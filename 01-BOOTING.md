@@ -32,4 +32,6 @@ The disk-write is for two reasons:
  
 ### Flow
 
+The Install will follow this general flow, for updates follow the link (click the image).
+
 [![Layered Images Diagram](./img/ncn-flow.png)](https://miro.com/app/board/o9J_kmgYTe4=/?moveToWidget=3074457349632214094&cot=12)
