@@ -7,8 +7,6 @@
       "kubernetes-pods-cidr": "~FIXME~ e.g. 10.32.0.0/12",
       "kubernetes-services-cidr": "~FIXME~ e.g. 10.16.0.0/12",
       "kubernetes-weave-mtu": "1460",
-      "metadata-server-ip": "~FIXME~ e.g. 10.1.1.1",
-      "metadata-server-port": "~FIXME~ e.g. 8888",
       "rgw-virtual-ip": "~FIXME~ e.g. 10.252.2.100",
       "k8s-virtual-ip": "~FIXME~ e.g. 10.252.120.2",
       "domain": "not.used.yet.com",
