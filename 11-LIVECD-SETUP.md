@@ -23,26 +23,41 @@ mem2=eth1
 /root/bin/sic-setup-bond0.sh $cidr $mem1 $mem2
 # If you have only one nic for the bond, then use this instead:
 /root/bin/sic-setup-bond0.sh $cidr $mem1
+
 # Setup the NMN:
 cidr=10.252.1.1/17
 /root/bin/sic-setup-vlan002.sh $cidr
+
 # Setup the HMN:
 cidr=10.254.1.1/17
 /root/bin/sic-setup-vlan004.sh $cidr
 ```
 
+Check that IPs are set for each interface:
+```bash
+ip a show lan0
+ip a show bond0
+ip a show vlan002
+ip a show vlan004
+```
+
 Now Setup services:
 ```bash
+# MTL
 cidr=10.1.1.1/16
 dhcp_start=10.1.2.1
 dhcp_end=10.1.255.254
 dhcp_ttl=10m
 /root/bin/sic-pxe-bond0.sh $cidr $dhcp_start $dhcp_end $dhcp_ttl
+
+# NMN
 cidr=10.252.1.1/16
 dhcp_start=10.252.2.1
 dhcp_end=10.252.127.254
 dhcp_ttl=10m
 /root/bin/sic-pxe-vlan002.sh $cidr $dhcp_start $dhcp_end $dhcp_ttl
+
+# HMN:
 cidr=10.254.1.1/16
 dhcp_start=10.254.2.1
 dhcp_end=10.254.127.254
@@ -54,7 +69,8 @@ Now verify service health:
 ```bash
 # both dnsmasq and podman should report HEALTHY and running.
 systemctl status dnsmasq
-systemctl status podman
+systemctl status basecamp
 # No containers should be dead.
 podman container ls -a
 ```
+If basecamp is dead, restart it with `systemctl restart basecamp`.

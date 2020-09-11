@@ -14,11 +14,10 @@ This RPM installs documentation into the system for the Shasta LiveCD.
 %setup -q
 
 %build
-rm -f Jenkinsfile
 
 %install
 install -m 755 -d %{buildroot}/usr/share/doc/metal
-cp -pvrR ./*  %{buildroot}/usr/share/doc/metal/ | awk '{print $3}' | sed "s/'//g" | sed "s|$RPM_BUILD_ROOT||g" | tee -a INSTALLED_FILES
+cp -pvrR ./*.md ./img ./*example* %{buildroot}/usr/share/doc/metal/ | awk '{print $3}' | sed "s/'//g" | sed "s|$RPM_BUILD_ROOT||g" | tee -a INSTALLED_FILES
 cat INSTALLED_FILES | xargs -i sh -c 'test -L {} && exit || test -f $RPM_BUILD_ROOT/{} && echo {} || echo %dir {}' > INSTALLED_FILES_2
 
 %clean
