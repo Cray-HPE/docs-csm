@@ -9,15 +9,20 @@ only.
 
 ```bash
 # Setup external access:
-cidr=172.29.16.5/20 
-gw=172.29.16.1
-nic=eth3
-/root/bin/sic-setup-lan0.sh $cidr $gw $nic
+cidr=172.30.53.68/20 
+gw=172.30.48.1
+dns='172.30.84.40 172.31.84.40'
+nic=eth0
+/root/bin/sic-setup-lan0.sh $cidr $gw $dns $nic
 
 # If you were on the Serial-over-LAN, now is a good time to log back in with SSH.
 # Setup the bond for talking to the full system, leverage link-resilience.
 cidr=10.1.1.1/16
-/root/bin/sic-setup-bond0.sh $cidr 
+mem1=eth4
+mem2=eth1
+/root/bin/sic-setup-bond0.sh $cidr $mem1 $mem2
+# If you have only one nic for the bond, then use this instead:
+/root/bin/sic-setup-bond0.sh $cidr $mem1
 # Setup the NMN:
 cidr=10.252.1.1/17
 /root/bin/sic-setup-vlan002.sh $cidr
