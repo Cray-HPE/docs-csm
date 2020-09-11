@@ -7,7 +7,15 @@ used on metal or virtual platforms.
 The following directions will show you how to create a USB stick (or internal disk) on an existing
 Shasta-1.3 system.
 
-This process has a few STOPs which will be reconciled before 1.4 is released.
+There are 4 steps:
+1. USB Stick
+2. Configuration Payload
+3. Stop-Gap solutions
+4. Booting
+
+**The above steps** are prone to change as development of Shasta Instance Control carries forward.
+
+### USB Stick
 
 ```bash
 ## 1.
@@ -26,7 +34,12 @@ ncn-w001:~ # ./spit/scripts/write-livecd.sh /dev/sdd $(pwd)/shasta-pre-install-t
 ## 2.
 # Mount data partition.
 ncn-w001:~ # mount /dev/sdd4 /mnt/
+```
 
+### Configuration Payload
+
+Now our stick is ready, and we can load configuration payload information.
+```bash
 ## 3.a.
 # Option 1: Fetch configs from a flat webroot:
 ncn-w001:~ # mkdir -pv /mnt/configs
@@ -47,7 +60,11 @@ ncn-w001:~ # pushd /mnt/configs
 ncn-w001:~ # tar -xzvf tar.gz 
 ncn-w001:~ # popd 
                                                                              
+```
 
+### Configuration Payload Stop-Gap Solution(s)
+
+```bash
 ## 4. 
 # Get data.json template for booting NCNs.
 ncn-w001:~ # git clone https://stash.us.cray.com/scm/mtl/docs-non-compute-nodes.git docs-ncn
@@ -60,7 +77,11 @@ ncn-w001:~ # cp -pv docs-ncn/example-data.json /mnt/configs/data.json
 # `ncn_metadata.csv`.
 ncn-w001:~ # vim /mnt/configs/data.json
 ncn-w001:~ # umount /mnt/
+```
 
+### Boot
+
+```bash
 ## 5.
 # Boot up, setup the liveCD (nics/dnsmasq/ipxe)
 ncn-w001:~ # reboot                                                       
