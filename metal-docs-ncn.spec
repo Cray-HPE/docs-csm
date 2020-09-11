@@ -18,7 +18,7 @@ rm -f Jenkinsfile
 
 %install
 install -m 755 -d %{buildroot}/usr/share/doc/metal
-cp -pvrR ./*  %{buildroot/usr/share/doc/metal/ %{buildroot}/root/bin/ | awk '{print $3}' | sed "s/'//g" | sed "s|$RPM_BUILD_ROOT||g" | tee -a INSTALLED_FILES
+cp -pvrR ./*  %{buildroot}/usr/share/doc/metal/ %{buildroot}/root/bin/ | awk '{print $3}' | sed "s/'//g" | sed "s|$RPM_BUILD_ROOT||g" | tee -a INSTALLED_FILES
 cat INSTALLED_FILES | xargs -i sh -c 'test -L {} && exit || test -f $RPM_BUILD_ROOT/{} && echo {} || echo %dir {}' > INSTALLED_FILES_2
 
 %clean
