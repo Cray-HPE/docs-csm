@@ -7,7 +7,7 @@ Setting up the NICS requires two things:
 Follow this process to setup external access and netbooting...the example values are for EXAMPLE
 only.
 
-```shell script
+```bash
 # Setup external access:
 cidr=172.29.16.5/20 
 gw=172.29.16.1
@@ -27,7 +27,7 @@ cidr=10.254.1.1/17
 ```
 
 Now Setup services:
-```shell script
+```bash
 cidr=10.1.1.1/16
 dhcp_start=10.1.2.1
 dhcp_end=10.1.255.254
@@ -46,7 +46,7 @@ dhcp_ttl=10m
 ```
 
 Now verify service health:
-```shell script
+```bash
 # both dnsmasq and podman should report HEALTHY and running.
 systemctl status dnsmasq
 systemctl status podman

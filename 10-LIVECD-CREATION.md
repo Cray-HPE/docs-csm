@@ -9,7 +9,7 @@ Shasta-1.3 system.
 
 This process has a few STOPs which will be reconciled before 1.4 is released.
 
-```shell script
+```bash
 ## 1.
 # Make the USB and fetch artifacts.
 
