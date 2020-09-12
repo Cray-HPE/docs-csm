@@ -15,7 +15,7 @@ There are 4 steps:
 
 **The above steps** are prone to change as development of Shasta Instance Control carries forward.
 
-### USB Stick
+## Manual Step: USB Stick
 
 ```bash
 ## 1.
@@ -36,7 +36,7 @@ ncn-w001:~ # ./spit/scripts/write-livecd.sh /dev/sdd $(pwd)/shasta-pre-install-t
 ncn-w001:~ # mount /dev/sdd4 /mnt/
 ```
 
-### Configuration Payload
+## Manual Step: Configuration Payload
 
 Now our stick is ready, and we can load configuration payload information.
 ```bash
@@ -62,7 +62,7 @@ ncn-w001:~ # popd
                                                                              
 ```
 
-### Configuration Payload Stop-Gap Solution(s)
+Edit `data.json`...
 
 ```bash
 ## 4. 
@@ -79,7 +79,7 @@ ncn-w001:~ # vim /mnt/configs/data.json
 ncn-w001:~ # umount /mnt/
 ```
 
-### Boot
+## Manual Step: Boot into your LiveCD.
 
 ```bash
 ## 5.
@@ -98,6 +98,6 @@ Once the system is booted, have your network information handy:
 - IP and netmask for your bis nodes (MTL, NMN, & HMN IPs)
 - Ranges for DHCP (MTL, NMN, & HMN)
 
-Then you can "pass go, collect $200" and move onto these next two pages:
+Then you can move onto these next two pages:
 1. Setting up communication...[11-LIVECD-SETUP.md](11-LIVECD-SETUP.md)
 2. Booting NCNs [12-LIVECD-DEPLOY.md](12-LIVECD-DEPLOY.md) `#TODO`
