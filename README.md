@@ -15,3 +15,4 @@ This space contains documentation for Shasta Non-Compute Nodes.
 * [LiveCD Creation](09-LIVECD-PREFLIGHT.md)
 * [LiveCD Creation](10-LIVECD-CREATION.md)
 * [LiveCD Setup](11-LIVECD-SETUP.md)
+* [LiveCD NCN Boots](12-LIVECD-NCN-BOOTS.md)

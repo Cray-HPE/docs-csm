@@ -100,4 +100,4 @@ Once the system is booted, have your network information handy:
 
 Then you can move onto these next two pages:
 1. Setting up communication...[11-LIVECD-SETUP.md](11-LIVECD-SETUP.md)
-2. Booting NCNs [12-LIVECD-DEPLOY.md](12-LIVECD-DEPLOY.md) `#TODO`
+2. Booting NCNs [12-LIVECD-NCN-BOOTS.md](12-LIVECD-NCN-BOOTS.md)

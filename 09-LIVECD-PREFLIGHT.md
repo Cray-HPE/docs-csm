@@ -79,3 +79,27 @@ If you don't have that information, then you need the following:
 - HMN CIDR (i.e. 10.254.1.1/17)
 - HMN DHCP start (i.e. 10.254.50.5)
 - HMN DHCP end (i.e. 10.254.99.252)
+
+
+#### Information for identifying the first nodes:
+
+- BMC MAC Addresses
+
+```apacheconfig
+dhcp-host=94:40:c9:37:66:98,10.254.2.13,uan01-mgmt
+dhcp-host=b4:2e:99:be:1a:39,10.254.2.6,nid000001-mgmt
+dhcp-host=b4:2e:99:be:24:ed,10.254.2.3,nid000002-mgmt
+dhcp-host=b4:2e:99:be:1a:71,10.254.2.20,nid000003-mgmt
+dhcp-host=b4:2e:99:be:19:f5,10.254.2.19,nid000004-mgmt
+dhcp-host=94:40:c9:2a:ad:8a,10.254.2.17,ncn-s003-mgmt
+dhcp-host=94:40:c9:2a:ad:d0,10.254.2.15,ncn-s002-mgmt
+dhcp-host=94:40:c9:37:e3:8a,10.254.2.11,ncn-s001-mgmt
+dhcp-host=94:40:c9:37:e3:4e,10.254.2.18,ncn-w003-mgmt
+dhcp-host=94:40:c9:37:e3:3e,10.254.2.14,ncn-w002-mgmt
+dhcp-host=94:40:c9:37:d3:de,10.254.2.8,ncn-w001-mgmt
+dhcp-host=94:40:c9:37:d3:fc,10.254.2.12,ncn-m003-mgmt
+dhcp-host=94:40:c9:37:e3:3a,10.254.2.10,ncn-m002-mgmt
+```
+
+> Note: Hostname resolution for NMN is not dynamic yet due to cloud-init integration.
+> A shim to allow for this is provided in [12-LIVECD-NCN-BOOTS.md](12-LIVECD-NCN-BOOTS.md).
