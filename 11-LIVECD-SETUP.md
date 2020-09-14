@@ -29,16 +29,15 @@ Internal, access to the Cray High-Performance Computer.
 Note, you must choose which interfaces to use for members in the 
 LACP Link Aggregation. 
 
-> If you're coming from 1.3, these would be the same as 
-> `lan1` and `lan3` in the `platform.yml` file.
+#### 1.3.X Testing
+
+If you made `qnd-1.4.sh` you can run that now to fill-in all of the required variables 
+for setting up interfaces.
 
 ```bash
-cidr=10.1.1.1/16
-mem1=eth4
-mem2=eth1
-/root/bin/sic-setup-bond0.sh $cidr $mem1 $mem2
+/root/bin/sic-setup-bond0.sh $mtl_cidr $bond_member0 $bond_member1
 # If you have only one nic for the bond, then use this instead:
-/root/bin/sic-setup-bond0.sh $cidr $mem1
+/root/bin/sic-setup-bond0.sh $mtl_cidr $bond_member0
 ```
 
 ## VLANS
@@ -49,8 +48,7 @@ This subnet handles discovering any trunked nodes (such as NCNs)
 and devices on unconfigured switchports (new switches, or factory reset).
 
 ```bash
-cidr=10.252.1.1/17
-/root/bin/sic-setup-vlan002.sh $cidr
+/root/bin/sic-setup-vlan002.sh $nmn_cidr
 ```
 
 #### Hardware management
@@ -59,8 +57,7 @@ This subnet handles hardware control, and communication. It is the primary
 network for talking to and powering on other nodes during bootstrap.
 
 ```bash
-cidr=10.254.1.1/17
-/root/bin/sic-setup-vlan004.sh $cidr
+/root/bin/sic-setup-vlan004.sh $hmn_cidr
 ```
 
 ## STOP :: Validate the LiveCD platform.
@@ -78,32 +75,26 @@ spit:~ # ip a show vlan004
 
 Support netbooting for trunked devices (non-compute nodes and UANs):
 
+If you made `qnd-1.4.sh` you can run that now to fill-in all of the required variables 
+for setting up services.
+
 ```bash
-cidr=10.1.1.1/16
-dhcp_start=10.1.2.1
-dhcp_end=10.1.255.254
 dhcp_ttl=10m
-/root/bin/sic-pxe-bond0.sh $cidr $dhcp_start $dhcp_end $dhcp_ttl
+/root/bin/sic-pxe-bond0.sh $mtl_cidr $mtl_dhcp_start $mtl_dhcp_end $dhcp_ttl
 ```
 
 Support node networking, serve DHCP/DNS/NTP over the NMN:
 
 ```bash
-cidr=10.252.1.1/16
-dhcp_start=10.252.2.1
-dhcp_end=10.252.127.254
 dhcp_ttl=10m
-/root/bin/sic-pxe-vlan002.sh $cidr $dhcp_start $dhcp_end $dhcp_ttl
+/root/bin/sic-pxe-vlan002.sh $nmn_cidr $nmn_dhcp_start $nmn_dhcp_end $dhcp_ttl
 ```
 
 Support hardware controllers, serve DHCP/DNS/NTP over the HMN:
 
 ```bash
-cidr=10.254.1.1/16
-dhcp_start=10.254.2.1
-dhcp_end=10.254.127.254
 dhcp_ttl=10m
-/root/bin/sic-pxe-vlan004.sh $cidr $dhcp_start $dhcp_end $dhcp_ttl
+/root/bin/sic-pxe-vlan004.sh $hmn_cidr $hmn_dhcp_start $hmn_dhcp_end $dhcp_ttl
 ```
 
 ## STOP :: Validate the LiveCD platform.
