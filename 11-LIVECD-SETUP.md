@@ -9,11 +9,12 @@ only.
 
 ## 1.3.X Testing
 
-If you made `qnd-1.4.sh` you can run that now to fill-in all of the required variables 
+If you made `qnd-1.4.sh` you can run that now to fill-in all of the required variables
 for setting up interfaces.
 
 ```shell script
-spit:~ # mount /dev/sdd4 /mnt
+# Note this may be different then the previous device you mounted on the 1.3 system
+spit:~ # mount /dev/sdb4 /mnt
 spit:~ # source /mnt/qnd-1.4.sh
 spit:~ # env
 ```
@@ -25,11 +26,14 @@ spit:~ # env
 External, direct access.
 
 ```shell script
+# These may have already been defined if you made them as part of the previous doc
 # Example below uses loki-ncn-m001.
-cidr=172.30.53.68/20 
+cidr=172.30.53.68/20
 gw=172.30.48.1
 dns='172.30.84.40 172.31.84.40'
-nic=eth0
+# This may be different, so check with with ip command what the interface names are first
+# It's not hard to undo, but you can save yourself a step if it's wrong
+nic=em1
 /root/bin/sic-setup-lan0.sh $cidr $gw $dns $nic
 ```
 
@@ -40,8 +44,8 @@ Setup the bond for talking to the full system, leverage link-resilience.
 
 Internal, access to the Cray High-Performance Computer.
 
-Note, you must choose which interfaces to use for members in the 
-LACP Link Aggregation. 
+Note, you must choose which interfaces to use for members in the
+LACP Link Aggregation.
 
 
 ```shell script
@@ -54,7 +58,7 @@ LACP Link Aggregation.
 
 #### Node management
 
-This subnet handles discovering any trunked nodes (such as NCNs) 
+This subnet handles discovering any trunked nodes (such as NCNs)
 and devices on unconfigured switchports (new switches, or factory reset).
 
 ```shell script
@@ -85,19 +89,19 @@ can_cidr=''
 Check that IPs are set for each interface:
 
 ```shell script
-spit:~ # ip a show lan0
-spit:~ # ip a show bond0
-spit:~ # ip a show vlan002
-spit:~ # ip a show vlan004
-spit:~ # ip a show vlan007
+ip a show lan0
+ip a show bond0
+ip a show vlan002
+ip a show vlan004
+ip a show vlan007
 ```
 
 # Services
 
 Support netbooting for trunked devices (non-compute nodes and UANs):
 
-If you made `qnd-1.4.sh` you can run that now to fill-in all of the required variables 
-for setting up services.
+If you made `qnd-1.4.sh` you can run that now to fill-in all of the required variables
+for setting up service, or they may have already been added in a previous step.ß
 
 ```shell script
 dhcp_ttl=10m
@@ -120,6 +124,7 @@ dhcp_ttl=10m
 
 Support customer access network interfaces:
 
+You may have already added this to `qnd-1.4.sh` from an earlier doc.
 ```shell script
 can_cidr=10.102.9.111
 can_dhcp_start=10.102.9.4
@@ -134,8 +139,10 @@ Now verify service health:
 - both dnsmasq and podman should report HEALTHY and running.
 - No container(s) should be dead.
 ```shell script
-spit:~ # systemctl status dnsmasq
-spit:~ # systemctl status basecamp
-spit:~ # podman container ls -a
+systemctl status dnsmasq
+systemctl status basecamp
+podman container ls -a
 ```
 If basecamp is dead, restart it with `systemctl restart basecamp`.
+
+Now you can start **Booting NCNs** [12-LIVECD-NCN-BOOTS.md](12-LIVECD-NCN-BOOTS.md)
