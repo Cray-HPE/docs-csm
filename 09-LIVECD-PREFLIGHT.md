@@ -84,6 +84,10 @@ If you don't have that information, then you need the following:
 - HMN CIDR (i.e. 10.254.1.1/17)
 - HMN DHCP start (i.e. 10.254.50.5)
 - HMN DHCP end (i.e. 10.254.99.252)
+- CAN CIDR (i.e. 10.102.9.110/24)
+- CAN GW (i.e. 10.102.9.111)
+- CAN DHCP start (i.e. 10.102.9.5)
+- CAN DHCP end (i.e. 10.102.9.109)
 
 
 ## Information Gathering for identifying the first nodes:

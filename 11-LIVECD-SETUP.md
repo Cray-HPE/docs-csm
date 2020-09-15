@@ -76,11 +76,11 @@ network for talking to and powering on other nodes during bootstrap.
 
 #### Customer Access
 
-This subnet handles hardware control, and communication. It is the primary
-network for talking to and powering on other nodes during bootstrap.
+This subnet handles customer access to nodes and services as well as access to outside services from inside the cluster. It is the primary
+network for talking to UANs and NCNs from outside the cluster and access services in the cluster.
 
 ```shell script
-can_cidr=''
+can_cidr='10.102.9.110/24'
 /root/bin/sic-setup-vlan007.sh $can_cidr
 ```
 
@@ -126,7 +126,7 @@ Support customer access network interfaces:
 
 You may have already added this to `qnd-1.4.sh` from an earlier doc.
 ```shell script
-can_cidr=10.102.9.111
+can_gw=10.102.9.111
 can_dhcp_start=10.102.9.4
 can_dhcp_end=10.102.9.109
 dhcp_ttl=10m
@@ -143,6 +143,7 @@ systemctl status dnsmasq
 systemctl status basecamp
 podman container ls -a
 ```
-If basecamp is dead, restart it with `systemctl restart basecamp`.
+
+> If basecamp is dead, restart it with `systemctl restart basecamp`.
 
 Now you can start **Booting NCNs** [12-LIVECD-NCN-BOOTS.md](12-LIVECD-NCN-BOOTS.md)
