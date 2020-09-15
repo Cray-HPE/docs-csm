@@ -32,6 +32,11 @@ The disk-write is for two reasons:
  
 ### Flow
 
-The Install will follow this general flow, for updates follow the link (click the image).
+The effective flow is basically this:
+1. Check for S3, if reachable then download the new/current image. Otherwise..
+2. Check for the pre-install toolkit, if reachable then download the new/current image..
+3. Boot the new image from disk, or if nothing was reachable boot the last image.
+
+The Install will follow this general flow, for updates follow the link (click the image for more).
 
 [![Layered Images Diagram](./img/ncn-flow.png)](https://miro.com/app/board/o9J_kmgYTe4=/?moveToWidget=3074457349632214094&cot=12)
