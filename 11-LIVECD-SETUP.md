@@ -70,6 +70,16 @@ network for talking to and powering on other nodes during bootstrap.
 /root/bin/sic-setup-vlan004.sh $hmn_cidr
 ```
 
+#### Customer Access
+
+This subnet handles hardware control, and communication. It is the primary
+network for talking to and powering on other nodes during bootstrap.
+
+```shell script
+can_cidr=''
+/root/bin/sic-setup-vlan007.sh $can_cidr
+```
+
 ## STOP :: Validate the LiveCD platform.
 
 Check that IPs are set for each interface:
@@ -79,6 +89,7 @@ spit:~ # ip a show lan0
 spit:~ # ip a show bond0
 spit:~ # ip a show vlan002
 spit:~ # ip a show vlan004
+spit:~ # ip a show vlan007
 ```
 
 # Services
@@ -105,6 +116,16 @@ Support hardware controllers, serve DHCP/DNS/NTP over the HMN:
 ```shell script
 dhcp_ttl=10m
 /root/bin/sic-pxe-vlan004.sh $hmn_cidr $hmn_dhcp_start $hmn_dhcp_end $dhcp_ttl
+```
+
+Support customer access network interfaces:
+
+```shell script
+can_cidr=10.102.9.111
+can_dhcp_start=10.102.9.4
+can_dhcp_end=10.102.9.109
+dhcp_ttl=10m
+/root/bin/sic-pxe-vlan007.sh $can_cidr $can_dhcp_start $can_dhcp_end $dhcp_ttl
 ```
 
 ## STOP :: Validate the LiveCD platform.
