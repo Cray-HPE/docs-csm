@@ -12,6 +12,8 @@ This space contains documentation for Shasta Non-Compute Nodes.
 * [Images](00-IMAGES.md)
 * [Booting](01-BOOTING.md)
 * [Firmware](02-FIRMWARE.md)
+* [Networking](03-NETWORKING.md)
+* [Partitioning](04-PARTITIONING.md)
 * [LiveCD Creation](09-LIVECD-PREFLIGHT.md)
 * [LiveCD Creation](10-LIVECD-CREATION.md)
 * [LiveCD Setup](11-LIVECD-SETUP.md)

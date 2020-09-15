@@ -14,7 +14,7 @@ spit:~ # grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases | wc -l
 currently booted up with the LiveCD (the node you're standing on).
 
 Print off each NCN we'll target for booting.
-```bash
+```shell script
 spit:~ # grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases
 ncn-w002-mgmt
 ncn-s001-mgmt
@@ -34,7 +34,7 @@ DNSmasq.
 > Note: this requires a statics.conf file to be generated with the BMC MAC addresses.
 > See [09-LIVECD-PREFLIGHT.md](09-LIVECD-PREFLIGHT.md) for more information.
 
-```bash
+```shell script
 username=''
 password=''
 for bmc in $(grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases); do
@@ -45,54 +45,30 @@ for bmc in $(grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases); do
     echo ipmitool -I lanplus -U $username -P $password -H $bmc lan 1 set netmask $netmask
     echo ipmitool -I lanplus -U $username -P $password -H $bmc lan 1 set defgw ipaddr $ipaddr
     echo ipmitool -I lanplus -U $username -P $password -H $bmc lan 1 set ipsrc static
+    echo console name="$bmc" dev="ipmi:$ipaddr" ipmiopts="U:$username,P:$password,W:solpayloadsize" >>/etc/conman.conf 
     echo
 done
 ```
 Running the above loop will output commands to copy-and-paste, it will not actually set anything
 on your BMCs.
 
-Verify the output, make sure it looks right - and then 
-### Fix NMN Hostname Resolution
-
-The NMN won't resolve because the nodes don't update DHCP/DNS A, AAAA, nor PTR records
-when their own hostnames change.
-
-To work around this by hand, you will need to obtain the IP from dnsmasq logs, or from
-it's `/var/lib/mic/dnsmasq.leases` file. This is a high-priority issue, that is just from a 
-shortage of hands.
-
-Once you map out which NMN IP goes to which node (ssh to the IP and see the hostname, or print off 
-the IP for vlan002), then you may add them to `/etc/hosts` as such:
-
-```
-10.252.2.10	ncn-m001.nmn
-10.252.2.11	ncn-m002.nmn
-10.252.2.12	ncn-m003.nmn
-10.252.2.13	ncn-w002.nmn
-10.252.2.14	ncn-s001.nmn
-10.252.2.15	ncn-s002.nmn
-10.252.2.16	ncn-s003.nmn
-```
-**Note the domain, `.nmn`**.
-
-Once `/etc/hosts` is adjusted, restart DNSMasq with:
-```bash
-systemctl restart dnsmasq
-```
-Now NMN names will be resolvable for the entire cluster, and our liveCD.
+Verify the output, make sure it looks right.
 
 ### Boot K8s
 
-```bash
-for bmc in $(grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases); do
+```shell script
+username=''
+password=''
+for bmc in $(grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases | sort); do
     echo ipmitool -I lanplus -U $username -P $password -H $bmc chassis bootdev pxe options=efiboot 
-    echo ipmitool -I lanplus -U $username -P $password -H $bmc chassis bootdev power on || echo ipmitool -I lanplus -U $username -P $password -H $bmc chassis bootdev power reset
+    echo "ipmitool -I lanplus -U $username -P $password -H $bmc chassis power on 2>/dev/null || echo ipmitool -I lanplus -U $username -P $password -H $bmc chassis power reset"
+done
 ```
 
 Watch consoles with the Serial-over-LAN, or use conamn if you've setup `/etc/conman.conf` with
 the static IPs for the BMCs.
 
-```bash
+```shell script
 # Connect to ncn-s002..
 username=''
 password=''

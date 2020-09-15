@@ -4,20 +4,18 @@ used on metal or virtual platforms.
 
 ## Creating & Booting into the LiveCD from an NCN.
 
-The following directions will show you how to create a USB stick (or internal disk) on an existing
-Shasta-1.3 system.
+The following directions will show you how to create a USB stick on an existing Shasta-1.3.x system.
 
-There are 4 steps:
+There are 3 steps here:
 1. USB Stick
 2. Configuration Payload
-3. Stop-Gap solutions
 4. Booting
 
 **The above steps** are prone to change as development of Shasta Instance Control carries forward.
 
-## Manual Step: USB Stick
+## Manual Step 1: USB Stick
 
-```bash
+```shell script
 ## 1.
 # Make the USB and fetch artifacts.
 
@@ -36,10 +34,10 @@ ncn-w001:~ # ./spit/scripts/write-livecd.sh /dev/sdd $(pwd)/shasta-pre-install-t
 ncn-w001:~ # mount /dev/sdd4 /mnt/
 ```
 
-## Manual Step: Configuration Payload
+## Manual Step 2: Configuration Payload
 
 Now our stick is ready, and we can load configuration payload information.
-```bash
+```shell script
 ## 3.a.
 # Option 1: Fetch configs from a flat webroot:
 ncn-w001:~ # mkdir -pv /mnt/configs
@@ -64,7 +62,7 @@ ncn-w001:~ # popd
 
 Edit `data.json`...
 
-```bash
+```shell script
 ## 4. 
 # Get data.json template for booting NCNs.
 ncn-w001:~ # git clone https://stash.us.cray.com/scm/mtl/docs-non-compute-nodes.git docs-ncn
@@ -76,13 +74,18 @@ ncn-w001:~ # cp -pv docs-ncn/example-data.json /mnt/configs/data.json
 # The values for the `global_data` should be cross-referenced to `networks_derived.yaml` and
 # `ncn_metadata.csv`.
 ncn-w001:~ # vim /mnt/configs/data.json
-ncn-w001:~ # umount /mnt/
 ```
 
-## Manual Step: Boot into your LiveCD.
+#### 1.3.x Upgrade Notice
 
-```bash
-## 5.
+**Copy `/tmp/qnd-1.4.sh`** to `/mnt/` or wherever you've mounted the data partition **now**.
+```shell script
+ncn-w001:~ # cp -pv /tmp/qnd-1.4.sh /mnt/
+```
+
+## Manual Step 3 : Boot into your LiveCD.
+
+```shell script
 # Boot up, setup the liveCD (nics/dnsmasq/ipxe)
 ncn-w001:~ # reboot                                                       
 # Use the Serial-over-LAN to control the system...                  
@@ -101,3 +104,6 @@ Once the system is booted, have your network information handy:
 Then you can move onto these next two pages:
 1. Setting up communication...[11-LIVECD-SETUP.md](11-LIVECD-SETUP.md)
 2. Booting NCNs [12-LIVECD-NCN-BOOTS.md](12-LIVECD-NCN-BOOTS.md)
+
+# remove block-device leeway
+# add blurb to re-run the script on the setup page

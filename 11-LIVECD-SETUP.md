@@ -7,11 +7,25 @@ Setting up the NICS requires two things:
 Follow this process to setup external access and netbooting...the example values are for EXAMPLE
 only.
 
+## 1.3.X Testing
+
+If you made `qnd-1.4.sh` you can run that now to fill-in all of the required variables 
+for setting up interfaces.
+
+```shell script
+spit:~ # mount /dev/sdd4 /mnt
+spit:~ # source /mnt/qnd-1.4.sh
+spit:~ # env
+```
+
+> Note: you will need to fetch your external interface information from somewhere else.
+
 ## Site-link (worker nodes, or managers for v3 networking)
 
 External, direct access.
 
-```bash
+```shell script
+# Example below uses loki-ncn-m001.
 cidr=172.30.53.68/20 
 gw=172.30.48.1
 dns='172.30.84.40 172.31.84.40'
@@ -29,12 +43,8 @@ Internal, access to the Cray High-Performance Computer.
 Note, you must choose which interfaces to use for members in the 
 LACP Link Aggregation. 
 
-#### 1.3.X Testing
 
-If you made `qnd-1.4.sh` you can run that now to fill-in all of the required variables 
-for setting up interfaces.
-
-```bash
+```shell script
 /root/bin/sic-setup-bond0.sh $mtl_cidr $bond_member0 $bond_member1
 # If you have only one nic for the bond, then use this instead:
 /root/bin/sic-setup-bond0.sh $mtl_cidr $bond_member0
@@ -47,7 +57,7 @@ for setting up interfaces.
 This subnet handles discovering any trunked nodes (such as NCNs) 
 and devices on unconfigured switchports (new switches, or factory reset).
 
-```bash
+```shell script
 /root/bin/sic-setup-vlan002.sh $nmn_cidr
 ```
 
@@ -56,7 +66,7 @@ and devices on unconfigured switchports (new switches, or factory reset).
 This subnet handles hardware control, and communication. It is the primary
 network for talking to and powering on other nodes during bootstrap.
 
-```bash
+```shell script
 /root/bin/sic-setup-vlan004.sh $hmn_cidr
 ```
 
@@ -64,7 +74,7 @@ network for talking to and powering on other nodes during bootstrap.
 
 Check that IPs are set for each interface:
 
-```bash
+```shell script
 spit:~ # ip a show lan0
 spit:~ # ip a show bond0
 spit:~ # ip a show vlan002
@@ -78,21 +88,21 @@ Support netbooting for trunked devices (non-compute nodes and UANs):
 If you made `qnd-1.4.sh` you can run that now to fill-in all of the required variables 
 for setting up services.
 
-```bash
+```shell script
 dhcp_ttl=10m
 /root/bin/sic-pxe-bond0.sh $mtl_cidr $mtl_dhcp_start $mtl_dhcp_end $dhcp_ttl
 ```
 
 Support node networking, serve DHCP/DNS/NTP over the NMN:
 
-```bash
+```shell script
 dhcp_ttl=10m
 /root/bin/sic-pxe-vlan002.sh $nmn_cidr $nmn_dhcp_start $nmn_dhcp_end $dhcp_ttl
 ```
 
 Support hardware controllers, serve DHCP/DNS/NTP over the HMN:
 
-```bash
+```shell script
 dhcp_ttl=10m
 /root/bin/sic-pxe-vlan004.sh $hmn_cidr $hmn_dhcp_start $hmn_dhcp_end $dhcp_ttl
 ```
@@ -102,7 +112,7 @@ dhcp_ttl=10m
 Now verify service health:
 - both dnsmasq and podman should report HEALTHY and running.
 - No container(s) should be dead.
-```bash
+```shell script
 spit:~ # systemctl status dnsmasq
 spit:~ # systemctl status basecamp
 spit:~ # podman container ls -a
