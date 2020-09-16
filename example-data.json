@@ -10,7 +10,10 @@
       "rgw-virtual-ip": "~FIXME~ e.g. 10.252.2.100",
       "k8s-virtual-ip": "~FIXME~ e.g. 10.252.120.2",
       "domain": "not.used.yet.com",
-      "wipe-ceph-ods": "yes"
+      "wipe-ceph-ods": "yes",
+      "num_storage_nodes": "3",
+      "can-gw": "~FIXME~ e.g. 10.102.9.20",
+      "can-if": "vlan007"
     }
   },
   "Default":{
