@@ -76,14 +76,14 @@ pushd /mnt/var/www/ephemeral
 /root/bin/set-sqfs-links.sh
 ```
 
-### Boot K8s
+### Boot Storage Nodes
 
 This will again just `echo` the commands.  Look them over and validate they are ok before running them.  This just `grep`s out the storage nodes so you only get the workers and managers.
 
 ```shell script
 username=''
 password=''
-for bmc in $(grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases | grep -v s00 | sort); do
+for bmc in $(grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases | grep  s | sort); do
     echo ipmitool -I lanplus -U $username -P $password -H $bmc chassis bootdev pxe options=efiboot
     echo "ipmitool -I lanplus -U $username -P $password -H $bmc chassis power on 2>/dev/null || echo ipmitool -I lanplus -U $username -P $password -H $bmc chassis power reset"
 done
@@ -103,3 +103,24 @@ spit:~ # echo ipmitool -I lanplus -U $username -P $password -H $bmc sol activate
 spit:~ # conman -q
 spit:~ # conman -j ncn-s002
 ```
+
+### Boot K8s
+
+This will again just `echo` the commands.  Look them over and validate they are ok before running them.  This just `grep`s out the storage nodes so you only get the workers and managers.
+
+```shell script
+username=''
+password=''
+for bmc in $(grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases | grep -v s | sort); do
+    echo ipmitool -I lanplus -U $username -P $password -H $bmc chassis bootdev pxe options=efiboot
+    echo "ipmitool -I lanplus -U $username -P $password -H $bmc chassis power on 2>/dev/null || echo ipmitool -I lanplus -U $username -P $password -H $bmc chassis power reset"
+done
+```
+
+### Check Storage
+
+> TODO: Craig Delatte
+
+### Check K8s
+
+> TODO: Brad Klein and Jeanne Ohren
