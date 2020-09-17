@@ -21,15 +21,15 @@ The disk-write is for two reasons:
 ### Installed
 
 > Responsibility: **BOS**
- 
+
 1. NCNs will network boot using PXE.
-2.  cray-tftp replies with a compiled iPXE binary pointing to the next chain..
-3. cray-bss replies with a final script to point the node to its artifacs (squashFS).
+2. cray-tftp replies with a compiled iPXE binary pointing to the next chain..
+3. cray-bss replies with a final script to point the node to its artifacts (squashFS).
 4. iPXE script runs and fetches from S3.
 5. Artifacts are written to disk (squashFS).
 6. System pivots to local squashFS.
 7. Cloud-init provides personalization.
- 
+
 ### Flow
 
 The effective flow is basically this:

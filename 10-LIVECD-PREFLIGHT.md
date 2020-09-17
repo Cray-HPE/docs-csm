@@ -140,16 +140,18 @@ do
   #echo "bmc port : $bmcport"
   #echo "nmn mac : $nmnmac"
   #echo "nmn port : $nmnport"
-  done < $INPUT
+done < $INPUT
+echo "compare the above to the ccd and then plug in the right hostnames in the first and third field"
 IFS=$OLDIFS
 ```
+This info will be used in `/etc/dnsmasq.d/statics.conf` but is still incomplete.  You can compare the output to the CCD and replace the `HOST` and port with the hostname and then restart `dnsmasq`.  
 
-This info will be used in `/etc/dnsmasq.d/statics.conf` but is still incomplete. 
+This info will be used in `/etc/dnsmasq.d/statics.conf` but is still incomplete.
 You can compare the output to the CCD and replace the `HOST` and port with the hostname and then restart `dnsmasq`.
 
 ```bash
 systemctl restart dnsmasq
-``` 
+```
 The `statics.conf` file should now look like this, but with MACs for your system:
 
 ```apacheconfig
@@ -178,5 +180,8 @@ dhcp-host=94:40:c9:37:e3:3a,10.254.2.10,ncn-m002-mgmt
 
 ## Artifact Gathering for Booting Nodes:
 
+
+
+# Next..
 
 Now move onto [05-LIVECD-CREATION](05-LIVECD-CREATION.md).
