@@ -14,7 +14,7 @@ For **new users** of the liveCD on a Shasta metal cluster, start here:
 * [LiveCD Setup](06-LIVECD-SETUP.md)
 * [LiveCD NCN Boots](07-LIVECD-NCN-BOOTS.md)
 
-For **virtual** users, go [here]() for assistance testing 
+For **virtual** users, go [here](https://connect.us.cray.com/confluence/display/CASM/Pre-install+Toolkit+Image%3A+Building+and+Booting) for assistance testing.
 
 ## 1.3 Upgrade & Rollback Guides
 
