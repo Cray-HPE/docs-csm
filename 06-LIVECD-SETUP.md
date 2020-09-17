@@ -97,21 +97,18 @@ If you made `qnd-1.4.sh` you can run that now to fill-in all of the required var
 for setting up service, or they may have already been added in a previous step.ß
 
 ```shell script
-dhcp_ttl=10m
 /root/bin/sic-pxe-bond0.sh $mtl_cidr $mtl_dhcp_start $mtl_dhcp_end $dhcp_ttl
 ```
 
 Support node networking, serve DHCP/DNS/NTP over the NMN:
 
 ```shell script
-dhcp_ttl=10m
 /root/bin/sic-pxe-vlan002.sh $nmn_cidr $nmn_dhcp_start $nmn_dhcp_end $dhcp_ttl
 ```
 
 Support hardware controllers, serve DHCP/DNS/NTP over the HMN:
 
 ```shell script
-dhcp_ttl=10m
 /root/bin/sic-pxe-vlan004.sh $hmn_cidr $hmn_dhcp_start $hmn_dhcp_end $dhcp_ttl
 ```
 
@@ -119,10 +116,6 @@ Support customer access network interfaces:
 
 You may have already added this to `qnd-1.4.sh` from an earlier doc.
 ```shell script
-can_gw=10.102.9.111
-can_dhcp_start=10.102.9.4
-can_dhcp_end=10.102.9.109
-dhcp_ttl=10m
 /root/bin/sic-pxe-vlan007.sh $can_cidr $can_dhcp_start $can_dhcp_end $dhcp_ttl
 ```
 
@@ -134,9 +127,11 @@ Now verify service health:
 ```shell script
 systemctl status dnsmasq
 systemctl status basecamp
+systemctl status nexus
 podman container ls -a
 ```
 
 > If basecamp is dead, restart it with `systemctl restart basecamp`.
+> If nexus is dead, restart it with `systemctl restart nexus`.
 
 Now you can start **Booting NCNs** [12-LIVECD-NCN-BOOTS.md](12-LIVECD-NCN-BOOTS.md)
