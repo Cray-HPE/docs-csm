@@ -15,24 +15,25 @@ There are 3 steps here:
 
 ## Manual Step 1: USB Stick
 
-```shell script
-## 1.
-# Make the USB and fetch artifacts.
+1. Make the USB and fetch artifacts.
+    
+    ```shell script
+    # Fetch the latest ISO:
+    ncn-w001:~ # rm -f shasta-pre-install-toolkit-latest.iso
+    ncn-w001:~ # wget http://car.dev.cray.com/artifactory/internal/MTL/sle15_sp2_ncn/x86_64/dev/master/metal-team/shasta-pre-install-toolkit-latest.iso
+    
+    # Find your USB stick with your linux tool of choice, for this it's /dev/sdd.
+    # Run this command, or adjust the copy-on-write (COW) overlay size for persistent storage
+    # from 5000MiB.                                                                                       
+    ncn-w001:~ # git clone https://stash.us.cray.com/scm/mtl/shasta-pre-install-toolkit.git
+    ncn-w001:~ # ./shasta-pre-install-toolkit/scripts/write-livecd.sh /dev/sdd $(pwd)/shasta-pre-install-toolkit-latest.iso 5000
+    ```
 
-# Fetch the latest ISO:
-ncn-w001:~ # rm -f shasta-pre-install-toolkit-latest.iso
-ncn-w001:~ # wget http://car.dev.cray.com/artifactory/internal/MTL/sle15_sp2_ncn/x86_64/dev/master/metal-team/shasta-pre-install-toolkit-latest.iso
+2. Mount data partition:
 
-# Find your USB stick with your linux tool of choice, for this it's /dev/sdd.
-# Run this command, or adjust the copy-on-write (COW) overlay size for persistent storage
-# from 5000MiB.                                                                                       
-ncn-w001:~ # git clone https://stash.us.cray.com/scm/mtl/shasta-pre-install-toolkit.git
-ncn-w001:~ # ./shasta-pre-install-toolkit/scripts/write-livecd.sh /dev/sdd $(pwd)/shasta-pre-install-toolkit-latest.iso 5000
-
-## 2.
-# Mount data partition.
-ncn-w001:~ # mount /dev/sdd4 /mnt/
-```
+    ```shell script
+    ncn-w001:~ # mount /dev/sdd4 /mnt/
+    ```
 
 ## Manual Step 2: Configuration Payload
 
@@ -45,8 +46,10 @@ Now our stick is ready, and we can load configuration payload information.
 First fetch and edit `data.json`...
 
 1. Fetch the latest example, this can be done off of ncn-w001: 
+
     ```shell script
-    ncn-w001:~ # git clone https://stash.us.cray.com/scm/mtl/docs-non-compute-nodes.git docs-ncn
+    ncn-w001:~ # mkdir -pv /mnt/configs
+    ncn-w001:~ # git clone https://stash.us.cray.com/scm/mtl/docs-non-compute-nodes.git
     ncn-w001:~ # cp -pv docs-ncn/example-data.json /mnt/configs/data.json
     ```
 2. Edit the MAC addresses with your values from:
@@ -76,9 +79,9 @@ Fetch the current working set of artifacts.
 mkdir -pv /mnt/data/
 pushd /mnt/data/
 # FIXME: Grab latest image automatically.
-wget --mirror -np -nH -A *.kernel,*initrd* -nv --cut-dirs=5 http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/sles15-base/0.0.1-1
-wget --mirror -np -nH -A *.squashfs -nv --cut-dirs=5 http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/kubernetes/0.0.1-4
-wget --mirror -np -nH -A *.squashfs -nv --cut-dirs=5 http://arti.dev.cray.com/artifactory/node-images-unstable-local/shasta/storage-ceph/0.0.1-6
+wget --mirror -np -nH -A *.kernel,*initrd* -nv --cut-dirs=5 http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/sles15-base/0.0.1-1/
+wget --mirror -np -nH -A *.squashfs -nv --cut-dirs=5 http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/kubernetes/0.0.1-4/
+wget --mirror -np -nH -A *.squashfs -nv --cut-dirs=5 http://arti.dev.cray.com/artifactory/node-images-unstable-local/shasta/storage-ceph/0.0.1-6/
 popd
 ```
 
