@@ -142,8 +142,13 @@ dhcp-host=94:40:c9:37:e3:3a,10.254.2.10,ncn-m002-mgmt
 ### NCNs
 
 > Note: Hostname resolution for NMN is not dynamic yet due to cloud-init integration.
-> A shim to allow for this is provided in [12-LIVECD-NCN-BOOTS.md](12-LIVECD-NCN-BOOTS.md).
+> A shim to allow for this is provided in [12-LIVECD-NCN-BOOTS.md](07-LIVECD-NCN-BOOTS.md).
+
+
+## Artifact Gathering for Booting Nodes:
+
+
 
 # Next..
 
-Now move onto [10-LIVECD-CREATION](10-LIVECD-CREATION.md).
+Now move onto [05-LIVECD-CREATION](05-LIVECD-CREATION.md).

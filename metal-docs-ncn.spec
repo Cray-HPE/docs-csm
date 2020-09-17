@@ -23,4 +23,5 @@ cat INSTALLED_FILES | xargs -i sh -c 'test -L {} && exit || test -f $RPM_BUILD_R
 %clean
 
 %files -f INSTALLED_FILES_2
+%docdir /usr/share/doc/metal
 %defattr(-,root,root)
