@@ -64,46 +64,38 @@ ncn-w001:~ # popd
 
 ```
 
-Edit `data.json`...
+Edit `data.json`:
+1. Clone the repo, this can be done off of ncn-w001: 
+    ```shell script
+    ncn-w001:~ # git clone https://stash.us.cray.com/scm/mtl/docs-non-compute-nodes.git docs-ncn
+    ncn-w001:~ # cp -pv docs-ncn/example-data.json /mnt/data.json
+    ```
+2. Copy the `example-data.json` into the config partition, and edit the MAC addresses with your values from:
 
+    - `cray-macs`
+    - `ncn_metadata.csv`
+ 
+3. Still editing the `data.json` file, adjust all the `~FIXMES~`    
 ```shell script
-## 4.
-# Get data.json template for booting NCNs.
-ncn-w001:~ # git clone https://stash.us.cray.com/scm/mtl/docs-non-compute-nodes.git docs-ncn
-ncn-w001:~ # cp -pv docs-ncn/example-data.json /mnt/data.json
 # STOP!
 # STOP! This next step requires some manual work.
 # STOP!
-# Edit, adjust all the ~FIXMES
 # The values for the `global_data` should be cross-referenced to `networks_derived.yml` and
 # `kubernetes.yml`.
 ncn-w001:~ # vim /mnt/configs/data.json
-```
-You'll also want to gather network info for the external interface, so you can **manually** gather this info for now and then append it to the quick and dirty script.  You can append this info with some `echo` commands and then everything will be in one file.
-
-```
-echo "export cidr=172.30.52.220/20" >> /mnt/qnd-1.4.sh
-echo "export gw=172.30.48.1" >> /mnt/qnd-1.4.sh
-echo "export dns='172.30.84.40 172.31.84.40'" >> /mnt/qnd-1.4.sh
-# This may be eth0/em1 depending on the machine.  Choose what appears when you boot the livecd
-# Overriding what you put here if necessary
-echo "export nic=em1" >> /mnt/qnd-1.4.sh
-# You may need to adjust this, but it's the same in several of these example commands:
-echo "export dhcp_ttl=10m" >> /mnt/qnd-1.4.sh
-# You'll have to gather this info:
-echo "export can_cidr=10.102.4.110/24" >> /mnt/qnd-1.4.sh
-echo "export can_dhcp_start=10.102.4.5" >> /mnt/qnd-1.4.sh
-echo "export can_dhcp_end=10.102.4.109" >> /mnt/qnd-1.4.sh
 ```
 
 ### Artifacts
 
 `in-progress`
 ```shell script
-
+mkdir -pv /mnt/data/
+pushd /mnt/data/
+# FIXME: Grab latest image automatically.
 wget --mirror -np -nH -A *.kernel,*initrd* -nv --cut-dirs=5 http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/sles15-base/0.0.1-1
 wget --mirror -np -nH -A *.squashfs -nv --cut-dirs=5 http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/kubernetes/0.0.1-4
 wget --mirror -np -nH -A *.squashfs -nv --cut-dirs=5 http://arti.dev.cray.com/artifactory/node-images-unstable-local/shasta/storage-ceph/0.0.1-6
+popd
 ```
 
 
