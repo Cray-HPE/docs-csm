@@ -50,7 +50,7 @@ First fetch and edit `data.json`...
     ```shell script
     ncn-w001:~ # mkdir -pv /mnt/configs
     ncn-w001:~ # git clone https://stash.us.cray.com/scm/mtl/docs-non-compute-nodes.git
-    ncn-w001:~ # cp -pv docs-ncn/example-data.json /mnt/configs/data.json
+    ncn-w001:~ # cp -pv docs-non-compute-nodes/example-data.json /mnt/configs/data.json
     ```
 2. Edit the MAC addresses with your values from:
 
