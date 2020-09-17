@@ -64,7 +64,7 @@ First fetch and edit `data.json`...
 ncn-w001:~ # vim /mnt/configs/data.json
 ```
 
-This file is the main metadata file for configuring nodes in cloud-init.
+This file (`data.json`) is the main metadata file for configuring nodes in cloud-init.
 
 ### Artifacts
 
