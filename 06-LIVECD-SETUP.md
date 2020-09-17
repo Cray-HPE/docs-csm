@@ -28,13 +28,7 @@ External, direct access.
 ```shell script
 # These may have already been defined if you made them as part of the previous doc
 # Example below uses loki-ncn-m001.
-cidr=172.30.53.68/20
-gw=172.30.48.1
-dns='172.30.84.40 172.31.84.40'
-# This may be different, so check with with ip command what the interface names are first
-# It's not hard to undo, but you can save yourself a step if it's wrong
-nic=em1
-/root/bin/sic-setup-lan0.sh $cidr $gw $dns $nic
+/root/bin/sic-setup-lan0.sh $site_cidr $site_gw $site_dns $site_nic
 ```
 
 Note: If you were on the Serial-over-LAN, now is a good time to log back in with SSH.
@@ -80,7 +74,6 @@ This subnet handles customer access to nodes and services as well as access to o
 network for talking to UANs and NCNs from outside the cluster and access services in the cluster.
 
 ```shell script
-can_cidr='10.102.9.110/24'
 /root/bin/sic-setup-vlan007.sh $can_cidr
 ```
 
