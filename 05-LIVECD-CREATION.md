@@ -68,7 +68,10 @@ This file is the main metadata file for configuring nodes in cloud-init.
 
 ### Artifacts
 
-`in-progress`
+
+Fetch the current working set of artifacts.
+> Note: This chooses a fixed artifact ID, you can change it by editing the suffix of the URL(s).
+
 ```shell script
 mkdir -pv /mnt/data/
 pushd /mnt/data/
