@@ -6,6 +6,9 @@ This will go over what values you need from 1.3 configuration files to jump-star
 This presumes you have 1.3.x configuration files, 1.2 should suffice but
 locations may differ and mileage may vary.
 
+## Shut down other nodes
+To prevent DHCP conflicts, shut down all the other NCNs before booting into the liveCD
+
 ## Information Gathering for Making the LiveCD:
 
 1. A USB stick or other Block Device, local to ncn-w001 or ncn-mXXX (external-managers).
@@ -16,11 +19,11 @@ locations may differ and mileage may vary.
 ## Information Gathering for Using the LiveCD:
 
 ### 1.3.x -> 1.4 Quick-n-dirty data gathering...
- 
+
 LiveCD setup information can be collected by hand or alterantively you can run this on any 1.3.X system
  to print out an easy-script for setting up your liveCD for your system.
- 
-> **This will all be replaced by the shasta-instance-control tool; this is just a helper for 1.3.X 
+
+> **This will all be replaced by the shasta-instance-control tool; this is just a helper for 1.3.X
 > testing.**
 
 The following steps will detail how to quickly collect information from a semi, or fully installed
@@ -30,7 +33,7 @@ The following steps will detail how to quickly collect information from a semi, 
 #### Steps:
 
 1. Copy the block below into a terminal window on a booted shasta-1.3.X-worker node (i.e. ncn-w001).
- 
+
 ```shell script
 # Make/truncate the file.
 >/tmp/qnd-1.4.sh
@@ -67,7 +70,7 @@ export hmn_dhcp_start=10.254.50.5
 export hmn_dhcp_end=10.254.99.252     
 ```
 
-### Alternative / Hand-collection. 
+### Alternative / Hand-collection.
 
 If you don't have that information, then you need the following:
 - Bond member 0 (i.e. p801p1)
@@ -86,10 +89,35 @@ If you don't have that information, then you need the following:
 ## Information Gathering for identifying the first nodes:
 
 
-The information from above should be parsable from a shasta-1.3.X `ncn_metadata.csv`. The last 
+The information from above should be parsable from a shasta-1.3.X `ncn_metadata.csv`. The last
 columns in that CSV should denote BMCs.
 
+A little script to parse that stuff out is below, but some manual intervention is still needed.  You can match this up to the ccd.
+
+```
+#!/bin/bash
+INPUT="$1"
+OLDIFS=$IFS
+IFS=','
+[[ ! -f $INPUT ]] && { echo "$INPUT file not found"; exit 99; }
+while read xname role subrole bmcmac bmcport nmnmac nmnport
+do
+# dhcp-host=ncn-s002-mgmt,a4:bf:01:48:20:03,ncn-s002-mgmt
+  echo "dhcp-host=HOST,$bmcmac,$bmcport"
+  #echo "xname: $xname"
+  #echo "role : $role"
+  #echo "subrole : $subrole"
+  #echo "bmc mac : $bmcmac"
+  #echo "bmc port : $bmcport"
+  #echo "nmn mac : $nmnmac"
+  #echo "nmn port : $nmnport"
+  done < $INPUT
+IFS=$OLDIFS
+```
+This info will be used in `/etc/dnsmasq.d/statistics.conf` but is still incomplete.  You can compare the output to the CCD and replace the `HOST` and port with the hostname and then restart `dnsmasq`.  
+
 ### BMCs
+
 
 ```apacheconfig
 dhcp-host=94:40:c9:37:66:98,10.254.2.13,uan01-mgmt

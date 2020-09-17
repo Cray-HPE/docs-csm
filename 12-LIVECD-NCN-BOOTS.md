@@ -3,19 +3,24 @@
 Before starting this you are expected to have networking and serices setup.
 If you are unsure, see the bottom of [11-LIVECD-SETUP.md](11-LIVECD-SETUP.md).
 
-Typically, we should have eight leases for NCN BMCs. Some systems may have less, but the 
+## IMPORTANT: Make sure the other nodes are shut down
+This was done in an earlier section, but it's important you have **shut down all the other NCNs to prevent DHCP conflicts**.  
+
+Typically, we should have eight leases for NCN BMCs. Some systems may have less, but the
 recommended minimum is 3 of each type (k8s-managers, k8s-workers, ceph-storage).
 
 Check for NCN lease count:
-spit:~ # grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases | wc -l
+```
+grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases | wc -l
 8
+```
 
 `8` is the number we're expecting typically, since NCN "number 9" is the node
 currently booted up with the LiveCD (the node you're standing on).
 
 Print off each NCN we'll target for booting.
 ```shell script
-spit:~ # grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases
+spit:~ # grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases | sort
 ncn-w002-mgmt
 ncn-s001-mgmt
 ncn-m002-mgmt
@@ -28,6 +33,8 @@ ncn-w003-mgmt
 
 ### Set fallback/static IPs.
 
+#### SKIP THIS STEP FOR DURING A 1.3 UPGRADE TEST.
+
 If we loose DHCP for some reason, we can use defined IP addresses from
 DNSmasq.
 
@@ -38,14 +45,14 @@ DNSmasq.
 username=''
 password=''
 for bmc in $(grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases); do
-    ipaddr=$(grep $bmc /var/lib/misc/dnsmasq.leases | awk '{print $3}') 
+    ipaddr=$(grep $bmc /var/lib/misc/dnsmasq.leases | awk '{print $3}')
     netmask=$(ipmitool -I lanplus -U root -P initial0 -H ${bmc} lan print 1 | grep Mask | awk '{print $NF}')
     echo $bmc commands:
-    echo ipmitool -I lanplus -U $username -P $password -H $bmc lan 1 set ipaddr $ipaddr 
+    echo ipmitool -I lanplus -U $username -P $password -H $bmc lan 1 set ipaddr $ipaddr
     echo ipmitool -I lanplus -U $username -P $password -H $bmc lan 1 set netmask $netmask
     echo ipmitool -I lanplus -U $username -P $password -H $bmc lan 1 set defgw ipaddr $ipaddr
     echo ipmitool -I lanplus -U $username -P $password -H $bmc lan 1 set ipsrc static
-    echo console name="$bmc" dev="ipmi:$ipaddr" ipmiopts="U:$username,P:$password,W:solpayloadsize" >>/etc/conman.conf 
+    echo console name="$bmc" dev="ipmi:$ipaddr" ipmiopts="U:$username,P:$password,W:solpayloadsize" >>/etc/conman.conf
     echo
 done
 ```
@@ -54,13 +61,28 @@ on your BMCs.
 
 Verify the output, make sure it looks right.
 
+## Ensure artifacts are in place
+This may already have been done in a previous step, but you need to download the kernel, initrd and the squashfs for the k8s and storage nodes.
+
+```
+mkdir -pv /mnt/var/www/ephemeral
+mount /dev/sdb4 !$
+pushd /mnt/var/www/ephemeral
+wget --mirror -np -nH -A *.kernel,*initrd* -nv --cut-dirs=5 http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/sles15-base/0.0.1-1
+wget --mirror -l1 -r -np nH -A squashfs http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/kubernetes/0.0.1-4
+wget --mirror -l1 -r -np -A squashfs http://arti.dev.cray.com/artifactory/node-images-unstable-local/shasta/storage-ceph/0.0.1-6
+popd
+```
+
 ### Boot K8s
+
+This will again just `echo` the commands.  Look them over and validate they are ok before running them.  This just `grep`s out the storage nodes so you only get the workers and managers.
 
 ```shell script
 username=''
 password=''
-for bmc in $(grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases | sort); do
-    echo ipmitool -I lanplus -U $username -P $password -H $bmc chassis bootdev pxe options=efiboot 
+for bmc in $(grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases | grep -v s00 | sort); do
+    echo ipmitool -I lanplus -U $username -P $password -H $bmc chassis bootdev pxe options=efiboot
     echo "ipmitool -I lanplus -U $username -P $password -H $bmc chassis power on 2>/dev/null || echo ipmitool -I lanplus -U $username -P $password -H $bmc chassis power reset"
 done
 ```
