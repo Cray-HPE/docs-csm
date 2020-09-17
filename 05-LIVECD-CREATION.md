@@ -26,7 +26,7 @@ ncn-w001:~ # wget http://car.dev.cray.com/artifactory/internal/MTL/sle15_sp2_ncn
 # Find your USB stick with your linux tool of choice, for this it's /dev/sdd.
 # Run this command, or adjust the copy-on-write (COW) overlay size for persistent storage
 # from 5000MiB.                                                                                       
-ncn-w001:~ git clone sssh://git@stash.us.cray.com:7999/mtl/shasta-pre-install-toolkit.git
+ncn-w001:~ # git clone https://stash.us.cray.com/scm/mtl/shasta-pre-install-toolkit.git
 ncn-w001:~ # ./shasta-pre-install-toolkit/scripts/write-livecd.sh /dev/sdd $(pwd)/shasta-pre-install-toolkit-latest.iso 5000
 
 ## 2.
