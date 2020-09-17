@@ -112,6 +112,3 @@ Once the system is booted, have your network information handy so you can popula
 Then you can move onto these next two pages:
 1. Setting up communication...[11-LIVECD-SETUP.md](06-LIVECD-SETUP.md)
 2. Booting NCNs [12-LIVECD-NCN-BOOTS.md](07-LIVECD-NCN-BOOTS.md)
-
-# remove block-device leeway
-# add blurb to re-run the script on the setup page
