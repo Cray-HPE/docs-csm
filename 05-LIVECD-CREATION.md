@@ -42,7 +42,8 @@ Now our stick is ready, and we can load configuration payload information.
 
 > Note: This manual step is tedious and will be removed by automation.
 
->Fetch and edit `data.json`:
+First fetch and edit `data.json`...
+
 1. Fetch the latest example, this can be done off of ncn-w001: 
     ```shell script
     ncn-w001:~ # git clone https://stash.us.cray.com/scm/mtl/docs-non-compute-nodes.git docs-ncn
