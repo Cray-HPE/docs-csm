@@ -62,16 +62,18 @@ on your BMCs.
 Verify the output, make sure it looks right.
 
 ## Ensure artifacts are in place
-This may already have been done in a previous step, but you need to download the kernel, initrd and the squashfs for the k8s and storage nodes.
+
+Mount the USB stick's data partition, and setup links for booting.
+
+> Note: The set-sqfs-links.sh only works for one image at a time, you may have to move the
+> k8s images or storage images out of the folder to run the script. Then swap artifacts for the next
+> node type.
 
 ```
 mkdir -pv /mnt/var/www/ephemeral
 mount /dev/sdb4 !$
 pushd /mnt/var/www/ephemeral
-wget --mirror -np -nH -A *.kernel,*initrd* -nv --cut-dirs=5 http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/sles15-base/0.0.1-1
-wget --mirror -l1 -r -np nH -A squashfs http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/kubernetes/0.0.1-4
-wget --mirror -l1 -r -np -A squashfs http://arti.dev.cray.com/artifactory/node-images-unstable-local/shasta/storage-ceph/0.0.1-6
-popd
+/root/bin/set-sqfs-links.sh
 ```
 
 ### Boot K8s
