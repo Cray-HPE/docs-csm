@@ -39,38 +39,16 @@ ncn-w001:~ # mount /dev/sdd4 /mnt/
 ### Configs
 
 Now our stick is ready, and we can load configuration payload information.
-```shell script
-## 3.a.
-# Option 1: Fetch configs from a flat webroot:
-ncn-w001:~ # mkdir -pv /mnt/configs
-ncn-w001:~ # pushd /mnt/configs
-ncn-w001:~ # url_endpoint=http://somewhere/out/there/
-ncn-w001:~ # wget --mirror -np -nH -A *.yml,*.yaml,*.toml,*.csv -nv --cut-dirs=1 $url_endpoint
-ncn-w001:~ # popd
 
-## 3.b.     
-# Option 2: Fetch configs from GIT:
-ncn-w001:~ # git clone $config_repo
-ncn-w001:~ # mkdir /mnt/configs
-ncn-w001:~ # cp -r shasta_system_configs/$system_name/* /mnt/configs/
+> Note: This manual step is tedious and will be removed by automation.
 
-## 3.c.
-# Option 3: Unpack a tarball:
-ncn-w001:~ # mkdir -pv /mnt/configs
-ncn-w001:~ # scp user:password@server/path/tar.gz /mnt/configs/
-ncn-w001:~ # pushd /mnt/configs
-ncn-w001:~ # tar -xzvf tar.gz
-ncn-w001:~ # popd
-
-```
-
-Edit `data.json`:
-1. Clone the repo, this can be done off of ncn-w001: 
+>Fetch and edit `data.json`:
+1. Fetch the latest example, this can be done off of ncn-w001: 
     ```shell script
     ncn-w001:~ # git clone https://stash.us.cray.com/scm/mtl/docs-non-compute-nodes.git docs-ncn
     ncn-w001:~ # cp -pv docs-ncn/example-data.json /mnt/data.json
     ```
-2. Copy the `example-data.json` into the config partition, and edit the MAC addresses with your values from:
+2. Edit the MAC addresses with your values from:
 
     - `cray-macs`
     - `ncn_metadata.csv`
@@ -84,6 +62,8 @@ Edit `data.json`:
 # `kubernetes.yml`.
 ncn-w001:~ # vim /mnt/configs/data.json
 ```
+
+This file is the main metadata file for configuring nodes in cloud-init.
 
 ### Artifacts
 
