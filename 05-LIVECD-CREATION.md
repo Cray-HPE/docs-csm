@@ -36,6 +36,8 @@ ncn-w001:~ # mount /dev/sdd4 /mnt/
 
 ## Manual Step 2: Configuration Payload
 
+### Configs
+
 Now our stick is ready, and we can load configuration payload information.
 ```shell script
 ## 3.a.
@@ -94,6 +96,17 @@ echo "export can_dhcp_start=10.102.4.5" >> /mnt/qnd-1.4.sh
 echo "export can_dhcp_end=10.102.4.109" >> /mnt/qnd-1.4.sh
 ```
 
+### Artifacts
+
+`in-progress`
+```shell script
+
+wget --mirror -np -nH -A *.kernel,*initrd* -nv --cut-dirs=5 http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/sles15-base/0.0.1-1
+wget --mirror -np -nH -A *.squashfs -nv --cut-dirs=5 http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/kubernetes/0.0.1-4
+wget --mirror -np -nH -A *.squashfs -nv --cut-dirs=5 http://arti.dev.cray.com/artifactory/node-images-unstable-local/shasta/storage-ceph/0.0.1-6
+```
+
+
 #### 1.3.x Upgrade Notice
 
 **Copy `/tmp/qnd-1.4.sh`** to `/mnt/` or wherever you've mounted the data partition **now**.
@@ -121,8 +134,8 @@ Once the system is booted, have your network information handy so you can popula
 - The CAN IP/CIDR (ex: `can_cidr=10.102.4.110/24`)
 
 Then you can move onto these next two pages:
-1. Setting up communication...[11-LIVECD-SETUP.md](11-LIVECD-SETUP.md)
-2. Booting NCNs [12-LIVECD-NCN-BOOTS.md](12-LIVECD-NCN-BOOTS.md)
+1. Setting up communication...[11-LIVECD-SETUP.md](06-LIVECD-SETUP.md)
+2. Booting NCNs [12-LIVECD-NCN-BOOTS.md](07-LIVECD-NCN-BOOTS.md)
 
 # remove block-device leeway
 # add blurb to re-run the script on the setup page

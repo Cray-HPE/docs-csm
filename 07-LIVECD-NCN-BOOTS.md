@@ -1,7 +1,7 @@
 # LiveCD NCN Boots
 
 Before starting this you are expected to have networking and serices setup.
-If you are unsure, see the bottom of [11-LIVECD-SETUP.md](11-LIVECD-SETUP.md).
+If you are unsure, see the bottom of [11-LIVECD-SETUP.md](06-LIVECD-SETUP.md).
 
 ## IMPORTANT: Make sure the other nodes are shut down
 This was done in an earlier section, but it's important you have **shut down all the other NCNs to prevent DHCP conflicts**.  
@@ -39,7 +39,7 @@ If we loose DHCP for some reason, we can use defined IP addresses from
 DNSmasq.
 
 > Note: this requires a statics.conf file to be generated with the BMC MAC addresses.
-> See [09-LIVECD-PREFLIGHT.md](09-LIVECD-PREFLIGHT.md) for more information.
+> See [09-LIVECD-PREFLIGHT.md](10-LIVECD-PREFLIGHT.md) for more information.
 
 ```shell script
 username=''
