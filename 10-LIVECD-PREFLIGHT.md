@@ -6,19 +6,16 @@ This will go over what values you need from 1.3 configuration files to jump-star
 This presumes you have 1.3.x configuration files, 1.2 should suffice but
 locations may differ and mileage may vary.
 
-## Shut down other nodes
-To prevent DHCP conflicts, shut down all the other NCNs before booting into the liveCD
-
-## Information Gathering for Making the LiveCD:
+Before starting, you should have:
 
 1. A USB stick or other Block Device, local to ncn-w001 or ncn-mXXX (external-managers).
 2. The drive letter of that device (i.e. `/dev/sdd`)
 3. Access to stash, to `git pull ssh://git@stash.us.cray.com:7999/mtl/shasta-pre-install-toolkit.git` onto your NCN.
 4. The block device should be `>16GB`, the toolkit's built from "just-enough-OS" and can fit on smaller drives.
 
-## Information Gathering for Using the LiveCD:
+# Manual Step 1: Information Gathering for Using the LiveCD:
 
-### 1.3.x -> 1.4 Quick-n-dirty data gathering...
+## 1.3.x -> 1.4 Quick-n-dirty data gathering...
 
 LiveCD setup information can be collected by hand or alterantively you can run this on any 1.3.X system
  to print out an easy-script for setting up your liveCD for your system.
@@ -34,45 +31,70 @@ The following steps will detail how to quickly collect information from a semi, 
 
 1. Copy the block below into a terminal window on a booted shasta-1.3.X-worker node (i.e. ncn-w001).
 
-```shell script
-# Make/truncate the file.
->/tmp/qnd-1.4.sh
-# Echo commands into the file and onto the screen, these run locally and against ncn-w001.
-echo export bond_member0=$(ansible ncn-w001 -c local -a "echo {{ platform.NICS.lan1 }}" | tail -n 1 ) | tee -a /tmp/qnd-1.4.sh
-echo export bond_member1=$(ansible ncn-w001 -c local -a "echo {{ platform.NICS.lan3 }}" | tail -n 1 ) | tee -a /tmp/qnd-1.4.sh
-echo export mtl_cidr=$(ansible ncn-w001 -c local -a "echo {{ [bis.mtl_ip, abbrv.mtl.network | ipaddr('prefix')] | join('/') }}" | tail -n 1 ) | tee -a /tmp/qnd-1.4.sh
-echo export mtl_dhcp_start=$(ansible ncn-w001 -c local -a "echo {{ abbrv.mtl.subnets | selectattr('label', 'equalto', 'default') | flatten | selectattr('dhcp') | map(attribute='dhcp.start') | first }}" | tail -n 1 ) | tee -a /tmp/qnd-1.4.sh
-echo export mtl_dhcp_end=$(ansible ncn-w001 -c local -a "echo {{ abbrv.mtl.subnets | selectattr('label', 'equalto', 'default') | flatten | selectattr('dhcp') | map(attribute='dhcp.end') | first }}" | tail -n 1 ) | tee -a /tmp/qnd-1.4.sh
-echo export nmn_cidr=$(ansible ncn-w001 -c local -a "echo {{ [bis.nmn_ip, abbrv.nmn.network | ipaddr('prefix')] | join('/') }}" | tail -n 1 ) | tee -a /tmp/qnd-1.4.sh
-echo export nmn_dhcp_start=$(ansible ncn-w001 -c local -a "echo {{ abbrv.nmn.subnets | selectattr('label', 'equalto', 'default') | flatten | selectattr('dhcp') | map(attribute='dhcp.start') | first }}" | tail -n 1 ) | tee -a /tmp/qnd-1.4.sh
-echo export nmn_dhcp_end=$(ansible ncn-w001 -c local -a "echo {{ abbrv.nmn.subnets | selectattr('label', 'equalto', 'default') | flatten | selectattr('dhcp') | map(attribute='dhcp.end') | first }}" | tail -n 1 ) | tee -a /tmp/qnd-1.4.sh
-echo export hmn_cidr=$(ansible ncn-w001 -c local -a "echo {{ [bis.hmn_ip, abbrv.hmn.network | ipaddr('prefix')] | join('/') }}" | tail -n 1 ) | tee -a /tmp/qnd-1.4.sh
-echo export hmn_dhcp_start=$(ansible ncn-w001 -c local -a "echo {{ abbrv.hmn.subnets | selectattr('label', 'equalto', 'default') | flatten | selectattr('dhcp') | map(attribute='dhcp.start') | first }}" | tail -n 1 ) | tee -a /tmp/qnd-1.4.sh
-echo export hmn_dhcp_end=$(ansible ncn-w001 -c local -a "echo {{ abbrv.hmn.subnets | selectattr('label', 'equalto', 'default') | flatten | selectattr('dhcp') | map(attribute='dhcp.end') | first }}" | tail -n 1 ) | tee -a /tmp/qnd-1.4.sh
-```
+    ```bash
+    # Make/truncate the file.
+    >/tmp/qnd-1.4.sh
+    # Echo commands into the file and onto the screen, these run locally and against ncn-w001.
+    echo export site_nic=$(ansible ncn-w001 -c local -a "echo {{ platform.NICS.lan2 }}" | tail -n 1 ) | tee -a /tmp/qnd-1.4.sh
+    echo export bond_member0=$(ansible ncn-w001 -c local -a "echo {{ platform.NICS.lan1 }}" | tail -n 1 ) | tee -a /tmp/qnd-1.4.sh
+    echo export bond_member1=$(ansible ncn-w001 -c local -a "echo {{ platform.NICS.lan3 }}" | tail -n 1 ) | tee -a /tmp/qnd-1.4.sh
+    echo export mtl_cidr=$(ansible ncn-w001 -c local -a "echo {{ [bis.mtl_ip, abbrv.mtl.network | ipaddr('prefix')] | join('/') }}" | tail -n 1 ) | tee -a /tmp/qnd-1.4.sh
+    echo export mtl_dhcp_start=$(ansible ncn-w001 -c local -a "echo {{ abbrv.mtl.subnets | selectattr('label', 'equalto', 'default') | flatten | selectattr('dhcp') | map(attribute='dhcp.start') | first }}" | tail -n 1 ) | tee -a /tmp/qnd-1.4.sh
+    echo export mtl_dhcp_end=$(ansible ncn-w001 -c local -a "echo {{ abbrv.mtl.subnets | selectattr('label', 'equalto', 'default') | flatten | selectattr('dhcp') | map(attribute='dhcp.end') | first }}" | tail -n 1 ) | tee -a /tmp/qnd-1.4.sh
+    echo export nmn_cidr=$(ansible ncn-w001 -c local -a "echo {{ [bis.nmn_ip, abbrv.nmn.network | ipaddr('prefix')] | join('/') }}" | tail -n 1 ) | tee -a /tmp/qnd-1.4.sh
+    echo export nmn_dhcp_start=$(ansible ncn-w001 -c local -a "echo {{ abbrv.nmn.subnets | selectattr('label', 'equalto', 'default') | flatten | selectattr('dhcp') | map(attribute='dhcp.start') | first }}" | tail -n 1 ) | tee -a /tmp/qnd-1.4.sh
+    echo export nmn_dhcp_end=$(ansible ncn-w001 -c local -a "echo {{ abbrv.nmn.subnets | selectattr('label', 'equalto', 'default') | flatten | selectattr('dhcp') | map(attribute='dhcp.end') | first }}" | tail -n 1 ) | tee -a /tmp/qnd-1.4.sh
+    echo export hmn_cidr=$(ansible ncn-w001 -c local -a "echo {{ [bis.hmn_ip, abbrv.hmn.network | ipaddr('prefix')] | join('/') }}" | tail -n 1 ) | tee -a /tmp/qnd-1.4.sh
+    echo export hmn_dhcp_start=$(ansible ncn-w001 -c local -a "echo {{ abbrv.hmn.subnets | selectattr('label', 'equalto', 'default') | flatten | selectattr('dhcp') | map(attribute='dhcp.start') | first }}" | tail -n 1 ) | tee -a /tmp/qnd-1.4.sh
+    echo export hmn_dhcp_end=$(ansible ncn-w001 -c local -a "echo {{ abbrv.hmn.subnets | selectattr('label', 'equalto', 'default') | flatten | selectattr('dhcp') | map(attribute='dhcp.end') | first }}" | tail -n 1 ) | tee -a /tmp/qnd-1.4.sh
+    ```
 
-2. Print the script into terminal for capture. There will be a reminder to copy this file into our LiveCD
+2. You'll also want to gather network info for the external interface. This would be:
+
+    ```bash
+    echo export site_cidr=172.30.53.68/20 >>/tmp/qnd-1.4.sh
+    echo export site_gw=172.30.48.1 >>/tmp/qnd-1.4.sh
+    echo export site_dns='172.30.84.40 172.31.84.40' >>/mnt/qnd-1.4.sh
+    ```
+
+3.  Customer Access Network information will need to be gathered by hand and kept:
+
+    ```bash
+    echo export can_cidr=10.102.4.110/24 >> /tmp/qnd-1.4.sh
+    echo export can_dhcp_start=10.102.4.5 >> /tmp/qnd-1.4.sh
+    echo export can_dhcp_end=10.102.4.109 >> /tmp/qnd-1.4.sh
+    ```
+
+4. Optionally adjust dhcp time for 1.4 leases:
+
+    ```bash
+    # Default is 10m
+    echo export dhcp_ttl=2m >> /tmp/qnd-1.4.sh
+    ```
+
+5. Print the script into terminal for capture. There will be a reminder to copy this file into our LiveCD
 in the creation readme.
 
-```shell script
-# Print the file we made:
-ncn-w001:~ # cat /tmp/qnd-1.4.sh
-export bond_member0=p801p1            
-export bond_member1=p801p2            
-export mtl_cidr=10.1.1.1/16           
-export mtl_dhcp_start=10.1.2.3        
-export mtl_dhcp_end=10.1.2.254        
-export nmn_cidr=10.252.1.1/17           
-export nmn_dhcp_start=10.252.50.0     
-export nmn_dhcp_end=10.252.99.252     
-export hmn_cidr=10.254.1.1/17           
-export hmn_dhcp_start=10.254.50.5     
-export hmn_dhcp_end=10.254.99.252     
-```
+    ```bash
+    # Print the file we made:
+    ncn-w001:~ # cat /tmp/qnd-1.4.sh
+    export site_link=em1
+    export bond_member0=p801p1            
+    export bond_member1=p801p2            
+    export mtl_cidr=10.1.1.1/16           
+    export mtl_dhcp_start=10.1.2.3        
+    export mtl_dhcp_end=10.1.2.254        
+    export nmn_cidr=10.252.1.1/17           
+    export nmn_dhcp_start=10.252.50.0     
+    export nmn_dhcp_end=10.252.99.252     
+    export hmn_cidr=10.254.1.1/17           
+    export hmn_dhcp_start=10.254.50.5     
+    export hmn_dhcp_end=10.254.99.252     
+    ```
 
-### Alternative / Hand-collection.
+#### Alternative / Hand-collection.
 
-If you don't have that information, then you need the following:
+If you don't have that information, then you need the following otherwise move on.
 - Bond member 0 (i.e. p801p1)
 - Bond member 1 (i.e. p801p2)
 - MTL CIDR (i.e. 10.1.1.1/16)
@@ -90,13 +112,16 @@ If you don't have that information, then you need the following:
 - CAN DHCP end (i.e. 10.102.9.109)
 
 
-## Information Gathering for identifying the first nodes:
+# Manual Step 2:  Information Gathering for identifying the first nodes:
 
 
-The information from above should be parsable from a shasta-1.3.X `ncn_metadata.csv`. The last
-columns in that CSV should denote BMCs.
+### BMCs
 
-A little script to parse that stuff out is below, but some manual intervention is still needed.  You can match this up to the ccd.
+A little script to parse that stuff out is below, but requires some manual intervention.
+Pass in the `ncn_metadata.csv` file to output data for a static file for talking to the BMCs.
+
+> Note this still allows DNSMasq to assign IPs out of its own pool(s), it just provides hostname
+> resolution.
 
 ```
 #!/bin/bash
@@ -106,8 +131,8 @@ IFS=','
 [[ ! -f $INPUT ]] && { echo "$INPUT file not found"; exit 99; }
 while read xname role subrole bmcmac bmcport nmnmac nmnport
 do
-# dhcp-host=ncn-s002-mgmt,a4:bf:01:48:20:03,ncn-s002-mgmt
-  echo "dhcp-host=HOST,$bmcmac,$bmcport"
+# dhcp-host=xname,a4:bf:01:48:20:03,ncn-s002-mgmt
+  echo "dhcp-host=$xname,$bmcmac,$bmcport"
   #echo "xname: $xname"
   #echo "role : $role"
   #echo "subrole : $subrole"
@@ -118,10 +143,14 @@ do
   done < $INPUT
 IFS=$OLDIFS
 ```
-This info will be used in `/etc/dnsmasq.d/statistics.conf` but is still incomplete.  You can compare the output to the CCD and replace the `HOST` and port with the hostname and then restart `dnsmasq`.  
 
-### BMCs
+This info will be used in `/etc/dnsmasq.d/statics.conf` but is still incomplete. 
+You can compare the output to the CCD and replace the `HOST` and port with the hostname and then restart `dnsmasq`.
 
+```bash
+systemctl restart dnsmasq
+``` 
+The `statics.conf` file should now look like this, but with MACs for your system:
 
 ```apacheconfig
 dhcp-host=94:40:c9:37:66:98,10.254.2.13,uan01-mgmt
@@ -141,14 +170,13 @@ dhcp-host=94:40:c9:37:e3:3a,10.254.2.10,ncn-m002-mgmt
 
 ### NCNs
 
+### This requires having 1.3 configs, for bare-metal/new machines this will be manual.
+
 > Note: Hostname resolution for NMN is not dynamic yet due to cloud-init integration.
 > A shim to allow for this is provided in [12-LIVECD-NCN-BOOTS.md](07-LIVECD-NCN-BOOTS.md).
 
 
 ## Artifact Gathering for Booting Nodes:
 
-
-
-# Next..
 
 Now move onto [05-LIVECD-CREATION](05-LIVECD-CREATION.md).

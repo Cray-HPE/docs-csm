@@ -9,79 +9,64 @@ This was done in an earlier section, but it's important you have **shut down all
 Typically, we should have eight leases for NCN BMCs. Some systems may have less, but the
 recommended minimum is 3 of each type (k8s-managers, k8s-workers, ceph-storage).
 
-Check for NCN lease count:
-```
-grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases | wc -l
-8
-```
+## Manual Check 1: Validate Controller Leases 
 
-`8` is the number we're expecting typically, since NCN "number 9" is the node
-currently booted up with the LiveCD (the node you're standing on).
+You will need to create a static file for the BMCs, at least so DNSMasq can map MAC to Hostname. 
+Follow BMC section guide at the bottom of [10-LIVECD-PREFLIGHT](10-LIVECD-PREFLIGHT.md).
 
-Print off each NCN we'll target for booting.
-```shell script
-spit:~ # grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases | sort
-ncn-w002-mgmt
-ncn-s001-mgmt
-ncn-m002-mgmt
-ncn-w001-mgmt
-ncn-s002-mgmt
-ncn-m003-mgmt
-ncn-s003-mgmt
-ncn-w003-mgmt
-```
+If you have that file, you can move on.
 
-### Set fallback/static IPs.
+1. Check for NCN lease count:
 
-#### SKIP THIS STEP FOR DURING A 1.3 UPGRADE TEST.
+    ```bash
+    grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases | wc -l
+    8
+    ```
 
-If we loose DHCP for some reason, we can use defined IP addresses from
-DNSmasq.
+    `8` is the number we're expecting typically, since NCN "number 9" is the node
+    currently booted up with the LiveCD (the node you're standing on).
 
-> Note: this requires a statics.conf file to be generated with the BMC MAC addresses.
-> See [09-LIVECD-PREFLIGHT.md](10-LIVECD-PREFLIGHT.md) for more information.
+2. Print off each NCN we'll target for booting.
 
-```shell script
-username=''
-password=''
-for bmc in $(grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases); do
-    ipaddr=$(grep $bmc /var/lib/misc/dnsmasq.leases | awk '{print $3}')
-    netmask=$(ipmitool -I lanplus -U root -P initial0 -H ${bmc} lan print 1 | grep Mask | awk '{print $NF}')
-    echo $bmc commands:
-    echo ipmitool -I lanplus -U $username -P $password -H $bmc lan 1 set ipaddr $ipaddr
-    echo ipmitool -I lanplus -U $username -P $password -H $bmc lan 1 set netmask $netmask
-    echo ipmitool -I lanplus -U $username -P $password -H $bmc lan 1 set defgw ipaddr $ipaddr
-    echo ipmitool -I lanplus -U $username -P $password -H $bmc lan 1 set ipsrc static
-    echo console name="$bmc" dev="ipmi:$ipaddr" ipmiopts="U:$username,P:$password,W:solpayloadsize" >>/etc/conman.conf
-    echo
-done
-```
-Running the above loop will output commands to copy-and-paste, it will not actually set anything
-on your BMCs.
+    ```bash
+    spit:~ # grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases | sort
+    ncn-w002-mgmt
+    ncn-s001-mgmt
+    ncn-m002-mgmt
+    ncn-w001-mgmt
+    ncn-s002-mgmt
+    ncn-m003-mgmt
+    ncn-s003-mgmt
+    ncn-w003-mgmt
+    ```
 
-Verify the output, make sure it looks right.
+# Manual Step 1:  Ensure artifacts are in place
 
-## Ensure artifacts are in place
-This may already have been done in a previous step, but you need to download the kernel, initrd and the squashfs for the k8s and storage nodes.
+Mount the USB stick's data partition, and setup links for booting.
 
-```
-mkdir -pv /mnt/var/www/ephemeral
-mount /dev/sdb4 !$
-pushd /mnt/var/www/ephemeral
-wget --mirror -np -nH -A *.kernel,*initrd* -nv --cut-dirs=5 http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/sles15-base/0.0.1-1
-wget --mirror -l1 -r -np nH -A squashfs http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/kubernetes/0.0.1-4
-wget --mirror -l1 -r -np -A squashfs http://arti.dev.cray.com/artifactory/node-images-unstable-local/shasta/storage-ceph/0.0.1-6
-popd
-```
+> Note: The `set-sqfs-links.sh` only works for one image at a time, you may have to move the
+> k8s images or storage images out of the folder to run the script. Then swap artifacts for the next
+> node type.
 
-### Boot K8s
+The ideal is to mount the data disk where we're serving from, since it's already on the same device.
+It is not recommended to copy the artifacts into place, because the copy-on-write partition may be
+smaller than the data partition.
+
+    ```bash
+    spit:~ # mkdir -pv /mnt/var/www/ephemeral
+    spit:~ # mount /dev/sdb4 !$
+    spit:~ # pushd /mnt/var/www/ephemeral
+    spit:~ # /root/bin/set-sqfs-links.sh
+    ```
+
+# Manual Step 2: Boot Storage Nodes
 
 This will again just `echo` the commands.  Look them over and validate they are ok before running them.  This just `grep`s out the storage nodes so you only get the workers and managers.
 
-```shell script
+```bash
 username=''
 password=''
-for bmc in $(grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases | grep -v s00 | sort); do
+for bmc in $(grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases | grep  s | sort); do
     echo ipmitool -I lanplus -U $username -P $password -H $bmc chassis bootdev pxe options=efiboot
     echo "ipmitool -I lanplus -U $username -P $password -H $bmc chassis power on 2>/dev/null || echo ipmitool -I lanplus -U $username -P $password -H $bmc chassis power reset"
 done
@@ -90,7 +75,7 @@ done
 Watch consoles with the Serial-over-LAN, or use conamn if you've setup `/etc/conman.conf` with
 the static IPs for the BMCs.
 
-```shell script
+```bash
 # Connect to ncn-s002..
 username=''
 password=''
@@ -101,3 +86,29 @@ spit:~ # echo ipmitool -I lanplus -U $username -P $password -H $bmc sol activate
 spit:~ # conman -q
 spit:~ # conman -j ncn-s002
 ```
+
+### Manual Step 3: Boot K8s
+
+This will again just `echo` the commands.  Look them over and validate they are ok before running them.  This just `grep`s out the storage nodes so you only get the workers and managers.
+
+```bash
+# Fixup the link to boot K8s nodes:
+spit:~ # ln -snf /var/www/filesystem.squashfs /var/www/kubernetes.squashfs
+```
+Then go ahead and boot your nodes:
+```bash
+username=''
+password=''
+for bmc in $(grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases | grep -v s | sort); do
+    echo ipmitool -I lanplus -U $username -P $password -H $bmc chassis bootdev pxe options=efiboot
+    echo "ipmitool -I lanplus -U $username -P $password -H $bmc chassis power on 2>/dev/null || echo ipmitool -I lanplus -U $username -P $password -H $bmc chassis power reset"
+done
+```
+
+### Manual Check 2: Storage
+
+> TODO: Craig Delatte
+
+### Manual Check 3: Check K8s
+
+> TODO: Brad Klein and Jeanne Ohren
