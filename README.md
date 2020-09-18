@@ -24,6 +24,12 @@ For guidance collecting information to embark on a 1.4 upgrade, see here:
 For guidance on rolling back to the previous 1.3 install, see here:
 * [LiveCD 1.3 Rollback](13-LIVECD-1.3-ROLLBACK.md)
 
+## Packages in use
+
+In MTL-1163, we're trying to track down what packages were in use in 1.3.  The goal is to get a defined list of packages we need installed and their specific version so we can ship only what we need.  This file has everything from 1.3 that was discovered and a list of what we install in 1.4 (under the ## livecd heading).
+
+* [Package list](200-PACKAGES.md)
+
 ## 1.4+ Upgrade Guides
 
 > TODO
