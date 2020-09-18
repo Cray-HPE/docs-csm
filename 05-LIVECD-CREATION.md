@@ -75,14 +75,30 @@ This file (`data.json`) is the main metadata file for configuring nodes in cloud
 Fetch the current working set of artifacts.
 > Note: This chooses a fixed artifact ID, you can change it by editing the suffix of the URL(s).
 
+1. Get the k8s squashFS images.
+2. Get the ceph squashFS images.
+3. Get the kernel and initrd from the base image for netboot.
+
 ```shell script
-ncn-w001:~ # mkdir -pv /mnt/data/
+# PREP
+ncn-w001:~ # mkdir -pv /mnt/data/k8s /mnt/data/ceph
 ncn-w001:~ # pushd /mnt/data/
-# FIXME: Grab latest image automatically.
+# K8s
+ncn-w001:/mnt/data # pushd k8s
+ncn-w001:/mnt/data/k8s # wget --mirror -np -nH -A *.squashfs -nv --cut-dirs=5 http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/kubernetes/0.0.1-4/
+ncn-w001:/mnt/data/k8s # popd
+# CEPH
+ncn-w001:/mnt/data # pushd ceph
+ncn-w001:/mnt/data/ceph # wget --mirror -np -nH -A *.squashfs -nv --cut-dirs=5 http://arti.dev.cray.com/artifactory/node-images-unstable-local/shasta/storage-ceph/0.0.1-6/
+ncn-w001:/mnt/data/ceph # popd
+# KERNEL & INITRD
 ncn-w001:/mnt/data # wget --mirror -np -nH -A *.kernel,*initrd* -nv --cut-dirs=5 http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/sles15-base/0.0.1-1/
-ncn-w001:/mnt/data # wget --mirror -np -nH -A *.squashfs -nv --cut-dirs=5 http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/kubernetes/0.0.1-4/
-ncn-w001:/mnt/data # wget --mirror -np -nH -A *.squashfs -nv --cut-dirs=5 http://arti.dev.cray.com/artifactory/node-images-unstable-local/shasta/storage-ceph/0.0.1-6/
 ncn-w001:/mnt/data # popd
+# VALIDATE
+ncn-w001:/mnt/data # ls -R
+# GET OFF THE USB STICK
+ncn-w001:/mnt/data # popd
+ncn-w001:~ #
 ```
 
 
