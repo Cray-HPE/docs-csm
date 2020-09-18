@@ -167,5 +167,5 @@ Once the system is booted, have your network information handy so you can popula
 - The CAN IP/CIDR (ex: `can_cidr=10.102.4.110/24`)
 
 Then you can move onto these next two pages:
-1. Setting up communication...[06-LIVECD-SETUP.md](06-LIVECD-SETUP.md)
-2. Booting NCNs [07-LIVECD-NCN-BOOTS.md](07-LIVECD-NCN-BOOTS.md)
+1. Setting up communication...[06-LIVECD-SETUP.md](006-LIVECD-SETUP.md)
+2. Booting NCNs [07-LIVECD-NCN-BOOTS.md](007-LIVECD-NCN-BOOTS.md)
