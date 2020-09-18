@@ -21,7 +21,7 @@ There are 3 steps here:
     # Fetch the latest ISO:
     ncn-w001:~ # rm -f shasta-pre-install-toolkit-latest.iso
     ncn-w001:~ # wget http://car.dev.cray.com/artifactory/internal/MTL/sle15_sp2_ncn/x86_64/dev/master/metal-team/shasta-pre-install-toolkit-latest.iso
-    
+
     # Find your USB stick with your linux tool of choice, for this it's /dev/sdd.
     # Run this command, or adjust the copy-on-write (COW) overlay size for persistent storage
     # from 5000MiB.                                                                                       
@@ -56,7 +56,7 @@ First fetch and edit `data.json`...
 
     - `cray-macs`
     - `ncn_metadata.csv`
- 
+
 3. Still editing the `data.json` file, adjust all the `~FIXMES~`    
 ```shell script
 # STOP!
@@ -76,13 +76,13 @@ Fetch the current working set of artifacts.
 > Note: This chooses a fixed artifact ID, you can change it by editing the suffix of the URL(s).
 
 ```shell script
-mkdir -pv /mnt/data/
-pushd /mnt/data/
+ncn-w001:~ # mkdir -pv /mnt/data/
+ncn-w001:~ # pushd /mnt/data/
 # FIXME: Grab latest image automatically.
-wget --mirror -np -nH -A *.kernel,*initrd* -nv --cut-dirs=5 http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/sles15-base/0.0.1-1/
-wget --mirror -np -nH -A *.squashfs -nv --cut-dirs=5 http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/kubernetes/0.0.1-4/
-wget --mirror -np -nH -A *.squashfs -nv --cut-dirs=5 http://arti.dev.cray.com/artifactory/node-images-unstable-local/shasta/storage-ceph/0.0.1-6/
-popd
+ncn-w001:/mnt/data # wget --mirror -np -nH -A *.kernel,*initrd* -nv --cut-dirs=5 http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/sles15-base/0.0.1-1/
+ncn-w001:/mnt/data # wget --mirror -np -nH -A *.squashfs -nv --cut-dirs=5 http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/kubernetes/0.0.1-4/
+ncn-w001:/mnt/data # wget --mirror -np -nH -A *.squashfs -nv --cut-dirs=5 http://arti.dev.cray.com/artifactory/node-images-unstable-local/shasta/storage-ceph/0.0.1-6/
+ncn-w001:/mnt/data # popd
 ```
 
 
@@ -90,6 +90,7 @@ popd
 
 **Copy `/tmp/qnd-1.4.sh`** to `/mnt/` or wherever you've mounted the data partition **now**.
 ```shell script
+# The script does NOT need to be executable, preferably it shouldn't be.
 ncn-w001:~ # cp -pv /tmp/qnd-1.4.sh /mnt/
 ```
 
@@ -103,6 +104,7 @@ mypc:~ > system=loki-ncn-m001
 mypc:~ > ipmitool -I lanplus -U $user -P $password -H ${system}-mgmt sol activate
 # Or use the iKVM: https://${system}-mgmt/
 ```
+
 If you observe the entire boot, you will see an integrity check occur before Linux starts. This
 can be skipped by hitting OK when it appears. It is very quick.
 
