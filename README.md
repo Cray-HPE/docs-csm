@@ -10,19 +10,19 @@ to overview/educational background information.
 
 For **new users** of the liveCD on a Shasta metal cluster, start here:
 
-* [LiveCD Creation](05-LIVECD-CREATION.md)
-* [LiveCD Setup](06-LIVECD-SETUP.md)
-* [LiveCD NCN Boots](07-LIVECD-NCN-BOOTS.md)
+* [LiveCD Creation](005-LIVECD-CREATION.md)
+* [LiveCD Setup](006-LIVECD-SETUP.md)
+* [LiveCD NCN Boots](007-LIVECD-NCN-BOOTS.md)
 
 For **virtual** users, go [here](https://connect.us.cray.com/confluence/display/MTL/Shasta+Pre-install+Toolkit+Image%3A+Building+and+Booting) for assistance testing.
 
 ## 1.3 Upgrade & Rollback Guides
 
 For guidance collecting information to embark on a 1.4 upgrade, see here:
-* [LiveCD Preflight](10-LIVECD-PREFLIGHT.md)
+* [LiveCD Preflight](004-LIVECD-PREFLIGHT.md)
 
 For guidance on rolling back to the previous 1.3 install, see here:
-* [LiveCD 1.3 Rollback](13-LIVECD-1.3-ROLLBACK.md)
+* [LiveCD 1.3 Rollback](003-LIVECD-1.3-ROLLBACK.md)
 
 ## 1.4+ Upgrade Guides
 

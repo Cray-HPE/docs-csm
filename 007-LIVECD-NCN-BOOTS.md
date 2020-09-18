@@ -1,7 +1,7 @@
 # LiveCD NCN Boots
 
 Before starting this you are expected to have networking and serices setup.
-If you are unsure, see the bottom of [11-LIVECD-SETUP.md](06-LIVECD-SETUP.md).
+If you are unsure, see the bottom of [006-LIVECD-SETUP.md](006-LIVECD-SETUP.md).
 
 ## IMPORTANT: Make sure the other nodes are shut down
 This was done in an earlier section, but it's important you have **shut down all the other NCNs to prevent DHCP conflicts**.  
@@ -12,7 +12,7 @@ recommended minimum is 3 of each type (k8s-managers, k8s-workers, ceph-storage).
 ## Manual Check 1: Validate Controller Leases
 
 You will need to create a static file for the BMCs, at least so DNSMasq can map MAC to Hostname.
-Follow BMC section guide at the bottom of [10-LIVECD-PREFLIGHT](10-LIVECD-PREFLIGHT.md).
+Follow BMC section guide at the bottom of [004-LIVECD-PREFLIGHT](004-LIVECD-PREFLIGHT.md).
 
 If you have that file, you can move on.
 

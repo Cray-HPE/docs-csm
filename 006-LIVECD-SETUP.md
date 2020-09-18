@@ -134,4 +134,4 @@ spit:~ # podman container ls -a
 > - If dnsmasq is dead, restart it with `systemctl restart basecamp`.
 > - If nexus is dead, restart it with `systemctl restart nexus`.
 
-Now you can start **Booting NCNs** [07-LIVECD-NCN-BOOTS.md](07-LIVECD-NCN-BOOTS.md)
+Now you can start **Booting NCNs** [007-LIVECD-NCN-BOOTS.md](007-LIVECD-NCN-BOOTS.md)
