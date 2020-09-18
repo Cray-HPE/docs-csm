@@ -34,7 +34,7 @@ The following steps will detail how to quickly collect information from a semi, 
 
 1. Copy the block below into a terminal window on a booted shasta-1.3.X-worker node (i.e. ncn-w001).
 
-    ```shell script
+    ```bash
     # Make/truncate the file.
     >/tmp/qnd-1.4.sh
     # Echo commands into the file and onto the screen, these run locally and against ncn-w001.
@@ -54,7 +54,7 @@ The following steps will detail how to quickly collect information from a semi, 
 
 2. You'll also want to gather network info for the external interface. This would be:
 
-    ```shell script
+    ```bash
     echo export site_cidr=172.30.53.68/20 >>/tmp/qnd-1.4.sh
     echo export site_gw=172.30.48.1 >>/tmp/qnd-1.4.sh
     echo export site_dns='172.30.84.40 172.31.84.40' >>/mnt/qnd-1.4.sh
@@ -62,7 +62,7 @@ The following steps will detail how to quickly collect information from a semi, 
 
 3.  Customer Access Network information will need to be gathered by hand and kept:
 
-    ```shell script
+    ```bash
     echo export can_cidr=10.102.4.110/24 >> /tmp/qnd-1.4.sh
     echo export can_dhcp_start=10.102.4.5 >> /tmp/qnd-1.4.sh
     echo export can_dhcp_end=10.102.4.109 >> /tmp/qnd-1.4.sh
@@ -70,7 +70,7 @@ The following steps will detail how to quickly collect information from a semi, 
 
 4. Optionally adjust dhcp time for 1.4 leases:
 
-    ```shell script
+    ```bash
     # Default is 10m
     echo export dhcp_ttl=2m >> /tmp/qnd-1.4.sh
     ```
@@ -78,7 +78,7 @@ The following steps will detail how to quickly collect information from a semi, 
 5. Print the script into terminal for capture. There will be a reminder to copy this file into our LiveCD
 in the creation readme.
 
-    ```shell script
+    ```bash
     # Print the file we made:
     ncn-w001:~ # cat /tmp/qnd-1.4.sh
     export site_link=em1
@@ -150,7 +150,7 @@ IFS=$OLDIFS
 This info will be used in `/etc/dnsmasq.d/statics.conf` but is still incomplete. 
 You can compare the output to the CCD and replace the `HOST` and port with the hostname and then restart `dnsmasq`.
 
-```shell script
+```bash
 systemctl restart dnsmasq
 ``` 
 The `statics.conf` file should now look like this, but with MACs for your system:

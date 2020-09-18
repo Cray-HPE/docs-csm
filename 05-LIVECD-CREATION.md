@@ -17,7 +17,7 @@ There are 3 steps here:
 
 1. Make the USB and fetch artifacts.
     
-    ```shell script
+    ```bash
     # Fetch the latest ISO:
     ncn-w001:~ # rm -f shasta-pre-install-toolkit-latest.iso
     ncn-w001:~ # wget http://car.dev.cray.com/artifactory/internal/MTL/sle15_sp2_ncn/x86_64/dev/master/metal-team/shasta-pre-install-toolkit-latest.iso
@@ -31,7 +31,7 @@ There are 3 steps here:
 
 2. Mount data partition:
 
-    ```shell script
+    ```bash
     ncn-w001:~ # mount /dev/sdd4 /mnt/
     ```
 
@@ -47,7 +47,7 @@ First fetch and edit `data.json`...
 
 1. Fetch the latest example, this can be done off of ncn-w001: 
 
-    ```shell script
+    ```bash
     ncn-w001:~ # mkdir -pv /mnt/configs
     ncn-w001:~ # git clone https://stash.us.cray.com/scm/mtl/docs-non-compute-nodes.git
     ncn-w001:~ # cp -pv docs-non-compute-nodes/example-data.json /mnt/configs/data.json
@@ -58,7 +58,7 @@ First fetch and edit `data.json`...
     - `ncn_metadata.csv`
 
 3. Still editing the `data.json` file, adjust all the `~FIXMES~`    
-```shell script
+```bash
 # STOP!
 # STOP! This next step requires some manual work.
 # STOP!
@@ -79,7 +79,7 @@ Fetch the current working set of artifacts.
 2. Get the ceph squashFS images.
 3. Get the kernel and initrd from the base image for netboot.
 
-```shell script
+```bash
 # PREP
 ncn-w001:~ # mkdir -pv /mnt/data/k8s /mnt/data/ceph
 ncn-w001:~ # pushd /mnt/data/
@@ -105,14 +105,14 @@ ncn-w001:~ #
 #### 1.3.x Upgrade Notice
 
 **Copy `/tmp/qnd-1.4.sh`** to `/mnt/` or wherever you've mounted the data partition **now**.
-```shell script
+```bash
 # The script does NOT need to be executable, preferably it shouldn't be.
 ncn-w001:~ # cp -pv /tmp/qnd-1.4.sh /mnt/
 ```
 
 ## Manual Step 3 : Boot into your LiveCD.
 
-```shell script
+```bash
 # Boot up, setup the liveCD (nics/dnsmasq/ipxe)
 ncn-w001:~ # reboot                                                       
 # Use the Serial-over-LAN to control the system and boot into the USB drive                 

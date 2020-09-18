@@ -19,7 +19,7 @@ grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases | wc -l
 currently booted up with the LiveCD (the node you're standing on).
 
 Print off each NCN we'll target for booting.
-```shell script
+```bash
 spit:~ # grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases | sort
 ncn-w002-mgmt
 ncn-s001-mgmt
@@ -41,7 +41,7 @@ DNSmasq.
 > Note: this requires a statics.conf file to be generated with the BMC MAC addresses.
 > See [09-LIVECD-PREFLIGHT.md](10-LIVECD-PREFLIGHT.md) for more information.
 
-```shell script
+```bash
 username=''
 password=''
 for bmc in $(grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases); do
@@ -80,7 +80,7 @@ pushd /mnt/var/www/ephemeral
 
 This will again just `echo` the commands.  Look them over and validate they are ok before running them.  This just `grep`s out the storage nodes so you only get the workers and managers.
 
-```shell script
+```bash
 username=''
 password=''
 for bmc in $(grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases | grep  s | sort); do
@@ -92,7 +92,7 @@ done
 Watch consoles with the Serial-over-LAN, or use conamn if you've setup `/etc/conman.conf` with
 the static IPs for the BMCs.
 
-```shell script
+```bash
 # Connect to ncn-s002..
 username=''
 password=''
@@ -108,7 +108,7 @@ spit:~ # conman -j ncn-s002
 
 This will again just `echo` the commands.  Look them over and validate they are ok before running them.  This just `grep`s out the storage nodes so you only get the workers and managers.
 
-```shell script
+```bash
 username=''
 password=''
 for bmc in $(grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases | grep -v s | sort); do
