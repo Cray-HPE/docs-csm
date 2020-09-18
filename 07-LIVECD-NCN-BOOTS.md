@@ -9,9 +9,9 @@ This was done in an earlier section, but it's important you have **shut down all
 Typically, we should have eight leases for NCN BMCs. Some systems may have less, but the
 recommended minimum is 3 of each type (k8s-managers, k8s-workers, ceph-storage).
 
-## Manual Check 1: Validate Controller Leases 
+## Manual Check 1: Validate Controller Leases
 
-You will need to create a static file for the BMCs, at least so DNSMasq can map MAC to Hostname. 
+You will need to create a static file for the BMCs, at least so DNSMasq can map MAC to Hostname.
 Follow BMC section guide at the bottom of [10-LIVECD-PREFLIGHT](10-LIVECD-PREFLIGHT.md).
 
 If you have that file, you can move on.
@@ -66,13 +66,13 @@ This will again just `echo` the commands.  Look them over and validate they are 
 ```bash
 username=''
 password=''
-for bmc in $(grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases | grep  s | sort); do
+for bmc in $(grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases | grep s | sort); do
     echo ipmitool -I lanplus -U $username -P $password -H $bmc chassis bootdev pxe options=efiboot
     echo "ipmitool -I lanplus -U $username -P $password -H $bmc chassis power on 2>/dev/null || echo ipmitool -I lanplus -U $username -P $password -H $bmc chassis power reset"
 done
 ```
 
-Watch consoles with the Serial-over-LAN, or use conamn if you've setup `/etc/conman.conf` with
+Watch consoles with the Serial-over-LAN, or use conman if you've setup `/etc/conman.conf` with
 the static IPs for the BMCs.
 
 ```bash
