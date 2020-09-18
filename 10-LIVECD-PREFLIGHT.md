@@ -6,19 +6,16 @@ This will go over what values you need from 1.3 configuration files to jump-star
 This presumes you have 1.3.x configuration files, 1.2 should suffice but
 locations may differ and mileage may vary.
 
-## Shut down other nodes
-To prevent DHCP conflicts, shut down all the other NCNs before booting into the liveCD
-
-## Information Gathering for Making the LiveCD:
+Before starting, you should have:
 
 1. A USB stick or other Block Device, local to ncn-w001 or ncn-mXXX (external-managers).
 2. The drive letter of that device (i.e. `/dev/sdd`)
 3. Access to stash, to `git pull ssh://git@stash.us.cray.com:7999/mtl/shasta-pre-install-toolkit.git` onto your NCN.
 4. The block device should be `>16GB`, the toolkit's built from "just-enough-OS" and can fit on smaller drives.
 
-## Information Gathering for Using the LiveCD:
+# Manual Step 1: Information Gathering for Using the LiveCD:
 
-### 1.3.x -> 1.4 Quick-n-dirty data gathering...
+## 1.3.x -> 1.4 Quick-n-dirty data gathering...
 
 LiveCD setup information can be collected by hand or alterantively you can run this on any 1.3.X system
  to print out an easy-script for setting up your liveCD for your system.
@@ -95,7 +92,7 @@ in the creation readme.
     export hmn_dhcp_end=10.254.99.252     
     ```
 
-### Alternative / Hand-collection.
+#### Alternative / Hand-collection.
 
 If you don't have that information, then you need the following otherwise move on.
 - Bond member 0 (i.e. p801p1)
@@ -115,16 +112,16 @@ If you don't have that information, then you need the following otherwise move o
 - CAN DHCP end (i.e. 10.102.9.109)
 
 
-## Information Gathering for identifying the first nodes:
+# Manual Step 2:  Information Gathering for identifying the first nodes:
 
-
-The information from above should be parsable from a shasta-1.3.X `ncn_metadata.csv`. The last
-columns in that CSV should denote BMCs.
 
 ### BMCs
 
-A little script to parse that stuff out is below, but requires some manual intervention.  
-You can match this up to the CCD/SHCD.
+A little script to parse that stuff out is below, but requires some manual intervention.
+Pass in the `ncn_metadata.csv` file to output data for a static file for talking to the BMCs.
+
+> Note this still allows DNSMasq to assign IPs out of its own pool(s), it just provides hostname
+> resolution.
 
 ```
 #!/bin/bash
@@ -134,8 +131,8 @@ IFS=','
 [[ ! -f $INPUT ]] && { echo "$INPUT file not found"; exit 99; }
 while read xname role subrole bmcmac bmcport nmnmac nmnport
 do
-# dhcp-host=ncn-s002-mgmt,a4:bf:01:48:20:03,ncn-s002-mgmt
-  echo "dhcp-host=HOST,$bmcmac,$bmcport"
+# dhcp-host=xname,a4:bf:01:48:20:03,ncn-s002-mgmt
+  echo "dhcp-host=$xname,$bmcmac,$bmcport"
   #echo "xname: $xname"
   #echo "role : $role"
   #echo "subrole : $subrole"
@@ -172,6 +169,8 @@ dhcp-host=94:40:c9:37:e3:3a,10.254.2.10,ncn-m002-mgmt
 ```
 
 ### NCNs
+
+### This requires having 1.3 configs, for bare-metal/new machines this will be manual.
 
 > Note: Hostname resolution for NMN is not dynamic yet due to cloud-init integration.
 > A shim to allow for this is provided in [12-LIVECD-NCN-BOOTS.md](07-LIVECD-NCN-BOOTS.md).
