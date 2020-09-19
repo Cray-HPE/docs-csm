@@ -59,7 +59,7 @@
       "hostname":"ncn-s002",
       "local_hostname":"ncn-s002",
       "runcmd": [
-        "/srv/cray/scripts/metal/set-dns-config.sh",
+        "/srv/cray/scripts/metal/set-dns-config.sh"
       ]
     }
   },
@@ -71,7 +71,7 @@
       "hostname":"ncn-s003",
       "local_hostname":"ncn-s003",
       "runcmd": [
-        "/srv/cray/scripts/metal/set-dns-config.sh",
+        "/srv/cray/scripts/metal/set-dns-config.sh"
       ]
     }
   },
@@ -87,7 +87,7 @@
         "/srv/cray/scripts/common/kubernetes-cloudinit.sh"
       ]
     }
-  }
+  },
   "$mac_address_w003" : {
     "meta-data":{
       "foo":"bar"
