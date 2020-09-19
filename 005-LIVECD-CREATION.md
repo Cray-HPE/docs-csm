@@ -71,6 +71,8 @@ ncn-w001:~ # vim /mnt/configs/data.json
 ```
 
 If you have `statics.conf` setup, you can populate `data.json` a bit easier like this:
+> Note: w001 is the main ingress node for bootstrap, but this will switch to manager nodes in 
+> v3 networking. The examples below are from the perspective of using w001.
 ```
 spit:/var/www/ephemeral # cat /etc/dnsmasq.d/statics.conf
 dhcp-host=ncn-m001-mgmt,a4:bf:01:5a:a9:ff,ncn-m001-mgmt
@@ -89,12 +91,9 @@ dhcp-host=ncn-w007-mgmt,a4:bf:01:3e:d3:26,ncn-w007-mgmt
 spit:/var/www/ephemeral # sed -i 's/$mac_address_m001/a4:bf:01:5a:a9:ff/' data.json >/dev/null
 spit:/var/www/ephemeral # sed -i 's/$mac_address_m002/a4:bf:01:5a:af:fc/' data.json >/dev/null
 spit:/var/www/ephemeral # sed -i 's/$mac_address_m003/a4:bf:01:68:55:a9/' data.json >/dev/null
+spit:/var/www/ephemeral # sed -i 's/$mac_address_w001/00:00:00:00:00:00/' data.json >/dev/null
 spit:/var/www/ephemeral # sed -i 's/$mac_address_w002/a4:bf:01:5a:d5:f6/' data.json >/dev/null
 spit:/var/www/ephemeral # sed -i 's/$mac_address_w003/a4:bf:01:5a:d5:e8/' data.json >/dev/null
-spit:/var/www/ephemeral # sed -i 's/$mac_address_w004/a4:bf:01:3e:ca:f2/' data.json >/dev/null
-spit:/var/www/ephemeral # sed -i 's/$mac_address_w005/a4:bf:01:3e:f9:50/' data.json >/dev/null
-spit:/var/www/ephemeral # sed -i 's/$mac_address_w006/a4:bf:01:3e:c7:f5/' data.json >/dev/null
-spit:/var/www/ephemeral # sed -i 's/$mac_address_w007/a4:bf:01:3e:d3:26/' data.json >/dev/null
 spit:/var/www/ephemeral # sed -i 's/$mac_address_s001/a4:bf:01:65:66:c8/' data.json >/dev/null
 spit:/var/www/ephemeral # sed -i 's/$mac_address_s002/a4:bf:01:65:6b:b4/' data.json >/dev/null
 spit:/var/www/ephemeral # sed -i 's/$mac_address_s003/a4:bf:01:64:f4:37/' data.json >/dev/null
