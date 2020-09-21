@@ -143,6 +143,24 @@ ncn-w001:~ # cp -pv /tmp/qnd-1.4.sh /mnt/
 
 ## Manual Step 3 : Boot into your LiveCD.
 
+This will take some detective work.
+
+You will need to parse the output of `efibootmgr` to determine which device is your USB stick. You
+can and should use tools such as `lsblk`, `blkid`, or kernel-fu if `efibootmgr` is insufficient. Some
+systems very obviously print out which device is the USB, other systems (like Gigabyte based) do not.
+
+```bash
+# Print off the UEFI's boot selections:
+ncn-w001:~ # efibootmgr
+
+# Select Boot0002 as the next device (notice the lack of "Boot" in the ID number.
+ncn-w001:~ # efibootmgr -n 0002
+
+# Verify the BootNext device is what you selected:
+ncn-w001:~ # efibootmgr | grep -i bootnext
+BootNext
+```
+
 ```bash
 # Boot up, setup the liveCD (nics/dnsmasq/ipxe)
 ncn-w001:~ # reboot                                                       
