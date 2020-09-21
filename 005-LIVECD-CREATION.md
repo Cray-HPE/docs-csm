@@ -124,7 +124,6 @@ ncn-w001:/mnt/data/ceph # wget --mirror -np -nH -A *.squashfs -nv --cut-dirs=5 h
 ncn-w001:/mnt/data/ceph # popd
 # KERNEL & INITRD
 ncn-w001:/mnt/data # wget --mirror -np -nH -A *.kernel,*initrd* -nv --cut-dirs=5 http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/sles15-base/0.0.1-1/
-ncn-w001:/mnt/data # popd
 # VALIDATE
 ncn-w001:/mnt/data # ls -R
 # GET OFF THE USB STICK
