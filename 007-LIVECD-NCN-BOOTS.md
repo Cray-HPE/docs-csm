@@ -52,19 +52,21 @@ The ideal is to mount the data disk where we're serving from, since it's already
 It is not recommended to copy the artifacts into place, because the copy-on-write partition may be
 smaller than the data partition.
 > Note: This will automount in the LiveCDs FSTAB: https://connect.us.cray.com/jira/browse/MTL-1167
-    ```bash
-    spit:~ # mkdir -pv /var/www/ephemeral
-    spit:~ # mount /dev/sdd4 /var/www/ephemeral
-    spit:~ # systemctl restart basecamp
-    spit:~ # /root/bin/set-sqfs-links.sh
-    ```
 
-    If basecamp fails to load the new data, you can soft-nuke it with this:
-    ```bash
-    spit:~ # systemctl stop basecamp
-    spit:~ # podman rm basecamp
-    spit:~ # systemctl start basecamp
-    ```
+```bash
+spit:~ # mkdir -pv /var/www/ephemeral
+spit:~ # mount /dev/sdd4 /var/www/ephemeral
+spit:~ # systemctl restart basecamp
+spit:~ # /root/bin/set-sqfs-links.sh
+```
+
+If basecamp fails to load the new data, you can soft-nuke it with this:
+
+```bash
+spit:~ # systemctl stop basecamp
+spit:~ # podman rm basecamp
+spit:~ # systemctl start basecamp
+```
 
 # Manual Step 2: Boot Storage Nodes
 
