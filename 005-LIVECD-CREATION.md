@@ -84,10 +84,6 @@ dhcp-host=ncn-w003-mgmt,a4:bf:01:5a:d5:e8,ncn-w003-mgmt
 dhcp-host=ncn-s001-mgmt,a4:bf:01:65:66:c8,ncn-s001-mgmt
 dhcp-host=ncn-s002-mgmt,a4:bf:01:65:6b:b4,ncn-s002-mgmt
 dhcp-host=ncn-s003-mgmt,a4:bf:01:64:f4:37,ncn-s003-mgmt
-dhcp-host=ncn-w004-mgmt,a4:bf:01:3e:ca:f2,ncn-w004-mgmt
-dhcp-host=ncn-w005-mgmt,a4:bf:01:3e:f9:50,ncn-w005-mgmt
-dhcp-host=ncn-w006-mgmt,a4:bf:01:3e:c7:f5,ncn-w006-mgmt
-dhcp-host=ncn-w007-mgmt,a4:bf:01:3e:d3:26,ncn-w007-mgmt
 spit:/var/www/ephemeral # sed -i 's/$mac_address_m001/a4:bf:01:5a:a9:ff/' data.json >/dev/null
 spit:/var/www/ephemeral # sed -i 's/$mac_address_m002/a4:bf:01:5a:af:fc/' data.json >/dev/null
 spit:/var/www/ephemeral # sed -i 's/$mac_address_m003/a4:bf:01:68:55:a9/' data.json >/dev/null
