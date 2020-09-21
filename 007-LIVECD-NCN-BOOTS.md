@@ -59,6 +59,13 @@ smaller than the data partition.
     spit:~ # /root/bin/set-sqfs-links.sh
     ```
 
+    If basecamp fails to load the new data, you can soft-nuke it with this:
+    ```bash
+    spit:~ # systemctl stop basecamp
+    spit:~ # podman rm basecamp
+    spit:~ # systemctl start basecamp
+    ```
+
 # Manual Step 2: Boot Storage Nodes
 
 This will again just `echo` the commands.  Look them over and validate they are ok before running them.  This just `grep`s out the storage nodes so you only get the workers and managers.
