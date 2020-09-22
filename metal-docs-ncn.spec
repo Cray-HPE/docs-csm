@@ -1,14 +1,15 @@
 # Copyright 2020 Cray Inc. All Rights Reserved.
-Name: cray-metal-docs-ncn
-License: Cray Software License Agreement
-Summary: Doocumentation for Non-Compute Nodes on a Metal Cluster.
+Name: metal-docs-ncn
+License: Cray Proprietary
+Summary: Documentation for Non-Compute Nodes on a Metal Cluster
+BuildArchitectures: noarch
 Version: %(cat .version)
 Release: %(echo ${BUILD_METADATA})
 Source: %{name}-%{version}.tar.bz2
 Vendor: Cray Inc.
 
 %description
-This RPM installs documentation into the system for the Shasta LiveCD.
+This RPM installs documentation into the system for the Shasta Non-compute Nodes.
 
 %prep
 %setup -q
