@@ -60,11 +60,13 @@ spit:~ # systemctl restart basecamp
 spit:~ # /root/bin/set-sqfs-links.sh
 ```
 
-If basecamp fails to load the new data, you can soft-nuke it with this:
+If basecamp fails to load the new data, you can soft-nuke by removing the container and the image:
 
 ```bash
 spit:~ # systemctl stop basecamp
 spit:~ # podman rm basecamp
+spit:~ # podman rmi basecamp
+# Now basecamp will re-init.
 spit:~ # systemctl start basecamp
 ```
 
@@ -72,6 +74,15 @@ spit:~ # systemctl start basecamp
 
 This will again just `echo` the commands.  Look them over and validate they are ok before running them.  This just `grep`s out the storage nodes so you only get the workers and managers.
 
+Setup the ceph image to boot:
+```bash
+spit:~ # /root/bin/set-sqfs-links.sh ceph
+# Now double-check ceph-storage is chosen:
+spit:~ # ls -l /var/www/filesystem.squashfs
+lrwxrwxrwx 1 root root 58 Sep 23 00:23 /var/www/filesystem.squashfs -> /var/www/ephemeral/data/ceph/storage-ceph-0.0.1-6.squashfs
+```
+
+Get our boot commands:
 ```bash
 username=''
 password=''
@@ -99,6 +110,13 @@ spit:~ # conman -j ncn-s002
 ### Manual Step 3: Boot K8s
 
 This will again just `echo` the commands.  Look them over and validate they are ok before running them.  This just `grep`s out the storage nodes so you only get the workers and managers.
+
+```bash
+spit:~ # /root/bin/set-sqfs-links.sh k8s
+# Now double-check kubernetes is chosen:
+spit:~ # ls -l /var/www/filesystem.squashfs
+lrwxrwxrwx 1 root root 55 Sep 23 10:04 /var/www/filesystem.squashfs -> /var/www/ephemeral/data/k8s/kubernetes-0.0.1-4.squashfs
+```
 
 ```bash
 # Fixup the link to boot K8s nodes:
