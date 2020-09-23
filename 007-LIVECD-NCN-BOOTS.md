@@ -55,7 +55,7 @@ smaller than the data partition.
 
 ```bash
 spit:~ # mkdir -pv /var/www/ephemeral
-spit:~ # mount /dev/sdd4 /var/www/ephemeral
+spit:~ # mount /dev/disk/by-label/install-data /var/www/ephemeral
 spit:~ # systemctl restart basecamp
 spit:~ # /root/bin/set-sqfs-links.sh
 ```

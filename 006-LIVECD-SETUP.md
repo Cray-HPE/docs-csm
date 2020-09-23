@@ -13,8 +13,7 @@ If you made `qnd-1.4.sh` you can run that now to fill-in all of the required var
 for setting up interfaces.
 
 ```bash
-# Note this may be different then the previous device you mounted on the 1.3 system
-spit:~ # mount /dev/sdb4 /mnt
+spit:~ # mount /dev/disk/by-label/install-data /mnt
 spit:~ # source /mnt/qnd-1.4.sh
 spit:~ # env
 ```
