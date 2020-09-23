@@ -32,7 +32,7 @@ There are 3 steps here:
 2. Mount data partition:
 
     ```bash
-    ncn-w001:~ # mount /dev/sdd4 /mnt/
+    ncn-w001:~ # mount /dev/disk/by-label/install-data /mnt/
     ```
 
 ## Manual Step 2: Configuration Payload
