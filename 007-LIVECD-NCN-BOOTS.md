@@ -134,8 +134,84 @@ done
 
 ### Manual Check 2: Storage
 
-> TODO: Craig Delatte
+Run ceph -s and verify cluster is healthy from ncn-s001.nmn.  Verify that health is HEALTH_OK, and that we have mon, mgr, mds, osd and rgw services in the output:
+
+```bash
+ncn-s001:~ # ceph -s
+  cluster:
+    id:     99ffa799-1209-49d4-9889-c7c3056e2062
+    health: HEALTH_OK
+
+  services:
+    mon: 3 daemons, quorum ncn-s001,ncn-s002,ncn-s003 (age 13m)
+    mgr: ncn-s001(active, since 5m), standbys: ncn-s003, ncn-s002
+    mds: cephfs:1 {0=ncn-s002=up:active} 2 up:standby
+    osd: 18 osds: 18 up (since 10m), 18 in (since 10m)
+    rgw: 3 daemons active (ncn-s001.rgw0, ncn-s002.rgw0, ncn-s003.rgw0)
+
+  task status:
+    scrub status:
+        mds.ncn-s002: idle
+
+  data:
+    pools:   10 pools, 968 pgs
+    objects: 342 objects, 26 KiB
+    usage:   18 GiB used, 24 TiB / 24 TiB avail
+    pgs:     968 active+clean
+```
+Verify 3 storage classes have been created (can run on ncn-s001.nmn):
+
+```bash
+ncn-s001:~ # kubectl get storageclass
+NAME                             PROVISIONER       RECLAIMPOLICY   VOLUMEBINDINGMODE   ALLOWVOLUMEEXPANSION   AGE
+ceph-cephfs-external             ceph.com/cephfs   Delete          Immediate           false                  4m47s
+k8s-block-replicated (default)   ceph.com/rbd      Delete          Immediate           true                   5m50s
+sma-block-replicated             ceph.com/rbd      Delete          Immediate           true                   5m31s
+```
 
 ### Manual Check 3: Check K8s
 
-> TODO: Brad Klein and Jeanne Ohren
+Verify all nodes have joined the cluster (can run on any master/worker):
+
+```bash
+ncn-m002:~ # kubectl get nodes
+NAME       STATUS   ROLES    AGE     VERSION
+ncn-m002   Ready    master   7m31s   v1.18.6
+ncn-m003   Ready    master   8m16s   v1.18.6
+ncn-w001   Ready    <none>   7m21s   v1.18.6
+ncn-w002   Ready    <none>   7m42s   v1.18.6
+ncn-w003   Ready    <none>   8m02s   v1.18.6
+```
+
+Also verify that all the pods in the kube-system namespace are running:
+
+```bash
+ncn-m002:~ # kubectl get po -n kube-system
+NAME                               READY   STATUS    RESTARTS   AGE
+coredns-66bff467f8-7psjb           1/1     Running   0          8m12s
+coredns-66bff467f8-hhw8f           1/1     Running   0          8m12s
+etcd-ncn-m001                      1/1     Running   0          8m20s
+etcd-ncn-m002                      1/1     Running   0          7m25s
+etcd-ncn-m003                      1/1     Running   0          2m34s
+kube-apiserver-ncn-m001            1/1     Running   0          8m20s
+kube-apiserver-ncn-m002            1/1     Running   0          7m5s
+kube-apiserver-ncn-m003            1/1     Running   0          2m21s
+kube-controller-manager-ncn-m001   1/1     Running   1          8m20s
+kube-controller-manager-ncn-m002   1/1     Running   0          7m5s
+kube-controller-manager-ncn-m003   1/1     Running   0          2m21s
+kube-multus-ds-amd64-7cnxz         1/1     Running   0          2m39s
+kube-multus-ds-amd64-8vdld         1/1     Running   0          2m35s
+kube-multus-ds-amd64-dxxvj         1/1     Running   1          7m30s
+kube-multus-ds-amd64-ltncv         1/1     Running   0          8m12s
+kube-proxy-lr6z9                   1/1     Running   0          2m35s
+kube-proxy-pmv8l                   1/1     Running   0          7m30s
+kube-proxy-s7jsl                   1/1     Running   0          2m39s
+kube-proxy-z9r2m                   1/1     Running   0          8m12s
+kube-scheduler-ncn-m001            1/1     Running   1          8m20s
+kube-scheduler-ncn-m002            1/1     Running   0          7m4s
+kube-scheduler-ncn-m003            1/1     Running   0          2m20s
+weave-net-bf8qn                    2/2     Running   0          7m55s
+weave-net-hsczs                    2/2     Running   4          7m30s
+weave-net-schwt                    2/2     Running   0          2m39s
+weave-net-vwqbt                    2/2     Running   0          2m35s
+```
