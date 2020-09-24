@@ -57,7 +57,7 @@ The following steps will detail how to quickly collect information from a semi, 
     echo export site_dns='172.30.84.40 172.31.84.40' >>/mnt/qnd-1.4.sh
     ```
 
-3.  Customer Access Network information will need to be gathered by hand and kept:
+3.  Customer Access Network information will need to be gathered by hand and kept (for current BGP Dev status, see [Can BGP status on Shasta systems](https://connect.us.cray.com/confluence/display/CASMPET/CAN-BGP+status+on+Shasta+systems)):
 
     ```bash
     echo export can_cidr=10.102.4.110/24 >> /tmp/qnd-1.4.sh
@@ -94,7 +94,7 @@ in the creation readme.
 
 #### Alternative / Hand-collection.
 
-If you don't have that information, then you need the following otherwise move on.
+If you don't have that information, then you need the following otherwise move on (for current BGP Dev status, see [Can BGP status on Shasta systems](https://connect.us.cray.com/confluence/display/CASMPET/CAN-BGP+status+on+Shasta+systems)).
 - Bond member 0 (i.e. p801p1)
 - Bond member 1 (i.e. p801p2)
 - MTL CIDR (i.e. 10.1.1.1/16)
