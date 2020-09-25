@@ -3,8 +3,16 @@
 This will go over what values you need from 1.3 configuration files to jump-start
  a shasta-1.4 development install.
 
+
+## Example Values
+
 This presumes you have 1.3.x configuration files, 1.2 should suffice but
-locations may differ and mileage may vary.
+locations may differ and mileage may vary. **Do not use the examples values
+in the examples**, they are for visual reference only. It will not be possible to
+fully deploy a system (NCN, CN, & HSN) using these values, it is safer to **use 1.3 values
+or start fresh.**
+
+## LiveCD Starter Checklist
 
 Before starting, you should have:
 
