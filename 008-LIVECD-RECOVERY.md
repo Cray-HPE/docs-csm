@@ -10,3 +10,9 @@ If a site/user needs to reset/clear the password for `root`, they can mount thei
 machine and remove this file from the cow partiion. When next booting from the USB it will 
 reinitialize to an empty password for `root`, and again at next login it will require the password
 to be changed.
+
+```bash
+mypc:~ > mount /dev/disk/by-label/cow /mnt
+mypc:~ > sudo rm -f /mnt/rw/etc/shadow
+mypc:~ > umount /dev/disk/by-label/cow
+```
