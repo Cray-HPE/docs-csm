@@ -3,8 +3,8 @@
 
 ### Root Account
 
-The root password is preserved within the COW partition at `cow:rw/etc/shadow`. This is the copy of 
-the(the upper filesystem of the overlayfs) copy of the modified /etc/shadow file.
+The root password is preserved within the COW partition at `cow:rw/etc/shadow`. This is the
+modified copy of the /etc/shadow file used by the operating system.
 
 If a site/user needs to reset/clear the password for `root`, they can mount their USB on another
 machine and remove this file from the COW partiion. When next booting from the USB it will 
