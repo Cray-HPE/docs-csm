@@ -172,7 +172,10 @@ mypc:~ > ipmitool -I lanplus -U $user -P $password -H ${system}-mgmt sol activat
 If you observe the entire boot, you will see an integrity check occur before Linux starts. This
 can be skipped by hitting OK when it appears. It is very quick.
 
-Once the system is booted, have your network information handy so you can populate it in the next steps.
+Once the system boots, you will need to create a **new** password for the root account (for information 
+on _recovery_, see [008-LIVECD-RECOVERY](008-LIVECD-RECOVERY.md).
+
+After logging in, have your network information handy so you can populate it in the next steps.
 - IP and netmask for your external connection(s).
 - IP and netmask for your bis nodes (MTL, NMN, & HMN IPs)
 - Ranges for DHCP (MTL, NMN, CAN, & HMN)
