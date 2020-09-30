@@ -21,9 +21,9 @@ This page will go over how to setup a re-install on a node. This assumes you wan
  the USB stick.
 
     ```bash
-    mylinuxpc> mount /dev/disk/by-label/install-data /mnt
+    mylinuxpc> mount /dev/disk/by-label/PITDATA /mnt
     mylinuxpc> tar -czvf --exclude *.squashfs "install-data-$(date  '+%Y-%m-%d_%H-%M-%S').tar.gz" /mnt/
-    mylinuxpc> umount /dev/disk/by-label/install-data
+    mylinuxpc> umount /dev/disk/by-label/PITDATA
     ```
 
 3. The new tar.gz file you made can be stored anywhere, and can be used to reinit the liveCD. Follow
@@ -33,7 +33,7 @@ next step.
  the install-data partition can be remounted and you can restore/extract the backup:
 
     ```bash
-    mylinuxpc> mount /dev/disk/by-label/install-data /mnt
+    mylinuxpc> mount /dev/disk/by-label/PITDATA /mnt
     mylinuxpc> tar -xzvf $(ls -ltR *.tar.gz | head -n 1)
     mylinuxpc> ls -R /mnt
     ``` 

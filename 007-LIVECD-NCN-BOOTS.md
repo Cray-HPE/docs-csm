@@ -51,17 +51,8 @@ Mount the USB stick's data partition, and setup links for booting.
 The ideal is to mount the data disk where we're serving from, since it's already on the same device.
 It is not recommended to copy the artifacts into place, because the copy-on-write partition may be
 smaller than the data partition.
-> Note: This will automount in the LiveCDs FSTAB: https://connect.us.cray.com/jira/browse/MTL-1167
-
-```bash
-spit:~ # mkdir -pv /var/www/ephemeral
-spit:~ # mount /dev/disk/by-label/install-data /var/www/ephemeral
-spit:~ # systemctl restart basecamp
-spit:~ # /root/bin/set-sqfs-links.sh
-```
 
 If basecamp fails to load the new data, you can soft-nuke by removing the container and the image:
-
 ```bash
 spit:~ # systemctl stop basecamp
 spit:~ # podman rm basecamp
