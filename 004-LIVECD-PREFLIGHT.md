@@ -151,9 +151,9 @@ First fetch and edit `data.json`...
 1. Fetch the latest example file, this can be done off of ncn-w001:
 
     ```bash
-    ncn-w001:~ # mkdir -pv /mnt/data
+    ncn-w001:~ # mkdir -pv /mnt/configs
     ncn-w001:~ # git clone https://stash.us.cray.com/scm/mtl/docs-non-compute-nodes.git
-    ncn-w001:~ # cp -pv docs-non-compute-nodes/example-data.json /mnt/data/data.json
+    ncn-w001:~ # cp -pv docs-non-compute-nodes/example-data.json /mnt/configs/data.json
     ```
 
 The example `data.json` is now saved to your USB stick.
