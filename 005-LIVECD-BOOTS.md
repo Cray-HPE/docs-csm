@@ -1,7 +1,5 @@
 # Booting Into Your LiveCD
 
-This will take some detective work.
-
 You will need to parse the output of `efibootmgr` to determine which device is your USB stick. You can and should use tools such as `lsblk`, `blkid`, or kernel-fu if `efibootmgr` is insufficient. As an example, you can sometimes match up `ls -l /dev/disk/by-partuuid` with `efibootmgr -v`.  Some systems very obviously print out which device is the USB, other systems (like Gigabyte based) do not.
 
 ```bash

@@ -10,7 +10,7 @@ to overview/educational background information.
 
 For **new users** of the liveCD on a Shasta metal cluster, start here:
 
-* [LiveCD Creation](005-LIVECD-CREATION.md)
+* [LiveCD Boots](005-LIVECD-BOOTS.md)
 * [LiveCD Setup](006-LIVECD-SETUP.md)
 * [LiveCD NCN Boots](007-LIVECD-NCN-BOOTS.md)
 
