@@ -27,7 +27,7 @@ This page will go over how to setup a re-install on a node. This assumes you wan
     ```
 
 3. The new tar.gz file you made can be stored anywhere, and can be used to reinit the liveCD. Follow
-the directions in [005-LIVECD-CREATION](005-LIVECD-CREATION.md) and then return here and move onto the
+the directions in [005-LIVECD-BOOTS](005-LIVECD-BOOTS.md) and then return here and move onto the
 next step.
 4. Now you can create a newer LiveCD on the same USB stick, clobbering whats there. Once created
  the install-data partition can be remounted and you can restore/extract the backup:
