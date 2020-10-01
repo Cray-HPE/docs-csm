@@ -120,7 +120,7 @@ lrwxrwxrwx 1 root root 55 Sep 23 10:04 /var/www/filesystem.squashfs -> /var/www/
 
 ```bash
 # Fixup the link to boot K8s nodes:
-spit:~ # ln -snf /var/www/filesystem.squashfs /var/www/kubernetes.squashfs
+spit:~ # ln -snf /var/www/filesystem.squashfs /var/www/k8s-filesystem.squashfs
 ```
 Then go ahead and boot your nodes:
 ```bash
