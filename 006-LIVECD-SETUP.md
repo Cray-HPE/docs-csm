@@ -1,14 +1,5 @@
 # Manual Step 1: Interfaces
 
-Setting up the NICS requires two things:
-1. Network information (manual now, automated by 1.4)
-2. A terminal to the system (ncn-w001, or ncn-m001)
-
-Follow this process to setup external access and netbooting...the example values are for EXAMPLE
-only.
-
-### 1.3.X Testing
-
 If you made `qnd-1.4.sh` you can run that now to fill-in all of the required variables
 for setting up interfaces.
 
@@ -30,10 +21,9 @@ External, direct access.
 /root/bin/sic-setup-lan0.sh $site_cidr $site_gw $site_dns $site_nic
 ```
 
-Note: If you were on the Serial-over-LAN, now is a good time to log back in with SSH.
-Setup the bond for talking to the full system, leverage link-resilience.
-
 ## Setup the Non-Compute Bond
+
+Then continue running the scripts that follow to set up the rest of the networking.  Setup the bond for talking to the full system, leverage link-resilience.  
 
 Internal, access to the Cray High-Performance Computer.
 
@@ -46,6 +36,12 @@ spit:~ # /root/bin/sic-setup-bond0.sh $mtl_cidr $bond_member0 $bond_member1
 # If you have only one nic for the bond, then use this instead:
 spit:~ # /root/bin/sic-setup-bond0.sh $mtl_cidr $bond_member0
 ```
+
+# Log in now with SSH
+
+If you were on the Serial-over-LAN, now is a good time to log back in with SSH.  
+
+> If you do log in with SSH, make you `source /var/www/ephemeral/qnd-1.4.sh` again since you're logged in in a new session now.
 
 ## Setup the VLANS
 
@@ -116,6 +112,15 @@ Support customer access network interfaces:
 You may have already added this to `qnd-1.4.sh` from an earlier doc.
 ```bash
 spit:~ # /root/bin/sic-pxe-vlan007.sh $can_cidr $can_dhcp_start $can_dhcp_end $dhcp_ttl
+```
+
+and netbooting...the example values are for EXAMPLE
+only.
+
+
+```bash
+cp /var/www/ephemeral/statics.conf /etc/dnsmasq.d/
+systemctl restart dnsmasq
 ```
 
 ## STOP :: Validate the LiveCD platform.
