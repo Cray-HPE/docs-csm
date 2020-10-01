@@ -16,3 +16,16 @@ mypc:~ > mount /dev/disk/by-label/cow /mnt
 mypc:~ > sudo rm -f /mnt/rw/etc/shadow
 mypc:~ > umount /dev/disk/by-label/cow
 ```
+
+### Basecamp
+
+If the desire to reset basecamp to defaults comes up, you can do so by following these commands.
+
+```bash
+spit:~ # systemctl stop basecamp
+spit:~ # podman rm basecamp
+spit:~ # podman rmi basecamp
+spit:~ # rm -f /var/www/ephemeral/configs/server.yaml
+# Now basecamp will re-init.
+spit:~ # systemctl start basecamp
+```
