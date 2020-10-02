@@ -9,7 +9,7 @@ Before starting, you should have:
 2. A USB stick or other Block Device, local to ncn-w001 or ncn-mXXX (external-managers).
 3. The drive letter of that device (i.e. `/dev/sdd`)
 4. Access to stash, to `git pull ssh://git@stash.us.cray.com:7999/mtl/shasta-pre-install-toolkit.git` onto your NCN.
-5. The block device should be `>16GB`, the toolkit's built from "just-enough-OS" and can fit on smaller drives.
+5. The block device should be `>=32GB`, the toolkit's built from "just-enough-OS" and can fit on smaller drives.
 
 ## Creating the LiveCD and populating it with information needed for the install
 
@@ -35,7 +35,7 @@ There are 5 steps here:
     # Run this command, or adjust the copy-on-write (COW) overlay size for persistent storage
     # from 5000MiB.                                                                                       
     ncn-w001:~ # git clone https://stash.us.cray.com/scm/mtl/shasta-pre-install-toolkit.git
-    ncn-w001:~ # ./shasta-pre-install-toolkit/scripts/write-livecd.sh /dev/sdd $(pwd)/shasta-pre-install-toolkit-latest.iso 5000
+    ncn-w001:~ # ./shasta-pre-install-toolkit/scripts/write-livecd.sh /dev/sdd $(pwd)/shasta-pre-install-toolkit-latest.iso 20000
 ```
 
 2. Mount data partition:
