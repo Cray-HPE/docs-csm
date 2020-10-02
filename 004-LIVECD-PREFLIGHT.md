@@ -41,7 +41,7 @@ There are 5 steps here:
 2. Mount data partition:
 
     ```bash
-    ncn-w001:~ # mount /dev/disk/by-label/install-data /mnt/
+    ncn-w001:~ # mount /dev/disk/by-label/PITDATA /mnt/
     ```
 
 Now that your disk is setup and the data partition is mounted, you can begin gathering info and configs and populating it to the USB disk so it's available when you boot into the livecd.

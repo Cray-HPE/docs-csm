@@ -4,8 +4,7 @@ If you made `qnd-1.4.sh` you can run that now to fill-in all of the required var
 for setting up interfaces.
 
 ```bash
-spit:~ # mount /dev/disk/by-label/install-data /mnt
-spit:~ # source /mnt/qnd-1.4.sh
+spit:~ # source /var/www/ephemeral/qnd-1.4.sh
 spit:~ # env
 ```
 
