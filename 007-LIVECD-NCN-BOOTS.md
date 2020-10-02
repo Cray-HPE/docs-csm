@@ -9,7 +9,7 @@ This was done in an earlier section, but it's important you have **shut down all
 Typically, we should have eight leases for NCN BMCs. Some systems may have less, but the
 recommended minimum is 3 of each type (k8s-managers, k8s-workers, ceph-storage).
 
-## Manual Check 1: Validate Controller Leases
+## STOP and Check: Manually Validate Controller Leases
 
 You will need to create a static file for the BMCs, at least so DNSMasq can map MAC to Hostname.
 Follow BMC section guide at the bottom of [004-LIVECD-PREFLIGHT](004-LIVECD-PREFLIGHT.md).
@@ -86,7 +86,7 @@ spit:~ # conman -q
 spit:~ # conman -j ncn-s002
 ```
 
-### Manual Step 3: Boot K8s
+# Manual Step 3: Boot K8s
 
 This will again just `echo` the commands.  Look them over and validate they are ok before running them.  This just `grep`s out the storage nodes so you only get the workers and managers.
 
@@ -111,7 +111,7 @@ for bmc in $(grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases | grep -v s | sor
 done
 ```
 
-### Manual Check 2: Storage
+## STOP and Check: Manually Inspect Storage
 
 Run ceph -s and verify cluster is healthy from ncn-s001.nmn.  Verify that health is HEALTH_OK, and that we have mon, mgr, mds, osd and rgw services in the output:
 
@@ -148,7 +148,7 @@ k8s-block-replicated (default)   ceph.com/rbd      Delete          Immediate    
 sma-block-replicated             ceph.com/rbd      Delete          Immediate           true                   5m31s
 ```
 
-### Manual Check 3: Check K8s
+## STOP and Check: Manually Check K8s
 
 Verify all nodes have joined the cluster (can run on any master/worker):
 
