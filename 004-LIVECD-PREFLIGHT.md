@@ -190,14 +190,10 @@ ncn-w001:~ # grep k8s_virtual_ip configs/networks.yml
   while read xname role subrole bmcmac bmcport nmnmac nmnport
   do
   # dhcp-host=xname,a4:bf:01:48:20:03,ncn-s002-mgmt
-    echo "dhcp-host=$xname,$bmcmac,$bmcport" >> /mnt/statics.conf
-    #echo "xname: $xname"
-    #echo "role : $role"
-    #echo "subrole : $subrole"
-    #echo "bmc mac : $bmcmac"
-    #echo "bmc port : $bmcport"
-    #echo "nmn mac : $nmnmac"
-    #echo "nmn port : $nmnport"
+    # BMC *-mgmt
+    echo "dhcp-host=${xname%n0},$bmcmac,$bmcport" >> /mnt/statics.conf
+    # NMN ncn-{s,m,w}0**
+    echo "dhcp-host=$nmnmac,$nmnport" >> /mnt/statics.conf
   done < $INPUT
   IFS=$OLDIFS
   ```
@@ -210,7 +206,7 @@ chmod 755 ./script.sh
 cat /mnt/statics.conf
 ```
 
-  4. Now that `/mnt/statics.conf` is made, you need to compare the output of that command to the CCD and replace the port with the hostname of the BMC.  This is a tedious step that currently has no automation.
+  4. Now that `/mnt/statics.conf` is made, you need to compare the output of that command to the CCD and replace the port with the hostname of the BMC.  This is a tedious step that currently has no automation.  You should also replace the NMN MAC addresses with the NCN hostname (ncn-s001, ncn-w002, etc.), though this bit isn't currently working until you add an entry for it in `/etc/hosts`: [MTL-1199](https://connect.us.cray.com/jira/browse/MTL-1199)
 
   5. Once you have `statics.conf` setup, you can now come back to finish populating `data.json` a bit easier than hand-editing.  Do so like this (the MACs will of course be different for your system):
 
@@ -236,7 +232,7 @@ cat /mnt/statics.conf
   ncn-w001:~ # sed -i 's/$mac_address_s002/a4:bf:01:65:6b:b8/' /mnt/data.json >/dev/null
   ncn-w001:~ # sed -i 's/$mac_address_s003/a4:bf:01:64:f4:3b/' /mnt/data.json >/dev/null
   ```
-The above commands will put your MAC addresses into `data.json`
+The above commands will put your BMC MAC addresses into `data.json`.
 
 ## Manual Step 4: Download booting artifacts
 
