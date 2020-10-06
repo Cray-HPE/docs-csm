@@ -20,6 +20,9 @@ External, direct access.
 /root/bin/sic-setup-lan0.sh $site_cidr $site_gw $site_dns $site_nic
 ```
 
+Run `hostname`.   If you don't see the system name (e.g. fanta) in the hostname, run `sic-setup-lan0.sh` again.
+This will be fixed in MTL-1200.
+
 ## Setup the Non-Compute Bond
 
 Then continue running the scripts that follow to set up the rest of the networking.  Setup the bond for talking to the full system, leverage link-resilience.  
@@ -110,23 +113,25 @@ Support customer access network interfaces:
 
 You may have already added this to `qnd-1.4.sh` from an earlier doc.
 ```bash
-spit:~ # /root/bin/sic-pxe-vlan007.sh $can_cidr $can_dhcp_start $can_dhcp_end $dhcp_ttl
+spit:~ # /root/bin/sic-pxe-vlan007.sh $can_gw $can_dhcp_start $can_dhcp_end $dhcp_ttl
 ```
 
 and netbooting...the example values are for EXAMPLE
 only.
 
+> NOTE: The NCN hosts added to /etc/hosts is only necessary to workaround MTL-1199 until that is fixed.
 
 ```bash
 cp /var/www/ephemeral/statics.conf /etc/dnsmasq.d/
 systemctl restart dnsmasq
+cat /var/www/ephemeral/ncn-hosts >> /etc/hosts
 ```
 
 ## STOP :: Validate the LiveCD platform.
 
 Now verify service health:
-- both dnsmasq and podman should report HEALTHY and running.
-- No container(s) should be dead.
+- dnsmasq, basecamp, and nexus should report HEALTHY and running.
+- No podman container(s) should be dead.
 
 ```bash
 spit:~ # systemctl status basecamp dnsmasq nexus

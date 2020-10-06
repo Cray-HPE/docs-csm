@@ -99,6 +99,7 @@ The following steps will detail how to quickly collect information from a semi, 
     echo export can_cidr=10.102.4.110/24 >> /mnt/qnd-1.4.sh
     echo export can_dhcp_start=10.102.4.5 >> /mnt/qnd-1.4.sh
     echo export can_dhcp_end=10.102.4.109 >> /mnt/qnd-1.4.sh
+    echo export can_gw=10.102.4.111 >> /mnt/qnd-1.4.sh
     ```
 
 4. Optionally, adjust dhcp time for 1.4 leases:
@@ -135,6 +136,7 @@ The following steps will detail how to quickly collect information from a semi, 
     export can_cidr=10.102.4.110/24
     export can_dhcp_start=10.102.4.5
     export can_dhcp_end=10.102.4.109
+    export can_gw=10.102.4.111
     export dhcp_ttl=2m    
     ```
 
@@ -142,13 +144,37 @@ Your quick-and-dirty script is now saved to your USB stick.  Next, we'll gather 
 
 ## Manual Step 3: Create `data.json` and `statics.conf`
 
-This file is the main metadata file for configuring nodes in cloud-init.
+data.json is the main metadata file for configuring nodes in cloud-init.
 
 > Note: This manual step is tedious and will be removed by automation.
 
-First fetch and edit `data.json`...
+1. Fetch the latest metadata file for your system.
 
-1. Fetch the latest example file, this can be done off of ncn-w001:
+> Replace <system-name> with your system (e.g. fanta)
+
+   ```bash
+   ncn-w001:~ # wget https://stash.us.cray.com/projects/DST/repos/shasta_system_configs/raw/<system-name>/ncn_metadata.csv
+   ```
+
+2. Edit the `ncn_metadata.csv` file to add `Bond MAC`, `Node Name`, and `NMN IP` columns.
+
+   Bond MAC will be the MAC of the bond0 interface on the NCN.   Set this to `00:00:00:00:00:00` for the `Site Connection` node.
+   NMN IP will be the IP address that you want to use for the NCN on the NMN.
+
+   ```bash
+   NCN xname,NCN Role,NCN Subrole,BMC MAC,BMC Switch Port,NMN MAC,NMN Switch Port,Bond MAC,Node Name,NMN IP
+   x3000c0s1b0n0,Management,Master,a4:bf:01:5a:aa:03,x3000u25-p25,a4:bf:01:5a:a9:ff,x3000u25-p02,98:03:9b:1a:f6:70,ncn-m001,10.252.2.10
+   x3000c0s3b0n0,Management,Master,a4:bf:01:5a:b0:00,x3000u25-p26,a4:bf:01:5a:af:fc,x3000u25-p03,b8:59:9f:2b:31:02,ncn-m002,10.252.2.11
+   x3000c0s5b0n0,Management,Master,a4:bf:01:68:55:ad,x3000u25-p27,a4:bf:01:68:55:a9,x3000u25-p04,b8:59:9f:2b:31:06,ncn-m003,10.252.2.12
+   x3000c0s7b0n0,Management,Worker,00:00:00:00:00:00,Site Connection,00:00:00:00:00:00,Site Connection,00:00:00:00:00:00,ncn-w001,0.0.0.0
+   x3000c0s9b0n0,Management,Worker,a4:bf:01:5a:d5:fa,x3000u25-p28,a4:bf:01:5a:d5:f6,x3000u25-p05,98:03:9b:0f:39:4a,ncn-w002,10.252.2.13
+   x3000c0s11b0n0,Management,Worker,a4:bf:01:5a:d5:ec,x3000u25-p29,a4:bf:01:5a:d5:e8,x3000u25-p06,50:6b:4b:08:d0:4a,ncn-w003,10.252.2.14
+   x3000c0s13b0n0,Management,Storage,a4:bf:01:65:66:cc,x3000u25-p30,a4:bf:01:65:66:c8,x3000u25-p07,b8:59:9f:2b:2e:d2,ncn-s001,10.252.2.15
+   x3000c0s15b0n0,Management,Storage,a4:bf:01:65:6b:b8,x3000u25-p31,a4:bf:01:65:6b:b4,x3000u25-p08,b8:59:9f:34:88:9e,ncn-s002,10.252.2.16
+   x3000c0s17b0n0,Management,Storage,a4:bf:01:64:f4:3b,x3000u25-p32,a4:bf:01:64:f4:37,x3000u25-p09,b8:59:9f:34:88:7a,ncn-s003,10.252.2.17
+   ```
+
+3. Fetch the latest example file, this can be done off of ncn-w001:
 
     ```bash
     ncn-w001:~ # mkdir -pv /mnt/configs
@@ -158,7 +184,7 @@ First fetch and edit `data.json`...
 
 The example `data.json` is now saved to your USB stick.
 
-3. Edit the `data.json` file and manually adjust all the `~FIXMES~`.
+4. Edit the `data.json` file and manually adjust all the `~FIXMES~`.
 
 ```bash
 # STOP!
@@ -170,16 +196,32 @@ The example `data.json` is now saved to your USB stick.
 ncn-w001:~ # vim /mnt/configs/data.json
 ```
 
-> You can find two of the values needed above with the commands below:
+  + k8s-virtual-ip and rgw-virtual-ip
 
-```
-ncn-w001:~ # grep rgw_virtual_ip configs/networks.yml
-ncn-w001:~ # grep k8s_virtual_ip configs/networks.yml
-```
+  Run these commands on the 1.3 system.
 
-`data.json` is now partially complete.  In order to save a little work, switch gears and create this `dnsmasq` config file first:
+  ```
+  ncn-w001:~ # grep rgw_virtual_ip /opt/cray/crayctl/files/group_vars/all/networks.yml
+  ncn-w001:~ # grep k8s_virtual_ip /opt/cray/crayctl/files/group_vars/all/networks.yml
+  ```
 
-2. Create this little script is below on w001 (or whichever node you're on), which can  grab the MAC addresses needed for `dnsmasq`.
+  + first-master-hostname
+
+  On systems that use w001 for the liveCD, set this to ncn-m001
+  On systems that use m001 for the liveCD, set this to ncn-m002
+
+  + dns-server
+
+  Set this to the IP used for `nmn_cidr` in qnd-1.4.sh.
+
+  + can-gw
+
+  Set this to the IP used for `can_gw` in qnd-1.4.sh.
+
+
+`data.json` is now partially complete.  We will complete it in the next step.
+
+5. Create this little script below on w001 (or whichever node you're on) which will generate `statics.conf` and finish `data.json`.
 
   ```
   #!/bin/bash
@@ -187,52 +229,41 @@ ncn-w001:~ # grep k8s_virtual_ip configs/networks.yml
   OLDIFS=$IFS
   IFS=','
   [[ ! -f $INPUT ]] && { echo "$INPUT file not found"; exit 99; }
-  while read xname role subrole bmcmac bmcport nmnmac nmnport
+
+  sed -i 's/$mac_address/mac_address/g' /mnt/configs/data.json
+  while read xname role subrole bmcmac bmcport nmnmac nmnport bondmac nodename nmnip
   do
-  # dhcp-host=xname,a4:bf:01:48:20:03,ncn-s002-mgmt
-    # BMC *-mgmt
-    echo "dhcp-host=${xname%n0},$bmcmac,$bmcport" >> /mnt/statics.conf
-    # NMN ncn-{s,m,w}0**
-    echo "dhcp-host=$nmnmac,$nmnport" >> /mnt/statics.conf
+    if [ "$xname" == "NCN xname" ]; then
+      continue
+    fi
+    if [ "$bmcmac" == "00:00:00:00:00:00" ]; then
+      continue
+    fi
+    echo "dhcp-host=$bondmac,$nmnip,$nodename" >> /mnt/statics.conf
+    shortname=`echo $nodename | sed 's/ncn-//'`
+    sed -i "s/mac_address_$shortname/$bondmac/" /mnt/configs/data.json
+    echo "$nmnip $nodename.nmn $nodename" >> /mnt/ncn-hosts
+  done < $INPUT
+  while read xname role subrole bmcmac bmcport nmnmac nmnport bondmac nodename nmnip
+  do
+    if [ "$xname" == "NCN xname" ]; then
+      continue
+    fi
+    if [ "$bmcmac" == "00:00:00:00:00:00" ]; then
+      continue
+    fi
+    echo "dhcp-host=${xname%n0},$bmcmac,${nodename}-mgmt" >> /mnt/statics.conf
   done < $INPUT
   IFS=$OLDIFS
   ```
 
-3. Run it to save the file to your USB stick:
+3. Run it to save the files to your USB stick:
 
 ```
 chmod 755 ./script.sh
-./script.sh configs/$SYSTEM/ncn_metadata.csv
+./script.sh ./ncn_metadata.csv
 cat /mnt/statics.conf
 ```
-
-  4. Now that `/mnt/statics.conf` is made, you need to compare the output of that command to the CCD and replace the port with the hostname of the BMC.  This is a tedious step that currently has no automation.  You should also replace the NMN MAC addresses with the NCN hostname (ncn-s001, ncn-w002, etc.), though this bit isn't currently working until you add an entry for it in `/etc/hosts`: [MTL-1199](https://connect.us.cray.com/jira/browse/MTL-1199)
-
-  5. Once you have `statics.conf` setup, you can now come back to finish populating `data.json` a bit easier than hand-editing.  Do so like this (the MACs will of course be different for your system):
-
-> These are example variables; adjust them as needed for your environment
-
-  ```
-  ncn-w001:~ # cat /mnt/statics.conf
-  dhcp-host=ncn-m001-mgmt,a4:bf:01:5a:a9:ff,ncn-m001-mgmt
-  dhcp-host=ncn-m002-mgmt,a4:bf:01:5a:af:fc,ncn-m002-mgmt
-  dhcp-host=ncn-m003-mgmt,a4:bf:01:68:55:a9,ncn-m003-mgmt
-  dhcp-host=ncn-w001-mgmt,00:00:00:00:00:00,ncn-w001-mgmt
-  dhcp-host=ncn-w002-mgmt,a4:bf:01:5a:d5:f6,ncn-w002-mgmt
-  dhcp-host=ncn-w003-mgmt,a4:bf:01:5a:d5:e8,ncn-w003-mgmt
-  dhcp-host=ncn-s001-mgmt,a4:bf:01:65:66:c8,ncn-s001-mgmt
-  dhcp-host=ncn-s002-mgmt,a4:bf:01:65:6b:b4,ncn-s002-mgmt
-  dhcp-host=ncn-s003-mgmt,a4:bf:01:64:f4:37,ncn-s003-mgmt
-  ncn-w001:~ # sed -i 's/$mac_address_m001/a4:bf:01:5a:aa:03/' /mnt/data.json >/dev/null
-  ncn-w001:~ # sed -i 's/$mac_address_m002/a4:bf:01:5a:b0:00/' /mnt/data.json >/dev/null
-  ncn-w001:~ # sed -i 's/$mac_address_m003/a4:bf:01:68:55:ad/' /mnt/data.json >/dev/null
-  ncn-w001:~ # sed -i 's/$mac_address_w002/a4:bf:01:5a:d5:fa/' /mnt/data.json >/dev/null
-  ncn-w001:~ # sed -i 's/$mac_address_w003/a4:bf:01:5a:d5:ec/' /mnt/data.json >/dev/null
-  ncn-w001:~ # sed -i 's/$mac_address_s001/a4:bf:01:65:66:cc/' /mnt/data.json >/dev/null
-  ncn-w001:~ # sed -i 's/$mac_address_s002/a4:bf:01:65:6b:b8/' /mnt/data.json >/dev/null
-  ncn-w001:~ # sed -i 's/$mac_address_s003/a4:bf:01:64:f4:3b/' /mnt/data.json >/dev/null
-  ```
-The above commands will put your BMC MAC addresses into `data.json`.
 
 ## Manual Step 4: Download booting artifacts
 
@@ -256,7 +287,7 @@ ncn-w001:/mnt/data # pushd ceph
 ncn-w001:/mnt/data/ceph # wget --mirror -np -nH -A *.squashfs -nv --cut-dirs=5 http://arti.dev.cray.com/artifactory/node-images-unstable-local/shasta/storage-ceph/0.0.1-6/
 ncn-w001:/mnt/data/ceph # popd
 # KERNEL & INITRD
-ncn-w001:/mnt/data # wget --mirror -np -nH -A *.kernel,*initrd* -nv --cut-dirs=5 http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/sles15-base/0.0.1-1/
+ncn-w001:/mnt/data # wget --mirror -np -nH -A *.kernel,*initrd* -nv --cut-dirs=5 http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/sles15-base/0.0.1-4/
 # VALIDATE
 ncn-w001:/mnt/data # ls -R
 # GET OFF THE USB STICK
@@ -285,4 +316,4 @@ If you don't have that information, then you need the following otherwise move o
 
 
 ## Manual Step 4 : Boot into your LiveCD.
-Now you can boot into your LiveCD [005-LIVECD-BOOT.md](005-LIVECD-BOOT.md)
+Now you can boot into your LiveCD [005-LIVECD-BOOTS.md](005-LIVECD-BOOTS.md)
