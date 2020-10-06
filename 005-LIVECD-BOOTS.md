@@ -27,7 +27,7 @@ If you observe the entire boot, you will see an integrity check occur before Lin
 
 
 Once the system boots, you will need to create a **new** password for the root account (for information
-on _recovery_, see [008-LIVECD-RECOVERY](008-LIVECD-RECOVERY.md).
+on _recovery_, see [010-LIVECD-RECOVERY.md](010-LIVECD-RECOVERY.md).
 
 After logging in, have your network information handy so you can populate it in the next steps.
 - IP and netmask for your external connection(s).
@@ -36,5 +36,5 @@ After logging in, have your network information handy so you can populate it in 
 - The CAN IP/CIDR (ex: `can_cidr=10.102.4.110/24`)
 
 Then you can move onto these next two pages:
-1. Setting up communication...[06-LIVECD-SETUP.md](006-LIVECD-SETUP.md)
-2. Booting NCNs [07-LIVECD-NCN-BOOTS.md](007-LIVECD-NCN-BOOTS.md)
+1. Setting up communication...[006-LIVECD-SETUP.md](006-LIVECD-SETUP.md)
+2. Booting NCNs [007-LIVECD-NCN-BOOTS.md](007-LIVECD-NCN-BOOTS.md)

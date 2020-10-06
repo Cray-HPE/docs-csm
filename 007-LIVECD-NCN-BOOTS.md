@@ -1,10 +1,31 @@
 # LiveCD NCN Boots
 
-Before starting this you are expected to have networking and serices setup.
+Before starting this you are expected to have networking and services setup.
 If you are unsure, see the bottom of [006-LIVECD-SETUP.md](006-LIVECD-SETUP.md).
 
 ## IMPORTANT: Make sure the other nodes are shut down
 This was done in an earlier section, but it's important you have **shut down all the other NCNs to prevent DHCP conflicts**.  
+
+## IMPORTANT: Make sure the MTU of the spine ports connected to the NCNs is set to 9216.  Check this on both spines.
+
+  ```bash
+  sw-spine01 [standalone: master] # show interface status | include ^Mpo
+  Mpo1                  Up                    Enabled                                           9216              -
+  Mpo2                  Up                    Enabled                                           9216              -
+  Mpo3                  Up                    Enabled                                           9216              -
+  Mpo4                  Up                    Enabled                                           9216              -
+  Mpo5                  Up                    Enabled                                           9216              -
+  Mpo6                  Up                    Enabled                                           9216              -
+  Mpo7                  Up                    Enabled                                           9216              -
+  Mpo8                  Up                    Enabled                                           9216              -
+  Mpo9                  Up                    Enabled                                           9216              -
+  Mpo11                 Down                  Enabled                                           9216              -
+  Mpo12                 Down                  Enabled                                           9216              -
+  Mpo15                 Down                  Enabled                                           9216              sw-leaf01-mlag
+  Mpo114                Down                  Enabled                                           9216              -
+  Mpo115                Up                    Enabled                                           9216              -
+  ```
+
 
 Typically, we should have eight leases for NCN BMCs. Some systems may have less, but the
 recommended minimum is 3 of each type (k8s-managers, k8s-workers, ceph-storage).
