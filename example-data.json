@@ -8,6 +8,7 @@
       "local_hostname":"ncn-m001",
       "runcmd": [
         "/srv/cray/scripts/metal/set-dns-config.sh",
+        "/srv/cray/scripts/metal/set-ntp-config.sh",
         "/srv/cray/scripts/common/kubernetes-cloudinit.sh"
       ]
     }
@@ -21,6 +22,7 @@
       "local_hostname":"ncn-m002",
       "runcmd": [
         "/srv/cray/scripts/metal/set-dns-config.sh",
+        "/srv/cray/scripts/metal/set-ntp-config.sh",
         "/srv/cray/scripts/common/kubernetes-cloudinit.sh"
       ]
     }
@@ -34,6 +36,7 @@
       "local_hostname":"ncn-m003",
       "runcmd": [
         "/srv/cray/scripts/metal/set-dns-config.sh",
+        "/srv/cray/scripts/metal/set-ntp-config.sh",
         "/srv/cray/scripts/common/kubernetes-cloudinit.sh"
       ]
     }
@@ -47,6 +50,7 @@
       "local_hostname":"ncn-s001",
       "runcmd": [
         "/srv/cray/scripts/metal/set-dns-config.sh",
+        "/srv/cray/scripts/metal/set-ntp-config.sh",
         "/srv/cray/scripts/common/storage-ceph-cloudinit.sh"
       ]
     }
@@ -59,7 +63,8 @@
       "hostname":"ncn-s002",
       "local_hostname":"ncn-s002",
       "runcmd": [
-        "/srv/cray/scripts/metal/set-dns-config.sh"
+        "/srv/cray/scripts/metal/set-dns-config.sh",
+        "/srv/cray/scripts/metal/set-ntp-config.sh"
       ]
     }
   },
@@ -71,7 +76,8 @@
       "hostname":"ncn-s003",
       "local_hostname":"ncn-s003",
       "runcmd": [
-        "/srv/cray/scripts/metal/set-dns-config.sh"
+        "/srv/cray/scripts/metal/set-dns-config.sh",
+        "/srv/cray/scripts/metal/set-ntp-config.sh"
       ]
     }
   },
@@ -84,6 +90,7 @@
       "local_hostname":"ncn-w002",
       "runcmd": [
         "/srv/cray/scripts/metal/set-dns-config.sh",
+        "/srv/cray/scripts/metal/set-ntp-config.sh",
         "/srv/cray/scripts/common/kubernetes-cloudinit.sh"
       ]
     }
@@ -97,6 +104,7 @@
       "local_hostname": "ncn-w003",
       "runcmd": [
         "/srv/cray/scripts/metal/set-dns-config.sh",
+        "/srv/cray/scripts/metal/set-ntp-config.sh",
         "/srv/cray/scripts/common/kubernetes-cloudinit.sh"
       ]
     }
