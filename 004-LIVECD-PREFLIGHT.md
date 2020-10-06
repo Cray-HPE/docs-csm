@@ -83,7 +83,7 @@ The following steps will detail how to quickly collect information from a semi, 
 
 2. You'll also want to gather network info for the external interface. This would be:
 
-> These are example variables; adjust them as needed for your environment
+    > These are example variables; adjust them as needed for your environment.
 
     ```bash
     echo export site_cidr=172.30.52.220/20 >>/mnt/qnd-1.4.sh
@@ -93,7 +93,7 @@ The following steps will detail how to quickly collect information from a semi, 
 
 3.  Customer Access Network information will need to be gathered by hand and kept (for current BGP Dev status, see [Can BGP status on Shasta systems](https://connect.us.cray.com/confluence/display/CASMPET/CAN-BGP+status+on+Shasta+systems)):
 
-> These are example variables; adjust them as needed for your environment
+    > These are example variables; adjust them as needed for your environment
 
     ```bash
     echo export can_cidr=10.102.4.110/24 >> /mnt/qnd-1.4.sh
@@ -103,7 +103,7 @@ The following steps will detail how to quickly collect information from a semi, 
 
 4. Optionally, adjust dhcp time for 1.4 leases:
 
-> These are example variables; adjust them as needed for your environment
+    > These are example variables; adjust them as needed for your environment
 
     ```bash
     # Default is 10m
@@ -112,7 +112,7 @@ The following steps will detail how to quickly collect information from a semi, 
 
 5. Print the script into terminal to visually verify things. There will be a reminder to copy this file into our LiveCD in the creation readme.
 
-> These are example variables; adjust them as needed for your environment
+    > These are example variables; adjust them as needed for your environment
 
     ```bash
     # Print the file we made:
