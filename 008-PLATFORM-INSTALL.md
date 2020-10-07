@@ -21,8 +21,18 @@ This page will go over how to install the Platform Manifest
     ```bash
     spit:~ # git clone https://stash.us.cray.com/scm/shasta-cfg/<system-name>.git 
     spit:~ # manifestgen -i <system-name>/manifests/platform.yaml > platform.yaml 
+    ```
+
+3. Run the deploydecryptionkey.sh script provided by the shasta-cfg/<system-name>.git repo.
+
+    ```bash
+    spit:~ # ./deploy/deploydecryptionkey.sh
+    ```
+
+4. Run loftsman against the platform manifest.
+
+    ```bash
     spit:~ # loftsman ship --shape --images-registry dtr.dev.cray.com --charts-repo http://packages.local:8081/repository/helmrepo.dev.cray.com/ --loftsman-images-registry dtr.dev.cray.com --manifest-file-path ./platform.yaml 
     ```
 
    This should execute the full platform manifest.   Make sure the shasta-cfg repo for your system is up-to-date with the shasta-cfg/stable repo.
-
