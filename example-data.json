@@ -81,6 +81,20 @@
       ]
     }
   },
+  "$mac_address_w001" : {
+    "meta-data":{
+      "foo":"bar"
+    },
+    "user-data":{
+      "hostname":"ncn-w001",
+      "local_hostname":"ncn-w001",
+      "runcmd": [
+        "/srv/cray/scripts/metal/set-dns-config.sh",
+        "/srv/cray/scripts/metal/set-ntp-config.sh",
+        "/srv/cray/scripts/common/kubernetes-cloudinit.sh"
+      ]
+    }
+  },
   "$mac_address_w002" : {
     "meta-data":{
       "foo":"bar"
