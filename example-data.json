@@ -81,6 +81,20 @@
       ]
     }
   },
+  "$mac_address_w001" : {
+    "meta-data":{
+      "foo":"bar"
+    },
+    "user-data":{
+      "hostname":"ncn-w001",
+      "local_hostname":"ncn-w001",
+      "runcmd": [
+        "/srv/cray/scripts/metal/set-dns-config.sh",
+        "/srv/cray/scripts/metal/set-ntp-config.sh",
+        "/srv/cray/scripts/common/kubernetes-cloudinit.sh"
+      ]
+    }
+  },
   "$mac_address_w002" : {
     "meta-data":{
       "foo":"bar"
@@ -123,7 +137,7 @@
       "chart-repo": "http://helmrepo.dev.cray.com:8080",
       "dns-server": "~FIXME~ e.g. 10.252.1.1",
       "docker-image-registry": "dtr.dev.cray.com",
-      "domain": "nmn",
+      "domain": "nmn hmn",
       "first-master-hostname": "~FIXME~ e.g. ncn-m002",
       "k8s-virtual-ip": "~FIXME~ e.g. 10.252.120.2",
       "kubernetes-max-pods-per-node": "200",

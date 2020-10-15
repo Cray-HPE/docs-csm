@@ -3,10 +3,14 @@
 Before starting this you are expected to have networking and services setup.
 If you are unsure, see the bottom of [006-LIVECD-SETUP.md](006-LIVECD-SETUP.md).
 
-## IMPORTANT: Make sure the other nodes are shut down
-This was done in an earlier section, but it's important you have **shut down all the other NCNs to prevent DHCP conflicts**.  
+### IMPORTANT : NCN Power State & DHCP
 
-## IMPORTANT: Make sure the MTU of the spine ports connected to the NCNs is set to 9216.  Check this on both spines.
+Make sure the other nodes are shutdown.  This was done in an earlier section, but it's important
+ you have **shut down all the other NCNs to prevent DHCP conflicts**.  
+
+### IMPORTANT : Switchport MTU
+
+Make sure the MTU of the spine ports connected to the NCNs is set to 9216.  Check this on both spines.
 
   ```bash
   sw-spine01 [standalone: master] # show interface status | include ^Mpo

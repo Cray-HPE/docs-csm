@@ -16,7 +16,7 @@ This page will go over how to install the Platform Manifest
     ``` 
     Now you can run `kubectl get nodes` to see the nodes in the cluster. 
 
-2. Generate the platform manifest.  (Replace <system-name> with the system you are installing.)
+2. Generate the platform manifest. (Replace <system-name> with the system you are installing.)
 
     ```bash
     spit:~ # git clone https://stash.us.cray.com/scm/shasta-cfg/<system-name>.git 
@@ -35,4 +35,4 @@ This page will go over how to install the Platform Manifest
     spit:~ # loftsman ship --shape --images-registry dtr.dev.cray.com --charts-repo http://packages.local:8081/repository/helmrepo.dev.cray.com/ --loftsman-images-registry dtr.dev.cray.com --manifest-file-path ./platform.yaml 
     ```
 
-   This should execute the full platform manifest.   Make sure the shasta-cfg repo for your system is up-to-date with the shasta-cfg/stable repo.
+   This should execute the full platform manifest. Make sure the shasta-cfg repo for your system is up-to-date with the shasta-cfg/stable repo.
