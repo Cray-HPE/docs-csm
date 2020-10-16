@@ -1,7 +1,6 @@
 # Manual Step 1: Interfaces
 
-If you made `qnd-1.4.sh` you can run that now to fill-in all of the required variables
-for setting up interfaces.
+> If you made `qnd-1.4.sh` you can invoke it in the 1.4 context to prepare the install env.
 
 ```bash
 spit:~ # source /var/www/ephemeral/qnd-1.4.sh
@@ -20,8 +19,8 @@ External, direct access.
 /root/bin/sic-setup-lan0.sh $site_cidr $site_gw $site_dns $site_nic
 ```
 
-Run `hostname`.   If you don't see the system name (e.g. fanta) in the hostname, run `sic-setup-lan0.sh` again.
-This will be fixed in MTL-1200.
+> Run `hostname`.   If you don't see the system name (e.g. fanta) in the hostname, run `sic-setup-lan0.sh` again.
+This will be fixed in [MTL-1200](https://connect.us.cray.com/jira/browse/MTL-1200).
 
 ## Setup the Non-Compute Bond
 

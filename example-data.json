@@ -137,7 +137,7 @@
       "chart-repo": "http://helmrepo.dev.cray.com:8080",
       "dns-server": "~FIXME~ e.g. 10.252.1.1",
       "docker-image-registry": "dtr.dev.cray.com",
-      "domain": "nmn",
+      "domain": "nmn hmn",
       "first-master-hostname": "~FIXME~ e.g. ncn-m002",
       "k8s-virtual-ip": "~FIXME~ e.g. 10.252.120.2",
       "kubernetes-max-pods-per-node": "200",

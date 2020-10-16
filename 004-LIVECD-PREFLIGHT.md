@@ -1,8 +1,9 @@
 # LiveCD Setup
 
-The LiveCD, formally known as the Shasta Pre-Install Toolkit, requires some setup before it can be used on metal or virtual platforms.
+This page will assist you with configuring the LiveCD, a.k.a. Shasta Pre-Install Toolkit. 
 
-## Components
+### Requirements:
+
 Before starting, you should have:
 
 1. A machine with 1.3.x installed
@@ -11,22 +12,21 @@ Before starting, you should have:
 4. Access to stash, to `git pull ssh://git@stash.us.cray.com:7999/mtl/shasta-pre-install-toolkit.git` onto your NCN.
 5. The block device should be `>=32GB`, the toolkit's built from "just-enough-OS" and can fit on smaller drives.
 
-## Creating the LiveCD and populating it with information needed for the install
+### Steps:
 
-There are 5 steps here:
+There are 4 manual steps.
+> These steps will be automated. CASM/MTL is automating this process  with the shasta-instance-control tool.
+
 1. Create the USB Stick
 2. Information gathering and configuration payload (most of your time will be spent here)
-3. Craft `data.json` and `statics.conf`
-4. Download the artifacts for PXE booting
-5. Boot into the livecd
-
-**The above steps** are prone to change as development of Shasta Instance Control carries forward.
+3. Init and prep configuration files; download the artifacts for PXE booting
+4. Boot into the livecd
 
 ## Manual Step 1: Create the USB Stick
 
 1. Make the USB and fetch artifacts.
 
-```bash
+    ```bash
     # Fetch the latest ISO:
     ncn-w001:~ # rm -f shasta-pre-install-toolkit-latest.iso
     ncn-w001:~ # wget http://car.dev.cray.com/artifactory/internal/MTL/sle15_sp2_ncn/x86_64/dev/master/metal-team/shasta-pre-install-toolkit-latest.iso
@@ -36,7 +36,7 @@ There are 5 steps here:
     # from 5000MiB.                                                                                       
     ncn-w001:~ # git clone https://stash.us.cray.com/scm/mtl/shasta-pre-install-toolkit.git
     ncn-w001:~ # ./shasta-pre-install-toolkit/scripts/write-livecd.sh /dev/sdd $(pwd)/shasta-pre-install-toolkit-latest.iso 20000
-```
+    ```
 
 2. Mount data partition:
 
@@ -54,7 +54,7 @@ This presumes you have 1.3.x configuration files, 1.2 should suffice but locatio
 
 ### 1.3.x -> 1.4 Quick-n-dirty data gathering...
 
-LiveCD setup information can be collected by hand or alternatively you can run this on any 1.3.X system to print out an easy-script for setting up your liveCD for your system.
+LiveCD setup information can be collected by hand, alternatively you can run this on any 1.3.X system to print out an easy-script for setting up your liveCD for your system.
 
 > **This will all be replaced by the shasta-instance-control tool; this is just a helper for 1.3.X
 > testing.**
@@ -142,7 +142,7 @@ The following steps will detail how to quickly collect information from a semi, 
 
 Your quick-and-dirty script is now saved to your USB stick.  Next, we'll gather more information needed for `dnsmasq`.
 
-## Manual Step 3: Create `data.json` and `statics.conf`
+## Manual Step 3: Init Configs and Fetch Artifacts
 
 data.json is the main metadata file for configuring nodes in cloud-init.
 
@@ -150,7 +150,7 @@ data.json is the main metadata file for configuring nodes in cloud-init.
 
 1. Fetch the latest metadata file for your system.
 
-> Replace <system-name> with your system (e.g. fanta)
+    > Replace <system-name> with your system (e.g. fanta)
 
    ```bash
    ncn-w001:~ # wget https://stash.us.cray.com/projects/DST/repos/shasta_system_configs/raw/<system-name>/ncn_metadata.csv
@@ -182,48 +182,47 @@ data.json is the main metadata file for configuring nodes in cloud-init.
     ncn-w001:~ # cp -pv docs-non-compute-nodes/example-data.json /mnt/configs/data.json
     ```
 
-The example `data.json` is now saved to your USB stick.
+    The example `data.json` is now saved to your USB stick.
 
 4. Edit the `data.json` file and manually adjust all the `~FIXMES~`.
 
-```bash
-# STOP!
-# STOP! This next step requires some manual work.
-# STOP!
-# Edit, adjust all the ~FIXMES
-# The values for the `global_data` should be cross-referenced to `networks*.yml` and
-# `kubernetes.yml`.
-ncn-w001:~ # vim /mnt/configs/data.json
-```
+    ```bash
+    # STOP!
+    # STOP! This next step requires some manual work.
+    # STOP!
+    # Edit, adjust all the ~FIXMES
+    # The values for the `global_data` should be cross-referenced to `networks*.yml` and
+    # `kubernetes.yml`.
+    ncn-w001:~ # vim /mnt/configs/data.json
+    ```
 
-  + k8s-virtual-ip and rgw-virtual-ip
+    1. `k8s-virtual-ip` and `rgw-virtual-ip`
 
-  Run these commands on the 1.3 system.
+        Run these commands on the 1.3 system.
 
-  ```
-  ncn-w001:~ # grep rgw_virtual_ip /opt/cray/crayctl/files/group_vars/all/networks.yml
-  ncn-w001:~ # grep k8s_virtual_ip /opt/cray/crayctl/files/group_vars/all/networks.yml
-  ```
+        ```bash
+        ncn-w001:~ # grep rgw_virtual_ip /opt/cray/crayctl/files/group_vars/all/networks.yml
+        ncn-w001:~ # grep k8s_virtual_ip /opt/cray/crayctl/files/group_vars/all/networks.yml
+        ```
 
-  + first-master-hostname
+    2. `first-master-hostname`
 
-  On systems that use w001 for the liveCD, set this to ncn-m001
-  On systems that use m001 for the liveCD, set this to ncn-m002
+        1. On systems that use w001 for the liveCD, set this to ncn-m001
+        2. On systems that use m001 for the liveCD, set this to ncn-m002
 
-  + dns-server
+    3. `dns-server`
 
-  Set this to the IP used for `nmn_cidr` in qnd-1.4.sh.
+        1. Set this to the IP used for `nmn_cidr` in qnd-1.4.sh
 
-  + can-gw
+    4. `can-gw`
 
-  Set this to the IP used for `can_gw` in qnd-1.4.sh.
+        1. Set this to the IP used for `can_gw` in qnd-1.4.sh
 
-
-`data.json` is now partially complete.  We will complete it in the next step.
+    `data.json` is now partially complete.  We will complete it in the next step.
 
 5. Create this little script below on w001 (or whichever node you're on) which will generate `statics.conf` and finish `data.json`.
 
-  ```
+  ```bash
   #!/bin/bash
   INPUT="$1"
   OLDIFS=$IFS
