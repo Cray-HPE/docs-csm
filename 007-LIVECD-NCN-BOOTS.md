@@ -55,14 +55,14 @@ If you have that file, you can move on.
 
     ```bash
     spit:~ # grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases | sort
-    ncn-w002-mgmt
-    ncn-s001-mgmt
     ncn-m002-mgmt
-    ncn-w001-mgmt
-    ncn-s002-mgmt
     ncn-m003-mgmt
-    ncn-s003-mgmt
+    ncn-w001-mgmt
+    ncn-w002-mgmt
     ncn-w003-mgmt
+    ncn-s001-mgmt
+    ncn-s002-mgmt
+    ncn-s003-mgmt
     ```
 
 # Manual Step 1:  Ensure artifacts are in place
@@ -219,3 +219,5 @@ weave-net-hsczs                    2/2     Running   4          7m30s
 weave-net-schwt                    2/2     Running   0          2m39s
 weave-net-vwqbt                    2/2     Running   0          2m35s
 ```
+
+Now you can start **Installing platform services** [008-PLATFORM-INSTALL.md](008-PLATFORM-INSTALL.md)

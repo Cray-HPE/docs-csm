@@ -5,7 +5,7 @@ This page will go over how to install the Platform Manifest
 
 1. Install kubectl on the LiveCD
 
-    > NOTE:  This is only needed until CASMPET-3442 is resolved. 
+    > NOTE:  This is only needed until CASMINST-110 is resolved.
 
     ```bash
     spit:~ # curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.18.6/bin/linux/amd64/kubectl" 
