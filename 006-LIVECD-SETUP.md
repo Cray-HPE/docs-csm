@@ -15,12 +15,11 @@ External, direct access.
 
 ```bash
 # These may have already been defined if you made them as part of the previous doc
-# Example below uses loki-ncn-m001.
 /root/bin/sic-setup-lan0.sh $site_cidr $site_gw $site_dns $site_nic
 ```
 
 > Run `hostname`.   If you don't see the system name (e.g. fanta) in the hostname, run `sic-setup-lan0.sh` again.
-This will be fixed in [MTL-1200](https://connect.us.cray.com/jira/browse/MTL-1200).
+This will be fixed in [CASMINST-111](https://connect.us.cray.com/jira/browse/CASMINST-111).
 
 ## Setup the Non-Compute Bond
 
@@ -67,7 +66,7 @@ spit:~ # /root/bin/sic-setup-vlan004.sh $hmn_cidr
 #### Customer Access VLAN
 
 This subnet handles customer access to nodes and services as well as access to outside services from inside the cluster. It is the primary
-network for talking to UANs and NCNs from outside the cluster and access services in the cluster.
+network for talking to NCNs from outside the cluster and access services in the cluster.
 
 ```bash
 spit:~ # /root/bin/sic-setup-vlan007.sh $can_cidr
@@ -87,7 +86,7 @@ spit:~ # ip a show vlan007
 
 # Manual Step 2: Services
 
-Support netbooting for trunked devices (non-compute nodes and UANs):
+Support netbooting for trunked devices (non-compute nodes):
 
 > Note: If you made `qnd-1.4.sh` you can run that now to fill-in all of the required variables
 > for setting up service, or they may have already been added in a previous step.
@@ -118,15 +117,12 @@ spit:~ # /root/bin/sic-pxe-vlan007.sh $can_gw $can_dhcp_start $can_dhcp_end $dhc
 and netbooting...the example values are for EXAMPLE
 only.
 
-> NOTE: The NCN hosts added to /etc/hosts is only necessary to workaround MTL-1199 until that is fixed.
-
 ```bash
 cp /var/www/ephemeral/statics.conf /etc/dnsmasq.d/
 systemctl restart dnsmasq
-cat /var/www/ephemeral/ncn-hosts >> /etc/hosts
 ```
 
-## STOP :: Validate the LiveCD platform.
+## Manual Check 2 :: STOP :: Validate the Services 
 
 Now verify service health:
 - dnsmasq, basecamp, and nexus should report HEALTHY and running.
@@ -134,11 +130,58 @@ Now verify service health:
 
 ```bash
 spit:~ # systemctl status basecamp dnsmasq nexus
-spit:~ # podman container ls -a
 ```
 
 > - If basecamp is dead, restart it with `systemctl restart basecamp`.
-> - If dnsmasq is dead, restart it with `systemctl restart basecamp`.
+> - If dnsmasq is dead, restart it with `systemctl restart dnsmasq`.
 > - If nexus is dead, restart it with `systemctl restart nexus`.
+
+
+```bash
+spit:~ # podman container ls -a
+```
+
+You should see two containers: nexus and basecamp
+
+```bash
+CONTAINER ID  IMAGE                                         COMMAND               CREATED     STATUS         PORTS   NAMES
+496a2ce806d8  dtr.dev.cray.com/metal/cloud-basecamp:latest                        4 days ago  Up 4 days ago          basecamp
+6fcdf2bfb58f  docker.io/sonatype/nexus3:3.25.0              sh -c ${SONATYPE_...  4 days ago  Up 4 days ago          nexus
+```
+
+
+# Manual Step 3: Access to External Services 
+
+To access outside services like Stash or Artifactory, we need to set up /etc/resolv.conf.  Make sure the /etc/resolv.conf includes the site DNS servers at the end of the file.
+
+```bash
+nameserver 172.30.84.40
+nameserver 172.31.84.40
+```
+
+# Manual Check 3: Verify Outside Name Resolution 
+
+You should be able to resolve outside services like arti.dev.cray.com.
+
+```bash
+ping arti.dev.cray.com
+```
+
+# Workaround CASMINST-23
+
+There is currently an issue with the ipxe.efi that is packaged in the LiveCD image.   This prevents NCNs from booting properly.
+Until CASMINST-23 is fixed, check the sha1sum of /var/www/boot/ipxe.efi.  If the SHA1 does not match the one below, then pull down the ipxe.efi below and install it.
+
+```bash
+spit:~ # sha1sum /var/www/boot/ipxe.efi
+705e6ad7c2fc550db089a496368810b64a64a8e0  /var/www/boot/ipxe.efi 
+```
+
+If the SHA1 does not match the one below, then copy the ipxe.efi from redbull and set the proper permissions. 
+
+```bash
+scp root@redbull-ncn-w001.us.cray.com:/var/www/boot/ipxe.efi /var/www/boot
+chown dnsmasq:tftp /var/www/boot/ipxe.efi
+```
 
 Now you can start **Booting NCNs** [007-LIVECD-NCN-BOOTS.md](007-LIVECD-NCN-BOOTS.md)
