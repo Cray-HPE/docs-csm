@@ -9,6 +9,9 @@ Make sure the other nodes are shutdown.  This was done in an earlier section, bu
  you have **shut down all the other NCNs to prevent DHCP conflicts**.  
 
 ### IMPORTANT : Switchport MTU
+```bash
+sic spit validate -m true
+```
 
 Make sure the MTU of the spine ports connected to the NCNs is set to 9216.  Check this on both spines.
 
@@ -35,6 +38,10 @@ Typically, we should have eight leases for NCN BMCs. Some systems may have less,
 recommended minimum is 3 of each type (k8s-managers, k8s-workers, ceph-storage).
 
 ## STOP and Check: Manually Validate Controller Leases
+
+```bash
+sic spit validate -d true
+```
 
 You will need to create a static file for the BMCs, at least so DNSMasq can map MAC to Hostname.
 Follow BMC section guide at the bottom of [004-LIVECD-PREFLIGHT](004-LIVECD-PREFLIGHT.md).
@@ -137,6 +144,10 @@ done
 ```
 
 ## STOP and Check: Manually Inspect Storage
+
+```bash
+sic spit validate -c true
+```
 
 Run ceph -s and verify cluster is healthy from ncn-s001.nmn.  Verify that health is HEALTH_OK, and that we have mon, mgr, mds, osd and rgw services in the output:
 

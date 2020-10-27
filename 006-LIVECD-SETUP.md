@@ -77,11 +77,7 @@ spit:~ # /root/bin/sic-setup-vlan007.sh $can_cidr
 Check that IPs are set for each interface:
 
 ```bash
-spit:~ # ip a show lan0
-spit:~ # ip a show bond0
-spit:~ # ip a show vlan002
-spit:~ # ip a show vlan004
-spit:~ # ip a show vlan007
+sic spit validate --network true
 ```
 
 # Manual Step 2: Services
@@ -122,35 +118,29 @@ cp /var/www/ephemeral/statics.conf /etc/dnsmasq.d/
 systemctl restart dnsmasq
 ```
 
-## Manual Check 2 :: STOP :: Validate the Services 
+## Manual Check 2 :: STOP :: Validate the Services
 
 Now verify service health:
 - dnsmasq, basecamp, and nexus should report HEALTHY and running.
 - No podman container(s) should be dead.
 
 ```bash
-spit:~ # systemctl status basecamp dnsmasq nexus
+sic spit validate --services true
 ```
 
 > - If basecamp is dead, restart it with `systemctl restart basecamp`.
 > - If dnsmasq is dead, restart it with `systemctl restart dnsmasq`.
 > - If nexus is dead, restart it with `systemctl restart nexus`.
 
-
-```bash
-spit:~ # podman container ls -a
-```
-
 You should see two containers: nexus and basecamp
 
-```bash
+```
 CONTAINER ID  IMAGE                                         COMMAND               CREATED     STATUS         PORTS   NAMES
 496a2ce806d8  dtr.dev.cray.com/metal/cloud-basecamp:latest                        4 days ago  Up 4 days ago          basecamp
 6fcdf2bfb58f  docker.io/sonatype/nexus3:3.25.0              sh -c ${SONATYPE_...  4 days ago  Up 4 days ago          nexus
 ```
 
-
-# Manual Step 3: Access to External Services 
+# Manual Step 3: Access to External Services
 
 To access outside services like Stash or Artifactory, we need to set up /etc/resolv.conf.  Make sure the /etc/resolv.conf includes the site DNS servers at the end of the file.
 
@@ -159,7 +149,7 @@ nameserver 172.30.84.40
 nameserver 172.31.84.40
 ```
 
-# Manual Check 3: Verify Outside Name Resolution 
+# Manual Check 3: Verify Outside Name Resolution
 
 You should be able to resolve outside services like arti.dev.cray.com.
 
@@ -174,10 +164,10 @@ Until CASMINST-23 is fixed, check the sha1sum of /var/www/boot/ipxe.efi.  If the
 
 ```bash
 spit:~ # sha1sum /var/www/boot/ipxe.efi
-705e6ad7c2fc550db089a496368810b64a64a8e0  /var/www/boot/ipxe.efi 
+705e6ad7c2fc550db089a496368810b64a64a8e0  /var/www/boot/ipxe.efi
 ```
 
-If the SHA1 does not match the one below, then copy the ipxe.efi from redbull and set the proper permissions. 
+If the SHA1 does not match the one below, then copy the ipxe.efi from redbull and set the proper permissions.
 
 ```bash
 scp root@redbull-ncn-w001.us.cray.com:/var/www/boot/ipxe.efi /var/www/boot
