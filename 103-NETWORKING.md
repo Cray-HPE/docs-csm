@@ -49,7 +49,7 @@ swap IDs out for certain systems until smarter logic can be added to cloud-init.
 | Vendor | Model | Device ID | Vendor ID |
 | :---- | :---- | :-----: | :---------: |
 | Intel Corporation | Ethernet Connection X722 | `37d2` | `8086` |
-| Intel Corporation | 82576 | `1526` | **`8086`** |
-| Mellanox Technologies | ConnectX-4 | `1013` | `15b3` |  
+| Intel Corporation | 82576 | `1526` | `8086` |
+| Mellanox Technologies | ConnectX-4 | `1013` | **`15b3`** |
 | Mellanox Technologies | ConnectX-5 | **`1017`** | `15b3` | 
 | QLogic Corporation | FastLinQ QL41000 | `8070` | **`1077`** |
