@@ -149,7 +149,7 @@
       "num_storage_nodes": "3",
       "rgw-virtual-ip": "~FIXME~ e.g. 10.252.2.100",
       "upstream_ntp_server": "~FIXME~",
-      "wipe-ceph-ods": "yes"
+      "wipe-ceph-osds": "yes"
     }
   }
 }

@@ -16,3 +16,40 @@ but in the context of a metal stack.
 | `vlan004` | Virtual LAN for managing hardware | 1500
 | `vlan007` | Virtual LAN for the customer access network | 1500
 
+# Vendor and Bus ID Identification
+
+The initial boot of an NCN sets interface udev rules since it has no discovery methood yet.
+
+The information needed is:
+- PCI **Vendor** IDs for devices/cards to be used on the Management network.
+- PCI **Device** IDs for the devices/cards to be used on the High-Speed Network.
+
+>  The 16-bit Vendor ID is allocated by the PCI-SIG (Peripheral Component Interconnect
+  Special Interest Group).
+
+![PCI Configuration Space](https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Pci-config-space.svg/600px-Pci-config-space.svg.png)
+
+The information belonds to the first 4 bytes of the PCI header, and admin can obtain it
+ using `lspci` or your preferred method for reading the PCI bus.
+
+### Collection Example 
+```bash
+lspci | grep -i ethernet
+lspci | grep c6:00.0
+```
+### Popular Vendor ID and Device ID Table
+
+These are commononly found in Cray computers.
+
+The Device and Vendor IDs are used in iPXE for bootstrapping the nodes, this allows genertors to
+swap IDs out for certain systems until smarter logic can be added to cloud-init.
+
+> The bolded numbers are the defaults that live in [metal-ipxe's boot script.](https://stash.us.cray.com/projects/MTL/repos/ipxe/browse/boot/script.ipxe).
+
+| Vendor | Model | Device ID | Vendor ID |
+| :---- | :---- | :-----: | :---------: |
+| Intel Corporation | Ethernet Connection X722 | `37d2` | `8086` |
+| Intel Corporation | 82576 | `1526` | **`8086`** |
+| Mellanox Technologies | ConnectX-4 | `1013` | `15b3` |  
+| Mellanox Technologies | ConnectX-5 | **`1017`** | `15b3` | 
+| QLogic Corporation | FastLinQ QL41000 | `8070` | **`1077`** |

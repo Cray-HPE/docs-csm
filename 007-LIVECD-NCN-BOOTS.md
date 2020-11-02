@@ -65,6 +65,29 @@ If you have that file, you can move on.
     ncn-s003-mgmt
     ```
 
+# Manual Upgrade Step(s)
+
+If you are fresh-installing you can skip this section and move onto "Manual Step 1"
+
+#### Safe-guard against wiping RAIDs, overlayFS, and Wiping Partitons
+
+Edit `/var/www/boot/script.ipxe` and align the following options as you see them here:
+
+- `rd.live.overlay.reset=0` will prevent any overlayFS files from being cleared.
+- `metal.no-wipe=1` will guard against touching RAIDs, disks, and partitions.
+
+#### Safe-guard against wiping CEPH OSDs
+
+Edit `/var/www/ephemeral/configs/data.json` and align the following options:
+
+```json
+  "wipe-ceph-osds": "no"
+```
+
+> Note: some earlier data.json files contain a typo of "wipe-ceph-**ods**": "yes", the typo is not
+> honored, please align it to these docs.
+
+
 # Manual Step 1:  Ensure artifacts are in place
 
 Mount the USB stick's data partition, and setup links for booting.
