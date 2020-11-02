@@ -6,8 +6,9 @@
 
 | FS Label | Partitions | Nodes	| Device | Size on Disk | Work Order | Memo
 | --- | --- | ---| --- | --- | --- | --- |
-| `SQFSRAID` | `/squashfs_management` | All NCNs | `BOOTRAID (MIRROR)` | `100 GiB` | [CASM-1885](https://connect.us.cray.com/jira/browse/MTL-1885) |  squashfs should compress our images to about 1/3rd their uncompressed size. (20G → 6.6G)  On pepsi's ncn-w001, we're at ~20G of non-volatile data storage needed. |
-| `ROOTRAID` | `/` | All NCNs | `BOOTRAID (MIRROR)` | Max/Remainder | Present since Shasta-Preview 1 | Partitions from 1.3 are not currently mounted. |
+| `BOOTRAID` |	`/boot/efi` | All NCNs | `BOOTRAID (MIRROR)` | `500 MiB` | Present since Shasta-Preview 1 |
+| `SQFSRAID` | `/run/initramfs/live` | All NCNs | `BOOTRAID (MIRROR)` | `100 GiB` | [CASM-1885](https://connect.us.cray.com/jira/browse/MTL-1885) |  squashfs should compress our images to about 1/3rd their uncompressed size. (20G → 6.6G)  On pepsi's ncn-w001, we're at ~20G of non-volatile data storage needed. |
+| `ROOTRAID` | Background | All NCNs | `BOOTRAID (MIRROR)` | Max/Remainder | Present since Shasta-Preview 1 | The persistent image file is loaded from this partition, when the image file is loaded the underlying drive is lazily unmounted (`umount -l`) so that when the overlay closes the disk follows suit. |
 | `CONRUN` | `/run/containerd` | All K8s Managers & Workers | Ephemeral | `75 GiB` | [MTL-916](https://connect.us.cray.com/jira/browse/MTL-916) | On pepsi ncn-w001, we have less than 200G of operational storage for this. |
 | `K8SETCD` | `/var/lib/etcd` | All K8s Managers | Ephemeral | `32 GiB` | [CASMPET-338](https://connect.us.cray.com/jira/browse/CASMPPET-338) | |
 | `CONLIB` | `/var/lib/containerd` | All K8s Managers & Workers | Ephemeral | `25%` | [MTL-892](https://connect.us.cray.com/jira/browse/MTL-892) | |
@@ -17,7 +18,6 @@ These labels/partitions are deprecated in Shasta 1.4+:
 
 | FS Label | Partitions | Nodes	| Device | Size on Disk | Work Order | Memo
 | --- | --- | ---| --- | --- | --- | --- |
-| `BOOTRAID` |	`/boot/efi` | All NCNs | `BOOTRAID (MIRROR)` | `500 MiB` | Present since Shasta-Preview 1 |
 | `K8SEPH` | `/var/lib/cray/k8s_ephemeral` | ncn-w001, ncn-w002 | Ephemeral | Max/Remainder | [CASMPET-338](https://connect.us.cray.com/jira/browse/CASMPET-338) [CASMPET-342](https://connect.us.cray.com/jira/browse/CASMPET-342) | No longer mounted/used in shasta-1.4 |
 | `CRAYINSTALL` | `/var/cray/vfat` | ncn-w001, ncn-w002 | Ephemeral | `12 GiB` |  [CASMPET-338](https://connect.us.cray.com/jira/browse/CASMPET-338) [CASMPET-342](https://connect.us.cray.com/jira/browse/CASMPET-342) | No longer mounted/used in shasta-1.4 |
 | `CRAYVBIS` | `/var/cray/vbis` | ncn-w001, ncn-w002 | Ephemeral | `900 GiB` |  [CASMPET-338](https://connect.us.cray.com/jira/browse/CASMPET-338) [CASMPET-342](https://connect.us.cray.com/jira/browse/CASMPET-342) | No longer mounted/used in shasta-1.4 |
@@ -94,7 +94,7 @@ LiveOS_rootfs on / type overlay (rw,relatime,lowerdir=/run/rootfsbase,upperdir=/
 
 ## Erasing the Persistent Storage
 
-The overlayFS is persistent by default, that is it will not reset itself on reboot. There's two 
+The overlayFS is persistent by default, that is it will not reset itself on reboot. There are two 
 toggles at the users disposal for resetting the overlay.
 
 ### Standard Resetting overlay Contents
@@ -125,7 +125,8 @@ To nuke the overlayFS file itself, you must set two-keys on the kernel commandli
 metal.no-wipe=0 rd.live.overlay.reset=1
 ```
 
-> Note: `metal.no-wipe=1` does not protect against `rd.live.overlay.reset`.
+> Note: `metal.no-wipe=1` does not protect against `rd.live.overlay.reset`, `metal.no-wipe` is not
+> a feature of dmsquash-live.
 
 ## Re-sizing the Persistent Overlay
 
