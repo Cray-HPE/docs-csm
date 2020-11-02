@@ -123,7 +123,7 @@
       ]
     }
   },
-  "default": {
+  "Default": {
     "meta-data": {
       "foo": "bar"
     }
