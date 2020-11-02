@@ -16,7 +16,7 @@ This page will go over how to install the Platform Manifest
     ```
     Now you can run `kubectl get nodes` to see the nodes in the cluster.
 
-2. Generate the platform manifest. (Replace <system-name> with the system you are installing.)
+2. Generate the platform and keycloak-gatekeeper manifests. (Replace <system-name> with the system you are installing.)
 
     > NOTE: the call to manifestgen should be done via <system-name>/deploy/generate.sh when we're ready to use all manifests
 
@@ -24,7 +24,8 @@ This page will go over how to install the Platform Manifest
     spit:~ # git clone https://stash.us.cray.com/scm/shasta-cfg/<system-name>.git
     spit:~ # cd <system-name>
     spit:~ # mkdir -p ./build/manifests
-    spit:~ # manifestgen -i <system-name>/manifests/platform.yaml > ./build/manifests/platform.yaml
+    spit:~ # manifestgen -c customizations.yaml -i ./manifests/platform.yaml > ./build/manifests/platform.yaml
+    spit:~ # manifestgen -c customizations.yaml -i ./manifests/keycloak-gatekeeper.yaml > ./build/manifests/keycloak-gatekeeper.yaml
     ```
 
 3. Run the deploydecryptionkey.sh script provided by the shasta-cfg/<system-name>.git repo.
@@ -40,3 +41,9 @@ This page will go over how to install the Platform Manifest
     ```
 
    This should execute the full platform manifest. Make sure the shasta-cfg repo for your system is up-to-date with the shasta-cfg/stable repo.
+
+5. Run loftsman against the keycloak-gatekeeper manifest using shasta-cfg/<system-name> provided-script.
+
+    ```bash
+    spit:~ # ./deploy/deploy.sh ./build/manifests/keycloak-gatekeeper.yaml dtr.dev.cray.com http://packages.local:8081/repository/helmrepo.dev.cray.com/
+    ```
