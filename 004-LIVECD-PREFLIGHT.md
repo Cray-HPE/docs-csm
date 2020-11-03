@@ -1,6 +1,6 @@
 # LiveCD Setup
 
-This page will assist you with configuring the LiveCD, a.k.a. Shasta Pre-Install Toolkit. 
+This page will assist you with configuring the LiveCD, a.k.a. Shasta Pre-Install Toolkit.
 
 ### Requirements:
 
@@ -13,32 +13,96 @@ Before starting, you should have:
 4. External network connections moved from ncn-w001 to ncn-m001
    - See [012-MOVE-SITE-CONNECTIONS.md](012-MOVE-SITE-CONNECTIONS.md).
 5. Access to stash, to `git pull ssh://git@stash.us.cray.com:7999/mtl/shasta-pre-install-toolkit.git` onto your NCN.
+6. `sic` installed (get the [latest built rpm](http://car.dev.cray.com/artifactory/shasta-premium/MTL/sle15_sp2_ncn/x86_64/dev/master/metal-team/)
 
 ### Steps:
 
-There are 4 manual steps.
 > These steps will be automated. CASM/MTL is automating this process  with the shasta-instance-control tool.
 
-1. Create the USB Stick
-2. Information gathering and configuration payload (most of your time will be spent here)
-3. Init and prep configuration files; download the artifacts for PXE booting
-4. Shutdown NCNs
-4. Boot into the LiveCD 
+1. Install `sic`
+2. Setup ENV vars for use with `sic`
+3. Create the USB Stick
+4. Information gathering and configuration payload (most of your time will be spent here)
+5. Init and prep configuration files; download the artifacts for PXE booting
+6. Shutdown NCNs
+7. Boot into the LiveCD
 
-## Manual Step 1: Create the USB Stick
+## Manual Step 1: Install `sic`
+
+`sic` can be used to create and populate your liveCD.  You can think of it as a "`crayctl`" if you need a way understand what the tool exists for.
+
+
+You'll most likely want to grab whatever is the latest version:
+
+```bash
+# This won't work for copy/paste--adjust the rpm name
+zypper in http://car.dev.cray.com/artifactory/shasta-premium/MTL/sle15_sp2_ncn/x86_64/dev/master/metal-team/shasta-instance-control-*.rpm
+# If nexus isn't working or the pod is gone, you can also install with the rpm command:
+rpm -Uhv http://car.dev.cray.com/artifactory/shasta-premium/MTL/sle15_sp2_ncn/x86_64/dev/master/metal-team/shasta-instance-control-*.rpm
+```
+
+## Manual Step 2: Create ENV vars for use with `sic`
+
+Create a file with a bunch of environmental variables in it.  These are example values, but set these to what you need for your system:
+
+```bash
+vim vars.sh
+```
+
+```bash
+#!/bin/bash
+# These vars will likely stay the same unless there are development changes
+export SPIT_DISK_LABEL=/dev/disk/by-label/PITDATA
+export SPIT_ISO_NAME=shasta-pre-install-toolkit-latest.iso
+export SPIT_REPO_URL=ssh://git@stash.us.cray.com:7999/mtl/shasta-pre-install-toolkit.git
+export SPIT_ISO_URL=http://car.dev.cray.com/artifactory/internal/MTL/sle15_sp2_ncn/x86_64/dev/master/metal-team/shasta-pre-install-toolkit-latest.iso
+
+# These will likely need to be modified
+# These are the artifacts you want to be used to boot with
+export SPIT_WRITE_SCRIPT=/root/shasta-pre-install-toolkit/scripts/write-livecd.sh
+export SPIT_DATA_DIR=/mnt/data
+export SPIT_CEPH_DIR=/mnt/data/ceph
+export SPIT_K8S_DIR=/mnt/data/k8s
+export SPIT_INITRD_URL=https://arti.dev.cray.com/artifactory/node-images-unstable-local/shasta/sles15-base/0.0.1-5/initrd.img-0.0.1-5.xz
+export SPIT_KERNEL_URL=https://arti.dev.cray.com/artifactory/node-images-unstable-local/shasta/sles15-base/0.0.1-5/5.3.18-24.24-default-0.0.1-5.kernel
+export SPIT_MANAGER_URL=https://arti.dev.cray.com/artifactory/node-images-unstable-local/shasta/kubernetes/0.0.1-11/kubernetes-0.0.1-11.squashfs
+export SPIT_STORAGE_URL=https://arti.dev.cray.com/artifactory/node-images-unstable-local/shasta/storage-ceph/0.0.1-12/storage-ceph-0.0.1-12.squashfs
+# Note: Choose a different suffix for each of the URLs.  For example, your suffix may look something like `b020b06-1601944128692`.
+
+# You can find the available builds here:
+# - kubernetes image:  http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/kubernetes
+# - ceph image:  http://arti.dev.cray.com/artifactory/node-images-unstable-local/shasta/storage-ceph
+# - base image:  http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/sles15-base
+
+# These won't be needed until you actually boot into the livecd, but you may want to set them now
+# Set to false for now, so you can validate each step as you walk through the instructions
+export SPIT_VALIDATE_CEPH=false
+export SPIT_VALIDATE_DNS_DHCP=false
+export SPIT_VALIDATE_K8S=false
+export SPIT_VALIDATE_MTU=false
+export SPIT_VALIDATE_NETWORK=false
+export SPIT_VALIDATE_SERVICES=false
+```
+
+
+## `source` the above file and copy to the livecd
+
+Without this vars.sh file being `source`d you'd need to pass them manually at the command line.  
+
+```bash
+source vars.sh
+```
+
+## Manual Step 3: Create the USB Stick
 
 1. Make the USB and fetch artifacts.
 
     ```bash
-    # Fetch the latest ISO:
-    ncn-m001:~ # rm -f shasta-pre-install-toolkit-latest.iso
-    ncn-m001:~ # wget http://car.dev.cray.com/artifactory/internal/MTL/sle15_sp2_ncn/x86_64/dev/master/metal-team/shasta-pre-install-toolkit-latest.iso
-
-    # Find your USB stick with your linux tool of choice, for this example it is /dev/sdd.
-    # Run this command, or adjust the copy-on-write (COW) overlay size for persistent storage
-    # from 5000MiB.                                                                                       
-    ncn-m001:~ # git clone https://stash.us.cray.com/scm/mtl/shasta-pre-install-toolkit.git
-    ncn-m001:~ # ./shasta-pre-install-toolkit/scripts/write-livecd.sh /dev/sdd $(pwd)/shasta-pre-install-toolkit-latest.iso 20000
+    # Find your USB stick with your linux tool of choice, for this example it is /dev/sdd
+    wget $SPIT_ISO_URL                                 
+    git clone $SPIT_REPO_URL
+    sic spit format /dev/sdd ./shasta-pre-install-toolkit-latest.iso 20000
+    # If this fails, you may need to erase all the partitions and try again
     ```
 
 
@@ -50,7 +114,11 @@ There are 4 manual steps.
 
 Now that your disk is setup and the data partition is mounted, you can begin gathering info and configs and populating it to the USB disk so it's available when you boot into the livecd.
 
+### Copy your vars file over
 
+```bash
+cp vars.sh /mnt/
+```
 
 ## Manual Step 2: Gather Information
 
@@ -78,7 +146,7 @@ The following steps will detail how to quickly collect information from a semi, 
     > These are example variables; adjust them as needed for your environment.
 
     - site_cidr: The IP/netmask for em1 on ncn-m001
-    - site_gw: The default gateway IP on ncn-m001 shown by running ip route | grep default 
+    - site_gw: The default gateway IP on ncn-m001 shown by running ip route | grep default
     - site_dns: These should match the example below
     - nmn_cidr: The IP/netmask for vlan002 on ncn-m001
     - hmn_cidr: The IP/netmask for vlan004 on ncn-m001
@@ -253,12 +321,12 @@ data.json is the main metadata file for configuring nodes in cloud-init.
         Leave this as the provided defaults `10.252.0.0/17,10.254.0.0/17`.   Just remove the `~FIXME~`.
 
     -  `ntp_peers`
-  
+
         Enumerate all of the NCNs in the cluster.  In most cases, you can leave this as the default.
 
 
     `data.json` is now partially complete.  We will complete it in the next step.
-    
+
 
 5. Create this little script below on m001 which will generate `statics.conf` and finish `data.json`.
 
@@ -299,43 +367,20 @@ cat /mnt/statics.conf
 
 Fetch the current working set of artifacts.
 
-> Note: Choose a different suffix for each of the URLs.  For example, your suffix may look something like `b020b06-1601944128692`.
 
-You can find the available builds here:
-- kubernetes image:  http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/kubernetes
-- ceph image:  http://arti.dev.cray.com/artifactory/node-images-unstable-local/shasta/storage-ceph
-- base image:  http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/sles15-base
+> Note:  When running on a system that has 1.3 installed, you may hit a collision with an ip rule that prevents access to arti.dev.cray.com.   If you cannot ping that name, try removing this ip rule:
 
-> Note:  When running on a system that has 1.3 installed, you may hit a collision with an ip rule that prevents access to arti.dev.cray.com.   If you cannot ping that name, try removing this ip rule.
-
-
-```bash
+```
 ip rule del from all to 10.100.0.0/17 lookup rt_smnet
 ```
 
-1. Get the k8s squashFS image.
-2. Get the ceph squashFS image.
-3. Get the kernel and initrd from the base image for netboot.
 
 ```bash
-# PREP
-ncn-m001:~ # mkdir -pv /mnt/data/k8s /mnt/data/ceph
-ncn-m001:~ # pushd /mnt/data/
-# K8s
-ncn-m001:/mnt/data # pushd k8s
-ncn-m001:/mnt/data/k8s # wget --mirror -np -nH -A *.squashfs -nv --cut-dirs=5 http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/kubernetes/0.0.1-4/
-ncn-m001:/mnt/data/k8s # popd
-# CEPH
-ncn-m001:/mnt/data # pushd ceph
-ncn-m001:/mnt/data/ceph # wget --mirror -np -nH -A *.squashfs -nv --cut-dirs=5 http://arti.dev.cray.com/artifactory/node-images-unstable-local/shasta/storage-ceph/0.0.1-6/
-ncn-m001:/mnt/data/ceph # popd
-# KERNEL & INITRD
-ncn-m001:/mnt/data # wget --mirror -np -nH -A *.kernel,*initrd* -nv --cut-dirs=5 http://arti.dev.cray.com:80/artifactory/node-images-unstable-local/shasta/sles15-base/0.0.1-4/
-# VALIDATE
-ncn-m001:/mnt/data # ls -R
-# GET OFF THE USB STICK
-ncn-m001:/mnt/data # popd
-ncn-m001:~ #
+# This will pull from the vars created in step 1.  You can also pull individual components with the command flags
+# If you didn't earlier:
+source vars.sh
+# Then download the artifacts:
+sic spit get
 ```
 
 ## Manual Step 5 : Shutdown NCNs
