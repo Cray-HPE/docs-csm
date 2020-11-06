@@ -12,7 +12,7 @@ This page will go over how to install the Platform Manifest
     spit:~ # chmod +x ./kubectl
     spit:~ # mv ./kubectl /usr/local/bin/kubectl
     spit:~ # mkdir ~/.kube
-    spit:~ # scp ncn-m001.nmn:/etc/kubernetes/admin.conf ~/.kube/config
+    spit:~ # scp ncn-m002.nmn:/etc/kubernetes/admin.conf ~/.kube/config
     ```
     Now you can run `kubectl get nodes` to see the nodes in the cluster.
 
