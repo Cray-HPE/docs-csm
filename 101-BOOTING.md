@@ -15,8 +15,9 @@ This covers booting in every context, namely:
 5. Cloud-init provides personalization.
 
 The disk-write is for two reasons:
-- Running the squashFS from disk frees memory, vs. running it in memory.
-- The local image serves as a fallback.
+- Running the squashFS from disk frees memory, vs. running it in memory
+- The local image serves as a fallback with a Grub2 bootlader
+- Persistence; runniing in memory is ephemeral 
 
 ### Installed
 

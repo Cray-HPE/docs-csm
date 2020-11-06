@@ -15,7 +15,7 @@ Ideally the Basic Wipe is enough, and should be tried first. All of these proced
 
 - Adding a node that isn't bare.
 - Adopoting new disks that aren't bare.
-- Fresh-installing
+- Fresh-installing.
 
 ### Basic Wipe
 
