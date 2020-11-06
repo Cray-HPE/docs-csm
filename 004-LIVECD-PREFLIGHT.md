@@ -374,7 +374,10 @@ Fetch the current working set of artifacts.
 ip rule del from all to 10.100.0.0/17 lookup rt_smnet
 ```
 
-
+> NOTE: [CASMINST-245](https://connect.us.cray.com/jira/browse/CASMINST-245) k8s will encounter disk-pressure
+> because the mount points for /run/containerd, /var/lib/kubelet, and /var/lib/containerd are not ready.
+> These are coming in fast (week of 11/09), until then these images need to be fetched after running the `sic` command below.
+> - https://arti.dev.cray.com/artifactory/node-images-unstable-local/shasta/kubernetes/b63f06b-1604671164414/kubernetes-b63f06b-1604671164414.squashfs
 ```bash
 # This will pull from the vars created in step 1.  You can also pull individual components with the command flags
 # If you didn't earlier:
@@ -391,5 +394,5 @@ Make sure all of the NCNs other than ncn-m001 are powered off.  If you still hav
 for i in m002 m003 w001 w002 w003 s001 s002 s003;do ipmitool -I lanplus -U $username -P $password -H ncn-${i}-mgmt chassis power status;done
 ```
 
-## Manual Step 4 : Boot into your LiveCD.
+## Manual Step 6 : Boot into your LiveCD.
 Now you can boot into your LiveCD [005-LIVECD-BOOTS.md](005-LIVECD-BOOTS.md)
