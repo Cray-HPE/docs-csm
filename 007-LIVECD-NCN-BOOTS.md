@@ -94,6 +94,24 @@ Edit `/var/www/ephemeral/configs/data.json` and align the following options:
 > Note: some earlier data.json files contain a typo of "wipe-ceph-**ods**": "yes", the typo is not
 > honored, please align it to these docs.
 
+```bash
+surtur-ncn-m001-spit:~ # grep wipe /var/www/ephemeral/configs/data.json
+        "wipe-ceph-osds": "yes"
+        "wipe-ceph-osds": "yes"
+        "wipe-ceph-osds": "yes"
+        "wipe-ceph-osds": "yes"
+        "wipe-ceph-osds": "yes"
+        "wipe-ceph-osds": "yes"
+        "wipe-ceph-osds": "yes"
+        "wipe-ceph-osds": "yes"
+        "wipe-ceph-osds": "yes"
+```
+
+Make sure no instances of "wipe-ceph-ods" -- and if there are, fix them and then:
+
+```bash
+surtur-ncn-m001-spit:~ # systemctl restart basecamp
+```
 
 # Manual Step 1:  Ensure artifacts are in place
 
