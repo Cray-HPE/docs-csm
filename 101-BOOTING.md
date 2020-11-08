@@ -6,7 +6,7 @@ This covers booting in every context, namely:
 
 ### Bootstrap
 
-> Responsibility: **LiveCD (`spit.nmn`)**
+> Responsibility: **LiveCD (`pit.nmn`)**
 
 1. NCNs will network boot using PXE and fetch an x86_64-secureboot iPXE binary.
 2. The iPXE binary chains to a final script, defining HTTP endpoints for kernel and initrd locations.

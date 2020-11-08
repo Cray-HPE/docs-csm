@@ -22,10 +22,10 @@ mypc:~ > umount /dev/disk/by-label/cow
 If the desire to reset basecamp to defaults comes up, you can do so by following these commands.
 
 ```bash
-spit:~ # systemctl stop basecamp
-spit:~ # podman rm basecamp
-spit:~ # podman rmi basecamp
-spit:~ # rm -f /var/www/ephemeral/configs/server.yaml
+pit:~ # systemctl stop basecamp
+pit:~ # podman rm basecamp
+pit:~ # podman rmi basecamp
+pit:~ # rm -f /var/www/ephemeral/configs/server.yaml
 # Now basecamp will re-init.
-spit:~ # systemctl start basecamp
+pit:~ # systemctl start basecamp
 ```

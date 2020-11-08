@@ -10,7 +10,7 @@ Make sure the other nodes are shutdown.  This was done in an earlier section, bu
 
 ### IMPORTANT : Switchport MTU
 ```bash
-sic spit validate -m true
+csi pit validate -m true
 ```
 
 Make sure the MTU of the spine ports connected to the NCNs is set to 9216.  Check this on both spines.
@@ -40,7 +40,7 @@ recommended minimum is 3 of each type (k8s-managers, k8s-workers, ceph-storage).
 ## STOP and Check: Manually Validate Controller Leases
 
 ```bash
-sic spit validate -d true
+csi pit validate -d true
 ```
 
 You will need to create a static file for the BMCs, at least so DNSMasq can map MAC to Hostname.
@@ -61,7 +61,7 @@ If you have that file, you can move on.
 2. Print off each NCN we'll target for booting.
 
     ```bash
-    spit:~ # grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases | sort
+    pit:~ # grep -Eo ncn-.*-mgmt /var/lib/misc/dnsmasq.leases | sort
     ncn-m002-mgmt
     ncn-m003-mgmt
     ncn-w001-mgmt
@@ -95,7 +95,7 @@ Edit `/var/www/ephemeral/configs/data.json` and align the following options:
 > honored, please align it to these docs.
 
 ```bash
-surtur-ncn-m001-spit:~ # grep wipe /var/www/ephemeral/configs/data.json
+surtur-ncn-m001-pit:~ # grep wipe /var/www/ephemeral/configs/data.json
         "wipe-ceph-osds": "yes"
         "wipe-ceph-osds": "yes"
         "wipe-ceph-osds": "yes"
@@ -110,7 +110,7 @@ surtur-ncn-m001-spit:~ # grep wipe /var/www/ephemeral/configs/data.json
 Make sure no instances of "wipe-ceph-ods" -- and if there are, fix them and then:
 
 ```bash
-surtur-ncn-m001-spit:~ # systemctl restart basecamp
+surtur-ncn-m001-pit:~ # systemctl restart basecamp
 ```
 
 # Manual Step 1:  Ensure artifacts are in place
@@ -128,9 +128,9 @@ This will again just `echo` the commands.  Look them over and validate they are 
 
 Setup the ceph image to boot:
 ```bash
-spit:~ # /root/bin/set-sqfs-links.sh ceph
+pit:~ # /root/bin/set-sqfs-links.sh ceph
 # Now double-check ceph-storage is chosen:
-spit:~ # ls -l /var/www/filesystem.squashfs
+pit:~ # ls -l /var/www/filesystem.squashfs
 lrwxrwxrwx 1 root root 58 Sep 23 00:23 /var/www/filesystem.squashfs -> /var/www/ephemeral/data/ceph/storage-ceph-0.0.1-6.squashfs
 ```
 
@@ -152,11 +152,11 @@ the static IPs for the BMCs.
 username=''
 password=''
 bmc='ncn-s002-mgmt'
-spit:~ # echo ipmitool -I lanplus -U $username -P $password -H $bmc sol activate
+pit:~ # echo ipmitool -I lanplus -U $username -P $password -H $bmc sol activate
 
 # ..or print available consoles:
-spit:~ # conman -q
-spit:~ # conman -j ncn-s002
+pit:~ # conman -q
+pit:~ # conman -j ncn-s002
 ```
 
 # Manual Step 3: Boot K8s
@@ -164,15 +164,15 @@ spit:~ # conman -j ncn-s002
 This will again just `echo` the commands.  Look them over and validate they are ok before running them.  This just `grep`s out the storage nodes so you only get the workers and managers.
 
 ```bash
-spit:~ # /root/bin/set-sqfs-links.sh k8s
+pit:~ # /root/bin/set-sqfs-links.sh k8s
 # Now double-check kubernetes is chosen:
-spit:~ # ls -l /var/www/filesystem.squashfs
+pit:~ # ls -l /var/www/filesystem.squashfs
 lrwxrwxrwx 1 root root 55 Sep 23 10:04 /var/www/filesystem.squashfs -> /var/www/ephemeral/data/k8s/kubernetes-0.0.1-4.squashfs
 ```
 
 ```bash
 # Fixup the link to boot K8s nodes:
-spit:~ # ln -snf /var/www/filesystem.squashfs /var/www/k8s-filesystem.squashfs
+pit:~ # ln -snf /var/www/filesystem.squashfs /var/www/k8s-filesystem.squashfs
 ```
 Then go ahead and boot your nodes:
 ```bash
@@ -187,7 +187,7 @@ done
 ## STOP and Check: Manually Inspect Storage
 
 ```bash
-sic spit validate -c true
+csi pit validate -c true
 ```
 
 Run ceph -s and verify cluster is healthy from ncn-s001.nmn.  Verify that health is HEALTH_OK, and that we have mon, mgr, mds, osd and rgw services in the output:
