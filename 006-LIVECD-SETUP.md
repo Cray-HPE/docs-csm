@@ -3,8 +3,8 @@
 > If you made `qnd-1.4.sh` you can invoke it in the 1.4 context to prepare the install env.
 
 ```bash
-spit:~ # source /var/www/ephemeral/qnd-1.4.sh
-spit:~ # env
+pit:~ # source /var/www/ephemeral/qnd-1.4.sh
+pit:~ # env
 ```
 
 > Note: you will need to fetch your external interface information from somewhere else.
@@ -15,10 +15,10 @@ External, direct access.
 
 ```bash
 # These may have already been defined if you made them as part of the previous doc
-/root/bin/sic-setup-lan0.sh $site_cidr $site_gw $site_dns $site_nic
+/root/bin/csi-setup-lan0.sh $site_cidr $site_gw $site_dns $site_nic
 ```
 
-> Run `hostname`.   If you don't see the system name (e.g. fanta) in the hostname, run `sic-setup-lan0.sh` again.
+> Run `hostname`.   If you don't see the system name (e.g. fanta) in the hostname, run `csi-setup-lan0.sh` again.
 This will be fixed in [CASMINST-111](https://connect.us.cray.com/jira/browse/CASMINST-111).
 
 ## Setup the Non-Compute Bond
@@ -32,9 +32,9 @@ LACP Link Aggregation.
 
 
 ```bash
-spit:~ # /root/bin/sic-setup-bond0.sh $mtl_cidr $bond_member0 $bond_member1
+pit:~ # /root/bin/csi-setup-bond0.sh $mtl_cidr $bond_member0 $bond_member1
 # If you have only one nic for the bond, then use this instead:
-spit:~ # /root/bin/sic-setup-bond0.sh $mtl_cidr $bond_member0
+pit:~ # /root/bin/csi-setup-bond0.sh $mtl_cidr $bond_member0
 ```
 
 # Log in now with SSH
@@ -51,7 +51,7 @@ This subnet handles discovering any trunked nodes (such as NCNs)
 and devices on unconfigured switchports (new switches, or factory reset).
 
 ```bash
-spit:~ # /root/bin/sic-setup-vlan002.sh $nmn_cidr
+pit:~ # /root/bin/csi-setup-vlan002.sh $nmn_cidr
 ```
 
 #### Hardware management VLAN
@@ -60,7 +60,7 @@ This subnet handles hardware control, and communication. It is the primary
 network for talking to and powering on other nodes during bootstrap.
 
 ```bash
-spit:~ # /root/bin/sic-setup-vlan004.sh $hmn_cidr
+pit:~ # /root/bin/csi-setup-vlan004.sh $hmn_cidr
 ```
 
 #### Customer Access VLAN
@@ -69,7 +69,7 @@ This subnet handles customer access to nodes and services as well as access to o
 network for talking to NCNs from outside the cluster and access services in the cluster.
 
 ```bash
-spit:~ # /root/bin/sic-setup-vlan007.sh $can_cidr
+pit:~ # /root/bin/csi-setup-vlan007.sh $can_cidr
 ```
 
 ## Manual Check 1 :: STOP :: Validate the LiveCD platform.
@@ -77,7 +77,7 @@ spit:~ # /root/bin/sic-setup-vlan007.sh $can_cidr
 Check that IPs are set for each interface:
 
 ```bash
-sic spit validate --network true
+csi pit validate --network true
 ```
 
 # Manual Step 2: Services
@@ -88,26 +88,26 @@ Support netbooting for trunked devices (non-compute nodes):
 > for setting up service, or they may have already been added in a previous step.
 
 ```bash
-spit:~ # /root/bin/sic-pxe-bond0.sh $mtl_cidr $mtl_dhcp_start $mtl_dhcp_end $dhcp_ttl
+pit:~ # /root/bin/csi-pxe-bond0.sh $mtl_cidr $mtl_dhcp_start $mtl_dhcp_end $dhcp_ttl
 ```
 
 Support node networking, serve DHCP/DNS/NTP over the NMN:
 
 ```bash
-spit:~ # /root/bin/sic-pxe-vlan002.sh $nmn_cidr $nmn_dhcp_start $nmn_dhcp_end $dhcp_ttl
+pit:~ # /root/bin/csi-pxe-vlan002.sh $nmn_cidr $nmn_dhcp_start $nmn_dhcp_end $dhcp_ttl
 ```
 
 Support hardware controllers, serve DHCP/DNS/NTP over the HMN:
 
 ```bash
-spit:~ # /root/bin/sic-pxe-vlan004.sh $hmn_cidr $hmn_dhcp_start $hmn_dhcp_end $dhcp_ttl
+pit:~ # /root/bin/csi-pxe-vlan004.sh $hmn_cidr $hmn_dhcp_start $hmn_dhcp_end $dhcp_ttl
 ```
 
 Support customer access network interfaces:
 
 You may have already added this to `qnd-1.4.sh` from an earlier doc.
 ```bash
-spit:~ # /root/bin/sic-pxe-vlan007.sh $can_gw $can_dhcp_start $can_dhcp_end $dhcp_ttl
+pit:~ # /root/bin/csi-pxe-vlan007.sh $can_gw $can_dhcp_start $can_dhcp_end $dhcp_ttl
 ```
 
 and netbooting...the example values are for EXAMPLE
@@ -125,7 +125,7 @@ Now verify service health:
 - No podman container(s) should be dead.
 
 ```bash
-sic spit validate --services true
+csi pit validate --services true
 ```
 
 > - If basecamp is dead, restart it with `systemctl restart basecamp`.
@@ -163,7 +163,7 @@ There is currently an issue with the ipxe.efi that is packaged in the LiveCD ima
 Until CASMINST-23 is fixed, check the sha1sum of /var/www/boot/ipxe.efi.  If the SHA1 does not match the one below, then pull down the ipxe.efi below and install it.
 
 ```bash
-spit:~ # sha1sum /var/www/boot/ipxe.efi
+pit:~ # sha1sum /var/www/boot/ipxe.efi
 705e6ad7c2fc550db089a496368810b64a64a8e0  /var/www/boot/ipxe.efi
 ```
 
