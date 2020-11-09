@@ -9,6 +9,7 @@
       "runcmd": [
         "/srv/cray/scripts/metal/set-dns-config.sh",
         "/srv/cray/scripts/metal/set-ntp-config.sh",
+        "/srv/cray/scripts/metal/install-bootloader.sh",
         "/srv/cray/scripts/common/kubernetes-cloudinit.sh"
       ]
     }
@@ -23,6 +24,7 @@
       "runcmd": [
         "/srv/cray/scripts/metal/set-dns-config.sh",
         "/srv/cray/scripts/metal/set-ntp-config.sh",
+        "/srv/cray/scripts/metal/install-bootloader.sh",
         "/srv/cray/scripts/common/kubernetes-cloudinit.sh"
       ]
     }
@@ -37,6 +39,7 @@
       "runcmd": [
         "/srv/cray/scripts/metal/set-dns-config.sh",
         "/srv/cray/scripts/metal/set-ntp-config.sh",
+        "/srv/cray/scripts/metal/install-bootloader.sh",
         "/srv/cray/scripts/common/kubernetes-cloudinit.sh"
       ]
     }
@@ -51,6 +54,7 @@
       "runcmd": [
         "/srv/cray/scripts/metal/set-dns-config.sh",
         "/srv/cray/scripts/metal/set-ntp-config.sh",
+        "/srv/cray/scripts/metal/install-bootloader.sh",
         "/srv/cray/scripts/common/storage-ceph-cloudinit.sh"
       ]
     }
@@ -64,7 +68,8 @@
       "local_hostname":"ncn-s002",
       "runcmd": [
         "/srv/cray/scripts/metal/set-dns-config.sh",
-        "/srv/cray/scripts/metal/set-ntp-config.sh"
+        "/srv/cray/scripts/metal/set-ntp-config.sh",
+        "/srv/cray/scripts/metal/install-bootloader.sh"
       ]
     }
   },
@@ -77,7 +82,8 @@
       "local_hostname":"ncn-s003",
       "runcmd": [
         "/srv/cray/scripts/metal/set-dns-config.sh",
-        "/srv/cray/scripts/metal/set-ntp-config.sh"
+        "/srv/cray/scripts/metal/set-ntp-config.sh",
+        "/srv/cray/scripts/metal/install-bootloader.sh"
       ]
     }
   },
@@ -91,6 +97,7 @@
       "runcmd": [
         "/srv/cray/scripts/metal/set-dns-config.sh",
         "/srv/cray/scripts/metal/set-ntp-config.sh",
+        "/srv/cray/scripts/metal/install-bootloader.sh",
         "/srv/cray/scripts/common/kubernetes-cloudinit.sh"
       ]
     }
@@ -105,6 +112,7 @@
       "runcmd": [
         "/srv/cray/scripts/metal/set-dns-config.sh",
         "/srv/cray/scripts/metal/set-ntp-config.sh",
+        "/srv/cray/scripts/metal/install-bootloader.sh",
         "/srv/cray/scripts/common/kubernetes-cloudinit.sh"
       ]
     }
@@ -119,6 +127,7 @@
       "runcmd": [
         "/srv/cray/scripts/metal/set-dns-config.sh",
         "/srv/cray/scripts/metal/set-ntp-config.sh",
+        "/srv/cray/scripts/metal/install-bootloader.sh",
         "/srv/cray/scripts/common/kubernetes-cloudinit.sh"
       ]
     }
