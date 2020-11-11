@@ -12,7 +12,7 @@ Before starting, you should have:
 3. The drive letter of that device (i.e. `/dev/sdd`)
 4. External network connections moved from ncn-w001 to ncn-m001
    - See [012-MOVE-SITE-CONNECTIONS.md](012-MOVE-SITE-CONNECTIONS.md).
-5. Access to stash, to `git pull ssh://git@stash.us.cray.com:7999/mtl/cray-pre-install-toolkit.git` onto your NCN.
+5. Access to stash, to `git clone https://stash.us.cray.com/scm/mtl/cray-pre-install-toolkit.git` onto your NCN.
 6. `csi` installed (get the [latest built rpm](http://car.dev.cray.com/artifactory/shasta-premium/MTL/sle15_sp2_ncn/x86_64/dev/master/metal-team/)
 
 ### Steps:
