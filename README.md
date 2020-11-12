@@ -10,6 +10,7 @@ to overview/educational background information.
 
 For **new users** of the liveCD on a Shasta metal cluster, start here:
 
+* [LiveCD Preflight](004-LIVECD-PREFLIGHT.md)
 * [LiveCD Boots](005-LIVECD-BOOTS.md)
 * [LiveCD Setup](006-LIVECD-SETUP.md)
 * [LiveCD NCN Boots](007-LIVECD-NCN-BOOTS.md)
@@ -19,7 +20,7 @@ For **virtual** users, go [here](https://connect.us.cray.com/confluence/display/
 ## 1.3 Upgrade & Rollback Guides
 
 For guidance collecting information to embark on a 1.4 upgrade, see here:
-* [LiveCD Preflight](004-LIVECD-PREFLIGHT.md)
+* Coming soon...
 
 For guidance on rolling back to the previous 1.3 install, see here:
 * [LiveCD 1.3 Rollback](003-LIVECD-1.3-ROLLBACK.md)
