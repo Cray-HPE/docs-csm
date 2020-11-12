@@ -1,7 +1,7 @@
 {
   "$mac_address_m001" : {
-    "meta-data":{
-      "foo":"bar"
+    "meta-data": {
+      "shasta-role": "Storage"
     },
     "user-data":{
       "hostname":"ncn-m001",
@@ -15,8 +15,8 @@
     }
   },
   "$mac_address_m002" : {
-    "meta-data":{
-      "foo":"bar"
+    "meta-data": {
+      "shasta-role": "Storage"
     },
     "user-data":{
       "hostname":"ncn-m002",
@@ -30,8 +30,8 @@
     }
   },
   "$mac_address_m003" : {
-    "meta-data":{
-      "foo":"bar"
+    "meta-data": {
+      "shasta-role": "Storage"
     },
     "user-data":{
       "hostname":"ncn-m003",
@@ -45,8 +45,8 @@
     }
   },
   "$mac_address_s001" : {
-    "meta-data":{
-      "foo":"bar"
+    "meta-data": {
+      "shasta-role": "Master"
     },
     "user-data":{
       "hostname":"ncn-s001",
@@ -60,8 +60,8 @@
     }
   },
   "$mac_address_s002" : {
-    "meta-data":{
-      "foo":"bar"
+    "meta-data": {
+      "shasta-role": "Master"
     },
     "user-data":{
       "hostname":"ncn-s002",
@@ -74,8 +74,8 @@
     }
   },
   "$mac_address_s003" : {
-    "meta-data":{
-      "foo":"bar"
+    "meta-data": {
+      "shasta-role": "Master"
     },
     "user-data":{
       "hostname":"ncn-s003",
@@ -88,8 +88,8 @@
     }
   },
   "$mac_address_w001" : {
-    "meta-data":{
-      "foo":"bar"
+    "meta-data": {
+      "shasta-role": "Worker"
     },
     "user-data":{
       "hostname":"ncn-w001",
@@ -103,8 +103,8 @@
     }
   },
   "$mac_address_w002" : {
-    "meta-data":{
-      "foo":"bar"
+    "meta-data": {
+      "shasta-role": "Worker"
     },
     "user-data":{
       "hostname":"ncn-w002",
@@ -118,8 +118,8 @@
     }
   },
   "$mac_address_w003" : {
-    "meta-data":{
-      "foo":"bar"
+    "meta-data": {
+      "shasta-role": "Worker"
     },
     "user-data": {
       "hostname": "ncn-w003",
@@ -134,7 +134,51 @@
   },
   "Default": {
     "meta-data": {
-      "foo": "bar"
+      "shasta-role": "Storage"
+    },
+    "user-data": {}
+  },
+  "Default": {
+    "meta-data": {
+      "foo": "bar",
+      "shasta-role": "Storage"
+    },
+    "user-data": {}
+  },
+  "Storage": {
+    "meta-data": {
+      "ceph_version": "1.0",
+      "self_destruct": "false"
+    },
+    "user-data": {
+      "test": "123",
+      "runcmd": [
+        "echo This is a storage cmd $(date) > /opt/runcmd"
+      ]
+    }
+  },
+  "Master": {
+    "meta-data": {
+      "ceph_version": "1.0",
+      "self_destruct": "false"
+    },
+    "user-data": {
+      "test": "123",
+      "runcmd": [
+        "echo This is a master cmd $(date) > /opt/runcmd"
+      ]
+    }
+  },
+  "Worker": {
+    "meta-data": {
+      "ceph_version": "1.0",
+      "self_destruct": "false"
+    },
+    "user-data": {
+      "test": "123",
+      "runcmd": [
+        "echo This is a worker cmd $(date) > /opt/runcmd"
+      ]
     }
   },
   "Global": {
