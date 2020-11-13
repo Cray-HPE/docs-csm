@@ -38,10 +38,9 @@ We are setting the root password on 1.4 system to `!nitial0` to be consistent.
 
 (for information on _recovery_, see [010-LIVECD-RECOVERY.md](010-LIVECD-RECOVERY.md).
 
-After logging in, have your network information handy so you can populate it in the next steps.  This is the information in qnd-1.4.sh
+After logging in, have your network information handy so you can populate it in the next steps.  This is the information in qnd-1.4.sh.  You will source this file in the next page of steps.
 - IP and netmask for your external connection(s).
 - IP and netmask for your bis nodes (MTL, NMN, & HMN IPs)
-- Ranges for DHCP (MTL, NMN, CAN, & HMN)
 - The CAN IP/CIDR (ex: `can_cidr=10.102.4.110/24`)
 
 Then you can move onto these next two pages:

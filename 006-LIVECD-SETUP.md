@@ -1,6 +1,6 @@
 # Manual Step 1: Interfaces
 
-> If you made `qnd-1.4.sh` you can invoke it in the 1.4 context to prepare the install env.
+> Source qnd-1.4.sh to prepare the install env.
 
 ```bash
 pit:~ # source /var/www/ephemeral/qnd-1.4.sh
@@ -82,40 +82,12 @@ csi pit validate --network true
 
 # Manual Step 2: Services
 
-Support netbooting for trunked devices (non-compute nodes):
-
-> Note: If you made `qnd-1.4.sh` you can run that now to fill-in all of the required variables
-> for setting up service, or they may have already been added in a previous step.
-
+Copy the config files generated earlier by `csi config init` into /etc/dnsmasq.d and /etc/conman.conf.
 ```bash
-pit:~ # /root/bin/csi-pxe-bond0.sh $mtl_cidr $mtl_dhcp_start $mtl_dhcp_end $dhcp_ttl
-```
-
-Support node networking, serve DHCP/DNS/NTP over the NMN:
-
-```bash
-pit:~ # /root/bin/csi-pxe-vlan002.sh $nmn_cidr $nmn_dhcp_start $nmn_dhcp_end $dhcp_ttl
-```
-
-Support hardware controllers, serve DHCP/DNS/NTP over the HMN:
-
-```bash
-pit:~ # /root/bin/csi-pxe-vlan004.sh $hmn_cidr $hmn_dhcp_start $hmn_dhcp_end $dhcp_ttl
-```
-
-Support customer access network interfaces:
-
-You may have already added this to `qnd-1.4.sh` from an earlier doc.
-```bash
-pit:~ # /root/bin/csi-pxe-vlan007.sh $can_gw $can_dhcp_start $can_dhcp_end $dhcp_ttl
-```
-
-and netbooting...the example values are for EXAMPLE
-only.
-
-```bash
-cp /var/www/ephemeral/statics.conf /etc/dnsmasq.d/
+cp /var/www/ephemeral/${system-name}/dnsmasq.d/* /etc/dnsmasq.d
+cp /var/www/ephemeral/${system-name}/conman.conf /etc/conman.conf
 systemctl restart dnsmasq
+systemctl restart conman
 ```
 
 ## Manual Check 2 :: STOP :: Validate the Services
@@ -155,23 +127,6 @@ You should be able to resolve outside services like arti.dev.cray.com.
 
 ```bash
 ping arti.dev.cray.com
-```
-
-# Workaround CASMINST-23
-
-There is currently an issue with the ipxe.efi that is packaged in the LiveCD image.   This prevents NCNs from booting properly.
-Until CASMINST-23 is fixed, check the sha1sum of /var/www/boot/ipxe.efi.  If the SHA1 does not match the one below, then pull down the ipxe.efi below and install it.
-
-```bash
-pit:~ # sha1sum /var/www/boot/ipxe.efi
-705e6ad7c2fc550db089a496368810b64a64a8e0  /var/www/boot/ipxe.efi
-```
-
-If the SHA1 does not match the one below, then copy the ipxe.efi from redbull and set the proper permissions.
-
-```bash
-scp root@redbull-ncn-w001.us.cray.com:/var/www/boot/ipxe.efi /var/www/boot
-chown dnsmasq:tftp /var/www/boot/ipxe.efi
 ```
 
 Now you can start **Booting NCNs** [007-LIVECD-NCN-BOOTS.md](007-LIVECD-NCN-BOOTS.md)

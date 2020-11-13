@@ -43,11 +43,6 @@ recommended minimum is 3 of each type (k8s-managers, k8s-workers, ceph-storage).
 csi pit validate -d true
 ```
 
-You will need to create a static file for the BMCs, at least so DNSMasq can map MAC to Hostname.
-Follow BMC section guide at the bottom of [004-LIVECD-PREFLIGHT](004-LIVECD-PREFLIGHT.md).
-
-If you have that file, you can move on.
-
 1. Check for NCN lease count:
 
     ```bash
@@ -117,22 +112,20 @@ surtur-ncn-m001-pit:~ # systemctl restart basecamp
 
 Mount the USB stick's data partition, and setup links for booting.
 
-> Note: The `set-sqfs-links.sh` only works for one image at a time, you may have to move the
-> k8s images or storage images out of the folder to run the script. Then swap artifacts for the next
-> node type.
+This will select the first boot image in each of the ceph and k8s directories and link it in /var/www.
 
+```bash
+pit:~ # /root/bin/set-sqfs-links.sh
+```
+
+Make sure the correct images were selected.
+```bash
+pit:~ # ls -l /var/www 
+```
 
 # Manual Step 2: Boot Storage Nodes
 
 This will again just `echo` the commands.  Look them over and validate they are ok before running them.  This just `grep`s out the storage nodes so you only get the workers and managers.
-
-Setup the ceph image to boot:
-```bash
-pit:~ # /root/bin/set-sqfs-links.sh ceph
-# Now double-check ceph-storage is chosen:
-pit:~ # ls -l /var/www/filesystem.squashfs
-lrwxrwxrwx 1 root root 58 Sep 23 00:23 /var/www/filesystem.squashfs -> /var/www/ephemeral/data/ceph/storage-ceph-0.0.1-6.squashfs
-```
 
 Get our boot commands:
 ```bash
@@ -163,18 +156,6 @@ pit:~ # conman -j ncn-s002
 
 This will again just `echo` the commands.  Look them over and validate they are ok before running them.  This just `grep`s out the storage nodes so you only get the workers and managers.
 
-```bash
-pit:~ # /root/bin/set-sqfs-links.sh k8s
-# Now double-check kubernetes is chosen:
-pit:~ # ls -l /var/www/filesystem.squashfs
-lrwxrwxrwx 1 root root 55 Sep 23 10:04 /var/www/filesystem.squashfs -> /var/www/ephemeral/data/k8s/kubernetes-0.0.1-4.squashfs
-```
-
-```bash
-# Fixup the link to boot K8s nodes:
-pit:~ # ln -snf /var/www/filesystem.squashfs /var/www/k8s-filesystem.squashfs
-```
-Then go ahead and boot your nodes:
 ```bash
 username=''
 password=''

@@ -2,35 +2,7 @@
 
 In 1.4, the site connections that were previously connection to ncn-w001 will be moved to ncn-m001.  This page will go over the process to make that change.
 
-1. Capture information from 1.3 installation on w001
-
-   Because we will be changing access to w001, it is easiest to capture the following information and transfer it to m001 before that change is made.   This information will be used to configure the LiveCD in later steps.
-
-   Copy the block below into a terminal window on ncn-w001 
-
-    ```bash
-    # Make/truncate the file.
-    >/root/qnd-1.4.sh
-    # Echo commands into the file and onto the screen, these run locally and against ncn-w001.
-    echo export site_nic=$(ansible ncn-w001 -c local -a "echo {{ platform.NICS.lan2 }}" | tail -n 1 ) | tee -a /root/qnd-1.4.sh
-    echo export bond_member0=$(ansible ncn-w001 -c local -a "echo {{ platform.NICS.lan1 }}" | tail -n 1 ) | tee -a /root/qnd-1.4.sh
-    echo export bond_member1=$(ansible ncn-w001 -c local -a "echo {{ platform.NICS.lan3 }}" | tail -n 1 ) | tee -a /root/qnd-1.4.sh
-    echo export mtl_cidr=$(ansible ncn-w001 -c local -a "echo {{ [bis.mtl_ip, abbrv.mtl.network | ipaddr('prefix')] | join('/') }}" | tail -n 1 ) | tee -a /root/qnd-1.4.sh
-    echo export mtl_dhcp_start=$(ansible ncn-w001 -c local -a "echo {{ abbrv.mtl.subnets | selectattr('label', 'equalto', 'default') | flatten | selectattr('dhcp') | map(attribute='dhcp.start') | first }}" | tail -n 1 ) | tee -a /root/qnd-1.4.sh
-    echo export mtl_dhcp_end=$(ansible ncn-w001 -c local -a "echo {{ abbrv.mtl.subnets | selectattr('label', 'equalto', 'default') | flatten | selectattr('dhcp') | map(attribute='dhcp.end') | first }}" | tail -n 1 ) | tee -a /root/qnd-1.4.sh
-    echo export nmn_dhcp_start=$(ansible ncn-w001 -c local -a "echo {{ abbrv.nmn.subnets | selectattr('label', 'equalto', 'default') | flatten | selectattr('dhcp') | map(attribute='dhcp.start') | first }}" | tail -n 1 ) | tee -a /root/qnd-1.4.sh
-    echo export nmn_dhcp_end=$(ansible ncn-w001 -c local -a "echo {{ abbrv.nmn.subnets | selectattr('label', 'equalto', 'default') | flatten | selectattr('dhcp') | map(attribute='dhcp.end') | first }}" | tail -n 1 ) | tee -a /root/qnd-1.4.sh
-    echo export hmn_dhcp_start=$(ansible ncn-w001 -c local -a "echo {{ abbrv.hmn.subnets | selectattr('label', 'equalto', 'default') | flatten | selectattr('dhcp') | map(attribute='dhcp.start') | first }}" | tail -n 1 ) | tee -a /root/qnd-1.4.sh
-    echo export hmn_dhcp_end=$(ansible ncn-w001 -c local -a "echo {{ abbrv.hmn.subnets | selectattr('label', 'equalto', 'default') | flatten | selectattr('dhcp') | map(attribute='dhcp.end') | first }}" | tail -n 1 ) | tee -a /root/qnd-1.4.sh
-    ```
-
-    scp /root/qnd-1.4.sh to ncn-m001.
-
-    ```bash
-    scp /root/qnd-1.4.sh ncn-m001:/root
-    ```
-
-2. Make request to DCHW to move the BMC/Host Connections and attach a USB to m001.
+1. Make request to DCHW to move the BMC/Host Connections and attach a USB to m001.
 
    Make sure ncn-w001 is up and accessible via the NMN from ncn-m001.
 
@@ -44,8 +16,7 @@ In 1.4, the site connections that were previously connection to ncn-w001 will be
 
      The old w001 DNS entries should remain/stay to prevent interruptions, if at all possible.
 
-
-3. Set the new host IP and default route.
+2. Set the new host IP and default route.
 
     After the above changes have been made, go to the console of ncn-m001 via the new BMC address given by DHCW.  
 
@@ -87,7 +58,7 @@ In 1.4, the site connections that were previously connection to ncn-w001 will be
    Exit out of the sol console.
 
    
-4. Set w001 BMC to dhcp
+3. Set w001 BMC to dhcp
  
     DCHW may do this step for you.  If not, do the following after the above changes have been made
 
@@ -103,7 +74,7 @@ In 1.4, the site connections that were previously connection to ncn-w001 will be
 
 
 
-5. Capture bond0 MACs and ncn-w001 BMC MAC
+4. Capture bond0 MACs and ncn-w001 BMC MAC
 
    For 1.4, we need to know the MAC address for the bond0 interface.  We also need to know the BMC and em1 MACs for w001 since that is not capture in ncn_metadata.csv.  You can capture all of this this from ncn-w001 by running the following commands.
 
@@ -119,10 +90,10 @@ In 1.4, the site connections that were previously connection to ncn-w001 will be
     ```
 
 
-6. Log out of ncn-w001.   You should now be back on ncn-m001.
+5. Log out of ncn-w001.   You should now be back on ncn-m001.
 
 
-7. Shutdown all of the nodes except for ncn-m001 
+6. Shutdown all of the nodes except for ncn-m001 
 
     We want to make sure all of the NCNs are shutdown before starting the 1.4 installation to avoid having multiple DHCP servers running.   Because Kea is also serving the BMCs their addresses, we will want to do this all at approximately the same time before they lose their leases.
 
