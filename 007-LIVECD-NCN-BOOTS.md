@@ -123,7 +123,52 @@ Make sure the correct images were selected.
 pit:~ # ls -l /var/www 
 ```
 
-# Manual Step 2: Boot Storage Nodes
+# Manual Step 2: Set Boot Order
+
+This step will ensure your NCNs follow 1.4 protocol for bootorder.
+
+> For more information about NCN boot order check [101-BOOTING](101-BOOTING.md)
+
+
+Set each node to always UEFI Network Boot
+
+```bash
+username=bob
+password=alice
+
+# ALWAYS PXE BOOT; sets a system to PXE
+ipmitool -I lanplus -U $username -P $password -H ncn-s003-mgmt chassis bootdev pxe options=efiboot,persistent
+ipmitool -I lanplus -U $username -P $password -H ncn-s002-mgmt chassis bootdev pxe options=efiboot,persistent
+ipmitool -I lanplus -U $username -P $password -H ncn-s001-mgmt chassis bootdev pxe options=efiboot,persistent
+ipmitool -I lanplus -U $username -P $password -H ncn-w003-mgmt chassis bootdev pxe options=efiboot,persistent
+ipmitool -I lanplus -U $username -P $password -H ncn-w002-mgmt chassis bootdev pxe options=efiboot,persistent
+ipmitool -I lanplus -U $username -P $password -H ncn-w001-mgmt chassis bootdev pxe options=efiboot,persistent
+ipmitool -I lanplus -U $username -P $password -H ncn-m003-mgmt chassis bootdev pxe options=efiboot,persistent
+ipmitool -I lanplus -U $username -P $password -H ncn-m002-mgmt chassis bootdev pxe options=efiboot,persistent
+
+# for installs still using w001 for the liveCD:
+ipmitool -I lanplus -U $username -P $password -H ncn-m001-mgmt chassis bootdev pxe options=efiboot,persistent
+```
+
+*That's it, you're done!* Move onto the next step. On the other hand, below you can find a block of code for 
+one-time disk booting via `ipmitool`.
+
+```bash
+# ONE TIME BOOT INTO DISK; rebooting again will PXE; can run this everytime to reboot to disk for developers.
+ipmitool -I lanplus -U $username -P $password -H ncn-s003-mgmt chassis bootdev disk options=efiboot
+ipmitool -I lanplus -U $username -P $password -H ncn-s002-mgmt chassis bootdev disk options=efiboot
+ipmitool -I lanplus -U $username -P $password -H ncn-s001-mgmt chassis bootdev disk options=efiboot
+ipmitool -I lanplus -U $username -P $password -H ncn-w003-mgmt chassis bootdev disk options=efiboot
+ipmitool -I lanplus -U $username -P $password -H ncn-w002-mgmt chassis bootdev disk options=efiboot
+ipmitool -I lanplus -U $username -P $password -H ncn-w001-mgmt chassis bootdev disk options=efiboot
+ipmitool -I lanplus -U $username -P $password -H ncn-m003-mgmt chassis bootdev disk options=efiboot
+ipmitool -I lanplus -U $username -P $password -H ncn-m002-mgmt chassis bootdev disk options=efiboot
+
+# for installs still using w001 for the LiveCD:
+ipmitool -I lanplus -U $username -P $password -H ncn-m001-mgmt chassis bootdev disk options=efiboot
+```
+
+# Manual Step 3: Boot Storage Nodes
 
 This will again just `echo` the commands.  Look them over and validate they are ok before running them.  This just `grep`s out the storage nodes so you only get the workers and managers.
 
@@ -152,7 +197,7 @@ pit:~ # conman -q
 pit:~ # conman -j ncn-s002
 ```
 
-# Manual Step 3: Boot K8s
+# Manual Step 4: Boot K8s
 
 This will again just `echo` the commands.  Look them over and validate they are ok before running them.  This just `grep`s out the storage nodes so you only get the workers and managers.
 
