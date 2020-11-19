@@ -36,6 +36,7 @@ ncn:~ # wipefs --all --force /dev/sd* /dev/disk/by-label/*
 
 ```bash
 # Delete CEPH Volumes
+ncn:~ # systemctl stop ceph-osd.target # Make sure the OSDs (if any) are not running
 ncn:~ # ls -1 /dev/sd* /dev/disk/bu-label/*
 ncn:~ # vgremove -f --select 'vg_name=~ceph*'
 
@@ -52,6 +53,7 @@ ncn:~ # wipefs --all --force /dev/sd* /dev/disk/by-label/*
 
 ```bash
 # Delete CEPH Volumes
+ncn:~ # systemctl stop ceph-osd.target # Make sure the OSDs (if any) are not running
 ncn:~ # ls -1 /dev/sd* /dev/disk/bu-label/*
 ncn:~ # vgremove -f --select 'vg_name=~ceph*'
 
