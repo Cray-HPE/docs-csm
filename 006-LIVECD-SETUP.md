@@ -84,8 +84,8 @@ csi pit validate --network true
 
 Copy the config files generated earlier by `csi config init` into /etc/dnsmasq.d and /etc/conman.conf.
 ```bash
-cp /var/www/ephemeral/${system-name}/dnsmasq.d/* /etc/dnsmasq.d
-cp /var/www/ephemeral/${system-name}/conman.conf /etc/conman.conf
+cp /var/www/ephemeral/${system_name}/dnsmasq.d/* /etc/dnsmasq.d
+cp /var/www/ephemeral/${system_name}/conman.conf /etc/conman.conf
 systemctl restart dnsmasq
 systemctl restart conman
 ```

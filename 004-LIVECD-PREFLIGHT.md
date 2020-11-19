@@ -54,7 +54,7 @@ vim vars.sh
 # These vars will likely stay the same unless there are development changes
 export PIT_DISK_LABEL=/dev/disk/by-label/PITDATA
 export PIT_ISO_NAME=cray-pre-install-toolkit-latest.iso
-export PIT_REPO_URL=ssh://git@stash.us.cray.com:7999/mtl/cray-pre-install-toolkit.git
+export PIT_REPO_URL=https://stash.us.cray.com/scm/mtl/cray-pre-install-toolkit.git
 export PIT_ISO_URL=http://car.dev.cray.com/artifactory/internal/MTL/sle15_sp2_ncn/x86_64/dev/master/metal-team/cray-pre-install-toolkit-latest.iso
 
 # These will likely need to be modified
@@ -101,8 +101,9 @@ source vars.sh
     # Find your USB stick with your linux tool of choice, for this example it is /dev/sdd
     wget $PIT_ISO_URL                                 
     git clone $PIT_REPO_URL
-    csi pit format /dev/sdd ./cray-pre-install-toolkit-latest.iso 20000
-    # If this fails, you may need to erase all the partitions and try again
+    # CASMINST-296 is requiring the -w flag even though PIT_WRITE_SCRIPT is set
+    csi pit format /dev/sdd ./cray-pre-install-toolkit-latest.iso 20000 -w /root/cray-pre-install-toolkit/scripts/write-livecd.sh
+    # If this fails, you may need the workaround for CASMINST-285
     ```
 
 
@@ -145,6 +146,7 @@ export mtl_cidr=10.1.1.1/16
 export nmn_cidr=10.252.0.10/17
 export hmn_cidr=10.254.0.10/17
 export can_cidr=10.102.4.110/24
+export system_name=sif
 ```
 
 - `site_nic`
@@ -227,13 +229,13 @@ The configuration payload is generated with the `csi config init` command anywhe
 
     - xnames for the spine and leaf switches.   x3000c0wXX where XX is the slot in the rack
 
-    - The CAN network in CIDR format (e.g. 10.103.10.0/24).  This will be different for every system.
+    - The CAN network in CIDR format (e.g. 10.102.11.0/24).  This will be different for every system.
 
     - The number of mountain and river cabinets in the system
 
     An example of the command to run with the required options.
     ``` bash
-    csi config init --bootstrap-ncn-bmc-user root --bootstrap-ncn-bmc-pass initial0 --leaf-switch-xnames="x3000c0w14" --spine-switch-xnames="x3000c0w12,x3000c0w14" --system-name sif  --mountain-cabinets 0 --river-cabinets 1 --can-cidr 10.103.10.0/24
+    csi config init --bootstrap-ncn-bmc-user root --bootstrap-ncn-bmc-pass initial0 --leaf-switch-xnames="x3000c0w14" --spine-switch-xnames="x3000c0w12,x3000c0w13" --system-name sif  --mountain-cabinets 0 --river-cabinets 1 --can-cidr 10.102.11.0/24
     ```
 
 
@@ -259,24 +261,13 @@ The configuration payload is generated with the `csi config init` command anywhe
 
 2.  There are a few additional workarounds that need to be done manually in the files until some further bugs are fixed.
 
-- First generate a data.json that is easier to edit.
+- First generate a data.json that is easier to edit. (CASMINST-298)
 
   ```bash
   cp data.json data.json.orig
   cat data.json.orig | python -mjson.tool > data.json
   ```
 - CASMINST-262 and CASMINST-281
-n
-  - Add `/srv/cray/scripts/metal/install-bootloader.sh` to the runcmd for each node immediately after set-ntp-config.sh.
-
-  ```bash
-        "runcmd": [
-        "/srv/cray/scripts/metal/set-dns-config.sh",
-        "/srv/cray/scripts/metal/set-ntp-config.sh",
-        "/srv/cray/scripts/metal/install-bootloader.sh",
-        "/srv/cray/scripts/common/kubernetes-cloudinit.sh"
-      ]
-  ```
 
   - Add `Global`, `Default`, `ncn-storage`, `ncn-master`, and `ncn-worker` sections to the end of data.json before the last curly bracket `}`.   Make sure to add a comma after the second-to-last curly bracket `{`.
 
@@ -351,19 +342,7 @@ n
    }
    ```
 
-- CASMINST-249
-
-  - Fix the peers defined in metallb.yaml.   There should be two peers.   The IP addresses should match the vlan 7 IP of each of the spines.
-
-   ```bash
-      	peers:
-	- peer-address: 10.252.0.2 
-	  peer-asn: 65533
-	  my-asn: 65533
-	- peer-address: 10.252.0.3 
-	  peer-asn: 65533
-	  my-asn: 65533
-   ```
+- CASMINST-320
 
   - Fix the customer-access-static and customer-access address pools to match what is in [Can BGP status on Shasta systems](https://connect.us.cray.com/confluence/display/CASMPET/CAN-BGP+status+on+Shasta+systems)
 
@@ -401,17 +380,7 @@ n
    ```
 
 
-- CASMINST-250
-
-   - Fix the `dns-server`, `ntp-server`, and `router` options in mtl.conf, HMN.conf, and NMN.conf to match the IP address for bond0, vlan004, and vlan002 (respectively) on the LiveCD node.
-
-   For example, in this case, the vlan004 interface has IP address 10.254.0.9 on the LiveCD.
-   
-   ```bash
-   dhcp-option=interface:vlan004,option:dns-server,10.254.0.9
-   dhcp-option=interface:vlan004,option:ntp-server,10.254.0.9
-   dhcp-option=interface:vlan004,option:router,10.254.0.9
-   ```
+- CASMINST-321
 
    - Fix the `router` option in CAN.conf to match the *gateway* IP address of vlan7 on this spines.   For Aruba switches, this is the `active-gateway ip`.   For Mellanox switches, this is the `magp` IP.
 
@@ -464,6 +433,29 @@ n
     dhcp-range=interface:vlan002,10.252.0.165,10.252.0.190,10m
     ```
 
+
+- CASMINST-347
+
+    For HMN.conf, make sure the range specified in the `domain` line INCLUDES the ncn-XXXX-mgmt IPs that are fixed in statics.conf.
+
+
+    ```bash
+    sif-ncn-m001-pit:/etc/dnsmasq.d # grep mgmt statics.conf
+    dhcp-host=94:40:c9:37:67:72,10.254.1.5,ncn-s003-mgmt,infinite #HMN
+    dhcp-host=94:40:c9:37:77:da,10.254.1.7,ncn-s002-mgmt,infinite #HMN
+    dhcp-host=94:40:c9:37:77:14,10.254.1.9,ncn-s001-mgmt,infinite #HMN
+    dhcp-host=94:40:c9:37:f3:90,10.254.1.11,ncn-w003-mgmt,infinite #HMN
+    dhcp-host=94:40:c9:37:77:6a,10.254.1.13,ncn-w002-mgmt,infinite #HMN
+    dhcp-host=94:40:c9:41:27:36,10.254.1.15,ncn-w001-mgmt,infinite #HMN
+    dhcp-host=94:40:c9:37:67:46,10.254.1.17,ncn-m003-mgmt,infinite #HMN
+    dhcp-host=94:40:c9:37:67:36,10.254.1.19,ncn-m002-mgmt,infinite #HMN
+    dhcp-host=00:00:00:00:00:00,10.254.1.21,ncn-m001-mgmt,infinite #HMN
+    ```
+
+    ```bash
+    domain=hmn,10.254.1.5,10.254.1.62,local
+    ```
+
 3. There are some FIXMES that need to be fixed in data.json. 
  
     ```
@@ -476,7 +468,7 @@ n
 
     - `k8s-virtual-ip` and `rgw-virtual-ip`
 
-        If you are installing a system that was previously 1.3, you can get these values from networks.yml for your system:  `https://stash.us.cray.com/projects/DST/repos/shasta_system_configs/browse/<system-name>/networks.yml`
+        If you are installing a system that was previously 1.3, you can get these values from networks.yml for your system:  `https://stash.us.cray.com/projects/DST/repos/shasta_system_configs/browse/${system_name}/networks.yml`
 
         ```bash
         grep rgw_virtual_ip networks.yml
@@ -507,12 +499,20 @@ n
 
         Set this to `cfntp-4-1.us.cray.com`
 
-4.  Copy these files to the mounted data partition.
+4.  Check the json format of data.json to make sure it is still valid
 
     ```bash
-    cp -r ${system-name} /mnt
+    cat ${system_name}/data.son | jq
+    ```
+
+    If you do not see an error message, the format is valid.
+
+5.  Copy these files to the mounted data partition.
+
+    ```bash
+    cp -r ${system_name} /mnt
     mkdir /mnt/configs 
-    cp ${system-name}/data.json /mnt/configs
+    cp ${system_name}/data.json /mnt/configs
     ```
     
 ## Manual Step 6: Download booting artifacts
