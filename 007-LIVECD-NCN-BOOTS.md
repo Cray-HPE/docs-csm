@@ -168,7 +168,18 @@ ipmitool -I lanplus -U $username -P $password -H ncn-m002-mgmt chassis bootdev d
 ipmitool -I lanplus -U $username -P $password -H ncn-m001-mgmt chassis bootdev disk options=efiboot
 ```
 
-# Manual Step 3: Boot Storage Nodes
+# Manual Step 3: Prepare for workarounds
+
+Clone the workaround repo to have access to the workarounds needed to get through some known issues until they are fully fixed.
+
+```bash
+pit:~ # cd /root
+pit:~ # git clone https://stash.us.cray.com/scm/spet/csm-installer-workarounds.git 
+```
+
+If there are any workarounds in the before-ncn-boot directory, run those now.   Instructions are in the README files.
+
+# Manual Step 4: Boot Storage Nodes
 
 This will again just `echo` the commands.  Look them over and validate they are ok before running them.  This just `grep`s out the storage nodes so you only get the workers and managers.
 
@@ -197,7 +208,7 @@ pit:~ # conman -q
 pit:~ # conman -j ncn-s002
 ```
 
-# Manual Step 4: Boot K8s
+# Manual Step 5: Boot K8s
 
 This will again just `echo` the commands.  Look them over and validate they are ok before running them.  This just `grep`s out the storage nodes so you only get the workers and managers.
 
