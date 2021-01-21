@@ -24,13 +24,13 @@ If you are unsure, see the bottom of [LiveCD Setup](004-LIVECD-SETUP.md).
 - [Power Off NCNs and Set Boot Order](#power-off-ncns-and-set-network-boot)
 - [Boot Storage Nodes](#boot-storage-nodes)
 - [Run Pre-flight Checks on Storage Nodes](#run-pre-flight-checks-on-storage-nodes)
-- [Check CEPH](#manually-inspect-storage)
 - [Boot Kubernetes Nodes](#boot-kubernetes-managers-and-workers)
 - [Post-NCN Boot Workarounds](#post-ncn-boot-work-arounds)
 - [Get Kubernetes Cluster Credentials](#add-cluster-credentials-to-the-livecd)
 - [Run Kubernetes Pre-flight Checks on NCNs](#run-kubernetes-pre-flight-checks-on-ncns)
 - [Update BGP Peers](#manual-step-9-update-bgp-peers-on-switches)
-- [Change root password](#change-root-password)
+- [Manual Checks](#manual-checks)
+- [Update New Password](#update-new-password)
 - [Run Loftsman Platform Deployments](#run-loftsman-platform-deployments)
 
 ## Warm-up / Pre-flight Checks
@@ -313,6 +313,56 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 
 > **`NOTE`**: You can use `clear ip bgp all` (Mellanox) or `clear bgp *` (Aruba) to restart the BGP peering sessions on each of the switches with BGP.
 
+### Manual Checks
+
+1.  Verify that the ceph-csi requirements are in place
+
+    1. Verify all post ceph install tasks have run
+    2. Log into ncn-s001
+    3. Check /etc/cray/ceph for completed task files
+        ```bash
+        ncn-s001:~ # ls /etc/cray/ceph/
+        ceph_k8s_initialized  csi_initialized  installed  kubernetes_nodes.txt  tuned
+        ```
+    4. Check to see if k8s ceph-csi prequisites have been created 
+        > You can also run this from any k8s-manager/k8s-worker node
+        ```bash
+        pit:~ # kubectl get cm
+        NAME               DATA   AGE
+        ceph-csi-config    1      3h50m
+        cephfs-csi-sc      1      3h50m
+        kube-csi-sc        1      3h50m
+        sma-csi-sc         1      3h50m
+        sts-rados-config   1      4h
+    
+        pit:~ # kubectl get secrets |grep csi
+        csi-cephfs-secret             Opaque                                4      3h51m
+        csi-kube-secret               Opaque                                2      3h51m
+        csi-sma-secret                Opaque                                2      3h51m
+        ```
+    
+    5. check your results against the above example.
+    6. if you are missing any components then you will want to re-run the storage node cloud-init script
+       a.  log in to ncn-s001
+       b.  run the storage-ceph-cloudinit.sh script
+       ```bash
+       ncn-s001:~ # /srv/cray/scripts/common/storage-ceph-cloudinit.sh
+       Configuring node auditing software
+       Using generic auditing configuration
+       This ceph cluster has been initialized
+       This ceph cluster has already been tuned
+       This ceph radosgw config and initial k8s integration already complete
+       ceph-csi configuration has been already been completed
+       ```
+       * if your output is like above then that means that all the steps ran.
+       * if the script failed out then you will have more output for the tasks that are being run. 
+
+
+**Important to make sure the following have been checked before continuing (either by a goss test or manually).**
+1. Verify all nodes have joined the cluster
+2. Verify etcd is running outside kubernetes on master nodes
+3. Verify that all the pods in the kube-system namespace are running
+4. Verify that the ceph-csi requirements are in place
 
 ### Update New Password
 
