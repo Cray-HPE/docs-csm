@@ -1,0 +1,2 @@
+# Ignore 999 prefixed pages to allow for transient/unstashed pages.
+999*
