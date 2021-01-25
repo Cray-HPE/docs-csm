@@ -37,7 +37,7 @@ If you are unsure, see the bottom of [LiveCD Setup](004-LIVECD-SETUP.md).
 
 First, there are some important checks to be done before continuing. These serve to prevent mayhem during installation and operation that are hard to debug.   Please note, more checks may be added over time  and existing checks may receive updates or become defunct.
 
-> Many of these use the `pit validate` command, which simply runs some shell commands for you, but it's up to you to determine what the output means.  This will no longer be the case one the GOSS tests are plugged into the `pit validate` command.
+> Many of these use the `pit validate` command, which simply runs some shell commands for you, but it's up to you to determine what the output means.  This will no longer be the case once the GOSS tests are plugged into the `pit validate` command.
 
 #### Optional Safeguards
 
