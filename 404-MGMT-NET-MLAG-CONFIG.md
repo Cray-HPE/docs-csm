@@ -90,6 +90,8 @@ Number of Multi-chassis LAG interfaces : 0
 
 Create and setup high availability VLAN interfaces
 This should be done for all VLANS
+VLANs in the 2xxx and 3xxx range will be for CDU switches only
+**Cray Site Init (CSI) generates the IPs used by the system, below are samples only.**
 
 | VLAN | Switch1 IP | Switch2 IP	| Active Gateway |
 | --- | --- | ---| --- | --- | --- | --- |
@@ -97,6 +99,8 @@ This should be done for all VLANS
 | 4 | 10.254.0.2/17| 10.254.0.3/17 | 10.254.0.1 |
 | 7 | TBD| TBD | TBD |
 | 10 | 10.11.0.2/17| 10.11.0.3/17 | 10.11.0.1 |
+| 2000 | 10.100.0.2/22| 10.100.0.3/22 | 10.100.0.1/22 | 
+| 3000 | 10.104.0.2/22| 10.104.0.3/22 | 10.104.0.1/22 | 
 
 ```
 sw-24g04(config)# vlan 2

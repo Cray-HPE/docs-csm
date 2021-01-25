@@ -12,11 +12,18 @@ These need to be set where the Layer3 interface is located, this will most likel
 
 The first step is to create the access list, once it's created we have to apply it to a VLAN.
 ```
-sw-24g03(config)# access-list ip nmn-hmn
-sw-24g03(config-acl-ip)# 10 deny any 10.252.0.0/255.255.128.0 10.254.0.0/255.255.128.0
-sw-24g03(config-acl-ip)# 20 deny any 10.254.0.0/255.255.128.0 10.252.0.0/255.255.128.0
-sw-24g03(config-acl-ip)# 30 permit any any any
+access-list ip nmn-hmn
+    10 deny any 10.252.0.0/255.255.128.0 10.254.0.0/255.255.128.0 
+    20 deny any 10.252.0.0/255.255.128.0 10.104.0.0/255.252.0.0
+    30 deny any 10.254.0.0/255.255.128.0 10.252.0.0/255.255.128.0 
+    40 deny any 10.254.0.0/255.255.128.0 10.100.0.0/255.252.0.0
+    50 deny any 10.100.0.0/255.252.0.0 10.254.0.0/255.255.128.0 
+    60 deny any 10.100.0.0/255.252.0.0 10.104.0.0/255.252.0.0
+    70 deny any 10.104.0.0/255.252.0.0 10.252.0.0/255.255.128.0 
+    80 deny any 10.104.0.0/255.252.0.0 10.100.0.0/255.252.0.0
+    90 permit any any any
 ```
+
 Apply ACL to a VLANs
 ```
 sw-24g03(config)# vlan 2
@@ -26,3 +33,5 @@ sw-24g03(config)# vlan 4
 sw-s24g03(config-vlan-4)# apply access-list ip nmn-hmn in
 sw-s24g03(config-vlan-4)# apply access-list ip nmn-hmn out
 ```
+
+If you are on a CDU switch you will need to apply it to the 2xxx and 3xxx VLANs

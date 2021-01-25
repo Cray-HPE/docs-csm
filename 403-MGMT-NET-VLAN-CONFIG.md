@@ -10,13 +10,24 @@
 At this point we should have access to the switches.
 We will start by adding all the VLANS required by the Shasta system.
 **Cray Site Init (CSI) generates the IPs used by the system, below are samples only.**
+The River Cabinets will need the following VLANs
 
 | VLAN | Switch1 IP | Switch2 IP	| Active Gateway | Purpose |
 | --- | --- | ---| --- | --- | --- | --- |
-| 2 | 10.252.0.2/17| 10.252.0.3/17 | 10.252.0.1 | Node Management
-| 4 | 10.254.0.2/17| 10.254.0.3/17 | 10.254.0.1 | Hardware Management
+| 2 | 10.252.0.2/17| 10.252.0.3/17 | 10.252.0.1 | River Node Management
+| 4 | 10.254.0.2/17| 10.254.0.3/17 | 10.254.0.1 | River Hardware Management
 | 7 | TBD| TBD | TBD | Customer Access Network
 | 10 | 10.11.0.2/17| 10.11.0.3/17 | 10.11.0.1 | Storage (future)
+
+The Mountain Cabinets will need the following VLANs, these are typically the CDU switches.
+The 2xxx and 3xxx VLANs are per cabinet, so with each additional cabinet you will need a new VLAN.
+
+| --- | --- | ---| --- | --- | --- | --- |
+| 2 | 10.252.0.x/17| 10.252.0.x/17 |  | River Node Management
+| 4 | 10.254.0.x/17| 10.254.0.x/17 |  | River Hardware Management
+| 2000 | 10.100.0.2/22| 10.100.0.3/22 |  | Mountain Node Management
+| 3000 | 10.104.0.2/22| 10.104.0.3/22 |  | Mountain Hardware Management
+
 
 Add the networks to each of the VSX pairs.
 ```
