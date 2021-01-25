@@ -1,9 +1,3 @@
-
-
-
-
-
-
 # CSM Health Checks
 
 This page will list available CSM Health Checks that can be executed to validate system health.
