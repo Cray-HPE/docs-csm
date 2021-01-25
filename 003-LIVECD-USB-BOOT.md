@@ -175,6 +175,7 @@ pit:~ # ip a
 pit:~ #
 ```
 
-Then you can move onto these next two pages:
-1. Setting up communication...[LiveCD Setup](004-LIVECD-SETUP.md))
-2. Booting NCNs [NCN Boots](005-NCN-BOOTS.md)
+Then you can move onto these next three pages:
+1. Configure the [Management Network Switches](401-MANAGEMENT-NETWORK-INSTALL.md)
+1. Setting up NCN communication[LiveCD Setup](004-LIVECD-SETUP.md)
+1. [Booting NCNs](005-NCN-BOOTS.md)
