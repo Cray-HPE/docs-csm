@@ -23,8 +23,8 @@ The ncnHealthChecks script reports the following health information:
 * Health of etcd clusters
 * Number of pods on each worker node for each etcd cluster
 * List of automated etcd backups for the Boot Orchestration Service (BOS), Boot Script Service (BSS), Compute Rolling Upgrade Service (CRUS), and Domain Name Service (DNS)
-* Report ncn node uptimes
-* Report pods yet to reach the running state
+* NCN node uptimes
+* Pods yet to reach the running state
 
 #### ncnPostgresHealthChecks
      /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
