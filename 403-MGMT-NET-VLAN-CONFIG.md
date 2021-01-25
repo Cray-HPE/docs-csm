@@ -20,13 +20,14 @@ The River Cabinets will need the following VLANs
 | 10 | 10.11.0.2/17| 10.11.0.3/17 | 10.11.0.1 | Storage (future)
 
 The Mountain Cabinets will need the following VLANs, these are typically the CDU switches.
-The 2xxx and 3xxx VLANs are per cabinet, so with each additional cabinet you will need a new VLAN.
+The 2xxx and 3xxx VLANs are per cabinet, so with each additional cabinet you will increment the VLAN by 1 and add a new /22 subnet.
 
+| VLAN | Switch1 IP | Switch2 IP	| Purpose |
 | --- | --- | ---| --- | --- | --- | --- |
-| 2 | 10.252.0.x/17| 10.252.0.x/17 |  | River Node Management
-| 4 | 10.254.0.x/17| 10.254.0.x/17 |  | River Hardware Management
-| 2000 | 10.100.0.2/22| 10.100.0.3/22 |  | Mountain Node Management
-| 3000 | 10.104.0.2/22| 10.104.0.3/22 |  | Mountain Hardware Management
+| 2 | 10.252.0.x/17| 10.252.0.x/17 | River Node Management
+| 4 | 10.254.0.x/17| 10.254.0.x/17 | River Hardware Management
+| 2000 | 10.100.0.2/22| 10.100.0.3/22 | Mountain Node Management
+| 3000 | 10.104.0.2/22| 10.104.0.3/22 | Mountain Hardware Management
 
 
 Add the networks to each of the VSX pairs.
@@ -70,6 +71,14 @@ sw-24g04(config-if-vlan)# int vlan 4
 sw-24g04(config-if-vlan)# ip helper-address 10.94.100.222
 sw-24g04(config-if-vlan)# int vlan 7
 sw-24g04(config-if-vlan)# ip helper-address 10.92.100.222
+```
+For CDU switches the IP helpers will look like the following.
+Any 2xxx VLANs will have ```10.92.100.222``` as the ip helper-address and any 3xxx VLANs will have ```10.94.100.222``` as the ip helper-address
+```
+interface vlan 2000
+    ip helper-address 10.92.100.222
+interface vlan 3000
+    ip helper-address 10.94.100.222
 ```
 
 Add the networks to the switches that the BMCs are connected to.
