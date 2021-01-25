@@ -1,20 +1,23 @@
 # Overview
-1. [New for Shasta v1.4](#new-for-v1.4)
-1. [Dell and Mellanox Changes for Shasta v1.3 to v1.4 Upgrades](#shasta-v1.3-to-v1.4-changes) 
+1. [New for Shasta v1.4 Networking](#new-for-v1.4)
+1. [Dell and Mellanox Changes for Shasta v1.3 to v1.4 Upgrades](#shasta-v1.3-to-v1.4-upgrades-for-dell-and-mellanox).
 1. HPE Aruba Installation and Configuration
     1. Early Installation
-        1. [Baseline Switch Configuration](402-MGMT-NET-BASE-CONFIG.md)
-        1. [Updating Firmware](409-MGMT-NET-FIRMWARE-UPDATE.md)
-    1. Access Master Node 1 (m001) and it's iLO.
-    1. CSI tool
-    1. enable sw-leaf-001 access from m001
-        1. Serial connection to sw-leaf-01 connected to m001 
-        1. config leaf VSX and MC-LAG to enable m001 connection via IPv6 VLAN1
-    1. Config all switches via IPv6 connection from m001
-        1. Layer 2 config: VLANs, VSX pairs, MTU, BMC access ports, switch uplink ports
-        1. Create the CAN
-        1. Layer 3 config: L3 interfaces, static CAN routes, ACLs.
-        1. Layer 3 dynamic routing: OSPFv2
+        1. Access Master Node 1 (m001) and it's iLO should already be completed (003-LIVECD-USB-BOOT.md)
+        1. Install [Baseline Switch Configuration](402-MGMT-NET-BASE-CONFIG.md)
+        1. Update [Firmware](409-MGMT-NET-FIRMWARE-UPDATE.md)
+    1. Configure all switches via IPv6 connection from m001
+        1. Layer 2 configuration:
+            1. [VLAN](403-MGMT-NET-VLAN-CONFIG.md).
+            1. [MLAG](404-MGMT-NET-MLAG-CONFIG.md) and VSX pairs.
+            1. iLO/BMC, CMM and Gateway Node [port configuration](405-MGMT-NET-PORT-CONFIG.md).
+            1. Switch uplink ports - [ISL](410-MGMT-NET-UPLINK-CONFIG.md)
+        1. Layer 3 configuration:
+            1. L3 interfaces.
+            1. [ACL](406-MGMT-NET-ACL-CONFIG.md).
+            1. [Dynamic Routing](411-MGMT-NET-LAYER3-CONFIG.md): OSPFv2 and BGP.
+            1. [SNMP](407-MGMT-NET-SNMP-CONFIG.md)
+        1. Create the [CAN](408-MGMT-NET-CAN-CONFIG.md).
 
 ----------------------------------------
 
@@ -30,7 +33,7 @@ The network architecture and configuration changes from v1.3 to v1.4 are fairly 
 *   Remove BPDUfilter on the Dell access ports.
 *   Add BPDUguard to the Dell access ports.
 
- # Shasta v1.3 to v1.4 Changes for Dell and Mellanox
+# Shasta v1.3 to v1.4 Upgrades for Dell and Mellanox
 ## Dell Changes
 * Remove spanning-tree bpdufilter
 * Add spanning-tree bpduguard
