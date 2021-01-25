@@ -1,12 +1,12 @@
 # CSM Health Checks
 
-This page will list available CSM Health Checks that can be executed to validate system health.
+This page lists available CSM Health Checks that can be executed to validate system health.
 
 ## Platform Health Checks
 
 Scripts do not verify results. Script output includes analysis needed to determine pass/fail for each check. All health checks are expected to pass.
 Health Check scripts can be run:
-* after sysmgmt manifest has been installed – not before
+* after install.sh has been run – not before
 * before and after one of the NCN's reboot
 * after the system or a single node goes down unexpectedly
 * after the system is gracefully shut down and brought up
