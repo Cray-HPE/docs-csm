@@ -1,6 +1,7 @@
 @Library("dst-shared@master") _
 rpmBuild (
     githubPushRepo : "Cray-HPE/docs-csm-install",
+    githubPushBranches : "(release/.*|main)",
     specfile : "docs-csm-install.spec",
     product : "csm",
     target_node : "ncn",
