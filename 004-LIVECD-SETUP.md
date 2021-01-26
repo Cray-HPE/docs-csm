@@ -3,6 +3,7 @@
 This page will assist you with configuring and activating your booted LiveCD.
 
 >**`IMPORTANT`** If you've arrived here with files from [002 LiveCD Creation](002-LIVECD-CREATION.md) then you can skip to [Set hostname](#set-hostname)
+>**`IMPORTANT`** If you've arrived here with **without** files from [002 LiveCD Creation](002-LIVECD-CREATION.md), you may proceed using the **`MANUAL`** annotated steps. Otherwise you may go back to page [002 LiveCD Creation](002-LIVECD-CREATION.md) and see "Configuration Payload" after setting up your [site-link](#setup-the-site-link-connections).
 
 ### LiveCD Interfaces
 
@@ -92,6 +93,7 @@ pit:~ # csi pit validate --network
 > Move onto **[Configure NTP](#configure-ntp)**.
 
 Copy the config files generated earlier by `csi config init` into /etc/dnsmasq.d and /etc/conman.conf.
+
 ```bash
 cp /var/www/ephemeral/prep/${system_name}/dnsmasq.d/* /etc/dnsmasq.d
 cp /var/www/ephemeral/prep/${system_name}/conman.conf /etc/conman.conf
