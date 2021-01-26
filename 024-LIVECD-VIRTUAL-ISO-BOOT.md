@@ -83,3 +83,34 @@ mount -o remount /
 ```
 
 If you excluded the `squashfs` files from the backup you will also want to repopulate them following the configuration section.
+
+## Troubleshooting
+
+### Boots to USB instead of Virtual ISO
+If after booting to the Virtual ISO it may appear you are actually booted to the USB. This is because the Dracut and LiveCD functionality will look for a `cow` labeled partition and use that for the rootfs overlay.
+
+So you may have actually booted from the Virtual ISO but the USB partition was still picked up automatically.
+
+A quick fix for this, other than wiping the USB, is to just relabel the partition with `e2label /dev/sdd3 cow-original`
+
+
+### Corrupt File System
+On hela after time we saw some errors about a corrupt file system.
+Some examples are
+
+```bash
+hela-ncn-m001-pit:~ # podman ls
+bash: /usr/bin/podman: Input/output error
+```
+
+```bash
+[60240.126063] SQUASHFS error: xz decompression failed, data probably corrupt
+[60240.134712] SQUASHFS error: squashfs_read_data failed to read block 0x3a6e2272
+[60240.143588] blk_update_request: I/O error, dev loop1, sector 4756320 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 0
+[60240.156283] SQUASHFS error: xz decompression failed, data probably corrupt
+[60240.164840] SQUASHFS error: squashfs_read_data failed to read block 0x3a6e2272
+[60240.173476] blk_update_request: I/O error, dev loop1, sector 4756320 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 0
+-bash: /usr/bin/md5sum: Input/output error
+```
+
+We haven't been able to determine what caused this or if there is a fix. We believe it may have been caused by the BMC unmounting or disconnecting the virtual iso, or the artifactory hosted ISO may have changed while it was still mounted.
