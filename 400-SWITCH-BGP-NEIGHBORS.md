@@ -12,9 +12,9 @@ This page will detail how to manually configure and verify BGP neighbors on the 
 # Automated Process
 - There is an automated script to update the BGP configuration on both the Mellanox and Aruba switches.  This script is located on the liveCD at ```/root/bin```
 - The scripts are named ```mellanox_set_bgp_peers.py``` and ```aruba_set_bgp_peers.py```
-- This script pulls in date from CSI generated .yaml files, the files required are ```CAN.yaml, HMN.yaml, HMNLB.yaml, NMNLB.yaml, NMN.yaml```
+- This script pulls in data from CSI generated .yaml files. The files required are ```CAN.yaml, HMN.yaml, HMNLB.yaml, NMNLB.yaml, NMN.yaml```
 ```
-USAGE: - <IP of switch 1> <IP of Switch 2> <Path to CSI generated network files>
+USAGE: - <Spine01/Agg01> <Spine02/Agg02> <Path to CSI generated network files>
 
        - The IPs used should be Node Management Network IPs (NMN), these IPs will be what's used for the BGP Router-ID.
 
@@ -22,7 +22,7 @@ USAGE: - <IP of switch 1> <IP of Switch 2> <Path to CSI generated network files>
 
 Example: ./aruba_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/redbull/networks
 ```
-- After this script is ran you will need verify the configuration and verify the BGP peers are ```ESTABLISHED```
+- After this script is run you will need to verify the configuration and verify the BGP peers are ```ESTABLISHED```
 
 # Manual Process
 
