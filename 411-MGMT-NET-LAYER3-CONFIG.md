@@ -13,8 +13,8 @@ At this point you should be able to ping the CDU switches on their VLAN 2 and VL
 We will need to setup routing so the compute nodes can communicate with k8s.
 
 Spine/leaf switch configuration
-First step is to start the OSPF process, give the switch a router-id. This is typically the NMN IP.
-We will need to redistribute BGP into OSPF, this will allow devices to communicate with K8s
+- First step is to start the OSPF process, give the switch a router-id. This is typically the NMN IP.
+- We will need to redistribute BGP into OSPF, this will allow devices to communicate with K8s
 ```
 router ospf 1
     router-id 10.252.0.3
