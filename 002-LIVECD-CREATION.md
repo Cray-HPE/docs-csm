@@ -4,7 +4,7 @@ This page will assist you with creating a LiveCD for a CSM install (formally kno
 or an existing shasta-1.3+ system.
 
 > **`NOTE`** For installs using the remote mounted LiveCD (no USB stick), pay attention to your memory usage while download and also extracting artifacts.
-> 
+>
 > Remote LiveCDs run entirely in memory, which fills as artifacts are downloaded and subsequently extracted. For most cases this is fine, but in cases when RAM is limited to less than 128GB memory pressure may occur from increasing file-system usage.
 >
 > For instances where memory is scarce, an NFS/CIF or HTTP/S share can be mounted in-place of the USB's data partition at `/var/www/ephemeral`. Using the same
@@ -20,7 +20,7 @@ mount point as the USB data partition will help ward off mistakes when following
 3. The number of mountain and river cabinets in the system.
 4. A set of configuration information sufficient to fill out the [listed flags for the `csi config init` command](#configuration-payload)
 
-> **`INTERNAL USE`** 
+> **`INTERNAL USE`**
 5. Access to stash/bitbucket
 6. The system's CCD/SHCD `.xlsx` file
 
@@ -39,7 +39,7 @@ mount point as the USB data partition will help ward off mistakes when following
 Download the CSM software release to the Linux host which will be preparing the LiveCD.
 
 > **`INTERNAL USE`** The `ENDPOINT` URL below are for internal use, customer/external should
-> use the URL for the server hosting their tarball. 
+> use the URL for the server hosting their tarball.
 
 ```bash
 linux# cd ~
@@ -264,19 +264,15 @@ linux# csi pit populate pitdata ~/eniac/ /mnt/pitdata/configs -b
 data.json---------------------> /mnt/pitdata/configs/data.json...OK
 
 # 2. Copy k8s KIS
-linux# csi pit populate pitdata ~/${CSM_RELEASE}/images/kubernetes/ /mnt/pitdata/data/k8s/ -k
+linux# csi pit populate pitdata ~/${CSM_RELEASE}/images/kubernetes/ /mnt/pitdata/data/k8s/ -kiK
 5.3.18-24.37-default-0.0.6.kernel-----------------> /mnt/pitdata/data/k8s/...OK
-linux# csi pit populate pitdata ~/${CSM_RELEASE}/images/kubernetes/ /mnt/pitdata/data/k8s/ -i
 initrd.img-0.0.6.xz-------------------------------> /mnt/pitdata/data/k8s/...OK
-linux# csi pit populate pitdata ~/${CSM_RELEASE}/images/kubernetes/ /mnt/pitdata/data/k8s/ -K
 kubernetes-0.0.6.squashfs-------------------------> /mnt/pitdata/data/k8s/...OK
 
 # 3. Copy ceph/storage KIS
-linux# csi pit populate pitdata ~/${CSM_RELEASE}/images/storage-ceph/ /mnt/pitdata/data/ceph/ -k
+linux# csi pit populate pitdata ~/${CSM_RELEASE}/images/storage-ceph/ /mnt/pitdata/data/ceph/ -kiC
 5.3.18-24.37-default-0.0.5.kernel-----------------> /mnt/pitdata/data/ceph/...OK
-linux# csi pit populate pitdata ~/${CSM_RELEASE}/images/storage-ceph/ /mnt/pitdata/data/ceph/ -i
 initrd.img-0.0.5.xz-------------------------------> /mnt/pitdata/data/ceph/...OK
-linux# csi pit populate pitdata ~/${CSM_RELEASE}/images/storage-ceph/ /mnt/pitdata/data/ceph/ -C
 storage-ceph-0.0.5.squashfs-----------------------> /mnt/pitdata/data/ceph/...OK
 
 # 4. Copy the CSI config files to prep dir
