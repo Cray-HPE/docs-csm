@@ -37,8 +37,6 @@ If you are unsure, see the bottom of [LiveCD Setup](004-LIVECD-SETUP.md).
 
 First, there are some important checks to be done before continuing. These serve to prevent mayhem during installation and operation that are hard to debug.   Please note, more checks may be added over time  and existing checks may receive updates or become defunct.
 
-> Many of these use the `pit validate` command, which simply runs some shell commands for you, but it's up to you to determine what the output means.  This will no longer be the case once the GOSS tests are plugged into the `pit validate` command.
-
 #### Optional Safeguards
 
 **If you are upgrading** you should run through these safe-guards on a by-case basis:
@@ -150,8 +148,9 @@ casminst-124
 Now that the PIT node configuration is complete, it's time to validate that it has been set up properly using the automated test suite.
 
 To execute tests, run:
+
 ```bash
-pit:~ # livecd-preflight-checks
+pit:~ # csi pit validate --livecd-preflight
 ```
 
 Observe the output of the checks and note any failures, then remediate them.
@@ -237,7 +236,7 @@ You can start booting the manager and worker nodes during the ceph installation.
 The following command will run a series of remote tests on the storage nodes to validate they are healthy and configured correctly.
 
 ```bash
-pit:~ # ncn-storage-checks
+pit:~ # csi pit validate --ceph
 ```
 
 Observe the output of the checks and note any failures, then remediate them.
@@ -301,7 +300,7 @@ pit:~ # scp ncn-m002.nmn:/etc/kubernetes/admin.conf ~/.kube/config
 The following command will run a series of remote tests on the NCNs to confirm the Kubernetes cluster is configured properly.
 
 ```bash
-pit:~ # ncn-kubernetes-checks
+pit:~ # csi pit validate --k8s
 ```
 Observe the output of the checks and note any failures, then remediate them.
 

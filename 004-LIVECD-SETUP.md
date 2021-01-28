@@ -1,4 +1,4 @@
-# LiveCD 
+# LiveCD
 
 This page will assist you with configuring and activating your booted LiveCD.
 
