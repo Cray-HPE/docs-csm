@@ -244,9 +244,7 @@ HMN.conf----------------------> /mnt/cow/rw/etc/dnsmasq.d/HMN.conf...OK
 NMN.conf----------------------> /mnt/cow/rw/etc/dnsmasq.d/NMN.conf...OK
 mtl.conf----------------------> /mnt/cow/rw/etc/dnsmasq.d/mtl.conf...OK
 statics.conf------------------> /mnt/cow/rw/etc/dnsmasq.d/statics.conf...OK
-
-# Copy Conman.conf (not copied with CSI)
-linux# cp -pv eniac/conman.conf /mnt/cow/rw/etc/conman.conf
+conman.conf-------------------> /mnt/cow/rw/etc/conman.conf...OK
 ```
 
 ### Pre-Populate the LiveCD Data and Deployment Files
