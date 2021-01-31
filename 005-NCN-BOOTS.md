@@ -135,11 +135,11 @@ pit:~ # systemctl restart basecamp
 
 ### Apply "Pre-NCN Boot" Workarounds
 
-Check for workarounds in the `/var/www/ephemeral/prep/csm-x.x.x/fix/before-ncn-boot` directory.  If there are any workarounds in that directory, run those now.   Instructions are in the `README` files.
+Check for workarounds in the `/var/www/ephemeral/${CSM_RELEASE}/fix/before-ncn-boot` directory.  If there are any workarounds in that directory, run those now.   Instructions are in the `README` files.
 
 ```
 # Example
-pit:~ # ls /var/www/ephemeral/prep/csm-x.x.x/fix/before-ncn-boot
+pit:~ # ls /var/www/ephemeral/${CSM_RELEASE}/fix/before-ncn-boot
 casminst-124
 ```
 
@@ -222,7 +222,7 @@ conman -q
 conman -j ncn-s001-mgmt
 
 # ..or tail multiple log files
-tail -f /var/log/conman/ncn-s*
+tail -f /var/log/conman/console.ncn-s*
 ```
 
 Once you see your first 3 storage nodes boot, you should start seeing the CEPH installer running
@@ -230,16 +230,6 @@ on the first storage nodes console. Optionally, you can also tail -f /var/log/cl
 **Remember, the ceph installation time is dependent on the number of storage nodes**
 
 You can start booting the manager and worker nodes during the ceph installation.
-
-### Run Pre-flight Checks on Storage Nodes
-
-The following command will run a series of remote tests on the storage nodes to validate they are healthy and configured correctly.
-
-```bash
-pit:~ # csi pit validate --ceph
-```
-
-Observe the output of the checks and note any failures, then remediate them.
 
 ### Boot Kubernetes Managers and Workers
 
@@ -274,11 +264,11 @@ CreatePciIoDevice: its SR-IOV function will be disabled. We need to report the i
 
 ### Post NCN Boot Work-arounds
 
-Check for workarounds in the `/var/www/ephemeral/prep/csm-x.x.x/fix/after-ncn-boot` directory.  If there are any workarounds in that directory, run those now.   Instructions are in the `README` files.
+Check for workarounds in the `/var/www/ephemeral/${CSM_RELEASE}/fix/after-ncn-boot` directory.  If there are any workarounds in that directory, run those now.   Instructions are in the `README` files.
 
 ```
 # Example
-pit:~ # ls /var/www/ephemeral/prep/csm-x.x.x/fix/after-ncn-boot
+pit:~ # ls /var/www/ephemeral/${CSM_RELEASE}/fix/after-ncn-boot
 casminst-12345
 ```
 
@@ -295,6 +285,16 @@ pit:~ # mkdir ~/.kube
 pit:~ # scp ncn-m002.nmn:/etc/kubernetes/admin.conf ~/.kube/config
 ```
 
+### Run Pre-flight Checks on Storage Nodes
+
+The following command will run a series of remote tests on the storage nodes to validate they are healthy and configured correctly.
+
+```bash
+pit:~ # csi pit validate --ceph
+```
+
+Observe the output of the checks and note any failures, then remediate them.
+
 ### Run Kubernetes Pre-flight Checks on NCNs
 
 The following command will run a series of remote tests on the NCNs to confirm the Kubernetes cluster is configured properly.
@@ -308,9 +308,9 @@ Observe the output of the checks and note any failures, then remediate them.
 
 After the NCNs are booted, the BGP peers will need to be checked and updated if the neighbor IPs are incorrect on the switches. See the doc to [Check and Update BGP Neighbors](400-SWITCH-BGP-NEIGHBORS.md).
 
-> **`NOTE`**: At this point all of the peering sessions with the BGP neighbors should be in IDLE or CONNECT state and not ESTABLISHED state.   You should check that all of the neighbor IPs are correct.
+> **`NOTE`**:  Make sure you clear the BGP sessions here.  Use the commands `clear ip bgp all` (Mellanox) or `clear bgp *` (Aruba) to restart the BGP peering sessions on each of the switches with BGP.
 
-> **`NOTE`**: You can use `clear ip bgp all` (Mellanox) or `clear bgp *` (Aruba) to restart the BGP peering sessions on each of the switches with BGP.
+> **`NOTE`**: At this point all but possibly one of the peering sessions with the BGP neighbors should be in IDLE or CONNECT state and not ESTABLISHED state.   If the switch is an Aruba, you will have one peering session established with the other switch.  You should check that all of the neighbor IPs are correct.
 
 ### Manual Checks
 
