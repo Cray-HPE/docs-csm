@@ -202,17 +202,39 @@ If you see warnings from `csi config init` that are similar to the warning messa
 ```
 If the piece of hardware is expected to be an application node then [follow the procedure to create the application_node_config.yaml](308-APPLICATION-NODE-CONFIG.md) file. The argument `--application-node-config-yaml ./application-node-config.yaml` can be given to `csi config init` to include the additional application node configuration. Due to systems having system specific application node source names in `hmn_connections.json` (and the SHCD) the `csi config init` command will need to be given additional configuration file to properly include these nodes in SLS Input file.
 
-2. Clone the shasta-cfg repository for the system.
-  > **IMPORTANT - NOTE FOR `INTERNAL`** - It is recommended to sync with STABLE after cloning if you have not already done so.
+2. If a shasta-cfg repository for the system already exists (e.g., `https://stash.us.cray.com/csm/shasta-cfg/eniac.git`), then clone it to `SITEDIR=/mnt/pitdata/prep/site-init`:
+
   > **IMPORTANT - NOTE FOR `INTERNAL`** - Configure Cray Datacenter LDAP if this hasn't been done for this system. See the section [Configuring Cray Datacenter LDAP](054-NCN-LDAP.md).
 
-  > **IMPORTANT - NOTE FOR `AIRGAP`** - You must do this now while preparing the USB on your local machine if your CRAY is airgapped or if it cannot otherwise reach your local GIT server.
-
   ```bash
-  linux# git clone https://stash.us.cray.com/scm/shasta-cfg/eniac.git /mnt/pitdata/prep/site-init
+  linux# git clone https://stash.us.cray.com/scm/shasta-cfg/eniac.git “${SITEDIR:=/mnt/pitdata/prep/site-init}”
   ```
 
-  If you would like to customize the PKI Certificate Authority (CA) used by the platform, see [Customizing the Platform CA](055-CERTIFICATE-AUTHORITY.md). This is an optional step. Note that the CA can not be modified after install.
+  Otherwise create it:
+
+  ```bash
+  linux# git init “${SITEDIR:=/mnt/pitdata/prep/site-init}”
+  linux# git remote add origin https://stash.us.cray.com/scm/shasta-cfg/eniac.git
+  ```
+
+  Follow the instructions at `~/${CSM_RELEASE}/shasta-cfg/docs/UPDATE-SYSTEM.md` to update settings:
+
+  > If you would like to customize the PKI Certificate Authority (CA) used by the platform, see [Customizing the Platform CA](055-CERTIFICATE-AUTHORITY.md). This is an optional step. Note that the CA can not be modified after install.
+
+  ```bash
+  linux# “~/${CSM_RELEASE}/shasta-cfg/meta/init.sh” “$SITEDIR”
+  linux# vim “${SITEDIR}/customizations.yaml”
+  linux# “${SITEDIR}/utils/secrets-reencrypt.sh” “${SITEDIR}/customizations.yaml” “${SITEDIR}/certs/sealed_secrets.key” “${SITEDIR}/certs/sealed_secrets.crt”
+  linux# “${SITEDIR}/utils/secrets-seed-customizations.sh” “${SITEDIR}/customizations.yaml”
+  linux# git add -u
+  linux# git commit -m “Updated to $(~/${CSM_RELEASE}/lib/version.sh)”
+  ```
+
+  Finally, push changes back upstream so they’re available later on in the install:
+
+  ```
+  linux# git push -u origin master
+  ```
 
 3. Apply workarounds
 
