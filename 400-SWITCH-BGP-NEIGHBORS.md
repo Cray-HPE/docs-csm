@@ -8,6 +8,13 @@ This page will detail how to manually configure and verify BGP neighbors on the 
 - The BGP neighbors will be the worker NCN IPs on the NMN (node management network) (VLAN002). If your system is using HPE/Aruba, one of the neighbors will be the other spine switch.
 - On the Aruba/HPE switches properly configured BGP will look like the following.
 
+# Generate Metallb configmap
+- Depending on the network architecture of your system you may need to peer with switches other than the spines.  CSI has a BGP peers argument that accepts 'aggregation' as an option, if no option is defined it will default to the spines as being the metallb peers. 
+
+CSI bgp peers argument.
+```
+--bgp-peers aggregation
+```
 
 # Automated Process
 - There is an automated script to update the BGP configuration on both the Mellanox and Aruba switches.  This script is located on the liveCD at ```/root/bin```
@@ -199,7 +206,6 @@ Mellanox configuration example.
 - If the BGP peers are still not coming up you should check the Metallb.yaml config file for errors.  The Metallb config file should point to the NMN IPs of the switches configured.
 
 Metallb.yaml configuration example.
-- If your management network has Aggregation switches setup and you are peering with them, the Metallb.yaml configuration file will need to be updated to reflect these IPs.
 - The peer-address should be the IP of the switch that you are doing BGP peering with.  
 ```
 ---
