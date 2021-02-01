@@ -12,6 +12,8 @@ After booting you can then setup Pre-Install Toolkit configs directly on the OS 
 
 ## Booting
 
+> **`NOTE`** It may appear that the boot is stalled at a line of `EXT4-fs (loop1): mounted ...` or `Starting dracut pre-mount hook...`. This is the step when it actually begins downloading the ISO's squashfs root filesystem and can take a few minutes
+
 ### ILO
 
 ILO BNCs allow for booting directly from an HTTP accessible ISO location. This can be done either from the web interface or a helper script
@@ -40,7 +42,28 @@ This will prompt for the BMC password, connect to the BMC over ssh, mount the IS
 ../cray-pre-install-toolkit/scripts/boot-to-iso-ilo.sh <ISO URL> <BNC Hostname or IP>
 ```
 
-> **`NOTE`** It may appear that the boot is stalled at a line of `EXT4-fs (loop1): mounted ...` or `Starting dracut pre-mount hook...`. This is the step when it actually begins downloading the ISO's squashfs root filesystem and can take a few minutes
+### Gigabyte
+
+**Web Interface**
+
+Access your BMC's web interface and navigate to `Settings -> Media Redirection Settings -> General Settings`.
+
+Enable `Remote Media Support` and `Mount CD/DVD` and then fill in the server IP or DNS name and the path to server.
+
+![Gigabyte BMC Settings](./img/bmc-virtual-media-settings-gigabyte.png)
+
+> **`NOTE`** The gigabyte url appears to not allow certain characters and has a limit on path length. So you may need to move or rename the ISO to a location with a smaller file name.
+
+Next head to `Image Redirection -> Remote Images` and click on the `Start` button to start the Virtual ISO mount.
+
+![Gigabyte BMC Start](./img/bmc-virtual-media-start-gigabyte.png)
+
+Finally, reboot the server and select the `Virtual CDROM` option from the manual boot options.
+
+![Gigabyte BMC Boot](./img/bmc-virtual-media-boot-gigabyte.png)
+
+
+
 
 ## Configuring
 
@@ -91,9 +114,9 @@ If after booting to the Virtual ISO it may appear you are actually booted to the
 
 So you may have actually booted from the Virtual ISO but the USB partition was still picked up automatically.
 
-A quick fix for this, other than wiping the USB, is to just relabel the partition with `e2label /dev/sdd3 cow-original`
+A quick fix for this, other than wiping the USB, is to just relabel the partition with `e2label /dev/sdd3 cow-original`. You can then verify labels with `lsblk -o name,mountpoint,fstype,label,size`.
 
-
+If you still run into problems it may be because the USB has a label of `CRAYLIVE` which can conflict with the boot order during early initrd startup.  Unfortunately the only fix for this is to fully wipe the USB disk to remove the label `wipefs -af /dev/sdd`
 ### Corrupt File System
 On hela after time we saw some errors about a corrupt file system.
 Some examples are
@@ -114,3 +137,16 @@ bash: /usr/bin/podman: Input/output error
 ```
 
 We haven't been able to determine what caused this or if there is a fix. We believe it may have been caused by the BMC unmounting or disconnecting the virtual iso, or the artifactory hosted ISO may have changed while it was still mounted.
+
+### Gigabyte Drops to Recovery Shell
+During testing of booting to gigabyte you may notice that it drops you into a recovery shell.
+
+It appears this happens when the dracut module begins downloading the large squashfs image from the Virtual ISO url. When this happens you may see errors like this in the kernel logs:
+
+```bash
+Jan 30 00:32:03 localhost kernel: blk_update_request: I/O error, dev sr0, sector 1019912 op 0x0:(READ) flags 0x0 phys_seg 2 prio class 0
+Jan 30 00:32:03 localhost kernel: Buffer I/O error on dev sr0, logical block 254978, async page read
+Jan 30 00:32:03 localhost kernel: Buffer I/O error on dev sr0, logical block 254979, async page read
+```
+
+Currently there is not a work around or fix for this and may be caused by the BMC itself, the web server hosting the ISO, network issues, or dracut download command itself.
