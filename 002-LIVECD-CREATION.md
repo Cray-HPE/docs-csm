@@ -171,6 +171,9 @@ linux# csi config init \
     --install-ncn-bond-members p1p1,p10p1
 ```
 
+An optional argument ```--bgp-peers aggregation``` is available if your system is BGP peering with aggregation switches. See [400-SWITCH-BGP-NEIGHBORS](400-SWITCH-BGP-NEIGHBORS.md) for more information.
+
+
 This will generate the following files in a subdirectory with the system name.
 
 ```
