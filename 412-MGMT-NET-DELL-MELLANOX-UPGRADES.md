@@ -1,7 +1,13 @@
 # Shasta v1.3 to v1.4 Upgrades for Dell and Mellanox
+
+*  The IP-Helper will reside on the switches where the default gateway for the servers, such as bmcs and computes, is configured.
+*  IP-Helper applied on vlan 1 and vlan 7, this will point to 10.92.100.222.
+
 ## Dell Changes
 * Remove spanning-tree bpdufilter
 * Add spanning-tree bpduguard
+* Remove IP-Helper if moving to a different switch.
+
 
 Shasta v1.3 (old) config
 ```
@@ -43,7 +49,15 @@ spanning-tree bpduguard enable
 exit
 write memory
 ```
+Remove IP-Helper
+```
+sw-leaf-001# configure terminal
+sw-leaf-001(config)# interface vlan 2
+sw-leaf-001(conf-if-vl-2)# no ip helper-address 10.92.100.222
 
+sw-leaf-001(config)# interface vlan 4
+sw-leaf-001(conf-if-vl-4)# no ip helper-address 10.94.100.222
+```
 ## Mellanox Changes
 ### MAGP
 MAGP setup for mellanox spine switches, this should be set for every VLAN interface. 
@@ -129,4 +143,18 @@ https://community.mellanox.com/s/article/how-to-configure-mlag-on-mellanox-switc
 (config interface ethernet 1/1) # mlag-channel-group 1 mode active
 (config interface ethernet 1/1) # interface ethernet 1/1 speed 40G force
 (config interface ethernet 1/1) # interface ethernet 1/1 mtu 9216 force
+```
+
+#### IP-Helper configuration
+```
+## DHCP relay configuration
+##
+   ip dhcp relay instance 2 vrf default
+   ip dhcp relay instance 4 vrf default
+   ip dhcp relay instance 2 address 10.92.100.222
+   ip dhcp relay instance 4 address 10.94.100.222
+   interface vlan 1 ip dhcp relay instance 2 downstream
+   interface vlan 2 ip dhcp relay instance 2 downstream
+   interface vlan 4 ip dhcp relay instance 4 downstream
+   interface vlan 7 ip dhcp relay instance 2 downstream
 ```
