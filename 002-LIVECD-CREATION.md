@@ -202,51 +202,27 @@ If you see warnings from `csi config init` that are similar to the warning messa
 ```
 If the piece of hardware is expected to be an application node then [follow the procedure to create the application_node_config.yaml](308-APPLICATION-NODE-CONFIG.md) file. The argument `--application-node-config-yaml ./application-node-config.yaml` can be given to `csi config init` to include the additional application node configuration. Due to systems having system specific application node source names in `hmn_connections.json` (and the SHCD) the `csi config init` command will need to be given additional configuration file to properly include these nodes in SLS Input file.
 
-2. If a shasta-cfg repository for the system already exists (e.g., `https://stash.us.cray.com/csm/shasta-cfg/eniac.git`), then clone it to `SITEDIR=/mnt/pitdata/prep/site-init`:
+2. Prepare SHASTA-CFG Repository 
+
+  If this is a new system, follow the instructions at ```/mnt/pitdata/${CSM_RELEASE}/shasta-cfg/docs/NEW-SYSTEM.md```. If existing, follow ```/mnt/pitdata/${CSM_RELEASE}/shasta-cfg/docs/UPDATE-SYSTEM.md```. For either procedure, when you are prompted to "review and update" ```customizations.yaml``` (prior to sealed secret generation/encryption), complete the steps below before finalizing your shasta-cfg initialization or update: 
+
+  * Review the ```spec.kubernetes.sealed_secrets``` generate blocks for ```cray_reds_credentials```, ```cray_meds_credentials```, and ```cray_hms_rts_credentials```. Replace the ```Password``` references with values appropriate for your system. 
+
+  * If you are federating Keycloak with an upstream LDAP server, and using TLS for LDAP, update the ```cray-keycloak``` sealed secret value by supplying a base64 encoded form of your CA certificate(s). You can use the ```keytool``` command and a PEM-encoded form of your certificate(s) to obtain this value, as follows: 
+
+    ```bash
+    linux# keytool -importcert -trustcacerts -file myad-pub-cert.pem -alias myad -keystore certs.jks -storepass password -noprompt
+    linux# cat certs.jks | base64
+    ```
+  
+  * If you would like to customize the PKI Certificate Authority (CA) used by the platform, see [Customizing the Platform CA](055-CERTIFICATE-AUTHORITY.md). This is an optional step. Note that the CA can not be modified after install.
+
+> **IMPORTANT - NOTE FOR `INTERNAL`** - Configure Cray Datacenter LDAP if this hasn't been done for this system. See the section [Configuring Cray Datacenter LDAP](054-NCN-LDAP.md).
+
+  If you are storing your SHASTA-CFG repository in git, it is a good practice to include the CSM release version in associated commit messages, e.g:
 
   ```bash
-  linux# git clone https://stash.us.cray.com/scm/shasta-cfg/eniac.git “${SITEDIR:=/mnt/pitdata/prep/site-init}”
-  ```
-
-  Otherwise create it:
-
-  ```bash
-  linux# git init “${SITEDIR:=/mnt/pitdata/prep/site-init}”
-  linux# git remote add origin https://stash.us.cray.com/scm/shasta-cfg/eniac.git
-  ```
-
-  Follow the instructions at `~/${CSM_RELEASE}/shasta-cfg/docs/UPDATE-SYSTEM.md` to update settings:
-
-  ```bash
-  linux# “~/${CSM_RELEASE}/shasta-cfg/meta/init.sh” “$SITEDIR”
-  linux# vim “${SITEDIR}/customizations.yaml”
-  ```
-
-  > **IMPORTANT - NOTE FOR `INTERNAL`** - Configure Cray Datacenter LDAP if this hasn't been done for this system. See the section [Configuring Cray Datacenter LDAP](054-NCN-LDAP.md).
-
-  If you would like to customize the PKI Certificate Authority (CA) used by the platform, see [Customizing the Platform CA](055-CERTIFICATE-AUTHORITY.md). This is an optional step. Note that the CA can not be modified after install.
-
-  Review the ```spec.kubernetes.sealed_secrets``` generate blocks for ```cray_reds_credentials``` and ```cray_meds_credentials```. Replace the ```Password``` fields with values appropriate for your system. 
-
-  If you are federating Keycloak with an upstream LDAP server, and using TLS for LDAP, update the ```cray-keycloak``` sealed secret value by supplying a base64 encoded form of your CA certificate(s). You can use the ```keytool``` command and a PEM-encoded form of your certificate(s) to obtain this value, as follows: 
-
-  ```bash
-  linux# keytool -importcert -trustcacerts -file myad-pub-cert.pem -alias myad -keystore certs.jks -storepass password -noprompt
-  linux# cat certs.jks | base64
-  ```
-
-  After you've addressed the above sealed secret settings and any ```FIXME``` references in customizations, finalize sealed secrets and update your system clone. 
-
-  ```bash
-  linux# “${SITEDIR}/utils/secrets-reencrypt.sh” “${SITEDIR}/customizations.yaml” “${SITEDIR}/certs/sealed_secrets.key” “${SITEDIR}/certs/sealed_secrets.crt”
-  linux# “${SITEDIR}/utils/secrets-seed-customizations.sh” “${SITEDIR}/customizations.yaml”
-  linux# git add -u
-  linux# git commit -m “Updated to $(~/${CSM_RELEASE}/lib/version.sh)”
-  ```
-
-  Finally, push changes back upstream so they’re available later on in the install:
-
-  ```
+  linux# git commit -m “Updated to $(/mnt/pitdata/${CSM_RELEASE}/lib/version.sh)”
   linux# git push -u origin master
   ```
 
