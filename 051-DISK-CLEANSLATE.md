@@ -14,7 +14,7 @@ After following these procedures an NCN can be rebooted and redeployed.
 Ideally the Basic Wipe is enough, and should be tried first. All of these procedures may be ran from Linux or an initramFS/initrd emergency shell.
 
 - Adding a node that isn't bare.
-- Adopoting new disks that aren't bare.
+- Adopting new disks that aren't bare.
 - Fresh-installing.
 
 ### Basic Wipe

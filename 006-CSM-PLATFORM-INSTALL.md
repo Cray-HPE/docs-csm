@@ -15,4 +15,4 @@ This page will go over how to install CSM applications and services (i.e., into 
     ```
      > TODO: For automation this should be checked, if this step is still used when automation lands.
 
-2. Change into the directory where you extracted the CSM Release distribution. Complete the CSM install by following instructions in ```INSTALL``` and as otherwise directed by the installer process. See [002-LIVECD-CREATION](002-LIVECD-CREATION.md) for further details.
+2. Change into the directory where you extracted the CSM Release distribution. Complete the CSM install by following instructions in ```INSTALL``` and as otherwise directed by the installer process. See [002-LIVECD-CREATION](002-CSM-INSTALL.md) for further details.

@@ -20,7 +20,7 @@ Sorted by safest to touch relative to keeping your SSH connection up.
     # Restarts Wicked daemons without reconfiguring the network interfaces.
     systemctl restart wickedd
     ```
-2. wicked.service  : The overarching service for spawning daemons and manipluating interface configuration; resetting this reloads daemons and configuration.
+2. wicked.service  : The overarching service for spawning daemons and manipulating interface configuration; resetting this reloads daemons and configuration.
     ```bash
     # Restarts Wicked; respawns daemons and (re)configures the network.
     systemctl restart wicked

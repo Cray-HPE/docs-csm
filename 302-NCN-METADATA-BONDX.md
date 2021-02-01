@@ -4,6 +4,13 @@ This page will detail how to collect the NCN MAC addresses from a racked, shasta
 
 After completing this guide, you will have the MAC addresses needed for the `ncn_metadata.csv` file's BMC column.
 
+#### Sections
+
+- [Procedure: iPXE](#procedure-ipxe-consoles)
+   - [Requirements](#requirements)
+   - [MAC Collection](#mac-collection)
+- [Procedure: Serial consoles](#procedure-serial-consoles)
+
 The easy way to do this leverages the NIC-dump provided by the metal-ipxe package. This page will walk-throuogh
 booting NCNs and collecting their MACs from the conman console logs.
 > The alternative is to use serial cables (or SSH) to collect the MACs from the switch ARP tables, this can become exponentially difficult for large systems.
@@ -24,7 +31,7 @@ boot-check nodes to dump network device information without an OS. This works by
 2. BMC MACs already collected
 3. LiveCD conman is configured for each BMC (`conman -q` to see consoles)
 
-For help with either of those, see [LiveCD Setup](004-LIVECD-SETUP.md).
+For help with either of those, see [LiveCD Setup](004-CSM-REMOTE-LIVECD.md).
 
 #### MAC Collection
 
@@ -48,14 +55,10 @@ will prevent the nodes from continuing to boot and end in undesired states.
 
 3. Now set the nodes to PXE boot and (re)start them.
     ```bash
-    # Replace with actual username/passwords.
-    username=bob
-    password=alice
-
-    # ALWAYS PXE BOOT; sets a system to PXE
-    for node in $(conman -q | grep ncn | grep mgmt); do
-        ipmitool -I lanplus -U $username -P $password -H $node chassis bootdev pxe options=efiboot,persistent
-        if ipmitool -I lanplus -U $username -P $password -H $node power status =~ 'off' ; then
+   export username=root
+   export IPMI_PASSWORD=
+   grep -oE "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} chassis bootdev pxe options=efiboot,persistent
+   grep -oE "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off        if ipmitool -I lanplus -U $username -P $password -H $node power status =~ 'off' ; then
             ipmitool -I lanplus -U $username -P $password -H $node power on
         else
             ipmitool -I lanplus -U $username -P $password -H $node power reset

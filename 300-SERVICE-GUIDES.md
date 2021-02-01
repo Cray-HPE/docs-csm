@@ -7,7 +7,7 @@ help.
 
 >#### Pre-Spring 2020 CRAY System Upgrade Notice
 > Systems built before Sprint 2020 originally used onboard NICs for netbooting. The new topologies for Shasta
-> cease using the onboard NICs. If your system is running shasta-1.3, then it likely is using onboard NICs.
+> cease using the onboard NICs. If your system is running Shasta v1.3, then it likely is using onboard NICs.
 >
 > It is recommended to cease using these for shasta-1.4, an admin would have one less MAC address to track and account for.
 > The NCN networking becomes relatively simpler as a result from caring about one less NIC.
@@ -21,13 +21,14 @@ This guide may receive more installments for other files as time goes on.
 - [Files](#files)
     - [`ncn_metadata.csv`](#ncn_metadatacsv)
     - [`switch_metadata.csv`](#switch_metadatacsv)
+    - [`hmn_connections.json`](#hmn_connectionsjson)
 
 ## Environments
 
 These guides expect you to have access to either of the following things for working on a bare-metal
 system (assuming freshly racked, or fresh-installing an existing system).
 
-- LiveCD (for more information, see [LiveCD USB Boot](003-LIVECD-USB-BOOT.md))
+- LiveCD (for more information, see [LiveCD USB Boot](003-CSM-USB-LIVECD.md))
 - Linux and a Serial Console
 
 If you do not have the LiveCD, or any other local Linux environment, this data collection
@@ -83,8 +84,8 @@ for data collection.
 ### `ncn_metadata.csv`
 
 Unless your system is sans-onboards, meaning it does not use or does not have onboard NICs on the non-compute nodes, then these guides will be necessary before (re)constructing the `ncn_metadata.csv` file.
-1. [Recabling from shasta-1.3 for shasta-1.4](050-MOVE-SITE-CONNECTIONS.md) (for machines still using w001 for BIS node)
-2. [Enabling Network Boots over Spine Switches](304-NCN-PCIE-NETBOOT-AND-RECABLE.md) (for shasta 1.3 machines)
+1. [Recabling from Shasta v1.3 for shasta-1.4](309-MOVE-SITE-CONNECTIONS.md) (for machines still using w001 for BIS node)
+2. [Enabling Network Boots over Spine Switches](304-NCN-PCIE-NET-BOOT-AND-RE-CABLE.md) (for shasta 1.3 machines)
 
 The following two guides will assist with (re)creating `ncn_metadata.csv` (an example file is below).
 
@@ -134,33 +135,10 @@ x3000c0h33s2,Spine,Mellanox
 ```
 
 
-## Refreshing the LiveCD
+### `hmn_connections.json`
 
-To refresh your liveCD's packages for this guide, you must have an internet connection
-to the CRAY repositories -or- have obtained the package and served it from local-disk or
-reachable internal endpoint.
-
-Use the built-in alias:
-```bash
-pit:~ # refme
-```
-
-On the other hand you can use this command, and tailor it to your use:
-```bash
-zypper \
-  --no-gpg-checks \
-  --plus-repo=http://car.dev.cray.com/artifactory/shasta-premium/MTL/sle15_sp2_ncn/x86_64/dev/master/ \
-  --plus-repo=http://car.dev.cray.com/artifactory/shasta-premium/MTL/sle15_sp2_ncn/noarch/dev/master/ \
-  install
-  -y \
-  cray-site-init \
-  metal-ipxe \
-  metal-docs-ncn
-```
-
-# Author(s)
-
-[Rusty Bunch](mailto:rustydb@hpe.com)
+This file denotes your BMC interfaces and other hardware network topology devices, see [HMN Connections](307-HMN-CONNECTIONS.md) for
+instructions creating this file. 
 
 [1]: https://stash.us.cray.com/projects/MTL/repos/cray-pre-install-toolkit/browse
 [2]: https://stash.us.cray.com/projects/MTL/repos/cray-site-init/browse
