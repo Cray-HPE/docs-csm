@@ -30,6 +30,21 @@ sw-smn01(config)# no routing
 sw-smn01(config)# vlan access 2
 ```
 
+- UAN port configuration
+- For 1.4 UANs are going to be only using a single port.
+- UANs connected to Mellanox switches went over a bonded switch configuration in 1.3, we did not see any issues with this so we are keeping that configuraiton for 1.4.
+
+Aruba Configuration
+```
+interface 1/1/16
+    no shutdown
+    mtu 9198
+    no routing
+    vlan trunk native 2
+    vlan trunk allowed 2,7
+    exit
+```
+
 - This configuration describes the ports that go to the Mountain CMMs/Computes.
 - The CDU switches have two cables connecting to each CMM, we will setup MC-LAG with the CDU switch pairs.
 - The second CDU switch in the pair will have it's port to the CMM shutdown, Redundancy is not yet available for the CMM.
