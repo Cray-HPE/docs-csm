@@ -62,7 +62,10 @@ result in a failure.
 ## How To Lock Management NCNs
 
 Use the standard CLI to perform locking.  The simplest command will lock all
-nodes with a **Management** role:
+nodes with a **Management** role.  The *processing-model rigid* parameter means that the
+operation must succeed on all target nodes or the entire operation will fail.
+
+Example:
 
 ```bash
 linux:~ # cray hsm locks lock create --role Management --processing-model rigid
