@@ -1,17 +1,21 @@
 # CSM Metal Install
 
 This page will go over deploying the non-compute nodes.
-- [Tokens](#tokens)
-- [Timing of Deployments](#timing-of-deployments)
-- [NCN Deployment](#ncn-deployment)
-   - [NCN Pre-Boot Workarounds](#apply-ncn-pre-boot-workarounds)
-   - [Start Deployment](#start-deployment)
-   - [NCN Post-Boot Workarounds](#apply-ncn-post-boot-workarounds)
-   - [LiveCD Cluster Authentication](#livecd-cluster-authentication)
-   - [BGP Routing](#bgp-routing)
-   - [Validation](#validation)
-- [Change NCN Password](#change-password)
 
+* [Tokens](#tokens)
+* [Timing of Deployments](#timing-of-deployments)
+* [NCN Deployment](#ncn-deployment)
+    * [Apply NCN Pre-Boot Workarounds](#apply-ncn-pre-boot-workarounds)
+    * [Start Deployment](#start-deployment)
+    * [Apply NCN Post-Boot Workarounds](#apply-ncn-post-boot-workarounds)
+    * [LiveCD Cluster Authentication](#livecd-cluster-authentication)
+    * [BGP Routing](#bgp-routing)
+    * [Validation](#validation)
+    * [Optional Validation](#optional-validation)
+    * [Change Password](#change-password)
+
+
+<a name="tokens"></a>
 ## Tokens
 
 These tokens will assist an administrator as they follow this page. Copy these into the shell environment
@@ -48,6 +52,7 @@ grep -oE "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i i
 grep -oE "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
 ```
 
+<a name="timing-of-deployments"></a>
 ## Timing of Deployments
 
 The timing of each set of boots varies based on hardware, some manufacturers will POST faster than others or vary based on BIOS setting. After powering a set of nodes on, an administrator can expect a healthy boot-session to take the follow times:
@@ -55,10 +60,12 @@ The timing of each set of boots varies based on hardware, some manufacturers wil
   1. Storage nodes; 15-20 minutes
   2. Managers and Worker nodes; 5-10 minutes
 
+<a name="ncn-deployment"></a>
 ## NCN Deployment
 
 This section will walk an administrator through NCN deployment.
 
+<a name="apply-ncn-pre-boot-workarounds"></a>
 #### Apply NCN Pre-Boot Workarounds
 
 > **There will be post-boot workarounds as well**.
@@ -72,6 +79,7 @@ pit:~ # ls /var/www/ephemeral/${CSM_RELEASE}/fix/before-ncn-boot
 CASMINST-980
 ```
 
+<a name="start-deployment"></a>
 ### Start Deployment
 
 1. Create boot directories for any NCN in DNS:
@@ -171,6 +179,7 @@ The administrator needs to move onto the next two sections, before considering c
 **After validating the install**, an administrator may proceed further to continue optional validations
 _or_ head to [CSM Platform Install](006-CSM-PLATFORM-INSTALL.md).
 
+<a name="apply-ncn-post-boot-workarounds"></a>
 #### Apply NCN Post-Boot Workarounds
 
 Check for workarounds in the `/var/www/ephemeral/${CSM_RELEASE}/fix/after-ncn-boot` directory.  If there are any workarounds in that directory, run those now.   Instructions are in the `README` files.
@@ -181,6 +190,7 @@ pit:~ # ls /var/www/ephemeral/${CSM_RELEASE}/fix/after-ncn-boot
 casminst-12345
 ```
 
+<a name="livecd-cluster-authentication"></a>
 #### LiveCD Cluster Authentication
 
 The LiveCD needs to authenticate with the cluster to facilitate the rest of the CSM installation.
@@ -194,6 +204,7 @@ pit:~ # mkdir ~/.kube
 pit:~ # scp ncn-m002.nmn:/etc/kubernetes/admin.conf ~/.kube/config
 ```
 
+<a name="bgp-routing"></a>
 #### BGP Routing
 
 After the NCNs are booted, the BGP peers will need to be checked and updated if the neighbor IPs are incorrect on the switches. See the doc to [Check and Update BGP Neighbors](400-SWITCH-BGP-NEIGHBORS.md).
@@ -204,6 +215,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 
 > **`NOTE`**: At this point all but possibly one of the peering sessions with the BGP neighbors should be in IDLE or CONNECT state and not ESTABLISHED state.   If the switch is an Aruba, you will have one peering session established with the other switch.  You should check that all of the neighbor IPs are correct.
 
+<a name="validation"></a>
 #### Validation
 
 The following command will run a series of remote tests on the storage nodes to validate they are healthy and configured correctly.
@@ -222,6 +234,7 @@ Observe the output of the checks and note any failures, then remediate them.
 > **`NOTE`** The **administrator may proceed to the [CSM Platform Install](006-CSM-PLATFORM-INSTALL.md) guide
 > at this time.** The optional validation may have differing value in various install contexts.  
 
+<a name="optional-validation"></a>
 #### Optional Validation
 
 These tests are for sanity checking. These exist as software reaches maturity, or as tests are worked
@@ -238,6 +251,7 @@ new tests.**
 3. Verify that all the pods in the kube-system namespace are running
 4. Verify that the ceph-csi requirements are in place (see [CEPH RSI](066-CEPH-RSI.md))
 
+<a name="change-password"></a>
 ## Change Password
 
 > **`EXTERNAL USE`** Internally this may be skipped based on context.
