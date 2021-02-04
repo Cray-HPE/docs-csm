@@ -1,28 +1,35 @@
-# Firmware
+# Node Firmware
 
-## NCNs
+Firmware and BIOS updates may be necessary before an install can start.
 
-Firmware is not updated during fresh-install. The bootstrap environment has capacity to upgrade, but it is more imperitive to standup services for a autonomy from the liveCD.
+During runtime, firmware is upgraded using FAS.
 
-NCN firmware is updated following install by various firmware update services in the management plane (i.e. FAS). This can be done after the platform is online, after rebooting from the LiveCD.
+New systems, or systems upgrading from prior versions of shasta, must meet the minimum specs defined in these pages:
+- [Network Firmware](251-FIRMWARE-NETWORK.md)
+- [Node Firmware](252-FIRMWARE-NODE.md)
 
-Firmware upgrades while the LiveCD is in flight can be done, but are not part of the normal install flow. This is seen as triage, or recovery
+> **`NOTE`** Only network devices and non-compute nodes upgrade firmware prior to a shasta-1.4.x install or upgrade. Other devices, such as compute nodes, provision upgrades from [FAS](#firmware-action-service-for-runtime).
 
-## CNs (compute)
+## LiveCD Availability for Bootstrap
 
-Firmware needs to be updated prior to install through the same services used for NCNs.
+The LiveCD serves firmware for bootstrapping devices and servers to enable a CRAY install.
 
-## Management Switches
+Devices can use SCP or HTTP to fetch firmware from the LiveCD USB stick, or from the remote ISO.
 
-Firmware needs to be updated prior to install.
+- http://pit/fw/
+- http://pit.nmn/fw/
+- http://pit.hmn/fw/
+- http://pit.can/fw/
+- `scp://<username>:<password>@pit/var/www/fw/`
 
-| Vendor | Model | Version	|
-| --- | --- | ---| --- | --- | --- | --- |
-| Aruba | 6300 | ArubaOS-CX_6400-6300_10.06.0010 |
-| Aruba | 8320 | ArubaOS-CX_8320_10.06.0010 |
-| Aruba | 8325 | ArubaOS-CX_8325_10.06.0010 |
-| Dell | S3048-ON | 10.5.1.4 |
-| Dell | S4148F-ON | 10.5.1.4 |
-| Dell | S4148T-ON | 10.5.1.4 |
-| Mellanox | MSN2100 | 3.9.1014 |
-| Mellanox | MSN2700 | 3.9.1014 |
+> Any interface of the LiveCD may be used in place of the above DNS names.
+
+## Firmware Action Service for Runtime
+
+The Firmware Action Service (FAS) tracks and performs actions (upgrade, downgrade, restore, create.snapshot) on system firmware.
+
+FAS is a runtime service deployed in Kubernetes.
+
+#### Fresh Install
+
+Fresh installs on bare-metal use FAS for upgrading compute node firmware.

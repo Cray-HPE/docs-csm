@@ -17,9 +17,9 @@ CSI bgp peers argument.
 ```
 
 # Automated Process
-- There is an automated script to update the BGP configuration on both the Mellanox and Aruba switches.  This script is located on the liveCD at ```/root/bin```
-- The scripts are named ```mellanox_set_bgp_peers.py``` and ```aruba_set_bgp_peers.py```
-- This script pulls in data from CSI generated .yaml files. The files required are ```CAN.yaml, HMN.yaml, HMNLB.yaml, NMNLB.yaml, NMN.yaml```
+- There is an automated script to update the BGP configuration on both the Mellanox and Aruba switches.  This script is installed into the `$PATH` by the `metal-net-scripts` package
+- The scripts are named `mellanox_set_bgp_peers.py` and `aruba_set_bgp_peers.py`
+- These scripts pull in data from CSI generated `.yaml` files. The files required are ```CAN.yaml, HMN.yaml, HMNLB.yaml, NMNLB.yaml, NMN.yaml```, these exist in the `networks/` subdirectory of the generated configs.
 ```
 USAGE: - <Spine01/Agg01> <Spine02/Agg02> <Path to CSI generated network files>
 

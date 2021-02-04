@@ -22,9 +22,9 @@ In 1.4, the site connections that were previously connection to ncn-w001 will be
 
    ```bash
    username=''
-   password=''
    bmcaddr=''
-   ipmitool -I lanplus -U $username -P $password -H $bmcaddr sol activate
+   export IPMI_PASSWORD=''
+   ipmitool -I lanplus -U $username -E -H $bmcaddr sol activate
    ``` 
 
    Set the new static em1 IP address in `/etc/sysconfig/network/ifcfg-em1`.  Replace `172.30.XX.XX` with the `em1` IP for your system.
@@ -99,15 +99,15 @@ In 1.4, the site connections that were previously connection to ncn-w001 will be
 
     Use ipmitool from ncn-m001 to shutdown all of the NCNs other than ncn-m001 and ncn-w001.
 
-    ``` bash
-    username=''
-    password=''
-    for i in m002 m003 w002 w003 s001 s002 s003;do ipmitool -I lanplus -U $username -P $password -H ncn-${i}-mgmt chassis power off;done
-    ```
+   ```bash
+   username=root
+   export IPMI_PASSWORD=
+   grep -oE $stoken /etc/dnsmasq.d/statics.conf | xargs -i ipmitool -I lanplus -U $username -E -H {} power off
+   ```
 
     If you found an IP in step 3e, use ipmitool from ncn-m001 to power off ncn-w001.  
 
     If you did not find an IP in step 3e or you cannot access that IP, then SSH to ncn-w001 from ncn-m001 and execute `shutdown -h now`.   Make sure you have moved anything you need from ncn-w001 because we will not have access to bring it back up until we bring up another DHCP server on the LiveCD.
 
 
-You can now go back to [LiveCD Creation](002-LIVECD-CREATION.md)
+You can now go back to [LiveCD Creation](002-CSM-INSTALL.md)

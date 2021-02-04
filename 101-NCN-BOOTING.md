@@ -16,30 +16,50 @@ Two ways, one may be easier depending on your env.
 
 ### How can I reset/configure the default boot order?
 
-Easily confiigure the default bootorder through `ipmitool`:
+Easily configure the default bootorder through `ipmitool`:
 ```bash                         
 username=root
-password=??????
+IPMI_PASSWORD=??????
 
 # ALWAYS PXE BOOT; sets a system to PXE
-ipmitool -I lanplus -U $username -P $password -H ncn-s001-mgmt chassis bootdev pxe options=efiboot,persistent
-ipmitool -I lanplus -U $username -P $password -H ncn-s002-mgmt chassis bootdev pxe options=efiboot,persistent
-ipmitool -I lanplus -U $username -P $password -H ncn-s003-mgmt chassis bootdev pxe options=efiboot,persistent
-ipmitool -I lanplus -U $username -P $password -H ncn-m001-mgmt chassis bootdev pxe options=efiboot,persistent
-ipmitool -I lanplus -U $username -P $password -H ncn-m002-mgmt chassis bootdev pxe options=efiboot,persistent
-ipmitool -I lanplus -U $username -P $password -H ncn-m003-mgmt chassis bootdev pxe options=efiboot,persistent
-ipmitool -I lanplus -U $username -P $password -H ncn-w003-mgmt chassis bootdev pxe options=efiboot,persistent
-ipmitool -I lanplus -U $username -P $password -H ncn-w002-mgmt chassis bootdev pxe options=efiboot,persistent
+ipmitool -I lanplus -U $username -E -H ncn-s001-mgmt chassis bootdev pxe options=efiboot,persistent
+ipmitool -I lanplus -U $username -E -H ncn-s002-mgmt chassis bootdev pxe options=efiboot,persistent
+ipmitool -I lanplus -U $username -E -H ncn-s003-mgmt chassis bootdev pxe options=efiboot,persistent
+ipmitool -I lanplus -U $username -E -H ncn-m001-mgmt chassis bootdev pxe options=efiboot,persistent
+ipmitool -I lanplus -U $username -E -H ncn-m002-mgmt chassis bootdev pxe options=efiboot,persistent
+ipmitool -I lanplus -U $username -E -H ncn-m003-mgmt chassis bootdev pxe options=efiboot,persistent
+ipmitool -I lanplus -U $username -E -H ncn-w003-mgmt chassis bootdev pxe options=efiboot,persistent
+ipmitool -I lanplus -U $username -E -H ncn-w002-mgmt chassis bootdev pxe options=efiboot,persistent
 
 # ONE TIME BOOT INTO DISK; rebooting again will PXE; can run this everytime to reboot to disk for developers.
-ipmitool -I lanplus -U $username -P $password -H ncn-s001-mgmt chassis bootdev disk options=efiboot
-ipmitool -I lanplus -U $username -P $password -H ncn-s002-mgmt chassis bootdev disk options=efiboot
-ipmitool -I lanplus -U $username -P $password -H ncn-s003-mgmt chassis bootdev disk options=efiboot
-ipmitool -I lanplus -U $username -P $password -H ncn-m001-mgmt chassis bootdev disk options=efiboot
-ipmitool -I lanplus -U $username -P $password -H ncn-m002-mgmt chassis bootdev disk options=efiboot
-ipmitool -I lanplus -U $username -P $password -H ncn-m003-mgmt chassis bootdev disk options=efiboot
-ipmitool -I lanplus -U $username -P $password -H ncn-w003-mgmt chassis bootdev disk options=efiboot
-ipmitool -I lanplus -U $username -P $password -H ncn-w002-mgmt chassis bootdev disk options=efiboot
+ipmitool -I lanplus -U $username -E -H ncn-s001-mgmt chassis bootdev disk options=efiboot
+ipmitool -I lanplus -U $username -E -H ncn-s002-mgmt chassis bootdev disk options=efiboot
+ipmitool -I lanplus -U $username -E -H ncn-s003-mgmt chassis bootdev disk options=efiboot
+ipmitool -I lanplus -U $username -E -H ncn-m001-mgmt chassis bootdev disk options=efiboot
+ipmitool -I lanplus -U $username -E -H ncn-m002-mgmt chassis bootdev disk options=efiboot
+ipmitool -I lanplus -U $username -E -H ncn-m003-mgmt chassis bootdev disk options=efiboot
+ipmitool -I lanplus -U $username -E -H ncn-w003-mgmt chassis bootdev disk options=efiboot
+ipmitool -I lanplus -U $username -E -H ncn-w002-mgmt chassis bootdev disk options=efiboot
+```
+
+### Set BMCs to DHCP
+
+If you are reinstalling a system (otherise skip to [Next: Deploy the NCNs](#next-deploy-the-ncns), the BMCs for the NCNs may be set to static.  We check `/var/lib/misc/dnsmasq.leases` for setting up the symlinks for the artifacts each node needs to boot.  So if your BMCs are set to static, those artifacts will not get setup correctly.  You can set them back to DHCP by using a command as such:
+
+```bash
+for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
+do
+ipmitool -U username -I lanplus -H $h -P password lan set 1 ipsrc dhcp
+done
+```
+
+Some BMCs need a cold reset in order to fully pick up this change:
+
+```bash
+for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
+do
+ipmitool -U username -I lanplus -H $h -P password mc reset cold
+done
 ```
 
 ### Bootstrap

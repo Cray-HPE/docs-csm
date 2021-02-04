@@ -20,7 +20,7 @@ The docs on a customer's LiveCD should match their reality, their install should
 
 This will report the version of your installed docs:
 ```bash
-pit:~ # rpm -q docs-csm-install`
+pit:~ # rpm -q docs-csm-install
 ```
 
 ### Review and Contribution

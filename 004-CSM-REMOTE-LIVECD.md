@@ -1,14 +1,34 @@
-# LiveCD
+# LiveCD Remote ISO Install
 
-This page will assist you with configuring and activating your booted LiveCD.
+This page will assist you with configuring and activating your booted LiveCD through a remote KVM.
 
->**`IMPORTANT`** If you've arrived here with files from [002 LiveCD Creation](002-LIVECD-CREATION.md) then you can skip to [Set hostname](#set-hostname)
->**`IMPORTANT`** If you've arrived here with **without** files from [002 LiveCD Creation](002-LIVECD-CREATION.md), you may proceed using the **`MANUAL`** annotated steps. Otherwise you may go back to page [002 LiveCD Creation](002-LIVECD-CREATION.md) and see "Configuration Payload" after setting up your [site-link](#setup-the-site-link-connections).
+* [LiveCD Setup](#livecd-setup)
+    * [LiveCD Interfaces](#livecd-interfaces)
+    * [Setup the Site-Link Connection(s)](#setup-site-link-connections)
+    * [Setup Internal Connections](#setup-internal-connections)
+* [Customization](#customization)
+    * [Hostname](#hostname)
+    * [Shasta-CFG](#shasta-cfg)
+    * [Cray Site Init](#cray-site-init)
+    * [CA Certificate](#ca-certificate)
+* [Validate the LiveCD platform.](#validate-the-livecd-platform)
+  * [LiveCD Services](#livecd-services)
+  * [Configure NTP](#configure-ntp)
+  * [Validate the LiveCD Services](#validate-the-livecd-services)
+  * [Verify Outside Name Resolution](#verify-outside-name-resolution)
+    
+Attaching the ISO to the node varies by the vendor:
+- [HPE uses iLO](./062-LIVECD-VIRTUAL-ISO-BOOT.md#hpe-ilo-bmcs)
+- [Gigabyte](./062-LIVECD-VIRTUAL-ISO-BOOT.md#gigabyte-bmcs)
+- [Intel](./062-LIVECD-VIRTUAL-ISO-BOOT.md#intel-bmcs)
 
+For information on how-to remote attach an ISO, see [LiveCD ISO Boot](062-LIVECD-VIRTUAL-ISO-BOOT.md).
+
+<a name="livecd-setup"></a>
+## LiveCD Setup
+
+<a name="livecd-interfaces"></a>
 ### LiveCD Interfaces
-
-> **`SKIP IF`** you pre-populated your LiveCD with the steps in [LiveCD Creation](002-LIVECD-CREATION.md).
-> Move onto **[Set Hostname](#set-hostname)**.
 
 > Set up variables for lan0 configuration
 
@@ -24,7 +44,8 @@ pit:~ # site_nic=p1p2
 - `site_gw` The gateway address for the site network.  This will be used to set up the default gateway route on ncn-m001.
 - `site_dns` ONE of the site DNS servers.   The script does not currently handle setting more than one IP address here.
 
-#### Setup the Site-Link Connection(s)
+<a name="setup-site-link-connection(s)"></a>
+#### Setup Site-Link Connection(s)
 
 External, direct access.
 
@@ -44,6 +65,7 @@ pit:~ # /root/bin/csi-set-hostname.sh
 
 If there's an IP showing for `ip a s lan0` then you could exit your CONSOLE and return with an SSH connection (if you prefer).
 
+<a name="setup-internal-connections"></a>
 #### Setup Internal Connections
 
 Now reload the other configurations:
@@ -60,26 +82,45 @@ pit:~ # /root/bin/csi-setup-vlan002.sh $nmn_cidr
 pit:~ # /root/bin/csi-setup-vlan004.sh $hmn_cidr
 pit:~ # /root/bin/csi-setup-vlan007.sh $can_cidr
 ```
-### Set Hostname
+<a name="customization"></a>
+## Customization
 
-This will set the hostname if you did not do it in a previous section.
+<a name="hostname"></a>
+### Hostname
 
-```
-pit:~ # /root/bin/csi-set-hostname.sh
-```
-### Mount the PITDATA partition
+To prevent mistakes, naming the LiveCD can be a useful visual aide.
 
-In the latest PIT ISO the `LABEL=PITDATA /var/www/ephemeral` directory no longer mounts automatically.
+> **`NOTE`** do not confuse other administrators by neglecting the "-pit" suffix.
 
-Manually mount and verify `PITDATA` with
-
+Set the hostname with `hostnamectl`:
 ```bash
-mount -L PITDATA
-lsblk
-ls -lh /var/www/ephemeral
+pit:~ # hostnamectl set-hostname bigbird-ncn-m001-pit
 ```
 
-### Validate the LiveCD platform.
+<a name="shasta-cfg"></a>
+### Shasta-CFG
+
+> **THIS IS A STUB** There are no instructions on this page, this page is place-holder.
+
+<a name="cray-site-init"></a>
+### Cray-Site-Init
+
+> **THIS IS A STUB** There are no instructions on this page, this page is place-holder.
+
+<a name="ca-certificate"></a>
+### CA Certificate
+
+Update CA Cert on the copied `data.json` file. Provide the path to the `data.json`, the path to
+our `customizations.yaml`, and finally the `sealed_secrets.key`
+```bash
+linux# csi patch ca \
+--cloud-init-seed-file /var/www/ephemeral/configs/data.json \
+--customizations-file /var/www/ephemeral/prep/site-init/customizations.yaml \
+--sealed-secret-key-file /var/www/ephemeral/prep/site-init/certs/sealed_secrets.key
+   ```
+
+<a name="validate-the-livecd-platform."></a>
+## Validate the LiveCD platform.
 
 Check that IPs are set for each interface:
 
@@ -87,9 +128,9 @@ Check that IPs are set for each interface:
 pit:~ # csi pit validate --network
 ```
 
+<a name="livecd-services"></a>
 ### LiveCD Services
 
-> **`SKIP IF`** you pre-populated your LiveCD with the steps in [LiveCD Creation](002-LIVECD-CREATION.md).
 > Move onto **[Configure NTP](#configure-ntp)**.
 
 Copy the config files generated earlier by `csi config init` into /etc/dnsmasq.d and /etc/conman.conf.
@@ -103,7 +144,7 @@ systemctl restart dnsmasq
 systemctl start basecamp
 systemctl start nexus
 ```
-
+<a name="configure-ntp"></a>
 ### Configure NTP
 
 Start and configure NTP on the LiveCD for a fallback/recovery server:
@@ -112,6 +153,7 @@ Start and configure NTP on the LiveCD for a fallback/recovery server:
 pit:~ # /root/bin/configure-ntp.sh
 ```
 
+<a name="validate-the-livecd-services"></a>
 ### Validate the LiveCD Services
 
 Now verify service health:
@@ -128,12 +170,13 @@ csi pit validate --services
 
 You should see two containers: nexus and basecamp
 
-```
+```bash
 CONTAINER ID  IMAGE                                         COMMAND               CREATED     STATUS         PORTS   NAMES
 496a2ce806d8  dtr.dev.cray.com/metal/cloud-basecamp:latest                        4 days ago  Up 4 days ago          basecamp
 6fcdf2bfb58f  docker.io/sonatype/nexus3:3.25.0              sh -c ${SONATYPE_...  4 days ago  Up 4 days ago          nexus
 ```
 
+<a name="verify-outside-name-resolution"></a>
 ### Verify Outside Name Resolution
 
 > **`SKIP IF AIRGAP/OFFLINE`** - offline installs should skip this check entirely.
@@ -147,39 +190,4 @@ ping 8.8.8.8
 
 Now is a good time to also verify your local site docker registry, and RPM repository connectivity as well.
 
-> **`INTERNAL USE`** These URLs are important for internal testing and have no use when used outside of CRAY-HPE Labs. This is just provided as an example of relevant endpoints.
-
-You should be able to resolve outside services like arti.dev.cray.com.
-
-```bash
-# Artifactory (both are used; one is in the works of replacing the other)
-ping arti.dev.cray.com
-ping car.dev.cray.com
-
-# Docker Registry
-ping dtr.dev.cray.com
-```
-
-### Set BMCs to DHCP
-
-If you are reinstalling a system (otherise skip to [Next: Deploy the NCNs](#next-deploy-the-ncns), the BMCs for the NCNs may be set to static.  We check `/var/lib/misc/dnsmasq.leases` for setting up the symlinks for the artifacts each node needs to boot.  So if your BMCs are set to static, those artifacts will not get setup correctly.  You can set them back to DHCP by using a command as such:
-
-```bash
-for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
-do
-ipmitool -U username -I lanplus -H $h -P password lan set 1 ipsrc dhcp
-done
-```
-
-Some BMCs need a cold reset in order to fully pick up this change:
-
-```bash
-for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
-do
-ipmitool -U username -I lanplus -H $h -P password mc reset cold
-done
-```
-
-### Next: Deploy the NCNs
-
-Now you can now pass GO, collect $200, and begin the [NCN Boots](005-NCN-BOOTS.md) page...
+Now you can now pass GO, collect $200, and begin the [CSM Metal Install](005-CSM-METAL-INSTALL.md) page...
