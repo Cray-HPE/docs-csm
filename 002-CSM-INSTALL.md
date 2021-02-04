@@ -6,7 +6,7 @@ This page will prepare you for a CSM install using the LiveCD in different situa
   * [Installing onto Shasta v1.3 Systems](#installing-onto-shasta-v13-systems) for previously
   * [Installing onto Bare-metal Systems](#installing-onto-bare-metal-systems) for new machines with no
   * [Reinstalling a Shasta v1.4 System](#reinstalling-a-shasta-v14-system) for previously deployed shasta-1.4
-* [Starting an Installation](#starting-an-installation) 
+* [Starting an Installation](#starting-an-installation)
   * [Remote ISO or USB](#remote-iso-or-usb)
   deployed shasta machines.
   software.
@@ -32,7 +32,7 @@ Each item below defines a pre-requisite that must be completed on systems with e
 v1.3 (or earlier)
 installations. Optional steps are noted as such.
 
-* [Collect Shasta-1.4 Config Payload](#collect-shasta-14-config-payload) 
+* [Collect Shasta-1.4 Config Payload](#collect-shasta-14-config-payload)
   * [Upgrading BIOS and Firmware](#upgrading-bios-and-firmware)
   * [Re-cabling](#re-cabling)
     * [Site Connections](#site-connections)
@@ -72,8 +72,7 @@ The Shasta-1.3 system needs a cable check for a few connections.
 <a name="site-connections"></a>
 #### Site Connections
 
-Installs in shasta 1.4 base out of mn001 instead of wn001 (the "bis" node). Systems are required to
-upgrade their topology to match.
+Installs in Shasta v1.4 base out of mn001 instead of wn001 (the "bis" node). Systems are required to upgrade their topology to match.
 
 See [moving site connections](309-MOVE-SITE-CONNECTIONS.md) to complete this step.
 
@@ -95,18 +94,18 @@ PCIe PXE boot.
 
 > UANs and CNs do not need to power off.
 
-NCNs hosting kubernetes services need to be powered off to facilitate a 1.4 install. Wiping the node
+NCNs hosting Kubernetes services need to be powered off to facilitate a 1.4 install. Wiping the node
 will avoid boot mistakes, making the only viable option the PXE option.
 
 > Assuming [site connections](#site-connections) were updated, the administrator will need to use mn001 as
 > a jump box.
 
-Below observe using Ansible for wiping and shutting down the NCNs.
+Below, observe using Ansible for wiping and shutting down the NCNs.
 
   ```bash
   # jumpbox
   ncn-m001:~ # ssh ncn-w001
-  
+
   # wipe all other nodes and power them off
   ncn-w001:~ # ansible ncn -m shell 'wipefs --all --force /dev/sd[a-z]'
   ncn-w001:~ # ansible ncn -m shell --limit='!ncn-w001' 'ipmitool power off'
@@ -157,8 +156,7 @@ See the [Service Guides](300-SERVICE-GUIDES.md) for information regarding the th
 ### Network Configuration and Firmware
 
 To complete this step, the network configuration needs to be applied. For information on bare
-configurations, firmware, and more
-see [Management network install](401-MANAGEMENT-NETWORK-INSTALL.md).
+configurations, firmware, and more, see [Management network install](401-MANAGEMENT-NETWORK-INSTALL.md).
 
 <a name="upgrading-bios-and-firmware"></a>
 ### Upgrading BIOS and Firmware
@@ -189,7 +187,7 @@ The following pre-requisites must be completed in order to successfully reinstal
 Runtime DHCP services interfere with the LiveCD's bootstrap nature to lease to BMCs. To remove
 edge-cases, disable the run-time KEA.
 
-Scale the deployment from either the LiveCD or any kubernetes node
+Scale the deployment from either the LiveCD or any Kubernetes node
 
 ```bash
 linux:~ # kubectl scale -n services --replicas=0 cray-dhcp-kea
@@ -217,7 +215,7 @@ ipmitool power off
 <a name="powering-off"></a>
 #### Powering Off
 
-The NCNs will auto-wipe on the next install, optionally they can be powered down to minimize network
+The NCNs will auto-wipe on the next install. Optionally, they can be powered down to minimize network
 activity.
 
 Power each NCN off using `ipmitool` from m001 (or the booted LiveCD if reinstalling an incomplete
@@ -237,7 +235,7 @@ install).
     done
     ```
 
-With the nodes off you can now continue.
+With the nodes off, you can now continue.
 
 > *`Next`*: Starting an Installation
 
@@ -257,10 +255,10 @@ All installs may be done in full from a LiveCD of any supported medium.
 
 **Choose** one of the following method for install.
 
-- For installing through a remote console, click here for starting an installation with the (
-  non-persistent bootable) [CSM Remote LiveCD](004-CSM-REMOTE-LIVECD.md).
 - For preloading on a laptop or and inserting into a CRAY, click here for starting an installation
   with the (persistent bootable) [CSM USB LiveCD](003-CSM-USB-LIVECD.md).
+- For installing through a remote console, click here for starting an installation with the (
+  non-persistent bootable) [CSM Remote LiveCD](004-CSM-REMOTE-LIVECD.md).
 
 > **`NOTICE`** the remote ISO runs entirely in the systems volatile memory.
 
