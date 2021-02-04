@@ -7,7 +7,7 @@ This page will prepare you for a CSM install using the LiveCD in different situa
   * [Installing onto Bare-metal Systems](#installing-onto-bare-metal-systems) for new machines with no
   * [Reinstalling a Shasta v1.4 System](#reinstalling-a-shasta-v14-system) for previously deployed shasta-1.4
 * [Starting an Installation](#starting-an-installation)
-  * [Boot the LiveCD](#bootable-livecd-usb-stick)
+  * [Boot the LiveCD](#boot-the-livecd)
 
 <a name="install-pre-requisites"></a>
 # Install Pre-Requisites
@@ -242,7 +242,7 @@ The system is now ready for [Starting an Installation](#starting-an-installation
 
 **After finishing the pre-requisites** an installation can be started one of two ways.
 
-<a name="remote-iso-or-usb"></a>
+<a name="boot-the-livecd"></a>
 ## Boot the LiveCD
 
 All installs may be done in full from a LiveCD of any supported medium.
