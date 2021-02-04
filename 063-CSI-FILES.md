@@ -5,10 +5,6 @@ This page describes administrative knowledge around CSI's files.
 > Detailed information for collecting certain files starts in  [Service Guides](./300-SERVICE-GUIDES.md)
   
 * [Save-File / Avoiding Parameters](#save-file--avoiding-parameters)
-* [Shasta CFG](#shasta-cfg)
-    * [LDAP](#ldap)
-    * [Configuring Cray Datacenter LDAP](#configuring-cray-datacenter-ldap)
-  * [Storing in GIT (VCS)](#storing-in-git-vcs)
 * [CSI `hmn_connections.json` Notes](#csi-`hmn_connections.json`-notes)
 
 <a name="save-file--avoiding-parameters"></a>
@@ -69,84 +65,6 @@ system-name: redbull
 upstream_ntp_server: time.nist.gov
 v2-registry: https://registry.nmn/
 ```
-
-<a name="shasta-cfg"></a>
-## Shasta CFG
-
-Shasta Configs contain environment manifests for helmcharts and other deployment items through `customizations.yaml`.
-
-A bare-bones shasta-cfg framework lives in the CSM tarballs:
-
-- For new systems, follow the instructions at
-   ```bash
-   /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/docs/NEW-SYSTEM.md
-   ```
-- Existing systems, follow
-   ```bash
-   /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/docs/UPDATE-SYSTEM.md
-   ```
-
-<a name="ldap"></a>
-#### LDAP
-
-When using TLS for LDAP, update the `cray-keycloak` sealed secret value by supplying a **base64 encoded** form of your CA certificate(s). You can use the `keytool` command and a PEM-encoded form of your certificate(s) to obtain this value, as follows:
-
-  ```bash
-  linux# keytool -importcert -trustcacerts -file myad-pub-cert.pem -alias myad -keystore certs.jks -storepass password -noprompt
-  linux# cat certs.jks | base64
-  ```
-
-<a name="configuring-cray-datacenter-ldap"></a>
-#### Configuring Cray Datacenter LDAP
-
-This is an **`INTERNAL`** process to configure our dev systems to use LDAP for users and groups.
-
-Add or change the `keycloak_users_localize` sealed secret in the `customizations.yaml` file for the system:
-
-```yaml
-spec:
-  kubernetes:
-    sealed_secrets:
-      keycloak_users_localize:
-        generate:
-          name: keycloak-users-localize
-          data:
-          - type: static
-            args:
-              name: ldap_connection_url
-              value: ldap://172.30.79.134
-```
-
-Run `utils/secrets-seed-customizations.sh customizations.yaml` to generate the encrypted value.
-
-Configure non-secret options by adding the following fields to the `cray-keycloak-users-localize` chart customizations:
-
-```yaml
-spec:
-  kubernetes:
-    services:
-      cray-keycloak-users-localize:
-        ldapSearchBase: "dc=datacenter,dc=cray,dc=com"
-        localRoleAssignments:
-        - {"group": "criemp", "role": "admin", "client": "shasta"}
-        - {"group": "criemp", "role": "admin", "client": "cray"}
-        - {"group": "craydev", "role": "admin", "client": "shasta"}
-        - {"group": "craydev", "role": "admin", "client": "cray"}
-        - {"group": "shasta_admins", "role": "admin", "client": "shasta"}
-        - {"group": "shasta_admins", "role": "admin", "client": "cray"}
-        - {"group": "shasta_users", "role": "user", "client": "shasta"}
-        - {"group": "shasta_users", "role": "user", "client": "cray"}
-```
-
-<a name="storing-in-git-vcs"></a>
-#### Storing in GIT (VCS)
-
-If one is to store their SHASTA-CFG repository in git, it is a good practice to include the CSM release version in associated commit messages, e.g:
-
-  ```bash
-  linux# git commit -m "Updated to $(/mnt/pitdata/${CSM_RELEASE}/lib/version.sh)"
-  linux# git push -u origin master
-  ```
 
 <a name="csi-`hmn_connections.json`-notes"></a>
 ### CSI `hmn_connections.json` Notes
