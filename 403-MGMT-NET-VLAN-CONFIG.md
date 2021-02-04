@@ -10,6 +10,8 @@
 At this point we should have access to the switches.
 We will start by adding all the VLANS required by the Shasta system.
 **Cray Site Init (CSI) generates the IPs used by the system, below are samples only.**
+Some switches will NOT need the CAN(VLAN7), most of the time this IP is only located on the Spine for external connectivity.
+
 The River Cabinets will need the following VLANs
 
 | VLAN | Switch1 IP | Switch2 IP	| Active Gateway | Purpose |
