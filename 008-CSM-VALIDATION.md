@@ -75,7 +75,7 @@ The ncnHealthChecks script reports the following health information:
 * NCN node uptimes
 * Pods yet to reach the running state
 
-Execute ncnHealthChecks script and analize the output of each individual check.
+Execute ncnHealthChecks script and analyze the output of each individual check.
 
 Verify that Border Gateway Protocol (BGP) peering sessions are established for each worker node on the system. See CSM Health Checks section of the Admin Guide.
 
