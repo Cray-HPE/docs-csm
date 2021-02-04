@@ -12,9 +12,9 @@ heuristics:
     [XYZ]-[context]-[memo].md
 
 Examples:
-    - `010-UAN-DEPLOY.md`
-    - `040-CN-DISCOVERY.md`
-    - `333-LIVCD-RECOVERY-GUIDE.md`
+* `010-UAN-DEPLOY.md`
+* `040-CN-DISCOVERY.md`
+* `333-LIVCD-RECOVERY-GUIDE.md`
 
 # Annotations
 
