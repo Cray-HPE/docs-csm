@@ -1,6 +1,5 @@
-# CSM Validation
-
-This page will guide you through validating the CSM install. 
+# CSM Install Validation & Health Checks
+This page lists available CSM install and health checks that can be executed to validate the CSM install. They can be run anytime after the install has completed.
 
 ## CMS
 
@@ -52,4 +51,43 @@ Run the HMS smoke tests. If no failures occur, then run the HMS functional tests
 
 ## PET
 
-> **THIS IS A STUB** There are no instructions on this page, this page is place-holder.
+### Platform Health Checks
+
+Scripts do not verify results. Script output includes analysis needed to determine pass/fail for each check. All health checks are expected to pass.
+Health Check scripts can be run:
+* after install.sh has been run – not before
+* before and after one of the NCN's reboot
+* after the system or a single node goes down unexpectedly
+* after the system is gracefully shut down and brought up
+* any time there is unexpected behavior on the system to get a baseline of data for CSM services and components
+* in order to provide relevant information to support tickets that are being opened after sysmgmt manifest has been installed
+
+Health Check scripts can be found and run on any worker or master node from any directory.
+
+#### ncnHealthChecks
+     /opt/cray/platform-utils/ncnHealthChecks.sh
+The ncnHealthChecks script reports the following health information:
+* Kubernetes status for master and worker NCNs
+* Ceph health status
+* Health of etcd clusters
+* Number of pods on each worker node for each etcd cluster
+* List of automated etcd backups for the Boot Orchestration Service (BOS),  Boot Script Service (BSS), Compute Rolling Upgrade Service (CRUS), and Domain Name Service (DNS)
+* NCN node uptimes
+* Pods yet to reach the running state
+
+Execute ncnHealthChecks script and analize the output of each individual check.
+
+Verify that Border Gateway Protocol (BGP) peering sessions are established for each worker node on the system. See CSM Health Checks section of the Admin Guide.
+
+#### ncnPostgresHealthChecks
+     /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
+For each postgres cluster the ncnPostgresHealthChecks script determines the leader pod and then reports the status of all postgres pods in the cluster. 
+
+Execute ncnPostgresHealthChecks script. Verify leader for each cluster and status of cluster members.
+
+### Shasta Health Services - Prometheus
+In a browser access https://prometheus.NAMEofSYSTEM.dev.cray.com/
+Select the Alerts tab to view current alerts.
+
+Pay attention to any KubeCronJobRunning alerts. Unexpected behavior on the system can result if cron jobs are not firing appropriately. See the System Management Health Architecture section of the Admin Guide for more information about system management monitoring. 
+
