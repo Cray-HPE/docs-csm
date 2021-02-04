@@ -1,4 +1,3 @@
-<a name="SHASTA-CFG"></a>
 # SHASTA-CFG
 
 SHASTA-CFG is a distinct repository of relatively static, installation-centric artifacts, including:
