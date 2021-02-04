@@ -30,9 +30,10 @@ sw-smn01(config)# no routing
 sw-smn01(config)# vlan access 2
 ```
 
-- UAN port configuration
-- For 1.4 UANs are going to be only using a single port.
-- UANs connected to Mellanox switches went over a bonded switch configuration in 1.3, we did not see any issues with this so we are keeping that configuraiton for 1.4.
+# UAN port configuration
+- UANs are going to have the same network connections as shasta 1.3.
+- One connection will go to a NMN(VLAN2) access port, this is where the UAN will pxe boot and communicate with internal systems. (see SHCD for UAN cabling).
+- One Bond (two connections) will be going to the MLAG/VSX pair of switches. This will be an access port for the CAN connection.
 
 Aruba Configuration
 ```
