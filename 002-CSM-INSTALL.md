@@ -7,10 +7,7 @@ This page will prepare you for a CSM install using the LiveCD in different situa
   * [Installing onto Bare-metal Systems](#installing-onto-bare-metal-systems) for new machines with no
   * [Reinstalling a Shasta v1.4 System](#reinstalling-a-shasta-v14-system) for previously deployed shasta-1.4
 * [Starting an Installation](#starting-an-installation)
-  * [Remote ISO or USB](#remote-iso-or-usb)
-  deployed shasta machines.
-  software.
-  machines.
+  * [Boot the LiveCD](#boot-the-livecd)
 
 <a name="install-pre-requisites"></a>
 # Install Pre-Requisites
@@ -133,15 +130,12 @@ Each item below defines a pre-requisite necessary for a bare-metal installation 
 <a name="livecd-setup"></a>
 ### LiveCD Setup
 
-The LiveCD will be exceedingly useful for bare-metal work. A lab user or system administrator may
-remotely attach the LiveCD or use a bootable USB stick.
+A 1TB USB3.0 USB stick will be required in order to create a bootable LiveCD.
 
 The LiveCD itself can be used out-of-the-box, and with only a little configuration it can serve for
 the various bare-metal pre-req tasks.
 
-See **[LiveCD Quick Setup](062-LIVECD-VIRTUAL-ISO-BOOT.md)** for either remote ISO path, this is useful for exploring a new system
-quickly. Other lab users may prefer a bootable USB stick to enable persistence, and for bringing
-artifacts for firmware updates.
+Experimental - See **[LiveCD Quick Setup](062-LIVECD-VIRTUAL-ISO-BOOT.md)** for either remote ISO path, this is useful for exploring a new system quickly. Other lab users may prefer a bootable USB stick to enable persistence, and for bringing artifacts for firmware updates.
 
 Once you are booted into a LiveCD, proceed onto the next pre-requisite steps for bare-metal.
 
@@ -248,15 +242,15 @@ The system is now ready for [Starting an Installation](#starting-an-installation
 
 **After finishing the pre-requisites** an installation can be started one of two ways.
 
-<a name="remote-iso-or-usb"></a>
-## Remote ISO or USB
+<a name="boot-the-livecd"></a>
+## Boot the LiveCD
 
 All installs may be done in full from a LiveCD of any supported medium.
 
-**Choose** one of the following method for install.
-
 - For preloading on a laptop or and inserting into a CRAY, click here for starting an installation
   with the (persistent bootable) [CSM USB LiveCD](003-CSM-USB-LIVECD.md).
+
+*Experimental*
 - For installing through a remote console, click here for starting an installation with the (
   non-persistent bootable) [CSM Remote LiveCD](004-CSM-REMOTE-LIVECD.md).
 
