@@ -1,13 +1,13 @@
 # Management Network Layer3 Configuration
 
-This page describes how to configure the layer 3 routing between the CDU switches and the Spine/Leaf switches.
+This page describes how to configure the layer 3 routing between the CDU switches and the Spine/Leaf switches. 
 
 # Requirements
 
 - Access to all of the switches
 - SHCD available
 
-# Configuration
+# Aruba Configuration
 
 At this point you should be able to ping the CDU switches on their VLAN 2 and VLAN 4 interfaces.
 We will need to setup routing so the compute nodes can communicate with k8s.
@@ -76,4 +76,12 @@ Neighbor ID      Priority  State             Nbr Address       Interface
 10.252.0.3       1         FULL/DROther      10.254.0.3         vlan4          
 
 10.252.0.5       1         FULL/BDR          10.254.0.5         vlan4 
+```
+
+# Aruba Static route
+This route is needed for consistent PXE booting on Aruba switches.
+The second IP ```10.252.1.10``` will be a worker node.  Here we are using worker 1. 
+```
+ip route 10.92.100.60/32 10.252.1.10
+ip route 10.94.100.60/32 10.252.1.10
 ```

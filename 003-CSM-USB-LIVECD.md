@@ -29,7 +29,7 @@ Fetch the base installation tarball and extract it, installing the contained CSI
    linux# cd ~
    linux# export ENDPOINT=https://arti.dev.cray.com/artifactory/shasta-distribution-stable-local/csm/
    linux# export CSM_RELEASE=csm-x.y.z
-   linux# wget ${ENDPOINT}/${CSM_RELEASE}.tar.gzg
+   linux# wget ${ENDPOINT}/${CSM_RELEASE}.tar.gz
    ```
 
 2. Expand the CSM software release:
@@ -93,7 +93,7 @@ which device that is.
 
 4.  Copy and extract the tarball (compressed) into the USB:
     ```bash
-    linux# cp -r ~/${CSM_RELEASE}.tar.gz -C /mnt/pitdata/
+    linux# cp -r ~/${CSM_RELEASE}.tar.gz /mnt/pitdata/
     linux# tar -zxvf ~/${CSM_RELEASE}.tar.gz -C /mnt/pitdata/
     ```
 
@@ -250,7 +250,7 @@ This will enable SSH, and other services when the LiveCD starts.
     linux# umount /mnt/cow    
     ```
 
-3. Make directories needed for basecamp and the squashfs images
+3. Make directories needed for basecamp (cloud-init) and the squashFS images
 
     ```bash
     linux# mkdir -p /mnt/pitdata/configs/
