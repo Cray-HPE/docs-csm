@@ -140,6 +140,21 @@ CASMINST-980
    ```
    > **`NOTE`**: All consoles are located at `/var/log/conman/console*`
 
+If the nodes are booted without a hostname or they didn't run all their cloud-init scripts the following commands need to be ran.
+```
+/srv/cray/scripts/metal/set-dhcp-to-static.sh
+```
+After this you should have network connectivity.
+Then you will run.
+```
+cloud-init clean
+cloud-init init
+cloud-init modules -m init
+cloud-init modules -m config
+cloud-init modules -m final
+```
+This should pull all the required cloud-init data for the NCN to join the cluster.
+
 6. Boot **Kubernetes Managers and Workers**
    ```bash
    username=root
