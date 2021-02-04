@@ -13,8 +13,11 @@ This page will assist you with configuring and activating your booted LiveCD thr
     * [CA Certificate](#ca-certificate)
 * [Validate the LiveCD platform.](#validate-the-livecd-platform)
   * [LiveCD Services](#livecd-services)
+    * [Configure Nexus Proxy to Upstream Registry](#configure-nexus-proxy)
+    * [Start Nexus](#start-nexus)
   * [Configure NTP](#configure-ntp)
   * [Validate the LiveCD Services](#validate-the-livecd-services)
+  * [Upload Container Images to Nexus Registry](#upload-container-images)
   * [Verify Outside Name Resolution](#verify-outside-name-resolution)
     
 Attaching the ISO to the node varies by the vendor:
@@ -82,6 +85,7 @@ pit:~ # /root/bin/csi-setup-vlan002.sh $nmn_cidr
 pit:~ # /root/bin/csi-setup-vlan004.sh $hmn_cidr
 pit:~ # /root/bin/csi-setup-vlan007.sh $can_cidr
 ```
+
 <a name="customization"></a>
 ## Customization
 
@@ -142,8 +146,40 @@ cp /var/www/ephemeral/prep/${system_name}/basecamp/* /var/www/ephemeral/configs/
 systemctl restart conman
 systemctl restart dnsmasq
 systemctl start basecamp
+```
+
+<a name=”configure-nexus-proxy”></a>
+#### Configure Nexus Proxy to Upstream Registry
+
+> **`SKIP IF AIRGAP/OFFLINE`** - Online installs require a URL to the proxied registry.
+
+The default configuration sets up the Nexus registry on the LiveCD as `type:
+hosted` and container images must be imported (see below). In order to proxy
+container images from an upstream registry, add the corresponding URL to the
+`ExecStartPost` script in /usr/lib/systemd/system/nexus.service. For example,
+Cray internal systems may want to proxy to https://dtr.dev.cray.com as follows:
+
+```bash
+pit:~ # URL=https://dtr.dev.cray.com
+pit:~ # sed -e "s,^\(ExecStartPost=/usr/sbin/nexus-setup.sh\).*$,\1 $URL," -i /usr/lib/systemd/system/nexus.service
+```
+
+Note: In order to change the configuration of Nexus on the LiveCD, you’ll need
+to first `systemctl stop nexus`, verify the `nexus` pod is removed using
+`podman ps -a`, and then delete the `nexus-data` volume via `podman volume rm
+nexus-data`. Once the configuration change has been made (e.g., the addition or
+removal of a proxy URL) then nexus may be restarted (see next).
+
+<a name=”start-nexus”></a>
+#### Start Nexus
+
+Start Nexus on the LiveCD in order to provide a container registry for
+bootstrapping critical platform services on Kubernetes.
+
+```bash
 systemctl start nexus
 ```
+
 <a name="configure-ntp"></a>
 ### Configure NTP
 
@@ -174,6 +210,37 @@ You should see two containers: nexus and basecamp
 CONTAINER ID  IMAGE                                         COMMAND               CREATED     STATUS         PORTS   NAMES
 496a2ce806d8  dtr.dev.cray.com/metal/cloud-basecamp:latest                        4 days ago  Up 4 days ago          basecamp
 6fcdf2bfb58f  docker.io/sonatype/nexus3:3.25.0              sh -c ${SONATYPE_...  4 days ago  Up 4 days ago          nexus
+```
+
+<a name=”upload-container-images”></a>
+### Upload Container Images to Nexus Registry
+
+> **`SKIP IF ONLINE`** - Online installs cannot upload container images to the
+> registry since it proxies an upstream source.
+
+First, verify that Nexus is ready: (any HTTP response other than `200 OK`
+indicates Nexus is not ready)
+
+```bash
+pit:~ # curl -sSif http://localhost:8081/service/rest/v1/status/writable
+HTTP/1.1 200 OK
+Date: Thu, 04 Feb 2021 05:27:44 GMT
+Server: Nexus/3.25.0-03 (OSS)
+X-Content-Type-Options: nosniff
+Content-Length: 0
+
+```
+
+Load the skopeo image installed by the cray-nexus RPM:
+
+```bash
+pit:~ # podman load -i /var/lib/cray/container-images/cray-nexus/skopeo-stable.tar
+```
+
+Use `skopeo sync` to upload container images from the CSM release:
+
+```bash
+pit:~ # podman run --rm --network host -v /var/www/ephemeral/${CSM_RELEASE}/docker/dtr.dev.cray.com:/images:ro quay.io/skopeo/stable sync --scoped --src dir --dest docker --dest-tls-verify=false --dest-creds admin:admin123 /images localhost:5000
 ```
 
 <a name="verify-outside-name-resolution"></a>
