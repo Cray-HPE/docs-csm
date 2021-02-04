@@ -1,4 +1,4 @@
-# CSM USB LiveCD - Creation and Configuration 
+# CSM USB LiveCD - Creation and Configuration
 
 This page will guide an administrator through creating a USB stick from either their Shasta v1.3 ncn-m001 node or their own laptop/desktop.
 
@@ -43,18 +43,18 @@ Fetch the base installation tarball and extract it, installing the contained CSI
    linux# rpm -Uvh ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
    ```
 
-The ISO and other files are now available in the extracted CSM tar. 
+The ISO and other files are now available in the extracted CSM tar.
 
 <a name="create-the-bootable-media"></a>
 ## Create the Bootable Media
 
-Cray Site Init will create the bootable LiveCD. Before creating the media, we need to identify 
+Cray Site Init will create the bootable LiveCD. Before creating the media, we need to identify
 which device that is.
 
 1. Identify the USB device.
 
     This example shows the USB device is /dev/sdd on the host.
-    
+
     ```bash
     linux# lsscsi
     [6:0:0:0]    disk    ATA      SAMSUNG MZ7LH480 404Q  /dev/sda
@@ -66,13 +66,13 @@ which device that is.
     In the above example, we can see our internal disks as the `ATA` devices and our USB as the `disk` or `enclsou` device. Since the `SanDisk` fits the profile we're looking for, we are going to use `/dev/sdd` as our disk.
 
     Set a variable with your disk to avoid mistakes:
-    
+
     ```bash
     linux# export USB=/dev/sdd  
     ```
 
 2. Format the USB device
-   
+
     On Linux using the CSI application:
     ```bash
     linux# csi pit format $USB ~/${CSM_RELEASE}/cray-pre-install-toolkit-*.iso 50000
@@ -91,13 +91,13 @@ which device that is.
     linux# mount -L cow /mnt/cow && mount -L PITDATA /mnt/pitdata
     ```
 
-4.  Copy and extract the tarball (compressed0 into the USB:
+4.  Copy and extract the tarball (compressed) into the USB:
     ```bash
     linux# cp -r ~/${CSM_RELEASE}.tar.gz -C /mnt/pitdata/
     linux# tar -zxvf ~/${CSM_RELEASE}.tar.gz -C /mnt/pitdata/
     ```
 
-The USB stick now bootable and contains our artifacts. This may be useful for internal or quick usage. Administrators seeking a shasta installation must continue onto the [configuration payload](#configuration-payload).
+The USB stick now bootable and contains our artifacts. This may be useful for internal or quick usage. Administrators seeking a Shasta installation must continue onto the [configuration payload](#configuration-payload).
 
 <a name="configuration-payload"></a>
 ## Configuration Payload
@@ -176,7 +176,7 @@ After gathering the files into the working directory, generate your configs:
    shasta_system_configs
    switch_metadata.csv
    system_config.yaml
-   
+
    # Generating system configuration.
    linux# csi config init
    ```
@@ -211,7 +211,7 @@ After gathering the files into the working directory, generate your configs:
        --install-ncn-bond-members p1p1,p10p1
    ```
 
-A new directory matcing your `--system-name` argument will now exist in your working directory.
+A new directory matching your `--system-name` argument will now exist in your working directory.
 
 <a name="pre-populate-livecd-daemons-configuration-and-ncn-arti"></a>
 ## Pre-Populate LiveCD Daemons Configuration and NCN Artifacts
@@ -249,7 +249,8 @@ This will enable SSH, and other services when the LiveCD starts.
     ```bash
     linux# umount /mnt/cow    
     ```
-3. Add the cloud-init meta-data file 
+
+3. Make directories needed for basecamp and the squashfs images
 
     ```bash
     linux# mkdir -p /mnt/pitdata/configs/
@@ -268,7 +269,7 @@ This will enable SSH, and other services when the LiveCD starts.
     linux# csi patch ca \
     --cloud-init-seed-file /var/www/ephemeral/configs/data.json \
     --customizations-file /var/www/ephemeral/prep/site-init/customizations.yaml \
-    --sealed-secret-key-file /var/www/ephemeral/prep/site-init/certs/sealed_secrets.key 
+    --sealed-secret-key-file /var/www/ephemeral/prep/site-init/certs/sealed_secrets.key
    ```
 6. Copy k8s artifacts:
     ```bash
@@ -315,7 +316,7 @@ If an administrator is rebooting a node into the LiveCD, vs booting a bare-metal
 
 On first login (over SSH or at local console) the LiveCD will prompt the administrator to change the password.
 
-1. **The initial password is empty**; set the username of `root` and press `return` twice: 
+1. **The initial password is empty**; set the username of `root` and press `return` twice:
 
    ```bash
    pit login: root
@@ -326,10 +327,10 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    New password:       <------- type new password
    Retype new password:<------- retype new password
    Welcome to the CRAY Prenstall Toolkit (LiveOS)
-   
+
    Offline CSM documentation can be found at /usr/share/doc/metal (version: rpm -q docs-csm-install)
    ```
-   
+
    > **`NOTE`** If this password is forgotten, it can be reset by mounting the USB stick on another computer. See [LiveCD Troubleshooting](058-LIVECD-TROUBLESHOOTING.md#root-password) for information on clearing the password.
 
 2. Mount the data partition

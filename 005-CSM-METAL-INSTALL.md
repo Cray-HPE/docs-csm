@@ -134,7 +134,7 @@ CASMINST-980
    # Print the console name
    pit:~ # conman -q | grep s001
    ncn-s001-mgmt
-   
+
    # Join the console
    pit:~ # conman -j ncn-s001-mgmt
    ```
@@ -157,7 +157,7 @@ CASMINST-980
    pit:~ # conman -j ncn-m002-mgmt
    ```
 
-8. Refer to [timing of deployments](#timing-of-deployments), after while `kubectl get nodes` should return
+8. Refer to [timing of deployments](#timing-of-deployments. After a while, `kubectl get nodes` should return
  all the managers and workers aside from the LiveCD's node.
    ```bash
    ncn-m002:~ # kubectl get nodes -o wide
@@ -230,7 +230,7 @@ Observe the output of the checks and note any failures, then remediate them.
     ```bash
     pit:~ # csi pit validate --k8s
     ```
-   
+
 > **`NOTE`** The **administrator may proceed to the [CSM Platform Install](006-CSM-PLATFORM-INSTALL.md) guide
 > at this time.** The optional validation may have differing value in various install contexts.  
 
@@ -243,7 +243,7 @@ and added into the installation repertoire.
 All validation should be taken care of by the CSI validate commands. The following checks can be
 done for sanity-checking:
 
-**Important common issues should be checked by tests, new pains in these areas should entail requests for 
+**Important common issues should be checked by tests, new pains in these areas should entail requests for
 new tests.**
 
 1. Verify all nodes have joined the cluster
@@ -259,7 +259,7 @@ new tests.**
 The NCNs are online, and their default password can now be customized. For details on changing
 the root password, see [056 NCN Reset Passwords](056-NCN-RESET-PASSWORDS.md).
 
-> It is possible to update the password before booting NCNs, see [NCN Development](107-NCN-DEVEL.md) for more 
+> It is possible to update the password before booting NCNs, see [NCN Development](107-NCN-DEVEL.md) for more
 information.
 
 > This step is **strongly encouraged** for external/site deployments. Airgapped deployments may opt to skip this step, as well as internal CI deployments.
