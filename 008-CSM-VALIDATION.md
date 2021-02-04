@@ -1,5 +1,12 @@
 # CSM Install Validation & Health Checks
-This page lists available CSM install and health checks that can be executed to validate the CSM install. They can be run anytime after the install has completed.
+This page lists available CSM install and health checks that can be executed to validate the CSM install. They can be run anytime after the install has run to completion, but not before.
+
+Examples of when you may wish to run them are:
+* after install.sh completes
+* before and after NCN reboots
+* after the system is brought back up
+* any time there is unexpected behavior observed
+* in order to provide relevant information to support tickets
 
 ## CMS
 
