@@ -5,10 +5,10 @@ This page provides directions on constructing the `application_node_config.yaml`
 The following `hmn_connections.json` file contains 4 application nodes. When the `csi config init` command is used without a `application_node_config.yaml` file, only the application node `uan01` will be included the generated SLS input file. The other 3 application nodes will be ignored as they have unknown prefixes and will not be present in the SLS Input file.
 ```json
 [
-  {"Source":"uan01","SourceRack":"x3000","SourceLocation":"u23","DestinationRack":"x3000","DestinationLocation":"u13","DestinationPort":"j37"},
-  {"Source":"gateway01","SourceRack":"x3113","SourceLocation":"u23","DestinationRack":"x3113","DestinationLocation":"u13","DestinationPort":"j37"},
-  {"Source":"vn02","SourceRack":"x3114","SourceLocation":"u23","DestinationRack":"x3114","DestinationLocation":"u13","DestinationPort":"j37"},
-  {"Source":"login01","SourceRack":"x3115","SourceLocation":"u23","DestinationRack":"x3115","DestinationLocation":"u13","DestinationPort":"j37"}
+  {"Source":"uan01",     "SourceRack":"x3000", "SourceLocation":"u23", "DestinationRack":"x3000", "DestinationLocation":"u13", "DestinationPort":"j37"},
+  {"Source":"gateway01", "SourceRack":"x3113", "SourceLocation":"u23", "DestinationRack":"x3113", "DestinationLocation":"u13", "DestinationPort":"j37"},
+  {"Source":"vn02",      "SourceRack":"x3114", "SourceLocation":"u23", "DestinationRack":"x3114", "DestinationLocation":"u13", "DestinationPort":"j37"},
+  {"Source":"login02",   "SourceRack":"x3115", "SourceLocation":"u23", "DestinationRack":"x3115", "DestinationLocation":"u13", "DestinationPort":"j37"}
 ]
 ```
 
@@ -37,7 +37,7 @@ aliases:
   x3114c0s23b0n0: ["visualization-02", "vn-02"]
 ```
 
-When the above `application_node_config.yaml` file is used 3 application nodes (`uan01`, `gateway01`, and `vn02`) will included in the generated SLS input file. The `login01` application node will be ignored.
+When the above `application_node_config.yaml` file is used 3 application nodes (`uan01`, `gateway01`, and `vn02`) will included in the generated SLS input file. The `login02` application node will be ignored.
 
 The following application node configuration does not add any additional prefixes, HSM subroles, or aliases: 
 ```yaml
@@ -83,20 +83,20 @@ Example entry from the `hmn_connections.json` file. The source name is the `Sour
     prefixes: # Additional application node prefixes
       - gateway
       - vn
-      - login # New prefix. Match source names that start with "login", such as login01 
+      - login # New prefix. Match source names that start with "login", such as login02
     ```
 
 2. __Add HSM SubRoles for Application node prefixes__
 
-    The `prefix_hsm_subroles` field mapping application node prefix (string) to the applicable Hardware State Manager (HSM) SubRole (string) for the application nodes. All applications nodes have the HSM Role of `Application`, and the SubRole value can be used to label what type of the application node it is (such as UAN, Login, Gateway, etc...).
+    The `prefix_hsm_subroles` field mapping application node prefix (string) to the applicable Hardware State Manager (HSM) SubRole (string) for the application nodes. All applications nodes have the HSM Role of `Application`, and the SubRole value can be used to label what type of the application node it is (such as UAN, Gateway, etc...).
 
     By default, the `csi config init` command will use the following SubRoles for application nodes:
 
      Prefix | HSM Subrole 
      ------ | ----------- 
      uan    | UAN         
+     ln     | UAN       
      gn     | Gateway     
-     ln     | Login       
 
     To add additional HSM SubRole for a given prefix add a new mapping under the `prefix_hsm_subroles` field. Where the key is the application node prefix and the value is the HSM SubRole.
     ```yaml
@@ -104,7 +104,7 @@ Example entry from the `hmn_connections.json` file. The source name is the `Sour
     prefix_hsm_subroles:
       gateway: Gateway
       vn: Visualization
-      login: Login # Application nodes that have the non-default prefix "login" are assigned the HSM SubRole "Login"
+      login: UAN # Application nodes that have the non-default prefix "login" are assigned the HSM SubRole "UAN"
     ```
 
 3. __Add Application node aliases__
@@ -120,5 +120,5 @@ Example entry from the `hmn_connections.json` file. The source name is the `Sour
     aliases: # Application Node alias 
       x3113c0s23b0n0: ["gateway-01"]
       x3114c0s23b0n0: ["visualization-02", "vn-02"]
-      x3115c0s23b0n0: ["login-01"] # Added alias for the login application node with the xname x3115c0s23b0n0
+      x3115c0s23b0n0: ["uan-02"] # Added alias for the application node with the xname x3115c0s23b0n0
     ```
