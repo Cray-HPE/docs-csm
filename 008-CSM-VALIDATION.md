@@ -86,7 +86,8 @@ For each postgres cluster the ncnPostgresHealthChecks script determines the lead
 Execute ncnPostgresHealthChecks script. Verify leader for each cluster and status of cluster members.
 
 ### Shasta Health Services - Prometheus
-In a browser access https://prometheus.NAMEofSYSTEM.dev.cray.com/
+In a browser access https://prometheus.SYSTEM_DOMAIN_NAME/ 
+For example: https://prometheus.NAMEofSYSTEM.dev.cray.com/
 Select the Alerts tab to view current alerts.
 
 Pay attention to any KubeCronJobRunning alerts. Unexpected behavior on the system can result if cron jobs are not firing appropriately. See the System Management Health Architecture section of the Admin Guide for more information about system management monitoring. 
