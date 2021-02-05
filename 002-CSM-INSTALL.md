@@ -69,7 +69,7 @@ The Shasta-1.3 system needs a cable check for a few connections.
 <a name="site-connections"></a>
 #### Site Connections
 
-Installs in Shasta v1.4 base out of mn001 instead of wn001 (the "bis" node). Systems are required to upgrade their topology to match.
+Installs in Shasta v1.4 base out of m001 instead of wn001 (the "bis" node). Systems are required to upgrade their topology to match.
 
 See [moving site connections](309-MOVE-SITE-CONNECTIONS.md) to complete this step.
 
@@ -94,7 +94,7 @@ PCIe PXE boot.
 NCNs hosting Kubernetes services need to be powered off to facilitate a 1.4 install. Wiping the node
 will avoid boot mistakes, making the only viable option the PXE option.
 
-> Assuming [site connections](#site-connections) were updated, the administrator will need to use mn001 as
+> Assuming [site connections](#site-connections) were updated, the administrator will need to use m001 as
 > a jump box.
 
 Below, observe using Ansible for wiping and shutting down the NCNs.
