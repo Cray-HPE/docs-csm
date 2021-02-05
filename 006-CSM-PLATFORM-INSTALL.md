@@ -5,6 +5,7 @@ the CSM Kubernetes cluster).
 
 * [Verify settings in `customizations.yaml`](#verify-customizations)
 * [Initialize bootstrap container registry](#init-bootstrap-registry)
+* [Configure proxy to upstream registry](#registry-proxy)
 * [Follow `INSTALL` instructions](#install)
 
 
