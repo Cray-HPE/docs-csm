@@ -128,7 +128,7 @@ Prior to either creating a new SHASTA-CFG repository, or updating an existing on
 
     ```bash
      linux:/mnt/pitdata/prep/site-init# git add -A
-     linux:/mnt/pitdata/prep/site-init# git commit -m “Updated to $(/mnt/pitdata/${CSM_RELEASE}/lib/version.sh)”
+     linux:/mnt/pitdata/prep/site-init# git commit -m "Updated to $(/mnt/pitdata/${CSM_RELEASE}/lib/version.sh)"
      linux:/mnt/pitdata/prep/site-init# git remote add origin https://your/upstream/repo.git
      linux:/mnt/pitdata/prep/site-init# git push -u origin master
      ```
