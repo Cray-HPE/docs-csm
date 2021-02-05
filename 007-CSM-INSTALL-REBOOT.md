@@ -44,10 +44,17 @@ This procedure entails deactivating the LiveCD, meaning the LiveCD and all of it
 
 ### Token Expiration
 
+> **`STUB`** this is a stub.
+
+Tokens for joining the cluster expire after `2hours`, if the cluster has been running for longer than that time then workarounds are 
+going to be needed.
+
+Check the [LiveCD Pre-Reboot Workarounds](#livecd-pre-reboot-workarounds).
+
 <a name="hand-off"></a>
 ## Hand-Off
 
-These steps will walk an administrator through loading hand-off data and rebooting the node. This will
+The steps in this guide will ultimately walk an administrator through loading hand-off data and rebooting the node. This will
 assist with remote-console setup, for observing the reboot.
 
 At the end of these steps, the LiveCD will be no longer active. The node it was using will join
