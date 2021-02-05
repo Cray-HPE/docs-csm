@@ -35,38 +35,16 @@ sw-smn01(config)# vlan access 2
 - One connection will go to a NMN(VLAN2) access port, this is where the UAN will pxe boot and communicate with internal systems. (see SHCD for UAN cabling).
 - One Bond (two connections) will be going to the MLAG/VSX pair of switches. This will be an access port for the CAN connection.
 
-Aruba UAN NMN Configuration
+Aruba Configuration
 ```
 interface 1/1/16
     no shutdown
     mtu 9198
     no routing
-    vlan access 2
+    vlan trunk native 2
+    vlan trunk allowed 2,7
     exit
 ```
-Aruba  UAN CAN configuration
-This is the Bonded connection from the VSX pair to the UAN.
-This configuration should be the same on both switches.
-```
-interface lag 16 multi-chassis
-    no shutdown
-    no routing
-    vlan access 7
-    lacp mode active
-    lacp fallback
-    spanning-tree bpdu-guard
-    spanning-tree port-type admin-edge
-```
-Add ports to the MC-LAG
-```
-interface 1/1/16
-    no shutdown
-    mtu 9198
-    lag 16
-```
-The Mellanox UAN configuration will be the same as 1.3
-
-# CDU Configuration
 
 - This configuration describes the ports that go to the Mountain CMMs/Computes.
 - The CDU switches have two cables connecting to each CMM, we will setup MC-LAG with the CDU switch pairs.
