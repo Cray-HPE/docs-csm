@@ -8,8 +8,7 @@ There are 5 overall steps that provide a bootable USB with SSH enabled, capable 
 * [Create the Bootable Media](#create-the-bootable-media)
 * [Configuration Payload](#configuration-payload)
    * [CSI Workarounds](#csi-workarounds)
-   * [Shasta-cfg](#shasta-cfg)
-     * [Custom PKI Certificate Authority](#custom-pki-certificate-authority)
+   * [SHASTA-CFG](#SHASTA-CFG)
    * [Generate Installation Files](#generate-installation-files)
 * [Pre-Populate LiveCD Daemons Configuration and NCN Artifacts](#pre-populate-livecd-daemons-configuration-and-ncn-artifacts)
 * [Boot the LiveCD](#boot-the-livecd)
@@ -103,8 +102,7 @@ The USB stick now bootable and contains our artifacts. This may be useful for in
 ## Configuration Payload
 
 * [CSI Workarounds](#csi-workarounds)
-* [Shasta-cfg](#shasta-cfg)
-   * [Custom PKI Certificate Authority](#custom-pki-certificate-authority)
+* [SHASTA-CFG](#SHASTA-CFG)
 * [Generate Installation Files](#generate-installation-files)
 
 <a name="csi-workarounds"></a>
@@ -118,30 +116,17 @@ Check for workarounds in the `~/${CSM_RELEASE}/fix/csi-config` directory.  If th
   casminst-999
   ```
 
-<a name="shasta-cfg"></a>
-### Shasta-cfg
+<a name="SHASTA-CFG"></a>
+### SHASTA-CFG
 
-In order for Kubernetes to deploy it needs a CA cert generated for the cluster. This CA comes from the
-shasta-cfg repository used in Shasta v1.3.
+SHASTA-CFG is a distinct repository of relatively static, installation-centric artifacts, including:
 
-**Refer to** the pages contained within your CSM TARBALL.
+* Cluster-wide network configuration settings required by Helm Charts deployed by product stream Loftsman Manifests
+* [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets)
+* Sealed Secret Generate Blocks -- an form of plain-text input that renders to a Sealed Secret
+* Helm Chart value overrides that are merged into Loftsman Manifests by product stream installers
 
-- For new systems, follow the instructions at
-   ```bash
-   /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/docs/NEW-SYSTEM.md
-   ```
-- Existing systems, follow
-   ```bash
-   /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/docs/UPDATE-SYSTEM.md
-   ```
-
-<a name="custom-pki-certificate-authority"></a>
-##### Custom PKI Certificate Authority
-
-To customize the PKI Certificate Authority (CA) used by the platform, see [Customizing the Platform CA](055-CERTIFICATE-AUTHORITY.md).
-
-> This is an optional step. Note that the CA can not be modified after install.
-
+Follow the instructions [here](./067-SHASTA-CFG.md) to prepare a SHASTA-CFG repository for your system.
 
 <a name="generate-installation-files"></a>
 ### Generate Installation Files
@@ -267,9 +252,9 @@ This will enable SSH, and other services when the LiveCD starts.
    our `customizations.yaml`, and finally the `sealed_secrets.key`
     ```bash
     linux# csi patch ca \
-    --cloud-init-seed-file /var/www/ephemeral/configs/data.json \
-    --customizations-file /var/www/ephemeral/prep/site-init/customizations.yaml \
-    --sealed-secret-key-file /var/www/ephemeral/prep/site-init/certs/sealed_secrets.key
+    --cloud-init-seed-file /mnt/pitdata/configs/configs/data.json \
+    --customizations-file /mnt/pitdata/prep/site-init/customizations.yaml \
+    --sealed-secret-key-file /mnt/pitdata/prep/site-init/certs/sealed_secrets.key 
    ```
 6. Copy k8s artifacts:
     ```bash
