@@ -82,6 +82,7 @@ pit:~ # /root/bin/csi-setup-vlan002.sh $nmn_cidr
 pit:~ # /root/bin/csi-setup-vlan004.sh $hmn_cidr
 pit:~ # /root/bin/csi-setup-vlan007.sh $can_cidr
 ```
+
 <a name="customization"></a>
 ## Customization
 
@@ -144,6 +145,7 @@ systemctl restart dnsmasq
 systemctl start basecamp
 systemctl start nexus
 ```
+
 <a name="configure-ntp"></a>
 ### Configure NTP
 
@@ -175,6 +177,7 @@ CONTAINER ID  IMAGE                                         COMMAND             
 496a2ce806d8  dtr.dev.cray.com/metal/cloud-basecamp:latest                        4 days ago  Up 4 days ago          basecamp
 6fcdf2bfb58f  docker.io/sonatype/nexus3:3.25.0              sh -c ${SONATYPE_...  4 days ago  Up 4 days ago          nexus
 ```
+
 
 <a name="verify-outside-name-resolution"></a>
 ### Verify Outside Name Resolution
