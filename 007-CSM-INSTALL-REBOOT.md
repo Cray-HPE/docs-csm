@@ -14,7 +14,9 @@ choose to install additional products following the completion of the CSM instal
 
 * [Required Services](#required-services) 
 * [Notice of Danger](#notice-of-danger)
-* [Start Hand-Off](#start-hand-off)
+* [Hand-Off](#hand-off)
+    * [LiveCD Pre-Reboot Workarounds](#livecd-pre-reboot-workarounds)
+    * [Start Hand-Off](#start-hand-off)
     * [Accessing USB Partitions After Reboot](#accessing-usb-partitions-after-reboot)
 
 
@@ -40,14 +42,37 @@ While the node is rebooting, it will be available only through Serial-over-LAN a
 This procedure entails deactivating the LiveCD, meaning the LiveCD and all of its resources will be
 **unavailable**.
 
-<a name="start-hand-off"></a>
-## Start Hand-Off
+### Token Expiration
+
+<a name="hand-off"></a>
+## Hand-Off
 
 These steps will walk an administrator through loading hand-off data and rebooting the node. This will
 assist with remote-console setup, for observing the reboot.
 
-At the end of these steps, the LiveCD will be no longer active and the node it was using will join
+At the end of these steps, the LiveCD will be no longer active. The node it was using will join
 the kubernetes cluster.
+
+
+<a name="livecd-pre-reboot-workarounds"></a>
+## LiveCD Pre-Reboot Workarounds
+
+
+
+Check for workarounds in the `/var/www/ephemeral/${CSM_RELEASE}/fix/livecd-pre-reboot` directory.  If there are any workarounds in that directory, run those now.   Instructions are in the `README` files.
+
+```
+# Example
+pit:~ # ls /var/www/ephemeral/${CSM_RELEASE}/fix/livecd-pre-reboot
+casminst-435
+```
+
+
+<a name="start-hand-off"></a>
+### Start Hand-Off
+
+**It is very important to run the pre-livecd-reboot workarounds**. Ensure that the [](#pre-reboot-workarounds) have all been ran by the administrator before
+starting this stage.
 
 1. Upload sls file
    ```bash
