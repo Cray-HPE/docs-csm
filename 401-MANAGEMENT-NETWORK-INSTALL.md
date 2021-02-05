@@ -28,7 +28,8 @@ The network architecture and configuration changes from v1.3 to v1.4 are fairly 
 *   ACL configuration.
 *   Moving Site connection from ncn-w001 to ncn-m001.
 *   The IP-Helper will reside on the switches where the default gateway for the servers, such as bmcs and computes, is configured.
-*   IP-Helper applied on vlan 1 and vlan 7, this will point to 10.92.100.222.
+*   IP-Helper 10.92.100.222 applied on vlan 1, 2, and 7.
+*   IP-Helper 10.94.100.222 applied on vlan 4.
 *   Make sure 1.3.2 changes are applied, this includes flow-control and MAGP changes.
 *   Remove BPDUfilter on the Dell access ports.
 *   Add BPDUguard to the Dell access ports.
