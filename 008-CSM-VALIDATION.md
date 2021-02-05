@@ -99,3 +99,93 @@ Select the Alerts tab to view current alerts.
 
 Pay attention to any KubeCronJobRunning alerts. Unexpected behavior on the system can result if cron jobs are not firing appropriately. See the System Management Health Architecture section of the Admin Guide for more information about system management monitoring. 
 
+## UAS / UAI
+
+Basic installation validation of UAS can be done once Keycloak is running and able to authenticate users.  The following shows commands and expected results, including the necessary setup if the CLI has not yet been initialized.  Notice the the user here is `vers` replace this with any CLI authorized user:
+
+```
+ncn-m001-pit:~ # cray init
+Cray Hostname: api-gw-service-nmn.local
+Username: vers
+Password:
+Success!
+
+Initialization complete.
+ncn-m001-pit:~ # cray uas mgr-info list
+service_name = "cray-uas-mgr"
+version = "1.11.5"
+
+ncn-m001-pit:~ # cray uas list
+results = []
+
+ncn-m001-pit:~ # cray uas images list
+default_image = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
+image_list = [ "dtr.dev.cray.com/cray/cray-uai-broker:latest", "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest",]
+```
+
+From here, move to a real master or worker node (not the LiveCD node) to test basic creation and function of UAIs.  Again, the user is `vers` replace this with any CLI authorized user:
+
+```
+ncn-w003:~ # cray init
+Cray Hostname: api-gw-service-nmn.local
+Username: vers
+Password:
+Success!
+
+Initialization complete.
+ncn-w003:~ # cray uas create --publickey ~/.ssh/id_rsa.pub
+uai_connect_string = "ssh vers@10.16.234.10"
+uai_host = "ncn-w001"
+uai_img = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
+uai_ip = "10.16.234.10"
+uai_msg = ""
+uai_name = "uai-vers-a00fb46b"
+uai_status = "Pending"
+username = "vers"
+
+[uai_portmap]
+
+ncn-w003:~ # cray uas list
+[[results]]
+uai_age = "0m"
+uai_connect_string = "ssh vers@10.16.234.10"
+uai_host = "ncn-w001"
+uai_img = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
+uai_ip = "10.16.234.10"
+uai_msg = ""
+uai_name = "uai-vers-a00fb46b"
+uai_status = "Running: Ready"
+username = "vers"
+
+
+ncn-w003:~ # ssh vers@10.16.234.10
+The authenticity of host '10.16.234.10 (10.16.234.10)' can't be established.
+ECDSA key fingerprint is SHA256:BifA2Axg5O0Q9wqESkLqK4z/b9e1usiDUZ/puGIFiyk.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '10.16.234.10' (ECDSA) to the list of known hosts.
+-bash: /usr/bin/tclsh: No such file or directory
+Error: Unable to initialize environment modules.
+vers@uai-vers-a00fb46b-6889b666db-4dfvn:~> ps -afe
+UID          PID    PPID  C STIME TTY          TIME CMD
+root           1       0  0 18:51 ?        00:00:00 /bin/bash /usr/bin/uai-ssh.sh
+munge         36       1  0 18:51 ?        00:00:00 /usr/sbin/munged
+root          54       1  0 18:51 ?        00:00:00 su vers -c /usr/sbin/sshd -e -f /etc/uas/ssh/sshd_config -D
+vers          55      54  0 18:51 ?        00:00:00 /usr/sbin/sshd -e -f /etc/uas/ssh/sshd_config -D
+vers          62      55  0 18:51 ?        00:00:00 sshd: vers [priv]
+vers          67      62  0 18:51 ?        00:00:00 sshd: vers@pts/0
+vers          68      67  0 18:51 pts/0    00:00:00 -bash
+vers         120      68  0 18:52 pts/0    00:00:00 ps -afe
+vers@uai-vers-a00fb46b-6889b666db-4dfvn:~> exit
+logout
+Connection to 10.16.234.10 closed.
+```
+
+Clean up the UAI.  Notice that the UAI name used is the same as the name in the output from `cray uas create ...` above:
+
+```
+ncn-w003:~ # cray uas delete --uai-list uai-vers-a00fb46b
+results = [ "Successfully deleted uai-vers-a00fb46b",]
+
+```
+
+If you got this far with similar results, then the UAS and UAI basic functionality is working.
