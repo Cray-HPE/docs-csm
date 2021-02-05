@@ -42,8 +42,8 @@ Throughout the guide, simple one-liners can be used to query status of expected 
 
 Examples:
 ```bash
-username=root
-password=
+export username=root
+export IPMI_PASSWORD=
 
 # Power status of all expected NCNs:
 grep -oE "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power status

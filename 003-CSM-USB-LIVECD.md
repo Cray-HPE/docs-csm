@@ -254,7 +254,7 @@ This will enable SSH, and other services when the LiveCD starts.
     linux# csi patch ca \
     --cloud-init-seed-file /mnt/pitdata/configs/configs/data.json \
     --customizations-file /mnt/pitdata/prep/site-init/customizations.yaml \
-    --sealed-secret-key-file /mnt/pitdata/prep/site-init/certs/sealed_secrets.key 
+    --sealed-secret-key-file /mnt/pitdata/prep/site-init/certs/sealed_secrets.key
    ```
 6. Copy k8s artifacts:
     ```bash
@@ -330,10 +330,11 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    pit:~ # csi pit validate --services
    ```
 
-   > - If basecamp is dead, restart it with `systemctl restart basecamp`.
-   > - If conman is dead, restart it with `systemctl restart conamn`.
-   > - If dnsmasq is dead, restart it with `systemctl restart dnsmasq`.
    > - If nexus is dead, restart it with `systemctl restart nexus`.
+   > - If basecamp is dead, restart it with `systemctl restart basecamp`.
+   > - If conman is dead, restart it with `systemctl restart conman`.
+   > - If dnsmasq is dead, restart it with `systemctl restart dnsmasq`.
+
 
 3. Follow the output's directions for failed validations before moving on.
 
