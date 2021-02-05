@@ -252,15 +252,9 @@ This will enable SSH, and other services when the LiveCD starts.
    our `customizations.yaml`, and finally the `sealed_secrets.key`
     ```bash
     linux# csi patch ca \
-<<<<<<< HEAD
-    --cloud-init-seed-file /var/www/ephemeral/configs/data.json \
-    --customizations-file /var/www/ephemeral/prep/site-init/customizations.yaml \
-    --sealed-secret-key-file /var/www/ephemeral/prep/site-init/certs/sealed_secrets.key
-=======
     --cloud-init-seed-file /mnt/pitdata/configs/configs/data.json \
     --customizations-file /mnt/pitdata/prep/site-init/customizations.yaml \
     --sealed-secret-key-file /mnt/pitdata/prep/site-init/certs/sealed_secrets.key 
->>>>>>> CASMINST-1272: Consolidate and section-off shasta-cfg documentation
    ```
 6. Copy k8s artifacts:
     ```bash
