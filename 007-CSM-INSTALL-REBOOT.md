@@ -12,10 +12,11 @@ choose to install additional products following the completion of the CSM instal
 > - User Access Nodes
 > - Work-Load Managers / SLURM
 
-* [Required Services](#required-services) 
+* [Required Services](#required-services)
 * [Notice of Danger](#notice-of-danger)
+	* [Token Expiration](#token-expiration)
 * [LiveCD Pre-Reboot Workarounds](#livecd-pre-reboot-workarounds)
-* [Hand-Off](#hand-off)   
+* [Hand-Off](#hand-off)
     * [Start Hand-Off](#start-hand-off)
     * [Accessing USB Partitions After Reboot](#accessing-usb-partitions-after-reboot)
 
@@ -42,6 +43,7 @@ While the node is rebooting, it will be available only through Serial-over-LAN a
 This procedure entails deactivating the LiveCD, meaning the LiveCD and all of its resources will be
 **unavailable**.
 
+<a name="token-expiration"></a>
 ### Token Expiration
 
 Tokens for joining the cluster expire after `2hours`, if the cluster has been running for longer than that time then 
