@@ -67,7 +67,7 @@ spec.network.static_ips.ncn_storage
     ```
 
 
-<a name="#registry-proxy"></a>
+<a name="registry-proxy"></a>
 ## Configure proxy to upstream registry
 
 > **`SKIP IF AIRGAP/OFFLINE`** - Online installs require a URL to the proxied
