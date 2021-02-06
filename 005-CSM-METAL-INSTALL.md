@@ -2,6 +2,7 @@
 
 This page will go over deploying the non-compute nodes.
 
+* [Configure Bootstrap Registry to Proxy an Upstream Registry](#configure-bootstrap-registry-to-proxy-an-upstream-registry)
 * [Tokens](#tokens)
 * [Timing of Deployments](#timing-of-deployments)
 * [NCN Deployment](#ncn-deployment)
@@ -13,6 +14,51 @@ This page will go over deploying the non-compute nodes.
     * [Validation](#validation)
     * [Optional Validation](#optional-validation)
     * [Change Password](#change-password)
+
+
+<a name="configure-bootstrap-registry-to-proxy-an-upstream-registry"></a>
+## Configure Bootstrap Registry to Proxy an Upstream Registry
+
+> **`SKIP IF AIRGAP/OFFLINE`** - Online installs require a URL to the proxied
+> registry.
+
+By default, the bootstrap registry is a `type: hosted` Nexus repository,
+which requires container images to be imported prior to platform
+installation. However, it may be reconfigured to proxy container images from
+an upstream registry as follows:
+
+1.  Stop Nexus:
+
+    ```bash
+    pit:~ # systemctl stop nexus
+    ```
+
+2.  Remove `nexus` container:
+
+    ```bash
+    pit:~ # podman container exists nexus && podman container rm nexus
+    ```
+
+3.  Remove `nexus-data` volume:
+
+    ```bash
+    pit:~# podman volume rm nexus-data
+    ```
+
+4.  Add the corresponding URL to the `ExecStartPost` script in
+    `/usr/lib/systemd/system/nexus.service`. For example, Cray internal systems
+    may want to proxy to https://dtr.dev.cray.com as follows:
+
+    ```bash
+    pit:~ # URL=https://dtr.dev.cray.com
+    pit:~ # sed -e "s,^\(ExecStartPost=/usr/sbin/nexus-setup.sh\).*$,\1 $URL," -i /usr/lib/systemd/system/nexus.service
+    ```
+
+5.  Restart Nexus:
+
+    ```bash
+    pit:~ # systemctl start nexus
+    ```
 
 
 <a name="tokens"></a>
