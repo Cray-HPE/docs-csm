@@ -14,8 +14,8 @@ choose to install additional products following the completion of the CSM instal
 
 * [Required Services](#required-services) 
 * [Notice of Danger](#notice-of-danger)
-* [Hand-Off](#hand-off)
-    * [LiveCD Pre-Reboot Workarounds](#livecd-pre-reboot-workarounds)
+* [LiveCD Pre-Reboot Workarounds](#livecd-pre-reboot-workarounds)
+* [Hand-Off](#hand-off)   
     * [Start Hand-Off](#start-hand-off)
     * [Accessing USB Partitions After Reboot](#accessing-usb-partitions-after-reboot)
 
@@ -44,21 +44,10 @@ This procedure entails deactivating the LiveCD, meaning the LiveCD and all of it
 
 ### Token Expiration
 
-> **`STUB`** this is a stub.
-
-Tokens for joining the cluster expire after `2hours`, if the cluster has been running for longer than that time then workarounds are 
-going to be needed.
+Tokens for joining the cluster expire after `2hours`, if the cluster has been running for longer than that time then 
+workarounds are going to be needed.
 
 Check the [LiveCD Pre-Reboot Workarounds](#livecd-pre-reboot-workarounds).
-
-<a name="hand-off"></a>
-## Hand-Off
-
-The steps in this guide will ultimately walk an administrator through loading hand-off data and rebooting the node. This will
-assist with remote-console setup, for observing the reboot.
-
-At the end of these steps, the LiveCD will be no longer active. The node it was using will join
-the kubernetes cluster.
 
 
 <a name="livecd-pre-reboot-workarounds"></a>
@@ -66,7 +55,9 @@ the kubernetes cluster.
 
 
 
-Check for workarounds in the `/var/www/ephemeral/${CSM_RELEASE}/fix/livecd-pre-reboot` directory.  If there are any workarounds in that directory, run those now.   Instructions are in the `README` files.
+Check for workarounds in the `/var/www/ephemeral/${CSM_RELEASE}/fix/livecd-pre-reboot` directory. If there are any 
+workarounds in that directory, run those when the workaround instructs. Timing is critical to ensure properly loaded 
+data so run them only when indicated. Instructions are in the `README` files.
 
 ```
 # Example
@@ -74,37 +65,55 @@ pit:~ # ls /var/www/ephemeral/${CSM_RELEASE}/fix/livecd-pre-reboot
 casminst-435
 ```
 
+<a name="hand-off"></a>
+## Hand-Off
+
+The steps in this guide will ultimately walk an administrator through loading hand-off data and rebooting the node. 
+This will assist with remote-console setup, for observing the reboot.
+
+At the end of these steps, the LiveCD will be no longer active. The node it was using will join
+the Kubernetes cluster as the final of 3 masters forming a quorum. 
 
 <a name="start-hand-off"></a>
 ### Start Hand-Off
 
-**It is very important to run the pre-livecd-reboot workarounds**. Ensure that the [](#pre-reboot-workarounds) have all been ran by the administrator before
-starting this stage.
+**It is very important to run the pre-livecd-reboot workarounds**. Ensure that the [](#pre-reboot-workarounds) have 
+all been ran by the administrator before starting this stage.
 
-1. Upload sls file
+1. Upload SLS file.
    ```bash
    pit# csi upload-sls-file --sls-file /var/www/ephemeral/prep/config/surtur/sls_input_file.json
    2021/02/02 14:05:15 Retrieving S3 credentails ( sls-s3-credentials ) for SLS
    2021/02/02 14:05:15 Uploading SLS file: /var/www/ephemeral/prep/config/surtur/sls_input_file.json
    2021/02/02 14:05:15 Successfully uploaded SLS Input File.
    ```
-2. Upload the same `data.json` file we used to our Kubernetes cloud-init DataSource, cray-bss:
+2. Get a token to use for authenticated communication with the gateway.
+   > **`NOTE`** `api-gw-service-nmn.local` is legacy, and will be replaced with api-gw-service.nmn.
+   ```text
+   pit# export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+      -d client_id=admin-client \
+      -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+      https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+   ```
+3. Upload the same `data.json` file we used to BSS, our Kubernetes cloud-init DataSource. If you have made any changes 
+   to this file as a result of any customizations or workarounds use the path to that file instead. This step will 
+   prompt for the root password of the NCNs.
    ```bash
    pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json
    ```
-3. Upload NCN artifacts, filling `CSM_RELEASE` with the actual release tarball.
+4. Upload NCN artifacts, filling `CSM_RELEASE` with the actual release tarball.
    ```bash
    pit# export CSM_RELEASE=csm-0.7.29
-   pit# export artdir=/var/www/ephemeral/${CSM_RELEASE}/images/
+   pit# export artdir=/var/www/ephemeral/${CSM_RELEASE}/images
    csi handoff ncn-images \
-        --k8s-kernel-path $adir/kubernetes/*.kernel \
-        --k8s-initrd-path $adir/kubernetes/initrd.img*.xz \
-        --k8s-squashfs-path $adir/kubernetes/kubernetes*.squashfs \
-        --ceph-kernel-path $adir/ceph/*.kernel \
-        --ceph-initrd-path $adir/ceph/initrd.img*.xz \
-        --ceph-squashfs-path $adir/ceph/ceph*.squashfs
+        --k8s-kernel-path $artdir/kubernetes/*.kernel \
+        --k8s-initrd-path $artdir/kubernetes/initrd.img*.xz \
+        --k8s-squashfs-path $artdir/kubernetes/kubernetes*.squashfs \
+        --ceph-kernel-path $artdir/storage-ceph/*.kernel \
+        --ceph-initrd-path $artdir/storage-ceph/initrd.img*.xz \
+        --ceph-squashfs-path $artdir/storage-ceph/storage-ceph*.squashfs
    ```
-4. Set efibootmgr for booting next from Port-1 of Riser-1
+5. Set efibootmgr for booting next from Port-1 of Riser-1
    ```bash
    pit# efibootmgr | grep -i ipv4
    Boot0005* UEFI IPv4: Network 00 at Riser 02 Slot 01
@@ -118,10 +127,12 @@ starting this stage.
    pit# efibootmgr -n 0005 2>&1 | grep -i bootbext
    BootNext: 0005
    ```
-5. **`SKIP THIS STEP IF USING USB LIVECD`** The remote LiveCD will loose all changes and local data once it is rebooted. It is advised
-   to backup the prep directory for the LiveCD off of the CRAY before rebooting. This will faciliate setting the LiveCD up again in the event
-   of a bad reboot. Follow the procedure in [VirtuaL ISO Boot - Backing up the OverlayFS](062-LIVECD-VIRTUAL-ISO-BOOT.md#backing-up-the-overlay-cow-fs). After completing that, return here and proceed to the next step.
-6. Optionally setup conman or serial console if not already on one from any laptop
+6. **`SKIP THIS STEP IF USING USB LIVECD`** The remote LiveCD will lose all changes and local data once it is rebooted. 
+   It is advised to backup the prep directory for the LiveCD off of the CRAY before rebooting. This will facilitate 
+   setting the LiveCD up again in the event of a bad reboot. Follow the procedure in 
+   [VirtuaL ISO Boot - Backing up the OverlayFS](062-LIVECD-VIRTUAL-ISO-BOOT.md#backing-up-the-overlay-cow-fs).
+   After completing that, return here and proceed to the next step.
+7. Optionally setup conman or serial console if not already on one from any laptop
    - Collect the CAN IPs for logging into other NCNs while this happens. This is useful for interacting
       and debugging the kubernetes cluster while the LiveCD is `offline`.
       ```bash
@@ -135,21 +146,22 @@ starting this stage.
       macos# ssh root@10.102.11.13
       ncn-m002#
       ```
-      Keep this terminal active as it will enable `kubectl` commands during the bring-up of the new NCN. If the reboot successfully deploys the LiveCD, this terminal can be exited.
-7. Reboot the LiveCD.
+      Keep this terminal active as it will enable `kubectl` commands during the bring-up of the new NCN. 
+      If the reboot successfully deploys the LiveCD, this terminal can be exited.
+8. Reboot the LiveCD.
    ```bash
    pit# reboot
    ```
-8. Observe the serial console
+9. Observe the serial console
    > **`NOTE`** This requires `ipmitool` to be present on another machine.
    ```bash
    macOS# export username
    macOS# export IPMI_PASSWORD
    macOS# ipmitool -I lanplus -U $username -E -H bigbird-ncn-m001-mgmt sol activate
    ```
-9. The node should boot, acquire its hostname (i.e. ncn-m001)
+10. The node should boot, acquire its hostname (i.e. ncn-m001).
 
-10. Run `kubectl get nodes` to see the full kubernetes cluster
+11. Run `kubectl get nodes` to see the full Kubernetes cluster.
     > **`NOTE`** If the new node fails to join the cluster after running other cloud-init items please refer to the 
     > `handoff`
    ```bash
@@ -163,19 +175,21 @@ starting this stage.
    ncn-w003   Ready    <none>   4h39m   v1.18.6
    ```
 
-11. Run `ip a` to show our IPs, verify the site link
+12. Run `ip a` to show our IPs, verify the site link. It will be necessary to restore the `ifcfg-lan0` file from either 
+    manual backup take in step 6 or re-mount the USB and copy it from the prep directory to `/etc/sysconfig/network/`.
     ```bash
     ncn-m001# ip a show lan0
     ```
-12. Run `ip a` to show our VLANs, verify they all have IPs
+13. Run `ip a` to show our VLANs, verify they all have IPs
     ```bash
     ncn-m001# ip a show vlan002 vlan004 vlan007
     ```
-13. Verify we do not have a metal bootstrap IP, this should be blank
+14. Verify we do not have a metal bootstrap IP, this should be blank
     ```bash
     ncn-m001# ip a show bond0
     ```
-At this time, the cluster is done. If the administrator used a USB stick, it may be ejected at this time or [re-accessed](#accessing-usb-partitions-after-reboot).
+At this time, the cluster is done. If the administrator used a USB stick, it may be ejected at this time or 
+[re-accessed](#accessing-usb-partitions-after-reboot).
 
 The administrator can continue onto [CSM Validation](008-CSM-VALIDATION.md) to conclude the CSM product deployment.
 
