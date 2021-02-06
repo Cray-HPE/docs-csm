@@ -8,7 +8,7 @@ Access to the switches from the liveCD/M001
 
 # Configuration
 
-- All firmware will be located at ```/var/www/network/firmware``` on the LiveCD
+- All firmware will be located at ```/var/www/fw/network``` on the LiveCD
 - It should contain the following files.
 ```
 surtur-ncn-m001-pit:/var/www/network/firmware # ls -lh
