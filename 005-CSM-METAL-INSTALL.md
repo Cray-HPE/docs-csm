@@ -154,6 +154,7 @@ cloud-init modules -m config
 cloud-init modules -m final
 ```
 This should pull all the required cloud-init data for the NCN to join the cluster.
+If the nodes still didn't join after running the commands above, you may need to reboot the node.
 
 6. Boot **Kubernetes Managers and Workers**
    ```bash
