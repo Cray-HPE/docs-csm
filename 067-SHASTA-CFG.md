@@ -1,84 +1,151 @@
 # SHASTA-CFG
 
-SHASTA-CFG is a distinct repository of relatively static, installation-centric artifacts, including:
+SHASTA-CFG is a distinct repository of relatively static, installation-centric
+artifacts, including:
 
-* Cluster-wide network configuration settings required by Helm Charts deployed by product stream Loftsman Manifests
-* [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets)
-* Sealed Secret Generate Blocks -- an form of plain-text input that renders to a Sealed Secret
-* Helm Chart value overrides that are merged into Loftsman Manifests by product stream installers
+*   Cluster-wide network configuration settings required by Helm Charts
+    deployed by product stream Loftsman Manifests
+*   [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets)
+*   Sealed Secret Generate Blocks -- an form of plain-text input that renders
+    to a Sealed Secret
+*   Helm Chart value overrides that are merged into Loftsman Manifests by
+    product stream installers
 
-For administrators that have an existing SHASTA-CFG repository, you'll need to update it based on the 'stable' distribution including in the CSM release. If you've previously updated your SHASTA-CFG repository **for the version of CSM you are installing**, no further action is required.
+For customers that have an existing SHASTA-CFG repository, you'll need to
+update it based on the `shasta-cfg` directory included with a CSM release. If
+you've previously updated your SHASTA-CFG repository **for the version of CSM
+you are installing**, no further action is required.
 
-> IMPORTANT: Ensure your SHASTA-CFG repository has been updated for the release of CSM you are installing. 
+> **`NOTE`** The `yq` tool used in the following procedures is available under
+> `/mnt/pitdata/prep/site-init/utils/bin`:
+>
+> ```bash
+> linux# alias yq="/mnt/pitdata/prep/site-init/utils/bin/$(uname | awk '{print tolower($0)}')/yq"
+> ```
 
-## Preparation
 
-Prior to either creating a new SHASTA-CFG repository, or updating an existing one, you may wish to make adjustments to the CSM distributed ```/mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml``` (a backup is recommended):
+## Create or Update Site-Init Directory
 
-* For those that would like to keep the current ```cray_reds_credentials```, ```cray_meds_credentials```, or ```cray_hms_rts_credentials``` credentials (or some subset thereof), remove them from the ```tracked_secrets``` list under ```spec.kubernetes.sealed_secret```. 
-
-## Update or initialize from stable
-
-1. For a system/administrator with an existing SHASTA-CFG repo, clone it into ```/mnt/pitdata/prep/site-init``` as illustrated below (if not, create an empty directory at this location).
+1.  For a system/administrator with an existing SHASTA-CFG repository, clone it
+    into `/mnt/pitdata/prep/site-init` as shown below.
 
     ```bash
-    git clone https://stash.us.cray.com/scm/shasta-cfg/<system_name>.git /mnt/pitdata/prep/site-init
+    linux# git clone https://stash.us.cray.com/scm/shasta-cfg/<system_name>.git /mnt/pitdata/prep/site-init
     ```
 
-2. Update or initialize ```site-init``` from CSM (noting the output will different on new vs. update):
+    Otherwise, create `/mnt/pitdata/prep/site-init`:
 
-    ```bash 
+    ```bash
+    linux# mkdir -p /mnt/pitdata/prep/site-init
+    ```
+
+2.  **`IMPORTANT`** In order to retain `cray_reds_credentials`,
+    `cray_meds_credentials`, or `cray_hms_rts_credentials` credentials already
+    in `/mnt/pitdata/prep/site-init/customizations.yaml`, presumably from a
+    previous install, they **MUST BE REMOVED** from the
+    `spec.kubernetes.tracked_sealed_secrets` list in
+    `/mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml`.
+
+    View currently tracked sealed secrets (i.e., those which will be
+    re-generated) via:
+
+    ```bash
+    linux# yq read /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations spec.kubernetes.tracked_sealed_secrets
+    - cray_reds_credentials
+    - cray_meds_credentials
+    - cray_hms_rts_credentials
+    ```
+
+    To retain e.g. `cray_reds_credentials` already in
+    `/mnt/pitdata/prep/site-init/customizations.yaml`:
+
+    ```bash
+    linux# yq delete -i /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations spec.kubernetes.tracked_sealed_secrets.cray_reds_credentials
+    ```
+
+3.  Initialize (or update) `/mnt/pitdata/prep/site-init` from CSM:
+
+    ```bash
     linux# /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/meta/init.sh /mnt/pitdata/prep/site-init
-    ...
-    **** IMPORTANT: Review and update /mnt/pitdata/prep/customizations.yaml and introduce custom edits (if applicable). ****
-    When ready to proceed, execute the following commands:
-
-    # /mnt/pitdata/prep/site-init/utils/secrets-reencrypt.sh /mnt/pitdata/prep/site-init/customizations.yaml /mnt/pitdata/prep/site-init/certs/sealed_secrets.key /mnt/pitdata/prep/site-init/certs/sealed_secrets.crt
-    # /mnt/pitdata/prep/site-init/utils/secrets-seed-customizations.sh /mnt/pitdata/prep/site-init/customizations.yaml
     ```
 
-3. Perform the following edits to ```customizations.yaml``` as applicable, also making sure to address any "FIXMEs":
 
-* Review the ```spec.kubernetes.sealed_secrets``` generate blocks for ```cray_reds_credentials```, ```cray_meds_credentials```, and ```cray_hms_rts_credentials```. Replace the ```Password``` references with values appropriate for your system. If you opted to keep these secrets, you can safely skip this instruction.
+## Update System Customizations
 
-* For administrators that are federating Keycloak with an upstream LDAP server, and using TLS for LDAP, update the ```cray-keycloak``` sealed secret value by supplying a base64 encoded form of your CA certificate(s). Admins can use the ```keytool``` command and a PEM-encoded form of your certificate(s) to obtain this value, as follows: 
+The following steps update `/mnt/pitdata/prep/site-init/customizations.yaml`
+with system-specific customizations.
 
-  ```bash
-  linux# keytool -importcert -trustcacerts -file myad-pub-cert.pem -alias myad -keystore certs.jks -storepass password -noprompt
-  linux# cat certs.jks | base64
-  ```
+1.  Ensure system-specific settings generated by CSI are merged into
+    `customizations.yaml`:
 
-    > Note: The keytool may not be available on the pit.
+    ```bash
+    linux# yq merge -xP -i /mnt/pitdata/prep/site-init/customizations.yaml <(yq prefix -P “/mnt/pitdata/prep/${SYSTEM_NAME}/customizations.yaml” spec)
+    ```
 
-* For administrators that would like to customize the PKI Certificate Authority (CA) used by the platform, see [Customizing the Platform CA](055-CERTIFICATE-AUTHORITY.md). Note that the CA can not be modified after install.
+    Set the cluster name:
 
-* For HPE `INTERNAL` Deployment, configure HPE Datacenter LDAP: 
+    ```bash
+    linux# yq w -i /mnt/pitdata/prep/site-init/customizations.yaml spec.wlm.cluster_name “$SYSTEM_NAME”
+    ```
 
-    Update the ```keycloak_users_localize``` sealed secret
+2.  Review the `spec.kubernetes.sealed_secrets` generate blocks for
+    `cray_reds_credentials`, `cray_meds_credentials`, and
+    `cray_hms_rts_credentials`. Replace the `Password` references with values
+    appropriate for your system. If you opted to keep these secrets, you can
+    safely skip this instruction.
 
-    ```yaml
-    spec:
-    kubernetes:
-        sealed_secrets:
-        keycloak_users_localize:
-            generate:
+3.  To customize the PKI Certificate Authority (CA) used by the platform, see
+    [Customizing the Platform CA](055-CERTIFICATE-AUTHORITY.md). 
+
+    > **`IMPORTANT`** The CA may not be modified after install.
+
+4.  To federate Keycloak with an upstream LDAP:
+
+    *   If LDAP requires TLS (recommended), update the `cray-keycloak` sealed
+        secret value by supplying a base64 encoded form of your CA
+        certificate(s). Admins can use the `keytool` command and a PEM-encoded
+        form of your certificate(s) to obtain this value, as follows:
+
+        > **`NOTE`** `keytool` may not be available on the pit server.
+
+        ```bash
+        linux# keytool -importcert -trustcacerts -file myad-pub-cert.pem -alias myad -keystore certs.jks -storepass password -noprompt
+        linux# cat certs.jks | base64
+        ```
+
+    *   Update the `keycloak_users_localize` sealed secret with the
+        appropriate value for `ldap_connection_url`. 
+
+        For internal HPE systems, use `ldap://172.30.79.134`.
+
+        Set `ldap_connection_url`:
+
+        ```bash
+        linux# yq w -i /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.keycloak_users_localize.generate.data.(args.name==ldap_connection_url).args.value' 'ldap://172.30.79.134'
+        ```
+
+        On success, the `keycloak_users_localize` sealed secret should look
+        similar to:
+
+        ```bash
+        linux# yq r /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.sealed_secrets.keycloak_users_localize
+        generate:
             name: keycloak-users-localize
             data:
             - type: static
                 args:
                 name: ldap_connection_url
                 value: ldap://172.30.79.134
-    ```
+        ```
 
-    and configure Helm Chart overrides for ```cray-keycloak-users-localize```
+    *   Configure the `ldapSearchBase` and `localRoleAssignments` settings for
+        the `cray-keycloak-users-localize` chart. 
 
-    ```yaml
-    spec:
-    kubernetes:
-        services:
-        cray-keycloak-users-localize:
-            ldapSearchBase: "dc=datacenter,dc=cray,dc=com"
-            localRoleAssignments:
+        For internal HPE systems appropriate settings are:
+
+        ```yaml
+        ldapSearchBase: "dc=datacenter,dc=cray,dc=com"
+        localRoleAssignments:
             - {"group": "criemp", "role": "admin", "client": "shasta"}
             - {"group": "criemp", "role": "admin", "client": "cray"}
             - {"group": "craydev", "role": "admin", "client": "shasta"}
@@ -87,25 +154,55 @@ Prior to either creating a new SHASTA-CFG repository, or updating an existing on
             - {"group": "shasta_admins", "role": "admin", "client": "cray"}
             - {"group": "shasta_users", "role": "user", "client": "shasta"}
             - {"group": "shasta_users", "role": "user", "client": "cray"}
-    ```
+        ```
 
-4. Verify settings in customizations.yaml:
+        Set `ldapSearchBase`:
 
-    Make sure the IP addresses and macvlan settings in the `customizations.yaml` file in this
-    repo align with the IPs generated in CSI.
+        ```bash
+        linux# yq w -i /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-keycloak-users-localize.ldapSearchBase 'dc=datacenter,dc=cray,dc=com'
+        ```
 
-    > File location: `/var/www/ephemeral/prep/site-init/customizations.yaml`
+        Set `localRoleAssignments`:
 
-    In particular, pay careful attention to these settings:
+        ```bash
+        linux# cat <<EOF | yq write -i -s - /mnt/pitdata/prep/site-init/customizations.yaml | yq r -  spec.kubernetes.services.cray-keycloak-users-localize
+        - command: update
+            path: spec.kubernetes.services.cray-keycloak-users-localize.localRoleAssignments
+            value:
+            - {"group": "criemp", "role": "admin", "client": "shasta"} 
+            - {"group": "criemp", "role": "admin", "client": "cray"} 
+            - {"group": "craydev", "role": "admin", "client": "shasta"} 
+            - {"group": "craydev", "role": "admin", "client": "cray"} 
+            - {"group": "shasta_admins", "role": "admin", "client": "shasta"} 
+            - {"group": "shasta_admins", "role": "admin", "client": "cray"} 
+            - {"group": "shasta_users", "role": "user", "client": "shasta"} 
+            - {"group": "shasta_users", "role": "user", "client": "cray"}  
+        EOF
+        ```
 
-    ```
-    spec.network.static_ips.dns.site_to_system_lookups
-    spec.network.static_ips.ncn_masters
-    spec.network.static_ips.ncn_storage
-    spec.macvlan.*
-    ```
+        On success, the `cray-keycloak-users-localize` values should look
+        similar to:
 
-5. Encrypt ```customizations.yaml``` as earlier directed, e.g.:
+        ```bash
+        linux# yq r /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-keycloak-users-localize
+        sealedSecrets:
+            - '{{ kubernetes.sealed_secrets.keycloak_users_localize | toYaml }}'
+        localRoleAssignments:
+            - {"group": "criemp", "role": "admin", "client": "shasta"}
+            - {"group": "criemp", "role": "admin", "client": "cray"}
+            - {"group": "craydev", "role": "admin", "client": "shasta"}
+            - {"group": "craydev", "role": "admin", "client": "cray"}
+            - {"group": "shasta_admins", "role": "admin", "client": "shasta"}
+            - {"group": "shasta_admins", "role": "admin", "client": "cray"}
+            - {"group": "shasta_users", "role": "user", "client": "shasta"}
+            - {"group": "shasta_users", "role": "user", "client": "cray"}
+        ldapSearchBase: dc=datacenter,dc=cray,dc=com
+        ```
+
+4.  Review `/mnt/pitdata/prep/site-init/customizations.yaml` and replace
+    remaining `~FIXME~` values with appropriate settings.
+
+5.  Re-encrypt secrets in `customizations.yaml`:
 
     ```bash
     linux:~ # /mnt/pitdata/prep/site-init/utils/secrets-reencrypt.sh /mnt/pitdata/prep/site-init/customizations.yaml /mnt/pitdata/prep/site-init/certs/sealed_secrets.key /mnt/pitdata/prep/site-init/certs/sealed_secrets.crt
@@ -144,20 +241,32 @@ Prior to either creating a new SHASTA-CFG repository, or updating an existing on
     Generating type static...
     ```
 
-5. Optionally add, commit, and push your git changes to an upstream git repository. If production system or operational security is a concern, **store your sealed secret key-pair outside of git/in a secure offline system**.
+## Commit Site-Init Changes
 
-    ```bash
-     linux:/mnt/pitdata/prep/site-init# git add -A
-     linux:/mnt/pitdata/prep/site-init# git commit -m "Updated to $(/mnt/pitdata/${CSM_RELEASE}/lib/version.sh)"
-     linux:/mnt/pitdata/prep/site-init# git remote add origin https://your/upstream/repo.git
-     linux:/mnt/pitdata/prep/site-init# git push -u origin master
-     ```
+Add and commit changes to `/mnt/pitdata/prep/site-init` files:
+
+```bash
+linux# cd /mnt/pitdata/prep/site-init
+linux# git add -A
+linux# git commit -m "Updated to $(/mnt/pitdata/${CSM_RELEASE}/lib/version.sh)"
+```
+
+> **`NOTE`** If production system or operational security is a concern, **store
+> your sealed secret key-pair outside of Git in a secure offline system**.
+
+If `/mnt/pitdata/prep/site-init` was cloned from an upstream repository, be
+sure to push these commits:
+
+```bash
+linux# git push
+```
 
 ## Decrypting Sealed Secrets for Review
 
-For administrators that would like to decrypt and review previously encrypted sealed secrets, you can use the ```secrets-decrypt.sh``` utility in SHASTA-CFG.
+For administrators that would like to decrypt and review previously encrypted
+sealed secrets, you can use the `secrets-decrypt.sh` utility in SHASTA-CFG.
 
-Syntax: ```secret-decrypt.sh sealed-secret-name sealed-secret-private-key-path customizations-path```
+Syntax: `secret-decrypt.sh SEALED-SECRET-NAME SEALED-SECRET-PRIVATE-KEY CUSTOMIZATIONS-YAML`
 
 ```bash
 linux:/mnt/pitdata/prep/site-init# ./utils/secrets-decrypt.sh cray_meds_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_redfish_defaults | sed -e 's/"//g' | base64 -d; echo

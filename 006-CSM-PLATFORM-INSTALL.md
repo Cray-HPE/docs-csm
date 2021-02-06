@@ -3,30 +3,12 @@
 This page will go over how to install CSM applications and services (i.e.,
 into the CSM Kubernetes cluster).
 
-* [Verify Settings in customizations.yaml](#verify-settings)
 * [Initialize Bootstrap Registry](#initialize-bootstrap-registry)
+* [Create Site-Init Secret](#create-site-init-secret)
+* [Deploy Sealed Secret Decryption Key](#deploy-sealed-secret-decryption-key)
 * [Run install.sh](#run-install-sh)
 * [Known Issues](#known-issues)
   * [Error: not ready: https://packages.local](#error-not-ready)
-
-<a name="verify-settings"></a>
-## Verify Settings in customizations.yaml
-
-Make sure the IP addresses in the `customizations.yaml` file in this repo
-align with the IPs generated in CSI.
-
-> File location: `/var/www/ephemeral/prep/site-init/customizations.yaml`
-
-In particular, pay careful attention to these settings:
-
-```
-spec.network.static_ips.dns.site_to_system_lookups
-spec.network.static_ips.ncn_masters
-spec.network.static_ips.ncn_storage
-```
-
-> **`TODO`**: For automation this should be checked, if this step is still
-> used when automation lands.
 
 
 <a name="initialize-bootstrap-registry"></a>
@@ -67,6 +49,48 @@ spec.network.static_ips.ncn_storage
     ```bash
     pit:~ # podman run --rm --network host -v /var/www/ephemeral/${CSM_RELEASE}/docker/dtr.dev.cray.com:/images:ro quay.io/skopeo/stable sync --scoped --src dir --dest docker --dest-tls-verify=false --dest-creds admin:admin123 /images localhost:5000
     ```
+
+
+<a name="create-site-init-secret"></a>
+## Create Site-Init Secret
+
+The `site-init` secret in the `loftsman` namespace makes
+`/var/www/ephemeral/prep/site-init/customizations.yaml` available to product
+installers. The `site-init` secret should only be updated when the
+corresponding `customizations.yaml` data is changed, such as during system
+installation or upgrade. Create the `site-init` secret to contain
+`/var/www/ephemeral/prep/site-init/customizations.yaml`:
+
+```bash
+pit:~ # kubectl create secret -n loftsman generic site-init --from-file=/var/www/ephemeral/prep/site-init/customizations.yaml
+secret/site-init created
+```
+
+> **`NOTE`** If the `site-init` secret already exists then `kubectl` will error:
+>
+> ```bash
+> pit:~ # kubectl create secret -n loftsman generic site-init --from-file=/var/www/ephemeral/prep/site-init/customizations.yaml
+> Error from server (AlreadyExists): secrets "site-init" already exists
+> ```
+>
+> In this case, delete the `site-init` secret and re-create it:
+>
+> ```bash
+> pit:~ # kubectl delete secret -n loftsman site-init
+> secret "site-init" deleted
+> pit:~ # kubectl create secret -n loftsman generic site-init --from-file=/var/www/ephemeral/prep/site-init/customizations.yaml
+> secret/site-init created
+> ```
+
+
+<a name="deploy-sealed-secret-decryption-key"></a>
+## Deploy Sealed Secret Decryption Key
+
+Deploy the corresponding key necessary to decrypt sealed secrets:
+
+```bash
+pit:~ # /var/www/ephemeral/prep/site-init/deploy/deploydecryptionkey.sh
+```
 
 
 <a name="run-install-sh"></a>
