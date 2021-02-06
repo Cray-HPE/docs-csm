@@ -34,6 +34,7 @@ installations. Optional steps are noted as such.
   * [Re-cabling](#re-cabling)
     * [Site Connections](#site-connections)
     * [PCIe Connections](#pcie-connections)
+  * [Set the BMCs on the systems back to DHCP](#bmcs-back-to-dhcp)
   * [Powering off NCNs](#powering-off-ncns)
 
 <a name="collect-shasta-14-config-payload"></a>
@@ -184,7 +185,29 @@ edge-cases, disable the run-time KEA.
 Scale the deployment from either the LiveCD or any Kubernetes node
 
 ```bash
-linux:~ # kubectl scale -n services --replicas=0 cray-dhcp-kea
+linux:~ # kubectl scale -n services --replicas=0 deployment cray-dhcp-kea
+```
+
+<a name="bmcs-back-to-dhcp"></a>
+### Set the BMCs on the systems back to DHCP
+
+This step uses the old statics.conf on the system in case CSI changes IPs:
+
+```bash
+for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
+do
+ipmitool -U root -I lanplus -H $h -P initial0 lan set 1 ipsrc dhcp
+done
+
+for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
+do
+ipmitool -U root -I lanplus -H $h -P initial0 lan print 1 | grep Source
+done
+
+for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
+do
+ipmitool -U root -I lanplus -H $h -P initial0 mc reset cold
+done
 ```
 
 <a name="power-down-the-ncns"></a>
@@ -219,7 +242,7 @@ install).
   ```bash
     export username=root
     export IPMI_PASSWORD=
-    conman -q | grep mgmt | xargs -t -i  ipmitool -I lanplus -U $username -E -H {} power status
+    conman -q | grep mgmt | xargs -t -i  ipmitool -I lanplus -U $username -E -H {} power off
     ```
 - Shutdown from m001
     ```bash

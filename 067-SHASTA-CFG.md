@@ -7,7 +7,7 @@ SHASTA-CFG is a distinct repository of relatively static, installation-centric a
 * Sealed Secret Generate Blocks -- an form of plain-text input that renders to a Sealed Secret
 * Helm Chart value overrides that are merged into Loftsman Manifests by product stream installers
 
-If you have an existing SHASTA-CFG repository, you'll need to update it based on the 'stable' distribution including in the CSM release. If you've previously updated your SHASTA-CFG repository **for the version of CSM you are installing**, no further action is required.
+For administrators that have an existing SHASTA-CFG repository, you'll need to update it based on the 'stable' distribution including in the CSM release. If you've previously updated your SHASTA-CFG repository **for the version of CSM you are installing**, no further action is required.
 
 > IMPORTANT: Ensure your SHASTA-CFG repository has been updated for the release of CSM you are installing. 
 
@@ -15,11 +15,15 @@ If you have an existing SHASTA-CFG repository, you'll need to update it based on
 
 Prior to either creating a new SHASTA-CFG repository, or updating an existing one, you may wish to make adjustments to the CSM distributed ```/mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml``` (a backup is recommended):
 
-* If you would like to keep your current ```cray_reds_credentials```, ```cray_meds_credentials```, or ```cray_hms_rts_credentials``` credentials (or some subset thereof). Remove them from the ```tracked_secrets``` list under ```spec.kubernetes.sealed_secret```. 
+* For those that would like to keep the current ```cray_reds_credentials```, ```cray_meds_credentials```, or ```cray_hms_rts_credentials``` credentials (or some subset thereof), remove them from the ```tracked_secrets``` list under ```spec.kubernetes.sealed_secret```. 
 
 ## Update or initialize from stable
 
-1. If you have an existing SHASTA-CFG repo, clone it into ```/mnt/pitdata/prep/site-init```. If not, create an empty directory at this location.
+1. For a system/administrator with an existing SHASTA-CFG repo, clone it into ```/mnt/pitdata/prep/site-init``` as illustrated below (if not, create an empty directory at this location).
+
+    ```bash
+    git clone https://stash.us.cray.com/scm/shasta-cfg/<system_name>.git /mnt/pitdata/prep/site-init
+    ```
 
 2. Update or initialize ```site-init``` from CSM (noting the output will different on new vs. update):
 
@@ -37,7 +41,7 @@ Prior to either creating a new SHASTA-CFG repository, or updating an existing on
 
 * Review the ```spec.kubernetes.sealed_secrets``` generate blocks for ```cray_reds_credentials```, ```cray_meds_credentials```, and ```cray_hms_rts_credentials```. Replace the ```Password``` references with values appropriate for your system. If you opted to keep these secrets, you can safely skip this instruction.
 
-* If you are federating Keycloak with an upstream LDAP server, and using TLS for LDAP, update the ```cray-keycloak``` sealed secret value by supplying a base64 encoded form of your CA certificate(s). You can use the ```keytool``` command and a PEM-encoded form of your certificate(s) to obtain this value, as follows: 
+* For administrators that are federating Keycloak with an upstream LDAP server, and using TLS for LDAP, update the ```cray-keycloak``` sealed secret value by supplying a base64 encoded form of your CA certificate(s). Admins can use the ```keytool``` command and a PEM-encoded form of your certificate(s) to obtain this value, as follows: 
 
   ```bash
   linux# keytool -importcert -trustcacerts -file myad-pub-cert.pem -alias myad -keystore certs.jks -storepass password -noprompt
@@ -46,7 +50,7 @@ Prior to either creating a new SHASTA-CFG repository, or updating an existing on
 
     > Note: The keytool may not be available on the pit.
 
-* If you would like to customize the PKI Certificate Authority (CA) used by the platform, see [Customizing the Platform CA](055-CERTIFICATE-AUTHORITY.md). Note that the CA can not be modified after install.
+* For administrators that would like to customize the PKI Certificate Authority (CA) used by the platform, see [Customizing the Platform CA](055-CERTIFICATE-AUTHORITY.md). Note that the CA can not be modified after install.
 
 * For HPE `INTERNAL` Deployment, configure HPE Datacenter LDAP: 
 
@@ -85,7 +89,23 @@ Prior to either creating a new SHASTA-CFG repository, or updating an existing on
             - {"group": "shasta_users", "role": "user", "client": "cray"}
     ```
 
-4. Encrypt ```customizations.yaml``` as earlier directed, e.g.:
+4. Verify settings in customizations.yaml:
+
+    Make sure the IP addresses and macvlan settings in the `customizations.yaml` file in this
+    repo align with the IPs generated in CSI.
+
+    > File location: `/var/www/ephemeral/prep/site-init/customizations.yaml`
+
+    In particular, pay careful attention to these settings:
+
+    ```
+    spec.network.static_ips.dns.site_to_system_lookups
+    spec.network.static_ips.ncn_masters
+    spec.network.static_ips.ncn_storage
+    spec.macvlan.*
+    ```
+
+5. Encrypt ```customizations.yaml``` as earlier directed, e.g.:
 
     ```bash
     linux:~ # /mnt/pitdata/prep/site-init/utils/secrets-reencrypt.sh /mnt/pitdata/prep/site-init/customizations.yaml /mnt/pitdata/prep/site-init/certs/sealed_secrets.key /mnt/pitdata/prep/site-init/certs/sealed_secrets.crt
@@ -135,7 +155,7 @@ Prior to either creating a new SHASTA-CFG repository, or updating an existing on
 
 ## Decrypting Sealed Secrets for Review
 
-If you would like to decrypt and review previously encrypted sealed secrets, you can use the ```secrets-decrypt.sh``` utility in SHASTA-CFG.
+For administrators that would like to decrypt and review previously encrypted sealed secrets, you can use the ```secrets-decrypt.sh``` utility in SHASTA-CFG.
 
 Syntax: ```secret-decrypt.sh sealed-secret-name sealed-secret-private-key-path customizations-path```
 

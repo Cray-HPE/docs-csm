@@ -120,7 +120,7 @@ Check for workarounds in the `fix/before-ncn-boot` directory within the CSM tar.
 
 ```bash
 # Example
-pit:~ # export CSM_RELEASE=v0.7.29
+pit:~ # export CSM_RELEASE=csm-0.7.29
 pit:~ # ls /var/www/ephemeral/${CSM_RELEASE}/fix/before-ncn-boot
 CASMINST-980
 ```
@@ -186,27 +186,26 @@ CASMINST-980
    ```
    > **`NOTE`**: All consoles are located at `/var/log/conman/console*`
 
-If the nodes are booted without a hostname or they didn't run all their cloud-init scripts the following commands need to be ran.
-```
-/srv/cray/scripts/metal/set-dhcp-to-static.sh
-```
-After this you should have network connectivity.
-Then you will run.
-```
-cloud-init clean
-cloud-init init
-cloud-init modules -m init
-cloud-init modules -m config
-cloud-init modules -m final
-```
-This should pull all the required cloud-init data for the NCN to join the cluster.
-If the nodes still didn't join after running the commands above, you may need to reboot the node.
+   > **`NOTE`**: If the nodes are booted without a hostname or they didn't run all their cloud-init scripts the following commands need to be ran **(but only in that circumstance)**.
+   > ```
+   > /srv/cray/scripts/metal/set-dhcp-to-static.sh
+   > ```
+   > After this you should have network connectivity.
+   > Then you will run.
+   > ```
+   > cloud-init clean
+   > cloud-init init
+   > cloud-init modules -m init
+   > cloud-init modules -m config
+   > cloud-init modules -m final
+   > ```
+   > This should pull all the required cloud-init data for the NCN to join the cluster.
 
 6. Boot **Kubernetes Managers and Workers**
    ```bash
    username=root
-   password=
-   grep -oE "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -P $password -H {} power on
+   export IPMI_PASSWORD=
+   grep -oE "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
    ```
 
 7. Wait. Observe the installation through ncn-m002-mgmt's console:
@@ -219,7 +218,7 @@ If the nodes still didn't join after running the commands above, you may need to
    pit:~ # conman -j ncn-m002-mgmt
    ```
 
-8. Refer to [timing of deployments](#timing-of-deployments. After a while, `kubectl get nodes` should return
+8. Refer to [timing of deployments](#timing-of-deployments). After a while, `kubectl get nodes` should return
  all the managers and workers aside from the LiveCD's node.
    ```bash
    ncn-m002:~ # kubectl get nodes -o wide
@@ -231,7 +230,7 @@ If the nodes still didn't join after running the commands above, you may need to
    ncn-w003   Ready    <none>   5m58s   v1.18.6   10.252.1.12   <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
    ```
 
-The administrator needs to move onto the next two sections, before considering continuing the installation:
+The administrator needs to move onto the next sections, before considering continuing the installation:
 
 - [NCN Post-Boot Workarounds](#apply-ncn-post-boot-workarounds)
 - [LiveCD Cluster Authentication](#livecd-cluster-authentication)
@@ -275,7 +274,15 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
    - Aruba:`clear bgp *`
    - Mellanox: `clear ip bgp all`
 
-> **`NOTE`**: At this point all but possibly one of the peering sessions with the BGP neighbors should be in IDLE or CONNECT state and not ESTABLISHED state.   If the switch is an Aruba, you will have one peering session established with the other switch.  You should check that all of the neighbor IPs are correct.
+   > **`NOTE`**: At this point all but possibly one of the peering sessions with the BGP neighbors should be in IDLE or CONNECT state and not ESTABLISHED state.   If the switch is an Aruba, you will have one peering session established with the other switch.  You should check that all of the neighbor IPs are correct.  
+
+2. If needed, the following helper scripts are available for the various switch types:
+
+   ```
+   pit:~ # ls -1 /usr/bin/*peer*py
+   /usr/bin/aruba_set_bgp_peers.py
+   /usr/bin/mellanox_set_bgp_peers.py
+   ```
 
 <a name="validation"></a>
 #### Validation
