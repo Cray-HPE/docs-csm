@@ -9,6 +9,7 @@ into the CSM Kubernetes cluster).
 * [Run install.sh](#run-install-sh)
 * [Known Issues](#known-issues)
   * [Error: not ready: https://packages.local](#error-not-ready)
+  * [Error initiating layer upload ... in registry.local: received unexpected HTTP status: 200 OK](#error-initiating-layer-upload)
 
 
 <a name="initialize-bootstrap-registry"></a>
@@ -198,3 +199,24 @@ successful. If `helm status -n nexus cray-nexus` indicates the status is
 deployment and additional diagnosis is required. In this case, the current
 Nexus deployment probably needs to be uninstalled and the `nexus-data` PVC
 removed before attempting to deploy again.
+
+
+<a name="error-initiating-layer-upload"></a>
+### Error initiating layer upload ... in registry.local: received unexpected HTTP status: 200 OK
+
+The following error may occur when running `./install.sh --continue`:
+
+```bash
+pit:/var/www/ephemeral/$CSM_RELEASE # ./install.sh --continue
+...
+time="2021-02-07T20:25:22Z" level=info msg="Copying image tag 97/144" from="dir:/image/jettech/kube-webhook-certgen:v1.2.1" to="docker://registry.local/jettech/kube-webhook-certgen:v1.2.1"
+Getting image source signatures
+Copying blob sha256:f6e131d355612c71742d71c817ec15e32190999275b57d5fe2cd2ae5ca940079
+Copying blob sha256:b6c5e433df0f735257f6999b3e3b7e955bab4841ef6e90c5bb85f0d2810468a2
+Copying blob sha256:ad2a53c3e5351543df45531a58d9a573791c83d21f90ccbc558a7d8d3673ccfa
+time="2021-02-07T20:25:33Z" level=fatal msg="Error copying tag \"dir:/image/jettech/kube-webhook-certgen:v1.2.1\": Error writing blob: Error initiating layer upload to /v2/jettech/kube-webhook-certgen/blobs/uploads/ in registry.local: received unexpected HTTP status: 200 OK"
++ return
+```
+
+This error is most likely _intermittent_ and running `./install.sh --continue`
+again is expected to succeed.
