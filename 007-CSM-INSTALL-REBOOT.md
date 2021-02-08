@@ -193,6 +193,14 @@ all been ran by the administrator before starting this stage.
 At this time, the cluster is done. If the administrator used a USB stick, it may be ejected at this time or 
 [re-accessed](#accessing-usb-partitions-after-reboot).
 
+15. Now check for workarounds in the `fix/after-m001-reboot` directory within the CSM tar. Each has its own instructions in their respective `README` files.
+```
+# Example
+pit:~ # export CSM_RELEASE=csm-0.7.29
+pit:~ # ls /var/www/ephemeral/${CSM_RELEASE}/fix/after-m001-reboot
+CASMINST-980
+```
+
 The administrator can continue onto [CSM Validation](008-CSM-VALIDATION.md) to conclude the CSM product deployment.
 
 <a name="accessing-usb-partitions-after-reboot"></a>
