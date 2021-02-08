@@ -18,12 +18,18 @@ There are 5 overall steps that provide a bootable USB with SSH enabled, capable 
 <a name="download-and-expand-the-csm-release"></a>
 ## Download and Expand the CSM Release
 
-Fetch the base installation tarball and extract it, installing the contained CSI tool.
+Fetch the base installation CSM tarball and extract it, installing the contained CSI tool.
+
+1. Start a typescript to capture the commands and output from this installation.
+   ```bash
+   linux# script -af csm-usb-lived.$(date +%Y-%m-%d).txt
+   linux# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+   ```
 
 > **`INTERNAL USE`** The `ENDPOINT` URL below are for internal use, customer/external should
 > use the URL for the server hosting their tarball.
 
-1. Download the CSM software release to the Linux host which will be preparing the LiveCD.
+2. Download the CSM software release to the Linux host which will be preparing the LiveCD.
    ```bash
    linux# cd ~
    linux# export ENDPOINT=https://arti.dev.cray.com/artifactory/shasta-distribution-stable-local/csm/
@@ -31,16 +37,28 @@ Fetch the base installation tarball and extract it, installing the contained CSI
    linux# wget ${ENDPOINT}/${CSM_RELEASE}.tar.gz
    ```
 
-2. Expand the CSM software release:
+3. Expand the CSM software release:
    ```bash
    linux# tar -zxvf ${CSM_RELEASE}.tar.gz
    linux# ls -l ${CSM_RELEASE}
    ```
 
-3. Install/upgrade the CSI RPM.
+4. Install/upgrade the CSI RPM.
    ```bash
    linux# rpm -Uvh ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
    ```
+
+5. Show the version of CSI installed.
+   ```bash
+   linux# csi version
+   CRAY-Site-Init build signature...
+   Build Commit   : b3ed3046a460d804eb545d21a362b3a5c7d517a3-release-shasta-1.4
+   Build Time     : 2021-02-04T21:05:32Z
+   Go Version     : go1.14.9
+   Git Version    : b3ed3046a460d804eb545d21a362b3a5c7d517a3
+   Platform       : linux/amd64
+   App. Version   : 1.5.18
+    ```
 
 The ISO and other files are now available in the extracted CSM tar.
 
@@ -96,10 +114,12 @@ which device that is.
     linux# tar -zxvf ~/${CSM_RELEASE}.tar.gz -C /mnt/pitdata/
     ```
 
-The USB stick now bootable and contains our artifacts. This may be useful for internal or quick usage. Administrators seeking a Shasta installation must continue onto the [configuration payload](#configuration-payload).
+The USB stick is now bootable and contains our artifacts. This may be useful for internal or quick usage. Administrators seeking a Shasta installation must continue onto the [configuration payload](#configuration-payload).
 
 <a name="configuration-payload"></a>
 ## Configuration Payload
+
+The shasta-cfg structure and other configuration files will be prepared, then csi will generate system-unique configuration payload used for the rest of the CSM installation onthe USB stick.
 
 * [SHASTA-CFG](#SHASTA-CFG)
 * [Generate Installation Files](#generate-installation-files)
@@ -120,18 +140,20 @@ Follow the instructions [here](./067-SHASTA-CFG.md) to prepare a SHASTA-CFG repo
 <a name="generate-installation-files"></a>
 ### Generate Installation Files
 
-Three files are needed for generating the configuration payload. New systems will need to create these three files before continuing.
+Some files are needed for generating the configuration payload. New systems will need to create these files before continuing.
 
 > Note: The USB stick is usable at this time, but without SSH enabled as well as core services. This means
 > the stick could be used to boot the system now, and a user can return to this step at another time.
 
 Pull these files into the current working directory:
-- `ncn_metadata.csv`
+- `application-node-config.yaml` (optional)
+- `cabinets.yaml` (optional)
 - `hmn_connections.json`
+- `ncn_metadata.csv`
 - `switch_metadata.csv`
 - `system_config.yaml` (see below)
 
-> Optionally a `application-node-config.yaml` file may be provided for further tweaking of settings. See the CSI usage for more information.
+> The optional `application-node-config.yaml` file may be provided for further tweaking of settings relating to how appication nodes will appear in HSM. See the CSI usage for more information.
 
 After gathering the files into the working directory, generate your configs:
 
@@ -141,36 +163,65 @@ After gathering the files into the working directory, generate your configs:
    linux# cd /mnt/pitdata/prep
    ```
 
-2. Re-use a parameter file (see [avoiding parameters](./063-CSI-FILES.md#save-file--avoiding-parameters)) **or skip this step**.
+2. Generate the system configuration reusing a parameter file (see [avoiding parameters](./063-CSI-FILES.md#save-file--avoiding-parameters)) **or skip this step**.
+
+   If moving from a Shasta v1.3 system, the system_config.yaml file will not be available, so skip this step and continue with step 3.
+
+   The needed files should be in the current directory.
    ```bash
-   # All the needed files together.
    linux# ls -1
+   application_node_config.yaml
+   cabinets.yaml
    hmn_connections.json
    ncn_metadata.csv
    shasta_system_configs
    switch_metadata.csv
    system_config.yaml
+   ```
 
-   # Generating system configuration.
+   Generate the system configuration.
+   ```bash
    linux# csi config init
    ```
 
-3. Run this command by hand if a parameter file is unavailable:
+   A new directory matching your `--system-name` argument will now exist in your working directory.
+
+   Set an environment variable so this system name can be used in later commands.
    ```bash
-   # All the needed files together.
+   linux# export SYSTEM_NAME=eniac
+   ```
+
+   Skip step 3 and continue with the CSI Workarounds
+
+3. Generate the system configuration when a pre-existing parameter file is unavailable:
+   
+   If moving from a Shasta v1.3 system, this step is required.  If you did step 2 above, skip this step.
+
+   The needed files should be in the current directory.  The application_node_config.yaml file is optional.
+   ```bash
    linux# ls -1
+   application_node_config.yaml
    hmn_connections.json
    ncn_metadata.csv
    shasta_system_configs
    switch_metadata.csv
-   system_config.yaml
+   ```
+
+   Set an environment variable so this system name can be used in later commands.
+   ```bash
+   linux# export SYSTEM_NAME=eniac
+   ```
+
+   Generate the system configuration.  See below for an explanation of the command line parameters and some common settings.
+   ```
    linux# csi config init \
        --bootstrap-ncn-bmc-user root \
        --bootstrap-ncn-bmc-pass changeme \
-       --system-name eniac  \
-       --mountain-cabinets 0 \
+       --system-name ${SYSTEM_NAME}  \
+       --mountain-cabinets 4 \
+       --starting-mountain-cabinet 1000 \
        --hill-cabinets 0 \
-       --river-cabinets 1  \
+       --river-cabinets 1 \
        --can-cidr 10.103.11.0/24 \
        --can-gateway 10.103.11.1 \
        --can-static-pool 10.103.11.112/28 \
@@ -178,14 +229,42 @@ After gathering the files into the working directory, generate your configs:
        --nmn-cidr 10.252.0.0/17 \
        --hmn-cidr 10.254.0.0/17 \
        --ntp-pool time.nist.gov \
+       --site-domain dev.cray.com \
        --site-ip 172.30.53.79/20 \
        --site-gw 172.30.48.1 \
        --site-nic p1p2 \
        --site-dns 172.30.84.40 \
        --install-ncn-bond-members p1p1,p10p1
+       --application-node-config-yaml application_node_config.yaml
+       --cabinets-yaml cabinets.yaml
    ```
 
-A new directory matching your `--system-name` argument will now exist in your working directory.
+   A new directory matching your `--system-name` argument will now exist in your working directory.
+
+   Run the command "csi config init --help" to get more information about the parameters mentioned in the example command above and others which are available.
+
+   Notes about parameters to "csi config init":
+   * The application_node_config.yaml file is optional, but if you have one describing the mapping between prefixes in hmn_connections.csv that should be maped to HSM subroles, you need to include a command line option to have it used.
+   * The bootstrap-ncn-bmc-user and bootstrap-ncn-bmc-pass must match what is used for the BMC account and its password for the management NCNs.
+   * Set site parameters (site-domain, site-ip, site-gw, site-nic, site-dns) for the information which connects the ncn-m001 (PIT) node to the site.  The site-nic is the interface on this node connected to the site.  If coming from Shasta v1.3, the information for all of these site parameters was collected.
+   * There are other interfaces possible, but the install-ncn-bond-members are typically: p1p1,p10p1 for HPE nodes; p1p1,p1p2 for Gigabyte nodes; and p801p1,p801p2 for Intel nodes.  If coming from Shasta v1.3, this information was collected for ncn-m001.
+   * Set the three cabinet parameters (mountain-cabinets, hill-cabinets, and river-cabinets) to the number of each cabinet which are part of this system.
+   * The starting cabinet number for each type of cabinet (for example, starting-mountain-cabinet) has a default that can be overriden.  See the "csi config init --help"
+   * For systems that use non-sequential cabinet id nubmers, use cabinets-yaml to include the cabinets.yaml file.  This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to explicitly specify the id of every cabinet in the system. 
+   * Several parameters (can-gateway, can-cidr, can-static-pool, can-dynamic-pool) describe the CAN (Customer Access network).  The can-gateway is the common gateway IP used for both spine switches and commonly referred to as the Virtual IP for the CAN.  The can-cidr is the IP subnet for the CAN assigned to this system. The can-static-pool and can-dynamic-pool are the MetalLB address static and dynamic pools for the CAN.
+   * Set ntp-pool to a reachable NTP server
+
+   These warnings from "csi config init" for issues in hmn_connections.json can be ignored.
+   * The node with the external connection (ncn-m001) will have a warning similar to this because its BMC is connected to the site and not the HMN like the other management NCNs.  It can be ignored.
+     "Couldn't find switch port for NCN: x3000c0s1b0"
+   * An unexpected component may have this message.  If this component is an application node with an unusual prefix, it should be added to the application_node_config.yaml file and then rerun "csi config init".   See the procedure to [create the application_node_config.yaml](308-APPLICATION-NODE-CONFIG.md)
+      {"level":"warn","ts":1610405168.8705149,"msg":"Found unknown source prefix! If this is expected to be an Application node, please update application_node_config.yaml","row":
+      {"Source":"gateway01","SourceRack":"x3000","SourceLocation":"u33","DestinationRack":"x3002","DestinationLocation":"u48","DestinationPort":"j29"}}
+   * If a component in hmn_connections.json is not a node, there might be a message like this.  It can be ignored.
+      {"level":"warn","ts":1612552159.2962296,"msg":"Cooling door found, but xname does not yet exist for cooling doors!","row":
+      {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
+
+   Continue with the CSI Workarounds
 
 <a name="csi-workarounds"></a>
 ### CSI Workarounds
@@ -206,9 +285,14 @@ Now that the configuration is generated, we can populate the LiveCD with the gen
 
 This will enable SSH, and other services when the LiveCD starts.
 
-1. Use CSI to populate the LiveCD, provide both the mountpoint and the CSI generated config dir.
+1.  Set an environment variable so this system name can be used in later commands.
+   ```bash
+   linux# export SYSTEM_NAME=eniac
+   ```
+
+2. Use CSI to populate the LiveCD, provide both the mountpoint and the CSI generated config dir.
     ```bash
-    linux# csi pit populate cow /mnt/cow/ eniac/
+    linux# csi pit populate cow /mnt/cow/ ${SYSTEM_NAME}/
     config------------------------> /mnt/cow/rw/etc/sysconfig/network/config...OK
     ifcfg-bond0-------------------> /mnt/cow/rw/etc/sysconfig/network/ifcfg-bond0...OK
     ifcfg-lan0--------------------> /mnt/cow/rw/etc/sysconfig/network/ifcfg-lan0...OK
@@ -224,32 +308,33 @@ This will enable SSH, and other services when the LiveCD starts.
     statics.conf------------------> /mnt/cow/rw/etc/dnsmasq.d/statics.conf...OK
     conman.conf-------------------> /mnt/cow/rw/etc/conman.conf...OK
     ```
-2. Optionally set the hostname, print it into the hostname file.
+
+3. Optionally set the hostname, print it into the hostname file.
    > Do not confuse other admins and name the LiveCD "ncn-m001", please append the "-pit" suffix
-   > to flag the context.
+   > which will indicate that the node is booted from the LiveCD.
    ```bash
-   echo 'bigbird-ncn-m001-pit' >/mnt/cow/rw/etc/hostname
+   linux# echo "${SYSTEM_NAME}-ncn-m001-pit" >/mnt/cow/rw/etc/hostname
    ```
 
-2. Unmount the Overlay, we're done with it
+4. Unmount the Overlay, we're done with it
     ```bash
     linux# umount /mnt/cow    
     ```
 
-3. Make directories needed for basecamp (cloud-init) and the squashFS images
+5. Make directories needed for basecamp (cloud-init) and the squashFS images
 
     ```bash
     linux# mkdir -p /mnt/pitdata/configs/
     linux# mkdir -p /mnt/pitdata/data/{k8s,ceph}/
     ```
 
-4. Copy basecamp data
+6. Copy basecamp data
     ```bash
     linux# csi pit populate pitdata $SYSTEM_NAME /mnt/pitdata/configs -b
     data.json---------------------> /mnt/pitdata/configs/data.json...OK
     ```
 
-5. Update CA Cert on the copied `data.json` file. Provide the path to the `data.json`, the path to
+7. Update CA Cert on the copied `data.json` file. Provide the path to the `data.json`, the path to
    our `customizations.yaml`, and finally the `sealed_secrets.key`
     ```bash
     linux# csi patch ca \
@@ -257,14 +342,16 @@ This will enable SSH, and other services when the LiveCD starts.
     --customizations-file /mnt/pitdata/prep/site-init/customizations.yaml \
     --sealed-secret-key-file /mnt/pitdata/prep/site-init/certs/sealed_secrets.key
    ```
-6. Copy k8s artifacts:
+
+8. Copy k8s artifacts:
     ```bash
     linux# csi pit populate pitdata ~/${CSM_RELEASE}/images/kubernetes/ /mnt/pitdata/data/k8s/ -kiK
     5.3.18-24.37-default-0.0.6.kernel-----------------> /mnt/pitdata/data/k8s/...OK
     initrd.img-0.0.6.xz-------------------------------> /mnt/pitdata/data/k8s/...OK
     kubernetes-0.0.6.squashfs-------------------------> /mnt/pitdata/data/k8s/...OK
     ```
-7. Copy ceph/storage artifacts:
+
+9. Copy ceph/storage artifacts:
     ```bash
     linux# csi pit populate pitdata ~/${CSM_RELEASE}/images/storage-ceph/ /mnt/pitdata/data/ceph/ -kiC
     5.3.18-24.37-default-0.0.5.kernel-----------------> /mnt/pitdata/data/ceph/...OK
@@ -272,7 +359,7 @@ This will enable SSH, and other services when the LiveCD starts.
     storage-ceph-0.0.5.squashfs-----------------------> /mnt/pitdata/data/ceph/...OK
     ```
 
-8. Unmount the data partition:
+10. Unmount the data partition:
     ```bash
     linux# cd; umount /mnt/pitdata
     ```
@@ -289,6 +376,37 @@ administrator may need to use the BIOS Boot Selection menu to choose the USB sti
 If an administrator is rebooting a node into the LiveCD, vs booting a bare-metal or wiped node, then `efibootmgr` will deterministically set the boot order. See the [EFI Boot Manager](064-EFIBOOTMGR.md) page for more information on this topic..
 
 > UEFI booting must be enabled to find the USB sticks EFI bootloader.
+
+1. Start a typescript on an external system, such as a laptop or Linux system, to record this section of activities done on the console of ncn-m001 via IPMI.
+
+   ```bash
+   external# script -a boot.livecd.$(date +%Y-%m-%d).txt
+   external# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+   ```
+
+Confirm that the IPMI credentials work for the BMC by checking the power status.
+
+   ```bash
+   external# username=root
+   external# password=changme
+   external# ipmitool -I lanplus -U $username -P $password -H ${SYSTEM_NAME}-ncn-m001-mgmt chassis power status
+   ```
+
+Connect to the IPMI console.  Press return and login on the console as root.
+
+   ```bash
+   external# ipmitool -I lanplus -U $username -P $password -H ${SYSTEM_NAME}-ncn-m001-mgmt sol activate
+   eniac-ncn-m001 login: root
+   ncn-m001# 
+   ```
+
+2. Reboot
+
+    ```bash
+    ncn-m001# reboot
+    ```
+
+Watch the shutdown and boot from the ipmitool session to the console terminal.
 
 > **An integrity check** runs before Linux starts by default, it can be skipped by selecting "OK" in its prompt.
 
@@ -314,13 +432,46 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
    > **`NOTE`** If this password is forgotten, it can be reset by mounting the USB stick on another computer. See [LiveCD Troubleshooting](058-LIVECD-TROUBLESHOOTING.md#root-password) for information on clearing the password.
 
-2. Mount the data partition
+
+2. Disconnect from IPMI console.
+
+   Once the network is up so that ssh to the node works, disconnect from the IPMI console.
+
+   You can disconnect from the IPMI console by using the "&.", that is, the ampersand character followed by a period character.
+
+   Login via ssh to the node.
+
+   ```bash
+   external# ssh ${SYSTEM_NAME}-ncn-m001
+   ncn-m001 login: root
+   pit# 
+
+   Note: The hostname should be something like eniac-ncn-m001-pit when booted from the LiveCD, but it will be shown as "pit#" in the command prompts from this point onward.
+
+
+3. Start a typescript to record this section of activities done on ncn-m001 while booted from the LiveCD.
+
+   ```bash
+   pit# script -af booted-csm-lived.$(date +%Y-%m-%d).txt
+   pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+   ```
+
+4. Check the pit-release version.
+
+   ```bash
+   pit# cat /etc/pit-release
+   VERSION=1.2.2
+   TIMESTAMP=20210121044136
+   HASH=75e6c4a
+   ```
+
+5. Mount the data partition
     > The data partition is set to `fsopt=noauto` to facilitate LiveCDs over virtual-ISO mount. USB installations need to mount this manually.
     ```bash
     pit:~ # mount -L PITDATA
     ```
 
-2. Verify the system:
+6. Verify the system:
    ```bash
    pit:~ # csi pit validate --network
    pit:~ # csi pit validate --services
@@ -331,7 +482,14 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    > - If conman is dead, restart it with `systemctl restart conman`.
    > - If dnsmasq is dead, restart it with `systemctl restart dnsmasq`.
 
+   > In addition, the final output from validating the services should have information about the nexus and basecamp conrainers/images similar this example.
 
-3. Follow the output's directions for failed validations before moving on.
+   ```
+   CONTAINER ID  IMAGE                                               COMMAND               CREATED        STATUS            PORTS   NAMES
+   ff7c22c6c6cb  dtr.dev.cray.com/sonatype/nexus3:3.25.0             sh -c ${SONATYPE_...  3 minutes ago  Up 3 minutes ago          nexus
+   c7638b573b93  dtr.dev.cray.com/cray/metal-basecamp:1.1.0-1de4aa6                        5 minutes ago  Up 5 minutes ago          basecamp
+   ```
+
+7. Follow the output's directions for failed validations before moving on.
 
 After successfully validating the LiveCD USB environment, the administrator may start the [CSM Metal Install](005-CSM-METAL-INSTALL.md).
