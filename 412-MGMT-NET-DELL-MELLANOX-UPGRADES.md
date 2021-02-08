@@ -1,8 +1,11 @@
 ### Management Network Dell And Mellanox Upgrades
 
-## IP Changes
-- CSI will generate the IPs for the switches on a 1.4 system, they will be located here "/var/www/ephemeral/prep/root/{system-name}/networks"on the liveCD/m001.
-- here's a snipet of NMN.yaml
+The Dell and Mellanox switches have some changes which are needed when moving from Shasta v1.3 to Shasta v1.4.
+
+## IP Address and Hostname Changes 
+CSI will generate the IPs for the switches on a 1.4 system, they will be located here "/var/www/ephemeral/prep/{system-name}/networks" when ncn-m001 is booted from the LiveCD.
+
+Here is a snippet from NMN.yaml with the IP addresses and hostnames of the switches.  
 
 ```
 ip_reservations:
@@ -19,48 +22,18 @@ ip_reservations:
    comment: x3000c0w40
    aliases: []
 ```
-- Next step is to validate whether the switches match the NMN.yaml, HMN.yaml, and CAN.yaml files, If the IPs do not match you will have to change the IP for the appropriate network. 
-- On most 1.3.x systems the IP addresses will be as shown below, which will require them to be updated. 
+
+On most 1.3.x systems the IP addresses and hostnames will be as shown below, which will require them to be updated. 
 
 ```
 spine-01 10.252.0.1
 spine-02 10.252.0.3
 leaf-01 10.252.0.2
 ```
-- To verify that these are correct you can SSH into the device and check the hostname or check the switch config repo.  Here's an example of rockets switch repo https://stash.us.cray.com/projects/SSI/repos/network-switch-cfg/browse/Rocket/RiverSpine/Mellanox_SN2100_v3.9/sw-spine01.conf
 
-Changing Mellanox IP
+To make the hostname and IP address changes for all switches, follow this procedure [Management Network Switch Rename](415-MGMT-NET-SWITCH-RENAME.md)
 
-```
-sw-spine01 [rocket-mlag-domain: standby] > ena
-sw-spine01 [rocket-mlag-domain: standby] # conf t
-sw-spine01 [rocket-mlag-domain: standby] (config) # no protocol magp
-sw-spine01 [rocket-mlag-domain: standby] (config interface vlan 2) # no ip address 10.252.0.1/17
-sw-spine01 [rocket-mlag-domain: standby] (config interface vlan 2) # ip address 10.252.0.2/17
-```
- - If MAGP is enabled it will need to be disabled before deleting the current IP.  This needs to be turned back on and configured in the MAGP section.
-
- Changing Dell IP
-
- ```
-sw-leaf01# configure terminal
-sw-leaf01(config)# interface vlan 2
-sw-leaf01(conf-if-vl-2)# ip address 10.252.0.4/17
- ```
- - When changing these IPs make sure you are not changing the IP that you are currently SSHed to.
- - Make sure the IP change is done for all VLANs. (1, 2, 4, 7, 10)
- - make sure to write memory to save changes. 
-
-- Mellanox Write memory
- ```
-sw-spine01 [rocket-mlag-domain: standby] (config) # write memory
- ```
-- Dell Write memory
-```
-sw-leaf01# write memory
-```
-
-## Dell Changes
+## Dell Changes to switch from bpdufilter to bpduguard
 * Remove spanning-tree bpdufilter
 * Add spanning-tree bpduguard
 
@@ -121,7 +94,7 @@ interface port-channel1
 ```
 
 
-## Mellanox Changes
+## Mellanox Changes for MAGP
 ### MAGP
 MAGP setup for mellanox spine switches, this should be set for every VLAN interface. 
 https://community.mellanox.com/s/article/howto-configure-magp-on-mellanox-switches
@@ -235,3 +208,40 @@ Hostname                                 VIP-State            IP Address
 sw-spine01                               master               192.168.255.241
 sw-spine02                               standby              192.168.255.243
 ```
+
+## Update SNMP configuration
+
+See [SNMP](407-MGMT-NET-SNMP-CONFIG.md)
+
+## Update CAN configuration
+
+Some systems may have had many switches on the CAN with Shasta v1.3.  In Shasta v1.4, only the spine switches should be on the CAN.  Other switches should remove their IP addresses on vlan7.
+
+See [CAN](408-MGMT-NET-CAN-CONFIG.md)
+
+## Update NTP configuration
+
+Some Shasta v1.3 systems may have set the switch ntp server to be the IP address of ncn-w001.  With the switch rename, the old IP address for ncn-w001 may now be assigned to one of the switches.
+The Shasta v1.4 configuration sets the switches to have the first three worker nodes as their ntp servers.
+
+See [CAN] (414-MGMT-NET-NTP-CONFIG.md)
+
+## Verify flow-control settings
+
+With Shasta v1.3.2, some changes were made for the flow-control settings which may not be on Shasta v1.3.0 systems.  Verify that these are set correctly for Shasta v1.4.
+These changes for flow-control will also disable iSCSI on Dell Switches (Leaf, CDU, and Aggregate).
+
+Replace this internal reference with a 4xx page.
+
+https://connect.us.cray.com/confluence/display/SSI/Management+Network+Changes+for+Shasta+1.3.2
+
+## Update DHCP IP helper configuration
+
+With Shasta v1.3.2, some changes were made for the ip-helper settings which may not be on Shasta v1.3.0 systems.  Verify that these are set correctly for Shasta v1.4.
+The IP-helpers are being moved for the switches that are doing the Layer3 Routing.  For most systems this will be moving the helper from the leaf to the spine.
+Also the IP-helpers are being added on VLAN1 and VLAN7 to PXE boot NCNs.
+
+Replace this internal reference with a 4xx page.
+
+https://connect.us.cray.com/confluence/display/SSI/Management+Network+Changes+for+Shasta+1.3.2
+
