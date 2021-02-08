@@ -272,3 +272,11 @@ Syntax: `secret-decrypt.sh SEALED-SECRET-NAME SEALED-SECRET-PRIVATE-KEY CUSTOMIZ
 linux:/mnt/pitdata/prep/site-init# ./utils/secrets-decrypt.sh cray_meds_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_redfish_defaults | sed -e 's/"//g' | base64 -d; echo
 {"Username": "root", "Password": "..."}
 ```
+
+## Accessing the customizations.yaml from within Cluster
+
+The install procedure outlined in 006-CSM-PLATFORM-INSTALL contains a step which places the customizations.yaml in a Kubernetes secret.  Accessing this file will be a necessary step for some of the other Shasta product installers, such as the UAN.  You can view these install settings and optionally pipe to a file from a Kubernetes master or worker NCN with the following command:
+
+```bash
+kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > /tmp/customizations.yaml
+```
