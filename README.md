@@ -27,7 +27,7 @@ pit:~ # rpm -q docs-csm-install
 
 Anyone with Git access to this repo may feel free to submit changes for review, tagging to the relevant JIRA(s) (if necessary).
 
-All changes undergo a review process, this governance is up to the reviewers' own discrestions. The review serves to keep core contributors on the "same page" while maintaining coherency throughout the doc.
+All changes undergo a review process, this governance is up to the reviewers' own discretions. The review serves to keep core contributors on the "same page" while maintaining coherency throughout the doc.
 
 ### Releases and Vintages
 
