@@ -278,6 +278,8 @@ The following prerequisites must be completed in order to successfully reinstall
 * [Power down the NCNs](#power-down-the-ncns)
   * [Degraded System Notice](#degraded-system-notice)
   * [Powering Off](#powering-off)
+  * [Set BMCs to back to DHCP](#bmcs-back-to-dhcp)
+  * [Powering Off the LiveCD/m001](#powering-off-livecd)
 
 <a name="scaling-down-dhcp"></a>
 ### Scaling Down DHCP
@@ -291,32 +293,10 @@ Scale the deployment from either the LiveCD or any Kubernetes node
 ncn# kubectl scale -n services --replicas=0 deployment cray-dhcp-kea
 ```
 
-<a name="bmcs-back-to-dhcp"></a>
-### Set the BMCs on the systems back to DHCP
-
-This step uses the old statics.conf on the system in case CSI changes IPs:
-
-```bash
-pit# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
-do
-ipmitool -U root -I lanplus -H $h -P initial0 lan set 1 ipsrc dhcp
-done
-
-pit# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
-do
-ipmitool -U root -I lanplus -H $h -P initial0 lan print 1 | grep Source
-done
-
-pit# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
-do
-ipmitool -U root -I lanplus -H $h -P initial0 mc reset cold
-done
-```
-
 <a name="power-down-the-ncns"></a>
 ### Power down the NCNs
 
-> UANs and CNs do not need to power off.
+> UANs and CNs do not need to be powered off.
 
 <a name="degraded-system-notice"></a>
 #### Degraded System Notice
@@ -324,13 +304,14 @@ done
 If the system is degraded, and the administrator wants to ensure a clean-slated install then a wipe
 may be performed to rule out issues with disks and boot-order.
 
-For each NCN, login and wipe it
+For each NCN, login, wipe it, and power it down
 
 ```bash
 pit# ssh ncn
 ncn# wipefs --all --force /dev/sd[a-z]
 ncn# wipefs --all --force /dev/disk/by-label/*
 ncn# ipmitool power off
+ncn# exit
 ```
 
 <a name="powering-off"></a>
@@ -353,8 +334,65 @@ install).
     ncn-m001# export username=alice
     ncn-m001# export IPMI_PASSWORD=bobby
     ncn-m001# grep ncn /etc/hosts | grep mgmt | sort -u | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
-    done
     ```
+
+<a name="bmcs-back-to-dhcp"></a>
+### Set the BMCs on the systems back to DHCP
+
+During the install of the NCNs their BMCs get get set to static IP addresses. The install expects the that the NCN BMCs are set back to DHCP before proceeding.
+
+- If on the LiveCD:
+  This step uses the old statics.conf on the system in case CSI changes IPs:
+
+  ```bash
+  pit# export username=root
+  pit# export IPMI_PASSWORD=
+
+  pit# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
+  do
+  ipmitool -U $username -I lanplus -H $h -E lan set 1 ipsrc dhcp
+  done
+
+  pit# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
+  do
+  ipmitool -U $username -I lanplus -H $h -E lan print 1 | grep Source
+  done
+
+  pit# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
+  do
+  ipmitool -U $username -I lanplus -H $h -E mc reset cold
+  done
+  ```
+
+- If on m001:
+  This step uses to the `/etc/hosts` file on m001 to determine the IP addresses of the BMCs:
+
+  ```bash
+  ncn-m001# export username=root
+  ncn-m001# export IPMI_PASSWORD=
+  ncn-m001# for h in $( grep ncn /etc/hosts | grep mgmt | grep -v m001 | awk '{print $2}' )
+  do
+  ipmitool -U $username -I lanplus -H $h -E lan set 1 ipsrc dhcp
+  done
+
+  ncn-m001# for h in $( grep ncn /etc/hosts | grep mgmt | grep -v m001 | awk '{print $2}' )
+  do
+  ipmitool -U $username -I lanplus -H $h -E lan print 1 | grep Source
+  done
+
+  ncn-m001# for h in $( grep ncn /etc/hosts | grep mgmt | grep -v m001 | awk '{print $2}' )
+  do
+  ipmitool -U $username -I lanplus -H $h -E mc reset cold
+  done
+  ```
+
+
+<a name="powering-off-livecd"></a>
+#### Powering Off LiveCD or m001 node
+Lastly, shutdown the LiveCD or m001 node
+```bash
+ncn-m001:~ # poweroff
+```
 
 With the nodes off, you can now continue.
 

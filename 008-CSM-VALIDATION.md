@@ -189,3 +189,24 @@ results = [ "Successfully deleted uai-vers-a00fb46b",]
 ```
 
 If you got this far with similar results, then the UAS and UAI basic functionality is working.
+
+## NET
+
+### Verify that KEA has active DHCP leases
+
+Verify that KEA has active DHCP leases. Right after an fresh install of CSM it is important to verify that KEA is currently handing out DHCP leases on the system. The following commands can be ran on any of the ncn masters or workers.
+
+Get a API Token:
+```
+ncn-w001:~ # export TOKEN=$(curl -s -S -d grant_type=client_credentials \
+                          -d client_id=admin-client \
+                          -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                          https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+```
+
+Retrieve all the Leases currently in KEA:
+```
+ncn-w001:~ # curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' https://api_gw_service.local/apis/dhcp-kea | jq
+```
+
+If there is an non-zero amount of DHCP leases for river hardware returned that is a good indication that KEA is working.

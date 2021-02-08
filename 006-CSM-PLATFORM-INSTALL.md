@@ -132,7 +132,7 @@ pit:/var/www/ephemeral/$CSM_RELEASE # ./install.sh
 > 2. Run the following two commands on all NCN manager, worker, and storage
 >    nodes as well as the pit server:
 > 
->     # sed -e "s/^\(NETCONFIG_DNS_STATIC_SERVERS\)=.*$/\1=\"10.92.100.225"/" -i /etc/sysconfig/network/config
+>     # sed -e "s/^\(NETCONFIG_DNS_STATIC_SERVERS\)=.*$/\1=\"10.92.100.225\"/" -i /etc/sysconfig/network/config
 >     # netconfig update -f
 > 
 > 3. Stop dnsmasq on the pit server:
@@ -144,6 +144,11 @@ pit:/var/www/ephemeral/$CSM_RELEASE # ./install.sh
 > 
 >     pit:/var/www/ephemeral/csm-0.7.24 # ./install.sh --continue
 > ```
+
+
+After successfully completing the CSM platform install, the administrator may start the [CSM Validation process](008-CSM-VALIDATION.md).
+
+Once the CSM services are deemed healthy the administrator way proceed to the final step of the CSM install [rebooting the LiveCD into m001](007-CSM-INSTALL-REBOOT.md).
 
 ----
 

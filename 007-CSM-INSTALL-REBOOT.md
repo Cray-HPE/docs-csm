@@ -83,10 +83,12 @@ the Kubernetes cluster as the final of 3 masters forming a quorum.
 all been ran by the administrator before starting this stage.
 
 1. Upload SLS file.
+   > Note the system name environment variable `SYSTEM_NAME` must be set 
+
    ```bash
-   pit# csi upload-sls-file --sls-file /var/www/ephemeral/prep/config/surtur/sls_input_file.json
+   pit# csi upload-sls-file --sls-file /var/www/ephemeral/prep/${SYSTEM_NAME}/sls_input_file.json
    2021/02/02 14:05:15 Retrieving S3 credentails ( sls-s3-credentials ) for SLS
-   2021/02/02 14:05:15 Uploading SLS file: /var/www/ephemeral/prep/config/surtur/sls_input_file.json
+   2021/02/02 14:05:15 Uploading SLS file: /var/www/ephemeral/prep/surtur/sls_input_file.json
    2021/02/02 14:05:15 Successfully uploaded SLS Input File.
    ```
 2. Get a token to use for authenticated communication with the gateway.
@@ -97,7 +99,7 @@ all been ran by the administrator before starting this stage.
       -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
       https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
    ```
-3. Upload the same `data.json` file we used to BSS, our Kubernetes cloud-init DataSource. If you have made any changes 
+3. Upload the same `data.json` file we used to BSS, our Kubernetes cloud-init DataSource. __If you have made any changes__ 
    to this file as a result of any customizations or workarounds use the path to that file instead. This step will 
    prompt for the root password of the NCNs.
    ```bash
@@ -126,7 +128,7 @@ all been ran by the administrator before starting this stage.
    Looking at the above output, `Network 00 at Riser 02 Slot 01` is reasonably our Port-1 of Riser-1.
    This value varies, take a moment to study the `efibootmgr` output before running this next command.
    ```bash
-   pit# efibootmgr -n 0005 2>&1 | grep -i bootbext
+   pit# efibootmgr -n 0005 2>&1 | grep -i BootNext
    BootNext: 0005
    ```
 6. **`SKIP THIS STEP IF USING USB LIVECD`** The remote LiveCD will lose all changes and local data once it is rebooted. 
@@ -135,35 +137,35 @@ all been ran by the administrator before starting this stage.
    [VirtuaL ISO Boot - Backing up the OverlayFS](062-LIVECD-VIRTUAL-ISO-BOOT.md#backing-up-the-overlay-cow-fs).
    After completing that, return here and proceed to the next step.
 7. Optionally setup conman or serial console if not already on one from any laptop
-   - Collect the CAN IPs for logging into other NCNs while this happens. This is useful for interacting
-      and debugging the kubernetes cluster while the LiveCD is `offline`.
-      ```bash
-      pit# ssh ncn-m002
-      ncn-m002# ip a show vlan007 | grep inet
-      inet 10.102.11.13/24 brd 10.102.11.255 scope global vlan007
-      inet6 fe80::1602:ecff:fed9:7820/64 scope link
-      ```
-      Now login from another machine to verify that IP is usable
-      ```bash
-      macos# ssh root@10.102.11.13
-      ncn-m002#
-      ```
-      Keep this terminal active as it will enable `kubectl` commands during the bring-up of the new NCN. 
-      If the reboot successfully deploys the LiveCD, this terminal can be exited.
-8. Reboot the LiveCD.
+8. Collect the CAN IPs for logging into other NCNs while this happens. This is useful for interacting
+   and debugging the kubernetes cluster while the LiveCD is `offline`.
+   ```bash
+   pit# ssh ncn-m002
+   ncn-m002# ip a show vlan007 | grep inet
+   inet 10.102.11.13/24 brd 10.102.11.255 scope global vlan007
+   inet6 fe80::1602:ecff:fed9:7820/64 scope link
+   ```
+   Now login from another machine to verify that IP is usable
+   ```bash
+   macos# ssh root@10.102.11.13
+   ncn-m002#
+   ```
+   Keep this terminal active as it will enable `kubectl` commands during the bring-up of the new NCN. 
+   If the reboot successfully deploys the LiveCD, this terminal can be exited.
+9. Reboot the LiveCD.
    ```bash
    pit# reboot
    ```
-9. Observe the serial console
+10. Observe the serial console
    > **`NOTE`** This requires `ipmitool` to be present on another machine.
    ```bash
    macOS# export username
    macOS# export IPMI_PASSWORD
    macOS# ipmitool -I lanplus -U $username -E -H bigbird-ncn-m001-mgmt sol activate
    ```
-10. The node should boot, acquire its hostname (i.e. ncn-m001).
+11. The node should boot, acquire its hostname (i.e. ncn-m001).
 
-11. Run `kubectl get nodes` to see the full Kubernetes cluster.
+12. Run `kubectl get nodes` to see the full Kubernetes cluster.
     > **`NOTE`** If the new node fails to join the cluster after running other cloud-init items please refer to the 
     > `handoff`
    ```bash
@@ -177,16 +179,26 @@ all been ran by the administrator before starting this stage.
    ncn-w003   Ready    <none>   4h39m   v1.18.6
    ```
 
-12. Run `ip a` to show our IPs, verify the site link. It will be necessary to restore the `ifcfg-lan0` file from either 
+13. Restore and verify the site link. It will be necessary to restore the `ifcfg-lan0` file from either 
     manual backup take in step 6 or re-mount the USB and copy it from the prep directory to `/etc/sysconfig/network/`.
+
+   > The following command assumes that USB stick has been re-mounted
+   ```
+   ncn-m001# cp /mnt/pitdata/prep/surtur/pit-files/ifcfg-lan0 /etc/sysconfig/network/
+   ncn-m001# wicked ifup lan0
+   ``` 
+
+14. Run `ip a` to show our IPs, verify the site link. 
     ```bash
     ncn-m001# ip a show lan0
     ```
-13. Run `ip a` to show our VLANs, verify they all have IPs
+15. Run `ip a` to show our VLANs, verify they all have IPs
     ```bash
-    ncn-m001# ip a show vlan002 vlan004 vlan007
+    ncn-m001# ip a show vlan002
+    ncn-m001# ip a show vlan004
+    ncn-m001# ip a show vlan007
     ```
-14. Verify we do not have a metal bootstrap IP, this should be blank
+16. Verify we do not have a metal bootstrap IP, this should be blank
     ```bash
     ncn-m001# ip a show bond0
     ```

@@ -121,21 +121,9 @@ The USB stick is now bootable and contains our artifacts. This may be useful for
 
 The shasta-cfg structure and other configuration files will be prepared, then csi will generate system-unique configuration payload used for the rest of the CSM installation onthe USB stick.
 
-* [SHASTA-CFG](#SHASTA-CFG)
 * [Generate Installation Files](#generate-installation-files)
 * [CSI Workarounds](#csi-workarounds)
-
-<a name="SHASTA-CFG"></a>
-### SHASTA-CFG
-
-SHASTA-CFG is a distinct repository of relatively static, installation-centric artifacts, including:
-
-* Cluster-wide network configuration settings required by Helm Charts deployed by product stream Loftsman Manifests
-* [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets)
-* Sealed Secret Generate Blocks -- an form of plain-text input that renders to a Sealed Secret
-* Helm Chart value overrides that are merged into Loftsman Manifests by product stream installers
-
-Follow the instructions [here](./067-SHASTA-CFG.md) to prepare a SHASTA-CFG repository for your system.
+* [SHASTA-CFG](#SHASTA-CFG)
 
 <a name="generate-installation-files"></a>
 ### Generate Installation Files
@@ -277,6 +265,17 @@ Check for workarounds in the `~/${CSM_RELEASE}/fix/csi-config` directory.  If th
   casminst-999
   ```
 
+<a name="SHASTA-CFG"></a>
+### SHASTA-CFG
+
+SHASTA-CFG is a distinct repository of relatively static, installation-centric artifacts, including:
+
+* Cluster-wide network configuration settings required by Helm Charts deployed by product stream Loftsman Manifests
+* [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets)
+* Sealed Secret Generate Blocks -- an form of plain-text input that renders to a Sealed Secret
+* Helm Chart value overrides that are merged into Loftsman Manifests by product stream installers
+
+Follow [the instructions here](./067-SHASTA-CFG.md) to prepare a SHASTA-CFG repository for your system.
 
 <a name="pre-populate-livecd-daemons-configuration-and-ncn-arti"></a>
 ## Pre-Populate LiveCD Daemons Configuration and NCN Artifacts
@@ -284,11 +283,10 @@ Check for workarounds in the `~/${CSM_RELEASE}/fix/csi-config` directory.  If th
 Now that the configuration is generated, we can populate the LiveCD with the generated files.
 
 This will enable SSH, and other services when the LiveCD starts.
-
-1.  Set an environment variable so this system name can be used in later commands.
-   ```bash
-   linux# export SYSTEM_NAME=eniac
-   ```
+1. Set system name and enter prep directory
+    ```bash
+    linux# export SYSTEM_NAME=eniac
+    ```
 
 2. Use CSI to populate the LiveCD, provide both the mountpoint and the CSI generated config dir.
     ```bash
@@ -330,7 +328,7 @@ This will enable SSH, and other services when the LiveCD starts.
 
 6. Copy basecamp data
     ```bash
-    linux# csi pit populate pitdata $SYSTEM_NAME /mnt/pitdata/configs -b
+    linux# csi pit populate pitdata ${SYSTEM_NAME} /mnt/pitdata/configs -b
     data.json---------------------> /mnt/pitdata/configs/data.json...OK
     ```
 

@@ -172,7 +172,7 @@ CASMINST-980
    # grep -oE : outputs only the lexeme, and allows expanded regexs.
    username=root
    export IPMI_PASSWORD=
-   grep -oE $stoken /etc/dnsmasq.d/statics.conf | xargs -i ipmitool -I lanplus -U $username -E -H {} power on
+   grep -oE $stoken /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
    ```
 
 5. Wait. Observe the installation through ncn-s001-mgmt's console:
