@@ -18,7 +18,7 @@ choose to install additional products following the completion of the CSM instal
 * [LiveCD Pre-Reboot Workarounds](#livecd-pre-reboot-workarounds)
 * [Hand-Off](#hand-off)
     * [Start Hand-Off](#start-hand-off)
-    * [Accessing USB Partitions After Reboot](#accessing-usb-partitions-after-reboot)
+* [Accessing USB Partitions After Reboot](#accessing-usb-partitions-after-reboot)
 
 
 <a name="required-services"></a>
@@ -205,18 +205,18 @@ all been ran by the administrator before starting this stage.
 At this time, the cluster is done. If the administrator used a USB stick, it may be ejected at this time or 
 [re-accessed](#accessing-usb-partitions-after-reboot).
 
-15. Now check for workarounds in the `fix/after-m001-reboot` directory within the CSM tar. Each has its own instructions in their respective `README` files.
+15. Now check for workarounds in the `fix/after-livecd-reboot` directory within the CSM tar. Each has its own instructions in their respective `README` files.
 ```
 # Example
 pit:~ # export CSM_RELEASE=csm-0.7.29
-pit:~ # ls /var/www/ephemeral/${CSM_RELEASE}/fix/after-m001-reboot
+pit:~ # ls /var/www/ephemeral/${CSM_RELEASE}/fix/after-livecd-reboot
 CASMINST-980
 ```
 
 The administrator can continue onto [CSM Validation](008-CSM-VALIDATION.md) to conclude the CSM product deployment.
 
 <a name="accessing-usb-partitions-after-reboot"></a>
-### Accessing USB Partitions After Reboot
+## Accessing USB Partitions After Reboot
 
 After deploying the LiveCD's NCN, the LiveCD USB itself is unharmed and available to an administrator.
 

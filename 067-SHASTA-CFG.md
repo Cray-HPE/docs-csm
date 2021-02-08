@@ -94,7 +94,7 @@ with system-specific customizations.
     Set the cluster name:
 
     ```bash
-    linux# yq w -i /mnt/pitdata/prep/site-init/customizations.yaml spec.wlm.cluster_name "$SYSTEM_NAME"
+    linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml spec.wlm.cluster_name "$SYSTEM_NAME"
     ```
 
 2.  Review the `spec.kubernetes.sealed_secrets` generate blocks for
@@ -130,14 +130,14 @@ with system-specific customizations.
         Set `ldap_connection_url`:
 
         ```bash
-        linux# yq w -i /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.keycloak_users_localize.generate.data.(args.name==ldap_connection_url).args.value' 'ldap://172.30.79.134'
+        linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.keycloak_users_localize.generate.data.(args.name==ldap_connection_url).args.value' 'ldap://172.30.79.134'
         ```
 
         On success, the `keycloak_users_localize` sealed secret should look
         similar to:
 
         ```bash
-        linux# yq r /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.sealed_secrets.keycloak_users_localize
+        linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.sealed_secrets.keycloak_users_localize
         generate:
             name: keycloak-users-localize
             data:
@@ -168,24 +168,24 @@ with system-specific customizations.
         Set `ldapSearchBase`:
 
         ```bash
-        linux# yq w -i /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-keycloak-users-localize.ldapSearchBase 'dc=datacenter,dc=cray,dc=com'
+        linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-keycloak-users-localize.ldapSearchBase 'dc=datacenter,dc=cray,dc=com'
         ```
 
         Set `localRoleAssignments`:
 
         ```bash
-        linux# cat <<EOF | yq write -i -s - /mnt/pitdata/prep/site-init/customizations.yaml | yq r -  spec.kubernetes.services.cray-keycloak-users-localize
+        linux# yq write -s - -i /mnt/pitdata/prep/site-init/customizations.yaml <<EOF
         - command: update
-            path: spec.kubernetes.services.cray-keycloak-users-localize.localRoleAssignments
-            value:
-            - {"group": "criemp", "role": "admin", "client": "shasta"} 
-            - {"group": "criemp", "role": "admin", "client": "cray"} 
-            - {"group": "craydev", "role": "admin", "client": "shasta"} 
-            - {"group": "craydev", "role": "admin", "client": "cray"} 
-            - {"group": "shasta_admins", "role": "admin", "client": "shasta"} 
-            - {"group": "shasta_admins", "role": "admin", "client": "cray"} 
-            - {"group": "shasta_users", "role": "user", "client": "shasta"} 
-            - {"group": "shasta_users", "role": "user", "client": "cray"}  
+          path: spec.kubernetes.services.cray-keycloak-users-localize.localRoleAssignments
+          value:
+          - {"group": "criemp", "role": "admin", "client": "shasta"}
+          - {"group": "criemp", "role": "admin", "client": "cray"}
+          - {"group": "craydev", "role": "admin", "client": "shasta"}
+          - {"group": "craydev", "role": "admin", "client": "cray"}
+          - {"group": "shasta_admins", "role": "admin", "client": "shasta"}
+          - {"group": "shasta_admins", "role": "admin", "client": "cray"}
+          - {"group": "shasta_users", "role": "user", "client": "shasta"}
+          - {"group": "shasta_users", "role": "user", "client": "cray"}
         EOF
         ```
 
@@ -193,7 +193,7 @@ with system-specific customizations.
         similar to:
 
         ```bash
-        linux# yq r /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-keycloak-users-localize
+        linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-keycloak-users-localize
         sealedSecrets:
             - '{{ kubernetes.sealed_secrets.keycloak_users_localize | toYaml }}'
         localRoleAssignments:

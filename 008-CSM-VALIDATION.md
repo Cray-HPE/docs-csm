@@ -101,42 +101,131 @@ Pay attention to any KubeCronJobRunning alerts. Unexpected behavior on the syste
 
 ## UAS / UAI
 
-Basic installation validation of UAS can be done once Keycloak is running and able to authenticate users.  The following shows commands and expected results, including the necessary setup if the CLI has not yet been initialized.  Notice the the user here is `vers` replace this with any CLI authorized user:
+### Initialize and Authorize the CLI
+
+The procedures below use the CLI as an authorized user and run on two separate node types.  The first part runs on the LiveCD node while the second part runs on a non-LiveCD kubernetes master or worker node.  When using the CLI on either node, the CLI configuration needs to be initialized and the user running the procedure needs to be authorized.  This section describes how to initialize the CLI for use by a user and authorize the CLI as a user to run the procedures on any given node.  The procedures will need to be repeated in both stages of the validation procedure.
+
+#### Stop Using the CRAY_CREDENTIALS Service Account Token
+
+Installation procedures leading up to production mode on Shasta use the CLI with a Kubernetes managed service account normally used for internal operations.  There is a procedure for extracting the OAUTH token for this service account and assigning it to the `CRAY_CREDENTIALS` environment variable to permit simple CLI operations.  The UAS / UAI validation procedure runs as a post-installation procedure and requires an actual user with Linux credentials, not this service account. Prior to running any of the steps below you must unset the `CRAY_CREDENTIALS` environment variable:
 
 ```
-ncn-m001-pit:~ # cray init
+# unset CRAY_CREDENTIALS
+```
+
+#### Initialize the CLI Configuration
+
+The CLI needs to know what host to use to obtain authorization and what user is requesting authorization so it can obtain an OAUTH token to talk to the API Gateway.  This is accomplished by initializing the CLI configuration.  In this example, I am using the `vers` username.  In practice, `vers` and the response to the `password: ` prompt should be replaced with the username and password of the administrator running the validation procedure.
+
+To check whether the CLI needs initialization, run:
+
+```
+# cray config describe
+```
+
+If the result looks like this:
+
+```
+# cray config describe
+Usage: cray config describe [OPTIONS]
+
+Error: No configuration exists. Run `cray init`
+```
+
+the CLI needs initialization.  If it looks more like this:
+
+```
+# cray config describe
+Your active configuration is: default
+[core]
+hostname = "https://api-gw-service-nmn.local"
+
+[auth.login]
+username = "vers"
+```
+
+then the CLI is initialized and logged in as `vers`.  If you are not `vers` you will want to authorize yourself using your username and password in the next section.  If you are `vers` you are ready to move on to the validation procedure on that node.
+
+Assuming you need to initialize the CLI, run the following (again, remembering to substitute your username and password for `vers` and the password response):
+
+```
+# cray init
 Cray Hostname: api-gw-service-nmn.local
 Username: vers
 Password:
 Success!
 
 Initialization complete.
+```
+
+#### Authorize the CLI for Your User
+
+If, when you check for an initialized CLI you find it is initialized but authorized for a user different from you, you will want to authorize the CLI for your self.  Do this with the following (remembering to substitute your username and password for `vers`):
+
+```
+# cray auth login
+Username: vers
+Password: 
+Success!
+```
+
+You are now authorized to use the CLI.
+
+#### Troubleshooting
+
+If initialization or authorization fails in one of the above steps, there are several common causes:
+
+* DNS failure looking up `api-gw-service-nmn.local` may be preventing the CLI from reaching the API Gateway and Keycloak for authorization
+* Network connectivity issues with the NMN may be preventing the CLI from reaching the API Gateway and Keycloak for authorization
+* Certificate mismatch or trust issues may be preventing a secure connection to the API Gateway
+* Istio failures may be preventing traffic from reaching Keycloak
+* Keycloak may not yet be set up to authorize you as a user
+
+While resolving these issues is beyond the scope of this section, you may get clues to what is failing by adding `-vvvvv` to the `cray auth...` or `cray init ...` commands.
+
+### Validate UAS and UAI Functionality
+
+The following procedures run on separate nodes of the Shasta system.  They are, therefore, separated into separate sub-sections.
+
+#### Validate the Basic UAS Installation
+
+Make sure you are running on the LiveCD node and have initialized and authorized yourself in the CLI as described above.
+
+Basic UAS installation is validated using the following:
+
+```
 ncn-m001-pit:~ # cray uas mgr-info list
 service_name = "cray-uas-mgr"
 version = "1.11.5"
 
 ncn-m001-pit:~ # cray uas list
 results = []
+```
 
+This shows that UAS is installed and running the `1.11.5` version.  It also shows that there are no currently running UAIs.  It is possible, if someone else has been using the UAS that there could be actual UAIs in the list.  That is acceptable too from a validation standpoint.
+
+To verify that the pre-made UAI images are registered with UAS, use:
+
+```
 ncn-m001-pit:~ # cray uas images list
-default_image = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
-image_list = [ "dtr.dev.cray.com/cray/cray-uai-broker:latest", "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest",]
-```
-
-From here, move to a real master or worker node (not the LiveCD node) to test basic creation and function of UAIs.  Again, the user is `vers` replace this with any CLI authorized user:
+default_image = "registry.local/cray/cray-uai-sles15sp1:latest"
+image_list = [ "registry.local/cray/cray-uai-broker:latest", "registry.local/cray/cray-uai-sles15sp1:latest",]
 
 ```
-ncn-w003:~ # cray init
-Cray Hostname: api-gw-service-nmn.local
-Username: vers
-Password:
-Success!
 
-Initialization complete.
+This shows that the pre-made end-user UAI image (`cray/cray-uai-sles15sp1:latest`) and the broker UAI image (`cray/cray-uai-broker:latest`) are registered with UAS. This does not necessarily mean these images are installed in the container image registry, but they are configured for use.  If other UAI images have been created and registered, they may also show up here, that is acceptable.
+
+#### Validate UAI Creation
+
+This procedure must run on a master or worker node (and not ncn-w001) on the Shasta system (or from an external host, but the procedure for that is not covered here).  It requires that the CLI be initialized and authorized as you.
+
+To verify that you can create a UAI, use the following command:
+
+```
 ncn-w003:~ # cray uas create --publickey ~/.ssh/id_rsa.pub
 uai_connect_string = "ssh vers@10.16.234.10"
 uai_host = "ncn-w001"
-uai_img = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
+uai_img = "registry.local/cray/cray-uai-sles15sp1:latest"
 uai_ip = "10.16.234.10"
 uai_msg = ""
 uai_name = "uai-vers-a00fb46b"
@@ -144,27 +233,32 @@ uai_status = "Pending"
 username = "vers"
 
 [uai_portmap]
+```
 
+This has created the UAI and the UAI is currently in the process of initializing and running.  The following can be repeated as needed to watch the UAIs state.  When the results look like the following:
+
+```
 ncn-w003:~ # cray uas list
 [[results]]
 uai_age = "0m"
 uai_connect_string = "ssh vers@10.16.234.10"
 uai_host = "ncn-w001"
-uai_img = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
+uai_img = "registry.local/cray/cray-uai-sles15sp1:latest"
 uai_ip = "10.16.234.10"
 uai_msg = ""
 uai_name = "uai-vers-a00fb46b"
 uai_status = "Running: Ready"
 username = "vers"
+```
 
+The UAI is ready for use.  You can then log into it (without a password) as follows:
 
+```
 ncn-w003:~ # ssh vers@10.16.234.10
 The authenticity of host '10.16.234.10 (10.16.234.10)' can't be established.
 ECDSA key fingerprint is SHA256:BifA2Axg5O0Q9wqESkLqK4z/b9e1usiDUZ/puGIFiyk.
 Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 Warning: Permanently added '10.16.234.10' (ECDSA) to the list of known hosts.
--bash: /usr/bin/tclsh: No such file or directory
-Error: Unable to initialize environment modules.
 vers@uai-vers-a00fb46b-6889b666db-4dfvn:~> ps -afe
 UID          PID    PPID  C STIME TTY          TIME CMD
 root           1       0  0 18:51 ?        00:00:00 /bin/bash /usr/bin/uai-ssh.sh
@@ -180,7 +274,7 @@ logout
 Connection to 10.16.234.10 closed.
 ```
 
-Clean up the UAI.  Notice that the UAI name used is the same as the name in the output from `cray uas create ...` above:
+Finally, clean up the UAI.  Notice that the UAI name used is the same as the name in the output from `cray uas create ...` above:
 
 ```
 ncn-w003:~ # cray uas delete --uai-list uai-vers-a00fb46b
@@ -190,6 +284,104 @@ results = [ "Successfully deleted uai-vers-a00fb46b",]
 
 If you got this far with similar results, then the UAS and UAI basic functionality is working.
 
+#### Troubleshooting
+
+Here are some common failure modes seen with UAS / UAI operations and how to resolve them.
+
+##### Authorization Issues
+
+If you are not logged in as a valid Keycloak user or are accidentally using the `CRAY_CREDENTIALS` environment variable (i.e. the variable is set regardless of whether you are logged in as you), you should see something like this:
+```
+# cray uas list
+Usage: cray uas list [OPTIONS]
+Try 'cray uas list --help' for help.
+
+Error: Bad Request: Token not valid for UAS. Attributes missing: ['gidNumber', 'loginShell', 'homeDirectory', 'uidNumber', 'name']
+```
+
+Fix this by logging in as a real user (someone with actual Linux credentials) and making sure that `CRAY_CREDENTIALS` is unset.
+
+##### UAS Cannot Access Keycloak
+
+If you see something that looks like:
+
+```
+# cray uas list
+Usage: cray uas list [OPTIONS]
+Try 'cray uas list --help' for help.
+
+Error: Internal Server Error: An error was encountered while accessing Keycloak
+```
+
+You may be using the wrong hostname to reach the API gateway, re-run the CLI initialization steps above and try again to check that.  There may also be a problem with the Istio service mesh inside of your Shasta system.  Troubleshooting this is beyond the scope of this section, but you may find more useful information by looking at the UAS pod logs in Kubernetes.  There are, generally, two UAS pods, so you may need to look at logs from both to find the specific failure.  The logs tend to have a very large number of `GET ` events listed as part of the aliveness checking.  The following shows an example of looking at UAS logs effectively (the example shows only one UAS manage, normally there would be two):
+
+```
+# kubectl get po -n services | grep uas-mgr | grep -v etcd
+cray-uas-mgr-6bbd584ccb-zg8vx                                    2/2     Running            0          12d
+# kubectl logs -n services cray-uas-mgr-6bbd584ccb-zg8vx cray-uas-mgr | grep -v 'GET ' | tail -25
+2021-02-08 15:32:41,211 - uas_mgr - INFO - getting deployment uai-vers-87a0ff6e in namespace user
+2021-02-08 15:32:41,225 - uas_mgr - INFO - creating deployment uai-vers-87a0ff6e in namespace user
+2021-02-08 15:32:41,241 - uas_mgr - INFO - creating the UAI service uai-vers-87a0ff6e-ssh
+2021-02-08 15:32:41,241 - uas_mgr - INFO - getting service uai-vers-87a0ff6e-ssh in namespace user
+2021-02-08 15:32:41,252 - uas_mgr - INFO - creating service uai-vers-87a0ff6e-ssh in namespace user
+2021-02-08 15:32:41,267 - uas_mgr - INFO - getting pod info uai-vers-87a0ff6e
+2021-02-08 15:32:41,360 - uas_mgr - INFO - No start time provided from pod
+2021-02-08 15:32:41,361 - uas_mgr - INFO - getting service info for uai-vers-87a0ff6e-ssh in namespace user
+127.0.0.1 - - [08/Feb/2021 15:32:41] "POST /v1/uas?imagename=registry.local%2Fcray%2Fno-image-registered%3Alatest HTTP/1.1" 200 -
+2021-02-08 15:32:54,455 - uas_auth - INFO - UasAuth lookup complete for user vers
+2021-02-08 15:32:54,455 - uas_mgr - INFO - UAS request for: vers
+2021-02-08 15:32:54,455 - uas_mgr - INFO - listing deployments matching: host None, labels uas=managed,user=vers
+2021-02-08 15:32:54,484 - uas_mgr - INFO - getting pod info uai-vers-87a0ff6e
+2021-02-08 15:32:54,596 - uas_mgr - INFO - getting service info for uai-vers-87a0ff6e-ssh in namespace user
+2021-02-08 15:40:25,053 - uas_auth - INFO - UasAuth lookup complete for user vers
+2021-02-08 15:40:25,054 - uas_mgr - INFO - UAS request for: vers
+2021-02-08 15:40:25,054 - uas_mgr - INFO - listing deployments matching: host None, labels uas=managed,user=vers
+2021-02-08 15:40:25,085 - uas_mgr - INFO - getting pod info uai-vers-87a0ff6e
+2021-02-08 15:40:25,212 - uas_mgr - INFO - getting service info for uai-vers-87a0ff6e-ssh in namespace user
+2021-02-08 15:40:51,210 - uas_auth - INFO - UasAuth lookup complete for user vers
+2021-02-08 15:40:51,210 - uas_mgr - INFO - UAS request for: vers
+2021-02-08 15:40:51,210 - uas_mgr - INFO - listing deployments matching: host None, labels uas=managed,user=vers
+2021-02-08 15:40:51,261 - uas_mgr - INFO - deleting service uai-vers-87a0ff6e-ssh in namespace user
+2021-02-08 15:40:51,291 - uas_mgr - INFO - delete deployment uai-vers-87a0ff6e in namespace user
+127.0.0.1 - - [08/Feb/2021 15:40:51] "DELETE /v1/uas?uai_list=uai-vers-87a0ff6e HTTP/1.1" 200 -
+```
+
+##### UAI Images not in Registry
+
+If you see something like:
+
+```
+# cray uas list
+[[results]]
+uai_age = "0m"
+uai_connect_string = "ssh vers@10.103.13.172"
+uai_host = "ncn-w001"
+uai_img = "registry.local/cray/cray-uai-sles15sp1:latest"
+uai_ip = "10.103.13.172"
+uai_msg = "ErrImagePull"
+uai_name = "uai-vers-87a0ff6e"
+uai_status = "Waiting"
+username = "vers"
+```
+
+the pre-made end-user UAI image is not in your local registry (or whatever registry it is being pulled from, see the `uai_img` value for details).  Locate and push / import the image to the registry.
+
+##### Missing Volumes and other Container Startup Issues
+
+Various packages install volumes in the UAS configuration.  All of those volumes must also have the underlying resources available, sometimes on the host node where the UAI is running sometimes from with Kubernetes.  If your UAI gets stuck with a `ContainerCreating` `uai_msg` field for an extended time, this is a likely cause.  UAIs run in the `user` Kubernetes namespace, and are pods that can be examined using `kubectl describe`.  Use
+
+```
+# kubectl get po -n user | grep <uai-name>
+```
+
+to locate the pod, and then use
+
+```
+# kubectl describe -n user <pod-name>
+```
+
+to investigate the problem.  If volumes are missing they will show up in the `Events:` section of the output.  Other problems may show up there as well.  The names of the missing volumes or other issues should indicate what needs to be fixed to make the UAI run.
+
 ## NET
 
 ### Verify that KEA has active DHCP leases
@@ -198,15 +390,16 @@ Verify that KEA has active DHCP leases. Right after an fresh install of CSM it i
 
 Get a API Token:
 ```
-ncn-w001:~ # export TOKEN=$(curl -s -S -d grant_type=client_credentials \
-                          -d client_id=admin-client \
-                          -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+# export TOKEN=$(curl -s -S -d grant_type=client_credentials \
+                 -d client_id=admin-client \
+                 -d client_secret=`kubectl get secrets admin-client-auth \
+                 -o jsonpath='{.data.client-secret}' | base64 -d` \
                           https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
 ```
 
 Retrieve all the Leases currently in KEA:
 ```
-ncn-w001:~ # curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' https://api_gw_service.local/apis/dhcp-kea | jq
+# curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' https://api_gw_service.local/apis/dhcp-kea | jq
 ```
 
 If there is an non-zero amount of DHCP leases for river hardware returned that is a good indication that KEA is working.
