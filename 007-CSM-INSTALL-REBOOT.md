@@ -63,7 +63,7 @@ data so run them only when indicated. Instructions are in the `README` files.
 
 ```
 # Example
-pit:~ # ls /var/www/ephemeral/${CSM_RELEASE}/fix/livecd-pre-reboot
+pit# ls /var/www/ephemeral/${CSM_RELEASE}/fix/livecd-pre-reboot
 casminst-435
 ```
 
@@ -109,7 +109,7 @@ all been run by the administrator before starting this stage.
    ```bash
    pit# export CSM_RELEASE=csm-0.7.29
    pit# export artdir=/var/www/ephemeral/${CSM_RELEASE}/images
-   csi handoff ncn-images \
+   pit# csi handoff ncn-images \
         --k8s-kernel-path $artdir/kubernetes/*.kernel \
         --k8s-initrd-path $artdir/kubernetes/initrd.img*.xz \
         --k8s-squashfs-path $artdir/kubernetes/kubernetes*.squashfs \
@@ -157,7 +157,7 @@ all been run by the administrator before starting this stage.
    ```
    Now login from another machine to verify that IP is usable
    ```bash
-   macos# ssh root@10.102.11.13
+   external# ssh root@10.102.11.13
    ncn-m002#
    ```
    Keep this terminal active as it will enable `kubectl` commands during the bring-up of the new NCN. 
@@ -169,9 +169,9 @@ all been run by the administrator before starting this stage.
 10. Observe the serial console
    > **`NOTE`** This requires `ipmitool` to be present on another machine.
    ```bash
-   macOS# export username
-   macOS# export IPMI_PASSWORD
-   macOS# ipmitool -I lanplus -U $username -E -H bigbird-ncn-m001-mgmt sol activate
+   external# export username
+   external# export IPMI_PASSWORD
+   external# ipmitool -I lanplus -U $username -E -H bigbird-ncn-m001-mgmt sol activate
    ```
 11. The node should boot, acquire its hostname (i.e. ncn-m001).
 
@@ -179,7 +179,7 @@ all been run by the administrator before starting this stage.
     > **`NOTE`** If the new node fails to join the cluster after running other cloud-init items please refer to the 
     > `handoff`
    ```bash
-   ncn-m001:~ # kubectl get nodes
+   ncn-m001# kubectl get nodes
    NAME       STATUS   ROLES    AGE     VERSION
    ncn-m001   Ready    master   7s      v1.18.6
    ncn-m002   Ready    master   4h40m   v1.18.6
@@ -219,8 +219,9 @@ At this time, the cluster is done. If the administrator used a USB stick, it may
 ```
 # Example
 # The following command assumes that the data partition of the USB stick has been remounted at /mnt/pitdata
-pit:~ # export CSM_RELEASE=csm-x.y.z
-pit:~ # ls /mnt/pitdata/${CSM_RELEASE}/fix/after-livecd-reboot
+ncn-m001# mount -L PITDATA /mnt/pitdata
+ncn-m001# export CSM_RELEASE=csm-x.y.z
+ncn-m001# ls /mnt/pitdata/${CSM_RELEASE}/fix/after-livecd-reboot
 CASMINST-980
 ```
 
