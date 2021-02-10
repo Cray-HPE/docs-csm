@@ -3,6 +3,8 @@
 This page details how to migrate NCNs from depending on their onboard NICs for PXE booting, and booting
 over the spine switches.
 
+
+
 **This applies to Newer systems (Spring 2020 or newer)** where onboard NICs are still used.
 
 This presents a need for migration for systems still using the legacy, preview topology. Specifically,
@@ -42,6 +44,8 @@ for MST in $(ls /dev/mst/*); do
 done
 ```
 
+### Setting Expected Values
+
 Use this snippet to enable and dump UEFI PXE state.
 ```bash
 # Set UEFI to YES
@@ -52,6 +56,19 @@ for MST in $(ls /dev/mst/*); do
     mlxconfig -d ${MST} -y set SRIOV_EN=0
     mlxconfig -d ${MST} q | egrep "EXP_ROM"
 done
+```
+### Setting Expected Values
+
+Use this snippet to enable and dump UEFI PXE state.
+```bash
+# Set UEFI to YES
+
+MST=/dev/mst/mt4119_pciconf1
+mlxconfig -d ${MST} -y set EXP_ROM_UEFI_ARM_ENABLE=0
+mlxconfig -d ${MST} -y set EXP_ROM_UEFI_x86_ENABLE=0
+mlxconfig -d ${MST} -y set EXP_ROM_PXE_ENABLE=0
+mlxconfig -d ${MST} -y set SRIOV_EN=0
+mlxconfig -d ${MST} q | egrep "EXP_ROM"
 ```
 
 Your Mellanox is now configured for PXE booting.
