@@ -80,9 +80,88 @@ Service OS Version : FL.01.07.0002
 BIOS Version       : FL.01.0002
 ```
 
+# Mellanox Firmware Update
 
+SSH into the switch you want to upgrade
 
+Fetch the image from m001.
+```
+sw-spine01 [standalone: master] # image fetch http://10.252.1.4/fw/network/onyx-X86_64-3.9.1014.stable.img
+```
 
+Install the image.
+```
+sw-spine01 [standalone: master] # image install onyx-X86_64-3.9.1014.stable.img 
+```
 
+Select the image to boot next.
+```
+sw-spine01 [standalone: master] # image boot next
+```
 
+Write memory and reload.
+```
+sw-spine01 [standalone: master] # write memory 
+sw-spine01 [standalone: master] # reload
+```
 
+Once the switch is available, verify the image is installed.
+```
+sw-spine01 [standalone: master] # show images 
+
+Installed images:
+  Partition 1:
+    version: X86_64 3.9.0300 2020-02-26 19:25:24 x86_64
+
+  Partition 2:
+    version: X86_64 3.9.1014 2020-08-05 18:06:58 x86_64
+
+Last boot partition: 2
+Next boot partition: 1
+
+Images available to be installed:
+  1:
+    Image  : onyx-X86_64-3.9.1014.stable.img
+    Version: X86_64 3.9.1014 2020-08-05 18:06:58 x86_64
+```
+
+# Dell Firmware Update
+
+SSH into the switch you want to upgrade
+
+Fetch the image from m001.
+```
+sw-leaf01# image install http://10.252.1.4/fw/network/OS10_Enterprise_10.5.1.4.stable.tar
+```
+
+Check the image upload status.
+
+```
+sw-leaf01# show image status
+Image Upgrade State:     download
+==================================================
+File Transfer State:     download
+--------------------------------------------------
+  State Detail:          In progress
+  Task Start:            2021-02-08T21:24:14Z
+  Task End:              0000-00-00T00:00:00Z
+  Transfer Progress:     7 %
+  Transfer Bytes:        40949640 bytes
+  File Size:             604119040 bytes
+  Transfer Rate:         869 kbps
+```
+
+Once the image is uploaded all that's left is a reboot.
+```
+sw-leaf01# write memory 
+sw-leaf01# reload
+```
+
+Once the switch is available, verify the image is installed.
+```
+sw-leaf01# show version 
+Dell EMC Networking OS10 Enterprise
+Copyright (c) 1999-2020 by Dell Inc. All Rights Reserved.
+OS Version: 10.5.1.4
+Build Version: 10.5.1.4.249
+```

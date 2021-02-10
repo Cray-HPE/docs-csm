@@ -24,7 +24,7 @@ These interfaces can be observed on a live NCN (using `ip link` on the command l
 The underlying naming relies on [BIOSDEVNAME][1], this helps conform device naming into a smaller
 set of possible names. It also helps show us when driver issues occur, if a non-BIOSDEVNAME interface appears
  then METAL can/should receive a triage report/bug.
- 
+
 MAC Based udev rules during initial boot in iPXE. When a node boots, iPXE will dump the PCI busses and sort
 network interfaces into 3 buckets:
 - `mgmt`: internal/management network connection
@@ -49,7 +49,7 @@ The information needed is:
 The information belonds to the first 4 bytes of the PCI header, and admin can obtain it
  using `lspci` or your preferred method for reading the PCI bus.
 
-### Collection Example 
+### Collection Example
 ```bash
 lspci | grep -i ethernet
 lspci | grep c6:00.0
@@ -68,7 +68,8 @@ swap IDs out for certain systems until smarter logic can be added to cloud-init.
 | Intel Corporation | Ethernet Connection X722 | `37d2` | `8086` |
 | Intel Corporation | 82576 | `1526` | `8086` |
 | Mellanox Technologies | ConnectX-4 | `1013` | **`15b3`** |
-| Mellanox Technologies | ConnectX-5 | **`1017`** | `15b3` | 
+| Mellanox Technologies | ConnectX-5 | **`1017`** | `15b3` |
+| Giga-Byte | Intel Corporation I350 | `1521` | `8086` |
 | QLogic Corporation | FastLinQ QL41000 | `8070` | **`1077`** |
 
 [1]: https://stash.us.cray.com/projects/MTL/repos/ipxe/browse/boot/script.ipxe
