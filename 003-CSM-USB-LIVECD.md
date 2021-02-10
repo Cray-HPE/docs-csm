@@ -244,14 +244,19 @@ After gathering the files into the working directory, generate your configs:
 
    These warnings from "csi config init" for issues in hmn_connections.json can be ignored.
    * The node with the external connection (ncn-m001) will have a warning similar to this because its BMC is connected to the site and not the HMN like the other management NCNs.  It can be ignored.
-     "Couldn't find switch port for NCN: x3000c0s1b0"
+      ```
+      "Couldn't find switch port for NCN: x3000c0s1b0"
+      ```
    * An unexpected component may have this message.  If this component is an application node with an unusual prefix, it should be added to the application_node_config.yaml file and then rerun "csi config init".   See the procedure to [create the application_node_config.yaml](308-APPLICATION-NODE-CONFIG.md)
+      ```json
       {"level":"warn","ts":1610405168.8705149,"msg":"Found unknown source prefix! If this is expected to be an Application node, please update application_node_config.yaml","row":
       {"Source":"gateway01","SourceRack":"x3000","SourceLocation":"u33","DestinationRack":"x3002","DestinationLocation":"u48","DestinationPort":"j29"}}
-   * If a component in hmn_connections.json is not a node, there might be a message like this.  It can be ignored.
+      ``` 
+   * If a cooling door is found in hmn_connections.json, there may be a message like the following. It can be safely ignored.
+      ```json
       {"level":"warn","ts":1612552159.2962296,"msg":"Cooling door found, but xname does not yet exist for cooling doors!","row":
       {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
-
+      ```
    Continue with the CSI Workarounds
 
 <a name="csi-workarounds"></a>
