@@ -75,14 +75,14 @@ Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   
 - You can get the NCN IPs from the CSI generated files (NMN.yaml, CAN.yaml, HMN.yaml), these IPs are also located in /etc/dnsmasq.d/statics.conf on the LiveCD/m001.
 
 ```
-root@fanta-ncn-m001-pit 2021-01-15 12:28:57 /etc/dnsmasq.d # cat statics.conf | grep w00 | grep nmn
+pit# grep w00 /etc/dnsmasq.d/statics.conf | grep nmn
 host-record=ncn-w003,ncn-w003.nmn,10.252.1.13
 host-record=ncn-w002,ncn-w002.nmn,10.252.1.14
 host-record=ncn-w001,ncn-w001.nmn,10.252.1.15
 ```
 - The route-map configuration will require you to get the HMN, and CAN IPs as well.
 ```
-root@fanta-ncn-m001-pit 2021-01-15 13:17:06 /etc/dnsmasq.d # grep ncn-w statics.conf | egrep "NMN|HMN|CAN" | grep -v mgmt
+pit# grep ncn-w /etc/dnsmasq.d/statics.conf | egrep "NMN|HMN|CAN" | grep -v mgmt
 dhcp-host=50:6b:4b:08:d0:4a,10.252.1.13,ncn-w003,20m # NMN
 dhcp-host=50:6b:4b:08:d0:4a,10.254.1.20,ncn-w003,20m # HMN
 dhcp-host=50:6b:4b:08:d0:4a,10.102.4.12,ncn-w003,20m # CAN
@@ -97,7 +97,7 @@ dhcp-host=98:03:9b:bb:a9:94,10.102.4.14,ncn-w001,20m # CAN
 - You will need to delete the previous route-map, and BGP configuration on both switches.
 Aruba delete commands.
 ```
-spine01# conf t
+spine01# configure terminal
 
 spine01(config)# no router  bgp 65533                          
 This will delete all BGP configurations on this device.
