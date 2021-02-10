@@ -229,7 +229,7 @@ See [CAN] (414-MGMT-NET-NTP-CONFIG.md)
 ## Verify flow-control settings
 
 With Shasta v1.3.2, some changes were made for the flow-control settings which may not be on Shasta v1.3.0 systems.  Verify that these are set correctly for Shasta v1.4.
-These changes for flow-control will also disable iSCSI on Dell Switches (Leaf, CDU, and Aggregate).
+These changes for flow-control will also disable iSCSI on Dell Switches (Leaf, CDU, and Aggregation).
 
 Replace this internal reference with a 4xx page.
 
