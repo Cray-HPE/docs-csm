@@ -290,6 +290,7 @@ This will enable SSH, and other services when the LiveCD starts.
 
 2. Use CSI to populate the LiveCD, provide both the mountpoint and the CSI generated config dir.
     ```bash
+    linux# cd /mnt/pitdata/prep
     linux# csi pit populate cow /mnt/cow/ ${SYSTEM_NAME}/
     config------------------------> /mnt/cow/rw/etc/sysconfig/network/config...OK
     ifcfg-bond0-------------------> /mnt/cow/rw/etc/sysconfig/network/ifcfg-bond0...OK
@@ -361,6 +362,8 @@ This will enable SSH, and other services when the LiveCD starts.
     ```bash
     linux# cd; umount /mnt/pitdata
     ```
+
+11. Quit the typescript session with the `exit` command and copy the file (csm-usb-lived.<date>.txt) to a location on another server for reference later.
 
 Now the USB stick may be reattached to the CRAY, or if it was made on the CRAY then its server can now
 reboot into the LiveCD.
@@ -435,7 +438,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
    Once the network is up so that ssh to the node works, disconnect from the IPMI console.
 
-   You can disconnect from the IPMI console by using the "&.", that is, the ampersand character followed by a period character.
+   You can disconnect from the IPMI console by using the "~.", that is, the tilde character followed by a period character.
 
    Login via ssh to the node.
 

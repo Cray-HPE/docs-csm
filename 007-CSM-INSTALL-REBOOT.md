@@ -79,8 +79,8 @@ the Kubernetes cluster as the final of 3 masters forming a quorum.
 <a name="start-hand-off"></a>
 ### Start Hand-Off
 
-**It is very important to run the pre-livecd-reboot workarounds**. Ensure that the [](#pre-reboot-workarounds) have 
-all been ran by the administrator before starting this stage.
+**It is very important to run the livecd-pre-reboot workarounds**. Ensure that the [](#pre-reboot-workarounds) have
+all been run by the administrator before starting this stage.
 
 1. Upload SLS file.
    > Note the system name environment variable `SYSTEM_NAME` must be set 
@@ -126,6 +126,16 @@ all been ran by the administrator before starting this stage.
    Boot000C* UEFI IPv4: Intel Network 01 at Baseboard
    ```
    Looking at the above output, `Network 00 at Riser 02 Slot 01` is reasonably our Port-1 of Riser-1.
+
+   ```bash
+   pit# efibootmgr | grep -i ipv4
+   Boot0013* OCP Slot 10 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - PXE (HTTP(S) IPv4)
+   Boot0014* OCP Slot 10 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - PXE (PXE IPv4)
+   Boot0017* Slot 1 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - PXE (HTTP(S) IPv4)
+   Boot0018* Slot 1 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - PXE (PXE IPv4)
+   ```
+   In the above example, look for the non-OCP device that has "PXE IPv4" rather than "HTTP(S) IPv4".
+
    This value varies, take a moment to study the `efibootmgr` output before running this next command.
    ```bash
    pit# efibootmgr -n 0005 2>&1 | grep -i BootNext
@@ -182,7 +192,7 @@ all been ran by the administrator before starting this stage.
 13. Restore and verify the site link. It will be necessary to restore the `ifcfg-lan0` file from either 
     manual backup take in step 6 or re-mount the USB and copy it from the prep directory to `/etc/sysconfig/network/`.
 
-   > The following command assumes that USB stick has been re-mounted
+   > The following command assumes that the PITDATA partition of the USB stick has been remounted at /mnt/pitdata
    ```
    ncn-m001# cp /mnt/pitdata/prep/surtur/pit-files/ifcfg-lan0 /etc/sysconfig/network/
    ncn-m001# wicked ifup lan0
@@ -208,8 +218,9 @@ At this time, the cluster is done. If the administrator used a USB stick, it may
 15. Now check for workarounds in the `fix/after-livecd-reboot` directory within the CSM tar. Each has its own instructions in their respective `README` files.
 ```
 # Example
-pit:~ # export CSM_RELEASE=csm-0.7.29
-pit:~ # ls /var/www/ephemeral/${CSM_RELEASE}/fix/after-livecd-reboot
+# The following command assumes that the data partition of the USB stick has been remounted at /mnt/pitdata
+pit:~ # export CSM_RELEASE=csm-x.y.z
+pit:~ # ls /mnt/pitdata/${CSM_RELEASE}/fix/after-livecd-reboot
 CASMINST-980
 ```
 

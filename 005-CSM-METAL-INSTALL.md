@@ -141,8 +141,7 @@ CASMINST-980
 
 2. Set each node to always UEFI Network Boot, and ensure they're powered off
    ```bash
-    # Replace "opensesame" with the real root password.
-    export IPMI_PASSWORD=opensesame
+    export IPMI_PASSWORD=
     export username=root
     grep -oE "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} chassis bootdev pxe options=efiboot,persistent
     grep -oE "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
@@ -174,8 +173,7 @@ CASMINST-980
 
 4. Boot the **Storage Nodes**
     ```bash
-    # Replace "opensesame" with the real root password.
-    export IPMI_PASSWORD=opensesame
+    export IPMI_PASSWORD=
     export username=root
     grep -oE $stoken /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
@@ -208,8 +206,7 @@ CASMINST-980
 
 6. Boot **Kubernetes Managers and Workers**
     ```bash
-    # Replace "opensesame" with the real root password.
-    export IPMI_PASSWORD=opensesame
+    export IPMI_PASSWORD=
     export username=root
     grep -oE "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
