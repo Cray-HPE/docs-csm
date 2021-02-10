@@ -469,13 +469,13 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 5. Mount the data partition
     > The data partition is set to `fsopt=noauto` to facilitate LiveCDs over virtual-ISO mount. USB installations need to mount this manually.
     ```bash
-    pit:~ # mount -L PITDATA
+    pit# mount -L PITDATA
     ```
 
 6. Verify the system:
    ```bash
-   pit:~ # csi pit validate --network
-   pit:~ # csi pit validate --services
+   pit# csi pit validate --network
+   pit# csi pit validate --services
    ```
 
    > - If nexus is dead, restart it with `systemctl restart nexus`.
