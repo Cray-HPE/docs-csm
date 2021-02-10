@@ -23,14 +23,14 @@ into the CSM Kubernetes cluster).
 1.  Verify that Nexus is running:
 
     ```bash
-    pit:~ # systemctl status nexus
+    pit# systemctl status nexus
     ```
 
 2.  Verify that Nexus is _ready_. (Any HTTP response other than `200 OK`
     indicates Nexus is not ready.)
 
     ```bash
-    pit:~ # curl -sSif http://localhost:8081/service/rest/v1/status/writable
+    pit# curl -sSif http://localhost:8081/service/rest/v1/status/writable
     HTTP/1.1 200 OK
     Date: Thu, 04 Feb 2021 05:27:44 GMT
     Server: Nexus/3.25.0-03 (OSS)
@@ -42,13 +42,13 @@ into the CSM Kubernetes cluster).
 3.  Load the skopeo image installed by the cray-nexus RPM:
 
     ```bash
-    pit:~ # podman load -i /var/lib/cray/container-images/cray-nexus/skopeo-stable.tar
+    pit# podman load -i /var/lib/cray/container-images/cray-nexus/skopeo-stable.tar
     ```
 
 4.  Use `skopeo sync` to upload container images from the CSM release:
 
     ```bash
-    pit:~ # podman run --rm --network host -v /var/www/ephemeral/${CSM_RELEASE}/docker/dtr.dev.cray.com:/images:ro quay.io/skopeo/stable sync --scoped --src dir --dest docker --dest-tls-verify=false --dest-creds admin:admin123 /images localhost:5000
+    pit# podman run --rm --network host -v /var/www/ephemeral/${CSM_RELEASE}/docker/dtr.dev.cray.com:/images:ro quay.io/skopeo/stable sync --scoped --src dir --dest docker --dest-tls-verify=false --dest-creds admin:admin123 /images localhost:5000
     ```
 
 
@@ -63,7 +63,7 @@ installation or upgrade. Create the `site-init` secret to contain
 `/var/www/ephemeral/prep/site-init/customizations.yaml`:
 
 ```bash
-pit:~ # kubectl create secret -n loftsman generic site-init --from-file=/var/www/ephemeral/prep/site-init/customizations.yaml
+pit# kubectl create secret -n loftsman generic site-init --from-file=/var/www/ephemeral/prep/site-init/customizations.yaml
 secret/site-init created
 ```
 
@@ -90,7 +90,7 @@ secret/site-init created
 Deploy the corresponding key necessary to decrypt sealed secrets:
 
 ```bash
-pit:~ # /var/www/ephemeral/prep/site-init/deploy/deploydecryptionkey.sh
+pit# /var/www/ephemeral/prep/site-init/deploy/deploydecryptionkey.sh
 ```
 
 
@@ -103,14 +103,14 @@ pit:~ # /var/www/ephemeral/prep/site-init/deploy/deploydecryptionkey.sh
 > `sls_input_file.json` configuration files.
 >
 > ```bash
-> pit:~ # export SYSTEM_NAME=eniac
+> pit# export SYSTEM_NAME=eniac
 > ```
 
 Complete the CSM install by running `install.sh`.
 
 ```bash
-pit:~ # cd /var/www/ephemeral/$CSM_RELEASE
-pit:/var/www/ephemeral/$CSM_RELEASE # ./install.sh
+pit# cd /var/www/ephemeral/$CSM_RELEASE
+pit# ./install.sh
 ```
 
 > **`NOTE`** `install.sh` will exit with instructions that may be copied and
@@ -118,7 +118,7 @@ pit:/var/www/ephemeral/$CSM_RELEASE # ./install.sh
 > installation. For example:
 > 
 > ```bash
-> pit:/var/www/ephemeral/csm-0.7.24 # ./install.sh
+> pit# ./install.sh
 > ...
 > 
 > Continue with the installation after performing the following steps to switch
@@ -127,22 +127,22 @@ pit:/var/www/ephemeral/$CSM_RELEASE # ./install.sh
 > 1. Unbound is listening on 10.92.100.225, verify it is working by resolving
 >    e.g., ncn-w001.nmn:
 > 
->     pit:/var/www/ephemeral/csm-0.7.24 # dig "@10.92.100.225" +short ncn-w001.nmn
+>     pit:# dig "@10.92.100.225" +short ncn-w001.nmn
 > 
 > 2. Run the following two commands on all NCN manager, worker, and storage
 >    nodes as well as the pit server:
 > 
->     # sed -e "s/^\(NETCONFIG_DNS_STATIC_SERVERS\)=.*$/\1=\"10.92.100.225\"/" -i /etc/sysconfig/network/config
->     # netconfig update -f
+>     ncn# sed -e "s/^\(NETCONFIG_DNS_STATIC_SERVERS\)=.*$/\1=\"10.92.100.225\"/" -i /etc/sysconfig/network/config
+>     ncn# netconfig update -f
 > 
 > 3. Stop dnsmasq on the pit server:
 > 
->     pit:/var/www/ephemeral/csm-0.7.24 # systemctl stop dnsmasq
->     pit:/var/www/ephemeral/csm-0.7.24 # systemctl disable dnsmasq
+>     pit# systemctl stop dnsmasq
+>     pit# systemctl disable dnsmasq
 > 
 > 4. Continue with the installation:
 > 
->     pit:/var/www/ephemeral/csm-0.7.24 # ./install.sh --continue
+>     pit# ./install.sh --continue
 > ```
 
 
@@ -213,7 +213,7 @@ removed before attempting to deploy again.
 The following error may occur when running `./install.sh --continue`:
 
 ```bash
-pit:/var/www/ephemeral/$CSM_RELEASE # ./install.sh --continue
+pit# ./install.sh --continue
 ...
 time="2021-02-07T20:25:22Z" level=info msg="Copying image tag 97/144" from="dir:/image/jettech/kube-webhook-certgen:v1.2.1" to="docker://registry.local/jettech/kube-webhook-certgen:v1.2.1"
 Getting image source signatures
