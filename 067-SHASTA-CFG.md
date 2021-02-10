@@ -111,26 +111,60 @@ with system-specific customizations.
 4.  To federate Keycloak with an upstream LDAP:
 
     *   If LDAP requires TLS (recommended), update the `cray-keycloak` sealed
-        secret value by supplying a base64 encoded form of your CA
-        certificate(s). Admins can use the `keytool` command and a PEM-encoded
-        form of your certificate(s) to obtain this value, as follows:
+        secret value by supplying a base64 encoded Java KeyStore (JKS) that
+        contains the CA certificate that signed the LDAP server's host key.
+        The password for the JKS file must be `password`.
+        Admins can use the `keytool` command and a PEM-encoded form of your
+        certificate(s) to obtain this value, as follows:
 
         > **`NOTE`** `keytool` may not be available on the pit server.
 
         ```bash
         linux# keytool -importcert -trustcacerts -file myad-pub-cert.pem -alias myad -keystore certs.jks -storepass password -noprompt
-        linux# cat certs.jks | base64
+        linux# cat certs.jks | base64 > certs.jks.b64
+        ```
+
+        For internal HPE systems, create the `certs.jks.b64` file by running the following command:
+
+        ```bash
+        linux# echo "/u3+7QAAAAIAAAABAAAAAgAGZGNsZGFwAAABdEZaxJcABVguNTA5AAADSjCCA0YwggKvoAMCAQICCQDF5ER+qOuY3jANBgkqhkiG9w0BAQUFADB2MQswCQYDVQQGEwJVUzELMAkGA1UECBMCV0kxETAPBgNVBAoTCENyYXkgSW5jMRQwEgYDVQQLEwtEYXRhIENlbnRlcjEQMA4GA1UEAxMHZGNncm91cDEfMB0GCSqGSIb3DQEJARYQZGNncm91cEBjcmF5LmNvbTAeFw0xODAxMzAxNzM5MDhaFw0yODAxMjgxNzM5MDhaMHYxCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJXSTERMA8GA1UEChMIQ3JheSBJbmMxFDASBgNVBAsTC0RhdGEgQ2VudGVyMRAwDgYDVQQDEwdkY2dyb3VwMR8wHQYJKoZIhvcNAQkBFhBkY2dyb3VwQGNyYXkuY29tMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCwGeSlwg1wVbOVbR03lJ/DAX0G223ZNTnCaKaSTELpIDQudRxasthhsvBX3CELqU0MPtJw4Bdt5QJEPvKbQPSMr5jyaY+scNenMZh06em4QCLPtcY4wqF7J7hGNfKdH5k7WEMoN7CuxoC3NfVAbXdWuw9Lcjno5J16Dn1686FxOwIDAQABo4HbMIHYMB0GA1UdDgQWBBQPHSI7g6UhzCdiqFcXosVqwzxhRjCBqAYDVR0jBIGgMIGdgBQPHSI7g6UhzCdiqFcXosVqwzxhRqF6pHgwdjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAldJMREwDwYDVQQKEwhDcmF5IEluYzEUMBIGA1UECxMLRGF0YSBDZW50ZXIxEDAOBgNVBAMTB2RjZ3JvdXAxHzAdBgkqhkiG9w0BCQEWEGRjZ3JvdXBAY3JheS5jb22CCQDF5ER+qOuY3jAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUAA4GBAH4pUCoFcDo5OXDmguKBh8qWNwNDE3WdjZb+6bERo0lOhfIeTv5VMPjHBYFiChREIS87HR3iDkc0kdmoRad9HrWX3C39Cla7+nDHDmA3GoNd/Hy/49gcpS27P6Gx+G4zHFj4l0QR9hUD+lsaXB8NfsOTy8TiveEOmk2TfVnWxRZ+UoVVRlm12bFRFobXFgGQRuFKy6U=" > certs.jks.b64
+        ```
+
+        Once you've got the `certs.jks.b64` file, inject and encrypt the file
+        into the `customizations.yaml` file using the following command:
+
+        ```bash
+        linux# cat <<EOF | yq w - 'data."certs.jks"' "$(<certs.jks.b64)" |
+          yq r -j - | /mnt/pitdata/prep/site-init/utils/secrets-encrypt.sh |
+          yq w -f - -i /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray-keycloak'
+        {
+          "kind": "Secret",
+          "apiVersion": "v1",
+          "metadata": {
+            "name": "keycloak-certs",
+            "namespace": "services",
+            "creationTimestamp": null
+          },
+          "data": {}
+        }
+        EOF
         ```
 
     *   Update the `keycloak_users_localize` sealed secret with the
         appropriate value for `ldap_connection_url`. 
 
-        For internal HPE systems, use `ldap://172.30.79.134`.
+        For internal HPE systems, if the IP address for the ncn-m001 node is
+        even then use `ldaps://dcldap2.us.cray.com`, otherwise use
+        `ldaps://dcldap3.us.cray.com`. For example,
+        `ping fanta-ncn-m001.us.cray.com` shows the IP address is
+        `172.30.52.72`, so fanta would use `ldaps://dcldap2.us.cray.com` as the
+        `ldap_connection_url`. This just spreads the load over the 2 LDAP
+        replicas.
 
         Set `ldap_connection_url`:
 
         ```bash
-        linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.keycloak_users_localize.generate.data.(args.name==ldap_connection_url).args.value' 'ldap://172.30.79.134'
+        linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.keycloak_users_localize.generate.data.(args.name==ldap_connection_url).args.value' 'ldaps://dcldap2.us.cray.com'
         ```
 
         On success, the `keycloak_users_localize` sealed secret should look
@@ -144,7 +178,7 @@ with system-specific customizations.
             - type: static
                 args:
                 name: ldap_connection_url
-                value: ldap://172.30.79.134
+                value: ldaps://dcldap3.us.cray.com
         ```
 
     *   Configure the `ldapSearchBase` and `localRoleAssignments` settings for
@@ -153,7 +187,7 @@ with system-specific customizations.
         For internal HPE systems appropriate settings are:
 
         ```yaml
-        ldapSearchBase: "dc=datacenter,dc=cray,dc=com"
+        ldapSearchBase: "dc=dcldap,dc=dit"
         localRoleAssignments:
             - {"group": "criemp", "role": "admin", "client": "shasta"}
             - {"group": "criemp", "role": "admin", "client": "cray"}
@@ -168,7 +202,7 @@ with system-specific customizations.
         Set `ldapSearchBase`:
 
         ```bash
-        linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-keycloak-users-localize.ldapSearchBase 'dc=datacenter,dc=cray,dc=com'
+        linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-keycloak-users-localize.ldapSearchBase 'dc=dcldap,dc=dit'
         ```
 
         Set `localRoleAssignments`:
@@ -205,7 +239,7 @@ with system-specific customizations.
             - {"group": "shasta_admins", "role": "admin", "client": "cray"}
             - {"group": "shasta_users", "role": "user", "client": "shasta"}
             - {"group": "shasta_users", "role": "user", "client": "cray"}
-        ldapSearchBase: dc=datacenter,dc=cray,dc=com
+        ldapSearchBase: dc=dcldap,dc=dit
         ```
 
 4.  Review `/mnt/pitdata/prep/site-init/customizations.yaml` and replace
