@@ -42,6 +42,14 @@ You should run a check for each of the following services after an install. Thes
 
 \* The ipxe shortcut runs a check of both the iPXE service and the TFTP service.
 
+Next, run automated run-time checks against all nodes with the following command:
+
+```
+ncn:~ # /opt/cray/tests/install/ncn/automated/ncn-run-time-checks
+```
+
+Take note of any failed tests and correct the errors.
+
 ## HMS
 
 ### HMS Service Tests
