@@ -331,9 +331,9 @@ install).
     ```
 - Shutdown from m001
     ```bash
-    ncn-m001# export username=alice
-    ncn-m001# export IPMI_PASSWORD=bobby
-    ncn-m001# grep ncn /etc/hosts | grep mgmt | sort -u | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
+    ncn-m001# export username=root
+    ncn-m001# export IPMI_PASSWORD=
+    ncn-m001# grep ncn /etc/hosts | grep mgmt | grep -v m001 | sort -u | awk '{print $2}' | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
     ```
 
 <a name="bmcs-back-to-dhcp"></a>
@@ -389,7 +389,7 @@ During the install of the NCNs their BMCs get get set to static IP addresses. Th
 
 <a name="powering-off-livecd"></a>
 #### Powering Off LiveCD or m001 node
-Lastly, shutdown the LiveCD or m001 node
+Lastly, shutdown the LiveCD or m001 node.  Skip this step if you are planning to use this node as a staging area to create the LiveCD.
 ```bash
 ncn-m001:~ # poweroff
 ```

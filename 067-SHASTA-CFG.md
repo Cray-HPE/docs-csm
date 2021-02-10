@@ -20,7 +20,7 @@ you are installing**, no further action is required.
 > `/mnt/pitdata/prep/site-init/utils/bin` once the SHASTA-CFG repo has been cloned:
 >
 > ```bash
-> linux# alias yq="/mnt/pitdata/prep/site-init/utils/bin/$(uname | awk '{print tolower($0)}')/yq"
+> linux# alias yq="/mnt/pitdata/${CSM_RELEASE}/shasta-cfg/utils/bin/$(uname | awk '{print tolower($0)}')/yq"
 > ```
 
 

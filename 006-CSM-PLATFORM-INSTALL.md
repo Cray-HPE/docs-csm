@@ -146,7 +146,8 @@ pit:/var/www/ephemeral/$CSM_RELEASE # ./install.sh
 > ```
 
 
-After successfully completing the CSM platform install, the administrator may start the [CSM Validation process](008-CSM-VALIDATION.md).
+After successfully completing the CSM platform install, quit the typescript session with the `exit` command and copy the file (booted-csm-lived.<date>.txt) to a location on another server for reference later.
+The administrator may then start the [CSM Validation process](008-CSM-VALIDATION.md).
 
 Once the CSM services are deemed healthy the administrator way proceed to the final step of the CSM install [rebooting the LiveCD into m001](007-CSM-INSTALL-REBOOT.md).
 
