@@ -183,21 +183,22 @@ Shutdown platform services.
 The management NCNs need to be powered off to facilitate a 1.4 install. Wiping the node
 will avoid boot mistakes, making the only viable option the PXE option.
 
-> Assuming [site connections](#site-connections) were updated, the administrator will need to use m001 as
-> a jump box.
+Below, use Ansible for wiping and shutting down the NCNs. Since 1.3 installs used w001 as
+a place to run Ansible and host Ansible inventory, we'll start by jumping from the manager node to w001.
 
-Below, use Ansible for wiping and shutting down the NCNs.
-
-INCORRECT: this process uses ncn-w001 to wipe ncn-m001, but we need to have ncn-m001 booted from the v1.3 disk for the v1.4 installation process.  And it fails to wipe ncn-w001.
   ```bash
   # jumpbox
   ncn-m001# ssh ncn-w001
 
   # wipe all other nodes and power them off
-  ncn-w001# ansible ncn -m shell 'wipefs --all --force /dev/sd[a-z]'
-  ncn-w001# ansible ncn -m shell --limit='!ncn-w001' 'ipmitool power off'
+  ncn-w001# ansible ncn -m shell -a 'wipefs --all --force /dev/sd[a-z]'
+  ncn-w001# ansible ncn -m shell --limit='!ncn-w001:!ncn-m001' -a 'ipmitool power off'
   ncn-w001# ipmitool power off
   ```
+
+At this time all that is left on is ncn-m001. The final `ipmitool power off` command should disconnect the administrator, leaving them on ncn-m001.
+
+If the connection fails to disconnect, an administrator can escape and disconnect IPMI without exiting their SSH session by pressing `~~.` until `ipmitool` disconnects.
 
 > Next: Starting an Installation
 
