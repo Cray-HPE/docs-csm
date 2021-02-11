@@ -211,6 +211,7 @@ After gathering the files into the working directory, generate your configs:
        --hill-cabinets 0 \
        --river-cabinets 1 \
        --can-cidr 10.103.11.0/24 \
+       --can-external-dns 10.103.11.113 \
        --can-gateway 10.103.11.1 \
        --can-static-pool 10.103.11.112/28 \
        --can-dynamic-pool 10.103.11.128/25 \
@@ -239,7 +240,7 @@ After gathering the files into the working directory, generate your configs:
    * Set the three cabinet parameters (mountain-cabinets, hill-cabinets, and river-cabinets) to the number of each cabinet which are part of this system.
    * The starting cabinet number for each type of cabinet (for example, starting-mountain-cabinet) has a default that can be overriden.  See the "csi config init --help"
    * For systems that use non-sequential cabinet id nubmers, use cabinets-yaml to include the cabinets.yaml file.  This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to explicitly specify the id of every cabinet in the system. 
-   * Several parameters (can-gateway, can-cidr, can-static-pool, can-dynamic-pool) describe the CAN (Customer Access network).  The can-gateway is the common gateway IP used for both spine switches and commonly referred to as the Virtual IP for the CAN.  The can-cidr is the IP subnet for the CAN assigned to this system. The can-static-pool and can-dynamic-pool are the MetalLB address static and dynamic pools for the CAN.
+   * Several parameters (can-gateway, can-cidr, can-static-pool, can-dynamic-pool) describe the CAN (Customer Access network).  The can-gateway is the common gateway IP used for both spine switches and commonly referred to as the Virtual IP for the CAN.  The can-cidr is the IP subnet for the CAN assigned to this system. The can-static-pool and can-dynamic-pool are the MetalLB address static and dynamic pools for the CAN. The can-external-dns is the static IP assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded.   The can-external-dns IP must be within the can-static-pool range.
    * Set ntp-pool to a reachable NTP server
 
    These warnings from "csi config init" for issues in hmn_connections.json can be ignored.

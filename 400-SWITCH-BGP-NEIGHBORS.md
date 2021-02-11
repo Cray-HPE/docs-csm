@@ -14,7 +14,7 @@ This page will detail how to manually configure and verify BGP neighbors on the 
 
 CSI cli arguments with ```--bgp-peers aggregation```
 ```
-~/src/mtl/cray-site-init/bin/csi config init --bootstrap-ncn-bmc-user root --bootstrap-ncn-bmc-pass initial0 --ntp-pool cfntp-4-1.us.cray.com,cfntp-4-2.us.cray.com --can-gateway 10.103.8.1 --site-ip 172.30.56.2/24 --site-gw 172.30.48.1 --site-dns 172.30.84.40 --site-nic em1 --system-name odin --bgp-peers aggregation
+~/src/mtl/cray-site-init/bin/csi config init --bootstrap-ncn-bmc-user root --bootstrap-ncn-bmc-pass initial0 --ntp-pool cfntp-4-1.us.cray.com,cfntp-4-2.us.cray.com --can-external-dns 10.103.8.113 --can-gateway 10.103.8.1 --site-ip 172.30.56.2/24 --site-gw 172.30.48.1 --site-dns 172.30.84.40 --site-nic em1 --system-name odin --bgp-peers aggregation
 ```
 
 # Automated Process
