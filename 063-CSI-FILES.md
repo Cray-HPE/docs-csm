@@ -24,6 +24,7 @@ can-bootstrap-vlan: 7
 can-cidr: 10.102.9.0/24
 can-dynamic-pool: 10.102.9.128/25
 can-gateway: 10.102.9.20
+can-external-dns: 10.102.9.113
 can-gw: 10.102.9.20
 can-static-pool: 10.102.9.112/28
 ceph-cephfs-image: dtr.dev.cray.com/cray/cray-cephfs-provisioner:0.1.0-nautilus-1.3
