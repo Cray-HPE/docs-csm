@@ -20,13 +20,17 @@ This page will go over deploying the non-compute nodes.
 <a name="configure-bootstrap-registry-to-proxy-an-upstream-registry"></a>
 ## Configure Bootstrap Registry to Proxy an Upstream Registry
 
-> **`SKIP IF AIRGAP/OFFLINE`** - Online installs require a URL to the proxied
-> registry.
+> **`INTERNAL USE`** -- This section is only relevant for Cray/HPE internal
+> systems.
 
-By default, the bootstrap registry is a `type: hosted` Nexus repository,
-which requires container images to be imported prior to platform
-installation. However, it may be reconfigured to proxy container images from
-an upstream registry as follows:
+> **`SKIP IF AIRGAP/OFFLINE`** - Do **NOT** reconfigure the bootstrap registry
+> to proxy an upstream registry if performing an _airgap/offline_ install.
+
+By default, the bootstrap registry is a `type: hosted` Nexus repository to
+support _airgap/offline_ installs, which requires container images to be
+imported prior to platform installation. However, it may be reconfigured to
+proxy container images from an upstream registry in order to support _online_
+installs as follows:
 
 1.  Stop Nexus:
 
