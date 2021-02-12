@@ -242,10 +242,30 @@ with system-specific customizations.
         ldapSearchBase: dc=dcldap,dc=dit
         ```
 
-4.  Review `/mnt/pitdata/prep/site-init/customizations.yaml` and replace
+5.  Review `/mnt/pitdata/prep/site-init/customizations.yaml` and replace
     remaining `~FIXME~` values with appropriate settings.
 
-5.  Re-encrypt secrets in `customizations.yaml`:
+    For the following `~FIXME~` values, use the example provided and just remove the `~FIXME~ e.g.`
+
+     ```bash
+        sma-rsyslog-aggregator:
+          cray-service:
+            service:
+              loadBalancerIP: ~FIXME~ e.g. 10.92.100.72
+          rsyslogAggregatorHmn:
+            service:
+              loadBalancerIP: ~FIXME~ e.g. 10.94.100.2
+
+        sma-rsyslog-aggregator-udp:
+          cray-service:
+            service:
+              loadBalancerIP: ~FIXME~ e.g. 10.92.100.75
+          rsyslogAggregatorUdpHmn:
+            service:
+              loadBalancerIP: ~FIXME~ e.g. 10.94.100.3
+     ```
+
+6.  Re-encrypt secrets in `customizations.yaml`:
 
     ```bash
     linux:~ # /mnt/pitdata/prep/site-init/utils/secrets-reencrypt.sh /mnt/pitdata/prep/site-init/customizations.yaml /mnt/pitdata/prep/site-init/certs/sealed_secrets.key /mnt/pitdata/prep/site-init/certs/sealed_secrets.crt
