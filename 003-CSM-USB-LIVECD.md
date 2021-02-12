@@ -182,7 +182,7 @@ After gathering the files into the working directory, generate your configs:
    Skip step 3 and continue with the CSI Workarounds
 
 3. Generate the system configuration when a pre-existing parameter file is unavailable:
-   
+
    If moving from a Shasta v1.3 system, this step is required.  If you did step 2 above, skip this step.
 
    The needed files should be in the current directory.  The application_node_config.yaml file is optional.
@@ -239,7 +239,7 @@ After gathering the files into the working directory, generate your configs:
    * There are other interfaces possible, but the install-ncn-bond-members are typically: p1p1,p10p1 for HPE nodes; p1p1,p1p2 for Gigabyte nodes; and p801p1,p801p2 for Intel nodes.  If coming from Shasta v1.3, this information was collected for ncn-m001.
    * Set the three cabinet parameters (mountain-cabinets, hill-cabinets, and river-cabinets) to the number of each cabinet which are part of this system.
    * The starting cabinet number for each type of cabinet (for example, starting-mountain-cabinet) has a default that can be overriden.  See the "csi config init --help"
-   * For systems that use non-sequential cabinet id nubmers, use cabinets-yaml to include the cabinets.yaml file.  This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to explicitly specify the id of every cabinet in the system. 
+   * For systems that use non-sequential cabinet id nubmers, use cabinets-yaml to include the cabinets.yaml file.  This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to explicitly specify the id of every cabinet in the system.
    * Several parameters (can-gateway, can-cidr, can-static-pool, can-dynamic-pool) describe the CAN (Customer Access network).  The can-gateway is the common gateway IP used for both spine switches and commonly referred to as the Virtual IP for the CAN.  The can-cidr is the IP subnet for the CAN assigned to this system. The can-static-pool and can-dynamic-pool are the MetalLB address static and dynamic pools for the CAN. The can-external-dns is the static IP assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded.   The can-external-dns IP must be within the can-static-pool range.
    * Set ntp-pool to a reachable NTP server
 
@@ -252,7 +252,7 @@ After gathering the files into the working directory, generate your configs:
       ```json
       {"level":"warn","ts":1610405168.8705149,"msg":"Found unknown source prefix! If this is expected to be an Application node, please update application_node_config.yaml","row":
       {"Source":"gateway01","SourceRack":"x3000","SourceLocation":"u33","DestinationRack":"x3002","DestinationLocation":"u48","DestinationPort":"j29"}}
-      ``` 
+      ```
    * If a cooling door is found in hmn_connections.json, there may be a message like the following. It can be safely ignored.
       ```json
       {"level":"warn","ts":1612552159.2962296,"msg":"Cooling door found, but xname does not yet exist for cooling doors!","row":
@@ -404,7 +404,7 @@ Connect to the IPMI console.  Press return and login on the console as root.
    ```bash
    external# ipmitool -I lanplus -U $username -P $password -H ${SYSTEM_NAME}-ncn-m001-mgmt sol activate
    eniac-ncn-m001 login: root
-   ncn-m001# 
+   ncn-m001#
    ```
 
 2. Reboot
@@ -451,7 +451,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    ```bash
    external# ssh ${SYSTEM_NAME}-ncn-m001
    ncn-m001 login: root
-   pit# 
+   pit#
 
    Note: The hostname should be something like eniac-ncn-m001-pit when booted from the LiveCD, but it will be shown as "pit#" in the command prompts from this point onward.
 
@@ -479,6 +479,11 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
     ```
 
 6. Verify the system:
+
+  > - Start nexus with `systemctl start nexus`.
+  > - Start basecamp with `systemctl start basecamp`.
+  > - Start conman with`systemctl start conman`.
+
    ```bash
    pit# csi pit validate --network
    pit# csi pit validate --services
@@ -489,7 +494,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    > - If conman is dead, restart it with `systemctl restart conman`.
    > - If dnsmasq is dead, restart it with `systemctl restart dnsmasq`.
 
-   > In addition, the final output from validating the services should have information about the nexus and basecamp conrainers/images similar this example.
+   > In addition, the final output from validating the services should have information about the nexus and basecamp containers/images similar this example.
 
    ```
    CONTAINER ID  IMAGE                                               COMMAND               CREATED        STATUS            PORTS   NAMES
