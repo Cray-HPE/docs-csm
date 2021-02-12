@@ -169,7 +169,7 @@ all been run by the administrator before starting this stage.
 10. Observe the serial console
    > **`NOTE`** This requires `ipmitool` to be present on another machine.
    ```bash
-   external# export usernamegi
+   external# export username
    external# export IPMI_PASSWORD
    external# ipmitool -I lanplus -U $username -E -H bigbird-ncn-m001-mgmt sol activate
    ```
@@ -219,13 +219,14 @@ all been run by the administrator before starting this stage.
    ncn-w003   Ready    <none>   4h39m   v1.18.6
    ```
 
-13. Restore and verify the site link. It will be necessary to restore the `ifcfg-lan0` file and the `ifroute-lan0` file from either 
+13. Restore and verify the site link. It will be necessary to restore the `ifcfg-lan0` file, and both the `ifroute-lan0` and `ifroute-vlan002` file from either 
     manual backup take in step 6 or re-mount the USB and copy it from the prep directory to `/etc/sysconfig/network/`.
 
    > The following command assumes that the PITDATA partition of the USB stick has been remounted at /mnt/pitdata
    ```
    ncn-m001# cp /mnt/pitdata/prep/surtur/pit-files/ifcfg-lan0 /etc/sysconfig/network/
    ncn-m001# cp /mnt/pitdata/prep/surtur/pit-files/ifroute-lan0 /etc/sysconfig/network/
+   ncn-m001# cp /mnt/pitdata/prep/surtur/pit-files/ifroute-vlan002 /etc/sysconfig/network/
    ncn-m001# wicked ifup lan0
    ``` 
 

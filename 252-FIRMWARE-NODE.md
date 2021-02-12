@@ -8,11 +8,11 @@ This page details the minium specification for nodes and their components (such 
 
 | Vendor | Model | Version |
 | :--- | :--- | ---: |
-| HPE | A41 DL325 Gen10 | [10/18/2019 2.30](1) | 
-| HPE | A42 DL385 Gen10+ | [10/31/2020 1.38](2) | 
-| HPE | A43 DL325 Gen10+ | [10/31/2020 1.38](2) | 
-| Intel | S2600WFT | [02.01.0012](3) |
-| Gigabyte | MZ32-AR0-00 | [12.84](4) |
+| HPE | A41 DL325 Gen10 | [10/18/2019 2.30][1] | 
+| HPE | A42 DL385 Gen10+ | [10/31/2020 1.38][2] | 
+| HPE | A43 DL325 Gen10+ | [10/31/2020 1.38][2] | 
+| Intel | S2600WFT | [02.01.0012][3] |
+| Gigabyte | MZ32-AR0-00 | [12.84][4] |
 
 [1]: https://support.hpe.com/hpsc/swd/public/detail?swItemId=MTX-ba30df44427f4e099b2f652829
 [2]: https://downloadcenter.intel.com/download/29753/Intel-Server-Board-S2600WF-Family-BIOS-and-Firmware-Update-Package-for-UEFI
@@ -42,10 +42,10 @@ This page details the minium specification for nodes and their components (such 
 
 | Vendor | Model | PSID | Version |
 | :--- | :--- | --- | ---: |
-| Marvell | QL41232HQCU-HC | | [08.50.78](5) | 
-| Mellanox | MCX416A-BCAT | `MT_2130111027` | [12.28.2006](8) |
-| Mellanox | MCX515A-CCAT | `MT_0000000011` | [16.28.4000](6) |
-| Mellanox | MCX515A-CCAT | `MT_0000000591` | [16.28.4000](7) |
+| Marvell | QL41232HQCU-HC | | [08.50.78][5] | 
+| Mellanox | MCX416A-BCAT | `MT_2130111027` | [12.28.2006][8] |
+| Mellanox | MCX515A-CCAT | `MT_0000000011` | [16.28.4000][6] |
+| Mellanox | MCX515A-CCAT | `MT_0000000591` | [16.28.4000][7] |
 
 > Note: The Mellanox firmware can be updated to minimum spec. using `mlxfwmanager`. The `mlxfwmanager` will fetch updates from online, or it can use a local file (or local web server such as http://pit/).
 
