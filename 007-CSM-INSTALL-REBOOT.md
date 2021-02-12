@@ -35,6 +35,15 @@ Required Platform Services:
 - cray-ipxe
 - cray-tftp
 
+
+## Verify service health
+
+**cray-s3**
+```bash
+ncn# curl "http://$(kubectl get service -n ceph-rgw cray-s3 -o jsonpath='{.status.loadBalancer.ingress[0].ip}'):8080"
+expected response: <?xml version="1.0" encoding="UTF-8"?><ListAllMyBucketsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Owner><ID>anonymous</ID><DisplayName></DisplayName></Owner><Buckets></Buckets></ListAllMyBucketsResult>
+```
+
 <a name="notice-of-danger"></a>
 ## Notice of Danger
 
