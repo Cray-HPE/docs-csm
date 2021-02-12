@@ -1,16 +1,18 @@
 # Management Network Switch Rename
 
-Any system moving from Shasta v1.3 to Shasta v1.4 software needs to adjust the hostnames and IP addresses for all switches to match the new standard.  There is now a virtual IP ending in .1 which is used by spine switches.  In Shasta v1.3, the first spine switch used the .1 address.  In Shasta v1.4, the ordering of the switches has changed with spine switches being grouped first.  The hostname for switches has changed from two digits to a dash and then 3 digits.
+Any system moving from Shasta v1.3 to Shasta v1.4 software needs to adjust the hostnames and IP addresses for all switches to match the new standard.  There is now a virtual IP ending in .1 which is used by spine switches.  In Shasta v1.3, the first spine switch used the .1 address.  In Shasta v1.4, the ordering of the switches has changed with spine switches being grouped first.  The hostname for switches has changed from two digits to a dash and then 3 digits.  All IPv4 data for the switches and switch naming comes from Cray Site Init (CSI).
 
-From v1.3, this example system had these IP addresses and hostnames on the HMN network. Similar names and IP address numbers for the NMN and CAN networks as well.
+From v1.3, this example system had these IP addresses and hostnames on the HMN network. Similar names and IP address numbers for the NMN and CAN networks as well.  Also note that some systems may not have an agg or aggregation set of switches. This is ok. Simply follow the directions below, always paying attention to the CSI specified IPv4 addresses and skip the aggregation switch directions.
 
 ```
 10.1.0.1        sw-spine01
-10.1.0.2        sw-leaf01
-10.1.0.3        sw-spine02
+10.1.0.2        sw-spine02
+10.1.0.3        sw-leaf01
 10.1.0.4        sw-leaf02
-10.1.0.5        sw-cdu01
-10.1.0.6        sw-cdu02
+10.1.0.5        sw-agg01
+10.1.0.6        sw-agg02
+10.1.0.7        sw-cdu01
+10.1.0.8        sw-cdu02
 ```
 
 The desired settings for the HMN network would be more like these.
@@ -18,13 +20,15 @@ The desired settings for the HMN network would be more like these.
 ```
 10.1.0.2        sw-spine-001
 10.1.0.3        sw-spine-002
-10.1.0.4        sw-leaf-001
-10.1.0.5        sw-leaf-002
-10.1.0.6        sw-cdu-001
-10.1.0.7        sw-cdu-002
+10.1.0.4        sw-agg-001
+10.1.0.5        sw-agg-002
+10.1.0.6        sw-leaf-001
+10.1.0.7        sw-leaf-002
+10.1.0.8        sw-cdu-001
+10.1.0.9        sw-cdu-002
 ```
 
-This system needs to do the renames in this order: do CDUs (6 to 7, 5 to 6) and then leafs (4 to 5, but also 2 to 4), then spines (3 to 3, and 1 to 2). These have IP address changes and name changes since we now have 3 digits instead of 2 for the switch hostname.  So even though sw-spine02 has the same IP address, it has the new name sw-spine-002.
+This system needs to do the renames in this order: do CDUs (7 to 8, 8 to 9) and then leafs (3 to 6, but also 4 to 7), then spines (2 to 3, and 1 to 2). These have IP address changes and name changes since we now have 3 digits instead of 2 for the switch hostname.
 
 1. Check switch IP addresses, names, and component names in /var/www/ephemeral/prep/${SYSTEM_NAME}/networks when booted from the LiveCD on ncn-m001.
 
@@ -47,20 +51,20 @@ This system needs to do the renames in this order: do CDUs (6 to 7, 5 to 6) and 
        comment: x3000c0h34s1
        aliases: []
      - ip_address: 10.252.0.4
-       name: sw-leaf-001
-       comment: x3000c0w38
-       aliases: []
-     - ip_address: 10.252.0.5
-       name: sw-leaf-002
-       comment: x3000c0w36
-       aliases: []
-     - ip_address: 10.252.0.6
        name: sw-cdu-001
        comment: d0w1
        aliases: []
-     - ip_address: 10.252.0.7
+     - ip_address: 10.252.0.5
        name: sw-cdu-002
        comment: d0w2
+       aliases: []
+     - ip_address: 10.252.0.6
+       name: sw-leaf-001
+       comment: x3000c0w38
+       aliases: []
+     - ip_address: 10.252.0.7
+       name: sw-leaf-002
+       comment: x3000c0w36
        aliases: []
    ```
 
@@ -81,20 +85,20 @@ This system needs to do the renames in this order: do CDUs (6 to 7, 5 to 6) and 
        comment: x3000c0h34s1
        aliases: []
      - ip_address: 10.254.0.4
-       name: sw-leaf-001
-       comment: x3000c0w38
-       aliases: []
-     - ip_address: 10.254.0.5
-       name: sw-leaf-002
-       comment: x3000c0w36
-       aliases: []
-     - ip_address: 10.254.0.6
        name: sw-cdu-001
        comment: d0w1
        aliases: []
-     - ip_address: 10.254.0.7
+     - ip_address: 10.254.0.5
        name: sw-cdu-002
        comment: d0w2
+       aliases: []
+     - ip_address: 10.254.0.6
+       name: sw-leaf-001
+       comment: x3000c0w38
+       aliases: []
+     - ip_address: 10.254.0.7
+       name: sw-leaf-002
+       comment: x3000c0w36
        aliases: []
    ```
 
@@ -102,7 +106,7 @@ This system needs to do the renames in this order: do CDUs (6 to 7, 5 to 6) and 
    pit# vi CAN.yaml
    ```
 
-   Excerpt from CAN.yaml showing the two spine switches. Most v1.3 systems would have had these as ending in .1 and in .3.
+   Excerpt from CAN.yaml showing the two spine switches. Most v1.3 systems would have had these as ending in .1 and in .3.  Note these switches are not named "spine" or "agg" since the SHCD may specify differing exit points, but with either option the IPv4 address is specified.
 
    ```
      ip_reservations:
@@ -127,11 +131,11 @@ This system needs to do the renames in this order: do CDUs (6 to 7, 5 to 6) and 
    Save this information in a text file for later evaluation and comparison after all changes have been made.
    pit# vi before.sw-spine01.txt
 
-   Repeat this for all of the switches.  The example system has switches up to 10.1.0.6.
+   Repeat this for all of the switches.  The example system has switches up to 10.1.0.8.
 
-3. Start moves with the highest numbered switch. In this case, that is sw-cdu02.
+3. Start moves with the highest numbered switch. In this case, that is sw-cdu02.  Said another way, if a switch is in a pair, start with the second half of the pair (ie. 2 of 2).
 
-   Move sw-cdu02 to sw-cdu-002 and increase IP addresses by 1. It is a Dell switch.
+   Move sw-cdu02 to sw-cdu-002 and increase IP addresses as specified in CSI output. It is a Dell switch.
 
    Note: You can change many addresses in a single session, but not the one you used to connect. This first connection will skip vlan 1 and change all of the other vlans (vlan 2 and vlan 4 on a CDU switch.)
 
@@ -165,7 +169,7 @@ Logout of the switch and return using the new IP address for vlan 2 so that vlan
    pit#
    ```
 
-4. Move sw-cdu01 to sw-cdu-001 and increase IP addresses by 1. It is a Dell switch.
+4. Move sw-cdu01 to sw-cdu-001 and increase IP addresses as specified in CSI output. It is a Dell switch.
 
    Note: You can change many addresses in a single session, but not the one you used to connect. This first connection will skip vlan 1 and change all of the other vlans (vlan 2 and vlan 4 on a CDU switch.)
 
@@ -199,7 +203,7 @@ Logout of the switch and return using the new IP address for vlan 2 so that vlan
    pit#
    ```
 
-5. Move sw-leaf02 to sw-leaf-002 and increase IP addresses by 1. It is a Dell switch.
+5. Move sw-leaf02 to sw-leaf-002 and increase IP addresses as specified in CSI output. It is a Dell switch.
 
    Note: You can change many addresses in a single session, but not the one you used to connect. This first connection will skip vlan 1 and change all of the other vlans (vlan 2, vlan 4, vlan 7, vlan 10) on a leaf switch.
 
@@ -237,7 +241,7 @@ Logout of the switch and return using the new IP address for vlan 2 so that vlan
    pit#
    ```
 
-6. Move sw-leaf01 to sw-leaf-001 and increase IP addresses by 1. It is a Dell switch.
+6. Move sw-leaf01 to sw-leaf-001 and increase IP addresses as specified in CSI output. It is a Dell switch.
 
    Note: You can change many addresses in a single session, but not the one you used to connect. This first connection will skip vlan 1 and change all of the other vlans (vlan 2, vlan 4, vlan 7, vlan 10) on a leaf switch.
 
@@ -331,7 +335,7 @@ Logout of the switch and return using the new IP address for vlan 2 so that vlan
    pit#
    ```
 
-8. Move sw-spine01 to sw-spine-001 and increase IP addresses by 1. It is a Mellanox switch.
+8. Move sw-spine01 to sw-spine-001 and increase IP addresses as specified in CSI output. It is a Mellanox switch.
 
    Note: You can change many addresses in a single session, but not the one you used to connect. This first connection will skip vlan 1 and change all of the other vlans (vlan 2, vlan 4, vlan 7, vlan 10) on a leaf switch.
 
@@ -422,4 +426,3 @@ Logout of the switch and return using the new IP address for vlan 2 so that vlan
    Repeat this for all of the switches.  The example system has switches up to 10.1.0.7.
 
 There are other changes needed, as described in [Dell and Mellanox Changes for Shasta v1.3 to v1.4 Upgrades](412-MGMT-NET-DELL-MELLANOX-UPGRADES.md)
-
