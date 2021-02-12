@@ -59,7 +59,7 @@ Locate the CSM Barebones image and note the path to the image's manifest.json in
       "name": "cray-shasta-csm-sles15sp1-barebones.x86_64-shasta-1.4"
     }
 
-####Create a BOS Session Template for the CSM Barebones Image
+#### Create a BOS Session Template for the CSM Barebones Image
 
 The session template below can be copied and used as the basis for the BOS Session Template. As noted below, make sure the S3 path for the manifest matches the S3 path shown in IMS.
 
@@ -90,7 +90,7 @@ The session template below can be copied and used as the basis for the BOS Sessi
     # cray bos v1 sessiontemplate create --file sessiontemplate.json --name shasta-1.4-csm-bare-bones-image
     /sessionTemplate/shasta-1.4-csm-bare-bones-image
 
-####Find an available node and boot the session template
+#### Find an available node and boot the session template
 
     # cray hsm state components list
     ...
@@ -116,7 +116,7 @@ The session template below can be copied and used as the basis for the BOS Sessi
      
     # cray bos v1 session create --template-uuid shasta-1.4-csm-bare-bones-image --operation reboot --limit <xname>
 
-####Connect to the node's console nad watch the boot
+#### Connect to the node's console nad watch the boot
 
 The boot will fail, but should reach the dracut stage. If the dracut stage is reached, the boot 
 can be considered successful and shows that the necessary CSM services needed to boot a node are 
@@ -152,9 +152,21 @@ At the time of this writing there is a bug ([CASMTRIAGE-553](https://connect.us.
 
 ### Usage
      cmsdev test [-q | -v] <shortcut>
+* The shortcut determines which component will be tested. See the table in the next section for the list of shortcuts.
 * The tool logs to /opt/cray/tests/cmsdev.log
 * The -q (quiet) and -v (verbose) flags can be used to decrease or increase the amount of information sent to the screen.
   * The same amount of data is written to the log file in either case.
+
+#### Interpreting Results
+
+* If a test passes:
+  * The last line of output from the tool reports SUCCESS
+  * The return code is 0.
+* If a test fails:
+  * The last line of output from the tool reports FAILURE
+  * The return code is non-0.
+* Unless the test was run in verbose mode, the log file will contain additional information about the execution.
+* For more detailed information on the tests, please see the CSM Validation section of the admin guide (note to docs writers: replace this with the actual document name and section number/title once available).
 
 ### Checks To Run
 
