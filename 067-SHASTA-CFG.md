@@ -24,60 +24,22 @@ you are installing**, no further action is required.
 > ```
 
 
-## Create or Update Site-Init Directory
+## Create and Initialize Site-Init Directory
 
-1.  For a system/administrator with an existing SHASTA-CFG repository, clone it
-    into `/mnt/pitdata/prep/site-init` as shown below.
-
-    ```bash
-    linux# git clone https://stash.us.cray.com/scm/shasta-cfg/<system_name>.git /mnt/pitdata/prep/site-init
-    ```
-
-    Otherwise, create `/mnt/pitdata/prep/site-init`:
+1.  Create directory `/mnt/pitdata/prep/site-init`:
 
     ```bash
     linux# mkdir -p /mnt/pitdata/prep/site-init
     ```
 
-2.  **`IMPORTANT`** In order to retain `cray_reds_credentials`,
-    `cray_meds_credentials`, or `cray_hms_rts_credentials` credentials already
-    in `/mnt/pitdata/prep/site-init/customizations.yaml`, presumably from a
-    previous install, they **MUST BE REMOVED** from the
-    `spec.kubernetes.tracked_sealed_secrets` list in
-    `/mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml`.
-
-    View currently tracked sealed secrets (i.e., those which will be
-    re-generated) via:
-
-    ```bash
-    linux# yq read /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets
-    - cray_reds_credentials
-    - cray_meds_credentials
-    - cray_hms_rts_credentials
-    ```
-
-    To retain e.g. `cray_reds_credentials` already in
-    `/mnt/pitdata/prep/site-init/customizations.yaml`:
-
-    ```bash
-    linux# yq delete -i /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_reds_credentials
-    ```
-
-    > To retain the REDS/MEDS/RTS credentials the following can be ran:
-    > ```
-    > yq delete -i /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_reds_credentials
-    > yq delete -i /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_meds_credentials
-    > yq delete -i /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_hms_rts_credentials
-    > ```
-
-3.  Initialize (or update) `/mnt/pitdata/prep/site-init` from CSM:
+2.  Initialize `/mnt/pitdata/prep/site-init` from CSM:
 
     ```bash
     linux# /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/meta/init.sh /mnt/pitdata/prep/site-init
     ```
 
 
-## Update System Customizations
+## Create Baseline System Customizations
 
 The following steps update `/mnt/pitdata/prep/site-init/customizations.yaml`
 with system-specific customizations.
@@ -97,11 +59,13 @@ with system-specific customizations.
     linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml spec.wlm.cluster_name "$SYSTEM_NAME"
     ```
 
-2.  Review the `spec.kubernetes.sealed_secrets` generate blocks for
-    `cray_reds_credentials`, `cray_meds_credentials`, and
-    `cray_hms_rts_credentials`. Replace the `Password` references with values
-    appropriate for your system. If you opted to keep these secrets, you can
-    safely skip this instruction.
+2.  Review the configuration to generate these sealed secrets in `customizations.yaml`:
+
+    * `spec.kubernetes.sealed_secrets.cray_reds_credentials`
+    * `spec.kubernetes.sealed_secrets.cray_meds_credentials`
+    * `spec.kubernetes.sealed_secrets.cray_hms_rts_credentials`
+
+    Replace the `Password` references with values appropriate for your system.
 
 3.  To customize the PKI Certificate Authority (CA) used by the platform, see
     [Customizing the Platform CA](055-CERTIFICATE-AUTHORITY.md). 
@@ -242,8 +206,8 @@ with system-specific customizations.
         ldapSearchBase: dc=dcldap,dc=dit
         ```
 
-5.  Review `/mnt/pitdata/prep/site-init/customizations.yaml` and replace
-    remaining `~FIXME~` values with appropriate settings.
+5.  Review `customizations.yaml` and replace remaining `~FIXME~` values with
+    appropriate settings.
 
     For the following `~FIXME~` values, use the example provided and just remove the `~FIXME~ e.g.`
 
@@ -265,11 +229,12 @@ with system-specific customizations.
               loadBalancerIP: ~FIXME~ e.g. 10.94.100.3
      ```
 
-6.  Re-encrypt secrets in `customizations.yaml`:
+
+6.  Re-encrypt and seed secrets in `customizations.yaml`:
 
     ```bash
-    linux:~ # /mnt/pitdata/prep/site-init/utils/secrets-reencrypt.sh /mnt/pitdata/prep/site-init/customizations.yaml /mnt/pitdata/prep/site-init/certs/sealed_secrets.key /mnt/pitdata/prep/site-init/certs/sealed_secrets.crt
-    linux:~ # /mnt/pitdata/prep/site-init/utils/secrets-seed-customizations.sh /mnt/pitdata/prep/site-init/customizations.yaml
+    linux# /mnt/pitdata/prep/site-init/utils/secrets-reencrypt.sh /mnt/pitdata/prep/site-init/customizations.yaml /mnt/pitdata/prep/site-init/certs/sealed_secrets.key /mnt/pitdata/prep/site-init/certs/sealed_secrets.crt
+    linux# /mnt/pitdata/prep/site-init/utils/secrets-seed-customizations.sh /mnt/pitdata/prep/site-init/customizations.yaml
     Creating Sealed Secret keycloak-certs
     Generating type static_b64...
     Creating Sealed Secret keycloak-master-admin-auth
@@ -304,25 +269,98 @@ with system-specific customizations.
     Generating type static...
     ```
 
-## Commit Site-Init Changes
+## Version Control Site-Init Files
 
-Add and commit changes to `/mnt/pitdata/prep/site-init` files:
+Setup `/mnt/pitdata/prep/site-init` as a Git repository in order to manage the
+baseline configuration during initial system installation.
+
+1.  Iinitialize `/mnt/pitdata/prep/site-info` as a Git repository:
+
+    ```bash
+    linux# cd /mnt/pitdata/prep/site-init
+    linux# git init .
+    ```
+
+2.  (Optional) **`WARNING`** If production system or operational security is a
+    concern, do NOT store the sealed secret private key in Git; instead,
+    **store the sealed secret key outside of Git in a secure offline system**.
+    To ensure these sensitive keys are not accidentally committed, configure
+    `.gitignore` to ignore files under the `certs` directory:
+
+    ```bash
+    linux# echo "certs/" >> .gitignore
+    ```
+
+3.  Stage site-init files to be committed:
+
+    ```bash
+    linux# git add -A
+    ```
+
+4.  Review what will be committed:
+
+    ```bash
+    linux# git status
+    ```
+
+5.  Commit all the above changes as the baseline configuration:
+
+    ```bash
+    linux# git commit -m "Baseline configuration for $(/mnt/pitdata/${CSM_RELEASE}/lib/version.sh)"
+    ```
+
+
+### Push to a Remote Repository
+
+It is **strongly recommended** to that the site-init repository be maintained
+off-cluster. Add a remote repository and push the baseline configuration on
+`master` branch to a corresponding remote branch. 
+
+
+## Customer-Specific Customizations
+
+Customer-specific customizations are any changes on top of the baseline
+configuration to satisfy customer-specific requirements. It is recommended that
+customer-specific customizations be tracked on branches separate from the
+mainline in order to make them easier to manage.
+
+Apply any customer-specific customizations by merging the corresponding
+branches into `master` branch of `/mnt/pitdata/prep/site-init`.
+
+When considering merges, and especially when resolving conflicts, carefully
+examine differences to ensure all changes are relevant. For example, when
+applying a customer-specific customization used in a prior version, be sure the
+change still makes sense. It’s common for options to change as new features are
+introduced and bugs are fixed.
+
+
+----
+
+
+## Tracked Sealed Secrets
+
+Tracked sealed secrets are regenerated everytime secrets are seeded (see the
+use of `utils/secrets-seed-customizations.sh` above). View currently tracked
+sealed secrets via:
 
 ```bash
-linux# cd /mnt/pitdata/prep/site-init
-linux# git add -A
-linux# git commit -m "Updated to $(/mnt/pitdata/${CSM_RELEASE}/lib/version.sh)"
+linux# yq read /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets
+- cray_reds_credentials
+- cray_meds_credentials
+- cray_hms_rts_credentials
 ```
 
-> **`NOTE`** If production system or operational security is a concern, **store
-> your sealed secret key-pair outside of Git in a secure offline system**.
-
-If `/mnt/pitdata/prep/site-init` was cloned from an upstream repository, be
-sure to push these commits:
+In order to prevent tracked sealed secrets from being regenerated, they **MUST
+BE REMOVED** from the `spec.kubernetes.tracked_sealed_secrets` list in
+`/mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml` prior to seeding.
+To retain the REDS/MEDS/RTS credentials, run:
 
 ```bash
-linux# git push
+linux# yq delete -i /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_reds_credentials
+linux# yq delete -i /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_meds_credentials
+linux# yq delete -i /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_hms_rts_credentials
 ```
+
 
 ## Decrypting Sealed Secrets for Review
 
@@ -336,10 +374,37 @@ linux:/mnt/pitdata/prep/site-init# ./utils/secrets-decrypt.sh cray_meds_credenti
 {"Username": "root", "Password": "..."}
 ```
 
-## Accessing the customizations.yaml from within Cluster
 
-The install procedure outlined in 006-CSM-PLATFORM-INSTALL contains a step which places the customizations.yaml in a Kubernetes secret.  Accessing this file will be a necessary step for some of the other Shasta product installers, such as the UAN.  You can view these install settings and optionally pipe to a file from a Kubernetes master or worker NCN with the following command:
+## Site-Init Kubernetes Secret
+
+The `site-init` Secret (in the `loftsman` namespace) is created at the
+beginning of [the CSM platform install procedures](006-CSM-PLATFORM-INSTALL.md)
+and contains `customizations.yaml`. When the pit server is rebooted as ncn-m001
+at the end of the CSM install, the `site-init` Secret is the mechanism other
+Cray/HPE product installers will use to obtain `customizations.yaml`.
+
+To read `customizations.yaml` from the `site-init` secret:
 
 ```bash
-kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > /tmp/customizations.yaml
+# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d
+```
+
+
+## Modifying Customizations During Installation
+
+If for some reason system customizations need to be modified to complete
+product installtion, administrators must first update `customizations.yaml` in
+the site-init Git repository, which may no longer be mounted on any cluster
+node, and then delete and recreate the `site-init` secret.
+
+To delete the `site-init` secret:
+
+```bash
+# kubectl -n loftsman delete secret site-init
+```
+
+To recreate the `site-init` secret:
+
+```bash
+# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
 ```
