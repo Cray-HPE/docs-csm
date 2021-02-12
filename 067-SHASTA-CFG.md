@@ -265,7 +265,24 @@ with system-specific customizations.
               loadBalancerIP: ~FIXME~ e.g. 10.94.100.3
      ```
 
-6.  Re-encrypt secrets in `customizations.yaml`:
+6.  Load container images required by Sealed Secret Generators
+
+    If running through this process on a Shasta 1.3 ncn-m001 node, or a node (laptop, ...) external to Shasta, run:
+
+    ```bash
+    linux:~ # /mnt/pitdata/${CSM_RELEASE}/csm/hack/load-container-image.sh dtr.dev.cray.com/zeromq/zeromq:v4.0.5
+    ```
+
+    If running through this process on a Shasta 1.4 ncn-m001 node (after reboot of the LiveCD and ncn-m001 has joined the K8S Cluster), run:
+
+    ```bash
+    linux:~ # podman pull registry.local/zeromq/zeromq:v4.0.5
+    linux:~ # podman tag registry.local/zeromq/zeromq:v4.0.5 dtr.dev.cray.com/zeromq/zeromq:v4.0.5
+    ```
+
+    > Note: you must properly configured Docker or Podman environment.
+
+7.  Re-encrypt secrets in `customizations.yaml`:
 
     ```bash
     linux:~ # /mnt/pitdata/prep/site-init/utils/secrets-reencrypt.sh /mnt/pitdata/prep/site-init/customizations.yaml /mnt/pitdata/prep/site-init/certs/sealed_secrets.key /mnt/pitdata/prep/site-init/certs/sealed_secrets.crt
