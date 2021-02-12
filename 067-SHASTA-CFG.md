@@ -206,7 +206,27 @@ with system-specific customizations.
         ldapSearchBase: dc=dcldap,dc=dit
         ```
 
-5.  Review `customizations.yaml` and replace remaining `~FIXME~` values with
+5.  If you need to resolve outside hostnames, you will need to configure forwarding in the cray-dns-unbound service.
+    For example, if you are using a hostname and not an IP for the upstream LDAP server in step 4 above, you will need to be able to resolve that hostname.
+
+    Set the `localZones` and `forwardZones` for the `cray-dns-unbound` service:
+
+    ```bash
+    linux# yq write -s - -i /mnt/pitdata/prep/site-init/customizations.yaml <<EOF
+    - command: update
+      path: spec.kubernetes.services.cray-dns-unbound
+      value:
+        localZones:
+        - localType: static
+          name: "local"
+        forwardZones:
+        - name: "."
+          forwardIps:
+          - "{{ network.netstaticips.system_to_site_lookups }}"
+    EOF
+    ```
+
+6.  Review `customizations.yaml` and replace remaining `~FIXME~` values with
     appropriate settings.
 
     For the following `~FIXME~` values, use the example provided and just remove the `~FIXME~ e.g.`
@@ -229,7 +249,7 @@ with system-specific customizations.
               loadBalancerIP: ~FIXME~ e.g. 10.94.100.3
      ```
 
-6.  Load container images required by Sealed Secret Generators
+7.  Load container images required by Sealed Secret Generators
 
     If running through this process on a Shasta 1.3 ncn-m001 node, or a node (laptop, ...) external to Shasta, run:
 
@@ -244,7 +264,7 @@ with system-specific customizations.
     linux:~ # podman tag registry.local/zeromq/zeromq:v4.0.5 dtr.dev.cray.com/zeromq/zeromq:v4.0.5
     ```
 
-7.  Re-encrypt and seed secrets in `customizations.yaml`:
+8.  Re-encrypt and seed secrets in `customizations.yaml`:
 
     ```bash
     linux# /mnt/pitdata/prep/site-init/utils/secrets-reencrypt.sh /mnt/pitdata/prep/site-init/customizations.yaml /mnt/pitdata/prep/site-init/certs/sealed_secrets.key /mnt/pitdata/prep/site-init/certs/sealed_secrets.crt
@@ -288,7 +308,7 @@ with system-specific customizations.
 Setup `/mnt/pitdata/prep/site-init` as a Git repository in order to manage the
 baseline configuration during initial system installation.
 
-1.  Iinitialize `/mnt/pitdata/prep/site-info` as a Git repository:
+1.  Initialize `/mnt/pitdata/prep/site-info` as a Git repository:
 
     ```bash
     linux# cd /mnt/pitdata/prep/site-init
