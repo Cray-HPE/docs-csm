@@ -27,6 +27,7 @@ total 2.7G
 | Aruba | 6300 | ArubaOS-CX_6400-6300_10.06.0010 |
 | Aruba | 8320 | ArubaOS-CX_8320_10.06.0010 |
 | Aruba | 8325 | ArubaOS-CX_8325_10.06.0010 |
+| Aruba | 8360 | ArubaOS-CX_8325_10.06.0010 |
 | Dell | S3048-ON | 10.5.1.4 |
 | Dell | S4148F-ON | 10.5.1.4 |
 | Dell | S4148T-ON | 10.5.1.4 |

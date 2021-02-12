@@ -1,22 +1,28 @@
 # Cabling
+* [HPE Hardware](##hpe-hardware)
+* [Gigabye Hardware](##gigabyte-hardware)
 
-## HPE DL385
+## HPE Hardware
+
+### HPE DL385
 ![DL385](img/network/DL385-back.png)
 * The OCP Slot is noted (number 7) in the image above.  
   * This is the bottom middle slot to the left of the VGA port.
-  * Ports are numbered left-to-right:  the far left port is port 1
+  * Ports are numbered left-to-right:  the far left port is port 1.
 * The PCIe Slot 1 is on the top left side of the image above (under number 1).
-  * Ports are numbered left-to-right:  the far left port is port 1
+  * Ports are numbered left-to-right:  the far left port is port 1.
 
-## HPE DL325
+
+### HPE DL325
 ![DL325](img/network/DL325-back.png)
 * The OCP Slot is noted (number 9) in the image above.
   * This is the slot on the bottom left of the server.
-  * Ports are numbered left-to-right:  the far left port is port 1
+  * Ports are numbered left-to-right:  the far left port is port 1.
 * The PCIE Slot 1 is on the top left side of the image above (under number 1).
-  * Ports are numbered left-to-right:  the far left port is port 1
+  * Ports are numbered left-to-right:  the far left port is port 1.
 
-## NCN Worker Cabling
+
+### NCN Worker Cabling
 
 | Server Port        | Management Network Port        | Speed | Use / Configuration            |
 |--------------------|--------------------------------|-------|--------------------------------|
@@ -25,14 +31,15 @@
 | PCIe Slot 1 port 1 | spine or aggr pair, switch 2/2 | 25Gb  | Management Network NMN/HMN/CAN |
 | PCIe Slot 1 port 2 | NONE                           | NONE  | NONE                           |
 
-## NCN Master Cabling
+
+### NCN Master Cabling
 
 | Server Port        | Management Network Port        | Speed | Use / Configuration            |
 |--------------------|--------------------------------|-------|--------------------------------|
-| OCP port 1         | spine or aggr pair, switch 1/2 | 25Gb  | Management Network NMN/HMN/CAN  |
+| OCP port 1         | spine or aggr pair, switch 1/2 | 25Gb  | Management Network NMN/HMN/CAN |
 | OCP port 2         | NONE                           | NONE  | NONE                           |
 | PCIe Slot 1 port 1 | spine or aggr pair, switch 2/2 | 25Gb  | Management Network NMN/HMN/CAN |
-| PCIe Slot 1 port 2 | NONE                           | NONE  | NONE (See note below for m001) |a
+| PCIe Slot 1 port 2 | NONE (See note below for m001) | NONE  | Site (See note below for m001) |
 
 
 **NOTE**: Master 1 (m001) is required to have a site connection for installation and non-CAN system access.  This can have several configurations depending on customer requirements/equipment:
@@ -41,7 +48,8 @@
 * If the customer does not support 10/25Gb speeds (or connection type) and requires RJ45 copper or 1Gb, then a new and separate card will be installed on m001 and that card will provide site connectivity.
 * Another possibility (non-HPE hardware mainly) is that a built-in 1Gb port will be used if available (similar to Shasta v1.3 PoR on Gigabyte hardware).
 
-## UAN Cabling
+
+### UAN Cabling
 
 | Server Port        | Management Network Port        | Speed | Use / Configuration        |
 |--------------------|--------------------------------|-------|----------------------------|
@@ -50,3 +58,43 @@
 | PCIe Slot 1 port 1 | spine or aggr pair, switch 2/2 | 25Gb  | NONE (Shasta v1.4)         |
 | PCIe Slot 1 port 2 | spine or aggr pair, switch 2/2 | 25Gb  | Managment Network CAN bond |
 
+## Gigabyte Hardware
+
+### NCN Worker Cabling
+![Gigabyte Worker](img/network/gigabyte-worker.png)
+
+| Server Port        | Management Network Port        | Speed | Use / Configuration            |
+|--------------------|--------------------------------|-------|--------------------------------|
+| PCIe Slot 1 port 1 | spine or aggr pair, switch 1/2 | 40Gb  | Management Network NMN/HMN/CAN |
+| PCIe Slot 1 port 2 | spine or aggr pair, switch 2/2 | 40Gb  | Management Network NMN/HMN/CAN |
+
+**NOTE**: Cabling of w001 has changed in Shasta v1.4.  Please see m001 note below.
+
+### NCN Master Cabling
+![Gigabyte Master](img/network/gigabyte-master.png)
+
+| Server Port        | Management Network Port        | Speed | Use / Configuration            |
+|--------------------|--------------------------------|-------|--------------------------------|
+| PCIe Slot 1 port 1 | spine or aggr pair, switch 1/2 | 40Gb  | Management Network NMN/HMN/CAN |
+| PCIe Slot 1 port 2 | spine or aggr pair, switch 2/2 | 40Gb  | Management Network NMN/HMN/CAN |
+| LAN0 port 1        | NONE (See note below for m001) | NONE  | Site (See note below for m001) |
+
+
+**NOTE**: Master 1 (m001) is required to have a site connection for installation and non-CAN system access.  In Shasta versions <=1.3 this connection was on w001.  This can have several configurations depending on customer requirements/equipment:
+
+* The default configuration for Gigabyte systems uses the built-in 1Gb lan0 port for site connection on m001.
+* If the customer requires connectivity greater than 1Gb (or a different connection type), then a new and separate card will be installed on m001 and that card will provide site connectivity.
+
+
+### UAN Cabling
+
+| Server Port        | Management Network Port        | Speed | Use / Configuration         |
+|--------------------|--------------------------------|-------|-----------------------------|
+| LAN0 port 1        | leaf (see note)                |  1Gb  | Management Network NMN      |
+| PCIe Slot 1 port 1 | spine or aggr pair, switch 1/2 | 40Gb  | Management Network CAN bond |
+| PCIe Slot 1 port 2 | spine or aggr pair, switch 2/2 | 40Gb  | Management Network CAN bond |
+
+NOTE that there are a couple configurations possible for LAN0:
+* Existing Gigabyte systems on Dell and Mellox network hardware will use the (existing) Dell leaf port.
+* Any Gigabyte system on Aruba network hardware will use a Aruba 6300 (for the 1Gb port).
+* Optionally a 10/25Gb card could be added in an Aruba hardware system to match the HPE UANs.
