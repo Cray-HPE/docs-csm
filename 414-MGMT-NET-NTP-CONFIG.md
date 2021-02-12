@@ -16,6 +16,7 @@ Our NTP servers will be the first 3 worker nodes.  You can find these IPs from t
 ntp server 10.252.1.14 prefer
 ntp server 10.252.1.13
 ntp server 10.252.1.12
+ntp source vlan 2
 ```
 
 # Mellanox
