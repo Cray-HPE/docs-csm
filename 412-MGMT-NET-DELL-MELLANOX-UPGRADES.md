@@ -95,9 +95,71 @@ interface port-channel1
 
 
 ## Mellanox Changes for MAGP
+
+
 ### MAGP
-MAGP setup for mellanox spine switches, this should be set for every VLAN interface. 
+MAGP setup for mellanox spine switches, this should be set for every VLAN interface (1,2,4,7,10)
 https://community.mellanox.com/s/article/howto-configure-magp-on-mellanox-switches
+
+```
+   protocol magp
+   interface vlan 1 magp 1
+   interface vlan 2 magp 2
+   interface vlan 4 magp 4
+   interface vlan 7 magp 7
+   interface vlan 10 magp 10
+   interface vlan 1 magp 1 ip virtual-router address 10.1.0.1
+   interface vlan 2 magp 2 ip virtual-router address 10.252.0.1
+   interface vlan 4 magp 4 ip virtual-router address 10.254.0.1
+   interface vlan 7 magp 7 ip virtual-router address 10.103.8.20
+   interface vlan 10 magp 10 ip virtual-router address 10.11.0.1
+   interface vlan 1 magp 1 ip virtual-router mac-address 00:00:5E:00:01:01
+   interface vlan 2 magp 2 ip virtual-router mac-address 00:00:5E:00:01:02
+   interface vlan 4 magp 4 ip virtual-router mac-address 00:00:5E:00:01:04
+   interface vlan 7 magp 7 ip virtual-router mac-address 00:00:5E:00:01:07
+   interface vlan 10 magp 10 ip virtual-router mac-address 00:00:5E:00:01:10
+```
+Output of a working MAGP
+```
+sw-spine-001 [standalone: master] # show magp
+
+MAGP 1:
+  Interface vlan: 1
+  Admin state   : Enabled
+  State         : Master
+  Virtual IP    : 10.1.0.1
+  Virtual MAC   : 00:00:5E:00:01:01
+
+MAGP 2:
+  Interface vlan: 2
+  Admin state   : Enabled
+  State         : Master
+  Virtual IP    : 10.252.0.1
+  Virtual MAC   : 00:00:5E:00:01:02
+
+MAGP 4:
+  Interface vlan: 4
+  Admin state   : Enabled
+  State         : Master
+  Virtual IP    : 10.254.0.1
+  Virtual MAC   : 00:00:5E:00:01:04
+
+MAGP 7:
+  Interface vlan: 7
+  Admin state   : Enabled
+  State         : Master
+  Virtual IP    : 10.103.8.20
+  Virtual MAC   : 00:00:5E:00:01:07
+
+MAGP 10:
+  Interface vlan: 10
+  Admin state   : Enabled
+  State         : Master
+  Virtual IP    : 10.11.0.1
+  Virtual MAC   : 00:00:5E:00:01:10
+```
+
+### MLAG setup IPL link.
 #### Spine01
 ```
 (config) # protocol mlag
