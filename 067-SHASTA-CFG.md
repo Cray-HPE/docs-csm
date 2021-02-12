@@ -264,6 +264,8 @@ with system-specific customizations.
     linux:~ # podman tag registry.local/zeromq/zeromq:v4.0.5 dtr.dev.cray.com/zeromq/zeromq:v4.0.5
     ```
 
+    > Note: you must properly configured Docker or Podman environment.
+
 8.  Re-encrypt and seed secrets in `customizations.yaml`:
 
     ```bash
