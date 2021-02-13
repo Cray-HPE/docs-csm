@@ -529,7 +529,7 @@ may be referenced when making a similar site modification to v1.3.
 
 25. Dump the information from SLS.
 
-    Some information from it can be extracted for use in the pre-config file, hmn_connections.json, for the v1.4 installation.  The Cray Shasta_administration Guide 1.3 S-8001 has a section "Dump SLS Information".
+    Some information from SLS can be extracted for use in the pre-config file, hmn_connections.json, and cabinets.yaml for the v1.4 installation.  The Cray Shasta_administration Guide 1.3 S-8001 has a section "Dump SLS Information".
 
     If there is a fully current SHCD (Shasta Cabling Diagram, previously called CCD for Cray Cabling Diagram) spreadsheet file for this system, there is a way to extract information from it to create the hmn_connections.json file later in the v1.4 installation process.  However, SLS data may be more current than the SHCD or there may not be a valid SHCD file for this system if cabling changes have not been recorded as updates to the SHCD file.  Saving this SLS information while v1.3 is booted may provide a point of comparison with the data in the SHCD.
 

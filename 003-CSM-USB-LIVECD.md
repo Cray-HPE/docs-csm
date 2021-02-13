@@ -119,7 +119,7 @@ The USB stick is now bootable and contains our artifacts. This may be useful for
 <a name="configuration-payload"></a>
 ## Configuration Payload
 
-The shasta-cfg structure and other configuration files will be prepared, then csi will generate system-unique configuration payload used for the rest of the CSM installation onthe USB stick.
+The shasta-cfg structure and other configuration files will be prepared, then csi will generate system-unique configuration payload used for the rest of the CSM installation on the USB stick.
 
 * [Generate Installation Files](#generate-installation-files)
 * [CSI Workarounds](#csi-workarounds)
@@ -128,20 +128,21 @@ The shasta-cfg structure and other configuration files will be prepared, then cs
 <a name="generate-installation-files"></a>
 ### Generate Installation Files
 
-Some files are needed for generating the configuration payload. New systems will need to create these files before continuing.
+Some files are needed for generating the configuration payload. New systems will need to create these files before continuing.  Systems upgrading from Shasta v1.3 should prepare by [gathering data from the exiting system](068-HARVEST-13-CONFIG.md).
 
-> Note: The USB stick is usable at this time, but without SSH enabled as well as core services. This means
-> the stick could be used to boot the system now, and a user can return to this step at another time.
+> Note: The USB stick is usable at this time, but without SSH enabled as well as core services. This means the stick could be used to boot the system now, and a user can return to this step at another time.
 
 Pull these files into the current working directory:
-- `application-node-config.yaml` (optional)
-- `cabinets.yaml` (optional)
+- `application-node-config.yaml` (optional - see below)
+- `cabinets.yaml` (optional - see below)
 - `hmn_connections.json`
 - `ncn_metadata.csv`
 - `switch_metadata.csv`
 - `system_config.yaml` (see below)
 
-> The optional `application-node-config.yaml` file may be provided for further tweaking of settings relating to how appication nodes will appear in HSM. See the CSI usage for more information.
+> The optional `application-node-config.yaml` file may be provided for further defining of settings relating to how application nodes will appear in HSM (e.g. naming). See the CSI usage for more information.  This will also be useful 
+
+> The optional `cabinets.yaml` file allows cabinet naming and numbering as well as some networking overrides (e.g. VLAN) which will allow systems on Shasta v1.3 to minimize changes to the existing system while migrating to Shasta v1.4.  More information on this file can be found [here](310-CABINETS.md).
 
 After gathering the files into the working directory, generate your configs:
 
@@ -223,12 +224,16 @@ After gathering the files into the working directory, generate your configs:
        --site-gw 172.30.48.1 \
        --site-nic p1p2 \
        --site-dns 172.30.84.40 \
-       --install-ncn-bond-members p1p1,p10p1
-       --application-node-config-yaml application_node_config.yaml
-       --cabinets-yaml cabinets.yaml
+       --install-ncn-bond-members p1p1,p10p1 \
+       --application-node-config-yaml application_node_config.yaml \
+       --cabinets-yaml cabinets.yaml \
+       --hmn-mtn-cidr 10.104.0.0/17 \
+       --nmn-mtn-cidr 10.100.0.0/17
    ```
 
    A new directory matching your `--system-name` argument will now exist in your working directory.
+
+   > After generating a configuration, particularly when upgrading from Shasta v1.3 a visual audit of the generated files for network data should be performed.  Specifically, the <systemname>/networks/HMN_MTN.yaml and <systemname>/networks/NMN_MTN.yaml files should be viewed to ensure that cabinet names, subnets and VLANs have been preserved for an upgrade to Shasta v1.4.  Failure of these parameters to match will likely mean a re-installation or reprogramming of CDU switches and CMM VLANs.
 
    Run the command "csi config init --help" to get more information about the parameters mentioned in the example command above and others which are available.
 
@@ -238,8 +243,9 @@ After gathering the files into the working directory, generate your configs:
    * Set site parameters (site-domain, site-ip, site-gw, site-nic, site-dns) for the information which connects the ncn-m001 (PIT) node to the site.  The site-nic is the interface on this node connected to the site.  If coming from Shasta v1.3, the information for all of these site parameters was collected.
    * There are other interfaces possible, but the install-ncn-bond-members are typically: p1p1,p10p1 for HPE nodes; p1p1,p1p2 for Gigabyte nodes; and p801p1,p801p2 for Intel nodes.  If coming from Shasta v1.3, this information was collected for ncn-m001.
    * Set the three cabinet parameters (mountain-cabinets, hill-cabinets, and river-cabinets) to the number of each cabinet which are part of this system.
-   * The starting cabinet number for each type of cabinet (for example, starting-mountain-cabinet) has a default that can be overriden.  See the "csi config init --help"
-   * For systems that use non-sequential cabinet id nubmers, use cabinets-yaml to include the cabinets.yaml file.  This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to explicitly specify the id of every cabinet in the system.
+   * The starting cabinet number for each type of cabinet (for example, starting-mountain-cabinet) has a default that can be overriden.  See the "csi config init --help" 
+   * For systems that use non-sequential cabinet id numbers, use cabinets-yaml to include the cabinets.yaml file.  This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to explicitly specify the id of every cabinet in the system.  This process is described [here](310-CABINETS.md).
+   * An override to default cabinet IPv4 subnets can be made with the hmn-mtn-cidr and nmn-mtn-cidr parameters.  These are also used to maintain existing configuration in a Shasta v1.3 system.
    * Several parameters (can-gateway, can-cidr, can-static-pool, can-dynamic-pool) describe the CAN (Customer Access network).  The can-gateway is the common gateway IP used for both spine switches and commonly referred to as the Virtual IP for the CAN.  The can-cidr is the IP subnet for the CAN assigned to this system. The can-static-pool and can-dynamic-pool are the MetalLB address static and dynamic pools for the CAN. The can-external-dns is the static IP assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded.   The can-external-dns IP must be within the can-static-pool range.
    * Set ntp-pool to a reachable NTP server
 
