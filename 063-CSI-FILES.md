@@ -2,7 +2,7 @@
 
 This page describes administrative knowledge around CSI's files.
 
-> Detailed information for collecting certain files starts in  [Service Guides](./300-SERVICE-GUIDES.md)
+> Detailed information for collecting certain files starts in [Service Guides](./300-SERVICE-GUIDES.md)
   
 * [Save-File / Avoiding Parameters](#save-file--avoiding-parameters)
 * [CSI `hmn_connections.json` Notes](#csi-`hmn_connections.json`-notes)
