@@ -109,10 +109,7 @@ pit# grep -oE "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t
 <a name="timing-of-deployments"></a>
 ## Timing of Deployments
 
-The timing of each set of boots varies based on hardware, some manufacturers will POST faster than others or vary based on BIOS setting. After powering a set of nodes on, an administrator can expect a healthy boot-session to take the follow times:
-
-1. Storage nodes; 15-20 minutes
-2. Managers and Worker nodes; 5-10 minutes
+The timing of each set of boots varies based on hardware, some manufacturers will POST faster than others or vary based on BIOS setting. After powering a set of nodes on, an administrator can expect a healthy boot-session to take about 60 minutes depending on the number of storage and worker nodes.
 
 <a name="ncn-deployment"></a>
 ## NCN Deployment
