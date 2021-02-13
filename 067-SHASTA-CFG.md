@@ -98,9 +98,7 @@ with system-specific customizations.
         into the `customizations.yaml` file using the following command:
 
         ```bash
-        linux# cat <<EOF | yq w - 'data."certs.jks"' "$(<certs.jks.b64)" |
-          yq r -j - | /mnt/pitdata/prep/site-init/utils/secrets-encrypt.sh |
-          yq w -f - -i /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray-keycloak'
+        linux# cat <<EOF | yq w - 'data."certs.jks"' "$(<certs.jks.b64)" | yq r -j - | /mnt/pitdata/prep/site-init/utils/secrets-encrypt.sh | yq w -f - -i /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray-keycloak'
         {
           "kind": "Secret",
           "apiVersion": "v1",
