@@ -48,6 +48,15 @@
 * If the customer does not support 10/25Gb speeds (or connection type) and requires RJ45 copper or 1Gb, then a new and separate card will be installed on m001 and that card will provide site connectivity.
 * Another possibility (non-HPE hardware mainly) is that a built-in 1Gb port will be used if available (similar to Shasta v1.3 PoR on Gigabyte hardware).
 
+### NCN Storage Cabling
+
+| Server Port        | Management Network Port        | Speed | Use / Configuration            |
+|--------------------|--------------------------------|-------|--------------------------------|
+| OCP port 1         | spine or aggr pair, switch 1/2 | 25Gb  | Management Network NMN/HMN/CAN |
+| OCP port 2         | spine or aggr pair, switch 1/2 | 25Gb  | Storage SUN (future use)                           |
+| PCIe Slot 1 port 1 | spine or aggr pair, switch 2/2 | 25Gb  | Management Network NMN/HMN/CAN |
+| PCIe Slot 1 port 2 | spine or aggr pair, switch 2/2 | 25Gb  | Storage SUN (future use) |
+
 
 ### UAN Cabling
 
@@ -85,6 +94,13 @@
 * The default configuration for Gigabyte systems uses the built-in 1Gb lan0 port for site connection on m001.
 * If the customer requires connectivity greater than 1Gb (or a different connection type), then a new and separate card will be installed on m001 and that card will provide site connectivity.
 
+### NCN Storage Cabling
+![Gigabyte Storage](img/network/gigabyte-storage.png)
+
+| Server Port        | Management Network Port        | Speed | Use / Configuration            |
+|--------------------|--------------------------------|-------|--------------------------------|
+| PCIe Slot 1 port 1 | spine or aggr pair, switch 1/2 | 40Gb  | Management Network NMN/HMN/CAN |
+| PCIe Slot 1 port 2 | spine or aggr pair, switch 2/2 | 40Gb  | Management Network NMN/HMN/CAN |
 
 ### UAN Cabling
 
