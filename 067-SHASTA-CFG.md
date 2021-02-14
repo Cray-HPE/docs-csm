@@ -249,20 +249,16 @@ with system-specific customizations.
 
 7.  Load container images required by Sealed Secret Generators
 
+    > Note: you must have a properly configured Docker or Podman environment.
+
     If running through this process on a Shasta 1.3 ncn-m001 node, or a node (laptop, ...) external to Shasta, run:
 
     ```bash
-    linux:~ # /mnt/pitdata/${CSM_RELEASE}/csm/hack/load-container-image.sh dtr.dev.cray.com/zeromq/zeromq:v4.0.5
+    linux:~ # /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh dtr.dev.cray.com/zeromq/zeromq:v4.0.5
     ```
+    > **WARNING**: Do not use the ```load-container-image.sh``` script on a booted 1.4 Kubernetes Master Node.
 
-    If running through this process on a Shasta 1.4 ncn-m001 node (after reboot of the LiveCD and ncn-m001 has joined the K8S Cluster), run:
-
-    ```bash
-    linux:~ # podman pull registry.local/zeromq/zeromq:v4.0.5
-    linux:~ # podman tag registry.local/zeromq/zeromq:v4.0.5 dtr.dev.cray.com/zeromq/zeromq:v4.0.5
-    ```
-
-    > Note: you must properly configured Docker or Podman environment.
+    If performing a 1.4 reinstall, pulling the image should have been completed as part of [002-CSM-INSTALL (1.4 Reinstall)](002-CSM-INSTALL.md#pull-required-container-images).
 
 8.  Re-encrypt and seed secrets in `customizations.yaml`:
 
