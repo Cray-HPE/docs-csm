@@ -328,7 +328,7 @@ See [CAN](408-MGMT-NET-CAN-CONFIG.md)
 Some Shasta v1.3 systems may have set the switch ntp server to be the IP address of ncn-w001.  With the switch rename, the old IP address for ncn-w001 may now be assigned to one of the switches.
 The Shasta v1.4 configuration sets the switches to have the first three worker nodes as their ntp servers.
 
-See [CAN] (414-MGMT-NET-NTP-CONFIG.md)
+See [NTP](414-MGMT-NET-NTP-CONFIG.md)
 
 ## Verify flow-control settings
 
