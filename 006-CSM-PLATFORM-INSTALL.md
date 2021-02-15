@@ -121,35 +121,31 @@ pit# ./install.sh
 > pit# ./install.sh
 > ...
 > 
-> Continue with the installation after performing the following steps to switch
-> DNS settings from dnsmasq on the pit server to Unbound running in Kubernetes:
+> Critical platform services are deployed.
 > 
-> 1. Unbound is listening on 10.92.100.225, verify it is working by resolving
->    e.g., ncn-w001.nmn:
+> Verify dnsmasq is DISABLED:
 > 
->     pit:# dig "@10.92.100.225" +short ncn-w001.nmn
+>     pit# systemctl status dnsmasq
 > 
-> 2. Run the following two commands on all NCN manager, worker, and storage
->    nodes as well as the pit server:
+> and that the pit server is configured to use Unbound at 10.92.100.225:
 > 
->     ncn# sed -e "s/^\(NETCONFIG_DNS_STATIC_SERVERS\)=.*$/\1=\"10.92.100.225\"/" -i /etc/sysconfig/network/config
->     ncn# netconfig update -f
+>     pit# cat /etc/resolv.conf | grep nameserver
 > 
-> 3. Stop dnsmasq on the pit server:
-> 
->     pit# systemctl stop dnsmasq
->     pit# systemctl disable dnsmasq
-> 
-> 4. Continue with the installation:
+> Once DNS settings on the pit server have been confirmed to use Unbound, then
+> continue with the CSM installation:
 > 
 >     pit# ./install.sh --continue
+> 
 > ```
 
+After successfully completing the CSM platform install, quit the typescript
+session with the `exit` command and copy the file (booted-csm-lived.<date>.txt)
+to a location on another server for reference later. The administrator may then
+start the [CSM Validation process](008-CSM-VALIDATION.md).
 
-After successfully completing the CSM platform install, quit the typescript session with the `exit` command and copy the file (booted-csm-lived.<date>.txt) to a location on another server for reference later.
-The administrator may then start the [CSM Validation process](008-CSM-VALIDATION.md).
-
-Once the CSM services are deemed healthy the administrator way proceed to the final step of the CSM install [rebooting the LiveCD into m001](007-CSM-INSTALL-REBOOT.md).
+Once the CSM services are deemed healthy the administrator way proceed to the
+final step of the CSM install [rebooting the LiveCD into
+m001](007-CSM-INSTALL-REBOOT.md).
 
 ----
 
