@@ -35,7 +35,7 @@ sw-spine01(config)# ntp server 10.252.1.11
 sw-spine01(config)# ntp server 10.252.1.12
 ```
 
-Verify NTP configuration.
+Verify NTP status.
 ```
 sw-spine01(config)# show ntp associations
 ----------------------------------------------------------------------
