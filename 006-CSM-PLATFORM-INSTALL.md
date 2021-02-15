@@ -123,10 +123,13 @@ pit# ./install.sh
 > 
 > Critical platform services are deployed.
 > 
-> Verify dnsmasq is DISABLED and the pit server is configured to use Unbound at
-> 10.92.100.225:
+> Verify dnsmasq is DISABLED:
 > 
->     pit:# dig "@10.92.100.225" +short ncn-w001.nmn
+>     pit# systemctl status dnsmasq
+> 
+> and that the pit server is configured to use Unbound at 10.92.100.225:
+> 
+>     pit# cat /etc/resolv.conf | grep nameserver
 > 
 > Once DNS settings on the pit server have been confirmed to use Unbound, then
 > continue with the CSM installation:
