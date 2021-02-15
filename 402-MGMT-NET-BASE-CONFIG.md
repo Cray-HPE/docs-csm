@@ -126,5 +126,3 @@ You can now connect to the neighbors via the IPv6 loopback that we set earlier.
 ```
 sw-25g03# ssh admin@fd01::1
 ```
-
-
