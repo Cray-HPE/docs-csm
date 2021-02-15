@@ -6,7 +6,7 @@ into the CSM Kubernetes cluster).
 * [Initialize Bootstrap Registry](#initialize-bootstrap-registry)
 * [Create Site-Init Secret](#create-site-init-secret)
 * [Deploy Sealed Secret Decryption Key](#deploy-sealed-secret-decryption-key)
-* [Run install.sh](#run-install-sh)
+* [Start the Deployment](#start-the-deployment)
 * [Known Issues](#known-issues)
   * [Error: not ready: https://packages.local](#error-not-ready)
   * [Error initiating layer upload ... in registry.local: received unexpected HTTP status: 200 OK](#error-initiating-layer-upload)
@@ -94,8 +94,12 @@ pit# /var/www/ephemeral/prep/site-init/deploy/deploydecryptionkey.sh
 ```
 
 
-<a name="run-install-sh"></a>
-## Run install.sh
+<a name="start-the-deployment"></a>
+## Start the Deployment
+
+At this time the administrator can begin actually deploying the platform.
+
+### Run `install.sh`
 
 > **`NOTE`** `install.sh` requires various system configuration which are
 > expected to be found in the locations used in proceeding documentation;
@@ -115,28 +119,8 @@ pit# ./install.sh
 
 > **`NOTE`** `install.sh` will exit with instructions that may be copied and
 > pasted to switch DNS settings from dnsmasq to Unbound and then to continue the
-> installation. For example:
-> 
-> ```bash
-> pit# ./install.sh
-> ...
-> 
-> Critical platform services are deployed.
-> 
-> Verify dnsmasq is DISABLED:
-> 
->     pit# systemctl status dnsmasq
-> 
-> and that the pit server is configured to use Unbound at 10.92.100.225:
-> 
->     pit# cat /etc/resolv.conf | grep nameserver
-> 
-> Once DNS settings on the pit server have been confirmed to use Unbound, then
-> continue with the CSM installation:
-> 
->     pit# ./install.sh --continue
-> 
-> ```
+> installation. **These should be ignored** unless the administrator did not run
+> the pre-ncn-boot workarounds.
 
 After successfully completing the CSM platform install, quit the typescript
 session with the `exit` command and copy the file (booted-csm-lived.<date>.txt)
