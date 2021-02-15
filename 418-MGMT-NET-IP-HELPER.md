@@ -2,7 +2,7 @@
 
 This page will describe how to setup IP-Helpers on Aruba, Dell, and Mellanox switches.
 
-If you are migrating from a 1.3.2 system, the IP-helpers are being moved for the switches that are doing the Layer3 Routing.  For most systems this will be moving the helper from the leaf to the spine.
+If you are migrating from a 1.3.2 system, the IP-helpers are being moved to the switches that are doing the Layer3 Routing.  For most systems this will be moving the helper from the leaf to the spine.
 
 IP-Helpers will reside on VLANs 1,2,4,7,2xxx, and 3xxx.
 
