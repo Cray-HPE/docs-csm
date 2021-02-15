@@ -214,7 +214,7 @@ sw-spine01 [standalone: master] (config) # interface ethernet <port> flowcontrol
 sw-spine01 [standalone: master] (config) # exit
 sw-spine01 [standalone: master] # write memory
 ```
-"<index>" would just be the number after "Po" or "Mpo", so "113" or "151".  "<port>" would be the value after "Eth", so "1/14" or "1/15/2".  Make sure to run the 'flowcontrol' commands for each mlag-port-channel and Ethernet port.
+"index" would just be the number after "Po" or "Mpo", so "113" or "151".  "<port>" would be the value after "Eth", so "1/14" or "1/15/2".  Make sure to run the 'flowcontrol' commands for each mlag-port-channel and Ethernet port.
 
 #### Leaf, CDU, and Aggregate Switch 'flowcontrol' Configuration Change
 
