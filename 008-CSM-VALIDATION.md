@@ -184,13 +184,10 @@ You should run a check for each of the following services after an install. Thes
 
 \* The ipxe shortcut runs a check of both the iPXE service and the TFTP service.
 
-Next, run automated run-time checks against all nodes with the following command:
 
 ```
 ncn:~ # /opt/cray/tests/install/ncn/automated/ncn-run-time-checks
 ```
-
-Take note of any failed tests and correct the errors.
 
 ## HMS
 
@@ -205,6 +202,30 @@ Run the HMS smoke tests. If no failures occur, then run the HMS functional tests
 
     ncn:~ # /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resources.sh
     ncn:~ # /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-resources.sh
+
+## Automated Goss Testing
+
+There are multiple [Goss](https://github.com/aelsabbahy/goss) test suites available that cover a variety of sub-systems. 
+
+You can execute the general NCN test suite via:
+
+```bash
+ncn:~ # /opt/cray/tests/install/ncn/automated/ncn-run-time-checks
+```
+
+And the Kubernetes test suite via:
+
+```bash
+ncn:~ # /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
+```
+
+### Known Goss Test Issues
+
+* Tests can only reliably be executed from the PIT node. Should be addressed in a future release.
+* K8S Test: Kubernetes Query BSS Cloud-init for ca-certs
+  - May fail immediately after platform install. Should pass after the TrustedCerts Operator has updated BSS (Global cloud-init meta) with CA certificates.
+* K8S Test: Kubernetes Velero No Failed Backups
+  - Due to a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (ie.g., vault). It may be necessary to use the ```velero``` command to delete backups from a Kubernetes node to clear this situation. 
 
 ## PET
 
