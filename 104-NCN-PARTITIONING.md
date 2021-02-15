@@ -290,6 +290,18 @@ rd.live.overlay.thin=1
 rd.live.overlay.thin=0
 ```
 
+# SystemD MetalFS
+
+The `metalfs` systemd service will try to mount any metal created partitions.
+
+This runs against the `/run/initramfs/overlayfs/fstab.metal` when it exists. This file is dynamically created by most metal dracut modules.
+
+The service will continuously attempt to mount the partitions, if problems arise please stop the service:
+
+```bash
+ncn# systemctl stop metalfs
+```
+
 # Old/Retired FS-Labels
 
 Deprecated FSlabels/partitions from Shasta 1.3.X (no longer in Shasta 1.4.0 and onwards).
