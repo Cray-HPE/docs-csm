@@ -1,6 +1,7 @@
 # Management Network Spanning-Tree Configuration.
 
-Spanning tree configuration is used to protect the network against loops.
+Spanning tree is used to protect the network against layer2 loops.
+
 It is not recommended to add/adjust these settings while a system is running.
 
 # Aruba Configuration
