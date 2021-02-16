@@ -47,6 +47,7 @@ interface 1/1/16
 ```
 
 Aruba UAN CAN Configuration
+
 Port Configuration is the same on both switches.
 ```
 interface lag 17 multi-chassis
