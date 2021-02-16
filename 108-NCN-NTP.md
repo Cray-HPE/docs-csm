@@ -97,3 +97,14 @@ MS Name/IP address         Stratum Poll Reach LastRx Last sample
 ### Log files
 
 Logs exist at `/var/log/chrony/`, which can be used for further troubleshooting.
+
+### Forcing a time sync
+
+You can step the clocks and force a sync of NTP.  If Kubernetes is already up or other services, they don't always react well if there is a large jump, so ideally, you would do this as the node is booting (our images do this automatically now):
+
+```
+chronyc burst 4/4
+# wait about 15 seconds while NTP measurements are gathered
+# jump the clock manually
+chronyc makestep
+```
