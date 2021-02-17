@@ -235,6 +235,8 @@ ncn:~ # /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
   - May fail immediately after platform install. Should pass after the TrustedCerts Operator has updated BSS (Global cloud-init meta) with CA certificates.
 * K8S Test: Kubernetes Velero No Failed Backups
   - Due to a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (ie.g., vault). It may be necessary to use the ```velero``` command to delete backups from a Kubernetes node to clear this situation. 
+* K8S Test: Verify spire-agent is enabled and running
+  - The spire-agent service may fail to start, logging errors (via journalctl) similar to "join token not existing...". Deleting the ```request-ncn-join-token``` daemonset pod running on the node may clear the issue.
 
 ## PET
 
