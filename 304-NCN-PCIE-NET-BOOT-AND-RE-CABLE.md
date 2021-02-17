@@ -3,6 +3,17 @@
 This page details how to migrate NCNs from depending on their onboard NICs for PXE booting, and booting
 over the spine switches.
 
+* [Enabling UEFI PXE Mode](#enabling-uefi-pxe-mode) <a name="enabling-uefi-pxe-mode"></a>
+    * [Mellanox](#mellanox) <a name="mellanox"></a>
+        * [Print current UEFI and SR-IOV State](#print-current-uefi-and-sr-iov-state) <a name="print-current-uefi-and-sr-iov-state"></a>
+        * [Setting Expected Values](#setting-expected-values) <a name="setting-expected-values"></a>
+        * [High-Speed Network](#high-speed-network) <a name="high-speed-network"></a>
+        * [Obtaining Mellanox Tools](#obtaining-mellanox-tools) <a name="obtaininig-mellanox-tools"></a>
+    * [QLogic FastLinq](#qlogic-fastlinq) <a name="qlogic-fastlinq"></a>
+        * [Kernel Modules](#kernel-modules) <a name="kernel-modules"></a>
+* [Disabling/Removing On-Board Connections](#disabling/removing-on-board-connections) <a name="disabling/removing-on-board-connections"></a>
+
+
 **This applies to Newer systems (Spring 2020 or newer)** where onboard NICs are still used.
 
 This presents a need for migration for systems still using the legacy, preview topology. Specifically,
@@ -14,13 +25,12 @@ This onboard NCN port came from before spine-switches were added to the shasta-n
 
 ## Enabling UEFI PXE Mode
 
-##### Mellanox
+### Mellanox
 
 This uses the [Mellanox CLI Tools][1] for configuring UEFI PXE from the Linux command line.
 
 On any NCN (using 0.0.10 k8s, or 0.0.8 ceph; anything built on ncn-0.0.21 or higher) can run this to begin interacting with Mellanox cards:
 If you are recovering NCNs with an earlier image without the mellanox tools, please refer to the section on the bottom of the Mellanox this segment.
-
 
 ```bash
 ncn:~ # mst start
@@ -28,23 +38,23 @@ ncn:~ # mst start
 
 Now `mst status` and other commands like `mlxfwmanager` or `mlxconfig` will work, and devices required for these commands will be created in `/dev/mst`.
 
-### Print current UEFI and SR-IOV State
+#### Print current UEFI and SR-IOV State
 
 > UEFI: all boots are UEFI, this needs to be enabled for access to the UEFI OpROM for configuration and for usage of UEFI firmwares.
 > SR_IOV: This is currently DISABLED because it can attribute to longer POSTs on HPE blades (Gen10+, i.e. DL325 or DL385) with Mellanox ConnectX-5 PCIe cards. The technology is not yet enabled for virtualiztion usage, but may be in the future.
 
 Use this snippet to print out device name and current UEFI PXE state.
 ```bash
-# Print name and current state; on an NCN or on the liveCD.
 mst status
 for MST in $(ls /dev/mst/*); do
     mlxconfig -d ${MST} q | egrep "(Device|EXP_ROM|SRIOV_EN)"
 done
 ```
 
+#### Setting Expected Values
+
 Use this snippet to enable and dump UEFI PXE state.
 ```bash
-# Set UEFI to YES
 for MST in $(ls /dev/mst/*); do
     echo ${MST}
     mlxconfig -d ${MST} -y set EXP_ROM_UEFI_x86_ENABLE=1
@@ -54,11 +64,32 @@ for MST in $(ls /dev/mst/*); do
 done
 ```
 
-Your Mellanox is now configured for PXE booting.
+#### High-Speed Network
 
-###### Obtaininig Mellanox Tools
+For worker nodes with High-Speed network attachments, the PXE and SR-IOV features should be
+disabled.
 
-If you do not have tools available in your environment, you can obtain these directly through Mellanox.
+1. Run `mlxfwmanager` to probe and dump your Mellanox PCIe cards
+
+2. Find the device path for the HSN card, assuming it is a ConnectX-5 or other 100GB card this should be easy to pick out.
+
+3. Run this, swapping the `MST` variable for your actual card path
+    ```bash
+    # Set UEFI to YES
+    
+    MST=/dev/mst/mt4119_pciconf1
+    mlxconfig -d ${MST} -y set EXP_ROM_UEFI_ARM_ENABLE=0
+    mlxconfig -d ${MST} -y set EXP_ROM_UEFI_x86_ENABLE=0
+    mlxconfig -d ${MST} -y set EXP_ROM_PXE_ENABLE=0
+    mlxconfig -d ${MST} -y set SRIOV_EN=0
+    mlxconfig -d ${MST} q | egrep "EXP_ROM"
+    ```
+
+Your Mellanox HSN card is now neutralized, and will only be usable in a booted system.
+
+###### Obtaining Mellanox Tools
+
+`mft` is installed in 1.4 NCN images, for 1.3 systems they will need to obtain the tools by hand:
 
 ```bash
 linux:~ # wget https://www.mellanox.com/downloads/MFT/mft-4.15.1-9-x86_64-rpm.tgz
@@ -69,11 +100,11 @@ linux:~ #/mft-4.15.1-9-x86_64-rpm/RPMS # cd
 linux:~ # mst start
 ```
 
-##### QLogic FastLinq
+### QLogic FastLinq
 
 These should already be configured for PXE booting.
 
-###### Kernel Modules
+#### Kernel Modules
 
 KMP modules for Qlogic are installed:
 
@@ -99,7 +130,7 @@ If you want to disable the connection, you will need to login to your respective
     pit:~ # ssh admin@10.252.0.2
     # SSH over HARDWARE MANAGEMENT
     pit:~ # ssh admin@10.254.0.2  
-    
+
     # or.. serial (device name will vary).
     pit:~ # minicom -b 115200 -D /dev/tty.USB1 
     ```
