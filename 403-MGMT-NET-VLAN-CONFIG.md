@@ -5,7 +5,7 @@
 - Access to all of the switches
 - SHCD available
 
-# Configuration
+# Aruba Configuration
 
 At this point we should have access to the switches.
 We will start by adding all the VLANS required by the Shasta system.
@@ -52,38 +52,8 @@ sw-24g04(config-vlan-7)# name CAN
 sw-24g04(config-vlan-7)# vlan 10
 sw-24g04(config-vlan-10)# name SUN
 ```
-On both switches participating in VSX we will need to add configuration to the VLAN interfaces.
-The IP-Helper is used to forward DCHP traffic from one network to a specified IP address.
 
-```
-sw-24g03(config)# int vlan 1
-sw-24g03(config-if-vlan)# ip helper-address 10.92.100.222
-sw-24g03(config-if-vlan)# int vlan 2
-sw-24g03(config-if-vlan)# ip helper-address 10.92.100.222
-sw-24g03(config-if-vlan)# int vlan 4
-sw-24g03(config-if-vlan)# ip helper-address 10.94.100.222
-sw-24g03(config-if-vlan)# int vlan 7
-sw-24g03(config-if-vlan)# ip helper-address 10.92.100.222
-
-sw-24g04(config)# int vlan 1
-sw-24g04(config-if-vlan)# ip helper-address 10.92.100.222
-sw-24g04(config-if-vlan)# int vlan 2
-sw-24g04(config-if-vlan)# ip helper-address 10.92.100.222
-sw-24g04(config-if-vlan)# int vlan 4
-sw-24g04(config-if-vlan)# ip helper-address 10.94.100.222
-sw-24g04(config-if-vlan)# int vlan 7
-sw-24g04(config-if-vlan)# ip helper-address 10.92.100.222
-```
-For CDU switches the IP helpers will look like the following.
-Any 2xxx VLANs will have ```10.92.100.222``` as the ip helper-address and any 3xxx VLANs will have ```10.94.100.222``` as the ip helper-address
-```
-interface vlan 2000
-    ip helper-address 10.92.100.222
-interface vlan 3000
-    ip helper-address 10.94.100.222
-```
-
-Add the networks to the switches that the BMCs are connected to.
+Add the networks to the leaf switches or the switches that the BMCs are connected to.
 
 ```
 sw-smn01(config)# vlan 2
@@ -107,4 +77,5 @@ sw-smn01(config-if-vlan)# ip address 10.252.0.4/17
 sw-smn01(config-if-vlan)# int vlan 4
 sw-smn01(config-if-vlan)# ip address 10.254.0.4/17
 ```
+
 
