@@ -73,7 +73,7 @@ will prevent the nodes from continuing to boot and end in undesired states.
         grep -Eoh '(net[0-9] MAC .*)' $file | sort -u | grep PCI && echo -----
     done
     ```
-6. From the output you must fish out 2 MACs to use for bond0, and 2 more to use for bond1 based on your topology.
+6. From the output you must fish out 2 MACs to use for bond0, and 2 more to use for bond1 based on your topology. **The `Bond0MAC0` must be the first port** of the first PCIe card, specifically the port connecting the NCN to the lower spine (e.g. if connected to spines01 and 02, this is going to spine01 - if connected to spine07 and spine08, then this is spine07). **The 2nd MAC for `bond0` is the first port of the 2nd PCIe card, or 2nd port of the first when only one card exists**.
     - Examine the output, you can use the table provided on [NCN Networking](103-NCN-NETWORKING.md) for referencing commonly seen devices.
     - Note that worker nodes also have the high-speed network cards. If you know these cards, you can filter their device IDs out from the above output using this snippet:
         ```bash
