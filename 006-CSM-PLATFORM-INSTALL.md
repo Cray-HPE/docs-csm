@@ -131,6 +131,12 @@ Once the CSM services are deemed healthy the administrator way proceed to the
 final step of the CSM install [rebooting the LiveCD into
 m001](007-CSM-INSTALL-REBOOT.md).
 
+<a name="add-cabinet-routing-to-ncns"></a>
+## Add Compute Cabinet Routing to NCNs
+Currently there is no automated procedure to apply routing changes to all worker NCNs to support Mountain, Hill and River
+Compute Node Cabinets.  This should be applied now to all workers as explained in [Add Compute Cabinet Routes](109-COMPUTE-CABINET-ROUTES-FOR-NCN.md).
+
+
 ----
 
 <a name="known-issues"></a>
