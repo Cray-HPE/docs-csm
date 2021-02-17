@@ -45,14 +45,14 @@ needed for Shasta v1.4.  Some of this data is easier to collect from a running S
 
 There may be some operational data to be saved such as any nodes which are disabled or marked down in a
 workload manager.  These nodes might need hardware or firmware actions to repair them.  If not addressed,
-and the newer firmware in v1.4 does not improve their performance or operation, then these may need to be 
+and the newer firmware in v1.4 does not improve their performance or operation, then these may need to be
 disabled with v1.4 as well.
 
 There may be site modifications to the system from v1.3 which are desired in v1.4.  They cannot be directly
 copied to v1.4, however, recommendation will be made about what to save.  Some saved information from v1.3
 may be referenced when making a similar site modification to v1.3.
 
-See the [Harvest Shasta v1.3 Information](068-HARVEST-13-CONFIG) page for the data harvesting procedure.
+See the [Harvest Shasta v1.3 Information](068-HARVEST-13-CONFIG.md) page for the data harvesting procedure.
 
 See the [service guides](300-SERVICE-GUIDES.md) for information regarding the v1.4 configuration files.
 
@@ -65,14 +65,14 @@ off the system, and limiting new logins to application nodes.
     Check for running slurm jobs
 
     ```bash
-    ncn-w001# ssh nid001000 squeue -l 
+    ncn-w001# ssh nid001000 squeue -l
     ```
 
     Check for running PBS jobs
 
     ```bash
-    ncn-w001# ssh nid001000 qstat -Q 
-    ncn-w001# ssh nid001000 qstat -a 
+    ncn-w001# ssh nid001000 qstat -Q
+    ncn-w001# ssh nid001000 qstat -a
     ```
 
 2. Obtain the authorization key for SAT.
@@ -106,7 +106,7 @@ off the system, and limiting new logins to application nodes.
 
 4. Shut down and power off all compute nodes and application nodes.
 
-    * v1.3.2 use the "sat bootsys shutdown" command to do compute nodes and application nodes at the same time. 
+    * v1.3.2 use the "sat bootsys shutdown" command to do compute nodes and application nodes at the same time.
     See the Cray Shasta Administration Guide 1.3 S-8001 RevF (or later) in the section "Shut Down and Power Off Compute and User Access Nodes"
 
     * v1.3.0 use the "cray bos shutdown command" for the compute nodes and then for the application nodes
@@ -247,7 +247,7 @@ configurations, firmware, and more, see [Management network install](401-MANAGEM
 ### Upgrading BIOS and Firmware
 
 The management NCNs are expected to have certain minimum firmware installed for BMC, node BIOS, and PCIe card
-firmware.  Where possible, the firmware should be updated prior to install.  Some firmware can be updated 
+firmware.  Where possible, the firmware should be updated prior to install.  Some firmware can be updated
 during or after the Shasta v1.4 installation, but it is better to meet the minimum NCN firmware requirement
 before starting.
 
@@ -298,7 +298,7 @@ ncn# kubectl scale -n services --replicas=0 deployment cray-dhcp-kea
 <a name="pull-required-container-images"></a>
 ### Pull Required Container Image(s)
 
-The following image is required by the SHASTA-CFG process. Pull and tag this image while Nexus is available. 
+The following image is required by the SHASTA-CFG process. Pull and tag this image while Nexus is available.
 
 This must be performed on ncn-m001.
 
