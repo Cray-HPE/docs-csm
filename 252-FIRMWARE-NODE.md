@@ -1,16 +1,34 @@
 # Node Firmware
 
-This page details the minium specification for nodes and their components (such as PCIe cards).
+This page details the minimum specification for servers, and their components (such as PCIe cards).
 
 > **`NOTE`** New items may be added to this page over time.
 
+* [Servers](#servers)
+* [Vendor Upgrade Refences](#vendor-upgrade-refences)
+    * [HPE (iLO) Upgrades](#hpe-(ilo)-upgrades)
+        * [Pre-Reqs](#pre-reqs)
+        * [GUI](#gui)
+        * [Redfish](#redfish)
+    * [Intel Upgrades](#intel-upgrades)
+    * [Gigabyte Upgrades](#gigabyte-upgrades)
+* [PCIe Cards](#pcie-cards)
+        * [Vendor Upgrade Refences](#vendor-upgrade-refences)
+            * [Marvell Upgrades](#marvell-upgrades)
+            * [Mellanox Upgrades](#mellanox-upgrades)
+                * [Requirement: Enable Tools](#requirement:-enable-tools)
+                * [Check Current Firmware](#check-current-firmware)
+                * [Upgrade from the LiveCD](#upgrade-from-the-livecd)
+                * [Upgrade from the Internet](#upgrade-from-the-internet)
+
+<a name="servers"></a>
 ## Servers
 
 | Vendor | Model | Version |
 | :--- | :--- | ---: |
 | HPE | A41 DL325 Gen10 | [10/18/2019 2.30][1] | 
-| HPE | A42 DL385 Gen10+ | [10/31/2020 1.38][2] | 
-| HPE | A43 DL325 Gen10+ | [10/31/2020 1.38][2] | 
+| HPE | A42 DL385 Gen10+ | [07/18/2020 1.30][2] | 
+| HPE | A43 DL325 Gen10+ | [07/18/2020 1.30][2] | 
 | Intel | S2600WFT | [02.01.0012][3] |
 | Gigabyte | MZ32-AR0-00 | [12.84][4] |
 
@@ -19,25 +37,99 @@ This page details the minium specification for nodes and their components (such 
 [3]: https://support.hpe.com/hpsc/swd/public/detail?swItemId=MTX_5ed1b5a914b844caab3780d293
 [4]: https://pubs.cray.com/bundle/Gigabyte_Node_Firmware_Update_Guide_S-8010/page/About_the_Gigabyte_Node_Firmware_Update_Guide.html
 
-#### Vendor Upgrade Refences
+<a name="vendor-upgrade-refences"></a>
+## Vendor Upgrade Refences
 
 - [HPE (iLO) Upgrades](#marvell-upgrades)
 - [Intel Upgrades](#mellanox-upgrades)
 - [Gigabyte Upgrades](#mellanox-upgrades)
 
 
-##### HPE (iLO) Upgrades
+<a name="hpe-(ilo)-upgrades"></a>
+### HPE (iLO) Upgrades
+
+Firmware is located on the LiveCD (versions 1.4.6 or higher).
+
+<a name="pre-reqs"></a>
+#### Pre-Reqs
+
+- BMCs are reachable; dnsmasq is setup and BMCs show in `/var/lib/misc/dnsmasq.leases`
+- Servers can be `off`
+- Static entries in dnsmasq are a bonus; helpful but unnecessary.
+
+Verify the firmwares available for the procedure:
+```bash
+pit:~ # ls -1 /var/www/fw/river/hpe/
+A41_2.42_07_17_2020.signed.flash
+A42_1.30_07_18_2020.signed.flash
+A43_1.30_07_18_2020.signed.flash
+ilo5_230.bin
+```
+
+<a name="gui"></a>
+#### GUI
+
+1. From the administrators own machine, SSH tunnel (`-L` creates the tunnel, and `-N` prevents a shell and stubs the connection). One at a time, or all together.
+    ```bash
+    ssh -L 6443:ncn-m002-mgmt:443 -N bigbird-ncn-m001
+    ssh -L 7443:ncn-m003-mgmt:443 -N bigbird-ncn-m001
+    ssh -L 8443:ncn-w001-mgmt:443 -N bigbird-ncn-m001
+    ssh -L 9443:ncn-w002-mgmt:443 -N bigbird-ncn-m001
+    ssh -L 10443:ncn-w003-mgmt:443 -N bigbird-ncn-m001
+    ssh -L 11443:ncn-s001-mgmt:443 -N bigbird-ncn-m001
+    ssh -L 12443:ncn-s002-mgmt:443 -N bigbird-ncn-m001
+    ssh -L 13443:ncn-s003-mgmt:443 -N bigbird-ncn-m001
+    ```
+2. One at a time in (to prevent log-outs from duplicate SSL/CA) open each and run through the nested steps:
+
+         https://127.0.0.1:6443
+         https://127.0.0.1:7443
+         https://127.0.0.1:8443
+         https://127.0.0.1:9443
+         https://127.0.0.1:10443
+         https://127.0.0.1:11443
+         https://127.0.0.1:12443
+         https://127.0.0.1:13443
+
+      1. Login with the default credentials.
+      2. On the _Left_, select "Firmware & OS Software"  ![fw-ilo-1.png](img/fw-ilo-1.png)
+      3. On the _Right_, select "Upload to ILO Repository"
+      4. Select "Remote File", and then choose your firmware file:
+         ```bash
+         # A43 example
+         http://pit/fw/river/hpe/A43_1.30_07_18_2020.signed.flash
+         ```
+         ![fw-ilo-2](img/fw-ilo-2.png)
+      5. Press **`Upload`** and wait for the upload to complete.
+      6. Now grab the iLO5 Firmware the same way:
+         1. On the _Right_, select "Upload to ILO Repository"
+         2. Select "Remote File", and then choose your firmware file:
+         ```bash
+         # A43 example
+         http://pit/fw/river/hpe/ilo5_230.bin
+         ```
+         ![fw-ilo-3](img/fw-ilo-3.png)
+         3. Press **`Upload`** and wait for the upload to complete.
+      7. Cold boot the server, or momentarily press the button (GUI button) to power it on
+
+Now the node(s) are upgraded to minimum spec. for booting.
+
+<a name="redfish"></a>
+#### Redfish
 
 > **THIS IS A STUB** There are no instructions on this page, this page is place-holder.
 
-##### Intel Upgrades
+<a name="intel-upgrades"></a>
+### Intel Upgrades
 
 > **THIS IS A STUB** There are no instructions on this page, this page is place-holder.
 
-##### Gigabyte Upgrades
+<a name="gigabyte-upgrades"></a>
+### Gigabyte Upgrades
 
 > **THIS IS A STUB** There are no instructions on this page, this page is place-holder.
 
+<a name="pcie-cards"></a>
 ## PCIe Cards
 
 | Vendor | Model | PSID | Version |
@@ -50,19 +142,23 @@ This page details the minium specification for nodes and their components (such 
 > Note: The Mellanox firmware can be updated to minimum spec. using `mlxfwmanager`. The `mlxfwmanager` will fetch updates from online, or it can use a local file (or local web server such as http://pit/).
 
 
+<a name="vendor-upgrade-refences"></a>
 #### Vendor Upgrade Refences
 
 - [Marvell Upgrades](#marvell-upgrades)
 - [Mellanox Upgrades](#mellanox-upgrades)
 
+<a name="marvell-upgrades"></a>
 ##### Marvell Upgrades
 
 > **THIS IS A STUB** There are no instructions on this page, this page is place-holder.
 
+<a name="mellanox-upgrades"></a>
 ##### Mellanox Upgrades
 
 Shasta 1.4 NCNs are # Print name and current state; on an NCN or on the liveCD.
 
+<a name="requirement:-enable-tools"></a>
 ###### Requirement: Enable Tools
 
 MST needs to be started for the tools to work.
@@ -76,6 +172,7 @@ Create devices
 Unloading MST PCI module (unused) - Success
 ```
 
+<a name="check-current-firmware"></a>
 ###### Check Current Firmware
 
 Print out the current firmware versions or all Mellanox cards:
@@ -120,6 +217,7 @@ Device #2:
 
 ```
 
+<a name="upgrade-from-the-livecd"></a>
 ###### Upgrade from the LiveCD
 
 If the LiveCD is reachable, firmware can be downloaded for local install:
@@ -129,6 +227,7 @@ curl -O http://pit/fw/pcie/firmware.img
 mlxfwmanager -u -i ./firmware.img
 ```
 
+<a name="upgrade-from-the-internet"></a>
 ###### Upgrade from the Internet
 
 If external queries can be made by the node, it can update firmware from the Internet:
