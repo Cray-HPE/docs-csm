@@ -33,9 +33,9 @@ sw-smn01(config)# vlan access 2
 # UAN port configuration
 - UANs are going to have the same network connections as shasta 1.3.
 - One connection will go to a NMN(VLAN2) access port, this is where the UAN will pxe boot and communicate with internal systems. (see SHCD for UAN cabling).
-- One Bond (two connections) will be going to the MLAG/VSX pair of switches. This will be an access port for the CAN connection.
+- One Bond (two connections) will be going to the MLAG/VSX pair of switches. This will be a TRUNK port for the CAN connection.
 
-Aruba Configuration
+Aruba UAN NMN Configuration
 ```
 interface 1/1/16
     no shutdown
@@ -43,6 +43,20 @@ interface 1/1/16
     no routing
     vlan trunk native 2
     vlan trunk allowed 2,7
+    exit
+```
+
+Aruba UAN CAN Configuration
+
+Port Configuration is the same on both switches.
+```
+interface lag 17 multi-chassis
+    no shutdown
+    no routing
+    vlan trunk native 1
+    vlan trunk allowed 7
+    lacp mode active
+    lacp fallback
     exit
 ```
 
