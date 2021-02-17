@@ -8,148 +8,109 @@ Examples of when you may wish to run them are:
 * any time there is unexpected behavior observed
 * in order to provide relevant information to support tickets
 
-## CMS
+The areas should be tested in the order they are listed on this page. Errors in an earlier check may cause errors in later checks due to dependencies.
 
-### Booting CSM Barebones Image
+For more details on these validations and health checks, see the admin guide (note to docs team: replace this with a reference to the specific section of the admin guide).
 
-Included with the Cray System Manaement (CSM) release is a pre-built node image that can be used 
-to validate that core CSM services are available and responding as expected. The CSM barebones 
-image contains only the minimal set of RPMS and configuation required to boot an image and is not
-suitable for production usage. To run production work loads, it is suggested that an image from 
-the Cray OS (COS) product, or similar, be used.
+## PET
 
----
-**NOTE** 
+### Platform Health Checks
 
-The CSM Barebones image included with the Shasta 1.4 release will not successfully complete
-the beyond the dracut stage of the boot process. However, if the dracut stage is reached the 
-boot can be considered successful and shows that the necessary CSM services needed to 
-boot a node are up and available.
+Scripts do not verify results. Script output includes analysis needed to determine pass/fail for each check. All health checks are expected to pass.
+Health Check scripts can be run:
+* after install.sh has been run – not before
+* before and after one of the NCN's reboot
+* after the system or a single node goes down unexpectedly
+* after the system is gracefully shut down and brought up
+* any time there is unexpected behavior on the system to get a baseline of data for CSM services and components
+* in order to provide relevant information to support tickets that are being opened after sysmgmt manifest has been installed
 
-This inability to fully boot the barebones image will be resolved in future releases of the
-CSM product.
+Health Check scripts can be found and run on any worker or master node from any directory.
 
----
+#### ncnHealthChecks
+     /opt/cray/platform-utils/ncnHealthChecks.sh
+The ncnHealthChecks script reports the following health information:
+* Kubernetes status for master and worker NCNs
+* Ceph health status
+* Health of etcd clusters
+* Number of pods on each worker node for each etcd cluster
+* List of automated etcd backups for the Boot Orchestration Service (BOS),  Boot Script Service (BSS), Compute Rolling Upgrade Service (CRUS), and Domain Name Service (DNS)
+* NCN node uptimes
+* Pods yet to reach the running state
 
----
-**NOTE**
+Execute ncnHealthChecks script and analyze the output of each individual check.
 
-In addition to the CSM Barebones image, the Shasta 1.4 release also includes an IMS Recipe that
-can be used to build the CSM Barebones image. However, the CSM Barebones recipe currently requires
-rpms that are not installed with the CSM product. The CSM Barebones recipe can be built after the
-Cray OS (COS) product stream is also installed on to the system. 
+Verify that Border Gateway Protocol (BGP) peering sessions are established for each worker node on the system. See CSM Health Checks section of the Admin Guide.
 
-In future releases of the CSM product, work will be undertaken to resolve these dependency issues.
+#### ncnPostgresHealthChecks
+     /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
+For each postgres cluster the ncnPostgresHealthChecks script determines the leader pod and then reports the status of all postgres pods in the cluster. 
 
----
+Execute ncnPostgresHealthChecks script. Verify leader for each cluster and status of cluster members.
 
-#### Locate the CSM Barebones Image in IMS
+## NET
 
-Locate the CSM Barebones image and note the path to the image's manifest.json in S3.
+### Verify that KEA has active DHCP leases
 
-```json
-// cray ims images list --format json | jq '.[] | select(.name | contains("barebones"))'
-{
-  "created": "2021-01-14T03:15:55.146962+00:00",
-  "id": "293b1e9c-2bc4-4225-b235-147d1d611eef",
-  "link": {
-    "etag": "6d04c3a4546888ee740d7149eaecea68",
-    "path": "s3://boot-images/293b1e9c-2bc4-4225-b235-147d1d611eef/manifest.json",
-    "type": "s3"
-  },
-  "name": "cray-shasta-csm-sles15sp1-barebones.x86_64-shasta-1.4"
-}
+Verify that KEA has active DHCP leases. Right after an fresh install of CSM it is important to verify that KEA is currently handing out DHCP leases on the system. The following commands can be ran on any of the ncn masters or workers.
+
+Get a API Token:
+```
+# export TOKEN=$(curl -s -S -d grant_type=client_credentials \
+                 -d client_id=admin-client \
+                 -d client_secret=`kubectl get secrets admin-client-auth \
+                 -o jsonpath='{.data.client-secret}' | base64 -d` \
+                          https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
 ```
 
-#### Create a BOS Session Template for the CSM Barebones Image
-
-The session template below can be copied and used as the basis for the BOS Session Template. As noted below, make sure the S3 path for the manifest matches the S3 path shown in IMS.
-
-```json
-// vi sessiontemplate.json
-{
-  "boot_sets": {
-    "compute": {
-      "boot_ordinal": 2,
-      "etag": "6d04c3a4546888ee740d7149eaecea68",// <== This should be set to the etag of the IMS Image
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-      "network": "nmn",
-      "node_roles_groups": [
-        "Compute"
-      ],
-      "path": "s3://boot-images/293b1e9c-2bc4-4225-b235-147d1d611eef/manifest.json",// <== Make sure this path matches the IMS Image Path
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-      "type": "s3"
-    }
-  },
-  "cfs": {
-    "configuration": "cos-integ-config-1.4.0"
-  },
-  "enable_cfs": false,
-  "name": "shasta-1.4-csm-bare-bones-image"
-}
-
-// cray bos v1 sessiontemplate create --file sessiontemplate.json --name shasta-1.4-csm-bare-bones-image
-// /sessionTemplate/shasta-1.4-csm-bare-bones-image
+Retrieve all the Leases currently in KEA:
+```
+# curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' https://api_gw_service.local/apis/dhcp-kea | jq
 ```
 
-#### Find an available node and boot the session template
+If there is an non-zero amount of DHCP leases for river hardware returned that is a good indication that KEA is working.
 
-```ini
-# cray hsm state components list
-...
-[[Components]]
-ID = "x3000c0s6b0"
-Type = "NodeBMC"
-State = "Ready"
-Flag = "OK"
-Enabled = true
-NetType = "Sling"
-Arch = "X86"
-Class = "River"
- 
-[[Components]]
-ID = "x3000c0s5e0"
-Type = "NodeEnclosure"
-State = "On"
-Flag = "OK"
-Enabled = true
-NetType = "Sling"
-Arch = "X86"
-Class = "River"
-```
+## Automated Goss Testing
+
+There are multiple [Goss](https://github.com/aelsabbahy/goss) test suites available that cover a variety of sub-systems. 
+
+You can execute the general NCN test suite via:
 
 ```bash
-ncn# cray bos v1 session create --template-uuid shasta-1.4-csm-bare-bones-image --operation reboot --limit <xname>
+ncn:~ # /opt/cray/tests/install/ncn/automated/ncn-run-time-checks
 ```
 
-#### Connect to the node's console nad watch the boot
+And the Kubernetes test suite via:
 
-The boot will fail, but should reach the dracut stage. If the dracut stage is reached, the boot 
-can be considered successful and shows that the necessary CSM services needed to boot a node are 
-up and available.
 ```bash
-cray-conman-b69748645-qtfxj:/ # conman -j x9000c1s7b0n1
-...
-[    7.876909] dracut: FATAL: Don't know how to handle 'root=craycps-s3:s3://boot-images/e3ba09d7-e3c2-4b80-9d86-0ee2c48c2214/rootfs:c77c0097bb6d488a5d1e4a2503969ac0-27:dvs:api-gw-service-nmn.local:300:nmn0'
-[    7.898169] dracut: Refusing to continue
-[    7.952291] systemd-shutdow: 13 output lines suppressed due to ratelimiting
-[    7.959842] systemd-shutdown[1]: Sending SIGTERM to remaining processes...
-[    7.975211] systemd-journald[1022]: Received SIGTERM from PID 1 (systemd-shutdow).
-[    7.982625] systemd-shutdown[1]: Sending SIGKILL to remaining processes...
-[    7.999281] systemd-shutdown[1]: Unmounting file systems.
-[    8.006767] systemd-shutdown[1]: Remounting '/' read-only with options ''.
-[    8.013552] systemd-shutdown[1]: Remounting '/' read-only with options ''.
-[    8.019715] systemd-shutdown[1]: All filesystems unmounted.
-[    8.024697] systemd-shutdown[1]: Deactivating swaps.
-[    8.029496] systemd-shutdown[1]: All swaps deactivated.
-[    8.036504] systemd-shutdown[1]: Detaching loop devices.
-[    8.043612] systemd-shutdown[1]: All loop devices detached.
-[    8.059239] reboot: System halted
+ncn:~ # /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
 ```
 
-### Validation Utility
+### Known Goss Test Issues
+
+* Tests can only reliably be executed from the PIT node. Should be addressed in a future release.
+* K8S Test: Kubernetes Query BSS Cloud-init for ca-certs
+  - May fail immediately after platform install. Should pass after the TrustedCerts Operator has updated BSS (Global cloud-init meta) with CA certificates.
+* K8S Test: Kubernetes Velero No Failed Backups
+  - Due to a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (ie.g., vault). It may be necessary to use the ```velero``` command to delete backups from a Kubernetes node to clear this situation. 
+* K8S Test: Verify spire-agent is enabled and running
+  - The spire-agent service may fail to start, logging errors (via journalctl) similar to "join token not existing...". Deleting the ```request-ncn-join-token``` daemonset pod running on the node may clear the issue.
+
+## HMS
+
+### HMS Service Tests
+Execute the HMS smoke and functional tests after the CSM install to confirm that the HMS services are running and operational.
+
+### CRAY INTERNAL USE ONLY
+The HMS tests are provided by the hms-ct-test-crayctldeploy RPM which comes preinstalled on the NCNs. However, the tests receive frequent updates so it is highly recommended to download and install the latest version of the RPM prior to executing the tests. The latest version of the RPM can be retrieved from car.dev.cray.com in the [ct-tests/HMS/sle15_sp2_ncn/x86_64/dev/master/hms-team/](http://car.dev.cray.com/artifactory/ct-tests/HMS/sle15_sp2_ncn/x86_64/dev/master/hms-team) folder. Install it on every worker and master NCN (except for ncn-m001 if it is still the PIT node).
+
+### Test Execution
+Run the HMS smoke tests. If no failures occur, then run the HMS functional tests. The tests should be executed as root on at least one worker NCN and one master NCN (but **not** ncn-m001 if it is still the PIT node).
+
+    ncn:~ # /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resources.sh
+    ncn:~ # /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-resources.sh
+
+## CMS Validation Utility
      /usr/local/bin/cmsdev
 
 ### CRAY INTERNAL USE ONLY
@@ -194,92 +155,144 @@ You should run a check for each of the following services after an install. Thes
 \* The ipxe shortcut runs a check of both the iPXE service and the TFTP service.
 
 
+## Booting CSM Barebones Image
+
+Included with the Cray System Manaement (CSM) release is a pre-built node image that can be used 
+to validate that core CSM services are available and responding as expected. The CSM barebones 
+image contains only the minimal set of RPMS and configuation required to boot an image and is not
+suitable for production usage. To run production work loads, it is suggested that an image from 
+the Cray OS (COS) product, or similar, be used.
+
+---
+**NOTE** 
+
+The CSM Barebones image included with the Shasta 1.4 release will not successfully complete
+the beyond the dracut stage of the boot process. However, if the dracut stage is reached the 
+boot can be considered successful and shows that the necessary CSM services needed to 
+boot a node are up and available.
+
+This inability to fully boot the barebones image will be resolved in future releases of the
+CSM product.
+
+---
+
+---
+**NOTE**
+
+In addition to the CSM Barebones image, the Shasta 1.4 release also includes an IMS Recipe that
+can be used to build the CSM Barebones image. However, the CSM Barebones recipe currently requires
+rpms that are not installed with the CSM product. The CSM Barebones recipe can be built after the
+Cray OS (COS) product stream is also installed on to the system. 
+
+In future releases of the CSM product, work will be undertaken to resolve these dependency issues.
+
+---
+
+### Locate the CSM Barebones Image in IMS
+
+Locate the CSM Barebones image and note the path to the image's manifest.json in S3.
+
+```json
+// cray ims images list --format json | jq '.[] | select(.name | contains("barebones"))'
+{
+  "created": "2021-01-14T03:15:55.146962+00:00",
+  "id": "293b1e9c-2bc4-4225-b235-147d1d611eef",
+  "link": {
+    "etag": "6d04c3a4546888ee740d7149eaecea68",
+    "path": "s3://boot-images/293b1e9c-2bc4-4225-b235-147d1d611eef/manifest.json",
+    "type": "s3"
+  },
+  "name": "cray-shasta-csm-sles15sp1-barebones.x86_64-shasta-1.4"
+}
 ```
-ncn:~ # /opt/cray/tests/install/ncn/automated/ncn-run-time-checks
+
+### Create a BOS Session Template for the CSM Barebones Image
+
+The session template below can be copied and used as the basis for the BOS Session Template. As noted below, make sure the S3 path for the manifest matches the S3 path shown in IMS.
+
+```json
+// vi sessiontemplate.json
+{
+  "boot_sets": {
+    "compute": {
+      "boot_ordinal": 2,
+      "etag": "6d04c3a4546888ee740d7149eaecea68",// <== This should be set to the etag of the IMS Image
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "network": "nmn",
+      "node_roles_groups": [
+        "Compute"
+      ],
+      "path": "s3://boot-images/293b1e9c-2bc4-4225-b235-147d1d611eef/manifest.json",// <== Make sure this path matches the IMS Image Path
+      "rootfs_provider": "cpss3",
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
+      "type": "s3"
+    }
+  },
+  "cfs": {
+    "configuration": "cos-integ-config-1.4.0"
+  },
+  "enable_cfs": false,
+  "name": "shasta-1.4-csm-bare-bones-image"
+}
+
+// cray bos v1 sessiontemplate create --file sessiontemplate.json --name shasta-1.4-csm-bare-bones-image
+// /sessionTemplate/shasta-1.4-csm-bare-bones-image
 ```
 
-## HMS
+### Find an available node and boot the session template
 
-### HMS Service Tests
-Execute the HMS smoke and functional tests after the CSM install to confirm that the HMS services are running and operational.
-
-### CRAY INTERNAL USE ONLY
-The HMS tests are provided by the hms-ct-test-crayctldeploy RPM which comes preinstalled on the NCNs. However, the tests receive frequent updates so it is highly recommended to download and install the latest version of the RPM prior to executing the tests. The latest version of the RPM can be retrieved from car.dev.cray.com in the [ct-tests/HMS/sle15_sp2_ncn/x86_64/dev/master/hms-team/](http://car.dev.cray.com/artifactory/ct-tests/HMS/sle15_sp2_ncn/x86_64/dev/master/hms-team) folder. Install it on every worker and master NCN (except for ncn-m001 if it is still the PIT node).
-
-### Test Execution
-Run the HMS smoke tests. If no failures occur, then run the HMS functional tests. The tests should be executed as root on at least one worker NCN and one master NCN (but **not** ncn-m001 if it is still the PIT node).
-
-    ncn:~ # /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resources.sh
-    ncn:~ # /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-resources.sh
-
-## Automated Goss Testing
-
-There are multiple [Goss](https://github.com/aelsabbahy/goss) test suites available that cover a variety of sub-systems. 
-
-You can execute the general NCN test suite via:
+```ini
+# cray hsm state components list
+...
+[[Components]]
+ID = "x3000c0s6b0"
+Type = "NodeBMC"
+State = "Ready"
+Flag = "OK"
+Enabled = true
+NetType = "Sling"
+Arch = "X86"
+Class = "River"
+ 
+[[Components]]
+ID = "x3000c0s5e0"
+Type = "NodeEnclosure"
+State = "On"
+Flag = "OK"
+Enabled = true
+NetType = "Sling"
+Arch = "X86"
+Class = "River"
+```
 
 ```bash
-ncn:~ # /opt/cray/tests/install/ncn/automated/ncn-run-time-checks
+ncn# cray bos v1 session create --template-uuid shasta-1.4-csm-bare-bones-image --operation reboot --limit <xname>
 ```
 
-And the Kubernetes test suite via:
+### Connect to the node's console nad watch the boot
 
+The boot will fail, but should reach the dracut stage. If the dracut stage is reached, the boot 
+can be considered successful and shows that the necessary CSM services needed to boot a node are 
+up and available.
 ```bash
-ncn:~ # /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
+cray-conman-b69748645-qtfxj:/ # conman -j x9000c1s7b0n1
+...
+[    7.876909] dracut: FATAL: Don't know how to handle 'root=craycps-s3:s3://boot-images/e3ba09d7-e3c2-4b80-9d86-0ee2c48c2214/rootfs:c77c0097bb6d488a5d1e4a2503969ac0-27:dvs:api-gw-service-nmn.local:300:nmn0'
+[    7.898169] dracut: Refusing to continue
+[    7.952291] systemd-shutdow: 13 output lines suppressed due to ratelimiting
+[    7.959842] systemd-shutdown[1]: Sending SIGTERM to remaining processes...
+[    7.975211] systemd-journald[1022]: Received SIGTERM from PID 1 (systemd-shutdow).
+[    7.982625] systemd-shutdown[1]: Sending SIGKILL to remaining processes...
+[    7.999281] systemd-shutdown[1]: Unmounting file systems.
+[    8.006767] systemd-shutdown[1]: Remounting '/' read-only with options ''.
+[    8.013552] systemd-shutdown[1]: Remounting '/' read-only with options ''.
+[    8.019715] systemd-shutdown[1]: All filesystems unmounted.
+[    8.024697] systemd-shutdown[1]: Deactivating swaps.
+[    8.029496] systemd-shutdown[1]: All swaps deactivated.
+[    8.036504] systemd-shutdown[1]: Detaching loop devices.
+[    8.043612] systemd-shutdown[1]: All loop devices detached.
+[    8.059239] reboot: System halted
 ```
-
-### Known Goss Test Issues
-
-* Tests can only reliably be executed from the PIT node. Should be addressed in a future release.
-* K8S Test: Kubernetes Query BSS Cloud-init for ca-certs
-  - May fail immediately after platform install. Should pass after the TrustedCerts Operator has updated BSS (Global cloud-init meta) with CA certificates.
-* K8S Test: Kubernetes Velero No Failed Backups
-  - Due to a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (ie.g., vault). It may be necessary to use the ```velero``` command to delete backups from a Kubernetes node to clear this situation. 
-* K8S Test: Verify spire-agent is enabled and running
-  - The spire-agent service may fail to start, logging errors (via journalctl) similar to "join token not existing...". Deleting the ```request-ncn-join-token``` daemonset pod running on the node may clear the issue.
-
-## PET
-
-### Platform Health Checks
-
-Scripts do not verify results. Script output includes analysis needed to determine pass/fail for each check. All health checks are expected to pass.
-Health Check scripts can be run:
-* after install.sh has been run – not before
-* before and after one of the NCN's reboot
-* after the system or a single node goes down unexpectedly
-* after the system is gracefully shut down and brought up
-* any time there is unexpected behavior on the system to get a baseline of data for CSM services and components
-* in order to provide relevant information to support tickets that are being opened after sysmgmt manifest has been installed
-
-Health Check scripts can be found and run on any worker or master node from any directory.
-
-#### ncnHealthChecks
-     /opt/cray/platform-utils/ncnHealthChecks.sh
-The ncnHealthChecks script reports the following health information:
-* Kubernetes status for master and worker NCNs
-* Ceph health status
-* Health of etcd clusters
-* Number of pods on each worker node for each etcd cluster
-* List of automated etcd backups for the Boot Orchestration Service (BOS),  Boot Script Service (BSS), Compute Rolling Upgrade Service (CRUS), and Domain Name Service (DNS)
-* NCN node uptimes
-* Pods yet to reach the running state
-
-Execute ncnHealthChecks script and analyze the output of each individual check.
-
-Verify that Border Gateway Protocol (BGP) peering sessions are established for each worker node on the system. See CSM Health Checks section of the Admin Guide.
-
-#### ncnPostgresHealthChecks
-     /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
-For each postgres cluster the ncnPostgresHealthChecks script determines the leader pod and then reports the status of all postgres pods in the cluster. 
-
-Execute ncnPostgresHealthChecks script. Verify leader for each cluster and status of cluster members.
-
-### Shasta Health Services - Prometheus
-In a browser access https://prometheus.SYSTEM_DOMAIN_NAME/ 
-For example: https://prometheus.NAMEofSYSTEM.dev.cray.com/
-Select the Alerts tab to view current alerts.
-
-Pay attention to any KubeCronJobRunning alerts. Unexpected behavior on the system can result if cron jobs are not firing appropriately. See the System Management Health Architecture section of the Admin Guide for more information about system management monitoring. 
 
 ## UAS / UAI
 
@@ -563,25 +576,3 @@ to locate the pod, and then use
 ```
 
 to investigate the problem.  If volumes are missing they will show up in the `Events:` section of the output.  Other problems may show up there as well.  The names of the missing volumes or other issues should indicate what needs to be fixed to make the UAI run.
-
-## NET
-
-### Verify that KEA has active DHCP leases
-
-Verify that KEA has active DHCP leases. Right after an fresh install of CSM it is important to verify that KEA is currently handing out DHCP leases on the system. The following commands can be ran on any of the ncn masters or workers.
-
-Get a API Token:
-```
-# export TOKEN=$(curl -s -S -d grant_type=client_credentials \
-                 -d client_id=admin-client \
-                 -d client_secret=`kubectl get secrets admin-client-auth \
-                 -o jsonpath='{.data.client-secret}' | base64 -d` \
-                          https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
-```
-
-Retrieve all the Leases currently in KEA:
-```
-# curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' https://api_gw_service.local/apis/dhcp-kea | jq
-```
-
-If there is an non-zero amount of DHCP leases for river hardware returned that is a good indication that KEA is working.
