@@ -20,6 +20,7 @@ choose to install additional products following the completion of the CSM instal
     * [Start Hand-Off](#start-hand-off)
 * [Accessing USB Partitions After Reboot](#accessing-usb-partitions-after-reboot)
    * [Accessing CSI from a USB or RemoteISO](#accessing-csi-from-a-usb-or-remoteiso)
+* [Disable NCN Disk Wiping](#disable-ncn-disk-wiping)
 
 
 <a name="required-services"></a>
@@ -326,3 +327,23 @@ be accessed by any LiveCD ISO file if not the one used for the original installa
    ncn-m001# cp -pv /mnt/rootfs/usr/bin/csi /tmp/csi
    ncn-m001# umount /mnt/rootfs /mnt/squashfs /mnt/livecd /mnt/pitdata
    ```
+
+<a name="disable-ncn-disk-wiping"></a>
+## Disable NCN Disk Wiping
+
+After all the NCNs have been installed, it is imperative to disable the automated wiping of disks so subsequent boots 
+do not destroy any data unintentionally. First follow the procedure [above](#accessing-usb-partitions-after-reboot)
+to re-mount the assets and then get a new token:
+
+```text
+pit# export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+  -d client_id=admin-client \
+  -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+  https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+```
+
+Followed by a call to CSI to update BSS:
+
+```bash
+/mnt/rootfs/usr/bin/csi handoff bss-update-param --set metal.no-wipe=1
+```
