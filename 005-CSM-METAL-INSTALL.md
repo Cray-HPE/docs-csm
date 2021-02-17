@@ -3,7 +3,7 @@
 This page will go over deploying the non-compute nodes.
 
 * [Configure Bootstrap Registry to Proxy an Upstream Registry](#configure-bootstrap-registry-to-proxy-an-upstream-registry)
-* [Tokens](#tokens)
+* [Tokens and IPMI Password](#tokens-and-ipmi-password)
 * [Timing of Deployments](#timing-of-deployments)
 * [NCN Deployment](#ncn-deployment)
     * [Apply NCN Pre-Boot Workarounds](#apply-ncn-pre-boot-workarounds)
@@ -66,39 +66,28 @@ installs as follows:
     ```
 
 
-<a name="tokens"></a>
-## Tokens
+<a name="tokens-and-ipmi-password"></a>
+## Tokens and IPMI Password
 
-These tokens will assist an administrator as they follow this page. Copy these into the shell environment
+These tokens will assist an administrator as they follow this page. Copy these into the shell environment **Notice** that one of them
+is the `IPMI_PASSWORD`
 
 > These exist as an avoidance measure for hard-codes, so these may be used in various system contexts.
-
 ```bash
-pit# export mtoken='ncn-m\w+-mgmt'
-pit# export stoken='ncn-s\w+-mgmt'
-pit# export wtoken='ncn-w\w+-mgmt'
-```
+export mtoken='ncn-m\w+-mgmt'
+export stoken='ncn-s\w+-mgmt'
+export wtoken='ncn-w\w+-mgmt'
 
-Optionally save them to the PIT's `.bashrc` file to load these on every login:
-```bash
-pit# export mtoken='ncn-m\w+-mgmt'
-pit# export stoken='ncn-s\w+-mgmt'
-pit# export wtoken='ncn-w\w+-mgmt'
-pit# cat << EOF >> ~/.bashrc
-export mtoken='$mtoken'
-export stoken='$stoken'
-export wtoken='$wtoken'
-EOF
+
+# Replace "opensesame" with the real root password.
+export IPMI_PASSWORD=opensesame
+export username=root
 ```
 
 Throughout the guide, simple one-liners can be used to query status of expected nodes. If the shell or environment is terminated, these environment variables should be re-exported.
 
 Examples:
 ```bash
-pit# export IPMI_PASSWORD=
-pit# export username=root
-
-# grep -oE : outputs only the lexeme, and allows expanded regexs.
 # Power status of all expected NCNs:
 pit# grep -oE "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power status
 
@@ -116,10 +105,12 @@ The timing of each set of boots varies based on hardware, some manufacturers wil
 
 This section will walk an administrator through NCN deployment.
 
+> Grab the [Tokens](#tokens-and-ipmi-password) to facilitate commands if loading this page from a bookmark.
+
 <a name="apply-ncn-pre-boot-workarounds"></a>
 #### Apply NCN Pre-Boot Workarounds
 
-> **There will be post-boot workarounds as well**.
+_There will be post-boot workarounds as well._
 
 Check for workarounds in the `fix/before-ncn-boot` directory within the CSM tar. Each has its own instructions in their respective `README` files.
 
@@ -142,8 +133,6 @@ CASMINST-980
 
 2. Set each node to always UEFI Network Boot, and ensure they're powered off
    ```bash
-    pit# export IPMI_PASSWORD=
-    pit# export username=root
     pit# grep -oE "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} chassis bootdev pxe options=efiboot,persistent
     pit# grep -oE "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
    ```
@@ -172,10 +161,9 @@ CASMINST-980
 
 > **`IMPORTANT`** This is the administrators _last chance_ to run [NCN pre-boot workarounds](#apply-ncn-pre-boot-workarounds).
 
+> **`NOTE`**: All consoles are located at `/var/log/conman/console*`
 4. Boot the **Storage Nodes**
     ```bash
-    pit# export IPMI_PASSWORD=
-    pit# export username=root
     pit# grep -oE $stoken /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
 
@@ -188,27 +176,20 @@ CASMINST-980
    # Join the console
    pit# conman -j ncn-s001-mgmt
    ```
-   > **`NOTE`**: All consoles are located at `/var/log/conman/console*`
-
-   > **`NOTE`**: If the nodes are booted without a hostname or they didn't run all their cloud-init scripts the following commands need to be ran **(but only in that circumstance)**.
+    From there an administrator can witness console-output for the cloud-init scripts.
+   > **`NOTE`**: If the nodes exhibit afflictions such as:
+   > - no hostname (e.g. `ncn`)
+   > - `mgmt0` or `mgmt1` does not indicate they exist in `bond0`, or has a mis-matching MTU of `1500` to the bond's members
+   > - no route (e.g. `ip r` returns no `default` route)
+   >   
+    > then run the following script from the afflicted node **(but only in either of those circumstances)**.
+   > ```bash
+   > ncn# /srv/cray/scripts/metal/retry-ci.sh
    > ```
-   > /srv/cray/scripts/metal/set-dhcp-to-static.sh
-   > ```
-   > After this you should have network connectivity.
-   > Then you will run.
-   > ```
-   > cloud-init clean
-   > cloud-init init
-   > cloud-init modules -m init
-   > cloud-init modules -m config
-   > cloud-init modules -m final
-   > ```
-   > This should pull all the required cloud-init data for the NCN to join the cluster.
+   > Running `hostname` or logging out and back in should yield the proper hostname.
 
 6. Boot **Kubernetes Managers and Workers**
     ```bash
-    pit# export IPMI_PASSWORD=
-    pit# export username=root
     pit# grep -oE "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
 

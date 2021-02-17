@@ -47,98 +47,107 @@ In future releases of the CSM product, work will be undertaken to resolve these 
 
 Locate the CSM Barebones image and note the path to the image's manifest.json in S3.
 
-    # cray ims images list --format json | jq '.[] | select(.name | contains("barebones"))'
-    {
-      "created": "2021-01-14T03:15:55.146962+00:00",
-      "id": "293b1e9c-2bc4-4225-b235-147d1d611eef",
-      "link": {
-        "etag": "6d04c3a4546888ee740d7149eaecea68",
-        "path": "s3://boot-images/293b1e9c-2bc4-4225-b235-147d1d611eef/manifest.json",
-        "type": "s3"
-      },
-      "name": "cray-shasta-csm-sles15sp1-barebones.x86_64-shasta-1.4"
-    }
+```json
+// cray ims images list --format json | jq '.[] | select(.name | contains("barebones"))'
+{
+  "created": "2021-01-14T03:15:55.146962+00:00",
+  "id": "293b1e9c-2bc4-4225-b235-147d1d611eef",
+  "link": {
+    "etag": "6d04c3a4546888ee740d7149eaecea68",
+    "path": "s3://boot-images/293b1e9c-2bc4-4225-b235-147d1d611eef/manifest.json",
+    "type": "s3"
+  },
+  "name": "cray-shasta-csm-sles15sp1-barebones.x86_64-shasta-1.4"
+}
+```
 
 #### Create a BOS Session Template for the CSM Barebones Image
 
 The session template below can be copied and used as the basis for the BOS Session Template. As noted below, make sure the S3 path for the manifest matches the S3 path shown in IMS.
 
-    # vi sessiontemplate.json
-    {
-      "boot_sets": {
-        "compute": {
-          "boot_ordinal": 2,
-          "etag": "6d04c3a4546888ee740d7149eaecea68",  <== This should be set to the etag of the IMS Image
-          "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-          "network": "nmn",
-          "node_roles_groups": [
-            "Compute"
-          ],
-          "path": "s3://boot-images/293b1e9c-2bc4-4225-b235-147d1d611eef/manifest.json",  <== Make sure this path matches the IMS Image Path
-          "rootfs_provider": "cpss3",
-          "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-          "type": "s3"
-        }
-      },
-      "cfs": {
-        "configuration": "cos-integ-config-1.4.0"
-      },
-      "enable_cfs": false,
-      "name": "shasta-1.4-csm-bare-bones-image"
+```json
+// vi sessiontemplate.json
+{
+  "boot_sets": {
+    "compute": {
+      "boot_ordinal": 2,
+      "etag": "6d04c3a4546888ee740d7149eaecea68",// <== This should be set to the etag of the IMS Image
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "network": "nmn",
+      "node_roles_groups": [
+        "Compute"
+      ],
+      "path": "s3://boot-images/293b1e9c-2bc4-4225-b235-147d1d611eef/manifest.json",// <== Make sure this path matches the IMS Image Path
+      "rootfs_provider": "cpss3",
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
+      "type": "s3"
     }
-     
-    # cray bos v1 sessiontemplate create --file sessiontemplate.json --name shasta-1.4-csm-bare-bones-image
-    /sessionTemplate/shasta-1.4-csm-bare-bones-image
+  },
+  "cfs": {
+    "configuration": "cos-integ-config-1.4.0"
+  },
+  "enable_cfs": false,
+  "name": "shasta-1.4-csm-bare-bones-image"
+}
+
+// cray bos v1 sessiontemplate create --file sessiontemplate.json --name shasta-1.4-csm-bare-bones-image
+// /sessionTemplate/shasta-1.4-csm-bare-bones-image
+```
 
 #### Find an available node and boot the session template
 
-    # cray hsm state components list
-    ...
-    [[Components]]
-    ID = "x3000c0s6b0"
-    Type = "NodeBMC"
-    State = "Ready"
-    Flag = "OK"
-    Enabled = true
-    NetType = "Sling"
-    Arch = "X86"
-    Class = "River"
-     
-    [[Components]]
-    ID = "x3000c0s5e0"
-    Type = "NodeEnclosure"
-    State = "On"
-    Flag = "OK"
-    Enabled = true
-    NetType = "Sling"
-    Arch = "X86"
-    Class = "River"
-     
-    # cray bos v1 session create --template-uuid shasta-1.4-csm-bare-bones-image --operation reboot --limit <xname>
+```ini
+# cray hsm state components list
+...
+[[Components]]
+ID = "x3000c0s6b0"
+Type = "NodeBMC"
+State = "Ready"
+Flag = "OK"
+Enabled = true
+NetType = "Sling"
+Arch = "X86"
+Class = "River"
+ 
+[[Components]]
+ID = "x3000c0s5e0"
+Type = "NodeEnclosure"
+State = "On"
+Flag = "OK"
+Enabled = true
+NetType = "Sling"
+Arch = "X86"
+Class = "River"
+```
+
+```bash
+ncn# cray bos v1 session create --template-uuid shasta-1.4-csm-bare-bones-image --operation reboot --limit <xname>
+```
 
 #### Connect to the node's console nad watch the boot
 
 The boot will fail, but should reach the dracut stage. If the dracut stage is reached, the boot 
 can be considered successful and shows that the necessary CSM services needed to boot a node are 
 up and available.
-
-    cray-conman-b69748645-qtfxj:/ # conman -j x9000c1s7b0n1
-    ...
-    [    7.876909] dracut: FATAL: Don't know how to handle 'root=craycps-s3:s3://boot-images/e3ba09d7-e3c2-4b80-9d86-0ee2c48c2214/rootfs:c77c0097bb6d488a5d1e4a2503969ac0-27:dvs:api-gw-service-nmn.local:300:nmn0'
-    [    7.898169] dracut: Refusing to continue
-    [    7.952291] systemd-shutdow: 13 output lines suppressed due to ratelimiting
-    [    7.959842] systemd-shutdown[1]: Sending SIGTERM to remaining processes...
-    [    7.975211] systemd-journald[1022]: Received SIGTERM from PID 1 (systemd-shutdow).
-    [    7.982625] systemd-shutdown[1]: Sending SIGKILL to remaining processes...
-    [    7.999281] systemd-shutdown[1]: Unmounting file systems.
-    [    8.006767] systemd-shutdown[1]: Remounting '/' read-only with options ''.
-    [    8.013552] systemd-shutdown[1]: Remounting '/' read-only with options ''.
-    [    8.019715] systemd-shutdown[1]: All filesystems unmounted.
-    [    8.024697] systemd-shutdown[1]: Deactivating swaps.
-    [    8.029496] systemd-shutdown[1]: All swaps deactivated.
-    [    8.036504] systemd-shutdown[1]: Detaching loop devices.
-    [    8.043612] systemd-shutdown[1]: All loop devices detached.
-    [    8.059239] reboot: System halted
+```bash
+cray-conman-b69748645-qtfxj:/ # conman -j x9000c1s7b0n1
+...
+[    7.876909] dracut: FATAL: Don't know how to handle 'root=craycps-s3:s3://boot-images/e3ba09d7-e3c2-4b80-9d86-0ee2c48c2214/rootfs:c77c0097bb6d488a5d1e4a2503969ac0-27:dvs:api-gw-service-nmn.local:300:nmn0'
+[    7.898169] dracut: Refusing to continue
+[    7.952291] systemd-shutdow: 13 output lines suppressed due to ratelimiting
+[    7.959842] systemd-shutdown[1]: Sending SIGTERM to remaining processes...
+[    7.975211] systemd-journald[1022]: Received SIGTERM from PID 1 (systemd-shutdow).
+[    7.982625] systemd-shutdown[1]: Sending SIGKILL to remaining processes...
+[    7.999281] systemd-shutdown[1]: Unmounting file systems.
+[    8.006767] systemd-shutdown[1]: Remounting '/' read-only with options ''.
+[    8.013552] systemd-shutdown[1]: Remounting '/' read-only with options ''.
+[    8.019715] systemd-shutdown[1]: All filesystems unmounted.
+[    8.024697] systemd-shutdown[1]: Deactivating swaps.
+[    8.029496] systemd-shutdown[1]: All swaps deactivated.
+[    8.036504] systemd-shutdown[1]: Detaching loop devices.
+[    8.043612] systemd-shutdown[1]: All loop devices detached.
+[    8.059239] reboot: System halted
+```
 
 ### Validation Utility
      /usr/local/bin/cmsdev

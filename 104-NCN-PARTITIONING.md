@@ -64,15 +64,15 @@ Let's pick apart the `SQFSRAID` and `ROOTRAID` overlays.
 Using the above bullets, one may be able to better understand the machine output below:
 
 ```bash
-ncn-m001:~ # mount | grep  ' / '
+ncn-m002:~ # mount | grep  ' / '
 LiveOS_rootfs on / type overlay (rw,relatime,lowerdir=/run/rootfsbase,upperdir=/run/overlayfs,workdir=/run/ovlwork)
                                              ^^^R/O^SQUASHFS IMAGE^^^|^^^ R/W PERSISTENCE ^^^|^^^^^^INTERIM^^^^^^
                                              ^^^R/O^SQUASHFS IMAGE^^^|^^^ R/W PERSISTENCE ^^^|^^^^^^INTERIM^^^^^^
                                              ^^^R/O^SQUASHFS IMAGE^^^|^^^ R/W PERSISTENCE ^^^|^^^^^^INTERIM^^^^^^
-ncn-m001:~ # losetup -a
-/dev/loop1: [0025]:56532 (/run/initramfs/thin-overlay/meta)
-/dev/loop2: [0025]:49062 (/run/initramfs/thin-overlay/data)
-/dev/loop0: [2431]:100 (/run/initramfs/live/LiveOS/ncn-m001.squashfs)
+ncn-m002:~ #  losetup -a
+/dev/loop1: [0025]:74858 (/run/initramfs/thin-overlay/meta)
+/dev/loop2: [0025]:74859 (/run/initramfs/thin-overlay/data)
+/dev/loop0: [2430]:100 (/run/initramfs/live/LiveOS/filesystem.squashfs)
 ```
 
 > The THIN OVERLAY is the transient space the system uses behind the scenes to allow data to live in RAM as it's written to disk.
@@ -84,28 +84,30 @@ overlays that are, by default, toggled `off` (so data persistencve be default is
 not assume).
 
 ```bash
-ncn-m001:~ # lsblk -f
-NAME                FSTYPE            LABEL         UUID                                 FSAVAIL FSUSE% MOUNTPOINT
-loop0               squashfs                                                                   0   100% /run/rootfsbase
-loop1
-└─live-overlay-pool
-loop2
-└─live-overlay-pool
-sda
-├─sda1
-├─sda2              linux_raid_member ncn-m001:SQFS d10e163c-169c-c23c-e6de-ddd79fd32ddb
-│ └─md127           xfs               SQFSRAID      08b549af-0246-4ec2-ad26-76fb45db73b1   89.3G     4% /run/initramfs/live
-└─sda3              linux_raid_member ncn-m001:ROOT 1bde5a2a-30b6-cd9b-fee0-702e9306760d
-  └─md126           xfs               ROOTRAID      67d38d40-a323-48cc-a724-b7431f180c6d  272.5G     2% /run/initramfs/overlayfs
-sdb
-├─sdb1
-├─sdb2              linux_raid_member ncn-m001:SQFS d10e163c-169c-c23c-e6de-ddd79fd32ddb
-│ └─md127           xfs               SQFSRAID      08b549af-0246-4ec2-ad26-76fb45db73b1   89.3G     4% /run/initramfs/live
-└─sdb3              linux_raid_member ncn-m001:ROOT 1bde5a2a-30b6-cd9b-fee0-702e9306760d
-  └─md126           xfs               ROOTRAID      67d38d40-a323-48cc-a724-b7431f180c6d  272.5G     2% /run/initramfs/overlayfs
-sdc
-└─sdc1
-
+ncn-m002:~ # lsblk
+NAME                MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINT
+loop0                 7:0    0   3.8G  1 loop  /run/rootfsbase
+loop1                 7:1    0    30G  0 loop
+└─live-overlay-pool 254:2    0   300G  0 dm
+loop2                 7:2    0   300G  0 loop
+└─live-overlay-pool 254:2    0   300G  0 dm
+sda                   8:0    1 447.1G  0 disk
+├─sda1                8:1    1   476M  0 part
+│ └─md127             9:127  0   476M  0 raid1
+├─sda2                8:2    1  92.7G  0 part
+│ └─md126             9:126  0  92.6G  0 raid1 /run/initramfs/live
+└─sda3                8:3    1 279.4G  0 part
+  └─md125             9:125  0 279.3G  0 raid1 /run/initramfs/overlayfs
+sdb                   8:16   1 447.1G  0 disk
+├─sdb1                8:17   1   476M  0 part
+│ └─md127             9:127  0   476M  0 raid1
+├─sdb2                8:18   1  92.7G  0 part
+│ └─md126             9:126  0  92.6G  0 raid1 /run/initramfs/live
+└─sdb3                8:19   1 279.4G  0 part
+  └─md125             9:125  0 279.3G  0 raid1 /run/initramfs/overlayfs
+sdc                   8:32   1 447.1G  0 disk
+└─ETCDLVM           254:0    0 447.1G  0 crypt
+  └─etcdvg0-ETCDK8S 254:1    0    32G  0 lvm   /run/lib-etcd
 ```
 
 ### Persistent Directories
@@ -122,7 +124,8 @@ Only the following directories are persistent _by default_:
 - `var`
 - `/run/containerd`
 - `/run/lib-containerd`
-- `/run/lib-kubelet`
+- `/run/lib-etcd`
+- `/run/lib/kubelet`
 
 More directories can be added, but mileage varies. The initial set is actually managed by dracut, when
 using a reset toggle the above list is "reset/cleared". If more directories are added, they will be eradicated when
@@ -288,6 +291,18 @@ rd.live.overlay.thin=1
 
 # Disable (not recommended; undesirable RAM waste)
 rd.live.overlay.thin=0
+```
+
+# SystemD MetalFS
+
+The `metalfs` systemd service will try to mount any metal created partitions.
+
+This runs against the `/run/initramfs/overlayfs/fstab.metal` when it exists. This file is dynamically created by most metal dracut modules.
+
+The service will continuously attempt to mount the partitions, if problems arise please stop the service:
+
+```bash
+ncn# systemctl stop metalfs
 ```
 
 # Old/Retired FS-Labels

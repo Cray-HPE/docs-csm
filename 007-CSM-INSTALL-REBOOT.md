@@ -19,6 +19,7 @@ choose to install additional products following the completion of the CSM instal
 * [Hand-Off](#hand-off)
     * [Start Hand-Off](#start-hand-off)
 * [Accessing USB Partitions After Reboot](#accessing-usb-partitions-after-reboot)
+   * [Accessing CSI from a USB or RemoteISO](#accessing-csi-from-a-usb-or-remoteiso)
 
 
 <a name="required-services"></a>
@@ -219,12 +220,14 @@ all been run by the administrator before starting this stage.
    ncn-w003   Ready    <none>   4h39m   v1.18.6
    ```
 
-13. Restore and verify the site link. It will be necessary to restore the `ifcfg-lan0` file from either 
+13. Restore and verify the site link. It will be necessary to restore the `ifcfg-lan0` file, and both the `ifroute-lan0` and `ifroute-vlan002` file from either 
     manual backup take in step 6 or re-mount the USB and copy it from the prep directory to `/etc/sysconfig/network/`.
 
    > The following command assumes that the PITDATA partition of the USB stick has been remounted at /mnt/pitdata
    ```
    ncn-m001# cp /mnt/pitdata/prep/surtur/pit-files/ifcfg-lan0 /etc/sysconfig/network/
+   ncn-m001# cp /mnt/pitdata/prep/surtur/pit-files/ifroute-lan0 /etc/sysconfig/network/
+   ncn-m001# cp /mnt/pitdata/prep/surtur/pit-files/ifroute-vlan002 /etc/sysconfig/network/
    ncn-m001# wicked ifup lan0
    ``` 
 
@@ -290,3 +293,36 @@ After deploying the LiveCD's NCN, the LiveCD USB itself is unharmed and availabl
     ```bash
     ncn-m001# umount /mnt/cow /mnt/pitdata
     ```
+
+<a name="accessing-csi-from-a-usb-or-remoteiso"></a>
+#### Accessing CSI from a USB or RemoteISO
+
+CSI is not installed on the NCNs, however it is compiled against the same base architecture and OS. Therefore, it can
+be accessed by any LiveCD ISO file if not the one used for the original installation.
+
+
+1. Set the CSM Release
+   ```bash
+   ncn-m001# CSM_RELEASE=0.8.6
+   ```
+2. Make directories.
+   ```bash
+   ncn-m001# mkdir /mnt/livecd /mnt/rootfs /mnt/sqfs /mnt/pitdata
+   ```
+3. Mount the rootfs (prompts omitted to facilitate copy-paste)
+   ```bash
+   mount -L PITDATA /mnt/pitdata
+   mount /mnt/pitdata/csm-${CSM_RELEASE}/cray-pre-install-toolkit-*.iso /mnt/livecd/
+   mount /mnt/livecd/LiveOS/squashfs.img /mnt/squashfs/
+   mount /mnt/squashfs/LiveOS/rootfs.img /mnt/rootfs/
+   ```
+4. Invoke CSI usage to validate it runs and is ready for use:
+   ```bash
+   ncn-m001# /mnt/rootfs/usr/bin/csi --help
+   ```
+
+5. Unmount the partitions after use, or copy the binary off to `tmp/`:
+   ```bash
+   ncn-m001# cp -pv /mnt/rootfs/usr/bin/csi /tmp/csi
+   ncn-m001# umount /mnt/rootfs /mnt/squashfs /mnt/livecd /mnt/pitdata
+   ```
