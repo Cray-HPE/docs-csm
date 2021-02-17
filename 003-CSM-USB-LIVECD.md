@@ -128,7 +128,7 @@ The shasta-cfg structure and other configuration files will be prepared, then cs
 <a name="generate-installation-files"></a>
 ### Generate Installation Files
 
-Some files are needed for generating the configuration payload. New systems will need to create these files before continuing.  Systems upgrading from Shasta v1.3 should prepare by [gathering data from the exiting system](068-HARVEST-13-CONFIG.md).
+Some files are needed for generating the configuration payload. New systems will need to create these files before continuing.  Systems upgrading from Shasta v1.3 should prepare by [gathering data from the existing system](068-HARVEST-13-CONFIG.md).
 
 > Note: The USB stick is usable at this time, but without SSH enabled as well as core services. This means the stick could be used to boot the system now, and a user can return to this step at another time.
 
