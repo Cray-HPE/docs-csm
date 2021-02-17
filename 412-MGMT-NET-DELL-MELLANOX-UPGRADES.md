@@ -1,8 +1,13 @@
 ### Management Network Dell And Mellanox Upgrades
 
 The Dell and Mellanox switches have some changes which are needed when moving from Shasta v1.3 to Shasta v1.4.
+This page is a guide to walk through the steps of upgrading a network to 1.4.
 
-## IP Address and Hostname Changes 
+## 1. Firmware Upgrade
+With shasta 1.4 we are using the following firmware, [FIRMWARE](409-MGMT-NET-FIRMWARE-UPDATE.md)
+
+
+## 2. IP Address and Hostname Changes 
 CSI will generate the IPs for the switches on a 1.4 system, they will be located here "/var/www/ephemeral/prep/{system-name}/networks" when ncn-m001 is booted from the LiveCD.
 
 Here is a snippet from NMN.yaml with the IP addresses and hostnames of the switches.  
@@ -33,7 +38,7 @@ leaf-01 10.252.0.2
 
 To make the hostname and IP address changes for all switches, follow this procedure [Management Network Switch Rename](415-MGMT-NET-SWITCH-RENAME.md)
 
-## Dell Changes to switch from bpdufilter to bpduguard
+## 3. Dell Changes to switch from bpdufilter to bpduguard
 * Remove spanning-tree bpdufilter
 * Add spanning-tree bpduguard
 
@@ -95,7 +100,6 @@ interface port-channel1
 
 
 ## Mellanox Changes for MAGP
-
 
 ### MAGP
 MAGP setup for mellanox spine switches, this should be set for every VLAN interface (1,2,4,7,10)
@@ -159,7 +163,43 @@ MAGP 10:
   Virtual MAC   : 00:00:5E:00:01:10
 ```
 
-### MLAG setup IPL link.
+### MLAG
+Check if MLAG is setup already.
+```
+sw-spine-002 [standalone: master] # show mlag
+Admin status: Enabled
+Operational status: Up
+Reload-delay: 30 sec
+Keepalive-interval: 1 sec
+Upgrade-timeout: 60 min
+System-mac: 00:00:5E:00:01:01
+
+MLAG Ports Configuration Summary:
+ Configured: 15
+ Disabled:   0
+ Enabled:    15
+
+MLAG Ports Status Summary:
+ Inactive:       0
+ Active-partial: 1
+ Active-full:    14
+
+MLAG IPLs Summary:
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+ID   Group         Vlan       Operational  Local                                    Peer                                     Up Time              Toggle Counter
+     Port-Channel  Interface  State        IP address                               IP address
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+1    Po100         4000       Up           192.168.255.253                          192.168.255.254                          19 days, 18:25:56    1
+
+MLAG Members Summary:
+---------------------------------------------------------------------
+System-id           State                        Hostname
+---------------------------------------------------------------------
+50:6B:4B:9C:C6:48   Up                           <sw-spine-002>
+98:03:9B:EF:D6:48   Up
+```
+If output looks like the following, MLAG is already setup.
+If MLAG needs to be setup on the system follow these steps.  Most 1.3 systems will have this already configured.
 #### Spine01
 ```
 (config) # protocol mlag
@@ -273,6 +313,8 @@ sw-spine02                               standby              192.168.255.243
 
 ## Update SNMP configuration
 
+There have been no changes to SNMP in 1.4.
+You can verify the settings here.
 See [SNMP](407-MGMT-NET-SNMP-CONFIG.md)
 
 ## Update CAN configuration
@@ -286,15 +328,14 @@ See [CAN](408-MGMT-NET-CAN-CONFIG.md)
 Some Shasta v1.3 systems may have set the switch ntp server to be the IP address of ncn-w001.  With the switch rename, the old IP address for ncn-w001 may now be assigned to one of the switches.
 The Shasta v1.4 configuration sets the switches to have the first three worker nodes as their ntp servers.
 
-See [CAN] (414-MGMT-NET-NTP-CONFIG.md)
+See [NTP](414-MGMT-NET-NTP-CONFIG.md)
 
 ## Verify flow-control settings
 
 With Shasta v1.3.2, some changes were made for the flow-control settings which may not be on Shasta v1.3.0 systems.  Verify that these are set correctly for Shasta v1.4.
 These changes for flow-control will also disable iSCSI on Dell Switches (Leaf, CDU, and Aggregation).
 
-Replace this internal reference with a 4xx page.
-
+See [Flow Control](417-MGMT-NET-FLOW-CONTROL.md)
 https://connect.us.cray.com/confluence/display/SSI/Management+Network+Changes+for+Shasta+1.3.2
 
 ## Update DHCP IP helper configuration
@@ -303,7 +344,18 @@ With Shasta v1.3.2, some changes were made for the ip-helper settings which may 
 The IP-helpers are being moved for the switches that are doing the Layer3 Routing.  For most systems this will be moving the helper from the leaf to the spine.
 Also the IP-helpers are being added on VLAN1 and VLAN7 to PXE boot NCNs.
 
-Replace this internal reference with a 4xx page.
+See [IP-Helper](418-MGMT-NET-IP-HELPER.md)
 
 https://connect.us.cray.com/confluence/display/SSI/Management+Network+Changes+for+Shasta+1.3.2
+
+# Verify My Dell/Mellanox system is 1.4 compliant.
+
+- Make sure firmware is up to date.
+- Change IP addresses of switches accordingly.
+- Verify Dell BPDU configuration.
+- Verify MLAG is setup.
+- Verify MAGP is setup for ALL vlans.
+- Verify NTP configuration is updated.
+- Verify flow-control settings.
+- Verify DHCP IP-Helper settings.
 
