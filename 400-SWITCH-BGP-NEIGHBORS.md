@@ -21,6 +21,17 @@ CSI cli arguments with ```--bgp-peers aggregation```
 - There is an automated script to update the BGP configuration on both the Mellanox and Aruba switches.  This script is installed into the `$PATH` by the `metal-net-scripts` package
 - The scripts are named `mellanox_set_bgp_peers.py` and `aruba_set_bgp_peers.py`
 - These scripts pull in data from CSI generated `.yaml` files. The files required are ```CAN.yaml, HMN.yaml, HMNLB.yaml, NMNLB.yaml, NMN.yaml```, these exist in the `networks/` subdirectory of the generated configs.
+- In order for these scripts to work the following commands will need to be present on the switches.
+
+Aruba
+```
+sw-spine01(config)# https-server rest access-mode read-write
+```
+Mellanox
+```
+switch (config) # json-gw enable
+```
+Script Usage
 ```
 USAGE: - <Spine01/Agg01> <Spine02/Agg02> <Path to CSI generated network files>
 
