@@ -40,32 +40,20 @@ cabinets:
   total_number: 2
   starting_id: 9000
 - type: mountain
-  total_number: 12
+  total_number: 4
   starting_id: 1000
-  ids:
-    - 1000
+  cabinets:
+    - id: 1000
       nmn-vlan: 2000
       hmn-vlan: 3000
-    - 1001
+    - id: 1001
       nmn-vlan: 2001
       hmn-vlan: 3001
-    - 1002
-    - 1003
-    - 1100
-    - 1101
-    - 1102
-    - 1103
-    - 1200
-    - 1201
-    - 1202
-    - 1203
+    - id: 1002
+    - id: 1003
 - type: river
   total_number: 4
   starting_id: 3000
-    - 3000
-    - 3002
-    - 3100
-    - 3102
 ```
 
 In the above example file, there are 2 Hill cabinets that will be automatically numbereed as 9000 and 9001.   The Mountain cabainets appear in 3 groupings of four ids.  The River cabinets are non-contiguous in 4 separated ids.
