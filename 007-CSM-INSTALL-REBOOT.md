@@ -251,7 +251,7 @@ all been run by the administrator before starting this stage.
       2. Activate the safe-guard with the final procedure [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard)
       > **`NOTE`** This safeguard needs to be _removed_ to faciliate bare-metal deployments of new nodes. The linked [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard) procedure can be used to disable the safeguard.
    At this time, the cluster is done. If the administrator used a USB stick, it may be ejected at this time or [re-accessed](#accessing-usb-partitions-after-reboot).
-
+18. Apply Mountain, Hill and River cabinet routing to m001 as described in [Add Compute Cabinet Routes](109-COMPUTE-CABINET-ROUTES-FOR-NCN.md).
 19. Now check for workarounds in the `fix/after-livecd-reboot` directory within the CSM tar. Each has its own instructions in their respective `README` files.
 ```
 # Example

@@ -7,6 +7,7 @@ into the CSM Kubernetes cluster).
 * [Create Site-Init Secret](#create-site-init-secret)
 * [Deploy Sealed Secret Decryption Key](#deploy-sealed-secret-decryption-key)
 * [Start the Deployment](#start-the-deployment)
+* [Add Compute Cabinet Routing to NCNs](#add-compute-cabinet-routing-to-ncns)
 * [Known Issues](#known-issues)
   * [Error: not ready: https://packages.local](#error-not-ready)
   * [Error initiating layer upload ... in registry.local: received unexpected HTTP status: 200 OK](#error-initiating-layer-upload)
