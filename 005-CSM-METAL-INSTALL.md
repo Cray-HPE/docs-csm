@@ -270,26 +270,6 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
    /usr/bin/mellanox_set_bgp_peers.py
    ```
 
-<a name="static-routing"></a>
-#### Static Routing
-
-If you have MTN/Hill Cabinets, you will need to add static routes on all the NCNs to reach the those networks.
-You can find these networks from NMN_MTN.yaml and HMN_MTN.yaml
-```
-pit# cat NMN_MTN.yaml
-full_name: Mountain Node Management Network
-cidr: 10.104.0.0/17
-
-pit# cat HMN_MTN.yaml
-full_name: Mountain Hardware Management Network
-cidr: 10.100.0.0/17
-```
-Once you have those networks you can now add the routes to all NCNs.
-```
-ncn# ip route add 10.100.0.0/17 via 10.252.0.1
-ncn# ip route add 10.104.0.0/17 via 10.254.0.1
-```
-
 <a name="validation"></a>
 #### Validation
 
