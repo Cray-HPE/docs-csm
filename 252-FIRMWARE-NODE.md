@@ -5,7 +5,6 @@ This page details the minimum specification for servers, and their components (s
 > **`NOTE`** New items may be added to this page over time.
 
 * [Servers](#servers)
-* [Vendor Upgrade Refences](#vendor-upgrade-refences)
     * [HPE (iLO) Upgrades](#hpe-(ilo)-upgrades)
         * [Pre-Reqs](#pre-reqs)
         * [GUI](#gui)
@@ -13,13 +12,12 @@ This page details the minimum specification for servers, and their components (s
     * [Intel Upgrades](#intel-upgrades)
     * [Gigabyte Upgrades](#gigabyte-upgrades)
 * [PCIe Cards](#pcie-cards)
-        * [Vendor Upgrade Refences](#vendor-upgrade-refences)
-            * [Marvell Upgrades](#marvell-upgrades)
-            * [Mellanox Upgrades](#mellanox-upgrades)
-                * [Requirement: Enable Tools](#requirement:-enable-tools)
-                * [Check Current Firmware](#check-current-firmware)
-                * [Upgrade from the LiveCD](#upgrade-from-the-livecd)
-                * [Upgrade from the Internet](#upgrade-from-the-internet)
+    * [Marvell Upgrades](#marvell-upgrades)
+    * [Mellanox Upgrades](#mellanox-upgrades)
+        * [Requirement: Enable Tools](#requirement:-enable-tools)
+        * [Check Current Firmware](#check-current-firmware)
+        * [Upgrade from the LiveCD](#upgrade-from-the-livecd)
+        * [Upgrade from the Internet](#upgrade-from-the-internet)
 
 <a name="servers"></a>
 ## Servers
@@ -37,8 +35,7 @@ This page details the minimum specification for servers, and their components (s
 [3]: https://support.hpe.com/hpsc/swd/public/detail?swItemId=MTX_5ed1b5a914b844caab3780d293
 [4]: https://pubs.cray.com/bundle/Gigabyte_Node_Firmware_Update_Guide_S-8010/page/About_the_Gigabyte_Node_Firmware_Update_Guide.html
 
-<a name="vendor-upgrade-refences"></a>
-## Vendor Upgrade Refences
+Find more information for each vendor below:
 
 - [HPE (iLO) Upgrades](#marvell-upgrades)
 - [Intel Upgrades](#mellanox-upgrades)
@@ -117,7 +114,26 @@ Now the node(s) are upgraded to minimum spec. for booting.
 <a name="redfish"></a>
 #### Redfish
 
-> **THIS IS A STUB** There are no instructions on this page, this page is place-holder.
+![redfish.png](img/3rd/redfish.png)
+
+> **THIS IS A STUB** There are untested instructions in this section. This will be removed when `mfw` has been tested (a.k.a. `/root/bin/ncnfw`).
+
+1. Set login vars for redfish™
+    ```bash
+   export username=root
+   export password= 
+   ```
+2. Invoke `mfw` with the matching firmware (check `ls 1 /var/www/fw/river/hpe` for a list)
+    ```bash
+    pit# /root/bin/mfw A43_1.30_07_18_2020.signed.flash
+    ```
+
+3. Watch status:
+    ```bash
+    pit# curl -sk -u $username:$password https://$1/redfish/v1/UpdateService | jq |grep -E 'State|Progress|Status'"
+    ```
+
+
 
 <a name="intel-upgrades"></a>
 ### Intel Upgrades
@@ -141,9 +157,7 @@ Now the node(s) are upgraded to minimum spec. for booting.
 
 > Note: The Mellanox firmware can be updated to minimum spec. using `mlxfwmanager`. The `mlxfwmanager` will fetch updates from online, or it can use a local file (or local web server such as http://pit/).
 
-
-<a name="vendor-upgrade-refences"></a>
-#### Vendor Upgrade Refences
+Find more information for each vendor below:
 
 - [Marvell Upgrades](#marvell-upgrades)
 - [Mellanox Upgrades](#mellanox-upgrades)
