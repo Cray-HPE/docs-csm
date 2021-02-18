@@ -5,7 +5,6 @@ This page details the minimum specification for servers, and their components (s
 > **`NOTE`** New items may be added to this page over time.
 
 * [Servers](#servers)
-* [Vendor Upgrade Refences](#vendor-upgrade-refences)
     * [HPE (iLO) Upgrades](#hpe-(ilo)-upgrades)
         * [Pre-Reqs](#pre-reqs)
         * [GUI](#gui)
@@ -13,13 +12,12 @@ This page details the minimum specification for servers, and their components (s
     * [Intel Upgrades](#intel-upgrades)
     * [Gigabyte Upgrades](#gigabyte-upgrades)
 * [PCIe Cards](#pcie-cards)
-        * [Vendor Upgrade Refences](#vendor-upgrade-refences)
-            * [Marvell Upgrades](#marvell-upgrades)
-            * [Mellanox Upgrades](#mellanox-upgrades)
-                * [Requirement: Enable Tools](#requirement:-enable-tools)
-                * [Check Current Firmware](#check-current-firmware)
-                * [Upgrade from the LiveCD](#upgrade-from-the-livecd)
-                * [Upgrade from the Internet](#upgrade-from-the-internet)
+    * [Marvell Upgrades](#marvell-upgrades)
+    * [Mellanox Upgrades](#mellanox-upgrades)
+        * [Requirement: Enable Tools](#requirement:-enable-tools)
+        * [Check Current Firmware](#check-current-firmware)
+        * [Upgrade from the LiveCD](#upgrade-from-the-livecd)
+        * [Upgrade from the Internet](#upgrade-from-the-internet)
 
 <a name="servers"></a>
 ## Servers
@@ -37,8 +35,7 @@ This page details the minimum specification for servers, and their components (s
 [3]: https://support.hpe.com/hpsc/swd/public/detail?swItemId=MTX_5ed1b5a914b844caab3780d293
 [4]: https://pubs.cray.com/bundle/Gigabyte_Node_Firmware_Update_Guide_S-8010/page/About_the_Gigabyte_Node_Firmware_Update_Guide.html
 
-<a name="vendor-upgrade-refences"></a>
-## Vendor Upgrade Refences
+Find more information for each vendor below:
 
 - [HPE (iLO) Upgrades](#marvell-upgrades)
 - [Intel Upgrades](#mellanox-upgrades)
@@ -141,9 +138,7 @@ Now the node(s) are upgraded to minimum spec. for booting.
 
 > Note: The Mellanox firmware can be updated to minimum spec. using `mlxfwmanager`. The `mlxfwmanager` will fetch updates from online, or it can use a local file (or local web server such as http://pit/).
 
-
-<a name="vendor-upgrade-refences"></a>
-#### Vendor Upgrade Refences
+Find more information for each vendor below:
 
 - [Marvell Upgrades](#marvell-upgrades)
 - [Mellanox Upgrades](#mellanox-upgrades)
