@@ -114,7 +114,26 @@ Now the node(s) are upgraded to minimum spec. for booting.
 <a name="redfish"></a>
 #### Redfish
 
-> **THIS IS A STUB** There are no instructions on this page, this page is place-holder.
+![redfish.png](img/3rd/redfish.png)
+
+> **THIS IS A STUB** There are untested instructions in this section. This will be removed when `mfw` has been tested (a.k.a. `/root/bin/ncnfw`).
+
+1. Set login vars for redfish™
+    ```bash
+   export username=root
+   export password= 
+   ```
+2. Invoke `mfw` with the matching firmware (check `ls 1 /var/www/fw/river/hpe` for a list)
+    ```bash
+    pit# /root/bin/mfw A43_1.30_07_18_2020.signed.flash
+    ```
+
+3. Watch status:
+    ```bash
+    pit# curl -sk -u $username:$password https://$1/redfish/v1/UpdateService | jq |grep -E 'State|Progress|Status'"
+    ```
+
+
 
 <a name="intel-upgrades"></a>
 ### Intel Upgrades
