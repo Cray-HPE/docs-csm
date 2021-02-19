@@ -295,8 +295,7 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
 {
 "stateComponentFilter": {
     "deviceTypes": [
-      "System ROM",
-      "Redundant System ROM"
+      "NodeBMC"
     ]
 },
 "inventoryHardwareFilter": {
