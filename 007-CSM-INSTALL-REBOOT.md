@@ -14,7 +14,6 @@ choose to install additional products following the completion of the CSM instal
 
 * [Required Services](#required-services)
 * [Notice of Danger](#notice-of-danger)
-	* [Token Expiration](#token-expiration)
 * [LiveCD Pre-Reboot Workarounds](#livecd-pre-reboot-workarounds)
 * [Hand-Off](#hand-off)
     * [Start Hand-Off](#start-hand-off)
@@ -45,27 +44,19 @@ While the node is rebooting, it will be available only through Serial-over-LAN a
 This procedure entails deactivating the LiveCD, meaning the LiveCD and all of its resources will be
 **unavailable**.
 
-<a name="token-expiration"></a>
-### Token Expiration
-
-Tokens for joining the cluster expire after `2hours`, if the cluster has been running for longer than that time then 
-workarounds are going to be needed.
-
-Check the [LiveCD Pre-Reboot Workarounds](#livecd-pre-reboot-workarounds).
-
 
 <a name="livecd-pre-reboot-workarounds"></a>
 ## LiveCD Pre-Reboot Workarounds
 
 
 
-Check for workarounds in the `/var/www/ephemeral/${CSM_RELEASE}/fix/livecd-pre-reboot` directory. If there are any 
+Check for workarounds in the `/opt/cray/csm/workarounds/livecd-pre-reboot` directory. If there are any 
 workarounds in that directory, run those when the workaround instructs. Timing is critical to ensure properly loaded 
 data so run them only when indicated. Instructions are in the `README` files.
 
 ```
 # Example
-pit# ls /var/www/ephemeral/${CSM_RELEASE}/fix/livecd-pre-reboot
+pit# ls /opt/cray/csm/workarounds/livecd-pre-reboot
 casminst-435
 ```
 
@@ -252,13 +243,13 @@ all been run by the administrator before starting this stage.
       > **`NOTE`** This safeguard needs to be _removed_ to faciliate bare-metal deployments of new nodes. The linked [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard) procedure can be used to disable the safeguard.
    At this time, the cluster is done. If the administrator used a USB stick, it may be ejected at this time or [re-accessed](#accessing-usb-partitions-after-reboot).
 18. Apply Mountain, Hill and River cabinet routing to m001 as described in [Add Compute Cabinet Routes](109-COMPUTE-CABINET-ROUTES-FOR-NCN.md).
-19. Now check for workarounds in the `fix/after-livecd-reboot` directory within the CSM tar. Each has its own instructions in their respective `README` files.
+19. Now check for workarounds in the `/opt/cray/csm/workarounds/after-livecd-reboot` directory within the CSM tar. Each has its own instructions in their respective `README` files.
 ```
 # Example
 # The following command assumes that the data partition of the USB stick has been remounted at /mnt/pitdata
 ncn-m001# mount -L PITDATA /mnt/pitdata
 ncn-m001# export CSM_RELEASE=csm-x.y.z
-ncn-m001# ls /mnt/pitdata/${CSM_RELEASE}/fix/after-livecd-reboot
+ncn-m001# ls /opt/cray/csm/workarounds/livecd-post-reboot
 CASMINST-980
 ```
 
