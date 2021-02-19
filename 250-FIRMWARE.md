@@ -1,8 +1,12 @@
+## Warning
+
+**WARNING:** Non-compute nodes (NCNs) should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS. Research "*009-NCN-LOCKING*" for more information. Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
+
 # Node Firmware
 
 Firmware and BIOS updates may be necessary before an install can start.
 
-During runtime, firmware is upgraded using FAS.
+During runtime (e.g. post CSM-install), firmware is upgraded using FAS.
 
 New systems, or systems upgrading from prior versions of shasta, must meet the minimum specs defined in these pages:
 - [Network Firmware](251-FIRMWARE-NETWORK.md)

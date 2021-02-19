@@ -2,7 +2,7 @@
 
 ## Why?
 
-In Shasta 1.4 NCN black listing is turned off by default.  Also, please note
+In Shasta 1.4 NCN black listing is turned off by default for CAPMC and FAS.  Also, please note
 that Management/NCN nodes are NOT locked by default either.
 
 Thus it is up to the administrator to properly lock NCNs to prevent things 
