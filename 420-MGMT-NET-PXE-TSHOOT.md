@@ -186,7 +186,7 @@ vlan2       N/A               downstream
 vlan7       N/A               downstream
 ```
 
-Verify that the route to the TFTP server is being learned from MetalLB
+Verify that the route to the TFTP server and the route for the ingress gateway are available.
 
 ```
 sw-spine01 [standalone: master] # show ip route 10.92.100.60
@@ -205,6 +205,26 @@ VRF Name default:
   ------------------------------------------------------------------------------------------------------
   default           0.0.0.0           c        10.101.15.161     eth1/12          static     1/1
   10.92.100.60      255.255.255.255   c        10.252.0.5        vlan2            bgp        200/0
+                                      c        10.252.0.6        vlan2            bgp        200/0
+                                      c        10.252.0.7        vlan2            bgp        200/0
+```
+```
+sw-spine01 [standalone: master] # show ip route 10.92.100.71
+
+Flags:
+  F: Failed to install in H/W
+  B: BFD protected (static route)
+  i: BFD session initializing (static route)
+  x: protecting BFD session failed (static route)
+  c: consistent hashing
+  p: partial programming in H/W
+
+VRF Name default:
+  ------------------------------------------------------------------------------------------------------
+  Destination       Mask              Flag     Gateway           Interface        Source     AD/M
+  ------------------------------------------------------------------------------------------------------
+  default           0.0.0.0           c        10.101.15.161     eth1/12          static     1/1
+  10.92.100.71      255.255.255.255   c        10.252.0.5        vlan2            bgp        200/0
                                       c        10.252.0.6        vlan2            bgp        200/0
                                       c        10.252.0.7        vlan2            bgp        200/0
 ```
