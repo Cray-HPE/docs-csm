@@ -103,25 +103,6 @@ Displaying ipv4 routes selected for forwarding
 ```
 You can see that the route is ```10.92.100.60/32 via 10.252.1.7``` with ```10.252.1.7``` being the worker node.
 
-To verify that this is a worker node.
-```
-sw-spine02(config)# show bgp ipv4 u s
-VRF : default
-BGP Summary
------------
- Local AS               : 65533        BGP Router Identifier  : 10.252.0.3
- Peers                  : 4            Log Neighbor Changes   : No
- Cfg. Hold Time         : 180          Cfg. Keep Alive        : 60
- Confederation Id       : 0
-
- Neighbor        Remote-AS MsgRcvd MsgSent   Up/Down Time State        AdminStatus
- 10.252.0.2      65533       1718    1719    01d:00h:53m  Established   Up
- 10.252.1.7      65533       2915    3335    01d:00h:05m  Established   Up
- 10.252.1.8      65533       2913    3329    01d:00h:05m  Established   Up
- 10.252.1.9      65533       2914    3328    01d:00h:05m  Established   Up
-```
-You'll see that ```10.252.1.7``` is a BGP peer meaning that it's a worker node.
-
 If that static route is missing you'll need to add it.
 ```
 sw-spine01(config)# ip route 10.92.100.60/32 10.252.1.7
