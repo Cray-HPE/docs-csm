@@ -145,7 +145,7 @@ CASMINST-980
    ```
    > Observe the output of the checks and note any failures, then remediate them.
 
-3. Print the consoles available to you:
+4. Print the consoles available to you:
    ```bash
    pit# conman -q
    ncn-m001-mgmt
@@ -162,12 +162,12 @@ CASMINST-980
 > **`IMPORTANT`** This is the administrators _last chance_ to run [NCN pre-boot workarounds](#apply-ncn-pre-boot-workarounds).
 
 > **`NOTE`**: All consoles are located at `/var/log/conman/console*`
-4. Boot the **Storage Nodes**
+5. Boot the **Storage Nodes**
     ```bash
     pit# grep -oE $stoken /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
 
-5. Wait. Observe the installation through ncn-s001-mgmt's console:
+6. Wait. Observe the installation through ncn-s001-mgmt's console:
    ```bash
    # Print the console name
    pit# conman -q | grep s001
@@ -188,12 +188,12 @@ CASMINST-980
    > ```
    > Running `hostname` or logging out and back in should yield the proper hostname.
 
-6. Boot **Kubernetes Managers and Workers**
+7. Boot **Kubernetes Managers and Workers**
     ```bash
     pit# grep -oE "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
 
-7. Wait. Observe the installation through ncn-m002-mgmt's console:
+8. Wait. Observe the installation through ncn-m002-mgmt's console:
    ```bash
    # Print the console name
    pit# conman -q | grep m002
@@ -203,7 +203,7 @@ CASMINST-980
    pit# conman -j ncn-m002-mgmt
    ```
 
-8. Refer to [timing of deployments](#timing-of-deployments). After a while, `kubectl get nodes` should return
+9. Refer to [timing of deployments](#timing-of-deployments). After a while, `kubectl get nodes` should return
    all the managers and workers aside from the LiveCD's node.
    ```bash
    pit# ssh ncn-m002
@@ -288,6 +288,18 @@ Observe the output of the checks and note any failures, then remediate them.
 
 > **`NOTE`** The **administrator may proceed to the [CSM Platform Install](006-CSM-PLATFORM-INSTALL.md) guide
 > at this time.** The optional validation may have differing value in various install contexts.
+
+3. Ensure that weave hasn't split-brained
+
+    Run the following command on each member of the kubernetes cluster (masters and workers) to ensure that weave is operating as a single cluster:
+
+    ```bash
+    ncn# weave --local status connections  | grep failed
+    ```
+    If you see messages like **'IP allocation was seeded by different peers'** then weave looks to have split-brained.  At this point it is necessary to wipe the ncns and start the pxe boot again:
+
+    1. Wipe the ncns using the 'Basic Wipe' section of [DISK CLEANSLATE](051-DISK-CLEANSLATE.md).
+    2. Return to the 'Boot the **Storage Nodes**' step of [Start Deployment](#start-deployment) section above.
 
 <a name="optional-validation"></a>
 #### Optional Validation
