@@ -14,7 +14,6 @@ choose to install additional products following the completion of the CSM instal
 
 * [Required Services](#required-services)
 * [Notice of Danger](#notice-of-danger)
-	* [Token Expiration](#token-expiration)
 * [LiveCD Pre-Reboot Workarounds](#livecd-pre-reboot-workarounds)
 * [Hand-Off](#hand-off)
     * [Start Hand-Off](#start-hand-off)
@@ -44,14 +43,6 @@ While the node is rebooting, it will be available only through Serial-over-LAN a
 
 This procedure entails deactivating the LiveCD, meaning the LiveCD and all of its resources will be
 **unavailable**.
-
-<a name="token-expiration"></a>
-### Token Expiration
-
-Tokens for joining the cluster expire after `2hours`, if the cluster has been running for longer than that time then 
-workarounds are going to be needed.
-
-Check the [LiveCD Pre-Reboot Workarounds](#livecd-pre-reboot-workarounds).
 
 
 <a name="livecd-pre-reboot-workarounds"></a>
