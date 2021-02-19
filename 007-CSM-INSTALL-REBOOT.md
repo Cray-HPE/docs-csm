@@ -258,7 +258,7 @@ all been run by the administrator before starting this stage.
 # The following command assumes that the data partition of the USB stick has been remounted at /mnt/pitdata
 ncn-m001# mount -L PITDATA /mnt/pitdata
 ncn-m001# export CSM_RELEASE=csm-x.y.z
-ncn-m001# ls /opt/cray/csm/workarounds/after-livecd-reboot
+ncn-m001# ls /opt/cray/csm/workarounds/livecd-post-reboot
 CASMINST-980
 ```
 
