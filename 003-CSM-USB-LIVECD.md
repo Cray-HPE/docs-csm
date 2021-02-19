@@ -269,11 +269,11 @@ After gathering the files into the working directory, generate your configs:
 <a name="csi-workarounds"></a>
 ### CSI Workarounds
 
-Check for workarounds in the `~/${CSM_RELEASE}/fix/csi-config` directory.  If there are any workarounds in that directory, run those now. Instructions are in the README files.
+Check for workarounds in the `/opt/cray/csm/workarounds/csi-config` directory.  If there are any workarounds in that directory, run those now. Instructions are in the README files.
 
   ```bash
   # Example
-  linux# ls ~/${CSM_RELEASE}/fix/csi-config
+  linux# ls /opt/cray/csm/workarounds/csi-config
   casminst-999
   ```
 
