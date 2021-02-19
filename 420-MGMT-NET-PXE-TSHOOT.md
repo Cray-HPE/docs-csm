@@ -2,11 +2,11 @@
 
 This page is designed to cover various issues that arise when trying to pxe boot nodes in a Shasta system.
 
-In order for PXE booting to successfully work the MGMT switches need to be configured correctly.
+In order for PXE booting to successfully work, the MGMT switches need to be configured correctly.
 
 # Configuration required for PXE booting
 
-To successfully pxe boot nodes the following is required.
+To successfully pxe boot nodes, the following is required.
 
 - The IP helper-address must be configured on VLAN 1,2,4,7.
 - The virtual-IP/VSX/MAGP IP must be configured on VLAN 1,2,4,7.
