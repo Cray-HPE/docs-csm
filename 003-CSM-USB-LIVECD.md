@@ -48,7 +48,12 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    linux# rpm -Uvh ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
    ```
 
-5. Show the version of CSI installed.
+5. Install/upgrade the workaround documentation RPM.
+   ```bash
+   linux# rpm -Uvh ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/noarch/csm-install-workarounds-*.noarch.rpm
+   ```
+
+6. Show the version of CSI installed.
    ```bash
    linux# csi version
    CRAY-Site-Init build signature...
