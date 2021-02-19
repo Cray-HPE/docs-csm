@@ -8,11 +8,20 @@ In order for PXE booting to successfully work, the MGMT switches need to be conf
 
 To successfully pxe boot nodes, the following is required.
 
-- The IP helper-address must be configured on VLAN 1,2,4,7.
+- The IP helper-address must be configured on VLAN 1,2,4,7.  This will be where the layer 3 gateway exists (spine or agg)
 - The virtual-IP/VSX/MAGP IP must be configured on VLAN 1,2,4,7.
 - There must be a static route pointing to the tftp server (Aruba Only).
-- M001 needs an active gateway of 10.1.0.1 and an IP-helper on VLAN1 in order to successfully boot. 
+- M001 needs an active gateway on VLAN1 this can be identified from MTL.yaml generated from CSI.
+- M001 needs an IP helper-address on VLAN1 pointing to 10.92.100.222. 
 
+snippet of MTL.yaml
+```
+  name: network_hardware
+  net-name: MTL
+  vlan_id: 0
+  comment: ""
+  gateway: 10.1.0.1
+```
 # Aruba Configuration
 
 Check the configuration for ```interface vlan x```
@@ -89,6 +98,14 @@ sw-spine02(config-if-vlan)# write mem
 
 Verify the route to the TFTP server is in place.
 This is a static route to get to the TFTP server via a worker node.
+You can get the worker node IP from NMN.yaml from CSI generated data.
+```
+  - ip_address: 10.252.1.9
+    name: ncn-w001
+    comment: x3000c0s4b0n0
+    aliases:
+```
+
 ```
 sw-spine02(config)# show ip route static
 
