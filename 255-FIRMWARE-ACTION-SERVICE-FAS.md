@@ -219,7 +219,7 @@ endTime = "2020-06-18 03:11:06.806297546 +0000 UTC"
 Using the `operationID` listed in the actions array we can see the full detail of the operation.
 
 ```bash
-# cray fas operations describe operationID actionID --format json
+# cray fas operations describe operationID --format json
 {
 "fromFirmwareVersion": "", "fromTag": "",
 "fromImageURL": "",

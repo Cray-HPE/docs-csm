@@ -25,4 +25,4 @@ The following table describes the hardware items that can have their firmware up
 | Cray             | chassisBMC | `BMC`, `Recovery`                                            |                                            |
 | Cray             | routerBMC  | `BMC`, `Recovery`                                            |                                            |
 | Gigabyte         | nodeBMC    | `BMC`, `BIOS`                                                |                                            |
-| HPE              | nodeBMC    | `iLO 5` (BMC aka `1` ), `System ROM` ,`Redundant System ROM` (BIOS aka `2`) | `iLO 5` and `System ROM` targets 
+| HPE              | nodeBMC    | `iLO 5` (BMC aka `1` ), `System ROM`(BIOS aka `2`) ,`Redundant System ROM`  | `iLO 5` and `System ROM` targets |
