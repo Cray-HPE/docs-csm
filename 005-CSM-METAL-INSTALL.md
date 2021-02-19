@@ -11,7 +11,6 @@ This page will go over deploying the non-compute nodes.
     * [Apply NCN Post-Boot Workarounds](#apply-ncn-post-boot-workarounds)
     * [LiveCD Cluster Authentication](#livecd-cluster-authentication)
     * [BGP Routing](#bgp-routing)
-    * [Static Routing](#static-routing)
     * [Validation](#validation)
     * [Optional Validation](#optional-validation)
     * [Change Password](#change-password)
@@ -326,7 +325,7 @@ new tests.**
 The NCNs are online, and their default password can now be customized. For details on changing
 the root password, see [056 NCN Reset Passwords](056-NCN-RESET-PASSWORDS.md).
 
-> It is possible to update the password before booting NCNs, see [NCN Development](107-NCN-DEVEL.md) for more
+> It is possible to update the password before booting NCNs, see [Set the Default Password](110-NCN-IMAGE-CUSTOMIZATION.md#set-the-default-password) for more
 information.
 
 > This step is **strongly encouraged** for external/site deployments. Airgapped deployments may opt to skip this step, as well as internal CI deployments.
