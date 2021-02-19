@@ -2,11 +2,13 @@
 
 These serve as guidelines to keep like-pages together.
 
-CSM Install:
-- 000 - 001 INTRO    : Information for contributing this book.
-- 002 - 049 INSTALL  : Install Pages for CSM and other products.
-- 050 - 099 PROCS    : Procedures referenced by install; help guides, tricks/tips, etc.
+- 000 - 001 INTRO : Information for contributing this book.
+- 002 - 008 CSM INSTALL : Install Pages for CSM
+- 009 NCN LOCKING : NCN Locking Guide
+- 010 FIRMWARE UPDATES : Firmware Updates with FAS
+- 011 - 049: Other install pages
+- 050 - 099 PROCS : Procedures referenced by install; help guides, tricks/tips, etc.
 - 100 - 150 NCN-META : Technical information for Non-Compute Nodes
-- 250 - 300 Common   : Technical information common to all nodes.
-- 300 - 350 MFG/SVC  : Procedures references by service teams.
-- 400 - 499 NETWORK  : Procedures for management network installation.
+- 250 - 300 Common  : Technical information common to all nodes.
+- 300 - 350 MFG/SVC : Procedures references by service teams.
+- 400 - 499 NETWORK : Procedures for management network installation.
