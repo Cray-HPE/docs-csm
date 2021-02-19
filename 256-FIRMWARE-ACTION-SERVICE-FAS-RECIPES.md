@@ -1,19 +1,19 @@
 # Firmware Action Service (FAS) Administration Guide
 
 * [Recipes](#recipes) 
-    * [Manufacturer : Cray](#manufacturer-:-cray)
-            * [Device Type : RouterBMC |  Target : BMC](#cray-device-type-:-routerbmc-|--target-:-bmc) 
-                * [Device Type : ChassisBMC | Target: BMC](#cray-device-type-:-chassisbmc-|-target:-bmc) 
-                * [Device Type : NodeBMC | Target : BMC](#cray-device-type-:-nodebmc-|-target-:-bmc) 
-                * [Device Type : NodeBMC | Target : NodeBIOS](#cray-device-type-:-nodebmc-|-target-:-nodebios) 
-                * [Device Type : NodeBMC | Target : Redstone FPGA](#cray-device-type-:-nodebmc-|-target-:-redstone-fpga) 
-    * [Manufacturer : HPE](#manufacturer-:-hpe)
-           * [Device Type : NodeBMC | Target : `iLO 5` aka BMC](#hpe-device-type-:-nodebmc-|-target-:--aka-bmc) 
-           * [Device Type : NodeBMC | Target : `System ROM` aka BIOS](#hpe-device-type-:-nodebmc-|-target-:--aka-bios) 
-    * [Manufacturer : Gigabyte](#manufacturer-:-gigabyte)
+  * [Manufacturer : Cray](#manufacturer-:-cray)
+    * [Device Type : RouterBMC |  Target : BMC](#cray-device-type-:-routerbmc-|--target-:-bmc) 
+    * [Device Type : ChassisBMC | Target: BMC](#cray-device-type-:-chassisbmc-|-target:-bmc) 
+    * [Device Type : NodeBMC | Target : BMC](#cray-device-type-:-nodebmc-|-target-:-bmc) 
+    * [Device Type : NodeBMC | Target : NodeBIOS](#cray-device-type-:-nodebmc-|-target-:-nodebios) 
+    * [Device Type : NodeBMC | Target : Redstone FPGA](#cray-device-type-:-nodebmc-|-target-:-redstone-fpga) 
+  * [Manufacturer : HPE](#manufacturer-:-hpe)
+    * [Device Type : NodeBMC | Target : `iLO 5` aka BMC](#hpe-device-type-:-nodebmc-|-target-:--aka-bmc) 
+    * [Device Type : NodeBMC | Target : `System ROM` aka BIOS](#hpe-device-type-:-nodebmc-|-target-:--aka-bios) 
+  * [Manufacturer : Gigabyte](#manufacturer-:-gigabyte)
     * [Device Type : NodeBMC | Target : BMC](#gb-device-type-:-nodebmc-|-target-:-bmc) 
-           * [Device Type : NodeBMC | Target : BIOS](#gb-device-type-:-nodebmc-|-target-:-bios) 
-    * [Special Note: updating NCNs](#special-note:-updating-ncns)
+    * [Device Type : NodeBMC | Target : BIOS](#gb-device-type-:-nodebmc-|-target-:-bios) 
+  * [Special Note: updating NCNs](#special-note:-updating-ncns)
 
 ## FAS Filters for `actions` and `snapshots` 
 
