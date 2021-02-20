@@ -1,7 +1,8 @@
 @Library("dst-shared@release/shasta-1.4") _
 rpmBuild (
     githubPushRepo : "Cray-HPE/docs-csm-install",
-    githubPushBranches : "(release/.*|main)",
+    githubPushBranches: "release/.*|main",
+    masterBranch : "main",
     specfile : "docs-csm-install.spec",
     product : "csm",
     target_node : "ncn",
