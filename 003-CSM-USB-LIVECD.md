@@ -42,6 +42,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    linux# tar -zxvf ${CSM_RELEASE}.tar.gz
    linux# ls -l ${CSM_RELEASE}
    ```
+   The ISO and other files are now available in the extracted CSM tar.
 
 4. Install/upgrade the CSI RPM.
    ```bash
@@ -65,7 +66,15 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    App. Version   : 1.5.18
     ```
 
-The ISO and other files are now available in the extracted CSM tar.
+6. Install podman or docker to support container tools required by SHASTA-CFG.
+
+   Podman RPMs are included in the "embedded" repository in the CSM release and
+   can be installed as follows:
+   ```bash
+   linux# zypper ar --gpgcheck-allow-unsigned -f "./${CSM_RELEASE}/rpm/embedded" "${CSM_RELEASE}-embedded"
+   linux# zypper in -y podman podman-cni-config
+   ```
+   or the RPMs (and their dependencies) can be manually installed using `rpm`.
 
 <a name="create-the-bootable-media"></a>
 ## Create the Bootable Media
@@ -124,7 +133,7 @@ The USB stick is now bootable and contains our artifacts. This may be useful for
 <a name="configuration-payload"></a>
 ## Configuration Payload
 
-The shasta-cfg structure and other configuration files will be prepared, then csi will generate system-unique configuration payload used for the rest of the CSM installation on the USB stick.
+The SHASTA-CFG structure and other configuration files will be prepared, then csi will generate system-unique configuration payload used for the rest of the CSM installation on the USB stick.
 
 * [Generate Installation Files](#generate-installation-files)
 * [CSI Workarounds](#csi-workarounds)

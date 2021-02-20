@@ -276,7 +276,6 @@ The system is now ready for [Starting an Installation](#starting-an-installation
 The following prerequisites must be completed in order to successfully reinstall Shasta v1.4.
 
 * [Scaling Down DHCP](#scaling-down-dhcp)
-* [Pull Required Container Images](#pull-required-container-images)
 * [Power down the NCNs](#power-down-the-ncns)
   * [Degraded System Notice](#degraded-system-notice)
   * [Powering Off](#powering-off)
@@ -293,18 +292,6 @@ Scale the deployment from either the LiveCD or any Kubernetes node
 
 ```bash
 ncn# kubectl scale -n services --replicas=0 deployment cray-dhcp-kea
-```
-
-<a name="pull-required-container-images"></a>
-### Pull Required Container Image(s)
-
-The following image is required by the SHASTA-CFG process. Pull and tag this image while Nexus is available.
-
-This must be performed on ncn-m001.
-
-```bash
-ncn-m001:~ # podman pull registry.local/zeromq/zeromq:v4.0.5
-ncn-m001:~ # podman tag registry.local/zeromq/zeromq:v4.0.5 dtr.dev.cray.com/zeromq/zeromq:v4.0.5
 ```
 
 <a name="power-down-the-ncns"></a>
