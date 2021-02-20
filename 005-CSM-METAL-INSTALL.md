@@ -176,6 +176,8 @@ CASMINST-980
    pit# conman -j ncn-s001-mgmt
    ```
     From there an administrator can witness console-output for the cloud-init scripts.
+   > **`NOTE`**: If the nodes have pxe boot issues (e.g. getting pxe errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](420-MGMT-NET-PXE-TSHOOT.md)
+
    > **`NOTE`**: If the nodes exhibit afflictions such as:
    > - no hostname (e.g. `ncn`)
    > - `mgmt0` or `mgmt1` does not indicate they exist in `bond0`, or has a mis-matching MTU of `1500` to the bond's members
