@@ -46,7 +46,7 @@ installs as follows:
 3.  Remove `nexus-data` volume:
 
     ```bash
-    pit podman volume rm nexus-data
+    pit# podman volume rm nexus-data
     ```
 
 4.  Add the corresponding URL to the `ExecStartPost` script in
