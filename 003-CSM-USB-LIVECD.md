@@ -498,20 +498,21 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
     pit# mount -L PITDATA
     ```
 
-6. Verify the system:
+6. Start services
 
-  > - Start nexus with `systemctl start nexus`.
-  > - Start basecamp with `systemctl start basecamp`.
-  > - Start conman with`systemctl start conman`.
+   ```bash
+   pit# systemctl start nexus
+   pit# systemctl start basecamp
+   pit# systemctl start conman
+   ```
+
+7. Verify the system:
 
    ```bash
    pit# csi pit validate --network
    pit# csi pit validate --services
    ```
 
-   > - If nexus is dead, restart it with `systemctl restart nexus`.
-   > - If basecamp is dead, restart it with `systemctl restart basecamp`.
-   > - If conman is dead, restart it with `systemctl restart conman`.
    > - If dnsmasq is dead, restart it with `systemctl restart dnsmasq`.
 
    > In addition, the final output from validating the services should have information about the nexus and basecamp containers/images similar this example.
@@ -522,6 +523,6 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    c7638b573b93  dtr.dev.cray.com/cray/metal-basecamp:1.1.0-1de4aa6                        5 minutes ago  Up 5 minutes ago          basecamp
    ```
 
-7. Follow the output's directions for failed validations before moving on.
+8. Follow the output's directions for failed validations before moving on.
 
 After successfully validating the LiveCD USB environment, the administrator may start the [CSM Metal Install](005-CSM-METAL-INSTALL.md).
