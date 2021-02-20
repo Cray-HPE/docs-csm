@@ -1,5 +1,19 @@
 # CSM Metal Install
 
+<div style="border: 1px dashed red">
+<span style="color:red">
+WARNING
+</span>
+
+Gigabyte NCNs that install Shasta 1.4 can become unusable when Shasta 1.4 is installed.  This is a result of a bug in the Gigabyte firmware that ships with Shasta 1.4.  It is recommended that Gigabyte users wait to install Shasta 1.4 until a firmware patch is available.
+
+A key symptom of this bug is that the NCN will not PXE boot and will instead fall through to the boot menu, despite being configure to PXE boot.  This behavior will persist until the failing node's CMOS is cleared.
+
+[A procedure is available in this document.](./254-NCN-FIRMWARE-GB.md)
+</div>
+
+## Overview
+
 This page will go over deploying the non-compute nodes.
 
 * [Configure Bootstrap Registry to Proxy an Upstream Registry](#configure-bootstrap-registry-to-proxy-an-upstream-registry)
