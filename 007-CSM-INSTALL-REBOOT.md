@@ -167,7 +167,8 @@ all been run by the administrator before starting this stage.
    external# ipmitool -I lanplus -U $username -E -H bigbird-ncn-m001-mgmt sol activate
    ```
 11. The node should boot, acquire its hostname (i.e. ncn-m001).
-
+   > **`NOTE`**: If the nodes have pxe boot issues (e.g. getting pxe errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](420-MGMT-NET-PXE-TSHOOT.md)
+   
    > **`NOTE`**: If m001 booted without a hostname or it didn't run all the cloud-init scripts the following commands need to be ran **(but only in that circumstance)**.
    > Make directory to copy network config files to.
    > ```
