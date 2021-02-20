@@ -61,6 +61,7 @@ installs as follows:
 5.  Restart Nexus:
 
     ```bash
+    pit# systemctl daemon-reload
     pit# systemctl start nexus
     ```
 
