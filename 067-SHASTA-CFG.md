@@ -76,26 +76,90 @@ with system-specific customizations.
 
     *   If LDAP requires TLS (recommended), update the `cray-keycloak` sealed
         secret value by supplying a base64 encoded Java KeyStore (JKS) that
-        contains the CA certificate that signed the LDAP server's host key.
-        The password for the JKS file must be `password`.
-        Admins can use the `keytool` command and a PEM-encoded form of your
-        certificate(s) to obtain this value, as follows:
+        contains the CA certificate that signed the LDAP server's host key. The
+        password for the JKS file must be `password`. Admins may use the
+        `keytool` command from the `openjdk:11-jre-slim` container image
+        packaged with CSM to create a JKS file that includes a PEM-encoded
+        CA certificate to verify the LDAP host(s) as follows:
 
-        > **`NOTE`** `keytool` may not be available on the pit server.
+        Load the `openjdk` container image:
 
-        ```bash
-        linux# keytool -importcert -trustcacerts -file myad-pub-cert.pem -alias myad -keystore certs.jks -storepass password -noprompt
-        linux# cat certs.jks | base64 > certs.jks.b64
-        ```
-
-        For internal HPE systems, create the `certs.jks.b64` file by running the following command:
+        > **`NOTE`** Requires a properly configured Docker or Podman
+        > environment.
 
         ```bash
-        linux# echo "/u3+7QAAAAIAAAABAAAAAgAHY2FfY2VydAAAAXeRoKKOAAVYLjUwOQAAA8EwggO9MIICpaADAgECAhRjGsb8+sxyYjMO4n5TUaHyGmxTxzANBgkqhkiG9w0BAQsFADBuMQswCQYDVQQGEwJVUzELMAkGA1UECAwCV0kxDDAKBgNVBAoMA0hQRTEQMA4GA1UECwwHSFBDL01DUzEUMBIGA1UEAwwLRGF0YSBDZW50ZXIxHDAaBgkqhkiG9w0BCQEWDWRjb3BzQGhwZS5jb20wHhcNMjAxMTI0MjAzMzQxWhcNMzAxMTIyMjAzMzQxWjBuMQswCQYDVQQGEwJVUzELMAkGA1UECAwCV0kxDDAKBgNVBAoMA0hQRTEQMA4GA1UECwwHSFBDL01DUzEUMBIGA1UEAwwLRGF0YSBDZW50ZXIxHDAaBgkqhkiG9w0BCQEWDWRjb3BzQGhwZS5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC4EhmQqK0cdVAfKa1pC3gPxmEbio0nRxOwuE4M8y1W0GM9mnn1749bNtz1GPn7B+Msa14rr980mwly1aVL9qviPD/EEg8yTmmDR2eQxPazuWRIKbJ31SJvu7rLoTzJ4agZxvsj7hkj4TcVBXvM9py3pvXvGZqM3IqvOEEYSNi5xglQvmJOBnprsc5lTY5pBJd7ty2IcHF7untGEcK4pGuomfGiiFqSWgrCAcfMMsVDNf/kAOnWF0lx25alpdhEwG7pvWaGbCjm+Zz58Od9SmXn9fiLXT2v1U3skLsNDn4lfy71IcMYuCAFaSuGm+Vs1cxUKfCdIV9v+ueYY7ut0lKnAgMBAAGjUzBRMB0GA1UdDgQWBBRWDdVgTFQB2fZYTd7xdzwc43L/7jAfBgNVHSMEGDAWgBRWDdVgTFQB2fZYTd7xdzwc43L/7jAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQBYsNAsHquuYr6DBRj7gHvRRJtArQmQta5zS0J+NPE1BPMVvvk94f4YfbVCyNQjxULpA4AAni7MgRXzlWk5A+mqPP4sj8SPXFd/Pmiy1lC72sIyc+1W7slPQH41Xse+CqJ1N9rYzZ3D3JRhLay6tk7xLQOrcGLogSG0ZTdPxmlsCYCn6c2xolZ1Q2MPgQI7msCTID9W75bIzPoXdkMGZGuKlYzUHXq/HytKlCnKBj4U1fh7VGqyUqGjK7Nd9QbPJe7HnKGz+585qo5ELDeskjG/ixNYaxIEtcOwUzeUGCWNIAd+YO4p075C/sSobMJEymBJyJmKGdtChGs9mQ4dTGs0M64IiKAYKQ31wT+5DJimXB1olmw=" > certs.jks.b64
+        linux:~ # /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh dtr.dev.cray.com/library/openjdk:11-jre-slim
         ```
 
-        Once you've got the `certs.jks.b64` file, inject and encrypt the file
-        into the `customizations.yaml` file using the following command:
+        Create (or update) `cert.jks` with the PEM-encoded CA certificate for an
+        LDAP host:
+
+        > **`IMPORTANT`** Replace `<ca-cert.pem>` and `<alias>` as appropriate.
+
+        ```bash
+        linux# podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool -importcert -trustcacerts -file /data/<ca-cert.pem> -alias <alias> -keystore /data/certs.jks -storepass password -noprompt
+        ```
+
+        > **`INTERNAL ONLY`** For example, on internal HPE systems, create the
+        > `certs.jks.b64` file as follows:
+        > 
+        > *   Get the issuer certificate for dcldap2.us.cray.com and
+        >     dcldap3.us.cray.com. Use `openssl s_client` to connect and
+        >     identify the issuer:
+        > 
+        >     ```bash
+        >     linux# openssl s_client -showcerts -connect dcldap2.us.cray.com:636 </dev/null 2>/dev/null | grep issuer=
+        >     issuer=/C=US/ST=WI/O=HPE/OU=HPC/MCS/CN=Data Center/emailAddress=dcops@hpe.com
+        >     ```
+        > 
+        > *   Next, capture the issuer cert as `cacert.pem`:
+        > 
+        >     ```bash
+        >     linux# openssl s_client -showcerts -connect dcldap2.us.cray.com:636 </dev/null 2>/dev/null| awk '/s:\/C=US\/ST=WI\/O=HPE\/OU=HPC\/MCS\/CN=Data Center\/emailAddress=dcops@hpe.com/,/END CERTIFICATE/' | awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' > cacert.pem
+        >     ```
+        > 
+        > *   Verify issuer's certificate was properly saved:
+        > 
+        >     ```bash
+        >     linux# cat cacert.pem
+        >     -----BEGIN CERTIFICATE-----
+        >     MIIDvTCCAqWgAwIBAgIUYxrG/PrMcmIzDuJ+U1Gh8hpsU8cwDQYJKoZIhvcNAQEL
+        >     BQAwbjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAldJMQwwCgYDVQQKDANIUEUxEDAO
+        >     BgNVBAsMB0hQQy9NQ1MxFDASBgNVBAMMC0RhdGEgQ2VudGVyMRwwGgYJKoZIhvcN
+        >     AQkBFg1kY29wc0BocGUuY29tMB4XDTIwMTEyNDIwMzM0MVoXDTMwMTEyMjIwMzM0
+        >     MVowbjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAldJMQwwCgYDVQQKDANIUEUxEDAO
+        >     BgNVBAsMB0hQQy9NQ1MxFDASBgNVBAMMC0RhdGEgQ2VudGVyMRwwGgYJKoZIhvcN
+        >     AQkBFg1kY29wc0BocGUuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+        >     AQEAuBIZkKitHHVQHymtaQt4D8ZhG4qNJ0cTsLhODPMtVtBjPZp59e+PWzbc9Rj5
+        >     +wfjLGteK6/fNJsJctWlS/ar4jw/xBIPMk5pg0dnkMT2s7lkSCmyd9Uib7u6y6E8
+        >     yeGoGcb7I+4ZI+E3FQV7zPact6b17xmajNyKrzhBGEjYucYJUL5iTgZ6a7HOZU2O
+        >     aQSXe7ctiHBxe7p7RhHCuKRrqJnxoohakloKwgHHzDLFQzX/5ADp1hdJcduWpaXY
+        >     RMBu6b1mhmwo5vmc+fDnfUpl5/X4i109r9VN7JC7DQ5+JX8u9SHDGLggBWkrhpvl
+        >     bNXMVCnwnSFfb/rnmGO7rdJSpwIDAQABo1MwUTAdBgNVHQ4EFgQUVg3VYExUAdn2
+        >     WE3e8Xc8HONy/+4wHwYDVR0jBBgwFoAUVg3VYExUAdn2WE3e8Xc8HONy/+4wDwYD
+        >     VR0TAQH/BAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAWLDQLB6rrmK+gwUY+4B7
+        >     0USbQK0JkLWuc0tCfjTxNQTzFb75PeH+GH21QsjUI8VC6QOAAJ4uzIEV85VpOQPp
+        >     qjz+LI/Ej1xXfz5ostZQu9rCMnPtVu7JT0B+NV7HvgqidTfa2M2dw9yUYS2surZO
+        >     8S0Dq3Bi6IEhtGU3T8ZpbAmAp+nNsaJWdUNjD4ECO5rAkyA/Vu+WyMz6F3ZDBmRr
+        >     ipWM1B16vx8rSpQpygY+FNX4e1RqslKhoyuzXfUGzyXux5yhs/ufOaqORCw3rJIx
+        >     v4sTWGsSBLXDsFM3lBgljSAHfmDuKdO+Qv7EqGzCRMpgSciZihnbQoRrPZkOHUxr
+        >     NA==
+        >     -----END CERTIFICATE-----
+        >     ```
+        > 
+        > *   Create `certs.jks`:
+        > 
+        >     ```bash
+        >     linux# podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool -importcert -trustcacerts -file /data/cacert.pem -alias cray-data-center-ca -keystore /data/certs.jks -storepass password -noprompt
+        >     ```
+
+        Create `certs.jks.b64` by base-64 encoding `certs.jks`:
+
+        ```bash
+        linux# base64 certs.jks > certs.jks.b64
+        ```
+
+        Then, inject and encrypt `certs.jks.b64` into `customizations.yaml`:
 
         ```bash
         linux# cat <<EOF | yq w - 'data."certs.jks"' "$(<certs.jks.b64)" | yq r -j - | /mnt/pitdata/prep/site-init/utils/secrets-encrypt.sh | yq w -f - -i /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray-keycloak'
@@ -113,99 +177,136 @@ with system-specific customizations.
         ```
 
     *   Update the `keycloak_users_localize` sealed secret with the
-        appropriate value for `ldap_connection_url`. 
+        appropriate value for `ldap_connection_url`.
 
-        For internal HPE systems, if the IP address for the ncn-m001 node is
-        even then use `ldaps://dcldap2.us.cray.com`, otherwise use
-        `ldaps://dcldap3.us.cray.com`. For example,
-        `ping fanta-ncn-m001.us.cray.com` shows the IP address is
-        `172.30.52.72`, so fanta would use `ldaps://dcldap2.us.cray.com` as the
-        `ldap_connection_url`. This just spreads the load over the 2 LDAP
-        replicas.
+        Set `ldap_connection_url` in `customizations.yaml`:
 
-        Set `ldap_connection_url`:
+        > **`IMPORTANT`** Replace `<ldap-url>` as appropriate.
 
         ```bash
-        linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.keycloak_users_localize.generate.data.(args.name==ldap_connection_url).args.value' 'ldaps://dcldap2.us.cray.com'
+        linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.keycloak_users_localize.generate.data.(args.name==ldap_connection_url).args.value' '<ldap-url>'
         ```
 
-        On success, the `keycloak_users_localize` sealed secret should look
-        similar to:
-
-        ```bash
-        linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.sealed_secrets.keycloak_users_localize
-        generate:
-            name: keycloak-users-localize
-            data:
-            - type: static
-                args:
-                name: ldap_connection_url
-                value: ldaps://dcldap3.us.cray.com
-        ```
+        > **`INTERNAL ONLY`** On internal HPE systems, if the IP address for
+        > the ncn-m001 node is even then use `ldaps://dcldap2.us.cray.com`,
+        > otherwise use `ldaps://dcldap3.us.cray.com`. For example, `ping
+        > fanta-ncn-m001.us.cray.com` shows the IP address is `172.30.52.72`,
+        > so fanta would use `ldaps://dcldap2.us.cray.com` as the
+        > `ldap_connection_url`. This just spreads the load over the two LDAP
+        > replicas.
+        > 
+        > Set `ldap_connection_url` in `customziations.yaml`:
+        > 
+        > ```bash
+        > linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.keycloak_users_localize.generate.data.(args.name==ldap_connection_url).args.value' 'ldaps://dcldap2.us.cray.com'
+        > ```
+        > 
+        > On success, the `keycloak_users_localize` sealed secret should look
+        > similar to:
+        > 
+        > ```bash
+        > linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.sealed_secrets.keycloak_users_localize
+        > generate:
+        >     name: keycloak-users-localize
+        >     data:
+        >     - type: static
+        >         args:
+        >         name: ldap_connection_url
+        >         value: ldaps://dcldap2.us.cray.com
+        > ```
 
     *   Configure the `ldapSearchBase` and `localRoleAssignments` settings for
-        the `cray-keycloak-users-localize` chart. 
+        the `cray-keycloak-users-localize` chart in `customizations.yaml`.
 
-        For internal HPE systems appropriate settings are:
+        Set `ldapSearchBase` in `customizations.yaml`:
 
-        ```yaml
-        ldapSearchBase: "dc=dcldap,dc=dit"
-        localRoleAssignments:
-            - {"group": "criemp", "role": "admin", "client": "shasta"}
-            - {"group": "criemp", "role": "admin", "client": "cray"}
-            - {"group": "craydev", "role": "admin", "client": "shasta"}
-            - {"group": "craydev", "role": "admin", "client": "cray"}
-            - {"group": "shasta_admins", "role": "admin", "client": "shasta"}
-            - {"group": "shasta_admins", "role": "admin", "client": "cray"}
-            - {"group": "shasta_users", "role": "user", "client": "shasta"}
-            - {"group": "shasta_users", "role": "user", "client": "cray"}
-        ```
-
-        Set `ldapSearchBase`:
+        > **`IMPORTANT`** Replace `<search-base>` as appropriate.
 
         ```bash
-        linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-keycloak-users-localize.ldapSearchBase 'dc=dcldap,dc=dit'
+        linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-keycloak-users-localize.ldapSearchBase '<search-base>'
         ```
 
-        Set `localRoleAssignments`:
+        Set `localRoleAssignments` that map to `admin` and/or `user` roles for
+        both `shasta` and `cray` clients in `customizations.yaml`:
+
+        > **`IMPORTANT`** Replace `<admin-group>` and `<user-group>` as
+        > appropriate. Also add other assignments as desired.
 
         ```bash
         linux# yq write -s - -i /mnt/pitdata/prep/site-init/customizations.yaml <<EOF
         - command: update
           path: spec.kubernetes.services.cray-keycloak-users-localize.localRoleAssignments
           value:
-          - {"group": "criemp", "role": "admin", "client": "shasta"}
-          - {"group": "criemp", "role": "admin", "client": "cray"}
-          - {"group": "craydev", "role": "admin", "client": "shasta"}
-          - {"group": "craydev", "role": "admin", "client": "cray"}
-          - {"group": "shasta_admins", "role": "admin", "client": "shasta"}
-          - {"group": "shasta_admins", "role": "admin", "client": "cray"}
-          - {"group": "shasta_users", "role": "user", "client": "shasta"}
-          - {"group": "shasta_users", "role": "user", "client": "cray"}
+          - {"group": "<admin-group>", "role": "admin", "client": "shasta"}
+          - {"group": "<admin-group>", "role": "admin", "client": "cray"}
+          - {"group": "<user-group>", "role": "user", "client": "shasta"}
+          - {"group": "<user-group>", "role": "user", "client": "cray"}
         EOF
         ```
 
-        On success, the `cray-keycloak-users-localize` values should look
-        similar to:
+        > **`INTERNAL ONLY`** For example, on internal HPE systems appropriate
+        > settings are:
+        > 
+        > ```yaml
+        > ldapSearchBase: "dc=dcldap,dc=dit"
+        > localRoleAssignments:
+        >     - {"group": "criemp", "role": "admin", "client": "shasta"}
+        >     - {"group": "criemp", "role": "admin", "client": "cray"}
+        >     - {"group": "craydev", "role": "admin", "client": "shasta"}
+        >     - {"group": "craydev", "role": "admin", "client": "cray"}
+        >     - {"group": "shasta_admins", "role": "admin", "client": "shasta"}
+        >     - {"group": "shasta_admins", "role": "admin", "client": "cray"}
+        >     - {"group": "shasta_users", "role": "user", "client": "shasta"}
+        >     - {"group": "shasta_users", "role": "user", "client": "cray"}
+        > ```
+        > 
+        > Set `ldapSearchBase` in `customizations.yaml`:
+        > 
+        > ```bash
+        > linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-keycloak-users-localize.ldapSearchBase 'dc=dcldap,dc=dit'
+        > ```
+        > 
+        > Set `localRoleAssignments` in `customizations.yaml`:
+        > 
+        > ```bash
+        > linux# yq write -s - -i /mnt/pitdata/prep/site-init/customizations.yaml <<EOF
+        > - command: update
+        >   path: spec.kubernetes.services.cray-keycloak-users-localize.localRoleAssignments
+        >   value:
+        >   - {"group": "criemp", "role": "admin", "client": "shasta"}
+        >   - {"group": "criemp", "role": "admin", "client": "cray"}
+        >   - {"group": "craydev", "role": "admin", "client": "shasta"}
+        >   - {"group": "craydev", "role": "admin", "client": "cray"}
+        >   - {"group": "shasta_admins", "role": "admin", "client": "shasta"}
+        >   - {"group": "shasta_admins", "role": "admin", "client": "cray"}
+        >   - {"group": "shasta_users", "role": "user", "client": "shasta"}
+        >   - {"group": "shasta_users", "role": "user", "client": "cray"}
+        > EOF
+        > ```
+        > 
+        > On success, the `cray-keycloak-users-localize` values should look
+        > similar to:
+        > 
+        > ```bash
+        > linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-keycloak-users-localize
+        > sealedSecrets:
+        >     - '{{ kubernetes.sealed_secrets.keycloak_users_localize | toYaml }}'
+        > localRoleAssignments:
+        >     - {"group": "criemp", "role": "admin", "client": "shasta"}
+        >     - {"group": "criemp", "role": "admin", "client": "cray"}
+        >     - {"group": "craydev", "role": "admin", "client": "shasta"}
+        >     - {"group": "craydev", "role": "admin", "client": "cray"}
+        >     - {"group": "shasta_admins", "role": "admin", "client": "shasta"}
+        >     - {"group": "shasta_admins", "role": "admin", "client": "cray"}
+        >     - {"group": "shasta_users", "role": "user", "client": "shasta"}
+        >     - {"group": "shasta_users", "role": "user", "client": "cray"}
+        > ldapSearchBase: dc=dcldap,dc=dit
+        > ```
 
-        ```bash
-        linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-keycloak-users-localize
-        sealedSecrets:
-            - '{{ kubernetes.sealed_secrets.keycloak_users_localize | toYaml }}'
-        localRoleAssignments:
-            - {"group": "criemp", "role": "admin", "client": "shasta"}
-            - {"group": "criemp", "role": "admin", "client": "cray"}
-            - {"group": "craydev", "role": "admin", "client": "shasta"}
-            - {"group": "craydev", "role": "admin", "client": "cray"}
-            - {"group": "shasta_admins", "role": "admin", "client": "shasta"}
-            - {"group": "shasta_admins", "role": "admin", "client": "cray"}
-            - {"group": "shasta_users", "role": "user", "client": "shasta"}
-            - {"group": "shasta_users", "role": "user", "client": "cray"}
-        ldapSearchBase: dc=dcldap,dc=dit
-        ```
-
-5.  If you need to resolve outside hostnames, you will need to configure forwarding in the cray-dns-unbound service.
-    For example, if you are using a hostname and not an IP for the upstream LDAP server in step 4 above, you will need to be able to resolve that hostname.
+5.  If you need to resolve outside hostnames, you will need to configure
+    forwarding in the cray-dns-unbound service. For example, if you are using a
+    hostname and not an IP for the upstream LDAP server in step 4 above, you
+    will need to be able to resolve that hostname.
 
     Set the `localZones` and `forwardZones` for the `cray-dns-unbound` service:
 
@@ -247,18 +348,13 @@ with system-specific customizations.
               loadBalancerIP: ~FIXME~ e.g. 10.94.100.3
      ```
 
-7.  Load container images required by Sealed Secret Generators
+7.  Load the `zeromq` container image required by Sealed Secret Generators:
 
-    > Note: you must have a properly configured Docker or Podman environment.
-
-    If running through this process on a Shasta 1.3 ncn-m001 node, or a node (laptop, ...) external to Shasta, run:
+    > **`NOTE`** Requires a properly configured Docker or Podman environment.
 
     ```bash
     linux:~ # /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh dtr.dev.cray.com/zeromq/zeromq:v4.0.5
     ```
-    > **WARNING**: Do not use the ```load-container-image.sh``` script on a booted 1.4 Kubernetes Master Node.
-
-    If performing a 1.4 reinstall, pulling the image should have been completed as part of [002-CSM-INSTALL (1.4 Reinstall)](002-CSM-INSTALL.md#pull-required-container-images).
 
 8.  Re-encrypt and seed secrets in `customizations.yaml`:
 
