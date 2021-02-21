@@ -142,7 +142,8 @@ CASMINST-980
    > This will create folders for each host in `/var/www`, allowing each host to have their own unique set of artifacts; kernel, initrd, SquashFS, and `script.ipxe` bootscript.
 
    ```bash
-   pit# /root/bin/set-sqfs-links.sh
+   pit# \
+   /root/bin/set-sqfs-links.sh
    ```
 
 2. Set each node to always UEFI Network Boot, and ensure they're powered off
@@ -156,7 +157,8 @@ CASMINST-980
 
 3. Validate that the LiveCD is ready for installing NCNs
    ```bash
-   pit# csi pit validate --livecd-preflight
+   pit# \
+   csi pit validate --livecd-preflight
    ```
    > Observe the output of the checks and note any failures, then remediate them.
 
@@ -179,7 +181,8 @@ CASMINST-980
 > **`NOTE`**: All consoles are located at `/var/log/conman/console*`
 5. Boot the **Storage Nodes**
     ```bash
-    pit# grep -oE $stoken /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
+    pit# \
+    grep -oE $stoken /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
 
 6. Wait. Observe the installation through ncn-s001-mgmt's console:
@@ -207,7 +210,8 @@ CASMINST-980
 
 7. Boot **Kubernetes Managers and Workers**
     ```bash
-    pit# grep -oE "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
+    pit# \
+    grep -oE "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
 
 8. Wait. Observe the installation through ncn-m002-mgmt's console:
