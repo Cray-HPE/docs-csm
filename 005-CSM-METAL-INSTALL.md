@@ -147,7 +147,7 @@ CASMINST-980
 
 2. Set each node to always UEFI Network Boot, and ensure they're powered off
     ```bash
-    pit#
+    pit# \
     grep -oE "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} chassis bootdev pxe options=efiboot,persistent
     grep -oE "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
     ```
