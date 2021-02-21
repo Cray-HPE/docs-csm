@@ -88,7 +88,7 @@ is the `IPMI_PASSWORD`
 
 > These exist as an avoidance measure for hard-codes, so these may be used in various system contexts.
 ```bash
-export mtoken='ncn-m\w+-mgmt'
+pit# export mtoken='ncn-m\w+-mgmt'
 export stoken='ncn-s\w+-mgmt'
 export wtoken='ncn-w\w+-mgmt'
 
@@ -147,7 +147,8 @@ CASMINST-980
 
 2. Set each node to always UEFI Network Boot, and ensure they're powered off
     ```bash
-    pit# grep -oE "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} chassis bootdev pxe options=efiboot,persistent
+    pit#
+    grep -oE "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} chassis bootdev pxe options=efiboot,persistent
     grep -oE "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
     ```
     > Note: some BMCs will "flake" and ignore the bootorder setting by `ipmitool`. As a fallback, cloud-init will
