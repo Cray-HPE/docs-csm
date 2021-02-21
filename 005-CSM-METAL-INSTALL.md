@@ -1,7 +1,9 @@
 # CSM Metal Install
 
 <div style="border: 1px dashed red">
-<span style="color:red">WARNING</span>
+<span style="color:red">
+WARNING
+</span>
 
 Gigabyte NCNs that install Shasta 1.4 can become unusable when Shasta 1.4 is installed.  This is a result of a bug in the Gigabyte firmware that ships with Shasta 1.4.  It is recommended that Gigabyte users wait to install Shasta 1.4 until a firmware patch is available.
 
