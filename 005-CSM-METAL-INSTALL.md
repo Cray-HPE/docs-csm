@@ -60,7 +60,7 @@ installs as follows:
 3.  Remove `nexus-data` volume:
 
     ```bash
-    pit podman volume rm nexus-data
+    pit# podman volume rm nexus-data
     ```
 
 4.  Add the corresponding URL to the `ExecStartPost` script in
@@ -75,6 +75,7 @@ installs as follows:
 5.  Restart Nexus:
 
     ```bash
+    pit# systemctl daemon-reload
     pit# systemctl start nexus
     ```
 
