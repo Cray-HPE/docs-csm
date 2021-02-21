@@ -88,14 +88,14 @@ is the `IPMI_PASSWORD`
 
 > These exist as an avoidance measure for hard-codes, so these may be used in various system contexts.
 ```bash
-pit# export mtoken='ncn-m\w+-mgmt'
+pit# \
+export mtoken='ncn-m\w+-mgmt'
 export stoken='ncn-s\w+-mgmt'
 export wtoken='ncn-w\w+-mgmt'
 
-
+export username=root
 # Replace "opensesame" with the real root password.
 export IPMI_PASSWORD=opensesame
-export username=root
 ```
 
 Throughout the guide, simple one-liners can be used to query status of expected nodes. If the shell or environment is terminated, these environment variables should be re-exported.
