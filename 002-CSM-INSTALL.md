@@ -324,13 +324,13 @@ activity.
 Power each NCN off using `ipmitool` from m001 (or the booted LiveCD if reinstalling an incomplete
 install).
 
-- Shutdown from LiveCD
+- Shutdown from **LiveCD** (`pit`)
   ```bash
     pit# export username=root
     pit# export IPMI_PASSWORD=
     pit# conman -q | grep mgmt | xargs -t -i  ipmitool -I lanplus -U $username -E -H {} power off
     ```
-- Shutdown from m001
+- Shutdown from **ncn-m001**
     ```bash
     ncn-m001# export username=root
     ncn-m001# export IPMI_PASSWORD=
@@ -342,7 +342,7 @@ install).
 
 During the install of the NCNs their BMCs get get set to static IP addresses. The install expects the that the NCN BMCs are set back to DHCP before proceeding.
 
-- If on the LiveCD:
+- If on the **LiveCD** (`pit`):
   This step uses the old statics.conf on the system in case CSI changes IPs:
 
   ```bash
@@ -365,7 +365,7 @@ During the install of the NCNs their BMCs get get set to static IP addresses. Th
   done
   ```
 
-- If on m001:
+- If on **ncn-m001**:
   This step uses to the `/etc/hosts` file on m001 to determine the IP addresses of the BMCs:
 
   ```bash
