@@ -105,20 +105,45 @@ with system-specific customizations.
         > 
         > *   Get the issuer certificate for dcldap2.us.cray.com and
         >     dcldap3.us.cray.com. Use `openssl s_client` to connect and
-        >     identify the issuer:
+        >     show the certificate chain returned by the LDAP host:
         > 
         >     ```bash
-        >     linux# openssl s_client -showcerts -connect dcldap2.us.cray.com:636 </dev/null 2>/dev/null | grep issuer=
-        >     issuer=/C=US/ST=WI/O=HPE/OU=HPC/MCS/CN=Data Center/emailAddress=dcops@hpe.com
+        >     linux# openssl s_client -showcerts -connect dcldap2.us.cray.com:636 </dev/null
         >     ```
         > 
-        > *   Next, capture the issuer cert as `cacert.pem`:
+        >     Either manually extract (i.e., cut/paste) the issuer's
+        >     certificate into `cacert.pem` or try the following commands to
+        >     create it automatically.
         > 
-        >     ```bash
-        >     linux# openssl s_client -showcerts -connect dcldap2.us.cray.com:636 </dev/null 2>/dev/null| awk '/s:\/C=US\/ST=WI\/O=HPE\/OU=HPC\/MCS\/CN=Data Center\/emailAddress=dcops@hpe.com/,/END CERTIFICATE/' | awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' > cacert.pem
-        >     ```
+        >     > **`NOTE`** The following commands were verified using OpenSSL
+        >     > version 1.1.1d and use the `-nameopt RFC2253` option to ensure
+        >     > consistent formatting of distinguished names (DNs).
+        >     > Unfortunately, older versions of OpenSSL may not support
+        >     > `-nameopt` on the `s_client` command or may use a different
+        >     > default format. As a result, your mileage may vary; however,
+        >     > you should be able to manually extract the issuer certificate
+        >     > from the output of the above `openssl s_client` example if the
+        >     > following commands are unsuccessful.
         > 
-        > *   Verify issuer's certificate was properly saved:
+        >     1.  Observe the issuer's DN:
+        > 
+        >         ```bash
+        >         linux# openssl s_client -showcerts -nameopt RFC2253 -connect dcldap2.us.cray.com:636 </dev/null 2>/dev/null | grep issuer= | sed -e 's/^issuer=//'
+        >         emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC/MCS,O=HPE,ST=WI,C=US
+        >         ```
+        > 
+        >     2.  Extract the issuer's certificate using `awk`:
+        > 
+        >         > **`NOTE`** The issuer DN is properly escaped as part of the
+        >         > `awk` pattern below. If the value you're using is
+        >         > different, be sure to escape it properly!
+        > 
+        >         ```bash
+        >         linux# openssl s_client -showcerts -nameopt RFC2253 -connect dcldap2.us.cray.com:636 </dev/null 2>/dev/null| awk '/s:emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC\/MCS,O=HPE,ST=WI,C=US/,/END CERTIFICATE/' | awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' > cacert.pem
+        >         ```
+        > 
+        > *   Verify issuer's certificate was properly extracted and saved in
+        >     `cacert.pem`:
         > 
         >     ```bash
         >     linux# cat cacert.pem
