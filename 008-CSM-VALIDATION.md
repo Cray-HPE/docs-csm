@@ -1,6 +1,14 @@
 # CSM Install Validation & Health Checks
 This page lists available CSM install and health checks that can be executed to validate the CSM install. They can be run anytime after the install has run to completion, but not before.
 
+* [Platform Health Checks](#platform-health-checks)
+* [Network Health Checks](#network-health-checks)
+* [Automated Goss Testing](#automated-goss-testing)
+* [Hardware Management Services Tests](#hms-tests)
+* [Cray Management Services Validation Utility](#cms-validation-utility)
+* [Booting CSM Barebones Image](#booting-csm-barebones-image)
+* [UAS/UAI Tests](#uas-uai-tests)
+
 Examples of when you may wish to run them are:
 * after install.sh completes
 * before and after NCN reboots
@@ -12,9 +20,8 @@ The areas should be tested in the order they are listed on this page. Errors in 
 
 For more details on these validations and health checks, see the admin guide (note to docs team: replace this with a reference to the specific section of the admin guide).
 
-## PET
-
-### Platform Health Checks
+<a name="platform-health-checks"></a>
+## Platform Health Checks
 
 Scripts do not verify results. Script output includes analysis needed to determine pass/fail for each check. All health checks are expected to pass.
 Health Check scripts can be run:
@@ -27,7 +34,7 @@ Health Check scripts can be run:
 
 Health Check scripts can be found and run on any worker or master node from any directory.
 
-#### ncnHealthChecks
+### ncnHealthChecks
      /opt/cray/platform-utils/ncnHealthChecks.sh
 The ncnHealthChecks script reports the following health information:
 * Kubernetes status for master and worker NCNs
@@ -42,13 +49,14 @@ Execute ncnHealthChecks script and analyze the output of each individual check.
 
 Verify that Border Gateway Protocol (BGP) peering sessions are established for each worker node on the system. See CSM Health Checks section of the Admin Guide.
 
-#### ncnPostgresHealthChecks
+### ncnPostgresHealthChecks
      /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
 For each postgres cluster the ncnPostgresHealthChecks script determines the leader pod and then reports the status of all postgres pods in the cluster. 
 
 Execute ncnPostgresHealthChecks script. Verify leader for each cluster and status of cluster members.
 
-## NET
+<a name="network-health-checks"></a>
+## Network Health Checks
 
 ### Verify that KEA has active DHCP leases
 
@@ -70,6 +78,7 @@ Retrieve all the Leases currently in KEA:
 
 If there is an non-zero amount of DHCP leases for river hardware returned that is a good indication that KEA is working.
 
+<a name="automated-goss-testing"></a>
 ## Automated Goss Testing
 
 There are multiple [Goss](https://github.com/aelsabbahy/goss) test suites available that cover a variety of sub-systems. 
@@ -96,9 +105,9 @@ ncn:~ # /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
 * K8S Test: Verify spire-agent is enabled and running
   - The spire-agent service may fail to start, logging errors (via journalctl) similar to "join token not existing...". Deleting the ```request-ncn-join-token``` daemonset pod running on the node may clear the issue.
 
-## HMS
+<a name="hms-tests"></a>
+## Hardware Management Services Tests
 
-### HMS Service Tests
 Execute the HMS smoke and functional tests after the CSM install to confirm that the HMS services are running and operational.
 
 ### CRAY INTERNAL USE ONLY
@@ -110,7 +119,8 @@ Run the HMS smoke tests. If no failures occur, then run the HMS functional tests
     ncn:~ # /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resources.sh
     ncn:~ # /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-resources.sh
 
-## CMS Validation Utility
+<a name="cms-validation-utility"></a>
+## Cray Management Services Validation Utility
      /usr/local/bin/cmsdev
 
 ### CRAY INTERNAL USE ONLY
@@ -155,6 +165,7 @@ You should run a check for each of the following services after an install. Thes
 \* The ipxe shortcut runs a check of both the iPXE service and the TFTP service.
 
 
+<a name="booting-csm-barebones-image"></a>
 ## Booting CSM Barebones Image
 
 Included with the Cray System Manaement (CSM) release is a pre-built node image that can be used 
@@ -294,7 +305,8 @@ cray-conman-b69748645-qtfxj:/ # conman -j x9000c1s7b0n1
 [    8.059239] reboot: System halted
 ```
 
-## UAS / UAI
+<a name="uas-uai-tests"></a>
+## UAS / UAI Tests
 
 ### Initialize and Authorize the CLI
 

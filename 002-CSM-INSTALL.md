@@ -321,7 +321,7 @@ ncn# exit
 The NCNs will auto-wipe on the next install. Optionally, they can be powered down to minimize network
 activity.
 
-Power each NCN off using `ipmitool` from m001 (or the booted LiveCD if reinstalling an incomplete
+Power each NCN off using `ipmitool` from ncn-m001 (or the booted LiveCD if reinstalling an incomplete
 install).
 
 - Shutdown from **LiveCD** (`pit`)
@@ -366,7 +366,7 @@ During the install of the NCNs their BMCs get get set to static IP addresses. Th
   ```
 
 - If on **ncn-m001**:
-  This step uses to the `/etc/hosts` file on m001 to determine the IP addresses of the BMCs:
+  This step uses to the `/etc/hosts` file on ncn-m001 to determine the IP addresses of the BMCs:
 
   ```bash
   ncn-m001# export username=root
@@ -389,8 +389,8 @@ During the install of the NCNs their BMCs get get set to static IP addresses. Th
 
 
 <a name="powering-off-livecd"></a>
-#### Powering Off LiveCD or m001 node
-Lastly, shutdown the LiveCD or m001 node.  Skip this step if you are planning to use this node as a staging area to create the LiveCD.
+#### Powering Off LiveCD or ncn-m001 node
+Lastly, shutdown the LiveCD or ncn-m001 node.  Skip this step if you are planning to use this node as a staging area to create the LiveCD.
 ```bash
 ncn-m001:~ # poweroff
 ```

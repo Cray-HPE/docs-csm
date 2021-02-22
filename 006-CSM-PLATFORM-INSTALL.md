@@ -129,8 +129,7 @@ to a location on another server for reference later. The administrator may then
 start the [CSM Validation process](008-CSM-VALIDATION.md).
 
 Once the CSM services are deemed healthy the administrator way proceed to the
-final step of the CSM install [rebooting the LiveCD into
-m001](007-CSM-INSTALL-REBOOT.md).
+final step of the CSM install [Reboot from the LiveCD to NCN](007-CSM-INSTALL-REBOOT.md).
 
 <a name="add-cabinet-routing-to-ncns"></a>
 ## Add Compute Cabinet Routing to NCNs
