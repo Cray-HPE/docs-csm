@@ -107,7 +107,6 @@ It is dangerous to run with 2 workers or less, work must be done with diligence 
     IPMI_PASSWORD=
     username=root
     ipmitool -I lanplus -U $username -E -H ncn-w002-mgmt power off
-    ipmitool 
     ```
 3. Now commence the operations on the server.
 
