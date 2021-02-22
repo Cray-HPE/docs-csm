@@ -180,7 +180,7 @@ may be referenced when making a similar site modification to v1.3.
 
     For minimum NCN firmware versions see [Node Firmware](252-FIRMWARE-NODE.md)
 
-    H272 (NCN workers, managers, storage nodes, some UANs and some Application Nodes) servers should use Gigabyte firmware package 21.00, which includes
+    R272 (NCN workers, managers, storage nodes, some UANs and some Application Nodes) servers should use Gigabyte firmware package 21.00, which includes
 
     ```
     BIOS version C17
@@ -188,7 +188,7 @@ may be referenced when making a similar site modification to v1.3.
     CMC version 62.84.02
     ```
 
-    H262 (mostly compute nodes) and H282 (most UAN and Application Nodes) servers should use Gigabyte firmware package 20.03, which includes
+    H262 (mostly compute nodes) and R282 (most UAN and Application Nodes) servers should use Gigabyte firmware package 20.03, which includes
 
     ```
     BIOS version C20
