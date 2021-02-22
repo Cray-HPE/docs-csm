@@ -1,5 +1,12 @@
 # Firmware Update the system with FAS
 
+* [Prerequisites](#prerequisites)
+* [Current Capabilities as of Shasta Release v1.4](#current-capabilities)
+* [Order Of Operations](#order-of-operations)
+* [Hardware Precedence Order](#hardware-precedence-order)
+* [Next steps](#next-steps)
+
+<a name="prerequisites"></a>
 ## Prerequisites
 
 1. 001-008 have been completed; CSM has been installed and HSM is running with discovered nodes.  Firmware has been loaded into FAS as part of the CSM install
@@ -14,6 +21,7 @@ Using the process outlined in [`255-FIRMWARE-ACTION-SERVICE-FAS.md`](../255-FIRM
 **NOTE**: each system is different and may not have all hardware options.
 
 
+<a name="current-capabilities"></a>
 ## Current Capabilities as of Shasta Release v1.4
 
 The following table describes the hardware items that can have their firmware updated via FAS.
@@ -29,6 +37,7 @@ The following table describes the hardware items that can have their firmware up
 | HPE              | nodeBMC    | `iLO 5` (BMC aka `1` ), `System ROM`(BIOS aka `2`) ,`Redundant System ROM`  | `iLO 5` and `System ROM` targets |
 
 
+<a name="order-of-operations"></a>
 ## Order Of Operations
 
 For each item in the `Hardware Precedence Order`:
@@ -64,6 +73,7 @@ For each item in the `Hardware Precedence Order`:
 
 5. Interpret the outcome of the live update; proceed to next type of hardware
 
+<a name="hardware-precedence-order"></a>
 ## Hardware Precedence Order
 After you identify which hardware you have; start with the top most item on this list to update.  If you don't have the hardware, skip it.
 
@@ -84,3 +94,10 @@ After you identify which hardware you have; start with the top most item on this
 3. HPE
      1. [BMC (iLO5)](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#hpe-device-type-:-nodebmc-|-target-:--aka-bmc)
      2. [BIOS (System ROM)](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#hpe-device-type-:-nodebmc-|-target-:--aka-bios) 
+
+
+<a name="next-steps"></a>
+## Next Steps
+
+Next the administrator should install additional products following the procedures in the HPE Cray EX System Installation and Configuration Guide S-8000.
+

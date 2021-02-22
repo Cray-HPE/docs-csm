@@ -1,12 +1,12 @@
 # NCN/Management Node Locking
 
-* Table of Contents
     * [Why?](#why?) 
     * [When To Lock Management/NCN Nodes](#when-to-lock-management/ncn-nodes) 
     * [When To Unlock Management/NCN Nodes](#when-to-unlock-management/ncn-nodes) 
     * [Locked Behavior](#locked-behavior) 
     * [START -> How To Lock Management NCNs](#how-to-lock-management-ncns)
     * [How To Unlock Management NCNs](#how-to-unlock-management-ncns) 
+    * [Next Steps](#next-steps)
 
 ##  <a name="why?">Why?</a>
 
@@ -132,4 +132,8 @@ Failure = 0
 [Success]
 ComponentIDs = [ "x3000c0s6b0n0",]
 ```
+
+## <a name="next-steps">Next Steps</a>
+
+Check and update firmware next.  See [Firmware updates with FAS](010-FIRMWARE-UPDATE-WITH-FAS.md)
 

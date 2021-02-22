@@ -3,7 +3,7 @@ This page lists available CSM install and health checks that can be executed to 
 
 * [Platform Health Checks](#platform-health-checks)
 * [Network Health Checks](#network-health-checks)
-* [Automated Goss Testing](#automated-gos-testing)
+* [Automated Goss Testing](#automated-goss-testing)
 * [Hardware Management Services Tests](#hms-tests)
 * [Cray Management Services Validation Utility](#cms-validation-utility)
 * [Booting CSM Barebones Image](#booting-csm-barebones-image)
@@ -105,10 +105,9 @@ ncn:~ # /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
 * K8S Test: Verify spire-agent is enabled and running
   - The spire-agent service may fail to start, logging errors (via journalctl) similar to "join token not existing...". Deleting the ```request-ncn-join-token``` daemonset pod running on the node may clear the issue.
 
-<a name="hms-health-checks"></a>
-## Hardware Management Services Health Checks
+<a name="hms-tests"></a>
+## Hardware Management Services Tests
 
-### HMS Service Tests
 Execute the HMS smoke and functional tests after the CSM install to confirm that the HMS services are running and operational.
 
 ### CRAY INTERNAL USE ONLY
@@ -166,7 +165,7 @@ You should run a check for each of the following services after an install. Thes
 \* The ipxe shortcut runs a check of both the iPXE service and the TFTP service.
 
 
-<a name="booting-csm-barebones-iamge"></a>
+<a name="booting-csm-barebones-image"></a>
 ## Booting CSM Barebones Image
 
 Included with the Cray System Manaement (CSM) release is a pre-built node image that can be used 

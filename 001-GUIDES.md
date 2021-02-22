@@ -83,6 +83,38 @@ The ncn-m001 node needs to reboot from the LiveCD to normal operation as a Kuber
 * Apply post-boot steps to complete configuration
 * Apply LiveCD Post-reboot Workarounds
 
+
+[CSM Validation process](008-CSM-VALIDATION.md)
+
+The CSM installation validation and health checks can be run again now that ncn-m001 has been rebooted to join the Kubernetes cluster. 
+
+[NCN/Management Node Locking](009-NCN-LOCKING.md) 
+
+The NCNs should be locked to prevent accidental firmware upgrades with FAS or power down operations and reset operations with CAPMC.
+
+* Why?
+* When To Lock Management/NCN Nodes
+* When To Unlock Management/NCN Nodes
+* Locked Behavior
+* How To Lock Management NCNs
+* How To Unlock Management NCNs
+
+[Firmware updates with FAS](010-FIRMWARE-UPDATE-WITH-FAS.md)
+
+The firmware versions of many components may need to be updated at this point in the installation process.
+
+* Prerequisites
+* Current Capabilities as of Shasta Release v1.4
+* Order Of Operations
+* Hardware Precedence Order
+
+The details of the process are outlined in [255-FIRMWARE-ACTION-SERVICE-FAS.md](255-FIRMWARE-ACTION-SERVICE-FAS.md) using recipes listed in [256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md)
+
+
+Using the process outlined in [`255-FIRMWARE-ACTION-SERVICE-FAS.md`](../255-FIRMWARE-ACTION-SERVICE-FAS.md) follow the process to update the system.  We recommend that you use the 'recipes' listed in [`256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md`](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md) to update each supported type.
+
+Then the administrator should install additional products following the procedures in the HPE Cray EX System Installation and Configuration Guide S-8000.
+
 # Naming convention for files in CSM documentation
 
 These documentation files are grouped to keep similar pages together.
