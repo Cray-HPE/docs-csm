@@ -102,7 +102,7 @@ In 1.4, the site connections that were previously connection to ncn-w001 will be
    ```bash
    username=root
    export IPMI_PASSWORD=
-   grep -oE $stoken /etc/dnsmasq.d/statics.conf | xargs -i ipmitool -I lanplus -U $username -E -H {} power off
+   grep -oP $stoken /etc/dnsmasq.d/statics.conf | xargs -i ipmitool -I lanplus -U $username -E -H {} power off
    ```
 
     If you found an IP in step 3e, use ipmitool from ncn-m001 to power off ncn-w001.  
