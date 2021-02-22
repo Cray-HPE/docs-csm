@@ -300,13 +300,13 @@ be accessed by any LiveCD ISO file if not the one used for the original installa
    ```
 2. Make directories.
    ```bash
-   ncn-m001# mkdir /mnt/livecd /mnt/rootfs /mnt/sqfs /mnt/pitdata
+   ncn-m001# mkdir -pv /mnt/livecd /mnt/rootfs /mnt/sqfs /mnt/pitdata
    ```
 3. Mount the rootfs (prompts omitted to facilitate copy-paste)
    ```bash
    mount -L PITDATA /mnt/pitdata
-   mount /mnt/pitdata/csm-${CSM_RELEASE}/cray-pre-install-toolkit-*.iso /mnt/livecd/
-   mount /mnt/livecd/LiveOS/squashfs.img /mnt/squashfs/
+   mount /mnt/pitdata/${CSM_RELEASE}/cray-pre-install-toolkit-*.iso /mnt/livecd/
+   mount /mnt/livecd/LiveOS/squashfs.img /mnt/sqfs/
    mount /mnt/squashfs/LiveOS/rootfs.img /mnt/rootfs/
    ```
 4. Invoke CSI usage to validate it runs and is ready for use:
