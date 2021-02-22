@@ -1,15 +1,15 @@
 # CSM USB LiveCD - Creation and Configuration
 
-This page will guide an administrator through creating a USB stick from either their Shasta v1.3 ncn-m001 node or their own laptop/desktop.
+This page will guide an administrator through creating a USB stick from either their Shasta v1.3 ncn-m001 node or their own laptop or desktop.
 
 There are 5 overall steps that provide a bootable USB with SSH enabled, capable of installing Shasta v1.4 (or higher).
 
 * [Download and Expand the CSM Release](#download-and-expand-the-csm-release)
 * [Create the Bootable Media](#create-the-bootable-media)
 * [Configuration Payload](#configuration-payload)
-   * [SHASTA-CFG](#SHASTA-CFG)
    * [Generate Installation Files](#generate-installation-files)
    * [CSI Workarounds](#csi-workarounds)
+   * [SHASTA-CFG](#SHASTA-CFG)
 * [Pre-Populate LiveCD Daemons Configuration and NCN Artifacts](#pre-populate-livecd-daemons-configuration-and-ncn-artifacts)
 * [Boot the LiveCD](#boot-the-livecd)
    * [First Login](#first-login)
