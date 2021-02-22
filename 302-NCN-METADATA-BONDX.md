@@ -57,8 +57,8 @@ will prevent the nodes from continuing to boot and end in undesired states.
     ```bash
    export username=root
    export IPMI_PASSWORD=
-   grep -oE "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} chassis bootdev pxe options=efiboot,persistent
-   grep -oE "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off        if ipmitool -I lanplus -U $username -P $password -H $node power status =~ 'off' ; then
+   grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} chassis bootdev pxe options=efiboot,persistent
+   grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off        if ipmitool -I lanplus -U $username -P $password -H $node power status =~ 'off' ; then
             ipmitool -I lanplus -U $username -P $password -H $node power on
         else
             ipmitool -I lanplus -U $username -P $password -H $node power reset
