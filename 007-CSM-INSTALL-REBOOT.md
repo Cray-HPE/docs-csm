@@ -307,7 +307,7 @@ be accessed by any LiveCD ISO file if not the one used for the original installa
    mount -L PITDATA /mnt/pitdata
    mount /mnt/pitdata/${CSM_RELEASE}/cray-pre-install-toolkit-*.iso /mnt/livecd/
    mount /mnt/livecd/LiveOS/squashfs.img /mnt/sqfs/
-   mount /mnt/squashfs/LiveOS/rootfs.img /mnt/rootfs/
+   mount /mnt/sqfs/LiveOS/rootfs.img /mnt/rootfs/
    ```
 4. Invoke CSI usage to validate it runs and is ready for use:
    ```bash
