@@ -41,8 +41,9 @@ interface 1/1/16
     no shutdown
     mtu 9198
     no routing
-    vlan trunk native 2
-    vlan trunk allowed 2,7
+    vlan access 2
+    spanning-tree bpdu-guard
+    spanning-tree port-type admin-edge
     exit
 ```
 
