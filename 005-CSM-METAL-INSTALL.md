@@ -21,6 +21,7 @@ This page will go over deploying the non-compute nodes.
 * [Timing of Deployments](#timing-of-deployments)
 * [NCN Deployment](#ncn-deployment)
     * [Apply NCN Pre-Boot Workarounds](#apply-ncn-pre-boot-workarounds)
+    * [Ensure Time Is Accurate Before Deploying NCNs](#ensure-time-is-accurate-before-deploying-ncns)
     * [Start Deployment](#start-deployment)
     * [Apply NCN Post-Boot Workarounds](#apply-ncn-post-boot-workarounds)
     * [LiveCD Cluster Authentication](#livecd-cluster-authentication)
@@ -134,6 +135,26 @@ pit# export CSM_RELEASE=csm-x.y.z
 pit# ls /opt/cray/csm/workarounds/before-ncn-boot
 CASMINST-980
 ```
+
+<a name="ensure-time-is-accurate-before-deploying-ncns"></a>
+#### Ensure Time Is Accurate Before Deploying NCNs
+
+> This step should not be skipped
+
+Check the current time to see if it matches the current time:
+
+```
+pit# date "+%Y-%m-%d %H:%M:%S.%6N%z"
+```
+
+The time can be inaccurate if the system has been off for a long time, or, for example, [the CMOS was cleared](254-NCN-FIRMWARE-GB.md). If needed, set the time manually as close as possible, and then run the NTP script:
+
+```
+pit# timedatectl set-time "2019-11-15 00:00:00"
+pit# /root/bin/configure-ntp.sh
+```
+
+This ensures that the PIT is configured with an accurate date/time, which will be properly propagated to the NCNs during boot.
 
 <a name="start-deployment"></a>
 ### Start Deployment
