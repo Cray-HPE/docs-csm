@@ -117,7 +117,7 @@ Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   
 sw-spine-001 [rocket-mlag-domain: master] #
 ```
 
-If one, or more BGP session is reported in an **Idle** state, reset BGP to re-establish the sessions:
+If one or more BGP session is reported in an **Idle** state, reset BGP to re-establish the sessions:
 ```bash
 sw-spine-001 [standalone: master] # clear ip bgp all
 ```
@@ -189,7 +189,7 @@ BGP Summary
 sw-agg01#
 ```
 
-If one, or more BGP session is reported in a **Idle** state, reset BGP to re-establish the sessions:
+If one or more BGP session is reported in a **Idle** state, reset BGP to re-establish the sessions:
 
 ```bash
 sw-agg01# clear bgp *
