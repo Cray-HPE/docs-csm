@@ -81,7 +81,7 @@ ncn-m001:~ #
 
 Using the first peer-address (10.252.0.2 here) ssh as the administrator to the first switch and note in the returned output if a Mellanox or Aruba switch is indicated.
 
-####Mellanox Switch 
+#### Mellanox Switch 
 Enable, verify BGP is enabled, check peering status:
 
 ```bash
@@ -148,9 +148,9 @@ sw-spine-001 [standalone: master] #
 
 If after several tries one or more BGP session remains **Idle**, see Check BGP Status and Reset Sessions, in the HPE Cray EX Administration Guide S-8001.
 
-Repeat the above procedure using the second peer-address (10.252.0.3 here)
+Repeat the above Mellanox procedure using the second peer-address (10.252.0.3 here)
 
-####Aruba Switch
+#### Aruba Switch
 Check BGP peering status
 
 After ssh'ing as admin to the fist peer-address the returned output indicates an Aruba switch. It may be a sw-spine or sw-agg switch.
