@@ -30,7 +30,7 @@ Health Check scripts can be run:
 * after the system or a single node goes down unexpectedly
 * after the system is gracefully shut down and brought up
 * any time there is unexpected behavior on the system to get a baseline of data for CSM services and components
-* in order to provide relevant information to support tickets that are being opened after sysmgmt manifest has been installed
+* in order to provide relevant information to support tickets that are being opened after install.sh has been run
 
 Health Check scripts can be found and run on any worker or master node from any directory.
 
@@ -47,13 +47,182 @@ The ncnHealthChecks script reports the following health information:
 
 Execute ncnHealthChecks script and analyze the output of each individual check.
 
-Verify that Border Gateway Protocol (BGP) peering sessions are established for each worker node on the system. See CSM Health Checks section of the Admin Guide.
-
 ### ncnPostgresHealthChecks
      /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
-For each postgres cluster the ncnPostgresHealthChecks script determines the leader pod and then reports the status of all postgres pods in the cluster. 
+For each postgres cluster the ncnPostgresHealthChecks script determines the leader pod and then reports the status of all postgres pods in the cluster.
 
 Execute ncnPostgresHealthChecks script. Verify leader for each cluster and status of cluster members.
+
+### BGP Peering Status and Reset
+Verify that Border Gateway Protocol (BGP) peering sessions are established for each worker node on the system. 
+
+Check the Border Gateway Protocol (BGP) status on the Aruba/Mellanox switches.
+Verify that all sessions are in an **Established** state. If the state of any
+session in the table is **Idle**, reset the BGP sessions.
+
+On an NCN node determine IP addresses of switches:
+
+```bash
+ncn-m001:~ # kubectl get cm config -n metallb-system -o yaml | head -12
+apiVersion: v1
+data:
+  config: |
+    peers:
+    - peer-address: 10.252.0.2
+      peer-asn: 65533
+      my-asn: 65533
+    - peer-address: 10.252.0.3
+      peer-asn: 65533
+      my-asn: 65533
+    address-pools:
+    - name: customer-access
+ncn-m001:~ #
+```
+
+Using the first peer-address (10.252.0.2 here) ssh as the administrator to the first switch and note in the returned output if a Mellanox or Aruba switch is indicated.
+
+#### Mellanox Switch 
+Enable, verify BGP is enabled, check peering status:
+
+```bash
+ncn-m001:~ # ssh admin@10.252.0.2
+Mellanox Onyx Switch Management
+Password:
+Last login: Tue Feb 23 17:05:21 UTC 2021 from 10.252.1.9 on pts/0
+Number of total successful connections since last 1 days: 5
+
+Mellanox Switch
+
+sw-spine-001 [rocket-mlag-domain: master] > enable
+sw-spine-001 [rocket-mlag-domain: master] # show protocols | include bgp
+ bgp:                    enabled
+sw-spine-001 [rocket-mlag-domain: master] # show ip bgp summary
+
+VRF name                  : default
+BGP router identifier     : 10.252.0.2
+local AS number           : 65533
+BGP table version         : 3
+Main routing table version: 3
+IPV4 Prefixes             : 59
+IPV6 Prefixes             : 0
+L2VPN EVPN Prefixes       : 0
+
+------------------------------------------------------------------------------------------------------------------
+Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   Up/Down       State/PfxRcd
+------------------------------------------------------------------------------------------------------------------
+10.252.1.10       4    65533        2945      3365      3         0      0      1:00:21:33    ESTABLISHED/20
+10.252.1.11       4    65533        2942      3356      3         0      0      1:00:20:49    ESTABLISHED/19
+10.252.1.12       4    65533        2945      3363      3         0      0      1:00:21:33    ESTABLISHED/20
+
+sw-spine-001 [rocket-mlag-domain: master] #
+```
+
+If one or more BGP session is reported in an **Idle** state, reset BGP to re-establish the sessions:
+```bash
+sw-spine-001 [standalone: master] # clear ip bgp all
+```
+
+It may take several minutes for all sessions to become **Established**. Wait a minute, or so, and then verify that all sessions now are all reported as **Established**. If some sessions remain in an **Idle** state, re-run the **clear ip bgp al** command and check again.
+
+```bash
+sw-spine-001 [standalone: master] # show ip bgp summary
+
+VRF name                  : default
+BGP router identifier     : 10.252.0.2
+local AS number           : 65533
+BGP table version         : 2
+Main routing table version: 2
+IPV4 Prefixes             : 42
+IPV6 Prefixes             : 0
+L2VPN EVPN Prefixes       : 0
+
+------------------------------------------------------------------------------------------------------------------
+Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   Up/Down       State/PfxRcd
+------------------------------------------------------------------------------------------------------------------
+10.252.1.7        4    65533        18        6         2         0      0      0:00:01:26    ESTABLISHED/14
+10.252.1.8        4    65533        18        6         2         0      0      0:00:01:26    ESTABLISHED/14
+10.252.1.9        4    65533        18        6         2         0      0      0:00:01:26    ESTABLISHED/14
+
+sw-spine-001 [standalone: master] #
+```
+
+If after several tries one or more BGP session remains **Idle**, see Check BGP Status and Reset Sessions, in the HPE Cray EX Administration Guide S-8001.
+
+Repeat the above **Mellanox** procedure using the second peer-address (10.252.0.3 here)
+
+#### Aruba Switch
+Check BGP peering status
+
+After ssh'ing as admin to the fist peer-address the returned output indicates an Aruba switch. It may be a sw-spine or sw-agg switch.
+
+```bash
+ncn-m001:~ # ssh admin@10.252.0.4
+
+ (C) Copyright 2017-2020 Hewlett Packard Enterprise Development LP
+
+ Please register your products now at: https://asp.arubanetworks.com
+
+admin@10.252.0.4's password:
+
+Last login: 2021-01-12 09:51:14 from 10.252.1.15
+User "admin" has logged in 84 times in the past 30 days
+sw-agg01#
+
+sw-agg01# show bgp ipv4 unicast summary
+VRF : default
+BGP Summary
+-----------
+ Local AS               : 65533        BGP Router Identifier  : 10.252.0.4
+ Peers                  : 7            Log Neighbor Changes   : No
+ Cfg. Hold Time         : 180          Cfg. Keep Alive        : 60
+ Confederation Id       : 0
+
+ Neighbor        Remote-AS MsgRcvd MsgSent   Up/Down Time State        AdminStatus
+ 10.252.0.5      65533       19579   19588   20h:40m:30s  Established   Up
+ 10.252.1.7      65533       34137   39074   20h:41m:53s  Established   Up
+ 10.252.1.8      65533       34134   39036   20h:36m:44s  Established   Up
+ 10.252.1.9      65533       34104   39072   00m:01w:04d  Established   Up
+ 10.252.1.10     65533       34105   39029   00m:01w:04d  Established   Up
+ 10.252.1.11     65533       34099   39042   00m:01w:04d  Established   Up
+ 10.252.1.12     65533       34101   39012   00m:01w:04d  Established   Up
+
+sw-agg01#
+```
+
+If one or more BGP session is reported in a **Idle** state, reset BGP to re-establish the sessions:
+
+```bash
+sw-agg01# clear bgp *
+```
+
+It may take several minutes for all sessions to become
+**Established**. Wait a minute, or so, and then verify that all sessions now are reported as **Established**. If some sessions remain in an **Idle** state, re-run the **clear bgp * ** command and check again.
+
+```bash
+sw-agg01# show bgp ipv4 unicast summary
+VRF : default
+BGP Summary
+-----------
+ Local AS               : 65533        BGP Router Identifier  : 10.252.0.4
+ Peers                  : 7            Log Neighbor Changes   : No
+ Cfg. Hold Time         : 180          Cfg. Keep Alive        : 60
+ Confederation Id       : 0
+
+ Neighbor        Remote-AS MsgRcvd MsgSent   Up/Down Time State        AdminStatus
+ 10.252.0.5      65533       19584   19594   20h:44m:58s  Established   Up
+ 10.252.1.7      65533       34146   39085   20h:46m:21s  Established   Up
+ 10.252.1.8      65533       34143   39046   20h:41m:12s  Established   Up
+ 10.252.1.9      65533       34113   39082   00m:01w:04d  Established   Up
+ 10.252.1.10     65533       34114   39039   00m:01w:04d  Established   Up
+ 10.252.1.11     65533       34108   39052   00m:01w:04d  Established   Up
+ 10.252.1.12     65533       34110   39022   00m:01w:04d  Established   Up
+
+sw-agg01#
+```
+
+If after several tries one or more BGP session remains **Idle**, see Check BGP Status and Reset Sessions, in the HPE Cray EX Administration Guide S-8001.
+
+Repeat the above **Aruba** procedure using the second peer-address (10.252.0.5 in this example)
 
 <a name="network-health-checks"></a>
 ## Network Health Checks
@@ -81,7 +250,7 @@ If there is an non-zero amount of DHCP leases for river hardware returned that i
 <a name="automated-goss-testing"></a>
 ## Automated Goss Testing
 
-There are multiple [Goss](https://github.com/aelsabbahy/goss) test suites available that cover a variety of sub-systems. 
+There are multiple [Goss](https://github.com/aelsabbahy/goss) test suites available that cover a variety of sub-systems.
 
 You can execute the general NCN test suite via:
 
@@ -101,7 +270,7 @@ ncn:~ # /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
 * K8S Test: Kubernetes Query BSS Cloud-init for ca-certs
   - May fail immediately after platform install. Should pass after the TrustedCerts Operator has updated BSS (Global cloud-init meta) with CA certificates.
 * K8S Test: Kubernetes Velero No Failed Backups
-  - Due to a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (ie.g., vault). It may be necessary to use the ```velero``` command to delete backups from a Kubernetes node to clear this situation. 
+  - Due to a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (ie.g., vault). It may be necessary to use the ```velero``` command to delete backups from a Kubernetes node to clear this situation.
 * K8S Test: Verify spire-agent is enabled and running
   - The spire-agent service may fail to start, logging errors (via journalctl) similar to "join token not existing...". Deleting the ```request-ncn-join-token``` daemonset pod running on the node may clear the issue.
 
@@ -168,18 +337,18 @@ You should run a check for each of the following services after an install. Thes
 <a name="booting-csm-barebones-image"></a>
 ## Booting CSM Barebones Image
 
-Included with the Cray System Manaement (CSM) release is a pre-built node image that can be used 
-to validate that core CSM services are available and responding as expected. The CSM barebones 
+Included with the Cray System Manaement (CSM) release is a pre-built node image that can be used
+to validate that core CSM services are available and responding as expected. The CSM barebones
 image contains only the minimal set of RPMS and configuation required to boot an image and is not
-suitable for production usage. To run production work loads, it is suggested that an image from 
+suitable for production usage. To run production work loads, it is suggested that an image from
 the Cray OS (COS) product, or similar, be used.
 
 ---
-**NOTE** 
+**NOTE**
 
 The CSM Barebones image included with the Shasta 1.4 release will not successfully complete
-the beyond the dracut stage of the boot process. However, if the dracut stage is reached the 
-boot can be considered successful and shows that the necessary CSM services needed to 
+the beyond the dracut stage of the boot process. However, if the dracut stage is reached the
+boot can be considered successful and shows that the necessary CSM services needed to
 boot a node are up and available.
 
 This inability to fully boot the barebones image will be resolved in future releases of the
@@ -193,7 +362,7 @@ CSM product.
 In addition to the CSM Barebones image, the Shasta 1.4 release also includes an IMS Recipe that
 can be used to build the CSM Barebones image. However, the CSM Barebones recipe currently requires
 rpms that are not installed with the CSM product. The CSM Barebones recipe can be built after the
-Cray OS (COS) product stream is also installed on to the system. 
+Cray OS (COS) product stream is also installed on to the system.
 
 In future releases of the CSM product, work will be undertaken to resolve these dependency issues.
 
@@ -264,7 +433,7 @@ Enabled = true
 NetType = "Sling"
 Arch = "X86"
 Class = "River"
- 
+
 [[Components]]
 ID = "x3000c0s5e0"
 Type = "NodeEnclosure"
@@ -282,8 +451,8 @@ ncn# cray bos v1 session create --template-uuid shasta-1.4-csm-bare-bones-image 
 
 ### Connect to the node's console nad watch the boot
 
-The boot will fail, but should reach the dracut stage. If the dracut stage is reached, the boot 
-can be considered successful and shows that the necessary CSM services needed to boot a node are 
+The boot will fail, but should reach the dracut stage. If the dracut stage is reached, the boot
+can be considered successful and shows that the necessary CSM services needed to boot a node are
 up and available.
 ```bash
 cray-conman-b69748645-qtfxj:/ # conman -j x9000c1s7b0n1
@@ -372,7 +541,7 @@ If, when you check for an initialized CLI you find it is initialized but authori
 ```
 # cray auth login
 Username: vers
-Password: 
+Password:
 Success!
 ```
 
