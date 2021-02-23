@@ -60,15 +60,15 @@ For more information, see [103-NETWORKING](103-NCN-NETWORKING.md) page for NCNs.
 
 #### "PXE" or "BOOTSTRAP" MAC
 
-In general this refers to the literal interface the node will network-boot over. This varies between vintages
+In general this refers to the interface to be used when the node attempts to PXE boot. This varies between vintages
 of systems; systems before "Spring 2020" often booted NCNs with onboard NICs, newer systems boot over their PCIe cards.
 
 If the system is **booting over PCIe than the "bootstrap MAC" and the "bond0 MAC 0" will be identical**. If the 
 system is **booting over onboards then the "bootstrap MAC" and the "bond0 MAC 0" will be different.**
 
 > Other Nomenclature
-- "BOND MACS" are the MACs for the physical interfaces that your node will use for the various VLANs.
-- "NMN MAC" is this is the same as the BOND MACs, but with emphasise on the vlan-participation.
+- "BOND MACS" are the MAC addresses for the physical interfaces that your node will use for the various VLANs.
+- "NMN MAC" is this is the same as the BOND MAC addresses, but with emphasis on the vlan-participation.
 > Relationships ...
 - BOND0 MAC0 and BOND0 MAC1 should **not** be on the same physical network card to establish redundancy for failed chips.
 - On the other hand, if any nodes' capacity prevents it from being redundant, then MAC1 and MAC0 will still produce a valid configuration if they do reside on the same physical chip/card.
@@ -126,7 +126,7 @@ directions about creating this file.
 
 > use case: 2 leaf switches and 2 spine switches
 ```
-pit:~ # cat example_switch_metadata.csv
+pit# cat example_switch_metadata.csv
 Switch Xname,Type,Brand
 x3000c0w38,Leaf,Dell
 x3000c0w36,Leaf,Dell

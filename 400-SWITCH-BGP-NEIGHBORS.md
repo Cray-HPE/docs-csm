@@ -25,7 +25,7 @@ CSI cli arguments with ```--bgp-peers aggregation```
 
 Aruba
 ```
-sw-spine01(config)# https-server rest access-mode read-write
+sw-spine-001(config)# https-server rest access-mode read-write
 ```
 Mellanox
 ```
@@ -46,7 +46,7 @@ Example: ./aruba_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/
 # Manual Process
 
 ```
-sw-spine01# show bgp ipv4 unicast summary
+sw-spine-001# show bgp ipv4 unicast summary
 VRF : default
 BGP Summary
 -----------
@@ -63,7 +63,7 @@ BGP Summary
  On the Mellanox switches the output should look like the following.
  
  ```
- sw-spine01 [standalone: master] # show ip bgp summary 
+ sw-spine-001 [standalone: master] # show ip bgp summary 
 
 VRF name                  : default
 BGP router identifier     : 10.252.0.1
@@ -108,15 +108,15 @@ dhcp-host=98:03:9b:bb:a9:94,10.102.4.14,ncn-w001,20m # CAN
 - You will need to delete the previous route-map, and BGP configuration on both switches.
 Aruba delete commands.
 ```
-spine01# configure terminal
+sw-spine-001# configure terminal
 
-spine01(config)# no router  bgp 65533                          
+sw-spine-001(config)# no router  bgp 65533                          
 This will delete all BGP configurations on this device.
 Continue (y/n)? y
 
-spine01(config)# no route-map ncn-w003
-spine01(config)# no route-map ncn-w002
-spine01(config)# no route-map ncn-w001
+sw-spine-001(config)# no route-map ncn-w003
+sw-spine-001(config)# no route-map ncn-w002
+sw-spine-001(config)# no route-map ncn-w001
 ```
 Aruba configuration example.
 ```
@@ -167,12 +167,12 @@ router bgp 65533
 ```
 Mellanox delete commands.
 ```
-sw-spine01 [standalone: master] # 
-sw-spine01 [standalone: master] # conf t
-sw-spine01 [standalone: master] (config) # no router bgp 65533
-sw-spine01 [standalone: master] (config) # no route-map ncn-w001
-sw-spine01 [standalone: master] (config) # no route-map ncn-w002
-sw-spine01 [standalone: master] (config) # no route-map ncn-w003
+sw-spine-001 [standalone: master] # 
+sw-spine-001 [standalone: master] # conf t
+sw-spine-001 [standalone: master] (config) # no router bgp 65533
+sw-spine-001 [standalone: master] (config) # no route-map ncn-w001
+sw-spine-001 [standalone: master] (config) # no route-map ncn-w002
+sw-spine-001 [standalone: master] (config) # no route-map ncn-w003
 ```
 Mellanox configuration example.
 ```

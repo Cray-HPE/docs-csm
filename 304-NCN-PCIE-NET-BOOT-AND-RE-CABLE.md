@@ -33,7 +33,7 @@ On any NCN (using 0.0.10 k8s, or 0.0.8 ceph; anything built on ncn-0.0.21 or hig
 If you are recovering NCNs with an earlier image without the mellanox tools, please refer to the section on the bottom of the Mellanox this segment.
 
 ```bash
-ncn:~ # mst start
+ncn# mst start
 ```
 
 Now `mst status` and other commands like `mlxfwmanager` or `mlxconfig` will work, and devices required for these commands will be created in `/dev/mst`.
@@ -45,7 +45,7 @@ Now `mst status` and other commands like `mlxfwmanager` or `mlxconfig` will work
 
 Use this snippet to print out device name and current UEFI PXE state.
 ```bash
-mst status
+ncn# mst status
 for MST in $(ls /dev/mst/*); do
     mlxconfig -d ${MST} q | egrep "(Device|EXP_ROM|SRIOV_EN)"
 done
@@ -70,6 +70,9 @@ For worker nodes with High-Speed network attachments, the PXE and SR-IOV feature
 disabled.
 
 1. Run `mlxfwmanager` to probe and dump your Mellanox PCIe cards
+    ```bash
+    ncn# mlxfwmanager
+    ```
 
 2. Find the device path for the HSN card, assuming it is a ConnectX-5 or other 100GB card this should be easy to pick out.
 
@@ -77,12 +80,12 @@ disabled.
     ```bash
     # Set UEFI to YES
     
-    MST=/dev/mst/mt4119_pciconf1
-    mlxconfig -d ${MST} -y set EXP_ROM_UEFI_ARM_ENABLE=0
-    mlxconfig -d ${MST} -y set EXP_ROM_UEFI_x86_ENABLE=0
-    mlxconfig -d ${MST} -y set EXP_ROM_PXE_ENABLE=0
-    mlxconfig -d ${MST} -y set SRIOV_EN=0
-    mlxconfig -d ${MST} q | egrep "EXP_ROM"
+    ncn# MST=/dev/mst/mt4119_pciconf1
+    ncn# mlxconfig -d ${MST} -y set EXP_ROM_UEFI_ARM_ENABLE=0
+    ncn# mlxconfig -d ${MST} -y set EXP_ROM_UEFI_x86_ENABLE=0
+    ncn# mlxconfig -d ${MST} -y set EXP_ROM_PXE_ENABLE=0
+    ncn# mlxconfig -d ${MST} -y set SRIOV_EN=0
+    ncn# mlxconfig -d ${MST} q | egrep "EXP_ROM"
     ```
 
 Your Mellanox HSN card is now neutralized, and will only be usable in a booted system.
@@ -92,12 +95,12 @@ Your Mellanox HSN card is now neutralized, and will only be usable in a booted s
 `mft` is installed in 1.4 NCN images, for 1.3 systems they will need to obtain the tools by hand:
 
 ```bash
-linux:~ # wget https://www.mellanox.com/downloads/MFT/mft-4.15.1-9-x86_64-rpm.tgz
-linux:~ # tar -xzvf mft-4.15.1-9-x86_64-rpm.tgz
-linux:~ #/mft-4.15.1-9-x86_64-rpm/RPMS # cd mft-4.15.1-9-x86_64-rpm/RPMS
-linux:~ #/mft-4.15.1-9-x86_64-rpm/RPMS # rpm -ivh ./mft-4.15.1-9.x86_64.rpm
-linux:~ #/mft-4.15.1-9-x86_64-rpm/RPMS # cd
-linux:~ # mst start
+linux# wget https://www.mellanox.com/downloads/MFT/mft-4.15.1-9-x86_64-rpm.tgz
+linux# tar -xzvf mft-4.15.1-9-x86_64-rpm.tgz
+linux# cd mft-4.15.1-9-x86_64-rpm/RPMS
+linux# rpm -ivh ./mft-4.15.1-9.x86_64.rpm
+linux# cd
+linux# mst start
 ```
 
 ### QLogic FastLinq
@@ -125,25 +128,25 @@ If you want to disable the connection, you will need to login to your respective
 1. Connect over your medium of choice:
     ```bash 
     # SSH over METAL MANAGEMENT
-    pit:~ # ssh admin@10.1.0.2
+    pit# ssh admin@10.1.0.4
     # SSH over NODE MANAGEMENT
-    pit:~ # ssh admin@10.252.0.2
+    pit# ssh admin@10.252.0.4
     # SSH over HARDWARE MANAGEMENT
-    pit:~ # ssh admin@10.254.0.2  
+    pit# ssh admin@10.254.0.4  
 
     # or.. serial (device name will vary).
-    pit:~ # minicom -b 115200 -D /dev/tty.USB1 
+    pit# minicom -b 115200 -D /dev/tty.USB1 
     ```
 2. Enter configuration mode
     ```sh
-    $> configure terminal
-    (config)#>  
+    sw-leaf-001> configure terminal
+    sw-leaf-001(config)#>  
     ```
 3. Disable the NCN interfaces - check your SHCD for reference before continuing.
     ```
-    (config)#> interface range 1/1/2-1/1/10  
-    (config)#> shutdown  
-    (config)#> write memory  
+    sw-leaf-001(config)#> interface range 1/1/2-1/1/10  
+    sw-leaf-001(config)#> shutdown  
+    sw-leaf-001(config)#> write memory  
     ```
 
 You're done.
@@ -152,4 +155,3 @@ You can enable them again at anytime by switching the `shutdown` command out for
 
 
 [1]: http://www.mellanox.com/page/management_tools
-[2]: https://cray.slack.com/messages/casm-triage

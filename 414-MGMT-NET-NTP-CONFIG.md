@@ -13,7 +13,7 @@ Our NTP servers will be the first 3 worker nodes.  You can find these IPs from t
 
 Get current NTP configuration.
 ```
-sw-spine01(config)# show run | include ntp
+sw-spine-001(config)# show run | include ntp
 ntp server 10.252.1.7
 ntp server 10.252.1.8
 ntp server 10.252.1.9
@@ -22,22 +22,22 @@ ntp enable
 
 Delete current NTP configuration.
 ```
-sw-spine01(config)# no ntp server 10.252.1.7
-sw-spine01(config)# no ntp server 10.252.1.8
-sw-spine01(config)# no ntp server 10.252.1.9
+sw-spine-001(config)# no ntp server 10.252.1.7
+sw-spine-001(config)# no ntp server 10.252.1.8
+sw-spine-001(config)# no ntp server 10.252.1.9
 ```
 
 Add new NTP configuration.
 ```
-sw-spine01(config)# ntp enable
-sw-spine01(config)# ntp server 10.252.1.10
-sw-spine01(config)# ntp server 10.252.1.11
-sw-spine01(config)# ntp server 10.252.1.12
+sw-spine-001(config)# ntp enable
+sw-spine-001(config)# ntp server 10.252.1.10
+sw-spine-001(config)# ntp server 10.252.1.11
+sw-spine-001(config)# ntp server 10.252.1.12
 ```
 
 Verify NTP status.
 ```
-sw-spine01(config)# show ntp associations
+sw-spine-001(config)# show ntp associations
 ----------------------------------------------------------------------
  ID            NAME          REMOTE          REF-ID ST LAST POLL REACH
 ----------------------------------------------------------------------

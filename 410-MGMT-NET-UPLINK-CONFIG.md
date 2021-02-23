@@ -47,20 +47,20 @@ sw-24g04(config-if)#
 
 This configuration shows the how to setup the LAG on the access switch connecting to the VSX pair. 
 ```
-sw-smn01(config)# interface lag 1
-sw-smn01(config)# no shutdown
-sw-smn01(config)# no routing
-sw-smn01(config)# vlan trunk native 1
-sw-smn01(config)# vlan trunk allowed all
-sw-smn01(config)# lacp mode active
+sw-leaf-001(config)# interface lag 1
+sw-leaf-001(config)# no shutdown
+sw-leaf-001(config)# no routing
+sw-leaf-001(config)# vlan trunk native 1
+sw-leaf-001(config)# vlan trunk allowed all
+sw-leaf-001(config)# lacp mode active
 
-sw-smn01(config)# interface 1/1/48
-sw-smn01(config-if)# no shutdown 
-sw-smn01(config-if)# mtu 9198
-sw-smn01(config-if)# lag 100
+sw-leaf-001(config)# interface 1/1/48
+sw-leaf-001(config-if)# no shutdown 
+sw-leaf-001(config-if)# mtu 9198
+sw-leaf-001(config-if)# lag 100
 
-sw-smn01(config)# interface 1/1/49
-sw-smn01(config-if)# no shutdown 
-sw-smn01(config-if)# mtu 9198
-sw-smn01(config-if)# lag 100
+sw-leaf-001(config)# interface 1/1/49
+sw-leaf-001(config-if)# no shutdown 
+sw-leaf-001(config-if)# mtu 9198
+sw-leaf-001(config-if)# lag 100
 ```

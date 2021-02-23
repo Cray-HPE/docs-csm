@@ -16,7 +16,7 @@ This guide shows the process for generating the `hmn_connections.json` from the 
 ### Procedure
 1. __If using Docker__: Make sure that the docker service is running:
     ```
-    root@ncn-m001:~ # systemctl status docker
+    linux# systemctl status docker
     ● docker.service - Docker Application Container Engine
     Loaded: loaded (/usr/lib/systemd/system/docker.service; disabled; vendor preset: disabled)
     Active: inactive (dead)
@@ -25,7 +25,7 @@ This guide shows the process for generating the `hmn_connections.json` from the 
 
     If the service is not running start it:
     ```
-    root@ncn-m001 # systemctl start docker
+    linux# systemctl start docker
     ```
 
 2. Load the hms-shcd-parser docker image from the CSM release distribution. Only required if the CSM release distribution includes container images, otherwise this step can be skipped.
@@ -33,20 +33,15 @@ This guide shows the process for generating the `hmn_connections.json` from the 
 
     > Note: The load-container-image.sh script works with both Podman and Docker
 
-    Change directories into the the location where the CSM release distrubtion was extracted:
-    ```
-    ncn-m001:~/ # cd /path/to/extracted/csm
-    ```
-
     Load the hms-shcd-parser docker image. This script will load the image into either Podman or Docker.
     ```
-    ncn-m001:~/csm-0.7.10 # ./hack/load-container-image.sh dtr.dev.cray.com/cray/hms-shcd-parser:1.1.1
+    linux# ${CSM_RELEASE}/hack/load-container-image.sh dtr.dev.cray.com/cray/hms-shcd-parser:1.1.1
     ```
 3. Set environment to point to the system's SHCD Excel file:
     > Note: Make sure to quote the SHCD file path if there are spaces in the document's filename.
 
     ```
-    ncn-m001:~/ # export SHCD_FILE="/path/to/systems/SHCD.xsls"
+    linux# export SHCD_FILE="/path/to/systems/SHCD.xsls"
     ```
 
 4. Generate the hmn_connections.json file from the SHCD. This will either create or overwrite the `hmn_connections.json` file in the current directory:
@@ -54,10 +49,10 @@ This guide shows the process for generating the `hmn_connections.json` from the 
 
     __If using Podman__:
     ```
-    ncn-m001:~/ # podman run --rm -it --name hms-shcd-parser -v "$(realpath "$SHCD_FILE")":/input/shcd_file.xlsx -v "$(pwd)":/output dtr.dev.cray.com/cray/hms-shcd-parser:1.1.1
+    linux# podman run --rm -it --name hms-shcd-parser -v "$(realpath "$SHCD_FILE")":/input/shcd_file.xlsx -v "$(pwd)":/output dtr.dev.cray.com/cray/hms-shcd-parser:1.1.1
     ```
 
     __If using Docker__:
     ```
-    ncn-m001:~/ # docker run --rm -it --name hms-shcd-parser -v "$(realpath "$SHCD_FILE")":/input/shcd_file.xlsx -v "$(pwd)":/output dtr.dev.cray.com/cray/hms-shcd-parser:1.1.1
+    linux# docker run --rm -it --name hms-shcd-parser -v "$(realpath "$SHCD_FILE")":/input/shcd_file.xlsx -v "$(pwd)":/output dtr.dev.cray.com/cray/hms-shcd-parser:1.1.1
     ```

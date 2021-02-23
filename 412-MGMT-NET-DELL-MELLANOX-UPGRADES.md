@@ -298,7 +298,7 @@ mlag-vip rocket-mlag-domain ip 192.168.255.242 /29 force
 
 Verifying mlag-vip
 ```
-sw-spine01 [rocket-mlag-domain: master] # show mlag-vip
+sw-spine-001 [rocket-mlag-domain: master] # show mlag-vip
 MLAG-VIP:
  MLAG group name: rocket-mlag-domain
  MLAG VIP address: 192.168.255.242/29
@@ -307,8 +307,8 @@ MLAG-VIP:
 ----------------------------------------------------------------------------------
 Hostname                                 VIP-State            IP Address
 ----------------------------------------------------------------------------------
-sw-spine01                               master               192.168.255.241
-sw-spine02                               standby              192.168.255.243
+sw-spine-001                               master               192.168.255.241
+sw-spine-002                               standby              192.168.255.243
 ```
 
 ## Update SNMP configuration

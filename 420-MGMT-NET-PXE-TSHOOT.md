@@ -28,7 +28,7 @@ Check the configuration for ```interface vlan x```
 This configuration will be the same on BOTH Switches (except the ```ip address```).
 You'll see that there is an ```active-gateway``` and ```ip helper-address``` configured.
 ```
-sw-spine02(config)# show run int vlan 1
+sw-spine-002(config)# show run int vlan 1
 interface vlan1
     vsx-sync active-gateways
     ip address 10.1.0.3/16
@@ -38,7 +38,7 @@ interface vlan1
     ip helper-address 10.92.100.222
     exit
 
-sw-spine02(config)# show run int vlan 2
+sw-spine-002(config)# show run int vlan 2
 interface vlan2
     vsx-sync active-gateways
     ip address 10.252.0.3/17
@@ -48,7 +48,7 @@ interface vlan2
     ip helper-address 10.92.100.222
     exit
 
-sw-spine02(config)# show run int vlan 4
+sw-spine-002(config)# show run int vlan 4
 interface vlan4
     vsx-sync active-gateways
     ip address 10.254.0.3/17
@@ -58,7 +58,7 @@ interface vlan4
     ip helper-address 10.94.100.222
     exit
 
-sw-spine02(config)# show run int vlan 7
+sw-spine-002(config)# show run int vlan 7
 interface vlan7
     vsx-sync active-gateways
     ip address 10.103.13.3/24
@@ -71,29 +71,29 @@ interface vlan7
 
 If any of this configuration is missing, you'll need to update it to BOTH switches.
 ```
-sw-spine02# conf t
-sw-spine02(config)# int vlan 1
-sw-spine02(config-if-vlan)# ip helper-address 10.92.100.222
-sw-spine02(config-if-vlan)# active-gateway ip mac 12:01:00:00:01:00
-sw-spine02(config-if-vlan)# active-gateway ip 10.1.0.1
+sw-spine-002# conf t
+sw-spine-002(config)# int vlan 1
+sw-spine-002(config-if-vlan)# ip helper-address 10.92.100.222
+sw-spine-002(config-if-vlan)# active-gateway ip mac 12:01:00:00:01:00
+sw-spine-002(config-if-vlan)# active-gateway ip 10.1.0.1
 
-sw-spine02# conf t
-sw-spine02(config)# int vlan 2
-sw-spine02(config-if-vlan)# ip helper-address 10.92.100.222
-sw-spine02(config-if-vlan)# active-gateway ip mac 12:01:00:00:01:00
-sw-spine02(config-if-vlan)# active-gateway ip 10.252.0.1
+sw-spine-002# conf t
+sw-spine-002(config)# int vlan 2
+sw-spine-002(config-if-vlan)# ip helper-address 10.92.100.222
+sw-spine-002(config-if-vlan)# active-gateway ip mac 12:01:00:00:01:00
+sw-spine-002(config-if-vlan)# active-gateway ip 10.252.0.1
 
-sw-spine02# conf t
-sw-spine02(config)# int vlan 4
-sw-spine02(config-if-vlan)# ip helper-address 10.94.100.222
-sw-spine02(config-if-vlan)# active-gateway ip mac 12:01:00:00:01:00
+sw-spine-002# conf t
+sw-spine-002(config)# int vlan 4
+sw-spine-002(config-if-vlan)# ip helper-address 10.94.100.222
+sw-spine-002(config-if-vlan)# active-gateway ip mac 12:01:00:00:01:00
 
-sw-spine02# conf t
-sw-spine02(config)# int vlan 7
-sw-spine02(config-if-vlan)# ip helper-address 10.92.100.222
-sw-spine02(config-if-vlan)# active-gateway ip mac 12:01:00:00:01:00
-sw-spine02(config-if-vlan)# active-gateway ip xxxxxxx
-sw-spine02(config-if-vlan)# write mem
+sw-spine-002# conf t
+sw-spine-002(config)# int vlan 7
+sw-spine-002(config-if-vlan)# ip helper-address 10.92.100.222
+sw-spine-002(config-if-vlan)# active-gateway ip mac 12:01:00:00:01:00
+sw-spine-002(config-if-vlan)# active-gateway ip xxxxxxx
+sw-spine-002(config-if-vlan)# write mem
 ```
 
 Verify the route to the TFTP server is in place.
@@ -107,7 +107,7 @@ You can get the worker node IP from NMN.yaml from CSI generated data.
 ```
 
 ```
-sw-spine02(config)# show ip route static
+sw-spine-002(config)# show ip route static
 
 Displaying ipv4 routes selected for forwarding
 
@@ -122,7 +122,7 @@ You can see that the route is ```10.92.100.60/32 via 10.252.1.7``` with ```10.25
 
 If that static route is missing you'll need to add it.
 ```
-sw-spine01(config)# ip route 10.92.100.60/32 10.252.1.7
+sw-spine-001(config)# ip route 10.92.100.60/32 10.252.1.7
 ```
 
 # Mellanox Configuration
@@ -189,7 +189,7 @@ vlan7       N/A               downstream
 Verify that the route to the TFTP server and the route for the ingress gateway are available.
 
 ```
-sw-spine01 [standalone: master] # show ip route 10.92.100.60
+sw-spine-001 [standalone: master] # show ip route 10.92.100.60
 
 Flags:
   F: Failed to install in H/W
@@ -209,7 +209,7 @@ VRF Name default:
                                       c        10.252.0.7        vlan2            bgp        200/0
 ```
 ```
-sw-spine01 [standalone: master] # show ip route 10.92.100.71
+sw-spine-001 [standalone: master] # show ip route 10.92.100.71
 
 Flags:
   F: Failed to install in H/W

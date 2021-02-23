@@ -6,12 +6,12 @@ This network architecture include two Aruba 8325s that are configured as VSX/MC-
 
 First 8325
 ```
-sw-spine01# show run
+sw-spine-001# show run
 Current configuration:
 !
 !Version ArubaOS-CX GL.10.05.0020
 !export-password: default
-hostname sw-spine01
+hostname sw-spine-001
 allow-unsupported-transceiver
 user admin group administrators password ciphertext AQBapa
 no ip icmp redirect
@@ -492,12 +492,12 @@ https-server vrf mgmt
 
 Second 8325
 ```
-sw-spine02# show run
+sw-spine-002# show run
 Current configuration:
 !
 !Version ArubaOS-CX GL.10.05.0020
 !export-password: default
-hostname sw-spine02
+hostname sw-spine-002
 allow-unsupported-transceiver
 user admin group administrators password ciphertext AQBapWcbqh2GB9yAT6oln21BOY+3jKy2nth07vZLpzNwXNBVYgAAADGyXE3TJ7+ez0DzF/NNBCsaMXTyBJgqvtIvLd907Jr2JCIB9xgJ0R4qhp4Mf24L7aMJ0rXZ0DqDFS3vvz5aZ4Cj2wVu4h4kt/JV6RBpSk/j3QPSCCpj85BMUaSK11ECjXRM
 no ip icmp redirect
@@ -976,12 +976,12 @@ https-server vrf mgmt
 The 6300
 
 ```
-sw-leaf01# show run
+sw-leaf-001# show run
 Current configuration:
 !
 !Version ArubaOS-CX FL.10.05.0040
 !export-password: default
-hostname sw-leaf01
+hostname sw-leaf-001
 user admin group administrators password ciphertext AQBapTQZPv
 ntp server 10.254.0.8
 !
@@ -1354,12 +1354,12 @@ https-server vrf mgmt
 
 First 8360 CDU switch
 ```
-sw-cdu01# show run
+sw-cdu-001# show run
 Current configuration:
 !
 !Version ArubaOS-CX LL.10.06.0001
 !export-password: default
-hostname sw-cdu01
+hostname sw-cdu-001
 user admin group administrators password ciphertext AQBapT3gxulv3VzyyLcGaKF1fZMtSAMoJzls0b2ojfJ0k9srYgAAABWZvTs5PSgj1JZenpQTO+zoKnbHsI5UaT6QSNOws1+jMSIoDAgunDoWkaRtCLkC2jQKdruZo3il1ESdzS4JNy9JmZqT9jB4QJXSl0nTJEZywQFaii7xjPZwW3UdyZPPNfMP
 vrf keepalive
 ntp server 10.254.0.8
@@ -1463,11 +1463,11 @@ interface 1/1/48
     ip address 192.168.255.0/31
 interface 1/1/49
     no shutdown
-    description sw-spine01_49
+    description sw-spine-001_49
     lag 149
 interface 1/1/50
     no shutdown
-    description sw-spine02_49
+    description sw-spine-002_49
     lag 149
 interface 1/1/51
     no shutdown
@@ -1535,7 +1535,7 @@ Current configuration:
 !
 !Version ArubaOS-CX LL.10.06.0001
 !export-password: default
-hostname sw-cdu02
+hostname sw-cdu-002
 user admin group administrators password ciphertext AQBap
 vrf keepalive
 ntp server 10.254.0.8
@@ -1631,11 +1631,11 @@ interface 1/1/48
     ip address 192.168.255.1/31
 interface 1/1/49
     no shutdown
-    description sw-spine01_50
+    description sw-spine-001_50
     lag 149
 interface 1/1/50
     no shutdown
-    description sw-spine02_50
+    description sw-spine-002_50
     lag 149
 interface 1/1/51
     no shutdown

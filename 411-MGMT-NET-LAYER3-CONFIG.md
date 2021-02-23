@@ -57,7 +57,7 @@ interface vlan 3000
 Once this is complete you should be able to see OSPF neighbors on the CDU switches.
 
 ```
-sw-cdu02# show ip ospf neighbors 
+sw-cdu-002# show ip ospf neighbors 
 OSPF Process ID 1 VRF default
 ==============================
 

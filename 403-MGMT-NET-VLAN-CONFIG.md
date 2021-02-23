@@ -56,26 +56,26 @@ sw-24g04(config-vlan-10)# name SUN
 Add the networks to the leaf switches or the switches that the BMCs are connected to.
 
 ```
-sw-smn01(config)# vlan 2
-sw-smn01(config-vlan-2)# name NMN
-sw-smn01(config-vlan-2)# vlan 4
-sw-smn01(config-vlan-4)# name HMN
-sw-smn01(config-vlan-4)# vlan 7 
-sw-smn01(config-vlan-7)# name CAN
-sw-smn01(config-vlan-7)# vlan 10
-sw-smn01(config-vlan-10)# name SUN
+sw-leaf-001(config)# vlan 2
+sw-leaf-001(config-vlan-2)# name NMN
+sw-leaf-001(config-vlan-2)# vlan 4
+sw-leaf-001(config-vlan-4)# name HMN
+sw-leaf-001(config-vlan-4)# vlan 7 
+sw-leaf-001(config-vlan-7)# name CAN
+sw-leaf-001(config-vlan-7)# vlan 10
+sw-leaf-001(config-vlan-10)# name SUN
 ```
 
 Add VLAN interfaces to the VLANs just created.
 Specific Addresses are provide CSI.
 
 ```
-sw-smn01(config)# int vlan 1
-sw-smn01(config-if-vlan)# ip address 10.1.0.4/16
-sw-smn01(config-if-vlan)# int vlan 2
-sw-smn01(config-if-vlan)# ip address 10.252.0.4/17
-sw-smn01(config-if-vlan)# int vlan 4
-sw-smn01(config-if-vlan)# ip address 10.254.0.4/17
+sw-leaf-001(config)# int vlan 1
+sw-leaf-001(config-if-vlan)# ip address 10.1.0.4/16
+sw-leaf-001(config-if-vlan)# int vlan 2
+sw-leaf-001(config-if-vlan)# ip address 10.252.0.4/17
+sw-leaf-001(config-if-vlan)# int vlan 4
+sw-leaf-001(config-if-vlan)# ip address 10.254.0.4/17
 ```
 
 
