@@ -273,7 +273,14 @@ ncn:~ # /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
 * K8S Test: Kubernetes Velero No Failed Backups
   - Due to a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (ie.g., vault). It may be necessary to use the ```velero``` command to delete backups from a Kubernetes node to clear this situation.
 * K8S Test: Verify spire-agent is enabled and running
-  - The ```spire-agent``` service may fail to start on Kubernetes NCNs, logging errors (via journalctl) similar to "join token not existing...". Deleting the ```request-ncn-join-token``` daemonset pod running on the node may clear the issue. While the ```spire-agent``` systemctl service on the Kubernetes node should eventually restart cleanly, you may have to login to the impacted nodes and restart the service. 
+
+  - The `spire-agent` service may fail to start on Kubernetes NCNs, logging errors (via journalctl) similar to "join token does not exist or has already been used" or the last logs containing multiple lines of "systemd[1]: spire-agent.service: Start request repeated too quickly.". Deleting the `request-ncn-join-token` daemonset pod running on the node may clear the issue. While the `spire-agent` systemctl service on the Kubernetes node should eventually restart cleanly, you may have to login to the impacted nodes and restart the service. The easiest way to delete the appropriate pod is to create the following function and run `renewncnjoin NODE`
+
+  ```
+  function renewncnjoin() { for pod in $(kubectl get pods -n spire |grep request-ncn-join-token | awk '{print $1}'); do if kubectl describe -n spire pods $pod | grep -q "Node:.*$1"; then echo "Restarting $pod running on $1"; kubectl delete -n spire pod "$pod"; fi done }
+  ```
+
+  - The `spire-agent` service may also fail if a NCN was powered off for too long and its tokens expired. If this happens then delete /root/spire/agent_svid.der, /root/spire/bundle.der, and /root/spire/data/svid.key off the NCN before deleting the `request-ncn-join-token` daemonset pod.
 
 <a name="hms-tests"></a>
 ## Hardware Management Services Tests
