@@ -91,16 +91,16 @@ host-record=ncn-w003,ncn-w003.nmn,10.252.1.13
 host-record=ncn-w002,ncn-w002.nmn,10.252.1.14
 host-record=ncn-w001,ncn-w001.nmn,10.252.1.15
 ```
-- The route-map configuration will require you to get the HMN, and CAN IPs as well.
+- The route-map configuration will require you to get the HMN, and CAN IPs as well. Note the `Bond0 Mac0/Mac1` entry is for the NMN.
 ```
-pit# grep ncn-w /etc/dnsmasq.d/statics.conf | egrep "NMN|HMN|CAN" | grep -v mgmt
-dhcp-host=50:6b:4b:08:d0:4a,10.252.1.13,ncn-w003,20m # NMN
+pit# grep ncn-w /etc/dnsmasq.d/statics.conf | egrep "Bond0|HMN|CAN" | grep -v mgmt
+dhcp-host=50:6b:4b:08:d0:4a,10.252.1.13,ncn-w003,20m # Bond0 Mac0/Mac1
 dhcp-host=50:6b:4b:08:d0:4a,10.254.1.20,ncn-w003,20m # HMN
 dhcp-host=50:6b:4b:08:d0:4a,10.102.4.12,ncn-w003,20m # CAN
-dhcp-host=98:03:9b:0f:39:4a,10.252.1.14,ncn-w002,20m # NMN
+dhcp-host=98:03:9b:0f:39:4a,10.252.1.14,ncn-w002,20m # Bond0 Mac0/Mac1
 dhcp-host=98:03:9b:0f:39:4a,10.254.1.22,ncn-w002,20m # HMN
 dhcp-host=98:03:9b:0f:39:4a,10.102.4.13,ncn-w002,20m # CAN
-dhcp-host=98:03:9b:bb:a9:94,10.252.1.15,ncn-w001,20m # NMN
+dhcp-host=98:03:9b:bb:a9:94,10.252.1.15,ncn-w001,20m # Bond0 Mac0/Mac1
 dhcp-host=98:03:9b:bb:a9:94,10.254.1.24,ncn-w001,20m # HMN
 dhcp-host=98:03:9b:bb:a9:94,10.102.4.14,ncn-w001,20m # CAN
 ```
