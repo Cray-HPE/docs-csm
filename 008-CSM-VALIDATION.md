@@ -30,7 +30,7 @@ Health Check scripts can be run:
 * after the system or a single node goes down unexpectedly
 * after the system is gracefully shut down and brought up
 * any time there is unexpected behavior on the system to get a baseline of data for CSM services and components
-* in order to provide relevant information to support tickets that are being opened after instal.sh has been run
+* in order to provide relevant information to support tickets that are being opened after install.sh has been run
 
 Health Check scripts can be found and run on any worker or master node from any directory.
 
