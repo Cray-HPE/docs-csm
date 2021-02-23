@@ -222,6 +222,8 @@ sw-agg01#
 
 If after several tries one or more BGP session remains **Idle**, see Check BGP Status and Reset Sessions, in the HPE Cray EX Administration Guide S-8001.
 
+
+
 Repeat the above **Aruba** procedure using the second peer-address (10.252.0.5 in this example)
 
 <a name="network-health-checks"></a>
