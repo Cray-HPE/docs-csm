@@ -107,6 +107,8 @@ Example entry from the `hmn_connections.json` file. The source name is the `Sour
       login: UAN # Application nodes that have the non-default prefix "login" are assigned the HSM SubRole "UAN"
     ```
 
+    Valid HSM subrole values are: `Worker`, `Master`, `Storage`, `UAN`, `Gateway`, `LNETRouter`, `Visualization`, and `UserDefined`.
+
 3. __Add Application node aliases__
     The `aliases` field is an map of xnames (strings) to an array of aliases (strings).
 
