@@ -229,13 +229,30 @@ This ensures that the PIT is configured with an accurate date/time, which will b
    > ```
    > Running `hostname` or logging out and back in should yield the proper hostname.
 
-7. Boot **Kubernetes Managers and Workers**
+7. Add in additional drives into Ceph (if necessary)
+   ```bash
+      *  On a manager node run
+           a. watch "ceph -s"
+              i.  This will allow you to monitor the progress of the drives being added
+      *  On each storage node run the following
+           a.  ceph-volume inventory --format json-pretty|jq '.[] | select(.available == true) |.path'
+               i. you can run ceph-volume inventory at to see the unedited output from the above command.
+           b.  ceph-volume lvm create --data /dev/<drive to be added> --bluestore
+               i.  you will repeat for all drives on that node that need added and also for each node that has drives to add.
+
+        After all the OSDs have been added, run the playbook to re-set the pool quotas (only necessary to run when you've increased the cluster capacity):
+
+        % ansible-playbook /etc/ansible/ceph-rgw-users/ceph-pool-quotas.yml
+   ```
+
+
+8. Boot **Kubernetes Managers and Workers**
     ```bash
     pit# \
     grep -oP "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
 
-8. Wait. Observe the installation through ncn-m002-mgmt's console:
+9. Wait. Observe the installation through ncn-m002-mgmt's console:
    ```bash
    # Print the console name
    pit# conman -q | grep m002
@@ -245,7 +262,7 @@ This ensures that the PIT is configured with an accurate date/time, which will b
    pit# conman -j ncn-m002-mgmt
    ```
 
-9. Refer to [timing of deployments](#timing-of-deployments). After a while, `kubectl get nodes` should return
+10. Refer to [timing of deployments](#timing-of-deployments). After a while, `kubectl get nodes` should return
    all the managers and workers aside from the LiveCD's node.
    ```bash
    pit# ssh ncn-m002
@@ -358,7 +375,7 @@ new tests.**
 1. Verify all nodes have joined the cluster
 2. Verify etcd is running outside kubernetes on master nodes
 3. Verify that all the pods in the kube-system namespace are running
-4. Verify that the ceph-csi requirements are in place (see [CEPH RSI](066-CEPH-RSI.md))
+4. Verify that the ceph-csi requirements are in place (see [CEPH CSI](066-CEPH-CSI.md))
 
 <a name="change-password"></a>
 ## Change Password
