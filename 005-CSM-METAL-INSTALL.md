@@ -139,22 +139,48 @@ CASMINST-980
 <a name="ensure-time-is-accurate-before-deploying-ncns"></a>
 #### Ensure Time Is Accurate Before Deploying NCNs
 
-> This step should not be skipped
+1. Ensure that the PIT node has the current and correct time.  But also check that each NCN has the correct time set in BIOS.
 
-Check the current time to see if it matches the current time:
+   > This step should not be skipped
 
-```
-pit# date "+%Y-%m-%d %H:%M:%S.%6N%z"
-```
+   Check the current time to see if it matches the current time:
 
-The time can be inaccurate if the system has been off for a long time, or, for example, [the CMOS was cleared](254-NCN-FIRMWARE-GB.md). If needed, set the time manually as close as possible, and then run the NTP script:
+   ```
+   pit# date "+%Y-%m-%d %H:%M:%S.%6N%z"
+   ```
 
-```
-pit# timedatectl set-time "2019-11-15 00:00:00"
-pit# /root/bin/configure-ntp.sh
-```
+   The time can be inaccurate if the system has been off for a long time, or, for example, [the CMOS was cleared](254-NCN-FIRMWARE-GB.md). If needed, set the time manually as close as possible, and then run the NTP script:
 
-This ensures that the PIT is configured with an accurate date/time, which will be properly propagated to the NCNs during boot.
+   ```
+   pit# timedatectl set-time "2019-11-15 00:00:00"
+   pit# /root/bin/configure-ntp.sh
+   ```
+
+   This ensures that the PIT is configured with an accurate date/time, which will be properly propagated to the NCNs during boot.
+
+2. Ensure the current time is set in BIOS for all management NCNs.
+
+   > If each NCN is booted to the BIOS menu, you can check and set the current UTC time.
+
+   Repeat this process for each NCN.
+
+   Start an IPMI console session to the NCN.
+   ```bash
+   pit# bmc=ncn-w001-mgmt  # Change this to be each node in turn.
+   pit# conman -j $bmc
+   ```
+
+   Boot the node to BIOS.
+   ```bash
+   pit# ipmitool -I lanplus -U $username -E -H $bmc chassis bootdev bios
+   pit# ipmitool -I lanplus -U $username -E -H $bmc chassis power off
+   pit# sleep 10
+   pit# ipmitool -I lanplus -U $username -E -H $bmc chassis power on
+   ```
+
+   When the node boots, you will be able to use the conman session to see the BIOS menu to check and set the time to current UTC time.  The process varies depending on the vendor of the NCN.
+
+   Repeat this process for each NCN.
 
 <a name="start-deployment"></a>
 ### Start Deployment
