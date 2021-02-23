@@ -10,24 +10,24 @@
 - Typically these are ports that are connected to iLOs (BMCs), gateway nodes, or compute nodes/CMM switches.
 
 ```
-sw-smn01(config)#  interface 1/1/28
-sw-smn01(config)# no shutdown 
-sw-smn01(config)# mtu 9198
-sw-smn01(config)# description HMN
-sw-smn01(config)# no routing
-sw-smn01(config)# vlan access 4
+sw-leaf-001(config)#  interface 1/1/28
+sw-leaf-001(config)# no shutdown 
+sw-leaf-001(config)# mtu 9198
+sw-leaf-001(config)# description HMN
+sw-leaf-001(config)# no routing
+sw-leaf-001(config)# vlan access 4
 ```
 
 - This configuration describes the ports that go to the Node Management Network (NMN/VLAN2).
 - You can Identify these ports by referencing the NMN tab on the SHCD.
 
 ```
-sw-smn01(config)# interface 1/1/6
-sw-smn01(config)# no shutdown 
-sw-smn01(config)# mtu 9198
-sw-smn01(config)# description NMN
-sw-smn01(config)# no routing
-sw-smn01(config)# vlan access 2
+sw-leaf-001(config)# interface 1/1/6
+sw-leaf-001(config)# no shutdown 
+sw-leaf-001(config)# mtu 9198
+sw-leaf-001(config)# description NMN
+sw-leaf-001(config)# no routing
+sw-leaf-001(config)# vlan access 2
 ```
 
 # UAN port configuration
@@ -67,38 +67,38 @@ interface lag 17 multi-chassis
 
 First CDU configuration.
 ```
-sw-cdu01(config)# int lag 2 multi-chassis
-sw-cdu01(config-lag-if)# vsx-sync vlans
-sw-cdu01(config-lag-if)# no shutdown
-sw-cdu01(config-lag-if)# description CMM_CAB_1000
-sw-cdu01(config-lag-if)# no routing
-sw-cdu01(config-lag-if)# vlan trunk native 2000
-sw-cdu01(config-lag-if)# vlan trunk allowed 2000,3000,4091
-sw-cdu01(config-lag-if)# lacp mode active
-sw-cdu01(config-lag-if)# lacp fallback
-sw-cdu01(config-lag-if)# exit
+sw-cdu-001(config)# int lag 2 multi-chassis
+sw-cdu-001(config-lag-if)# vsx-sync vlans
+sw-cdu-001(config-lag-if)# no shutdown
+sw-cdu-001(config-lag-if)# description CMM_CAB_1000
+sw-cdu-001(config-lag-if)# no routing
+sw-cdu-001(config-lag-if)# vlan trunk native 2000
+sw-cdu-001(config-lag-if)# vlan trunk allowed 2000,3000,4091
+sw-cdu-001(config-lag-if)# lacp mode active
+sw-cdu-001(config-lag-if)# lacp fallback
+sw-cdu-001(config-lag-if)# exit
 
-sw-cdu01(config)# int 1/1/2
-sw-cdu01(config-if)# no shutdown
-sw-cdu01(config-if)# lag 2
-sw-cdu01(config-if)# exit
+sw-cdu-001(config)# int 1/1/2
+sw-cdu-001(config-if)# no shutdown
+sw-cdu-001(config-if)# lag 2
+sw-cdu-001(config-if)# exit
 ```
 
 Second CDU configuration
 ```
-sw-cdu02(config)# int lag 2 multi-chassis
-sw-cdu02(config-lag-if)# vsx-sync vlans
-sw-cdu02(config-lag-if)# shutdown
-sw-cdu02(config-lag-if)# description CMM_CAB_1000
-sw-cdu02(config-lag-if)# no routing
-sw-cdu02(config-lag-if)# vlan trunk native 2000
-sw-cdu02(config-lag-if)# vlan trunk allowed 2000,3000,4091
-sw-cdu02(config-lag-if)# lacp mode active
-sw-cdu02(config-lag-if)# lacp fallback
-sw-cdu02(config-lag-if)# exit
+sw-cdu-002(config)# int lag 2 multi-chassis
+sw-cdu-002(config-lag-if)# vsx-sync vlans
+sw-cdu-002(config-lag-if)# shutdown
+sw-cdu-002(config-lag-if)# description CMM_CAB_1000
+sw-cdu-002(config-lag-if)# no routing
+sw-cdu-002(config-lag-if)# vlan trunk native 2000
+sw-cdu-002(config-lag-if)# vlan trunk allowed 2000,3000,4091
+sw-cdu-002(config-lag-if)# lacp mode active
+sw-cdu-002(config-lag-if)# lacp fallback
+sw-cdu-002(config-lag-if)# exit
 
-sw-cdu02(config)# int 1/1/2
-sw-cdu02(config-if)# no shutdown
-sw-cdu02(config-if)# lag 2
-sw-cdu02(config-if)# exit
+sw-cdu-002(config)# int 1/1/2
+sw-cdu-002(config-if)# no shutdown
+sw-cdu-002(config-if)# lag 2
+sw-cdu-002(config-if)# exit
 ```

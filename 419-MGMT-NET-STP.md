@@ -16,7 +16,7 @@ spanning-tree vlan 1,2,4,7,10
 
 Verify that each VSX pair is the root bridge for all VLANs configured on that switch.
 ```
-sw-spine01# show spanning-tree summary root
+sw-spine-001# show spanning-tree summary root
 STP status            : Enabled
 Protocol              : RPVST
 System ID             : 02:01:00:00:01:00
@@ -43,7 +43,7 @@ spanning-tree vlan 1,2,4,7,10
 Verify Spanning tree is configured and we are not the Root Bridge for any VLANs.
 
 ```
-sw-leaf01# show spanning-tree summary root
+sw-leaf-001# show spanning-tree summary root
 STP status            : Enabled
 Protocol              : RPVST
 System ID             : 88:3a:30:9f:24:80
@@ -71,7 +71,7 @@ spanning-tree vlan 1,2,4,2000,3000,4091
 Verify that each CDU switch is the root bridge for VLANs 2xxx and 3xxx
 
 ```
-sw-cdu02# show spanning-tree summary root
+sw-cdu-002# show spanning-tree summary root
 STP status            : Enabled
 Protocol              : RPVST
 System ID             : 02:01:00:00:01:02

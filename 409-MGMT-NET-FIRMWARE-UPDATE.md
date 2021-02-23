@@ -40,15 +40,15 @@ SSH into the switch you want to upgrade.
 
 Example: the IP ```10.252.1.12``` used is the liveCD 
 ```
-sw-leaf01# copy sftp://root@10.252.1.12//var/www/ephemeral/data/network_images/ArubaOS-CX_6400-6300_10_06_0010.stable.swi primary
+sw-leaf-001# copy sftp://root@10.252.1.12//var/www/ephemeral/data/network_images/ArubaOS-CX_6400-6300_10_06_0010.stable.swi primary
 
-sw-leaf01# write mem
+sw-leaf-001# write mem
 Copying configuration: [Success]
 ```
 Once the upload is complete you can check the images
 
 ```
-sw-leaf01# show image
+sw-leaf-001# show image
 ---------------------------------------------------------------------------
 ArubaOS-CX Primary Image
 ---------------------------------------------------------------------------
@@ -60,13 +60,13 @@ SHA-256 : 78dc27c5e521e92560a182ca44dc04b60d222b9609129c93c1e329940e1e11f9
 After the firmware is uploaded you will need to boot the switch to the correct image.
 
 ```
-sw-leaf01# boot system primary
+sw-leaf-001# boot system primary
 ```
 
 Once the reboot is complete check and make sure the firmware version is correct.
 
 ```
-sw-leaf01# show version
+sw-leaf-001# show version
 -----------------------------------------------------------------------------
 ArubaOS-CX
 (c) Copyright 2017-2020 Hewlett Packard Enterprise Development LP
@@ -87,28 +87,28 @@ SSH into the switch you want to upgrade
 
 Fetch the image from m001.
 ```
-sw-spine01 [standalone: master] # image fetch http://10.252.1.4/fw/network/onyx-X86_64-3.9.1014.stable.img
+sw-spine-001 [standalone: master] # image fetch http://10.252.1.4/fw/network/onyx-X86_64-3.9.1014.stable.img
 ```
 
 Install the image.
 ```
-sw-spine01 [standalone: master] # image install onyx-X86_64-3.9.1014.stable.img 
+sw-spine-001 [standalone: master] # image install onyx-X86_64-3.9.1014.stable.img 
 ```
 
 Select the image to boot next.
 ```
-sw-spine01 [standalone: master] # image boot next
+sw-spine-001 [standalone: master] # image boot next
 ```
 
 Write memory and reload.
 ```
-sw-spine01 [standalone: master] # write memory 
-sw-spine01 [standalone: master] # reload
+sw-spine-001 [standalone: master] # write memory 
+sw-spine-001 [standalone: master] # reload
 ```
 
 Once the switch is available, verify the image is installed.
 ```
-sw-spine01 [standalone: master] # show images 
+sw-spine-001 [standalone: master] # show images 
 
 Installed images:
   Partition 1:
@@ -132,13 +132,13 @@ SSH into the switch you want to upgrade
 
 Fetch the image from m001.
 ```
-sw-leaf01# image install http://10.252.1.4/fw/network/OS10_Enterprise_10.5.1.4.stable.tar
+sw-leaf-001# image install http://10.252.1.4/fw/network/OS10_Enterprise_10.5.1.4.stable.tar
 ```
 
 Check the image upload status.
 
 ```
-sw-leaf01# show image status
+sw-leaf-001# show image status
 Image Upgrade State:     download
 ==================================================
 File Transfer State:     download
@@ -154,13 +154,13 @@ File Transfer State:     download
 
 Once the image is uploaded all that's left is a reboot.
 ```
-sw-leaf01# write memory 
-sw-leaf01# reload
+sw-leaf-001# write memory 
+sw-leaf-001# reload
 ```
 
 Once the switch is available, verify the image is installed.
 ```
-sw-leaf01# show version 
+sw-leaf-001# show version 
 Dell EMC Networking OS10 Enterprise
 Copyright (c) 1999-2020 by Dell Inc. All Rights Reserved.
 OS Version: 10.5.1.4

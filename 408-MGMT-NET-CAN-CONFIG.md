@@ -62,7 +62,7 @@ ip route vrf default 10.101.8.0/24 10.101.15.154
 
 Going the other direction, there must be a default route on each spine switch directing traffic not matching other routes to the endpoint on the customer's switch.
 
-This is an example of the route configuration on spine01.
+This is an example of the route configuration on sw-spine-001.
 Mellanox
 ```
 ip route vrf default 0.0.0.0/0 10.101.15.149
@@ -79,8 +79,8 @@ interface vlan 7 ip address 10.101.8.2/26 primary
 ```
 Aruba
 ```
-sw-spine02(config)# int vlan 7
-sw-spine02(config-if-vlan)# ip address 10.102.11.3/24
+sw-spine-002(config)# int vlan 7
+sw-spine-002(config-if-vlan)# ip address 10.102.11.3/24
 ```
 
 # Verification of CAN Configuration
