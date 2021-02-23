@@ -2,8 +2,33 @@
 
 The NCNs deploy with a default password.  It is recommended to change that password before continuing.  In addition, this step will also generate ssh keys, which can be used for a more secure login to NCNs.
 
-> **`NOTE`** This is a work-around for applying a new password. There will be a procedure for setting this in the 
-> image before booting NCNs - or for booting new NCNs. 
+> **`NOTE`** This is a work-around for applying a new password. There will be a procedure for setting this in the
+> image before booting NCNs - or for booting new NCNs.
+
+# Using an SSH key
+
+It is recommended to set the new password by using an SSH key.  This prevents you from having to enter the password for each NCN that you log into.  You have three path for this approach:
+
+1. Use an existing keypair that is already setup on the NCNs (recommended)
+2. Generate a new keypair on the PIT
+3. Use an existing key
+
+## Use an existing keypair that is already setup on the NCNs (recommended)
+
+From the PIT, log into any NCN using SSH.  The NCNs are already setup with passwordless SSH, so you can quickly change the password using this method.
+
+> If you have more than 9 NCNs, you should add those hostnames into the `for` loops below.
+
+```
+ncn-m002:~ # for i in m003 w001 w002 w003 s001 s002 s003
+do
+ssh -t ncn-$i "passwd"
+done
+```
+
+Follow the prompts to set your a new password.
+
+## Generate a new keypair on the PIT
 
 First, generate a new keypair from the LiveCD.  
 
@@ -71,3 +96,7 @@ done
 ```
 
 From here on out, you'll be able to log in to the NCNs from the LiveCD without the need for a password.
+
+## Use an existing key
+
+You can follow the same method as above for generating a new keypair, but instead of generating a new one, copy your existing key to the PIT and use the instructions above starting with the `ssh-copy-id` command.
