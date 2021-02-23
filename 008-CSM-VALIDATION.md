@@ -224,6 +224,7 @@ If after several tries one or more BGP session remains **Idle**, see Check BGP S
 
 Repeat the above **Aruba** procedure using the second peer-address (10.252.0.5 in this example)
 
+
 <a name="network-health-checks"></a>
 ## Network Health Checks
 
