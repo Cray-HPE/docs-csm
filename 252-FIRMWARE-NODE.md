@@ -143,7 +143,15 @@ Now the node(s) are upgraded to minimum spec. for booting.
 <a name="gigabyte-upgrades"></a>
 ### Gigabyte Upgrades
 
-> **THIS IS A STUB** There are no instructions on this page, this page is place-holder.
+> **FIXME** Installation instructions are needed
+
+## Server Model R272 (Includes NCN Worker, NCN Managers, and NCN Storage nodes.  Also includes some UAN and Application nodes)
+
+* Install Gigabyte BIOS version C17 which is included in Gigabyte firmware package 21.00.
+
+## Server Models H262 and R282 (Includes UAN and Application nodes)
+
+* Install Gigabyte BIOS version C20 which is included in Gigabyte firmware package 20.03.
 
 <a name="pcie-cards"></a>
 ## PCIe Cards

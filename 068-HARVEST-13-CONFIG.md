@@ -180,7 +180,15 @@ may be referenced when making a similar site modification to v1.3.
 
     For minimum NCN firmware versions see [Node Firmware](252-FIRMWARE-NODE.md)
 
-    Gigabyte nodes should be at the 20.03.00 version released after Shasta v1.3.2 in December 2020.
+    R272 (NCN workers, managers, storage nodes, some UANs and some Application Nodes) servers should use Gigabyte firmware package 21.00, which includes
+
+    ```
+    BIOS version C17
+    BMC version 12.84.09
+    CMC version 62.84.02
+    ```
+
+    H262 (mostly compute nodes) and R282 (most UAN and Application Nodes) servers should use Gigabyte firmware package 20.03, which includes
 
     ```
     BIOS version C20
