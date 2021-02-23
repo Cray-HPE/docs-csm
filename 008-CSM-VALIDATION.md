@@ -162,7 +162,7 @@ ncn-m001:~ # ssh admin@10.252.0.4
 
  Please register your products now at: https://asp.arubanetworks.com
 
-admin@10.252.0.4's password:
+admin@10.252.0.4 password:
 
 Last login: 2021-01-12 09:51:14 from 10.252.1.15
 User "admin" has logged in 84 times in the past 30 days
@@ -221,8 +221,6 @@ sw-agg01#
 ```
 
 If after several tries one or more BGP session remains **Idle**, see Check BGP Status and Reset Sessions, in the HPE Cray EX Administration Guide S-8001.
-
-
 
 Repeat the above **Aruba** procedure using the second peer-address (10.252.0.5 in this example)
 
