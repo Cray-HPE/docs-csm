@@ -131,6 +131,15 @@ all been run by the administrator before starting this stage.
    [VirtuaL ISO Boot - Backing up the OverlayFS](062-LIVECD-VIRTUAL-ISO-BOOT.md#backing-up-the-overlay-cow-fs).
    After completing that, return here and proceed to the next step.
 7. Optionally setup conman or serial console if not already on one from any laptop
+   ```bash
+   external# script -a boot.livecd.$(date +%Y-%m-%d).txt
+   external# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+   external# SYSTEM_NAME=eniac
+   external# username=root
+   external# IPMI_PASSWORD=changeme
+   external# ipmitool -I lanplus -U $username -E -H ${SYSTEM_NAME}-ncn-m001-mgmt chassis power status
+   external# ipmitool -I lanplus -U $username -E -H ${SYSTEM_NAME}-ncn-m001-mgmt sol activate
+   ```
 8. Collect the CAN IPs for logging into other NCNs while this happens. This is useful for interacting
    and debugging the kubernetes cluster while the LiveCD is `offline`.
    ```bash
@@ -150,14 +159,8 @@ all been run by the administrator before starting this stage.
    ```bash
    pit# reboot
    ```
-10. Observe the serial console
-   > **`NOTE`** This requires `ipmitool` to be present on another machine.
-   ```bash
-   external# export username
-   external# export IPMI_PASSWORD
-   external# ipmitool -I lanplus -U $username -E -H bigbird-ncn-m001-mgmt sol activate
-   ```
-11. The node should boot, acquire its hostname (i.e. ncn-m001).
+
+10. The node should boot, acquire its hostname (i.e. ncn-m001).
    > **`NOTE`**: If the nodes have pxe boot issues (e.g. getting pxe errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](420-MGMT-NET-PXE-TSHOOT.md)
    
    > **`NOTE`**: If m001 booted without a hostname or it didn't run all the cloud-init scripts the following commands need to be ran **(but only in that circumstance)**.
@@ -190,7 +193,21 @@ all been run by the administrator before starting this stage.
    > ```
    > This should pull all the required cloud-init data for the NCN to join the cluster.
 
-12. Run `kubectl get nodes` to see the full Kubernetes cluster.
+11. Login and start a typescript
+
+   ```bash
+   external# ssh ${SYSTEM_NAME}-ncn-m001
+   ncn-m001# script -a verify.csm.$(date +%Y-%m-%d).txt
+   ncn-m001# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+   ```
+
+12. Change the root password on ncn-m001 to match the other management NCNs.
+
+   ```bash
+   ncn-m001# passwd
+   ```
+
+13. Run `kubectl get nodes` to see the full Kubernetes cluster.
     > **`NOTE`** If the new node fails to join the cluster after running other cloud-init items please refer to the 
     > `handoff`
    ```bash
@@ -204,7 +221,7 @@ all been run by the administrator before starting this stage.
    ncn-w003   Ready    <none>   4h39m   v1.18.6
    ```
 
-13. Restore and verify the site link. It will be necessary to restore the `ifcfg-lan0` file, and both the `ifroute-lan0` and `ifroute-vlan002` file from either 
+14. Restore and verify the site link. It will be necessary to restore the `ifcfg-lan0` file, and both the `ifroute-lan0` and `ifroute-vlan002` file from either 
     manual backup take in step 6 or re-mount the USB and copy it from the prep directory to `/etc/sysconfig/network/`.
 
    > The following command assumes that the PITDATA partition of the USB stick has been remounted at /mnt/pitdata
@@ -215,27 +232,27 @@ all been run by the administrator before starting this stage.
    ncn-m001# wicked ifup lan0
    ``` 
 
-14. Run `ip a` to show our IPs, verify the site link. 
+15. Run `ip a` to show our IPs, verify the site link. 
     ```bash
     ncn-m001# ip a show lan0
     ```
-15. Run `ip a` to show our VLANs, verify they all have IPs
+16. Run `ip a` to show our VLANs, verify they all have IPs
     ```bash
     ncn-m001# ip a show vlan002
     ncn-m001# ip a show vlan004
     ncn-m001# ip a show vlan007
     ```
-16. Verify we do not have a metal bootstrap IP, this should be blank
+17. Verify we do not have a metal bootstrap IP, this should be blank
     ```bash
     ncn-m001# ip a show bond0
     ```
-17. Enable the wipe-safeguard to prevent destructive behavior from occurring during reboot. 
+18. Enable the wipe-safeguard to prevent destructive behavior from occurring during reboot. 
       1. Follow the procedure defined in [Accessing CSI from a USB or RemoteISO](#accessing-csi-from-a-usb-or-remoteiso)
       2. Activate the safe-guard with the final procedure [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard)
       > **`NOTE`** This safeguard needs to be _removed_ to faciliate bare-metal deployments of new nodes. The linked [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard) procedure can be used to disable the safeguard.
    At this time, the cluster is done. If the administrator used a USB stick, it may be ejected at this time or [re-accessed](#accessing-usb-partitions-after-reboot).
-18. Apply Mountain, Hill and River cabinet routing to m001 as described in [Add Compute Cabinet Routes](109-COMPUTE-CABINET-ROUTES-FOR-NCN.md).
-19. Now check for workarounds in the `/opt/cray/csm/workarounds/after-livecd-reboot` directory within the CSM tar. Each has its own instructions in their respective `README` files.
+19. Apply Mountain, Hill and River cabinet routing to m001 as described in [Add Compute Cabinet Routes](109-COMPUTE-CABINET-ROUTES-FOR-NCN.md).
+20. Now check for workarounds in the `/opt/cray/csm/workarounds/after-livecd-reboot` directory within the CSM tar. Each has its own instructions in their respective `README` files.
 ```
 # Example
 # The following command assumes that the data partition of the USB stick has been remounted at /mnt/pitdata
