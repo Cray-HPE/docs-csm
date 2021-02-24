@@ -226,13 +226,20 @@ CASMINST-980
 > **`IMPORTANT`** This is the administrators _last chance_ to run [NCN pre-boot workarounds](#apply-ncn-pre-boot-workarounds).
 
 > **`NOTE`**: All consoles are located at `/var/log/conman/console*`
-5. Boot the **Storage Nodes**
+
+
+5. Restart basecamp to make sure state is up-to-date
+   ```bash
+   pit# systemctl restart basecamp
+   ```
+
+6. Boot the **Storage Nodes**
     ```bash
     pit# \
     grep -oP $stoken /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
 
-6. Wait. Observe the installation through ncn-s001-mgmt's console:
+7. Wait. Observe the installation through ncn-s001-mgmt's console:
    ```bash
    # Print the console name
    pit# conman -q | grep s001
@@ -255,7 +262,7 @@ CASMINST-980
    > ```
    > Running `hostname` or logging out and back in should yield the proper hostname.
 
-7. Add in additional drives into Ceph (if necessary)
+8. Add in additional drives into Ceph (if necessary)
    ```bash
       *  On a manager node run
            a. watch "ceph -s"
@@ -277,14 +284,18 @@ CASMINST-980
   >         - There should be 1 per drive.
   ? - if you meet this criteria please run the "Full Wipe" procudure in 051-DISK-CLEANSLATE.md.
 
+9. Restart basecamp to make sure state is up-to-date
+   ```bash
+   pit# systemctl restart basecamp
+   ```
 
-8. Boot **Kubernetes Managers and Workers**
+10. Boot **Kubernetes Managers and Workers**
     ```bash
     pit# \
     grep -oP "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
 
-9. Wait. Observe the installation through ncn-m002-mgmt's console:
+11. Wait. Observe the installation through ncn-m002-mgmt's console:
    ```bash
    # Print the console name
    pit# conman -q | grep m002
@@ -294,7 +305,7 @@ CASMINST-980
    pit# conman -j ncn-m002-mgmt
    ```
 
-10. Refer to [timing of deployments](#timing-of-deployments). After a while, `kubectl get nodes` should return
+12. Refer to [timing of deployments](#timing-of-deployments). After a while, `kubectl get nodes` should return
    all the managers and workers aside from the LiveCD's node.
    ```bash
    pit# ssh ncn-m002
