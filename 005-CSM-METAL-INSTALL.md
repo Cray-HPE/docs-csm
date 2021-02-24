@@ -270,6 +270,12 @@ CASMINST-980
 
         % ansible-playbook /etc/ansible/ceph-rgw-users/ceph-pool-quotas.yml
    ```
+  >**`NOTE`**: If you ceph install fails due to large volumes being created please do the following
+  > - lsblk on each storage node.  you will see a lot of output, but look for the size of the lvm volumes associated with the drives.
+  >     - Anything over the drive size (1.92TB, 3.84TB, 7.68TB) is the indicator that there is an issue
+  >     - Another method is to run `vgs` on the storage nodes.  This will give you the size of the volume groups.
+  >         - There should be 1 per drive.
+  ? - if you meet this criteria please run the "Full Wipe" procudure in 051-DISK-CLEANSLATE.md.
 
 
 8. Boot **Kubernetes Managers and Workers**
