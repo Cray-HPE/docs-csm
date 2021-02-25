@@ -19,5 +19,11 @@ This page is designed to be a guide on how all servers in a Shasta system are wi
     - We can use ```mn01``` as an example, this is a gigabyte master node, we noted the vendor in the ```device diagrams``` tab.
     - Once you have those two pieces of information you can open the [MGMT-NET-CABLING](416-MGMT-NET-CABLING.md) page.
     - Locate ```NCN Gigabyte Master``` and make sure that it's cabled correctly.
-
+    
+- Complete the previous steps for all nodes listed on the SHCD.
+    - UANs
+    - NCNs Workers
+    - NCNs Masters
+    - NCNs Storage
+    - Application nodes
 
