@@ -247,9 +247,10 @@ all been run by the administrator before starting this stage.
     `ifroute-lan0` and `ifroute-vlan002` file from either manual backup take in step 6 or re-mount the USB and copy it 
     from the prep directory to `/etc/sysconfig/network/`.
    ```
-   ncn-m001# cp /mnt/pitdata/prep/surtur/pit-files/ifcfg-lan0 /etc/sysconfig/network/
-   ncn-m001# cp /mnt/pitdata/prep/surtur/pit-files/ifroute-lan0 /etc/sysconfig/network/
-   ncn-m001# cp /mnt/pitdata/prep/surtur/pit-files/ifroute-vlan002 /etc/sysconfig/network/
+   ncn-m001# export SYSTEM_NAME=eniac
+   ncn-m001# cp /mnt/pitdata/prep/${SYSTEM_NAME}/pit-files/ifcfg-lan0 /etc/sysconfig/network/
+   ncn-m001# cp /mnt/pitdata/prep/${SYSTEM_NAME}/pit-files/ifroute-lan0 /etc/sysconfig/network/
+   ncn-m001# cp /mnt/pitdata/prep/${SYSTEM_NAME}/pit-files/ifroute-vlan002 /etc/sysconfig/network/
    ncn-m001# wicked ifup lan0
    ``` 
 
@@ -269,20 +270,21 @@ all been run by the administrator before starting this stage.
     ```
 20. [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard) to prevent destructive behavior from occurring during reboot.
       > **`NOTE`** This safeguard needs to be _removed_ to facilitate bare-metal deployments of new nodes. The linked [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard) procedure can be used to disable the safeguard by setting the value back to `0`.
-21. Install the workaround RPM to m001:
+21. Install the workaround and docs RPMs to m001:
     ```bash
-    ncn-m001# rpm -i /mnt/pitdata/${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/noarch/csm-install-workarounds-*.noarch.rpm
+    ncn-m001# rpm -iv /mnt/pitdata/${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/noarch/csm-install-workarounds-*.noarch.rpm
+    ncn-m001# rpm -iv /mnt/pitdata/${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/noarch/docs-csm-install-*.noarch.rpm
     ```
 22. Apply Mountain, Hill and River cabinet routing to m001 as described in [Add Compute Cabinet Routes](109-COMPUTE-CABINET-ROUTES-FOR-NCN.md).
-23. Now check for workarounds in the `/opt/cray/csm/workarounds/after-livecd-reboot` directory within the CSM tar. Each has its own instructions in their respective `README` files.
-```
-# Example
-# The following command assumes that the data partition of the USB stick has been remounted at /mnt/pitdata
-ncn-m001# mount -L PITDATA /mnt/pitdata
-ncn-m001# export CSM_RELEASE=csm-x.y.z
-ncn-m001# ls /tmp/csm/workarounds/workarounds/livecd-post-reboot
-CASMINST-980
-```
+23. Now check for workarounds in the `/opt/cray/csm/workarounds/after-livecd-reboot` directory. Each has its own instructions in their respective `README` files.
+    ```text
+    # Example
+    # The following command assumes that the data partition of the USB stick has been remounted at /mnt/pitdata
+    ncn-m001# mount -L PITDATA /mnt/pitdata
+    ncn-m001# export CSM_RELEASE=csm-x.y.z
+    ncn-m001# ls /opt/cray/csm/workarounds/livecd-post-reboot
+    CASMINST-1093  CASMINST-1309  CASMINST-1570  .keep
+    ```
 
 At this time, the NCN cluster is fully established. The administrator may now eject any mounted USB stick:
    ```
