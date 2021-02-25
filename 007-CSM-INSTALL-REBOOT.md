@@ -284,7 +284,10 @@ ncn-m001# ls /tmp/csm/workarounds/workarounds/livecd-post-reboot
 CASMINST-980
 ```
 
-At this time, the NCN cluster is fully established. The administrator may now eject any mounted USB stick.
+At this time, the NCN cluster is fully established. The administrator may now eject any mounted USB stick:
+   ```
+   ncn-m001# umount /mnt/rootfs /mnt/sqfs /mnt/livecd /mnt/pitdata
+   ```
 
 The administrator can continue onto [CSM Validation](008-CSM-VALIDATION.md) to conclude the CSM product deployment.
 
@@ -356,11 +359,6 @@ be accessed by any LiveCD ISO file if not the one used for the original installa
 5. Copy the CSI binary and CSM workaround documentation off to `tmp/`
    ```bash
    ncn-m001# cp -pv /mnt/rootfs/usr/bin/csi /tmp/csi
-   ```
-
-6. Unmount the partitions after use:
-   ```
-   ncn-m001# umount /mnt/rootfs /mnt/sqfs /mnt/livecd /mnt/pitdata
    ```
 
 <a name="enable-ncn-disk-wiping-safeguard"></a>
