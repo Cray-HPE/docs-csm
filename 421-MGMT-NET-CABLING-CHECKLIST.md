@@ -31,9 +31,39 @@ This page is designed to be a guide on how all servers in a Shasta system are wi
 
 | Hardware Type | Step      | Complete?     |
 | ----------- | ----------- | ------------- |
-| UAN         |             |               |
+| UAN/Application Node         |             |               |
 |             | Open the SHCD from the system |             |
-|             | Take note of the type of hardware on the system        |          |
+|             | Go to the ```Device Diagrams``` tab, take note of the type of hardware on the system        |          |
 |             | Depending on the hardware, open either the **25G_10G** tab or the **40G_10G** tab. |        |
-|             | and on and on...  |         |
-
+|             | Locate the servers named ```mn``` |        |
+|             | Based on the vendor of the server and the name in the first colum we can determine how it's supposed to be cabled.  |         |
+|             | Check cabling against the [MGMT-NET-CABLING](416-MGMT-NET-CABLING.md) page.            |               |
+|             | If it's cabled correctly you are done.            |               |
+|             | If it's cabled incorrectly, contact the team in charge of cabling and request a change.             |               |
+| NCN-Master         |             |               |
+|             | Open the SHCD from the system |             |
+|             | Go to the ```Device Diagrams``` tab, take note of the type of hardware on the system        |          |
+|             | Depending on the hardware, open either the **25G_10G** tab or the **40G_10G** tab. |        |
+|             | Locate the servers named ```mn0x``` |        |
+|             | Based on the vendor of the server and the name in the first colum we can determine how it's supposed to be cabled.  |         |
+|             | Check cabling against the [MGMT-NET-CABLING](416-MGMT-NET-CABLING.md) page.            |               |
+|             | If it's cabled correctly you are done.            |               |
+|             | If it's cabled incorrectly, contact the team in charge of cabling and request a change.             |               |
+| NCN-Worker         |             |               |
+|             | Open the SHCD from the system |             |
+|             | Go to the ```Device Diagrams``` tab, take note of the type of hardware on the system        |          |
+|             | Depending on the hardware, open either the **25G_10G** tab or the **40G_10G** tab. |        |
+|             | Locate the servers named ```wn0x``` |        |
+|             | Based on the vendor of the server and the name in the first colum we can determine how it's supposed to be cabled.  |         |
+|             | Check cabling against the [MGMT-NET-CABLING](416-MGMT-NET-CABLING.md) page.            |               |
+|             | If it's cabled correctly you are done.            |               |
+|             | If it's cabled incorrectly, contact the team in charge of cabling and request a change.             |               |
+| NCN-Storage         |             |               |
+|             | Open the SHCD from the system |             |
+|             | Go to the ```Device Diagrams``` tab, take note of the type of hardware on the system        |          |
+|             | Depending on the hardware, open either the **25G_10G** tab or the **40G_10G** tab. |        |
+|             | Locate the servers named ```sn0x``` |        |
+|             | Based on the vendor of the server and the name in the first colum we can determine how it's supposed to be cabled.  |         |
+|             | Check cabling against the [MGMT-NET-CABLING](416-MGMT-NET-CABLING.md) page.            |               |
+|             | If it's cabled correctly you are done.            |               |
+|             | If it's cabled incorrectly, contact the team in charge of cabling and request a change.             |               |
