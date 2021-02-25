@@ -155,7 +155,25 @@ all been run by the administrator before starting this stage.
    ```
    Keep this terminal active as it will enable `kubectl` commands during the bring-up of the new NCN. 
    If the reboot successfully deploys the LiveCD, this terminal can be exited.
-9. Reboot the LiveCD.
+9. Rollout a restart of the BSS deployment:
+   ```bash
+   pit# kubectl -n services rollout restart deployment cray-bss
+   deployment.apps/cray-bss restarted
+   ```
+   Then wait for this command to return (it will block showing status as the pods are refreshed):
+   ```bash
+   pit# # kubectl -n services rollout status deployment cray-bss
+   Waiting for deployment "cray-bss" rollout to finish: 1 out of 3 new replicas have been updated...
+   Waiting for deployment "cray-bss" rollout to finish: 1 out of 3 new replicas have been updated...
+   Waiting for deployment "cray-bss" rollout to finish: 1 out of 3 new replicas have been updated...
+   Waiting for deployment "cray-bss" rollout to finish: 2 out of 3 new replicas have been updated...
+   Waiting for deployment "cray-bss" rollout to finish: 2 out of 3 new replicas have been updated...
+   Waiting for deployment "cray-bss" rollout to finish: 2 out of 3 new replicas have been updated...
+   Waiting for deployment "cray-bss" rollout to finish: 1 old replicas are pending termination...
+   Waiting for deployment "cray-bss" rollout to finish: 1 old replicas are pending termination...
+   deployment "cray-bss" successfully rolled out
+   ```
+10. Reboot the LiveCD.
    ```bash
    pit# reboot
    ```
