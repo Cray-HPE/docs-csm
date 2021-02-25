@@ -283,7 +283,7 @@ all been run by the administrator before starting this stage.
     # Example
     # The following command assumes that the data partition of the USB stick has been remounted at /mnt/pitdata
     ncn-m001# ls /opt/cray/csm/workarounds/livecd-post-reboot
-    CASMINST-1093  CASMINST-1309  CASMINST-1570  .keep
+    CASMINST-1309  CASMINST-1570  .keep
     ```
 
 At this time, the NCN cluster is fully established. The administrator may now eject any mounted USB stick:
