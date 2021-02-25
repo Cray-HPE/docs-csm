@@ -227,19 +227,13 @@ CASMINST-980
 
 > **`NOTE`**: All consoles are located at `/var/log/conman/console*`
 
-
-5. Restart basecamp to make sure state is up-to-date
-   ```bash
-   pit# systemctl restart basecamp
-   ```
-
-6. Boot the **Storage Nodes**
+5. Boot the **Storage Nodes**
     ```bash
     pit# \
     grep -oP $stoken /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
 
-7. Wait. Observe the installation through ncn-s001-mgmt's console:
+6. Wait. Observe the installation through ncn-s001-mgmt's console:
    ```bash
    # Print the console name
    pit# conman -q | grep s001
@@ -255,14 +249,25 @@ CASMINST-980
    > - no hostname (e.g. `ncn`)
    > - `mgmt0` or `mgmt1` does not indicate they exist in `bond0`, or has a mis-matching MTU of `1500` to the bond's members
    > - no route (e.g. `ip r` returns no `default` route)
-   >   
-    > then run the following script from the afflicted node **(but only in either of those circumstances)**.
+   > 
+   > First, restart the Basecamp service on the PIT (this only needs to be done once even if more than one node are impacted):
+   > ```bash
+   > pit# systemctl restart basecamp
+   > ```
+   > 
+   > Next, verify that valid data is returned for the afflicted node from Basecamp (the output should contain information 
+   > specific to the afflicted node like the hostname):
+   > ```bash
+   > ncn:~ # curl http://pit.mtl:8888/meta-data
+   > ```
+   > 
+   > Finally, run the following script from the afflicted node **(but only in either of those circumstances)**.
    > ```bash
    > ncn# /srv/cray/scripts/metal/retry-ci.sh
    > ```
    > Running `hostname` or logging out and back in should yield the proper hostname.
-
-8. Add in additional drives into Ceph (if necessary)
+   
+7. Add in additional drives into Ceph (if necessary)
       *  On a manager node run
            a. watch "ceph -s"
               i.  This will allow you to monitor the progress of the drives being added
@@ -293,18 +298,18 @@ CASMINST-980
   >         - There should be 1 per drive.
   ? - if you meet this criteria please run the "Full Wipe" procudure in 051-DISK-CLEANSLATE.md.
 
-9. Restart basecamp to make sure state is up-to-date
+8. Restart basecamp to make sure state is up-to-date
    ```bash
    pit# systemctl restart basecamp
    ```
 
-10. Boot **Kubernetes Managers and Workers**
+9. Boot **Kubernetes Managers and Workers**
     ```bash
     pit# \
     grep -oP "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
 
-11. Wait. Observe the installation through ncn-m002-mgmt's console:
+10. Wait. Observe the installation through ncn-m002-mgmt's console:
    ```bash
    # Print the console name
    pit# conman -q | grep m002
@@ -314,7 +319,7 @@ CASMINST-980
    pit# conman -j ncn-m002-mgmt
    ```
 
-12. Refer to [timing of deployments](#timing-of-deployments). After a while, `kubectl get nodes` should return
+11. Refer to [timing of deployments](#timing-of-deployments). After a while, `kubectl get nodes` should return
    all the managers and workers aside from the LiveCD's node.
    ```bash
    pit# ssh ncn-m002
