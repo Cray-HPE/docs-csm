@@ -67,7 +67,7 @@
 | PCIe Slot 1 port 1 | spine or aggr pair, switch 2/2 | 25Gb  | NONE (Shasta v1.4)         |
 | PCIe Slot 1 port 2 | spine or aggr pair, switch 2/2 | 25Gb  | Managment Network CAN bond |
 
-## Gigabyte Hardware
+## Gigabyte/Intel Hardware
 
 ### NCN Worker Cabling
 ![Gigabyte Worker](img/network/gigabyte-worker.png)
