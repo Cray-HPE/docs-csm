@@ -214,6 +214,7 @@ all been run by the administrator before starting this stage.
 12. Login and start a typescript
 
    ```bash
+   external# export SYSTEM_NAME=eniac
    external# ssh ${SYSTEM_NAME}-ncn-m001
    ncn-m001# script -a verify.csm.$(date +%Y-%m-%d).txt
    ncn-m001# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
@@ -281,7 +282,6 @@ all been run by the administrator before starting this stage.
     # Example
     # The following command assumes that the data partition of the USB stick has been remounted at /mnt/pitdata
     ncn-m001# mount -L PITDATA /mnt/pitdata
-    ncn-m001# export CSM_RELEASE=csm-x.y.z
     ncn-m001# ls /opt/cray/csm/workarounds/livecd-post-reboot
     CASMINST-1093  CASMINST-1309  CASMINST-1570  .keep
     ```
@@ -340,7 +340,7 @@ be accessed by any LiveCD ISO file if not the one used for the original installa
 
 1. Set the CSM Release
    ```bash
-   ncn-m001# CSM_RELEASE=csm-0.8.6
+   ncn-m001# export CSM_RELEASE=csm-x.y.z
    ```
 2. Make directories.
    ```bash
