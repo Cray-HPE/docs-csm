@@ -258,7 +258,7 @@ CASMINST-980
    > Next, verify that valid data is returned for the afflicted node from Basecamp (the output should contain information 
    > specific to the afflicted node like the hostname):
    > ```bash
-   > ncn:~ # curl http://pit.mtl:8888/meta-data
+   > ncn:~ # curl http://pit:8888/user-data
    > ```
    > 
    > Finally, run the following script from the afflicted node **(but only in either of those circumstances)**.
