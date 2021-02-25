@@ -32,7 +32,6 @@ This page is designed to be a guide on how all servers in a Shasta system are wi
 | Hardware Type | Step      | Complete?     |
 | ----------- | ----------- | ------------- |
 | UAN         |             |               |
-| :------------ |:----------- | :------------- |
 |             | Open the SHCD from the system |             |
 |             | Take note of the type of hardware on the system        |          |
 |             | Depending on the hardware, open either the **25G_10G** tab or the **40G_10G** tab. |        |
