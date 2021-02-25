@@ -178,7 +178,7 @@ all been run by the administrator before starting this stage.
    pit# reboot
    ```
 
-10. The node should boot, acquire its hostname (i.e. ncn-m001).
+11. The node should boot, acquire its hostname (i.e. ncn-m001).
    > **`NOTE`**: If the nodes have pxe boot issues (e.g. getting pxe errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](420-MGMT-NET-PXE-TSHOOT.md)
    
    > **`NOTE`**: If m001 booted without a hostname or it didn't run all the cloud-init scripts the following commands need to be ran **(but only in that circumstance)**.
@@ -211,7 +211,7 @@ all been run by the administrator before starting this stage.
    > ```
    > This should pull all the required cloud-init data for the NCN to join the cluster.
 
-11. Login and start a typescript
+12. Login and start a typescript
 
    ```bash
    external# ssh ${SYSTEM_NAME}-ncn-m001
@@ -219,7 +219,7 @@ all been run by the administrator before starting this stage.
    ncn-m001# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
-12. Optionally change the root password on ncn-m001 to match the other management NCNs.
+13. Optionally change the root password on ncn-m001 to match the other management NCNs.
    
    > This step is optional and is only needed when the other management NCNs passwords were customized during the [CSM Metal Install](005-CSM-METAL-INSTALL.md) procedure. If the management NCNs still have the default password this step can be skipped.
    
@@ -227,7 +227,7 @@ all been run by the administrator before starting this stage.
    ncn-m001# passwd
    ```
 
-13. Run `kubectl get nodes` to see the full Kubernetes cluster.
+14. Run `kubectl get nodes` to see the full Kubernetes cluster.
     > **`NOTE`** If the new node fails to join the cluster after running other cloud-init items please refer to the 
     > `handoff`
    ```bash
@@ -241,10 +241,11 @@ all been run by the administrator before starting this stage.
    ncn-w003   Ready    <none>   4h39m   v1.18.6
    ```
 
-14. Restore and verify the site link. It will be necessary to restore the `ifcfg-lan0` file, and both the `ifroute-lan0` and `ifroute-vlan002` file from either 
-    manual backup take in step 6 or re-mount the USB and copy it from the prep directory to `/etc/sysconfig/network/`.
+15. Follow the procedure defined in [Accessing CSI from a USB or RemoteISO](#accessing-csi-from-a-usb-or-remoteiso).
 
-   > The following command assumes that the PITDATA partition of the USB stick has been remounted at /mnt/pitdata.:
+16. Restore and verify the site link. It will be necessary to restore the `ifcfg-lan0` file, and both the 
+    `ifroute-lan0` and `ifroute-vlan002` file from either manual backup take in step 6 or re-mount the USB and copy it 
+    from the prep directory to `/etc/sysconfig/network/`.
    ```
    ncn-m001# cp /mnt/pitdata/prep/surtur/pit-files/ifcfg-lan0 /etc/sysconfig/network/
    ncn-m001# cp /mnt/pitdata/prep/surtur/pit-files/ifroute-lan0 /etc/sysconfig/network/
@@ -252,31 +253,28 @@ all been run by the administrator before starting this stage.
    ncn-m001# wicked ifup lan0
    ``` 
 
-15. Run `ip a` to show our IPs, verify the site link. 
+17. Run `ip a` to show our IPs, verify the site link. 
     ```bash
     ncn-m001# ip a show lan0
     ```
-16. Run `ip a` to show our VLANs, verify they all have IPs
+18. Run `ip a` to show our VLANs, verify they all have IPs
     ```bash
     ncn-m001# ip a show vlan002
     ncn-m001# ip a show vlan004
     ncn-m001# ip a show vlan007
     ```
-17. Verify we do not have a metal bootstrap IP, this should be blank
+19. Verify we do not have a metal bootstrap IP, this should be blank
     ```bash
     ncn-m001# ip a show bond0
     ```
-18. Enable the wipe-safeguard to prevent destructive behavior from occurring during reboot. 
-      1. Follow the procedure defined in [Accessing CSI from a USB or RemoteISO](#accessing-csi-from-a-usb-or-remoteiso)
-      2. Activate the safe-guard with the final procedure [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard)
-      > **`NOTE`** This safeguard needs to be _removed_ to faciliate bare-metal deployments of new nodes. The linked [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard) procedure can be used to disable the safeguard.
-   At this time, the cluster is done. If the administrator used a USB stick, it may be ejected at this time or [re-accessed](#accessing-usb-partitions-after-reboot).
-19. Install the workaround RPM to m001:
+20. [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard) to prevent destructive behavior from occurring during reboot.
+      > **`NOTE`** This safeguard needs to be _removed_ to facilitate bare-metal deployments of new nodes. The linked [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard) procedure can be used to disable the safeguard by setting the value back to `0`.
+21. Install the workaround RPM to m001:
     ```bash
     ncn-m001# rpm -i /mnt/pitdata/${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/noarch/csm-install-workarounds-*.noarch.rpm
     ```
-20. Apply Mountain, Hill and River cabinet routing to m001 as described in [Add Compute Cabinet Routes](109-COMPUTE-CABINET-ROUTES-FOR-NCN.md).
-21. Now check for workarounds in the `/opt/cray/csm/workarounds/after-livecd-reboot` directory within the CSM tar. Each has its own instructions in their respective `README` files.
+22. Apply Mountain, Hill and River cabinet routing to m001 as described in [Add Compute Cabinet Routes](109-COMPUTE-CABINET-ROUTES-FOR-NCN.md).
+23. Now check for workarounds in the `/opt/cray/csm/workarounds/after-livecd-reboot` directory within the CSM tar. Each has its own instructions in their respective `README` files.
 ```
 # Example
 # The following command assumes that the data partition of the USB stick has been remounted at /mnt/pitdata
@@ -286,9 +284,9 @@ ncn-m001# ls /tmp/csm/workarounds/workarounds/livecd-post-reboot
 CASMINST-980
 ```
 
-The administrator can continue onto [CSM Validation](008-CSM-VALIDATION.md) to conclude the CSM product deployment.
+At this time, the NCN cluster is fully established. The administrator may now eject any mounted USB stick.
 
-**This is the final step in the Cray System Management (CSM) installer**.
+The administrator can continue onto [CSM Validation](008-CSM-VALIDATION.md) to conclude the CSM product deployment.
 
 There are some operational steps to be taken in [NCN/Management Node Locking](009-NCN-LOCKING.md) and then [Firmware updates with FAS](010-FIRMWARE-UPDATE-WITH-FAS.md)
 
