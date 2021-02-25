@@ -118,7 +118,8 @@ all been run by the administrator before starting this stage.
    Boot0017* Slot 1 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - PXE (HTTP(S) IPv4)
    Boot0018* Slot 1 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - PXE (PXE IPv4)
    ```
-   In the above example, look for the non-OCP device that has "PXE IPv4" rather than "HTTP(S) IPv4".
+   In the above example, look for the non-OCP device that has "PXE IPv4" rather than "HTTP(S) IPv4", which would be 
+   `Boot0018` in this case.
 
    This value varies, take a moment to study the `efibootmgr` output before running this next command.
    ```bash
@@ -281,7 +282,6 @@ all been run by the administrator before starting this stage.
     ```text
     # Example
     # The following command assumes that the data partition of the USB stick has been remounted at /mnt/pitdata
-    ncn-m001# mount -L PITDATA /mnt/pitdata
     ncn-m001# ls /opt/cray/csm/workarounds/livecd-post-reboot
     CASMINST-1093  CASMINST-1309  CASMINST-1570  .keep
     ```
