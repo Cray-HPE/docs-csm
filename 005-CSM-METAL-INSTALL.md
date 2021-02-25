@@ -263,7 +263,6 @@ CASMINST-980
    > Running `hostname` or logging out and back in should yield the proper hostname.
 
 8. Add in additional drives into Ceph (if necessary)
-   ```bash
       *  On a manager node run
            a. watch "ceph -s"
               i.  This will allow you to monitor the progress of the drives being added
@@ -272,11 +271,21 @@ CASMINST-980
                i. you can run ceph-volume inventory at to see the unedited output from the above command.
            b.  ceph-volume lvm create --data /dev/<drive to be added> --bluestore
                i.  you will repeat for all drives on that node that need added and also for each node that has drives to add.
+      *After all the OSDs have been added, run the playbook to re-set the pool quotas (only necessary to run when you've increased the cluster capacity):
+      *  Do the following procedure to update the SMA pool quotas
+         
+   ```bash
+      ncn-s001#  echo "---
+        hosts:
+        - managers
+      any_errors_fatal: true
+      remote_user: root
+      roles:
+        - ceph-pool-quotas" > /etc/ansible/ceph-rgw-users/roles/ceph-pool-quotas.yml
 
-        After all the OSDs have been added, run the playbook to re-set the pool quotas (only necessary to run when you've increased the cluster capacity):
+      ncn-s001# ansible-playbook /etc/ansible/ceph-rgw-users/roles/ceph-pool-quotas.yml
+   ```     
 
-        % ansible-playbook /etc/ansible/ceph-rgw-users/ceph-pool-quotas.yml
-   ```
   >**`NOTE`**: If you ceph install fails due to large volumes being created please do the following
   > - lsblk on each storage node.  you will see a lot of output, but look for the size of the lvm volumes associated with the drives.
   >     - Anything over the drive size (1.92TB, 3.84TB, 7.68TB) is the indicator that there is an issue
