@@ -244,8 +244,7 @@ all been run by the administrator before starting this stage.
 14. Restore and verify the site link. It will be necessary to restore the `ifcfg-lan0` file, and both the `ifroute-lan0` and `ifroute-vlan002` file from either 
     manual backup take in step 6 or re-mount the USB and copy it from the prep directory to `/etc/sysconfig/network/`.
 
-   > The following command assumes that the PITDATA partition of the USB stick has been remounted at /mnt/pitdata. Once the files have been copied from the PITDATA partition unmount it (and the cow partition if mounted): 
-   > `ncn-m001# umount /mnt/cow /mnt/pitdata`
+   > The following command assumes that the PITDATA partition of the USB stick has been remounted at /mnt/pitdata.:
    ```
    ncn-m001# cp /mnt/pitdata/prep/surtur/pit-files/ifcfg-lan0 /etc/sysconfig/network/
    ncn-m001# cp /mnt/pitdata/prep/surtur/pit-files/ifroute-lan0 /etc/sysconfig/network/
@@ -272,8 +271,12 @@ all been run by the administrator before starting this stage.
       2. Activate the safe-guard with the final procedure [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard)
       > **`NOTE`** This safeguard needs to be _removed_ to faciliate bare-metal deployments of new nodes. The linked [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard) procedure can be used to disable the safeguard.
    At this time, the cluster is done. If the administrator used a USB stick, it may be ejected at this time or [re-accessed](#accessing-usb-partitions-after-reboot).
-19. Apply Mountain, Hill and River cabinet routing to m001 as described in [Add Compute Cabinet Routes](109-COMPUTE-CABINET-ROUTES-FOR-NCN.md).
-20. Now check for workarounds in the `/opt/cray/csm/workarounds/after-livecd-reboot` directory within the CSM tar. Each has its own instructions in their respective `README` files.
+19. Install the workaround RPM to m001:
+    ```bash
+    ncn-m001# rpm -i /mnt/pitdata/${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/noarch/csm-install-workarounds-*.noarch.rpm
+    ```
+20. Apply Mountain, Hill and River cabinet routing to m001 as described in [Add Compute Cabinet Routes](109-COMPUTE-CABINET-ROUTES-FOR-NCN.md).
+21. Now check for workarounds in the `/opt/cray/csm/workarounds/after-livecd-reboot` directory within the CSM tar. Each has its own instructions in their respective `README` files.
 ```
 # Example
 # The following command assumes that the data partition of the USB stick has been remounted at /mnt/pitdata
@@ -355,8 +358,6 @@ be accessed by any LiveCD ISO file if not the one used for the original installa
 5. Copy the CSI binary and CSM workaround documentation off to `tmp/`
    ```bash
    ncn-m001# cp -pv /mnt/rootfs/usr/bin/csi /tmp/csi
-   ncn-m001# mkdir -p /tmp/csm/workarounds
-   ncn-m001# cp -pvr /mnt/rootfs/opt/cray/csm/workarounds /tmp/csm/workarounds
    ```
 
 6. Unmount the partitions after use:
