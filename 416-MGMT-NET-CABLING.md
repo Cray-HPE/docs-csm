@@ -31,7 +31,8 @@
 | PCIe Slot 1 port 1 | spine or aggr pair, switch 2/2 | 25Gb  | Management Network NMN/HMN/CAN |
 | PCIe Slot 1 port 2 | NONE                           | NONE  | NONE                           |
 
-SHCD Example
+#### SHCD Example
+
 |hostname|Source         |Destination   |Destination |
 |--------|---------------|--------------|------------|
 | wn01	 | x3000u04ocp-j1 | x3000u12-j7 | sw-25g01   |
@@ -48,7 +49,8 @@ SHCD Example
 | PCIe Slot 1 port 1 | spine or aggr pair, switch 2/2 | 25Gb  | Management Network NMN/HMN/CAN |
 | PCIe Slot 1 port 2 | NONE (See note below for m001) | NONE  | Site (See note below for m001) |
 
-SHCD Example
+#### SHCD Example
+
 |hostname|Source         |Destination   |Destination |
 |--------|---------------|--------------|------------|
 | mn01	 | x3000u01ocp-j1 | x3000u12-j1 | sw-25g01   |
@@ -70,7 +72,8 @@ SHCD Example
 | PCIe Slot 1 port 1 | spine or aggr pair, switch 2/2 | 25Gb  | Management Network NMN/HMN/CAN |
 | PCIe Slot 1 port 2 | spine or aggr pair, switch 2/2 | 25Gb  | Storage SUN (future use) |
 
-SHCD Example
+#### SHCD Example
+
 |hostname|Source         |Destination   |Destination |
 |--------|---------------|--------------|------------|
 | sn01	 | x3000u17s1-j2 | x3000u34-j14	| sw-25g02   |
@@ -84,7 +87,7 @@ For systems that include 4 aggregation switches the cabling will look like the f
 
 ![HPE_Large_Storage](img/network/HPE_Storage_large.png)
 
-SHCD Example with four aggregation switches. 
+#### SHCD Example with four aggregation switches. 
 |hostname|Source          |Destination   |Destination |
 |--------|----------------|--------------|------------|
 | sn01	 | x3000u10ocp-j2 | x3000u36-j5	 | sw-25g04   |
@@ -102,7 +105,8 @@ SHCD Example with four aggregation switches.
 | PCIe Slot 1 port 1 | spine or aggr pair, switch 2/2 | 25Gb  | NONE (Shasta v1.4)         |
 | PCIe Slot 1 port 2 | spine or aggr pair, switch 2/2 | 25Gb  | Managment Network CAN bond |
 
-SHCD Example
+#### SHCD Example
+
 |hostname|Source         |Destination   |Destination |
 |--------|---------------|--------------|------------|
 | uan01	 | x3000u17s1-j2 | x3000u34-j14	| sw-25g02   |
@@ -122,7 +126,8 @@ SHCD Example
 | PCIe Slot 1 port 1 | spine or aggr pair, switch 1/2 | 40Gb  | Management Network NMN/HMN/CAN |
 | PCIe Slot 1 port 2 | spine or aggr pair, switch 2/2 | 40Gb  | Management Network NMN/HMN/CAN |
 
-SHCD Example
+#### SHCD Example
+
 |hostname|Source         |Destination   |Destination |
 |--------|---------------|--------------|------------|
 | wn01	 | x3000u07s1-j1 | x3000u24L-j4 | sw-smn02   |
@@ -141,7 +146,8 @@ SHCD Example
 | PCIe Slot 1 port 2 | spine or aggr pair, switch 2/2 | 40Gb  | Management Network NMN/HMN/CAN |
 | LAN0 port 1        | NONE (See note below for m001) | NONE  | Site (See note below for m001) |
 
-SHCD Example
+#### SHCD Example
+
 |hostname|Source         |Destination   |Destination |
 |--------|---------------|--------------|------------|
 | mn01	 | x3000u01s1-j1 | x3000u24L-j1 | sw-smn02   |
@@ -162,7 +168,8 @@ SHCD Example
 | PCIe Slot 1 port 1 | spine or aggr pair, switch 1/2 | 40Gb  | Management Network NMN/HMN/CAN |
 | PCIe Slot 1 port 2 | spine or aggr pair, switch 2/2 | 40Gb  | Management Network NMN/HMN/CAN |
 
-SHCD Example
+#### SHCD Example
+
 |hostname|Source         |Destination   |Destination |
 |--------|---------------|--------------|------------|
 | sn01	 | x3000u13s1-j1 | x3000u24L-j7 | sw-smn02   |
@@ -178,7 +185,8 @@ SHCD Example
 | PCIe Slot 1 port 1 | spine or aggr pair, switch 1/2 | 40Gb  | Management Network CAN bond |
 | PCIe Slot 1 port 2 | spine or aggr pair, switch 2/2 | 40Gb  | Management Network CAN bond |
 
-SHCD Example
+#### SHCD Example
+
 |hostname|Source         |Destination   |Destination |
 |--------|---------------|--------------|------------|
 | uan01	 | x3000u27s1-j1 | x3000u24L-j10| sw-smn02   |
