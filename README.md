@@ -23,6 +23,13 @@ This will report the version of your installed docs:
 pit:~ # rpm -q docs-csm-install
 ```
 
+To install the latest docs-csm-install RPM after installation:
+```bash
+ncn-m001# zypper ar -cf --gpgcheck-allow-unsigned https://packages.local/repository/csm-sle-15sp2 csm-sle-15sp2
+ncn-m001## zypper ref csm-sle-15sp2
+ncn-m001## zypper in -y --from csm-sle-15sp2 docs-csm-install
+```
+
 ### Review and Contribution
 
 Anyone with Git access to this repo may feel free to submit changes for review, tagging to the relevant JIRA(s) (if necessary).
