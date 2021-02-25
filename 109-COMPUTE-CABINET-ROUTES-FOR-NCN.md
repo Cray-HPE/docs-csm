@@ -1,13 +1,13 @@
 # Cabinet Routing
 NCNs require additional routing to enable access to Mountain, Hill and River Compute cabinets.
-The following script should be **applied to all NCN worker and master nodes**.
+The following script should be **applied to all NCNs**.
 
 Requires:
 * Platform installation
 * Running and configured SLS
 * Post m001 reboot
 
-Apply the following script to all workers and masters. This idempotent script will apply live and persisted routes for the cabinets as configured by CSI and stored in SLS:
+Apply the following script to all NCNs. This idempotent script will apply live and persisted routes for the cabinets as configured by CSI and stored in SLS. Note this script will **not** work on any storage node other than s001. For remaining storage nodes you will need to manually add the routes and create the files until this script can be updated to do this automatically.
 ```
 #!/bin/bash
 
