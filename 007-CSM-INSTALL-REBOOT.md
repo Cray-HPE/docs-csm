@@ -212,10 +212,11 @@ all been run by the administrator before starting this stage.
    > ```
    > This should pull all the required cloud-init data for the NCN to join the cluster.
 
-12. Login and start a typescript (the IP used here is the same from step 8).
+12. Login and start a typescript (the IP used here is the same from step 9).
 
    ```bash
    external# ssh root@10.102.11.13
+   ncn-m002# ssh ncn-m001
    ncn-m001# script -a verify.csm.$(date +%Y-%m-%d).txt
    ncn-m001# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
