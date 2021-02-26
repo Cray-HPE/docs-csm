@@ -101,7 +101,25 @@ all been run by the administrator before starting this stage.
         --ceph-initrd-path $artdir/storage-ceph/initrd.img*.xz \
         --ceph-squashfs-path $artdir/storage-ceph/storage-ceph*.squashfs
    ```
-5. Set efibootmgr for booting next from Port-1 of Riser-1
+5. Rollout a restart of the BSS deployment:
+   ```bash
+   pit# kubectl -n services rollout restart deployment cray-bss
+   deployment.apps/cray-bss restarted
+   ```
+   Then wait for this command to return (it will block showing status as the pods are refreshed):
+   ```bash
+   pit# # kubectl -n services rollout status deployment cray-bss
+   Waiting for deployment "cray-bss" rollout to finish: 1 out of 3 new replicas have been updated...
+   Waiting for deployment "cray-bss" rollout to finish: 1 out of 3 new replicas have been updated...
+   Waiting for deployment "cray-bss" rollout to finish: 1 out of 3 new replicas have been updated...
+   Waiting for deployment "cray-bss" rollout to finish: 2 out of 3 new replicas have been updated...
+   Waiting for deployment "cray-bss" rollout to finish: 2 out of 3 new replicas have been updated...
+   Waiting for deployment "cray-bss" rollout to finish: 2 out of 3 new replicas have been updated...
+   Waiting for deployment "cray-bss" rollout to finish: 1 old replicas are pending termination...
+   Waiting for deployment "cray-bss" rollout to finish: 1 old replicas are pending termination...
+   deployment "cray-bss" successfully rolled out
+   ```
+6. Set efibootmgr for booting next from Port-1 of Riser-1
    ```bash
    pit# efibootmgr | grep -i ipv4
    Boot0005* UEFI IPv4: Network 00 at Riser 02 Slot 01
@@ -126,12 +144,12 @@ all been run by the administrator before starting this stage.
    pit# efibootmgr -n 0005 2>&1 | grep -i BootNext
    BootNext: 0005
    ```
-6. **`SKIP THIS STEP IF USING USB LIVECD`** The remote LiveCD will lose all changes and local data once it is rebooted. 
+7. **`SKIP THIS STEP IF USING USB LIVECD`** The remote LiveCD will lose all changes and local data once it is rebooted. 
    It is advised to backup the prep directory for the LiveCD off of the CRAY before rebooting. This will facilitate 
    setting the LiveCD up again in the event of a bad reboot. Follow the procedure in 
    [VirtuaL ISO Boot - Backing up the OverlayFS](062-LIVECD-VIRTUAL-ISO-BOOT.md#backing-up-the-overlay-cow-fs).
    After completing that, return here and proceed to the next step.
-7. Optionally setup conman or serial console if not already on one from any laptop
+8. Optionally setup conman or serial console if not already on one from any laptop
    ```bash
    external# script -a boot.livecd.$(date +%Y-%m-%d).txt
    external# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
@@ -141,7 +159,7 @@ all been run by the administrator before starting this stage.
    external# ipmitool -I lanplus -U $username -E -H ${SYSTEM_NAME}-ncn-m001-mgmt chassis power status
    external# ipmitool -I lanplus -U $username -E -H ${SYSTEM_NAME}-ncn-m001-mgmt sol activate
    ```
-8. Collect the CAN IPs for logging into other NCNs while this happens. This is useful for interacting
+9. Collect the CAN IPs for logging into other NCNs while this happens. This is useful for interacting
    and debugging the kubernetes cluster while the LiveCD is `offline`.
    ```bash
    pit# ssh ncn-m002
@@ -156,24 +174,6 @@ all been run by the administrator before starting this stage.
    ```
    Keep this terminal active as it will enable `kubectl` commands during the bring-up of the new NCN. 
    If the reboot successfully deploys the LiveCD, this terminal can be exited.
-9. Rollout a restart of the BSS deployment:
-   ```bash
-   pit# kubectl -n services rollout restart deployment cray-bss
-   deployment.apps/cray-bss restarted
-   ```
-   Then wait for this command to return (it will block showing status as the pods are refreshed):
-   ```bash
-   pit# # kubectl -n services rollout status deployment cray-bss
-   Waiting for deployment "cray-bss" rollout to finish: 1 out of 3 new replicas have been updated...
-   Waiting for deployment "cray-bss" rollout to finish: 1 out of 3 new replicas have been updated...
-   Waiting for deployment "cray-bss" rollout to finish: 1 out of 3 new replicas have been updated...
-   Waiting for deployment "cray-bss" rollout to finish: 2 out of 3 new replicas have been updated...
-   Waiting for deployment "cray-bss" rollout to finish: 2 out of 3 new replicas have been updated...
-   Waiting for deployment "cray-bss" rollout to finish: 2 out of 3 new replicas have been updated...
-   Waiting for deployment "cray-bss" rollout to finish: 1 old replicas are pending termination...
-   Waiting for deployment "cray-bss" rollout to finish: 1 old replicas are pending termination...
-   deployment "cray-bss" successfully rolled out
-   ```
 10. Reboot the LiveCD.
    ```bash
    pit# reboot
@@ -212,11 +212,11 @@ all been run by the administrator before starting this stage.
    > ```
    > This should pull all the required cloud-init data for the NCN to join the cluster.
 
-12. Login and start a typescript
+12. Login and start a typescript (the IP used here is the same from step 9).
 
    ```bash
-   external# export SYSTEM_NAME=eniac
-   external# ssh ${SYSTEM_NAME}-ncn-m001
+   external# ssh root@10.102.11.13
+   ncn-m002# ssh ncn-m001
    ncn-m001# script -a verify.csm.$(date +%Y-%m-%d).txt
    ncn-m001# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
