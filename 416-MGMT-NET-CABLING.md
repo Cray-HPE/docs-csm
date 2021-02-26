@@ -31,6 +31,14 @@
 | PCIe Slot 1 port 1 | spine or aggr pair, switch 2/2 | 25Gb  | Management Network NMN/HMN/CAN |
 | PCIe Slot 1 port 2 | NONE                           | NONE  | NONE                           |
 
+#### SHCD Example
+
+|hostname|Source         |Destination   |Destination |
+|--------|---------------|--------------|------------|
+| wn01	 | x3000u04ocp-j1 | x3000u12-j7 | sw-25g01   |
+| wn01	 | x3000u04ocp-j2 | x3000u13-j7	| sw-25g02   |
+
+![HPE_Worker](img/network/HPE_Worker.png)
 
 ### NCN Master Cabling
 
@@ -41,7 +49,14 @@
 | PCIe Slot 1 port 1 | spine or aggr pair, switch 2/2 | 25Gb  | Management Network NMN/HMN/CAN |
 | PCIe Slot 1 port 2 | NONE (See note below for m001) | NONE  | Site (See note below for m001) |
 
+#### SHCD Example
 
+|hostname|Source         |Destination   |Destination |
+|--------|---------------|--------------|------------|
+| mn01	 | x3000u01ocp-j1 | x3000u12-j1 | sw-25g01   |
+| mn01	 | x3000u01s1-j1  | x3000u13-j1	| sw-25g02   |
+
+![HPE_Worker](img/network/HPE_Master.png)
 **NOTE**: Master 1 (m001) is required to have a site connection for installation and non-CAN system access.  This can have several configurations depending on customer requirements/equipment:
 
 * Dual 10/25Gb card configurations as described in the table above should use PCIe Slot 1, Port 2 as a site connection if the customer supports 10/25Gb.
@@ -57,6 +72,29 @@
 | PCIe Slot 1 port 1 | spine or aggr pair, switch 2/2 | 25Gb  | Management Network NMN/HMN/CAN |
 | PCIe Slot 1 port 2 | spine or aggr pair, switch 2/2 | 25Gb  | Storage SUN (future use) |
 
+#### SHCD Example
+
+|hostname|Source         |Destination   |Destination |
+|--------|---------------|--------------|------------|
+| sn01	 | x3000u17s1-j2 | x3000u34-j14	| sw-25g02   |
+| sn01	 | x3000u17s1-j1 | x3000u34-j8	| sw-25g02   |
+| sn01	 | x3000u17ocp-j2| x3000u33-j14	| sw-25g01   |
+| sn01	 | x3000u17ocp-j1| x3000u33-j8	| sw-25g01   |
+
+![HPE_Storage](img/network/HPE_Storage.png)
+
+For systems that include 4 aggregation switches the cabling will look like the following.
+
+![HPE_Large_Storage](img/network/HPE_Storage_large.png)
+
+#### SHCD Example with four aggregation switches. 
+|hostname|Source          |Destination   |Destination |
+|--------|----------------|--------------|------------|
+| sn01	 | x3000u10ocp-j2 | x3000u36-j5	 | sw-25g04   |
+| sn01	 | x3000u10s1-j2  | x3000u35-j5	 | sw-25g03   |
+| sn01	 | x3000u10ocp-j1 | x3000u34-j6	 | sw-25g02   |
+| sn01	 | x3000u10s1-j1  | x3000u33-j6	 | sw-25g01   |
+
 
 ### UAN Cabling
 
@@ -67,7 +105,18 @@
 | PCIe Slot 1 port 1 | spine or aggr pair, switch 2/2 | 25Gb  | NONE (Shasta v1.4)         |
 | PCIe Slot 1 port 2 | spine or aggr pair, switch 2/2 | 25Gb  | Managment Network CAN bond |
 
-## Gigabyte Hardware
+#### SHCD Example
+
+|hostname|Source         |Destination   |Destination |
+|--------|---------------|--------------|------------|
+| uan01	 | x3000u17s1-j2 | x3000u34-j14	| sw-25g02   |
+| uan01	 | x3000u17s1-j1 | x3000u34-j8	| sw-25g02   |
+| uan01	 | x3000u17ocp-j2| x3000u33-j14	| sw-25g01   |
+| uan01	 | x3000u17ocp-j1| x3000u33-j8	| sw-25g01   |
+
+![HPE_UAN](img/network/HPE_UAN.png)
+
+## Gigabyte/Intel Hardware
 
 ### NCN Worker Cabling
 ![Gigabyte Worker](img/network/gigabyte-worker.png)
@@ -76,6 +125,15 @@
 |--------------------|--------------------------------|-------|--------------------------------|
 | PCIe Slot 1 port 1 | spine or aggr pair, switch 1/2 | 40Gb  | Management Network NMN/HMN/CAN |
 | PCIe Slot 1 port 2 | spine or aggr pair, switch 2/2 | 40Gb  | Management Network NMN/HMN/CAN |
+
+#### SHCD Example
+
+|hostname|Source         |Destination   |Destination |
+|--------|---------------|--------------|------------|
+| wn01	 | x3000u07s1-j1 | x3000u24L-j4 | sw-smn02   |
+| wn01	 | x3000u07s1-j2 | x3000u24R-j4	| sw-smn03   |
+
+![Gig_intel_worker](img/network/Gigaintel_Worker.png)
 
 **NOTE**: Cabling of w001 has changed in Shasta v1.4.  Please see m001 note below.
 
@@ -88,6 +146,14 @@
 | PCIe Slot 1 port 2 | spine or aggr pair, switch 2/2 | 40Gb  | Management Network NMN/HMN/CAN |
 | LAN0 port 1        | NONE (See note below for m001) | NONE  | Site (See note below for m001) |
 
+#### SHCD Example
+
+|hostname|Source         |Destination   |Destination |
+|--------|---------------|--------------|------------|
+| mn01	 | x3000u01s1-j1 | x3000u24L-j1 | sw-smn02   |
+| mn01	 | x3000u01s1-j2 | x3000u24R-j1	| sw-smn03   |
+
+![Gig_intel_master](img/network/Gigaintel_Master.png)
 
 **NOTE**: Master 1 (m001) is required to have a site connection for installation and non-CAN system access.  In Shasta versions <=1.3 this connection was on w001.  This can have several configurations depending on customer requirements/equipment:
 
@@ -102,6 +168,15 @@
 | PCIe Slot 1 port 1 | spine or aggr pair, switch 1/2 | 40Gb  | Management Network NMN/HMN/CAN |
 | PCIe Slot 1 port 2 | spine or aggr pair, switch 2/2 | 40Gb  | Management Network NMN/HMN/CAN |
 
+#### SHCD Example
+
+|hostname|Source         |Destination   |Destination |
+|--------|---------------|--------------|------------|
+| sn01	 | x3000u13s1-j1 | x3000u24L-j7 | sw-smn02   |
+| sn01	 | x3000u13s1-j2 | x3000u24R-j7	| sw-smn03   |
+
+![Gig_intel_storage](img/network/GigaIntel_storage.png)
+
 ### UAN Cabling
 
 | Server Port        | Management Network Port        | Speed | Use / Configuration         |
@@ -109,6 +184,15 @@
 | LAN0 port 1        | leaf (see note)                |  1Gb  | Management Network NMN      |
 | PCIe Slot 1 port 1 | spine or aggr pair, switch 1/2 | 40Gb  | Management Network CAN bond |
 | PCIe Slot 1 port 2 | spine or aggr pair, switch 2/2 | 40Gb  | Management Network CAN bond |
+
+#### SHCD Example
+
+|hostname|Source         |Destination   |Destination |
+|--------|---------------|--------------|------------|
+| uan01	 | x3000u27s1-j1 | x3000u24L-j10| sw-smn02   |
+| uan01	 | x3000u27s1-j2 | x3000u24R-j10| sw-smn03   |
+
+![Gig_intel_uan](img/network/Gigaintel_UAN.png)
 
 NOTE that there are a couple configurations possible for LAN0:
 * Existing Gigabyte systems on Dell and Mellox network hardware will use the (existing) Dell leaf port.
