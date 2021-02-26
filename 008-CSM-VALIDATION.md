@@ -430,24 +430,28 @@ The session template below can be copied and used as the basis for the BOS Sessi
 ### Find an available node and boot the session template
 
 ```ini
-# cray hsm state components list
+# cray hsm state components list --role Compute
 ...
 [[Components]]
-ID = "x3000c0s6b0"
-Type = "NodeBMC"
-State = "Ready"
+ID = "x3000c0s17b1n0"
+Type = "Node"
+State = "On"
 Flag = "OK"
 Enabled = true
+Role = "Compute"
+NID = 1
 NetType = "Sling"
 Arch = "X86"
 Class = "River"
 
 [[Components]]
-ID = "x3000c0s5e0"
-Type = "NodeEnclosure"
+ID = "x3000c0s17b2n0"
+Type = "Node"
 State = "On"
 Flag = "OK"
 Enabled = true
+Role = "Compute"
+NID = 2
 NetType = "Sling"
 Arch = "X86"
 Class = "River"

@@ -389,7 +389,7 @@ During the install of the NCNs their BMCs get get set to static IP addresses. Th
 
 <a name="powering-off-livecd"></a>
 #### Powering Off LiveCD or ncn-m001 node
-Lastly, shutdown the LiveCD or ncn-m001 node.  Skip this step if you are planning to use this node as a staging area to create the LiveCD.
+Skip this step if you are planning to use this node as a staging area to create the LiveCD. Lastly, shutdown the LiveCD or ncn-m001 node.
 ```bash
 ncn-m001:~ # poweroff
 ```
