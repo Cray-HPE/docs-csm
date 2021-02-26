@@ -305,13 +305,12 @@ ncn# kubectl scale -n services --replicas=0 deployment cray-dhcp-kea
 If the system is degraded, and the administrator wants to ensure a clean-slated install then a wipe
 may be performed to rule out issues with disks and boot-order.
 
-For each NCN, login, wipe it, and power it down
+For each NCN **except for m001**, login and wipe it
 
 ```bash
 pit# ssh ncn
 ncn# wipefs --all --force /dev/sd[a-z]
 ncn# wipefs --all --force /dev/disk/by-label/*
-ncn# ipmitool power off
 ncn# exit
 ```
 
