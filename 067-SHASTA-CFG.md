@@ -67,12 +67,27 @@ with system-specific customizations.
 
     Replace the `Password` references with values appropriate for your system.
 
-3.  To customize the PKI Certificate Authority (CA) used by the platform, see
+3. Validate that the REDS/MEDS/RTS sealed secrets contain valid json using `jq`:
+  ```bash
+  # Validate REDS credentials
+  linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray_reds_credentials.generate.data[0].args.value' | jq
+  linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray_reds_credentials.generate.data[1].args.value' | jq
+
+  # Validate MEDS credentials
+  linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray_meds_credentials.generate.data[0].args.value' | jq
+
+  # Validate RTS credentials
+  linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray_hms_rts_credentials.generate.data[0].args.value' | jq
+  linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray_hms_rts_credentials.generate.data[1].args.value' | jq
+  ```
+
+
+4.  To customize the PKI Certificate Authority (CA) used by the platform, see
     [Customizing the Platform CA](055-CERTIFICATE-AUTHORITY.md). 
 
     > **`IMPORTANT`** The CA may not be modified after install.
 
-4.  To federate Keycloak with an upstream LDAP:
+5.  To federate Keycloak with an upstream LDAP:
 
     *   If LDAP requires TLS (recommended), update the `cray-keycloak` sealed
         secret value by supplying a base64 encoded Java KeyStore (JKS) that
@@ -328,7 +343,7 @@ with system-specific customizations.
         > ldapSearchBase: dc=dcldap,dc=dit
         > ```
 
-5.  If you need to resolve outside hostnames, you will need to configure
+6.  If you need to resolve outside hostnames, you will need to configure
     forwarding in the cray-dns-unbound service. For example, if you are using a
     hostname and not an IP for the upstream LDAP server in step 4 above, you
     will need to be able to resolve that hostname.
@@ -350,7 +365,7 @@ with system-specific customizations.
     EOF
     ```
 
-6.  Review `customizations.yaml` and replace remaining `~FIXME~` values with
+7.  Review `customizations.yaml` and replace remaining `~FIXME~` values with
     appropriate settings.
 
     For the following `~FIXME~` values, use the example provided and just remove the `~FIXME~ e.g.`
@@ -373,15 +388,14 @@ with system-specific customizations.
               loadBalancerIP: ~FIXME~ e.g. 10.94.100.3
      ```
 
-7.  Load the `zeromq` container image required by Sealed Secret Generators:
+8.  Load the `zeromq` container image required by Sealed Secret Generators:
 
     > **`NOTE`** Requires a properly configured Docker or Podman environment.
 
     ```bash
     linux:~ # /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh dtr.dev.cray.com/zeromq/zeromq:v4.0.5
     ```
-
-8.  Re-encrypt and seed secrets in `customizations.yaml`:
+9.  Re-encrypt and seed secrets in `customizations.yaml`:
 
     ```bash
     linux# /mnt/pitdata/prep/site-init/utils/secrets-reencrypt.sh /mnt/pitdata/prep/site-init/customizations.yaml /mnt/pitdata/prep/site-init/certs/sealed_secrets.key /mnt/pitdata/prep/site-init/certs/sealed_secrets.crt
