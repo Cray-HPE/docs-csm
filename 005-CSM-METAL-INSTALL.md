@@ -16,19 +16,21 @@ A key symptom of this bug is that the NCN will not PXE boot and will instead fal
 
 This page will go over deploying the non-compute nodes.
 
-* [Configure Bootstrap Registry to Proxy an Upstream Registry](#configure-bootstrap-registry-to-proxy-an-upstream-registry)
-* [Tokens and IPMI Password](#tokens-and-ipmi-password)
-* [Timing of Deployments](#timing-of-deployments)
-* [NCN Deployment](#ncn-deployment)
-    * [Apply NCN Pre-Boot Workarounds](#apply-ncn-pre-boot-workarounds)
-    * [Ensure Time Is Accurate Before Deploying NCNs](#ensure-time-is-accurate-before-deploying-ncns)
-    * [Start Deployment](#start-deployment)
-    * [Apply NCN Post-Boot Workarounds](#apply-ncn-post-boot-workarounds)
-    * [LiveCD Cluster Authentication](#livecd-cluster-authentication)
-    * [BGP Routing](#bgp-routing)
-    * [Validation](#validation)
-    * [Optional Validation](#optional-validation)
-    * [Change Password](#change-password)
+- [CSM Metal Install](#csm-metal-install)
+  - [Overview](#overview)
+  - [Configure Bootstrap Registry to Proxy an Upstream Registry](#configure-bootstrap-registry-to-proxy-an-upstream-registry)
+  - [Tokens and IPMI Password](#tokens-and-ipmi-password)
+  - [Timing of Deployments](#timing-of-deployments)
+  - [NCN Deployment](#ncn-deployment)
+      - [Apply NCN Pre-Boot Workarounds](#apply-ncn-pre-boot-workarounds)
+      - [Ensure Time Is Accurate Before Deploying NCNs](#ensure-time-is-accurate-before-deploying-ncns)
+    - [Start Deployment](#start-deployment)
+      - [Apply NCN Post-Boot Workarounds](#apply-ncn-post-boot-workarounds)
+      - [LiveCD Cluster Authentication](#livecd-cluster-authentication)
+      - [BGP Routing](#bgp-routing)
+      - [Validation](#validation)
+      - [Optional Validation](#optional-validation)
+  - [Change Password](#change-password)
 
 
 <a name="configure-bootstrap-registry-to-proxy-an-upstream-registry"></a>
@@ -266,8 +268,61 @@ CASMINST-980
    > ncn# /srv/cray/scripts/metal/retry-ci.sh
    > ```
    > Running `hostname` or logging out and back in should yield the proper hostname.
-   
-7. Add in additional drives into Ceph (if necessary)
+
+**`IMPORTANT (FOR FRESH INSTALLS ONLY)`**: If your ceph install failed please check the following
+   > ```bash
+   > ncn-s# ceph osd tree
+   >ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
+   >-1       83.83459 root default
+   >-5       27.94470     host ncn-s001
+   >  0   ssd  3.49309         osd.0         up  1.00000 1.00000
+   >  4   ssd  3.49309         osd.4         up  1.00000 1.00000
+   >  6   ssd  3.49309         osd.6         up  1.00000 1.00000
+   >  8   ssd  3.49309         osd.8         up  1.00000 1.00000
+   >10   ssd  3.49309         osd.10        up  1.00000 1.00000
+   >12   ssd  3.49309         osd.12        up  1.00000 1.00000
+   >14   ssd  3.49309         osd.14        up  1.00000 1.00000
+   >16   ssd  3.49309         osd.16        up  1.00000 1.00000
+   >-3       27.94470     host ncn-s002
+   >  1   ssd  3.49309         osd.1       down  1.00000 1.00000
+   >  3   ssd  3.49309         osd.3       down  1.00000 1.00000
+   >  5   ssd  3.49309         osd.5       down  1.00000 1.00000
+   >  7   ssd  3.49309         osd.7       down  1.00000 1.00000
+   >  9   ssd  3.49309         osd.9       down  1.00000 1.00000
+   >11   ssd  3.49309         osd.11      down  1.00000 1.00000
+   >13   ssd  3.49309         osd.13      down  1.00000 1.00000
+   >15   ssd  3.49309         osd.15      down  1.00000 1.00000
+   >-7       27.94519     host ncn-s003                            <--- node where our issue exists
+   >  2   ssd 27.94519         osd.2       down  1.00000 1.00000    <--- our problematic VG.  
+   >```
+   >**SSH to our node(s) where the issue exists and do the following:**
+   >
+   >1.  ncn-s# systemctl stop ceph-osd.target
+   >2.  ncn-s# vgremove -f --select 'vg_name=~ceph*'  
+   **This will take a little bit of time, so don't panic.**
+   >3.  ncn-s# for i in {g..n}; do sgdisk --zap-all /dev/sd$i; done.
+   >
+   **This will vary node to node and you should use lsblk to identify all drives available to ceph** 
+
+   >**Manually create OSDs on the problematic nodes**
+   >ncn-s# for i in {g..n}; do ceph-volume lvm create --data /dev/sd$i  --bluestore; done
+   >
+   >**ALL THE BELOW WORK WILL BE RUN FROM NCN-S001**
+   >
+   >1. Verify the /etc/cray/ceph directory is empty.  If there are any files there then delete them
+   >2. Put in safeguard
+   >     - Edit /srv/cray/scripts/metal/lib.sh
+   >    - Comment out the below lines
+   >
+   > ```bash
+   > 22   if [ $wipe == 'yes' ]; then
+   > 23     ansible osds -m shell -a "vgremove -f --select 'vg_name=~ceph*'"
+   > 24   fi```
+   >
+   >Run the cloud init script
+   >ncn-s001# /srv/cray/scripts/common/storage-ceph-cloudinit.sh
+
+1. Add in additional drives into Ceph (if necessary)
     *  On a manager node run
         1. `watch "ceph -s"`
             1.  This will allow you to monitor the progress of the drives being added
@@ -298,18 +353,18 @@ CASMINST-980
     >         - There should be 1 per drive.
     > - if you meet this criteria please run the "Full Wipe" procedure in 051-DISK-CLEANSLATE.md.
 
-8. Restart basecamp to make sure state is up-to-date
+2. Restart basecamp to make sure state is up-to-date
    ```bash
    pit# systemctl restart basecamp
    ```
 
-9. Boot **Kubernetes Managers and Workers**
+3. Boot **Kubernetes Managers and Workers**
     ```bash
     pit# \
     grep -oP "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
 
-10. Wait. Observe the installation through ncn-m002-mgmt's console:
+4.  Wait. Observe the installation through ncn-m002-mgmt's console:
    ```bash
    # Print the console name
    pit# conman -q | grep m002
