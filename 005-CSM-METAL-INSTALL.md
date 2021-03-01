@@ -277,11 +277,10 @@ The configuration workflow described here is intended to help understand the exp
    pit# conman -j ncn-s001-mgmt
    ```
     From there an administrator can witness console-output for the cloud-init scripts.
-
-7. Boot **Kubernetes Managers and Workers**
    > **`NOTE`**: If the nodes have pxe boot issues (e.g. getting pxe errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](420-MGMT-NET-PXE-TSHOOT.md)
    > **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to linux) see the CSM workarounds for fixes around mutual symptoms.
 
+7. Boot **Kubernetes Managers and Workers**
     ```bash
     pit# \
     grep -oP "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
