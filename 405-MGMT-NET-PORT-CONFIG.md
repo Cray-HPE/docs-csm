@@ -42,6 +42,8 @@ interface 1/1/16
     mtu 9198
     no routing
     vlan access 2
+    spanning-tree bpdu-guard
+    spanning-tree port-type admin-edge
     exit
 ```
 
