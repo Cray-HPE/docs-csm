@@ -8,7 +8,7 @@ This page will assist you with configuring and activating your booted LiveCD thr
     * [Setup Internal Connections](#setup-internal-connections)
 * [Customization](#customization)
     * [Hostname](#hostname)
-    * [Shasta-CFG](#shasta-cfg)
+    * [SHASTA-CFG](#shasta-cfg)
     * [Cray Site Init](#cray-site-init)
     * [CA Certificate](#ca-certificate)
 * [Validate the LiveCD platform.](#validate-the-livecd-platform)
@@ -101,7 +101,8 @@ pit# hostnamectl set-hostname bigbird-ncn-m001-pit
 <a name="shasta-cfg"></a>
 ### Shasta-CFG
 
-> **THIS IS A STUB** There are no instructions on this page, this page is place-holder.
+Follow [the procedures in 067-SHASTA-CFG.md](./067-SHASTA-CFG.md) to
+prepare the `site-init` directory for your system.
 
 <a name="cray-site-init"></a>
 ### Cray-Site-Init

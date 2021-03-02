@@ -9,7 +9,7 @@ There are 5 overall steps that provide a bootable USB with SSH enabled, capable 
 * [Configuration Payload](#configuration-payload)
    * [Generate Installation Files](#generate-installation-files)
    * [CSI Workarounds](#csi-workarounds)
-   * [SHASTA-CFG](#SHASTA-CFG)
+   * [SHASTA-CFG](#shasta-cfg)
 * [Pre-Populate LiveCD Daemons Configuration and NCN Artifacts](#pre-populate-livecd-daemons-configuration-and-ncn-artifacts)
 * [Boot the LiveCD](#boot-the-livecd)
    * [First Login](#first-login)
@@ -291,17 +291,11 @@ Check for workarounds in the `/opt/cray/csm/workarounds/csi-config` directory.  
   casminst-999
   ```
 
-<a name="SHASTA-CFG"></a>
+<a name="shasta-cfg"></a>
 ### SHASTA-CFG
 
-SHASTA-CFG is a distinct repository of relatively static, installation-centric artifacts, including:
-
-* Cluster-wide network configuration settings required by Helm Charts deployed by product stream Loftsman Manifests
-* [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets)
-* Sealed Secret Generate Blocks -- an form of plain-text input that renders to a Sealed Secret
-* Helm Chart value overrides that are merged into Loftsman Manifests by product stream installers
-
-Follow [the instructions here](./067-SHASTA-CFG.md) to prepare a SHASTA-CFG repository for your system.
+Follow [the procedures in 067-SHASTA-CFG.md](./067-SHASTA-CFG.md) to
+prepare the `site-init` directory for your system.
 
 <a name="pre-populate-livecd-daemons-configuration-and-ncn-arti"></a>
 ## Pre-Populate LiveCD Daemons Configuration and NCN Artifacts
