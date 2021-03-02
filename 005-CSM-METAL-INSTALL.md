@@ -24,7 +24,7 @@ This page will go over deploying the non-compute nodes.
   - [NCN Deployment](#ncn-deployment)
       - [Apply NCN Pre-Boot Workarounds](#apply-ncn-pre-boot-workarounds)
       - [Ensure Time Is Accurate Before Deploying NCNs](#ensure-time-is-accurate-before-deploying-ncns)
-    - [Start Deployment](#start-deployment)
+      - [Start Deployment](#start-deployment)
       - [Apply NCN Post-Boot Workarounds](#apply-ncn-post-boot-workarounds)
       - [LiveCD Cluster Authentication](#livecd-cluster-authentication)
       - [BGP Routing](#bgp-routing)
@@ -125,7 +125,7 @@ This section will walk an administrator through NCN deployment.
 > Grab the [Tokens](#tokens-and-ipmi-password) to facilitate commands if loading this page from a bookmark.
 
 <a name="apply-ncn-pre-boot-workarounds"></a>
-#### Apply NCN Pre-Boot Workarounds
+### Apply NCN Pre-Boot Workarounds
 
 _There will be post-boot workarounds as well._
 
@@ -139,7 +139,7 @@ CASMINST-980
 ```
 
 <a name="ensure-time-is-accurate-before-deploying-ncns"></a>
-#### Ensure Time Is Accurate Before Deploying NCNs
+### Ensure Time Is Accurate Before Deploying NCNs
 
 1. Ensure that the PIT node has the current and correct time.  But also check that each NCN has the correct time set in BIOS.
 
@@ -186,6 +186,29 @@ CASMINST-980
 
 <a name="start-deployment"></a>
 ### Start Deployment
+
+Deployment of the nodes starts with booting the storage nodes first, then the master nodes and worker nodes together.
+After the operating system boots on each node there are some configuration actions which take place.  Watching the
+console or the console log for certain nodes can help to understand what happens and when.  When the process is complete
+for all nodes, the Ceph storage will have been initialized and the Kuberenetes cluster will be created ready for a workload.
+
+The configuration workflow described here is intended to help understand the expected path for booting and configuring.  See the actual steps below for the commands to deploy these management NCNs.
+
+  - Start watching the consoles for ncn-s001 and at least one other storage node
+  - Boot all storage nodes at the same time
+    - The first storage node ncn-s001 will boot and then starts a loop as ceph-ansible configuration waits for all other storage nodes to boot
+    - The other storage nodes boot and become passive.  They will be fully configured when ceph-ansible runs to completion on ncn-s001
+  - Once ncn-s001 notices that all other storage nodes have booted, ceph-ansible will begin ceph configuration.  This takes several minutes.
+  - Once ceph-ansible has finished on ncn-s001, then ncn-s001 waits for ncn-m002 to create /etc/kubernetes/admin.conf.
+  - Start watching the consoles for ncn-m002, ncn-m003 and at least one worker node
+  - Boot master nodes (ncn-m002 and ncn-m003) and all worker nodes at the same time
+    - The worker nodes will boot and wait for ncn-m002 to create the /etc/cray/kubernetes/join-command-control-plane so they can join Kubernetes
+    - The third master node ncn-m003 boots and waits for ncn-m002 to create the /etc/cray/kubernetes/join-command-control-plane so it can join Kubernetes
+    - The second master node ncn-m002 boots, runs the kubernetes-cloudinit.sh which will create /etc/kubernetes/admin.conf and /etc/cray/kubernetes/join-command-control-plan, then waits for the storage node to create etcd-backup-s3-credentials
+  - Once ncn-s001 notices that ncn-m002 has created /etc/kubernetes/admin.conf, then ncn-s001 waits for any worker node to become available.
+  - Once each worker node notices that ncn-m002 has created /etc/cray/kubernetes/join-command-control-plan, then it will join the Kubernetes cluster.  
+    - Now ncn-s001 should notice this from any one of the worker nodes and move forward with creation of config maps and running the post-ceph playbooks (s3, OSD pools, quotas, etc.)
+  - Once ncn-s001 creates etcd-backup-s3-credentials during the benji-backups role which is one of the last roles after ceph has been set up, then ncn-m001 notices this and moves forward
 
 1. Create boot directories for any NCN in DNS:
    > This will create folders for each host in `/var/www`, allowing each host to have their own unique set of artifacts; kernel, initrd, SquashFS, and `script.ipxe` bootscript.
@@ -245,12 +268,12 @@ CASMINST-980
    pit# conman -j ncn-s001-mgmt
    ```
     From there an administrator can witness console-output for the cloud-init scripts.
-   > **`NOTE`**: If the nodes have pxe boot issues (e.g. getting pxe errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](420-MGMT-NET-PXE-TSHOOT.md)
+   > **`NOTE`**: If the nodes have pxe boot issues, such as getting pxe errors or not pulling the ipxe.efi binary, see [PXE boot troubleshooting](420-MGMT-NET-PXE-TSHOOT.md)
 
    > **`NOTE`**: If the nodes exhibit afflictions such as:
-   > - no hostname (e.g. `ncn`)
+   > - no hostname (or a hostname of `ncn`)
    > - `mgmt0` or `mgmt1` does not indicate they exist in `bond0`, or has a mis-matching MTU of `1500` to the bond's members
-   > - no route (e.g. `ip r` returns no `default` route)
+   > - no route (`ip r` returns no `default` route)
    > 
    > First, restart the Basecamp service on the PIT (this only needs to be done once even if more than one node are impacted):
    > ```bash
@@ -260,7 +283,7 @@ CASMINST-980
    > Next, verify that valid data is returned for the afflicted node from Basecamp (the output should contain information 
    > specific to the afflicted node like the hostname):
    > ```bash
-   > ncn:~ # curl http://pit:8888/user-data
+   > ncn# curl http://pit:8888/user-data
    > ```
    > 
    > Finally, run the following script from the afflicted node **(but only in either of those circumstances)**.
@@ -375,7 +398,7 @@ CASMINST-980
    ```
 
 11. Refer to [timing of deployments](#timing-of-deployments). After a while, `kubectl get nodes` should return
-   all the managers and workers aside from the LiveCD's node.
+   all the master nodes and worker nodess aside from the LiveCD's node.
    ```bash
    pit# ssh ncn-m002
    ncn-m002# kubectl get nodes -o wide
@@ -398,7 +421,7 @@ The administrator needs to move onto the next sections, before considering conti
 _or_ head to [CSM Platform Install](006-CSM-PLATFORM-INSTALL.md).
 
 <a name="apply-ncn-post-boot-workarounds"></a>
-#### Apply NCN Post-Boot Workarounds
+### Apply NCN Post-Boot Workarounds
 
 Check for workarounds in the `/opt/cray/csm/workarounds/after-ncn-boot` directory.  If there are any workarounds in that directory, run those now.   Instructions are in the `README` files.
 
@@ -409,7 +432,7 @@ casminst-12345
 ```
 
 <a name="livecd-cluster-authentication"></a>
-#### LiveCD Cluster Authentication
+### LiveCD Cluster Authentication
 
 The LiveCD needs to authenticate with the cluster to facilitate the rest of the CSM installation.
 
@@ -423,7 +446,7 @@ pit# scp ncn-m002.nmn:/etc/kubernetes/admin.conf ~/.kube/config
 ```
 
 <a name="bgp-routing"></a>
-#### BGP Routing
+### BGP Routing
 
 After the NCNs are booted, the BGP peers will need to be checked and updated if the neighbor IPs are incorrect on the switches. See the doc to [Check and Update BGP Neighbors](400-SWITCH-BGP-NEIGHBORS.md).
 
@@ -442,7 +465,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
    ```
 
 <a name="validation"></a>
-#### Validation
+### Validation
 
 The following command will run a series of remote tests on the storage nodes to validate they are healthy and configured correctly.
 
@@ -462,7 +485,7 @@ Observe the output of the checks and note any failures, then remediate them.
 
 3. Ensure that weave hasn't split-brained
 
-    Run the following command on each member of the kubernetes cluster (masters and workers) to ensure that weave is operating as a single cluster:
+    Run the following command on each member of the kubernetes cluster (master nodes and worker nodes) to ensure that weave is operating as a single cluster:
 
     ```bash
     ncn# weave --local status connections  | grep failed
@@ -473,7 +496,7 @@ Observe the output of the checks and note any failures, then remediate them.
     2. Return to the 'Boot the **Storage Nodes**' step of [Start Deployment](#start-deployment) section above.
 
 <a name="optional-validation"></a>
-#### Optional Validation
+### Optional Validation
 
 These tests are for sanity checking. These exist as software reaches maturity, or as tests are worked
 and added into the installation repertoire.

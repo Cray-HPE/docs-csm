@@ -26,12 +26,12 @@ Below we can see the two product files for a CEPH node, in here we see we have a
 of high performance computing and serving enterprise storage.
 
  ```bash
-ncn-s001:~ # ll /etc/products.d/
+ncn-s001# ls -l /etc/products.d/
 total 5
 lrwxrwxrwx 1 root root   12 Jan  1 06:43 baseproduct -> SLE_HPC.prod
 -rw-r--r-- 1 root root 1587 Oct 21 15:27 ses.prod
 -rw-r--r-- 1 root root 2956 Jun 10  2020 SLE_HPC.prod
-ncn-s001:~ # grep '<summary' /etc/products.d/*.prod
+ncn-s001# grep '<summary' /etc/products.d/*.prod
 /etc/products.d/ses.prod:  <summary>SUSE Enterprise Storage 7</summary>
 /etc/products.d/SLE_HPC.prod:  <summary>SUSE Linux Enterprise High Performance Computing 15 SP2</summary>
 ```
@@ -39,7 +39,7 @@ ncn-s001:~ # grep '<summary' /etc/products.d/*.prod
 Kubernetes nodes on the other hand will report SLES HPC only, this is reflective in `kubectl` output:
 > Remember, vshasta will show SUSE Linux Enterprise Server instead.
 ```
-pit:~ # kubectl get nodes -o wide
+pit# kubectl get nodes -o wide
 NAME       STATUS   ROLES    AGE    VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                                                  KERNEL-VERSION         CONTAINER-RUNTIME
 ncn-m002   Ready    master   128m   v1.18.6   10.252.1.14   <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.37-default   containerd://1.3.4
 ncn-m003   Ready    master   127m   v1.18.6   10.252.1.13   <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.37-default   containerd://1.3.4

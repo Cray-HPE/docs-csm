@@ -2,25 +2,25 @@
 
 This page will detail cases for various hardware changes.
 
-- [Server Components](#server-components)
-- [Servers](#servers)
-    - [Rebooting Servers](#rebooting-servers)
+- [Node Components](#node-components)
+- [Nodes](#nodes)
+    - [Rebooting Servers](#rebooting-nodes)
         - [CEPH](#ceph)
         - [Kubernetes](#kubernetes)
 - [Safely Removing Nodes from Runtime](#safely-removing-nodes-from-runtime)
     - [Rebuilding CEPH NCNs](#rebuilding-ceph-ncns)
         - [Quorum](#quorum)
     - [Rebuilding K8s NCNs](#rebuilding-k8s-ncns)
-        - [Masters](#master-servers)
-        - [Workers](#worker-servers)
+        - [Master nodes](#master-nodes)
+        - [Worker nodes](#worker-nodes)
 
 
-<a name='server-components'></a>
-# Server Components
+<a name='node-components'></a>
+# Node Components
 
 Malfunctioning or disabled hardware may need to be removed, or upgrades may want to be installed.
 
-For either case, certain hardware requires that the server be shutdown prior to operations.
+For either case, certain hardware requires that the node be shutdown prior to operations.
 
 | Component | Server Off | Rebuild Required |
 | --- | --- | --- |
@@ -33,8 +33,8 @@ For either case, certain hardware requires that the server be shutdown prior to 
 
 [^1]: If replacing **all** OS disks then a rebuild is required.
 
-<a name='rebooting-servers'></a>
-### Rebooting Servers
+<a name='rebooting-nodes'></a>
+### Rebooting Nodes
 
 For operations that do not require a rebuild, a power off and cold boot will suffice.
 
@@ -46,23 +46,23 @@ For operations that do not require a rebuild, a power off and cold boot will suf
 <a name='kubernetes'></a>
 #### Kubernetes
 
-If the server can be powered off nicely by issuing a `poweroff` command on the CLi, then it will evict its containers
+If the node can be powered off nicely by issuing a `poweroff` command on the CLi, then it will evict its containers
 and unmount etcd. On power-up it will re-join.
 
-If the server is unresponsive, you can alert the cluster that you will be rebooting it by evicing the node:
+If the node is unresponsive, you can alert the cluster that you will be rebooting it by evicing the node:
 ```bash
 linux# kubectl drain ncn-w002
 ```
 
-Then you can reboot, and nicely tell the server to add the node back.
+Then you can reboot, and nicely tell the node to add the node back.
 ```bash
 linux# kubectl uncordon ncn-w002
 ```
 
-<a name='servers'></a>
-# Servers
+<a name='nodes'></a>
+# Nodes
 
-Swapping a server for an entirely new server mandates a "rebuild" (or a "build" if this is the first use).
+Swapping a node for an entirely new node mandates a "rebuild" (or a "build" if this is the first use).
 
 <a name='safely-removing-nodes-from-runtime'></a>
 # Safely Removing Nodes from Runtime
@@ -81,42 +81,42 @@ Swapping a server for an entirely new server mandates a "rebuild" (or a "build" 
 <a name='rebuilding-k8s-ncns'></a>
 ## Rebuilding Kubernetes NCNs
 
-<a name='master-servers'></a>
-### Master Servers
+<a name='master-nodes'></a>
+### Master Nodes
 
-If etcd has met quorum, if there are 3 managers active, then etcd must expunge the server we're rebuilding.
+If etcd has met quorum, if there are 3 master nodes active, then etcd must expunge the node we're rebuilding.
 
 1. Evict etcd:
     > **`STUB`** This is a stub that requires code snippets to search-and-destroy OOM.
-2. Follow the procedure for [worker servers](#worker-servers).
+2. Follow the procedure for [worker nodes](#worker-nodes).
 
 
-<a name='worker-servers'></a>
-### Worker Servers
+<a name='worker-nodes'></a>
+### Worker Nodes
 
-It is dangerous to run with 2 workers or less, work must be done with diligence or pod clean-up will be necessary. Kubernetes pods will begin to throw Out-Of-Memory error after some time.
+It is dangerous to run with 2 worker nodes or less, work must be done with diligence or pod clean-up will be necessary. Kubernetes pods will begin to throw Out-Of-Memory error after some time.
 
-1. Drain the target worker, issue the command from your laptop (if authenticated) or from an ingress node (such as ncn-m001):
+1. Drain the target worker node, issue the command from your laptop (if authenticated) or from an ingress node (such as ncn-m001):
     ```bash
     linux# kubectl drain ncn-w002
     linux# kubectl delete ncn-w002
     ```
 
-2. Power down the server either in rack, or with `ipmitool`
+2. Power down the node either in rack, or with `ipmitool`
     ```bash
     IPMI_PASSWORD=
     username=root
     ipmitool -I lanplus -U $username -E -H ncn-w002-mgmt power off
     ```
-3. Now commence the operations on the server.
+3. Now commence the operations on the node.
 
-4. Once ready, power the server on in the rack or with `ipmitool`
+4. Once ready, power the node on in the rack or with `ipmitool`
     ```bash
     IPMI_PASSWORD=
     username=root
     ipmitool -I lanplus -U $username -E -H ncn-w002-mgmt power on
     ```
-5. The server will netboot from sysmgmt services (kea/unbound/s3/bss).
+5. The node will netboot from sysmgmt services (kea/unbound/s3/bss).
 
 > **`NOTE`** If sysmgmt services are not booting the NCN, and the LiveCD is still available. See [069 Toggle PXE Sources](./069-TOGGLE-PXE-SOURCES.md) for pivoting boot services temporarily back to the LiveCD.
 

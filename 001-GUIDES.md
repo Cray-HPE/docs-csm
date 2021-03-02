@@ -93,8 +93,8 @@ The CSM installation validation and health checks can be run again now that ncn-
 The NCNs should be locked to prevent accidental firmware upgrades with FAS or power down operations and reset operations with CAPMC.
 
 * Why?
-* When To Lock Management/NCN Nodes
-* When To Unlock Management/NCN Nodes
+* When To Lock Management NCNs
+* When To Unlock Management NCNs
 * Locked Behavior
 * How To Lock Management NCNs
 * How To Unlock Management NCNs

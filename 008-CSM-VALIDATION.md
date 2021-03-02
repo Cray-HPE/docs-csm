@@ -42,7 +42,7 @@ The ncnHealthChecks script reports the following health information:
 * Health of etcd clusters
 * Number of pods on each worker node for each etcd cluster
 * List of automated etcd backups for the Boot Orchestration Service (BOS),  Boot Script Service (BSS), Compute Rolling Upgrade Service (CRUS), and Domain Name Service (DNS)
-* NCN node uptimes
+* Management node uptimes
 * Pods yet to reach the running state
 
 Execute ncnHealthChecks script and analyze the output of each individual check.
@@ -63,7 +63,7 @@ session in the table is **Idle**, reset the BGP sessions.
 On an NCN node determine IP addresses of switches:
 
 ```bash
-ncn-m001:~ # kubectl get cm config -n metallb-system -o yaml | head -12
+ncn-m001# kubectl get cm config -n metallb-system -o yaml | head -12
 apiVersion: v1
 data:
   config: |
@@ -76,7 +76,7 @@ data:
       my-asn: 65533
     address-pools:
     - name: customer-access
-ncn-m001:~ #
+ncn-m001#
 ```
 
 Using the first peer-address (10.252.0.2 here) ssh as the administrator to the first switch and note in the returned output if a Mellanox or Aruba switch is indicated.
@@ -85,7 +85,7 @@ Using the first peer-address (10.252.0.2 here) ssh as the administrator to the f
 Enable, verify BGP is enabled, check peering status:
 
 ```bash
-ncn-m001:~ # ssh admin@10.252.0.2
+ncn-m001# ssh admin@10.252.0.2
 Mellanox Onyx Switch Management
 Password:
 Last login: Tue Feb 23 17:05:21 UTC 2021 from 10.252.1.9 on pts/0
@@ -156,7 +156,7 @@ Check BGP peering status
 After ssh'ing as admin to the fist peer-address the returned output indicates an Aruba switch. It may be a sw-spine or sw-agg switch.
 
 ```bash
-ncn-m001:~ # ssh admin@10.252.0.4
+ncn-m001# ssh admin@10.252.0.4
 
  (C) Copyright 2017-2020 Hewlett Packard Enterprise Development LP
 
@@ -230,7 +230,7 @@ Repeat the above **Aruba** procedure using the second peer-address (10.252.0.5 i
 
 ### Verify that KEA has active DHCP leases
 
-Verify that KEA has active DHCP leases. Right after an fresh install of CSM it is important to verify that KEA is currently handing out DHCP leases on the system. The following commands can be ran on any of the ncn masters or workers.
+Verify that KEA has active DHCP leases. Right after an fresh install of CSM it is important to verify that KEA is currently handing out DHCP leases on the system. The following commands can be ran on any of the master nodes or worker nodes.
 
 Get a API Token:
 ```
@@ -256,13 +256,13 @@ There are multiple [Goss](https://github.com/aelsabbahy/goss) test suites availa
 You can execute the general NCN test suite via:
 
 ```bash
-ncn:~ # /opt/cray/tests/install/ncn/automated/ncn-run-time-checks
+ncn# /opt/cray/tests/install/ncn/automated/ncn-run-time-checks
 ```
 
 And the Kubernetes test suite via:
 
 ```bash
-ncn:~ # /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
+ncn# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
 ```
 
 ### Known Goss Test Issues
@@ -271,7 +271,7 @@ ncn:~ # /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
 * K8S Test: Kubernetes Query BSS Cloud-init for ca-certs
   - May fail immediately after platform install. Should pass after the TrustedCerts Operator has updated BSS (Global cloud-init meta) with CA certificates.
 * K8S Test: Kubernetes Velero No Failed Backups
-  - Due to a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (ie.g., vault). It may be necessary to use the ```velero``` command to delete backups from a Kubernetes node to clear this situation.
+  - Due to a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (for example, vault). It may be necessary to use the ```velero``` command to delete backups from a Kubernetes node to clear this situation.
 * K8S Test: Verify spire-agent is enabled and running
 
   - The `spire-agent` service may fail to start on Kubernetes NCNs, logging errors (via journalctl) similar to "join token does not exist or has already been used" or the last logs containing multiple lines of "systemd[1]: spire-agent.service: Start request repeated too quickly.". Deleting the `request-ncn-join-token` daemonset pod running on the node may clear the issue. While the `spire-agent` systemctl service on the Kubernetes node should eventually restart cleanly, you may have to login to the impacted nodes and restart the service. The easiest way to delete the appropriate pod is to create the following function and run `renewncnjoin NODE`
@@ -293,8 +293,8 @@ The HMS tests are provided by the hms-ct-test-crayctldeploy RPM which comes prei
 ### Test Execution
 Run the HMS smoke tests. If no failures occur, then run the HMS functional tests. The tests should be executed as root on at least one worker NCN and one master NCN (but **not** ncn-m001 if it is still the PIT node).
 
-    ncn:~ # /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resources.sh
-    ncn:~ # /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-resources.sh
+    ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resources.sh
+    ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-resources.sh
 
 <a name="cms-validation-utility"></a>
 ## Cray Management Services Validation Utility
@@ -582,11 +582,11 @@ Make sure you are running on the LiveCD node and have initialized and authorized
 Basic UAS installation is validated using the following:
 
 ```
-ncn-m001-pit:~ # cray uas mgr-info list
+ncn-m001-pit# cray uas mgr-info list
 service_name = "cray-uas-mgr"
 version = "1.11.5"
 
-ncn-m001-pit:~ # cray uas list
+ncn-m001-pit# cray uas list
 results = []
 ```
 
@@ -595,7 +595,7 @@ This shows that UAS is installed and running the `1.11.5` version.  It also show
 To verify that the pre-made UAI images are registered with UAS, use:
 
 ```
-ncn-m001-pit:~ # cray uas images list
+ncn-m001-pit# cray uas images list
 default_image = "registry.local/cray/cray-uai-sles15sp1:latest"
 image_list = [ "registry.local/cray/cray-uai-broker:latest", "registry.local/cray/cray-uai-sles15sp1:latest",]
 
@@ -610,7 +610,7 @@ This procedure must run on a master or worker node (and not ncn-w001) on the Sha
 To verify that you can create a UAI, use the following command:
 
 ```
-ncn-w003:~ # cray uas create --publickey ~/.ssh/id_rsa.pub
+ncn-w003# cray uas create --publickey ~/.ssh/id_rsa.pub
 uai_connect_string = "ssh vers@10.16.234.10"
 uai_host = "ncn-w001"
 uai_img = "registry.local/cray/cray-uai-sles15sp1:latest"
@@ -626,7 +626,7 @@ username = "vers"
 This has created the UAI and the UAI is currently in the process of initializing and running.  The following can be repeated as needed to watch the UAIs state.  When the results look like the following:
 
 ```
-ncn-w003:~ # cray uas list
+ncn-w003# cray uas list
 [[results]]
 uai_age = "0m"
 uai_connect_string = "ssh vers@10.16.234.10"
@@ -642,7 +642,7 @@ username = "vers"
 The UAI is ready for use.  You can then log into it (without a password) as follows:
 
 ```
-ncn-w003:~ # ssh vers@10.16.234.10
+ncn-w003# ssh vers@10.16.234.10
 The authenticity of host '10.16.234.10 (10.16.234.10)' can't be established.
 ECDSA key fingerprint is SHA256:BifA2Axg5O0Q9wqESkLqK4z/b9e1usiDUZ/puGIFiyk.
 Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
@@ -665,7 +665,7 @@ Connection to 10.16.234.10 closed.
 Finally, clean up the UAI.  Notice that the UAI name used is the same as the name in the output from `cray uas create ...` above:
 
 ```
-ncn-w003:~ # cray uas delete --uai-list uai-vers-a00fb46b
+ncn-w003# cray uas delete --uai-list uai-vers-a00fb46b
 results = [ "Successfully deleted uai-vers-a00fb46b",]
 
 ```

@@ -9,14 +9,14 @@ find a basic flow for iterative boots.
     > `-k` for kubernetes, `-s` for storage/ceph
 
     ```bash
-   pit:~ # /root/bin/get-sqfs.sh -k 9683117-1609280754169
-   pit:~ # /root/bin/get-sqfs.sh -s c46624e-1609524120402
+   pit# /root/bin/get-sqfs.sh -k 9683117-1609280754169
+   pit# /root/bin/get-sqfs.sh -s c46624e-1609524120402
    ```
 
 2. Set your Image IDs
     > This finds the newest pair, so it'll find the last downloaded set (i.e. your set of images). 
     ```bash
-   pit:~ # /root/bin/set-sqfs-links.sh
+   pit# /root/bin/set-sqfs-links.sh
    ```
 
 3. (Re)boot the node(s) you want to test.

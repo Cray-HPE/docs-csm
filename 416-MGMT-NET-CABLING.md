@@ -16,7 +16,7 @@
 ### HPE DL325
 ![DL325](img/network/DL325-back.png)
 * The OCP Slot is noted (number 9) in the image above.
-  * This is the slot on the bottom left of the server.
+  * This is the slot on the bottom left of the node.
   * Ports are numbered left-to-right:  the far left port is port 1.
 * The PCIE Slot 1 is on the top left side of the image above (under number 1).
   * Ports are numbered left-to-right:  the far left port is port 1.
@@ -47,7 +47,7 @@
 | OCP port 1         | spine or aggr pair, switch 1/2 | 25Gb  | Management Network NMN/HMN/CAN |
 | OCP port 2         | NONE                           | NONE  | NONE                           |
 | PCIe Slot 1 port 1 | spine or aggr pair, switch 2/2 | 25Gb  | Management Network NMN/HMN/CAN |
-| PCIe Slot 1 port 2 | NONE (See note below for m001) | NONE  | Site (See note below for m001) |
+| PCIe Slot 1 port 2 | NONE (See note below for ncn-m001) | NONE  | Site (See note below for ncn-m001) |
 
 #### SHCD Example
 
@@ -57,10 +57,10 @@
 | mn01	 | x3000u01s1-j1  | x3000u13-j1	| sw-25g02   |
 
 ![HPE_Worker](img/network/HPE_Master.png)
-**NOTE**: Master 1 (m001) is required to have a site connection for installation and non-CAN system access.  This can have several configurations depending on customer requirements/equipment:
+**NOTE**: Master 1 (ncn-m001) is required to have a site connection for installation and non-CAN system access.  This can have several configurations depending on customer requirements/equipment:
 
 * Dual 10/25Gb card configurations as described in the table above should use PCIe Slot 1, Port 2 as a site connection if the customer supports 10/25Gb.
-* If the customer does not support 10/25Gb speeds (or connection type) and requires RJ45 copper or 1Gb, then a new and separate card will be installed on m001 and that card will provide site connectivity.
+* If the customer does not support 10/25Gb speeds (or connection type) and requires RJ45 copper or 1Gb, then a new and separate card will be installed on ncn-m001 and that card will provide site connectivity.
 * Another possibility (non-HPE hardware mainly) is that a built-in 1Gb port will be used if available (similar to Shasta v1.3 PoR on Gigabyte hardware).
 
 ### NCN Storage Cabling
@@ -135,7 +135,7 @@ For systems that include 4 aggregation switches the cabling will look like the f
 
 ![Gig_intel_worker](img/network/Gigaintel_Worker.png)
 
-**NOTE**: Cabling of w001 has changed in Shasta v1.4.  Please see m001 note below.
+**NOTE**: Cabling of ncn-w001 has changed in Shasta v1.4.  Please see ncn-m001 note below.
 
 ### NCN Master Cabling
 ![Gigabyte Master](img/network/gigabyte-master.png)
@@ -144,7 +144,7 @@ For systems that include 4 aggregation switches the cabling will look like the f
 |--------------------|--------------------------------|-------|--------------------------------|
 | PCIe Slot 1 port 1 | spine or aggr pair, switch 1/2 | 40Gb  | Management Network NMN/HMN/CAN |
 | PCIe Slot 1 port 2 | spine or aggr pair, switch 2/2 | 40Gb  | Management Network NMN/HMN/CAN |
-| LAN0 port 1        | NONE (See note below for m001) | NONE  | Site (See note below for m001) |
+| LAN0 port 1        | NONE (See note below for ncn-m001) | NONE  | Site (See note below for ncn-m001) |
 
 #### SHCD Example
 
@@ -155,10 +155,10 @@ For systems that include 4 aggregation switches the cabling will look like the f
 
 ![Gig_intel_master](img/network/Gigaintel_Master.png)
 
-**NOTE**: Master 1 (m001) is required to have a site connection for installation and non-CAN system access.  In Shasta versions <=1.3 this connection was on w001.  This can have several configurations depending on customer requirements/equipment:
+**NOTE**: Master 1 (ncn-m001) is required to have a site connection for installation and non-CAN system access.  In Shasta versions <=1.3 this connection was on ncn-w001.  This can have several configurations depending on customer requirements/equipment:
 
-* The default configuration for Gigabyte systems uses the built-in 1Gb lan0 port for site connection on m001.
-* If the customer requires connectivity greater than 1Gb (or a different connection type), then a new and separate card will be installed on m001 and that card will provide site connectivity.
+* The default configuration for Gigabyte systems uses the built-in 1Gb lan0 port for site connection on ncn-m001.
+* If the customer requires connectivity greater than 1Gb (or a different connection type), then a new and separate card will be installed on ncn-m001 and that card will provide site connectivity.
 
 ### NCN Storage Cabling
 ![Gigabyte Storage](img/network/gigabyte-storage.png)

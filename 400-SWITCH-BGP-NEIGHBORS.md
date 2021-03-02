@@ -14,7 +14,7 @@ This page will detail how to manually configure and verify BGP neighbors on the 
 
 CSI cli arguments with ```--bgp-peers aggregation```
 ```
-~/src/mtl/cray-site-init/bin/csi config init --bootstrap-ncn-bmc-user root --bootstrap-ncn-bmc-pass initial0 --ntp-pool cfntp-4-1.us.cray.com,cfntp-4-2.us.cray.com --can-external-dns 10.103.8.113 --can-gateway 10.103.8.1 --site-ip 172.30.56.2/24 --site-gw 172.30.48.1 --site-dns 172.30.84.40 --site-nic em1 --system-name odin --bgp-peers aggregation
+linux# ~/src/mtl/cray-site-init/bin/csi config init --bootstrap-ncn-bmc-user root --bootstrap-ncn-bmc-pass initial0 --ntp-pool cfntp-4-1.us.cray.com,cfntp-4-2.us.cray.com --can-external-dns 10.103.8.113 --can-gateway 10.103.8.1 --site-ip 172.30.56.2/24 --site-gw 172.30.48.1 --site-dns 172.30.84.40 --site-nic em1 --system-name odin --bgp-peers aggregation
 ```
 
 # Automated Process
@@ -83,7 +83,7 @@ Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   
 ```
 - If the BGP neighbors are not in the `ESTABLISHED` state make sure the IPs are correct for the route-map and BGP configuration.
 - If IPs are incorrect you will have to update the configuration to match the IPs, the configuration below will need to be edited.
-- You can get the NCN IPs from the CSI generated files (NMN.yaml, CAN.yaml, HMN.yaml), these IPs are also located in /etc/dnsmasq.d/statics.conf on the LiveCD/m001.
+- You can get the NCN IPs from the CSI generated files (NMN.yaml, CAN.yaml, HMN.yaml), these IPs are also located in /etc/dnsmasq.d/statics.conf on the LiveCD/ncn-m001.
 
 ```
 pit# grep w00 /etc/dnsmasq.d/statics.conf | grep nmn
@@ -214,7 +214,7 @@ Mellanox configuration example.
 ```
 
 - Once the IPs are updated for the route-maps and BGP neighbors you may need to restart the BGP process on the switches, you do this by running `clear ip bgp all` on the mellanox and `clear bgp *` on the Arubas. (This may need to be done multiple times for all the peers to come up)
-- When workers are reinstalled the BGP process will need to be restarted. 
+- When worker nodes are reinstalled, the BGP process will need to be restarted. 
 - If the BGP peers are still not coming up you should check the Metallb.yaml config file for errors.  The Metallb config file should point to the NMN IPs of the switches configured.
 
 Metallb.yaml configuration example.

@@ -1,6 +1,6 @@
 # NCN Packages
 
-These are defined elserwhere, but this lis updates for quick-reference. These lists are generated
+These are defined elserwhere, but this list updates for quick-reference. These lists are generated
 on running nodes, but to account for drift there are collection commands listed for each image.
 
 ## Kubernetes Images
@@ -10,7 +10,7 @@ Source: https://stash.us.cray.com/projects/CLOUD/repos/node-image-kubernetes/bro
 #### Collection 
 
 ```bash
-ncn-w002:~ # zypper --disable-repositories se --installed-only | grep i+ | tr -d '|' | awk '{print $2}'
+ncn-w002# zypper --disable-repositories se --installed-only | grep i+ | tr -d '|' | awk '{print $2}'
 ```
 
 #### The List
@@ -170,7 +170,7 @@ Source: https://stash.us.cray.com/projects/CLOUD/repos/node-image-storage-ceph/b
 #### Collection
 
 ```bash
-ncn-s002:~ # zypper --disable-repositories se --installed-only | grep i+ | tr -d '|' | awk '{print $2}'
+ncn-s002# zypper --disable-repositories se --installed-only | grep i+ | tr -d '|' | awk '{print $2}'
 ```
 
 #### The List

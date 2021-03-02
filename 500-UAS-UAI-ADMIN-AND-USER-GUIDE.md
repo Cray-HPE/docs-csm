@@ -136,7 +136,7 @@ When selecting UAI host nodes, it is a good idea to take into account the amount
 Since UAI host node identification is an exclusive activity, not an inclusive one, it starts by identifying the nodes that could potentially be UAI host nodes by their Kubernetes role:
 
 ```
-ncn-m001-pit:~ # kubectl get no | grep -v master
+ncn-m001-pit# kubectl get nodes | grep -v master
 NAME       STATUS   ROLES    AGE   VERSION
 ncn-w001   Ready    <none>   10d   v1.18.6
 ncn-w002   Ready    <none>   25d   v1.18.6
@@ -146,7 +146,7 @@ ncn-w003   Ready    <none>   23d   v1.18.6
 On this system, there are 3 nodes known by Kubernetes that are not running as Kubernetes master nodes.  These are all potential UAI host nodes.  Next, identify the nodes that are excluded from eligibility as UAI host nodes:
 
 ```
-ncn-m001-pit:~ # kubectl get no -l uas=False
+ncn-m001-pit# kubectl get no -l uas=False
 NAME       STATUS   ROLES    AGE   VERSION
 ncn-w001   Ready    <none>   10d   v1.18.6
 ```
@@ -160,7 +160,7 @@ Of the non-master nodes, there is one node that is configured to reject UAIs, `n
 UAI host nodes are determined by tainting the nodes against UAIs, so the following:
 
 ```
-ncn-m001-pit:~ # kubectl label node ncn-w001 uas=False --overwrite
+ncn-m001-pit# kubectl label node ncn-w001 uas=False --overwrite
 ```
 
 Please note here that setting `uas=True` or any variant of that, while potentially useful for local book keeping purposes, does NOT transform the node into a UAS host node.  With that setting the node will be a UAS node because the value of the `uas` flag is not in the list `False`, `false` or `FALSE`, but unless the node previously had one of the false values, it was a UAI node all along.  Perhaps more to the point, removing the `uas` label from a node labeled `uas=True` does not take the node out of the list of UAI host nodes.  The only way to make a non-master Kubernetes node not be a UAS host node is to explicitly set the label to `False`, `false` or `FALSE`.
@@ -170,7 +170,7 @@ Please note here that setting `uas=True` or any variant of that, while potential
 When it comes to customizing non-compute node (NCN) contents for UAIs, it is useful to have a Hardware State Manager (HSM) node group containing the NCNs that are UAI hosts nodes.  The `hpe-csm-scripts` package provides a script called `make_node_groups` that is useful for this purpose.  This script is normally installed as `/opt/cray/csm/scripts/node_management/make_node_groups`.  It can create and update node groups for management master nodes, storage nodes, management worker nodes, and UAI host nodes.  The following summarizes its use:
 
 ```
-ncn-m001:~ # /opt/cray/csm/scripts/node_management/make_node_groups --help
+ncn-m001# /opt/cray/csm/scripts/node_management/make_node_groups --help
 getopt: unrecognized option '--help'
 usage: make_node_groups [-m][-s][-u][w][-A][-R][-N]
 Where:
@@ -192,7 +192,7 @@ Where:
 Here is an example of a dry-run that will create or update a node group for UAI host nodes:
 
 ```
-ncn-m001:~ # /opt/cray/csm/scripts/node_management/make_node_groups -N -R -u
+ncn-m001# /opt/cray/csm/scripts/node_management/make_node_groups -N -R -u
 (dry run)cray hsm groups delete uai
 (dry run)cray hsm groups create --label uai
 (dry run)cray hsm groups members create uai --id x3000c0s4b0n0
@@ -378,12 +378,12 @@ UAS also permits [creation and registration of custom UAI images](#main-uaiimage
 To see what UAI images have been registered with UAS, use the following Shasta CLI command:
 
 ```
-ncn-m001-pit:~ # cray uas admin config images list
+ncn-m001-pit# cray uas admin config images list
 ```
 
 Here is a sample execution of that command:
 ```
-ncn-m001-pit:~ # cray uas admin config images list
+ncn-m001-pit# cray uas admin config images list
 [[results]]
 default = true
 image_id = "08a04462-195a-4e66-aa31-08076072c9b3"
@@ -411,25 +411,25 @@ There is also a `default` flag.  If this flag is `true` the image will be used  
 To register a UAI image with UAS, here is the minimum required CLI command form:
 
 ```
-ncn-m001-pit:~ # cray uas admin config images create --imagename <image_name>
+ncn-m001-pit# cray uas admin config images create --imagename <image_name>
 ```
 
 To register the image `registry.local/cray/custom-end-user-uai:latest`, the stock end-user UAI image, use:
 
 ```
-ncn-m001-pit:~ # cray uas admin config images create --imagename registry.local/cray/custom-end-user-uai:latest
+ncn-m001-pit# cray uas admin config images create --imagename registry.local/cray/custom-end-user-uai:latest
 ```
 
 In addition to registering an image UAS allows the image to be set as the default image.  There can be at most one default image defined at any given time, and setting an image as default causes any previous default image to cease to be default.  To register the above image as the default image, use:
 
 ```
-ncn-m001-pit:~ # cray uas admin config images create --imagename registry.local/cray/custom-end-user-uai:latest --default yes
+ncn-m001-pit# cray uas admin config images create --imagename registry.local/cray/custom-end-user-uai:latest --default yes
 ```
 
 to register the image explicitly as non-default:
 
 ```
-ncn-m001-pit:~ # cray uas admin config images create --imagename registry.local/cray/custom-end-user-uai:latest --default no
+ncn-m001-pit# cray uas admin config images create --imagename registry.local/cray/custom-end-user-uai:latest --default no
 ```
 
 The last command is usually not necessary, because when the `--default` option is omitted, images are registered as non-default.
@@ -458,13 +458,13 @@ imagename = "registry.local/cray/custom-end-user-uai:latest"
 Once an image is registered, it can be updated using a command of the form
 
 ```
-ncn-m001-pit:~ # cray uas admin config images update [options] <image_id>
+ncn-m001-pit# cray uas admin config images update [options] <image_id>
 ```
 
 Use the `--default` or `--imagename` options as specified when registering an image to update those specific elements of an existing image registration.  For example, to make the `registry.local/cray/custom-end-user-uai:latest` image shown above the default image, use:
 
 ```
-ncn-m001-pit:~ # cray uas admin config images update --default yes 8fdf5d4a-c190-24c1-2b96-74ab98c7ec07
+ncn-m001-pit# cray uas admin config images update --default yes 8fdf5d4a-c190-24c1-2b96-74ab98c7ec07
 ```
 
 #### Deleting a UAI Image Registration <a name="main-uasconfig-images-delete"></a>
@@ -472,12 +472,12 @@ ncn-m001-pit:~ # cray uas admin config images update --default yes 8fdf5d4a-c190
 To delete a UAS image registration, use the following form:
 
 ```
-ncn-m001-pit:~ # cray uas admin config images delete <image_id>
+ncn-m001-pit# cray uas admin config images delete <image_id>
 ```
 
 For example, to delete the above image registration:
 ```
-ncn-m001-pit:~ # cray uas admin config images delete 8fdf5d4a-c190-24c1-2b96-74ab98c7ec07
+ncn-m001-pit# cray uas admin config images delete 8fdf5d4a-c190-24c1-2b96-74ab98c7ec07
 ```
 
 ### Volumes <a name="main-uasconfig-volumes"></a>
@@ -499,13 +499,13 @@ Any kind of volume recognized by the Kubernetes installation can be installed as
 To list volumes in UAS, use the following Shasta CLI command:
 
 ```
-ncn-m001-pit:~ # cray uas admin config volumes list
+ncn-m001-pit# cray uas admin config volumes list
 ```
 
 Here is an example of the output from this command:
 
 ```
-ncn-m001-pit:~ # cray uas admin config volumes list
+ncn-m001-pit# cray uas admin config volumes list
 
 [[results]]
 mount_path = "/lus"
@@ -566,7 +566,7 @@ type = "FileOrCreate"
 This TOML formatted output can be challenging to read, so it may be more reasonable to obtain the information in YAML format:
 
 ```
-ncn-m001-pit:~ # cray uas admin config volumes list --format yaml
+ncn-m001-pit# cray uas admin config volumes list --format yaml
 
 - mount_path: /lus
   volume_description:
@@ -619,7 +619,7 @@ ncn-m001-pit:~ # cray uas admin config volumes list --format yaml
 or JSON format:
 
 ```
-ncn-m001-pit:~ # cray uas admin config volumes list --format json
+ncn-m001-pit# cray uas admin config volumes list --format json
 
 [
   {
@@ -716,13 +716,13 @@ The `volume_id` is a unique identifier used to identify the UAS volume when exam
 To add a UAS volume use a command of the form:
 
 ```
-ncn-m001-pit:~ # cray uas admin config volumes create --mount-path <path in UAI> --volume-description '{"<volume-kind>": <k8s-volume-description>}' --volumename '<string>'
+ncn-m001-pit# cray uas admin config volumes create --mount-path <path in UAI> --volume-description '{"<volume-kind>": <k8s-volume-description>}' --volumename '<string>'
 ```
 
 For example:
 
 ```
-ncn-m001-pit:~ # cray uas admin config volumes create --mount-path /host_files/host_passwd --volume-description '{"host_path": {"path": "/etc/passwd", "type": "FileOrCreate"}}' --volumename 'my-volume-with-passwd-from-the-host-node'
+ncn-m001-pit# cray uas admin config volumes create --mount-path /host_files/host_passwd --volume-description '{"host_path": {"path": "/etc/passwd", "type": "FileOrCreate"}}' --volumename 'my-volume-with-passwd-from-the-host-node'
 ```
 
 will create a directory `/host_files` in every UAI configured to use this volume and mount the file `/etc/passwd` from the host node into that directory as a file named `host_passwd`.  Notice the form of the `--volume-description` argument. It is a JSON string encapsulating an entire `volume_description` field as shown in the JSON output in the previous section.
@@ -732,13 +732,13 @@ will create a directory `/host_files` in every UAI configured to use this volume
 Once a UAS volume has been configured, it can be examined individually using a command of the form
 
 ```
-ncn-m001-pit:~ # cray uas admin config volumes describe <volume-id>
+ncn-m001-pit# cray uas admin config volumes describe <volume-id>
 ```
 
 The `--format` option can be used here to obtain formats other than TOML that may be easier to read.  For example:
 
 ```
-ncn-m001-pit:~ # cray uas admin config volumes describe a0066f48-9867-4155-9268-d001a4430f5c --format json
+ncn-m001-pit# cray uas admin config volumes describe a0066f48-9867-4155-9268-d001a4430f5c --format json
 {
   "mount_path": "/host_files/host_passwd",
   "volume_description": {
@@ -763,7 +763,7 @@ cray uas admin config volumes update [options] <volume-id>
 For example:
 
 ```
-ncn-m001-pit:~ # cray uas admin config volumes update --volumename 'my-example-volume' a0066f48-9867-4155-9268-d001a4430f5c
+ncn-m001-pit# cray uas admin config volumes update --volumename 'my-example-volume' a0066f48-9867-4155-9268-d001a4430f5c
 ```
 
 The `--volumename`, `--volume-description`, and `--mount-path` options may be used in any combination to update the configuration of a given volume.
@@ -773,13 +773,13 @@ The `--volumename`, `--volume-description`, and `--mount-path` options may be us
 To delete a UAS Volume use a command of the form
 
 ```
-ncn-m001-pit:~ # cray uas admin config volumes delete <volume-id>
+ncn-m001-pit# cray uas admin config volumes delete <volume-id>
 ```
 
 For example:
 
 ```
-ncn-m001-pit:~ # cray uas admin config volumes delete a0066f48-9867-4155-9268-d001a4430f5c
+ncn-m001-pit# cray uas admin config volumes delete a0066f48-9867-4155-9268-d001a4430f5c
 ```
 
 ### Resource Specifications <a name="main-uasconfig-resources"></a>
@@ -791,13 +791,13 @@ Kubernetes uses <a href="https://kubernetes.io/docs/tasks/configure-pod-containe
 To list the available resource specifications, use the following:
 
 ```
-ncn-m001-pit:~ # cray uas admin config resources list
+ncn-m001-pit# cray uas admin config resources list
 ```
 
 for example:
 
 ```
-ncn-m001-pit:~ # cray uas admin config resources list
+ncn-m001-pit# cray uas admin config resources list
 [[results]]
 comment = "my first example resource specification"
 limit = "{\"cpu\": \"300m\", \"memory\": \"250Mi\"}"
@@ -818,13 +818,13 @@ There are three configurable parts to a resource specification, a `limit` which 
 Add a new resource specification using a command of the form
 
 ```
-ncn-m001-pit:~ # cray uas admin config resources create [--limit <k8s-resource-limit>] [--request <k8s-resource-request>] [--comment '<string>']
+ncn-m001-pit # cray uas admin config resources create [--limit <k8s-resource-limit>] [--request <k8s-resource-request>] [--comment '<string>']
 ```
 
 For example:
 
 ```
-ncn-m001-pit:~ # cray uas admin config resources create --request '{"cpu": "300m", "memory": "250Mi"}' --limit '{"cpu": "300m", "memory": "250Mi"}' --comment "my first example resource specification"
+ncn-m001-pit# cray uas admin config resources create --request '{"cpu": "300m", "memory": "250Mi"}' --limit '{"cpu": "300m", "memory": "250Mi"}' --comment "my first example resource specification"
 ```
 
 This specifies a request / limit pair that requests and is constrained to 300 mili-CPUs (0.3 CPUs) and 250 MiB of memory (`250 * 1024 * 1024` bytes) for any UAI created with this limit specification.  By keeping the request and the limit the same, this ensures that a host node will not be oversubscribed by UAIs.  It is also legitimate to request less than the limit, though that risks over-subscription and is not recommended in most cases.  If the request is greater than the limit, UAIs created with the request specification will never be scheduled because they will not be able to provide the requested resources.
@@ -836,13 +836,13 @@ All of the configurable parts are optional when adding a resource specification.
 To examine a particular resource specification use a command of the form
 
 ```
-ncn-m001-pit:~ # cray uas admin config resources describe <resource-id>
+ncn-m001-pit# cray uas admin config resources describe <resource-id>
 ```
 
 for example:
 
 ```
-ncn-m001-pit:~ # cray uas admin config resources describe 85645ff3-1ce0-4f49-9c23-05b8a2d31849
+ncn-m001-pit# cray uas admin config resources describe 85645ff3-1ce0-4f49-9c23-05b8a2d31849
 comment = "my first example resource specification"
 limit = "{\"cpu\": \"300m\", \"memory\": \"250Mi\"}"
 request = "{\"cpu\": \"300m\", \"memory\": \"250Mi\"}"
@@ -860,7 +860,7 @@ cray uas admin config resources update [options] <resource-id>
 for example:
 
 ```
-ncn-m001-pit:~ # cray uas admin config resources update --limit '{"cpu": "100m", "memory": "10Mi"}' 85645ff3-1ce0-4f49-9c23-05b8a2d31849
+ncn-m001-pit# cray uas admin config resources update --limit '{"cpu": "100m", "memory": "10Mi"}' 85645ff3-1ce0-4f49-9c23-05b8a2d31849
 ```
 
 #### Deleting a Resource Specification <a name="main-uasconfig-resources-delete"></a>
@@ -868,13 +868,13 @@ ncn-m001-pit:~ # cray uas admin config resources update --limit '{"cpu": "100m",
 To delete a resource specification use a command of the form
 
 ```
-ncn-m001-pit:~ # cray uas admin config resources delete <resource-id>
+ncn-m001-pit# cray uas admin config resources delete <resource-id>
 ```
 
 for example:
 
 ```
-ncn-m001-pit:~ # cray uas admin config resources delete 7c78f5cf-ccf3-4d69-ae0b-a75648e5cddb
+ncn-m001-pit# cray uas admin config resources delete 7c78f5cf-ccf3-4d69-ae0b-a75648e5cddb
 ```
 
 ### UAI Classes <a name="main-uasconfig-classes"></a>
@@ -897,13 +897,13 @@ A UAI class is a template from which UAIs can be created.  At a minimum, a UAI c
 To list available UAI classes, use the following command:
 
 ```
-ncn-m001-pit:~ # cray uas admin config classes list
+ncn-m001-pit# cray uas admin config classes list
 ```
 
 for example (using JSON format because it is a bit easier to read):
 
 ```
-ncn-m001-pit:~ # cray uas admin config classes list --format json
+ncn-m001-pit# cray uas admin config classes list --format json
 [
   {
     "class_id": "05496a5f-7e35-435d-a802-882c6425e5b2",
@@ -1095,13 +1095,13 @@ Taking apart the non-brokered end-user UAI class, the first part is:
 The `class_id` field is the identifier used to refer to this class when examining, updating and deleting this class as well as when using this class with the
 
 ```
-ncn-m001-pit:~ # cray uas admin uais create
+ncn-m001-pit# cray uas admin uais create
 ```
 
 command.  The `comment` field is a free form string describing the UAI class.  The `default` field is a flag indicating whether this class is the default class.  The default class will be applied, overriding both the default UAI image and any specified image name, when the
 
 ```
-ncn-m001-pit:~ # cray uas create
+ncn-m001-pit# cray uas create
 ```
 
 command is used to create an end-user UAI for a user.  Setting a class to default gives the administrator fine grained control over the behavior of end-user UAIs that are created by authorized users in [legacy mode](#main-uaimanagement-legacymode).  The `namespace` field specifies the Kubernetes namespace in which this UAI will run.  It has the default setting of `user` here.  The `opt_ports` field is an empty list of TCP port numbers that will be opened on the external IP address of the UAI when it runs.  This controls whether services other than SSH can be run and reached publicly on the UAI.  The `priority_class_name` `"uai_priority"` is the default <a href="https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass">Kubernetes priority class</a> of UAIs.  If it were a different class, it would affect both Kubernetes default resource limit / request assignments and Kubernetes scheduling priority for the UAI.  The `public_ip` field is a flag that indicates whether the UAI should be given an external IP address LoadBalancer service so that clients outside the Kubernetes cluster can reach it, or only be given a Kubernetes Cluster-IP address.  For the most part, this controls whether the UAI is reachable by SSH from external clients, but it also controls whether the ports in `opt_ports` are reachable as well. The `resource_config` field is not set, but could be set to a resource specification to override namespace defaults on Kubernetes resource requests / limits.  The `uai_compute_network` flag indicates whether this UAI uses the macvlan mechanism to gain access to the Shasta compute node network.  This needs to be `true` to support workload management.  The `uai_creation_class` field is used by [broker UIAs](#main-uaimanagement-brokermode-brokerclasses) to tell the broker what kind of UAI to create when automatically generating a UAI.
@@ -1171,7 +1171,7 @@ Here we are inheriting the timezone from the host node by importing `/etc/localt
 To add a new UAI class, use a command of the form:
 
 ```
-ncn-m001-pit:~ # cray uas admin config classes create --image-id <image-id> [options]
+ncn-m001-pit# cray uas admin config classes create --image-id <image-id> [options]
 ```
 
 where `--image-id <image-id>` specifies the UAI image identifier of the UAI image to be used in creating UAIs of the new class.  Any number of classes using the same image id can be defined.  Options available are:
@@ -1195,13 +1195,13 @@ Only the `--image-id` option is required to create a UAI class.  In that case, a
 To examine an existing UAI class, use a command of the following form
 
 ```
-ncn-m001-pit:~ # cray uas admin config classes describe <class-id>
+ncn-m001-pit# cray uas admin config classes describe <class-id>
 ```
 
 For example:
 
 ```
-ncn-m001-pit:~ # cray uas admin config classes describe --format yaml bb28a35a-6cbc-4c30-84b0-6050314af76b
+ncn-m001-pit# cray uas admin config classes describe --format yaml bb28a35a-6cbc-4c30-84b0-6050314af76b
 class_id: bb28a35a-6cbc-4c30-84b0-6050314af76b
 comment: Non-Brokered UAI User Class
 default: false
@@ -1250,7 +1250,7 @@ volume_mounts:
 To update an existing UAI class use a command of the form
 
 ```
-ncn-m001-pit:~ # cray uas admin config classes update [options] <class-id>
+ncn-m001-pit# cray uas admin config classes update [options] <class-id>
 ```
 
 where `[options]` are the same options described in the previous section.  Any change made using this command affects UAIs created using the class subsequent to the change.  Existing UAIs using the class will not change.  To update UAIs after updating a class delete and re-create the UAIs.
@@ -1258,7 +1258,7 @@ where `[options]` are the same options described in the previous section.  Any c
 For example:
 
 ```
-ncn-m001-pit:~ # cray uas admin config classes update --comment "a new comment for my UAI class" bb28a35a-6cbc-4c30-84b0-6050314af76b
+ncn-m001-pit# cray uas admin config classes update --comment "a new comment for my UAI class" bb28a35a-6cbc-4c30-84b0-6050314af76b
 ```
 
 would change the comment on the non-brokered UAI class examined above.
@@ -1268,13 +1268,13 @@ would change the comment on the non-brokered UAI class examined above.
 To delete a UAI class use a command of the form
 
 ```
-ncn-m001-pit:~ # cray uas admin config classes delete <class-id>
+ncn-m001-pit# cray uas admin config classes delete <class-id>
 ```
 
 for example:
 
 ```
-ncn-m001-pit:~ # cray uas admin config classes bb28a35a-6cbc-4c30-84b0-6050314af76b
+ncn-m001-pit# cray uas admin config classes bb28a35a-6cbc-4c30-84b0-6050314af76b
 ```
 
 deletes the non-brokered UAI class examined above.
@@ -1302,7 +1302,7 @@ Direct administration of UAIs includes listing, manual creation (rare), examinat
 To list UAIs use a command of the form
 
 ```
-ncn-m001-pit:~ # cray uas admin uais list [options]
+ncn-m001-pit# cray uas admin uais list [options]
 ```
 
 where `[options]` include the following selection options:
@@ -1312,7 +1312,7 @@ where `[options]` include the following selection options:
 For example:
 
 ```
-ncn-m001-pit:~ # cray uas admin uais list --owner vers
+ncn-m001-pit# cray uas admin uais list --owner vers
 [[results]]
 uai_age = "6h22m"
 uai_connect_string = "ssh vers@10.28.212.166"
@@ -1350,7 +1350,7 @@ cray uas admin uais describe <uai-name>
 for example:
 
 ```
-ncn-m001-pit:~ # cray uas admin uais describe uai-vers-715fa89d
+ncn-m001-pit# cray uas admin uais describe uai-vers-715fa89d
 uai_age = "2d23h"
 uai_connect_string = "ssh vers@10.28.212.166"
 uai_host = "ncn-w001"
@@ -1382,7 +1382,7 @@ where options may be
 for example:
 
 ```
-ncn-m001-pit:~ # cray uas admin uais delete --uai-list 'uai-vers-715fa89d,uai-ctuser-0aed4970'
+ncn-m001-pit# cray uas admin uais delete --uai-list 'uai-vers-715fa89d,uai-ctuser-0aed4970'
 results = [ "Successfully deleted uai-vers-715fa89d", "Successfully deleted uai-ctuser-0aed4970",]
 ```
 
@@ -1420,7 +1420,7 @@ In addition to this, there may be volumes defined to support a workload manager 
 For an example minimal system, here is an example set of volumes and an example creation of a UAI class that would use those volumes:
 
 ```
-ncn-m001-pit:~ # cray uas admin config volumes list --format json
+ncn-m001-pit# cray uas admin config volumes list --format json
 [
   {
     "mount_path": "/etc/localtime",
@@ -1446,7 +1446,7 @@ ncn-m001-pit:~ # cray uas admin config volumes list --format json
   }
 ]
 
-ncn-m001-pit:~ # cray uas admin config images list
+ncn-m001-pit# cray uas admin config images list
 [[results]]
 default = false
 image_id = "c5dcb261-5271-49b3-9347-afe7f3e31941"
@@ -1462,7 +1462,7 @@ default = true
 image_id = "ff86596e-9699-46e8-9d49-9cb20203df8c"
 imagename = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
 
-ncn-m001-pit:~ # cray uas admin config classes create --image-id ff86596e-9699-46e8-9d49-9cb20203df8c --volume-list '55a02475-5770-4a77-b621-f92c5082475c,9fff2d24-77d9-467f-869a-235ddcd37ad7' --uai-compute-network yes --public-ip yes --comment "my default legacy mode uai class" --default yes
+ncn-m001-pit# cray uas admin config classes create --image-id ff86596e-9699-46e8-9d49-9cb20203df8c --volume-list '55a02475-5770-4a77-b621-f92c5082475c,9fff2d24-77d9-467f-869a-235ddcd37ad7' --uai-compute-network yes --public-ip yes --comment "my default legacy mode uai class" --default yes
 class_id = "e2ea4845-5951-4c79-93d7-186ced8ce8ad"
 comment = "my default legacy mode uai class"
 default = true
@@ -1499,7 +1499,7 @@ imagename = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
 Here is an example of a default UAI class configured for Slurm support if Slurm has been installed on the host system:
 
 ```
-ncn-m001-pit:~ # cray uas admin config volumes list --format json
+ncn-m001-pit# cray uas admin config volumes list --format json
 [
   {
     "mount_path": "/etc/localtime",
@@ -1545,7 +1545,7 @@ ncn-m001-pit:~ # cray uas admin config volumes list --format json
   }
 ]
 
-ncn-m001-pit:~ # cray uas admin config images list
+ncn-m001-pit# cray uas admin config images list
 [[results]]
 default = false
 image_id = "c5dcb261-5271-49b3-9347-afe7f3e31941"
@@ -1561,7 +1561,7 @@ default = true
 image_id = "ff86596e-9699-46e8-9d49-9cb20203df8c"
 imagename = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
 
-ncn-m001-pit:~ # cray uas admin config classes create --image-id ff86596e-9699-46e8-9d49-9cb20203df8c --volume-list '55a02475-5770-4a77-b621-f92c5082475c,9fff2d24-77d9-467f-869a-235ddcd37ad7,7aeaf158-ad8d-4f0d-bae6-47f8fffbd1ad,ea97325c-2b1d-418a-b3b5-3f6488f4a9e2' --uai-compute-network yes --public-ip yes --comment "my default legacy mode uai class" --default yes
+ncn-m001-pit# cray uas admin config classes create --image-id ff86596e-9699-46e8-9d49-9cb20203df8c --volume-list '55a02475-5770-4a77-b621-f92c5082475c,9fff2d24-77d9-467f-869a-235ddcd37ad7,7aeaf158-ad8d-4f0d-bae6-47f8fffbd1ad,ea97325c-2b1d-418a-b3b5-3f6488f4a9e2' --uai-compute-network yes --public-ip yes --comment "my default legacy mode uai class" --default yes
 class_id = "c0a6dfbc-f74c-4f2c-8c8e-e278ff0e14c6"
 comment = "my default legacy mode uai class"
 default = true
@@ -1612,33 +1612,33 @@ imagename = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
 A user creates a UAI using the default UAI image or the default UAI class in legacy mode with a command of the following form
 
 ```
-user:~ $ cray uas create --public-key '<path>'
+user> cray uas create --public-key '<path>'
 ```
 
 where `<path>` is the path to a file containing an SSH public-key matched to the SSH private key belonging to the user.  The user can then use a command of the form
 
 ```
-user:~ $ cray uas list
+user> cray uas list
 ```
 
 to watch the UAI and see when it is ready for logins.  The user logs into the UAI over SSH to do work in the UAI.  When the user is finished with the UAI it can be deleted using a command of the form
 
 ```
-user:~ $ cray uas delete --uai-list '<uai-list>'
+user> cray uas delete --uai-list '<uai-list>'
 ```
 
 Here is a sample lifecycle of a UAI showing these steps:
 
 ```
-vers:~ $ cray auth login
+vers> cray auth login
 Username: vers
 Password: 
 Success!
 
-vers:~ $ cray uas list
+vers> cray uas list
 results = []
 
-vers:~ $ cray uas create --publickey ~/.ssh/id_rsa.pub 
+vers> cray uas create --publickey ~/.ssh/id_rsa.pub 
 uai_age = "0m"
 uai_connect_string = "ssh vers@10.103.13.157"
 uai_host = "ncn-w001"
@@ -1651,7 +1651,7 @@ username = "vers"
 
 [uai_portmap]
 
-vers:~ $ cray uas list
+vers> cray uas list
 [[results]]
 uai_age = "0m"
 uai_connect_string = "ssh vers@10.103.13.157"
@@ -1664,7 +1664,7 @@ uai_status = "Running: Ready"
 username = "vers"
 
 
-vers:~ $ ssh vers@10.103.13.157
+vers> ssh vers@10.103.13.157
 The authenticity of host '10.103.13.157 (10.103.13.157)' can't be established.
 ECDSA key fingerprint is SHA256:XQukF3V1q0Hh/aTiFmijhLMcaOzwAL+HjbM66YR4mAg.
 Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
@@ -1672,14 +1672,14 @@ Warning: Permanently added '10.103.13.157' (ECDSA) to the list of known hosts.
 vers@uai-vers-8ee103bf-95b5d774-88ssd:/tmp> sinfo
 PARTITION AVAIL  TIMELIMIT  NODES  STATE NODELIST 
 workq*       up   infinite      4   comp nid[000001-000004] 
-vers@uai-vers-8ee103bf-95b5d774-88ssd:~ > srun -n 3 -N 3 hostname
+vers@uai-vers-8ee103bf-95b5d774-88ssd> srun -n 3 -N 3 hostname
 nid000001
 nid000002
 nid000003
-vers@uai-vers-8ee103bf-95b5d774-88ssd:~ > exit
+vers@uai-vers-8ee103bf-95b5d774-88ssd> exit
 logout
 Connection to 10.103.13.157 closed.
-vers:~ $ cray uas delete --uai-list uai-vers-8ee103bf
+vers> cray uas delete --uai-list uai-vers-8ee103bf
 results = [ "Successfully deleted uai-vers-8ee103bf",]
 ```
 
@@ -1690,12 +1690,12 @@ In this example the user logs into the CLI using `cray auth login` and a user na
 A user can list the UAI images available for creating a UAI with a command of the form
 
 ```
-user:~ $ cray uas images list
+user> cray uas images list
 ```
 
 For example:
 ```
-vers:~ $ cray uas images list
+vers> cray uas images list
 default_image = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
 image_list = [ "dtr.dev.cray.com/cray/cray-uai-broker:latest", "dtr.dev.cray.com/cray/cray-uas-sles15:latest", "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest",]
 ```
@@ -1705,17 +1705,17 @@ image_list = [ "dtr.dev.cray.com/cray/cray-uai-broker:latest", "dtr.dev.cray.com
 A user can create a UAI from a specific UAI image (assuming no default UAI class exists) using a command of the form
 
 ```
-user:~ $ cray uas create --publickey <path> --imagename <image-name>
+user> cray uas create --publickey <path> --imagename <image-name>
 ```
 
 where `<image-name>` is the name shown above in the list of UAI images.  For example:
 
 ```
-vers:~ $ cray uas images list
+vers> cray uas images list
 default_image = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
 image_list = [ "dtr.dev.cray.com/cray/cray-uai-broker:latest", "dtr.dev.cray.com/cray/cray-uas-sles15:latest", "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest",]
 
-vers:~ $ cray uas create --publickey ~/.ssh/id_rsa.pub --imagename dtr.dev.cray.com/cray/cray-uas-sles15:latest
+vers> cray uas create --publickey ~/.ssh/id_rsa.pub --imagename dtr.dev.cray.com/cray/cray-uas-sles15:latest
 uai_connect_string = "ssh vers@10.103.13.160"
 uai_host = "ncn-w001"
 uai_img = "dtr.dev.cray.com/cray/cray-uas-sles15:latest"
@@ -1797,7 +1797,7 @@ To configure LDAP, first determine which files need to be changed in the broker 
 To add the above to a secret, first create a file with the contents:
 
 ```
-ncn-m001-pit:~ # cat <<EOF > sssd.conf
+ncn-m001-pit# cat <<EOF > sssd.conf
 [sssd]
   config_file_version = 2
   services = nss, pam
@@ -1824,13 +1824,13 @@ EOF
 Next make a secret from the file:
 
 ```
-ncn-m001-pit:~ # kubectl create secret generic -n uas broker-sssd-conf --from-file=sssd.conf
+ncn-m001-pit# kubectl create secret generic -n uas broker-sssd-conf --from-file=sssd.conf
 ```
 
 Next make a volume for the secret in the UAS configuration:
 
 ```
-ncn-m001-pit:~ # cray uas admin config volumes create --mount-path /etc/sssd --volume-description '{"secret": {"secret_name": "broker-sssd-conf", "default_mode": 384}}' --volumename broker-sssd-config 
+ncn-m001-pit# cray uas admin config volumes create --mount-path /etc/sssd --volume-description '{"secret": {"secret_name": "broker-sssd-conf", "default_mode": 384}}' --volumename broker-sssd-config 
 mount_path = "/etc/sssd"
 volume_id = "4dc6691e-e7d9-4af3-acde-fc6d308dd7b4"
 volumename = "broker-sssd-config"
@@ -1848,7 +1848,7 @@ Two important things to notice here are:
 The last part that is needed is a UAI class for the broker UAI with the updated configuration in the volume list.  For this we need the image-id of the broker UAI image, the volume-ids of the volumes to be added to the broker class and the class-id of the end-user UAI class managed by the broker:
 
 ```
-ncn-m001-pit:~ # cray uas admin config images list
+ncn-m001-pit# cray uas admin config images list
 [[results]]
 default = false
 image_id = "c5dcb261-5271-49b3-9347-afe7f3e31941"
@@ -1864,7 +1864,7 @@ default = true
 image_id = "ff86596e-9699-46e8-9d49-9cb20203df8c"
 imagename = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
 
-ncn-m001-pit:~ # cray uas admin config volumes list | grep -e volume_id -e volumename
+ncn-m001-pit# cray uas admin config volumes list | grep -e volume_id -e volumename
 volume_id = "4dc6691e-e7d9-4af3-acde-fc6d308dd7b4"
 volumename = "broker-sssd-config"
 volume_id = "55a02475-5770-4a77-b621-f92c5082475c"
@@ -1876,7 +1876,7 @@ volumename = "lustre"
 volume_id = "ea97325c-2b1d-418a-b3b5-3f6488f4a9e2"
 volumename = "slurm-config"
 
-ncn-m001-pit:~ # cray uas admin config classes list | grep -e class_id -e comment
+ncn-m001-pit# cray uas admin config classes list | grep -e class_id -e comment
 class_id = "a623a04a-8ff0-425e-94cc-4409bdd49d9c"
 comment = "UAI User Class"
 class_id = "bb28a35a-6cbc-4c30-84b0-6050314af76b"
@@ -1886,7 +1886,7 @@ comment = "Non-Brokered UAI User Class"
 Using that information create the broker UAI class
 
 ```
-ncn-m001-pit:~ # cray uas admin config classes create --image-id c5dcb261-5271-49b3-9347-afe7f3e31941 --volume-list '4dc6691e-e7d9-4af3-acde-fc6d308dd7b4,55a02475-5770-4a77-b621-f92c5082475c,9fff2d24-77d9-467f-869a-235ddcd37ad7' --uai-compute-network no --public-ip yes --comment "UAI broker class" --uai-creation-class a623a04a-8ff0-425e-94cc-4409bdd49d9c --namespace uas
+ncn-m001-pit# cray uas admin config classes create --image-id c5dcb261-5271-49b3-9347-afe7f3e31941 --volume-list '4dc6691e-e7d9-4af3-acde-fc6d308dd7b4,55a02475-5770-4a77-b621-f92c5082475c,9fff2d24-77d9-467f-869a-235ddcd37ad7' --uai-compute-network no --public-ip yes --comment "UAI broker class" --uai-creation-class a623a04a-8ff0-425e-94cc-4409bdd49d9c --namespace uas
 class_id = "74970cdc-9f94-4d51-8f20-96326212b468"
 comment = "UAI broker class"
 default = false
@@ -1932,13 +1932,13 @@ imagename = "dtr.dev.cray.com/cray/cray-uai-broker:latest"
 Once the broker UAI class has been set up, all that remains is to create the broker UAI using a command of the form
 
 ```
-ncn-m001-pit:~ # cray uas admin uais create --class-id <class-id> [--owner <name>]
+ncn-m001-pit# cray uas admin uais create --class-id <class-id> [--owner <name>]
 ```
 
 To make the broker obvious in the list of UAIs, giving it an owner name of `broker` is handy.  The owner name on a broker is used for naming and listing, but nothing else, so this is a convenient convention.  Here is an example using the class created above:
 
 ```
-ncn-m001-pit:~ # cray uas admin uais create --class-id 74970cdc-9f94-4d51-8f20-96326212b468 --owner broker
+ncn-m001-pit# cray uas admin uais create --class-id 74970cdc-9f94-4d51-8f20-96326212b468 --owner broker
 uai_connect_string = "ssh broker@10.103.13.162"
 uai_img = "dtr.dev.cray.com/cray/cray-uai-broker:latest"
 uai_ip = "10.103.13.162"
@@ -1955,7 +1955,7 @@ username = "broker"
 With the broker UAI running, users can use SSH to log into it and reach their end-user UAIs on demand.  Here is the first login by the user `vers`:
 
 ```
-vers :~ $ ssh vers@10.103.13.162
+vers> ssh vers@10.103.13.162
 The authenticity of host '10.103.13.162 (10.103.13.162)' can't be established.
 ECDSA key fingerprint is SHA256:k4ef6vTtJ1Dtb6H17cAFh5ljZYTl4IXtezR3fPVUKZI.
 Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
@@ -1974,9 +1974,9 @@ There are several things to notice here.  First, the first time the user logs in
 The next time `vers` logs in, it looks more like this:
 
 ```
-vers :~ $ ssh vers@10.103.13.162
+vers> ssh vers@10.103.13.162
 Password: 
-vers@uai-vers-ee6f427e-6c7468cdb8-2rqtv:~> 
+vers@uai-vers-ee6f427e-6c7468cdb8-2rqtv> 
 ```
 
 Only the password prompt appears now, since the hosts are all known and the end-user UAI exists but there is no `.ssh/authorized_keys` known yet by the broker UAI for `vers`.
@@ -2038,7 +2038,7 @@ Here is an example of replacing the entrypoint script with a new entrypoint scri
 ```
 # Notice special here document form to prevent variable substitution in the file
 
-ncn-m001-pit:~ # cat <<-"EOF" > entrypoint.sh
+ncn-m001-pit# cat <<-"EOF" > entrypoint.sh
 #!/bin/bash
 
 # Copyright 2020 Hewlett Packard Enterprise Development LP
@@ -2068,14 +2068,14 @@ sssd --config /etc/sssd/sssd.conf
 sleep infinity
 EOF
 
-ncn-m001-pit:~ # kubectl create configmap -n uas broker-entrypoint --from-file=entrypoint.sh
+ncn-m001-pit# kubectl create configmap -n uas broker-entrypoint --from-file=entrypoint.sh
 
 # Notice that the `default_mode` setting, which will set the mode on the file
 # /app/broker/entrypoint.sh is decimal 493 here instead of octal 0755.
 # The octal notation is not permitted in a JSON specification. Decimal
 # numbers have to be used.
 
-ncn-m001-pit:~ # cray uas admin config volumes create --mount-path /app/broker --volume-description '{"config_map": {"name": "broker-entrypoint", "default_mode": 493}}' --volumename broker-entrypoint
+ncn-m001-pit# cray uas admin config volumes create --mount-path /app/broker --volume-description '{"config_map": {"name": "broker-entrypoint", "default_mode": 493}}' --volumename broker-entrypoint
 mount_path = "/app/broker"
 volume_id = "1f3bde56-b2e7-4596-ab3a-6aa4327d29c7"
 volumename = "broker-entrypoint"
@@ -2084,7 +2084,7 @@ volumename = "broker-entrypoint"
 default_mode = 493
 name = "broker-entrypoint"
 
-ncn-m001-pit:~ # cray uas admin config classes list | grep -e class_id -e comment
+ncn-m001-pit# cray uas admin config classes list | grep -e class_id -e comment
 class_id = "74970cdc-9f94-4d51-8f20-96326212b468"
 comment = "UAI broker class"
 class_id = "a623a04a-8ff0-425e-94cc-4409bdd49d9c"
@@ -2092,7 +2092,7 @@ comment = "UAI User Class"
 class_id = "bb28a35a-6cbc-4c30-84b0-6050314af76b"
 comment = "Non-Brokered UAI User Class"
 
-ncn-m001-pit:~ # cray uas admin config classes describe 74970cdc-9f94-4d51-8f20-96326212b468 --format yaml
+ncn-m001-pit# cray uas admin config classes describe 74970cdc-9f94-4d51-8f20-96326212b468 --format yaml
 class_id: 74970cdc-9f94-4d51-8f20-96326212b468
 comment: UAI broker class
 default: false
@@ -2130,7 +2130,7 @@ volume_mounts:
   volume_id: 9fff2d24-77d9-467f-869a-235ddcd37ad7
   volumename: lustre
 
-ncn-m001-pit:~ # cray uas admin config classes update --volume-list '4dc6691e-e7d9-4af3-acde-fc6d308dd7b4,55a02475-5770-4a77-b621-f92c5082475c,9fff2d24-77d9-467f-869a-235ddcd37ad7,1f3bde56-b2e7-4596-ab3a-6aa4327d29c7' --format yaml 74970cdc-9f94-4d51-8f20-96326212b468
+ncn-m001-pit# cray uas admin config classes update --volume-list '4dc6691e-e7d9-4af3-acde-fc6d308dd7b4,55a02475-5770-4a77-b621-f92c5082475c,9fff2d24-77d9-467f-869a-235ddcd37ad7,1f3bde56-b2e7-4596-ab3a-6aa4327d29c7' --format yaml 74970cdc-9f94-4d51-8f20-96326212b468
 class_id: 74970cdc-9f94-4d51-8f20-96326212b468
 comment: UAI broker class
 default: false
@@ -2181,13 +2181,13 @@ With the broker UAI class updated, all that remains is to clear out any existing
     NOTE: clearing out existing UAIs will terminate any user activity on those UAIs, make sure that users are warned of the disruption.
 
 ```
-ncn-m001-pit:~ # cray uas admin uais delete --class-id a623a04a-8ff0-425e-94cc-4409bdd49d9c
+ncn-m001-pit# cray uas admin uais delete --class-id a623a04a-8ff0-425e-94cc-4409bdd49d9c
 results = [ "Successfully deleted uai-vers-ee6f427e",]
 
-ncn-m001-pit:~ # cray uas admin uais delete --class-id 74970cdc-9f94-4d51-8f20-96326212b468
+ncn-m001-pit# cray uas admin uais delete --class-id 74970cdc-9f94-4d51-8f20-96326212b468
 results = [ "Successfully deleted uai-broker-11f36815",]
 
-ncn-m001-pit:~ # cray uas admin uais create --class-id 74970cdc-9f94-4d51-8f20-96326212b468 --owner broker
+ncn-m001-pit# cray uas admin uais create --class-id 74970cdc-9f94-4d51-8f20-96326212b468 --owner broker
 uai_connect_string = "ssh broker@10.103.13.162"
 uai_img = "dtr.dev.cray.com/cray/cray-uai-broker:latest"
 uai_ip = "10.103.13.162"
@@ -2234,7 +2234,7 @@ The following is an example that follows on from the previous section and config
 ```
 # Notice special here document form to prevent variable substitution in the file
 
-ncn-m001-pit:~ # cat <<-"EOF" > banner
+ncn-m001-pit# cat <<-"EOF" > banner
 Here is a banner that will be displayed before login on
 the broker UAI
 
@@ -2242,7 +2242,7 @@ EOF
 
 # Notice special here document form to prevent variable substitution in the file
 
-ncn-m001-pit:~ # cat <<-"EOF" > sshd_conf
+ncn-m001-pit# cat <<-"EOF" > sshd_conf
 Port 30123
 AuthorizedKeysFile	.ssh/authorized_keys
 UsePAM yes
@@ -2260,9 +2260,9 @@ Match User !root,*
 	ForceCommand /usr/bin/switchboard broker --class-id $UAI_CREATION_CLASS
 EOF
 
-ncn-m001-pit:~ # kubectl create configmap -n uas broker-sshd-conf --from-file sshd_config --from-file banner
+ncn-m001-pit# kubectl create configmap -n uas broker-sshd-conf --from-file sshd_config --from-file banner
 
-ncn-m001-pit:~ # cray uas admin config volumes create --mount-path /etc/switchboard --volume-description '{"config_map": {"name": "broker-sshd-conf", "default_mode": 384}}' --volumename broker-sshd-config 
+ncn-m001-pit# cray uas admin config volumes create --mount-path /etc/switchboard --volume-description '{"config_map": {"name": "broker-sshd-conf", "default_mode": 384}}' --volumename broker-sshd-config 
 mount_path = "/etc/switchboard"
 volume_id = "d5058121-c1b6-4360-824d-3c712371f042"
 volumename = "broker-sshd-config"
@@ -2271,7 +2271,7 @@ volumename = "broker-sshd-config"
 default_mode = 384
 name = "broker-sshd-conf"
 
-ncn-m001-pit:~ # cray uas admin config classes update --volume-list '4dc6691e-e7d9-4af3-acde-fc6d308dd7b4,55a02475-5770-4a77-b621-f92c5082475c,9fff2d24-77d9-467f-869a-235ddcd37ad7,1f3bde56-b2e7-4596-ab3a-6aa4327d29c7,d5058121-c1b6-4360-824d-3c712371f042' --format yaml 74970cdc-9f94-4d51-8f20-96326212b468
+ncn-m001-pit# cray uas admin config classes update --volume-list '4dc6691e-e7d9-4af3-acde-fc6d308dd7b4,55a02475-5770-4a77-b621-f92c5082475c,9fff2d24-77d9-467f-869a-235ddcd37ad7,1f3bde56-b2e7-4596-ab3a-6aa4327d29c7,d5058121-c1b6-4360-824d-3c712371f042' --format yaml 74970cdc-9f94-4d51-8f20-96326212b468
 class_id: 74970cdc-9f94-4d51-8f20-96326212b468
 comment: UAI broker class
 default: false
@@ -2329,13 +2329,13 @@ With the new configuration installed, clean out the old UAIs and restart the bro
     NOTE: clearing out existing UAIs will terminate any user activity on those UAIs, make sure that users are warned of the disruption.
 
 ```
-ncn-m001-pit:~ # cray uas admin uais delete --class-id a623a04a-8ff0-425e-94cc-4409bdd49d9c
+ncn-m001-pit# cray uas admin uais delete --class-id a623a04a-8ff0-425e-94cc-4409bdd49d9c
 results = [ "Successfully deleted uai-vers-e937b810",]
 
-ncn-m001-pit:~ # cray uas admin uais delete --class-id 74970cdc-9f94-4d51-8f20-96326212b468
+ncn-m001-pit# cray uas admin uais delete --class-id 74970cdc-9f94-4d51-8f20-96326212b468
 results = [ "Successfully deleted uai-broker-a50407d5",]
 
-ncn-m001-pit:~ # cray uas admin uais create --class-id 74970cdc-9f94-4d51-8f20-96326212b468 --owner broker
+ncn-m001-pit# cray uas admin uais create --class-id 74970cdc-9f94-4d51-8f20-96326212b468 --owner broker
 uai_age = "0m"
 uai_connect_string = "ssh broker@10.103.13.162"
 uai_host = "ncn-w001"
@@ -2352,7 +2352,7 @@ username = "broker"
 Now when the user connects to the broker to log in
 
 ```
-vers :~ $ ssh vers@10.103.13.162
+vers> ssh vers@10.103.13.162
 Here is a banner that will be displayed before login to SSH
 on Broker UAIs
 Password: 
@@ -2371,7 +2371,7 @@ A custom end-user UAI image can be any container image set up with the end-user 
 The following steps are used to build a custom End-User UAI image called `registry.local/cray/cray-uai-compute:latest`.  Alter this name as needed by changing the following in the procedure:
 
 ```
-ncn-w001:~ # UAI_IMAGE_NAME=registry.local/cray/cray-uai-compute:latest
+ncn-w001# UAI_IMAGE_NAME=registry.local/cray/cray-uai-compute:latest
 ```
 
 to use a different name.  All steps in this procedure must be run from a true NCN (master or worker node) not from the LiveCD node.  In particular, pushing the final image to `registry.local` will fail with an error reporting a bad x509 certificate if it is attempted on the LiveCD node.
@@ -2380,7 +2380,7 @@ to use a different name.  All steps in this procedure must be run from a true NC
 Identify the Sessiontemplate name to use. A full list may be found with:
 
 ```
-ncn-w001:~ # cray bos v1 sessiontemplate list --format yaml
+ncn-w001# cray bos v1 sessiontemplate list --format yaml
 - boot_sets:
     compute:
       boot_ordinal: 2
@@ -2405,7 +2405,7 @@ ncn-w001:~ # cray bos v1 sessiontemplate list --format yaml
 Alternatively, collect the sessiontemplate name used when performing the "Install and Configure the Cray Operating System (COS)" procedure in the Installation and Configuration Guide. Near the end of that procedure the step to "Create a BOS Session to boot the compute nodes" should contain the name. 
 
 ```
-ncn-w001:~ # SESSION_NAME=wlm-sessiontemplate-0.1.0
+ncn-w001# SESSION_NAME=wlm-sessiontemplate-0.1.0
 ```
 
 #####  Download a Compute Node squashfs <a name="main-uaiimages-customenduser-build-squashfs"></a>
@@ -2413,9 +2413,9 @@ ncn-w001:~ # SESSION_NAME=wlm-sessiontemplate-0.1.0
 Using the Sessiontemplate name, download a compute node squashfs from a BOS sessiontemplate name:
 
 ```
-ncn-w001:~ # SESSION_ID=$(cray bos v1 sessiontemplate describe $SESSION_NAME --format json | jq -r '.boot_sets.compute.path' | awk -F/ '{print $4}')
+ncn-w001# SESSION_ID=$(cray bos v1 sessiontemplate describe $SESSION_NAME --format json | jq -r '.boot_sets.compute.path' | awk -F/ '{print $4}')
 
-ncn-w001:~ # cray artifacts get boot-images $SESSION_ID/rootfs rootfs.squashfs
+ncn-w001# cray artifacts get boot-images $SESSION_ID/rootfs rootfs.squashfs
 ```
 
 ##### Mount the squashfs and Create a tarball <a name="main-uaiimages-customenduser-build-tarball"></a>
@@ -2423,9 +2423,9 @@ ncn-w001:~ # cray artifacts get boot-images $SESSION_ID/rootfs rootfs.squashfs
 Create a directory to mount the squashfs:
 
 ```
-ncn-w001:~ # mkdir mount
+ncn-w001# mkdir mount
 
-ncn-w001:~ # mount -o loop,rdonly rootfs.squashfs `pwd`/mount
+ncn-w001# mount -o loop,rdonly rootfs.squashfs `pwd`/mount
 ```
 
 Create the tarball.
@@ -2433,13 +2433,13 @@ Create the tarball.
     IMPORTANT: 99-slingshot-network.conf is omitted from the tarball as that prevents the UAI from running sshd as the UAI user with the su command:
 
 ```
-ncn-w001:~ # (cd `pwd`/mount; tar --xattrs --xattrs-include='*' --exclude="99-slingshot-network.conf" -cf "../$SESSION_ID.tar" .) > /dev/null
+ncn-w001# (cd `pwd`/mount; tar --xattrs --xattrs-include='*' --exclude="99-slingshot-network.conf" -cf "../$SESSION_ID.tar" .) > /dev/null
 ```
 
 This may take several minutes.  Notice that this does not create a compressed tarball.  Using an uncompressed format makes it possible to add files if needed once the tarball is made.  It also makes the procedure run just a bit more quickly.  When making the tarball completes, check that the tarball contains './usr/bin/uai-ssh.sh:
 
 ```
-ncn-w001:~ # tar tf $SESSION_ID.tar | grep '[.]/usr/bin/uai-ssh[.]sh'
+ncn-w001# tar tf $SESSION_ID.tar | grep '[.]/usr/bin/uai-ssh[.]sh'
 ./usr/bin/uai-ssh.sh
 ```
 
@@ -2447,7 +2447,7 @@ If the script is not present, the easiest place to get a copy of the script is f
 
 ```
 mkdir -p ./usr/bin
-ncn-w001:~ # cray uas create --publickey ~/.ssh/id_rsa.pub
+ncn-w001# cray uas create --publickey ~/.ssh/id_rsa.pub
 uai_connect_string = "ssh vers@10.26.23.123"
 uai_host = "ncn-w001"
 uai_img = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
@@ -2459,17 +2459,17 @@ username = "vers"
 
 [uai_portmap]
 
-ncn-w001:~ # scp vers@10.26.23.123:/usr/bin/uai-ssh.sh ./usr/bin/uai-ssh.sh
+ncn-w001# scp vers@10.26.23.123:/usr/bin/uai-ssh.sh ./usr/bin/uai-ssh.sh
 The authenticity of host '10.26.23.123 (10.26.23.123)' can't be established.
 ECDSA key fingerprint is SHA256:voQUCKDG4C9FGkmUcHZVrYJBXVKVYqcJ4kmTpe4tvOA.
 Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 Warning: Permanently added '10.26.23.123' (ECDSA) to the list of known hosts.
 uai-ssh.sh                                                                    100% 5035     3.0MB/s   00:00
 
-ncn-w001:~ # cray uas delete --uai-list uai-vers-32079250
+ncn-w001# cray uas delete --uai-list uai-vers-32079250
 results = [ "Successfully deleted uai-vers-32079250",]
 
-ncn-w001:~ # tar rf 0c0d4081-2e8b-433f-b6f7-e1ef0b907be3.tar ./usr/bin/uai-ssh.sh
+ncn-w001# tar rf 0c0d4081-2e8b-433f-b6f7-e1ef0b907be3.tar ./usr/bin/uai-ssh.sh
 ```
 
 ##### Create and Push the Container Image <a name="main-uaiimages-customenduser-build-image"></a>
@@ -2477,30 +2477,30 @@ ncn-w001:~ # tar rf 0c0d4081-2e8b-433f-b6f7-e1ef0b907be3.tar ./usr/bin/uai-ssh.s
 Create a container image using podman or docker and push it to the site container registry. Any container specific modifications may also be done here with a Dockerfile. The ENTRYPOINT layer must be /usr/bin/uai-ssh.sh as that starts SSHD for the user in the UAI container started by UAS.
 
 ```
-ncn-w001:~ # UAI_IMAGE_NAME=registry.local/cray/cray-uai-compute:latest
+ncn-w001# UAI_IMAGE_NAME=registry.local/cray/cray-uai-compute:latest
 
-ncn-w001:~ # podman import --change "ENTRYPOINT /usr/bin/uai-ssh.sh" $SESSION_ID.tar $UAI_IMAGE_NAME
+ncn-w001# podman import --change "ENTRYPOINT /usr/bin/uai-ssh.sh" $SESSION_ID.tar $UAI_IMAGE_NAME
 
-ncn-w001:~ # podman push $UAI_IMAGE_NAME
+ncn-w001# podman push $UAI_IMAGE_NAME
 ```
 
 ##### Register the New Container Image With UAS <a name="main-uaiimages-customenduser-build-register"></a>
 
 ```
-ncn-w001:~ # cray uas admin config images create --imagename $UAI_IMAGE_NAME
+ncn-w001# cray uas admin config images create --imagename $UAI_IMAGE_NAME
 ```
 
 ##### Cleanup the Mount Directory and tarball <a name="main-uaiimages-customenduser-build-cleanup"></a>
 
 ```
-ncn-w001:~ # umount mount; rmdir mount
+ncn-w001# umount mount; rmdir mount
 
-ncn-w001:~ # rm $SESSION_ID.tar rootfs.squashfs
+ncn-w001# rm $SESSION_ID.tar rootfs.squashfs
 
 # NOTE: the next step could be done as an `rm -rf` but, since the user
 #       is `root` and the path is very similar to an important system
 #       path a more cautious approach is taken.
-ncn-w001:~ # rm -f ./usr/bin/uai-ssh.sh && rmdir ./usr/bin ./usr
+ncn-w001# rm -f ./usr/bin/uai-ssh.sh && rmdir ./usr/bin ./usr
 ```
 
 ## Troubleshooting <a name="main-trouble"></a>
@@ -2514,7 +2514,7 @@ At times there will be problems with UAS.  Usually this takes the form of errors
 The first thing to do is to find out the names of the Kubernetes pods running UAS:
 
 ```
-ncn-m001-pit:~ # kubectl get po -n services | grep uas | grep -v etcd
+ncn-m001-pit# kubectl get po -n services | grep uas | grep -v etcd
 cray-uas-mgr-6bbd584ccb-zg8vx                                    2/2     Running     0          7d7h
 cray-uas-mgr-6bbd584ccb-acg7y                                    2/2     Running     0          7d7h
 ```
@@ -2563,7 +2563,7 @@ If an error had occurred in UAS that error would likely show up here.  Because t
 Sometimes a UAI will come up and run but won't work correctly.  It is possible to see errors reported by elements of the UAI entrypoint script using the `kubectl logs` command.  First find the UAI of interest.  This starts by identifying the UAI name using the CLI:
 
 ```
-ncn-m001-pit:~ # cray uas admin uais list 
+ncn-m001-pit# cray uas admin uais list 
 [[results]]
 uai_age = "4h30m"
 uai_connect_string = "ssh broker@10.103.13.162"
@@ -2590,21 +2590,21 @@ username = "vers"
 Using this, find the UAI in question, remembering that end-user UAIs run in the `user` Kubernetes namespace and broker UAIs run in the `uas` Kubernetes namespace.
 
 ```
-ncn-m001-pit:~ # kubectl get po -n user | grep uai-vers-6da50e7a
+ncn-m001-pit# kubectl get po -n user | grep uai-vers-6da50e7a
 uai-vers-6da50e7a-54dbc99fdd-csxmk     1/1     Running   0          76m
 ```
 
 or
 
 ```
-ncn-m001-pit:~ # kubectl get po -n uas | grep uai-broker-2e6ce6b7
+ncn-m001-pit# kubectl get po -n uas | grep uai-broker-2e6ce6b7
 uai-broker-2e6ce6b7-68d78c6c95-s28dh     2/2     Running   0          4h34m
 ```
 
 Using the UAI's pod name and the `user` namespace, get the logs:
 
 ```
-ncn-m001-pit:~ # kubectl logs -n user uai-vers-6da50e7a-54dbc99fdd-csxmk uai-vers-6da50e7a
+ncn-m001-pit# kubectl logs -n user uai-vers-6da50e7a-54dbc99fdd-csxmk uai-vers-6da50e7a
 Setting up passwd and group entries for vers
 Setting profile for vers
 Adding vers to groups
@@ -2624,7 +2624,7 @@ ssh-keygen: generating new host keys: RSA DSA ECDSA ED25519
 or, for the broker using the broker UAI pod's name and the `uas` namespace:
 
 ```
-ncn-m001-pit:~ # kubectl logs -n uas uai-broker-2e6ce6b7-68d78c6c95-s28dh uai-broker-2e6ce6b7
+ncn-m001-pit# kubectl logs -n uas uai-broker-2e6ce6b7-68d78c6c95-s28dh uai-broker-2e6ce6b7
 /bin/bash: warning: setlocale: LC_ALL: cannot change locale (C.UTF-8)
 Configure PAM to use sssd...
 Generating broker host keys...
@@ -2648,7 +2648,7 @@ cray uas admin uais delete --class-id <creation-class-id>
 command specifying the uai-creation-class identifier from the broker's UAI class.  For example:
 
 ```
-ncn-m001-pit:~ # cray uas admin config classes list | grep -e class_id -e comment
+ncn-m001-pit# cray uas admin config classes list | grep -e class_id -e comment
 class_id = "74970cdc-9f94-4d51-8f20-96326212b468"
 comment = "UAI broker class"
 class_id = "a623a04a-8ff0-425e-94cc-4409bdd49d9c"
@@ -2656,10 +2656,10 @@ comment = "UAI User Class"
 class_id = "bb28a35a-6cbc-4c30-84b0-6050314af76b"
 comment = "Non-Brokered UAI User Class"
 
-ncn-m001-pit:~ # cray uas admin config classes describe 74970cdc-9f94-4d51-8f20-96326212b468 | grep uai_creation_class
+ncn-m001-pit# cray uas admin config classes describe 74970cdc-9f94-4d51-8f20-96326212b468 | grep uai_creation_class
 uai_creation_class = "a623a04a-8ff0-425e-94cc-4409bdd49d9c"
 
-ncn-m001-pit:~ # cray uas admin uais delete --class-id a623a04a-8ff0-425e-94cc-4409bdd49d9c
+ncn-m001-pit# cray uas admin uais delete --class-id a623a04a-8ff0-425e-94cc-4409bdd49d9c
 results = [ "Successfully deleted uai-vers-6da50e7a",]
 ```
 
@@ -2670,7 +2670,7 @@ After that, users should be able to log into the broker UAI and be directed to a
 Sometimes the UAI will show a `uai_status` field of `Waiting` and a `uai_msg` field of `ContainerCreating`.  It is possible that this is just a matter of starting the UAI taking longer than normal, perhaps as it pulls in a new UAI image from a registry, but, if it persists for a long time, it is worth investigating.  To do this, first find the UAI:
 
 ```
-ncn-m001-pit:~ # cray uas admin uais list --owner ctuser
+ncn-m001-pit# cray uas admin uais list --owner ctuser
 [[results]]
 uai_age = "1m"
 uai_connect_string = "ssh ctuser@10.103.13.159"
@@ -2686,14 +2686,14 @@ username = "ctuser"
 Then look up its pod in Kubernetes:
 
 ```
-baldar-ncn-m001-pit:~ # kubectl get po -n user | grep uai-ctuser-bcd1ff74
+ncn-m001-pit# kubectl get po -n user | grep uai-ctuser-bcd1ff74
 uai-ctuser-bcd1ff74-7d94967bdc-4vm66   0/1     ContainerCreating   0          2m58s
 ```
 
 Then describe the pod in Kubernetes:
 
 ```
-ncn-m001-pit:~ # kubectl describe pod -n user uai-ctuser-bcd1ff74-7d94967bdc-4vm66
+ncn-m001-pit# kubectl describe pod -n user uai-ctuser-bcd1ff74-7d94967bdc-4vm66
 Name:                 uai-ctuser-bcd1ff74-7d94967bdc-4vm66
 Namespace:            user
 Priority:             -100
@@ -2722,7 +2722,7 @@ Other problems can usually be quickly identified using this and other informatio
 If a user attempts to create a UAI in the legacy mode and cannot create the UAI at all, a good place to look is at volumes.  Duplicate `mount_path` specifications in the list of volumes in a UAI will cause a failure that looks like this:
 
 ```
-ncn-m001-pit:~ # cray uas create --publickey ~/.ssh/id_rsa.pub
+ncn-m001-pit# cray uas create --publickey ~/.ssh/id_rsa.pub
 Usage: cray uas create [OPTIONS]
 Try 'cray uas create --help' for help.
 
@@ -2732,7 +2732,7 @@ Error: Unprocessable Entity: Failed to create deployment uai-erl-543cdbbc: Unpro
 At present there is not a lot of UAS log information available from this error (this is a known problem), but a likely cause is duplicate `mount_path` specifications in volumes.  Looking through the configured volumes for duplicates can be helpful.
 
 ```
-ncn-m001-pit:~ # cray uas admin config volumes list | grep -e mount_path -e volumename -e volume_id
+ncn-m001-pit# cray uas admin config volumes list | grep -e mount_path -e volumename -e volume_id
 mount_path = "/app/broker"
 volume_id = "1f3bde56-b2e7-4596-ab3a-6aa4327d29c7"
 volumename = "broker-entrypoint"
@@ -2768,7 +2768,7 @@ volumename = "optforge"
 Looking through this list, the mount path for the volume named `delete-me` and the mount path for the volume named `optforge` are the same.  The obvious candidate for deletion in this case is `delete-me` so it can be deleted
 
 ```
-ncn-m001-pit:~ # cray uas admin config volumes delete 7b924270-c9e9-4b0e-85f5-5bc62c02457e
+ncn-m001-pit# cray uas admin config volumes delete 7b924270-c9e9-4b0e-85f5-5bc62c02457e
 mount_path = "/opt/forge"
 volume_id = "7b924270-c9e9-4b0e-85f5-5bc62c02457e"
 volumename = "delete-me"
@@ -2789,7 +2789,7 @@ Sometimes there is no better way to figure out a problem with a UAI than to get 
 Here is an example session showing a `ps` command inside the container of a UAI by an administrator:
 
 ```
-baldar-ncn-m001-pit:~ # cray uas admin uais list
+ncn-m001-pit# cray uas admin uais list
 [[results]]
 uai_age = "1d4h"
 uai_connect_string = "ssh broker@10.103.13.162"
@@ -2812,10 +2812,10 @@ uai_name = "uai-vers-4ebe1966"
 uai_status = "Running: Ready"
 username = "vers"
 
-ncn-m001-pit:~ # kubectl get po -n user | grep uai-vers-4ebe1966
+ncn-m001-pit# kubectl get po -n user | grep uai-vers-4ebe1966
 uai-vers-4ebe1966-77b7c9c84f-xgqm4     1/1     Running   0          77s
 
-ncn-m001-pit:~ # kubectl exec -it -n user uai-vers-4ebe1966-77b7c9c84f-xgqm4 -c uai-vers-4ebe1966 -- /bin/sh
+ncn-m001-pit# kubectl exec -it -n user uai-vers-4ebe1966-77b7c9c84f-xgqm4 -c uai-vers-4ebe1966 -- /bin/sh
 sh-4.4# ps -afe
 UID          PID    PPID  C STIME TTY          TIME CMD
 root           1       0  0 22:56 ?        00:00:00 /bin/bash /usr/bin/uai-ssh.sh

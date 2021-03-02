@@ -9,7 +9,7 @@ Parsing the output of `efibootmgr` can be helpful in determining which device is
 
 ```bash
 # Print off the UEFI's boot selections:
-ncn-m001:~ # efibootmgr
+ncn-m001# efibootmgr
 BootCurrent: 0015
 Timeout: 1 seconds
 BootOrder: 000E,000D,0011,0012,0007,0005,0006,0008,0009,0000,0001,0002,000A,000B,000C,0003,0004,000F,0010,0013,0014
@@ -43,10 +43,10 @@ In the example above, our device is 0014 or 0015. We'll guess its the first one,
 Notice the lack of "Boot" in the ID number given, we want Boot0014 so we pass '0014' to efibootmgr:
 
 ```bash
-ncn-m001:~ # efibootmgr -n 0014
+ncn-m001# efibootmgr -n 0014
 
 # Verify the BootNext device is what you selected:
-ncn-m001:~ # efibootmgr | grep -i bootnext
+ncn-m001# efibootmgr | grep -i bootnext
 BootNext: 0014
 ```
 

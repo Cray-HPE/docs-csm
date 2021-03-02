@@ -7,7 +7,7 @@ A patched firmware release is expected to be available for a future release of S
 ## Clear BIOS settings by jumper
 
 1. Pull the power cables or blade server from the chassis, and open the system top cover.
-2. Move the Clear CMOS Jumper to 2-3, and wait 2~3 seconds.
+2. Move the Clear CMOS Jumper to 2-3, and wait 2 to 3 seconds.
 3. Move the Clear CMOS Jumper to 1-2.
 
 ### Motherboard MZ62-HD0-00/-YF for H262 chassis

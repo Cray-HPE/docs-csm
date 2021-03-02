@@ -88,7 +88,7 @@ sw-spine-002(config-if-vlan)# ip address 10.102.11.3/24
 After completing this configuration you should be able to ping and log in to all of the NCNs at the external CAN IP address from a device on the customer network.
 
 ```
-$ ping 10.101.8.6
+external> ping 10.101.8.6
 PING 10.101.8.6 (10.101.8.6): 56 data bytes
 64 bytes from 10.101.8.6: icmp_seq=0 ttl=58 time=61.445 ms
 64 bytes from 10.101.8.6: icmp_seq=1 ttl=58 time=70.263 ms
@@ -97,12 +97,12 @@ PING 10.101.8.6 (10.101.8.6): 56 data bytes
 --- 10.101.8.6 ping statistics ---
 3 packets transmitted, 3 packets received, 0.0% packet loss
 round-trip min/avg/max/stddev = 59.270/63.659/70.263/4.753 ms
-$ ssh root@10.101.8.6
+external> ssh root@10.101.8.6
 The authenticity of host '10.101.8.6 (10.101.8.6)' can't be established.
 ECDSA key fingerprint is SHA256:jnMGZnMcdPQ9QleyJADbI9AQAvo4DfGz0SOYbe3lraI.
 Are you sure you want to continue connecting (yes/no)? yes
 Warning: Permanently added '10.101.8.6' (ECDSA) to the list of known hosts.
 Password:
  
-ncn-w001:~ #
+ncn-w001#
 ```

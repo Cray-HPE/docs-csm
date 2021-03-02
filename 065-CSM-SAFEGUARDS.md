@@ -28,20 +28,22 @@ Edit `/var/www/ephemeral/configs/data.json` and align the following options:
 }
 ```
 
+pit# vi /var/www/ephemeral/configs/data.json
+
 Quickly toggle yes or no to the file:
 
 ```bash
 # set wipe-ceph-osds=no
-sed -i 's/wipe-ceph-osds": "yes"/wipe-ceph-osds": "no"/g' /var/www/ephemeral/configs/data.json
+pit# sed -i 's/wipe-ceph-osds": "yes"/wipe-ceph-osds": "no"/g' /var/www/ephemeral/configs/data.json
 
 # set wipe-ceph-osds=yes
-sed -i 's/wipe-ceph-osds": "no"/wipe-ceph-osds": "yes"/g' /var/www/ephemeral/configs/data.json
+pit# sed -i 's/wipe-ceph-osds": "no"/wipe-ceph-osds": "yes"/g' /var/www/ephemeral/configs/data.json
 ```
 
 Activate the new setting:
 
 ```
-pit:~ # systemctl restart basecamp
+pit# systemctl restart basecamp
 ```
 
 ##### Safeguard RAIDS / BOOTLOADERS / SquashFS / OverlayFS
@@ -50,3 +52,5 @@ Edit `/var/www/boot/script.ipxe` and align the following options as you see them
 
 - `rd.live.overlay.reset=0` will prevent any overlayFS files from being cleared.
 - `metal.no-wipe=1` will guard against touching RAIDs, disks, and partitions.
+
+pit# vi /var/www/boot/script.ipxe

@@ -154,7 +154,7 @@ Pull these files into the current working directory:
 - `switch_metadata.csv`
 - `system_config.yaml` (see below)
 
-> The optional `application-node-config.yaml` file may be provided for further defining of settings relating to how application nodes will appear in HSM (e.g. naming). See the CSI usage for more information.  This will also be useful 
+> The optional `application-node-config.yaml` file may be provided for further defining of settings relating to how application nodes will appear in HSM for roles and subroles. See the CSI usage for more information.  
 
 > The optional `cabinets.yaml` file allows cabinet naming and numbering as well as some networking overrides (e.g. VLAN) which will allow systems on Shasta v1.3 to minimize changes to the existing system while migrating to Shasta v1.4.  More information on this file can be found [here](310-CABINETS.md).
 

@@ -6,13 +6,13 @@ This page will go over how to setup a re-install on a node.
 1. Backup to the data partition:
 
     ```bash
-    pit:~ # mkdir -pv /var/www/ephemeral/backup
-    pit:~ # pushd /var/www/ephemeral/backup
-    pit:~ # tar -czvf "dnsmasq-data-$(date  '+%Y-%m-%d_%H-%M-%S').tar.gz" /etc/dnsmasq.*
-    pit:~ # tar -czvf "network-data-$(date  '+%Y-%m-%d_%H-%M-%S').tar.gz" /etc/sysconfig/network/*
-    pit:~ # cp -pv /etc/hosts ./
-    pit:~ # popd
-    pit:~ # umount /var/www/ephemeral
+    pit# mkdir -pv /var/www/ephemeral/backup
+    pit# pushd /var/www/ephemeral/backup
+    pit# tar -czvf "dnsmasq-data-$(date  '+%Y-%m-%d_%H-%M-%S').tar.gz" /etc/dnsmasq.*
+    pit# tar -czvf "network-data-$(date  '+%Y-%m-%d_%H-%M-%S').tar.gz" /etc/sysconfig/network/*
+    pit# cp -pv /etc/hosts ./
+    pit# popd
+    pit# umount /var/www/ephemeral
     ``` 
     Now the USB stick can be unplugged, it contains all the information we already loaded plus backups
     of initialized files.
@@ -51,11 +51,11 @@ Once fetched, attach the USB to a CRAY non-compute node and reboot into the USB 
     ```bash
     # STOP AND INSPECT ANY FAILURE IN ANY OF THESE COMMANDS
     # DO NOT PASS GO ; DO NOT COLLECT $200
-    pit:~ # tar -xzvf /var/www/ephemeral/backup/dnsmasq*.tar.gz
-    pit:~ # tar -xzvf /var/www/ephemeral/backup/network*.tar.gz
-    pit:~ # systemctl restart wicked wickedd-nanny
-    pit:~ # systemctl restart dnsmasq
-    pit:~ # systemctl start basecamp nexus
+    pit# tar -xzvf /var/www/ephemeral/backup/dnsmasq*.tar.gz
+    pit# tar -xzvf /var/www/ephemeral/backup/network*.tar.gz
+    pit# systemctl restart wicked wickedd-nanny
+    pit# systemctl restart dnsmasq
+    pit# systemctl start basecamp nexus
     ```
 
 7. You now have a revitalized LiveCD with previous configuration.

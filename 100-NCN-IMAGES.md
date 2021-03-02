@@ -26,11 +26,11 @@ For information on pulling and swapping other NCN images, see [107-NCN-DEVEL](10
 View the current ephemeral data payload:
 
 ```bash
-pit:~ # ll /var/www
+pit# ls -l /var/www
 total 8
 drwxr-xr-x 1 dnsmasq tftp 4096 Dec 17 21:20 boot
 drwxr-xr-x 7 root    root 4096 Dec  2 04:45 ephemeral
-pit:~ # ll /var/www/ephemeral/data/*
+pit# ls -l /var/www/ephemeral/data/*
 /var/www/ephemeral/data/ceph:
 total 4
 drwxr-xr-x 2 root root 4096 Dec 17 21:42 0.0.7
@@ -42,7 +42,7 @@ drwxr-xr-x 2 root root 4096 Dec 17 21:26 0.0.8
 
 Setup the "booting repos":
 ```bash
-pit:~ # set-sqfs-links.sh
+pit# set-sqfs-links.sh
 Mismatching kernels! The discovered artifacts will deploy an undesirable stack.
 mkdir: created directory 'ncn-m001'
 /var/www/ncn-m001 /var/www
@@ -96,7 +96,7 @@ mkdir: created directory 'ncn-s003'
 
 Viewing the currently set links
 ```bash
--pit: # ll /var/www/ncn-*
+pit# ls -l /var/www/ncn-*
 boot:
 total 1552
 -rw-r--r-- 1 root    root 166634 Dec 17 13:21 graffiti.png
