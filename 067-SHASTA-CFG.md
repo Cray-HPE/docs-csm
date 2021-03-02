@@ -382,6 +382,18 @@ with system-specific customizations.
     EOF
     ```
 
+    On success, the `cray-dns-unbound` values should look similar to:
+    ```bash
+    linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-dns-unbound
+    localZones:
+    - localType: static
+      name: "local"
+    forwardZones:
+    - name: "."
+      forwardIps:
+      - "{{ network.netstaticips.system_to_site_lookups }}"
+    ```
+
 7.  Review `customizations.yaml` and replace remaining `~FIXME~` values with
     appropriate settings.
 

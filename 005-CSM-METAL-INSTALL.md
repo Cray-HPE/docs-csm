@@ -151,13 +151,17 @@ CASMINST-980
    pit# date "+%Y-%m-%d %H:%M:%S.%6N%z"
    ```
 
-   The time can be inaccurate if the system has been off for a long time, or, for example, [the CMOS was cleared](254-NCN-FIRMWARE-GB.md). If needed, set the time manually as close as possible, and then run the NTP script:
+   The time can be inaccurate if the system has been off for a long time, or, for example, [the CMOS was cleared](254-NCN-FIRMWARE-GB.md). If needed, set the time manually as close as possible. 
 
    ```
    pit# timedatectl set-time "2019-11-15 00:00:00"
-   pit# /root/bin/configure-ntp.sh
    ```
 
+   Then finally run the NTP script:
+   ```
+   pit# /root/bin/configure-ntp.sh
+   ```
+   
    This ensures that the PIT is configured with an accurate date/time, which will be properly propagated to the NCNs during boot.
 
 2. Ensure the current time is set in BIOS for all management NCNs.
