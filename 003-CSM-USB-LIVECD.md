@@ -66,15 +66,45 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    App. Version   : 1.5.18
     ```
 
-6. Install podman or docker to support container tools required by SHASTA-CFG.
+6. Install podman or docker to support container tools required to generated
+   sealed secrets.
 
-   Podman RPMs are included in the "embedded" repository in the CSM release and
-   can be installed as follows:
-   ```bash
-   linux# zypper ar --gpgcheck-allow-unsigned -f "./${CSM_RELEASE}/rpm/embedded" "${CSM_RELEASE}-embedded"
-   linux# zypper in -y podman podman-cni-config
-   ```
-   or the RPMs (and their dependencies) can be manually installed using `rpm`.
+   Podman RPMs are included in the `embedded` repository in the CSM release and
+   may be installed in your pre-LiveCD environment using `zypper` as follows:
+
+   * Add the `embedded` repository (if necessary):
+     ```bash
+     linux# zypper ar -fG "./${CSM_RELEASE}/rpm/embedded" "${CSM_RELEASE}-embedded"
+     ```
+     
+   * Install `podman` and `podman-cni-config` pacakges:
+     ```bash
+     linux# zypper in -y podman podman-cni-config
+     ```
+
+   Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
+   from the `./${CSM_RELEASE}/rpm/ebedded` directory.
+
+7. Although not strictly required, the procedures for setting up the
+   `site-init` directory recommend persisting `site-init` files in a Git
+   repository.
+
+   Git RPMs are included in the `embedded` repository in the CSM release and
+   may be installed in your pre-LiveCD environment using `zypper` as follows:
+   
+   * Add the `embedded` repository (if necessary):
+     ```bash
+     linux# zypper ar -fG "./${CSM_RELEASE}/rpm/embedded" "${CSM_RELEASE}-embedded"
+     ```
+     
+   * Install `git` package:
+     ```bash
+     linux# zypper in -y git
+     ```
+
+   Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
+   from the `./${CSM_RELEASE}/rpm/ebedded` directory.
+
 
 <a name="create-the-bootable-media"></a>
 ## Create the Bootable Media
