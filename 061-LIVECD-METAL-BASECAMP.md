@@ -39,11 +39,11 @@ This page details what those settings are.
 If the desire to reset basecamp to defaults comes up, you can do so by following these commands.
 
 ```bash
-pit:~ # systemctl stop basecamp
-pit:~ # podman rm basecamp
-pit:~ # podman rmi basecamp
-pit:~ # rm -f /var/www/ephemeral/configs/server.yaml
-pit:~ # systemctl start basecamp
+pit# systemctl stop basecamp
+pit# podman rm basecamp
+pit# podman rmi basecamp
+pit# rm -f /var/www/ephemeral/configs/server.yaml
+pit# systemctl start basecamp
 ```
 
 Basecamp is now entirely fresh.

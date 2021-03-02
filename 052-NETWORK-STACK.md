@@ -43,10 +43,10 @@ Sorted by safest to touch relative to keeping your SSH connection up.
 ##### Interface Information
 ```bash
 # Check interface status (up/down/broken)
-root:~ # wicked ifstatus
+ncn# wicked ifstatus
 
 # Show routing and status for all devices
-root:~ # wicked ifstatus --verbose all
+ncn# wicked ifstatus --verbose all
 lo              up
       link:     #1, state up
       type:     loopback
@@ -118,14 +118,14 @@ vlan007         device-unconfigured
 
 eth0            no-device
 # Print real devices ( ignore no-device )
-root:~ # wicked show --verbose all
+ncn# wicked show --verbose all
 ```
 
 ##### Network Service
 
 ```bash
 # Shows the currently enabled network service (Wicked or Network Manager)
-root:~ # systemctl show -p Id network.service
+ncn# systemctl show -p Id network.service
 Id=wicked.service
 ```
 

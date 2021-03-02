@@ -1,8 +1,8 @@
 # Move Site Connections 
 
 In 1.4, the site connections that were previously connection to ncn-w001 will be moved to ncn-m001.  This page will go over the process to make that change.
-> Note: In shasta-1.4, any number of managers may have external connections, pre-1.4 was strictly w001(a.k.a. sms01).
-1. Make request to DCHW to move the BMC/Host Connections and attach a USB to m001.
+> Note: In shasta-1.4, any number of master nodes may have external connections, before Shasta v1.4 this was strictly ncn-w001.
+1. Make request to DCHW to move the BMC/Host Connections and attach a USB to ncn-m001.
 
    Make sure ncn-w001 is up and accessible via the NMN from ncn-m001.
 
@@ -10,11 +10,11 @@ In 1.4, the site connections that were previously connection to ncn-w001 will be
 
    * Swap mn01 and wn01 cabling. mn01-j1 and mn01-j3 need the external/site-links and both wn01-j1 and wn01-j3 should be wired into the leaf switch.
    * Plug a USB stick (250GB or larger) into mn01. If one is already in wn01 please move it to mn01, otherwise new USBs should have been ordered.  
-   * Create DNS records for m001 and its BMC. 
+   * Create DNS records for ncn-m001 and its BMC. 
       - `<system-name>-ncn-m001`
       - `<system-name>-ncn-m001-mgmt`
 
-     The old w001 DNS entries should remain/stay to prevent interruptions, if at all possible.
+     The old ncn-w001 DNS entries should remain/stay to prevent interruptions, if at all possible.
 
 2. Set the new host IP and default route.
 
@@ -58,7 +58,7 @@ In 1.4, the site connections that were previously connection to ncn-w001 will be
    Exit out of the sol console.
 
    
-3. Set w001 BMC to dhcp
+3. Set ncn-w001 BMC to dhcp
  
     DCHW may do this step for you.  If not, do the following after the above changes have been made
 
@@ -76,7 +76,7 @@ In 1.4, the site connections that were previously connection to ncn-w001 will be
 
 4. Capture bond0 MACs and ncn-w001 BMC MAC
 
-   For 1.4, we need to know the MAC address for the bond0 interface.  We also need to know the BMC and em1 MACs for w001 since that is not capture in ncn_metadata.csv.  You can capture all of this this from ncn-w001 by running the following commands.
+   For 1.4, we need to know the MAC address for the bond0 interface.  We also need to know the BMC and em1 MACs for ncn-w001 since that is not capture in ncn_metadata.csv.  You can capture all of this this from ncn-w001 by running the following commands.
 
    ```bash
    ansible ncn -m shell -a "ip addr show bond0 | grep ether" > /root/macs.txt

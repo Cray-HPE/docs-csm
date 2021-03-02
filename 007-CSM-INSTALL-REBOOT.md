@@ -72,7 +72,7 @@ all been run by the administrator before starting this stage.
    ```bash
    pit# csi upload-sls-file --sls-file /var/www/ephemeral/prep/${SYSTEM_NAME}/sls_input_file.json
    2021/02/02 14:05:15 Retrieving S3 credentails ( sls-s3-credentials ) for SLS
-   2021/02/02 14:05:15 Uploading SLS file: /var/www/ephemeral/prep/surtur/sls_input_file.json
+   2021/02/02 14:05:15 Uploading SLS file: /var/www/ephemeral/prep/eniac/sls_input_file.json
    2021/02/02 14:05:15 Successfully uploaded SLS Input File.
    ```
 2. Get a token to use for authenticated communication with the gateway.
@@ -162,9 +162,9 @@ all been run by the administrator before starting this stage.
    ```
 
 10. The node should boot, acquire its hostname (i.e. ncn-m001).
-   > **`NOTE`**: If the nodes have pxe boot issues (e.g. getting pxe errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](420-MGMT-NET-PXE-TSHOOT.md)
+   > **`NOTE`**: If the nodes have pxe boot issues,such as getting pxe errors or not pulling the ipxe.efi binary, see [PXE boot troubleshooting](420-MGMT-NET-PXE-TSHOOT.md)
    
-   > **`NOTE`**: If m001 booted without a hostname or it didn't run all the cloud-init scripts the following commands need to be ran **(but only in that circumstance)**.
+   > **`NOTE`**: If ncn-m001 booted without a hostname or it didn't run all the cloud-init scripts the following commands need to be ran **(but only in that circumstance)**.
    > Make directory to copy network config files to.
    > ```
    > mkdir /mnt/cow
@@ -254,12 +254,12 @@ all been run by the administrator before starting this stage.
     ```
 19. [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard) to prevent destructive behavior from occurring during reboot.
       > **`NOTE`** This safeguard needs to be _removed_ to facilitate bare-metal deployments of new nodes. The linked [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard) procedure can be used to disable the safeguard by setting the value back to `0`.
-20. Install the workaround and docs RPMs to m001:
+20. Install the workaround and docs RPMs to ncn-m001:
     ```bash
     ncn-m001# rpm -iv /mnt/pitdata/${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/noarch/csm-install-workarounds-*.noarch.rpm
     ncn-m001# rpm -iv /mnt/pitdata/${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/noarch/docs-csm-install-*.noarch.rpm
     ```
-21. Apply Mountain, Hill and River cabinet routing to m001 as described in [Add Compute Cabinet Routes](109-COMPUTE-CABINET-ROUTES-FOR-NCN.md).
+21. Apply Mountain, Hill and River cabinet routing to ncn-m001 as described in [Add Compute Cabinet Routes](109-COMPUTE-CABINET-ROUTES-FOR-NCN.md).
 22. Now check for workarounds in the `/opt/cray/csm/workarounds/after-livecd-reboot` directory. Each has its own instructions in their respective `README` files.
     ```text
     # Example

@@ -20,7 +20,7 @@ In general, there are 3 kinds of disks:
 | k8s-manager | k8s-worker | storage-ceph | FS Label | Partitions | Device |  Partition Size | OverlayFS | Work Order(s) | Memo
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | ✅ | ✅ | ✅ | `BOOTRAID` | _Not Mounted_ | 2 small disks in RAID1 | `500 MiB` | ❌ | Present since Shasta-Preview 1 |
-| ✅ | ✅ | ✅ | `SQFSRAID` | `/run/initramfs/live` | 2 small disks in RAID1 | `100 GiB` | ✅ | [CASM-1885](https://connect.us.cray.com/jira/browse/MTL-1885) |  squashfs should compress our images to about 1/3rd their uncompressed size. (20G → 6.6G)  On pepsi's ncn-w001, we're at ~20G of non-volatile data storage needed. |
+| ✅ | ✅ | ✅ | `SQFSRAID` | `/run/initramfs/live` | 2 small disks in RAID1 | `100 GiB` | ✅ | [CASM-1885](https://connect.us.cray.com/jira/browse/MTL-1885) |  squashfs should compress our images to about 1/3rd their uncompressed size. (20G → 6.6G)  On pepsi's ncn-w001, we're at about 20G of non-volatile data storage needed. |
 | ✅ | ✅ | ✅ | `ROOTRAID` | `/run/initramfs/overlayfs` | 2 small disks in RAID1 | Max/Remainder | ✅ | Present since Shasta-Preview 1 | The persistent image file is loaded from this partition, when the image file is loaded the underlying drive is lazily unmounted (`umount -l`) so that when the overlay closes the disk follows suit. |
 | ❌ | ✅ | ❌ | `CONRUN` | `/run/containerd` | Ephemeral | `75 GiB` | ❌ | [MTL-916](https://connect.us.cray.com/jira/browse/MTL-916) | On pepsi ncn-w001, we have less than 200G of operational storage for this. |
 | ❌ | ✅ | ❌ | `CONLIB` | `/run/lib-containerd` | Ephemeral | `25%` | ✅ | [MTL-892](https://connect.us.cray.com/jira/browse/MTL-892) [CASMINST-255](https://connect.us.cray.com/jira/browse/CASMINST-255) | |
@@ -64,12 +64,12 @@ Let's pick apart the `SQFSRAID` and `ROOTRAID` overlays.
 Using the above bullets, one may be able to better understand the machine output below:
 
 ```bash
-ncn-m002:~ # mount | grep  ' / '
+ncn-m002# mount | grep  ' / '
 LiveOS_rootfs on / type overlay (rw,relatime,lowerdir=/run/rootfsbase,upperdir=/run/overlayfs,workdir=/run/ovlwork)
                                              ^^^R/O^SQUASHFS IMAGE^^^|^^^ R/W PERSISTENCE ^^^|^^^^^^INTERIM^^^^^^
                                              ^^^R/O^SQUASHFS IMAGE^^^|^^^ R/W PERSISTENCE ^^^|^^^^^^INTERIM^^^^^^
                                              ^^^R/O^SQUASHFS IMAGE^^^|^^^ R/W PERSISTENCE ^^^|^^^^^^INTERIM^^^^^^
-ncn-m002:~ #  losetup -a
+ncn-m002#  losetup -a
 /dev/loop1: [0025]:74858 (/run/initramfs/thin-overlay/meta)
 /dev/loop2: [0025]:74859 (/run/initramfs/thin-overlay/data)
 /dev/loop0: [2430]:100 (/run/initramfs/live/LiveOS/filesystem.squashfs)
@@ -84,7 +84,7 @@ overlays that are, by default, toggled `off` (so data persistencve be default is
 not assume).
 
 ```bash
-ncn-m002:~ # lsblk
+ncn-m002# lsblk
 NAME                MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINT
 loop0                 7:0    0   3.8G  1 loop  /run/rootfsbase
 loop1                 7:1    0    30G  0 loop
@@ -160,7 +160,7 @@ Let's take `/root` for example, we can see in the upper-dir (the overlay) we hav
 
 The upper-dir has these files:
 ```bash
-ncn-m001:~ # ll /run/overlayfs/root/
+ncn-m001# ls -l /run/overlayfs/root/
 total 4
 -rw------- 1 root root 252 Nov  4 18:23 .bash_history
 drwxr-x--- 4 root root  37 Nov  4 04:35 .kube
@@ -168,7 +168,7 @@ drwx------ 2 root root  29 Oct 21 21:57 .ssh
 ```
 Then in the squashFS immage (lower-dir) we have these...
 ```bash
-ncn-m001:~ # ll /run/rootfsbase/root/
+ncn-m001# ls -l /run/rootfsbase/root/
 total 1
 -rw------- 1 root root   0 Oct 19 15:31 .bash_history
 drwxr-xr-x 2 root root   3 May 25  2018 bin
@@ -186,7 +186,7 @@ drwx------ 2 root root  70 Oct 21 21:57 .ssh
 
 Finally, looking at `/root` we see the magic:
 ```bash
-ncn-m001:~ # ll /root
+ncn-m001# ls -l /root
 total 5
 -rw------- 1 root root 252 Nov  4 18:23 .bash_history
 drwxr-xr-x 2 root root   3 May 25  2018 bin

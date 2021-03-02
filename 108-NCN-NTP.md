@@ -31,7 +31,7 @@ The first two options are not fully fleshed out yet as we haven't done much test
 Example:
 
 ```
-ncn-w001:~ # chronyc accheck 10.252.0.7
+ncn-w001# chronyc accheck 10.252.0.7
 208 Access allowed
 ```
 
@@ -40,7 +40,7 @@ ncn-w001:~ # chronyc accheck 10.252.0.7
 Example:
 
 ```
-ncn-s001:~ # chronyc tracking
+ncn-s001# chronyc tracking
 Reference ID    : 0AFC0104 (ncn-s003)
 Stratum         : 4
 Ref time (UTC)  : Mon Nov 30 20:02:24 2020
@@ -61,7 +61,7 @@ Leap status     : Normal
 Example:
 
 ```
-ncn-s001:~ # chronyc sourcestats
+ncn-s001# chronyc sourcestats
 210 Number of sources = 8
 Name/IP Address            NP  NR  Span  Frequency  Freq Skew  Offset  Std Dev
 ==============================================================================
@@ -80,7 +80,7 @@ ncn-m003                   24  15  197m     -0.005      0.009  +9442ns    46us
 Example:
 
 ```
-ncn-s001:~ # chronyc sources
+ncn-s001# chronyc sources
 210 Number of sources = 8
 MS Name/IP address         Stratum Poll Reach LastRx Last sample
 ===============================================================================

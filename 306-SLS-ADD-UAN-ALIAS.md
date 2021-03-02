@@ -22,7 +22,7 @@ This guide shows the process for manually adding aliases to UAN nodes in SLS. St
 
     This will return an array of application nodes currently known in SLS:
     ```json
-    ncn-w001:~ # curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api_gw_service.local/apis/sls/v1/search/hardware?extra_properties.Role=Application" | jq
+    ncn-w001# curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api_gw_service.local/apis/sls/v1/search/hardware?extra_properties.Role=Application" | jq
     [
       {
         "Parent": "x3000c0s19b0",
@@ -80,7 +80,7 @@ This guide shows the process for manually adding aliases to UAN nodes in SLS. St
 
     Example response:
     ```json
-    ncn-w001:~ # curl -X PUT -s -k -H "Authorization: Bearer ${TOKEN}" "https://api_gw_service.local/apis/sls/v1/hardware/x3000c0s19b0n0" -d '
+    ncn-w001# curl -X PUT -s -k -H "Authorization: Bearer ${TOKEN}" "https://api_gw_service.local/apis/sls/v1/hardware/x3000c0s19b0n0" -d '
     > {
     >   "Parent": "x3000c0s19b0",
     >   "Xname": "x3000c0s19b0n0",
@@ -100,7 +100,7 @@ This guide shows the process for manually adding aliases to UAN nodes in SLS. St
 
 4. Confirm that the BMC for the UAN is up and running at the alasied address.
     ```
-    ncn-w001:~ # ping -c 4 uan01-mgmt
+    ncn-w001# ping -c 4 uan01-mgmt
     PING uan01-mgmt (10.254.2.53) 56(84) bytes of data.
     64 bytes from x3000c0s19b0 (10.254.2.53): icmp_seq=1 ttl=255 time=0.170 ms
     64 bytes from x3000c0s19b0 (10.254.2.53): icmp_seq=2 ttl=255 time=0.228 ms

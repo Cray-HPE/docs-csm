@@ -11,7 +11,7 @@
 
 1. 001-008 have been completed; CSM has been installed and HSM is running with discovered nodes.  Firmware has been loaded into FAS as part of the CSM install
 2. 009 has been applied and the NCNs are locked.
-3. Identify the type and manufacturers of hardware in your system.  e.g. if you don't have Gigabytes, don't update them!
+3. Identify the type and manufacturers of hardware in your system.  If you don't have Gigabyte nodes, don't update them!
 
 **WARNING:** Non-compute nodes (NCNs) should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS. Research "*009-NCN-LOCKING*" for more information. Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
 
@@ -62,9 +62,9 @@ For each item in the `Hardware Precedence Order`:
      	*	IF `dryrun` : There is something that FAS could do, but it likely would fail; most likely because the file is missing. 
      	*	IF `live update` : the operation failed, the identified version could not be put on the xname + target.
 
-3. If necessary (e.g. `succeeded` count > 0) now perform a live update
+3. If `succeeded` count > 0, now perform a live update
 
-4. update the json file `overrideDryrun` to `true`
+4. Update the json file `overrideDryrun` to `true`
 
    1. `cray fas actions create {jsonfile}`
      2. Note the ActionID!

@@ -103,7 +103,7 @@ with system-specific customizations.
         > environment.
 
         ```bash
-        linux:~ # /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh dtr.dev.cray.com/library/openjdk:11-jre-slim
+        linux# /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh dtr.dev.cray.com/library/openjdk:11-jre-slim
         ```
 
         Create (or update) `cert.jks` with the PEM-encoded CA certificate for an
@@ -393,7 +393,7 @@ with system-specific customizations.
     > **`NOTE`** Requires a properly configured Docker or Podman environment.
 
     ```bash
-    linux:~ # /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh dtr.dev.cray.com/zeromq/zeromq:v4.0.5
+    linux# /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh dtr.dev.cray.com/zeromq/zeromq:v4.0.5
     ```
 9.  Re-encrypt and seed secrets in `customizations.yaml`:
 
@@ -544,7 +544,7 @@ linux:/mnt/pitdata/prep/site-init# ./utils/secrets-decrypt.sh cray_meds_credenti
 
 The `site-init` Secret (in the `loftsman` namespace) is created at the
 beginning of [the CSM platform install procedures](006-CSM-PLATFORM-INSTALL.md)
-and contains `customizations.yaml`. When the pit server is rebooted as ncn-m001
+and contains `customizations.yaml`. When the pit node is rebooted as ncn-m001
 at the end of the CSM install, the `site-init` Secret is the mechanism other
 Cray/HPE product installers will use to obtain `customizations.yaml`.
 

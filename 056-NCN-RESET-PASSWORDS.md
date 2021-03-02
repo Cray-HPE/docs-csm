@@ -20,7 +20,7 @@ From the PIT, log into any NCN using SSH.  The NCNs are already setup with passw
 > If you have more than 9 NCNs, you should add those hostnames into the `for` loops below.
 
 ```
-ncn-m002:~ # for i in m003 w001 w002 w003 s001 s002 s003
+ncn-m002# for i in m003 w001 w002 w003 s001 s002 s003
 do
 ssh -t ncn-$i "passwd"
 done
@@ -39,7 +39,7 @@ ssh-keygen -t rsa -b 4098
 If a key already exists, you could use that one.  In that case, just choose `N` at this message:
 
 ```
-eniac-ncn-m001:~ # ssh-keygen -t rsa -b 4098
+eniac-ncn-m001# ssh-keygen -t rsa -b 4098
 Generating public/private rsa key pair.
 Enter file in which to save the key (/root/.ssh/id_rsa):
 /root/.ssh/id_rsa already exists.
@@ -49,7 +49,7 @@ Overwrite (y/n)? n
 Otherwise the output appears like this:
 
 ```
-eniac-ncn-m001:~ # ssh-keygen -t rsa -b 4098
+eniac-ncn-m001# ssh-keygen -t rsa -b 4098
 Generating public/private rsa key pair.
 Enter file in which to save the key (/root/.ssh/id_rsa):
 Enter passphrase (empty for no passphrase):

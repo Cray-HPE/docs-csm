@@ -23,9 +23,9 @@ A Cray Pre-Install Toolkit ISO is required for this process. This ISO can be obt
 <a name="bmcs-virtual-mounts"></a>
 # BMCs' Virtual Mounts
 
-Most BMCs offer a **Web Interface** for controlling your server and for providing access to its BIOS and firmware. 
+Most BMCs offer a **Web Interface** for controlling the node and for providing access to its BIOS and firmware. 
 
-Refer to the following pages based on your server vendor for help mounting an ISO image:
+Refer to the following pages based on your node vendor for help mounting an ISO image:
 
 * [HPE iLO BMCs](#hpe-ilo-bmcs)
 * [Gigabyte](#gigabyte-bmcs)
@@ -53,7 +53,7 @@ ILO BMCs allow for booting directly from an HTTP accessible ISO location.
 
 Gigabyte BMCs allow for booting over NFS or HTTP.
 
-Go to the BMC settings and setup the remote ISO for your protocol and server.
+Go to the BMC settings and setup the remote ISO for your protocol and node.
 
 ![Gigabyte BMC Virtual Media Settings](./img/bmc-virtual-media-gigbyte-settings.png)
 
@@ -71,7 +71,7 @@ Next head to `Image Redirection -> Remote Images` and click on the `Start` butto
 
 ![Gigabyte BMC Start](./img/bmc-virtual-media-start-gigabyte.png)
 
-Finally, reboot the server and select the `Virtual CDROM` option from the manual boot options.
+Finally, reboot the node and select the `Virtual CDROM` option from the manual boot options.
 
 ![Gigabyte BMC Boot](./img/bmc-virtual-media-boot-gigabyte.png)
 

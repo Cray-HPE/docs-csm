@@ -76,7 +76,7 @@ See the example files below for reference.
 
 > An example with Dell leaf switches and 2 Mellanox switches in the same slot number:
 ```
-pit:~ # cat example_switch_metadata.csv
+pit# cat example_switch_metadata.csv
 Switch Xname,Type,Brand
 x3000c0w38,Leaf,Dell
 x3000c0w36,Leaf,Dell
@@ -86,7 +86,7 @@ x3000c0h33s2,Spine,Mellanox
 
 > An example with Aruba switches:
 ```
-pit:~ # cat example_switch_metadata.csv
+pit# cat example_switch_metadata.csv
 Switch Xname,Type,Brand
 x3000c0w14,Leaf,Aruba
 x3000c0h12s1,Spine,Aruba

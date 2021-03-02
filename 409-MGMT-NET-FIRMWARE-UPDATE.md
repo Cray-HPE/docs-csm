@@ -11,7 +11,7 @@ Access to the switches from the liveCD/M001
 - All firmware will be located at ```/var/www/fw/network``` on the LiveCD
 - It should contain the following files.
 ```
-surtur-ncn-m001-pit:/var/www/network/firmware # ls -lh
+ncn-m001-pit:/var/www/network/firmware # ls -lh
 total 2.7G
 -rw-r--r-- 1 root root 614M Jan 15 18:57 ArubaOS-CX_6400-6300_10_05_0040.stable.swi
 -rw-r--r-- 1 root root 368M Jan 15 19:09 ArubaOS-CX_8320_10_05_0040.stable.swi
@@ -85,7 +85,7 @@ BIOS Version       : FL.01.0002
 
 SSH into the switch you want to upgrade
 
-Fetch the image from m001.
+Fetch the image from ncn-m001.
 ```
 sw-spine-001 [standalone: master] # image fetch http://10.252.1.4/fw/network/onyx-X86_64-3.9.1014.stable.img
 ```
@@ -130,7 +130,7 @@ Images available to be installed:
 
 SSH into the switch you want to upgrade
 
-Fetch the image from m001.
+Fetch the image from ncn-m001.
 ```
 sw-leaf-001# image install http://10.252.1.4/fw/network/OS10_Enterprise_10.5.1.4.stable.tar
 ```

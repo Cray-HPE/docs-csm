@@ -3,10 +3,10 @@
 1. [Dell and Mellanox Changes for Shasta v1.3 to v1.4 Upgrades](412-MGMT-NET-DELL-MELLANOX-UPGRADES.md)
 1. HPE Aruba Installation and Configuration
     1. Early Installation
-        1. Access Master Node 1 (m001) and it's iLO should already be completed (003-LIVECD-USB-BOOT.md)
+        1. Access Master Node 1 (ncn-m001) and it's iLO should already be completed (003-LIVECD-USB-BOOT.md)
         1. Install [Baseline Switch Configuration](402-MGMT-NET-BASE-CONFIG.md)
         1. Update [Firmware](409-MGMT-NET-FIRMWARE-UPDATE.md)
-    1. Configure all switches via IPv6 connection from m001
+    1. Configure all switches via IPv6 connection from ncn-m001
         1. Layer 2 configuration:
             1. [VLAN](403-MGMT-NET-VLAN-CONFIG.md).
             1. [MLAG](404-MGMT-NET-MLAG-CONFIG.md) and VSX pairs.
@@ -27,7 +27,7 @@ The network architecture and configuration changes from v1.3 to v1.4 are fairly 
 *   New Aruba/HPE switches.
 *   ACL configuration.
 *   Moving Site connection from ncn-w001 to ncn-m001.
-*   The IP-Helper will reside on the switches where the default gateway for the servers, such as bmcs and computes, is configured.
+*   The IP-Helper will reside on the switches where the default gateway for the nodes, such as BMCs and computes, is configured.
 *   IP-Helper 10.92.100.222 applied on vlan 1, 2, and 7.
 *   IP-Helper 10.94.100.222 applied on vlan 4.
 *   Make sure 1.3.2 changes are applied, this includes flow-control and MAGP changes.

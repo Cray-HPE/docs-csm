@@ -1,10 +1,10 @@
 # Node Firmware
 
-This page details the minimum specification for servers, and their components (such as PCIe cards).
+This page details the minimum specification for nodes, and their components (such as PCIe cards).
 
 > **`NOTE`** New items may be added to this page over time.
 
-* [Servers](#servers)
+* [Nodes](#nodes)
     * [HPE (iLO) Upgrades](#hpe-(ilo)-upgrades)
         * [Pre-Reqs](#pre-reqs)
         * [GUI](#gui)
@@ -19,8 +19,8 @@ This page details the minimum specification for servers, and their components (s
         * [Upgrade from the LiveCD](#upgrade-from-the-livecd)
         * [Upgrade from the Internet](#upgrade-from-the-internet)
 
-<a name="servers"></a>
-## Servers
+<a name="nodes"></a>
+## Nodes
 
 | Vendor | Model | Version |
 | :--- | :--- | ---: |
@@ -56,7 +56,7 @@ Firmware is located on the LiveCD (versions 1.4.6 or higher).
 
 Verify the firmwares available for the procedure:
 ```bash
-pit:~ # ls -1 /var/www/fw/river/hpe/
+pit# ls -1 /var/www/fw/river/hpe/
 A41_2.42_07_17_2020.signed.flash
 A42_1.30_07_18_2020.signed.flash
 A43_1.30_07_18_2020.signed.flash
@@ -107,7 +107,7 @@ ilo5_230.bin
          ```
          ![fw-ilo-3](img/fw-ilo-3.png)
          3. Press **`Upload`** and wait for the upload to complete.
-      7. Cold boot the server, or momentarily press the button (GUI button) to power it on
+      7. Cold boot the node, or momentarily press the button (GUI button) to power it on
 
 Now the node(s) are upgraded to minimum spec. for booting.
 
@@ -186,7 +186,7 @@ Shasta 1.4 NCNs are # Print name and current state; on an NCN or on the liveCD.
 MST needs to be started for the tools to work.
 
 ```bash
-linux:~ # mst status
+linux# mst status
 Starting MST (Mellanox Software Tools) driver set
 Loading MST PCI module - Success
 Loading MST PCI configuration module - Success
@@ -200,7 +200,7 @@ Unloading MST PCI module (unused) - Success
 Print out the current firmware versions or all Mellanox cards:
 
 ```bash
-linux:~ # mlxfwmanager
+linux# mlxfwmanager
 Querying Mellanox devices firmware ...
 
 Device #1:

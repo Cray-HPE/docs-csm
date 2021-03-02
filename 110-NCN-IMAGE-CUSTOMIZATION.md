@@ -18,32 +18,32 @@ _Using kubernetes as an example._
 
 1. Open the image, ours is called `k8s-filesystem.squashfs`.
    ```bash
-   pit:~ # cd /var/www/ephemeral/data/k8s
-   pit:/var/www/ephemeral/data/k8s # unsquash k8s-filesystem.squashfs
+   pit# cd /var/www/ephemeral/data/k8s
+   pit# unsquash k8s-filesystem.squashfs
    ```
 2. Change into the image root
    ```bash
-   chroot ./squashfs-root
+   pit# chroot ./squashfs-root
    ```
 3. Change the password
    ```bash
-   ncn:~ # passwd
+   chroot-pit# passwd
    ```
 4. Create the new squashFS artifact
    ```bash
-   ncn:~ # /srv/cray/scripts/common/create-kis-artifacts.sh
+   chroot-pit# /srv/cray/scripts/common/create-kis-artifacts.sh
    ```
 5. Exit the chroot
    ```bash
-   /srv/cray/scripts/common/create-kis-artifacts.sh
+   chroot-pit# exit
    ```
 6. Cleanup the squash creation
    ```bash
-   umount /var/www/ephemeral/data/k8s/squasfs-root/squashfs
+   pit# umount /var/www/ephemeral/data/k8s/squasfs-root/squashfs
    ```
 7. Set boot links
    ```bash
-   pit:/var/www/ephemeral/data/k8s # set-sqfs-links.sh   
+   pit# set-sqfs-links.sh   
    ```
 
 Now the next boot your images will have the new password for the next boot.

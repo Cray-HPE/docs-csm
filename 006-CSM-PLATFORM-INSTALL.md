@@ -73,16 +73,16 @@ secret/site-init created
 > **`NOTE`** If the `site-init` secret already exists then `kubectl` will error:
 >
 > ```bash
-> pit:~ # kubectl create secret -n loftsman generic site-init --from-file=/var/www/ephemeral/prep/site-init/customizations.yaml
+> pit# kubectl create secret -n loftsman generic site-init --from-file=/var/www/ephemeral/prep/site-init/customizations.yaml
 > Error from server (AlreadyExists): secrets "site-init" already exists
 > ```
 >
 > In this case, delete the `site-init` secret and re-create it:
 >
 > ```bash
-> pit:~ # kubectl delete secret -n loftsman site-init
+> pit# kubectl delete secret -n loftsman site-init
 > secret "site-init" deleted
-> pit:~ # kubectl create secret -n loftsman generic site-init --from-file=/var/www/ephemeral/prep/site-init/customizations.yaml
+> pit# kubectl create secret -n loftsman generic site-init --from-file=/var/www/ephemeral/prep/site-init/customizations.yaml
 > secret/site-init created
 > ```
 
@@ -150,7 +150,7 @@ error. It may be possible to resume installation from the last successful
 command executed by `install.sh`, but admins will need to appropriately
 modify `install.sh` to pick up where the previous run left off. (Note: The
 `install.sh` script runs with `set -x`, so each command will be printed to
-stderr prefixed with the expanded value of PS4, e.g., `+ `.)
+stderr prefixed with the expanded value of PS4, namely, `+ `.)
 
 Known potential issues with suggested fixes are listed below.
 
@@ -201,19 +201,19 @@ likely indicates that a Nexus setup utility was unable to connect to Nexus
 via the `packages.local` name. Since the install does not attempt to connect
 to `packages.local` until Nexus has been successfully deployed, the error
 does not usually indicate something is actually wrong with Nexus. Instead, it
-is most commonly a network issue with e.g., name resolution (i.e., DNS), IP
+is most commonly a network issue with name resolution (i.e., DNS), IP
 routes from the pit node, switch misconfiguration, or Istio ingress.
 
 Verify that packages.local resolves to **ONLY** the load balancer IP for the
 istio-ingressgateway service in the istio-system namespace, typically
-10.92.100.71. If name resolution returns addresses on other networks (e.g.,
+10.92.100.71. If name resolution returns addresses on other networks (such as
 HMN) this must be corrected. Prior to DNS/DHCP hand-off to Unbound, these
 settings are controlled by dnsmasq. Unbound settings are based on SLS
 settings in sls_input_file.json and must be updated via the Unbound manager.
 
 If packages.local resolves to the correct addresses, verify basic
 connectivity using ping. If `ping packages.local` is unsuccessful, verify the
-IP routes from the pit node to the NMN load balancer network, e.g., the
+IP routes from the pit node to the NMN load balancer network.  The
 typical `ip route` configuration is `10.92.100.0/24 via 10.252.0.1 dev
 vlan002`. If pings are successful, try checking the status of Nexus by
 running `curl -sS https://packages.local/service/rest/v1/status/writable`. If
@@ -221,7 +221,7 @@ the connection times out, it indicates there is a more complex connection
 issue. Verify switches are configured properly and BGP peering is operating
 correctly, see docs/400-SWITCH-BGP-NEIGHBORS.md for more information. Lastly,
 check Istio and OPA logs to see if connections to packages.local are not
-reaching Nexus, e.g., perhaps due to an authorization issue.
+reaching Nexus, perhaps due to an authorization issue.
 
 If https://packages.local/service/rest/v1/status/writable returns an HTTP
 code other than `200 OK`, it indicates there is an issue with Nexus. Verify

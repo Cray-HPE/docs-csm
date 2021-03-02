@@ -6,7 +6,7 @@
 
 Firmware and BIOS updates may be necessary before an install can start.
 
-During runtime (e.g. post CSM-install), firmware is upgraded using FAS.
+During runtime (post CSM-install), firmware is upgraded using FAS.
 
 New systems, or systems upgrading from prior versions of shasta, must meet the minimum specs defined in these pages:
 - [Network Firmware](251-FIRMWARE-NETWORK.md)
@@ -16,7 +16,7 @@ New systems, or systems upgrading from prior versions of shasta, must meet the m
 
 ## LiveCD Availability for Bootstrap
 
-The LiveCD serves firmware for bootstrapping devices and servers to enable a CRAY install.
+The LiveCD serves firmware for bootstrapping devices and nodes to enable a CRAY install.
 
 Devices can use SCP or HTTP to fetch firmware from the LiveCD USB stick, or from the remote ISO.
 

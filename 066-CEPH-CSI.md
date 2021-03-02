@@ -9,13 +9,13 @@ Verify that the ceph-csi requirements are in place
 2. Log into any storage node.
 3. Check /etc/cray/ceph for completed task files
     ```bash
-    ncn-s001:~ # ls /etc/cray/ceph/
+    ncn-s001# ls /etc/cray/ceph/
     ceph_k8s_initialized  csi_initialized  installed  kubernetes_nodes.txt  tuned
     ```
 4. Check to see if k8s ceph-csi prerequisites have been created
    > You can also run this from any k8s-manager/k8s-worker node
       ```bash
-      pit:~ # kubectl get cm
+      pit# kubectl get cm
       NAME               DATA   AGE
       ceph-csi-config    1      3h50m
       cephfs-csi-sc      1      3h50m
@@ -23,7 +23,7 @@ Verify that the ceph-csi requirements are in place
       sma-csi-sc         1      3h50m
       sts-rados-config   1      4h
 
-      pit:~ # kubectl get secrets |grep csi
+      pit# kubectl get secrets |grep csi
       csi-cephfs-secret             Opaque                                4      3h51m
       csi-kube-secret               Opaque                                2      3h51m
       csi-sma-secret                Opaque                                2      3h51m
@@ -50,7 +50,7 @@ Verify that the ceph-csi requirements are in place
             ```
    * run the storage-ceph-cloudinit.sh script
        ```bash
-   ncn-s001:~ # /srv/cray/scripts/common/storage-ceph-cloudinit.sh
+   ncn-s001# /srv/cray/scripts/common/storage-ceph-cloudinit.sh
    Configuring node auditing software
    Using generic auditing configuration
    This ceph cluster has been initialized
