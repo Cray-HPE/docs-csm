@@ -24,16 +24,19 @@ This page details the minimum specification for nodes, and their components (suc
 
 | Vendor | Model | Version |
 | :--- | :--- | ---: |
-| HPE | A41 DL325 Gen10 | [10/18/2019 2.30][1] | 
-| HPE | A42 DL385 Gen10+ | [07/18/2020 1.30][2] | 
-| HPE | A43 DL325 Gen10+ | [07/18/2020 1.30][2] | 
-| Intel | S2600WFT | [02.01.0012][3] |
-| Gigabyte | MZ32-AR0-00 | [12.84][4] |
+| HPE | iLO5 | [2.33][6] |
+| HPE | A41 DL325 Gen10 BIOS | [11/13/2020 2.44][1] |
+| HPE | A42 DL385 Gen10+ BIOS | [10/30/2020 1.38][2] |
+| HPE | A43 DL325 Gen10+ BIOS | [10/30/2020 1.38][3] |
+| Intel | S2600WFT | [02.01.0012][4] |
+| Gigabyte | MZ32-AR0-00 | [12.84][5] |
 
-[1]: https://support.hpe.com/hpsc/swd/public/detail?swItemId=MTX-ba30df44427f4e099b2f652829
-[2]: https://downloadcenter.intel.com/download/29753/Intel-Server-Board-S2600WF-Family-BIOS-and-Firmware-Update-Package-for-UEFI
+[6]: https://support.hpe.com/hpsc/swd/public/detail?swItemId=MTX_11b0bf7deb9d4b5aa46ee921ef
+[1]: https://support.hpe.com/hpsc/swd/public/detail?swItemId=MTX_66638ca480054764a2dc4803f1
+[2]: https://support.hpe.com/hpsc/swd/public/detail?swItemId=MTX_c530466269d14674bdca97394e
 [3]: https://support.hpe.com/hpsc/swd/public/detail?swItemId=MTX_5ed1b5a914b844caab3780d293
-[4]: https://pubs.cray.com/bundle/Gigabyte_Node_Firmware_Update_Guide_S-8010/page/About_the_Gigabyte_Node_Firmware_Update_Guide.html
+[4]: https://downloadcenter.intel.com/download/29753/Intel-Server-Board-S2600WF-Family-BIOS-and-Firmware-Update-Package-for-UEFI
+[5]: https://pubs.cray.com/bundle/Gigabyte_Node_Firmware_Update_Guide_S-8010/page/About_the_Gigabyte_Node_Firmware_Update_Guide.html
 
 Find more information for each vendor below:
 
@@ -57,10 +60,10 @@ Firmware is located on the LiveCD (versions 1.4.6 or higher).
 Verify the firmwares available for the procedure:
 ```bash
 pit# ls -1 /var/www/fw/river/hpe/
-A41_2.42_07_17_2020.signed.flash
-A42_1.30_07_18_2020.signed.flash
-A43_1.30_07_18_2020.signed.flash
-ilo5_230.bin
+A41_2.44_11_13_2020.signed.flash
+A42_1.38_10_30_2020.signed.flash
+A43_1.38_10_30_2020.signed.flash
+ilo5_233.bin
 ```
 
 <a name="gui"></a>
@@ -103,7 +106,7 @@ ilo5_230.bin
          2. Select "Remote File", and then choose your firmware file:
          ```bash
          # A43 example
-         http://pit/fw/river/hpe/ilo5_230.bin
+         http://pit/fw/river/hpe/ilo5_233.bin
          ```
          ![fw-ilo-3](img/fw-ilo-3.png)
          3. Press **`Upload`** and wait for the upload to complete.
