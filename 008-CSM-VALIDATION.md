@@ -248,6 +248,27 @@ Retrieve all the Leases currently in KEA:
 
 If there is an non-zero amount of DHCP leases for river hardware returned that is a good indication that KEA is working.
 
+### Verify ability to resolve external DNS
+
+If you have configured unbound to resolve outside hostnames, then the following check should be performed. If you have not done this, then this check may be skipped. 
+
+Run the following on one of the master or worker nodes (not the pit):
+
+```bash
+ncn:~ # nslookup cray.com
+Server:         10.92.100.225
+Address:        10.92.100.225#53
+
+Non-authoritative answer:
+Name:   cray.com
+Address: 52.36.131.229
+
+ncn:~ # echo $?
+ncn:~ # 0
+```
+
+Verify that the command has exit code 0, reports no errors, and resolves the address.
+
 <a name="automated-goss-testing"></a>
 ## Automated Goss Testing
 
@@ -303,9 +324,9 @@ Run the HMS smoke tests. If no failures occur, then run the HMS functional tests
 ### CRAY INTERNAL USE ONLY
 This tool is included in the cray-cmstools-crayctldeploy rpm, which comes preinstalled on the ncns. However, the tool is receiving frequent updates in the run up to the release. Because of this, it is highly recommended to download and install the latest version.
 
-You can get the latest version of the rpm from car.dev.cray.com in the [csm/SCMS/sle15_sp2_ncn/x86_64/release/shasta-1.4/cms-team/](http://car.dev.cray.com/artifactory/webapp/#/artifacts/browse/tree/General/csm/SCMS/sle15_sp2_ncn/x86_64/release/shasta-1.4/cms-team) folder. Install it on every worker and master ncn (except for ncn-m001 if it is still the PIT node).
+You can get the latest version of the rpm from car.dev.cray.com in the [csm/SCMS/sle15_sp2_ncn/x86_64/release/shasta-1.4/cms-team/](http://car.dev.cray.com/artifactory/webapp/#/artifacts/browse/tree/General/csm/SCMS/sle15_sp2_ncn/x86_64/release/shasta-1.4/cms-team) folder. The [corresponding folder in the master branch](http://car.dev.cray.com/artifactory/webapp/#/artifacts/browse/tree/General/csm/SCMS/sle15_sp2_ncn/x86_64/release/master/cms-team) may have an even more recent version of the tool, which has not yet been synced to the release branch. At this time no changes have been included in the master branch which are not intended to work on the 1.4 release. Install it on every worker and master ncn (except for ncn-m001 if it is still the PIT node).
 
-At the time of this writing there is a bug ([CASMTRIAGE-553](https://connect.us.cray.com/jira/browse/CASMTRIAGE-553)) which is causing the VCS test to hang about half of the time when it does a git push. If you see this, stop the test with control-C and re-run it. It may take a few tries but so far it has always eventually executed.
+At the time of this writing there is a bug ([CASMTRIAGE-553](https://connect.us.cray.com/jira/browse/CASMTRIAGE-553)) which causes some git pushes to VCS to hang. Prior to cmsdev version 0.8.21, this would result in the VCS test hanging. Starting in cmsdev version 0.8.21, the test was modified to try to avoid this issue. **If you see the VCS test hang on cmsdev version 0.8.21 or later**, please record this in ([CASMTRIAGE-553](https://connect.us.cray.com/jira/browse/CASMTRIAGE-553)) and include the cmsdev version. If you do see the test hang, stop the test with control-C and re-run it. It may take a few tries but so far it has always eventually executed.
 
 ### Usage
      cmsdev test [-q | -v] <shortcut>
@@ -423,7 +444,7 @@ The session template below can be copied and used as the basis for the BOS Sessi
   "name": "shasta-1.4-csm-bare-bones-image"
 }
 
-// cray bos v1 sessiontemplate create --file sessiontemplate.json --name shasta-1.4-csm-bare-bones-image
+// cray bos sessiontemplate create --file sessiontemplate.json --name shasta-1.4-csm-bare-bones-image
 // /sessionTemplate/shasta-1.4-csm-bare-bones-image
 ```
 
@@ -458,15 +479,18 @@ Class = "River"
 ```
 
 ```bash
-ncn# cray bos v1 session create --template-uuid shasta-1.4-csm-bare-bones-image --operation reboot --limit <xname>
+ncn# cray bos session create --template-uuid shasta-1.4-csm-bare-bones-image --operation reboot --limit <xname>
 ```
 
-### Connect to the node's console nad watch the boot
+### Connect to the node's console and watch the boot
 
-The boot will fail, but should reach the dracut stage. If the dracut stage is reached, the boot
+Run conman from inside the conman pod to access the console. The boot will fail, but should reach the dracut stage. If the dracut stage is reached, the boot
 can be considered successful and shows that the necessary CSM services needed to boot a node are
 up and available.
 ```bash
+ncn# kubectl get pods -n services | grep conman
+cray-conman-b69748645-qtfxj                                    3/3     Running     2          46m
+ncn# kubectl exec -it -n services cray-conman-b69748645-qtfxj -c cray-conman -- bash
 cray-conman-b69748645-qtfxj:/ # conman -j x9000c1s7b0n1
 ...
 [    7.876909] dracut: FATAL: Don't know how to handle 'root=craycps-s3:s3://boot-images/e3ba09d7-e3c2-4b80-9d86-0ee2c48c2214/rootfs:c77c0097bb6d488a5d1e4a2503969ac0-27:dvs:api-gw-service-nmn.local:300:nmn0'
@@ -595,13 +619,12 @@ This shows that UAS is installed and running the `1.11.5` version.  It also show
 To verify that the pre-made UAI images are registered with UAS, use:
 
 ```
-ncn-m001-pit# cray uas images list
-default_image = "registry.local/cray/cray-uai-sles15sp1:latest"
-image_list = [ "registry.local/cray/cray-uai-broker:latest", "registry.local/cray/cray-uai-sles15sp1:latest",]
-
+ncn-m001-pit:~ # cray uas images list
+default_image = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
+image_list = [ "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest",]
 ```
 
-This shows that the pre-made end-user UAI image (`cray/cray-uai-sles15sp1:latest`) and the broker UAI image (`cray/cray-uai-broker:latest`) are registered with UAS. This does not necessarily mean these images are installed in the container image registry, but they are configured for use.  If other UAI images have been created and registered, they may also show up here, that is acceptable.
+This shows that the pre-made end-user UAI image (`cray/cray-uai-sles15sp1:latest`) is registered with UAS. This does not necessarily mean this image is installed in the container image registry, but it is configured for use.  If other UAI images have been created and registered, they may also show up here -- that is acceptable.
 
 #### Validate UAI Creation
 
