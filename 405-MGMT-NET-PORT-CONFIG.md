@@ -61,6 +61,176 @@ interface lag 17 multi-chassis
     exit
 ```
 
+# Gigabyte/Intel NCN Worker port configuration
+The cabling guidelines for all servers can be found here [MGMT-NET-CABLING](416-MGMT-NET-CABLING.md).
+
+Mellanox Port Config
+```
+sw-spine-002 [gamora-mlag-domain: master] # show run int ethernet 1/1
+interface ethernet 1/1 speed 40G force
+interface ethernet 1/1 mtu 9216 force
+interface ethernet 1/1 flowcontrol receive on force
+interface ethernet 1/1 flowcontrol send on force
+interface ethernet 1/1 mlag-channel-group 1 mode active
+```
+Mellanox MLAG config
+```
+sw-spine-002 [gamora-mlag-domain: master] # show run int mlag-port-channel 1
+interface mlag-port-channel 1
+interface mlag-port-channel 1 mtu 9216 force
+interface mlag-port-channel 1 flowcontrol receive on force
+interface mlag-port-channel 1 flowcontrol send on force
+interface mlag-port-channel 1 switchport mode hybrid
+interface mlag-port-channel 1 no shutdown
+interface mlag-port-channel 1 switchport hybrid allowed-vlan add 2
+interface mlag-port-channel 1 switchport hybrid allowed-vlan add 4
+interface mlag-port-channel 1 switchport hybrid allowed-vlan add 7
+interface mlag-port-channel 1 switchport hybrid allowed-vlan add 10
+```
+
+# HPE NCN Worker port configuration
+Aruba Port Config
+```
+sw-spine02# show run int 1/1/7
+interface 1/1/7
+    no shutdown
+    mtu 9198
+    lag 4
+    exit
+```
+Aruba LAG Configuration
+```
+sw-spine02# show run int lag 4
+interface lag 4 multi-chassis
+    no shutdown
+    no routing
+    vlan trunk native 1
+    vlan trunk allowed 1-2,4,7,10
+    lacp mode active
+    lacp fallback
+    exit
+```
+
+# Gigabyte/Intel NCN Master port configuration
+Mellanox Port config
+```
+sw-spine-002 [gamora-mlag-domain: master] # show run int ethernet 1/1
+interface ethernet 1/1 speed 40G force
+interface ethernet 1/1 mtu 9216 force
+interface ethernet 1/1 flowcontrol receive on force
+interface ethernet 1/1 flowcontrol send on force
+interface ethernet 1/1 mlag-channel-group 1 mode active
+```
+
+Mellanox MLAG port config
+```
+sw-spine-002 [gamora-mlag-domain: master] # show run int mlag-port-channel 1
+interface mlag-port-channel 1
+interface mlag-port-channel 1 mtu 9216 force
+interface mlag-port-channel 1 flowcontrol receive on force
+interface mlag-port-channel 1 flowcontrol send on force
+interface mlag-port-channel 1 switchport mode hybrid
+interface mlag-port-channel 1 no shutdown
+interface mlag-port-channel 1 switchport hybrid allowed-vlan add 2
+interface mlag-port-channel 1 switchport hybrid allowed-vlan add 4
+interface mlag-port-channel 1 switchport hybrid allowed-vlan add 7
+interface mlag-port-channel 1 switchport hybrid allowed-vlan add 10
+```
+
+# HPE NCN Master port configuration
+Aruba Port Config
+```
+sw-spine02# show run int 1/1/7
+interface 1/1/7
+    no shutdown
+    mtu 9198
+    lag 4
+    exit
+```
+Aruba LAG Configuration
+```
+sw-spine02# show run int lag 4
+interface lag 4 multi-chassis
+    no shutdown
+    no routing
+    vlan trunk native 1
+    vlan trunk allowed 1-2,4,7,10
+    lacp mode active
+    lacp fallback
+    exit
+```
+
+# Gigabyte/Intel NCN Storage port configuration
+Mellanox Port config
+```
+sw-spine-002 [gamora-mlag-domain: master] # show run int ethernet 1/7
+interface ethernet 1/7 speed 40G force
+interface ethernet 1/7 mtu 9216 force
+interface ethernet 1/7 flowcontrol receive on force
+interface ethernet 1/7 flowcontrol send on force
+interface ethernet 1/7 mlag-channel-group 7 mode active
+```
+Mellanox MLAG port config
+```
+sw-spine-002 [gamora-mlag-domain: master] # show run int mlag-port-channel 7
+interface mlag-port-channel 7
+interface mlag-port-channel 7 mtu 9216 force
+interface mlag-port-channel 7 flowcontrol receive on force
+interface mlag-port-channel 7 flowcontrol send on force
+interface mlag-port-channel 7 switchport mode hybrid
+interface mlag-port-channel 7 no shutdown
+interface mlag-port-channel 7 switchport hybrid allowed-vlan add 2
+interface mlag-port-channel 7 switchport hybrid allowed-vlan add 4
+interface mlag-port-channel 7 switchport hybrid allowed-vlan add 7
+interface mlag-port-channel 7 switchport hybrid allowed-vlan add
+```
+
+# HPE NCN Storage port configuration
+
+Aruba Port Config
+```
+sw-spine02# show run int 1/1/7
+interface 1/1/7
+    no shutdown
+    mtu 9198
+    lag 4
+    exit
+```
+Aruba LAG Configuration
+```
+sw-spine02# show run int lag 4
+interface lag 4 multi-chassis
+    no shutdown
+    no routing
+    vlan trunk native 1
+    vlan trunk allowed 1-2,4,7,10
+    lacp mode active
+    lacp fallback
+    exit
+```
+Aruba Storage port configuration (future use)
+These will be configured, but the ports will be shut down until needed.
+```
+sw-spine02# show run int 1/1/7
+interface 1/1/7
+    shutdown
+    mtu 9198
+    lag 4
+    exit
+```
+Aruba LAG Configuration
+```
+sw-spine02# show run int lag 4
+interface lag 4 multi-chassis
+    shutdown
+    no routing
+    vlan access 10
+    lacp mode active
+    lacp fallback
+    exit
+```
+
+
 - This configuration describes the ports that go to the Mountain CMMs/Computes.
 - The CDU switches have two cables connecting to each CMM, we will setup MC-LAG with the CDU switch pairs.
 - The second CDU switch in the pair will have it's port to the CMM shutdown, Redundancy is not yet available for the CMM.
