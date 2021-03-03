@@ -191,11 +191,14 @@ CASMINST-980
 <a name="start-deployment"></a>
 ### Start Deployment
 
+
 Deployment of the nodes starts with booting the storage nodes first, then the master nodes and worker nodes together.
 After the operating system boots on each node there are some configuration actions which take place.  Watching the
 console or the console log for certain nodes can help to understand what happens and when.  When the process is complete
 for all nodes, the Ceph storage will have been initialized and the Kuberenetes cluster will be created ready for a workload.
 
+
+#### Workflow
 The configuration workflow described here is intended to help understand the expected path for booting and configuring.  See the actual steps below for the commands to deploy these management NCNs.
 
   - Start watching the consoles for ncn-s001 and at least one other storage node
@@ -206,13 +209,15 @@ The configuration workflow described here is intended to help understand the exp
   - Once ceph-ansible has finished on ncn-s001, then ncn-s001 waits for ncn-m002 to create /etc/kubernetes/admin.conf.
   - Start watching the consoles for ncn-m002, ncn-m003 and at least one worker node
   - Boot master nodes (ncn-m002 and ncn-m003) and all worker nodes at the same time
-    - The worker nodes will boot and wait for ncn-m002 to create the /etc/cray/kubernetes/join-command-control-plane so they can join Kubernetes
-    - The third master node ncn-m003 boots and waits for ncn-m002 to create the /etc/cray/kubernetes/join-command-control-plane so it can join Kubernetes
+    - The worker nodes will boot and wait for ncn-m002 to create the `/etc/cray/kubernetes/join-command-control-plane` so they can join Kubernetes
+    - The third master node ncn-m003 boots and waits for ncn-m002 to create the `/etc/cray/kubernetes/join-command-control-plane` so it can join Kubernetes
     - The second master node ncn-m002 boots, runs the kubernetes-cloudinit.sh which will create /etc/kubernetes/admin.conf and /etc/cray/kubernetes/join-command-control-plan, then waits for the storage node to create etcd-backup-s3-credentials
   - Once ncn-s001 notices that ncn-m002 has created /etc/kubernetes/admin.conf, then ncn-s001 waits for any worker node to become available.
   - Once each worker node notices that ncn-m002 has created /etc/cray/kubernetes/join-command-control-plan, then it will join the Kubernetes cluster.  
     - Now ncn-s001 should notice this from any one of the worker nodes and move forward with creation of config maps and running the post-ceph playbooks (s3, OSD pools, quotas, etc.)
   - Once ncn-s001 creates etcd-backup-s3-credentials during the benji-backups role which is one of the last roles after ceph has been set up, then ncn-m001 notices this and moves forward
+
+#### Deploy
 
 1. Create boot directories for any NCN in DNS:
    > This will create folders for each host in `/var/www`, allowing each host to have their own unique set of artifacts; kernel, initrd, SquashFS, and `script.ipxe` bootscript.
@@ -251,10 +256,10 @@ The configuration workflow described here is intended to help understand the exp
    ncn-w002-mgmt
    ncn-w003-mgmt
    ```
-
-> **`IMPORTANT`** This is the administrators _last chance_ to run [NCN pre-boot workarounds](#apply-ncn-pre-boot-workarounds).
-
-> **`NOTE`**: All consoles are located at `/var/log/conman/console*`
+    
+    > **`IMPORTANT`** This is the administrators _last chance_ to run [NCN pre-boot workarounds](#apply-ncn-pre-boot-workarounds).
+    
+    > **`NOTE`**: All consoles are located at `/var/log/conman/console*`
 
 5. Boot the **Storage Nodes**
     ```bash
@@ -272,126 +277,16 @@ The configuration workflow described here is intended to help understand the exp
    pit# conman -j ncn-s001-mgmt
    ```
     From there an administrator can witness console-output for the cloud-init scripts.
-   > **`NOTE`**: If the nodes have pxe boot issues, such as getting pxe errors or not pulling the ipxe.efi binary, see [PXE boot troubleshooting](420-MGMT-NET-PXE-TSHOOT.md)
+   > **`NOTE`**: If the nodes have pxe boot issues (e.g. getting pxe errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](420-MGMT-NET-PXE-TSHOOT.md)
+   > **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to linux) see the CSM workarounds for fixes around mutual symptoms.
 
-   > **`NOTE`**: If the nodes exhibit afflictions such as:
-   > - no hostname (or a hostname of `ncn`)
-   > - `mgmt0` or `mgmt1` does not indicate they exist in `bond0`, or has a mis-matching MTU of `1500` to the bond's members
-   > - no route (`ip r` returns no `default` route)
-   > 
-   > First, restart the Basecamp service on the PIT (this only needs to be done once even if more than one node are impacted):
-   > ```bash
-   > pit# systemctl restart basecamp
-   > ```
-   > 
-   > Next, verify that valid data is returned for the afflicted node from Basecamp (the output should contain information 
-   > specific to the afflicted node like the hostname):
-   > ```bash
-   > ncn# curl http://pit:8888/user-data
-   > ```
-   > 
-   > Finally, run the following script from the afflicted node **(but only in either of those circumstances)**.
-   > ```bash
-   > ncn# /srv/cray/scripts/metal/retry-ci.sh
-   > ```
-   > Running `hostname` or logging out and back in should yield the proper hostname.
-
-**`IMPORTANT (FOR FRESH INSTALLS ONLY)`**: If your ceph install failed please check the following
-   > ```bash
-   > ncn-s# ceph osd tree
-   >ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
-   >-1       83.83459 root default
-   >-5       27.94470     host ncn-s001
-   >  0   ssd  3.49309         osd.0         up  1.00000 1.00000
-   >  4   ssd  3.49309         osd.4         up  1.00000 1.00000
-   >  6   ssd  3.49309         osd.6         up  1.00000 1.00000
-   >  8   ssd  3.49309         osd.8         up  1.00000 1.00000
-   >10   ssd  3.49309         osd.10        up  1.00000 1.00000
-   >12   ssd  3.49309         osd.12        up  1.00000 1.00000
-   >14   ssd  3.49309         osd.14        up  1.00000 1.00000
-   >16   ssd  3.49309         osd.16        up  1.00000 1.00000
-   >-3       27.94470     host ncn-s002
-   >  1   ssd  3.49309         osd.1       down  1.00000 1.00000
-   >  3   ssd  3.49309         osd.3       down  1.00000 1.00000
-   >  5   ssd  3.49309         osd.5       down  1.00000 1.00000
-   >  7   ssd  3.49309         osd.7       down  1.00000 1.00000
-   >  9   ssd  3.49309         osd.9       down  1.00000 1.00000
-   >11   ssd  3.49309         osd.11      down  1.00000 1.00000
-   >13   ssd  3.49309         osd.13      down  1.00000 1.00000
-   >15   ssd  3.49309         osd.15      down  1.00000 1.00000
-   >-7       27.94519     host ncn-s003                            <--- node where our issue exists
-   >  2   ssd 27.94519         osd.2       down  1.00000 1.00000    <--- our problematic VG.  
-   >```
-   >**SSH to our node(s) where the issue exists and do the following:**
-   >
-   >1.  ncn-s# systemctl stop ceph-osd.target
-   >2.  ncn-s# vgremove -f --select 'vg_name=~ceph*'  
-   **This will take a little bit of time, so don't panic.**
-   >3.  ncn-s# for i in {g..n}; do sgdisk --zap-all /dev/sd$i; done.
-   >
-   **This will vary node to node and you should use lsblk to identify all drives available to ceph** 
-
-   >**Manually create OSDs on the problematic nodes**
-   >ncn-s# for i in {g..n}; do ceph-volume lvm create --data /dev/sd$i  --bluestore; done
-   >
-   >**ALL THE BELOW WORK WILL BE RUN FROM NCN-S001**
-   >
-   >1. Verify the /etc/cray/ceph directory is empty.  If there are any files there then delete them
-   >2. Put in safeguard
-   >     - Edit /srv/cray/scripts/metal/lib.sh
-   >    - Comment out the below lines
-   >
-   > ```bash
-   > 22   if [ $wipe == 'yes' ]; then
-   > 23     ansible osds -m shell -a "vgremove -f --select 'vg_name=~ceph*'"
-   > 24   fi```
-   >
-   >Run the cloud init script
-   >ncn-s001# /srv/cray/scripts/common/storage-ceph-cloudinit.sh
-
-1. Add in additional drives into Ceph (if necessary)
-    *  On a manager node run
-        1. `watch "ceph -s"`
-            1.  This will allow you to monitor the progress of the drives being added
-    *  On each storage node run the following
-        1. `ceph-volume inventory --format json-pretty|jq '.[] | select(.available == true) |.path'`
-            - you can run ceph-volume inventory at to see the unedited output from the above command.
-        2. `ceph-volume lvm create --data /dev/<drive to be added> --bluestore`
-            - you will repeat for all drives on that node that need added and also for each node that has drives to add.
-    * After all the OSDs have been added, run the playbook to re-set the pool quotas (only necessary to run when you've increased the cluster capacity):
-    * Do the following procedure to update the SMA pool quotas
-         
-    ```bash
-        ncn-s001#  echo "---
-        hosts:
-        - managers
-        any_errors_fatal: true
-        remote_user: root
-        roles:
-        - ceph-pool-quotas" > /etc/ansible/ceph-rgw-users/roles/ceph-pool-quotas.yml
-
-        ncn-s001# ansible-playbook /etc/ansible/ceph-rgw-users/roles/ceph-pool-quotas.yml
-    ```     
-
-    >**`NOTE`**: If you ceph install fails due to large volumes being created please do the following
-    > - lsblk on each storage node.  you will see a lot of output, but look for the size of the lvm volumes associated with the drives.
-    >     - Anything over the drive size (1.92TB, 3.84TB, 7.68TB) is the indicator that there is an issue
-    >     - Another method is to run `vgs` on the storage nodes.  This will give you the size of the volume groups.
-    >         - There should be 1 per drive.
-    > - if you meet this criteria please run the "Full Wipe" procedure in 051-DISK-CLEANSLATE.md.
-
-2. Restart basecamp to make sure state is up-to-date
-   ```bash
-   pit# systemctl restart basecamp
-   ```
-
-3. Boot **Kubernetes Managers and Workers**
+7. Boot **Kubernetes Managers and Workers**
     ```bash
     pit# \
     grep -oP "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
 
-4.  Wait. Observe the installation through ncn-m002-mgmt's console:
+8.  Wait. Observe the installation through ncn-m002-mgmt's console:
    ```bash
    # Print the console name
    pit# conman -q | grep m002
@@ -401,8 +296,8 @@ The configuration workflow described here is intended to help understand the exp
    pit# conman -j ncn-m002-mgmt
    ```
 
-11. Refer to [timing of deployments](#timing-of-deployments). After a while, `kubectl get nodes` should return
-   all the master nodes and worker nodess aside from the LiveCD's node.
+9. Refer to [timing of deployments](#timing-of-deployments). After a while, `kubectl get nodes` should return
+   all the managers and workers aside from the LiveCD's node.
    ```bash
    pit# ssh ncn-m002
    ncn-m002# kubectl get nodes -o wide
