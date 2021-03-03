@@ -287,27 +287,27 @@ The configuration workflow described here is intended to help understand the exp
     ```
 
 8.  Wait. Observe the installation through ncn-m002-mgmt's console:
-   ```bash
-   # Print the console name
-   pit# conman -q | grep m002
-   ncn-m002-mgmt
-
-   # Join the console
-   pit# conman -j ncn-m002-mgmt
-   ```
+    ```bash
+    # Print the console name
+    pit# conman -q | grep m002
+    ncn-m002-mgmt
+    
+    # Join the console
+    pit# conman -j ncn-m002-mgmt
+    ```
 
 9. Refer to [timing of deployments](#timing-of-deployments). After a while, `kubectl get nodes` should return
    all the managers and workers aside from the LiveCD's node.
-   ```bash
-   pit# ssh ncn-m002
-   ncn-m002# kubectl get nodes -o wide
-   NAME       STATUS   ROLES    AGE     VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                                                  KERNEL-VERSION         CONTAINER-RUNTIME
-   ncn-m002   Ready    master   14m     v1.18.6   10.252.1.5    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
-   ncn-m003   Ready    master   13m     v1.18.6   10.252.1.6    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
-   ncn-w001   Ready    <none>   6m30s   v1.18.6   10.252.1.7    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
-   ncn-w002   Ready    <none>   6m16s   v1.18.6   10.252.1.8    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
-   ncn-w003   Ready    <none>   5m58s   v1.18.6   10.252.1.12   <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
-   ```
+    ```bash
+    pit# ssh ncn-m002
+    ncn-m002# kubectl get nodes -o wide
+    NAME       STATUS   ROLES    AGE     VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                                                  KERNEL-VERSION         CONTAINER-RUNTIME
+    ncn-m002   Ready    master   14m     v1.18.6   10.252.1.5    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
+    ncn-m003   Ready    master   13m     v1.18.6   10.252.1.6    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
+    ncn-w001   Ready    <none>   6m30s   v1.18.6   10.252.1.7    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
+    ncn-w002   Ready    <none>   6m16s   v1.18.6   10.252.1.8    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
+    ncn-w003   Ready    <none>   5m58s   v1.18.6   10.252.1.12   <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
+    ```
 
 The administrator needs to move onto the next sections, before considering continuing the installation:
 
