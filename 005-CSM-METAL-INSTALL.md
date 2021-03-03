@@ -188,7 +188,7 @@ CASMINST-980
    > For HPE NCNs the above process will boot the nodes to their BIOS, but the menu is unavailable through conman as the node is booted into a graphical BIOS menu.
    >
    > To access the serial version of the BIOS setup. Perform the ipmitool steps above to boot the node. Then in conman press `ESC+9` key combination to when you
-   > see the following messages in the console, this will open you to a menu that can be used to enter the BIOS.
+   > see the following messages in the console, this will open you to a menu that can be used to enter the BIOS via conman.
    > ```
    > For access via BIOS Serial Console:
    > Press 'ESC+9' for System Utilities
@@ -196,7 +196,6 @@ CASMINST-980
    > Press 'ESC+!' for One-Time Boot Menu
    > Press 'ESC+@' for Network Boot
    > ```
-   >
    > For HPE NCNs the date configuration menu can be found at the following path: `System Configuration -> BIOS/Platform Configuration (RBSU) -> Date and Time`
    >
    > Alternatively for HPE NCNs you can login to the BMC's web interface and access the HTML5 console for the node to interact with the graphical BIOS.
@@ -205,7 +204,7 @@ CASMINST-980
    > linux# bmc=ncn-w001-mgmt  # Change this to be each node in turn.
    > linux# ssh -L 9443:$bmc:443 -N root@eniac-ncn-m001
    > ```
-   > Opening a web browser to `https://localhost:9443` will give access to teh BMCs web interface.
+   > Opening a web browser to `https://localhost:9443` will give access to the BMC's web interface.
 
    When the node boots, you will be able to use the conman session to see the BIOS menu to check and set the time to current UTC time.  The process varies depending on the vendor of the NCN.
 
