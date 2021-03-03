@@ -216,6 +216,8 @@ NAME                       READY   STATUS      RESTARTS   AGE
 cray-sls-init-load-pbzxv   0/2     Completed   0          55m
 ```
 
+Once the loader job has completed successfully running `./install.sh` again is expected to succeed.
+
 <a name="error-not-ready"></a>
 ### Error: not ready: https://packages.local
 

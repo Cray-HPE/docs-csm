@@ -278,7 +278,12 @@ The configuration workflow described here is intended to help understand the exp
    ```
     From there an administrator can witness console-output for the cloud-init scripts.
    > **`NOTE`**: If the nodes have pxe boot issues (e.g. getting pxe errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](420-MGMT-NET-PXE-TSHOOT.md)
-   > **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to linux) see the CSM workarounds for fixes around mutual symptoms.
+   > **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to linux with no hostname) see the CSM workarounds for fixes around mutual symptoms.
+   > ```bash
+   > # Example
+   > pit# ls /opt/cray/csm/workarounds/after-ncn-boot
+   > CASMINST-1093
+   > ```
 
 7. Boot **Kubernetes Managers and Workers**
     ```bash
@@ -295,6 +300,14 @@ The configuration workflow described here is intended to help understand the exp
     # Join the console
     pit# conman -j ncn-m002-mgmt
     ```
+
+   > **`NOTE`**: If the nodes have pxe boot issues (e.g. getting pxe errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](420-MGMT-NET-PXE-TSHOOT.md)
+   > **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to linux with no hostname) see the CSM workarounds for fixes around mutual symptoms.
+   > ```bash
+   > # Example
+   > pit# ls /opt/cray/csm/workarounds/after-ncn-boot
+   > CASMINST-1093
+   > ```
 
 9. Refer to [timing of deployments](#timing-of-deployments). After a while, `kubectl get nodes` should return
    all the managers and workers aside from the LiveCD's node.
