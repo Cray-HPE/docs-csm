@@ -86,6 +86,30 @@ secret/site-init created
 > secret/site-init created
 > ```
 
+> **`WARNING`** If for some reason the system customizations need to be
+> modified to complete product installtion, administrators must first update
+> `customizations.yaml` in the `site-init` Git repository, which may no longer
+> be mounted on any cluster node, and then delete and recreate the `site-init`
+> secret as shown below.
+> 
+> To **read** `customizations.yaml` from the `site-init` secret:
+> 
+> ```bash
+> # kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
+> ```
+> 
+> To **delete** the `site-init` secret:
+> 
+> ```bash
+> # kubectl -n loftsman delete secret site-init
+> ```
+> 
+> To **recreate** the `site-init` secret:
+> 
+> ```bash
+> # kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+> ```
+
 
 <a name="deploy-sealed-secret-decryption-key"></a>
 ## Deploy Sealed Secret Decryption Key
