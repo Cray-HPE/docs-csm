@@ -14,6 +14,7 @@ On the other hand, if the node has only a single network card, then MAC1 and MAC
    - [Requirements](#requirements)
    - [MAC Collection](#mac-collection)
 - [Procedure: Serial consoles](#procedure-serial-consoles)
+- [Procedure: Recovering from an incorrect metadata file](#procedure-recovering-from-an-incorrect-metadata-file)
 
 The easy way to do this leverages the NIC-dump provided by the metal-ipxe package. This page will walk-through
 booting NCNs and collecting their MACs from the conman console logs.
@@ -99,7 +100,9 @@ will prevent the nodes from continuing to boot and end in undesired states.
         done
         ```
 7. Examine the output from `grep`, use the lowest value MAC address per PCIe card.
-    > example: 1 PCIe card with 2 ports for a total of 2 ports per node.
+
+    > example: 1 PCIe card with 2 ports for a total of 2 ports per node.\
+
     ```bash
     -----
     /var/log/conman/console.ncn-w003-mt
@@ -107,7 +110,9 @@ will prevent the nodes from continuing to boot and end in undesired states.
     net3 MAC b8:59:9f:d9:9e:2d PCI.DeviceID 1013 PCI.VendorID 15b3 <-bond0-mac1
     -----
     ```
+
     > example: 2 PCIe cards with 2 ports each for a total of 4 ports per node.
+
     ```bash
     -----
     /var/log/conman/console.ncn-w006-mgmt
@@ -116,6 +121,8 @@ will prevent the nodes from continuing to boot and end in undesired states.
     net2 MAC 14:02:ec:da:b9:98 PCI.DeviceID 8070 PCI.VendorID 1077 <-bond0-mac1 (0x61f0 < 0x7104)
     net3 MAC 14:02:ec:da:b9:99 PCI.DeviceID 8070 PCI.VendorID 1077 (future use)
     -----
+    ```
+
 8. The above output identified MAC0 and MAC1 of the bond as 14:02:ec:df:9c:38 and 94:40:c9:c1:61:f0 respectively.
     > Tip: Mind the index (3, 2, 1.... ; not 1, 2, 3)
     ```
@@ -136,3 +143,41 @@ the MACs for your BOND from each the sw-spine-001 and sw-spine-002 switch.
 1. Follow "Metadata BMC" on each spine switch that port1 and port2 of the bond is plugged into.
 2. Usually the 2nd/3rd/4th/Nth MAC on the PCIe card will be a 0x1 or 0x2 deviation from the first port. If you confirm this, then collection
 is quicker.
+
+<a name="procedure-recovering-from-an-incorrect-metadata-file"></a>
+## Procedure: Recovering from an incorrect metadata file
+
+If you are coming from 1.3 and happened to use the `ncn_metadata.csv` without modification, you will be unable to deploy the NCNs.  This section details a recovery procedure in case that happens.
+
+1. Remove the incorrectly-generated configs
+
+```bash
+rm -rf /var/www/ephemeral/prep/$SYSTEM_NAME
+```
+
+2. Remove the cached config file that `csi` creates
+
+```bash
+rm -f /var/www/ephemeral/prep/system_config.yaml
+```
+
+3. Manually edit `ncn_metadata.csv`, replacing the bootstrap MAC address with Bond0Mac0 address for the afflicted nodes that failed to boot
+
+4. Re-run `csi config init` with the required flags
+
+5. Copy all the newly-generated files into place
+
+```bash
+cp -p /var/www/ephemeral/prep/$SYSTEM_NAME/dnsmasq.d/* /etc/dnsmasq.d/*
+cp -p /var/www/ephemeral/prep/$SYSTEM_NAME/basecamp/* /var/www/ephemeral/configs/
+cp -p /var/www/ephemeral/prep/$SYSTEM_NAME/conman.conf /etc/
+cp -p /var/www/ephemeral/prep/$SYSTEM_NAME/pit-files/* /etc/sysconfig/network/
+```
+
+6. Now restart everything to apply the new configs:
+
+```
+wicked ifreload all
+systemctl restart dnsmasq conman basecamp
+systemctl restart nexus
+```
