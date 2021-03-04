@@ -120,6 +120,18 @@ Deploy the corresponding key necessary to decrypt sealed secrets:
 pit# /var/www/ephemeral/prep/site-init/deploy/deploydecryptionkey.sh
 ```
 
+An error similar to the following may occur when deploying the key:
+```bash
+pit# /var/www/ephemeral/prep/site-init/deploy/deploydecryptionkey.sh
+Error from server (NotFound): secrets "sealed-secrets-key" not found
+ 
+W0304 17:21:42.749101   29066 helpers.go:535] --dry-run is deprecated and can be replaced with --dry-run=client.
+secret/sealed-secrets-key created
+Restarting sealed-secrets to pick up new keys
+No resources found
+```
+
+This is expected and can safely be ignored. 
 
 <a name="start-the-deployment"></a>
 ## Start the Deployment
