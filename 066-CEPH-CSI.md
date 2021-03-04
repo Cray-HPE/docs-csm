@@ -6,8 +6,8 @@
 Verify that the ceph-csi requirements are in place
 
 1. Verify all post ceph install tasks have run
-2. Log into any storage node.
-3. Check /etc/cray/ceph for completed task files
+2. Log into any storage node to perform the following checks, except as noted.
+3. **This check can only be done on storage node s001** Check /etc/cray/ceph for completed task files.
     ```bash
     ncn-s001# ls /etc/cray/ceph/
     ceph_k8s_initialized  csi_initialized  installed  kubernetes_nodes.txt  tuned
