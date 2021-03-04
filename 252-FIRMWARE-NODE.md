@@ -163,8 +163,8 @@ Now the node(s) are upgraded to minimum spec. for booting.
 | :--- | :--- | --- | ---: |
 | Marvell | QL41232HQCU-HC | | [08.50.78][5] | 
 | Mellanox | MCX416A-BCAT | `MT_2130111027` | [12.28.2006][8] |
-| Mellanox | MCX515A-CCAT | `MT_0000000011` | [16.28.4000][6] |
-| Mellanox | MCX515A-CCAT | `MT_0000000591` | [16.28.4000][7] |
+| Mellanox | MCX515A-CCAT | `MT_0000000011` | [16.28.2006][6] |
+| Mellanox | MCX515A-CCAT | `MT_0000000591` | [16.28.2006][7] |
 
 > Note: The Mellanox firmware can be updated to minimum spec. using `mlxfwmanager`. The `mlxfwmanager` will fetch updates from online, or it can use a local file (or local web server such as http://pit/).
 
