@@ -25,11 +25,13 @@ This page will go over deploying the non-compute nodes.
     - [Apply NCN Pre-Boot Workarounds](#apply-ncn-pre-boot-workarounds)
     - [Ensure Time Is Accurate Before Deploying NCNs](#ensure-time-is-accurate-before-deploying-ncns)
     - [Start Deployment](#start-deployment)
-      - [Apply NCN Post-Boot Workarounds](#apply-ncn-post-boot-workarounds)
-      - [LiveCD Cluster Authentication](#livecd-cluster-authentication)
-      - [BGP Routing](#bgp-routing)
-      - [Validation](#validation)
-      - [Optional Validation](#optional-validation)
+      - [Workflow](#workflow)
+      - [Deploy](#deploy)
+    - [Apply NCN Post-Boot Workarounds](#apply-ncn-post-boot-workarounds)
+    - [LiveCD Cluster Authentication](#livecd-cluster-authentication)
+    - [BGP Routing](#bgp-routing)
+    - [Validation](#validation)
+    - [Optional Validation](#optional-validation)
   - [Change Password](#change-password)
 
 
@@ -408,6 +410,7 @@ Observe the output of the checks and note any failures, then remediate them.
     ```bash
     pit# csi pit validate --ceph
     ```
+    **`Note`**: Please refer to the **Utility Storage** section of the Admin guide to help resolve any failed tests. 
 
 2. Check K8s
     ```bash
