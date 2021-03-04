@@ -83,7 +83,7 @@ with system-specific customizations.
     * `spec.kubernetes.sealed_secrets.cray_meds_credentials`
     * `spec.kubernetes.sealed_secrets.cray_hms_rts_credentials`
 
-    Replace the `Password` references with values appropriate for your system.
+    Replace the `Password` references with values appropriate for your system. See [Decrypting Sealed Secrets for Review](#decrypting-sealed-secrets-for-review) if you need to examine credentials from prior installs.
 
 3. Validate that the REDS/MEDS/RTS sealed secrets contain valid json using `jq`:
   ```bash
