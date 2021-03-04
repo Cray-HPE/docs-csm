@@ -31,7 +31,7 @@ This page will go over deploying the non-compute nodes.
     - [LiveCD Cluster Authentication](#livecd-cluster-authentication)
     - [BGP Routing](#bgp-routing)
     - [Validation](#validation)
-    - [Optional Validation](#optional-validation)
+    - [Additional Validation Tasks for Failed Installs](#additional-validation-tasks-for-failed-installs)
   - [Change Password](#change-password)
 
 
@@ -300,6 +300,8 @@ The configuration workflow described here is intended to help understand the exp
    # Join the console
    pit# conman -j ncn-s001-mgmt
    ```
+   **`NOTE`**: Watch the storage node consoles carefully for error messages. If any are seen, consult [066-CEPH-CSI](066-CEPH-CSI.md)
+
     From there an administrator can witness console-output for the cloud-init scripts.
    > **`NOTE`**: If the nodes have pxe boot issues (e.g. getting pxe errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](420-MGMT-NET-PXE-TSHOOT.md)
    > **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to linux with no hostname) see the CSM workarounds for fixes around mutual symptoms.
@@ -325,8 +327,11 @@ The configuration workflow described here is intended to help understand the exp
     pit# conman -j ncn-m002-mgmt
     ```
 
-   > **`NOTE`**: If the nodes have pxe boot issues (e.g. getting pxe errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](420-MGMT-NET-PXE-TSHOOT.md)
-   > **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to linux with no hostname) see the CSM workarounds for fixes around mutual symptoms.
+    **`NOTE`**: If the nodes have pxe boot issues (e.g. getting pxe errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](420-MGMT-NET-PXE-TSHOOT.md)
+    
+    **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to linux with no hostname) see the CSM workarounds for fixes around mutual symptoms.
+    **`NOTE`**: If one of the manager nodes seems hung waiting for the storage nodes to create a secret, check the storage node consoles for error messages. If any are found, consult [066-CEPH-CSI](066-CEPH-CSI.md)
+
    > ```bash
    > # Example
    > pit# ls /opt/cray/csm/workarounds/after-ncn-boot
@@ -432,7 +437,8 @@ Observe the output of the checks and note any failures, then remediate them.
     2. Return to the 'Boot the **Storage Nodes**' step of [Start Deployment](#start-deployment) section above.
 
 <a name="optional-validation"></a>
-### Optional Validation
+
+### Additional Validation Tasks for Failed Installs
 
 These tests are for sanity checking. These exist as software reaches maturity, or as tests are worked
 and added into the installation repertoire.
