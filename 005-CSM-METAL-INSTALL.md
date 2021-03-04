@@ -333,8 +333,7 @@ The configuration workflow described here is intended to help understand the exp
    > CASMINST-1093
    > ```
 
-9. Refer to [timing of deployments](#timing-of-deployments). After a while, `kubectl get nodes` should return
-   all the managers and workers aside from the LiveCD's node.
+9. Refer to [timing of deployments](#timing-of-deployments). It should not take more than 60 minutes for the `kubectl get nodes` command to return output indicating that all the managers and workers aside from the LiveCD's node are `Ready`:
     ```bash
     pit# ssh ncn-m002
     ncn-m002# kubectl get nodes -o wide
