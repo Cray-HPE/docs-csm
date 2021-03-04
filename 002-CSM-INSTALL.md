@@ -307,12 +307,29 @@ may be performed to rule out issues with disks and boot-order.
 
 For each NCN **except for ncn-m001**, login and wipe it
 
-```bash
-pit# ssh ncn
-ncn# wipefs --all --force /dev/sd[a-z]
-ncn# wipefs --all --force /dev/disk/by-label/*
-ncn# exit
-```
+- Wipe NCN disks from **LiveCD** (`pit`)
+    ```bash
+    pit# ncns=$(grep Bond0 /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F',' '{print $6}')
+    for h in $ncns; do
+        read -r -p "Are you sure you want to wipe the disks on $h? [y/N] " response
+        response=${response,,}
+        if [[ "$response" =~ ^(yes|y)$ ]]; then
+             ssh $h wipefs --all --force /dev/sd[a-z] /dev/disk/by-label/*
+        fi
+    done
+    ```
+
+- Wipe NCN disks from **ncn-m001**
+    ```bash
+    ncn-m001# ncns=$(grep ncn /etc/hosts | grep nmn | grep -v m001 | awk '{print $3}')
+    for h in $ncns; do
+        read -r -p "Are you sure you want to wipe the disks on $h? [y/N] " response
+        response=${response,,}
+        if [[ "$response" =~ ^(yes|y)$ ]]; then
+             ssh $h wipefs --all --force /dev/sd[a-z] /dev/disk/by-label/*
+        fi
+    done
+    ```
 
 <a name="powering-off"></a>
 #### Powering Off
