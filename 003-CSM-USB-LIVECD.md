@@ -324,8 +324,8 @@ Check for workarounds in the `/opt/cray/csm/workarounds/csi-config` directory.  
 <a name="shasta-cfg"></a>
 ### SHASTA-CFG
 
-Follow [the procedures in 067-SHASTA-CFG.md](./067-SHASTA-CFG.md) to
-prepare the `site-init` directory for your system.
+Now execute [the procedures in 067-SHASTA-CFG.md](./067-SHASTA-CFG.md) to prepare the `site-init` directory for your system.
+
 
 <a name="pre-populate-livecd-daemons-configuration-and-ncn-arti"></a>
 ## Pre-Populate LiveCD Daemons Configuration and NCN Artifacts
