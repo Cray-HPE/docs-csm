@@ -269,6 +269,64 @@ ncn:~ # 0
 
 Verify that the command has exit code 0, reports no errors, and resolves the address.
 
+### Verify Spire Agent is Running on Kuberetes NCNs
+
+Execute the following commands on ```ncn-m002```, adjusting the ```-w``` argument of ```pdsh``` to include all of your Kubernetes master and worker nodes (excluding the PIT node):
+
+```bash
+ncn-m002:~ # export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+ncn-m002:~ # pdsh -w ncn-m00[2-3],ncn-w00[1-3] -f 1 'goss -g /opt/cray/tests/install/ncn/tests/goss-spire-agent-service-running.yaml validate'
+ncn-m002: Warning: Permanently added 'ncn-m002,10.252.1.11' (ECDSA) to the list of known hosts.
+ncn-m002: ..
+ncn-m002: 
+ncn-m002: Total Duration: 0.011s
+ncn-m002: Count: 2, Failed: 0, Skipped: 0
+ncn-m003: Warning: Permanently added 'ncn-m003,10.252.1.10' (ECDSA) to the list of known hosts.
+ncn-m003: ..
+ncn-m003: 
+ncn-m003: Total Duration: 0.012s
+ncn-m003: Count: 2, Failed: 0, Skipped: 0
+ncn-w001: Warning: Permanently added 'ncn-w001,10.252.1.9' (ECDSA) to the list of known hosts.
+ncn-w001: ..
+ncn-w001: 
+ncn-w001: Total Duration: 0.013s
+ncn-w001: Count: 2, Failed: 0, Skipped: 0
+ncn-w002: Warning: Permanently added 'ncn-w002,10.252.1.8' (ECDSA) to the list of known hosts.
+ncn-w002: ..
+ncn-w002: 
+ncn-w002: Total Duration: 0.037s
+ncn-w002: Count: 2, Failed: 0, Skipped: 0
+ncn-w003: Warning: Permanently added 'ncn-w003,10.252.1.7' (ECDSA) to the list of known hosts.
+ncn-w003: ..
+ncn-w003: 
+ncn-w003: Total Duration: 0.013s
+ncn-w003: Count: 2, Failed: 0, Skipped: 0
+```
+
+Known failures and how to recover:
+
+* K8S Test: Verify spire-agent is enabled and running
+
+  - The `spire-agent` service may fail to start on Kubernetes NCNs, logging errors (via journalctl) similar to "join token does not exist or has already been used" or the last logs containing multiple lines of "systemd[1]: spire-agent.service: Start request repeated too quickly.". Deleting the `request-ncn-join-token` daemonset pod running on the node may clear the issue. While the `spire-agent` systemctl service on the Kubernetes node should eventually restart cleanly, you may have to login to the impacted nodes and restart the service. The easiest way to delete the appropriate pod is to create the following function and run `renewncnjoin NODE`
+
+  ```
+  function renewncnjoin() { for pod in $(kubectl get pods -n spire |grep request-ncn-join-token | awk '{print $1}'); do if kubectl describe -n spire pods $pod | grep -q "Node:.*$1"; then echo "Restarting $pod running on $1"; kubectl delete -n spire pod "$pod"; fi done }
+  ```
+
+  - The `spire-agent` service may also fail if a NCN was powered off for too long and its tokens expired. If this happens then delete /root/spire/agent_svid.der, /root/spire/bundle.der, and /root/spire/data/svid.key off the NCN before deleting the `request-ncn-join-token` daemonset pod.
+
+### Verify the Vault Cluster is Healthy
+
+Execute the following commands on ```ncn-m002```:
+
+```bash
+ncn-m002:~ # goss -g /opt/cray/tests/install/ncn/tests/goss-k8s-vault-cluster-health.yaml validate
+..
+
+Total Duration: 0.849s
+Count: 2, Failed: 0, Skipped: 0
+```
+
 <a name="automated-goss-testing"></a>
 ## Automated Goss Testing
 
@@ -293,15 +351,6 @@ ncn# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
   - May fail immediately after platform install. Should pass after the TrustedCerts Operator has updated BSS (Global cloud-init meta) with CA certificates.
 * K8S Test: Kubernetes Velero No Failed Backups
   - Due to a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (for example, vault). It may be necessary to use the ```velero``` command to delete backups from a Kubernetes node to clear this situation.
-* K8S Test: Verify spire-agent is enabled and running
-
-  - The `spire-agent` service may fail to start on Kubernetes NCNs, logging errors (via journalctl) similar to "join token does not exist or has already been used" or the last logs containing multiple lines of "systemd[1]: spire-agent.service: Start request repeated too quickly.". Deleting the `request-ncn-join-token` daemonset pod running on the node may clear the issue. While the `spire-agent` systemctl service on the Kubernetes node should eventually restart cleanly, you may have to login to the impacted nodes and restart the service. The easiest way to delete the appropriate pod is to create the following function and run `renewncnjoin NODE`
-
-  ```
-  function renewncnjoin() { for pod in $(kubectl get pods -n spire |grep request-ncn-join-token | awk '{print $1}'); do if kubectl describe -n spire pods $pod | grep -q "Node:.*$1"; then echo "Restarting $pod running on $1"; kubectl delete -n spire pod "$pod"; fi done }
-  ```
-
-  - The `spire-agent` service may also fail if a NCN was powered off for too long and its tokens expired. If this happens then delete /root/spire/agent_svid.der, /root/spire/bundle.der, and /root/spire/data/svid.key off the NCN before deleting the `request-ncn-join-token` daemonset pod.
 
 <a name="hms-tests"></a>
 ## Hardware Management Services Tests
