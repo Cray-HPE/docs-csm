@@ -1,6 +1,10 @@
 # Management Network Layer3 Configuration
 
-This page describes how to configure the layer 3 routing between the CDU switches and the Spine/Leaf switches. 
+This page describes how to configure layer 3 routing for Hill and MTN cabinets.
+
+MTN cabinets have their own "CDU" Switches.
+
+Hill cabinets are connected the leaf switches.
 
 # Requirements
 
@@ -12,7 +16,7 @@ This page describes how to configure the layer 3 routing between the CDU switche
 At this point you should be able to ping the CDU switches on their VLAN 2 and VLAN 4 interfaces.
 We will need to setup routing so the compute nodes can communicate with k8s.
 
-Spine/leaf switch configuration
+Spine/Agg switch configuration
 - First step is to start the OSPF process, give the switch a router-id. This is typically the NMN IP.
 - We will need to redistribute BGP into OSPF, this will allow devices to communicate with K8s
 ```
@@ -36,7 +40,7 @@ router bgp 65533
     distance bgp 85 70
 ```
 
-CDU switch Layer3 configuration
+CDU/Leaf switch Layer3 configuration
 ```
 router ospf 1
     router-id 10.252.0.6
@@ -54,7 +58,7 @@ interface vlan 3000
     ip ospf passive
 ```
 
-Once this is complete you should be able to see OSPF neighbors on the CDU switches.
+Once this is complete you should be able to see OSPF neighbors on the CDU/Leaf switches.
 
 ```
 sw-cdu-002# show ip ospf neighbors 
