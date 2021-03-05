@@ -122,7 +122,7 @@ If one or more BGP session is reported in an **Idle** state, reset BGP to re-est
 sw-spine-001 [standalone: master] # clear ip bgp all
 ```
 
-It may take several minutes for all sessions to become **Established**. Wait a minute, or so, and then verify that all sessions now are all reported as **Established**. If some sessions remain in an **Idle** state, re-run the **clear ip bgp al** command and check again.
+It may take several minutes for all sessions to become **Established**. Wait a minute, or so, and then verify that all sessions now are all reported as **Established**. If some sessions remain in an **Idle** state, re-run the **clear ip bgp all** command and check again.
 
 ```bash
 sw-spine-001 [standalone: master] # show ip bgp summary
