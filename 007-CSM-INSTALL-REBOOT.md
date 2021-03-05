@@ -157,8 +157,25 @@ all been run by the administrator before starting this stage.
    If the reboot successfully deploys the LiveCD, this terminal can be exited.
   
 9. Wipe the node beneath the LiveCD, erasing the RAIDs labels will trigger a fresh partition table to deploy.
+   > **`WARNING`** Do not assume to wipe the first three disks (e.g. `sda, sdb, and sdc`), these could be any letter. Choosing the wrong ones may result in wiping the USB stick.
    ```bash
-   pit# wipefs --all --force /dev/disk/by-label/*RAID
+   # Select disks to wipe; SATA/NVME/SAS
+   pit# md_disks="$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(sata|nvme|sas)' | sort -h | awk '{print "/dev/" $2}')"
+
+   # Sanity check; print disks into typscript or console
+   pit# echo $md_disks
+   /dev/sda /dev/sdb /dev/sdc
+
+   # Wipe; this is irreversible.
+   pit# wipefs --all  --force $md_disks
+   /dev/sda: 8 bytes were erased at offset 0x00000200 (gpt): 45 46 49 20 50 41 52 54
+   /dev/sda: 8 bytes were erased at offset 0x6fc86d5e00 (gpt): 45 46 49 20 50 41 52 54
+   /dev/sda: 2 bytes were erased at offset 0x000001fe (PMBR): 55 aa
+   /dev/sdb: 6 bytes were erased at offset 0x00000000 (crypto_LUKS): 4c 55 4b 53 ba be
+   /dev/sdb: 6 bytes were erased at offset 0x00004000 (crypto_LUKS): 53 4b 55 4c ba be
+   /dev/sdc: 8 bytes were erased at offset 0x00000200 (gpt): 45 46 49 20 50 41 52 54
+   /dev/sdc: 8 bytes were erased at offset 0x6fc86d5e00 (gpt): 45 46 49 20 50 41 52 54
+   /dev/sdc: 2 bytes were erased at offset 0x000001fe (PMBR): 55 aa
    ```
 
 10. Reboot the LiveCD.
@@ -168,36 +185,8 @@ all been run by the administrator before starting this stage.
 
 11. The node should boot, acquire its hostname (i.e. ncn-m001).
    > **`NOTE`**: If the nodes have pxe boot issues,such as getting pxe errors or not pulling the ipxe.efi binary, see [PXE boot troubleshooting](420-MGMT-NET-PXE-TSHOOT.md)
-   
+
    > **`NOTE`**: If ncn-m001 booted without a hostname or it didn't run all the cloud-init scripts the following commands need to be ran **(but only in that circumstance)**.
-   > Make directory to copy network config files to.
-   > ```
-   > mkdir /mnt/cow
-   > ```
-   > Mount the USB to that directory.
-   > ```
-   > mount -L cow /mnt/cow
-   > ```
-   > Copy the network config files.
-   > ```
-   > cp -pv /mnt/cow/rw/etc/sysconfig/network/ifroute* /etc/sysconfig/network/
-   > cp -pv /mnt/cow/rw/etc/sysconfig/network/ifcfg-lan0 /etc/sysconfig/network/
-   > ```
-   >
-   > Run the dhcp to static script
-   > ```
-   > /srv/cray/scripts/metal/set-dhcp-to-static.sh
-   > ```
-   > After this you should have network connectivity.
-   > Then you will run.
-   > ```
-   > cloud-init clean
-   > cloud-init init
-   > cloud-init modules -m init
-   > cloud-init modules -m config
-   > cloud-init modules -m final
-   > ```
-   > This should pull all the required cloud-init data for the NCN to join the cluster.
 
 12. Login and start a typescript (the IP used here is the same from step 9).
 
@@ -209,7 +198,7 @@ all been run by the administrator before starting this stage.
    ```
 
 13. Optionally change the root password on ncn-m001 to match the other management NCNs.
-   
+ 
    > This step is optional and is only needed when the other management NCNs passwords were customized during the [CSM Metal Install](005-CSM-METAL-INSTALL.md) procedure. If the management NCNs still have the default password this step can be skipped.
    
    ```bash
