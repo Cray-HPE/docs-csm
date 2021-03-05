@@ -90,15 +90,14 @@ all been run by the administrator before starting this stage.
    ```
 4. Upload NCN artifacts, filling `CSM_RELEASE` with the actual release tarball.
    ```bash
-   pit# export CSM_RELEASE=csm-0.7.29
-   pit# export artdir=/var/www/ephemeral/${CSM_RELEASE}/images
-   pit# csi handoff ncn-images \
-        --k8s-kernel-path $artdir/kubernetes/*.kernel \
-        --k8s-initrd-path $artdir/kubernetes/initrd.img*.xz \
-        --k8s-squashfs-path $artdir/kubernetes/kubernetes*.squashfs \
-        --ceph-kernel-path $artdir/storage-ceph/*.kernel \
-        --ceph-initrd-path $artdir/storage-ceph/initrd.img*.xz \
-        --ceph-squashfs-path $artdir/storage-ceph/storage-ceph*.squashfs
+   pit# export CSM_RELEASE=csm-0.7.29 artdir=/var/www/ephemeral/${CSM_RELEASE}/images \
+      csi handoff ncn-images \
+      --k8s-kernel-path $artdir/kubernetes/*.kernel \
+      --k8s-initrd-path $artdir/kubernetes/initrd.img*.xz \
+      --k8s-squashfs-path $artdir/kubernetes/kubernetes*.squashfs \
+      --ceph-kernel-path $artdir/storage-ceph/*.kernel \
+      --ceph-initrd-path $artdir/storage-ceph/initrd.img*.xz \
+      --ceph-squashfs-path $artdir/storage-ceph/storage-ceph*.squashfs
    ```
 5. Set efibootmgr for booting next from Port-1 of Riser-1
    ```bash
