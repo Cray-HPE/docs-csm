@@ -1,5 +1,12 @@
 # Disk Cleanslate
 
+
+* [Disk Cleanslate](#disk-cleanslate)
+* [Use Cases](#use-cases)
+    * [Basic Wipe](#basic-wipe)
+    * [Advanced Wipe](#advanced-wipe)
+    * [Full Wipe](#full-wipe)
+
 This page will detail how disks are wiped and work-arounds for wedged 
 disks.
 
@@ -9,6 +16,7 @@ Any process covered on this page will be covered by the installer.
 
 After following these procedures an NCN can be rebooted and redeployed.
 
+<a name="use-cases"></a>
 ## Use Cases
 
 Ideally the Basic Wipe is enough, and should be tried first. All of these procedures may be ran from Linux or an initramFS/initrd emergency shell.
@@ -17,6 +25,7 @@ Ideally the Basic Wipe is enough, and should be tried first. All of these proced
 - Adopting new disks that aren't bare.
 - Fresh-installing.
 
+<a name="basic-wipe"></a>
 ### Basic Wipe
 
 - Wipe Magic Bits
@@ -29,6 +38,7 @@ ncn# ls -1 /dev/sd* /dev/disk/by-label/*
 ncn# wipefs --all --force /dev/sd* /dev/disk/by-label/*
 ```
 
+<a name="advanced-wipe"></a>
 ### Advanced Wipe
 
 - Clear Ceph
@@ -44,6 +54,7 @@ ncn-s# vgremove -f --select 'vg_name=~ceph*'
 ncn# wipefs --all --force /dev/sd* /dev/disk/by-label/*
 ```
 
+<a name="full-wipe"></a>
 ### Full-Wipe
 
 - Clear Ceph
