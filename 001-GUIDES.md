@@ -18,7 +18,7 @@ Starting an installation
 
 The three separate scenarios (above) continue the same way at this point, with preparation and then booting from the LiveCD.  
 
-* This version of the documention supports booting from a [CSM USB LiveCD] (003-CSM-USB-LIVECD.md).
+* This version of the documentation supports booting from a [CSM USB LiveCD] (003-CSM-USB-LIVECD.md).
 * A future version of this documentation will support booting from a virtual ISO method [CSM Remote LiveCD] (004-CSM-REMOTE-LIVECD.md). 
 
 [CSM USB LiveCD] (003-CSM-LIVECD.md)
@@ -26,14 +26,14 @@ The three separate scenarios (above) continue the same way at this point, with p
 Preparation of the LiveCD on a USB stick can be done from a Linux system such as a booted ncn-m001 node with either Shasta v1.3 or v1.4 or a laptop or desktop.
 
 * Download and Expand the CSM Release
-  * Install the Cray Site Init (CSI) rpm
-  * Install the CSM workaround documentation rpms
+  * Install the Cray Site Init (CSI) RPM
+  * Install the CSM workaround documentation RPMs
   * Install podman or docker to support tools required by SHASTA-CFG
 * Create the Bootable Media 
 * Create the Configuration Payload
    * Generate Installation Files and Run CSI
    * Apply CSI Workarounds
-   * Prepare SHASTA-CFG with Kubernetes cluster network configuration settings needed by helm charts and loftsman manifests, generate sealed secrets, and adjust helm chart value overrides.  See [SHASTA-CFG](067-SHASTA-CFG.md)
+   * Prepare SHASTA-CFG with Kubernetes cluster network configuration settings needed by helm charts and Loftsman manifests, generate sealed secrets, and adjust helm chart value overrides.  See [SHASTA-CFG](067-SHASTA-CFG.md)
 * Pre-Populate LiveCD Daemons Configuration and NCN Artifacts
 * Boot ncn-m001 from the LiveCD
    * First Login to ncn-m001 booted from LiveCD 

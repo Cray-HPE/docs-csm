@@ -219,7 +219,7 @@ CASMINST-980
 Deployment of the nodes starts with booting the storage nodes first, then the master nodes and worker nodes together.
 After the operating system boots on each node there are some configuration actions which take place.  Watching the
 console or the console log for certain nodes can help to understand what happens and when.  When the process is complete
-for all nodes, the Ceph storage will have been initialized and the Kuberenetes cluster will be created ready for a workload.
+for all nodes, the Ceph storage will have been initialized and the Kubernetes cluster will be created ready for a workload.
 
 
 #### Workflow

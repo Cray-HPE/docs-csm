@@ -1,7 +1,7 @@
 
 ### Utility Storage Installation Troubleshooting
 
-Ocassionally we observe an installation failure during the ceph install.  We will break these up into scenarios.  Please match your scenario prior to executing any work arounds
+Occasionally we observe an installation failure during the ceph install.  We will break these up into scenarios.  Please match your scenario prior to executing any workarounds
 
 #### Scenario 1
 

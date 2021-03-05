@@ -3,15 +3,15 @@
 This page details how to migrate NCNs from depending on their onboard NICs for PXE booting, and booting
 over the spine switches.
 
-* [Enabling UEFI PXE Mode](#enabling-uefi-pxe-mode) <a name="enabling-uefi-pxe-mode"></a>
-    * [Mellanox](#mellanox) <a name="mellanox"></a>
-        * [Print current UEFI and SR-IOV State](#print-current-uefi-and-sr-iov-state) <a name="print-current-uefi-and-sr-iov-state"></a>
-        * [Setting Expected Values](#setting-expected-values) <a name="setting-expected-values"></a>
-        * [High-Speed Network](#high-speed-network) <a name="high-speed-network"></a>
-        * [Obtaining Mellanox Tools](#obtaining-mellanox-tools) <a name="obtaininig-mellanox-tools"></a>
-    * [QLogic FastLinq](#qlogic-fastlinq) <a name="qlogic-fastlinq"></a>
-        * [Kernel Modules](#kernel-modules) <a name="kernel-modules"></a>
-* [Disabling/Removing On-Board Connections](#disabling/removing-on-board-connections) <a name="disabling/removing-on-board-connections"></a>
+* [Enabling UEFI PXE Mode](#enabling-uefi-pxe-mode) 
+    * [Mellanox](#mellanox) 
+        * [Print current UEFI and SR-IOV State](#print-current-uefi-and-sr-iov-state) 
+        * [Setting Expected Values](#setting-expected-values) 
+        * [High-Speed Network](#high-speed-network) 
+        * [Obtaining Mellanox Tools](#obtaining-mellanox-tools) 
+    * [QLogic FastLinq](#qlogic-fastlinq) 
+        * [Kernel Modules](#kernel-modules) 
+* [Disabling/Removing On-Board Connections](#disabling/removing-on-board-connections) 
 
 
 **This applies to Newer systems (Spring 2020 or newer)** where onboard NICs are still used.
@@ -23,8 +23,10 @@ This onboard NCN port came from before spine-switches were added to the shasta-n
   was responsible for every network (MTL/NMN/HMN/CAN) and was the sole driver of PXE booting for. Now, NCNs use bond interfaces and spine switches for those networks,
    however some older systems still have this legacy connection to their leaf switches and solely use it for PXE booting. This NIC is not used during runtime, and NCNs in this state should enable PXE within their PCIe devices' OpROMs and disable/remove this onboard connection.
 
+<a name="enabling-uefi-pxe-mode"></a>
 ## Enabling UEFI PXE Mode
 
+<a name="mellanox"></a>
 ### Mellanox
 
 This uses the [Mellanox CLI Tools][1] for configuring UEFI PXE from the Linux command line.
@@ -38,10 +40,11 @@ ncn# mst start
 
 Now `mst status` and other commands like `mlxfwmanager` or `mlxconfig` will work, and devices required for these commands will be created in `/dev/mst`.
 
+<a name="print-current-uefi-and-sr-iov-state"></a>
 #### Print current UEFI and SR-IOV State
 
 > UEFI: all boots are UEFI, this needs to be enabled for access to the UEFI OpROM for configuration and for usage of UEFI firmwares.
-> SR_IOV: This is currently DISABLED because it can attribute to longer POSTs on HPE blades (Gen10+, i.e. DL325 or DL385) with Mellanox ConnectX-5 PCIe cards. The technology is not yet enabled for virtualiztion usage, but may be in the future.
+> SR_IOV: This is currently DISABLED because it can attribute to longer POSTs on HPE blades (Gen10+, i.e. DL325 or DL385) with Mellanox ConnectX-5 PCIe cards. The technology is not yet enabled for virtualization usage, but may be in the future.
 
 Use this snippet to print out device name and current UEFI PXE state.
 ```bash
@@ -51,6 +54,7 @@ for MST in $(ls /dev/mst/*); do
 done
 ```
 
+<a name="setting-expected-values"></a>
 #### Setting Expected Values
 
 Use this snippet to enable and dump UEFI PXE state.
@@ -64,6 +68,7 @@ for MST in $(ls /dev/mst/*); do
 done
 ```
 
+<a name="high-speed-network"></a>
 #### High-Speed Network
 
 For worker nodes with High-Speed network attachments, the PXE and SR-IOV features should be
@@ -90,6 +95,7 @@ disabled.
 
 Your Mellanox HSN card is now neutralized, and will only be usable in a booted system.
 
+<a name="obtaining-mellanox-tools"></a>
 ###### Obtaining Mellanox Tools
 
 `mft` is installed in 1.4 NCN images, for 1.3 systems they will need to obtain the tools by hand:
@@ -103,10 +109,12 @@ linux# cd
 linux# mst start
 ```
 
+<a name="qlogic-fastlinq"></a>
 ### QLogic FastLinq
 
 These should already be configured for PXE booting.
 
+<a name="kernel-modules"></a>
 #### Kernel Modules
 
 KMP modules for Qlogic are installed:
@@ -116,6 +124,7 @@ KMP modules for Qlogic are installed:
 
 See [#casm-triage][2] if this is not the case.
 
+<a name="disabling/removing-on-board-connections"></a>
 ## Disabling/Removing On-Board Connections
 
 The onboard connection can be disabled a few ways, short of removing the physical connection one

@@ -46,7 +46,7 @@ This is the interface, one or more, that comprise the NCNs' LACP link-aggregatio
 
 ##### LACP Bonding
 NCNs may have 1 or more bond interfaces, which may be comprised from one or more physical interfaces. The
-prefferred default configuration is 2 physical network interfaces per bond. The number 
+preferred default configuration is 2 physical network interfaces per bond. The number 
 of bonds themselves depends on your systems network topology.
 
 For example, systems with 4 network interfaces on a given node could configure either of these

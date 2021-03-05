@@ -19,7 +19,7 @@ sw-leaf-001# write memory
 ## Switch-to-Switch Connections
 
 We want to disable flowcontrol in both directions for all switch-to-switch connections: spine-to-leaf; spine-to-CDU; spine-to-aggregate; and aggregate-to-leaf.  (It is unlikely that any system has every type of connection.)  We will first cover how to identify which ports are part of a switch-to-switch connection, and then we will provide the commands to make the changes.  We will provide the commands for each switch group separately, but it is strongly recommended to make the configuration changes for each end of the connection in short order; for example, for a spine-leaf connection, do not make the changes on the spine side, if you cannot also make the changes to the leaf switch end of the connection within a couple minutes.
-Repeat the above commands for each leaf switch in your system.  These changes can be peformed before the switch-to-switch connections, or concurrent with those changes.
+Repeat the above commands for each leaf switch in your system.  These changes can be performed before the switch-to-switch connections, or concurrent with those changes.
 
 Recommended Order of Flow Control Changes for Switch-to-Switch Connections
 1. Make change on sw-spine-001 side of leaf/aggregate/CDU ISL connections.

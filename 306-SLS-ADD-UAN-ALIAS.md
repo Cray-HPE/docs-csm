@@ -98,7 +98,7 @@ This guide shows the process for manually adding aliases to UAN nodes in SLS. St
 
     After a few minutes the -mgmt name should begin resolving. Communication with the BMC should be available via the alias `uan01-mgmt`.
 
-4. Confirm that the BMC for the UAN is up and running at the alasied address.
+4. Confirm that the BMC for the UAN is up and running at the aliased address.
     ```
     ncn-w001# ping -c 4 uan01-mgmt
     PING uan01-mgmt (10.254.2.53) 56(84) bytes of data.

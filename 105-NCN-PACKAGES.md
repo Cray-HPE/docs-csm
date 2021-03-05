@@ -1,6 +1,6 @@
 # NCN Packages
 
-These are defined elserwhere, but this list updates for quick-reference. These lists are generated
+These are defined elsewhere, but this list updates for quick-reference. These lists are generated
 on running nodes, but to account for drift there are collection commands listed for each image.
 
 ## Kubernetes Images

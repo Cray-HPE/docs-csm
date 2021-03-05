@@ -31,7 +31,7 @@ ipmitool -I lanplus -U $username -E -H ncn-m003-mgmt chassis bootdev pxe options
 ipmitool -I lanplus -U $username -E -H ncn-w003-mgmt chassis bootdev pxe options=efiboot,persistent
 ipmitool -I lanplus -U $username -E -H ncn-w002-mgmt chassis bootdev pxe options=efiboot,persistent
 
-# ONE TIME BOOT INTO DISK; rebooting again will PXE; can run this everytime to reboot to disk for developers.
+# ONE TIME BOOT INTO DISK; rebooting again will PXE; can run this every time to reboot to disk for developers.
 ipmitool -I lanplus -U $username -E -H ncn-s001-mgmt chassis bootdev disk options=efiboot
 ipmitool -I lanplus -U $username -E -H ncn-s002-mgmt chassis bootdev disk options=efiboot
 ipmitool -I lanplus -U $username -E -H ncn-s003-mgmt chassis bootdev disk options=efiboot
@@ -44,7 +44,7 @@ ipmitool -I lanplus -U $username -E -H ncn-w002-mgmt chassis bootdev disk option
 
 ### Set BMCs to DHCP
 
-If you are reinstalling a system (otherise skip to [Next: Deploy the NCNs](#next-deploy-the-ncns), the BMCs for the NCNs may be set to static.  We check `/var/lib/misc/dnsmasq.leases` for setting up the symlinks for the artifacts each node needs to boot.  So if your BMCs are set to static, those artifacts will not get setup correctly.  You can set them back to DHCP by using a command as such:
+If you are reinstalling a system (otherwise skip to [Next: Deploy the NCNs](#next-deploy-the-ncns), the BMCs for the NCNs may be set to static.  We check `/var/lib/misc/dnsmasq.leases` for setting up the symlinks for the artifacts each node needs to boot.  So if your BMCs are set to static, those artifacts will not get setup correctly.  You can set them back to DHCP by using a command as such:
 
 ```bash
 for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
@@ -74,8 +74,8 @@ done
 
 The disk-write is for two reasons:
 - Running the squashFS from disk frees memory, vs. running it in memory
-- The local image serves as a fallback with a Grub2 bootlader
-- Persistence; runniing in memory is ephemeral 
+- The local image serves as a fallback with a Grub2 bootloader
+- Persistence; running in memory is ephemeral 
 
 ### Installed
 
@@ -85,7 +85,7 @@ The disk-write is for two reasons:
 2. cray-tftp replies with a compiled iPXE binary pointing to the next chain..
 3. cray-bss replies with a final script to point the node to its artifacts (squashFS).
 4. iPXE script runs and fetches from S3.
-5. Artifacts dowload and write to disk (squashFS), if new.
+5. Artifacts download and write to disk (squashFS), if new.
 6. System pivots to local squashFS.
 7. Cloud-init provides personalization.
 

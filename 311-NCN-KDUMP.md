@@ -16,7 +16,7 @@ This workaround is tedious, and will require some close attention, and a test cr
 2. Restart the kdump service
 3. Expand the auto-generated kdump initrd
 4. Modify the save_dump.sh script
-5. Rebuild the initird with the modified contents
+5. Rebuild the initrd with the modified contents
 6. Restart the kdump service again
 7. Test crash the node
 
@@ -72,7 +72,7 @@ Make that directory so it can be mounted there.
 mkdir /var/lib/kubelet/crash
 ```
 
-### Rebuild the initird with the modified contents
+### Rebuild the initrd with the modified contents
 
 ```bash
 # backup original initrd

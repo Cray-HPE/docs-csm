@@ -5,7 +5,7 @@ This page serves to provide technical detail for the various filesystems on the 
 
 ### Disk Layout Quick-Reference Tables
 
-The table below represents all recognizable FSLabels on any given NCN, varying slightly by node-role (i.e. kubernetes-manager vs. kubernetes-worker).
+The table below represents all recognizable FS labels on any given NCN, varying slightly by node-role (i.e. kubernetes-manager vs. kubernetes-worker).
 
 ##### Nomenclature
 
@@ -80,7 +80,7 @@ ncn-m002#  losetup -a
 
 Below is the layout of what a persistent system looks like. Note, this means that persistent capacity
 is there, but admins should beware of reset toggles on unfamiliar systems. There are toggles to reset
-overlays that are, by default, toggled `off` (so data persistencve be default is safe but one should
+overlays that are, by default, toggled `off` (so data persistence be default is safe but one should
 not assume).
 
 ```bash
@@ -142,7 +142,7 @@ drwxr-xr-x 3 root root  18 Oct  5 19:16 srv
 drwxrwxrwt 2 root root  85 Oct 16 14:50 tmp
 drwxr-xr-x 8 root root  76 Oct 13 16:52 var
 ```
-> Remeber: `/run/overlayfs` is a symbolic link to the real disk `/run/initramfs/overlayfs/*`.
+> Remember: `/run/overlayfs` is a symbolic link to the real disk `/run/initramfs/overlayfs/*`.
 
 ##### Layering - Upperdir and Lowerdir(s)
 
@@ -307,7 +307,7 @@ ncn# systemctl stop metalfs
 
 # Old/Retired FS-Labels
 
-Deprecated FSlabels/partitions from Shasta 1.3.X (no longer in Shasta 1.4.0 and onwards).
+Deprecated FS labels/partitions from Shasta 1.3.X (no longer in Shasta 1.4.0 and onwards).
 
 | FS Label | Partitions | Nodes	| Device | Size on Disk | Work Order | Memo
 | --- | --- | ---| --- | --- | --- | --- |

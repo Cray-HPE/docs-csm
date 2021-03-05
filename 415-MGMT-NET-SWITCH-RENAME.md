@@ -120,7 +120,7 @@ This system needs to do the renames in this order: do CDUs (7 to 8, 8 to 9) and 
        aliases: []
    ```
 
-2. Save the running-config from all swiches before you start.
+2. Save the running-config from all switches before you start.
 
    Note: Mellanox switches require the "enable" command before doing "show running-config"
 
@@ -414,7 +414,7 @@ Logout of the switch and return using the new IP address for vlan 2 so that vlan
    pit#
    ```
 
-9. Save the running-config from all swiches after completion
+9. Save the running-config from all switches after completion
 
    Note: Mellanox switches require the "enable" command before doing "show running-config"
 

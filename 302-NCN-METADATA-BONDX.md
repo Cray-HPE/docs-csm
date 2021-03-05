@@ -4,7 +4,7 @@ This procedure will detail how to collect the NCN MAC addresses from a Shasta sy
 you will have the MAC addresses needed for the Bootstrap MAC, Bond0 MAC0, and Bond0 MAC1 columns in `ncn_metadata.csv`.
 
 The Bootstrap Mac address will be used for identification of this node during the early part of the PXE boot process before the bonded interface can be established.
-The Bond0 MAC0 and Bond0 MAC1 are the MAC addressess for the physical interfaces that your node will use for the various VLANs.
+The Bond0 MAC0 and Bond0 MAC1 are the MAC addresses for the physical interfaces that your node will use for the various VLANs.
 The Bond0 MAC0 and Bond0 MAC1 should be on the different network cards to establish redundancy for a failed network card.
 On the other hand, if the node has only a single network card, then MAC1 and MAC0 will still produce a valid configuration if they do reside on the same physical card.
 
@@ -15,7 +15,7 @@ On the other hand, if the node has only a single network card, then MAC1 and MAC
    - [MAC Collection](#mac-collection)
 - [Procedure: Serial consoles](#procedure-serial-consoles)
 
-The easy way to do this leverages the NIC-dump provided by the metal-ipxe package. This page will walk-throuogh
+The easy way to do this leverages the NIC-dump provided by the metal-ipxe package. This page will walk-through
 booting NCNs and collecting their MACs from the conman console logs.
 > The alternative is to use serial cables (or SSH) to collect the MACs from the switch ARP tables, this can become exponentially difficult for large systems.
 > If this is the only way, please proceed to the bottom of this page.
