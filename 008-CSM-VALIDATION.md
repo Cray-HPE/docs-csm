@@ -271,36 +271,13 @@ Verify that the command has exit code 0, reports no errors, and resolves the add
 
 ### Verify Spire Agent is Running on Kuberetes NCNs
 
-Execute the following commands on ```ncn-m002```, adjusting the ```-w``` argument of ```pdsh``` to include all of your Kubernetes master and worker nodes (excluding the PIT node):
+Execute the following command on all Kubernetes NCNs (excluding the PIT):
 
 ```bash
-ncn-m002:~ # export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-ncn-m002:~ # pdsh -w ncn-m00[2-3],ncn-w00[1-3] -f 1 'goss -g /opt/cray/tests/install/ncn/tests/goss-spire-agent-service-running.yaml validate'
-ncn-m002: Warning: Permanently added 'ncn-m002,10.252.1.11' (ECDSA) to the list of known hosts.
-ncn-m002: ..
-ncn-m002: 
-ncn-m002: Total Duration: 0.011s
-ncn-m002: Count: 2, Failed: 0, Skipped: 0
-ncn-m003: Warning: Permanently added 'ncn-m003,10.252.1.10' (ECDSA) to the list of known hosts.
-ncn-m003: ..
-ncn-m003: 
-ncn-m003: Total Duration: 0.012s
-ncn-m003: Count: 2, Failed: 0, Skipped: 0
-ncn-w001: Warning: Permanently added 'ncn-w001,10.252.1.9' (ECDSA) to the list of known hosts.
-ncn-w001: ..
-ncn-w001: 
-ncn-w001: Total Duration: 0.013s
-ncn-w001: Count: 2, Failed: 0, Skipped: 0
-ncn-w002: Warning: Permanently added 'ncn-w002,10.252.1.8' (ECDSA) to the list of known hosts.
-ncn-w002: ..
-ncn-w002: 
-ncn-w002: Total Duration: 0.037s
-ncn-w002: Count: 2, Failed: 0, Skipped: 0
-ncn-w003: Warning: Permanently added 'ncn-w003,10.252.1.7' (ECDSA) to the list of known hosts.
-ncn-w003: ..
-ncn-w003: 
-ncn-w003: Total Duration: 0.013s
-ncn-w003: Count: 2, Failed: 0, Skipped: 0
+ncn:~ # goss -g /opt/cray/tests/install/ncn/tests/goss-spire-agent-service-running.yaml validate
+..
+
+Total Duration: 0.011s
 ```
 
 Known failures and how to recover:
