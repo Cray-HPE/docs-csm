@@ -38,7 +38,7 @@
         4. [UAI Classes](#main-uasconfig-classes)
             1. [Listing UAI Classes](#main-uasconfig-classes-list)
             2. [Adding a UAI Class](#main-uasconfig-classes-add)
-            3. [Examinig a UAI Class](#main-uasconfig-classes-examine)
+            3. [Examining a UAI Class](#main-uasconfig-classes-examine)
             4. [Updating a UAI Class](#main-uasconfig-classes-update)
             5. [Deleting a UAI Class](#main-uasconfig-classes-delete)
     5. [UAI Management](#main-uaimanagement)
@@ -125,7 +125,7 @@ UAIs run on Kubernetes worker nodes.  There is a mechanism using Kubernetes labe
 
 ### UAI Network Attachments (macvlans) <a name="main-concepts-netattach"></a>
 
-UAIs need to be able to reach compute nodes across the node managment network (NMN).  When the compute node NMN is structured as multiple subnets, this requires routing form the UAIs to those subnets.  The default route in a UAI goes to the public network through the customer access network (CAN) so that will not work for reaching compute nodes.  To solve this problem, UAS installs Kubernetes network attachments within the Kubernetes `user` namespace, one of which is used by UAIs.  The type of network attachment used on Shasta hardware for this purpose is a `macvlan` network attachment, so this is often referred to on Shasta systems as "macvlans".  This network attachment integrates the UAI into the NMN on the UAI host node where the UAI is running and assigns the UAI an IP address on that network.  It also installs a set of routes in the UAI that are used to reach the compute node subnets on the NMN.
+UAIs need to be able to reach compute nodes across the node management network (NMN).  When the compute node NMN is structured as multiple subnets, this requires routing form the UAIs to those subnets.  The default route in a UAI goes to the public network through the customer access network (CAN) so that will not work for reaching compute nodes.  To solve this problem, UAS installs Kubernetes network attachments within the Kubernetes `user` namespace, one of which is used by UAIs.  The type of network attachment used on Shasta hardware for this purpose is a `macvlan` network attachment, so this is often referred to on Shasta systems as "macvlans".  This network attachment integrates the UAI into the NMN on the UAI host node where the UAI is running and assigns the UAI an IP address on that network.  It also installs a set of routes in the UAI that are used to reach the compute node subnets on the NMN.
 
 ## UAI Host Node Selection <a name="main-hostnodes"></a>
 
@@ -247,7 +247,7 @@ spec:
       nmn_vlan: vlan002
       # NOTE: the term DHCP here is misleading, this is merely
       #       a range of reserved IPs for UAIs that should not
-      #       be handed out to others becase the network
+      #       be handed out to others because the network
       #       attachment will hand them out to UAIs.
       nmn_dhcp_start: 10.252.2.10
       nmn_dhcp_end: 10.252.3.254
@@ -1190,7 +1190,7 @@ where `--image-id <image-id>` specifies the UAI image identifier of the UAI imag
 
 Only the `--image-id` option is required to create a UAI class.  In that case, a UAI class with the specified UAI Image and no volumes will be created.
 
-#### Examinig a UAI Class <a name="main-uasconfig-classes-examine"></a>
+#### Examining a UAI Class <a name="main-uasconfig-classes-examine"></a>
 
 To examine an existing UAI class, use a command of the following form
 
@@ -2380,7 +2380,7 @@ to use a different name.  All steps in this procedure must be run from a true NC
 Identify the Sessiontemplate name to use. A full list may be found with:
 
 ```
-ncn-w001# cray bos v1 sessiontemplate list --format yaml
+ncn-w001# cray bos sessiontemplate list --format yaml
 - boot_sets:
     compute:
       boot_ordinal: 2
@@ -2413,7 +2413,7 @@ ncn-w001# SESSION_NAME=wlm-sessiontemplate-0.1.0
 Using the Sessiontemplate name, download a compute node squashfs from a BOS sessiontemplate name:
 
 ```
-ncn-w001# SESSION_ID=$(cray bos v1 sessiontemplate describe $SESSION_NAME --format json | jq -r '.boot_sets.compute.path' | awk -F/ '{print $4}')
+ncn-w001# SESSION_ID=$(cray bos sessiontemplate describe $SESSION_NAME --format json | jq -r '.boot_sets.compute.path' | awk -F/ '{print $4}')
 
 ncn-w001# cray artifacts get boot-images $SESSION_ID/rootfs rootfs.squashfs
 ```
@@ -2833,7 +2833,7 @@ The procedure is to find the name of the UAI in question, use that with `kubectl
 
 If problems occur while making or working with a custom end-user UAI image some basic troubleshooting questions to ask are:
 
-* Does SESSION_NAME match an actual entry in "cray bos v1 sessiontemplate list"?
+* Does SESSION_NAME match an actual entry in "cray bos sessiontemplate list"?
 * Is SESSION_ID set to an appropriate uuid format? Did the awk command not parse the uuid correctly?
 * Did the file /etc/security/limits.d/99-slingshot-network.conf get removed from the tarball correctly?
 * Does the ENTRYPOINT /usr/bin/uai-ssh.sh exist?

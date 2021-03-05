@@ -4,7 +4,7 @@ This page describes how to setup a bonded configuration from the Non-Compute nod
 
 # Requirements
 
-- Console Access to the switches participating in MLAG confguration.
+- Console Access to the switches participating in MLAG configuration.
 - Two switches running the same firmware version.
 - Three cables connected between the switches, two for the Inter Switch Link (ISL) and one for the Keepalive.
 

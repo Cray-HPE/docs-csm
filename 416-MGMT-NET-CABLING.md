@@ -98,12 +98,12 @@ For systems that include 4 aggregation switches the cabling will look like the f
 
 ### UAN Cabling
 
-| Server Port        | Management Network Port        | Speed | Use / Configuration        |
-|--------------------|--------------------------------|-------|----------------------------|
-| OCP port 1         | spine or aggr pair, switch 1/2 | 25Gb  | Managment Network NMN      |
-| OCP port 2         | spine or aggr pair, switch 1/2 | 25Gb  | Managment Network CAN bond |
-| PCIe Slot 1 port 1 | spine or aggr pair, switch 2/2 | 25Gb  | NONE (Shasta v1.4)         |
-| PCIe Slot 1 port 2 | spine or aggr pair, switch 2/2 | 25Gb  | Managment Network CAN bond |
+| Server Port        | Management Network Port        | Speed | Use / Configuration         |
+|--------------------|--------------------------------|-------|-----------------------------|
+| OCP port 1         | spine or aggr pair, switch 1/2 | 25Gb  | Management Network NMN      |
+| OCP port 2         | spine or aggr pair, switch 1/2 | 25Gb  | Management Network CAN bond |
+| PCIe Slot 1 port 1 | spine or aggr pair, switch 2/2 | 25Gb  | NONE (Shasta v1.4)          |
+| PCIe Slot 1 port 2 | spine or aggr pair, switch 2/2 | 25Gb  | Management Network CAN bond |
 
 #### SHCD Example
 

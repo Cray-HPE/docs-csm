@@ -109,12 +109,12 @@ the booted OS.
    follow the prompts.
 2. You can no use the LiveCD to look around, or you may continue setting the LiveCD up for [a CSM installation](004-CSM-REMOTE-LIVECD.md).
 
-> **`NOTE`** The root OS `/` directory is writeable without persistence. This means that restarting the machine will result in all changes being lost. Before restarting, consider following [Backing up the Overlay COW FS](#backing-up-the-overlay-cow-fs) and the accompanying [Restoring from an Overlay COW FS Backup](#restoring-from-an-overlay-cow-fs-backup) section.
+> **`NOTE`** The root OS `/` directory is writable without persistence. This means that restarting the machine will result in all changes being lost. Before restarting, consider following [Backing up the Overlay COW FS](#backing-up-the-overlay-cow-fs) and the accompanying [Restoring from an Overlay COW FS Backup](#restoring-from-an-overlay-cow-fs-backup) section.
 
 <a name="backing-up-the-overlay-cow-fs"></a>
 ### Backing up the Overlay COW FS
 
-You can backup the writeable overlay upper-dir so that your changes are not lost after a reboot or when updating your ISO.
+You can backup the writable overlay upper-dir so that your changes are not lost after a reboot or when updating your ISO.
 
 This requires that you have a location that you can SSH at tar-ball to as a backup.
 

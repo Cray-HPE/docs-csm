@@ -557,7 +557,7 @@ introduced and bugs are fixed.
 <a name="tracked-sealed-secrets"></a>
 ## Tracked Sealed Secrets
 
-Tracked sealed secrets are regenerated everytime secrets are seeded (see the
+Tracked sealed secrets are regenerated every time secrets are seeded (see the
 use of `utils/secrets-seed-customizations.sh` above). View currently tracked
 sealed secrets via:
 

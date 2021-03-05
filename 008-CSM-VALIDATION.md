@@ -362,13 +362,31 @@ You should run a check for each of the following services after an install. Thes
 
 \* The ipxe shortcut runs a check of both the iPXE service and the TFTP service.
 
+The following is a convenient way to run all of the tests and see if they passed:
+
+```bash
+for S in bos cfs conman crus ims ipxe vcs ; do
+    LOG=/root/cmsdev-$S-$(date +"%Y%m%d_%H%M%S").log
+    echo -n "$(date) Starting $S check ... "
+    START=$SECONDS
+    /usr/local/bin/cmsdev test -v $S > $LOG 2>&1
+    rc=$?
+    let DURATION=SECONDS-START
+    if [ $rc -eq 0 ]; then
+        echo "PASSED (duration: $DURATION seconds)"
+    else
+        echo "FAILED (duration: $DURATION seconds)"
+        echo " # See $LOG for details"
+    fi
+done
+```
 
 <a name="booting-csm-barebones-image"></a>
 ## Booting CSM Barebones Image
 
-Included with the Cray System Manaement (CSM) release is a pre-built node image that can be used
+Included with the Cray System Management (CSM) release is a pre-built node image that can be used
 to validate that core CSM services are available and responding as expected. The CSM barebones
-image contains only the minimal set of RPMS and configuation required to boot an image and is not
+image contains only the minimal set of RPMS and configuration required to boot an image and is not
 suitable for production usage. To run production work loads, it is suggested that an image from
 the Cray OS (COS) product, or similar, be used.
 
@@ -394,6 +412,14 @@ rpms that are not installed with the CSM product. The CSM Barebones recipe can b
 Cray OS (COS) product stream is also installed on to the system.
 
 In future releases of the CSM product, work will be undertaken to resolve these dependency issues.
+
+---
+
+---
+**NOTE**
+
+You will need to use the CLI in order to complete these tasks. If needed, see the
+[Initialize and Authorize the CLI](#uas-uai-init-cli) section.
 
 ---
 
@@ -448,10 +474,10 @@ The session template below can be copied and used as the basis for the BOS Sessi
 // /sessionTemplate/shasta-1.4-csm-bare-bones-image
 ```
 
-### Find an available node and boot the session template
+### Find an available compute node and boot the session template
 
 ```ini
-# cray hsm state components list --role Compute
+# cray hsm state components list --role Compute --enabled true
 ...
 [[Components]]
 ID = "x3000c0s17b1n0"
@@ -555,6 +581,7 @@ cray-conman-b69748645-qtfxj:/ # conman -j x9000c1s7b0n1
 <a name="uas-uai-tests"></a>
 ## UAS / UAI Tests
 
+<a name="uas-uai-init-cli"></a>
 ### Initialize and Authorize the CLI
 
 The procedures below use the CLI as an authorized user and run on two separate node types.  The first part runs on the LiveCD node while the second part runs on a non-LiveCD kubernetes master or worker node.  When using the CLI on either node, the CLI configuration needs to be initialized and the user running the procedure needs to be authorized.  This section describes how to initialize the CLI for use by a user and authorize the CLI as a user to run the procedures on any given node.  The procedures will need to be repeated in both stages of the validation procedure.

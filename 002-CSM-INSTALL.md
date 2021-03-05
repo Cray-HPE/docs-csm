@@ -109,7 +109,7 @@ off the system, and limiting new logins to application nodes.
     * v1.3.2 use the "sat bootsys shutdown" command to do compute nodes and application nodes at the same time.
     See the Cray Shasta Administration Guide 1.3 S-8001 RevF (or later) in the section "Shut Down and Power Off Compute and User Access Nodes"
 
-    * v1.3.0 use the "cray bos shutdown command" for the compute nodes and then for the application nodes
+    * v1.3.0 use the "cray bos" command to create a shutdown session for the compute nodes and then for the application nodes
     See the Cray Shasta Administration Guide 1.3 S-8001 RevC (or later) in the section "Shut Down and Power Off Compute and User Access Nodes"
 
 

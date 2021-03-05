@@ -16,7 +16,7 @@ This page describes rebooting and deploying the non-compute node that is current
 <a name="required-services"></a>
 ## Required Services
 
-These services must be healthy in kubernetes before the reboot of the LiveCD can take place.
+These services must be healthy in Kubernetes before the reboot of the LiveCD can take place.
 
 Required Platform Services:
 - cray-dhcp-kea
@@ -128,7 +128,7 @@ all been run by the administrator before starting this stage.
 6. **`SKIP THIS STEP IF USING USB LIVECD`** The remote LiveCD will lose all changes and local data once it is rebooted. 
    It is advised to backup the prep directory for the LiveCD off of the CRAY before rebooting. This will facilitate 
    setting the LiveCD up again in the event of a bad reboot. Follow the procedure in 
-   [VirtuaL ISO Boot - Backing up the OverlayFS](062-LIVECD-VIRTUAL-ISO-BOOT.md#backing-up-the-overlay-cow-fs).
+   [Virtual ISO Boot - Backing up the OverlayFS](062-LIVECD-VIRTUAL-ISO-BOOT.md#backing-up-the-overlay-cow-fs).
    After completing that, return here and proceed to the next step.
 7. Optionally setup conman or serial console if not already on one from any laptop
    ```bash
@@ -141,7 +141,7 @@ all been run by the administrator before starting this stage.
    external# ipmitool -I lanplus -U $username -E -H ${SYSTEM_NAME}-ncn-m001-mgmt sol activate
    ```
 8. Collect the CAN IPs for logging into other NCNs while this happens. This is useful for interacting
-   and debugging the kubernetes cluster while the LiveCD is `offline`.
+   and debugging the Kubernetes cluster while the LiveCD is `offline`.
    ```bash
    pit# ssh ncn-m002
    ncn-m002# ip a show vlan007 | grep inet

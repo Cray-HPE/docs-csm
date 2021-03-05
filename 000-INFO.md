@@ -5,7 +5,7 @@ See [Guides](001-GUIDES.md) for the different scenarios to which this documentat
 
 The rest of this page describes the conventions used in the documentation:
 * [Page naming or indexing] (#page-indexing) conventions 
-* [Annotations] (#annotations) for how we identify sections of the documention that do not apply to all systems 
+* [Annotations] (#annotations) for how we identify sections of the documentation that do not apply to all systems 
 * [Command Prompt Conventions] (#command-prompt-conventions) which describe the context for user, host, directory, chroot environment, or container environment
 
 <a name="page-indexing"></a>
@@ -65,7 +65,7 @@ The host name in a command prompt indicates where the command must be run.  The 
 - Any non-root account is indicated with account@hostname>.  A non-privileged account is referred to as user.
 
 ## Node abbreviations
-The following list conatins abbrev iations for nodes used below
+The following list contains abbreviations for nodes used below
 
 * CN - compute Node
 * NCN - Non Compute Node
@@ -160,9 +160,9 @@ user@hostname > cd /usr/bin
 user@hostname > ./command
 ```
 
-## Commmand prompts for network switch configuration
+## Command prompts for network switch configuration
 
-The prompts when doing network swtich configuration can vary widely
+The prompts when doing network switch configuration can vary widely
 depending on which vendor switch is being configured and the context
 of the item being configured on that switch.  There may be two levels
 of user privilege which have different commands available and a

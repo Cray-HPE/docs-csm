@@ -6,9 +6,9 @@ recommended to use the Serial/COM ports on the spine and leaf switches.
 This guide will instruct the user on procuring MAC addresses for the NCNs metadata files
 with the serial console.
 
-Milaeage may vary, as some obstacles such as BAUDRATE and `terminal` usage vary per manufactorer.
+Milaeage may vary, as some obstacles such as BAUDRATE and `terminal` usage vary per manufacturer.
 
-### Common Manufactorers
+### Common Manufacturers
 (click any for links to support/document portals)
 
 - [Aruba][1]
@@ -46,9 +46,9 @@ On Mellanox switches if the console is not responding when opened try holding `C
 
 ##### Tip : No USB TTY Device
 
-If you can't see your device in `/dev/tty*` then follow `dmesg -w` and try reseating your USB cable (unplug the end in the NCN, and plug it back in). Observe the `dmesg -w` output, does it show errors pertainig to USB? The cable may be bad, or you may need to reboot.
+If you can't see your device in `/dev/tty*` then follow `dmesg -w` and try reseating your USB cable (unplug the end in the NCN, and plug it back in). Observe the `dmesg -w` output, does it show errors pertaining to USB? The cable may be bad, or you may need to reboot.
 
-## Addtional External References
+## Additional External References
 
 - [USB-B to RJ-45 rs232 Cable][4]
 - [USB-B to USB-C adapter][5]

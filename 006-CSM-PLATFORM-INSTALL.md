@@ -87,7 +87,7 @@ secret/site-init created
 > ```
 
 > **`WARNING`** If for some reason the system customizations need to be
-> modified to complete product installtion, administrators must first update
+> modified to complete product installation, administrators must first update
 > `customizations.yaml` in the `site-init` Git repository, which may no longer
 > be mounted on any cluster node, and then delete and recreate the `site-init`
 > secret as shown below.
@@ -302,5 +302,13 @@ time="2021-02-23T19:55:54Z" level=fatal msg="Error copying tag \"dir:/image/graf
 + return
 ```
 
-This error is most likely _intermittent_ and running `./install.sh --continue`
+Or a similar error:
+```bash
+pit# ./install.sh --continue
+...
+time="2021-03-04T22:45:07Z" level=fatal msg="Error copying ref \"dir:/image/cray/cray-ims-load-artifacts:1.0.4\": Error trying to reuse blob sha256:1ec886c351fa4c330217411b0095ccc933090aa2cd7ae7dcd33bb14b9f1fd217 at destination: Head \"https://registry.local/v2/cray/cray-ims-load-artifacts/blobs/sha256:1ec886c351fa4c330217411b0095ccc933090aa2cd7ae7dcd33bb14b9f1fd217\": dial tcp: lookup registry.local: Temporary failure in name resolution"
++ return
+```
+
+These errors are most likely _intermittent_ and running `./install.sh --continue`
 again is expected to succeed.

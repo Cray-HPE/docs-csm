@@ -2,7 +2,7 @@
 
 This firmware is updated manually, and needs to be checked prior to an install.
 
-> **`IMPORTANT NOTE`** systems with multi-chassis link-aggregations must meet this pages minimum specificaitons for optimal deployment.
+> **`IMPORTANT NOTE`** systems with multi-chassis link-aggregations must meet this pages minimum specifications for optimal deployment.
 
 ## Management Network Switches
 

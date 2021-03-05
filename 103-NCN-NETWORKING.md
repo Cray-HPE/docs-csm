@@ -35,7 +35,7 @@ The source code for the rule generation is in [metal-ipxe][1], but for technical
 
 # Vendor and Bus ID Identification
 
-The initial boot of an NCN sets interface udev rules since it has no discovery methood yet.
+The initial boot of an NCN sets interface udev rules since it has no discovery method yet.
 
 The information needed is:
 - PCI **Vendor** IDs for devices/cards to be used on the Management network.
@@ -46,7 +46,7 @@ The information needed is:
 
 ![PCI Configuration Space](https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Pci-config-space.svg/600px-Pci-config-space.svg.png)
 
-The information belonds to the first 4 bytes of the PCI header, and admin can obtain it
+The information belongs to the first 4 bytes of the PCI header, and admin can obtain it
  using `lspci` or your preferred method for reading the PCI bus.
 
 ### Collection Example
@@ -56,9 +56,9 @@ lspci | grep c6:00.0
 ```
 ### Popular Vendor ID and Device ID Table
 
-These are commononly found in Cray computers.
+These are commonly found in Cray computers.
 
-The Device and Vendor IDs are used in iPXE for bootstrapping the nodes, this allows genertors to
+The Device and Vendor IDs are used in iPXE for bootstrapping the nodes, this allows generators to
 swap IDs out for certain systems until smarter logic can be added to cloud-init.
 
 > The bolded numbers are the defaults that live in [metal-ipxe's boot script.](https://stash.us.cray.com/projects/MTL/repos/ipxe/browse/boot/script.ipxe).

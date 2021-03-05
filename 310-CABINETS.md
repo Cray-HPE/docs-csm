@@ -4,7 +4,7 @@ This page provides directions on constructing the optional "cabinets.yaml" file.
 
 The `cabinets.yaml` file is particularly important for upgrades from Shasta v1.3 systems as it allows the preservation of cabinet names and network VLANs.  An audit of the existing system will be required to gather the data needed to populate `cabinets.yaml`. In the example below the VLANs for cabinets 1000 and 1001 are overridden.  This example can be used to preserve existing cabinet VLANs and prevent reconfiguring switches and CMMs.  Similar cabinet numbering and preservation of VLANs can be used for Hill and River cabinets.
 
-Use for original cabinet data for v1.3 systems use [SLS Dump data collected from the system](068-HARVEST-13-CONFIG.md). An exerpt of the data is shown below.  Cabinet names and VLANs for `comptype_cabinet` should be collected from SLS data and used to populate `cabinets.yaml` for the system.  Failure to do this will result in needing to change switch and CMM configurations.
+Use for original cabinet data for v1.3 systems use [SLS Dump data collected from the system](068-HARVEST-13-CONFIG.md). An excerpt of the data is shown below.  Cabinet names and VLANs for `comptype_cabinet` should be collected from SLS data and used to populate `cabinets.yaml` for the system.  Failure to do this will result in needing to change switch and CMM configurations.
 
 ```
    "x9000": {
@@ -56,9 +56,9 @@ cabinets:
   starting_id: 3000
 ```
 
-In the above example file, there are 2 Hill cabinets that will be automatically numbereed as 9000 and 9001.   The Mountain cabainets appear in 3 groupings of four ids.  The River cabinets are non-contiguous in 4 separated ids.
+In the above example file, there are 2 Hill cabinets that will be automatically numbered as 9000 and 9001.   The Mountain cabinets appear in 3 groupings of four ids.  The River cabinets are non-contiguous in 4 separated ids.
 
 A system will Hill cabinets can have 1 to 4 cabinet ids.  There is no limit on the number of Mountain or River cabinets.
 
-When the above `cabinets.yaml` file is used, the fields for each type will take precedence over any commandline argument to "csi config init" for starting-mountain-cabinet, starting-river-cabinet, starting-hill-cabinet, mountain-cabinets, river-cabinets, or hill-cabinets.  If these command line arguments provide information which is not in the cabinets.yaml file, then the information will be merged from them with the information provided in cabinets.yaml.
+When the above `cabinets.yaml` file is used, the fields for each type will take precedence over any command line argument to "csi config init" for starting-mountain-cabinet, starting-river-cabinet, starting-hill-cabinet, mountain-cabinets, river-cabinets, or hill-cabinets.  If these command line arguments provide information which is not in the cabinets.yaml file, then the information will be merged from them with the information provided in cabinets.yaml.
 

@@ -77,7 +77,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
      linux# zypper ar -fG "./${CSM_RELEASE}/rpm/embedded" "${CSM_RELEASE}-embedded"
      ```
      
-   * Install `podman` and `podman-cni-config` pacakges:
+   * Install `podman` and `podman-cni-config` packages:
      ```bash
      linux# zypper in -y podman podman-cni-config
      ```
@@ -103,7 +103,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
      ```
 
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
-   from the `./${CSM_RELEASE}/rpm/ebedded` directory.
+   from the `./${CSM_RELEASE}/rpm/embedded` directory.
 
 
 <a name="create-the-bootable-media"></a>
@@ -282,12 +282,12 @@ After gathering the files into the working directory, generate your configs:
    Run the command "csi config init --help" to get more information about the parameters mentioned in the example command above and others which are available.
 
    Notes about parameters to "csi config init":
-   * The application_node_config.yaml file is optional, but if you have one describing the mapping between prefixes in hmn_connections.csv that should be maped to HSM subroles, you need to include a command line option to have it used.
+   * The application_node_config.yaml file is optional, but if you have one describing the mapping between prefixes in hmn_connections.csv that should be mapped to HSM subroles, you need to include a command line option to have it used.
    * The bootstrap-ncn-bmc-user and bootstrap-ncn-bmc-pass must match what is used for the BMC account and its password for the management NCNs.
    * Set site parameters (site-domain, site-ip, site-gw, site-nic, site-dns) for the information which connects the ncn-m001 (PIT) node to the site.  The site-nic is the interface on this node connected to the site.  If coming from Shasta v1.3, the information for all of these site parameters was collected.
    * There are other interfaces possible, but the install-ncn-bond-members are typically: p1p1,p10p1 for HPE nodes; p1p1,p1p2 for Gigabyte nodes; and p801p1,p801p2 for Intel nodes.  If coming from Shasta v1.3, this information was collected for ncn-m001.
    * Set the three cabinet parameters (mountain-cabinets, hill-cabinets, and river-cabinets) to the number of each cabinet which are part of this system.
-   * The starting cabinet number for each type of cabinet (for example, starting-mountain-cabinet) has a default that can be overriden.  See the "csi config init --help" 
+   * The starting cabinet number for each type of cabinet (for example, starting-mountain-cabinet) has a default that can be overridden.  See the "csi config init --help" 
    * For systems that use non-sequential cabinet id numbers, use cabinets-yaml to include the cabinets.yaml file.  This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to explicitly specify the id of every cabinet in the system.  This process is described [here](310-CABINETS.md).
    * An override to default cabinet IPv4 subnets can be made with the hmn-mtn-cidr and nmn-mtn-cidr parameters.  These are also used to maintain existing configuration in a Shasta v1.3 system.
    * Several parameters (can-gateway, can-cidr, can-static-pool, can-dynamic-pool) describe the CAN (Customer Access network).  The can-gateway is the common gateway IP used for both spine switches and commonly referred to as the Virtual IP for the CAN.  The can-cidr is the IP subnet for the CAN assigned to this system. The can-static-pool and can-dynamic-pool are the MetalLB address static and dynamic pools for the CAN. The can-external-dns is the static IP assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded.   The can-external-dns IP must be within the can-static-pool range.
@@ -336,11 +336,11 @@ This will enable SSH, and other services when the LiveCD starts.
 1. Set system name and enter prep directory
     ```bash
     linux# export SYSTEM_NAME=eniac
+    linux# cd /mnt/pitdata/prep
     ```
 
-2. Use CSI to populate the LiveCD, provide both the mountpoint and the CSI generated config dir.
+2. Use CSI to populate the LiveCD, provide both the mount point and the CSI generated config dir.
     ```bash
-    linux# cd /mnt/pitdata/prep
     linux# csi pit populate cow /mnt/cow/ ${SYSTEM_NAME}/
     config------------------------> /mnt/cow/rw/etc/sysconfig/network/config...OK
     ifcfg-bond0-------------------> /mnt/cow/rw/etc/sysconfig/network/ifcfg-bond0...OK
@@ -438,6 +438,7 @@ If an administrator is rebooting a node into the LiveCD, vs booting a bare-metal
 Confirm that the IPMI credentials work for the BMC by checking the power status.
 
    ```bash
+   external# SYSTEM_NAME=eniac
    external# username=root
    external# password=changme
    external# ipmitool -I lanplus -U $username -P $password -H ${SYSTEM_NAME}-ncn-m001-mgmt chassis power status

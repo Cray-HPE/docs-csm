@@ -7,7 +7,7 @@
     * [Advanced Wipe](#advanced-wipe)
     * [Full Wipe](#full-wipe)
 
-This page will detail how disks are wiped and work-arounds for wedged 
+This page will detail how disks are wiped and workarounds for wedged 
 disks.
 
 Any process covered on this page will be covered by the installer.

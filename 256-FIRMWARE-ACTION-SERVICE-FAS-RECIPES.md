@@ -104,9 +104,9 @@ These filters are then applied; and then `command` parameter applies settings fo
 - `version` - usually `latest` because we want to upgrade usually
 - `tag` - usually `default` because we only care about the default image (this can be mostly ignored)
 - `overrideDryrun` - This determines if this is a LIVE UPDATE or a DRYRUN; if you override; then it will provide a live update
-- `restoreNotPossibleOverride` - this determines if an update (live or dry run) will be attempted if a restore cannot be performed.  Typically we dont have engough firmrware to be able to do a rollback; that means if you UPDATE away from a particular version, we probably cannot go back to a previous version.  Given our context it is most likely that this value will ALWAYS need to be set `true` 
+- `restoreNotPossibleOverride` - this determines if an update (live or dry run) will be attempted if a restore cannot be performed.  Typically we don't have enough firmrware to be able to do a rollback; that means if you UPDATE away from a particular version, we probably cannot go back to a previous version.  Given our context it is most likely that this value will ALWAYS need to be set `true` 
 - `overwriteSameImage` - this will cause a firmware update to be performed EVEN if the device is already at the identified, selected version.  
-- `timeLimit` - this is the amount of time in seconds that any operation should be allowed to execute.  Most `cray` stuff can be completed in about 1000 seconds or less; but the `gigabyte` stuff will comonly take 1,500 seconds or greater.   We recommend setting the value to 2000; this is just a stop gap to prevent the  operation from never ending, should something get stuck.
+- `timeLimit` - this is the amount of time in seconds that any operation should be allowed to execute.  Most `cray` stuff can be completed in about 1000 seconds or less; but the `gigabyte` stuff will commonly take 1,500 seconds or greater.   We recommend setting the value to 2000; this is just a stop gap to prevent the  operation from never ending, should something get stuck.
 - `description`- this is a human friendly description; use it!
 
 
@@ -401,4 +401,4 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
 
 ## <a name="special-note:-updating-ncns">Special Note: updating NCNs</a>
 
-NCNs are compute blades; we currently only have NCNs that are manufactured by Gigabyte or HPE.  We recommend using the `NodeBMC` examples from above and including the `xname` param as part of the `stateComponentFilter` to target **ONLY** the xnames you have separately identified as an NCN.  Updating more than one NCN at a time **MAY** cause system instability. Be sure to follow the correct process for updating NCN; FAS accepts no responbility for updates that do not follow the correct process.  Firmware updates have the capacity to harm the system; follow the appropriate guides!
+NCNs are compute blades; we currently only have NCNs that are manufactured by Gigabyte or HPE.  We recommend using the `NodeBMC` examples from above and including the `xname` param as part of the `stateComponentFilter` to target **ONLY** the xnames you have separately identified as an NCN.  Updating more than one NCN at a time **MAY** cause system instability. Be sure to follow the correct process for updating NCN; FAS accepts no responsibility for updates that do not follow the correct process.  Firmware updates have the capacity to harm the system; follow the appropriate guides!
