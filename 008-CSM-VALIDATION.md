@@ -482,6 +482,48 @@ Class = "River"
 ncn# cray bos session create --template-uuid shasta-1.4-csm-bare-bones-image --operation reboot --limit <xname>
 ```
 
+### Verify console connections
+
+Sometimes the compute nodes and uan are not up yet when cray-conman is initialized and will not be 
+monitored  yet.  This is a good time to verify that all nodes are being monitored for console logging
+or re-initialze cray-conman if needed. 
+
+Use kubectl to exec into the running cray-conman pod, then check the existing connections.
+``` bash
+cray-conman-b69748645-qtfxj:/ # conman -q
+x9000c0s1b0n0
+x9000c0s20b0n0
+x9000c0s22b0n0
+x9000c0s24b0n0
+x9000c0s27b1n0
+x9000c0s27b2n0
+x9000c0s27b3n0
+```
+
+If the compute nodes and uans are not included in the list of nodes being monitored, the 
+conman process can be re-initialized by killing the conmand process:
+``` bash
+cray-conman-b69748645-qtfxj:/ # ps -ax | grep conmand
+     13 ?        Sl     0:45 conmand -F -v -c /etc/conman.conf
+  56704 pts/3    S+     0:00 grep conmand
+cray-conman-b69748645-qtfxj:/ # kill 13
+```
+
+This will regenerate the conman configuration file and restart the conmand process, now
+including all nodes that are included in state manager.
+
+``` bash
+cray-conman-b69748645-qtfxj:/ # conman -q
+x9000c1s7b0n1
+x9000c0s1b0n0
+x9000c0s20b0n0
+x9000c0s22b0n0
+x9000c0s24b0n0
+x9000c0s27b1n0
+x9000c0s27b2n0
+x9000c0s27b3n0
+```
+
 ### Connect to the node's console and watch the boot
 
 Run conman from inside the conman pod to access the console. The boot will fail, but should reach the dracut stage. If the dracut stage is reached, the boot
