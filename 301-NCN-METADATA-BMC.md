@@ -3,7 +3,7 @@
 This guide will detail how to collect BMC MAC Addresses from a Shasta system with configured switches.
 The BMC MAC Address is the exclusive, dedicated LAN for the onboard BMC.
 
-If you are here with an unconfigured switch, milage may vary.
+If you are here with an unconfigured switch, mileage may vary.
 
 ## Requirements
 

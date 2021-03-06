@@ -544,7 +544,19 @@ Sometimes the compute nodes and uan are not up yet when cray-conman is initializ
 monitored  yet.  This is a good time to verify that all nodes are being monitored for console logging
 or re-initialze cray-conman if needed. 
 
-Use kubectl to exec into the running cray-conman pod, then check the existing connections.
+1. Identify the cray-conman pod and set the PODNAME variable accordingly.
+``` bash
+ncn-m002:~ # kubectl get pods -n services | grep "^cray-conman-"
+cray-conman-b69748645-qtfxj                                     3/3     Running           0          16m
+ncn-m002:~ # export PODNAME=cray-conman-b69748645-qtfxj
+```
+2. Log into the cray-conman container in the pod you identified in the previous step.
+``` bash
+ncn-m002:~ # kubectl exec -n services -it $PODNAME -c cray-conman -- bash
+cray-conman-b69748645-qtfxj:/ # 
+```
+
+3. Check the existing connections.
 ``` bash
 cray-conman-b69748645-qtfxj:/ # conman -q
 x9000c0s1b0n0
@@ -556,7 +568,7 @@ x9000c0s27b2n0
 x9000c0s27b3n0
 ```
 
-If the compute nodes and uans are not included in the list of nodes being monitored, the 
+If the compute nodes and UANs are not included in the list of nodes being monitored, the 
 conman process can be re-initialized by killing the conmand process:
 ``` bash
 cray-conman-b69748645-qtfxj:/ # ps -ax | grep conmand
@@ -586,9 +598,6 @@ Run conman from inside the conman pod to access the console. The boot will fail,
 can be considered successful and shows that the necessary CSM services needed to boot a node are
 up and available.
 ```bash
-ncn# kubectl get pods -n services | grep conman
-cray-conman-b69748645-qtfxj                                    3/3     Running     2          46m
-ncn# kubectl exec -it -n services cray-conman-b69748645-qtfxj -c cray-conman -- bash
 cray-conman-b69748645-qtfxj:/ # conman -j x9000c1s7b0n1
 ...
 [    7.876909] dracut: FATAL: Don't know how to handle 'root=craycps-s3:s3://boot-images/e3ba09d7-e3c2-4b80-9d86-0ee2c48c2214/rootfs:c77c0097bb6d488a5d1e4a2503969ac0-27:dvs:api-gw-service-nmn.local:300:nmn0'

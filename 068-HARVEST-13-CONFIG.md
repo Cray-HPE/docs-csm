@@ -74,7 +74,7 @@ may be referenced when making a similar site modification to v1.3.
 
 5. Check switches are reachable.
 
-    Substitute the system switch names in the following command for the correct number of spine, leaf, CDU, and aggregation swtiches in this system.
+    Substitute the system switch names in the following command for the correct number of spine, leaf, CDU, and aggregation switches in this system.
 
     ```bash
     ncn-w001# for switch in sw-leaf0{1,2}-mtl sw-spine0{1,2}-mtl sw-cdu0{1,2}-mtl; do while true; \

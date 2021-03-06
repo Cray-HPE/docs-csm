@@ -1,12 +1,12 @@
 # NCN Metadata over USB-Serial Cable
 
-In the event that network plumbing is lacking, down, or unconfiguraed for procuring devices then it is
+In the event that network plumbing is lacking, down, or unconfigured for procuring devices then it is
 recommended to use the Serial/COM ports on the spine and leaf switches.
 
 This guide will instruct the user on procuring MAC addresses for the NCNs metadata files
 with the serial console.
 
-Milaeage may vary, as some obstacles such as BAUDRATE and `terminal` usage vary per manufacturer.
+Mileage may vary, as some obstacles such as BAUDRATE and `terminal` usage vary per manufacturer.
 
 ### Common Manufacturers
 (click any for links to support/document portals)

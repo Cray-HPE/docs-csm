@@ -3,7 +3,7 @@
 ## Prerequisites
 The Cray command line interface (CLI) tool is initialized and configured on the system. See "Configure the Cray Command Line Interface (CLI)" in the HPE Cray EX System Administration Guide S-8001 for more information.
 
-##  <a href="action">Execute an Action</a>
+##  <a name="action"></a>Execute an Action
 
 ### Objective
 Use the Firmware Action Service (FAS) to execute an action.  An action produces a  set of firmware operations. Each operation represents an xname + target on that xname that will be targeted for update.  There are two of firmware action modes: : `dryrun` or `liveupdate`; the parameters used when creating either are completely identical except for the `overrideDryrun` setting. `overrideDryrun` will determine if feature to determine what firmware can be updated on the system. Dry-runs are enabled by default, and can be configured with the `overrideDryrun` parameter. A dry-run will create a query according to the filters requested by the admin. It will initiate an update sequence to determine what firmware is available, but will not actually change the state of the firmware
@@ -37,14 +37,14 @@ This will cover the generic process for executing an action.  For more specific 
 ...
 {
 	"actionID": "e0cdd7c2-32b1-4a25-9b2a-8e74217eafa7",
-	"overrideDryun": false
+	"overrideDryrun": false
 }
 ```
 Note the returned `actionID`
 
 See 'interpreting an Action' for more information.
 
-## <a href="abort">Abort an Action </a>
+## <a name="abort"></a>Abort an Action
 
 ### Objective
 Firmware updates can be stopped if required. This is useful given only one action can be run at a time. This is to protect hardware from multiple actions trying to modify it at the same time.
@@ -60,7 +60,7 @@ Firmware updates can be stopped if required. This is useful given only one actio
 ```
 **Note**: The action could take up to a minute to fully abort.
 
-## <a href="desribe-action">Describe an Action </a>
+## <a name="describe-action"></a>Describe an Action
 
 ### Objective
 There are several ways to get more information about a firmware update. An `actionID` and `operationID`s are generated when an live update or dry-run is created. These values can be used to learn more about what is happening on the system during an update.

@@ -83,7 +83,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
      ```
 
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
-   from the `./${CSM_RELEASE}/rpm/ebedded` directory.
+   from the `./${CSM_RELEASE}/rpm/embedded` directory.
 
 7. Although not strictly required, the procedures for setting up the
    `site-init` directory recommend persisting `site-init` files in a Git
@@ -124,7 +124,7 @@ which device that is.
     [14:0:0:0]   disk    SanDisk  Extreme SSD      1012  /dev/sdd
     [14:0:0:1]   enclosu SanDisk  SES Device       1012  -      
     ```
-    In the above example, we can see our internal disks as the `ATA` devices and our USB as the `disk` or `enclsou` device. Since the `SanDisk` fits the profile we're looking for, we are going to use `/dev/sdd` as our disk.
+    In the above example, we can see our internal disks as the `ATA` devices and our USB as the `disk` or `enclosu` device. Since the `SanDisk` fits the profile we're looking for, we are going to use `/dev/sdd` as our disk.
 
     Set a variable with your disk to avoid mistakes:
 
@@ -438,9 +438,9 @@ If an administrator is rebooting a node into the LiveCD, vs booting a bare-metal
 Confirm that the IPMI credentials work for the BMC by checking the power status.
 
    ```bash
-   external# SYSTEM_NAME=eniac
-   external# username=root
-   external# password=changme
+   external# export SYSTEM_NAME=eniac
+   external# export username=root
+   external# export password=changeme
    external# ipmitool -I lanplus -U $username -P $password -H ${SYSTEM_NAME}-ncn-m001-mgmt chassis power status
    ```
 

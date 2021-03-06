@@ -7,8 +7,8 @@ This page describes the purpose of the ACLs and how they are configured
 
 # Aruba Configuration
 
-These ACLS are designed to to block traffic from the node management network to and from the hardware management network.
-These need to be set where the Layer3 interface is located, this will most likely be a VSX pair of switches. These ACLS are required on both switches in the pair.
+These ACLs are designed to to block traffic from the node management network to and from the hardware management network.
+These need to be set where the Layer3 interface is located, this will most likely be a VSX pair of switches. These ACLs are required on both switches in the pair.
 
 The first step is to create the access list, once it's created we have to apply it to a VLAN.
 ```

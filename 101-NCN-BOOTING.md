@@ -18,8 +18,8 @@ Two ways, one may be easier depending on your env.
 
 Easily configure the default bootorder through `ipmitool`:
 ```bash                         
-username=root
-IPMI_PASSWORD=??????
+export username=root
+export IPMI_PASSWORD=changeme
 
 # ALWAYS PXE BOOT; sets a system to PXE
 ipmitool -I lanplus -U $username -E -H ncn-s001-mgmt chassis bootdev pxe options=efiboot,persistent

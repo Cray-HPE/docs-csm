@@ -90,8 +90,9 @@ all been run by the administrator before starting this stage.
    ```
 4. Upload NCN artifacts, filling `CSM_RELEASE` with the actual release tarball.
    ```bash
-   pit# export CSM_RELEASE=csm-0.7.29 artdir=/var/www/ephemeral/${CSM_RELEASE}/images \
-      csi handoff ncn-images \
+   pit# export CSM_RELEASE=csm-x.y.z
+   pit# export artdir=/var/www/ephemeral/${CSM_RELEASE}/images
+   pit# csi handoff ncn-images \
       --k8s-kernel-path $artdir/kubernetes/*.kernel \
       --k8s-initrd-path $artdir/kubernetes/initrd.img*.xz \
       --k8s-squashfs-path $artdir/kubernetes/kubernetes*.squashfs \
