@@ -25,7 +25,7 @@ In general, there are 3 kinds of disks:
 | ❌ | ✅ | ❌ | `CONRUN` | `/run/containerd` | Ephemeral | `75 GiB` | ❌ | [MTL-916](https://connect.us.cray.com/jira/browse/MTL-916) | On pepsi ncn-w001, we have less than 200G of operational storage for this. |
 | ❌ | ✅ | ❌ | `CONLIB` | `/run/lib-containerd` | Ephemeral | `25%` | ✅ | [MTL-892](https://connect.us.cray.com/jira/browse/MTL-892) [CASMINST-255](https://connect.us.cray.com/jira/browse/CASMINST-255) | |
 | ✅ | ❌ | ❌ | `ETCDK8S` | `/run/lib-etcd` | Ephemeral | `32 GiB` | ✅ | [CASMPET-338](https://connect.us.cray.com/jira/browse/CASMPPET-338) | |
-| ✅ | ❌ | ❌ | `K8SKUBE` | `/var/lib/kubelet` | Ephemeral | `25%` | ❌ | [MTL-892](https://connect.us.cray.com/jira/browse/MTL-892) [CASMINST-255](https://connect.us.cray.com/jira/browse/CASMINST-255) | |
+| ✅ | ❌ | ❌ | `K8SLET` | `/var/lib/kubelet` | Ephemeral | `25%` | ❌ | [MTL-892](https://connect.us.cray.com/jira/browse/MTL-892) [CASMINST-255](https://connect.us.cray.com/jira/browse/CASMINST-255) | |
 
 The above table's rows with overlayFS map their "Mount Paths" to the "Upper Directory" in the table below:
 
@@ -311,6 +311,7 @@ Deprecated FS labels/partitions from Shasta 1.3.X (no longer in Shasta 1.4.0 and
 
 | FS Label | Partitions | Nodes	| Device | Size on Disk | Work Order | Memo
 | --- | --- | ---| --- | --- | --- | --- |
+| `K8SKUBE` | `/var/lib/kubelet` | ncn-w001, ncn-w002 | Ephemeral | Max/Remainder | [CASMPET-338](https://connect.us.cray.com/jira/browse/CASMPET-338) [CASMPET-342](https://connect.us.cray.com/jira/browse/CASMPET-342) | No longer mounted/used in shasta-1.4 |
 | `K8SEPH` | `/var/lib/cray/k8s_ephemeral` | ncn-w001, ncn-w002 | Ephemeral | Max/Remainder | [CASMPET-338](https://connect.us.cray.com/jira/browse/CASMPET-338) [CASMPET-342](https://connect.us.cray.com/jira/browse/CASMPET-342) | No longer mounted/used in shasta-1.4 |
 | `CRAYINSTALL` | `/var/cray/vfat` | ncn-w001, ncn-w002 | Ephemeral | `12 GiB` |  [CASMPET-338](https://connect.us.cray.com/jira/browse/CASMPET-338) [CASMPET-342](https://connect.us.cray.com/jira/browse/CASMPET-342) | No longer mounted/used in shasta-1.4 |
 | `CRAYVBIS` | `/var/cray/vbis` | ncn-w001, ncn-w002 | Ephemeral | `900 GiB` |  [CASMPET-338](https://connect.us.cray.com/jira/browse/CASMPET-338) [CASMPET-342](https://connect.us.cray.com/jira/browse/CASMPET-342) | No longer mounted/used in shasta-1.4 |
