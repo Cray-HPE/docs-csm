@@ -28,16 +28,16 @@ to [Starting an Installation](#starting-an-installation).
 Each item below defines a prerequisite that must be completed on systems with existing Shasta
 v1.3 installations. Optional steps are noted as such.
 
-* [Collect Shasta v1.4 Config Payload](#collect-shasta-14-config-payload)
-* [Quiesce Shasta v1.3 System](#quiesce-shasta-13-system)
-* [Upgrading BIOS and Firmware](#upgrading-bios-and-firmware)
-* [Recabling](#recabling)
+* [Collect Shasta v1.4 Config Payload](#collect-shasta-v14-config-payload)
+* [Quiesce Shasta v1.3 System](#quiesce-shasta-v13-system)
+* [Upgrading BIOS and Firmware](#upgrading-bios-and-firmware-from-13)
+* [Re-cabling](#re-cabling)
   * [Site Connections](#site-connections)
   * [PCIe Connections](#pcie-connections)
-* [Shut Down Management Kubernetes Cluster](#shutdown-kubernetes)
+* [Shut Down Management Kubernetes Cluster](#shut-down-management-kubernetes-cluster)
 * [Powering off NCNs](#powering-off-ncns)
 
-<a name="collect-shasta-14-config-payload"></a>
+<a name="collect-shasta-v14-config-payload"></a>
 ### Collect Shasta v1.4 Config Payload
 
 Although some configuration data can be saved from a Shasta v1.3 system, there are new configuration files
@@ -56,7 +56,7 @@ See the [Harvest Shasta v1.3 Information](068-HARVEST-13-CONFIG.md) page for the
 
 See the [service guides](300-SERVICE-GUIDES.md) for information regarding the v1.4 configuration files.
 
-<a name="quiesce-shasta-13-system"></a>
+<a name="quiesce-shasta-v13-system"></a>
 ### Quiesce Shasta v1.3 System
 
 1. Follow site processes to quiesce the system, such as draining workload manager queues, saving user data somewhere
@@ -113,8 +113,8 @@ off the system, and limiting new logins to application nodes.
     See the Cray Shasta Administration Guide 1.3 S-8001 RevC (or later) in the section "Shut Down and Power Off Compute and User Access Nodes"
 
 
-<a name="upgrading-bios-and-firmware"></a>
-### Upgrading BIOS and Firmware
+<a name="upgrading-bios-and-firmware-from-1.3"></a>
+### Upgrading BIOS and Firmware from 1.3
 
 The management NCNs are expected to have certain minimum firmware installed for BMC, node BIOS, and PCIe card
 firmware.
@@ -123,21 +123,24 @@ Known issues for Shasta v1.3 systems include:
 * Gigabyte nodes should use the Gigabyte Node Firmware Update Guide (1.3.2) S-8010 while booted with Shasta v1.3.2.  However, since v1.3 will never be booted again on this system, there is no need to ensure that the etcd clusters are healthy and that BGP Peering has been ESTABLISHED as recommended in that guide.
 * Nodes with Mellanox ConnectX-4 and ConnectX-5 PCIe NICs need to update their firmware.  This should be done while Shasta v1.3.2 is booted.  The Mellanox ConnectX-4 cards will be enabled for PXE booting later.
 
-For minimum NCN firmware versions see [Node Firmware](252-FIRMWARE-NODE.md).
+1. For minimum BIOS spec (required settings), see [Node BIOS Preferences](200-NCN-BIOS-PREF.md). 
 
-The spine, leaf, CDU, and aggregation network switches from Dell and Mellanox may need updates.
+2. For minimum NCN firmware versions see [Node Firmware](252-FIRMWARE-NODE.md).
 
-For minimum Network switch versions see [Network Firmware](251-FIRMWARE-NETWORK.md).
+3. For minimum Network switch firmware versions see [Network Firmware](251-FIRMWARE-NETWORK.md).
 
-Not meeting the minimum versions can result in:
+4. For minimum Network switch configurations see [Management Network Install](401-MANAGEMENT-NETWORK-INSTALL.md).
 
-- Misnamed interfaces (missing `hsn0`)
-- Malfunctioning bonds (`bond0`)
-- Link failures (i.e. QLogic cards set to 10Gbps fixed)
-- Malfunctioning or disabled Multi-Chassis LAGG
+> **`WARNING`** Skipping this on a system that is new to Shasta v1.4 (bare-metal or previously installed with Shasta v1.3 or earlier) can result in undesirable difficulties:
+> 
+> - Misnamed interfaces (missing `hsn0`)
+> - Malfunctioning bonds (`bond0`)
+> - Link failures (i.e. QLogic cards set to 10Gbps fixed)
+> - Malfunctioning or disabled Multi-Chassis LAGG
+> - Back-firing work-around scripts
 
 <a name="recabling"></a>
-### Recabling
+### Re-cabling
 
 The Shasta v1.3 system needs to change a few connections.
 
@@ -166,7 +169,7 @@ Linux install. Now, everything is over the PCIe network interface card.
 See [PCIe Net-boot and Recable](304-NCN-PCIE-NET-BOOT-AND-RE-CABLE.md) for information on enabling
 PCIe card PXE boot.
 
-<a name="shutdown-kubernetes"></a>
+<a name="shut-down-management-kubernetes-cluster"></a>
 ### Shut Down Management Kubernetes Cluster
 
 Shut down Ceph and the Kubernetes management cluster.  This performs several actions to quiesce the
@@ -251,18 +254,22 @@ firmware.  Where possible, the firmware should be updated prior to install.  Som
 during or after the Shasta v1.4 installation, but it is better to meet the minimum NCN firmware requirement
 before starting.
 
-For minimum NCN firmware versions see [Node Firmware](252-FIRMWARE-NODE.md).
+1. For minimum BIOS spec (required settings), see [Node BIOS Preferences](200-NCN-BIOS-PREF.md).
 
-The spine, leaf, CDU, and aggregation network switches may need updates.
+2. For minimum NCN firmware versions see [Node Firmware](252-FIRMWARE-NODE.md).
 
-For minimum Network switch versions see [Network Firmware](251-FIRMWARE-NETWORK.md).
+3. For minimum Network switch firmware versions see [Network Firmware](251-FIRMWARE-NETWORK.md).
 
-Not meeting the minimum versions can result in:
+4. For minimum Network switch configurations see [Management Network Install](401-MANAGEMENT-NETWORK-INSTALL.md).
 
-- Misnamed interfaces (missing `hsn0`)
-- Malfunctioning bonds (`bond0`)
-- Link failures (i.e. QLogic cards set to 10Gbps fixed)
-- Malfunctioning or disabled Multi-Chassis LAGG
+> **`WARNING`** Skipping this on a system that is new to Shasta v1.4 (bare-metal or previously installed with Shasta v1.3 or earlier) can result in undesirable difficulties:
+>
+> - Misnamed interfaces (missing `hsn0`)
+> - Malfunctioning bonds (`bond0`)
+> - Link failures (i.e. QLogic cards set to 10Gbps fixed)
+> - Malfunctioning or disabled Multi-Chassis LAGG
+> - Back-firing work-around scripts
+
 
 > Next: Starting an Installation
 
@@ -279,8 +286,8 @@ The following prerequisites must be completed in order to successfully reinstall
 * [Power down the NCNs](#power-down-the-ncns)
   * [Degraded System Notice](#degraded-system-notice)
   * [Powering Off](#powering-off)
-  * [Set BMCs to back to DHCP](#bmcs-back-to-dhcp)
-  * [Powering Off the LiveCD/m001](#powering-off-livecd)
+  * [Set BMCs to back to DHCP](#set-the-bmcs-on-the-systems-back-to-dhcp)
+  * [Powering Off the LiveCD/m001](#powering-off-livecd-or-ncn-m001-node)
 
 <a name="scaling-down-dhcp"></a>
 ### Scaling Down DHCP
@@ -353,7 +360,7 @@ install).
     ncn-m001# grep ncn /etc/hosts | grep mgmt | grep -v m001 | sort -u | awk '{print $2}' | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
     ```
 
-<a name="bmcs-back-to-dhcp"></a>
+<a name="set-the-bmcs-on-the-systems-back-to-dhcp"></a>
 ### Set the BMCs on the systems back to DHCP
 
 During the install of the NCNs their BMCs get get set to static IP addresses. The install expects the that the NCN BMCs are set back to DHCP before proceeding.
@@ -404,7 +411,7 @@ During the install of the NCNs their BMCs get get set to static IP addresses. Th
   ```
 
 
-<a name="powering-off-livecd"></a>
+<a name="powering-off-livecd-or-ncn-m001-node"></a>
 #### Powering Off LiveCD or ncn-m001 node
 Skip this step if you are planning to use this node as a staging area to create the LiveCD. Lastly, shutdown the LiveCD or ncn-m001 node.
 ```bash
