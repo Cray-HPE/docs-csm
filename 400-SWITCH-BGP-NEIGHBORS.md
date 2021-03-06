@@ -2,15 +2,15 @@
 
 This page will detail how to manually configure and verify BGP neighbors on the management switches.
 
-- You will not have BGP peers until ```install.sh``` is ran.  This is where Metallb is deployed.
+- You will not have BGP peers until ```install.sh``` is ran.  This is where MetalLB is deployed.
 - How do I check the status of the BGP neighbors?
 - Log into the spine switches and run `show bgp ipv4 unicast summary` for Aruba/HPE switches and `show ip bgp summary` for Mellanox.
 - Are my Neighbors stuck in IDLE? running `clear ip bgp all` on the mellanox and `clear bgp *` on the Arubas will restart the BGP process, this process may need to be done when a system is reinstalled.  If only some neighbors are showing `ESTABLISHED` you may need to run the command multiple times for all the BGP peers to come up. 
 - The BGP neighbors will be the worker NCN IPs on the NMN (node management network) (VLAN002). If your system is using HPE/Aruba, one of the neighbors will be the other spine switch.
 - On the Aruba/HPE switches properly configured BGP will look like the following.
 
-# Generate Metallb configmap
-- Depending on the network architecture of your system you may need to peer with switches other than the spines.  CSI has a BGP peers argument that accepts 'aggregation' as an option, if no option is defined it will default to the spines as being the metallb peers. 
+# Generate MetalLB configmap
+- Depending on the network architecture of your system you may need to peer with switches other than the spines.  CSI has a BGP peers argument that accepts 'aggregation' as an option, if no option is defined it will default to the spines as being the MetalLB peers. 
 
 CSI cli arguments with ```--bgp-peers aggregation```
 ```
@@ -215,9 +215,9 @@ Mellanox configuration example.
 
 - Once the IPs are updated for the route-maps and BGP neighbors you may need to restart the BGP process on the switches, you do this by running `clear ip bgp all` on the mellanox and `clear bgp *` on the Arubas. (This may need to be done multiple times for all the peers to come up)
 - When worker nodes are reinstalled, the BGP process will need to be restarted. 
-- If the BGP peers are still not coming up you should check the Metallb.yaml config file for errors.  The Metallb config file should point to the NMN IPs of the switches configured.
+- If the BGP peers are still not coming up you should check the metallb.yaml config file for errors.  The MetalLB config file should point to the NMN IPs of the switches configured.
 
-Metallb.yaml configuration example.
+metallb.yaml configuration example.
 - The peer-address should be the IP of the switch that you are doing BGP peering with.  
 ```
 ---

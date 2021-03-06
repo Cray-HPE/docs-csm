@@ -343,13 +343,13 @@ install).
 - Shutdown from **LiveCD** (`pit`)
   ```bash
     pit# export username=root
-    pit# export IPMI_PASSWORD=
+    pit# export IPMI_PASSWORD=changeme
     pit# conman -q | grep mgmt | xargs -t -i  ipmitool -I lanplus -U $username -E -H {} power off
     ```
 - Shutdown from **ncn-m001**
     ```bash
     ncn-m001# export username=root
-    ncn-m001# export IPMI_PASSWORD=
+    ncn-m001# export IPMI_PASSWORD=changeme
     ncn-m001# grep ncn /etc/hosts | grep mgmt | grep -v m001 | sort -u | awk '{print $2}' | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
     ```
 
@@ -363,7 +363,7 @@ During the install of the NCNs their BMCs get get set to static IP addresses. Th
 
   ```bash
   pit# export username=root
-  pit# export IPMI_PASSWORD=
+  pit# export IPMI_PASSWORD=changeme
 
   pit# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
   do
@@ -386,7 +386,7 @@ During the install of the NCNs their BMCs get get set to static IP addresses. Th
 
   ```bash
   ncn-m001# export username=root
-  ncn-m001# export IPMI_PASSWORD=
+  ncn-m001# export IPMI_PASSWORD=changeme
   ncn-m001# for h in $( grep ncn /etc/hosts | grep mgmt | grep -v m001 | awk '{print $2}' )
   do
   ipmitool -U $username -I lanplus -H $h -E lan set 1 ipsrc dhcp

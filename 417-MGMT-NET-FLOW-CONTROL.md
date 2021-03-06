@@ -201,7 +201,7 @@ Record these ports AND the port-channel and mlag-port-channel interfaces, as we 
 
 #### Spine Switch 'flowcontrol' Configuration Change
 
-On the Mellanox spine switches, we need to modify the flowcontrol settings on the port-channel, mlag-port-channel, and ethernet interfaces.  The general form looks like this:
+On the Mellanox spine switches, we need to modify the flowcontrol settings on the port-channel, mlag-port-channel, and Ethernet interfaces.  The general form looks like this:
 
 ```
 sw-spine-001 [standalone: master] # configure terminal

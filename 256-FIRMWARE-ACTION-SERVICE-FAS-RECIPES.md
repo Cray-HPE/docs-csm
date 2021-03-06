@@ -1,19 +1,19 @@
 # Firmware Action Service (FAS) Administration Guide
 
 * [Recipes](#recipes) 
-  * [Manufacturer : Cray](#manufacturer-:-cray)
-    * [Device Type : RouterBMC |  Target : BMC](#cray-device-type-:-routerbmc-|--target-:-bmc) 
-    * [Device Type : ChassisBMC | Target: BMC](#cray-device-type-:-chassisbmc-|-target:-bmc) 
-    * [Device Type : NodeBMC | Target : BMC](#cray-device-type-:-nodebmc-|-target-:-bmc) 
-    * [Device Type : NodeBMC | Target : NodeBIOS](#cray-device-type-:-nodebmc-|-target-:-nodebios) 
-    * [Device Type : NodeBMC | Target : Redstone FPGA](#cray-device-type-:-nodebmc-|-target-:-redstone-fpga) 
-  * [Manufacturer : HPE](#manufacturer-:-hpe)
-    * [Device Type : NodeBMC | Target : `iLO 5` aka BMC](#hpe-device-type-:-nodebmc-|-target-:--aka-bmc) 
-    * [Device Type : NodeBMC | Target : `System ROM` aka BIOS](#hpe-device-type-:-nodebmc-|-target-:--aka-bios) 
-  * [Manufacturer : Gigabyte](#manufacturer-:-gigabyte)
-    * [Device Type : NodeBMC | Target : BMC](#gb-device-type-:-nodebmc-|-target-:-bmc) 
-    * [Device Type : NodeBMC | Target : BIOS](#gb-device-type-:-nodebmc-|-target-:-bios) 
-  * [Special Note: updating NCNs](#special-note:-updating-ncns)
+  * [Manufacturer : Cray](#manufacturer-cray)
+    * [Device Type : RouterBMC |  Target : BMC](#cray-device-type-routerbmc--target-bmc) 
+    * [Device Type : ChassisBMC | Target: BMC](#cray-device-type-chassisbmc-target-bmc) 
+    * [Device Type : NodeBMC | Target : BMC](#cray-device-type-nodebmc-target-bmc) 
+    * [Device Type : NodeBMC | Target : NodeBIOS](#cray-device-type-nodebmc-target-nodebios) 
+    * [Device Type : NodeBMC | Target : Redstone FPGA](#cray-device-type-nodebmc-target-redstone-fpga) 
+  * [Manufacturer : HPE](#manufacturer-hpe)
+    * [Device Type : NodeBMC | Target : `iLO 5` aka BMC](#hpe-device-type-nodebmc-target--aka-bmc) 
+    * [Device Type : NodeBMC | Target : `System ROM` aka BIOS](#hpe-device-type-nodebmc-target--aka-bios) 
+  * [Manufacturer : Gigabyte](#manufacturer-gigabyte)
+    * [Device Type : NodeBMC | Target : BMC](#gb-device-type-nodebmc-target-bmc) 
+    * [Device Type : NodeBMC | Target : BIOS](#gb-device-type-nodebmc-target-bios) 
+  * [Special Note: updating NCNs](#special-note-updating-ncns)
 
 ## FAS Filters for `actions` and `snapshots` 
 
@@ -111,13 +111,13 @@ These filters are then applied; and then `command` parameter applies settings fo
 
 
 ---
-# <a name="recipes">Recipes</a>
+# <a name="recipes"></a>Recipes
 
-Below are some example `json` files that you may find useful when updating specific hardware components.  In all of these examples the `overrrideDryrun` field will be set to `false`; set them to `true` to perform a live update.  We would recommend that when updating an entire system that you walk down the device hierarchy component type by component type, starting first with 'Routers' aka switches, proceeding to Chassis, then finally Nodes.  While this is not strictly necessary we have found that it helps eliminate confusion. 
+Below are some example `json` files that you may find useful when updating specific hardware components.  In all of these examples the `overrideDryrun` field will be set to `false`; set them to `true` to perform a live update.  We would recommend that when updating an entire system that you walk down the device hierarchy component type by component type, starting first with 'Routers' aka switches, proceeding to Chassis, then finally Nodes.  While this is not strictly necessary we have found that it helps eliminate confusion. 
 
-## <a name="manufacturer-:-cray">Manufacturer : Cray  </a>
+## <a name="manufacturer-cray"></a>Manufacturer : Cray
 
-#### <a name="cray-device-type-:-routerbmc-|--target-:-bmc">Device Type : RouterBMC |  Target : BMC</a> 
+#### <a name="cray-device-type-routerbmc--target-bmc"></a>Device Type : RouterBMC |  Target : BMC
 
 The BMC on the RouterBMC for a Cray includes the ASIC.  
 
@@ -147,7 +147,7 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
 }
 ```
 
-#### <a name="cray-device-type-:-chassisbmc-|-target:-bmc">Device Type : ChassisBMC | Target: BMC</a>
+#### <a name="cray-device-type-chassisbmc-target-bmc"></a>Device Type : ChassisBMC | Target: BMC
 
 **IMPORTANT**: Before updating a CMM, make sure all slot and rectifier power is off.
 
@@ -176,7 +176,7 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
   }
 }
 ```
-#### <a name="cray-device-type-:-nodebmc-|-target-:-bmc">Device Type : NodeBMC | Target : BMC</a>
+#### <a name="cray-device-type-nodebmc-target-bmc"></a>Device Type : NodeBMC | Target : BMC
 
 ```json
 {
@@ -207,7 +207,7 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
 
 
 
-#### <a name="cray-device-type-:-nodebmc-|-target-:-nodebios"> Device Type : NodeBMC | Target : NodeBIOS</a>
+#### <a name="cray-device-type-nodebmc-target-nodebios"></a> Device Type : NodeBMC | Target : NodeBIOS
 
 **IMPORTANT**: The Nodes themselves must be powered **off** in order to update the BIOS on the nodes.  The BMC will still have power and will perform the update.
 
@@ -240,7 +240,7 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
 }
 ```
 
-#### <a name="cray-device-type-:-nodebmc-|-target-:-redstone-fpga">Device Type : NodeBMC | Target : Redstone FPGA</a>
+#### <a name="cray-device-type-nodebmc-target-redstone-fpga"></a>Device Type : NodeBMC | Target : Redstone FPGA
 
 **IMPORTANT**: The Nodes themselves must be powered **on** in order to update the firmware of the Redstone FPGA on the nodes.  
 
@@ -275,8 +275,8 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
 
 ---
 
-## <a name="manufacturer-:-hpe">Manufacturer : HPE</a> 
-####  <a name="hpe-device-type-:-nodebmc-|-target-:-`ilo-5`-aka-bmc">Device Type : NodeBMC | Target : `iLO 5` aka BMC</a>
+## <a name="manufacturer-hpe"></a>Manufacturer : HPE 
+####  <a name="hpe-device-type-nodebmc-target-`ilo-5`-aka-bmc"></a>Device Type : NodeBMC | Target : `iLO 5` aka BMC
 
 ```json
 "stateComponentFilter": {
@@ -305,7 +305,7 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
 
 **NOTE**: You MUST use `1`as `target` to indicate `iLO 5` 
 
-####  <a name="hpe-device-type-:-nodebmc-|-target-:-`system-rom`-aka-bios">Device Type : NodeBMC | Target : `System ROM` aka BIOS</a>
+####  <a name="hpe-device-type-nodebmc-target-`system-rom`-aka-bios"></a>Device Type : NodeBMC | Target : `System ROM` aka BIOS
 
 ```json
 {
@@ -338,9 +338,9 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
 
 ---
 
-## <a name="manufacturer-:-gigabyte">Manufacturer : Gigabyte</a>
+## <a name="manufacturer-gigabyte"></a>Manufacturer : Gigabyte
 
-#### <a name="gb-device-type-:-nodebmc-|-target-:-bmc">Device Type : NodeBMC | Target : BMC</a>
+#### <a name="gb-device-type-nodebmc-target-bmc"></a>Device Type : NodeBMC | Target : BMC
 
 ```json
 {
@@ -371,7 +371,7 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
 
 *note*: the timeLimit is `2000` because the gigabytes can take a lot longer to update. 
 
-#### <a name="gb-device-type-:-nodebmc-|-target-:-bios">Device Type : NodeBMC | Target : BIOS</a>
+#### <a name="gb-device-type-nodebmc-target-bios"></a>Device Type : NodeBMC | Target : BIOS
 ```json
 {
 "stateComponentFilter": {
@@ -399,6 +399,6 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
 }
 ```
 
-## <a name="special-note:-updating-ncns">Special Note: updating NCNs</a>
+## <a name="special-note-updating-ncns"></a>Special Note: updating NCNs
 
 NCNs are compute blades; we currently only have NCNs that are manufactured by Gigabyte or HPE.  We recommend using the `NodeBMC` examples from above and including the `xname` param as part of the `stateComponentFilter` to target **ONLY** the xnames you have separately identified as an NCN.  Updating more than one NCN at a time **MAY** cause system instability. Be sure to follow the correct process for updating NCN; FAS accepts no responsibility for updates that do not follow the correct process.  Firmware updates have the capacity to harm the system; follow the appropriate guides!

@@ -49,7 +49,7 @@
             4. [Deleting UAIs](#main-uaimanagement-adminuai-delete)
         2. [Legacy Mode UAI Management](#main-uaimanagement-legacymode)
             1. [Configuring A Default UAI Class for Legacy Mode](#main-uaimanagement-legacymode-defaultclass)
-                1. [Example Minimal Default UAI Class](#main-uaimanagement-legacymode-defaultclass-minimaleexample)
+                1. [Example Minimal Default UAI Class](#main-uaimanagement-legacymode-defaultclass-minimalexample)
                 2. [Example Default UAI Class with Slurm Support](#main-uaimanagement-legacymode-slurmexample)
             2. [Creating and Using Default UAIs in Legacy Mode](#main-uaimanagement-legacymode-defaultcreate)
             3. [Listing Available UAI Images in Legacy Mode](#main-uaimanagement-legacymode-list)
@@ -1415,7 +1415,7 @@ To make UAIs useful, there is a minimum set of volumes that should be defined in
 
 In addition to this, there may be volumes defined to support a workload manager (Slurm or PBS Professional) or the Cray PE or other packages the full extent of these volumes is outside the scope of this document, but whatever list of these other volumes is needed to get a suitable end-user UAI should be included in the default UAI class configuration.
 
-##### Example Minimal Default UAI Class <a name="main-uaimanagement-legacymode-defaultclass-minimaleexample"></a>
+##### Example Minimal Default UAI Class <a name="main-uaimanagement-legacymode-defaultclass-minimalexample"></a>
 
 For an example minimal system, here is an example set of volumes and an example creation of a UAI class that would use those volumes:
 
@@ -2713,7 +2713,7 @@ Events:
   Warning  FailedMount  114s                   kubelet, ncn-w001  Unable to attach or mount volumes: unmounted volumes=[broker-sssd-config broker-entrypoint broker-sshd-config], unattached volumes=[optcraype optlmod etcprofiled optr optforgelicense broker-sssd-config lustre timezone optintel optmodulefiles usrsharelmod default-token-58t5p optarmlicenceserver optcraycrayucx slurm-config opttoolworks optnvidiahpcsdk munge-key optamd opttotalview optgcc opttotalviewlicense broker-entrypoint broker-sshd-config etccrayped opttotalviewsupport optcraymodulefilescrayucx optforge usrlocalmodules varoptcraypepeimages]: timed out waiting for the condition
 ```
 
-This produces a lot of output, all of which can be useful for diagnosis, but a good place to start is in the `Events` section at the bottom.  Notice the warnings here about volumes whose secrets and configmaps are not found.  In this case, that means the UAI can't start because it was started in legacy mode without a default UAI class, and some of the volumes configured in the UAS are in the `uas` namespace to support localization of broker UAIs and cannot be found in the `user` namesspace.  To solve this particular problem, the best move would be to configure a default UAI class with the correct volume list in it, delete the UAI and allow the user to try creating it again using the default class.
+This produces a lot of output, all of which can be useful for diagnosis, but a good place to start is in the `Events` section at the bottom.  Notice the warnings here about volumes whose secrets and configmaps are not found.  In this case, that means the UAI can't start because it was started in legacy mode without a default UAI class, and some of the volumes configured in the UAS are in the `uas` namespace to support localization of broker UAIs and cannot be found in the `user` namespace.  To solve this particular problem, the best move would be to configure a default UAI class with the correct volume list in it, delete the UAI and allow the user to try creating it again using the default class.
 
 Other problems can usually be quickly identified using this and other information found in the output from the `kubectl describe pod` command.
 
@@ -2780,7 +2780,7 @@ type = "DirectoryOrCreate"
 
 ### Missing or Incorrect UAI Images <a name="main-trouble-images"></a>
 
-If a UAI shows a `uai_status` of `Waiting` and a `uai_msg` of `ImagePullBackoff` that indicates that the UAI or the UAI class is configured to use an image that is not in the image registry.  Either obtaining and pushing the image to the image registry, or correcting the name / version of the image in the UAS configuration will usually resolve this.
+If a UAI shows a `uai_status` of `Waiting` and a `uai_msg` of `ImagePullBackOff` that indicates that the UAI or the UAI class is configured to use an image that is not in the image registry.  Either obtaining and pushing the image to the image registry, or correcting the name / version of the image in the UAS configuration will usually resolve this.
 
 ### Administrative Access to UAIs for Diagnosis <a name="main-trouble-adminaccess"></a>
 

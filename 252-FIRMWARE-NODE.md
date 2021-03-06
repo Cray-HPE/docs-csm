@@ -124,7 +124,7 @@ Now the node(s) are upgraded to minimum spec. for booting.
 1. Set login vars for redfish™
     ```bash
    export username=root
-   export password= 
+   export password=changeme
    ```
 2. Invoke `mfw` with the matching firmware (check `ls 1 /var/www/fw/river/hpe` for a list)
     ```bash
