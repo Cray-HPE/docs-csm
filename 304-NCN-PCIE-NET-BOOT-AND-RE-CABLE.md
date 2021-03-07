@@ -11,7 +11,7 @@ over the spine switches.
         * [Obtaining Mellanox Tools](#obtaining-mellanox-tools) 
     * [QLogic FastLinq](#qlogic-fastlinq) 
         * [Kernel Modules](#kernel-modules) 
-* [Disabling/Removing On-Board Connections](#disabling/removing-on-board-connections) 
+* [Disabling/Removing On-Board Connections](#disabling-or-removing-on-board-connections) 
 
 
 **This applies to Newer systems (Spring 2020 or newer)** where onboard NICs are still used.
@@ -124,8 +124,8 @@ KMP modules for Qlogic are installed:
 
 See [#casm-triage][2] if this is not the case.
 
-<a name="disabling/removing-on-board-connections"></a>
-## Disabling/Removing On-Board Connections
+<a name="disabling-or-removing-on-board-connections"></a>
+## Disabling or Removing On-Board Connections
 
 The onboard connection can be disabled a few ways, short of removing the physical connection one
 may shutdown the switchport as well.
