@@ -232,7 +232,7 @@ all been run by the administrator before starting this stage.
    ```bash
    ncn-m001# passwd
    ```
-  > **`NOTE`** A workaround script for rotaing the default private ssh key is available after installing the csm-install-workarounds rpm in a later step
+  > **`NOTE`** A workaround script for rotating the default private ssh key is available in the LiveCD at /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-1667/ssh-key-rotate.sh.
 
 14. Run `kubectl get nodes` to see the full Kubernetes cluster.
     > **`NOTE`** If the new node fails to join the cluster after running other cloud-init items please refer to the 
