@@ -1,8 +1,7 @@
 # Copyright 2020 Cray Inc. All Rights Reserved.
 Name: docs-csm-install
-Provides: metal-docs-ncn
 License: MIT License
-Summary: Documentation for Non-Compute Nodes on a Metal Cluster
+Summary: Documentation for CRAY-HPE HPCaaS Installation and Upgrades
 BuildArchitectures: noarch
 Version: %(cat .version)
 Release: %(echo ${BUILD_METADATA})
@@ -10,7 +9,6 @@ Source: %{name}-%{version}.tar.bz2
 Vendor: Cray Inc.
 
 %description
-This RPM installs documentation into the system for the Shasta Non-compute Nodes.
 
 %prep
 %setup -q
