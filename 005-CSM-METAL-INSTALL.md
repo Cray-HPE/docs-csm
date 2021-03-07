@@ -33,6 +33,8 @@ This page will go over deploying the non-compute nodes.
     - [Validation](#validation)
     - [Additional Validation Tasks for Failed Installs](#additional-validation-tasks-for-failed-installs)
   - [Change Password](#change-password)
+  - [Configure & Trim UEFI Entries](005-CSM-METAL-INSTALL.md#configure-and-trim-uefi-entries)
+
 
 
 <a name="configure-bootstrap-registry-to-proxy-an-upstream-registry"></a>
@@ -467,4 +469,15 @@ information.
 
 > This step is **strongly encouraged** for external/site deployments. Airgapped deployments may opt to skip this step, as well as internal CI deployments.
 
-Whether the password is changed or not, an administrator may now move onto the [CSM Platform Install](006-CSM-PLATFORM-INSTALL.md) page to continue the CSM install.
+Whether the password is changed or not, an administrator may now move onto [Configure & Trim UEFI Entries](#configure-and-trim-uefi-entries) section below.
+
+<a name="configure-and-trim-uefi-entries"></a>
+## Configure and Trim UEFI Entries
+
+> **`IMPORTANT`** *The Boot-Order is set by cloud-init, however the current setting is still iterating. This manual step is required until further notice.*
+
+Do the two-steps outlined in [Fixing Boot-Order](064-EFIBOOTMGR.md#boot-order):
+1. [Setting Order](064-EFIBOOTMGR.md#setting-order)
+2. [Trimming](064-EFIBOOTMGR.md#trimming)
+
+The administrator or CI/CD agent may now move onto the [CSM Platform Install](006-CSM-PLATFORM-INSTALL.md) page to continue the CSM install.
