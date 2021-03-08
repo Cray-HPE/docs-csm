@@ -240,6 +240,8 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
 }
 ```
 
+> **NOTE**: If this update does not work as expected please check the workaround [257-FIRMWARE-ACTION-SERVICE-CRAY-WINDOM-COMPUTE-NODE-BIOS-WORKAROUND.md](../257-FIRMWARE-ACTION-SERVICE-CRAY-WINDOM-COMPUTE-NODE-BIOS-WORKAROUND.md).
+
 #### <a name="cray-device-type-nodebmc-target-redstone-fpga"></a>Device Type : NodeBMC | Target : Redstone FPGA
 
 **IMPORTANT**: The Nodes themselves must be powered **on** in order to update the firmware of the Redstone FPGA on the nodes.  
