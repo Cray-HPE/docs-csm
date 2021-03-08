@@ -52,63 +52,64 @@ The following conditions must be true in order to qualify for this problem:
 1. Search for the `FAS` image records for a `cray` `HPE CRAY EX425` `Node1.BIOS`.  
 
 
-	```json
-	 cray fas images list --format json | jq '.images[] | select(.manufacturer=="cray") | select(.target=="Node1.BIOS") | select(any(.models[]; contains("EX425")))'
-	{
-	  "imageID": "e23f5465-ed29-4b18-9389-f8cf0580ca60",
-	  "createTime": "2021-03-04T00:04:05Z",
-	  "deviceType": "nodeBMC",
-	  "manufacturer": "cray",
-	  "models": [
-	    "HPE CRAY EX425"
-	  ],
-	  "softwareIds": [
-	    "bios.ex425.*.*"
-	  ],
-	  "target": "Node1.BIOS",
-	  "tags": [
-	    "default"
-	  ],
-	  "firmwareVersion": "ex425.bios-1.4.3",
-	  "semanticFirmwareVersion": "1.4.3",
-	  "pollingSpeedSeconds": 30,
-	  "s3URL": "s3:/fw-update/2227040f7c7d11eb9fa00e2f2e08fd5d/ex425.bios-1.4.3.tar.gz"
-	}
-	``` 
+```
+ cray fas images list --format json | jq '.images[] | select(.manufacturer=="cray") | select(.target=="Node1.BIOS") | select(any(.models[]; contains("EX425")))'
+{
+  "imageID": "e23f5465-ed29-4b18-9389-f8cf0580ca60",
+  "createTime": "2021-03-04T00:04:05Z",
+  "deviceType": "nodeBMC",
+  "manufacturer": "cray",
+  "models": [
+    "HPE CRAY EX425"
+  ],
+  "softwareIds": [
+    "bios.ex425.*.*"
+  ],
+  "target": "Node1.BIOS",
+  "tags": [
+    "default"
+  ],
+  "firmwareVersion": "ex425.bios-1.4.3",
+  "semanticFirmwareVersion": "1.4.3",
+  "pollingSpeedSeconds": 30,
+  "s3URL": "s3:/fw-update/2227040f7c7d11eb9fa00e2f2e08fd5d/ex425.bios-1.4.3.tar.gz"
+}
+``` 
+
 2. Using the imageID from that record create an update command json file that will use the image override.
 
-	```json
-	{
-	    "stateComponentFilter": {
-	    
-	        "deviceTypes": [
-	          "nodeBMC"    ]
-	      },
-	    "inventoryHardwareFilter": {
-	        "manufacturer": "cray"
-	        },
-	    "targetFilter": {
-	        "targets": [
-	          "Node0.BIOS",
-	          "Node1.BIOS"
-	        ]
-	      },
-        "imageFilter": {
-          "imageID": "e23f5465-ed29-4b18-9389-f8cf0580ca60",
-          "overrideImage": true
-          },
-	    "command": {
-	        "version": "latest",
-	        "tag": "default",
-	        "overrideDryrun": true,
-	        "restoreNotPossibleOverride": true,
-	        "timeLimit": 1000,
-	        "description": " upgrade of Node BIOS"
-	      }
-	    }
-	```
+```json
+{
+    "stateComponentFilter": {
+    
+        "deviceTypes": [
+          "nodeBMC"    ]
+      },
+    "inventoryHardwareFilter": {
+        "manufacturer": "cray"
+        },
+    "targetFilter": {
+        "targets": [
+          "Node0.BIOS",
+          "Node1.BIOS"
+        ]
+      },
+    "imageFilter": {
+      "imageID": "e23f5465-ed29-4b18-9389-f8cf0580ca60",
+      "overrideImage": true
+      },
+    "command": {
+        "version": "latest",
+        "tag": "default",
+        "overrideDryrun": true,
+        "restoreNotPossibleOverride": true,
+        "timeLimit": 1000,
+        "description": " upgrade of Node BIOS"
+      }
+}
+```
 
-  **NOTE** YOU MUST CHANGE THE `imageID` to match your identified image ID
+>  **NOTE** YOU MUST CHANGE THE `imageID` to match your identified image ID
 
 3. Using `FAS` as normal, launch the action referencing the new JSON file.
 4. At this point you should use `FAS` as normal.  The expectation would be that the operations should be `succeeded` after using the new JSON file.
