@@ -121,7 +121,7 @@ The following conditions must be true in order to qualify for this problem:
 	        ]
 	      },
         "imageFilter": {
-          "imageID": "your-image-id-will-be-unique-use-the-identified-id",
+          "imageID": "e23f5465-ed29-4b18-9389-f8cf0580ca60",
           "overrideImage": true
           },
 	    "command": {
@@ -134,6 +134,8 @@ The following conditions must be true in order to qualify for this problem:
 	      }
 	    }
 	```
+
+  **NOTE** YOU MUST CHANGE THE `imageID` to match your identified image ID
 
 3. Using `FAS` as normal, launch the action referencing the new JSON file.
 4. At this point you should use `FAS` as normal.  The expectation would be that the operations should be `succeeded` after using the new JSON file.
