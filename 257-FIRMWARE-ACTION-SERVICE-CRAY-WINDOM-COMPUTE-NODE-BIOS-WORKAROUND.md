@@ -5,34 +5,7 @@ The following conditions must be true in order to qualify for this problem:
 
 1. The system running Shasta v1.4
 2. The system has completed CSM installation
-3. an upgrade via FAS of `Cray` - `Node1.BIOS`/`Node0.BIOS` has been completed:
-
-	```json
-	{
-	    "stateComponentFilter": {
-	    
-	        "deviceTypes": [
-	          "nodeBMC"    ]
-	      },
-	    "inventoryHardwareFilter": {
-	        "manufacturer": "cray"
-	        },
-	    "targetFilter": {
-	        "targets": [
-	          "Node0.BIOS",
-	          "Node1.BIOS"
-	        ]
-	      },
-	    "command": {
-	        "version": "latest",
-	        "tag": "default",
-	        "overrideDryrun": false,
-	        "restoreNotPossibleOverride": true,
-	        "timeLimit": 1000,
-	        "description": "Dryrun upgrade of Node BIOS"
-	      }
-	    }
-	```
+3. an upgrade via FAS of `Cray` - `Node1.BIOS`/`Node0.BIOS` has been completed following the recipes in [256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#cray-device-type-nodebmc-target-nodebios)
 4. The result of the upgrade is that the `NodeX.BIOS` has failed as `noSolution` and the `stateHelper` field for the operation states: `"No Image Available"`
 5. The BIOS in question is running a version <= `1.2.5` (as reported by Redfish; or by describing the `noSolution` operation in FAS).
 6. The hardware model reported by Redfish is `wnc-rome`; this hardware's marketing designation is  `HPE CRAY EX425` .  Note if your Redfish model is different (ignoring casing); meaning the blade(s) in question are not `Windom` please reach out to technical support.
