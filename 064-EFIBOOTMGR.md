@@ -29,10 +29,10 @@ This page will assist an administrator in using the `efibootmgr` tool.
 > ###### Masters
 > 
 > ```bash
-> ncn-m002:~ # efibootmgr | grep -iP '(pxe ipv?4.*adapter)' | tee /tmp/bbs1
+> ncn-m# efibootmgr | grep -iP '(pxe ipv?4.*adapter)' | tee /tmp/bbs1
 > Boot0007* UEFI: PXE IP4 Mellanox Network Adapter - B8:59:9F:BE:8F:2E
 > Boot0009* UEFI: PXE IP4 Mellanox Network Adapter - B8:59:9F:BE:8F:2F                
-> ncn-m002:~ # efibootmgr | grep cray | tee /tmp/bbs2
+> ncn-m# efibootmgr | grep cray | tee /tmp/bbs2
 > Boot0000* cray (sda1)
 > Boot0002* cray (sdb1)
 > ```
@@ -40,10 +40,10 @@ This page will assist an administrator in using the `efibootmgr` tool.
 > ###### Storage
 > 
 > ```bash
-> ncn-s001:~ # efibootmgr | grep -iP '(pxe ipv?4.*adapter)' | tee /tmp/bbs1
+> ncn-s# efibootmgr | grep -iP '(pxe ipv?4.*adapter)' | tee /tmp/bbs1
 > Boot0007* UEFI: PXE IP4 Mellanox Network Adapter - B8:59:9F:C7:11:FA
 > Boot0009* UEFI: PXE IP4 Mellanox Network Adapter - B8:59:9F:C7:11:FB
-> ncn-s001:~ # efibootmgr | grep cray | tee /tmp/bbs2
+> ncn-s# efibootmgr | grep cray | tee /tmp/bbs2
 > Boot0000* cray (sda1)
 > Boot0002* cray (sdb1)
 > ```
@@ -54,11 +54,11 @@ This page will assist an administrator in using the `efibootmgr` tool.
 > > disabling PXE on their HSN cards. On the other hand, the rogue boot entry can be removed with a hand crafted `efibootmgr -b <num> -B` command.
 > 
 > ```bash
-> ncn-w001:~ # efibootmgr | grep -iP '(pxe ipv?4.*adapter)' | tee /tmp/bbs1
+> ncn-w# efibootmgr | grep -iP '(pxe ipv?4.*adapter)' | tee /tmp/bbs1
 > Boot0007* UEFI: PXE IP4 Mellanox Network Adapter - 98:03:9B:AA:88:30
 > Boot0009* UEFI: PXE IP4 Mellanox Network Adapter - B8:59:9F:34:89:2A
 > Boot000B* UEFI: PXE IP4 Mellanox Network Adapter - B8:59:9F:34:89:2B
-> ncn-w001:~ # efibootmgr | grep cray | tee /tmp/bbs2
+> ncn-w# efibootmgr | grep cray | tee /tmp/bbs2
 > Boot0000* cray (sda1)
 > Boot0002* cray (sdb1)
 > ```
@@ -69,10 +69,10 @@ This page will assist an administrator in using the `efibootmgr` tool.
 > ###### Masters
 >
 > ```bash
-> ncn-m002:~ # efibootmgr | grep -i 'port 1' | grep -i 'pxe ipv4' | tee /tmp/bbs1
+> ncn-m# efibootmgr | grep -i 'port 1' | grep -i 'pxe ipv4' | tee /tmp/bbs1
 > Boot0014* OCP Slot 10 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - PXE (PXE IPv4)
 > Boot0018* Slot 1 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - PXE (PXE IPv4)
-> ncn-m002:~ # efibootmgr | grep cray | tee /tmp/bbs2
+> ncn-m# efibootmgr | grep cray | tee /tmp/bbs2
 > Boot0021* cray (sdb1)
 > Boot0022* cray (sdc1)
 > ```
@@ -80,10 +80,10 @@ This page will assist an administrator in using the `efibootmgr` tool.
 > ###### Storage
 >
 > ```bash
-> ncn-s002:~ # efibootmgr | grep -i 'port 1' | grep -i 'pxe ipv4' | tee /tmp/bbs1
+> ncn-s# efibootmgr | grep -i 'port 1' | grep -i 'pxe ipv4' | tee /tmp/bbs1
 > Boot001C* OCP Slot 10 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - PXE (PXE IPv4)
 > Boot001D* Slot 1 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - PXE (PXE IPv4)
-> ncn-s002:~ # efibootmgr | grep cray | tee /tmp/bbs2
+> ncn-s# efibootmgr | grep cray | tee /tmp/bbs2
 > Boot0002* cray (sdg1)
 > Boot0020* cray (sdh1)
 > ```
@@ -91,11 +91,11 @@ This page will assist an administrator in using the `efibootmgr` tool.
 > ###### Workers
 >
 > ```bash
-> ncn-w001:~ # efibootmgr | grep -i 'port 1' | grep -i 'pxe ipv4' | tee /tmp/bbs1
+> ncn-w# efibootmgr | grep -i 'port 1' | grep -i 'pxe ipv4' | tee /tmp/bbs1
 > Boot0012* OCP Slot 10 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - PXE (PXE IPv4)
-> ncn-w001:~ #
-> ncn-w001:~ # efibootmgr | grep cray | tee /tmp/bbs2\
-> ncn-w001:~ # efibootmgr | grep cray | tee /tmp/bbs2
+> ncn-w#
+> ncn-w# efibootmgr | grep cray | tee /tmp/bbs2\
+> ncn-w# efibootmgr | grep cray | tee /tmp/bbs2
 > Boot0017* cray (sdb1)
 > Boot0018* cray (sdc1)
 > ```
@@ -104,20 +104,20 @@ This page will assist an administrator in using the `efibootmgr` tool.
 >
 > ###### Masters
 > ```bash
-> ncn-m002:~ # efibootmgr | grep -i 'ipv4' | grep -iv 'baseboard' | tee /tmp/bbs1
+> ncn-m# efibootmgr | grep -i 'ipv4' | grep -iv 'baseboard' | tee /tmp/bbs1
 > Boot000E* UEFI IPv4: Network 00 at Riser 02 Slot 01
 > Boot0014* UEFI IPv4: Network 01 at Riser 02 Slot 01
-> ncn-m002:~ # efibootmgr | grep -i 'cray' | tee /tmp/bbs2
+> ncn-m# efibootmgr | grep -i 'cray' | tee /tmp/bbs2
 > Boot0011* cray (sda1)
 > Boot0012* cray (sdb1)
 >```
 > 
 > ###### Storage
 > ```bash
-> ncn-s001:~ # efibootmgr | grep -i 'ipv4' | grep -iv 'baseboard' | tee /tmp/bbs1
+> ncn-s# efibootmgr | grep -i 'ipv4' | grep -iv 'baseboard' | tee /tmp/bbs1
 > Boot000E* UEFI IPv4: Network 00 at Riser 02 Slot 01
 > Boot0012* UEFI IPv4: Network 01 at Riser 02 Slot 01
-> ncn-s001:~ # efibootmgr | grep -i 'cray' | tee /tmp/bbs2
+> ncn-s# efibootmgr | grep -i 'cray' | tee /tmp/bbs2
 > Boot0014* cray (sda1)
 > Boot0015* cray (sdb1)
 > ```
@@ -125,10 +125,10 @@ This page will assist an administrator in using the `efibootmgr` tool.
 > ###### Workers
 > 
 > ```bash
-> ncn-w001:~ # efibootmgr | grep -i 'ipv4' | grep -iv 'baseboard' | tee /tmp/bbs1
+> ncn-w# efibootmgr | grep -i 'ipv4' | grep -iv 'baseboard' | tee /tmp/bbs1
 > Boot0008* UEFI IPv4: Network 00 at Riser 02 Slot 01
 > Boot000C* UEFI IPv4: Network 01 at Riser 02 Slot 01
-> ncn-w001:~ # efibootmgr | grep -i 'cray' | tee /tmp/bbs2
+> ncn-w# efibootmgr | grep -i 'cray' | tee /tmp/bbs2
 > Boot0010* cray (sda1)
 > Boot0011* cray (sdb1)
 > ```
@@ -136,7 +136,7 @@ This page will assist an administrator in using the `efibootmgr` tool.
 
 2. Set Order (works universally; every vendor, every Shasta ncn-type):
 > ```bash
-> ncn-m002:~ # efibootmgr -o $(cat /tmp/bbs* | sed 's/^Boot//g' | awk '{print $1}' | tr -t '*' ',' | tr -d '\n' | sed 's/,$//') | grep -i bootorder
+> ncn-m# efibootmgr -o $(cat /tmp/bbs* | sed 's/^Boot//g' | awk '{print $1}' | tr -t '*' ',' | tr -d '\n' | sed 's/,$//') | grep -i bootorder
 > BootOrder: 000E,0014,0011,0012
 > ```
 
@@ -178,7 +178,7 @@ Your boot menu should be trimmed down to only contain relevant entries.
 Master node (with onboards enabled):
 
 ```bash
-ncn-m001:~ # efibootmgr
+ncn-m# efibootmgr
 BootCurrent: 0009
 Timeout: 2 seconds
 BootOrder: 0004,0000,0007,0009,000B,000D,0012,0013,0002,0003,0001
@@ -198,7 +198,7 @@ Boot0013* UEFI: PNY USB 3.1 FD PMAP, Partition 2
 Storage node (with onboards enabled):
 
 ```bash
-ncn-s001:~ # efibootmgr
+ncn-s# efibootmgr
 BootNext: 0005
 BootCurrent: 0006
 Timeout: 2 seconds
@@ -215,7 +215,7 @@ Boot000B* UEFI: PXE IP4 Intel(R) I350 Gigabit Network Connection
 Worker node  (with onboards enabled):
 
 ```bash
-ncn-w001:~ # efibootmgr
+ncn-w# efibootmgr
 BootNext: 0005
 BootCurrent: 0008
 Timeout: 2 seconds
@@ -268,7 +268,7 @@ Parsing the output of `efibootmgr` can be helpful in determining which device is
 
 ```bash
 # Print off the UEFI's boot selections:
-ncn-m001# efibootmgr
+ncn-m# efibootmgr
 BootCurrent: 0015
 Timeout: 1 seconds
 BootOrder: 000E,000D,0011,0012,0007,0005,0006,0008,0009,0000,0001,0002,000A,000B,000C,0003,0004,000F,0010,0013,0014
@@ -302,10 +302,10 @@ In the example above, our device is 0014 or 0015. We'll guess its the first one,
 Notice the lack of "Boot" in the ID number given, we want Boot0014 so we pass '0014' to efibootmgr:
 
 ```bash
-ncn-m001# efibootmgr -n 0014
+ncn-m# efibootmgr -n 0014
 
 # Verify the BootNext device is what you selected:
-ncn-m001# efibootmgr | grep -i bootnext
+ncn-m# efibootmgr | grep -i bootnext
 BootNext: 0014
 ```
 
