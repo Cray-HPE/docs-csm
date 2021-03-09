@@ -54,7 +54,6 @@ Now that ncn-m001 has been booted from the LiveCD, the other management NCNs wil
     * [BGP Routing](005-CSM-METAL-INSTALL.md#bgp-routing)
     * [Validation](005-CSM-METAL-INSTALL.md#validation)
 * [Additional Validation Tasks for Failed Installs](005-CSM-METAL-INSTALL.md#additional-validation-tasks-for-failed-installs)
-  * [Change Password](005-CSM-METAL-INSTALL.md#change-password)
   * [Configure and Trim UEFI Entries](005-CSM-METAL-INSTALL.md#configure-and-trim-uefi-entries)
 
 
