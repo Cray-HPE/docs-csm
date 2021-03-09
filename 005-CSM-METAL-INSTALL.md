@@ -268,6 +268,8 @@ The configuration workflow described here is intended to help understand the exp
    ```
    > Observe the output of the checks and note any failures, then remediate them.
 
+   > Note: If your shell terminal is not echoing your input after running this, type "reset" and press enter to recover.
+
 4. Print the consoles available to you:
    ```bash
    pit# conman -q

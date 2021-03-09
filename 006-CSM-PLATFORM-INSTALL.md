@@ -51,7 +51,7 @@ into the CSM Kubernetes cluster).
 4.  Use `skopeo sync` to upload container images from the CSM release:
 
     ```bash
-    pit# export CSM_RELEASE=csm-0.8.20
+    pit# export CSM_RELEASE=csm-x.y.z
     pit# podman run --rm --network host -v /var/www/ephemeral/${CSM_RELEASE}/docker/dtr.dev.cray.com:/images:ro quay.io/skopeo/stable sync --scoped --src dir --dest docker --dest-tls-verify=false --dest-creds admin:admin123 /images localhost:5000
     ```
 

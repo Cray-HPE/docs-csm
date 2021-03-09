@@ -118,6 +118,18 @@ with system-specific customizations.
 
 5.  To federate Keycloak with an upstream LDAP:
 
+    > **`INTERNAL ONLY`** On internal HPE systems, if the IP address for
+    > the ncn-m001 node is even then use `ldaps://dcldap2.us.cray.com`,
+    > otherwise use `ldaps://dcldap3.us.cray.com`. For example, `ping
+    > fanta-ncn-m001.us.cray.com` shows the IP address is `172.30.52.72`,
+    > so fanta would use `ldaps://dcldap2.us.cray.com` as the
+    > `ldap_connection_url`. This just spreads the load over the two LDAP
+    > replicas.
+    >
+    > ```bash
+    > export DCLDAP=dcldap2.us.cray.com
+    > ```
+
     *   If LDAP requires TLS (recommended), update the `cray-keycloak` sealed
         secret value by supplying a base64 encoded Java KeyStore (JKS) that
         contains the CA certificate that signed the LDAP server's host key. The
@@ -147,12 +159,11 @@ with system-specific customizations.
         > **`INTERNAL ONLY`** For example, on internal HPE systems, create the
         > `certs.jks.b64` file as follows:
         > 
-        > *   Get the issuer certificate for dcldap2.us.cray.com and
-        >     dcldap3.us.cray.com. Use `openssl s_client` to connect and
-        >     show the certificate chain returned by the LDAP host:
+        > *   Get the issuer certificate for dcldap. Use `openssl s_client` to connect
+        >     and show the certificate chain returned by the LDAP host:
         > 
         >     ```bash
-        >     linux# openssl s_client -showcerts -connect dcldap2.us.cray.com:636 </dev/null
+        >     linux# openssl s_client -showcerts -connect $DCLDAP:636 </dev/null
         >     ```
         > 
         >     Either manually extract (i.e., cut/paste) the issuer's
@@ -172,7 +183,7 @@ with system-specific customizations.
         >     1.  Observe the issuer's DN:
         > 
         >         ```bash
-        >         linux# openssl s_client -showcerts -nameopt RFC2253 -connect dcldap2.us.cray.com:636 </dev/null 2>/dev/null | grep issuer= | sed -e 's/^issuer=//'
+        >         linux# openssl s_client -showcerts -nameopt RFC2253 -connect $DCLDAP:636 </dev/null 2>/dev/null | grep issuer= | sed -e 's/^issuer=//'
         >         emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC/MCS,O=HPE,ST=WI,C=US
         >         ```
         > 
@@ -183,7 +194,7 @@ with system-specific customizations.
         >         > different, be sure to escape it properly!
         > 
         >         ```bash
-        >         linux# openssl s_client -showcerts -nameopt RFC2253 -connect dcldap2.us.cray.com:636 </dev/null 2>/dev/null| awk '/s:emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC\/MCS,O=HPE,ST=WI,C=US/,/END CERTIFICATE/' | awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' > cacert.pem
+        >         linux# openssl s_client -showcerts -nameopt RFC2253 -connect $DCLDAP:636 </dev/null 2>/dev/null| awk '/s:emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC\/MCS,O=HPE,ST=WI,C=US/,/END CERTIFICATE/' | awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' > cacert.pem
         >         ```
         > 
         > *   Verify issuer's certificate was properly extracted and saved in
@@ -256,18 +267,12 @@ with system-specific customizations.
         linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.keycloak_users_localize.generate.data.(args.name==ldap_connection_url).args.value' '<ldap-url>'
         ```
 
-        > **`INTERNAL ONLY`** On internal HPE systems, if the IP address for
-        > the ncn-m001 node is even then use `ldaps://dcldap2.us.cray.com`,
-        > otherwise use `ldaps://dcldap3.us.cray.com`. For example, `ping
-        > fanta-ncn-m001.us.cray.com` shows the IP address is `172.30.52.72`,
-        > so fanta would use `ldaps://dcldap2.us.cray.com` as the
-        > `ldap_connection_url`. This just spreads the load over the two LDAP
-        > replicas.
+        > **`INTERNAL ONLY`** 
         > 
         > Set `ldap_connection_url` in `customziations.yaml`:
         > 
         > ```bash
-        > linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.keycloak_users_localize.generate.data.(args.name==ldap_connection_url).args.value' 'ldaps://dcldap2.us.cray.com'
+        > linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.keycloak_users_localize.generate.data.(args.name==ldap_connection_url).args.value' "ldaps://$DCLDAP"
         > ```
         > 
         > On success, the `keycloak_users_localize` sealed secret should look

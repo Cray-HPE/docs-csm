@@ -85,7 +85,25 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
    from the `./${CSM_RELEASE}/rpm/embedded` directory.
 
-7. Although not strictly required, the procedures for setting up the
+7. Install lsscsi to view attached storage devices.
+
+   lsscsi RPMs are included in the `embedded` repository in the CSM release and
+   may be installed in your pre-LiveCD environment using `zypper` as follows:
+
+   * Add the `embedded` repository (if necessary):
+     ```bash
+     linux# zypper ar -fG "./${CSM_RELEASE}/rpm/embedded" "${CSM_RELEASE}-embedded"
+     ```
+     
+   * Install `lsscsi` package:
+     ```bash
+     linux# zypper in -y lsscsi
+     ```
+
+   Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
+   from the `./${CSM_RELEASE}/rpm/embedded` directory.
+
+8. Although not strictly required, the procedures for setting up the
    `site-init` directory recommend persisting `site-init` files in a Git
    repository.
 
