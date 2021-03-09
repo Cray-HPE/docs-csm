@@ -69,8 +69,6 @@ Mellanox Port Config
 sw-spine-002 [gamora-mlag-domain: master] # show run int ethernet 1/1
 interface ethernet 1/1 speed 40G force
 interface ethernet 1/1 mtu 9216 force
-interface ethernet 1/1 flowcontrol receive on force
-interface ethernet 1/1 flowcontrol send on force
 interface ethernet 1/1 mlag-channel-group 1 mode active
 ```
 Mellanox MLAG config
@@ -78,8 +76,6 @@ Mellanox MLAG config
 sw-spine-002 [gamora-mlag-domain: master] # show run int mlag-port-channel 1
 interface mlag-port-channel 1
 interface mlag-port-channel 1 mtu 9216 force
-interface mlag-port-channel 1 flowcontrol receive on force
-interface mlag-port-channel 1 flowcontrol send on force
 interface mlag-port-channel 1 switchport mode hybrid
 interface mlag-port-channel 1 no shutdown
 interface mlag-port-channel 1 switchport hybrid allowed-vlan add 2
@@ -117,8 +113,6 @@ Mellanox Port config
 sw-spine-002 [gamora-mlag-domain: master] # show run int ethernet 1/1
 interface ethernet 1/1 speed 40G force
 interface ethernet 1/1 mtu 9216 force
-interface ethernet 1/1 flowcontrol receive on force
-interface ethernet 1/1 flowcontrol send on force
 interface ethernet 1/1 mlag-channel-group 1 mode active
 ```
 
@@ -127,8 +121,6 @@ Mellanox MLAG port config
 sw-spine-002 [gamora-mlag-domain: master] # show run int mlag-port-channel 1
 interface mlag-port-channel 1
 interface mlag-port-channel 1 mtu 9216 force
-interface mlag-port-channel 1 flowcontrol receive on force
-interface mlag-port-channel 1 flowcontrol send on force
 interface mlag-port-channel 1 switchport mode hybrid
 interface mlag-port-channel 1 no shutdown
 interface mlag-port-channel 1 switchport hybrid allowed-vlan add 2
@@ -166,8 +158,6 @@ Mellanox Port config
 sw-spine-002 [gamora-mlag-domain: master] # show run int ethernet 1/7
 interface ethernet 1/7 speed 40G force
 interface ethernet 1/7 mtu 9216 force
-interface ethernet 1/7 flowcontrol receive on force
-interface ethernet 1/7 flowcontrol send on force
 interface ethernet 1/7 mlag-channel-group 7 mode active
 ```
 Mellanox MLAG port config
@@ -175,8 +165,6 @@ Mellanox MLAG port config
 sw-spine-002 [gamora-mlag-domain: master] # show run int mlag-port-channel 7
 interface mlag-port-channel 7
 interface mlag-port-channel 7 mtu 9216 force
-interface mlag-port-channel 7 flowcontrol receive on force
-interface mlag-port-channel 7 flowcontrol send on force
 interface mlag-port-channel 7 switchport mode hybrid
 interface mlag-port-channel 7 no shutdown
 interface mlag-port-channel 7 switchport hybrid allowed-vlan add 2
