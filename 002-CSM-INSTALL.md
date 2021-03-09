@@ -309,8 +309,7 @@ ncn# kubectl scale -n services --replicas=0 deployment cray-dhcp-kea
 <a name="degraded-system-notice"></a>
 #### Degraded System Notice
 
-If the system is degraded, and the administrator wants to ensure a clean-slated install then a wipe
-may be performed to rule out issues with disks and boot-order.
+If the system is degraded, and the administrator wants to ensure a clean-slated install then a wipe must be performed to rule out issues with disks, boot-order, and install orchestration.  Be sure to backup any data off-cluster.
 
 For each NCN **except for ncn-m001**, login and wipe it
 

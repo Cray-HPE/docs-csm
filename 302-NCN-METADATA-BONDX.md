@@ -181,3 +181,4 @@ wicked ifreload all
 systemctl restart dnsmasq conman basecamp
 systemctl restart nexus
 ```
+7. Before relaunching NCNs, be sure to wipe the disks first.  To wipe all disks in all NCNs, refer to the disk wipe procedure in the Degraded System Notice section of 002-CSM-INSTALL.md.
