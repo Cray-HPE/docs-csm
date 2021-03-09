@@ -28,6 +28,8 @@ Ideally the Basic Wipe is enough, and should be tried first. All of these proced
 <a name="basic-wipe"></a>
 ### Basic Wipe
 
+These basic wipe instructions can be executed on all ncn nodes (master, worker and storage).
+
 - Wipe Magic Bits
 
 ```bash
@@ -38,8 +40,12 @@ ncn# ls -1 /dev/sd* /dev/disk/by-label/*
 ncn# wipefs --all --force /dev/sd* /dev/disk/by-label/*
 ```
 
+**NOTE:** The final wipefs command may fail if no labeled disks are found, that's OK.
+
 <a name="advanced-wipe"></a>
 ### Advanced Wipe
+
+This section is specific to storage nodes.
 
 - Clear Ceph
 - Wipe Magic Bits
@@ -56,6 +62,8 @@ ncn# wipefs --all --force /dev/sd* /dev/disk/by-label/*
 
 <a name="full-wipe"></a>
 ### Full-Wipe
+
+This section is also specific to storage nodes.
 
 - Clear Ceph
 - Wipe Magic Bits
