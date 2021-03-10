@@ -32,7 +32,6 @@ This page will go over deploying the non-compute nodes.
     - [BGP Routing](#bgp-routing)
     - [Validation](#validation)
     - [Additional Validation Tasks for Failed Installs](#additional-validation-tasks-for-failed-installs)
-  - [Change Password](#change-password)
   - [Configure & Trim UEFI Entries](005-CSM-METAL-INSTALL.md#configure-and-trim-uefi-entries)
 
 
@@ -244,7 +243,13 @@ The configuration workflow described here is intended to help understand the exp
 
 #### Deploy
 
-1. Create boot directories for any NCN in DNS:
+1. Change the default root password and ssh keys
+   > If you want to avoid using the default install root password and ssh keys for the NCNs, follow the
+   > NCN image customization steps in [110 NCN Image Customization](110-NCN-IMAGE-CUSTOMIZATION.md).
+
+   This step is **strongly encouraged** for external/site deployments.
+
+2. Create boot directories for any NCN in DNS:
    > This will create folders for each host in `/var/www`, allowing each host to have their own unique set of artifacts; kernel, initrd, SquashFS, and `script.ipxe` bootscript.
 
    ```bash
@@ -252,7 +257,7 @@ The configuration workflow described here is intended to help understand the exp
    /root/bin/set-sqfs-links.sh
    ```
 
-2. Set each node to always UEFI Network Boot, and ensure they're powered off
+3. Set each node to always UEFI Network Boot, and ensure they're powered off
     ```bash
     pit# \
     grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} chassis bootdev pxe options=efiboot,persistent
@@ -261,7 +266,7 @@ The configuration workflow described here is intended to help understand the exp
     > Note: some BMCs will "flake" and ignore the bootorder setting by `ipmitool`. As a fallback, cloud-init will
     > correct the bootorder after NCNs complete their first boot. The first boot may need manual effort to set the boot order over the conman console. The NCN boot order is further explained in [101 NCN Booting](101-NCN-BOOTING.md).
 
-3. Validate that the LiveCD is ready for installing NCNs
+4. Validate that the LiveCD is ready for installing NCNs
    ```bash
    pit# \
    csi pit validate --livecd-preflight
@@ -270,7 +275,7 @@ The configuration workflow described here is intended to help understand the exp
 
    > Note: If your shell terminal is not echoing your input after running this, type "reset" and press enter to recover.
 
-4. Print the consoles available to you:
+6. Print the consoles available to you:
    ```bash
    pit# conman -q
    ncn-m001-mgmt
@@ -288,13 +293,13 @@ The configuration workflow described here is intended to help understand the exp
     
     > **`NOTE`**: All consoles are located at `/var/log/conman/console*`
 
-5. Boot the **Storage Nodes**
+6. Boot the **Storage Nodes**
     ```bash
     pit# \
     grep -oP $stoken /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
 
-6. Wait. Observe the installation through ncn-s001-mgmt's console:
+7. Wait. Observe the installation through ncn-s001-mgmt's console:
    ```bash
    # Print the console name
    pit# conman -q | grep s001
@@ -316,13 +321,13 @@ The configuration workflow described here is intended to help understand the exp
    > CASMINST-1093
    > ```
 
-7. Once all storage nodes are up and ncn-s001 is running ceph-ansible, boot **Kubernetes Managers and Workers**
+8. Once all storage nodes are up and ncn-s001 is running ceph-ansible, boot **Kubernetes Managers and Workers**
     ```bash
     pit# \
     grep -oP "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
 
-8.  Wait. Observe the installation through ncn-m002-mgmt's console:
+9.  Wait. Observe the installation through ncn-m002-mgmt's console:
     ```bash
     # Print the console name
     pit# conman -q | grep m002
@@ -457,21 +462,6 @@ new tests.**
 2. Verify etcd is running outside kubernetes on master nodes
 3. Verify that all the pods in the kube-system namespace are running
 4. Verify that the ceph-csi requirements are in place (see [CEPH CSI](066-CEPH-CSI.md))
-
-<a name="change-password"></a>
-## Change Password
-
-> **`EXTERNAL USE`** Internally this may be skipped based on context.
-
-The NCNs are online, and their default password can now be customized. For details on changing
-the root password, see [056 NCN Reset Passwords](056-NCN-RESET-PASSWORDS.md).
-
-> It is possible to update the password before booting NCNs, see [Set the Default Password](110-NCN-IMAGE-CUSTOMIZATION.md#set-the-default-password) for more
-information.
-
-> This step is **strongly encouraged** for external/site deployments. Airgapped deployments may opt to skip this step, as well as internal CI deployments.
-
-Whether the password is changed or not, an administrator may now move onto [Configure & Trim UEFI Entries](#configure-and-trim-uefi-entries) section below.
 
 <a name="configure-and-trim-uefi-entries"></a>
 ## Configure and Trim UEFI Entries
