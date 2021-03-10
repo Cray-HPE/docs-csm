@@ -279,11 +279,11 @@ all been run by the administrator before starting this stage.
       > **`NOTE`** This safeguard needs to be _removed_ to facilitate bare-metal deployments of new nodes. The linked [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard) procedure can be used to disable the safeguard by setting the value back to `0`.
 21. Install the workaround and docs RPMs to ncn-m001:
     ```bash
+    ncn-m001# export CSM_RELEASE=csm-x.y.z
     ncn-m001# rpm -iv /mnt/pitdata/${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/noarch/csm-install-workarounds-*.noarch.rpm
     ncn-m001# rpm -iv /mnt/pitdata/${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/noarch/docs-csm-install-*.noarch.rpm
     ```
-22. Apply Mountain, Hill and River cabinet routing to ncn-m001 as described in [Add Compute Cabinet Routes](109-COMPUTE-CABINET-ROUTES-FOR-NCN.md).
-23. Now check for workarounds in the `/opt/cray/csm/workarounds/livecd-post-reboot` directory. Each has its own instructions in their respective `README` files.
+22. Now check for workarounds in the `/opt/cray/csm/workarounds/livecd-post-reboot` directory. Each has its own instructions in their respective `README` files.
     ```text
     # Example
     # The following command assumes that the data partition of the USB stick has been remounted at /mnt/pitdata

@@ -146,8 +146,11 @@ At this time the administrator can begin actually deploying the platform.
 > however, it needs to know `SYSTEM_NAME` in order to find `metallb.yaml` and
 > `sls_input_file.json` configuration files.
 >
+> Some commands will also need to have the CSM_RELEASE variable set.
+>
 > ```bash
 > pit# export SYSTEM_NAME=eniac
+> pit# export CSM_RELEASE=csm-x.y.z
 > ```
 
 Complete the CSM install by running `install.sh`.

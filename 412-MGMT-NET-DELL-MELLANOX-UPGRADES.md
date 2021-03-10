@@ -84,7 +84,7 @@ write memory
 ```
 
 Dell CDU changes
-Add BPDUgudard to ports going to CMMs
+Add BPDUguard to ports going to CMMs
 
 ```
 interface port-channel1
