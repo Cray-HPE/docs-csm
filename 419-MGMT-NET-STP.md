@@ -6,7 +6,7 @@ It is not recommended to add/adjust these settings while a system is running.
 
 # Aruba Configuration
 
-The following configuration is applied to each of the VSX pairs (Spines), this config is identical.
+The following configuration is applied to each of the Spine VSX pairs, this config is identical.
 ```
 spanning-tree mode rpvst
 spanning-tree
@@ -33,7 +33,7 @@ VLAN7       32768 02:01:00:00:01:00         0     2  20  15            0
 VLAN10      32768 02:01:00:00:01:00         0     2  20  15            0
 ```
 
-The following configuration is applied to Aruba leaf switches.
+The following configuration is applied to Aruba leaf/Aggregation switches.
 ```
 spanning-tree mode rpvst
 spanning-tree
