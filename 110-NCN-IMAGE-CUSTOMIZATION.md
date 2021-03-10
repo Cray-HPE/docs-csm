@@ -14,9 +14,9 @@ The LiveCD is equipped for "re-squashing" an SquashFS images.
 <a name="set-the-default-password"></a>
 #### Set the Default Password
 
-_Using kubernetes as an example._
+_Using kubernetes as an example. This should be repeated for the other NCN squashfs filesystems._
 
-1. Open the image, ours is called `k8s-filesystem.squashfs`.
+1. Open the image, ours is called `k8s-filesystem.squashfs`
    ```bash
    pit# cd /var/www/ephemeral/data/k8s
    pit# unsquash k8s-filesystem.squashfs
@@ -29,19 +29,25 @@ _Using kubernetes as an example._
    ```bash
    chroot-pit# passwd
    ```
-4. Create the new squashFS artifact
+4. Replace the ssh keys
+   ```bash
+   chroot-pit# cd root
+   ```
+   Replace the default root public and private ssh keys with your own or generate a new pair with `ssh-keygen(1)`
+
+5. Create the new squashFS artifact
    ```bash
    chroot-pit# /srv/cray/scripts/common/create-kis-artifacts.sh
    ```
-5. Exit the chroot
+6. Exit the chroot
    ```bash
    chroot-pit# exit
    ```
-6. Cleanup the squash creation
+7. Cleanup the squash creation
    ```bash
    pit# umount /var/www/ephemeral/data/k8s/squasfs-root/squashfs
    ```
-7. Set boot links
+8. Repeat the previous steps for the other image types and then set the boot links
    ```bash
    pit# set-sqfs-links.sh   
    ```
