@@ -3,10 +3,8 @@
 This page will prepare you for a CSM install using the LiveCD in different scenarios.
 
 * [Install Prerequisites](#install-prerequisites)
-  * [Installing onto Shasta v1.3 Systems](#installing-onto-shasta-v13-systems) for systems which have Shasta v1.3 software and need to move to Shasta v1.4 software.
-  * [Installing onto Bare-metal Systems](#installing-onto-bare-metal-systems) for new machines doing their first install of Shasta software.
-  * [Reinstalling a Shasta v1.4 System](#reinstalling-a-shasta-v14-system) for previously deployed Shasta v1.4 system.
 * [Starting an Installation](#starting-an-installation)
+
   * [Boot the LiveCD](#boot-the-livecd)
 
 <a name="install-prerequisites"></a>
@@ -15,14 +13,19 @@ This page will prepare you for a CSM install using the LiveCD in different scena
 The prerequisites for each install scenario are defined here. **All prerequisites must be met
 before commencing an installation**.
 
-
 After finishing any of these prerequisite guides, an administrator may move
 to [Starting an Installation](#starting-an-installation).
 
+#### Available Installation Paths
+
+  * [Prerequisites for Shasta v1.4 Installations on Shasta v1.3 Systems](#prerequisites-for-shasta-v14-installations-on-shasta-v13-systems)
+  * [Prerequisites for Shasta v1.4 Installations on Bare-metal Systems](#prerequisites-for-shasta-v14-installations-on-bare-metal-systems)
+  * [Prerequisites for Reinstalling Shasta v1.4](#prerequisites-for-reinstallting-shasta-v14)
+
 ---
 
-<a name="installing-onto-shasta-v13-systems"></a>
-## Installing onto Shasta v1.3 Systems
+<a name="pre-requisites-for-shasta-v14-installations-on-shasta-v13-systems"></a>
+## Prerequisites for Shasta v1.4 Installations on Shasta v1.3 Systems
 
 
 Each item below defines a prerequisite that must be completed on systems with existing Shasta
@@ -160,7 +163,7 @@ See [moving site connections](309-MOVE-SITE-CONNECTIONS.md) to complete this ste
 #### PCIe Connections
 
 This **is strongly encouraged** to prevent overhead when adding new NCNs that the
-existing NCNs are recabled to facilitate PCIe PXE booting and "keeping NCNs the same."
+existing NCNs are re-cabled to facilitate PCIe PXE booting and "keeping NCNs the same."
 
 Installs for NCNs support PCIe PXE booting for deployment. Previous installations of Shasta v1.3 and
 earlier used their onboard interfaces to start PXE, before pivoting to their faster PCIe ports for
@@ -209,8 +212,8 @@ The system is now ready for [Starting an Installation](#starting-an-installation
 
 ---
 
-<a name="installing-onto-bare-metal-systems"></a>
-## Installing onto Bare-metal Systems
+<a name="prerequisites-for-shasta-v14-installations-on-bare-metal-systems"></a>
+## Prerequisites for Shasta v1.4 Installations on Bare-metal Systems
 
 Each item below defines a prerequisite necessary for a bare-metal installation to succeed.
 
@@ -277,20 +280,16 @@ The system is now ready for [Starting an Installation](#starting-an-installation
 
 ---
 
-<a name="reinstalling-a-shasta-v14-system"></a>
-## Reinstalling a Shasta v1.4 System
+<a name="prerequisites-for-reinstallting-shasta-v14"></a>
+## Prerequisites for Reinstallting Shasta v1.4
 
 The following prerequisites must be completed in order to successfully reinstall Shasta v1.4.
 
-* [Scaling Down DHCP](#scaling-down-dhcp)
-* [Power down the NCNs](#power-down-the-ncns)
-  * [Degraded System Notice](#degraded-system-notice)
-  * [Powering Off](#powering-off)
-  * [Set BMCs to back to DHCP](#set-the-bmcs-on-the-systems-back-to-dhcp)
-  * [Powering Off the LiveCD/m001](#powering-off-livecd-or-ncn-m001-node)
+* [Standing Kubernetes Down](#standing-kubernetes-down)
+* [Prepare the Non-Compute Nodes](#prepare-the-non-compute-nodes)
 
-<a name="scaling-down-dhcp"></a>
-### Scaling Down DHCP
+<a name="Standing Kubernetes Down"></a>
+### Standing Kubernetes Down
 
 Runtime DHCP services interfere with the LiveCD's bootstrap nature to provide DHCP leases to BMCs. To remove
 edge-cases, disable the run-time cray-dhcp-kea pod.
@@ -301,127 +300,116 @@ Scale the deployment from either the LiveCD or any Kubernetes node
 ncn# kubectl scale -n services --replicas=0 deployment cray-dhcp-kea
 ```
 
-<a name="power-down-the-ncns"></a>
-### Power down the NCNs
+<a name="prepare-the-non-compute-nodes"></a>
+### Prepare the Non-Compute Nodes
 
 > UANs and CNs do not need to be powered off.
 
+The steps below detail how to prepare the NCNs.
+
 <a name="degraded-system-notice"></a>
-#### Degraded System Notice
+> #### Degraded System Notice
+> 
+> If the system is degraded; CRAY services are down, or the NCNs are in inconsistent states then a cleanslate should be performed.  [basic wipe from Disk Cleanslate](051-DISK-CLEANSLATE.md#basic-wipe)
 
-If the system is degraded, and the administrator wants to ensure a clean-slated install then a wipe must be performed to rule out issues with disks, boot-order, and install orchestration.  Be sure to backup any data off-cluster.
+1. **REQUIRED** For each NCN, **excluding** ncn-m001, login and wipe it (this step uses the [basic wipe from Disk Cleanslate](051-DISK-CLEANSLATE.md#basic-wipe)):
+    > **`NOTE`** Pending completion of CASMINST-1659, the auto-wipe is insufficient for masters and workers. All administrators must wipe their NCNs with this step.
+    - Wipe NCN disks from **LiveCD** (`pit`)
+        ```bash
+        pit# ncns=$(grep Bond0 /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F',' '{print $6}')
+        for h in $ncns; do
+            read -r -p "Are you sure you want to wipe the disks on $h? [y/N] " response
+            response=${response,,}
+            if [[ "$response" =~ ^(yes|y)$ ]]; then
+                 ssh $h wipefs --all --force /dev/sd[a-z] /dev/disk/by-label/*
+            fi
+        done
+        ```
 
-For each NCN **except for ncn-m001**, login and wipe it
-
-- Wipe NCN disks from **LiveCD** (`pit`)
-    ```bash
-    pit# ncns=$(grep Bond0 /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F',' '{print $6}')
-    for h in $ncns; do
-        read -r -p "Are you sure you want to wipe the disks on $h? [y/N] " response
-        response=${response,,}
-        if [[ "$response" =~ ^(yes|y)$ ]]; then
-             ssh $h wipefs --all --force /dev/sd[a-z] /dev/disk/by-label/*
-        fi
-    done
-    ```
-
-- Wipe NCN disks from **ncn-m001**
-    ```bash
-    ncn-m001# ncns=$(grep ncn /etc/hosts | grep nmn | grep -v m001 | awk '{print $3}')
-    for h in $ncns; do
-        read -r -p "Are you sure you want to wipe the disks on $h? [y/N] " response
-        response=${response,,}
-        if [[ "$response" =~ ^(yes|y)$ ]]; then
-             ssh $h wipefs --all --force /dev/sd[a-z] /dev/disk/by-label/*
-        fi
-    done
-    ```
-
-<a name="powering-off"></a>
-#### Powering Off
-
-The NCNs will auto-wipe on the next install. Optionally, they can be powered down to minimize network
-activity.
-
-Power each NCN off using `ipmitool` from ncn-m001 (or the booted LiveCD if reinstalling an incomplete
+    - Wipe NCN disks from **ncn-m001**
+        ```bash
+        ncn-m001# ncns=$(grep ncn /etc/hosts | grep nmn | grep -v m001 | awk '{print $3}')
+        for h in $ncns; do
+            read -r -p "Are you sure you want to wipe the disks on $h? [y/N] " response
+            response=${response,,}
+            if [[ "$response" =~ ^(yes|y)$ ]]; then
+                 ssh $h wipefs --all --force /dev/sd[a-z] /dev/disk/by-label/*
+            fi
+        done
+        ```
+2. Power each NCN off using `ipmitool` from ncn-m001 (or the booted LiveCD if reinstalling an incomplete
 install).
 
-- Shutdown from **LiveCD** (`pit`)
-  ```bash
-    pit# export username=root
-    pit# export IPMI_PASSWORD=changeme
-    pit# conman -q | grep mgmt | xargs -t -i  ipmitool -I lanplus -U $username -E -H {} power off
-    ```
-- Shutdown from **ncn-m001**
-    ```bash
-    ncn-m001# export username=root
-    ncn-m001# export IPMI_PASSWORD=changeme
-    ncn-m001# grep ncn /etc/hosts | grep mgmt | grep -v m001 | sort -u | awk '{print $2}' | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
-    ```
+    - Shutdown from **LiveCD** (`pit`)
+        ```bash
+        pit# export username=root
+        pit# export IPMI_PASSWORD=changeme
+        pit# conman -q | grep mgmt | xargs -t -i  ipmitool -I lanplus -U $username -E -H {} power off
+        ```
+
+    - Shutdown from **ncn-m001**
+        ```bash
+        ncn-m001# export username=root
+        ncn-m001# export IPMI_PASSWORD=changeme
+        ncn-m001# grep ncn /etc/hosts | grep mgmt | grep -v m001 | sort -u | awk '{print $2}' | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
+        ```
 
 <a name="set-the-bmcs-on-the-systems-back-to-dhcp"></a>
-### Set the BMCs on the systems back to DHCP
+3. Set the BMCs on the systems back to DHCP.
+   > **`NOTE`** During the install of the NCNs their BMCs get set to static IP addresses. The installation expects the that the NCN BMCs are set back to DHCP before proceeding.
 
-During the install of the NCNs their BMCs get get set to static IP addresses. The install expects the that the NCN BMCs are set back to DHCP before proceeding.
+    - from the **LiveCD** (`pit`):
+        > **`NOTE`** This step uses the old statics.conf on the system in case CSI changes IPs:
 
-- If on the **LiveCD** (`pit`):
-  This step uses the old statics.conf on the system in case CSI changes IPs:
+        ```bash
+        pit# export username=root
+        pit# export IPMI_PASSWORD=changeme
 
-  ```bash
-  pit# export username=root
-  pit# export IPMI_PASSWORD=changeme
+        pit# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
+        do
+        ipmitool -U $username -I lanplus -H $h -E lan set 1 ipsrc dhcp
+        done
 
-  pit# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
-  do
-  ipmitool -U $username -I lanplus -H $h -E lan set 1 ipsrc dhcp
-  done
+        pit# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
+        do
+        ipmitool -U $username -I lanplus -H $h -E lan print 1 | grep Source
+        done
 
-  pit# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
-  do
-  ipmitool -U $username -I lanplus -H $h -E lan print 1 | grep Source
-  done
+        pit# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
+        do
+        ipmitool -U $username -I lanplus -H $h -E mc reset cold
+        done
+        ```
 
-  pit# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
-  do
-  ipmitool -U $username -I lanplus -H $h -E mc reset cold
-  done
-  ```
+    - from **ncn-m001**:
+        > **`NOTE`** This step uses to the `/etc/hosts` file on ncn-m001 to determine the IP addresses of the BMCs:
 
-- If on **ncn-m001**:
-  This step uses to the `/etc/hosts` file on ncn-m001 to determine the IP addresses of the BMCs:
+        ```bash
+        ncn-m001# export username=root
+        ncn-m001# export IPMI_PASSWORD=changeme
+        ncn-m001# for h in $( grep ncn /etc/hosts | grep mgmt | grep -v m001 | awk '{print $2}' )
+        do
+        ipmitool -U $username -I lanplus -H $h -E lan set 1 ipsrc dhcp
+        done
 
-  ```bash
-  ncn-m001# export username=root
-  ncn-m001# export IPMI_PASSWORD=changeme
-  ncn-m001# for h in $( grep ncn /etc/hosts | grep mgmt | grep -v m001 | awk '{print $2}' )
-  do
-  ipmitool -U $username -I lanplus -H $h -E lan set 1 ipsrc dhcp
-  done
+        ncn-m001# for h in $( grep ncn /etc/hosts | grep mgmt | grep -v m001 | awk '{print $2}' )
+        do
+        ipmitool -U $username -I lanplus -H $h -E lan print 1 | grep Source
+        done
 
-  ncn-m001# for h in $( grep ncn /etc/hosts | grep mgmt | grep -v m001 | awk '{print $2}' )
-  do
-  ipmitool -U $username -I lanplus -H $h -E lan print 1 | grep Source
-  done
+        ncn-m001# for h in $( grep ncn /etc/hosts | grep mgmt | grep -v m001 | awk '{print $2}' )
+        do
+        ipmitool -U $username -I lanplus -H $h -E mc reset cold
+        done
+        ```
 
-  ncn-m001# for h in $( grep ncn /etc/hosts | grep mgmt | grep -v m001 | awk '{print $2}' )
-  do
-  ipmitool -U $username -I lanplus -H $h -E mc reset cold
-  done
-  ```
+4. Powering Off LiveCD or ncn-m001 node
+    > **`Skip this step if`** you are planning to use this node as a staging area to create the LiveCD. Lastly, shutdown the LiveCD or ncn-m001 node.
+    ```bash
+    ncn-m001# poweroff
+    ```
 
-
-<a name="powering-off-livecd-or-ncn-m001-node"></a>
-#### Powering Off LiveCD or ncn-m001 node
-Skip this step if you are planning to use this node as a staging area to create the LiveCD. Lastly, shutdown the LiveCD or ncn-m001 node.
-```bash
-ncn-m001# poweroff
-```
-
-With the nodes off, you can now continue.
-
-> *`Next`*: Starting an Installation
-
-The system is now ready for [Starting an Installation](#starting-an-installation).
+With the nodes off, the system is now ready for [Starting an Installation](#starting-an-installation).
 
 ---
 
