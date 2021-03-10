@@ -1,4 +1,4 @@
-# Compute Node Bios workaround for `WNC-rome` aka `HPE CRAY EX425`
+# Compute Node BIOS workaround for `WNC-rome` aka `HPE CRAY EX425`
 
 ## Problem Identification
 The following conditions must be true in order to qualify for this problem:
