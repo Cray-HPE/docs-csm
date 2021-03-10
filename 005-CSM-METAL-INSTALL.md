@@ -362,9 +362,6 @@ The administrator needs to move onto the next sections, before considering conti
 - [BGP Routing](#bgp-routing)
 - [Validation](#validation)
 
-**After validating the install**, an administrator may proceed further to continue optional validations
-_or_ head to [CSM Platform Install](006-CSM-PLATFORM-INSTALL.md).
-
 <a name="apply-ncn-post-boot-workarounds"></a>
 ### Apply NCN Post-Boot Workarounds
 
@@ -438,7 +435,10 @@ Observe the output of the checks and note any failures, then remediate them.
     1. Wipe the ncns using the 'Basic Wipe' section of [DISK CLEANSLATE](051-DISK-CLEANSLATE.md).
     2. Return to the 'Boot the **Storage Nodes**' step of [Start Deployment](#start-deployment) section above.
 
-4. The **administrator may proceed to the [CSM Platform Install](006-CSM-PLATFORM-INSTALL.md) guide at this time.** The optional validation may have differing value in various install contexts.
+
+**After validating the install**, an administrator may proceed further to continue optional validations
+_or_ head to [CSM Platform Install](006-CSM-PLATFORM-INSTALL.md). The optional validation may have differing
+value in various install contexts.
 
 <a name="optional-validation"></a>
 

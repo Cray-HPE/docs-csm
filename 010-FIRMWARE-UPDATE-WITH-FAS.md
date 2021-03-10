@@ -81,19 +81,19 @@ After you identify which hardware you have; start with the top most item on this
 
 **IMPORTANT** : read the corresponding recipes! there are sometimes ancillary actions that must be completed in order to ensure update integrity!
 
-1. Cray
-     2. [RouterBMC](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#cray-device-type-:-routerbmc-|--target-:-bmc)
-     2. [ChassisBMC](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#cray-device-type-:-chassisbmc-|-target:-bmc)
+1. [Cray](#manufacturer-cray)
+     2. [RouterBMC](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#cray-device-type-routerbmc--target-bmc)
+     2. [ChassisBMC](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#cray-device-type-chassisbmc-target-bmc)
      4. NodeBMC
-        4. [BMC](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#cray-device-type-:-nodebmc-|-target-:-bmc)
-        5. [NodeBios](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#cray-device-type-:-nodebmc-|-target-:-nodebios)
-        6. [Redstone FPGA 	](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#cray-device-type-:-nodebmc-|-target-:-redstone-fpga) 
-5. Gigabyte
-	6. [BMC](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#gb-device-type-:-nodebmc-|-target-:-bmc) 
-	7. [BIOS](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#gb-device-type-:-nodebmc-|-target-:-bios) 
-3. HPE
-     1. [BMC (iLO5)](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#hpe-device-type-:-nodebmc-|-target-:--aka-bmc)
-     2. [BIOS (System ROM)](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#hpe-device-type-:-nodebmc-|-target-:--aka-bios) 
+        4. [BMC](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#cray-device-type-nodebmc-target-bmc)
+        5. [NodeBIOS](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#cray-device-type-nodebmc-target-nodebios)
+        6. [Redstone FPGA 	](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#cray-device-type-nodebmc-target-redstone-fpga) 
+5. [Gigabyte](#manufacturer-gigabyte)
+	6. [BMC](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#gb-device-type-nodebmc-target-bmc) 
+	7. [BIOS](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#gb-device-type-nodebmc-target-bios) 
+3. [HPE](#manufacturer-hpe)
+     1. [BMC (iLO5)](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#hpe-device-type-nodebmc-target--aka-bmc)
+     2. [BIOS (System ROM)](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#hpe-device-type-nodebmc-target--aka-bios) 
 
 
 <a name="next-steps"></a>

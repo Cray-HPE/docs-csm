@@ -3,7 +3,7 @@
 1. [Dell and Mellanox Changes for Shasta v1.3 to v1.4 Upgrades](412-MGMT-NET-DELL-MELLANOX-UPGRADES.md)
 1. HPE Aruba Installation and Configuration
     1. Early Installation
-        1. Access Master Node 1 (ncn-m001) and it's iLO should already be completed (003-LIVECD-USB-BOOT.md)
+        1. Access Master Node 1 (ncn-m001) and it's iLO should already be completed (003-CSM-USB-LIVECD.md)
         1. Install [Baseline Switch Configuration](402-MGMT-NET-BASE-CONFIG.md)
         1. Update [Firmware](409-MGMT-NET-FIRMWARE-UPDATE.md)
     1. Configure all switches via IPv6 connection from ncn-m001

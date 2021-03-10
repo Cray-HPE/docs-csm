@@ -48,7 +48,7 @@ For operations that do not require a rebuild, a power off and cold boot will suf
 <a name='kubernetes'></a>
 #### Kubernetes
 
-If the node can be powered off nicely by issuing a `poweroff` command on the CLi, then it will evict its containers
+If the node can be powered off nicely by issuing a `poweroff` command on the CLI, then it will evict its containers
 and unmount etcd. On power-up it will re-join.
 
 If the node is unresponsive, you can alert the cluster that you will be rebooting it by evicting the node:
