@@ -90,6 +90,11 @@ off the system, and limiting new logins to application nodes.
 
     ```bash
     ncn-w001# sat bootsys shutdown --stage session-checks
+    ```
+    
+    Expected output will look something like this:
+    
+    ```
     Checking for active BOS sessions.
     Found no active BOS sessions.
     Checking for active CFS sessions.
@@ -187,22 +192,45 @@ Shutdown platform services.
 ### Powering off NCNs
 
 The management NCNs need to be powered off to facilitate a 1.4 install. Wiping the node
-will avoid boot mistakes, making the only viable option the PXE option.
+will avoid boot mistakes, making the only viable option the PXE option. Below, use Ansible
+for wiping and shutting down the NCNs. 
 
-Below, use Ansible for wiping and shutting down the NCNs. Since 1.3 installs used ncn-w001 as
-a place to run Ansible and host Ansible inventory, we'll start by jumping from the manager node to ncn-w001.
+1. Since 1.3 installs used ncn-w001 as a place to run Ansible and host Ansible inventory, 
+we'll start by jumping from the manager node to ncn-w001.
+    ```bash
+    # jumpbox
+    ncn-m001# ssh ncn-w001
+    ncn-w001#
+    ```
+1. Wipe disks on all nodes:
+    ```bash
+    ncn-w001# ansible ncn -m shell -a 'shopt -s extglob ; wipefs --all --force /dev/sd+([a-z])'
+    ```
 
-  ```bash
-  # jumpbox
-  ncn-m001# ssh ncn-w001
+    For disks which have no labels, no output will be shown by the wipefs commands being run. 
+    If one or more disks have labels, output similar to the following is expected:
+    ```
+    /dev/sda: 8 bytes were erased at offset 0x00000200 (gpt): 45 46 49 20 50 41 52 54
+    /dev/sda: 8 bytes were erased at offset 0x6fc86d5e00 (gpt): 45 46 49 20 50 41 52 54
+    /dev/sda: 2 bytes were erased at offset 0x000001fe (PMBR): 55 aa
+    /dev/sdb: 8 bytes were erased at offset 0x00000200 (gpt): 45 46 49 20 50 41 52 54
+    /dev/sdb: 8 bytes were erased at offset 0x6fc86d5e00 (gpt): 45 46 49 20 50 41 52 54
+    /dev/sdb: 2 bytes were erased at offset 0x000001fe (PMBR): 55 aa
+    /dev/sdc: 6 bytes were erased at offset 0x00000000 (crypto_LUKS): 4c 55 4b 53 ba be
+    /dev/sdc: 6 bytes were erased at offset 0x00004000 (crypto_LUKS): 53 4b 55 4c ba be
+    ```
+  
+    The thing to verify is that there are no error messages in the output.
+1. Power off all other nodes except ncn-m001
+    ```bash
+    ncn-w001# ansible ncn -m shell --limit='!ncn-w001:!ncn-m001' -a 'ipmitool power off'
+    ```
+1. Power off ncn-w001:
+    ```bash
+    ncn-w001# ipmitool power off
+    ```
 
-  # wipe all other nodes and power them off
-  ncn-w001# ansible ncn -m shell -a 'wipefs --all --force /dev/sd[a-z]'
-  ncn-w001# ansible ncn -m shell --limit='!ncn-w001:!ncn-m001' -a 'ipmitool power off'
-  ncn-w001# ipmitool power off
-  ```
-
-At this time all that is left on is ncn-m001. The final `ipmitool power off` command should disconnect the administrator, leaving them on ncn-m001.
+At this time all that is left powered on is ncn-m001. The final `ipmitool power off` command should disconnect the administrator from ncn-w001, leaving them on ncn-m001.
 
 If the connection fails to disconnect, an administrator can escape and disconnect IPMI without exiting their SSH session by pressing `~~.` until `ipmitool` disconnects.
 
@@ -317,11 +345,11 @@ The steps below detail how to prepare the NCNs.
     - Wipe NCN disks from **LiveCD** (`pit`)
         ```bash
         pit# ncns=$(grep Bond0 /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F',' '{print $6}')
-        for h in $ncns; do
+        pit# for h in $ncns; do
             read -r -p "Are you sure you want to wipe the disks on $h? [y/N] " response
             response=${response,,}
             if [[ "$response" =~ ^(yes|y)$ ]]; then
-                 ssh $h wipefs --all --force /dev/sd[a-z] /dev/disk/by-label/*
+                 ssh $h 'shopt -s extglob ; wipefs --all --force /dev/sd+([a-z]) /dev/disk/by-label/*'
             fi
         done
         ```
@@ -329,14 +357,33 @@ The steps below detail how to prepare the NCNs.
     - Wipe NCN disks from **ncn-m001**
         ```bash
         ncn-m001# ncns=$(grep ncn /etc/hosts | grep nmn | grep -v m001 | awk '{print $3}')
-        for h in $ncns; do
+        ncn-m001# for h in $ncns; do
             read -r -p "Are you sure you want to wipe the disks on $h? [y/N] " response
             response=${response,,}
             if [[ "$response" =~ ^(yes|y)$ ]]; then
-                 ssh $h wipefs --all --force /dev/sd[a-z] /dev/disk/by-label/*
+                 ssh $h 'shopt -s extglob ; wipefs --all --force /dev/sd+([a-z]) /dev/disk/by-label/*'
             fi
         done
         ```
+
+    In either case, for disks which have no labels, no output will be shown. If one or more disks have labels, output similar
+    to the following is expected:
+    ```
+    ...
+    Are you sure you want to wipe the disks on ncn-m003? [y/N] y
+    /dev/sda: 8 bytes were erased at offset 0x00000200 (gpt): 45 46 49 20 50 41 52 54
+    /dev/sda: 8 bytes were erased at offset 0x6fc86d5e00 (gpt): 45 46 49 20 50 41 52 54
+    /dev/sda: 2 bytes were erased at offset 0x000001fe (PMBR): 55 aa
+    /dev/sdb: 8 bytes were erased at offset 0x00000200 (gpt): 45 46 49 20 50 41 52 54
+    /dev/sdb: 8 bytes were erased at offset 0x6fc86d5e00 (gpt): 45 46 49 20 50 41 52 54
+    /dev/sdb: 2 bytes were erased at offset 0x000001fe (PMBR): 55 aa
+    /dev/sdc: 6 bytes were erased at offset 0x00000000 (crypto_LUKS): 4c 55 4b 53 ba be
+    /dev/sdc: 6 bytes were erased at offset 0x00004000 (crypto_LUKS): 53 4b 55 4c ba be
+    ...
+    ```
+
+    The thing to verify is that there are no error messages in the output.
+
 2. Power each NCN off using `ipmitool` from ncn-m001 (or the booted LiveCD if reinstalling an incomplete
 install).
 
@@ -358,7 +405,7 @@ install).
 3. Set the BMCs on the systems back to DHCP.
    > **`NOTE`** During the install of the NCNs their BMCs get set to static IP addresses. The installation expects the that the NCN BMCs are set back to DHCP before proceeding.
 
-    - from the **LiveCD** (`pit`):
+   * from the **LiveCD** (`pit`):
         > **`NOTE`** This step uses the old statics.conf on the system in case CSI changes IPs:
 
         ```bash
@@ -381,7 +428,7 @@ install).
         done
         ```
 
-    - from **ncn-m001**:
+   * from **ncn-m001**:
         > **`NOTE`** This step uses to the `/etc/hosts` file on ncn-m001 to determine the IP addresses of the BMCs:
 
         ```bash

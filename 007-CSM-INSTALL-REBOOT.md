@@ -47,7 +47,11 @@ data so run them only when indicated. Instructions are in the `README` files.
 ```
 # Example
 pit# ls /opt/cray/csm/workarounds/livecd-pre-reboot
-casminst-435
+```
+
+If there is a workaround here, the output looks similar to the following:
+```
+CASMINST-435
 ```
 
 <a name="hand-off"></a>
@@ -70,25 +74,29 @@ all been run by the administrator before starting this stage.
 
    ```bash
    pit# csi upload-sls-file --sls-file /var/www/ephemeral/prep/${SYSTEM_NAME}/sls_input_file.json
+   ```
+   
+   Expected output looks similar to the following:
+   ```
    2021/02/02 14:05:15 Retrieving S3 credentails ( sls-s3-credentials ) for SLS
    2021/02/02 14:05:15 Uploading SLS file: /var/www/ephemeral/prep/eniac/sls_input_file.json
    2021/02/02 14:05:15 Successfully uploaded SLS Input File.
    ```
-2. Get a token to use for authenticated communication with the gateway.
+1. Get a token to use for authenticated communication with the gateway.
    > **`NOTE`** `api-gw-service-nmn.local` is legacy, and will be replaced with api-gw-service.nmn.
-   ```text
+   ```bash
    pit# export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
       -d client_id=admin-client \
       -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
       https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
    ```
-3. Upload the same `data.json` file we used to BSS, our Kubernetes cloud-init DataSource. __If you have made any changes__ 
+1. Upload the same `data.json` file we used to BSS, our Kubernetes cloud-init DataSource. __If you have made any changes__ 
    to this file as a result of any customizations or workarounds use the path to that file instead. This step will 
    prompt for the root password of the NCNs.
    ```bash
    pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json
    ```
-4. Upload NCN artifacts, filling `CSM_RELEASE` with the actual release tarball.
+1. Upload NCN artifacts, filling `CSM_RELEASE` with the actual release tarball.
    ```bash
    pit# export CSM_RELEASE=csm-x.y.z
    pit# export artdir=/var/www/ephemeral/${CSM_RELEASE}/images
@@ -100,37 +108,56 @@ all been run by the administrator before starting this stage.
       --ceph-initrd-path $artdir/storage-ceph/initrd.img*.xz \
       --ceph-squashfs-path $artdir/storage-ceph/storage-ceph*.squashfs
    ```
-5. Set efibootmgr for booting next from Port-1 of Riser-1
+1. List ipv4 boot options using `efibootmgr`:
    ```bash
    pit# efibootmgr | grep -i ipv4
-   Boot0005* UEFI IPv4: Network 00 at Riser 02 Slot 01
-   Boot0007* UEFI IPv4: Network 01 at Riser 02 Slot 01
-   Boot000A* UEFI IPv4: Intel Network 00 at Baseboard
-   Boot000C* UEFI IPv4: Intel Network 01 at Baseboard
    ```
-   Looking at the above output, `Network 00 at Riser 02 Slot 01` is reasonably our Port-1 of Riser-1.
+1. Identify Port-1 of Riser-1 in `efibootmgr` output and set `PXEPORT` variable.
+   * Example 1
+   
+      Possible output of `efibootmgr` command in the previous step:
+      ```
+      Boot0005* UEFI IPv4: Network 00 at Riser 02 Slot 01
+      Boot0007* UEFI IPv4: Network 01 at Riser 02 Slot 01
+      Boot000A* UEFI IPv4: Intel Network 00 at Baseboard
+      Boot000C* UEFI IPv4: Intel Network 01 at Baseboard
+      ```
+      Looking at the above output, `Network 00 at Riser 02 Slot 01` is reasonably our Port-1 of Riser-1, which would
+      be `Boot0005` in this case. Set `PXEPORT` to the numeric suffix of that name.
+      ```bash
+      pit# export PXEPORT=0005
+      ```
+   * Example 2
+   
+      Possible output of `efibootmgr` command in the previous step:
+      ```
+      Boot0013* OCP Slot 10 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - PXE (HTTP(S) IPv4)
+      Boot0014* OCP Slot 10 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - PXE (PXE IPv4)
+      Boot0017* Slot 1 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - PXE (HTTP(S) IPv4)
+      Boot0018* Slot 1 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - PXE (PXE IPv4)
+      ```
+      In the above output, look for the non-OCP device that has "PXE IPv4" rather than "HTTP(S) IPv4", which would be 
+      `Boot0018` in this case. Set `PXEPORT` to the numeric suffix of that name.
+      ```bash
+      pit# export PXEPORT=0018
+      ```
 
+      This value varies, take a moment to study the `efibootmgr` output before proceeding.
+1. Use `efibootmgr` to set next boot device to port selected in the previous step.
    ```bash
-   pit# efibootmgr | grep -i ipv4
-   Boot0013* OCP Slot 10 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - PXE (HTTP(S) IPv4)
-   Boot0014* OCP Slot 10 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - PXE (PXE IPv4)
-   Boot0017* Slot 1 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - PXE (HTTP(S) IPv4)
-   Boot0018* Slot 1 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - PXE (PXE IPv4)
+   pit# efibootmgr -n $PXEPORT 2>&1 | grep -i BootNext
    ```
-   In the above example, look for the non-OCP device that has "PXE IPv4" rather than "HTTP(S) IPv4", which would be 
-   `Boot0018` in this case.
-
-   This value varies, take a moment to study the `efibootmgr` output before running this next command.
-   ```bash
-   pit# efibootmgr -n 0005 2>&1 | grep -i BootNext
+   
+   If `PXEPORT` was set to 0005, the expected output looks similar to the following:
+   ```
    BootNext: 0005
    ```
-6. **`SKIP THIS STEP IF USING USB LIVECD`** The remote LiveCD will lose all changes and local data once it is rebooted. 
+1. **`SKIP THIS STEP IF USING USB LIVECD`** The remote LiveCD will lose all changes and local data once it is rebooted. 
    It is advised to backup the prep directory for the LiveCD off of the CRAY before rebooting. This will facilitate 
    setting the LiveCD up again in the event of a bad reboot. Follow the procedure in 
    [Virtual ISO Boot - Backing up the OverlayFS](062-LIVECD-VIRTUAL-ISO-BOOT.md#backing-up-the-overlay-cow-fs).
    After completing that, return here and proceed to the next step.
-7. Optionally setup conman or serial console if not already on one from any laptop
+1. Optionally setup conman or serial console if not already on one from any laptop
    ```bash
    external# script -a boot.livecd.$(date +%Y-%m-%d).txt
    external# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
@@ -140,11 +167,15 @@ all been run by the administrator before starting this stage.
    external# ipmitool -I lanplus -U $username -E -H ${SYSTEM_NAME}-ncn-m001-mgmt chassis power status
    external# ipmitool -I lanplus -U $username -E -H ${SYSTEM_NAME}-ncn-m001-mgmt sol activate
    ```
-8. Collect the CAN IPs for logging into other NCNs while this happens. This is useful for interacting
+1. Collect the CAN IPs for logging into other NCNs while this happens. This is useful for interacting
    and debugging the Kubernetes cluster while the LiveCD is `offline`.
    ```bash
    pit# ssh ncn-m002
    ncn-m002# ip a show vlan007 | grep inet
+   ```
+   
+   Expected output looks similar to the following:
+   ```
    inet 10.102.11.13/24 brd 10.102.11.255 scope global vlan007
    inet6 fe80::1602:ecff:fed9:7820/64 scope link
    ```
@@ -156,67 +187,79 @@ all been run by the administrator before starting this stage.
    Keep this terminal active as it will enable `kubectl` commands during the bring-up of the new NCN. 
    If the reboot successfully deploys the LiveCD, this terminal can be exited.
   
-9. Wipe the node beneath the LiveCD, erasing the RAIDs labels will trigger a fresh partition table to deploy.
+1. Wipe the node beneath the LiveCD, erasing the RAIDs labels will trigger a fresh partition table to deploy.
    > **`WARNING`** Do not assume to wipe the first three disks (e.g. `sda, sdb, and sdc`), these could be any letter. Choosing the wrong ones may result in wiping the USB stick.
-   ```bash
-   # Select disks to wipe; SATA/NVME/SAS
-   pit# md_disks="$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(sata|nvme|sas)' | sort -h | awk '{print "/dev/" $2}')"
+   1. Select disks to wipe; SATA/NVME/SAS
+      ```bash
+      pit# md_disks="$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(sata|nvme|sas)' | sort -h | awk '{print "/dev/" $2}')"
+      ```
 
-   # Sanity check; print disks into typscript or console
-   pit# echo $md_disks
-   /dev/sda /dev/sdb /dev/sdc
+   2. Sanity check; print disks into typscript or console
+      ```bash
+      pit# echo $md_disks
+      ```
+      
+      Expected output looks similar to the following:
+      ```
+      /dev/sda /dev/sdb /dev/sdc
+      ```
 
-   # Wipe; this is irreversible.
-   pit# wipefs --all  --force $md_disks
-   /dev/sda: 8 bytes were erased at offset 0x00000200 (gpt): 45 46 49 20 50 41 52 54
-   /dev/sda: 8 bytes were erased at offset 0x6fc86d5e00 (gpt): 45 46 49 20 50 41 52 54
-   /dev/sda: 2 bytes were erased at offset 0x000001fe (PMBR): 55 aa
-   /dev/sdb: 6 bytes were erased at offset 0x00000000 (crypto_LUKS): 4c 55 4b 53 ba be
-   /dev/sdb: 6 bytes were erased at offset 0x00004000 (crypto_LUKS): 53 4b 55 4c ba be
-   /dev/sdc: 8 bytes were erased at offset 0x00000200 (gpt): 45 46 49 20 50 41 52 54
-   /dev/sdc: 8 bytes were erased at offset 0x6fc86d5e00 (gpt): 45 46 49 20 50 41 52 54
-   /dev/sdc: 2 bytes were erased at offset 0x000001fe (PMBR): 55 aa
-   ```
+   3. Wipe. **This is irreversible.**
+      ```bash
+      pit# wipefs --all --force $md_disks
+      ```
 
-10. Reboot the LiveCD.
+      If any disks had labels present, output looks similar to the following:
+      ```
+      /dev/sda: 8 bytes were erased at offset 0x00000200 (gpt): 45 46 49 20 50 41 52 54
+      /dev/sda: 8 bytes were erased at offset 0x6fc86d5e00 (gpt): 45 46 49 20 50 41 52 54
+      /dev/sda: 2 bytes were erased at offset 0x000001fe (PMBR): 55 aa
+      /dev/sdb: 6 bytes were erased at offset 0x00000000 (crypto_LUKS): 4c 55 4b 53 ba be
+      /dev/sdb: 6 bytes were erased at offset 0x00004000 (crypto_LUKS): 53 4b 55 4c ba be
+      /dev/sdc: 8 bytes were erased at offset 0x00000200 (gpt): 45 46 49 20 50 41 52 54
+      /dev/sdc: 8 bytes were erased at offset 0x6fc86d5e00 (gpt): 45 46 49 20 50 41 52 54
+      /dev/sdc: 2 bytes were erased at offset 0x000001fe (PMBR): 55 aa
+      ```
+      
+      The thing to verify is that there are no error messages in the output.
+1. Reboot the LiveCD.
    ```bash
    pit# reboot
    ```
-
-11. The node should boot, acquire its hostname (i.e. ncn-m001).
-   > **`NOTE`**: If the nodes have pxe boot issues,such as getting pxe errors or not pulling the ipxe.efi binary, see [PXE boot troubleshooting](420-MGMT-NET-PXE-TSHOOT.md)
+1. The node should boot, acquire its hostname (i.e. ncn-m001).
+   > **`NOTE`**: If the nodes has pxe boot issues, such as getting pxe errors or not pulling the ipxe.efi binary, see [PXE boot troubleshooting](420-MGMT-NET-PXE-TSHOOT.md)
 
    > **`NOTE`**: If ncn-m001 booted without a hostname or it didn't run all the cloud-init scripts the following commands need to be ran **(but only in that circumstance)**.
-   > Make directory to copy network config files to.
-   > ```
-   > mkdir /mnt/cow
-   > ```
-   > Mount the USB to that directory.
-   > ```
-   > mount -L cow /mnt/cow
-   > ```
-   > Copy the network config files.
-   > ```
-   > cp -pv /mnt/cow/rw/etc/sysconfig/network/ifroute* /etc/sysconfig/network/
-   > cp -pv /mnt/cow/rw/etc/sysconfig/network/ifcfg-lan0 /etc/sysconfig/network/
-   > ```
-   >
-   > Run the dhcp to static script
-   > ```
-   > /srv/cray/scripts/metal/set-dhcp-to-static.sh
-   > ```
-   > After this you should have network connectivity.
-   > Then you will run.
-   > ```
-   > cloud-init clean
-   > cloud-init init
-   > cloud-init modules -m init
-   > cloud-init modules -m config
-   > cloud-init modules -m final
-   > ```
-   > This should pull all the required cloud-init data for the NCN to join the cluster.
-
-12. Login and start a typescript (the IP used here is the same from step 9).
+   > In the commands below the prompt is shown as ncn-m001 purely to indciate that the commands should be run on that node.
+   > 
+   > 1. Make directory to copy network config files to.
+   >    ```bash
+   >    ncn-m001# mkdir /mnt/cow
+   >    ```
+   > 2. Mount the USB to that directory.
+   >    ```bash
+   >    ncn-m001# mount -L cow /mnt/cow
+   >    ```
+   > 3. Copy the network config files.
+   >    ```bash
+   >    ncn-m001# cp -pv /mnt/cow/rw/etc/sysconfig/network/ifroute* /etc/sysconfig/network/
+   >    ncn-m001# cp -pv /mnt/cow/rw/etc/sysconfig/network/ifcfg-lan0 /etc/sysconfig/network/
+   >    ```
+   > 4. Run the `set-dhcp-to-static.sh` script
+   >    ```bash
+   >    ncn-m001# /srv/cray/scripts/metal/set-dhcp-to-static.sh
+   >    ```
+   <    After this you should have network connectivity.
+   > 5. Run the following commands:
+   >    ```bash
+   >    ncn-m001# cloud-init clean
+   >    ncn-m001# cloud-init init
+   >    ncn-m001# cloud-init modules -m init
+   >    ncn-m001# cloud-init modules -m config
+   >    ncn-m001# cloud-init modules -m final
+   >    ```
+   >    This should pull all the required cloud-init data for the NCN to join the cluster.
+1. Login and start a typescript (the IP used here is the same from step 9).
 
    ```bash
    external# ssh root@10.102.11.13
@@ -224,8 +267,7 @@ all been run by the administrator before starting this stage.
    ncn-m001# script -a verify.csm.$(date +%Y-%m-%d).txt
    ncn-m001# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
-
-13. Optionally change the root password on ncn-m001 to match the other management NCNs.
+1. Optionally change the root password on ncn-m001 to match the other management NCNs.
  
    > This step is optional and is only needed when the other management NCNs passwords were customized during the [CSM Metal Install](005-CSM-METAL-INSTALL.md) procedure. If the management NCNs still have the default password this step can be skipped.
    
@@ -233,12 +275,15 @@ all been run by the administrator before starting this stage.
    ncn-m001# passwd
    ```
   > **`NOTE`** A workaround script for rotating the default private ssh key is available in the LiveCD at /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-1667/ssh-key-rotate.sh.
-
-14. Run `kubectl get nodes` to see the full Kubernetes cluster.
+1. Run `kubectl get nodes` to see the full Kubernetes cluster.
     > **`NOTE`** If the new node fails to join the cluster after running other cloud-init items please refer to the 
     > `handoff`
    ```bash
    ncn-m001# kubectl get nodes
+   ```
+   
+   Expected output looks similar to the following:
+   ```
    NAME       STATUS   ROLES    AGE     VERSION
    ncn-m001   Ready    master   7s      v1.18.6
    ncn-m002   Ready    master   4h40m   v1.18.6
@@ -247,52 +292,54 @@ all been run by the administrator before starting this stage.
    ncn-w002   Ready    <none>   4h39m   v1.18.6
    ncn-w003   Ready    <none>   4h39m   v1.18.6
    ```
-
-15. Follow the procedure defined in [Accessing CSI from a USB or RemoteISO](#accessing-csi-from-a-usb-or-remoteiso).
-
-16. Restore and verify the site link. It will be necessary to restore the `ifcfg-lan0` file, and both the 
+1. Follow the procedure defined in [Accessing CSI from a USB or RemoteISO](#accessing-csi-from-a-usb-or-remoteiso).
+1. Restore and verify the site link. It will be necessary to restore the `ifcfg-lan0` file, and both the 
     `ifroute-lan0` and `ifroute-vlan002` file from either manual backup take in step 6 or re-mount the USB and copy it 
     from the prep directory to `/etc/sysconfig/network/`.
-   ```
+   ```bash
    ncn-m001# export SYSTEM_NAME=eniac
    ncn-m001# cp /mnt/pitdata/prep/${SYSTEM_NAME}/pit-files/ifcfg-lan0 /etc/sysconfig/network/
    ncn-m001# cp /mnt/pitdata/prep/${SYSTEM_NAME}/pit-files/ifroute-lan0 /etc/sysconfig/network/
    ncn-m001# cp /mnt/pitdata/prep/${SYSTEM_NAME}/pit-files/ifroute-vlan002 /etc/sysconfig/network/
    ncn-m001# wicked ifreload lan0
    ``` 
-
-17. Run `ip a` to show our IPs, verify the site link. 
+1. Run `ip a` to show our IPs, verify the site link. 
     ```bash
     ncn-m001# ip a show lan0
     ```
-18. Run `ip a` to show our VLANs, verify they all have IPs
+1. Run `ip a` to show our VLANs, verify they all have IPs
     ```bash
     ncn-m001# ip a show vlan002
     ncn-m001# ip a show vlan004
     ncn-m001# ip a show vlan007
     ```
-19. Verify we do not have a metal bootstrap IP, this should be blank
+1. Verify we do not have a metal bootstrap IP, this should be blank
     ```bash
     ncn-m001# ip a show bond0
     ```
-20. [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard) to prevent destructive behavior from occurring during reboot.
+1. [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard) to prevent destructive behavior from occurring during reboot.
       > **`NOTE`** This safeguard needs to be _removed_ to facilitate bare-metal deployments of new nodes. The linked [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard) procedure can be used to disable the safeguard by setting the value back to `0`.
-21. Install the workaround and docs RPMs to ncn-m001:
+1. Install the workaround and docs RPMs to ncn-m001:
     ```bash
     ncn-m001# export CSM_RELEASE=csm-x.y.z
     ncn-m001# rpm -iv /mnt/pitdata/${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/noarch/csm-install-workarounds-*.noarch.rpm
     ncn-m001# rpm -iv /mnt/pitdata/${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/noarch/docs-csm-install-*.noarch.rpm
     ```
-22. Now check for workarounds in the `/opt/cray/csm/workarounds/livecd-post-reboot` directory. Each has its own instructions in their respective `README` files.
-    ```text
+1. Now check for workarounds in the `/opt/cray/csm/workarounds/livecd-post-reboot` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
+
+    **Note:** The following command assumes that the data partition of the USB stick has been remounted at /mnt/pitdata
+    ```bash
     # Example
-    # The following command assumes that the data partition of the USB stick has been remounted at /mnt/pitdata
     ncn-m001# ls /opt/cray/csm/workarounds/livecd-post-reboot
-    CASMINST-1309  CASMINST-1570  .keep
+    ```
+
+    If there are workarounds here, the output looks similar to the following:
+    ```
+    CASMINST-1309  CASMINST-1570
     ```
 
 At this time, the NCN cluster is fully established. The administrator may now eject any mounted USB stick:
-   ```
+   ```bash
    ncn-m001# umount /mnt/rootfs /mnt/sqfs /mnt/livecd /mnt/pitdata
    ```
 
@@ -313,6 +360,10 @@ After deploying the LiveCD's NCN, the LiveCD USB itself is unharmed and availabl
    ncn-m001# mount -L cow /mnt/cow
    ncn-m001# mount -L PITDATA /mnt/pitdata
    ncn-m001# ls -ld /mnt/cow/rw/*
+   ```
+   
+   Example output:
+   ```
    drwxr-xr-x  2 root root 4096 Jan 28 15:47 /mnt/cow/rw/boot
    drwxr-xr-x  8 root root 4096 Jan 29 07:25 /mnt/cow/rw/etc
    drwxr-xr-x  3 root root 4096 Feb  5 04:02 /mnt/cow/rw/mnt
@@ -321,7 +372,15 @@ After deploying the LiveCD's NCN, the LiveCD USB itself is unharmed and availabl
    drwxrwxrwt 13 root root 4096 Feb  5 04:03 /mnt/cow/rw/tmp
    drwxr-xr-x  7 root root 4096 Jan 28 15:40 /mnt/cow/rw/usr
    drwxr-xr-x  7 root root 4096 Jan 28 15:47 /mnt/cow/rw/var
+   ```
+
+   Look at the contents of `/mnt/pitdata`:
+   ```bash
    ncn-m001# ls -ld /mnt/pitdata/*
+   ```
+   
+   Example output:
+   ```
    drwxr-xr-x  2 root root        4096 Feb  3 04:32 /mnt/pitdata/configs
    drwxr-xr-x 14 root root        4096 Feb  3 07:26 /mnt/pitdata/csm-0.7.29
    -rw-r--r--  1 root root 22159328586 Feb  2 22:18 /mnt/pitdata/csm-0.7.29.tar.gz
@@ -345,27 +404,27 @@ be accessed by any LiveCD ISO file if not the one used for the original installa
 
 1. Set the CSM Release
    ```bash
-   ncn-m001# export CSM_RELEASE=csm-x.y.z
+   ncn# export CSM_RELEASE=csm-x.y.z
    ```
 2. Make directories.
    ```bash
-   ncn-m001# mkdir -pv /mnt/livecd /mnt/rootfs /mnt/sqfs /mnt/pitdata
+   ncn# mkdir -pv /mnt/livecd /mnt/rootfs /mnt/sqfs /mnt/pitdata
    ```
-3. Mount the rootfs (prompts omitted to facilitate copy-paste)
+3. Mount the rootfs.
    ```bash
-   mount -L PITDATA /mnt/pitdata
-   mount /mnt/pitdata/${CSM_RELEASE}/cray-pre-install-toolkit-*.iso /mnt/livecd/
-   mount /mnt/livecd/LiveOS/squashfs.img /mnt/sqfs/
-   mount /mnt/sqfs/LiveOS/rootfs.img /mnt/rootfs/
+   ncn# mount -L PITDATA /mnt/pitdata
+   ncn# mount /mnt/pitdata/${CSM_RELEASE}/cray-pre-install-toolkit-*.iso /mnt/livecd/
+   ncn# mount /mnt/livecd/LiveOS/squashfs.img /mnt/sqfs/
+   ncn# mount /mnt/sqfs/LiveOS/rootfs.img /mnt/rootfs/
    ```
 4. Invoke CSI usage to validate it runs and is ready for use:
    ```bash
-   ncn-m001# /mnt/rootfs/usr/bin/csi --help
+   ncn# /mnt/rootfs/usr/bin/csi --help
    ```
 
 5. Copy the CSI binary and CSM workaround documentation off to `tmp/`
    ```bash
-   ncn-m001# cp -pv /mnt/rootfs/usr/bin/csi /tmp/csi
+   ncn# cp -pv /mnt/rootfs/usr/bin/csi /tmp/csi
    ```
 
 <a name="enable-ncn-disk-wiping-safeguard"></a>
@@ -377,7 +436,7 @@ After all the NCNs have been installed, it is imperative to disable the automate
 do not destroy any data unintentionally. First follow the procedure [above](#accessing-usb-partitions-after-reboot)
 to re-mount the assets and then get a new token:
 
-```text
+```bash
 pit# export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
   -d client_id=admin-client \
   -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
@@ -387,7 +446,7 @@ pit# export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
 Followed by a call to CSI to update BSS:
 
 ```bash
-/tmp/csi handoff bss-update-param --set metal.no-wipe=1
+pit# /tmp/csi handoff bss-update-param --set metal.no-wipe=1
 ```
 
 > **`NOTE`** `/tmp/csi` will delete itself on the next reboot since /tmp/ is mounted as tmpfs and does not persist **no matter what**.

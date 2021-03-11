@@ -70,13 +70,15 @@ installs as follows:
     ```
 
 4.  Add the corresponding URL to the `ExecStartPost` script in
-    `/usr/lib/systemd/system/nexus.service`. For example, Cray internal systems
-    may want to proxy to https://dtr.dev.cray.com as follows:
+    `/usr/lib/systemd/system/nexus.service`. 
 
-    ```bash
-    pit# URL=https://dtr.dev.cray.com
-    pit# sed -e "s,^\(ExecStartPost=/usr/sbin/nexus-setup.sh\).*$,\1 $URL," -i /usr/lib/systemd/system/nexus.service
-    ```
+    > **`INTERNAL USE`** Cray internal systems may want to proxy to 
+    > https://dtr.dev.cray.com as follows:
+    >
+    > ```bash
+    > pit# URL=https://dtr.dev.cray.com
+    > pit# sed -e "s,^\(ExecStartPost=/usr/sbin/nexus-setup.sh\).*$,\1 $URL," -i /usr/lib/systemd/system/nexus.service
+    > ```
 
 5.  Restart Nexus:
 
@@ -94,14 +96,12 @@ is the `IPMI_PASSWORD`
 
 > These exist as an avoidance measure for hard-codes, so these may be used in various system contexts.
 ```bash
-pit# \
-export mtoken='ncn-m(?!001)\w+-mgmt'
-export stoken='ncn-s\w+-mgmt'
-export wtoken='ncn-w\w+-mgmt'
-
-export username=root
+pit# export mtoken='ncn-m(?!001)\w+-mgmt'
+pit# export stoken='ncn-s\w+-mgmt'
+pit# export wtoken='ncn-w\w+-mgmt'
+pit# export username=root
 # Replace "changeme" with the real root password.
-export IPMI_PASSWORD=changeme
+pit# export IPMI_PASSWORD=changeme
 ```
 
 Throughout the guide, simple one-liners can be used to query status of expected nodes. If the shell or environment is terminated, these environment variables should be re-exported.
@@ -132,11 +132,15 @@ This section will walk an administrator through NCN deployment.
 
 _There will be post-boot workarounds as well._
 
-Check for workarounds in the `/opt/cray/csm/workarounds/before-ncn-boot` directory within the CSM tar. Each has its own instructions in their respective `README` files.
+Check for workarounds in the `/opt/cray/csm/workarounds/before-ncn-boot` directory within the CSM tar. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
 
 ```bash
 # Example
 pit# ls /opt/cray/csm/workarounds/before-ncn-boot
+```
+
+If there is a workaround here, the output looks similar to the following:
+```
 CASMINST-980
 ```
 
@@ -203,7 +207,8 @@ CASMINST-980
    > Alternatively for HPE NCNs you can login to the BMC's web interface and access the HTML5 console for the node to interact with the graphical BIOS.
    > From the administrators own machine create a SSH tunnel (-L creates the tunnel, and -N prevents a shell and stubs the connection):
    > ```bash
-   > linux# bmc=ncn-w001-mgmt  # Change this to be each node in turn.
+   > # Change this to be each node in turn.
+   > linux# bmc=ncn-w001-mgmt
    > linux# ssh -L 9443:$bmc:443 -N root@eniac-ncn-m001
    > ```
    > Opening a web browser to `https://localhost:9443` will give access to the BMC's web interface.
@@ -253,23 +258,20 @@ The configuration workflow described here is intended to help understand the exp
    > This will create folders for each host in `/var/www`, allowing each host to have their own unique set of artifacts; kernel, initrd, SquashFS, and `script.ipxe` bootscript.
 
    ```bash
-   pit# \
-   /root/bin/set-sqfs-links.sh
+   pit# /root/bin/set-sqfs-links.sh
    ```
 
 3. Set each node to always UEFI Network Boot, and ensure they're powered off
     ```bash
-    pit# \
-    grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} chassis bootdev pxe options=efiboot,persistent
-    grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
+    pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} chassis bootdev pxe options=efiboot,persistent
+    pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
     ```
     > Note: some BMCs will "flake" and ignore the bootorder setting by `ipmitool`. As a fallback, cloud-init will
     > correct the bootorder after NCNs complete their first boot. The first boot may need manual effort to set the boot order over the conman console. The NCN boot order is further explained in [101 NCN Booting](101-NCN-BOOTING.md).
 
 4. Validate that the LiveCD is ready for installing NCNs
    ```bash
-   pit# \
-   csi pit validate --livecd-preflight
+   pit# csi pit validate --livecd-preflight
    ```
    > Observe the output of the checks and note any failures, then remediate them.
 
@@ -278,6 +280,10 @@ The configuration workflow described here is intended to help understand the exp
 6. Print the consoles available to you:
    ```bash
    pit# conman -q
+   ```
+   
+   Expected output looks similar to the following:
+   ```
    ncn-m001-mgmt
    ncn-m002-mgmt
    ncn-m003-mgmt
@@ -295,16 +301,22 @@ The configuration workflow described here is intended to help understand the exp
 
 6. Boot the **Storage Nodes**
     ```bash
-    pit# \
-    grep -oP $stoken /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
+    pit# grep -oP $stoken /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
 
 7. Wait. Observe the installation through ncn-s001-mgmt's console:
    ```bash
    # Print the console name
    pit# conman -q | grep s001
+   ```
+   
+   Expected output looks similar to the following:
+   ```
    ncn-s001-mgmt
+   ```
 
+   Then join the console:
+   ```bash
    # Join the console
    pit# conman -j ncn-s001-mgmt
    ```
@@ -318,21 +330,30 @@ The configuration workflow described here is intended to help understand the exp
    > ```bash
    > # Example
    > pit# ls /opt/cray/csm/workarounds/after-ncn-boot
+   > ```
+   > If there is a workaround here, the output looks similar to the following:
+   > ```
    > CASMINST-1093
    > ```
 
 8. Once all storage nodes are up and ncn-s001 is running ceph-ansible, boot **Kubernetes Managers and Workers**
     ```bash
-    pit# \
-    grep -oP "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
+    pit# grep -oP "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
 
 9.  Wait. Observe the installation through ncn-m002-mgmt's console:
     ```bash
     # Print the console name
     pit# conman -q | grep m002
-    ncn-m002-mgmt
+    ```
     
+    Expected output looks similar to the following:
+    ```
+    ncn-m002-mgmt
+    ```
+
+    Then join the console:
+    ```bash
     # Join the console
     pit# conman -j ncn-m002-mgmt
     ```
@@ -345,6 +366,9 @@ The configuration workflow described here is intended to help understand the exp
    > ```bash
    > # Example
    > pit# ls /opt/cray/csm/workarounds/after-ncn-boot
+   > ```
+   > If there is a workaround here, the output looks similar to the following:
+   > ```
    > CASMINST-1093
    > ```
 
@@ -352,6 +376,10 @@ The configuration workflow described here is intended to help understand the exp
     ```bash
     pit# ssh ncn-m002
     ncn-m002# kubectl get nodes -o wide
+    ```
+   
+    Expected output looks similar to the following:
+    ```
     NAME       STATUS   ROLES    AGE     VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                                                  KERNEL-VERSION         CONTAINER-RUNTIME
     ncn-m002   Ready    master   14m     v1.18.6   10.252.1.5    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
     ncn-m003   Ready    master   13m     v1.18.6   10.252.1.6    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
@@ -375,7 +403,11 @@ Check for workarounds in the `/opt/cray/csm/workarounds/after-ncn-boot` director
 ```
 # Example
 pit# ls /opt/cray/csm/workarounds/after-ncn-boot
-casminst-12345
+```
+
+If there is a workaround here, the output looks similar to the following:
+ ```
+CASMINST-12345
 ```
 
 <a name="livecd-cluster-authentication"></a>
@@ -387,7 +419,7 @@ Copy the Kubernetes config to the LiveCD to be able to use `kubectl` as cluster 
 
 > This will always be whatever node is the `first-master-hostname` in your `/var/www/ephemeral/configs/data.json | jq` file. If you are provisioning your CRAY from `ncn-m001` then you can expect to fetch these from `ncn-m002`.
 
-```
+```bash
 pit# mkdir ~/.kube
 pit# scp ncn-m002.nmn:/etc/kubernetes/admin.conf ~/.kube/config
 ```
@@ -405,8 +437,12 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 
 2. If needed, the following helper scripts are available for the various switch types:
 
-   ```
+   ```bash
    pit# ls -1 /usr/bin/*peer*py
+   ```
+   
+   Expected output looks similar to the following:
+   ```
    /usr/bin/aruba_set_bgp_peers.py
    /usr/bin/mellanox_set_bgp_peers.py
    ```
