@@ -57,6 +57,10 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 6. Show the version of CSI installed.
    ```bash
    linux# csi version
+   ```
+   
+   Expected output looks similar to the following:
+   ```
    CRAY-Site-Init build signature...
    Build Commit   : b3ed3046a460d804eb545d21a362b3a5c7d517a3-release-shasta-1.4
    Build Time     : 2021-02-04T21:05:32Z
@@ -136,6 +140,10 @@ which device that is.
 
     ```bash
     linux# lsscsi
+    ```
+    
+    Expected output looks similar to the following:
+    ```
     [6:0:0:0]    disk    ATA      SAMSUNG MZ7LH480 404Q  /dev/sda
     [7:0:0:0]    disk    ATA      SAMSUNG MZ7LH480 404Q  /dev/sdb
     [8:0:0:0]    disk    ATA      SAMSUNG MZ7LH480 404Q  /dev/sdc
@@ -221,6 +229,10 @@ After gathering the files into the working directory, generate your configs:
    The needed files should be in the current directory.
    ```bash
    linux# ls -1
+   ```
+    
+   Expected output looks similar to the following:
+   ```
    application_node_config.yaml
    cabinets.yaml
    hmn_connections.json
@@ -251,6 +263,10 @@ After gathering the files into the working directory, generate your configs:
    The needed files should be in the current directory.  The application_node_config.yaml file is optional.
    ```bash
    linux# ls -1
+   ```
+    
+   Expected output looks similar to the following:
+   ```
    application_node_config.yaml
    hmn_connections.json
    ncn_metadata.csv
@@ -264,7 +280,7 @@ After gathering the files into the working directory, generate your configs:
    ```
 
    Generate the system configuration.  See below for an explanation of the command line parameters and some common settings.
-   ```
+   ```bash
    linux# csi config init \
        --bootstrap-ncn-bmc-user root \
        --bootstrap-ncn-bmc-pass changeme \
@@ -331,12 +347,16 @@ After gathering the files into the working directory, generate your configs:
 <a name="csi-workarounds"></a>
 ### CSI Workarounds
 
-Check for workarounds in the `/opt/cray/csm/workarounds/csi-config` directory.  If there are any workarounds in that directory, run those now. Instructions are in the README files.
+Check for workarounds in the `/opt/cray/csm/workarounds/csi-config` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
 
   ```bash
   # Example
   linux# ls /opt/cray/csm/workarounds/csi-config
-  casminst-999
+  ```
+
+  If there is a workaround here, the output looks similar to the following:
+  ```
+  CASMINST-999
   ```
 
 <a name="shasta-cfg"></a>
@@ -360,6 +380,10 @@ This will enable SSH, and other services when the LiveCD starts.
 2. Use CSI to populate the LiveCD, provide both the mount point and the CSI generated config dir.
     ```bash
     linux# csi pit populate cow /mnt/cow/ ${SYSTEM_NAME}/
+    ```
+   
+    Expected output looks similar to the following:
+    ```
     config------------------------> /mnt/cow/rw/etc/sysconfig/network/config...OK
     ifcfg-bond0-------------------> /mnt/cow/rw/etc/sysconfig/network/ifcfg-bond0...OK
     ifcfg-lan0--------------------> /mnt/cow/rw/etc/sysconfig/network/ifcfg-lan0...OK
@@ -398,6 +422,10 @@ This will enable SSH, and other services when the LiveCD starts.
 6. Copy basecamp data
     ```bash
     linux# csi pit populate pitdata ${SYSTEM_NAME} /mnt/pitdata/configs -b
+    ```
+    
+    Expected output looks similar to the following:
+    ```
     data.json---------------------> /mnt/pitdata/configs/data.json...OK
     ```
 
@@ -413,6 +441,10 @@ This will enable SSH, and other services when the LiveCD starts.
 8. Copy k8s artifacts:
     ```bash
     linux# csi pit populate pitdata ~/${CSM_RELEASE}/images/kubernetes/ /mnt/pitdata/data/k8s/ -kiK
+    ```
+    
+    Expected output looks similar to the following:
+    ```
     5.3.18-24.37-default-0.0.6.kernel-----------------> /mnt/pitdata/data/k8s/...OK
     initrd.img-0.0.6.xz-------------------------------> /mnt/pitdata/data/k8s/...OK
     kubernetes-0.0.6.squashfs-------------------------> /mnt/pitdata/data/k8s/...OK
@@ -421,6 +453,10 @@ This will enable SSH, and other services when the LiveCD starts.
 9. Copy ceph/storage artifacts:
     ```bash
     linux# csi pit populate pitdata ~/${CSM_RELEASE}/images/storage-ceph/ /mnt/pitdata/data/ceph/ -kiC
+    ```
+    
+    Expected output looks similar to the following:
+    ```
     5.3.18-24.37-default-0.0.5.kernel-----------------> /mnt/pitdata/data/ceph/...OK
     initrd.img-0.0.5.xz-------------------------------> /mnt/pitdata/data/ceph/...OK
     storage-ceph-0.0.5.squashfs-----------------------> /mnt/pitdata/data/ceph/...OK
@@ -462,11 +498,10 @@ Confirm that the IPMI credentials work for the BMC by checking the power status.
    external# ipmitool -I lanplus -U $username -P $password -H ${SYSTEM_NAME}-ncn-m001-mgmt chassis power status
    ```
 
-Connect to the IPMI console.  Press return and login on the console as root.
+Connect to the IPMI console.
 
    ```bash
    external# ipmitool -I lanplus -U $username -P $password -H ${SYSTEM_NAME}-ncn-m001-mgmt sol activate
-   eniac-ncn-m001 login: root
    ncn-m001#
    ```
 
@@ -487,8 +522,12 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
 1. **The initial password is empty**; set the username of `root` and press `return` twice:
 
-   ```bash
+   ```
    pit login: root
+   ```
+    
+   Expected output looks similar to the following:
+   ```
    Password:           <-------just press Enter here for a blank password
    You are required to change your password immediately (administrator enforced)
    Changing password for root.
@@ -509,15 +548,14 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
    You can disconnect from the IPMI console by using the "~.", that is, the tilde character followed by a period character.
 
-   Login via ssh to the node.
+   Login via ssh to the node as root.
 
    ```bash
-   external# ssh ${SYSTEM_NAME}-ncn-m001
-   ncn-m001 login: root
+   external# ssh root@${SYSTEM_NAME}-ncn-m001
    pit#
+   ```
 
-   Note: The hostname should be something like eniac-ncn-m001-pit when booted from the LiveCD, but it will be shown as "pit#" in the command prompts from this point onward.
-
+   Note: The hostname should be similar to eniac-ncn-m001-pit when booted from the LiveCD, but it will be shown as "pit#" in the command prompts from this point onward.
 
 3. Start a typescript to record this section of activities done on ncn-m001 while booted from the LiveCD.
 
@@ -530,6 +568,10 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
    ```bash
    pit# cat /etc/pit-release
+   ```
+    
+   Expected output looks similar to the following:
+   ```
    VERSION=1.2.2
    TIMESTAMP=20210121044136
    HASH=75e6c4a

@@ -34,12 +34,15 @@ into the CSM Kubernetes cluster).
 
     ```bash
     pit# curl -sSif http://localhost:8081/service/rest/v1/status/writable
+    ```
+   
+    Expected output looks similar to the following:
+    ```
     HTTP/1.1 200 OK
     Date: Thu, 04 Feb 2021 05:27:44 GMT
     Server: Nexus/3.25.0-03 (OSS)
     X-Content-Type-Options: nosniff
     Content-Length: 0
-
     ```
 
 3.  Load the skopeo image installed by the cray-nexus RPM:
@@ -68,24 +71,40 @@ installation or upgrade. Create the `site-init` secret to contain
 
 ```bash
 pit# kubectl create secret -n loftsman generic site-init --from-file=/var/www/ephemeral/prep/site-init/customizations.yaml
+```
+   
+Expected output looks similar to the following:
+```
 secret/site-init created
 ```
 
-> **`NOTE`** If the `site-init` secret already exists then `kubectl` will error:
+> **`NOTE`** If the `site-init` secret already exists then `kubectl` will error with a message similar to:
 >
-> ```bash
-> pit# kubectl create secret -n loftsman generic site-init --from-file=/var/www/ephemeral/prep/site-init/customizations.yaml
+> ```
 > Error from server (AlreadyExists): secrets "site-init" already exists
 > ```
 >
-> In this case, delete the `site-init` secret and re-create it:
+> In this case, delete the `site-init` secret and recreate it.
 >
-> ```bash
-> pit# kubectl delete secret -n loftsman site-init
-> secret "site-init" deleted
-> pit# kubectl create secret -n loftsman generic site-init --from-file=/var/www/ephemeral/prep/site-init/customizations.yaml
-> secret/site-init created
-> ```
+> 1. First delete it:
+>    ```bash
+>    pit# kubectl delete secret -n loftsman site-init
+>    ```
+>    
+>    Expected output looks similar to the following:
+>    ```
+>    secret "site-init" deleted
+>    ```
+>
+> 2. Then recreate it:
+>    ```bash
+>    pit# kubectl create secret -n loftsman generic site-init --from-file=/var/www/ephemeral/prep/site-init/customizations.yaml
+>    ```
+>    
+>    Expected output looks similar to the following:
+>    ```
+>    secret/site-init created
+>    ```
 
 > **`WARNING`** If for some reason the system customizations need to be
 > modified to complete product installation, administrators must first update
@@ -96,19 +115,19 @@ secret/site-init created
 > To **read** `customizations.yaml` from the `site-init` secret:
 > 
 > ```bash
-> # kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
+> ncn# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
 > ```
 > 
 > To **delete** the `site-init` secret:
 > 
 > ```bash
-> # kubectl -n loftsman delete secret site-init
+> ncn# kubectl -n loftsman delete secret site-init
 > ```
 > 
 > To **recreate** the `site-init` secret:
 > 
 > ```bash
-> # kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+> ncn# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
 > ```
 
 
@@ -122,8 +141,7 @@ pit# /var/www/ephemeral/prep/site-init/deploy/deploydecryptionkey.sh
 ```
 
 An error similar to the following may occur when deploying the key:
-```bash
-pit# /var/www/ephemeral/prep/site-init/deploy/deploydecryptionkey.sh
+```
 Error from server (NotFound): secrets "sealed-secrets-key" not found
  
 W0304 17:21:42.749101   29066 helpers.go:535] --dry-run is deprecated and can be replaced with --dry-run=client.
@@ -167,8 +185,12 @@ pit# ./install.sh
 
 After successfully completing the CSM platform install, quit the typescript
 session with the `exit` command and copy the file (booted-csm-lived.<date>.txt)
-to a location on another server for reference later. The administrator may then
-start the [CSM Validation process](008-CSM-VALIDATION.md).
+to a location on another server for reference later. 
+
+The administrator should wait at least 15 minutes to let the various Kubernetes resources
+get initialized and started. Because there are a number of dependencies between them, 
+some services are not expected to work immediately after the install script completes.
+After waiting, the administrator may start the [CSM Validation process](008-CSM-VALIDATION.md).
 
 Once the CSM services are deemed healthy the administrator way proceed to the
 final step of the CSM install [Reboot from the LiveCD to NCN](007-CSM-INSTALL-REBOOT.md).
@@ -183,7 +205,10 @@ Requires:
 * Running and configured SLS
 * Can be run from PIT if passwordless SSH is set up to all NCNs, but should be run post ncn-m001 reboot.
 
-To apply the routing, run the in `/opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-1570/CASMINST-1570.sh`.
+To apply the routing, run:
+```bash
+ncn# /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-1570/CASMINST-1570.sh
+```
 
 > **`NOTE`** Currently, there is no automated procedure to apply routing changes to all worker NCNs to support Mountain, Hill and River
 Compute Node Cabinets. 
@@ -207,9 +232,7 @@ Known potential issues with suggested fixes are listed below.
 ### error: timed out waiting for the condition on jobs/cray-sls-init-load
 
 The following error may occur when running `./install.sh`:
-```bash
-pit# ./install.sh
-...
+```
 + /var/www/ephemeral/csm-0.8.11/lib/wait-for-unbound.sh
 + kubectl wait -n services job cray-sls-init-load --for=condition=complete --timeout=20m
 error: timed out waiting for the condition on jobs/cray-sls-init-load
@@ -218,6 +241,10 @@ error: timed out waiting for the condition on jobs/cray-sls-init-load
 Determine the name and state of the SLS init loader job pod:
 ```bash
 pit# kubectl -n services get pods -l app=cray-sls-init-load
+```
+   
+Expected output looks similar to the following:
+```
 NAME                       READY   STATUS      RESTARTS   AGE
 cray-sls-init-load-nh5k7   2/2     Running     0          21m
 ```
@@ -225,7 +252,10 @@ cray-sls-init-load-nh5k7   2/2     Running     0          21m
 If the state is `Running` after after the 20 minute timeout, this is likely that the SLS loader job is failing to ping the SLS S3 bucket due to a malformed URL. To verify this inspect the logs of the cray-sls-init-load pod:
 ```bash
 pit# kubectl -n services logs -l app=cray-sls-init-load -c cray-sls-loader
-...
+```
+
+The symptom of this situation is the present of something similar to the following in the output of the previous command:
+```
 {"level":"warn","ts":1612296611.2630196,"caller":"sls-s3-downloader/main.go:96","msg":"Failed to ping bucket.","error":"encountered error during head_bucket operation for bucket sls at https://: RequestError: send request failed\ncaused by: Head \"https:///sls\": http: no Host in request URL"}
 ```  
 
@@ -237,6 +267,10 @@ pit# kubectl -n services delete pod cray-sls-init-load-nh5k7
 Once the pod is deleted is deleted, verify the new pod started by k8s completes successfully. If it does not complete within a few minutes inspect the logs for the pod. If it is still failing to ping the S3 bucket, delete the pod again and try again.
 ```bash
 pit# kubectl -n services get pods -l app=cray-sls-init-load
+```
+
+If the pod has completed successfully, the output looks similar to the following:
+```
 NAME                       READY   STATUS      RESTARTS   AGE
 cray-sls-init-load-pbzxv   0/2     Completed   0          55m
 ```
@@ -289,9 +323,7 @@ removed before attempting to deploy again.
 
 The following error may occur when running `./install.sh --continue`:
 
-```bash
-pit# ./install.sh --continue
-...
+```
 time="2021-02-07T20:25:22Z" level=info msg="Copying image tag 97/144" from="dir:/image/jettech/kube-webhook-certgen:v1.2.1" to="docker://registry.local/jettech/kube-webhook-certgen:v1.2.1"
 Getting image source signatures
 Copying blob sha256:f6e131d355612c71742d71c817ec15e32190999275b57d5fe2cd2ae5ca940079
@@ -308,17 +340,13 @@ again is expected to succeed.
 ### Error lookup registry.local: no such host
 
 The following error may occur when running `./install.sh --continue`:
-```bash
-pit# ./install.sh --continue
-...
+```
 time="2021-02-23T19:55:54Z" level=fatal msg="Error copying tag \"dir:/image/grafana/grafana:7.0.3\": Error writing blob: Head \"https://registry.local/v2/grafana/grafana/blobs/sha256:cf254eb90de2dc62aa7cce9737ad7e143c679f5486c46b742a1b55b168a736d3\": dial tcp: lookup registry.local: no such host"
 + return
 ```
 
 Or a similar error:
-```bash
-pit# ./install.sh --continue
-...
+```
 time="2021-03-04T22:45:07Z" level=fatal msg="Error copying ref \"dir:/image/cray/cray-ims-load-artifacts:1.0.4\": Error trying to reuse blob sha256:1ec886c351fa4c330217411b0095ccc933090aa2cd7ae7dcd33bb14b9f1fd217 at destination: Head \"https://registry.local/v2/cray/cray-ims-load-artifacts/blobs/sha256:1ec886c351fa4c330217411b0095ccc933090aa2cd7ae7dcd33bb14b9f1fd217\": dial tcp: lookup registry.local: Temporary failure in name resolution"
 + return
 ```
