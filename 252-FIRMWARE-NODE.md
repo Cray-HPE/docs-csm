@@ -5,6 +5,7 @@ This page details the minimum specification for nodes, and their components (suc
 > **`NOTE`** New items may be added to this page over time.
 
 * [Nodes](#nodes)
+    * [Apply node firmware workarounds](#apply-node-firmware-workarounds)
     * [HPE (iLO) Upgrades](#hpe-(ilo)-upgrades)
         * [Pre-Reqs](#pre-reqs)
         * [GUI](#gui)
@@ -44,6 +45,10 @@ Find more information for each vendor below:
 - [Intel Upgrades](#mellanox-upgrades)
 - [Gigabyte Upgrades](#mellanox-upgrades)
 
+<a name="apply-node-firmware-workarounds"></a>
+### Apply node firmware workarounds
+
+Check for workarounds in the `/opt/cray/csm/workarounds/firmware-node` directory. Each has its own instructions in their respective `README` files.
 
 <a name="hpe-(ilo)-upgrades"></a>
 ### HPE (iLO) Upgrades
