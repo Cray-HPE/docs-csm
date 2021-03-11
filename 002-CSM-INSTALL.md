@@ -131,7 +131,7 @@ Known issues for Shasta v1.3 systems include:
 * Gigabyte nodes should use the Gigabyte Node Firmware Update Guide (1.3.2) S-8010 while booted with Shasta v1.3.2.  However, since v1.3 will never be booted again on this system, there is no need to ensure that the etcd clusters are healthy and that BGP Peering has been ESTABLISHED as recommended in that guide.
 * Nodes with Mellanox ConnectX-4 and ConnectX-5 PCIe NICs need to update their firmware.  This should be done while Shasta v1.3.2 is booted.  The Mellanox ConnectX-4 cards will be enabled for PXE booting later.
 
-1. For minimum BIOS spec (required settings), see [Node BIOS Preferences](200-NCN-BIOS-PREF.md). 
+1. For minimum BIOS spec (required settings), see [Node BIOS Preferences](200-NCN-BIOS-PREF.md).
 
 2. For minimum NCN firmware versions see [Node Firmware](252-FIRMWARE-NODE.md).
 
@@ -140,7 +140,7 @@ Known issues for Shasta v1.3 systems include:
 4. For minimum Network switch configurations see [Management Network Install](401-MANAGEMENT-NETWORK-INSTALL.md).
 
 > **`WARNING`** Skipping this on a system that is new to Shasta v1.4 (bare-metal or previously installed with Shasta v1.3 or earlier) can result in undesirable difficulties:
-> 
+>
 > - Misnamed interfaces (missing `hsn0`)
 > - Malfunctioning bonds (`bond0`)
 > - Link failures (i.e. QLogic cards set to 10Gbps fixed)
@@ -337,7 +337,7 @@ The steps below detail how to prepare the NCNs.
 
 <a name="degraded-system-notice"></a>
 > #### Degraded System Notice
-> 
+>
 > If the system is degraded; CRAY services are down, or the NCNs are in inconsistent states then a cleanslate should be performed.  [basic wipe from Disk Cleanslate](051-DISK-CLEANSLATE.md#basic-wipe)
 
 1. **REQUIRED** For each NCN, **excluding** ncn-m001, login and wipe it (this step uses the [basic wipe from Disk Cleanslate](051-DISK-CLEANSLATE.md#basic-wipe)):
@@ -416,7 +416,11 @@ install).
         do
         ipmitool -U $username -I lanplus -H $h -E lan set 1 ipsrc dhcp
         done
+        ```
 
+        The timing of this change can vary based on the hardware, so if the IP can no longer be reached after running the above command, run these commands.
+
+        ```
         pit# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
         do
         ipmitool -U $username -I lanplus -H $h -E lan print 1 | grep Source
@@ -438,7 +442,11 @@ install).
         do
         ipmitool -U $username -I lanplus -H $h -E lan set 1 ipsrc dhcp
         done
+        ```
 
+        The timing of this change can vary based on the hardware, so if the IP can no longer be reached after running the above command, run these commands.
+
+        ```
         ncn-m001# for h in $( grep ncn /etc/hosts | grep mgmt | grep -v m001 | awk '{print $2}' )
         do
         ipmitool -U $username -I lanplus -H $h -E lan print 1 | grep Source
