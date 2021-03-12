@@ -204,7 +204,7 @@ we'll start by jumping from the manager node to ncn-w001.
     ```
 1. Wipe disks on all nodes:
     ```bash
-    ncn-w001# ansible ncn -m shell -a 'shopt -s extglob ; wipefs --all --force /dev/sd+([a-z])'
+    ncn-w001# ansible ncn -m shell -a 'shopt -s extglob ; wipefs --all --force /dev/sd*'
     ```
 
     For disks which have no labels, no output will be shown by the wipefs commands being run. 
@@ -349,7 +349,7 @@ The steps below detail how to prepare the NCNs.
             read -r -p "Are you sure you want to wipe the disks on $h? [y/N] " response
             response=${response,,}
             if [[ "$response" =~ ^(yes|y)$ ]]; then
-                 ssh $h 'shopt -s extglob ; wipefs --all --force /dev/sd+([a-z]) /dev/disk/by-label/*'
+                 ssh $h 'shopt -s extglob ; wipefs --all --force /dev/sd* /dev/disk/by-label/*'
             fi
         done
         ```
@@ -361,7 +361,7 @@ The steps below detail how to prepare the NCNs.
             read -r -p "Are you sure you want to wipe the disks on $h? [y/N] " response
             response=${response,,}
             if [[ "$response" =~ ^(yes|y)$ ]]; then
-                 ssh $h 'shopt -s extglob ; wipefs --all --force /dev/sd+([a-z]) /dev/disk/by-label/*'
+                 ssh $h 'shopt -s extglob ; wipefs --all --force /dev/sd* /dev/disk/by-label/*'
             fi
         done
         ```
