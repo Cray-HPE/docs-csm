@@ -33,9 +33,6 @@ These basic wipe instructions can be executed on **any ncn nodes** (master, work
 - Wipe Magic Bits
 
 ```bash
-# Enable extended globbing for use in subsequent commands
-ncn# shopt -s extglob
-
 # Print off the disks for verification:
 ncn# ls -1 /dev/sd* /dev/disk/by-label/*
 
@@ -67,9 +64,6 @@ This section is specific to **storage nodes**.
 
 ```bash
 # Delete CEPH Volumes
-# Enable extended globbing for use in subsequent commands
-ncn-s# shopt -s extglob
-
 ncn-s# systemctl stop ceph-osd.target # Make sure the OSDs (if any) are not running
 ncn-s# ls -1 /dev/sd* /dev/disk/by-label/*
 ncn-s# vgremove -f --select 'vg_name=~ceph*'
@@ -91,9 +85,6 @@ This section is also specific to **storage nodes**.
 - Stop RAIDs
 
 ```bash
-# Enable extended globbing for use in subsequent commands
-ncn-s# shopt -s extglob
-
 # Delete CEPH Volumes
 ncn-s# systemctl stop ceph-osd.target # Make sure the OSDs (if any) are not running
 ncn-s# ls -1 /dev/sd* /dev/disk/by-label/*
