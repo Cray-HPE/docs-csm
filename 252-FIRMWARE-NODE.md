@@ -98,23 +98,23 @@ ilo5_233.bin
 
       1. Login with the default credentials.
       2. On the _Left_, select "Firmware & OS Software"  ![fw-ilo-1.png](img/fw-ilo-1.png)
-      3. On the _Right_, select "Upload to ILO Repository"
-      4. Select "Remote File", and then choose your firmware file:
+      3. On the _Right_, select "Upload Firmware"
+      4. Select "Remote File" and "Confirm TPM override", and then choose your firmware file:
          ```bash
          # A43 example
          http://pit/fw/river/hpe/A43_1.30_07_18_2020.signed.flash
          ```
-         ![fw-ilo-2](img/fw-ilo-2.png)
-      5. Press **`Upload`** and wait for the upload to complete.
+         ![fw-ilo-4](img/fw-ilo-4.png)
+      5. Press **`Flash`** and wait for the upload and flash to complete. iLO may reboot after flash.
       6. Now grab the iLO5 Firmware the same way:
-         1. On the _Right_, select "Upload to ILO Repository"
-         2. Select "Remote File", and then choose your firmware file:
+         1. On the _Right_, select "Upload Firmware"
+         2. Select "Remote File" and "Confirm TPM override", and then choose your firmware file:
          ```bash
-         # A43 example
+         # iLO5 example
          http://pit/fw/river/hpe/ilo5_233.bin
          ```
-         ![fw-ilo-3](img/fw-ilo-3.png)
-         3. Press **`Upload`** and wait for the upload to complete.
+         ![fw-ilo-5](img/fw-ilo-5.png)
+         3. Press **`Flash`** and wait for the upload and flash to complete. iLO may reboot after flash.
       7. Cold boot the node, or momentarily press the button (GUI button) to power it on
 
 Now the node(s) are upgraded to minimum spec. for booting.
@@ -166,7 +166,7 @@ Now the node(s) are upgraded to minimum spec. for booting.
 
 | Vendor | Model | PSID | Version |
 | :--- | :--- | --- | ---: |
-| Marvell | QL41232HQCU-HC | | [08.50.78][5] | 
+| Marvell | QL41232HQCU-HC | | [08.50.78][5] |
 | Mellanox | MCX416A-BCAT | `MT_2130111027` | [12.28.2006][8] |
 | Mellanox | MCX515A-CCAT | `MT_0000000011` | [16.28.2006][6] |
 | Mellanox | MCX515A-CCAT | `MT_0000000591` | [16.28.2006][7] |
