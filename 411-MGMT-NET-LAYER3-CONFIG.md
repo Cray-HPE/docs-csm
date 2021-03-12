@@ -41,6 +41,7 @@ router bgp 65533
 ```
 
 CDU/Leaf switch Layer3 configuration
+
 The ipv6 configuration is needed for CEC communication.
 ```
 router ospf 1
