@@ -48,7 +48,7 @@ into the CSM Kubernetes cluster).
 3.  Load the skopeo image installed by the cray-nexus RPM:
 
     ```bash
-    pit# podman load -i /var/lib/cray/container-images/cray-nexus/skopeo-stable.tar
+    pit# podman load -i /var/lib/cray/container-images/cray-nexus/skopeo-stable.tar quay.io/skopeo/stable
     ```
 
 4.  Use `skopeo sync` to upload container images from the CSM release:
