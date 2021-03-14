@@ -1,39 +1,23 @@
-## Warning
+# Firmware Checkout
 
-**WARNING:** Non-compute nodes (NCNs) should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS. Research "*009-NCN-LOCKING*" for more information. Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
+This page will guide an administrator on 3 things:
+1. Checking Firmware Status
+1. Applying Firmware over the GUI
+1. (optionally) applying firmware via Redfish
 
-# Node Firmware
+Information below is sorted based on device type; complete each when directed to by the prerequisite page. On the other hand, if an administrator is using this guide ad-hoc then they must complete each of the listed guides in order.
 
-Firmware and BIOS updates may be necessary before an install can start.
+- (**required**) [Management Network Firmware Guide](251-FIRMWARE-NETWORK.md)
+- (**required**) [NCN Firmware Guide for Bootstrap](252-FIRMWARE-NCN.md)
 
-During runtime (post CSM-install), firmware is upgraded using FAS.
+##### Guides for Runtime
 
-New systems, or systems upgrading from prior versions of shasta, must meet the minimum specs defined in these pages:
-- [Network Firmware](251-FIRMWARE-NETWORK.md)
-- [Node Firmware](252-FIRMWARE-NODE.md)
+The following guide(s) can be done when the CRAY is operational (in runtime).
 
-> **`NOTE`** Only network devices and non-compute nodes upgrade firmware prior to a shasta-1.4.x install or upgrade. Other devices, such as compute nodes, provision upgrades from [FAS](#firmware-action-service-for-runtime).
+These are **not** required for an installation. 
 
-## LiveCD Availability for Bootstrap
+- [NCN Firmware Installation Guide for FAS](010-FIRMWARE-UPDATE-WITH-FAS.md)
+- [NCN Firmware Action Service (FAS) Guide](255-FIRMWARE-ACTION-SERVICE-FAS.md)
+- [NCN Firmware Action Service FAS Recipes](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md)
 
-The LiveCD serves firmware for bootstrapping devices and nodes to enable a CRAY install.
-
-Devices can use SCP or HTTP to fetch firmware from the LiveCD USB stick, or from the remote ISO.
-
-- http://pit/fw/
-- http://pit.nmn/fw/
-- http://pit.hmn/fw/
-- http://pit.can/fw/
-- `scp://<username>:<password>@pit/var/www/fw/`
-
-> Any interface of the LiveCD may be used in place of the above DNS names.
-
-## Firmware Action Service for Runtime
-
-The Firmware Action Service (FAS) tracks and performs actions (upgrade, downgrade, restore, create.snapshot) on system firmware.
-
-FAS is a runtime service deployed in Kubernetes.
-
-#### Fresh Install
-
-Fresh installs on bare-metal use FAS for upgrading compute node firmware.
+> **WARNING:** Non-compute nodes (NCNs) should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS. Research [009-NCN-LOCKING](009-NCN-LOCKING.md) for more information. Failure to lock the NCNs could result in an unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.

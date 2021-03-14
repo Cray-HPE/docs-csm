@@ -96,12 +96,13 @@ is the `IPMI_PASSWORD`
 
 > These exist as an avoidance measure for hard-codes, so these may be used in various system contexts.
 ```bash
-pit# export mtoken='ncn-m(?!001)\w+-mgmt'
-pit# export stoken='ncn-s\w+-mgmt'
-pit# export wtoken='ncn-w\w+-mgmt'
-pit# export username=root
+pit# \
+export mtoken='ncn-m(?!001)\w+-mgmt'
+export stoken='ncn-s\w+-mgmt'
+export wtoken='ncn-w\w+-mgmt'
+export username=root
 # Replace "changeme" with the real root password.
-pit# export IPMI_PASSWORD=changeme
+export IPMI_PASSWORD=changeme
 ```
 
 Throughout the guide, simple one-liners can be used to query status of expected nodes. If the shell or environment is terminated, these environment variables should be re-exported.
