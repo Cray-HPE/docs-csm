@@ -191,7 +191,7 @@ these guides to update them:
 <a name="gigabyte-upgrades"></a>
 ### Gigabyte Upgrades
 
-> TODO: Get directions.
+![img.png](img/fw-gb-1.png)
 
 <a name="hpe-ilo-upgrades"></a>
 ### HPE (iLO) Upgrades
