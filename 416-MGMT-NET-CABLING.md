@@ -41,6 +41,17 @@
 ![HPE_Worker](img/network/HPE_Worker.png)
 
 ### NCN Master Cabling
+#### Single Card Installations
+
+| Server Port        | Management Network Port        | Speed | Use / Configuration            |
+|--------------------|--------------------------------|-------|--------------------------------|
+| OCP port 1         | spine or aggr pair, switch 1/2 | 25Gb  | Management Network NMN/HMN/CAN |
+| OCP port 2         | NONE                           | NONE  | NONE                           |
+| PCIe Slot 1 port 1 | spine or aggr pair, switch 2/2 | 25Gb  | Management Network NMN/HMN/CAN |
+| PCIe Slot 1 port 2 | NONE (See note below for ncn-m001) | NONE  | Site (See note below for ncn-m001) |
+
+#### Dual Card Installations
+A dual card configuration is much less common, but can occur based on customer requirements.  The table below describes the cabling of dual card configurations.  Also read notes in this section to see other possible customer-based configurations.
 
 | Server Port        | Management Network Port        | Speed | Use / Configuration            |
 |--------------------|--------------------------------|-------|--------------------------------|
