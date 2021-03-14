@@ -178,7 +178,7 @@ may be referenced when making a similar site modification to v1.3.
 
 8. Check firmware on Gigabyte nodes. If they need to be updated, remember that for later in this procedure.
 
-    For minimum NCN firmware versions see [Node Firmware](252-FIRMWARE-NODE.md)
+    For minimum NCN firmware versions see [Node Firmware](252-FIRMWARE-NCN.md)
 
     R272 nodes (worker nodes, master nodes, storage nodes, some UANs and some Application Nodes) should use Gigabyte firmware package 21.00, which includes
 
@@ -753,7 +753,7 @@ may be referenced when making a similar site modification to v1.3.
 
 30. Check Mellanox firmware for the CX-4 and CX-5 on management NCNs.
 
-    For minimum NCN firmware versions see [Node Firmware](252-FIRMWARE-NODE.md)
+    For minimum NCN firmware versions see [Node Firmware](252-FIRMWARE-NCN.md)
 
     Confirm the version of the mft rpm installed on the management NCNs. The mft-4.14.0-105.x86_64 version is known to work to report the firmware version installed.
 
@@ -767,7 +767,7 @@ may be referenced when making a similar site modification to v1.3.
     ncn-w001# for ncn in $nodes; do echo $ncn; ssh $ncn mlxfwmanager | egrep "FW|Device" ; done
     ```
 
-    Output from each node will look like this. Compare this information with the versions in [Node Firmware](252-FIRMWARE-NODE.md)
+    Output from each node will look like this. Compare this information with the versions in [Node Firmware](252-FIRMWARE-NCN.md)
 
     ```bash
     Device #1:

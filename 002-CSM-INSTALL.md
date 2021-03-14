@@ -133,7 +133,7 @@ Known issues for Shasta v1.3 systems include:
 
 1. For minimum BIOS spec (required settings), see [Node BIOS Preferences](200-NCN-BIOS-PREF.md).
 
-2. For minimum NCN firmware versions see [Node Firmware](252-FIRMWARE-NODE.md).
+2. For minimum NCN firmware versions see [Node Firmware](252-FIRMWARE-NCN.md).
 
 3. For minimum Network switch firmware versions see [Network Firmware](251-FIRMWARE-NETWORK.md).
 
@@ -287,7 +287,7 @@ before starting.
 
 1. For minimum BIOS spec (required settings), see [Node BIOS Preferences](200-NCN-BIOS-PREF.md).
 
-2. For minimum NCN firmware versions see [Node Firmware](252-FIRMWARE-NODE.md).
+2. For minimum NCN firmware versions see [Node Firmware](252-FIRMWARE-NCN.md).
 
 3. For minimum Network switch firmware versions see [Network Firmware](251-FIRMWARE-NETWORK.md).
 
