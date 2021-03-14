@@ -41,6 +41,8 @@ router bgp 65533
 ```
 
 CDU/Leaf switch Layer3 configuration
+
+The ipv6 configuration is needed for CEC communication.
 ```
 router ospf 1
     router-id 10.252.0.6
@@ -53,9 +55,11 @@ interface vlan 4
 interface vlan 2000
     ip ospf 1 area 0.0.0.2
     ip ospf passive
+    ipv6 address autoconfig
 interface vlan 3000
     ip ospf 1 area 0.0.0.4
     ip ospf passive
+    ipv6 address autoconfig
 ```
 
 Once this is complete you should be able to see OSPF neighbors on the CDU/Leaf switches.
