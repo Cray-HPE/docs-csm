@@ -3,6 +3,8 @@
 ## Prerequisites
 The Cray command line interface (CLI) tool is initialized and configured on the system. See "Configure the Cray Command Line Interface (CLI)" in the HPE Cray EX System Administration Guide S-8001 for more information.
 
+> **`IMPORTANT`** It may be necessary to explicitly set the power state of certain devices before performing a given firmware update. Refer to ()[] in order to understand the process for setting power state and controlling relevant settings.
+
 ##  <a name="action"></a>Execute an Action
 
 ### Objective

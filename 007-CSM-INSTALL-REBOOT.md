@@ -261,7 +261,7 @@ all been run by the administrator before starting this stage.
    >    ```bash
    >    ncn-m001# /srv/cray/scripts/metal/set-dhcp-to-static.sh
    >    ```
-   >    After this you should have network connectivity.
+   >    Network connectivity should be restored afterwards; the bond is up.
    > 5. Run the following commands:
    >    ```bash
    >    ncn-m001# cloud-init clean
