@@ -46,7 +46,11 @@ To complete firmware checkout, proceed through the below sections:
     find /opt/cray/FW/bios -name sh-svr* -exec ln -snf {} /var/www/fw/river/gb/ \;
     mkdir -pv /var/www/fw/mountain/cray
     find /opt/cray/FW/bios -mindepth 0 -maxdepth 1 -type f -exec ln -snf {} /var/www/fw/mountain/cray/ \;
+4. Make a tftp symlink for Gigabyte nodes:
+    ```bash
+    pit #ln -snf ../fw /var/www/boot/fw
     ```
+
 <a name="identifying-bios-and-hardware"></a>
 ## Identifying BIOS and Hardware
 
