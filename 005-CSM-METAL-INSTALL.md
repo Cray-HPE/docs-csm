@@ -227,7 +227,7 @@ After the operating system boots on each node there are some configuration actio
 console or the console log for certain nodes can help to understand what happens and when.  When the process is complete
 for all nodes, the Ceph storage will have been initialized and the Kubernetes cluster will be created ready for a workload.
 
-
+<a name="workflow"></a>
 #### Workflow
 The configuration workflow described here is intended to help understand the expected path for booting and configuring.  See the actual steps below for the commands to deploy these management NCNs.
 
@@ -247,6 +247,7 @@ The configuration workflow described here is intended to help understand the exp
     - Now ncn-s001 should notice this from any one of the worker nodes and move forward with creation of config maps and running the post-ceph playbooks (s3, OSD pools, quotas, etc.)
   - Once ncn-s001 creates etcd-backup-s3-credentials during the benji-backups role which is one of the last roles after ceph has been set up, then ncn-m001 notices this and moves forward
 
+<a name="deploy"></a>
 #### Deploy
 
 1. Change the default root password and ssh keys
@@ -271,10 +272,21 @@ The configuration workflow described here is intended to help understand the exp
     > correct the bootorder after NCNs complete their first boot. The first boot may need manual effort to set the boot order over the conman console. The NCN boot order is further explained in [101 NCN Booting](101-NCN-BOOTING.md).
 
 4. Validate that the LiveCD is ready for installing NCNs
+   Observe the output of the checks and note any failures, then remediate them.
    ```bash
    pit# csi pit validate --livecd-preflight
    ```
-   > Observe the output of the checks and note any failures, then remediate them.
+   > **`WARNING`** if test failuires for "/dev/sdc" are observed they should be discarded for a manual test:
+   > ```bash
+   > # masters:
+   > ncn# blkid -L ETCDLVM
+   > # workers:
+   > ncn# blkid -L CONLIB
+   > ncn# blkid -L CONRUN
+   > ncn# blkid -L K8SLET
+   > ```
+   > 
+   > The test should be looking for the ephemeral disk, that disk is sometimes `/dev/sdc`. The name of the disk is a more accurate test, and isn't prone to the random path change.
 
    > Note: If your shell terminal is not echoing your input after running this, type "reset" and press enter to recover.
 
