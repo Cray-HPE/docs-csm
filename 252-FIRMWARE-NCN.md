@@ -21,7 +21,7 @@ To complete firmware checkout, proceed through the below sections:
 
 ## Confirm BIOS and Firmware Inventory
 
-> **`CUSTOMER NOTE`** If there's doubt that the tar contains latest, the customer should check [CrayPort][10] for newer firmware.
+> **`CUSTOMER NOTE`** If there's doubt that the tar contains latest, the customer should check [CrayPort][1] for newer firmware.
 
 1. Prepare the inventory; the RPMs providing firmware need to be installed:
 
@@ -163,24 +163,27 @@ To complete firmware checkout, proceed through the below sections:
 
    > **`IMPORTANT NOTE`** **Do not downgrade firmware** unless directed to by the table(s) below. In the event that newer firmware is found, the administrator should return to their Shasta installation and consider this step completed. Only on rare circumstance will certain downgrades be required.
 
-   | Manufacturer | Board Product | Device Type | Version | Downgrade (Y/n)? | LiveCD Location |
-   | :---: | :--- | :---: | ---: | :---: | :--- | 
-   | Gigabyte | MZ32-AR0 | BIOS | `C17` (12.84.09 a.k.a. 21.00.00) | `YES` |`http://pit/fw/river/gb/sh-svr-1264up-bios/bios/SPI_UPD/image.bin`
-   | Gigabyte | MZ32-AR0 | BMC | 12.84.09 | `YES` |`http://pit/fw/river/gb/sh-svr-1264up-bios/bmc/fw/128409.bin`
-   | | | | | |
-   | Gigabyte | MZ62-HD0 | BIOS | `C20` 20.03.00 | `NO` |`http://pit/fw/river/gb/sh-svr-3264-bios/bios/SPI_UPD/image.bin`
-   | Gigabyte | MZ62-HD0 | BMC | 12.84.09 | `NO` |`http://pit/fw/river/gb/sh-svr-3264-bios/bmc/fw/128409.bin`
-   | Gigabyte | MZ62-HD0 | CMC | 62.84.02 | `NO` |`http://pit/fw/river/gb/sh-svr-3264-bios/bmc/fw/628402.bin`
-   | | | | | |
-   | Gigabyte | MZ92-FS0 | BIOS | `C20` 20.03.00 | `NO` |`http://pit/fw/river/gb/sh-svr-5264-gpu-bios/bios/SPI_UPD/image.bin`
-   | Gigabyte | MZ92-FS0 | BMC | 12.84.09 | `NO` |`http://pit/fw/river/gb/sh-svr-5264-gpu-bios/bmc/fw/128409.bin`
-   | | | | | |
-   | HPE | `A42` ProLiant DL385 Gen10 Plus | BIOS | 10/30/2020 1.38 | `NO` | `http://pit/fw/river/hpe/A42_1.38_10_30_2020.signed.flash` | 
-   | HPE | `A43` ProLiant DL325 Gen10 Plus | BIOS | 10/30/2020 1.38 | `NO` | `http://pit/fw/river/hpe/A43_1.38_10_30_2020.signed.flash` | 
-   | HPE | iLO5 | BMC | 2.33 | `NO` |`http://pit/fw/river/hpe/ilo5_233.bin` |
-   | | | | | |
-   | CRAY | EX235n | BIOS | ex235n.bios-1.0.3 | `NO` | `http://pit/fw/mountain/cray/ex235n.bios-1.0.3.tar.gz` | 
-   | CRAY | EX425 | BIOS | ex425.bios-1.4.3 | `NO` | `http://pit/fw/mountain/cray/ex425.bios-1.4.3.tar.gz` |
+   <a name="bios-and-bmc-firmware-version-reference"></a>
+   #### BIOS and BMC Firmware Version Reference
+
+   | CRAY Node Type | Manufacturer | Board Product | Device Type | Version | Downgrade (Y/n)? | LiveCD Location |
+   | :---: | :---: | :--- | :---: | ---: | :---: | :--- | 
+   | NCN | Gigabyte | MZ32-AR0 | BIOS | 21.00.00 | `YES` |`http://pit/fw/river/gb/sh-svr-1264up-bios/bios/SPI_UPD/image.bin`
+   | NCN | Gigabyte | MZ32-AR0 | BMC | 12.84.09 | `YES` |`http://pit/fw/river/gb/sh-svr-1264up-bios/bmc/fw/128409.bin`
+   | | | | | | |
+   | CN | Gigabyte | MZ62-HD0 | BIOS | 20.03.00 | `NO` |`http://pit/fw/river/gb/sh-svr-3264-bios/bios/SPI_UPD/image.bin`
+   | CN | Gigabyte | MZ62-HD0 | BMC | 12.84.09 | `NO` |`http://pit/fw/river/gb/sh-svr-3264-bios/bmc/fw/128409.bin`
+   | CN | Gigabyte | MZ62-HD0 | CMC | 62.84.02 | `NO` |`http://pit/fw/river/gb/sh-svr-3264-bios/bmc/fw/628402.bin`
+   | | | | | | |
+   | UAN | Gigabyte | MZ92-FS0 | BIOS | 20.03.00 | `NO` |`http://pit/fw/river/gb/sh-svr-5264-gpu-bios/bios/SPI_UPD/image.bin`
+   | UAN | Gigabyte | MZ92-FS0 | BMC | 12.84.09 | `NO` |`http://pit/fw/river/gb/sh-svr-5264-gpu-bios/bmc/fw/128409.bin`
+   | | | | | | |
+   | NCN | HPE | `A42` ProLiant DL385 Gen10 Plus | BIOS | 10/30/2020 1.38 | `NO` | `http://pit/fw/river/hpe/A42_1.38_10_30_2020.signed.flash` | 
+   | NCN | HPE | `A43` ProLiant DL325 Gen10 Plus | BIOS | 10/30/2020 1.38 | `NO` | `http://pit/fw/river/hpe/A43_1.38_10_30_2020.signed.flash` | 
+   | NCN | HPE | iLO5 | BMC | 2.33 | `NO` |`http://pit/fw/river/hpe/ilo5_233.bin` |
+   | | | | | | |
+   | CN | CRAY | EX235n | BIOS | ex235n.bios-1.0.3 | `NO` | `http://pit/fw/mountain/cray/ex235n.bios-1.0.3.tar.gz` | 
+   | CN | CRAY | EX425 | BIOS | ex425.bios-1.4.3 | `NO` | `http://pit/fw/mountain/cray/ex425.bios-1.4.3.tar.gz` |
 
 3. For each server that is **lower** than the items above (except for any downgrade exceptions), run through
 these guides to update them:
@@ -382,8 +385,4 @@ Simply run this to update the card, after finding the PCI Device Name in the `ml
 ncn# mlxfwmanager -u --online -d /dev/mst/<mst_device_id>
 ```
 
-[5]: https://www.marvell.com/products/hpe/hpe-industry-standard-adapters.html
-[6]: http://15.213.147.156/HPC_Fabric/Mellanox/Mellanox%20HDR/ConnectX-6%20EN%20network%20interface%20card%20100GbE%20single-port%20QSFP28%20MCX515A-CCAT%20(Cray%20E1000)/
-[7]: http://15.213.147.156/HPC_Fabric/Mellanox/Mellanox%20EDR/HPE%20Ethernet%20100Gb%201-port%20QSFP28%20MCX515A-CCAT%20PCIe3%20x16%20Adapter%20P313246-H21%20(Oku)/16.28.4000%20GA/
-[8]: https://www.mellanox.com/support/firmware/connectx4en
-[10]: https://cray.my.salesforce.com/apex/Home
+[1]: https://cray.my.salesforce.com/apex/Home
