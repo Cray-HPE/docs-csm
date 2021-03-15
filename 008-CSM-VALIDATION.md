@@ -772,20 +772,20 @@ ncn# cray config describe
       Error: No configuration exists. Run `cray init`
       ```
       This means the CLI needs to be initialized. To do so, run the following:
-            ```bash            
-            ncn# cray init
-            ```
-            
-            When prompted, remember to substitute your username instead of 'vers'.
-            Expected output (including your typed input) should look similar to the following:
-            ```
-            Cray Hostname: api-gw-service-nmn.local
-            Username: vers
-            Password:
-            Success!
+      ```bash
+      ncn# cray init
+      ```
 
-            Initialization complete.
-            ```
+      When prompted, remember to substitute your username instead of 'vers'.
+      Expected output (including your typed input) should look similar to the following:
+      ```
+      Cray Hostname: api-gw-service-nmn.local
+      Username: vers
+      Password:
+      Success!
+
+      Initialization complete.
+      ```
 
 <a name="uas-uai-init-cli-auth"></a>
 #### Authorize the CLI for Your User

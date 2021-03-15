@@ -463,7 +463,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 <a name="validation"></a>
 ### Validation
 
-The following command will run a series of remote tests on the storage nodes to validate they are healthy and configured correctly.
+The following commands will run a series of remote tests on the other nodes to validate they are healthy and configured correctly.
 
 Observe the output of the checks and note any failures, then remediate them.
 1. Check CEPH
@@ -489,10 +489,17 @@ Observe the output of the checks and note any failures, then remediate them.
     1. Wipe the ncns using the 'Basic Wipe' section of [DISK CLEANSLATE](051-DISK-CLEANSLATE.md).
     2. Return to the 'Boot the **Storage Nodes**' step of [Start Deployment](#start-deployment) section above.
 
+<a name="configure-and-trim-uefi-entries"></a>
+## Configure and Trim UEFI Entries
 
-**After validating the install**, an administrator may proceed further to continue optional validations
-_or_ head to [CSM Platform Install](006-CSM-PLATFORM-INSTALL.md). The optional validation may have differing
-value in various install contexts.
+> **`IMPORTANT`** *The Boot-Order is set by cloud-init, however the current setting is still iterating. This manual step is required until further notice.*
+
+Do the two-steps outlined in [Fixing Boot-Order](064-EFIBOOTMGR.md#boot-order):
+1. [Setting Order](064-EFIBOOTMGR.md#setting-order)
+2. [Trimming](064-EFIBOOTMGR.md#trimming)
+
+The administrator or CI/CD agent may now move onto the [CSM Platform Install](006-CSM-PLATFORM-INSTALL.md) page to continue the CSM install, or 
+may proceed further to continue optional validations. The optional validation may have differing value in various install contexts.
 
 <a name="optional-validation"></a>
 
@@ -512,13 +519,3 @@ new tests.**
 3. Verify that all the pods in the kube-system namespace are running
 4. Verify that the ceph-csi requirements are in place (see [CEPH CSI](066-CEPH-CSI.md))
 
-<a name="configure-and-trim-uefi-entries"></a>
-## Configure and Trim UEFI Entries
-
-> **`IMPORTANT`** *The Boot-Order is set by cloud-init, however the current setting is still iterating. This manual step is required until further notice.*
-
-Do the two-steps outlined in [Fixing Boot-Order](064-EFIBOOTMGR.md#boot-order):
-1. [Setting Order](064-EFIBOOTMGR.md#setting-order)
-2. [Trimming](064-EFIBOOTMGR.md#trimming)
-
-The administrator or CI/CD agent may now move onto the [CSM Platform Install](006-CSM-PLATFORM-INSTALL.md) page to continue the CSM install.

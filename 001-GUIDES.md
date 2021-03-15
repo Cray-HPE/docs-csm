@@ -79,50 +79,53 @@ Install all of the CSM applications and services into the management Kubernetes 
 The CSM installation validation and health checks can be run after install.sh finishes in this installation process, but can also be run at other times later.
 
 * [Platform Health Checks](008-CSM-VALIDATION.md#platform-health-checks)
-  * [ncnHealthChecks](008-CSM-VALIDATION.md#ncnhealthchecks)
-  * [ncnPostgresHealthChecks](008-CSM-VALIDATION.md#ncnpostgreshealthchecks)
-  * [BGP Peering Status and Reset](008-CSM-VALIDATION.md#bgp-peering-status-and-reset)
-    * [Mellanox Switch](008-CSM-VALIDATION.md#mellanox-switch)
-    * [Aruba Switch](008-CSM-VALIDATION.md#aruba-switch)
+  * [ncnHealthChecks](008-CSM-VALIDATION.md#pet-ncnhealthchecks)
+  * [ncnPostgresHealthChecks](008-CSM-VALIDATION.md#pet-ncnpostgreshealthchecks)
+  * [BGP Peering Status and Reset](008-CSM-VALIDATION.md#pet-bgp)
+    * [Mellanox Switch](008-CSM-VALIDATION.md#pet-bgp-mellanox)
+    * [Aruba Switch](008-CSM-VALIDATION.md#pet-bgp-aruba)
 
 
 * [Network Health Checks](008-CSM-VALIDATION.md#network-health-checks)
-  * [Verify that KEA has active DHCP leases](008-CSM-VALIDATION.md#verify-that-kea-has-active-dhcp-leases)
-  * [Verify ability to resolve external DNS](008-CSM-VALIDATION.md#verify-ability-to-resolve-external-dns)
-  * [Verify Spire Agent is Running on Kuberetes NCNs](008-CSM-VALIDATION.md#verify-spire-agent-is-running-on-kuberetes-ncns)
-  * [Verify the Vault Cluster is Healthy](008-CSM-VALIDATION.md#verify-the-vault-cluster-is-healthy)
+  * [Verify that KEA has active DHCP leases](008-CSM-VALIDATION.md#net-kea)
+  * [Verify ability to resolve external DNS](008-CSM-VALIDATION.md#net-extdns)
+  * [Verify Spire Agent is Running on Kuberetes NCNs](008-CSM-VALIDATION.md#net-spire)
+  * [Verify the Vault Cluster is Healthy](008-CSM-VALIDATION.md#net-vault)
 
 
 * [Automated Goss Testing](008-CSM-VALIDATION.md#automated-goss-testing)
-  * [Known Goss Test Issues](008-CSM-VALIDATION.md#known-goss-test-issues)
+  * [Known Goss Test Issues](008-CSM-VALIDATION.md#autogoss-issues)
 
 
-* [Hardware Management Services Tests](008-CSM-VALIDATION.md#hardware-management-services-tests)
-  * [Test Execution](008-CSM-VALIDATION.md#test-execution)
-  * [Cray Management Services Validation Utility](008-CSM-VALIDATION.md#cray-management-services-validation-utility)
-  * [Usage](008-CSM-VALIDATION.md#usage)
-    * [Interpreting Results](008-CSM-VALIDATION.md#interpreting-results)
-  * [Checks To Run](008-CSM-VALIDATION.md#checks-to-run)
-    * [Booting CSM Barebones Image](008-CSM-VALIDATION.md#booting-csm-barebones-image)
-      * [Locate the CSM Barebones Image in IMS](008-CSM-VALIDATION.md#locate-the-csm-barebones-image-in-ims)
-      * [Create a BOS Session Template for the CSM Barebones Image](008-CSM-VALIDATION.md#create-a-bos-session-template-for-the-csm-barebones-image)
-    * [Find an available compute node and boot the session template](008-CSM-VALIDATION.md#find-an-available-compute-node-and-boot-the-session-template)
-    * [Verify console connections](008-CSM-VALIDATION.md#verify-console-connections)
-    * [Connect to the node's console and watch the boot](008-CSM-VALIDATION.md#connect-to-the-node's-console-and-watch-the-boot)
+* [Hardware Management Services Tests](008-CSM-VALIDATION.md#hms-tests)
+  * [Test Execution](008-CSM-VALIDATION.md#hms-exec)
+* [Cray Management Services Validation Utility](008-CSM-VALIDATION.md#cms-validation-utility)
+  * [Usage](008-CSM-VALIDATION.md#cms-usage)
+  * [Interpreting Results](008-CSM-VALIDATION.md#cms-results)
+  * [Checks To Run](008-CSM-VALIDATION.md#cms-checks)
+* [Booting CSM Barebones Image](008-CSM-VALIDATION.md#booting-csm-barebones-image)
+  * [Locate the CSM Barebones Image in IMS](008-CSM-VALIDATION.md#csm-ims)
+  * [Create a BOS Session Template for the CSM Barebones Image](008-CSM-VALIDATION.md#csm-bst)
+  * [Find an available compute node and boot the session template](008-CSM-VALIDATION.md#csm-node)
+  * [Reboot node](008-CSM-VALIDATION.md#csm-reboot)
+  * [Verify console connections](008-CSM-VALIDATION.md#csm-consoles)
+  * [Connect to the node's console and watch the boot](008-CSM-VALIDATION.md#csm-watch)
 
 
-* [UAS / UAI Tests](008-CSM-VALIDATION.md#uas--uai-tests)
-  * [Initialize and Authorize the CLI](008-CSM-VALIDATION.md#initialize-and-authorize-the-cli)
-    * [Stop Using the CRAY_CREDENTIALS Service Account Token](008-CSM-VALIDATION.md#stop-using-the-cray_credentials-service-account-token)
-  * [Initialize the CLI Configuration](008-CSM-VALIDATION.md#initialize-the-cli-configuration)
-  * [Authorize the CLI for Your User](008-CSM-VALIDATION.md#authorize-the-cli-for-your-user)
-  * [Validate UAS and UAI Functionality](008-CSM-VALIDATION.md#validate-uas-and-uai-functionality)
-  * [Validate the Basic UAS Installation](008-CSM-VALIDATION.md#validate-the-basic-uas-installation)
-  * [Validate UAI Creation](008-CSM-VALIDATION.md#validate-uai-creation)
-  * [Authorization Issues](008-CSM-VALIDATION.md#authorization-issues)
-    * [UAS Cannot Access Keycloak](008-CSM-VALIDATION.md#uas-cannot-access-keycloak)
-    * [UAI Images not in Registry](008-CSM-VALIDATION.md#uai-images-not-in-registry)
-    * [Missing Volumes and other Container Startup Issues](008-CSM-VALIDATION.md#missing-volumes-and-other-container-startup-issues)
+* [UAS / UAI Tests](008-CSM-VALIDATION.md#uas-uai-tests)
+  * [Initialize and Authorize the CLI](008-CSM-VALIDATION.md#uas-uai-init-cli)
+    * [Stop Using the CRAY_CREDENTIALS Service Account Token](008-CSM-VALIDATION.md#uas-uai-init-cli-stop)
+    * [Initialize the CLI Configuration](008-CSM-VALIDATION.md#uas-uai-init-cli-init)
+    * [Authorize the CLI for Your User](008-CSM-VALIDATION.md#uas-uai-init-auth)
+    * [Troubleshooting CLI issues](008-CSM-VALIDATION.md#uas-uai-init-debug)
+  * [Validate UAS and UAI Functionality](008-CSM-VALIDATION.md#uas-uai-validate)
+    * [Validate the Basic UAS Installation](008-CSM-VALIDATION.md#uas-uai-validate-install)
+    * [Validate UAI Creation](008-CSM-VALIDATION.md#uas-uai-validate-create)
+    * [Troubleshooting](008-CSM-VALIDATION.md#uas-uai-validate-debug)
+      * [Authorization Issues](008-CSM-VALIDATION.md#uas-uai-validate-debug-auth)
+      * [UAS Cannot Access Keycloak](008-CSM-VALIDATION.md#uas-uai-validate-debug-keycloak)
+      * [UAI Images not in Registry](008-CSM-VALIDATION.md#uas-uai-validate-debug-registry)
+      * [Missing Volumes and other Container Startup Issues](008-CSM-VALIDATION.md#uas-uai-validate-debug-container)
 
 ##### [CSM Install Reboot - Final NCN Install](007-CSM-INSTALL-REBOOT.md#csm-install-reboot---final-ncn-install)
 
@@ -140,7 +143,7 @@ The ncn-m001 node needs to reboot from the LiveCD to normal operation as a Kuber
 
 ##### [CSM Validation process](008-CSM-VALIDATION.md)
 
-[*Double-back...*](#csm-install-validation-and-health-checks008-csm-validationmd)
+[*Double-back...*](#csm-install-validation-and-health-checks)
 
 The CSM installation validation and health checks can be run again now that ncn-m001 has been rebooted to join the Kubernetes cluster. 
 
