@@ -237,6 +237,8 @@ Firmware is located on the LiveCD (versions 1.4.6 or higher).
       2. On the _Left_, select "Firmware & OS Software"
       3. On the _Right_, select "Upload Firmware"
       4. Select "Remote File" and "Confirm TPM override", and then choose your firmware file:
+         - `Remote File URL`: Use the "LiveCD Location" value from the table above.
+         - `Confirm TPM Override`: Check this box to confirm the flash.
          ![fw-ilo-4](img/fw-ilo-4.png)
       5. Press **`Flash`** and wait for the upload and flash to complete. iLO may reboot after flash.
       6. Now grab the iLO5 Firmware the same way:
@@ -246,7 +248,17 @@ Firmware is located on the LiveCD (versions 1.4.6 or higher).
          3. Press **`Flash`** and wait for the upload and flash to complete. iLO may reboot after flash.
       7. Cold boot the node, or momentarily press the button (GUI button) to power it on.
 
-3. After Flashing the node, the SSH tunnel may be severed.
+3. After the other nodes are completed, the pit node can be updgraded. (Alternatively this could be done first):
+   - Repeat the same process, using the external BMC URL for the PIT node's BMC (e.g. https://system-ncn-m001-mgmt)
+   - For the `Remote File URL` use `127.0.0.1` instead of `pit` (e.g. http://127.0.0.1/fw/river/hpe/A42_1.38_10_30_2020.signed.flash)
+   - Before rebooting the node, save any work and set the `BootNext` to the current boot sessions device:
+      ```bash
+      pit# bootcurrent=$(efibootmgr | grep -i bootcurrent | awk '{print $NF}')
+      pit# efibootmgr -n $bootcurrent
+      pit# reboot
+      ```
+
+All NCNs are now updated via GUI.
 
 <a name="redfish"></a>
 #### Redfish
