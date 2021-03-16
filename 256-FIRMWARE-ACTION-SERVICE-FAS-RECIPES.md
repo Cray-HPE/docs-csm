@@ -150,6 +150,10 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
 #### <a name="cray-device-type-chassisbmc-target-bmc"></a>Device Type : ChassisBMC | Target: BMC
 
 **IMPORTANT**: Before updating a CMM, make sure all slot and rectifier power is off.
+The hms-discovery job must also be stopped before updates and restarted after updates are complete:
+> Stop hms-discovery job: ```kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":true}}'```
+>
+> Start hms-discovery job: ``` kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":false}}'```
 
 ```json
 {
@@ -307,9 +311,11 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
 }
 ```
 
-**NOTE**: You MUST use `1`as `target` to indicate `iLO 5` 
+**NOTE**: You MUST use `1` as `target` to indicate `iLO 5`
 
 ####  <a name="hpe-device-type-nodebmc-target-`system-rom`-aka-bios"></a>Device Type : NodeBMC | Target : `System ROM` aka BIOS
+
+**NOTE**: Node should be powered on for System ROM update and will need to be rebooted to use the updated BIOS.
 
 ```json
 {
@@ -337,8 +343,9 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
 }
 ```
 
-**NOTE**: You MUST use `2`as `target` to indicate `System ROM` 
+**NOTE**: You MUST use `2` as `target` to indicate `System ROM`
 
+**NOTE**: Because of an incorrect string in the image meta data in FAS.  Update of System ROM may report as an error when it actually succeeded.  You may have to manually check the update version.
 
 ---
 
