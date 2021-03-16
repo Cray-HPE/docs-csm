@@ -17,8 +17,8 @@ To complete firmware checkout, proceed through the below sections:
       * [Enable Tools](252-FIRMWARE-NCN.md#enable-tools)
       * [Check Current Firmware](252-FIRMWARE-NCN.md#check-current-firmware)
       * [Optional Online Update](252-FIRMWARE-NCN.md#optional-online-update)
-<a name="confirm-bios-and-firmware-inventory"></a>
 
+<a name="confirm-bios-and-firmware-inventory"></a>
 ## Confirm BIOS and Firmware Inventory
 
 > **`CUSTOMER NOTE`** If there's doubt that the tar contains latest, the customer should check [CrayPort][1] for newer firmware.
@@ -31,7 +31,7 @@ To complete firmware checkout, proceed through the below sections:
     ```
 
 2. Hide the old firmware; cleanup the directory
-     > **`NOTE`** This step will be removed in later versions of Shasta; this is correcting the layout of the directory.
+   > **`NOTE`** This step will be removed in later versions of Shasta; this is correcting the layout of the directory.
     ```bash
     pit# mv /var/www/fw/river /var/www/fw/.river-old
     ```
@@ -167,15 +167,15 @@ To complete firmware checkout, proceed through the below sections:
    #### BIOS and BMC Firmware Version Reference
 
    | CRAY Node Type | Manufacturer | Board Product | Device Type | Version | Downgrade (Y/n)? | LiveCD Location |
-   | :---: | :---: | :--- | :---: | ---: | :---: | :--- | 
-   | NCN | Gigabyte | MZ32-AR0 | BIOS | 21.00.00 | `YES` |`http://pit/fw/river/gb/sh-svr-1264up-bios/bios/SPI_UPD/image.bin`
+   | :---: | :---: | :--- | :---: | ---: | :---: | :--- |
+   | NCN | Gigabyte | MZ32-AR0 | BIOS | 21.00.00 | `YES` |`http://pit/fw/river/gb/sh-svr-1264up-bios/bios/RBU/image.RBU`
    | NCN | Gigabyte | MZ32-AR0 | BMC | 12.84.09 | `YES` |`http://pit/fw/river/gb/sh-svr-1264up-bios/bmc/fw/128409.bin`
    | | | | | | |
-   | CN | Gigabyte | MZ62-HD0 | BIOS | 20.03.00 | `NO` |`http://pit/fw/river/gb/sh-svr-3264-bios/bios/SPI_UPD/image.bin`
+   | CN | Gigabyte | MZ62-HD0 | BIOS | 20.03.00 | `NO` |`http://pit/fw/river/gb/sh-svr-3264-bios/bios/RBU/image.RBU`
    | CN | Gigabyte | MZ62-HD0 | BMC | 12.84.09 | `NO` |`http://pit/fw/river/gb/sh-svr-3264-bios/bmc/fw/128409.bin`
    | CN | Gigabyte | MZ62-HD0 | CMC | 62.84.02 | `NO` |`http://pit/fw/river/gb/sh-svr-3264-bios/bmc/fw/628402.bin`
    | | | | | | |
-   | UAN | Gigabyte | MZ92-FS0 | BIOS | 20.03.00 | `NO` |`http://pit/fw/river/gb/sh-svr-5264-gpu-bios/bios/SPI_UPD/image.bin`
+   | UAN | Gigabyte | MZ92-FS0 | BIOS | 20.03.00 | `NO` |`http://pit/fw/river/gb/sh-svr-5264-gpu-bios/bios/RBU/image.RBU`
    | UAN | Gigabyte | MZ92-FS0 | BMC | 12.84.09 | `NO` |`http://pit/fw/river/gb/sh-svr-5264-gpu-bios/bmc/fw/128409.bin`
    | | | | | | |
    | NCN | HPE | `A42` ProLiant DL385 Gen10 Plus | BIOS | 10/30/2020 1.38 | `NO` | `http://pit/fw/river/hpe/A42_1.38_10_30_2020.signed.flash` | 
@@ -186,15 +186,69 @@ To complete firmware checkout, proceed through the below sections:
    | CN | CRAY | EX425 | BIOS | ex425.bios-1.4.3 | `NO` | `http://pit/fw/mountain/cray/ex425.bios-1.4.3.tar.gz` |
 
 3. For each server that is **lower** than the items above (except for any downgrade exceptions), run through
-these guides to update them:
+   these guides to update them:
    - [Gigabyte Upgrades](#gigabyte-upgrades)
    - [HPE (iLO) Upgrades](#hpe-ilo-upgrades)
 
-<a name="gigabytes-upgrades"></a>
 <a name="gigabyte-upgrades"></a>
 ### Gigabyte Upgrades
 
-> TODO: Get directions.
+For Gigabyte upgrades a tftp server needs to be referred to.
+
+<a name="gui"></a>
+#### GUI
+
+1. From the administrators own machine, SSH tunnel (`-L` creates the tunnel, and `-N` prevents a shell and stubs the connection). One at a time, or all together.
+    ```bash
+    ssh -L 6443:ncn-m002-mgmt:443 -N $system_name-ncn-m001
+    ssh -L 7443:ncn-m003-mgmt:443 -N $system_name-ncn-m001
+    ssh -L 8443:ncn-w001-mgmt:443 -N $system_name-ncn-m001
+    ssh -L 9443:ncn-w002-mgmt:443 -N $system_name-ncn-m001
+    ssh -L 10443:ncn-w003-mgmt:443 -N $system_name-ncn-m001
+    ssh -L 11443:ncn-s001-mgmt:443 -N $system_name-ncn-m001
+    ssh -L 12443:ncn-s002-mgmt:443 -N $system_name-ncn-m001
+    ssh -L 13443:ncn-s003-mgmt:443 -N $system_name-ncn-m001
+    ```
+2. One at a time in (to prevent log-outs from duplicate SSL/CA) open each and run through the nested steps:
+
+         https://127.0.0.1:6443
+         https://127.0.0.1:7443
+         https://127.0.0.1:8443
+         https://127.0.0.1:9443
+         https://127.0.0.1:10443
+         https://127.0.0.1:11443
+         https://127.0.0.1:12443
+         https://127.0.0.1:13443
+
+   1. Login with the default credentials.
+   2. On the _Left_, select "Maintenance"
+   3. In the new pane, select "Firmware Image Location"
+      ![img_1.png](img/fw-gb-2.png)
+   4. Configure the TFTP Server:
+      - Server Address: The HMN IP of the PIT node (`ip a show vlan004`)
+      - Image Name: The LiveCD Location from the above table, minus the base URL (e.g. `/fw/river/gb/sh-svr-1264up-bios/bios/RBU/image.RBU`)
+      - Press **`SAVE`** when done
+         ![img.png](img/fw-gb-4.png)
+   5. Go back to "Maintenance", then select "Firmware Update"
+   6. Change the selection to BIOS and then press "Flash"
+      ![img_3.png](img/fw-gb-3.png)
+   7. Next. Go back to the "Firmware Image Location" and modify it to fetch the BMC ROM:
+      ![img_4.png](img/fw-gb-2.png)
+   8. Press Proceed to Flash; ensure the Update Type is set to BMC
+       > **`IMPORTANT`** Make sure to check off "Preserve all configuration" otherwise network connectvitity may be lost after reset.
+
+      ![img_5.png](img/fw-gb-1.png)
+
+3. Now repeat this for m001, however for every location `http://pit` is used we need to use `127.0.0.1` instead.
+
+4. Reboot the pit node back into itself:
+   ```bash
+   pit# bootcurrent=$(efibootmgr | grep -i bootcurrent | awk '{print $NF}')
+   pit# efibootmgr -n $bootcurrent
+   pit# reboot
+   ```
+
+You're now finished with FW updates.
 
 <a name="hpe-ilo-upgrades"></a>
 ### HPE (iLO) Upgrades
@@ -233,20 +287,20 @@ Firmware is located on the LiveCD (versions 1.4.6 or higher).
          https://127.0.0.1:12443
          https://127.0.0.1:13443
 
-      1. Login with the default credentials.
-      2. On the _Left_, select "Firmware & OS Software"
-      3. On the _Right_, select "Upload Firmware"
-      4. Select "Remote File" and "Confirm TPM override", and then choose your firmware file:
-         - `Remote File URL`: Use the "LiveCD Location" value from the table above.
-         - `Confirm TPM Override`: Check this box to confirm the flash.
-         ![fw-ilo-4](img/fw-ilo-4.png)
-      5. Press **`Flash`** and wait for the upload and flash to complete. iLO may reboot after flash.
-      6. Now grab the iLO5 Firmware the same way:
-         1. On the _Right_, select "Upload Firmware"
-         2. Select "Remote File" and "Confirm TPM override", and then choose your firmware file:
-            ![fw-ilo-5](img/fw-ilo-5.png)
-         3. Press **`Flash`** and wait for the upload and flash to complete. iLO may reboot after flash.
-      7. Cold boot the node, or momentarily press the button (GUI button) to power it on.
+   1. Login with the default credentials.
+   2. On the _Left_, select "Firmware & OS Software"
+   3. On the _Right_, select "Upload Firmware"
+   4. Select "Remote File" and "Confirm TPM override", and then choose your firmware file:
+      - `Remote File URL`: Use the "LiveCD Location" value from the table above.
+      - `Confirm TPM Override`: Check this box to confirm the flash.
+        ![fw-ilo-4](img/fw-ilo-4.png)
+   5. Press **`Flash`** and wait for the upload and flash to complete. iLO may reboot after flash.
+   6. Now grab the iLO5 Firmware the same way:
+      1. On the _Right_, select "Upload Firmware"
+      2. Select "Remote File" and "Confirm TPM override", and then choose your firmware file:
+         ![fw-ilo-5](img/fw-ilo-5.png)
+      3. Press **`Flash`** and wait for the upload and flash to complete. iLO may reboot after flash.
+   7. Cold boot the node, or momentarily press the button (GUI button) to power it on.
 
 3. After the other nodes are completed, the pit node can be updgraded. (Alternatively this could be done first):
    - Repeat the same process, using the external BMC URL for the PIT node's BMC (e.g. https://system-ncn-m001-mgmt)
