@@ -451,7 +451,7 @@ removed before attempting to deploy again.
 <a name="error-initiating-layer-upload"></a>
 ### Error initiating layer upload ... in registry.local: received unexpected HTTP status: 200 OK
 
-The following error may occur when running `./install.sh --continue`:
+The following error may occur when running `./lib/setup-nexus.sh`:
 
 ```
 time="2021-02-07T20:25:22Z" level=info msg="Copying image tag 97/144" from="dir:/image/jettech/kube-webhook-certgen:v1.2.1" to="docker://registry.local/jettech/kube-webhook-certgen:v1.2.1"
@@ -463,13 +463,13 @@ time="2021-02-07T20:25:33Z" level=fatal msg="Error copying tag \"dir:/image/jett
 + return
 ```
 
-This error is most likely _intermittent_ and running `./install.sh --continue`
+This error is most likely _intermittent_ and running `./lib/setup-nexus.sh`
 again is expected to succeed.
 
 <a name="error-registry-local-no-such-host"></a>
 ### Error lookup registry.local: no such host
 
-The following error may occur when running `./install.sh --continue`:
+The following error may occur when running `./lib/setup-nexus.sh`:
 ```
 time="2021-02-23T19:55:54Z" level=fatal msg="Error copying tag \"dir:/image/grafana/grafana:7.0.3\": Error writing blob: Head \"https://registry.local/v2/grafana/grafana/blobs/sha256:cf254eb90de2dc62aa7cce9737ad7e143c679f5486c46b742a1b55b168a736d3\": dial tcp: lookup registry.local: no such host"
 + return
@@ -481,5 +481,5 @@ time="2021-03-04T22:45:07Z" level=fatal msg="Error copying ref \"dir:/image/cray
 + return
 ```
 
-These errors are most likely _intermittent_ and running `./install.sh --continue`
+These errors are most likely _intermittent_ and running `./lib/setup-nexus.sh`
 again is expected to succeed.
