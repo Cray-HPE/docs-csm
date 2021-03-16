@@ -269,7 +269,7 @@ with system-specific customizations.
 
         > **`INTERNAL ONLY`** 
         > 
-        > Set `ldap_connection_url` in `customziations.yaml`:
+        > Set `ldap_connection_url` in `customizations.yaml`:
         > 
         > ```bash
         > linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.keycloak_users_localize.generate.data.(args.name==ldap_connection_url).args.value' "ldaps://$DCLDAP"

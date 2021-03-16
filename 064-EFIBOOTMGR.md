@@ -4,7 +4,7 @@ This page will assist an administrator in using the `efibootmgr` tool.
 
   * [Boot Order](064-EFIBOOTMGR.md#boot-order)
     * [Setting Order](064-EFIBOOTMGR.md#setting-order)
-    * [Triming](064-EFIBOOTMGR.md#trimming)
+    * [Trimming](064-EFIBOOTMGR.md#trimming)
         * [Examples](064-EFIBOOTMGR.md#examples)
     * [Reverting Changes](064-EFIBOOTMGR.md#reverting-changes)
   * [Locating a USB Stick](064-EFIBOOTMGR.md#locating-a-usb-stick)
@@ -94,7 +94,6 @@ This page will assist an administrator in using the `efibootmgr` tool.
 > ncn-w# efibootmgr | grep -i 'port 1' | grep -i 'pxe ipv4' | tee /tmp/bbs1
 > Boot0012* OCP Slot 10 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - PXE (PXE IPv4)
 > ncn-w#
-> ncn-w# efibootmgr | grep cray | tee /tmp/bbs2\
 > ncn-w# efibootmgr | grep cray | tee /tmp/bbs2
 > Boot0017* cray (sdb1)
 > Boot0018* cray (sdc1)
@@ -248,10 +247,10 @@ ipmitool chassis bootdev none options=clear-cmos
 # set boot order
 ipmitool chassis bootdev pxe options=efiboot,persistent
 
-# boot to bios for checkout
+# boot to BIOS for checkout
 ipmitool chassis bootdev bios options=efiboot
 ```
-> **`NOTE`** `ipmitool` works against a machine remotely over TCP/IP, it requires more arugments:
+> **`NOTE`** `ipmitool` works against a machine remotely over TCP/IP, it requires more arguments:
 > ```bash
 > username=root
 > IPMI_PASSWORD=

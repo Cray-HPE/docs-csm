@@ -20,7 +20,7 @@ to [Starting an Installation](#starting-an-installation).
 
   * [Prerequisites for Shasta v1.4 Installations on Shasta v1.3 Systems](#prerequisites-for-shasta-v14-installations-on-shasta-v13-systems)
   * [Prerequisites for Shasta v1.4 Installations on Bare-metal Systems](#prerequisites-for-shasta-v14-installations-on-bare-metal-systems)
-  * [Prerequisites for Reinstalling Shasta v1.4](#prerequisites-for-reinstallting-shasta-v14)
+  * [Prerequisites for Reinstalling Shasta v1.4](#prerequisites-for-reinstalling-shasta-v14)
 
 ---
 
@@ -308,7 +308,7 @@ The system is now ready for [Starting an Installation](#starting-an-installation
 
 ---
 
-<a name="prerequisites-for-reinstallting-shasta-v14"></a>
+<a name="prerequisites-for-reinstalling-shasta-v14"></a>
 ## Prerequisites for Reinstallting Shasta v1.4
 
 The following prerequisites must be completed in order to successfully reinstall Shasta v1.4.

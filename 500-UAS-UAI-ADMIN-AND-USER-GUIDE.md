@@ -1751,7 +1751,7 @@ Everything else should be the same as it would be for a legacy mode UAI class.
 
 Configuring a broker UAI class consists of the following:
 
-* create volumes to hold any site specific authentication, SSH, or other configuration required
+* create volumes to hold any site-specific authentication, SSH, or other configuration required
 * choose the end-user UAI class for which the broker UAI will serve instances
 * [add the UAI class](#main-uasconfig-classes-add) with (at a minimum)
   * `namespace` set to `uas`
@@ -2474,7 +2474,7 @@ ncn-w001# tar rf 0c0d4081-2e8b-433f-b6f7-e1ef0b907be3.tar ./usr/bin/uai-ssh.sh
 
 ##### Create and Push the Container Image <a name="main-uaiimages-customenduser-build-image"></a>
 
-Create a container image using podman or docker and push it to the site container registry. Any container specific modifications may also be done here with a Dockerfile. The ENTRYPOINT layer must be /usr/bin/uai-ssh.sh as that starts SSHD for the user in the UAI container started by UAS.
+Create a container image using podman or docker and push it to the site container registry. Any container-specific modifications may also be done here with a Dockerfile. The ENTRYPOINT layer must be /usr/bin/uai-ssh.sh as that starts SSHD for the user in the UAI container started by UAS.
 
 ```
 ncn-w001# UAI_IMAGE_NAME=registry.local/cray/cray-uai-compute:latest

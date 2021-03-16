@@ -159,7 +159,7 @@ To complete firmware checkout, proceed through the below sections:
 2. Refer to the table below, and use the output from the previous step to map the following information:
    - NCN Type: `Board Product` maps to the "Board Product" column
    - NCN BIOS:`Product Version : 10/30/2020` maps to the "Version" column (note: ignore this field for Gigabyte)
-   - NCN BMC Firmware: `Firmeware Revision` maps to the rows for the BMC
+   - NCN BMC Firmware: `Firmware Revision` maps to the rows for the BMC
 
    > **`IMPORTANT NOTE`** **Do not downgrade firmware** unless directed to by the table(s) below. In the event that newer firmware is found, the administrator should return to their Shasta installation and consider this step completed. Only on rare circumstance will certain downgrades be required.
 

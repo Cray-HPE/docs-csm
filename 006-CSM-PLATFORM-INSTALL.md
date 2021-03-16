@@ -178,7 +178,7 @@ pit# cd /var/www/ephemeral/$CSM_RELEASE
 pit# ./install.sh
 ```
 
-On success, `install.sh` will exit indicating that critical platofrm services
+On success, `install.sh` will exit indicating that critical platform services
 are deployed. It will also print procedures to update DNS settings on NCNs to
 use Unbound. **Complete those procedures** prior to continuing the
 installation:
@@ -196,7 +196,7 @@ get initialized and started. Because there are a number of dependencies between 
 some services are not expected to work immediately after the install script completes.
 After waiting, the administrator may start the [CSM Validation process](008-CSM-VALIDATION.md).
 
-Once the CSM services are deemed healthy the administrator way proceed to the
+Once the CSM services are deemed healthy the administrator may proceed to the
 final step of the CSM install [Reboot from the LiveCD to NCN](007-CSM-INSTALL-REBOOT.md).
 
 <a name="add-cabinet-routing-to-ncns"></a>
