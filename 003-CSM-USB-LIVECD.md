@@ -49,7 +49,8 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    linux# rpm -Uvh ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
    ```
 
-5. Download and install/upgrade the workaround and documentation RPMs.
+5. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet 
+   access these RPMs will need to be externally downloaded and then copied to be installed.
    ```bash
    linux# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm-install/docs-csm-install-latest.noarch.rpm
    linux# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
@@ -565,7 +566,8 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
    
-4. Download and install/upgrade the workaround and documentation RPMs.
+4. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet 
+   access these RPMs will need to be externally downloaded and then copied to be installed.
    ```bash
    pit# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm-install/docs-csm-install-latest.noarch.rpm
    pit# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
