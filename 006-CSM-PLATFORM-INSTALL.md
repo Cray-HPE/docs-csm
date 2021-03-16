@@ -6,7 +6,11 @@ into the CSM Kubernetes cluster).
 * [Initialize Bootstrap Registry](#initialize-bootstrap-registry)
 * [Create Site-Init Secret](#create-site-init-secret)
 * [Deploy Sealed Secret Decryption Key](#deploy-sealed-secret-decryption-key)
-* [Start the Deployment](#start-the-deployment)
+* [Deploy CSM Applications and Services](#deploy-csm-applications-and-services)
+  * [Setup Nexus](#setup-nexus)
+  * [Set NCNs to use Unbound](#set-ncns-to-use-unbound)
+  * [Validate CSM Install](#validate-csm-install)
+  * [Reboot from the LiveCD to NCN](#reboot-from-the-livecd-to-ncn)
 * [Add Compute Cabinet Routing to NCNs](#add-compute-cabinet-routing-to-ncns)
 * [Known Issues](#known-issues)
   * [error: timed out waiting for the condition on jobs/cray-sls-init-load](#error-timed-out-sls-init-load-job)
@@ -78,7 +82,8 @@ Expected output looks similar to the following:
 secret/site-init created
 ```
 
-> **`NOTE`** If the `site-init` secret already exists then `kubectl` will error with a message similar to:
+> **`NOTE`** If the `site-init` secret already exists then `kubectl` will error
+> with a message similar to:
 >
 > ```
 > Error from server (AlreadyExists): secrets "site-init" already exists
@@ -150,14 +155,13 @@ Restarting sealed-secrets to pick up new keys
 No resources found
 ```
 
-This is expected and can safely be ignored. 
+This is expected and can safely be ignored.
 
-<a name="start-the-deployment"></a>
-## Start the Deployment
 
-At this time the administrator can begin actually deploying the platform.
+<a name="#deploy-csm-applications-and-services"></a>
+## Deploy CSM Applications and Services
 
-### Run `install.sh`
+Run `install.sh` to deploy CSM applications services:
 
 > **`NOTE`** `install.sh` requires various system configuration which are
 > expected to be found in the locations used in proceeding documentation;
@@ -171,33 +175,155 @@ At this time the administrator can begin actually deploying the platform.
 > pit# export CSM_RELEASE=csm-x.y.z
 > ```
 
-Complete the CSM install by running `install.sh`.
-
 ```bash
 pit# cd /var/www/ephemeral/$CSM_RELEASE
 pit# ./install.sh
 ```
 
-On success, `install.sh` will exit indicating that critical platofrm services
-are deployed. It will also print procedures to update DNS settings on NCNs to
-use Unbound. **Complete those procedures** prior to continuing the
-installation:
+On success, `install.sh` will output `OK` to stderr and exit with status code
+`0`, e.g.:
 
 ```bash
-pit# ./install.sh --continue
+pit# ./install.sh
+...
++ CSM applications and services deployed
+install.sh: OK
 ```
+
+In the event that `install.sh` does not complete successfully, consult the
+[known issues](#known-issues) below to resolve potential problems and then try
+running `install.sh` again.
+
+
+<a name="setup-nexus"></a>
+### Setup Nexus
+
+Run `./lib/setup-nexus.sh` to configure Nexus and upload CSM RPM repositories,
+container images, and Helm charts:
+
+```bash
+pit# ./lib/setup-nexus.sh
+```
+
+On success, `setup-nexus.sh` will output to `OK` on stderr and exit with status
+code `0`, e.g.:
+
+```bash
+pit# ./lib/setup-nexus.sh
+...
++ Nexus setup complete
+setup-nexus.sh: OK
+```
+
+In the event of an error, consult the [known issues](#known-issues) below to
+resolve potential problems and then try running `setup-nexus.sh` again. Note
+that subsequent runs of `setup-nexus.sh` may report `FAIL` when uploading
+duplicate assets. This is ok as long as `setup-nexus.sh` outputs
+`setup-nexus.sh: OK` and exits with status code `0`.
+
+
+<a name="set-ncns-to-use-unbound"></a>
+### Set NCNs to use Unbound
+
+First, verify that SLS properly reports all NCNs in the system:
+
+```bash
+pit# ./lib/list-ncns.sh
+```
+
+On success, each NCN will be output, e.g.:
+
+```bash
+pit# ./lib/list-ncns.sh
++ Getting admin-client-auth secret
++ Obtaining access token
++ Querying SLS 
+ncn-m001
+ncn-m002
+ncn-m003
+ncn-s001
+ncn-s002
+ncn-s003
+ncn-w001
+ncn-w002
+ncn-w003
+```
+
+If any NCNs are missing from the output, take corrective action before
+proceeding.
+
+Next, run `lib/set-ncns-to-unbound.sh` to SSH to each NCN and update
+/etc/resolv.conf to use Unbound as the nameserver.
+
+```bash
+pit# ./lib/set-ncns-to-unbound.sh
+```
+
+> **`NOTE`** If passwordless SSH is not configured, the administrator will have
+> to enter the corresponding password as the script attempts to conenct to each
+> NCN.
+
+On success, the nameserver configuration in /etc/resolv.conf will be printed
+for each NCN, e.g.,:
+
+```bash
+pit# ./lib/set-ncns-to-unbound.sh
++ Getting admin-client-auth secret
++ Obtaining access token
++ Querying SLS 
++ Updating ncn-m001
+Password: 
+ncn-m001: nameserver 127.0.0.1
+ncn-m001: nameserver 10.92.100.225
++ Updating ncn-m002
+Password: 
+ncn-m002: nameserver 10.92.100.225
++ Updating ncn-m003
+Password: 
+ncn-m003: nameserver 10.92.100.225
++ Updating ncn-s001
+Password: 
+ncn-s001: nameserver 10.92.100.225
++ Updating ncn-s002
+Password: 
+ncn-s002: nameserver 10.92.100.225
++ Updating ncn-s003
+Password: 
+ncn-s003: nameserver 10.92.100.225
++ Updating ncn-w001
+Password: 
+ncn-w001: nameserver 10.92.100.225
++ Updating ncn-w002
+Password: 
+ncn-w002: nameserver 10.92.100.225
++ Updating ncn-w003
+Password: 
+ncn-w003: nameserver 10.92.100.225
+```
+
+> **`NOTE`** The script connects to ncn-m001 which will be the pit node, whose
+> password may be different from that of the other NCNs.
+
+
+<a name="validate-csm-install"></a>
+### Validate CSM Install
 
 After successfully completing the CSM platform install, quit the typescript
 session with the `exit` command and copy the file (booted-csm-lived.<date>.txt)
 to a location on another server for reference later. 
 
 The administrator should wait at least 15 minutes to let the various Kubernetes resources
-get initialized and started. Because there are a number of dependencies between them, 
+get initialized and started. Because there are a number of dependencies between them,
 some services are not expected to work immediately after the install script completes.
 After waiting, the administrator may start the [CSM Validation process](008-CSM-VALIDATION.md).
 
-Once the CSM services are deemed healthy the administrator way proceed to the
+
+<a name="reboot-from-the-livecd-to-ncn"></a>
+### Reboot from the LiveCD to NCN
+
+Once the CSM services are deemed healthy the administrator may proceed to the
 final step of the CSM install [Reboot from the LiveCD to NCN](007-CSM-INSTALL-REBOOT.md).
+
 
 <a name="add-cabinet-routing-to-ncns"></a>
 ## Add Compute Cabinet Routing to NCNs

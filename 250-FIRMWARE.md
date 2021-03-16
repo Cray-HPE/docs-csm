@@ -3,7 +3,7 @@
 This page will guide an administrator on 3 things:
 1. Checking Firmware Status
 1. Applying Firmware over the GUI
-1. (optionally) applying firmware via Redfish
+1. (optionally) Applying firmware via Redfish
 
 Information below is sorted based on device type; complete each when directed to by the prerequisite page. On the other hand, if an administrator is using this guide ad-hoc then they must complete each of the listed guides in order.
 

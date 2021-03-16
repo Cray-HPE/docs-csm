@@ -17,7 +17,7 @@ Use the Firmware Action Service (FAS) to execute an action.  An action produces 
 ### Steps
 This will cover the generic process for executing an action.  For more specific examples and detailed explanations of options see the `recipes.md` file.
 
-1. Identify the selection of filters you want to apply.  Filters narrow the scope of FAS to target specific xnames, manufacturers, targets, etc. For our purpose we will run FAS 'wide open', with no selection filters applied.
+1. Identify the selection of filters you want to apply.  Filters narrow the scope of FAS to target-specific xnames, manufacturers, targets, etc. For our purpose we will run FAS 'wide open', with no selection filters applied.
 
 2. create a json file {whole-system-dryrun.json}; to make this a `live update` set `"overrideDryrun": true`
 
