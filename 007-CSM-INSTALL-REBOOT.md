@@ -331,12 +331,12 @@ all been run by the administrator before starting this stage.
     ```
 1. [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard) to prevent destructive behavior from occurring during reboot.
       > **`NOTE`** This safeguard needs to be _removed_ to facilitate bare-metal deployments of new nodes. The linked [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard) procedure can be used to disable the safeguard by setting the value back to `0`.
-1. Install the workaround and docs RPMs to ncn-m001:
-    ```bash
-    ncn-m001# export CSM_RELEASE=csm-x.y.z
-    ncn-m001# rpm -iv /mnt/pitdata/${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/noarch/csm-install-workarounds-*.noarch.rpm
-    ncn-m001# rpm -iv /mnt/pitdata/${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/noarch/docs-csm-install-*.noarch.rpm
-    ```
+1. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet 
+   access these RPMs will need to be externally downloaded and then copied to be installed.
+   ```bash
+   ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm-install/docs-csm-install-latest.noarch.rpm
+   ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
+   ```
 1. Now check for workarounds in the `/opt/cray/csm/workarounds/livecd-post-reboot` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
 
     **Note:** The following command assumes that the data partition of the USB stick has been remounted at /mnt/pitdata

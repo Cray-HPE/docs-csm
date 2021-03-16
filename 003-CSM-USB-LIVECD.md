@@ -26,10 +26,10 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    linux# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
-> **`INTERNAL USE`** The `ENDPOINT` URL below are for internal use, customer/external should
-> use the URL for the server hosting their tarball.
+> **`INTERNAL USE`** The `ENDPOINT` URL below are for internal use. Customers do not need to download any additional 
+> artifacts, the CSM tarball is included along with the Shasta release.
 
-2. Download the CSM software release to the Linux host which will be preparing the LiveCD.
+2. If necessary, download the CSM software release to the Linux host which will be preparing the LiveCD.
    ```bash
    linux# cd ~
    linux# export ENDPOINT=https://arti.dev.cray.com/artifactory/shasta-distribution-stable-local/csm/
@@ -49,9 +49,11 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    linux# rpm -Uvh ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
    ```
 
-5. Install/upgrade the workaround documentation RPM.
+5. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet 
+   access these RPMs will need to be externally downloaded and then copied to be installed.
    ```bash
-   linux# rpm -Uvh ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/noarch/csm-install-workarounds-*.noarch.rpm
+   linux# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm-install/docs-csm-install-latest.noarch.rpm
+   linux# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
    ```
 
 6. Show the version of CSI installed.
@@ -563,8 +565,15 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    pit# script -af booted-csm-lived.$(date +%Y-%m-%d).txt
    pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
+   
+4. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet 
+   access these RPMs will need to be externally downloaded and then copied to be installed.
+   ```bash
+   pit# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm-install/docs-csm-install-latest.noarch.rpm
+   pit# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
+   ```
 
-4. Check the pit-release version.
+5. Check the pit-release version.
 
    ```bash
    pit# cat /etc/pit-release
@@ -577,13 +586,13 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    HASH=75e6c4a
    ```
 
-5. Mount the data partition
+6. Mount the data partition
     > The data partition is set to `fsopt=noauto` to facilitate LiveCDs over virtual-ISO mount. USB installations need to mount this manually.
     ```bash
     pit# mount -L PITDATA
     ```
 
-6. Start services
+7. Start services
 
    ```bash
    pit# systemctl start nexus
@@ -591,7 +600,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    pit# systemctl start conman
    ```
 
-7. Verify the system:
+8. Verify the system:
 
    ```bash
    pit# csi pit validate --network
@@ -608,6 +617,6 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    c7638b573b93  dtr.dev.cray.com/cray/metal-basecamp:1.1.0-1de4aa6                        5 minutes ago  Up 5 minutes ago          basecamp
    ```
 
-8. Follow the output's directions for failed validations before moving on.
+9. Follow the output's directions for failed validations before moving on.
 
 After successfully validating the LiveCD USB environment, the administrator may start the [CSM Metal Install](005-CSM-METAL-INSTALL.md).
