@@ -89,7 +89,7 @@ Data can be viewed at several levels of information:
 To view counts of operations, what state they are in, the overall state of the action, and what parameters were used to create the action:
 
 ```toml
-# cray fas actions status describe {actionID}
+# cray fas actions describe {actionID}
 blockedBy = []
 state = "completed"
 actionID = "0a305f36-6d89-4cf8-b4a1-b9f199afaf3b" startTime = "2020-06-23 15:43:42.939100799 +0000 UTC"
