@@ -67,6 +67,39 @@ For each postgres cluster the ncnPostgresHealthChecks script determines the lead
 
 Execute ncnPostgresHealthChecks script. Verify leader for each cluster and status of cluster members.
 
+For a particular postgres cluster expected output similar to the following:
+```bash
+--- patronictl, version 1.6.5, list for services leader pod cray-sls-postgres-0 ---
++ Cluster: cray-sls-postgres (6938772644984361037) ---+----+-----------+
+|        Member       |    Host    |  Role  |  State  | TL | Lag in MB |
++---------------------+------------+--------+---------+----+-----------+
+| cray-sls-postgres-0 | 10.47.0.35 | Leader | running |  1 |           |
+| cray-sls-postgres-1 | 10.36.0.33 |        | running |  1 |         0 |
+| cray-sls-postgres-2 | 10.44.0.42 |        | running |  1 |         0 |
++---------------------+------------+--------+---------+----+-----------+
+```
+Check the leader pod’s log output for its status as the leader. Such as:”
+```bash
+i am the leader with the lock
+```
+For example:
+```bash
+--- Logs for services Leader Pod cray-sls-postgres-0 ---
+  ERROR: get_cluster
+  INFO: establishing a new patroni connection to the postgres cluster
+  INFO: initialized a new cluster
+  INFO: Lock owner: cray-sls-postgres-0; I am cray-sls-postgres-0
+  INFO: Lock owner: None; I am cray-sls-postgres-0
+  INFO: no action. i am the leader with the lock
+  INFO: No PostgreSQL configuration items changed, nothing to reload.
+  INFO: postmaster pid=87
+  INFO: running post_bootstrap
+  INFO: trying to bootstrap a new cluster
+```
+Errors reported previous to the lock status, such as **ERROR: get_cluster** can be ignored.
+
+See see the **About Postgres** section in the HPE Cray EX Administration Guide S-8001 for further information.
+
 <a name="pet-bgp"></a>
 ### BGP Peering Status and Reset
 Verify that Border Gateway Protocol (BGP) peering sessions are established for each worker node on the system. 
