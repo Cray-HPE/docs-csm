@@ -47,7 +47,7 @@ For each item in the `Hardware Precedence Order`:
      2. `cray fas actions create {jsonfile}`
      2. Note the ActionID!
      3. Poll the status of the action until the action `state` is `completed`:
-        1. `cray fas actions status describe {actionID} --format json`
+        1. `cray fas actions describe {actionID} --format json`
 
   2. Interpret the outcome of the dryrun; look at the counts and determine if the dryrun identified any hardware to update
 
@@ -69,7 +69,7 @@ For each item in the `Hardware Precedence Order`:
    1. `cray fas actions create {jsonfile}`
      2. Note the ActionID!
      3. Poll the status of the action until the action `state` is `completed`:
-        1. `cray fas actions status describe {actionID} --format json`
+        1. `cray fas actions describe {actionID} --format json`
 
 5. Interpret the outcome of the live update; proceed to next type of hardware
 
