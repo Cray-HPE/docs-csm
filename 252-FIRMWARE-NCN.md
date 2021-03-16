@@ -235,7 +235,7 @@ For Gigabyte upgrades a tftp server needs to be referred to.
    7. Next. Go back to the "Firmware Image Location" and modify it to fetch the BMC ROM:
       ![img_4.png](img/fw-gb-2.png)
    8. Press Proceed to Flash; ensure the Update Type is set to BMC
-       > **`IMPORTANT`** Make sure to check off "Preserve all configuration" otherwise network connectvitity may be lost after reset.
+       > **`IMPORTANT`** Make sure to check off "Preserve all configuration" otherwise network connectivity may be lost after reset.
 
       ![img_5.png](img/fw-gb-1.png)
 
@@ -302,7 +302,7 @@ Firmware is located on the LiveCD (versions 1.4.6 or higher).
       3. Press **`Flash`** and wait for the upload and flash to complete. iLO may reboot after flash.
    7. Cold boot the node, or momentarily press the button (GUI button) to power it on.
 
-3. After the other nodes are completed, the pit node can be updgraded. (Alternatively this could be done first):
+3. After the other nodes are completed, the pit node can be upgraded. (Alternatively this could be done first):
    - Repeat the same process, using the external BMC URL for the PIT node's BMC (e.g. https://system-ncn-m001-mgmt)
    - For the `Remote File URL` use `127.0.0.1` instead of `pit` (e.g. http://127.0.0.1/fw/river/hpe/A42_1.38_10_30_2020.signed.flash)
    - Before rebooting the node, save any work and set the `BootNext` to the current boot sessions device:

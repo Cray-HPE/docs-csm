@@ -166,7 +166,7 @@ total 4
 drwxr-x--- 4 root root  37 Nov  4 04:35 .kube
 drwx------ 2 root root  29 Oct 21 21:57 .ssh
 ```
-Then in the squashFS immage (lower-dir) we have these...
+Then in the squashFS image (lower-dir) we have these...
 ```bash
 ncn-m001# ls -l /run/rootfsbase/root/
 total 1

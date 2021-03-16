@@ -29,7 +29,9 @@ sw-spine-001(config)# https-server rest access-mode read-write
 ```
 Mellanox
 ```
-switch (config) # json-gw enable
+sw-spine-001 [standalone: master] > enable
+sw-spine-001 [standalone: master] # configure terminal
+sw-spine-001 [standalone: master] (config) # json-gw enable
 ```
 Script Usage
 ```
@@ -60,10 +62,10 @@ BGP Summary
  10.252.2.9      65533       54732   62927   00m:02w:04d  Established   Up         
  10.252.2.18     65533       54732   62911   00m:02w:04d  Established   Up 
  ```
- On the Mellanox switches the output should look like the following.
+On the Mellanox switches, first you must run the switch commands listed in the Automated section above. Then the output should look like the following.
  
- ```
- sw-spine-001 [standalone: master] # show ip bgp summary 
+```
+sw-spine-001 [standalone: master] # show ip bgp summary 
 
 VRF name                  : default
 BGP router identifier     : 10.252.0.1

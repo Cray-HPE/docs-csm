@@ -110,7 +110,7 @@ all been run by the administrator before starting this stage.
    ```
 1. List ipv4 boot options using `efibootmgr`:
    ```bash
-   pit# efibootmgr | grep -i ipv4
+   pit# efibootmgr | grep -Ei "ip(v4|4)"
    ```
 1. Identify Port-1 of Riser-1 in `efibootmgr` output and set `PXEPORT` variable.
    * Example 1
@@ -242,7 +242,7 @@ all been run by the administrator before starting this stage.
    > **`NOTE`**: If the nodes has pxe boot issues, such as getting pxe errors or not pulling the ipxe.efi binary, see [PXE boot troubleshooting](420-MGMT-NET-PXE-TSHOOT.md)
 
    > **`NOTE`**: If ncn-m001 booted without a hostname or it didn't run all the cloud-init scripts the following commands need to be ran **(but only in that circumstance)**.
-   > In the commands below the prompt is shown as ncn-m001 purely to indciate that the commands should be run on that node.
+   > In the commands below the prompt is shown as ncn-m001 purely to indicate that the commands should be run on that node.
    >
    > 1. Make directory to copy network config files to.
    >    ```bash
