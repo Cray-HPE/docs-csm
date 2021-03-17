@@ -89,7 +89,7 @@ The CSM installation validation and health checks can be run after install.sh fi
 * [Network Health Checks](008-CSM-VALIDATION.md#network-health-checks)
   * [Verify that KEA has active DHCP leases](008-CSM-VALIDATION.md#net-kea)
   * [Verify ability to resolve external DNS](008-CSM-VALIDATION.md#net-extdns)
-  * [Verify Spire Agent is Running on Kuberetes NCNs](008-CSM-VALIDATION.md#net-spire)
+  * [Verify Spire Agent is Running on Kubernetes NCNs](008-CSM-VALIDATION.md#net-spire)
   * [Verify the Vault Cluster is Healthy](008-CSM-VALIDATION.md#net-vault)
 
 

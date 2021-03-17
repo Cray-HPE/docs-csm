@@ -260,7 +260,7 @@ pit# ./lib/set-ncns-to-unbound.sh
 ```
 
 > **`NOTE`** If passwordless SSH is not configured, the administrator will have
-> to enter the corresponding password as the script attempts to conenct to each
+> to enter the corresponding password as the script attempts to connect to each
 > NCN.
 
 On success, the nameserver configuration in /etc/resolv.conf will be printed

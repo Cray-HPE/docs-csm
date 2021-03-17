@@ -1,6 +1,6 @@
 # Cabling
 * [HPE Hardware](##hpe-hardware)
-* [Gigabye Hardware](##gigabyte-hardware)
+* [Gigabyte Hardware](##gigabyte-hardware)
 
 ## HPE Hardware
 
@@ -206,6 +206,6 @@ For systems that include 4 aggregation switches the cabling will look like the f
 ![Gig_intel_uan](img/network/Gigaintel_UAN.png)
 
 NOTE that there are a couple configurations possible for LAN0:
-* Existing Gigabyte systems on Dell and Mellox network hardware will use the (existing) Dell leaf port.
+* Existing Gigabyte systems on Dell and Mellanox network hardware will use the (existing) Dell leaf port.
 * Any Gigabyte system on Aruba network hardware will use a Aruba 6300 (for the 1Gb port).
 * Optionally a 10/25Gb card could be added in an Aruba hardware system to match the HPE UANs.

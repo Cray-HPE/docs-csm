@@ -285,7 +285,7 @@ Exit code is 0
 Verify that the command has exit code 0, reports no errors, and resolves the address.
 
 <a name="net-spire"></a>
-### Verify Spire Agent is Running on Kuberetes NCNs
+### Verify Spire Agent is Running on Kubernetes NCNs
 
 Execute the following command on all Kubernetes NCNs (excluding the PIT):
 
@@ -622,7 +622,7 @@ type = "GET"
 
 Sometimes the compute nodes and UAN are not up yet when `cray-conman` is initialized, and consequently will
 not be monitored. This is a good time to verify that all nodes are being monitored for console logging
-and re-initialze `cray-conman` if needed.
+and re-initialize `cray-conman` if needed.
 
 This procedure can be run from any member of the Kubernetes cluster.
 
