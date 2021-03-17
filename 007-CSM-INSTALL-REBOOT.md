@@ -286,7 +286,6 @@ all been run by the administrator before starting this stage.
    ```bash
    ncn-m001# passwd
    ```
-   > **`NOTE`** A workaround script for rotating the default private ssh key is available in the LiveCD at /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-1667/ssh-key-rotate.sh.
 1. Run `kubectl get nodes` to see the full Kubernetes cluster.
     > **`NOTE`** If the new node fails to join the cluster after running other cloud-init items please refer to the
     > `handoff`
@@ -402,7 +401,7 @@ After deploying the LiveCD's NCN, the LiveCD USB itself is unharmed and availabl
    drwxr-xr-x  2 root root        4096 Jan 28 16:07 /mnt/pitdata/static
    ```
 
-2. Be kind, unmount the USB before ejecting it:
+1. Be kind, unmount the USB before ejecting it:
     ```bash
     ncn-m001# umount /mnt/cow /mnt/pitdata
     ```
