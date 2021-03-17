@@ -309,7 +309,7 @@ The system is now ready for [Starting an Installation](#starting-an-installation
 ---
 
 <a name="prerequisites-for-reinstalling-shasta-v14"></a>
-## Prerequisites for Reinstallting Shasta v1.4
+## Prerequisites for Reinstalling Shasta v1.4
 
 The following prerequisites must be completed in order to successfully reinstall Shasta v1.4.
 

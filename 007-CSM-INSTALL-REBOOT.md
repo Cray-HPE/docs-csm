@@ -110,7 +110,7 @@ all been run by the administrator before starting this stage.
    ```
 1. List ipv4 boot options using `efibootmgr`:
    ```bash
-   pit# efibootmgr | grep -i ipv4
+   pit# efibootmgr | grep -Ei "ip(v4|4)"
    ```
 1. Identify Port-1 of Riser-1 in `efibootmgr` output and set `PXEPORT` variable.
    * Example 1
@@ -242,7 +242,7 @@ all been run by the administrator before starting this stage.
    > **`NOTE`**: If the nodes has pxe boot issues, such as getting pxe errors or not pulling the ipxe.efi binary, see [PXE boot troubleshooting](420-MGMT-NET-PXE-TSHOOT.md)
 
    > **`NOTE`**: If ncn-m001 booted without a hostname or it didn't run all the cloud-init scripts the following commands need to be ran **(but only in that circumstance)**.
-   > In the commands below the prompt is shown as ncn-m001 purely to indciate that the commands should be run on that node.
+   > In the commands below the prompt is shown as ncn-m001 purely to indicate that the commands should be run on that node.
    >
    > 1. Make directory to copy network config files to.
    >    ```bash
@@ -286,7 +286,6 @@ all been run by the administrator before starting this stage.
    ```bash
    ncn-m001# passwd
    ```
-   > **`NOTE`** A workaround script for rotating the default private ssh key is available in the LiveCD at /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-1667/ssh-key-rotate.sh.
 1. Run `kubectl get nodes` to see the full Kubernetes cluster.
     > **`NOTE`** If the new node fails to join the cluster after running other cloud-init items please refer to the
     > `handoff`
@@ -402,7 +401,7 @@ After deploying the LiveCD's NCN, the LiveCD USB itself is unharmed and availabl
    drwxr-xr-x  2 root root        4096 Jan 28 16:07 /mnt/pitdata/static
    ```
 
-2. Be kind, unmount the USB before ejecting it:
+1. Be kind, unmount the USB before ejecting it:
     ```bash
     ncn-m001# umount /mnt/cow /mnt/pitdata
     ```
