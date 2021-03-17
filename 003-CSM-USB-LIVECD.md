@@ -38,6 +38,13 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    ```
 
 3. Expand the CSM software release:
+   > **`IMPORTANT`** Before proceeding, refer to the "CSM Patch Assembly" section of the Shasta Install Guide 
+   > to apply any needed patch content for CSM. It is critical to perform these steps to ensure that the correct
+   > CSM release artifacts are deployed.
+   > 
+   > **`WARNING`** Ensure that the `CSM_RELEASE` environment variable is set to the version of the patched CSM release tarball. 
+   > Applying the "CSM Patch Assembly" procedure will result in a different CSM version when compared to 
+   > the pre-patched CSM release tarball.
    ```bash
    linux# tar -zxvf ${CSM_RELEASE}.tar.gz
    linux# ls -l ${CSM_RELEASE}
