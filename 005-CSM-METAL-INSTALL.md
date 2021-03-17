@@ -276,7 +276,7 @@ The configuration workflow described here is intended to help understand the exp
    ```bash
    pit# csi pit validate --livecd-preflight
    ```
-   > **`WARNING`** if test failuires for "/dev/sdc" are observed they should be discarded for a manual test:
+   > **`WARNING`** if test failures for "/dev/sdc" are observed they should be discarded for a manual test:
    > ```bash
    > # masters:
    > ncn# blkid -L ETCDLVM
