@@ -281,11 +281,40 @@ This command would display one or more images available for updates.
 If the `firmwareVersion` from the FAS image matches the `fromFirmwareVersion` from the FAS action, the firmware is at the latest version and no update is needed.
 
 Using the imageID from the `cray images list` command above (in the example above it would be: `ff268e8a-8f73-414f-a9c7-737a34bb02fc`) add the following line to your action json file, replacing *IMAGEID* with the imageID:
-```bash
-{"imageFilter": {"imageID":"IMAGEID","overrideImage":true},
+```json
+"imageFilter": {
+  "imageID":"IMAGEID",
+  "overrideImage":true
+}
+```
+Example actions json file with imageFilter added:
+```json
+{
+  "stateComponentFilter": {
+    "deviceTypes":["nodeBMC"]
+  },
+  "inventoryHardwareFilter": {
+    "manufacturer":"cray"
+  },
+  "imageFilter": {
+    "imageID":"ff268e8a-8f73-414f-a9c7-737a34bb02fc",
+    "overrideImage":true
+  },
+  "targetFilter": {
+    "targets":["Node0.AccFPGA0","Node1.AccFPGA0"]
+  },
+  "command": {
+    "overrideDryrun":false,
+    "restoreNotPossibleOverride":true,
+    "overwriteSameImage":false
+  }
+}
 ```
 To be sure you grabbed the correct imageID, you can run the command:
 ```bash
 cray fas images describe imageID
 ```
-Rerun FAS actions command using the updated json file. **It is strongly recommended you run a Dry Run (overrideDryrun=false) first and check the actions outpus.**
+***WARNING: FAS will force a flash of the device, using incorrect firmware may make it inoperable.***
+
+Rerun FAS actions command using the updated json file.
+**It is strongly recommended you run a Dry Run (overrideDryrun=false) first and check the actions output.**
