@@ -333,10 +333,12 @@ Count: 2, Failed: 0, Skipped: 0
 
 There are multiple [Goss](https://github.com/aelsabbahy/goss) test suites available that cover a variety of sub-systems.
 
-You can execute the general NCN test suite via:
+You should now run the NCN health checks against the three different types of nodes with the following commands:
 
 ```bash
-pit# /opt/cray/tests/install/ncn/automated/ncn-run-time-checks
+pit# /opt/cray/tests/install/ncn/automated/ncn-healthcheck-master
+pit# /opt/cray/tests/install/ncn/automated/ncn-healthcheck-worker
+pit# /opt/cray/tests/install/ncn/automated/ncn-healthcheck-storage
 ```
 
 And the Kubernetes test suite via:
