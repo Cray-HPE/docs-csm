@@ -382,6 +382,53 @@ ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-
 ```
 1. Examine the output for errors or failures.
 
+**Note**: The HMS functional tests include a check for unexpected flags that may be set in Hardware State Manager (HSM) for the BMCs on the system. There is a known issue [SDEVICE-3319](https://connect.us.cray.com/jira/browse/SDEVICE-3319) that can cause Warning flags to be set erroneously in HSM for Mountain BMCs and result in test failures. If _test_smd_components_ncn-functional_remote-functional.tavern.yaml_ fails during the HMS functional test run with error messages about Warning flags being set on one or more BMCs:
+
+```bash
+=================================== FAILURES ===================================
+_ /opt/cray/tests/ncn-functional/hms/hms-smd/test_smd_components_ncn-functional_remote-functional.tavern.yaml::Ensure that we can conduct a query for all Node BMCs in the Component collection _
+
+Errors:
+E   tavern.util.exceptions.TestFailError: Test 'Verify the expected response fields for all NodeBMCs' failed:
+    - Error calling validate function '<function validate_pykwalify at 0x7f44666179d0>':
+        Traceback (most recent call last):
+          File "/usr/lib/python3.8/site-packages/tavern/schemas/files.py", line 106, in verify_generic
+            verifier.validate()
+          File "/usr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
+            raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
+        pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
+         - Enum 'Warning' does not exist. Path: '/Components/9/Flag'.
+         - Enum 'Warning' does not exist. Path: '/Components/10/Flag'.
+         - Enum 'Warning' does not exist. Path: '/Components/11/Flag'.
+         - Enum 'Warning' does not exist. Path: '/Components/12/Flag'.
+         - Enum 'Warning' does not exist. Path: '/Components/13/Flag'.
+         - Enum 'Warning' does not exist. Path: '/Components/14/Flag'.: Path: '/'>
+```
+
+* Retrieve the xnames of all Mountain BMCs with Warning flags set in HSM:
+
+```bash
+ncn# curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v1/State/Components?Type=NodeBMC\&Class=Mountain\&Flag=Warning | jq '.Components[] | { ID: .ID, Flag: .Flag, Class: .Class }' -c | sort -V | jq -c
+{"ID":"x5000c1s0b0","Flag":"Warning","Class":"Mountain"}
+{"ID":"x5000c1s0b1","Flag":"Warning","Class":"Mountain"}
+{"ID":"x5000c1s1b0","Flag":"Warning","Class":"Mountain"}
+{"ID":"x5000c1s1b1","Flag":"Warning","Class":"Mountain"}
+{"ID":"x5000c1s2b0","Flag":"Warning","Class":"Mountain"}
+{"ID":"x5000c1s2b1","Flag":"Warning","Class":"Mountain"}
+```
+
+* For each Mountain BMC xname, check its Redfish BMC Manager status:
+
+```bash
+ncn# curl -s -k -u root:${BMC_PASSWORD} https://x5000c1s0b0/redfish/v1/Managers/BMC | jq '.Status'
+{
+  "Health": "OK",
+  "State": "Online"
+}
+```
+
+* Test failures and HSM Warning flags for Mountain BMCs with the Redfish BMC Manager status shown above can be safely ignored.
+
 <a name="cms-validation-utility"></a>
 ## Cray Management Services Validation Utility
 `/usr/local/bin/cmsdev`
