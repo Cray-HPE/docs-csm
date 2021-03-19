@@ -495,9 +495,9 @@ Observe the output of the checks and note any failures, then remediate them.
 
 > **`IMPORTANT`** *The Boot-Order is set by cloud-init, however the current setting is still iterating. This manual step is required until further notice.*
 
-Do the two-steps outlined in [Fixing Boot-Order](064-EFIBOOTMGR.md#boot-order):
-1. [Setting Order](064-EFIBOOTMGR.md#setting-order)
-2. [Trimming](064-EFIBOOTMGR.md#trimming)
+Do the two-steps outlined in [Fixing Boot-Order](101-NCN-BOOTING.md#set-boot-order)
+1. [Setting Order](101-NCN-BOOTING.md#setting-order)
+2. [Trimming](101-NCN-BOOTING.md#trimming)
 
 The administrator or CI/CD agent may now move onto the [CSM Platform Install](006-CSM-PLATFORM-INSTALL.md) page to continue the CSM install, or
 may proceed further to continue optional validations. The optional validation may have differing value in various install contexts.
