@@ -112,48 +112,53 @@ all been run by the administrator before starting this stage.
    ```bash
    pit# efibootmgr | grep -Ei "ip(v4|4)"
    ```
+1. Set the boot order for **masters** from one of the following guides:
+   > `**NOTE**` If your boot order from `efibootmgr` looks like one of [these examples](101-NCN-BOOTING.md#examples) then you can proceed to the next step.
+   - 👉 [Gigabyte Technology](101-NCN-BOOTING.md#gigabyte-technology)
+   - 👉 [Hewlett Packard Enterprise](101-NCN-BOOTING.md#hewlett-packard-enterprise)
+   - 👉 [Intel Corporation](101-NCN-BOOTING.md#intel-corporation)
+
 1. Identify Port-1 of Riser-1 in `efibootmgr` output and set `PXEPORT` variable.
-   * Example 1
+   > **`WARNING`** Pay attention to the boot order, if doesn't show any of these examples please double-check that PCIe booting was enabled. Simply run-through the ["Print Current UEFI and SR-IOV State"](304-NCN-PCIE-NET-BOOT-AND-RE-CABLE.md#print-current-uefi-and-sr-iov-state) section, then fixup as needed with the ["Setting Expected Values"](304-NCN-PCIE-NET-BOOT-AND-RE-CABLE.md#setting-expected-values) section before returning here.
+   * *Example 1*:
 
-      Possible output of `efibootmgr` command in the previous step:
-      ```
-      Boot0005* UEFI IPv4: Network 00 at Riser 02 Slot 01
-      Boot0007* UEFI IPv4: Network 01 at Riser 02 Slot 01
-      Boot000A* UEFI IPv4: Intel Network 00 at Baseboard
-      Boot000C* UEFI IPv4: Intel Network 01 at Baseboard
-      ```
-      Looking at the above output, `Network 00 at Riser 02 Slot 01` is reasonably our Port-1 of Riser-1, which would
-      be `Boot0005` in this case. Set `PXEPORT` to the numeric suffix of that name.
-      ```bash
-      pit# export PXEPORT=0005
-      ```
-   * Example 2
+     > Possible output of `efibootmgr` command in the previous step:
+     >  ```
+     >  Boot0005* UEFI IPv4: Network 00 at Riser 02 Slot 01
+     >  Boot0007* UEFI IPv4: Network 01 at Riser 02 Slot 01
+     >  Boot000A* UEFI IPv4: Intel Network 00 at Baseboard
+     >  Boot000C* UEFI IPv4: Intel Network 01 at Baseboard
+     >  ```
+     > Looking at the above output, `Network 00 at Riser 02 Slot 01` is reasonably our Port-1 of Riser-1, which would
+     > be `Boot0005` in this case. Set `PXEPORT` to the numeric suffix of that name.
+     >  ```bash
+     >  pit# export PXEPORT=0005
+     >  ```
+   * *Example 2*:
 
-      Possible output of `efibootmgr` command in the previous step:
-      ```
-      Boot0013* OCP Slot 10 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - PXE (HTTP(S) IPv4)
-      Boot0014* OCP Slot 10 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - PXE (PXE IPv4)
-      Boot0017* Slot 1 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - PXE (HTTP(S) IPv4)
-      Boot0018* Slot 1 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - PXE (PXE IPv4)
-      ```
-      In the above output, look for the non-OCP device that has "PXE IPv4" rather than "HTTP(S) IPv4", which would be
-      `Boot0018` in this case. Set `PXEPORT` to the numeric suffix of that name.
-      ```bash
-      pit# export PXEPORT=0018
-      ```
+     > Possible output of `efibootmgr` command in the previous step:
+     > ```
+     > Boot0013* OCP Slot 10 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - PXE (HTTP(S) IPv4)
+     > Boot0014* OCP Slot 10 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - PXE (PXE IPv4)
+     > Boot0017* Slot 1 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - PXE (HTTP(S) IPv4)
+     > Boot0018* Slot 1 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - PXE (PXE IPv4)
+     > ```
+     > In the above output, look for the non-OCP device that has "PXE IPv4" rather than "HTTP(S) IPv4", which would be
+     > `Boot0018` in this case. Set `PXEPORT` to the numeric suffix of that name.
+     > ```bash
+     > pit# export PXEPORT=0018
+     > ```
 
-   * Example 3
+   * *Example 3*:
 
-      The output below if what a Gigabyte machine may look like.
-
-      ```
-      Boot000B* UEFI: PXE IP4 Mellanox Network Adapter - B8:59:9F:C7:12:F2
-      Boot000C* UEFI: PXE IP4 Mellanox Network Adapter - B8:59:9F:C7:12:F3
-      Boot000D* UEFI: PXE IP6 Mellanox Network Adapter - B8:59:9F:C7:12:F2
-      Boot000E* UEFI: PXE IP6 Mellanox Network Adapter - B8:59:9F:C7:12:F3
-      ```
-
-      This value varies, take a moment to study the `efibootmgr` output before proceeding.
+     > The output below if what a Gigabyte machine may look like.
+     > 
+     >  ```
+     >  Boot000B* UEFI: PXE IP4 Mellanox Network Adapter - B8:59:9F:C7:12:F2
+     >  Boot000C* UEFI: PXE IP4 Mellanox Network Adapter - B8:59:9F:C7:12:F3
+     >  Boot000D* UEFI: PXE IP6 Mellanox Network Adapter - B8:59:9F:C7:12:F2
+     >  Boot000E* UEFI: PXE IP6 Mellanox Network Adapter - B8:59:9F:C7:12:F3
+     >  ```
 
 1. Use `efibootmgr` to set next boot device to port selected in the previous step.
    ```bash
