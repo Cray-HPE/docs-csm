@@ -243,6 +243,78 @@ Using the `operationID` listed in the actions array we can see the full detail o
 "xname": "x9000c1s3b1",
 "toFirmwareVersion": ""
 }
-
 ```
 
+
+#### Override Image for Update
+
+If an update fails due to `"No Image available"`, it may be caused by FAS unable to match the data on the node to find an image in the image list.
+
+Find the available image in FAS using the command: (change *TARGETNAME* to the actual target you are looking for)
+```bash
+cray fas images list --format json | jq '.[] | .[] | select(.target=="TARGETNAME")'
+```
+This command would display one or more images available for updates.
+```json
+{
+  "imageID": "ff268e8a-8f73-414f-a9c7-737a34bb02fc",
+  "createTime": "2021-02-24T02:25:03Z",
+  "deviceType": "nodeBMC",
+  "manufacturer": "cray",
+  "models": [
+    "HPE Cray EX235n",
+    "GrizzlyPkNodeCard_REV_B"
+  ],
+  "softwareIds": [
+    "fgpa:NVIDIA.HGX.A100.4.GPU:*:*"
+  ],
+  "target": "Node0.AccFPGA0",
+  "tags": [
+    "default"
+  ],
+  "firmwareVersion": "2.7",
+  "semanticFirmwareVersion": "2.7.0",
+  "pollingSpeedSeconds": 30,
+  "s3URL": "s3:/fw-update/80a62641764711ebabe28e2b78a05899/accfpga_nvidia_2.7.tar.gz"
+}
+```
+If the `firmwareVersion` from the FAS image matches the `fromFirmwareVersion` from the FAS action, the firmware is at the latest version and no update is needed.
+
+Using the imageID from the `cray images list` command above (in the example above it would be: `ff268e8a-8f73-414f-a9c7-737a34bb02fc`) add the following line to your action json file, replacing *IMAGEID* with the imageID:
+```json
+"imageFilter": {
+  "imageID":"IMAGEID",
+  "overrideImage":true
+}
+```
+Example actions json file with imageFilter added:
+```json
+{
+  "stateComponentFilter": {
+    "deviceTypes":["nodeBMC"]
+  },
+  "inventoryHardwareFilter": {
+    "manufacturer":"cray"
+  },
+  "imageFilter": {
+    "imageID":"ff268e8a-8f73-414f-a9c7-737a34bb02fc",
+    "overrideImage":true
+  },
+  "targetFilter": {
+    "targets":["Node0.AccFPGA0","Node1.AccFPGA0"]
+  },
+  "command": {
+    "overrideDryrun":false,
+    "restoreNotPossibleOverride":true,
+    "overwriteSameImage":false
+  }
+}
+```
+To be sure you grabbed the correct imageID, you can run the command:
+```bash
+cray fas images describe imageID
+```
+***WARNING: FAS will force a flash of the device, using incorrect firmware may make it inoperable.***
+
+Rerun FAS actions command using the updated json file.
+**It is strongly recommended you run a Dry Run (overrideDryrun=false) first and check the actions output.**
