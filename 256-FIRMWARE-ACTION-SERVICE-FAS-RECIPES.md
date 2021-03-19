@@ -246,7 +246,7 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
 
 **IMPORTANT**: The Nodes themselves must be powered **on** in order to update the firmware of the Redstone FPGA on the nodes.  
 
-**NOTE**: If updating FPGAs fail due to "No Image available", you can update using the Override Image for Update procedure in [255-FIRMWARE-ACTIONS-SERVICE-FAS.md](../255-FIRMWARE-ACTION-SERVICE-FAS.md).  You can find the imageID using the following command: `cray fas images list --format json | jq '.[] | .[] | select(.target=="Node0.AccFPGA0")`
+**NOTE**: If updating FPGAs fail due to "No Image available", you can update using the Override Image for Update procedure in [255-FIRMWARE-ACTIONS-SERVICE-FAS.md](../255-FIRMWARE-ACTION-SERVICE-FAS.md).  You can find the imageID using the following command: `cray fas images list --format json | jq '.[] | .[] | select(.target=="Node0.AccFPGA0")'`
 
 ```json
 {
