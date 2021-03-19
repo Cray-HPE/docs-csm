@@ -70,9 +70,9 @@ installs as follows:
     ```
 
 4.  Add the corresponding URL to the `ExecStartPost` script in
-    `/usr/lib/systemd/system/nexus.service`. 
+    `/usr/lib/systemd/system/nexus.service`.
 
-    > **`INTERNAL USE`** Cray internal systems may want to proxy to 
+    > **`INTERNAL USE`** Cray internal systems may want to proxy to
     > https://dtr.dev.cray.com as follows:
     >
     > ```bash
@@ -158,7 +158,7 @@ CASMINST-980
    pit# date "+%Y-%m-%d %H:%M:%S.%6N%z"
    ```
 
-   The time can be inaccurate if the system has been off for a long time, or, for example, [the CMOS was cleared](254-NCN-FIRMWARE-GB.md). If needed, set the time manually as close as possible. 
+   The time can be inaccurate if the system has been off for a long time, or, for example, [the CMOS was cleared](254-NCN-FIRMWARE-GB.md). If needed, set the time manually as close as possible.
 
    ```
    pit# timedatectl set-time "2019-11-15 00:00:00"
@@ -168,7 +168,7 @@ CASMINST-980
    ```
    pit# /root/bin/configure-ntp.sh
    ```
-   
+
    This ensures that the PIT is configured with an accurate date/time, which will be properly propagated to the NCNs during boot.
 
 2. Ensure the current time is set in BIOS for all management NCNs.
@@ -276,25 +276,12 @@ The configuration workflow described here is intended to help understand the exp
    ```bash
    pit# csi pit validate --livecd-preflight
    ```
-   > **`WARNING`** if test failures for "/dev/sdc" are observed they should be discarded for a manual test:
-   > ```bash
-   > # masters:
-   > ncn# blkid -L ETCDLVM
-   > # workers:
-   > ncn# blkid -L CONLIB
-   > ncn# blkid -L CONRUN
-   > ncn# blkid -L K8SLET
-   > ```
-   > 
-   > The test should be looking for the ephemeral disk, that disk is sometimes `/dev/sdc`. The name of the disk is a more accurate test, and isn't prone to the random path change.
 
-   > Note: If your shell terminal is not echoing your input after running this, type "reset" and press enter to recover.
-
-6. Print the consoles available to you:
+5. Print the consoles available to you:
    ```bash
    pit# conman -q
    ```
-   
+
    Expected output looks similar to the following:
    ```
    ncn-m001-mgmt
@@ -307,9 +294,9 @@ The configuration workflow described here is intended to help understand the exp
    ncn-w002-mgmt
    ncn-w003-mgmt
    ```
-    
+
     > **`IMPORTANT`** This is the administrators _last chance_ to run [NCN pre-boot workarounds](#apply-ncn-pre-boot-workarounds).
-    
+
     > **`NOTE`**: All consoles are located at `/var/log/conman/console*`
 
 6. Boot the **Storage Nodes**
@@ -322,7 +309,7 @@ The configuration workflow described here is intended to help understand the exp
    # Print the console name
    pit# conman -q | grep s001
    ```
-   
+
    Expected output looks similar to the following:
    ```
    ncn-s001-mgmt
@@ -338,7 +325,7 @@ The configuration workflow described here is intended to help understand the exp
    **`NOTE`**: Watch the storage node consoles carefully for error messages. If any are seen, consult [066-CEPH-CSI](066-CEPH-CSI.md)
 
    **`NOTE`**: If the nodes have pxe boot issues (e.g. getting pxe errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](420-MGMT-NET-PXE-TSHOOT.md)
-    
+
    **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to linux with no hostname) see the CSM workarounds for fixes around mutual symptoms.
    > ```bash
    > # Example
@@ -359,7 +346,7 @@ The configuration workflow described here is intended to help understand the exp
     # Print the console name
     pit# conman -q | grep m002
     ```
-    
+
     Expected output looks similar to the following:
     ```
     ncn-m002-mgmt
@@ -372,7 +359,7 @@ The configuration workflow described here is intended to help understand the exp
     ```
 
     **`NOTE`**: If the nodes have pxe boot issues (e.g. getting pxe errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](420-MGMT-NET-PXE-TSHOOT.md)
-    
+
     **`NOTE`**: If one of the manager nodes seems hung waiting for the storage nodes to create a secret, check the storage node consoles for error messages. If any are found, consult [066-CEPH-CSI](066-CEPH-CSI.md)
 
     **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to linux with no hostname) see the CSM workarounds for fixes around mutual symptoms.
@@ -390,7 +377,7 @@ The configuration workflow described here is intended to help understand the exp
     pit# ssh ncn-m002
     ncn-m002# kubectl get nodes -o wide
     ```
-   
+
     Expected output looks similar to the following:
     ```
     NAME       STATUS   ROLES    AGE     VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                                                  KERNEL-VERSION         CONTAINER-RUNTIME
@@ -453,7 +440,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
    ```bash
    pit# ls -1 /usr/bin/*peer*py
    ```
-   
+
    Expected output looks similar to the following:
    ```
    /usr/bin/aruba_set_bgp_peers.py
@@ -470,12 +457,26 @@ Observe the output of the checks and note any failures, then remediate them.
     ```bash
     pit# csi pit validate --ceph
     ```
-    **`Note`**: Please refer to the **Utility Storage** section of the Admin guide to help resolve any failed tests. 
+    **`Note`**: Please refer to the **Utility Storage** section of the Admin guide to help resolve any failed tests.
 
 2. Check K8s
     ```bash
     pit# csi pit validate --k8s
     ```
+
+    > **`WARNING`** if test failuires for "/dev/sdc" are observed they should be discarded for a manual test:
+    > ```bash
+    > # masters:
+    > ncn# blkid -L ETCDLVM
+    > # workers:
+    > ncn# blkid -L CONLIB
+    > ncn# blkid -L CONRUN
+    > ncn# blkid -L K8SLET
+    > ```
+    >
+    > The test should be looking for the ephemeral disk, that disk is sometimes `/dev/sdc`. The name of the disk is a more accurate test, and isn't prone to the random path change.
+
+    > Note: If your shell terminal is not echoing your input after running this, type "reset" and press enter to recover.
 
 3. Ensure that weave hasn't split-brained
 
@@ -498,7 +499,7 @@ Do the two-steps outlined in [Fixing Boot-Order](064-EFIBOOTMGR.md#boot-order):
 1. [Setting Order](064-EFIBOOTMGR.md#setting-order)
 2. [Trimming](064-EFIBOOTMGR.md#trimming)
 
-The administrator or CI/CD agent may now move onto the [CSM Platform Install](006-CSM-PLATFORM-INSTALL.md) page to continue the CSM install, or 
+The administrator or CI/CD agent may now move onto the [CSM Platform Install](006-CSM-PLATFORM-INSTALL.md) page to continue the CSM install, or
 may proceed further to continue optional validations. The optional validation may have differing value in various install contexts.
 
 <a name="optional-validation"></a>
@@ -518,4 +519,3 @@ new tests.**
 2. Verify etcd is running outside kubernetes on master nodes
 3. Verify that all the pods in the kube-system namespace are running
 4. Verify that the ceph-csi requirements are in place (see [CEPH CSI](066-CEPH-CSI.md))
-
