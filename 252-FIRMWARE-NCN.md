@@ -349,7 +349,7 @@ Find more information for each vendor below:
 - [Mellanox Upgrades](#mellanox-upgrades)
 
 | Vendor | Model | PSID | Version | Downgrade (Y/n)? | LiveCD Location |
-   | :--- | :--- | --- | ---: | :---: | :--- | 
+| :--- | :--- | --- | ---: | :---: | :--- | 
 | Marvell | QL41232HQCU-HC |   | 08.50.78 | `NO` | `unavailable`
 | Mellanox | MCX416A-BCA* | `CRAY000000001` | 12.28.2006 | `NO` | `http://pit/fw/pcie/images/CRAY000000001.bin`
 | Mellanox | MCX515A-CCA* | `MT_0000000011` and `MT_0000000591` | 16.28.2006 | `NO` | `http://pit/fw/pcie/images/MT_0000000011.bin`
