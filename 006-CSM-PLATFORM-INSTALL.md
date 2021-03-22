@@ -13,7 +13,6 @@ into the CSM Kubernetes cluster).
   * [Reboot from the LiveCD to NCN](#reboot-from-the-livecd-to-ncn)
 * [Add Compute Cabinet Routing to NCNs](#add-compute-cabinet-routing-to-ncns)
 * [Known Issues](#known-issues)
-  * [error: timed out waiting for the condition on jobs/cray-sls-init-load](#error-timed-out-sls-init-load-job)
   * [Error: not ready: https://packages.local](#error-not-ready)
   * [Error initiating layer upload ... in registry.local: received unexpected HTTP status: 200 OK](#error-initiating-layer-upload)
   * [Error lookup registry.local: no such host](#error-registry-local-no-such-host)
@@ -357,55 +356,6 @@ modify `install.sh` to pick up where the previous run left off. (Note: The
 stderr prefixed with the expanded value of PS4, namely, `+ `.)
 
 Known potential issues with suggested fixes are listed below.
-
-<a name="error-timed-out-sls-init-load-job"></a>
-### error: timed out waiting for the condition on jobs/cray-sls-init-load
-
-The following error may occur when running `./install.sh`:
-```
-+ /var/www/ephemeral/csm-0.8.11/lib/wait-for-unbound.sh
-+ kubectl wait -n services job cray-sls-init-load --for=condition=complete --timeout=20m
-error: timed out waiting for the condition on jobs/cray-sls-init-load
-```
-
-Determine the name and state of the SLS init loader job pod:
-```bash
-pit# kubectl -n services get pods -l app=cray-sls-init-load
-```
-   
-Expected output looks similar to the following:
-```
-NAME                       READY   STATUS      RESTARTS   AGE
-cray-sls-init-load-nh5k7   2/2     Running     0          21m
-```
-
-If the state is `Running` after after the 20 minute timeout, this is likely that the SLS loader job is failing to ping the SLS S3 bucket due to a malformed URL. To verify this inspect the logs of the cray-sls-init-load pod:
-```bash
-pit# kubectl -n services logs -l app=cray-sls-init-load -c cray-sls-loader
-```
-
-The symptom of this situation is the present of something similar to the following in the output of the previous command:
-```
-{"level":"warn","ts":1612296611.2630196,"caller":"sls-s3-downloader/main.go:96","msg":"Failed to ping bucket.","error":"encountered error during head_bucket operation for bucket sls at https://: RequestError: send request failed\ncaused by: Head \"https:///sls\": http: no Host in request URL"}
-```  
-
-This error is most likely _intermittent_ and and deleting the cray-sls-init-load pod is expected to resolve this issue. You may need to delete the loader pod multiple times until it succeeds. 
-```bash
-pit# kubectl -n services delete pod cray-sls-init-load-nh5k7
-```
-
-Once the pod is deleted is deleted, verify the new pod started by k8s completes successfully. If it does not complete within a few minutes inspect the logs for the pod. If it is still failing to ping the S3 bucket, delete the pod again and try again.
-```bash
-pit# kubectl -n services get pods -l app=cray-sls-init-load
-```
-
-If the pod has completed successfully, the output looks similar to the following:
-```
-NAME                       READY   STATUS      RESTARTS   AGE
-cray-sls-init-load-pbzxv   0/2     Completed   0          55m
-```
-
-Once the loader job has completed successfully running `./install.sh` again is expected to succeed.
 
 <a name="error-not-ready"></a>
 ### Error: not ready: https://packages.local
