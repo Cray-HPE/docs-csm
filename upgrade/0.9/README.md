@@ -58,7 +58,7 @@ being used for the upgrade.
 
 ## Update Customizations.yaml and Site-Init Secret
 
-TODO
+TODO Consult the [SHASTA-CFG guide](../../067-SHASTA-CFG.md)
 
 
 ## Setup Nexus
@@ -80,48 +80,12 @@ ncn-m001# ${CSM_DISTDIR}/lib/setup-nexus.sh
 setup-nexus.sh: OK
 ```
 
-In the event of an error, consult the [known issues](#known-issues) below to
-resolve potential problems and then try running `setup-nexus.sh` again. Note
-that subsequent runs of `setup-nexus.sh` may report `FAIL` when uploading
-duplicate assets. This is ok as long as `setup-nexus.sh` outputs
-`setup-nexus.sh: OK` and exits with status code `0`.
-
-
-### Known Issues
-
-#### Error initiating layer upload ... in registry.local: received unexpected HTTP status: 200 OK
-
-The following error may occur when running `lib/setup-nexus.sh`:
-
-```
-time="2021-02-07T20:25:22Z" level=info msg="Copying image tag 97/144" from="dir:/image/jettech/kube-webhook-certgen:v1.2.1" to="docker://registry.local/jettech/kube-webhook-certgen:v1.2.1"
-Getting image source signatures
-Copying blob sha256:f6e131d355612c71742d71c817ec15e32190999275b57d5fe2cd2ae5ca940079
-Copying blob sha256:b6c5e433df0f735257f6999b3e3b7e955bab4841ef6e90c5bb85f0d2810468a2
-Copying blob sha256:ad2a53c3e5351543df45531a58d9a573791c83d21f90ccbc558a7d8d3673ccfa
-time="2021-02-07T20:25:33Z" level=fatal msg="Error copying tag \"dir:/image/jettech/kube-webhook-certgen:v1.2.1\": Error writing blob: Error initiating layer upload to /v2/jettech/kube-webhook-certgen/blobs/uploads/ in registry.local: received unexpected HTTP status: 200 OK"
-+ return
-```
-
-This error is most likely _intermittent_ and running `lib/setup-nexus.sh`
-again is expected to succeed.
-
-#### Error lookup registry.local: no such host
-
-The following error may occur when running `lib/setup-nexus.sh`:
-```
-time="2021-02-23T19:55:54Z" level=fatal msg="Error copying tag \"dir:/image/grafana/grafana:7.0.3\": Error writing blob: Head \"https://registry.local/v2/grafana/grafana/blobs/sha256:cf254eb90de2dc62aa7cce9737ad7e143c679f5486c46b742a1b55b168a736d3\": dial tcp: lookup registry.local: no such host"
-+ return
-```
-
-Or a similar error:
-```
-time="2021-03-04T22:45:07Z" level=fatal msg="Error copying ref \"dir:/image/cray/cray-ims-load-artifacts:1.0.4\": Error trying to reuse blob sha256:1ec886c351fa4c330217411b0095ccc933090aa2cd7ae7dcd33bb14b9f1fd217 at destination: Head \"https://registry.local/v2/cray/cray-ims-load-artifacts/blobs/sha256:1ec886c351fa4c330217411b0095ccc933090aa2cd7ae7dcd33bb14b9f1fd217\": dial tcp: lookup registry.local: Temporary failure in name resolution"
-+ return
-```
-
-These errors are most likely _intermittent_ and running `lib/setup-nexus.sh`
-again is expected to succeed.
+In the event of an error, consult the [known
+issues](../../006-CSM-PLATFORM-INSTALL.md#known-issues) from the install
+documentation to resolve potential problems and then try running
+`setup-nexus.sh` again. Note that subsequent runs of `setup-nexus.sh` may
+report `FAIL` when uploading duplicate assets. This is ok as long as
+`setup-nexus.sh` outputs `setup-nexus.sh: OK` and exits with status code `0`.
 
 
 ## Deploy Upgraded Manifests
