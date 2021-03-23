@@ -91,7 +91,7 @@ report `FAIL` when uploading duplicate assets. This is ok as long as
 ## Deploy Upgraded Manifests
 
 ```bash
-ncn-m001# ${CSM_DISTDIR}/install.sh --upgrade
+ncn-m001# ${CSM_DISTDIR}/upgrade.sh
 ```
 
 
