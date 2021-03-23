@@ -98,3 +98,20 @@ ncn-m001# ${CSM_DISTDIR}/upgrade.sh
 ## Upgrade NCN RPMs
 
 TODO Use CFS?
+
+## Switch VCS Configuration Repositories to Private
+
+Previous installs of CSM and other Cray products created git repositories in
+the VCS service which were set to be publicly visible. To enhance security,
+please follow the instructions in the Admin guide, chapter 12,
+`Version Control Service (VCS)` section to switch the visibility of all
+`*-config-management` repositories to private.
+
+Future installations of configuration content into Gitea by CSM and other
+Cray products will create or patch repositories to private visibility
+automatically.
+
+As a result of this change, `git clone` operations will now require
+credentials. CSM services that clone repositories have been upgraded
+to use the `crayvcs` user to clone repositories.
+
