@@ -5,7 +5,7 @@
 WARNING
 </span>
 
-Gigabyte NCNs that install Shasta 1.4 can become unusable when Shasta 1.4 is installed.  This is a result of a bug in the Gigabyte firmware that ships with Shasta 1.4.  It is recommended that Gigabyte users wait to install Shasta 1.4 until a firmware patch is available.
+Gigabyte NCNs running firmware version C20 can become unusable when Shasta 1.4 is installed.  This is a result of a bug in the Gigabyte firmware that ships with Shasta 1.4.  This bug has not been observed in firmware version C17.
 
 A key symptom of this bug is that the NCN will not PXE boot and will instead fall through to the boot menu, despite being configure to PXE boot.  This behavior will persist until the failing node's CMOS is cleared.
 
