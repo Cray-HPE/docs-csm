@@ -439,7 +439,8 @@ may be referenced when making a similar site modification to v1.3.
     There might be organizational information, such as the names of BOS session templates or how they specify the nodes to be booted using a list of groups or list of nodes, but there might also be special kernel parameters added by the site.
 
     ```bash
-    command TBD
+    ncn-w001# cray bos v1 sessiontemplate list --format \
+    json > bos.sessiontemplate.list.json
     ```
 
 24. Save a copy of any IMS images which might have been directly customized.
