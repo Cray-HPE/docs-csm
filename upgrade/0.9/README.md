@@ -14,6 +14,7 @@ Copyright 2021 Hewlett Packard Enterprise Development LP
 - [Post-Upgrade Actions](#post-upgrade-actions)
   - [Switch VCS Configuration Repositories to Private](#switch-vcs-configuration-repositories-to-private)
   - [Configure Prometheus Alert Notifications to Detect Postgres Replication Lag](#configure-prometheus-alert-notifications-to-detect-postgres-replication-lag)
+- [Run Validation Checks](#run-validation-checks)
 
 
 <a name="about"></a>
@@ -42,10 +43,12 @@ specific Shasta patch releases.
 <a name="common-environment-variables"></a>
 ### Common Environment Variables
 
-For convenience these procedures use the following environment variables:
+For convenience, these procedures make use of the following environment
+variables. Be sure to set them to the appropriate values before proceeding.
 
 - `CSM_RELEASE` - The CSM release version, e.g., `0.9.1`.
 - `CSM_DISTDIR` - The directory of the _extracted_ CSM release distribution.
+- `SITE_INIT_REPO_URL` - URL to remote `site-init` Git repository.
 
 
 <a name="preparation"></a>
@@ -72,10 +75,76 @@ being used for the upgrade.
 <a name="update-customizations"></a>
 ## Update Customizations
 
-Before [deploying upgraded manifests](#deploy-manifests), update
-`customizations.yaml` in the `site-init` secret in the `loftsman` namespace.
+Before [deploying upgraded manifests](#deploy-manifests), `customizations.yaml`
+in the `site-init` secret in the `loftsman` namespace must be updated.
 
-TODO Consult the [SHASTA-CFG guide](../../067-SHASTA-CFG.md)
+1. If the [`site-init` repository is available as a remote
+   repository](../../067-SHASTA-CFG.md#push-to-a-remote-repository) then clone
+   it on the host orchestrating the upgrade:
+
+   ```bash
+   ncn-m001# git clone "$SITE_INIT_REPO_URL" site-init
+   ```
+
+   Otherwise, create a new `site-init` working tree:
+
+   ```bash
+   ncn-m001# ${CSM_DISTDIR}/shasta-cfg/meta/init.sh site-init
+   ```
+
+2. Download the sealed secret decryption key:
+
+   ```bash
+   ncn-m001# mkdir -p site-init/certs
+   ncn-m001# kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.crt}' | base64 -d > site-init/certs/sealed_secrets.crt
+   ncn-m001# kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.key}' | base64 -d > site-init/certs/sealed_secrets.key
+   ```
+
+3. Download `customizations.yaml`:
+
+   ```bash
+   ncn-m001# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > site-init/customizations.yaml
+   ```
+
+4. Review, add, and commit `customizations.yaml` to the local `site-init`
+   repository as appropriate.
+
+   > **`NOTE`**: If `site-init` was cloned from a remote repository in step 1,
+   > there may not be any differences and hence nothing to commit. This is
+   > okay.
+
+   ```bash
+   ncn-m001# cd site-init
+   ncn-m001# git diff
+   ncn-m001# git add customizations.yaml
+   ncn-m001# git commit -m 'Add customizations.yaml from site-init secret'
+   ```
+
+5. Run `${CSM_DISTDIR}/shasta-cfg/meta/init.sh` to update the contents of
+   `site-init` from the patch release distribution:
+
+   > **`NOTE:`** If `site-init` was not cloned from a remote repository, this
+   > will be the second time running `meta/init.sh`. This is intentional since
+   > step 2 will have replaced the sealed secret decryption key and step 3 will
+   > have overwritten `customizations.yaml`.
+
+   ```bash
+   ncn-m001# ${CSM_DISTDIR}/shasta-cfg/meta/init.sh .
+   ```
+
+6. Review the changes to `customizations.yaml` and verify [baseline system
+   customizations](../../067-SHASTA-CFG.md#create-baseline-system-customizations)
+   are correct.
+
+7. Commit `site-init` changes and push to the remote repository, as
+   appropriate.
+
+8. Update `site-init` sealed secret in `loftsman` namespace:
+
+   ```bash
+   ncn-m001# kubectl delete secret -n loftsman site-init
+   ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ```
 
 
 <a name="setup-nexus"></a>
@@ -108,6 +177,8 @@ report `FAIL` when uploading duplicate assets. This is ok as long as
 
 <a name="deploy-manifests"></a>
 ## Deploy Manifests
+
+Run `upgrade.sh` to deploy upgraded CSM applications and services:
 
 ```bash
 ncn-m001# ${CSM_DISTDIR}/upgrade.sh
@@ -169,3 +240,11 @@ signs of replication lag ("About Postgres" sub-section under "Kubernetes
 Architecture").
 
 [1.4 HPE Cray EX System Administration Guide]: https://connect.us.cray.com/confluence/download/attachments/186435146/HPE_Cray_EX_System_Administration_Guide_1.4_S-8001_RevA.pdf?version=1&modificationDate=1616193177450&api=v2
+
+
+<a name="run-validation-checks"></a>
+## Run Validation Checks
+
+Wait at least 15 minutes to let the various Kubernetes resources get
+initialized and started, and then run the [CSM validation
+checks](../../008-CSM-VALIDATION.md).
