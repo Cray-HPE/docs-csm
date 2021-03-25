@@ -269,6 +269,8 @@ Architecture").
 <a name="run-validation-checks"></a>
 ## Run Validation Checks
 
-Wait at least 15 minutes to let the various Kubernetes resources get
-initialized and started, and then run the [CSM validation
-checks](../../008-CSM-VALIDATION.md).
+> **`IMPORTANT`** Wait at least 15 minutes after
+> [`upgrade.sh`](#deploy-manifests) completes to let the various Kubernetes
+> resources get initialized and started.
+
+Run the [CSM validation checks](../../008-CSM-VALIDATION.md).
