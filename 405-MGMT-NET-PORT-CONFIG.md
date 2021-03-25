@@ -217,23 +217,25 @@ interface lag 4 multi-chassis
     lacp fallback
     exit
 ```
-
+# CMM port configuration.
 
 - This configuration describes the ports that go to the Mountain CMMs/Computes.
-- The CDU switches have two cables connecting to each CMM, we will setup MC-LAG with the CDU switch pairs.
-- The second CDU switch in the pair will have it's port to the CMM shutdown, Redundancy is not yet available for the CMM.
+- This is for Aruba switches only.
+- The CDU switches have two cables (10Gb RJ45) connecting to each CMM, we will setup a static MC-LAG.
+- This LAG is currently used for improved throughput, redundancy is not yet offered.
+- The CEC will need to be programmed to have the "switch LAG" setting to be set to "0001"
 
-First CDU configuration.
+![CEC LAG](img/network/CECLAG.png)
+
+First Aruba CDU configuration.
 ```
-sw-cdu-001(config)# int lag 2 multi-chassis
+sw-cdu-001(config)# int lag 2 multi-chassis static
 sw-cdu-001(config-lag-if)# vsx-sync vlans
 sw-cdu-001(config-lag-if)# no shutdown
 sw-cdu-001(config-lag-if)# description CMM_CAB_1000
 sw-cdu-001(config-lag-if)# no routing
 sw-cdu-001(config-lag-if)# vlan trunk native 2000
 sw-cdu-001(config-lag-if)# vlan trunk allowed 2000,3000,4091
-sw-cdu-001(config-lag-if)# lacp mode active
-sw-cdu-001(config-lag-if)# lacp fallback
 sw-cdu-001(config-lag-if)# exit
 
 sw-cdu-001(config)# int 1/1/2
@@ -242,17 +244,15 @@ sw-cdu-001(config-if)# lag 2
 sw-cdu-001(config-if)# exit
 ```
 
-Second CDU configuration
+Second Aruba CDU configuration
 ```
-sw-cdu-002(config)# int lag 2 multi-chassis
+sw-cdu-002(config)# int lag 2 multi-chassis static
 sw-cdu-002(config-lag-if)# vsx-sync vlans
 sw-cdu-002(config-lag-if)# shutdown
 sw-cdu-002(config-lag-if)# description CMM_CAB_1000
 sw-cdu-002(config-lag-if)# no routing
 sw-cdu-002(config-lag-if)# vlan trunk native 2000
 sw-cdu-002(config-lag-if)# vlan trunk allowed 2000,3000,4091
-sw-cdu-002(config-lag-if)# lacp mode active
-sw-cdu-002(config-lag-if)# lacp fallback
 sw-cdu-002(config-lag-if)# exit
 
 sw-cdu-002(config)# int 1/1/2
