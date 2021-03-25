@@ -12,7 +12,8 @@ Copyright 2021 Hewlett Packard Enterprise Development LP
 - [Deploy Manifests](#deploy-manifests)
 - [Upgrade NCN RPMs](#upgrade-ncn-rpms)
 - [Post-Upgrade Actions](#post-upgrade-actions)
-- [Switch VCS Configuration Repositories to Private](#switch-vcs-configuration-repositories-to-private)
+  - [Switch VCS Configuration Repositories to Private](#switch-vcs-configuration-repositories-to-private)
+  - [Configure Prometheus Alert Notifications to Detect Postgres Replication Lag](#configure-prometheus-alert-notifications-to-detect-postgres-replication-lag)
 
 
 <a name="about"></a>
@@ -127,15 +128,44 @@ TODO Use CFS?
 
 Previous installs of CSM and other Cray products created git repositories in
 the VCS service which were set to be publicly visible. To enhance security,
-please follow the instructions in the Admin guide, chapter 12,
-`Version Control Service (VCS)` section to switch the visibility of all
-`*-config-management` repositories to private.
+please follow the instructions in the Admin guide, chapter 12, "Version Control
+Service (VCS)" section to switch the visibility of all `*-config-management`
+repositories to private.
 
-Future installations of configuration content into Gitea by CSM and other
-Cray products will create or patch repositories to private visibility
-automatically.
+Future installations of configuration content into Gitea by CSM and other Cray
+products will create or patch repositories to private visibility automatically.
 
 As a result of this change, `git clone` operations will now require
-credentials. CSM services that clone repositories have been upgraded
-to use the `crayvcs` user to clone repositories.
+credentials. CSM services that clone repositories have been upgraded to use the
+`crayvcs` user to clone repositories.
 
+
+<a name="configure-prometheus-alert-notifications-to-detect-postgres-replication-lag"></a>
+### Configure Prometheus Alert Notifications to Detect Postgres Replication Lag
+
+Three new Prometheus alert definitions have been added in CSM 0.9.1 for
+monitoring replication across Postgres instances, which are used by some system
+management services.  The new alerts are `PostgresqlReplicationLagSMA` (for
+Postgres instances in the `sma` namespace), `PostgresqlReplicationLagServices`
+(for Postgres instances in all other namespaces), and
+`PostgresqlInactiveReplicationSlot`.
+
+In the event that a state of broken Postgres replication persists to the extent
+that space allocated for its WAL files fills-up, the affected database will
+likely shut down and create a state where it cannot be brought up again.  This
+can impact the reliability of the related service and can require that it be
+redeployed with data re-population procedures.
+
+To avoid this unexpected, but possible event, it is recommended that all
+administrators configure Prometheus alert notifications for the early detection
+of Postgres replication lag and, if notified, swiftly follow the suggested
+remediation actions (to avoid service down-time).
+
+Please access the relevant sections of the [1.4 HPE Cray EX System
+Administration Guide] for information about how to configure Prometheus Alert
+Notifications ("System Management Health Checks and Alerts" sub-section under
+"Monitor the System") and how to re-initialize a Postgres cluster encountering
+signs of replication lag ("About Postgres" sub-section under "Kubernetes
+Architecture").
+
+[1.4 HPE Cray EX System Administration Guide]: https://connect.us.cray.com/confluence/download/attachments/186435146/HPE_Cray_EX_System_Administration_Guide_1.4_S-8001_RevA.pdf?version=1&modificationDate=1616193177450&api=v2
