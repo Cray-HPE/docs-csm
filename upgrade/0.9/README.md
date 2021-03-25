@@ -12,6 +12,8 @@ Copyright 2021 Hewlett Packard Enterprise Development LP
 - [Deploy Manifests](#deploy-manifests)
 - [Upgrade NCN RPMs](#upgrade-ncn-rpms)
 - [Post-Upgrade Actions](#post-upgrade-actions)
+- [Update BGP Configuration](#update-bgp-configuration)
+- [Configure LAG for CMMs](#config-cmm-lag)
   - [Switch VCS Configuration Repositories to Private](#switch-vcs-configuration-repositories-to-private)
   - [Configure Prometheus Alert Notifications to Detect Postgres Replication Lag](#configure-prometheus-alert-notifications-to-detect-postgres-replication-lag)
 - [Run Validation Checks](#run-validation-checks)
@@ -208,10 +210,13 @@ Run `upgrade.sh` to deploy upgraded CSM applications and services:
 ncn-m001# ./upgrade.sh
 ```
 
-
+<a name="upgrade-ncn"></a>
 ## Upgrade NCN RPMs
 
-TODO Use CFS?
+Some CSM upgrades will require a new RPM.  To get updated RPMs.
+Run
+```zypper ar -fG https://packages.local/repository/csm-sle-15sp2 csm-sle-15sp2```
+```zypper in -y hpe-csm-scripts```
 
 
 <a name="post-upgrade-actions"></a>
@@ -265,6 +270,38 @@ Architecture").
 
 [1.4 HPE Cray EX System Administration Guide]: https://connect.us.cray.com/confluence/download/attachments/186435146/HPE_Cray_EX_System_Administration_Guide_1.4_S-8001_RevA.pdf?version=1&modificationDate=1616193177450&api=v2
 
+<a name="update-bgp-configuration"></a>
+### Update BGP Configuration
+
+If your Shasta system is using Aruba Management Switches you will need to run
+an updated BGP script.
+
+
+Below is an example. `10.252.0.2` & `10.252.0.3` being the switches running BGP.
+
+```bash
+ncn-w001:/opt/cray/csm/scripts/networking/BGP # ./Aruba_BGP_Peers.py 10.252.0.2 10.252.0.3
+```
+
+Once that's complete, the static routes configured in [LAYER3-CONFIG](411-MGMT-NET-LAYER3-CONFIG.md) will need to
+be removed. Log into the switches running BGP (Spines/Aggs) and remove them.
+
+```bash
+sw-spine-001(config)# no ip route 10.92.100.60/32 10.252.1.10
+sw-spine-001(config)# no ip route 10.94.100.60/32 10.252.1.10
+```
+
+Once that's complete verify the BGP configuration [BGP](400-SWITCH-BGP-NEIGHBORS.md)
+
+
+<a name="config-cmm-lag"></a>
+## Configure LAG for CMMs
+
+If your Shasta system is using Aruba CDU switches you should follow the steps labeled
+"CMM Port Configuration" located at the bottom of [MGMT-PORT-CONFIG](405-MGMT-NET-PORT-CONFIG.md) .  These 
+instructions show how to setup Link Aggregation from the CMM Switch to the Aruba 
+CDU switches.  This change will require physical access to the CEC and remote access
+to the CDU Switches.
 
 <a name="run-validation-checks"></a>
 ## Run Validation Checks
