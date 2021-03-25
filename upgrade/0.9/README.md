@@ -50,13 +50,13 @@ specifiers](https://www.python.org/dev/peps/pep-0440/#version-specifiers)
 matching against `$CSM_SYSTEM_VERSION` or `$CSM_RELEASE_VERSION`. The following
 comparison operators may be used:
 
-| Operator   | Meaning                                                       |
-| --------   | -------                                                       |
-| `==`       | Version matching clause                                       |
-| `!=`       | Version exclusion clause                                      |
-| `<=`, `>=` | Inclusive ordered comparison clauses                          |
-| `<`, `>`   | Exclusive ordered comparison clauses                          |
-| `,`        | Separates version clauses; equivalent to logical **and** operator |
+| Operator   | Meaning                                                           | Example                                                                                                                                                                                                          |
+| --------   | -------                                                           | -------                                                                                                                                                                                                          |
+| `==`       | Version matching clause                                           | `$CSM_SYSTEM_VERSION == 0.9.0` is true if the version of CSM installed on the system is 0.9.0                                                                                                                    |
+| `!=`       | Version exclusion clause                                          | `$CSM_SYSTEM_VERSION != 0.9.0` is true if the version of CSM installed on the system is **not** 0.9.0                                                                                                            |
+| `<=`, `>=` | Inclusive ordered comparison clauses                              | `$CSM_RELEASE_VERSION <= 0.9.5` is true if the version of the CSM release distribution is at or before 0.9.5                                                                                                     |
+| `<`, `>`   | Exclusive ordered comparison clauses                              | `$CSM_SYSTEM_VERSION > 0.9.5` is true if the version of CSM installed on the system is strictly after 0.9.5                                                                                                      |
+| `,`        | Separates version clauses; equivalent to logical **and** operator | `$CSM_SYSTEM_VERSION < 0.9.5, $CSM_RELEASE_VERSION >= 1.0.0` is true if the version of CSM installed on the system is strictly before 0.9.5 and the version of the CSM release distribution is at or after 1.0.0 |
 
 
 <a name="preparation"></a>
