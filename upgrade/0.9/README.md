@@ -215,9 +215,9 @@ ncn-m001# ./upgrade.sh
 
 Some CSM upgrades will require a new RPM.  To get updated RPMs.
 Run
-```zypper ar -fG https://packages.local/repository/csm-sle-15sp2 csm-sle-15sp2```
-```zypper in -y hpe-csm-scripts```
-
+```bash
+ncn-w001:~ # for node in $(kubectl get nodes| awk '{print $1}'|grep -v NAME);do pdsh -w $node "zypper ar -fG https://packages.local/repository/csm-sle-15sp2 csm-sle-15sp2;zypper in -y hpe-csm-scripts";done
+```
 
 <a name="post-upgrade-actions"></a>
 ## Post-Upgrade Actions
