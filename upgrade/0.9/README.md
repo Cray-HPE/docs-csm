@@ -274,3 +274,28 @@ Architecture").
 > resources get initialized and started.
 
 Run the [CSM validation checks](../../008-CSM-VALIDATION.md).
+
+**Note**: The following HMS functional tests may fail due to locked components in HSM:
+
+1. test_bss_bootscript_ncn-functional_remote-functional.tavern.yaml
+2. test_smd_components_ncn-functional_remote-functional.tavern.yaml
+
+```bash
+        Traceback (most recent call last):
+          File "/usr/lib/python3.8/site-packages/tavern/schemas/files.py", line 106, in verify_generic
+            verifier.validate()
+          File "/usr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
+            raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
+        pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
+         - Key 'Locked' was not defined. Path: '/Components/0'.
+         - Key 'Locked' was not defined. Path: '/Components/5'.
+         - Key 'Locked' was not defined. Path: '/Components/6'.
+         - Key 'Locked' was not defined. Path: '/Components/7'.
+         - Key 'Locked' was not defined. Path: '/Components/8'.
+         - Key 'Locked' was not defined. Path: '/Components/9'.
+         - Key 'Locked' was not defined. Path: '/Components/10'.
+         - Key 'Locked' was not defined. Path: '/Components/11'.
+         - Key 'Locked' was not defined. Path: '/Components/12'.: Path: '/'>
+```
+
+Failures of these tests due to locked components as shown above can be safely ignored.
