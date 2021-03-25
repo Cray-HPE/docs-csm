@@ -4,8 +4,8 @@ Copyright 2021 Hewlett Packard Enterprise Development LP
 # CSM 0.9 Patch Upgrade Guide
 
 - [About](#about)
-  - [Release-Specific Procedures](#release-specific-procedures)
   - [Common Environment Variables](#common-environment-variables)
+  - [Version-Specific Procedures](#version-specific-procedures)
 - [Preparation](#preparation)
 - [Update Customizations](#update-customizations)
 - [Setup Nexus](#setup-nexus)
@@ -14,6 +14,7 @@ Copyright 2021 Hewlett Packard Enterprise Development LP
 - [Post-Upgrade Actions](#post-upgrade-actions)
   - [Switch VCS Configuration Repositories to Private](#switch-vcs-configuration-repositories-to-private)
   - [Configure Prometheus Alert Notifications to Detect Postgres Replication Lag](#configure-prometheus-alert-notifications-to-detect-postgres-replication-lag)
+- [Run Validation Checks](#run-validation-checks)
 
 
 <a name="about"></a>
@@ -28,30 +29,40 @@ See CHANGELOG.md in the root of a CSM release distribution for a summary of
 changes in each CSM release.
 
 
-<a name="release-specific-procedures"></a>
-### Release-Specific Procedures
-
-Select procedures are annotated to indicate they are only applicable to
-specific Shasta patch releases.
-
-> **`WARNING:`** Follow this procedure only when upgrading to CSM 0.9.1.
-
-> **`WARNING:`** Follow this procedure only when upgrading from CSM 0.9.0.
-
-
 <a name="common-environment-variables"></a>
 ### Common Environment Variables
 
-For convenience these procedures use the following environment variables:
+For convenience, these procedures make use of the following environment
+variables. Be sure to set them to the appropriate values before proceeding.
 
-- `CSM_RELEASE` - The CSM release version, e.g., `0.9.1`.
-- `CSM_DISTDIR` - The directory of the _extracted_ CSM release distribution.
+- `CSM_SYSTEM_VERSION` - The version of CSM installed on the system, e.g., `0.9.0`.
+- `CSM_RELEASE_VERSION` - The CSM release version, e.g., `0.9.1`.
+- `CSM_DISTDIR` - Absolute path to the directory of the _extracted_ CSM release distribution.
+- `SITE_INIT_REPO_URL` - URL to remote `site-init` Git repository.
+
+
+<a name="version-specific-procedures"></a>
+### Version-Specific Procedures
+
+Procedures may be annotated to indicate they are only applicable to specific
+CSM versions using [version
+specifiers](https://www.python.org/dev/peps/pep-0440/#version-specifiers)
+matching against `$CSM_SYSTEM_VERSION` or `$CSM_RELEASE_VERSION`. The following
+comparison operators may be used:
+
+| Operator   | Meaning                                                           | Example                                                                                                                                                                                                          |
+| --------   | -------                                                           | -------                                                                                                                                                                                                          |
+| `==`       | Version matching clause                                           | `$CSM_SYSTEM_VERSION == 0.9.0` is true if the version of CSM installed on the system is 0.9.0                                                                                                                    |
+| `!=`       | Version exclusion clause                                          | `$CSM_SYSTEM_VERSION != 0.9.0` is true if the version of CSM installed on the system is **not** 0.9.0                                                                                                            |
+| `<=`, `>=` | Inclusive ordered comparison clauses                              | `$CSM_RELEASE_VERSION <= 0.9.5` is true if the version of the CSM release distribution is at or before 0.9.5                                                                                                     |
+| `<`, `>`   | Exclusive ordered comparison clauses                              | `$CSM_SYSTEM_VERSION > 0.9.5` is true if the version of CSM installed on the system is strictly after 0.9.5                                                                                                      |
+| `,`        | Separates version clauses; equivalent to logical **and** operator | `$CSM_SYSTEM_VERSION < 0.9.5, $CSM_RELEASE_VERSION >= 1.0.0` is true if the version of CSM installed on the system is strictly before 0.9.5 and the version of the CSM release distribution is at or after 1.0.0 |
 
 
 <a name="preparation"></a>
 ## Preparation
 
-The remainder of this guide assumes the new CSM release distribution has been
+This guide assumes the release distribution for the new version of CSM has been
 extracted at `$CSM_DISTDIR`.
 
 > **`NOTE`**: Use `--no-same-owner` and `--no-same-permissions` options to
@@ -59,23 +70,104 @@ extracted at `$CSM_DISTDIR`.
 > extracted files are owned by `root` and have permissions based on the current
 > `umask` value.
 
-List current CSM versions in the product catalog:
+Set `CSM_RELEASE_VERSION` to the version reported by `${CSM_DISTDIR}/lib/version.sh`:
 
 ```bash
-ncn-m001# kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' | yq r -j - | jq -r 'keys[]' | sed '/-/!{s/$/_/}' | sort -V | sed 's/_$//'
+ncn-m001# CSM_RELEASE_VERSION="$(${CSM_DISTDIR}/lib/version.sh --version)"
 ```
 
-Run `${CSM_DISTDIR}/lib/version.sh` to verify that the intended CSM release is
-being used for the upgrade.
+Set `CSM_SYSTEM_VERSION` to the latest version listed in the catalog:
+
+```bash
+ncn-m001# CSM_SYSTEM_VERSION="$(kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' | yq r -j - | jq -r 'keys[]' | sed '/-/!{s/$/_/}' | sort -Vr | head -n 1 | sed 's/_$//')"
+```
+
+> **`NOTE`**: List all CSM versions in the product catalog using:
+>
+> ```bash
+> ncn-m001# kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' | yq r -j - | jq -r 'keys[]' | sed '/-/!{s/$/_/}' | sort -V | sed 's/_$//'
+> ```
 
 
 <a name="update-customizations"></a>
 ## Update Customizations
 
-Before [deploying upgraded manifests](#deploy-manifests), update
-`customizations.yaml` in the `site-init` secret in the `loftsman` namespace.
+Before [deploying upgraded manifests](#deploy-manifests), `customizations.yaml`
+in the `site-init` secret in the `loftsman` namespace must be updated.
 
-TODO Consult the [SHASTA-CFG guide](../../067-SHASTA-CFG.md)
+1. If the [`site-init` repository is available as a remote
+   repository](../../067-SHASTA-CFG.md#push-to-a-remote-repository) then clone
+   it on the host orchestrating the upgrade:
+
+   ```bash
+   ncn-m001# git clone "$SITE_INIT_REPO_URL" site-init
+   ```
+
+   Otherwise, create a new `site-init` working tree:
+
+   ```bash
+   ncn-m001# git init site-init
+   ```
+
+2. Download `customizations.yaml`:
+
+   ```bash
+   ncn-m001# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > site-init/customizations.yaml
+   ```
+
+3. Review, add, and commit `customizations.yaml` to the local `site-init`
+   repository as appropriate.
+
+   > **`NOTE`**: If `site-init` was cloned from a remote repository in step 1,
+   > there may not be any differences and hence nothing to commit. This is
+   > okay. If there are differences between what's in the repository and what
+   > was stored in the `site-init`, then it suggest settings were improperly
+   > changed at some point. If that's the case then be cautious, _there may be
+   > dragons ahead_.
+
+   ```bash
+   ncn-m001# cd site-init
+   ncn-m001# git diff
+   ncn-m001# git add customizations.yaml
+   ncn-m001# git commit -m 'Add customizations.yaml from site-init secret'
+   ```
+
+4. Update `customizations.yaml`. Perform the following procedures in order if
+   the version specifier is satisfied:
+
+   - `$CSM_SYSTEM_VERSION == 0.9.0`
+
+     ```bash
+     ncn-m001# yq d -i customizations.yaml spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources
+     ```
+
+5. Review the changes to `customizations.yaml` and verify [baseline system
+   customizations](../../067-SHASTA-CFG.md#create-baseline-system-customizations)
+   and any customer-specific settings are correct.
+
+   ```
+   ncn-m001# git diff
+   ```
+
+6. Add and commit `customimzations.yaml` if there are any changes:
+
+   ```
+   ncn-m001# git add customizations.yaml
+   ncn-m001# git commit -m "Update customizations.yaml consistent with CSM $CSM_RELEASE_VERSION"
+   ```
+
+7. Update `site-init` sealed secret in `loftsman` namespace:
+
+   ```bash
+   ncn-m001# kubectl delete secret -n loftsman site-init
+   ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ```
+
+8. Push to the remote repository as appropriate:
+
+   ```bash
+   ncn-m001# git push
+   ```
 
 
 <a name="setup-nexus"></a>
@@ -85,14 +177,15 @@ Run `lib/setup-nexus.sh` to configure Nexus and upload new CSM RPM
 repositories, container images, and Helm charts:
 
 ```bash
-ncn-m001# ${CSM_DISTDIR}/lib/setup-nexus.sh
+ncn-m001# cd "$CSM_DISTDIR"
+ncn-m001# ./lib/setup-nexus.sh
 ```
 
 On success, `setup-nexus.sh` will output to `OK` on stderr and exit with status
 code `0`, e.g.:
 
 ```bash
-ncn-m001# ${CSM_DISTDIR}/lib/setup-nexus.sh
+ncn-m001# ./lib/setup-nexus.sh
 ...
 + Nexus setup complete
 setup-nexus.sh: OK
@@ -109,8 +202,10 @@ report `FAIL` when uploading duplicate assets. This is ok as long as
 <a name="deploy-manifests"></a>
 ## Deploy Manifests
 
+Run `upgrade.sh` to deploy upgraded CSM applications and services:
+
 ```bash
-ncn-m001# ${CSM_DISTDIR}/upgrade.sh
+ncn-m001# ./upgrade.sh
 ```
 
 
@@ -169,3 +264,13 @@ signs of replication lag ("About Postgres" sub-section under "Kubernetes
 Architecture").
 
 [1.4 HPE Cray EX System Administration Guide]: https://connect.us.cray.com/confluence/download/attachments/186435146/HPE_Cray_EX_System_Administration_Guide_1.4_S-8001_RevA.pdf?version=1&modificationDate=1616193177450&api=v2
+
+
+<a name="run-validation-checks"></a>
+## Run Validation Checks
+
+> **`IMPORTANT`** Wait at least 15 minutes after
+> [`upgrade.sh`](#deploy-manifests) completes to let the various Kubernetes
+> resources get initialized and started.
+
+Run the [CSM validation checks](../../008-CSM-VALIDATION.md).
