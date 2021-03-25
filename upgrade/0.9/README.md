@@ -12,7 +12,8 @@ Copyright 2021 Hewlett Packard Enterprise Development LP
 - [Deploy Manifests](#deploy-manifests)
 - [Upgrade NCN RPMs](#upgrade-ncn-rpms)
 - [Post-Upgrade Actions](#post-upgrade-actions)
-- [Switch VCS Configuration Repositories to Private](#switch-vcs-configuration-repositories-to-private)
+  - [Switch VCS Configuration Repositories to Private](#switch-vcs-configuration-repositories-to-private)
+  - [Configure Prometheus Alert Notifications to Detect Postgres Replication Lag](#configure-prometheus-alert-notifications-to-detect-postgres-replication-lag)
 
 
 <a name="about"></a>
@@ -139,7 +140,7 @@ credentials. CSM services that clone repositories have been upgraded to use the
 `crayvcs` user to clone repositories.
 
 
-<a name="configure-prometheus-alert-notifications-for-postgres-replication-lag"></a>
+<a name="configure-prometheus-alert-notifications-to-detect-postgres-replication-lag"></a>
 ### Configure Prometheus Alert Notifications to Detect Postgres Replication Lag
 
 Three new Prometheus alert definitions have been added in CSM 0.9.1 for
