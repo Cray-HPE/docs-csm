@@ -139,3 +139,28 @@ As a result of this change, `git clone` operations will now require
 credentials. CSM services that clone repositories have been upgraded
 to use the `crayvcs` user to clone repositories.
 
+<a name="configure-prometheus-alert-notifications-for-postgres-replication-lag"></a>
+### Configure Prometheus Alert Notifications to Detect Postgres Replication Lag
+
+Three new prometheus alert definitions have been added in the Shasta v1.4.1 patch
+release for monitoring replication across postgres instances, which are used by
+some system management services.  The new alerts are
+PostgresqlReplicationLagSMA (for postgres instances in the `sma` namespace),
+PostgresqlReplicationLagServices (for postgres instances in all other namespaces),
+and PostgresqlInactiveReplicationSlot.
+
+In the event that a state of broken postgres replication persists to the extent that
+space allocated for its WAL files fills-up, the affected database will likely shut
+down and create a state where it cannot be brought up again.  This can impact the
+reliability of the related service and can require that it be redeployed with data
+re-population procedures.
+
+To avoid this unexpected, but possible event, it is recommended that all administrators
+configure Prometheus Alert notifications for the early detection of postgres replication lag
+and, if notified, swiftly follow the suggested remediation actions (to avoid service down-time).
+
+Please access the relevant sections of the `1.4 HPE Cray EX System Administration Guide`
+for information about how to configure Prometheus Alert Notifications
+(`System Management Health Checks and Alerts` sub-section under `Monitor the System`)
+and how to re-initialize a postgres cluster encountering signs of replication lag
+(`About Postgres` sub-section under `Kubernetes Architecture`).
