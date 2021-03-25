@@ -283,7 +283,7 @@ Below is an example. `10.252.0.2` & `10.252.0.3` being the switches running BGP.
 ncn-w001:/opt/cray/csm/scripts/networking/BGP # ./Aruba_BGP_Peers.py 10.252.0.2 10.252.0.3
 ```
 
-Once that's complete, the static routes configured in [LAYER3-CONFIG](411-MGMT-NET-LAYER3-CONFIG.md) will need to
+Once that's complete, the static routes configured in [LAYER3-CONFIG](../../411-MGMT-NET-LAYER3-CONFIG.md) will need to
 be removed. Log into the switches running BGP (Spines/Aggs) and remove them.
 
 ```bash
@@ -291,14 +291,14 @@ sw-spine-001(config)# no ip route 10.92.100.60/32 10.252.1.10
 sw-spine-001(config)# no ip route 10.94.100.60/32 10.252.1.10
 ```
 
-Once that's complete verify the BGP configuration [BGP](400-SWITCH-BGP-NEIGHBORS.md)
+Once that's complete verify the BGP configuration [BGP](../../400-SWITCH-BGP-NEIGHBORS.md)
 
 
 <a name="config-cmm-lag"></a>
 ## Configure LAG for CMMs
 
 If your Shasta system is using Aruba CDU switches you should follow the steps labeled
-"CMM Port Configuration" located at the bottom of [MGMT-PORT-CONFIG](405-MGMT-NET-PORT-CONFIG.md) .  These 
+"CMM Port Configuration" located at the bottom of [MGMT-PORT-CONFIG](../../405-MGMT-NET-PORT-CONFIG.md) .  These 
 instructions show how to setup Link Aggregation from the CMM Switch to the Aruba 
 CDU switches.  This change will require physical access to the CEC and remote access
 to the CDU Switches.
