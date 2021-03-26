@@ -358,9 +358,9 @@ Run the [CSM validation checks](../../008-CSM-VALIDATION.md).
 > Failures of these tests due to locked components as shown above can be safely
 > ignored.
 
-## Upgrading Firmware on Rosetta Switches
+## Upgrading Firmware on Chassis Controllers
 
-This release contains an update to the Rosetta Switch firmware.
+This release contains an update to the Chassis Controller.
 
 Steps:
 1. Check to see if firmware is loaded into FAS:
