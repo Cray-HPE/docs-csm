@@ -21,22 +21,26 @@ There are 5 overall steps that provide a bootable USB with SSH enabled, capable 
 
 Fetch the base installation CSM tarball and extract it, installing the contained CSI tool.
 
-1. Start a typescript to capture the commands and output from this installation.
+1. Set up the Typescript directory as well as the initial typescript. This directory will be returned to for every typescript in the entire CSM installation.
+   (Run this on the `pit` node as root, the prompts are removed for easier copy-paste; this step is only useful as a whole)
    ```bash
-   linux# script -af csm-usb-lived.$(date +%Y-%m-%d).txt
-   linux# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+   mkdir -p /var/www/ephemeral/prep/admin
+   pushd !$
+   script -af csm-install-usb.$(date +%Y-%m-%d).txt
+   export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
-
-> **`INTERNAL USE`** The `ENDPOINT` URL below are for internal use. Customers do not need to download any additional 
-> artifacts, the CSM tarball is included along with the Shasta release.
 
 2. If necessary, download the CSM software release to the Linux host which will be preparing the LiveCD.
-   ```bash
-   linux# cd ~
-   linux# export ENDPOINT=https://arti.dev.cray.com/artifactory/shasta-distribution-stable-local/csm/
-   linux# export CSM_RELEASE=csm-x.y.z
-   linux# wget ${ENDPOINT}/${CSM_RELEASE}.tar.gz
-   ```
+
+   > **`INTERNAL USE`** The `ENDPOINT` URL below are for internal use. Customers do not need to download any additional 
+   > artifacts, the CSM tarball is included along with the Shasta release.
+
+    ```bash
+    linux# cd ~
+    linux# export ENDPOINT=https://arti.dev.cray.com/artifactory/shasta-distribution-stable-local/csm/
+    linux# export CSM_RELEASE=csm-x.y.z
+    linux# wget ${ENDPOINT}/${CSM_RELEASE}.tar.gz
+    ```
 
 3. Expand the CSM software release:
    > **`IMPORTANT`** Before proceeding, refer to the "CSM Patch Assembly" section of the Shasta Install Guide 
@@ -388,7 +392,7 @@ Check for workarounds in the `/opt/cray/csm/workarounds/csi-config` directory. I
 <a name="shasta-cfg"></a>
 ### SHASTA-CFG
 
-Now execute [the procedures in 067-SHASTA-CFG.md](./067-SHASTA-CFG.md) to prepare the `site-init` directory for your system.
+Now execute [the procedures in 004-SHASTA-CFG.md](004-SHASTA-CFG.md) to prepare the `site-init` directory for your system.
 
 
 <a name="pre-populate-livecd-daemons-configuration-and-ncn-arti"></a>
@@ -538,6 +542,7 @@ Connect to the IPMI console.
     ```
 
 Watch the shutdown and boot from the ipmitool session to the console terminal.
+The typescript can be discarded, otherwise if issues arise then it should be submitted with the bug report.
 
 > **An integrity check** runs before Linux starts by default, it can be skipped by selecting "OK" in its prompt.
 

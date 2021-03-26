@@ -5,7 +5,9 @@ This page will walk-through booting the LiveCD `.iso` file directly onto a BMC.
 * [Requirements](#requirements)
 * [BMCs' Virtual Mounts](#bmcs-virtual-mounts)
   * [HPE iLO BMCs](#hpe-ilo-bmcs)
+    * [Using HTTP/HTTPS](#using-httphttps)
   * [Gigabyte BMCs](#gigabyte-bmcs)
+    * [Using NFS or HTTP](#using-nfs-or-http)
   * [Intel BMCs](#intel-bmcs)
 * [Configuring](#configuring)
    * [Backing up the Overlay COW FS](#backing-up-the-overlay-cow-fs)
@@ -34,6 +36,9 @@ Refer to the following pages based on your node vendor for help mounting an ISO 
 <a name="hpe-ilo-bmcs"></a>
 ### HPE iLO BMCs
 
+<a name="using-httphttps"></a>
+#### Using HTTP/HTTPS
+
 ILO BMCs allow for booting directly from an HTTP accessible ISO location.
 
 > Here you can insert the Virtual Media URL, select Boot on Next Reset, and click Insert Media
@@ -50,6 +55,9 @@ ILO BMCs allow for booting directly from an HTTP accessible ISO location.
 
 <a name="gigabyte-bmcs"></a>
 ### Gigabyte BMCs
+
+<a name="using-nfs-or-http"></a>
+#### Using NFS or HTTP
 
 Gigabyte BMCs allow for booting over NFS or HTTP.
 
@@ -107,7 +115,7 @@ the booted OS.
 
 1. The ISO boots with no password, requiring one be set on first login. Enter blank as the password and
    follow the prompts.
-2. You can no use the LiveCD to look around, or you may continue setting the LiveCD up for [a CSM installation](004-CSM-REMOTE-LIVECD.md).
+2. You can no use the LiveCD to look around, or you may continue setting the LiveCD up for [a CSM installation](003-CSM-LIVECD.md).
 
 > **`NOTE`** The root OS `/` directory is writable without persistence. This means that restarting the machine will result in all changes being lost. Before restarting, consider following [Backing up the Overlay COW FS](#backing-up-the-overlay-cow-fs) and the accompanying [Restoring from an Overlay COW FS Backup](#restoring-from-an-overlay-cow-fs-backup) section.
 

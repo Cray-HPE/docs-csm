@@ -38,7 +38,7 @@ boot-check nodes to dump network device information without an OS. This works by
 2. BMC MAC addresses already collected
 3. LiveCD conman is configured for each BMC (`conman -q` to see consoles)
 
-For help with either of those, see [LiveCD Setup](004-CSM-REMOTE-LIVECD.md).
+For help with either of those, see [LiveCD Setup](003-CSM-LIVECD.md).
 
 <a name="mac-collection"></a>
 #### MAC Collection

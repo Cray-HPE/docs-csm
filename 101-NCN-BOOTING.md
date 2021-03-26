@@ -9,12 +9,12 @@ Table of Contents:
 
 * [How can I tell if I booted via disk or pxe?](101-NCN-BOOTING.md#how-can-i-tell-if-i-booted-via-disk-or-pxe)
 * [Set BMCs to DHCP](101-NCN-BOOTING.md#set-bmcs-to-dhcp)
-* [Boot Order](101-NCN-BOOTING.md#set-boot-order) <a name="boot-order"></a>
-  * [Setting Order](101-NCN-BOOTING.md#setting-order) <a name="setting-order"></a>
-  * [Trimming](101-NCN-BOOTING.md#trimming) <a name="trimming"></a>
-  * [Examples](101-NCN-BOOTING.md#examples) <a name="examples"></a>
-  * [Reverting Changes](101-NCN-BOOTING.md#reverting-changes) <a name="reverting-changes"></a>
-    * [Locating a USB Stick](101-NCN-BOOTING.md#locating-a-usb-stick) <a name="locating-a-usb-stick"></a>
+* [Boot Order](101-NCN-BOOTING.md#set-boot-order)
+  * [Setting Order](101-NCN-BOOTING.md#setting-order)
+  * [Trimming](101-NCN-BOOTING.md#trimming)
+  * [Examples](101-NCN-BOOTING.md#examples)
+  * [Reverting Changes](101-NCN-BOOTING.md#reverting-changes)
+    * [Locating a USB Stick](101-NCN-BOOTING.md#locating-a-usb-stick)
 
 <a name="how-can-i-tell-if-i-booted-via-disk-or-pxe?"></a>
 ### How can I tell if I booted via disk or pxe?
@@ -195,7 +195,7 @@ Simply run the reverse-pattern of the PXE commands from the [fixing boot order](
 
 1. Find the other PXE entries:
     - Gigabyte Technology:
-      > **`NOTE`** This will not remove onboard PXE IPv4 options.
+      > **`NOTE`** This will not remove onboard PXE IPv4 options; C22 BIOS or newer required, then manual deletion is recommended.
       ```bash
       ncn# efibootmgr | grep -ivP '(pxe ipv?4.*)' | grep -iP '(adapter|connection)' | tee /tmp/rbbs1
       ```

@@ -493,18 +493,9 @@ With the nodes off, the system is now ready for [Starting an Installation](#star
 <a name="boot-the-livecd"></a>
 ## Boot the LiveCD
 
-All installs may be done in full from a LiveCD of any supported medium.
+There are two mediums available to an administrator and CI/CD agents; the RemoteISO, or a bootable USB. The recommended way is the RemoteISO, since it does not 
+require any physical media to prepare. However, remotely mounting an ISO has varying mileage between vendors. It's recommended to try the RemoteISO first. 
 
-- For preloading on a laptop or Linux node and inserting into a CRAY, click here for starting an installation
-  with the (persistent bootable) [CSM USB LiveCD](003-CSM-USB-LIVECD.md).
+- [RemoteISO](003-CSM-LIVECD.md#livecd-remote-iso-install) (recommended)
 
-*Experimental*
-- For installing through a remote console, click here for starting an installation with the (
-  non-persistent bootable) [CSM Remote LiveCD](004-CSM-REMOTE-LIVECD.md).
-
-> **`NOTICE`** the remote ISO runs entirely in the systems volatile memory.
-
-> For installs using the remote mounted LiveCD (no USB stick), pay attention to memory usage as
-artifacts are downloaded and subsequently extracted. When RAM is limited to less than 128GB, memory
-pressure may occur from increasing file-system usage.
-> For instances where memory is scarce, an NFS/CIF or HTTP/S share can be mounted in-place of the USB's data partition at `/var/www/ephemeral`. Using the same mount point as the USB data partition will help ward off mistakes when following along.
+- [USB stick](064-LIVECD-USB-BOOT.md) (fallback)

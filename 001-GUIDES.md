@@ -21,19 +21,19 @@ The three separate scenarios (above) continue the same way at this point, with p
 * This version of the documentation supports booting from a [CSM USB LiveCD] (003-CSM-USB-LIVECD.md).
 * A future version of this documentation will support booting from a virtual ISO method [CSM Remote LiveCD] (004-CSM-REMOTE-LIVECD.md). 
 
-##### [CSM USB LiveCD - Creation and Configuration](003-CSM-USB-LIVECD.md#csm-usb-livecd---creation-and-configuration)
+##### [CSM USB LiveCD - Creation and Configuration](064-LIVECD-USB-BOOT.md#csm-usb-livecd---creation-and-configuration)
 
 Preparation of the LiveCD on a USB stick can be done from a Linux system such as a booted ncn-m001 node with either Shasta v1.3 or v1.4 or a laptop or desktop.
 
-* [Download and Expand the CSM Release](003-CSM-USB-LIVECD.md#download-and-expand-the-csm-release)
-* [Create the Bootable Media](003-CSM-USB-LIVECD.md#create-the-bootable-media)
-* [Configuration Payload](003-CSM-USB-LIVECD.md#configuration-payload)
-  * [Generate Installation Files](003-CSM-USB-LIVECD.md#generate-installation-files)
-  * [CSI Workarounds](003-CSM-USB-LIVECD.md#csi-workarounds)
-  * [SHASTA-CFG](003-CSM-USB-LIVECD.md#shasta-cfg)
-* [Pre-Populate LiveCD Daemons Configuration and NCN Artifacts](003-CSM-USB-LIVECD.md#pre-populate-livecd-daemons-configuration-and-ncn-artifacts)
-* [Boot the LiveCD](003-CSM-USB-LIVECD.md#boot-the-livecd)
-  * [First Login](003-CSM-USB-LIVECD.md#first-login)
+* [Download and Expand the CSM Release](064-LIVECD-USB-BOOT.md#download-and-expand-the-csm-release)
+* [Create the Bootable Media](064-LIVECD-USB-BOOT.md#create-the-bootable-media)
+* [Configuration Payload](064-LIVECD-USB-BOOT.md#configuration-payload)
+  * [Generate Installation Files](064-LIVECD-USB-BOOT.md#generate-installation-files)
+  * [CSI Workarounds](064-LIVECD-USB-BOOT.md#csi-workarounds)
+  * [SHASTA-CFG](064-LIVECD-USB-BOOT.md#shasta-cfg)
+* [Pre-Populate LiveCD Daemons Configuration and NCN Artifacts](064-LIVECD-USB-BOOT.md#pre-populate-livecd-daemons-configuration-and-ncn-artifacts)
+* [Boot the LiveCD](064-LIVECD-USB-BOOT.md#boot-the-livecd)
+  * [First Login](064-LIVECD-USB-BOOT.md#first-login)
 
 ##### [CSM Metal Install](005-CSM-METAL-INSTALL.md#csm-metal-install)
 

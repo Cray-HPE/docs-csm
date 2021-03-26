@@ -12,7 +12,7 @@ This guide shows the process for generating the `hmn_connections.json` from the 
 * Podman or Docker running
 
 > Note: Docker can be used instead of Podman if the system being used to prepare this file does not have Podman available. 
-> Podman is available on the CSM LiveCD, and is installed onto a NCN running Shasta v1.3 during the procedure to create the [CSM USB LiveCD](003-CSM-USB-LIVECD.md).
+> Podman is available on the CSM LiveCD, and is installed onto a NCN running Shasta v1.3 during the procedure to create the [CSM USB LiveCD](064-LIVECD-USB-BOOT.md).
 
 ### Procedure
 1. __If using Docker__: Make sure that the docker service is running:

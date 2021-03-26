@@ -28,7 +28,7 @@ This guide may receive more installments for other files as time goes on.
 These guides expect you to have access to either of the following things for working on a bare-metal
 system (assuming freshly racked, or fresh-installing an existing system).
 
-- LiveCD (for more information, see [LiveCD USB Boot](003-CSM-USB-LIVECD.md))
+- LiveCD (for more information, see [LiveCD USB Boot](064-LIVECD-USB-BOOT.md))
 - Linux and a Serial Console
 
 If you do not have the LiveCD, or any other local Linux environment, this data collection

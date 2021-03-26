@@ -73,6 +73,7 @@ To complete firmware checkout, proceed through the below sections:
      export IPMI_PASSWORD=changeme
      grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} fru | grep -i 'board product'
      grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} mc info | grep -i 'firmware revision'
+     grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} mc info | grep -i 'product version'
      ```
    > #### Manufacturer Examples
    > - Gigabyte:

@@ -75,7 +75,7 @@ This process should be done for the "kubernetes" image used by master and worker
 10. Update file permissions on initrd
    ```bash
    pit# chmod 644 initrd.img.xz
-
+   ```
 11. Repeat the preceding steps for the other image type.
 
 12. Set the boot links.
