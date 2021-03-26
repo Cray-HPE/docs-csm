@@ -71,6 +71,10 @@ extracted at `$CSM_DISTDIR`.
 > `tar` when extracting a CSM release distribution as `root` to ensure the
 > extracted files are owned by `root` and have permissions based on the current
 > `umask` value.
+> Example:
+> ```bash
+> ncn-m001# tar --no-same-owner --no-same-permissions -zxvf csm-x.y.z.tar.gz
+> ```
 
 Set `CSM_RELEASE_VERSION` to the version reported by `${CSM_DISTDIR}/lib/version.sh`:
 
@@ -123,7 +127,7 @@ in the `site-init` secret in the `loftsman` namespace must be updated.
    > **`NOTE:`** If `site-init` was cloned from a remote repository in step 1,
    > there may not be any differences and hence nothing to commit. This is
    > okay. If there are differences between what's in the repository and what
-   > was stored in the `site-init`, then it suggest settings were improperly
+   > was stored in the `site-init`, then it suggests settings were improperly
    > changed at some point. If that's the case then be cautious, _there may be
    > dragons ahead_.
 
@@ -349,7 +353,23 @@ script `/opt/cray/csm/scripts/networking/BGP/Aruba_BGP_Peers.py`.
 
 1. Set the `SWITCH_IPS` variable to an array containing the IP addresses of the switches.
 
-   > **`EXAMPLE:`** Suppose `10.252.0.2` and `10.252.0.3` are the switches running
+   > **`EXAMPLE:`**: The following can be used to determine the IP addresses of the switches running BGP:
+   > ```bash
+   > ncn-m001# kubectl get cm config -n metallb-system -o yaml | head -12
+   > apiVersion: v1
+   > data:
+   > config: |
+   >    peers:
+   >    - peer-address: 10.252.0.2
+   >       peer-asn: 65533
+   >       my-asn: 65533
+   >    - peer-address: 10.252.0.3
+   >      peer-asn: 65533
+   >      my-asn: 65533
+   >   address-pools:
+   >    - name: customer-access
+   > ```
+   > In the above output `10.252.0.2` and `10.252.0.3` are the switches running
    > BGP. Set `SWITCH_IPS` as follows:
    >
    > ```bash
@@ -365,6 +385,23 @@ script `/opt/cray/csm/scripts/networking/BGP/Aruba_BGP_Peers.py`.
 3. Remove the static routes configured in
    [LAYER3-CONFIG](../../411-MGMT-NET-LAYER3-CONFIG.md). Log into the switches
    running BGP (Spines/Aggs) and remove them:
+
+   > **`Note`**: To view the current static routes setup on the switch run the following
+   > ```bash
+   > sw-spine01# show ip route static
+   > 
+   > Displaying ipv4 routes selected for forwarding
+   > 
+   > '[x/y]' denotes [distance/metric]
+   > 
+   > 0.0.0.0/0, vrf default
+   > 	via  10.103.15.161,  [1/0],  static
+   > 10.92.100.60/32, vrf default
+   > 	via  10.252.1.10,  [1/0],  static
+   > 10.94.100.60/32, vrf default
+   > 	via  10.252.1.10,  [1/0],  static
+   > ```
+   > In the above example the static routes that need to be removed point to `10.252.1.10`
 
    ```bash
    sw-spine-001(config)# no ip route 10.92.100.60/32 10.252.1.10
