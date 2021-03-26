@@ -16,6 +16,8 @@ Copyright 2021 Hewlett Packard Enterprise Development LP
 - [Configure LAG for CMMs](#config-cmm-lag)
   - [Switch VCS Configuration Repositories to Private](#switch-vcs-configuration-repositories-to-private)
   - [Configure Prometheus Alert Notifications to Detect Postgres Replication Lag](#configure-prometheus-alert-notifications-to-detect-postgres-replication-lag)
+  - [Update BGP Configuration](#update-bgp-configuration)
+  - [Configure LAG for CMMs](#configure-lag-for-cmms)
 - [Run Validation Checks](#run-validation-checks)
 
 
@@ -67,7 +69,7 @@ comparison operators may be used:
 This guide assumes the release distribution for the new version of CSM has been
 extracted at `$CSM_DISTDIR`.
 
-> **`NOTE`**: Use `--no-same-owner` and `--no-same-permissions` options to
+> **`NOTE:`** Use `--no-same-owner` and `--no-same-permissions` options to
 > `tar` when extracting a CSM release distribution as `root` to ensure the
 > extracted files are owned by `root` and have permissions based on the current
 > `umask` value.
@@ -84,7 +86,7 @@ Set `CSM_SYSTEM_VERSION` to the latest version listed in the catalog:
 ncn-m001# CSM_SYSTEM_VERSION="$(kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' | yq r -j - | jq -r 'keys[]' | sed '/-/!{s/$/_/}' | sort -Vr | head -n 1 | sed 's/_$//')"
 ```
 
-> **`NOTE`**: List all CSM versions in the product catalog using:
+> **`NOTE:`** List all CSM versions in the product catalog using:
 >
 > ```bash
 > ncn-m001# kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' | yq r -j - | jq -r 'keys[]' | sed '/-/!{s/$/_/}' | sort -V | sed 's/_$//'
@@ -120,7 +122,7 @@ in the `site-init` secret in the `loftsman` namespace must be updated.
 3. Review, add, and commit `customizations.yaml` to the local `site-init`
    repository as appropriate.
 
-   > **`NOTE`**: If `site-init` was cloned from a remote repository in step 1,
+   > **`NOTE:`** If `site-init` was cloned from a remote repository in step 1,
    > there may not be any differences and hence nothing to commit. This is
    > okay. If there are differences between what's in the repository and what
    > was stored in the `site-init`, then it suggest settings were improperly
@@ -210,14 +212,16 @@ Run `upgrade.sh` to deploy upgraded CSM applications and services:
 ncn-m001# ./upgrade.sh
 ```
 
-<a name="upgrade-ncn"></a>
-## Upgrade NCN RPMs
 
-Some CSM upgrades will require a new RPM.  To get updated RPMs.
-Run
+<a name="upgrade-ncn-packages"></a>
+## Upgrade NCN Packages
+
+Upgrade packages on NCNs:
+
 ```bash
-ncn-w001:~ # for node in $(kubectl get nodes| awk '{print $1}'|grep -v NAME);do pdsh -w $node "zypper ar -fG https://packages.local/repository/csm-sle-15sp2 csm-sle-15sp2;zypper in -y hpe-csm-scripts";done
+ncn-m001# pdsh -w $(./lib/list-ncns.sh | paste -sd,) "zypper ar -fG https://packages.local/repository/csm-sle-15sp2/ csm-sle-15sp2 && zypper in -y hpe-csm-scripts"
 ```
+
 
 <a name="post-upgrade-actions"></a>
 ## Post-Upgrade Actions
@@ -303,36 +307,87 @@ instructions show how to setup Link Aggregation from the CMM Switch to the Aruba
 CDU switches.  This change will require physical access to the CEC and remote access
 to the CDU Switches.
 
+<a name="update-bgp-configuration"></a>
+### Update BGP Configuration
+
+> **`IMPORTANT:`** This procedure applies to systems with Aruba management
+> switches.
+
+If your Shasta system is using Aruba management switches run the updated BGP
+script `/opt/cray/csm/scripts/networking/BGP/Aruba_BGP_Peers.py`.
+
+1. Set the `SWITCH_IPS` variable to an array containing the IP addresses of the switches.
+
+   > **`EXAMPLE:`** Suppose `10.252.0.2` and `10.252.0.3` are the switches running
+   > BGP. Set `SWITCH_IPS` as follows:
+   >
+   > ```bash
+   > ncn-m001# SWITCH_IPS=( 10.252.0.2 10.252.0.3 )
+   > ```
+
+2. Run:
+
+   ```bash
+   ncn-m001# /opt/cray/csm/scripts/networking/BGP/Aruba_BGP_Peers.py "${SWITCH_IPS[@]}"
+   ```
+
+3. Remove the static routes configured in
+   [LAYER3-CONFIG](../../411-MGMT-NET-LAYER3-CONFIG.md). Log into the switches
+   running BGP (Spines/Aggs) and remove them:
+
+   ```bash
+   sw-spine-001(config)# no ip route 10.92.100.60/32 10.252.1.10
+   sw-spine-001(config)# no ip route 10.94.100.60/32 10.252.1.10
+   ```
+
+4. Verify the [BGP configuration](../../400-SWITCH-BGP-NEIGHBORS.md).
+
+
+<a name="configure-lag-for-cmms"></a>
+### Configure LAG for CMMs
+
+> **`IMPORTANT:`** This procedure applies to systems with Aruba CDU switches.
+
+If your Shasta system is using Aruba CDU switches follow the steps labeled "CMM
+Port Configuration" located at the bottom of
+[MGMT-PORT-CONFIG](../../405-MGMT-NET-PORT-CONFIG.md). The instructions show
+how to setup Link Aggregation from the CMM Switch to the Aruba CDU switches.
+This change will require physical access to the CEC and remote access to the
+CDU Switches.
+
+
 <a name="run-validation-checks"></a>
 ## Run Validation Checks
 
-> **`IMPORTANT`** Wait at least 15 minutes after
+> **`IMPORTANT:`** Wait at least 15 minutes after
 > [`upgrade.sh`](#deploy-manifests) completes to let the various Kubernetes
 > resources get initialized and started.
 
 Run the [CSM validation checks](../../008-CSM-VALIDATION.md).
 
-**Note**: The following HMS functional tests may fail due to locked components in HSM:
-
-1. test_bss_bootscript_ncn-functional_remote-functional.tavern.yaml
-2. test_smd_components_ncn-functional_remote-functional.tavern.yaml
-
-```bash
-        Traceback (most recent call last):
-          File "/usr/lib/python3.8/site-packages/tavern/schemas/files.py", line 106, in verify_generic
-            verifier.validate()
-          File "/usr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
-            raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
-        pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
-         - Key 'Locked' was not defined. Path: '/Components/0'.
-         - Key 'Locked' was not defined. Path: '/Components/5'.
-         - Key 'Locked' was not defined. Path: '/Components/6'.
-         - Key 'Locked' was not defined. Path: '/Components/7'.
-         - Key 'Locked' was not defined. Path: '/Components/8'.
-         - Key 'Locked' was not defined. Path: '/Components/9'.
-         - Key 'Locked' was not defined. Path: '/Components/10'.
-         - Key 'Locked' was not defined. Path: '/Components/11'.
-         - Key 'Locked' was not defined. Path: '/Components/12'.: Path: '/'>
-```
-
-Failures of these tests due to locked components as shown above can be safely ignored.
+> **`CAUTION:`** The following HMS functional tests may fail due to locked
+> components in HSM:
+>
+> 1. `test_bss_bootscript_ncn-functional_remote-functional.tavern.yaml`
+> 2. `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
+>
+> ```bash
+>         Traceback (most recent call last):
+>           File "/usr/lib/python3.8/site-packages/tavern/schemas/files.py", line 106, in verify_generic
+>             verifier.validate()
+>           File "/usr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
+>             raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
+>         pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
+>          - Key 'Locked' was not defined. Path: '/Components/0'.
+>          - Key 'Locked' was not defined. Path: '/Components/5'.
+>          - Key 'Locked' was not defined. Path: '/Components/6'.
+>          - Key 'Locked' was not defined. Path: '/Components/7'.
+>          - Key 'Locked' was not defined. Path: '/Components/8'.
+>          - Key 'Locked' was not defined. Path: '/Components/9'.
+>          - Key 'Locked' was not defined. Path: '/Components/10'.
+>          - Key 'Locked' was not defined. Path: '/Components/11'.
+>          - Key 'Locked' was not defined. Path: '/Components/12'.: Path: '/'>
+> ```
+>
+> Failures of these tests due to locked components as shown above can be safely
+> ignored.
