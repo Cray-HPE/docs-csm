@@ -11,14 +11,12 @@ Copyright 2021 Hewlett Packard Enterprise Development LP
 - [Setup Nexus](#setup-nexus)
 - [Deploy Manifests](#deploy-manifests)
 - [Upgrade NCN RPMs](#upgrade-ncn-rpms)
-- [Post-Upgrade Actions](#post-upgrade-actions)
-- [Update BGP Configuration](#update-bgp-configuration)
-- [Configure LAG for CMMs](#config-cmm-lag)
-  - [Switch VCS Configuration Repositories to Private](#switch-vcs-configuration-repositories-to-private)
-  - [Configure Prometheus Alert Notifications to Detect Postgres Replication Lag](#configure-prometheus-alert-notifications-to-detect-postgres-replication-lag)
-  - [Update BGP Configuration](#update-bgp-configuration)
-  - [Configure LAG for CMMs](#configure-lag-for-cmms)
+- [Switch VCS Configuration Repositories to Private](#switch-vcs-configuration-repositories-to-private)
+- [Configure Prometheus Alert Notifications to Detect Postgres Replication Lag](#configure-prometheus-alert-notifications-to-detect-postgres-replication-lag)
 - [Run Validation Checks](#run-validation-checks)
+- [Update BGP Configuration](#update-bgp-configuration)
+- [Configure LAG for CMMs](#configure-lag-for-cmms)
+- [Upgrade Firmware on Chassis Controllers](#upgrade-firmware-on-chassis-controllers)
 
 
 <a name="about"></a>
@@ -223,12 +221,8 @@ ncn-m001# pdsh -w $(./lib/list-ncns.sh | paste -sd,) "zypper ar -fG https://pack
 ```
 
 
-<a name="post-upgrade-actions"></a>
-## Post-Upgrade Actions
-
-
 <a name="switch-vcs-configuration-repositories-to-private"></a>
-### Switch VCS Configuration Repositories to Private
+## Switch VCS Configuration Repositories to Private
 
 Previous installs of CSM and other Cray products created git repositories in
 the VCS service which were set to be publicly visible. To enhance security,
@@ -245,7 +239,7 @@ credentials. CSM services that clone repositories have been upgraded to use the
 
 
 <a name="configure-prometheus-alert-notifications-to-detect-postgres-replication-lag"></a>
-### Configure Prometheus Alert Notifications to Detect Postgres Replication Lag
+## Configure Prometheus Alert Notifications to Detect Postgres Replication Lag
 
 Three new Prometheus alert definitions have been added in CSM 0.9.1 for
 monitoring replication across Postgres instances, which are used by some system
@@ -307,55 +301,6 @@ instructions show how to setup Link Aggregation from the CMM Switch to the Aruba
 CDU switches.  This change will require physical access to the CEC and remote access
 to the CDU Switches.
 
-<a name="update-bgp-configuration"></a>
-### Update BGP Configuration
-
-> **`IMPORTANT:`** This procedure applies to systems with Aruba management
-> switches.
-
-If your Shasta system is using Aruba management switches run the updated BGP
-script `/opt/cray/csm/scripts/networking/BGP/Aruba_BGP_Peers.py`.
-
-1. Set the `SWITCH_IPS` variable to an array containing the IP addresses of the switches.
-
-   > **`EXAMPLE:`** Suppose `10.252.0.2` and `10.252.0.3` are the switches running
-   > BGP. Set `SWITCH_IPS` as follows:
-   >
-   > ```bash
-   > ncn-m001# SWITCH_IPS=( 10.252.0.2 10.252.0.3 )
-   > ```
-
-2. Run:
-
-   ```bash
-   ncn-m001# /opt/cray/csm/scripts/networking/BGP/Aruba_BGP_Peers.py "${SWITCH_IPS[@]}"
-   ```
-
-3. Remove the static routes configured in
-   [LAYER3-CONFIG](../../411-MGMT-NET-LAYER3-CONFIG.md). Log into the switches
-   running BGP (Spines/Aggs) and remove them:
-
-   ```bash
-   sw-spine-001(config)# no ip route 10.92.100.60/32 10.252.1.10
-   sw-spine-001(config)# no ip route 10.94.100.60/32 10.252.1.10
-   ```
-
-4. Verify the [BGP configuration](../../400-SWITCH-BGP-NEIGHBORS.md).
-
-
-<a name="configure-lag-for-cmms"></a>
-### Configure LAG for CMMs
-
-> **`IMPORTANT:`** This procedure applies to systems with Aruba CDU switches.
-
-If your Shasta system is using Aruba CDU switches follow the steps labeled "CMM
-Port Configuration" located at the bottom of
-[MGMT-PORT-CONFIG](../../405-MGMT-NET-PORT-CONFIG.md). The instructions show
-how to setup Link Aggregation from the CMM Switch to the Aruba CDU switches.
-This change will require physical access to the CEC and remote access to the
-CDU Switches.
-
-
 <a name="run-validation-checks"></a>
 ## Run Validation Checks
 
@@ -391,3 +336,147 @@ Run the [CSM validation checks](../../008-CSM-VALIDATION.md).
 >
 > Failures of these tests due to locked components as shown above can be safely
 > ignored.
+
+
+<a name="update-bgp-configuration"></a>
+## Update BGP Configuration
+
+> **`IMPORTANT:`** This procedure applies to systems with Aruba management
+> switches.
+
+If your Shasta system is using Aruba management switches run the updated BGP
+script `/opt/cray/csm/scripts/networking/BGP/Aruba_BGP_Peers.py`.
+
+1. Set the `SWITCH_IPS` variable to an array containing the IP addresses of the switches.
+
+   > **`EXAMPLE:`** Suppose `10.252.0.2` and `10.252.0.3` are the switches running
+   > BGP. Set `SWITCH_IPS` as follows:
+   >
+   > ```bash
+   > ncn-m001# SWITCH_IPS=( 10.252.0.2 10.252.0.3 )
+   > ```
+
+2. Run:
+
+   ```bash
+   ncn-m001# /opt/cray/csm/scripts/networking/BGP/Aruba_BGP_Peers.py "${SWITCH_IPS[@]}"
+   ```
+
+3. Remove the static routes configured in
+   [LAYER3-CONFIG](../../411-MGMT-NET-LAYER3-CONFIG.md). Log into the switches
+   running BGP (Spines/Aggs) and remove them:
+
+   ```bash
+   sw-spine-001(config)# no ip route 10.92.100.60/32 10.252.1.10
+   sw-spine-001(config)# no ip route 10.94.100.60/32 10.252.1.10
+   ```
+
+4. Verify the [BGP configuration](../../400-SWITCH-BGP-NEIGHBORS.md).
+
+
+<a name="configure-lag-for-cmms"></a>
+## Configure LAG for CMMs
+
+> **`IMPORTANT:`** This procedure applies to systems with Aruba CDU switches.
+
+If your Shasta system is using Aruba CDU switches follow the steps labeled "CMM
+Port Configuration" located at the bottom of
+[MGMT-PORT-CONFIG](../../405-MGMT-NET-PORT-CONFIG.md). The instructions show
+how to setup Link Aggregation from the CMM Switch to the Aruba CDU switches.
+This change will require physical access to the CEC and remote access to the
+CDU Switches.
+
+
+<a name="upgrade-firmware-on-chassis-controllers"></a>
+## Upgrade Firmware on Chassis Controllers
+
+Upgrade firmware on the chassis controllers:
+
+1. Check to see if firmware is loaded into FAS:
+
+   ```bash
+   ncn-m001# cray fas images list | grep cc.1.4.19
+   ```
+
+   If firmware not installed, rerun the FAS loader:
+
+   ```bash
+   ncn-w001# kubectl -n services get jobs | grep fas-loader
+   cray-fas-loader-1  1/1  8m57s  7d15h
+   ```
+
+   > **`NOTE:`** In the above example, the returned job name is
+   > `cray-fas-loader-1`, hence that is the job to rerun.
+
+
+   ```bash
+   ncn-m001# kubectl -n services get job cray-fas-loader-1 -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels."controller-uid")' | kubectl replace --force -f -
+   ```
+
+   When completed, verify the firmware was loaded into FAS:
+
+   ```bash
+   ncn-m001# cray fas images list | grep cc.1.4.19
+   ```
+
+2. Update the CMM firmware:
+
+   > **`IMPORTANT:`** Before updating a CMM, make sure all slot and rectifier
+   > power is off.
+
+   The hms-discovery job must also be stopped before updates and restarted
+   after updates are complete.
+
+   Stop hms-discovery job: 
+
+   ```bash
+   ncn-m001# kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":true}}'
+   ```
+
+   Start hms-discovery job:
+
+   ```bash
+   ncn-m001# kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":false}}'
+   ```
+
+   Create an upgrade json file `ccBMCupdate.json`:
+
+   ```json
+   {
+     "inventoryHardwareFilter": {
+       "manufacturer": "cray"
+     },
+     "stateComponentFilter": {
+       "deviceTypes": [
+         "chassisBMC"
+       ]
+     },
+     "targetFilter": {
+       "targets": [
+         "BMC"
+       ]
+     },
+     "command": {
+       "version": "latest",
+       "tag": "default",
+       "overrideDryrun": false,
+       "restoreNotPossibleOverride": true,
+       "timeLimit": 1000,
+       "description": "Dryrun upgrade of Cray Chassis Controllers"
+     }
+   }
+   ```
+
+   Using the above json file run a dry-run with FAS:
+
+   ```bash
+   ncn-w001# cray fas actions create ccBMCupdate.json
+   ```
+
+   Check the output from the dry-run with the command: `cray fas actions
+   describe {action-id}` (where `action-id` was the `actionId` returned for the
+   `fas actions create` command)
+
+   If dry-run succeeded with updates to version 1.4.19, change
+   `"overrideDryrun"` in the above json file to `true` and update the
+   description. Rerun FAS with the updated json file to do the actual updates.
