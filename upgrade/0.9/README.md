@@ -365,24 +365,24 @@ This release contains an update to the Rosetta Switch firmware.
 Steps:
 1. Check to see if firmware is loaded into FAS:
 >
-> ```
-ncn-w001# cray fas images list | grep mtn-ccnc-firmware-1.4.19
-```
+> ```bash
+> ncn-w001# cray fas images list | grep mtn-ccnc-firmware-1.4.19
+>  ```
 > If firmware not installed, rerun the FAS loader:
+>> ```bash
+>> ncn-w001# kubectl -n services get jobs | grep fas-loader
+>> cray-fas-loader-1  1/1  8m57s  7d15h
 >> ```
-ncn-w001# kubectl -n services get jobs | grep fas-loader
-cray-fas-loader-1  1/1  8m57s  7d15h
-```
 >> Note the returned job name in the previous command, which is cray-fas-loader-1 in this example. Run the following command:
+>> ```bash
+>> ncn-w001# kubectl -n services get job cray-fas-loader-1 -o json | jq 'del(.spec.selector)' \| jq del(.spec.template.metadata.labels."controller-uid")' | kubectl replace --force -f
 >> ```
-ncn-w001# kubectl -n services get job cray-fas-loader-1 -o json | jq 'del(.spec.selector)' \| jq del(.spec.template.metadata.labels."controller-uid")' | kubectl replace --force -f
-```
 >> Once the loader job has completed, verify the firmware was loaded into FAS
 
 2. Update the switch firmware
-
+>
 > **IMPORTANT**: Before updating a CMM, make sure all slot and rectifier power is off.
-The hms-discovery job must also be stopped before updates and restarted after updates are complete:
+> The hms-discovery job must also be stopped before updates and restarted after updates are complete:
 >
 > Stop hms-discovery job: ```kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":true}}'```
 >
@@ -391,34 +391,34 @@ The hms-discovery job must also be stopped before updates and restarted after up
 > Create an upgrade json file `ccBMCupdate.json`:
 >
 > ```json
-{
-"inventoryHardwareFilter": {
-    "manufacturer": "cray"
-    },
-"stateComponentFilter": {
-    "deviceTypes": [
-      "chassisBMC"
-    ]
-},
-"targetFilter": {
-    "targets": [
-      "BMC"
-    ]
-  },
-"command": {
-    "version": "latest",
-    "tag": "default",
-    "overrideDryrun": false,
-    "restoreNotPossibleOverride": true,
-    "timeLimit": 1000,
-    "description": "Dryrun upgrade of Cray Chassis Controllers"
-  }
-}
-```
-> Using the above json file run a dry-run with FAS
+> {
+> "inventoryHardwareFilter": {
+>    "manufacturer": "cray"
+>     },
+> "stateComponentFilter": {
+>     "deviceTypes": [
+>      "chassisBMC"
+>     ]
+> },
+> "targetFilter": {
+>     "targets": [
+>       "BMC"
+>     ]
+>   },
+> "command": {
+>     "version": "latest",
+>     "tag": "default",
+>     "overrideDryrun": false,
+>     "restoreNotPossibleOverride": true,
+>     "timeLimit": 1000,
+>     "description": "Dryrun upgrade of Cray Chassis Controllers"
+>   }
+> }
 > ```
-ncn-w001# cray fas actions create ccBMCupdate.json
-```
+> Using the above json file run a dry-run with FAS
+> ```bash
+> ncn-w001# cray fas actions create ccBMCupdate.json
+> ```
 > Check the output from the dry-run with the command: `cray fas actions describe {action-id}` (where action-id was the actionId returned for the fas actions create command)
 >
 > If dry-run succeeded with updates to version 1.4.19, change `"overrideDryrun"` in the above json file to `true` and update the description.
