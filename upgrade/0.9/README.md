@@ -366,7 +366,7 @@ Steps:
 1. Check to see if firmware is loaded into FAS:
 >
 > ```bash
-> ncn-w001# cray fas images list | grep mtn-ccnc-firmware-1.4.19
+> ncn-w001# cray fas images list | grep cc.1.4.19
 >  ```
 > If firmware not installed, rerun the FAS loader:
 >> ```bash
