@@ -375,7 +375,7 @@ Steps:
 >> ```
 >> Note the returned job name in the previous command, which is cray-fas-loader-1 in this example. Run the following command:
 >> ```bash
->> ncn-w001# kubectl -n services get job cray-fas-loader-1 -o json | jq 'del(.spec.selector)' \| jq del(.spec.template.metadata.labels."controller-uid")' | kubectl replace --force -f
+>> ncn-w001# kubectl -n services get job cray-fas-loader-1 -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels."controller-uid")' | kubectl replace --force -f -
 >> ```
 >> Once the loader job has completed, verify the firmware was loaded into FAS
 
