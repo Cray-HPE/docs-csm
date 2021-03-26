@@ -379,7 +379,7 @@ ncn-w001# kubectl -n services get job cray-fas-loader-1 -o json | jq 'del(.spec.
 ```
 Once the loader job has completed, verify the firmware was loaded into FAS
 
-2. Update the switch firmwareVersion
+2. Update the switch firmware
 
 > **IMPORTANT**: Before updating a CMM, make sure all slot and rectifier power is off.
 The hms-discovery job must also be stopped before updates and restarted after updates are complete:
