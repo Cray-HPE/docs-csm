@@ -379,7 +379,7 @@ Steps:
 >> ```
 >> Once the loader job has completed, verify the firmware was loaded into FAS
 
-2. Update the switch firmware
+2. Update the CMM firmware
 >
 > **IMPORTANT**: Before updating a CMM, make sure all slot and rectifier power is off.
 > The hms-discovery job must also be stopped before updates and restarted after updates are complete:
