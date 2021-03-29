@@ -11,7 +11,8 @@ This guide shows the process for generating the `hmn_connections.json` from the 
 * SHCD Excel file for your system
 * Podman or Docker running
 
-> Note: Docker can be used instead of Podman if using a system with Shasta v1.3 to prepare this file. Podman is available on the Shasta v1.4 LiveCD.
+> Note: Docker can be used instead of Podman if the system being used to prepare this file does not have Podman available. 
+> Podman is available on the CSM LiveCD, and is installed onto a NCN running Shasta v1.3 during the procedure to create the [CSM USB LiveCD](003-CSM-USB-LIVECD.md).
 
 ### Procedure
 1. __If using Docker__: Make sure that the docker service is running:

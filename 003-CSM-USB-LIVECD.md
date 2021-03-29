@@ -7,6 +7,7 @@ There are 5 overall steps that provide a bootable USB with SSH enabled, capable 
 * [Download and Expand the CSM Release](#download-and-expand-the-csm-release)
 * [Create the Bootable Media](#create-the-bootable-media)
 * [Configuration Payload](#configuration-payload)
+   * [Before Configuration Payload Workarounds](#before-configuration-payload-workarounds)
    * [Generate Installation Files](#generate-installation-files)
    * [CSI Workarounds](#csi-workarounds)
    * [SHASTA-CFG](#shasta-cfg)
@@ -200,9 +201,25 @@ The USB stick is now bootable and contains our artifacts. This may be useful for
 
 The SHASTA-CFG structure and other configuration files will be prepared, then csi will generate system-unique configuration payload used for the rest of the CSM installation on the USB stick.
 
+* [Before Configuration Payload Workarounds](#before-configuration-payload-workarounds)
 * [Generate Installation Files](#generate-installation-files)
 * [CSI Workarounds](#csi-workarounds)
 * [SHASTA-CFG](#SHASTA-CFG)
+
+<a name="before-configuration-payload-workarounds"></a>
+### Before Configuration Payload Workarounds
+
+Check for workarounds in the `/opt/cray/csm/workarounds/before-configuration-payload` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
+
+  ```bash
+  # Example
+  linux# ls /opt/cray/csm/workarounds/before-configuration-payload
+  ```
+
+  If there is a workaround here, the output looks similar to the following:
+  ```
+  CASMINST-999
+  ```
 
 <a name="generate-installation-files"></a>
 ### Generate Installation Files
