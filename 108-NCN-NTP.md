@@ -108,3 +108,91 @@ chronyc burst 4/4
 # jump the clock manually
 chronyc makestep
 ```
+
+# Customizing NTP
+
+## Setting A Local Timezone
+
+**This procedure needs to be completed _before_ the NCNs are deployed**
+
+## Configure NTP on PIT to your local timezone
+
+Shasta ships with UTC as the default time zone.  To change this, you'll need to set an environment variable, as well as `chroot` into the node images and change some files there.  You can find a list of timezones to use in the commands below by running `timedatectl list-timezones`.
+
+Run the following commands, replacing them with your timezone as needed.
+
+1. `echo TZ=America/Chicago >> /etc/environment`
+2. `sed -i 's/^timedatectl set-timezone UTC/timedatectl set-timezone America\/Chicago/' /root/bin/configure-ntp.sh`
+3. `sed -i 's/--utc/--localtime/' /root/bin/configure-ntp.sh`
+4. `/root/bin/configure-ntp.sh`
+
+sed -i 's/^timedatectl set-timezone UTC/timedatectl set-timezone America\/Chicago/' /srv/cray/scripts/metal/set-ntp-config.sh
+You should see the output in your local timezone.  You can verify as well by running `timedatectl` and `hwclock --verbose`.
+
+```
+pit:~ # /root/bin/configure-ntp.sh
+CURRENT TIME SETTINGS
+rtc: 2021-03-26 11:34:45.873331+00:00
+sys: 2021-03-26 11:34:46.015647+0000
+200 OK
+200 OK
+NEW TIME SETTINGS
+rtc: 2021-03-26 06:35:16.576477-05:00
+sys: 2021-03-26 06:35:17.004587-0500
+pit:~ # timedatectl
+      Local time: Fri 2021-03-26 06:35:58 CDT
+  Universal time: Fri 2021-03-26 11:35:58 UTC
+        RTC time: Fri 2021-03-26 11:35:58
+       Time zone: America/Chicago (CDT, -0500)
+ Network time on: no
+NTP synchronized: no
+ RTC in local TZ: no
+ncn-m001-pit:~ # hwclock --verbose
+redbull-ncn-m001-pit:~ # hwclock --verbose
+hwclock from util-linux 2.33.1
+System Time: 1616758841.688220
+Trying to open: /dev/rtc0
+Using the rtc interface to the clock.
+Last drift adjustment done at 1616758836 seconds after 1969
+Last calibration done at 1616758836 seconds after 1969
+Hardware clock is on local time
+Assuming hardware clock is kept in local time.
+Waiting for clock tick...
+...got clock tick
+Time read from Hardware Clock: 2021/03/26 06:40:42
+Hw clock time : 2021/03/26 06:40:42 = 1616758842 seconds since 1969
+Time since last adjustment is 6 seconds
+Calculated Hardware Clock drift is 0.000000 seconds
+2021-03-26 06:40:41.685618-05:00
+```
+
+If the time if off and not accurate to your timezone, you will need to _manually_ set the date and then run the NTP script again.
+
+```bash
+# Set as close as possible to the real time
+timedatectl set-time "2021-03-26 00:00:00"
+/root/bin/configure-ntp.sh
+```
+
+The PIT is now configured to your local timezone.
+
+## Configure NCN Images To Use Your Local Timezone
+
+You need to adjust the node images so that they also boot in the local timezone.  This is accomplished by `chroot`ing into the unsquashed images, making some modifications, and then squashing it back up and moving the new images into place.
+
+1. `cd /var/www/ephemeral/data/ceph/`
+2. `unsquashfs storage-ceph*.squashfs`
+3. `chroot ./squashfs-root`
+4. `echo TZ=America/Chicago >> /etc/environment`
+5. `sed -i 's/^timedatectl set-timezone UTC/timedatectl set-timezone America\/Chicago/' /srv/cray/scripts/metal/set-ntp-config.sh`
+6. `sed -i 's/--utc/--localtime/' /srv/cray/scripts/metal/set-ntp-config.sh`
+7. `/srv/cray/scripts/common/create-kis-artifacts.sh`
+8. `exit`
+9. `mkdir /var/www/ephemeral/data/ceph/orig`
+10. `mv *.kernel *.xz *.squashfs /var/www/ephemeral/data/ceph/orig/`
+11. `cp squashfs-root/squashfs/* .`
+12. `chmod 644 /var/www/ephemeral/data/ceph/initrd.img.xz`
+12. `umount /var/www/ephemeral/data/ceph/squashfs-root/mnt/squashfs`
+13. `set-sqfs-links.sh`
+
+**Repeat these steps for the k8s images, substituting in the correct paths where appropriate.**
