@@ -439,7 +439,8 @@ may be referenced when making a similar site modification to v1.3.
     There might be organizational information, such as the names of BOS session templates or how they specify the nodes to be booted using a list of groups or list of nodes, but there might also be special kernel parameters added by the site.
 
     ```bash
-    command TBD
+    ncn-w001# cray bos v1 sessiontemplate list --format \
+    json > bos.sessiontemplate.list.json
     ```
 
 24. Save a copy of any IMS images which might have been directly customized.
@@ -784,14 +785,32 @@ may be referenced when making a similar site modification to v1.3.
          FW             16.28.4000     N/A           
     ```
 
-31. Is there any information to export from SDU data or plugins before it is wiped out by the v1.4 install?
-    CASMINST-1268
+31. When reinstalling a v1.3 system with v1.4 software, preserving the SDU configuration, plug-ins, and locally
+stored dump files may be desired. Run the following command and store the resulting tar file.
+   ```bash
+   ncn-w001# tar czvf sdu-shastav1.3.tar.gz /opt/cray/sdu \
+   /opt/cray/sdu-shasta-plugins/default \
+   /etc/opt/cray/sdu /var/opt/cray/sdu
+   ```
 
-32. Is there any information to export from SMF or other log sources before it is wiped out by the v1.4 install?
-    CASMINST-1269
+32. SMA services are stateful and stateless. For stateful SMA services, the data is saved in PVs. The data
+comprises of configuration attributes, telemetry streams, logging info, etc. Upon an upgrade, the data in all
+SMA PVs must be saved. The enumeration of PVs for SMA services is displayed by running the following
+command.
+   ```bash
+   ncn-w001# kubectl -n sma get pvc
+   ```
 
-33. Is there any information to export from LDMS before it is wiped out by the v1.4 install?
-    CASMINST-1270
+33. LDMS, an SMA service, saves configuration data on the base OS for CNs and NCNs. The base OS
+directory /etc/sysconfig/ldms.d and all sub-directories under this path must be preserved, both on CNs
+and NCNs. Additionally, NCN configuration must be preserved in the locations as follows.
+
+   * Samplers: /etc/sysconfig/ldms.d dir and the entire tree must be preserved.
+   * Aggregator: The following PVs along with the data, must be preserved:
+      * sma/ldms-sms-aggr-pvc
+      * sma/ldms-sms-smpl-pvc
+      * sma/ldms-compute-aggr-pvc
+      * sma/ldms-compute-smpl-pvc
 
 34. The checks have all completed.  
 
