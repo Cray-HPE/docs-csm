@@ -92,31 +92,38 @@ The following two guides will assist with (re)creating `ncn_metadata.csv` (an ex
 1. [Collecting BMC MAC Addresses](301-NCN-METADATA-BMC.md)
 2. [Collecting NCN MAC Addresses](302-NCN-METADATA-BONDX.md)
 
-> use case: single PCIe card (1 card with 1 or 2 ports):
-```
-Xname,Role,Subrole,BMC MAC,Bootstrap MAC,Bond0 MAC0
-x3000c0s9b0n0,Management,Storage,94:40:c9:37:77:26,14:02:ec:d9:76:88,14:02:ec:d9:76:89
-x3000c0s8b0n0,Management,Storage,94:40:c9:37:87:5a,14:02:ec:d9:7b:c8,14:02:ec:d9:7b:c9
-x3000c0s7b0n0,Management,Storage,94:40:c9:37:0a:2a,14:02:ec:d9:7c:88,14:02:ec:d9:7c:89
-x3000c0s6b0n0,Management,Worker,94:40:c9:37:77:b8,14:02:ec:da:bb:00,14:02:ec:da:bb:01
-x3000c0s5b0n0,Management,Worker,94:40:c9:35:03:06,14:02:ec:d9:76:b8,14:02:ec:d9:76:b9
-x3000c0s4b0n0,Management,Worker,94:40:c9:37:67:60,14:02:ec:d9:7c:40,14:02:ec:d9:7c:41
-x3000c0s3b0n0,Management,Master,94:40:c9:37:04:84,14:02:ec:d9:79:e8,14:02:ec:d9:79:e9
-x3000c0s2b0n0,Management,Master,94:40:c9:37:f9:b4,14:02:ec:da:b8:18,14:02:ec:da:b8:19
-x3000c0s1b0n0,Management,Master,00:00:00:00:00:00,14:02:ec:da:b5:18,14:02:ec:da:b5:d9
-```
-> use case: dual PCIe cards (2 cards with 2 ports each for 4 ports total):
+The following are sample rows from a `ncn_metadata.csv` file:
+* __Use case__: NCN with a single PCIe card (1 card with 2 ports):
+    > Notice how the MAC address for `Bond0 MAC0` and `Bond0 MAC1` are only off by 1, which indicates that 
+    > they are on the same 2 port card.
+    ```
+    Xname,Role,Subrole,BMC MAC,Bootstrap MAC,Bond0 MAC0,Bond0 MAC1
+    x3000c0s6b0n0,Management,Worker,94:40:c9:37:77:b8,14:02:ec:da:bb:00,14:02:ec:da:bb:00,14:02:ec:da:bb:01
+    ```
+* __Use case__: NCN with a dual PCIe cards (2 cards with 2 ports each for 4 ports total):
+    > Notice how the MAC address for `Bond0 MAC0` and `Bond0 MAC1` have a difference greater than 1, which 
+    > indicates that they are on not on the same 2 port same card.
+    ```
+    Xname,Role,Subrole,BMC MAC,Bootstrap MAC,Bond0 MAC0,Bond0 MAC1
+    x3000c0s9b0n0,Management,Storage,94:40:c9:37:77:26,14:02:ec:d9:76:88,14:02:ec:d9:76:88,94:40:c9:5f:b6:92
+    ```
+
+Example `ncn_metadata.csv` file for a system that has been configured as follows:
+ * NCNs are configured to boot over the PCIe NICs
+ * Master and Storage nodes have two 2 port PCIe cards
+ * Worker nodes have one 2 port PCIe card
+> Since the NCN have been configured to boot over their PCIe NICs the values for the columns `Bootstrap MAC` and `Bond0 MAC0` have the same value.
 ```
 Xname,Role,Subrole,BMC MAC,Bootstrap MAC,Bond0 MAC0,Bond0 MAC1
-x3000c0s9b0n0,Management,Storage,94:40:c9:37:77:26,14:02:ec:d9:76:88,98:40:c9:d9:76:88
-x3000c0s8b0n0,Management,Storage,94:40:c9:37:87:5a,14:02:ec:d9:7b:c8,98:40:c9:d9:7b:c8
-x3000c0s7b0n0,Management,Storage,94:40:c9:37:0a:2a,14:02:ec:d9:7c:88,98:40:c9:d9:7c:88
-x3000c0s6b0n0,Management,Worker,94:40:c9:37:77:b8,14:02:ec:da:bb:00,98:40:c8:da:bb:00
-x3000c0s5b0n0,Management,Worker,94:40:c9:35:03:06,14:02:ec:d9:76:b8,98:40:c9:d9:76:b8
-x3000c0s4b0n0,Management,Worker,94:40:c9:37:67:60,14:02:ec:d9:7c:40,98:40:c9:d9:7c:40
-x3000c0s3b0n0,Management,Master,94:40:c9:37:04:84,14:02:ec:d9:79:e8,98:40:c9:d9:79:e8
-x3000c0s2b0n0,Management,Master,94:40:c9:37:f9:b4,14:02:ec:da:b8:18,98:40:c9:da:b8:18
-x3000c0s1b0n0,Management,Master,00:00:00:00:00:00,94:40:c9:5f:b5:de,94:40:c9:5f:b5:de
+x3000c0s9b0n0,Management,Storage,94:40:c9:37:77:26,14:02:ec:d9:76:88,14:02:ec:d9:76:88,94:40:c9:5f:b6:92
+x3000c0s8b0n0,Management,Storage,94:40:c9:37:87:5a,14:02:ec:d9:7b:c8,14:02:ec:d9:7b:c8,94:40:c9:5f:b6:5c
+x3000c0s7b0n0,Management,Storage,94:40:c9:37:0a:2a,14:02:ec:d9:7c:88,14:02:ec:d9:7c:88,94:40:c9:5f:9a:a8
+x3000c0s6b0n0,Management,Worker,94:40:c9:37:77:b8,14:02:ec:da:bb:00,14:02:ec:da:bb:00,14:02:ec:da:bb:01
+x3000c0s5b0n0,Management,Worker,94:40:c9:35:03:06,14:02:ec:d9:76:b8,14:02:ec:d9:76:b8,14:02:ec:d9:76:b9
+x3000c0s4b0n0,Management,Worker,94:40:c9:37:67:60,14:02:ec:d9:7c:40,14:02:ec:d9:7c:40,14:02:ec:d9:7c:41
+x3000c0s3b0n0,Management,Master,94:40:c9:37:04:84,14:02:ec:d9:79:e8,14:02:ec:d9:79:e8,94:40:c9:5f:b5:cc
+x3000c0s2b0n0,Management,Master,94:40:c9:37:f9:b4,14:02:ec:da:b8:18,14:02:ec:da:b8:18,94:40:c9:5f:a3:a8
+x3000c0s1b0n0,Management,Master,94:40:c9:37:87:32,14:02:ec:da:b9:98,14:02:ec:da:b9:98,14:02:ec:da:b9:99
 ```
 
 ### `switch_metadata.csv`
@@ -133,7 +140,33 @@ x3000c0w36,Leaf,Dell
 x3000c0h33s1,Spine,Mellanox
 x3000c0h33s2,Spine,Mellanox
 ```
+> use case: 2 CDU switches, 2 leaf switches, and 2 spines switches
+```
+pit# cat example_switch_metadata.csv
+Switch Xname,Type,Brand
+d0w1,CDU,Dell
+d0w2,CDU,Dell
+x3000c0w38,Leaf,Dell
+x3000c0w36,Leaf,Dell
+x3000c0h33s1,Spine,Mellanox
+x3000c0h34s1,Spine,Mellanox
+```
 
+> use case: 2 CDU Switches, 2 leaf switches, 4 aggregation switches, and 2 spine switches
+```
+pit# cat example_switch_metadata.csv
+Switch Xname,Type,Brand
+d0w1,CDU,Aruba
+d0w2,CDU,Aruba
+x3000c0w31,Leaf,Aruba
+x3000c0w32,Leaf,Aruba
+x3000c0h33s1,Aggregation,Aruba
+x3000c0h34s1,Aggregation,Aruba
+x3000c0h35s1,Aggregation,Aruba
+x3000c0h36s1,Aggregation,Aruba
+x3000c0h37s1,Spine,Aruba
+x3000c0h38s1,Spine,Aruba
+``` 
 
 ### `hmn_connections.json`
 
