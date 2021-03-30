@@ -9,6 +9,7 @@ into the CSM Kubernetes cluster).
 * [Deploy CSM Applications and Services](#deploy-csm-applications-and-services)
   * [Setup Nexus](#setup-nexus)
   * [Set NCNs to use Unbound](#set-ncns-to-use-unbound)
+  * [Apply After Sysmgmt Manifest Workarounds](#apply-after-sysmgmt-manifest-workarounds]
   * [Validate CSM Install](#validate-csm-install)
   * [Reboot from the LiveCD to NCN](#reboot-from-the-livecd-to-ncn)
 * [Add Compute Cabinet Routing to NCNs](#add-compute-cabinet-routing-to-ncns)
@@ -304,6 +305,20 @@ ncn-w003: nameserver 10.92.100.225
 > **`NOTE`** The script connects to ncn-m001 which will be the pit node, whose
 > password may be different from that of the other NCNs.
 
+<a name="apply-after-sysmgmt-manifest-workarounds"></a>
+### Apply After Sysmgmt Manifest Workarounds
+
+Check for workarounds in the `/opt/cray/csm/workarounds/after-sysmgmt-manifest` directory within the CSM tar. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
+
+```bash
+# Example
+pit# ls /opt/cray/csm/workarounds/after-sysmgmt-manifest
+```
+
+If there is a workaround here, the output looks similar to the following:
+```
+CASMCMS-6857  CASMNET-423
+```
 
 <a name="validate-csm-install"></a>
 ### Validate CSM Install
