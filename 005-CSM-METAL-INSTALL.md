@@ -388,7 +388,39 @@ The configuration workflow described here is intended to help understand the exp
     ncn-w003   Ready    <none>   5m58s   v1.18.6   10.252.1.12   <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
     ```
 
-The administrator needs to move onto the next sections, before considering continuing the installation:
+
+ <span style="color:red">IMPORTANT: If you are using Gigabyte hardware for your ncn please do the following<span>
+
+***Checking for unused drive on Utility Storage Nodes***
+
+1. log into each ncn-s node and check for unused drives
+
+   ```bash
+   ncn-s002:~ # ceph-volume inventory
+
+   ## the field "available" would be true if ceph sees the drive as empty and can be used
+   Device Path               Size         rotates available Model name
+   /dev/sda                  447.13 GB    False   False     SAMSUNG MZ7LH480 
+   /dev/sdb                  447.13 GB    False   False     SAMSUNG MZ7LH480
+   /dev/sdc                  3.49 TB      False   False     SAMSUNG MZ7LH3T8
+   /dev/sdd                  3.49 TB      False   False     SAMSUNG MZ7LH3T8
+   /dev/sde                  3.49 TB      False   False     SAMSUNG MZ7LH3T8
+   /dev/sdf                  3.49 TB      False   False     SAMSUNG MZ7LH3T8
+   /dev/sdg                  3.49 TB      False   False     SAMSUNG MZ7LH3T8
+   /dev/sdh                  3.49 TB      False   False     SAMSUNG MZ7LH3T8
+
+   # alternative method to just dump the paths
+   ceph-volume inventory --format json-pretty|jq -r '.[]|select(.available="true")|.path'
+   ```
+
+2. Add unused drives
+
+   ```bash
+   ceph-volume lvm create --data /dev/sd<drive to add>  --bluestore; done 
+   ```
+
+
+**The administrator needs to move onto the next sections, before considering continuing the installation:**
 
 - [NCN Post-Boot Workarounds](#apply-ncn-post-boot-workarounds)
 - [LiveCD Cluster Authentication](#livecd-cluster-authentication)
