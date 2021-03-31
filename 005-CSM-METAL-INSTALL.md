@@ -1,39 +1,36 @@
 # CSM Metal Install
 
-<div style="border: 1px dashed red">
-<span style="color:red">
-WARNING
-</span>
+> **`WARNING:`** Gigabyte NCNs running firmware version C20 can become unusable
+> when Shasta 1.4 is installed.  This is a result of a bug in the Gigabyte
+> firmware that ships with Shasta 1.4.  This bug has not been observed in
+> firmware version C17.
+>
+> A key symptom of this bug is that the NCN will not PXE boot and will instead
+> fall through to the boot menu, despite being configure to PXE boot.  This
+> behavior will persist until the failing node's CMOS is cleared.
+>
+> A procedure is available in
+> [254-NCN-FIRMWARE-GB.md](./254-NCN-FIRMWARE-GB.md).
 
-Gigabyte NCNs running firmware version C20 can become unusable when Shasta 1.4 is installed.  This is a result of a bug in the Gigabyte firmware that ships with Shasta 1.4.  This bug has not been observed in firmware version C17.
+This document specifies the procedures for deploying the non-compute nodes
+(NCNs).
 
-A key symptom of this bug is that the NCN will not PXE boot and will instead fall through to the boot menu, despite being configure to PXE boot.  This behavior will persist until the failing node's CMOS is cleared.
-
-[A procedure is available in this document.](./254-NCN-FIRMWARE-GB.md)
-</div>
-
-## Overview
-
-This page will go over deploying the non-compute nodes.
-
-- [CSM Metal Install](#csm-metal-install)
-  - [Overview](#overview)
-  - [Configure Bootstrap Registry to Proxy an Upstream Registry](#configure-bootstrap-registry-to-proxy-an-upstream-registry)
-  - [Tokens and IPMI Password](#tokens-and-ipmi-password)
-  - [Timing of Deployments](#timing-of-deployments)
-  - [NCN Deployment](#ncn-deployment)
-    - [Apply NCN Pre-Boot Workarounds](#apply-ncn-pre-boot-workarounds)
-    - [Ensure Time Is Accurate Before Deploying NCNs](#ensure-time-is-accurate-before-deploying-ncns)
-    - [Start Deployment](#start-deployment)
-      - [Workflow](#workflow)
-      - [Deploy](#deploy)
-    - [Apply NCN Post-Boot Workarounds](#apply-ncn-post-boot-workarounds)
-    - [LiveCD Cluster Authentication](#livecd-cluster-authentication)
-    - [BGP Routing](#bgp-routing)
-    - [Validation](#validation)
-    - [Additional Validation Tasks for Failed Installs](#additional-validation-tasks-for-failed-installs)
-  - [Configure & Trim UEFI Entries](005-CSM-METAL-INSTALL.md#configure-and-trim-uefi-entries)
-
+- [Configure Bootstrap Registry to Proxy an Upstream Registry](#configure-bootstrap-registry-to-proxy-an-upstream-registry)
+- [Tokens and IPMI Password](#tokens-and-ipmi-password)
+- [Timing of Deployments](#timing-of-deployments)
+- [NCN Deployment](#ncn-deployment)
+- [Apply NCN Pre-Boot Workarounds](#apply-ncn-pre-boot-workarounds)
+- [Ensure Time Is Accurate Before Deploying NCNs](#ensure-time-is-accurate-before-deploying-ncns)
+- [Start Deployment](#start-deployment)
+  - [Workflow](#workflow)
+  - [Deploy](#deploy)
+- [Check for Unused Drives on Utility Storage Nodes](#check-for-unused-drives-on-utility-storage-nodes)
+- [Apply NCN Post-Boot Workarounds](#apply-ncn-post-boot-workarounds)
+- [LiveCD Cluster Authentication](#livecd-cluster-authentication)
+- [BGP Routing](#bgp-routing)
+- [Validation](#validation)
+- [Additional Validation Tasks for Failed Installs](#additional-validation-tasks-for-failed-installs)
+- [Configure & Trim UEFI Entries](#configure-and-trim-uefi-entries)
 
 
 <a name="configure-bootstrap-registry-to-proxy-an-upstream-registry"></a>
@@ -116,10 +113,12 @@ pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t
 pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
 ```
 
+
 <a name="timing-of-deployments"></a>
 ## Timing of Deployments
 
 The timing of each set of boots varies based on hardware, some manufacturers will POST faster than others or vary based on BIOS setting. After powering a set of nodes on, an administrator can expect a healthy boot-session to take about 60 minutes depending on the number of storage and worker nodes.
+
 
 <a name="ncn-deployment"></a>
 ## NCN Deployment
@@ -127,6 +126,7 @@ The timing of each set of boots varies based on hardware, some manufacturers wil
 This section will walk an administrator through NCN deployment.
 
 > Grab the [Tokens](#tokens-and-ipmi-password) to facilitate commands if loading this page from a bookmark.
+
 
 <a name="apply-ncn-pre-boot-workarounds"></a>
 ### Apply NCN Pre-Boot Workarounds
@@ -144,6 +144,7 @@ If there is a workaround here, the output looks similar to the following:
 ```
 CASMINST-980
 ```
+
 
 <a name="ensure-time-is-accurate-before-deploying-ncns"></a>
 ### Ensure Time Is Accurate Before Deploying NCNs
@@ -218,6 +219,7 @@ CASMINST-980
 
    Repeat this process for each NCN.
 
+
 <a name="start-deployment"></a>
 ### Start Deployment
 
@@ -226,6 +228,7 @@ Deployment of the nodes starts with booting the storage nodes first, then the ma
 After the operating system boots on each node there are some configuration actions which take place.  Watching the
 console or the console log for certain nodes can help to understand what happens and when.  When the process is complete
 for all nodes, the Ceph storage will have been initialized and the Kubernetes cluster will be created ready for a workload.
+
 
 <a name="workflow"></a>
 #### Workflow
@@ -246,6 +249,7 @@ The configuration workflow described here is intended to help understand the exp
   - Once each worker node notices that ncn-m002 has created /etc/cray/kubernetes/join-command-control-plan, then it will join the Kubernetes cluster.  
     - Now ncn-s001 should notice this from any one of the worker nodes and move forward with creation of config maps and running the post-ceph playbooks (s3, OSD pools, quotas, etc.)
   - Once ncn-s001 creates etcd-backup-s3-credentials during the benji-backups role which is one of the last roles after ceph has been set up, then ncn-m001 notices this and moves forward
+
 
 <a name="deploy"></a>
 #### Deploy
@@ -295,14 +299,14 @@ The configuration workflow described here is intended to help understand the exp
    ncn-w003-mgmt
    ```
 
-    > **`IMPORTANT`** This is the administrators _last chance_ to run [NCN pre-boot workarounds](#apply-ncn-pre-boot-workarounds).
+   > **`IMPORTANT`** This is the administrators _last chance_ to run [NCN pre-boot workarounds](#apply-ncn-pre-boot-workarounds).
 
-    > **`NOTE`**: All consoles are located at `/var/log/conman/console*`
+   > **`NOTE`**: All consoles are located at `/var/log/conman/console*`
 
 6. Boot the **Storage Nodes**
-    ```bash
-    pit# grep -oP $stoken /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
-    ```
+   ```bash
+   pit# grep -oP $stoken /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
+   ```
 
 7. Wait. Observe the installation through ncn-s001-mgmt's console:
    ```bash
@@ -389,16 +393,21 @@ The configuration workflow described here is intended to help understand the exp
     ```
 
 
- <span style="color:red">IMPORTANT: If you are using Gigabyte hardware for your ncn please do the following<span>
+<a name="check-for-unused-drives-on-utility-storage-nodes"></a>
+### Check for Unused Drives on Utility Storage Nodes
 
-***Checking for unused drive on Utility Storage Nodes***
+> **`IMPORTANT:`** Do the following if NCNs use Gigabyte hardware.
 
-1. log into each ncn-s node and check for unused drives
+1. Log into **each** ncn-s node and check for unused drives
 
    ```bash
-   ncn-s002:~ # ceph-volume inventory
+   ncn-s# ceph-volume inventory
+   ```
 
-   ## the field "available" would be true if ceph sees the drive as empty and can be used
+   The field "available" would be true if ceph sees the drive as empty and can
+   be used, e.g.:
+
+   ```
    Device Path               Size         rotates available Model name
    /dev/sda                  447.13 GB    False   False     SAMSUNG MZ7LH480 
    /dev/sdb                  447.13 GB    False   False     SAMSUNG MZ7LH480
@@ -408,24 +417,20 @@ The configuration workflow described here is intended to help understand the exp
    /dev/sdf                  3.49 TB      False   False     SAMSUNG MZ7LH3T8
    /dev/sdg                  3.49 TB      False   False     SAMSUNG MZ7LH3T8
    /dev/sdh                  3.49 TB      False   False     SAMSUNG MZ7LH3T8
+   ```
 
-   # alternative method to just dump the paths
-   ceph-volume inventory --format json-pretty|jq -r '.[]|select(.available="true")|.path'
+   Alternatively, just dump the paths of available drives:
+
+   ```bash
+   ncn-s# ceph-volume inventory --format json-pretty | jq -r '.[]|select(.available="true")|.path'
    ```
 
 2. Add unused drives
 
    ```bash
-   ceph-volume lvm create --data /dev/sd<drive to add>  --bluestore; done 
+   ncn-s# ceph-volume lvm create --data /dev/sd<drive to add>  --bluestore; done 
    ```
 
-
-**The administrator needs to move onto the next sections, before considering continuing the installation:**
-
-- [NCN Post-Boot Workarounds](#apply-ncn-post-boot-workarounds)
-- [LiveCD Cluster Authentication](#livecd-cluster-authentication)
-- [BGP Routing](#bgp-routing)
-- [Validation](#validation)
 
 <a name="apply-ncn-post-boot-workarounds"></a>
 ### Apply NCN Post-Boot Workarounds
@@ -438,9 +443,11 @@ pit# ls /opt/cray/csm/workarounds/after-ncn-boot
 ```
 
 If there is a workaround here, the output looks similar to the following:
- ```
+
+```
 CASMINST-12345
 ```
+
 
 <a name="livecd-cluster-authentication"></a>
 ### LiveCD Cluster Authentication
@@ -455,6 +462,7 @@ Copy the Kubernetes config to the LiveCD to be able to use `kubectl` as cluster 
 pit# mkdir ~/.kube
 pit# scp ncn-m002.nmn:/etc/kubernetes/admin.conf ~/.kube/config
 ```
+
 
 <a name="bgp-routing"></a>
 ### BGP Routing
@@ -478,6 +486,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
    /usr/bin/aruba_set_bgp_peers.py
    /usr/bin/mellanox_set_bgp_peers.py
    ```
+
 
 <a name="validation"></a>
 ### Validation
@@ -522,20 +531,8 @@ Observe the output of the checks and note any failures, then remediate them.
     1. Wipe the ncns using the 'Basic Wipe' section of [DISK CLEANSLATE](051-DISK-CLEANSLATE.md).
     2. Return to the 'Boot the **Storage Nodes**' step of [Start Deployment](#start-deployment) section above.
 
-<a name="configure-and-trim-uefi-entries"></a>
-## Configure and Trim UEFI Entries
 
-> **`IMPORTANT`** *The Boot-Order is set by cloud-init, however the current setting is still iterating. This manual step is required until further notice.*
-
-Do the two-steps outlined in [Fixing Boot-Order](101-NCN-BOOTING.md#set-boot-order)
-1. [Setting Order](101-NCN-BOOTING.md#setting-order)
-2. [Trimming](101-NCN-BOOTING.md#trimming)
-
-The administrator or CI/CD agent may now move onto the [CSM Platform Install](006-CSM-PLATFORM-INSTALL.md) page to continue the CSM install, or
-may proceed further to continue optional validations. The optional validation may have differing value in various install contexts.
-
-<a name="optional-validation"></a>
-
+<a name="additional-validation-tasks-for-failed-installs"></a>
 ### Additional Validation Tasks for Failed Installs
 
 These tests are for sanity checking. These exist as software reaches maturity, or as tests are worked
@@ -551,3 +548,17 @@ new tests.**
 2. Verify etcd is running outside kubernetes on master nodes
 3. Verify that all the pods in the kube-system namespace are running
 4. Verify that the ceph-csi requirements are in place (see [CEPH CSI](066-CEPH-CSI.md))
+
+
+<a name="configure-and-trim-uefi-entries"></a>
+## Configure and Trim UEFI Entries
+
+> **`IMPORTANT`** *The Boot-Order is set by cloud-init, however the current setting is still iterating. This manual step is required until further notice.*
+
+Do the two-steps outlined in [Fixing Boot-Order](101-NCN-BOOTING.md#set-boot-order)
+1. [Setting Order](101-NCN-BOOTING.md#setting-order)
+2. [Trimming](101-NCN-BOOTING.md#trimming)
+
+The administrator or CI/CD agent may now move onto the [CSM Platform Install](006-CSM-PLATFORM-INSTALL.md) page to continue the CSM install, or
+may proceed further to continue optional validations. The optional validation may have differing value in various install contexts.
+
