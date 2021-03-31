@@ -14,7 +14,7 @@ On the other hand, if the node has only a single network card, then MAC1 and MAC
    - [Requirements](#requirements)
    - [MAC Collection](#mac-collection)
 - [Procedure: Serial consoles](#procedure-serial-consoles)
-- [Procedure: Recovering from an incorrect metadata file](#procedure-recovering-from-an-incorrect-metadata-file)
+- [Procedure: Recovering from an incorrect NCN metadata file](#procedure-recovering-from-an-incorrect-metadata-file)
 
 The easy way to do this leverages the NIC-dump provided by the metal-ipxe package. This page will walk-through
 booting NCNs and collecting their MACs from the conman console logs.
@@ -145,40 +145,63 @@ the MACs for your BOND from each the sw-spine-001 and sw-spine-002 switch.
 is quicker.
 
 <a name="procedure-recovering-from-an-incorrect-metadata-file"></a>
-## Procedure: Recovering from an incorrect metadata file
+## Procedure: Recovering from an incorrect NCN metadata file
 
 If you are coming from 1.3 and happened to use the `ncn_metadata.csv` without modification, you will be unable to deploy the NCNs.  This section details a recovery procedure in case that happens.
 
-1. Remove the incorrectly-generated configs
+1. Remove the incorrectly-generated configs. Before deleting the incorrectly-generated configs consider making a backup of them. In case they need to be examined at a later time. 
+
+> **`WARNING`** Ensure that the `SYSTEM_NAME` environment variable is correctly set. If `SYSTEM_NAME` is
+> not set the command below could potentially remove the entire prep directory.
+> ```bash
+> pit# export SYSTEM_NAME=eniac
+> ```
 
 ```bash
-rm -rf /var/www/ephemeral/prep/$SYSTEM_NAME
+pit# rm -rf /var/www/ephemeral/prep/$SYSTEM_NAME
 ```
 
-2. Remove the cached config file that `csi` creates
+2. Manually edit `ncn_metadata.csv`, replacing the bootstrap MAC address with Bond0Mac0 address for the afflicted nodes that failed to boot
+
+3. Re-run `csi config init` with the required flags
+
+4. Copy all the newly-generated files into place
 
 ```bash
-rm -f /var/www/ephemeral/prep/system_config.yaml
-```
-
-3. Manually edit `ncn_metadata.csv`, replacing the bootstrap MAC address with Bond0Mac0 address for the afflicted nodes that failed to boot
-
-4. Re-run `csi config init` with the required flags
-
-5. Copy all the newly-generated files into place
-
-```bash
+pit# \
 cp -p /var/www/ephemeral/prep/$SYSTEM_NAME/dnsmasq.d/* /etc/dnsmasq.d/*
 cp -p /var/www/ephemeral/prep/$SYSTEM_NAME/basecamp/* /var/www/ephemeral/configs/
 cp -p /var/www/ephemeral/prep/$SYSTEM_NAME/conman.conf /etc/
 cp -p /var/www/ephemeral/prep/$SYSTEM_NAME/pit-files/* /etc/sysconfig/network/
 ```
 
+5. Update CA Cert on the copied data.json file. Provide the path to the data.json, the path to our customizations.yaml, and finally the sealed_secrets.key
+
+```bash
+pit# csi patch ca \
+--cloud-init-seed-file /var/www/ephemeral/configs/data.json \
+--customizations-file /var/www/ephemeral/prep/site-init/customizations.yaml \
+--sealed-secret-key-file /var/www/ephemeral/prep/site-init/certs/sealed_secrets.key
+```
+
 6. Now restart everything to apply the new configs:
 
-```
+```bash
+pit# \
 wicked ifreload all
 systemctl restart dnsmasq conman basecamp
 systemctl restart nexus
 ```
-7. Before relaunching NCNs, be sure to wipe the disks first.  To wipe all disks in all NCNs, refer to the disk wipe procedure in the Degraded System Notice section of 002-CSM-INSTALL.md.
+
+7. Apply any NCN Pre-Boot Workarounds. Check for workarounds in the `/opt/cray/csm/workarounds/before-ncn-boot` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective README.md files.
+
+```bash
+pit# ls /opt/cray/csm/workarounds/before-ncn-boot
+```
+
+If there is a workaround here, the output looks similar to the following:
+```
+CASMINST-980
+```
+
+8. Before relaunching NCNs, be sure to wipe the disks first.  To wipe all disks in all NCNs, refer to the disk wipe procedure in the Degraded System Notice section of 002-CSM-INSTALL.md.
