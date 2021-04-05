@@ -643,4 +643,9 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
 9. Follow the output's directions for failed validations before moving on.
 
+10. If this is a Shasta v1.3.x migration scenario, then the Dell and Mellanox switches can be reconfigured now with their new names, new IP addresses, and new configuration for v1.4.
+
+See [Management Network Dell And Mellanox Upgrades](412-MGMT-NET-DELL-MELLANOX-UPGRADES.md).
+
+
 After successfully validating the LiveCD USB environment, the administrator may start the [CSM Metal Install](005-CSM-METAL-INSTALL.md).

@@ -9,7 +9,7 @@ help.
 > Systems built before Sprint 2020 originally used onboard NICs for netbooting. The new topologies for Shasta
 > cease using the onboard NICs. If your system is running Shasta v1.3, then it likely is using onboard NICs.
 >
-> It is recommended to cease using these for shasta-1.4, an admin would have one less MAC address to track and account for.
+> It is recommended to cease using these for Shasta v1.4, an admin would have one less MAC address to track and account for.
 > The NCN networking becomes relatively simpler as a result from caring about one less NIC.
 
 This guide may receive more installments for other files as time goes on.
@@ -84,8 +84,8 @@ for data collection.
 ### `ncn_metadata.csv`
 
 Unless your system is sans-onboards, meaning it does not use or does not have onboard NICs on the non-compute nodes, then these guides will be necessary before (re)constructing the `ncn_metadata.csv` file.
-1. [Recabling from Shasta v1.3 for shasta-1.4](309-MOVE-SITE-CONNECTIONS.md) (for machines still using ncn-w001 for BIS node)
-2. [Enabling Network Boots over Spine Switches](304-NCN-PCIE-NET-BOOT-AND-RE-CABLE.md) (for shasta 1.3 machines)
+1. [Recabling from Shasta v1.3 for Shasta v1.4](309-MOVE-SITE-CONNECTIONS.md) (for machines still using ncn-w001 for BIS node)
+2. [Enabling Network Boots over Spine Switches](304-NCN-PCIE-NET-BOOT-AND-RE-CABLE.md) (for Shasta v1.3 machines)
 
 The following two guides will assist with (re)creating `ncn_metadata.csv` (an example file is below).
 

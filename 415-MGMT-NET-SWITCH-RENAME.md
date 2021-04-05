@@ -5,14 +5,14 @@ Any system moving from Shasta v1.3 to Shasta v1.4 software needs to adjust the h
 From v1.3, this example system had these IP addresses and hostnames on the HMN network. Similar names and IP address numbers for the NMN and CAN networks as well.  Also note that some systems may not have an agg or aggregation set of switches. This is ok. Simply follow the directions below, always paying attention to the CSI specified IPv4 addresses and skip the aggregation switch directions.
 
 ```
-10.1.0.2        sw-spine01
+10.1.0.1        sw-spine01
+10.1.0.2        sw-leaf01
 10.1.0.3        sw-spine02
-10.1.0.4        sw-leaf01
-10.1.0.5        sw-leaf02
-10.1.0.6        sw-agg01
-10.1.0.7        sw-agg02
-10.1.0.8        sw-cdu01
-10.1.0.9        sw-cdu02
+10.1.0.4        sw-leaf02
+10.1.0.5        sw-agg01
+10.1.0.6        sw-agg02
+10.1.0.7        sw-cdu01
+10.1.0.8        sw-cdu02
 ```
 
 The desired settings for the HMN network would be more like these.
@@ -28,7 +28,7 @@ The desired settings for the HMN network would be more like these.
 10.1.0.9        sw-cdu-002
 ```
 
-This system needs to do the renames in this order: do CDUs (7 to 8, 8 to 9) and then leafs (3 to 6, but also 4 to 7), then spines (2 to 3, and 1 to 2). These have IP address changes and name changes since we now have 3 digits instead of 2 for the switch hostname.
+This system needs to do the renames in this order: do CDU switches (8 to 9, 7 to 8) and then leaf switches (4 to 7, but also 2 to 6), then aggregation switches (6 to 5, 5 to 4) and spine switches (3 to 3, and 1 to 2). These have IP address changes and name changes since we now have 3 digits instead of 2 for the switch hostname.
 
 1. Check switch IP addresses, names, and component names in /var/www/ephemeral/prep/${SYSTEM_NAME}/networks when booted from the LiveCD on ncn-m001.
 
@@ -101,6 +101,39 @@ This system needs to do the renames in this order: do CDUs (7 to 8, 8 to 9) and 
        comment: x3000c0w36
        aliases: []
    ```
+   pit# vi MTL.yaml
+   ```
+
+   Excerpt from MTL.yaml
+
+   ```
+     ip_reservations:
+     - ip_address: 10.1.0.2
+       name: sw-spine-001
+       comment: x3000c0h33s1
+       aliases: []
+     - ip_address: 10.1.0.3
+       name: sw-spine-002
+       comment: x3000c0h34s1
+       aliases: []
+     - ip_address: 10.1.0.4
+       name: sw-cdu-001
+       comment: d0w1
+       aliases: []
+     - ip_address: 10.1.0.5
+       name: sw-cdu-002
+       comment: d0w2
+       aliases: []
+     - ip_address: 10.1.0.6
+       name: sw-leaf-001
+       comment: x3000c0w38
+       aliases: []
+     - ip_address: 10.1.0.7
+       name: sw-leaf-002
+       comment: x3000c0w36
+       aliases: []
+   ```
+
 
    ```
    pit# vi CAN.yaml
@@ -161,7 +194,7 @@ Logout of the switch and return using the new IP address for vlan 2 so that vlan
    pit# ssh admin@10.252.0.7
    sw-cdu-002# configure terminal
    sw-cdu-002(config)# interface vlan1
-   sw-cdu-002(conf-if-vl-1)# ip address 10.1.0.9/16
+   sw-cdu-002(conf-if-vl-1)# ip address 10.1.0.7/16
    sw-cdu-002(conf-if-vl-1)# exit
    sw-cdu-002(config)# exit
    sw-cdu-002# write memory
@@ -281,7 +314,10 @@ Logout of the switch and return using the new IP address for vlan 2 so that vlan
 
 7. Move sw-spine02 to sw-spine-002. It already has the .3 IP address so does not need to change. It is a Mellanox switch.
 
+
    Note: You can change many addresses in a single session, but not the one you used to connect. This first connection will skip vlan 1 and change all of the other vlans (vlan 2, vlan 4, vlan 7, vlan 10) on a leaf switch.
+
+   Note: The addresses for the spine switches in CAN.yaml shown above (ip_address: 10.103.8.2, name: can-switch-1) and (ip_address: 10.103.8.3, name: can-switch-2) were shown on the 10.103.8.0 subnet so the virtual-router address on interface vlan7 magp 7 should be 10.103.8.1.
 
    ```
    pit# ssh admin@10.1.0.3
@@ -312,9 +348,11 @@ Logout of the switch and return using the new IP address for vlan 2 so that vlan
    sw-spine-002 [standalone: master] (config) # interface vlan 1
    sw-spine-002 [standalone: master] (config interface vlan 1) # no ip address
    sw-spine-002 [standalone: master] (config interface vlan 1) # ip address 10.1.0.3/16 primary
+   sw-spine-002 [standalone: master] (config interface vlan 1) # exit
+   sw-spine-002 [standalone: master] (config) #    interface vlan 1 magp 1
    sw-spine-002 [standalone: master] (config interface vlan 1 magp 1) # ip virtual-router address 10.1.0.1
    sw-spine-002 [standalone: master] (config interface vlan 1 magp 1) # ip virtual-router mac-address 00:00:5E:00:01:01
-   sw-spine-002 [standalone: master] (config interface vlan 1) # exit
+   sw-spine-002 [standalone: master] (config interface vlan 1 magp) # exit
    sw-spine-002 [standalone: master] (config) #    interface vlan 2 magp 2
    sw-spine-002 [standalone: master] (config interface vlan 2 magp 2) # ip virtual-router address 10.252.0.1
    sw-spine-002 [standalone: master] (config interface vlan 2 magp 2) # ip virtual-router mac-address 00:00:5E:00:01:02
@@ -324,7 +362,7 @@ Logout of the switch and return using the new IP address for vlan 2 so that vlan
    sw-spine-002 [standalone: master] (config interface vlan 4 magp 4) # ip virtual-router mac-address 00:00:5E:00:01:04
    sw-spine-002 [standalone: master] (config interface vlan 4 magp 4) # exit
    sw-spine-002 [standalone: master] (config) #    interface vlan 7 magp 7
-   sw-spine-002 [standalone: master] (config interface vlan 7 magp 7) # ip virtual-router address 10.103.8.20
+   sw-spine-002 [standalone: master] (config interface vlan 7 magp 7) # ip virtual-router address 10.103.8.1
    sw-spine-002 [standalone: master] (config interface vlan 7 magp 7) # ip virtual-router mac-address 00:00:5E:00:01:07
    sw-spine-002 [standalone: master] (config interface vlan 7 magp 7) # exit
    sw-spine-002 [standalone: master] (config) #    interface vlan 10 magp 10
@@ -341,6 +379,8 @@ Logout of the switch and return using the new IP address for vlan 2 so that vlan
 
    Note: You can change many addresses in a single session, but not the one you used to connect. This first connection will skip vlan 1 and change all of the other vlans (vlan 2, vlan 4, vlan 7, vlan 10) on a leaf switch.
 
+   Note: The addresses for the spine switches in CAN.yaml shown above (ip_address: 10.103.8.2, name: can-switch-1) and (ip_address: 10.103.8.3, name: can-switch-2) were shown on the 10.103.8.0 subnet so the virtual-router address on interface vlan7 magp 7 should be 10.103.8.1.
+
    ```
    pit# ssh admin@10.1.0.1
    sw-spine01> enable
@@ -353,23 +393,15 @@ Logout of the switch and return using the new IP address for vlan 2 so that vlan
    sw-spine-001 [standalone: master] (config interface vlan 2) # exit
    sw-spine-001 [standalone: master] (config) # interface vlan 4
    sw-spine-001 [standalone: master] (config interface vlan 4) # no ip address
-   sw-spine-001 [standalone: master] (config interface vlan 4) # 
    sw-spine-001 [standalone: master] (config interface vlan 4) # ip address 10.254.0.2/17 primary
-   sw-spine-001 [standalone: master] (config interface vlan 4) # 
    sw-spine-001 [standalone: master] (config interface vlan 4) # exit
    sw-spine-001 [standalone: master] (config) # interface vlan 7 
-   sw-spine-001 [standalone: master] (config interface vlan 7) # 
    sw-spine-001 [standalone: master] (config interface vlan 7) # no ip address
-   sw-spine-001 [standalone: master] (config interface vlan 7) # 
    sw-spine-001 [standalone: master] (config interface vlan 7) # ip address 10.103.8.2/24 primary
-   sw-spine-001 [standalone: master] (config interface vlan 7) # 
    sw-spine-001 [standalone: master] (config interface vlan 7) # exit
    sw-spine-001 [standalone: master] (config) # interface vlan 10
-   sw-spine-001 [standalone: master] (config interface vlan 10) # 
    sw-spine-001 [standalone: master] (config interface vlan 10) # no ip address
-   sw-spine-001 [standalone: master] (config interface vlan 10) # 
-   sw-spine-001 [standalone: master] (config interface vlan 10) #  ip address 10.11.0.2/16 primary
-   sw-spine-001 [standalone: master] (config interface vlan 10) # 
+   sw-spine-001 [standalone: master] (config interface vlan 10) # ip address 10.11.0.2/16 primary
    sw-spine-001 [standalone: master] (config interface vlan 10) # exit
    sw-spine-001 [standalone: master] (config) # router bgp 65533 vrf default router-id 10.252.0.2 force
    sw-spine-001 [standalone: master] (config) # router ospf 1 vrf default router-id 10.252.0.2
@@ -385,26 +417,28 @@ Logout of the switch and return using the new IP address for vlan 2 so that vlan
    sw-spine-001 [standalone: master] > enable
    sw-spine-001 [standalone: master] # configure terminal
    sw-spine-001 [standalone: master] (config) # no protocol magp
-   sw-spine-001(config)# protocol magp
+   sw-spine-001 [standalone: master] (config) # protocol magp
    sw-spine-001 [standalone: master] (config) # interface vlan 1
    sw-spine-001 [standalone: master] (config interface vlan 1) # no ip address
    sw-spine-001 [standalone: master] (config interface vlan 1) # ip address 10.1.0.2/16 primary
+   sw-spine-001 [standalone: master] (config interface vlan 1) # exit
+   sw-spine-001 [standalone: master] (config) # interface vlan 1 magp 1
    sw-spine-001 [standalone: master] (config interface vlan 1 magp 1) # ip virtual-router address 10.1.0.1
    sw-spine-001 [standalone: master] (config interface vlan 1 magp 1) # ip virtual-router mac-address 00:00:5E:00:01:01
-   sw-spine-001 [standalone: master] (config interface vlan 1) # exit
-   sw-spine-001 [standalone: master] (config) #    interface vlan 2 magp 2
+   sw-spine-001 [standalone: master] (config interface vlan 1 magp 1) # exit
+   sw-spine-001 [standalone: master] (config) # interface vlan 2 magp 2
    sw-spine-001 [standalone: master] (config interface vlan 2 magp 2) # ip virtual-router address 10.252.0.1
    sw-spine-001 [standalone: master] (config interface vlan 2 magp 2) # ip virtual-router mac-address 00:00:5E:00:01:02
    sw-spine-001 [standalone: master] (config interface vlan 2 magp 2) # exit
-   sw-spine-001 [standalone: master] (config) #    interface vlan 4 magp 4
+   sw-spine-001 [standalone: master] (config) # interface vlan 4 magp 4
    sw-spine-001 [standalone: master] (config interface vlan 4 magp 4) # ip virtual-router address 10.254.0.1
    sw-spine-001 [standalone: master] (config interface vlan 4 magp 4) # ip virtual-router mac-address 00:00:5E:00:01:04
    sw-spine-001 [standalone: master] (config interface vlan 4 magp 4) # exit
-   sw-spine-001 [standalone: master] (config) #    interface vlan 7 magp 7
-   sw-spine-001 [standalone: master] (config interface vlan 7 magp 7) # ip virtual-router address 10.103.8.20
+   sw-spine-001 [standalone: master] (config) # interface vlan 7 magp 7
+   sw-spine-001 [standalone: master] (config interface vlan 7 magp 7) # ip virtual-router address 10.103.8.1
    sw-spine-001 [standalone: master] (config interface vlan 7 magp 7) # ip virtual-router mac-address 00:00:5E:00:01:07
    sw-spine-001 [standalone: master] (config interface vlan 7 magp 7) # exit
-   sw-spine-001 [standalone: master] (config) #    interface vlan 10 magp 10
+   sw-spine-001 [standalone: master] (config) # interface vlan 10 magp 10
    sw-spine-001 [standalone: master] (config interface vlan 10 magp 10) # ip virtual-router address 10.11.0.1
    sw-spine-001 [standalone: master] (config interface vlan 10 magp 10) # ip virtual-router mac-address 00:00:5E:00:01:10
    sw-spine-001 [standalone: master] (config interface vlan 10 magp 10) # exit

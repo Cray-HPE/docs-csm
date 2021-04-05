@@ -31,15 +31,6 @@ installation-centric artifacts such as:
 *   Helm Chart value overrides that are merged into Loftsman Manifests by
     product stream installers
 
-> **`NOTE`** The `yq` tool used in the following procedures is available under
-> `/mnt/pitdata/prep/site-init/utils/bin` once the SHASTA-CFG repo has been
-> cloned:
->
-> ```bash
-> linux# alias yq="/mnt/pitdata/${CSM_RELEASE}/shasta-cfg/utils/bin/$(uname | awk '{print tolower($0)}')/yq"
-> ```
-
-
 <a name="create-and-initialize-site-init-directory"></a>
 ## Create and Initialize Site-Init Directory
 
@@ -55,6 +46,13 @@ installation-centric artifacts such as:
     linux# /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/meta/init.sh /mnt/pitdata/prep/site-init
     ```
 
+3.  The `yq` tool used in the following procedures is available under
+`/mnt/pitdata/prep/site-init/utils/bin` once the SHASTA-CFG repo has been
+cloned
+
+    ```bash
+    linux# alias yq="/mnt/pitdata/${CSM_RELEASE}/shasta-cfg/utils/bin/$(uname | awk '{print tolower($0)}')/yq"
+    ```
 
 <a name="create-baseline-system-customizations"></a>
 ## Create Baseline System Customizations
@@ -127,7 +125,7 @@ with system-specific customizations.
     > replicas.
     >
     > ```bash
-    > export DCLDAP=dcldap2.us.cray.com
+    > export LDAP=dcldap2.us.cray.com
     > ```
 
     *   If LDAP requires TLS (recommended), update the `cray-keycloak` sealed
@@ -163,7 +161,7 @@ with system-specific customizations.
         >     and show the certificate chain returned by the LDAP host:
         > 
         >     ```bash
-        >     linux# openssl s_client -showcerts -connect $DCLDAP:636 </dev/null
+        >     linux# openssl s_client -showcerts -connect $LDAP:636 </dev/null
         >     ```
         > 
         >     Either manually extract (i.e., cut/paste) the issuer's
@@ -183,7 +181,7 @@ with system-specific customizations.
         >     1.  Observe the issuer's DN:
         > 
         >         ```bash
-        >         linux# openssl s_client -showcerts -nameopt RFC2253 -connect $DCLDAP:636 </dev/null 2>/dev/null | grep issuer= | sed -e 's/^issuer=//'
+        >         linux# openssl s_client -showcerts -nameopt RFC2253 -connect $LDAP:636 </dev/null 2>/dev/null | grep issuer= | sed -e 's/^issuer=//'
         >         emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC/MCS,O=HPE,ST=WI,C=US
         >         ```
         > 
@@ -194,7 +192,7 @@ with system-specific customizations.
         >         > different, be sure to escape it properly!
         > 
         >         ```bash
-        >         linux# openssl s_client -showcerts -nameopt RFC2253 -connect $DCLDAP:636 </dev/null 2>/dev/null| awk '/s:emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC\/MCS,O=HPE,ST=WI,C=US/,/END CERTIFICATE/' | awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' > cacert.pem
+        >         linux# openssl s_client -showcerts -nameopt RFC2253 -connect $LDAP:636 </dev/null 2>/dev/null| awk '/s:emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC\/MCS,O=HPE,ST=WI,C=US/,/END CERTIFICATE/' | awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' > cacert.pem
         >         ```
         > 
         > *   Verify issuer's certificate was properly extracted and saved in
@@ -272,7 +270,7 @@ with system-specific customizations.
         > Set `ldap_connection_url` in `customizations.yaml`:
         > 
         > ```bash
-        > linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.keycloak_users_localize.generate.data.(args.name==ldap_connection_url).args.value' "ldaps://$DCLDAP"
+        > linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.keycloak_users_localize.generate.data.(args.name==ldap_connection_url).args.value' "ldaps://$LDAP"
         > ```
         > 
         > On success, the `keycloak_users_localize` sealed secret should look

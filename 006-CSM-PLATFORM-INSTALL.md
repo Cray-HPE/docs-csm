@@ -9,7 +9,6 @@ into the CSM Kubernetes cluster).
 * [Deploy CSM Applications and Services](#deploy-csm-applications-and-services)
   * [Setup Nexus](#setup-nexus)
   * [Set NCNs to use Unbound](#set-ncns-to-use-unbound)
-  * [Apply After Sysmgmt Manifest Workarounds](#apply-after-sysmgmt-manifest-workarounds]
   * [Validate CSM Install](#validate-csm-install)
   * [Reboot from the LiveCD to NCN](#reboot-from-the-livecd-to-ncn)
 * [Add Compute Cabinet Routing to NCNs](#add-compute-cabinet-routing-to-ncns)
@@ -224,15 +223,15 @@ duplicate assets. This is ok as long as `setup-nexus.sh` outputs
 
 
 <a name="set-ncns-to-use-unbound"></a>
-### Set NCNs to use Unbound
+### Set Management NCNs to use Unbound
 
-First, verify that SLS properly reports all NCNs in the system:
+First, verify that SLS properly reports all management NCNs in the system:
 
 ```bash
 pit# ./lib/list-ncns.sh
 ```
 
-On success, each NCN will be output, e.g.:
+On success, each management NCN will be output, e.g.:
 
 ```bash
 pit# ./lib/list-ncns.sh
@@ -250,10 +249,10 @@ ncn-w002
 ncn-w003
 ```
 
-If any NCNs are missing from the output, take corrective action before
+If any management NCNs are missing from the output, take corrective action before
 proceeding.
 
-Next, run `lib/set-ncns-to-unbound.sh` to SSH to each NCN and update
+Next, run `lib/set-ncns-to-unbound.sh` to SSH to each management NCN and update
 /etc/resolv.conf to use Unbound as the nameserver.
 
 ```bash
@@ -265,7 +264,7 @@ pit# ./lib/set-ncns-to-unbound.sh
 > NCN.
 
 On success, the nameserver configuration in /etc/resolv.conf will be printed
-for each NCN, e.g.,:
+for each management NCN, e.g.,:
 
 ```bash
 pit# ./lib/set-ncns-to-unbound.sh
@@ -320,25 +319,14 @@ If there is a workaround here, the output looks similar to the following:
 CASMCMS-6857  CASMNET-423
 ```
 
+
 <a name="validate-csm-install"></a>
 ### Validate CSM Install
-
-After successfully completing the CSM platform install, quit the typescript
-session with the `exit` command and copy the file (booted-csm-lived.<date>.txt)
-to a location on another server for reference later. 
 
 The administrator should wait at least 15 minutes to let the various Kubernetes resources
 get initialized and started. Because there are a number of dependencies between them,
 some services are not expected to work immediately after the install script completes.
 After waiting, the administrator may start the [CSM Validation process](008-CSM-VALIDATION.md).
-
-
-<a name="reboot-from-the-livecd-to-ncn"></a>
-### Reboot from the LiveCD to NCN
-
-Once the CSM services are deemed healthy the administrator may proceed to the
-final step of the CSM install [Reboot from the LiveCD to NCN](007-CSM-INSTALL-REBOOT.md).
-
 
 <a name="add-cabinet-routing-to-ncns"></a>
 ## Add Compute Cabinet Routing to NCNs
@@ -359,6 +347,12 @@ ncn# /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-1570/CASMINST-1570.sh
 Compute Node Cabinets. 
 
 ----
+
+<a name="reboot-from-the-livecd-to-ncn"></a>
+## Reboot from the LiveCD to NCN
+
+Once the CSM services are deemed healthy the administrator may proceed to the
+final step of the CSM install [Reboot from the LiveCD to NCN](007-CSM-INSTALL-REBOOT.md).
 
 <a name="known-issues"></a>
 ## Known Issues

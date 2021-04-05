@@ -4,7 +4,7 @@
 * Access to the API gateway `api-gw-service` (legacy: `api-gw-service-nmn.local`)
 
 ### About this task
-This guide shows the process for manually adding aliases to UAN nodes in SLS. Steps 3 & 4 of this guide can be repeated for each UAN alias that needs to be added in SLS. This guide is intended to be ran on any k8s node that has access to the API gateway `api-gw-service` (current/legacy: `api-gw-service-nmn.local`).
+This guide shows the process for manually adding aliases to UAN nodes in SLS. Steps 3 & 4 of this guide can be repeated for each UAN alias that needs to be added in SLS. This guide is intended to be run on any k8s node that has access to the API gateway `api-gw-service` (current/legacy: `api-gw-service-nmn.local`).
 
 ### Procedure
 1. Authenticate with Keycloak to obtain an API token:
@@ -116,24 +116,45 @@ This guide shows the process for manually adding aliases to UAN nodes in SLS. St
 
 5. Confirm that the UAN is being monitored by the cray-conman service
 
-    Use kubectl to exec into the running cray-conman pod, then check the existing connections.
+    Use kubectl to exec into the running cray-conman pod.
+
+    1. Identify the `cray-conman` pod:
+       ```bash
+       ncn# kubectl get pods -n services | grep "^cray-conman-"
+       ```
+    
+       Expected output looks similar to the following:
+       ```
+       cray-conman-b69748645-qtfxj                                     3/3     Running           0          16m
+       ```
+    1. Set the `PODNAME` variable accordingly:
+       ```bash
+       ncn# export PODNAME=cray-conman-b69748645-qtfxj
+       ```
+    1. Log into the `cray-conman` container in this pod:
+       ```bash
+       ncn# kubectl exec -n services -it $PODNAME -c cray-conman -- bash
+       cray-conman#  
+       ```
+
+    Check the existing connections.
     ```
-    cray-conman-b69748645-qtfxj:/ # conman -q | grep x3000c0s19b0
-    cray-conman-b69748645-qtfxj:/ #
+    cray-conman# conman -q | grep x3000c0s19b0
+    cray-conman#
     ```
 
     If the node is not being reported as connected to conman, the conman service will need to
     be re-initialized.  This is done by killing the existing conmand process.
     ```
-    cray-conman-b69748645-qtfxj:/ # ps -ax | grep conmand
+    cray-conman# ps -ax | grep conmand
      13 ?           Sl     0:45 conmand -F -v -c /etc/conman.conf
      56704 pts/3    S+     0:00 grep conmand
-    cray-conman-b69748645-qtfxj:/ # kill 13
+    cray-conman# kill 13
     ```
 
     If the UAN has been successfully discovered by hsm, it should now be monitored by conman.
     ```
-    cray-conman-b69748645-qtfxj:/ # conman -q | grep x3000c0s19b0
+    cray-conman# conman -q | grep x3000c0s19b0
     x3000c0s19b0
-    cray-conman-b69748645-qtfxj:/ #
+    cray-conman#
     ```

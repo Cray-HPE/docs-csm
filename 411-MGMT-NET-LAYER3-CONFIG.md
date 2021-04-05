@@ -1,10 +1,10 @@
 # Management Network Layer3 Configuration
 
-This page describes how to configure layer 3 routing for Hill and MTN cabinets.
+This page describes how to configure layer 3 routing for Hill and Mountain cabinets.
 
-MTN cabinets have their own "CDU" Switches.
+Mountain cabinets have their own "CDU" Switches.
 
-Hill cabinets are connected the leaf switches.
+Hill cabinets are connected to the leaf switches.
 
 # Requirements
 

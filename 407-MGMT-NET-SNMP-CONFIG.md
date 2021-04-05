@@ -3,7 +3,7 @@
 # Requirements
 Access to switches
 
-This configuration is required for hardware discovery of the shasta system.
+This configuration is required for hardware discovery of the Shasta system.
 It needs to be applied on all switches that are connected to BMCs
 
 # Aruba Configuration

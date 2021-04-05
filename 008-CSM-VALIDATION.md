@@ -13,7 +13,7 @@ This page lists available CSM install and health checks that can be executed to 
 1. [Automated Goss Testing](#automated-goss-testing)
 1. [Hardware Management Services Tests](#hms-tests)
 1. [Cray Management Services Validation Utility](#cms-validation-utility)
-1 [Hardware State Manager Discovery Validation](#cms-smd-discovery-validation)
+1. [Hardware State Manager Discovery Validation](#hms-smd-discovery-validation)
 1. [Booting CSM Barebones Image](#booting-csm-barebones-image)
 1. [UAS/UAI Tests](#uas-uai-tests)
    
@@ -44,7 +44,7 @@ Health Check scripts can be found and run on any worker or master node from any 
 
 <a name="pet-ncnhealthchecks"></a>
 ### ncnHealthChecks
-     /opt/cray/platform-utils/ncnHealthChecks.sh
+     ncn# /opt/cray/platform-utils/ncnHealthChecks.sh
 The ncnHealthChecks script reports the following health information:
 * Kubernetes status for master and worker NCNs
 * Ceph health status
@@ -63,7 +63,7 @@ about the `cray-crus-` pod state.
 
 <a name="pet-ncnpostgreshealthchecks"></a>
 ### ncnPostgresHealthChecks
-     /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
+     ncn# /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
 For each postgres cluster the ncnPostgresHealthChecks script determines the leader pod and then reports the status of all postgres pods in the cluster.
 
 Execute ncnPostgresHealthChecks script. Verify leader for each cluster and status of cluster members.
@@ -503,7 +503,7 @@ ncn# for S in bos cfs conman crus ims ipxe vcs ; do
 done
 ```
 
-<a name="cms-smd-discovery-validation"></a>
+<a name="hms-smd-discovery-validation"></a>
 ## Hardware State Manager Discovery Validation
 
 By this point in the installation process the Hardware State Manager should 
@@ -734,11 +734,11 @@ This procedure can be run from any member of the Kubernetes cluster.
 1. Log into the `cray-conman` container in this pod:
    ```bash
    ncn# kubectl exec -n services -it $PODNAME -c cray-conman -- bash
-   cray-conman-b69748645-qtfxj:/ # 
+   cray-conman# 
    ```
 1. Check the existing list of nodes being monitored.
    ```bash
-   cray-conman-b69748645-qtfxj:/ # conman -q
+   cray-conman# conman -q
    ```
 
    Output looks similar to the following:
@@ -755,7 +755,7 @@ This procedure can be run from any member of the Kubernetes cluster.
 conman process can be re-initialized by killing the conmand process.
    1. Identify the command process
       ```bash
-      cray-conman-b69748645-qtfxj:/ # ps -ax | grep conmand | grep -v grep
+      cray-conman# ps -ax | grep conmand | grep -v grep
       ```
       
       Output will look similar to:
@@ -764,11 +764,11 @@ conman process can be re-initialized by killing the conmand process.
       ```
    1. Set CONPID to the process ID from the previous command output:
       ```bash
-      cray-conman-b69748645-qtfxj:/ # export CONPID=13
+      cray-conman# export CONPID=13
       ```
    1. Kill the process:
       ```bash
-      cray-conman-b69748645-qtfxj:/ # kill $CONPID
+      cray-conman# kill $CONPID
       ```
 This will regenerate the conman configuration file and restart the conmand process. Repeat the
 previous steps to verify that it now includes all nodes that are included in state manager.

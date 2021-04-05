@@ -134,7 +134,10 @@ If you can remove the physical connection, this is preferred and can be done so 
 the PCIe cards.
 
 If you want to disable the connection, you will need to login to your respective leaf switch.
-1. Connect over your medium of choice:
+
+1. Connect to the leaf switch using serial or SSH connections.
+
+Select one of the connection options below.  The IP addresses and device names may vary in the commands below.
     ```bash 
     # SSH over METAL MANAGEMENT
     pit# ssh admin@10.1.0.4
@@ -151,14 +154,13 @@ If you want to disable the connection, you will need to login to your respective
     sw-leaf-001> configure terminal
     sw-leaf-001(config)#>  
     ```
-3. Disable the NCN interfaces - check your SHCD for reference before continuing.
+3. Disable the NCN interfaces.
+Check your SHCD for reference before continuing so that the interfaces which are connected to management NCNs are being changes.  Ports 2 to 10 are commonly the master, worker, and storage nodes when there are 3 of each.  Some systems may have more worker nodes or utility storage nodes, or may be racked and cabled differently.
     ```
-    sw-leaf-001(config)#> interface range 1/1/2-1/1/10  
+    sw-leaf-001(config)#> interface range 1/1/2-1/1/10
     sw-leaf-001(config)#> shutdown  
     sw-leaf-001(config)#> write memory  
     ```
-
-You're done.
 
 You can enable them again at anytime by switching the `shutdown` command out for `no shutdown`.
 

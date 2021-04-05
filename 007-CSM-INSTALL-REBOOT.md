@@ -239,6 +239,15 @@ all been run by the administrator before starting this stage.
       ```
 
       The thing to verify is that there are no error messages in the output.
+1. Save the typescript.
+
+Quit the typescript session with the `exit` command and copy the file (booted-csm-lived.<date>.txt)
+to a location on another server for reference later.
+
+   ```bash
+   pit# exit
+   ```
+
 1. Reboot the LiveCD.
    ```bash
    pit# reboot
