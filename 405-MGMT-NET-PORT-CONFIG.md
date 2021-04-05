@@ -31,7 +31,7 @@ sw-leaf-001(config)# vlan access 2
 ```
 
 # UAN port configuration
-- UANs are going to have the same network connections as shasta 1.3.
+- UANs have the same network connections as Shasta v1.3.
 - One connection will go to a NMN(VLAN2) access port, this is where the UAN will pxe boot and communicate with internal systems. (see SHCD for UAN cabling).
 - One Bond (two connections) will be going to the MLAG/VSX pair of switches. This will be a TRUNK port for the CAN connection.
 

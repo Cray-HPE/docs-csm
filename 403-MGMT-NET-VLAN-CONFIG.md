@@ -53,7 +53,7 @@ sw-24g04(config-vlan-7)# vlan 10
 sw-24g04(config-vlan-10)# name SUN
 ```
 
-Add the networks to the leaf switches or the switches that the BMCs are connected to.
+Add the networks to the leaf switches or the switches to which the BMCs are connected.
 
 ```
 sw-leaf-001(config)# vlan 2

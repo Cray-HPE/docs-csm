@@ -252,7 +252,7 @@ sw-cdu-001# write memory
 
 #### Disable iSCSI on Dell Switches (Leaf, CDU, and Aggregate)
 
-The final configuration change needed on the Dell switches is to disable iSCSI in the configuration.  This change insures that all of the flowcontrol changes made above will persist through a reboot of the switch.
+The final configuration change needed on the Dell switches is to disable iSCSI in the configuration.  This change ensures that all of the flowcontrol changes made above will persist through a reboot of the switch.
 
 Run the following commands on all Dell switches in your system:
 

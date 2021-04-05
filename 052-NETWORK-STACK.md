@@ -18,18 +18,18 @@ Sorted by safest to touch relative to keeping your SSH connection up.
 1. wickedd.service : The daemons handling each interface ; resetting this clears stale configuration.
     ```bash
     # Restarts Wicked daemons without reconfiguring the network interfaces.
-    systemctl restart wickedd
+    ncn# systemctl restart wickedd
     ```
 2. wicked.service  : The overarching service for spawning daemons and manipulating interface configuration; resetting this reloads daemons and configuration.
     ```bash
     # Restarts Wicked; respawns daemons and (re)configures the network.
-    systemctl restart wicked
+    ncn# systemctl restart wicked
     ```
 3. network.service : Responsible for network configuration per interface; does not reload Wicked.
     > NOTE: Commonly the problem exists within Wicked, this is a last resort in the event the configuration is so bad Wicked can't handle it.
     ```bash
     # Restart the network interface configuration, but leaves wicked daemons alone.
-    systemctl restart network
+    ncn# systemctl restart network
     ```
 ##### Use Cases for Resetting Services:
 

@@ -29,7 +29,7 @@ This document specifies the procedures for deploying the non-compute nodes
 - [LiveCD Cluster Authentication](#livecd-cluster-authentication)
 - [BGP Routing](#bgp-routing)
 - [Validation](#validation)
-- [Additional Validation Tasks for Failed Installs](#additional-validation-tasks-for-failed-installs)
+- [Optional Validation](#optional-validation)
 - [Configure & Trim UEFI Entries](#configure-and-trim-uefi-entries)
 
 
@@ -175,6 +175,11 @@ CASMINST-980
 2. Ensure the current time is set in BIOS for all management NCNs.
 
    > If each NCN is booted to the BIOS menu, you can check and set the current UTC time.
+
+   ```bash
+   pit# export username=root
+   pit# export IPMI_PASSWORD=changeme
+   ```
 
    Repeat this process for each NCN.
 
@@ -376,7 +381,7 @@ The configuration workflow described here is intended to help understand the exp
    > CASMINST-1093
    > ```
 
-9. Refer to [timing of deployments](#timing-of-deployments). It should not take more than 60 minutes for the `kubectl get nodes` command to return output indicating that all the managers and workers aside from the LiveCD's node are `Ready`:
+9. Refer to [timing of deployments](#timing-of-deployments). It should not take more than 60 minutes for the `kubectl get nodes` command to return output indicating that all the managers and workers aside from the PIT node booted from the LiveCD are `Ready`:
     ```bash
     pit# ssh ncn-m002
     ncn-m002# kubectl get nodes -o wide
@@ -469,6 +474,8 @@ pit# scp ncn-m002.nmn:/etc/kubernetes/admin.conf ~/.kube/config
 
 After the NCNs are booted, the BGP peers will need to be checked and updated if the neighbor IPs are incorrect on the switches. See the doc to [Check and Update BGP Neighbors](400-SWITCH-BGP-NEIGHBORS.md).
 
+Note: If migrating from Shasta v1.3.x, the worker nodes have different IP addresses, so the scripts below must be run to correct the spine switch configuration to the Shasta v1.4 IP addresses for the worker nodes.
+
 1. Make sure you clear the BGP sessions here.
     - Aruba:`clear bgp *`
     - Mellanox: `clear ip bgp all`
@@ -494,18 +501,18 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 The following commands will run a series of remote tests on the other nodes to validate they are healthy and configured correctly.
 
 Observe the output of the checks and note any failures, then remediate them.
-1. Check CEPH
+1. Check Ceph
     ```bash
     pit# csi pit validate --ceph
     ```
     **`Note`**: Please refer to the **Utility Storage** section of the Admin guide to help resolve any failed tests.
 
-2. Check K8s
+2. Check Kubernetes
     ```bash
     pit# csi pit validate --k8s
     ```
 
-    > **`WARNING`** if test failuires for "/dev/sdc" are observed they should be discarded for a manual test:
+    > **`WARNING`** if test failures for "/dev/sdc" are observed they should be discarded for a manual test:
     > ```bash
     > # masters:
     > ncn# blkid -L ETCDLVM
@@ -531,9 +538,8 @@ Observe the output of the checks and note any failures, then remediate them.
     1. Wipe the ncns using the 'Basic Wipe' section of [DISK CLEANSLATE](051-DISK-CLEANSLATE.md).
     2. Return to the 'Boot the **Storage Nodes**' step of [Start Deployment](#start-deployment) section above.
 
-
-<a name="additional-validation-tasks-for-failed-installs"></a>
-### Additional Validation Tasks for Failed Installs
+<a name="optional-validation"></a>
+### Optional Validation 
 
 These tests are for sanity checking. These exist as software reaches maturity, or as tests are worked
 and added into the installation repertoire.

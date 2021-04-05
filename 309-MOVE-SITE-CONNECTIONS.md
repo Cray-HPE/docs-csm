@@ -1,12 +1,12 @@
 # Move Site Connections 
 
 In 1.4, the site connections that were previously connection to ncn-w001 will be moved to ncn-m001.  This page will go over the process to make that change.
-> Note: In shasta-1.4, any number of master nodes may have external connections, before Shasta v1.4 this was strictly ncn-w001.
-1. Make request to DCHW to move the BMC/Host Connections and attach a USB to ncn-m001.
+> Note: In Shasta v1.4, any number of master nodes may have external connections, before Shasta v1.4 this was strictly ncn-w001.
+1. Make request to DCHW to move the BMC/Host Connections and attach a USB storage device to ncn-m001.
 
    Make sure ncn-w001 is up and accessible via the NMN from ncn-m001.
 
-   Send a request to dchw@hpe.com to request the following changes.
+   Also request that the SHCD be updated with the following changes.
 
    * Swap mn01 and wn01 cabling. mn01-j1 and mn01-j3 need the external/site-links and both wn01-j1 and wn01-j3 should be wired into the leaf switch.
    * Plug a USB stick (250GB or larger) into mn01. If one is already in wn01 please move it to mn01, otherwise new USBs should have been ordered.  

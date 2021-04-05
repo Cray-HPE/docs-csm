@@ -40,7 +40,7 @@ interface vlan 3000
 ```
 
 # Dell Configuration
-In shasta 1.3.2 the IP-helpers for the NMN(VLAN2), and HMN(VLAN4) resided on the leafs, these are moving to the spines.
+In Shasta v1.3.2 the IP-helpers for the NMN(VLAN2), and HMN(VLAN4) resided on the leafs, these are moving to the spines.
 
 Remove IP-Helper configuration from the leafs.
 ```

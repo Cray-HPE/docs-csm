@@ -4,11 +4,11 @@ The Dell and Mellanox switches have some changes which are needed when moving fr
 This page is a guide to walk through the steps of upgrading a network to 1.4.
 
 ## 1. Firmware Upgrade
-With shasta 1.4 we are using the following firmware, [FIRMWARE](409-MGMT-NET-FIRMWARE-UPDATE.md)
+With Shasta v1.4 we are using the following firmware, [FIRMWARE](409-MGMT-NET-FIRMWARE-UPDATE.md)
 
 
 ## 2. IP Address and Hostname Changes 
-CSI will generate the IPs for the switches on a 1.4 system, they will be located here "/var/www/ephemeral/prep/{system-name}/networks" when ncn-m001 is booted from the LiveCD.
+CSI will generate the IPs for the switches on a Shasta v1.4 system, they will be located here "/var/www/ephemeral/prep/{system-name}/networks" when ncn-m001 is booted from the LiveCD.
 
 Here is a snippet from NMN.yaml with the IP addresses and hostnames of the switches.  
 
@@ -28,12 +28,12 @@ ip_reservations:
    aliases: []
 ```
 
-On most 1.3.x systems the IP addresses and hostnames will be as shown below, which will require them to be updated. 
+On most Shasta v1.3.x systems the IP addresses and hostnames will be as shown below, which will require them to be updated. 
 
 ```
 spine-01 10.252.0.1
-spine-02 10.252.0.3
 leaf-01 10.252.0.2
+spine-02 10.252.0.3
 ```
 
 To make the hostname and IP address changes for all switches, follow this procedure [Management Network Switch Rename](415-MGMT-NET-SWITCH-RENAME.md)
@@ -198,7 +198,7 @@ System-id           State                        Hostname
 50:6B:4B:9C:C6:48   Up                           <sw-spine-002>
 98:03:9B:EF:D6:48   Up
 ```
-If output looks like the following, MLAG is already setup.
+If output looks like the above, MLAG is already setup.
 If MLAG needs to be setup on the system follow these steps.  Most 1.3 systems will have this already configured.
 #### Spine01
 ```
@@ -251,12 +251,13 @@ Adding MLAG ports (these ports go to NCNs)
 
 #### Spine02
 NOTE: 'lacp fallback' is only on one of the Spines.
-We are only applying it to Spine01 here.
+Disable "lacp-individual enable force" on Spine02, if it was set previously.
 ```
 (config) # int mlag-port-channel 1
 (config interface mlag-port-channel 1) # mtu 9216 force
 (config interface mlag-port-channel 1) # switchport mode hybrid
 (config interface mlag-port-channel 1) # no shutdown
+(config interface mlag-port-channel 1) # no lacp-individual enable force
 (config interface mlag-port-channel 1) # switchport hybrid allowed-vlan add 2
 (config interface mlag-port-channel 1) # switchport hybrid allowed-vlan add 4
 (config interface mlag-port-channel 1) # switchport hybrid allowed-vlan add 7
@@ -275,7 +276,7 @@ Once you create the MLAG you need to add ports to it.
 Configuration with Recommended MLAG-VIP cable.
 - This is recommended by Mellanox but not required.
 - It's purpose is to prevent "split brain" which is where both spines think they are the active gateway.
-- It requires a RJ45 cable between the mgmt0 ports on both switches.
+- It requires an RJ45 cable between the mgmt0 ports on both switches.
 - https://community.mellanox.com/s/article/how-to-configure-mlag-on-mellanox-switches#jive_content_id_MLAG_VIP
 
 #### Spine01
@@ -348,6 +349,18 @@ See [IP-Helper](418-MGMT-NET-IP-HELPER.md)
 
 https://connect.us.cray.com/confluence/display/SSI/Management+Network+Changes+for+Shasta+1.3.2
 
+## Verify Spanning-Tree settings
+
+Spanning tree configuration has not changed on Dell and Mellanox switches from 1.3 to 1.4
+
+See [Management Network Spanning-Tree Configuration](419-MGMT-NET-STP.md).
+
+## Update Management Network ACL settings
+
+These ACLs are designed to block traffic from the node management network to and from the hardware management network.
+See [Management Network ACL configuration](406-MGMT-NET-ACL-CONFIG.md).
+
+
 # Verify My Dell/Mellanox system is 1.4 compliant.
 
 - Make sure firmware is up to date.
@@ -358,4 +371,6 @@ https://connect.us.cray.com/confluence/display/SSI/Management+Network+Changes+fo
 - Verify NTP configuration is updated.
 - Verify flow-control settings.
 - Verify DHCP IP-Helper settings.
+- Verify Spanning-Tree settings.
+- Verify ACL settings.
 

@@ -183,10 +183,23 @@ PCIe card PXE boot.
 Shut down Ceph and the Kubernetes management cluster.  This performs several actions to quiesce the
 management services and leaves each management NCN running Linux, but no other services.
 
+If Shasta v1.3.2 or later is installed, use this command.
+
 Shutdown platform services.
-  ```bash
-  ncn-w001# sat bootsys shutdown --stage platform-services
-  ```
+   ```bash
+   ncn-w001# sat bootsys shutdown --stage platform-services
+   ```
+
+If Shasta v1.3.0 or v1.3.1 is installed, follow these three steps from Cray Shasta Administration Guide 1.3 S-8001 RevC in section 6.6 Shut Down and Power Off the Management Kubernetes Cluster.
+
+   2. Determine if patch 1.3.1 has been installed. 
+      Only do step 3 if patch 1.3.1 has been installed.
+   3. Modify /opt/cray/crayctl/ansible_framework/main/roles/cri-ctl/tasks/main.yml file with the following lines.
+   7.  Run the platform-shutdown.yml playbook.
+   ```bash
+   ncn-w001# ansible-playbook \
+   /opt/cray/crayctl/ansible_framework/main/platform-shutdown.yml
+   ```
 
 <a name="powering-off-ncns"></a>
 ### Powering off NCNs
@@ -221,7 +234,7 @@ we'll start by jumping from the manager node to ncn-w001.
     ```
   
     The thing to verify is that there are no error messages in the output.
-1. Power off all other nodes except ncn-m001
+1. Power off all other nodes except ncn-w001 and ncn-m001.
     ```bash
     ncn-w001# ansible ncn -m shell --limit='!ncn-w001:!ncn-m001' -a 'ipmitool power off'
     ```
@@ -232,7 +245,11 @@ we'll start by jumping from the manager node to ncn-w001.
 
 At this time all that is left powered on is ncn-m001. The final `ipmitool power off` command should disconnect the administrator from ncn-w001, leaving them on ncn-m001.
 
-If the connection fails to disconnect, an administrator can escape and disconnect IPMI without exiting their SSH session by pressing `~~.` until `ipmitool` disconnects.
+If the connection fails to disconnect, an administrator can escape and disconnect IPMI without exiting their SSH session by pressing `~.` until `ipmitool` disconnects.
+
+1. Exit typescript from prep.install.
+
+Save collected typescript and health check information off the system so it can be referenced later
 
 > Next: Starting an Installation
 
@@ -316,7 +333,7 @@ The following prerequisites must be completed in order to successfully reinstall
 * [Standing Kubernetes Down](#standing-kubernetes-down)
 * [Prepare the Non-Compute Nodes](#prepare-the-non-compute-nodes)
 
-<a name="Standing Kubernetes Down"></a>
+<a name="standing-kubernetes-down"></a>
 ### Standing Kubernetes Down
 
 Runtime DHCP services interfere with the LiveCD's bootstrap nature to provide DHCP leases to BMCs. To remove
