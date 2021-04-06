@@ -395,8 +395,6 @@ CDU Switches.
 <a name="upgrade-firmware-on-chassis-controllers"></a>
 ## Upgrade Firmware on Chassis Controllers
 
-Upgrade firmware on the chassis controllers:
-
 1. Check to see if firmware is loaded into FAS:
 
    ```bash
@@ -424,64 +422,75 @@ Upgrade firmware on the chassis controllers:
    ncn-m001# cray fas images list | grep cc.1.4.19
    ```
 
-2. Update the CMM firmware:
+2. Update the Chassis Controller BMC Firmware:
 
-   > **`IMPORTANT:`** Before updating a CMM, make sure all slot and rectifier
-   > power is off.
+  Power off the chassis slots.
 
-   The hms-discovery job must also be stopped before updates and restarted
-   after updates are complete.
+  Disable the hms-discovery job:
 
-   Stop hms-discovery job: 
-
-   ```bash
-   ncn-m001# kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":true}}'
-   ```
-
-   Start hms-discovery job:
+  ```bash
+  ncn-m001# kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":true}}'
+  ```
+   Power off all the components: for example, in chassis 0-7. cabinets 1000-1003:
 
    ```bash
-   ncn-m001# kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":false}}'
+   ncn-m001# cray capmc xname_off create --xnames x[1000-1003]c[0-7] --recursive true --continue true
    ```
 
-   Create an upgrade json file `ccBMCupdate.json`:
+  Create an upgrade json file `ccBMCupdate.json`:
 
-   ```json
-   {
-     "inventoryHardwareFilter": {
-       "manufacturer": "cray"
-     },
-     "stateComponentFilter": {
-       "deviceTypes": [
-         "chassisBMC"
-       ]
-     },
-     "targetFilter": {
-       "targets": [
-         "BMC"
-       ]
-     },
-     "command": {
-       "version": "latest",
-       "tag": "default",
-       "overrideDryrun": false,
-       "restoreNotPossibleOverride": true,
-       "timeLimit": 1000,
-       "description": "Dryrun upgrade of Cray Chassis Controllers"
-     }
-   }
-   ```
+  ```json
+  {
+    "inventoryHardwareFilter": {
+      "manufacturer": "cray"
+    },
+    "stateComponentFilter": {
+      "deviceTypes": [
+        "chassisBMC"
+      ]
+    },
+    "targetFilter": {
+      "targets": [
+        "BMC"
+      ]
+    },
+    "command": {
+      "version": "latest",
+      "tag": "default",
+      "overrideDryrun": false,
+      "restoreNotPossibleOverride": true,
+      "timeLimit": 1000,
+      "description": "Dryrun upgrade of Cray Chassis Controllers"
+    }
+  }
+  ```
 
-   Using the above json file run a dry-run with FAS:
+  Using the above json file run a dry-run with FAS:
 
-   ```bash
-   ncn-w001# cray fas actions create ccBMCupdate.json
-   ```
+  ```bash
+  ncn-w001# cray fas actions create ccBMCupdate.json
+  ```
 
-   Check the output from the dry-run with the command: `cray fas actions
-   describe {action-id}` (where `action-id` was the `actionId` returned for the
-   `fas actions create` command)
+  Check the output from the dry-run with the command: `cray fas actions
+  describe {action-id}` (where `action-id` was the `actionId` returned for the
+  `fas actions create` command)
 
-   If dry-run succeeded with updates to version 1.4.19, change
-   `"overrideDryrun"` in the above json file to `true` and update the
-   description. Rerun FAS with the updated json file to do the actual updates.
+  If dry-run succeeded with updates to version 1.4.19, change
+  `"overrideDryrun"` in the above json file to `true` and update the description.
+  Rerun FAS with the updated json file to do the actual updates.
+
+  After firmware update complete,
+  Restart the hms-disover cronjob:
+
+  ```bash
+  ncn-m001 # kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
+  ```
+
+  The hms-discovery cronjob will run within 5 minutes of being unsuspended and start powering on the chassis enclosures, switches, and compute blades. If components are not being powered back on, then power them on manually:
+
+  ```bash
+  ncn-m001 # cray capmc xname_on create --xnames x[1000-1003]c[0-7]r[0-7],x[1000-1003]c[0-7]s[0-7] --prereq true --continue true
+  ```
+  The --prereq option ensures all required components are powered on first. The --continue option allows the command to complete in systems without fully populated hardware.
+
+  After the components have powered on, boot the nodes using the Boot Orchestration Services (BOS).
