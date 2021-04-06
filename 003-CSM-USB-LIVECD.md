@@ -616,7 +616,19 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
     pit# mount -L PITDATA
     ```
 
-7. Start services
+7. First login workarounds
+
+   Check for workarounds in the `/opt/cray/csm/workarounds/first-livecd-login` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
+   ```bash
+   # Example
+   pit# ls /opt/cray/csm/workarounds/first-livecd-login
+   ```
+
+   If there is a workaround here, the output looks similar to the following:
+   ```
+   CASMINST-999
+   ```
+8. Start services
 
    ```bash
    pit# systemctl start nexus
@@ -624,7 +636,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    pit# systemctl start conman
    ```
 
-8. Verify the system:
+9. Verify the system:
 
    ```bash
    pit# csi pit validate --network
@@ -641,9 +653,9 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    c7638b573b93  dtr.dev.cray.com/cray/metal-basecamp:1.1.0-1de4aa6                        5 minutes ago  Up 5 minutes ago          basecamp
    ```
 
-9. Follow the output's directions for failed validations before moving on.
+10. Follow the output's directions for failed validations before moving on.
 
-10. If this is a Shasta v1.3.x migration scenario, then the Dell and Mellanox switches can be reconfigured now with their new names, new IP addresses, and new configuration for v1.4.
+11. If this is a Shasta v1.3.x migration scenario, then the Dell and Mellanox switches can be reconfigured now with their new names, new IP addresses, and new configuration for v1.4.
 
 See [Management Network Dell And Mellanox Upgrades](412-MGMT-NET-DELL-MELLANOX-UPGRADES.md).
 
