@@ -90,12 +90,6 @@ all been run by the administrator before starting this stage.
       -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
       https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
    ```
-1. Upload the same `data.json` file we used to BSS, our Kubernetes cloud-init DataSource. __If you have made any changes__
-   to this file as a result of any customizations or workarounds use the path to that file instead. This step will
-   prompt for the root password of the NCNs.
-   ```bash
-   pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json
-   ```
 1. Upload NCN artifacts, filling `CSM_RELEASE` with the actual release tarball.
    ```bash
    pit# export CSM_RELEASE=csm-x.y.z
@@ -107,6 +101,20 @@ all been run by the administrator before starting this stage.
       --ceph-kernel-path $artdir/storage-ceph/*.kernel \
       --ceph-initrd-path $artdir/storage-ceph/initrd.img*.xz \
       --ceph-squashfs-path $artdir/storage-ceph/storage-ceph*.squashfs
+   ```
+   
+   Running this command will output a block that looks like this at the end:
+   ```text
+   You should run the following commands so the versions you just uploaded can be used in other steps:
+   export KUBERNETES_VERSION=x.y.z
+   export CEPH_VERSION=x.y.z
+   ```
+   Be sure to perform this action so the next step is sucessful.
+1. Upload the same `data.json` file we used to BSS, our Kubernetes cloud-init DataSource. __If you have made any changes__
+   to this file as a result of any customizations or workarounds use the path to that file instead. This step will
+   prompt for the root password of the NCNs.
+   ```bash
+   pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json
    ```
 1. List ipv4 boot options using `efibootmgr`:
    ```bash
