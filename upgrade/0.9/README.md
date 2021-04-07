@@ -7,13 +7,14 @@ Copyright 2021 Hewlett Packard Enterprise Development LP
   - [Common Environment Variables](#common-environment-variables)
   - [Version-Specific Procedures](#version-specific-procedures)
 - [Preparation](#preparation)
+- [Run Validation Checks (Pre-Upgrade)](#run-validation-checks-pre-upgrade)
 - [Update Customizations](#update-customizations)
 - [Setup Nexus](#setup-nexus)
 - [Deploy Manifests](#deploy-manifests)
 - [Upgrade NCN RPMs](#upgrade-ncn-rpms)
 - [Switch VCS Configuration Repositories to Private](#switch-vcs-configuration-repositories-to-private)
 - [Configure Prometheus Alert Notifications to Detect Postgres Replication Lag](#configure-prometheus-alert-notifications-to-detect-postgres-replication-lag)
-- [Run Validation Checks](#run-validation-checks)
+- [Run Validation Checks (Post-Upgrade)](#run-validation-checks-post-upgrade)
 - [Update BGP Configuration](#update-bgp-configuration)
 - [Configure LAG for CMMs](#configure-lag-for-cmms)
 - [Upgrade Firmware on Chassis Controllers](#upgrade-firmware-on-chassis-controllers)
@@ -95,6 +96,12 @@ ncn-m001# CSM_SYSTEM_VERSION="$(kubectl -n services get cm cray-product-catalog 
 > ```
 
 
+<a name="run-validation-checks-pre-upgrade"></a>
+## Run Validation Checks (Pre-Upgrade)
+
+It is important to first verify a healthy starting state. To do this, run the [CSM validation checks](../../008-CSM-VALIDATION.md). If any problems are found, correct them before proceeding.
+
+
 <a name="update-customizations"></a>
 ## Update Customizations
 
@@ -155,7 +162,7 @@ in the `site-init` secret in the `loftsman` namespace must be updated.
    ncn-m001# git diff
    ```
 
-6. Add and commit `customimzations.yaml` if there are any changes:
+6. Add and commit `customizations.yaml` if there are any changes:
 
    ```
    ncn-m001# git add customizations.yaml
@@ -273,14 +280,14 @@ Architecture").
 [1.4 HPE Cray EX System Administration Guide]: https://connect.us.cray.com/confluence/download/attachments/186435146/HPE_Cray_EX_System_Administration_Guide_1.4_S-8001_RevA.pdf?version=1&modificationDate=1616193177450&api=v2
 
 
-<a name="run-validation-checks"></a>
-## Run Validation Checks
+<a name="run-validation-checks-post-upgrade"></a>
+## Run Validation Checks (Post-Upgrade)
 
 > **`IMPORTANT:`** Wait at least 15 minutes after
 > [`upgrade.sh`](#deploy-manifests) completes to let the various Kubernetes
 > resources get initialized and started.
 
-Run the [CSM validation checks](../../008-CSM-VALIDATION.md).
+Run the [CSM validation checks](../../008-CSM-VALIDATION.md) to ensure that everything is still working properly after the upgrade.
 
 > **`CAUTION:`** The following HMS functional tests may fail due to locked
 > components in HSM:
@@ -480,7 +487,7 @@ CDU Switches.
   Rerun FAS with the updated json file to do the actual updates.
 
   After firmware update complete,
-  Restart the hms-disover cronjob:
+  Restart the hms-discovery cronjob:
 
   ```bash
   ncn-m001 # kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
