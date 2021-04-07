@@ -99,7 +99,10 @@ ncn-m001# CSM_SYSTEM_VERSION="$(kubectl -n services get cm cray-product-catalog 
 <a name="run-validation-checks-pre-upgrade"></a>
 ## Run Validation Checks (Pre-Upgrade)
 
-It is important to first verify a healthy starting state. To do this, run the [CSM validation checks](../../008-CSM-VALIDATION.md). If any problems are found, correct them before proceeding.
+It is important to first verify a healthy starting state. To do this, run the
+[CSM validation checks](../../008-CSM-VALIDATION.md). If any problems are
+found, correct them and verify the appropriate validation checks before
+proceeding.
 
 
 <a name="update-customizations"></a>
@@ -287,7 +290,13 @@ Architecture").
 > [`upgrade.sh`](#deploy-manifests) completes to let the various Kubernetes
 > resources get initialized and started.
 
-Run the [CSM validation checks](../../008-CSM-VALIDATION.md) to ensure that everything is still working properly after the upgrade.
+Run the following validation checks to ensure that everything is still working
+properly after the upgrade:
+
+1. [Platform health checks](../../008-CSM-VALIDATION.md#platform-health-checks)
+2. [Network health checks](../../008-CSM-VALIDATION.md#network-health-checks)
+
+Other health checks may be run as desired.
 
 > **`CAUTION:`** The following HMS functional tests may fail due to locked
 > components in HSM:
