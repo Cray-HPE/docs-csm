@@ -109,7 +109,7 @@ all been run by the administrator before starting this stage.
    export KUBERNETES_VERSION=x.y.z
    export CEPH_VERSION=x.y.z
    ```
-   Be sure to perform this action so the next step is sucessful.
+   Be sure to perform this action so the next step is successful.
 1. Upload the same `data.json` file we used to BSS, our Kubernetes cloud-init DataSource. __If you have made any changes__
    to this file as a result of any customizations or workarounds use the path to that file instead. This step will
    prompt for the root password of the NCNs.
