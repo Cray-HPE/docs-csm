@@ -427,13 +427,13 @@ The configuration workflow described here is intended to help understand the exp
    Alternatively, just dump the paths of available drives:
 
    ```bash
-   ncn-s# ceph-volume inventory --format json-pretty | jq -r '.[]|select(.available="true")|.path'
+   ncn-s# ceph-volume inventory --format json-pretty | jq -r '.[]|select(.available==true)|.path'
    ```
 
 2. Add unused drives
 
    ```bash
-   ncn-s# ceph-volume lvm create --data /dev/sd<drive to add>  --bluestore; done 
+   ncn-s# ceph-volume lvm create --data /dev/sd<drive to add>  --bluestore
    ```
 
 
@@ -505,6 +505,8 @@ Observe the output of the checks and note any failures, then remediate them.
     ```bash
     pit# csi pit validate --ceph
     ```
+    **`Note`**: Throughout the output there are multiple lines of test totals; be sure to check all of them and not just the final one.
+
     **`Note`**: Please refer to the **Utility Storage** section of the Admin guide to help resolve any failed tests.
 
 2. Check Kubernetes
