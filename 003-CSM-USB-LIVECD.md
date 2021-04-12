@@ -60,8 +60,8 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 5. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet 
    access these RPMs will need to be externally downloaded and then copied to be installed.
    ```bash
-   linux# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm-install/docs-csm-install-latest.noarch.rpm
-   linux# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
+   linux# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
+   linux# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
    ```
 
 6. Show the version of CSI installed.
