@@ -217,20 +217,20 @@ interface lag 4 multi-chassis
     lacp fallback
     exit
 ```
+
 # CMM port configuration.
 
-- This configuration describes the ports that go to the Mountain CMMs/Computes.
-- This is for Aruba switches only.
-- The CDU switches have two cables (10Gb RJ45) connecting to each CMM, we will setup a static MC-LAG.
-- This LAG is currently used for improved throughput, redundancy is not yet offered.
-- The CEC will need to be programmed to have the "switch LAG" setting to be set to "0001"
+- This requires updated CMM firmware. (version 1.4.20)
+- A static LAG will be configured on the CDU switches.
+- The CDU switches have two cables (10Gb RJ45) connecting to each CMM. 
+- This configuration offers increased throughput and redundancy.
 
-![CEC LAG](img/network/CECLAG.png)
-
-First Aruba CDU configuration.
+## Aruba
+Aruba CDU switch configuration.
+This configuration is identical across CDU VSX pairs.
+The VLANS used here are generated from CSI.
 ```
 sw-cdu-001(config)# int lag 2 multi-chassis static
-sw-cdu-001(config-lag-if)# vsx-sync vlans
 sw-cdu-001(config-lag-if)# no shutdown
 sw-cdu-001(config-lag-if)# description CMM_CAB_1000
 sw-cdu-001(config-lag-if)# no routing
@@ -244,19 +244,54 @@ sw-cdu-001(config-if)# lag 2
 sw-cdu-001(config-if)# exit
 ```
 
-Second Aruba CDU configuration
-```
-sw-cdu-002(config)# int lag 2 multi-chassis static
-sw-cdu-002(config-lag-if)# vsx-sync vlans
-sw-cdu-002(config-lag-if)# shutdown
-sw-cdu-002(config-lag-if)# description CMM_CAB_1000
-sw-cdu-002(config-lag-if)# no routing
-sw-cdu-002(config-lag-if)# vlan trunk native 2000
-sw-cdu-002(config-lag-if)# vlan trunk allowed 2000,3000,4091
-sw-cdu-002(config-lag-if)# exit
+## Dell
 
-sw-cdu-002(config)# int 1/1/2
-sw-cdu-002(config-if)# no shutdown
-sw-cdu-002(config-if)# lag 2
-sw-cdu-002(config-if)# exit
+Dell CDU switch configuration.
+This configuration is identical across CDU VLT pairs.
+The VLANS used here are generated from CSI.
+```
+interface port-channel1
+ description CMM_CAB_1000
+ no shutdown
+ switchport mode trunk
+ switchport access vlan 2000
+ switchport trunk allowed vlan 3000,4091
+ mtu 9216
+ vlt-port-channel 1
+
+interface ethernet1/1/1
+ description CMM_CAB_1000
+ no shutdown
+ channel-group 1 mode on 
+ no switchport
+ mtu 9216
+ flowcontrol receive on
+ flowcontrol transmit on
+```
+
+# CEC port configuration.
+
+The VLAN used here is generated from CSI.  It is the HMN_MTN VLAN that is assigned to that cabinet.
+
+## Dell
+```
+interface ethernet1/1/50
+ description CEC_CAB_1003_alt
+ no shutdown
+ switchport access vlan 3003
+ flowcontrol receive off
+ flowcontrol transmit off
+ spanning-tree bpduguard enable
+ spanning-tree port type edge
+ ```
+
+ ## Aruba
+```
+interface 1/1/1
+no shutdown
+description cec1
+no routing
+vlan access 3000
+spanning-tree bpdu-guard
+spanning-tree port-type admin-edge
 ```
