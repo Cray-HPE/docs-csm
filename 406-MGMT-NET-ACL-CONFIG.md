@@ -34,7 +34,7 @@ sw-s24g03(config-vlan-4)# apply access-list ip nmn-hmn in
 sw-s24g03(config-vlan-4)# apply access-list ip nmn-hmn out
 ```
 
-If you are on a CDU switch you will need to apply it to the 2xxx and 3xxx VLANs
+If you are on a Aruba CDU switch you will need to apply the same access-list to the 2xxx and 3xxx VLANs (MTN VLANS)
 
 # Mellanox Configuration
 
@@ -60,3 +60,25 @@ sw-spine-001(config) # interface vlan 4 ipv4 port access-group nmn-hmn
 sw-spine-001(config) # exit
 sw-spine-001# write memory
 ```
+
+# Dell Configuration
+Create the Access list then apply it to all the vlan interfaces.  In the example below we only show the NMN VLAN.  This will need to go on all River and MTN networks.
+```
+ip access-list nmn-hmn
+ seq 10 deny ip 10.252.0.0/17 10.254.0.0/17
+ seq 20 deny ip 10.252.0.0/17 10.104.0.0/14
+ seq 30 deny ip 10.254.0.0/17 10.252.0.0/17
+ seq 40 deny ip 10.254.0.0/17 10.100.0.0/14
+ seq 50 deny ip 10.100.0.0/14 10.254.0.0/17
+ seq 60 deny ip 10.100.0.0/14 10.104.0.0/14
+ seq 70 deny ip 10.104.0.0/14 10.252.0.0/17
+ seq 80 deny ip 10.104.0.0/14 10.100.0.0/14
+ seq 90 permit ip any any
+```
+
+```
+interface vlan2
+ ip access-group nmn-hmn in
+ ip access-group nmn-hmn out
+```
+

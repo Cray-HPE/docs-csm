@@ -287,10 +287,6 @@ Logout of the switch and return using the new IP address for vlan 2 so that vlan
    sw-leaf-001(conf-if-vl-2)# interface vlan4
    sw-leaf-001(conf-if-vl-4)# ip address 10.254.0.4/17
    sw-leaf-001(conf-if-vl-4)# interface vlan7
-   sw-leaf-001(conf-if-vl-7)# ip address 10.103.8.4/24
-   sw-leaf-001(conf-if-vl-7)# interface vlan10
-   sw-leaf-001(conf-if-vl-10)# ip address 10.11.0.4/16
-   sw-leaf-001(conf-if-vl-10)# router ospf 1
    sw-leaf-001(config-router-ospf-1)# router-id 10.252.0.4
    sw-leaf-001(config-router-ospf-1)# exit
    sw-leaf-001(config)# exit
