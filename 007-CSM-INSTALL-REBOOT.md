@@ -116,6 +116,11 @@ all been run by the administrator before starting this stage.
    ```bash
    pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json
    ```
+1. Ensure the DNS server value is set correctly. If for any reason you have changed the IP address of the DNS server,
+   use that value instead.
+   ```bash
+   pit# csi handoff bss-update-cloud-init --set meta-data.dns-server=10.92.100.225 --limit Global
+   ```
 1. List ipv4 boot options using `efibootmgr`:
    ```bash
    pit# efibootmgr | grep -Ei "ip(v4|4)"
