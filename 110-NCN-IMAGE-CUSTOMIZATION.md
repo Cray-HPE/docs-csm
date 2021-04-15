@@ -21,12 +21,12 @@ This process should be done for the "kubernetes" image used by master and worker
 
 1. Open the image.
 
-   The kubernetes image will be of the form "kubernetes-0.0.53.squashfs" in /var/www/ephermeral/data/k8s.
+   The kubernetes image will be of the form "kubernetes-0.0.53.squashfs" in /var/www/ephemeral/data/k8s.
    ```bash
    pit# cd /var/www/ephemeral/data/k8s
    pit# unsquashfs kubernetes-0.0.53.squashfs
    ```
-   The ceph image will be of the form "ceph-0.0.44.squashfs" in /var/www/ephermeral/data/ceph.
+   The ceph image will be of the form "ceph-0.0.44.squashfs" in /var/www/ephemeral/data/ceph.
    ```bash
    pit# cd /var/www/ephemeral/data/ceph
    pit# unsquashfs ceph-0.0.44.squashfs
@@ -55,11 +55,11 @@ This process should be done for the "kubernetes" image used by master and worker
    ```
 7. Cleanup the SquashFS creation
 
-   The kubernetes image directory is /var/www/ephermeral/data/k8s.
+   The kubernetes image directory is /var/www/ephemeral/data/k8s.
    ```bash
    pit# umount /var/www/ephemeral/data/k8s/squashfs-root/mnt/squashfs
    ```
-   The ceph image directory is /var/www/ephermeral/data/ceph.
+   The ceph image directory is /var/www/ephemeral/data/ceph.
    ```bash
    pit# umount /var/www/ephemeral/data/ceph/squashfs-root/mnt/squashfs
    ```
