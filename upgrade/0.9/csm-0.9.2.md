@@ -26,7 +26,6 @@ Procedures:
 - [Configure Prometheus Alert Notifications to Detect Postgres Replication Lag](#configure-prometheus-alert-notifications-to-detect-postgres-replication-lag)
 - [Run Validation Checks (Post-Upgrade)](#run-validation-checks-post-upgrade)
 - [Update BGP Configuration](#update-bgp-configuration)
-- [Configure LAG for CMMs](#configure-lag-for-cmms)
 - [Upgrade Firmware on Chassis Controllers](#upgrade-firmware-on-chassis-controllers)
 
 
@@ -363,20 +362,6 @@ script `/opt/cray/csm/scripts/networking/BGP/Aruba_BGP_Peers.py`.
    ```
 
 4. Verify the [BGP configuration](../../400-SWITCH-BGP-NEIGHBORS.md).
-
-
-<a name="configure-lag-for-cmms"></a>
-## Configure LAG for CMMs
-
-> **`IMPORTANT:`** This procedure applies to systems with Aruba CDU switches.
-
-If your Shasta system is using Aruba CDU switches follow the steps labeled "CMM
-Port Configuration" located at the bottom of
-[MGMT-PORT-CONFIG](../../405-MGMT-NET-PORT-CONFIG.md). The instructions show
-how to setup Link Aggregation from the CMM Switch to the Aruba CDU switches.
-This change will require physical access to the CEC and remote access to the
-CDU Switches.
-
 
 <a name="upgrade-firmware-on-chassis-controllers"></a>
 ## Upgrade Firmware on Chassis Controllers

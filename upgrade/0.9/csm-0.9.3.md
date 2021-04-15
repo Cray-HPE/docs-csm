@@ -18,6 +18,7 @@ Procedures:
 - [Setup Nexus](#setup-nexus)
 - [Deploy Manifests](#deploy-manifests)
 - [Upgrade NCN RPMs](#upgrade-ncn-rpms)
+- [Configure LAG for CMMs](#configure-lag-for-cmms)
 - [Run Validation Checks (Post-Upgrade)](#run-validation-checks-post-upgrade)
 
 
@@ -116,7 +117,65 @@ Upgrade CSM packages on NCNs:
 ```bash
 ncn-m001# pdsh -w $(./lib/list-ncns.sh | paste -sd,) "zypper ar -fG https://packages.local/repository/csm-sle-15sp2/ csm-sle-15sp2 && zypper up -y"
 ```
+<a name="configure-lag-for-cmms"></a>
 
+## Configure LAG for CMMs
+
+> **`CRITICAL:`** Only perform the following procedure if `$CSM_RELEASE_VERSION >= 0.9.3`.
+
+> **`IMPORTANT:`** This procedure applies to systems with CDU switches.
+
+If your Shasta system is using CDU switches you will need to update the configuration going to the CMMs.
+
+- This requires updated CMM firmware. (version 1.4.20)
+- A static LAG will be configured on the CDU switches.
+- The CDU switches have two cables (10Gb RJ45) connecting to each CMM. 
+- This configuration offers increased throughput and redundancy.
+- The CEC will not need to be programmed in order to support the LAG configuration as it was required in previous versions.  The updated firmware takes care of this.
+
+## Aruba
+Aruba CDU switch configuration.
+This configuration is identical across CDU VSX pairs.
+The VLANS used here are generated from CSI.
+```
+sw-cdu-001(config)# int lag 2 multi-chassis static
+sw-cdu-001(config-lag-if)# no shutdown
+sw-cdu-001(config-lag-if)# description CMM_CAB_1000
+sw-cdu-001(config-lag-if)# no routing
+sw-cdu-001(config-lag-if)# vlan trunk native 2000
+sw-cdu-001(config-lag-if)# vlan trunk allowed 2000,3000,4091
+sw-cdu-001(config-lag-if)# exit
+
+sw-cdu-001(config)# int 1/1/2
+sw-cdu-001(config-if)# no shutdown
+sw-cdu-001(config-if)# lag 2
+sw-cdu-001(config-if)# exit
+```
+
+## Dell
+
+Dell CDU switch configuration.
+This configuration is identical across CDU VLT pairs.
+The VLANS used here are generated from CSI.
+```
+interface port-channel1
+ description CMM_CAB_1000
+ no shutdown
+ switchport mode trunk
+ switchport access vlan 2000
+ switchport trunk allowed vlan 3000,4091
+ mtu 9216
+ vlt-port-channel 1
+
+interface ethernet1/1/1
+ description CMM_CAB_1000
+ no shutdown
+ channel-group 1 mode on 
+ no switchport
+ mtu 9216
+ flowcontrol receive on
+ flowcontrol transmit on
+```
 
 <a name="run-validation-checks-post-upgrade"></a>
 ## Run Validation Checks (Post-Upgrade)
