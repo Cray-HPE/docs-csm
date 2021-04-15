@@ -1,21 +1,125 @@
-# non-compute-node Mounts and File Systems
 
-This page serves to provide technical detail for the various filesystems on the non-compute nodes.
+<a name="ncn-partitions"></a>
+# NCN Partitions
+
+Shasta non-compute nodes use drive storage for persistence and block storage. This page outlines
+reference information for these disks, their partition tables, and their management.
+
+* [NCN Partitions](104-NCN-PARTITIONING.md#ncn-partitions)
+    * [What Controls Partitioning?](104-NCN-PARTITIONING.md#what-controls-partitioning?)
+    * [Plan of Record / Baseline](104-NCN-PARTITIONING.md#plan-of-record--baseline)
+        * [Problems When Above/Below Baseline](104-NCN-PARTITIONING.md#problems-when-abovebelow-baseline)
+        * [Worker Nodes with ETCD](104-NCN-PARTITIONING.md#worker-nodes-with-etcd)
+            * [Disable Luks](104-NCN-PARTITIONING.md#disable-luks)
+            * [Expand the RAID](104-NCN-PARTITIONING.md#expand-the-raid)
+    * [Disk Layout Quick-Reference Tables](104-NCN-PARTITIONING.md#disk-layout-quick-reference-tables)
+* [OverlayFS and Persistence](104-NCN-PARTITIONING.md#overlayfs-and-persistence)
+    * [Persistent Directories](104-NCN-PARTITIONING.md#persistent-directories)
+    * [OverlayFS Example](104-NCN-PARTITIONING.md#overlayfs-example)
+      * [Layering - Upperdir and Lowerdir(s)](104-NCN-PARTITIONING.md#layering---upperdir-and-lowerdirs)
+      * [Layering Real World Example](104-NCN-PARTITIONING.md#layering-real-world-example)
+    * [OverlayFS Control](104-NCN-PARTITIONING.md#overlayfs-control)
+        * [Reset Toggles](104-NCN-PARTITIONING.md#reset-toggles)
+        * [Reset On Next Boot](104-NCN-PARTITIONING.md#reset-on-next-boot)
+        * [Reset on Every Boot](104-NCN-PARTITIONING.md#reset-on-every-boot)
+        * [Re-sizing the Persistent Overlay](104-NCN-PARTITIONING.md#re-sizing-the-persistent-overlay)
+        * [Thin Overlay Feature](104-NCN-PARTITIONING.md#thin-overlay-feature)
+* [SystemD MetalFS](104-NCN-PARTITIONING.md#systemd-metalfs)
+* [Old/Retired FS-Labels](104-NCN-PARTITIONING.md#oldretired-fs-labels)
 
 
-### Disk Layout Quick-Reference Tables
+<a name="what-controls-partitioning?"></a>
+## What Controls Partitioning?
+
+Partitioning is controlled by two aspects:
+
+- dracut; this selects disks and builds their partition tables and/or LVM storage.
+- cloud-init; this manages standalone partitions or volumes, as well as high-level object storage.
+
+<a name="plan-of-record--baseline"></a>
+## Plan of Record / Baseline
+
+| Node Type | No. of "small" disks (0.5 TiB) | No. of "large" disks (1.9 TiB) |
+| --- |:---:|:---:|
+| k8s-master nodes | 3 | 0
+| k8s-worker nodes | 2 | 1 
+| ceph-storage nodes | 2 | 3+
+
+Disks are chosen by dracut, kubernetes and storage nodes use different dracut modules.
+- First, `two disks` for the OS are chosen from the pool of "small" disks
+- Second, `one disk` is selected for the ephemeral data
+
+<a name="problems-when-abovebelow-baseline"></a>
+### Problems When Above/Below Baseline
+
+NCN masters and workers use the same artifacts, and thus have the same dracut modules assimilating disks. Therefore, it is important
+to beware of:
+- k8s-master nodes with 1 or more extra "large" disk(s); these disks help but are unnecessary 
+- ceph-storage nodes do not run the same dracut modules since they have different disk demands
+
+<a name="worker-nodes-with-etcd"></a>
+### Worker Nodes with ETCD
+
+k8s-worker nodes with 1 or more extra "small" disk(s); these disks are confusing and unnecessary and can be disabled
+easily.
+
+<a name="disable-luks"></a>
+#### Disable Luks
+
+> **`NOTE`** This is broken, use the [expand RAID](#expand-raid) option instead. (MTL-1309) 
+
+All NCNs (master/worker/storage) have the same kernel parameters, but are not always necessary. This method works by toggling the dependency
+for the metal ETCD module, disabling LUKs will disable ETCD bare-metal creation.
+
+1. Disable LUKs for each worker node, thus disabling the metal ETCD module:
+    - During Bootstrap (on the `pit` node):
+        ```bash
+        sed 's/disk-opts rd.luks /disk-opts rd.luks=0 /g' /var/www/ncn-w*/script.ipxe
+        ```
+    - During runtime with `csi`:
+        ```bash
+        csi handoff bss-update-param rd.luks=0
+        ```
+
+1. Rebuild the node
+    - Run the [basic wipe](051-DISK-CLEANSLATE.md#basic-wipe) if the node was already booted
+    - (re)boot the node
+
+<a name="expand-the-raid"></a>
+#### Expand the RAID
+
+This option simply expands the RAID to consume the extra disks, leaving none behind for the metal ETCD module to find.
+
+1. Set `metal.disks` equal to the number of "small" disks in the node(s), this will reserve them for the RAID and prevent any other partitioning from happening on them.
+
+    - During Bootstrap (on the `pit` node):
+        ```bash
+        sed 's/disk-opts /disk-opts metal.disks=3 /g' /var/www/ncn-w*/script.ipxe
+        ```
+    - During runtime with `csi`:
+        ```bash
+        csi handoff bss-update-param metal.disks=3
+        ```
+
+1. Change the RAID type, or leave it as default (mirror)
+
+    - During Bootstrap (on the `pit` node):
+        ```bash
+        sed 's/disk-opts /disk-opts metal.md-level=stripe /g' /var/www/ncn-w*/script.ipxe
+        ```
+    - During runtime with `csi`:
+        ```bash
+        csi handoff bss-update-param metal.md-level=stripe
+        ```
+
+1. Rebuild the node
+    - Run the [basic wipe](051-DISK-CLEANSLATE.md#basic-wipe) if the node was already booted
+    - (re)boot the node
+
+<a name="disk-layout-quick-reference-tables"></a>
+## Disk Layout Quick-Reference Tables
 
 The table below represents all recognizable FS labels on any given NCN, varying slightly by node-role (i.e. kubernetes-manager vs. kubernetes-worker).
-
-##### Nomenclature
-
-In general, there are 3 kinds of disks:
-
-- **Ephemeral**: a disk that is not in the systems RAID
-- **RAID**: a RAID (mirror/raid-1)
-- **CEPH**: a disk for use as a ceph OSD
-
-
 
 | k8s-manager | k8s-worker | storage-ceph | FS Label | Partitions | Device |  Partition Size | OverlayFS | Work Order(s) | Memo
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -38,6 +142,7 @@ The above table's rows with overlayFS map their "Mount Paths" to the "Upper Dire
 
 > For notes on previous/old labels, scroll to the bottom.
 
+<a name="overlayfs-and-persistence"></a>
 # OverlayFS and Persistence
 
 There are a few overlays used for NCN image boots. These enable two critical functions; changes to data and new data will persist between reboots, and RAM (memory) is freed because we're using our block-devices (SATA/PCIe).
@@ -46,6 +151,7 @@ There are a few overlays used for NCN image boots. These enable two critical fun
 2. `CONLIB` is a persistent overlayFS for containerd, it commits and saves all new changes while allowing read-through to pre-existing (baked-in) data from the squashFS.
 3. `ETCDK8S` is a persistent overlayFS for etcd, it works like the `CONLIB` overlayFS however this exists in an encrypted LUKS2 partition.
 
+<a name="persistent-directories"></a>
 #### OverlayFS Example
 
 > Helpful commands... the overlayFS organization can be best viewed with these three commands:
@@ -110,6 +216,7 @@ sdc                   8:32   1 447.1G  0 disk
   └─etcdvg0-ETCDK8S 254:1    0    32G  0 lvm   /run/lib-etcd
 ```
 
+<a name="overlayfs-example"></a>
 ### Persistent Directories
 
 **Not all directories are persistent!**
@@ -144,6 +251,7 @@ drwxr-xr-x 8 root root  76 Oct 13 16:52 var
 ```
 > Remember: `/run/overlayfs` is a symbolic link to the real disk `/run/initramfs/overlayfs/*`.
 
+<a name="layering---upperdir-and-lowerdirs"></a>
 ##### Layering - Upperdir and Lowerdir(s)
 
 The file-system the user is working on is really two layered file-systems (overlays).
@@ -154,6 +262,7 @@ The file-system the user is working on is really two layered file-systems (overl
 > There are fancier options for overlays, such as multiple lower-layers, copy-up (lower-layer precedence),
 >  and opaque (removing a directory in the upper layer hides it in the lower layer). You can read more [here|https://www.kernel.org/doc/html/latest/filesystems/overlayfs.html#inode-properties]
 
+<a name="layering-real-world-example"></a>
 ##### Layering Real World Example
 
 Let's take `/root` for example, we can see in the upper-dir (the overlay) we have these files:
@@ -204,17 +313,19 @@ drwx------ 1 root root  29 Oct 21 21:57 .ssh
 
 The take-away here is: any change done to `/root/` will persist through `/run/overlayfs/root` and will take precedence to the squashFS image root.
 
-
-# OverlayFS Features
+<a name="overlayfs-control"></a>
+## OverlayFS Control
 
 These features or toggles are passable on the kernel command line, and change the behavior of the overlayFS.
 
-## Reset Toggles
+<a name="reset-toggles"></a>
+### Reset Toggles
 
 The overlay FS provides a few reset toggles to clear out the persistence directories without reinstall.
 
 **The toggles require rebooting.**
 
+<a name="reset-on-next-boot"></a>
 #### Reset On Next Boot
 
 The preferred way to reset persistent storage is to use the overlayFS reset toggle.
@@ -234,6 +345,7 @@ will persist.
 rd.live.overlay.reset=0
 ```
 
+<a name="reset-on-every-boot"></a>
 #### Reset on Every Boot
 
 There are two options one can leave enabled to accomplish this:
@@ -255,7 +367,8 @@ metal.no-wipe=0 rd.live.overlay.reset=1
 > Note: `metal.no-wipe=1` does not protect against `rd.live.overlay.reset`, `metal.no-wipe` is not
 > a feature of dmsquash-live.
 
-## Re-sizing the Persistent Overlay
+<a name="re-sizing-the-persistent-overlay"></a>
+### Re-sizing the Persistent Overlay
 
 - Default Size: 300 GiB
 - File System: XFS
@@ -276,7 +389,8 @@ rd.live.overlay.size=307200
 rd.live.overlay.size=1000000
 ``` 
 
-## Thin Overlay Feature
+<a name="thin-overlay-feature"></a>
+### Thin Overlay Feature
 
 The persistent overlayFS leverages newer, "thin" overlays that support discards and that will
 free blocks that are not claimed by the file system. This means that memory is free/released
@@ -293,7 +407,8 @@ rd.live.overlay.thin=1
 rd.live.overlay.thin=0
 ```
 
-# SystemD MetalFS
+<a name="systemd-metalfs"></a>
+## SystemD MetalFS
 
 The `metalfs` systemd service will try to mount any metal created partitions.
 
@@ -305,6 +420,7 @@ The service will continuously attempt to mount the partitions, if problems arise
 ncn# systemctl stop metalfs
 ```
 
+<a name="oldretired-fs-labels"></a>
 # Old/Retired FS-Labels
 
 Deprecated FS labels/partitions from Shasta 1.3.X (no longer in Shasta 1.4.0 and onwards).
