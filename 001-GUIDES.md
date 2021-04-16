@@ -151,12 +151,12 @@ The CSM installation validation and health checks can be run again now that ncn-
 
 The NCNs should be locked to prevent accidental firmware upgrades with FAS or power down operations and reset operations with CAPMC.
 
-* [Why?](009-NCN-LOCKING.md#a-namewhyawhy)
-* [When To Lock Management NCNs](009-NCN-LOCKING.md#a-namewhen-to-lock-management-ncnsawhen-to-lock-management-ncns)
-* [When To Unlock Management NCNs](009-NCN-LOCKING.md#a-namewhen-to-unlock-management-ncnsawhen-to-unlock-management-ncns)
-* [Locked Behavior](009-NCN-LOCKING.md#a-namelocked-behavioralocked-behavior)
-* [How To Lock Management NCNs](009-NCN-LOCKING.md#a-namehow-to-lock-management-ncnsastart--how-to-lock-management-ncns)
-* [How To Unlock Management NCNs](009-NCN-LOCKING.md#a-namehow-to-unlock-management-ncnsahow-to-unlock-management-ncns)
+* [Why?](009-NCN-LOCKING.md#why)
+* [When To Lock Management NCNs](009-NCN-LOCKING.md#when-to-lock-management-ncns)
+* [When To Unlock Management NCNs](009-NCN-LOCKING.md#when-to-unlock-management-ncns)
+* [Locked Behavior](009-NCN-LOCKING.md#locked-behavior)
+* [How To Lock Management NCNs](009-NCN-LOCKING.md#how-to-lock-management-ncns)
+* [How To Unlock Management NCNs](009-NCN-LOCKING.md#how-to-unlock-management-ncns)
 
 
 ##### [Firmware Update the system with FAS](010-FIRMWARE-UPDATE-WITH-FAS.md#firmware-update-the-system-with-fas) 

@@ -126,7 +126,6 @@ Run the following commands, replacing them with your timezone as needed.
 3. `sed -i 's/--utc/--localtime/' /root/bin/configure-ntp.sh`
 4. `/root/bin/configure-ntp.sh`
 
-sed -i 's/^timedatectl set-timezone UTC/timedatectl set-timezone America\/Chicago/' /srv/cray/scripts/metal/set-ntp-config.sh
 You should see the output in your local timezone.  You can verify as well by running `timedatectl` and `hwclock --verbose`.
 
 ```

@@ -50,39 +50,39 @@ installs as follows:
 
 1.  Stop Nexus:
 
-    ```bash
-    pit# systemctl stop nexus
-    ```
+   ```bash
+   pit# systemctl stop nexus
+   ```
 
 2.  Remove `nexus` container:
 
-    ```bash
-    pit# podman container exists nexus && podman container rm nexus
-    ```
+   ```bash
+   pit# podman container exists nexus && podman container rm nexus
+   ```
 
 3.  Remove `nexus-data` volume:
 
-    ```bash
-    pit# podman volume rm nexus-data
-    ```
+   ```bash
+   pit# podman volume rm nexus-data
+   ```
 
 4.  Add the corresponding URL to the `ExecStartPost` script in
-    `/usr/lib/systemd/system/nexus.service`.
+   `/usr/lib/systemd/system/nexus.service`.
 
-    > **`INTERNAL USE`** Cray internal systems may want to proxy to
-    > https://dtr.dev.cray.com as follows:
-    >
-    > ```bash
-    > pit# URL=https://dtr.dev.cray.com
-    > pit# sed -e "s,^\(ExecStartPost=/usr/sbin/nexus-setup.sh\).*$,\1 $URL," -i /usr/lib/systemd/system/nexus.service
-    > ```
+   > **`INTERNAL USE`** Cray internal systems may want to proxy to
+   > https://dtr.dev.cray.com as follows:
+   >
+   > ```bash
+   > pit# URL=https://dtr.dev.cray.com
+   > pit# sed -e "s,^\(ExecStartPost=/usr/sbin/nexus-setup.sh\).*$,\1 $URL," -i /usr/lib/systemd/system/nexus.service
+   > ```
 
 5.  Restart Nexus:
 
-    ```bash
-    pit# systemctl daemon-reload
-    pit# systemctl start nexus
-    ```
+   ```bash
+   pit# systemctl daemon-reload
+   pit# systemctl start nexus
+   ```
 
 
 <a name="tokens-and-ipmi-password"></a>
@@ -281,14 +281,15 @@ The configuration workflow described here is intended to help understand the exp
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} chassis bootdev pxe options=efiboot,persistent
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
     ```
-    > Note: some BMCs will "flake" and ignore the bootorder setting by `ipmitool`. As a fallback, cloud-init will
-    > correct the bootorder after NCNs complete their first boot. The first boot may need manual effort to set the boot order over the conman console. The NCN boot order is further explained in [101 NCN Booting](101-NCN-BOOTING.md).
+   > Note: some BMCs will "flake" and ignore the bootorder setting by `ipmitool`. As a fallback, cloud-init will
+   > correct the bootorder after NCNs complete their first boot. The first boot may need manual effort to set the boot order over the conman console. The NCN boot order is further explained in [101 NCN Booting](101-NCN-BOOTING.md).
 
 4. Validate that the LiveCD is ready for installing NCNs
    Observe the output of the checks and note any failures, then remediate them.
    ```bash
    pit# csi pit validate --livecd-preflight
    ```
+   > Note: If you are *not* on an internal Cray/HPE system, or if you are on an offline/airgapped system, then you can ignore any errors about not being able resolve arti.dev.cray.com
 
 5. Print the consoles available to you:
    ```bash
@@ -350,32 +351,32 @@ The configuration workflow described here is intended to help understand the exp
    > ```
 
 8. Once all storage nodes are up and ncn-s001 is running ceph-ansible, boot **Kubernetes Managers and Workers**
-    ```bash
-    pit# grep -oP "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
-    ```
+   ```bash
+   pit# grep -oP "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
+   ```
 
 9.  Wait. Observe the installation through ncn-m002-mgmt's console:
-    ```bash
-    # Print the console name
-    pit# conman -q | grep m002
-    ```
+   ```bash
+   # Print the console name
+   pit# conman -q | grep m002
+   ```
 
-    Expected output looks similar to the following:
-    ```
-    ncn-m002-mgmt
-    ```
+   Expected output looks similar to the following:
+   ```
+   ncn-m002-mgmt
+   ```
 
-    Then join the console:
-    ```bash
-    # Join the console
-    pit# conman -j ncn-m002-mgmt
-    ```
+   Then join the console:
+   ```bash
+   # Join the console
+   pit# conman -j ncn-m002-mgmt
+   ```
 
-    **`NOTE`**: If the nodes have pxe boot issues (e.g. getting pxe errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](420-MGMT-NET-PXE-TSHOOT.md)
+   **`NOTE`**: If the nodes have pxe boot issues (e.g. getting pxe errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](420-MGMT-NET-PXE-TSHOOT.md)
 
-    **`NOTE`**: If one of the manager nodes seems hung waiting for the storage nodes to create a secret, check the storage node consoles for error messages. If any are found, consult [066-CEPH-CSI](066-CEPH-CSI.md)
+   **`NOTE`**: If one of the manager nodes seems hung waiting for the storage nodes to create a secret, check the storage node consoles for error messages. If any are found, consult [066-CEPH-CSI](066-CEPH-CSI.md)
 
-    **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to linux with no hostname) see the CSM workarounds for fixes around mutual symptoms.
+   **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to linux with no hostname) see the CSM workarounds for fixes around mutual symptoms.
    > ```bash
    > # Example
    > pit# ls /opt/cray/csm/workarounds/after-ncn-boot
@@ -386,20 +387,20 @@ The configuration workflow described here is intended to help understand the exp
    > ```
 
 9. Refer to [timing of deployments](#timing-of-deployments). It should not take more than 60 minutes for the `kubectl get nodes` command to return output indicating that all the managers and workers aside from the PIT node booted from the LiveCD are `Ready`:
-    ```bash
-    pit# ssh ncn-m002
-    ncn-m002# kubectl get nodes -o wide
-    ```
+   ```bash
+   pit# ssh ncn-m002
+   ncn-m002# kubectl get nodes -o wide
+   ```
 
-    Expected output looks similar to the following:
-    ```
-    NAME       STATUS   ROLES    AGE     VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                                                  KERNEL-VERSION         CONTAINER-RUNTIME
-    ncn-m002   Ready    master   14m     v1.18.6   10.252.1.5    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
-    ncn-m003   Ready    master   13m     v1.18.6   10.252.1.6    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
-    ncn-w001   Ready    <none>   6m30s   v1.18.6   10.252.1.7    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
-    ncn-w002   Ready    <none>   6m16s   v1.18.6   10.252.1.8    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
-    ncn-w003   Ready    <none>   5m58s   v1.18.6   10.252.1.12   <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
-    ```
+   Expected output looks similar to the following:
+   ```
+   NAME       STATUS   ROLES    AGE     VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                                                  KERNEL-VERSION         CONTAINER-RUNTIME
+   ncn-m002   Ready    master   14m     v1.18.6   10.252.1.5    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
+   ncn-m003   Ready    master   13m     v1.18.6   10.252.1.6    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
+   ncn-w001   Ready    <none>   6m30s   v1.18.6   10.252.1.7    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
+   ncn-w002   Ready    <none>   6m16s   v1.18.6   10.252.1.8    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
+   ncn-w003   Ready    <none>   5m58s   v1.18.6   10.252.1.12   <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
+   ```
 
 
 <a name="check-for-unused-drives-on-utility-storage-nodes"></a>
@@ -481,8 +482,8 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 Note: If migrating from Shasta v1.3.x, the worker nodes have different IP addresses, so the scripts below must be run to correct the spine switch configuration to the Shasta v1.4 IP addresses for the worker nodes.
 
 1. Make sure you clear the BGP sessions here.
-    - Aruba:`clear bgp *`
-    - Mellanox: `clear ip bgp all`
+   - Aruba:`clear bgp *`
+   - Mellanox: `clear ip bgp all`
 
    > **`NOTE`**: At this point all but possibly one of the peering sessions with the BGP neighbors should be in IDLE or CONNECT state and not ESTABLISHED state.   If the switch is an Aruba, you will have one peering session established with the other switch.  You should check that all of the neighbor IPs are correct.
 
@@ -506,43 +507,43 @@ The following commands will run a series of remote tests on the other nodes to v
 
 Observe the output of the checks and note any failures, then remediate them.
 1. Check Ceph
-    ```bash
-    pit# csi pit validate --ceph
-    ```
-    **`Note`**: Throughout the output there are multiple lines of test totals; be sure to check all of them and not just the final one.
+   ```bash
+   pit# csi pit validate --ceph
+   ```
+   **`Note`**: Throughout the output there are multiple lines of test totals; be sure to check all of them and not just the final one.
 
-    **`Note`**: Please refer to the **Utility Storage** section of the Admin guide to help resolve any failed tests.
+   **`Note`**: Please refer to the **Utility Storage** section of the Admin guide to help resolve any failed tests.
 
 2. Check Kubernetes
-    ```bash
-    pit# csi pit validate --k8s
-    ```
+   ```bash
+   pit# csi pit validate --k8s
+   ```
 
-    > **`WARNING`** if test failures for "/dev/sdc" are observed they should be discarded for a manual test:
-    > ```bash
-    > # masters:
-    > ncn# blkid -L ETCDLVM
-    > # workers:
-    > ncn# blkid -L CONLIB
-    > ncn# blkid -L CONRUN
-    > ncn# blkid -L K8SLET
-    > ```
-    >
-    > The test should be looking for the ephemeral disk, that disk is sometimes `/dev/sdc`. The name of the disk is a more accurate test, and isn't prone to the random path change.
+   > **`WARNING`** if test failures for "/dev/sdc" are observed they should be discarded for a manual test:
+   > ```bash
+   > # masters:
+   > ncn# blkid -L ETCDLVM
+   > # workers:
+   > ncn# blkid -L CONLIB
+   > ncn# blkid -L CONRUN
+   > ncn# blkid -L K8SLET
+   > ```
+   >
+   > The test should be looking for the ephemeral disk, that disk is sometimes `/dev/sdc`. The name of the disk is a more accurate test, and isn't prone to the random path change.
 
-    > Note: If your shell terminal is not echoing your input after running this, type "reset" and press enter to recover.
+   > Note: If your shell terminal is not echoing your input after running this, type "reset" and press enter to recover.
 
 3. Ensure that weave hasn't split-brained
 
-    Run the following command on each member of the kubernetes cluster (master nodes and worker nodes) to ensure that weave is operating as a single cluster:
+   Run the following command on each member of the kubernetes cluster (master nodes and worker nodes) to ensure that weave is operating as a single cluster:
 
-    ```bash
-    ncn# weave --local status connections  | grep failed
-    ```
-    If you see messages like **'IP allocation was seeded by different peers'** then weave looks to have split-brained.  At this point it is necessary to wipe the ncns and start the pxe boot again:
+   ```bash
+   ncn# weave --local status connections  | grep failed
+   ```
+   If you see messages like **'IP allocation was seeded by different peers'** then weave looks to have split-brained.  At this point it is necessary to wipe the ncns and start the pxe boot again:
 
-    1. Wipe the ncns using the 'Basic Wipe' section of [DISK CLEANSLATE](051-DISK-CLEANSLATE.md).
-    2. Return to the 'Boot the **Storage Nodes**' step of [Start Deployment](#start-deployment) section above.
+   1. Wipe the ncns using the 'Basic Wipe' section of [DISK CLEANSLATE](051-DISK-CLEANSLATE.md).
+   2. Return to the 'Boot the **Storage Nodes**' step of [Start Deployment](#start-deployment) section above.
 
 <a name="optional-validation"></a>
 ### Optional Validation 

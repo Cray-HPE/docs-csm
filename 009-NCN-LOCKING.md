@@ -1,6 +1,6 @@
 # NCN/Management Node Locking
 
-    * [Why?](#why?) 
+    * [Why?](#why) 
     * [When To Lock Management NCNs](#when-to-lock-management-ncns) 
     * [When To Unlock Management NCNs](#when-to-unlock-management ncns) 
     * [Locked Behavior](#locked-behavior) 
@@ -8,7 +8,7 @@
     * [How To Unlock Management NCNs](#how-to-unlock-management-ncns) 
     * [Next Steps](#next-steps)
 
-##  <a name="why?"></a>Why?
+##  <a name="why"></a>Why?
 
 In Shasta 1.4 NCN black listing is turned off by default for CAPMC and FAS.  Also, please note
 that Management NCNs are NOT locked by default either.
