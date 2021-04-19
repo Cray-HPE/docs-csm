@@ -127,9 +127,9 @@ ncn-m001# pdsh -w $(./lib/list-ncns.sh | paste -sd,) "zypper ar -fG https://pack
 
 If your Shasta system is using CDU switches you will need to update the configuration going to the CMMs.
 
-- This requires updated CMM firmware. (version 1.4.20)
+- This requires updated CMM firmware. (version 1.4.20) `See v1.4 Admin Guide for details on updating CMM firmware`
 - A static LAG will be configured on the CDU switches.
-- The CDU switches have two cables (10Gb RJ45) connecting to each CMM. 
+- The CDU switches have two cables (10Gb RJ45) connecting to each CMM.
 - This configuration offers increased throughput and redundancy.
 - The CEC will not need to be programmed in order to support the LAG configuration as it was required in previous versions.  The updated firmware takes care of this.
 
