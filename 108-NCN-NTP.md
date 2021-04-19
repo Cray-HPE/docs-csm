@@ -110,7 +110,7 @@ chronyc makestep
 ```
 
 # Customizing NTP
-
+<a name="setting-a-local-timezone"></a>
 ## Setting A Local Timezone
 
 **This procedure needs to be completed _before_ the NCNs are deployed**
@@ -193,5 +193,10 @@ You need to adjust the node images so that they also boot in the local timezone.
 12. `chmod 644 /var/www/ephemeral/data/ceph/initrd.img.xz`
 12. `umount /var/www/ephemeral/data/ceph/squashfs-root/mnt/squashfs`
 13. `set-sqfs-links.sh`
+14. Take note of the file paths for these customized assets for use during `csi handoff` (see below and on [007-CSM-INSTALL-REBOOT.md#start-hand-off](007-CSM-INSTALL-REBOOT#start-hand-off)): `/var/www/ephemeral/data/{ceph,k8s}/*`
 
 **Repeat these steps for the k8s images, substituting in the correct paths where appropriate.**
+
+## Replace the customized image in the CSM tarball
+
+Per the documentation in 007-CSM-INSTALL-REBOOT.md, the images are uploaded to BSS from `/var/www/ephemeral/${CSM_RELEASE}/images`, but if you are following the directions on this page to customize the timezone, these need to be replaced with the paths to your customized images (`/var/www/ephemeral/data/{ceph,k8s}/*`).  Without making this change to the `csi handoff` command, subsequent boots of NCNs will boot with the default image provided in the CSM tarball--without the timezone change in place.
