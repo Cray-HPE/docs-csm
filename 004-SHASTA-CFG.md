@@ -409,30 +409,6 @@ with system-specific customizations.
       - "{{ network.netstaticips.system_to_site_lookups }}"
     ```
 
-7.  Review `customizations.yaml` and replace remaining `~FIXME~` values with
-    appropriate settings.
-
-    For the following `~FIXME~` values, use the example provided and just remove the `~FIXME~ e.g.`
-
-     ```bash
-        sma-rsyslog-aggregator:
-          cray-service:
-            service:
-              loadBalancerIP: ~FIXME~ e.g. 10.92.100.72
-          rsyslogAggregatorHmn:
-            service:
-              loadBalancerIP: ~FIXME~ e.g. 10.94.100.2
-
-        sma-rsyslog-aggregator-udp:
-          cray-service:
-            service:
-              loadBalancerIP: ~FIXME~ e.g. 10.92.100.75
-          rsyslogAggregatorUdpHmn:
-            service:
-              loadBalancerIP: ~FIXME~ e.g. 10.94.100.3
-     ```
-
-
 <a name="generate-sealed-secrets"></a>
 ## Generate Sealed Secrets
 
