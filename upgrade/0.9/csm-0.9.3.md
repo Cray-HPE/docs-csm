@@ -18,6 +18,7 @@ Procedures:
 - [Setup Nexus](#setup-nexus)
 - [Deploy Manifests](#deploy-manifests)
 - [Upgrade NCN RPMs](#upgrade-ncn-rpms)
+- [Apply iSCSI Security Fix](#iscsi-security-fix)
 - [Configure LAG for CMMs](#configure-lag-for-cmms)
 - [Run Validation Checks (Post-Upgrade)](#run-validation-checks-post-upgrade)
 
@@ -117,6 +118,23 @@ Upgrade CSM packages on NCNs:
 ```bash
 ncn-m001# pdsh -w $(./lib/list-ncns.sh | paste -sd,) "zypper ar -fG https://packages.local/repository/csm-sle-15sp2/ csm-sle-15sp2 && zypper up -y"
 ```
+
+
+<a name="iscsi-security-fix"></a>
+## Apply iSCSI Security Fix
+
+Apply the workaround for the following CVEs: CVE-2021-27365, CVE-2021-27364, CVE-2021-27363.
+
+The affected kernel modules are not typically loaded on Shasta NCNs.  The following prevents them
+from ever being loaded.
+
+```bash
+ncn-m001# pdsh -w $(./lib/list-ncns.sh | paste -sd,) "echo 'install libiscsi /bin/true' >> /etc/modprobe.d/disabled-modules.conf"
+```
+
+Upgrade CSM packages on NCNs:
+
+
 <a name="configure-lag-for-cmms"></a>
 
 ## Configure LAG for CMMs
