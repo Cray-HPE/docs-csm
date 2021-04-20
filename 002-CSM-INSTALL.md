@@ -422,15 +422,15 @@ install).
 3. Set the BMCs on the systems back to DHCP.
    > **`NOTE`** During the install of the NCNs their BMCs get set to static IP addresses. The installation expects the that the NCN BMCs are set back to DHCP before proceeding.
    
-    If you have Intel nodes run:
-    ```text
-    # export lan=3
-    ```
+   If you have Intel nodes run:
+   ```text
+   # export lan=3
+   ```
     
-    Otherwise run:
-    ```text
-    # export lan=1
-    ```
+   Otherwise run:
+   ```text
+   # export lan=1
+   ```
 
    * from the **LiveCD** (`pit`):
         > **`NOTE`** This step uses the old statics.conf on the system in case CSI changes IPs:
