@@ -421,6 +421,16 @@ install).
 <a name="set-the-bmcs-on-the-systems-back-to-dhcp"></a>
 3. Set the BMCs on the systems back to DHCP.
    > **`NOTE`** During the install of the NCNs their BMCs get set to static IP addresses. The installation expects the that the NCN BMCs are set back to DHCP before proceeding.
+   
+   If you have Intel nodes run:
+   ```text
+   # export lan=3
+   ```
+    
+   Otherwise run:
+   ```text
+   # export lan=1
+   ```
 
    * from the **LiveCD** (`pit`):
         > **`NOTE`** This step uses the old statics.conf on the system in case CSI changes IPs:
@@ -431,7 +441,7 @@ install).
 
         pit# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
         do
-        ipmitool -U $username -I lanplus -H $h -E lan set 1 ipsrc dhcp
+        ipmitool -U $username -I lanplus -H $h -E lan set $lan ipsrc dhcp
         done
         ```
 
@@ -440,7 +450,7 @@ install).
         ```
         pit# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
         do
-        ipmitool -U $username -I lanplus -H $h -E lan print 1 | grep Source
+        ipmitool -U $username -I lanplus -H $h -E lan print $lan | grep Source
         done
 
         pit# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
@@ -457,7 +467,7 @@ install).
         ncn-m001# export IPMI_PASSWORD=changeme
         ncn-m001# for h in $( grep ncn /etc/hosts | grep mgmt | grep -v m001 | awk '{print $2}' )
         do
-        ipmitool -U $username -I lanplus -H $h -E lan set 1 ipsrc dhcp
+        ipmitool -U $username -I lanplus -H $h -E lan set $lan ipsrc dhcp
         done
         ```
 
@@ -466,7 +476,7 @@ install).
         ```
         ncn-m001# for h in $( grep ncn /etc/hosts | grep mgmt | grep -v m001 | awk '{print $2}' )
         do
-        ipmitool -U $username -I lanplus -H $h -E lan print 1 | grep Source
+        ipmitool -U $username -I lanplus -H $h -E lan print $lan | grep Source
         done
 
         ncn-m001# for h in $( grep ncn /etc/hosts | grep mgmt | grep -v m001 | awk '{print $2}' )
