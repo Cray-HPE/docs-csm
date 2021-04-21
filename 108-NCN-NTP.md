@@ -1,6 +1,6 @@
 # NTP On NCNs
 
->See this epic for details: [MTL-1182](https://connect.us.cray.com/jira/browse/MTL-1182).
+> **Internal use only** See this epic for details: [MTL-1182](https://connect.us.cray.com/jira/browse/MTL-1182).
 
 The NCNs serve NTP at stratum 3 and all NCNs peer with each other.  Currently, the LiveCD does is not running NTP, but the other nodes are when they are booted.
 
@@ -31,7 +31,7 @@ The first two options are not fully fleshed out yet as we haven't done much test
 Example:
 
 ```
-ncn-w001# chronyc accheck 10.252.0.7
+ncn# chronyc accheck 10.252.0.7
 208 Access allowed
 ```
 
@@ -40,7 +40,7 @@ ncn-w001# chronyc accheck 10.252.0.7
 Example:
 
 ```
-ncn-s001# chronyc tracking
+ncn# chronyc tracking
 Reference ID    : 0AFC0104 (ncn-s003)
 Stratum         : 4
 Ref time (UTC)  : Mon Nov 30 20:02:24 2020
@@ -61,7 +61,7 @@ Leap status     : Normal
 Example:
 
 ```
-ncn-s001# chronyc sourcestats
+ncn# chronyc sourcestats
 210 Number of sources = 8
 Name/IP Address            NP  NR  Span  Frequency  Freq Skew  Offset  Std Dev
 ==============================================================================
@@ -80,7 +80,7 @@ ncn-m003                   24  15  197m     -0.005      0.009  +9442ns    46us
 Example:
 
 ```
-ncn-s001# chronyc sources
+ncn# chronyc sources
 210 Number of sources = 8
 MS Name/IP address         Stratum Poll Reach LastRx Last sample
 ===============================================================================
@@ -110,7 +110,7 @@ chronyc makestep
 ```
 
 # Customizing NTP
-
+<a name="setting-a-local-timezone"></a>
 ## Setting A Local Timezone
 
 **This procedure needs to be completed _before_ the NCNs are deployed**
@@ -121,15 +121,18 @@ Shasta ships with UTC as the default time zone.  To change this, you'll need to 
 
 Run the following commands, replacing them with your timezone as needed.
 
-1. `echo TZ=America/Chicago >> /etc/environment`
-2. `sed -i 's/^timedatectl set-timezone UTC/timedatectl set-timezone America\/Chicago/' /root/bin/configure-ntp.sh`
-3. `sed -i 's/--utc/--localtime/' /root/bin/configure-ntp.sh`
-4. `/root/bin/configure-ntp.sh`
+```bash
+pit# export NEWTZ=America/Chicago
+pit# echo TZ=${NEWTZ} >> /etc/environment
+pit# sed -i "s#^timedatectl set-timezone UTC#timedatectl set-timezone ${NEWTZ}#" /root/bin/configure-ntp.sh
+pit# sed -i 's/--utc/--localtime/' /root/bin/configure-ntp.sh
+pit# /root/bin/configure-ntp.sh
+```
 
-You should see the output in your local timezone.  You can verify as well by running `timedatectl` and `hwclock --verbose`.
+You should see the output in your local timezone. 
 
 ```
-pit:~ # /root/bin/configure-ntp.sh
+pit# /root/bin/configure-ntp.sh
 CURRENT TIME SETTINGS
 rtc: 2021-03-26 11:34:45.873331+00:00
 sys: 2021-03-26 11:34:46.015647+0000
@@ -138,7 +141,12 @@ sys: 2021-03-26 11:34:46.015647+0000
 NEW TIME SETTINGS
 rtc: 2021-03-26 06:35:16.576477-05:00
 sys: 2021-03-26 06:35:17.004587-0500
-pit:~ # timedatectl
+```
+
+You can verify as well by running `timedatectl` and `hwclock --verbose`.
+
+```bash
+pit# timedatectl
       Local time: Fri 2021-03-26 06:35:58 CDT
   Universal time: Fri 2021-03-26 11:35:58 UTC
         RTC time: Fri 2021-03-26 11:35:58
@@ -146,8 +154,10 @@ pit:~ # timedatectl
  Network time on: no
 NTP synchronized: no
  RTC in local TZ: no
-ncn-m001-pit:~ # hwclock --verbose
-redbull-ncn-m001-pit:~ # hwclock --verbose
+```
+
+```bash
+pit# hwclock --verbose
 hwclock from util-linux 2.33.1
 System Time: 1616758841.688220
 Trying to open: /dev/rtc0
@@ -165,12 +175,12 @@ Calculated Hardware Clock drift is 0.000000 seconds
 2021-03-26 06:40:41.685618-05:00
 ```
 
-If the time if off and not accurate to your timezone, you will need to _manually_ set the date and then run the NTP script again.
+If the time is off and not accurate to your timezone, you will need to _manually_ set the date and then run the NTP script again.
 
 ```bash
 # Set as close as possible to the real time
-timedatectl set-time "2021-03-26 00:00:00"
-/root/bin/configure-ntp.sh
+pit# timedatectl set-time "2021-03-26 00:00:00"
+pit# /root/bin/configure-ntp.sh
 ```
 
 The PIT is now configured to your local timezone.
@@ -179,19 +189,48 @@ The PIT is now configured to your local timezone.
 
 You need to adjust the node images so that they also boot in the local timezone.  This is accomplished by `chroot`ing into the unsquashed images, making some modifications, and then squashing it back up and moving the new images into place.
 
-1. `cd /var/www/ephemeral/data/ceph/`
-2. `unsquashfs storage-ceph*.squashfs`
-3. `chroot ./squashfs-root`
-4. `echo TZ=America/Chicago >> /etc/environment`
-5. `sed -i 's/^timedatectl set-timezone UTC/timedatectl set-timezone America\/Chicago/' /srv/cray/scripts/metal/set-ntp-config.sh`
-6. `sed -i 's/--utc/--localtime/' /srv/cray/scripts/metal/set-ntp-config.sh`
-7. `/srv/cray/scripts/common/create-kis-artifacts.sh`
-8. `exit`
-9. `mkdir /var/www/ephemeral/data/ceph/orig`
-10. `mv *.kernel *.xz *.squashfs /var/www/ephemeral/data/ceph/orig/`
-11. `cp squashfs-root/squashfs/* .`
-12. `chmod 644 /var/www/ephemeral/data/ceph/initrd.img.xz`
-12. `umount /var/www/ephemeral/data/ceph/squashfs-root/mnt/squashfs`
-13. `set-sqfs-links.sh`
-
-**Repeat these steps for the k8s images, substituting in the correct paths where appropriate.**
+1. Set some variables
+    ```bash
+    pit# export NEWTZ=America/Chicago
+    pit# export IMGTYPE=ceph
+    pit# export IMGDIR=/var/www/ephemeral/data/${IMGTYPE}
+    ```
+1. Go to the image directory and unsquash the image
+    ```bash
+    pit# cd ${IMGDIR}
+    pit# unsquashfs *.squashfs
+    ```
+1. Start a chroot session inside the unsquashed image. Your prompt may change to reflect that you are now in the root directory of the image.
+    ```bash
+    pit# chroot ./squashfs-root
+    ```
+1. Inside the chroot session, you will modify a few files by running the following commands, and then exit from the chroot session.
+    ```bash
+    pit-chroot# echo TZ=${NEWTZ} >> /etc/environment
+    pit-chroot# sed -i "s#^timedatectl set-timezone UTC#timedatectl set-timezone $NEWTZ#" /srv/cray/scripts/metal/set-ntp-config.sh
+    pit-chroot# sed -i 's/--utc/--localtime/' /srv/cray/scripts/metal/set-ntp-config.sh
+    pit-chroot# /srv/cray/scripts/common/create-kis-artifacts.sh
+    pit-chroot# exit
+    pit#
+    ```
+1. Back outside the chroot session, you will now backup the original images and copy the new ones into place.
+    ```bash
+    pit# mkdir ${IMGDIR}/orig
+    pit# mv *.kernel *.xz *.squashfs ${IMGDIR}/orig/
+    pit# cp squashfs-root/squashfs/* .
+    pit# chmod 644 ${IMGDIR}/initrd.img.xz
+    ```
+1. Unmount the squashfs mount (which was mounted by the earlier unsquashfs command)
+    ```bash
+    pit# umount ${IMGDIR}/squashfs-root/mnt/squashfs
+    ```
+1. Repeat all of the previous steps, except in the first step, set the IMGTYPE variable as follows:
+   ```bash
+   pit# export IMGTYPE=k8s
+   ```
+   **Be sure to also set the IMGDIR variable again, so it gets the new value of IMGTYPE**
+1. Now link the new images so that the NCNs will get them from the LiveCD node when they boot
+    ```bash
+    pit# set-sqfs-links.sh
+    ```
+1. Make a note that when performing the [csi handoff of NCN boot artifacts in 007-CSM-INSTALL-REBOOT.md](007-CSM-INSTALL-REBOOT#ncn-boot-artifacts-hand-off), you must be sure to specify these new images. Otherwise m001 will use the default timezone when it boots, and subsequent reboots of the other NCNs will also lose the customized timezone changes.
