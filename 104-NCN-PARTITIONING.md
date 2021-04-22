@@ -130,6 +130,7 @@ The table below represents all recognizable FS labels on any given NCN, varying 
 | ❌ | ❌ | ✅ | `CEPHETC` | `/etc/ceph` | LVM | `10 GiB` | ❌ | [MTL-1308](https://connect.us.cray.com/jira/browse/MTL-1308) | |
 | ❌ | ❌ | ✅ | `CEPHVAR` | `/var/lib/ceph` | LVM | `60 GiB` | ❌ | [MTL-1308](https://connect.us.cray.com/jira/browse/MTL-1308) |  |
 | ❌ | ❌ | ✅ | `CONTAIN` | `/run/containers` | LVM | `60 GiB` | ❌ | [MTL-1308](https://connect.us.cray.com/jira/browse/MTL-1308) | |
+| ✅ | ✅ | ❌ | `CRAYSDU` | `/var/lib/sdu` | LVM | `100 GiB` | ❌ | [MTL-1292](https://connect.us.cray.com/jira/browse/MTL-1292) | |
 | ❌ | ✅ | ❌ | `CONRUN` | `/run/containerd` | Ephemeral | `75 GiB` | ❌ | [MTL-916](https://connect.us.cray.com/jira/browse/MTL-916) | On pepsi ncn-w001, we have less than 200G of operational storage for this. |
 | ❌ | ✅ | ❌ | `CONLIB` | `/run/lib-containerd` | Ephemeral | `25%` | ✅ | [MTL-892](https://connect.us.cray.com/jira/browse/MTL-892) [CASMINST-255](https://connect.us.cray.com/jira/browse/CASMINST-255) | |
 | ✅ | ❌ | ❌ | `ETCDK8S` | `/run/lib-etcd` | Ephemeral | `32 GiB` | ✅ | [CASMPET-338](https://connect.us.cray.com/jira/browse/CASMPET-338) | |
