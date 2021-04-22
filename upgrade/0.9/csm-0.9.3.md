@@ -16,6 +16,7 @@ Procedures:
 - [Preparation](#preparation)
 - [Run Validation Checks (Pre-Upgrade)](#run-validation-checks-pre-upgrade)
 - [Setup Nexus](#setup-nexus)
+- [Update Resources](#update-resources)
 - [Deploy Manifests](#deploy-manifests)
 - [Upgrade NCN RPMs](#upgrade-ncn-rpms)
 - [Apply iSCSI Security Fix](#iscsi-security-fix)
@@ -98,6 +99,54 @@ documentation to resolve potential problems and then try running
 `setup-nexus.sh` again. Note that subsequent runs of `setup-nexus.sh` may
 report `FAIL` when uploading duplicate assets. This is ok as long as
 `setup-nexus.sh` outputs `setup-nexus.sh: OK` and exits with status code `0`.
+
+
+<a name="update-resources"></a>
+## Update Resources
+Create and run the following two scripts on ncn-m002 to update the kube-multus and coredns resources.  Watch that the pods restart and the status is Running.
+```bash
+ncn-m002# cat coredns-bump-resources.sh
+#!/bin/bash
+echo "Applying new resource limits to coredns pods"
+cfile=/tmp/coredns-deployment.yaml
+kubectl -n kube-system get deployment coredns -o yaml > $cfile
+yq w -i $cfile 'spec.template.spec.containers.(name==coredns).resources.requests.cpu' '300m'
+yq w -i $cfile 'spec.template.spec.containers.(name==coredns).resources.requests.memory' '140Mi'
+yq w -i $cfile 'spec.template.spec.containers.(name==coredns).resources.limits.memory' '340Mi'
+kubectl apply -f $cfile
+```
+```
+ncn-m002# chmod +x coredns-bump-resources.sh
+ncn-m002# ./coredns-bump-resources.sh
+Applying new resource limits to coredns pods
+Warning: kubectl apply should be used on resource created by either kubectl create --save-config or kubectl apply
+deployment.apps/coredns configured
+ncn-m002# watch "kubectl get pods -n kube-system -l k8s-app=kube-dns"
+```
+```bash
+ncn-m002# cat multus-bump-resources.sh
+#!/bin/bash
+echo "Applying new resource limits to /etc/cray/kubernetes/multus-daemonset.yml"
+mfile=/etc/cray/kubernetes/multus-daemonset.yml
+yq w -i --doc 5 $mfile 'spec.template.spec.containers.(name==kube-multus).resources.limits.memory' '100Mi'
+kubectl apply -f $mfile
+```
+```
+ncn-m002# chmod +x multus-bump-resources.sh
+ncn-m002# ./multus-bump-resources.sh
+Applying new resource limits to /etc/cray/kubernetes/multus-daemonset.yml
+customresourcedefinition.apiextensions.k8s.io/network-attachment-definitions.k8s.cni.cncf.io unchanged
+clusterrole.rbac.authorization.k8s.io/multus unchanged
+clusterrolebinding.rbac.authorization.k8s.io/multus unchanged
+serviceaccount/multus unchanged
+configmap/multus-cni-config unchanged
+daemonset.apps/kube-multus-ds-amd64 configured
+ncn-m002# watch "kubectl get pods -n kube-system -l app=multus"
+```
+On success, the coredns and kube-multus pods should restart with a status of Running.  If any kube-multus pod(s) remain in Terminating status, force delete the pod so that the daemonset can restart it successfully. 
+```bash
+kubectl delete pod <pod-name> -n kube-system --force
+```
 
 
 <a name="deploy-manifests"></a>

@@ -195,18 +195,24 @@ Simply run the reverse-pattern of the PXE commands from the [fixing boot order](
 
 1. Find the other PXE entries:
     - Gigabyte Technology:
-      > **`NOTE`** This will not remove onboard PXE IPv4 options; C22 BIOS or newer required, then manual deletion is recommended.
-      ```bash
-      ncn# efibootmgr | grep -ivP '(pxe ipv?4.*)' | grep -iP '(adapter|connection)' | tee /tmp/rbbs1
-      ```
+        ```bash
+        # on an NCN, or on the pit node
+        efibootmgr | grep -ivP '(pxe ipv?4.*)' | grep -iP '(adapter|connection|nvme|sata)' | tee /tmp/rbbs1
+        efibootmgr | grep -iP '(pxe ipv?4.*)' | grep -i connection | tee /tmp/rbbs2
+        ```
     - Hewlett-Packard Enterprise
-      ```bash
-      ncn#  efibootmgr | grep -i 'port 1' | grep -vi 'pxe ipv4' | tee /tmp/rbbs1
-      ```
+      > **`NOTE`** This does not trim HSN Mellanox cards; these should disable their OpROMs using [the high speed network snippet(s)](304-NCN-PCIE-NET-BOOT-AND-RE-CABLE.md#high-speed-network).
+        ```bash
+        # on an NCN, or on the pit node
+        efibootmgr | grep -vi 'pxe ipv4' | grep -i adapter |tee /tmp/rbbs1
+        efibootmgr | grep -iP '(sata|nvme)' | tee /tmp/rbbs2
+        ```
     - Intel Corporation
-      ```bash
-      ncn#  efibootmgr | grep -vi 'ipv4' | grep -i 'baseboard' | tee /tmp/rbbs1
-      ```
+        ```bash
+        # on an NCN, or on the pit node
+        efibootmgr | grep -vi 'ipv4' | grep -iP '(sata|nvme|uefi)' | tee /tmp/rbbs1
+        efibootmgr | grep -i baseboard | tee /tmp/rbbs2
+        ```
 2. Remove them:
     ```bash
    ncn# cat /tmp/rbbs* | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -t -i efibootmgr -b {} -B

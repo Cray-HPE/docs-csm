@@ -260,16 +260,16 @@ The configuration workflow described here is intended to help understand the exp
 
    This step is **strongly encouraged** for external/site deployments.
 
-1. Customize boot scripts for any out-of-baseline NCNs
-    - **kubernetes-workers** with more than 2 small disks need to make adjustments to [prevent bare-metal etcd creation](104-NCN-PARTITIONING.md#worker-nodes-with-etcd)
-    - A brief overview of what's expected is here, in [disk plan of record / baseline](104-NCN-PARTITIONING.md#plan-of-record--baseline)
-
 1. Create boot directories for any NCN in DNS:
     > This will create folders for each host in `/var/www`, allowing each host to have their own unique set of artifacts; kernel, initrd, SquashFS, and `script.ipxe` bootscript.
 
     ```bash
     pit# /root/bin/set-sqfs-links.sh
     ```
+
+1. Customize boot scripts for any out-of-baseline NCNs
+    - **kubernetes-workers** with more than 2 small disks need to make adjustments to [prevent bare-metal etcd creation](104-NCN-PARTITIONING.md#worker-nodes-with-etcd)
+    - A brief overview of what's expected is here, in [disk plan of record / baseline](104-NCN-PARTITIONING.md#plan-of-record--baseline)
 
 1. Set each node to always UEFI Network Boot, and ensure they're powered off
     ```bash

@@ -74,7 +74,7 @@ for the metal ETCD module, disabling LUKs will disable ETCD bare-metal creation.
 1. Disable LUKs for each worker node, thus disabling the metal ETCD module:
     - During Bootstrap (on the `pit` node):
         ```bash
-        sed 's/disk-opts rd.luks /disk-opts rd.luks=0 /g' /var/www/ncn-w*/script.ipxe
+        sed -i 's/disk-opts rd.luks /disk-opts rd.luks=0 /g' /var/www/ncn-w*/script.ipxe
         ```
     - During runtime with `csi`:
         ```bash
