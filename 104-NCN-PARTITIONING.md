@@ -123,7 +123,7 @@ The table below represents all recognizable FS labels on any given NCN, varying 
 
 | k8s-manager | k8s-worker | storage-ceph | FS Label | Partitions | Device |  Partition Size | OverlayFS | Work Order(s) | Memo
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| ✅ | ✅ | ✅ | `BOOTRAID` | _Not Mounted_ | 2 small disks in RAID1 | `500 MiB` | ❌ | Present since Shasta-Preview 1 |
+| ✅ | ✅ | ✅ | `BOOTRAID` | `/metal/boot` | 2 small disks in RAID1 | `500 MiB` | ❌ | Present since Shasta-Preview 1 |
 | ✅ | ✅ | ✅ | `SQFSRAID` | `/run/initramfs/live` | 2 small disks in RAID1 | `25 GiB` | ✅ | [CASM-1885](https://connect.us.cray.com/jira/browse/MTL-1885) |  squashfs should compress our images to about 1/3rd their uncompressed size. (20G → 6.6G)  On pepsi's ncn-w001, we're at about 20G of non-volatile data storage needed. |
 | ✅ | ✅ | ✅ | `ROOTRAID` | `/run/initramfs/overlayfs` | 2 small disks in RAID1 | `150 GiB` | ✅ | Present since Shasta-Preview 1 | The persistent image file is loaded from this partition, when the image file is loaded the underlying drive is lazily unmounted (`umount -l`) so that when the overlay closes the disk follows suit. |
 | ✅ | ✅ | ✅ | `AUX` | `/dev/md/AUX` _(Not Mounted)_ | 2 small disks in RAID1 | `150 GiB` | ❌ | [MTL-1308](https://connect.us.cray.com/jira/browse/MTL-1308) | Auxillary RAID array for cloud-init to use. |
