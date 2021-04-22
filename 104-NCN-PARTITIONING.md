@@ -94,7 +94,7 @@ This option simply expands the RAID to consume the extra disks, leaving none beh
 
     - During Bootstrap (on the `pit` node):
         ```bash
-        sed 's/disk-opts /disk-opts metal.disks=3 /g' /var/www/ncn-w*/script.ipxe
+        sed -i 's/disk-opts /disk-opts metal.disks=3 /g' /var/www/ncn-w*/script.ipxe
         ```
     - During runtime with `csi`:
         ```bash
@@ -105,7 +105,7 @@ This option simply expands the RAID to consume the extra disks, leaving none beh
 
     - During Bootstrap (on the `pit` node):
         ```bash
-        sed 's/disk-opts /disk-opts metal.md-level=stripe /g' /var/www/ncn-w*/script.ipxe
+        sed -i 's/disk-opts /disk-opts metal.md-level=stripe /g' /var/www/ncn-w*/script.ipxe
         ```
     - During runtime with `csi`:
         ```bash
