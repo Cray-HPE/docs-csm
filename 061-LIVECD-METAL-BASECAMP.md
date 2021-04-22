@@ -136,7 +136,7 @@ data:
 ```json
 {
   // ...
-  "k8s_virtual_ip": "10.252.1.2",
+  "wipe-ceph-osds": "yes",
   // ...
 }
 ```
