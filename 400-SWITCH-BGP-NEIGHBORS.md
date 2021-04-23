@@ -6,6 +6,7 @@ This page will detail how to manually configure and verify BGP neighbors on the 
 - How do I check the status of the BGP neighbors?
 - Log into the spine switches and run `show bgp ipv4 unicast summary` for Aruba/HPE switches and `show ip bgp summary` for Mellanox.
 - Are my Neighbors stuck in IDLE? running `clear ip bgp all` on the mellanox and `clear bgp *` on the Arubas will restart the BGP process, this process may need to be done when a system is reinstalled.  If only some neighbors are showing `ESTABLISHED` you may need to run the command multiple times for all the BGP peers to come up. 
+- If you cannot get the neighbors out of IDLE, make sure that passive neighbors are configured.  This is in the automated scripts and shown in the example below.
 - The BGP neighbors will be the worker NCN IPs on the NMN (node management network) (VLAN002). If your system is using HPE/Aruba, one of the neighbors will be the other spine switch.
 - On the Aruba/HPE switches properly configured BGP will look like the following.
 
@@ -154,8 +155,11 @@ router bgp 65533
     bgp router-id 10.252.0.1
     maximum-paths 8
     neighbor 10.252.0.3 remote-as 65533
+    neighbor 10.252.0.3 passive
     neighbor 10.252.2.8 remote-as 65533
+    neighbor 10.252.0.8 passive
     neighbor 10.252.2.9 remote-as 65533
+    neighbor 10.252.0.9 passive
     neighbor 10.252.2.18 remote-as 65533
     address-family ipv4 unicast
         neighbor 10.252.0.3 activate
@@ -208,11 +212,13 @@ Mellanox configuration example.
    router bgp 65533 vrf default maximum-paths ibgp 32
    router bgp 65533 vrf default neighbor 10.252.0.7 remote-as 65533
    router bgp 65533 vrf default neighbor 10.252.0.7 route-map ncn-w001
+   router bgp 65533 vrf default neighbor 10.252.0.7 transport connection-mode passive
    router bgp 65533 vrf default neighbor 10.252.0.8 remote-as 65533
    router bgp 65533 vrf default neighbor 10.252.0.8 route-map ncn-w002
+   router bgp 65533 vrf default neighbor 10.252.0.8 transport connection-mode passive
    router bgp 65533 vrf default neighbor 10.252.0.9 remote-as 65533
    router bgp 65533 vrf default neighbor 10.252.0.9 route-map ncn-w003
-   router bgp 65533 vrf default neighbor 10.252.0.10 remote-as 65533
+   router bgp 65533 vrf default neighbor 10.252.0.9 transport connection-mode passive
 ```
 
 - Once the IPs are updated for the route-maps and BGP neighbors you may need to restart the BGP process on the switches, you do this by running `clear ip bgp all` on the mellanox and `clear bgp *` on the Arubas. (This may need to be done multiple times for all the peers to come up)
