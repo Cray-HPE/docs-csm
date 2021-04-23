@@ -111,9 +111,11 @@ Now the administrator or CI/CD agent can move onto [configure the running LiveCD
       ```
 
    - (recommended) After reconnecting, resume the typescript (the `-a` appends to an existing script):
+     (Run this on the `pit` node as root, the prompts are removed for easier copy-paste; this step is only useful as a whole)
        ```bash
-      pit# pushd /var/www/ephemeral/prep/admin
-      pit# script -af $(ls -tr csm-usb-lived* | head -n 1)
+      pushd /var/www/ephemeral/prep/admin
+      script -af $(ls -tr csm-install-remoteiso* | head -n 1)
+      export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
       ```
 
    - Check hostname:
@@ -123,9 +125,8 @@ Now the administrator or CI/CD agent can move onto [configure the running LiveCD
       > **`NOTE`** If the hostname returned by the `hostnamectl` command is still `pit`, then re-run the above script with the same parameters. Otherwise feel free to set the hostname by hand with `hostnamectl`, please continue to use the `-pit` suffix to prevent masquerading a pit node as a real NCN to administrators and automation.
 
 1. Find a local disk for storing product installers:
-
+   (Run this on the `pit` node as root, the prompts are removed for easier copy-paste; this step is only useful as a whole)
     ```bash
-    pit# \
     disk="$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(sata|nvme|sas)' | sort -h | awk '{print $2}' | head -n 1 | tr -d '\n')"
     parted --wipesignatures -m --align=opt --ignore-busy -s /dev/$disk -- mklabel gpt mkpart primary ext4 2048s 100%
     mkfs.ext4 -L PITDATA "/dev/${disk}1"
@@ -162,7 +163,7 @@ Now the administrator or CI/CD agent can move onto [configure the running LiveCD
        pit:/var/www/ephemeral# wget ${ENDPOINT}/${CSM_RELEASE}.tar.gz -O /var/www/ephemeral/${CSM_RELEASE}.tar.gz
        ```
 
-    - Expand the ball (while this runs, feel free to move onto the next step in another shell):
+    - Expand the ball:
        ```bash
        pit:/var/www/ephemeral# tar -zxvf ${CSM_RELEASE}.tar.gz
        pit:/var/www/ephemeral# ls -l ${CSM_RELEASE}
