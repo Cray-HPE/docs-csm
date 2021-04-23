@@ -104,23 +104,8 @@ data so run them only when indicated. Instructions are in the `README` files.
       -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
       https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
-    
-1. Upload the same `data.json` file we used to BSS, our Kubernetes cloud-init DataSource. __If you have made any changes__
-   to this file as a result of any customizations or workarounds, use the path to that file instead. This step will
-   prompt for the root password of the NCNs.
-    
-    ```bash
-    pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json
-    ```
-    
-1. Ensure the DNS server value is set correctly. If for any reason you have changed the IP address of the DNS server,
-   use that value instead.
-    
-    ```bash
-    pit# csi handoff bss-update-cloud-init --set meta-data.dns-server=10.92.100.225 --limit Global
-    ```
-    
-1. Perform csi handoff, uploading NCN boot artifacts into S3.
+
+1. Upload NCN boot artifacts into S3.
     
     1. Set variables
     
@@ -156,6 +141,29 @@ data so run them only when indicated. Instructions are in the `README` files.
         --ceph-initrd-path $cephdir/initrd.img*.xz \
         --ceph-squashfs-path $cephdir/*.squashfs
         ```
+       
+        Running this command will output a block that looks like this at the end:
+        ```text
+        You should run the following commands so the versions you just uploaded can be used in other steps:
+        export KUBERNETES_VERSION=x.y.z
+        export CEPH_VERSION=x.y.z
+        ```
+        Be sure to perform this action so subsequent steps are successful.
+
+1. Upload the same `data.json` file we used to BSS, our Kubernetes cloud-init DataSource. __If you have made any changes__
+   to this file as a result of any customizations or workarounds, use the path to that file instead. This step will
+   prompt for the root password of the NCNs.
+    
+    ```bash
+    pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json
+    ```
+    
+1. Ensure the DNS server value is set correctly. If for any reason you have changed the IP address of the DNS server,
+   use that value instead.
+    
+    ```bash
+    pit# csi handoff bss-update-cloud-init --set meta-data.dns-server=10.92.100.225 --limit Global
+    ```
         
 1. Upload the bootstrap information; note this denotes information that should always be kept together in order to fresh-install the system again.
 
