@@ -170,8 +170,8 @@ Now the administrator or CI/CD agent can move onto [configure the running LiveCD
    - Copy the artifacts into place:
       ```bash
       pit/var/www/ephemeral# mkdir -p data/{k8s,ceph}
-      pit/var/www/ephemeral# cp -pvr ./${CSM_RELEASE}/images/kubernetes ./data/k8s
-      pit/var/www/ephemeral# cp -pvr ./${CSM_RELEASE}/images/storage-ceph ./data/ceph
+      pit/var/www/ephemeral# rsync -a -P --delete ./${CSM_RELEASE}/images/kubernetes/ ./data/k8s/
+      pit/var/www/ephemeral# rsync -a -P --delete ./${CSM_RELEASE}/images/storage-ceph/ ./data/ceph/
       ```
 
    > The PIT ISO, Helm charts/images, and bootstrap RPMs are now available in the extracted CSM tar.
