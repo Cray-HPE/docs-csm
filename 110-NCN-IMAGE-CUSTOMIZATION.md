@@ -69,16 +69,21 @@ This process should be done for the "kubernetes" image used by master and worker
    pit# mv *squashfs old
    ```
 9. Move new SquashFS image, kernel, and initrd into place.
+
    ```bash
    pit# mv squashfs-root/squashfs/* .
    ```
+
 10. Update file permissions on initrd
+
    ```bash
    pit# chmod 644 initrd.img.xz
    ```
+
 11. Repeat the preceding steps for the other image type.
 
 12. Set the boot links.
+
    ```bash
    pit# cd
    pit# set-sqfs-links.sh   
