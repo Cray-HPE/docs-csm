@@ -305,42 +305,40 @@ all been run by the administrator before starting this stage.
     pit# reboot
     ```
     
-1. The node should boot, acquire its hostname (i.e. ncn-m001).
+1. The node should boot, acquire its hostname (i.e. ncn-m001), and run cloud-init.
     
     > **`NOTE`**: If the nodes has pxe boot issues, such as getting pxe errors or not pulling the ipxe.efi binary, see [PXE boot troubleshooting](420-MGMT-NET-PXE-TSHOOT.md)
     
-    > **`NOTE`**: If ncn-m001 booted without a hostname or it didn't run all the cloud-init scripts the following commands need to be ran **(but only in that circumstance)**.
+    > **`NOTE`**: If ncn-m001 booted without a hostname or it didn't run all the cloud-init scripts, the following commands need to be run **(but only in that circumstance)**.
     
-    > In the commands below the prompt is shown as ncn-m001 purely to indicate that the commands should be run on that node.
+    1. Make directory to copy network config files to.
+        ```bash
+        ncn-m001# mkdir /mnt/cow
+        ```
+    1. Mount the USB to that directory.
+        ```bash
+        ncn-m001# mount -L cow /mnt/cow
+        ```
+    1. Copy the network config files.
+        ```bash
+        ncn-m001# cp -pv /mnt/cow/rw/etc/sysconfig/network/ifroute* /etc/sysconfig/network/
+        ncn-m001# cp -pv /mnt/cow/rw/etc/sysconfig/network/ifcfg-lan0 /etc/sysconfig/network/
+        ```
+    1. Run the `set-dhcp-to-static.sh` script
+        ```bash
+        ncn-m001# /srv/cray/scripts/metal/set-dhcp-to-static.sh
+        ```
+        Network connectivity should be restored afterwards; the bond is up.
+    1. Run the following commands:
+        ```bash
+        ncn-m001# cloud-init clean
+        ncn-m001# cloud-init init
+        ncn-m001# cloud-init modules -m init
+        ncn-m001# cloud-init modules -m config
+        ncn-m001# cloud-init modules -m final
+        ```
     
-        1. Make directory to copy network config files to.
-            ```bash
-            ncn-m001# mkdir /mnt/cow
-            ```
-        1. Mount the USB to that directory.
-            ```bash
-            ncn-m001# mount -L cow /mnt/cow
-            ```
-        1. Copy the network config files.
-            ```bash
-            ncn-m001# cp -pv /mnt/cow/rw/etc/sysconfig/network/ifroute* /etc/sysconfig/network/
-            ncn-m001# cp -pv /mnt/cow/rw/etc/sysconfig/network/ifcfg-lan0 /etc/sysconfig/network/
-            ```
-        1. Run the `set-dhcp-to-static.sh` script
-            ```bash
-            ncn-m001# /srv/cray/scripts/metal/set-dhcp-to-static.sh
-            ```
-            Network connectivity should be restored afterwards; the bond is up.
-        1. Run the following commands:
-            ```bash
-            ncn-m001# cloud-init clean
-            ncn-m001# cloud-init init
-            ncn-m001# cloud-init modules -m init
-            ncn-m001# cloud-init modules -m config
-            ncn-m001# cloud-init modules -m final
-            ```
-    
-1. Login and start a typescript (the IP used here is the same from step 9).
+1. Once cloud-init has completed successfully, login and start a typescript (the IP used here is the one we noted for ncn-m002 in an earlier step).
     
     ```bash
     external# ssh root@10.102.11.13
@@ -394,7 +392,7 @@ all been run by the administrator before starting this stage.
     ncn-m001# ip a show lan0
     ```
     
-1. Run `ip a` to show our VLANs, verify they all have IPs
+1. Run `ip a` to show our VLANs, verify they all have IPs.
     
     ```bash
     ncn-m001# ip a show vlan002
@@ -402,7 +400,7 @@ all been run by the administrator before starting this stage.
     ncn-m001# ip a show vlan007
     ```
     
-1. Verify we do not have a metal bootstrap IP, this should be blank
+1. Verify we **do not** have a metal bootstrap IP.
     ```bash
     ncn-m001# ip a show bond0
     ```

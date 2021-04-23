@@ -263,7 +263,6 @@ After gathering the files into the working directory, generate your configs:
    cabinets.yaml
    hmn_connections.json
    ncn_metadata.csv
-   shasta_system_configs
    switch_metadata.csv
    system_config.yaml
    ```
