@@ -23,6 +23,7 @@ This guide may receive more installments for other files as time goes on.
     - [`switch_metadata.csv`](#switch_metadatacsv)
     - [`hmn_connections.json`](#hmn_connectionsjson)
 
+<a name="environments"></a>
 ## Environments
 
 These guides expect you to have access to either of the following things for working on a bare-metal
@@ -56,6 +57,7 @@ permutations (for redundancy minimums within Shasta cluster):
 
 For more information, see [103-NETWORKING](103-NCN-NETWORKING.md) page for NCNs.
 
+<a name="nomenclature--constraints"></a>
 ## Nomenclature & Constraints
 
 #### "PXE" or "BOOTSTRAP" MAC
@@ -74,6 +76,7 @@ system is **booting over onboards then the "bootstrap MAC" and the "bond0 MAC 0"
 - On the other hand, if any nodes' capacity prevents it from being redundant, then MAC1 and MAC0 will still produce a valid configuration if they do reside on the same physical chip/card.
 - The BMC MAC is the exclusive, dedicated LAN for the onboard BMC. It should not be swapped with any other device.
 
+<a name="files"></a>
 ## Files
 
 Each paragraph here will denote which pre-reqs are needed and which pages to follow 
@@ -81,6 +84,7 @@ for data collection.
 
 --- 
 
+<a name="ncn_metadatacsv"></a>
 ### `ncn_metadata.csv`
 
 Unless your system is sans-onboards, meaning it does not use or does not have onboard NICs on the non-compute nodes, then these guides will be necessary before (re)constructing the `ncn_metadata.csv` file.
@@ -126,6 +130,7 @@ x3000c0s2b0n0,Management,Master,94:40:c9:37:f9:b4,14:02:ec:da:b8:18,14:02:ec:da:
 x3000c0s1b0n0,Management,Master,94:40:c9:37:87:32,14:02:ec:da:b9:98,14:02:ec:da:b9:98,14:02:ec:da:b9:99
 ```
 
+<a name="switch_metadatacsv"></a>
 ### `switch_metadata.csv`
 
 This file denotes your network topology devices, see [Switch Metadata](305-SWITCH-METADATA.md) for 
@@ -168,6 +173,7 @@ x3000c0h37s1,Spine,Aruba
 x3000c0h38s1,Spine,Aruba
 ``` 
 
+<a name="hmn_connectionsjson"></a>
 ### `hmn_connections.json`
 
 This file denotes your BMC interfaces and other hardware network topology devices, see [HMN Connections](307-HMN-CONNECTIONS.md) for

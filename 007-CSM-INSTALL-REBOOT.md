@@ -67,7 +67,7 @@ the Kubernetes cluster as the final of 3 masters forming a quorum.
 <a name="start-hand-off"></a>
 ### Start Hand-Off
 
-**It is very important to run the livecd-pre-reboot workarounds**. Ensure that the [](#pre-reboot-workarounds) have
+**It is very important to run the livecd-pre-reboot workarounds**. Ensure that the [livecd-pre-reboot workarounds](#livecd-pre-reboot-workarounds) have
 all been run by the administrator before starting this stage.
 
 1. Upload SLS file.
@@ -102,7 +102,7 @@ all been run by the administrator before starting this stage.
     pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json
     ```
     
-1. Perform csi handoff, uploading NCN boot artifacts into S3.
+1. <a name="ncn-boot-artifacts-hand-off"></a>Perform csi handoff, uploading NCN boot artifacts into S3.
     
     1. Set variables
     
@@ -147,9 +147,9 @@ all been run by the administrator before starting this stage.
     
     > `**NOTE**` If your boot order from `efibootmgr` looks like one of [these examples](101-NCN-BOOTING.md#examples) then you can proceed to the next step.
     
-    - 👉 [Gigabyte Technology](101-NCN-BOOTING.md#gigabyte-technology)
-    - 👉 [Hewlett Packard Enterprise](101-NCN-BOOTING.md#hewlett-packard-enterprise)
-    - 👉 [Intel Corporation](101-NCN-BOOTING.md#intel-corporation)
+    - [Gigabyte Technology](101-NCN-BOOTING.md#gigabyte-technology)
+    - [Hewlett Packard Enterprise](101-NCN-BOOTING.md#hewlett-packard-enterprise)
+    - [Intel Corporation](101-NCN-BOOTING.md#intel-corporation)
     
 1. Identify Port-1 of Riser-1 in `efibootmgr` output and set `PXEPORT` variable.
     
@@ -533,7 +533,7 @@ do not destroy any data unintentionally. First follow the procedure [above](#acc
 to re-mount the assets and then get a new token:
 
 ```bash
-pit# export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+ncn-m001# export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
   -d client_id=admin-client \
   -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
   https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
@@ -542,7 +542,7 @@ pit# export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
 Followed by a call to CSI to update BSS:
 
 ```bash
-pit# /tmp/csi handoff bss-update-param --set metal.no-wipe=1
+ncn-m001# /tmp/csi handoff bss-update-param --set metal.no-wipe=1
 ```
 
 > **`NOTE`** `/tmp/csi` will delete itself on the next reboot since /tmp/ is mounted as tmpfs and does not persist **no matter what**.

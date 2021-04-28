@@ -157,8 +157,7 @@ No resources found
 
 This is expected and can safely be ignored.
 
-
-<a name="#deploy-csm-applications-and-services"></a>
+<a name="deploy-csm-applications-and-services"></a>
 ## Deploy CSM Applications and Services
 
 Run `install.sh` to deploy CSM applications services:
@@ -301,7 +300,7 @@ Password:
 ncn-w003: nameserver 10.92.100.225
 ```
 
-> **`NOTE`** The script connects to ncn-m001 which will be the pit node, whose
+> **`NOTE`** The script connects to ncn-m001 which will be the PIT node, whose
 > password may be different from that of the other NCNs.
 
 <a name="apply-after-sysmgmt-manifest-workarounds"></a>
@@ -328,7 +327,7 @@ get initialized and started. Because there are a number of dependencies between 
 some services are not expected to work immediately after the install script completes.
 After waiting, the administrator may start the [CSM Validation process](008-CSM-VALIDATION.md).
 
-<a name="add-cabinet-routing-to-ncns"></a>
+<a name="add-compute-cabinet-routing-to-ncns"></a>
 ## Add Compute Cabinet Routing to NCNs
 
 NCNs require additional routing to enable access to Mountain, Hill and River Compute cabinets.
@@ -426,7 +425,7 @@ via the `packages.local` name. Since the install does not attempt to connect
 to `packages.local` until Nexus has been successfully deployed, the error
 does not usually indicate something is actually wrong with Nexus. Instead, it
 is most commonly a network issue with name resolution (i.e., DNS), IP
-routes from the pit node, switch misconfiguration, or Istio ingress.
+routes from the PIT node, switch misconfiguration, or Istio ingress.
 
 Verify that packages.local resolves to **ONLY** the load balancer IP for the
 istio-ingressgateway service in the istio-system namespace, typically
@@ -437,7 +436,7 @@ settings in sls_input_file.json and must be updated via the Unbound manager.
 
 If packages.local resolves to the correct addresses, verify basic
 connectivity using ping. If `ping packages.local` is unsuccessful, verify the
-IP routes from the pit node to the NMN load balancer network.  The
+IP routes from the PIT node to the NMN load balancer network.  The
 typical `ip route` configuration is `10.92.100.0/24 via 10.252.0.1 dev
 vlan002`. If pings are successful, try checking the status of Nexus by
 running `curl -sS https://packages.local/service/rest/v1/status/writable`. If

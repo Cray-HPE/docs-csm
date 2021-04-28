@@ -120,8 +120,6 @@ It is dangerous to run with 2 worker nodes or less, work must be done with dilig
     ```
 5. The node will netboot from sysmgmt services (kea/unbound/s3/bss).
 
-> **`NOTE`** If sysmgmt services are not booting the NCN, and the LiveCD is still available. See [069 Toggle PXE Sources](./069-TOGGLE-PXE-SOURCES.md) for pivoting boot services temporarily back to the LiveCD.
-
 6. The node will run cloud-init and will auto-join the cluster again. Monitor for status with:
     ```bash
     linux# kubectl get nodes -w 

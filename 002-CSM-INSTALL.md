@@ -18,7 +18,7 @@ to [Starting an Installation](#starting-an-installation).
 
 #### Available Installation Paths
 
-  * [Prerequisites for Shasta v1.4 Installations on Shasta v1.3 Systems](#prerequisites-for-shasta-v14-installations-on-shasta-v13-systems)
+  * [Prerequisites for Shasta v1.4 Installations on Shasta v1.3 Systems](#pre-requisites-for-shasta-v14-installations-on-shasta-v13-systems)
   * [Prerequisites for Shasta v1.4 Installations on Bare-metal Systems](#prerequisites-for-shasta-v14-installations-on-bare-metal-systems)
   * [Prerequisites for Reinstalling Shasta v1.4](#prerequisites-for-reinstalling-shasta-v14)
 
@@ -33,8 +33,8 @@ v1.3 installations. Optional steps are noted as such.
 
 * [Collect Shasta v1.4 Config Payload](#collect-shasta-v14-config-payload)
 * [Quiesce Shasta v1.3 System](#quiesce-shasta-v13-system)
-* [Upgrading BIOS and Firmware](#upgrading-bios-and-firmware-from-13)
-* [Re-cabling](#re-cabling)
+* [Upgrading BIOS and Firmware](#upgrading-bios-and-firmware-from-1.3)
+* [Re-cabling](#recabling)
   * [Site Connections](#site-connections)
   * [PCIe Connections](#pcie-connections)
 * [Shut Down Management Kubernetes Cluster](#shut-down-management-kubernetes-cluster)

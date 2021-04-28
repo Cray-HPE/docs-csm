@@ -18,9 +18,9 @@ This page will assist you with configuring and activating your booted LiveCD thr
   * [Verify Outside Name Resolution](#verify-outside-name-resolution)
     
 Attaching the ISO to the node varies by the vendor:
-- [HPE uses iLO](./062-LIVECD-VIRTUAL-ISO-BOOT.md#hpe-ilo-bmcs)
-- [Gigabyte](./062-LIVECD-VIRTUAL-ISO-BOOT.md#gigabyte-bmcs)
-- [Intel](./062-LIVECD-VIRTUAL-ISO-BOOT.md#intel-bmcs)
+- [HPE uses iLO](062-LIVECD-VIRTUAL-ISO-BOOT.md#hpe-ilo-bmcs)
+- [Gigabyte](062-LIVECD-VIRTUAL-ISO-BOOT.md#gigabyte-bmcs)
+- [Intel](062-LIVECD-VIRTUAL-ISO-BOOT.md#intel-bmcs)
 
 For information on how-to remote attach an ISO, see [LiveCD ISO Boot](062-LIVECD-VIRTUAL-ISO-BOOT.md).
 
@@ -44,7 +44,7 @@ pit# site_nic=p1p2
 - `site_gw` The gateway address for the site network.  This will be used to set up the default gateway route on ncn-m001.
 - `site_dns` ONE of the site DNS servers.   The script does not currently handle setting more than one IP address here.
 
-<a name="setup-site-link-connection(s)"></a>
+<a name="setup-site-link-connections"></a>
 #### Setup Site-Link Connection(s)
 
 External, direct access.
@@ -102,7 +102,7 @@ pit# hostnamectl set-hostname bigbird-ncn-m001-pit
 <a name="shasta-cfg"></a>
 ### Shasta-CFG
 
-Follow [the procedures in 067-SHASTA-CFG.md](./067-SHASTA-CFG.md) to
+Follow [the procedures in 067-SHASTA-CFG.md](067-SHASTA-CFG.md) to
 prepare the `site-init` directory for your system.
 
 <a name="cray-site-init"></a>
@@ -122,7 +122,7 @@ pit# csi patch ca \
 --sealed-secret-key-file /var/www/ephemeral/prep/site-init/certs/sealed_secrets.key
 ```
 
-<a name="validate-the-livecd-platform."></a>
+<a name="validate-the-livecd-platform"></a>
 ## Validate the LiveCD platform.
 
 Check that IPs are set for each interface:

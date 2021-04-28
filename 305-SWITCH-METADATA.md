@@ -50,7 +50,7 @@ Spine and aggregation switches use the format `xXcChHsS`. Leaf switches use `xXc
     - The slot number(s) for the spine switches
         - In the below example this is x3000u23R and x3000u23L (two side-by-side switches)
         - Newer side-by-side switches use slot numbers of s1 and s2 instead of R and L
-    >   ![Layered Images Diagram](./img/shcd-rack-example.png)
+    >   ![Layered Images Diagram](img/shcd-rack-example.png)
 2. Each spine or aggregation switch will follow this format: `xXcChHsS`
     > This format also applies to CDU switches that are in a river cabinet that make connections to an adjacent hill cabinet.
     - xX : where "X" is the river cabinet identification number (the figure above is "3000")

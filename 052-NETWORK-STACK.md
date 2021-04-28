@@ -1,6 +1,6 @@
 # Network Stack (Software and Hardware)
 
-This page will detail how-to reload/reset interfaces within the network stack to fixup 
+This page will detail how to reload/reset interfaces within the network stack to fix 
 wedged interfaces.
 
 Any process covered on this page will be covered by the installer.

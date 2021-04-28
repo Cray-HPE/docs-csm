@@ -10,7 +10,7 @@
 > behavior will persist until the failing node's CMOS is cleared.
 >
 > A procedure is available in
-> [254-NCN-FIRMWARE-GB.md](./254-NCN-FIRMWARE-GB.md).
+> [254-NCN-FIRMWARE-GB.md](254-NCN-FIRMWARE-GB.md).
 
 This document specifies the procedures for deploying the non-compute nodes
 (NCNs).
@@ -141,7 +141,7 @@ CASMINST-980
 ### Ensure Time Is Accurate Before Deploying NCNs
 
 **NOTE**: If you wish to use a timezone other than UTC, instead of step 1 below, follow 
-[this procedure for setting a local timezone](./108-NCN-NTP.md#setting-a-local-timezone), then
+[this procedure for setting a local timezone](108-NCN-NTP.md#setting-a-local-timezone), then
 proceed to step 2.
 
 1. Ensure that the PIT node has the current and correct time.
@@ -284,7 +284,7 @@ The configuration workflow described here is intended to help understand the exp
     ```bash
     pit# csi pit validate --livecd-preflight
     ```
-    > Note: If you are *not* on an internal Cray/HPE system, or if you are on an offline/airgapped system, then you can ignore any errors about not being able resolve arti.dev.cray.com
+    > Note: If you are **not** on an internal Cray/HPE system, or if you are on an offline/airgapped system, then you can ignore any errors about not being able resolve arti.dev.cray.com
 
 1. Print the consoles available to you:
     ```bash
@@ -560,7 +560,7 @@ new tests.**
 
 > **`IMPORTANT`** *The Boot-Order is set by cloud-init, however the current setting is still iterating. This manual step is required until further notice.*
 
-Do the two-steps outlined in [Fixing Boot-Order](101-NCN-BOOTING.md#set-boot-order)
+Do the following two steps outlined in [Fixing Boot-Order](101-NCN-BOOTING.md#set-boot-order)
 1. [Setting Order](101-NCN-BOOTING.md#setting-order)
 1. [Trimming](101-NCN-BOOTING.md#trimming)
 

@@ -39,10 +39,10 @@ The state component filter allows users to select hardware to update. Hardware c
 
 #### Parameters
 
-1.  `xnames` - a list of xnames to target
-2.  `partitions` -  a partition to target
-3.  `groups`- a group to target
-4.  `deviceTypes` (like NodeBMC, RouterBMC, ChassisBMC -> these are the ONLY 3 allowed types and come from HSM)
+*  `xnames` - a list of xnames to target
+*  `partitions` -  a partition to target
+*  `groups`- a group to target
+*  `deviceTypes` (NodeBMC, RouterBMC, or ChassisBMC -- these are the ONLY 3 allowed types and come from HSM)
 
 ---
 
@@ -104,7 +104,7 @@ These filters are then applied; and then `command` parameter applies settings fo
 - `version` - usually `latest` because we want to upgrade usually
 - `tag` - usually `default` because we only care about the default image (this can be mostly ignored)
 - `overrideDryrun` - This determines if this is a LIVE UPDATE or a DRYRUN; if you override; then it will provide a live update
-- `restoreNotPossibleOverride` - this determines if an update (live or dry run) will be attempted if a restore cannot be performed.  Typically we don't have enough firmrware to be able to do a rollback; that means if you UPDATE away from a particular version, we probably cannot go back to a previous version.  Given our context it is most likely that this value will ALWAYS need to be set `true` 
+- `restoreNotPossibleOverride` - this determines if an update (live or dry run) will be attempted if a restore cannot be performed.  Typically we don't have enough firmware to be able to do a rollback; that means if you UPDATE away from a particular version, we probably cannot go back to a previous version.  Given our context it is most likely that this value will ALWAYS need to be set `true` 
 - `overwriteSameImage` - this will cause a firmware update to be performed EVEN if the device is already at the identified, selected version.  
 - `timeLimit` - this is the amount of time in seconds that any operation should be allowed to execute.  Most `cray` stuff can be completed in about 1000 seconds or less; but the `gigabyte` stuff will commonly take 1,500 seconds or greater.   We recommend setting the value to 2000; this is just a stop gap to prevent the  operation from never ending, should something get stuck.
 - `description`- this is a human friendly description; use it!
@@ -244,13 +244,13 @@ The hms-discovery job must also be stopped before updates and restarted after up
 }
 ```
 
-> **NOTE**: If this update does not work as expected please check the workaround [257-FIRMWARE-ACTION-SERVICE-CRAY-WINDOM-COMPUTE-NODE-BIOS-WORKAROUND.md](../257-FIRMWARE-ACTION-SERVICE-CRAY-WINDOM-COMPUTE-NODE-BIOS-WORKAROUND.md).
+> **NOTE**: If this update does not work as expected please check the workaround [257-FIRMWARE-ACTION-SERVICE-CRAY-WINDOM-COMPUTE-NODE-BIOS-WORKAROUND.md](257-FIRMWARE-ACTION-SERVICE-CRAY-WINDOM-COMPUTE-NODE-BIOS-WORKAROUND.md).
 
 #### <a name="cray-device-type-nodebmc-target-redstone-fpga"></a>Device Type : NodeBMC | Target : Redstone FPGA
 
 **IMPORTANT**: The Nodes themselves must be powered **on** in order to update the firmware of the Redstone FPGA on the nodes.  
 
-**NOTE**: If updating FPGAs fail due to "No Image available", you can update using the Override Image for Update procedure in [255-FIRMWARE-ACTIONS-SERVICE-FAS.md](../255-FIRMWARE-ACTION-SERVICE-FAS.md).  You can find the imageID using the following command: `cray fas images list --format json | jq '.[] | .[] | select(.target=="Node0.AccFPGA0")'`
+**NOTE**: If updating FPGAs fail due to "No Image available", you can update using the Override Image for Update procedure in [255-FIRMWARE-ACTIONS-SERVICE-FAS.md](255-FIRMWARE-ACTION-SERVICE-FAS.md).  You can find the imageID using the following command: `cray fas images list --format json | jq '.[] | .[] | select(.target=="Node0.AccFPGA0")'`
 
 ```json
 {
@@ -284,7 +284,7 @@ The hms-discovery job must also be stopped before updates and restarted after up
 ---
 
 ## <a name="manufacturer-hpe"></a>Manufacturer : HPE 
-####  <a name="hpe-device-type-nodebmc-target-`ilo-5`-aka-bmc"></a>Device Type : NodeBMC | Target : `iLO 5` aka BMC
+####  <a name="hpe-device-type-nodebmc-target--aka-bmc"></a>Device Type : NodeBMC | Target : `iLO 5` aka BMC
 
 ```json
 "stateComponentFilter": {
@@ -313,7 +313,7 @@ The hms-discovery job must also be stopped before updates and restarted after up
 
 **NOTE**: You MUST use `1` as `target` to indicate `iLO 5`
 
-####  <a name="hpe-device-type-nodebmc-target-`system-rom`-aka-bios"></a>Device Type : NodeBMC | Target : `System ROM` aka BIOS
+####  <a name="hpe-device-type-nodebmc-target--aka-bios"></a>Device Type : NodeBMC | Target : `System ROM` aka BIOS
 
 **NOTE**: Node should be powered on for System ROM update and will need to be rebooted to use the updated BIOS.
 
@@ -380,7 +380,7 @@ The hms-discovery job must also be stopped before updates and restarted after up
 }
 ```
 
-*note*: the timeLimit is `2000` because the gigabytes can take a lot longer to update. 
+*Note*: The timeLimit is `2000` because the Gigabyte BMCs can take a lot longer to update. 
 
 #### <a name="gb-device-type-nodebmc-target-bios"></a>Device Type : NodeBMC | Target : BIOS
 ```json

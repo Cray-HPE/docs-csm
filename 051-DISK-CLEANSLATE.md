@@ -1,7 +1,5 @@
 # Disk Cleanslate
 
-
-* [Disk Cleanslate](#disk-cleanslate)
 * [Use Cases](#use-cases)
     * [Basic Wipe](#basic-wipe)
     * [Advanced Wipe](#advanced-wipe)

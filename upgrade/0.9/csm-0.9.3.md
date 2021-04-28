@@ -18,7 +18,7 @@ Procedures:
 - [Setup Nexus](#setup-nexus)
 - [Update Resources](#update-resources)
 - [Deploy Manifests](#deploy-manifests)
-- [Upgrade NCN RPMs](#upgrade-ncn-rpms)
+- [Upgrade NCN Packages](#upgrade-ncn-packages)
 - [Enable PodSecurityPolicy](#enable-psp)
 - [Apply iSCSI Security Fix](#iscsi-security-fix)
 - [Configure LAG for CMMs](#configure-lag-for-cmms)

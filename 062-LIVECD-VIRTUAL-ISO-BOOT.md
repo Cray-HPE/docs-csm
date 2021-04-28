@@ -38,11 +38,11 @@ ILO BMCs allow for booting directly from an HTTP accessible ISO location.
 
 > Here you can insert the Virtual Media URL, select Boot on Next Reset, and click Insert Media
 
-![ILO BMC Mount](./img/bmc-virtual-media-ilo.png)
+![ILO BMC Mount](img/bmc-virtual-media-ilo.png)
 
 > Next go ahead and reboot by select reset in the top right menu control option
 
-![ILO BMC Reboot](./img/bmc-reboot-ilo.png)
+![ILO BMC Reboot](img/bmc-reboot-ilo.png)
 
 > Open up the virtual terminal by choosing the `HTML5 Console` option when clicking the terminal image in the bottom left corner.
 
@@ -55,7 +55,7 @@ Gigabyte BMCs allow for booting over NFS or HTTP.
 
 Go to the BMC settings and setup the remote ISO for your protocol and node.
 
-![Gigabyte BMC Virtual Media Settings](./img/bmc-virtual-media-gigbyte-settings.png)
+![Gigabyte BMC Virtual Media Settings](img/bmc-virtual-media-gigbyte-settings.png)
 
 **Web Interface**
 
@@ -63,17 +63,17 @@ Access your BMC's web interface and navigate to `Settings -> Media Redirection S
 
 Enable `Remote Media Support` and `Mount CD/DVD` and then fill in the server IP or DNS name and the path to server.
 
-![Gigabyte BMC Settings](./img/bmc-virtual-media-settings-gigabyte.png)
+![Gigabyte BMC Settings](img/bmc-virtual-media-settings-gigabyte.png)
 
 > **`NOTE`** The gigabyte url appears to not allow certain characters and has a limit on path length. So you may need to move or rename the ISO to a location with a smaller file name.
 
 Next head to `Image Redirection -> Remote Images` and click on the `Start` button to start the Virtual ISO mount.
 
-![Gigabyte BMC Start](./img/bmc-virtual-media-start-gigabyte.png)
+![Gigabyte BMC Start](img/bmc-virtual-media-start-gigabyte.png)
 
 Finally, reboot the node and select the `Virtual CDROM` option from the manual boot options.
 
-![Gigabyte BMC Boot](./img/bmc-virtual-media-boot-gigabyte.png)
+![Gigabyte BMC Boot](img/bmc-virtual-media-boot-gigabyte.png)
 
 <a name="intel-bmcs"></a>
 ### Intel BMCs
@@ -82,15 +82,15 @@ Intel BMCs allow for booting with direct ISO mounts.
 
 > Go to the virtual media menu.
 
-![Intel BMC Virtual Media](./img/bmc-virtual-media-intel.png)
+![Intel BMC Virtual Media](img/bmc-virtual-media-intel.png)
 
 > Choose your ISO file:
 
-![Intel BMC Virtual Mount](./img/bmc-virtual-media-intel-menu.png)
+![Intel BMC Virtual Mount](img/bmc-virtual-media-intel-menu.png)
 
 > Click `mount` to make it available.
 
-![Intel BMC Virtual Mounted](./img/bmc-virtual-media-intel-mounted.png)
+![Intel BMC Virtual Mounted](img/bmc-virtual-media-intel-mounted.png)
 
 > **`NOTE`** Do not close the virtual media window or main BMC page until done.
 

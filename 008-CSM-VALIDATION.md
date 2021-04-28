@@ -13,7 +13,6 @@ This page lists available CSM install and health checks that can be executed to 
 1. [Automated Goss Testing](#automated-goss-testing)
 1. [Hardware Management Services Tests](#hms-tests)
 1. [Cray Management Services Validation Utility](#cms-validation-utility)
-1. [Hardware State Manager Discovery Validation](#hms-smd-discovery-validation)
 1. [Booting CSM Barebones Image](#booting-csm-barebones-image)
 1. [UAS/UAI Tests](#uas-uai-tests)
    
@@ -265,7 +264,7 @@ If there is an non-zero amount of DHCP leases for river hardware returned that i
 
 If you have configured unbound to resolve outside hostnames, then the following check should be performed. If you have not done this, then this check may be skipped. 
 
-Run the following on one of the master or worker nodes (not the pit):
+Run the following on one of the master or worker nodes (not the PIT node):
 
 ```bash
 ncn# nslookup cray.com ; echo "Exit code is $?"
