@@ -19,6 +19,7 @@ Procedures:
 - [Update Resources](#update-resources)
 - [Deploy Manifests](#deploy-manifests)
 - [Upgrade NCN RPMs](#upgrade-ncn-rpms)
+- [Enable PodSecurityPolicy](#enable-psp)
 - [Apply iSCSI Security Fix](#iscsi-security-fix)
 - [Configure LAG for CMMs](#configure-lag-for-cmms)
 - [Run Validation Checks (Post-Upgrade)](#run-validation-checks-post-upgrade)
@@ -144,6 +145,16 @@ Upgrade CSM packages on NCNs:
 
 ```bash
 ncn-m001# pdsh -w $(./lib/list-ncns.sh | paste -sd,) "zypper ar -fG https://packages.local/repository/csm-sle-15sp2/ csm-sle-15sp2 && zypper up -y"
+```
+
+
+<a name="enable-psp"></a>
+## Enable PodSecurityPolicy
+
+Run `./lib/0.9.3/enable-psp.sh` to enable PodSecurityPolicy:
+
+```bash
+ncn-m001# ./lib/0.9.3/enable-psp.sh
 ```
 
 
