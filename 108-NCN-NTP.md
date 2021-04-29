@@ -123,13 +123,13 @@ Run the following commands, replacing them with your timezone as needed.
 
 ```bash
 pit# export NEWTZ=America/Chicago
-pit# echo TZ=${NEWTZ} >> /etc/environment
+pit# echo -e "\nTZ=${NEWTZ}" >> /etc/environment
 pit# sed -i "s#^timedatectl set-timezone UTC#timedatectl set-timezone ${NEWTZ}#" /root/bin/configure-ntp.sh
 pit# sed -i 's/--utc/--localtime/' /root/bin/configure-ntp.sh
 pit# /root/bin/configure-ntp.sh
 ```
 
-You should see the output in your local timezone. 
+You should see the output in your local timezone.
 
 ```
 pit# /root/bin/configure-ntp.sh
