@@ -104,24 +104,24 @@ report `FAIL` when uploading duplicate assets. This is ok as long as
 
 <a name="update-resources"></a>
 ## Update Resources
-Run the following two scripts on ncn-m002 to update the kube-multus and coredns resources.  Watch that the pods restart and the status is Running.
+Run `lib/coredns-bump-resources.sh` and `lib/multus-bump-resources.sh` to update the coredns and kube-multus resources.  Watch that the pods restart with status Running.
 ```bash
-ncn-m002# ./lib/coredns-bump-resources.sh
+ncn-m001# ./lib/coredns-bump-resources.sh
 Applying new resource limits to coredns pods
 Warning: kubectl apply should be used on resource created by either kubectl create --save-config or kubectl apply
 deployment.apps/coredns configured
-ncn-m002# watch "kubectl get pods -n kube-system -l k8s-app=kube-dns"
+ncn-m001# watch "kubectl get pods -n kube-system -l k8s-app=kube-dns"
 ```
 ```bash
-ncn-m002# ./lib/multus-bump-resources.sh
-Applying new resource limits to /etc/cray/kubernetes/multus-daemonset.yml
+ncn-m001# ./lib/multus-bump-resources.sh
+Applying new resource limits to kube-multus pods
 customresourcedefinition.apiextensions.k8s.io/network-attachment-definitions.k8s.cni.cncf.io unchanged
 clusterrole.rbac.authorization.k8s.io/multus unchanged
 clusterrolebinding.rbac.authorization.k8s.io/multus unchanged
 serviceaccount/multus unchanged
 configmap/multus-cni-config unchanged
 daemonset.apps/kube-multus-ds-amd64 configured
-ncn-m002# watch "kubectl get pods -n kube-system -l app=multus"
+ncn-m001# watch "kubectl get pods -n kube-system -l app=multus"
 ```
 On success, the coredns and kube-multus pods should restart with a status of Running.  If any kube-multus pod(s) remain in Terminating status, force delete the pod so that the daemonset can restart it successfully.
 ```bash
