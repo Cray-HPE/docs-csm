@@ -242,7 +242,7 @@ For Gigabyte upgrades a tftp server needs to be referred to.
 
 3. Now repeat this for m001, however for every location `http://pit` is used we need to use `127.0.0.1` instead.
 
-4. Reboot the pit node back into itself:
+4. Reboot the PIT node back into itself:
    ```bash
    pit# bootcurrent=$(efibootmgr | grep -i bootcurrent | awk '{print $NF}')
    pit# efibootmgr -n $bootcurrent
@@ -303,7 +303,7 @@ Firmware is located on the LiveCD (versions 1.4.6 or higher).
       3. Press **`Flash`** and wait for the upload and flash to complete. iLO may reboot after flash.
    7. Cold boot the node, or momentarily press the button (GUI button) to power it on.
 
-3. After the other nodes are completed, the pit node can be upgraded. (Alternatively this could be done first):
+3. After the other nodes are completed, the PIT node can be upgraded. (Alternatively this could be done first):
    - Repeat the same process, using the external BMC URL for the PIT node's BMC (e.g. https://system-ncn-m001-mgmt)
    - For the `Remote File URL` use `127.0.0.1` instead of `pit` (e.g. http://127.0.0.1/fw/river/hpe/A42_1.38_10_30_2020.signed.flash)
    - Before rebooting the node, save any work and set the `BootNext` to the current boot sessions device:
@@ -320,7 +320,7 @@ All NCNs are now updated via GUI.
 
 ![redfish.png](img/3rd/redfish.png)
 
-> **Not Ready** This LiveCD bash script is broken, and will be fixed. It will allow remote BIOS and firmware updates and checkout from the pit node.
+> **Not Ready** This LiveCD bash script is broken, and will be fixed. It will allow remote BIOS and firmware updates and checkout from the PIT node.
 
 1. Set login vars for redfish™
     ```bash

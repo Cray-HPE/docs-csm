@@ -2,7 +2,7 @@
 
     * [Why?](#why) 
     * [When To Lock Management NCNs](#when-to-lock-management-ncns) 
-    * [When To Unlock Management NCNs](#when-to-unlock-management ncns) 
+    * [When To Unlock Management NCNs](#when-to-unlock-management-ncns) 
     * [Locked Behavior](#locked-behavior) 
     * [START -> How To Lock Management NCNs](#how-to-lock-management-ncns)
     * [How To Unlock Management NCNs](#how-to-unlock-management-ncns) 

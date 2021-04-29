@@ -674,7 +674,7 @@ may be referenced when making a similar site modification to v1.3.
 
     Use "ipmitool lan print" to determine the BMC MAC address.
 
-    * Gigabayte nodes should use "lan print 1".
+    * Gigabyte nodes should use "lan print 1".
     * Intel nodes should use "lan print 3".
 
     ```bash

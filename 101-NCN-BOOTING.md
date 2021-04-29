@@ -16,7 +16,7 @@ Table of Contents:
   * [Reverting Changes](101-NCN-BOOTING.md#reverting-changes)
     * [Locating a USB Stick](101-NCN-BOOTING.md#locating-a-usb-stick)
 
-<a name="how-can-i-tell-if-i-booted-via-disk-or-pxe?"></a>
+<a name="how-can-i-tell-if-i-booted-via-disk-or-pxe"></a>
 ### How can I tell if I booted via disk or pxe?
 
 Two ways, one may be easier depending on your env.
@@ -27,7 +27,7 @@ Two ways, one may be easier depending on your env.
 <a name="set-bmcs-to-dhcp"></a>
 ### Set BMCs to DHCP
 
-If you are reinstalling a system (otherwise skip to [Next: Deploy the NCNs](#next-deploy-the-ncns), the BMCs for the NCNs may be set to static.  We check `/var/lib/misc/dnsmasq.leases` for setting up the symlinks for the artifacts each node needs to boot.  So if your BMCs are set to static, those artifacts will not get setup correctly.  You can set them back to DHCP by using a command as such:
+If you are reinstalling a system, the BMCs for the NCNs may be set to static. We check `/var/lib/misc/dnsmasq.leases` for setting up the symlinks for the artifacts each node needs to boot.  So if your BMCs are set to static, those artifacts will not get setup correctly. You can set them back to DHCP by using a command as such:
 
 ```bash
 for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
@@ -141,7 +141,7 @@ done
 > Boot0018* cray (sdc1)
 > ```
 > 
-> <a name="intel-coporation"></a>
+> <a name="intel-corporation"></a>
 > #### Intel Corporation
 >
 > <a name="masters-3"></a>
@@ -191,25 +191,25 @@ After following the twp-steps on a given NCN, that NCN will now use the desired 
 As for removing entries, this section will only advise on removing other PXE entries. There are too many vendor-specific entries beyond
 disks and NICs to cover in this section (e.g. BIOS entries, iLO entries, etc.).
 
-Simply run the reverse-pattern of the PXE commands from the [fixing boot order](#fixing-boot-order) section:
+Simply run the reverse-pattern of the PXE commands from the [setting boot order](#setting-order) section:
 
 1. Find the other PXE entries:
     - Gigabyte Technology:
         ```bash
-        # on an NCN, or on the pit node
+        # on an NCN, or on the PIT node
         efibootmgr | grep -ivP '(pxe ipv?4.*)' | grep -iP '(adapter|connection|nvme|sata)' | tee /tmp/rbbs1
         efibootmgr | grep -iP '(pxe ipv?4.*)' | grep -i connection | tee /tmp/rbbs2
         ```
     - Hewlett-Packard Enterprise
       > **`NOTE`** This does not trim HSN Mellanox cards; these should disable their OpROMs using [the high speed network snippet(s)](304-NCN-PCIE-NET-BOOT-AND-RE-CABLE.md#high-speed-network).
         ```bash
-        # on an NCN, or on the pit node
+        # on an NCN, or on the PIT node
         efibootmgr | grep -vi 'pxe ipv4' | grep -i adapter |tee /tmp/rbbs1
         efibootmgr | grep -iP '(sata|nvme)' | tee /tmp/rbbs2
         ```
     - Intel Corporation
         ```bash
-        # on an NCN, or on the pit node
+        # on an NCN, or on the PIT node
         efibootmgr | grep -vi 'ipv4' | grep -iP '(sata|nvme|uefi)' | tee /tmp/rbbs1
         efibootmgr | grep -i baseboard | tee /tmp/rbbs2
         ```

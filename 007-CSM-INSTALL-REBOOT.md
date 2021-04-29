@@ -105,7 +105,7 @@ data so run them only when indicated. Instructions are in the `README` files.
       https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
-1. Upload NCN boot artifacts into S3.
+1. <a name="ncn-boot-artifacts-hand-off"></a>Upload NCN boot artifacts into S3.
     
     1. Set variables
     

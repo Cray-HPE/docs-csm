@@ -6,7 +6,7 @@ Shasta non-compute nodes use drive storage for persistence and block storage. Th
 reference information for these disks, their partition tables, and their management.
 
 * [NCN Partitions](104-NCN-PARTITIONING.md#ncn-partitions)
-    * [What Controls Partitioning?](104-NCN-PARTITIONING.md#what-controls-partitioning?)
+    * [What Controls Partitioning?](104-NCN-PARTITIONING.md#what-controls-partitioning)
     * [Plan of Record / Baseline](104-NCN-PARTITIONING.md#plan-of-record--baseline)
         * [Problems When Above/Below Baseline](104-NCN-PARTITIONING.md#problems-when-abovebelow-baseline)
         * [Worker Nodes with ETCD](104-NCN-PARTITIONING.md#worker-nodes-with-etcd)
@@ -28,7 +28,7 @@ reference information for these disks, their partition tables, and their managem
 * [Old/Retired FS-Labels](104-NCN-PARTITIONING.md#oldretired-fs-labels)
 
 
-<a name="what-controls-partitioning?"></a>
+<a name="what-controls-partitioning"></a>
 ## What Controls Partitioning?
 
 Partitioning is controlled by two aspects:
@@ -66,7 +66,7 @@ easily.
 <a name="disable-luks"></a>
 #### Disable Luks
 
-> **`NOTE`** This is broken, use the [expand RAID](#expand-raid) option instead. (MTL-1309) 
+> **`NOTE`** This is broken, use the [expand RAID](#expand-the-raid) option instead. (MTL-1309) 
 
 All NCNs (master/worker/storage) have the same kernel parameters, but are not always necessary. This method works by toggling the dependency
 for the metal ETCD module, disabling LUKs will disable ETCD bare-metal creation.

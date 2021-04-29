@@ -13,10 +13,10 @@
 2. 009 has been applied and the NCNs are locked.
 3. Identify the type and manufacturers of hardware in your system.  If you don't have Gigabyte nodes, don't update them!
 
-**WARNING:** Non-compute nodes (NCNs) should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS. Research "*009-NCN-LOCKING*" for more information. Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
+**WARNING:** Non-compute nodes (NCNs) should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS. See [`009-NCN-LOCKING.md`](009-NCN-LOCKING.md) for more information. Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
 
 
-Using the process outlined in [`255-FIRMWARE-ACTION-SERVICE-FAS.md`](../255-FIRMWARE-ACTION-SERVICE-FAS.md) follow the process to update the system.  We recommend that you use the 'recipes' listed in [`256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md`](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md) to update each supported type.
+Using the process outlined in [`255-FIRMWARE-ACTION-SERVICE-FAS.md`](255-FIRMWARE-ACTION-SERVICE-FAS.md) follow the process to update the system.  We recommend that you use the 'recipes' listed in [`256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md`](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md) to update each supported type.
 
 **NOTE**: each system is different and may not have all hardware options.
 
@@ -56,7 +56,7 @@ For each item in the `Hardware Precedence Order`:
      *	`NoOp`: Nothing to do, already at version.
      *	`NoSol`: No viable image is available; this will not be updated.
      *	`succeeded`: 
-     	*	IF `dryrun`: The operation should succeed if performed as a `live update`.  `succeeded` means that FAS identified that it COULD update an xname + target with the declared strategy. 
+     	*	IF `dryrun`: The operation should succeed if performed as a `live update`. `succeeded` means that FAS identified that it COULD update an xname + target with the declared strategy. 
      	*	IF `live update`: the operation succeeded, and has updated the xname + target to the identified version.
      *	`failed`: 
      	*	IF `dryrun` : There is something that FAS could do, but it likely would fail; most likely because the file is missing. 
@@ -77,23 +77,23 @@ For each item in the `Hardware Precedence Order`:
 ## Hardware Precedence Order
 After you identify which hardware you have; start with the top most item on this list to update.  If you don't have the hardware, skip it.
 
-**IMPORTANT**: this process does not communicate the SAFE way to update NCNs. If you have not locked NCNs or blindly use FAS to update NCNs without following the correct process **YOU WILL VIOLATE THE STABILITY OF THE SYSTEM**
+**IMPORTANT**: This process does not communicate the SAFE way to update NCNs. If you have not locked NCNs, or blindly use FAS to update NCNs without following the correct process, then **YOU WILL VIOLATE THE STABILITY OF THE SYSTEM**
 
-**IMPORTANT** : read the corresponding recipes! there are sometimes ancillary actions that must be completed in order to ensure update integrity!
+**IMPORTANT** : Read the corresponding recipes! There are sometimes ancillary actions that must be completed in order to ensure update integrity.
 
-1. [Cray](#manufacturer-cray)
-     2. [RouterBMC](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#cray-device-type-routerbmc--target-bmc)
-     2. [ChassisBMC](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#cray-device-type-chassisbmc-target-bmc)
+1. [Cray](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#manufacturer-cray)
+     2. [RouterBMC](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#cray-device-type-routerbmc--target-bmc)
+     2. [ChassisBMC](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#cray-device-type-chassisbmc-target-bmc)
      4. NodeBMC
-        4. [BMC](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#cray-device-type-nodebmc-target-bmc)
-        5. [NodeBIOS](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#cray-device-type-nodebmc-target-nodebios)
-        6. [Redstone FPGA 	](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#cray-device-type-nodebmc-target-redstone-fpga) 
-5. [Gigabyte](#manufacturer-gigabyte)
-	6. [BMC](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#gb-device-type-nodebmc-target-bmc) 
-	7. [BIOS](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#gb-device-type-nodebmc-target-bios) 
-3. [HPE](#manufacturer-hpe)
-     1. [BMC (iLO5)](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#hpe-device-type-nodebmc-target--aka-bmc)
-     2. [BIOS (System ROM)](../256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#hpe-device-type-nodebmc-target--aka-bios) 
+        4. [BMC](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#cray-device-type-nodebmc-target-bmc)
+        5. [NodeBIOS](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#cray-device-type-nodebmc-target-nodebios)
+        6. [Redstone FPGA 	](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#cray-device-type-nodebmc-target-redstone-fpga) 
+5. [Gigabyte](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#manufacturer-gigabyte)
+	6. [BMC](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#gb-device-type-nodebmc-target-bmc) 
+	7. [BIOS](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#gb-device-type-nodebmc-target-bios) 
+3. [HPE](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#manufacturer-hpe)
+     1. [BMC (iLO5)](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#hpe-device-type-nodebmc-target--aka-bmc)
+     2. [BIOS (System ROM)](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#hpe-device-type-nodebmc-target--aka-bios) 
 
 
 <a name="next-steps"></a>

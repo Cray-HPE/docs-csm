@@ -21,7 +21,7 @@ Procedures:
 - [Update Customizations](#update-customizations)
 - [Setup Nexus](#setup-nexus)
 - [Deploy Manifests](#deploy-manifests)
-- [Upgrade NCN RPMs](#upgrade-ncn-rpms)
+- [Upgrade NCN Packages](#upgrade-ncn-packages)
 - [Switch VCS Configuration Repositories to Private](#switch-vcs-configuration-repositories-to-private)
 - [Configure Prometheus Alert Notifications to Detect Postgres Replication Lag](#configure-prometheus-alert-notifications-to-detect-postgres-replication-lag)
 - [Run Validation Checks (Post-Upgrade)](#run-validation-checks-post-upgrade)

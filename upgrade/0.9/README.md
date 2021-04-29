@@ -10,5 +10,5 @@ patches are released.
 CSM 0.9.0 was released with Shasta 1.4.0 and requires a fresh install.
 
 * CSM 0.9.1 - _Not released_
-* [CSM 0.9.2](./csm-0.9.2.md) - Released with Shasta 1.4.1
-* [CSM 0.9.3](./csm-0.9.3.md) - Released with Shasta 1.4.2
+* [CSM 0.9.2](csm-0.9.2.md) - Released with Shasta 1.4.1
+* [CSM 0.9.3](csm-0.9.3.md) - Released with Shasta 1.4.2

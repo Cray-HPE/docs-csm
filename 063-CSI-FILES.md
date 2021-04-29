@@ -2,10 +2,10 @@
 
 This page describes administrative knowledge around CSI's files.
 
-> Detailed information for collecting certain files starts in [Service Guides](./300-SERVICE-GUIDES.md)
+> Detailed information for collecting certain files starts in [Service Guides](300-SERVICE-GUIDES.md)
   
 * [Save-File / Avoiding Parameters](#save-file--avoiding-parameters)
-* [CSI `hmn_connections.json` Notes](#csi-`hmn_connections.json`-notes)
+* [CSI `hmn_connections.json` Notes](#csi-hmn_connections.json-notes)
 
 <a name="save-file--avoiding-parameters"></a>
 ## Save-File / Avoiding Parameters
@@ -67,7 +67,7 @@ upstream_ntp_server: time.nist.gov
 v2-registry: https://registry.nmn/
 ```
 
-<a name="csi-`hmn_connections.json`-notes"></a>
+<a name="csi-hmn_connections.json-notes"></a>
 ### CSI `hmn_connections.json` Notes
 
 If you see warnings from `csi config init` that are similar to the warning messages below, it means that CSI encountered an unknown piece of hardware in the `hmn_connections.json` file. If you do not see this message you can move on to sub-step 2.

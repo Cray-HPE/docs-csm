@@ -21,7 +21,7 @@ The three separate scenarios (above) continue the same way at this point, with p
 * This version of the documentation supports booting from a [CSM USB LiveCD] (003-CSM-USB-LIVECD.md).
 * A future version of this documentation will support booting from a virtual ISO method [CSM Remote LiveCD] (004-CSM-REMOTE-LIVECD.md). 
 
-##### [CSM USB LiveCD - Creation and Configuration](064-LIVECD-USB-BOOT.md#csm-usb-livecd---creation-and-configuration)
+##### [CSM USB LiveCD - Creation and Configuration](064-LIVECD-USB-BOOT.md)
 
 Preparation of the LiveCD on a USB stick can be done from a Linux system such as a booted ncn-m001 node with either Shasta v1.3 or v1.4 or a laptop or desktop.
 
@@ -35,43 +35,45 @@ Preparation of the LiveCD on a USB stick can be done from a Linux system such as
 * [Boot the LiveCD](064-LIVECD-USB-BOOT.md#boot-the-livecd)
   * [First Login](064-LIVECD-USB-BOOT.md#first-login)
 
-##### [CSM Metal Install](005-CSM-METAL-INSTALL.md#csm-metal-install)
+##### [CSM Metal Install](005-CSM-METAL-INSTALL.md)
 
 Now that ncn-m001 has been booted from the LiveCD, the other management NCNs will be deployed to create the management Kubernetes cluster.
 
-  * [Overview](005-CSM-METAL-INSTALL.md#overview)
-  * [Configure Bootstrap Registry to Proxy an Upstream Registry](005-CSM-METAL-INSTALL.md#configure-bootstrap-registry-to-proxy-an-upstream-registry)
-  * [Tokens and IPMI Password](005-CSM-METAL-INSTALL.md#tokens-and-ipmi-password)
-  * [Timing of Deployments](005-CSM-METAL-INSTALL.md#timing-of-deployments)
-  * [NCN Deployment](005-CSM-METAL-INSTALL.md#ncn-deployment)
-    * [Apply NCN Pre-Boot Workarounds](005-CSM-METAL-INSTALL.md#apply-ncn-pre-boot-workarounds)
-    * [Ensure Time Is Accurate Before Deploying NCNs](005-CSM-METAL-INSTALL.md#ensure-time-is-accurate-before-deploying-ncns)
-    * [Start Deployment](005-CSM-METAL-INSTALL.md#start-deployment)
-      * [Workflow](005-CSM-METAL-INSTALL.md#workflow)
-      * [Deploy](005-CSM-METAL-INSTALL.md#deploy)
-    * [Apply NCN Post-Boot Workarounds](005-CSM-METAL-INSTALL.md#apply-ncn-post-boot-workarounds)
-    * [LiveCD Cluster Authentication](005-CSM-METAL-INSTALL.md#livecd-cluster-authentication)
-    * [BGP Routing](005-CSM-METAL-INSTALL.md#bgp-routing)
-    * [Validation](005-CSM-METAL-INSTALL.md#validation)
-* [Additional Validation Tasks for Failed Installs](005-CSM-METAL-INSTALL.md#additional-validation-tasks-for-failed-installs)
-  * [Configure and Trim UEFI Entries](005-CSM-METAL-INSTALL.md#configure-and-trim-uefi-entries)
+* [Configure Bootstrap Registry to Proxy an Upstream Registry](005-CSM-METAL-INSTALL.md#configure-bootstrap-registry-to-proxy-an-upstream-registry)
+* [Tokens and IPMI Password](005-CSM-METAL-INSTALL.md#tokens-and-ipmi-password)
+* [Timing of Deployments](005-CSM-METAL-INSTALL.md#timing-of-deployments)
+* [NCN Deployment](005-CSM-METAL-INSTALL.md#ncn-deployment)
+  * [Apply NCN Pre-Boot Workarounds](005-CSM-METAL-INSTALL.md#apply-ncn-pre-boot-workarounds)
+  * [Ensure Time Is Accurate Before Deploying NCNs](005-CSM-METAL-INSTALL.md#ensure-time-is-accurate-before-deploying-ncns)
+  * [Start Deployment](005-CSM-METAL-INSTALL.md#start-deployment)
+    * [Workflow](005-CSM-METAL-INSTALL.md#workflow)
+    * [Deploy](005-CSM-METAL-INSTALL.md#deploy)
+  * [Apply NCN Post-Boot Workarounds](005-CSM-METAL-INSTALL.md#apply-ncn-post-boot-workarounds)
+  * [LiveCD Cluster Authentication](005-CSM-METAL-INSTALL.md#livecd-cluster-authentication)
+  * [BGP Routing](005-CSM-METAL-INSTALL.md#bgp-routing)
+  * [Validation](005-CSM-METAL-INSTALL.md#validation)
+  * [Optional Validation](005-CSM-METAL-INSTALL.md#optional-validation)
+* [Configure and Trim UEFI Entries](005-CSM-METAL-INSTALL.md#configure-and-trim-uefi-entries)
 
 
-##### [CSM Platform Install](006-CSM-PLATFORM-INSTALL.md#csm-platform-install)
+##### [CSM Platform Install](006-CSM-PLATFORM-INSTALL.md)
 
 Install all of the CSM applications and services into the management Kubernetes cluster.
 
 * [Initialize Bootstrap Registry](006-CSM-PLATFORM-INSTALL.md#initialize-bootstrap-registry)
 * [Create Site-Init Secret](006-CSM-PLATFORM-INSTALL.md#create-site-init-secret)
 * [Deploy Sealed Secret Decryption Key](006-CSM-PLATFORM-INSTALL.md#deploy-sealed-secret-decryption-key)
-* [Start the Deployment](006-CSM-PLATFORM-INSTALL.md#start-the-deployment)
-  * [Run `install.sh`](006-CSM-PLATFORM-INSTALL.md#run-installsh)
+* [Deploy CSM Applications and Services](006-CSM-PLATFORM-INSTALL.md#deploy-csm-applications-and-services)
+  * [Setup Nexus](006-CSM-PLATFORM-INSTALL.md#setup-nexus)
+  * [Set NCNs to use Unbound](006-CSM-PLATFORM-INSTALL.md#set-ncns-to-use-unbound)
+  * [Validate CSM Install](006-CSM-PLATFORM-INSTALL.md#validate-csm-install)
+  * [Reboot from the LiveCD to NCN](006-CSM-PLATFORM-INSTALL.md#reboot-from-the-livecd-to-ncn)
 * [Add Compute Cabinet Routing to NCNs](006-CSM-PLATFORM-INSTALL.md#add-compute-cabinet-routing-to-ncns)
 * [Known Issues](006-CSM-PLATFORM-INSTALL.md#known-issues)
-  * [error: timed out waiting for the condition on jobs/cray-sls-init-load](006-CSM-PLATFORM-INSTALL.md#error-timed-out-waiting-for-the-condition-on-jobscray-sls-init-load)
-  * [Error: not ready: https://packages.local](006-CSM-PLATFORM-INSTALL.md#error-not-ready-httpspackageslocal)
-  * [Error initiating layer upload ... in registry.local: received unexpected HTTP status: 200 OK](006-CSM-PLATFORM-INSTALL.md#error-initiating-layer-upload--in-registrylocal-received-unexpected-http-status-200-ok)
-  * [Error lookup registry.local: no such host](006-CSM-PLATFORM-INSTALL.md#error-lookup-registry.local:-no-such-host)
+  * [error: timed out waiting for the condition on jobs/cray-sls-init-load](006-CSM-PLATFORM-INSTALL.md#error-timed-out-sls-init-load-job)
+  * [Error: not ready: https://packages.local](006-CSM-PLATFORM-INSTALL.md#error-not-ready)
+  * [Error initiating layer upload ... in registry.local: received unexpected HTTP status: 200 OK](006-CSM-PLATFORM-INSTALL.md#error-initiating-layer-upload)
+  * [Error lookup registry.local: no such host](006-CSM-PLATFORM-INSTALL.md#error-registry-local-no-such-host)
 
 <a name="csm-install-validation-and-health-checks"></a> 
 ###### [CSM Install Validation and Health Checks](008-CSM-VALIDATION.md)
@@ -84,19 +86,13 @@ The CSM installation validation and health checks can be run after install.sh fi
   * [BGP Peering Status and Reset](008-CSM-VALIDATION.md#pet-bgp)
     * [Mellanox Switch](008-CSM-VALIDATION.md#pet-bgp-mellanox)
     * [Aruba Switch](008-CSM-VALIDATION.md#pet-bgp-aruba)
-
-
 * [Network Health Checks](008-CSM-VALIDATION.md#network-health-checks)
   * [Verify that KEA has active DHCP leases](008-CSM-VALIDATION.md#net-kea)
   * [Verify ability to resolve external DNS](008-CSM-VALIDATION.md#net-extdns)
   * [Verify Spire Agent is Running on Kubernetes NCNs](008-CSM-VALIDATION.md#net-spire)
   * [Verify the Vault Cluster is Healthy](008-CSM-VALIDATION.md#net-vault)
-
-
 * [Automated Goss Testing](008-CSM-VALIDATION.md#automated-goss-testing)
   * [Known Goss Test Issues](008-CSM-VALIDATION.md#autogoss-issues)
-
-
 * [Hardware Management Services Tests](008-CSM-VALIDATION.md#hms-tests)
   * [Test Execution](008-CSM-VALIDATION.md#hms-exec)
 * [Cray Management Services Validation Utility](008-CSM-VALIDATION.md#cms-validation-utility)
@@ -110,14 +106,12 @@ The CSM installation validation and health checks can be run after install.sh fi
   * [Reboot node](008-CSM-VALIDATION.md#csm-reboot)
   * [Verify console connections](008-CSM-VALIDATION.md#csm-consoles)
   * [Connect to the node's console and watch the boot](008-CSM-VALIDATION.md#csm-watch)
-
-
 * [UAS / UAI Tests](008-CSM-VALIDATION.md#uas-uai-tests)
   * [Initialize and Authorize the CLI](008-CSM-VALIDATION.md#uas-uai-init-cli)
     * [Stop Using the CRAY_CREDENTIALS Service Account Token](008-CSM-VALIDATION.md#uas-uai-init-cli-stop)
     * [Initialize the CLI Configuration](008-CSM-VALIDATION.md#uas-uai-init-cli-init)
-    * [Authorize the CLI for Your User](008-CSM-VALIDATION.md#uas-uai-init-auth)
-    * [Troubleshooting CLI issues](008-CSM-VALIDATION.md#uas-uai-init-debug)
+    * [Authorize the CLI for Your User](008-CSM-VALIDATION.md#uas-uai-init-cli-auth)
+    * [Troubleshooting CLI issues](008-CSM-VALIDATION.md#uas-uai-init-cli-debug)
   * [Validate UAS and UAI Functionality](008-CSM-VALIDATION.md#uas-uai-validate)
     * [Validate the Basic UAS Installation](008-CSM-VALIDATION.md#uas-uai-validate-install)
     * [Validate UAI Creation](008-CSM-VALIDATION.md#uas-uai-validate-create)
@@ -127,16 +121,16 @@ The CSM installation validation and health checks can be run after install.sh fi
       * [UAI Images not in Registry](008-CSM-VALIDATION.md#uas-uai-validate-debug-registry)
       * [Missing Volumes and other Container Startup Issues](008-CSM-VALIDATION.md#uas-uai-validate-debug-container)
 
-##### [CSM Install Reboot - Final NCN Install](007-CSM-INSTALL-REBOOT.md#csm-install-reboot---final-ncn-install)
+##### [CSM Install Reboot - Final NCN Install](007-CSM-INSTALL-REBOOT.md)
 
 The ncn-m001 node needs to reboot from the LiveCD to normal operation as a Kubernetes master node.
 
 * [Required Services](007-CSM-INSTALL-REBOOT.md#required-services)
 * [Notice of Danger](007-CSM-INSTALL-REBOOT.md#notice-of-danger)
 * [LiveCD Pre-Reboot Workarounds](007-CSM-INSTALL-REBOOT.md#livecd-pre-reboot-workarounds)
-* [Example](007-CSM-INSTALL-REBOOT.md#example)
 * [Hand-Off](007-CSM-INSTALL-REBOOT.md#hand-off)
   * [Start Hand-Off](007-CSM-INSTALL-REBOOT.md#start-hand-off)
+* [Reboot](007-CSM-INSTALL-REBOOT.md#reboot)
 * [Accessing USB Partitions After Reboot](007-CSM-INSTALL-REBOOT.md#accessing-usb-partitions-after-reboot)
   * [Accessing CSI from a USB or RemoteISO](007-CSM-INSTALL-REBOOT.md#accessing-csi-from-a-usb-or-remoteiso)
 * [Enable NCN Disk Wiping Safeguard](007-CSM-INSTALL-REBOOT.md#enable-ncn-disk-wiping-safeguard)
@@ -159,21 +153,18 @@ The NCNs should be locked to prevent accidental firmware upgrades with FAS or po
 * [How To Unlock Management NCNs](009-NCN-LOCKING.md#how-to-unlock-management-ncns)
 
 
-##### [Firmware Update the system with FAS](010-FIRMWARE-UPDATE-WITH-FAS.md#firmware-update-the-system-with-fas) 
+##### [Firmware Update the system with FAS](010-FIRMWARE-UPDATE-WITH-FAS.md)
 
 The firmware versions of many components may need to be updated at this point in the installation process.
 
 * [Prerequisites](010-FIRMWARE-UPDATE-WITH-FAS.md#prerequisites)
-* [Current Capabilities as of Shasta Release v1.4](010-FIRMWARE-UPDATE-WITH-FAS.md#current-capabilities-as-of-shasta-release-v1.4)
+* [Current Capabilities as of Shasta Release v1.4](010-FIRMWARE-UPDATE-WITH-FAS.md#current-capabilities)
 * [Order Of Operations](010-FIRMWARE-UPDATE-WITH-FAS.md#order-of-operations)
 * [Hardware Precedence Order](010-FIRMWARE-UPDATE-WITH-FAS.md#hardware-precedence-order)
 * [Next Steps](010-FIRMWARE-UPDATE-WITH-FAS.md#next-steps)
 
 
 The details of the process are outlined in [255-FIRMWARE-ACTION-SERVICE-FAS.md](255-FIRMWARE-ACTION-SERVICE-FAS.md) using recipes listed in [256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md)
-
-
-Using the process outlined in [`255-FIRMWARE-ACTION-SERVICE-FAS.md`](../255-FIRMWARE-ACTION-SERVICE-FAS.md) follow the process to update the system.  We recommend that you use the 'recipes' listed in [`256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md`](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md) to update each supported type.
 
 Then the administrator should install additional products following the procedures in the HPE Cray EX System Installation and Configuration Guide S-8000.
 

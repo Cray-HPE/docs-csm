@@ -1,7 +1,8 @@
 # Cabling
-* [HPE Hardware](##hpe-hardware)
-* [Gigabyte Hardware](##gigabyte-hardware)
+* [HPE Hardware](#hpe-hardware)
+* [Gigabyte/Intel Hardware](#gigabyte-hardware)
 
+<a name="hpe-hardware"></a>
 ## HPE Hardware
 
 ### HPE DL385
@@ -20,7 +21,6 @@
   * Ports are numbered left-to-right:  the far left port is port 1.
 * The PCIE Slot 1 is on the top left side of the image above (under number 1).
   * Ports are numbered left-to-right:  the far left port is port 1.
-
 
 ### NCN Worker Cabling
 
@@ -106,7 +106,6 @@ For systems that include 4 aggregation switches the cabling will look like the f
 | sn01	 | x3000u10ocp-j1 | x3000u34-j6	 | sw-25g02   |
 | sn01	 | x3000u10s1-j1  | x3000u33-j6	 | sw-25g01   |
 
-
 ### UAN Cabling
 
 | Server Port        | Management Network Port        | Speed | Use / Configuration         |
@@ -127,6 +126,7 @@ For systems that include 4 aggregation switches the cabling will look like the f
 
 ![HPE_UAN](img/network/HPE_UAN.png)
 
+<a name="gigabyte-hardware"></a>
 ## Gigabyte/Intel Hardware
 
 ### NCN Worker Cabling

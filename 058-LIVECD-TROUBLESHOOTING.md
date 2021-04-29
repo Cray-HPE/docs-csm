@@ -4,7 +4,7 @@ This page will contain sections for recovering the LiveCD.
 
 * [Root Password](#root-password)
 
-<a name="root-account"></a>
+<a name="root-password"></a>
 ### Root Password
 
 It may become desirable to clear the password on the LiveCD.

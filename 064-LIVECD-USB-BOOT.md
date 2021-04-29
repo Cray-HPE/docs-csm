@@ -208,7 +208,7 @@ The SHASTA-CFG structure and other configuration files will be prepared, then cs
 * [Before Configuration Payload Workarounds](#before-configuration-payload-workarounds)
 * [Generate Installation Files](#generate-installation-files)
 * [CSI Workarounds](#csi-workarounds)
-* [SHASTA-CFG](#SHASTA-CFG)
+* [SHASTA-CFG](#shasta-cfg)
 
 <a name="before-configuration-payload-workarounds"></a>
 ### Before Configuration Payload Workarounds
@@ -252,7 +252,7 @@ After gathering the files into the working directory, generate your configs:
    linux# cd /mnt/pitdata/prep
    ```
 
-2. Generate the system configuration reusing a parameter file (see [avoiding parameters](./063-CSI-FILES.md#save-file--avoiding-parameters)) **or skip this step**.
+2. Generate the system configuration reusing a parameter file (see [avoiding parameters](063-CSI-FILES.md#save-file--avoiding-parameters)) **or skip this step**.
 
    If moving from a Shasta v1.3 system, the system_config.yaml file will not be available, so skip this step and continue with step 3.
 
@@ -394,7 +394,7 @@ Check for workarounds in the `/opt/cray/csm/workarounds/csi-config` directory. I
 Now execute [the procedures in 004-SHASTA-CFG.md](004-SHASTA-CFG.md) to prepare the `site-init` directory for your system.
 
 
-<a name="pre-populate-livecd-daemons-configuration-and-ncn-arti"></a>
+<a name="pre-populate-livecd-daemons-configuration-and-ncn-artifacts"></a>
 ## Pre-Populate LiveCD Daemons Configuration and NCN Artifacts
 
 Now that the configuration is generated, we can populate the LiveCD with the generated files.
