@@ -170,8 +170,6 @@ from ever being loaded.
 ncn-m001# pdsh -w $(./lib/list-ncns.sh | paste -sd,) "echo 'install libiscsi /bin/true' >> /etc/modprobe.d/disabled-modules.conf"
 ```
 
-Upgrade CSM packages on NCNs:
-
 
 <a name="configure-lag-for-cmms"></a>
 
