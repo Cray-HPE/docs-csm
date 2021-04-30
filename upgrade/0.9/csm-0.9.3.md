@@ -17,6 +17,7 @@ Procedures:
 - [Run Validation Checks (Pre-Upgrade)](#run-validation-checks-pre-upgrade)
 - [Setup Nexus](#setup-nexus)
 - [Update Resources](#update-resources)
+- [Increase Max pty on Workers](#increase-pty-max)
 - [Deploy Manifests](#deploy-manifests)
 - [Upgrade NCN Packages](#upgrade-ncn-packages)
 - [Enable PodSecurityPolicy](#enable-psp)
@@ -126,6 +127,12 @@ ncn-m001# watch "kubectl get pods -n kube-system -l app=multus"
 On success, the coredns and kube-multus pods should restart with a status of Running.  If any kube-multus pod(s) remain in Terminating status, force delete the pod so that the daemonset can restart it successfully.
 ```bash
 kubectl delete pod <pod-name> -n kube-system --force
+```
+
+<a name="increase-pty-max"></a>
+## Increase Max pty on Workers
+```bash
+ncn-m001# pdsh -w $(./lib/list-ncns.sh | grep ncn-w | paste -sd,) "echo kernel.pty.max=8196 > /etc/sysctl.d/991-maxpty.conf && sysctl -p /etc/sysctl.d/991-maxpty.conf"
 ```
 
 <a name="deploy-manifests"></a>
