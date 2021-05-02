@@ -229,14 +229,14 @@ Some files are needed for generating the configuration payload. New systems will
 > Note: The USB stick is usable at this time, but without SSH enabled as well as core services. This means the stick could be used to boot the system now, and a user can return to this step at another time.
 
 Pull these files into the current working directory:
-- `application-node-config.yaml` (optional - see below)
+- `application_node_config.yaml` (optional - see below)
 - `cabinets.yaml` (optional - see below)
 - `hmn_connections.json`
 - `ncn_metadata.csv`
 - `switch_metadata.csv`
 - `system_config.yaml` (see below)
 
-> The optional `application-node-config.yaml` file may be provided for further defining of settings relating to how application nodes will appear in HSM for roles and subroles. See the CSI usage for more information.  
+> The optional `application_node_config.yaml` file may be provided for further defining of settings relating to how application nodes will appear in HSM for roles and subroles. See the CSI usage for more information.  
 
 > The optional `cabinets.yaml` file allows cabinet naming and numbering as well as some networking overrides (e.g. VLAN) which will allow systems on Shasta v1.3 to minimize changes to the existing system while migrating to Shasta v1.4.  More information on this file can be found [here](310-CABINETS.md).
 
