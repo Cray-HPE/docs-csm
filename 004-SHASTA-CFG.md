@@ -9,6 +9,7 @@ default install procedures.
 * [Create and Initialize Site-Init Directory](#create-and-initialize-site-init-directory)
 * [Create Baseline System Customizations](#create-baseline-system-customizations)
 * [Generate Sealed Secrets](#generate-sealed-secrets)
+    * [Patch cloud-init with the CA](#patch-cloud-init-with-the-ca)
 * [Version Control Site-Init Files](#version-control-site-init-files)
     * [Push to a Remote Repository](#push-to-a-remote-repository)
 * [Customer-Specific Customizations](#customer-specific-customizations)
@@ -511,6 +512,28 @@ encrypted.
     Generating type static...
     ```
 
+<a name="patch-cloud-init-with-the-ca"></a>
+### Patch cloud-init with the CA
+
+Using `csi` on a generated site-init directory...
+
+1. Patch the CA certificate from the shasta-cfg:
+   ```bash
+   pit# csi patch ca \
+   --cloud-init-seed-file /var/www/ephemeral/configs/data.json \
+   --customizations-file /var/www/ephemeral/prep/site-init/customizations.yaml \
+   --sealed-secret-key-file /var/www/ephemeral/prep/site-init/certs/sealed_secrets.key
+   ```
+
+1. To assure it picks up the new meta-data:
+   ```bash
+   pit# systemctl restart basecamp
+   ```
+
+1. Unmount the shim from earlier if one was used (for users of the [RemoteISO](003-CSM-LIVECD.md)):
+   ```bash
+   pit# umount /mnt/pitdata
+   ```
 
 <a name="version-control-site-init-files"></a>
 ## Version Control Site-Init Files
@@ -552,7 +575,6 @@ baseline configuration during initial system installation.
     ```bash
     linux# git commit -m "Baseline configuration for $(/mnt/pitdata/${CSM_RELEASE}/lib/version.sh)"
     ```
-
 
 <a name="push-to-a-remote-repository"></a>
 ### Push to a Remote Repository

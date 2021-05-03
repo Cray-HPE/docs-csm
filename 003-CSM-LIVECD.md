@@ -319,39 +319,15 @@ Now the administrator or CI/CD agent can move onto [configure the running LiveCD
    pit# csi pit validate --services
    ```
 
-Now the administrator may continue the installation or use the LiveCD for bare-metal checkout.
-
----
-
-The following steps will set up customized CA certificates for deployment using Shasta-CFG.
-
-1. Mount a shim to match the Shasta-CFG steps' directory structure:
+1. `SHIM` Mount a shim to match the Shasta-CFG steps' directory structure:
     ```bash
     pit# mkdir -vp /mnt/pitdata
     pit# mount -v -L PITDATA /mnt/pitdata
     ```
 
-1. Follow [the procedures in 004-SHASTA-CFG.md](004-SHASTA-CFG.md) to
-prepare the `site-init` directory for your system (this will create the `site-init` directory).
-
-1. Patch the CA certificate from the shasta-cfg:
-   ```bash
-   pit# csi patch ca \
-   --cloud-init-seed-file /var/www/ephemeral/configs/data.json \
-   --customizations-file /var/www/ephemeral/prep/site-init/customizations.yaml \
-   --sealed-secret-key-file /var/www/ephemeral/prep/site-init/certs/sealed_secrets.key
-   ```
-
-1. To assure it picks up the new meta-data:
-   ```bash
-   pit# systemctl restart basecamp
-   ```
-
-1. Unmount the shim:
-   ```bash
-   pit# umount /mnt/pitdata
-   ```
-
-Now the administrator or CI/CD agent may proceed to
-the [CSM Metal Install](005-CSM-METAL-INSTALL.md) page or continue to use the system for bare-metal
+The following steps will set up customized CA certificates for deployment using Shasta-CFG. Please follow
+- [the procedures in SHASTA-CFG](004-SHASTA-CFG.md) to prepare the `site-init` directory for your system (this will create the `site-init` directory).
+- [the procedures in CSM Metal Install](005-CSM-METAL-INSTALL.md) page or continue to use the system for bare-metal
 checkout.
+
+The end of the CSM Metal Install will continue provide further directions for continuing.
