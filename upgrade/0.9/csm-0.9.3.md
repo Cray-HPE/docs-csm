@@ -17,6 +17,7 @@ Procedures:
 - [Run Validation Checks (Pre-Upgrade)](#run-validation-checks-pre-upgrade)
 - [Setup Nexus](#setup-nexus)
 - [Update Resources](#update-resources)
+- [Increase Max pty on Workers](#increase-pty-max)
 - [Deploy Manifests](#deploy-manifests)
 - [Upgrade NCN Packages](#upgrade-ncn-packages)
 - [Enable PodSecurityPolicy](#enable-psp)
@@ -104,28 +105,34 @@ report `FAIL` when uploading duplicate assets. This is ok as long as
 
 <a name="update-resources"></a>
 ## Update Resources
-Run the following two scripts on ncn-m002 to update the kube-multus and coredns resources.  Watch that the pods restart and the status is Running.
+Run `lib/coredns-bump-resources.sh` and `lib/multus-bump-resources.sh` to update the coredns and kube-multus resources.  Watch that the pods restart with status Running.
 ```bash
-ncn-m002# ./lib/coredns-bump-resources.sh
+ncn-m001# ./lib/coredns-bump-resources.sh
 Applying new resource limits to coredns pods
 Warning: kubectl apply should be used on resource created by either kubectl create --save-config or kubectl apply
 deployment.apps/coredns configured
-ncn-m002# watch "kubectl get pods -n kube-system -l k8s-app=kube-dns"
+ncn-m001# watch "kubectl get pods -n kube-system -l k8s-app=kube-dns"
 ```
 ```bash
-ncn-m002# ./lib/multus-bump-resources.sh
-Applying new resource limits to /etc/cray/kubernetes/multus-daemonset.yml
+ncn-m001# ./lib/multus-bump-resources.sh
+Applying new resource limits to kube-multus pods
 customresourcedefinition.apiextensions.k8s.io/network-attachment-definitions.k8s.cni.cncf.io unchanged
 clusterrole.rbac.authorization.k8s.io/multus unchanged
 clusterrolebinding.rbac.authorization.k8s.io/multus unchanged
 serviceaccount/multus unchanged
 configmap/multus-cni-config unchanged
 daemonset.apps/kube-multus-ds-amd64 configured
-ncn-m002# watch "kubectl get pods -n kube-system -l app=multus"
+ncn-m001# watch "kubectl get pods -n kube-system -l app=multus"
 ```
 On success, the coredns and kube-multus pods should restart with a status of Running.  If any kube-multus pod(s) remain in Terminating status, force delete the pod so that the daemonset can restart it successfully.
 ```bash
 kubectl delete pod <pod-name> -n kube-system --force
+```
+
+<a name="increase-pty-max"></a>
+## Increase Max pty on Workers
+```bash
+ncn-m001# pdsh -w $(./lib/list-ncns.sh | grep ncn-w | paste -sd,) "echo kernel.pty.max=8196 > /etc/sysctl.d/991-maxpty.conf && sysctl -p /etc/sysctl.d/991-maxpty.conf"
 ```
 
 <a name="deploy-manifests"></a>
@@ -169,8 +176,6 @@ from ever being loaded.
 ```bash
 ncn-m001# pdsh -w $(./lib/list-ncns.sh | paste -sd,) "echo 'install libiscsi /bin/true' >> /etc/modprobe.d/disabled-modules.conf"
 ```
-
-Upgrade CSM packages on NCNs:
 
 
 <a name="configure-lag-for-cmms"></a>

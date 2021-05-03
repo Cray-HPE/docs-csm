@@ -38,6 +38,7 @@ installation-centric artifacts such as:
 
     ```bash
     linux# mkdir -p /mnt/pitdata/prep/site-init
+    linux# cd /mnt/pitdata/prep/site-init
     ```
 
 2.  Initialize `/mnt/pitdata/prep/site-init` from CSM:
@@ -75,13 +76,15 @@ with system-specific customizations.
     linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml spec.wlm.cluster_name "$SYSTEM_NAME"
     ```
 
-2.  Review the configuration to generate these sealed secrets in `customizations.yaml`:
+2.  Review the configuration to generate these sealed secrets in `customizations.yaml` in the `site-init` directory:
 
     * `spec.kubernetes.sealed_secrets.cray_reds_credentials`
     * `spec.kubernetes.sealed_secrets.cray_meds_credentials`
     * `spec.kubernetes.sealed_secrets.cray_hms_rts_credentials`
 
-    Replace the `Password` references with values appropriate for your system. See [Decrypting Sealed Secrets for Review](#decrypting-sealed-secrets-for-review) if you need to examine credentials from prior installs.
+    Replace the `Password` references with values appropriate for your system. See 
+    [Decrypting Sealed Secrets for Review](#decrypting-sealed-secrets-for-review) if you need to examine
+    credentials from prior installs.
 
 3. Validate that the REDS/MEDS/RTS sealed secrets contain valid json using `jq`:
   ```bash
@@ -125,7 +128,7 @@ with system-specific customizations.
     > replicas.
     >
     > ```bash
-    > export LDAP=dcldap2.us.cray.com
+    > linux# export LDAP=dcldap2.us.cray.com
     > ```
 
     *   If LDAP requires TLS (recommended), update the `cray-keycloak` sealed
@@ -151,7 +154,9 @@ with system-specific customizations.
         > **`IMPORTANT`** Replace `<ca-cert.pem>` and `<alias>` as appropriate.
 
         ```bash
-        linux# podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool -importcert -trustcacerts -file /data/<ca-cert.pem> -alias <alias> -keystore /data/certs.jks -storepass password -noprompt
+        linux# podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool \
+                      -importcert -trustcacerts -file /data/<ca-cert.pem> -alias <alias> \
+                      -keystore /data/certs.jks -storepass password -noprompt
         ```
 
         > **`INTERNAL ONLY`** For example, on internal HPE systems, create the
@@ -182,6 +187,11 @@ with system-specific customizations.
         > 
         >         ```bash
         >         linux# openssl s_client -showcerts -nameopt RFC2253 -connect $LDAP:636 </dev/null 2>/dev/null | grep issuer= | sed -e 's/^issuer=//'
+        >         ```
+        >
+        >         Expected output looks like:
+        >
+        >         ```
         >         emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC/MCS,O=HPE,ST=WI,C=US
         >         ```
         > 
@@ -192,14 +202,20 @@ with system-specific customizations.
         >         > different, be sure to escape it properly!
         > 
         >         ```bash
-        >         linux# openssl s_client -showcerts -nameopt RFC2253 -connect $LDAP:636 </dev/null 2>/dev/null| awk '/s:emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC\/MCS,O=HPE,ST=WI,C=US/,/END CERTIFICATE/' | awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' > cacert.pem
+        >         linux# openssl s_client -showcerts -nameopt RFC2253 -connect $LDAP:636 </dev/null 2>/dev/null | 
+        >                   awk '/s:emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC\/MCS,O=HPE,ST=WI,C=US/,/END CERTIFICATE/' | 
+        >                   awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' > cacert.pem
         >         ```
         > 
-        > *   Verify issuer's certificate was properly extracted and saved in
-        >     `cacert.pem`:
+        > *   Verify issuer's certificate was properly extracted and saved in `cacert.pem`:
         > 
         >     ```bash
         >     linux# cat cacert.pem
+        >     ```
+        >
+        >     Expected output looks like:
+        >
+        >     ```
         >     -----BEGIN CERTIFICATE-----
         >     MIIDvTCCAqWgAwIBAgIUYxrG/PrMcmIzDuJ+U1Gh8hpsU8cwDQYJKoZIhvcNAQEL
         >     BQAwbjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAldJMQwwCgYDVQQKDANIUEUxEDAO
@@ -228,7 +244,9 @@ with system-specific customizations.
         > *   Create `certs.jks`:
         > 
         >     ```bash
-        >     linux# podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool -importcert -trustcacerts -file /data/cacert.pem -alias cray-data-center-ca -keystore /data/certs.jks -storepass password -noprompt
+        >     linux# podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool -importcert \
+        >                   -trustcacerts -file /data/cacert.pem -alias cray-data-center-ca -keystore /data/certs.jks \
+        >                   -storepass password -noprompt
         >     ```
 
         Create `certs.jks.b64` by base-64 encoding `certs.jks`:
@@ -240,7 +258,9 @@ with system-specific customizations.
         Then, inject and encrypt `certs.jks.b64` into `customizations.yaml`:
 
         ```bash
-        linux# cat <<EOF | yq w - 'data."certs.jks"' "$(<certs.jks.b64)" | yq r -j - | /mnt/pitdata/prep/site-init/utils/secrets-encrypt.sh | yq w -f - -i /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray-keycloak'
+        linux# cat <<EOF | yq w - 'data."certs.jks"' "$(<certs.jks.b64)" | \
+            yq r -j - | /mnt/pitdata/prep/site-init/utils/secrets-encrypt.sh | \
+            yq w -f - -i /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray-keycloak'
         {
           "kind": "Secret",
           "apiVersion": "v1",
@@ -262,7 +282,8 @@ with system-specific customizations.
         > **`IMPORTANT`** Replace `<ldap-url>` as appropriate.
 
         ```bash
-        linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.keycloak_users_localize.generate.data.(args.name==ldap_connection_url).args.value' '<ldap-url>'
+        linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml \
+                'spec.kubernetes.sealed_secrets.keycloak_users_localize.generate.data.(args.name==ldap_connection_url).args.value' '<ldap-url>'
         ```
 
         > **`INTERNAL ONLY`** 
@@ -270,14 +291,19 @@ with system-specific customizations.
         > Set `ldap_connection_url` in `customizations.yaml`:
         > 
         > ```bash
-        > linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.keycloak_users_localize.generate.data.(args.name==ldap_connection_url).args.value' "ldaps://$LDAP"
+        > linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml \
+        >         'spec.kubernetes.sealed_secrets.keycloak_users_localize.generate.data.(args.name==ldap_connection_url).args.value' "ldaps://$LDAP"
         > ```
         > 
-        > On success, the `keycloak_users_localize` sealed secret should look
-        > similar to:
+        > On success, review the `keycloak_users_localize` sealed secret:
         > 
         > ```bash
         > linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.sealed_secrets.keycloak_users_localize
+        > ```
+        > 
+        > Expected output is similar to:
+        >
+        > ```
         > generate:
         >     name: keycloak-users-localize
         >     data:
@@ -356,11 +382,15 @@ with system-specific customizations.
         > EOF
         > ```
         > 
-        > On success, the `cray-keycloak-users-localize` values should look
-        > similar to:
+        > On success, review the `cray-keycloak-users-localize` values:
         > 
         > ```bash
         > linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-keycloak-users-localize
+        > ```
+        >
+        > Expected output looks similar to:
+        >
+        > ```
         > sealedSecrets:
         >     - '{{ kubernetes.sealed_secrets.keycloak_users_localize | toYaml }}'
         > localRoleAssignments:
@@ -397,9 +427,15 @@ with system-specific customizations.
     EOF
     ```
 
-    On success, the `cray-dns-unbound` values should look similar to:
+    On success, review the `cray-dns-unbound` values.
+    
     ```bash
     linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-dns-unbound
+    ```
+    
+    Expected output looks similar to:
+    
+    ```
     localZones:
     - localType: static
       name: "local"
@@ -428,13 +464,19 @@ encrypted.
 2.  Re-encrypt existing secrets:
 
     ```bash
-    linux# /mnt/pitdata/prep/site-init/utils/secrets-reencrypt.sh /mnt/pitdata/prep/site-init/customizations.yaml /mnt/pitdata/prep/site-init/certs/sealed_secrets.key /mnt/pitdata/prep/site-init/certs/sealed_secrets.crt
+    linux# /mnt/pitdata/prep/site-init/utils/secrets-reencrypt.sh /mnt/pitdata/prep/site-init/customizations.yaml \
+                /mnt/pitdata/prep/site-init/certs/sealed_secrets.key /mnt/pitdata/prep/site-init/certs/sealed_secrets.crt
     ```
 
 3.  Generate secrets:
 
     ```bash
     linux# /mnt/pitdata/prep/site-init/utils/secrets-seed-customizations.sh /mnt/pitdata/prep/site-init/customizations.yaml
+    ```
+    
+    Expected output looks similar to:
+    
+    ```
     Creating Sealed Secret keycloak-certs
     Generating type static_b64...
     Creating Sealed Secret keycloak-master-admin-auth
@@ -554,6 +596,11 @@ sealed secrets via:
 
 ```bash
 linux# yq read /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets
+```
+
+Expected output looks similar to:
+
+```
 - cray_reds_credentials
 - cray_meds_credentials
 - cray_hms_rts_credentials
@@ -580,5 +627,10 @@ Syntax: `secret-decrypt.sh SEALED-SECRET-NAME SEALED-SECRET-PRIVATE-KEY CUSTOMIZ
 
 ```bash
 linux:/mnt/pitdata/prep/site-init# ./utils/secrets-decrypt.sh cray_meds_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_redfish_defaults | sed -e 's/"//g' | base64 -d; echo
+```
+
+Expected output looks similar to:
+
+```
 {"Username": "root", "Password": "..."}
 ```
