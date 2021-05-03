@@ -27,13 +27,19 @@ Procedures:
 - [Run Validation Checks (Post-Upgrade)](#run-validation-checks-post-upgrade)
 - [Update BGP Configuration](#update-bgp-configuration)
 - [Upgrade Firmware on Chassis Controllers](#upgrade-firmware-on-chassis-controllers)
-
+- [Exit Typescript](#exit-typescript)
 
 <a name="preparation"></a>
 ## Preparation
 
 For convenience, these procedures make use of environment variables. This
 section sets the expected environment variables to the appropriate values.
+
+1. Start a typescript to capture the commands and output from this procedure.
+   ```bash
+   ncn-m001# script -af csm-update.$(date +%Y-%m-%d).txt
+   ncn-m001# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+   ```
 
 1. Set `CSM_DISTDIR` to the directory of the extracted release distribution for
    CSM 0.9.2:
@@ -48,17 +54,17 @@ section sets the expected environment variables to the appropriate values.
    ncn-m001# CSM_DISTDIR="$(pwd)/csm-0.9.2"
    ```
 
-2. Set `CSM_RELEASE_VERSION` to the version reported by
+1. Set `CSM_RELEASE_VERSION` to the version reported by
    `${CSM_DISTDIR}/lib/version.sh`:
 
    ```bash
    ncn-m001# CSM_RELEASE_VERSION="$(${CSM_DISTDIR}/lib/version.sh --version)"
    ```
 
-3. Set `CSM_SYSTEM_VERSION` to `0.9.2`:
+1. Set `CSM_SYSTEM_VERSION` to `0.9.0`:
 
    ```bash
-   ncn-m001# CSM_SYSTEM_VERSION="0.9.2"
+   ncn-m001# CSM_SYSTEM_VERSION="0.9.0"
    ```
 
    > **`NOTE:`** Installed CSM versions may be listed from the product catalog using:
@@ -97,13 +103,13 @@ in the `site-init` secret in the `loftsman` namespace must be updated.
    ncn-m001# git init site-init
    ```
 
-2. Download `customizations.yaml`:
+1. Download `customizations.yaml`:
 
    ```bash
    ncn-m001# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > site-init/customizations.yaml
    ```
 
-3. Review, add, and commit `customizations.yaml` to the local `site-init`
+1. Review, add, and commit `customizations.yaml` to the local `site-init`
    repository as appropriate.
 
    > **`NOTE:`** If `site-init` was cloned from a remote repository in step 1,
@@ -120,13 +126,13 @@ in the `site-init` secret in the `loftsman` namespace must be updated.
    ncn-m001# git commit -m 'Add customizations.yaml from site-init secret'
    ```
 
-4. Update `customizations.yaml`.
+1. Update `customizations.yaml`.
 
    ```bash
    ncn-m001# yq d -i customizations.yaml spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources
    ```
 
-5. Review the changes to `customizations.yaml` and verify [baseline system
+1. Review the changes to `customizations.yaml` and verify [baseline system
    customizations](../../067-SHASTA-CFG.md#create-baseline-system-customizations)
    and any customer-specific settings are correct.
 
@@ -134,21 +140,21 @@ in the `site-init` secret in the `loftsman` namespace must be updated.
    ncn-m001# git diff
    ```
 
-6. Add and commit `customizations.yaml` if there are any changes:
+1. Add and commit `customizations.yaml` if there are any changes:
 
    ```
    ncn-m001# git add customizations.yaml
    ncn-m001# git commit -m "Update customizations.yaml consistent with CSM $CSM_RELEASE_VERSION"
    ```
 
-7. Update `site-init` sealed secret in `loftsman` namespace:
+1. Update `site-init` sealed secret in `loftsman` namespace:
 
    ```bash
    ncn-m001# kubectl delete secret -n loftsman site-init
    ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
    ```
 
-8. Push to the remote repository as appropriate:
+1. Push to the remote repository as appropriate:
 
    ```bash
    ncn-m001# git push
@@ -329,13 +335,13 @@ script `/opt/cray/csm/scripts/networking/BGP/Aruba_BGP_Peers.py`.
    > ncn-m001# SWITCH_IPS=( 10.252.0.2 10.252.0.3 )
    > ```
 
-2. Run:
+1. Run:
 
    ```bash
    ncn-m001# /opt/cray/csm/scripts/networking/BGP/Aruba_BGP_Peers.py "${SWITCH_IPS[@]}"
    ```
 
-3. Remove the static routes configured in
+1. Remove the static routes configured in
    [LAYER3-CONFIG](../../411-MGMT-NET-LAYER3-CONFIG.md). Log into the switches
    running BGP (Spines/Aggs) and remove them:
 
@@ -361,7 +367,7 @@ script `/opt/cray/csm/scripts/networking/BGP/Aruba_BGP_Peers.py`.
    sw-spine-001(config)# no ip route 10.94.100.60/32 10.252.1.10
    ```
 
-4. Verify the [BGP configuration](../../400-SWITCH-BGP-NEIGHBORS.md).
+1. Verify the [BGP configuration](../../400-SWITCH-BGP-NEIGHBORS.md).
 
 <a name="upgrade-firmware-on-chassis-controllers"></a>
 ## Upgrade Firmware on Chassis Controllers
@@ -393,7 +399,7 @@ script `/opt/cray/csm/scripts/networking/BGP/Aruba_BGP_Peers.py`.
    ncn-m001# cray fas images list | grep cc.1.4.19
    ```
 
-2. Update the Chassis Controller BMC Firmware:
+1. Update the Chassis Controller BMC Firmware:
 
   Power off the chassis slots.
 
@@ -470,3 +476,14 @@ script `/opt/cray/csm/scripts/networking/BGP/Aruba_BGP_Peers.py`.
 
   After the components have powered on, boot the nodes using the Boot
   Orchestration Services (BOS).
+
+<a name="exit-typescript"></a>
+## Exit Typescript
+
+Remember to exit your typescript.
+
+```bash
+ncn-m001# exit
+```
+
+It is recommended to save the typescript file for later reference.
