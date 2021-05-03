@@ -349,42 +349,16 @@ TODO don't reference the USB method of generating installation files here.
    pit# csi pit validate --services
    ```
 
-Now the administrator may continue the installation or use the LiveCD for bare-metal checkout.
-
----
-
-The following steps will set up customized CA certificates for deployment using Shasta-CFG.
-
-1. Mount a shim to match the Shasta-CFG steps' directory structure:
+1. `SHIM` Mount a shim to match the Shasta-CFG steps' directory structure:
 
     ```bash
     pit# mkdir -vp /mnt/pitdata
     pit# mount -v -L PITDATA /mnt/pitdata
     ```
 
-1. Follow the procedures to [Prepare Site-Init](prepare_site_init) directory for your system.
+The following step will set up customized CA certificates for deployment using Shasta-CFG. Please follow
+- [Prepare Site Init](prepare-site-init.md) to create and prepare the `site-init` directory for your system.
+- [Deploy Management Nodes](deploy_management_nodes.md) or continue to use the system for bare-metal checkout.
 
-1. Patch the CA certificate from the shasta-cfg:
+The end of Deploy Management Nodes will continue provide further directions for continuing.
 
-   ```bash
-   pit# csi patch ca \
-   --cloud-init-seed-file /var/www/ephemeral/configs/data.json \
-   --customizations-file /var/www/ephemeral/prep/site-init/customizations.yaml \
-   --sealed-secret-key-file /var/www/ephemeral/prep/site-init/certs/sealed_secrets.key
-   ```
-
-1. To assure it picks up the new meta-data:
-
-   ```bash
-   pit# systemctl restart basecamp
-   ```
-
-1. Unmount the shim:
-
-   ```bash
-   pit# umount /mnt/pitdata
-   ```
-
-Now the administrator or CI/CD agent may proceed to
-[Deploy Management Nodes](deploy_management_nodes.md) or continue to use the system for bare-metal
-checkout.

@@ -41,6 +41,7 @@ To make the hostname and IP address changes for all switches, follow this proced
 ## 3. Dell Changes to switch from bpdufilter to bpduguard
 * Remove spanning-tree bpdufilter
 * Add spanning-tree bpduguard
+* These are edge ports. Examples include BMCs, PDUs, CECs.
 
 Shasta v1.3 (old) config
 ```
@@ -82,22 +83,6 @@ spanning-tree bpduguard enable
 exit
 write memory
 ```
-
-Dell CDU changes
-Add BPDUguard to ports going to CMMs
-
-```
-interface port-channel1
- description CMM_CAB_1000
- no shutdown
- switchport mode trunk
- switchport access vlan 2000
- switchport trunk allowed vlan 3000,4091
- mtu 9216
- vlt-port-channel 1
- spanning-tree bpduguard enable
-```
-
 
 ## Mellanox Changes for MAGP
 
@@ -269,8 +254,8 @@ Once you create the MLAG you need to add ports to it.
 ```
 (config) # interface ethernet 1/1
 (config interface ethernet 1/1) # mlag-channel-group 1 mode active
-(config interface ethernet 1/1) # interface ethernet 1/1 speed 40G force
-(config interface ethernet 1/1) # interface ethernet 1/1 mtu 9216 force
+(config interface ethernet 1/1) # speed 40G force
+(config interface ethernet 1/1) # mtu 9216 force
 ```
 
 Configuration with Recommended MLAG-VIP cable.

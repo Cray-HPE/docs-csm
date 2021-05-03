@@ -185,7 +185,7 @@ done
 
 2. Set Order (works universally; every vendor, every Shasta ncn-type):
 > ```bash
-> ncn-m# efibootmgr -o $(cat /tmp/bbs* | sed 's/^Boot//g' | awk '{print $1}' | tr -t '*' ',' | tr -d '\n' | sed 's/,$//') | grep -i bootorder
+> ncn# efibootmgr -o $(sort -u /tmp/bbs* | sed 's/^Boot//g' | awk '{print $1}' | tr -t '*' ',' | tr -d '\n' | sed 's/,$//') | grep -i bootorder
 > BootOrder: 000E,0014,0011,0012
 > ```
 
@@ -221,7 +221,7 @@ Simply run the reverse-pattern of the PXE commands from the [setting boot order]
         ```
 2. Remove them:
     ```bash
-   ncn# cat /tmp/rbbs* | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -t -i efibootmgr -b {} -B
+   ncn# sort -u /tmp/rbbs* | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -t -i efibootmgr -b {} -B
     ```
 
 Your boot menu should be trimmed down to only contain relevant entries.

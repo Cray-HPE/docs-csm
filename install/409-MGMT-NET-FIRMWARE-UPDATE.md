@@ -24,19 +24,19 @@ total 2.7G
 
 1.4 Switch firmware.
 
-| Vendor | Model | Version	|
-| --- | --- | ---| --- | --- | --- | --- |
+| Vendor | Model | Version |
+| --- | --- | --- |
 | Aruba | 6300 | ArubaOS-CX_6400-6300_10.06.0010 |
 | Aruba | 8320 | ArubaOS-CX_8320_10.06.0010 |
 | Aruba | 8325 | ArubaOS-CX_8325_10.06.0010 |
-| Aruba | 8360 | ArubaOS-CX_8325_10.06.0010 |
+| Aruba | 8360 | ArubaOS-CX_8360_10.06.0010 |
 | Dell | S3048-ON | 10.5.1.4 |
 | Dell | S4148F-ON | 10.5.1.4 |
 | Dell | S4148T-ON | 10.5.1.4 |
 | Mellanox | MSN2100 | 3.9.1014 |
 | Mellanox | MSN2700 | 3.9.1014 |
 
-# Aruba Firmware Update
+# Aruba Firmware Update - standalone
 
 SSH into the switch you want to upgrade.
 

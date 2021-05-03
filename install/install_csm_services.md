@@ -64,7 +64,8 @@ into the CSM Kubernetes cluster).
 
     ```bash
     pit# export CSM_RELEASE=csm-x.y.z
-    pit# podman run --rm --network host -v /var/www/ephemeral/${CSM_RELEASE}/docker/dtr.dev.cray.com:/images:ro quay.io/skopeo/stable sync --scoped --src dir --dest docker --dest-tls-verify=false --dest-creds admin:admin123 /images localhost:5000
+    pit# podman run --rm --network host -v /var/www/ephemeral/${CSM_RELEASE}/docker/dtr.dev.cray.com:/images:ro quay.io/skopeo/stable sync \
+    --scoped --src dir --dest docker --dest-tls-verify=false --dest-creds admin:admin123 /images localhost:5000
     ```
 
 
@@ -416,6 +417,24 @@ If the pod has completed successfully, the output looks similar to the following
 ```
 NAME                       READY   STATUS      RESTARTS   AGE
 cray-sls-init-load-pbzxv   0/2     Completed   0          55m
+```
+
+Since it can sometimes be required to repeat the above steps several times before the pod succeeds, the following script can be used to automate the retry process:
+```bash
+pit# while [ true ]; do
+    POD=""
+    while [ -z "$POD" ]; do
+        POD=$(kubectl get pods -n services --no-headers -o custom-columns=:metadata.name | grep "^cray-sls-init-load-")
+    done
+    GOOD=0
+    while [ true ]; do
+        [ "$(kubectl get pod -n services $POD --no-headers -o custom-columns=:.status.phase)" = Succeeded ] && GOOD=1 && echo "Success!" && break
+        kubectl logs -n services $POD --all-containers 2>/dev/null | grep -q "http: no Host in request URL" && break
+        sleep 1
+    done
+    [ $GOOD -eq 1 ] && break
+    kubectl delete pod -n services $POD
+done
 ```
 
 Once the loader job has completed successfully running `./install.sh` again is expected to succeed.

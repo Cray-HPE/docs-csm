@@ -9,6 +9,8 @@ SHCD
 
 # Configuration
 
+The CAN configuration is highly dependent on customer requirements and may not meet the specifications below.
+
 To access the Shasta nodes and services from the customer network, there is minimal configuration needed on the spine switch and the customer switch connected upstream from the spine switch to allow the customer_access_network subnet to be routed to the Shasta system.
 
 The customer's switch must be connected to the spine switches with a p2p subnet for each switch.  In the example below, these two p2p subnets are 10.11.15.148/30 and 10.101.15.152/30.   The subnets used are up to the customer.
