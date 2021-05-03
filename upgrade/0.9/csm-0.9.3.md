@@ -279,14 +279,84 @@ ncn-m001# pdsh -w $(./lib/list-ncns.sh | paste -sd,) "echo 'install libiscsi /bi
 If your Shasta system is using CDU switches you will need to update the configuration going to the CMMs.
 
 - This **requires** updated CMM firmware. (version 1.4.20) `See v1.4 Admin Guide for details on updating CMM firmware`
-- This **requires** updated Aruba firmware on CDU switch pairs. (version 10.06.011) `See v1.4 Admin Guide for details on updating Aruba switch firmware`
+- This **requires** updated Aruba firmware on CDU switch pairs only. (version 10.06.011) `See below for the Aruba firmware upgrade process.`
 - A static LAG will be configured on the CDU switches.
 - The CDU switches have two cables (10Gb RJ45) connecting to each CMM.
 - This configuration offers increased throughput and redundancy.
 - The CEC will not need to be programmed in order to support the LAG configuration as it was required in previous versions.  The updated firmware takes care of this.
 
 ## Aruba
-Aruba CDU switch configuration.
+### Aruba Firmware Update - when used as a MLAG pair using VSX
+The following procedure is recommended by Aruba for switch pairs using VSX to provide minimal outages during the upgrade.
+
+NOTE: For the following example the switch pair will be composed of sw-cdu-001 and sw-cdu-002 with the second switch in the pair being sw-cdu-002.
+NOTE: In the example: ```10.252.1.12``` used is the liveCD firmware location.
+
+SSH into the second switch of the pair:
+```
+ssh admin@sw-cdu-002
+
+sw-cdu-002# copy sftp://root@10.252.1.12//var/www/ephemeral/data/network_images/ArubaOS-CX_8360.06.0110.stable.swi primary
+
+sw-cdu-002# write mem
+Copying configuration: [Success]
+```
+Once the upload is complete you can check the images
+Check Firmware Version and VSX status (you should see both Local and Peer).
+```
+sw-cdu-002# show vsx status
+VSX Operational State
+---------------------
+  ISL channel             : In-Sync
+  ISL mgmt channel        : operational
+  Config Sync Status      : In-Sync
+  NAE                     : peer_reachable
+  HTTPS Server            : peer_reachable
+
+Attribute           Local               Peer
+------------        --------            --------
+ISL link            lag99               lag99
+ISL version         2                   2
+System MAC          02:01:00:00:01:00   02:01:00:00:01:00
+Platform            8325                8325
+Software Version    GL.10.06.0010       GL.10.06.0010
+Device Role         primary             secondary
+```
+After the firmware is uploaded you will need to boot the switch to the correct image.
+
+```
+sw-cdu-002# boot system primary
+```
+
+Once the reboot is complete check and make sure the firmware version is correct.  You should also see that the VSX Peer is empty of information.  This will resolve after the other switch is updated. For now the current switch (sw-cdu-002) is the master and will be accepting all traffic.
+
+```
+sw-cdu-002# show vsx status
+VSX Operational State
+---------------------
+  ISL channel             : In-Sync
+  ISL mgmt channel        : operational
+  Config Sync Status      : 
+  NAE                     : peer_reachable
+  HTTPS Server            : peer_reachable
+
+Attribute           Local               Peer
+------------        --------            --------
+ISL link            lag99               
+ISL version         2                   
+System MAC          02:01:00:00:01:00   
+Platform            8360                
+Software Version    GL.10.06.0110       
+Device Role         primary             
+```
+Repeat the process just performed on the second switch in the pair on the first switch in the pair. For this example the first switch is sw-cdu-001.
+1. ssh to sw-cdu-001
+2. upload the new firmware to primary.
+3. validate vsx status
+4. reboot the switch to the new firmware.
+6. validate vsx status: both Local and Peer VSX columns should be populated and have the correct, updated firmware versions running.
+
+### Aruba CDU switch configuration.
 This configuration is identical across CDU VSX pairs.
 The VLANS used here are generated from CSI.
 ```
