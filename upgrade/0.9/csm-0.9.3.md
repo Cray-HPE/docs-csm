@@ -116,11 +116,6 @@ ncn-m001# watch "kubectl get pods -n kube-system -l k8s-app=kube-dns"
 ```bash
 ncn-m001# ./lib/multus-bump-resources.sh
 Applying new resource limits to kube-multus pods
-customresourcedefinition.apiextensions.k8s.io/network-attachment-definitions.k8s.cni.cncf.io unchanged
-clusterrole.rbac.authorization.k8s.io/multus unchanged
-clusterrolebinding.rbac.authorization.k8s.io/multus unchanged
-serviceaccount/multus unchanged
-configmap/multus-cni-config unchanged
 daemonset.apps/kube-multus-ds-amd64 configured
 ncn-m001# watch "kubectl get pods -n kube-system -l app=multus"
 ```
