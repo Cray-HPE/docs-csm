@@ -205,15 +205,20 @@ with system-specific customizations.
         >         > different, be sure to escape it properly!
         > 
         >         ```bash
-        >         linux# openssl s_client -showcerts -nameopt RFC2253 -connect $LDAP:636 </dev/null 2>/dev/null| \
-        >         awk '/s:emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC\/MCS,O=HPE,ST=WI,C=US/,/END CERTIFICATE/' | \
-        >         awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' > cacert.pem
+        >         linux# openssl s_client -showcerts -nameopt RFC2253 -connect $LDAP:636 </dev/null 2>/dev/null | \
+        >                   awk '/s:emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC\/MCS,O=HPE,ST=WI,C=US/,/END CERTIFICATE/' | \
+        >                   awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' > cacert.pem
         >         ```
         > 
         > *   Verify issuer's certificate was properly extracted and saved in `cacert.pem`:
         > 
         >     ```bash
         >     linux# cat cacert.pem
+        >     ```
+        >
+        >     Expected output looks like:
+        >
+        >     ```
         >     -----BEGIN CERTIFICATE-----
         >     MIIDvTCCAqWgAwIBAgIUYxrG/PrMcmIzDuJ+U1Gh8hpsU8cwDQYJKoZIhvcNAQEL
         >     BQAwbjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAldJMQwwCgYDVQQKDANIUEUxEDAO
@@ -425,7 +430,7 @@ with system-specific customizations.
     EOF
     ```
 
-    On success, the review the `cray-dns-unbound` values.
+    On success, review the `cray-dns-unbound` values.
     ```bash
     linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-dns-unbound
     ```
@@ -468,7 +473,6 @@ encrypted.
 3.  Generate secrets:
 
     ```bash
-
     linux# /mnt/pitdata/prep/site-init/utils/secrets-seed-customizations.sh \
     /mnt/pitdata/prep/site-init/customizations.yaml
     ```
@@ -573,7 +577,6 @@ baseline configuration during initial system installation.
     ```bash
     linux# git commit -m "Baseline configuration for $(/mnt/pitdata/${CSM_RELEASE}/lib/version.sh)"
     ```
-
 
 <a name="push-to-a-remote-repository"></a>
 ### Push to a Remote Repository
