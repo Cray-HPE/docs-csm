@@ -1,0 +1,82 @@
+# Change NCN Image Root Password and SSH Keys
+
+TODO clean up for this new location and fix title
+TODO Add headers: About this task, Role, Objective, Limitations, New in this Release
+
+
+Customize the NCN image by changing the root password or adding different ssh keys for the root account.
+
+This process should be done for the "kubernetes" image used by master and worker nodes and then repeated for the "ceph" image used by the utility storage nodes.
+
+
+1. Open the image.
+
+   The kubernetes image will be of the form "kubernetes-0.0.53.squashfs" in /var/www/ephemeral/data/k8s.
+   ```bash
+   pit# cd /var/www/ephemeral/data/k8s
+   pit# unsquashfs kubernetes-0.0.53.squashfs
+   ```
+   The ceph image will be of the form "ceph-0.0.44.squashfs" in /var/www/ephemeral/data/ceph.
+   ```bash
+   pit# cd /var/www/ephemeral/data/ceph
+   pit# unsquashfs ceph-0.0.44.squashfs
+   ```
+2. Change into the image root
+   ```bash
+   pit# chroot ./squashfs-root
+   ```
+3. Change the password
+   ```bash
+   chroot-pit# passwd
+   ```
+4. Replace the ssh keys
+   ```bash
+   chroot-pit# cd root
+   ```
+   Replace the default root public and private ssh keys with your own or generate a new pair with `ssh-keygen(1)`
+
+5. Create the new SquashFS artifact
+   ```bash
+   chroot-pit# /srv/cray/scripts/common/create-kis-artifacts.sh
+   ```
+6. Exit the chroot
+   ```bash
+   chroot-pit# exit
+   ```
+7. Cleanup the SquashFS creation
+
+   The kubernetes image directory is /var/www/ephemeral/data/k8s.
+   ```bash
+   pit# umount /var/www/ephemeral/data/k8s/squashfs-root/mnt/squashfs
+   ```
+   The ceph image directory is /var/www/ephemeral/data/ceph.
+   ```bash
+   pit# umount /var/www/ephemeral/data/ceph/squashfs-root/mnt/squashfs
+   ```
+8. Save old SquashFS image.
+   ```bash
+   pit# mkdir old
+   pit# mv *squashfs old
+   ```
+9. Move new SquashFS image, kernel, and initrd into place.
+
+   ```bash
+   pit# mv squashfs-root/squashfs/* .
+   ```
+
+10. Update file permissions on initrd
+
+   ```bash
+   pit# chmod 644 initrd.img.xz
+   ```
+
+11. Repeat the preceding steps for the other image type.
+
+12. Set the boot links.
+
+   ```bash
+   pit# cd
+   pit# set-sqfs-links.sh   
+   ```
+
+The images will have the new password for the next boot.
