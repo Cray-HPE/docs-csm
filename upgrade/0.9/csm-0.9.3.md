@@ -24,13 +24,19 @@ Procedures:
 - [Apply iSCSI Security Fix](#iscsi-security-fix)
 - [Configure LAG for CMMs](#configure-lag-for-cmms)
 - [Run Validation Checks (Post-Upgrade)](#run-validation-checks-post-upgrade)
-
+- [Exit Typescript](#exit-typescript)
 
 <a name="preparation"></a>
 ## Preparation
 
 For convenience, these procedures make use of environment variables. This
 section sets the expected environment variables to the appropriate values.
+
+1. Start a typescript to capture the commands and output from this procedure.
+   ```bash
+   ncn-m001# script -af csm-update.$(date +%Y-%m-%d).txt
+   ncn-m001# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+   ```
 
 1. Set `CSM_DISTDIR` to the directory of the extracted release distribution for
    CSM 0.9.3:
@@ -45,14 +51,14 @@ section sets the expected environment variables to the appropriate values.
    ncn-m001# CSM_DISTDIR="$(pwd)/csm-0.9.3"
    ```
 
-2. Set `CSM_RELEASE_VERSION` to the version reported by
+1. Set `CSM_RELEASE_VERSION` to the version reported by
    `${CSM_DISTDIR}/lib/version.sh`:
 
    ```bash
    ncn-m001# CSM_RELEASE_VERSION="$(${CSM_DISTDIR}/lib/version.sh --version)"
    ```
 
-3. Set `CSM_SYSTEM_VERSION` to `0.9.2`:
+1. Set `CSM_SYSTEM_VERSION` to `0.9.2`:
 
    ```bash
    ncn-m001# CSM_SYSTEM_VERSION="0.9.2"
@@ -105,23 +111,46 @@ report `FAIL` when uploading duplicate assets. This is ok as long as
 
 <a name="update-resources"></a>
 ## Update Resources
-Run `lib/coredns-bump-resources.sh` and `lib/multus-bump-resources.sh` to update the coredns and kube-multus resources.  Watch that the pods restart with status Running.
+Update the `coredns` and `kube-multus` resources.
+
+1. Run `lib/0.9.3/coredns-bump-resources.sh`
+    ```bash
+    ncn-m001# ./lib/0.9.3/coredns-bump-resources.sh
+    ```
+    
+    Expected output looks similar to:
+    ```
+    Applying new resource limits to coredns pods
+    Warning: kubectl apply should be used on resource created by either kubectl create --save-config or kubectl apply
+    deployment.apps/coredns configured
+    ```
+
+2. Verify that the pods restart with status `Running`:
+    ```bash
+    ncn-m001# watch "kubectl get pods -n kube-system -l k8s-app=kube-dns"
+    ```
+
+3. Run `lib/0.9.3/multus-bump-resources.sh`
+    ```bash
+    ncn-m001# ./lib/0.9.3/multus-bump-resources.sh
+    ```
+    
+    Expected output looks similar to:
+    ```
+    Applying new resource limits to kube-multus pods
+    daemonset.apps/kube-multus-ds-amd64 configured
+    ```
+
+4. Verify that the pods restart with status `Running`:
+    ```bash
+    ncn-m001# watch "kubectl get pods -n kube-system -l app=multus"
+    ```
+
+On success, the `coredns` and `kube-multus` pods should restart with a status of `Running`.  
+If any `kube-multus` pods remain in `Terminating` status, force delete them so that the
+daemonset can restart them successfully.
 ```bash
-ncn-m001# ./lib/coredns-bump-resources.sh
-Applying new resource limits to coredns pods
-Warning: kubectl apply should be used on resource created by either kubectl create --save-config or kubectl apply
-deployment.apps/coredns configured
-ncn-m001# watch "kubectl get pods -n kube-system -l k8s-app=kube-dns"
-```
-```bash
-ncn-m001# ./lib/multus-bump-resources.sh
-Applying new resource limits to kube-multus pods
-daemonset.apps/kube-multus-ds-amd64 configured
-ncn-m001# watch "kubectl get pods -n kube-system -l app=multus"
-```
-On success, the coredns and kube-multus pods should restart with a status of Running.  If any kube-multus pod(s) remain in Terminating status, force delete the pod so that the daemonset can restart it successfully.
-```bash
-kubectl delete pod <pod-name> -n kube-system --force
+ncn-m001# kubectl delete pod <pod-name> -n kube-system --force
 ```
 
 <a name="increase-pty-max"></a>
@@ -133,12 +162,78 @@ ncn-m001# pdsh -w $(./lib/list-ncns.sh | grep ncn-w | paste -sd,) "echo kernel.p
 <a name="deploy-manifests"></a>
 ## Deploy Manifests
 
-Run `upgrade.sh` to deploy upgraded CSM applications and services:
+1. Before deplyoing the manifests, the `cray-propduct-catalog` role in kubernetes needs to be updated.
+    
+    1. Display the role before changing it:
+        
+        ```bash
+        ncn-m001# kubectl get role -n services cray-product-catalog -o json| jq '.rules[0]'
+        ```
+    
+        Expected output looks like:
+        ```
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "configmaps"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "update",
+            "patch"
+          ]
+        }
+        ```
+    
+    1. Patch the role:
+        
+        ```bash
+        ncn-m001# kubectl patch role -n services cray-product-catalog --patch \
+                    '{"rules": [{"apiGroups": [""],"resources": ["configmaps"],"verbs": ["create","get","list","update","patch","delete"]}]}'
+        ```
+        
+        On success, expected output looks like:
+        ```
+        role.rbac.authorization.k8s.io/cray-product-catalog patched
+        ```
+        
+    1. Display the role after the patch:
+        
+        ```bash
+        ncn-m001# kubectl get role -n services cray-product-catalog -o json| jq '.rules[0]'
+        ```
+        
+        Expected output looks like:
+        ```
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "configmaps"
+          ],
+          "verbs": [
+            "create",
+            "get",
+            "list",
+            "update",
+            "patch",
+            "delete"
+          ]
+        }
+        ```
 
-```bash
-ncn-m001# ./upgrade.sh
-```
+1. Run `upgrade.sh` to deploy upgraded CSM applications and services:
+    ```bash
+    ncn-m001# ./upgrade.sh
+    ```
 
+**Note**: If you have not already installed the workload manager product including slurm and munge, then the `cray-crus` pod is
+expected to be in the `Init` state. After running `ugrade.sh`, you may observe there are now *two* copies of the `cray-crus` pod in
+the `Init` state. This situation is benign and should resolve itself once the workload manager product is installed.
 
 <a name="upgrade-ncn-packages"></a>
 ## Upgrade NCN Packages
@@ -274,3 +369,14 @@ Other health checks may be run as desired.
 >
 > Failures of these tests due to locked components as shown above can be safely
 > ignored.
+
+<a name="exit-typescript"></a>
+## Exit Typescript
+
+Remember to exit your typescript.
+
+```bash
+ncn-m001# exit
+```
+
+It is recommended to save the typescript file for later reference.
