@@ -162,7 +162,7 @@ ncn-m001# pdsh -w $(./lib/list-ncns.sh | grep ncn-w | paste -sd,) "echo kernel.p
 <a name="deploy-manifests"></a>
 ## Deploy Manifests
 
-1. Before deplyoing the manifests, the `cray-propduct-catalog` role in kubernetes needs to be updated.
+1. Before deploying the manifests, the `cray-product-catalog` role in kubernetes needs to be updated.
     
     1. Display the role before changing it:
         
