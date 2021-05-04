@@ -108,6 +108,9 @@ ncn-s# vgremove -f --select 'vg_name=~ceph*'
 # Nicely stop the RAIDs, or try.
 ncn# for md in /dev/md/*; do mdadm -S $md || echo nope ; done
 
+# Remove auxillary LVMs
+ncn# vgremove -f --select 'vg_name=~metal*'
+
 # Wipe the disks and RAIDs:
 ncn# sgdisk --zap-all /dev/sd* 
 ncn# wipefs --all --force /dev/sd* /dev/disk/by-label/*
