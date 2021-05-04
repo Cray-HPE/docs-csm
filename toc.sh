@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright 2021 Hewlett Packard Enterprise Development LP
 set -u
 # dump table-of-contents to stdout
 # usage:
@@ -25,7 +26,7 @@ set -u
 
 pattern=${1%%.*}
 
-# Normalize grep incase one has it usefully bound to some short-cut.
+# Normalize grep in case one has it usefully bound to some short-cut.
 # (devs can reload their .bashrc/.profile/.bash_profile to fix this after).
 unalias grep >/dev/null 2>&1
 

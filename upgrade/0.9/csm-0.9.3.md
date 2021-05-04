@@ -125,12 +125,12 @@ Update the `coredns` and `kube-multus` resources.
     deployment.apps/coredns configured
     ```
 
-2. Verify that the pods restart with status `Running`:
+1. Verify that the pods restart with status `Running`:
     ```bash
     ncn-m001# watch "kubectl get pods -n kube-system -l k8s-app=kube-dns"
     ```
 
-3. Run `lib/0.9.3/multus-bump-resources.sh`
+1. Run `lib/0.9.3/multus-bump-resources.sh`
     ```bash
     ncn-m001# ./lib/0.9.3/multus-bump-resources.sh
     ```
@@ -141,7 +141,7 @@ Update the `coredns` and `kube-multus` resources.
     daemonset.apps/kube-multus-ds-amd64 configured
     ```
 
-4. Verify that the pods restart with status `Running`:
+1. Verify that the pods restart with status `Running`:
     ```bash
     ncn-m001# watch "kubectl get pods -n kube-system -l app=multus"
     ```
@@ -162,9 +162,9 @@ ncn-m001# pdsh -w $(./lib/list-ncns.sh | grep ncn-w | paste -sd,) "echo kernel.p
 <a name="deploy-manifests"></a>
 ## Deploy Manifests
 
-1. Before deploying the manifests, the `cray-product-catalog` role in kubernetes needs to be updated.
+1. Before deploying the manifests, the `cray-product-catalog` role in Kubernetes needs to be updated.
     
-    1. Display the role before changing it:
+    a. Display the role before changing it:
         
         ```bash
         ncn-m001# kubectl get role -n services cray-product-catalog -o json| jq '.rules[0]'
@@ -188,7 +188,7 @@ ncn-m001# pdsh -w $(./lib/list-ncns.sh | grep ncn-w | paste -sd,) "echo kernel.p
         }
         ```
     
-    1. Patch the role:
+    b. Patch the role:
         
         ```bash
         ncn-m001# kubectl patch role -n services cray-product-catalog --patch \
@@ -200,7 +200,7 @@ ncn-m001# pdsh -w $(./lib/list-ncns.sh | grep ncn-w | paste -sd,) "echo kernel.p
         role.rbac.authorization.k8s.io/cray-product-catalog patched
         ```
         
-    1. Display the role after the patch:
+    c. Display the role after the patch:
         
         ```bash
         ncn-m001# kubectl get role -n services cray-product-catalog -o json| jq '.rules[0]'

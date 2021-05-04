@@ -45,7 +45,7 @@ Partitioning is controlled by two aspects:
 | k8s-worker nodes | 2 | 1 
 | ceph-storage nodes | 2 | 3+
 
-Disks are chosen by dracut, kubernetes and storage nodes use different dracut modules.
+Disks are chosen by dracut. Kubernetes and storage nodes use different dracut modules.
 - First, `two disks` for the OS are chosen from the pool of "small" disks
 - Second, `one disk` is selected for the ephemeral data
 

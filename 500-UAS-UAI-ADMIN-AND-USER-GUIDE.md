@@ -121,7 +121,7 @@ All of the above can be customized on a given set of UAIs by defining a UAI clas
 
 ### UAI Host Nodes <a name="main-concepts-hostnodes"></a>
 
-UAIs run on Kubernetes worker nodes.  There is a mechanism using Kubernetes labels to prevent UAIs from running on a specific worker node, however.  Any Kubernetes node that is not labeled to prevent UAIs from running on it is considered to be a UAI host node.  The administrator of a given site may control the set of UAI host nodes by labeling kubernetes worker nodes appropriately.
+UAIs run on Kubernetes worker nodes.  There is a mechanism using Kubernetes labels to prevent UAIs from running on a specific worker node, however.  Any Kubernetes node that is not labeled to prevent UAIs from running on it is considered to be a UAI host node.  The administrator of a given site may control the set of UAI host nodes by labeling Kubernetes worker nodes appropriately.
 
 ### UAI Network Attachments (macvlans) <a name="main-concepts-netattach"></a>
 

@@ -16,12 +16,12 @@ The LiveCD is equipped for "re-squashing" an SquashFS images.
 
 Customize the NCN images by changing the root password or adding different ssh keys for the root account.
 
-This process should be done for the "kubernetes" image used by master and worker nodes and then repeated for the "ceph" image used by the utility storage nodes.
+This process should be done for the "Kubernetes" image used by master and worker nodes and then repeated for the "ceph" image used by the utility storage nodes.
 
 
 1. Open the image.
 
-   The kubernetes image will be of the form "kubernetes-0.0.53.squashfs" in /var/www/ephemeral/data/k8s.
+   The Kubernetes image will be of the form "kubernetes-0.0.53.squashfs" in /var/www/ephemeral/data/k8s.
    ```bash
    pit# cd /var/www/ephemeral/data/k8s
    pit# unsquashfs kubernetes-0.0.53.squashfs
@@ -55,7 +55,7 @@ This process should be done for the "kubernetes" image used by master and worker
    ```
 7. Cleanup the SquashFS creation
 
-   The kubernetes image directory is /var/www/ephemeral/data/k8s.
+   The Kubernetes image directory is /var/www/ephemeral/data/k8s.
    ```bash
    pit# umount /var/www/ephemeral/data/k8s/squashfs-root/mnt/squashfs
    ```

@@ -3,10 +3,10 @@
 This page will help you if you're trying to test new images on a metal system. Here you can
 find a basic flow for iterative boots.
 
-> We assume you are internally developing, these scripts are for internal use only.
+> We assume you are internally developing; these scripts are for internal use only.
 
 1. Get your Image ID
-    > `-k` for kubernetes, `-s` for storage/ceph
+    > `-k` for Kubernetes, `-s` for storage/ceph
 
     ```bash
    pit# /root/bin/get-sqfs.sh -k 9683117-1609280754169
@@ -21,4 +21,4 @@ find a basic flow for iterative boots.
 
 3. (Re)boot the node(s) you want to test.
 
-4. One can easily follow along using conman, run `conman -q` to see available consoles.
+4. One can easily follow along using conman. Run `conman -q` to see available consoles.
