@@ -193,6 +193,12 @@ report `FAIL` when uploading duplicate assets. This is ok as long as
 <a name="deploy-manifests"></a>
 ## Deploy Manifests
 
+Run `kubectl delete -n spire job spire-update-bss` to allow the spire chart to be updated properly:
+
+```bash
+ncn-m001# kubectl delete -n spire job spire-update-bss
+```
+
 Run `upgrade.sh` to deploy upgraded CSM applications and services:
 
 ```bash
