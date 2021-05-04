@@ -27,9 +27,7 @@
 | Server Port        | Management Network Port        | Speed | Use / Configuration            |
 |--------------------|--------------------------------|-------|--------------------------------|
 | OCP port 1         | spine or aggr pair, switch 1/2 | 25Gb  | Management Network NMN/HMN/CAN |
-| OCP port 2         | NONE                           | NONE  | NONE                           |
-| PCIe Slot 1 port 1 | spine or aggr pair, switch 2/2 | 25Gb  | Management Network NMN/HMN/CAN |
-| PCIe Slot 1 port 2 | NONE                           | NONE  | NONE                           |
+| OCP port 2         | spine or aggr pair, switch 2/2 | 25Gb  | Management Network NMN/HMN/CAN |
 
 #### SHCD Example
 
@@ -41,17 +39,10 @@
 ![HPE_Worker](img/network/HPE_Worker.png)
 
 ### NCN Master Cabling
-#### Single Card Installations
 
-| Server Port        | Management Network Port        | Speed | Use / Configuration            |
-|--------------------|--------------------------------|-------|--------------------------------|
-| OCP port 1         | spine or aggr pair, switch 1/2 | 25Gb  | Management Network NMN/HMN/CAN |
-| OCP port 2         | NONE                           | NONE  | NONE                           |
-| PCIe Slot 1 port 1 | spine or aggr pair, switch 2/2 | 25Gb  | Management Network NMN/HMN/CAN |
-| PCIe Slot 1 port 2 | NONE (See note below for ncn-m001) | NONE  | Site (See note below for ncn-m001) |
 
 #### Dual Card Installations
-A dual card configuration is much less common, but can occur based on customer requirements.  The table below describes the cabling of dual card configurations.  Also read notes in this section to see other possible customer-based configurations.
+The table below describes the cabling of dual card configurations.  Also read notes in this section to see other possible customer-based configurations.
 
 | Server Port        | Management Network Port        | Speed | Use / Configuration            |
 |--------------------|--------------------------------|-------|--------------------------------|
@@ -91,7 +82,7 @@ A dual card configuration is much less common, but can occur based on customer r
 | sn01	 | x3000u17s1-j1 | x3000u34-j8	| sw-25g02   |
 | sn01	 | x3000u17ocp-j2| x3000u33-j14	| sw-25g01   |
 | sn01	 | x3000u17ocp-j1| x3000u33-j8	| sw-25g01   |
-
+The OCP ports go to the First switch and the PCIe ports go to the Second switch.  OCP port 1 and PCIe port 1 form a Bond.  OCP port 2 and PCIe port 2 form a Bond.
 ![HPE_Storage](img/network/HPE_Storage.png)
 
 For systems that include 4 aggregation switches the cabling will look like the following.
