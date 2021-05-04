@@ -357,7 +357,9 @@ TODO don't reference the USB method of generating installation files here.
     ```
 
 The following steps will set up customized CA certificates for deployment using Shasta-CFG. Please follow
-- [Prepare Site Init](prepare-site-init.md) to create and prepare the `site-init` directory for your system.
+
+- [Prepare Site-Init](prepare_site_init.md) to create and prepare the `site-init` directory for your system.
 - [Deploy Management Nodes](deploy_management_nodes.md) or continue to use the system for bare-metal checkout.
 
-The end of Deploy Management Nodes will continue provide further directions for continuing.
+
+The end of Deploy Management Nodes will provide further directions for continuing.
