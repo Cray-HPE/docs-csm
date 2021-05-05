@@ -539,7 +539,7 @@ Observe the output of the checks and note any failures, then remediate them.
 
 1. Ensure that weave hasn't split-brained
 
-   Run the following command on each member of the kubernetes cluster (master nodes and worker nodes) to ensure that weave is operating as a single cluster:
+   Run the following command on each member of the Kubernetes cluster (master nodes and worker nodes) to ensure that weave is operating as a single cluster:
 
    ```bash
    ncn# weave --local status connections  | grep failed
@@ -562,7 +562,7 @@ done for sanity-checking:
 new tests.**
 
 1. Verify all nodes have joined the cluster
-1. Verify etcd is running outside kubernetes on master nodes
+1. Verify etcd is running outside Kubernetes on master nodes
 1. Verify that all the pods in the kube-system namespace are running
 1. Verify that the ceph-csi requirements are in place (see [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md)
 
