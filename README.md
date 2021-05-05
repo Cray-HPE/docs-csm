@@ -2,7 +2,7 @@
 
 # CRAY System Management - Guides and References
 
-> **These pages are available offline on the LiveCD** all CSM documentation can be found at `/usr/share/doc/metal`.
+> **These pages are available offline by RPM install at** at `/usr/share/doc/metal`.
 
 * [CRAY System Management - Guides and References](#cray-system-management---guides-and-references)
     * [Offline Documentation](#offline-documentation)
