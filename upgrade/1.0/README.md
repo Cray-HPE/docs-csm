@@ -51,7 +51,7 @@ Follow the steps at: [Initial Ceph Upgrade](resource_material/stage1/initial-cep
 
 #### Stage 2. Ceph image upgrade
 
-For each storage node in the cluster, start by following the steps at: [Common Prerequisite Steps](resource_material/common/prerequisite-steps.md)
+For each storage node in the cluster, start by following the steps at: [Common Prerequisite Steps](resource_material/common/prerequisite-steps.md). Note that these steps should be performed on one storage node at a time.
 
 #### Stage 3. Kubernetes Upgrade from 1.18.6 to 1.19.9
 
