@@ -1,3 +1,5 @@
+# PLEASE DO NOT EXECUTE THIS PAGE OF INSTRUCTIONS AT THIS TIME.  IT IS EXPERIMENTAL AND MUST GO THROUGH INTERNAL TESTING.
+
 # Determine Data Export Location (External to Shasta System)
 
 Configure a mount point or select a location external to the Shasta system where critical data can be exported.  

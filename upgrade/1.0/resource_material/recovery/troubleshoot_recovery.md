@@ -1,3 +1,5 @@
+# PLEASE DO NOT EXECUTE THIS PAGE OF INSTRUCTIONS AT THIS TIME.  IT IS EXPERIMENTAL AND MUST GO THROUGH INTERNAL TESTING.
+
 # Upgrade Recovery and Troubleshooting
 
 This document has recommendations for recovering from a failed upgrade.  The ability to recover from failures may be impacted by the stage in which the failure occurred.  There may be known issues and/or work-arounds that are already documented in other locations (which this document may reference).  Non-recoverable upgrade failures are more likely with irreversible data loss encountered in the Ceph/Storage upgrade steps.  Should this occur, the recommended recovery method will be to ensure that data exported in the 'Prereq' steps has been safely stored external to the shasta system, execute a Shasta 1.4 Fresh install, and follow steps documented below to "import" critical data back on top of the fresh install.  At that point, an upgrade attempt can be re-tried.
