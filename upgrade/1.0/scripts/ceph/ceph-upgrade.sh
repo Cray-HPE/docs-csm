@@ -1,11 +1,12 @@
+#
+# Copyright 2021 Hewlett Packard Enterprise Development LP
+#
 ###
 # Part 1.  Prep work
 ###
 
 file="/etc/cray/ceph/_upgraded"
 pre_pull_images_file="/etc/cray/ceph/images_pre_pulled"
-scale_down_cephfs_clients_file="/etc/cray/ceph/cephfs_scaled_down"
-scale_up_cephfs_clients_file="/etc/cray/ceph/cephfs_scaled_up"
 convert_rgw_file="/etc/cray/ceph/radosgw_converted"
 upgrade_init_file="/etc/cray/ceph/upgrade_initialized"
 upgrade_mons_file="/etc/cray/ceph/mons_upgraded"
@@ -59,13 +60,8 @@ else
   mark_initialized $pre_pull_images_file
 fi
 
-if [ -f "$scale_down_cephfs_clients_file" ]; then
-  echo "cephfs clients have been scaled down"
-else
-  echo "Scaling down cephfs clients"
-  scale_down_cephfs_clients
-  mark_initialized $scale_down_cephfs_clients_file
-fi
+echo "Scaling down cephfs clients (if needed)"
+scale_down_cephfs_clients
 
 if [ -f "$convert_rgw_file" ]; then
   echo "Radosgw has already been converted"
@@ -183,10 +179,5 @@ ceph config set mgr mgr/cephadm/warn_on_stray_daemons true
 
 wait_for_health_ok
 
-if [ -f "$scale_up_cephfs_clients_file" ]; then
-  echo "cephfs clients have been scaled up"
-else
-  echo "Scaling up cephfs clients"
-  scale_up_cephfs_clients
-  mark_initialized $scale_up_cephfs_clients_file
-fi
+echo "Scaling up cephfs clients"
+scale_up_cephfs_clients

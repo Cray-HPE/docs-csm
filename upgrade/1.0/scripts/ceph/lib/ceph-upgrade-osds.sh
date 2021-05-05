@@ -1,4 +1,8 @@
 # Begin OSD conversion.  Run on each node that has OSDS
+#
+# Copyright 2021 Hewlett Packard Enterprise Development LP
+#
+
 function upgrade_osds () {
 for host in $(ceph node ls| jq -r '.osd|keys[]')
  do

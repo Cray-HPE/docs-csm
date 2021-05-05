@@ -1,3 +1,7 @@
+#
+# Copyright 2021 Hewlett Packard Enterprise Development LP
+#
+
 cephadm prepare-host
 cephadm ls
 ceph config assimilate-conf -i /etc/ceph/ceph.conf

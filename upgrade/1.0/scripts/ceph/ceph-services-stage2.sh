@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+# Copyright 2021 Hewlett Packard Enterprise Development LP
+#
 
 echo "Reconfiguring apparmor for haproxy"
 sed -i -e '/inet6/a\' -e '  /etc/ceph/rgw.pem r,' /etc/apparmor.d/usr.sbin.haproxy

@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+# Copyright 2021 Hewlett Packard Enterprise Development LP
+#
 
 all_workers=$(kubectl get nodes | grep ncn-w | awk '{print $1}')
 kea_node=$(kubectl get po -n services -l 'app.kubernetes.io/name=cray-dhcp-kea' -o wide | grep -v NAME | awk '{print $7}')

@@ -1,3 +1,7 @@
+#
+# Copyright 2021 Hewlett Packard Enterprise Development LP
+#
+
 function ceph_upgrade_init () {
  echo "Starting upgrade with initial tasks"
  for host in $(ceph node ls| jq -r '.osd|keys[]')

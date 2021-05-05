@@ -1,4 +1,8 @@
 ### Begin run on each mon/mgr
+#
+# Copyright 2021 Hewlett Packard Enterprise Development LP
+#
+
 function upgrade_ceph_mgrs () {
 for host in $(ceph node ls| jq -r '.mgr|keys[]')
  do

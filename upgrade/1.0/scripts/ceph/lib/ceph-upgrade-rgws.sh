@@ -1,4 +1,8 @@
 # stop the ceph-rgw daemon on all hosts as the command needs the cluster status to be in HEALTH_OK
+#
+# Copyright 2021 Hewlett Packard Enterprise Development LP
+#
+
 function upgrade_rgws () {
 
   for host in $(ceph node ls| jq -r '.osd|keys|join(" ")'); do

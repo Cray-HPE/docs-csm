@@ -1,4 +1,7 @@
 # Scale down cephfs clients to prevent mds corruption issues
+#
+# Copyright 2021 Hewlett Packard Enterprise Development LP
+#
 
 cephfs_replica_counts_file="/etc/cray/ceph/cephfs_replica_counts"
 
@@ -7,10 +10,11 @@ function scale_down_cephfs_clients () {
   backup_name="$now-snapshot"
 
   echo "Taking a snapshot of nexus pvc ($backup_name)"
-  kubectl -n nexus exec -it $(kubectl get po -n nexus -l 'app=nexus' -o json | jq -r '.items[].metadata.name') -c nexus -- /bin/sh -c "mkdir /nexus-data/.snap/$backup_name"
+  output=$(kubectl -n nexus exec -it $(kubectl get po -n nexus -l 'app=nexus' -o json | jq -r '.items[].metadata.name') -c nexus -- /bin/sh -c "mkdir /nexus-data/.snap/$backup_name" 2>&1)
+  if [[ "$?" -ne 0 ]]; then
+    echo "Didn't find nexus pod to take snapshot from -- continuing..."
+  fi
 
-  echo "Sleeping 10 seconds after taking nexus pvc snapshot"
-  sleep 10
 
   rm -f $cephfs_replica_counts_file
   cnt=0
@@ -26,8 +30,20 @@ function scale_down_cephfs_clients () {
       kubectl get deployment -n $ns $deployment -o yaml | grep -q "claimName: $pvc_name"
       if [[ "$?" -eq 0 ]]; then
         num_replicas=$(kubectl -n $ns get deployment $deployment -o json | jq -r '.spec.replicas')
+        if [[ "$num_replicas" -eq 0 ]]; then
+          #
+          # We may have already scaled this deployment down or are re-running
+          # the upgrade script.  Let's be careful not to write zeros in the 
+          # replica count file.
+          #
+          if [ "$deployment" == "cray-ipxe" ]; then
+            num_replicas=3
+          else
+            num_replicas=1
+          fi
+        fi
         echo "${ns}_${deployment} $num_replicas" >> $cephfs_replica_counts_file
-        echo "Scaling $deployment deployment in namespace $ns from $num_replicas to zero"
+        echo "Ensuring $deployment deployment in namespace $ns is scaled from $num_replicas to zero"
         kubectl scale deployment -n $ns $deployment --replicas=0
       fi
     done

@@ -1,4 +1,7 @@
 # Begin OSD conversion.  Run on each node that has OSDS
+#
+# Copyright 2021 Hewlett Packard Enterprise Development LP
+#
 
 . ./lib/ceph-health.sh
 

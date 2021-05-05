@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+# Copyright 2021 Hewlett Packard Enterprise Development LP
+#
 
 source /srv/cray/scripts/metal/lib.sh
 export KUBERNETES_VERSION="v$(cat /etc/cray/kubernetes/version)"

@@ -1,3 +1,7 @@
+#
+# Copyright 2021 Hewlett Packard Enterprise Development LP
+#
+
 function convert_radosgw () {
   echo "Converting radsogw to support Ceph 15.x requirements"
   echo "Verifying that a realm doesn't exist"

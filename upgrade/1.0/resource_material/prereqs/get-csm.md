@@ -9,18 +9,9 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    ```
 2. Download the CSM software release to ncn-m001 -- choose either stable or prerelease depending on your intent:
 
-   a. Preferred method (stable):
+   a. **OPTION 1:** Internal/Test Systems:
 
-      ```bash
-      ncn-m001# cd ~
-      ncn-m001# export ENDPOINT=https://arti.dev.cray.com/artifactory/shasta-distribution-stable-local/csm/
-      ncn-m001# export CSM_RELEASE=csm-x.y.z
-      ncn-m001# wget ${ENDPOINT}/${CSM_RELEASE}.tar.gz
-      ```
-
-   b. Prerelease/internal use (only):
-
-      > **`INTERNAL USE`** The `ENDPOINT` URL below are for internal use. Customers do not need to download any additional 
+      > NOTE: The `ENDPOINT` URL below are for internal use. Customers do not need to download any additional 
       > artifacts, the CSM tarball is included along with the Shasta release.
      
       ```bash
@@ -29,6 +20,16 @@ Fetch the base installation CSM tarball and extract it, installing the contained
       ncn-m001# export CSM_RELEASE=csm-1.0.0-alpha.x # (whichever version is latest from above)
       ncn-m001# wget ${ENDPOINT}/${CSM_RELEASE}.tar.gz
       ``` 
+
+   b. **OPTION 2:** Customer/Production Systems:
+
+      ```bash
+      ncn-m001# cd ~
+      ncn-m001# export ENDPOINT=https://arti.dev.cray.com/artifactory/shasta-distribution-stable-local/csm/
+      ncn-m001# export CSM_RELEASE=csm-x.y.z
+      ncn-m001# wget ${ENDPOINT}/${CSM_RELEASE}.tar.gz
+      ```
+
 
 3. Expand the CSM software release:
    ```bash

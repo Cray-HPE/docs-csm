@@ -27,7 +27,7 @@ These steps should be taken regardless of the type of NCN you will be upgrading.
 
     ```text
     ncn# export CSM_RELEASE=csm-x.y.z
-    ncn# export UPGRADE_NCN=ncn-m001
+    ncn# export UPGRADE_NCN=<ncn> # <-- SET TO NODE BEING UPGRADED (like ncn-s001)
    
     ncn# export STABLE_NCN=$(hostname)
     ncn# export UPGRADE_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \

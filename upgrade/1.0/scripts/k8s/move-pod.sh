@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+# Copyright 2021 Hewlett Packard Enterprise Development LP
+#
 
 pod_name=$1
 target_node=$2

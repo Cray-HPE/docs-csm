@@ -1,3 +1,7 @@
+#
+# Copyright 2021 Hewlett Packard Enterprise Development LP
+#
+
 function update_image_values () {
  IMAGE="$registry/ceph/ceph:v15.2.8"
  ceph config set global container_image $IMAGE

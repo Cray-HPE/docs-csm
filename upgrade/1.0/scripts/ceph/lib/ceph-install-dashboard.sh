@@ -1,3 +1,7 @@
+#
+# Copyright 2021 Hewlett Packard Enterprise Development LP
+#
+
 function install_dashboard () {
     echo "Enabling the Ceph Dashboard"
     until $(ceph mgr services|jq .dashboard) =~ "ncn-s00"

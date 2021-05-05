@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+# Copyright 2021 Hewlett Packard Enterprise Development LP
+#
 
 disks=$(lsblk | grep -B2 -F md1  | grep ^s | awk '{print $1}')
 disk1=$(echo $disks | awk '{print $1}')
