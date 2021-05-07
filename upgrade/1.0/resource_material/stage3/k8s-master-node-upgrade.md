@@ -117,6 +117,8 @@ These are steps specific to upgrading a master node.
 9. To cordon/drain the node run the below script in the example below.  This will evacuate pods running on the node.
 
    ```bash
+   ncn# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
+   
    ncn# /usr/share/doc/metal/upgrade/1.0/scripts/k8s/remove-k8s-node.sh $UPGRADE_NCN
    ```
 
