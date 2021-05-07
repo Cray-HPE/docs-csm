@@ -499,8 +499,10 @@ data so run them only when indicated. Instructions are in the `README` files.
     
 > **`CSI NOTE`** `/tmp/csi` will delete itself on the next reboot. The /tmp directory is `tmpfs` and runs in memory, it normally will not persist on restarts.
 
-## <a name="next-step"></a>
-## Next Step
+<a name="next-topic"></a>
+# Next topic
 
-The next step is to [Configure Administrative Access](configure_administrative_access.md).
+   After completing this procedure, the next step is to configure administrative access.
+
+   * See [Configure Administrative Access](index.md#configure_administrative_access)
 

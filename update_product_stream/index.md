@@ -8,6 +8,8 @@ The software included in the CSM product stream is released in more than one way
    * [Check for Latest Workarounds and Documentation Updates](#workarounds)
    * [Check for Field Notices about Hotfixes](#hotfixes)
 
+The topics in thie chapter need to be done as part of an ordered procedure so are shown here with numbered topics.
+
 ## Details
 
 <a name="download-and-extract"></a>

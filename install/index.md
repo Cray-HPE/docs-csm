@@ -1,8 +1,15 @@
 # Install CSM
 
-TODO
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Installation of the CSM product stream has many steps in multiple procedures which should be done in a
+specific order.  Information about the HPE Cray EX system and the site is used to prepare the configuration
+payload.  The initial node used to bootstrap the installation process is called the PIT node because the
+Pre-Install Toolkit is installed there. Once the management network switches have been configured, the other
+management nodes can be deployed with an operating system and the software to create a Kubernetes cluster
+utilizing Ceph storage.  The CSM services provide essential software infrastructure including the API gateway
+and many microservices with REST APIs for managing the system.  Once administrative access has been configured,
+the installation of CSM software and nodes can be validated with health checks before doing operational tasks
+like the check and update of firmware on system components.  Once the CSM installation has completed, other
+product streams for the HPE Cray EX system can be installed.
 
 ### Topics:
    
@@ -11,11 +18,18 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
    1. [Configure Management Network Switches](#configure_management_network)
    1. [Deploy Management Nodes](#deploy_management_nodes)
    1. [Install CSM Services](#install_csm_services)
+   1. [Validate CSM Health Before PIT Node Redeploy](#validate_csm_health_before_pit_redeploy)
    1. [Redeploy PIT Node](#redeploy_pit_node)
    1. [Configure Administrative Access](#configure_administrative_access)
    1. [Validate CSM Health](#validate_csm_health.md)
    1. [Update Firmware with FAS](#update_firmware_with_fas)
+   1. [Next Topic](#next_topic)
    1. [Troubleshooting Installation Problems](#troubleshooting_installation)
+
+The topics in this chapter need to be done as part of an ordered procedure so are shown here with numbered topics.
+
+Note: If problems are encountered during the installation, some of the topics do have their own troubleshooting
+sections, but there is also a general troubleshooting topic.
 
 ## Details
  
@@ -23,47 +37,51 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
    
    1. Prepare Configuration Payload
 
-   TODO
+   Information gathered from a site survey is needed to feed into the CSM installation process, such as system name,
+   system size, site network information for the CAN, site DNS configuration, site NTP configuration, network
+   information for the node used to bootstrap the installation.  Much of the information about the system hardware
+   is encapsulated in the SHCD (Shasta Cabling Diagram), which is a spreadhsheet prepared by HPE Cray Manufacturing
+   to assemble the components of the system and connect cables having appropriate cable labels.
 
    See [Prepare Configuration Payload](payload.md)
 
    <a name="bootstrap_pit_node"></a>
-   1. [Bootstrap PIT Node from LiveCD](#bootstrap_pit_node)
 
-   
    1. Bootstrap PIT Node
 
    The Pre-Install Toolkit (PIT) node needs to be bootstraped from the LiveCD.  There are two media available
-   to bootstrap the PIT node, the RemoteISO or a bootable USB device.  The recommended media is the RemoteISO,
+   to bootstrap the PIT node--the RemoteISO or a bootable USB device.  The recommended media is the RemoteISO,
    since it does not require any physical media to prepare. However, remotely mounting an ISO on a BMC does not
    work smoothly for nodes from all vendors. It is recommended to try the RemoteISO first.
 
    Use one of these procedures to bootstrap the PIT node from the LiveCD.
 
-   * [Bootstrap Pit Node from LiveCD Remote ISO](bootstrap_livecd_remote_iso.md) (recommended)
-   * [Bootstrap Pit Node from LiveCD USB](bootstrap_livecd_usb.md) (fallback)
-
-   <a name="bootstrap_pit_node"></a>
-   
-   1. Bootstrap PIT Node
-
-   TODO
-
-   See [Bootstrap PIT Node](bootstrap_pit_node.md)
+      * [Bootstrap Pit Node from LiveCD Remote ISO](bootstrap_livecd_remote_iso.md) (recommended)
+      * [Bootstrap Pit Node from LiveCD USB](bootstrap_livecd_usb.md) (fallback)
 
    <a name="configure_management_network"></a>
    
    1. Configure Management Network Switches
 
-   TODO
-
+   Now that the PIT node has been booted with the LiveCD environment and CSI has generated the switch IP addresses,
+   the management network switches can be configured.  This procedure will configure the spine switches, aggregation
+   switches (if present), CDU switches (if present), and the leaf switches.
+ 
    See [Configure Management Network Switches](configure_management_network.md)
+
+   Note: If a reinstall of this software release is being done on this system and the management network switches
+   have already been configured, then this topic could be skipped and instead move to
+   [Deploy Management Nodes](#deploy_management_nodes).
 
    <a name="deploy_management_nodes"></a>
 
    1. Deploy Management Nodes
 
-   TODO
+   Now that the PIT node has been booted with the LiveCD and the management network switches have been configured,
+   the other management nodes can be deployed.  This procedure will boot all of the management nodes, initialize
+   Ceph storage on the storage nodes and start the Kubernetes cluster on all of the worker nodes and the master nodes,
+   except for the PIT node.  The PIT node will join Kubernetes after it is rebooted later in 
+   [Redeploy PIT Node](#redeploy PIT node).
 
    See [Deploy Management Nodes](deploy_management_nodes.md)
 
@@ -71,15 +89,38 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
    
    1. Install CSM Services
 
-   TODO
+   Now that deployment of management nodes is complete with initialized Ceph storage and a running Kubernetes
+   cluster on all worker and master nodes, except the PIT node, the CSM services can be installed.  The Nexus
+   repository will be populated with artifacts, containerized CSM services will be installed, .
 
    See [Install CSM Services](install_csm_services.md)
+
+   <a name="validate_csm_health_before_pit_redeploy"></a>
+ 
+   1. Validate CSM Health Before PIT Node Redeploy
+
+   After installing all of the CSM services, now would be an good time to validate the health of the
+   management nodes and all CSM services.  The advantage in doing it now is that if there are any problems
+   detected with the core infrastructure or the nodes, it is easy to rewind the installation to
+   [Deploy Management Nodes](#deploy_management_nodes) since the PIT node has not yet been redeployed.
+
+   Note: If doing the CSM validation at this point, some of the tests which use the 'cray' CLI may fail
+   until these two procedures have been done.  These tests, such as Booting the CSM Barebones Image on compute
+   nodes or the UAS/UAI Tests can be skipped until after the PIT node has been redeployed.
+
+   To enable the 'cray' CLI, these two procedures could be done now.
+      * Optional [Configure Keycloak Account](configure_administrative_access.md#configure_keycloak_account)
+      * Optional [Configure the Cray Command Line Interface (cray CLI)](configure_administrative_access.md#configure_cray_cli)
+
+   To run the CSM health checks now, see [Validate CSM Health](../operations/validate_csm_health.md)
 
    <a name="redeploy_pit_node"></a>
 
    1. Redeploy PIT Node
 
-   TODO
+   Now that all CSM services have been installed and the CSM health checks completed, with the possible exception
+   of Booting the CSM Barebones Image and the UAS/UAI tests, the PIT node can be rebooted to leave the LiveCD
+   environment and assume its intended role as one the Kubernetes master nodes.
 
    See [Redeploy PIT Node](redeploy_pit_node.md)
 
@@ -87,7 +128,11 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
    
    1. Configure Administrative Access
 
-   TODO
+   Now that all of the CSM services have been installed and the PIT node has been redeployed, administrative access
+   can be prepared.   This may include configuring Keycloak with a local Keycloak account or confirming Keycloak
+   is properly federating LDAP or other Identity Provider (IdP), initializing the 'cray' CLI for administrative 
+   commands, locking the management nodes from accidental actions firmware updates by FAS or power actions by
+   CAPMC, and configuring node BMCs (node controllers) for nodes in liquid cooled cabinets.
 
    See [Configure Administrative Access](configure_administrative_access.md)
 
@@ -95,7 +140,13 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
   
    1. Validate CSM Health
 
-   TODO
+   Now that all management nodes have joined the Kubernetes cluster, CSM services have been installed,
+   and administrative access has been enabled, the health of the management nodes and all CSM services
+   should be validated.  There are no exceptions to running the tests--all can be run now. 
+
+   This CSM health validation can also be run at other points during the system lifecycle, such as when replacing
+   a management node, checking the health after a management node has rebooted due to a crash, as part of doing
+   a full system power down or power up, or after other types of system maintenance.
 
    See [Validate CSM Health](../operations/validate_csm_health.md)
 
@@ -103,14 +154,27 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
    1. Update Firmware with FAS
 
-   TODO
+   Now that all management nodes and CSM services have been validated as healthy, the firmware on other
+   components in the system can be checked and updated.  The Firmware Action Service (FAS) communicates
+   with many devices on the system. FAS can be used to update the firmware for all of the devices it
+   communicates with at once, or specific devices can be targeted for a firmware update.
 
    See [Update Firmware with FAS](../operations/update_firmware_with_fas.md)
+
+   <a name="next_topic"></a>
+
+   1. Next Topic
+
+   After completion of the firmware update with FAS, the CSM product stream has been fully installad and
+   configured.  Refer to the _HPE Cray EX Installation and Configuration Guide S-8001_, for other product streams
+   to be installed and configured after CSM.
 
    <a name="troubleshooting_installation"></a>
    
    1. Troubleshooting Installation Problems
 
-   TODO
+   The installation of the Cray System Management (CSM) product requires knowledge of the various nodes and
+   switches for the HPE Cray EX system. The procedures in this section should be referenced during the CSM install
+   for additional information on system hardware, troubleshooting, and administrative tasks related to CSM.
 
    See [Troubleshooting Installation Problems](troubleshooting_installation.md)

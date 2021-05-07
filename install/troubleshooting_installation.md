@@ -1,6 +1,8 @@
 # Troubleshooting Installation Problems
 
-Here are several procedures that may help with troubleshooting or recovery so a procedure can be restarted.
+The installation of the Cray System Management (CSM) product requires knowledge of the various nodes and
+switches for the HPE Cray EX system. The procedures in this section should be referenced during the CSM install
+for additional information on system hardware, troubleshooting, and administrative tasks related to CSM.
 
 ### Topics:
 

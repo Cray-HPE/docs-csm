@@ -67,6 +67,10 @@ TODO define Compute nodes
 
 TODO define CSI
 
+### CSM
+
+TODO define CSM
+
 ### eC
 
 The CEC microcontroller (eC) sets the cabinet's geolocation, monitors the cabinet

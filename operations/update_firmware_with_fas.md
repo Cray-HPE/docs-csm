@@ -6,7 +6,6 @@
 System installer
 
 #### Objective
-Acquire a CSM software release tarball for installation on the HPE Cray EX supercomputer.
 
 #### Limitations
 None.
@@ -25,7 +24,6 @@ TODO 257-FIRMWARE-ACTION-SERVICE-CRAY-WINDOM-COMPUTE-NODE-BIOS-WORKAROUND.md
 * [Current Capabilities as of Shasta Release v1.4](#current-capabilities)
 * [Order Of Operations](#order-of-operations)
 * [Hardware Precedence Order](#hardware-precedence-order)
-* [Next steps](#next-steps)
 
 <a name="prerequisites"></a>
 ## Prerequisites
@@ -116,9 +114,4 @@ After you identify which hardware you have; start with the top most item on this
      1. [BMC (iLO5)](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#hpe-device-type-nodebmc-target--aka-bmc)
      2. [BIOS (System ROM)](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#hpe-device-type-nodebmc-target--aka-bios) 
 
-
-<a name="next-steps"></a>
-## Next Steps
-
-Next the administrator should install additional products following the procedures in the HPE Cray EX System Installation and Configuration Guide S-8000.
 

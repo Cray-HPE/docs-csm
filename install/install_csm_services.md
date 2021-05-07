@@ -5,23 +5,23 @@ TODO Add headers: About this task, Role, Objective, Limitations, New in this Rel
 
 # CSM Platform Install
 
-This page will go over how to install CSM applications and services (i.e.,
-into the CSM Kubernetes cluster).
+This page will go over how to install CSM applications and services into the CSM Kubernetes cluster.
 
-* [Initialize Bootstrap Registry](#initialize-bootstrap-registry)
-* [Create Site-Init Secret](#create-site-init-secret)
-* [Deploy Sealed Secret Decryption Key](#deploy-sealed-secret-decryption-key)
-* [Deploy CSM Applications and Services](#deploy-csm-applications-and-services)
-  * [Setup Nexus](#setup-nexus)
-  * [Set NCNs to use Unbound](#set-ncns-to-use-unbound)
-  * [Validate CSM Install](#validate-csm-install)
-  * [Reboot from the LiveCD to NCN](#reboot-from-the-livecd-to-ncn)
-* [Add Compute Cabinet Routing to NCNs](#add-compute-cabinet-routing-to-ncns)
-* [Known Issues](#known-issues)
+1. [Initialize Bootstrap Registry](#initialize-bootstrap-registry)
+1. [Create Site-Init Secret](#create-site-init-secret)
+1. [Deploy Sealed Secret Decryption Key](#deploy-sealed-secret-decryption-key)
+1. [Deploy CSM Applications and Services](#deploy-csm-applications-and-services)
+  1. [Setup Nexus](#setup-nexus)
+  1. [Set NCNs to use Unbound](#set-ncns-to-use-unbound)
+  1. [Add Compute Cabinet Routing to NCNs](#add-compute-cabinet-routing-to-ncns)
+1. [Validate CSM Install](#validate-csm-install)
+1. [Reboot from the LiveCD to NCN](#reboot-from-the-livecd-to-ncn)
+1. [Known Issues](#known-issues)
   * [error: timed out waiting for the condition on jobs/cray-sls-init-load](#error-timed-out-sls-init-load-job)
   * [Error: not ready: https://packages.local](#error-not-ready)
   * [Error initiating layer upload ... in registry.local: received unexpected HTTP status: 200 OK](#error-initiating-layer-upload)
   * [Error lookup registry.local: no such host](#error-registry-local-no-such-host)
+1. [Next Topic](#next-topic)
 
 
 <a name="initialize-bootstrap-registry"></a>
@@ -324,17 +324,8 @@ If there is a workaround here, the output looks similar to the following:
 CASMCMS-6857  CASMNET-423
 ```
 
-
-<a name="validate-csm-install"></a>
-### Validate CSM Install
-
-The administrator should wait at least 15 minutes to let the various Kubernetes resources
-get initialized and started. Because there are a number of dependencies between them,
-some services are not expected to work immediately after the install script completes.
-After waiting, the administrator may start the [Validate CSM Health](../operations/validate_csm_health.md).
-
 <a name="add-compute-cabinet-routing-to-ncns"></a>
-## Add Compute Cabinet Routing to NCNs
+### Add Compute Cabinet Routing to NCNs
 
 NCNs require additional routing to enable access to Mountain, Hill and River Compute cabinets.
 
@@ -350,6 +341,14 @@ ncn# /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-1570/CASMINST-1570.sh
 
 > **`NOTE`** Currently, there is no automated procedure to apply routing changes to all worker NCNs to support Mountain, Hill and River
 Compute Node Cabinets. 
+
+<a name="validate-csm-install"></a>
+## Validate CSM Install
+
+The administrator should wait at least 15 minutes to let the various Kubernetes resources
+get initialized and started. Because there are a number of dependencies between them,
+some services are not expected to work immediately after the install script completes.
+After waiting, the administrator may start the [Validate CSM Health](../operations/validate_csm_health.md).
 
 ----
 
@@ -515,3 +514,11 @@ time="2021-03-04T22:45:07Z" level=fatal msg="Error copying ref \"dir:/image/cray
 
 These errors are most likely _intermittent_ and running `./lib/setup-nexus.sh`
 again is expected to succeed.
+
+<a name="next-topic"></a>
+# Next topic
+
+   After completing this procedure the next step is to redeploy the PIT node.
+
+   * See [Redeploy PIT Node](index.md#redeploy_pit_node)
+

@@ -13,10 +13,13 @@ None.
 
 ### Topics: 
 
-   * [Configure Keycloak Account](#configure_keycloak_account)
-   * [Configure the Cray Command Line Interface (cray CLI)](#configure_cray_cli)
-   * [Lock Management Nodes](#lock_management_nodes)
-   * [Configure BMC and Controller Parameters with SCSD](#configure_with_scsd)
+   1. [Configure Keycloak Account](#configure_keycloak_account)
+   1. [Configure the Cray Command Line Interface (cray CLI)](#configure_cray_cli)
+   1. [Lock Management Nodes](#lock_management_nodes)
+   1. [Configure BMC and Controller Parameters with SCSD](#configure_with_scsd)
+
+   Note: The procedures in this section of installation documentation are intended to be done in order, even though the topics are
+   administrative or operational procedures.  The topics themselves do not have navigational links to the next topic in the sequence.
 
 ## Details
 
@@ -58,4 +61,11 @@ None.
    TODO description of SCSD to enable passwordless access to the Mountain node BMCs which might be needed for debugging of the power up or power down as part of the compute node booting process.
 
    See [Configure BMC and Controller Parameters with SCSD](../operations/configure_with_scsd.md)
+
+<a name="next-topic"></a>
+# Next topic
+
+   After completing this procedure, the next step is to validate the health of management nodes and CSM services.
+
+   * See [Validate CSM Health](index.md#validate_csm_health)
 

@@ -1,4 +1,4 @@
-# Prepare Site-Init
+# Prepare Site Init
 
 TODO revise content here and ensure the names and paths work for both LiveCD USB and LiveCD RemoteISO.
 

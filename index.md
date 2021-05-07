@@ -2,7 +2,7 @@
 
 ### Scope and Audience
 
-The documentation included here describes how to install or upgrade the Cray System Management (CSM) software and related supporting operational procedures.  CSM software is the foundation upon which other software product streams in the Shasta software stack for the HPE Cray EX system depend.
+The documentation included here describes how to install or upgrade the Cray System Management (CSM) software and related supporting operational procedures.  CSM software is the foundation upon which other software product streams for the HPE Cray EX system depend.
 
 The information is intended for system installers, system administrators, and network administrators of the system.  It assumes some familiarity with standard Linux and open source tools, such as shell scripts, Ansible, YAML, JSON, and TOML file formats, etc.
 
@@ -40,10 +40,12 @@ The chapters with topics which need to be done as part of an ordered procedure a
    1. [Configure Management Network Switches](install/configure_management_network.md)
    1. [Deploy Management Nodes](install/deploy_management_nodes.md)
    1. [Install CSM Services](install/install_csm_services.md)
-   1. [Redeploy PIT Node](install/redploy_pit_node.md)
+   1. [Validate CSM Health Before PIT Node Redeploy](install/index.md#validate_csm_health_before_pit_redeploy)
+   1. [Redeploy PIT Node](install/redeploy_pit_node.md)
    1. [Configure Administrative Access](configure_administrative_access.md)
    1. [Validate CSM Health](operations/validate_csm_health.md)
    1. [Update Firmware with FAS](operations/update_firmware_with_fas.md)
+   1. [Next Topic](install/next_topic)
    1. [Troubleshooting Installation Problems](install/troubleshooting_installation.md)
 
 1. [Upgrade CSM](upgrade/index.md)
@@ -56,7 +58,8 @@ The chapters with topics which need to be done as part of an ordered procedure a
    1. [Restore from Backup](upgrade/restore_from_backup.md)
    1. [Validate CSM Health](operations/validate_csm_health.md)
    1. [Update Firmware with FAS](operations/update_firmware_with_fas.md)
-   1. [Troubleshooting Upgrade Problems](upgrade/troubleshooting_upgrade.md))
+   1. [Next Topic](upgrade/next_topic)
+   1. [Troubleshooting Upgrade Problems](upgrade/troubleshooting_upgrade.md)
 
 1. [CSM Operational Activities](operations/index.md)
 

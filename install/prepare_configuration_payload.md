@@ -1,5 +1,6 @@
 # Prepare Configuration Payload
 
+
 TODO will this become 2 separate files, each with a focus on one of these two paths?
 
 * First Time Install of this Release
@@ -285,3 +286,11 @@ TODO reference these files
 307-HMN-CONNECTIONS.md HMN Connections File
 308-APPLICATION-NODE-CONFIG.md Application Node Config
 310-CABINETS.md Cabinets
+
+<a name="next-topic"></a>
+# Next topic
+
+   After completing this procedure the next step is to bootstrap the PIT node.
+
+   * See [Bootstrap PIT Node](index.md#bootstrap_pid_node)
+

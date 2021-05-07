@@ -356,10 +356,15 @@ TODO don't reference the USB method of generating installation files here.
     pit# mount -v -L PITDATA /mnt/pitdata
     ```
 
-The following steps will set up customized CA certificates for deployment using Shasta-CFG. Please follow
+1. The following procedure will set up customized CA certificates for deployment using Shasta-CFG.
 
-- [Prepare Site-Init](prepare_site_init.md) to create and prepare the `site-init` directory for your system.
-- [Deploy Management Nodes](deploy_management_nodes.md) or continue to use the system for bare-metal checkout.
+   * [Prepare Site-Init](prepare_site_init.md) to create and prepare the `site-init` directory for your system.
 
 
-The end of Deploy Management Nodes will provide further directions for continuing.
+<a name="next-topic"></a>
+# Next topic
+
+   After completing this procedure the next step is to configure the management network switches.
+
+   * See [Configure Management Network Switches](index.md#configure_management_network)
+

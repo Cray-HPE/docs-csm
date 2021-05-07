@@ -16,7 +16,7 @@ There are 5 overall steps that provide a bootable USB with SSH enabled, capable 
    * [Before Configuration Payload Workarounds](#before-configuration-payload-workarounds)
    * [Generate Installation Files](#generate-installation-files)
    * [CSI Workarounds](#csi-workarounds)
-   * [SHASTA-CFG](#shasta-cfg)
+   * [Prepare Site Init](#prepare_site_init)
 * [Pre-Populate LiveCD Daemons Configuration and NCN Artifacts](#pre-populate-livecd-daemons-configuration-and-ncn-artifacts)
 * [Boot the LiveCD](#boot-the-livecd)
    * [First Login](#first-login)
@@ -214,7 +214,7 @@ The SHASTA-CFG structure and other configuration files will be prepared, then cs
 * [Before Configuration Payload Workarounds](#before-configuration-payload-workarounds)
 * [Generate Installation Files](#generate-installation-files)
 * [CSI Workarounds](#csi-workarounds)
-* [SHASTA-CFG](#shasta-cfg)
+* [Prepare Site Init](#prepare_site_init)
 
 <a name="before-configuration-payload-workarounds"></a>
 ### Before Configuration Payload Workarounds
@@ -394,10 +394,10 @@ Check for workarounds in the `/opt/cray/csm/workarounds/csi-config` directory. I
   CASMINST-999
   ```
 
-<a name="shasta-cfg"></a>
-### SHASTA-CFG
+<a name="prepare_site-init"></a>
+### Prepare Site Init
 
-Follow the procedures to [Prepare Site-Init](prepare_site_init.md) directory for your system.
+Follow the procedures to [Prepare Site Init](prepare_site_init.md) directory for your system.
 
 
 <a name="pre-populate-livecd-daemons-configuration-and-ncn-artifacts"></a>
@@ -663,11 +663,12 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    c7638b573b93  dtr.dev.cray.com/cray/metal-basecamp:1.1.0-1de4aa6                        5 minutes ago  Up 5 minutes ago          basecamp
    ```
 
-10. Follow the output's directions for failed validations before moving on.
+10. Follow directions in the output from the 'csi pit validate' commands for failed validations before continuing. 
 
-11. If this is a Shasta v1.3.x migration scenario, then the Dell and Mellanox switches can be reconfigured now with their new names, new IP addresses, and new configuration for v1.4.
+<a name="next-topic"></a>
+# Next topic
 
-See [Management Network Dell And Mellanox Upgrades](412-MGMT-NET-DELL-MELLANOX-UPGRADES.md).
+   After completing this procedure the next step is to configure the management network switches.
 
+   * See [Configure Management Network Switches](index.md#configure_management_network)
 
-After successfully validating the LiveCD USB environment, the administrator may [Deploy Management Nodes](deploy_management_nodes.md).
