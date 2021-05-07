@@ -27,22 +27,24 @@ TODO split into 5 subtopic files
 This document specifies the procedures for deploying the non-compute nodes
 (NCNs).
 
-- [Configure Bootstrap Registry to Proxy an Upstream Registry](#configure-bootstrap-registry-to-proxy-an-upstream-registry)
-- [Tokens and IPMI Password](#tokens-and-ipmi-password)
-- [Timing of Deployments](#timing-of-deployments)
-- [NCN Deployment](#ncn-deployment)
-- [Apply NCN Pre-Boot Workarounds](#apply-ncn-pre-boot-workarounds)
-- [Ensure Time Is Accurate Before Deploying NCNs](#ensure-time-is-accurate-before-deploying-ncns)
-- [Start Deployment](#start-deployment)
-  - [Workflow](#workflow)
-  - [Deploy](#deploy)
-- [Check for Unused Drives on Utility Storage Nodes](#check-for-unused-drives-on-utility-storage-nodes)
-- [Apply NCN Post-Boot Workarounds](#apply-ncn-post-boot-workarounds)
-- [LiveCD Cluster Authentication](#livecd-cluster-authentication)
-- [BGP Routing](#bgp-routing)
-- [Validation](#validation)
-- [Optional Validation](#optional-validation)
-- [Configure & Trim UEFI Entries](#configure-and-trim-uefi-entries)
+- [Deploy Management Nodes](#deploy-management-nodes)
+- [CSM Metal Install](#csm-metal-install)
+  - [Configure Bootstrap Registry to Proxy an Upstream Registry](#configure-bootstrap-registry-to-proxy-an-upstream-registry)
+  - [Tokens and IPMI Password](#tokens-and-ipmi-password)
+  - [Timing of Deployments](#timing-of-deployments)
+  - [NCN Deployment](#ncn-deployment)
+    - [Apply NCN Pre-Boot Workarounds](#apply-ncn-pre-boot-workarounds)
+    - [Ensure Time Is Accurate Before Deploying NCNs](#ensure-time-is-accurate-before-deploying-ncns)
+    - [Start Deployment](#start-deployment)
+      - [Workflow](#workflow)
+      - [Deploy](#deploy)
+    - [Check for Unused Drives on Utility Storage Nodes](#check-for-unused-drives-on-utility-storage-nodes)
+    - [Apply NCN Post-Boot Workarounds](#apply-ncn-post-boot-workarounds)
+    - [LiveCD Cluster Authentication](#livecd-cluster-authentication)
+    - [BGP Routing](#bgp-routing)
+    - [Validation](#validation)
+    - [Optional Validation](#optional-validation)
+  - [Configure and Trim UEFI Entries](#configure-and-trim-uefi-entries)
 
 
 <a name="configure-bootstrap-registry-to-proxy-an-upstream-registry"></a>
@@ -321,11 +323,14 @@ The configuration workflow described here is intended to help understand the exp
     > **`NOTE`**: All consoles are located at `/var/log/conman/console*`
 
 1. Boot the **Storage Nodes**
+
+    **`Note`**: You can boot all the storage nodes at the same time, but we have had better success boot all storage nodes except ncn-s001.  then boot that node approximately 1 minute after the other nodes.
+
     ```bash
     pit# grep -oP $stoken /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
 
-1. Wait. Observe the installation through ncn-s001-mgmt's console:
+2. Wait. Observe the installation through ncn-s001-mgmt's console:
     ```bash
     # Print the console name
     pit# conman -q | grep s001
@@ -348,6 +353,7 @@ The configuration workflow described here is intended to help understand the exp
     **`NOTE`**: If the nodes have pxe boot issues (e.g. getting pxe errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
 
     **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to linux with no hostname) see the CSM workarounds for fixes around mutual symptoms.
+
     > ```bash
     > # Example
     > pit# ls /opt/cray/csm/workarounds/after-ncn-boot
@@ -357,12 +363,15 @@ The configuration workflow described here is intended to help understand the exp
     > CASMINST-1093
     > ```
 
-1. Once all storage nodes are up and ncn-s001 is running ceph-ansible, boot **Kubernetes Managers and Workers**
+3. Once all storage nodes are up and ncn-s001 is running ceph-ansible, boot **Kubernetes Managers and Workers**
+
+   **`NOTE`**: You can see if ansible is doing anything by tailing the /var/log/cray/ansible.log file.  This would typically be found running from ncn-s001.
+
     ```bash
     pit# grep -oP "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
 
-1.  Wait. Observe the installation through ncn-m002-mgmt's console:
+4.  Wait. Observe the installation through ncn-m002-mgmt's console:
     ```bash
     # Print the console name
     pit# conman -q | grep m002
@@ -393,7 +402,7 @@ The configuration workflow described here is intended to help understand the exp
     > CASMINST-1093
     > ```
 
-1. Refer to [timing of deployments](#timing-of-deployments). It should not take more than 60 minutes for the `kubectl get nodes` command to return output indicating that all the managers and workers aside from the PIT node booted from the LiveCD are `Ready`:
+5. Refer to [timing of deployments](#timing-of-deployments). It should not take more than 60 minutes for the `kubectl get nodes` command to return output indicating that all the managers and workers aside from the PIT node booted from the LiveCD are `Ready`:
     ```bash
     pit# ssh ncn-m002
     ncn-m002# kubectl get nodes -o wide
