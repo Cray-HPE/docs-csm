@@ -5,6 +5,8 @@
 
    > NOTE: If the command below doesn't return any pod names, proceed to step 2.
 
+   > NOTE: If `cray` is not intialized, please check [Initialize the CLI Configuration](https://stash.us.cray.com/projects/CSM/repos/docs-csm/browse/operations/validate_csm_health.md#uas-uai-init-cli-init)
+
     ```text
     ncn# cray cps deployment list --format json | jq '.[] | [.node,.podname]'
     [
@@ -49,6 +51,15 @@
    ```bash
    ncn# pdsh -w ncn-w00[1-3] 'crictl pull registry.local/cray/cray-nexus-setup:0.3.2'
    ```
+   > NOTE: If you get this error following errors, just ssh to each worker and make sure you have them in STABLE_NCN's *known_hosts*
+   ```
+   ncn-w001: Host key verification failed.
+   pdsh@ncn-m001: ncn-w001: ssh exited with exit code 255
+   ncn-w003: Host key verification failed.
+   pdsh@ncn-m001: ncn-w003: ssh exited with exit code 255
+   ncn-w002: Host key verification failed.
+   pdsh@ncn-m001: ncn-w002: ssh exited with exit code 255
+   ``` 
 
 4. Gather any logs/info from pods in a `Completed` state on the worker node being updated.
 
