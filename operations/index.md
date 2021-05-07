@@ -19,5 +19,5 @@ TODO Find a logical way to order or group these topics.
    * [Replacing NCN hardware](replacing_ncn_hardware.md)
    * [Accessing LiveCD USB Device After Reboot](accessing_livecd_usb_device_after_reboot.md)
    * [Update SLS with UAN Aliases](update_sls_with_uan_aliases.md)
-   * [Configure NTP on NCNs](background/configure_ntp_on_ncns.md)
-   * [Change NCN Image Root Password and SSH Keys](operations/change_ncn_image_root_password_and_ssh_keys.md)
+   * [Configure NTP on NCNs](../background/configure_ntp_on_ncns.md)
+   * [Change NCN Image Root Password and SSH Keys](change_ncn_image_root_password_and_ssh_keys.md)

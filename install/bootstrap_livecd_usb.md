@@ -513,7 +513,7 @@ reboot into the LiveCD.
 Some systems will boot the USB stick automatically if no other OS exists (bare-metal). Otherwise the
 administrator may need to use the BIOS Boot Selection menu to choose the USB stick.
 
-If an administrator is rebooting a node into the LiveCD, vs booting a bare-metal or wiped node, then `efibootmgr` will deterministically set the boot order. See the [set boot order](background/ncn_boot_workflow.md#set-boot-order) page for more information on this topic..
+If an administrator is rebooting a node into the LiveCD, vs booting a bare-metal or wiped node, then `efibootmgr` will deterministically set the boot order. See the [set boot order](../background/ncn_boot_workflow.md#set-boot-order) page for more information on this topic..
 
 > UEFI booting must be enabled to find the USB sticks EFI bootloader.
 

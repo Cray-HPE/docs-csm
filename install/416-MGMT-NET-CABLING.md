@@ -6,7 +6,7 @@
 ## HPE Hardware
 
 ### HPE DL385
-![DL385](img/network/DL385-back.png)
+![DL385](../img/network/DL385-back.png)
 * The OCP Slot is noted (number 7) in the image above.  
   * This is the bottom middle slot to the left of the VGA port.
   * Ports are numbered left-to-right:  the far left port is port 1.
@@ -15,7 +15,7 @@
 
 
 ### HPE DL325
-![DL325](img/network/DL325-back.png)
+![DL325](../img/network/DL325-back.png)
 * The OCP Slot is noted (number 9) in the image above.
   * This is the slot on the bottom left of the node.
   * Ports are numbered left-to-right:  the far left port is port 1.
@@ -36,7 +36,7 @@
 | wn01	 | x3000u04ocp-j1 | x3000u12-j7 | sw-25g01   |
 | wn01	 | x3000u04ocp-j2 | x3000u13-j7	| sw-25g02   |
 
-![HPE_Worker](img/network/HPE_Worker.png)
+![HPE_Worker](../img/network/HPE_Worker.png)
 
 ### NCN Master Cabling
 
@@ -58,7 +58,7 @@ The table below describes the cabling of dual card configurations.  Also read no
 | mn01	 | x3000u01ocp-j1 | x3000u12-j1 | sw-25g01   |
 | mn01	 | x3000u01s1-j1  | x3000u13-j1	| sw-25g02   |
 
-![HPE_Worker](img/network/HPE_Master.png)
+![HPE_Worker](../img/network/HPE_Master.png)
 **NOTE**: Master 1 (ncn-m001) is required to have a site connection for installation and non-CAN system access.  This can have several configurations depending on customer requirements/equipment:
 
 * Dual 10/25Gb card configurations as described in the table above should use PCIe Slot 1, Port 2 as a site connection if the customer supports 10/25Gb.
@@ -83,11 +83,11 @@ The table below describes the cabling of dual card configurations.  Also read no
 | sn01	 | x3000u17ocp-j2| x3000u33-j14	| sw-25g01   |
 | sn01	 | x3000u17ocp-j1| x3000u33-j8	| sw-25g01   |
 The OCP ports go to the First switch and the PCIe ports go to the Second switch.  OCP port 1 and PCIe port 1 form a Bond.  OCP port 2 and PCIe port 2 form a Bond.
-![HPE_Storage](img/network/HPE_Storage.png)
+![HPE_Storage](../img/network/HPE_Storage.png)
 
 For systems that include 4 aggregation switches the cabling will look like the following.
 
-![HPE_Large_Storage](img/network/HPE_Storage_large.png)
+![HPE_Large_Storage](../img/network/HPE_Storage_large.png)
 
 #### SHCD Example with four aggregation switches. 
 |hostname|Source          |Destination   |Destination |
@@ -115,13 +115,13 @@ For systems that include 4 aggregation switches the cabling will look like the f
 | uan01	 | x3000u17ocp-j2| x3000u33-j14	| sw-25g01   |
 | uan01	 | x3000u17ocp-j1| x3000u33-j8	| sw-25g01   |
 
-![HPE_UAN](img/network/HPE_UAN.png)
+![HPE_UAN](../img/network/HPE_UAN.png)
 
 <a name="gigabyte-hardware"></a>
 ## Gigabyte/Intel Hardware
 
 ### NCN Worker Cabling
-![Gigabyte Worker](img/network/gigabyte-worker.png)
+![Gigabyte Worker](../img/network/gigabyte-worker.png)
 
 | Server Port        | Management Network Port        | Speed | Use / Configuration            |
 |--------------------|--------------------------------|-------|--------------------------------|
@@ -135,12 +135,12 @@ For systems that include 4 aggregation switches the cabling will look like the f
 | wn01	 | x3000u07s1-j1 | x3000u24L-j4 | sw-smn02   |
 | wn01	 | x3000u07s1-j2 | x3000u24R-j4	| sw-smn03   |
 
-![Gig_intel_worker](img/network/Gigaintel_Worker.png)
+![Gig_intel_worker](../img/network/Gigaintel_Worker.png)
 
 **NOTE**: Cabling of ncn-w001 has changed in Shasta v1.4.  Please see ncn-m001 note below.
 
 ### NCN Master Cabling
-![Gigabyte Master](img/network/gigabyte-master.png)
+![Gigabyte Master](../img/network/gigabyte-master.png)
 
 | Server Port        | Management Network Port        | Speed | Use / Configuration            |
 |--------------------|--------------------------------|-------|--------------------------------|
@@ -155,7 +155,7 @@ For systems that include 4 aggregation switches the cabling will look like the f
 | mn01	 | x3000u01s1-j1 | x3000u24L-j1 | sw-smn02   |
 | mn01	 | x3000u01s1-j2 | x3000u24R-j1	| sw-smn03   |
 
-![Gig_intel_master](img/network/Gigaintel_Master.png)
+![Gig_intel_master](../img/network/Gigaintel_Master.png)
 
 **NOTE**: Master 1 (ncn-m001) is required to have a site connection for installation and non-CAN system access.  In Shasta versions <=1.3 this connection was on ncn-w001.  This can have several configurations depending on customer requirements/equipment:
 
@@ -163,7 +163,7 @@ For systems that include 4 aggregation switches the cabling will look like the f
 * If the customer requires connectivity greater than 1Gb (or a different connection type), then a new and separate card will be installed on ncn-m001 and that card will provide site connectivity.
 
 ### NCN Storage Cabling
-![Gigabyte Storage](img/network/gigabyte-storage.png)
+![Gigabyte Storage](../img/network/gigabyte-storage.png)
 
 | Server Port        | Management Network Port        | Speed | Use / Configuration            |
 |--------------------|--------------------------------|-------|--------------------------------|
@@ -177,7 +177,7 @@ For systems that include 4 aggregation switches the cabling will look like the f
 | sn01	 | x3000u13s1-j1 | x3000u24L-j7 | sw-smn02   |
 | sn01	 | x3000u13s1-j2 | x3000u24R-j7	| sw-smn03   |
 
-![Gig_intel_storage](img/network/GigaIntel_storage.png)
+![Gig_intel_storage](../img/network/GigaIntel_storage.png)
 
 ### UAN Cabling
 
@@ -194,7 +194,7 @@ For systems that include 4 aggregation switches the cabling will look like the f
 | uan01	 | x3000u27s1-j1 | x3000u24L-j10| sw-smn02   |
 | uan01	 | x3000u27s1-j2 | x3000u24R-j10| sw-smn03   |
 
-![Gig_intel_uan](img/network/Gigaintel_UAN.png)
+![Gig_intel_uan](../img/network/Gigaintel_UAN.png)
 
 NOTE that there are a couple configurations possible for LAN0:
 * Existing Gigabyte systems on Dell and Mellanox network hardware will use the (existing) Dell leaf port.

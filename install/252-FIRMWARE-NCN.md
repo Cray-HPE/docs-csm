@@ -224,21 +224,21 @@ For Gigabyte upgrades a tftp server needs to be referred to.
    1. Login with the default credentials.
    2. On the _Left_, select "Maintenance"
    3. In the new pane, select "Firmware Image Location"
-      ![img_1.png](img/fw-gb-2.png)
+      ![img_1.png](../img/fw-gb-2.png)
    4. Configure the TFTP Server:
       - Server Address: The HMN IP of the PIT node (`ip a show vlan004`)
       - Image Name: The LiveCD Location from the above table, minus the base URL (e.g. `/fw/river/gb/sh-svr-1264up-bios/bios/RBU/image.RBU`)
       - Press **`SAVE`** when done
-         ![img.png](img/fw-gb-4.png)
+         ![img.png](../img/fw-gb-4.png)
    5. Go back to "Maintenance", then select "Firmware Update"
    6. Change the selection to BIOS and then press "Flash"
-      ![img_3.png](img/fw-gb-3.png)
+      ![img_3.png](../img/fw-gb-3.png)
    7. Next. Go back to the "Firmware Image Location" and modify it to fetch the BMC ROM:
-      ![img_4.png](img/fw-gb-2.png)
+      ![img_4.png](../img/fw-gb-2.png)
    8. Press Proceed to Flash; ensure the Update Type is set to BMC
        > **`IMPORTANT`** Make sure to check off "Preserve all configuration" otherwise network connectivity may be lost after reset.
 
-      ![img_5.png](img/fw-gb-1.png)
+      ![img_5.png](../img/fw-gb-1.png)
 
 3. Now repeat this for m001, however for every location `http://pit` is used we need to use `127.0.0.1` instead.
 
@@ -294,12 +294,12 @@ Firmware is located on the LiveCD (versions 1.4.6 or higher).
    4. Select "Remote File" and "Confirm TPM override", and then choose your firmware file:
       - `Remote File URL`: Use the "LiveCD Location" value from the table above.
       - `Confirm TPM Override`: Check this box to confirm the flash.
-        ![fw-ilo-4](img/fw-ilo-4.png)
+        ![fw-ilo-4](../img/fw-ilo-4.png)
    5. Press **`Flash`** and wait for the upload and flash to complete. iLO may reboot after flash.
    6. Now grab the iLO5 Firmware the same way:
       1. On the _Right_, select "Upload Firmware"
       2. Select "Remote File" and "Confirm TPM override", and then choose your firmware file:
-         ![fw-ilo-5](img/fw-ilo-5.png)
+         ![fw-ilo-5](../img/fw-ilo-5.png)
       3. Press **`Flash`** and wait for the upload and flash to complete. iLO may reboot after flash.
    7. Cold boot the node, or momentarily press the button (GUI button) to power it on.
 
@@ -318,7 +318,7 @@ All NCNs are now updated via GUI.
 <a name="redfish"></a>
 #### Redfish
 
-![redfish.png](img/3rd/redfish.png)
+![redfish.png](../img/3rd/redfish.png)
 
 > **Not Ready** This LiveCD bash script is broken, and will be fixed. It will allow remote BIOS and firmware updates and checkout from the PIT node.
 

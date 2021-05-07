@@ -228,7 +228,7 @@ VRF Name default:
                                       c        10.252.0.6        vlan2            bgp        200/0
                                       c        10.252.0.7        vlan2            bgp        200/0
 ```
-If these routes are missing please see [Update BGP Neighbors](../operations/install/pxe_boot_troubleshooting.md).
+If these routes are missing please see [Update BGP Neighbors](../operations/update-bgp-neighbors.md).
 
 # Next steps
 

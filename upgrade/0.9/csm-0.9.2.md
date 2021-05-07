@@ -78,7 +78,7 @@ section sets the expected environment variables to the appropriate values.
 ## Run Validation Checks (Pre-Upgrade)
 
 It is important to first verify a healthy starting state. To do this, run the
-[CSM validation checks](../../008-CSM-VALIDATION.md). If any problems are
+[CSM validation checks](../../operations/validate_csm_health.md). If any problems are
 found, correct them and verify the appropriate validation checks before
 proceeding.
 
@@ -274,8 +274,8 @@ Architecture").
 Run the following validation checks to ensure that everything is still working
 properly after the upgrade:
 
-1. [Platform health checks](../../008-CSM-VALIDATION.md#platform-health-checks)
-2. [Network health checks](../../008-CSM-VALIDATION.md#network-health-checks)
+1. [Platform health checks](../../operations/validate_csm_health.md#platform-health-checks)
+2. [Network health checks](../../operations/validate_csm_health.md#network-health-checks)
 
 Other health checks may be run as desired.
 

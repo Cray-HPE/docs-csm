@@ -114,7 +114,7 @@ Example entry from the `hmn_connections.json` file. The source name is the `Sour
 
     By default, the `csi config init` command does not set the `ExtraProperties.Alias` field for application nodes in the SLS input file. 
 
-    Instead of manually adding the application node alias as described after the system is installed [in this procedure](306-SLS-ADD-UAN-ALIAS.md) the application node aliases can be included when the SLS Input file is built.
+    Instead of manually adding the application node alias as described after the system is installed [in this procedure](../operations/update_sls_with_uan_aliases.md) the application node aliases can be included when the SLS Input file is built.
 
     To add additional application node aliases, add a new mapping under the `aliases` field. Where the key is the xname of the application node, and the value is an array of aliases (strings) which allows for one or more aliases to be specified for an application node. 
     ```yaml

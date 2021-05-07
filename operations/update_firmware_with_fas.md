@@ -32,7 +32,7 @@ TODO 257-FIRMWARE-ACTION-SERVICE-CRAY-WINDOM-COMPUTE-NODE-BIOS-WORKAROUND.md
 2. 009 has been applied and the NCNs are locked.
 3. Identify the type and manufacturers of hardware in your system.  If you don't have Gigabyte nodes, don't update them!
 
-**WARNING:** Non-compute nodes (NCNs) should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS. See [`009-NCN-LOCKING.md`](009-NCN-LOCKING.md) for more information. Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
+**WARNING:** Non-compute nodes (NCNs) should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS. See [`lock_and_unlock_nodes.md`](lock_and_unlock_nodes.md) for more information. Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
 
 
 Using the process outlined in [`255-FIRMWARE-ACTION-SERVICE-FAS.md`](255-FIRMWARE-ACTION-SERVICE-FAS.md) follow the process to update the system.  We recommend that you use the 'recipes' listed in [`256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md`](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md) to update each supported type.

@@ -239,4 +239,4 @@ You need to adjust the node images so that they also boot in the local timezone.
     ```bash
     pit# set-sqfs-links.sh
     ```
-1. Make a note that when performing the [csi handoff of NCN boot artifacts in Redploy PIT Node](install/redeploy_pit_node.md#ncn-boot-artifacts-hand-off), you must be sure to specify these new images. Otherwise ncn-m001 will use the default timezone when it boots, and subsequent reboots of the other NCNs will also lose the customized timezone changes.
+1. Make a note that when performing the [csi handoff of NCN boot artifacts in Redploy PIT Node](../install/redeploy_pit_node.md#ncn-boot-artifacts-hand-off), you must be sure to specify these new images. Otherwise ncn-m001 will use the default timezone when it boots, and subsequent reboots of the other NCNs will also lose the customized timezone changes.

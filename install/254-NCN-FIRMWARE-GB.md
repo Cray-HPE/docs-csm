@@ -11,10 +11,10 @@ A patched firmware release is expected to be available for a future release of S
 3. Move the Clear CMOS Jumper to 1-2.
 
 ### Motherboard MZ62-HD0-00/-YF for H262 chassis
-![mz62-hd0-00/-yf for h262](img/cmos1.png)
+![mz62-hd0-00/-yf for h262](../img/cmos1.png)
 
 ### Motherboard MZ32-AR0-00/-YF for R272 chassis
-![mz32-ar0-00/-yf for r272](img/cmos2.png)
+![mz32-ar0-00/-yf for r272](../img/cmos2.png)
 
 ### Motherboard MZ92-FS0-00/-YF for R282 chassis
-![mz92-fs0-00/-yf for r282](img/cmos3.png)
+![mz92-fs0-00/-yf for r282](../img/cmos3.png)

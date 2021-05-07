@@ -60,4 +60,4 @@ TODO
 <a name="cloud-init_basecamp_configuration"></a>
 ### cloud-init Basecamp Configuration
 
-   * [cloud-init Basecamp Configuration](cloud-init_basecamp_configuration.md)
+   * [cloud-init Basecamp Configuration](../operations/cloud-init_basecamp_configuration.md)

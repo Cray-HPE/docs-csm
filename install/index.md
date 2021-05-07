@@ -21,7 +21,7 @@ product streams for the HPE Cray EX system can be installed.
    1. [Validate CSM Health Before PIT Node Redeploy](#validate_csm_health_before_pit_redeploy)
    1. [Redeploy PIT Node](#redeploy_pit_node)
    1. [Configure Administrative Access](#configure_administrative_access)
-   1. [Validate CSM Health](#validate_csm_health.md)
+   1. [Validate CSM Health](#validate_csm_health)
    1. [Update Firmware with FAS](#update_firmware_with_fas)
    1. [Next Topic](#next_topic)
    1. [Troubleshooting Installation Problems](#troubleshooting_installation)
@@ -43,7 +43,7 @@ sections, but there is also a general troubleshooting topic.
    is encapsulated in the SHCD (Shasta Cabling Diagram), which is a spreadhsheet prepared by HPE Cray Manufacturing
    to assemble the components of the system and connect cables having appropriate cable labels.
 
-   See [Prepare Configuration Payload](payload.md)
+   See [Prepare Configuration Payload](prepare_configuration_payload.md)
 
    <a name="bootstrap_pit_node"></a>
 

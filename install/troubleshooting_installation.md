@@ -42,14 +42,14 @@ for additional information on system hardware, troubleshooting, and administrati
    If a reinstall of the PIT node is needed, the data from the PIT node can be saved to the LiveCD USB and
    the LiveCD USB can be rebuilt.
 
-   See [PXE Boot Troubleshooting](#pxe_boot_troubleshooting.md)
+   See [PXE Boot Troubleshooting](pxe_boot_troubleshooting.md)
 
    <a name="wipe_ncn_disks_for_reinstallation"></a>
 
    1. Wipe NCN Disks for Reinstallation
 
    If it has been determined an NCN did not properly configure its storage while trying to
-   [Deploy Management Nodes](#deploy_management_nodes.md) during the install, then the
+   [Deploy Management Nodes](deploy_management_nodes.md) during the install, then the
    storage should be wiped so the node can be redeployed.
 
    See [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md)

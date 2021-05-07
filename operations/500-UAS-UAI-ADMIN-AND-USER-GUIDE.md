@@ -1392,7 +1392,7 @@ In the legacy mode, users create and manage their own UAIs through the Shasta CL
 
 The following diagram illustrates a system running with UAIs created in the legacy mode by four users, each of whom has created at least one end-user UAI.  Notice that the user Pat has created two end-user UAIs:
 
-![UAS Legacy Mode](img/uas_legacy_mode.svg)
+![UAS Legacy Mode](../img/uas_legacy_mode.svg)
 
 In the simplest UAS configuration, there is some number of UAI images available for use in legacy mode and there is a set of volumes defined.  In this configuration, when a UAI is created, the user may specify the UAI image to use as an option when creating the UAI, or may allow a default UAI image, if one is assigned, to be used.  Every volume defined at the time the UAI is created will be mounted unconditionally in every newly created UAI if this approach is used.  This can lead to problems with [conflicting volume mount points](#main-trouble-dupmounts) and [unresolvable volumes](#main-trouble-stuckuais) in some configurations of UAS.  Unless UAI classes are used to make UAIs, care must be taken to ensure all volumes have unique mount-path settings and are accessible in the `user` Kubernetes namespace.
 
@@ -1732,7 +1732,7 @@ username = "vers"
 
 A UAI broker is a special kind of UAI whose job is not to host users directly but to field attempts to reach a UAI, locate or create a UAI for the user making the attempt, and then pass the connection on to the correct UAI.  Multiple UAI brokers can be created, each serving a UAI of a different class, making it possible to set up UAIs for varying workflows and environments as needed.  The following illustrates a system using the UAI broker mode of UAI management:
 
-![UAS Broker Mode](img/uas_broker_mode.svg)
+![UAS Broker Mode](../img/uas_broker_mode.svg)
 
 Notice that, unlike in the legacy model, in this model users log into their UAIs through the UAI broker.  After that, each user is assigned an end-user UAI by the broker and the SSH session is forwarded to the end-user UAI.  This is seamless from the user's perspective, as the SSH session is carried through the UAI broker and into the end-user UAI.
 

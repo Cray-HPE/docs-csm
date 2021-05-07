@@ -42,7 +42,7 @@ The chapters with topics which need to be done as part of an ordered procedure a
    1. [Install CSM Services](install/install_csm_services.md)
    1. [Validate CSM Health Before PIT Node Redeploy](install/index.md#validate_csm_health_before_pit_redeploy)
    1. [Redeploy PIT Node](install/redeploy_pit_node.md)
-   1. [Configure Administrative Access](configure_administrative_access.md)
+   1. [Configure Administrative Access](install/configure_administrative_access.md)
    1. [Validate CSM Health](operations/validate_csm_health.md)
    1. [Update Firmware with FAS](operations/update_firmware_with_fas.md)
    1. [Next Topic](install/next_topic)
@@ -91,7 +91,7 @@ The chapters with topics which need to be done as part of an ordered procedure a
    * [NCN Mounts and File Systems](background/ncn_mounts_and_file_systems.md)
    * [NCN Packages](background/ncn_packages.md)
    * [NCN Operating System Releases](background/ncn_operating_system_releases.md)
-   * [cloud-init Basecamp Configuration](background/cloud-init_basecamp_configuration.md)
+   * [cloud-init Basecamp Configuration](operations/cloud-init_basecamp_configuration.md)
 
 
 1. [Glossary](glossary.md)

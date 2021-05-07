@@ -130,7 +130,7 @@ with system-specific customizations.
     ```
     
 1.  To customize the PKI Certificate Authority (CA) used by the platform, see
-    [Customizing the Platform CA](055-CERTIFICATE-AUTHORITY.md). 
+    [Customizing the Platform CA](../background/certificate_authority.md). 
 
     > **`IMPORTANT`** The CA may not be modified after install.
 
@@ -582,7 +582,7 @@ Using `csi` on a generated site-init directory...
    pit# systemctl restart basecamp
    ```
 
-1. Unmount the shim from earlier if one was used (for users of the [RemoteISO](003-CSM-LIVECD.md)):
+1. Unmount the shim from earlier if one was used (for users of the [RemoteISO](bootstrap_livecd_usb.md)):
    ```bash
    pit# umount /mnt/pitdata
    ```
