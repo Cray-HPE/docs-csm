@@ -43,8 +43,31 @@ TO DO:  Determine if the ordering if the below items matters and re-order accord
 
 #### Import Gitea-vcs Config Data
 
-<Enter procedure here and if a script is included it should be placed [here] (data_export/<scriptname>) >
+Importing VCS data involves cloning from the created bundles and pushing the data to VCS.  This process assumes that clean versions of all repos exist on the new system.  If the repos do not yet exist they should be created before restoring from the bundles.  If the repos exist but contain data the should be preserved, see the Git documentation for more information on restoring parts of a bundle: [Git Tools - Bundling](https://git-scm.com/book/en/v2/Git-Tools-Bundling).  The process outlined below will overwrite all data in the new repos with the exported data.
 
+### Manual Procedure
+
+For each repo that needs to be restored, clone the bundle.
+
+   ```bash
+   # git clone --mirror config-management.bundle
+   ```
+
+Switch to the directory created by the clone update the remote url.
+
+   ```bash
+   # git remote set-url origin https://api-gw-service-nmn.local/vcs/crayvcs/config-management.git
+   ```
+
+Lastly, push the content of the repo back to VCS.
+
+   ```bash
+   # git push
+   ```
+
+### Automated Procedure
+
+A script that will automatically restores VCS from the bundles can be found [here](data_import/import_vcs.sh).  This should be run from a directory containing the  `vcs-content` directory.  Before running, edit the script to include the VCS password.
 
 #### Import IMS Recipe & Image Data
 

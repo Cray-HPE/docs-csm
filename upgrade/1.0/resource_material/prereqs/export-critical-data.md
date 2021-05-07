@@ -37,8 +37,27 @@ See Steps 1- 19 in the `Collect Data From Healthy Shasta System for EX Installat
 
 ## Export Critical Gitea-vcs Config Data
 
-<Enter procedure here and if a script is included it should be placed [here](data_export/<scriptname>) >
+VCS data is exported by cloning all repos and saving them as bundles.  For information on creating bundles, see [Git Tools - Bundling](https://git-scm.com/book/en/v2/Git-Tools-Bundling)
 
+### Manual Procedure
+
+For each repo that needs to be exported, clone the repo.  Using the `--mirror` flag will allow you to bundle all branches simultaneously.
+
+   ```bash
+   # git clone --mirror https://api-gw-service-nmn.local/vcs/cray/config-management.git
+   ```
+
+Switch to the directory created by the clone and then run the `git bundle` command.
+
+   ```bash
+   # git bundle create config-management.bundle --all
+   ```
+
+The resulting bundle file can then be saved off to a safe location for later import.
+
+### Automated Procedure
+
+A script that will automatically create the bundles for all repos and branches in VCS can be found [here](data_export/export_vcs.sh).  This will create a `vcs-content` directory that can be moved to the export location.  Some adjustments may be needed if organizations other than `cray` exist in vcs or if any of the repositories have been set to private.
 
 ## Export IMS Recipe & Image Data
 
