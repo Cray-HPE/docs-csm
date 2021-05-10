@@ -17,7 +17,7 @@ These steps should be taken to prepare each storage node being upgraded.
      \"/srv/cray/scripts/metal/set-host-records.sh\",\
      \"/srv/cray/scripts/metal/set-dhcp-to-static.sh\",\
      \"/srv/cray/scripts/metal/set-dns-config.sh\",\
-     \"/srv/cray/scripts/metal/set-ntp-config.sh\",\
+     \"/srv/cray/scripts/metal/ntp-upgrade-config.sh\",\
      \"/srv/cray/scripts/metal/set-bmc-bbs.sh\",\
      \"/srv/cray/scripts/metal/disable-cloud-init.sh\",\
      \"/srv/cray/scripts/common/update_ca_certs.py\"\
