@@ -58,6 +58,7 @@ Obtain and attach the LiveCD `.iso` file to the BMC. Depending on the server ven
 1. Obtain the ISO
    - **`EXTERNAL`** Obtain the CSM TAR ball from CrayPort
    - **`INTERNAL`** latest nightly ISO: http://car.dev.cray.com/artifactory/csm/MTL/sle15_sp2_ncn/x86_64/dev/master/metal-team/cray-pre-install-toolkit-latest.iso
+   - **`INTERNAL ADVISORY`** The latest ISO in Artifactory can change, it is advised to use the FQDN of the ISO name. Every `latest` ISO has a matching ISO with the real buildID in the name, this ISO will have the same File-Time meta as the latest ISO.
 
 1. See the respective guide below to attach an ISO:
 
