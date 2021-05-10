@@ -61,7 +61,7 @@ Preparation of the LiveCD on a USB stick can be done from a Linux system such as
 * [Boot the LiveCD](064-LIVECD-USB-BOOT.md#boot-the-livecd)
   * [First Login](064-LIVECD-USB-BOOT.md#first-login)
 
-##### [CSM Metal Install](../install/deploy_management_nodes.md)
+##### [Deploy Management Nodes](../install/deploy_management_nodes.md)
 
 Now that ncn-m001 has been booted from the LiveCD, the other management NCNs will be deployed to create the management Kubernetes cluster.
 
@@ -102,7 +102,7 @@ Install all of the CSM applications and services into the management Kubernetes 
   * [Error lookup registry.local: no such host](../install/install_csm_services.md#error-registry-local-no-such-host)
 
 <a name="csm-install-validation-and-health-checks"></a> 
-###### [CSM Install Validation and Health Checks](../operations/validate_csm_health.md)
+###### [Validate CSM Health](../operations/validate_csm_health.md)
 
 The CSM installation validation and health checks can be run after install.sh finishes in this installation process, but can also be run at other times later.
 
@@ -158,13 +158,13 @@ The ncn-m001 node needs to reboot from the LiveCD to normal operation as a Kuber
 * [Reboot](../install/redeploy_pit_node.md#reboot)
 * [Next Step](../install/redeploy_pit_node.md#next-step)
 
-##### [CSM Validation process](../operations/validate_csm_health.md)
+##### [Validate CSM Health](../operations/validate_csm_health.md)
 
 [*Double-back...*](#csm-install-validation-and-health-checks)
 
 The CSM installation validation and health checks can be run again now that ncn-m001 has been rebooted to join the Kubernetes cluster. 
 
-##### [NCN/Management Node Locking](../operations/lock_and_unlock_nodes.md) 
+##### [Lock And Unlock Nodes](../operations/lock_and_unlock_nodes.md) 
 
 The NCNs should be locked to prevent accidental firmware upgrades with FAS or power down operations and reset operations with CAPMC.
 
