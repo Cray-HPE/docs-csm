@@ -6,7 +6,6 @@ This document is intended to guide an administrator through the upgrade process 
 
 > **NOTE**: This document is a work in progress, and these items are outstanding:
 > 1. PowerDNS -- Need to add content
-> 1. Preflight checks -- these haven't yet been implmented, and when they are they should be added to this flow where appropriate.
 > 1. Additional automation -- hopefully we'll add some more scripting as we refine this process.  There's alot of copy/pasting which will frustrate adminstrators, especially on larger systems.
 
 ### Terminology
@@ -32,7 +31,19 @@ For protection against unexpected upgrade issues, follow the recommended steps t
 
 ### Preflight Checks
 
-CSI or other tool needs the most love here. At a minimum we want to ensure general cluster health but we also need NCN specific checks that are run right before rebooting. Should this be part of a fully automated procedure? How do we determine compability between two image versions and whether we should "allow" that setting?
+Before starting the upgrade, ensure the system is currently in a healthy state.  Run the following goss tests on the initial stable node (typically `ncn-m001`) where the latest version of CSM has been installed (in the previous step):
+
+1. Update the version of the `csm-testing` rpm to run updated preflight tests:
+
+   ```bash
+   ncn-m001# rpm -Uvh $(find $CSM_RELEASE -name \*csm-testing\* | sort | tail -1)
+   ```
+
+2. Run the preflight tests -- ensure you address any failures in these tests before proceeding with the upgrade:
+
+   ```bash
+    ncn-m001# goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-preflight-tests.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
+   ```
 
 ### Upgrade Stages
 

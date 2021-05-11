@@ -1,14 +1,3 @@
-<h2 id="pre-upgrade-checks">Pre-Upgrade checks</h2>
-
-Execute the following tests for the type of node being upgraded before proceeding -- ensuring the system stays healthy between each ncn being upgraded.
-
-1. Master node specific goss instructions
-   **TBD**: CASMINST-1962
-1. Worker node specific goss instructions
-   **TBD**: CASMINST-1963
-1. Storage node specific goss instructions
-   **TBD**: CASMINST-1964
-
 <h2 id="prerequisite-steps">Prerequisite Steps</h2>
 
 These steps should be taken regardless of the type of NCN you will be upgrading.

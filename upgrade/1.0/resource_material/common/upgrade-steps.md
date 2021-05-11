@@ -90,41 +90,39 @@ These steps will be run on the stable NCN of choice regardless of NCN type to be
        ipmitool -I lanplus -U root -P initial0 -H $UPGRADE_NCN-mgmt chassis power on
        ```
 
-5. If the node is a ***MASTER*** or  ***WORKER*** node, verify the new node joins the Kubernetes cluster. If this node is also a  ***MASTER*** node, ensure its status switches from `unstarted` to `started`.  This should occur within 10 or 20 minutes.
+5. If the node is a ***WORKER***, confirm BGP is healthy by following the steps in the 'Check BGP Status and Reset Sessions' section in the admin guide for steps to verify and fix BGP if needed.
 
-    ```text
-    e76d690e3446c64c, started, ncn-m001, https://10.252.1.4:2380, https://10.252.1.4:2379,https://127.0.0.1:2379, false
-    e7efb5c83103594a, started, ncn-m002, https://10.252.1.5:2380, https://10.252.1.5:2379,https://127.0.0.1:2379, false
-    ea1ce29e4bf2b505, started, ncn-m003, https://10.252.1.6:2380, https://10.252.1.6:2379,https://127.0.0.1:2379, false
-    
-    NAME       STATUS   ROLES    AGE    VERSION
-    ncn-m001   Ready    master   3d3h   v1.19.8
-    ncn-m002   Ready    master   3d1h   v1.19.8
-    ncn-m003   Ready    master   11m    v1.19.8
-    ncn-w001   Ready    <none>   5d5h   v1.18.6
-    ncn-w002   Ready    <none>   5d5h   v1.18.6
-    ncn-w003   Ready    <none>   5d5h   v1.18.6
-    ```
-
-6. If the node is a ***MASTER*** or  ***WORKER*** node, confirm pods begin to schedule and reach a `Running` state. After several minutes of the node joining the cluster, you should see pods in a `Running` state for the node.
-
-   ```bash
-   ncn# kubectl get po -A -o wide | grep $UPGRADE_NCN
-   ```
-
-7. If the node is a ***WORKER***, confirm BGP is healthy by following the steps in the 'Check BGP Status and Reset Sessions' section in the admin guide for steps to verify and fix BGP if needed.
-
-8. Set the disk wipe flag back to not wipe the disk in the event that the node reboots.
+6. Set the disk wipe flag back to not wipe the disk in the event that the node reboots.
 
    ```bash
    ncn# csi handoff bss-update-param --set metal.no-wipe=1 --limit $UPGRADE_XNAME
    ```
 
-9. If the node just upgraded was `ncn-m001`, you'll want to copy the `/etc/sysconfig/network/ifcfg-lan0` and  `/etc/sysconfig/network/ifroute-lan` files back into place, and run the following command.
+7. If the node just upgraded was `ncn-m001`, you'll want to copy the `/etc/sysconfig/network/ifcfg-lan0` and  `/etc/sysconfig/network/ifroute-lan` files back into place, and run the following command.
 
    ```bash
    ncn# wicked ifreload lan0
    ```
+
+8. Finally, login to the newly rebuild node, and run the appropriate set of goss tests to confirm the node is in a healthy state before proceeding to the next node to upgrade.  If any of the tests fail, inspect the output from the goss command and address any failures.
+
+   - ***MASTER***:
+
+     ```bash
+     ncn# goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-master.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
+     ```
+
+   - ***WORKER***:
+
+     ```bash
+     ncn# goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-worker.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
+     ```
+
+   - ***STORAGE***:
+
+     ```bash
+     ncn# goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-storage.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
+     ```
 
 Proceed to either:
 - [Back to Main Page](../../README.md) if done upgrading either master or worker nodes
