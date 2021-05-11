@@ -350,7 +350,7 @@ The configuration workflow described here is intended to help understand the exp
 
     **`NOTE`**: Watch the storage node consoles carefully for error messages. If any are seen, consult [Ceph-CSI Troubleshooting](ceph_csi_troubleshooting.md)
 
-    **`NOTE`**: If the nodes have pxe boot issues (e.g. getting pxe errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
+    **`NOTE`**: If the nodes have PXE boot issues (e.g. getting PXE errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
 
     **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to linux with no hostname) see the CSM workarounds for fixes around mutual symptoms.
 
@@ -388,9 +388,9 @@ The configuration workflow described here is intended to help understand the exp
     pit# conman -j ncn-m002-mgmt
     ```
 
-    **`NOTE`**: If the nodes have pxe boot issues (e.g. getting pxe errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
+    **`NOTE`**: If the nodes have PXE boot issues (e.g. getting PXE errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
 
-    **`NOTE`**: If one of the manager nodes seems hung waiting for the storage nodes to create a secret, check the storage node consoles for error messages. If any are found, consult [066-CEPH-CSI](066-CEPH-CSI.md)
+    **`NOTE`**: If one of the manager nodes seems hung waiting for the storage nodes to create a secret, check the storage node consoles for error messages. If any are found, consult [CEPH CSI Troubleshooting](ceph_csi_troubleshooting.md)
 
     **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to linux with no hostname) see the CSM workarounds for fixes around mutual symptoms.
     > ```bash
@@ -553,7 +553,7 @@ Observe the output of the checks and note any failures, then remediate them.
    ```bash
    ncn# weave --local status connections  | grep failed
    ```
-   If you see messages like **'IP allocation was seeded by different peers'** then weave looks to have split-brained.  At this point it is necessary to wipe the ncns and start the pxe boot again:
+   If you see messages like **'IP allocation was seeded by different peers'** then weave looks to have split-brained.  At this point it is necessary to wipe the ncns and start the PXE boot again:
 
    1. Wipe the ncns using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md).
    1. Return to the 'Boot the **Storage Nodes**' step of [Start Deployment](#start-deployment) section above.

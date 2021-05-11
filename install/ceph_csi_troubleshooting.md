@@ -1,74 +1,94 @@
-#Ceph CSI Troubleshooting
+# Ceph CSI Troubleshooting
 
-TODO Fix title
-TODO Add about this task
-### About this task
+If there has been a failure to initialize all ceph csi components on ncn-s001, then the storage node
+cloud-init may need to be rerun.
 
-#### Role
-System installer
+### Topics:
+      * [Verify Ceph CSI](#verify_ceph_csi)
+      * [Rerun Storage Node cloud-init](rerun_storage_node_cloud-init)
 
-#### Objective
+## Details
 
-#### Limitations
-None.
-
-## CEPH CSI Verification
+<a name="verify_ceph_csi"></a>
+## Verify Ceph CSI
 
 Verify that the ceph-csi requirements are in place
 
-### Verify all post ceph install tasks have run
+   1. Log in to ncn-s00 and run this command
 
-Log in to ncn-s001 and check /etc/cray/ceph for completed task files.
-```bash
-ncn-s001# ls /etc/cray/ceph/
-ceph_k8s_initialized  csi_initialized  installed  kubernetes_nodes.txt  tuned
-```
+   ```bash
+   ncn-s001# ceph -s
+   ```
 
-### Check to see if k8s ceph-csi prerequisites have been created
+   If it returns a connection error then assume ceph is not installed. See [Rerun Storage Node cloud-init](#rerun_storage_node_cloud-init).
 
-You can run this from any storage, manager, or worker node.
-```bash
-pit# kubectl get cm
-NAME               DATA   AGE
-ceph-csi-config    1      3h50m
-cephfs-csi-sc      1      3h50m
-kube-csi-sc        1      3h50m
-sma-csi-sc         1      3h50m
-sts-rados-config   1      4h
+   1. Verify all post ceph install tasks have run
 
-pit# kubectl get secrets | grep csi
-csi-cephfs-secret             Opaque                                4      3h51m
-csi-kube-secret               Opaque                                2      3h51m
-csi-sma-secret                Opaque                                2      3h51m
-```
+   Log in to ncn-s001 and check /etc/cray/ceph for completed task files.
 
-Check your results against the above examples.
+   ```bash
+   ncn-s001# ls /etc/cray/ceph/
+   ceph_k8s_initialized  csi_initialized  installed  kubernetes_nodes.txt  tuned
+   ```
 
-### Troubleshooting
+   Check your results against this example.
 
-If you are missing any components then you will want to re-run the storage node cloud-init script
-   1. Log in to ncn-s001
-   2. Run the following
-    ```bash
-    ncn-s001# ceph -s
-    ```
-       * If it returns a connection error then assume ceph is not installed and you can re-run the cloud-init script
-   3. Run the following:
+   If any components are missing, See [Rerun Storage Node cloud-init](#rerun_storage_node_cloud-init).
+
+   1. Check to see if k8s ceph-csi prerequisites have been created
+
+   These commands can be run this from any storage, manager, or worker node.
+
+   ```bash
+   ncn# kubectl get cm
+   NAME               DATA   AGE
+   ceph-csi-config    1      3h50m
+   cephfs-csi-sc      1      3h50m
+   kube-csi-sc        1      3h50m
+   sma-csi-sc         1      3h50m
+   sts-rados-config   1      4h
+   
+   ncn# kubectl get secrets | grep csi
+   csi-cephfs-secret             Opaque                                4      3h51m
+   csi-kube-secret               Opaque                                2      3h51m
+   csi-sma-secret                Opaque                                2      3h51m
+   ```
+
+   Check your results against the above examples.
+
+   If any components are missing, see [Rerun Storage Node cloud-init](#rerun_storage_node_cloud-init).
+
+<a name="rerun_storage_node_cloud-init"></a>
+## Rerun Storage Node cloud-init
+
+   This procedure will restart the storage node cloud-init process to prepare ceph for use by the utility storage nodes.
+
+   1. Run the following:
+
     ```bash
     ncn-s001# ls /etc/cray/ceph
     ```
-       * If any files are there they will represent completed stages
-       * If you have a running cluster you will want to edit `/srv/cray/scripts/common/storage-ceph-cloudinit.sh` on ncn-s001 and comment out this section:
-            ```bash
-            #if [ -f "$ceph_installed_file" ]; then
-            #  echo "This ceph cluster has been initialized"
-            #else
-            #  echo "Installing ceph"
-            #  init
-            #  mark_initialized $ceph_installed_file
-            #fi
-            ```
-   4. Run the `storage-ceph-cloudinit.sh` script:
+    If any files are there they will represent completed stages.
+
+    1. If you have a running cluster you will want to edit 'storage-ceph-cloudinit.sh` on ncn-s001
+
+       ```ncn-s001# vi /srv/cray/scripts/common/storage-ceph-cloudinit.sh
+       ```
+
+       Comment out this section:
+
+       ```bash
+       #if [ -f "$ceph_installed_file" ]; then
+       #  echo "This ceph cluster has been initialized"
+       #else
+       #  echo "Installing ceph"
+       #  init
+       #  mark_initialized $ceph_installed_file
+       #fi
+       ```
+
+   1. Run the `storage-ceph-cloudinit.sh` script:
+
        ```bash
        ncn-s001# /srv/cray/scripts/common/storage-ceph-cloudinit.sh
        Configuring node auditing software
@@ -78,6 +98,7 @@ If you are missing any components then you will want to re-run the storage node 
        This ceph radosgw config and initial k8s integration already complete
        ceph-csi configuration has been already been completed
        ```
-        * If your output is like above then that means that all the steps ran.
-            - You can also locate file in /etc/cray/ceph that are create as each step completes
-        * If the script failed out then you will have more output for the tasks that are being run. 
+
+       * If your output is like above then that means that all the steps ran.
+           - You can also locate file in /etc/cray/ceph that are created as each step completes.
+       * If the script failed out then you will have more output for the tasks that are being run. 

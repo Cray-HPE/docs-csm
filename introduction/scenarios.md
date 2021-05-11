@@ -17,7 +17,7 @@ There are multiple scenarios for installing CSM software.
   There is no direct migration from Shasta v1.3.x releases to Shasta v1.5.  However there is a supported path.
   * Migration from v1.3.x to v1.4.0
     The migration from v1.3.x to v1.4.0 is described in the Shasta v1.4 documentation
-    See HPE Cray EX System Installation and Configuration Guide 1.4 S-8000.
+    Refer to "1.3 to 1.4 Install Prerequisites" and "Collect Data From Healthy Shasta 1.3 System for EX 1.4 Installation" in the _HPE Cray EX System Installation and Configuration Guide 1.4 S-8000_.
   * Upgrade v1.4.x to v1.5
     An upgrade from the previous release (Shasta v1.4.x) is supported with this release.
     [Upgrade from 1.4.x to v1.5](../upgrade/index.md)
@@ -29,23 +29,23 @@ TODO Revise this section
 
 The installation of CSM software has three scenarios which are described in this documentation with many supporting procedures.  Here is an overview of the workflow through the documentation to support these scenarios.
 
-[CSM Install] (002-CSM-INSTALL.md)
+[Prepare Configuration Payload](../install/prepare_configuration_payload.md)
 
 Installation prerequisites
 
-Satisfy the prerequisites for one of these three installation scenarios 
+Satisfy the prerequisites for one of the installation scenarios 
 
-* First time installation of Shasta software (a bare-metal install).  This describes now to setup the LiveCD to be able to collect the configuration payload, configure network switches, update firmware for switches and nodes to required versions.  Then you move to Starting an Installation.
-* Reinstalling Shasta v1.4 software on a system which previously had Shasta v1.4 installed.  These steps here are scaling down DHCP, wiping disks on the NCNs (except ncn-m001), power off NCNs, change management node BMCs to be DHCP not Static, and powering off the LiveCD or ncn-m001 (unless it will be used to prepare the LiveCD).  Then you move to Starting an Installation.
+* First time installation of Shasta software.  This describes now to setup the LiveCD to be able to collect the configuration payload, configure network switches, update firmware for switches and nodes to required versions.  Then you move to Starting an Installation.
+* Reinstalling Shasta v1.5 software on a system which previously had Shasta v1.5 installed.  These steps here are scaling down DHCP, wiping disks on the NCNs (except ncn-m001), power off NCNs, change management node BMCs to be DHCP not Static, and powering off the LiveCD or ncn-m001 (unless it will be used to prepare the LiveCD).  Then you move to Starting an Installation.
 
 Once the installation prerequisites have been addressed, the installation is very similar for all of them.  There are a few places where a comment will be made for how one of the scenarios needs to do something different.
 
 Starting an installation
 
-The three separate scenarios (above) continue the same way at this point, with preparation and then booting from the LiveCD.  
+The scenarios (above) continue the same way at this point, with preparation and then booting from the LiveCD.  
 
-* This version of the documentation supports booting from a [CSM USB LiveCD] (../install/bootstrap_livecd_remote_iso.md).
-* A future version of this documentation will support booting from a virtual ISO method [CSM Remote LiveCD] (004-CSM-REMOTE-LIVECD.md). 
+* This version of the documentation supports [Bootstrap LiveCD Remote ISO](../install/bootstrap_livecd_remote_iso.md).
+  or [Bootstrap LiveCD USB](../install/bootstrap_livecd_usb.md).
 
 ##### [CSM USB LiveCD - Creation and Configuration](064-LIVECD-USB-BOOT.md)
 
@@ -152,11 +152,14 @@ The CSM installation validation and health checks can be run after install.sh fi
 The ncn-m001 node needs to reboot from the LiveCD to normal operation as a Kubernetes master node.
 
 * [Required Services](../install/redeploy_pit_node.md#required-services)
-* [Notice of Danger](../install/redeploy_pit_node.md#danger)
+* [Notice of Danger](../install/redeploy_pit_node.md#notice-of-danger)
+* [LiveCD Pre-Reboot Workarounds](../install/redeploy_pit_node.md#livecd-pre-reboot-workarounds)
 * [Hand-Off](../install/redeploy_pit_node.md#hand-off)
   * [Start Hand-Off](../install/redeploy_pit_node.md#start-hand-off)
 * [Reboot](../install/redeploy_pit_node.md#reboot)
-* [Next Step](../install/redeploy_pit_node.md#next-step)
+* [Accessing USB Partitions After Reboot](../install/redeploy_pit_node.md#accessing-usb-partitions-after-reboot)
+  * [Accessing CSI from a USB or RemoteISO](../install/redeploy_pit_node.md#accessing-csi-from-a-usb-or-remoteiso)
+* [Enable NCN Disk Wiping Safeguard](../install/redeploy_pit_node.md#enable-ncn-disk-wiping-safeguard)
 
 ##### [Validate CSM Health](../operations/validate_csm_health.md)
 
@@ -164,7 +167,7 @@ The ncn-m001 node needs to reboot from the LiveCD to normal operation as a Kuber
 
 The CSM installation validation and health checks can be run again now that ncn-m001 has been rebooted to join the Kubernetes cluster. 
 
-##### [Lock And Unlock Nodes](../operations/lock_and_unlock_nodes.md) 
+##### [Lock and Unlock Nodes](../operations/lock_and_unlock_nodes.md) 
 
 The NCNs should be locked to prevent accidental firmware upgrades with FAS or power down operations and reset operations with CAPMC.
 
@@ -189,4 +192,4 @@ The firmware versions of many components may need to be updated at this point in
 
 The details of the process are outlined in [255-FIRMWARE-ACTION-SERVICE-FAS.md](255-FIRMWARE-ACTION-SERVICE-FAS.md) using recipes listed in [256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md)
 
-Then the administrator should install additional products following the procedures in the HPE Cray EX System Installation and Configuration Guide S-8000.
+Then the administrator should install additional product streams. Refer to the _HPE Cray EX System Installation and Configuration Guide 1.5 S-8000_ for procedures to install other product streams.

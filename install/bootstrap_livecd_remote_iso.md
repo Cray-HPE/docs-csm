@@ -10,10 +10,8 @@ This page describes how to use the LiveCD as a remote ISO. The installation proc
 the alternative USB based installation with adjustments to account for the lack of removable
 storage.
 
-TODO Update reference to 002-CSM-INSTALL
-
-**Before starting this page** be sure to complete the [CSM prerequisites](./002-CSM-INSTALL.md) for
-the relevant installation path.
+**Before starting this page** be sure to complete the [CSM Install Prerequisites](prepare_configuration_payload.md#csm-install-prerequisites) for
+the relevant installation scenario.
 **After finishing this page** the LiveCD will be ready
 for [Deploy Management Nodes](deploy_management_nodes.md).
 

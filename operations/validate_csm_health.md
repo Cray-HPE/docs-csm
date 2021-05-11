@@ -105,7 +105,7 @@ For example:
 ```
 Errors reported previous to the lock status, such as **ERROR: get_cluster** can be ignored.
 
-See see the **About Postgres** section in the HPE Cray EX Administration Guide S-8001 for further information.
+Refer to "About Postgres" in the _HPE Cray EX System Administration Guide 1.5 S-8001_ for further information.
 
 <a name="pet-bgp"></a>
 ### BGP Peering Status and Reset
@@ -195,7 +195,7 @@ ncn-m001# ssh admin@10.252.0.2
 
    * It may take several minutes for all sessions to become **Established**. Wait a minute, or so, and then verify that all sessions now are all reported as **Established**. If some sessions remain in an **Idle** state, re-run the **clear ip bgp all** command and check again.
 
-   * If after several tries one or more BGP session remains **Idle**, see Check BGP Status and Reset Sessions, in the HPE Cray EX Administration Guide S-8001.
+   * If after several tries one or more BGP session remains **Idle**, refer to "Check BGP Status and Reset Sessions" in the _HPE Cray EX System Administration Guide 1.5 S-8001_.
 
 1. Repeat the above **Mellanox** procedure using the second peer-address (10.252.0.3 here)
 
@@ -238,7 +238,8 @@ On an Aruba switch, the prompt may include `sw-spine` or `sw-agg`.
    verify that all sessions now are reported as **Established**. If some sessions remain in an **Idle** state,
    re-run the **clear bgp * ** command and check again.
 
-   * If after several tries one or more BGP session remains **Idle**, see Check BGP Status and Reset Sessions, in the HPE Cray EX Administration Guide S-8001.
+   * If after several tries one or more BGP session remains **Idle**, refer to "Check BGP Status and Reset Sessions" in the _HPE Cray EX System Administration Guide 1.5 S-8001_.
+
 
 1. Repeat the above **Aruba** procedure using the second peer-address (10.252.0.5 in this example)
 

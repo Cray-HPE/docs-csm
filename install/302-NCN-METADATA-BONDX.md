@@ -204,4 +204,5 @@ If there is a workaround here, the output looks similar to the following:
 CASMINST-980
 ```
 
-8. Before relaunching NCNs, be sure to wipe the disks first.  To wipe all disks in all NCNs, refer to the disk wipe procedure in the Degraded System Notice section of 002-CSM-INSTALL.md.
+8. Before relaunching NCNs, be sure to wipe the disks first.  To wipe all disks in all NCNs, refer to the disk wipe procedure in the
+[Degraded System Notice](prepare_configuration_payload.md#degraded-system-notice).

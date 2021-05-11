@@ -30,7 +30,7 @@ The 'cray' CLI only needs to be initialized once per user on a node.
    If LDAP configuration has enabled, then use a valid account in LDAP instead of 'vers'.
 
    If LDAP configuration was not enabled, or is not working, then a keycloak local account could be created. 
-   See "Create a Service Account in Keycloak" in the HPE Cray EX System Administration Guide 1.4 S-80001.
+   Refer to "Create a Service Account in Keycloak" in the _HPE Cray EX System Administration Guide S-8001_.
 
    ```bash
    ncn# cray init

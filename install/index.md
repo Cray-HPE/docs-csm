@@ -21,7 +21,7 @@ product streams for the HPE Cray EX system can be installed.
    1. [Validate CSM Health Before PIT Node Redeploy](#validate_csm_health_before_pit_redeploy)
    1. [Redeploy PIT Node](#redeploy_pit_node)
    1. [Configure Administrative Access](#configure_administrative_access)
-   1. [Validate CSM Health](#validate_csm_health)
+   1. [Validate CSM Health](#validate_csm_health.md)
    1. [Update Firmware with FAS](#update_firmware_with_fas)
    1. [Next Topic](#next_topic)
    1. [Troubleshooting Installation Problems](#troubleshooting_installation)
@@ -165,8 +165,8 @@ sections, but there is also a general troubleshooting topic.
 
    1. Next Topic
 
-   After completion of the firmware update with FAS, the CSM product stream has been fully installad and
-   configured.  Refer to the _HPE Cray EX Installation and Configuration Guide S-8001_, for other product streams
+   After completion of the firmware update with FAS, the CSM product stream has been fully installed and
+   configured.  Refer to the _HPE Cray EX Installation and Configuration Guide 1.5 S-8000_ for other product streams
    to be installed and configured after CSM.
 
    <a name="troubleshooting_installation"></a>

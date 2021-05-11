@@ -27,6 +27,8 @@ Product Coverage:
 One may also find technical information, see the following for navigating and contributing to this
 guidebook:
 
+TODO fix these links
+
 - [Info / Inside-Panel](000-INFO.md) Contribution and rules
 - [Table of Contents](001-GUIDES.md) Lay of the land; where information is by chapter
 

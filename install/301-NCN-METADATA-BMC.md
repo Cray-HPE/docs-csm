@@ -27,7 +27,7 @@ If you are here with an unconfigured switch, mileage may vary.
     # or.. serial (device name will vary).
     pit# minicom -b 115200 -D /dev/tty.USB1
     ```
-2. If you know the ports of your BMCs, you can print out the MAC for those ports -or- if they exist on the same VLAN you should be able to dump the VLAN.
+2. If you know the ports of your BMCs, you can display the MAC for those ports -or- if they exist on the same VLAN you should be able to dump the VLAN.
     > Syntax is for Onyx and Dell EMC devices - please resort to your CLI usage (press `?` or `tab` to assist on-the-fly).
 
     If you know the VLAN ID:

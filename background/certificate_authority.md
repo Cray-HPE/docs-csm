@@ -1,9 +1,17 @@
 # Certificate Authority
 
-TODO clean up for this new location and fix title
-TODO Add headers: About this task, Role, Objective, Limitations, New in this Release
+While a system is being installed for the first time, a certificate authority (CA) is needed.  This can be
+generated for a system, or one can be supplied from a customer intermediate CA.  Outside of a new
+installation, there is no supported method to rotate or change the platform CA in this release.
 
-# Overview
+### Topics:
+   * [Overview](#overview)
+   * [Use Default Platform Generated CA](#use_default_platform_generated_ca)
+   * [Customize Platform Generated CA](#customize_platform_generated_ca)
+   * [Use External CA](#use_external_ca)
+
+<a name="overview"></a>
+## Overview
 
 At *install time*, a PKI certificate authority (CA) can either be generated for a system, or a customer can opt to supply their own (intermediate) CA. 
 
@@ -15,7 +23,8 @@ The resulting CA will be used to sign multiple workloads on the platform (Ingres
 
 > Management of Sealed Secrets should ideally take place on a secure workstation.
 
-# Using Default Platform Generated CA
+<a name="use_default_platform_generated_ca"></a>
+## Use Default Platform Generated CA
 
 In shasta-cfg, there is a Sealed Secret generator named ```platform_ca```. By default, the ```customizations.yaml``` file will contain a generation template to use this generator, and will create a sealed secret named ```generated-platform-ca-1```. The ```cray-vault``` overrides in ```customizations.yaml``` contain a) a templated reference to expand the ```generated-platform-ca-1``` Sealed Secret and b) directives instructing vault to load the CA material on start-up -- ultimately initializing a Hashicorp Vault PKI Engine instance with the material.
 
@@ -56,13 +65,15 @@ spec:
 
 > The ```platform_ca``` generator will produce RSA CAs with a 3072-bit modulus, using SHA256 as the base signature algorithm. 
 
-# Customize Platform Generated CA
+<a name="customize_platform_generated_ca"></a>
+## Customize Platform Generated CA
 
 The ```platform_ca``` generator inputs can be customized, if desired. Notably, the ```root_days```, ```int_days```, ```root_cn``` and ```int_cn``` fields can be modified. While the shasta-cfg documentation on the use of generators supplies additional detail, the ```*_days``` settings control the validity period and the ```*_cn``` settings control the common name value for the resulting CA certificates. Ensure the Sealed Secret name reference in ```spec.kubernetes.services.cray-vault.sealedSecrets``` is updated if you opt to use a different name. 
 
 > Outside of a new installation, there is currently no supported method to rotate (change) the platform CA. Please set validity periods accordingly. The ability to rotate CAs is anticipated as part of a future release. 
 
-# Use an External CA
+<a name="use_external_ca"></a>
+## Use External CA
 
 The ```static_platform_ca``` generator, part of shasta-cfg, can be used to supply an external CA private key, certificate, and associated upstream CAs that form the trust chain. The generator will attempt to prevent you from supplying a root CA. You must also supply the entire trust chain up to the root CA certificate. 
 

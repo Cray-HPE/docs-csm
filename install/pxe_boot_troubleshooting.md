@@ -6,7 +6,7 @@ In order for PXE booting to successfully work, the MGMT switches need to be conf
 
 # Configuration required for PXE booting
 
-To successfully pxe boot nodes, the following is required.
+To successfully PXE boot nodes, the following is required.
 
 - The IP helper-address must be configured on VLAN 1,2,4,7.  This will be where the layer 3 gateway exists (spine or agg)
 - The virtual-IP/VSX/MAGP IP must be configured on VLAN 1,2,4,7.
@@ -232,7 +232,7 @@ If these routes are missing please see [Update BGP Neighbors](../operations/upda
 
 # Next steps
 
-If your configuration looks good, and you are still not able to pxe boot there are some other things to try.
+If your configuration looks good, and you are still not able to PXE boot there are some other things to try.
 
 ### Restart BSS
 If while watching an NCN boot attempt you see the following output on the console during PXE 
@@ -268,7 +268,7 @@ deployment "cray-bss" successfully rolled out
 Then reboot the NCN one more time.
 
 ### Restart KEA
-In some cases rebooting the KEA pod has resolved pxe issues.
+In some cases rebooting the KEA pod has resolved PXE issues.
 
 Get KEA pod
 ```

@@ -84,6 +84,7 @@ The chapters with topics which need to be done as part of an ordered procedure a
 1. [CSM Background Information](background/index.md)
 
    Topics:
+   * [Cray Site Init Files](background/cray_site_init_files.md)
    * [Certficate Authority](background/certificate_authority.md)
    * [NCN Images](background/ncn_images.md)
    * [NCN Boot Workflow](background/ncn_boot_workflow.md)
@@ -91,7 +92,7 @@ The chapters with topics which need to be done as part of an ordered procedure a
    * [NCN Mounts and File Systems](background/ncn_mounts_and_file_systems.md)
    * [NCN Packages](background/ncn_packages.md)
    * [NCN Operating System Releases](background/ncn_operating_system_releases.md)
-   * [cloud-init Basecamp Configuration](operations/cloud-init_basecamp_configuration.md)
+   * [cloud-init Basecamp Configuration](background/cloud-init_basecamp_configuration.md)
 
 
 1. [Glossary](glossary.md)

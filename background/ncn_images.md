@@ -1,17 +1,26 @@
 # NCN Images
 
-TODO clean up for this new location and fix title
-TODO Add headers: About this task, Role, Objective, Limitations, New in this Release
+The management nodes boot from NCN images which are created from layers on top of a common base image.
+The comman image is customized with a Kubernetes layer for the master nodes and worker nodes.
+The comman image is customized with a storage-ceph layer for the utility storage nodes..
 
-# Non-Compute Node Images
+### Topics:
+
+   * [Overview of NCN Images](#overview_ncn_images)
+   * [LiveCD Server](#livecd_server)
+
+## Details
+
+<a name="overview_of_ncn_images"></a>
+#### Overview of NCN Images
 
 There are several flavors of NCN images, each share a common base image. When booting NCNs an admin or user will need to choose between
 stable (Release) and unstable (pre-release/dev) images.
 
 > For details on how these images behave and inherit from the base and common images, see [node-image-docs][1].
 
-In short, each application image (i.e. Kubernetes and storage-ceph) inherit from the non-compute-common layer. Operationally these are all
-that matter; the common layer, Kubernetes layer, ceph layer, and any other new application images.
+In short, each image (i.e. Kubernetes and storage-ceph) inherit from the non-compute-common layer. Operationally these are all
+that matter; the common layer, Kubernetes layer, ceph layer, and any other new images.
 
 To boot an NCN, you need 3 artifacts for each node-type (kubernetes-manager/worker, ceph):
 
@@ -24,9 +33,10 @@ To boot an NCN, you need 3 artifacts for each node-type (kubernetes-manager/work
     - `$version-[RELEASE].kernel`
     - `storage-ceph-[RELEASE].squashfs`
 
+<a name="livecd_server"></a>
 ### LiveCD Server
 
-View the current ephemeral data payload:
+1. View the current ephemeral data payload:
 
 ```bash
 pit# ls -l /var/www
@@ -43,7 +53,8 @@ total 4
 drwxr-xr-x 2 root root 4096 Dec 17 21:26 0.0.8
 ```
 
-Setup the "booting repos":
+1. Setup the "booting repos":
+
 ```bash
 pit# set-sqfs-links.sh
 Mismatching kernels! The discovered artifacts will deploy an undesirable stack.
@@ -97,7 +108,8 @@ mkdir: created directory 'ncn-s003'
 /var/www
 ```
 
-Viewing the currently set links
+1. View the currently set links
+
 ```bash
 pit# ls -l /var/www/ncn-*
 boot:

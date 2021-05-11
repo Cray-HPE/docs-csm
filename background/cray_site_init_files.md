@@ -1,14 +1,25 @@
 # Cray Site Init Files
 
-This page describes administrative knowledge around CSI's files.
+This page describes administrative knowledge around the pre-config files to `csi` or the output files from `csi`.
 
-> Detailed information for collecting certain files starts in [Service Guides](../install/300-SERVICE-GUIDES.md)
+> Detailed information for collecting certain files starts in [Service Guides](../install/300-SERVICE-GUIDES.md) 
+  and continues in these topics.
+
+   * [`application_node_config.yaml`](../install/308-APPLICATION-NODE-CONFIG.md)
+   * [`cabinets.yaml`](../install/310-CABINETS.md)
+   * [`hmn_connections.json`](../install/307-HMN-CONNECTIONS.md)
+   * [`ncn_metadata.csv`](../install/301-NCN-METADATA-BMC.md)
+   * [`switch_metadat.csv`](../install/305-SWITCH-METADATA.md)
+
+### Topics: 
   
-* [Save-File / Avoiding Parameters](#save-file--avoiding-parameters)
-* [CSI `hmn_connections.json` Notes](#csi-hmn_connections.json-notes)
+   * [Save-File / Avoiding Parameters](#save-file--avoiding-parameters)
+   * [CSI `hmn_connections.json` Notes](#csi-hmn_connections.json-notes)
+
+## Details
 
 <a name="save-file--avoiding-parameters"></a>
-## Save-File / Avoiding Parameters
+### Save-File / Avoiding Parameters
 
 A `system_config.yaml` file may be provided by the administrator that will omit the need for specifying parameters on the command line.
 
@@ -16,6 +27,7 @@ A `system_config.yaml` file may be provided by the administrator that will omit 
 serves as a fingerprint for re-generated the same configs.
 
 Here is an example file
+
 ```yaml
 bgp-asn: "65533"
 bootstrap-ncn-bmc-pass: admin
@@ -70,6 +82,8 @@ v2-registry: https://registry.nmn/
 <a name="csi-hmn_connections.json-notes"></a>
 ### CSI `hmn_connections.json` Notes
 
+TODO this warning is out of place here.  It belongs in the install chapter when preparing to call `csi` with the configuration payload.
+
 If you see warnings from `csi config init` that are similar to the warning messages below, it means that CSI encountered an unknown piece of hardware in the `hmn_connections.json` file. If you do not see this message you can move on to sub-step 2.
 
 ```json
@@ -77,7 +91,7 @@ If you see warnings from `csi config init` that are similar to the warning messa
 ```
 
 If the piece of hardware is expected to be an application node then [follow the procedure to create
-the application_node_config.yaml](../install/308-APPLICATION-NODE-CONFIG.md) file. The argument
+the `application_node_config.yaml`](../install/308-APPLICATION-NODE-CONFIG.md) file. The argument
 `--application-node-config-yaml ./application_node_config.yaml` can be given to `csi config init`
 to include the additional application node configuration. Due to systems having system-specific
 application node source names in `hmn_connections.json` (and the SHCD) the `csi config init` command

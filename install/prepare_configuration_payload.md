@@ -1,6 +1,5 @@
 # Prepare Configuration Payload
 
-
 TODO will this become 2 separate files, each with a focus on one of these two paths?
 
 * First Time Install of this Release
@@ -10,13 +9,13 @@ TODO edit data from 002-CSM-INSTALL.md.  This should prepare the configuration p
 
 This page will prepare you for a CSM install using the LiveCD in different scenarios.
 
-* [Install Prerequisites](#install-prerequisites)
+* [CSM Install Prerequisites](#csm-install-prerequisites)
 * [Starting an Installation](#starting-an-installation)
 
   * [Boot the LiveCD](#boot-the-livecd)
 
-<a name="install-prerequisites"></a>
-# Install Prerequisites
+<a name="csm-install-prerequisites"></a>
+# CSM Install Prerequisites
 
 The prerequisites for each install scenario are defined here. **All prerequisites must be met
 before commencing an installation**.

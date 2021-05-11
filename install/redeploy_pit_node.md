@@ -317,7 +317,7 @@ data so run them only when indicated. Instructions are in the `README` files.
     
 1. The node should boot, acquire its hostname (i.e. ncn-m001), and run cloud-init.
     
-    > **`NOTE`**: If the nodes has pxe boot issues, such as getting pxe errors or not pulling the ipxe.efi binary, see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
+    > **`NOTE`**: If the nodes has PXE boot issues, such as getting PXE errors or not pulling the ipxe.efi binary, see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
     
     > **`NOTE`**: If ncn-m001 booted without a hostname or it didn't run all the cloud-init scripts, the following commands need to be run **(but only in that circumstance)**.
     

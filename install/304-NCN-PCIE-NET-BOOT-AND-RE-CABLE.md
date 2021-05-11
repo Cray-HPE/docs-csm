@@ -46,7 +46,7 @@ Now `mst status` and other commands like `mlxfwmanager` or `mlxconfig` will work
 > UEFI: all boots are UEFI, this needs to be enabled for access to the UEFI OpROM for configuration and for usage of UEFI firmwares.
 > SR_IOV: This is currently DISABLED because it can attribute to longer POSTs on HPE blades (Gen10+, i.e. DL325 or DL385) with Mellanox ConnectX-5 PCIe cards. The technology is not yet enabled for virtualization usage, but may be in the future.
 
-Use this snippet to print out device name and current UEFI PXE state.
+Use this snippet to display device name and current UEFI PXE state.
 ```bash
 ncn# mst status
 for MST in $(ls /dev/mst/*); do

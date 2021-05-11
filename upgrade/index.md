@@ -22,7 +22,7 @@ product streams for the HPE Cray EX system can be installed or upgraded.
    1. [Next Topic](#next_topic)
    1. [Troubleshooting Upgrade Problems](#troubleshooting_upgrade)
 
-The topics in thie chapter need to be done as part of an ordered procedure so are shown here with numbered topics.
+The topics in this chapter need to be done as part of an ordered procedure so are shown here with numbered topics.
 
 Note: If problems are encountered during the upgrade, some of the topics do have their own troubleshooting
 sections, but there is also a general troubleshooting topic.
@@ -90,7 +90,7 @@ sections, but there is also a general troubleshooting topic.
    1. Next Topic
 
    After completion of the firmware update with FAS, the CSM product stream has been fully upgraded and
-   configured.  Refer to the _HPE Cray EX Installation and Configuration Guide S-8001_, for other product streams
+   configured.  Refer to the _HPE Cray EX Installation and Configuration Guide 1.5 S-8000_ for other product streams
    to be upgraded and configured after CSM.
 
    <a name="troubleshooting_upgrade"></a>

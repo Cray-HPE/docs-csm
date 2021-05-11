@@ -2,11 +2,14 @@
 
 Glossary of terms used in CSM documentation.
 
-TODO Make each term an anchor so that the other markdown files can link to glossary/#term.
+### Application Node (AN)
 
-### AN
-
-TODO define Application nodes, and mention UAN
+An application node (AN) is an NCN which is not providing management fuctions for the Cray EX system.
+The AN is not part of the Kubernetes cluster to which management nodes belong.  One special type of AN
+is the UAN (User Access Node), but different systems may have need for other types of AN, such as nodes
+which provide a Lustre routing function (LNet router), or gateway between HSN and Infiniband, or data 
+mover between two different network file systems, or visualization servers, or some other special purpose
+node. 
 
 ### Baseboard Management Controller (BMC)
 
@@ -26,11 +29,24 @@ distribution unit (CDU). Management network CDU switches in the CDU aggregate al
 node management network (NMN) and hardware management network (HMN) connections
 for the cabinet group.
 
-### CAN
+### Customer Access Network
 
-TODO define CAN, customer access network.  New terms in v1.5 with bifurcated CAN
+The Customer Access Network (CAN) provides access from outside the customer network to services, noncompute
+nodes (NCNs), and User Access Nodes (UANs) in the system. This allows for the following:
+   * Clients outside of the system:
+      * Log in to each of the NCNs and UANs.
+      * Access web UIs within the system (e.g. Prometheus, Grafana, and more).
+      * Access the Rest APIs within the system.
+      * Access a DNS server within the system for resolution of names for the webUI and REST API services.
+      * Run Cray CLI commands from outside the system.
+      * Access the User Access Instances (UAI).
+   *  NCNs and UANs to access systems outside the cluster (e.g. LDAP, license servers, and more).
+   *  Services within the cluster to access systems outside the cluster.
 
-### CEC
+These nodes and services need an IP address that routes to the customer’s network in order to be accessed from
+outside the network.
+
+### Cabinet Environmental Controller (CEC)
 
 The Liquid-Cooled cabinet environmental controller (CEC) sets the cabinet's geolocation,
 monitors environmental sensors, and communicates status to the cooling distribution unit
@@ -42,7 +58,7 @@ action. The CEC firmware is flashed automatically when the CMM firmware is flash
 there are momentary erroneous signals due to a CEC reset or cable disconnection, the
 system can ride through these events without issuing an EPO.
 
-### CMM
+### Chassis Management Module (CMM)
 
 The cabinet chassis management module (CMM) provides a REST endpoint via its chassis
 controller (cC). The CMM is an embedded controller that monitors and controls all the
@@ -59,17 +75,27 @@ in a path (half of the cabinet), and CMMs 1/3/5/7 and CEC1 are in another path. 
 or CEC in the same half-cabinet path can be removed and CDU cooling will stay enabled as
 long as the other CMMs/CEC enables CDU cooling.
 
-### CN
+### Compute Node (CN)
 
-TODO define Compute nodes 
+The compute node (CN) is where high performance computing application are run.  These have
+hostnames that are of the form "nidXXXXXX", that is, "nid" followed by six digits.
+where the XXXXXX is a six digit number starting with zero padding.
 
-### CSI
+### Cray Site Init (CSI)
 
-TODO define CSI
+The Cray Site Init (CSI) program creates, validates, installs, and upgrades a Cray EX system.
+CSI can prepare the LiveCD for booting the PIT node and then is used from a booted PIT node
+to do its other functions during an installation.  During an upgrade, CSI is installed on
+one of the nodes to facilitate the CSM software upgrade.
 
-### CSM
+### Cray System Management (CSM)
 
-TODO define CSM
+Cray System Management (CSM) refers to the product stream which provides the infrastructure to 
+manage a Cray EX system using Kubernetes to manage the containerized workload of layered
+microservices with well-defined REST APIs which provide the ability to discover and control the
+hardware platform, manage configuration of the system, configure the network, boot nodes, gather
+log and telemetry data, connect API access and user level access to Identity Providers (IdPs),
+and provide a method for system administrators and end-users to access the Cray EX system.
 
 ### eC
 
@@ -125,7 +151,13 @@ point for managing the system.
 
 ### Management Nodes
 
-TODO define Management nodes 
+The management nodes are one grouping of NCNs.  The management nodes include the master nodes
+with hostnames of the form of ncn-mXXX, the worker nodes with hostnames of the form ncn-wXXX,
+and utility storage nodes, with hostnames of the form ncn-sXXX, where the XXX is a three
+digit number starting with zero padding.  The utility storage nodes provide Ceph storage for use
+by the management nodes.  The master nodes provide Kubernetes master functions and have the 
+etcd cluster which provides a datastore for Kubernetes.  The worker nodes provide Kubernetes
+worker functions where most of the containerized workload is scheduled by Kubernetes.
 
 ### NIC Mezzanine Card (NMC)
 
@@ -149,13 +181,17 @@ typically 10GbE Ethernet LAN-on-motherboard (LOM) interfaces. This network suppo
 node boot protocols (DHCP/TFTP/HTTP), in-band telemetry and event exchange, and
 general access to management REST APIs.
 
-### NCN
+### Non-Compute Node (NCN)
 
-TODO define NCN.  Management nodes and Aplication nodes.
+Any node which is not a compute node may be called a Non-Compute Node (NCN).  The NCNs include
+management nodes and application nodes.
 
-### PIT node
+### Pre-Install Toolkit (PIT) node
 
-TODO define PIT node
+The Pre-Install Toolkit is installed onto the initial node used as the inception node during software
+installation which is booted from a LiveCD.  The node running the Pre-Install Toolkit is known
+as the PIT node during the installation process until it reboots from a normal management node image
+like the other master nodes.
 
 ### PDU
 
@@ -259,7 +295,16 @@ The Air-Cooled cabinet HSN ToR switch embedded controller (sC-ToR) provides a ha
 management REST endpoint to monitor the ToR switch environmental conditions and
 manage the switch power, HSN ASIC, and FPGA interfaces.
 
+### UAI
+
+The User Access Instance (UAI) is a lightweight, disposable platform that runs under Kubernetes orchestraion
+on worker nodes.  The UAI provides a single user containerized environment for users on a Cray Ex system to
+develop, build, and execute their applications on the Cray EX compute node.  See UAN for another
+way for users to gain access.
+
 ### UAN
 
-TODO define UAN
-
+The User Access Node (UAN) is an NCN, but is really one of the special types of Application nodes.
+The UAN provides a traditional multi-user Linux environment for users on a Cray Ex system to
+develop, build, and execute their applications on the Cray EX compute node.  See UAI for another
+way for users to gain access.  Some sites refer to their UANs as Login nodes.

@@ -13,7 +13,7 @@ for additional information on system hardware, troubleshooting, and administrati
    1. [Restart Network Services and Interfaces on NCNs](#restart_network_services_and_interfaces_on_ncns)
    1. [Utility Storage Node Installation Troubleshooting](#utility_storage_node_installation_troubleshooting)
    1. [Ceph CSI Troubleshooting](#ceph_csi_troubleshooting)
-   1. [Safeguards for CSM NCN Upgrades](safeguards_for_csm_ncn_upgrades.md)
+   1. [Safeguards for CSM NCN Upgrades](#safeguards_for_csm_ncn_upgrades)
 
 
 ## Details
@@ -79,11 +79,19 @@ for additional information on system hardware, troubleshooting, and administrati
 
    1. Ceph CSI Troubleshooting
 
-   TODO this procedure should be split into "Verify CEPH CSI" right after NCNs have been deployed and
-   both "Verify CEPH CSI" and "Ceph CSI Troubleshooting" here.
-
-   Verify that ceph-csi has run on ncn-s001 to do all steps of ceph configuration on utility storage nodes.
-   If any ceph csi components are missing then the cloud-init script to provision ceph storage will need to run again.
+   If there has been a failure to initialize all ceph csi components on ncn-s001, then the storage node 
+   cloud-init may need to be rerun.
+      * Verify Ceph CSI
+      * Rerun Storage Node cloud-init
 
    See [Ceph CSI Troubleshooting](ceph_csi_troubleshooting.md)
 
+   <a name="safeguards_for_csm_ncn_upgrades"></a>
+
+   1. Safeguards for CSM NCN Upgrades
+
+   If a reinstall or upgrade is being done, there might be a reason to use one of these safeguards.
+      * Preserve Ceph on Utiity Storage Nodes
+      * Protect RAID Configuration on Management Nodes
+
+   See [Safeguards for CSM NCN Upgrades](safeguards_for_csm_ncn_upgrades.md)

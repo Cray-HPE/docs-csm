@@ -1,34 +1,39 @@
 # NCN Boot Workflow
 
-TODO clean up for this new location and fix title
 TODO Add headers: About this task, Role, Objective, Limitations, New in this Release
 
-
-<a name="ncn-booting"></a>
-# NCN Booting
 
 Non-compute nodes boot two ways:
 - Network/PXE booting
 - Disk Booting
 
-Table of Contents:
+### Topics:
 
-* [How can I tell if I booted via disk or pxe?](#how-can-i-tell-if-i-booted-via-disk-or-pxe)
+* [How can I tell if I booted via disk or PXE?](#how-can-i-tell-if-i-booted-via-disk-or-pxe)
 * [Set BMCs to DHCP](#set-bmcs-to-dhcp)
-* [Boot Order](#set-boot-order)
-  * [Setting Order](#setting-order)
-  * [Trimming](#trimming)
-  * [Examples](#examples)
-  * [Reverting Changes](#reverting-changes)
-    * [Locating a USB Stick](#locating-a-usb-stick)
+* [Set Boot Order](#set-boot-order)
+   * [Setting Order](#setting-order)
+   * [Trimming Boot Order](#trimming_boot_order)
+   * [Examples](#examples)
+   * [Reverting Changes](#reverting-changes)
+   * [Locating USB Device](#locating-usb-device)
+
+## Details
 
 <a name="how-can-i-tell-if-i-booted-via-disk-or-pxe"></a>
-### How can I tell if I booted via disk or pxe?
+### How can I tell if I booted via disk or PXE?
 
 Two ways, one may be easier depending on your env.
 
-1. `cat /proc/cmdline` if it starts with `kernel` then the node network booted. If it starts with `BOOT_IMAGE=(` then it disk booted.
-2. `efibootmgr`, see what it says for `BootCurrent` and match that value to the list beneath to see if it lines up with a networking option or a `cray sd*)` option for disk boots.
+1. Check kernel parameters. 
+
+```bash
+ncn# cat /proc/cmdline
+```
+
+If it starts with `kernel` then the node network booted. If it starts with `BOOT_IMAGE=(` then it disk booted.
+
+1. `efibootmgr`, see what it says for `BootCurrent` and match that value to the list beneath to see if it lines up with a networking option or a `cray sd*)` option for disk boots.
 
 <a name="set-bmcs-to-dhcp"></a>
 ### Set BMCs to DHCP
@@ -36,7 +41,7 @@ Two ways, one may be easier depending on your env.
 If you are reinstalling a system, the BMCs for the NCNs may be set to static. We check `/var/lib/misc/dnsmasq.leases` for setting up the symlinks for the artifacts each node needs to boot.  So if your BMCs are set to static, those artifacts will not get setup correctly. You can set them back to DHCP by using a command as such:
 
 ```bash
-for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
+ncn# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
 do
 ipmitool -U username -I lanplus -H $h -P password lan set 1 ipsrc dhcp
 done
@@ -45,29 +50,28 @@ done
 Some BMCs need a cold reset in order to fully pick up this change:
 
 ```bash
-for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
+ncn# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
 do
 ipmitool -U username -I lanplus -H $h -P password mc reset cold
 done
 ```
 
 <a name="set-boot-order"></a>
-## Set Boot Order
+### Set Boot Order
 
-- `ipmitool` can set and edit boot order; works better on some vendors based on their BMC implementation
-- `efibootmgr` speaks directly to systems UEFI; can only be ignored by new BIOS activity
+- `ipmitool` can set and edit boot order; works better for some vendors based on their BMC implementation
+- `efibootmgr` speaks directly to the node's UEFI; can only be ignored by new BIOS activity
 
 > **`NOTE`** Cloud-init will set bootorder on boot, but this is bugged (CASMINST-1686) with certain vendors.
 
 <a name="setting-order"></a>
-### Setting Order
+#### Setting Order
 
 1. Create our boot-bios-selector file(s) based on the manufacturer:
 
 > <a name="gigabyte-technology"></a>
 > #### Gigabyte Technology
 >
-> <a name="masters-1"></a>
 > ##### Masters
 >
 > ```bash
@@ -79,7 +83,6 @@ done
 > Boot0002* cray (sdb1)
 > ```
 >
-> <a name="storage-1"></a>
 > ##### Storage
 >
 > ```bash
@@ -91,7 +94,6 @@ done
 > Boot0002* cray (sdb1)
 > ```
 >
-> <a name="workers-1"></a>
 > ##### Workers
 >
 > > **`NOTE`** If more than 3 interfaces appear in `/tmp/bbs1` the administrator may want to consider
@@ -107,11 +109,9 @@ done
 > Boot0002* cray (sdb1)
 > ```
 >
-> <a name="hewlett-packard-enterprise"></a>
 > #### Hewlett-Packard Enterprise
 >
 > 
-><a name="masters-2"></a>
 > ##### Masters
 >
 > ```bash
@@ -123,7 +123,6 @@ done
 > Boot0022* cray (sdc1)
 > ```
 > 
-><a name="storage-2"></a>
 > ##### Storage
 >
 > ```bash
@@ -135,7 +134,6 @@ done
 > Boot0020* cray (sdh1)
 > ```
 > 
-><a name="workers-2"></a>
 > ##### Workers
 >
 > ```bash
@@ -147,10 +145,8 @@ done
 > Boot0018* cray (sdc1)
 > ```
 > 
-> <a name="intel-corporation"></a>
 > #### Intel Corporation
 >
-> <a name="masters-3"></a>
 > ##### Masters
 > ```bash
 > ncn-m# efibootmgr | grep -i 'ipv4' | grep -iv 'baseboard' | tee /tmp/bbs1
@@ -160,7 +156,6 @@ done
 > Boot0011* cray (sda1)
 > Boot0012* cray (sdb1)
 >```
-> <a name="storage-3"></a>
 > ##### Storage
 > ```bash
 > ncn-s# efibootmgr | grep -i 'ipv4' | grep -iv 'baseboard' | tee /tmp/bbs1
@@ -170,7 +165,6 @@ done
 > Boot0014* cray (sda1)
 > Boot0015* cray (sdb1)
 > ```
-> <a name="workers-3"></a>
 > ##### Workers
 >
 > ```bash
@@ -183,7 +177,8 @@ done
 > ```
 
 
-2. Set Order (works universally; every vendor, every Shasta ncn-type):
+1. Set Order (works universally; every vendor, every Shasta ncn-type):
+
 > ```bash
 > ncn# efibootmgr -o $(sort -u /tmp/bbs* | sed 's/^Boot//g' | awk '{print $1}' | tr -t '*' ',' | tr -d '\n' | sed 's/,$//') | grep -i bootorder
 > BootOrder: 000E,0014,0011,0012
@@ -191,41 +186,42 @@ done
 
 After following the twp-steps on a given NCN, that NCN will now use the desired Shasta boot order.
 
-<a name="trimming"></a>
-### Trimming
+<a name="trimming_boot_order"></a>
+#### Trimming Boot Order
 
-As for removing entries, this section will only advise on removing other PXE entries. There are too many vendor-specific entries beyond
-disks and NICs to cover in this section (e.g. BIOS entries, iLO entries, etc.).
+As for removing entries, this section will only advise on removing other PXE entries. There are too many
+vendor-specific entries beyond disks and NICs to cover in this section (e.g. BIOS entries, iLO entries, etc.).
 
 Simply run the reverse-pattern of the PXE commands from the [setting boot order](#setting-order) section:
 
 1. Find the other PXE entries:
-    - Gigabyte Technology:
-        ```bash
-        # on an NCN, or on the PIT node
-        efibootmgr | grep -ivP '(pxe ipv?4.*)' | grep -iP '(adapter|connection|nvme|sata)' | tee /tmp/rbbs1
-        efibootmgr | grep -iP '(pxe ipv?4.*)' | grep -i connection | tee /tmp/rbbs2
-        ```
-    - Hewlett-Packard Enterprise
+   - Gigabyte Technology:
+
+      ```bash
+      ncn# efibootmgr | grep -ivP '(pxe ipv?4.*)' | grep -iP '(adapter|connection|nvme|sata)' | tee /tmp/rbbs1
+      ncn# efibootmgr | grep -iP '(pxe ipv?4.*)' | grep -i connection | tee /tmp/rbbs2
+      ```
+   - Hewlett-Packard Enterprise
       > **`NOTE`** This does not trim HSN Mellanox cards; these should disable their OpROMs using [the high speed network snippet(s)](../install/304-NCN-PCIE-NET-BOOT-AND-RE-CABLE.md#high-speed-network).
-        ```bash
-        # on an NCN, or on the PIT node
-        efibootmgr | grep -vi 'pxe ipv4' | grep -i adapter |tee /tmp/rbbs1
-        efibootmgr | grep -iP '(sata|nvme)' | tee /tmp/rbbs2
-        ```
-    - Intel Corporation
-        ```bash
-        # on an NCN, or on the PIT node
-        efibootmgr | grep -vi 'ipv4' | grep -iP '(sata|nvme|uefi)' | tee /tmp/rbbs1
-        efibootmgr | grep -i baseboard | tee /tmp/rbbs2
-        ```
+
+      ```bash
+      ncn# efibootmgr | grep -vi 'pxe ipv4' | grep -i adapter |tee /tmp/rbbs1
+      ncn#efibootmgr | grep -iP '(sata|nvme)' | tee /tmp/rbbs2
+      ```
+   - Intel Corporation
+
+      ```bash
+      ncn# efibootmgr | grep -vi 'ipv4' | grep -iP '(sata|nvme|uefi)' | tee /tmp/rbbs1
+      ncn# efibootmgr | grep -i baseboard | tee /tmp/rbbs2
+       ```
+
 2. Remove them:
-    ```bash
+
+   ```bash
    ncn# sort -u /tmp/rbbs* | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -t -i efibootmgr -b {} -B
-    ```
+   ```
 
 Your boot menu should be trimmed down to only contain relevant entries.
-
 
 <a name="examples"></a>
 ###### Examples
@@ -287,83 +283,88 @@ Boot000D* UEFI: PXE IP4 Intel(R) I350 Gigabit Network Connection
 
 
 <a name="reverting-changes"></a>
-### Reverting Changes
+#### Reverting Changes
 
+Reset the BIOS.  Refer to vendor documentation for resetting the BIOS or attempt to reset the BIOS with `ipmitool`
 
-Reset the BIOS.
-
-Refer to vendor documentation for resetting the BIOS.
-
-Optionally attempt to with `ipmitool`:
-
-```bash
-# reset
-ipmitool chassis bootdev none options=clear-cmos
-
-# set boot order
-ipmitool chassis bootdev pxe options=efiboot,persistent
-
-# boot to BIOS for checkout
-ipmitool chassis bootdev bios options=efiboot
-```
-> **`NOTE`** `ipmitool` works against a machine remotely over TCP/IP, it requires more arguments:
+> **`NOTE`** When using `ipmitool` against a machine remotely, it requires more arguments:
 > ```bash
-> username=root
-> IPMI_PASSWORD=
-> ipmitool -I lanplus -U $username -E -H <bmc-hostname>
+> linux# username=root
+> linux# IPMI_PASSWORD=CHANGME
+> linux# ipmitool -I lanplus -U $username -E -H <bmc-hostname>
 > ```
 
-<a name="locating-a-usb-stick"></a>
-## Locating a USB Stick
+1. Reset BIOS with ipmitool
+ 
+   ```bash
+   ncn# ipmitool chassis bootdev none options=clear-cmos
+   ```
 
-Some systems very obviously print out which device is the USB, other systems (like Gigabyte based) do not.
+1. Set next boot with ipmitool
 
-Parsing the output of `efibootmgr` can be helpful in determining which device is your USB stick. One can and should use tools such as `lsblk`, `blkid`, or kernel (`/proc`) as well if one knows how. As an example, one can sometimes match up `ls -l /dev/disk/by-partuuid` with `efibootmgr -v`.
+   ```bash
+   ncn# ipmitool chassis bootdev pxe options=efiboot,persistent
+   ```
 
+1. Boot to BIOS for checkout of boot devices
 
-```bash
-# Print off the UEFI's boot selections:
-ncn-m# efibootmgr
-BootCurrent: 0015
-Timeout: 1 seconds
-BootOrder: 000E,000D,0011,0012,0007,0005,0006,0008,0009,0000,0001,0002,000A,000B,000C,0003,0004,000F,0010,0013,0014
-Boot0000* Enter Setup
-Boot0001  Boot Device List
-Boot0002  Network Boot
-Boot0003* Launch EFI Shell
-Boot0004* UEFI HTTPv6: Network 00 at Riser 02 Slot 01
-Boot0005* UEFI HTTPv6: Intel Network 00 at Baseboard
-Boot0006* UEFI HTTPv4: Intel Network 00 at Baseboard
-Boot0007* UEFI IPv4: Intel Network 00 at Baseboard
-Boot0008* UEFI IPv6: Intel Network 00 at Baseboard
-Boot0009* UEFI HTTPv6: Intel Network 01 at Baseboard
-Boot000A* UEFI HTTPv4: Intel Network 01 at Baseboard
-Boot000B* UEFI IPv4: Intel Network 01 at Baseboard
-Boot000C* UEFI IPv6: Intel Network 01 at Baseboard
-Boot000D* UEFI HTTPv4: Network 00 at Riser 02 Slot 01
-Boot000E* UEFI IPv4: Network 00 at Riser 02 Slot 01
-Boot000F* UEFI IPv6: Network 00 at Riser 02 Slot 01
-Boot0010* UEFI HTTPv6: Network 01 at Riser 02 Slot 01
-Boot0011* UEFI HTTPv4: Network 01 at Riser 02 Slot 01
-Boot0012* UEFI IPv4: Network 01 at Riser 02 Slot 01
-Boot0013* UEFI IPv6: Network 01 at Riser 02 Slot 01
-Boot0014* UEFI Samsung Flash Drive 1100
-Boot0015* UEFI Samsung Flash Drive 1100
-Boot0018* UEFI SAMSUNG MZ7LH480HAHQ-00005 S45PNA0M838871
-Boot1001* Enter Setup
-```
+   ```bash
+   ncn# ipmitool chassis bootdev bios options=efiboot
+   ```
 
-In the example above, our device is 0014 or 0015. We'll guess its the first one, and can correct this on-the-fly in POST
-Notice the lack of "Boot" in the ID number given, we want Boot0014 so we pass '0014' to efibootmgr:
+<a name="locating-usb-device"></a>
+#### Locating USB Device
 
-```bash
-ncn-m# efibootmgr -n 0014
+Some nodes very obviously display which device is the USB, other nodes (such as Gigabyte) do not.
 
-# Verify the BootNext device is what you selected:
-ncn-m# efibootmgr | grep -i bootnext
-BootNext: 0014
-```
+Parsing the output of `efibootmgr` can be helpful in determining which device is your USB device. One can and should use tools such as `lsblk`, `blkid`, or kernel (`/proc`) as well if one knows how. As an example, one can sometimes match up `ls -l /dev/disk/by-partuuid` with `efibootmgr -v`.
 
-Now the UEFI Samsung Flash Drive will boot next.
+   1. Display the current UEFI boot selections.
 
-> **`Note`** there are duplicates in the list. During boot, the boot-manager will select the first one. If you find that the first one is false, false entries can be deleted with `efibootmgr -b 0014 -d`.
+   ```bash
+   ncn-m# efibootmgr
+   BootCurrent: 0015
+   Timeout: 1 seconds
+   BootOrder: 000E,000D,0011,0012,0007,0005,0006,0008,0009,0000,0001,0002,000A,000B,000C,0003,0004,000F,0010,0013,0014
+   Boot0000* Enter Setup
+   Boot0001  Boot Device List
+   Boot0002  Network Boot
+   Boot0003* Launch EFI Shell
+   Boot0004* UEFI HTTPv6: Network 00 at Riser 02 Slot 01
+   Boot0005* UEFI HTTPv6: Intel Network 00 at Baseboard
+   Boot0006* UEFI HTTPv4: Intel Network 00 at Baseboard
+   Boot0007* UEFI IPv4: Intel Network 00 at Baseboard
+   Boot0008* UEFI IPv6: Intel Network 00 at Baseboard
+   Boot0009* UEFI HTTPv6: Intel Network 01 at Baseboard
+   Boot000A* UEFI HTTPv4: Intel Network 01 at Baseboard
+   Boot000B* UEFI IPv4: Intel Network 01 at Baseboard
+   Boot000C* UEFI IPv6: Intel Network 01 at Baseboard
+   Boot000D* UEFI HTTPv4: Network 00 at Riser 02 Slot 01
+   Boot000E* UEFI IPv4: Network 00 at Riser 02 Slot 01
+   Boot000F* UEFI IPv6: Network 00 at Riser 02 Slot 01
+   Boot0010* UEFI HTTPv6: Network 01 at Riser 02 Slot 01
+   Boot0011* UEFI HTTPv4: Network 01 at Riser 02 Slot 01
+   Boot0012* UEFI IPv4: Network 01 at Riser 02 Slot 01
+   Boot0013* UEFI IPv6: Network 01 at Riser 02 Slot 01
+   Boot0014* UEFI Samsung Flash Drive 1100
+   Boot0015* UEFI Samsung Flash Drive 1100
+   Boot0018* UEFI SAMSUNG MZ7LH480HAHQ-00005 S45PNA0M838871
+   Boot1001* Enter Setup
+   ```
+   1. Set next boot entry.
+
+   In the example above, our device is 0014 or 0015. We'll guess its the first one, and can correct this on-the-fly in POST
+   Notice the lack of "Boot" in the ID number given, we want Boot0014 so we pass '0014' to efibootmgr:
+
+   ```bash
+   ncn-m# efibootmgr -n 0014
+   ```
+   1. Verify the BootNext device is what you selected:
+
+   ```bash
+   ncn-m# efibootmgr | grep -i bootnext
+   BootNext: 0014
+   ```
+   1. Now the UEFI Samsung Flash Drive will boot next.
+
+   > **`Note`** there are duplicates in the list. During boot, the boot-manager will select the first one. If you find that the first one is false, false entries can be deleted with `efibootmgr -b 0014 -d`.
