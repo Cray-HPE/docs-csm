@@ -363,7 +363,7 @@ The configuration workflow described here is intended to help understand the exp
     > CASMINST-1093
     > ```
 
-3. Once all storage nodes are up and the message "...sleeping 5 seconds until /etc/kubernetes/admin.conf" appears on the ncn-s001, it is safe to proceed with booting the **Kubernetes Managers and Workers**
+3. Once all storage nodes are up and the message "...sleeping 5 seconds until /etc/kubernetes/admin.conf" appears on the ncn-s001 console, it is safe to proceed with booting the **Kubernetes Managers and Workers**
 
    **`NOTE`**: On ncn-s001, run `tail -f messages | grep cloud-init` and when you get see `...sleeping 5 seconds until /etc/kubernetes/admin.conf` then you are ready to boot the masters and workers.
 
