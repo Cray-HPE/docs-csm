@@ -363,9 +363,9 @@ The configuration workflow described here is intended to help understand the exp
     > CASMINST-1093
     > ```
 
-3. Once all storage nodes are up and ncn-s001 is running ceph-ansible, boot **Kubernetes Managers and Workers**
+3. Once all storage nodes are up and the message "...sleeping 5 seconds until /etc/kubernetes/admin.conf" appears on the ncn-s001, it is safe to proceed with booting the **Kubernetes Managers and Workers**
 
-   **`NOTE`**: You can see if ansible is doing anything by tailing the /var/log/cray/ansible.log file.  This would typically be found running from ncn-s001.
+   **`NOTE`**: On ncn-s001, run `tail -f messages | grep cloud-init` and when you get see `...sleeping 5 seconds until /etc/kubernetes/admin.conf` then you are ready to boot the masters and workers.
 
     ```bash
     pit# grep -oP "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
