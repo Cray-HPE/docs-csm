@@ -36,7 +36,9 @@ For either case, certain hardware requires that the node be shutdown prior to op
 
 [^1]: If replacing **all** OS disks then a rebuild is required.
 
-> **NOTE:** These instructions only apply prior to booting off the LiveCD -- once that step is complete refer to the "Rebuild NCNs" section in the HPE Cray EX Hardware Management Administration Guide S-8015.
+> **NOTE:** These instructions only apply prior to booting off the LiveCD -- once that step is complete refer 
+> to "Rebuild NCNs" in the _HPE Cray EX Hardware Management Administration Guide 1.5 S-8015_.
+
 
 <a name='rebooting-nodes'></a>
 ### Rebooting Nodes

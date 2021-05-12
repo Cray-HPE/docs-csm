@@ -308,3 +308,12 @@ The User Access Node (UAN) is an NCN, but is really one of the special types of 
 The UAN provides a traditional multi-user Linux environment for users on a Cray Ex system to
 develop, build, and execute their applications on the Cray EX compute node.  See UAI for another
 way for users to gain access.  Some sites refer to their UANs as Login nodes.
+
+### xname
+
+Component names (xnames) identify the geolocation for hardware components in the HPE Cray EX system. Every
+component is uniquely identified by these component names. Some, like the system cabinet number or the CDU
+number, can be changed by site needs. There is no geolocation encoded within the cabinet number, such as an
+X-Y coordinate system to relate to the floor layout of the cabinets. Other component names refer to the location
+within a cabinet and go down to the port on a card or switch or the socket holding a processor or a memory DIMM
+location.  Refer to "Component Names (xnames)" in the _HPE Cray EX Hardware Management Administration Guide 1.5 S-8015_.

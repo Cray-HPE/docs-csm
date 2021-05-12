@@ -31,9 +31,8 @@ The above file would lead to this pairing between component name and hostname:
 For this you will need:
 
 - The SHCD for your system
-
-It is worthwhile to review the topic about component names from the HPE Cray EX Hardware Management Administration Guide 1.4 S-8015
-while mapping names between the SHCD and your `switch_metadata.csv` file.
+Check the description for component names while mapping names between the SHCD and your `switch_metadata.csv` file.
+Refer to "Component Names (xnames)" in the _HPE Cray EX Hardware Management Administration Guide 1.5 S-8015_.
 
 **`INTERNAL USE`**
 [HSS Naming Convention](https://connect.us.cray.com/confluence/display/HSOS/Shasta+HSS+Component+Naming+Convention)

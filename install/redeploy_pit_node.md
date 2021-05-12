@@ -115,7 +115,7 @@ data so run them only when indicated. Instructions are in the `README` files.
     1. Set variables
     
         **IMPORTANT**: The variables you set depend on whether or not you followed the steps in 
-        [Setting a Local Timezone](../operations/configure_ntp_on_ncns.md#setting-a-local-timezone).  The
+        [Configure NCN Images to Use Local Timezone](../operations/configure_ntp_on_ncns.md#configure_ncn_images_to_use_local_timezone).  The
         two paths forward are listed below:
         
         * If you customized the timezones, set the following variables:

@@ -1,44 +1,47 @@
 # Lock and Unlock Nodes
 
-TODO compare descriptive text to S-8000 and make this the best of both.
+Starting with Shasta v1.4, CAPMC and FAS have the ability to ignore mangement nodes by honoring
+a lock state, however this ability is turned off by default.  The administrator must lock the
+management nodes to prevent unwanted actions from affecting these nodes.  
 
-    * [Why?](#why) 
-    * [When To Lock Management NCNs](#when-to-lock-management-ncns) 
-    * [When To Unlock Management NCNs](#when-to-unlock-management-ncns) 
-    * [Locked Behavior](#locked-behavior) 
-    * [START -> How To Lock Management NCNs](#how-to-lock-management-ncns)
-    * [How To Unlock Management NCNs](#how-to-unlock-management-ncns) 
-    * [Next Steps](#next-steps)
+This section only covers using locks with the Hardware State Manager (HSM). For more information
+on ignoring nodes, refer to the following sections:
 
-##  <a name="why"></a>Why?
+   * Firmware Action Service (FAS): Refer to "Ignore Node within FAS" in the _HPE Cray EX Hardware Management Administration Guide 1.5 S-8015_
+   * Cray Advanced Platform Monitoring and Control (CAPMC): Refer to "Ignore Node with CAPMC" in the _HPE Cray EX Hardware Management Administration Guide 1.5 S-8015_
 
-In Shasta 1.4 NCN black listing is turned off by default for CAPMC and FAS.  Also, please note
-that Management NCNs are NOT locked by default either.
+The following actions can be prevented when a node is locked.
+   * Firmware upgrades with FAS
+   * Power off operations with CAPMC
+   * Reset operations with CAPMC
 
-Thus it is up to the administrator to properly lock NCNs to prevent things 
-from accidentally being done to them, namely:
+Doing any of these actions by accident will shut down a management node. If the node is a Kubernetes master or worker
+node, this can have serious negative effects on system operations. If a single node is taken down by mistake, it is
+possible that services will recover. If all management nodes are taken down, or all Kubernetes workers are taken down by
+mistake, the system must be restarted.
 
-* Firmware upgrades
-* Power down operations
-* Reset operations
+After critical nodes are locked, power/reset (CAPMC) or firmware (FAS) operations cannot affect the nodes unless
+they are unlocked. For example, any locked node that is included in a list of nodes to be reset will result in a
+failure.
 
-Doing any of these by accident will take down an NCN.  If the NCN is a 
-Kubernetes master or worker node, this can have serious negative effects on
-system operation.  
+### Topics:
 
-If a single node is taken down by mistake it is possible that things will 
-recover; if all NCNs are taken down, or all Kubernetes worker nodes are taken down
-by mistake, the system is dead and has to be completely restarted.
+   * [When To Lock Management Nodes](#when-to-lock-management-nodes) 
+   * [When To Unlock Management Nodes](#when-to-unlock-management-nodes) 
+   * [How To Lock Management Nodes](#how-to-lock-management-nodes)
+   * [How To Unlock Management Nodes](#how-to-unlock-management-nodes) 
 
-## <a name="when-to-lock-management-ncns"></a>When To Lock Management NCNs
+## Details
 
-If NCNs are to be locked, **it should be done as early as possible in the install/
-upgrade cycle**.   The later in the process, the more risk of accidentally taking
-down a critical node.
+<a name="when-to-lock-management-nodes"></a>
+### When To Lock Management Nodes
 
-NCN locking must be done after Kubernetes is running and all HMS Hardware State Manager service is operational.
+To best protect system health, management nodes should be locked as early as possible in the
+install/upgrade cycle.   The later in the process, the more risk of accidentally taking
+down a critical node.  Management node locking must be done after Kubernetes is running and
+the HSM (Hardware State Manager) service is operational.
 
-This can be checked thusly:
+Check whether HSM is running with the following command.
 
 ```bash
 linux# kubectl -n services get pods | grep smd
@@ -52,88 +55,88 @@ cray-smd-postgres-2                 2/2     Running    0          19d
 cray-smd-wait-for-postgres-4-7c78j  0/3     Completed  0          9d
 ```
 
-Note that the cray-smd-xxx pods are in the **Running** state.
+The `cray-smd` pods need to be in the 'Running' state, except for `cray-smd-init` and
+`cray-smd-wait-for-postgres` which should be in 'Completed' state..
 
-## <a name="when-to-unlock-management-ncns"></a>When To Unlock Management NCNs
+<a name="when-to-unlock-management-nodes"></a>
+### When To Unlock Management Nodes
 
-Any time a management NCN has to be power cycled, reset, or have its
-firmware updated it will first need to be unlocked.   
+Any time a management NCN has to be power cycled, reset, or have its firmware updated
+it will first need to be unlocked.  After the operation is complete the targeted nodes
+should once again be locked.
 
-After the operation is complete the targeted nodes should once again be locked.
-See below for instructions and examples.
+<a name="how-to-lock-management-nodes"></a>
+### How To Lock Management Nodes
 
-## <a name="locked-behavior"></a>Locked Behavior
+Use the `cray hsm locks lock` command to perform locking. 
 
-Once critical nodes are locked, then no power/reset (CAPMC) or firmware (FAS)
-operations can be done to them unless they are first unlocked.   Any node
-included in a list of nodes to reset, for example, which are locked, will
-result in a failure.
+* To lock all nodes with the _Management_ role.
 
-## <a name="how-to-lock-management-ncns"></a>START-> How To Lock Management NCNs
+   The *processing-model rigid* parameter means that the operation must succeed on all
+   target nodes or the entire operation will fail.
 
-Use the standard CLI to perform locking.  The simplest command will lock all
-nodes with a **Management** role.  The *processing-model rigid* parameter means that the
-operation must succeed on all target nodes or the entire operation will fail.
+   ```bash
+   linux# cray hsm locks lock create --role Management --processing-model rigid
+   Failure = []
+   
+   [Counts]
+   Total = 8
+   Success = 8
+   Failure = 0
+   
+   [Success]
+   ComponentIDs = [ "x3000c0s5b0n0", "x3000c0s4b0n0", "x3000c0s7b0n0", "x3000c0s6b0n0", "x3000c0s3b0n0", "x3000c0s2b0n0", "x3000c0s9b0n0", "x3000c0s8b0n0",]
+   ```
 
-Example:
+* To lock single nodes or lists of specific nodes.
 
-```bash
-linux# cray hsm locks lock create --role Management --processing-model rigid
-Failure = []
+   ```bash
+   linux# cray hsm locks lock create --role Management --component-ids x3000c0s6b0n0 --processing-model rigid
+   Failure = []
+   
+   [Counts]
+   Total = 1
+   Success = 1
+   Failure = 0
+   
+   [Success]
+   ComponentIDs = [ "x3000c0s6b0n0",]
+   ```
 
-[Counts]
-Total = 8
-Success = 8
-Failure = 0
+<a name="how-to-unlock-management-nodes"></a>
+### How To Unlock Management Nodes
 
-[Success]
-ComponentIDs = [ "x3000c0s5b0n0", "x3000c0s4b0n0", "x3000c0s7b0n0", "x3000c0s6b0n0", "x3000c0s3b0n0", "x3000c0s2b0n0", "x3000c0s9b0n0", "x3000c0s8b0n0",]
-```
+Use the `cray hsm locks unlock` command to perform unlocking. 
 
-Single nodes or lists of specific nodes can also be locked:
+* To lock all nodes with the _Management_ role.
 
-```bash
-linux# cray hsm locks lock create --role Management --component-ids x3000c0s6b0n0 --processing-model rigid
-Failure = []
+   ```bash
+   linux# cray hsm locks unlock create --role Management --processing-model rigid
+   Failure = []
+   
+   [Counts]
+   Total = 8
+   Success = 8
+   Failure = 0
+   
+   [Success]
+   ComponentIDs = [ "x3000c0s7b0n0", "x3000c0s6b0n0", "x3000c0s3b0n0", "x3000c0s2b0n0", "x3000c0s9b0n0", "x3000c0s8b0n0", "x3000c0s5b0n0", "x3000c0s4b0n0",]
+   ```
 
-[Counts]
-Total = 1
-Success = 1
-Failure = 0
+* To unlock single nodes or lists of specific nodes.
 
-[Success]
-ComponentIDs = [ "x3000c0s6b0n0",]
-```
-
-
-## <a name="how-to-unlock-management-ncns"></a>How To Unlock Management NCNs
-
-```bash
-linux# cray hsm locks unlock create --role Management --processing-model rigid
-Failure = []
-
-[Counts]
-Total = 8
-Success = 8
-Failure = 0
-
-[Success]
-ComponentIDs = [ "x3000c0s7b0n0", "x3000c0s6b0n0", "x3000c0s3b0n0", "x3000c0s2b0n0", "x3000c0s9b0n0", "x3000c0s8b0n0", "x3000c0s5b0n0", "x3000c0s4b0n0",]
-```
-Single nodes or lists of specific nodes can also be locked:
-
-```bash
-linux# cray hsm locks unlock create --role Management --component-ids x3000c0s6b0n0 --processing-model rigid
-Failure = []
-
-[Counts]
-Total = 1
-Success = 1
-Failure = 0
-
-[Success]
-ComponentIDs = [ "x3000c0s6b0n0",]
-```
+   ```bash
+   linux# cray hsm locks unlock create --role Management --component-ids x3000c0s6b0n0 --processing-model rigid
+   Failure = []
+   
+   [Counts]
+   Total = 1
+   Success = 1
+   Failure = 0
+   
+   [Success]
+   ComponentIDs = [ "x3000c0s6b0n0",]
+   ```
 
 ## <a name="next-steps"></a>Next Steps
 

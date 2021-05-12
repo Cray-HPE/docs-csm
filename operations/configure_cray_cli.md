@@ -1,15 +1,14 @@
 # Configure the Cray Command Line Interface (cray CLI)
 
-TODO Add headers: About this task, Role, Objective, Limitations, New in this Release
-
-The cray command line interface (CLI) is a framework created to integrate all of the system management REST
+The `cray` command line interface (CLI) is a framework created to integrate all of the system management REST
 APIs into easily usable commands. 
 
-Later procedures in the installation process use the 'cray' CLI to interact with multiple services.
-The 'cray' CLI configuration needs to be initialized and the user running the procedure needs to be authorized. 
-This section describes how to initialize the 'cray' CLI for use by a user and authorize that user.
+Later procedures in the installation workflow use the `cray` CLI to interact with multiple services.
+The `cray` CLI configuration needs to be initialized for the Linux account and the keycloak user running
+the procedure needs to be authorized.  This section describes how to initialize the `cray` CLI for use by
+a user and authorize that user.
 
-The 'cray' CLI only needs to be initialized once per user on a node.
+The `cray` CLI only needs to be initialized once per user on a node.
 
 1. Unset CRAY_CREDENTIALS environment variable, if previously set.
 
@@ -21,16 +20,17 @@ The 'cray' CLI only needs to be initialized once per user on a node.
    ncn# unset CRAY_CREDENTIALS
    ```
 
-1. Initialize the 'cray' CLI for the root account.
+1. Initialize the `cray` CLI for the root account.
 
-   The 'cray' CLI needs to know what host to use to obtain authorization and what user is requesting authorization
+   The `cray` CLI needs to know what host to use to obtain authorization and what user is requesting authorization
    so it can obtain an OAUTH token to talk to the API Gateway.  This is accomplished by initializing the CLI
    configuration.  In this example, the `vers` username and its password are used. 
 
-   If LDAP configuration has enabled, then use a valid account in LDAP instead of 'vers'.
+   If LDAP configuration was enabled, then use a valid account in LDAP instead of the example account 'vers'.
 
    If LDAP configuration was not enabled, or is not working, then a keycloak local account could be created. 
-   Refer to "Create a Service Account in Keycloak" in the _HPE Cray EX System Administration Guide S-8001_.
+   See [Configure Keycloak Account](configure_keycloak_account.md) to create this local account in keycloak 
+   and then use it instead of the example account 'vers'.
 
    ```bash
    ncn# cray init

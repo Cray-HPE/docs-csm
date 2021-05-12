@@ -105,7 +105,7 @@ For example:
 ```
 Errors reported previous to the lock status, such as **ERROR: get_cluster** can be ignored.
 
-Refer to "About Postgres" in the _HPE Cray EX System Administration Guide 1.5 S-8001_ for further information.
+Refer to "About Postgres" in the _HPE Cray EX System Administration Guide 1.5 S-8001_.
 
 <a name="pet-bgp"></a>
 ### BGP Peering Status and Reset

@@ -71,7 +71,7 @@ The chapters with topics which need to be done as part of an ordered procedure a
    * [Configure BMC and Controller Parameters with SCSD](operations/configure_with_scsd.md)
    * [Update BGP Neighbors](operations/update-bgp-neighbors.md)
    * [Update Firmware with FAS](operations/update_firmware_with_fas.md)
-   * [Manage Node Consoles](operations/manage_node_consoles.md))
+   * [Manage Node Consoles](operations/manage_node_consoles.md)
    * [Changing Passwords and Credentials](operations/changing_passwords_and_credentials.md)
    * [Managing Configuration with CFS](operations/managing_configuration_with_CFS.md)
    * [UAS/UAI Admin and User Guide](operations/500-UAS-UAI-ADMIN-AND-USER-GUIDE.md)
