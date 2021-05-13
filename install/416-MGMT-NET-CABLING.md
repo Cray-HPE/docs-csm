@@ -117,6 +117,44 @@ For systems that include 4 aggregation switches the cabling will look like the f
 
 ![HPE_UAN](img/network/HPE_UAN.png)
 
+### HPE Apollo 6500 XL645D
+![XL645D](../img/network/XL645D-back.png)
+* The XL645D has two servers in the same chassis.
+* The iLO BMC RJ45 port is a shared network port.  Both iLO/BMC traffic and compute node traffic could transit this link.
+  * Isolating this port to iLO/BMC only traffic is not possible within firmware configuration alone.
+  * iLO configuration settings **must** be paired with management switch port settings to ensure only BMC traffic exits the port.
+  * The iLO firmware must be set to tag traffic to VLAN 4.  The switch port must be set to trunk VLAN 4.
+* Ports on the OCP card are numbered left-to-right:  the far left port is port 1.
+
+#### Apollo XL645D Cabling (per server)
+
+| Server Port        | Management Network Port        | Speed | Use / Configuration         |
+|--------------------|--------------------------------|-------|-----------------------------|
+| OCP port 1         | 1G leaf switch                 |  1Gb  | Management Network NMN      |
+| OCP port 2         | None                           | None  | None                        |
+| OCP port 3         | None                           | None  | None                        |
+| OCP port 4         | None                           | None  | None                        |
+| iLO                | 1G leaf switch                 |  1Gb  | Management Network HMN      |
+
+### HPE Apollo 6500 XL675D
+![XL675D](../img/network/XL675D-back.png)
+* Two PCIe slots (chassis slots 21 and 22) are highlighted.  One will contain the 1Gb management network card and one will be for the HSN.
+* The iLO BMC RJ45 port is a shared network port.  Both iLO/BMC traffic and compute node traffic could transit this link.
+  * Isolating this port to iLO/BMC only traffic is not possible within firmware configuration alone.
+  * iLO configuration settings **must** be paired with management switch port settings to ensure only BMC traffic exits the port.
+  * The iLO firmware must be set to tag traffic to VLAN 4.  The switch port must be set to trunk VLAN 4.
+* Ports on the PCIe card are numbered left-to-right:  the far left port is port 1.
+
+#### Apollo XL675D Cabling
+
+| Server Port        | Management Network Port        | Speed | Use / Configuration         |
+|--------------------|--------------------------------|-------|-----------------------------|
+| PCIe port 1        | 1G leaf switch                 |  1Gb  | Management Network NMN      |
+| PCIe port 2        | None                           | None  | None                        |
+| PCIe port 3        | None                           | None  | None                        |
+| PCIe port 4        | None                           | None  | None                        |
+| iLO                | 1G leaf switch                 |  1Gb  | Management Network HMN      |
+
 <a name="gigabyte-hardware"></a>
 ## Gigabyte/Intel Hardware
 
