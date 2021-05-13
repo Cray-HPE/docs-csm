@@ -22,6 +22,7 @@ sw-leaf-001(config)#
 - This configuration describes the ports that go to the Node Management Network (NMN/VLAN2).
 - You can Identify these ports by referencing the NMN tab on the SHCD.
 
+```
 sw-leaf-001(config)#
     interface 1/1/35
     no shutdown
