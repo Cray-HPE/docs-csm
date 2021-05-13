@@ -144,7 +144,7 @@ route-map ncn-w001 permit seq 20
      match ip address prefix-list tftp
      match ip next-hop 10.252.1.8
      set local-preference 1100
-route-map ncn-w001 permit seq 30
+route-map ncn-w001 permit seq 30ß
      match ip address prefix-list tftp
      match ip next-hop 10.252.1.9
      set local-preference 1200
