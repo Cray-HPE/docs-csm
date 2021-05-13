@@ -319,26 +319,8 @@ data so run them only when indicated. Instructions are in the `README` files.
     
     > **`NOTE`**: If the nodes has PXE boot issues, such as getting PXE errors or not pulling the ipxe.efi binary, see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
     
-    > **`NOTE`**: If ncn-m001 booted without a hostname or it didn't run all the cloud-init scripts, the following commands need to be run **(but only in that circumstance)**.
+    > **`NOTE`**: If ncn-m001 didn't run all the cloud-init scripts, the following commands need to be run **(but only in that circumstance)**.
     
-    1. Make directory to copy network config files to.
-        ```bash
-        ncn-m001# mkdir /mnt/cow
-        ```
-    1. Mount the USB to that directory.
-        ```bash
-        ncn-m001# mount -L cow /mnt/cow
-        ```
-    1. Copy the network config files.
-        ```bash
-        ncn-m001# cp -pv /mnt/cow/rw/etc/sysconfig/network/ifroute* /etc/sysconfig/network/
-        ncn-m001# cp -pv /mnt/cow/rw/etc/sysconfig/network/ifcfg-lan0 /etc/sysconfig/network/
-        ```
-    1. Run the `set-dhcp-to-static.sh` script
-        ```bash
-        ncn-m001# /srv/cray/scripts/metal/set-dhcp-to-static.sh
-        ```
-        Network connectivity should be restored afterwards; the bond is up.
     1. Run the following commands:
         ```bash
         ncn-m001# cloud-init clean
