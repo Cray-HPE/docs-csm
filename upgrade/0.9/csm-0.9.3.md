@@ -226,6 +226,12 @@ ncn-m001# pdsh -w $(./lib/list-ncns.sh | grep ncn-w | paste -sd,) "echo kernel.p
         }
         ```
 
+1. Run `kubectl delete -n spire job spire-update-bss` to allow the spire chart to be updated properly:
+
+	```bash
+	ncn-m001# kubectl delete -n spire job spire-update-bss
+	```
+
 1. Run `upgrade.sh` to deploy upgraded CSM applications and services:
     ```bash
     ncn-m001# ./upgrade.sh
