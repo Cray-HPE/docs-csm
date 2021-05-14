@@ -7,6 +7,10 @@ These steps should be run for a storage node after the common upgrade steps are 
    ```bash
    ncn# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
    ```
+2. Run NTP setup
+```bash
+ncn-s001# /srv/cray/scripts/metal/ntp-upgrade-config.sh
+```
 
 2. Restore the `/var/lib/ceph`, `/etc/ceph`, and `/var/lib/containers` directories for the storage node being upgraded ($UPGRADE_NCN).
 
