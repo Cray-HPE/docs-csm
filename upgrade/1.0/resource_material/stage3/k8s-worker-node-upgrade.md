@@ -46,20 +46,53 @@
      "retryPolicy": 3,
     ```
 
-3. Ensure the nexus pod has the ability to start on any worker node by pre-pulling the `nexus-setup` image.  This command should be run from the stable node.
+3. Ensure the nexus pod has the ability to start on any worker node by
+   pre-caching the required images from the new CSM release.
+
+   > NOTE: The command pipeline used in this step ties everything together in a
+   > single command to precache the appropriate images before rebooting any
+   > worker nodes. As a result it must be run from the node that has the
+   > extracted CSM release distribution. If this is not possible, then see the
+   > note below to sync each image one at a time.
 
    ```bash
-   ncn# pdsh -w ncn-w00[1-3] 'crictl pull registry.local/cray/cray-nexus-setup:0.3.2'
+   ncn-m001# workers="$(kubectl get node --selector='!node-role.kubernetes.io/master' -o name | sed -e 's,^node/,,' | paste -sd,)"
+   ncn-m001# export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+   ncn-m001# yq r ./${CSM_RELEASE}/manifests/platform.yaml 'spec.charts(name==cray-precache-images).values.cacheImages[*]' | while read image; do echo >&2 "+ caching $image"; pdsh -w "$workers" "crictl pull $image"; done
    ```
-   > NOTE: If you get this error following errors, just ssh to each worker and make sure you have them in STABLE_NCN's *known_hosts*
-   ```
-   ncn-w001: Host key verification failed.
-   pdsh@ncn-m001: ncn-w001: ssh exited with exit code 255
-   ncn-w003: Host key verification failed.
-   pdsh@ncn-m001: ncn-w003: ssh exited with exit code 255
-   ncn-w002: Host key verification failed.
-   pdsh@ncn-m001: ncn-w002: ssh exited with exit code 255
-   ``` 
+
+   > HOW-TO: **Manually precache images.** Inspect the `cray-precache-images`
+   > chart configuration in the new platform.yaml manifest to get the list of
+   > images that must be precached:
+   >
+   > ```bash
+   > ncn-m001# yq r ./${CSM_RELEASE}/manifests/platform.yaml 'spec.charts(name==cray-precache-images).values.cacheImages[*]'
+   > docker.io/sonatype/nexus3:3.25.0
+   > dtr.dev.cray.com/cray/cray-nexus-setup:0.3.2
+   > dtr.dev.cray.com/baseos/busybox:1
+   > dtr.dev.cray.com/cray/cray-dns-unbound:0.2.18
+   > dtr.dev.cray.com/cray/proxyv2:1.7.8-cray1
+   > k8s.gcr.io/pause:3.2
+   > dtr.dev.cray.com/k8s.gcr.io/pause:3.2
+   > ```
+   >
+   > Images are cached on a worker node using `crictl pull`, e.g.:
+   >
+   > ```bash
+   > ncn-w# crictl pull docker.io/sonatype/nexus3:3.25.0
+   > Image is up to date for sha256:0aedb49b54b0cc4499b02de66d41f45b956f911932e733f60b436165f4cb4d2d
+   > ```
+   >
+   > Use `pdsh 'crictl pull ...'` to cache each image on all workers, e.g.:
+   >
+   > ```bash
+   > ncn# workers="$(kubectl get node --selector='!node-role.kubernetes.io/master' -o name | sed -e 's,^node/,,' | paste -sd,)"
+   > ncn# export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+   > ncn# pdsh -w "$workers" 'crictl pull docker.io/sonatype/nexus3:3.25.0'
+   > ncn-w001: Image is up to date for sha256:0aedb49b54b0cc4499b02de66d41f45b956f911932e733f60b436165f4cb4d2d
+   > ncn-w003: Image is up to date for sha256:0aedb49b54b0cc4499b02de66d41f45b956f911932e733f60b436165f4cb4d2d
+   > ncn-w002: Image is up to date for sha256:0aedb49b54b0cc4499b02de66d41f45b956f911932e733f60b436165f4cb4d2d
+   > ```
 
 4. Gather any logs/info from pods in a `Completed` state on the worker node being updated.
 
