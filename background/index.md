@@ -78,7 +78,8 @@ software, but provides background which might be helpful for troubleshooting an 
 <a name="ncn_networking"></a>
 ### NCN Networking
 
-TODO finish the expansion of this topic
+   Non-compute nodes and compute nodes have different network interfaces used for booting.
+   The NCN network interafaces, device naming, and vendor and bus identification are described in this topic.
 
    * [NCN Networking](ncn_networking.md)
 
@@ -92,20 +93,21 @@ TODO finish the expansion of this topic
 <a name="ncn_packages"></a>
 ### NCN Packages
 
-TODO finish the expansion of this topic
+   The management nodes boot from images which have many (rpm) packages installed.  The packages
+   installed differ between the Kubernetes master and worker nodes versus the utility storage nodes.
 
    * [NCN Packages](ncn_packages.md)
 
 <a name="ncn_operating_system_releases"></a>
 ### NCN Operating System Releases
 
-TODO finish the expansion of this topic
+   All management nodes have an operating system based on SLE_HPC (SuSE High Performance Computing).
 
    * [NCN Operating System Releases](ncn_operating_system_releases.md)
 
 <a name="cloud-init_basecamp_configuration"></a>
 ### cloud-init Basecamp Configuration
 
-TODO finish the expansion of this topic
+Metal Basecamp is a cloud-init DataSource available on the LiveCD. Basecamp's configuration file offers many inputs for various cloud-init scripts embedded within the NCN images.
 
    * [cloud-init Basecamp Configuration](cloud-init_basecamp_configuration.md)

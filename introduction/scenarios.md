@@ -47,19 +47,19 @@ The scenarios (above) continue the same way at this point, with preparation and 
 * This version of the documentation supports [Bootstrap LiveCD Remote ISO](../install/bootstrap_livecd_remote_iso.md).
   or [Bootstrap LiveCD USB](../install/bootstrap_livecd_usb.md).
 
-##### [CSM USB LiveCD - Creation and Configuration](064-LIVECD-USB-BOOT.md)
+##### [Bootstrap PIT Node from LiveCD USB](../install/bootstrap_livecd_usb.md)
 
-Preparation of the LiveCD on a USB stick can be done from a Linux system such as a booted ncn-m001 node with either Shasta v1.3 or v1.4 or a laptop or desktop.
+Preparation of the LiveCD on a USB stick can be done from a Linux system such as a booted ncn-m001 node with Shasta vv1.4 or a laptop or desktop.
 
-* [Download and Expand the CSM Release](064-LIVECD-USB-BOOT.md#download-and-expand-the-csm-release)
-* [Create the Bootable Media](064-LIVECD-USB-BOOT.md#create-the-bootable-media)
-* [Configuration Payload](064-LIVECD-USB-BOOT.md#configuration-payload)
-  * [Generate Installation Files](064-LIVECD-USB-BOOT.md#generate-installation-files)
-  * [CSI Workarounds](064-LIVECD-USB-BOOT.md#csi-workarounds)
-  * [SHASTA-CFG](064-LIVECD-USB-BOOT.md#shasta-cfg)
-* [Pre-Populate LiveCD Daemons Configuration and NCN Artifacts](064-LIVECD-USB-BOOT.md#pre-populate-livecd-daemons-configuration-and-ncn-artifacts)
-* [Boot the LiveCD](064-LIVECD-USB-BOOT.md#boot-the-livecd)
-  * [First Login](064-LIVECD-USB-BOOT.md#first-login)
+* [Download and Expand the CSM Release](../install/bootstrap_livecd_usb.md#download-and-expand-the-csm-release)
+* [Create the Bootable Media](../install/bootstrap_livecd_usb.md#create-the-bootable-media)
+* [Configuration Payload](../install/bootstrap_livecd_usb.md#configuration-payload)
+  * [Generate Installation Files](../install/bootstrap_livecd_usb.md#generate-installation-files)
+  * [CSI Workarounds](../install/bootstrap_livecd_usb.md#csi-workarounds)
+  * [SHASTA-CFG](../install/bootstrap_livecd_usb.md#shasta-cfg)
+* [Prepopulate LiveCD Daemons Configuration and NCN Artifacts](../install/bootstrap_livecd_usb.md#prepopulate-livecd-daemons-configuration-and-ncn-artifacts)
+* [Boot the LiveCD](../install/bootstrap_livecd_usb.md#boot-the-livecd)
+  * [First Login](../install/bootstrap_livecd_usb.md#first-login)
 
 ##### [Deploy Management Nodes](../install/deploy_management_nodes.md)
 
@@ -90,10 +90,9 @@ Install all of the CSM applications and services into the management Kubernetes 
 * [Create Site-Init Secret](../install/install_csm_services.md#create-site-init-secret)
 * [Deploy Sealed Secret Decryption Key](../install/install_csm_services.md#deploy-sealed-secret-decryption-key)
 * [Deploy CSM Applications and Services](../install/install_csm_services.md#deploy-csm-applications-and-services)
-  * [Setup Nexus](../install/install_csm_services.md#setup-nexus)
-  * [Set NCNs to use Unbound](../install/install_csm_services.md#set-ncns-to-use-unbound)
-  * [Validate CSM Install](../install/install_csm_services.md#validate-csm-install)
-  * [Reboot from the LiveCD to NCN](../install/install_csm_services.md#reboot-from-the-livecd-to-ncn)
+* [Setup Nexus](../install/install_csm_services.md#setup-nexus)
+* [Set NCNs to use Unbound](../install/install_csm_services.md#set-ncns-to-use-unbound)
+* [Apply After Sysmgmt Manifest Workarounds](../install/install_csm_services.md#apply-after-sysmgmt-manifest-workarounds)
 * [Add Compute Cabinet Routing to NCNs](../install/install_csm_services.md#add-compute-cabinet-routing-to-ncns)
 * [Known Issues](../install/install_csm_services.md#known-issues)
   * [error: timed out waiting for the condition on jobs/cray-sls-init-load](../install/install_csm_services.md#error-timed-out-sls-init-load-job)
@@ -153,12 +152,9 @@ The ncn-m001 node needs to reboot from the LiveCD to normal operation as a Kuber
 
 * [Required Services](../install/redeploy_pit_node.md#required-services)
 * [Notice of Danger](../install/redeploy_pit_node.md#notice-of-danger)
-* [LiveCD Pre-Reboot Workarounds](../install/redeploy_pit_node.md#livecd-pre-reboot-workarounds)
 * [Hand-Off](../install/redeploy_pit_node.md#hand-off)
   * [Start Hand-Off](../install/redeploy_pit_node.md#start-hand-off)
 * [Reboot](../install/redeploy_pit_node.md#reboot)
-* [Accessing USB Partitions After Reboot](../install/redeploy_pit_node.md#accessing-usb-partitions-after-reboot)
-  * [Accessing CSI from a USB or RemoteISO](../install/redeploy_pit_node.md#accessing-csi-from-a-usb-or-remoteiso)
 * [Enable NCN Disk Wiping Safeguard](../install/redeploy_pit_node.md#enable-ncn-disk-wiping-safeguard)
 
 ##### [Validate CSM Health](../operations/validate_csm_health.md)
@@ -184,7 +180,6 @@ The firmware versions of many components may need to be updated at this point in
 * [Current Capabilities as of Shasta Release v1.4](../operations/update_firmware_with_fas.md#current-capabilities)
 * [Order Of Operations](../operations/update_firmware_with_fas.md#order-of-operations)
 * [Hardware Precedence Order](../operations/update_firmware_with_fas.md#hardware-precedence-order)
-* [Next Steps](../operations/update_firmware_with_fas.md#next-steps)
 
 
 The details of the process are outlined in [255-FIRMWARE-ACTION-SERVICE-FAS.md](255-FIRMWARE-ACTION-SERVICE-FAS.md) using recipes listed in [256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md)

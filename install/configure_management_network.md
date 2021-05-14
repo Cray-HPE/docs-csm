@@ -5,7 +5,6 @@ Newer systems have HPE Aruba switches, while older systems have Dell and Mellano
 
 The configuration steps are different for these switch vendors.  The switch configuration procedures for HPE Aruba will be grouped separately from the switch configuration procedures for other vendors.
 
-TODO Add headers: About this task, Role, Objective, Limitations, New in this Release
 TODO What is best workflow order?  Should it be by functionality or by doing all things on a switch?  All in this file or Aruba file and others file?
 TODO Remove all v1.3 migration things, but keep info about how to do a fresh install on Dell and Mellanox.
 
@@ -43,6 +42,7 @@ TODO New in Shasta v1.5. Should be called out as one of the New features in (../
       1. [Configure Flow Control](417-MGMT-NET-FLOW-CONTROL.md)
       1. [Configure NTP](414-MGMT-NET-NTP-CONFIG.md)
       1. [Create the CAN](408-MGMT-NET-CAN-CONFIG.md)
+   * [Next Topic](#next-topic)
 
 
 ## Details
@@ -54,7 +54,7 @@ TODO Should this information be merged or stay separate?  416-MGMT-NET-CABLING.m
 TODO 421-MGMT-NET-CABLING-CHECKLIST.md was orphaned.  No other file referenced it.
 
 <a name="next-topic"></a>
-# Next topic
+# Next Topic
 
    After completing this procedure the next step is to deploy the other management nodes using the PIT node and the management network switches configured in this procedure.
 

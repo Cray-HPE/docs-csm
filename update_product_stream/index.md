@@ -37,6 +37,12 @@ None.
    linux# wget ${ENDPOINT}/${CSM_RELEASE}.tar.gz
    ```
 
+   > **`INTERNAL USE`** The `ENDPOINT` URL below is for internal use. 
+
+   ```bash
+   linux# export ENDPOINT=https://arti.dev.cray.com/artifactory/shasta-distribution-stable-local/csm/
+   ```
+
    1. Extract the source release distribution.
 
    If doing a first time install, this can be done on a Linux system, but for an upgrade, it could be done on one of the NCNs, such as ncn-m001.

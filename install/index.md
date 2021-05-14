@@ -23,6 +23,7 @@ product streams for the HPE Cray EX system can be installed.
    1. [Configure Administrative Access](#configure_administrative_access)
    1. [Validate CSM Health](#validate_csm_health.md)
    1. [Update Firmware with FAS](#update_firmware_with_fas)
+   1. [Prepare Compute Nodes](#prepare_compute_nodes)
    1. [Next Topic](#next_topic)
    1. [Troubleshooting Installation Problems](#troubleshooting_installation)
 
@@ -99,10 +100,17 @@ sections, but there is also a general troubleshooting topic.
  
    1. Validate CSM Health Before PIT Node Redeploy
 
-   After installing all of the CSM services, now would be an good time to validate the health of the
+   After installing all of the CSM services now would be an good time to validate the health of the
    management nodes and all CSM services.  The advantage in doing it now is that if there are any problems
    detected with the core infrastructure or the nodes, it is easy to rewind the installation to
    [Deploy Management Nodes](#deploy_management_nodes) since the PIT node has not yet been redeployed.
+
+   After installing all of the CSM services, wait at least 15 minutes to let the various Kubernetes
+   resources get initialized and started before trying to validate CSM health. Because there are a number
+   of dependencies between them, some services are not expected to work immediately after the install
+   script completes.
+
+   Some of the time waiting can be spent preparing the `cray` CLI.
 
    Note: If doing the CSM validation at this point, some of the tests which use the 'cray' CLI may fail
    until these two procedures have been done.  These tests, such as Booting the CSM Barebones Image on compute
@@ -161,13 +169,26 @@ sections, but there is also a general troubleshooting topic.
 
    See [Update Firmware with FAS](../operations/update_firmware_with_fas.md)
 
-   <a name="next_topic"></a>
+   <a name="prepare_compute_nodes"></a>
+
+   1. Prepare Compute Nodes
+
+   After completion of the firmware update with FAS, compute nodes can be prepared.  Some compute node
+   types have special preparation steps, but most compute nodes are ready to be used now.
+
+   These compute node types require preparation.
+
+      * HPE Apollo 6500 XL645d 
+
+   See [Prepare Compute Nodes](prepare_compute_nodes.md)
+
+   <a name="next-topic"></a>
 
    1. Next Topic
 
-   After completion of the firmware update with FAS, the CSM product stream has been fully installed and
-   configured.  Refer to the _HPE Cray EX Installation and Configuration Guide 1.5 S-8000_ for other product streams
-   to be installed and configured after CSM.
+   After completion of the firmware update with FAS and the preparation of compute nodes, the CSM product stream has
+   been fully installed and configured.  Refer to the _HPE Cray EX Installation and Configuration Guide 1.5 S-8000_
+   for other product streams to be installed and configured after CSM.
 
    <a name="troubleshooting_installation"></a>
    

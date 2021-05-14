@@ -14,7 +14,6 @@ This page describes administrative knowledge around the pre-config files to `csi
 ### Topics: 
   
    * [Save-File / Avoiding Parameters](#save-file--avoiding-parameters)
-   * [CSI `hmn_connections.json` Notes](#csi-hmn_connections.json-notes)
 
 ## Details
 
@@ -78,22 +77,3 @@ system-name: redbull
 upstream_ntp_server: time.nist.gov
 v2-registry: https://registry.nmn/
 ```
-
-<a name="csi-hmn_connections.json-notes"></a>
-### CSI `hmn_connections.json` Notes
-
-TODO this warning is out of place here.  It belongs in the install chapter when preparing to call `csi` with the configuration payload.
-
-If you see warnings from `csi config init` that are similar to the warning messages below, it means that CSI encountered an unknown piece of hardware in the `hmn_connections.json` file. If you do not see this message you can move on to sub-step 2.
-
-```json
-{"level":"warn","ts":1610405168.8705149,"msg":"Found unknown source prefix! If this is expected to be an Application node, please update application_node_config.yaml","row":{"Source":"gateway01","SourceRack":"x3000","SourceLocation":"u33","DestinationRack":"x3002","DestinationLocation":"u48","DestinationPort":"j29"}}
-```
-
-If the piece of hardware is expected to be an application node then [follow the procedure to create
-the `application_node_config.yaml`](../install/308-APPLICATION-NODE-CONFIG.md) file. The argument
-`--application-node-config-yaml ./application_node_config.yaml` can be given to `csi config init`
-to include the additional application node configuration. Due to systems having system-specific
-application node source names in `hmn_connections.json` (and the SHCD) the `csi config init` command
-will need to be given additional configuration file to properly include these nodes in SLS Input file.
-

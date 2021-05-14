@@ -1,20 +1,17 @@
 # Utility Storage Installation Troubleshooting
 
-TODO Fix title
-TODO Add about this task
-### About this task
+If there is a failure in the creation of ceph storage on the utility storage nodes for one of these scenarios,
+the ceph storage might need to be reinitialized.
 
-#### Role
-System installer
+Please match your scenario prior to executing any workarounds.
 
-#### Objective
+### Topics:
 
-#### Limitations
-None.
+   * [Scenario 1](#scenario-1)
 
+## Detais
 
-Occasionally we observe an installation failure during the ceph install.  We will break these up into scenarios.  Please match your scenario prior to executing any workarounds
-
+<a name="scenario-1">
 #### Scenario 1
 
 **`IMPORTANT (FOR NODE INSTALLS/REINSTALLS ONLY)`**: If your ceph install failed please check the following

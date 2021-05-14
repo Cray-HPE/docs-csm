@@ -1,9 +1,6 @@
 # Validate CSM Health
 
-TODO clean up for this new location and fix title
-TODO Add headers: About this task, Role, Objective, Limitations, New in this Release
-TODO rename sections to fit remap plan and shift content from other areas as needed
-
+TODO rename sections to fit remap plan and shift content from other areas as needed.
 
 # CSM Install Validation & Health Checks
 This page lists available CSM install and health checks that can be executed to validate the CSM install. They can be run anytime after the install has run to completion, but not before.
@@ -676,62 +673,7 @@ Sometimes the compute nodes and UAN are not up yet when `cray-conman` is initial
 not be monitored. This is a good time to verify that all nodes are being monitored for console logging
 and re-initialize `cray-conman` if needed.
 
-This procedure can be run from any member of the Kubernetes cluster.
-
-1. Identify the `cray-conman` pod:
-   ```bash
-   ncn# kubectl get pods -n services | grep "^cray-conman-"
-   ```
-
-   Expected output looks similar to the following:
-   ```
-   cray-conman-b69748645-qtfxj                                     3/3     Running           0          16m
-   ```
-1. Set the `PODNAME` variable accordingly:
-   ```bash
-   ncn# export PODNAME=cray-conman-b69748645-qtfxj
-   ```
-1. Log into the `cray-conman` container in this pod:
-   ```bash
-   ncn# kubectl exec -n services -it $PODNAME -c cray-conman -- bash
-   cray-conman# 
-   ```
-1. Check the existing list of nodes being monitored.
-   ```bash
-   cray-conman# conman -q
-   ```
-
-   Output looks similar to the following:
-   ```
-   x9000c0s1b0n0
-   x9000c0s20b0n0
-   x9000c0s22b0n0
-   x9000c0s24b0n0
-   x9000c0s27b1n0
-   x9000c0s27b2n0
-   x9000c0s27b3n0
-   ```
-1. If any compute nodes or UANs are not included in this list, the
-conman process can be re-initialized by killing the conmand process.
-   1. Identify the command process
-      ```bash
-      cray-conman# ps -ax | grep conmand | grep -v grep
-      ```
-      
-      Output will look similar to:
-      ```
-      13 ?        Sl     0:45 conmand -F -v -c /etc/conman.conf
-      ```
-   1. Set CONPID to the process ID from the previous command output:
-      ```bash
-      cray-conman# export CONPID=13
-      ```
-   1. Kill the process:
-      ```bash
-      cray-conman# kill $CONPID
-      ```
-This will regenerate the conman configuration file and restart the conmand process. Repeat the
-previous steps to verify that it now includes all nodes that are included in state manager.
+See [Manage Node Consoles](manage_node_consoles.md)
 
 <a name="csm-watch"></a>
 ### Connect to the node's console and watch the boot

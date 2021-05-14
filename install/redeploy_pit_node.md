@@ -1,36 +1,44 @@
 # Redeploy PIT Node
 
-TODO clean up for this new location and fix title
-TODO Add headers: About this task, Role, Objective, Limitations, New in this Release
+The following procedure contains information for rebooting and deploying the management node that is currently
+hosting the LiveCD. The following steps detail how an administrator through loading hand-off data and rebooting
+the node. This assists with remote-console setup to aide in observing the reboot. At the end of this procedure, the
+LiveCD will no longer be active. The node it was using will join the Kubernetes cluster as the final of three master
+nodes forming a quorum.
 
-# CSM Install Reboot - Final NCN Install
+Important: While the node is rebooting, it will be available only through Serial-over-LAN and local terminals. This
+procedure entails deactivating the LiveCD, meaning the LiveCD and all of it's resources will be unavailable.
 
-This page describes rebooting and deploying the non-compute node that is currently hosting the LiveCD.
+Topics:
 
-* [Required Services](#required-services)
-* [Notice of Danger](#danger)
-* [Hand-Off](#hand-off)
-    * [Start Hand-Off](#start-hand-off)
-* [Reboot](#reboot)
-* [Next Step](#next-step)
+   * [Required Services](#required-services)
+   * [Notice of Danger](#notice-of-danger)
+   * [Hand-Off](#hand-off)
+      * [Start Hand-Off](#start-hand-off)
+   * [Reboot](#reboot)
+   * [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard)
+   * [Next Topic](#next-topic)
+
+## Details
 
 <a name="required-services"></a>
-## Required Services
+### Required Services
 
 These services must be healthy in Kubernetes before the reboot of the LiveCD can take place.
 
 Required Platform Services:
-- cray-bss
-- cray-dhcp-kea
-- cray-dns-unbound
-- cray-ipxe
-- cray-sls
-- cray-s3
-- cray-tftp
 
-> ## Danger!
-> <a name="danger"></a>
-> 
+   * cray-bss
+   * cray-dhcp-kea
+   * cray-dns-unbound
+   * cray-ipxe
+   * cray-sls
+   * cray-s3
+   * cray-tftp
+
+<a name="notice-of-danger"></a>
+### Notice of Danger
+
 > An administrator is **strongly encouraged** to be mindful of pitfalls during this segment of the CSM install.
 > The steps below do contain warnings themselves, but overall there are risks:
 > 
@@ -46,25 +54,28 @@ Required Platform Services:
 > **unavailable**.
 
 <a name="hand-off"></a>
-## Hand-Off
+### Hand-Off
 
 The steps in this guide will ultimately walk an administrator through loading hand-off data and rebooting the node.
 This will assist with remote-console setup, for observing the reboot.
 
 At the end of these steps, the LiveCD will be no longer active. The node it was using will join
-the Kubernetes cluster as the final of 3 masters forming a quorum.
+the Kubernetes cluster as the final of three masters forming a quorum.
 
 <a name="start-hand-off"></a>
-### Start Hand-Off
+#### Start Hand-Off
 
 1. Start a new typescript (quit )
    (Run this on the `pit` node as root, the prompts are removed for easier copy-paste; this step is only useful as a whole)
    - Exit the current typescript if one has arrived here from the prior pages:
+
       ```bash
       pit# exit
       pit# popd
       ```
+
    - Start the new script
+
       ```bash
       mkdir -pv /var/www/ephemeral/prep/admin
       pushd /var/www/ephemeral/prep/admin
@@ -82,6 +93,7 @@ data so run them only when indicated. Instructions are in the `README` files.
     ```
     
     If there is a workaround here, the output looks similar to the following:
+
     ```
     CASMINST-435
     ```
@@ -94,16 +106,18 @@ data so run them only when indicated. Instructions are in the `README` files.
     ```
     
     Expected output looks similar to the following:
+
     ```
     2021/02/02 14:05:15 Retrieving S3 credentails ( sls-s3-credentials ) for SLS
     2021/02/02 14:05:15 Uploading SLS file: /var/www/ephemeral/prep/eniac/sls_input_file.json
     2021/02/02 14:05:15 Successfully uploaded SLS Input File.
     ```
+
 1. Get a token to use for authenticated communication with the gateway.
     
     > **`NOTE`** `api-gw-service-nmn.local` is legacy, and will be replaced with api-gw-service.nmn.
+
     ```bash
-    
     pit# export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
       -d client_id=admin-client \
       -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
@@ -135,7 +149,7 @@ data so run them only when indicated. Instructions are in the `README` files.
             pit# export cephdir=$artdir/storage-ceph
             ```
     
-    2. After setting the variables above per your situation, run:
+    1. After setting the variables above per your situation, run:
         
         ```bash
         pit# csi handoff ncn-images \
@@ -148,6 +162,7 @@ data so run them only when indicated. Instructions are in the `README` files.
         ```
        
         Running this command will output a block that looks like this at the end:
+
         ```text
         You should run the following commands so the versions you just uploaded can be used in other steps:
         export KUBERNETES_VERSION=x.y.z
@@ -238,17 +253,20 @@ data so run them only when indicated. Instructions are in the `README` files.
 1. Collect a backdoor login ... fetch the CAN IP for ncn-m002 for a backdoor during the reboot of ncn-m001.
 
     1. Get the IP
+
         ```bash
         pit# ssh ncn-m002 'ip a show vlan007 | grep inet'
         ```
         
         _Expected output (values may differ)_:
+
         ```
         inet 10.102.11.13/24 brd 10.102.11.255 scope global vlan007
         inet6 fe80::1602:ecff:fed9:7820/64 scope link
         ```
     
     1. Login from another external machine to verify SSH is up and running for this session.
+
         ```bash
         external# ssh root@10.102.11.13
         ncn-m002#
@@ -266,27 +284,31 @@ data so run them only when indicated. Instructions are in the `README` files.
     > **`WARNING : USER ERROR`** Do not assume to wipe the first three disks (e.g. `sda, sdb, and sdc`), they float and are not pinned to any physical disk layout. **Choosing the wrong ones may result in wiping the USB stick**, the USB stick can only be wiped by operators at this point in the install. The USB sticks are never wiped by the CSM installer.
 
     1. Select disks to wipe; SATA/NVME/SAS
-        > TODO: provide `md_disks` from a callable
+
         ```bash
         pit# md_disks="$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(sata|nvme|sas)' | sort -h | awk '{print "/dev/" $2}')"
         ```
 
     1. Sanity check; print disks into typscript or console
+
         ```bash
         pit# echo $md_disks
         ```
 
         Expected output looks similar to the following:
+
         ```
         /dev/sda /dev/sdb /dev/sdc
         ```
 
     1. Wipe. **This is irreversible.**
+
         ```bash
         pit# wipefs --all --force $md_disks
         ```
 
         If any disks had labels present, output looks similar to the following:
+
         ```
         /dev/sda: 8 bytes were erased at offset 0x00000200 (gpt): 45 46 49 20 50 41 52 54
         /dev/sda: 8 bytes were erased at offset 0x6fc86d5e00 (gpt): 45 46 49 20 50 41 52 54
@@ -307,7 +329,7 @@ data so run them only when indicated. Instructions are in the `README` files.
     ```
 
 <a name="reboot"></a>
-## Reboot
+### Reboot
 
 1. Reboot the LiveCD.
     
@@ -322,6 +344,7 @@ data so run them only when indicated. Instructions are in the `README` files.
     > **`NOTE`**: If ncn-m001 didn't run all the cloud-init scripts, the following commands need to be run **(but only in that circumstance)**.
     
     1. Run the following commands:
+
         ```bash
         ncn-m001# cloud-init clean
         ncn-m001# cloud-init init
@@ -356,6 +379,7 @@ data so run them only when indicated. Instructions are in the `README` files.
     ```
     
     Expected output looks similar to the following:
+
     ```
     NAME       STATUS   ROLES    AGE     VERSION
     ncn-m001   Ready    master   7s      v1.18.6
@@ -398,6 +422,7 @@ data so run them only when indicated. Instructions are in the `README` files.
     ```
     
 1. Verify we **do not** have a metal bootstrap IP.
+
     ```bash
     ncn-m001# rm /etc/zypp/repos.d/* && zypper ms --remote --disable
     ```
@@ -443,6 +468,9 @@ data so run them only when indicated. Instructions are in the `README` files.
     ncn-m002# exit
     ```
     
+<a name="enable-ncn-disk-wiping-safeguard"></a>
+###Enable NCN Disk Wiping Safeguard
+
     > The next steps require `csi` from the installation media. `csi` will not be provided on an NCN otherwise since it is used for CRAY installation & bootstrap. The CSI binary is compiled against the NCN base, simply fetching it from the bootable media will suffice.
     
 1. SSH back into ncn-m001, or restart a local console and resume the typescript
@@ -482,7 +510,7 @@ data so run them only when indicated. Instructions are in the `README` files.
 > **`CSI NOTE`** `/tmp/csi` will delete itself on the next reboot. The /tmp directory is `tmpfs` and runs in memory, it normally will not persist on restarts.
 
 <a name="next-topic"></a>
-# Next topic
+# Next Topic
 
    After completing this procedure, the next step is to configure administrative access.
 

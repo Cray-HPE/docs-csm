@@ -1,61 +1,73 @@
-<a name="node-firmware"></a>
-# Node Firmware
+# Update NCN Firmware
 
-This page will walk an administrator through NCN BIOS and firmware checkout.
+Firmware and BIOS updates for the management nodes may be necessary before an install can progress.
 
-To complete firmware checkout, proceed through the below sections:
-1. [Confirm BIOS and Firmware Inventory](252-FIRMWARE-NCN.md#confirm-bios-and-firmware-inventory)
-2. [Identifying BIOS and Hardware](252-FIRMWARE-NCN.md#identifying-bios-and-hardware)
-   * [Gigabyte Upgrades](252-FIRMWARE-NCN.md#gigabyte-upgrades)
-   * [HPE (iLO) Upgrades](252-FIRMWARE-NCN.md#hpe-ilo-upgrades)
-      * [Pre-Reqs](252-FIRMWARE-NCN.md#pre-reqs)
-      * [GUI](252-FIRMWARE-NCN.md#gui)
-      * [Redfish](252-FIRMWARE-NCN.md#redfish)
-3. [Component Firmware Checkout](252-FIRMWARE-NCN.md#component-firmware-checkout)
-   * [Marvell Upgrades](252-FIRMWARE-NCN.md#marvell-upgrades)
-   * [Mellanox Upgrades](252-FIRMWARE-NCN.md#mellanox-upgrades)
-      * [Enable Tools](252-FIRMWARE-NCN.md#enable-tools)
-      * [Check Current Firmware](252-FIRMWARE-NCN.md#check-current-firmware)
-      * [Optional Online Update](252-FIRMWARE-NCN.md#optional-online-update)
+Only non-compute nodes (NCNs) can upgrade firmware during a CSM install.
+Other devices, such as compute nodes or application nodes, have their upgrades managed by FAS
+once all CSM software and services have been installed..
 
-<a name="confirm-bios-and-firmware-inventory"></a>
-## Confirm BIOS and Firmware Inventory
+FAS tracks and performs actions (upgrade, downgrade, restore and create snapshots) on system firmware.
+FAS is a runtime service deployed in Kubernetes. Fresh installs use FAS for upgrading
+compute node and application node firmware.
+
+### Topics 
+   1. [Prepare BIOS and Firmware Content for Installation](#prepare-bios-and-firmware-for-installation)
+   2. [Check BIOS and Hardware](#check-bios-and-hardware)
+      * [Ugrade HPE (iLO) Firmware](#upgrade-hpe-ilo-firmware)
+         * [HPE Pre-Reqs](#hpe-pre-reqs)
+         * [HPE GUI](#hpe-gui)
+         * [HPE Redfish](#hpe-redfish)
+      * [Upgrade Gigabyte Firmware](#upgrade-gigabyte-firmware)
+         * [Gigabyte GUI](#gigabyte-gui)
+   3. [Component Firmware Checkout](#component-firmware-checkout)
+      * [Upgrade Marvell PCIe Card](#upgrade-marvell-pcie-card)
+      * [Upgrade Mellanox PCIe Card](#upgrade-mellanox-pcie-card)
+
+## Details
+
+<a name="prepare-bios-and-firmware-for-installation"></a>
+### Prepare BIOS and Firmware Content for Installation
 
 > **`CUSTOMER NOTE`** If there's doubt that the tar contains latest, the customer should check [CrayPort][1] for newer firmware.
 
-1. Prepare the inventory; the RPMs providing firmware need to be installed:
+1. Prepare the inventory. The RPMs providing firmware need to be installed:
 
-    ```bash
-    pit# export CSM_RELEASE=<insert the name of the CSM release folder>
-    pit# find /var/www/ephemeral/${CSM_RELEASE}/firmware -name *.rpm -exec zypper -n in --auto-agree-with-licenses --allow-unsigned-rpm {} \+
-    ```
+   ```bash
+   pit# export CSM_RELEASE=x.y.z
+   pit# find /var/www/ephemeral/${CSM_RELEASE}/firmware -name *.rpm -exec zypper -n in --auto-agree-with-licenses --allow-unsigned-rpm {} \+
+   ```
 
 2. Hide the old firmware; cleanup the directory
-   > **`NOTE`** This step will be removed in later versions of Shasta; this is correcting the layout of the directory.
-    ```bash
-    pit# mv /var/www/fw/river /var/www/fw/.river-old
-    ```
+   > **`NOTE`** This step will be removed in later versions of CSM; this is correcting the layout of the directory.
+
+   ```bash
+   pit# mv /var/www/fw/river /var/www/fw/.river-old
+   ```
 
 3. Set web-links for the new firmware:
-    ```bash
-    pit# \
-    mkdir -pv /var/www/fw/river/hpe
-    find /opt/cray/fw -name *.flash -exec ln -snf {} /var/www/fw/river/hpe/ \;
-    find /opt/cray/fw -name *.bin -exec ln -snf {} /var/www/fw/river/hpe/ \;
-    mkdir -pv /var/www/fw/river/gb
-    find /opt/cray/FW/bios -name sh-svr* -exec ln -snf {} /var/www/fw/river/gb/ \;
-    mkdir -pv /var/www/fw/mountain/cray
-    find /opt/cray/FW/bios -mindepth 0 -maxdepth 1 -type f -exec ln -snf {} /var/www/fw/mountain/cray/ \;
+
+   ```bash
+   pit# mkdir -pv /var/www/fw/river/hpe
+   pit# find /opt/cray/fw -name *.flash -exec ln -snf {} /var/www/fw/river/hpe/ \;
+   pit# find /opt/cray/fw -name *.bin -exec ln -snf {} /var/www/fw/river/hpe/ \;
+   pit# mkdir -pv /var/www/fw/river/gb
+   pit# find /opt/cray/FW/bios -name sh-svr* -exec ln -snf {} /var/www/fw/river/gb/ \;
+   pit# mkdir -pv /var/www/fw/mountain/cray
+   pit# find /opt/cray/FW/bios -mindepth 0 -maxdepth 1 -type f -exec ln -snf {} /var/www/fw/mountain/cray/ \;
+   ```
+
 4. Make a tftp symlink for Gigabyte nodes:
+
     ```bash
-    pit #ln -snf ../fw /var/www/boot/fw
+    pit# ln -snf ../fw /var/www/boot/fw
     ```
 
-<a name="identifying-bios-and-hardware"></a>
-## Identifying BIOS and Hardware
+<a name="check-bios-and-hardware"></a>
+### Check BIOS and Hardware
 
 1. Checkout BIOS and BMC firmware with `ipmitool`:
-   - From the NCN:
+   * From the NCN:
+
       ```bash
       ncn-m002# pdsh -b -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') '
       ipmitool fru | grep -i "board product" && \
@@ -63,7 +75,9 @@ To complete firmware checkout, proceed through the below sections:
       ipmitool fru | grep -i "product version"
       ' | sort -u
       ```
-   - From the LiveCD
+
+   * From the LiveCD
+
      ```bash
      pit# \
      export mtoken='ncn-m(?!001)\w+-mgmt'
@@ -75,9 +89,11 @@ To complete firmware checkout, proceed through the below sections:
      grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} mc info | grep -i 'firmware revision'
      grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} mc info | grep -i 'product version'
      ```
+
    > #### Manufacturer Examples
    > - Gigabyte:
    >      > **NOTE** On Gigabyte, the Product Version can be disregarded. It may become valuable at a later date.
+   >
    >      ```bash
    >      ncn-m001:  Board Product         : MZ32-AR0-00
    >      ncn-m001: Firmware Revision         : 12.84
@@ -109,6 +125,7 @@ To complete firmware checkout, proceed through the below sections:
    >      ```
    >
    > - HPE:
+   >
    >      ```bash
    >      ncn-m001:  Board Product         : Marvell 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter
    >      ncn-m001:  Board Product         : ProLiant DL325 Gen10 Plus
@@ -187,84 +204,24 @@ To complete firmware checkout, proceed through the below sections:
    | CN | CRAY | EX425 | BIOS | ex425.bios-1.4.3 | `NO` | `http://pit/fw/mountain/cray/ex425.bios-1.4.3.tar.gz` |
 
 3. For each server that is **lower** than the items above (except for any downgrade exceptions), run through
-   these guides to update them:
-   - [Gigabyte Upgrades](#gigabyte-upgrades)
-   - [HPE (iLO) Upgrades](#hpe-ilo-upgrades)
+   these procedures to update them:
+   * [Upgrade HPE (iLO) Firmware](#upgrade-hpe-ilo-firmware)
+   * [Upgrade Gigabyte Firmware](#upgrade-gigabyte-firmware)
 
-<a name="gigabyte-upgrades"></a>
-### Gigabyte Upgrades
-
-For Gigabyte upgrades a tftp server needs to be referred to.
-
-<a name="gui"></a>
-#### GUI
-
-1. From the administrators own machine, SSH tunnel (`-L` creates the tunnel, and `-N` prevents a shell and stubs the connection). One at a time, or all together.
-    ```bash
-    ssh -L 6443:ncn-m002-mgmt:443 -N $system_name-ncn-m001
-    ssh -L 7443:ncn-m003-mgmt:443 -N $system_name-ncn-m001
-    ssh -L 8443:ncn-w001-mgmt:443 -N $system_name-ncn-m001
-    ssh -L 9443:ncn-w002-mgmt:443 -N $system_name-ncn-m001
-    ssh -L 10443:ncn-w003-mgmt:443 -N $system_name-ncn-m001
-    ssh -L 11443:ncn-s001-mgmt:443 -N $system_name-ncn-m001
-    ssh -L 12443:ncn-s002-mgmt:443 -N $system_name-ncn-m001
-    ssh -L 13443:ncn-s003-mgmt:443 -N $system_name-ncn-m001
-    ```
-2. One at a time in (to prevent log-outs from duplicate SSL/CA) open each and run through the nested steps:
-
-         https://127.0.0.1:6443
-         https://127.0.0.1:7443
-         https://127.0.0.1:8443
-         https://127.0.0.1:9443
-         https://127.0.0.1:10443
-         https://127.0.0.1:11443
-         https://127.0.0.1:12443
-         https://127.0.0.1:13443
-
-   1. Login with the default credentials.
-   2. On the _Left_, select "Maintenance"
-   3. In the new pane, select "Firmware Image Location"
-      ![img_1.png](../img/fw-gb-2.png)
-   4. Configure the TFTP Server:
-      - Server Address: The HMN IP of the PIT node (`ip a show vlan004`)
-      - Image Name: The LiveCD Location from the above table, minus the base URL (e.g. `/fw/river/gb/sh-svr-1264up-bios/bios/RBU/image.RBU`)
-      - Press **`SAVE`** when done
-         ![img.png](../img/fw-gb-4.png)
-   5. Go back to "Maintenance", then select "Firmware Update"
-   6. Change the selection to BIOS and then press "Flash"
-      ![img_3.png](../img/fw-gb-3.png)
-   7. Next. Go back to the "Firmware Image Location" and modify it to fetch the BMC ROM:
-      ![img_4.png](../img/fw-gb-2.png)
-   8. Press Proceed to Flash; ensure the Update Type is set to BMC
-       > **`IMPORTANT`** Make sure to check off "Preserve all configuration" otherwise network connectivity may be lost after reset.
-
-      ![img_5.png](../img/fw-gb-1.png)
-
-3. Now repeat this for m001, however for every location `http://pit` is used we need to use `127.0.0.1` instead.
-
-4. Reboot the PIT node back into itself:
-   ```bash
-   pit# bootcurrent=$(efibootmgr | grep -i bootcurrent | awk '{print $NF}')
-   pit# efibootmgr -n $bootcurrent
-   pit# reboot
-   ```
-
-You're now finished with FW updates.
-
-<a name="hpe-ilo-upgrades"></a>
-### HPE (iLO) Upgrades
+<a name="upgrade-hpe-ilo-firmware"></a>
+#### Upgrade HPE (iLO)
 
 Firmware is located on the LiveCD (versions 1.4.6 or higher).
 
-<a name="pre-reqs"></a>
-#### Pre-Reqs
+<a name="hpe-pre-reqs"></a>
+##### HPE Pre-Reqs
 
 - BMCs are reachable; dnsmasq is setup and BMCs show in `/var/lib/misc/dnsmasq.leases`
 - Servers can be `off`
 - Static entries in dnsmasq are a bonus; helpful but unnecessary.
 
-<a name="gui"></a>
-#### GUI
+<a name="hpe-gui"></a>
+##### HPE GUI
 
 1. From the administrators own machine, SSH tunnel (`-L` creates the tunnel, and `-N` prevents a shell and stubs the connection). One at a time, or all together.
     ```bash
@@ -307,6 +264,7 @@ Firmware is located on the LiveCD (versions 1.4.6 or higher).
    - Repeat the same process, using the external BMC URL for the PIT node's BMC (e.g. https://system-ncn-m001-mgmt)
    - For the `Remote File URL` use `127.0.0.1` instead of `pit` (e.g. http://127.0.0.1/fw/river/hpe/A42_1.38_10_30_2020.signed.flash)
    - Before rebooting the node, save any work and set the `BootNext` to the current boot sessions device:
+
       ```bash
       pit# bootcurrent=$(efibootmgr | grep -i bootcurrent | awk '{print $NF}')
       pit# efibootmgr -n $bootcurrent
@@ -315,30 +273,97 @@ Firmware is located on the LiveCD (versions 1.4.6 or higher).
 
 All NCNs are now updated via GUI.
 
-<a name="redfish"></a>
-#### Redfish
+<a name="hpe-redfish"></a>
+##### HPE Redfish
 
 ![redfish.png](../img/3rd/redfish.png)
 
 > **Not Ready** This LiveCD bash script is broken, and will be fixed. It will allow remote BIOS and firmware updates and checkout from the PIT node.
 
 1. Set login vars for redfish™
+
     ```bash
    export username=root
    export password=changeme
    ```
+
 2. Invoke `mfw` with the matching firmware (check `ls 1 /var/www/fw/river/hpe` for a list)
+
     ```bash
     pit# /root/bin/mfw A43_1.30_07_18_2020.signed.flash
     ```
 
 3. Watch status:
+
     ```bash
     pit# curl -sk -u $username:$password https://$1/redfish/v1/UpdateService | jq |grep -E 'State|Progress|Status'"
     ```
 
+<a name="upgrade-gigabyte-firmware"></a>
+#### Upgrade Gigabyte Firmware
+
+For Gigabyte upgrades a tftp server needs to be referred to.
+
+<a name="gui"></a>
+##### GUI
+
+1. From the administrators own machine, SSH tunnel (`-L` creates the tunnel, and `-N` prevents a shell and stubs the connection). One at a time, or all together.
+
+    ```bash
+    ssh -L 6443:ncn-m002-mgmt:443 -N $system_name-ncn-m001
+    ssh -L 7443:ncn-m003-mgmt:443 -N $system_name-ncn-m001
+    ssh -L 8443:ncn-w001-mgmt:443 -N $system_name-ncn-m001
+    ssh -L 9443:ncn-w002-mgmt:443 -N $system_name-ncn-m001
+    ssh -L 10443:ncn-w003-mgmt:443 -N $system_name-ncn-m001
+    ssh -L 11443:ncn-s001-mgmt:443 -N $system_name-ncn-m001
+    ssh -L 12443:ncn-s002-mgmt:443 -N $system_name-ncn-m001
+    ssh -L 13443:ncn-s003-mgmt:443 -N $system_name-ncn-m001
+    ```
+
+2. One at a time in (to prevent log-outs from duplicate SSL/CA) open each and run through the nested steps:
+
+         https://127.0.0.1:6443
+         https://127.0.0.1:7443
+         https://127.0.0.1:8443
+         https://127.0.0.1:9443
+         https://127.0.0.1:10443
+         https://127.0.0.1:11443
+         https://127.0.0.1:12443
+         https://127.0.0.1:13443
+
+   1. Login with the default credentials.
+   2. On the _Left_, select "Maintenance"
+   3. In the new pane, select "Firmware Image Location"
+      ![img_1.png](../img/fw-gb-2.png)
+   4. Configure the TFTP Server:
+      - Server Address: The HMN IP of the PIT node (`ip a show vlan004`)
+      - Image Name: The LiveCD Location from the above table, minus the base URL (e.g. `/fw/river/gb/sh-svr-1264up-bios/bios/RBU/image.RBU`)
+      - Press **`SAVE`** when done
+         ![img.png](../img/fw-gb-4.png)
+   5. Go back to "Maintenance", then select "Firmware Update"
+   6. Change the selection to BIOS and then press "Flash"
+      ![img_3.png](../img/fw-gb-3.png)
+   7. Next. Go back to the "Firmware Image Location" and modify it to fetch the BMC ROM:
+      ![img_4.png](../img/fw-gb-2.png)
+   8. Press Proceed to Flash; ensure the Update Type is set to BMC
+       > **`IMPORTANT`** Make sure to check off "Preserve all configuration" otherwise network connectivity may be lost after reset.
+
+      ![img_5.png](../img/fw-gb-1.png)
+
+3. Now repeat this for ncn-m001, however for every location `http://pit` is used we need to use `127.0.0.1` instead.
+
+4. Reboot the PIT node back into itself:
+
+   ```bash
+   pit# bootcurrent=$(efibootmgr | grep -i bootcurrent | awk '{print $NF}')
+   pit# efibootmgr -n $bootcurrent
+   pit# reboot
+   ```
+
+You're now finished with firmware updates.
+
 <a name="component-firmware-checkout"></a>
-## Component Firmware Checkout
+### Component Firmware Checkout
 
 This covers PCIe devices.
 
@@ -346,8 +371,8 @@ This covers PCIe devices.
 
 Find more information for each vendor below:
 
-- [Marvell Upgrades](#marvell-upgrades)
-- [Mellanox Upgrades](#mellanox-upgrades)
+- [Upgrade Marvell PCIe card](#upgrade-marvell-pcie-card)
+- [Upgrade Mellanox PCIe card](#upgrade-mellanox-pcie-card)
 
 | Vendor | Model | PSID | Version | Downgrade (Y/n)? | LiveCD Location |
 | :--- | :--- | --- | ---: | :---: | :--- | 
@@ -356,97 +381,100 @@ Find more information for each vendor below:
 | Mellanox | MCX515A-CCA* | `MT_0000000011` and `MT_0000000591` | 16.28.2006 | `NO` | `http://pit/fw/pcie/images/MT_0000000011.bin`
 
 
-<a name="marvell-upgrades"></a>
-### Marvell Upgrades
+<a name="upgrade-marvell-pcie-card"></a>
+#### Upgrade Marvell PCIe Card
 
 > There are no upgrades at this time for Marvell.
 
-<a name="mellanox-upgrades"></a>
-### Mellanox Upgrades
+<a name="upgrade-mellanox-pcie-card"></a>
+#### Upgrade Mellanox PCIe Card
 
-Shasta 1.4 NCNs are # Print name and current state; on an NCN or on the liveCD.
+The firmware for a Mellanox PCIe card used for booting the NCNs can be updated from a booted Linux node.
 
-<a name="enable-tools"></a>
-#### Enable Tools
+1. Enable Mellanox tools
 
-MST needs to be started for the tools to work.
+   MST needs to be started for the tools to work.
 
-```bash
-linux# mst status
-Starting MST (Mellanox Software Tools) driver set
-Loading MST PCI module - Success
-Loading MST PCI configuration module - Success
-Create devices
-Unloading MST PCI module (unused) - Success
-```
-
-<a name="check-current-firmware"></a>
-#### Check Current Firmware
-
-**Some nodes will not have any Mellanox cards.** If `mlxfwmanager` returns with no devices found after `mst start` was run then this
-section should be skipped for that NCN.
-
-1. Start and Run Mellanox Firmware services to check for firmware revision:
    ```bash
-   linux# mlxfwmanager
-   Querying Mellanox devices firmware ...
-
-   Device #1:
-   ----------
-
-     Device Type:      ConnectX5
-     Part Number:      MCX515A-CCA_Ax_Bx
-     Description:      ConnectX-5 EN network interface card; 100GbE single-port QSFP28; PCIe3.0 x16; tall bracket; ROHS R6
-     PSID:             MT_0000000011
-     PCI Device Name:  /dev/mst/mt4119_pciconf1
-     Base GUID:        506b4b030028505c
-     Base MAC:         506b4b28505c
-     Versions:         Current        Available
-        FW             16.28.4000     N/A
-        PXE            3.6.0103       N/A
-        UEFI           14.21.0021     N/A
-
-     Status:           No matching image found
-
-   Device #2:
-   ----------
-
-     Device Type:      ConnectX5
-     Part Number:      MCX515A-CCA_Ax_Bx
-     Description:      ConnectX-5 EN network interface card; 100GbE single-port QSFP28; PCIe3.0 x16; tall bracket; ROHS R6
-     PSID:             MT_0000000011
-     PCI Device Name:  /dev/mst/mt4119_pciconf0
-     Base GUID:        98039b03001eda3c
-     Base MAC:         98039b1eda3c
-     Versions:         Current        Available
-        FW             16.28.4000     N/A
-        PXE            3.6.0103       N/A
-        UEFI           14.21.0021     N/A
-
-     Status:           No matching image found
+   linux# mst status
+   Starting MST (Mellanox Software Tools) driver set
+   Loading MST PCI module - Success
+   Loading MST PCI configuration module - Success
+   Create devices
+   Unloading MST PCI module (unused) - Success
    ```
 
-2. Download and run the update on the NCN
+1. Check Current Firmware
+
+   **Some nodes will not have any Mellanox cards.** If `mlxfwmanager` returns with no devices found after `mst start` was run then this
+   section should be skipped for that NCN.
+
+   1. Start and Run Mellanox Firmware services to check for firmware revision:
+
+      ```bash
+      linux# mlxfwmanager
+      Querying Mellanox devices firmware ...
+
+      Device #1:
+      ----------
+
+        Device Type:      ConnectX5
+        Part Number:      MCX515A-CCA_Ax_Bx
+        Description:      ConnectX-5 EN network interface card; 100GbE single-port QSFP28; PCIe3.0 x16; tall bracket; ROHS R6
+        PSID:             MT_0000000011
+        PCI Device Name:  /dev/mst/mt4119_pciconf1
+        Base GUID:        506b4b030028505c
+        Base MAC:         506b4b28505c
+        Versions:         Current        Available
+           FW             16.28.4000     N/A
+           PXE            3.6.0103       N/A
+           UEFI           14.21.0021     N/A
+
+        Status:           No matching image found
+
+      Device #2:
+      ----------
+
+        Device Type:      ConnectX5
+        Part Number:      MCX515A-CCA_Ax_Bx
+        Description:      ConnectX-5 EN network interface card; 100GbE single-port QSFP28; PCIe3.0 x16; tall bracket; ROHS R6
+        PSID:             MT_0000000011
+        PCI Device Name:  /dev/mst/mt4119_pciconf0
+        Base GUID:        98039b03001eda3c
+        Base MAC:         98039b1eda3c
+        Versions:         Current        Available
+           FW             16.28.4000     N/A
+           PXE            3.6.0103       N/A
+           UEFI           14.21.0021     N/A
+
+        Status:           No matching image found
+      ```
+
+1. Download and run the update on the NCN
+
    ```bash
    ncn# curl -O http://pit/fw/pcie/images/MT_0000000011.bin
    ncn# curl -O http://pit/fw/pcie/images/CRAY000000001.bin
    ncn# mlxfwmanager -u -i ./MT_0000000011.bin -y
    ncn# mlxfwmanager -u -i ./CRAY000000001.bin -y
    ```
-4. Update the PIT node:
+
+1. Update the PIT node:
+
    ```bash
    ncn# mlxfwmanager -u -i /var/www/fw/pcie/images/MT_0000000011.bin -y
    ncn# mlxfwmanager -u -i /var/www/fw/pcie/images/CRAY000000001.bin -y
    ```
 
 <a name="optional-online-update"></a>
-#### Optional Online Update
+##### Optional Online Update
 
 The non-HSN PCIe cards, like the NCN's management PCIe cards, can obtain updates from the Internet:
+
 - When firmware is not available on the LiveCD _and_
 - Internet access is available to the NCN
 
-Simply run this to update the card, after finding the PCI Device Name in the `mlxfwmanager` output:
+Run this command to update the card, after finding the PCI Device Name in the `mlxfwmanager` output:
 
 ```bash
 ncn# mlxfwmanager -u --online -d /dev/mst/<mst_device_id>

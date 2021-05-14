@@ -1,27 +1,23 @@
 # cloud-init Basecamp Configuration
 
-TODO clean up file.
-
-# LiveCD - Metal Basecamp
 Metal Basecamp is a cloud-init DataSource available on the LiveCD. Basecamp's configuration file offers many inputs for various cloud-init scripts baked into the NCN images.
 
 This page details what those settings are.
 
 * [Basecamp](#basecamp)
-  * [Config Files](#config-files)
-  * [Purging Basecamp](#purging-basecamp)
+   * [Config Files](#config-files)
+   * [Purging Basecamp](#purging-basecamp)
 * [CAN](#can)
 * [CEPH](#ceph)
-    * [Certificate Authority](#certificate-authority)
-    * [RADOS Gateway](#rados-gateway)
-    * [Wiping](#wiping)
+   * [Certificate Authority](#certificate-authority)
+   * [RADOS Gateway](#rados-gateway)
+   * [Wiping](#wiping)
 * [DNS](#dns)
-        * [Resolution Configuration](#resolution-configuration)
-        * [Static Fallback](#static-fallback)
+   * [Resolution Configuration](#resolution-configuration)
+   * [Static Fallback](#static-fallback)
 * [Kubernetes](#kubernetes)
 * [NTP](#ntp)
 * [Node Auditing](#node-auditing)
-
 
 **Generally these settings are determined by the cray-site-init tool.** See `csi config --help` for more information. Manual adjustments typically are for debug and development.
 
@@ -61,6 +57,7 @@ Customer Access Network.
 Key: `can-gw`
 
 data:
+
 ```json
 {
   // ...
@@ -68,11 +65,13 @@ data:
   // ...
 }
 ```
+
 ---
 
 Key: `can-if`
 
 data:
+
 ```json
 {
   // ...
@@ -80,6 +79,7 @@ data:
   // ...
 }
 ```
+
 ---
 
 <a name="ceph"></a>
@@ -89,6 +89,7 @@ data:
 Key: `num_storage_nodes`
 
 data:
+
 ```json
 {
   // ...
@@ -96,6 +97,7 @@ data:
   // ...
 }
 ```
+
 ---
 
 <a name="certificate-authority"></a>
@@ -105,6 +107,7 @@ data:
 Key: `ca-certs`
 
 data:
+
 ```json
 {
   // ...
@@ -112,6 +115,7 @@ data:
   // ...
 }
 ```
+
 ---
 
 <a name="rados-gateway"></a>
@@ -121,6 +125,7 @@ data:
 Key: `rgw-virtual-ip`
 
 data:
+
 ```json
 {
   // ...
@@ -128,6 +133,7 @@ data:
   // ...
 }
 ```
+
 ---
 
 <a name="wiping"></a>
@@ -137,6 +143,7 @@ data:
 Key: `wipe-ceph-osds`
 
 data:
+
 ```json
 {
   // ...
@@ -144,6 +151,7 @@ data:
   // ...
 }
 ```
+
 ---
 
 <a name="dns"></a>
@@ -152,7 +160,7 @@ data:
 cloud-init modifications to DNS.
 
 <a name="resolution-configuration"></a>
-#### Resolution Configuration
+### Resolution Configuration
 
 Paves over bootstrap provisions by adjusting `/etc/sysconfig/network/config` to match the `dns-server` value.
 Updates `/etc/resolv.conf` by invoking `netconfig update -f`.
@@ -164,6 +172,7 @@ Updates `/etc/resolv.conf` by invoking `netconfig update -f`.
 Key: `dns-server`
 
 data:
+
 ```json
 {
   // ...
@@ -171,10 +180,12 @@ data:
   // ...
 }
 ```
+
 ---
 Key: `domain`
 
 data:
+
 ```json
 {
   // ...
@@ -182,10 +193,11 @@ data:
   // ...
 }
 ```
+
 ---
 
 <a name="static-fallback"></a>
-#### Static Fallback
+### Static Fallback
 
 Safety-net script for installing static-fallback resolution when Kubernetes is offline.
 
@@ -219,6 +231,7 @@ data:
   // ...
 }
 ```
+
 <a name="kubernetes"></a>
 ## Kubernetes
 
@@ -226,6 +239,7 @@ data:
 Key: `k8s_virtual_ip`
 
 data:
+
 ```json
 {
   // ...
@@ -233,12 +247,14 @@ data:
   // ...
 }
 ```
+
 ---
 
 ---
 Key: `first_master_hostname`
 
 data:
+
 ```json
 {
   // ...
@@ -246,6 +262,7 @@ data:
   // ...
 }
 ```
+
 ---
 
 <a name="ntp"></a>
@@ -258,6 +275,7 @@ cloud-init modifications to NTP.
 Key: `ntp_peers`
 
 data:
+
 ```json
 {
   // ...
@@ -265,10 +283,12 @@ data:
   // ...
 }
 ```
+
 ---
 Key: `ntp_local_nets`
 
 data:
+
 ```json
 {
   // ...
@@ -276,12 +296,14 @@ data:
   // ...
 }
 ```
+
 ---
 Key: `upstream_ntp_server`
 
 > **`WARNING`** at this time, multiple upstream-NTP servers can not be specified.
 
 data:
+
 ```json
 {
   // ...
@@ -289,6 +311,7 @@ data:
   // ...
 }
 ```
+
 ---
 
 <a name="node-auditing"></a>
@@ -298,11 +321,12 @@ data:
 Key: `ncn-mgmt-node-auditing-enabled`
 
 data:
+
 ```json
 {
   // ...
   "ncn-mgmt-node-auditing-enabled": false,
   // ...
 }
-
+```
 ---

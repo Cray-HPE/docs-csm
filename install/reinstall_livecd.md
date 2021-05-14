@@ -1,21 +1,6 @@
 # Reinstall LiveCD
 
-TODO Fix title
-TODO Add about this task
-### About this task
-
-#### Role
-System installer
-
-#### Objective
-
-#### Limitations
-None.
-
-# LiveCD Re-Installs
-
-This page will go over how to setup a re-install on a node.
-
+Setup a re-install of LiveCD on a node using the previous configuration.
 
 1. Backup to the data partition:
 
@@ -28,26 +13,32 @@ This page will go over how to setup a re-install on a node.
     pit# popd
     pit# umount /var/www/ephemeral
     ``` 
-    Now the USB stick can be unplugged, it contains all the information we already loaded plus backups
-    of initialized files.
 
-2. Plug the stick into a new machine, or make a backup on the booted NCN. Make a snapshot of
- the USB stick.
+1. Unplug the USB stick.
+
+   The USB stick should now contain all the information already loaded, as well as the backups of
+   the initialized files.
+
+1. Plug the stick into a new machine, or make a backup on the booted NCN. Make a snapshot of the USB stick.
 
     ```bash
     mylinuxpc> mount /dev/disk/by-label/PITDATA /mnt
-    mylinuxpc> tar -czvf --exclude *.squashfs "install-data-$(date  '+%Y-%m-%d_%H-%M-%S').tar.gz" /mnt/
+    mylinuxpc> tar -czvf --exclude *.squashfs \
+    "install-data-$(date  '+%Y-%m-%d_%H-%M-%S').tar.gz" /mnt/
     mylinuxpc> umount /dev/disk/by-label/PITDATA
     ```
 
-3. The new tar.gz file you made can be stored anywhere, and can be used to reinit the liveCD. Follow
-the directions in [005-LIVECD-CREATION](002-CSM-INSTALL.md) and then return here and move onto the
+1. Follow the steps in the "Boot LiveCD" procedure in the HPE Cray EX System Installation and Configuration
+Guide S-8000.
+The new tar.gz file can be stored anywhere, and can be used to reinitialize the LiveCD.
+
+1. The new tar.gz file you made can be stored anywhere, and can be used to reinit the liveCD. Follow
+the directions in [bootstrap_livecd_usb.md](bootstrap_livecd_usb.md) and then return here and move onto the
 next step.
 
-TODO This link is very broken 005-LIVECD-CREATION points to 002-CSM-INSTALL.md, but neither of those filename exists
+1. Delete the existing content on the USB stick and create a new LiveCD on that same USB.
 
-4. Now you can create a newer LiveCD on the same USB stick, clobbering whats there. Once created
- the install-data partition can be remounted and you can restore/extract the backup:
+   Once the install-data partition is created, it can be remounted and can be used to restore the backup.
 
     ```bash
     mylinuxpc> mount /dev/disk/by-label/PITDATA /mnt
@@ -55,23 +46,26 @@ TODO This link is very broken 005-LIVECD-CREATION points to 002-CSM-INSTALL.md, 
     mylinuxpc> ls -R /mnt
     ``` 
 
-5. The tarball should've extracted everything into the install-data partition. You will need to re-fetch
- your squashFS artifacts, they can be fetched into (respectively):
- - `/mnt/var/www/ephemeral/k8s/`
- - `/mnt/var/www/ephemeral/ceph/`
+   The tarball should have extracted everything into the install-data partition. 
 
-Once fetched, attach the USB to a CRAY non-compute node and reboot into the USB stick.
+1. Retrieve the SquashFS artifacts.
+   The artifacts can be retrieved at the following locations:
 
-6. Once booted into the USB stick; restore network config, dnsmasq, and ensure pods are started.
+   * `/mnt/var/www/ephemeral/k8s/`
+   * `/mnt/var/www/ephemeral/ceph/`
 
-    ```bash
-    # STOP AND INSPECT ANY FAILURE IN ANY OF THESE COMMANDS
-    # DO NOT PASS GO ; DO NOT COLLECT $200
-    pit# tar -xzvf /var/www/ephemeral/backup/dnsmasq*.tar.gz
-    pit# tar -xzvf /var/www/ephemeral/backup/network*.tar.gz
-    pit# systemctl restart wicked wickedd-nanny
-    pit# systemctl restart dnsmasq
-    pit# systemctl start basecamp nexus
-    ```
+1. Attach the USB to a Cray non-compute node and reboot into the USB stick.
 
-7. You now have a revitalized LiveCD with previous configuration.
+1. Once booted into the USB stick, restore network configuration, dnsmasq, and ensure the pods are started.
+
+   > STOP AND INSPECT ANY FAILURE IN ANY OF THESE COMMANDS
+
+   ```bash
+   pit# tar -xzvf /var/www/ephemeral/backup/dnsmasq*.tar.gz
+   pit# tar -xzvf /var/www/ephemeral/backup/network*.tar.gz
+   pit# systemctl restart wicked wickedd-nanny
+   pit# systemctl restart dnsmasq
+   pit# systemctl start basecamp nexus
+   ```
+
+1. The LiveCD is now re-installed with the previous configuration.

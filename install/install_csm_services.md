@@ -1,30 +1,27 @@
 # Install CSM Services
 
-TODO clean up for this new location and fix title
-TODO Add headers: About this task, Role, Objective, Limitations, New in this Release
+This procedure will install CSM applications and services into the CSM Kubernetes cluster.
 
-# CSM Platform Install
+### Topics:
+   1. [Initialize Bootstrap Registry](#initialize-bootstrap-registry)
+   1. [Create Site-Init Secret](#create-site-init-secret)
+   1. [Deploy Sealed Secret Decryption Key](#deploy-sealed-secret-decryption-key)
+   1. [Deploy CSM Applications and Services](#deploy-csm-applications-and-services)
+   1. [Setup Nexus](#setup-nexus)
+   1. [Set NCNs to use Unbound](#set-ncns-to-use-unbound)
+   1. [Apply After Sysmgmt Manifest Workarounds](#apply-after-sysmgmt-manifest-workarounds)
+   1. [Add Compute Cabinet Routing to NCNs](#add-compute-cabinet-routing-to-ncns)
+   1. [Known Issues](#known-issues)
+     * [Error: not ready: https://packages.local](#error-not-ready)
+     * [Error initiating layer upload ... in registry.local: received unexpected HTTP status: 200 OK](#error-initiating-layer-upload)
+     * [Error lookup registry.local: no such host](#error-registry-local-no-such-host)
+   1. [Next Topic](#next-topic)
 
-This page will go over how to install CSM applications and services into the CSM Kubernetes cluster.
 
-1. [Initialize Bootstrap Registry](#initialize-bootstrap-registry)
-1. [Create Site-Init Secret](#create-site-init-secret)
-1. [Deploy Sealed Secret Decryption Key](#deploy-sealed-secret-decryption-key)
-1. [Deploy CSM Applications and Services](#deploy-csm-applications-and-services)
-  1. [Setup Nexus](#setup-nexus)
-  1. [Set NCNs to use Unbound](#set-ncns-to-use-unbound)
-  1. [Add Compute Cabinet Routing to NCNs](#add-compute-cabinet-routing-to-ncns)
-1. [Validate CSM Install](#validate-csm-install)
-1. [Reboot from the LiveCD to NCN](#reboot-from-the-livecd-to-ncn)
-1. [Known Issues](#known-issues)
-  * [Error: not ready: https://packages.local](#error-not-ready)
-  * [Error initiating layer upload ... in registry.local: received unexpected HTTP status: 200 OK](#error-initiating-layer-upload)
-  * [Error lookup registry.local: no such host](#error-registry-local-no-such-host)
-1. [Next Topic](#next-topic)
-
+## Details
 
 <a name="initialize-bootstrap-registry"></a>
-## Initialize Bootstrap Registry
+### Initialize Bootstrap Registry
 
 > **`SKIP IF ONLINE`** - Online installs cannot upload container images to the
 > bootstrap registry since it proxies an upstream source. **DO NOT** perform
@@ -45,6 +42,7 @@ This page will go over how to install CSM applications and services into the CSM
     ```
    
     Expected output looks similar to the following:
+
     ```
     HTTP/1.1 200 OK
     Date: Thu, 04 Feb 2021 05:27:44 GMT
@@ -69,7 +67,7 @@ This page will go over how to install CSM applications and services into the CSM
 
 
 <a name="create-site-init-secret"></a>
-## Create Site-Init Secret
+### Create Site-Init Secret
 
 The `site-init` secret in the `loftsman` namespace makes
 `/var/www/ephemeral/prep/site-init/customizations.yaml` available to product
@@ -83,6 +81,7 @@ pit# kubectl create secret -n loftsman generic site-init --from-file=/var/www/ep
 ```
    
 Expected output looks similar to the following:
+
 ```
 secret/site-init created
 ```
@@ -97,21 +96,25 @@ secret/site-init created
 > In this case, delete the `site-init` secret and recreate it.
 >
 > 1. First delete it:
+>
 >    ```bash
 >    pit# kubectl delete secret -n loftsman site-init
 >    ```
 >    
 >    Expected output looks similar to the following:
+>
 >    ```
 >    secret "site-init" deleted
 >    ```
 >
 > 2. Then recreate it:
+>
 >    ```bash
 >    pit# kubectl create secret -n loftsman generic site-init --from-file=/var/www/ephemeral/prep/site-init/customizations.yaml
 >    ```
 >    
 >    Expected output looks similar to the following:
+>
 >    ```
 >    secret/site-init created
 >    ```
@@ -142,7 +145,7 @@ secret/site-init created
 
 
 <a name="deploy-sealed-secret-decryption-key"></a>
-## Deploy Sealed Secret Decryption Key
+### Deploy Sealed Secret Decryption Key
 
 Deploy the corresponding key necessary to decrypt sealed secrets:
 
@@ -151,6 +154,7 @@ pit# /var/www/ephemeral/prep/site-init/deploy/deploydecryptionkey.sh
 ```
 
 An error similar to the following may occur when deploying the key:
+
 ```
 Error from server (NotFound): secrets "sealed-secrets-key" not found
  
@@ -163,7 +167,7 @@ No resources found
 This is expected and can safely be ignored.
 
 <a name="deploy-csm-applications-and-services"></a>
-## Deploy CSM Applications and Services
+### Deploy CSM Applications and Services
 
 Run `install.sh` to deploy CSM applications services:
 
@@ -197,7 +201,6 @@ install.sh: OK
 In the event that `install.sh` does not complete successfully, consult the
 [known issues](#known-issues) below to resolve potential problems and then try
 running `install.sh` again.
-
 
 <a name="setup-nexus"></a>
 ### Setup Nexus
@@ -334,6 +337,7 @@ Requires:
 * Can be run from PIT if passwordless SSH is set up to all NCNs, but should be run post ncn-m001 reboot.
 
 To apply the routing, run:
+
 ```bash
 ncn# /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-1570/CASMINST-1570.sh
 ```
@@ -341,24 +345,8 @@ ncn# /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-1570/CASMINST-1570.sh
 > **`NOTE`** Currently, there is no automated procedure to apply routing changes to all worker NCNs to support Mountain, Hill and River
 Compute Node Cabinets. 
 
-<a name="validate-csm-install"></a>
-## Validate CSM Install
-
-The administrator should wait at least 15 minutes to let the various Kubernetes resources
-get initialized and started. Because there are a number of dependencies between them,
-some services are not expected to work immediately after the install script completes.
-After waiting, the administrator may start the [Validate CSM Health](../operations/validate_csm_health.md).
-
-----
-
-<a name="reboot-from-the-livecd-to-ncn"></a>
-## Reboot from the LiveCD to NCN
-
-Once the CSM services are deemed healthy the administrator may proceed to the
-final step of the CSM install [Redeploy PIT Node](redeploy_pit_node.md).
-
 <a name="known-issues"></a>
-## Known Issues
+### Known Issues
 
 The `install.sh` script changes cluster state and should not simply be rerun
 in the event of a failure without careful consideration of the specific
@@ -371,7 +359,7 @@ stderr prefixed with the expanded value of PS4, namely, `+ `.)
 Known potential issues with suggested fixes are listed below.
 
 <a name="error-not-ready"></a>
-### Error: not ready: https://packages.local
+#### Error: not ready: https://packages.local
 
 The infamous `error: not ready: https://packages.local` indicates that from
 the caller’s perspective, Nexus not ready to receive writes. However, it most
@@ -397,7 +385,7 @@ vlan002`. If pings are successful, try checking the status of Nexus by
 running `curl -sS https://packages.local/service/rest/v1/status/writable`. If
 the connection times out, it indicates there is a more complex connection
 issue. Verify switches are configured properly and BGP peering is operating
-correctly, see [Update BGP Neighbors](../operations/update-bgp-neighbors.md) for more information. Lastly,
+correctly, see [Update BGP Neighbors](../operations/update_bgp_neighbors.md) for more information. Lastly,
 check Istio and OPA logs to see if connections to packages.local are not
 reaching Nexus, perhaps due to an authorization issue.
 
@@ -412,7 +400,7 @@ removed before attempting to deploy again.
 
 
 <a name="error-initiating-layer-upload"></a>
-### Error initiating layer upload ... in registry.local: received unexpected HTTP status: 200 OK
+#### Error initiating layer upload ... in registry.local: received unexpected HTTP status: 200 OK
 
 The following error may occur when running `./lib/setup-nexus.sh`:
 
@@ -430,15 +418,17 @@ This error is most likely _intermittent_ and running `./lib/setup-nexus.sh`
 again is expected to succeed.
 
 <a name="error-registry-local-no-such-host"></a>
-### Error lookup registry.local: no such host
+#### Error lookup registry.local: no such host
 
 The following error may occur when running `./lib/setup-nexus.sh`:
+
 ```
 time="2021-02-23T19:55:54Z" level=fatal msg="Error copying tag \"dir:/image/grafana/grafana:7.0.3\": Error writing blob: Head \"https://registry.local/v2/grafana/grafana/blobs/sha256:cf254eb90de2dc62aa7cce9737ad7e143c679f5486c46b742a1b55b168a736d3\": dial tcp: lookup registry.local: no such host"
 + return
 ```
 
 Or a similar error:
+
 ```
 time="2021-03-04T22:45:07Z" level=fatal msg="Error copying ref \"dir:/image/cray/cray-ims-load-artifacts:1.0.4\": Error trying to reuse blob sha256:1ec886c351fa4c330217411b0095ccc933090aa2cd7ae7dcd33bb14b9f1fd217 at destination: Head \"https://registry.local/v2/cray/cray-ims-load-artifacts/blobs/sha256:1ec886c351fa4c330217411b0095ccc933090aa2cd7ae7dcd33bb14b9f1fd217\": dial tcp: lookup registry.local: Temporary failure in name resolution"
 + return
@@ -448,9 +438,9 @@ These errors are most likely _intermittent_ and running `./lib/setup-nexus.sh`
 again is expected to succeed.
 
 <a name="next-topic"></a>
-# Next topic
+# Next Topic
 
    After completing this procedure the next step is to redeploy the PIT node.
 
-   * See [Redeploy PIT Node](index.md#redeploy_pit_node)
+   * See [Validate CSM Health Before PIT Node Redeploy](index.md#validate_csm_health_before_pit_redeploy)
 

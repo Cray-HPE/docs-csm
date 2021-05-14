@@ -1,26 +1,5 @@
 # Reset root Password on LiveCD
 
-TODO Fix title
-TODO Add about this task
-### About this task
-
-#### Role
-System installer
-
-#### Objective
-
-#### Limitations
-None.
-
-# LiveCD Recovery
-
-This page will contain sections for recovering the LiveCD.
-
-* [Root Password](#root-password)
-
-<a name="root-password"></a>
-### Root Password
-
 It may become desirable to clear the password on the LiveCD.
 
 The root password is preserved within the COW partition at `cow:rw/etc/shadow`. This is the
@@ -32,6 +11,7 @@ reinitialize to an empty password for `root`, and again at next login it will re
 to be changed.
 
 Clearing the password (macOS or Linux):
+
 ```bash
 mypc:~ > mount -L cow /mnt
 mypc:~ > sudo rm -f /mnt/rw/etc/shadow

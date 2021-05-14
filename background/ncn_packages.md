@@ -1,25 +1,20 @@
 # NCN Packages
 
-TODO clean up for this new location and fix title
-TODO Add headers: About this task, Role, Objective, Limitations, New in this Release
-
-
-# NCN Packages
-
-These are defined elsewhere, but this list updates for quick-reference. These lists are generated
-on running nodes, but to account for drift there are collection commands listed for each image.
+The management nodes boot from images which have many (rpm) packages installed. Lists of the packages for
+these images are generated on running nodes. A list of images can be collected by running a zypper
+command on one of the storage, worker, or master nodes.
 
 ## Kubernetes Images
 
-Source: https://stash.us.cray.com/projects/CLOUD/repos/node-image-kubernetes/browse
+The Kubernetes image is used to boot the master nodes and worker nodes.
 
-#### Collection 
+### Collection 
 
 ```bash
 ncn-w002# zypper --disable-repositories se --installed-only | grep i+ | tr -d '|' | awk '{print $2}'
 ```
 
-#### The List
+### The List
 
 - SLE_HPC
 - SLE_HPC-release
@@ -171,15 +166,15 @@ ncn-w002# zypper --disable-repositories se --installed-only | grep i+ | tr -d '|
 
 ## CEPH
 
-Source: https://stash.us.cray.com/projects/CLOUD/repos/node-image-storage-ceph/browse
+The Ceph image is used to boot the utility storage nodes.
 
-#### Collection
+### Collection
 
 ```bash
 ncn-s002# zypper --disable-repositories se --installed-only | grep i+ | tr -d '|' | awk '{print $2}'
 ```
 
-#### The List
+### The List
 
 - SLE_HPC
 - SLE_HPC-release

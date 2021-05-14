@@ -72,7 +72,7 @@ configurations, firmware, and more, see [Management network install](401-MANAGEM
 
 The management NCNs are expected to have certain minimum firmware installed for BMC, node BIOS, and PCIe card
 firmware.  Where possible, the firmware should be updated prior to install.  Some firmware can be updated
-during or after the Shasta v1.4 installation, but it is better to meet the minimum NCN firmware requirement
+during or after the Shasta v1.5 installation, but it is better to meet the minimum NCN firmware requirement
 before starting.
 
 1. Check the minimum required BIOS settings on management nodes.
@@ -89,7 +89,7 @@ before starting.
    
    > **`NOTE`** **PCIe** options can be found in [PCIe : Setting Expected Values](304-NCN-PCIE-NET-BOOT-AND-RE-CABLE.md#setting-expected-values).
 
-2. For minimum NCN firmware versions see [Node Firmware](252-FIRMWARE-NCN.md).
+2. For minimum NCN firmware versions see [Update NCN Firmware](update_ncn_firmware.md).
 
 3. For minimum Network switch firmware versions see [Network Firmware](251-FIRMWARE-NETWORK.md).
 
@@ -140,9 +140,9 @@ The steps below detail how to prepare the NCNs.
 <a name="degraded-system-notice"></a>
 > #### Degraded System Notice
 >
-> If the system is degraded; CRAY services are down, or the NCNs are in inconsistent states then a cleanslate should be performed.  [basic wipe from Disk Cleanslate](wipe_ncn_disks_for_reinstallation.md#basic-wipe)
+> If the system is degraded; CRAY services are down, or the NCNs are in inconsistent states then a cleanslate should be performed.  See [basic wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe)
 
-1. **REQUIRED** For each NCN, **excluding** ncn-m001, login and wipe it (this step uses the [basic wipe from Disk Cleanslate](wipe_ncn_disks_for_reinstallation.md#basic-wipe)):
+1. **REQUIRED** For each NCN, **excluding** ncn-m001, login and wipe it (this step uses the [basic wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe)):
     > **`NOTE`** Pending completion of CASMINST-1659, the auto-wipe is insufficient for masters and workers. All administrators must wipe their NCNs with this step.
     - Wipe NCN disks from **LiveCD** (`pit`)
         ```bash
@@ -287,7 +287,7 @@ TODO reference these files
 310-CABINETS.md Cabinets
 
 <a name="next-topic"></a>
-# Next topic
+# Next Topic
 
    After completing this procedure the next step is to bootstrap the PIT node.
 

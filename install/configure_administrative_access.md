@@ -76,7 +76,7 @@ BMC/controller passwords.
    See [Configure BMC and Controller Parameters with SCSD](../operations/configure_with_scsd.md)
 
    <a name="next-topic"></a>
-   1. Next topic
+   1. Next Topic
 
    After completing the operational procedures above which configure administrative access, the next step is to validate the health of management nodes and CSM services.
 

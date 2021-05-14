@@ -10,7 +10,7 @@ TODO Find a logical way to order or group these topics.
    * [Configure Keycloak Account](configure_keycloak_account.md)
    * [Configure the Cray Command Line Interface (cray CLI)](configure_cray_cli.md)
    * [Configure BMC and Controller Parameters with SCSD](configure_with_scsd.md)
-   * [Update BGP Neighbors](update-bgp-neighbors.md)
+   * [Update BGP Neighbors](update_bgp_neighbors.md)
    * [Update Firmware with FAS](update_firmware_with_fas.md)
    * [Manage Node Consoles](manage_node_consoles.md))
    * [Changing Passwords and Credentials](changing_passwords_and_credentials.md)

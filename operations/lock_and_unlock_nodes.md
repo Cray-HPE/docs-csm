@@ -138,7 +138,3 @@ Use the `cray hsm locks unlock` command to perform unlocking.
    ComponentIDs = [ "x3000c0s6b0n0",]
    ```
 
-## <a name="next-steps"></a>Next Steps
-
-Check and update firmware next.  See [Update Firmware with FAS](update_firmware_with_fas.md)
-

@@ -1,7 +1,6 @@
 # Update BGP Neighbors
 
 TODO clean up for this new location and fix title
-TODO Add headers: About this task, Role, Objective, Limitations, New in this Release
 TODO Split content so only the Update procedure is here.  The Verify/check procedure should be part of CSM Health Checks
 
 

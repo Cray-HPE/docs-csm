@@ -1,85 +1,76 @@
 # Bootstrap PIT Node from LiveCD USB
 
-TODO Cleanup for this new location and fix title
-TODO Add headers: About this task, Role, Objective, Limitations, New in this Release
+The Pre-Install Toolkit (PIT) node needs to be bootstraped from the LiveCD.  There are two media available
+to bootstrap the PIT node--the RemoteISO or a bootable USB device.  This procedure describes using the USB 
+device.  If not using the USB device, see [Bootstrap Pit Node from LiveCD Remote ISO](bootstrap_livecd_remote_iso.md).
 
-# CSM USB LiveCD - Creation and Configuration
+There are 5 overall steps that provide a bootable USB with SSH enabled, capable of installing Shasta v1.5 (or higher).
 
+### Topics
+   1. [Download and Expand the CSM Release](#download-and-expand-the-csm-release)
+   1. [Create the Bootable Media](#create-the-bootable-media)
+   1. [Configuration Payload](#configuration-payload)
+      1. [Before Configuration Payload Workarounds](#before-configuration-payload-workarounds)
+      1. [Generate Installation Files](#generate-installation-files)
+      1. [CSI Workarounds](#csi-workarounds)
+      1. [Prepare Site Init](#prepare_site_init)
+   1. [Prepopulate LiveCD Daemons Configuration and NCN Artifacts](#prepopulate-livecd-daemons-configuration-and-ncn-artifacts)
+   1. [Boot the LiveCD](#boot-the-livecd)
+      1. [First Login](#first-login)
+   1. [Next Topic](#next-topic)
 
-This page will guide an administrator through creating a USB stick from either their Shasta v1.3 ncn-m001 node or their own laptop or desktop.
-
-There are 5 overall steps that provide a bootable USB with SSH enabled, capable of installing Shasta v1.4 (or higher).
-
-* [Download and Expand the CSM Release](#download-and-expand-the-csm-release)
-* [Create the Bootable Media](#create-the-bootable-media)
-* [Configuration Payload](#configuration-payload)
-   * [Before Configuration Payload Workarounds](#before-configuration-payload-workarounds)
-   * [Generate Installation Files](#generate-installation-files)
-   * [CSI Workarounds](#csi-workarounds)
-   * [Prepare Site Init](#prepare_site_init)
-* [Pre-Populate LiveCD Daemons Configuration and NCN Artifacts](#pre-populate-livecd-daemons-configuration-and-ncn-artifacts)
-* [Boot the LiveCD](#boot-the-livecd)
-   * [First Login](#first-login)
-
+## Details
 
 <a name="download-and-expand-the-csm-release"></a>
-## Download and Expand the CSM Release
+### Download and Expand the CSM Release
 
 Fetch the base installation CSM tarball and extract it, installing the contained CSI tool.
 
 1. Set up the Typescript directory as well as the initial typescript. This directory will be returned to for every typescript in the entire CSM installation.
-   (Run this on the `pit` node as root, the prompts are removed for easier copy-paste; this step is only useful as a whole)
+
    ```bash
-   mkdir -p /var/www/ephemeral/prep/admin
-   pushd !$
-   script -af csm-install-usb.$(date +%Y-%m-%d).txt
-   export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+   linux# mkdir -p /var/www/ephemeral/prep/admin
+   linux# pushd !$
+   linux# script -af csm-install-usb.$(date +%Y-%m-%d).txt
+   linux# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
-2. If necessary, download the CSM software release to the Linux host which will be preparing the LiveCD.
+1. The CSM software release should be downloaded and expanded for use.
 
-   > **`INTERNAL USE`** The `ENDPOINT` URL below are for internal use. Customers do not need to download any additional 
-   > artifacts, the CSM tarball is included along with the Shasta release.
+   **Important:** To ensure that the CSM release plus any patches, workarounds, or hotfixes are included 
+   follow the instructions in [Update CSM Product Stream](../update_product_stream/index.md)
 
-    ```bash
-    linux# cd ~
-    linux# export ENDPOINT=https://arti.dev.cray.com/artifactory/shasta-distribution-stable-local/csm/
-    linux# export CSM_RELEASE=csm-x.y.z
-    linux# wget ${ENDPOINT}/${CSM_RELEASE}.tar.gz
-    ```
+   The rest of this procedure will use the CSM_RELEASE variable and expect to have the 
+   contents of the CSM software release tarball plus any patches, workarounds, or hotfixes.
 
-3. Expand the CSM software release:
-   > **`IMPORTANT`** Before proceeding, refer to the "CSM Patch Assembly" section of the Shasta Install Guide 
-   > to apply any needed patch content for CSM. It is critical to perform these steps to ensure that the correct
-   > CSM release artifacts are deployed.
-   > 
-   > **`WARNING`** Ensure that the `CSM_RELEASE` environment variable is set to the version of the patched CSM release tarball. 
-   > Applying the "CSM Patch Assembly" procedure will result in a different CSM version when compared to 
-   > the pre-patched CSM release tarball.
    ```bash
+   linux# echo $CSM_RELEASE
    linux# tar -zxvf ${CSM_RELEASE}.tar.gz
    linux# ls -l ${CSM_RELEASE}
    ```
-   The ISO and other files are now available in the extracted CSM tar.
 
-4. Install/upgrade the CSI RPM.
+   The ISO and other files are now available in the directory from the extracted CSM tar.
+
+1. Install/upgrade the CSI RPM.
+
    ```bash
    linux# rpm -Uvh ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
    ```
 
-5. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet 
-   access these RPMs will need to be externally downloaded and then copied to be installed.
-   ```bash
-   linux# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
-   linux# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
-   ```
+1. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet 
+   access these RPMs will need to be externally downloaded and then copied to this machine.
 
-6. Show the version of CSI installed.
+   **Important:** To ensure that the latest workarounds and documentation updates are available, 
+   see [Check for Latest Workarounds and Documentation Updates](update_product_stream/index.md#workarounds)
+
+1. Show the version of CSI installed.
+
    ```bash
    linux# csi version
    ```
    
    Expected output looks similar to the following:
+
    ```
    CRAY-Site-Init build signature...
    Build Commit   : b3ed3046a460d804eb545d21a362b3a5c7d517a3-release-shasta-1.4
@@ -90,18 +81,20 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    App. Version   : 1.5.18
     ```
 
-6. Install podman or docker to support container tools required to generated
+1. Install podman or docker to support container tools required to generated
    sealed secrets.
 
    Podman RPMs are included in the `embedded` repository in the CSM release and
    may be installed in your pre-LiveCD environment using `zypper` as follows:
 
    * Add the `embedded` repository (if necessary):
+
      ```bash
      linux# zypper ar -fG "./${CSM_RELEASE}/rpm/embedded" "${CSM_RELEASE}-embedded"
      ```
      
    * Install `podman` and `podman-cni-config` packages:
+
      ```bash
      linux# zypper in -y podman podman-cni-config
      ```
@@ -109,17 +102,19 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
    from the `./${CSM_RELEASE}/rpm/embedded` directory.
 
-7. Install lsscsi to view attached storage devices.
+1. Install lsscsi to view attached storage devices.
 
    lsscsi RPMs are included in the `embedded` repository in the CSM release and
    may be installed in your pre-LiveCD environment using `zypper` as follows:
 
    * Add the `embedded` repository (if necessary):
+
      ```bash
      linux# zypper ar -fG "./${CSM_RELEASE}/rpm/embedded" "${CSM_RELEASE}-embedded"
      ```
      
    * Install `lsscsi` package:
+
      ```bash
      linux# zypper in -y lsscsi
      ```
@@ -127,7 +122,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
    from the `./${CSM_RELEASE}/rpm/embedded` directory.
 
-8. Although not strictly required, the procedures for setting up the
+1. Although not strictly required, the procedures for setting up the
    `site-init` directory recommend persisting `site-init` files in a Git
    repository.
 
@@ -135,11 +130,13 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    may be installed in your pre-LiveCD environment using `zypper` as follows:
    
    * Add the `embedded` repository (if necessary):
+
      ```bash
      linux# zypper ar -fG "./${CSM_RELEASE}/rpm/embedded" "${CSM_RELEASE}-embedded"
      ```
      
    * Install `git` package:
+
      ```bash
      linux# zypper in -y git
      ```
@@ -149,7 +146,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 
 
 <a name="create-the-bootable-media"></a>
-## Create the Bootable Media
+### Create the Bootable Media
 
 Cray Site Init will create the bootable LiveCD. Before creating the media, we need to identify
 which device that is.
@@ -170,6 +167,7 @@ which device that is.
     [14:0:0:0]   disk    SanDisk  Extreme SSD      1012  /dev/sdd
     [14:0:0:1]   enclosu SanDisk  SES Device       1012  -      
     ```
+
     In the above example, we can see our internal disks as the `ATA` devices and our USB as the `disk` or `enclosu` device. Since the `SanDisk` fits the profile we're looking for, we are going to use `/dev/sdd` as our disk.
 
     Set a variable with your disk to avoid mistakes:
@@ -178,27 +176,30 @@ which device that is.
     linux# export USB=/dev/sd<disk_letter>
     ```
 
-2. Format the USB device
+1. Format the USB device
 
     On Linux using the CSI application:
+
     ```bash
     linux# csi pit format $USB ~/${CSM_RELEASE}/cray-pre-install-toolkit-*.iso 50000
     ```
+
     On MacOS using the bash script:
+
     ```bash
     macos# ./cray-site-init/write-livecd.sh $USB ~/${CSM_RELEASE}/cray-pre-install-toolkit-*.iso 50000
     ```
 
     > NOTE: At this point the USB stick is usable in any server with an x86_64 architecture based CPU. The remaining steps help add the installation data and enable SSH on boot.
 
-3. Mount the configuration and persistent data partition:
+1. Mount the configuration and persistent data partition:
 
     ```bash
     linux# mkdir -pv /mnt/{cow,pitdata}
     linux# mount -L cow /mnt/cow && mount -L PITDATA /mnt/pitdata
     ```
 
-4.  Copy and extract the tarball (compressed) into the USB:
+1.  Copy and extract the tarball (compressed) into the USB:
     ```bash
     linux# cp -r ~/${CSM_RELEASE}.tar.gz /mnt/pitdata/
     linux# tar -zxvf ~/${CSM_RELEASE}.tar.gz -C /mnt/pitdata/
@@ -207,7 +208,7 @@ which device that is.
 The USB stick is now bootable and contains our artifacts. This may be useful for internal or quick usage. Administrators seeking a Shasta installation must continue onto the [configuration payload](#configuration-payload).
 
 <a name="configuration-payload"></a>
-## Configuration Payload
+### Configuration Payload
 
 The SHASTA-CFG structure and other configuration files will be prepared, then csi will generate system-unique configuration payload used for the rest of the CSM installation on the USB stick.
 
@@ -217,12 +218,11 @@ The SHASTA-CFG structure and other configuration files will be prepared, then cs
 * [Prepare Site Init](#prepare_site_init)
 
 <a name="before-configuration-payload-workarounds"></a>
-### Before Configuration Payload Workarounds
+#### Before Configuration Payload Workarounds
 
 Check for workarounds in the `/opt/cray/csm/workarounds/before-configuration-payload` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
 
   ```bash
-  # Example
   linux# ls /opt/cray/csm/workarounds/before-configuration-payload
   ```
 
@@ -232,7 +232,7 @@ Check for workarounds in the `/opt/cray/csm/workarounds/before-configuration-pay
   ```
 
 <a name="generate-installation-files"></a>
-### Generate Installation Files
+#### Generate Installation Files
 
 Some files are needed for generating the configuration payload. New systems will need to create these files before continuing.
 
@@ -248,26 +248,29 @@ Pull these files into the current working directory:
 
 > The optional `application_node_config.yaml` file may be provided for further defining of settings relating to how application nodes will appear in HSM for roles and subroles. See the CSI usage for more information.  
 
-> The optional `cabinets.yaml` file allows cabinet naming and numbering as well as some networking overrides (e.g. VLAN) which will allow systems on Shasta v1.3 to minimize changes to the existing system while migrating to Shasta v1.4.  More information on this file can be found [here](310-CABINETS.md).
+> The optional `cabinets.yaml` file allows cabinet naming and numbering as well as some VLAN overrides. More information on this file can be found [here](310-CABINETS.md).
 
 After gathering the files into the working directory, generate your configs:
 
 1. Change into the preparation directory:
+
    ```bash
    linux# mkdir -pv /mnt/pitdata/prep
    linux# cd /mnt/pitdata/prep
    ```
 
-2. Generate the system configuration reusing a parameter file (see [avoiding parameters](../background/cray_site_init_files.md#save-file--avoiding-parameters)) **or skip this step**.
+1. Generate the system configuration reusing a parameter file (see [avoiding parameters](../background/cray_site_init_files.md#save-file--avoiding-parameters)) **or skip this step**.
 
-   If moving from a Shasta v1.3 system, the system_config.yaml file will not be available, so skip this step and continue with step 3.
+   If not doing a reinstall of Shasta software, then the system_config.yaml file will not be available, so skip the rest of this step.
 
    The needed files should be in the current directory.
+
    ```bash
    linux# ls -1
    ```
     
    Expected output looks similar to the following:
+
    ```
    application_node_config.yaml
    cabinets.yaml
@@ -278,6 +281,7 @@ After gathering the files into the working directory, generate your configs:
    ```
 
    Generate the system configuration.
+
    ```bash
    linux# csi config init
    ```
@@ -285,22 +289,25 @@ After gathering the files into the working directory, generate your configs:
    A new directory matching your `--system-name` argument will now exist in your working directory.
 
    Set an environment variable so this system name can be used in later commands.
+
    ```bash
    linux# export SYSTEM_NAME=eniac
    ```
 
-   Skip step 3 and continue with the CSI Workarounds
+   Skip the next step to continue with the [CSI Workarounds](#csi-workarounds)
 
-3. Generate the system configuration when a pre-existing parameter file is unavailable:
+1. Generate the system configuration when a pre-existing parameter file is unavailable:
 
-   If moving from a Shasta v1.3 system, this step is required.  If you did step 2 above, skip this step.
+   If doing a first time install, this step is required.  If you did the previous step as part of a reinstall, skip this.
 
    The needed files should be in the current directory.  The application_node_config.yaml file is optional.
+
    ```bash
    linux# ls -1
    ```
     
    Expected output looks similar to the following:
+
    ```
    application_node_config.yaml
    hmn_connections.json
@@ -310,11 +317,13 @@ After gathering the files into the working directory, generate your configs:
    ```
 
    Set an environment variable so this system name can be used in later commands.
+
    ```bash
    linux# export SYSTEM_NAME=eniac
    ```
 
    Generate the system configuration.  See below for an explanation of the command line parameters and some common settings.
+
    ```bash
    linux# csi config init \
        --bootstrap-ncn-bmc-user root \
@@ -364,28 +373,33 @@ After gathering the files into the working directory, generate your configs:
 
    These warnings from "csi config init" for issues in hmn_connections.json can be ignored.
    * The node with the external connection (ncn-m001) will have a warning similar to this because its BMC is connected to the site and not the HMN like the other management NCNs.  It can be ignored.
+
       ```
       "Couldn't find switch port for NCN: x3000c0s1b0"
       ```
+
    * An unexpected component may have this message.  If this component is an application node with an unusual prefix, it should be added to the application_node_config.yaml file and then rerun "csi config init".   See the procedure to [create the application_node_config.yaml](308-APPLICATION-NODE-CONFIG.md)
+
       ```json
       {"level":"warn","ts":1610405168.8705149,"msg":"Found unknown source prefix! If this is expected to be an Application node, please update application_node_config.yaml","row":
       {"Source":"gateway01","SourceRack":"x3000","SourceLocation":"u33","DestinationRack":"x3002","DestinationLocation":"u48","DestinationPort":"j29"}}
       ```
+
    * If a cooling door is found in hmn_connections.json, there may be a message like the following. It can be safely ignored.
+
       ```json
       {"level":"warn","ts":1612552159.2962296,"msg":"Cooling door found, but xname does not yet exist for cooling doors!","row":
       {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
       ```
-   Continue with the CSI Workarounds
+
+   Continue continue with the [CSI Workarounds](#csi-workarounds)
 
 <a name="csi-workarounds"></a>
-### CSI Workarounds
+#### CSI Workarounds
 
 Check for workarounds in the `/opt/cray/csm/workarounds/csi-config` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
 
   ```bash
-  # Example
   linux# ls /opt/cray/csm/workarounds/csi-config
   ```
 
@@ -395,29 +409,33 @@ Check for workarounds in the `/opt/cray/csm/workarounds/csi-config` directory. I
   ```
 
 <a name="prepare_site-init"></a>
-### Prepare Site Init
+#### Prepare Site Init
 
 Follow the procedures to [Prepare Site Init](prepare_site_init.md) directory for your system.
 
 
-<a name="pre-populate-livecd-daemons-configuration-and-ncn-artifacts"></a>
-## Pre-Populate LiveCD Daemons Configuration and NCN Artifacts
+<a name="prepopulate-livecd-daemons-configuration-and-ncn-artifacts"></a>
+### Prepopulate LiveCD Daemons Configuration and NCN Artifacts
 
 Now that the configuration is generated, we can populate the LiveCD with the generated files.
 
 This will enable SSH, and other services when the LiveCD starts.
+
 1. Set system name and enter prep directory
+
     ```bash
     linux# export SYSTEM_NAME=eniac
     linux# cd /mnt/pitdata/prep
     ```
 
-2. Use CSI to populate the LiveCD, provide both the mount point and the CSI generated config dir.
+1. Use CSI to populate the LiveCD, provide both the mount point and the CSI generated config dir.
+
     ```bash
     linux# csi pit populate cow /mnt/cow/ ${SYSTEM_NAME}/
     ```
    
     Expected output looks similar to the following:
+
     ```
     config------------------------> /mnt/cow/rw/etc/sysconfig/network/config...OK
     ifcfg-bond0-------------------> /mnt/cow/rw/etc/sysconfig/network/ifcfg-bond0...OK
@@ -435,37 +453,42 @@ This will enable SSH, and other services when the LiveCD starts.
     conman.conf-------------------> /mnt/cow/rw/etc/conman.conf...OK
     ```
 
-3. Optionally set the hostname, print it into the hostname file.
+1. Optionally set the hostname, print it into the hostname file.
    > Do not confuse other admins and name the LiveCD "ncn-m001", please append the "-pit" suffix
    > which will indicate that the node is booted from the LiveCD.
+
    ```bash
    linux# echo "${SYSTEM_NAME}-ncn-m001-pit" >/mnt/cow/rw/etc/hostname
    ```
 
-4. Unmount the Overlay, we're done with it
+1. Unmount the Overlay, we're done with it
+
     ```bash
     linux# umount /mnt/cow    
     ```
 
-5. Make directories needed for basecamp (cloud-init) and the squashFS images
+1. Make directories needed for basecamp (cloud-init) and the squashFS images
 
     ```bash
     linux# mkdir -p /mnt/pitdata/configs/
     linux# mkdir -p /mnt/pitdata/data/{k8s,ceph}/
     ```
 
-6. Copy basecamp data
+1. Copy basecamp data
+
     ```bash
     linux# csi pit populate pitdata ${SYSTEM_NAME} /mnt/pitdata/configs -b
     ```
     
     Expected output looks similar to the following:
+
     ```
     data.json---------------------> /mnt/pitdata/configs/data.json...OK
     ```
 
-7. Update CA Cert on the copied `data.json` file. Provide the path to the `data.json`, the path to
+1. Update CA Cert on the copied `data.json` file. Provide the path to the `data.json`, the path to
    our `customizations.yaml`, and finally the `sealed_secrets.key`
+
     ```bash
     linux# csi patch ca \
     --cloud-init-seed-file /mnt/pitdata/configs/data.json \
@@ -473,42 +496,47 @@ This will enable SSH, and other services when the LiveCD starts.
     --sealed-secret-key-file /mnt/pitdata/prep/site-init/certs/sealed_secrets.key
    ```
 
-8. Copy k8s artifacts:
+1. Copy k8s artifacts:
+
     ```bash
     linux# csi pit populate pitdata ~/${CSM_RELEASE}/images/kubernetes/ /mnt/pitdata/data/k8s/ -kiK
     ```
     
     Expected output looks similar to the following:
+
     ```
     5.3.18-24.37-default-0.0.6.kernel-----------------> /mnt/pitdata/data/k8s/...OK
     initrd.img-0.0.6.xz-------------------------------> /mnt/pitdata/data/k8s/...OK
     kubernetes-0.0.6.squashfs-------------------------> /mnt/pitdata/data/k8s/...OK
     ```
 
-9. Copy ceph/storage artifacts:
+1. Copy ceph/storage artifacts:
+
     ```bash
     linux# csi pit populate pitdata ~/${CSM_RELEASE}/images/storage-ceph/ /mnt/pitdata/data/ceph/ -kiC
     ```
     
     Expected output looks similar to the following:
+
     ```
     5.3.18-24.37-default-0.0.5.kernel-----------------> /mnt/pitdata/data/ceph/...OK
     initrd.img-0.0.5.xz-------------------------------> /mnt/pitdata/data/ceph/...OK
     storage-ceph-0.0.5.squashfs-----------------------> /mnt/pitdata/data/ceph/...OK
     ```
 
-10. Unmount the data partition:
+1. Unmount the data partition:
+
     ```bash
     linux# cd; umount /mnt/pitdata
     ```
 
-11. Quit the typescript session with the `exit` command and copy the file (csm-usb-lived.<date>.txt) to a location on another server for reference later.
+1. Quit the typescript session with the `exit` command and copy the file (csm-usb-lived.<date>.txt) to a location on another server for reference later.
 
 Now the USB stick may be reattached to the CRAY, or if it was made on the CRAY then its server can now
 reboot into the LiveCD.
 
 <a name="boot-the-livecd"></a>
-## Boot the LiveCD
+### Boot the LiveCD
 
 Some systems will boot the USB stick automatically if no other OS exists (bare-metal). Otherwise the
 administrator may need to use the BIOS Boot Selection menu to choose the USB stick.
@@ -540,7 +568,7 @@ Connect to the IPMI console.
    ncn-m001#
    ```
 
-2. Reboot
+1. Reboot
 
     ```bash
     ncn-m001# reboot
@@ -552,7 +580,7 @@ The typescript can be discarded, otherwise if issues arise then it should be sub
 > **An integrity check** runs before Linux starts by default, it can be skipped by selecting "OK" in its prompt.
 
 <a name="first-login"></a>
-### First Login
+#### First Login
 
 On first login (over SSH or at local console) the LiveCD will prompt the administrator to change the password.
 
@@ -563,6 +591,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    ```
     
    Expected output looks similar to the following:
+
    ```
    Password:           <-------just press Enter here for a blank password
    You are required to change your password immediately (administrator enforced)
@@ -573,12 +602,13 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    Welcome to the CRAY Prenstall Toolkit (LiveOS)
 
    Offline CSM documentation can be found at /usr/share/doc/metal (version: rpm -q docs-csm-install)
+
    ```
 
-   > **`NOTE`** If this password is forgotten, it can be reset by mounting the USB stick on another computer. See [LiveCD Troubleshooting](reset_root_password_on_LiveCD.md#root-password) for information on clearing the password.
+   > **`NOTE`** If this password is forgotten, it can be reset by mounting the USB stick on another computer. See [Reset root Password on LiveCD](reset_root_password_on_LiveCD.md) for information on clearing the password.
 
 
-2. Disconnect from IPMI console.
+1. Disconnect from IPMI console.
 
    Once the network is up so that ssh to the node works, disconnect from the IPMI console.
 
@@ -593,52 +623,59 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
    Note: The hostname should be similar to eniac-ncn-m001-pit when booted from the LiveCD, but it will be shown as "pit#" in the command prompts from this point onward.
 
-3. Start a typescript to record this section of activities done on ncn-m001 while booted from the LiveCD.
+<a name="configure-the-running-livecd"></a>
+### Configure the Running LiveCD
+
+1. Start a typescript to record this section of activities done on ncn-m001 while booted from the LiveCD.
 
    ```bash
-   pit# script -af booted-csm-lived.$(date +%Y-%m-%d).txt
+   pit# script -af booted-csm-livecd.$(date +%Y-%m-%d).txt
    pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
    
-4. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet 
+1. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet 
    access these RPMs will need to be externally downloaded and then copied to be installed.
+
    ```bash
    pit# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
    pit# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
    ```
 
-5. Check the pit-release version.
+1. Check the pit-release version.
 
    ```bash
    pit# cat /etc/pit-release
    ```
     
    Expected output looks similar to the following:
+
    ```
    VERSION=1.2.2
    TIMESTAMP=20210121044136
    HASH=75e6c4a
    ```
 
-6. Mount the data partition
+1. Mount the data partition
     > The data partition is set to `fsopt=noauto` to facilitate LiveCDs over virtual-ISO mount. USB installations need to mount this manually.
+
     ```bash
     pit# mount -L PITDATA
     ```
 
-7. First login workarounds
+1. First login workarounds
 
    Check for workarounds in the `/opt/cray/csm/workarounds/first-livecd-login` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
+
    ```bash
-   # Example
    pit# ls /opt/cray/csm/workarounds/first-livecd-login
    ```
 
    If there is a workaround here, the output looks similar to the following:
+
    ```
    CASMINST-999
    ```
-8. Start services
+1. Start services
 
    ```bash
    pit# systemctl start nexus
@@ -646,7 +683,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    pit# systemctl start conman
    ```
 
-9. Verify the system:
+1. Verify the system:
 
    ```bash
    pit# csi pit validate --network
@@ -663,10 +700,10 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    c7638b573b93  dtr.dev.cray.com/cray/metal-basecamp:1.1.0-1de4aa6                        5 minutes ago  Up 5 minutes ago          basecamp
    ```
 
-10. Follow directions in the output from the 'csi pit validate' commands for failed validations before continuing. 
+1. Follow directions in the output from the 'csi pit validate' commands for failed validations before continuing. 
 
 <a name="next-topic"></a>
-# Next topic
+# Next Topic
 
    After completing this procedure the next step is to configure the management network switches.
 

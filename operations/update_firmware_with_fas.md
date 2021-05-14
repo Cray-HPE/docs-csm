@@ -1,38 +1,41 @@
 # Update Firmware with FAS
 
-### About this task
+The Firmware Action Service (FAS) provides an interface for managing firmware versions of Redfish-enabled
+hardware in the system. FAS interacts with the Hardware State Manager (HSM), device data, and image data in
+order to update firmware.
 
-#### Role
-System installer
+TODO CASMINST-2225
 
-#### Objective
+### Topics:
+   * [Prerequisites](#prerequisites)
+   * [Current Capabilities as of Shasta Release v1.4](#current-capabilities)
+   * [Order Of Operations](#order-of-operations)
+   * [Hardware Precedence Order](#hardware-precedence-order)
 
-#### Limitations
-None.
+Refer to "Firmware Action Service (FAS)" in the _HPE Cray EX Hardware Management Administration Guide 1.5 S-8015_ 
+for more information about these other topics for updating firmware.
 
+   * FAS Use Cases
+   * Firmware Actions
+   * FAS Filters for Updates and Snapshots
+   * Firmware Images
+   * FAS Workflows
+      * Load Firmware
+      * Perform a Dry-Run
+      * Update Firmware
+      * Create a Snapshot
 
-TODO clean up for this new location and fix title
-TODO Add headers: About this task, Role, Objective, Limitations, New in this Release
-TODO include content from these files here and clean up the workflow.
-TODO 255-FIRMWARE-ACTION-SERVICE-FAS.md
-TODO 256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md
-TODO 257-FIRMWARE-ACTION-SERVICE-CRAY-WINDOM-COMPUTE-NODE-BIOS-WORKAROUND.md
-
-# Firmware Update the system with FAS
-
-* [Prerequisites](#prerequisites)
-* [Current Capabilities as of Shasta Release v1.4](#current-capabilities)
-* [Order Of Operations](#order-of-operations)
-* [Hardware Precedence Order](#hardware-precedence-order)
+## Details
 
 <a name="prerequisites"></a>
-## Prerequisites
+### Prerequisites
 
-1. 001-008 have been completed; CSM has been installed and HSM is running with discovered nodes.  Firmware has been loaded into FAS as part of the CSM install
-2. 009 has been applied and the NCNs are locked.
+1. CSM software has been installed, firmware has been loaded into FAS as part of the CSM install, HSM is running,
+   and nodes have been discovered. 
+2. All management nodes have been locked.  
 3. Identify the type and manufacturers of hardware in your system.  If you don't have Gigabyte nodes, don't update them!
 
-**WARNING:** Non-compute nodes (NCNs) should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS. See [Lock and Unlock Nodes](lock_and_unlock_nodes.md) for more information. Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
+**WARNING:** Non-compute nodes (NCNs) should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS. See [Lock and Unlock Nodes](lock_and_unlock_nodes.md) for more information. Failure to lock the NCNs could result in unintentional update of the NCNs.  !f FAS is not used correctly; this will lead to system instability problems.
 
 
 Using the process outlined in [`255-FIRMWARE-ACTION-SERVICE-FAS.md`](255-FIRMWARE-ACTION-SERVICE-FAS.md) follow the process to update the system.  We recommend that you use the 'recipes' listed in [`256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md`](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md) to update each supported type.
@@ -41,7 +44,7 @@ Using the process outlined in [`255-FIRMWARE-ACTION-SERVICE-FAS.md`](255-FIRMWAR
 
 
 <a name="current-capabilities"></a>
-## Current Capabilities as of Shasta Release v1.4
+### Current Capabilities as of Shasta Release v1.4
 
 The following table describes the hardware items that can have their firmware updated via FAS.
 
@@ -57,7 +60,7 @@ The following table describes the hardware items that can have their firmware up
 
 
 <a name="order-of-operations"></a>
-## Order Of Operations
+### Order Of Operations
 
 For each item in the `Hardware Precedence Order`:
 
@@ -93,7 +96,7 @@ For each item in the `Hardware Precedence Order`:
 5. Interpret the outcome of the live update; proceed to next type of hardware
 
 <a name="hardware-precedence-order"></a>
-## Hardware Precedence Order
+### Hardware Precedence Order
 After you identify which hardware you have; start with the top most item on this list to update.  If you don't have the hardware, skip it.
 
 **IMPORTANT**: This process does not communicate the SAFE way to update NCNs. If you have not locked NCNs, or blindly use FAS to update NCNs without following the correct process, then **YOU WILL VIOLATE THE STABILITY OF THE SYSTEM**

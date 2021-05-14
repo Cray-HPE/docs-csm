@@ -1,15 +1,12 @@
 # NCN Boot Workflow
 
-TODO Add headers: About this task, Role, Objective, Limitations, New in this Release
-
-
 Non-compute nodes boot two ways:
 - Network/PXE booting
 - Disk Booting
 
 ### Topics:
 
-* [How can I tell if I booted via disk or PXE?](#how-can-i-tell-if-i-booted-via-disk-or-pxe)
+* [Determine if NCNs booted via disk or PXE](#determine-if-ncns-booted-via-disk-or-pxe)
 * [Set BMCs to DHCP](#set-bmcs-to-dhcp)
 * [Set Boot Order](#set-boot-order)
    * [Setting Order](#setting-order)
@@ -20,20 +17,27 @@ Non-compute nodes boot two ways:
 
 ## Details
 
-<a name="how-can-i-tell-if-i-booted-via-disk-or-pxe"></a>
-### How can I tell if I booted via disk or PXE?
+<a name="determine-if-ncns-booted-via-disk-or-pxe"></a>
+### Determine if NCNs booted via disk or PXE
 
-Two ways, one may be easier depending on your env.
+There are two different methods for determining whether a management node is booted using disk or
+PXE. The method to use will vary depending on the system environment.
 
 1. Check kernel parameters. 
 
-```bash
-ncn# cat /proc/cmdline
-```
+   ```bash
+   ncn# cat /proc/cmdline
+   ```
 
-If it starts with `kernel` then the node network booted. If it starts with `BOOT_IMAGE=(` then it disk booted.
+   If it starts with `kernel` then the node network booted. If it starts with `BOOT_IMAGE=(` then it disk booted.
 
-1. `efibootmgr`, see what it says for `BootCurrent` and match that value to the list beneath to see if it lines up with a networking option or a `cray sd*)` option for disk boots.
+1. Check output from `efibootmgr`.
+
+   ```bash
+   ncn# efibootmgr
+   ```
+
+   The `BootCurrent` value should be matched to the list beneath to see if it lines up with a networking option or a `cray sd*)` option for disk boots.
 
 <a name="set-bmcs-to-dhcp"></a>
 ### Set BMCs to DHCP
@@ -109,6 +113,7 @@ done
 > Boot0002* cray (sdb1)
 > ```
 >
+> <a name="hewlett-packard-enterprise"></a>
 > #### Hewlett-Packard Enterprise
 >
 > 
@@ -145,6 +150,7 @@ done
 > Boot0018* cray (sdc1)
 > ```
 > 
+> <a name="intel-corporation"></a>
 > #### Intel Corporation
 >
 > ##### Masters
