@@ -91,7 +91,9 @@ See [Basic Wipe](#basic-wipe) section for expected output from the wipefs comman
 This section is preferred method for all nodes. A full wipe includes deleting the Ceph volumes (where applicable), stopping the
 RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
-1. Delete CEPH Volumes on Utility Storage Nodes
+**IMPORTANT:** Step 1 is to wipe the ceph osd drives.  ***steps 2,3,4 and 5 are for all node types.***
+
+1. Delete CEPH Volumes ***on Utility Storage Nodes ONLY***
 
    ```bash
    ncn-s# systemctl stop ceph-osd.target
@@ -102,14 +104,18 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
    ncn-s# ls -1 /dev/sd* /dev/disk/by-label/*
    ncn-s# vgremove -f --select 'vg_name=~ceph*'
    ```
-
-1. Stop the RAIDs.
+   
+2. Unmount volumes
+   1. Storage nodes unmount (/var/lib/ceph, /var/lib/containers, and /etc/ceph)
+   2. Master nodes unmount (/var/lib/etcd)
+   3. Woker nodes unmount (/var/lib/containerd, /var/lib/kubelet, and /var/lib/sdu)
+3. Stop the RAIDs.
 
    ```bash
    ncn-s# for md in /dev/md/*; do mdadm -S $md || echo nope ; done
    ```
 
-1. Remove auxillary LVMs
+4. Remove auxillary LVMs
 
    ```bash
    ncn-s# vgremove -f --select 'vg_name=~metal*'
@@ -117,7 +123,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
 >>***Note***: Optionally you can run a pvs and if any drives are still listed, you can remove them with a pvremove.   This is rarely needed.
 
-1. Wipe the disks and RAIDs.
+5. Wipe the disks and RAIDs.
 
    ```bash
    ncn-s# sgdisk --zap-all /dev/sd* 
