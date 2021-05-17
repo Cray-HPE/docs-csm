@@ -347,6 +347,8 @@ The hms-discovery job must also be stopped before updates and restarted after up
 
 **NOTE**: Because of an incorrect string in the image meta data in FAS.  Update of System ROM may report as an error when it actually succeeded.  You may have to manually check the update version.
 
+**NOTE**: If you update the System ROM of a NCN, you will lose NTP and DNS server values.  Those must be restored using the `set-bmc-ntp-dns.sh` (located in `/opt/cray`).  Use the `-h` to get a list of command line options to restore NTP and DNS values.
+
 ---
 
 ## <a name="manufacturer-gigabyte"></a>Manufacturer : Gigabyte
