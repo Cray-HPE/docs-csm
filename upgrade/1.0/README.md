@@ -23,11 +23,10 @@ scope of this documentation.
 
 ### Prerequisites
 
+Before upgrading to CSM-1.0, please ensure that the latest CSM-0.9.x patches and hot-fixes have been applied.  These upgrade instructions assume that the latest released CSM-0.9.x patch and any appplicable hot-fixes for CSM-0.9.x, have been applied.
+
 Begin by [downloading and configuring the latest version of CSM](resource_material/prereqs/get-csm.md)
 
-
-**PLEASE NOTE THAT THE NEXT LINE IS NOT READY FOR EXECUTION** with respect to exporting critical site data.  It is experimental and is undergoing internal testing.
-For protection against unexpected upgrade issues, follow the recommended steps to [export critical site data](resource_material/prereqs/export-critical-data.md).
 
 ### Preflight Checks
 
@@ -103,5 +102,3 @@ ncn-m001# ./${CSM_RELEASE}/upgrade.sh
 
 ### Troubleshooting and Recovering from Failed Upgrades
 
-**PLEASE NOTE THAT THE NEXT LINE IS NOT READY FOR EXECUTION** with respect to executing recovery procedures.  It is experimental and is undergoing internal testing.
-Please see the [Upgrade Recovery and Troubleshooting](resource_material/recovery/troubleshoot_recovery.md) procedures in the event of failures or issues encountered during the upgrade.
