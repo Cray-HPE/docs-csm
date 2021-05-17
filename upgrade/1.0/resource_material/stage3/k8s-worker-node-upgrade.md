@@ -98,7 +98,13 @@
 
    > NOTE: Pods in a `Completed` state are not moved to another worker node when the node being upgraded is drained, but rather they are deleted.  ***If the administrator would like to gather any information from pods in this state, now is the last chance to do so.***
 
-5. Use the script provided in this repository to cordon/drain the node.  This will evacuate pods running on the node.
+5. Ensure that the previously rebuilt worker node (if applicable) has started any etcd pods (if necessary).  ***We don't want to begin rebuilding the next worker node until etcd pods have reached quorum.***  Run the following command, and pause on this step until all pods are in a `Running` state:
+
+   ```bash
+   ncn#  kubectl get po -A -l 'app=etcd'
+   ```
+
+6. Use the script provided in this repository to cordon/drain the node.  This will evacuate pods running on the node.
 
    ```bash
    ncn# /usr/share/doc/metal/upgrade/1.0/scripts/k8s/remove-k8s-node.sh $UPGRADE_NCN
