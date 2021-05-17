@@ -88,10 +88,10 @@ See [Basic Wipe](#basic-wipe) section for expected output from the wipefs comman
 <a name="full-wipe"></a>
 ### Full-Wipe
 
-This section is specific to utility storage nodes. A full wipe includes deleting the Ceph volumes, stopping the
+This section is preferred method for all nodes. A full wipe includes deleting the Ceph volumes (where applicable), stopping the
 RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
-1. Delete CEPH Volumes
+1. Delete CEPH Volumes on Utility Storage Nodes
 
    ```bash
    ncn-s# systemctl stop ceph-osd.target
@@ -114,6 +114,8 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
    ```bash
    ncn-s# vgremove -f --select 'vg_name=~metal*'
    ```
+
+>>***Note***: Optionally you can run a pvs and if any drives are still listed, you can remove them with a pvremove.   This is rarely needed.
 
 1. Wipe the disks and RAIDs.
 

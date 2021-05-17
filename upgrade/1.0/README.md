@@ -60,6 +60,14 @@ Before starting the upgrade, ensure the system is currently in a healthy state. 
 
 Follow the steps at: [Initial Ceph Upgrade](resource_material/stage1/initial-ceph-upgrade.md)
 
+**IMPORTANT NOTES**
+> - At this point your ceph commands will still be working.  
+> - You have a new way of executing ceph commands in addition to the traditional way.  
+>   - Please see [cephadm-reference.md](resource_material/common/cephadm-reference.md) for more information.
+> - Both methods are depdent on the master nodes and storage nodes 001/2/3 have a ceph.client.admin.keyring and/or a ceph.conf file (cephadm will not require the ceph.conf). 
+> - When you continue with Stage 2, you may have issues running your ceph commands.  
+>   - If you are experiencing this, please double check that you restored your /etc/ceph directory from your tar backup.
+
 #### Stage 2. Ceph image upgrade
 
 For each storage node in the cluster, start by following the steps at: [Common Prerequisite Steps](resource_material/common/prerequisite-steps.md). Note that these steps should be performed on one storage node at a time.
