@@ -278,18 +278,18 @@ install).
 
 TODO reference these files
 
-301-NCN-METADATA-BMC.md Collecting the BMC MAC Addresses
-302-NCN-METADATA-BONDX.md Collecting NCN MAC Addresses
-303-NCN-METADATA-USB-SERIAL.md NCN Metadata over USB-Serial Cable
-305-SWITCH-METADATA.md Switch Metadata
-307-HMN-CONNECTIONS.md HMN Connections File
-308-APPLICATION-NODE-CONFIG.md Application Node Config
-310-CABINETS.md Cabinets
+* 301-NCN-METADATA-BMC.md Collecting the BMC MAC Addresses
+* 302-NCN-METADATA-BONDX.md Collecting NCN MAC Addresses
+* 303-NCN-METADATA-USB-SERIAL.md NCN Metadata over USB-Serial Cable
+* 305-SWITCH-METADATA.md Switch Metadata
+* 307-HMN-CONNECTIONS.md HMN Connections File
+* 308-APPLICATION-NODE-CONFIG.md Application Node Config
+* 310-CABINETS.md Cabinets
 
 <a name="next-topic"></a>
 # Next Topic
 
    After completing this procedure the next step is to bootstrap the PIT node.
 
-   * See [Bootstrap PIT Node](index.md#bootstrap_pid_node)
+   * See [Bootstrap PIT Node](index.md#bootstrap_pit_node)
 

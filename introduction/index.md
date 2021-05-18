@@ -1,8 +1,10 @@
 # Introduction to CSM Installation
 
-This document provides an introduction to the CSM installation documentation.
+This document provides an introduction to the Cray System Management (CSM) installation documentation
+for an HPE Cray EX system. 
 
 ### Topics:
+   * [CSM Overview](#csm_overview)
    * [Scenarios for Shasta v1.5](#scenarios)
    * [CSM Product Stream Updates](#product-stream-updates)
    * [CSM Operational Activities](#operations)
@@ -11,10 +13,29 @@ This document provides an introduction to the CSM installation documentation.
 
 ## Details
 
-<a name="scenarios"></a>
-# Scenarios for Shasta v1.5
+<a name="csm_overview"></a>
+## CSM Overview
 
-   These scenarios for how to get CSM software onto a system are described in [Scenarios for Shasta v1.5](scenarios.md)
+   The CSM installation prepares and deploys a distributed system across a group of management
+   nodes organized into a Kubernetes cluster which uses Ceph for utility storage.  These nodes
+   perform their function as Kubernetes master nodes, Kubernetes worker nodes, or utility storage
+   nodes with the Ceph storage.
+
+   System services on these nodes are provided as containerized microservices packaged for deployment
+   as helm charts.  These services are orchestrated by Kubernetes to be scheduled on Kubernetes worker
+   nodes with horizontal scaling to increase or decrease the number of instances of some services as
+   demand for them varies, such as when booting many compute nodes or application nodes.
+
+   There is much more information available in the [CSM Overview](csm_overview.md) about the hardware,
+   software, network, and access to these services and components.
+
+   See [CSM Overview](csm_overview.md)
+
+<a name="scenarios"></a>
+## Scenarios for Shasta v1.5
+
+   These scenarios for how to get CSM software onto a system are described in [Scenarios for Shasta v1.5](scenarios.md).
+
    * Installation of CSM software
       * First time installation of CSM software
       * Reinstall of CSM software
@@ -22,17 +43,17 @@ This document provides an introduction to the CSM installation documentation.
 
    Note: A migration from Shasta v1.3.x software to Shasta v1.5 software is not supported as a direct action, but is a two step process of first migrating from Shasta v1.3.x to Shasta v1.4 and then following the Upgrade procedure from v1.4 to v1.5.
 
-   See [Scenarios for Shasta v1.5](scenarios.md)
+See [Scenarios for Shasta v1.5](scenarios.md)
 
 <a name="product-stream-updates"></a>
-# CSM Product Stream Updates
+## CSM Product Stream Updates
 
    The software included in the CSM product stream is released in more than one way.  The initial product release may be augmented with late-breaking workarounds and documentation updates or hotfixes after the release. 
 
    See [CSM Product Stream Updates](../update_product_stream/index.md)
 
 <a name="operations"></a>
-# CSM Operational Activities
+## CSM Operational Activities
 
    Procedures which are used during either installation or upgrading of software or in both, but which
    may also be used for general operation of the system reside here.  They are referenced in the context
@@ -41,15 +62,25 @@ This document provides an introduction to the CSM installation documentation.
    See [CSM Operational Activities](../operations/index.md)
 
 <a name="differences"></a>
-# Differences from Previous Release
+## Differences from Previous Release
 
-   TODO summary
+   Significant changes from the previous release of CSM are described.
+  
+   * New Features
+   * Deprecating Features
+   * Deprecated Features
+   * Other Changes
 
-   * [Differences from Previous Release](differences.md)
+See [Differences from Previous Release](differences.md)
 
 <a name="documetation_conventions"></a>
-# Documentation Conventions
+## Documentation Conventions
 
-   TODO summary
+   Several conventions have been used in the preparation of this documentation.
 
-   * [Documentation Conventions](documentation_conventions.md)
+   * File Formats
+   * Typographic Conventions 
+   * Annotations for how we identify sections of the documentation that do not apply to all systems
+   * Command Prompt Conventions which indicate the context for user, host, directory, chroot environment, or container environment
+
+See [Documentation Conventions](documentation_conventions.md)

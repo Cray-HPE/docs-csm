@@ -16,47 +16,45 @@ Verify that the ceph-csi requirements are in place
 
    1. Log in to ncn-s00 and run this command
 
-   ```bash
-   ncn-s001# ceph -s
-   ```
-
-   If it returns a connection error then assume ceph is not installed. See [Rerun Storage Node cloud-init](#rerun_storage_node_cloud-init).
-
+      ```bash
+      ncn-s001# ceph -s
+      ```
+      If it returns a connection error then assume ceph is not installed. See [Rerun Storage Node cloud-init](#rerun_storage_node_cloud-init).  
    1. Verify all post ceph install tasks have run
 
-   Log in to ncn-s001 and check /etc/cray/ceph for completed task files.
+      Log in to ncn-s001 and check /etc/cray/ceph for completed task files.
 
-   ```bash
-   ncn-s001# ls /etc/cray/ceph/
-   ceph_k8s_initialized  csi_initialized  installed  kubernetes_nodes.txt  tuned
-   ```
+      ```bash
+      ncn-s001# ls /etc/cray/ceph/
+      ceph_k8s_initialized  csi_initialized  installed  kubernetes_nodes.txt  tuned
+      ```
 
-   Check your results against this example.
+      Check your results against this example.
 
-   If any components are missing, See [Rerun Storage Node cloud-init](#rerun_storage_node_cloud-init).
+      If any components are missing, See [Rerun Storage Node cloud-init](#rerun_storage_node_cloud-init).
 
    1. Check to see if k8s ceph-csi prerequisites have been created
 
-   These commands can be run this from any storage, manager, or worker node.
+      These commands can be run this from any storage, manager, or worker node.
 
-   ```bash
-   ncn# kubectl get cm
-   NAME               DATA   AGE
-   ceph-csi-config    1      3h50m
-   cephfs-csi-sc      1      3h50m
-   kube-csi-sc        1      3h50m
-   sma-csi-sc         1      3h50m
-   sts-rados-config   1      4h
-   
-   ncn# kubectl get secrets | grep csi
-   csi-cephfs-secret             Opaque                                4      3h51m
-   csi-kube-secret               Opaque                                2      3h51m
-   csi-sma-secret                Opaque                                2      3h51m
-   ```
+      ```bash
+      ncn# kubectl get cm
+      NAME               DATA   AGE
+      ceph-csi-config    1      3h50m
+      cephfs-csi-sc      1      3h50m
+      kube-csi-sc        1      3h50m
+      sma-csi-sc         1      3h50m
+      sts-rados-config   1      4h
+      
+      ncn# kubectl get secrets | grep csi
+      csi-cephfs-secret             Opaque                                4      3h51m
+      csi-kube-secret               Opaque                                2      3h51m
+      csi-sma-secret                Opaque                                2      3h51m
+      ```
 
-   Check your results against the above examples.
+      Check your results against the above examples.
 
-   If any components are missing, see [Rerun Storage Node cloud-init](#rerun_storage_node_cloud-init).
+      If any components are missing, see [Rerun Storage Node cloud-init](#rerun_storage_node_cloud-init).
 
 <a name="rerun_storage_node_cloud-init"></a>
 ## Rerun Storage Node cloud-init
@@ -65,14 +63,15 @@ Verify that the ceph-csi requirements are in place
 
    1. Run the following:
 
-    ```bash
-    ncn-s001# ls /etc/cray/ceph
-    ```
-    If any files are there they will represent completed stages.
+       ```bash
+       ncn-s001# ls /etc/cray/ceph
+       ```
+       If any files are there they will represent completed stages.
 
-    1. If you have a running cluster you will want to edit 'storage-ceph-cloudinit.sh` on ncn-s001
+   1. If you have a running cluster you will want to edit 'storage-ceph-cloudinit.sh` on ncn-s001
 
-       ```ncn-s001# vi /srv/cray/scripts/common/storage-ceph-cloudinit.sh
+       ```
+       ncn-s001# vi /srv/cray/scripts/common/storage-ceph-cloudinit.sh
        ```
 
        Comment out this section:

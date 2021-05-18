@@ -469,7 +469,7 @@ data so run them only when indicated. Instructions are in the `README` files.
     ```
     
 <a name="enable-ncn-disk-wiping-safeguard"></a>
-###Enable NCN Disk Wiping Safeguard
+### Enable NCN Disk Wiping Safeguard
 
     > The next steps require `csi` from the installation media. `csi` will not be provided on an NCN otherwise since it is used for CRAY installation & bootstrap. The CSI binary is compiled against the NCN base, simply fetching it from the bootable media will suffice.
     

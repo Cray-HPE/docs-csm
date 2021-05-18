@@ -56,7 +56,7 @@ Obtain and attach the LiveCD `.iso` file to the BMC. Depending on the server ven
 
 1. Each guide should have rebooted the server.  Observe the server boot into the LiveCD.
 
-<a name"first-login"></a>
+<a name="first-login"></a>
 ### First Login
 
 On first login (over SSH or at local console) the LiveCD will prompt the administrator to change the password.

@@ -97,7 +97,7 @@ The following list contains abbreviations for nodes used below
 | pit# | Run the command as root on the PIT node. |
 | linux# | Run the command as root on a linux host. |
 | uan# | Run the command as root on any UAN. |
-| uan01# | Run the command as root on any UAN. |
+| uan01# | Run the command as root on hostname uan01. |
 | user@uan> | Run the command as any non-root user on any UAN. |
 | cn# | Run the command as root on any CN.  Note that a CN will have a hostname of the form nid124356, that is "nid" and a six digit, zero padded number. |
 | hostname# | Run the command as root on the specified hostname. |

@@ -2,9 +2,23 @@
 
 ### Scope and Audience
 
-The documentation included here describes how to install or upgrade the Cray System Management (CSM) software and related supporting operational procedures.  CSM software is the foundation upon which other software product streams for the HPE Cray EX system depend.
+The documentation included here describes how to install or upgrade the Cray System Management (CSM)
+software and related supporting operational procedures.  CSM software is the foundation upon which
+other software product streams for the HPE Cray EX system depend.
 
-The information is intended for system installers, system administrators, and network administrators of the system.  It assumes some familiarity with standard Linux and open source tools, such as shell scripts, Ansible, YAML, JSON, and TOML file formats, etc.
+The CSM installation prepares and deploys a distributed system across a group of management
+nodes organized into a Kubernetes cluster which uses Ceph for utility storage.  These nodes
+perform their function as Kubernetes master nodes, Kubernetes worker nodes, or utility storage
+nodes with the Ceph storage.
+
+System services on these nodes are provided as containerized microservices packaged for deployment
+as helm charts.  These services are orchestrated by Kubernetes to be scheduled on Kubernetes worker
+nodes with horizontal scaling to increase or decrease the number of instances of some services as 
+demand for them varies, such as when booting many compute nodes or application nodes.
+
+This information is intended for system installers, system administrators, and network administrators
+of the system.  It assumes some familiarity with standard Linux and open source tools, such as shell
+scripts, Ansible, YAML, JSON, and TOML file formats, etc.
 
 ### Trademarks
 
@@ -17,11 +31,12 @@ The chapters with topics which need to be done as part of an ordered procedure a
 1. [Introduction to CSM Installation](introduction/index.md)
 
    Topics:
-   * [Scenarios for Shasta v1.5](introduction/scenarios.md)
+   * [CSM Overview](introduction/index.md#csm_overview)
+   * [Scenarios for Shasta v1.5](introduction/index.md#scenarios)
    * [CSM Product Stream Updates](introduction/index.md#product-stream-updates)
    * [CSM Operational Activities](introduction/index.md#operations)
-   * [Differences from Previous Release](introduction/differences.md)
-   * [Documentation Conventions](introduction/documentation_conventions.md)
+   * [Differences from Previous Release](introduction/index.md#differences)
+   * [Documentation Conventions](introduction/index.md#documentation_conventions)
 
 1. [Update CSM Product Stream](update_product_stream/index.md)
 

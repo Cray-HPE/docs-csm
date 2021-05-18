@@ -4,6 +4,9 @@
 The upgrade of the CSM product stream has many steps in multiple procedures which should be done in a 
 specific order.
 
+The information below is not yet correct for a general upgrade workflow.  Until it is the upgrade should
+start with [CSM 1.4 to 1.5 Upgrade Process](1.0/README.md) which is in the 1.0 subdirectory from this file.
+
 TODO missing internal steps
 
 The upgrade of CSM software and nodes can be validated with health checks before doing operational tasks
@@ -32,74 +35,66 @@ sections, but there is also a general troubleshooting topic.
    <a name="prepare_for_upgrade"></a>
 
    1. Prepare for Upgrade
-
-   TODO
-
-   See [Prepare for Upgrade](prepare_for_upgrade.md)
-
+      
+      TODO
+      
+      See [Prepare for Upgrade](prepare_for_upgrade.md)
    <a name="update_management_network"></a>
 
    1. Update Management Network Configuration
-
-   TODO
-
-   See [Update Management Network Configuration](update_management_network.md)
-
+      
+      TODO
+      
+      See [Update Management Network Configuration](update_management_network.md)
    <a name="upgrade_management_nodes"></a>
 
    1. Upgrade Management Nodes
-
-   TODO
-
-   See [Upgrade Management Nodes](upgrade_management_nodes.md)
-
+      
+      TODO
+      
+      See [Upgrade Management Nodes](upgrade_management_nodes.md)
    <a name="upgrade_csm_services"></a>
 
    1. Upgrade CSM Services
-
-   TODO
-
-   See [Upgrade CSM Services](upgrade_csm_services.md)
-
+      
+      TODO
+      
+      See [Upgrade CSM Services](upgrade_csm_services.md)
    <a name="restore_from_backup"></a>
 
    1. Restore from Backup
-
-   TODO
-
-   See [Restore from Backup](restore_from_backup.md)
-
+      
+      TODO
+      
+      See [Restore from Backup](restore_from_backup.md)
    <a name="validate_csm_health"></a>
 
    1. Validate CSM Health
-
-   TODO
-
-   See [Validate CSM Health](../operations/validate_csm_health.md)
-
+      
+      TODO
+      
+      See [Validate CSM Health](../operations/validate_csm_health.md)
    <a name="update_firmware_with_fas"></a>
 
    1. Update Firmware with FAS
-
-   TODO
-
-   See [Update Firmware with FAS](../operations/update_firmware_with_fas.md)
-
+      
+      TODO
+      
+      See [Update Firmware with FAS](../operations/update_firmware_with_fas.md)
    <a name="next_topic"></a>
 
    1. Next Topic
 
-   After completion of the firmware update with FAS, the CSM product stream has been fully upgraded and
-   configured.  Refer to the _HPE Cray EX Installation and Configuration Guide 1.5 S-8000_ for other product streams
-   to be upgraded and configured after CSM.
-
+      After completion of the firmware update with FAS, the CSM product stream has been fully upgraded and
+      configured.  Refer to the _HPE Cray EX Installation and Configuration Guide 1.5 S-8000_ for other product streams
+      to be upgraded and configured after CSM.
    <a name="troubleshooting_upgrade"></a>
 
    1. Troubleshooting Upgrade Problems
 
-   The upgrade of the Cray System Management (CSM) product requires knowledge of the various nodes and
-   switches for the HPE Cray EX system. The procedures in this section should be referenced during the CSM upgrade
-   for additional information on system hardware, troubleshooting, and administrative tasks related to CSM.
+      The upgrade of the Cray System Management (CSM) product requires knowledge of the various nodes and
+      switches for the HPE Cray EX system. The procedures in this section should be referenced during the CSM upgrade
+      for additional information on system hardware, troubleshooting, and administrative tasks related to CSM.
 
-   See [Troubleshooting Upgrade Problems](troubleshooting_upgrade.md))
+      See [Troubleshooting Upgrade Problems](troubleshooting_upgrade.md))
 

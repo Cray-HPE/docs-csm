@@ -5,10 +5,12 @@ This page describes how CDU switches are configured and will show users how to v
 CDU switches are located in Mountain cabinets and provide connectivity to MTN components.
 CDU switches act as leafs in the architecture.
 They run in a high availability pair and use VLT to provide redundancy.
+
 Requirements:
-    - Two uplinks from each CDU switch to the upstream switch, this is normally a Spine switch.
-    - Three connections between the switches, two of these are used for the VLTi (VLT interconnect) and one used for the keepalive.
-    - The VLTi uses two 100gb links between the switches.
+
+   - Two uplinks from each CDU switch to the upstream switch, this is normally a Spine switch.
+   - Three connections between the switches, two of these are used for the VLTi (VLT interconnect) and one used for the keepalive.
+   - The VLTi uses two 100gb links between the switches.
 
 ## VLAN Config
 
@@ -109,17 +111,17 @@ Note: CSI does not yet generate IPs for the CDU switches on VLANs HMN_MTN and NM
 Below is an example of CDU switch IP addressing based on the network .yaml files from above.
 
 | VLAN | CDU1 | CDU2	| Purpose |
-| --- | --- | ---| --- | --- | --- | --- |
+| --- | --- | ---| --- | 
 | 2 | 10.252.0.5/17| 10.252.0.6/17 | River Node Management
 | 4 | 10.254.0.5/17| 10.254.0.6/17 | River Hardware Management
 | 2000 | 10.100.0.2/22| 10.100.0.3/22 | Mountain Node Management
-| 3000 | 10.104.0.2/22| 10.104.0.3/22 | Mountain Hardware Management
+| 3000 | 10.104.0.2/22| 10.104.0.3/22 | Mountain Hardware Managemen
 
 If the system has additional Mountain Cabinets the VLANs will look like this. 
 This is an example of a system with 3 cabinets. 
 
-| VLAN | CDU1 | CDU2	|
-| --- | --- | ---| --- | --- | --- | --- |
+| VLAN | CDU1 | CDU2	| Purpose |
+| --- | --- | ---| --- |
 | 2000 | 10.100.0.2/22| 10.100.0.3/22 | Mountain Node Management
 | 3000 | 10.104.0.2/22| 10.104.0.3/22 | Mountain Hardware Management
 | 2001 | 10.100.4.2/22| 10.100.4.3/22 | Mountain Node Management
