@@ -5,47 +5,40 @@ Newer systems have HPE Aruba switches, while older systems have Dell and Mellano
 
 The configuration steps are different for these switch vendors.  The switch configuration procedures for HPE Aruba will be grouped separately from the switch configuration procedures for other vendors.
 
-TODO What is best workflow order?  Should it be by functionality or by doing all things on a switch?  All in this file or Aruba file and others file?
-TODO Remove all v1.3 migration things, but keep info about how to do a fresh install on Dell and Mellanox.
-
-TODO New in Shasta v1.5. Should be called out as one of the New features in (../introduction/differences.md)
-
 ### Topics:
 
-   * HPE Aruba switch configuration
-      1. [Install Baseline Switch Configuration](402-MGMT-NET-BASE-CONFIG.md)
-      1. [Update Aruba Switch Firmware](409-MGMT-NET-FIRMWARE-UPDATE.md)
-      1. [Configure Layer 2 VLAN](403-MGMT-NET-VLAN-CONFIG.md)
-      1. [Configure Layer 2 MLAG and VSX Pairs](404-MGMT-NET-MLAG-CONFIG.md)
-      1. [Configure Layer 2 iLO/BMC, CMM, and Gateway Node Ports](405-MGMT-NET-PORT-CONFIG.md)
-      1. [Configure Layer 2 Management Network Spanning-Tree](419-MGMT-NET-STP.md)
-      1. [Configure Layer 2 Switch Uplink Ports (ISL)](410-MGMT-NET-UPLINK-CONFIG.md)
-      1. [Configure Layer 3 ACL](406-MGMT-NET-ACL-CONFIG.md)
-      1. [Configure Layer 3 OSPFv2 and BGP Dynamic Routing](411-MGMT-NET-LAYER3-CONFIG.md)
-      1. [Configure Layer 3 SNMP](407-MGMT-NET-SNMP-CONFIG.md)
-      1. [Configure Layer 3 IP-Helper](418-MGMT-NET-IP-HELPER.md)
-      1. [Configure NTP](414-MGMT-NET-NTP-CONFIG.md)
-      1. [Create the CAN](408-MGMT-NET-CAN-CONFIG.md)
-
-   * Dell and Mellanox switch configuration
-      1. [Install Baseline Switch Configuration] TODO is this important for the old switch vendors? This has some of the content  which would be needed [412-MGMT-NET-DELL-MELLANOX-UPGRADES.md](412-MGMT-NET-DELL-MELLANOX-UPGRADES.md)  Also in [415-MGMT-NET-SWITCH-RENAME.md](415-MGMT-NET-SWITCH-RENAME.md)
-      1. [Update Dell and Mellanox Switch Firmware](409-MGMT-NET-FIRMWARE-UPDATE.md)
-      1. [Configure Layer 2 VLAN](403-MGMT-NET-VLAN-CONFIG.md) TODO Missing information for Dell/Mellanox VLAN configuration
-      1. [Configure Layer 2 MLAG](412-MGMT-NET-DELL-MELLANOX-UPGRADES.md) TODO split this information
-      1. [Configure Layer 2 MAGP](412-MGMT-NET-DELL-MELLANOX-UPGRADES.md) TODO split this information
-      1. [Configure Layer 2 iLO/BMC, CMM, and Gateway Node Ports](405-MGMT-NET-PORT-CONFIG.md)
-      1. [Configure Layer 2 Management Network Spanning-Tree](419-MGMT-NET-STP.md)
-      1. [Configure Layer 3 ACL](406-MGMT-NET-ACL-CONFIG.md)
-      1. [Configure Layer 3 OSPFv2 and BGP Dynamic Routing](411-MGMT-NET-LAYER3-CONFIG.md) TODO Missing information for Dell/Mellanox OSPFv2 and BGP configuration
-      1. [Configure Layer 3 SNMP](407-MGMT-NET-SNMP-CONFIG.md)
-      1. [Configure Layer 3 IP-Helper](418-MGMT-NET-IP-HELPER.md)
-      1. [Configure Flow Control](417-MGMT-NET-FLOW-CONTROL.md)
-      1. [Configure NTP](414-MGMT-NET-NTP-CONFIG.md)
-      1. [Create the CAN](408-MGMT-NET-CAN-CONFIG.md)
+   * [HPE Aruba switch configuration](#hpe_aruba_switch_configuration)
+   * [Dell and Mellanox switch configuration](#dell_and_mellanox_switch_configuration)
    * [Next Topic](#next-topic)
 
 
 ## Details
+
+<a name="hpe_aruba_switch_configuration"></a>
+### HPE Aruba Switch Configuration
+
+The management network switches should be configured in this order: Spine, Aggregation (if present), CDU (if present), and Leaf.
+Only systems with liquid-cooled cabinets will have the CDU switches.  Only systems with many nodes in air-cooled cabinets
+will have Aggregation switches.
+
+   1. [Configure Aruba Spine Switch](configure_aruba_spine_switch.md)
+   1. [Configure Aruba Aggregation Switch](configure_aruba_aggregation_switch.md) (if present)
+   1. [Configure Aruba CDU Switch](configure_aruba_cdu_switch.md) (if present)
+   1. [Configure Aruba Leaf Switch](configure_aruba_leaf_switch.md)
+
+<a name="dell_and_mellanox_switch_configuration"></a>
+### Dell and Mellanox Switch Configuration
+
+The management network switches should be configured in this order: Spine, Aggregation (if present), CDU (if present), and Leaf.
+Only systems with liquid-cooled cabinets will have the CDU switches.  Only systems with many nodes in air-cooled
+cabinets will have Aggregation switches.
+
+On a typical system, the Mellanox switches are Spine switches and the Dell switches are used for Aggretation, CDU, and Leaf switches.
+
+
+TODO This section needs to be rewritten for a first time install that needs to configure Dell and Mellanox switches.
+
+TODO Remove all v1.3 migration things, but keep info about how to do a fresh install on Dell and Mellanox.
 
 TODO This 413-MGMT-NET-EXAMPLE-CONFIG.md file was orphaned.  No other file referenced it.  It needs to be cleaned up since it is for a Hill system, but not for a River or Mountain system.
 
@@ -53,6 +46,26 @@ TODO Should this information be merged or stay separate?  416-MGMT-NET-CABLING.m
 
 TODO 421-MGMT-NET-CABLING-CHECKLIST.md was orphaned.  No other file referenced it.
 
+   1. [Install Baseline Switch Configuration] TODO is this important for the old switch vendors? This has some of the content  which would be needed [412-MGMT-NET-DELL-MELLANOX-UPGRADES.md](412-MGMT-NET-DELL-MELLANOX-UPGRADES.md)  Also in [415-MGMT-NET-SWITCH-RENAME.md](415-MGMT-NET-SWITCH-RENAME.md)
+   1. [Update Dell and Mellanox Switch Firmware](409-MGMT-NET-FIRMWARE-UPDATE.md)
+   1. [Configure Layer 2 VLAN](403-MGMT-NET-VLAN-CONFIG.md) TODO Missing information for Dell/Mellanox VLAN configuration
+   1. [Configure Layer 2 MLAG](412-MGMT-NET-DELL-MELLANOX-UPGRADES.md) TODO split this information
+   1. [Configure Layer 2 MAGP](412-MGMT-NET-DELL-MELLANOX-UPGRADES.md) TODO split this information
+   1. [Configure Layer 2 iLO/BMC, CMM, and Gateway Node Ports](405-MGMT-NET-PORT-CONFIG.md)
+   1. [Configure Layer 2 Management Network Spanning-Tree](419-MGMT-NET-STP.md)
+   1. [Configure Layer 3 ACL](406-MGMT-NET-ACL-CONFIG.md)
+   1. [Configure Layer 3 OSPFv2 and BGP Dynamic Routing](411-MGMT-NET-LAYER3-CONFIG.md) TODO Missing information for Dell/Mellanox OSPFv2 and BGP configuration
+   1. [Configure Layer 3 SNMP](407-MGMT-NET-SNMP-CONFIG.md)
+   1. [Configure Layer 3 IP-Helper](418-MGMT-NET-IP-HELPER.md)
+   1. [Configure Flow Control](417-MGMT-NET-FLOW-CONTROL.md)
+   1. [Configure NTP](414-MGMT-NET-NTP-CONFIG.md)
+   1. [Create the CAN](408-MGMT-NET-CAN-CONFIG.md)
+
+Future filenames 
+   1. [Configure Mellanox Spine Switch](configure_mellanox_spine_switch.md)
+   1. [Configure Dell Aggregation Switch](configure_dell_aggregation_switch.md) (if present)
+   1. [Configure Dell CDU Switch](configure_dell_cdu_switch.md) (if present)
+   1. [Configure Dell Leaf Switch](configure_dell_leaf_switch.md)
 <a name="next-topic"></a>
 # Next Topic
 
