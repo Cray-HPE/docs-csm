@@ -7,12 +7,13 @@ Please match your scenario prior to executing any workarounds.
 
 ### Topics
 
-* [Scenario 1](#scenario-1)
+* [Scenario 1](#scenario-1) (Shasta v1.4 only)
+* [Scenario 2](#scenario-2) (Shasta v1.5 only)
 
-## Detais
+## Details
 
-<a name="scenario-1">
-#### Scenario 1  (Shasta 1.4 only)
+<a name="scenario-1"></a>
+### Scenario 1  (Shasta 1.4 only)
 
 **`IMPORTANT (FOR NODE INSTALLS/REINSTALLS ONLY)`**: If your ceph install failed please check the following
 
@@ -47,7 +48,7 @@ ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
 
    1. ncn-s# systemctl stop ceph-osd.target
    2. ncn-s# vgremove -f --select 'vg_name=~ceph*'  
-   *This will take a little bit of time, so don't panic.**
+   *This will take a little bit of time, so don't panic.*
    3. ncn-s# for i in {g..n}; do sgdisk --zap-all /dev/sd$i; done.
 
    **This will vary node to node and you should use lsblk to identify all drives available to ceph**
@@ -62,15 +63,20 @@ ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
         * Edit /srv/cray/scripts/metal/lib.sh
        * Comment out the below lines
 
-    ```bash
-    22   if [ $wipe == 'yes' ]; then
-    23     ansible osds -m shell -a "vgremove -f --select 'vg_name=~ceph*'"
-    24   fi```
+   ```bash
+   22   if [ $wipe == 'yes' ]; then
+   23     ansible osds -m shell -a "vgremove -f --select 'vg_name=~ceph*'"
+   24   fi
+   ```
 
-   Run the cloud init script
+   Run the cloud init script.
+   
+   ```bash
    ncn-s001# /srv/cray/scripts/common/storage-ceph-cloudinit.sh
+   ```
 
-#### Scenario 2  (Shasta 1.5 only)
+<a name="scenario-2"></a>
+### Scenario 2  (Shasta 1.5 only)
 
 IMPORTANT (FOR NODE INSTALLS/REINSTALLS ONLY): If your ceph install failed please check the following
 
