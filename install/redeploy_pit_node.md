@@ -22,7 +22,7 @@ Topics:
 ## Details
 
 <a name="required-services"></a>
-### Required Services
+### 1. Required Services
 
 These services must be healthy in Kubernetes before the reboot of the LiveCD can take place.
 
@@ -37,7 +37,7 @@ Required Platform Services:
    * cray-tftp
 
 <a name="notice-of-danger"></a>
-### Notice of Danger
+### 2. Notice of Danger
 
 > An administrator is **strongly encouraged** to be mindful of pitfalls during this segment of the CSM install.
 > The steps below do contain warnings themselves, but overall there are risks:
@@ -54,7 +54,7 @@ Required Platform Services:
 > **unavailable**.
 
 <a name="hand-off"></a>
-### Hand-Off
+### 3. Hand-Off
 
 The steps in this guide will ultimately walk an administrator through loading hand-off data and rebooting the node.
 This will assist with remote-console setup, for observing the reboot.
@@ -63,7 +63,7 @@ At the end of these steps, the LiveCD will be no longer active. The node it was 
 the Kubernetes cluster as the final of three masters forming a quorum.
 
 <a name="start-hand-off"></a>
-#### Start Hand-Off
+#### 3.1 Start Hand-Off
 
 1. Start a new typescript (quit )
    (Run this on the `pit` node as root, the prompts are removed for easier copy-paste; this step is only useful as a whole)
@@ -329,7 +329,7 @@ data so run them only when indicated. Instructions are in the `README` files.
     ```
 
 <a name="reboot"></a>
-### Reboot
+### 4. Reboot
 
 1. Reboot the LiveCD.
     
@@ -469,7 +469,7 @@ data so run them only when indicated. Instructions are in the `README` files.
     ```
     
 <a name="enable-ncn-disk-wiping-safeguard"></a>
-### Enable NCN Disk Wiping Safeguard
+### 5. Enable NCN Disk Wiping Safeguard
 
     > The next steps require `csi` from the installation media. `csi` will not be provided on an NCN otherwise since it is used for CRAY installation & bootstrap. The CSI binary is compiled against the NCN base, simply fetching it from the bootable media will suffice.
     

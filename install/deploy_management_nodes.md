@@ -27,9 +27,9 @@ the number of storage and worker nodes.
    1. [Deploy Management Nodes](#deploy_management_nodes)
       1. [Deploy Workflow](#deploy-workflow)
       1. [Deploy](#deploy)
-   1. [Configure after Management Node Deployment](#configure_after_management_node_deployment)
       1. [Check for Unused Drives on Utility Storage Nodes](#check-for-unused-drives-on-utility-storage-nodes)
       1. [Apply NCN Post-Boot Workarounds](#apply-ncn-post-boot-workarounds)
+   1. [Configure after Management Node Deployment](#configure_after_management_node_deployment)
       1. [LiveCD Cluster Authentication](#livecd-cluster-authentication)
       1. [BGP Routing](#bgp-routing)
       1. [Configure and Trim UEFI Entries](#configure-and-trim-uefi-entries)
@@ -40,12 +40,12 @@ the number of storage and worker nodes.
 ## Details
 
 <a name="prepare_for_management_node_deployment"></a>
-### Prepare for Management Node Deployment
+### 1. Prepare for Management Node Deployment
 
 Preparation of the environment must be done before attempting to deploy the management nodes.
 
 <a name="configure-bootstrap-registry-to-proxy-an-upstream-registry"></a>
-#### Configure Bootstrap Registry to Proxy an Upstream Registry
+#### 1.1 Configure Bootstrap Registry to Proxy an Upstream Registry
 
 > **`INTERNAL USE`** -- This procedure is only relevant for HPE Cray internal systems.
 
@@ -92,7 +92,7 @@ installs as follows:
     ```
 
 <a name="tokens-and-ipmi-password"></a>
-#### Tokens and IPMI Password
+#### 1.2 Tokens and IPMI Password
 
 1. Define shell environment variables that will simplify later commands to deploy management nodes.
 
@@ -123,7 +123,7 @@ installs as follows:
    ```
 
 <a name="apply-ncn-pre-boot-workarounds"></a>
-#### Apply NCN Pre-Boot Workarounds
+#### 1.3 Apply NCN Pre-Boot Workarounds
 
 _There will be post-boot workarounds as well._
 
@@ -137,7 +137,7 @@ _There will be post-boot workarounds as well._
    ```
 
 <a name="ensure-time-is-accurate-before-deploying-ncns"></a>
-#### Ensure Time Is Accurate Before Deploying NCNs
+#### 1.4 Ensure Time Is Accurate Before Deploying NCNs
 
 **NOTE**: If you wish to use a timezone other than UTC, instead of step 1 below, follow 
 [this procedure for setting a local timezone](../operations/configure_ntp_on_ncns.md#setting-a-local-timezone), then
@@ -227,7 +227,7 @@ proceed to step 2.
    Repeat the above process for each NCN.
 
 <a name="update_management_node_firmware"></a>
-### Update Management Node Firmware
+### 2. Update Management Node Firmware
 
 The management nodes are expected to have certain minimum firmware installed for BMC, node BIOS, and PCIe card
 firmware.  Where possible, the firmware should be updated prior to install.  Some firmware can be updated
@@ -264,7 +264,7 @@ during or after the installation, but it is better to meet the minimum NCN firmw
    * See [Clear Gigabyte CMOS](clear_gigabyte_cmos.md).
 
 <a name="deploy_management_nodes"></a>
-### Deploy Management Nodes
+### 3. Deploy Management Nodes
 
 Deployment of the nodes starts with booting the storage nodes first, then the master nodes and worker nodes together.
 After the operating system boots on each node there are some configuration actions which take place.  Watching the
@@ -273,7 +273,7 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 
 
 <a name="deploy-workflow"></a>
-##### Deploy Workflow
+##### 3.1 Deploy Workflow
 The configuration workflow described here is intended to help understand the expected path for booting and configuring.  See the actual steps below for the commands to deploy these management NCNs.
 
 1. Start watching the consoles for ncn-s001 and at least one other storage node
@@ -294,7 +294,7 @@ The configuration workflow described here is intended to help understand the exp
 
 
 <a name="deploy"></a>
-##### Deploy
+##### 3.2 Deploy
 
 1. Change the default root password and ssh keys
    > If you want to avoid using the default install root password and ssh keys for the NCNs, follow the
@@ -453,9 +453,8 @@ The configuration workflow described here is intended to help understand the exp
     ncn-w003   Ready    <none>   5m58s   v1.18.6   10.252.1.12   <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
     ```
 
-
 <a name="check-for-unused-drives-on-utility-storage-nodes"></a>
-#### Check for Unused Drives on Utility Storage Nodes
+#### 3.3 Check for Unused Drives on Utility Storage Nodes
 
 > **`IMPORTANT:`** Do the following if NCNs use Gigabyte hardware.
 
@@ -493,7 +492,7 @@ The configuration workflow described here is intended to help understand the exp
     ```
 
 <a name="apply-ncn-post-boot-workarounds"></a>
-#### Apply NCN Post-Boot Workarounds
+#### 3.4 Apply NCN Post-Boot Workarounds
 
 Check for workarounds in the `/opt/cray/csm/workarounds/after-ncn-boot` directory.  If there are any workarounds in that directory, run those now.   Instructions are in the `README` files.
 
@@ -504,11 +503,13 @@ CASMINST-12345
 ```
 
 <a name="configure_after_management_node_deployment"></a>
-### Configure after Management Node Deployment
+### 4. Configure after Management Node Deployment
+
+After the management nodes have been deployed, configuration can be applied to the booted nodes.
 
 
 <a name="livecd-cluster-authentication"></a>
-#### LiveCD Cluster Authentication
+#### 4.1 LiveCD Cluster Authentication
 
 The LiveCD needs to authenticate with the cluster to facilitate the rest of the CSM installation.
 
@@ -523,7 +524,7 @@ The LiveCD needs to authenticate with the cluster to facilitate the rest of the 
 
 
 <a name="bgp-routing"></a>
-#### BGP Routing
+#### 4.2 BGP Routing
 
 After the NCNs are booted, the BGP peers will need to be checked and updated if the neighbor IPs are incorrect on the switches. See the doc to [Check and Update BGP Neighbors](../operations/update_bgp_neighbors.md).
 
@@ -548,7 +549,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 
 
 <a name="configure-and-trim-uefi-entries"></a>
-#### Configure and Trim UEFI Entries
+#### 4.3 Configure and Trim UEFI Entries
 
 > **`IMPORTANT`** *The Boot-Order is set by cloud-init, however the current setting is still iterating. This manual step is required until further notice.*
 
@@ -559,12 +560,12 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 
 
 <a name="validate_management_node_deployment"></a>
-### Validate Management Node Deployment
+### 5. Validate Management Node Deployment
 
 Do all of the validation steps.  The optional validation steps are manual steps which could be skipped.
 
 <a name="validation"></a>
-#### Validation
+#### 5.1 Validation
 
 The following commands will run a series of remote tests on the other nodes to validate they are healthy and configured correctly.
 
@@ -615,7 +616,7 @@ Observe the output of the checks and note any failures, then remediate them.
 
 
 <a name="optional-validation"></a>
-#### Optional Validation 
+#### 5.2 Optional Validation 
 
    These tests are for sanity checking. These exist as software reaches maturity, or as tests are worked
    and added into the installation repertoire.

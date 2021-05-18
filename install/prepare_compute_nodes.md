@@ -4,12 +4,12 @@ Some compute nodes types have special preparation steps, but most compute nodes 
 These nodes have an additional procedure before they can be booted.
 
 ### Topics:
-   * [Configure HPE Apollo 6500 XL645d Gen10 Plus Compute Nodes](#configure-hpe-apollo-6500-x645d-gen10-plus-compute-nodes)
+   1. [Configure HPE Apollo 6500 XL645d Gen10 Plus Compute Nodes](#configure-hpe-apollo-6500-x645d-gen10-plus-compute-nodes)
 
 ## Details
 
 <a name="configure-hpe-apollo-x645d-gen10-plus-compute-nodes"></a>
-### Configure HPE Apollo 6500 XL645d Gen10 Plus Compute Nodes
+### 1. Configure HPE Apollo 6500 XL645d Gen10 Plus Compute Nodes
   
 The HPE Apollo 6500 XL645d Gen10 Plus compute node uses a NIC/shared iLO network port. The NIC is
 also referred to as the Embedded LOM (LAN On Motherboard) and is available to the booted OS. This

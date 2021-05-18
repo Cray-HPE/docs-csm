@@ -1,4 +1,4 @@
-# Aruba leaf switch configuration
+# Configure Aruba leaf switch
 
 This page describes how aruba leaf switches are configured and will show users how to validate configuration.
 

@@ -1,4 +1,4 @@
-# Aruba Aggregation switch configuration
+# Configure Aruba Aggregation Switch
 
 This page describes how aruba aggregation switches are configured and will show users how to validate configuration.
 

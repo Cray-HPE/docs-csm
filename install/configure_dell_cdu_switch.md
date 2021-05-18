@@ -1,4 +1,4 @@
-# Dell CDU switch configuration
+# Configure Dell CDU switch
 
 This page describes how CDU switches are configured and will show users how to validate configuration.
 

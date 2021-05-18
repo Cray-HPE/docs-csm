@@ -4,7 +4,7 @@ This page is designed to cover various issues that arise when trying to PXE boot
 
 In order for PXE booting to successfully work, the MGMT switches need to be configured correctly.
 
-# Configuration required for PXE booting
+## Configuration required for PXE booting
 
 To successfully PXE boot nodes, the following is required.
 
@@ -22,7 +22,7 @@ snippet of MTL.yaml
   comment: ""
   gateway: 10.1.0.1
 ```
-# Aruba Configuration
+## Aruba Configuration
 
 Check the configuration for ```interface vlan x```
 This configuration will be the same on BOTH Switches (except the ```ip address```).
@@ -125,7 +125,7 @@ If that static route is missing you'll need to add it.
 sw-spine-001(config)# ip route 10.92.100.60/32 10.252.1.7
 ```
 
-# Mellanox Configuration
+## Mellanox Configuration
 
 Check the configuration for ```interface vlan 1```
 This configuration will be the same on BOTH Switches (except the ```ip address```).
@@ -230,7 +230,7 @@ VRF Name default:
 ```
 If these routes are missing please see [Update BGP Neighbors](../operations/update_bgp_neighbors.md).
 
-# Next steps
+## Next steps
 
 If your configuration looks good, and you are still not able to PXE boot there are some other things to try.
 

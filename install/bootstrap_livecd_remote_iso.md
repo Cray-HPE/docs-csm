@@ -20,7 +20,7 @@ the relevant installation scenario.
 
 ## Details
 <a name="known-compatibility-issues"></a>
-### Known Compatibility Issues
+### 1. Known Compatibility Issues
 
 The LiveCD Remote ISO has known compatibility issues for nodes from certain vendors.
 
@@ -30,7 +30,7 @@ The LiveCD Remote ISO has known compatibility issues for nodes from certain vend
    - Boot the node with `ipmitool chassis bootdev reset/on options=legacy`
 
 <a name="attaching-and-booting-the-livecd-with-the-bmc"></a>
-### Attaching and Booting the LiveCD with the BMC
+### 2. Attaching and Booting the LiveCD with the BMC
 
 > **`INTERNAL WARNING`** If this is a re-installation on a system that still has a USB stick from a prior
 > installation then that USB stick must be wiped before continuing. Failing to wipe the USB, if present, may result in confusion.
@@ -57,7 +57,7 @@ Obtain and attach the LiveCD `.iso` file to the BMC. Depending on the server ven
 1. Each guide should have rebooted the server.  Observe the server boot into the LiveCD.
 
 <a name="first-login"></a>
-### First Login
+### 3. First Login
 
 On first login (over SSH or at local console) the LiveCD will prompt the administrator to change the password.
 
@@ -83,7 +83,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    ```
 
 <a name="configure-the-running-livecd"></a>
-### Configure the Running LiveCD
+### 4. Configure the Running LiveCD
 
 1. Set up the Typescript directory as well as the initial typescript. This directory will be returned to for every typescript in the entire CSM installation.
 

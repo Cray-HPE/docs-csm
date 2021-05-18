@@ -13,20 +13,20 @@ compute node and application node firmware.
 ### Topics 
    1. [Prepare BIOS and Firmware Content for Installation](#prepare-bios-and-firmware-for-installation)
    2. [Check BIOS and Hardware](#check-bios-and-hardware)
-      * [Ugrade HPE (iLO) Firmware](#upgrade-hpe-ilo-firmware)
+      1. [Ugrade HPE (iLO) Firmware](#upgrade-hpe-ilo-firmware)
          * [HPE Pre-Reqs](#hpe-pre-reqs)
          * [HPE GUI](#hpe-gui)
          * [HPE Redfish](#hpe-redfish)
-      * [Upgrade Gigabyte Firmware](#upgrade-gigabyte-firmware)
+      1. [Upgrade Gigabyte Firmware](#upgrade-gigabyte-firmware)
          * [Gigabyte GUI](#gigabyte-gui)
    3. [Component Firmware Checkout](#component-firmware-checkout)
-      * [Upgrade Marvell PCIe Card](#upgrade-marvell-pcie-card)
-      * [Upgrade Mellanox PCIe Card](#upgrade-mellanox-pcie-card)
+      1. [Upgrade Marvell PCIe Card](#upgrade-marvell-pcie-card)
+      1. [Upgrade Mellanox PCIe Card](#upgrade-mellanox-pcie-card)
 
 ## Details
 
 <a name="prepare-bios-and-firmware-for-installation"></a>
-### Prepare BIOS and Firmware Content for Installation
+### 1. Prepare BIOS and Firmware Content for Installation
 
 > **`CUSTOMER NOTE`** If there's doubt that the tar contains latest, the customer should check [CrayPort][1] for newer firmware.
 
@@ -63,7 +63,7 @@ compute node and application node firmware.
     ```
 
 <a name="check-bios-and-hardware"></a>
-### Check BIOS and Hardware
+### 2. Check BIOS and Hardware
 
 1. Checkout BIOS and BMC firmware with `ipmitool`:
    * From the NCN:
@@ -209,7 +209,7 @@ compute node and application node firmware.
    * [Upgrade Gigabyte Firmware](#upgrade-gigabyte-firmware)
 
 <a name="upgrade-hpe-ilo-firmware"></a>
-#### Upgrade HPE (iLO)
+#### 2.1 Upgrade HPE (iLO)
 
 Firmware is located on the LiveCD (versions 1.4.6 or higher).
 
@@ -300,12 +300,12 @@ All NCNs are now updated via GUI.
     ```
 
 <a name="upgrade-gigabyte-firmware"></a>
-#### Upgrade Gigabyte Firmware
+#### 2.2 Upgrade Gigabyte Firmware
 
 For Gigabyte upgrades a tftp server needs to be referred to.
 
-<a name="gui"></a>
-##### GUI
+<a name="gigabyte-gui"></a>
+##### Gigabyte GUI
 
 1. From the administrators own machine, SSH tunnel (`-L` creates the tunnel, and `-N` prevents a shell and stubs the connection). One at a time, or all together.
 
@@ -363,7 +363,7 @@ For Gigabyte upgrades a tftp server needs to be referred to.
 You're now finished with firmware updates.
 
 <a name="component-firmware-checkout"></a>
-### Component Firmware Checkout
+### 3. Component Firmware Checkout
 
 This covers PCIe devices.
 
@@ -382,12 +382,12 @@ Find more information for each vendor below:
 
 
 <a name="upgrade-marvell-pcie-card"></a>
-#### Upgrade Marvell PCIe Card
+#### 3.1 Upgrade Marvell PCIe Card
 
 > There are no upgrades at this time for Marvell.
 
 <a name="upgrade-mellanox-pcie-card"></a>
-#### Upgrade Mellanox PCIe Card
+#### 3.2 Upgrade Mellanox PCIe Card
 
 The firmware for a Mellanox PCIe card used for booting the NCNs can be updated from a booted Linux node.
 

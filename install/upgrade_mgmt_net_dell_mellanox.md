@@ -1,4 +1,4 @@
-### Management Network Dell And Mellanox Upgrades
+### Upgrade Management Network Dell And Mellanox
 
 The Dell and Mellanox switches have some changes which are needed when moving from Shasta v1.3 to Shasta v1.4.
 This page is a guide to walk through the steps of upgrading a network to 1.4.

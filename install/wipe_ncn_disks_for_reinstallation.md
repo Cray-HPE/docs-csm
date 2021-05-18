@@ -18,14 +18,14 @@ The following are potential use cases for wiping disks:
 <a name="basic-wipe"></a>
 
 ### Topics: 
-   * [Basic Wipe](#basic-wipe)
-   * [Advanced Wipe](#advanced-wipe)
-   * [Full Wipe](#full-wipe)
+   1. [Basic Wipe](#basic-wipe)
+   1. [Advanced Wipe](#advanced-wipe)
+   1. [Full Wipe](#full-wipe)
 
 ## Details
 
 <a name="use-cases"></a>
-### Basic Wipe
+### 1. Basic Wipe
 
 A basic wipe includes wiping the disks and all of the RAIDs.  These basic wipe instructions can be
 executed on **any management nodes** (master, worker and storage).
@@ -60,7 +60,7 @@ executed on **any management nodes** (master, worker and storage).
    The `wipefs` command may fail if no labeled disks are found, which is an indication of a larger problem.
 
 <a name="advanced-wipe"></a>
-### Advanced Wipe
+### 2. Advanced Wipe
 
 This section is specific to utility storage nodes. An advanced wipe includes deleting the Ceph volumes, and then
 wiping the disks and RAIDs.
@@ -86,7 +86,7 @@ wiping the disks and RAIDs.
 See [Basic Wipe](#basic-wipe) section for expected output from the wipefs command.
 
 <a name="full-wipe"></a>
-### Full-Wipe
+### 3. Full-Wipe
 
 This section is preferred method for all nodes. A full wipe includes deleting the Ceph volumes (where applicable), stopping the
 RAIDs, zeroing the disks, and then wiping the disks and RAIDs.

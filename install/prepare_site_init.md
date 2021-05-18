@@ -6,23 +6,22 @@ directory which contains important customizations for various products. The
 default install procedures.
 
 ### Topics:
-   * [Background](#background)
-   * [Create and Initialize Site-Init Directory](#create-and-initialize-site-init-directory)
-   * [Create Baseline System Customizations](#create-baseline-system-customizations)
-   * [Generate Sealed Secrets](#generate-sealed-secrets)
-      * [Patch cloud-init with the CA](#patch-cloud-init-with-the-ca)
-   * [Version Control Site-Init Files](#version-control-site-init-files)
-      * [Push to a Remote Repository](#push-to-a-remote-repository)
-   * [Customer-Specific Customizations](#customer-specific-customizations)
-   * [Appendix](#appendix)
-      * [Tracked Sealed Secrets](#tracked-sealed-secrets)
-      * [Decrypting Sealed Secrets for Review](#decrypting-sealed-secrets-for-review)
-
+   1. [Background](#background)
+   1. [Create and Initialize Site-Init Directory](#create-and-initialize-site-init-directory)
+   1. [Create Baseline System Customizations](#create-baseline-system-customizations)
+   1. [Generate Sealed Secrets](#generate-sealed-secrets)
+      1. [Patch cloud-init with the CA](#patch-cloud-init-with-the-ca)
+   1. [Version Control Site-Init Files](#version-control-site-init-files)
+      1. [Push to a Remote Repository](#push-to-a-remote-repository)
+   1. [Customer-Specific Customizations](#customer-specific-customizations)
+   1. [Appendix](#appendix)
+      1. [Tracked Sealed Secrets](#tracked-sealed-secrets)
+      1. [Decrypting Sealed Secrets for Review](#decrypting-sealed-secrets-for-review)
 
 ## Details
 
 <a name="background"></a>
-### Background
+### 1. Background
 
 The `shasta-cfg` directory included in CSM includes relatively static,
 installation-centric artifacts such as:
@@ -36,7 +35,7 @@ installation-centric artifacts such as:
     product stream installers
 
 <a name="create-and-initialize-site-init-directory"></a>
-### Create and Initialize Site-Init Directory
+### 2. Create and Initialize Site-Init Directory
 
 1.  Create directory `/mnt/pitdata/prep/site-init`:
     
@@ -60,7 +59,7 @@ cloned
     ```
 
 <a name="create-baseline-system-customizations"></a>
-### Create Baseline System Customizations
+### 3. Create Baseline System Customizations
 
 The following steps update `/mnt/pitdata/prep/site-init/customizations.yaml`
 with system-specific customizations.
@@ -499,7 +498,7 @@ with system-specific customizations.
 
 
 <a name="generate-sealed-secrets"></a>
-### Generate Sealed Secrets
+### 4. Generate Sealed Secrets
 
 Secrets are stored in `customizations.yaml` as `SealedSecret` resources (i.e.,
 encrypted secrets) which are deployed by specific charts and decrypted by the
@@ -566,7 +565,7 @@ encrypted.
     ```
 
 <a name="patch-cloud-init-with-the-ca"></a>
-#### Patch cloud-init with the CA
+#### 4.1 Patch cloud-init with the CA
 
 Using `csi` on a generated site-init directory...
 
@@ -589,7 +588,7 @@ Using `csi` on a generated site-init directory...
    ```
 
 <a name="version-control-site-init-files"></a>
-### Version Control Site-Init Files
+### 5. Version Control Site-Init Files
 
 Setup `/mnt/pitdata/prep/site-init` as a Git repository in order to manage the
 baseline configuration during initial system installation.
@@ -630,7 +629,7 @@ baseline configuration during initial system installation.
     ```
 
 <a name="push-to-a-remote-repository"></a>
-#### Push to a Remote Repository
+#### 5.1 Push to a Remote Repository
 
 It is **strongly recommended** to that the site-init repository be maintained
 off-cluster. Add a remote repository and push the baseline configuration on
@@ -638,7 +637,7 @@ off-cluster. Add a remote repository and push the baseline configuration on
 
 
 <a name="customer-specific-customizations"></a>
-### Customer-Specific Customizations
+### 6. Customer-Specific Customizations
 
 Customer-specific customizations are any changes on top of the baseline
 configuration to satisfy customer-specific requirements. It is recommended that
@@ -659,11 +658,11 @@ introduced and bugs are fixed.
 
 
 <a name="appendix"></a>
-### Appendix
+### 7. Appendix
 
 
 <a name="tracked-sealed-secrets"></a>
-### Tracked Sealed Secrets
+### 7.1 Tracked Sealed Secrets
 
 Tracked sealed secrets are regenerated every time secrets are seeded (see the
 use of `utils/secrets-seed-customizations.sh` above). View currently tracked
@@ -693,7 +692,7 @@ linux# yq delete -i /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml s
 ```
 
 <a name="decrypting-sealed-secrets-for-review"></a>
-### Decrypting Sealed Secrets for Review
+### 7.2 Decrypting Sealed Secrets for Review
 
 For administrators that would like to decrypt and review previously encrypted
 sealed secrets, you can use the `secrets-decrypt.sh` utility in SHASTA-CFG.

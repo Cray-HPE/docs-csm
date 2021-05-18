@@ -22,7 +22,7 @@ There are 5 overall steps that provide a bootable USB with SSH enabled, capable 
 ## Details
 
 <a name="download-and-expand-the-csm-release"></a>
-### Download and Expand the CSM Release
+### 1. Download and Expand the CSM Release
 
 Fetch the base installation CSM tarball and extract it, installing the contained CSI tool.
 
@@ -144,9 +144,8 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
    from the `./${CSM_RELEASE}/rpm/embedded` directory.
 
-
 <a name="create-the-bootable-media"></a>
-### Create the Bootable Media
+### 2. Create the Bootable Media
 
 Cray Site Init will create the bootable LiveCD. Before creating the media, we need to identify
 which device that is.
@@ -206,9 +205,8 @@ which device that is.
     ```
 
 The USB stick is now bootable and contains our artifacts. This may be useful for internal or quick usage. Administrators seeking a Shasta installation must continue onto the [configuration payload](#configuration-payload).
-
 <a name="configuration-payload"></a>
-### Configuration Payload
+### 3. Configuration Payload
 
 The SHASTA-CFG structure and other configuration files will be prepared, then csi will generate system-unique configuration payload used for the rest of the CSM installation on the USB stick.
 
@@ -218,7 +216,7 @@ The SHASTA-CFG structure and other configuration files will be prepared, then cs
 * [Prepare Site Init](#prepare_site_init)
 
 <a name="before-configuration-payload-workarounds"></a>
-#### Before Configuration Payload Workarounds
+#### 3.1 Before Configuration Payload Workarounds
 
 Check for workarounds in the `/opt/cray/csm/workarounds/before-configuration-payload` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
 
@@ -232,7 +230,7 @@ Check for workarounds in the `/opt/cray/csm/workarounds/before-configuration-pay
   ```
 
 <a name="generate-installation-files"></a>
-#### Generate Installation Files
+#### 3.2 Generate Installation Files
 
 Some files are needed for generating the configuration payload. New systems will need to create these files before continuing.
 
@@ -395,7 +393,7 @@ After gathering the files into the working directory, generate your configs:
    Continue continue with the [CSI Workarounds](#csi-workarounds)
 
 <a name="csi-workarounds"></a>
-#### CSI Workarounds
+#### 3.3 CSI Workarounds
 
 Check for workarounds in the `/opt/cray/csm/workarounds/csi-config` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
 
@@ -409,13 +407,13 @@ Check for workarounds in the `/opt/cray/csm/workarounds/csi-config` directory. I
   ```
 
 <a name="prepare_site-init"></a>
-#### Prepare Site Init
+#### 3.4 Prepare Site Init
 
 Follow the procedures to [Prepare Site Init](prepare_site_init.md) directory for your system.
 
 
 <a name="prepopulate-livecd-daemons-configuration-and-ncn-artifacts"></a>
-### Prepopulate LiveCD Daemons Configuration and NCN Artifacts
+### 4. Prepopulate LiveCD Daemons Configuration and NCN Artifacts
 
 Now that the configuration is generated, we can populate the LiveCD with the generated files.
 
@@ -536,7 +534,7 @@ Now the USB stick may be reattached to the CRAY, or if it was made on the CRAY t
 reboot into the LiveCD.
 
 <a name="boot-the-livecd"></a>
-### Boot the LiveCD
+### 5. Boot the LiveCD
 
 Some systems will boot the USB stick automatically if no other OS exists (bare-metal). Otherwise the
 administrator may need to use the BIOS Boot Selection menu to choose the USB stick.
@@ -580,7 +578,7 @@ The typescript can be discarded, otherwise if issues arise then it should be sub
 > **An integrity check** runs before Linux starts by default, it can be skipped by selecting "OK" in its prompt.
 
 <a name="first-login"></a>
-#### First Login
+#### 5.1 First Login
 
 On first login (over SSH or at local console) the LiveCD will prompt the administrator to change the password.
 
@@ -624,7 +622,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    Note: The hostname should be similar to eniac-ncn-m001-pit when booted from the LiveCD, but it will be shown as "pit#" in the command prompts from this point onward.
 
 <a name="configure-the-running-livecd"></a>
-### Configure the Running LiveCD
+### 6. Configure the Running LiveCD
 
 1. Start a typescript to record this section of activities done on ncn-m001 while booted from the LiveCD.
 

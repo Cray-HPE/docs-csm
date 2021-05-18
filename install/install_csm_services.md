@@ -12,16 +12,16 @@ This procedure will install CSM applications and services into the CSM Kubernete
    1. [Apply After Sysmgmt Manifest Workarounds](#apply-after-sysmgmt-manifest-workarounds)
    1. [Add Compute Cabinet Routing to NCNs](#add-compute-cabinet-routing-to-ncns)
    1. [Known Issues](#known-issues)
-     * [Error: not ready: https://packages.local](#error-not-ready)
-     * [Error initiating layer upload ... in registry.local: received unexpected HTTP status: 200 OK](#error-initiating-layer-upload)
-     * [Error lookup registry.local: no such host](#error-registry-local-no-such-host)
+      * [Error: not ready: https://packages.local](#error-not-ready)
+      * [Error initiating layer upload ... in registry.local: received unexpected HTTP status: 200 OK](#error-initiating-layer-upload)
+      * [Error lookup registry.local: no such host](#error-registry-local-no-such-host)
    1. [Next Topic](#next-topic)
 
 
 ## Details
 
 <a name="initialize-bootstrap-registry"></a>
-### Initialize Bootstrap Registry
+### 1. Initialize Bootstrap Registry
 
 > **`SKIP IF ONLINE`** - Online installs cannot upload container images to the
 > bootstrap registry since it proxies an upstream source. **DO NOT** perform
@@ -67,7 +67,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
 
 
 <a name="create-site-init-secret"></a>
-### Create Site-Init Secret
+### 2. Create Site-Init Secret
 
 The `site-init` secret in the `loftsman` namespace makes
 `/var/www/ephemeral/prep/site-init/customizations.yaml` available to product
@@ -145,7 +145,7 @@ secret/site-init created
 
 
 <a name="deploy-sealed-secret-decryption-key"></a>
-### Deploy Sealed Secret Decryption Key
+### 3. Deploy Sealed Secret Decryption Key
 
 Deploy the corresponding key necessary to decrypt sealed secrets:
 
@@ -167,7 +167,7 @@ No resources found
 This is expected and can safely be ignored.
 
 <a name="deploy-csm-applications-and-services"></a>
-### Deploy CSM Applications and Services
+### 4. Deploy CSM Applications and Services
 
 Run `install.sh` to deploy CSM applications services:
 
@@ -203,7 +203,7 @@ In the event that `install.sh` does not complete successfully, consult the
 running `install.sh` again.
 
 <a name="setup-nexus"></a>
-### Setup Nexus
+### 5. Setup Nexus
 
 Run `./lib/setup-nexus.sh` to configure Nexus and upload CSM RPM repositories,
 container images, and Helm charts:
@@ -230,7 +230,7 @@ duplicate assets. This is ok as long as `setup-nexus.sh` outputs
 
 
 <a name="set-ncns-to-use-unbound"></a>
-### Set Management NCNs to use Unbound
+### 6. Set Management NCNs to use Unbound
 
 First, verify that SLS properly reports all management NCNs in the system:
 
@@ -312,7 +312,7 @@ ncn-w003: nameserver 10.92.100.225
 > password may be different from that of the other NCNs.
 
 <a name="apply-after-sysmgmt-manifest-workarounds"></a>
-### Apply After Sysmgmt Manifest Workarounds
+### 7. Apply After Sysmgmt Manifest Workarounds
 
 Check for workarounds in the `/opt/cray/csm/workarounds/after-sysmgmt-manifest` directory within the CSM tar. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
 
@@ -327,7 +327,7 @@ CASMCMS-6857  CASMNET-423
 ```
 
 <a name="add-compute-cabinet-routing-to-ncns"></a>
-### Add Compute Cabinet Routing to NCNs
+### 8. Add Compute Cabinet Routing to NCNs
 
 NCNs require additional routing to enable access to Mountain, Hill and River Compute cabinets.
 
@@ -346,7 +346,7 @@ ncn# /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-1570/CASMINST-1570.sh
 Compute Node Cabinets. 
 
 <a name="known-issues"></a>
-### Known Issues
+### 9. Known Issues
 
 The `install.sh` script changes cluster state and should not simply be rerun
 in the event of a failure without careful consideration of the specific
@@ -359,7 +359,7 @@ stderr prefixed with the expanded value of PS4, namely, `+ `.)
 Known potential issues with suggested fixes are listed below.
 
 <a name="error-not-ready"></a>
-#### Error: not ready: https://packages.local
+#### 9.1 Error: not ready: https://packages.local
 
 The infamous `error: not ready: https://packages.local` indicates that from
 the caller’s perspective, Nexus not ready to receive writes. However, it most
@@ -400,7 +400,7 @@ removed before attempting to deploy again.
 
 
 <a name="error-initiating-layer-upload"></a>
-#### Error initiating layer upload ... in registry.local: received unexpected HTTP status: 200 OK
+#### 9.2 Error initiating layer upload ... in registry.local: received unexpected HTTP status: 200 OK
 
 The following error may occur when running `./lib/setup-nexus.sh`:
 
@@ -418,7 +418,7 @@ This error is most likely _intermittent_ and running `./lib/setup-nexus.sh`
 again is expected to succeed.
 
 <a name="error-registry-local-no-such-host"></a>
-#### Error lookup registry.local: no such host
+#### 9.3 Error lookup registry.local: no such host
 
 The following error may occur when running `./lib/setup-nexus.sh`:
 

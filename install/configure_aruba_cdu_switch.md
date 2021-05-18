@@ -1,4 +1,4 @@
-# Aruba CDU switch configuration
+# Configure Aruba CDU switch
 
 This page describes how CDU switches are configured and will show users how to validate configuration.
 

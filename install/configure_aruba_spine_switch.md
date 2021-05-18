@@ -1,4 +1,4 @@
-# Aruba Spine switch configuration
+# Configure Aruba Spine Switch
 
 This page describes how aruba spine switches are configured and will show users how to validate configuration.
 

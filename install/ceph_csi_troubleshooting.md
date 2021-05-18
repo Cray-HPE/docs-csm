@@ -4,13 +4,13 @@ If there has been a failure to initialize all ceph csi components on ncn-s001, t
 cloud-init may need to be rerun.
 
 ### Topics:
-      * [Verify Ceph CSI](#verify_ceph_csi)
-      * [Rerun Storage Node cloud-init](rerun_storage_node_cloud-init)
+   1. [Verify Ceph CSI](#verify_ceph_csi)
+   1. [Rerun Storage Node cloud-init](rerun_storage_node_cloud-init)
 
 ## Details
 
 <a name="verify_ceph_csi"></a>
-## Verify Ceph CSI
+### 1. Verify Ceph CSI
 
 Verify that the ceph-csi requirements are in place
 
@@ -57,7 +57,7 @@ Verify that the ceph-csi requirements are in place
       If any components are missing, see [Rerun Storage Node cloud-init](#rerun_storage_node_cloud-init).
 
 <a name="rerun_storage_node_cloud-init"></a>
-## Rerun Storage Node cloud-init
+### 1. Rerun Storage Node cloud-init
 
    This procedure will restart the storage node cloud-init process to prepare ceph for use by the utility storage nodes.
 
