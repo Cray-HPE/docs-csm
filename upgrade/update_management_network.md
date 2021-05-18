@@ -52,7 +52,7 @@ Displaying ipv4 routes selected for forwarding
 sw-spine01(config)# no ip route 10.92.100.60/32 10.252.1.9
 ```
 
-- (ARUBA ONLY) re-run the bgp script if it's missing the tftp prefix-list and route-maps.
+- (ARUBA ONLY) re-run the bgp script if it's missing the tftp prefix-list and route-maps as shown in the example below.
 - These configuration changes also noted on the [BGP](../operations/update_bgp_neighbors.md) page.
 
 Example TFTP prefix-list and route-map from running config. 
