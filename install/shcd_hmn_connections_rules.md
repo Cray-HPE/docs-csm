@@ -120,8 +120,150 @@ Example 4 compute nodes in the same chassis without a CMC connected to the HMN n
 ```
 
 #### SLS
-__TODO__
+Compute node with NID 1:
+* Node
+  ```json
+  {
+    "Parent": "x3000c0s17b1",
+    "Xname": "x3000c0s17b1n0",
+    "Type": "comptype_node",
+    "Class": "River",
+    "TypeString": "Node",
+    "ExtraProperties": {
+      "NID": 1,
+      "Role": "Compute",
+      "Aliases": [
+        "nid000001"
+      ]
+    }
+  }
+  ```
 
+* Management Switch Connector:
+  ```json
+  {
+    "Parent": "x3000c0w14",
+    "Xname": "x3000c0w14j36",
+    "Type": "comptype_mgmt_switch_connector",
+    "Class": "River",
+    "TypeString": "MgmtSwitchConnector",
+    "ExtraProperties": {
+      "NodeNics": [
+        "x3000c0s17b1"
+      ],
+      "VendorName": "1/1/36"
+    }
+  }
+  ```
+
+Compute node with NID 2:
+* Node:
+  ```json
+  {
+    "Parent": "x3000c0s17b2",
+    "Xname": "x3000c0s17b2n0",
+    "Type": "comptype_node",
+    "Class": "River",
+    "TypeString": "Node",
+    "ExtraProperties": {
+      "NID": 2,
+      "Role": "Compute",
+      "Aliases": [
+        "nid000002"
+      ]
+    }
+  }
+  ```
+
+* Management Switch Connector:
+  ```json
+  {
+    "Parent": "x3000c0w14",
+    "Xname": "x3000c0w14j35",
+    "Type": "comptype_mgmt_switch_connector",
+    "Class": "River",
+    "TypeString": "MgmtSwitchConnector",
+    "ExtraProperties": {
+      "NodeNics": [
+        "x3000c0s17b2"
+      ],
+      "VendorName": "1/1/35"
+    }
+  }
+  ```
+
+Compute node with NID 3:
+* Node
+  ```json
+  {
+    "Parent": "x3000c0s17b3",
+    "Xname": "x3000c0s17b3n0",
+    "Type": "comptype_node",
+    "Class": "River",
+    "TypeString": "Node",
+    "ExtraProperties": {
+      "NID": 3,
+      "Role": "Compute",
+      "Aliases": [
+        "nid000003"
+      ]
+    }
+  }
+  ```
+
+* Management Switch Connector:
+  ```json
+  {
+    "Parent": "x3000c0w14",
+    "Xname": "x3000c0w14j34",
+    "Type": "comptype_mgmt_switch_connector",
+    "Class": "River",
+    "TypeString": "MgmtSwitchConnector",
+    "ExtraProperties": {
+      "NodeNics": [
+        "x3000c0s17b3"
+      ],
+      "VendorName": "1/1/34"
+    }
+  }
+  ```
+
+
+Compute node with NID 4:
+* Node
+  ```json
+  {
+    "Parent": "x3000c0s17b4",
+    "Xname": "x3000c0s17b4n0",
+    "Type": "comptype_node",
+    "Class": "River",
+    "TypeString": "Node",
+    "ExtraProperties": {
+      "NID": 4,
+      "Role": "Compute",
+      "Aliases": [
+        "nid000004"
+      ]
+    }
+  }
+  ```
+
+* Management Switch Connector:
+  ```json
+  {
+    "Parent": "x3000c0w14",
+    "Xname": "x3000c0w14j33",
+    "Type": "comptype_mgmt_switch_connector",
+    "Class": "River",
+    "TypeString": "MgmtSwitchConnector",
+    "ExtraProperties": {
+      "NodeNics": [
+        "x3000c0s17b4"
+      ],
+      "VendorName": "1/1/33"
+    }
+  }
+  ```
 
 ### Single node chassis - Apollo 6500 XL675D
 > This convention applies to all compute nodes that are chassis, such as the Apollo XL675D
@@ -141,7 +283,40 @@ A single compute node chassis needs to match these additional conditions:
 ```
 
 #### SLS
-__TODO__
+Node:
+```json
+{
+  "Parent": "x3000c0s2b0",
+  "Xname": "x3000c0s2b0n0",
+  "Type": "comptype_node",
+  "Class": "River",
+  "TypeString": "Node",
+  "ExtraProperties": {
+    "NID": 1,
+    "Role": "Compute",
+    "Aliases": [
+      "nid000001"
+    ]
+  }
+}
+```
+
+Management Switch Connector:
+```json
+{
+  "Parent": "x3000c0w40",
+  "Xname": "x3000c0w40j36",
+  "Type": "comptype_mgmt_switch_connector",
+  "Class": "River",
+  "TypeString": "MgmtSwitchConnector",
+  "ExtraProperties": {
+    "NodeNics": [
+      "x3000c0s2b0"
+    ],
+    "VendorName": "1/1/36"
+  }
+}
+```
 
 ### Dual node chassis - Apollo 6500 XL645D
 > The Apollo 6500 XL645D supports 2 nodes in the same chassis
@@ -169,13 +344,83 @@ In addition to the top-level compute node naming requirements when they are 2 no
 ```
 
 #### SLS
-__TODO__
+Compute node with NID 1:
+* Node:
+  ```json
+  {
+    "Parent": "x3000c0s8b1",
+    "Xname": "x3000c0s8b1n0",
+    "Type": "comptype_node",
+    "Class": "River",
+    "TypeString": "Node",
+    "ExtraProperties": {
+      "NID": 3,
+      "Role": "Compute",
+      "Aliases": [
+        "nid000003"
+      ]
+    }
+  }
+  ```
+* Management Switch Connector
+  ```json
+  {
+    "Parent": "x3000c0w40",
+    "Xname": "x3000c0w40j38",
+    "Type": "comptype_mgmt_switch_connector",
+    "Class": "River",
+    "TypeString": "MgmtSwitchConnector",
+    "ExtraProperties": {
+      "NodeNics": [
+        "x3000c0s8b1"
+      ],
+      "VendorName": "1/1/38"
+    }
+  }
+  ```
+
+Compute node with NID 2:
+* Node
+  ```json
+  {
+    "Parent": "x3000c0s8b2",
+    "Xname": "x3000c0s8b2n0",
+    "Type": "comptype_node",
+    "Class": "River",
+    "TypeString": "Node",
+    "ExtraProperties": {
+      "NID": 2,
+      "Role": "Compute",
+      "Aliases": [
+        "nid000002"
+      ]
+    }
+  }
+  ```
+
+* Management Switch Connectors:
+  ```json
+  {
+    "Parent": "x3000c0w40",
+    "Xname": "x3000c0w40j37",
+    "Type": "comptype_mgmt_switch_connector",
+    "Class": "River",
+    "TypeString": "MgmtSwitchConnector",
+    "ExtraProperties": {
+      "NodeNics": [
+        "x3000c0s8b2"
+      ],
+      "VendorName": "1/1/37"
+    }
+  }
+  ```
 
 ## CMC
 > This is not the same as an RCM (Rack Consolidation Module) that is present in Apollo 2000 chassis.
 
 Matching conditions:
 * This row is referenced as a SourceParent of another row
+* Source field contains `cmc` or `CMC`
 * Has a connection to the HMN network
   * In CSM 1.X and later a row that is referenced as a SourceParent will need a connection to the HMN network to be considered a CMC.
     > Pending [CASMINST-2243](https://connect.us.cray.com/jira/browse/CASMINST-2243)
@@ -196,7 +441,33 @@ These devices will have the BMC ordinal of 999 for their xnames. Such as x3000c0
 ```
 
 ### SLS
-__TODO__
+CMC:
+```json
+{
+  "Parent": "x3000",
+  "Xname": "x3000c0s17b999",
+  "Type": "comptype_chassis_bmc",
+  "Class": "River",
+  "TypeString": "ChassisBMC"
+}
+```
+
+Management Switch Connector
+```json
+{
+  "Parent": "x3000c0w14",
+  "Xname": "x3000c0w14j32",
+  "Type": "comptype_mgmt_switch_connector",
+  "Class": "River",
+  "TypeString": "MgmtSwitchConnector",
+  "ExtraProperties": {
+    "NodeNics": [
+      "x3000c0s17b999"
+    ],
+    "VendorName": "1/1/32"
+  }
+}
+```
 
 ## River HSN Switch
 Matching conditions
@@ -235,7 +506,37 @@ Example with `Columbia` source name:
 ```
 
 ### SLS
-__TODO__
+Router BMC:
+```json
+{
+  "Parent": "x3000",
+  "Xname": "x3000c0r42b0",
+  "Type": "comptype_rtr_bmc",
+  "Class": "River",
+  "TypeString": "RouterBMC",
+  "ExtraProperties": {
+    "Username": "vault://hms-creds/x3000c0r42b0",
+    "Password": "vault://hms-creds/x3000c0r42b0"
+  }
+}
+```
+
+Management Switch Connector:
+```json
+{
+  "Parent": "x3000c0w38",
+  "Xname": "x3000c0w38j45",
+  "Type": "comptype_mgmt_switch_connector",
+  "Class": "River",
+  "TypeString": "MgmtSwitchConnector",
+  "ExtraProperties": {
+    "NodeNics": [
+      "x3000c0r42b0"
+    ],
+    "VendorName": "ethernet1/1/45"
+  }
+}
+```
 
 
 ## PDU Controller
@@ -255,11 +556,37 @@ A PDU Controller is the device that is connected to the HMN network and manages 
 
 ### HMN Connections
 ```json
-{"Source":"x3000p0","SourceRack":"x3000","SourceLocation":"p0","DestinationRack":"x3000","DestinationLocation":"u14","DestinationPort":"j45"}
+{"Source":"x3000p0","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u38","DestinationPort":"j41"}
 ```
 
 ### SLS
-__TODO__
+Cabinet PDU Controller:
+```json
+{
+  "Parent": "x3000",
+  "Xname": "x3000m0",
+  "Type": "comptype_cab_pdu_controller",
+  "Class": "River",
+  "TypeString": "CabinetPDUController"
+}
+```
+
+Management Switch Connector:
+```json
+{
+  "Parent": "x3000c0w38",
+  "Xname": "x3000c0w38j41",
+  "Type": "comptype_mgmt_switch_connector",
+  "Class": "River",
+  "TypeString": "MgmtSwitchConnector",
+  "ExtraProperties": {
+    "NodeNics": [
+      "x3000m0"
+    ],
+    "VendorName": "1/1/41"
+  }
+}
+```
 
 ## Cooling Door
 The Source field for a Cooling door must match the following:
@@ -306,7 +633,7 @@ The Management switches in SLS are not populated by hmn_connections.json, instea
 Match conditions:
 * Source Field
   * `mn` prefix
-  * Immediately after the prefix an integer number
+  * Integer number immediately after the prefix
 
 The integer number after the prefix is used to determine the hostname of the master node. For example, `mn02` corresponds to host name `ncn-m002`.
 
@@ -337,13 +664,47 @@ Example master node where its BMC is connected to the site network:
 ```
 
 #### SLS
-__TODO__
+Node:
+```json
+{
+  "Parent": "x3000c0s2b0",
+  "Xname": "x3000c0s2b0n0",
+  "Type": "comptype_node",
+  "Class": "River",
+  "TypeString": "Node",
+  "ExtraProperties": {
+    "NID": 100008,
+    "Role": "Management",
+    "SubRole": "Master",
+    "Aliases": [
+      "ncn-m002"
+    ]
+  }
+}
+```
+
+Management Switch Connector:
+```json
+{
+  "Parent": "x3000c0w14",
+  "Xname": "x3000c0w14j25",
+  "Type": "comptype_mgmt_switch_connector",
+  "Class": "River",
+  "TypeString": "MgmtSwitchConnector",
+  "ExtraProperties": {
+    "NodeNics": [
+      "x3000c0s2b0"
+    ],
+    "VendorName": "1/1/25"
+  }
+}
+```
 
 ### Worker
 Match conditions:
 * Source Field
   * `wn` prefix
-  * Immediately after the prefix an integer number
+  * Integer number immediately after the prefix
 
 The integer number after the prefix is used to determine the hostname of the master node. For example, `wn01` corresponds to host name `ncn-w001`.
 
@@ -358,13 +719,47 @@ The integer number after the prefix is used to determine the hostname of the mas
 ```
 
 #### SLS
-__TODO__
+Node:
+```json
+{
+  "Parent": "x3000c0s4b0",
+  "Xname": "x3000c0s4b0n0",
+  "Type": "comptype_node",
+  "Class": "River",
+  "TypeString": "Node",
+  "ExtraProperties": {
+    "NID": 100006,
+    "Role": "Management",
+    "SubRole": "Worker",
+    "Aliases": [
+      "ncn-w001"
+    ]
+  }
+}
+```
+
+Management Switch Connector:
+```json
+{
+  "Parent": "x3000c0w14",
+  "Xname": "x3000c0w14j48",
+  "Type": "comptype_mgmt_switch_connector",
+  "Class": "River",
+  "TypeString": "MgmtSwitchConnector",
+  "ExtraProperties": {
+    "NodeNics": [
+      "x3000c0s4b0"
+    ],
+    "VendorName": "1/1/48"
+  }
+}
+```
 
 ### Storage
 Match conditions:
 * Source Field
   * `sn` prefix
-  * Immediately after the prefix an integer number
+  * Integer number immediately after the prefix
 
 The integer number after the prefix is used to determine the hostname of the master node. For example, `sn01` corresponds to host name `ncn-s001`.
 
@@ -378,7 +773,41 @@ The integer number after the prefix is used to determine the hostname of the mas
 {"Source":"sn01","SourceRack":"x3000","SourceLocation":"u07","DestinationRack":"x3000","DestinationLocation":"u14","DestinationPort":"j29"}
 ```
 #### SLS
-__TODO__
+Node:
+```json
+{
+  "Parent": "x3000c0s7b0",
+  "Xname": "x3000c0s7b0n0",
+  "Type": "comptype_node",
+  "Class": "River",
+  "TypeString": "Node",
+  "ExtraProperties": {
+    "NID": 100003,
+    "Role": "Management",
+    "SubRole": "Storage",
+    "Aliases": [
+      "ncn-s001"
+    ]
+  }
+}
+```
+
+Management Switch Connector:
+```json
+{
+  "Parent": "x3000c0w14",
+  "Xname": "x3000c0w14j29",
+  "Type": "comptype_mgmt_switch_connector",
+  "Class": "River",
+  "TypeString": "MgmtSwitchConnector",
+  "ExtraProperties": {
+    "NodeNics": [
+      "x3000c0s7b0"
+    ],
+    "VendorName": "1/1/29"
+  }
+}
+```
 
 ## Application Node
 Refer [application node config procedure](https://stash.us.cray.com/projects/CSM/repos/docs-csm/browse/install/308-APPLICATION-NODE-CONFIG.md) for the rules related to application nodes.
