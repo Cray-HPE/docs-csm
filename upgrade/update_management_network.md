@@ -140,4 +140,4 @@ router bgp 65533
 
 #### Apollo Server configuration
 
-If the system has Appollo servers the configuration can be found [here](../operations/configure_mgmt_net_ports.md) under the section "Apollo Server port config".
+If the system has Appollo servers, the configuration can be found [here](../operations/configure_mgmt_net_ports.md) under the section "Apollo Server port config".
