@@ -88,8 +88,8 @@ route-map ncn-w001 permit seq 60
 - BGP script location ```/opt/cray/csm/scripts/networking/BGP```
 - Usage [BGP](../operations/update_bgp_neighbors.md)
 
-(ARUBA & MELLANOX) Verify the BGP neighbors are configured as passive.  
-(ARUBA) The peering between the switches is not configured as passive, only the peerings with the workers.
+(ARUBA & MELLANOX) Verify the BGP neighbors are configured as passive. Example configuration below. 
+(ARUBA) The peering between the switches is NOT configured as passive, ONLY the peerings with the workers.
 
 ```
 router bgp 65533
