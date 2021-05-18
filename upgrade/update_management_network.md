@@ -11,7 +11,8 @@ Some of these changes are applied as hotfixes and patches for 1.4, they may have
 
 #### CMM Static Lag configuration
 
-- Verify the version of the CMM firmware, the firmware must be on version 1.4.20 in order to support static LAGs on the CDU switches
+- Verify the version of the CMM firmware, the firmware must be on version 1.4.20 in order to support static LAGs on the CDU switches.
+- The command below should get you all the cmm firmware for a system.
 - Update the password in the command before usage. Change ```root:password``` to the correct BMC password.
 
 ```
