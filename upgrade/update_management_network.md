@@ -53,7 +53,7 @@ sw-spine01(config)# no ip route 10.92.100.60/32 10.252.1.9
 ```
 
 - (ARUBA ONLY) re-run the bgp script if it's missing the tftp prefix-list and route-maps.
-- These are also noted on the [BGP](../operations/update_bgp_neighbors.md) page.
+- These configuration changes also noted on the [BGP](../operations/update_bgp_neighbors.md) page.
 
 Example TFTP prefix-list and route-map from running config. 
 ```
