@@ -501,6 +501,13 @@ ALL OK
 If there are mismatches, these will be displayed in the appropriate section of
 the output.
 
+**NOTES:**
+* BMCs for management cluster master node 'm001' will not typically be present in HSM component data
+* Chassis Management Controllers (CMC) may show up as not being present in HSM.  CMCs for Intel server blades can be ignored.  Gigabyte server blade CMCs not found in HSM is not normal and should be investigated.   If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored.
+* HPE PDUs are not supported at this time and will likely show up as not being found in HSM.
+* BMCs having no association with a management switch port will be annotated as such, and should be investigated.  Exceptions to this are in Mountain or Hill configurations where mountain BMCs will show this condition on SLS/HSM mismatches, which is normal.
+* In Hill configurations SLS assumes BMCs in chassis 1 and 3 are populated, and in mountain contifurations SLS assumes all BMCs are populated.   Any non-populated BMCs will have no HSM data and will show up in the mismatch list.
+
 
 <a name="booting-csm-barebones-image"></a>
 ## Booting CSM Barebones Image
