@@ -160,8 +160,6 @@ system is **booting over onboards then the "bootstrap MAC" and the "bond0 MAC 0"
 
 > Other Nomenclature
 - "BOND MACS" are the MAC addresses for the physical interfaces that your node will use for the various VLANs.
-- "NMN MAC" is this is the same as the BOND MAC addresses, but with emphasis on the vlan-participation.
-> Relationships ...
 - BOND0 MAC0 and BOND0 MAC1 should **not** be on the same physical network card to establish redundancy for failed chips.
 - On the other hand, if any nodes' capacity prevents it from being redundant, then MAC1 and MAC0 will still produce a valid configuration if they do reside on the same physical chip/card.
 - The BMC MAC is the exclusive, dedicated LAN for the onboard BMC. It should not be swapped with any other device.
@@ -266,7 +264,7 @@ x3000c0h38s1,Spine,Aruba
 
 1. Collect data for `ncn_metadata.csv`
 
-   Some of the data in the `ncn_metadta.csv` can be found in the SHCD.  However, the hardest data
+   Some of the data in the `ncn_metadata.csv` can be found in the SHCD.  However, the hardest data
    to collect is the MAC addresses for the node's BMC, the node's bootable network interface, and the
    pair of network interfaces which will become the bonded interface `bond0`.
    
