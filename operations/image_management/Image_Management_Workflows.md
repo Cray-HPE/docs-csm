@@ -6,8 +6,8 @@ The following workflows are intended to be high-level overviews of image managem
 
 The workflows in this section include:
 
-  * [Create a New Image](#create-a-new-image)
-  * [Customize an Image](#customize-an-image)
+  * Create a New Image
+  * Customize an Image
 
 ### Create a New Image
 
@@ -21,7 +21,7 @@ Mentioned in this workflow:
 -   Nexus is needed for image creation and image customization. Nexus provides local RPM repositories for use when building or customizing an image. You can define Zypper or Yum package repositories and provide the RPM content for installing and updating software for every compute and non-compute node in the system.
 -   The Simple Storage Service \(Ceph S3\) is an artifact repository that stores boot artifacts. Recipes are stored in the `ims` bucket and images are stored in the `boot-images` bucket.
 
-![](/img/image-create.gif)
+![image-create](/img/image-create.gif)
 
 **Workflow Overview:** The following sequence of steps occurs during this workflow.
 
@@ -70,7 +70,7 @@ Mentioned in this workflow:
 
     IMS waits for repositories to be available from Nexus. The repositories are needed to build the image.
 
-8.  I**MS creates a custom RPM**
+8.  **IMS creates a custom RPM**
 
     IMS creates a custom RPM to install the CA root certificate from the system into the image. The build-ca-rpm container creates an RPM with the private root-CA certificate for the system and this RPM is installed automatically by Kiwi-NG. The CA root certificate is required to enable secure HTTPS access to the RPM repositories when building the image root.
 
@@ -100,7 +100,7 @@ Mentioned in this workflow:
 -   Image Management Service \(IMS\) allows administrators and users to build or customize \(pre-boot\) images from kiwi-ng recipes. This service is responsible for enabling the creation of bootable and non-bootable images, enabling image customization via an SSH-able environment, and packaging and association of new/customized image artifacts \(kernel, rootfs, initrd, etc\) with a new IMS image record.
 -   The Simple Storage Service \(Ceph S3\) is an artifact repository that stores artifacts. Recipes are stored in the `ims` bucket and images are stored in the `boot-images` bucket.
 
-![](/img/image-customize.gif)
+![image-customize](/img/image-customize.gif)
 
 **Workflow Overview:** The following sequence of steps occurs during this workflow.
 

@@ -62,7 +62,7 @@ The Cray EX User Access Node \(UAN\) recipe currently requires the Slingshot Dia
 
     3.  Use the saved IMS recipe id in the procedure [Build an Image Using IMS REST Service](Build_an_Image_Using_IMS_REST_Service.md) to build the UAN image.
 
-4.  **Optional:**Build the UAN image by customizing it manually. Skip this step if the UAN image was built automatically in the previous step.
+4. **Optional:** Build the UAN image by customizing it manually. Skip this step if the UAN image was built automatically in the previous step.
 
     1.  Identify the base UAN image to customize.
 
