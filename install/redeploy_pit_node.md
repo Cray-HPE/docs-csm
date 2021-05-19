@@ -429,18 +429,19 @@ data so run them only when indicated. Instructions are in the `README` files.
     
 1. Install the latest documentation and workaround packages. This will require external access. 
 
-    - **Recommended** fetch from Google (if external access is not an option due to the physical site restrictions then look at the next bullet point instead).
+   If this machine does not have direct Internet access these RPMs will need to be externally downloaded and then copied to the system.
 
-        ```bash
-        ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm-install/docs-csm-install-latest.noarch.rpm
-        ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
-        ```
+   **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hotfixes
+   were downloaded to a system using the instructions in [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds).  Use that set of rpms rather than downloading again.
 
-    - **Fallback** option for installations in **`AIRGAP/OFFLINE`**.
-    
-        ```bash
-        ncn-m001# zypper --plus-repo /metal/bootstrap/${CSM_RELEASE}/rpm/cray/csm/ -n --no-gpg-checks in docs-csm-install csm-install-workarounds
-        ```
+   ```bash
+   linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
+   linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
+   linux# scp -p docs-csm-install-*rpm csm-install-workarounds-*rpm ncn-m001:/root
+   linux# ssh ncn-m001
+   pit# rpm -Uvh docs-csm-install-latest.noarch.rpm
+   pit# rpm -Uvh csm-install-workarounds-latest.noarch.rpm
+   ```
     
 1. Now check for workarounds in the `/opt/cray/csm/workarounds/livecd-post-reboot` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
     

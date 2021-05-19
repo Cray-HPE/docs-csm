@@ -7,10 +7,8 @@ RemoveISO.  If not using the RemoteISO, see [Bootstrap PIT Node from LiveCD USB]
 The installation process is similar to the USB based installation with adjustments to account for the
 lack of removable storage.
 
-TODO: The prerequisites link below is broken. Not sure where it should point now.
-**Important:** Before starting this page be sure to complete the
-[Prepare Configuration Payload](prepare_configuration_payload.md#csm-install-prerequisites) for
-the relevant installation scenario.
+**Important:** Before starting this procedure be sure to complete the procedure to
+[Prepare Configuration Payload](prepare_configuration_payload.md) for the relevant installation scenario.
 
 ### Topics:
    * [Known Compatibility Issues](*known-compatibility-issues)
@@ -63,8 +61,8 @@ the instructions for attaching to the BMC will differ.
 
 1. See the respective procedure below to attach an ISO.
 
-   - [HPE iLO BMCs](./062-LIVECD-VIRTUAL-ISO-BOOT.md#hpe-ilo-bmcs)
-   - [Gigabyte BMCs](./062-LIVECD-VIRTUAL-ISO-BOOT.md#gigabyte-bmcs)
+   - [HPE iLO BMCs](boot_livecd_virtual_iso.md#hpe-ilo-bmcs)
+   - [Gigabyte BMCs](boot_livecd_virtual_iso.md#gigabyte-bmcs)
    - [Intel BMCs] Should not use the RemoteISO method.  See [Bootstrap PIT Node from LiveCD USB](bootstrap_livecd_usb.md)
 
 1. The chosen procedure should have rebooted the server.  Observe the server boot into the LiveCD.
@@ -171,14 +169,12 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
     pit/var/www/ephemeral# mkdir -v prep configs data 
     ```
 
-1. If necessary, download the CSM software release to the Linux host which will be preparing the
-   LiveCD.
+1. Download the CSM software release to the PIT node.
 
-   TODO Does this information in substeps 1 to 3 need to be replaced with a link to [Update Product Stream](../update_product_stream/index.md) for how to get the latest CSM software release and apply any patches?
-
-   > **`INTERNAL NOTE: $ENDPOINT`** The `$ENDPOINT` URL (`arti.dev.cray.com`) below are for internal use. Customers do not need to download any additional
-   > artifacts, the CSM tarball is included along with the Shasta release.
-
+   **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hotfixes 
+   were downloaded to a system using the instructions in [Update CSM Product Stream](../update_product_stream/index.md)
+   Either copy from that system to the PIT node or set the ENDPOINT variable to URL and use `wget`.
+   
    1. Set helper variables
 
       ```bash
@@ -194,20 +190,20 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       pit:/var/www/ephemeral# echo -e "\nCSM_RELEASE=$CSM_RELEASE" >>/etc/environment
       ```
 
-   1. Fetch the release ball:
+   1. Fetch the release tarball.
 
       ```bash
       pit:/var/www/ephemeral# wget ${ENDPOINT}/${CSM_RELEASE}.tar.gz -O /var/www/ephemeral/${CSM_RELEASE}.tar.gz
       ```
 
-   1. Expand the ball:
+   1. Expand the tarball on the PIT node.
 
       ```bash
       pit:/var/www/ephemeral# tar -zxvf ${CSM_RELEASE}.tar.gz
       pit:/var/www/ephemeral# ls -l ${CSM_RELEASE}
       ```
 
-   1. Copy the artifacts into place:
+   1. Copy the artifacts into place.
 
       ```bash
       pit/var/www/ephemeral# mkdir -p data/{k8s,ceph}
@@ -218,17 +214,6 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    > The PIT ISO, Helm charts/images, and bootstrap RPMs are now available in the extracted CSM tar.
 
 1. Install/upgrade the CSI RPM.
-
-
-   > **`IMPORTANT`** Before proceeding, refer to the "CSM Patch Assembly" section of the Shasta Install Guide
-   > to apply any needed patch content for CSM. It is critical to perform these steps to ensure that the correct
-   > CSM release artifacts are deployed.
-   >
-   > TODO Does this information in this IMPORTANT section need to be replaced with a link to [Update Product Stream](../update_product_stream/index.md) for how to get the latest CSM software release and apply any patches?
-   >
-   > **`WARNING`** Ensure that the `CSM_RELEASE` environment variable is set to the version of the patched CSM release tarball.
-   > Applying the "CSM Patch Assembly" procedure will result in a different CSM version when compared to
-   > the pre-patched CSM release tarball.
 
    ```bash
    pit:/var/www/ephemeral# rpm -Uvh $(ls -r ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm | head -n 1)
@@ -251,15 +236,20 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    App. Version   : 1.5.18
    ```
 
-1. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have
-   direct internet access these RPMs will need to be externally downloaded and then copied to be
-   installed.
+1. Download and install/upgrade the workaround and documentation RPMs.
 
-   TODO Getting workaround rpms is in [Update Product Stream](../update_product_stream/index.md).
+   If this machine does not have direct Internet access these RPMs will need to be externally downloaded and then copied to the system.
+
+   **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hotfixes 
+   were downloaded to a system using the instructions in [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds).  Use that set of rpms rather than downloading again.
 
    ```bash
-   pit# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
-   pit# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
+   linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
+   linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
+   linux# scp -p docs-csm-install-*rpm csm-install-workarounds-*rpm ncn-m001:/root
+   linux# ssh ncn-m001
+   pit# rpm -Uvh docs-csm-install-latest.noarch.rpm
+   pit# rpm -Uvh csm-install-workarounds-latest.noarch.rpm
    ```
 
 1. Generate configuration files:

@@ -1,21 +1,21 @@
-# LiveCD Virtual ISO Boot
+# Boot LiveCD Virtual ISO 
 
 This page will walk-through booting the LiveCD `.iso` file directly onto a BMC.
+
+### Topics:
 
 * [Requirements](#requirements)
 * [BMCs' Virtual Mounts](#bmcs-virtual-mounts)
   * [HPE iLO BMCs](#hpe-ilo-bmcs)
-    * [Using HTTP/HTTPS](#using-httphttps)
   * [Gigabyte BMCs](#gigabyte-bmcs)
-    * [Using NFS or HTTP](#using-nfs-or-http)
-  * [Intel BMCs](#intel-bmcs)
 * [Configuring](#configuring)
    * [Backing up the Overlay COW FS](#backing-up-the-overlay-cow-fs)
    * [Restoring from an Overlay COW FS Backup](#restoring-from-an-overlay-cow-fs-backup)
 
+## Details
 
 <a name="requirements"></a>   
-## Requirements
+### Requirements
 
 A Cray Pre-Install Toolkit ISO is required for this process. This ISO can be obtained from:
 
@@ -26,7 +26,7 @@ A Cray Pre-Install Toolkit ISO is required for this process. This ISO can be obt
   http://car.dev.cray.com/artifactory/csm/MTL/sle15_sp2_ncn/x86_64/dev/master/metal-team/cray-pre-install-toolkit-latest.iso
 
 <a name="bmcs-virtual-mounts"></a>
-# BMCs' Virtual Mounts
+### BMCs' Virtual Mounts
 
 Most BMCs offer a **Web Interface** for controlling the node and for providing access to its BIOS and firmware. 
 
@@ -34,13 +34,9 @@ Refer to the following pages based on your node vendor for help mounting an ISO 
 
 * [HPE iLO BMCs](#hpe-ilo-bmcs)
 * [Gigabyte](#gigabyte-bmcs)
-* [Intel](#intel-bmcs)
 
 <a name="hpe-ilo-bmcs"></a>
-### HPE iLO BMCs
-
-<a name="using-httphttps"></a>
-#### Using HTTP/HTTPS
+#### HPE iLO BMCs
 
 ILO BMCs allow for booting directly from an HTTP accessible ISO location.
 
@@ -57,12 +53,11 @@ ILO BMCs allow for booting directly from an HTTP accessible ISO location.
 > **`NOTE`** It may appear that the boot is stalled at a line of `EXT4-fs (loop1): mounted ...` or `Starting dracut pre-mount hook...`. This is the step when it actually begins downloading the ISO's squashfs root filesystem and can take a few minutes
 
 <a name="gigabyte-bmcs"></a>
-### Gigabyte BMCs
+#### Gigabyte BMCs
 
-<a name="using-nfs-or-http"></a>
-#### Using NFS or HTTP
+Gigabyte BMCs allow for booting over HTTP.
 
-Gigabyte BMCs allow for booting over NFS or HTTP.
+**Note:** Due to problems in the Gigabyte firmware, do not try to boot over NFS or CIFS. 
 
 Go to the BMC settings and setup the remote ISO for your protocol and node.
 
@@ -86,27 +81,8 @@ Finally, reboot the node and select the `Virtual CDROM` option from the manual b
 
 ![Gigabyte BMC Boot](../img/bmc-virtual-media-boot-gigabyte.png)
 
-<a name="intel-bmcs"></a>
-### Intel BMCs
-
-Intel BMCs allow for booting with direct ISO mounts.
-
-> Go to the virtual media menu.
-
-![Intel BMC Virtual Media](../img/bmc-virtual-media-intel.png)
-
-> Choose your ISO file:
-
-![Intel BMC Virtual Mount](../img/bmc-virtual-media-intel-menu.png)
-
-> Click `mount` to make it available.
-
-![Intel BMC Virtual Mounted](../img/bmc-virtual-media-intel-mounted.png)
-
-> **`NOTE`** Do not close the virtual media window or main BMC page until done.
-
 <a name="configuring"></a>
-## Configuring
+### Configuring
 
 * [Configuring](#configuring)
    * [Backing up the Overlay COW FS](#backing-up-the-overlay-cow-fs)
@@ -116,18 +92,19 @@ Intel BMCs allow for booting with direct ISO mounts.
 After attaching and booting into the ISO, the password will need to be changed at least before using 
 the booted OS.
 
-1. The ISO boots with no password, requiring one be set on first login. Enter blank as the password and
-   follow the prompts.
-2. You can now use the LiveCD to look around, or you may continue setting the LiveCD up to [Bootstrap LiveCD Remote ISO](bootstrap_livecd_remote_iso.md).
+1. The ISO boots with no password, requiring one be set on first login.
+2. You can now use the LiveCD to look around or you may continue the bootstrap process by setting the root password
+following the procedure [First Login](bootstrap_livecd_remote_iso.md#first-login).
+
 
 > **`NOTE`** The root OS `/` directory is writable without persistence. This means that restarting the machine will result in all changes being lost. Before restarting, consider following [Backing up the Overlay COW FS](#backing-up-the-overlay-cow-fs) and the accompanying [Restoring from an Overlay COW FS Backup](#restoring-from-an-overlay-cow-fs-backup) section.
 
 <a name="backing-up-the-overlay-cow-fs"></a>
-### Backing up the Overlay COW FS
+#### Backing up the Overlay COW FS
 
 You can backup the writable overlay upper-dir so that your changes are not lost after a reboot or when updating your ISO.
 
-This requires that you have a location that you can SSH at tar-ball to as a backup.
+This requires that you have a location that you can SSH at tarball to as a backup.
 
 ```bash
 tar czf /run/overlay.tar.gz -C /run/overlayfs/rw .
@@ -137,7 +114,7 @@ scp /run/overlay.tar.gz <somelocation>
 
 
 <a name="restoring-from-an-overlay-cow-fs-backup"></a>
-### Restoring from an Overlay COW FS Backup
+#### Restoring from an Overlay COW FS Backup
 
 Restore a backed up tarball from the previous command with
 

@@ -634,12 +634,20 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
    
-1. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet 
-   access these RPMs will need to be externally downloaded and then copied to be installed.
+1. Download and install/upgrade the workaround and documentation RPMs. 
+
+   If this machine does not have direct Internet access these RPMs will need to be externally downloaded and then copied to the system.
+
+   **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hotfixes
+   were downloaded to a system using the instructions in [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds).  Use that set of rpms rather than downloading again.
 
    ```bash
-   pit# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
-   pit# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
+   linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
+   linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
+   linux# scp -p docs-csm-install-*rpm csm-install-workarounds-*rpm ncn-m001:/root
+   linux# ssh ncn-m001
+   pit# rpm -Uvh docs-csm-install-latest.noarch.rpm
+   pit# rpm -Uvh csm-install-workarounds-latest.noarch.rpm
    ```
 
 1. Check the pit-release version.
