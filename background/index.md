@@ -27,7 +27,7 @@ software, but provides background which might be helpful for troubleshooting an 
    * [`cabinets.yaml`](../install/prepare_configuration_payload.md#cabinets_yaml)
    * [`hmn_connections.json`](../install/prepare_configuration_payload.md#hmn_connections_json)
    * [`ncn_metadata.csv`](../install/prepare_configuration_payload.md#ncn_metadata_csv)
-   * [`switch_metadat.csv`](../install/prepare_configuration_payload.md#create_switch_metadata_csv)
+   * [`switch_metadata.csv`](../install/prepare_configuration_payload.md#create_switch_metadata_csv)
 
    In addition, after running `csi` with those pre-config files, `csi` creates an output `system_config.yaml`
    file which can be passed to `csi` when reinstalling this software release. 

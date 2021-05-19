@@ -8,7 +8,7 @@ This page describes administrative knowledge around the pre-config files to `csi
    * [`cabinets.yaml`](../install/prepare_configuration_payload.md#cabinets_yaml)
    * [`hmn_connections.json`](../install/prepare_configuration_payload.md#hmn_connections_json)
    * [`ncn_metadata.csv`](../install/prepare_configuration_payload.md#ncn_metadata_csv)
-   * [`switch_metadat.csv`](../install/prepare_configuration_payload.md#create_switch_metadata_csv)
+   * [`switch_metadata.csv`](../install/prepare_configuration_payload.md#create_switch_metadata_csv)
 
 ### Topics: 
   
