@@ -1,13 +1,10 @@
 # Upgrade CSM
 
-
 The upgrade of the CSM product stream has many steps in multiple procedures which should be done in a 
 specific order.
 
-The information below is not yet correct for a general upgrade workflow.  Until it is the upgrade should
+The information below is not yet correct for a general upgrade workflow.  Until it is, the upgrade should
 start with [CSM 1.4 to 1.5 Upgrade Process](1.0/README.md) which is in the 1.0 subdirectory from this file.
-
-TODO missing internal steps
 
 The upgrade of CSM software and nodes can be validated with health checks before doing operational tasks
 like the check and update of firmware on system components.  Once the CSM upgrade has completed, other 
@@ -36,49 +33,35 @@ sections, but there is also a general troubleshooting topic.
 
    1. Prepare for Upgrade
       
-      TODO
-      
       See [Prepare for Upgrade](prepare_for_upgrade.md)
    <a name="update_management_network"></a>
 
    1. Update Management Network Configuration
-      
-      TODO
       
       See [Update Management Network Configuration](update_management_network.md)
    <a name="upgrade_management_nodes"></a>
 
    1. Upgrade Management Nodes
       
-      TODO
-      
       See [Upgrade Management Nodes](upgrade_management_nodes.md)
    <a name="upgrade_csm_services"></a>
 
    1. Upgrade CSM Services
-      
-      TODO
       
       See [Upgrade CSM Services](upgrade_csm_services.md)
    <a name="restore_from_backup"></a>
 
    1. Restore from Backup
       
-      TODO
-      
       See [Restore from Backup](restore_from_backup.md)
    <a name="validate_csm_health"></a>
 
    1. Validate CSM Health
       
-      TODO
-      
       See [Validate CSM Health](../operations/validate_csm_health.md)
    <a name="update_firmware_with_fas"></a>
 
    1. Update Firmware with FAS
-      
-      TODO
       
       See [Update Firmware with FAS](../operations/update_firmware_with_fas.md)
    <a name="next_topic"></a>

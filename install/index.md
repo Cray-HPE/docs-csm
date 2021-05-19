@@ -41,20 +41,22 @@ sections, but there is also a general troubleshooting topic.
    system size, site network information for the CAN, site DNS configuration, site NTP configuration, network
    information for the node used to bootstrap the installation.  Much of the information about the system hardware
    is encapsulated in the SHCD (Shasta Cabling Diagram), which is a spreadhsheet prepared by HPE Cray Manufacturing
-   to assemble the components of the system and connect cables having appropriate cable labels.   
+   to assemble the components of the system and connect appropriately labeled cables.   
    
       See [Prepare Configuration Payload](prepare_configuration_payload.md)  
    <a name="bootstrap_pit_node"></a>
    
    1. Bootstrap PIT Node  
-   The Pre-Install Toolkit (PIT) node needs to be bootstraped from the LiveCD.  There are two media available
+   The Pre-Install Toolkit (PIT) node needs to be bootstrapped from the LiveCD.  There are two media available
    to bootstrap the PIT node--the RemoteISO or a bootable USB device.  The recommended media is the RemoteISO,
    since it does not require any physical media to prepare. However, remotely mounting an ISO on a BMC does not
    work smoothly for nodes from all vendors. It is recommended to try the RemoteISO first.  
    
       Use one of these procedures to bootstrap the PIT node from the LiveCD.  
       * [Bootstrap Pit Node from LiveCD Remote ISO](bootstrap_livecd_remote_iso.md) (recommended)
-      * [Bootstrap Pit Node from LiveCD USB](bootstrap_livecd_usb.md) (fallback)  
+      * [Bootstrap Pit Node from LiveCD USB](bootstrap_livecd_usb.md) (fallback)
+
+   Using the LiveCD USB method requires a USB 3.0 device with at least 1TB of space to create a bootable LiveCD.
    <a name="configure_management_network"></a>  
 
    1. Configure Management Network Switches  

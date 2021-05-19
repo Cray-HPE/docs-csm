@@ -1,6 +1,6 @@
-# Application Node Config
+# Create Application Node Config YAML
 
-This page provides directions on constructing the `application_node_config.yaml` file. This file controls how the `csi config init` command finds and treats applications nodes discovered the `hmn_connections.json` file when building the SLS Input file. 
+This page provides directions on constructing the `application_node_config.yaml` file. This file controls how the `csi config init` command finds and treats application nodes discovered in the `hmn_connections.json` file when building the SLS Input file. 
 
 The following `hmn_connections.json` file contains 4 application nodes. When the `csi config init` command is used without a `application_node_config.yaml` file, only the application node `uan01` will be included the generated SLS input file. The other 3 application nodes will be ignored as they have unknown prefixes and will not be present in the SLS Input file.
 ```json

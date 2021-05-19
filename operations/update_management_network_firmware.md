@@ -1,14 +1,12 @@
-# Management Network Firmware Update
-
-TODO Need separate anchors for each switch vendor (Aruba, Dell, Mellanox). 
+# Update Management Network Firmware
 
 This page describes how to update firmware on the Management network switches.
 
-# Requirements
+## Requirements
 
 Access to the switches from the liveCD/ncn-m001
 
-# Configuration
+## Configuration
 
 - All firmware will be located at ```/var/www/fw/network``` on the LiveCD
 - It should contain the following files.
@@ -22,7 +20,7 @@ total 2.7G
 -rw-r--r-- 1 root root 577M Oct 28 11:45 OS10_Enterprise_10.5.1.4.stable.tar
 ```
 
-1.4 Switch firmware.
+## 1.4 Switch firmware.
 
 | Vendor | Model | Version |
 | --- | --- | --- |
@@ -36,7 +34,7 @@ total 2.7G
 | Mellanox | MSN2100 | 3.9.1014 |
 | Mellanox | MSN2700 | 3.9.1014 |
 
-# Aruba Firmware Update - standalone
+## Aruba Firmware Update - standalone
 
 SSH into the switch you want to upgrade.
 
@@ -83,7 +81,7 @@ Service OS Version : FL.01.07.0002
 BIOS Version       : FL.01.0002
 ```
 
-# Mellanox Firmware Update
+## Mellanox Firmware Update
 
 SSH into the switch you want to upgrade
 
@@ -128,7 +126,7 @@ Images available to be installed:
     Version: X86_64 3.9.1014 2020-08-05 18:06:58 x86_64
 ```
 
-# Dell Firmware Update
+## Dell Firmware Update
 
 SSH into the switch you want to upgrade
 

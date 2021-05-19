@@ -2,14 +2,13 @@
 
 This page describes administrative knowledge around the pre-config files to `csi` or the output files from `csi`.
 
-> Detailed information for collecting certain files starts in [Service Guides](../install/300-SERVICE-GUIDES.md) 
-  and continues in these topics.
+> Information for collecting certain files starts in [Configuration Payload](../install/prepare_configuration_payload.md#configuration_payload) 
 
-   * [`application_node_config.yaml`](../install/308-APPLICATION-NODE-CONFIG.md)
-   * [`cabinets.yaml`](../install/310-CABINETS.md)
-   * [`hmn_connections.json`](../install/307-HMN-CONNECTIONS.md)
-   * [`ncn_metadata.csv`](../install/301-NCN-METADATA-BMC.md)
-   * [`switch_metadat.csv`](../install/305-SWITCH-METADATA.md)
+   * [`application_node_config.yaml`](../install/prepare_configuration_payload.md#application_node_config_yaml)
+   * [`cabinets.yaml`](../install/prepare_configuration_payload.md#cabinets_yaml)
+   * [`hmn_connections.json`](../install/prepare_configuration_payload.md#hmn_connections_json)
+   * [`ncn_metadata.csv`](../install/prepare_configuration_payload.md#ncn_metadata_csv)
+   * [`switch_metadat.csv`](../install/prepare_configuration_payload.md#create_switch_metadata_csv)
 
 ### Topics: 
   

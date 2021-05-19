@@ -1,8 +1,10 @@
-# Switch Metadata
+# Create Switch Metadata CSV
 
 This page provides directions on constructing the `switch_metadata.csv` file.
 
 This file is manually created to include information about all spine, leaf, CDU, and aggregation switches in the system.
+None of the Slingshot switches for the HSN should be included in this file.
+
 The file follows this format in ascending order for the switches of each type:
 
 ```
@@ -33,9 +35,6 @@ For this you will need:
 - The SHCD for your system
 Check the description for component names while mapping names between the SHCD and your `switch_metadata.csv` file.
 Refer to "Component Names (xnames)" in the _HPE Cray EX Hardware Management Administration Guide 1.5 S-8015_.
-
-**`INTERNAL USE`**
-[HSS Naming Convention](https://connect.us.cray.com/confluence/display/HSOS/Shasta+HSS+Component+Naming+Convention)
 
 #### Format
 

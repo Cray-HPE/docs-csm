@@ -2,8 +2,6 @@
 
 These administrative procedures are needed to operate an HPE Cray EX system with CSM software installed.
 
-TODO Find a logical way to order or group these topics.
-
 ### Topics:
    * [Lock and Unlock Nodes](lock_and_unlock_nodes.md)
    * [Validate CSM Health](validate_csm_health.md)

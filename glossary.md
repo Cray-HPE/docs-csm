@@ -126,7 +126,7 @@ configuration settings for the Slingshot high-speed network.
 A floor-standing coolant distribution unit (CDU) pumps liquid coolant through a cabinet
 group or cabinet chilled doors.
 
-### Hardware Management Network
+### Hardware Management Network (HMN)
 
 The hardware management network (HMN) includes HMS embedded controllers. This
 includes chassis controllers (cC), node controllers (nC) and switch controllers (sC), for
@@ -135,6 +135,10 @@ iPDUs, COTS server BMCs, or any other equipment that requires hardware-managemen
 with Redfish. The hardware management network is isolated from all other node
 management networks. An out-of-band Ethernet management switch and hardware
 management VLAN is used for customer access and administration of hardware.
+
+### High Speed Network (HSN)
+
+The High Speed Network (HSN) in an HPE Cray EX system is based on the Slingshot switches.
 
 ### LiveCD
 
@@ -262,6 +266,15 @@ A standard cabinet can support one, two, or four, rack-mounted Slingshot ToR swi
 Each switch supports a total of 64 fabric ports. 32 QSFP-DD connectors on the front panel
 connect 64 ports to the fabric. All front-panel connectors support either passive electrical
 cables (PEC) or active optical cables (AOC).
+
+### Shasta Cabling Diagram (SHCD)
+
+The Shasta Cabling Diagram (SHCD) is a multiple tab spreadsheet prepared by HPE Cray Manufacting with information about the components
+in an HPE Cray EX system.   This document has much information about the system.  Included in the SHCD are a configuration summary with
+revision history, floor layout plan, type and location of components in the air-cooled cabinets, type and location of components in the
+liquid-cooled cabinets, device diagrams for switches and nodes in the cabinets, list of source and destination of every HSN cable,
+list of source and destination of every cable connected to the spine switches, list of source and destination of every cable connected
+to the NMN, list of source and destination of every cable connected to the HMN. list of cabling for the KVM, and routing of power to the PDUs.
 
 ### SMS Nodes
 
