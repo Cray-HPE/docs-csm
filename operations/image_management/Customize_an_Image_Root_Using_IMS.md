@@ -148,10 +148,14 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     -   application/vnd.cray.image.parameters.boot
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 8.  Generate an image manifest file.
 =======
 1.  Generate an image manifest file.
 >>>>>>> c36c198 (STP-2624: added image management files)
+=======
+8.  Generate an image manifest file.
+>>>>>>> 89b783f (STP-2624: minor formatting changes)
 
     ```bash
     ncn# cat <<EOF> manifest.json
@@ -189,10 +193,14 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     ```
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 9.  Upload the manifest to S3.
 =======
 2.  Upload the manifest to S3.
 >>>>>>> c36c198 (STP-2624: added image management files)
+=======
+9.  Upload the manifest to S3.
+>>>>>>> 89b783f (STP-2624: minor formatting changes)
 
     ```bash
     ncn# cray artifacts create boot-images $IMS_IMAGE_ID/manifest.json manifest.json
@@ -205,8 +213,12 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 =======
 ### <a href="register">Register the Image Root with the IMS Service</a>
 
+<<<<<<< HEAD
 4.  Update the IMS image record.
 >>>>>>> c36c198 (STP-2624: added image management files)
+=======
+10.  Update the IMS image record.
+>>>>>>> 89b783f (STP-2624: minor formatting changes)
 
     ```bash
     ncn# cray ims images update $IMS_IMAGE_ID \
@@ -230,8 +242,12 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 =======
 ### <a href="locate">Locate an IMS Image to Customize
 
+<<<<<<< HEAD
 1.  Locate the IMS image record for the image that is being customized.
 >>>>>>> c36c198 (STP-2624: added image management files)
+=======
+11.  Locate the IMS image record for the image that is being customized.
+>>>>>>> 89b783f (STP-2624: minor formatting changes)
 
     ```bash
     ncn# cray ims images list
@@ -257,10 +273,14 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 ### Submit the Kubernetes Image Customization Job
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 13.  Create an IMS job record and start the image customization job.
 =======
 1.  Create an IMS job record and start the image customization job.
 >>>>>>> c36c198 (STP-2624: added image management files)
+=======
+12.  Create an IMS job record and start the image customization job.
+>>>>>>> 89b783f (STP-2624: minor formatting changes)
 
     After customizing the image, IMS will automatically upload any build artifacts \(root filesystem, kernel and initrd\) to S3, and associate the S3 artifacts with IMS. Unfortunately, IMS is not able to dynamically determine the Linux kernel and initrd to look for since the file name for these vary depending upon Linux distribution, Linux version, dracut configuration, and more. Thus, the user must pass the name of the kernel and initrd that IMS is to look for in the resultant image root’s /boot directory.
 
@@ -353,10 +373,14 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     A jailed environment lets users SSH into the SSH container and be immediately within the image root for the image being customized. Users do not need to `cd` or `chroot` into the image root. Using a jailed environment has some advantages, such as making the IMS SSH job shell look more like a compute node. This allows applications like the CFS to perform actions on both IMS job pods \(pre-boot\) and  compute nodes \(post-boot\).
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 14. Use kubectl and the returned IMS\_KUBERNETES\_JOB value to describe the image create job.
 =======
 2.  Use kubectl and the returned IMS\_KUBERNETES\_JOB value to describe the image create job.
 >>>>>>> c36c198 (STP-2624: added image management files)
+=======
+13.  Use kubectl and the returned IMS\_KUBERNETES\_JOB value to describe the image create job.
+>>>>>>> 89b783f (STP-2624: minor formatting changes)
 
     ```bash
     ncn# kubectl -n ims describe job $IMS_KUBERNETES_JOB
@@ -373,6 +397,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
     ```bash
 <<<<<<< HEAD
+<<<<<<< HEAD
     ncn# export POD=cray-ims-cfa864b3-4e08-49b1-9c57-04573228fd3f-customize-xh2jf
     ```
 
@@ -384,6 +409,12 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
 3.  Verify that the status of the IMS job is waiting\_on\_user.
 >>>>>>> c36c198 (STP-2624: added image management files)
+=======
+    ncn# export POD=cray-ims-cfa864b3-4e08-49b1-9c57-04573228fd3f-customize-xh2jf
+    ```
+
+14.  Verify that the status of the IMS job is waiting\_on\_user.
+>>>>>>> 89b783f (STP-2624: minor formatting changes)
 
     ```bash
     ncn# cray ims jobs describe $IMS_JOB_ID
@@ -419,8 +450,12 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 16. Customize the image in the image customization environment.
 =======
 
+<<<<<<< HEAD
 4.  Customize the image in the image customization environment.
 >>>>>>> c36c198 (STP-2624: added image management files)
+=======
+15.  Customize the image in the image customization environment.
+>>>>>>> 89b783f (STP-2624: minor formatting changes)
 
     Once chrooted into the image root \(or if using a \`jailed\` environment\) during image customization, the image will only have access to whatever configuration the image already contains. In order to talk to  services, including Nexus RPM repositories, the image root must first be configured with DNS and other settings. A base level of customization is provided by the default Ansible plays used by the CFS to enable DNS resolution.
 
@@ -466,9 +501,13 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
         -   The `buildenv-sidecar` container will compresses the image root
         -   The customized artifacts will be uploaded to S3 and associated with a new IMS image record
 <<<<<<< HEAD
+<<<<<<< HEAD
     
 =======
 >>>>>>> c36c198 (STP-2624: added image management files)
+=======
+    
+>>>>>>> 89b783f (STP-2624: minor formatting changes)
     -   **Option 2:** Use Ansible to run playbooks against the image root.
 
         ```bash
@@ -483,10 +522,14 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
         This Ansible inventory file below can also be used. The private key \(`./pod_rsa_key`\) corresponds to the public key file the container has in its authorized\_keys file.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         ```bash
 =======
         ```screen
 >>>>>>> c36c198 (STP-2624: added image management files)
+=======
+        ```bash
+>>>>>>> 89b783f (STP-2624: minor formatting changes)
         myimage-customize ansible_user=root ansible_host=ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.shasta.cray.com ansible_port=22 \
                           ansible_ssh_private_key_file=./pod_rsa_key ansible_ssh_common_args='-o \
                           StrictHostKeyChecking=no'
@@ -495,10 +538,14 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
         A sample playbook can be run on the image root:
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         ```bash
 =======
         ```screen
 >>>>>>> c36c198 (STP-2624: added image management files)
+=======
+        ```bash
+>>>>>>> 89b783f (STP-2624: minor formatting changes)
         ---
         # The playbook creates a new database test and populates data in the database to test the sharding.
         
@@ -526,6 +573,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
         The sample playbook can be run with the following command:
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         ```bash
         ncn# ansible-playbook -i ./inventory.ini sample_playbook.yml
         ```
@@ -536,12 +584,20 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 =======
         ```screen
         # ansible-playbook -i ./inventory.ini sample\_playbook.yml
+=======
+        ```bash
+        ncn# ansible-playbook -i ./inventory.ini sample_playbook.yml
+>>>>>>> 89b783f (STP-2624: minor formatting changes)
         ```
 
-5.  Tail the `buildenv-sidecar` to ensure that any artifacts are properly uploaded to S3 and associated with IMS.
+16.  Tail the `buildenv-sidecar` to ensure that any artifacts are properly uploaded to S3 and associated with IMS.
 
+<<<<<<< HEAD
     ```screen
 >>>>>>> c36c198 (STP-2624: added image management files)
+=======
+    ```bash
+>>>>>>> 89b783f (STP-2624: minor formatting changes)
     ncn# kubectl -n ims logs -f $POD -c buildenv-sidecar
     + python -m ims_python_helper image upload_artifacts sles15_barebones_image 7de80ccc-1e7d-43a9-a6e4-02cad10bb60b 
     -v -r /mnt/image/sles15_barebones_image.sqsh -k /mnt/image/image-root/boot/vmlinuz 
@@ -625,10 +681,14 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     ```bash
 =======
 
-6.  Look up the ID of the newly created image.
+17.  Look up the ID of the newly created image.
 
+<<<<<<< HEAD
     ```screen
 >>>>>>> c36c198 (STP-2624: added image management files)
+=======
+    ```bash
+>>>>>>> 89b783f (STP-2624: minor formatting changes)
     ncn# cray ims jobs describe $IMS_JOB_ID
     status = "success"
     enable_debug = false
@@ -662,14 +722,18 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 =======
     If successful, create a variable for the IMS `resultant_image_id` value in the returned data.
 
-    ```screen
+    ```bash
     ncn# export IMS_RESULTANT_IMAGE_ID=d88521c3-b339-43bc-afda-afdfda126388
     ```
 
-7.  Verify the new IMS image record exists.
+18.  Verify the new IMS image record exists.
 
+<<<<<<< HEAD
     ```screen
 >>>>>>> c36c198 (STP-2624: added image management files)
+=======
+    ```bash
+>>>>>>> 89b783f (STP-2624: minor formatting changes)
     ncn# cray ims images describe $IMS_RESULTANT_IMAGE_ID
     created = "2018-12-04T17:25:52.482514+00:00"
     id = "d88521c3-b339-43bc-afda-afdfda126388"
@@ -684,6 +748,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 ### Clean Up the Image Customization Environment
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 20. Delete the IMS job record.
 
     ```bash
@@ -694,6 +759,12 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     ```screen
     # cray ims jobs delete $IMS_JOB_ID
 >>>>>>> c36c198 (STP-2624: added image management files)
+=======
+19.  Delete the IMS job record.
+
+    ```bash
+    ncn# cray ims jobs delete $IMS_JOB_ID
+>>>>>>> 89b783f (STP-2624: minor formatting changes)
     ```
 
     Deleting the job record also deletes the underlying Kubernetes job, service and config map that were created when the job record was submitted.
