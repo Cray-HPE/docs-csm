@@ -18,10 +18,15 @@ These administrative procedures are needed to operate an HPE Cray EX system with
    * [Update SLS with UAN Aliases](update_sls_with_uan_aliases.md)
    * [Configure NTP on NCNs](configure_ntp_on_ncns.md)
    * [Change NCN Image Root Password and SSH Keys](change_ncn_image_root_password_and_ssh_keys.md)
+<<<<<<< HEAD
    * [Remove Artifacts from Product Installations](Remove_Artifacts_from_Product_Installations.md)
 
 #### Image Management
 
+=======
+
+#### Image Management
+>>>>>>> c36c198 (STP-2624: added image management files)
    * [Image Management with Kiwi-NG Recipes](image_management/Image_Management_with_Kiwi-NG_Recipes.md)
    * [Image Management Workflows](image_management/Image_Management_Workflows.md)
    * [Upload and Register an Image Recipe](image_management/Upload_and_Register_an_Image_Recipe.md)
@@ -32,6 +37,7 @@ These administrative procedures are needed to operate an HPE Cray EX system with
      * [Convert TGZ Archives to SquashFS Images](image_management/Convert_TGZ_Archives_to_SquashFS_Images.md)
      * [Customize an Image Root to Install Singularity](/operations/image_management/Customize_an_Image_Root_to_Install_Singularity.md)
      * [Customize an Image Root to Install Compute Kubernetes](image_management/Customize_an_Image_Root_to_Install_Compute_Kubernetes.md)
+<<<<<<< HEAD
    * [Delete or Recover Deleted IMS Content](image_management/Delete_or_Recover_Deleted_IMS_Content.md)
 
 #### Boot Orchestration
@@ -208,3 +214,6 @@ These administrative procedures are needed to operate an HPE Cray EX system with
    * [NTP Resiliency](resiliency/NTP_Resiliency.md)
 
 
+=======
+   * [Delete or Recover Deleted IMS Content](image_management/Delete_or_Recover_Deleted_IMS_Content.md)
+>>>>>>> c36c198 (STP-2624: added image management files)
