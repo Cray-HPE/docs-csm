@@ -202,7 +202,8 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
 ### <a href="locate">Locate an IMS Image to Customize
 
-11.  Locate the IMS image record for the image that is being customized.
+    
+12.  Locate the IMS image record for the image that is being customized.
 
     ```bash
     ncn# cray ims images list
@@ -227,7 +228,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
 ### Submit the Kubernetes Image Customization Job
 
-12.  Create an IMS job record and start the image customization job.
+13.  Create an IMS job record and start the image customization job.
 
     After customizing the image, IMS will automatically upload any build artifacts \(root filesystem, kernel and initrd\) to S3, and associate the S3 artifacts with IMS. Unfortunately, IMS is not able to dynamically determine the Linux kernel and initrd to look for since the file name for these vary depending upon Linux distribution, Linux version, dracut configuration, and more. Thus, the user must pass the name of the kernel and initrd that IMS is to look for in the resultant image root’s /boot directory.
 
@@ -311,7 +312,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
     A jailed environment lets users SSH into the SSH container and be immediately within the image root for the image being customized. Users do not need to `cd` or `chroot` into the image root. Using a jailed environment has some advantages, such as making the IMS SSH job shell look more like a compute node. This allows applications like the CFS to perform actions on both IMS job pods \(pre-boot\) and  compute nodes \(post-boot\).
 
-13.  Use kubectl and the returned IMS\_KUBERNETES\_JOB value to describe the image create job.
+14. Use kubectl and the returned IMS\_KUBERNETES\_JOB value to describe the image create job.
 
     ```bash
     ncn# kubectl -n ims describe job $IMS_KUBERNETES_JOB
@@ -330,7 +331,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     ncn# export POD=cray-ims-cfa864b3-4e08-49b1-9c57-04573228fd3f-customize-xh2jf
     ```
 
-14.  Verify that the status of the IMS job is waiting\_on\_user.
+15.   Verify that the status of the IMS job is waiting\_on\_user.
 
     ```bash
     ncn# cray ims jobs describe $IMS_JOB_ID
@@ -361,8 +362,8 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     host = "ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.shasta.cray.com"
     port = 22
     ```
-
-15.  Customize the image in the image customization environment.
+    
+16. Customize the image in the image customization environment.
 
     Once chrooted into the image root \(or if using a \`jailed\` environment\) during image customization, the image will only have access to whatever configuration the image already contains. In order to talk to  services, including Nexus RPM repositories, the image root must first be configured with DNS and other settings. A base level of customization is provided by the default Ansible plays used by the CFS to enable DNS resolution.
 
@@ -455,7 +456,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
         ncn# ansible-playbook -i ./inventory.ini sample_playbook.yml
         ```
 
-16.  Tail the `buildenv-sidecar` to ensure that any artifacts are properly uploaded to S3 and associated with IMS.
+17. Tail the `buildenv-sidecar` to ensure that any artifacts are properly uploaded to S3 and associated with IMS.
 
     ```bash
     ncn# kubectl -n ims logs -f $POD -c buildenv-sidecar
@@ -534,8 +535,8 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     ```
 
     The IMS customization workflow automatically copies the NCN Certificate Authority’s public certificate to /etc/cray/ca/certificate\_authority.crt within the image root being customized. This can be used to enable secure communications between the NCN and the client node.
-
-17.  Look up the ID of the newly created image.
+    
+18.  Look up the ID of the newly created image.
 
     ```bash
     ncn# cray ims jobs describe $IMS_JOB_ID
@@ -563,7 +564,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     ncn# export IMS_RESULTANT_IMAGE_ID=d88521c3-b339-43bc-afda-afdfda126388
     ```
 
-18.  Verify the new IMS image record exists.
+19. Verify the new IMS image record exists.
 
     ```bash
     ncn# cray ims images describe $IMS_RESULTANT_IMAGE_ID
@@ -579,7 +580,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
 ### Clean Up the Image Customization Environment
 
-19.  Delete the IMS job record.
+20. Delete the IMS job record.
 
     ```bash
     ncn# cray ims jobs delete $IMS_JOB_ID

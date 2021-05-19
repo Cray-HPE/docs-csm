@@ -10,7 +10,7 @@ Create an image root from an IMS recipe.
     -   `cray-nexus`, the Nexus repository manager service
 -   The NCN Certificate Authority \(CA\) public key has been properly installed into the CA cache for this system. 
 -   `kubectl` is installed locally and configured to point at the SMS Kubernetes cluster.
--   A Kiwi image recipe uploaded as a gzipped tar file and registered with IMS. See [Upload and Register an Image Recipe]().
+-   A Kiwi image recipe uploaded as a gzipped tar file and registered with IMS. See [Upload and Register an Image Recipe](/operations/image_management/Upload_and_Register_an_Image_Recipe.md).
 -   A token providing Simple Storage Service \(S3\) credentials has been generated.
 
 ### LIMITATIONS
@@ -67,7 +67,7 @@ The commands in this procedure must be run as the `root` user in this release.
 
 ### Get the IMS Recipe to Build
 
-4.  Locate the IMS recipe needed to build the image.
+3.  Locate the IMS recipe needed to build the image.
 
     ```bash
     ncn# cray ims recipes list
@@ -92,7 +92,7 @@ The commands in this procedure must be run as the `root` user in this release.
 
 ### Submit the Kubernetes Image Create Job
 
-6.  Create an IMS job record and start the image creation job.
+4.  Create an IMS job record and start the image creation job.
 
     After building an image, IMS will automatically upload any build artifacts \(root filesystem, kernel and initrd\) to the artifact repository, and associate them with IMS. IMS is not able to dynamically determine the Linux kernel and initrd to look for since the file name for these vary depending upon linux distribution, linux version, dracut configuration, and more. Thus, the user must pass the name of the kernel and initrd that IMS will look for in the resultant image root’s /boot directory.
 
@@ -133,7 +133,7 @@ The commands in this procedure must be run as the `root` user in this release.
     ncn# export IMS_KUBERNETES_JOB=cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-create
     ```
 
-7.  Use `kubectl` and the returned `IMS_KUBERNETES_JOB` value to describe the image create job.
+5.  Use `kubectl` and the returned `IMS_KUBERNETES_JOB` value to describe the image create job.
 
     ```bash
     ncn# kubectl -n ims describe job $IMS_KUBERNETES_JOB
@@ -154,7 +154,7 @@ The commands in this procedure must be run as the `root` user in this release.
     ncn# export POD=cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-create-lt69t
     ```
 
-8.  Watch the logs from the `fetch-recipe`, `wait-for-reops`, `build-ca-rpm`, `build-image`, and `buildenv-sidecar` containers to monitor the image creation process.
+6.  Watch the logs from the `fetch-recipe`, `wait-for-reops`, `build-ca-rpm`, `build-image`, and `buildenv-sidecar` containers to monitor the image creation process.
 
     Use `kubectl` and the returned pod name from the previous step to retrieve this information.
 
@@ -388,7 +388,7 @@ The commands in this procedure must be run as the `root` user in this release.
 
     If the image creation operation fails, the build artifacts will not be uploaded to S3. If enable\_debug is set to true, the IMS creation job will enable a debug SSH shell that is accessible by one or more dynamic host names. The user needs to know if they will SSH from inside or outside the Kubernetes cluster to determine which host name to use. Typically, customers access the system from outside the Kubernetes cluster using the Customer Access Network \(CAN\).
 
-9.  Use the `IMS_JOB_ID` to look up the ID of the newly created image.
+7.  Use the `IMS_JOB_ID` to look up the ID of the newly created image.
 
     Steps 7-9 should only be run if the image creation job fails. If it was successful, proceed to step 10.
 
@@ -420,8 +420,8 @@ The commands in this procedure must be run as the `root` user in this release.
     host = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-service.ims.svc.cluster.local"
     port = 22
     [ssh_containers.connection_info.customer_access]
-    host = "ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.shasta.cray.com" **<<-- Note this host**
-    port = 22 **<<-- Note this port**
+    host = "ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.shasta.cray.com" <<-- Note this host
+    port = 22 <<-- Note this port
     ```
 
     If successful, create variables for the SSH connection information.
@@ -431,7 +431,7 @@ The commands in this procedure must be run as the `root` user in this release.
     ncn# IMS_SSH_PORT=22
     ```
 
-10. Connect to the IMS debug shell.
+8.  Connect to the IMS debug shell.
 
     To access the debug shell, SSH to the container using the private key that matches the public key used to create the IMS Job.
 
@@ -443,7 +443,7 @@ The commands in this procedure must be run as the `root` user in this release.
     [root@POD ~]#
     ```
 
-11. Investigate the IMS debug shell.
+9.  Investigate the IMS debug shell.
 
     1.  Change to the cd /mnt/image/ directory.
 
@@ -472,7 +472,7 @@ The commands in this procedure must be run as the `root` user in this release.
         [root@POD image]# touch /mount/image/complete
         ```
 
-12. Verify the new image was created correctly.
+10. Verify the new image was created correctly.
 
     ```bash
     ncn# cray ims jobs describe $IMS_JOB_ID
@@ -500,7 +500,7 @@ The commands in this procedure must be run as the `root` user in this release.
     ncn# export IMS_RESULTANT_IMAGE_ID=d88521c3-b339-43bc-afda-afdfda126388
     ```
 
-13. Verify the new IMS image record exists.
+11. Verify the new IMS image record exists.
 
     ```bash
     ncn# cray ims images describe $IMS_RESULTANT_IMAGE_ID
@@ -516,7 +516,7 @@ The commands in this procedure must be run as the `root` user in this release.
 
 ### Clean Up the Create Environment 
 
-15. Delete the IMS job record using the `IMS_JOB_ID`.
+12. Delete the IMS job record using the `IMS_JOB_ID`.
 
     ```bash
     ncn# cray ims jobs delete $IMS_JOB_ID
@@ -527,5 +527,6 @@ The commands in this procedure must be run as the `root` user in this release.
 
 Images built by IMS contain only the packages and settings that are referenced in the Kiwi-NG recipe used to build the image. The only exception is that IMS will dynamically install the system's root CA certificate to allow Zypper \(via Kiwi-NG\) to talk securely with the required Nexus RPM repositories. Images that are intended to be used to boot a CN or other node must be configured with DNS and other settings that enable the image to talk to vital  services. A base level of customization is provided by the default Ansible plays used by the Configuration Framework Service \(CFS\) to enable DNS resolution, which are typically run against an image after it is built by IMS.
 
-When customizing an image via [Customize an Image Root Using IMS](/portal/developer-portal/operations/Customize_an_Image_Root_Using_IMS.md), once chrooted into the image root \(or if using a \`jailed\` environment\), the image will only have access to whatever configuration the image already contains. In order to talk to  services, including Nexus RPM repositories, the image root must first be configured with DNS and other settings. That base level of customization is provided by the default Ansible plays used by the CFS to enable DNS resolution.
+When customizing an image via [Customize an Image Root Using IMS](/operations/image_management/Customize_an_Image_Root_Using_IMS.md), once chrooted into the image root \(or if using a \`jailed\` environment\), the image will only have access to whatever configuration the image already contains. In order to talk to  services, including Nexus RPM repositories, the image root must first be configured with DNS and other settings. That base level of customization is provided by the default Ansible plays used by the CFS to enable DNS resolution.
+
 
