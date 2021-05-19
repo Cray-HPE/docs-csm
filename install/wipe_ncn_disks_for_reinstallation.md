@@ -115,7 +115,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
    ncn-s# for md in /dev/md/*; do mdadm -S $md || echo nope ; done
    ```
 
-4. Remove auxillary LVMs
+4. Remove auxiliary LVMs
 
    ```bash
    ncn-s# vgremove -f --select 'vg_name=~metal*'

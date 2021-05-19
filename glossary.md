@@ -4,7 +4,7 @@ Glossary of terms used in CSM documentation.
 
 ### Application Node (AN)
 
-An application node (AN) is an NCN which is not providing management fuctions for the Cray EX system.
+An application node (AN) is an NCN which is not providing management functions for the Cray EX system.
 The AN is not part of the Kubernetes cluster to which management nodes belong.  One special type of AN
 is the UAN (User Access Node), but different systems may have need for other types of AN, such as nodes
 which provide a Lustre routing function (LNet router), or gateway between HSN and Infiniband, or data 
@@ -269,7 +269,7 @@ cables (PEC) or active optical cables (AOC).
 
 ### Shasta Cabling Diagram (SHCD)
 
-The Shasta Cabling Diagram (SHCD) is a multiple tab spreadsheet prepared by HPE Cray Manufacting with information about the components
+The Shasta Cabling Diagram (SHCD) is a multiple tab spreadsheet prepared by HPE Cray Manufacturing with information about the components
 in an HPE Cray EX system.   This document has much information about the system.  Included in the SHCD are a configuration summary with
 revision history, floor layout plan, type and location of components in the air-cooled cabinets, type and location of components in the
 liquid-cooled cabinets, device diagrams for switches and nodes in the cabinets, list of source and destination of every HSN cable,

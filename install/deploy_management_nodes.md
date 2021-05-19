@@ -8,7 +8,10 @@ take place. Watching the console or the console log for certain nodes can help t
 what happens and when. When the process completes for all nodes, the Ceph storage is
 initialized and the Kubernetes cluster is created and ready for a workload.  The PIT node
 will join Kubernetes after it is rebooted later in
-[Redeploy PIT Node](#redeploy PIT node).
+[Redeploy PIT Node](index.md#redeploy_pit_node).
+
+<a name="timing-of-deployments"></a>
+### Timing of Deployments
 
 The timing of each set of boots varies based on hardware. Nodes from some manufacturers will
 POST faster than others or vary based on BIOS setting. After powering a set of nodes on,
@@ -140,7 +143,7 @@ _There will be post-boot workarounds as well._
 #### 1.4 Ensure Time Is Accurate Before Deploying NCNs
 
 **NOTE**: If you wish to use a timezone other than UTC, instead of step 1 below, follow 
-[this procedure for setting a local timezone](../operations/configure_ntp_on_ncns.md#setting-a-local-timezone), then
+[this procedure for setting a local timezone](../operations/configure_ntp_on_ncns.md#set-a-local-timezone), then
 proceed to step 2.
 
 1. Ensure that the PIT node has the current and correct time.
@@ -612,7 +615,7 @@ Observe the output of the checks and note any failures, then remediate them.
    If you see messages like **'IP allocation was seeded by different peers'** then weave looks to have split-brained.  At this point it is necessary to wipe the ncns and start the PXE boot again:
 
    1. Wipe the ncns using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md).
-   1. Return to the 'Boot the **Storage Nodes**' step of [Deploy Management Nodes](#deploy-management-nodes) section above.
+   1. Return to the 'Boot the **Storage Nodes**' step of [Deploy Management Nodes](#deploy_management_nodes) section above.
 
 
 <a name="optional-validation"></a>

@@ -40,7 +40,7 @@ sections, but there is also a general troubleshooting topic.
    Information gathered from a site survey is needed to feed into the CSM installation process, such as system name,
    system size, site network information for the CAN, site DNS configuration, site NTP configuration, network
    information for the node used to bootstrap the installation.  Much of the information about the system hardware
-   is encapsulated in the SHCD (Shasta Cabling Diagram), which is a spreadhsheet prepared by HPE Cray Manufacturing
+   is encapsulated in the SHCD (Shasta Cabling Diagram), which is a spreadsheet prepared by HPE Cray Manufacturing
    to assemble the components of the system and connect appropriately labeled cables.   
    
       See [Prepare Configuration Payload](prepare_configuration_payload.md)  
@@ -76,7 +76,7 @@ sections, but there is also a general troubleshooting topic.
    the other management nodes can be deployed.  This procedure will boot all of the management nodes, initialize
    Ceph storage on the storage nodes and start the Kubernetes cluster on all of the worker nodes and the master nodes,
    except for the PIT node.  The PIT node will join Kubernetes after it is rebooted later in 
-   [Redeploy PIT Node](#redeploy PIT node).  
+   [Redeploy PIT Node](#redeploy_pit_node).  
    
       See [Deploy Management Nodes](deploy_management_nodes.md)  
    <a name="install_csm_services"></a>
@@ -159,7 +159,7 @@ sections, but there is also a general troubleshooting topic.
          * HPE Apollo 6500 XL645d Gen10 Plus  
    
       See [Prepare Compute Nodes](prepare_compute_nodes.md)
-   <a name="next-topic"></a>
+   <a name="next_topic"></a>
    1. Next Topic  
    After completion of the firmware update with FAS and the preparation of compute nodes, the CSM product stream has
    been fully installed and configured.  Refer to the _HPE Cray EX Installation and Configuration Guide 1.5 S-8000_

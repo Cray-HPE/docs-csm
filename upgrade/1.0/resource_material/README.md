@@ -1,7 +1,7 @@
 # Usage
-This repo will house documentation for known issues that occured while running upgrades during testing.  
+This repo will house documentation for known issues that occurred while running upgrades during testing.  
 
-The layout will consist of a directory per stage with 2 files per directoy. These files will be *KNOWN_ISSUES.md* and *REFERENCE_MATERIAL.md*
+The layout will consist of a directory per stage with 2 files per directory. These files will be *KNOWN_ISSUES.md* and *REFERENCE_MATERIAL.md*
 
 **KNOW_ISSUES.md** will house all known issues that occurred during install that a customer might possibly run into and the fix or work around.  Please make sure you match your stage and issue up correctly in the document. 
 

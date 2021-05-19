@@ -11,7 +11,7 @@ The comman image is customized with a storage-ceph layer for the utility storage
 
 ## Details
 
-<a name="overview_of_ncn_images"></a>
+<a name="overview_ncn_images"></a>
 #### Overview of NCN Images
 
 There are several flavors of NCN images, each share a common base image. When booting NCNs an admin or user will need to choose between

@@ -86,7 +86,7 @@ The admin must be authenticated to the Cray CLI before proceeding.
 
    Notice that the command prompt includes the hostname for this node controller
 
-1. The logs from power actions for node 0 and node 1 on this node contoller are in /var/log.
+1. The logs from power actions for node 0 and node 1 on this node controller are in /var/log.
 
    ```bash
    x1000c1s0b0:> cd /var/log

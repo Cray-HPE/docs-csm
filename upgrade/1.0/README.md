@@ -6,7 +6,7 @@ This document is intended to guide an administrator through the upgrade process 
 
 > **NOTE**: This document is a work in progress, and these items are outstanding:
 > 1. PowerDNS -- Need to add content
-> 1. Additional automation -- hopefully we'll add some more scripting as we refine this process.  There's alot of copy/pasting which will frustrate adminstrators, especially on larger systems.
+> 1. Additional automation -- hopefully we'll add some more scripting as we refine this process.  There's a lot of copy/pasting which will frustrate administrators, especially on larger systems.
 
 ### Terminology
 
@@ -63,7 +63,7 @@ Follow the steps at: [Initial Ceph Upgrade](resource_material/stage1/initial-cep
 > - At this point your ceph commands will still be working.  
 > - You have a new way of executing ceph commands in addition to the traditional way.  
 >   - Please see [cephadm-reference.md](resource_material/common/cephadm-reference.md) for more information.
-> - Both methods are depdent on the master nodes and storage nodes 001/2/3 have a ceph.client.admin.keyring and/or a ceph.conf file (cephadm will not require the ceph.conf). 
+> - Both methods are dependent on the master nodes and storage nodes 001/2/3 have a ceph.client.admin.keyring and/or a ceph.conf file (cephadm will not require the ceph.conf). 
 > - When you continue with Stage 2, you may have issues running your ceph commands.  
 >   - If you are experiencing this, please double check that you restored your /etc/ceph directory from your tar backup.
 

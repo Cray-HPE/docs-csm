@@ -2,7 +2,7 @@
 
 This page describes how aruba spine switches are configured and will show users how to validate configuration.
 
-Depending on the size of the shasta system the Spine switches will serve different purposes.  On TDS systems, the NCNs will plug directly into the spine switches, on Larger sytems with aggregation switches, the spines will provide connection between the aggregation switches.
+Depending on the size of the shasta system the Spine switches will serve different purposes.  On TDS systems, the NCNs will plug directly into the spine switches, on larger systems with aggregation switches, the spines will provide connection between the aggregation switches.
 
 Switch Models used
 JL635A Aruba 8325-48Y8C and JL636A Aruba 8325-32C

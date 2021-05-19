@@ -1,6 +1,6 @@
 # Lock and Unlock Nodes
 
-Starting with Shasta v1.4, CAPMC and FAS have the ability to ignore mangement nodes by honoring
+Starting with Shasta v1.4, CAPMC and FAS have the ability to ignore management nodes by honoring
 a lock state, however this ability is turned off by default.  The administrator must lock the
 management nodes to prevent unwanted actions from affecting these nodes.  
 

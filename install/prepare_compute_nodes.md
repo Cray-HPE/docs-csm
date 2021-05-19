@@ -8,7 +8,7 @@ These nodes have an additional procedure before they can be booted.
 
 ## Details
 
-<a name="configure-hpe-apollo-x645d-gen10-plus-compute-nodes"></a>
+<a name="configure-hpe-apollo-6500-x645d-gen10-plus-compute-nodes"></a>
 ### 1. Configure HPE Apollo 6500 XL645d Gen10 Plus Compute Nodes
   
 The HPE Apollo 6500 XL645d Gen10 Plus compute node uses a NIC/shared iLO network port. The NIC is

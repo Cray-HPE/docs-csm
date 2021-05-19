@@ -6,7 +6,7 @@ software, but provides background which might be helpful for troubleshooting an 
 
 ### Topics:
    * [Cray Site Init Files](#cray_site_init_files)
-   * [Certficate Authority](#certificate_authority)
+   * [Certificate Authority](#certificate_authority)
    * [NCN Images](#ncn_images)
    * [NCN Boot Workflow](#ncn_boot_workflow)
    * [NCN Networking](#ncn_networking)
@@ -27,7 +27,7 @@ software, but provides background which might be helpful for troubleshooting an 
    * [`cabinets.yaml`](../install/prepare_configuration_payload.md#cabinets_yaml)
    * [`hmn_connections.json`](../install/prepare_configuration_payload.md#hmn_connections_json)
    * [`ncn_metadata.csv`](../install/prepare_configuration_payload.md#ncn_metadata_csv)
-   * [`switch_metadata.csv`](../install/prepare_configuration_payload.md#create_switch_metadata_csv)
+   * [`switch_metadata.csv`](../install/prepare_configuration_payload.md#switch_metadata_csv)
 
    In addition, after running `csi` with those pre-config files, `csi` creates an output `system_config.yaml`
    file which can be passed to `csi` when reinstalling this software release. 
@@ -35,13 +35,13 @@ software, but provides background which might be helpful for troubleshooting an 
    See [Cray Site Init Files](cray_site_init_files.md) for more information about these files.
 
 <a name="certificate_authority"></a>
-### Certficate Authority
+### Certificate Authority
 
    While a system is being installed for the first time, a certificate authority (CA) is needed.  This can be
    generated for a system, or one can be supplied from a customer intermediate CA.  Outside of a new
    installation, there is no supported method to rotate or change the platform CA in this release.
 
-   For more information about these topics, see [Certficate Authority](certificate_authority.md)
+   For more information about these topics, see [Certificate Authority](certificate_authority.md)
 
    * "Overview"
    * "Use Default Platform Generated CA"

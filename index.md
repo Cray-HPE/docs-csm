@@ -60,8 +60,8 @@ The chapters with topics which need to be done as part of an ordered procedure a
    1. [Configure Administrative Access](install/configure_administrative_access.md)
    1. [Validate CSM Health](operations/validate_csm_health.md)
    1. [Update Firmware with FAS](operations/update_firmware_with_fas.md)
-   1. [Prepare Compute Nodes](install/#prepare_compute_nodes)
-   1. [Next Topic](install/next_topic)
+   1. [Prepare Compute Nodes](install/index.md#prepare_compute_nodes)
+   1. [Next Topic](install/index.md#next_topic)
    1. [Troubleshooting Installation Problems](install/troubleshooting_installation.md)
 
 1. [Upgrade CSM](upgrade/index.md)
@@ -74,7 +74,7 @@ The chapters with topics which need to be done as part of an ordered procedure a
    1. [Restore from Backup](upgrade/restore_from_backup.md)
    1. [Validate CSM Health](operations/validate_csm_health.md)
    1. [Update Firmware with FAS](operations/update_firmware_with_fas.md)
-   1. [Next Topic](upgrade/next_topic)
+   1. [Next Topic](upgrade/index.md#next_topic)
    1. [Troubleshooting Upgrade Problems](upgrade/troubleshooting_upgrade.md)
 
 1. [CSM Operational Activities](operations/index.md)
@@ -101,7 +101,7 @@ The chapters with topics which need to be done as part of an ordered procedure a
 
    Topics:
    * [Cray Site Init Files](background/cray_site_init_files.md)
-   * [Certficate Authority](background/certificate_authority.md)
+   * [Certificate Authority](background/certificate_authority.md)
    * [NCN Images](background/ncn_images.md)
    * [NCN Boot Workflow](background/ncn_boot_workflow.md)
    * [NCN Networking](background/ncn_networking.md)

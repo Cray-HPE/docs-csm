@@ -3,7 +3,7 @@
 The configuration payload consists of the information which must be known about the HPE Cray EX system so it
 can be passed to the `csi` (Cray Site Init) program during the CSM installation process.
 
-Information gathered from a site survey is needed to feed into the CSM installation process, such as system name, system size, site network information for the CAN, site DNS configuration, site NTP configuration, network information for the node used to bootstrap the installation. More detailed component level information about the system hardware is encapsulated in the SHCD (Shasta Cabling Diagram), which is a spreadhsheet prepared by HPE Cray Manufacturing to assemble the components of the system and connect appropriately labeled cables.
+Information gathered from a site survey is needed to feed into the CSM installation process, such as system name, system size, site network information for the CAN, site DNS configuration, site NTP configuration, network information for the node used to bootstrap the installation. More detailed component level information about the system hardware is encapsulated in the SHCD (Shasta Cabling Diagram), which is a spreadsheet prepared by HPE Cray Manufacturing to assemble the components of the system and connect appropriately labeled cables.
 
 How the configuration payload is prepared depends on whether this is a first time install of CSM
 software on this system or the CSM software is being reinstalled.  The reinstall scenario has the
@@ -38,7 +38,7 @@ The air-cooled cabinet is known to `csi` as a `river` cabinet.  The liquid-coole
 | --mountain-cabinets 4 | Number of Mountain cabinets, but this could also be in cabinets.yaml |
 | --starting-mountain-cabinet 1000 | Starting Mountain cabinet |
 | --hill-cabinets 0 | Number of Hill cabinets, but this could also be in cabinets.yaml |
-| --river-cabinets 1 | Number of River cabines, but this could also be in cabinets.yaml |
+| --river-cabinets 1 | Number of River cabinets, but this could also be in cabinets.yaml |
 | --can-cidr 10.103.11.0/24 | IP subnet for the CAN assigned to this system |
 | --can-external-dns 10.103.11.113 | IP on CAN for this system's DNS server |
 | --can-gateway 10.103.11.1 | Virtual IP for the CAN (on the spine switches) |
@@ -86,7 +86,7 @@ command during the installation process.
 | [ncn_metadata.csv](#ncn_metadata_csv) | SHCD, other| The number of master, worker, and storage nodes and MAC address information for BMC and bootable NICs |
 | [switch_metadata.csv](#switch_metadata_csv) | SHCD | Inventory of all spine, aggregation, CDU, and leaf switches |
 
-Although some information in these files can be populated from site survery information, the SHCD prepared by
+Although some information in these files can be populated from site survey information, the SHCD prepared by
 HPE Cray Manufacturing is the best source of data for hmn_connections.json.  The `ncn_metadata.csv` does
 require collection of MAC addresses from the management nodes since that information is not present in the SHCD.
 
@@ -248,6 +248,7 @@ x3000c0h37s1,Spine,Aruba
 x3000c0h38s1,Spine,Aruba
 ```
 
+<a name="first_time_install"></a>
 ### First Time Install of this Release
 
 1. Collect data for `application_node_config.yaml`
@@ -294,7 +295,7 @@ x3000c0h38s1,Spine,Aruba
 <a name="reinstall"></a>
 ### Reinstall 
 
-1. [Collect Payload for Reinstall](#collect_paylod_for_reinstall)
+1. [Collect Payload for Reinstall](#collect_payload_for_reinstall)
 1. [Standing Kubernetes Down](#standing-kubernetes-down)
 1. Prepare CNs and ANs
    * They don't need to be powered off
@@ -305,7 +306,7 @@ x3000c0h38s1,Spine,Aruba
    1. power off NCNs from PIT node or from ncn-m001
    1. power off PIT node or ncn-m001
   
-<a name="collect_paylod_for_reinstall"></a>
+<a name="collect_payload_for_reinstall"></a>
 #### Collect Payload for Reinstall
 
 1. How to collect data from previous install for this reinstall

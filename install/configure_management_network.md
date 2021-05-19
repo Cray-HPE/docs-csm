@@ -34,7 +34,7 @@ The management network switches should be configured in this order: Spine, Aggre
 Only systems with liquid-cooled cabinets will have the CDU switches.  Only systems with many nodes in air-cooled
 cabinets will have Aggregation switches.
 
-On a typical system, the Mellanox switches are Spine switches and the Dell switches are used for Aggretation, CDU, and Leaf switches.
+On a typical system, the Mellanox switches are Spine switches and the Dell switches are used for Aggregation, CDU, and Leaf switches.
 
 
 TODO This section needs to be rewritten for a first time install that needs to configure Dell and Mellanox switches.
@@ -73,5 +73,5 @@ Future filenames
 
    After completing this procedure the next step is to deploy the other management nodes using the PIT node and the management network switches configured in this procedure.
 
-   * See [Deploy Manaagement Nodes](index.md#deploy_management_nodes)
+   * See [Deploy Management Nodes](index.md#deploy_management_nodes)
 

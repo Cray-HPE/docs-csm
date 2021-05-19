@@ -212,7 +212,7 @@ Simply run the reverse-pattern of the PXE commands from the [setting boot order]
 
       ```bash
       ncn# efibootmgr | grep -vi 'pxe ipv4' | grep -i adapter |tee /tmp/rbbs1
-      ncn#efibootmgr | grep -iP '(sata|nvme)' | tee /tmp/rbbs2
+      ncn# efibootmgr | grep -iP '(sata|nvme)' | tee /tmp/rbbs2
       ```
    - Intel Corporation
 
@@ -296,7 +296,7 @@ Reset the BIOS.  Refer to vendor documentation for resetting the BIOS or attempt
 > **`NOTE`** When using `ipmitool` against a machine remotely, it requires more arguments:
 > ```bash
 > linux# username=root
-> linux# IPMI_PASSWORD=CHANGME
+> linux# IPMI_PASSWORD=CHANGEME
 > linux# ipmitool -I lanplus -U $username -E -H <bmc-hostname>
 > ```
 

@@ -1,4 +1,4 @@
-# Conifgure Management Network Base
+# Configure Management Network Base
 
 This page provides instructions on how to setup the base network configuration of the Shasta Management network.
 

@@ -121,7 +121,7 @@ osd.4   ncn-s002  running (23h)  7m ago     2d   15.2.8   registry.local/ceph/ce
 osd.7   ncn-s002  running (23h)  7m ago     2d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  78a89eaef92a
 ```
 
->>**optionally leave off the host name and it will return all the osd processesin the cluster**
+>>**optionally leave off the host name and it will return all the osd processing the cluster**
 
 On the node in question you will have to gather some information to zap a single OSD.
 

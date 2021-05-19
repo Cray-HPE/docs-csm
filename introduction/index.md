@@ -9,7 +9,7 @@ for an HPE Cray EX system.
    * [CSM Product Stream Updates](#product-stream-updates)
    * [CSM Operational Activities](#operations)
    * [Differences from Previous Release](#differences)
-   * [Documentation Conventions](#documetation_conventions)
+   * [Documentation Conventions](#documentation_conventions)
 
 ## Details
 
@@ -73,7 +73,7 @@ See [Scenarios for Shasta v1.5](scenarios.md)
 
 See [Differences from Previous Release](differences.md)
 
-<a name="documetation_conventions"></a>
+<a name="documentation_conventions"></a>
 ## Documentation Conventions
 
    Several conventions have been used in the preparation of this documentation.

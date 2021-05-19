@@ -33,7 +33,7 @@ These steps will be run on the stable NCN of choice regardless of NCN type to be
 
 2. Watch the console for the node being rebuilt by exec'ing into the conman pod and connect to the console (press `&.` to exit).
 
-    > **NOTE:** If the node being upgraded is `ncn-m001`, the adminstrator will need to watch the using the web interface for the bmc (typically https://SYSTEM-ncn-m001-mgmt/viewer.html).
+    > **NOTE:** If the node being upgraded is `ncn-m001`, the administrator will need to watch the using the web interface for the bmc (typically https://SYSTEM-ncn-m001-mgmt/viewer.html).
 
     ```bash
     ncn# kubectl -n services exec -it $(kubectl get po -n services | grep conman | awk '{print $1}') -- /bin/sh -c 'conman -j <xname>'

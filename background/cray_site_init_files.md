@@ -2,13 +2,13 @@
 
 This page describes administrative knowledge around the pre-config files to `csi` or the output files from `csi`.
 
-> Information for collecting certain files starts in [Configuration Payload](../install/prepare_configuration_payload.md#configuration_payload) 
+> Information for collecting certain files starts in [Configuration Payload](../install/prepare_configuration_payload.md) 
 
    * [`application_node_config.yaml`](../install/prepare_configuration_payload.md#application_node_config_yaml)
    * [`cabinets.yaml`](../install/prepare_configuration_payload.md#cabinets_yaml)
    * [`hmn_connections.json`](../install/prepare_configuration_payload.md#hmn_connections_json)
    * [`ncn_metadata.csv`](../install/prepare_configuration_payload.md#ncn_metadata_csv)
-   * [`switch_metadata.csv`](../install/prepare_configuration_payload.md#create_switch_metadata_csv)
+   * [`switch_metadata.csv`](../install/prepare_configuration_payload.md#switch_metadata_csv)
 
 ### Topics: 
   

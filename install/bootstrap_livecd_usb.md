@@ -1,6 +1,6 @@
 # Bootstrap PIT Node from LiveCD USB
 
-The Pre-Install Toolkit (PIT) node needs to be bootstraped from the LiveCD.  There are two media available
+The Pre-Install Toolkit (PIT) node needs to be bootstrapped from the LiveCD.  There are two media available
 to bootstrap the PIT node--the RemoteISO or a bootable USB device.  This procedure describes using the USB 
 device.  If not using the USB device, see [Bootstrap Pit Node from LiveCD Remote ISO](bootstrap_livecd_remote_iso.md).
 
@@ -409,7 +409,7 @@ Check for workarounds in the `/opt/cray/csm/workarounds/csi-config` directory. I
   CASMINST-999
   ```
 
-<a name="prepare_site-init"></a>
+<a name="prepare_site_init"></a>
 #### 3.4 Prepare Site Init
 
 Follow the procedures to [Prepare Site Init](prepare_site_init.md) directory for your system.

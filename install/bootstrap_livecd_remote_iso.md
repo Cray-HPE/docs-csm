@@ -1,12 +1,13 @@
 # Bootstrap PIT Node from LiveCD Remote ISO 
 
-The Pre-Install Toolkit (PIT) node needs to be bootstraped from the LiveCD.  There are two media available
+The Pre-Install Toolkit (PIT) node needs to be bootstrapped from the LiveCD.  There are two media available
 to bootstrap the PIT node--the RemoteISO or a bootable USB device.  This procedure describes using the 
-RemoveISO.  If not using the RemoteISO, see [Bootstrap PIT Node from LiveCD USB](#bootstrap_livecd_usb.md)
+RemoveISO.  If not using the RemoteISO, see [Bootstrap PIT Node from LiveCD USB](bootstrap_livecd_usb.md)
 
 The installation process is similar to the USB based installation with adjustments to account for the
 lack of removable storage.
 
+TODO: The prerequisites link below is broken. Not sure where it should point now.
 **Important:** Before starting this page be sure to complete the
 [CSM Install Prerequisites](prepare_configuration_payload.md#csm-install-prerequisites) for
 the relevant installation scenario.
@@ -171,6 +172,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       ```bash
       pit:/var/www/ephemeral# export ENDPOINT=https://arti.dev.cray.com/artifactory/shasta-distribution-stable-local/csm
       pit:/var/www/ephemeral# export CSM_RELEASE=csm-x.y.z
+      pit:/var/www/ephemeral# export SYSTEM_NAME=eniac
       ```
 
    1. Save the `CSM_RELEASE` for usage later; all subsequent shell sessions will have this var set.
@@ -242,11 +244,10 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    installed.
 
    TODO Getting workaround rpms is in [Update Product Stream](../update_product_stream/index.md).
-   TODO Are the 1.5 workaround rpms really in a URL that has "shasta-1.4" in it?
 
    ```bash
-   pit# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm-install/docs-csm-install-latest.noarch.rpm
-   pit# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
+   pit# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
+   pit# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
    ```
 
 1. Generate configuration files:
@@ -255,7 +256,8 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    TODO don't reference the USB method of generating installation files here.  Both bootstrap_livecd_usb.md and bootstrap_livecd_remote_iso.md should reference the same information in prepare_configuration_payload.md.  Anything else should be replicated from USB to RemoteISO because we don't want to jump between too many different files, especially between USB and RemoteISO.
 
    ```bash
-   pit:/var/www/ephemeral# csi config init
+   pit# cd /var/www/ephemeral/prep
+   pit# csi config init
    ```
 
 1. Check for workarounds in the `/opt/cray/csm/workarounds/csi-config` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
@@ -274,14 +276,14 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 1. Copy the interface config files generated earlier by `csi config init`
    into `/etc/sysconfig/network/` **or** use the provided scripts under "lab usage" below:
 
-   1. Copy PIT files:
+   * Option 1: Copy PIT files:
 
       ```bash
       pit# cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/pit-files/* /etc/sysconfig/network/
       pit# wicked ifreload all
       pit# systemctl restart wickedd-nanny && sleep 5
       ```
-   1. Lab usage; setup dnsmasq by hand:
+   * Option 2: Lab usage; setup dnsmasq by hand:
 
       ```bash
       pit# /root/bin/csi-setup-vlan002.sh $nmn_cidr
@@ -336,19 +338,19 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
     1. Copy files (files only, `-r` is exclusively not used):
 
-       ```bash
-       pit# cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/dnsmasq.d/* /etc/dnsmasq.d/
-       pit# cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/conman.conf /etc/conman.conf
-       pit# cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/basecamp/* /var/www/ephemeral/configs/
-       ```
+        ```bash
+        pit# cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/dnsmasq.d/* /etc/dnsmasq.d/
+        pit# cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/conman.conf /etc/conman.conf
+        pit# cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/basecamp/* /var/www/ephemeral/configs/
+        ```
 
     1. Enable, and fully restart all PIT services:
 
-      ```bash
-       pit# systemctl enable basecamp nexus dnsmasq conman
-       pit# systemctl stop basecamp nexus dnsmasq conman
-       pit# systemctl start basecamp nexus dnsmasq conman
-       ```
+        ```bash
+        pit# systemctl enable basecamp nexus dnsmasq conman
+        pit# systemctl stop basecamp nexus dnsmasq conman
+        pit# systemctl start basecamp nexus dnsmasq conman
+        ```
 
 1. Start and configure NTP on the LiveCD for a fallback/recovery server:
 

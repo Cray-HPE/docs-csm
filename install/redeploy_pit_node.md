@@ -289,7 +289,7 @@ data so run them only when indicated. Instructions are in the `README` files.
         pit# md_disks="$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(sata|nvme|sas)' | sort -h | awk '{print "/dev/" $2}')"
         ```
 
-    1. Sanity check; print disks into typscript or console
+    1. Sanity check; print disks into typescript or console
 
         ```bash
         pit# echo $md_disks
@@ -457,7 +457,7 @@ data so run them only when indicated. Instructions are in the `README` files.
     CASMINST-1309  CASMINST-1570
     ```
     
-1. Now exit the typescript and relocate the backup over to ncn-m001, thus removing the need to track ncn-m002 as yet-another bootstrapping agent. This is required to facilitate re-installations, since it pulls the preperation data back over to the documented area (ncn-m001).
+1. Now exit the typescript and relocate the backup over to ncn-m001, thus removing the need to track ncn-m002 as yet-another bootstrapping agent. This is required to facilitate re-installations, since it pulls the preparation data back over to the documented area (ncn-m001).
 
     ```bash
     ncn-m001# exit

@@ -9,10 +9,10 @@ default install procedures.
    1. [Background](#background)
    1. [Create and Initialize Site-Init Directory](#create-and-initialize-site-init-directory)
    1. [Create Baseline System Customizations](#create-baseline-system-customizations)
-   1. [Generate Sealed Secrets](#generate-sealed-secrets)
-      1. [Patch cloud-init with the CA](#patch-cloud-init-with-the-ca)
    1. [Version Control Site-Init Files](#version-control-site-init-files)
       1. [Push to a Remote Repository](#push-to-a-remote-repository)
+   1. [Generate Sealed Secrets](#generate-sealed-secrets)
+      1. [Patch cloud-init with the CA](#patch-cloud-init-with-the-ca)
    1. [Customer-Specific Customizations](#customer-specific-customizations)
    1. [Appendix](#appendix)
       1. [Tracked Sealed Secrets](#tracked-sealed-secrets)
@@ -564,31 +564,9 @@ encrypted.
     Generating type static...
     ```
 
-<a name="patch-cloud-init-with-the-ca"></a>
-#### 4.1 Patch cloud-init with the CA
-
-Using `csi` on a generated site-init directory...
-
-1. Patch the CA certificate from the shasta-cfg:
-   ```bash
-   pit# csi patch ca \
-   --cloud-init-seed-file /var/www/ephemeral/configs/data.json \
-   --customizations-file /var/www/ephemeral/prep/site-init/customizations.yaml \
-   --sealed-secret-key-file /var/www/ephemeral/prep/site-init/certs/sealed_secrets.key
-   ```
-
-1. To assure it picks up the new meta-data:
-   ```bash
-   pit# systemctl restart basecamp
-   ```
-
-1. Unmount the shim from earlier if one was used (for users of the [Bootstrap LiveCD Remote ISO](bootstrap_livecd_remote_iso.md)):
-   ```bash
-   pit# umount /mnt/pitdata
-   ```
 
 <a name="version-control-site-init-files"></a>
-### 5. Version Control Site-Init Files
+### 4. Version Control Site-Init Files
 
 Setup `/mnt/pitdata/prep/site-init` as a Git repository in order to manage the
 baseline configuration during initial system installation.
@@ -628,13 +606,37 @@ baseline configuration during initial system installation.
     linux# git commit -m "Baseline configuration for $(/mnt/pitdata/${CSM_RELEASE}/lib/version.sh)"
     ```
 
+
 <a name="push-to-a-remote-repository"></a>
-#### 5.1 Push to a Remote Repository
+#### 4.1 Push to a Remote Repository
 
 It is **strongly recommended** to that the site-init repository be maintained
 off-cluster. Add a remote repository and push the baseline configuration on
 `master` branch to a corresponding remote branch. 
 
+
+<a name="patch-cloud-init-with-the-ca"></a>
+#### 5.1 Patch cloud-init with the CA
+
+Using `csi` on a generated site-init directory...
+
+1. Patch the CA certificate from the shasta-cfg:
+   ```bash
+   pit# csi patch ca \
+   --cloud-init-seed-file /var/www/ephemeral/configs/data.json \
+   --customizations-file /var/www/ephemeral/prep/site-init/customizations.yaml \
+   --sealed-secret-key-file /var/www/ephemeral/prep/site-init/certs/sealed_secrets.key
+   ```
+
+1. To assure it picks up the new meta-data:
+   ```bash
+   pit# systemctl restart basecamp
+   ```
+
+1. Unmount the shim from earlier if one was used (for users of the [Bootstrap LiveCD Remote ISO](bootstrap_livecd_remote_iso.md)):
+   ```bash
+   pit# umount /mnt/pitdata
+   ```
 
 <a name="customer-specific-customizations"></a>
 ### 6. Customer-Specific Customizations

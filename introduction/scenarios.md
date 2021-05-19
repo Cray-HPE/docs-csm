@@ -16,7 +16,7 @@ There are two ways to install the CSM software.  There are some differences betw
 which must create the initial configuration payload and configure the management network switches,
 whereas a a reinstall can reuse a previous configuration payload and skip the configuration of management
 network switches.  The first time install will check and then may update firmware for various components
-wherease the reinstall will check and indicate that no firmware update is required.  There are two different
+whereas the reinstall will check and indicate that no firmware update is required.  There are two different
 ways to use the LiveCD, either from a RemoteISO or a USB device, which are described in [Bootstrap PIT Node](../install/index.md#bootstrap_pit_node).
 There are a few places where a comment will be made in a procedure for how one of the scenarios needs to do something different.
 
@@ -40,7 +40,7 @@ the same regardless of the starting point in the workflow.
    1. [Validate CSM Health Before PIT Node Redeploy](../install/index.md#validate_csm_health_before_pit_redeploy)
    1. [Redeploy PIT Node](../install/index.md#redeploy_pit_node)
    1. [Configure Administrative Access](../install/index.md#configure_administrative_access)
-   1. [Validate CSM Health](../install/index.md#validate_csm_health.md)
+   1. [Validate CSM Health](../install/index.md#validate_csm_health)
    1. [Update Firmware with FAS](../install/index.md#update_firmware_with_fas)
    1. [Prepare Compute Nodes](../install/index.md#prepare_compute_nodes)
 
