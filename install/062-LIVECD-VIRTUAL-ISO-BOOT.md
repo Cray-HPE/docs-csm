@@ -19,8 +19,11 @@ This page will walk-through booting the LiveCD `.iso` file directly onto a BMC.
 
 A Cray Pre-Install Toolkit ISO is required for this process. This ISO can be obtained from:
 
-- The Cray Pre-Install Toolkit ISO included in a CSM release tarball.
-- Internal endpoints (HPE Artifactory)
+- The Cray Pre-Install Toolkit ISO included in a CSM release tarball.  It will have a filename similar to
+  `cray-pre-install-toolkit-sle15sp2.x86_64-1.4.10-20210514183447-gc054094.iso`
+
+- **`INTERNAL ONLY`** The latest ISO in Artifactory can change, it is advised to use the full filename of the ISO name. Every `latest` ISO has a matching ISO with the real buildID in the name, this ISO will have the same File-Time metadata as the latest ISO.
+  http://car.dev.cray.com/artifactory/csm/MTL/sle15_sp2_ncn/x86_64/dev/master/metal-team/cray-pre-install-toolkit-latest.iso
 
 <a name="bmcs-virtual-mounts"></a>
 # BMCs' Virtual Mounts
@@ -115,7 +118,7 @@ the booted OS.
 
 1. The ISO boots with no password, requiring one be set on first login. Enter blank as the password and
    follow the prompts.
-2. You can no use the LiveCD to look around, or you may continue setting the LiveCD up for [a CSM installation](bootstrap_livecd_remote_iso.md).
+2. You can now use the LiveCD to look around, or you may continue setting the LiveCD up to [Bootstrap LiveCD Remote ISO](bootstrap_livecd_remote_iso.md).
 
 > **`NOTE`** The root OS `/` directory is writable without persistence. This means that restarting the machine will result in all changes being lost. Before restarting, consider following [Backing up the Overlay COW FS](#backing-up-the-overlay-cow-fs) and the accompanying [Restoring from an Overlay COW FS Backup](#restoring-from-an-overlay-cow-fs-backup) section.
 

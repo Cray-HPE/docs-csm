@@ -11,11 +11,11 @@ Ideally the Basic Wipe is enough, and should be tried first. All type of disk wi
 
 The following are potential use cases for wiping disks:
 
+<a name="use-cases"></a>
    * Adding a node that isn't bare.
    * Adopting new disks that aren't bare.
-   * Fresh-installing.
+   * Doing a fresh install.
 
-<a name="basic-wipe"></a>
 
 ### Topics: 
    1. [Basic Wipe](#basic-wipe)
@@ -24,7 +24,7 @@ The following are potential use cases for wiping disks:
 
 ## Details
 
-<a name="use-cases"></a>
+<a name="basic-wipe"></a>
 ### 1. Basic Wipe
 
 A basic wipe includes wiping the disks and all of the RAIDs.  These basic wipe instructions can be

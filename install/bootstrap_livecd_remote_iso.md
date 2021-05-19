@@ -9,7 +9,7 @@ lack of removable storage.
 
 TODO: The prerequisites link below is broken. Not sure where it should point now.
 **Important:** Before starting this page be sure to complete the
-[CSM Install Prerequisites](prepare_configuration_payload.md#csm-install-prerequisites) for
+[Prepare Configuration Payload](prepare_configuration_payload.md#csm-install-prerequisites) for
 the relevant installation scenario.
 
 ### Topics:
@@ -25,37 +25,49 @@ the relevant installation scenario.
 
 The LiveCD Remote ISO has known compatibility issues for nodes from certain vendors.
 
-- [`INTEL`] S2600WF and any *26** series may experience the described issues below.
-- [`INTEL`] Samba is untested and undocumented by Intel at this time. It may be used on Intels as a workaround at the user's own leisure.
-- [`INTEL`] Mounting the LiveCD on an Intel server does not provide a recognizable boot device without the BIOS running in LEGACY mode (not UEFI).
-   - Boot the node with `ipmitool chassis bootdev reset/on options=legacy`
+   * Intel nodes should not attempt to bootstrap using the LiveCD Remote ISO  method.  Instead use [Bootstrap PIT Node from LiveCD USB](bootstrap_livecd_usb.md)
 
 <a name="attaching-and-booting-the-livecd-with-the-bmc"></a>
 ### 2. Attaching and Booting the LiveCD with the BMC
 
-> **`INTERNAL WARNING`** If this is a re-installation on a system that still has a USB stick from a prior
+> **Warning:** If this is a re-installation on a system that still has a USB stick from a prior
 > installation then that USB stick must be wiped before continuing. Failing to wipe the USB, if present, may result in confusion.
 > If the USB is booted still then it can wipe itself using the [basic wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe). If it is not booted, please do so and wipe it _or_ disable the USB ports in the BIOS (not available for all vendors).
 
-Obtain and attach the LiveCD `.iso` file to the BMC. Depending on the server vendor, the instructions for attaching to the BMC will differ.
+Obtain and attach the LiveCD cray-pre-install-toolkit ISO file to the BMC. Depending on the vendor of the node,
+the instructions for attaching to the BMC will differ.
 
-1. Obtain the ISO
+1. The CSM software release should be downloaded and expanded for use.
 
-   TODO Replace the EXTERNAL information with a link to [Update Product Stream](../update_product_stream/index.md) for how to get the latest CSM software release and apply any patches.  Still needs to explain how to get the ISO from that CSM tarball.
+   **Important:** To ensure that the CSM release plus any patches, workarounds, or hotfixes are included
+   follow the instructions in [Update CSM Product Stream](../update_product_stream/index.md)
 
-   - **`EXTERNAL`** Obtain the CSM TAR ball from CrayPort
-   - **`INTERNAL`** latest nightly ISO: http://car.dev.cray.com/artifactory/csm/MTL/sle15_sp2_ncn/x86_64/dev/master/metal-team/cray-pre-install-toolkit-latest.iso
-   - **`INTERNAL ADVISORY`** The latest ISO in Artifactory can change, it is advised to use the FQDN of the ISO name. Every `latest` ISO has a matching ISO with the real buildID in the name, this ISO will have the same File-Time meta as the latest ISO.
+   The cray-pre-install-toolkit ISO and other files are now available in the directory from the extracted CSM tar.
+   The ISO will have a name similar to
+   `cray-pre-install-toolkit-sle15sp2.x86_64-1.4.10-20210514183447-gc054094.iso`
 
-1. See the respective guide below to attach an ISO:
 
-   TODO Is it better to include this content here or link to an outside topic?
+
+1. Prepare a server on the network to host the cray-pre-install-toolkit ISO.
+
+   This release of CSM software, the cray-pre-install-toolkit ISO should be placed on a server which the PIT node
+   will be able to contact via http or https.
+
+      * HPE nodes can use http or https.
+      * Gigabyte nodes can only use http.
+
+   **Note:** that a shorter path name is better than a long path name on the webserver.
+
+   **`INTERNAL ONLY`** The latest ISO in Artifactory can change, it is advised to use the full filename of the ISO name. Every `latest` ISO has a matching ISO with the real buildID in the name, this ISO will have the same File-Time metadata as the latest ISO.
+   http://car.dev.cray.com/artifactory/csm/MTL/sle15_sp2_ncn/x86_64/dev/master/metal-team/cray-pre-install-toolkit-latest.iso
+
+1. See the respective procedure below to attach an ISO.
 
    - [HPE iLO BMCs](./062-LIVECD-VIRTUAL-ISO-BOOT.md#hpe-ilo-bmcs)
    - [Gigabyte BMCs](./062-LIVECD-VIRTUAL-ISO-BOOT.md#gigabyte-bmcs)
-   - [Intel BMCs](./062-LIVECD-VIRTUAL-ISO-BOOT.md#intel-bmcs)
+   - [Intel BMCs] Should not use the RemoteISO method.  See [Bootstrap PIT Node from LiveCD USB](bootstrap_livecd_usb.md)
 
-1. Each guide should have rebooted the server.  Observe the server boot into the LiveCD.
+1. The chosen procedure should have rebooted the server.  Observe the server boot into the LiveCD.
 
 <a name="first-login"></a>
 ### 3. First Login

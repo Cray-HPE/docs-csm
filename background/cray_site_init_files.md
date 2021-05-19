@@ -27,9 +27,12 @@ serves as a fingerprint for re-generated the same configs.
 Here is an example file
 
 ```yaml
+application-node-config-yaml: application_node_config.yaml
 bgp-asn: "65533"
+bgp-peers: spine
 bootstrap-ncn-bmc-pass: admin
 bootstrap-ncn-bmc-user: admin
+cabinets-yaml: cabinets.yaml
 can-bootstrap-vlan: 7
 can-cidr: 10.102.9.0/24
 can-dynamic-pool: 10.102.9.128/25
@@ -55,6 +58,7 @@ manifest-release: ""
 mountain-cabinets: 0
 mtl-cidr: 10.1.1.0/16
 ncn-metadata: ncn_metadata.csv
+ncn-mgmt-node-auditing-enabled: false
 nmn-bootstrap-vlan: 2
 nmn-cidr: 10.252.0.0/17
 ntp-pool: time.nist.gov
@@ -72,7 +76,17 @@ starting-river-cabinet: 3000
 starting-river-nid: 1
 supernet: true
 switch-metadata: switch_metadata.csv
-system-name: redbull
+system-name: eniac
 upstream_ntp_server: time.nist.gov
 v2-registry: https://registry.nmn/
+versioninfo:
+  major: "1"
+  minor: "5"
+  fixvr: "20"
+  gitversion: f771260cc9b478782b2e7fa597090637916fd4ef
+  gitcommit: f771260cc9b478782b2e7fa597090637916fd4ef-release-shasta-1.5
+  builddate: "2021-02-18T00:41:38Z"
+  goversion: go1.14.9
+  compiler: gc
+  platform: linux/amd64
 ```

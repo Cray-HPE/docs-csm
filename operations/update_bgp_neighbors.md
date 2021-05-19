@@ -48,7 +48,7 @@ USAGE: - <Spine01/Agg01> <Spine02/Agg02> <Path to CSI generated network files>
 
        - The path must include CAN.yaml', 'HMN.yaml', 'HMNLB.yaml', 'NMNLB.yaml', 'NMN.yaml
 
-Example: ./aruba_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/redbull/networks
+Example: ./aruba_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/eniac/networks
 ```
 - After this script is run you will need to verify the configuration and verify the BGP peers are ```ESTABLISHED```
 
