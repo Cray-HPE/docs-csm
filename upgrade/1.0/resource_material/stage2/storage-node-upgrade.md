@@ -73,7 +73,7 @@ ncn-s001# /srv/cray/scripts/metal/ntp-upgrade-config.sh
 9. Run script to reconfigure storage load balancer (run on the newly rebuilt storage node):
 
    ```bash
-   ncn# /usr/share/doc/metal/upgrade/1.0/scripts/ceph/ceph-services-stage2.sh
+   ncn# /usr/share/doc/csm/upgrade/1.0/scripts/ceph/ceph-services-stage2.sh
    ```
 
 10. Proceed either of the following options:
