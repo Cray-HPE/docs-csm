@@ -1,0 +1,58 @@
+@Library('csm-shared-library') _
+
+pipeline {
+    agent {
+        label "metal-gcp-builder"
+    }
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: "10"))
+        timestamps()
+    }
+
+    environment {
+        SPEC_FILE = "docs-csm-install.spec"
+        BUILD_METADATA = setRPMRevision()
+    }
+
+    stages {
+        stage("Build") {
+            when { not { buildingTag() } }
+            stages {
+                stage("Prepare") {
+                    steps {
+                        script {
+                            runLibraryScript("addRpmMetaData.sh", env.SPEC_FILE)
+                            sh "make prepare"
+                        }
+                    }
+                }
+
+                stage("Build RPM") {
+                    steps {
+                        script {
+                            sh "make rpm"
+                        }
+                    }
+                }
+
+                stage('Publish ') {
+                    steps {
+                        script {
+                            uploadCsmRpms(component: "docs-csm", pattern: "dist/rpmbuild/RPMS/noarch/*.rpm", arch: "noarch")
+                            uploadCsmRpms(component: "docs-csm", pattern: "dist/rpmbuild/SRPMS/*.rpm", arch: "src")
+                        }
+                    }
+                }
+            }
+        }
+        stage("Promote") {
+            when { buildingTag() }
+            steps {
+                script {
+                    error "TODO - promote rpm from development to stable in arti"
+                }
+            }
+        }
+    }
+}
