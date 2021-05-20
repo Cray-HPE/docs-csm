@@ -78,7 +78,7 @@ For each storage node in the cluster, start by following the steps at: [Common P
 2. Determine worker rebuild order, attempt to minimize moves of key pxe boot related pods.  Run the following command for locations of key pods and recommendation of rebuild order:
 
    ```bash
-   ncn# /usr/share/doc/metal/upgrade/1.0/scripts/k8s/determine-worker-order.sh
+   ncn# /usr/share/doc/csm/upgrade/1.0/scripts/k8s/determine-worker-order.sh
    ```
 
 3. For each worker node in the cluster, also follow the steps at: [Common Prerequisite Steps](resource_material/common/prerequisite-steps.md)

@@ -107,7 +107,7 @@
 6. Use the script provided in this repository to cordon/drain the node.  This will evacuate pods running on the node.
 
    ```bash
-   ncn# /usr/share/doc/metal/upgrade/1.0/scripts/k8s/remove-k8s-node.sh $UPGRADE_NCN
+   ncn# /usr/share/doc/csm/upgrade/1.0/scripts/k8s/remove-k8s-node.sh $UPGRADE_NCN
    ```
 
 Proceed to [Common Upgrade Steps](../common/upgrade-steps.md)

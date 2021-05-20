@@ -68,7 +68,7 @@ These are steps specific to upgrading a master node.
 
        ```bash
        ncn# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
-       ncn# /usr/share/doc/metal/upgrade/1.0/scripts/k8s/promote-initial-master.sh
+       ncn# /usr/share/doc/csm/upgrade/1.0/scripts/k8s/promote-initial-master.sh
             CONTROL_PLANE_HOSTNAME has been set to 10.252.1.2
             CONTROL_PLANE_ENDPOINT has been set to 10.252.1.2:6442
             Setting K8S_NODE_IP to 10.252.1.6 for KUBELET_EXTRA_ARGS and kubeadm config
@@ -119,7 +119,7 @@ These are steps specific to upgrading a master node.
    ```bash
    ncn# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
    
-   ncn# /usr/share/doc/metal/upgrade/1.0/scripts/k8s/remove-k8s-node.sh $UPGRADE_NCN
+   ncn# /usr/share/doc/csm/upgrade/1.0/scripts/k8s/remove-k8s-node.sh $UPGRADE_NCN
    ```
 
 Proceed to [Common Upgrade Steps](../common/upgrade-steps.md)
