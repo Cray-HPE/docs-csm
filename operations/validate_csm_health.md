@@ -506,7 +506,7 @@ the output.
 * Chassis Management Controllers (CMC) may show up as not being present in HSM.  CMCs for Intel server blades can be ignored.  Gigabyte server blade CMCs not found in HSM is not normal and should be investigated.   If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored.
 * HPE PDUs are not supported at this time and will likely show up as not being found in HSM.
 * BMCs having no association with a management switch port will be annotated as such, and should be investigated.  Exceptions to this are in Mountain or Hill configurations where mountain BMCs will show this condition on SLS/HSM mismatches, which is normal.
-* In Hill configurations SLS assumes BMCs in chassis 1 and 3 are populated, and in mountain contifurations SLS assumes all BMCs are populated.   Any non-populated BMCs will have no HSM data and will show up in the mismatch list.
+* In Hill configurations SLS assumes BMCs in chassis 1 and 3 are populated, and in mountain configurations SLS assumes all BMCs are populated.   Any non-populated BMCs will have no HSM data and will show up in the mismatch list.
 
 
 <a name="booting-csm-barebones-image"></a>
@@ -673,24 +673,15 @@ rel = "status"
 type = "GET"
 ```
 
-<a name="csm-consoles"></a>
-### Verify console connections
-
-Sometimes the compute nodes and UAN are not up yet when `cray-conman` is initialized, and consequently will
-not be monitored. This is a good time to verify that all nodes are being monitored for console logging
-and re-initialize `cray-conman` if needed.
-
 See [Manage Node Consoles](manage_node_consoles.md)
 
 <a name="csm-watch"></a>
 ### Connect to the node's console and watch the boot
 
-Run conman from inside the conman pod to access the console. The boot will fail, but should reach the dracut stage. If the dracut stage is reached, the boot
+Access the node's console using the procedure in [Manage Node Consoles](manage_node_consoles.md).
+The boot will fail, but should reach the dracut stage. If the dracut stage is reached, the boot
 can be considered successful and shows that the necessary CSM services needed to boot a node are
 up and available.
-```bash
-cray-conman-b69748645-qtfxj:/ # conman -j x9000c1s7b0n1
-```
 
 The boot is considered successful if the console output ends with something similar to the following:
 ```

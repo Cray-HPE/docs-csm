@@ -1,7 +1,7 @@
 # Update SLS with UAN Aliases
 
 This guide shows the process for manually adding an alias to a UAN in SLS and ensuring that the node
-is being monitored by cray-conman for console logs.
+is being monitored by conman for console logs.
 
 ### Prerequisites 
 * SLS is up and running and has been populated with data.
@@ -133,56 +133,5 @@ is being monitored by cray-conman for console logs.
 
    When this node boots, the DHCP request of it's -nmn interface will cause the uan01 to be created and resolved.
 
-1. Confirm that the UAN is being monitored by the cray-conman service
+1. Confirm that the UAN is being monitored by the console services. Follow the procedure in [Manage Node Consoles](manage_node_consoles.md).
 
-   Use kubectl to exec into the running cray-conman pod.
-
-   1. Identify the `cray-conman` pod:
-
-      ```bash
-      ncn# kubectl get pods -n services | grep "^cray-conman-"
-      ```
-   
-      Expected output looks similar to the following:
-
-      ```
-      cray-conman-b69748645-qtfxj                                     3/3     Running           0          16m
-      ```
-
-   1. Set the `PODNAME` variable accordingly:
-
-      ```bash
-      ncn# export PODNAME=cray-conman-b69748645-qtfxj
-      ```
-
-   1. Log into the `cray-conman` container in this pod:
-
-      ```bash
-      ncn# kubectl exec -n services -it $PODNAME -c cray-conman -- bash
-      cray-conman#  
-      ```
-
-   1. Check the existing connections.
-
-      ```
-      cray-conman# conman -q | grep x3000c0s19b0
-      cray-conman#
-      ```
-
-   1. If the node is not being reported as connected to conman, the conman service will need to
-      be re-initialized.  This is done by killing the existing conmand process.
-
-      ```
-      cray-conman# ps -ax | grep conmand
-      13 ?           Sl     0:45 conmand -F -v -c /etc/conman.conf
-      56704 pts/3    S+     0:00 grep conmand
-      cray-conman# kill 13
-      ```
-
-   1. If the UAN has been successfully discovered by hsm, it should now be monitored by conman.
-
-      ```
-      cray-conman# conman -q | grep x3000c0s19b0
-      x3000c0s19b0
-      cray-conman#
-      ```
