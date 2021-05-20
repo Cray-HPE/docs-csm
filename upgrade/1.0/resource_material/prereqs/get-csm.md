@@ -7,50 +7,23 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    ncn-m001# script -af csm-1.5-upgrade.$(date +%Y-%m-%d).txt
    ncn-m001# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
-2. Download the CSM software release to ncn-m001 -- choose either stable or prerelease depending on your intent:
+2. Download and extract the CSM software release to ncn-m001:
 
-   a. **OPTION 1:** Internal/Test Systems:
+   Follow instructions at [Update CSM Product Stream](../../../../update_product_stream/index.md) to download the csm tarfile (csm-x.y.z.tar.gz).
 
-      > NOTE: The `ENDPOINT` URL below are for internal use. Customers do not need to download any additional 
-      > artifacts, the CSM tarball is included along with the Shasta release.
-     
-      ```bash
-      ncn-m001# cd ~
-      ncn-m001# export ENDPOINT=http://arti.dev.cray.com/artifactory/shasta-distribution-unstable-local/csm/
-      ncn-m001# export CSM_RELEASE=csm-1.0.0-alpha.x # (whichever version is latest from above)
-      ncn-m001# wget ${ENDPOINT}/${CSM_RELEASE}.tar.gz
-      ``` 
-
-   b. **OPTION 2:** Customer/Production Systems:
-
-      ```bash
-      ncn-m001# cd ~
-      ncn-m001# export ENDPOINT=https://arti.dev.cray.com/artifactory/shasta-distribution-stable-local/csm/
-      ncn-m001# export CSM_RELEASE=csm-x.y.z
-      ncn-m001# wget ${ENDPOINT}/${CSM_RELEASE}.tar.gz
-      ```
-
-
-3. Expand the CSM software release:
-   ```bash
-   ncn-m001# tar -zxvf ${CSM_RELEASE}.tar.gz
-   ncn-m001# ls -l ${CSM_RELEASE}
-   ```
-   The ISO and other files are now available in the extracted CSM tar.
-
-4. Install/upgrade the CSI RPM.
+3. Install/upgrade the CSI RPM.
    ```bash
    ncn-m001# rpm -Uvh ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
    ```
 
-5. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet 
+4. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet 
    access these RPMs will need to be externally downloaded and then copied to be installed.
    ```bash
    ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
    ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
    ```
 
-6. Show the version of CSI installed.
+5. Show the version of CSI installed.
    ```bash
    ncn-m001# csi version
    ```
