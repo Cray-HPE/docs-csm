@@ -25,13 +25,13 @@ These are steps specific to the initial upgrade of ceph from nautilus to octopus
 3. Run the script that creates partitions for `/var/lib/ceph` and `/var/lib/containers` on each storage node (one at a time):
 
    ```bash
-   ncn-s001# /usr/share/doc/metal/upgrade/1.0/scripts/ceph/ceph-partitions-stage1.sh
+   ncn-s001# /usr/share/doc/csm/upgrade/1.0/scripts/ceph/ceph-partitions-stage1.sh
    ```
 
 4. On `ncn-s001` execute the `ceph-upgrade.sh` script:
 
    ```bash
-   ncn-s001 # cd /usr/share/doc/metal/upgrade/1.0/scripts/ceph
+   ncn-s001 # cd /usr/share/doc/csm/upgrade/1.0/scripts/ceph
    ncn-s001 # ./ceph-upgrade.sh
    ```
 
