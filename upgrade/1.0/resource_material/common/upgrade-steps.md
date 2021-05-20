@@ -109,7 +109,7 @@ These steps will be run on the stable NCN of choice regardless of NCN type to be
    - ***MASTER***:
 
      ```bash
-     ncn# goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-master.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
+     ncn# GOSS_BASE=/opt/cray/tests/install goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-master.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
      ```
 
    - ***WORKER***:
