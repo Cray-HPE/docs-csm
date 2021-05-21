@@ -201,12 +201,6 @@ data so run them only when indicated. Instructions are in the `README` files.
             pit# ssh ncn-m002 cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
             ```
         
-        1. Login to ncn-m002, then into pit.nmn; accept the host signatures to allow the upcoming nested rsync to work:
-            
-            ```bash
-            pit# ssh ncn-m002 ssh pit.nmn
-            ```
-
         1. Run this to create the backup; in one swoop, login to m002 and pull the files off the pit. _This runs `rsync` with specific parameters; `partial`, `non-verbose`, and `progress`._
             
             > NOTE: this needs to be optimized to copy only the change/delta within the `csm/` folder, as well as the tar. Right now this 
@@ -215,8 +209,8 @@ data so run them only when indicated. Instructions are in the `README` files.
             ```bash
             pit# ssh ncn-m002 CSM_RELEASE=$(basename $(ls -d /var/www/ephemeral/csm*/ | head -n 1)) \
             'mkdir -pv /metal/bootstrap
-            rsync -rltD -P --delete pit.nmn:/var/www/ephemeral/prep /metal/bootstrap/
-            rsync -rltD -P --delete pit.nmn:/var/www/ephemeral/${CSM_RELEASE} /metal/bootstrap/'
+            rsync -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -rltD -P --delete pit.nmn:/var/www/ephemeral/prep /metal/bootstrap/
+            rsync -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -rltD -P --delete pit.nmn:/var/www/ephemeral/${CSM_RELEASE} /metal/bootstrap/'
             ```
         
         1. Handoff prep and CSM backups are done; the administrator or CI/CD agent can move onto the next step.
