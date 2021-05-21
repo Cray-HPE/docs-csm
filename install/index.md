@@ -56,7 +56,7 @@ sections, but there is also a general troubleshooting topic.
       * [Bootstrap Pit Node from LiveCD Remote ISO](bootstrap_livecd_remote_iso.md) (recommended)
       * [Bootstrap Pit Node from LiveCD USB](bootstrap_livecd_usb.md) (fallback)
 
-   Using the LiveCD USB method requires a USB 3.0 device with at least 1TB of space to create a bootable LiveCD.
+      Using the LiveCD USB method requires a USB 3.0 device with at least 1TB of space to create a bootable LiveCD.
    <a name="configure_management_network"></a>  
 
    1. Configure Management Network Switches  
