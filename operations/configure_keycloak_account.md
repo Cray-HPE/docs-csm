@@ -12,7 +12,7 @@ enables the use of the `cray` CLI for many administrative commands, such as thos
 [Validate CSM Health](validate_csm_health.md) and general operation of the management services
 via the API gateway.
 
-Refer to the _HPE Cray EX System Administration Guide S-8001_ for more information about these topics.
+Refer to the _HPE Cray EX System Administration Guide 1.5 S-8001_ for more information about these topics.
 
    * Default Keycloak Realms, Accounts, and Clients
       * Certificate Types

@@ -208,7 +208,7 @@ Simply run the reverse-pattern of the PXE commands from the [setting boot order]
       ncn# efibootmgr | grep -iP '(pxe ipv?4.*)' | grep -i connection | tee /tmp/rbbs2
       ```
    - Hewlett-Packard Enterprise
-      > **`NOTE`** This does not trim HSN Mellanox cards; these should disable their OpROMs using [the high speed network snippet(s)](../install/304-NCN-PCIE-NET-BOOT-AND-RE-CABLE.md#high-speed-network).
+      > **`NOTE`** This does not trim HSN Mellanox cards; these should disable their OpROMs using [the high speed network snippet(s)](../install/switch_pxe_boot_from_onboard_nic_to_pcie.md#high-speed-network).
 
       ```bash
       ncn# efibootmgr | grep -vi 'pxe ipv4' | grep -i adapter |tee /tmp/rbbs1

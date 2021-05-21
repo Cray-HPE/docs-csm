@@ -189,7 +189,7 @@ which device that is.
     macos# ./cray-site-init/write-livecd.sh $USB ~/${CSM_RELEASE}/cray-pre-install-toolkit-*.iso 50000
     ```
 
-    > NOTE: At this point the USB stick is usable in any server with an x86_64 architecture based CPU. The remaining steps help add the installation data and enable SSH on boot.
+    > NOTE: At this point the USB device is usable in any server with an x86_64 architecture based CPU. The remaining steps help add the installation data and enable SSH on boot.
 
 1. Mount the configuration and persistent data partition:
 
@@ -204,11 +204,11 @@ which device that is.
     linux# tar -zxvf ~/${CSM_RELEASE}.tar.gz -C /mnt/pitdata/
     ```
 
-The USB stick is now bootable and contains our artifacts. This may be useful for internal or quick usage. Administrators seeking a Shasta installation must continue onto the [configuration payload](#configuration-payload).
+The USB device is now bootable and contains our artifacts. This may be useful for internal or quick usage. Administrators seeking a Shasta installation must continue onto the [configuration payload](#configuration-payload).
 <a name="configuration-payload"></a>
 ### 3. Configuration Payload
 
-The SHASTA-CFG structure and other configuration files will be prepared, then csi will generate system-unique configuration payload used for the rest of the CSM installation on the USB stick.
+The SHASTA-CFG structure and other configuration files will be prepared, then csi will generate system-unique configuration payload used for the rest of the CSM installation on the USB device.
 
 * [Before Configuration Payload Workarounds](#before-configuration-payload-workarounds)
 * [Generate Installation Files](#generate-installation-files)
@@ -232,9 +232,12 @@ Check for workarounds in the `/opt/cray/csm/workarounds/before-configuration-pay
 <a name="generate-installation-files"></a>
 #### 3.2 Generate Installation Files
 
-Some files are needed for generating the configuration payload. New systems will need to create these files before continuing.
+Some files are needed for generating the configuration payload.  See these topics in [Prepare Configuration Payload](prepare_configuration_payload.md) if you have not already prepared the information for this system.
 
-> Note: The USB stick is usable at this time, but without SSH enabled as well as core services. This means the stick could be used to boot the system now, and a user can return to this step at another time.
+   * [Command Line Configuration Payload](#command_line_configuration_payload)
+   * [Configuration Payload Files](#configuration_payload_files)
+
+> Note: The USB device is usable at this time, but without SSH enabled as well as core services. This means the USB device could be used to boot the system now, and a user can return to this step at another time.
 
 Pull these files into the current working directory:
 - `application_node_config.yaml` (optional - see below)
@@ -248,7 +251,8 @@ Pull these files into the current working directory:
 
 > The optional `cabinets.yaml` file allows cabinet naming and numbering as well as some VLAN overrides. See [Create Cabinets YAML](create_cabinets_yaml.md).
 
-After gathering the files into the working directory, generate your configs:
+> The `system_config.yaml` is required for a reinstall, since it was created during a previous install.  For a first time install, the information in it can be provided as command line arguments to `csi config init`.
+
 
 1. Change into the preparation directory:
 
@@ -257,9 +261,11 @@ After gathering the files into the working directory, generate your configs:
    linux# cd /mnt/pitdata/prep
    ```
 
-1. Generate the system configuration reusing a parameter file (see [avoiding parameters](../background/cray_site_init_files.md#save-file--avoiding-parameters)) **or skip this step**.
+   After gathering the files into this working directory, generate your configs:
 
-   If not doing a reinstall of Shasta software, then the system_config.yaml file will not be available, so skip the rest of this step.
+1. If doing a reinstall and have the `system_config.yaml` parameter file avail available, then generate the system configuration reusing this parameter file (see [avoiding parameters](../background/cray_site_init_files.md#save-file--avoiding-parameters)).
+
+   If not doing a reinstall of Shasta software, then the `system_config.yaml` file will not be available, so skip the rest of this step.
 
    The needed files should be in the current directory.
 
@@ -278,6 +284,12 @@ After gathering the files into the working directory, generate your configs:
    system_config.yaml
    ```
 
+   Set an environment variable so this system name can be used in later commands.
+
+   ```bash
+   linux# export SYSTEM_NAME=eniac
+   ```
+
    Generate the system configuration.
 
    ```bash
@@ -286,19 +298,13 @@ After gathering the files into the working directory, generate your configs:
 
    A new directory matching your `--system-name` argument will now exist in your working directory.
 
-   Set an environment variable so this system name can be used in later commands.
-
-   ```bash
-   linux# export SYSTEM_NAME=eniac
-   ```
-
    Skip the next step to continue with the [CSI Workarounds](#csi-workarounds)
 
-1. Generate the system configuration when a pre-existing parameter file is unavailable:
+1. If doing a first time install or the `system_config.yaml` parameter file for a reinstall is not available, generate the system configuration.
 
    If doing a first time install, this step is required.  If you did the previous step as part of a reinstall, skip this.
 
-   The needed files should be in the current directory.  The application_node_config.yaml file is optional.
+   The needed files should be in the current directory.
 
    ```bash
    linux# ls -1
@@ -308,9 +314,9 @@ After gathering the files into the working directory, generate your configs:
 
    ```
    application_node_config.yaml
+   cabinets.yaml
    hmn_connections.json
    ncn_metadata.csv
-   shasta_system_configs
    switch_metadata.csv
    ```
 
@@ -393,7 +399,7 @@ After gathering the files into the working directory, generate your configs:
       {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
       ```
 
-   Continue continue with the [CSI Workarounds](#csi-workarounds)
+   Continue with the [CSI Workarounds](#csi-workarounds)
 
 <a name="csi-workarounds"></a>
 #### 3.3 CSI Workarounds
@@ -533,18 +539,18 @@ This will enable SSH, and other services when the LiveCD starts.
 
 1. Quit the typescript session with the `exit` command and copy the file (csm-usb-lived.<date>.txt) to a location on another server for reference later.
 
-Now the USB stick may be reattached to the CRAY, or if it was made on the CRAY then its server can now
+Now the USB device may be reattached to the management node, or if it was made on the management node then it can now
 reboot into the LiveCD.
 
 <a name="boot-the-livecd"></a>
 ### 5. Boot the LiveCD
 
-Some systems will boot the USB stick automatically if no other OS exists (bare-metal). Otherwise the
-administrator may need to use the BIOS Boot Selection menu to choose the USB stick.
+Some systems will boot the USB device automatically if no other OS exists (bare-metal). Otherwise the
+administrator may need to use the BIOS Boot Selection menu to choose the USB device.
 
 If an administrator is rebooting a node into the LiveCD, vs booting a bare-metal or wiped node, then `efibootmgr` will deterministically set the boot order. See the [set boot order](../background/ncn_boot_workflow.md#set-boot-order) page for more information on this topic..
 
-> UEFI booting must be enabled to find the USB sticks EFI bootloader.
+> UEFI booting must be enabled to find the USB device's EFI bootloader.
 
 1. Start a typescript on an external system, such as a laptop or Linux system, to record this section of activities done on the console of ncn-m001 via IPMI.
 
@@ -606,7 +612,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
    ```
 
-   > **`NOTE`** If this password is forgotten, it can be reset by mounting the USB stick on another computer. See [Reset root Password on LiveCD](reset_root_password_on_LiveCD.md) for information on clearing the password.
+   > **`NOTE`** If this password is forgotten, it can be reset by mounting the USB device on another computer. See [Reset root Password on LiveCD](reset_root_password_on_LiveCD.md) for information on clearing the password.
 
 
 1. Disconnect from IPMI console.

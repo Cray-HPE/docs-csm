@@ -28,8 +28,8 @@ The LiveCD Remote ISO has known compatibility issues for nodes from certain vend
 <a name="attaching-and-booting-the-livecd-with-the-bmc"></a>
 ### 2. Attaching and Booting the LiveCD with the BMC
 
-> **Warning:** If this is a re-installation on a system that still has a USB stick from a prior
-> installation then that USB stick must be wiped before continuing. Failing to wipe the USB, if present, may result in confusion.
+> **Warning:** If this is a re-installation on a system that still has a USB device from a prior
+> installation then that USB device must be wiped before continuing. Failing to wipe the USB, if present, may result in confusion.
 > If the USB is booted still then it can wipe itself using the [basic wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe). If it is not booted, please do so and wipe it _or_ disable the USB ports in the BIOS (not available for all vendors).
 
 Obtain and attach the LiveCD cray-pre-install-toolkit ISO file to the BMC. Depending on the vendor of the node,
@@ -253,14 +253,173 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    ```
 
 1. Generate configuration files:
-   > For help, see [generate installation files](bootstrap_livecd_usb.md#generate-installation-files) from the USB stick; the description there works here.
 
-   TODO don't reference the USB method of generating installation files here.  Both bootstrap_livecd_usb.md and bootstrap_livecd_remote_iso.md should reference the same information in prepare_configuration_payload.md.  Anything else should be replicated from USB to RemoteISO because we don't want to jump between too many different files, especially between USB and RemoteISO.
-
-   ```bash
-   pit# cd /var/www/ephemeral/prep
-   pit# csi config init
-   ```
+   Some files are needed for generating the configuration payload.  See these topics in [Prepare Configuration Payload](prepare_configuration_payload.md) if you have not already prepared the information for this system.
+   
+      * [Command Line Configuration Payload](#command_line_configuration_payload)
+      * [Configuration Payload Files](#configuration_payload_files)
+   
+   Pull these files into the current working directory:
+   - `application_node_config.yaml` (optional - see below)
+   - `cabinets.yaml` (optional - see below)
+   - `hmn_connections.json`
+   - `ncn_metadata.csv`
+   - `switch_metadata.csv`
+   - `system_config.yaml` (see below)
+   
+   > The optional `application_node_config.yaml` file may be provided for further defining of settings relating to how application nodes will appear in HSM for roles and subroles.  See [Create Application Node YAML](create_application_node_config_yaml.md)
+   
+   > The optional `cabinets.yaml` file allows cabinet naming and numbering as well as some VLAN overrides. See [Create Cabinets YAML](create_cabinets_yaml.md).
+   
+   > The `system_config.yaml` is required for a reinstall, since it was created during a previous install.  For a first time install, the information in it can be provided as command line arguments to `csi config init`.
+   
+   
+   1. Change into the preparation directory:
+   
+      ```bash
+      linux# mkdir -pv /var/www/ephemeral/prep
+      linux# cd /var/www/ephemeral/prep
+      ```
+   
+      After gathering the files into this working directory, generate your configs:
+   
+   1. If doing a reinstall and have the `system_config.yaml` parameter file avail available, then generate the system configuration reusing this parameter file (see [avoiding parameters](../background/cray_site_init_files.md#save-file--avoiding-parameters)).
+   
+      If not doing a reinstall of Shasta software, then the `system_config.yaml` file will not be available, so skip the rest of this step.
+   
+      The needed files should be in the current directory.
+   
+      ```bash
+      linux# ls -1
+      ```
+   
+      Expected output looks similar to the following:
+   
+      ```
+      application_node_config.yaml
+      cabinets.yaml
+      hmn_connections.json
+      ncn_metadata.csv
+      switch_metadata.csv
+      system_config.yaml
+      ```
+   
+      Set an environment variable so this system name can be used in later commands.
+   
+      ```bash
+      linux# export SYSTEM_NAME=eniac
+      ```
+   
+      Generate the system configuration.
+   
+      ```bash
+      linux# csi config init
+      ```
+   
+      A new directory matching your `--system-name` argument will now exist in your working directory.
+   
+      Skip the next step to apply the csi-config workarounds.
+   
+   1. If doing a first time install or the `system_config.yaml` parameter file for a reinstall is not available, generate the system configuration.
+   
+      If doing a first time install, this step is required.  If you did the previous step as part of a reinstall, skip this.
+   
+      The needed files should be in the current directory.
+   
+      ```bash
+      linux# ls -1
+      ```
+   
+      Expected output looks similar to the following:
+   
+      ```
+      application_node_config.yaml
+      cabinets.yaml
+      hmn_connections.json
+      ncn_metadata.csv
+      switch_metadata.csv
+      ```
+   
+      Set an environment variable so this system name can be used in later commands.
+   
+      ```bash
+      linux# export SYSTEM_NAME=eniac
+      ```
+   
+      Generate the system configuration.  See below for an explanation of the command line parameters and some common settings.
+   
+      ```bash
+      linux# csi config init \
+          --bootstrap-ncn-bmc-user root \
+          --bootstrap-ncn-bmc-pass changeme \
+          --system-name ${SYSTEM_NAME}  \
+          --mountain-cabinets 4 \
+          --starting-mountain-cabinet 1000 \
+          --hill-cabinets 0 \
+          --river-cabinets 1 \
+          --can-cidr 10.103.11.0/24 \
+          --can-external-dns 10.103.11.113 \
+          --can-gateway 10.103.11.1 \
+          --can-static-pool 10.103.11.112/28 \
+          --can-dynamic-pool 10.103.11.128/25 \
+          --nmn-cidr 10.252.0.0/17 \
+          --hmn-cidr 10.254.0.0/17 \
+          --ntp-pool time.nist.gov \
+          --site-domain dev.cray.com \
+          --site-ip 172.30.53.79/20 \
+          --site-gw 172.30.48.1 \
+          --site-nic p1p2 \
+          --site-dns 172.30.84.40 \
+          --install-ncn-bond-members p1p1,p10p1 \
+          --application-node-config-yaml application_node_config.yaml \
+          --cabinets-yaml cabinets.yaml \
+          --hmn-mtn-cidr 10.104.0.0/17 \
+          --nmn-mtn-cidr 10.100.0.0/17
+      ```
+   
+      A new directory matching your `--system-name` argument will now exist in your working directory.
+   
+      > After generating a configuration, particularly when upgrading from Shasta v1.3 a visual audit of the generated files for network data should be performed.  Specifically, the <systemname>/networks/HMN_MTN.yaml and <systemname>/networks/NMN_MTN.yaml files should be viewed to ensure that cabinet names, subnets and VLANs have been preserved for an upgrade to Shasta v1.4.  Failure of these parameters to match will likely mean a re-installation or reprogramming of CDU switches and CMM VLANs.
+   
+      Run the command "csi config init --help" to get more information about the parameters mentioned in the example command above and others which are available.
+   
+      Notes about parameters to "csi config init":
+      * The application_node_config.yaml file is optional, but if you have one describing the mapping between prefixes in hmn_connections.csv that should be mapped to HSM subroles, you need to include a command line option to have it used.  See [Create Application Node YAML](create_application_node_config_yaml.md).
+      * The bootstrap-ncn-bmc-user and bootstrap-ncn-bmc-pass must match what is used for the BMC account and its password for the management NCNs.
+      * Set site parameters (site-domain, site-ip, site-gw, site-nic, site-dns) for the information which connects the ncn-m001 (PIT) node to the site.  The site-nic is the interface on this node connected to the site.
+      * There are other interfaces possible, but the install-ncn-bond-members are typically:
+         * p1p1,p10p1 for HPE nodes
+         * p1p1,p1p2 for Gigabyte nodes
+         * p801p1,p801p2 for Intel nodes
+      * Set the three cabinet parameters (mountain-cabinets, hill-cabinets, and river-cabinets) to the number of each cabinet which are part of this system.
+      * The starting cabinet number for each type of cabinet (for example, starting-mountain-cabinet) has a default that can be overridden.  See the "csi config init --help"
+      * For systems that use non-sequential cabinet id numbers, use cabinets-yaml to include the cabinets.yaml file.  This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to explicitly specify the id of every cabinet in the system.  See [Create Cabinets YAML](create_cabinets_yaml.md).
+      * An override to default cabinet IPv4 subnets can be made with the hmn-mtn-cidr and nmn-mtn-cidr parameters.
+      * Several parameters (can-gateway, can-cidr, can-static-pool, can-dynamic-pool) describe the CAN (Customer Access network).  The can-gateway is the common gateway IP used for both spine switches and commonly referred to as the Virtual IP for the CAN.  The can-cidr is the IP subnet for the CAN assigned to this system. The can-static-pool and can-dynamic-pool are the MetalLB address static and dynamic pools for the CAN. The can-external-dns is the static IP assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded.   The can-external-dns IP must be within the can-static-pool range.
+      * Set ntp-pool to a reachable NTP server
+   
+      These warnings from "csi config init" for issues in hmn_connections.json can be ignored.
+      * The node with the external connection (ncn-m001) will have a warning similar to this because its BMC is connected to the site and not the HMN like the other management NCNs.  It can be ignored.
+   
+         ```
+         "Couldn't find switch port for NCN: x3000c0s1b0"
+         ```
+   
+      * An unexpected component may have this message.  If this component is an application node with an unusual prefix, it should be added to the application_node_config.yaml file and then rerun "csi config init".   See the procedure to [Create Application Node Config YAML](create_application_node_config_yaml.md)
+   
+         ```json
+         {"level":"warn","ts":1610405168.8705149,"msg":"Found unknown source prefix! If this is expected to be an Application node, please update application_node_config.yaml","row":
+         {"Source":"gateway01","SourceRack":"x3000","SourceLocation":"u33","DestinationRack":"x3002","DestinationLocation":"u48","DestinationPort":"j29"}}
+         ```
+   
+      * If a cooling door is found in hmn_connections.json, there may be a message like the following. It can be safely ignored.
+   
+         ```json
+         {"level":"warn","ts":1612552159.2962296,"msg":"Cooling door found, but xname does not yet exist for cooling doors!","row":
+         {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
+         ```
+   
+      Continue with the next step to apply the csi-config workarounds.
 
 1. Check for workarounds in the `/opt/cray/csm/workarounds/csi-config` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
 

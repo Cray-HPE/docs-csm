@@ -91,7 +91,6 @@ The chapters with topics which need to be done as part of an ordered procedure a
    * [Changing Passwords and Credentials](operations/changing_passwords_and_credentials.md)
    * [Managing Configuration with CFS](operations/managing_configuration_with_CFS.md)
    * [UAS/UAI Admin and User Guide](operations/500-UAS-UAI-ADMIN-AND-USER-GUIDE.md)
-   * [Replacing NCN hardware](operations/replacing_ncn_hardware.md)
    * [Accessing LiveCD USB Device After Reboot](operations/accessing_livecd_usb_device_after_reboot.md)
    * [Update SLS with UAN Aliases](operations/update_sls_with_uan_aliases.md)
    * [Configure NTP on NCNs](operations/configure_ntp_on_ncns.md)

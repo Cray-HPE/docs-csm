@@ -6,7 +6,7 @@ This is an procedure that only applies to the LiveCD USB device after the PIT no
 
 After deploying the LiveCD's NCN, the LiveCD USB itself is unharmed and available to an administrator.
 
-Mount and view the USB stick:
+Mount and view the USB device:
 
 ```bash
 ncn-m001# mkdir -pv /mnt/{cow,pitdata}
@@ -46,7 +46,7 @@ drwxr-xr-x  5 root root        4096 Feb  3 04:20 /mnt/pitdata/prep
 drwxr-xr-x  2 root root        4096 Jan 28 16:07 /mnt/pitdata/static
 ```
 
-When removing the USB stick, please unmount it first to avoid corruption. This corruption risk is low, but varies if large data use was done to or on the USB.
+When removing the USB device, please unmount it first to avoid corruption. This corruption risk is low, but varies if large data use was done to or on the USB.
 
 ```bash
 ncn-m001# umount /mnt/cow /mnt/pitdata

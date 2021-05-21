@@ -184,7 +184,7 @@ compute node and application node firmware.
    <a name="bios-and-bmc-firmware-version-reference"></a>
    #### BIOS and BMC Firmware Version Reference
 
-   | CRAY Node Type | Manufacturer | Board Product | Device Type | Version | Downgrade (Y/n)? | LiveCD Location |
+   | Node Type | Manufacturer | Board Product | Device Type | Version | Downgrade (Y/n)? | LiveCD Location |
    | :---: | :---: | :--- | :---: | ---: | :---: | :--- |
    | NCN | Gigabyte | MZ32-AR0 | BIOS | 21.00.00 | `YES` |`http://pit/fw/river/gb/sh-svr-1264up-bios/bios/RBU/image.RBU`
    | NCN | Gigabyte | MZ32-AR0 | BMC | 12.84.09 | `YES` |`http://pit/fw/river/gb/sh-svr-1264up-bios/bmc/fw/128409.bin`

@@ -46,7 +46,7 @@ Required Platform Services:
 > 
 > - Rebooting a remoteISO will dump all running changes on the `pit` node; USBs are accessible after the install
 > 
-> - The NCN **will never wipe a USB stick** during installation
+> - The NCN **will never wipe a USB device** during installation
 > 
 > - Learning the CAN IPs of the other NCNs will be a benefit if troubleshooting is required 
 > 
@@ -187,7 +187,7 @@ data so run them only when indicated. Instructions are in the `README` files.
         
 1. Upload the bootstrap information; note this denotes information that should always be kept together in order to fresh-install the system again.
 
-    > **`NOTE`** This is important for installations using the RemoteISO (not USB stick). For USBs, this is recommended as to remove 
+    > **`NOTE`** This is important for installations using the RemoteISO (not USB device). For USBs, this is recommended as to remove 
     > the need for safekeeping the USB.
    
     - **Option 1**: Copy to ncn-m002 and ncn-m003
@@ -275,13 +275,13 @@ data so run them only when indicated. Instructions are in the `README` files.
     > Keep this terminal active as it will enable `kubectl` commands during the bring-up of the new NCN.
     If the reboot successfully deploys the LiveCD, this terminal can be exited.
     
-    > **POINT OF NO RETURN** The next step will wipe the underlying nodes disks clean, it will ignore USB sticks. RemoteISOs are at risk here, even though a backup has been
+    > **POINT OF NO RETURN** The next step will wipe the underlying nodes disks clean, it will ignore USB devices. RemoteISOs are at risk here, even though a backup has been
     > performed of the pit node we can't simply boot back to the same state.
     > This is the last step before rebooting the node.
 
 1. **`IN-PLACE WAR`** This is a WAR until the auto-wipe feature ceases preventing the creation of the 3rd disk (CASMINST-169. This step is safe to do even after auto-wipe is fixed.
    
-    > **`WARNING : USER ERROR`** Do not assume to wipe the first three disks (e.g. `sda, sdb, and sdc`), they float and are not pinned to any physical disk layout. **Choosing the wrong ones may result in wiping the USB stick**, the USB stick can only be wiped by operators at this point in the install. The USB sticks are never wiped by the CSM installer.
+    > **`WARNING : USER ERROR`** Do not assume to wipe the first three disks (e.g. `sda, sdb, and sdc`), they float and are not pinned to any physical disk layout. **Choosing the wrong ones may result in wiping the USB device**, the USB device can only be wiped by operators at this point in the install. The USB device are never wiped by the CSM installer.
 
     1. Select disks to wipe; SATA/NVME/SAS
 
@@ -445,7 +445,7 @@ data so run them only when indicated. Instructions are in the `README` files.
     
 1. Now check for workarounds in the `/opt/cray/csm/workarounds/livecd-post-reboot` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
     
-    **Note:** The following command assumes that the data partition of the USB stick has been remounted at /mnt/pitdata
+    **Note:** The following command assumes that the data partition of the USB device has been remounted at /mnt/pitdata
     
     ```bash
     # Example

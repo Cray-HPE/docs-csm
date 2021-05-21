@@ -14,12 +14,12 @@ Setup a re-install of LiveCD on a node using the previous configuration.
     pit# umount /var/www/ephemeral
     ``` 
 
-1. Unplug the USB stick.
+1. Unplug the USB device.
 
-   The USB stick should now contain all the information already loaded, as well as the backups of
+   The USB device should now contain all the information already loaded, as well as the backups of
    the initialized files.
 
-1. Plug the stick into a new machine, or make a backup on the booted NCN. Make a snapshot of the USB stick.
+1. Plug the device into a new machine, or make a backup on the booted NCN. Make a snapshot of the USB device.
 
     ```bash
     mylinuxpc> mount /dev/disk/by-label/PITDATA /mnt
@@ -36,7 +36,7 @@ The new tar.gz file can be stored anywhere, and can be used to reinitialize the 
 the directions in [bootstrap_livecd_usb.md](bootstrap_livecd_usb.md) and then return here and move onto the
 next step.
 
-1. Delete the existing content on the USB stick and create a new LiveCD on that same USB.
+1. Delete the existing content on the USB device and create a new LiveCD on that same USB device.
 
    Once the install-data partition is created, it can be remounted and can be used to restore the backup.
 
@@ -54,9 +54,9 @@ next step.
    * `/mnt/var/www/ephemeral/k8s/`
    * `/mnt/var/www/ephemeral/ceph/`
 
-1. Attach the USB to a Cray non-compute node and reboot into the USB stick.
+1. Attach the USB to a Cray non-compute node and reboot into the USB device.
 
-1. Once booted into the USB stick, restore network configuration, dnsmasq, and ensure the pods are started.
+1. Once booted into the USB device, restore network configuration, dnsmasq, and ensure the pods are started.
 
    > STOP AND INSPECT ANY FAILURE IN ANY OF THESE COMMANDS
 

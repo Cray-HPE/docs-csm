@@ -6,7 +6,7 @@ cray-conman starts, then HSM is unaware of them and so is cray-conman.
 
 Verify that all nodes are being monitored for console logging and connect to them if desired.
 
-Refer to "About the ConMan Containerized Service" in the _HPE Cray EX System Administration Guide S-8001_
+Refer to "About the ConMan Containerized Service" in the _HPE Cray EX System Administration Guide 1.5 S-8001_
 for more information about these topics.
 
    * Access Compute Node Logs Using ConMan

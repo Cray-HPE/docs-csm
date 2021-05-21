@@ -15,18 +15,8 @@ Some of the installation instructions require updating files in JSON, YAML, or T
 <a name="typographic-conventions"></a>
 # Typographic Conventions
 
-TODO how do we handle these conventions from S-8000?
-
-Monospace Indicates program code, reserved words, library functions, command-line prompts,
+`This style` indicates program code, reserved words, library functions, command-line prompts,
 screen output, file/path names, and other software constructs.
-
-Monospaced Bold Indicates commands that must be entered on a command line or in response to an
-interactive prompt.
-
-Oblique or Italics Indicates user-supplied values in commands or syntax definitions.
-
-Proportional Bold Indicates a GUI Window, GUI element, cascading menu (Ctrl→Alt→Delete), or
-key strokes (press Enter).
 
 \ (backslash) At the end of a command line, indicates the Linux shell line continuation character
 (lines joined by a backslash are parsed as a single line).
@@ -34,9 +24,7 @@ key strokes (press Enter).
 <a name="annotations"></a>
 # Annotations
 
-TODO Thes annotations need review.  Not consistently applied.  Confusing for customers who asked why we include any INTERNAL USE things in customer documentation.  These could be revised to show examples with the INTERNAL USE data.  Lots of confusion about AIRGAP/OFFLINE USE and ONLINE.
-
-This repository may change annotations, for now under the MarkDown governance these are the available annotations.
+This repository may change annotations, for now, under the MarkDown governance these are the available annotations.
 
 **You must use these to denote the right steps to the right audience.**
 
@@ -54,7 +42,7 @@ This tag should be used to highlight anything that an internal user should ignor
 > **`INTERNAL USE`** 
 
 This tag should be used before any block of instruction or text that is only usable or recommended for 
-internal HPE CRAY systems.
+internal HPE Cray systems.
 
 External (GitHub or customer) should disregard these annotated blocks - they maybe contain useful
 information as an example but are not intended for their use.
@@ -184,7 +172,7 @@ Example of prompts as they appear in this publication:
 
 Enter "setup" mode for the switch make and model, for example:
 ```bash
-remote# ssh sw-leaf-001
+remote# ssh admin@sw-leaf-001
 sw-leaf-001>  enable
 sw-leaf-001#  configure terminal
 sw-leaf-001(conf)# 

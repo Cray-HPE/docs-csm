@@ -25,7 +25,6 @@ the number of storage and worker nodes.
       1. [Tokens and IPMI Password](#tokens-and-ipmi-password)
       1. [Apply NCN Pre-Boot Workarounds](#apply-ncn-pre-boot-workarounds)
       1. [Ensure Time Is Accurate Before Deploying NCNs](#ensure-time-is-accurate-before-deploying-ncns)
-      1. TODO include 304-NCN-PCIE-NET-BOOT-AND-RE-CABLE.md Guide : Netboot an NCN from a Spine
    1. [Update Management Node Firmware](#update_management_node_firmware)
    1. [Deploy Management Nodes](#deploy_management_nodes)
       1. [Deploy Workflow](#deploy-workflow)
@@ -248,7 +247,7 @@ during or after the installation, but it is better to meet the minimum NCN firmw
    | Intel® Virtualization Technology (e.g. VT-x, VT) and AMD Virtualization Technology (e.g. AMD-V)| `Enabled` | Enables Virtual Machine extensions. | Within the Processor or the PCH Menu.
    | PXE Retry Count | 1 or 2 (default: 1) | Attempts done on a single boot-menu option (note: 2 should be set for systems with unsolved network congestion). | Within the Networking Menu, and then under Network Boot.
 
-   > **`NOTE`** **PCIe** options can be found in [PCIe : Setting Expected Values](304-NCN-PCIE-NET-BOOT-AND-RE-CABLE.md#setting-expected-values).
+   > **`NOTE`** **PCIe** options can be found in [PCIe : Setting Expected Values](switch_pxe_boot_from_onboard_nic_to_pcie.md#setting-expected-values).
 
 1. Check for minimum NCN firmware versions and update them as needed, 
    The firmware on the management nodes should be checked for compliance with the minimum version required

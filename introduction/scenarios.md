@@ -54,9 +54,9 @@ or a reinstall..
 <a name="upgrade"></a>
 ## Upgrade
 
-   An upgrade from the previous release Shasta v1.4.x is supported.
+   An upgrade from the previous release, Shasta v1.4.2, to Shasta v1.5 is supported.
 
-   See [Upgrade from 1.4.x to v1.5](../upgrade/index.md).
+   See [Upgrade CSM](../upgrade/index.md).
 
 <a name="migration"></a>
 ## Migration

@@ -1,7 +1,7 @@
-# Guide : Netboot an NCN from a Spine
+# Switch PXE Boot from Onboard NIC to PCIe
 
-This page details how to migrate NCNs from depending on their onboard NICs for PXE booting, and booting
-over the spine switches.
+This page details how to migrate NCNs from using their onboard NICs for PXE booting to booting
+over the PCIe cards.
 
 * [Enabling UEFI PXE Mode](#enabling-uefi-pxe-mode) 
     * [Mellanox](#mellanox) 
@@ -20,8 +20,8 @@ This presents a need for migration for systems still using the legacy, preview t
 systems with onboard connections to their leaf switches and NCNs need to disable/remove that connection.
 
 This onboard NCN port came from before spine-switches were added to the shasta-network topology. The onboard connection
-  was responsible for every network (MTL/NMN/HMN/CAN) and was the sole driver of PXE booting for. Now, NCNs use bond interfaces and spine switches for those networks,
-   however some older systems still have this legacy connection to their leaf switches and solely use it for PXE booting. This NIC is not used during runtime, and NCNs in this state should enable PXE within their PCIe devices' OpROMs and disable/remove this onboard connection.
+was responsible for every network (MTL/NMN/HMN/CAN) and was the sole driver of PXE booting for. Now, NCNs use bond interfaces and spine switches for those networks,
+however some older systems still have this legacy connection to their leaf switches and solely use it for PXE booting. This NIC is not used during runtime, and NCNs in this state should enable PXE within their PCIe devices' OpROMs and disable/remove this onboard connection.
 
 <a name="enabling-uefi-pxe-mode"></a>
 ## Enabling UEFI PXE Mode

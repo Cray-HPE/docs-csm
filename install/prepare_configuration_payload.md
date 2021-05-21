@@ -30,6 +30,8 @@ to the procedure [Bootstrap PIT Node](index.md#bootstrap_pit_node)
 The air-cooled cabinet is known to `csi` as a `river` cabinet.  The liquid-cooled cabinets are either
 `mountain` or `hill` (if a TDS system).
 
+For more description of these settings and the default values, see [[Default IP Address Ranges](../introduction/csm_overview.md#default_ip_address_ranges) and the other topics in [CSM Overview](../introduction/csm_overview.md)
+
 | CSI option | Information |
 | --- | --- |
 | --bootstrap-ncn-bmc-user root | Administrative account for the management node BMCs |
@@ -281,7 +283,7 @@ x3000c0h38s1,Spine,Aruba
 
    Unless your system does not use or does not have onboard NICs on the management nodes, then these topics
    will be necessary before constructing the `ncn_metadata.csv` file.
-      1. [Enabling Network Boots over Spine Switches](304-NCN-PCIE-NET-BOOT-AND-RE-CABLE.md)
+      1. [Switch PXE Boot from Onboard NIC to PCIe](switch_pxe_boot_from_onboard_nic_to_pcie.md)
       
       The following two topics will assist with creating `ncn_metadata.csv`.
       
