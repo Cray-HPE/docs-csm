@@ -74,7 +74,7 @@ thereby enabling those compute nodes to access the gateway, user access services
 
 A site may create other networks as well, but it is only the supported network that is served by those devices.
 
-TODO Insert image from S-8000 Figure 1. Management Network connections - HPE Cray EX System
+![Management Network connections - HPE Cray EX System](../img/Management_Network_Connections_Liquid_Cooled.png)
 
 <a name="default_ip_address_ranges"></a>
 ## 2. Default IP Address Ranges
