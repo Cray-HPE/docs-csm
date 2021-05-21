@@ -190,15 +190,16 @@ data so run them only when indicated. Instructions are in the `README` files.
     > **`NOTE`** This is important for installations using the RemoteISO (not USB stick). For USBs, this is recommended as to remove 
     > the need for safekeeping the USB.
    
-    - **Option 1**: Copy to ncn-m002
+    - **Option 1**: Copy to ncn-m002 and ncn-m003
         
-        1. Login; setup passwordless SSH _to_ the pit node by copying ONLY the public key from `ncn-m002` to the `pit` (**do not setup passwordless SSH _from_ the PIT** or the key will have to be securely tracked or expunged if using a USB installation).
+        1. Login; setup passwordless SSH _to_ the pit node by copying ONLY the public keys from `ncn-m002` and `ncn-m003` to the `pit` (**do not setup passwordless SSH _from_ the PIT** or the key will have to be securely tracked or expunged if using a USB installation).
         
             ```bash
             pit# CSM_RELEASE=$(basename $(ls -d /var/www/ephemeral/csm*/ | head -n 1))
             
-            # this will prompt for a password:
+            # these will prompt for a password:
             pit# ssh ncn-m002 cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
+            pit# ssh ncn-m003 cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
             ```
         
         1. Run this to create the backup; in one swoop, login to m002 and pull the files off the pit. _This runs `rsync` with specific parameters; `partial`, `non-verbose`, and `progress`._
@@ -210,7 +211,12 @@ data so run them only when indicated. Instructions are in the `README` files.
             pit# ssh ncn-m002 CSM_RELEASE=$(basename $(ls -d /var/www/ephemeral/csm*/ | head -n 1)) \
             'mkdir -pv /metal/bootstrap
             rsync -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -rltD -P --delete pit.nmn:/var/www/ephemeral/prep /metal/bootstrap/
-            rsync -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -rltD -P --delete pit.nmn:/var/www/ephemeral/${CSM_RELEASE} /metal/bootstrap/'
+            ```
+
+            ```bash
+            pit# ssh ncn-m003 CSM_RELEASE=$(basename $(ls -d /var/www/ephemeral/csm*/ | head -n 1)) \
+            'mkdir -pv /metal/bootstrap
+            rsync -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -rltD -P --delete pit.nmn:/var/www/ephemeral/prep /metal/bootstrap/
             ```
         
         1. Handoff prep and CSM backups are done; the administrator or CI/CD agent can move onto the next step.
