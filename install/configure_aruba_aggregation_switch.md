@@ -14,7 +14,7 @@ Requirements:
 
 Here is an example snippet from a Agg switch on the SHCD.
 
-![Agg-SHCD](../img/network/AGG-SHCD.png)
+![Example Aggregation Connections in SHCD](../img/network/AGG-SHCD.png)
 
 ## VSX Config
 

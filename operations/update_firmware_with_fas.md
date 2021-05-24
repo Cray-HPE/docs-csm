@@ -4,8 +4,6 @@ The Firmware Action Service (FAS) provides an interface for managing firmware ve
 hardware in the system. FAS interacts with the Hardware State Manager (HSM), device data, and image data in
 order to update firmware.
 
-TODO CASMINST-2225
-
 ### Topics:
    * [Prerequisites](#prerequisites)
    * [Current Capabilities as of Shasta Release v1.4](#current-capabilities)

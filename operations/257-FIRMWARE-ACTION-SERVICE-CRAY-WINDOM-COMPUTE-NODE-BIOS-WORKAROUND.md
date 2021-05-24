@@ -1,6 +1,5 @@
 # Compute Node BIOS workaround for `WNC-rome` aka `HPE CRAY EX425`
 
-TODO Revised this topic to fit into update_firmware_with_fas.md
 
 ## Problem Identification
 The following conditions must be true in order to qualify for this problem:

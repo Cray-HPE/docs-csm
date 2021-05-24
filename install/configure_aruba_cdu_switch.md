@@ -11,9 +11,9 @@ Requirements:
     - Three connections between the switches, two of these are used for the ISL (Inter switch link) and one used for the keepalive.
     - The ISL uses 100GB ports and the keepalive uses a 10GB port.
 
-![CDU-Wiring](../img/network/CDU-Wiring.png)
+![Diagram of CDU Wiring to Upstream Switch](../img/network/CDU-Wiring.png)
 
-Here are example snippets from a CDU switch on the SHCD.
+Here are example snippets from a CDU switch in the SHCD.
 
 The uplinks are port 51 and 52 on both CDU switches.  These go to sw-100g01 and sw-100g2 which are spine 1 and 2. 
 
@@ -23,7 +23,7 @@ The Keepalive is port 48.
 
 Note: These are examples only, your installation and cabling may vary. 
 
-![CDU-SHCD](../img/network/CDU-SHCD.png)
+![Example CDU Connections in SHCD](../img/network/CDU-SHCD.png)
 
 It is assumed that you have connectivity to the switch and the [Base Config](402-MGMT-NET-BASE-CONFIG.md) has been applied.
 ## VSX Config
@@ -255,7 +255,7 @@ This is an example of a system with 3 cabinets.
 Below is the output of an SHCD, the components in the x1000 cabinet would get their own NMN and HMN VLAN and components in the x1001 would also get their own NMN and HMN VLAN.
 The CECs will be on the HMN VLAN of that cabinet.
 
-![CDU-Wiring](../img/network/CDU-CMM.png)
+![Example CDU Connections to CMM in SHCD](../img/network/CDU-CMM-SHCD.png)
 
 Once you have all this information you can now configure the VLANs on the switches. 
 

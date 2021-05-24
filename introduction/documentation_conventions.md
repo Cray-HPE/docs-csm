@@ -30,30 +30,17 @@ This repository may change annotations, for now, under the MarkDown governance t
 
 These are context clues for steps, if they contain these, and you are not in that context you ought to skip them.
 
-> **`AIRGAP/OFFLINE USE`**
-
-This tag should preface any block that is for offline install steps or procedures, where there is 
-no online/internet connection.
-
 > **`EXTERNAL USE`** 
 
-This tag should be used to highlight anything that an internal user should ignore or skip.
+This tag should be used to highlight anything that an HPE Cray  internal user should ignore or skip.
 
 > **`INTERNAL USE`** 
 
-This tag should be used before any block of instruction or text that is only usable or recommended for 
+This tag is used before any block of instruction or text that is only usable or recommended for 
 internal HPE Cray systems.
 
 External (GitHub or customer) should disregard these annotated blocks - they maybe contain useful
 information as an example but are not intended for their use.
-
-> **`PREFERRED`** 
-
-This is the preferred path, but if not possible, there will be a MANUAL section which can be done instead
-
-> **`MANUAL`** 
-
-This is a manual path that can be taken if the PREFERRED section is not possible in the given context.
 
 <a name="command-prompt-conventions"></a>
 # Command Prompt Conventions

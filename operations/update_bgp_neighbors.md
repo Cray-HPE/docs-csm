@@ -1,22 +1,18 @@
 # Update BGP Neighbors
 
-TODO clean up for this new location and fix title
-TODO Split content so only the Update procedure is here.  The Verify/check procedure should be part of CSM Health Checks
-
-
-# Verify and Update BGP neighbors
-
 This page will detail how to manually configure and verify BGP neighbors on the management switches.
 
-- You will not have BGP peers until ```install.sh``` is ran.  This is where MetalLB is deployed.
+You will not have BGP peers until CSM ```install.sh``` has run.  This is where MetalLB is deployed.
+
 - How do I check the status of the BGP neighbors?
-- Log into the spine switches and run `show bgp ipv4 unicast summary` for Aruba/HPE switches and `show ip bgp summary` for Mellanox.
-- Are my Neighbors stuck in IDLE? running `clear ip bgp all` on the mellanox and `clear bgp *` on the Arubas will restart the BGP process, this process may need to be done when a system is reinstalled.  If only some neighbors are showing `ESTABLISHED` you may need to run the command multiple times for all the BGP peers to come up. 
-- If you cannot get the neighbors out of IDLE, make sure that passive neighbors are configured.  This is in the automated scripts and shown in the example below.  Passive neighbors should only be configured on NCN neighbors not the switch to switch neighbors (Aruba Only)
+  - Log into the spine switches and run `show bgp ipv4 unicast summary` for Aruba/HPE switches and `show ip bgp summary` for Mellanox.
+- Are my Neighbors stuck in IDLE?
+  -  Running `clear ip bgp all` on the mellanox and `clear bgp *` on the Arubas will restart the BGP process, this process may need to be done when a system is reinstalled.  If only some neighbors are showing `ESTABLISHED` you may need to run the command multiple times for all the BGP peers to come up. 
+  - If you cannot get the neighbors out of IDLE, make sure that passive neighbors are configured.  This is in the automated scripts and shown in the example below.  Passive neighbors should only be configured on NCN neighbors not the switch to switch neighbors (Aruba Only)
 - The BGP neighbors will be the worker NCN IPs on the NMN (node management network) (VLAN002). If your system is using HPE/Aruba, one of the neighbors will be the other spine switch.
 - On the Aruba/HPE switches properly configured BGP will look like the following.
 
-# Generate MetalLB configmap
+## Generate MetalLB configmap
 - Depending on the network architecture of your system you may need to peer with switches other than the spines.  CSI has a BGP peers argument that accepts 'aggregation' as an option, if no option is defined it will default to the spines as being the MetalLB peers. 
 
 CSI cli arguments with ```--bgp-peers aggregation```
@@ -24,11 +20,12 @@ CSI cli arguments with ```--bgp-peers aggregation```
 linux# ~/src/mtl/cray-site-init/bin/csi config init --bootstrap-ncn-bmc-user root --bootstrap-ncn-bmc-pass initial0 --ntp-pool cfntp-4-1.us.cray.com,cfntp-4-2.us.cray.com --can-external-dns 10.103.8.113 --can-gateway 10.103.8.1 --site-ip 172.30.56.2/24 --site-gw 172.30.48.1 --site-dns 172.30.84.40 --site-nic em1 --system-name odin --bgp-peers aggregation
 ```
 
-# Automated Process
-- There is an automated script to update the BGP configuration on both the Mellanox and Aruba switches.  This script is installed into the `$PATH` by the `metal-net-scripts` package
-- The scripts are named `mellanox_set_bgp_peers.py` and `aruba_set_bgp_peers.py`
-- These scripts pull in data from CSI generated `.yaml` files. The files required are ```CAN.yaml, HMN.yaml, HMNLB.yaml, NMNLB.yaml, NMN.yaml```, these exist in the `networks/` subdirectory of the generated configs.
-- In order for these scripts to work the following commands will need to be present on the switches.
+## Automated Process
+There is an automated script to update the BGP configuration on both the Mellanox and Aruba switches.  This script is installed into the `$PATH` by the `metal-net-scripts` package.
+The scripts are named `mellanox_set_bgp_peers.py` and `aruba_set_bgp_peers.py`
+These scripts pull in data from CSI generated `.yaml` files. The files required are ```CAN.yaml, HMN.yaml, HMNLB.yaml, NMNLB.yaml, NMN.yaml```, these exist in the `networks/` subdirectory of the generated configs.
+
+In order for these scripts to work the following commands will need to be present on the switches.
 
 Aruba
 ```
@@ -50,9 +47,9 @@ USAGE: - <Spine01/Agg01> <Spine02/Agg02> <Path to CSI generated network files>
 
 Example: ./aruba_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/eniac/networks
 ```
-- After this script is run you will need to verify the configuration and verify the BGP peers are ```ESTABLISHED```
+After this script is run you will need to verify the configuration and verify the BGP peers are ```ESTABLISHED```
 
-# Manual Process
+## Manual Process
 
 ```
 sw-spine-001# show bgp ipv4 unicast summary

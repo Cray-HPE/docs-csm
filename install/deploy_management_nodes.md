@@ -49,7 +49,7 @@ Preparation of the environment must be done before attempting to deploy the mana
 <a name="configure-bootstrap-registry-to-proxy-an-upstream-registry"></a>
 #### 1.1 Configure Bootstrap Registry to Proxy an Upstream Registry
 
-> **`INTERNAL USE`** -- This procedure is only relevant for HPE Cray internal systems.
+> **`INTERNAL USE`** -- This procedure to configure a bootstrap registry to proxy to an upstream registry is only relevant for HPE Cray internal systems.
 
 By default, the bootstrap registry is a `type: hosted` Nexus repository to
 support _airgap/offline_ installs, which requires container images to be
@@ -78,8 +78,7 @@ installs as follows:
 1. Add the corresponding URL to the `ExecStartPost` script in
     `/usr/lib/systemd/system/nexus.service`.
     
-    > **`INTERNAL USE`** Cray internal systems may want to proxy to
-    > https://dtr.dev.cray.com as follows:
+    > **`INTERNAL USE`** Cray internal systems may want to proxy to https://dtr.dev.cray.com as follows:
     >
     > ```bash
     > pit# URL=https://dtr.dev.cray.com

@@ -1,7 +1,5 @@
 # FIRMWARE ACTION SERVICE (FAS) | User Procedures
 
-TODO Revised this topic to fit into update_firmware_with_fas.md
-
 ## Prerequisites
 The Cray command line interface (CLI) tool is initialized and configured on the system. Refer to "Configure the Cray Command Line Interface (CLI)" in the _HPE Cray EX System Administration Guide 1.5 S-8001_.
 

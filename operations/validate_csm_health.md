@@ -1,53 +1,92 @@
 # Validate CSM Health
 
-TODO rename sections to fit remap plan and shift content from other areas as needed.
+Anytime after the installation of the CSM services, the health of the management nodes and all CSM services can be validated.
 
-# CSM Install Validation & Health Checks
-This page lists available CSM install and health checks that can be executed to validate the CSM install. They can be run anytime after the install has run to completion, but not before.
-
-1. [Platform Health Checks](#platform-health-checks)
-    1. [ncnHealthChecks](#pet-ncnhealthchecks)
-    1. [ncnPostgresHealthChecks](#pet-ncnpostgreshealthchecks)
-    1. [BGP Peering Status and Reset](#pet-bgp)
-1. [Network Health Checks](#network-health-checks)
-    1. [KEA / DHCP](#net-kea)
-    1. [External DNS](#net-extdns)
-    1. [Spire Agent](#net-spire)
-    1. [Vault Cluster](#net-vault)
-1. [Automated Goss Testing](#automated-goss-testing)
-1. [Hardware Management Services Tests](#hms-tests)
-1. [Cray Management Services Validation Utility](#cms-validation-utility)
-1. [Booting CSM Barebones Image](#booting-csm-barebones-image)
-1. [UAS/UAI Tests](#uas-uai-tests)
-   
 Examples of when you may wish to run them are:
-* after install.sh completes
+* after CSM install.sh completes
 * before and after NCN reboots
 * after the system is brought back up
 * any time there is unexpected behavior observed
-* in order to provide relevant information to support tickets
+* in order to provide relevant information to create support tickets
 
 The areas should be tested in the order they are listed on this page. Errors in an earlier check may cause errors in later checks due to dependencies.
 
-For more details on these validations and health checks, see the admin guide (note to docs team: replace this with a reference to the specific section of the admin guide).
+### Topics: 
+1. [Platform Health Checks](#platform-health-checks)
+   1. [ncnHealthChecks](#pet-ncnhealthchecks)
+   1. [ncnPostgresHealthChecks](#pet-ncnpostgreshealthchecks)
+   1. [BGP Peering Status and Reset](#pet-bgp)
+   1. [Automated Goss Testing](#automated-goss-testing)
+   1. [KEA / DHCP](#net-kea)
+   1. [External DNS](#net-extdns)
+   1. [Spire Agent](#net-spire)
+   1. [Vault Cluster](#net-vault)
+1. [Hardware Management Services Health Checks](#hms-health-checks)
+   1. [Install Latest hms-team rpm](#install-latest-hms-team-rpm)
+   1. [HMS test execution](#hms-test-execution)
+   1. [Hardware State Manager Discovery Validation](#hms-smd-discovery-validation)
+1. [Software Management Services Validation Utility](#sms-health-checks)
+   1. [Install Latest cmsdev rpm](#install-latest-cmsdev-rpm)
+   1. [cmsdev Usage](#cms-usage)
+   1. [Interpreting cmsdev Results](#cmsdev-results)
+   1. [SMS Checks To Run](#sms-checks)
+1. [Booting CSM Barebones Image](#booting-csm-barebones-image)
+   1. [Locate CSM Barebones Image in IMS](#locate-csm-barebones-image-in-ims)
+   1. [Create a BOS Session Template for the CSM Barebones Image](#csm-bos-session-template)
+   1. [Find an available compute node](#csm-node")
+   1. [Reboot the node using your BOS session template](#csm-reboot)
+   1. [Verify console connections](#csm-consoles)
+   1. [Connect to the node's console and watch the boot](#csm-watch-boot)
+1. [UAS/UAI Tests](#uas-uai-tests)
+   1. [Initialize and Authorize the CLI](#uas-uai-init-cli)
+      1. [Stop Using CRAY_CREDENTIALS Service Account Token](#uas-uai-init-cli-stop)
+      1. [Initialize the CLI Configuration](#uas-uai-init-cli-init)
+      1. [Authorize the CLI for Your User](#uas-uai-init-cli-auth)
+      1. [CLI Troubleshooting](#uas-uai-init-cli-debug)
+   1. [Validate UAS and UAI Functionality](#uas-uai-validate)
+      1. [Validate Basic UAS Installation](#uas-uai-validate-install)
+      1. [Validate UAI Creation](#uas-uai-validate-create)
+      1. [UAS/UAI Troubleshooting](#uas-uai-validate-debug)
+         1. [Authorization Issues](#uas-uai-validate-debug-auth)
+         1. [UAS Cannot Access Keycloak](#uas-uai-validate-debug-keycloak)
+         1. [UAI Images not in Registry](#uas-uai-validate-debug-registry)
+         1. [Missing Volumes and Other Container Startup Issues](#uas-uai-validate-debug-container)
+  
+
+## Details
 
 <a name="platform-health-checks"></a>
-## Platform Health Checks
+### 1. Platform Health Checks
 
 Scripts do not verify results. Script output includes analysis needed to determine pass/fail for each check. All health checks are expected to pass.
 Health Check scripts can be run:
-* after install.sh has been run – not before
+* after CSM install.sh has been run – not before
 * before and after one of the NCN's reboot
 * after the system or a single node goes down unexpectedly
 * after the system is gracefully shut down and brought up
 * any time there is unexpected behavior on the system to get a baseline of data for CSM services and components
-* in order to provide relevant information to support tickets that are being opened after install.sh has been run
+* in order to provide relevant information to support tickets that are being opened after CSM install.sh has been run
+
+
+Available Platform Health Checks:
+1. [ncnHealthChecks](#pet-ncnhealthchecks)
+1. [ncnPostgresHealthChecks](#pet-ncnpostgreshealthchecks)
+1. [BGP Peering Status and Reset](#pet-bgp)
+1. [Automated Goss Testing](#automated-goss-testing)
+1. [KEA / DHCP](#net-kea)
+1. [External DNS](#net-extdns)
+1. [Spire Agent](#net-spire)
+1. [Vault Cluster](#net-vault)
+
+<a name="pet-ncnhealthchecks"></a>
+#### 1.1 ncnHealthChecks
 
 Health Check scripts can be found and run on any worker or master node from any directory.
 
-<a name="pet-ncnhealthchecks"></a>
-### ncnHealthChecks
-     ncn# /opt/cray/platform-utils/ncnHealthChecks.sh
+   ```bash
+   ncn# /opt/cray/platform-utils/ncnHealthChecks.sh
+   ```
+
 The ncnHealthChecks script reports the following health information:
 * Kubernetes status for master and worker NCNs
 * Ceph health status
@@ -61,12 +100,18 @@ Execute ncnHealthChecks script and analyze the output of each individual check.
 
 **Note**: The `cray-crus-` pod is expected to be in the Init state until slurm and munge
 are installed. In particular, this will be the case if you are executing this as part of the validation after completing the [Install CSM Services](../install/install_csm_services.md).
-If in doubt, you can validate the CRUS service using the [CMS Validation Tool](#cms-validation-utility). If the CRUS check passes using that tool, you don't need to worry
+If in doubt, you can validate the CRUS service using the [CMS Validation Tool](#sms-health-checks). If the CRUS check passes using that tool, you don't need to worry
 about the `cray-crus-` pod state.
 
 <a name="pet-ncnpostgreshealthchecks"></a>
-### ncnPostgresHealthChecks
-     ncn# /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
+#### 1.2 ncnPostgresHealthChecks
+
+Health Check scripts can be found and run on any worker or master node from any directory.
+
+   ```bash
+   ncn# /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
+   ```
+
 For each postgres cluster the ncnPostgresHealthChecks script determines the leader pod and then reports the status of all postgres pods in the cluster.
 
 Execute ncnPostgresHealthChecks script. Verify leader for each cluster and status of cluster members.
@@ -105,10 +150,10 @@ Errors reported previous to the lock status, such as **ERROR: get_cluster** can 
 Refer to "About Postgres" in the _HPE Cray EX System Administration Guide 1.5 S-8001_.
 
 <a name="pet-bgp"></a>
-### BGP Peering Status and Reset
+#### 1.3 BGP Peering Status and Reset
 Verify that Border Gateway Protocol (BGP) peering sessions are established for each worker node on the system. 
 
-Check the Border Gateway Protocol (BGP) status on the Aruba/Mellanox switches.
+Check the Border Gateway Protocol (BGP) status on the Aruba or Mellanox switches.
 Verify that all sessions are in an **Established** state. If the state of any
 session in the table is **Idle**, reset the BGP sessions.
 
@@ -144,7 +189,7 @@ ncn-m001# ssh admin@10.252.0.2
 * On an Aruba switch, you may see `Please register your products now at: https://asp.arubanetworks.com` after logging in to the switch with ssh. In this case, proceed to the [Aruba steps](#pet-bgp-aruba).
 
 <a name="pet-bgp-mellanox"></a>
-#### Mellanox Switch 
+##### 1.3.1 Mellanox Switch 
 
 1. Enable:
    ```
@@ -197,7 +242,7 @@ ncn-m001# ssh admin@10.252.0.2
 1. Repeat the above **Mellanox** procedure using the second peer-address (10.252.0.3 here)
 
 <a name="pet-bgp-aruba"></a>
-#### Aruba Switch
+#### 1.3.2 Aruba Switch
 
 On an Aruba switch, the prompt may include `sw-spine` or `sw-agg`.
 
@@ -240,11 +285,8 @@ On an Aruba switch, the prompt may include `sw-spine` or `sw-agg`.
 
 1. Repeat the above **Aruba** procedure using the second peer-address (10.252.0.5 in this example)
 
-<a name="network-health-checks"></a>
-## Network Health Checks
-
 <a name="net-kea"></a>
-### Verify that KEA has active DHCP leases
+#### 1.4 Verify that KEA has active DHCP leases
 
 Verify that KEA has active DHCP leases. Right after an fresh install of CSM it is important to verify that KEA is currently handing out DHCP leases on the system. The following commands can be ran on any of the master nodes or worker nodes.
 
@@ -265,7 +307,7 @@ ncn# curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: applicat
 If there is an non-zero amount of DHCP leases for river hardware returned that is a good indication that KEA is working.
 
 <a name="net-extdns"></a>
-### Verify ability to resolve external DNS
+#### 1.5 Verify ability to resolve external DNS
 
 If you have configured unbound to resolve outside hostnames, then the following check should be performed. If you have not done this, then this check may be skipped. 
 
@@ -290,7 +332,7 @@ Exit code is 0
 Verify that the command has exit code 0, reports no errors, and resolves the address.
 
 <a name="net-spire"></a>
-### Verify Spire Agent is Running on Kubernetes NCNs
+#### 1.6 Verify Spire Agent is Running on Kubernetes NCNs
 
 Execute the following command on all Kubernetes NCNs (excluding the PIT):
 
@@ -319,7 +361,7 @@ Known failures and how to recover:
   - The `spire-agent` service may also fail if a NCN was powered off for too long and its tokens expired. If this happens then delete `/root/spire/agent_svid.der`, `/root/spire/bundle.der`, and `/root/spire/data/svid.key` off the NCN before deleting the `request-ncn-join-token` daemonset pod.
 
 <a name="net-vault"></a>
-### Verify the Vault Cluster is Healthy
+#### 1.7 Verify the Vault Cluster is Healthy
 
 Execute the following commands on ```ncn-m002```:
 
@@ -333,7 +375,7 @@ Count: 2, Failed: 0, Skipped: 0
 ```
 
 <a name="automated-goss-testing"></a>
-## Automated Goss Testing
+#### 1.8 Automated Goss Testing
 
 There are multiple [Goss](https://github.com/aelsabbahy/goss) test suites available that cover a variety of sub-systems.
 
@@ -352,7 +394,7 @@ pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
 ```
 
 <a name="autogoss-issues"></a>
-### Known Test Issues
+##### 1.8.1 Known Test Issues
 
 * These tests can only reliably be executed from the PIT node. Should be addressed in a future release.
 * K8S Test: Kubernetes Query BSS Cloud-init for ca-certs
@@ -360,20 +402,24 @@ pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
 * K8S Test: Kubernetes Velero No Failed Backups
   - Due to a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (for example, vault). It may be necessary to use the ```velero``` command to delete backups from a Kubernetes node to clear this situation.
 
-<a name="hms-tests"></a>
-## Hardware Management Services Tests
+<a name="hms-health-checks"></a>
+### 2. Hardware Management Services Health Checks
 
-Execute the HMS smoke and functional tests after the CSM install to confirm that the HMS services are running and operational.
+Execute the HMS smoke and functional tests after the CSM install to confirm that the Hardware Management Services are running and operational.
 
-### CRAY INTERNAL USE ONLY
-The HMS tests are provided by the hms-ct-test-crayctldeploy RPM which comes preinstalled on the NCNs. However, the tests receive frequent updates so it is recommended to check and see if a newer version of the RPM is available for the applicable software installation and if so, to download and install the latest version of the RPM prior to executing the tests. The latest versions of the hms-ct-test-crayctldeploy RPM can be retrieved from car.dev.cray.com in the following locations:
+<a name="install-latest-hms-team-rpm"></a>
+#### 2.1 Install Latest hms-team rpm
+
+**`INTERNAL USE`** Only HPE Cray internal systems have access to this latest rpm of hms-team tests.
+
+The HMS tests are provided by the hms-ct-test-crayctldeploy RPM which comes preinstalled on the NCNs. However, the tests receive frequent updates so it is recommended to check for a newer version of the RPM and if so, to download and install the latest version of the RPM prior to executing the tests. The latest versions of the hms-ct-test-crayctldeploy RPM can be retrieved from car.dev.cray.com in the following locations:
 * Master: [ct-tests/HMS/sle15_sp2_ncn/x86_64/dev/master/hms-team/](http://car.dev.cray.com/artifactory/ct-tests/HMS/sle15_sp2_ncn/x86_64/dev/master/hms-team)
 * 1.5 Release: [ct-tests/HMS/sle15_sp2_ncn/x86_64/release/csm-1.0/hms-team/](http://car.dev.cray.com/artifactory/ct-tests/HMS/sle15_sp2_ncn/x86_64/release/csm-1.0/hms-team/)
 
-Install the RPM on every worker and master NCN (except for ncn-m001 if it is still the PIT node).
+Install the RPM on every worker node and master node (except for ncn-m001 if it is still the PIT node).
 
-<a name="hms-exec"></a>
-### Test Execution
+<a name="hms-test-execution"></a>
+#### 2.2 HMS Test Execution
 
 These tests should be executed as root on at least one worker NCN and one master NCN (but **not** ncn-m001 if it is still the PIT node).
 
@@ -389,79 +435,8 @@ ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-
 ```
 1. Examine the output for errors or failures.
 
-<a name="cms-validation-utility"></a>
-## Cray Management Services Validation Utility
-`/usr/local/bin/cmsdev`
-
-### CRAY INTERNAL USE ONLY
-This tool is included in the `cray-cmstools-crayctldeploy` RPM, which comes preinstalled on the ncns. However, the tool is receiving frequent updates in the run up to the release. Because of this, it is highly recommended to download and install the latest version.
-
-You can get the latest version of the RPM from car.dev.cray.com in the [csm/SCMS/sle15_sp2_ncn/x86_64/release/shasta-1.4/cms-team/](http://car.dev.cray.com/artifactory/webapp/#/artifacts/browse/tree/General/csm/SCMS/sle15_sp2_ncn/x86_64/release/shasta-1.4/cms-team) folder. The [corresponding folder in the master branch](http://car.dev.cray.com/artifactory/webapp/#/artifacts/browse/tree/General/csm/SCMS/sle15_sp2_ncn/x86_64/release/master/cms-team) may have an even more recent version of the tool, which has not yet been synced to the release branch. At this time no changes have been included in the master branch which are not intended to work on the 1.4 release. Install it on every worker and master ncn (except for ncn-m001 if it is still the PIT node).
-
-At the time of this writing there is a bug ([CASMTRIAGE-553](https://connect.us.cray.com/jira/browse/CASMTRIAGE-553)) which causes some git pushes to VCS to hang. Prior to cmsdev version 0.8.21, this would result in the VCS test hanging. Starting in cmsdev version 0.8.21, the test was modified to try to avoid this issue. **If you see the VCS test hang on cmsdev version 0.8.21 or later**, please record this in ([CASMTRIAGE-553](https://connect.us.cray.com/jira/browse/CASMTRIAGE-553)) and include the cmsdev version. If you do see the test hang, stop the test with control-C and re-run it. It may take a few tries but so far it has always eventually executed.
-
-1. [Usage](#cms-usage)
-1. [Interpreting Results](#cms-results)
-1. [Checks To Run](#cms-checks)
-
-<a name="cms-usage"></a>
-### Usage
-`cmsdev test [-q | -v] <shortcut>`
-* The shortcut determines which component will be tested. See the table in the next section for the list of shortcuts.
-* The tool logs to /opt/cray/tests/cmsdev.log
-* The -q (quiet) and -v (verbose) flags can be used to decrease or increase the amount of information sent to the screen.
-  * The same amount of data is written to the log file in either case.
-
-<a name="cms-results"></a>
-#### Interpreting Results
-
-* If a test passes:
-  * The last line of output from the tool reports SUCCESS
-  * The return code is 0.
-* If a test fails:
-  * The last line of output from the tool reports FAILURE
-  * The return code is non-0.
-* Unless the test was run in verbose mode, the log file will contain additional information about the execution.
-* For more detailed information on the tests, please see the CSM Validation section of the admin guide (note to docs writers: replace this with the actual document name and section number/title once available).
-
-<a name="cms-checks"></a>
-### Checks To Run
-
-You should run a check for each of the following services after an install. These should be run on at least one worker ncn and at least one master ncn (but **not** ncn-m001 if it is still the PIT node).
-
-| Services  | Shortcut |
-| ---  | --- |
-| BOS (Boot Orchestration Service) | bos |
-| CFS (Configuration Framework Service) | cfs |
-| ConMan (Console Manager) | conman |
-| CRUS (Compute Rolling Upgrade Service) | crus |
-| IMS (Image Management Service) | ims |
-| iPXE, TFTP (Trivial File Transfer Protocol) | ipxe* |
-| VCS (Version Control Service) | vcs |
-
-\* The ipxe shortcut runs a check of both the iPXE service and the TFTP service.
-
-The following is a convenient way to run all of the tests and see if they passed:
-
-```bash
-ncn# for S in bos cfs conman crus ims ipxe vcs ; do
-    LOG=/root/cmsdev-$S-$(date +"%Y%m%d_%H%M%S").log
-    echo -n "$(date) Starting $S check ... "
-    START=$SECONDS
-    /usr/local/bin/cmsdev test -v $S > $LOG 2>&1
-    rc=$?
-    let DURATION=SECONDS-START
-    if [ $rc -eq 0 ]; then
-        echo "PASSED (duration: $DURATION seconds)"
-    else
-        echo "FAILED (duration: $DURATION seconds)"
-        echo " # See $LOG for details"
-    fi
-done
-```
-
 <a name="hms-smd-discovery-validation"></a>
-## Hardware State Manager Discovery Validation
+### 2.3 Hardware State Manager Discovery Validation
 
 By this point in the installation process the Hardware State Manager should 
 have done it's discovery of the system.
@@ -506,11 +481,91 @@ the output.
 * Chassis Management Controllers (CMC) may show up as not being present in HSM.  CMCs for Intel server blades can be ignored.  Gigabyte server blade CMCs not found in HSM is not normal and should be investigated.   If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored.
 * HPE PDUs are not supported at this time and will likely show up as not being found in HSM.
 * BMCs having no association with a management switch port will be annotated as such, and should be investigated.  Exceptions to this are in Mountain or Hill configurations where mountain BMCs will show this condition on SLS/HSM mismatches, which is normal.
-* In Hill configurations SLS assumes BMCs in chassis 1 and 3 are populated, and in mountain configurations SLS assumes all BMCs are populated.   Any non-populated BMCs will have no HSM data and will show up in the mismatch list.
+* In Hill configurations SLS assumes BMCs in chassis 1 and 3 are populated, and in mountain contifurations SLS assumes all BMCs are populated.   Any non-populated BMCs will have no HSM data and will show up in the mismatch list.
 
+
+<a name="sms-health-checks"></a>
+### 3 Software Management Services Health Checks
+
+The Software Management Services health checks are run using `/usr/local/bin/cmsdev`.
+
+1. [Install Latest cmsdev rpm](#install-latest-cmsdev-rpm)
+1. [cmsdev Usage](#cms-usage)
+1. [Interpreting cmsdev Results](#cmsdev-results)
+1. [SMS Checks To Run](#sms-checks)
+
+<a name="install-latest-cmsdev-rpm-usage"></a>
+#### 3.1 Install Latest cmsdev rpm
+**`INTERNAL USE`** Only HPE Cray internal systems have access to this latest rpm of cmsdev tests.
+
+The cmsdev tool is included in the `cray-cmstools-crayctldeploy` RPM, which comes preinstalled on the ncns. However, the tool is receiving frequent updates so it is recommended to check for a newer version of the RPM and if so, to download and install the latest version.
+
+The latest version of the RPM can be retrieved from car.dev.cray.com in the following locations:
+* Master: [corresponding folder in the master branch](http://car.dev.cray.com/artifactory/webapp/#/artifacts/browse/tree/General/csm/SCMS/sle15_sp2_ncn/x86_64/release/master/cms-team)
+* 1.5 Release: [csm/SCMS/sle15_sp2_ncn/x86_64/release/shasta-1.4/cms-team/](http://car.dev.cray.com/artifactory/webapp/#/artifacts/browse/tree/General/csm/SCMS/sle15_sp2_ncn/x86_64/release/shasta-1.4/cms-team)
+
+Install it on every worker node and master node (except for ncn-m001 if it is still the PIT node).
+
+At the time of this writing there is a bug ([CASMTRIAGE-553](https://connect.us.cray.com/jira/browse/CASMTRIAGE-553)) which causes some git pushes to VCS to hang. Prior to cmsdev version 0.8.21, this would result in the VCS test hanging. Starting in cmsdev version 0.8.21, the test was modified to try to avoid this issue. **If you see the VCS test hang on cmsdev version 0.8.21 or later**, please record this in ([CASMTRIAGE-553](https://connect.us.cray.com/jira/browse/CASMTRIAGE-553)) and include the cmsdev version. If you do see the test hang, stop the test with control-C and re-run it. It may take a few tries but so far it has always eventually executed.
+
+<a name="cmsdev-usage"></a>
+#### 3.2 cmsdev Usage
+`cmsdev test [-q | -v] <shortcut>`
+* The shortcut determines which component will be tested. See the table in the next section for the list of shortcuts.
+* The tool logs to /opt/cray/tests/cmsdev.log
+* The -q (quiet) and -v (verbose) flags can be used to decrease or increase the amount of information sent to the screen.
+  * The same amount of data is written to the log file in either case.
+
+<a name="cmsdev-results"></a>
+##### 3.3 Interpreting cmsdev Results
+
+* If a test passes:
+  * The last line of output from the tool reports SUCCESS
+  * The return code is 0.
+* If a test fails:
+  * The last line of output from the tool reports FAILURE
+  * The return code is non-0.
+* Unless the test was run in verbose mode, the log file will contain additional information about the execution.
+* For more detailed information on the tests, please see the CSM Validation section of the admin guide (note to docs writers: replace this with the actual document name and section number/title once available).
+
+<a name="sms-checks"></a>
+#### 3.4 SMS Checks To Run
+
+You should run a check for each of the following services after an install. These should be run on at least one worker ncn and at least one master ncn (but **not** ncn-m001 if it is still the PIT node).
+
+| Services  | Shortcut |
+| ---  | --- |
+| BOS (Boot Orchestration Service) | bos |
+| CFS (Configuration Framework Service) | cfs |
+| ConMan (Console Manager) | conman |
+| CRUS (Compute Rolling Upgrade Service) | crus |
+| IMS (Image Management Service) | ims |
+| iPXE, TFTP (Trivial File Transfer Protocol) | ipxe* |
+| VCS (Version Control Service) | vcs |
+
+\* The ipxe shortcut runs a check of both the iPXE service and the TFTP service.
+
+The following is a convenient way to run all of the tests and see if they passed:
+
+```bash
+ncn# for S in bos cfs conman crus ims ipxe vcs ; do
+    LOG=/root/cmsdev-$S-$(date +"%Y%m%d_%H%M%S").log
+    echo -n "$(date) Starting $S check ... "
+    START=$SECONDS
+    /usr/local/bin/cmsdev test -v $S > $LOG 2>&1
+    rc=$?
+    let DURATION=SECONDS-START
+    if [ $rc -eq 0 ]; then
+        echo "PASSED (duration: $DURATION seconds)"
+    else
+        echo "FAILED (duration: $DURATION seconds)"
+        echo " # See $LOG for details"
+    fi
+done
+```
 
 <a name="booting-csm-barebones-image"></a>
-## Booting CSM Barebones Image
+### 4. Booting CSM Barebones Image
 
 Included with the Cray System Management (CSM) release is a pre-built node image that can be used
 to validate that core CSM services are available and responding as expected. The CSM barebones
@@ -535,16 +590,15 @@ Cray OS (COS) product stream is also installed on to the system.
 * You will need to use the CLI in order to complete these tasks. If needed, see the
 [Initialize and Authorize the CLI](#uas-uai-init-cli) section.
 ---
+    1. [Locate CSM Barebones Image in IMS](#locate-csm-barebones-image-in-ims)
+    1. [Create a BOS Session Template for the CSM Barebones Image](#csm-bos-session-template)
+    1. [Find an available compute node](#csm-node")
+    1. [Reboot the node using your BOS session template](#csm-reboot)
+    1. [Verify console connections](#csm-consoles)
+    1. [Watch Boot on Console](#csm-watch-boot)
 
-1. [Locate Image in IMS](#csm-ims)
-1. [Create BOS Session Template](#csm-bst)
-1. [Find Compute Node](#csm-node)
-1. [Reboot Node](#csm-reboot)
-1. [Verify Consoles](#csm-consoles)
-1. [Watch Boot on Console](#csm-watch)
-
-<a name="csm-ims"></a>
-### Locate the CSM Barebones Image in IMS
+<a name="locate-csm-barebones-image-in-ims"></a>
+#### 4.1 Locate CSM Barebones Image in IMS
 
 Locate the CSM Barebones image and note the path to the image's manifest.json in S3.
 
@@ -566,8 +620,8 @@ Expected output is similar to the following:
 }
 ```
 
-<a name="csm-bst"></a>
-### Create a BOS Session Template for the CSM Barebones Image
+<a name="csm-bos-session-template"></a>
+#### 4.2 Create a BOS Session Template for the CSM Barebones Image
 
 The session template below can be copied and used as the basis for the BOS Session Template. As noted below, make sure the S3 path for the manifest matches the S3 path shown in IMS.
 
@@ -610,7 +664,7 @@ The session template below can be copied and used as the basis for the BOS Sessi
    ```
 
 <a name="csm-node"></a>
-### Find an available compute node
+#### 4.3 Find an available compute node
 
 ```bash
 ncn# cray hsm state components list --role Compute --enabled true
@@ -649,7 +703,7 @@ ncn# export XNAME=x3000c0s17b2n0
 ```
 
 <a name="csm-reboot"></a>
-### Reboot the node using your BOS session template
+#### 4.4 Reboot the node using your BOS session template
 
 Create a BOS session to reboot the chosen node using the BOS session template that you created:
 ```bash
@@ -673,15 +727,24 @@ rel = "status"
 type = "GET"
 ```
 
+<a name="csm-consoles"></a>
+#### 4.5 Verify console connections
+
+Sometimes the compute nodes and UAN are not up yet when `cray-conman` is initialized, and consequently will
+not be monitored. This is a good time to verify that all nodes are being monitored for console logging
+and re-initialize `cray-conman` if needed.
+
 See [Manage Node Consoles](manage_node_consoles.md)
 
-<a name="csm-watch"></a>
-### Connect to the node's console and watch the boot
+<a name="csm-watch-boot"></a>
+#### 4.6 Connect to the node's console and watch the boot
 
-Access the node's console using the procedure in [Manage Node Consoles](manage_node_consoles.md).
-The boot will fail, but should reach the dracut stage. If the dracut stage is reached, the boot
+Run conman from inside the conman pod to access the console. The boot will fail, but should reach the dracut stage. If the dracut stage is reached, the boot
 can be considered successful and shows that the necessary CSM services needed to boot a node are
 up and available.
+```bash
+cray-conman-b69748645-qtfxj:/ # conman -j x9000c1s7b0n1
+```
 
 The boot is considered successful if the console output ends with something similar to the following:
 ```
@@ -703,29 +766,29 @@ The boot is considered successful if the console output ends with something simi
 ```
 
 <a name="uas-uai-tests"></a>
-## UAS / UAI Tests
+### 5. UAS / UAI Tests
 
-1. [Initialize and Authorize CLI](#uas-uai-init-cli)
-    1. [Stop Using CRAY_CREDENTIALS](#uas-uai-init-cli-stop)
-    1. [Initialize](#uas-uai-init-cli-init)
-    1. [Authorize](#uas-uai-init-cli-auth)
-    1. [Troubleshooting](#uas-uai-init-cli-debug)
-1. [Validate UAS and UAI](#uas-uai-validate)
-    1. [Validate Basic UAS Installation](#uas-uai-validate-install)
-    1. [Validate UAI Creation](#uas-uai-validate-create)
-    1. [Troubleshooting](#uas-uai-validate-debug)
-        1. [Authorization Issues](#uas-uai-validate-debug-auth)
-        1. [Keycloak Issues](#uas-uai-validate-debug-keycloak)
-        1. [Registry Issues](#uas-uai-validate-debug-registry)
-        1. [Missing Volumes and Other Container Startup Issues](#uas-uai-validate-debug-container)
+1. [Initialize and Authorize the CLI](#uas-uai-init-cli)
+   1. [Stop Using CRAY_CREDENTIALS Service Account Token](#uas-uai-init-cli-stop)
+   1. [Initialize the CLI Configuration](#uas-uai-init-cli-init)
+   1. [Authorize the CLI for Your User](#uas-uai-init-cli-auth)
+   1. [CLI Troubleshooting](#uas-uai-init-cli-debug)
+1. [Validate UAS and UAI Functionality](#uas-uai-validate)
+   1. [Validate Basic UAS Installation](#uas-uai-validate-install)
+   1. [Validate UAI Creation](#uas-uai-validate-create)
+   1. [UAS/UAI Troubleshooting](#uas-uai-validate-debug)
+      1. [Authorization Issues](#uas-uai-validate-debug-auth)
+      1. [UAS Cannot Access Keycloak](#uas-uai-validate-debug-keycloak)
+      1. [UAI Images not in Registry](#uas-uai-validate-debug-registry)
+      1. [Missing Volumes and Other Container Startup Issues](#uas-uai-validate-debug-container)
 
 <a name="uas-uai-init-cli"></a>
-### Initialize and Authorize the CLI
+#### 5.1 Initialize and Authorize the CLI
 
 The procedures below use the CLI as an authorized user and run on two separate node types.  The first part runs on the LiveCD node while the second part runs on a non-LiveCD Kubernetes master or worker node.  When using the CLI on either node, the CLI configuration needs to be initialized and the user running the procedure needs to be authorized.  This section describes how to initialize the CLI for use by a user and authorize the CLI as a user to run the procedures on any given node.  The procedures will need to be repeated in both stages of the validation procedure.
 
 <a name="uas-uai-init-cli-stop"></a>
-#### Stop Using the CRAY_CREDENTIALS Service Account Token
+##### 5.1.1 Stop Using the CRAY_CREDENTIALS Service Account Token
 
 Installation procedures leading up to production mode on Shasta use the CLI with a Kubernetes managed service account normally used for internal operations.  There is a procedure for extracting the OAUTH token for this service account and assigning it to the `CRAY_CREDENTIALS` environment variable to permit simple CLI operations.  The UAS / UAI validation procedure runs as a post-installation procedure and requires an actual user with Linux credentials, not this service account. Prior to running any of the steps below you must unset the `CRAY_CREDENTIALS` environment variable:
 
@@ -734,7 +797,7 @@ ncn# unset CRAY_CREDENTIALS
 ```
 
 <a name="uas-uai-init-cli-init"></a>
-#### Initialize the CLI Configuration
+##### 5.1.2 Initialize the CLI Configuration
 
 The CLI needs to know what host to use to obtain authorization and what user is requesting authorization so it can obtain an OAUTH token to talk to the API Gateway.  This is accomplished by initializing the CLI configuration.  In this example, I am using the `vers` username.  In practice, `vers` and the response to the `password: ` prompt should be replaced with the username and password of the administrator running the validation procedure.
 
@@ -780,7 +843,7 @@ ncn# cray config describe
       ```
 
 <a name="uas-uai-init-cli-auth"></a>
-#### Authorize the CLI for Your User
+##### 5.1.3 Authorize the CLI for Your User
 
 If, when you check for an initialized CLI you find it is initialized but authorized for a user different from you, you will want to authorize the CLI for your self.  Do this with the following (remembering to substitute your username and password for `vers`):
 
@@ -791,7 +854,7 @@ ncn# cray auth login
 Verify that the output of the command reports success. You are now authorized to use the CLI.
 
 <a name="uas-uai-init-cli-debug"></a>
-#### Troubleshooting
+##### 5.1.4 CLI Troubleshooting
 
 If initialization or authorization fails in one of the above steps, there are several common causes:
 
@@ -804,12 +867,12 @@ If initialization or authorization fails in one of the above steps, there are se
 While resolving these issues is beyond the scope of this section, you may get clues to what is failing by adding `-vvvvv` to the `cray auth...` or `cray init ...` commands.
 
 <a name="uas-uai-validate"></a>
-### Validate UAS and UAI Functionality
+#### 5.2 Validate UAS and UAI Functionality
 
 The following procedures run on separate nodes of the Shasta system.  They are, therefore, separated into separate sub-sections.
 
 <a name="uas-uai-validate-install"></a>
-#### Validate the Basic UAS Installation
+##### 5.2.1 Validate the Basic UAS Installation
 
 Make sure you are running on the LiveCD node and have initialized and authorized yourself in the CLI as described above.
 
@@ -851,7 +914,7 @@ Make sure you are running on the LiveCD node and have initialized and authorized
    This example output shows that the pre-made end-user UAI image (`cray/cray-uai-sles15sp1:latest`) is registered with UAS. This does not necessarily mean this image is installed in the container image registry, but it is configured for use. If other UAI images have been created and registered, they may also show up here -- that is acceptable.
 
 <a name="uas-uai-validate-create"></a>
-#### Validate UAI Creation
+##### 5.2.2 Validate UAI Creation
 
 This procedure must run on a master or worker node (and not `ncn-w001`) on the Shasta system (or from an external host, but the procedure for that is not covered here).  It requires that the CLI be initialized and authorized as you.
 
@@ -941,12 +1004,12 @@ In this procedure, we will show the steps being run on `ncn-w003`
 If you got this far with similar results, then the basic functionality of the UAS and UAI is working.
 
 <a name="uas-uai-validate-debug"></a>
-#### Troubleshooting
+##### 5.2.3 UAS/UAI Troubleshooting
 
 Here are some common failure modes seen with UAS / UAI operations and how to resolve them.
 
 <a name="uas-uai-validate-debug-auth"></a>
-##### Authorization Issues
+###### 5.2.3.1 Authorization Issues
 
 If you are not logged in as a valid Keycloak user or are accidentally using the `CRAY_CREDENTIALS` environment variable (i.e. the variable is set regardless of whether you are logged in as you), you will see an error when running CLI commands.
 
@@ -966,7 +1029,7 @@ Error: Bad Request: Token not valid for UAS. Attributes missing: ['gidNumber', '
 Fix this by logging in as a real user (someone with actual Linux credentials) and making sure that `CRAY_CREDENTIALS` is unset.
 
 <a name="uas-uai-validate-debug-keycloak"></a>
-##### UAS Cannot Access Keycloak
+###### 5.2.3.2 UAS Cannot Access Keycloak
 
 When running CLI commands, you may get a Keycloak error.
 
@@ -1035,7 +1098,7 @@ The following shows an example of looking at UAS logs effectively (this example 
    ```
 
 <a name="uas-uai-validate-debug-registry"></a>
-##### UAI Images not in Registry
+###### 5.2.3.3 UAI Images not in Registry
 
 When listing or describing your UAI, you may notice an error in the `uai_msg` field. For example:
 ```bash
@@ -1059,7 +1122,7 @@ username = "vers"
 This means the pre-made end-user UAI image is not in your local registry (or whatever registry it is being pulled from; see the `uai_img` value for details). To correct this, locate and push/import the image to the registry.
 
 <a name="uas-uai-validate-debug-container"></a>
-##### Missing Volumes and other Container Startup Issues
+###### 5.2.3.4 Missing Volumes and other Container Startup Issues
 
 Various packages install volumes in the UAS configuration.  All of those volumes must also have the underlying resources available, sometimes on the host node where the UAI is running sometimes from with Kubernetes.  If your UAI gets stuck with a `ContainerCreating` `uai_msg` field for an extended time, this is a likely cause.  UAIs run in the `user` Kubernetes namespace, and are pods that can be examined using `kubectl describe`.  Use
 

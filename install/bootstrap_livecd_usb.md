@@ -234,8 +234,8 @@ Check for workarounds in the `/opt/cray/csm/workarounds/before-configuration-pay
 
 Some files are needed for generating the configuration payload.  See these topics in [Prepare Configuration Payload](prepare_configuration_payload.md) if you have not already prepared the information for this system.
 
-   * [Command Line Configuration Payload](#command_line_configuration_payload)
-   * [Configuration Payload Files](#configuration_payload_files)
+   * [Command Line Configuration Payload](prepare_configuration_payload.md#command_line_configuration_payload)
+   * [Configuration Payload Files](prepare_configuration_payload.md#configuration_payload_files)
 
 > Note: The USB device is usable at this time, but without SSH enabled as well as core services. This means the USB device could be used to boot the system now, and a user can return to this step at another time.
 

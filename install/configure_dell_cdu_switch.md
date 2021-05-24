@@ -132,7 +132,7 @@ This is an example of a system with 3 cabinets.
 Below is the output of an SHCD, the components in the x1000 cabinet would get their own NMN and HMN VLAN and components in the x1001 would also get their own NMN and HMN VLAN.
 The CECs will be on the HMN VLAN of that cabinet.
 
-![CDU-Wiring](../img/network/CDU-CMM.png)
+![Example of CDU connections to CMM in SHCD](../img/network/CDU-CMM-SHCD.png)
 
 Once you have all this information you can now configure the VLANs on the switches. 
 

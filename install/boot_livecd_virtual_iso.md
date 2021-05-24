@@ -22,7 +22,7 @@ A Cray Pre-Install Toolkit ISO is required for this process. This ISO can be obt
 - The Cray Pre-Install Toolkit ISO included in a CSM release tarball.  It will have a filename similar to
   `cray-pre-install-toolkit-sle15sp2.x86_64-1.4.10-20210514183447-gc054094.iso`
 
-- **`INTERNAL ONLY`** The latest ISO in Artifactory can change, it is advised to use the full filename of the ISO name. Every `latest` ISO has a matching ISO with the real buildID in the name, this ISO will have the same File-Time metadata as the latest ISO.
+- **`INTERNAL USE`** The latest ISO in HPE Cray Artifactory can change without notice, so it is advised to use the full filename of the ISO name. Every `latest` ISO has a matching ISO with the real buildID in the name, this ISO will have the same File-Time metadata as the latest ISO.
   http://car.dev.cray.com/artifactory/csm/MTL/sle15_sp2_ncn/x86_64/dev/master/metal-team/cray-pre-install-toolkit-latest.iso
 
 <a name="bmcs-virtual-mounts"></a>
@@ -38,15 +38,15 @@ Refer to the following pages based on your node vendor for help mounting an ISO 
 <a name="hpe-ilo-bmcs"></a>
 #### HPE iLO BMCs
 
-ILO BMCs allow for booting directly from an HTTP accessible ISO location.
+HPE iLO BMCs allow for booting directly from an HTTP accessible ISO location.
 
 > Here you can insert the Virtual Media URL, select Boot on Next Reset, and click Insert Media
 
-![ILO BMC Mount](../img/bmc-virtual-media-ilo.png)
+![Screen Shot of iLO BMC Virtual Media Mount](../img/bmc-virtual-media-ilo.png)
 
 > Next go ahead and reboot by select reset in the top right menu control option
 
-![ILO BMC Reboot](../img/bmc-reboot-ilo.png)
+![Screen Shot of iLO BMC Reboot](../img/bmc-reboot-ilo.png)
 
 > Open up the virtual terminal by choosing the `HTML5 Console` option when clicking the terminal image in the bottom left corner.
 
@@ -61,7 +61,7 @@ Gigabyte BMCs allow for booting over HTTP.
 
 Go to the BMC settings and setup the remote ISO for your protocol and node.
 
-![Gigabyte BMC Virtual Media Settings](../img/bmc-virtual-media-gigbyte-settings.png)
+![Screen Shot of Gigabyte BMC Virtual Media Settings](../img/bmc-virtual-media-gigabyte-settings.png)
 
 **Web Interface**
 
@@ -69,17 +69,17 @@ Access your BMC's web interface and navigate to `Settings -> Media Redirection S
 
 Enable `Remote Media Support` and `Mount CD/DVD` and then fill in the server IP or DNS name and the path to server.
 
-![Gigabyte BMC Settings](../img/bmc-virtual-media-settings-gigabyte.png)
+![Screen Shot of Gigabyte BMC General Settings](../img/bmc-virtual-media-settings-gigabyte.png)
 
-> **`NOTE`** The gigabyte url appears to not allow certain characters and has a limit on path length. So you may need to move or rename the ISO to a location with a smaller file name.
+> **`NOTE`** The Gigabyte URL appears to not allow certain characters and has a limit on path length. So you may need to move or rename the ISO to a location with a smaller file name.
 
 Next head to `Image Redirection -> Remote Images` and click on the `Start` button to start the Virtual ISO mount.
 
-![Gigabyte BMC Start](../img/bmc-virtual-media-start-gigabyte.png)
+![Screen Shot of Gigabyte BMC Start](../img/bmc-virtual-media-start-gigabyte.png)
 
 Finally, reboot the node and select the `Virtual CDROM` option from the manual boot options.
 
-![Gigabyte BMC Boot](../img/bmc-virtual-media-boot-gigabyte.png)
+![Screen Shot of Gigabyte BMC Boot](../img/bmc-virtual-media-boot-gigabyte.png)
 
 <a name="configuring"></a>
 ### Configuring

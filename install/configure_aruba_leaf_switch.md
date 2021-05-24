@@ -8,11 +8,11 @@ Aruba JL762A 6300M 48G 4SFP56 is the model used.
 Requirements:
     - Two uplinks from the switch to the upstream switch, this is can be an aggregation switch or a spine switch.
 
-![Leaf-Wiring](../img/network/Leaf-Wiring.png)
+![Diagram of Leaf Wiring to Upstream Switch](../img/network/Leaf-Wiring.png)
 
-Here are example snippets from a CDU switch on the SHCD.
+Here are example snippets from a Leaf switch in the SHCD.
 
-![Leaf-SHCD](../img/network/Leaf-SHCD.png)
+![Example Leaf Connections in SHCD](../img/network/Leaf-SHCD.png)
 
 The uplinks are port 49 and 50 on the leaf.  They connect to Aggregation switch 1 and 2 on port 47.
 

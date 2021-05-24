@@ -14,9 +14,9 @@ This page is designed to be a guide on how all nodes in a Shasta system are wire
     - Take note of the hardware.
 - go to the ```25G_10G``` or ```40G_10G``` tab, this will depend on the SHCD.
     - we'll be looking at this part of the page.
-![SHCD](../img/network/SHCD-40G_10G.png)
+![Example 40G_10G Connections in SHCD](../img/network/SHCD-40G_10G.png)
     - Based on the vendor of the nodes and the name in the first column we can determine how it's supposed to be cabled. 
-    - We can use ```mn01``` as an example, this is a gigabyte master node, we noted the vendor in the ```device diagrams``` tab.
+    - We can use ```mn01``` as an example, this is a Gigabyte master node, we noted the vendor in the ```device diagrams``` tab.
     - Once you have those two pieces of information you can open the [MGMT-NET-CABLING](416-MGMT-NET-CABLING.md) page.
     - Locate ```NCN Gigabyte Master``` and make sure that it's cabled correctly.
     

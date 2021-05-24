@@ -3,7 +3,7 @@
 
 The following procedure shows the process for generating the `hmn_connections.json` from the system's SHCD Excel document. This process is typically needed when generating the `hmn_connections.json` file for a new system, or regenerating it when system's SHCD is changed (specifically the HMN tab). The hms-shcd-parser tool can be used to generate the `hmn_connections.json` file.
 
-> **`INTERNAL USE`** This file should come from the [shasta_system_configs](https://stash.us.cray.com/projects/DST/repos/shasta_system_configs/browse) repository.
+> **`INTERNAL USE`** For HPE Cray internal systems, this file should come from the [shasta_system_configs](https://stash.us.cray.com/projects/DST/repos/shasta_system_configs/browse) repository.
 > Each system has its own directory in the repository. If this is a new system that doesn't yet have the `hmn_connections.json` file (or needs to be regenerated), then one will need to be generated from the SHCD (Cabling Diagram) for the system. 
 >
 > If you need to fetch the system's SHCD, you can use your HPE login to fetch it from [SharePoint](https://hpe.sharepoint.com/sites/HPC-AI-Install/CID/Install%20Documents/Forms/AllItems.aspx?FolderCTID=0x0120009859972694683B4C93C09EA98DDBB640&viewid=d6b54e31%2D74ce%2D44a9%2D924a%2Df5c0627cd172&id=%2Fsites%2FHPC%2DAI%2DInstall%2FCID%2FInstall%20Documents%2FCray%2FShasta%20River). May need to request permission to access this SharePoint folder.

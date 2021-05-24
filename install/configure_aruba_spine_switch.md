@@ -17,7 +17,7 @@ Here is an example snippet from a Spine switch on the SHCD.
 The ISL ports are 31 and 32 on both Spine switches.
 The keepalive is port 27.
 
-![Spine-SHCD](../img/network/Spine-SHCD.png)
+![Example Spine Connections in SHCD](../img/network/Spine-SHCD.png)
 
 It is assumed that you have connectivity to the switch and the [Base Config](402-MGMT-NET-BASE-CONFIG.md) has been applied.
 

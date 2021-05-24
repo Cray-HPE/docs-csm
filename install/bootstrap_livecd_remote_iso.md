@@ -56,7 +56,7 @@ the instructions for attaching to the BMC will differ.
 
    **Note:** that a shorter path name is better than a long path name on the webserver.
 
-   **`INTERNAL ONLY`** The latest ISO in Artifactory can change, it is advised to use the full filename of the ISO name. Every `latest` ISO has a matching ISO with the real buildID in the name, this ISO will have the same File-Time metadata as the latest ISO.
+   **`INTERNAL USE`** The latest ISO in HPE Cray Artifactory can change, it is advised to use the full filename of the ISO name. Every `latest` ISO has a matching ISO with the real buildID in the name, this ISO will have the same File-Time metadata as the latest ISO.
    http://car.dev.cray.com/artifactory/csm/MTL/sle15_sp2_ncn/x86_64/dev/master/metal-team/cray-pre-install-toolkit-latest.iso
 
 1. See the respective procedure below to attach an ISO.
@@ -106,7 +106,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
-1. Set up the site-link, enabling SSH to work. The administrator or CI/CD agent can reconnect with SSH after this step.
+1. Set up the site-link, enabling SSH to work. You can reconnect with SSH after this step.
    > **`NOTICE REGARDING DHCP`** If your site's network authority or network administrator has already provisioned an IPv4 address for your master node(s) external NIC(s), **then skip this step**.
 
    1. Setup Variables:
@@ -435,7 +435,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       ```
 
 1. Copy the interface config files generated earlier by `csi config init`
-   into `/etc/sysconfig/network/` **or** use the provided scripts under "lab usage" below:
+   into `/etc/sysconfig/network/` with the first option **or** use the provided scripts in the second option below:
 
    * Option 1: Copy PIT files:
 
@@ -444,7 +444,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       pit# wicked ifreload all
       pit# systemctl restart wickedd-nanny && sleep 5
       ```
-   * Option 2: Lab usage; setup dnsmasq by hand:
+   * Option 2: Set up dnsmasq by hand:
 
       ```bash
       pit# /root/bin/csi-setup-vlan002.sh $nmn_cidr

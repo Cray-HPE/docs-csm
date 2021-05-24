@@ -74,7 +74,7 @@ thereby enabling those compute nodes to access the gateway, user access services
 
 A site may create other networks as well, but it is only the supported network that is served by those devices.
 
-![Management Network connections - HPE Cray EX System](../img/Management_Network_Connections_Liquid_Cooled.png)
+![Management Network Connections for HPE Cray EX System](../img/Management_Network_Connections_Liquid_Cooled.png)
 
 <a name="default_ip_address_ranges"></a>
 ## 2. Default IP Address Ranges
@@ -268,7 +268,7 @@ Access to individual APIs through the gateway is controlled by a policy-driven a
 users must retrieve a token for authentication before attempting to access APIs through the gateway and present
 a valid token with each API call. The authentication and authorization decisions are made at the gateway level
 which prevent unauthorized API calls from reaching the underlying micro-services. For more detail on the process
-of obtaining tokens and user managemen, refer to the _HPE Cray EX System Administration Guide 1.5 S-8001_.
+of obtaining tokens and user management, refer to the _HPE Cray EX System Administration Guide 1.5 S-8001_.
 
 Review the API documentation in the supplied container before attempting to use the API services. This container
 is generated with the release using the most current API descriptions in OpenAPI 2.0 format. Since this file serves

@@ -136,7 +136,7 @@ with system-specific customizations.
 
 1.  To federate Keycloak with an upstream LDAP:
 
-    > **`INTERNAL ONLY`** On internal HPE systems, if the IP address for
+    > **`INTERNAL USE`** On internal HPE Cray systems, if the IP address for
     > the ncn-m001 node is even then use `ldaps://dcldap2.us.cray.com`,
     > otherwise use `ldaps://dcldap3.us.cray.com`. For example, `ping
     > fanta-ncn-m001.us.cray.com` shows the IP address is `172.30.52.72`,
@@ -176,8 +176,7 @@ with system-specific customizations.
         -storepass password -noprompt
         ```
 
-        > **`INTERNAL ONLY`** For example, on internal HPE systems, create the
-        > `certs.jks.b64` file as follows:
+        > **`INTERNAL USE`** For example, on internal HPE Cray systems, create the `certs.jks.b64` file as follows:
         > 
         > *   Get the issuer certificate for dcldap. Use `openssl s_client` to connect
         >     and show the certificate chain returned by the LDAP host:
@@ -303,7 +302,7 @@ with system-specific customizations.
         'spec.kubernetes.sealed_secrets.keycloak_users_localize.generate.data.(args.name==ldap_connection_url).args.value' '<ldap-url>'
         ```
 
-        > **`INTERNAL ONLY`** 
+        > **`INTERNAL USE`** for example, on internal HPE Cray systems settings are:
         > 
         > Set `ldap_connection_url` in `customizations.yaml`:
         > 
@@ -359,8 +358,7 @@ with system-specific customizations.
         EOF
         ```
 
-        > **`INTERNAL ONLY`** For example, on internal HPE systems appropriate
-        > settings are:
+        > **`INTERNAL USE`** For example, on internal HPE Cray systems appropriate settings are:
         > 
         > ```yaml
         > ldapSearchBase: "dc=dcldap,dc=dit"
