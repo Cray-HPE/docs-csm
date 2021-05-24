@@ -485,7 +485,7 @@ data so run them only when indicated. Instructions are in the `README` files.
     ```bash
     ncn-m001# export CSM_RELEASE=csm-x.y.z
     ncn-m001# mkdir -pv /mnt/livecd /mnt/rootfs /mnt/sqfs
-    ncn-m001# mount /metal/bootstrap/csm*/cray-pre-install-toolkit-*.iso /mnt/livecd/
+    ncn-m001# mount /metal/bootstrap/cray-pre-install-toolkit-*.iso /mnt/livecd/
     ncn-m001# mount /mnt/livecd/LiveOS/squashfs.img /mnt/sqfs/
     ncn-m001# mount /mnt/sqfs/LiveOS/rootfs.img /mnt/rootfs/
     ncn-m001# cp -pv /mnt/rootfs/usr/bin/csi /tmp/csi
