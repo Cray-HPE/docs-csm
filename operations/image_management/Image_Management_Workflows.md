@@ -21,7 +21,7 @@ Mentioned in this workflow:
 -   Nexus is needed for image creation and image customization. Nexus provides local RPM repositories for use when building or customizing an image. You can define Zypper or Yum package repositories and provide the RPM content for installing and updating software for every compute and non-compute node in the system.
 -   The Simple Storage Service \(Ceph S3\) is an artifact repository that stores boot artifacts. Recipes are stored in the `ims` bucket and images are stored in the `boot-images` bucket.
 
-![image-create](/img/image-create.gif)
+![image-create](../../img/operations/image-create.gif)
 
 **Workflow Overview:** The following sequence of steps occurs during this workflow.
 
@@ -100,7 +100,7 @@ Mentioned in this workflow:
 -   Image Management Service \(IMS\) allows administrators and users to build or customize \(pre-boot\) images from kiwi-ng recipes. This service is responsible for enabling the creation of bootable and non-bootable images, enabling image customization via an SSH-able environment, and packaging and association of new/customized image artifacts \(kernel, rootfs, initrd, etc\) with a new IMS image record.
 -   The Simple Storage Service \(Ceph S3\) is an artifact repository that stores artifacts. Recipes are stored in the `ims` bucket and images are stored in the `boot-images` bucket.
 
-![image-customize](/img/image-customize.gif)
+![image-customize](../../img/operations/image-customize.gif)
 
 **Workflow Overview:** The following sequence of steps occurs during this workflow.
 
