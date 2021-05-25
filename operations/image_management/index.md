@@ -1,6 +1,9 @@
 ## Image Management
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 269058d (STP-2624: imported several files from the admin guide)
 * [Image Management with Kiwi-NG Recipes](Image_Management_with_Kiwi-NG_Recipes.md)
 * [Image Management Workflows](Image_Management_Workflows.md)
 * [Upload and Register an Image Recipe](Upload_and_Register_an_Image_Recipe.md)
@@ -11,6 +14,7 @@
   * [Convert TGZ Archives to SquashFS Images](Convert_TGZ_Archives_to_SquashFS_Images.md)
   * [Customize an Image Root to Install Singularity](Customize_an_Image_Root_to_Install_Singularity.md)
   * [Customize an Image Root to Install Compute Kubernetes](Customize_an_Image_Root_to_Install_Compute_Kubernetes.md)
+<<<<<<< HEAD
 * [Delete or Recover Deleted IMS Content](Delete_or_Recover_Deleted_IMS_Content.md)
 =======
 * [Image Management with Kiwi-NG Recipes](image_management/Image_Management_with_Kiwi-NG_Recipes.md)
@@ -25,3 +29,6 @@
   * [Customize an Image Root to Install Compute Kubernetes](image_management/Customize_an_Image_Root_to_Install_Compute_Kubernetes.md)
 * [Delete or Recover Deleted IMS Content](image_management/Delete_or_Recover_Deleted_IMS_Content.md)
 >>>>>>> c36c198 (STP-2624: added image management files)
+=======
+* [Delete or Recover Deleted IMS Content](Delete_or_Recover_Deleted_IMS_Content.md)
+>>>>>>> 269058d (STP-2624: imported several files from the admin guide)

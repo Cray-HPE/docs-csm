@@ -56,6 +56,10 @@ The process can be used to include any nodes in the system reachable over the No
 
 CFS handles inventory for image customization differently because this type of configuration session does not target live nodes. When creating a configuration session meant to customize a boot image, the Image Management Service \(IMS\) image IDs are used as hosts and grouped according to input to the session creation.
 
+<<<<<<< HEAD
 See [Create an Image Customization CFS Session](Create_an_Image_Customization_CFS_Session.md) for more information.
+=======
+See [Create an Image Customization CFS Session](/portal/developer-portal/operations/Create_an_Image_Customization_CFS_Session.md) for more information.
+>>>>>>> 269058d (STP-2624: imported several files from the admin guide)
 
 

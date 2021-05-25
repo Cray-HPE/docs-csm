@@ -33,6 +33,7 @@ Mentioned in this workflow:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 ![image-create](../../img/operations/image-create.gif)
 =======
 ![](/img/image-create.gif)
@@ -40,6 +41,9 @@ Mentioned in this workflow:
 =======
 ![image-create](/img/image-create.gif)
 >>>>>>> 89b783f (STP-2624: minor formatting changes)
+=======
+![image-create](../../img/operations/image-create.gif)
+>>>>>>> 269058d (STP-2624: imported several files from the admin guide)
 
 **Workflow Overview:** The following sequence of steps occurs during this workflow.
 
@@ -128,6 +132,7 @@ Mentioned in this workflow:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 ![image-customize](../../img/operations/image-customize.gif)
 =======
 ![](/img/image-customize.gif)
@@ -135,6 +140,9 @@ Mentioned in this workflow:
 =======
 ![image-customize](/img/image-customize.gif)
 >>>>>>> 89b783f (STP-2624: minor formatting changes)
+=======
+![image-customize](../../img/operations/image-customize.gif)
+>>>>>>> 269058d (STP-2624: imported several files from the admin guide)
 
 **Workflow Overview:** The following sequence of steps occurs during this workflow.
 
