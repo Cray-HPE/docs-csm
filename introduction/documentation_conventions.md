@@ -2,18 +2,31 @@
 
 Several conventions have been used in the preparation of this documentation.
 
+   * [Markdown Format](#markdown-format)
    * [File Formats](#file-formats)
    * [Typographic Conventions](#typographic-conventions)
    * [Annotations](#annotations) for how we identify sections of the documentation that do not apply to all systems 
    * [Command Prompt Conventions](#command-prompt-conventions) which describe the context for user, host, directory, chroot environment, or container environment
 
+<a name="markdown-format"></a>
+## Markdown Format
+
+This documentation is in Markdown format.  Although much of it can be viewed with any text editor,
+a richer experience will come from using a tool which can render the Markdown to show different font
+sizes, the use of bold and italics formatting, inclusion of diagrams and screen shots as image files,
+and to follow navigational links within a topic file and to other files.
+
+There are many tools which can render the Markdown format to get these advantages.  Any Internet search
+for Markdown tools will provide a long list of these tools.  Some of the tools are better than others
+at displaying the images and allowing you to follow the navigational links.
+
 <a name="file-formats"></a>
-# File Formats
+## File Formats
 
 Some of the installation instructions require updating files in JSON, YAML, or TOML format.  These files should be updated with care since some file formats do not accept tab characters for indentation of lines. Only space characters are supported.  Refer to online documentation to learn more about the syntax of JSON, YAML, and TOML files.
 
 <a name="typographic-conventions"></a>
-# Typographic Conventions
+## Typographic Conventions
 
 `This style` indicates program code, reserved words, library functions, command-line prompts,
 screen output, file/path names, and other software constructs.
@@ -22,7 +35,7 @@ screen output, file/path names, and other software constructs.
 (lines joined by a backslash are parsed as a single line).
 
 <a name="annotations"></a>
-# Annotations
+## Annotations
 
 This repository may change annotations, for now, under the MarkDown governance these are the available annotations.
 
@@ -43,15 +56,15 @@ External (GitHub or customer) should disregard these annotated blocks - they may
 information as an example but are not intended for their use.
 
 <a name="command-prompt-conventions"></a>
-# Command Prompt Conventions
+## Command Prompt Conventions
 
-## Host name and account in command prompts
+#### Host name and account in command prompts
 
 The host name in a command prompt indicates where the command must be run.  The account that must run the command is also indicated in the prompt.
 - The root or super-user account always has the # character at the end of the prompt
 - Any non-root account is indicated with account@hostname>.  A non-privileged account is referred to as user.
 
-## Node abbreviations
+#### Node abbreviations
 The following list contains abbreviations for nodes used below
 
 * CN - compute Node
@@ -78,7 +91,7 @@ The following list contains abbreviations for nodes used below
 | hostname# | Run the command as root on the specified hostname. |
 | user@hostname> | Run the command as any non-root user son the specified hostname. |
 
-## Command prompt inside chroot
+#### Command prompt inside chroot
 
 If the chroot command is used, the prompt changes to indicate
 that it is inside a chroot environment on the system.
@@ -89,7 +102,7 @@ chroot-hostname#
 
 ```
 
-## Command prompt inside Kubernetes pod
+#### Command prompt inside Kubernetes pod
 
 If executing a shell inside a container of a Kubernetes pod where
 the pod name is $podName, the prompt changes to indicate that it
@@ -101,7 +114,7 @@ ncn# kubectl exec -it $podName /bin/sh
 pod#
 ```
 
-## Command prompt inside image customization session
+#### Command prompt inside image customization session
 
 If using ssh during an image customization session, the prompt
 changes to indicate that it is inside the image customization
@@ -116,7 +129,7 @@ root@POD# chroot /mnt/image/image-root
 :/#
 ```
 
-## Directory path in command prompt
+#### Directory path in command prompt
 
 Example prompts do not include the directory path, because long
 paths can reduce the clarity of examples. Most of the time, the
@@ -147,7 +160,7 @@ user@hostname > cd /usr/bin
 user@hostname > ./command
 ```
 
-## Command prompts for network switch configuration
+#### Command prompts for network switch configuration
 
 The prompts when doing network switch configuration can vary widely
 depending on which vendor switch is being configured and the context

@@ -23,7 +23,8 @@ lack of removable storage.
 
 The LiveCD Remote ISO has known compatibility issues for nodes from certain vendors.
 
-   * Intel nodes should not attempt to bootstrap using the LiveCD Remote ISO  method.  Instead use [Bootstrap PIT Node from LiveCD USB](bootstrap_livecd_usb.md)
+   * Intel nodes should not attempt to bootstrap using the LiveCD Remote ISO method.  Instead use [Bootstrap PIT Node from LiveCD USB](bootstrap_livecd_usb.md)
+   * Gigabyte nodes should not attempt to bootstrap using the LiveCD Remote ISO method.  Instead use [Bootstrap PIT Node from LiveCD USB](bootstrap_livecd_usb.md)
 
 <a name="attaching-and-booting-the-livecd-with-the-bmc"></a>
 ### 2. Attaching and Booting the LiveCD with the BMC
@@ -52,7 +53,6 @@ the instructions for attaching to the BMC will differ.
    will be able to contact via http or https.
 
       * HPE nodes can use http or https.
-      * Gigabyte nodes can only use http.
 
    **Note:** that a shorter path name is better than a long path name on the webserver.
 
@@ -62,7 +62,7 @@ the instructions for attaching to the BMC will differ.
 1. See the respective procedure below to attach an ISO.
 
    - [HPE iLO BMCs](boot_livecd_virtual_iso.md#hpe-ilo-bmcs)
-   - [Gigabyte BMCs](boot_livecd_virtual_iso.md#gigabyte-bmcs)
+   - [Gigabyte BMCs] Should not use the RemoteISO method.  See [Bootstrap PIT Node from LiveCD USB](bootstrap_livecd_usb.md)
    - [Intel BMCs] Should not use the RemoteISO method.  See [Bootstrap PIT Node from LiveCD USB](bootstrap_livecd_usb.md)
 
 1. The chosen procedure should have rebooted the server.  Observe the server boot into the LiveCD.
@@ -87,10 +87,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    Current password:   <------- press Enter here, again, for a blank password
    New password:       <------- type new password
    Retype new password:<------- retype new password
-   Welcome to the CRAY Prenstall Toolkit (LiveOS)
-
-   Offline CSM documentation can be found at /usr/share/doc/metal (version: rpm -q docs-csm-install)
-
+   Welcome to the CRAY Pre-Install Toolkit (LiveOS)
    ```
 
 <a name="configure-the-running-livecd"></a>
