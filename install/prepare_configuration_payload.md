@@ -408,7 +408,7 @@ install).
         ```bash
         pit# export username=root
         pit# export IPMI_PASSWORD=changeme
-        pit# conman -q | grep mgmt | grep -v m001 | xargs -t -i  ipmitool -I lanplus -U $username -E -H {} power off
+        pit# conman -q | grep mgmt | grep -v m001 | sort -u | xargs -t -i  ipmitool -I lanplus -U $username -E -H {} power off
         ```
 
     - Shutdown from **ncn-m001**
