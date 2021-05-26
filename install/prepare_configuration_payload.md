@@ -17,6 +17,7 @@ and an extra configuration file which that generated.
    * [Configuration Payload Files](#configuration_payload_files)
    * [First Time Install](#first_time_install)
    * [Reinstall](#reinstall)
+   * [Next Topic](#next-topic)
 
 ## Details
 
@@ -274,12 +275,15 @@ x3000c0h38s1,Spine,Aruba
    If the nodes are booted to Linux, then the data can be collected by `ipmitool lan print` for the BMC MAC,
    and the `ip a` command for the other NICs.  
    
-   If the nodes are not booted and there is SSH access to the spine and leaf switches, it is possible to
+   If the nodes are booted and there is SSH access to the spine and leaf switches, it is possible to
    collect information from the spine and leaf switches.
    
-   If the nodes are not booted and there is no SSH access to the spine and leaf switches, it is possible
+   If the nodes are booted and there is no SSH access to the spine and leaf switches, it is possible
    to connect to the spine and leaf switches using the method described in
    [NCN Metadata over USB-Serial Cable](303-NCN-METADATA-USB-SERIAL.md).
+
+   In all other cases, the information needed for `ncn_metadata.csv` won't be available for collection
+   until after the PIT node has been booted from the LiveCD.
 
    Unless your system does not use or does not have onboard NICs on the management nodes, then these topics
    will be necessary before constructing the `ncn_metadata.csv` file.
@@ -297,13 +301,7 @@ x3000c0h38s1,Spine,Aruba
 <a name="reinstall"></a>
 ### Reinstall 
 
-The process to reinstall must have the configuration payload files available.  The other preparation 
-includes quiescing the compute nodes and application nodes, scaling back DHCP on the management nodes,
-wiping the storage on the management nodes, and powering off the management nodes.
-
-> #### Degraded System Notice
->
-> If the system is degraded; CSM services are down, or the management nodes are in inconsistent states then a cleanslate should be performed.
+The process to reinstall must have the configuration payload files available.
 
 1. Collect Payload for Reinstall
 
@@ -332,168 +330,11 @@ wiping the storage on the management nodes, and powering off the management node
       ```bash
       linux# csi config init
       ```
-1. Quiesce compute nodes and application nodes.
-
-   Both of these node types depend on the management nodes to provide services for their run time environment.
-
-      * CPS to project the operating system image or the CPE image or the Analytics image
-      * cray-dns-unbound (internal system DNS)
-      * cray-kea (DHCP leases)
-      * Access to the API gateway for node heartbeats
-
-   While the reinstall process happens, these nodes would not be able to function normally.  As part of the
-   reinstall, they will be rebooted with new boot images and configuration.
-
-   Refer to "Shut Down and Power Off Compute and User Access Nodes" in the _HPE Cray EX Hardware Management Administration Guide 1.5 S-8015_.
-
-1. Scale back DHCP.
-
-   Runtime DHCP services interfere with the LiveCD's bootstrap nature to provide DHCP leases to BMCs. To remove
-   edge-cases, disable the run-time cray-dhcp-kea pod.
-   
-   Scale the deployment from either the LiveCD or any Kubernetes node
-   
-   ```bash
-   ncn# kubectl scale -n services --replicas=0 deployment cray-dhcp-kea
-   ```
-
-1. **REQUIRED** For each management node, **excluding** ncn-m001, login and wipe it (this step uses the [basic wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe)):
-    > **`NOTE`** Pending completion of MTL-1288, the auto-wipe is insufficient for master nodes and worker nodes. All administrators must wipe their NCNs with this step.
-    - Wipe NCN disks from **LiveCD** (`pit`)
-        ```bash
-        pit# ncns=$(grep Bond0 /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F',' '{print $6}')
-        pit# for h in $ncns; do
-            read -r -p "Are you sure you want to wipe the disks on $h? [y/N] " response
-            response=${response,,}
-            if [[ "$response" =~ ^(yes|y)$ ]]; then
-                 ssh $h 'wipefs --all --force /dev/sd* /dev/disk/by-label/*'
-            fi
-        done
-        ```
-
-    - Wipe NCN disks from **ncn-m001**
-        ```bash
-        ncn-m001# ncns=$(grep ncn /etc/hosts | grep nmn | grep -v m001 | awk '{print $3}')
-        ncn-m001# for h in $ncns; do
-            read -r -p "Are you sure you want to wipe the disks on $h? [y/N] " response
-            response=${response,,}
-            if [[ "$response" =~ ^(yes|y)$ ]]; then
-                 ssh $h 'wipefs --all --force /dev/sd* /dev/disk/by-label/*'
-            fi
-        done
-        ```
-
-    In either case, for disks which have no labels, no output will be shown. If one or more disks have labels, output similar
-    to the following is expected:
-    ```
-    ...
-    Are you sure you want to wipe the disks on ncn-m003? [y/N] y
-    /dev/sda: 8 bytes were erased at offset 0x00000200 (gpt): 45 46 49 20 50 41 52 54
-    /dev/sda: 8 bytes were erased at offset 0x6fc86d5e00 (gpt): 45 46 49 20 50 41 52 54
-    /dev/sda: 2 bytes were erased at offset 0x000001fe (PMBR): 55 aa
-    /dev/sdb: 8 bytes were erased at offset 0x00000200 (gpt): 45 46 49 20 50 41 52 54
-    /dev/sdb: 8 bytes were erased at offset 0x6fc86d5e00 (gpt): 45 46 49 20 50 41 52 54
-    /dev/sdb: 2 bytes were erased at offset 0x000001fe (PMBR): 55 aa
-    /dev/sdc: 6 bytes were erased at offset 0x00000000 (crypto_LUKS): 4c 55 4b 53 ba be
-    /dev/sdc: 6 bytes were erased at offset 0x00004000 (crypto_LUKS): 53 4b 55 4c ba be
-    ...
-    ```
-
-    Verify is that there are no error messages in the output.
-
-1. Power each NCN off using `ipmitool` from ncn-m001 (or the booted LiveCD if reinstalling an incomplete
-install).
-
-    - Shutdown from **LiveCD** (`pit`)
-        ```bash
-        pit# export username=root
-        pit# export IPMI_PASSWORD=changeme
-        pit# conman -q | grep mgmt | grep -v m001 | sort -u | xargs -t -i  ipmitool -I lanplus -U $username -E -H {} power off
-        ```
-
-    - Shutdown from **ncn-m001**
-        ```bash
-        ncn-m001# export username=root
-        ncn-m001# export IPMI_PASSWORD=changeme
-        ncn-m001# grep ncn /etc/hosts | grep mgmt | grep -v m001 | sort -u | awk '{print $2}' | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
-        ```
-1. Set the BMCs on the management nodes to DHCP.
-   > **`NOTE`** During the install of the management nodes their BMCs get set to static IP addresses. The installation expects the that these BMCs are set back to DHCP before proceeding.
-   
-   * Set the lan variable.
-      If you have Intel nodes set it to 3.
-      ```bash
-      ncn# export lan=3
-      ```
-    
-      Otherwise set it to 1.
-      ```bash
-      ncn# export lan=1
-      ```
-
-   * from the **LiveCD** (`pit`):
-      > **`NOTE`** This step uses the old statics.conf on the system in case CSI changes IPs:
-
-      ```bash
-      pit# export username=root
-      pit# export IPMI_PASSWORD=changeme
-
-      pit# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
-      do
-         ipmitool -U $username -I lanplus -H $h -E lan set $lan ipsrc dhcp
-      done
-      ```
-
-      The timing of this change can vary based on the hardware, so if the IP can no longer be reached after running the above command, run these commands.
-
-      ```bash
-      pit# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
-      do
-         ipmitool -U $username -I lanplus -H $h -E lan print $lan | grep Source
-      done
-
-      pit# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
-      do
-         ipmitool -U $username -I lanplus -H $h -E mc reset cold
-      done
-      ```
-
-   * from **ncn-m001**:
-      > **`NOTE`** This step uses to the `/etc/hosts` file on ncn-m001 to determine the IP addresses of the BMCs:
-
-      ```bash
-      ncn-m001# export username=root
-      ncn-m001# export IPMI_PASSWORD=changeme
-      ncn-m001# for h in $( grep ncn /etc/hosts | grep mgmt | grep -v m001 | awk '{print $2}' )
-      do
-         ipmitool -U $username -I lanplus -H $h -E lan set $lan ipsrc dhcp
-      done
-      ```
-
-      The timing of this change can vary based on the hardware, so if the IP can no longer be reached after running the above command, run these commands.
-
-      ```
-      ncn-m001# for h in $( grep ncn /etc/hosts | grep mgmt | grep -v m001 | awk '{print $2}' )
-      do
-         ipmitool -U $username -I lanplus -H $h -E lan print $lan | grep Source
-      done
-
-      ncn-m001# for h in $( grep ncn /etc/hosts | grep mgmt | grep -v m001 | awk '{print $2}' )
-      do
-         ipmitool -U $username -I lanplus -H $h -E mc reset cold
-      done
-      ```
-
-1. Powering Off LiveCD or ncn-m001 node
-    > **`Skip this step if`** you are planning to use this node as a staging area to create the LiveCD. Lastly, shutdown the LiveCD or ncn-m001 node.
-    ```bash
-    ncn-m001# poweroff
-    ```
 
 <a name="next-topic"></a>
 # Next Topic
 
-   After completing this procedure the next step is to bootstrap the PIT node.
+   After completing this procedure the next step is to prepare the management nodes.
 
-   * See [Bootstrap PIT Node](index.md#bootstrap_pit_node)
+   * See [Prepare Management Nodes](index.md#prepare_management_nodes)
 

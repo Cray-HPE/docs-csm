@@ -2,6 +2,8 @@
 
 This procedure will install CSM applications and services into the CSM Kubernetes cluster.
 
+> **Node:** Check the information in [Known Issues](#known-issues) before starting this procedure to be warned about possible problems.
+
 ### Topics:
    1. [Initialize Bootstrap Registry](#initialize-bootstrap-registry)
    1. [Create Site-Init Secret](#create-site-init-secret)

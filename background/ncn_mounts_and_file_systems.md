@@ -119,9 +119,9 @@ This option simply expands the RAID to consume the extra disks, leaving none beh
 <a name="disk-layout-quick-reference-tables"></a>
 ### Disk Layout Quick-Reference Tables
 
-The table below represents all recognizable FS labels on any given NCN, varying slightly by node-role (i.e. kubernetes-manager vs. kubernetes-worker).
+The table below represents all recognizable FS labels on any given management node, varying slightly by node role (Kubernetes master or Kubernetes worker).
 
-| k8s-manager | k8s-worker | storage-ceph | FS Label | Partitions | Device |  Partition Size | OverlayFS | Work Order(s) | Memo
+| k8s-master | k8s-worker | storage-ceph | FS Label | Partitions | Device |  Partition Size | OverlayFS | Work Order(s) | Memo
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | ✅ | ✅ | ✅ | `BOOTRAID` | `/metal/boot` | 2 small disks in RAID1 | `500 MiB` | ❌ | Present since Shasta-Preview 1 |
 | ✅ | ✅ | ✅ | `SQFSRAID` | `/run/initramfs/live` | 2 small disks in RAID1 | `25 GiB` | ✅ | [CASM-1885](https://connect.us.cray.com/jira/browse/MTL-1885) |  squashfs should compress our images to about 1/3rd their uncompressed size. (20G → 6.6G)  On pepsi's ncn-w001, we're at about 20G of non-volatile data storage needed. |
