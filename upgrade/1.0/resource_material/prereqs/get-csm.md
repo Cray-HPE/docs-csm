@@ -58,6 +58,22 @@ code `0`, e.g.:
 setup-nexus.sh: OK
 ```
 
+# Upgrade BSS
+
+To make booting NCNs during an upgrade more reliable, upgrade BSS to the 1.5 version:
+
+```bash
+ncn-m001# helm -n services upgrade cray-hms-bss ./${CSM_RELEASE}/helm/cray-hms-bss-*.tgz
+```
+
+Then wait for the deployment to be fully upgraded:
+
+```bash
+ncn-m001# kubectl -n services rollout status deployment cray-bss
+...
+deployment "cray-bss" successfully rolled out
+```
+
 # Upload New NCN Images
 
 ```bash
