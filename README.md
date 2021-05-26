@@ -1,129 +1,100 @@
-<a name="cray-system-management---guides-and-references"></a>
+<a name="cray-system-management"></a>
+# Cray System Management (CSM) - Documentation
 
-# CRAY System Management - Guides and References
+The documentation included here describes how to install or upgrade the Cray System Management (CSM)
+software and related supporting operational procedures.  CSM software is the foundation upon which
+other software product streams for the HPE Cray EX system depend.
 
-> **These pages are available offline by RPM install at** at `/usr/share/doc/metal`.
+This documentation is in Markdown format.  Although much of it can be viewed with any text editor,
+a richer experience will come from using a tool which can render the Markdown to show different font
+sizes, the use of bold and italics formatting, inclusion of diagrams and screen shots as image files,
+and to follow navigational links within a topic file and to other files.
 
-* [CRAY System Management - Guides and References](#cray-system-management---guides-and-references)
-    * [Offline Documentation](#offline-documentation)
-    * [Review and Contribution](#review-and-contribution)
-    * [Releases and Vintages](#releases-and-vintages)
-    * [Versioning](#versioning)
-    * [Discussions](#discussions)
-    * [Original Authors / Reviewers](#original-authors--reviewers)
+There are many tools which can render the Markdown format to get these advantages.  Any Internet search
+for Markdown tools will provide a long list of these tools.  Some of the tools are better than others
+at displaying the images and allowing you to follow the navigational links.
 
-This repository serves to provides coherent guides for installing or upgrading a CRAY system across
-all its various node-types and states.
+The exploration of the CSM documentation begins with the Table of Contents in
+the [Cray System Management Installation Guide](index.md) which introduces 
+topics related to CSM software installation, upgrade, and operational use.  Notice that the
+previous sentence had a link to the index.md file for the Cray System Management Installation Guide. 
+If the link does not work, then a better Markdown viewer is needed.
 
-Product Coverage:
+Within this REAMDME.md file, these topics are described.
 
-- Cray Pre-Install Toolkit (LiveCD/PIT)
-- Non-Compute Nodes (NCN)
-- Compute Nodes (CNs)
-- User Access Nodes (UAN)
-- High-Speed Network (HSN)
-    - **`hpe-portal`**: 📑[slingshot documentation][3]
+   * [Offline Documentation](#offline-documentation)
+   * [Review and Contribution](#review-and-contribution)
+   * [Releases](#releases)
+   * [Versioning](#versioning)
+   * [Discussions](#discussions)
 
-One may also find technical information, see the following for navigating and contributing to this
-guidebook:
-
-TODO fix these links
-
-- [Info / Inside-Panel](000-INFO.md) Contribution and rules
-- [Table of Contents](001-GUIDES.md) Lay of the land; where information is by chapter
 
 <a name="offline-documentation"></a>
-
 ### Offline Documentation
 
-The docs on a customer's LiveCD should match their reality, their install should follow the docs
-shipped on their liveCD.
+The CSM documentation is included within the CSM product release tarball.  After it has been installed, the 
+documentation will be available at `/usr/share/doc/metal` as installed by the `docs-csm-install` rpm.
 
-This will report the version of your installed docs:
+This command will report the version of your installed documentation:
 
 ```bash
-sles# rpm -q docs-csm-install
+ncn# rpm -q docs-csm-install
 ```
 
 To install the latest docs-csm-install RPM after installation:
 
 ```bash
-sles# zypper ar -cf --gpgcheck-allow-unsigned https://packages.local/repository/csm-sle-15sp2 csm-sle-15sp2
-sles# zypper ref csm-sle-15sp2
-sles# zypper in -y --from csm-sle-15sp2 docs-csm-install
+ncn# zypper ar -cf --gpgcheck-allow-unsigned https://packages.local/repository/csm-sle-15sp2 csm-sle-15sp2
+ncn# zypper ref csm-sle-15sp2
+ncn# zypper in -y --from csm-sle-15sp2 docs-csm-install
 ```
 
 <a name="review-and-contribution"></a>
-
 ### Review and Contribution
 
-Anyone with Git access to this repo may feel free to submit changes for review, tagging to the
-relevant JIRA(s) (if necessary).
+Anyone with Git access to this repo may feel free to submit changes for review -- tagging to the
+relevant ticket(s) (if necessary).
 
-All changes undergo a review process, this governance is up to the reviewers' own discretions. The
-review serves to keep core contributors on the "same page" while maintaining coherency throughout
-the doc.
+All changes undergo a review process.  This governance is up to the reviewers' discretion. The
+review serves to keep core contributors in alignment while maintaining coherency throughout
+the documentation.
 
-<a name="releases-and-vintages"></a>
-
-### Releases and Vintages
+<a name="releases"></a>
+### Releases 
 
 This guide follows a basic release model for enabling amendments and maintenance across releases.
 
-> Note: Leading up to a release heads out the door the "stable" and "unstable" branches may be _equal_.
+> Note: Leading up to a release the "stable" and "unstable" branches may be _equal_.
 > However once a release has shipped, any amendments to that release must be made to the respective release branch.
 
 - The "stable" (release) version of this guide exists within branches prefixed with "`release/`"
-- The "unstable" (latest) version of this guide exists within the `master` branch
+- The "unstable" (latest) version of this guide exists within the `main` branch
 
 <a name="versioning"></a>
 
 ### Versioning
 
-This guide is versioned and packaged for offline or in-field reference.
+This CSM documentation is versioned and packaged for offline reference.
 
     X.Y.Z-HASH
 
 The HASH will always change, it changes for every contribution that is pushed to this repository.
 
 The X.Y.Z does not always change, it must be incremented by the contributor or this repository's
-owner(s). This pattern follows [semver][2]:
+owner(s). This pattern follows semantic version as described by http://semver.org.
 
-- X: Major Version - this should be incremented by the repo owner for dramatic, or substantial
-  changes to the structure or format of the guide.
-- Y: Minor Version - this should be incremented by the developer when making new pages or large
+- X: Major Version - This should be incremented by the repository owner for dramatic, or substantial
+  changes to the structure or format.
+- Y: Minor Version - This should be incremented by the developer when making new pages or large
   amendments to the flow.
-- Z: Bug Fix/patch - this should be incremented by the developer when making amendments confined to
+- Z: Bug Fix/patch - This should be incremented by the developer when making amendments confined to
   a page.
 
-Any contributor should feel welcome to ask for clarification on versioning within their change's
-review.
+Any contributor should feel welcome to ask for clarification on versioning within their change's review.
 
 <a name="discussions"></a>
-
 ### Discussions
 
-See the Cray /HPE Slack [#docs-csm-install][1] (not public; external access may be available for
-various partners & customers).
+For discussion about the CSM documentation, see the HPE Cray Slack [#docs-csm].  This is not public.
+External access may be available for various partners & customers.
 
-<a name="original-authors--reviewers"></a>
-
-##### Original Authors / Reviewers
-
-This document can be discussed in [#docs-csm-install][1].
-
-These folks are main contributors or reviewers, none of which are the owners of this repository. Any
-email should include the list, otherwise ping the slack channel.
-
-- PET: [Brad Klein](mailto:bradley.klein@hpe.com)
-- PET: [Craig DeLatte](mailto:craig.delatte@hpe.com)
-- METAL: [Jacob Salmela](mailto:jacob.salmela@hpe.com)
-- PET: [Jeanne Ohren](mailto:jeanne.ohren@hpe.com)
-- METAL: [Russell Bunch](mailto:doomslayer@hpe.com)
-- CMS: [Mitch Harding](mailto:mitchell.harding@hpe.com)
-
-[1]: https://cray.slack.com/messages/docs-csm-install
-
-[2]: https://semver.org/
-
-[3]: http://web.us.cray.com/~ekoen/slingshot_portal/master/portal/public/developer-portal/overview/

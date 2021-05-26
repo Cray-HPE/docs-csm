@@ -14,6 +14,7 @@ product streams for the HPE Cray EX system can be installed.
 ### Topics:
    
    1. [Prepare Configuration Payload](#prepare_configuration_payload)
+   1. [Prepare Management Nodes](#prepare_management_nodes)
    1. [Bootstrap PIT Node](#bootstrap_pit_node)
    1. [Configure Management Network Switches](#configure_management_network)
    1. [Deploy Management Nodes](#deploy_management_nodes)
@@ -44,6 +45,16 @@ sections, but there is also a general troubleshooting topic.
    to assemble the components of the system and connect appropriately labeled cables.   
    
       See [Prepare Configuration Payload](prepare_configuration_payload.md)  
+   <a name="prepare_management_nodes"></a>
+
+   1. Prepare Management Nodes
+   Some preparation of the management nodes might be needed before starting an install or reinstall.
+   The preparation includes checking and updating the firmware on the PIT node, quiescing the compute nodes
+   and application nodes, scaling back DHCP on the management nodes, wiping the storage on the management nodes,
+   powering off the management nodes, and possibly powering off the PIT node.
+
+   
+      See [Prepare Management Nodes](prepare_management_nodes.md)  
    <a name="bootstrap_pit_node"></a>
    
    1. Bootstrap PIT Node  
@@ -54,6 +65,8 @@ sections, but there is also a general troubleshooting topic.
    
       Use one of these procedures to bootstrap the PIT node from the LiveCD.  
       * [Bootstrap Pit Node from LiveCD Remote ISO](bootstrap_livecd_remote_iso.md) (recommended)
+         * [Gigabyte BMCs] Should not use the RemoteISO method.
+         * [Intel BMCs] Should not use the RemoteISO method.
       * [Bootstrap Pit Node from LiveCD USB](bootstrap_livecd_usb.md) (fallback)
 
       Using the LiveCD USB method requires a USB 3.0 device with at least 1TB of space to create a bootable LiveCD.

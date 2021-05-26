@@ -204,19 +204,18 @@ data so run them only when indicated. Instructions are in the `README` files.
         
         1. Run this to create the backup; in one swoop, login to m002 and pull the files off the pit. _This runs `rsync` with specific parameters; `partial`, `non-verbose`, and `progress`._
             
-            > NOTE: this needs to be optimized to copy only the change/delta within the `csm/` folder, as well as the tar. Right now this 
-            > fetches 100% of the `csm/` folder without any compression.
-
             ```bash
             pit# ssh ncn-m002 CSM_RELEASE=$(basename $(ls -d /var/www/ephemeral/csm*/ | head -n 1)) \
-            'mkdir -pv /metal/bootstrap
-            rsync -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -rltD -P --delete pit.nmn:/var/www/ephemeral/prep /metal/bootstrap/
+            "mkdir -pv /metal/bootstrap
+            rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/prep /metal/bootstrap/
+            rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/${CSM_RELEASE}/cray-pre-install-toolkit*.iso /metal/bootstrap/"
             ```
 
             ```bash
             pit# ssh ncn-m003 CSM_RELEASE=$(basename $(ls -d /var/www/ephemeral/csm*/ | head -n 1)) \
-            'mkdir -pv /metal/bootstrap
-            rsync -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -rltD -P --delete pit.nmn:/var/www/ephemeral/prep /metal/bootstrap/
+            "mkdir -pv /metal/bootstrap
+            rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/prep /metal/bootstrap/
+            rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/${CSM_RELEASE}/cray-pre-install-toolkit*.iso /metal/bootstrap/"
             ```
         
         1. Handoff prep and CSM backups are done. Move to the next step and skip Option 2.
@@ -322,7 +321,7 @@ data so run them only when indicated. Instructions are in the `README` files.
 
         If there was any wiping done, output should appear similar to the snippet above. If this is re-ran, there may be no output or an ignorable error.
     
-1. Quit the typescript session with the `exit` command and copy the file (`booted-csm-lived.<date>.txt`) to a location on another server for reference later.
+1. Quit the typescript session with the `exit` command and copy the file (`booted-csm-livecd.<date>.txt`) to a location on another server for reference later.
     
     ```bash
     pit# exit
@@ -485,7 +484,7 @@ data so run them only when indicated. Instructions are in the `README` files.
     ```bash
     ncn-m001# export CSM_RELEASE=csm-x.y.z
     ncn-m001# mkdir -pv /mnt/livecd /mnt/rootfs /mnt/sqfs
-    ncn-m001# mount /metal/bootstrap/csm*/cray-pre-install-toolkit-*.iso /mnt/livecd/
+    ncn-m001# mount /metal/bootstrap/cray-pre-install-toolkit-*.iso /mnt/livecd/
     ncn-m001# mount /mnt/livecd/LiveOS/squashfs.img /mnt/sqfs/
     ncn-m001# mount /mnt/sqfs/LiveOS/rootfs.img /mnt/rootfs/
     ncn-m001# cp -pv /mnt/rootfs/usr/bin/csi /tmp/csi

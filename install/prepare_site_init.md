@@ -425,16 +425,13 @@ with system-specific customizations.
     hostname and not an IP for the upstream LDAP server in step 4 above, you
     will need to be able to resolve that hostname.
 
-    Set the `localZones` and `forwardZones` for the `cray-dns-unbound` service:
+    Set the `forwardZones` for the `cray-dns-unbound` service:
 
     ```bash
     linux# yq write -s - -i /mnt/pitdata/prep/site-init/customizations.yaml <<EOF
     - command: update
       path: spec.kubernetes.services.cray-dns-unbound
       value:
-        localZones:
-        - localType: static
-          name: "local"
         forwardZones:
         - name: "."
           forwardIps:
@@ -450,9 +447,6 @@ with system-specific customizations.
     Expected output looks similar to:
     
     ```
-    localZones:
-    - localType: static
-      name: "local"
     forwardZones:
     - name: "."
       forwardIps:

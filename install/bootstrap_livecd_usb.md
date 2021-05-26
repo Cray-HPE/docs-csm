@@ -180,13 +180,13 @@ which device that is.
     On Linux using the CSI application:
 
     ```bash
-    linux# csi pit format $USB ~/${CSM_RELEASE}/cray-pre-install-toolkit-*.iso 50000
+    linux# csi pit format $USB ./${CSM_RELEASE}/cray-pre-install-toolkit-*.iso 50000
     ```
 
     On MacOS using the bash script:
 
     ```bash
-    macos# ./cray-site-init/write-livecd.sh $USB ~/${CSM_RELEASE}/cray-pre-install-toolkit-*.iso 50000
+    macos# ./cray-site-init/write-livecd.sh $USB ./${CSM_RELEASE}/cray-pre-install-toolkit-*.iso 50000
     ```
 
     > NOTE: At this point the USB device is usable in any server with an x86_64 architecture based CPU. The remaining steps help add the installation data and enable SSH on boot.
@@ -201,7 +201,7 @@ which device that is.
 1.  Copy and extract the tarball (compressed) into the USB:
     ```bash
     linux# cp -r ~/${CSM_RELEASE}.tar.gz /mnt/pitdata/
-    linux# tar -zxvf ~/${CSM_RELEASE}.tar.gz -C /mnt/pitdata/
+    linux# tar -zxf ~/${CSM_RELEASE}.tar.gz -C /mnt/pitdata/
     ```
 
 The USB device is now bootable and contains our artifacts. This may be useful for internal or quick usage. Administrators seeking a Shasta installation must continue onto the [configuration payload](#configuration-payload).
@@ -537,7 +537,7 @@ This will enable SSH, and other services when the LiveCD starts.
     linux# cd; umount /mnt/pitdata
     ```
 
-1. Quit the typescript session with the `exit` command and copy the file (csm-usb-lived.<date>.txt) to a location on another server for reference later.
+1. Quit the typescript session with the `exit` command and copy the file (csm-usb-livecd.<date>.txt) to a location on another server for reference later.
 
 Now the USB device may be reattached to the management node, or if it was made on the management node then it can now
 reboot into the LiveCD.
@@ -548,7 +548,9 @@ reboot into the LiveCD.
 Some systems will boot the USB device automatically if no other OS exists (bare-metal). Otherwise the
 administrator may need to use the BIOS Boot Selection menu to choose the USB device.
 
-If an administrator is rebooting a node into the LiveCD, vs booting a bare-metal or wiped node, then `efibootmgr` will deterministically set the boot order. See the [set boot order](../background/ncn_boot_workflow.md#set-boot-order) page for more information on this topic..
+If an administrator is rebooting a node into the LiveCD, versus booting a bare-metal or wiped node, then `efibootmgr` will deterministically set the boot order.
+
+See the [set boot order](../background/ncn_boot_workflow.md#set-boot-order) page for more information on this topic..
 
 > UEFI booting must be enabled to find the USB device's EFI bootloader.
 
@@ -606,10 +608,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    Current password:   <------- press Enter here, again, for a blank password
    New password:       <------- type new password
    Retype new password:<------- retype new password
-   Welcome to the CRAY Prenstall Toolkit (LiveOS)
-
-   Offline CSM documentation can be found at /usr/share/doc/metal (version: rpm -q docs-csm-install)
-
+   Welcome to the CRAY Pre-Install Toolkit (LiveOS)
    ```
 
    > **`NOTE`** If this password is forgotten, it can be reset by mounting the USB device on another computer. See [Reset root Password on LiveCD](reset_root_password_on_LiveCD.md) for information on clearing the password.
@@ -665,9 +664,9 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    Expected output looks similar to the following:
 
    ```
-   VERSION=1.2.2
-   TIMESTAMP=20210121044136
-   HASH=75e6c4a
+   VERSION=1.4.9
+   TIMESTAMP=20210309034439
+   HASH=g1e67449
    ```
 
 1. Mount the data partition
