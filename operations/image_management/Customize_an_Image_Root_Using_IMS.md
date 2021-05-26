@@ -20,7 +20,7 @@ The Image Management Service \(IMS\) customization workflow sets up a temporary 
 -   Images in the .txz compressed format need to be converted to SquashFS in order to use IMS image customization.
 
 
-### ENABLE PASSWORDLESS SSH
+### Enable Passwordless SSH
 
 1.  Check for an existing IMS public key `id`.
 
@@ -79,7 +79,7 @@ The Image Management Service \(IMS\) customization workflow sets up a temporary 
     Select one of the following options based on the current state of the image root being used:
 
     -   If the image root being customized meets the above requirements, proceed to [Locate an IMS Image to Customize](#locate).
-    -   If the image root being customized is not in SquashFS format, refer to [Convert TGZ Archives to SquashFS Images](/portal/developer-portal/operations/Convert_TGZ_Archives_to_SquashFS_Images.mdConvert_TGZ_Archives_to_SquashFS_Images.md).
+    -   If the image root being customized is not in SquashFS format, refer to [Convert TGZ Archives to SquashFS Images](Convert_TGZ_Archives_to_SquashFS_Images.mdConvert_TGZ_Archives_to_SquashFS_Images.md).
     -   If the image root being customized is in SquashFS format and in S3, but not registered with the IMS service, proceed to [Register the Image Root with the IMS Service](#register).
 
 
@@ -182,7 +182,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     ncn# cray artifacts create boot-images $IMS_IMAGE_ID/manifest.json manifest.json
     ```
 
-### <a href="register">Register the Image Root with the IMS Service</a>
+### Register the Image Root with the IMS Service
 
 10.  Update the IMS image record.
 
@@ -200,7 +200,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     etag = ""
     ```
 
-### <a href="locate">Locate an IMS Image to Customize
+### Locate an IMS Image to Customize
 
     
 12.  Locate the IMS image record for the image that is being customized.
@@ -239,7 +239,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     |SLES 15 SP1 Barebones|cray-sles15sp1-barebones|vmlinuz|initrd|
     |CLE|cray-sles15sp1-cle|vmlinuz|initrd|
 
-    1.  Start the image customization job.
+     1.  Start the image customization job.
 
         Before running the following command, replace the MY\_CUSTOMIZED\_IMAGE value with the name of the image root being used.
 
@@ -279,8 +279,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
         host = "ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.shasta.cray.com" 
         port = 22 
         ```
-
-    2.  Create variables for the IMS job ID, Kubnetes job ID, and the SSH connection values in the returned data.
+     2.  Create variables for the IMS job ID, Kubnetes job ID, and the SSH connection values in the returned data.
 
         Before setting the SSH values, determine the appropriate method to SSH into the customization pod:
 
@@ -333,6 +332,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
 15.   Verify that the status of the IMS job is waiting\_on\_user.
 
+
     ```bash
     ncn# cray ims jobs describe $IMS_JOB_ID
     status = "waiting_on_user" 
@@ -381,8 +381,8 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
         Once connected to the IMS image customization shell, perform any customizations required. If the SSH shell was created without using the --ssh-containers-jail True parameter, cd or chroot into the image root. Refer to the following sections for examples of custom configurations:
 
-        -   [Customize an Image Root to Install Singularity](/portal/developer-portal/operations/Customize_an_Image_Root_to_Install_Singularity.md)
-        -   [Customize an Image Root to Install Compute Kubernetes](/portal/developer-portal/operations/Customize_an_Image_Root_to_Install_Compute_Kubernetes.md)
+        -   [Customize an Image Root to Install Singularity](Customize_an_Image_Root_to_Install_Singularity.md)
+        -   [Customize an Image Root to Install Compute Kubernetes](Customize_an_Image_Root_to_Install_Compute_Kubernetes.md)
         After changes have been made, run the touch command on the `complete` file. The location of the complete file depends on whether or not the SSH job shell was created using the `--ssh-containers-jail True` parameter. See the table below for more information.
 
         |--ssh-containers-jail|Command used to create the complete file|
@@ -558,6 +558,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     kubernetes_configmap = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-configmap"
     ```
 
+    
     If successful, create a variable for the IMS `resultant_image_id` value in the returned data.
 
     ```bash

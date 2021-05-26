@@ -15,7 +15,7 @@ New Keycloak groups can be used to group users for authentication.
     ```
 
 
-### procedure
+### Procedure
 
 1.  Click the Groups text in the Manage section in the navigation area on the left side of the screen.
 
