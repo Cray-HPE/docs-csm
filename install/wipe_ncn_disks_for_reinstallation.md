@@ -69,6 +69,7 @@ wiping the disks and RAIDs.
 
    ```bash
    ncn-s# systemctl stop ceph-osd.target
+   ```
 
    Make sure the OSDs (if any) are not running after running the first command.
 
@@ -97,6 +98,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
    ```bash
    ncn-s# systemctl stop ceph-osd.target
+   ```
 
    Make sure the OSDs (if any) are not running after running the first command.
 
@@ -105,29 +107,38 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
    ncn-s# vgremove -f --select 'vg_name=~ceph*'
    ```
    
-2. Unmount volumes
-   1. Storage nodes unmount (/var/lib/ceph, /var/lib/containers, and /etc/ceph)
-   2. Master nodes unmount (/var/lib/etcd)
-   3. Woker nodes unmount (/var/lib/containerd, /var/lib/kubelet, and /var/lib/sdu)
-3. Stop the RAIDs.
+1. Unmount volumes
+   1. Storage nodes
+      ```bash
+      ncn-s# umount /var/lib/ceph /var/lib/containers /etc/ceph
+      ```
+   2. Master nodes
+      ```bash
+      ncn-m# umount /var/lib/etcd
+      ```
+   3. Worker nodes
+      ```bash
+      ncn-w# umount /var/lib/containerd /var/lib/kubelet /var/lib/sdu
+      ```
+1. Stop the RAIDs.
 
    ```bash
    ncn-s# for md in /dev/md/*; do mdadm -S $md || echo nope ; done
    ```
 
-4. Remove auxiliary LVMs
+1. Remove auxiliary LVMs
 
    ```bash
    ncn-s# vgremove -f --select 'vg_name=~metal*'
    ```
 
->>***Note***: Optionally you can run a pvs and if any drives are still listed, you can remove them with a pvremove.   This is rarely needed.
+   >>***Note***: Optionally you can run a pvs and if any drives are still listed, you can remove them with a pvremove.   This is rarely needed.
 
-5. Wipe the disks and RAIDs.
+1. Wipe the disks and RAIDs.
 
    ```bash
    ncn-s# sgdisk --zap-all /dev/sd* 
    ncn-s# wipefs --all --force /dev/sd* /dev/disk/by-label/*
    ```
 
-See [Basic Wipe](#basic-wipe) section for expected output from the wipefs command.
+   See [Basic Wipe](#basic-wipe) section for expected output from the wipefs command.

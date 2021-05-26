@@ -331,7 +331,7 @@ The configuration workflow described here is intended to help understand the exp
     pit# csi pit validate --livecd-preflight
     ```
 
-    > Note: If you are **not** on an internal Cray/HPE system, or if you are on an offline/airgapped system, then you can ignore any errors about not being able resolve arti.dev.cray.com
+    > Note: If you are **not** on an internal HPE Cray system or if you are on an offline/airgapped system, then you can ignore any errors about not being able resolve arti.dev.cray.com
 
 1. Print the consoles available to you:
 

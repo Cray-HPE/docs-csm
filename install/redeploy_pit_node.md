@@ -321,7 +321,7 @@ data so run them only when indicated. Instructions are in the `README` files.
 
         If there was any wiping done, output should appear similar to the snippet above. If this is re-ran, there may be no output or an ignorable error.
     
-1. Quit the typescript session with the `exit` command and copy the file (`booted-csm-lived.<date>.txt`) to a location on another server for reference later.
+1. Quit the typescript session with the `exit` command and copy the file (`booted-csm-livecd.<date>.txt`) to a location on another server for reference later.
     
     ```bash
     pit# exit
