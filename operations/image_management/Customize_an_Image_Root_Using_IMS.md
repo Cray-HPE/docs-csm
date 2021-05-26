@@ -21,10 +21,14 @@ The Image Management Service \(IMS\) customization workflow sets up a temporary 
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ### Enable Passwordless SSH
 =======
 ### ENABLE PASSWORDLESS SSH
 >>>>>>> c36c198 (STP-2624: added image management files)
+=======
+### Enable Passwordless SSH
+>>>>>>> f416af2 (STP-2624: formatting changes)
 
 1.  Check for an existing IMS public key `id`.
 
@@ -84,10 +88,14 @@ The Image Management Service \(IMS\) customization workflow sets up a temporary 
 
     -   If the image root being customized meets the above requirements, proceed to [Locate an IMS Image to Customize](#locate).
 <<<<<<< HEAD
+<<<<<<< HEAD
     -   If the image root being customized is not in SquashFS format, refer to [Convert TGZ Archives to SquashFS Images](Convert_TGZ_Archives_to_SquashFS_Images.mdConvert_TGZ_Archives_to_SquashFS_Images.md).
 =======
     -   If the image root being customized is not in SquashFS format, refer to [Convert TGZ Archives to SquashFS Images](/portal/developer-portal/operations/Convert_TGZ_Archives_to_SquashFS_Images.mdConvert_TGZ_Archives_to_SquashFS_Images.md).
 >>>>>>> c36c198 (STP-2624: added image management files)
+=======
+    -   If the image root being customized is not in SquashFS format, refer to [Convert TGZ Archives to SquashFS Images](Convert_TGZ_Archives_to_SquashFS_Images.mdConvert_TGZ_Archives_to_SquashFS_Images.md).
+>>>>>>> f416af2 (STP-2624: formatting changes)
     -   If the image root being customized is in SquashFS format and in S3, but not registered with the IMS service, proceed to [Register the Image Root with the IMS Service](#register).
 
 
@@ -207,11 +215,15 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     ```
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ### Register the Image Root with the IMS Service
 
 10.  Update the IMS image record.
 =======
 ### <a href="register">Register the Image Root with the IMS Service</a>
+=======
+### Register the Image Root with the IMS Service
+>>>>>>> f416af2 (STP-2624: formatting changes)
 
 <<<<<<< HEAD
 4.  Update the IMS image record.
@@ -235,12 +247,16 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     ```
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ### Locate an IMS Image to Customize
 
     
 12.  Locate the IMS image record for the image that is being customized.
 =======
 ### <a href="locate">Locate an IMS Image to Customize
+=======
+### Locate an IMS Image to Customize
+>>>>>>> f416af2 (STP-2624: formatting changes)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -301,10 +317,14 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     |CLE|cray-sles15sp1-cle|vmlinuz|initrd|
 
 <<<<<<< HEAD
+<<<<<<< HEAD
      1.  Start the image customization job.
 =======
     1.  Start the image customization job.
 >>>>>>> c36c198 (STP-2624: added image management files)
+=======
+     1.  Start the image customization job.
+>>>>>>> f416af2 (STP-2624: formatting changes)
 
         Before running the following command, replace the MY\_CUSTOMIZED\_IMAGE value with the name of the image root being used.
 
@@ -345,11 +365,15 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
         port = 22 
         ```
 <<<<<<< HEAD
+<<<<<<< HEAD
      2.  Create variables for the IMS job ID, Kubnetes job ID, and the SSH connection values in the returned data.
 =======
 
     2.  Create variables for the IMS job ID, Kubnetes job ID, and the SSH connection values in the returned data.
 >>>>>>> c36c198 (STP-2624: added image management files)
+=======
+     2.  Create variables for the IMS job ID, Kubnetes job ID, and the SSH connection values in the returned data.
+>>>>>>> f416af2 (STP-2624: formatting changes)
 
         Before setting the SSH values, determine the appropriate method to SSH into the customization pod:
 
@@ -416,6 +440,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
 15.   Verify that the status of the IMS job is waiting\_on\_user.
 
+<<<<<<< HEAD
 =======
     mcm# export POD=cray-ims-cfa864b3-4e08-49b1-9c57-04573228fd3f-customize-xh2jf
     ```
@@ -432,6 +457,8 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 =======
 15.   Verify that the status of the IMS job is waiting\_on\_user.
 >>>>>>> fd44548 (STP-2624: step ordering)
+=======
+>>>>>>> f416af2 (STP-2624: formatting changes)
 
     ```bash
     ncn# cray ims jobs describe $IMS_JOB_ID
@@ -496,12 +523,17 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
         Once connected to the IMS image customization shell, perform any customizations required. If the SSH shell was created without using the --ssh-containers-jail True parameter, cd or chroot into the image root. Refer to the following sections for examples of custom configurations:
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         -   [Customize an Image Root to Install Singularity](Customize_an_Image_Root_to_Install_Singularity.md)
         -   [Customize an Image Root to Install Compute Kubernetes](Customize_an_Image_Root_to_Install_Compute_Kubernetes.md)
 =======
         -   [Customize an Image Root to Install Singularity](/portal/developer-portal/operations/Customize_an_Image_Root_to_Install_Singularity.md)
         -   [Customize an Image Root to Install Compute Kubernetes](/portal/developer-portal/operations/Customize_an_Image_Root_to_Install_Compute_Kubernetes.md)
 >>>>>>> c36c198 (STP-2624: added image management files)
+=======
+        -   [Customize an Image Root to Install Singularity](Customize_an_Image_Root_to_Install_Singularity.md)
+        -   [Customize an Image Root to Install Compute Kubernetes](Customize_an_Image_Root_to_Install_Compute_Kubernetes.md)
+>>>>>>> f416af2 (STP-2624: formatting changes)
         After changes have been made, run the touch command on the `complete` file. The location of the complete file depends on whether or not the SSH job shell was created using the `--ssh-containers-jail True` parameter. See the table below for more information.
 
         |--ssh-containers-jail|Command used to create the complete file|
@@ -739,6 +771,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     ```
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     
     If successful, create a variable for the IMS `resultant_image_id` value in the returned data.
 
@@ -750,6 +783,9 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
     ```bash
 =======
+=======
+    
+>>>>>>> f416af2 (STP-2624: formatting changes)
     If successful, create a variable for the IMS `resultant_image_id` value in the returned data.
 
     ```bash

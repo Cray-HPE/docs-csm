@@ -24,10 +24,14 @@ Ansible tasks and playbooks can be profiled in order to determine execution time
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 New sessions will be created with profiling information available in the Ansible logs of the session pods. Alternatively, if editing the default ansible.cfg file that CFS uses, is not desired, a new Ansible configuration can also be created to enable profiling and direct CFS to use it. See [Use a Custom ansible-cfg File](Use_a_Custom_ansible-cfg_File.md) for more information.
 =======
 New sessions will be created with profiling information available in the Ansible logs of the session pods. Alternatively, if editing the default ansible.cfg file that CFS uses, is not desired, a new Ansible configuration can also be created to enable profiling and direct CFS to use it. See [Use a Custom ansible-cfg File](/portal/developer-portal/operations/Use_a_Custom_ansible-cfg_File.mdd) for more information.
 >>>>>>> 269058d (STP-2624: imported several files from the admin guide)
+=======
+New sessions will be created with profiling information available in the Ansible logs of the session pods. Alternatively, if editing the default ansible.cfg file that CFS uses, is not desired, a new Ansible configuration can also be created to enable profiling and direct CFS to use it. See [Use a Custom ansible-cfg File](Use_a_Custom_ansible-cfg_File.md) for more information.
+>>>>>>> f416af2 (STP-2624: formatting changes)
 
 
 

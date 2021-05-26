@@ -44,6 +44,7 @@ Soft deleting an IMS public key, recipe, or image removes the record\(s\) from t
 
 Deleting an IMS public-key, recipe, or image record performs the following actions:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 1.  The IMS record\(s\) being deleted are moved from the collection of available items to a new deleted collection. Any newly created records within the deleted collection will have the same IMS ID value as it did before being moved there.
 2.  Any Simple Storage Service \(S3\) artifacts that are associated with the record or records being deleted are renamed within their S3 buckets so as to make them unavailable under their original key name.
@@ -51,6 +52,11 @@ Deleting an IMS public-key, recipe, or image record performs the following actio
     1.  The IMS record\(s\) being deleted are moved from the collection of available items to a new deleted collection. Any newly created records within the deleted collection will have the same IMS ID value as it did before being moved there.
     2.  Any Simple Storage Service \(S3\) artifacts that are associated with the record or records being deleted are renamed within their S3 buckets so as to make them unavailable under their original key name.
 >>>>>>> c36c198 (STP-2624: added image management files)
+=======
+
+1.  The IMS record\(s\) being deleted are moved from the collection of available items to a new deleted collection. Any newly created records within the deleted collection will have the same IMS ID value as it did before being moved there.
+2.  Any Simple Storage Service \(S3\) artifacts that are associated with the record or records being deleted are renamed within their S3 buckets so as to make them unavailable under their original key name.
+>>>>>>> f416af2 (STP-2624: formatting changes)
 
 #### Prerequisites
 

@@ -16,10 +16,14 @@ New Keycloak groups can be used to group users for authentication.
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ### Procedure
 =======
 ### procedure
 >>>>>>> 269058d (STP-2624: imported several files from the admin guide)
+=======
+### Procedure
+>>>>>>> f416af2 (STP-2624: formatting changes)
 
 1.  Click the Groups text in the Manage section in the navigation area on the left side of the screen.
 

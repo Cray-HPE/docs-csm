@@ -21,9 +21,13 @@ The default `ansible.cfg` file ConfigMap can be changed to a custom ConfigMap \(
 To use a different `ansible.cfg` on a per-session basis, use the --ansible-config option when creating a CFS session.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 Refer to [Use a Custom ansible-cfg File](Use_a_Custom_ansible-cfg_File.md) for more information.
 =======
 Refer to [Use a Custom ansible-cfg File](/portal/developer-portal/operations/Use_a_Custom_ansible-cfg_File.md) for more information.
 >>>>>>> 269058d (STP-2624: imported several files from the admin guide)
+=======
+Refer to [Use a Custom ansible-cfg File](Use_a_Custom_ansible-cfg_File.md) for more information.
+>>>>>>> f416af2 (STP-2624: formatting changes)
 
 
