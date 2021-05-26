@@ -114,13 +114,13 @@ installs as follows:
    Check power status of all NCNs.
 
    ```bash
-   pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power status
+   pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power status
    ```
    
    Power off all NCNs.
 
    ```bash
-   pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
+   pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
    ```
 
 <a name="apply-ncn-pre-boot-workarounds"></a>
@@ -317,8 +317,8 @@ The configuration workflow described here is intended to help understand the exp
 1. Set each node to always UEFI Network Boot, and ensure they're powered off
 
     ```bash
-    pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} chassis bootdev pxe options=efiboot,persistent
-    pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
+    pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $username -E -H {} chassis bootdev pxe options=efiboot,persistent
+    pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
     ```
 
     > Note: some BMCs will "flake" and ignore the bootorder setting by `ipmitool`. As a fallback, cloud-init will
@@ -362,7 +362,7 @@ The configuration workflow described here is intended to help understand the exp
     **`Note`**: You can boot all the storage nodes at the same time, but we have had better success boot all storage nodes except ncn-s001.  then boot that node approximately 1 minute after the other nodes.
 
     ```bash
-    pit# grep -oP $stoken /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
+    pit# grep -oP $stoken /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
 
 1. Wait. Observe the installation through ncn-s001-mgmt's console:
@@ -403,7 +403,7 @@ The configuration workflow described here is intended to help understand the exp
    **`NOTE`**: Once all storage nodes are up and the message "...sleeping 5 seconds until /etc/kubernetes/admin.conf" appears on the ncn-s001 console, it is safe to proceed with booting the **Kubernetes master nodes and worker nodes**
 
     ```bash
-    pit# grep -oP "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
+    pit# grep -oP "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
 
 1.  Wait. Observe the installation through ncn-m002-mgmt's console:
