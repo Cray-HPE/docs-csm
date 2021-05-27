@@ -43,7 +43,7 @@ The following procedure shows the process for generating the `hmn_connections.js
     > Note: Make sure to quote the SHCD file path if there are spaces in the document's filename.
 
     ```
-    linux# export SHCD_FILE="/path/to/systems/SHCD.xsls"
+    linux# export SHCD_FILE="/path/to/systems/SHCD.xlsx"
     ```
 
 4. Generate the hmn_connections.json file from the SHCD. This will either create or overwrite the `hmn_connections.json` file in the current directory:

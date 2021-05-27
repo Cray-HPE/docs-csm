@@ -44,9 +44,11 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    contents of the CSM software release tarball plus any patches, workarounds, or hotfixes.
 
    ```bash
+   linux# CSM_RELEASE=csm-x.y.z
    linux# echo $CSM_RELEASE
    linux# tar -zxvf ${CSM_RELEASE}.tar.gz
    linux# ls -l ${CSM_RELEASE}
+   linux# CSM_PATH=$(pwd)/${CSM_RELEASE}
    ```
 
    The ISO and other files are now available in the directory from the extracted CSM tar.
@@ -54,14 +56,14 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 1. Install/upgrade the CSI RPM.
 
    ```bash
-   linux# rpm -Uvh ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
+   linux# rpm -Uvh ${CSM_PATH}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
    ```
 
 1. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet 
    access these RPMs will need to be externally downloaded and then copied to this machine.
 
    **Important:** To ensure that the latest workarounds and documentation updates are available, 
-   see [Check for Latest Workarounds and Documentation Updates](update_product_stream/index.md#workarounds)
+   see [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds)
 
 1. Show the version of CSI installed.
 
@@ -90,7 +92,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    * Add the `embedded` repository (if necessary):
 
      ```bash
-     linux# zypper ar -fG "./${CSM_RELEASE}/rpm/embedded" "${CSM_RELEASE}-embedded"
+     linux# zypper ar -fG "${CSM_PATH}/rpm/embedded" "${CSM_RELEASE}-embedded"
      ```
      
    * Install `podman` and `podman-cni-config` packages:
@@ -100,7 +102,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
      ```
 
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
-   from the `./${CSM_RELEASE}/rpm/embedded` directory.
+   from the `${CSM_PATH}/rpm/embedded` directory.
 
 1. Install lsscsi to view attached storage devices.
 
@@ -110,7 +112,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    * Add the `embedded` repository (if necessary):
 
      ```bash
-     linux# zypper ar -fG "./${CSM_RELEASE}/rpm/embedded" "${CSM_RELEASE}-embedded"
+     linux# zypper ar -fG "${CSM_PATH}/rpm/embedded" "${CSM_RELEASE}-embedded"
      ```
      
    * Install `lsscsi` package:
@@ -120,7 +122,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
      ```
 
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
-   from the `./${CSM_RELEASE}/rpm/embedded` directory.
+   from the `${CSM_PATH}/rpm/embedded` directory.
 
 1. Although not strictly required, the procedures for setting up the
    `site-init` directory recommend persisting `site-init` files in a Git
@@ -132,7 +134,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    * Add the `embedded` repository (if necessary):
 
      ```bash
-     linux# zypper ar -fG "./${CSM_RELEASE}/rpm/embedded" "${CSM_RELEASE}-embedded"
+     linux# zypper ar -fG "${CSM_PATH}/rpm/embedded" "${CSM_RELEASE}-embedded"
      ```
      
    * Install `git` package:
@@ -142,7 +144,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
      ```
 
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
-   from the `./${CSM_RELEASE}/rpm/embedded` directory.
+   from the `${CSM_PATH}/rpm/embedded` directory.
 
 <a name="create-the-bootable-media"></a>
 ### 2. Create the Bootable Media
@@ -180,13 +182,13 @@ which device that is.
     On Linux using the CSI application:
 
     ```bash
-    linux# csi pit format $USB ./${CSM_RELEASE}/cray-pre-install-toolkit-*.iso 50000
+    linux# csi pit format $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
     ```
 
     On MacOS using the bash script:
 
     ```bash
-    macos# ./cray-site-init/write-livecd.sh $USB ./${CSM_RELEASE}/cray-pre-install-toolkit-*.iso 50000
+    macos# ./cray-site-init/write-livecd.sh $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
     ```
 
     > NOTE: At this point the USB device is usable in any server with an x86_64 architecture based CPU. The remaining steps help add the installation data and enable SSH on boot.
@@ -200,8 +202,8 @@ which device that is.
 
 1.  Copy and extract the tarball (compressed) into the USB:
     ```bash
-    linux# cp -r ~/${CSM_RELEASE}.tar.gz /mnt/pitdata/
-    linux# tar -zxf ~/${CSM_RELEASE}.tar.gz -C /mnt/pitdata/
+    linux# cp -r ${CSM_PATH}.tar.gz /mnt/pitdata/
+    linux# tar -zxvf ${CSM_PATH}.tar.gz -C /mnt/pitdata/
     ```
 
 The USB device is now bootable and contains our artifacts. This may be useful for internal or quick usage. Administrators seeking a Shasta installation must continue onto the [configuration payload](#configuration-payload).
