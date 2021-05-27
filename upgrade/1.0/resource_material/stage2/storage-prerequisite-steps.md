@@ -29,7 +29,9 @@ These steps should be taken to prepare each storage node being upgraded.
    - Create a tar file on the storage node being upgraded:
 
    ```bash
+   ncn-s001# systemctl stop ceph.target
    ncn-s001# tar -zcvf /tmp/$(hostname)-ceph.tgz /var/lib/ceph /var/lib/containers /etc/ceph
+   ncn-s001# systemctl start ceph.target
    ```
 
    - Copy the file to the $STABLE_NCN (execute from the stable ncn node):
