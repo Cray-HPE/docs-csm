@@ -11,7 +11,7 @@
     2. [Worker](#management-node-worker)
     3. [Storage](#management-node-storage)
 5. [Application Node](#application-node)
-6. [River HSN Switch](#river-hsn-switch)
+6. [Columbia Slingshot Switch](#columbia-slingshot-switch)
 7. [PDU Cabinet Controller](#pdu-cabinet-controller)
 8. [Cooling Door](#cooling-door)
 9. [Management Switches](#management-switches)
@@ -19,11 +19,11 @@
 <a name="introduction"></a>
 ## Introduction
 
-The HMN tab of the SHCD describes the river hardware present in the system and how these devices are connected to the Hardware Management Network (HMN). This information is required by CSM to perform hardware discovery and geolocation of River hardware in the system. The HMN tab may contain other hardware that is not managed by CSM, but is connected to the HMN. 
+The HMN tab of the SHCD describes the air-cooled hardware present in the system and how these devices are connected to the Hardware Management Network (HMN). This information is required by CSM to perform hardware discovery and geolocation of air-cooled hardware in the system. The HMN tab may contain other hardware that is not managed by CSM, but is connected to the HMN. 
 
 The hmn_connections.json file is derived from the HMN tab of a system SHCD, and is one of the seed files required by Cray Site Init (CSI) command to generate configuration files required to install CSM. The hmn_connections.json file is almost a 1 to 1 copy of the right-hand table in the HMN tab of the SHCD. It is an array of JSON objects, and each object represents a row from the HMN tab. Any row that is not understood by CSI will be ignored, this includes any additional devices connected to the HMN that are not managed by CSM.
 
-The System Layout Service (SLS) contains data about what hardware is in the system and how it is connected to the HMN network. This data is generated when the CSI tool generates configurations files for system. For River hardware, SLS will contain the SLS representation of the device and a Management Switch Connector object that describes what device is plugged into a particular management switch port.
+The System Layout Service (SLS) contains data about what hardware is in the system and how it is connected to the HMN network. This data is generated when the CSI tool generates configurations files for system. For air-cooled hardware, SLS will contain the SLS representation of the device and a Management Switch Connector object that describes what device is plugged into a particular management switch port.
 
 Column mapping from SHCD to hmn_connections.json:
 
@@ -71,7 +71,7 @@ Depending the type of compute node additional rules may apply. Compute nodes in 
 ### Dense 4 node chassis - Gigabyte or Intel chassis
 > Apollo 2000 compute nodes are not currently supported by CSM
 
-River compute nodes are typically in a 2U chassis that contains 4 compute nodes. Each of the compute nodes in the chassis gets its own row in the HMN tab, plus a parent row.
+Air-cooled compute nodes are typically in a 2U chassis that contains 4 compute nodes. Each of the compute nodes in the chassis gets its own row in the HMN tab, plus a parent row.
 
 The value of the SourceParent field is used to group together the 4 nodes that are contained withing the same chassis, and it is used to reference another row in the SHCD HMN table. The referenced SourceParent row is used to determine the rack slot that the compute nodes in occupy.
 * The SourceParent row can be a Chassis Management Controller which can be used to control devices underneath it. This device typically will have a connection to the HMN. A Gigabyte CMC is an example of a CMC. If a CMC is not connected to the HMN network, this will prevent CSM services from managing that device.
@@ -704,8 +704,8 @@ Management Switch Connector:
 ## Application Node
 The naming conventions for application nodes can be unique to a system. Refer to the [application node config procedure](308-APPLICATION-NODE-CONFIG) for the rules related to application nodes.
 
-<a name="river-hsn-switch"></a>
-## River HSN Switch
+<a name="columbia-slingshot-switch"></a>
+## Columbia Slingshot Switch
 The Source field needs to matching one of the following conditions:
   * Prefixed with: `sw-hsn`
   * Equal to `columbia` or `Columbia`
@@ -717,7 +717,7 @@ The following are examples of valid matches:
 
 
 ### SHCD
-A River HSN switch in slot 42 of cabinet 3000. Its BMC is connected to port 45 of the leaf switch in slot 38 of cabinet 3000.
+A Columbia Slingshot Switch in slot 42 of cabinet 3000. Its BMC is connected to port 45 of the leaf switch in slot 38 of cabinet 3000.
 
 | Source          | Rack  | Location |     | Parent          |     | Port | Destination | Rack   | Location |     | Port |
 | --------------- | ----- | -------- | --- | --------------- | --- | ---- | ----------- | ------ | -------- | --- | ---- | 
@@ -834,10 +834,10 @@ Management Switch Connector:
 ## Cooling Door
 The Source field for a Cooling door contains `door`.
 
-Cooling doors for River cabinets are not currently supported by CSM software and are ignored.
+Cooling doors in an air-cooled cabinet are not currently supported by CSM software and are ignored.
 
 ### SHCD
-Cooling door for cabinet 3000 is connected to port 27 of the leaf switch in slot 36 of cabient 3000. 
+Cooling door for cabinet 3000 is connected to port 27 of the leaf switch in slot 36 of cabinet 3000. 
 
 | Source          | Rack  | Location |     | Parent          |     | Port | Destination | Rack   | Location |     | Port |
 | --------------- | ----- | -------- | --- | --------------- | --- | ---- | ----------- | ------ | -------- | --- | ---- | 
