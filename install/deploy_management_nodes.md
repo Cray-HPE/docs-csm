@@ -77,7 +77,7 @@ installs as follows:
 
 1. Add the corresponding URL to the `ExecStartPost` script in
     `/usr/lib/systemd/system/nexus.service`.
-    
+
     > **`INTERNAL USE`** Cray internal systems may want to proxy to https://dtr.dev.cray.com as follows:
     >
     > ```bash
@@ -99,10 +99,13 @@ installs as follows:
 
     **Notice** that one of them is the `IPMI_PASSWORD`.  Replace `changeme` with the real root password for BMCs.
 
+    **Notice** that one of them is the `bmctype`.  Replace `ilo` with `gb` (or `intel`)
+
    ```bash
    pit# export mtoken='ncn-m(?!001)\w+-mgmt'
    pit# export stoken='ncn-s\w+-mgmt'
    pit# export wtoken='ncn-w\w+-mgmt'
+   pit# export bmctype='ilo' # or 'gb' or 'intel'
    pit# export username=root
    pit# export IPMI_PASSWORD=changeme
    ```
@@ -116,11 +119,44 @@ installs as follows:
    ```bash
    pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power status
    ```
-   
+
    Power off all NCNs.
 
    ```bash
    pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
+   ```
+
+   > **`INTERNAL USE`** the following steps work for Intel only if SDPTool is available.  
+     See /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh -h for examples
+
+   Configure NTP on each BMC using data defined in cloud-init **For fresh 1.5 installs**:
+
+   ```
+   pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh "$bmctype" -H {} -n
+   ```
+
+   Configure DNS on each BMC using manually defined servers **For 1.4 upgrades or 1.5 upgraded**:
+
+   ```
+   pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh "$bmctype" -H {} -N <NTP SERVER 1>,<NTP SERVER 2> -n
+   ```
+
+   Configure DNS on each BMC using data defined in cloud-init **For fresh 1.5 installs**:
+
+   ```
+   pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh "$bmctype" -H {} -d
+   ```
+
+   Configure DNS on each BMC using manually defined servers **For 1.4 upgrades or 1.5 upgraded**:
+
+   ```
+   pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh "$bmctype" -H {} -D <UNBOUND IP>,<OTHER NAMESERVER> -d
+   ```
+
+   Show the settings of each BMC, if desired:
+
+   ```
+   pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh "$bmctype" -H {} -s
    ```
 
 <a name="apply-ncn-pre-boot-workarounds"></a>
@@ -140,7 +176,7 @@ _There will be post-boot workarounds as well._
 <a name="ensure-time-is-accurate-before-deploying-ncns"></a>
 #### 1.4 Ensure Time Is Accurate Before Deploying NCNs
 
-**NOTE**: If you wish to use a timezone other than UTC, instead of step 1 below, follow 
+**NOTE**: If you wish to use a timezone other than UTC, instead of step 1 below, follow
 [this procedure for setting a local timezone](../operations/configure_ntp_on_ncns.md#set-a-local-timezone), then
 proceed to step 2.
 
@@ -154,7 +190,7 @@ proceed to step 2.
    pit# date "+%Y-%m-%d %H:%M:%S.%6N%z"
    ```
 
-   The time can be inaccurate if the system has been off for a long time, or, for example, the CMOS was cleared on a Gigabyte node.  See [Clear Gigabyte CMOS](clear_gigabyte_cmos.md). 
+   The time can be inaccurate if the system has been off for a long time, or, for example, the CMOS was cleared on a Gigabyte node.  See [Clear Gigabyte CMOS](clear_gigabyte_cmos.md).
 
    If the time is inaccurate, set the time manually.
 
@@ -248,7 +284,7 @@ during or after the installation, but it is better to meet the minimum NCN firmw
 
    > **`NOTE`** **PCIe** options can be found in [PCIe : Setting Expected Values](switch_pxe_boot_from_onboard_nic_to_pcie.md#setting-expected-values).
 
-1. Check for minimum NCN firmware versions and update them as needed, 
+1. Check for minimum NCN firmware versions and update them as needed,
    The firmware on the management nodes should be checked for compliance with the minimum version required
    and updated, if necessary, at this point.
 
@@ -464,13 +500,13 @@ The configuration workflow described here is intended to help understand the exp
     ```bash
     ncn-s# ceph-volume inventory
     ```
-    
+
     The field "available" would be true if ceph sees the drive as empty and can
     be used, e.g.:
 
     ```
     Device Path               Size         rotates available Model name
-    /dev/sda                  447.13 GB    False   False     SAMSUNG MZ7LH480 
+    /dev/sda                  447.13 GB    False   False     SAMSUNG MZ7LH480
     /dev/sdb                  447.13 GB    False   False     SAMSUNG MZ7LH480
     /dev/sdc                  3.49 TB      False   False     SAMSUNG MZ7LH3T8
     /dev/sdd                  3.49 TB      False   False     SAMSUNG MZ7LH3T8
@@ -617,7 +653,7 @@ Observe the output of the checks and note any failures, then remediate them.
 
 
 <a name="optional-validation"></a>
-#### 5.2 Optional Validation 
+#### 5.2 Optional Validation
 
    These tests are for sanity checking. These exist as software reaches maturity, or as tests are worked
    and added into the installation repertoire.
