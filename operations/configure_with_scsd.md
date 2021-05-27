@@ -49,10 +49,9 @@ The admin must be authenticated to the Cray CLI before proceeding.
    ncn# cat > scsd_cfg.json <<DATA
    {
       "Force":false,
-      "Targets": $(cray hsm inventory redfishEndpoints list --format=json | jq '[.RedfishEndpoints[] | .ID]' | sed 's/
-   ^/ /'),
+      "Targets": $(cray hsm inventory redfishEndpoints list --format=json | jq '[.RedfishEndpoints[] | .ID]' | sed 's/^/ /'),
       "Params":{
-         "SSHKey":"$(echo $SCSD_SSH_KEY)",
+         "SSHKey":"$(echo $SCSD_SSH_KEY)"
       }
    }
    DATA
@@ -66,7 +65,7 @@ The admin must be authenticated to the Cray CLI before proceeding.
    * The SSHKey settings match the desired public key
 
    ```bash
-   ncn1# cray scsd bmc loadcfg create scsd_cfg.json
+   ncn# cray scsd bmc loadcfg create scsd_cfg.json
    ```
 
    Check the output to verify all hardware has been set with the correct keys. Passwordless SSH to the root
