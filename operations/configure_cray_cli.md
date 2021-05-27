@@ -49,6 +49,8 @@ The `cray` CLI only needs to be initialized once per user on a node.
 
 ## Troubleshooting
 
+***NOTE:***  While resolving these issues is beyond the scope of this section, you may get clues to what is failing by adding `-vvvvv` to the `cray init ...` commands.
+
    If initialization fails in the above step, there are several common causes:
 
    * DNS failure looking up `api-gw-service-nmn.local` may be preventing the CLI from reaching the API Gateway and Keycloak for authorization
@@ -57,5 +59,66 @@ The `cray` CLI only needs to be initialized once per user on a node.
    * Istio failures may be preventing traffic from reaching Keycloak
    * Keycloak may not yet be set up to authorize you as a user
 
-   While resolving these issues is beyond the scope of this section, you may get clues to what is failing by adding `-vvvvv` to the `cray init ...` commands.
+   If the initialization fails and the reason output is like the below example then follow then you will need to restart radosgw on the storage nodes
+
+   ```bash
+   ncn-m002:~ # cray artifacts buckets list -vvv
+   Loaded token: /root/.config/cray/tokens/api_gw_service_nmn_local.vers
+   REQUEST: PUT to https://api-gw-service-nmn.local/apis/sts/token
+
+   OPTIONS: {'verify': False}
+
+   ERROR: {
+    "detail": "The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application.",
+     "status": 500,
+     "title": "Internal Server Error",
+     "type": "about:blank"
+    }
+
+    Usage: cray artifacts buckets list [OPTIONS]
+
+    Try 'cray artifacts buckets list --help' for  help.
+
+    Error: Internal Server Error: The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application.
+   ```
+
+   1.  ssh to ncn-s001/2/3
+   2.  Restart your ceph radosgw process
+   
+       ***The expected output will be like below but will vary based on the number of nodes running radosgw.***
+
+       ```bash
+       ncn-s00(1/2/3)# ceph orch restart rgw.site1.zone1
+       restart rgw.site1.zone1.ncn-s001.cshvbb from host 'ncn-s001'
+       restart rgw.site1.zone1.ncn-s002.tlegbb from host 'ncn-s002'
+       restart rgw.site1.zone1.ncn-s003.vwjwew from host 'ncn-s003'
+       ```
+   3.  Check to see that the processes were restarted
+
+       ***The "running" time should be in seconds.  You restarting all of them could require a couple of mins depending on how many***
+
+       ```bash
+       ncn-s001:~ # ceph orch ps --daemon_type rgw
+       NAME                             HOST      STATUS         REFRESHED  AGE  VERSION  IMAGE NAME                        IMAGE ID      CONTAINER ID
+       rgw.site1.zone1.ncn-s001.cshvbb  ncn-s001  running (29s)  23s ago    9h   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  2a712824adc1
+       rgw.site1.zone1.ncn-s002.tlegbb  ncn-s002  running (29s)  28s ago    9h   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  e423f22d06a5
+       rgw.site1.zone1.ncn-s003.vwjwew  ncn-s003  running (29s)  23s ago    9h   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  1e6ad6bc2c62
+       ```
+   4.  In the event that more than 5 minutes has passed and the radosgw services have not restarted you can fail the ceph-mgr process to the standby.
+
+       ***There are cases where an orchestration task gets stuck and our current remediation is to fail the ceph manager process.***
+       ```bash
+       # Get active ceph-mgr
+       ncn-s00(1/2/3)#ceph mgr dump | jq -r .active_name
+       ncn-s002.zozbqp
+       
+       # Fail the active ceph-mgr
+       ncn-s00(1/2/3)# ceph mgr fail $(ceph mgr dump | jq -r .active_name)
+       
+       #Confirm ceph-mgr has moved to a different ceph-mgr container
+       ncn-s00(1/2/3)# ceph mgr dump | jq -r .active_name
+       ncn-s001.qucrpr
+       ```
+
+   5.  At this point your process should restart, but confirm they have restarted like in step 3, and there is the outside case you may need to do steps 2 and 3 again.  
 
