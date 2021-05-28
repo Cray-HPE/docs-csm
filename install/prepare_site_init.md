@@ -9,10 +9,10 @@ default install procedures.
    1. [Background](#background)
    1. [Create and Initialize Site-Init Directory](#create-and-initialize-site-init-directory)
    1. [Create Baseline System Customizations](#create-baseline-system-customizations)
+   1. [Generate Sealed Secrets](#generate-sealed-secrets)
    1. [Version Control Site-Init Files](#version-control-site-init-files)
       1. [Push to a Remote Repository](#push-to-a-remote-repository)
-   1. [Generate Sealed Secrets](#generate-sealed-secrets)
-      1. [Patch cloud-init with the CA](#patch-cloud-init-with-the-ca)
+   1. [Patch cloud-init with the CA](#patch-cloud-init-with-the-ca)
    1. [Customer-Specific Customizations](#customer-specific-customizations)
    1. [Appendix](#appendix)
       1. [Tracked Sealed Secrets](#tracked-sealed-secrets)
@@ -573,7 +573,7 @@ encrypted.
 Setup `/mnt/pitdata/prep/site-init` as a Git repository in order to manage the
 baseline configuration during initial system installation.
 
-1.  Initialize `/mnt/pitdata/prep/site-info` as a Git repository:
+1.  Initialize `/mnt/pitdata/prep/site-init` as a Git repository:
 
     ```bash
     linux# cd /mnt/pitdata/prep/site-init
@@ -618,7 +618,7 @@ off-cluster. Add a remote repository and push the baseline configuration on
 
 
 <a name="patch-cloud-init-with-the-ca"></a>
-#### 5.1 Patch cloud-init with the CA
+### 5 Patch cloud-init with the CA
 
 **`NOTE`** Skip this if using a USB LiveCD. These steps are done elsewhere in that procedure.
 

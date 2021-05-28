@@ -10,7 +10,7 @@ These administrative procedures are needed to operate an HPE Cray EX system with
    * [Configure BMC and Controller Parameters with SCSD](configure_with_scsd.md)
    * [Update BGP Neighbors](update_bgp_neighbors.md)
    * [Update Firmware with FAS](update_firmware_with_fas.md)
-   * [Manage Node Consoles](manage_node_consoles.md))
+   * [Manage Node Consoles](manage_node_consoles.md)
    * [Changing Passwords and Credentials](changing_passwords_and_credentials.md)
    * [Managing Configuration with CFS](managing_configuration_with_CFS.md)
    * [UAS/UAI Admin and User Guide](500-UAS-UAI-ADMIN-AND-USER-GUIDE.md)
