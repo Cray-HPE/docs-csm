@@ -96,18 +96,29 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
 1. Delete CEPH Volumes ***on Utility Storage Nodes ONLY***
 
+   For Each Storage node:
+
+   ***1.4 or earlier***
    ```bash
    ncn-s# systemctl stop ceph-osd.target
    ```
-
+   ***1.5 or later***
+   ```bash
+   cephadm rm-cluster --fsid $(ceph status -f json-pretty|jq -r '.fsid') --force
+   ```
    Make sure the OSDs (if any) are not running after running the first command.
 
+   ```bash
+   ncn-s# ps -ef|grep ceph-osd  # examine the output.  there should be no running ceph-osd processes
+   ```
+
+   Remove the vgs.
    ```bash
    ncn-s# ls -1 /dev/sd* /dev/disk/by-label/*
    ncn-s# vgremove -f --select 'vg_name=~ceph*'
    ```
    
-1. Unmount volumes
+2. Unmount volumes
    1. Storage nodes
       ```bash
       ncn-s# umount /var/lib/ceph /var/lib/containers /etc/ceph
@@ -120,13 +131,13 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
       ```bash
       ncn-w# umount /var/lib/containerd /var/lib/kubelet /var/lib/sdu
       ```
-1. Stop the RAIDs.
+3. Stop the RAIDs.
 
    ```bash
    ncn-s# for md in /dev/md/*; do mdadm -S $md || echo nope ; done
    ```
 
-1. Remove auxiliary LVMs
+4. Remove auxiliary LVMs
 
    ```bash
    ncn-s# vgremove -f --select 'vg_name=~metal*'
@@ -134,7 +145,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
    >>***Note***: Optionally you can run a pvs and if any drives are still listed, you can remove them with a pvremove.   This is rarely needed.
 
-1. Wipe the disks and RAIDs.
+5. Wipe the disks and RAIDs.
 
    ```bash
    ncn-s# sgdisk --zap-all /dev/sd* 
