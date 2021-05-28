@@ -12,7 +12,8 @@ pipeline {
 
     environment {
         SPEC_FILE = "docs-csm-install.spec"
-        BUILD_METADATA = setRpmRevision()
+        BUILD_METADATA = getRpmRevision()
+        IS_STABLE = getRpmIsStable()
     }
 
     stages {
@@ -36,8 +37,8 @@ pipeline {
         stage('Publish ') {
             steps {
                 script {
-                    uploadCsmRpms(component: "docs-csm", pattern: "dist/rpmbuild/RPMS/noarch/*.rpm", arch: "noarch", isStable: env.TAG_NAME != null)
-                    uploadCsmRpms(component: "docs-csm", pattern: "dist/rpmbuild/SRPMS/*.rpm", arch: "src", isStable: env.TAG_NAME != null)
+                    uploadCsmRpms(component: "docs-csm", pattern: "dist/rpmbuild/RPMS/noarch/*.rpm", arch: "noarch", isStable: env.IS_STABLE)
+                    uploadCsmRpms(component: "docs-csm", pattern: "dist/rpmbuild/SRPMS/*.rpm", arch: "src", isStable: env.IS_STABLE)
                 }
             }
         }
