@@ -90,11 +90,15 @@ For each storage node in the cluster, start by following the steps at: [Common P
 
 #### Stage 4. Service Upgrades
 
-Run `upgrade.sh` to deploy upgraded CSM applications and services:
+1. Follow the steps at: [Pre Service Upgrade](resource_material/stage4/postgres-operator-pre-service-upgrade.md)
+
+2. Run `upgrade.sh` to deploy upgraded CSM applications and services:
 
 ```bash
 ncn-m001# ./${CSM_RELEASE}/upgrade.sh
 ```
+
+3. Follow the steps at: [Post Service Upgrade](resource_material/stage4/postgres-operator-post-service-upgrade.md)
 
 ### Post-Upgrade Health Checks
 
