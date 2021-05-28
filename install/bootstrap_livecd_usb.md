@@ -508,7 +508,7 @@ This will enable SSH, and other services when the LiveCD starts.
 1. Copy k8s artifacts:
 
     ```bash
-    linux# csi pit populate pitdata ~/${CSM_RELEASE}/images/kubernetes/ /mnt/pitdata/data/k8s/ -kiK
+    linux# csi pit populate pitdata "${CSM_PATH}/images/kubernetes/" /mnt/pitdata/data/k8s/ -kiK
     ```
     
     Expected output looks similar to the following:
@@ -522,7 +522,7 @@ This will enable SSH, and other services when the LiveCD starts.
 1. Copy ceph/storage artifacts:
 
     ```bash
-    linux# csi pit populate pitdata ~/${CSM_RELEASE}/images/storage-ceph/ /mnt/pitdata/data/ceph/ -kiC
+    linux# csi pit populate pitdata "${CSM_PATH}/images/storage-ceph/" /mnt/pitdata/data/ceph/ -kiC
     ```
     
     Expected output looks similar to the following:
