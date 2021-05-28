@@ -25,7 +25,7 @@ Note: These are examples only, your installation and cabling may vary.
 
 ![Example CDU Connections in SHCD](../img/network/CDU-SHCD.png)
 
-It is assumed that you have connectivity to the switch and the [Base Config](402-MGMT-NET-BASE-CONFIG.md) has been applied.
+It is assumed that you have connectivity to the switch and the [Base Config](configure_mgmt_net_base_config.md) has been applied.
 ## VSX Config
 
 Create the keepalive vrf on both switches.
