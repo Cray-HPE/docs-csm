@@ -31,10 +31,16 @@ compute node and application node firmware.
 > **`CUSTOMER NOTE`** If there's doubt that the tar contains latest, the customer should check [CrayPort][1] for newer firmware.
 
 1. Prepare the inventory. The RPMs providing firmware need to be installed:
-
+    
+    > When setting the CSM_PATH variable, set it to where your expanded CSM release tarball is located.
+    
    ```bash
    pit# export CSM_RELEASE=x.y.z
-   pit# find /var/www/ephemeral/${CSM_RELEASE}/firmware -name *.rpm -exec zypper -n in --auto-agree-with-licenses --allow-unsigned-rpm {} \+
+   pit# export CSM_PATH=/var/www/ephemeral/${CSM_RELEASE}
+   pit# zypper ar -fG "${CSM_PATH}/rpm/embedded" "${CSM_RELEASE}-embedded"
+   pit# pushd "${CSM_PATH}"
+   pit# find firmware -name *.rpm -exec zypper -n in --auto-agree-with-licenses --allow-unsigned-rpm {} \+
+   pit# popd
    ```
 
 2. Hide the old firmware; cleanup the directory
@@ -48,18 +54,19 @@ compute node and application node firmware.
 
    ```bash
    pit# mkdir -pv /var/www/fw/river/hpe
-   pit# find /opt/cray/fw -name *.flash -exec ln -snf {} /var/www/fw/river/hpe/ \;
-   pit# find /opt/cray/fw -name *.bin -exec ln -snf {} /var/www/fw/river/hpe/ \;
+   pit# find /opt/cray/fw -name *.flash -exec ln -svnf {} /var/www/fw/river/hpe/ \;
+   pit# find /opt/cray/fw -name *.bin -exec ln -svnf {} /var/www/fw/river/hpe/ \;
    pit# mkdir -pv /var/www/fw/river/gb
-   pit# find /opt/cray/FW/bios -name sh-svr* -exec ln -snf {} /var/www/fw/river/gb/ \;
+   pit# find /opt/cray/FW/bios -name sh-svr* -exec ln -svnf {} /var/www/fw/river/gb/ \;
    pit# mkdir -pv /var/www/fw/mountain/cray
-   pit# find /opt/cray/FW/bios -mindepth 0 -maxdepth 1 -type f -exec ln -snf {} /var/www/fw/mountain/cray/ \;
+   pit# find /opt/cray/FW/bios -mindepth 0 -maxdepth 1 -type f -exec ln -svnf {} /var/www/fw/mountain/cray/ \;
    ```
 
 4. Make a tftp symlink for Gigabyte nodes:
 
     ```bash
-    pit# ln -snf ../fw /var/www/boot/fw
+    pit# mkdir -pv /var/www/boot
+    pit# ln -svnf /var/www/fw /var/www/boot/fw
     ```
 
 <a name="check-bios-and-hardware"></a>
@@ -69,7 +76,7 @@ compute node and application node firmware.
    * From the NCN:
 
       ```bash
-      ncn-m002# pdsh -b -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') '
+      ncn-m# pdsh -b -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') '
       ipmitool fru | grep -i "board product" && \
       ipmitool mc info | grep -i "firmware revision" && \
       ipmitool fru | grep -i "product version"
@@ -225,14 +232,14 @@ Firmware is located on the LiveCD (versions 1.4.6 or higher).
 
 1. From the administrators own machine, SSH tunnel (`-L` creates the tunnel, and `-N` prevents a shell and stubs the connection). One at a time, or all together.
     ```bash
-    ssh -L 6443:ncn-m002-mgmt:443 -N $system_name-ncn-m001
-    ssh -L 7443:ncn-m003-mgmt:443 -N $system_name-ncn-m001
-    ssh -L 8443:ncn-w001-mgmt:443 -N $system_name-ncn-m001
-    ssh -L 9443:ncn-w002-mgmt:443 -N $system_name-ncn-m001
-    ssh -L 10443:ncn-w003-mgmt:443 -N $system_name-ncn-m001
-    ssh -L 11443:ncn-s001-mgmt:443 -N $system_name-ncn-m001
-    ssh -L 12443:ncn-s002-mgmt:443 -N $system_name-ncn-m001
-    ssh -L 13443:ncn-s003-mgmt:443 -N $system_name-ncn-m001
+    ssh -L 6443:ncn-m002-mgmt:443 -N root@${system_name}-ncn-m001
+    ssh -L 7443:ncn-m003-mgmt:443 -N root@${system_name}-ncn-m001
+    ssh -L 8443:ncn-w001-mgmt:443 -N root@${system_name}-ncn-m001
+    ssh -L 9443:ncn-w002-mgmt:443 -N root@${system_name}-ncn-m001
+    ssh -L 10443:ncn-w003-mgmt:443 -N root@${system_name}-ncn-m001
+    ssh -L 11443:ncn-s001-mgmt:443 -N root@${system_name}-ncn-m001
+    ssh -L 12443:ncn-s002-mgmt:443 -N root@${system_name}-ncn-m001
+    ssh -L 13443:ncn-s003-mgmt:443 -N root@${system_name}-ncn-m001
     ```
 2. One at a time in (to prevent log-outs from duplicate SSL/CA) open each and run through the nested steps:
 
