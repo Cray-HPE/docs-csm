@@ -573,7 +573,7 @@ encrypted.
 Setup `/mnt/pitdata/prep/site-init` as a Git repository in order to manage the
 baseline configuration during initial system installation.
 
-1.  Initialize `/mnt/pitdata/prep/site-info` as a Git repository:
+1.  Initialize `/mnt/pitdata/prep/site-init` as a Git repository:
 
     ```bash
     linux# cd /mnt/pitdata/prep/site-init
