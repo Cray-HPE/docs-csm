@@ -16,7 +16,7 @@ Here are example snippets from a Leaf switch in the SHCD.
 
 The uplinks are port 49 and 50 on the leaf.  They connect to Aggregation switch 1 and 2 on port 47.
 
-It is assumed that you have connectivity to the switch and the [Base Config](402-MGMT-NET-BASE-CONFIG.md) has been applied.
+It is assumed that you have connectivity to the switch and the [Base Config](configure_mgmt_net_base_config.md) has been applied.
 
 ## Uplink Config
 The uplink ports are the ports connecting the Leaf switches to the upstream switch.

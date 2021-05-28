@@ -19,11 +19,11 @@ The keepalive is port 27.
 
 ![Example Spine Connections in SHCD](../img/network/Spine-SHCD.png)
 
-It is assumed that you have connectivity to the switch and the [Base Config](402-MGMT-NET-BASE-CONFIG.md) has been applied.
+It is assumed that you have connectivity to the switch and the [Base Config](configure_mgmt_net_base_config.md) has been applied.
 
 ## VSX Config
 
-Create the keepalive vrf on both switches.
+Create the keepalive vrf on both switches.02-MGMT-NET-BASE-CONFIG
 ```
 sw-spine-001 & sw-spine-002 (config)#
     vrf keepalive
