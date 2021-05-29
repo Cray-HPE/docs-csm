@@ -166,7 +166,7 @@ if [[ ${upgrade_ncn} != ncn-s* ]]; then
       
       ssh-keygen -R $UPGRADE_NCN -f /root/.ssh/known_hosts
       ssh-keyscan -H $UPGRADE_NCN >> ~/.ssh/known_hosts
-      ssh $UPGRADE_NCN '/opt/cray/tests/install/ncn/scripts/check_clock_skew.sh'
+      ssh $UPGRADE_NCN '/srv/cray/scripts/metal/ntp-upgrade-config.sh'
       
       record_state "${state_name}" ${upgrade_ncn}
       echo

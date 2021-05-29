@@ -70,6 +70,18 @@ else
     echo "${state_name} has beed completed"
 fi
 
+state_name="UPGRADE_BSS"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" ]]; then
+    echo "${state_name} ..."
+    helm -n services upgrade cray-hms-bss ./${CSM_RELEASE}/helm/cray-hms-bss-*.tgz
+    record_state ${state_name} $(hostname)
+    echo
+else
+    echo "${state_name} has beed completed"
+fi
+
+
 state_name="UPLOAD_NEW_NCN_IMAGE"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
