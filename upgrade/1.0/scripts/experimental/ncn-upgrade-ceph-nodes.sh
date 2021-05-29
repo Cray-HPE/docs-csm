@@ -98,8 +98,6 @@ ceph orch daemon redeploy mon.$upgrade_ncn
 for s in $(ceph orch ps | grep $upgrade_ncn | awk '{print $1}'); do  ceph orch daemon start $s; done
 
 /usr/share/doc/csm/upgrade/1.0/scripts/ceph/ceph-services-stage2.sh
-
-/srv/cray/scripts/metal/ntp-upgrade-config.sh
 EOF
 read -p "Read above steps and press any key to continue ..."
 

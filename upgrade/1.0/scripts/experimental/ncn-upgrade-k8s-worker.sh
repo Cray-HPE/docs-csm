@@ -36,7 +36,8 @@ cat <<EOF
 NOTE: 
     Ensure that the previously rebuilt worker node (if applicable) has started any etcd pods (if necessary). We don't want to begin rebuilding the next worker node until etcd pods have reached quorum. Run the following command, and pause on this step until all pods are in a Running state:
 
-    kubectl get po -A -l 'app=etcd'
+    kubectl get po -A -l 'app=etcd' | grep -v "Running"
+
 EOF
 read -p "Read and act on above steps. Press any key to continue ..."
 

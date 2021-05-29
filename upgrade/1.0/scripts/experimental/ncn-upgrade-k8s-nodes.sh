@@ -113,7 +113,7 @@ if [[ $state_recorded == "0" ]]; then
     ipmitool -I lanplus -U root -P initial0 -H $UPGRADE_NCN-mgmt chassis power cycle
 EOF
 
-    read -p "Press any key to continue after above 'watch' command is running ..."
+    read -p "Press any key to continue after a node is booted ..."
     csi handoff bss-update-param --set metal.no-wipe=1 --limit $UPGRADE_XNAME
     
     record_state "${state_name}" ${upgrade_ncn}
@@ -158,17 +158,19 @@ if [[ ${upgrade_ncn} != ncn-s* ]]; then
    fi
 fi
 
-cat <<EOF
-Steps 8 are not automated yet
-
-MASTER:
-
-ncn# GOSS_BASE=/opt/cray/tests/install goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-master.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
-WORKER:
-
-ncn# GOSS_BASE=/opt/cray/tests/install goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-worker.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
-STORAGE:
-
-ncn# goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-storage.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
-EOF
-read -p "Read above steps and press any key to continue ..."
+if [[ ${upgrade_ncn} != ncn-s* ]]; then
+   state_name="NTP_SETUP"
+   state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+   if [[ $state_recorded == "0" ]]; then
+      echo "${state_name} ..."
+      
+      ssh-keygen -R $UPGRADE_NCN -f /root/.ssh/known_hosts
+      ssh-keyscan -H $UPGRADE_NCN >> ~/.ssh/known_hosts
+      ssh $UPGRADE_NCN '/opt/cray/tests/install/ncn/scripts/check_clock_skew.sh'
+      
+      record_state "${state_name}" ${upgrade_ncn}
+      echo
+   else
+      echo "${state_name} has beed completed"
+   fi
+fi
