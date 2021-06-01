@@ -102,11 +102,11 @@ installs as follows:
     **Notice** that one of them is the `bmctype`.  Replace `ilo` with `gb` (or `intel`)
 
    ```bash
+   pit# export bmctype='ilo' # or 'gb' or 'intel'
    pit# export mtoken='ncn-m(?!001)\w+-mgmt'
    pit# export stoken='ncn-s\w+-mgmt'
    pit# export wtoken='ncn-w\w+-mgmt'
-   pit# export bmctype='ilo' # or 'gb' or 'intel'
-   pit# export username=root
+   pit# export USERNAME=root
    pit# export IPMI_PASSWORD=changeme
    ```
 
@@ -117,13 +117,13 @@ installs as follows:
    Check power status of all NCNs.
 
    ```bash
-   pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power status
+   pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power status
    ```
 
    Power off all NCNs.
 
    ```bash
-   pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
+   pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
    ```
 
    > **`INTERNAL USE`** the following steps work for Intel only if SDPTool is available.  
@@ -212,7 +212,7 @@ proceed to step 2.
 
 
    ```bash
-   pit# export username=root
+   pit# export USERNAME=root
    pit# export IPMI_PASSWORD=changeme
    ```
 
@@ -229,10 +229,10 @@ proceed to step 2.
 
       ```bash
       pit# bmc=ncn-w001-mgmt  # Change this to be each node in turn.
-      pit# ipmitool -I lanplus -U $username -E -H $bmc chassis bootdev bios
-      pit# ipmitool -I lanplus -U $username -E -H $bmc chassis power off
+      pit# ipmitool -I lanplus -U $USERNAME -E -H $bmc chassis bootdev bios
+      pit# ipmitool -I lanplus -U $USERNAME -E -H $bmc chassis power off
       pit# sleep 10
-      pit# ipmitool -I lanplus -U $username -E -H $bmc chassis power on
+      pit# ipmitool -I lanplus -U $USERNAME -E -H $bmc chassis power on
       ```
 
       > For HPE NCNs the above process will boot the nodes to their BIOS, but the menu is unavailable through conman as the node is booted into a graphical BIOS menu.
@@ -353,8 +353,8 @@ The configuration workflow described here is intended to help understand the exp
 1. Set each node to always UEFI Network Boot, and ensure they're powered off
 
     ```bash
-    pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $username -E -H {} chassis bootdev pxe options=efiboot,persistent
-    pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
+    pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=efiboot,persistent
+    pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
     ```
 
     > Note: some BMCs will "flake" and ignore the bootorder setting by `ipmitool`. As a fallback, cloud-init will
@@ -398,7 +398,7 @@ The configuration workflow described here is intended to help understand the exp
     **`Note`**: You can boot all the storage nodes at the same time, but we have had better success boot all storage nodes except ncn-s001.  then boot that node approximately 1 minute after the other nodes.
 
     ```bash
-    pit# grep -oP $stoken /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
+    pit# grep -oP $stoken /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power on
     ```
 
 1. Wait. Observe the installation through ncn-s001-mgmt's console:
@@ -439,7 +439,7 @@ The configuration workflow described here is intended to help understand the exp
    **`NOTE`**: Once all storage nodes are up and the message "...sleeping 5 seconds until /etc/kubernetes/admin.conf" appears on the ncn-s001 console, it is safe to proceed with booting the **Kubernetes master nodes and worker nodes**
 
     ```bash
-    pit# grep -oP "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
+    pit# grep -oP "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power on
     ```
 
 1.  Wait. Observe the installation through ncn-m002-mgmt's console:

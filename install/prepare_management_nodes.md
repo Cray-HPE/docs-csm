@@ -9,6 +9,8 @@ For an install, if the system ever had any previous software installed, then sto
 For a reinstall, the preparation includes quiescing the compute nodes and application nodes, scaling back DHCP on the management nodes,
 wiping the storage on the management nodes, and powering off the management nodes.
 
+The procedures described on this page are being doing before any node is booted with the Cray Pre-Install Toolkit. When the PIT node is referenced during these procedures, it means the node that will be be booted as the PIT node.
+
 ### Topics:
 
 For install:
@@ -39,7 +41,7 @@ The HPC Firmware Pack is available in the same location as other product streams
 
 See the HPC Firmware Pack product stream for required minimum levels and procedures to check and update.
 
-**`INTERNAL USE`**  The HPC Firmware Pack is available at https://arti.dev.cray.com/artifactory/shasta-distribution-stable-local/firmware/
+**`INTERNAL USE`**  The HPC Firmware Pack is available at https://arti.dev.cray.com/artifactory/shasta-distribution-stable-local/shasta-firmware/
 
 Later in the installation process the HPC Firmware Pack will be installed on the PIT node and added to the Nexus repository so that it can be used in conjunction with the Firmware Action Services (FAS) to update firmware on other components.
 

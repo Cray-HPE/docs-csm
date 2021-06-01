@@ -22,7 +22,7 @@ scope of this documentation.
 
 ### Prerequisites
 
-Before upgrading to CSM-1.0, please ensure that the latest CSM-0.9.x patches and hot-fixes have been applied.  These upgrade instructions assume that the latest released CSM-0.9.x patch and any appplicable hot-fixes for CSM-0.9.x, have been applied.
+Before upgrading to CSM-1.0, please ensure that the latest CSM-0.9.x patches and hot-fixes have been applied.  These upgrade instructions assume that the latest released CSM-0.9.x patch and any applicable hot-fixes for CSM-0.9.x, have been applied.
 
 Begin by [downloading and configuring the latest version of CSM](resource_material/prereqs/get-csm.md)
 

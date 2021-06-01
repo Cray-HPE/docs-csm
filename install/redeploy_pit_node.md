@@ -321,7 +321,7 @@ data so run them only when indicated. Instructions are in the `README` files.
 
         If there was any wiping done, output should appear similar to the snippet above. If this is re-ran, there may be no output or an ignorable error.
     
-1. If you wish to preserve your conman console logs for the other NCNs, this is your last chance to do so. They will be lost after rebooting. They are located in `/var/logs/conman` on the PIT node.
+1. If you wish to preserve your conman console logs for the other NCNs, this is your last chance to do so. They will be lost after rebooting. They are located in `/var/log/conman` on the PIT node.
 
 1. Quit the typescript session with the `exit` command and copy the file (`booted-csm-livecd.<date>.txt`) to a location on another server for reference later.
     
@@ -473,12 +473,13 @@ data so run them only when indicated. Instructions are in the `README` files.
 <a name="enable-ncn-disk-wiping-safeguard"></a>
 ### 5. Enable NCN Disk Wiping Safeguard
 
-    > The next steps require `csi` from the installation media. `csi` will not be provided on an NCN otherwise since it is used for CRAY installation & bootstrap. The CSI binary is compiled against the NCN base, simply fetching it from the bootable media will suffice.
+> The next steps require `csi` from the installation media. `csi` will not be provided on an NCN otherwise since it is used for CRAY installation & bootstrap. The CSI binary is compiled against the NCN base, simply fetching it from the bootable media will suffice.
     
 1. SSH back into ncn-m001, or restart a local console and resume the typescript
     
     ```bash
     ncn-m001# script -af /metal/bootstrap/prep/admin/csm-verify.$(date +%Y-%m-%d).txt
+    ncn-m001# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
     ```
     
 1. Obtain access to CSI
