@@ -24,53 +24,53 @@ The system is fully installed.
 
     Users will be redirected to Keycloak to login, and based on the default OPA policy, only admin users will be authorized. Scripts may connect by first obtaining a JWT token from Keycloak and passing it in the HTTP Authorization header.
 
-    ![Nexus Web UI](../../img/operations/01-welcome.png "Nexus Web UI")
+    ![Nexus Web UI](../../img/operations/Nexus_Web_UI.png "Nexus Web UI")
 
 2.  Click on the gear icon at the top of the page.
 
     Clicking on the gear will open up the repository administration page.
 
-    ![Repository Administration Page](../../img/operations/02-admin.png "Repository Administration Page")
+    ![Repository Administration Page](../../img/operations/Nexus_Repository_Admin_Page.png "Repository Administration Page")
 
 3.  Click on **Tasks** in the navigation bar on the left-hand side of the page.
 
     The **Tasks** button is under the **System** heading.
 
-    ![Tasks Page](../../img/operations/03-tasks.png "Tasks Page")
+    ![Tasks Page](../../img/operations/Nexus_Tasks_Page.png "Tasks Page")
 
 4.  Click the **Create Task** button.
 
     Clicking the **Create Task** button will open up the following page. Select the type of task. For this example, the **Create Repair - Rebuild Yum repository metadata \(repodata\)** option would be selected.
 
-    ![Task Type Selection](../../img/operations/04-create-task.png "Task Type Selection")
+    ![Task Type Selection](../../img/operations/Nexus_Task_Type_Selection.png "Task Type Selection")
 
 5.  Enter the required information for the task, such as the task name, repository, and task frequency.
 
     Click the **Create task** at the bottom of the page after entering all required information about the task.
 
-    ![Create Task](../../img/operations/06-create-task-repair-yum-metadata-opensuse.png "Create Task")
+    ![Create Task](../../img/operations/Nexus_Create_Task.png "Create Task")
 
     The new task will now be available on the main Tasks page.
 
 6.  Click on the newly created task.
 
-    ![New Task on Task Page](../../img/operations/07-tasks2.png "New Task on Task Page")
+    ![New Task on Task Page](../../img/operations/Nexus_New_Task.png "New Task on Task Page")
 
 7.  Click the **Run** button at the top of the page.
 
-    ![Run a Task](../../img/operations/08-task-detail-opensuse.png "Run a Task")
+    ![Run a Task](../../img/operations/Nexus_Task_Detail.png "Run a Task")
 
     Select **Yes** when the confirmation pop-up appears.
 
-    ![Task Confirmation](../../img/operations/09-task-detail-confirm-run-opensuse.png "Task Confirmation")
+    ![Task Confirmation](../../img/operations/Nexus_Task_Confirmation.png "Task Confirmation")
 
     There will now be information about the run that was just scheduled on the main Tasks page.
 
-    ![Tasks Page](../../img/operations/10-task-detail-last-ran-opensuse.png "Tasks Page")
+    ![Tasks Page](../../img/operations/Nexus_Task_Detail_Last_Run.png "Tasks Page")
 
 8.  Click on the box icon in the navigation bar at the top of the page, then click **Browse** in the navigation bar on the left-hand side of the page..
 
-    ![Browse Page](../../img/operations/11-browse.png "Browse Page")
+    ![Browse Page](../../img/operations/Nexus_Browse_Page.png "Browse Page")
 
 9.  Track down the name of the repository being repaired.
 
@@ -78,9 +78,9 @@ The system is fully installed.
 
 10. View the repodata for the repository.
 
-    ![Repodata Summary](../../img/operations/12-browse-opensuse-before1.png "Repodata Summary")
+    ![Repodata Summary](../../img/operations/Nexus_Repodata_Summary.png "Repodata Summary")
 
-    ![Repodata Attributes](../../img/operations/13-browse-opensuse-before2.png "Repodata Attributes")
+    ![Repodata Attributes](../../img/operations/Nexus_Repodata_Attributes.png "Repodata Attributes")
 
 11. View the log file on the system.
 
@@ -136,9 +136,9 @@ The system is fully installed.
 
 12. Check the repodata for the repository again in the web UI.
 
-    ![Repodata Summary](../../img/operations/14-browse-opensuse-after1.png "Repodata Summary")
+    ![Repodata Summary](../../img/operations/Nexus_Repodata_Summary_After.png "Repodata Summary")
 
-    ![Repodata Attributes](../../img/operations/15-browse-opensuse-after2.png "Repodata Attributes")
+    ![Repodata Attributes](../../img/operations/Nexus_Repodata_Attributes_After.png "Repodata Attributes")
 
 
 **Troubleshooting:** When a rebuild fails, expect to see `ERROR` and `WARN` messages around the same time as the `Finished rebuilding yum metadata for repository` message. For example, consider the log from a failed rebuild of `mirror-1.3.0-opensuse-leap-15`:
