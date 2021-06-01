@@ -37,8 +37,8 @@ pipeline {
         stage('Publish ') {
             steps {
                 script {
-                    uploadCsmRpms(component: "docs-csm", pattern: "dist/rpmbuild/RPMS/noarch/*.rpm", arch: "noarch", isStable: env.IS_STABLE)
-                    uploadCsmRpms(component: "docs-csm", pattern: "dist/rpmbuild/SRPMS/*.rpm", arch: "src", isStable: env.IS_STABLE)
+                    publishCsmRpms(component: "docs-csm", pattern: "dist/rpmbuild/RPMS/noarch/*.rpm", arch: "noarch", isStable: env.IS_STABLE)
+                    publishCsmRpms(component: "docs-csm", pattern: "dist/rpmbuild/SRPMS/*.rpm", arch: "src", isStable: env.IS_STABLE)
                 }
             }
         }
