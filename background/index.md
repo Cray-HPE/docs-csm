@@ -52,8 +52,8 @@ software, but provides background which might be helpful for troubleshooting an 
 ### NCN Images
 
    The management nodes boot from NCN images which are created as layers on top of a common base image.
-   The comman image is customized with a Kubernetes layer for the master nodes and worker nodes.
-   The comman image is also customized with a storage-ceph layer for the utility storage nodes.
+   The common image is customized with a Kubernetes layer for the master nodes and worker nodes.
+   The common image is also customized with a storage-ceph layer for the utility storage nodes.
    Three artifacts are needed to boot the management nodes.
 
    See [NCN Images](ncn_images.md)
@@ -79,7 +79,7 @@ software, but provides background which might be helpful for troubleshooting an 
 ### NCN Networking
 
    Non-compute nodes and compute nodes have different network interfaces used for booting.
-   The NCN network interafaces, device naming, and vendor and bus identification are described in this topic.
+   The NCN network interfaces, device naming, and vendor and bus identification are described in this topic.
 
    * [NCN Networking](ncn_networking.md)
 

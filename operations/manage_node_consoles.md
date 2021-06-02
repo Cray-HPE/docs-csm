@@ -30,7 +30,7 @@ by conman and to connect to a console. **Note** this procedure has changed since
 
 1. Find the cray-console-node pod that is connected to the node. Be sure to substitute the actual xname of the node in the command below.
     ```bash
-    ncn# NODEPOD=$(kubectl -n services exec $CONPOD -- sh -c "/app/get-node <xname>" | jq .podname | sed 's/"//g')
+    ncn# NODEPOD=$(kubectl -n services exec $CONPOD -c cray-console-operator -- sh -c "/app/get-node <xname>" | jq .podname | sed 's/"//g')
     ncn# echo $NODEPOD
     ```
 

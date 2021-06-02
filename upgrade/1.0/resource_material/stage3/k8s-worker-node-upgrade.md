@@ -5,7 +5,7 @@
 
    > NOTE: If the command below doesn't return any pod names, proceed to step 2.
 
-   > NOTE: If `cray` is not intialized, please check [Initialize the CLI Configuration](https://stash.us.cray.com/projects/CSM/repos/docs-csm/browse/operations/validate_csm_health.md#uas-uai-init-cli-init)
+   > NOTE: If `cray` is not initialized, please check [Initialize the CLI Configuration](https://stash.us.cray.com/projects/CSM/repos/docs-csm/browse/operations/validate_csm_health.md#uas-uai-init-cli-init)
 
     ```text
     ncn# cray cps deployment list --format json | jq '.[] | [.node,.podname]'

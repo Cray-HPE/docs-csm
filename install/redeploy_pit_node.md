@@ -321,7 +321,7 @@ data so run them only when indicated. Instructions are in the `README` files.
 
         If there was any wiping done, output should appear similar to the snippet above. If this is re-ran, there may be no output or an ignorable error.
     
-1. If you wish to preserve your conman console logs for the other NCNs, this is your last chance to do so. They will be lost after rebooting. They are located in `/var/logs/conman` on the PIT node.
+1. If you wish to preserve your conman console logs for the other NCNs, this is your last chance to do so. They will be lost after rebooting. They are located in `/var/log/conman` on the PIT node.
 
 1. Quit the typescript session with the `exit` command and copy the file (`booted-csm-livecd.<date>.txt`) to a location on another server for reference later.
     
@@ -425,7 +425,7 @@ data so run them only when indicated. Instructions are in the `README` files.
 1. Verify we **do not** have a metal bootstrap IP.
 
     ```bash
-    ncn-m001# rm /etc/zypp/repos.d/* && zypper ms --remote --disable
+    ncn-m001# rm -v /etc/zypp/repos.d/* && zypper ms --remote --disable
     ```
     
 1. Install the latest documentation and workaround packages. This will require external access. 
@@ -466,19 +466,20 @@ data so run them only when indicated. Instructions are in the `README` files.
     ncn-m002# exit
     # typescript exited
     ncn-m002# rsync -rltDv -P /metal/bootstrap ncn-m001:/metal/
-    ncn-m002# rm -rf /metal/bootstrap
+    ncn-m002# rm -rfv /metal/bootstrap
     ncn-m002# exit
     ```
     
 <a name="enable-ncn-disk-wiping-safeguard"></a>
 ### 5. Enable NCN Disk Wiping Safeguard
 
-    > The next steps require `csi` from the installation media. `csi` will not be provided on an NCN otherwise since it is used for CRAY installation & bootstrap. The CSI binary is compiled against the NCN base, simply fetching it from the bootable media will suffice.
+> The next steps require `csi` from the installation media. `csi` will not be provided on an NCN otherwise since it is used for CRAY installation & bootstrap. The CSI binary is compiled against the NCN base, simply fetching it from the bootable media will suffice.
     
 1. SSH back into ncn-m001, or restart a local console and resume the typescript
     
     ```bash
     ncn-m001# script -af /metal/bootstrap/prep/admin/csm-verify.$(date +%Y-%m-%d).txt
+    ncn-m001# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
     ```
     
 1. Obtain access to CSI
@@ -486,9 +487,9 @@ data so run them only when indicated. Instructions are in the `README` files.
     ```bash
     ncn-m001# export CSM_RELEASE=csm-x.y.z
     ncn-m001# mkdir -pv /mnt/livecd /mnt/rootfs /mnt/sqfs
-    ncn-m001# mount /metal/bootstrap/cray-pre-install-toolkit-*.iso /mnt/livecd/
-    ncn-m001# mount /mnt/livecd/LiveOS/squashfs.img /mnt/sqfs/
-    ncn-m001# mount /mnt/sqfs/LiveOS/rootfs.img /mnt/rootfs/
+    ncn-m001# mount -v /metal/bootstrap/cray-pre-install-toolkit-*.iso /mnt/livecd/
+    ncn-m001# mount -v /mnt/livecd/LiveOS/squashfs.img /mnt/sqfs/
+    ncn-m001# mount -v /mnt/sqfs/LiveOS/rootfs.img /mnt/rootfs/
     ncn-m001# cp -pv /mnt/rootfs/usr/bin/csi /tmp/csi
     ncn-m001# /tmp/csi version
     ncn-m001# umount -vl /mnt/sqfs /mnt/rootfs /mnt/livecd

@@ -121,15 +121,15 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 2. Unmount volumes
    1. Storage nodes
       ```bash
-      ncn-s# umount /var/lib/ceph /var/lib/containers /etc/ceph
+      ncn-s# umount -v /var/lib/ceph /var/lib/containers /etc/ceph
       ```
    2. Master nodes
       ```bash
-      ncn-m# umount /var/lib/etcd
+      ncn-m# umount -v /var/lib/etcd
       ```
    3. Worker nodes
       ```bash
-      ncn-w# umount /var/lib/containerd /var/lib/kubelet /var/lib/sdu
+      ncn-w# umount -v /var/lib/containerd /var/lib/kubelet /var/lib/sdu
       ```
 3. Stop the RAIDs.
 

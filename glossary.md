@@ -310,7 +310,7 @@ manage the switch power, HSN ASIC, and FPGA interfaces.
 
 ### UAI
 
-The User Access Instance (UAI) is a lightweight, disposable platform that runs under Kubernetes orchestraion
+The User Access Instance (UAI) is a lightweight, disposable platform that runs under Kubernetes orchestration
 on worker nodes.  The UAI provides a single user containerized environment for users on a Cray Ex system to
 develop, build, and execute their applications on the Cray EX compute node.  See UAN for another
 way for users to gain access.

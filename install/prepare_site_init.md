@@ -40,7 +40,7 @@ installation-centric artifacts such as:
 1.  Create directory `/mnt/pitdata/prep/site-init`:
     
     ```bash
-    linux# mkdir -p /mnt/pitdata/prep/site-init
+    linux# mkdir -pv /mnt/pitdata/prep/site-init
     linux# cd /mnt/pitdata/prep/site-init
     ```
     
@@ -87,7 +87,7 @@ with system-specific customizations.
 1. Make a backup copy of `/mnt/pitdata/prep/site-init/customizations.yaml`:
     
     ```bash
-    linux# cp /mnt/pitdata/prep/site-init/customizations.yaml /mnt/pitdata/prep/site-init/customizations.yaml.prepassword
+    linux# cp -v /mnt/pitdata/prep/site-init/customizations.yaml /mnt/pitdata/prep/site-init/customizations.yaml.prepassword
     ```
     
 1.  Review the configuration to generate these sealed secrets in `customizations.yaml` in the `site-init` directory:
@@ -464,7 +464,7 @@ with system-specific customizations.
     1. Create backup copy of `customizations.yaml`:
         
         ```bash
-        linux# cp /mnt/pitdata/prep/site-init/customizations.yaml /mnt/pitdata/prep/site-init/customizations.yaml-prefixme
+        linux# cp -v /mnt/pitdata/prep/site-init/customizations.yaml /mnt/pitdata/prep/site-init/customizations.yaml-prefixme
         ```
     
     1. Edit `customizations.yaml`
@@ -639,7 +639,7 @@ Using `csi` on a generated site-init directory...
 
 1. Unmount the shim from earlier if one was used (for users of the [Bootstrap LiveCD Remote ISO](bootstrap_livecd_remote_iso.md)):
    ```bash
-   pit# umount /mnt/pitdata
+   pit# umount -v /mnt/pitdata
    ```
 
 <a name="customer-specific-customizations"></a>

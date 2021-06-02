@@ -2,7 +2,7 @@
 
 The Pre-Install Toolkit (PIT) node needs to be bootstrapped from the LiveCD.  There are two media available
 to bootstrap the PIT node--the RemoteISO or a bootable USB device.  This procedure describes using the 
-RemoveISO.  If not using the RemoteISO, see [Bootstrap PIT Node from LiveCD USB](bootstrap_livecd_usb.md)
+RemoteISO.  If not using the RemoteISO, see [Bootstrap PIT Node from LiveCD USB](bootstrap_livecd_usb.md)
 
 The installation process is similar to the USB based installation with adjustments to account for the
 lack of removable storage.
@@ -97,7 +97,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
 
    ```bash
-   pit# mkdir -p /var/www/ephemeral/prep/admin
+   pit# mkdir -pv /var/www/ephemeral/prep/admin
    pit# pushd !$
    pit# script -af csm-install-remoteiso.$(date +%Y-%m-%d).txt
    pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
@@ -203,7 +203,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    1. Copy the artifacts into place.
 
       ```bash
-      pit/var/www/ephemeral# mkdir -p data/{k8s,ceph}
+      pit/var/www/ephemeral# mkdir -pv data/{k8s,ceph}
       pit/var/www/ephemeral# rsync -a -P --delete ./${CSM_RELEASE}/images/kubernetes/ ./data/k8s/
       pit/var/www/ephemeral# rsync -a -P --delete ./${CSM_RELEASE}/images/storage-ceph/ ./data/ceph/
       ```

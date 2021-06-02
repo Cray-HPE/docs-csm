@@ -24,14 +24,14 @@ is being monitored by conman for console logs.
 
    ```bash
    curl -s -k -H "Authorization: Bearer ${TOKEN}" \
-   "https://api_gw_service.local/apis/sls/v1/search/hardware?extra_properties.Role=Application" \
+   "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Application" \
    | jq
    ```
 
    This will return an array of application nodes currently known in SLS:
    ```json
    ncn-w001# curl -s -k -H "Authorization: Bearer ${TOKEN}" \
-   "https://api_gw_service.local/apis/sls/v1/search/hardware?extra_properties.Role=Application" \
+   "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Application" \
    | jq
    [
      {
@@ -59,7 +59,7 @@ is being monitored by conman for console logs.
 
    ```json
    curl -X PUT -s -k -H "Authorization: Bearer ${TOKEN}" \
-   "https://api_gw_service.local/apis/sls/v1/hardware/<UAN_XNAME>" -d '
+   "https://api-gw-service-nmn.local/apis/sls/v1/hardware/<UAN_XNAME>" -d '
    {
      "Parent": "UAN_PARENT_XNAME",
      "Xname": "UAN_XNAME",
@@ -79,7 +79,7 @@ is being monitored by conman for console logs.
 
    ```json
    curl -X PUT -s -k -H "Authorization: Bearer ${TOKEN}" \
-   "https://api_gw_service.local/apis/sls/v1/hardware/x3000c0s19b0n0" -d '
+   "https://api-gw-service-nmn.local/apis/sls/v1/hardware/x3000c0s19b0n0" -d '
    {
      "Parent": "x3000c0s19b0",
      "Xname": "x3000c0s19b0n0",
@@ -98,7 +98,7 @@ is being monitored by conman for console logs.
 
    ```json
    ncn-w001# curl -X PUT -s -k -H "Authorization: Bearer ${TOKEN}" \
-   >"https://api_gw_service.local/apis/sls/v1/hardware/x3000c0s19b0n0" -d '
+   >"https://api-gw-service-nmn.local/apis/sls/v1/hardware/x3000c0s19b0n0" -d '
    > {
    >   "Parent": "x3000c0s19b0",
    >   "Xname": "x3000c0s19b0n0",
