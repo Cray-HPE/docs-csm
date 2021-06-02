@@ -69,7 +69,7 @@ None.
 
 ### Procedure
 
-   1. Verify that the Git version is at least 2.16.5 on the Linus system which will apply the patch.
+   1. Verify that the Git version is at least 2.16.5 on the Linux system which will apply the patch.
 
    The patch process is known to work with Git >= 2.16.5. Older versions of Git may not correctly apply the
    binary patch.

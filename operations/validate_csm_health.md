@@ -35,7 +35,6 @@ The areas should be tested in the order they are listed on this page. Errors in 
    1. [Create a BOS Session Template for the CSM Barebones Image](#csm-bos-session-template)
    1. [Find an available compute node](#csm-node")
    1. [Reboot the node using your BOS session template](#csm-reboot)
-   1. [Verify console connections](#csm-consoles)
    1. [Connect to the node's console and watch the boot](#csm-watch-boot)
 1. [UAS/UAI Tests](#uas-uai-tests)
    1. [Initialize and Authorize the CLI](#uas-uai-init-cli)
@@ -301,7 +300,7 @@ ncn# export TOKEN=$(curl -s -S -d grant_type=client_credentials \
 
 Retrieve all the Leases currently in KEA:
 ```bash
-ncn# curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' https://api_gw_service.local/apis/dhcp-kea | jq
+ncn# curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq
 ```
 
 If there is an non-zero amount of DHCP leases for river hardware returned that is a good indication that KEA is working.
@@ -481,7 +480,7 @@ the output.
 * Chassis Management Controllers (CMC) may show up as not being present in HSM.  CMCs for Intel server blades can be ignored.  Gigabyte server blade CMCs not found in HSM is not normal and should be investigated.   If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored.
 * HPE PDUs are not supported at this time and will likely show up as not being found in HSM.
 * BMCs having no association with a management switch port will be annotated as such, and should be investigated.  Exceptions to this are in Mountain or Hill configurations where mountain BMCs will show this condition on SLS/HSM mismatches, which is normal.
-* In Hill configurations SLS assumes BMCs in chassis 1 and 3 are populated, and in mountain contifurations SLS assumes all BMCs are populated.   Any non-populated BMCs will have no HSM data and will show up in the mismatch list.
+* In Hill configurations SLS assumes BMCs in chassis 1 and 3 are populated, and in mountain configurations SLS assumes all BMCs are populated.   Any non-populated BMCs will have no HSM data and will show up in the mismatch list.
 
 
 <a name="sms-health-checks"></a>
@@ -576,13 +575,13 @@ the Cray OS (COS) product, or similar, be used.
 ---
 **NOTES**
 
-* The CSM Barebones image included with the Shasta 1.4 release will not successfully complete
+* The CSM Barebones image included with the release will not successfully complete
 the beyond the dracut stage of the boot process. However, if the dracut stage is reached the
 boot can be considered successful and shows that the necessary CSM services needed to
 boot a node are up and available.
    * This inability to fully boot the barebones image will be resolved in future releases of the
    CSM product.
-* In addition to the CSM Barebones image, the Shasta 1.4 release also includes an IMS Recipe that
+* In addition to the CSM Barebones image, the release also includes an IMS Recipe that
 can be used to build the CSM Barebones image. However, the CSM Barebones recipe currently requires
 RPMs that are not installed with the CSM product. The CSM Barebones recipe can be built after the
 Cray OS (COS) product stream is also installed on to the system.
@@ -594,7 +593,6 @@ Cray OS (COS) product stream is also installed on to the system.
     1. [Create a BOS Session Template for the CSM Barebones Image](#csm-bos-session-template)
     1. [Find an available compute node](#csm-node")
     1. [Reboot the node using your BOS session template](#csm-reboot)
-    1. [Verify console connections](#csm-consoles)
     1. [Watch Boot on Console](#csm-watch-boot)
 
 <a name="locate-csm-barebones-image-in-ims"></a>
@@ -727,42 +725,18 @@ rel = "status"
 type = "GET"
 ```
 
-<a name="csm-consoles"></a>
-#### 4.5 Verify console connections
-
-Sometimes the compute nodes and UAN are not up yet when `cray-conman` is initialized, and consequently will
-not be monitored. This is a good time to verify that all nodes are being monitored for console logging
-and re-initialize `cray-conman` if needed.
-
-See [Manage Node Consoles](manage_node_consoles.md)
-
 <a name="csm-watch-boot"></a>
 #### 4.6 Connect to the node's console and watch the boot
 
-Run conman from inside the conman pod to access the console. The boot will fail, but should reach the dracut stage. If the dracut stage is reached, the boot
-can be considered successful and shows that the necessary CSM services needed to boot a node are
-up and available.
-```bash
-cray-conman-b69748645-qtfxj:/ # conman -j x9000c1s7b0n1
-```
+See [Manage Node Consoles](manage_node_consoles.md) for information on how to connect to the node's console.
 
-The boot is considered successful if the console output ends with something similar to the following:
+The boot will fail, but should reach the dracut stage. If the dracut stage is reached, the boot
+can be considered successful and shows that the necessary CSM services needed to boot a node are
+up and available. The boot is considered successful if the console output has something similar
+to the following near its end:
 ```
 [    7.876909] dracut: FATAL: Don't know how to handle 'root=craycps-s3:s3://boot-images/e3ba09d7-e3c2-4b80-9d86-0ee2c48c2214/rootfs:c77c0097bb6d488a5d1e4a2503969ac0-27:dvs:api-gw-service-nmn.local:300:nmn0'
 [    7.898169] dracut: Refusing to continue
-[    7.952291] systemd-shutdow: 13 output lines suppressed due to ratelimiting
-[    7.959842] systemd-shutdown[1]: Sending SIGTERM to remaining processes...
-[    7.975211] systemd-journald[1022]: Received SIGTERM from PID 1 (systemd-shutdow).
-[    7.982625] systemd-shutdown[1]: Sending SIGKILL to remaining processes...
-[    7.999281] systemd-shutdown[1]: Unmounting file systems.
-[    8.006767] systemd-shutdown[1]: Remounting '/' read-only with options ''.
-[    8.013552] systemd-shutdown[1]: Remounting '/' read-only with options ''.
-[    8.019715] systemd-shutdown[1]: All filesystems unmounted.
-[    8.024697] systemd-shutdown[1]: Deactivating swaps.
-[    8.029496] systemd-shutdown[1]: All swaps deactivated.
-[    8.036504] systemd-shutdown[1]: Detaching loop devices.
-[    8.043612] systemd-shutdown[1]: All loop devices detached.
-[    8.059239] reboot: System halted
 ```
 
 <a name="uas-uai-tests"></a>

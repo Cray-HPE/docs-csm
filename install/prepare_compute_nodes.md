@@ -136,7 +136,7 @@ This procedure needs to be done for each of the HPE Apollo 6500 XL645d nodes to 
    ncn-m001:~ # curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H \
    "Content-Type: application/json" -d '{"command": "lease4-del", \
    "service": [ "dhcp4" ], "arguments": {"hw-address": "94:40:c9:38:f7:b4", \
-   "ip-address": "10.254.1.38"}}' https://api_gw_service.local/apis/dhcp-kea
+   "ip-address": "10.254.1.38"}}' https://api-gw-service-nmn.local/apis/dhcp-kea
 
    [ { "result": 0, "text": "IPv4 lease deleted." } ]
    ```
