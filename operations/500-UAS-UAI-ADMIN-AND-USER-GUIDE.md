@@ -2423,9 +2423,9 @@ ncn-w001# cray artifacts get boot-images $SESSION_ID/rootfs rootfs.squashfs
 Create a directory to mount the squashfs:
 
 ```
-ncn-w001# mkdir mount
+ncn-w001# mkdir -v mount
 
-ncn-w001# mount -o loop,rdonly rootfs.squashfs `pwd`/mount
+ncn-w001# mount -v -o loop,rdonly rootfs.squashfs `pwd`/mount
 ```
 
 Create the tarball.
@@ -2446,7 +2446,7 @@ ncn-w001# tar tf $SESSION_ID.tar | grep '[.]/usr/bin/uai-ssh[.]sh'
 If the script is not present, the easiest place to get a copy of the script is from a UAI built from the end-user UAI image provided with UAS, and it can be appended to the tarball:
 
 ```
-mkdir -p ./usr/bin
+ncn-w001# mkdir -pv ./usr/bin
 ncn-w001# cray uas create --publickey ~/.ssh/id_rsa.pub
 uai_connect_string = "ssh vers@10.26.23.123"
 uai_host = "ncn-w001"
@@ -2469,7 +2469,7 @@ uai-ssh.sh                                                                    10
 ncn-w001# cray uas delete --uai-list uai-vers-32079250
 results = [ "Successfully deleted uai-vers-32079250",]
 
-ncn-w001# tar rf 0c0d4081-2e8b-433f-b6f7-e1ef0b907be3.tar ./usr/bin/uai-ssh.sh
+ncn-w001# tar rvf 0c0d4081-2e8b-433f-b6f7-e1ef0b907be3.tar ./usr/bin/uai-ssh.sh
 ```
 
 ##### Create and Push the Container Image <a name="main-uaiimages-customenduser-build-image"></a>
@@ -2493,14 +2493,14 @@ ncn-w001# cray uas admin config images create --imagename $UAI_IMAGE_NAME
 ##### Cleanup the Mount Directory and tarball <a name="main-uaiimages-customenduser-build-cleanup"></a>
 
 ```
-ncn-w001# umount mount; rmdir mount
+ncn-w001# umount -v mount; rmdir -v mount
 
 ncn-w001# rm $SESSION_ID.tar rootfs.squashfs
 
 # NOTE: the next step could be done as an `rm -rf` but, since the user
 #       is `root` and the path is very similar to an important system
 #       path a more cautious approach is taken.
-ncn-w001# rm -f ./usr/bin/uai-ssh.sh && rmdir ./usr/bin ./usr
+ncn-w001# rm -fv ./usr/bin/uai-ssh.sh && rmdir ./usr/bin ./usr
 ```
 
 ## Troubleshooting <a name="main-trouble"></a>

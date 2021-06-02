@@ -1,8 +1,8 @@
 # NCN Images
 
 The management nodes boot from NCN images which are created from layers on top of a common base image.
-The comman image is customized with a Kubernetes layer for the master nodes and worker nodes.
-The comman image is customized with a storage-ceph layer for the utility storage nodes..
+The common image is customized with a Kubernetes layer for the master nodes and worker nodes.
+The common image is customized with a storage-ceph layer for the utility storage nodes..
 
 ### Topics:
 

@@ -11,7 +11,7 @@ Setup a re-install of LiveCD on a node using the previous configuration.
     pit# tar -czvf "network-data-$(date  '+%Y-%m-%d_%H-%M-%S').tar.gz" /etc/sysconfig/network/*
     pit# cp -pv /etc/hosts ./
     pit# popd
-    pit# umount /var/www/ephemeral
+    pit# umount -v /var/www/ephemeral
     ``` 
 
 1. Unplug the USB device.
@@ -22,10 +22,10 @@ Setup a re-install of LiveCD on a node using the previous configuration.
 1. Plug the device into a new machine, or make a backup on the booted NCN. Make a snapshot of the USB device.
 
     ```bash
-    mylinuxpc> mount /dev/disk/by-label/PITDATA /mnt
+    mylinuxpc> mount -v /dev/disk/by-label/PITDATA /mnt
     mylinuxpc> tar -czvf --exclude *.squashfs \
     "install-data-$(date  '+%Y-%m-%d_%H-%M-%S').tar.gz" /mnt/
-    mylinuxpc> umount /dev/disk/by-label/PITDATA
+    mylinuxpc> umount -v /dev/disk/by-label/PITDATA
     ```
 
 1. Follow the steps in the "Boot LiveCD" procedure in the HPE Cray EX System Installation and Configuration
@@ -41,7 +41,7 @@ next step.
    Once the install-data partition is created, it can be remounted and can be used to restore the backup.
 
     ```bash
-    mylinuxpc> mount /dev/disk/by-label/PITDATA /mnt
+    mylinuxpc> mount -v /dev/disk/by-label/PITDATA /mnt
     mylinuxpc> tar -xzvf $(ls -ltR *.tar.gz | head -n 1)
     mylinuxpc> ls -R /mnt
     ``` 

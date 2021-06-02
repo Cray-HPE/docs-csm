@@ -18,7 +18,7 @@ sw-leaf-001# write memory
 
 ## Switch-to-Switch Connections for MLAG, VLT, or VSX
 Flowcontrol is supposed to be enabled on the IPL for Mellanox MLAG.
-Flowcontrol settings are defined elsewhere for the links between redundant Dell, Mellanox, or Aruba switches. This includes IPL and keepalive interfaces. This document is not relevent for those links.
+Flowcontrol settings are defined elsewhere for the links between redundant Dell, Mellanox, or Aruba switches. This includes IPL and keepalive interfaces. This document is not relevant for those links.
 
 The configuration below is supposed to be on for Mellanox MLAG
 ```

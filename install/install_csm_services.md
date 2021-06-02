@@ -12,7 +12,6 @@ This procedure will install CSM applications and services into the CSM Kubernete
    1. [Setup Nexus](#setup-nexus)
    1. [Set NCNs to use Unbound](#set-ncns-to-use-unbound)
    1. [Apply After Sysmgmt Manifest Workarounds](#apply-after-sysmgmt-manifest-workarounds)
-   1. [Add Compute Cabinet Routing to NCNs](#add-compute-cabinet-routing-to-ncns)
    1. [Known Issues](#known-issues)
       * [Error: not ready: https://packages.local](#error-not-ready)
       * [Error initiating layer upload ... in registry.local: received unexpected HTTP status: 200 OK](#error-initiating-layer-upload)
@@ -28,7 +27,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
 > **`EXTERNAL USE`** -- Every customer system should follow this procedure.  
 > 
 > **`INTERNAL USE`** This procedure **is needed** for HPE Cray internal systems which did not reconfigure to proxy from an
->  upstream registry. This procdure **is NOT needed** for HPE Cray internal systems which **did** reconfigure to proxy from an upstream registry.  Online installs cannot upload container images to the bootstrap registry since it proxies an upstream source.  
+>  upstream registry. This procedure **is NOT needed** for HPE Cray internal systems which **did** reconfigure to proxy from an upstream registry.  Online installs cannot upload container images to the bootstrap registry since it proxies an upstream source.  
 >  **Warning:** **DO NOT** perform this procedure if the bootstrap registry was [reconfigured to proxy from an
 > upstream registry](deploy_management_nodes.md#configure-bootstrap-registry-to-proxy-an-upstream-registry). 
 
@@ -342,27 +341,8 @@ If there is a workaround here, the output looks similar to the following:
 CASMCMS-6857  CASMNET-423
 ```
 
-<a name="add-compute-cabinet-routing-to-ncns"></a>
-### 8. Add Compute Cabinet Routing to NCNs
-
-NCNs require additional routing to enable access to Mountain, Hill and River Compute cabinets.
-
-Requires:
-* Platform installation
-* Running and configured SLS
-* Can be run from PIT if passwordless SSH is set up to all NCNs, but should be run post ncn-m001 reboot.
-
-To apply the routing, run:
-
-```bash
-ncn# /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-1570/CASMINST-1570.sh
-```
-
-> **`NOTE`** Currently, there is no automated procedure to apply routing changes to all worker NCNs to support Mountain, Hill and River
-Compute Node Cabinets. 
-
 <a name="known-issues"></a>
-### 9. Known Issues
+### 8. Known Issues
 
 The `install.sh` script changes cluster state and should not simply be rerun
 in the event of a failure without careful consideration of the specific
@@ -375,7 +355,7 @@ stderr prefixed with the expanded value of PS4, namely, `+ `.)
 Known potential issues with suggested fixes are listed below.
 
 <a name="error-not-ready"></a>
-#### 9.1 Error: not ready: https://packages.local
+#### 8.1 Error: not ready: https://packages.local
 
 The infamous `error: not ready: https://packages.local` indicates that from
 the caller’s perspective, Nexus not ready to receive writes. However, it most
@@ -416,7 +396,7 @@ removed before attempting to deploy again.
 
 
 <a name="error-initiating-layer-upload"></a>
-#### 9.2 Error initiating layer upload ... in registry.local: received unexpected HTTP status: 200 OK
+#### 8.2 Error initiating layer upload ... in registry.local: received unexpected HTTP status: 200 OK
 
 The following error may occur when running `./lib/setup-nexus.sh`:
 
@@ -434,7 +414,7 @@ This error is most likely _intermittent_ and running `./lib/setup-nexus.sh`
 again is expected to succeed.
 
 <a name="error-registry-local-no-such-host"></a>
-#### 9.3 Error lookup registry.local: no such host
+#### 8.3 Error lookup registry.local: no such host
 
 The following error may occur when running `./lib/setup-nexus.sh`:
 
@@ -454,7 +434,7 @@ These errors are most likely _intermittent_ and running `./lib/setup-nexus.sh`
 again is expected to succeed.
 
 <a name="next-topic"></a>
-# Next Topic
+# 9. Next Topic
 
    After completing this procedure the next step is to redeploy the PIT node.
 

@@ -197,12 +197,12 @@ which device that is.
 
     ```bash
     linux# mkdir -pv /mnt/{cow,pitdata}
-    linux# mount -L cow /mnt/cow && mount -L PITDATA /mnt/pitdata
+    linux# mount -vL cow /mnt/cow && mount -vL PITDATA /mnt/pitdata
     ```
 
 1.  Copy and extract the tarball (compressed) into the USB:
     ```bash
-    linux# cp -r ${CSM_PATH}.tar.gz /mnt/pitdata/
+    linux# cp -v ${CSM_PATH}.tar.gz /mnt/pitdata/
     linux# tar -zxvf ${CSM_PATH}.tar.gz -C /mnt/pitdata/
     ```
 
@@ -473,14 +473,13 @@ This will enable SSH, and other services when the LiveCD starts.
 1. Unmount the Overlay, we're done with it
 
     ```bash
-    linux# umount /mnt/cow    
+    linux# umount -v /mnt/cow    
     ```
 
 1. Make directories needed for basecamp (cloud-init) and the squashFS images
 
     ```bash
-    linux# mkdir -p /mnt/pitdata/configs/
-    linux# mkdir -p /mnt/pitdata/data/{k8s,ceph}/
+    linux# mkdir -pv /mnt/pitdata/configs/ /mnt/pitdata/data/{k8s,ceph}/
     ```
 
 1. Copy basecamp data
@@ -536,7 +535,7 @@ This will enable SSH, and other services when the LiveCD starts.
 1. Unmount the data partition:
 
     ```bash
-    linux# cd; umount /mnt/pitdata
+    linux# cd; umount -v /mnt/pitdata
     ```
 
 1. Quit the typescript session with the `exit` command and copy the file (csm-usb-livecd.<date>.txt) to a location on another server for reference later.
@@ -634,10 +633,18 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 <a name="configure-the-running-livecd"></a>
 ### 6. Configure the Running LiveCD
 
+1. Mount the data partition
+    > The data partition is set to `fsopt=noauto` to facilitate LiveCDs over virtual-ISO mount. USB installations need to mount this manually.
+
+    ```bash
+    pit# mount -vL PITDATA
+    ```
+
 1. Start a typescript to record this section of activities done on ncn-m001 while booted from the LiveCD.
 
    ```bash
-   pit# script -af booted-csm-livecd.$(date +%Y-%m-%d).txt
+   pit# mkdir -pv /var/www/ephemeral/prep/logs
+   pit# script -af /var/www/ephemeral/prep/logs/booted-csm-livecd.$(date +%Y-%m-%d).txt
    pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
    
@@ -670,13 +677,6 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    TIMESTAMP=20210309034439
    HASH=g1e67449
    ```
-
-1. Mount the data partition
-    > The data partition is set to `fsopt=noauto` to facilitate LiveCDs over virtual-ISO mount. USB installations need to mount this manually.
-
-    ```bash
-    pit# mount -L PITDATA
-    ```
 
 1. First login workarounds
 

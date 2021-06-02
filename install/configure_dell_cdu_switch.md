@@ -115,7 +115,7 @@ Below is an example of CDU switch IP addressing based on the network .yaml files
 | 2 | 10.252.0.5/17| 10.252.0.6/17 | River Node Management
 | 4 | 10.254.0.5/17| 10.254.0.6/17 | River Hardware Management
 | 2000 | 10.100.0.2/22| 10.100.0.3/22 | Mountain Node Management
-| 3000 | 10.104.0.2/22| 10.104.0.3/22 | Mountain Hardware Managemen
+| 3000 | 10.104.0.2/22| 10.104.0.3/22 | Mountain Hardware Management
 
 If the system has additional Mountain Cabinets the VLANs will look like this. 
 This is an example of a system with 3 cabinets. 

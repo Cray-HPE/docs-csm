@@ -27,7 +27,7 @@ Refer to the _HPE Cray EX System Administration Guide 1.5 S-8001_ for more infor
       * Re-Sync Keycloak Users to Compute Nodes
       * Configure Keycloak for LDAP/AD Authentication
       * Configure the RSA Plugin in Keycloak
-      * Preserve Username Capicalization for Users Exported from Keycloak
+      * Preserve Username Capitalization for Users Exported from Keycloak
       * Change the LDAP Server IP for Existing LDAP Server Content
       * Change the LDAP Server IP for New LDAP Server Content
       * Remove the LDAP User Federation from Keycloak
