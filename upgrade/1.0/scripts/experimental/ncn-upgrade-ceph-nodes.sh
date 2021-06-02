@@ -83,22 +83,36 @@ else
 fi
 
 cat <<EOF
-Steps 3-10 are not automated yet
+Steps 3-8 are not automated yet
 
-watch "ceph orch ps | grep $upgrade_ncn; echo ''; ceph osd tree"
+watch "ceph orch ps | grep ${upgrade_ncn}; echo ''; ceph osd tree"
 
 ceph cephadm get-pub-key > ~/ceph.pub
 
-ssh-copy-id -f -i ~/ceph.pub root@$upgrade_ncn
+ssh-copy-id -f -i ~/ceph.pub root@${upgrade_ncn}
 
-ceph orch host add $upgrade_ncn
+ceph orch host add ${upgrade_ncn}
 
-ceph orch daemon redeploy mon.$upgrade_ncn
+ceph orch daemon redeploy mon.${upgrade_ncn}
 
-for s in $(ceph orch ps | grep $upgrade_ncn | awk '{print $1}'); do  ceph orch daemon start $s; done
+for s in $(ceph orch ps | grep ${upgrade_ncn} | awk '{print $1}'); do  ceph orch daemon start $s; done
 
-/usr/share/doc/csm/upgrade/1.0/scripts/ceph/ceph-services-stage2.sh
 EOF
 read -p "Read above steps and press any key to continue ..."
+
+state_name="POST_CEPH_IMAGE_UPGRADE_CONFIG"
+state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo "${state_name} ..."
+
+    ssh ${upgrade_ncn} '/usr/share/doc/csm/upgrade/1.0/scripts/ceph/ceph-services-stage2.sh'
+    ssh ${upgrade_ncn} '/srv/cray/scripts/metal/ntp-upgrade-config.sh'
+
+
+    record_state "${state_name}" ${upgrade_ncn}
+    echo
+else
+    echo "${state_name} has beed completed"
+fi
 
 ssh $upgrade_ncn 'GOSS_BASE=/opt/cray/tests/install goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-storage.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate'

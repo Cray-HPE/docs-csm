@@ -57,7 +57,7 @@ EOF
     elif [[ $upgrade_ncn == ncn-m* ]]; then
     cat <<'EOF' > wipe_disk.sh
     set -e
-    umount /var/lib/etcd || true
+    umount /var/lib/etcd /var/lib/sdu || true
     for md in /dev/md/*; do mdadm -S $md || echo nope ; done
     vgremove -f --select 'vg_name=~metal*' || true
     pvremove /dev/md124 || true
