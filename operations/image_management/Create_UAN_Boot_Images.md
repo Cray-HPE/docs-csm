@@ -362,26 +362,12 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         UAN-1.4.0-day-zero.squashfs
         artifact = "ac31e971-f990-4b5f-821d-c0c18daefb6e/UAN-1.4.0-day-zero.rootfs"
         Key = "ac31e971-f990-4b5f-821d-c0c18daefb6e/UAN-1.4.0-day-zero.rootfs" 
-<<<<<<< HEAD
-<<<<<<< HEAD
         
-=======
->>>>>>> c36c198 (STP-2624: added image management files)
-=======
-        
->>>>>>> 89b783f (STP-2624: minor formatting changes)
         ncn-m001# cray artifacts create boot-images ${NEW_IMAGE_ID}/initrd \
         initrd
         artifact = "ac31e971-f990-4b5f-821d-c0c18daefb6e/UAN-1.4.0-day-zero.initrd"
         Key = "ac31e971-f990-4b5f-821d-c0c18daefb6e/UAN-1.4.0-day-zero.initrd" 
-<<<<<<< HEAD
-<<<<<<< HEAD
         
-=======
->>>>>>> c36c198 (STP-2624: added image management files)
-=======
-        
->>>>>>> 89b783f (STP-2624: minor formatting changes)
         ncn-m001# cray artifacts create boot-images ${NEW_IMAGE_ID}/kernel \
         vmlinuz
         artifact = "ac31e971-f990-4b5f-821d-c0c18daefb6e/UAN-1.4.0-day-zero.kernel"
@@ -511,21 +497,9 @@ This guide only details how to apply UAN-specific configuration to the UAN image
     ncn-m001# cray cfs sessions describe uan-config-PRODUCT_VERSION --format json | jq
     ```
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 ### Prepare UAN Boot Session Templates
 
 19. Retrieve the xnames of the UAN nodes from the Hardware State Manager \(HSM\).
-=======
-19. |PREPARE UAN BOOT SESSION TEMPLATES|
-
-20. Retrieve the xnames of the UAN nodes from the Hardware State Manager \(HSM\).
->>>>>>> c36c198 (STP-2624: added image management files)
-=======
-### Prepare UAN Boot Session Templates
-
-19. Retrieve the xnames of the UAN nodes from the Hardware State Manager \(HSM\).
->>>>>>> 89b783f (STP-2624: minor formatting changes)
 
     These xnames are needed for Step 20.
 
@@ -537,15 +511,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
     x3000c0s22b0n0
     ```
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 20. Determine the correct value for the ifmap option in the `kernel_parameters` string for the type of UAN.
-=======
-21. Determine the correct value for the ifmap option in the `kernel_parameters` string for the type of UAN.
->>>>>>> c36c198 (STP-2624: added image management files)
-=======
-20. Determine the correct value for the ifmap option in the `kernel_parameters` string for the type of UAN.
->>>>>>> 89b783f (STP-2624: minor formatting changes)
 
     -   Use ifmap=net0:nmn0,lan0:hsn0,lan1:hsn1 if the UANs are:
         -   Either HPE DL325 or DL385 server that have a single OCP PCIe card installed.
@@ -553,15 +519,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
     -   Use ifmap=net2:nmn0,lan0:hsn0,lan1:hsn1 if the UANs are:
         -   Either HPE DL325 or DL385 servers which have a second OCP PCIe card installed, regardless if it is being used or not.
         -   Gigabyte servers that have a PCIe network card installed in addition to the built-in LOM ports, regardless if it is being used or not.
-<<<<<<< HEAD
-<<<<<<< HEAD
 21. Construct a JSON BOS boot session template for the UAN.
-=======
-22. Construct a JSON BOS boot session template for the UAN.
->>>>>>> c36c198 (STP-2624: added image management files)
-=======
-21. Construct a JSON BOS boot session template for the UAN.
->>>>>>> 89b783f (STP-2624: minor formatting changes)
 
     1.  Populate the template with the following information:
 
@@ -597,15 +555,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
 
     3.  Save the template with a descriptive name, such as uan-sessiontemplate-PRODUCT\_VERSION.json.
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 22. Register the session template with BOS.
-=======
-23. Register the session template with BOS.
->>>>>>> c36c198 (STP-2624: added image management files)
-=======
-22. Register the session template with BOS.
->>>>>>> 89b783f (STP-2624: minor formatting changes)
 
     The following command uses the JSON session template file to save a session template in BOS. This step allows administrators to boot UANs by referring to the session template name.
 

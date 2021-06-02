@@ -37,15 +37,7 @@ batcherCheckInterval = 10
 defaultBatcherRetryPolicy = 3
 ```
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 See [CFS Global Options](CFS_Global_Options.md) for more information. Use the cray cfs options update command to change these values as needed.
-=======
-See [CFS Global Options](/portal/developer-portal/operations/CFS_Global_Options.md) for more information. Use the cray cfs options update command to change these values as needed.
->>>>>>> 269058d (STP-2624: imported several files from the admin guide)
-=======
-See [CFS Global Options](CFS_Global_Options.md) for more information. Use the cray cfs options update command to change these values as needed.
->>>>>>> f416af2 (STP-2624: formatting changes)
 
 Review the following information about CFS Batcher options before changing the defaults. Setting these to non-optimal values may affect system performance. The optimal values will depend on system size and the specifics of the configuration layers that will be applied in the sessions created by CFS Batcher.
 
@@ -106,5 +98,4 @@ To find all of the sessions created by the CFS Batcher due to configuration requ
 ```bash
 # cray cfs sessions list --tags bos_session=BOS_SESSION_ID
 ```
-
 
