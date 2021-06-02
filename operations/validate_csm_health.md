@@ -300,7 +300,7 @@ ncn# export TOKEN=$(curl -s -S -d grant_type=client_credentials \
 
 Retrieve all the Leases currently in KEA:
 ```bash
-ncn# curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' https://api_gw_service.local/apis/dhcp-kea | jq
+ncn# curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq
 ```
 
 If there is an non-zero amount of DHCP leases for river hardware returned that is a good indication that KEA is working.

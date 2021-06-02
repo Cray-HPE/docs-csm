@@ -13,7 +13,7 @@ to be changed.
 Clearing the password (macOS or Linux):
 
 ```bash
-mypc:~ > mount -L cow /mnt
-mypc:~ > sudo rm -f /mnt/rw/etc/shadow
-mypc:~ > umount /mnt
+mypc:~ > mount -vL cow /mnt
+mypc:~ > sudo rm -fv /mnt/rw/etc/shadow
+mypc:~ > umount -v /mnt
 ```

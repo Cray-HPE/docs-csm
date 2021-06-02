@@ -9,7 +9,7 @@ For an install, if the system ever had any previous software installed, then sto
 For a reinstall, the preparation includes quiescing the compute nodes and application nodes, scaling back DHCP on the management nodes,
 wiping the storage on the management nodes, and powering off the management nodes.
 
-The procedures described on this page are being doing before any node is booted with the Cray Pre-Install Toolkit. When the PIT node is referenced during these procedures, it means the node that will be be booted as the PIT node.
+The procedures described on this page are being done before any node is booted with the Cray Pre-Install Toolkit. When the PIT node is referenced during these procedures, it means the node that will be be booted as the PIT node.
 
 ### Topics:
 
@@ -193,12 +193,13 @@ install).
 
 <a name="power_off_pit_node"></a>
 ### Power Off PIT Node 
-    > **`Skip this step if`** you are planning to use this node as a staging area to create the USB LiveCD.
 
-    Lastly, shutdown the LiveCD or ncn-m001 node.
-    ```bash
-    ncn-m001# poweroff
-    ```
+> **`Skip this step if`** you are planning to use this node as a staging area to create the USB LiveCD.
+
+Lastly, shutdown the LiveCD or ncn-m001 node.
+```bash
+ncn-m001# poweroff
+```
 
 <a name="next-topic"></a>
 # Next Topic

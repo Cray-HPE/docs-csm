@@ -56,26 +56,26 @@ The Kubernetes image is used by the master and worker nodes.
    The Kubernetes image directory is /var/www/ephemeral/data/k8s.
 
    ```bash
-   pit# umount /var/www/ephemeral/data/k8s/squashfs-root/mnt/squashfs
+   pit# umount -v /var/www/ephemeral/data/k8s/squashfs-root/mnt/squashfs
    ```
 
 1. Save old SquashFS image.
 
    ```bash
-   pit# mkdir old
-   pit# mv *squashfs old
+   pit# mkdir -v old
+   pit# mv -v *squashfs old
    ```
 
 1. Move new SquashFS image, kernel, and initrd into place.
 
    ```bash
-   pit# mv squashfs-root/squashfs/* .
+   pit# mv -v squashfs-root/squashfs/* .
    ```
 
 1. Update file permissions on initrd
 
    ```bash
-   pit# chmod 644 initrd.img.xz
+   pit# chmod -v 644 initrd.img.xz
    ```
 
 1. Set the boot links.
@@ -137,26 +137,26 @@ The Ceph image is used by the utility storage nodes.
    The ceph image directory is /var/www/ephemeral/data/ceph.
 
    ```bash
-   pit# umount /var/www/ephemeral/data/ceph/squashfs-root/mnt/squashfs
+   pit# umount -v /var/www/ephemeral/data/ceph/squashfs-root/mnt/squashfs
    ```
 
 1. Save old SquashFS image.
 
    ```bash
-   pit# mkdir old
-   pit# mv *squashfs old
+   pit# mkdir -v old
+   pit# mv -v *squashfs old
    ```
 
 1. Move new SquashFS image, kernel, and initrd into place.
 
    ```bash
-   pit# mv squashfs-root/squashfs/* .
+   pit# mv -v squashfs-root/squashfs/* .
    ```
 
 1. Update file permissions on initrd
 
    ```bash
-   pit# chmod 644 initrd.img.xz
+   pit# chmod -v 644 initrd.img.xz
    ```
 
 1. Set the boot links.

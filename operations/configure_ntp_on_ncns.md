@@ -281,16 +281,16 @@ You need to adjust the node images so that they also boot in the local timezone.
 1. Back outside the chroot session, you will now back up the original images and copy the new ones into place.
 
     ```bash
-    pit# mkdir ${IMGDIR}/orig
-    pit# mv *.kernel *.xz *.squashfs ${IMGDIR}/orig/
-    pit# cp squashfs-root/squashfs/* .
-    pit# chmod 644 ${IMGDIR}/initrd.img.xz
+    pit# mkdir -v ${IMGDIR}/orig
+    pit# mv -v *.kernel *.xz *.squashfs ${IMGDIR}/orig/
+    pit# cp -v squashfs-root/squashfs/* .
+    pit# chmod -v 644 ${IMGDIR}/initrd.img.xz
     ```
 
 1. Unmount the squashfs mount (which was mounted by the earlier unsquashfs command).
 
     ```bash
-    pit# umount ${IMGDIR}/squashfs-root/mnt/squashfs
+    pit# umount -v ${IMGDIR}/squashfs-root/mnt/squashfs
     ```
 
 1. Repeat all of the previous steps, with this change to the IMGTYPE variable.
@@ -329,16 +329,16 @@ You need to adjust the node images so that they also boot in the local timezone.
 1. Back outside the chroot session, you will now back up the original images and copy the new ones into place.
 
     ```bash
-    pit# mkdir ${IMGDIR}/orig
-    pit# mv *.kernel *.xz *.squashfs ${IMGDIR}/orig/
-    pit# cp squashfs-root/squashfs/* .
-    pit# chmod 644 ${IMGDIR}/initrd.img.xz
+    pit# mkdir -v ${IMGDIR}/orig
+    pit# mv -v *.kernel *.xz *.squashfs ${IMGDIR}/orig/
+    pit# cp -v squashfs-root/squashfs/* .
+    pit# chmod -v 644 ${IMGDIR}/initrd.img.xz
     ```
 
 1. Unmount the squashfs mount (which was mounted by the earlier unsquashfs command)
 
     ```bash
-    pit# umount ${IMGDIR}/squashfs-root/mnt/squashfs
+    pit# umount -v ${IMGDIR}/squashfs-root/mnt/squashfs
     ```
 
 1. Now link the new images so that the NCNs will get them from the LiveCD node when they boot.

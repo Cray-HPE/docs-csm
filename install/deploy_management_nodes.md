@@ -397,9 +397,19 @@ The configuration workflow described here is intended to help understand the exp
 
     **`Note`**: You can boot all the storage nodes at the same time, but we have had better success boot all storage nodes except ncn-s001.  then boot that node approximately 1 minute after the other nodes.
 
-    ```bash
-    pit# grep -oP $stoken /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power on
-    ```
+    1. Boot all storage nodes except ncn-s001:
+    
+        ```bash
+        pit# grep -oP $stoken /etc/dnsmasq.d/statics.conf | grep -v "ncn-s001-" | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power on
+        ```
+    
+    1. Wait 1 minute.
+    
+    1. Boot ncn-s001:
+    
+        ```bash
+        pit# ipmitool -I lanplus -U $USERNAME -E -H ncn-s001-mgmt power on
+        ```
 
 1. Wait. Observe the installation through ncn-s001-mgmt's console:
 
@@ -555,7 +565,7 @@ The LiveCD needs to authenticate with the cluster to facilitate the rest of the 
    > This will always be whatever node is the `first-master-hostname` in your `/var/www/ephemeral/configs/data.json | jq` file. If you are provisioning your HPE Cray EX system from `ncn-m001` then you can expect to fetch these from `ncn-m002`.
 
    ```bash
-   pit# mkdir ~/.kube
+   pit# mkdir -v ~/.kube
    pit# scp ncn-m002.nmn:/etc/kubernetes/admin.conf ~/.kube/config
    ```
 

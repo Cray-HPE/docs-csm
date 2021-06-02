@@ -425,7 +425,7 @@ data so run them only when indicated. Instructions are in the `README` files.
 1. Verify we **do not** have a metal bootstrap IP.
 
     ```bash
-    ncn-m001# rm /etc/zypp/repos.d/* && zypper ms --remote --disable
+    ncn-m001# rm -v /etc/zypp/repos.d/* && zypper ms --remote --disable
     ```
     
 1. Install the latest documentation and workaround packages. This will require external access. 
@@ -466,7 +466,7 @@ data so run them only when indicated. Instructions are in the `README` files.
     ncn-m002# exit
     # typescript exited
     ncn-m002# rsync -rltDv -P /metal/bootstrap ncn-m001:/metal/
-    ncn-m002# rm -rf /metal/bootstrap
+    ncn-m002# rm -rfv /metal/bootstrap
     ncn-m002# exit
     ```
     
@@ -487,9 +487,9 @@ data so run them only when indicated. Instructions are in the `README` files.
     ```bash
     ncn-m001# export CSM_RELEASE=csm-x.y.z
     ncn-m001# mkdir -pv /mnt/livecd /mnt/rootfs /mnt/sqfs
-    ncn-m001# mount /metal/bootstrap/cray-pre-install-toolkit-*.iso /mnt/livecd/
-    ncn-m001# mount /mnt/livecd/LiveOS/squashfs.img /mnt/sqfs/
-    ncn-m001# mount /mnt/sqfs/LiveOS/rootfs.img /mnt/rootfs/
+    ncn-m001# mount -v /metal/bootstrap/cray-pre-install-toolkit-*.iso /mnt/livecd/
+    ncn-m001# mount -v /mnt/livecd/LiveOS/squashfs.img /mnt/sqfs/
+    ncn-m001# mount -v /mnt/sqfs/LiveOS/rootfs.img /mnt/rootfs/
     ncn-m001# cp -pv /mnt/rootfs/usr/bin/csi /tmp/csi
     ncn-m001# /tmp/csi version
     ncn-m001# umount -vl /mnt/sqfs /mnt/rootfs /mnt/livecd

@@ -10,8 +10,8 @@ Mount and view the USB device:
 
 ```bash
 ncn-m001# mkdir -pv /mnt/{cow,pitdata}
-ncn-m001# mount -L cow /mnt/cow
-ncn-m001# mount -L PITDATA /mnt/pitdata
+ncn-m001# mount -vL cow /mnt/cow
+ncn-m001# mount -vL PITDATA /mnt/pitdata
 ncn-m001# ls -ld /mnt/cow/rw/*
 ```
 
@@ -49,5 +49,5 @@ drwxr-xr-x  2 root root        4096 Jan 28 16:07 /mnt/pitdata/static
 When removing the USB device, please unmount it first to avoid corruption. This corruption risk is low, but varies if large data use was done to or on the USB.
 
 ```bash
-ncn-m001# umount /mnt/cow /mnt/pitdata
+ncn-m001# umount -v /mnt/cow /mnt/pitdata
 ```

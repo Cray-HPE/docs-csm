@@ -10,7 +10,7 @@ System services on these nodes are provided as containerized microservices packa
 ### Topics: 
    1. [System Nodes and Networks](#system_nodes_and_networks)
    1. [Default IP Address Ranges](#default_ip_address_ranges)
-   1. [Resilience of System Management Services](#resilience_of_system_maangement_services)
+   1. [Resilience of System Management Services](#resilience_of_system_management_services)
       1. [Expected Resiliency Behavior](#expected_resiliency_behavior)
       1. [Known Resiliency Issues and Workarounds](#known_resiliency_issues_and_workarounds)
       1. [Future Resiliency Improvements](#future_resiliency_improvements)
@@ -127,7 +127,7 @@ part of the main subnet.
    gateway between the CAN and the rest of the customer's internal networks. This address would be the lasthop
    route to the CAN network.
 
-<a name="resilience_of_system_maangement_services"></a>
+<a name="resilience_of_system_management_services"></a>
 ## 3. Resilience of System Management Services
 
 HPE Cray EX systems are designed so that system management services (SMS) are fully resilient and that there
