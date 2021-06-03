@@ -20,7 +20,7 @@ may include those which configure management functionality, such as COS, SMA, an
 or optional functionality to enable user productivity with UAI, such as PE, Analytics, and filesystem
 mounts like Lustre or SpectrumScale.
 
-For more detailed information see these topics in [Configuration Management](operations/configuration_management/index.md)
+For more detailed information see these topics in [Configuration Management](configuration_management/Configuration_Management.md)
    * Configuration Layers
    * Ansible Inventory
    * Configuration Management with the CFS Batcher
@@ -79,7 +79,7 @@ injected into the authorized keys file are not automatically removed during reco
 ##### CSM keys in Vault 
 
 Passwordless SSH Keys are generated using vault under the csm key. The private half of the key is published as
-a kubernetes secret:
+a Kubernetes secret:
 
    ```bash
    ncn-m001# kubectl get secrets -n services csm-private-key \
@@ -100,7 +100,7 @@ The public half of the key is stored in a Kubernetes configmap:
    nistp384AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBB5VcmkgxWrbjvXDSrrOrrYFczLiciuz5
    91xMR4Y+MQOm50KEoKt1oxKuIB7tb/G9v22VU4Wn5BYmf3UKd2lVyrrfZ32rJGjL9kik
    +R2JOQ5CW12xK6baNSRYsrJui7xng==
-```
+   ```
 
 These commands can be run anywhere kubectl is configured to point at the cluster with proper authentication.
 
@@ -282,12 +282,12 @@ Multiple product configuration layers may be created later to apply multiple cha
    values obtained for each of the configuration repositories.
 
    When multiple layers are present, the expected order is:
-   * CSM (optional, see [CSM Configuration Layer](#csm_configuration_layer))
-   * COS
-   * SMA
-   * CPE (optional)
-   * Analytics (optional)
-   * customer (optional)
+   1. CSM (optional, see [CSM Configuration Layer](#csm_configuration_layer))
+   1. COS
+   1. SMA
+   1. CPE (optional)
+   1. Analytics (optional)
+   1. customer (optional)
 
    A product can have multiple layers using one commit ID and reference different playbooks from that repository in VCS,
    such as the sma-base-config and sma-ldms-ncn layers for SMA.
@@ -503,8 +503,8 @@ to a management node.
 
 1. Clear the error count for the node in CFS.
 
-   ```bash
    Replace the XNAME value in the following command before running it.
+   ```bash
    ncn-w# cray cfs components update --error-count 0 XNAME
    ```
 
