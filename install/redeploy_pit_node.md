@@ -60,7 +60,7 @@ The steps in this guide will ultimately walk an administrator through loading ha
 This will assist with remote-console setup, for observing the reboot.
 
 At the end of these steps, the LiveCD will be no longer active. The node it was using will join
-the Kubernetes cluster as the final of three masters forming a quorum.
+the Kubernetes cluster as the final of three master nodes forming a quorum.
 
 <a name="start-hand-off"></a>
 #### 3.1 Start Hand-Off
@@ -234,7 +234,7 @@ data so run them only when indicated. Instructions are in the `README` files.
     pit# efibootmgr | grep -Ei "ip(v4|4)"
     ```
     
-1. Set the boot order for **masters** from one of the following guides:
+1. Set the boot order for **master nodes** from one of the following guides:
     
     > `**NOTE**` If your boot order from `efibootmgr` looks like one of [these examples](../background/ncn_boot_workflow.md#examples) then you can proceed to the next step.
     
