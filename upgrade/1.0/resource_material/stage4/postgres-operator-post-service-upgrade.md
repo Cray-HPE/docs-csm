@@ -2,7 +2,7 @@
 
 These steps should be run after running the upgrade.sh in Stage 4.
 
-1. Run the post-service-upgrade.sh script to complete the cray-smd-postgres cluster PVCs for resize.
+1. Run the post-service-upgrade.sh script to complete the resize of PVCs for cray-smd, keycloak and spire postgres clusters
 
    ```bash
    ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/postgres-operator/post-service-upgrade.sh
