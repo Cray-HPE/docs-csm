@@ -83,22 +83,30 @@ else
 fi
 
 cat <<EOF
-Steps 3-8 are not automated yet
-
 watch "ceph orch ps | grep ${upgrade_ncn}; echo ''; ceph osd tree"
-
-ceph cephadm get-pub-key > ~/ceph.pub
-
-ssh-copy-id -f -i ~/ceph.pub root@${upgrade_ncn}
-
-ceph orch host add ${upgrade_ncn}
-
-ceph orch daemon redeploy mon.${upgrade_ncn}
-
-for s in $(ceph orch ps | grep ${upgrade_ncn} | awk '{print $1}'); do  ceph orch daemon start $s; done
-
 EOF
 read -p "Read above steps and press any key to continue ..."
+
+state_name="REDEPLOY_CEPH"
+state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo "${state_name} ..."
+
+    ceph cephadm get-pub-key > ~/ceph.pub
+    ssh-copy-id -f -i ~/ceph.pub root@${upgrade_ncn}
+    ceph orch host add ${upgrade_ncn}
+    sleep 20
+    ceph orch daemon redeploy mon.${upgrade_ncn}
+    sleep 20
+    for s in $(ceph orch ps | grep ${upgrade_ncn} | awk '{print $1}'); do  ceph orch daemon start $s; done
+    
+    record_state "${state_name}" ${upgrade_ncn}
+    echo
+else
+    echo "${state_name} has beed completed"
+fi
+
+read -p "After ceph health is ok then press any key to continue ..."
 
 state_name="POST_CEPH_IMAGE_UPGRADE_CONFIG"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
