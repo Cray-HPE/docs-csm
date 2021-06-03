@@ -347,7 +347,7 @@ The configuration workflow described here is intended to help understand the exp
     ```
 
 1. Customize boot scripts for any out-of-baseline NCNs
-    - **kubernetes-workers** with more than 2 small disks need to make adjustments to [prevent bare-metal etcd creation](../background/ncn_mounts_and_file_systems.md#worker-nodes-with-etcd)
+    - **kubernetes-worker nodes** with more than 2 small disks need to make adjustments to [prevent bare-metal etcd creation](../background/ncn_mounts_and_file_systems.md#worker-nodes-with-etcd)
     - A brief overview of what's expected is here, in [disk plan of record / baseline](../background/ncn_mounts_and_file_systems.md#plan-of-record--baseline)
 
 1. Set each node to always UEFI Network Boot, and ensure they're powered off
@@ -473,7 +473,7 @@ The configuration workflow described here is intended to help understand the exp
 
     **`NOTE`**: If the nodes have PXE boot issues (e.g. getting PXE errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
 
-    **`NOTE`**: If one of the manager nodes seems hung waiting for the storage nodes to create a secret, check the storage node consoles for error messages. If any are found, consult [CEPH CSI Troubleshooting](ceph_csi_troubleshooting.md)
+    **`NOTE`**: If one of the master nodes seems hung waiting for the storage nodes to create a secret, check the storage node consoles for error messages. If any are found, consult [CEPH CSI Troubleshooting](ceph_csi_troubleshooting.md)
 
     **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to linux with no hostname) see the CSM workarounds for fixes around mutual symptoms.  If there is a workaround here, the output will look similar to the following.
 
@@ -482,7 +482,7 @@ The configuration workflow described here is intended to help understand the exp
     > CASMINST-1093
     > ```
 
-1. Refer to [timing of deployments](#timing-of-deployments). It should not take more than 60 minutes for the `kubectl get nodes` command to return output indicating that all the managers and workers aside from the PIT node booted from the LiveCD are `Ready`:
+1. Refer to [timing of deployments](#timing-of-deployments). It should not take more than 60 minutes for the `kubectl get nodes` command to return output indicating that all the master nodes and worker nodes aside from the PIT node booted from the LiveCD are `Ready`:
 
     ```bash
     pit# ssh ncn-m002
@@ -637,9 +637,9 @@ Observe the output of the checks and note any failures, then remediate them.
    > **`WARNING`** if test failures for "/dev/sdc" are observed they should be discarded for a manual test:
    >
    > ```bash
-   > # masters:
+   > # master nodes:
    > ncn# blkid -L ETCDLVM
-   > # workers:
+   > # worker nodes:
    > ncn# blkid -L CONLIB
    > ncn# blkid -L CONRUN
    > ncn# blkid -L K8SLET

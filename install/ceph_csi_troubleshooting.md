@@ -35,7 +35,7 @@ Verify that the ceph-csi requirements are in place
 
    1. Check to see if k8s ceph-csi prerequisites have been created
 
-      These commands can be run this from any storage, manager, or worker node.
+      These commands can be run this from any storage, master, or worker node.
 
       ```bash
       ncn# kubectl get cm

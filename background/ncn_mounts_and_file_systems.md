@@ -52,9 +52,9 @@ Disks are chosen by dracut. Kubernetes and storage nodes use different dracut mo
 <a name="problems-when-abovebelow-baseline"></a>
 #### Problems When Above/Below Baseline
 
-NCN masters and workers use the same artifacts, and thus have the same dracut modules assimilating disks. Therefore, it is important
+The master nodes and worker nodes use the same artifacts, and thus have the same dracut modules assimilating disks. Therefore, it is important
 to beware of:
-- k8s-master nodes with 1 or more extra "large" disk(s); these disks help but are unnecessary 
+- k8s-master nodes with one or more extra "large" disk(s); these disks help but are unnecessary 
 - ceph-storage nodes do not run the same dracut modules since they have different disk demands
 
 <a name="worker-nodes-with-etcd"></a>
