@@ -8,11 +8,11 @@ Note that power management features are "asynchronous," in that the client must 
 
 In-band power management features are not supported in v1.4. HPE supports Slurm as a workload manager which reports job energy usage and records it in the ITDB forsystem accounting purposes.
 
-###`sma-postgres-cluster`
+### `sma-postgres-cluster`
 
 A time-series PostgreSQL database (`sma-postgres-cluster`) contains the power telemetry data and tracks job start/end times, job-id, application-id, user-id, and application node allocation data. This data is made available through the System Monitoring Framework (SMF). Power monitoring and job data in sma-postgres-cluster enable out-of-band power profiling on the management nodes. Slurm interfaces with the PostgreSQL database through a plug-in.
 
-###HPE Cray EX Systems
+### HPE Cray EX Systems
 
 Cabinet-level power/energy data from compute blades, switch blades, and chassis rectifiers is collected by each Chassis Management Module (CMM) and provided on system management network. This power telemetry can be monitored by the SMF. Cabinet-level power data is collected and forwarded to the management nodes. The management nodes store the telemetry in the power management database.
 
