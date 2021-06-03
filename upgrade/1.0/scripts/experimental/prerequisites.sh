@@ -126,7 +126,7 @@ if [[ $state_recorded == "0" ]]; then
     echo "${state_name} ..."
     
     rpm -Uvh $(find $CSM_RELEASE -name \*csm-testing\* | sort | tail -1)
-goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-preflight-tests.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
+    goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-preflight-tests.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
     
     record_state ${state_name} $(hostname)
     echo
