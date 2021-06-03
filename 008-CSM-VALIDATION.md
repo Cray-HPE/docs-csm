@@ -352,6 +352,9 @@ pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
   - May fail immediately after platform install. Should pass after the TrustedCerts Operator has updated BSS (Global cloud-init meta) with CA certificates.
 * K8S Test: Kubernetes Velero No Failed Backups
   - Due to a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (for example, vault). It may be necessary to use the ```velero``` command to delete backups from a Kubernetes node to clear this situation.
+* K8S Test: sdc Drive Test
+  - There is a known test issue that can produce false failures of this test.
+  - If it fails, perform the manual validation steps from the [Validation section](005-CSM-METAL-INSTALL.md#validation) of the [CSM Metal Install](005-CSM-METAL-INSTALL.md) chapter.
 
 <a name="hms-tests"></a>
 ## Hardware Management Services Tests
