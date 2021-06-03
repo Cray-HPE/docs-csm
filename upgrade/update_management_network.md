@@ -89,7 +89,7 @@ route-map ncn-w001 permit seq 60
 - Usage [BGP](../operations/update_bgp_neighbors.md)
 
 (ARUBA & MELLANOX) Verify the BGP neighbors are configured as passive. Example configuration below. 
-(ARUBA) The peering between the switches is NOT configured as passive, ONLY the peerings with the workers.
+(ARUBA) The peering between the switches is NOT configured as passive, ONLY the peerings with the worker nodes.
 
 ```
 router bgp 65533
@@ -140,4 +140,4 @@ router bgp 65533
 
 #### Apollo Server configuration
 
-If the system has Apollo servers, the configuration can be found [here](../operations/configure_mgmt_net_ports.md) under the section "Apollo Server port config".
+If the system has Appollo servers, the configuration can be found [here](../operations/configure_mgmt_net_ports.md) under the section "Apollo Server port config".

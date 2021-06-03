@@ -373,4 +373,4 @@ Parsing the output of `efibootmgr` can be helpful in determining which device is
    ```
    1. Now the UEFI Samsung Flash Drive will boot next.
 
-   > **`Note`** there are duplicates in the list. During boot, the boot-manager will select the first one. If you find that the first one is false, false entries can be deleted with `efibootmgr -b 0014 -d`.
+   > **`Note`** there are duplicates in the list. During boot, the EFI boot manager will select the first one. If you find that the first one is false, false entries can be deleted with `efibootmgr -b 0014 -d`.
