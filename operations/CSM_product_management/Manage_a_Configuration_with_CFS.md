@@ -1,26 +1,32 @@
 # Manage a Configuration with CFS
 
-Many product streams need to use the Configuration Framework Service (CFS) to apply post-boot configuration to the management nodes.
-This post-boot configuration by CFS is known as NCN personalization. CFS is also used for the compute nodes and application nodes
-for node personalization (post-boot) and for pre-boot configuration of images (image customization).
+Many product streams need to use the Configuration Framework Service (CFS) to
+apply post-boot configuration to the management nodes. This post-boot
+configuration is known as NCN personalization.
 
-NCN Personalization performs automated post-boot configuration tasks on the HPE Cray EX management nodes. Many HPE
-Cray EX management services (including DVS and SMA) require NCN personalization to function.
+NCN personalization applies post-boot configuration to the HPE Cray EX
+management nodes. Many HPE Cray EX management services outside of CSM
+(including DVS and SMA) require NCN personalization to function.
 
-In this release, NCN Personalization must be set up manually. In general, this process requires two steps:
-1. Create and upload a CFS Configuration file. This file lists the Ansible playbooks stored in the Version Control Service or VCS (gitea) that configure each NCN.
-1. Update the component endpoints in CFS for each management node requiring post-boot configuration. This step tells CFS to apply the CFS configuration automatically to a specific node.
+NCN Personalization is set up via the following steps:
+1. Create and upload a configuration file for the NCNs to CFS. This file lists
+   the Ansible playbooks and their location in the Version Control Service (VCS)
+   that configure each NCN.
+1. Set the desired configuration from the previous step in CFS for each
+   management node requiring post-boot configuration. This step directs CFS to
+   apply the configuration automatically to each node.
 
-Hewlett Packard Enterprise recommends that the configurations for both CNs and NCNs use the same git
-commit IDs. This requirement ensures that the configurations remain compatible. This compatibility is necessary for
-services like DVS which require low-level compatibility between CNs and NCNs.
+Hewlett Packard Enterprise recommends that the configurations for both CNs and
+NCNs use the same git commit IDs. This requirement ensures that the
+configurations remain compatible. This compatibility is necessary for services
+like DVS which require low-level compatibility between CNs and NCNs.
 
-Software product streams which include configuration content to be applied to the management nodes
-may include those which configure management functionality, such as COS, SMA, and CSM,
-or optional functionality to enable user productivity with UAI, such as PE, Analytics, and file system
-mounts like Lustre or SpectrumScale.
+Additional software product streams may require NCN personalization of the
+management nodes in addition to the configuration required by CSM. Consult the
+documentation for these products for more information.
 
-For more detailed information see these topics in [Configuration Management](../configuration_management/Configuration_Management.md)
+For more detailed information on configuration management with CFS, see these
+topics in [Configuration Management](configuration_management/Configuration_Management.md)
    * Configuration Layers
    * Ansible Inventory
    * Configuration Management with the CFS Batcher
@@ -40,6 +46,7 @@ For more detailed information see these topics in [Configuration Management](../
             * Provide Custom Keys
             * Restore Keys to Initial Defaults
             * Create a CFS Configuration for the Application of Passwordless SSH to NCNs
+      * [Setting the root Password on NCNs](#set_root_password)
    * [Create a CFS Configuration JSON File](#create_a_cfs_configuration_json_file)
    * [Upload and Apply the CFS Configuration File](#upload_and_apply_the_cfs_configuration_file)
    * [Rerun NCN Personalization on an NCN](#rerun_ncn_personalization_on_an_ncn)
@@ -73,7 +80,7 @@ Downstream managed product environments, such as compute nodes and User Access N
 configuration references to the `trust-csm-ssh-keys` role by default. During image customization of the images for those nodes,
 public portions of these keys are added to the environments exactly once. If an admin changes the automatically
 generated private or public key for these environments, the images must be reconfigured, or the product
-site.yml needs to be reconfigured to allow for pushing subsequent updated public keys. Existing public keys
+`site.yml` needs to be reconfigured to allow for pushing subsequent updated public keys. Existing public keys
 injected into the authorized keys file are not automatically removed during reconfiguration.
 
 ##### CSM keys in Vault
@@ -82,7 +89,7 @@ Passwordless SSH Keys are generated using vault under the CSM key. The private h
 a Kubernetes secret:
 
    ```bash
-   ncn-m001# kubectl get secrets -n services csm-private-key \
+   ncn# kubectl get secrets -n services csm-private-key \
    -o jsonpath="{.data.value}" | base64 -d
    -----BEGIN EC PRIVATE KEY-----
    MIGkAgEBBDCax9yqFs4TlTR0pnI5rvk7FlKl4weWnQxfAGRtTGM5axygblJxLbdY
@@ -94,7 +101,7 @@ a Kubernetes secret:
 
 The public half of the key is stored in a Kubernetes configmap:
    ```bash
-   ncn-m001# kubectl get configmap -n services csm-public-key \
+   ncn# kubectl get configmap -n services csm-public-key \
    -o jsonpath="{.data.value}" | base64 -d
    ecdsa-sha2-
    nistp384AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBB5VcmkgxWrbjvXDSrrOrrYFczLiciuz5
@@ -121,7 +128,7 @@ file system.
 
 The public key is injected as a trusted source as an authorized_key for managed environments automatically,
 even if the private half is never used. If this is not desirable, the role `trust-csm-public-keys` can be
-removed from the `site.yml` top level play for the compute nodes (COS product) or UANs (UAN product).
+removed from the `site.yml` top-level play for the compute nodes (COS product) or UANs (UAN product).
 
 Under no circumstances should the `passwordless-ssh` Ansible role be run against an image that is to be
 registered into IMS/S3 during image customization. Doing so would allow access to private credentials
@@ -152,16 +159,14 @@ customization and node personalization for CFS targets.
 
 To replace the private key half:
 ```bash
-ncn-m001# kubectl get secret -n services csm-private-key -o json | \
-jq --arg value "$(cat ~/.ssh/id_rsa |base64)" \
-'.data["value"]=$value' | kubectl apply -f -
+ncn# kubectl get secret -n services csm-private-key -o json | jq --arg value "$(cat ~/.ssh/id_rsa | base64)" '.data["value"]=$value' | | kubectl apply -f -
 ```
 
-In this example, ~/.ssh/id_rsa is a local file containing a private key in a format specified by the admin.
+In this example, `~/.ssh/id_rsa` is a local file containing a private key in a format specified by the admin.
 
 To replace the public key half:
 ```bash
-ncn-m001# kubectl delete configmap -n services \
+ncn# kubectl delete configmap -n services \
 csm-public-key && cat ~/.ssh/id_rsa.pub | \
 base64 > ./value && kubectl create configmap --from-file \
 value csm-public-key --namespace services && rm ./value
@@ -187,7 +192,7 @@ Multiple product configuration layers may be created later to apply multiple cha
 1. Get the import_branch for CSM from the cray-product-catalog.
 
    ```bash
-   ncn-m001# kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}'
+   ncn# kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}'
    1.0.0-beta.19:
      configuration:
        clone_url: https://vcs.SYSTEM_DOMAIN_NAME/vcs/cray/csm-config-management.git
@@ -205,13 +210,13 @@ Multiple product configuration layers may be created later to apply multiple cha
 
 1. Set the RELEASE environment variable from the version number in import_branch.
    ```bash
-   ncn-m001# RELEASE=1.5.8
+   ncn# RELEASE=1.5.8
    ```
 
 1. Obtain the password for the `crayvcs` user from the Kubernetes secret for use in the next step.
 
    ```bash
-   ncn-m001# kubectl get secret -n services vcs-user-credentials \
+   ncn# kubectl get secret -n services vcs-user-credentials \
    --template={{.data.vcs_password}} | base64 --decode; echo ""
    8ac997acbd9e8e4a050fa8300257901a839c55bc780a3ebe60e2ff999c8ff964
    ```
@@ -220,18 +225,18 @@ Multiple product configuration layers may be created later to apply multiple cha
 
    The `git ls-remote` command in this step will require a valid username and password in VCS. See previous step for the `crayvcs` username and its password.
    ```bash
-   ncn-m001# COMMIT=$(git ls-remote \
-     https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git \
-     | grep refs/heads/cray/csm/${RELEASE} | awk '{print $1}')
+   ncn# COMMIT=$(git ls-remote \
+   https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git \
+   refs/heads/cray/csm/${RELEASE} | awk '{print $1}')
    Username for 'https://api-gw-service-nmn.local': crayvcs
-   Password for 'https://crayvcs@api-gw-service-nmn.local':
-   ncn-m001# echo $COMMIT
+   Password for 'https://crayvcs@api-gw-service-nmn.local': 
+   ncn# echo $COMMIT
    43ecfa8236bed625b54325ebb70916f55884b3a4
    ```
 
 1. Create a JSON file with just the CSM configuration information in it using the RELEASE and COMMIT collected above.
    ```bash
-   ncn-m001# cat <<'EOF' > csm-config-$RELEASE.json
+   ncn# cat <<'EOF' > csm-config-$RELEASE.json
    {
       "layers": [
          {
@@ -243,15 +248,15 @@ Multiple product configuration layers may be created later to apply multiple cha
       ]
    }
    EOF
-   ncn-m001# sed -i -e "s:@RELEASE@:$RELEASE:g" \
-   -e "s:@COMMIT@:$COMMIT:g" csm-config-$RELEASE.json
+   ncn# sed -i -e "s:@RELEASE@:$RELEASE:g" \
+   -e "s:@COMMIT@:$COMMIT@:g" csm-config-$RELEASE.json
    ```
 
 1. If this is a first time install and only the CSM software product has been installed, then this file can become
    the original `ncn-personalization.json` file to which other software products can be added as they are installed.
 
    ```bash
-   ncn-m001# cp -p csm-config-$RELEASE.json ncn-personalization.json
+   ncn# cp -p csm-config-$RELEASE.json ncn-personalization.json
    ```
 
    And then skip to [Upload and Apply the CFS Configuration File](#upload_and_apply_the_cfs_configuration_file)
@@ -259,6 +264,28 @@ Multiple product configuration layers may be created later to apply multiple cha
    If this is not a first time install, then the `csm-config-$RELEASE.json` contents should be added to
     `ncn-personalization.json` using the configuration layer order suggested in [Create a CFS configuration JSON file](#create_a_cfs_configuration_json_file)
 
+<a name="set_root_password"></a>
+#### Setting the root Password
+
+The root password is managed on NCNs by using the `csm.password` Ansible role
+located in `roles/csm.password` in the CSM configuration management repository
+and stored in VCS on the system. Root passwords are managed in Vault and applied
+via NCN personalization.
+
+By default, the `csm.password` role reads passwords from Vault using the
+`secret/csm/management_nodes` secret and the `root_password` key in that secret.
+To set the password in Vault, follow steps 1-3 in the
+[Update NCN Passwords](#operations/security_and_authentication/Update_NCN_Passwords.md)
+procedure.
+
+This role is enabled by default in the CSM `site.yml` top-level play and assumes
+the password change is for the root user. To rotate or set the root password on
+the NCNs, create a CFS session with using the  [CSM Configuration Layer](#csm_configuration_layer)
+with `site.yml` as the playbook. This will re-run NCN personalization and all of
+its configuration layers. To only change the root password, use the
+`rotate-pw-mgmt-nodes.yml` playbook by following the instructions in the
+[Update NCN Passwords](#operations/security_and_authentication/Update_NCN_Passwords.md)
+procedure.
 
 <a name="create_a_cfs_configuration_json_file"></a>
 ### Create a CFS Configuration JSON File
@@ -290,7 +317,7 @@ Multiple product configuration layers may be created later to apply multiple cha
    1. Analytics (optional)
    1. customer (optional)
 
-   A product can have multiple layers using one commit ID and reference different playbooks from that repository in VCS,
+   A product may have multiple layers using one commit ID and reference different playbooks from that repository in VCS,
    such as the sma-base-config and sma-ldms-ncn layers for SMA.
 
    Obtain the git commit ID and cloneUrl for the appropriate branch or branches using
@@ -301,8 +328,8 @@ Multiple product configuration layers may be created later to apply multiple cha
    included in this sample ncn-personalization.json file.
 
    ```bash
-   ncn-m# vi ncn-personalization.json
-   ncn-m# cat ncn-personalization.json
+   ncn# vi ncn-personalization.json
+   ncn# cat ncn-personalization.json
    {
       "layers": [
          {
@@ -357,7 +384,7 @@ Multiple product configuration layers may be created later to apply multiple cha
 1. Upload the configuration file to CFS and give the configuration a name.
 
    ```bash
-   ncn-m# cray cfs configurations update ncn-personalization --file \
+   ncn# cray cfs configurations update ncn-personalization --file \
    ncn-personalization.json --format json
    {
       "lastUpdated": "2020-12-16T16:34:19Z",
@@ -414,7 +441,7 @@ Multiple product configuration layers may be created later to apply multiple cha
    > TrustedUserCAKeys entry to /etc/ssh/sshd_config.
    >
    > ```bash
-   > ncn-m001# systemctl restart cfs-state-reporter
+   > ncn# systemctl restart cfs-state-reporter
    > ```
 
 1. Optional: Obtain the xnames of all NCNs that will be configured by NCN Personalization by running this
@@ -422,14 +449,14 @@ Multiple product configuration layers may be created later to apply multiple cha
 
    Skip this step if the required xnames have already been obtained.
    ```bash
-   ncn-m# ssh ncn-w001 cat /etc/cray/xname
+   ncn# ssh ncn-w001 cat /etc/cray/xname
    x3000c0s7b0n0
    ```
 
 1. Update the CFS component for all NCNs. Replace NCN_XNAME in the following command with the xname of an NCN.
 
    ```bash
-   ncn-m# cray cfs components update --desired-config ncn-personalization \
+   ncn# cray cfs components update --desired-config ncn-personalization \
    --enabled true --format json NCN_XNAME
    ```
 
@@ -442,7 +469,7 @@ Multiple product configuration layers may be created later to apply multiple cha
    `"configurationStatus": "configured"`.
 
    ```bash
-   ncn-m# cray cfs components describe x3000c0s7b0n0 --format json
+   ncn# cray cfs components describe x3000c0s7b0n0 --format json
    {
       "configurationStatus": "pending",
       "desiredConfig": "ncn-personalization",
@@ -451,7 +478,7 @@ Multiple product configuration layers may be created later to apply multiple cha
       "id": "x3000c0s7b0n0",
       "retryPolicy": 3,
    }
-   ncn-m# cray cfs components describe x3000c0s7b0n0 --format json
+   ncn# cray cfs components describe x3000c0s7b0n0 --format json
    {
       "configurationStatus": "configured",
       "desiredConfig": "ncn-personalization",
@@ -485,18 +512,39 @@ This procedure should be used for changes to any of the configuration layers whi
 to a management node.
 
 
+1. Retrieve the authenticated credentials required to rerun the configuration for a node.
+
+   ```bash
+   ncn# ADMIN_SECRET=$(kubectl get secrets admin-client-auth \
+   -ojsonpath='{.data.client-secret}' | base64 -d)
+   ```
+
 1. Clear the state of the node using CFS.
 
    Replace the XNAME value in the following command with the xname of the node being reconfigured.
 
    ```bash
-   ncn-w# cray cfs components update XNAME --state '[]'
+   ncn# cray cfs components update XNAME --state '[]'
+   ```
+
+1. Optional: Clear the state of the node in CFS using the following commands if the previous step was
+   unsuccessful.
+
+   Replace the XNAME value in the following command with the xname of the node being reconfigured.
+
+   ```bash
+   ncn# function get_token { curl -s -d grant_type=client_credentials \
+   -d client_id=admin-client -d client_secret=$ADMIN_SECRET \
+   https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \
+   | python -c 'import sys, json; print json.load(sys.stdin)["access_token"]';}
+   ncn# curl -H "Authorization: Bearer $(get_token)" https://api-gw-service-nmn.local/apis/cfs/v2/components/XNAME \
+   -X PATCH -H "Content-type: application/json" -d '{"state": []}'
    ```
 
 1. Clear the error count for the node in CFS.
 
    Replace the XNAME value in the following command before running it.
    ```bash
-   ncn-w# cray cfs components update --error-count 0 XNAME
+   ncn# cray cfs components update --error-count 0 XNAME
    ```
 
