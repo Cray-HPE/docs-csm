@@ -22,7 +22,13 @@ scope of this documentation.
 
 ### Prerequisites & Preflight Checks
 
-Before upgrading to CSM-1.0, please ensure that the latest CSM-0.9.x patches and hot-fixes have been applied.  These upgrade instructions assume that the latest released CSM-0.9.x patch and any applicable hot-fixes for CSM-0.9.x, have been applied.
+Please note that CSM-0.9.3 is the version of CSM required in order to upgrade to CSM-1.0.0 (available with Shasta v1.5). The following command can be used to check the CSM version on the system:
+
+```
+kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm'
+``` 
+
+This check will also be conducted in the 'prerequisites.sh' script listed below and will fail if the system is not running CSM-0.9.3.
 
 Install documents: 
 
@@ -120,7 +126,20 @@ Run `upgrade.sh` to deploy upgraded CSM applications and services:
 ncn-m002# ./${CSM_RELEASE}/upgrade.sh
 ```
 > NOTE: make sure your current working dir is `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade`
+
 ### Post-Upgrade Health Checks
+
+> **`IMPORTANT:`** Wait at least 15 minutes after
+> [`upgrade.sh`](#deploy-manifests) completes to let the various Kubernetes
+> resources get initialized and started.
+
+Run the following validation checks to ensure that everything is still working
+properly after the upgrade:
+
+1. [Platform health checks](../../operations/validate_csm_health.md#platform-health-checks)
+2. [Network health checks](../../operations/validate_csm_health.md#network-health-checks)
+
+Other health checks may be run as desired.
 
 
 ### Troubleshooting and Recovering from Failed Upgrades
