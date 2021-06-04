@@ -48,7 +48,7 @@ None.
    If doing a first time install, this can be done on a Linux system, but for an upgrade, it could be done on one of the NCNs, such as ncn-m001.
 
    ```
-   linux# tar -xzf ${CSM_RELEASE}.tar.gz
+   linux# tar -xzvf ${CSM_RELEASE}.tar.gz
    ```
 
    1. Before using this software release, check for any patches available for it.  If patches are available, see [Apply Patch to CSM Release](#patch).
@@ -96,7 +96,7 @@ None.
    1. Uncompress the patch.
 
    ```
-   ncn-m001# gunzip ${CSM_RELEASE}-${PATCH_RELEASE}.patch.gz
+   ncn-m001# gunzip -v ${CSM_RELEASE}-${PATCH_RELEASE}.patch.gz
    ```
 
    1. Apply the patch.
@@ -115,7 +115,7 @@ None.
    1. Update the name of the CSM release distribution directory.
 
    ```bash
-   ncn-m001# mv $CSM_RELEASE $NEW_CSM_RELEASE
+   ncn-m001# mv -v $CSM_RELEASE $NEW_CSM_RELEASE
    ```
 
    1. Create a tarball from the patched release distribution.
