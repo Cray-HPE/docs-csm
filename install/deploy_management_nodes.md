@@ -529,14 +529,16 @@ The configuration workflow described here is intended to help understand the exp
     Alternatively, just dump the paths of available drives:
 
     ```bash
-    ncn-s# ceph-volume inventory --format json-pretty | jq -r '.[]|select(.available==true)|.path'
+    ncn-s# cephadm shell -- ceph-volume inventory --format json-pretty | jq -r '.[]|select(.available==true)|.path'
     ```
 
 1. Add unused drives
 
     ```bash
-    ncn-s# ceph-volume lvm create --data /dev/sd<drive to add>  --bluestore
+    ncn-s# cephadm shell -- ceph-volume lvm create --data /dev/sd<drive to add>  --bluestore
     ```
+
+More information can be found at [cephadm reference page](../upgrade/1.0/resource_material/common/cephadm-reference.md)
 
 <a name="apply-ncn-post-boot-workarounds"></a>
 #### 3.4 Apply NCN Post-Boot Workarounds
@@ -678,6 +680,10 @@ Observe the output of the checks and note any failures, then remediate them.
    1. Verify etcd is running outside Kubernetes on master nodes
    1. Verify that all the pods in the kube-system namespace are running
    1. Verify that the ceph-csi requirements are in place (see [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md)
+
+# Important Checkpoint
+
+> Before you move on, this is the last point where you will be able to rebuild nodes without having to rebuild the pit node.  So take time to double check either the cluster or the validation test results**
 
 <a name="next-topic"></a>
 # Next Topic
