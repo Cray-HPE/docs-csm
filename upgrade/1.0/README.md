@@ -22,7 +22,13 @@ scope of this documentation.
 
 ### Prerequisites & Preflight Checks
 
-Before upgrading to CSM-1.0, please ensure that the latest CSM-0.9.x patches and hot-fixes have been applied.  These upgrade instructions assume that the latest released CSM-0.9.x patch and any applicable hot-fixes for CSM-0.9.x, have been applied.
+Please note that CSM-0.9.3 is the version of CSM required in order to upgrade to CSM-1.1.0 (available with Shasta v1.5). The following command can be used to check the CSM version on the system:
+
+```
+kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm'
+``` 
+
+This check will also be conducted in the 'prerequisites.sh' script listed below and will fail if the system is not running CSM-0.9.3.
 
 Install documents: 
 
@@ -120,7 +126,47 @@ Run `upgrade.sh` to deploy upgraded CSM applications and services:
 ncn-m002# ./${CSM_RELEASE}/upgrade.sh
 ```
 > NOTE: make sure your current working dir is `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade`
+
 ### Post-Upgrade Health Checks
+
+> **`IMPORTANT:`** Wait at least 15 minutes after
+> [`upgrade.sh`](#deploy-manifests) completes to let the various Kubernetes
+> resources get initialized and started.
+
+Run the following validation checks to ensure that everything is still working
+properly after the upgrade:
+
+1. [Platform health checks](../../operations/validate_csm_health.md#platform-health-checks)
+2. [Network health checks](../../operations/validate_csm_health.md#network-health-checks)
+
+Other health checks may be run as desired.
+
+> **`CAUTION:`** The following HMS functional tests may fail due to locked
+> components in HSM:
+>
+> 1. `test_bss_bootscript_ncn-functional_remote-functional.tavern.yaml`
+> 2. `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
+>
+> ```bash
+>         Traceback (most recent call last):
+>           File "/usr/lib/python3.8/site-packages/tavern/schemas/files.py", line 106, in verify_generic
+>             verifier.validate()
+>           File "/usr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
+>             raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
+>         pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
+>          - Key 'Locked' was not defined. Path: '/Components/0'.
+>          - Key 'Locked' was not defined. Path: '/Components/5'.
+>          - Key 'Locked' was not defined. Path: '/Components/6'.
+>          - Key 'Locked' was not defined. Path: '/Components/7'.
+>          - Key 'Locked' was not defined. Path: '/Components/8'.
+>          - Key 'Locked' was not defined. Path: '/Components/9'.
+>          - Key 'Locked' was not defined. Path: '/Components/10'.
+>          - Key 'Locked' was not defined. Path: '/Components/11'.
+>          - Key 'Locked' was not defined. Path: '/Components/12'.: Path: '/'>
+> ```
+>
+> Failures of these tests due to locked components as shown above can be safely
+> ignored.
 
 
 ### Troubleshooting and Recovering from Failed Upgrades
