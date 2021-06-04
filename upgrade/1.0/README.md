@@ -110,7 +110,7 @@ Run `upgrade.sh` to deploy upgraded CSM applications and services:
 ```bash
 ncn-m002# ./${CSM_RELEASE}/upgrade.sh
 ```
-
+> NOTE: make sure your current working dir is `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade`
 ### Post-Upgrade Health Checks
 
 
