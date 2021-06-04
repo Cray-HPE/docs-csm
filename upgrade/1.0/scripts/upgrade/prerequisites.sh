@@ -124,7 +124,29 @@ state_name="PREFLIGHT_CHECK"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "${state_name} ..."
-    
+
+    REQUIRED_PATCH_NUM=3
+    versions=$(kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm')
+    patch_versions=$(echo "${versions}" | grep ^0.9)
+
+    if [ "$patch_versions" == "" ]; then
+      echo "Required CSM patch 0.9.3 has not been applied to this system"
+      exit 1
+    fi
+
+    highest_patch_num=0
+    for patch_version in $patch_versions; do
+      patch_num=$(echo $patch_version | sed 's/://' | awk -F '.' '{print $NF}')
+      if [[ "$patch_num" -gt "$highest_patch_num" ]]; then
+        highest_patch_num=$patch_num
+      fi
+    done
+
+    if [[ "$highest_patch_num" -ne "$REQUIRED_PATCH_NUM" ]]; then
+      echo "Required CSM patch 0.9.3 has not been applied to this system"
+      exit 1
+    fi
+
     rpm -Uvh $(find $CSM_RELEASE -name \*csm-testing\* | sort | tail -1)
     goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-preflight-tests.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
     
