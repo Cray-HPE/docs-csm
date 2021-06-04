@@ -22,7 +22,7 @@ scope of this documentation.
 
 ### Prerequisites & Preflight Checks
 
-Please note that CSM-0.9.3 is the version of CSM required in order to upgrade to CSM-1.1.0 (available with Shasta v1.5). The following command can be used to check the CSM version on the system:
+Please note that CSM-0.9.3 is the version of CSM required in order to upgrade to CSM-1.0.0 (available with Shasta v1.5). The following command can be used to check the CSM version on the system:
 
 ```
 kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm'
@@ -140,33 +140,6 @@ properly after the upgrade:
 2. [Network health checks](../../operations/validate_csm_health.md#network-health-checks)
 
 Other health checks may be run as desired.
-
-> **`CAUTION:`** The following HMS functional tests may fail due to locked
-> components in HSM:
->
-> 1. `test_bss_bootscript_ncn-functional_remote-functional.tavern.yaml`
-> 2. `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
->
-> ```bash
->         Traceback (most recent call last):
->           File "/usr/lib/python3.8/site-packages/tavern/schemas/files.py", line 106, in verify_generic
->             verifier.validate()
->           File "/usr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
->             raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
->         pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
->          - Key 'Locked' was not defined. Path: '/Components/0'.
->          - Key 'Locked' was not defined. Path: '/Components/5'.
->          - Key 'Locked' was not defined. Path: '/Components/6'.
->          - Key 'Locked' was not defined. Path: '/Components/7'.
->          - Key 'Locked' was not defined. Path: '/Components/8'.
->          - Key 'Locked' was not defined. Path: '/Components/9'.
->          - Key 'Locked' was not defined. Path: '/Components/10'.
->          - Key 'Locked' was not defined. Path: '/Components/11'.
->          - Key 'Locked' was not defined. Path: '/Components/12'.: Path: '/'>
-> ```
->
-> Failures of these tests due to locked components as shown above can be safely
-> ignored.
 
 
 ### Troubleshooting and Recovering from Failed Upgrades
