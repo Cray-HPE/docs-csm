@@ -131,13 +131,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
       ```bash
       ncn-w# umount -v /var/lib/containerd /var/lib/kubelet /var/lib/sdu
       ```
-3. Stop the RAIDs.
-
-   ```bash
-   ncn-s# for md in /dev/md/*; do mdadm -S $md || echo nope ; done
-   ```
-
-4. Remove auxiliary LVMs
+3. Remove auxiliary LVMs
 
    ```bash
    ncn-s# vgremove -f --select 'vg_name=~metal*'
@@ -145,6 +139,11 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
    >>***Note***: Optionally you can run a pvs and if any drives are still listed, you can remove them with a pvremove.   This is rarely needed.
 
+4. Stop the RAIDs.
+
+   ```bash
+   ncn-s# for md in /dev/md/*; do mdadm -S $md || echo nope ; done
+   ```
 5. Wipe the disks and RAIDs.
 
    ```bash
