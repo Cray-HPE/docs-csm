@@ -88,9 +88,9 @@ For each storage node in the cluster, start by following the steps:
 
 Use m002 as stable ncn:
     
-    Install documents: `rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm`
+Install documents: `rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm`
 
-    Run: `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh [CSM_RELEASE]`
+Run: `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh [CSM_RELEASE]`
 
 upgrade ncn-m001 `./ncn-upgrade-k8s-master.sh ncn-m001`
 > NOTE: follow output of above script carefully. The script will pause for manual interaction
