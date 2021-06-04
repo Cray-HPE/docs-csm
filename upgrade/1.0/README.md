@@ -5,6 +5,7 @@
 This document is intended to guide an administrator through the upgrade process going from Cray Shasta v1.4 to v1.5.  When upgrading a system, this top-level README.md file should be followed top to bottom, and the content on this top level page is meant to be terse.  See the additional files (like KNOWN_ISSUES.md and REFERENCE_MATERIAL.md in the various directories under the linked resource_material sub-directories.
 
 > **NOTE**: This document is a work in progress, and these items are outstanding:
+> 1. PowerDNS -- Need to add content
 > 1. Additional automation -- hopefully we'll add some more scripting as we refine this process.  There's a lot of copy/pasting which will frustrate administrators, especially on larger systems.
 
 ### Terminology
@@ -20,43 +21,29 @@ upgrade that node.
 It is also possible to do this from a "remote" node (like the PIT during a normal install) however this is beyond the
 scope of this documentation.
 
-### Prerequisites
+### Prerequisites & Preflight Checks
 
 Before upgrading to CSM-1.0, please ensure that the latest CSM-0.9.x patches and hot-fixes have been applied.  These upgrade instructions assume that the latest released CSM-0.9.x patch and any applicable hot-fixes for CSM-0.9.x, have been applied.
 
-Begin by [downloading and configuring the latest version of CSM](resource_material/prereqs/get-csm.md)
+Install documents: `rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm`
+
+Run: `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh [CSM_RELEASE]`
 
 
-### Preflight Checks
-
-Before starting the upgrade, ensure the system is currently in a healthy state.  Run the following goss tests on the initial stable node (typically `ncn-m001`) where the latest version of CSM has been installed (in the previous step):
-
-1. Update the version of the `csm-testing` rpm to run updated preflight tests:
-
-   ```bash
-   ncn-m001# rpm -Uvh $(find $CSM_RELEASE -name \*csm-testing\* | sort | tail -1)
-   ```
-
-2. Run the preflight tests -- ensure you address any failures in these tests before proceeding with the upgrade:
-
-   ```bash
-    ncn-m001# goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-preflight-tests.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
-   ```
+Above script also runs the goss tests on the initial stable node (typically `ncn-m001`) where the latest version of CSM has been installed. Make sure the goss test pass before continue.
 
 ### Upgrade Stages
 
-#### Stage 1.  Ceph upgrade from Nautilus (14.2.11) to Octopus (15.2.8)
+#### Stage 1.  Ceph upgrade from Nautilus (14.2.x) to Octopus (15.2.x)
 
-> **WARNING**: This upgrade step requires that all `cephfs` traffic be quiesced for the duration of this stage.  As a result pods in the following deployments will be scaled down and then back up and their services will be unavailable during this time:
-> 1. nexus
-> 1. cray-cfs
-> 1. cray-conman
-> 1. cray-ims
-> 1. cray-ipxe
-> 1. cray-tftp
-> 1. gitea-vcs
+`/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-ceph-initial.sh ncn-s001` <== run the script for all storage nodes
 
-Follow the steps at: [Initial Ceph Upgrade](resource_material/stage1/initial-ceph-upgrade.md)
+On ncn-s001 execute the ceph-upgrade.sh script:
+```
+cd /usr/share/doc/csm/upgrade/1.0/scripts/ceph
+
+./ceph-upgrade.sh
+```
 
 **IMPORTANT NOTES**
 > - At this point your ceph commands will still be working.  
@@ -68,19 +55,31 @@ Follow the steps at: [Initial Ceph Upgrade](resource_material/stage1/initial-cep
 
 #### Stage 2. Ceph image upgrade
 
-For each storage node in the cluster, start by following the steps at: [Common Prerequisite Steps](resource_material/common/prerequisite-steps.md). Note that these steps should be performed on one storage node at a time.
+For each storage node in the cluster, start by following the steps: 
+
+`/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-ceph-nodes.sh ncn-s001` <==== ncn-s001, ncn-s002, ncn-s003
+
+ Note that these steps should be performed on one storage node at a time.
 
 #### Stage 3. Kubernetes Upgrade from 1.18.6 to 1.19.9
 
-1. For each master node in the cluster, again follow the steps at: [Common Prerequisite Steps](resource_material/common/prerequisite-steps.md)
+1. For each master node in the cluster (exclude m001), again follow the steps:
 
-2. Determine worker rebuild order, attempt to minimize moves of key pxe boot related pods.  Run the following command for locations of key pods and recommendation of rebuild order:
+`/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-master.sh ncn-m002` <==== ncn-m002, ncn-m003
 
-   ```bash
-   ncn# /usr/share/doc/csm/upgrade/1.0/scripts/k8s/determine-worker-order.sh
-   ```
+2. For each worker node in the cluster, also follow the steps:
 
-3. For each worker node in the cluster, also follow the steps at: [Common Prerequisite Steps](resource_material/common/prerequisite-steps.md)
+`/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-worker.sh ncn-w002` <==== ncn-w002, ncn-w003, ncn-w001
+
+3. For master 001, follow the steps:
+
+Use m002 as stable ncn:
+    
+    Install documents: `rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm`
+
+    Run: `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh [CSM_RELEASE]`
+
+upgrade ncn-m001 `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-master.sh ncn-m001`
 
 4. For each master node in the cluster, run the following command to complete the kubernetes upgrade _(this will restart several pods on each master to their new docker containers)_:
 
@@ -90,15 +89,11 @@ For each storage node in the cluster, start by following the steps at: [Common P
 
 #### Stage 4. Service Upgrades
 
-1. Follow the steps at: [Pre Service Upgrade](resource_material/stage4/postgres-operator-pre-service-upgrade.md)
-
-2. Run `upgrade.sh` to deploy upgraded CSM applications and services:
+Run `upgrade.sh` to deploy upgraded CSM applications and services:
 
 ```bash
-ncn-m001# ./${CSM_RELEASE}/upgrade.sh
+ncn-m002# ./${CSM_RELEASE}/upgrade.sh
 ```
-
-3. Follow the steps at: [Post Service Upgrade](resource_material/stage4/postgres-operator-post-service-upgrade.md)
 
 ### Post-Upgrade Health Checks
 
