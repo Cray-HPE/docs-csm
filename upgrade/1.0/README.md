@@ -77,36 +77,34 @@ For each storage node in the cluster, start by following the steps:
 
 1. For each master node in the cluster (exclude m001), again follow the steps:
 
-`./ncn-upgrade-k8s-master.sh ncn-m002` <==== ncn-m002, ncn-m003
-> NOTE: follow output of above script carefully. The script will pause for manual interaction
+    `./ncn-upgrade-k8s-master.sh ncn-m002` <==== ncn-m002, ncn-m003
+    > NOTE: follow output of above script carefully. The script will pause for manual interaction
 
-> NOTE: make sure your current working dir is `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade`
+    > NOTE: make sure your current working dir is `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade`
 
 2. For each worker node in the cluster, also follow the steps:
 
-`./ncn-upgrade-k8s-worker.sh ncn-w002` <==== ncn-w002, ncn-w003, ncn-w001
-> NOTE: follow output of above script carefully. The script will pause for manual interaction
+    `./ncn-upgrade-k8s-worker.sh ncn-w002` <==== ncn-w002, ncn-w003, ncn-w001
+    > NOTE: follow output of above script carefully. The script will pause for manual interaction
 
-> NOTE: make sure your current working dir is `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade`
+    > NOTE: make sure your current working dir is `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade`
 
-3. For master 001, follow the steps:
-
-Use m002 as stable ncn:
+3. For master 001, Use m002 as stable ncn:
     
-Install documents: 
+    Install documents: 
 
-`rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm`
+    `rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm`
 
-Run: 
+    Run: 
 
-`/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh [CSM_RELEASE]`
+    `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh [CSM_RELEASE]`
 
-upgrade ncn-m001:
+    upgrade ncn-m001:
 
-`./ncn-upgrade-k8s-master.sh ncn-m001`
-> NOTE: follow output of above script carefully. The script will pause for manual interaction
+    `./ncn-upgrade-k8s-master.sh ncn-m001`
+    > NOTE: follow output of above script carefully. The script will pause for manual interaction
 
-> NOTE: make sure your current working dir is `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade`
+    > NOTE: make sure your current working dir is `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade`
 
 4. For each master node in the cluster, run the following command to complete the kubernetes upgrade _(this will restart several pods on each master to their new docker containers)_:
 
