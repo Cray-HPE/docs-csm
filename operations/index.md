@@ -3,6 +3,7 @@
 These administrative procedures are needed to operate an HPE Cray EX system with CSM software installed.
 
 ### Topics:
+
    * [Lock and Unlock Nodes](lock_and_unlock_nodes.md)
    * [Validate CSM Health](validate_csm_health.md)
    * [Configure Keycloak Account](configure_keycloak_account.md)
@@ -18,21 +19,10 @@ These administrative procedures are needed to operate an HPE Cray EX system with
    * [Update SLS with UAN Aliases](update_sls_with_uan_aliases.md)
    * [Configure NTP on NCNs](configure_ntp_on_ncns.md)
    * [Change NCN Image Root Password and SSH Keys](change_ncn_image_root_password_and_ssh_keys.md)
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 269058d (STP-2624: imported several files from the admin guide)
    * [Remove Artifacts from Product Installations](Remove_Artifacts_from_Product_Installations.md)
 
 #### Image Management
 
-<<<<<<< HEAD
-=======
-
-#### Image Management
->>>>>>> c36c198 (STP-2624: added image management files)
-=======
->>>>>>> 269058d (STP-2624: imported several files from the admin guide)
    * [Image Management with Kiwi-NG Recipes](image_management/Image_Management_with_Kiwi-NG_Recipes.md)
    * [Image Management Workflows](image_management/Image_Management_Workflows.md)
    * [Upload and Register an Image Recipe](image_management/Upload_and_Register_an_Image_Recipe.md)
@@ -43,10 +33,6 @@ These administrative procedures are needed to operate an HPE Cray EX system with
      * [Convert TGZ Archives to SquashFS Images](image_management/Convert_TGZ_Archives_to_SquashFS_Images.md)
      * [Customize an Image Root to Install Singularity](/operations/image_management/Customize_an_Image_Root_to_Install_Singularity.md)
      * [Customize an Image Root to Install Compute Kubernetes](image_management/Customize_an_Image_Root_to_Install_Compute_Kubernetes.md)
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 269058d (STP-2624: imported several files from the admin guide)
    * [Delete or Recover Deleted IMS Content](image_management/Delete_or_Recover_Deleted_IMS_Content.md)
 
 #### Boot Orchestration
@@ -91,8 +77,6 @@ These administrative procedures are needed to operate an HPE Cray EX system with
 
    *   [Configuration Management](configuration_management/Configuration_Management.md)
    *   [Configuration Layers](configuration_management/Configuration_Layers.md)
-<<<<<<< HEAD
-<<<<<<< HEAD
        *   [Create a CFS Configuration](configuration_management/Create_a_CFS_Configuration.md)
        *   [Update a CFS Configuration](configuration_management/Update_a_CFS_Configuration.md)
    *   [Ansible Inventory](configuration_management/Ansible_Inventory.md)
@@ -123,13 +107,6 @@ These administrative procedures are needed to operate an HPE Cray EX system with
        *   [Create and Populate a VCS Configuration Repository](configuration_management/Create_and_Populate_a_VCS_Configuration_Repository.md)
    *   [Write Ansible Code for CFS](configuration_management/Write_Ansible_Code_for_CFS.md)
        *   [Target Ansible Tasks for Image Customization](configuration_management/Target_Ansible_Tasks_for_Image_Customization.md)
-=======
-      *   [Create a CFS Configuration](configuration_management/Create_a_CFS_Configuration.md)
-      *   [Update a CFS Configuration](configuration_management/Update_a_CFS_Configuration.md)
-=======
-       *   [Create a CFS Configuration](configuration_management/Create_a_CFS_Configuration.md)
-       *   [Update a CFS Configuration](configuration_management/Update_a_CFS_Configuration.md)
->>>>>>> f416af2 (STP-2624: formatting changes)
    *   [Ansible Inventory](configuration_management/Ansible_Inventory.md)
        *   [Manage Multiple Inventories in a Single Location](configuration_management/Manage_Multiple_Inventories_in_a_Single_Location.md)
    *   [Configuration Sessions](configuration_management/Configuration_Sessions.md)
@@ -157,12 +134,7 @@ These administrative procedures are needed to operate an HPE Cray EX system with
        *   [Update the Privacy Settings for Gitea Configuration Content Repositories](configuration_management/Update_the_Privacy_Settings_for_Gitea_Configuration_Content_Repositories.md)
        *   [Create and Populate a VCS Configuration Repository](configuration_management/Create_and_Populate_a_VCS_Configuration_Repository.md)
    *   [Write Ansible Code for CFS](configuration_management/Write_Ansible_Code_for_CFS.md)
-<<<<<<< HEAD
       *   [Target Ansible Tasks for Image Customization](configuration_management/Target_Ansible_Tasks_for_Image_Customization.md)
->>>>>>> 269058d (STP-2624: imported several files from the admin guide)
-=======
-       *   [Target Ansible Tasks for Image Customization](configuration_management/Target_Ansible_Tasks_for_Image_Customization.md)
->>>>>>> f416af2 (STP-2624: formatting changes)
 
 #### Customer Access Network (CAN)
 
@@ -177,22 +149,12 @@ These administrative procedures are needed to operate an HPE Cray EX system with
 
    *   [Kubernetes Architecture](kubernetes/Kubernetes_Architecture.md)
    *   [About kubectl](kubernetes/About_kubectl.md)
-<<<<<<< HEAD
-<<<<<<< HEAD
        *   [Configure kubectl Credentials to Access the Kubernetes APIs](kubernetes/Configure_kubectl_Credentials_to_Access_the_Kubernetes_APIs.md)
-=======
-      *   [Configure kubectl Credentials to Access the Kubernetes APIs](kubernetes/Configure_kubectl_Credentials_to_Access_the_Kubernetes_APIs.md)
->>>>>>> 269058d (STP-2624: imported several files from the admin guide)
-=======
-       *   [Configure kubectl Credentials to Access the Kubernetes APIs](kubernetes/Configure_kubectl_Credentials_to_Access_the_Kubernetes_APIs.md)
->>>>>>> f416af2 (STP-2624: formatting changes)
    *   [About Kubernetes Taints and Labels](kubernetes/About_Kubernetes_Taints_and_Labels.md)
    *   [Kubernetes Storage](kubernetes/Kubernetes_Storage.md)
    *   [Kubernetes Networking](kubernetes/Kubernetes_Networking.md)
    *   [Retrieve Cluster Health Information Using Kubernetes](kubernetes/Retrieve_Cluster_Health_Information_Using_Kubernetes.md)
    *   [Pod Resource Limits](kubernetes/Pod_Resource_Limits.md)
-<<<<<<< HEAD
-<<<<<<< HEAD
        *   [Determine if Pods are Hitting Resource Limits](kubernetes/Determine_if_Pods_are_Hitting_Resource_Limits.md)
        *   [Increase Pod Resource Limits](kubernetes/Increase_Pod_Resource_Limits.md)
        *   [Increase Kafka Pod Resource Limits](kubernetes/Increase_Kafka_Pod_Resource_Limits.md)
@@ -216,15 +178,9 @@ These administrative procedures are needed to operate an HPE Cray EX system with
        *   [Kubernetes Log File Locations](kubernetes/Kubernetes_Log_File_Locations.md)
        *   [Troubleshoot Liveliness or Readiness Probe Failures](kubernetes/Troubleshoot_Liveliness_Readiness_Probe_Failures.md)
        *   [Troubleshoot Unresponsive kubectl Commands](kubernetes/Troubleshoot_Unresponsive_kubectl_Commands.md)
-=======
-      *   [Determine if Pods are Hitting Resource Limits](kubernetes/Determine_if_Pods_are_Hitting_Resource_Limits.md)
-      *   [Increase Pod Resource Limits](kubernetes/Increase_Pod_Resource_Limits.md)
-      *   [Increase Kafka Pod Resource Limits](kubernetes/Increase_Kafka_Pod_Resource_Limits.md)
-=======
        *   [Determine if Pods are Hitting Resource Limits](kubernetes/Determine_if_Pods_are_Hitting_Resource_Limits.md)
        *   [Increase Pod Resource Limits](kubernetes/Increase_Pod_Resource_Limits.md)
        *   [Increase Kafka Pod Resource Limits](kubernetes/Increase_Kafka_Pod_Resource_Limits.md)
->>>>>>> f416af2 (STP-2624: formatting changes)
    *   [About etcd](kubernetes/About_etcd.md)
        *   [Check the Health and Balance of etcd Clusters](kubernetes/Check_the_Health_and_Balance_of_etcd_Clusters.md)
        *   [Rebuild Unhealthy etcd Clusters](kubernetes/Rebuild_Unhealthy_etcd_Clusters.md)
@@ -242,16 +198,9 @@ These administrative procedures are needed to operate an HPE Cray EX system with
        *   [View Postgres Information for System Databases](kubernetes/View_Postgres_Information_for_System_Databases.md)
    *   [Configure Kubernetes on Compute Nodes](kubernetes/Configure_Kubernetes_on_Compute_Nodes.md)
    *   [Kubernetes Troubleshooting Information](kubernetes/Kubernetes_Troubleshooting_Information.md)
-<<<<<<< HEAD
       *   [Kubernetes Log File Locations](kubernetes/Kubernetes_Log_File_Locations.md)
       *   [Troubleshoot Liveliness or Readiness Probe Failures](kubernetes/Troubleshoot_Liveliness_Readiness_Probe_Failures.md)
       *   [Troubleshoot Unresponsive kubectl Commands](kubernetes/Troubleshoot_Unresponsive_kubectl_Commands.md)
->>>>>>> 269058d (STP-2624: imported several files from the admin guide)
-=======
-       *   [Kubernetes Log File Locations](kubernetes/Kubernetes_Log_File_Locations.md)
-       *   [Troubleshoot Liveliness or Readiness Probe Failures](kubernetes/Troubleshoot_Liveliness_Readiness_Probe_Failures.md)
-       *   [Troubleshoot Unresponsive kubectl Commands](kubernetes/Troubleshoot_Unresponsive_kubectl_Commands.md)
->>>>>>> f416af2 (STP-2624: formatting changes)
 
 #### Package Repository Management
 
@@ -266,26 +215,14 @@ These administrative procedures are needed to operate an HPE Cray EX system with
 
    *   [System Security and Authentication](security_and_authentication/System_Security_and_Authentication.md)
    *   [Manage System Passwords](security_and_authentication/Manage_System_Passwords.md)
-<<<<<<< HEAD
-<<<<<<< HEAD
-       *   [Update NCN Passwords](security_and_authentication/Update_NCN_Passwords.md)
-       *   [Change Root Passwords for Compute Nodes](security_and_authentication/Change_Root_Passwords_for_Compute_Nodes.md)
-=======
       *   [Update NCN Passwords](security_and_authentication/Update_NCN_Passwords.md)
       *   [Change Root Passwords for Compute Nodes](security_and_authentication/Change_Root_Passwords_for_Compute_Nodes.md)
->>>>>>> 269058d (STP-2624: imported several files from the admin guide)
-=======
        *   [Update NCN Passwords](security_and_authentication/Update_NCN_Passwords.md)
        *   [Change Root Passwords for Compute Nodes](security_and_authentication/Change_Root_Passwords_for_Compute_Nodes.md)
->>>>>>> f416af2 (STP-2624: formatting changes)
    *   [Retrieve an Authentication Token](security_and_authentication/Retrieve_an_Authentication_Token.md)
    *   [SSH Keys](security_and_authentication/SSH_Keys.md)
    *   [Authenticate an Account with the Command Line](security_and_authentication/Authenticate_an_Account_with_the_Command_Line.md)
    *   [Default Keycloak Realms, Accounts and Clients](security_and_authentication/Default_Keycloak_Realsm_Accounts_and_Clients.md)
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> f416af2 (STP-2624: formatting changes)
        *   [Certificate Types](security_and_authentication/Certificate_Types.md)
        *   [Change the Keycloak Admin Password](security_and_authentication/Change_the_Keycloak_Admin_Password.md)
        *   [Create a Service Account in Keycloak](security_and_authentication/Create_a_Service_Account_in_Keycloak.md)
@@ -306,7 +243,6 @@ These administrative procedures are needed to operate an HPE Cray EX system with
        *   [Change the LDAP Server IP for New LDAP Server Content](security_and_authentication/Change_the_LDAP_Server_IP_for_New_LDAP_Server_Content.md)
        *   [Remove the LDAP User Federation from Keycloak](security_and_authentication/Remove_the_LDAP_User_Federation_from_Keycloak.md)
        *   [Add LDAP User Federation](security_and_authentication/Add_LDAP_User_Federation.md)
-<<<<<<< HEAD
    *   [Public Key Infrastructure \(PKI\)](security_and_authentication/Public_Key_Infrastructure_PKI.md)
        *   [PKI Certificate Authority \(CA\)](security_and_authentication/PKI_Certificate_Authority_CA.md)
        *   [Make HTTPS Requests from Sources Outside the Management Kubernetes Cluster](security_and_authentication/Make_HTTPS_Requests_from_Sources_Outside_the_Management_Kubernetes_Cluster.md)
@@ -315,37 +251,6 @@ These administrative procedures are needed to operate an HPE Cray EX system with
        *   [HashiCorp Vault](security_and_authentication/HashiCorp_Vault.md)
        *   [Backup and Restore Vault Clusters](security_and_authentication/Backup_and_Restore_Vault_Clusters.md)
        *   [Troubleshoot Common Vault Cluster Issues](security_and_authentication/Troubleshoot_Common_Vault_Cluster_Issues.md)
-=======
-      *   [Certificate Types](security_and_authentication/Certificate_Types.md)
-      *   [Change the Keycloak Admin Password](security_and_authentication/Change_the_Keycloak_Admin_Password.md)
-      *   [Create a Service Account in Keycloak](security_and_authentication/Create_a_Service_Account_in_Keycloak.md)
-      *   [Retrieve the Client Secret for Service Accounts](security_and_authentication/Retrieve_the_Client_Secret_for_Service_Accounts.md)
-      *   [Get a Long-Lived Token for a Service Account](security_and_authentication/Get_a_Long-lived_Token_for_a_Service_Account.md)
-      *   [Access the Keycloak User Management UI](security_and_authentication/Access_the_Keycloak_User_Managment_UI.md)
-      *   [Create Internal User Accounts in the Keycloak Shasta Realm](security_and_authentication/Create_Internal_User_Accounts_in_the_Keycloak_Shasta_Realm.md)
-      *   [Delete Internal User Accounts in the Keycloak Shasta Realm](security_and_authentication/Delete_Internal_User_Accounts_from_the_Keycloak_Shasta_Realm.md)
-      *   [Create Internal User Groups in the Keycloak Shasta Realm](security_and_authentication/Create_Internal_User_Accounts_in_the_Keycloak_Shasta_Realm.md)
-      *   [Remove Internal Groups from the Keycloak Shasta Realm](security_and_authentication/Remove_Internal_Groups_from_the_Keycloak_Shasta_Realm.md)
-      *   [Remove the Email Mapper from the LDAP User Federation](security_and_authentication/Remove_the_Email_Mapper_from_the_LDAP_User_Federation.md)
-      *   [Re-Sync Keycloak Users to Compute Nodes](security_and_authentication/Resync_Keycloak_Users_to_Compute_Nodes.md)
-      *   [Keycloak Operations](security_and_authentication/Keycloak_Operations.md)
-      *   [Configure Keycloak for LDAP/AD authentication](security_and_authentication/Configure_Keycloak_for_LDAPAD_Authentication.md)
-      *   [Configure the RSA Plugin in Keycloak](security_and_authentication/Configure_the_RSA_Plugin_in_Keycloak.md)
-      *   [Preserve Username Capitalization for Users Exported from Keycloak](security_and_authentication/Preserve_Username_Capitalization_for_Users_Exported_from_Keycloak.md)
-      *   [Change the LDAP Server IP for Existing LDAP Server Content](security_and_authentication/Change_the_LDAP_Server_IP_for_Existing_LDAP_Server_Content.md)
-      *   [Change the LDAP Server IP for New LDAP Server Content](security_and_authentication/Change_the_LDAP_Server_IP_for_New_LDAP_Server_Content.md)
-      *   [Remove the LDAP User Federation from Keycloak](security_and_authentication/Remove_the_LDAP_User_Federation_from_Keycloak.md)
-      *   [Add LDAP User Federation](security_and_authentication/Add_LDAP_User_Federation.md)
-   *   [Public Key Infrastructure \(PKI\)](security_and_authentication/Public_Key_Infrastructure_PKI.md)
-      *   [PKI Certificate Authority \(CA\)](security_and_authentication/PKI_Certificate_Authority_CA.md)
-      *   [Make HTTPS Requests from Sources Outside the Management Kubernetes Cluster](security_and_authentication/Make_HTTPS_Requests_from_Sources_Outside_the_Management_Kubernetes_Cluster.md)
-      *   [Transport Layer Security \(TLS\) for Ingress Services](security_and_authentication/Transport_Layer_Security_for_Ingress_Services.md)
-      *   [PKI Services](security_and_authentication/PKI_Services.md)
-      *   [HashiCorp Vault](security_and_authentication/HashiCorp_Vault.md)
-      *   [Backup and Restore Vault Clusters](security_and_authentication/Backup_and_Restore_Vault_Clusters.md)
-      *   [Troubleshoot Common Vault Cluster Issues](security_and_authentication/Troubleshoot_Common_Vault_Cluster_Issues.md)
->>>>>>> 269058d (STP-2624: imported several files from the admin guide)
-=======
    *   [Public Key Infrastructure \(PKI\)](security_and_authentication/Public_Key_Infrastructure_PKI.md)
        *   [PKI Certificate Authority \(CA\)](security_and_authentication/PKI_Certificate_Authority_CA.md)
        *   [Make HTTPS Requests from Sources Outside the Management Kubernetes Cluster](security_and_authentication/Make_HTTPS_Requests_from_Sources_Outside_the_Management_Kubernetes_Cluster.md)
@@ -354,7 +259,6 @@ These administrative procedures are needed to operate an HPE Cray EX system with
        *   [HashiCorp Vault](security_and_authentication/HashiCorp_Vault.md)
        *   [Backup and Restore Vault Clusters](security_and_authentication/Backup_and_Restore_Vault_Clusters.md)
        *   [Troubleshoot Common Vault Cluster Issues](security_and_authentication/Troubleshoot_Common_Vault_Cluster_Issues.md)
->>>>>>> f416af2 (STP-2624: formatting changes)
    *   [Troubleshoot SPIRE Failing to Start on NCNs](security_and_authentication/Troubleshoot_SPIRE_Failing_to_Start_on_NCNs.md)
    *   [API Authorization](security_and_authentication/API_Authorization.md)
 
@@ -364,11 +268,3 @@ These administrative procedures are needed to operate an HPE Cray EX system with
    * [Restore System Functionality if a Kubernetes Worker Node is Down](resiliency/Restore_System_Functionality_if_a_Kubernetes%20Worker_Node_is_Down.md)
    * [Recreate StatefulSet Pods on Another Node](resiliency/Recreate_StatefulSet_Pods_on_Another_Node.md)
    * [NTP Resiliency](resiliency/NTP_Resiliency.md)
-
-
-<<<<<<< HEAD
-=======
-   * [Delete or Recover Deleted IMS Content](image_management/Delete_or_Recover_Deleted_IMS_Content.md)
->>>>>>> c36c198 (STP-2624: added image management files)
-=======
->>>>>>> 269058d (STP-2624: imported several files from the admin guide)
