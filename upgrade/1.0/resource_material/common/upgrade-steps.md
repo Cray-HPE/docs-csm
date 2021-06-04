@@ -39,7 +39,56 @@ These steps will be run on the stable NCN of choice regardless of NCN type to be
     ncn# kubectl -n services exec -it $(kubectl get po -n services | grep conman | awk '{print $1}') -- /bin/sh -c 'conman -j <xname>'
     ```
 
-3. Wipe/erase the disks on the node being rebuilt.  This can be done from the conman console window.
+3. Update bss cloud-init data so that Mountain/Hill routes get added to NCNs when they boot with the new image.  This will affect all NCNs.
+    ```bash
+    ncn# cd /usr/share/doc/csm/upgrade/1.0/scripts/cloud-init
+    ncn# ./update-ncn-mountain-hill-routes.sh
+    ```
+
+    Output will look similar to:
+    ```bash
+    ncn# ./update-ncn-mountain-hill-routes.sh
+    2021/06/04 14:51:22 Getting management NCNs from SLS...
+    2021/06/04 14:51:22 Done getting management NCNs from SLS.
+    2021/06/04 14:51:22 Updating NCN cloud-init parameters...
+    2021/06/04 14:51:28 Sucessfuly PUT BSS entry for x3000c0s21b0n0
+    2021/06/04 14:51:35 Sucessfuly PUT BSS entry for x3000c0s7b0n0
+    2021/06/04 14:51:42 Sucessfuly PUT BSS entry for x3000c0s19b0n0
+    2021/06/04 14:51:48 Sucessfuly PUT BSS entry for x3000c0s13b0n0
+    2021/06/04 14:51:55 Sucessfuly PUT BSS entry for x3000c0s3b0n0
+    2021/06/04 14:52:02 Sucessfuly PUT BSS entry for x3000c0s11b0n0
+    2021/06/04 14:52:08 Sucessfuly PUT BSS entry for x3000c0s5b0n0
+    2021/06/04 14:52:15 Sucessfuly PUT BSS entry for x3000c0s25b0n0
+    2021/06/04 14:52:22 Sucessfuly PUT BSS entry for x3000c0s17b0n0
+    2021/06/04 14:52:28 Sucessfuly PUT BSS entry for x3000c0s1b0n0
+    2021/06/04 14:52:35 Sucessfuly PUT BSS entry for x3000c0s9b0n0
+    2021/06/04 14:52:42 Sucessfuly PUT BSS entry for Global
+    2021/06/04 14:52:42 Done updating NCN cloud-init parameters.
+    ncn#
+    ```
+
+    Verify the operation was successful, picking any one of the xnames from the above output.  You should see `write_files` content similar to the following::
+    ```bash
+    ncn# cray bss bootparameters list --hosts x3000c0s25b0n0 --format=json | jq '.[] | ."cloud-init"."user-data"."write_files"'
+    {
+      "write_files": [
+        {
+          "content": "10.100.0.0/22 10.252.0.1 - vlan002\n10.100.4.0/22 10.252.0.1 - vlan002\n10.100.8.0/22 10.252.0.1 - vlan002\n10.100.12.0/22 10.252.0.1 - vlan002\n10.106.0.0/22 10.252.0.1 - vlan002\n",
+          "owner": "root:root",
+          "path": "/etc/sysconfig/network/ifroute-vlan002",
+          "permissions": "0644"
+        },
+        {
+          "content": "10.104.0.0/22 10.254.0.1 - vlan004\n10.104.4.0/22 10.254.0.1 - vlan004\n10.104.8.0/22 10.254.0.1 - vlan004\n10.104.12.0/22 10.254.0.1 - vlan004\n10.107.0.0/22 10.254.0.1 - vlan004\n",
+          "owner": "root:root",
+          "path": "/etc/sysconfig/network/ifroute-vlan004",
+          "permissions": "0644"
+        }
+      ]
+    }
+    ```
+
+4. Wipe/erase the disks on the node being rebuilt.  This can be done from the conman console window.
 
      > NOTE: This is the point of no return, once disks are wiped, you are committed to rebuilding the node.
 
@@ -56,7 +105,7 @@ These steps will be run on the stable NCN of choice regardless of NCN type to be
       ncn-s# for d in $(lsblk | grep -B2 -F md1  | grep ^s | awk '{print $1}'); do wipefs -af "/dev/$d"; done
       ```
 
-4. Set the PXE boot option and power cycle the node. 
+5. Set the PXE boot option and power cycle the node.
 
     > NOTE:
     >
@@ -92,21 +141,22 @@ These steps will be run on the stable NCN of choice regardless of NCN type to be
 
     5. Wait for the server to boot and complete cloud-init.
 
-5. If the node is a ***WORKER***, confirm BGP is healthy by following the steps in the `Check BGP Status and Reset Sessions` section in the admin guide for steps to verify and fix BGP if needed.
+6. If the node is a ***WORKER***, confirm BGP is healthy by following the steps in the 'Check BGP Status and Reset Sessions' section in the admin guide for steps to verify and fix BGP if needed.
 
-6. Set the disk wipe flag back to not wipe the disk in the event that the node reboots.
+7. Set the disk wipe flag back to not wipe the disk in the event that the node reboots.
 
    ```bash
    ncn# csi handoff bss-update-param --set metal.no-wipe=1 --limit $UPGRADE_XNAME
    ```
 
-7. If the node just upgraded was `ncn-m001`, you'll want to copy the `/etc/sysconfig/network/ifcfg-lan0` and  `/etc/sysconfig/network/ifroute-lan` files back into place, and run the following command.
+8. If the node just upgraded was `ncn-m001`, you'll want to copy the `/etc/sysconfig/network/ifcfg-lan0` and  `/etc/sysconfig/network/ifroute-lan` files back into place, and run the following command.
 
    ```bash
    ncn# wicked ifreload lan0
    ```
 
-8. Verify node health.
+
+9. Verify node health.
 
     * If the node is a **MASTER** or **WORKER**, login to the newly-rebuilt node, and run the appropriate set of goss tests to confirm the node is in a healthy state before proceeding to the next node to upgrade.  If any of the tests fail, inspect the output from the goss command and address any failures.
 
