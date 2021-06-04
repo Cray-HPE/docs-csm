@@ -25,9 +25,11 @@ scope of this documentation.
 Before upgrading to CSM-1.0, please ensure that the latest CSM-0.9.x patches and hot-fixes have been applied.  These upgrade instructions assume that the latest released CSM-0.9.x patch and any applicable hot-fixes for CSM-0.9.x, have been applied.
 
 Install documents: 
+
 `rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm`
 
 Run: 
+
 `./prerequisites.sh [CSM_RELEASE]`
 > NOTE: make sure your current working dir is `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade`
 
@@ -38,6 +40,7 @@ Above script also runs the goss tests on the initial stable node (typically `ncn
 #### Stage 1.  Ceph upgrade from Nautilus (14.2.x) to Octopus (15.2.x)
 
 Run: 
+
 `./ncn-upgrade-ceph-initial.sh ncn-s001` <== run the script for all storage nodes
 
 > NOTE: follow output of above script carefully. The script will pause for manual interaction
@@ -62,6 +65,7 @@ cd /usr/share/doc/csm/upgrade/1.0/scripts/ceph
 #### Stage 2. Ceph image upgrade
 
 For each storage node in the cluster, start by following the steps: 
+
 `./ncn-upgrade-ceph-nodes.sh ncn-s001` <==== ncn-s001, ncn-s002, ncn-s003
 > NOTE: follow output of above script carefully. The script will pause for manual interaction
 
@@ -72,6 +76,7 @@ For each storage node in the cluster, start by following the steps:
 #### Stage 3. Kubernetes Upgrade from 1.18.6 to 1.19.9
 
 1. For each master node in the cluster (exclude m001), again follow the steps:
+
 `./ncn-upgrade-k8s-master.sh ncn-m002` <==== ncn-m002, ncn-m003
 > NOTE: follow output of above script carefully. The script will pause for manual interaction
 
@@ -89,13 +94,16 @@ For each storage node in the cluster, start by following the steps:
 Use m002 as stable ncn:
     
 Install documents: 
+
 `rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm`
 
 Run: 
+
 `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh [CSM_RELEASE]`
 
 upgrade ncn-m001:
- `./ncn-upgrade-k8s-master.sh ncn-m001`
+
+`./ncn-upgrade-k8s-master.sh ncn-m001`
 > NOTE: follow output of above script carefully. The script will pause for manual interaction
 
 > NOTE: make sure your current working dir is `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade`
