@@ -19,22 +19,49 @@ echo "  nexus pod is running on:  $nexus_node ($nexus_pod)"
 echo "  conman pod is running on: $conman_node ($conman_pod)"
 echo ""
 
-found_empty_worker=0
+other_worker=""
+emptiest_worker=""
+lowest_count=""
+lowest_podlist=""
 for worker in $all_workers; do
-  if [ "$worker" == "$kea_node" ] || [ "$worker" == "$nexus_node" ] || [ "$worker" == "$conman_node" ]; then
-    continue
-  fi
-  echo "NOTE: In order to minimize pod moves, it is recommended to first upgrade"
-  echo "      $worker first and move pods to that after it is rebuilt."
-  found_empty_worker=1
-  break
+    count=0
+    podlist=""
+    [ "$worker" == "$kea_node" ] && let count+=1 && podlist="$podlist $kea_pod"
+    [ "$worker" == "$nexus_node" ] && let count+=1 && podlist="$podlist $nexus_pod"
+    [ "$worker" == "$conman_node" ] && let count+=1 && podlist="$podlist $conman_pod"
+    if [ -z "$lowest_count" ] || [ $count -lt $lowest_count ]; then
+        if [ -n "$emptiest_worker" ] && [ -z "$other_worker" ]; then
+            other_worker="$emptiest_worker"
+        fi
+        emptiest_worker="$worker"
+        lowest_count=$count
+        lowest_podlist="$podlist"
+        [ $count -eq 0 ] && break
+    elif [ -z "$other_worker" ]; then
+        other_worker="$worker"
+    fi
 done
 
-if [ "$found_empty_worker" -eq 0 ]; then
-  echo "NOTE: There isn't a worker not running one of the critical services, so choose whatever order you wish."
-fi
+echo "This is the recommended procedure to upgrade your worker nodes:"
 
-echo ""
-echo "      In order to force a pod to move to a given node, you can use the following script:"
-echo ""
-echo "      /usr/share/doc/metal/upgrade/1.0/scripts/k8s/move-pod.sh <pod_name> <target_node>"
+if [ $lowest_count -eq 0 ]; then
+    echo "      1. Upgrade ${emptiest_worker}."
+    echo "      2. Once its upgrade is completed, run the following commands to move all of the"
+    echo "         critical pods to it:"
+    for pod in $kea_pod $nexus_pod $conman_pod ; do
+        echo "         # /usr/share/doc/csm/upgrade/1.0/scripts/k8s/move-pod.sh $pod ${emptiest_worker}"
+    done
+    echo "      3. Upgrade the remaining worker nodes in any order."
+else
+    echo "      1. Run the following commands to move all criticial pods from ${emptiest_worker} to ${other_worker}:"
+    for pod in $lowest_podlist; do
+        echo "         # /usr/share/doc/csm/upgrade/1.0/scripts/k8s/move-pod.sh $pod ${other_worker}"
+    done
+    echo "      2. Upgrade ${emptiest_worker}."
+    echo "      3. Once its upgrade is completed, run the following commands to move all of the"
+    echo "         critical pods to it:"
+    for pod in $kea_pod $nexus_pod $conman_pod ; do
+        echo "         # /usr/share/doc/csm/upgrade/1.0/scripts/k8s/move-pod.sh $pod ${emptiest_worker}"
+    done
+    echo "      4. Upgrade the remaining worker nodes in any order."
+fi
