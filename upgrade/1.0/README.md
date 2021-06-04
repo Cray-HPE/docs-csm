@@ -38,6 +38,8 @@ Above script also runs the goss tests on the initial stable node (typically `ncn
 
 `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-ceph-initial.sh ncn-s001` <== run the script for all storage nodes
 
+> NOTE: follow output of above script carefully. The script will pause for manual interaction
+
 On ncn-s001 execute the ceph-upgrade.sh script:
 ```
 cd /usr/share/doc/csm/upgrade/1.0/scripts/ceph
@@ -58,18 +60,21 @@ cd /usr/share/doc/csm/upgrade/1.0/scripts/ceph
 For each storage node in the cluster, start by following the steps: 
 
 `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-ceph-nodes.sh ncn-s001` <==== ncn-s001, ncn-s002, ncn-s003
+> NOTE: follow output of above script carefully. The script will pause for manual interaction
 
- Note that these steps should be performed on one storage node at a time.
+> Note that these steps should be performed on one storage node at a time.
 
 #### Stage 3. Kubernetes Upgrade from 1.18.6 to 1.19.9
 
 1. For each master node in the cluster (exclude m001), again follow the steps:
 
 `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-master.sh ncn-m002` <==== ncn-m002, ncn-m003
+> NOTE: follow output of above script carefully. The script will pause for manual interaction
 
 2. For each worker node in the cluster, also follow the steps:
 
 `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-worker.sh ncn-w002` <==== ncn-w002, ncn-w003, ncn-w001
+> NOTE: follow output of above script carefully. The script will pause for manual interaction
 
 3. For master 001, follow the steps:
 
@@ -80,6 +85,7 @@ Use m002 as stable ncn:
     Run: `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh [CSM_RELEASE]`
 
 upgrade ncn-m001 `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-master.sh ncn-m001`
+> NOTE: follow output of above script carefully. The script will pause for manual interaction
 
 4. For each master node in the cluster, run the following command to complete the kubernetes upgrade _(this will restart several pods on each master to their new docker containers)_:
 
