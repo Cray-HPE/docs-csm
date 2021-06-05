@@ -110,7 +110,9 @@ if [[ $state_recorded == "0" ]]; then
 
     power cycle:
 
-    ipmitool -I lanplus -U root -P initial0 -H $UPGRADE_NCN-mgmt chassis power cycle
+        ipmitool -I lanplus -U root -P initial0 -H $UPGRADE_NCN-mgmt chassis power cycle
+
+    run above command in a different terminal on stable ncn
 EOF
 
     read -p "Press any key to continue after a node is booted ..."
@@ -149,7 +151,6 @@ if [[ ${upgrade_ncn} != ncn-s* ]]; then
       ssh-keygen -R $UPGRADE_NCN -f /root/.ssh/known_hosts
       ssh-keyscan -H $UPGRADE_NCN >> ~/.ssh/known_hosts
       ssh $UPGRADE_NCN 'cray init --no-auth --overwrite --hostname https://api-gw-service-nmn.local'
-      ssh $UPGRADE_NCN 'cray auth login --username vers --password diet.pepsi'
       
       record_state "${state_name}" ${upgrade_ncn}
       echo

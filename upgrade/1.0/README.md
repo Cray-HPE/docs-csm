@@ -1,4 +1,4 @@
-# CSM 0.9 to 1.0 Upgrade Process
+# CSM 0.9.3 to 1.0.0 Upgrade Process
 
 ### Introduction
 

@@ -4,8 +4,15 @@
 #
 set -e
 . ./upgrade-state.sh
-ENDPOINT=https://arti.dev.cray.com/artifactory/shasta-distribution-unstable-local/csm/
 CSM_RELEASE=$1
+
+if [[ -z $2 ]]; then
+    ENDPOINT=https://arti.dev.cray.com/artifactory/shasta-distribution-unstable-local/csm/
+    echo "Use internal endpoint: ${ENDPOINT}"
+else 
+    ENDPOINT=$2
+fi
+
 
 if [[ -z ${CSM_RELEASE} ]]; then
     echo "CSM RELEASE is not specified"
@@ -49,8 +56,6 @@ state_name="INSTALL_WAR_DOC"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "${state_name} ..."
-    rpm -Uvh \
-        https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm && \
     rpm -Uvh \
         https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
     record_state ${state_name} $(hostname)
