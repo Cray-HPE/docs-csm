@@ -19,13 +19,13 @@ scope of this documentation.
 
 ### Terminal Output
 
-<font style="color: while;background-color:grey"> White </font>: output of logs are in white
+<font style="color: while"> White </font>: output of logs are in white
 
-<font style="color: green;background-color:grey"> Green </font>: output of upgrade states are in green
+<font style="color: green"> Green </font>: output of upgrade states are in green
 
-<font style="color: yellow;background-color:grey"> Yellow </font>: Your action is required, read and react carefully with the output
+<font style="color: yellow"> Yellow </font>: Your action is required, read and react carefully with the output
 
-<font style="color: red;background-color:grey"> Red </font>: Unexpeted errors are in red
+<font style="color: red"> Red </font>: Unexpeted errors are in red
 
 ### Prerequisites & Preflight Checks
 
