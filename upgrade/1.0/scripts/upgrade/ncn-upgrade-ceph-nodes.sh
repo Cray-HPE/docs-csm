@@ -52,7 +52,7 @@ else
     echo "${state_name} has beed completed"
 fi
 
-./ncn-upgrade-k8s-nodes.sh $upgrade_ncn
+${BASEDIR}/ncn-upgrade-k8s-nodes.sh $upgrade_ncn
 
 state_name="INSTALL_UPGRADE_SCRIPT"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})

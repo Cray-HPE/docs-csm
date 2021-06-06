@@ -105,6 +105,6 @@ else
     echo "${state_name} has beed completed"
 fi
 
-./ncn-upgrade-k8s-nodes.sh $upgrade_ncn
+${BASEDIR}/ncn-upgrade-k8s-nodes.sh $upgrade_ncn
 
 ssh $upgrade_ncn 'GOSS_BASE=/opt/cray/tests/install goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-master.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate'
