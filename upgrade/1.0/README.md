@@ -18,6 +18,7 @@ It is also possible to do this from a "remote" node (like the PIT during a norma
 scope of this documentation.
 
 ### Terminal Output
+<div style="background-color:grey;">
 
 <font color="white"> White </font>: output of logs are in white
 
@@ -26,7 +27,7 @@ scope of this documentation.
 <font color="yellow"> Yellow </font>: Your action is required, read and react carefully with the output
 
 <font color="red"> Red </font>: Unexpeted errors are in red
-
+</div>
 ### Prerequisites & Preflight Checks
 
 > NOTE: CSM-0.9.3 is the version of CSM required in order to upgrade to CSM-1.0.0 (available with Shasta v1.5).
