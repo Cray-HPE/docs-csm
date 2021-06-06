@@ -3,7 +3,8 @@
 # Copyright 2021 Hewlett Packard Enterprise Development LP
 #
 set -e
-. ./upgrade-state.sh
+BASEDIR=$(dirname $0)
+. ${BASEDIR}/upgrade-state.sh
 CSM_RELEASE=$1
 
 if [[ -z $2 ]]; then

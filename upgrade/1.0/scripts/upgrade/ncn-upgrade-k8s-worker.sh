@@ -3,11 +3,12 @@
 # Copyright 2021 Hewlett Packard Enterprise Development LP
 #
 set -e
-. ./upgrade-state.sh
+BASEDIR=$(dirname $0)
+. ${BASEDIR}/upgrade-state.sh
 
 upgrade_ncn=$1
 
-. ./ncn-upgrade-common.sh ${upgrade_ncn}
+. ${BASEDIR}/ncn-upgrade-common.sh ${upgrade_ncn}
 
 cat <<EOF
 NOTE: 

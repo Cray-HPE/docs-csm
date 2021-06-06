@@ -3,11 +3,12 @@
 # Copyright 2021 Hewlett Packard Enterprise Development LP
 #
 set -e
-. ./upgrade-state.sh
+BASEDIR=$(dirname $0)
+. ${BASEDIR}/upgrade-state.sh
 
 upgrade_ncn=$1
 
-. ./ncn-upgrade-common.sh ${upgrade_ncn}
+. ${BASEDIR}/ncn-upgrade-common.sh ${upgrade_ncn}
 
 if [[ ${upgrade_ncn} == "ncn-m001" ]]; then
    state_name="BACKUP_M001_NET_CONFIG"
