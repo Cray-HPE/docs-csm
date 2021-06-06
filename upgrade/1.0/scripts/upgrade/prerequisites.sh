@@ -5,7 +5,9 @@
 set -e
 BASEDIR=$(dirname $0)
 . ${BASEDIR}/upgrade-state.sh
+trap 'err_report' ERR
 CSM_RELEASE=$1
+
 
 if [[ -z $2 ]]; then
     ENDPOINT=https://arti.dev.cray.com/artifactory/shasta-distribution-unstable-local/csm/

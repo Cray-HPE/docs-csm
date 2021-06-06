@@ -5,6 +5,7 @@
 set -e
 BASEDIR=$(dirname $0)
 . ${BASEDIR}/upgrade-state.sh
+trap 'err_report' ERR
 
 upgrade_ncn=$1
 

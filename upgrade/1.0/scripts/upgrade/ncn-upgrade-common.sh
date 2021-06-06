@@ -5,6 +5,7 @@
 set -e
 BASEDIR=$(dirname $0)
 . ${BASEDIR}/upgrade-state.sh
+trap 'err_report' ERR
 . ./myenv
 
 export UPGRADE_NCN=$1
