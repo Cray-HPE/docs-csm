@@ -35,7 +35,7 @@ Install documents:
 
 Run: 
 
-`/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh [CSM_RELEASE]`
+`/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh [CSM_RELEASE] [ENDPOINT]` <== ENDPOINT is optional for internal use. it is pointing to arti by default
 
 Above script also runs the goss tests on the initial stable node (typically `ncn-m001`) where the latest version of CSM has been installed. Make sure the goss test pass before continue.
 
