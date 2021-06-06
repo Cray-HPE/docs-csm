@@ -17,6 +17,15 @@ upgrade that node.
 It is also possible to do this from a "remote" node (like the PIT during a normal install) however this is beyond the
 scope of this documentation.
 
+### Terminal Output
+<span style="color: while"> White </span>: output of logs are in white
+
+<span style="color: green"> Green </span>: output of upgrade states are in green
+
+<span style="color: yellow"> Yellow </span>: Your action is required, read and react carefully with the output
+
+<span style="color: red"> Red </span>: Unexpeted errors are in red
+
 ### Prerequisites & Preflight Checks
 
 > NOTE: CSM-0.9.3 is the version of CSM required in order to upgrade to CSM-1.0.0 (available with Shasta v1.5).
