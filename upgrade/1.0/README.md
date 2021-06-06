@@ -23,6 +23,8 @@ White: output of logs are in white
 
 <font color="green"> Green </font>: output of upgrade states are in green
 
+<font color="blue"> Blue </font>: informational output
+
 <font color="#9B870C"> Yellow </font>: Your action is required, read and react carefully with the output
 
 <font color="red"> Red </font>: Unexpeted errors are in red
