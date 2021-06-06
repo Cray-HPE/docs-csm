@@ -18,15 +18,14 @@ It is also possible to do this from a "remote" node (like the PIT during a norma
 scope of this documentation.
 
 ### Terminal Output
-<font color='red'>test</font>
 
-<span style="color: while"> White </span>: output of logs are in white
+<font style="color: while;background-color:grey"> White </font>: output of logs are in white
 
-<span style="color: green"> Green </span>: output of upgrade states are in green
+<font style="color: green;background-color:grey"> Green </font>: output of upgrade states are in green
 
-<span style="color: yellow"> Yellow </span>: Your action is required, read and react carefully with the output
+<font style="color: yellow;background-color:grey"> Yellow </font>: Your action is required, read and react carefully with the output
 
-<span style="color: red"> Red </span>: Unexpeted errors are in red
+<font style="color: red;background-color:grey"> Red </font>: Unexpeted errors are in red
 
 ### Prerequisites & Preflight Checks
 
