@@ -86,16 +86,17 @@ else
     echo "${state_name} has beed completed"
 fi
 
+upgrade_ncn_mgmt_host="$UPGRADE_NCN-mgmt"
+
 state_name="SET_PXE_BOOT"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "${state_name} ..."
-    if [[ ${upgrade_ncn} != "ncn-m001" ]]; then
-        ipmitool -I lanplus -U root -P initial0 -H $UPGRADE_NCN-mgmt chassis bootdev pxe options=efiboot
-    else
-        read -p "mgmt IP/Host of ncn-m001:" m001_mgmt_ip
-        ipmitool -I lanplus -U root -P initial0 -H $m001_mgmt_ip chassis bootdev pxe options=efiboot
+    if [[ ${upgrade_ncn} == "ncn-m001" ]]; then
+        read -p "mgmt IP/Host of ncn-m001:" upgrade_ncn_mgmt_host
     fi
+    ipmitool -I lanplus -U root -P initial0 -H $upgrade_ncn_mgmt_host chassis bootdev pxe options=efiboot
+
     record_state "${state_name}" ${upgrade_ncn}
     echo
 else
@@ -111,9 +112,9 @@ if [[ $state_recorded == "0" ]]; then
 
     power cycle:
 
-        ipmitool -I lanplus -U root -P initial0 -H $UPGRADE_NCN-mgmt chassis power cycle
+        ipmitool -I lanplus -U root -P initial0 -H $upgrade_ncn_mgmt_host chassis power cycle
 
-    run above command in a different terminal on stable ncn
+    run above command in a different terminal on stable ncn to boot $UPGRADE_NCN
 EOF
 
     read -p "Press any key to continue after a node is booted ..."
