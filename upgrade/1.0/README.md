@@ -18,6 +18,8 @@ It is also possible to do this from a "remote" node (like the PIT during a norma
 scope of this documentation.
 
 ### Terminal Output
+<font color='red'>test</font>
+
 <span style="color: while"> White </span>: output of logs are in white
 
 <span style="color: green"> Green </span>: output of upgrade states are in green
