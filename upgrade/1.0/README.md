@@ -1,11 +1,8 @@
-# CSM 1.4 to 1.5 Upgrade Process
+# CSM 0.9 to 1.0 Upgrade Process
 
 ### Introduction
 
-This document is intended to guide an administrator through the upgrade process going from Cray Shasta v1.4 to v1.5.  When upgrading a system, this top-level README.md file should be followed top to bottom, and the content on this top level page is meant to be terse.  See the additional files (like KNOWN_ISSUES.md and REFERENCE_MATERIAL.md in the various directories under the linked resource_material sub-directories.
-
-> **NOTE**: This document is a work in progress, and these items are outstanding:
-> 1. Additional automation -- hopefully we'll add some more scripting as we refine this process.  There's a lot of copy/pasting which will frustrate administrators, especially on larger systems.
+This document is intended to guide an administrator through the upgrade process going from Cray Systems Management 0.9 to v1.0.  When upgrading a system, this top-level README.md file should be followed top to bottom, and the content on this top level page is meant to be terse.  See the additional files (like KNOWN_ISSUES.md and REFERENCE_MATERIAL.md in the various directories under the linked resource_material sub-directories.
 
 ### Terminology
 
@@ -22,7 +19,9 @@ scope of this documentation.
 
 ### Prerequisites & Preflight Checks
 
-Please note that CSM-0.9.3 is the version of CSM required in order to upgrade to CSM-1.0.0 (available with Shasta v1.5). The following command can be used to check the CSM version on the system:
+> NOTE: CSM-0.9.3 is the version of CSM required in order to upgrade to CSM-1.0.0 (available with Shasta v1.5).
+
+The following command can be used to check the CSM version on the system:
 
 ```
 kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm'
