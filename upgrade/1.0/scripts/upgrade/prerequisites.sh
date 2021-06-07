@@ -128,7 +128,7 @@ else
     echo "====> ${state_name} has beed completed"
 fi
 
-state_name="UPGRADE_BSS_CLOUD_INIT"
+state_name="UPDATE_BSS_CLOUD_INIT_RECORDS"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "${state_name} ..."
@@ -166,7 +166,7 @@ else
     echo "${state_name} has beed completed"
 fi
 
-state_name="UDATE_CRAY_DHCP_KEA_TRAFFIC_POLICY"
+state_name="UPDATE_CRAY_DHCP_KEA_TRAFFIC_POLICY"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "${state_name} ..."
@@ -206,13 +206,13 @@ state_name="EXPORT_GLOBAL_ENV"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    
+
     rm -rf myenv
     echo "export CEPH_VERSION=${CEPH_VERSION}" >> myenv
     echo "export KUBERNETES_VERSION=${KUBERNETES_VERSION}" >> myenv
     echo "export CSM_RELEASE=${CSM_RELEASE}" >> myenv
     echo "export DOC_RPM_NEXUS_URL=https://packages.local/repository/csm-sle-15sp2/$(ls ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/noarch/docs-csm-install-*.noarch.rpm | awk -F'/sle-15sp2/' '{print $2}')" >> myenv
-    
+
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has beed completed"
@@ -247,7 +247,7 @@ if [[ $state_recorded == "0" ]]; then
 
     rpm --force -Uvh $(find $CSM_RELEASE -name \*csm-testing\* | sort | tail -1)
     goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-preflight-tests.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
-    
+
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has beed completed"
