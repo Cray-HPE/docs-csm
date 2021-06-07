@@ -1,6 +1,6 @@
 ## System Security and Authentication
 
-The  system uses a number of mechanisms to ensure the security and authentication of internal and external requests.
+The system uses a number of mechanisms to ensure the security and authentication of internal and external requests.
 
 -   **API Gateway service** - The Cray API Gateway service provides a common access gateway for all of the systems management REST APIs. Authentication is provided by an Identity and Access Management \(IAM\) service that integrates with Istio.
 -   **Keycloak** - Keycloak is an open source Identity and Access Management \(IAM\) solution. It provides authentication and authorization services that are used to secure access to services on the system.

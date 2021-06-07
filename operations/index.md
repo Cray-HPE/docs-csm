@@ -1,8 +1,36 @@
 # CSM Operational Activities
 
-These administrative procedures are needed to operate an HPE Cray EX system with CSM software installed.
+The Cray System Management (CSM) operational activities are administrative procedures required to operate an HPE Cray EX system with CSM software installed. 
 
-### Topics:
+The following administrative topics can be found in this guide:
+
+- [CSM Operational Activities](#csm-operational-activities)
+    - [CSM **TBD: topics need to be re-organized**](#csm-tbd-topics-need-to-be-re-organized)
+    - [Image Management](#image-management)
+    - [Boot Orchestration](#boot-orchestration)
+    - [Artifact Management](#artifact-management)
+    - [Compute Rolling Upgrades](#compute-rolling-upgrades)
+    - [Configuration Management](#configuration-management)
+    - [Kubernetes](#kubernetes)
+    - [Package Repository Management](#package-repository-management)
+    - [Security and Authentication](#security-and-authentication)
+    - [Resiliency](#resiliency)
+    - [ConMan](#conman)
+    - [Utility Storage](#utility-storage)
+    - [System Management Health](#system-management-health)
+    - [System Layout Service (SLS)](#system-layout-service-sls)
+    - [System Configuration Service](#system-configuration-service)
+    - [Hardware State Manager (HSM)](#hardware-state-manager-hsm)
+    - [Node Management](#node-management)
+    - [Network](#network)
+      - [Customer Access Network (CAN)](#customer-access-network-can)
+      - [Dynamic Host Configuration Protocol (DHCP)](#dynamic-host-configuration-protocol-dhcp)
+      - [Domain Name Service (DNS)](#domain-name-service-dns)
+      - [External DNS](#external-dns)
+      - [MetalLB in BGP-Mode](#metallb-in-bgp-mode)
+  
+
+### CSM **TBD: topics need to be re-organized**
 
    * [Lock and Unlock Nodes](lock_and_unlock_nodes.md)
    * [Validate CSM Health](validate_csm_health.md)
@@ -21,9 +49,14 @@ These administrative procedures are needed to operate an HPE Cray EX system with
    * [Change NCN Image Root Password and SSH Keys](change_ncn_image_root_password_and_ssh_keys.md)
    * [Remove Artifacts from Product Installations](Remove_Artifacts_from_Product_Installations.md)
 
-#### Image Management
 
-   * [Image Management with Kiwi-NG Recipes](image_management/Image_Management_with_Kiwi-NG_Recipes.md)
+<a name="image-management"></a>
+
+### Image Management
+
+Build and customize image recipes with the Image Management Service (IMS).
+
+   * [Image Management](image_management/Image_Management.md)
    * [Image Management Workflows](image_management/Image_Management_Workflows.md)
    * [Upload and Register an Image Recipe](image_management/Upload_and_Register_an_Image_Recipe.md)
    * [Build a New UAN Image Using the Default Recipe](image_management/Build_a_New_UAN_Image_Using_the_Default_Recipe.md)
@@ -35,9 +68,13 @@ These administrative procedures are needed to operate an HPE Cray EX system with
      * [Customize an Image Root to Install Compute Kubernetes](image_management/Customize_an_Image_Root_to_Install_Compute_Kubernetes.md)
    * [Delete or Recover Deleted IMS Content](image_management/Delete_or_Recover_Deleted_IMS_Content.md)
 
-#### Boot Orchestration
+<a name="boot-orchestration"></a>
 
-   * [Boot Orchestration Service (BOS)](boot_orchestration/introduction.md)
+### Boot Orchestration
+
+Use the Boot Orchestration Service \(BOS\) to boot, configure, and shutdown collections of nodes.
+
+   * [Boot Orchestration Service (BOS)](boot_orchestration/Boot_Orchestration.md)
    * [BOS Workflows](boot_orchestration/BOS_Workflows.md)
    * [BOS Session Templates](boot_orchestration/Session_Templates.md)
      * [Manage a Session Template](boot_orchestration/Manage_a_Session_Template.md)
@@ -57,14 +94,22 @@ These administrative procedures are needed to operate an HPE Cray EX system with
      * [Troubleshoot Booting Nodes with Hardware Issues](boot_orchestration/Troubleshoot_Booting_Nodes_with_Hardware_Issues.md)
    * [BOS Limitations for Gigabyte BMC Hardware](boot_orchestration/Limitations_for_Gigabyte_BMC_Hardware.md)
 
-#### Artifact Management
+<a name="artifcat-Management"></a>
+
+### Artifact Management
+
+Use the Ceph Object Gateway Simple Storage Service \(S3\) API to manage artifacts on the system.
 
    * [Artifact Management](artifact_management/Artifact_Management.md)
    * [Manage Artifacts with the Cray CLI](artifact_management/Manage_Artifacts_with_the_Cray_CLI.md)
    * [Use S3 Libraries and Clients](artifact_management/Use_S3_Libraries_and_Clients.md)
    * [Generate Temporary S3 Credentials](artifact_management/Generate_Temporary_S3_Credentials.md)
 
-#### Compute Rolling Upgrades
+<a name="compute-rolling-upgrades"></a>
+
+### Compute Rolling Upgrades
+
+Upgrade sets of compute nodes with the Compute Rolling Upgrade Service \(CRUS\) without requiring an entire set of nodes to be out of service at once. CRUS enables administrators to limit the impact on production caused from upgrading compute nodes by working through one step of the upgrade process at a time.
 
    * [Compute Rolling Upgrade Service (CRUS)](compute_rolling_upgrade/Compute_Rolling_Upgrade_Service_CRUS.md)
    * [CRUS Workflow](compute_rolling_upgrade/CRUS_Workflow.md)
@@ -73,7 +118,11 @@ These administrative procedures are needed to operate an HPE Cray EX system with
    * [Troubleshoot a Failed CRUS Session Due to Unmet Conditions](compute_rolling_upgrade/Troubleshoot_a_Failed_CRUS_Session_Due_to_Unmet_Conditions.md)
    * [Troubleshoot a Failed CRUS Session Due to Bad Parameters](compute_rolling_upgrade/Troubleshoot_a_Failed_CRUS_Session_Due_to_Bad_Parameters.md)
 
-#### Configuration Management
+<a name="configuration-management"></a>
+
+### Configuration Management
+
+The Configuration Framework Service \(CFS\) is available on systems for remote execution and configuration management of nodes and boot images.
 
    *   [Configuration Management](configuration_management/Configuration_Management.md)
    *   [Configuration Layers](configuration_management/Configuration_Layers.md)
@@ -136,16 +185,12 @@ These administrative procedures are needed to operate an HPE Cray EX system with
    *   [Write Ansible Code for CFS](configuration_management/Write_Ansible_Code_for_CFS.md)
       *   [Target Ansible Tasks for Image Customization](configuration_management/Target_Ansible_Tasks_for_Image_Customization.md)
 
-#### Customer Access Network (CAN)
 
-   * [Customer Access Network (CAN)](customer_access_network/Customer_Access_Network_CAN.md)
-   * [Required Labels if CAN is Not Configured](customer_access_network/Required_Labels_if_CAN_is_Not_Configured.md)
-   * [Externally Exposed Services](customer_access_network/Externally_Exposed_Services.md)
-   * [Connect to the CAN](customer_access_network/Connect_to_the_CAN.md)
-   * [CAN with Dual-Spine Configuration](customer_access_network/CAN_with_Dual-Spine_Configuration.md)
-   * [Troubleshoot CAN Issues](customer_access_network/Troubleshoot_CAN_Issues.md)
+<a name="kubernetes"></a>
 
-#### Kubernetes
+### Kubernetes
+
+The system management components are broken down into a series of microservices. Each service is independently deployable, fine-grained, and uses lightweight protocols. As a result, the system's microservices are modular, resilient, and can be updated independently. Services within the Kubernetes architecture communicate via REST APIs.
 
    *   [Kubernetes Architecture](kubernetes/Kubernetes_Architecture.md)
    *   [About kubectl](kubernetes/About_kubectl.md)
@@ -202,16 +247,27 @@ These administrative procedures are needed to operate an HPE Cray EX system with
       *   [Troubleshoot Liveliness or Readiness Probe Failures](kubernetes/Troubleshoot_Liveliness_Readiness_Probe_Failures.md)
       *   [Troubleshoot Unresponsive kubectl Commands](kubernetes/Troubleshoot_Unresponsive_kubectl_Commands.md)
 
-#### Package Repository Management
 
-   *   [Package Repository Management with Nexus](package_repository_management/Package_Repository_Management_with_Nexus.md)
-   *   [Manage Repositories with Nexus](package_repository_management/Manage_Repositories_with_Nexus.md)
-   *   [Nexus Configuration](package_repository_management/Nexus_Configuration.md)
-   *   [Nexus Deployment](package_repository_management/Nexus_Deployment.md)
-   *   [Restrict Admin Privileges in Nexus](package_repository_management/Restrict_Admin_Privileges_in_Nexus.md)
-   *   [Repair Yum Repository Metadata](package_repository_management/Repair_Yum_Repository_Metadata.md)
+<a name="package-repository-management"></a>
 
-#### Security and Authentication
+### Package Repository Management
+
+Repositories are added to  systems to extend the system functionality beyond what is initially delivered. The Sonatype Nexus Repository Manager is the primary method for repository management. Nexus hosts the Yum, Docker, raw, and Helm repositories for software and firmware content.
+
+   * [Package Repository Management](package_repository_management/Package_Repository_Management.md)
+   * [Package Repository Management with Nexus](package_repository_management/Package_Repository_Management_with_Nexus.md)
+   * [Manage Repositories with Nexus](package_repository_management/Manage_Repositories_with_Nexus.md)
+   * [Nexus Configuration](package_repository_management/Nexus_Configuration.md)
+   * [Nexus Deployment](package_repository_management/Nexus_Deployment.md)
+   * [Restrict Admin Privileges in Nexus](package_repository_management/Restrict_Admin_Privileges_in_Nexus.md)
+   * [Repair Yum Repository Metadata](package_repository_management/Repair_Yum_Repository_Metadata.md)
+
+
+<a name="security-and-authentication"></a>
+
+### Security and Authentication
+
+Mechanisms used by the system to ensure the security and authentication of internal and external requests.
 
    *   [System Security and Authentication](security_and_authentication/System_Security_and_Authentication.md)
    *   [Manage System Passwords](security_and_authentication/Manage_System_Passwords.md)
@@ -262,9 +318,236 @@ These administrative procedures are needed to operate an HPE Cray EX system with
    *   [Troubleshoot SPIRE Failing to Start on NCNs](security_and_authentication/Troubleshoot_SPIRE_Failing_to_Start_on_NCNs.md)
    *   [API Authorization](security_and_authentication/API_Authorization.md)
 
-#### Resilience of System Management Services
 
+<a name="resiliency"></a>
+
+### Resiliency
+
+HPE Cray EX systems are designed so that system management services \(SMS\) are fully resilient and that there is no single point of failure.
+
+   * [Resiliency](resiliency/Resiliency.md)
    * [Resilience of System Management Services](resiliency/Resilience_of_System_Management_Services.md)
    * [Restore System Functionality if a Kubernetes Worker Node is Down](resiliency/Restore_System_Functionality_if_a_Kubernetes%20Worker_Node_is_Down.md)
    * [Recreate StatefulSet Pods on Another Node](resiliency/Recreate_StatefulSet_Pods_on_Another_Node.md)
    * [NTP Resiliency](resiliency/NTP_Resiliency.md)
+
+
+<a name="conman"></a>
+
+### ConMan
+
+ConMan is a tool used for connecting to remote consoles and collecting console logs. These node logs can then be used for various administrative purposes, such as troubleshooting node boot issues.
+
+  * [Access Compute Node Logs](Access_Compute_Node_Logs.md)
+  * [Access Console Log Data Via the System Monitoring Framework \(SMF\)](Access_Console_Log_Data_Via_the_System_Monitoring_Framework_SMF.md)
+  * [Log in to a Node Using ConMan](Log_in_to_a_Node_Using_ConMan.md)
+  * [Establish a Serial Connection to NCNs](Establish_a_Serial_Connection_to_NCNs.md)
+  * [Disable ConMan After System Software Installation](Disable_ConMan_After_System_Software_Installation.md)
+  * [Troubleshoot ConMan Blocking Access to a Node BMC](Troubleshoot_ConMan_Blocking_Access_to_a_Node_BMC.md)
+  * [Troubleshoot ConMan Failing to Connect to a Console](Troubleshoot_ConMan_Failing_to_Connect_to_a_Console.md)
+  * [Troubleshoot ConMan Asking for Password on SSH Connection](Troubleshoot_ConMan_Asking_for_Password_on_SSH_Connection.md)
+
+
+<a name="utility-storage"></a>
+
+### Utility Storage
+
+Ceph is the utility storage platform that is used to enable pods to store persistent data. It is deployed to provide block, object, and file storage to the management services running on Kubernetes, as well as for telemetry data coming from the compute nodes.
+
+  * [Utility Storage](utility_storage/Utility_Storage.md)
+  * [Collect Information about the Ceph Cluster](Collect_Information_About_the_Ceph_Cluster.md)  
+  * [Ceph Services](Ceph_Services.md)  
+  * [Manage Ceph Services](Manage_Ceph_Services.md)  
+  * [Restart Ceph Services via Ansible](Restart_Ceph_Services_via_Ansible.md)  
+  * [Adjust Ceph Pool Quotas](Adjust_Ceph_Pool_Quotas.md)  
+  * [Add Ceph OSDs](Add_Ceph_OSDs.md)  
+  * [Shrink Ceph OSDs](Shrink_Ceph_OSDs.md)  
+  * [Ceph Health States](Ceph_Health_States.md)  
+  * [Dump Ceph Crash Data](Dump_Ceph_Crash_Data.md)  
+  * [Identify Ceph Latency Issues](Identify_Ceph_Latency_Issues.md)  
+  * [Troubleshoot Failure to Get Ceph Health](Troubleshoot_Failure_to_Get_Ceph_Health.md)  
+  * [Troubleshoot a Down OSD](Troubleshoot_a_Down_OSD.md)  
+  * [Troubleshoot Ceph OSDs Reporting Full](Troubleshoot_Ceph_OSDs_Reporting_Full.md)  
+  * [Troubleshoot System Clock Skew](Troubleshoot_System_Clock_Skew.md)  
+  * [Troubleshoot an Unresponsive S3 Endpoint](Troubleshoot_an_Unresponsive_S3_Endpoint.md)  
+  * [Troubleshoot Ceph-Mon Processes Stopping and Exceeding Max Restarts](Troubleshoot_Ceph-Mon_Processes_Stopping_and_Exceeding_Max_Restarts.md)  
+  * [Troubleshoot Pods Failing to Restart on Other Worker Nodes](Troubleshoot_Pods_Failing_to_Restart_on_Other_Worker_Nodes.md)  
+  * [Troubleshoot Large Object Map Objects in Ceph Health](Troubleshoot_Large_Object_Map_Objects_in_Ceph_Health.md)  
+
+
+<a name="system-management-health"></a>
+
+### System Management Health
+
+Enable system administrators to assess the health of their system. Operators need to quickly and efficiently troubleshoot system issues as they occur and be confident that a lack of issues indicates the system is operating normally.
+
+  * [System Management Health](system_management_health/System_Management_Health.md)
+  * [System Management Health Checks and Alerts](System_Management_Health_Checks_and_Alerts.md)
+  * [Access System Management Health Services](Access_System_Management_Health_Services.md)
+  * [Configure Prometheus Email Alert Notifications](Configure_Prometheus_Email_Alert_Notifications.md)
+
+
+<a name="system-layout-service-sls"></a>
+
+### System Layout Service (SLS)
+
+The System Layout Service \(SLS\) holds information about the system design, such as the physical locations of network hardware, compute nodes, and cabinets. It also stores information about the network, such as which port on which switch should be connected to each compute node.
+
+  * [System Layout Service (SLS)](system_layout_service/System_Layout_Service_SLS.md)
+  * [Dump SLS Information](Dump_SLS_Information.md)
+  * [Load SLS Database with Dump File](Load_SLS_Database_with_Dump_File.md)
+  * [Add UAN CAN IP Addresses to SLS](Add_UAN_CAN_IP_Addresses_to_SLS.md)
+
+
+<a name="system-configuration-service"></a>
+
+### System Configuration Service
+
+The System Configuration Service \(SCSD\) allows admins to set various BMC and controller parameters. These parameters are typically set during discovery, but this tool enables parameters to be set before or after discovery. The operations to change these parameters are available in the Cray CLI under the `scsd` command.
+
+  * [System Configuration Service](system_configuration_service/System_Configuration_Service.md)
+  * [Manage Parameteres with the scsd Service](Manage_Parameters_with_the_scsd_Service.md)
+  * [Set BMC Credentials](Set_BMC_Credentials.md)
+
+
+<a name="hardware-state-manager-hsm"></a>
+
+### Hardware State Manager (HSM)
+
+Use the Hardware State Manager \(HSM\) to monitor and interrogate hardware components in the HPE Cray EX system, tracking hardware state and inventory information, and making it available via REST queries and message bus events when changes occur.
+
+  * [Hardware State Manager (HSM)](hardware_state_manager/Hardware_State_Manager.md)
+  * [Hardware Management Services (HMS) Locking API](Hardware_Management_Services_HMS_Locking_API.md)
+    * [NCN and Management Node Locking](NCN_and_Management_Node_Locking.md)
+  * [Component Groups and Partitions](Component_Groups_and_Partitions.md)
+    * [Manage Component Groups](Manage_Component_Groups.md)
+    * [Component Group Members](Component_Group_Members.md)
+    * [Manage Component Partitions](Manage_Component_Partitions.md)
+    * [Component Partition Members](Component_Partition_Members.md)
+    * [Component Memberships](Component_Memberships.md)
+  * [Hardware State Manager (HSM) State and Flag Fields](Hardware_State_Manager_HSM_State_and_Flag_Fields.md)
+  * [Add a NCN into the HSM Database](Add_a_NCN_into_HSM_Database.md)
+  * [Add a Switch to the HSM Database](Add_a_Switch_to_the_HSM_Database.md)
+  * [Manage NodeMaps with HSM](Manage_NodeMaps_with_HSM.md)
+
+
+<a name="node_management"></a>
+
+### Node Management
+
+Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the HPE Cray EX system.
+
+  * [Node Management](node_management/Node_Management.md)
+  * [Node Management Workflows](Node_Management_Workflows.md)
+  * [Rebuild NCNs](Rebuild_NCNs.md)
+  * [Reboot NCNs](Reboot_NCNs.md)
+    * [Check and Set the metalno-wipe Setting on NCNs](Check_and_Set_the_metalno-wipe_Setting_on_NCNs.md)
+  * [Enable Nodes](Enable_Nodes.md)
+  * [Disable Nodes](Disable_Nodes.md)
+  * [Find Node Type and Manufacturer](Find_Node_Type_and_Manufacturer.md)
+  * [Add a Standard Rack Node](Add_a_Standard_Rack_Node.md)
+    * [Move a Standard Rack Node](Move_a_Standard_Rack_Node.md)
+    * [Move a Standard Rack Node (Same Rack/Same HSN Ports)](Move_a_Standard_Rack_Node_SameRack_SameHSNPorts.md)
+  * [Clear Space in Root File System on Worker Nodes](Clear_Space_in_Root_File_System_on_Worker_Nodes.md)
+  * [Manually Wipe Boot Configuration on Nodes to be Reinstalled](Manually_Wipe_Boot_Configuration_on_Nodes_to_be_Reinstalled.md)
+  * [Troubleshoot Issues with Redfish Endpoint DiscoveryCheck for Redfish Events from Nodes](Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md)
+  * [Reset Credentials on Redfish Devices](Reset_Credentials_on_Redfish_Devices_for_Reinstallation.md)
+  * [Access and Update Settings for Replacement NCNs](Access_and_Update_the_Settings_for_Replacement_NCNs_.md)
+  * [Change Settings for HMS Collector Polling of Air Cooled Nodes](Change_Settings_for_HMS_Collector_Polling_of_Air_Cooled_Nodes.md)
+  * [Use the Physical KVM](Use_the_Physical_KVM.md)
+  * [Launch a Virtual KVM on Gigabyte Servers](Launch_a_Virtual_KVM_on_Gigabyte_Servers.md)
+  * [Launch a Virtual KVM on Intel Servers](Launch_a_Virtual_KVM_on_Intel_Servers.md)
+  * [Change Java Security Settings](Change_Java_Security_Settings.md)
+  * [Verify Accuracy of the System Clock](Verify_Accuracy_of_the_System_Clock.md)
+  * [Configuration of NCN Bonding](Configuration_of_NCN_Bonding.md)
+    * [Change Interfaces in the Bond](Change_Interfaces_in_the_Bond.md)
+    * [Troubleshoot Interfaces with IP Address Issues](Troubleshoot_Interfaces_with_IP_Address_Issues.md)
+  * [Troubleshoot Loss of Console Connections and Logs on Gigabyte Nodes](Troubleshoot_Loss_of_Console_Connections_and_Logs_on_Gigabyte_Nodes.md)
+  * [Check the BMC Failover Mode](Check_the_BMC_Failover_Mode.md)
+  * [Update Compute Node Mellanox HSN NIC Firmware](Update_Compute_Node_Mellanox_HSN_NIC_Firmware.md)
+  * [TLS Certificates for Redfish BMCs](TLS_Certificates_for_Redfish_BMCs.md)
+    * [Add TLS Certificates to BMCs](Add_TLS_Certificates_to_BMCs.md)
+
+
+<a name="network"></a>
+
+### Network
+
+Overview of the several different networks supported by the HPE Cray EX system.
+
+  * [Network](network/Network.md)
+  * [Access to System Management Services](Access_to_System_Management_Services.md)
+  * [Default IP Address Ranges](Default_IP_Address_Ranges.md)
+  * [Connect to the HPE Cray EX Environment](Connect_to_the_HPE_Cray_EX_Environment.md)
+
+
+<a name="customer-access-network-can"></a>
+
+#### Customer Access Network (CAN)
+
+The Customer Access Network \(CAN\) provides access from outside the customer network to services, NCNs, and User Access Nodes \(UANs\) in the system.
+
+   * [Customer Access Network (CAN)](network/customer_access_network/Customer_Access_Network_CAN.md)
+   * [Required Labels if CAN is Not Configured](network/customer_access_network/Required_Labels_if_CAN_is_Not_Configured.md)
+   * [Externally Exposed Services](network/customer_access_network/Externally_Exposed_Services.md)
+   * [Connect to the CAN](network/customer_access_network/Connect_to_the_CAN.md)
+   * [CAN with Dual-Spine Configuration](network/customer_access_network/CAN_with_Dual-Spine_Configuration.md)
+   * [Troubleshoot CAN Issues](network/customer_access_network/Troubleshoot_CAN_Issues.md)
+
+
+<a name="dynamic-host-configuration-protocol-dhcp"></a>
+
+#### Dynamic Host Configuration Protocol (DHCP)
+
+The DHCP service on the HPE Cray EX system uses the Internet Systems Consortium \(ISC\) Kea tool. Kea provides more robust management capabilities for DHCP servers.
+
+  * [DHCP](/operations/network/dhcp/DHCP.md)
+  * [Troubleshoot DHCP Issues](Troubleshoot_DHCP_Issues.md)
+  * [Clear HSM Tables to Resolve DHCP Issues](Clear_HSM_Tables_to_Resolve_DHCP_Issues.md)
+
+
+<a name="domain-name-service-dns"></a>
+
+#### Domain Name Service (DNS)
+
+The central DNS infrastructure provides the structural networking hierarchy and datastore for the system.
+
+  * [DNS](/operations/network/dns/DNS.md)
+  * [Manage the DNS Unbound Resolver](Manage_the_DNS_Unbound_Resolver.md)
+  * [Enable ncsd on UANS](Enable_ncsd_on_UANs.md)
+  * [Troubleshoot Common DNS Issues](Troubleshoot_Common_DNS_Issues.md)
+  * [Troubleshoot Services Needed by the DNS](Troubleshoot_Services_Needed_by_the_DNS_Unbound_Resolver.md)
+
+
+<a name="external_dns"></a>
+
+#### External DNS
+
+External DNS, along with the Customer Access Network \(CAN\), Border Gateway Protocol \(BGP\), and MetalLB, makes it simpler to access the HPE Cray EX API and system management services. Services are accessible directly from a laptop without needing to tunnel into a non-compute node \(NCN\) or override /etc/hosts settings.
+
+  * [External DNS](network/external_dns/External_DNS.md)
+  * [External DNS csi config init Input Values](External_DNS_csi_config_init_Input_Values.md)
+  * [Update the system-name.site-domain Value Post-Installation](Update_the_system-name_site-domain_Value_Post-Installation.md)
+  * [Update the can-external-dns Value Post-Installation](Update_the_can-external-dns_Value_Post-Installation.md)
+  * [Ingress Routing](Ingress_Routing.md)
+  * [Add NCNs and UANs to External DNS](Add_NCNs_and_UANs_to_External_DNS.md)
+  * [External DNS Failing to Discover Services Workaround](External_DNS_Failing_to_Discover_Services_Workaround.md)
+  * [Troubleshoot Connectivity to Services with External IPs](Troubleshoot_Systems_Not_Provisioned_with_External_IPs.md)
+  * [Troubleshoot DNS Configuration Issues](Troubleshoot_DNS_Configuration_Issues.md)
+
+
+<a name="metallb-in-bgp-mode"></a>
+
+#### MetalLB in BGP-Mode
+
+MetalLB is a component in Kubernetes that manages access to LoadBalancer services from outside the Kubernetes cluster. There are LoadBalancer services on the Node Management Network \(NMN\), Hardware Management Network \(HMN\), and Customer Access Network \(CAN\).
+
+MetalLB can run in either Layer2-mode or BGP-mode for each address pool it manages. BGP-mode is used for the NMN, HMN, and CAN. This enables true load balancing \(Layer2-mode does failover, not load balancing\) and allows for a more robust layer 3 configuration for these networks.
+
+  * [MetalLB in BGP-Mode](network/metallb_bgp/MetalLB_in_BGP-Mode.md)
+  * [MetalLB in BGP-Mode Configuration](MetalLB_in_BGP-Mode_Configuration.md)
+  * [Check BGP Status and Reset Sessions](Check_BGP_Status_and_Reset_Sessions.md)
+  * [Troubleshoot Services without an Allocated IP Address](Troubleshoot_Services_without_an_Allocated_IP_Address.md)
+  * [Troubleshoot BGP not Accepting Routes from MetalLB](Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
+
+

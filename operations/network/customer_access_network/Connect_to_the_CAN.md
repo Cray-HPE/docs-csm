@@ -10,7 +10,7 @@ The physical connection to the CAN is made via the load balancer or the spine sw
 
 In the example below, a Mellanox SN2700 with a single uplink connection is being used. The cable would connect to port 32 as shown in the diagram below:
 
-![Mellanox SN2700](../../img/operations/Mellanox_SN2700.png)
+![Mellanox SN2700](../../../img/operations/Mellanox_SN2700.png)
 
 ### Layer 3 Connection to the CAN
 
@@ -22,7 +22,7 @@ This option provides a point-to-point routing topology between the customer swit
 
 The diagram below shows how the point-to-point routing topology works:
 
-![CAN Point-to-Point](../../img/operations/CAN_Point_to_Point.png)
+![CAN Point-to-Point](../../../img/operations/CAN_Point_to_Point.png)
 
 **Option 2: Single Gateway**
 
@@ -34,7 +34,7 @@ For a dual-spine configuration, the admin would need to extended the customer ne
 
 The diagram below shows how the connection is established:
 
-![CAN Single Gateway](../../img/operations/CAN_Single_Gateway.png)
+![CAN Single Gateway](../../../img/operations/CAN_Single_Gateway.png)
 
 **Option 3: Customer Specific**
 
