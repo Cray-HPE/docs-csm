@@ -31,9 +31,9 @@ SCSD cannot be used to alter NTP, Syslog, SSH keys, or BMC credentials on Chassi
 
 For example:
 
-```screen
-ncn-m001# curl -k -u root:<redacted\> -X PATCH -d '\{"Oem": \{"SSHAdmin: \\
-\{"AuthorizedKeys":"xxxxxxxx"\}\}\}' https://x1000c0/redfish/v1/Managers/BMC/NetworkProtocol
+```bash
+ncn-m001# curl -k -u root:<redacted> -X PATCH -d '{"Oem": {"SSHAdmin: \
+{"AuthorizedKeys":"xxxxxxxx"}}}' https://x1000c0/redfish/v1/Managers/BMC/NetworkProtocol
 ```
 
 ### Table of Contents

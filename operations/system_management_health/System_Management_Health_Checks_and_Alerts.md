@@ -57,6 +57,6 @@ ncn-w001# curl -s http://CLUSTER-IP:PORT/api/v1/alerts | jq . | grep -B 10 -A 20
 
 In the example above, the alert actually indicates it is getting close to the limit, but the value included in the alert is the actual number of pods on `ncn-w003`.
 
-**Troubleshooting:** If an alert titled `KubeCronJobRunning` is encountered, this could be an indication that a Kubernetes cronjob is misbehaving. The Labels section under the firing alert will indicate the name of the cronjob that is taking longer than expected to complete. Refer to the "CHECK CRON JOBS" header in the "Power On and Start the Management Kubernetes Cluster" procedure for instructions on how to troubleshoot the cronjob, as well as how to restart \(export and reapply\) the cronjob.
+**Troubleshooting:** If an alert titled `KubeCronJobRunning` is encountered, this could be an indication that a Kubernetes cronjob is misbehaving. The Labels section under the firing alert will indicate the name of the cronjob that is taking longer than expected to complete. Refer to the "CHECK CRON JOBS" header in the [Power On and Start the Management Kubernetes Cluster](../power_management/Power_On_and_Start_the_Management_Kubernetes_Cluster.md) procedure for instructions on how to troubleshoot the cronjob, as well as how to restart \(export and reapply\) the cronjob.
 
 

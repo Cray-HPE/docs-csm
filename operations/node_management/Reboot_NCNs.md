@@ -2,17 +2,17 @@
 
 The following is a high-level overview of the non-compute node \(NCN\) reboot workflow:
 
-    -   Run the NCN pre-reboot checks and procedures:
-        -   Ensure `ncn-m001` is not running in "LiveCD" or install mode
-        -   Check the `metal.no-wipe` settings for all NCNs
-        -   Run all platform health checks, including checks on the Border Gateway Protocol \(BGP\) peering sessions
-    -   Run the rolling NCN reboot procedure:
-        -   Loop through reboots on storage NCNs, worker NCNs, and master NCNs, where each boot consists of the following workflow:
-            -   Establish console session with NCN to reboot
-            -   Execute a power off/on sequence to the NCN to allow it to boot up to completion
-            -   Execute NCN/platform health checks and do not go on to reboot the next NCN until health has been ensured on the most recently rebooted NCN
-            -   Disconnect console session with the NCN that was rebooted
-    -   Re-run all platform health checks, including checks on BGP peering sessions
+-   Run the NCN pre-reboot checks and procedures:
+    -   Ensure `ncn-m001` is not running in "LiveCD" or install mode
+    -   Check the `metal.no-wipe` settings for all NCNs
+    -   Run all platform health checks, including checks on the Border Gateway Protocol \(BGP\) peering sessions
+-   Run the rolling NCN reboot procedure:
+    -   Loop through reboots on storage NCNs, worker NCNs, and master NCNs, where each boot consists of the following workflow:
+        -   Establish console session with NCN to reboot
+        -   Execute a power off/on sequence to the NCN to allow it to boot up to completion
+        -   Execute NCN/platform health checks and do not go on to reboot the next NCN until health has been ensured on the most recently rebooted NCN
+        -   Disconnect console session with the NCN that was rebooted
+-   Re-run all platform health checks, including checks on BGP peering sessions
 
 The time duration for this procedure \(if health checks are being executed in between each boot, as recommended\) could take between two to four hours for a system with approximately nine NCNs.
 
@@ -20,7 +20,7 @@ This same procedure can be used to reboot a single NCN node as outlined above. B
 
 ### Prerequisites
 
-The kubectl command is installed.
+The `kubectl` command is installed.
 
 ### Procedure
 

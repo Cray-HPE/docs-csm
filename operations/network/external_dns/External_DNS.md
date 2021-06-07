@@ -2,7 +2,7 @@
 
 External DNS, along with the Customer Access Network \(CAN\), Border Gateway Protocol \(BGP\), and MetalLB, makes it simpler to access the HPE Cray EX API and system management services. Services are accessible directly from a laptop without needing to tunnel into a non-compute node \(NCN\) or override /etc/hosts settings. Some services may require a JSON Web Token \(JWT\) to access them, while others may require Keycloak to login using a DC LDAP password.
 
-![External DNS](../../../img/operationsExternalDNS.PNG "External DNS")
+![External DNS](../../../img/operations/ExternalDNS.PNG "External DNS")
 
 The following services are currently available:
 

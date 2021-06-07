@@ -129,8 +129,8 @@ ncn-m001# radosgw-admin user info --uid TEST_USER
     "keys": [
         {
             "user": "test_user",
-            "access_key": "QEA6PG8VDSJ41JR4C6GZ",  **<<-- Random key unique to this user and system**
-            "secret_key": "SzNCqWwZ7XlGZ1tdtuVdhLTno48ugthx5YwCF6E8" **<<-- Random key unique to this user and system**
+            "access_key": "QEA6PG8VDSJ41JR4C6GZ",  <<-- Random key unique to this user and system
+            "secret_key": "SzNCqWwZ7XlGZ1tdtuVdhLTno48ugthx5YwCF6E8" <<-- Random key unique to this user and system
         }
     ],
     "swift_keys": [],
