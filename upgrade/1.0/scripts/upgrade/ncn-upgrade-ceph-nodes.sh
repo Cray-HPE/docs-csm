@@ -62,7 +62,7 @@ if [[ $state_recorded == "0" ]]; then
     
     ssh-keygen -R ${upgrade_ncn} -f /root/.ssh/known_hosts
     ssh-keyscan -H ${upgrade_ncn} >> ~/.ssh/known_hosts
-    ssh ${upgrade_ncn} 'rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm'
+    ssh ${upgrade_ncn} 'rpm --force -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm'
 
     record_state "${state_name}" ${upgrade_ncn}
     echo

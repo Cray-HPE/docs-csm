@@ -48,7 +48,7 @@ state_name="INSTALL_CSI"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
-    rpm -Uvh ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
+    rpm --force -Uvh ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
     record_state ${state_name} $(hostname)
     echo
 else
@@ -59,7 +59,7 @@ state_name="INSTALL_WAR_DOC"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
-    rpm -Uvh \
+    rpm --force -Uvh \
         https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
     record_state ${state_name} $(hostname)
     echo
@@ -166,7 +166,7 @@ if [[ $state_recorded == "0" ]]; then
       exit 1
     fi
 
-    rpm -Uvh $(find $CSM_RELEASE -name \*csm-testing\* | sort | tail -1)
+    rpm --force -Uvh $(find $CSM_RELEASE -name \*csm-testing\* | sort | tail -1)
     goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-preflight-tests.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
     
     record_state ${state_name} $(hostname)
