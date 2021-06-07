@@ -33,7 +33,7 @@ These steps will be run on the stable NCN of choice regardless of NCN type to be
 
 2. Watch the console for the node being rebuilt by exec'ing into the conman pod and connect to the console (press `&.` to exit).
 
-    > **NOTE:** If the node being upgraded is `ncn-m001`, the administrator will need to watch the using the web interface for the bmc (typically https://SYSTEM-ncn-m001-mgmt/viewer.html).
+    > **NOTE:** If the node being upgraded is `ncn-m001`, the administrator will need to watch the using ipmitool or the web interface for the bmc (typically https://SYSTEM-ncn-m001-mgmt/viewer.html).
 
     ```bash
     ncn# kubectl -n services exec -it $(kubectl get po -n services | grep conman | awk '{print $1}') -- /bin/sh -c 'conman -j <xname>'
@@ -88,21 +88,22 @@ These steps will be run on the stable NCN of choice regardless of NCN type to be
     }
     ```
 
-4. Wipe/erase the disks on the node being rebuilt.  This can be done from the conman console window.
+4. Wipe/erase the disks on the node being rebuilt.  This can be done from the conman console window. The procedure differs based on the type of node being upgraded.
 
      > NOTE: This is the point of no return, once disks are wiped, you are committed to rebuilding the node.
 
-   1. Execute the wipe command for a ***MASTER*** or ***WORKER*** (***skip this step and proceed to step (3.ii) if a storage node***):
+   *  If node being upgraded is a ***MASTER*** or ***WORKER***, run the following commands on it:
 
       ```bash
       ncn# md_disks="$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(sata|nvme|sas)' | sort -h | awk '{print "/dev/" $2}')"
+      ncn# echo $md_disks
       ncn# wipefs -af $md_disks
       ```
 
-   2. If the node being upgraded is a ***STORAGE*** node use the following command to only wipe OS disks with mirrored devices:
+   * If the node being upgraded is a ***STORAGE*** node, run the following on it to wipe OS disks with mirrored devices:
 
       ```bash
-      ncn-s# for d in $(lsblk | grep -B2 -F md1  | grep ^s | awk '{print $1}'); do wipefs -af "/dev/$d"; done
+      ncn-s# for d in $(lsblk | grep -B2 -F md1  | grep ^s | awk '{print $1}'); do echo "wiping /dev/$d" ; wipefs -af "/dev/$d"; done
       ```
 
 5. Set the PXE boot option and power cycle the node.
@@ -115,28 +116,34 @@ These steps will be run on the stable NCN of choice regardless of NCN type to be
          during the initial install. If you run into any issues at this stage please consult the PXE boot
          Troubleshooting guide.
 
+    1. Export the BMC password
+    
+        ```bash
+        linux# export IPMI_PASSWORD=changeme
+        ```
+
     1. Set the pxe/efiboot option
 
        ```bash
-       linux# ipmitool -I lanplus -U root -P initial0 -H $UPGRADE_NCN-mgmt chassis bootdev pxe options=efiboot
+       linux# ipmitool -I lanplus -U root -E -H $UPGRADE_NCN-mgmt chassis bootdev pxe options=efiboot
        ```
 
     2. Power off the server.
 
        ```bash
-       linux# ipmitool -I lanplus -U root -P initial0 -H $UPGRADE_NCN-mgmt chassis power off
+       linux# ipmitool -I lanplus -U root -E -H $UPGRADE_NCN-mgmt chassis power off
        ```
 
     3. Check the server is off (might need to wait a few seconds).
 
        ```bash
-       linux# ipmitool -I lanplus -U root -P initial0 -H $UPGRADE_NCN-mgmt chassis power status
+       linux# ipmitool -I lanplus -U root -E -H $UPGRADE_NCN-mgmt chassis power status
        ```
 
     4. Power on the server.
 
        ```bash
-       linux# ipmitool -I lanplus -U root -P initial0 -H $UPGRADE_NCN-mgmt chassis power on
+       linux# ipmitool -I lanplus -U root -E -H $UPGRADE_NCN-mgmt chassis power on
        ```
 
     5. Wait for the server to boot and complete cloud-init.
@@ -149,12 +156,11 @@ These steps will be run on the stable NCN of choice regardless of NCN type to be
    ncn# csi handoff bss-update-param --set metal.no-wipe=1 --limit $UPGRADE_XNAME
    ```
 
-8. If the node just upgraded was `ncn-m001`, you'll want to copy the `/etc/sysconfig/network/ifcfg-lan0` and  `/etc/sysconfig/network/ifroute-lan` files back into place, and run the following command.
+8. If the node just upgraded was `ncn-m001`, you'll want to copy the `/etc/sysconfig/network/ifcfg-lan0` and  `/etc/sysconfig/network/ifroute-lan0` files back into place, and run the following command.
 
    ```bash
    ncn# wicked ifreload lan0
    ```
-
 
 9. Verify node health.
 
@@ -173,6 +179,8 @@ These steps will be run on the stable NCN of choice regardless of NCN type to be
             ```
 
     * If the node is a **STORAGE** node, there is no validation to perform at this point. It is expected that ceph will be in an unhealthy state until further upgrade steps are performed.
+
+9. If the upgraded node is a **WORKER** node, now is the time to move critical pods to it if needed, based on the instructions from the `/usr/share/doc/csm/upgrade/1.0/scripts/k8s/determine-worker-order.sh` script.
 
 Proceed to either:
 - [Back to Main Page](../../README.md) if done upgrading either master or worker nodes
