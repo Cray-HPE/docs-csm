@@ -94,7 +94,7 @@ Use the Boot Orchestration Service \(BOS\) to boot, configure, and shutdown coll
      * [Troubleshoot Booting Nodes with Hardware Issues](boot_orchestration/Troubleshoot_Booting_Nodes_with_Hardware_Issues.md)
    * [BOS Limitations for Gigabyte BMC Hardware](boot_orchestration/Limitations_for_Gigabyte_BMC_Hardware.md)
 
-<a name="artifcat-Management"></a>
+<a name="artifact-Management"></a>
 
 ### Artifact Management
 
