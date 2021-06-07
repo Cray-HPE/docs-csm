@@ -109,6 +109,7 @@ installs as follows:
    pit# export wtoken='ncn-w\w+-mgmt'
    pit# export USERNAME=root
    pit# export IPMI_PASSWORD=changeme
+   pit# export CSM_RELEASE=csm-x.y.z
    ```
 
    Throughout the guide, simple one-liners can be used to query status of expected nodes. If the shell or environment is terminated, these environment variables should be re-exported.
@@ -127,37 +128,60 @@ installs as follows:
    pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
    ```
 
-   > **`INTERNAL USE`** the following steps work for Intel only if SDPTool is available.  
+2. Create a symbolic link to the yq tool and run it, to verify it works.
+
+   1. Create the symbolic link
+
+      ```bash
+      pit# ln -sv /var/www/ephemeral/${CSM_RELEASE}/shasta-cfg/utils/bin/$(uname | awk '{print tolower($0)}')/yq /usr/local/bin/yq
+      ```
+
+   2. Verify that it works
+
+      ```bash
+      pit# yq -V
+      ```
+   
+      Expected output is similar to:
+      ```
+      yq version 3.3.0
+      ```
+
+3. Configure NTP on each BMC.
+
+   > **`INTERNAL USE`** this step and the following step work for Intel only if SDPTool is available.  
      See /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh -h for examples
 
-   Configure NTP on each BMC using data defined in cloud-init **For fresh 1.5 installs**:
+   * Configure NTP on each BMC using data defined in cloud-init **For fresh 1.5 installs**:
 
-   ```
-   pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh "$bmctype" -H {} -n
-   ```
+      ```bash
+      pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh "$bmctype" -H {} -n
+      ```
 
-   Configure DNS on each BMC using manually defined servers **For 1.4 upgrades or 1.5 upgraded**:
+   * Configure NTP on each BMC using manually defined servers **For 1.4 upgrades or 1.5 upgraded**:
 
-   ```
-   pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh "$bmctype" -H {} -N <NTP SERVER 1>,<NTP SERVER 2> -n
-   ```
+      ```bash
+      pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh "$bmctype" -H {} -N <NTP SERVER 1>,<NTP SERVER 2> -n
+      ```
 
-   Configure DNS on each BMC using data defined in cloud-init **For fresh 1.5 installs**:
+4. Configure DNS on each BMC.
 
-   ```
-   pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh "$bmctype" -H {} -d
-   ```
+   * Configure DNS on each BMC using data defined in cloud-init **For fresh 1.5 installs**:
 
-   Configure DNS on each BMC using manually defined servers **For 1.4 upgrades or 1.5 upgraded**:
+      ```bash
+      pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh "$bmctype" -H {} -d
+      ```
 
-   ```
-   pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh "$bmctype" -H {} -D <UNBOUND IP>,<OTHER NAMESERVER> -d
-   ```
+   * Configure DNS on each BMC using manually defined servers **For 1.4 upgrades or 1.5 upgraded**:
 
-   Show the settings of each BMC, if desired:
+      ```bash
+      pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh "$bmctype" -H {} -D <UNBOUND IP>,<OTHER NAMESERVER> -d
+      ```
 
-   ```
-   pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh "$bmctype" -H {} -s
+5. Show the settings of each BMC, if desired:
+
+   ```bash
+   pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh "$bmctype" -H {} -s
    ```
 
 <a name="apply-ncn-pre-boot-workarounds"></a>
@@ -509,7 +533,7 @@ The configuration workflow described here is intended to help understand the exp
 1. Log into **each** ncn-s node and check for unused drives
 
     ```bash
-    ncn-s# ceph-volume inventory
+    ncn-s# cephadm shell -- ceph-volume inventory
     ```
 
     The field "available" would be true if ceph sees the drive as empty and can

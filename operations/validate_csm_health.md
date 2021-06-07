@@ -589,11 +589,12 @@ Cray OS (COS) product stream is also installed on to the system.
 * You will need to use the CLI in order to complete these tasks. If needed, see the
 [Initialize and Authorize the CLI](#uas-uai-init-cli) section.
 ---
-    1. [Locate CSM Barebones Image in IMS](#locate-csm-barebones-image-in-ims)
-    1. [Create a BOS Session Template for the CSM Barebones Image](#csm-bos-session-template)
-    1. [Find an available compute node](#csm-node")
-    1. [Reboot the node using your BOS session template](#csm-reboot)
-    1. [Watch Boot on Console](#csm-watch-boot)
+
+1. [Locate CSM Barebones Image in IMS](#locate-csm-barebones-image-in-ims)
+1. [Create a BOS Session Template for the CSM Barebones Image](#csm-bos-session-template)
+1. [Find an available compute node](#csm-node")
+1. [Reboot the node using your BOS session template](#csm-reboot)
+1. [Watch Boot on Console](#csm-watch-boot)
 
 <a name="locate-csm-barebones-image-in-ims"></a>
 #### 4.1 Locate CSM Barebones Image in IMS
