@@ -1,9 +1,11 @@
-# Worker Specific Steps
+# Worker-Specific Steps
 
 1. Determine if the worker being rebuilt is running a `cray-cps-cm-pm` pod.  If so, there's a final step to re-deploy
    this pod once the worker is rebuilt. In the example below nodes ncn-w001, ncn-w002, and ncn-w003 have the pod.
 
    > NOTE: If the command below doesn't return any pod names, proceed to step 2.
+   
+   > NOTE: A 404 error is expected if the COS product is not installed on the system. In this case, proceed to step 2.
 
    > NOTE: If `cray` is not initialized, please check [Initialize the CLI Configuration](https://stash.us.cray.com/projects/CSM/repos/docs-csm/browse/operations/validate_csm_health.md#uas-uai-init-cli-init)
 
@@ -31,7 +33,7 @@
     ```
 
 2. Confirm what the CFS setting is for `configurationStatus` before shutting down the node. If the state is `pending`,
-   the administrator may want to tail the logs of the `cray-cps-cm-pm` pod running on that node to watch the job finish
+   the administrator may want to tail the logs of the CFS pod running on that node to watch the job finish
    before rebooting this node.  If the state is `failed` for this node, then you'll know that the failed CFS job state
    preceded this worker rebuild, and that can be addressed independent of rebuilding this worker.
 
