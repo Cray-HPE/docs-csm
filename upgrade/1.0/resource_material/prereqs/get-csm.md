@@ -114,7 +114,7 @@ You should run the following commands to update BSS cloud-init data:
 export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
 
 # get bss cloud-init data with host_records
-curl -k -H "Authorization: Bearer $TOKEN" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global|jq .[]> cloud-init-global.json
+curl -s -k -H "Authorization: Bearer $TOKEN" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global|jq .[]> cloud-init-global.json
 
 # get ip of api-gw in nmn
 ip=$(dig api-gw-service-nmn.local +short)
