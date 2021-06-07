@@ -4,7 +4,7 @@ The upgrade of the CSM product stream has many steps in multiple procedures whic
 specific order.
 
 The information below is not yet correct for a general upgrade workflow.  Until it is, the upgrade should
-start with [CSM 1.4 to 1.5 Upgrade Process](1.0/README.md) which is in the 1.0 subdirectory from this file.
+start with [CSM 0.9 to 1.0 Upgrade Process](1.0/README.md) which is in the 1.0 subdirectory from this file.
 
 The upgrade of CSM software and nodes can be validated with health checks before doing operational tasks
 like the check and update of firmware on system components.  Once the CSM upgrade has completed, other 
