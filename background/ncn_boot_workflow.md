@@ -232,7 +232,7 @@ Your boot menu should be trimmed down to only contain relevant entries.
 <a name="examples"></a>
 ###### Examples
 
-Master node (with onboards enabled):
+Master node (with onboard NICs enabled):
 
 ```bash
 ncn-m# efibootmgr
@@ -252,7 +252,7 @@ Boot0012* UEFI: PNY USB 3.1 FD PMAP
 Boot0013* UEFI: PNY USB 3.1 FD PMAP, Partition 2
 ```
 
-Storage node (with onboards enabled):
+Storage node (with onboard NICs enabled):
 
 ```bash
 ncn-s# efibootmgr
@@ -269,7 +269,7 @@ Boot0009* UEFI: PXE IP4 Mellanox Network Adapter - B8:59:9F:34:88:77
 Boot000B* UEFI: PXE IP4 Intel(R) I350 Gigabit Network Connection
 ```
 
-Worker node  (with onboards enabled):
+Worker node  (with onboard NICs enabled):
 
 ```bash
 ncn-w# efibootmgr

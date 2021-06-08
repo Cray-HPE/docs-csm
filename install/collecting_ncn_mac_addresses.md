@@ -3,18 +3,18 @@
 This procedure will detail how to collect the NCN MAC addresses from a Shasta system.  After completing this procedure,
 you will have the MAC addresses needed for the Bootstrap MAC, Bond0 MAC0, and Bond0 MAC1 columns in `ncn_metadata.csv`.
 
-The Bootstrap Mac address will be used for identification of this node during the early part of the PXE boot process before the bonded interface can be established.
+The Bootstrap MAC address will be used for identification of this node during the early part of the PXE boot process before the bonded interface can be established.
 The Bond0 MAC0 and Bond0 MAC1 are the MAC addresses for the physical interfaces that your node will use for the various VLANs.
 The Bond0 MAC0 and Bond0 MAC1 should be on the different network cards to establish redundancy for a failed network card.
 On the other hand, if the node has only a single network card, then MAC1 and MAC0 will still produce a valid configuration if they do reside on the same physical card.
 
 #### Sections
 
-- [Procedure: iPXE](#procedure-ipxe-consoles)
+- [Procedure: iPXE Consoles](#procedure-ipxe-consoles)
    - [Requirements](#requirements)
    - [MAC Collection](#mac-collection)
 - [Procedure: Serial consoles](#procedure-serial-consoles)
-- [Procedure: Recovering from an incorrect NCN metadata file](#procedure-recovering-from-an-incorrect-metadata-file)
+- [Procedure: Recovering from an incorrect `ncn_metadata.csv` file](#procedure-recovering-from-an-incorrect-ncn_metadata_csv-file)
 
 The easy way to do this leverages the NIC-dump provided by the metal-ipxe package. This page will walk-through
 booting NCNs and collecting their MACs from the conman console logs.
@@ -25,7 +25,7 @@ booting NCNs and collecting their MACs from the conman console logs.
 ## Procedure: iPXE Consoles
 
 This procedure is faster for those with the LiveCD (CRAY Pre-Install Toolkit) it can be used to quickly
-boot-check nodes to dump network device information without an OS. This works by accessing the PCI Configuration Space.
+boot-check nodes to dump network device information without an operating system. This works by accessing the PCI Configuration Space.
 
 <a name="requirements"></a>
 #### Requirements
@@ -36,15 +36,16 @@ boot-check nodes to dump network device information without an OS. This works by
 
 1. LiveCD dnsmasq is configured for the bond0/metal network (NMN/HMN/CAN do not matter)
 2. BMC MAC addresses already collected
-3. LiveCD conman is configured for each BMC (`conman -q` to see consoles)
+3. LiveCD conman is configured for each BMC
 
 For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md).
 
 <a name="mac-collection"></a>
 #### MAC Collection
 
-1. (optional) shim the boot so nodes bail after dumping their netdevs. Removing the iPXE script will prevent network booting but beware of disk-boots.
-will prevent the nodes from continuing to boot and end in undesired states.
+1. (optional) Shim the boot so nodes bail after dumping their netdevs. 
+   Removing the iPXE script will prevent network booting but beware of disk-boots.
+   This will prevent the nodes from continuing to boot and end in undesired states.
     ```bash
     pit# mv /var/www/boot/script.ipxe /var/www/boot/script.ipxe.bak
     ```
@@ -64,7 +65,7 @@ will prevent the nodes from continuing to boot and end in undesired states.
 3. Now set the nodes to PXE boot and (re)start them.
     ```bash
     pit# export username=root
-    pit# export IPMI_PASSWORD=
+    pit# export IPMI_PASSWORD=changeme
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $username -E -H {} chassis bootdev pxe options=efiboot,persistent
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
     pit# sleep 10
@@ -78,7 +79,7 @@ will prevent the nodes from continuing to boot and end in undesired states.
         grep -Eoh '(net[0-9] MAC .*)' $file | sort -u | grep PCI && echo -----
     done
     ```
-6. From the output you must fish out 2 MACs to use for bond0, and 2 more to use for bond1 based on your topology. **The `Bond0MAC0` must be the first port** of the first PCIe card, specifically the port connecting the NCN to the lower spine (for example, if connected to spines01 and 02, this is going to sw-spine-001 - if connected to sw-spine-007 and sw-spine-008, then this is sw-spine-007). **The 2nd MAC for `bond0` is the first port of the 2nd PCIe card, or 2nd port of the first when only one card exists**.
+6. From the output you must fish out 2 MACs to use for bond0, and 2 more to use for bond1 based on your topology. **The `Bond0 MAC0` must be the first port** of the first PCIe card, specifically the port connecting the NCN to the lower spine (for example, if connected to spines01 and 02, this is going to sw-spine-001 - if connected to sw-spine-007 and sw-spine-008, then this is sw-spine-007). **The 2nd MAC for `bond0` is the first port of the 2nd PCIe card, or 2nd port of the first when only one card exists**.
     - Examine the output, you can use the table provided on [NCN Networking](../background/ncn_networking.md) for referencing commonly seen devices.
     - Note that worker nodes also have the high-speed network cards. If you know these cards, you can filter their device IDs out from the above output using this snippet:
         ```bash
@@ -134,8 +135,10 @@ will prevent the nodes from continuing to boot and end in undesired states.
 <a name="procedure-serial-consoles"></a>
 ## Procedure: Serial Consoles
 
-For this, you will need to double-back to [NCN Metadata BMC](301-NCN-METADATA-BMC.md) and pick out
+For this, you will need to double-back to [Collecting BMC MAC Addresses](collecting_bmc_mac_addresses.md) and pick out
 the MACs for your BOND from each the sw-spine-001 and sw-spine-002 switch.
+
+> **Note:** The node must be booted into an operating system in order for the Bond MAC addresses to appear on the spine switches.
 
 > Tip: A PCIe card with dual-heads may go to either spine switch, meaning MAC0 ought to be collected from
 > spine-01. Please refer to your cabling diagram, or actual rack (in-person).
@@ -144,10 +147,10 @@ the MACs for your BOND from each the sw-spine-001 and sw-spine-002 switch.
 2. Usually the 2nd/3rd/4th/Nth MAC on the PCIe card will be a 0x1 or 0x2 deviation from the first port. If you confirm this, then collection
 is quicker.
 
-<a name="procedure-recovering-from-an-incorrect-metadata-file"></a>
-## Procedure: Recovering from an incorrect NCN metadata file
+<a name="procedure-recovering-from-an-incorrect-ncn_metadata_csv-file"></a>
+## Procedure: Recovering from an incorrect `ncn_metadata.csv` file
 
-If you are coming from 1.3 and happened to use the `ncn_metadata.csv` without modification, you will be unable to deploy the NCNs.  This section details a recovery procedure in case that happens.
+If you have an incorrect `ncn_metadata.csv` file, you will be unable to deploy the NCNs.  This section details a recovery procedure in case that happens.
 
 1. Remove the incorrectly-generated configs. Before deleting the incorrectly-generated configs consider making a backup of them. In case they need to be examined at a later time. 
 
@@ -161,7 +164,7 @@ If you are coming from 1.3 and happened to use the `ncn_metadata.csv` without mo
 pit# rm -rf /var/www/ephemeral/prep/$SYSTEM_NAME
 ```
 
-2. Manually edit `ncn_metadata.csv`, replacing the bootstrap MAC address with Bond0Mac0 address for the afflicted nodes that failed to boot
+2. Manually edit `ncn_metadata.csv`, replacing the bootstrap MAC address with Bond0 MAC0 address for the afflicted nodes that failed to boot
 
 3. Re-run `csi config init` with the required flags
 
@@ -193,7 +196,7 @@ systemctl restart dnsmasq conman basecamp
 systemctl restart nexus
 ```
 
-7. Apply any NCN Pre-Boot Workarounds. Check for workarounds in the `/opt/cray/csm/workarounds/before-ncn-boot` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective README.md files.
+7. Apply any NCN pre-boot Workarounds. Check for workarounds in the `/opt/cray/csm/workarounds/before-ncn-boot` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective README.md files.
 
 ```bash
 pit# ls /opt/cray/csm/workarounds/before-ncn-boot

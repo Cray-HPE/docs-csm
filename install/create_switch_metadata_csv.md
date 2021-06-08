@@ -75,26 +75,23 @@ See the example files below for reference.
 
 #### Examples
 
-> An example with Dell leaf switches and 2 Mellanox switches in the same slot number:
+> Use case: 2 Aruba CDU Switches, 2 Aruba leaf switches, 4 Aruba aggregation switches, and 2 Aruba spine switches
 ```
 pit# cat example_switch_metadata.csv
 Switch Xname,Type,Brand
-x3000c0w38,Leaf,Dell
-x3000c0w36,Leaf,Dell
-x3000c0h33s1,Spine,Mellanox
-x3000c0h33s2,Spine,Mellanox
+d0w1,CDU,Aruba
+d0w2,CDU,Aruba
+x3000c0w31,Leaf,Aruba
+x3000c0w32,Leaf,Aruba
+x3000c0h33s1,Aggregation,Aruba
+x3000c0h34s1,Aggregation,Aruba
+x3000c0h35s1,Aggregation,Aruba
+x3000c0h36s1,Aggregation,Aruba
+x3000c0h37s1,Spine,Aruba
+x3000c0h38s1,Spine,Aruba
 ```
 
-> An example with Aruba switches:
-```
-pit# cat example_switch_metadata.csv
-Switch Xname,Type,Brand
-x3000c0w14,Leaf,Aruba
-x3000c0h12s1,Spine,Aruba
-x3000c0h13s1,Spine,Aruba
-```
-
-> An example with Dell leaf and CDU switches and Mellanox spine switches:
+> Use case: 2 Dell CDU switches, 2 Dell leaf switches, and 2 Mellanox spine switches:
 
 ```
 Switch Xname,Type,Brand
@@ -105,3 +102,14 @@ x3000c0w38,Leaf,Dell
 x3000c0h33s1,Spine,Mellanox
 x3000c0h34s1,Spine,Mellanox
 ```
+
+> Use case: 2 Dell leaf switches and 2 Mellanox switches in the same slot number:
+```
+pit# cat example_switch_metadata.csv
+Switch Xname,Type,Brand
+x3000c0w38,Leaf,Dell
+x3000c0w36,Leaf,Dell
+x3000c0h33s1,Spine,Mellanox
+x3000c0h33s2,Spine,Mellanox
+```
+

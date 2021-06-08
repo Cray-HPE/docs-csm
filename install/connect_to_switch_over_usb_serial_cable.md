@@ -1,4 +1,4 @@
-# NCN Metadata over USB-Serial Cable
+# Connect to Switch over USB-Serial Cable
 
 In the event that network plumbing is lacking, down, or unconfigured for procuring devices then it is
 recommended to use the Serial/COM ports on the spine and leaf switches.
