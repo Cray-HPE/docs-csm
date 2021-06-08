@@ -3,82 +3,90 @@
 # Copyright 2021 Hewlett Packard Enterprise Development LP
 #
 set -e
-. ./upgrade-state.sh
-ENDPOINT=https://arti.dev.cray.com/artifactory/shasta-distribution-unstable-local/csm/
+BASEDIR=$(dirname $0)
+. ${BASEDIR}/upgrade-state.sh
+trap 'err_report' ERR
 CSM_RELEASE=$1
 
+
+if [[ -z $2 ]]; then
+    ENDPOINT=https://arti.dev.cray.com/artifactory/shasta-distribution-unstable-local/csm/
+    echo -e "${BLUE}Use internal endpoint: ${ENDPOINT} ${NOCOLOR}"
+else 
+    ENDPOINT=$2
+fi
+
+
 if [[ -z ${CSM_RELEASE} ]]; then
-    echo "CSM RELEASE is not specified"
+    echo -e "CSM RELEASE is not specified"
     exit 1
 fi
 
 state_name="GET_CSM_TARBALL_FILE"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
-    echo "${state_name} ..."
+    echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
     wget ${ENDPOINT}/${CSM_RELEASE}.tar.gz
     record_state ${state_name} $(hostname)
     echo
 else
-    echo "${state_name} has beed completed"
+    echo -e "${GREEN}====> ${state_name} has beed completed ${NOCOLOR}"
 fi
 
 state_name="UNTAR_CSM_TARBALL_FILE"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
-    echo "${state_name} ..."
+    echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
     tar -xzf ${CSM_RELEASE}.tar.gz
     record_state ${state_name} $(hostname)
     echo
 else
-    echo "${state_name} has beed completed"
+    echo -e "${GREEN}====> ${state_name} has beed completed ${NOCOLOR}"
 fi
 
 state_name="INSTALL_CSI"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
-    echo "${state_name} ..."
-    rpm -Uvh ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
+    echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
+    rpm --force -Uvh ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
     record_state ${state_name} $(hostname)
     echo
 else
-    echo "${state_name} has beed completed"
+    echo -e "${GREEN}====> ${state_name} has beed completed ${NOCOLOR}"
 fi
 
 state_name="INSTALL_WAR_DOC"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
-    echo "${state_name} ..."
-    rpm -Uvh \
-        https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm && \
-    rpm -Uvh \
+    echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
+    rpm --force -Uvh \
         https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
     record_state ${state_name} $(hostname)
     echo
 else
-    echo "${state_name} has beed completed"
+    echo -e "${GREEN}====> ${state_name} has beed completed ${NOCOLOR}"
 fi
 
 state_name="SETUP_NEXUS"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
-    echo "${state_name} ..."
+    echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
     ./${CSM_RELEASE}/lib/setup-nexus.sh
     record_state ${state_name} $(hostname)
     echo
 else
-    echo "${state_name} has beed completed"
+    echo -e "${GREEN}====> ${state_name} has beed completed ${NOCOLOR}"
 fi
 
 state_name="UPGRADE_BSS"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
-    echo "${state_name} ..."
+    echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
     helm -n services upgrade cray-hms-bss ./${CSM_RELEASE}/helm/cray-hms-bss-*.tgz
     record_state ${state_name} $(hostname)
     echo
 else
-    echo "${state_name} has beed completed"
+    echo -e "${GREEN}====> ${state_name} has beed completed ${NOCOLOR}"
 fi
 
 state_name="APPLY_POD_PRIORITY"
@@ -96,7 +104,7 @@ fi
 state_name="UPLOAD_NEW_NCN_IMAGE"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
-    echo "${state_name} ..."
+    echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
     temp_file=$(mktemp)
     artdir=./${CSM_RELEASE}/images
     csi handoff ncn-images \
@@ -113,13 +121,13 @@ if [[ $state_recorded == "0" ]]; then
     record_state ${state_name} $(hostname)
     echo
 else
-    echo "${state_name} has beed completed"
+    echo -e "${GREEN}====> ${state_name} has beed completed ${NOCOLOR}"
 fi
 
 state_name="EXPORT_GLOBAL_ENV"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
-    echo "${state_name} ..."
+    echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
     
     echo "export CEPH_VERSION=${CEPH_VERSION}" >> myenv
     echo "export KUBERNETES_VERSION=${KUBERNETES_VERSION}" >> myenv
@@ -128,20 +136,20 @@ if [[ $state_recorded == "0" ]]; then
     record_state ${state_name} $(hostname)
     echo
 else
-    echo "${state_name} has beed completed"
+    echo -e "${GREEN}====> ${state_name} has beed completed ${NOCOLOR}"
 fi
 
 state_name="PREFLIGHT_CHECK"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
-    echo "${state_name} ..."
+    echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
 
     REQUIRED_PATCH_NUM=3
     versions=$(kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm')
     patch_versions=$(echo "${versions}" | grep ^0.9)
 
     if [ "$patch_versions" == "" ]; then
-      echo "Required CSM patch 0.9.3 has not been applied to this system"
+      echo -e "Required CSM patch 0.9.3 has not been applied to this system"
       exit 1
     fi
 
@@ -154,15 +162,15 @@ if [[ $state_recorded == "0" ]]; then
     done
 
     if [[ "$highest_patch_num" -ne "$REQUIRED_PATCH_NUM" ]]; then
-      echo "Required CSM patch 0.9.3 has not been applied to this system"
+      echo -e "Required CSM patch 0.9.3 has not been applied to this system"
       exit 1
     fi
 
-    rpm -Uvh $(find $CSM_RELEASE -name \*csm-testing\* | sort | tail -1)
+    rpm --force -Uvh $(find $CSM_RELEASE -name \*csm-testing\* | sort | tail -1)
     goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-preflight-tests.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
     
     record_state ${state_name} $(hostname)
     echo
 else
-    echo "${state_name} has beed completed"
+    echo -e "${GREEN}====> ${state_name} has beed completed ${NOCOLOR}"
 fi

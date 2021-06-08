@@ -3,7 +3,9 @@
 # Copyright 2021 Hewlett Packard Enterprise Development LP
 #
 set -e
-. ./upgrade-state.sh
+BASEDIR=$(dirname $0)
+. ${BASEDIR}/upgrade-state.sh
+trap 'err_report' ERR
 . ./myenv
 
 export UPGRADE_NCN=$1
