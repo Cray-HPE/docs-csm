@@ -17,6 +17,7 @@ Topics:
       * [Start Hand-Off](#start-hand-off)
    * [Reboot](#reboot)
    * [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard)
+   * [Configure DNS and NTP on each BMC](#configure-dns-and-ntp-on-each-bmc)
    * [Next Topic](#next-topic)
 
 ## Details
@@ -511,6 +512,37 @@ data so run them only when indicated. Instructions are in the `README` files.
     ```
     
 > **`CSI NOTE`** `/tmp/csi` will delete itself on the next reboot. The /tmp directory is `tmpfs` and runs in memory, it normally will not persist on restarts.
+
+<a name="configure-dns-and-ntp-on-each-bmc"></a>
+### 6. Configure DNS and NTP on each BMC
+
+ **`INTERNAL USE`** This section works for Intel only if SDPTool is available. See /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh -h for examples
+
+1. Set environment variables. Make sure to set appropriate values for the `bmctype` and `IPMI_PASSWORD` variables. The `bmctype` variable should be set to the appropriate value for your BMCs: `gb`, `ilo`, or `intel`
+
+   ```bash
+   ncn-m001# export bmctype=yourbmctype
+   ncn-m001# export IPMI_PASSWORD=changeme
+   ncn-m001# export USERNAME=root
+   ```
+
+2. Configure NTP on each BMC using data from cloud-init.
+
+      ```bash
+      ncn-m001# grep ncn /etc/hosts | grep mgmt | grep -v m001 | sort -u | awk '{print $2}' | xargs -t -i /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh "$bmctype" -H {} -n
+      ```
+
+3. Configure DNS on each BMC using data from cloud-init.
+
+      ```bash
+      ncn-m001# grep ncn /etc/hosts | grep mgmt | grep -v m001 | sort -u | awk '{print $2}' | xargs -t -i /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh "$bmctype" -H {} -d
+      ```
+
+4. Show the settings of each BMC, if desired:
+
+   ```bash
+   ncn-m001# grep ncn /etc/hosts | grep mgmt | grep -v m001 | sort -u | awk '{print $2}' | xargs -t -i /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh "$bmctype" -H {} -s
+   ```
 
 <a name="next-topic"></a>
 # Next Topic
