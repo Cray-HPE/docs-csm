@@ -13,6 +13,7 @@ Once the CSM installation has completed, other product streams for the HPE Cray 
 
 ### Topics:
    
+   1. [Validate Management Network Cabling](#validate_management_network_cabling)
    1. [Prepare Configuration Payload](#prepare_configuration_payload)
    1. [Prepare Management Nodes](#prepare_management_nodes)
    1. [Bootstrap PIT Node](#bootstrap_pit_node)
@@ -36,6 +37,19 @@ sections, but there is also a general troubleshooting topic.
 
 ## Details
  
+   <a name="validate_management_network_cabling"></a>
+
+   1. Validate Management Network Cabling  
+   The cabling should be validated between the nodes and the management network switches.  The information in the 
+   Shasta Cabling Diagram (SHCD) can be used to confirm the cables which physically connect components of the system. 
+   Having the data in the SHCD which matches the physical cabling will be needed later in both
+   [Prepare Configuration Payload](#prepare_configuration_payload) and [Configure Management Network Switches](#configure_management_network).
+   
+      See [Validate Management Network Cabling](validate_management_network_cabling.md)  
+
+      **Note**: If a reinstall or fresh install of this software release is being done on this system and the management
+      network cabling has already been validated, then this topic could be skipped and instead move to
+      [Prepare Configuration Payload](#prepare_configuration_payload)
    <a name="prepare_configuration_payload"></a>
 
    1. Prepare Configuration Payload  
@@ -48,7 +62,7 @@ sections, but there is also a general troubleshooting topic.
       See [Prepare Configuration Payload](prepare_configuration_payload.md)  
    <a name="prepare_management_nodes"></a>
 
-   1. Prepare Management Nodes
+   1. Prepare Management Nodes  
    Some preparation of the management nodes might be needed before starting an install or reinstall.
    The preparation includes checking and updating the firmware on the PIT node, quiescing the compute nodes
    and application nodes, scaling back DHCP on the management nodes, wiping the storage on the management nodes,
