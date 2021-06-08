@@ -568,7 +568,7 @@ encrypted.
 
 
 <a name="version-control-site-init-files"></a>
-### 4. Version Control Site-Init Files
+### 5. Version Control Site-Init Files
 
 Setup `/mnt/pitdata/prep/site-init` as a Git repository in order to manage the
 baseline configuration during initial system installation.
@@ -610,7 +610,7 @@ baseline configuration during initial system installation.
 
 
 <a name="push-to-a-remote-repository"></a>
-#### 4.1 Push to a Remote Repository
+#### 5.1 Push to a Remote Repository
 
 It is **strongly recommended** to that the site-init repository be maintained
 off-cluster. Add a remote repository and push the baseline configuration on
@@ -618,7 +618,7 @@ off-cluster. Add a remote repository and push the baseline configuration on
 
 
 <a name="patch-cloud-init-with-the-ca"></a>
-### 5 Patch cloud-init with the CA
+### 6. Patch cloud-init with the CA
 
 **`NOTE`** Skip this if using a USB LiveCD. These steps are done elsewhere in that procedure.
 
@@ -643,7 +643,7 @@ Using `csi` on a generated site-init directory...
    ```
 
 <a name="customer-specific-customizations"></a>
-### 6. Customer-Specific Customizations
+### 7. Customer-Specific Customizations
 
 Customer-specific customizations are any changes on top of the baseline
 configuration to satisfy customer-specific requirements. It is recommended that
@@ -664,11 +664,11 @@ introduced and bugs are fixed.
 
 
 <a name="appendix"></a>
-### 7. Appendix
+### 8. Appendix
 
 
 <a name="tracked-sealed-secrets"></a>
-### 7.1 Tracked Sealed Secrets
+### 8.1 Tracked Sealed Secrets
 
 Tracked sealed secrets are regenerated every time secrets are seeded (see the
 use of `utils/secrets-seed-customizations.sh` above). View currently tracked
@@ -698,7 +698,7 @@ linux# yq delete -i /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml s
 ```
 
 <a name="decrypting-sealed-secrets-for-review"></a>
-### 7.2 Decrypting Sealed Secrets for Review
+### 8.2 Decrypting Sealed Secrets for Review
 
 For administrators that would like to decrypt and review previously encrypted
 sealed secrets, you can use the `secrets-decrypt.sh` utility in SHASTA-CFG.
