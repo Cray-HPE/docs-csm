@@ -111,6 +111,12 @@ else
 fi
 
 echo -e "${YELLOW}"
+cat <<EOF
+Run: watch "ceph -s"
+
+- Make sure ceph health is OK
+- If ceph health is HEALTH_WARN and the cause is clock skew, you can still continue and next steps will attempt to fix it for you
+EOF
 read -p "After ceph health is ok then press any key to continue ..."
 echo -e "${NOCOLOR}"
 
