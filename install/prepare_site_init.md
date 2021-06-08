@@ -425,38 +425,37 @@ with system-specific customizations.
         > ldapSearchBase: dc=dcldap,dc=dit
         > ```
 
-1.  If you need to resolve outside hostnames, you will need to configure
-    forwarding in the cray-dns-unbound service. For example, if you are using a
-    hostname and not an IP for the upstream LDAP server in step 4 above, you
-    will need to be able to resolve that hostname.
+1.  If there is no requirement to resolve external hostnames or no upstream DNS server
+    then remove the DNS forwarding configuration from the `cray-dns-unbound` service.
 
-    Set the `forwardZones` for the `cray-dns-unbound` service:
+    Default configuration:
 
-    ```bash
-    linux# yq write -s - -i /mnt/pitdata/prep/site-init/customizations.yaml <<EOF
-    - command: update
-      path: spec.kubernetes.services.cray-dns-unbound
-      value:
-        forwardZones:
+    ```
+    cray-dns-unbound:
+      domain_name: '{{ network.dns.external }}'
+      forwardZones:
         - name: "."
           forwardIps:
-          - "{{ network.netstaticips.system_to_site_lookups }}"
-    EOF
+            - "{{ network.netstaticips.system_to_site_lookups }}"
+    ```
+    Remove the `forwardZones` configuration for the `cray-dns-unbound` service:
+
+    ```bash
+    linux# yq delete -i /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-dns-unbound.forwardZones
     ```
 
-    On success, review the `cray-dns-unbound` values.
+    Review the `cray-dns-unbound` values.
+
     ```bash
     linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-dns-unbound
     ```
     
-    Expected output looks similar to:
+    Expected output is:
     
     ```
-    forwardZones:
-    - name: "."
-      forwardIps:
-      - "{{ network.netstaticips.system_to_site_lookups }}"
+	domain_name: '{{ network.dns.external }}'
     ```
+Do not remove the `domain_name` entry.
 
 1.  Review `customizations.yaml` in the `site-init` directory and replace remaining `~FIXME~` values with
     appropriate settings.
