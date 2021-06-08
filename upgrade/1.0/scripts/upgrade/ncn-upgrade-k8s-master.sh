@@ -47,7 +47,6 @@ if [[ ${first_master_hostname} == ${upgrade_ncn} ]]; then
    if [[ $state_recorded == "0" ]]; then
       echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
       csi handoff bss-update-cloud-init --set meta-data.first-master-hostname=$STABLE_NCN --limit Global
-      rpm --force -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm --force || true
       /usr/share/doc/csm/upgrade/1.0/scripts/k8s/promote-initial-master.sh
       
       record_state "${state_name}" ${upgrade_ncn}
