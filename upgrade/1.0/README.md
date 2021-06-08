@@ -1,4 +1,4 @@
-# CSM 0.9 to 1.0 Upgrade Process
+# CSM 0.9.3 to 1.0.0 Upgrade Process
 
 ### Introduction
 
@@ -17,6 +17,17 @@ upgrade that node.
 It is also possible to do this from a "remote" node (like the PIT during a normal install) however this is beyond the
 scope of this documentation.
 
+### Terminal Output
+
+White: output of logs are in white
+
+<font color="green"> Green </font>: output of upgrade states are in green
+
+<font color="blue"> Blue </font>: informational output
+
+<font color="#9B870C"> Yellow </font>: Your action is required, read and react carefully with the output
+
+<font color="red"> Red </font>: Unexpeted errors are in red
 ### Prerequisites & Preflight Checks
 
 > NOTE: CSM-0.9.3 is the version of CSM required in order to upgrade to CSM-1.0.0 (available with Shasta v1.5).
@@ -35,8 +46,7 @@ Install documents:
 
 Run: 
 
-`./prerequisites.sh [CSM_RELEASE]`
-> NOTE: make sure your current working dir is `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade`
+`/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh [CSM_RELEASE] [ENDPOINT]` <== ENDPOINT is optional for internal use. it is pointing to arti by default
 
 Above script also runs the goss tests on the initial stable node (typically `ncn-m001`) where the latest version of CSM has been installed. Make sure the goss test pass before continue.
 
@@ -46,11 +56,9 @@ Above script also runs the goss tests on the initial stable node (typically `ncn
 
 Run: 
 
-`./ncn-upgrade-ceph-initial.sh ncn-s001` <== run the script for all storage nodes
+`/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-ceph-initial.sh ncn-s001` <== run the script for all storage nodes
 
 > NOTE: follow output of above script carefully. The script will pause for manual interaction
-
-> NOTE: make sure your current working dir is `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade`
 
 On ncn-s001 execute the ceph-upgrade.sh script:
 ```
@@ -71,10 +79,8 @@ cd /usr/share/doc/csm/upgrade/1.0/scripts/ceph
 
 For each storage node in the cluster, start by following the steps: 
 
-`./ncn-upgrade-ceph-nodes.sh ncn-s001` <==== ncn-s001, ncn-s002, ncn-s003
+`/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-ceph-nodes.sh ncn-s001` <==== ncn-s001, ncn-s002, ncn-s003
 > NOTE: follow output of above script carefully. The script will pause for manual interaction
-
-> NOTE: make sure your current working dir is `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade`
 
 > Note that these steps should be performed on one storage node at a time.
 
@@ -82,17 +88,13 @@ For each storage node in the cluster, start by following the steps:
 
 1. For each master node in the cluster (exclude m001), again follow the steps:
 
-    `./ncn-upgrade-k8s-master.sh ncn-m002` <==== ncn-m002, ncn-m003
+    `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-master.sh ncn-m002` <==== ncn-m002, ncn-m003
     > NOTE: follow output of above script carefully. The script will pause for manual interaction
-
-    > NOTE: make sure your current working dir is `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade`
 
 2. For each worker node in the cluster, also follow the steps:
 
-    `./ncn-upgrade-k8s-worker.sh ncn-w002` <==== ncn-w002, ncn-w003, ncn-w001
+    `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-worker.sh ncn-w002` <==== ncn-w002, ncn-w003, ncn-w001
     > NOTE: follow output of above script carefully. The script will pause for manual interaction
-
-    > NOTE: make sure your current working dir is `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade`
 
 3. For master 001, Use m002 as stable ncn:
     
@@ -106,10 +108,8 @@ For each storage node in the cluster, start by following the steps:
 
     upgrade ncn-m001:
 
-    `./ncn-upgrade-k8s-master.sh ncn-m001`
+    `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-master.sh ncn-m001`
     > NOTE: follow output of above script carefully. The script will pause for manual interaction
-
-    > NOTE: make sure your current working dir is `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade`
 
 4. For each master node in the cluster, run the following command to complete the kubernetes upgrade _(this will restart several pods on each master to their new docker containers)_:
 
@@ -124,7 +124,6 @@ Run `upgrade.sh` to deploy upgraded CSM applications and services:
 ```bash
 ncn-m002# ./${CSM_RELEASE}/upgrade.sh
 ```
-> NOTE: make sure your current working dir is `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade`
 
 ### Post-Upgrade Health Checks
 
