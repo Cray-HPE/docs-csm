@@ -138,6 +138,8 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
 For this, you will need to double-back to [Collecting BMC MAC Addresses](collecting_bmc_mac_addresses.md) and pick out
 the MACs for your BOND from each the sw-spine-001 and sw-spine-002 switch.
 
+> **Note:** The node must be booted into an operating system in order for the Bond MAC addresses to appear on the spine switches.
+
 > Tip: A PCIe card with dual-heads may go to either spine switch, meaning MAC0 ought to be collected from
 > spine-01. Please refer to your cabling diagram, or actual rack (in-person).
 

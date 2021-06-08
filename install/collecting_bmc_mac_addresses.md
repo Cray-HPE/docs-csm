@@ -84,12 +84,14 @@ If you are here with an unconfigured switch, mileage may vary.
    The column heading must match that shown above for csi to correctly parse it. 
 
 1. Collect the BMC MAC address information for the PIT node. 
-   The PIT node BMC is not connected to the swtich like the other management nodes.
+   The PIT node BMC is not connected to the switch like the other management nodes.
 
    ```bash
    pit# ipmitool lan print | grep "MAC Address"
    MAC Address             : a4:bf:01:37:87:32
    ```
+
+   > **Note:** an Intel node would need to use `ipmitool lan print 3` instead of `ipmitool lan print`.
 
    Add this information for ncn-m001 to the `ncn_metadata.csv` file.  There should be ncn-m003, then ncn-m002, and this new entry for ncn-m001 as the last line in the file.
    ```
@@ -99,8 +101,9 @@ If you are here with an unconfigured switch, mileage may vary.
 1. Collect the NCN MAC address for the PIT node.
 
    ```bash
-   pit# ip address show bond0 | grep ether
-       link/ether b8:59:9f:c7:12:f2 brd ff:ff:ff:ff:ff:ff
+   pit# cat /proc/net/bonding/bond0  | grep Perm
+   Permanent HW addr: b8:59:9f:c7:12:f2
+   Permanent HW addr: b8:59:9f:c7:12:f3
    ```
 
    Add this information to the `ncn_metadata.csv` file for the row which represents ncn-m001.
@@ -110,7 +113,7 @@ If you are here with an unconfigured switch, mileage may vary.
    x3000c0s1b0n0,Management,Master,a4:bf:01:37:87:32,b8:59:9f:c7:12:f2,b8:59:9f:c7:12:f2,b8:59:9f:c7:12:f3
    ```
 
-1. As this point the `ncn_metadata.csv` file should should have a row for every management node in the SHCD,
+1. At this point the `ncn_metadata.csv` file should should have a row for every management node in the SHCD,
    although there may be dummy entries for some MAC addresses.
 
    Sample file showing storage nodes 3,2,1, then worker nodes 3,2,1, then master nodes 3,2,1 with valid BMC 

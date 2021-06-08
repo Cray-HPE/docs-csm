@@ -184,6 +184,8 @@ making a backup of them, in case they need to be examined at a later time.
 
 1. Verify that all BMCs can be pinged.
 
+   **Note:** It may take some time from when dnsmasq is restarted to when the BMCs pick up new DHCP leases.
+
    This step will check all management nodes except ncn-m001-mgmt since that has an external connection and could
    not be booted by itself as the PIT node. 
 
