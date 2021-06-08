@@ -38,6 +38,7 @@ the number of storage and worker nodes.
    1. [Validate Management Node Deployment](#validate_management_node_deployment)
       1. [Validation](#validation)
       1. [Optional Validation](#optional-validation)
+   1. [Next Topic](#next-topic)
 
 ## Details
 

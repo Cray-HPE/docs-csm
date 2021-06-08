@@ -72,7 +72,7 @@ the instructions for attaching to the BMC will differ.
 
 On first login (over SSH or at local console) the LiveCD will prompt the administrator to change the password.
 
-1. **The initial password is empty**; set the username of `root` and press `return` twice:
+1. **The initial password is empty**; set the username of `root` and press `return` twice.
 
    ```
    pit login: root
@@ -106,7 +106,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 1. Set up the site-link, enabling SSH to work. You can reconnect with SSH after this step.
    > **`NOTICE REGARDING DHCP`** If your site's network authority or network administrator has already provisioned an IPv4 address for your master node(s) external NIC(s), **then skip this step**.
 
-   1. Setup Variables:
+   1. Setup Variables.
 
       ```bash
       # The IPv4 Address for the nodes external interface(s); this will be provided if not already by the site's network administrator or network authority.
@@ -119,15 +119,15 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       pit# site_nics=em1
       ```
 
-   1. Run the link setup script:
+   1. Run the link setup script.
       > **`NOTE : USAGE`** All of the `/root/bin/csi-*` scripts are harmless to run without parameters, doing so will dump usage statements.
 
       ```bash
       pit# /root/bin/csi-setup-lan0.sh $site_ip $site_gw $site_dns $site_nics
       ```
 
-   1. (recommended) print `lan0`, and if it has an IP then exit console and login again. The SSH connection will
-      provide larger window sizes and better bufferhandling (screen wrapping).
+   1. (recommended) print `lan0`, and if it has an IP address then exit console and login again using SSH. The
+      SSH connection will provide larger window sizes and better bufferhandling (screen wrapping).
 
       ```bash
       pit# ip a show lan0
@@ -135,7 +135,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       external# ssh root@${SYSTEM_NAME}-ncn-m001
       ```
 
-   1. (recommended) After reconnecting, resume the typescript (the `-a` appends to an existing script):
+   1. (recommended) After reconnecting, resume the typescript (the `-a` appends to an existing script).
 
        ```bash
       pit# pushd /var/www/ephemeral/prep/admin
@@ -143,14 +143,14 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
       ```
 
-   1. Check hostname:
+   1. Check hostname.
 
       ```bash
       pit# hostnamectl
       ```
       > **`NOTE`** If the hostname returned by the `hostnamectl` command is still `pit`, then re-run the above script with the same parameters. Otherwise feel free to set the hostname by hand with `hostnamectl`, please continue to use the `-pit` suffix to prevent masquerading a pit node as a real NCN to administrators and automation.
 
-1. Find a local disk for storing product installers:
+1. Find a local disk for storing product installers.
 
     ```bash
     pit# disk="$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(sata|nvme|sas)' | sort -h | awk '{print $2}' | head -n 1 | tr -d '\n')"
@@ -249,14 +249,14 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    pit# rpm -Uvh csm-install-workarounds-latest.noarch.rpm
    ```
 
-1. Generate configuration files:
+1. Generate configuration files.
 
    Some files are needed for generating the configuration payload.  See these topics in [Prepare Configuration Payload](prepare_configuration_payload.md) if you have not already prepared the information for this system.
    
       * [Command Line Configuration Payload](#command_line_configuration_payload)
       * [Configuration Payload Files](#configuration_payload_files)
    
-   Pull these files into the current working directory:
+   Pull these files into the current working directory.
    - `application_node_config.yaml` (optional - see below)
    - `cabinets.yaml` (optional - see below)
    - `hmn_connections.json`
@@ -271,14 +271,14 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    > The `system_config.yaml` is required for a reinstall, since it was created during a previous install.  For a first time install, the information in it can be provided as command line arguments to `csi config init`.
    
    
-   1. Change into the preparation directory:
+   1. Change into the preparation directory.
    
       ```bash
       linux# mkdir -pv /var/www/ephemeral/prep
       linux# cd /var/www/ephemeral/prep
       ```
    
-      After gathering the files into this working directory, generate your configs:
+      After gathering the files into this working directory, generate your configs.
    
    1. If doing a reinstall and have the `system_config.yaml` parameter file avail available, then generate the system configuration reusing this parameter file (see [avoiding parameters](../background/cray_site_init_files.md#save-file--avoiding-parameters)).
    
@@ -421,7 +421,6 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 1. Check for workarounds in the `/opt/cray/csm/workarounds/csi-config` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
 
       ```bash
-      # Example
       linux# ls /opt/cray/csm/workarounds/csi-config
       ```
 
@@ -432,16 +431,16 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       ```
 
 1. Copy the interface config files generated earlier by `csi config init`
-   into `/etc/sysconfig/network/` with the first option **or** use the provided scripts in the second option below:
+   into `/etc/sysconfig/network/` with the first option **or** use the provided scripts in the second option below.
 
-   * Option 1: Copy PIT files:
+   * Option 1: Copy PIT files.
 
       ```bash
       pit# cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/pit-files/* /etc/sysconfig/network/
       pit# wicked ifreload all
       pit# systemctl restart wickedd-nanny && sleep 5
       ```
-   * Option 2: Set up dnsmasq by hand:
+   * Option 2: Set up dnsmasq by hand.
 
       ```bash
       pit# /root/bin/csi-setup-vlan002.sh $nmn_cidr
@@ -449,9 +448,9 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       pit# /root/bin/csi-setup-vlan007.sh $can_cidr
       ```
 
-1. Check that IPs are set for each interface and investigate any failures:
+1. Check that IPs are set for each interface and investigate any failures.
 
-    1. Check IPs, do not run tests if these are missing and instead start triage:
+    1. Check IPs, do not run tests if these are missing and instead start triage.
 
        ```bash
        pit# wicked show bond0 vlan002 vlan004 vlan007
@@ -485,16 +484,16 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
        addr:     ipv4 10.254.1.4/17 [static]
        ```
 
-    1. Run tests, inspect failures:
+    1. Run tests, inspect failures.
 
        ```bash
        pit# csi pit validate --network
        ```
 
 1. Copy the service config files generated earlier by `csi config init` for DNSMasq, Metal
-   Basecamp (cloud-init), and Conman:
+   Basecamp (cloud-init), and Conman.
 
-    1. Copy files (files only, `-r` is exclusively not used):
+    1. Copy files (files only, `-r` is expressly not used).
 
         ```bash
         pit# cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/dnsmasq.d/* /etc/dnsmasq.d/
@@ -502,7 +501,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
         pit# cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/basecamp/* /var/www/ephemeral/configs/
         ```
 
-    1. Enable, and fully restart all PIT services:
+    1. Enable, and fully restart all PIT services.
 
         ```bash
         pit# systemctl enable basecamp nexus dnsmasq conman
@@ -510,7 +509,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
         pit# systemctl start basecamp nexus dnsmasq conman
         ```
 
-1. Start and configure NTP on the LiveCD for a fallback/recovery server:
+1. Start and configure NTP on the LiveCD for a fallback/recovery server.
 
    ```bash
    pit# /root/bin/configure-ntp.sh
@@ -522,7 +521,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    pit# csi pit validate --services
    ```
 
-1. Mount a shim to match the Shasta-CFG steps' directory structure:
+1. Mount a shim to match the Shasta-CFG steps' directory structure.
 
     ```bash
     pit# mkdir -vp /mnt/pitdata

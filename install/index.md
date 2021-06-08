@@ -8,8 +8,8 @@ management nodes can be deployed with an operating system and the software to cr
 utilizing Ceph storage.  The CSM services provide essential software infrastructure including the API gateway
 and many microservices with REST APIs for managing the system.  Once administrative access has been configured,
 the installation of CSM software and nodes can be validated with health checks before doing operational tasks
-like the check and update of firmware on system components.  Once the CSM installation has completed, other
-product streams for the HPE Cray EX system can be installed.
+like the check and update of firmware on system components or the preparation of compute nodes. 
+Once the CSM installation has completed, other product streams for the HPE Cray EX system can be installed.
 
 ### Topics:
    
@@ -17,6 +17,7 @@ product streams for the HPE Cray EX system can be installed.
    1. [Prepare Management Nodes](#prepare_management_nodes)
    1. [Bootstrap PIT Node](#bootstrap_pit_node)
    1. [Configure Management Network Switches](#configure_management_network)
+   1. [Collect MAC Addresses for NCNs](#collect_mac_addresses_for_ncns)
    1. [Deploy Management Nodes](#deploy_management_nodes)
    1. [Install CSM Services](#install_csm_services)
    1. [Validate CSM Health Before PIT Node Redeploy](#validate_csm_health_before_pit_redeploy)
@@ -42,7 +43,7 @@ sections, but there is also a general troubleshooting topic.
    system size, site network information for the CAN, site DNS configuration, site NTP configuration, network
    information for the node used to bootstrap the installation.  Much of the information about the system hardware
    is encapsulated in the SHCD (Shasta Cabling Diagram), which is a spreadsheet prepared by HPE Cray Manufacturing
-   to assemble the components of the system and connect appropriately labeled cables.   
+   to assemble the components of the system and connect appropriately labeled cables. 
    
       See [Prepare Configuration Payload](prepare_configuration_payload.md)  
    <a name="prepare_management_nodes"></a>
@@ -65,8 +66,8 @@ sections, but there is also a general troubleshooting topic.
    
       Use one of these procedures to bootstrap the PIT node from the LiveCD.  
       * [Bootstrap Pit Node from LiveCD Remote ISO](bootstrap_livecd_remote_iso.md) (recommended)
-         * [Gigabyte BMCs] Should not use the RemoteISO method.
-         * [Intel BMCs] Should not use the RemoteISO method.
+         * **Gigabyte BMCs** should not use the RemoteISO method.
+         * **Intel BMCs** should not use the RemoteISO method.
       * [Bootstrap Pit Node from LiveCD USB](bootstrap_livecd_usb.md) (fallback)
 
       Using the LiveCD USB method requires a USB 3.0 device with at least 1TB of space to create a bootable LiveCD.
@@ -81,7 +82,24 @@ sections, but there is also a general troubleshooting topic.
       
       **Note**: If a reinstall of this software release is being done on this system and the management network switches
       have already been configured, then this topic could be skipped and instead move to
-      [Deploy Management Nodes](#deploy_management_nodes).  
+      [Collect MAC Addresses for NCNs](#collect_mac_addresses_for_ncns)
+   <a name="collect_mac_addresses_for_ncns"></a>
+
+   1. Collect MAC Addresses for NCNs  
+   Now that the PIT node has been booted with the LiveCD and the management network switches have been configured,
+   the actual MAC address for the management nodes can be collected.  This process will include repitition of some
+   of the steps done up to this point because `csi config init` will need to be run with the proper
+   MAC addresses.
+
+      See [Collect MAC Addresses for NCNs](collect_mac_addresses_for_ncns.md)
+
+      **Note**: If a reinstall of this software release is being done on this system and the `ncn_metadata.csv`
+      file aleady had valid MAC addresses for both BMC and node interfaces before `csi config init` was run, then
+      this topic could be skipped and instead move to [Deploy Management Nodes](#deploy_management_nodes).  
+
+      **Note**: If a first time install of this software release is being done on this system and the `ncn_metadata.csv`
+      file aleady had valid MAC addresses for both BMC and node interfaces before `csi config init` was run, then
+      this topic could be skipped and instead move to [Deploy Management Nodes](#deploy_management_nodes).  
    <a name="deploy_management_nodes"></a>
  
    1. Deploy Management Nodes  
