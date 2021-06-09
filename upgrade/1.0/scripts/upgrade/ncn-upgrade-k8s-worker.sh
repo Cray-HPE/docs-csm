@@ -62,13 +62,13 @@ fi
 
 ${BASEDIR}/ncn-upgrade-k8s-nodes.sh $upgrade_ncn
 
-ssh $upgrade_ncn 'GOSS_BASE=/opt/cray/tests/install goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-worker.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate'
+ssh $upgrade_ncn 'GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-worker.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate'
 
 echo -e "${YELLOW}"
 cat <<EOF
-Make sure above goss test passed before continue. 
+If above test failed, try to fix it based on test output. Then run the test again:
 
-NOTE: if BGP failure is detected above, following the steps in the 'Check BGP Status and Reset Sessions' section in the admin guide for steps to verify and fix BGP if needed
-EOF
-read -p "Read above steps and press any key to continue ..."
+ssh $upgrade_ncn 'GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-worker.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate'
+
+read -p "Press any key to continue ..."
 echo -e "${NOCOLOR}"
