@@ -3,6 +3,14 @@
 # Copyright 2021 Hewlett Packard Enterprise Development LP
 #
 
+echo "Ensuring cloud-init is healthy"
+cloud-init query -a > /dev/null 2>&1
+rc=$?
+if [[ "$rc" -ne 0 ]]; then
+  echo "cloud-init isn't healthy -- re-running 'cloud-init init' to repair cached data"
+  cloud-init init > /dev/null 2>&1
+fi
+
 source /srv/cray/scripts/metal/lib.sh
 export KUBERNETES_VERSION="v$(cat /etc/cray/kubernetes/version)"
 echo $(kubeadm init phase upload-certs --upload-certs 2>&1 | tail -1) > /etc/cray/kubernetes/certificate-key
