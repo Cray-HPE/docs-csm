@@ -92,32 +92,41 @@ See [Basic Wipe](#basic-wipe) section for expected output from the wipefs comman
 This section is preferred method for all nodes. A full wipe includes deleting the Ceph volumes (where applicable), stopping the
 RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
-**IMPORTANT:** Step 1 is to wipe the ceph osd drives.  ***steps 2,3,4 and 5 are for all node types.***
+**IMPORTANT:** Step 1 is to wipe the ceph osd drives.  ***Steps 2, 3, 4 and 5 are for all node types.***
 
 1. Delete CEPH Volumes ***on Utility Storage Nodes ONLY***
 
    For Each Storage node:
 
-   ***1.4 or earlier***
-   ```bash
-   ncn-s# systemctl stop ceph-osd.target
-   ```
-   ***1.5 or later***
-   ```bash
-   cephadm rm-cluster --fsid $(ceph status -f json-pretty|jq -r '.fsid') --force
-   ```
-   Make sure the OSDs (if any) are not running after running the first command.
+    1. Stop CEPH
 
-   ```bash
-   ncn-s# ps -ef|grep ceph-osd  # examine the output.  there should be no running ceph-osd processes
-   ```
+        * ***1.4 or earlier***
 
-   Remove the vgs.
-   ```bash
-   ncn-s# ls -1 /dev/sd* /dev/disk/by-label/*
-   ncn-s# vgremove -f --select 'vg_name=~ceph*'
-   ```
-   
+            ```bash
+            ncn-s# systemctl stop ceph-osd.target
+            ```
+
+        * ***1.5 or later***
+
+            ```bash
+            ncn-s# cephadm rm-cluster --fsid $(ceph status -f json-pretty|jq -r '.fsid') --force
+            ```
+
+   2. Make sure the OSDs (if any) are not running.
+
+        ```bash
+        ncn-s# ps -ef|grep ceph-osd
+        ```
+        
+        Examine the output. There should be no running ceph-osd processes.
+
+   3. Remove the VGs.
+
+        ```bash
+        ncn-s# ls -1 /dev/sd* /dev/disk/by-label/*
+        ncn-s# vgremove -f --select 'vg_name=~ceph*'
+        ```
+
 2. Unmount volumes
    1. Storage nodes
       ```bash
@@ -134,7 +143,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 3. Remove auxiliary LVMs
 
    ```bash
-   ncn-s# vgremove -f --select 'vg_name=~metal*'
+   ncn# vgremove -f --select 'vg_name=~metal*'
    ```
 
    >>***Note***: Optionally you can run a pvs and if any drives are still listed, you can remove them with a pvremove.   This is rarely needed.
@@ -142,13 +151,15 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 4. Stop the RAIDs.
 
    ```bash
-   ncn-s# for md in /dev/md/*; do mdadm -S $md || echo nope ; done
+   ncn# for md in /dev/md/*; do mdadm -S $md || echo nope ; done
    ```
 5. Wipe the disks and RAIDs.
 
    ```bash
-   ncn-s# sgdisk --zap-all /dev/sd* 
-   ncn-s# wipefs --all --force /dev/sd* /dev/disk/by-label/*
+   ncn# sgdisk --zap-all /dev/sd* 
+   ncn# wipefs --all --force /dev/sd* /dev/disk/by-label/*
    ```
+
+   **Note**: On worker nodes, it is a known issue that the sgdisk command sometimes encounters a hard hang. If you see no output from the command for 90 seconds, close the terminal session to the worker node, open a new terminal session to it, and complete the disk wipe procedure by running the above wipefs command.
 
    See [Basic Wipe](#basic-wipe) section for expected output from the wipefs command.
