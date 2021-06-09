@@ -51,6 +51,13 @@ section sets the expected environment variables to the appropriate values.
    ncn-m001# CSM_DISTDIR="$(pwd)/csm-0.9.3"
    ```
 
+1. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet
+   access these RPMs will need to be externally downloaded and then copied to be installed.
+   ```bash
+   ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm-install/docs-csm-install-latest.noarch.rpm
+   ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
+   ```
+
 1. Set `CSM_RELEASE_VERSION` to the version reported by
    `${CSM_DISTDIR}/lib/version.sh`:
 
