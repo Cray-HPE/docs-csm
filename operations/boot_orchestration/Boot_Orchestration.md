@@ -30,7 +30,7 @@ rel = "self"
 
 ### Table of Contents
 
-The procedures in this section include the information required to boot, configure, and shutt down collections of nodes with BOS.
+The procedures in this section include the information required to boot, configure, and shut down collections of nodes with BOS.
 
 - [BOS Workflows](BOS_Workflows.md)
 - [BOS Session Templates](Session_Templates.md)

@@ -46,11 +46,11 @@ The minimum size for the CAN subnet is /26. The CAN /26 subnet allows for the fo
     The 32 service IPs will be used for the 5 standard customer-access service IPs and the remaining 27 IPs are for UAI and/or IMS services.
 
 
-![CAN /26 Subnet Layout](CAN_26_Subnet.PNG "CAN /26 Subnet Layout")
+![CAN /26 Subnet Layout](../../../img/operations/CAN_26_Subnet.PNG "CAN /26 Subnet Layout")
 
 If there are more than 27 IPs needed for NCNs, UANs, and switches, and/or more than 32 IPs needed for the external CAN services, then the CAN subnet will need to be larger than a /26.
 
-![CAN /25 Subnet Layout](CAN_25_Subnet.PNG "CAN /25 Subnet Layout")
+![CAN /25 Subnet Layout](../../../img/operations/CAN_25_Subnet.PNG "CAN /25 Subnet Layout")
 
 ### Customer Variables
 

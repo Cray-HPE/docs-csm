@@ -1,6 +1,6 @@
 ## Image Management
 
-The Cray Image Management System \(IMS\) uses the open source Kiwi-NG tool to build image roots from compressed Kiwi image descriptions. These compressed Kiwi image descriptions are referred to as "recipes." Kiwi-NG builds images based on a variety of different Linux distributions, specifically SUSE, RHEL, and their derivatives. Kiwi image descriptions must follow the Kiwi development schema. More information about the development schema and the Kiwi-NG tool can be found in the documentation: [https://doc.opensuse.org/projects/kiwi/doc/](https://doc.opensuse.org/projects/kiwi/doc/).
+The Image Management Service \(IMS\) uses the open source Kiwi-NG tool to build image roots from compressed Kiwi image descriptions. These compressed Kiwi image descriptions are referred to as "recipes." Kiwi-NG builds images based on a variety of different Linux distributions, specifically SUSE, RHEL, and their derivatives. Kiwi image descriptions must follow the Kiwi development schema. More information about the development schema and the Kiwi-NG tool can be found in the documentation: [https://doc.opensuse.org/projects/kiwi/doc/](https://doc.opensuse.org/projects/kiwi/doc/).
 
 Even though Kiwi recipes can be developed from scratch or found on the Internet, Cray suggests that recipes are based on existing Cray image recipes. Cray provides multiple types of recipes including, but not limited to the following:
 
