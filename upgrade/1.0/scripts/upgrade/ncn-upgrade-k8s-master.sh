@@ -109,4 +109,13 @@ fi
 
 ${BASEDIR}/ncn-upgrade-k8s-nodes.sh $upgrade_ncn
 
-ssh $upgrade_ncn 'GOSS_BASE=/opt/cray/tests/install goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-master.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate'
+ssh $upgrade_ncn 'GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-master.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate'
+
+echo -e "${YELLOW}"
+cat <<EOF
+If above test failed, try to fix it based on test output. Then run the test again:
+
+ssh $upgrade_ncn 'GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-master.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate'
+
+read -p "Press any key to continue ..."
+echo -e "${NOCOLOR}"
