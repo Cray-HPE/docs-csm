@@ -226,6 +226,41 @@ ncn-m001# pdsh -w $(./lib/list-ncns.sh | grep ncn-w | paste -sd,) "echo kernel.p
         }
         ```
 
+1. Add a ClusterRoleBinding for cray-unbound-coredns PodSecurityPolicies
+
+	a.  create `cray-unbound-coredns-psp.yaml` with the following contents
+
+       ```
+       ---
+       apiVersion: rbac.authorization.k8s.io/v1
+       kind: ClusterRoleBinding
+       metadata:
+         name: cray-unbound-coredns-psp
+       roleRef:
+         apiGroup: rbac.authorization.k8s.io
+         kind: ClusterRole
+         name: restricted-transition-net-raw-psp
+       subjects:
+         - kind: ServiceAccount
+           name: cray-dns-unbound-manager
+           namespace: services
+         - kind: ServiceAccount
+           name: cray-dns-unbound-coredns
+           namespace: services
+        ```
+
+	b. run kubectl apply -f on cray-unbound-coredns-psp.yaml 
+
+       ```bash
+       ncn-m001# kubectl apply -f cray-unbound-coredns-psp.yaml
+       ```
+
+1. Run `kubectl delete -n spire job spire-update-bss` to allow the spire chart to be updated properly:
+
+	```bash
+	ncn-m001# kubectl delete -n spire job spire-update-bss
+	```
+
 1. Run `upgrade.sh` to deploy upgraded CSM applications and services:
     ```bash
     ncn-m001# ./upgrade.sh
