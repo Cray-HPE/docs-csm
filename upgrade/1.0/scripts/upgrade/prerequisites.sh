@@ -92,12 +92,12 @@ fi
 state_name="APPLY_POD_PRIORITY"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
-    echo "${state_name} ..."
+    echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
     . ${BASEDIR}/add_pod_priority.sh
     record_state ${state_name} $(hostname)
     echo
 else
-    echo "${state_name} has beed completed"
+    echo -e "${GREEN}====> ${state_name} has beed completed ${NOCOLOR}"
 fi
 
 
