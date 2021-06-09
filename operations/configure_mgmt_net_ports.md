@@ -33,6 +33,7 @@ sw-leaf-001(config)#
 ```
 
 ## Apollo Server port config
+This is for the Apollo XL645d only.
 
 iLO BMC port
 ```
