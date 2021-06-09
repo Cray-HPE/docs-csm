@@ -176,6 +176,15 @@ if [[ ${upgrade_ncn} != ncn-s* ]]; then
       
       ssh-keygen -R $UPGRADE_NCN -f /root/.ssh/known_hosts
       ssh-keyscan -H $UPGRADE_NCN >> ~/.ssh/known_hosts
+
+      echo "Ensuring cloud-init on $UPGRADE_NCN is healthy"
+      ssh $UPGRADE_NCN 'cloud-init query -a > /dev/null 2>&1'
+      rc=$?
+      if [[ "$rc" -ne 0 ]]; then
+        echo "cloud-init on $UPGRADE_NCN isn't healthy -- re-running 'cloud-init init' to repair cached data"
+        ssh $UPGRADE_NCN 'cloud-init init > /dev/null 2>&1'
+      fi
+
       ssh $UPGRADE_NCN '/srv/cray/scripts/metal/ntp-upgrade-config.sh'
       
       record_state "${state_name}" ${upgrade_ncn}
