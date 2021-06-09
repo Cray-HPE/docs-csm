@@ -96,7 +96,7 @@ The network management system \(NMS\) data model and REST API enable customer si
 
 The low-level network management components \(switch, DHCP service, ARP service\) of the NCNs and ClusterStor interfaces are configured to serve one particular network \(the "supported network"\) on the high-speed fabric. The supported network includes all of the compute nodes, thereby enabling those compute nodes to access the gateway, user access services, and ClusterStor devices. A site may create other networks as well, but it is only the supported network that is served by those devices.
 
-![Management Network Connections - Liquid Cooled](../../../img/Management_Network_Connections_Liquid_Cooled.png "Management Network Connections - Liquid Cooled")
+![Management Network Connections - Liquid Cooled](../../img/Management_Network_Connections_Liquid_Cooled.png "Management Network Connections - Liquid Cooled")
 
 ### Table of Contents
 
