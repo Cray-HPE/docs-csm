@@ -7,7 +7,7 @@ For more information:
 -   Mellanox: [https://community.mellanox.com/s/article/howto-configure-magp-on-mellanox-switches](https://community.mellanox.com/s/article/howto-configure-magp-on-mellanox-switches)
 -   Aruba: [https://www.arubanetworks.com/techdocs/AOS-CX/10.04/HTML/5200-6728/index.html\#book.html](https://www.arubanetworks.com/techdocs/AOS-CX/10.04/HTML/5200-6728/index.html#book.html)
 
-![Dual-Spine Configuration](../../img/operations/dual-spine-configuration.PNG "Dual-Spine Configuration")
+![Dual-Spine Configuration](../../../img/operations/dual-spine-configuration.PNG "Dual-Spine Configuration")
 
 The following is an example of the point-to-point configuration on the spine switches. The IP address should be replaced with the IP chosen by the customer that matches the switch configuration.
 
