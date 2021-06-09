@@ -93,7 +93,7 @@ state_name="APPLY_POD_PRIORITY"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "${state_name} ..."
-    . ./add_pod_priority.sh
+    . ${BASEDIR}/add_pod_priority.sh
     record_state ${state_name} $(hostname)
     echo
 else
