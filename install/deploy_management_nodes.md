@@ -100,10 +100,7 @@ installs as follows:
 
     **Notice** that one of them is the `IPMI_PASSWORD`.  Replace `changeme` with the real root password for BMCs.
 
-    **Notice** that one of them is the `bmctype`.  Replace `ilo` with `gb` (or `intel`)
-
    ```bash
-   pit# export bmctype='ilo' # or 'gb' or 'intel'
    pit# export mtoken='ncn-m(?!001)\w+-mgmt'
    pit# export stoken='ncn-s\w+-mgmt'
    pit# export wtoken='ncn-w\w+-mgmt'
@@ -125,39 +122,6 @@ installs as follows:
 
    ```bash
    pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
-   ```
-
-   > **`INTERNAL USE`** the following steps work for Intel only if SDPTool is available.  
-     See /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh -h for examples
-
-   Configure NTP on each BMC using data defined in cloud-init **For fresh 1.5 installs**:
-
-   ```
-   pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh "$bmctype" -H {} -n
-   ```
-
-   Configure DNS on each BMC using manually defined servers **For 1.4 upgrades or 1.5 upgraded**:
-
-   ```
-   pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh "$bmctype" -H {} -N <NTP SERVER 1>,<NTP SERVER 2> -n
-   ```
-
-   Configure DNS on each BMC using data defined in cloud-init **For fresh 1.5 installs**:
-
-   ```
-   pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh "$bmctype" -H {} -d
-   ```
-
-   Configure DNS on each BMC using manually defined servers **For 1.4 upgrades or 1.5 upgraded**:
-
-   ```
-   pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh "$bmctype" -H {} -D <UNBOUND IP>,<OTHER NAMESERVER> -d
-   ```
-
-   Show the settings of each BMC, if desired:
-
-   ```
-   pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh "$bmctype" -H {} -s
    ```
 
 <a name="apply-ncn-pre-boot-workarounds"></a>
@@ -509,7 +473,7 @@ The configuration workflow described here is intended to help understand the exp
 1. Log into **each** ncn-s node and check for unused drives
 
     ```bash
-    ncn-s# ceph-volume inventory
+    ncn-s# cephadm shell -- ceph-volume inventory
     ```
 
     The field "available" would be true if ceph sees the drive as empty and can
