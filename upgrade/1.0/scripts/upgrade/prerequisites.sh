@@ -6,15 +6,33 @@ set -e
 BASEDIR=$(dirname $0)
 . ${BASEDIR}/upgrade-state.sh
 trap 'err_report' ERR
-CSM_RELEASE=$1
 
+while [[ $# -gt 0 ]]
+do
+key="$1"
 
-if [[ -z $2 ]]; then
-    ENDPOINT=https://arti.dev.cray.com/artifactory/shasta-distribution-unstable-local/csm/
-    echo -e "${BLUE}Use internal endpoint: ${ENDPOINT} ${NOCOLOR}"
-else 
-    ENDPOINT=$2
-fi
+case $key in
+    --csm-version)
+    CSM_RELEASE="$2"
+    shift # past argument
+    shift # past value
+    ;;
+    --endpoint)
+    SEARCHPATH="$2"
+    shift # past argument
+    shift # past value
+    ;;
+    --tarball-file)
+    TARBALL_FILE="$2"
+    shift # past argument
+    shift # past value
+    ;;
+    *)    # unknown option
+    echo -e "${RED}unknow options${NOCOLOR}"
+    exit 1
+    ;;
+esac
+done
 
 
 if [[ -z ${CSM_RELEASE} ]]; then
@@ -22,22 +40,38 @@ if [[ -z ${CSM_RELEASE} ]]; then
     exit 1
 fi
 
-state_name="GET_CSM_TARBALL_FILE"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" ]]; then
-    echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
-    wget ${ENDPOINT}/${CSM_RELEASE}.tar.gz
-    record_state ${state_name} $(hostname)
-    echo
-else
-    echo -e "${GREEN}====> ${state_name} has beed completed ${NOCOLOR}"
+if [[ -z ${TARBALL_FILE} ]]; then
+    # Download tarball from internet 
+    
+    if [[ -z ${ENDPOINT} ]]; then
+        # default endpoint to internal artifactory
+        ENDPOINT=https://arti.dev.cray.com/artifactory/shasta-distribution-unstable-local/csm/
+        echo -e "${BLUE}Use internal endpoint: ${ENDPOINT} ${NOCOLOR}"
+    fi
+
+    # Download tarball file
+    state_name="GET_CSM_TARBALL_FILE"
+    state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+    if [[ $state_recorded == "0" ]]; then
+        echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
+        wget ${ENDPOINT}/${CSM_RELEASE}.tar.gz
+        # set TARBALL_FILE to newly downloaded file
+        TARBALL_FILE=${CSM_RELEASE}.tar.gz
+
+        record_state ${state_name} $(hostname)
+        echo
+    else
+        echo -e "${GREEN}====> ${state_name} has beed completed ${NOCOLOR}"
+    fi
 fi
 
+# untar csm tarball file
 state_name="UNTAR_CSM_TARBALL_FILE"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
-    tar -xzf ${CSM_RELEASE}.tar.gz
+    tar -xzf ${TARBALL_FILE}
+
     record_state ${state_name} $(hostname)
     echo
 else
@@ -49,6 +83,7 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
     rpm --force -Uvh ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
+    
     record_state ${state_name} $(hostname)
     echo
 else

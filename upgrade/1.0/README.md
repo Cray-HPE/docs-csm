@@ -47,7 +47,7 @@ Install document rpm package:
 
 Run: 
 
-`/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm_version [CSM_RELEASE] --endpoint [ENDPOINT]` <== ENDPOINT is optional for internal use. it is pointing to arti by default
+`/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --endpoint [ENDPOINT]` <== ENDPOINT is optional for internal use. it is pointing to internal arti by default
 
 #### Option 2 - Air Gapped Environment
 Install document rpm package: 
@@ -56,7 +56,7 @@ Install document rpm package:
 
 Run: 
 
-`/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm_version [CSM_RELEASE] --path [PATH_CSM_TARBALL_FILE]`
+`/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --tarball-file [PATH_TO_CSM_TARBALL_FILE]`
 
 Above script also runs the goss tests on the initial stable node (typically `ncn-m001`) where the latest version of CSM has been installed. Make sure the goss test pass before continue.
 
