@@ -40,11 +40,13 @@ function is_state_recorded () {
     fi
 }
 
-export RED='\033[0;31m'
-export GREEN='\033[0;32m'
-export BLUE='\033[0;34m'
-export YELLOW='\033[1;33m'
-export NOCOLOR='\033[0m'
+if [[ -z ${NO_COLOR} ]]; then
+    export RED='\033[0;31m'
+    export GREEN='\033[0;32m'
+    export BLUE='\033[0;34m'
+    export YELLOW='\033[1;33m'
+    export NOCOLOR='\033[0m'
+fi
 
 function err_report() {
     echo -e "${RED}Unexpected erros, check output above${NOCOLOR}"
