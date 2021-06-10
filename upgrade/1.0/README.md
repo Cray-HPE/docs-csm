@@ -151,7 +151,6 @@ Run the following validation checks to ensure that everything is still working
 properly after the upgrade:
 
 1. [Platform health checks](../../operations/validate_csm_health.md#platform-health-checks)
-2. [Network health checks](../../operations/validate_csm_health.md#network-health-checks)
 
 Other health checks may be run as desired.
 
