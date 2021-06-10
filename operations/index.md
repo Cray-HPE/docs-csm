@@ -8,6 +8,9 @@ The following administrative topics can be found in this guide:
     - [CSM **TBD: topics need to be re-organized**](#csm-tbd-topics-need-to-be-re-organized)
     - [Image Management](#image-management)
     - [Boot Orchestration](#boot-orchestration)
+    - [System Power Off Procedures](#system-power-off-procedures)
+    - [System Power On Procedures](#system-power-on-procedures)
+    - [Power Management](#power-management)
     - [Artifact Management](#artifact-management)
     - [Compute Rolling Upgrades](#compute-rolling-upgrades)
     - [Configuration Management](#configuration-management)
@@ -22,6 +25,7 @@ The following administrative topics can be found in this guide:
     - [System Configuration Service](#system-configuration-service)
     - [Hardware State Manager (HSM)](#hardware-state-manager-hsm)
     - [Node Management](#node-management)
+    - [River Endpoint Discovery Service (REDS)](#river-endpoint-discovery-service-reds)
     - [Network](#network)
       - [Customer Access Network (CAN)](#customer-access-network-can)
       - [Dynamic Host Configuration Protocol (DHCP)](#dynamic-host-configuration-protocol-dhcp)
@@ -93,6 +97,45 @@ Use the Boot Orchestration Service \(BOS\) to boot, configure, and shutdown coll
      * [Troubleshoot Compute Node Boot Issues Related to Slow Boot Times](boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Related_to_Slow_Boot_Times.md)
      * [Troubleshoot Booting Nodes with Hardware Issues](boot_orchestration/Troubleshoot_Booting_Nodes_with_Hardware_Issues.md)
    * [BOS Limitations for Gigabyte BMC Hardware](boot_orchestration/Limitations_for_Gigabyte_BMC_Hardware.md)
+
+### System Power Off Procedures
+
+Procedures required to fully power off an HPE Cray EX system.
+
+  * System Power Off Procedures
+  * Prepare the System for Power Off
+  * Shut Down and Power Off Compute and User Access Nodes
+  * Save Management Network Switch Configuration Settings
+  * Power Off Compute and IO Cabinets
+  * Shut Down and Power Off the Management Kubernetes Cluster
+  * Power Off the External Lustre File System
+
+### System Power On Procedures
+
+Procedures required to fully power on an HPE Cray EX system.
+
+  * System Power On Procedures
+  * Power On and Start the Management Kubernetes Cluster
+  * Power On the External Lustre File System
+  * Power On Compute and IO Cabinets
+  * Bring Up the Slingshot Fabric
+  * Power On and Boot Compute and User Access Nodes
+  * Recover from a Liquid Cooled Cabinet EPO Event
+
+### Power Management
+
+HPE Cray System Management (CSM) software manages and controls power out-of-band through Redfish APIs.
+
+  * Power Management
+  * Cray Advanced Platform Monitoring and Control (CAPMC)
+  * Liquid Cooled Node Power Management
+    * User Access to Compute Node Power Data
+  * Standard Rack Node Power Management
+  * Ignore Nodes with CAPMC
+  * Set the Turbo Boost Limit
+
+
+
 
 <a name="artifact-Management"></a>
 
@@ -467,6 +510,27 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   * [Update Compute Node Mellanox HSN NIC Firmware](Update_Compute_Node_Mellanox_HSN_NIC_Firmware.md)
   * [TLS Certificates for Redfish BMCs](TLS_Certificates_for_Redfish_BMCs.md)
     * [Add TLS Certificates to BMCs](Add_TLS_Certificates_to_BMCs.md)
+  * [Run a Manual ckdump on Compute Nodes](Run_a_Manual_ckdump_on_Compute_Nodes.md)
+  * [Dump a Compute Node with Node Memory Dump (NMD)](Dump_a_Compute_Node_with_Node_Memory_Dump_nmd.md)
+  * [Dump a Non-Compute Node](Dump_a_Non-Compute_Node.md)
+  * [Enable Passwordless Connections to Liquid Cooled Node BMCs](Enable_Passwordless_Connections_to_Liquid_Cooled_Node_BMCs.md)
+    * [View BIOS Logs for Liquid Cooled Nodes](View_BIOS_Logs_for_Liquid_Cooled_Nodes.md)
+  * [Enable Nvidia GPU Support](Enable_Nvidia_GPU_Support.md)
+    * [Update Nvidia GPU Software without Rebooting](Update_Nvidia_GPU_Software_without_Rebooting.md)
+
+
+<a name="reds"></a>
+
+### River Endpoint Discovery Service (REDS)
+
+The River Endpoint Discovery Service \(REDS\) performs geolocation and initialization of compute nodes, based on a mapping file that is provided with each system.
+
+  * [Configure a Management Switch for REDS](Configure_a_Management_Switch_for_REDS.md)
+  * [Initialize and Geolocate Nodes](Initialize_and_Geolocate_Nodes.md)
+  * [Verify Node Removal](Verify_Node_Removal.md)
+  * [Troubleshoot Common REDS Issues](Troubleshoot_Common_REDS_Issues.md)
+    * [Troubleshot Common Error Messages in REDS Logs](Troubleshoot_Common_Error_Messages_in_REDS_Logs.md)
+    * [Clear State and Restart REDS](Clear_State_and_Restart_REDS.md)
 
 
 <a name="network"></a>
