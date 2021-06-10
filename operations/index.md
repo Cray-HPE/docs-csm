@@ -102,39 +102,37 @@ Use the Boot Orchestration Service \(BOS\) to boot, configure, and shutdown coll
 
 Procedures required to fully power off an HPE Cray EX system.
 
-  * System Power Off Procedures
-  * Prepare the System for Power Off
-  * Shut Down and Power Off Compute and User Access Nodes
-  * Save Management Network Switch Configuration Settings
-  * Power Off Compute and IO Cabinets
-  * Shut Down and Power Off the Management Kubernetes Cluster
-  * Power Off the External Lustre File System
+  * [System Power Off Procedures](power_management/System_Power_Off_Procedures.md)
+  * [Prepare the System for Power Off](power_management/Prepare_the_System_for_Power_Off.md)
+  * [Shut Down and Power Off Compute and User Access Nodes](power_management/Shut_Down_and_Power_Off_Compute_and_User_Access_Nodes.md)
+  * [Save Management Network Switch Configuration Settings]
+  * [Power Off Compute and IO Cabinets](power_management/Power_Off_Compute_and_IO_Cabinets.md)
+  * [Shut Down and Power Off the Management Kubernetes Cluster](power_management/Shut_Down_and_Power_Off_the_Management_Kubernetes_Cluster.md)
+  * [Power Off the External Lustre File System](power_management/Power_Off_the_External_Lustre_File_System.md)
 
 ### System Power On Procedures
 
 Procedures required to fully power on an HPE Cray EX system.
 
-  * System Power On Procedures
-  * Power On and Start the Management Kubernetes Cluster
-  * Power On the External Lustre File System
-  * Power On Compute and IO Cabinets
-  * Bring Up the Slingshot Fabric
-  * Power On and Boot Compute and User Access Nodes
-  * Recover from a Liquid Cooled Cabinet EPO Event
+  * [System Power On Procedures](power_management/System_Power_On_Procedures.md)
+  * [Power On and Start the Management Kubernetes Cluster](power_management/Power_On_and_Start_the_Management_Kubernetes_Cluster.md)
+  * [Power On the External Lustre File System](power_management/Power_On_the_External_Lustre_File_System.md)
+  * [Power On Compute and IO Cabinets](power_management/Power_On_Compute_and_IO_Cabinets.md)
+  * [Bring Up the Slingshot Fabric](power_management/Bring_up_the_Slingshot_Fabric.md)
+  * [Power On and Boot Compute and User Access Nodes](power_management/Power_On_and_Boot_Compute_Nodes_and_User_Access_Nodes.md)
+  * [Recover from a Liquid Cooled Cabinet EPO Event]
 
 ### Power Management
 
 HPE Cray System Management (CSM) software manages and controls power out-of-band through Redfish APIs.
 
-  * Power Management
-  * Cray Advanced Platform Monitoring and Control (CAPMC)
-  * Liquid Cooled Node Power Management
-    * User Access to Compute Node Power Data
-  * Standard Rack Node Power Management
-  * Ignore Nodes with CAPMC
-  * Set the Turbo Boost Limit
-
-
+  * [Power Management](power_management/power_management.md)
+  * [Cray Advanced Platform Monitoring and Control (CAPMC)](power_management/Cray_Advanced_Platform_Monitoring_and_Control_CAPMC.md)
+  * [Liquid Cooled Node Power Management](power_management/Liquid_Cooled_Node_Card_Power_Management.md)
+    * [User Access to Compute Node Power Data](power_management/User_Access_to_Compute_Node_Power_Data.md)
+  * [Standard Rack Node Power Management](power_management/Standard_Rack_Node_Power_Management.md)
+  * [Ignore Nodes with CAPMC](power_management/Ignore_Nodes_with_CAPMC.md)
+  * [Set the Turbo Boost Limit](power_management/Set_the_Turbo_Boost_Limit.md)
 
 
 <a name="artifact-Management"></a>
