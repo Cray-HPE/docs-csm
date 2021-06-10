@@ -33,7 +33,7 @@ state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
     
-    ssh $upgrade_ncn 'rpm --force -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm'
+    ssh $upgrade_ncn "rpm --force -Uvh ${DOC_RPM_NEXUS_URL}"
     ssh $upgrade_ncn '/usr/share/doc/csm/upgrade/1.0/scripts/ceph/ceph-partitions-stage1.sh'
 
     record_state "${state_name}" ${upgrade_ncn}
