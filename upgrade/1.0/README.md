@@ -139,19 +139,5 @@ Run `csm-service-upgrade.sh` to deploy upgraded CSM applications and services:
 /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/csm-service-upgrade.sh
 ```
 
-### Post-Upgrade Health Checks
-
-> **`IMPORTANT:`** Wait at least 15 minutes after
-> [`upgrade.sh`](#deploy-manifests) completes to let the various Kubernetes
-> resources get initialized and started.
-
-Run the following validation checks to ensure that everything is still working
-properly after the upgrade:
-
-1. [Platform health checks](../../operations/validate_csm_health.md#platform-health-checks)
-
-Other health checks may be run as desired.
-
-
 ### Troubleshooting and Recovering from Failed Upgrades
 
