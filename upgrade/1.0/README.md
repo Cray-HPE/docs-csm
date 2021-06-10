@@ -40,13 +40,23 @@ kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm'
 
 This check will also be conducted in the 'prerequisites.sh' script listed below and will fail if the system is not running CSM-0.9.3.
 
-Install documents: 
+#### Option 1 - Internet Connected Environment
+Install document rpm package:
 
 `rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm`
 
 Run: 
 
-`/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh [CSM_RELEASE] [ENDPOINT]` <== ENDPOINT is optional for internal use. it is pointing to arti by default
+`/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --endpoint [ENDPOINT]` <== ENDPOINT is optional for internal use. it is pointing to internal arti by default
+
+#### Option 2 - Air Gapped Environment
+Install document rpm package: 
+
+`rpm -Uvh [PATH_TO_docs-csm-install-*.noarch.rpm]`
+
+Run: 
+
+`/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --tarball-file [PATH_TO_CSM_TARBALL_FILE]`
 
 Above script also runs the goss tests on the initial stable node (typically `ncn-m001`) where the latest version of CSM has been installed. Make sure the goss test pass before continue.
 
@@ -98,17 +108,23 @@ For each storage node in the cluster, start by following the steps:
 
 3. For master 001, Use m002 as stable ncn:
     
-    Install documents: 
+    #### Option 1 - Internet Connected Environment
+    Install document rpm package:
 
     `rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm`
 
     Run: 
 
-    `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh [CSM_RELEASE]`
+    `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --endpoint [ENDPOINT]` <== ENDPOINT is optional for internal use. it is pointing to internal arti by default
 
-    upgrade ncn-m001:
+    #### Option 2 - Air Gapped Environment
+    Install document rpm package: 
 
-    `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-master.sh ncn-m001`
+    `rpm -Uvh [PATH_TO_docs-csm-install-*.noarch.rpm]`
+
+    Run: 
+
+    `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --tarball-file [PATH_TO_CSM_TARBALL_FILE]`
     > NOTE: follow output of above script carefully. The script will pause for manual interaction
 
 4. For each master node in the cluster, run the following command to complete the kubernetes upgrade _(this will restart several pods on each master to their new docker containers)_:
