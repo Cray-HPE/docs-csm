@@ -2,9 +2,9 @@
 
 ### New Features and Functions for v1.5
 
-- Static Lags from the CDU switches to the CMMs on BOTH Dell and Mellanox.
-- Apollo server port config, requires a trunk port to the iLO.
-- BGP tftp static route removal.
+- Static Lags from the CDU switches to the CMMs (Aruba and Dell).
+- HPE Apollo server port config, requires a trunk port to the iLO.
+- BGP TFTP static route removal (Aruba).
 - BGP passive neighbors (Aruba and Mellanox)
 
 Some of these changes are applied as hotfixes and patches for 1.4, they may have already been applied.
@@ -34,7 +34,7 @@ Expected output
 
 #### BGP updates
 
-- (ARUBA ONLY) Remove the tftp static route entry on the switches that are BGP participating in BGP.
+- (ARUBA ONLY) Remove the TFTP static route entry on the switches that are BGP participating in BGP.
 
 ```
 sw-spine01# show ip route 10.92.100.60
@@ -52,7 +52,7 @@ Displaying ipv4 routes selected for forwarding
 sw-spine01(config)# no ip route 10.92.100.60/32 10.252.1.9
 ```
 
-- (ARUBA ONLY) re-run the bgp script if it's missing the tftp prefix-list and route-maps as shown in the example below.
+- (ARUBA ONLY) re-run the bgp script if it's missing the TFTP prefix-list and route-maps as shown in the example below.
 - These configuration changes also noted on the [BGP](../operations/update_bgp_neighbors.md) page.
 
 Example TFTP prefix-list and route-map from running config. 
