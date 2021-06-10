@@ -6,16 +6,13 @@ This document is intended to guide an administrator through the upgrade process 
 
 ### Terminology
 
-Throughout the guide the terms "stable" and "upgrade" are used in the context of NCNs. The "stable" NCN is the master
-node you will be running all of these commands from and therefore will not be affecting the power state of. Clearly
-then the "upgrade" node is the node you will be next upgrading.
+Throughout the guide the terms "stable" and "upgrade" are used in the context of the management nodes (NCNs). The
+"stable" NCN is the master node from which all of these commands will be run and therefore cannot have its power state
+affected.  Then the "upgrade" node is the node to next be upgraded.
 
-In this way when doing a rolling upgrade of the entire cluster at some point you will need to transfer the
-responsibility of the "stable" NCN to another master. However, you do not need to do this before you are ready to
+When doing a rolling upgrade of the entire cluster, at some point you will need to transfer the
+responsibility of the "stable" NCN to another master node. However, you do not need to do this before you are ready to
 upgrade that node.
-
-It is also possible to do this from a "remote" node (like the PIT during a normal install) however this is beyond the
-scope of this documentation.
 
 ### Terminal Output
 
@@ -106,7 +103,7 @@ For each storage node in the cluster, start by following the steps:
     `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-worker.sh ncn-w002` <==== ncn-w002, ncn-w003, ncn-w001
     > NOTE: follow output of above script carefully. The script will pause for manual interaction
 
-3. For master 001, Use m002 as stable ncn:
+3. For ncn-m001, use ncn-m002 as the stable NCN:
     
     #### Option 1 - Internet Connected Environment
     Install document rpm package:
@@ -133,7 +130,8 @@ For each storage node in the cluster, start by following the steps:
    ncn# kubeadm upgrade apply v1.19.9 -y
    ```
 
-#### Stage 4. Service Upgrades
+<a name="deploy-manifests"></a>
+#### Stage 4. CSM Service Upgrades
 
 Run `csm-service-upgrade.sh` to deploy upgraded CSM applications and services:
 
