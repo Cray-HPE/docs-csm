@@ -40,13 +40,23 @@ kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm'
 
 This check will also be conducted in the 'prerequisites.sh' script listed below and will fail if the system is not running CSM-0.9.3.
 
-Install documents: 
+#### Internet Connected Environment
+Install document rpm package:
 
 `rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm`
 
 Run: 
 
-`/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh [CSM_RELEASE] [ENDPOINT]` <== ENDPOINT is optional for internal use. it is pointing to arti by default
+`/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm_version [CSM_RELEASE] --endpoint [ENDPOINT]` <== ENDPOINT is optional for internal use. it is pointing to arti by default
+
+#### Air Gapped Environment
+Install document rpm package: 
+
+`rpm -Uvh [PATH_TO_docs-csm-install-*.noarch.rpm]`
+
+Run: 
+
+`/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm_version [CSM_RELEASE] --path [PATH_CSM_TARBALL_FILE]`
 
 Above script also runs the goss tests on the initial stable node (typically `ncn-m001`) where the latest version of CSM has been installed. Make sure the goss test pass before continue.
 
