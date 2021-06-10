@@ -51,6 +51,8 @@ This procedure requires administrative privileges.
 
 1.  Reset BGP to re-establish the sessions.
 
+    <a name="mellanox-ssh"></a>
+
     1.  SSH to each spine switch.
 
         For example:
@@ -138,6 +140,8 @@ This procedure requires administrative privileges.
 
 1.  Reset BGP to re-establish the sessions.
 
+    <a name="aruba-ssh"></a>
+
     1.  SSH to each spine switch.
 
         For example:
@@ -175,7 +179,7 @@ This procedure requires administrative privileges.
 
     Once all sessions are in an Established state, BGP reset is complete for the Aruba switches.
 
-    **Troubleshooting:** If some sessions remain Idle, re-run the Aruba reset steps to clear and re-check status. If some sessions still remain Idle, proceed to step [5](#step_kwt_qkv_r4b) to reapply the cray-metallb helm chart, along with the BGP reset to force the speaker pods to re-establish sessions with the switch.
+    **Troubleshooting:** If some sessions remain Idle, re-run the Aruba reset steps to clear and re-check status. If some sessions still remain Idle, proceed to the next step to reapply the cray-metallb helm chart, along with the BGP reset to force the speaker pods to re-establish sessions with the switch.
 
 #### Re-apply the cray-metalb Helm Chart
 
@@ -232,9 +236,9 @@ This procedure requires administrative privileges.
 
 1. Use the open SSH sessions to the switches to clear the BGP sessions based on the above Mellanox or Aruba procedures.
 
-    Refer to step [2.1 - 2.3](#step_zsn_mmv_r4b) for Mellanox.
+    Refer to substeps [1-3](#mellanox-ssh) for Mellanox.
 
-    Refer to step [4.1 and 4.2](#step_czz_kmv_r4b) for Aruba.
+    Refer to substeps [1-2](#aruba-ssh) for Aruba.
 
 1. Reapply the cray-metallb chart based on the CSM\_RELEASE.
 
@@ -258,8 +262,8 @@ This procedure requires administrative privileges.
 
 1. Use the open SSH sessions to the switches to check the status of the BGP sessions.
 
-    Refer to step [2.4](#substep_kqn_znn_t4b) for Mellanox.
+    Refer to substeps [1-3](#mellanox-ssh) for Mellanox.
 
-    Refer to step [4.3](#substep_zyx_24n_t4b) for Aruba.
+    Refer to substeps [1-2](#aruba-ssh) for Aruba.
 
 
