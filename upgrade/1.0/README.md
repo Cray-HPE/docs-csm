@@ -135,10 +135,10 @@ For each storage node in the cluster, start by following the steps:
 
 #### Stage 4. Service Upgrades
 
-Run `upgrade.sh` to deploy upgraded CSM applications and services:
+Run `csm-service-upgrade.sh` to deploy upgraded CSM applications and services:
 
 ```bash
-ncn-m002# ./${CSM_RELEASE}/upgrade.sh
+/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/csm-service-upgrade.sh
 ```
 
 ### Post-Upgrade Health Checks
