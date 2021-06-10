@@ -35,17 +35,13 @@ else
     echo -e "${GREEN}====> ${state_name} has beed completed ${NOCOLOR}"
 fi
 
-# TODO: automate this by a while loop
-echo -e "${YELLOW}"
-cat <<EOF
-NOTE: 
-    Ensure that the previously rebuilt worker node (if applicable) has started any etcd pods (if necessary). We don't want to begin rebuilding the next worker node until etcd pods have reached quorum. Run the following command, and pause on this step until all pods are in a Running state:
-
+# Ensure that the previously rebuilt worker node (if applicable) has started any etcd pods (if necessary). 
+# We don't want to begin rebuilding the next worker node until etcd pods have reached quorum. 
+while [[ "$(kubectl get po -A -l 'app=etcd' | grep -v "Running"| wc -l)" != "1" ]]; do 
+    echo -e "${YELLOW}Some etcd pods are not in running state, wait for 5s ...${NOCOLOR}"
     kubectl get po -A -l 'app=etcd' | grep -v "Running"
-
-EOF
-read -p "Read and act on above steps. Press any key to continue ..."
-echo -e "${NOCOLOR}"
+    sleep 5
+done
 
 # TODO: duplicate code
 state_name="DRAIN_NODE"
@@ -62,7 +58,7 @@ fi
 
 ${BASEDIR}/ncn-upgrade-k8s-nodes.sh $upgrade_ncn
 
-ssh $upgrade_ncn 'GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-worker.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate'
+ssh $upgrade_ncn -t 'GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-worker.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate'
 
 echo -e "${YELLOW}"
 cat <<EOF

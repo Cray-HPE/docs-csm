@@ -42,6 +42,8 @@ echo -e "${YELLOW}"
 cat <<EOF
 Watch the console for the node being rebuilt by exec'ing into the conman pod and connect to the console (press &. to exit).
 
+NOTE: if this is an install of ncn-m001, you won't be able to use conman to monitor booting progress
+
 kubectl -n services exec -it $(kubectl get po -n services | grep conman | awk '{print $1}') -- /bin/sh -c 'conman -j $UPGRADE_XNAME'
 EOF
 
