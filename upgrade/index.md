@@ -48,7 +48,6 @@ sections, but there is also a general troubleshooting topic.
    * Stage 2. Ceph image upgrade
    * Stage 3. Kubernetes Upgrade from 1.18.6 to 1.19.9
    * Stage 4. CSM Service Upgrades
-   * Post-Upgrade Health Checks
 
    See [Upgrade Management Nodes and CSM Services](1.0/README.md)
 <a name="validate_csm_health"></a>
