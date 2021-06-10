@@ -104,6 +104,7 @@ For each storage node in the cluster, start by following the steps:
     > NOTE: follow output of above script carefully. The script will pause for manual interaction
 
 3. For ncn-m001, use ncn-m002 as the stable NCN:
+    > NOTE: using vlan007/CAN IP to ssh to ncn-m002 for ncn-m001 install
     
     #### Option 1 - Internet Connected Environment
     Install document rpm package:
