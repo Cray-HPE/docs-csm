@@ -40,7 +40,7 @@ kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm'
 
 This check will also be conducted in the 'prerequisites.sh' script listed below and will fail if the system is not running CSM-0.9.3.
 
-#### Internet Connected Environment
+#### Option 1 - Internet Connected Environment
 Install document rpm package:
 
 `rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm`
@@ -49,7 +49,7 @@ Run:
 
 `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm_version [CSM_RELEASE] --endpoint [ENDPOINT]` <== ENDPOINT is optional for internal use. it is pointing to arti by default
 
-#### Air Gapped Environment
+#### Option 2 - Air Gapped Environment
 Install document rpm package: 
 
 `rpm -Uvh [PATH_TO_docs-csm-install-*.noarch.rpm]`
