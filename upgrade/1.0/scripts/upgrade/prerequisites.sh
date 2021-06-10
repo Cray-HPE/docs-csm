@@ -59,8 +59,7 @@ state_name="INSTALL_WAR_DOC"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
-    rpm --force -Uvh \
-        https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
+    rpm --force -Uvh ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/noarch/csm-install-workarounds-*.noarch.rpm
     record_state ${state_name} $(hostname)
     echo
 else
@@ -129,9 +128,11 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
     
+    rm -rf myenv
     echo "export CEPH_VERSION=${CEPH_VERSION}" >> myenv
     echo "export KUBERNETES_VERSION=${KUBERNETES_VERSION}" >> myenv
     echo "export CSM_RELEASE=${CSM_RELEASE}" >> myenv
+    echo "export DOC_RPM_NEXUS_URL=https://packages.local/repository/csm-sle-15sp2/$(ls ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/noarch/docs-csm-install-*.noarch.rpm | awk -F'/sle-15sp2/' '{print $2}')" >> myenv
     
     record_state ${state_name} $(hostname)
     echo
