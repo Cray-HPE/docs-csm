@@ -20,7 +20,7 @@ topics related to CSM software installation, upgrade, and operational use.  Noti
 previous sentence had a link to the index.md file for the Cray System Management Installation Guide. 
 If the link does not work, then a better Markdown viewer is needed.
 
-Within this REAMDME.md file, these topics are described.
+Within this README.md file, these topics are described.
 
    * [Offline Documentation](#offline-documentation)
    * [Review and Contribution](#review-and-contribution)
