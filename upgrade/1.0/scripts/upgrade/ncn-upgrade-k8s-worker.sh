@@ -56,7 +56,7 @@ else
     echo -e "${GREEN}====> ${state_name} has beed completed ${NOCOLOR}"
 fi
 
-${BASEDIR}/ncn-upgrade-k8s-nodes.sh $upgrade_ncn
+${BASEDIR}/ncn-upgrade-wipe-rebuild.sh $upgrade_ncn
 
 ssh $upgrade_ncn -t 'GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-worker.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate'
 
