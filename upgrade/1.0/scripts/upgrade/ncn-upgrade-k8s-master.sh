@@ -26,19 +26,6 @@ if [[ ${upgrade_ncn} == "ncn-m001" ]]; then
    fi
 fi
 
-echo -e "${YELLOW}"
-cat <<EOF
-Open a new terminal window to the stable NCN to watch the etcd cluster status, as well as the Kubernetes node listing. This will be useful to watch the progress of the node being upgraded, so leave it up and running
-
-watch 'etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt \
-     --cert=/etc/kubernetes/pki/etcd/ca.crt  \
-     --key=/etc/kubernetes/pki/etcd/ca.key \
-     --endpoints=localhost:2379 member list; echo -e ""; kubectl get nodes'
-EOF
-
-read -p "Press any key to continue after above 'watch' command is running ..."
-echo -e "${NOCOLOR}"
-
 first_master_hostname=`curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global | \
      jq -r '.[] | ."cloud-init"."meta-data"."first-master-hostname"'`
 if [[ ${first_master_hostname} == ${upgrade_ncn} ]]; then   
@@ -60,7 +47,8 @@ state_name="STOP_ETCD_SERVICE"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
-    ssh $upgrade_ncn 'systemctl daemon-reload || systemctl stop etcd.service'
+    ssh $upgrade_ncn 'systemctl daemon-reload'
+    ssh $upgrade_ncn 'systemctl stop etcd.service'
     record_state "${state_name}" ${upgrade_ncn}
     echo
 else

@@ -38,18 +38,6 @@ else
     echo -e "${GREEN}====> ${state_name} has beed completed ${NOCOLOR}"
 fi
 
-echo -e "${YELLOW}"
-cat <<EOF
-Watch the console for the node being rebuilt by exec'ing into the conman pod and connect to the console (press &. to exit).
-
-NOTE: if this is an install of ncn-m001, you won't be able to use conman to monitor booting progress
-
-kubectl -n services exec -it $(kubectl get po -n services | grep conman | awk '{print $1}') -- /bin/sh -c 'conman -j $UPGRADE_XNAME'
-EOF
-
-read -p "Press any key to continue after above 'watch' command is running ..."
-echo -e "${NOCOLOR}"
-
 state_name="WIPE_NODE_DISK"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
@@ -91,17 +79,92 @@ else
 fi
 
 upgrade_ncn_mgmt_host="$UPGRADE_NCN-mgmt"
+if [[ ${upgrade_ncn} == "ncn-m001" ]]; then
+    echo -e "${YELLOW}"
+    read -p "mgmt IP/Host of ncn-m001:" upgrade_ncn_mgmt_host
+    echo -e "${NOCOLOR}"
+else 
+    echo -e "${BLUE}mgmt IP/Host: ${upgrade_ncn_mgmt_host}${NOCOLOR}"
+fi
 
 state_name="SET_PXE_BOOT"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
-    if [[ ${upgrade_ncn} == "ncn-m001" ]]; then
-        echo -e "${YELLOW}"
-        read -p "mgmt IP/Host of ncn-m001:" upgrade_ncn_mgmt_host
-        echo -e "${NOCOLOR}"
-    fi
+
     ipmitool -I lanplus -U root -P initial0 -H $upgrade_ncn_mgmt_host chassis bootdev pxe options=efiboot
+
+    record_state "${state_name}" ${upgrade_ncn}
+    echo
+else
+    echo -e "${GREEN}====> ${state_name} has beed completed ${NOCOLOR}"
+fi
+
+state_name="POWER_CYCLE_NCN"
+state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
+
+    # power cycle node
+    ipmitool -I lanplus -U root -P initial0 -H $upgrade_ncn_mgmt_host chassis power cycle
+    sleep 20
+
+    record_state "${state_name}" ${upgrade_ncn}
+    echo
+else
+    echo -e "${GREEN}====> ${state_name} has beed completed ${NOCOLOR}"
+fi
+
+state_name="WAIT_FOR_NCN_BOOT"
+state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
+    # inline tips for watching boot logs
+    echo -e "${BLUE}"
+    cat <<EOF
+    Watch the console for the node being rebuilt by exec'ing into the conman pod and connect to the console (press &. to exit).
+
+    NOTE: if this is an install of ncn-m001, you won't be able to use conman to monitor booting progress
+
+    kubectl -n services exec -it $(kubectl get po -n services | grep conman | awk '{print $1}') -- /bin/sh -c 'conman -j $UPGRADE_XNAME'
+EOF
+    echo -e "${NOCOLOR}"
+    # wait for boot
+    printf "%s" "waiting for boot: $upgrade_ncn ..."
+    while ! ping -c 1 -n -w 1 $upgrade_ncn &> /dev/null
+    do
+        printf "%c" "."
+        sleep 20
+    done
+    printf "\n%s\n"  "$upgrade_ncn is booted and online"
+
+    record_state "${state_name}" ${upgrade_ncn}
+    echo
+else
+    echo -e "${GREEN}====> ${state_name} has beed completed ${NOCOLOR}"
+fi
+
+
+state_name="WAIT_FOR_CLOUD_INIT"
+state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
+    # tips for watching cloud-init logs
+    echo -e "${BLUE}"
+    cat <<EOF
+    Watch the cloud-init logs for the node being rebuilt on another terminal from stable ncn:
+
+    ssh $upgrade_ncn 'tail -f /var/log/cloud-init-output.log'
+EOF
+    echo -e "${NOCOLOR}"
+    # wait for cloud-init
+    printf "%s" "waiting for cloud-init: $upgrade_ncn  ..."
+    while ! ssh $upgrade_ncn 'cat /var/log/cloud-init-output.log  | grep "Cloud-init" | grep "finished"' &> /dev/null
+    do
+        printf "%c" "."
+        sleep 20
+    done
+    printf "\n%s\n"  "$upgrade_ncn finished cloud-init"
 
     record_state "${state_name}" ${upgrade_ncn}
     echo
@@ -113,19 +176,6 @@ state_name="SET_BSS_NO_WIPE"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
-    echo -e "${YELLOW}"
-    cat <<EOF
-    Welcome to PXE wonderland, you may have to power cycle sometimes before it boots.
-
-    power cycle:
-
-        ipmitool -I lanplus -U root -P initial0 -H $upgrade_ncn_mgmt_host chassis power cycle
-
-    NOTE: run above command in a different terminal on stable ncn to boot $UPGRADE_NCN
-EOF
-
-    read -p "Press any key to continue after a node is booted and cloud-init reached target ..."
-    echo -e "${NOCOLOR}"
 
     csi handoff bss-update-param --set metal.no-wipe=1 --limit $UPGRADE_XNAME
     
