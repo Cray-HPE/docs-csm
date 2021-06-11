@@ -25,6 +25,7 @@ White: output of logs are in white
 <font color="#9B870C"> Yellow </font>: Your action is required, read and react carefully with the output
 
 <font color="red"> Red </font>: Unexpeted errors are in red
+> NOTE: Colored output can be disabled by `export NO_COLOR=true` to current terminal session
 ### Prerequisites & Preflight Checks
 
 > NOTE: CSM-0.9.3 is the version of CSM required in order to upgrade to CSM-1.0.0 (available with Shasta v1.5).
