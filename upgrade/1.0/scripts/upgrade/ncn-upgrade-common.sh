@@ -20,3 +20,18 @@ export UPGRADE_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://a
      jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$UPGRADE_NCN\")) | .Xname")
 
 export UPGRADE_IP_NMN=$(dig +short $UPGRADE_NCN.nmn)
+
+function drain_node() {
+   upgrade_ncn=$1
+   state_name="DRAIN_NODE"
+   state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+   if [[ $state_recorded == "0" ]]; then
+      echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
+      /usr/share/doc/csm/upgrade/1.0/scripts/k8s/remove-k8s-node.sh $upgrade_ncn
+      
+      record_state "${state_name}" ${upgrade_ncn}
+      echo
+   else
+      echo -e "${GREEN}====> ${state_name} has beed completed ${NOCOLOR}"
+   fi
+}

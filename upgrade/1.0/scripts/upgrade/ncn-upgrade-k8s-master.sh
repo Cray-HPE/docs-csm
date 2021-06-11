@@ -94,18 +94,7 @@ else
     echo -e "${GREEN}====> ${state_name} has beed completed ${NOCOLOR}"
 fi
 
-state_name="DRAIN_NODE"
-state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
-if [[ $state_recorded == "0" ]]; then
-    echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
-    ssh $upgrade_ncn "rpm --force -Uvh ${DOC_RPM_NEXUS_URL}"
-    /usr/share/doc/csm/upgrade/1.0/scripts/k8s/remove-k8s-node.sh $UPGRADE_NCN
-    
-    record_state "${state_name}" ${upgrade_ncn}
-    echo
-else
-    echo -e "${GREEN}====> ${state_name} has beed completed ${NOCOLOR}"
-fi
+drain_node $upgrade_ncn
 
 ${BASEDIR}/ncn-upgrade-wipe-rebuild.sh $upgrade_ncn
 
