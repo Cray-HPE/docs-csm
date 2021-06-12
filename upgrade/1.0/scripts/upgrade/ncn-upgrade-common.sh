@@ -21,6 +21,22 @@ export UPGRADE_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://a
 
 export UPGRADE_IP_NMN=$(dig +short $UPGRADE_NCN.nmn)
 
+if [[ -z ${IPMI_USERNAME} ]]; then
+   IPMI_USERNAME=root
+fi
+
+if [[ -z ${IPMI_PASSWORD} ]]; then
+   IPMI_PASSWORD=initial0
+fi
+
+if [[ -z ${SW_USERNAME} ]]; then
+   SW_USERNAME=root
+fi
+
+if [[ -z ${SW_PASSWORD} ]]; then
+   SW_PASSWORD=initial0
+fi
+
 function drain_node() {
    upgrade_ncn=$1
    state_name="DRAIN_NODE"

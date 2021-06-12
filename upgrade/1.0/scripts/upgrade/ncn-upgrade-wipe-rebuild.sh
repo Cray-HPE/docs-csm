@@ -92,7 +92,7 @@ state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
 
-    ipmitool -I lanplus -U root -P initial0 -H $upgrade_ncn_mgmt_host chassis bootdev pxe options=efiboot
+    ipmitool -I lanplus -U ${IPMI_USERNAME} -P ${IPMI_PASSWORD} -H $upgrade_ncn_mgmt_host chassis bootdev pxe options=efiboot
 
     record_state "${state_name}" ${upgrade_ncn}
     echo
@@ -106,8 +106,10 @@ if [[ $state_recorded == "0" ]]; then
     echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
 
     # power cycle node
-    ipmitool -I lanplus -U root -P initial0 -H $upgrade_ncn_mgmt_host chassis power cycle
+    ipmitool -I lanplus -U ${IPMI_USERNAME} -P ${IPMI_PASSWORD} -E -H $upgrade_ncn_mgmt_host chassis power off
     sleep 20
+    ipmitool -I lanplus -U ${IPMI_USERNAME} -P ${IPMI_PASSWORD} -E -H $upgrade_ncn_mgmt_host chassis power status
+    ipmitool -I lanplus -U ${IPMI_USERNAME} -P ${IPMI_PASSWORD} -E -H $upgrade_ncn_mgmt_host chassis power on
 
     record_state "${state_name}" ${upgrade_ncn}
     echo
