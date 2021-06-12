@@ -22,19 +22,23 @@ export UPGRADE_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://a
 export UPGRADE_IP_NMN=$(dig +short $UPGRADE_NCN.nmn)
 
 if [[ -z ${IPMI_USERNAME} ]]; then
-   IPMI_USERNAME=root
+   export IPMI_USERNAME=root
+   echo "IPMI_USERNAME environment variable is not set. Use default value"
 fi
 
 if [[ -z ${IPMI_PASSWORD} ]]; then
-   IPMI_PASSWORD=initial0
+   export IPMI_PASSWORD=initial0
+   echo "IPMI_PASSWORD environment variable is not set. Use default value"
 fi
 
 if [[ -z ${SW_USERNAME} ]]; then
-   SW_USERNAME=root
+   export SW_USERNAME=root
+   echo "SW_USERNAME environment variable is not set. Use default value"
 fi
 
 if [[ -z ${SW_PASSWORD} ]]; then
-   SW_PASSWORD=initial0
+   export SW_PASSWORD="!nitial0"
+   echo "SW_PASSWORD environment variable is not set. Use default value"
 fi
 
 function drain_node() {
@@ -42,12 +46,12 @@ function drain_node() {
    state_name="DRAIN_NODE"
    state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
    if [[ $state_recorded == "0" ]]; then
-      echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
+      echo "====> ${state_name} ..."
       /usr/share/doc/csm/upgrade/1.0/scripts/k8s/remove-k8s-node.sh $upgrade_ncn
       
       record_state "${state_name}" ${upgrade_ncn}
       echo
    else
-      echo -e "${GREEN}====> ${state_name} has beed completed ${NOCOLOR}"
+      echo "====> ${state_name} has beed completed"
    fi
 }

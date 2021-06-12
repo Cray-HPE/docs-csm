@@ -13,19 +13,6 @@ affected.  Then the "upgrade" node is the node to next be upgraded.
 When doing a rolling upgrade of the entire cluster, at some point you will need to transfer the
 responsibility of the "stable" NCN to another master node. However, you do not need to do this before you are ready to
 upgrade that node.
-
-### Terminal Output
-
-White: output of logs are in white
-
-<font color="green"> Green </font>: output of upgrade states are in green
-
-<font color="blue"> Blue </font>: informational output
-
-<font color="#9B870C"> Yellow </font>: Your action is required, read and react carefully with the output
-
-<font color="red"> Red </font>: Unexpeted errors are in red
-> NOTE: Colored output can be disabled by `export NO_COLOR=true` to current terminal session
 ### Prerequisites & Preflight Checks
 
 > NOTE: CSM-0.9.3 is the version of CSM required in order to upgrade to CSM-1.0.0 (available with Shasta v1.5).

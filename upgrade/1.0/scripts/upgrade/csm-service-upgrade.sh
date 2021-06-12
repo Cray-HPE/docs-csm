@@ -12,38 +12,35 @@ trap 'err_report' ERR
 state_name="PRE_CSM_UPGRADE_RESIZE"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
-    echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
+    echo "====> ${state_name} ..."
     
     /usr/share/doc/csm/upgrade/1.0/scripts/postgres-operator/pre-service-upgrade.sh
 
     record_state ${state_name} $(hostname)
-    echo
 else
-    echo -e "${GREEN}====> ${state_name} has beed completed ${NOCOLOR}"
+    echo "====> ${state_name} has beed completed"
 fi
 
 state_name="CSM_SERVICE_UPGRADE"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
-    echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
+    echo "====> ${state_name} ..."
     
     ${CSM_RELEASE}/upgrade.sh
     
     record_state ${state_name} $(hostname)
-    echo
 else
-    echo -e "${GREEN}====> ${state_name} has beed completed ${NOCOLOR}"
+    echo "====> ${state_name} has beed completed"
 fi
 
 state_name="POST_CSM_UPGRADE_RESIZE"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
-    echo -e "${GREEN}====> ${state_name} ... ${NOCOLOR}"
+    echo "====> ${state_name} ..."
     
     /usr/share/doc/csm/upgrade/1.0/scripts/postgres-operator/post-service-upgrade.sh
     
     record_state ${state_name} $(hostname)
-    echo
 else
-    echo -e "${GREEN}====> ${state_name} has beed completed ${NOCOLOR}"
+    echo "====> ${state_name} has beed completed"
 fi
