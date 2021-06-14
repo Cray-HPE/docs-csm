@@ -283,6 +283,7 @@ The system management components are broken down into a series of microservices.
        *   [Troubleshoot Postgres Databases with the Patroni Tool](kubernetes/Troubleshoot_Postgres_Databases_with_the_Patroni_Tool.md)
        *   [View Postgres Information for System Databases](kubernetes/View_Postgres_Information_for_System_Databases.md)
    *   [Configure Kubernetes on Compute Nodes](kubernetes/Configure_Kubernetes_on_Compute_Nodes.md)
+   *   [Post-Install Customizations](kubernetes/Post_Install_Customizations.md)
    *   [Kubernetes Troubleshooting Information](kubernetes/Kubernetes_Troubleshooting_Information.md)
       *   [Kubernetes Log File Locations](kubernetes/Kubernetes_Log_File_Locations.md)
       *   [Troubleshoot Liveliness or Readiness Probe Failures](kubernetes/Troubleshoot_Liveliness_Readiness_Probe_Failures.md)

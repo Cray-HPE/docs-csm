@@ -1,62 +1,63 @@
-## Post Install Customizations
+## Post-Install Customizations
 
-Post install customizations may be needed as systems scale.  These customizations also need to persist across future installs or upgrades.  
+Post-install customizations may be needed as systems scale. These customizations also need to persist across future installs or upgrades. Not all resources can be customized post-install; common scenarios are documented in the following sections.
 
-Not all resources can be customized post install; common cases are documented below.
-
-The following will provide a guide for determining where issues may exist and how to adjust the resources as needed such that the change will persist.
+The following is a guide for determining where issues may exist and how to adjust the resources as needed to ensure the change will persist.
 
 ### Kubectl Events OOMKilled
 
 Check kubectl events to see if there are any recent out of memory events.
+
 ```
 ncn-w001# kubectl get event -A | grep OOM
 ```
 
-Use the grafana "Kubernetes/Compute Resources/Pod" Dashboard to view the memory utilization graphs over time for any pod that has been OOMKilled. 
+Use the Grafana "Kubernetes/Compute Resources/Pod" Dashboard to view the memory utilization graphs over time for any pod that has been OOMKilled. 
 
 ### Prometheus CPUThrottlingHigh Alerts
 
-Check prometheus for recent CPUThrottlingHigh Alerts.
+Check Prometheus for recent CPUThrottlingHigh Alerts.
 
-From prometheus (https://prometheus\.SYSTEM-NAME_DOMAIN-NAME/), select the **Alert** tab and scroll down to the alert for **CPUThrottlingHigh**.  
+From Prometheus (https://prometheus\.SYSTEM-NAME_DOMAIN-NAME/), select the **Alert** tab and scroll down to the alert for **CPUThrottlingHigh**.  
 
-Use the grafana "Kubernetes/Compute Resources/Pod" Dashboard to view the throttling graphs over time for any pod that is alerting.  
+Use the Grafana "Kubernetes/Compute Resources/Pod" Dashboard to view the throttling graphs over time for any pod that is alerting.  
 
 ### Grafana Kubernetes/Compute Resources/Pod Dashboard
 
-Use grafana to investigate and analyze CPU Throttling and/or Memory Usage.
+Use Grafana to investigate and analyze CPU Throttling and/or Memory Usage.
 
-From grafana (https://grafana.\.SYSTEM-NAME_DOMAIN-NAME/) and the Home Dashboard, select the "Kubernetes/Compute Resources/Pod" Dashboard.
-Select the datasource, namespace and pod based on the pod you wish to examine - for example:
+From Grafana (https://grafana.\.SYSTEM-NAME_DOMAIN-NAME/) and the Home Dashboard, select the "Kubernetes/Compute Resources/Pod" Dashboard.
+
+Select the datasource, namespace, and pod based on the pod being examined. For example:
 ```
 datasource: default
 namespace: sysmgmt-health
 pod: prometheus-cray-sysmgmt-health-promet-prometheus-0
 ```
 
-For CPU Throttling: 
+**For CPU Throttling: **
 
-Select the **CPU Throttling** drop down to see the CPU Throttling graph for the pod during the selected time (from the top right) and select the container (from the legends under the x axis).
+Select the **CPU Throttling** drop down to see the CPU Throttling graph for the pod during the selected time (from the top right), and select the container (from the legends under the x axis).
 
-The presence of CPU throttling doesn't always indicate a problem, but if a service is being slow or experiencing latency issues, reviewing the graph and adjusting the resources.requests.cpu and/or resources.limits.cpu can be beneficial.  If the pod is being throttled at or near 100% for any period of time, then adjustments are likely needed.  If the service's response time is critical, then adjusting the pod's resources to greatly reduce or eliminate any cpu throttling may be required.
+The presence of CPU throttling doesn't always indicate a problem, but if a service is being slow or experiencing latency issues, reviewing the graph and adjusting the resources.requests.cpu and/or resources.limits.cpu can be beneficial. If the pod is being throttled at or near 100% for any period of time, then adjustments are likely needed. If the service's response time is critical, then adjusting the pod's resources to greatly reduce or eliminate any cpu throttling may be required.
 
-For Memory Usage:
+**For Memory Usage:**
 
-Select the **Memory Usage** drop down to see the Memory Usage graph for the pod during the selected time (from the top right) and select the container (from the legends under the x axis).
+Select the **Memory Usage** drop down to see the Memory Usage graph for the pod during the selected time (from the top right), and select the container (from the legends under the x axis).
 
 From the Memory Usage graph for the container, determine the steady state memory usage.  This is where the resources.requests.memory should be minimally set.  But more importantly, determine the spike usage for the container and set the resources.limits.memory based on the spike values with some additional headroom.
 
-### Common Customization Cases
-#### Prometheus Pod is OOMKilled or CPU Throttled
-Update resources associated with prometheus in the sysmgmt-health namespace.
+### Common Customization Scenarios
 
-1. Get current cached customizations.
+#### Prometheus Pod is OOMKilled or CPU Throttled
+Update resources associated with Prometheus in the sysmgmt-health namespace.
+
+1. Get the current cached customizations.
 ```
 ncn-w001# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
 ```
 
-2. Get current cached platform manifest.
+2. Get the current cached platform manifest.
 ```
 ncn-w001# kubectl get cm -n loftsman loftsman-platform -o jsonpath='{.data.manifest\.yaml}'  > platform.yaml
 ```
@@ -81,7 +82,7 @@ limits:
   memory: 30Gi
 ```
 
-5. Edit the platform.yaml to only include the cray-sysmgmt-health chart and all it's current data.  (The resources specified above will be updated in the next step and the version may differ as this is an example).
+5. Edit the platform.yaml to only include the cray-sysmgmt-health chart and all its current data. (The resources specified above will be updated in the next step and the version may differ as this is an example).
 ```
 apiVersion: manifests/v1beta1
 metadata:
@@ -114,7 +115,7 @@ limits:
   memory: 30Gi
 ```
 
-8. Redeploy the same chart version but with the desired resource settings.
+8. Re-deploy the same chart version but with the desired resource settings.
 ```
 ncn-w001# loftsman ship --charts-repo http://helmrepo.dev.cray.com:8080 --manifest-path $PWD/manifest.yaml
 ```
@@ -131,26 +132,26 @@ ncn-w001#  kubectl delete pod prometheus-cray-sysmgmt-health-promet-prometheus-0
 ncn-w001#  kubectl get pod prometheus-cray-sysmgmt-health-promet-prometheus-0 -n sysmgmt-health -o json | jq -r '.spec.containers[] | select(.name == "prometheus").resources'
 ```
 
-10. Store the modified customizations.yaml in the site-init repo at your customer managed location.  **This step is critical.**  If not done, these changes will not persist in future installs or updates.
+10. Store the modified customizations.yaml in the site-init repository in the customer-managed location. **This step is critical.**  If not done, these changes will not persist in future installs or updates.
 
 
 #### Postgres Pods are OOMKilled or CPU Throttled
 
 Update resources associated with spire-postgres in the spire namespace.
 
-A similar flow can be used to update the resources for cray-sls-postgres, cray-smd-postgres, or gitea-vcs-postgres.  See the bottom of this section for more details.
+A similar flow can be used to update the resources for cray-sls-postgres, cray-smd-postgres, or gitea-vcs-postgres. Refer to the note at the end of this section for more details.
 
-1. Get current cached customizations.
+1. Get the current cached customizations.
 ```
 ncn-w001# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
 ```
 
-2. Get current cached sysmgmt manifest.
+2. Get the current cached sysmgmt manifest.
 ```
 ncn-w001# kubectl get cm -n loftsman loftsman-sysmgmt -o jsonpath='{.data.manifest\.yaml}'  > sysmgmt.yaml
 ```
 
-3.  Edit the customizations as desired - add or update spec.kubernetes.services.spire.cray-service.sqlCluster.resources.
+3.  Edit the customizations as desired by adding or updating spec.kubernetes.services.spire.cray-service.sqlCluster.resources.
 ```
 ncn-w001# yq write -i customizations.yaml 'spec.kubernetes.services.spire.cray-service.sqlCluster.resources.requests.cpu' --style=double '4'
 ncn-w001# yq write -i customizations.yaml 'spec.kubernetes.services.spire.cray-service.sqlCluster.resources.requests.memory' '4Gi'
@@ -170,7 +171,7 @@ limits:
   memory: 8Gi
 ```
 
-5. Edit the sysmgmt.yaml to only include the spire chart and all it's current data.  (The resources specified above will be updated in the next step and the version may differ as this is an example).
+5. Edit the sysmgmt.yaml to only include the spire chart and all its current data. (The resources specified above will be updated in the next step and the version may differ as this is an example).
 ```
 apiVersion: manifests/v1beta1
 metadata:
@@ -225,10 +226,9 @@ ncn-w001# kubectl get pod spire-postgres-0 -n spire -o json | jq -r '.spec.conta
 }
 ```
 
-10. Store the modified customizations.yaml in the site-init repo at your customer managed location.  **This step is critical.**  If not done, these changes will not persist in future installs or updates.
+10. Store the modified customizations.yaml in the site-init repository in the customer-managed location. **This step is critical.** If not done, these changes will not persist in future installs or updates.
 
-
-**NOTE:** If cray-sls-postgres, cray-smd-postgres, or gitea-vcs-postgres resources need to be adjusted, the same procedure as above can be used with the following changes
+**IMPORTANT:** If cray-sls-postgres, cray-smd-postgres, or gitea-vcs-postgres resources need to be adjusted, the same procedure as above can be used with the following changes:
 
 cray-sls-postgres:
 
@@ -248,8 +248,8 @@ gitea-vcs-postgres:
 
 ### References
 
-To make changes that will not persist installs or upgrades see the references below.  These procedures will also help to verify and eliminate any issues in the short term.  As other resource customizations are needed, contact support to request the feature.
+To make changes that will not persist installs or upgrades see the following references. These procedures will also help to verify and eliminate any issues in the short term. As other resource customizations are needed, contact support to request the feature.
 
-Reference [Determine_if_Pods_are_Hitting_Resource_Limits.md](Determine_if_Pods_are_Hitting_Resource_Limits.md)
-Reference [Increase Pod Resource Limits](Increase_Pod_Resource_Limits.md)
+* Reference [Determine_if_Pods_are_Hitting_Resource_Limits.md](Determine_if_Pods_are_Hitting_Resource_Limits.md)
+* Reference [Increase Pod Resource Limits](Increase_Pod_Resource_Limits.md)
 
