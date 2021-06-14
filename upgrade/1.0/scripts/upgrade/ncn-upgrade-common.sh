@@ -31,15 +31,15 @@ if [[ -z ${IPMI_PASSWORD} ]]; then
    echo "IPMI_PASSWORD environment variable is not set. Use default value"
 fi
 
-# if [[ -z ${SW_USERNAME} ]]; then
-#    export SW_USERNAME=root
-#    echo "SW_USERNAME environment variable is not set. Use default value"
-# fi
+if [[ -z ${SW_USERNAME} ]]; then
+   export SW_USERNAME=root
+   echo "SW_USERNAME environment variable is not set. Use default value"
+fi
 
-# if [[ -z ${SW_PASSWORD} ]]; then
-#    export SW_PASSWORD="!nitial0"
-#    echo "SW_PASSWORD environment variable is not set. Use default value"
-# fi
+if [[ -z ${SW_PASSWORD} ]]; then
+   export SW_PASSWORD="!nitial0"
+   echo "SW_PASSWORD environment variable is not set. Use default value"
+fi
 
 function drain_node() {
    upgrade_ncn=$1
