@@ -14,18 +14,14 @@ When doing a rolling upgrade of the entire cluster, at some point you will need 
 responsibility of the "stable" NCN to another master node. However, you do not need to do this before you are ready to
 upgrade that node.
 
-### Terminal Output
+### Credentials & Environment Variables
+> Internal use: Default credentials are set for internal systems. We don't have to speicify below environment variables unless the system has different ones set.
 
-White: output of logs are in white
-
-<font color="green"> Green </font>: output of upgrade states are in green
-
-<font color="blue"> Blue </font>: informational output
-
-<font color="#9B870C"> Yellow </font>: Your action is required, read and react carefully with the output
-
-<font color="red"> Red </font>: Unexpeted errors are in red
-### Prerequisites & Preflight Checks
+- IPMI_USERNAME: username of ipmitool
+- IPMI_PASSWORD: password of ipmitool
+- SW_USERNAME:   username of switches
+- SW_PASSWORD:   password of switches
+### Stage 0 - Prerequisites & Preflight Checks
 
 > NOTE: CSM-0.9.3 is the version of CSM required in order to upgrade to CSM-1.0.0 (available with Shasta v1.5).
 
@@ -60,13 +56,14 @@ Above script also runs the goss tests on the initial stable node (typically `ncn
 ### Upgrade Stages
 
 #### Stage 1.  Ceph upgrade from Nautilus (14.2.x) to Octopus (15.2.x)
-
+#### Stage 1.1
 Run: 
 
 `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-ceph-initial.sh ncn-s001` <== run the script for all storage nodes
 
 > NOTE: follow output of above script carefully. The script will pause for manual interaction
 
+#### Stage 1.2
 On ncn-s001 execute the ceph-upgrade.sh script:
 ```
 cd /usr/share/doc/csm/upgrade/1.0/scripts/ceph
@@ -93,17 +90,18 @@ For each storage node in the cluster, start by following the steps:
 
 #### Stage 3. Kubernetes Upgrade from 1.18.6 to 1.19.9
 
-1. For each master node in the cluster (exclude m001), again follow the steps:
+#### Stage 3.1. For each master node in the cluster (exclude m001), again follow the steps:
 
     `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-master.sh ncn-m002` <==== ncn-m002, ncn-m003
     > NOTE: follow output of above script carefully. The script will pause for manual interaction
 
-2. For each worker node in the cluster, also follow the steps:
+#### Stage 3.2. For each worker node in the cluster, also follow the steps:
 
     `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-worker.sh ncn-w002` <==== ncn-w002, ncn-w003, ncn-w001
     > NOTE: follow output of above script carefully. The script will pause for manual interaction
 
-3. For ncn-m001, use ncn-m002 as the stable NCN:
+#### Stage 3.3. For ncn-m001, use ncn-m002 as the stable NCN:
+    > NOTE: using vlan007/CAN IP to ssh to ncn-m002 for ncn-m001 install
     
     #### Option 1 - Internet Connected Environment
     Install document rpm package:
@@ -124,7 +122,7 @@ For each storage node in the cluster, start by following the steps:
     `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --tarball-file [PATH_TO_CSM_TARBALL_FILE]`
     > NOTE: follow output of above script carefully. The script will pause for manual interaction
 
-4. For each master node in the cluster, run the following command to complete the kubernetes upgrade _(this will restart several pods on each master to their new docker containers)_:
+#### Stage 3.4. For each master node in the cluster, run the following command to complete the kubernetes upgrade _(this will restart several pods on each master to their new docker containers)_:
 
    ```bash
    ncn# kubeadm upgrade apply v1.19.9 -y
