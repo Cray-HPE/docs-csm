@@ -341,6 +341,7 @@ sw-agg-001 & sw-agg-002 (config)#
     spanning-tree bpdu-guard
     spanning-tree port-type admin-edge
     exit
+```
 
 Aruba UAN CAN Configuration
 
