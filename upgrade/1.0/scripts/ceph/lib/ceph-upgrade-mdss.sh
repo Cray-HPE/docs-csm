@@ -1,6 +1,7 @@
-# Begin OSD conversion.  Run on each node that has OSDS
-#
+#!/bin/bash
 # Copyright 2021 Hewlett Packard Enterprise Development LP
+
+# Begin OSD conversion.  Run on each node that has OSDS
 #
 
 . ./lib/ceph-health.sh
@@ -26,7 +27,7 @@ function upgrade_mds () {
 
   date=$(date +%m%e.%H%M)
   echo "Backing up the Ceph MDS Journal"
-  cephfs-journal-tool --rank cephfs:all  journal export /root/backup.$date.bin
+  cephfs-journal-tool --rank cephfs:all  journal export /root/backup."$date".bin
 
   export standby_mdss=$(ceph fs dump -f json-pretty|jq -r '.standbys|map(.name)|join(" ")')
   export active_mds=$(ceph fs status -f json-pretty|jq -r '.mdsmap[]|select(.state=="active")|.name')
@@ -46,9 +47,9 @@ function upgrade_mds () {
   for host in $mds_cluster
   do
    echo "Stopping mds service on $host"
-   ssh $host "systemctl stop ceph-mds.target"
+   ssh "$host" "systemctl stop ceph-mds.target"
    echo "Cleaning up /var/lib/ceph/mds/ceph-* on $host"
-   ssh $host "rm -rf /var/lib/ceph/mds/ceph-*"
+   ssh "$host" "rm -rf /var/lib/ceph/mds/ceph-*"
   done
 
   ceph fs set cephfs standby_count_wanted 2

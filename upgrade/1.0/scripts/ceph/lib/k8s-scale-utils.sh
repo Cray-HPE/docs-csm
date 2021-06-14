@@ -1,7 +1,7 @@
-# Scale down cephfs clients to prevent mds corruption issues
-#
+#!/bin/bash
 # Copyright 2021 Hewlett Packard Enterprise Development LP
-#
+
+# Scale down cephfs clients to prevent mds corruption issues
 
 cephfs_replica_counts_file="/etc/cray/ceph/cephfs_replica_counts"
 
@@ -44,7 +44,7 @@ function scale_down_cephfs_clients () {
         fi
         echo "${ns}_${deployment} $num_replicas" >> $cephfs_replica_counts_file
         echo "Ensuring $deployment deployment in namespace $ns is scaled from $num_replicas to zero"
-        kubectl scale deployment -n $ns $deployment --replicas=0
+        kubectl scale deployment -n "$ns" "$deployment" --replicas=0
       fi
     done
   done
