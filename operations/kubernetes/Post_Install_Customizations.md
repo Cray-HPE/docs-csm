@@ -35,7 +35,7 @@ namespace: sysmgmt-health
 pod: prometheus-cray-sysmgmt-health-promet-prometheus-0
 ```
 
-**For CPU Throttling: **
+**For CPU Throttling:**
 
 Select the **CPU Throttling** drop down to see the CPU Throttling graph for the pod during the selected time (from the top right), and select the container (from the legends under the x axis).
 
@@ -250,6 +250,6 @@ gitea-vcs-postgres:
 
 To make changes that will not persist installs or upgrades see the following references. These procedures will also help to verify and eliminate any issues in the short term. As other resource customizations are needed, contact support to request the feature.
 
-* Reference [Determine_if_Pods_are_Hitting_Resource_Limits.md](Determine_if_Pods_are_Hitting_Resource_Limits.md)
+* Reference [Determine if Pods are Hitting Resource Limits](Determine_if_Pods_are_Hitting_Resource_Limits.md)
 * Reference [Increase Pod Resource Limits](Increase_Pod_Resource_Limits.md)
 
