@@ -1,6 +1,6 @@
 ## Manage HMS Locks
 
-This section describes how to check the status of a lock, disable locking/reservations, and repair locking/reservations. The disable and repair operations only affect the ability to make reservations on hardware devices.
+This section describes how to check the status of a lock, disable reservations, and repair reservations. The disable and repair operations only affect the ability to make reservations on hardware devices.
 
 Some of the common scenarios an admin might encounter when working with the Hardware State Manager (HSM) Locking API are also described.
 
@@ -25,7 +25,7 @@ ReservationDisabled = false
 ```
 
 
-### Disable Reservations and Locking
+### Disable Reservations
 
 Disabling a lock prevents a service from being able to make a reservation on it, and it releases/ends any current reservations. Even though SMD removes the reservation when disabling a lock, it does not mean that the Firmware Action Service (FAS) is aware that it has lost the reservation. 
 
@@ -58,7 +58,7 @@ Reserved = false
 ReservationDisabled = true
 ```
 
-### Repair Reservations and Locking
+### Repair Reservations
 
 Locks must be manually repaired after disabling a component or performing a manual EPO. This prevents the system from automatically re-issuing reservations or giving out lock requests.
 
