@@ -128,6 +128,57 @@ else
     echo "====> ${state_name} has beed completed"
 fi
 
+state_name="UPDATE_BSS_CLOUD_INIT_RECORDS"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" ]]; then
+    echo "${state_name} ..."
+
+    # get bss cloud-init data with host_records
+    curl -k -H "Authorization: Bearer $TOKEN" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global|jq .[] > cloud-init-global.json
+
+    # get ip of api-gw in nmn
+    ip=$(dig api-gw-service-nmn.local +short)
+
+    # get entry number to add record to
+    entry_number=$(jq '."cloud-init"."meta-data".host_records|length' cloud-init-global.json )
+
+    # check for record already exists and create the script to be idempotent
+    for ((i=0;i<$entry_number; i++)); do
+        record=$(jq '."cloud-init"."meta-data".host_records['$i']' cloud-init-global.json)
+        if [[ $record =~ "packages.local" ]] || [[ $record =~ "registry.local" ]]; then
+                echo "packages.local and registry.local already in BSS cloud-init host_records"
+                exit 0
+        fi
+    done
+
+    # create the updated json
+    jq '."cloud-init"."meta-data".host_records['$entry_number']|= . + {"aliases": ["packages.local", "registry.local"],"ip": "'$ip'"}' cloud-init-global.json  > cloud-init-global_update.json
+
+    # post the update json to bss
+    curl -s -k -H "Authorization: Bearer ${TOKEN}" --header "Content-Type: application/json" \
+	    --request PUT \
+	    --data @cloud-init-global_update.json \
+	    https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters
+
+    record_state ${state_name} $(hostname)
+    echo
+else
+    echo "${state_name} has beed completed"
+fi
+
+state_name="UPDATE_CRAY_DHCP_KEA_TRAFFIC_POLICY"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" ]]; then
+    echo "${state_name} ..."
+    kubectl -n services patch service cray-dhcp-kea-tcp-hmn --type merge -p '{"spec":{"externalTrafficPolicy":"Local"}}'
+    kubectl -n services patch service cray-dhcp-kea-tcp-nmn --type merge -p '{"spec":{"externalTrafficPolicy":"Local"}}'
+    kubectl -n services patch service cray-dhcp-kea-udp-nmn --type merge -p '{"spec":{"externalTrafficPolicy":"Local"}}'
+    kubectl -n services patch service cray-dhcp-kea-udp-hmn --type merge -p '{"spec":{"externalTrafficPolicy":"Local"}}'
+    record_state ${state_name} $(hostname)
+    echo
+else
+    echo "${state_name} has beed completed"
+fi
 
 state_name="UPLOAD_NEW_NCN_IMAGE"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
@@ -155,13 +206,13 @@ state_name="EXPORT_GLOBAL_ENV"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    
+
     rm -rf myenv
     echo "export CEPH_VERSION=${CEPH_VERSION}" >> myenv
     echo "export KUBERNETES_VERSION=${KUBERNETES_VERSION}" >> myenv
     echo "export CSM_RELEASE=${CSM_RELEASE}" >> myenv
     echo "export DOC_RPM_NEXUS_URL=https://packages.local/repository/csm-sle-15sp2/$(ls ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/noarch/docs-csm-install-*.noarch.rpm | awk -F'/sle-15sp2/' '{print $2}')" >> myenv
-    
+
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has beed completed"
@@ -196,7 +247,7 @@ if [[ $state_recorded == "0" ]]; then
 
     rpm --force -Uvh $(find $CSM_RELEASE -name \*csm-testing\* | sort | tail -1)
     goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-preflight-tests.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
-    
+
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has beed completed"

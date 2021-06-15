@@ -34,11 +34,21 @@ fi
 
 # Ensure that the previously rebuilt worker node (if applicable) has started any etcd pods (if necessary). 
 # We don't want to begin rebuilding the next worker node until etcd pods have reached quorum. 
-while [[ "$(kubectl get po -A -l 'app=etcd' | grep -v "Running"| wc -l)" != "1" ]]; do 
-    echo "Some etcd pods are not in running state, wait for 5s ..."
-    kubectl get po -A -l 'app=etcd' | grep -v "Running"
-    sleep 5
-done
+state_name="ENSURE_ETCD_PODS_RUNNING"
+state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    
+    while [[ "$(kubectl get po -A -l 'app=etcd' | grep -v "Running"| wc -l)" != "1" ]]; do 
+        echo "Some etcd pods are not in running state, wait for 5s ..."
+        kubectl get po -A -l 'app=etcd' | grep -v "Running"
+        sleep 5
+    done
+
+    record_state "${state_name}" ${upgrade_ncn}
+else
+    echo "====> ${state_name} has beed completed"
+fi
 
 drain_node $upgrade_ncn
 
