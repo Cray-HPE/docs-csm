@@ -92,18 +92,20 @@ For each storage node in the cluster, start by following the steps:
 
 #### Stage 3.1. For each master node in the cluster (exclude m001), again follow the steps:
 
-    `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-master.sh ncn-m002` <==== ncn-m002, ncn-m003
-    > NOTE: follow output of above script carefully. The script will pause for manual interaction
+`/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-master.sh ncn-m002` <==== ncn-m002, ncn-m003
+
+> NOTE: follow output of above script carefully. The script will pause for manual interaction
 
 #### Stage 3.2. For each worker node in the cluster, also follow the steps:
 
-    `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-worker.sh ncn-w002` <==== ncn-w002, ncn-w003, ncn-w001
-    > NOTE: follow output of above script carefully. The script will pause for manual interaction
+`/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-worker.sh ncn-w002` <==== ncn-w002, ncn-w003, ncn-w001
+    
+> NOTE: follow output of above script carefully. The script will pause for manual interaction
 
 #### Stage 3.3. For ncn-m001, use ncn-m002 as the stable NCN:
-    > NOTE: using vlan007/CAN IP to ssh to ncn-m002 for ncn-m001 install
+> NOTE: using vlan007/CAN IP to ssh to ncn-m002 for ncn-m001 install
     
-    #### Option 1 - Internet Connected Environment
+#### Option 1 - Internet Connected Environment
     Install document rpm package:
 
     `rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm`
@@ -111,8 +113,7 @@ For each storage node in the cluster, start by following the steps:
     Run: 
 
     `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --endpoint [ENDPOINT]` <== ENDPOINT is optional for internal use. it is pointing to internal arti by default
-
-    #### Option 2 - Air Gapped Environment
+#### Option 2 - Air Gapped Environment
     Install document rpm package: 
 
     `rpm -Uvh [PATH_TO_docs-csm-install-*.noarch.rpm]`
