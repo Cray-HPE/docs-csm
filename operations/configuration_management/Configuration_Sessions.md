@@ -20,7 +20,7 @@ CFS provides several filters for use when listing sessions or using the bulk del
 * `--succeeded` - If the session has not yet completed, this will be set to `none`. Otherwise, this
 will be set to `true`, `false`, or `unknown` in the event that CFS was unable to find the Kubernetes
 job associated with the session.
-* `--min-age`/`--max-age` - Return only sessions that fall within the given age. For example,
+* `--min-age`/`--max-age` - Returns only the sessions that fall within the given age. For example,
 `--max-age` could be used to list only the recent sessions, or `--min-age` could be used to find old sessions
 for cleanup. Age is given in the format "1d" for days, or "6h" for hours.
 * `--tags` - Sessions can be created with searchable tags. By default, this includes the
@@ -28,7 +28,6 @@ for cleanup. Age is given in the format "1d" for days, or "6h" for hours.
 
     ```bash
     ncn-m001# cray cfs sessions list --tags bos_session=BOS_SESSION_NAME
-    === Configuration Management with CFS Batcher
     ```
 
 ### Configuration Session Workflow
