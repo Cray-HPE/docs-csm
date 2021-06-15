@@ -127,19 +127,25 @@ TIPS:
     kubectl -n services exec -it $(kubectl get po -n services | grep conman | awk '{print $1}') -- /bin/sh -c 'conman -j $UPGRADE_XNAME'
 EOF
     # wait for boot
-    printf "%s" "waiting for boot: $upgrade_ncn ..."
+    counter=0
+    printf "%s" "waiting for boot: $upgrade_ncn  ..."
     while ! ping -c 1 -n -w 1 $upgrade_ncn &> /dev/null
     do
         printf "%c" "."
+        counter=$((counter+1))
+        if [ $counter -gt 30 ]; then
+            counter=0
+            ipmitool -I lanplus -U ${IPMI_USERNAME} -P ${IPMI_PASSWORD} -E -H $upgrade_ncn_mgmt_host chassis power cycle
+            echo "Boot timeout, power cycle again"
+        fi
         sleep 20
     done
-    printf "\n%s\n"  "$upgrade_ncn is booted and online"
+    printf "\n%s\n" "$upgrade_ncn is booted and online"
 
     record_state "${state_name}" ${upgrade_ncn}
 else
     echo "====> ${state_name} has beed completed"
 fi
-
 
 state_name="WAIT_FOR_CLOUD_INIT"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
@@ -152,9 +158,12 @@ TIPS:
 
     ssh $upgrade_ncn 'tail -f /var/log/cloud-init-output.log'
 EOF
+    sleep 60
     # wait for cloud-init
+    ssh-keygen -R $upgrade_ncn -f /root/.ssh/known_hosts || true
+    ssh-keyscan -H $upgrade_ncn >> ~/.ssh/known_hosts || true
     printf "%s" "waiting for cloud-init: $upgrade_ncn  ..."
-    while ! ssh $upgrade_ncn 'cat /var/log/cloud-init-output.log  | grep "Cloud-init" | grep "finished"' &> /dev/null
+    while ! ssh $upgrade_ncn 'cat /var/log/messages  | grep "Cloud-init" | grep "finished"' &> /dev/null
     do
         printf "%c" "."
         sleep 20
