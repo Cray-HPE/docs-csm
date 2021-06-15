@@ -96,4 +96,39 @@ export CEPH_VERSION=x.y.z
 ```
 Be sure to perform this action so subsequent steps are successful.
 
+# Update cray-dhcp-kea externalTrafficPolicy
+```text
+You should run the following commands to update externalTrafficPolicy for cray-dhcp-kea:
+
+kubectl -n services patch service cray-dhcp-kea-tcp-hmn --type merge -p '{"spec":{"externalTrafficPolicy":"Local"}}'
+kubectl -n services patch service cray-dhcp-kea-tcp-nmn --type merge -p '{"spec":{"externalTrafficPolicy":"Local"}}'
+kubectl -n services patch service cray-dhcp-kea-udp-nmn --type merge -p '{"spec":{"externalTrafficPolicy":"Local"}}'
+kubectl -n services patch service cray-dhcp-kea-udp-hmn --type merge -p '{"spec":{"externalTrafficPolicy":"Local"}}'
+```
+
+# Add registry.local and packages.local to BSS cloud-init host_records
+```text
+You should run the following commands to update BSS cloud-init data:
+
+# create token
+export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+
+# get bss cloud-init data with host_records
+curl -s -k -H "Authorization: Bearer $TOKEN" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global|jq .[]> cloud-init-global.json
+
+# get ip of api-gw in nmn
+ip=$(dig api-gw-service-nmn.local +short)
+
+# get entry number to add record to
+entry_number=$(jq '."cloud-init"."meta-data".host_records|length' cloud-init-global.txt )
+
+# create the updated json
+jq '."cloud-init"."meta-data".host_records['$entry_number']|= . + {"aliases": ["packages.local", "registry.local"],"ip": "'$ip'"}' cloud-init-global.json  > cloud-init-global_update.json
+
+# post the update json to bss
+curl -s -k -H "Authorization: Bearer ${TOKEN}" --header "Content-Type: application/json" \
+	--request PUT \
+	--data @cloud-init-global_update.json \
+	https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters
+```
 [Back to Main Page](../../README.md)
