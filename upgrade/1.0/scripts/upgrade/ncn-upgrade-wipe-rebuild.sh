@@ -147,8 +147,6 @@ else
     echo "====> ${state_name} has beed completed"
 fi
 
-sleep 60
-
 state_name="WAIT_FOR_CLOUD_INIT"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
@@ -160,6 +158,7 @@ TIPS:
 
     ssh $upgrade_ncn 'tail -f /var/log/cloud-init-output.log'
 EOF
+    sleep 60
     # wait for cloud-init
     ssh-keygen -R $upgrade_ncn -f /root/.ssh/known_hosts || true
     ssh-keyscan -H $upgrade_ncn >> ~/.ssh/known_hosts || true
