@@ -123,6 +123,10 @@ Run:
 `/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --tarball-file [PATH_TO_CSM_TARBALL_FILE]`
 > NOTE: follow output of above script carefully. The script will pause for manual interaction
 
+#### Upgrade ncn-m001
+
+`/usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-master.sh ncn-m001`
+
 #### Stage 3.4. For each master node in the cluster, run the following command to complete the kubernetes upgrade _(this will restart several pods on each master to their new docker containers)_:
 
    ```bash
