@@ -1,37 +1,27 @@
 
 
-# Power On and Boot Compute and User Access Nodes
+## Power On and Boot Compute and User Access Nodes
 
-Power on and boot compute and user access nodes using Boot Orchestration Service \(BOS\).
-
-All compute cabinet PDUs, servers, and switches must be powered on.
-
-An authentication token is required to access the API gateway and to use the sat command. See the *System Security and Authentication* and *SAT Authentication* sections in the *HPE Cray EX System Administration Guide S-8001* for more information.
+Use Boot Orchestration Service \(BOS\) and choose the appropriate session template to power on and boot compute and UANs.
 
 This procedure boots all compute nodes and user access nodes \(UANs\) in the context of a full system power-up.
 
--   **LEVEL**
+### Prerequisites
 
-    **Level 1 HaaS**
+* All compute cabinet PDUs, servers, and switches must be powered on.
+* An authentication token is required to access the API gateway and to use the `sat` command. See the [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md) and "SAT Authentication" in the SAT repository for more information.
 
--   **ROLE**
-
-    System administrator
-
--   **OBJECTIVE**
-
-    Use Boot Orchestration Service \(BOS\) and choose the appropriate session template to power on and boot compute and UANs.
-
+### Procedure
 
 1.  Obtain the authorization key.
 
-    See *System Security and Authentication*, *Authenticate an Account with the Command Line*, *SAT Authentication* in *HPE Cray EX System Administration Guide S-8001* for more information.
+    See [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md), [Authenticate an Account with the Command Line](../security_and_authentication/Authenticate_an_Account_with_the_Command_Line.md), and "SAT Authentication" in the SAT repository for more information.
 
 2.  List detailed information about the available boot orchestration service \(BOS\) session template names.
 
     Identify the BOS session template names such as `"cos-2.0.x"`, `slurm`, `uan-slurm`, and choose the appropriate compute and UAN node templates for the power on and boot.
 
-    ```screen
+    ```bash
     ncn-m001# cray bos v1 sessiontemplate list
     [[results]]
     name = "cos-2.0.x"
@@ -47,7 +37,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 
 3.  To display more information about a session template, for example `cos-2.0.0`, use the `describe` option.
 
-    ```screen
+    ```bash
     ncn-m001# cray bos v1 sessiontemplate describe cos-2.0.x
     ```
 
@@ -57,7 +47,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 
     Use `--loglevel debug` command line option to provide more information as the system boots.
 
-    ```screen
+    ```bash
     ncn-m001# sat bootsys boot --stage bos-operations \
     --bos-templates COS_SESSION_TEMPLATE,UAN_SESSION_TEMPLATE
     Started boot operation on BOS session templates: cos-2.0.x, uan.
@@ -80,7 +70,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 
     **Tip:** The commands needed to monitor the progress of the job are provided in the output of the `sat bootsys shutdown` command.
 
-    ```screen
+    ```bash
     ncn-m001# kubectl -n services logs -c boa -f --selector job-name=boa-caa15959-2402-4190-9243-150d568942f6
     ```
 
@@ -88,7 +78,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 
 6.  In another shell window, use a similar command to monitor the UAN session.
 
-    ```screen
+    ```bash
     ncn-m001# kubectl -n services logs -c boa -f --selector job-name=boa-a1a697fc-e040-4707-8a44-a6aef9e4d6ea
     ```
 
@@ -96,7 +86,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 
 8.  Verify that nodes have booted and indicate `Ready`.
 
-    ```screen
+    ```bash
     ncn-m001# sat status
     +----------------+------+----------+-------+------+---------+------+----------+-------------+----------+
     | xname          | Type | NID      | State | Flag | Enabled | Arch | Class    | Role        | Net Type |
@@ -109,7 +99,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
     . . .  
     ```
 
-9. Make nodes available to customers and refer to *CSM Health Checks and Install Validation* in the *HPE Cray EX System Administration Guide S-8001* to check system health and status.
+9. Make nodes available to customers and refer to [Validate CSM Health](../validate_csm_health.md) to check system health and status.
 
 
 

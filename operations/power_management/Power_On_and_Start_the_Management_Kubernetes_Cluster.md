@@ -4,9 +4,12 @@
 
 Power on and start management services on the HPE Cray EX management Kubernetes cluster.
 
-All management rack PDUs are connected to facility power and facility power is ON.
+### Prerequisites
 
-An authentication token is required to access the API gateway and to use the sat command. See the *System Security and Authentication* and *SAT Authentication* sections in the *HPE Cray EX System Administration Guide S-8001* for more information.
+* All management rack PDUs are connected to facility power and facility power is ON.
+* An authentication token is required to access the API gateway and to use the `sat` command. See the [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md) and "SAT Authentication" in the SAT repository for more information.
+
+### Procedure
 
 First run `sat bootsys boot --stage ncn-power` to power on and boot the management NCNs. Then the run `sat bootsys boot --stage platform-services` to start platform services on the system.
 
@@ -24,13 +27,13 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
 5.  Activate the serial console window to ncn-m001.
 
-    ```screen
+    ```bash
     remote$ ipmitool -I lanplus -U root -P PASSWORD -H NCN_M001_BMC_HOSTNAME sol activate
     ```
 
 6.  In a separate window, power on the master node 1 \(ncn-m001\) chassis using IPMI tool.
 
-    ```screen
+    ```bash
     remote$ ipmitool -I lanplus -U root -P PASSWORD -H NCN_M001_BMC_HOSTNAME chassis power on
     ```
 
@@ -38,19 +41,20 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
 7.  Wait for the ncn-m001 node to boot, then ping the node to check status.
 
-    ```screen
+    ```bash
     remote$ ping NCN_M001_HOSTNAME
     ```
 
 8. Log in to ncn-m001 as root.
 
-   ```screen
+   ```bash
    remote$ ssh root@NCN_M001_HOSTNAME
    ```
 
-   **POWER ON ALL OTHER MANAGEMENT NCNs**
 
-10. Power on and boot other management NCNs.
+**POWER ON ALL OTHER MANAGEMENT NCNs**
+
+9.  Power on and boot other management NCNs.
 
     ```screen
     ncn-m001# sat bootsys boot --stage ncn-power
@@ -60,7 +64,7 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
     Alternately attach to the screen session \(screen sessions real time, but not saved\):
 
-    ```screen
+    ```bash
     ncn-m001# screen -ls
     There are screens on:
     26745.SAT-console-ncn-m003-mgmt (Detached)
@@ -76,18 +80,17 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
     ```
 
     
-
-    **VERIFY ACCESS TO LUSTRE FILESYSTEM**
+**VERIFY ACCESS TO LUSTRE FILESYSTEM**
 
 11. Verify that the Lustre file system is available from the management cluster.
     
     
 
-    **CHECK STATUS OF THE MANAGEMENT CLUSTER**
+**CHECK STATUS OF THE MANAGEMENT CLUSTER**
     
 12. If Ceph is frozen, use the following commands as workaround.
 
-    ```screen
+    ```bash
     ncn-m001# ceph osd unset noout
     noout is unset
     ncn-m001# ceph osd unset nobackfill
@@ -98,7 +101,7 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
 13. Check Ceph status.
 
-    ```screen
+    ```bash
     ncn-m001# ceph -s
       cluster:
         id:     e6536923-2bf5-4fb1-b132-2532b4d01eae
@@ -125,42 +128,41 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
         recovery: 3.6 MiB/s, 1 objects/s
     ```
 
-14. If Ceph does not recover and become healthy, refer to the *Utility Storage*, *Restart Ceph Services* section in the *HPE Cray EX System Administration Guide S-8001*.
+14. If Ceph does not recover and become healthy, refer to the [Restart Ceph Services](../utility_storage/Restart_Ceph_Services_via_Ansible.md) section.
 
     
-
-    **START KUBERNETES \(k8s\)**
+**START KUBERNETES \(k8s\)**
 
 15. Use `sat bootsys` to start the k8s cluster.
 
-    ```screen
+    ```bash
     ncn-m001# sat bootsys boot --stage platform-services 
     ```
 
 16. If the previous step fails with the following, or similar message, restart Ceph services and wait for services to be healthy.
 
-    ```screen
+    ```bash
     Executing step: Check health of Ceph cluster and unfreeze state.
     ERROR: Ceph is not healthy. The following fatal Ceph health warnings were found: POOL_NO_REDUNDANCY
     ERROR: Fatal error in step "Check health of Ceph cluster and unfreeze state." of platform services start: Ceph is not healthy. Please correct Ceph health and try again.
     
     ```
 
-    The warning message will vary. In this example, it is POOL\_NO\_REDUNDANCY. See *Utility Storage, Restart Ceph Services* in the *HPE Cray EX System Administration Guide S-8001*.
+    The warning message will vary. In this example, it is POOL\_NO\_REDUNDANCY. See [Restart Ceph Services](../utility_storage/Restart_Ceph_Services_via_Ansible.md).
 
     From storage node ncn-s001, restart Ceph services.
 
-    ```screen
-    ncn-s001# ansible ceph\_all -m shell -a "systemctl restart ceph-osd.target"
-    ansible ceph\_all -m shell -a "systemctl restart ceph-radosgw.target"
-    ansible ceph\_all -m shell -a "systemctl restart ceph-mon.target"
-    ansible ceph\_all -m shell -a "systemctl restart ceph-mgr.target"
-    ansible ceph\_all -m shell -a "systemctl restart ceph-mds.target"
+    ```bash
+    ncn-s001# ansible ceph_all -m shell -a "systemctl restart ceph-osd.target"
+    ansible ceph_all -m shell -a "systemctl restart ceph-radosgw.target"
+    ansible ceph_all -m shell -a "systemctl restart ceph-mon.target"
+    ansible ceph_all -m shell -a "systemctl restart ceph-mgr.target"
+    ansible ceph_all -m shell -a "systemctl restart ceph-mds.target"
     ```
 
 17. Check the space available on the Ceph cluster.
 
-    ```screen
+    ```bash
     ncn-m001# ceph df
     RAW STORAGE:
         CLASS     SIZE       AVAIL      USED        RAW USED     %RAW USED 
@@ -185,12 +187,12 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
 18. If `%USED` for any pool approaches 80% used, resolve the space issue.
 
-    To resolve the space issue, see *Troubleshoot Ceph OSDs Reporting Full* in the *HPE Cray EX System Administration Guide S-8001*.
+    To resolve the space issue, see [Troubleshoot Ceph OSDs Reporting Full](../utility_storage/Troubleshoot_Ceph_OSDs_Reporting_Full.md).
 
 19. Monitor the status of the management cluster and which pods are restarting as indicated by either a `Running` or `Completed` state.
 
-    ```screen
-    ncn-m001# kubectl get pods -A -o wide \| grep -v -e Running -e Completed
+    ```bash
+    ncn-m001# kubectl get pods -A -o wide | grep -v -e Running -e Completed
     ```
 
     The pods and containers are normally restored in approximately 10 minutes.
@@ -201,16 +203,15 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
 20. Check the status of the `slurmctld` and `slurmdbd` pods to determine if they are starting:
 
-    ```screen
+    ```bash
     ncn-m001# kubectl describe pod -n user -lapp=slurmctld
     ```
 
-    ```screen
+    ```bash
     ncn-m001# kubectl describe pod -n user -lapp=slurmdbd
     ```
 
-    ```screen
-    
+    ```bash
     Events:
       Type     Reason                  Age                    From               Message
       ----     ------                  ----                   ----               -------
@@ -230,24 +231,23 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
     
 21. Check that spire pods have started.
 
-    ```screen
-    ncn-m001# kubectl get pods -n spire -o wide \| grep spire-jwks
+    ```bash
+    ncn-m001# kubectl get pods -n spire -o wide | grep spire-jwks
     spire-jwks-6b97457548-gc7td    2/3  CrashLoopBackOff   9    23h   10.44.0.117  ncn-w002 <none>   <none>
     spire-jwks-6b97457548-jd7bd    2/3  CrashLoopBackOff   9    23h   10.36.0.123  ncn-w003 <none>   <none>
     spire-jwks-6b97457548-lvqmf    2/3  CrashLoopBackOff   9    23h   10.39.0.79   ncn-w001 <none>   <none>
-    
     ```
 
 22. If spire pods indicate `CrashLoopBackOff`, then restart the spire pods.
 
-    ```screen
+    ```bash
     ncn-m001# kubectl rollout restart -n spire deployment spire-jwks
     ```
 
 23. Determine whether the cfs-state-reporter service is failing to start on each manager/master and worker NCN while trying to contact CFS.
 
-    ```screen
-    ncn-m001# pdsh -w ncn-m00\[1-3\],ncn-w00\[1-3\] systemctl status cfs-state-reporter
+    ```bash
+    ncn-m001# pdsh -w ncn-m00[1-3],ncn-w00[1-3] systemctl status cfs-state-reporter
     ncn-w001:  cfs-state-reporter.service - cfs-state-reporter reports configuration level of the system
     ncn-w001:    Loaded: loaded (/usr/lib/systemd/system/cfs-state-reporter.service; enabled; vendor preset: disabled)
     ncn-w001:    Active: activating (start) since Thu 2021-03-18 22:29:15 UTC; 21h ago
@@ -271,34 +271,33 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
     1.  On each NCN where cfs-state-reporter is stuck in "activating" as shown in the preceding error messages, restart the cfs-state-reporter service. For example:
 
-        ```screen
+        ```bash
         ncn-m001# systemctl restart cfs-state-reporter
         ```
 
     2.  Check the status again.
 
-        ```screen
-        ncn-m001# pdsh -w ncn-m00\[1-3\],ncn-w00\[1-3\] systemctl status cfs-state-reporter
+        ```bash
+        ncn-m001# pdsh -w ncn-m00[1-3],ncn-w00[1-3] systemctl status cfs-state-reporter
         ```
 
     
 
-    **VERIFY BGP PEERING SESSIONS**
+**VERIFY BGP PEERING SESSIONS**
 
+**Attention:** All HSN switches and their associated HSN adapters must be up before the HSN can initialized. See [Bring Up the Slingshot Fabric](Bring_up_the_Slingshot_Fabric.md).
 
-    **Attention:** All HSN switches and their associated HSN adapters must be up before the HSN can initialized. See [Bring Up the Slingshot Fabric](Bring_up_the_Slingshot_Fabric.md).
+1.  Check the status of the Border Gateway Protocol \(BGP\). For more information, see [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
 
-29. Check the status of the Border Gateway Protocol \(BGP\). For more information see *Check BGP Status and Reset Sessions*, in the *HPE Cray EX System Administration Guide S-8001*.
-
-30. Check the status and health of etcd clusters, see *Check the Health and Balance of etcd Clusters* in the *HPE Cray EX System Administration Guide S-8001*.
+2.  Check the status and health of etcd clusters, see [Check the Health and Balance of etcd Clusters](../kubernetes/Check_the_Health_and_Balance_of_etcd_Clusters.md).
 
     
 
-    **CHECK CRON JOBS**
+**CHECK CRON JOBS**
 
-32. Display all the k8s cron jobs.
+3.  Display all the k8s cron jobs.
 
-    ```screen
+    ```bash
     ncn-m001# kubectl get cronjobs.batch -A
     NAMESPACE     NAME                                 SCHEDULE       SUSPEND   ACTIVE   LAST SCHEDULE   AGE
     **backups       benji-k8s-backup-backups-namespace   \*/5 \* \* \* \*    False     0        13d             39d**
@@ -317,13 +316,13 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
     **Attention:** It is normal for the hms-discovery service to be suspended at this point if liquid-cooled cabinets have not been powered on. The hms-discovery service is un-suspended during the liquid-cooled cabinet power on procedure. Do not re-create the hms-discovery cron job at this point.
 
-33. Check for cron jobs that have a `LAST SCHEDULE` time that is older than the `SCHEDULE` time. These cron jobs must be restarted.
+4.  Check for cron jobs that have a `LAST SCHEDULE` time that is older than the `SCHEDULE` time. These cron jobs must be restarted.
 
-34. Check the cron jobs in question for errors.
+5.  Check the cron jobs in question for errors.
 
-    ```screen
-    ncn-m001# kubectl describe cronjobs.batch -n backups benji-k8s-backup-backups-namespace \\
-    \| egrep -A 15 Events
+    ```bash
+    ncn-m001# kubectl describe cronjobs.batch -n backups benji-k8s-backup-backups-namespace \
+    | egrep -A 15 Events
     Events:
       Type     Reason            Age                        From                Message
       ----     ------            ----                       ----                -------
@@ -333,12 +332,12 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
                                                                                 or check clock skew
     ```
 
-35. For any cron jobs producing errors, get the YAML representation of the cron job and edit the YAML file:
+6.  For any cron jobs producing errors, get the YAML representation of the cron job and edit the YAML file:
 
-    ```screen
+    ```bash
     ncn-m001# cd ~/k8s
-    ncn-m001# kubectl get cronjobs.batch -n NAMESPACE CRON\_JOB\_NAME -o yaml \> CRON\_JOB\_NAME-cronjob.yaml
-    ncn-m001# vi CRON\_JOB\_NAME-cronjob.yaml 
+    ncn-m001# kubectl get cronjobs.batch -n NAMESPACE CRON_JOB_NAME -o yaml > CRON_JOB_NAME-cronjob.yaml
+    ncn-m001# vi CRON_JOB_NAME-cronjob.yaml 
     ```
 
     1.  Delete all lines that contain `uid:`.
@@ -347,31 +346,32 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
     3.  Save the file and quit the editor.
 
-36. Delete the cron job.
+7.  Delete the cron job.
 
-    ```screen
-    ncn-m001# kubectl delete -f CRON\_JOB\_NAME-cronjob.yaml
+    ```bash
+    ncn-m001# kubectl delete -f CRON_JOB_NAME-cronjob.yaml
     ```
 
-37. Apply the cron job.
+8.  Apply the cron job.
 
-    ```screen
-    ncn-m001# kubectl apply -f CRON\_JOB\_NAME-cronjob.yaml
+    ```bash
+    ncn-m001# kubectl apply -f CRON_JOB_NAME-cronjob.yaml
     ```
 
-38. Verify that the cron job has been scheduled.
+9.  Verify that the cron job has been scheduled.
 
-    ```screen
+    ```bash
     ncn-m001# kubectl get cronjobs -n backups benji-k8s-backup-backups-namespace
     NAME                                 SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE
     benji-k8s-backup-backups-namespace   */5 * * * *   False     0        92s             64d
     ```
 
-    **CHECK THE HSM INVENTORY STATUS OF NCNs**
 
-40. Use the `sat` command to check for management NCNs in an Off state.
+**CHECK THE HSM INVENTORY STATUS OF NCNs**
 
-    ```screen
+10. Use the `sat` command to check for management NCNs in an Off state.
+
+    ```bash
     ncn-m001# sat status --filter role=management
     +----------------+------+----------+-------+---------+---------+------+-------+-------------+----------+
     | xname          | Type | NID      | State | Flag    | Enabled | Arch | Class | Role        | Net Type |
@@ -390,17 +390,17 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
     **Attention:** When the NCNs are brought back online after a power outage or planned shutdown, `sat status` may report them as being Off.
 
-41. If NCNs are listed as OFF, run a manual discovery of NCNs in the Off state.
+11. If NCNs are listed as OFF, run a manual discovery of NCNs in the Off state.
 
-    ```screen
+    ```bash
     ncn-m001# cray hsm inventory discover create --xnames x3000c0s12b0,x3000c0s20b0
     [[results]]
     URI = "/hsm/v1/Inventory/DiscoveryStatus/0"
     ```
 
-42. Check for NCN status.
+12. Check for NCN status.
 
-    ```screen
+    ```bash
     ncn-m001# sat status --filter Role=Management
     +----------------+------+--------+-------+------+---------+------+-------+------------+----------+
     | xname          | Type | NID    | State | Flag | Enabled | Arch | Class | Role       | Net Type |
@@ -418,9 +418,9 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
     
     ```
 
-43. To check the health and status of the management cluster after a power cycle, refer to *Platform Health Checks* in the *HPE Cray EX System Administration Guide S-8001*.
+13. To check the health and status of the management cluster after a power cycle, refer to the "Platform Health Checks" section in [Validate CSM Health](../validate_csm_health.md).
 
-44. If NCNs must have access to Lustre, start the Lustre file system. See [Power On the External Lustre File System](Power_On_the_External_Lustre_File_System.md).
+14. If NCNs must have access to Lustre, start the Lustre file system. See [Power On the External Lustre File System](Power_On_the_External_Lustre_File_System.md).
 
 
 

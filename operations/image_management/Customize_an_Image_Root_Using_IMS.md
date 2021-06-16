@@ -19,8 +19,9 @@ The Image Management Service \(IMS\) customization workflow sets up a temporary 
 -   Currently, the initrd image and kernel image are not regenerated automatically when the image root is changed. The admin must manually regenerate them while in the customization environment, if needed.
 -   Images in the .txz compressed format need to be converted to SquashFS in order to use IMS image customization.
 
+### Procedure
 
-### Enable Passwordless SSH
+**Enable Passwordless SSH**
 
 1.  Check for an existing IMS public key `id`.
 
@@ -67,7 +68,7 @@ The Image Management Service \(IMS\) customization workflow sets up a temporary 
     ncn# export IMS_PUBLIC_KEY_ID=a252ff6f-c087-4093-a305-122b41824a3e
     ```
 
-### Locate or Register an Image Root Archive to Customize
+**Locate or Register an Image Root Archive to Customize**
 
 1.  Determine if the image root being used is in IMS and ready to be customized.
 
@@ -83,7 +84,7 @@ The Image Management Service \(IMS\) customization workflow sets up a temporary 
     -   If the image root being customized is in SquashFS format and in S3, but not registered with the IMS service, proceed to [Register the Image Root with the IMS Service](#register).
 
 
-### Create an IMS Image Record
+**Create an IMS Image Record**
 
 1.  Create a new IMS image record for the image.
 
@@ -101,7 +102,7 @@ The Image Management Service \(IMS\) customization workflow sets up a temporary 
     ncn# export IMS_IMAGE_ID=4e78488d-4d92-4675-9d83-97adfc17cb19
     ```
 
-### Upload Image Artifacts to S3
+**Upload Image Artifacts to S3**
 
 The steps in this section apply only if the SquashFS image root is not yet in S3.
 
@@ -130,7 +131,7 @@ The steps in this section apply only if the SquashFS image root is not yet in S3
     ncn# export IMS_INITRD_MD5SUM=`md5sum image-root/boot/$IMS_INITRD_FILENAME | awk '{ print $1 }'`
     ```
 
-### Create an Image Manifest and Upload it to S3
+**Create an Image Manifest and Upload it to S3**
 
 Cray uses a manifest file that associates multiple related boot artifacts \(kernel, initrd, rootfs\) into an image description that is used by IMS and other services to boot nodes. Artifacts listed within the manifest are identified by a `type` value:
 
@@ -182,7 +183,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     ncn# cray artifacts create boot-images $IMS_IMAGE_ID/manifest.json manifest.json
     ```
 
-### Register the Image Root with the IMS Service
+**Register the Image Root with the IMS Service**
 
 1.  Update the IMS image record.
 
@@ -202,7 +203,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
 <a name="locate"></a>
 
-### Locate an IMS Image to Customize
+**Locate an IMS Image to Customize**
 
     
 1.  Locate the IMS image record for the image that is being customized.
@@ -228,7 +229,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     ncn# export IMS_IMAGE_ID=4e78488d-4d92-4675-9d83-97adfc17cb19
     ```
 
-### Submit the Kubernetes Image Customization Job
+**Submit the Kubernetes Image Customization Job**
 
 1.  Create an IMS job record and start the image customization job.
 
@@ -334,7 +335,6 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     ```
 
 1.   Verify that the status of the IMS job is waiting\_on\_user.
-
 
     ```bash
     ncn# cray ims jobs describe $IMS_JOB_ID
@@ -460,7 +460,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
         ncn# ansible-playbook -i ./inventory.ini sample_playbook.yml
         ```
 
-1.  Tail the `buildenv-sidecar` to ensure that any artifacts are properly uploaded to S3 and associated with IMS.
+3.  Tail the `buildenv-sidecar` to ensure that any artifacts are properly uploaded to S3 and associated with IMS.
 
     ```bash
     ncn# kubectl -n ims logs -f $POD -c buildenv-sidecar
@@ -540,7 +540,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
     The IMS customization workflow automatically copies the NCN Certificate Authority’s public certificate to /etc/cray/ca/certificate\_authority.crt within the image root being customized. This can be used to enable secure communications between the NCN and the client node.
     
-1.   Look up the ID of the newly created image.
+4.   Look up the ID of the newly created image.
 
     ```bash
     ncn# cray ims jobs describe $IMS_JOB_ID
@@ -568,7 +568,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     ncn# export IMS_RESULTANT_IMAGE_ID=d88521c3-b339-43bc-afda-afdfda126388
     ```
 
-1.  Verify the new IMS image record exists.
+5.  Verify the new IMS image record exists.
 
     ```bash
     ncn# cray ims images describe $IMS_RESULTANT_IMAGE_ID
@@ -582,7 +582,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     etag = "28f3d78c8cceca2083d7d3090d96bbb7"
     ```
 
-### Clean Up the Image Customization Environment
+**Clean Up the Image Customization Environment**
 
 1. Delete the IMS job record.
 

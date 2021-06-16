@@ -12,13 +12,15 @@ After the CDU is switched on and healthy, the liquid-cooled PDU circuit breakers
 
 **Standard Racks** - HPE Cray standard EIA racks include redundant PDUs. Some PDU models may require a flat-blade screw driver to open or close the PDU circuit breakers.
 
+### Procedure
+
 1.  Verify with site management that it is safe to power on the system.
 
 2. If the system does not have Cray EX liquid-cooled cabinets, proceed to step 7.
 
    
 
-   **POWER ON CRAY EX LIQUID-COOLED CABINET CIRCUIT BREAKERS**
+**POWER ON CRAY EX LIQUID-COOLED CABINET CIRCUIT BREAKERS**
 
 3. Power on the CDU for the cabinet cooling group.
 

@@ -17,6 +17,7 @@ Only follow the step in this section for the node type being rebuilt:
 -   NCN storage node: step [3](#step3)
 
 <a name="step1"></a>
+
 1.  Prepare an NCN worker node before rebuilding it.
 
     Skip this step if rebuilding an NCN master or storage node. The examples in this step assume `ncn-w002` is being rebuilt.
@@ -96,14 +97,14 @@ Only follow the step in this section for the node type being rebuilt:
         ncn-m002
         ```
 
-        If the node returned isn't the one being rebuilt, proceed to step [2.f](#substep_oq5_jc1_bpb).
+        If the node returned isn't the one being rebuilt, proceed to step [2.8](#stop-etcd).
 
     2.  Reconfigure the Boot Script Service \(BSS\) to point to a new first master node.
 
         Run this step on a master or worker node that is not being rebuilt.
 
         ```bash
-        ncn# cray bss bootparameters list --name Global --format=json > Global.json
+        ncn# cray bss bootparameters list --name Global --format=json | jq '.[]' > Global.json
         ```
 
     3.  Edit the Global.json file and edit the indicated line.
@@ -161,13 +162,7 @@ Only follow the step in this section for the node type being rebuilt:
         echo "0 */1 * * * root /srv/cray/scripts/kubernetes/token-certs-refresh.sh >> /var/log/cray/cron.log 2>&1" > /etc/cron.d/cray-k8s-token-certs-refresh
         ```
 
-    6.  Stop the etcd service on the master node being removed.
-
-        ```bash
-        ncn-m001# systemctl stop etcd.service
-        ```
-
-    7.  Find the member ID of the master node being removed.
+    6.  Find the member ID of the master node being removed.
 
         ```bash
         ncn-m001# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt \
@@ -177,7 +172,7 @@ Only follow the step in this section for the node type being rebuilt:
 
         Note the returned member ID for use in subsequent steps.
 
-    8.  Remove the master node from the etcd cluster backing Kubernetes.
+    7.  Remove the master node from the etcd cluster backing Kubernetes.
 
         Replace the MEMBER\_ID value with the value returned in the previous sub-step.
 
@@ -185,6 +180,14 @@ Only follow the step in this section for the node type being rebuilt:
         ncn-m001# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt \
         --cert=/etc/kubernetes/pki/etcd/ca.crt --key=/etc/kubernetes/pki/etcd/ca.key \
         --endpoints=localhost:2379 member remove MEMBER_ID
+        ```
+    
+    <a name="stop-etcd"></a>
+
+    8.  Stop the etcd service on the master node being removed.
+
+        ```bash
+        ncn-m001# systemctl stop etcd.service
         ```
 
     9.  Remove the node from the Kubernetes cluster.
@@ -397,7 +400,7 @@ Only follow the step in this section for the node type being rebuilt:
         -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth \
         -o jsonpath='{.data.client-secret}' | base64 -d` \
         https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \
-        | jq -r '.access_token'
+        | jq -r '.access_token')
         ```
 
     2.  Do a PUT action for the new JSON file.
