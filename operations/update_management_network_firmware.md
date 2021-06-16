@@ -24,15 +24,53 @@ total 2.7G
 
 | Vendor | Model | Version |
 | --- | --- | --- |
-| Aruba | 6300 | ArubaOS-CX_6400-6300_10.06.0010 |
-| Aruba | 8320 | ArubaOS-CX_8320_10.06.0010 |
-| Aruba | 8325 | ArubaOS-CX_8325_10.06.0010 |
-| Aruba | 8360 | ArubaOS-CX_8360_10.06.0010 10.06.0110|
+| Aruba | 6300 | ArubaOS-CX_6400-6300_10.06.0120 |
+| Aruba | 8320 | ArubaOS-CX_8320_10.06.0120 |
+| Aruba | 8325 | ArubaOS-CX_8325_10.06.0120 |
+| Aruba | 8360 | ArubaOS-CX_8360_10.06.0120|
 | Dell | S3048-ON | 10.5.1.4 |
 | Dell | S4148F-ON | 10.5.1.4 |
 | Dell | S4148T-ON | 10.5.1.4 |
 | Mellanox | MSN2100 | 3.9.1014 |
 | Mellanox | MSN2700 | 3.9.1014 |
+
+## Aruba Firmware Best practices
+
+Aruba software version number explained:
+
+10.06.0120
+
+10		= OS
+06		= Major branch (new features)
+0120	= CPE release (bug fixes)
+
+It is considered to be a best practice to keep all of your Aruba CX platform devices running the same software version.  
+
+Aruba CX devices two software image banks, which means you can pre-stage sw images to the device without booting to the new image. 
+
+If you  are upgrading to a new major branch, in Aruba identified by the second integer in the software image number
+
+When upgrading past a major software release say from 10.6 to 10.8 (and skipping 10.7) you will need to issue 'allow-unsafe-upgrades' to allow any low level firmware/driver upgrades to complete. If going from say 10.6 branch to 10.7 branch, this step can be skipped as the low level firmware/driver upgrade would be automatically completed. 
+
+...
+sw-leaf-001# config
+sw-leaf-001(config)# allow-unsafe-updates 30
+
+This command will enable non-failsafe updates of programmable devices for
+the next 30 minutes.  You will first need to wait for all line and fabric
+modules to reach the ready state, and then reboot the switch to begin
+applying any needed updates.  Ensure that the switch will not lose power,
+be rebooted again, or have any modules removed until all updates have
+finished and all line and fabric modules have returned to the ready state.
+
+WARNING: Interrupting these updates may make the product unusable!
+
+Continue (y/n)? y
+
+    Unsafe updates      : allowed (less than 30 minute(s) remaining)
+...
+
+VSX software upgrade command can automatically upgrade both of the peers in VSX topology by staging upgrade and automatically doing traffic shifting between peers to minimize impact to network. In below examples we will  give you the option for standalone and vsx-pair upgrade. 
 
 ## Aruba Firmware Update - standalone
 
@@ -80,6 +118,34 @@ Active Image : primary
 Service OS Version : FL.01.07.0002                 
 BIOS Version       : FL.01.0002
 ```
+## Aruba Firmware Update - VSX software upgrade
+
+SSH into the Primary VSX member of the VSX-pair you want to upgrade.
+
+Example: the IP ```10.252.1.12``` used is the liveCD 
+```
+sw-leaf-001# copy sftp://root@10.252.1.12//var/www/ephemeral/data/network_images/ArubaOS-CX_6400-6300_10_06_0120.stable.swi primary
+
+sw-leaf-001# write mem
+Copying configuration: [Success]
+```
+Once the upload is complete you can check the images
+
+```
+sw-leaf-001# show image
+---------------------------------------------------------------------------
+ArubaOS-CX Primary Image
+---------------------------------------------------------------------------
+Version : FL.10.06.0120                 
+Size    : 643 MB                        
+Date    : 2021-03-14 10:06:34 PST       
+SHA-256 : 78dc27c5e521e92560a182ca44dc04b60d222b9609129c93c1e329940e1e11f9 
+```
+After the firmware is uploaded you will need to boot the switch to the correct image. Now that we are upgrading a VSX pair we can use the VSX upgrade command to automatically upgrade both pairs. 
+```
+sw-leaf-001# vsx update-software boot-bank primary
+```
+This will trigger the upgrade process on the VSX pair and it will start the dialogue explaining what will happen next, i.e. if any firmware/driver upgrades are needed (i.e. the unit would reboot twice if this was the case) and it will show you on the screen the current status of the upgrade process. in VSX upgrade process the secondary VSX member will always boot first. 
 
 ## Mellanox Firmware Update
 
