@@ -49,6 +49,14 @@ if [[ -z ${TARBALL_FILE} ]]; then
         echo "Use internal endpoint: ${ENDPOINT}"
     fi
 
+    # Ensure we have enough disk space
+    reqSpace=100000000 # ~100GB 
+    availSpace=$(df "$HOME" | awk 'NR==2 { print $4 }')
+    if (( availSpace < reqSpace )); then
+        echo "Not enough Space, required: $reqSpace, availSpace: $availSpace" >&2
+        exit 1
+    fi
+
     # Download tarball file
     state_name="GET_CSM_TARBALL_FILE"
     state_recorded=$(is_state_recorded "${state_name}" $(hostname))
@@ -71,7 +79,8 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     tar -xzf ${TARBALL_FILE}
-
+    rm -rf ${TARBALL_FILE}
+    
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has beed completed"
