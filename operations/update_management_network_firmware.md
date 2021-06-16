@@ -41,8 +41,11 @@ Aruba software version number explained:
 10.06.0120
 
 10		= OS
+
 06		= Major branch (new features)
+
 0120	= CPE release (bug fixes)
+
 
 It is considered to be a best practice to keep all of your Aruba CX platform devices running the same software version.  
 
