@@ -2,32 +2,21 @@
 
 ## Prepare the System for Power Off
 
-An authentication token is required to access the API gateway and to use the sat command. See the *System Security and Authentication* and *SAT Authentication* sections in the *HPE Cray EX System Administration Guide S-8001* for more information.
+This procedure prepares the system to remove power from all system cabinets. Be sure the system is healthy and ready to be shutdown and powered off.
 
-This procedure prepares the system to remove power from all system cabinets.
+The `sat bootsys shutdown` and `sat bootsys boot` commands are used to shut down the system.
 
--   **LEVEL**
+### Prerequisites
 
-    **Level 1 HaaS**
+An authentication token is required to access the API gateway and to use the `sat` command. See the [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md) and "SAT Authentication" in the SAT repository for more information.
 
--   **ROLE**
-
-    System administrator
-
--   **OBJECTIVE**
-
-    Be sure the system is healthy and ready to be shutdown and powered off.
-
--   **NEW IN THIS RELEASE**
-
-    The `sat bootsys shutdown` and `sat bootsys boot` commands are used to shut down the system.
-
+### Procedure
 
 1.  Obtain the user ID and passwords for system components:
 
     1.  Obtain user ID and passwords for all the system management network switches. For example:
 
-        ```screen
+        ```bash
         sw-leaf-001
         sw-leaf-002
         sw-spine-001.nmn
@@ -56,11 +45,11 @@ This procedure prepares the system to remove power from all system cabinets.
 
 3.  Use `sat auth` to authenticate to the API gateway within SAT.
 
-    See *System Security and Authentication*, *Authenticate an Account with the Command Line*, and *SAT Authentication* in the *HPE Cray EX System Administration Guide S-8001* for detailed information.
+    See [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md), [Authenticate an Account with the Command Line](../security_and_authentication/Authenticate_an_Account_with_the_Command_Line.md), and "SAT Authentication" in the SAT repository for more information.
 
 4.  Use sat to capture state of the system before the shutdown.
 
-    ```screen
+    ```bash
     ncn-m001# sat bootsys shutdown --stage capture-state
     ```
 
@@ -70,66 +59,66 @@ This procedure prepares the system to remove power from all system cabinets.
 
         **Important:** SDU takes about 15 minutes to run on a small system \(longer for large systems\).
 
-        ```screen
-        ncn-m001# sdu --scenario triage --start\_time '-4 hours' \\
+        ```bash
+        ncn-m001# sdu --scenario triage --start_time '-4 hours' \
         --reason "saving state before powerdown/up"
         ```
 
     2.  Capture the state of all nodes.
 
-        ```screen
-        ncn-m001# sat status \| tee sat.status.off
+        ```bash
+        ncn-m001# sat status | tee sat.status.off
         ```
 
     3.  Capture the list of disabled nodes.
 
-        ```screen
-        ncn-m001# sat status --filter Enabled=false \> sat.status.disabled
+        ```bash
+        ncn-m001# sat status --filter Enabled=false > sat.status.disabled
         ```
 
     4.  Capture the list of nodes that are `off`.
 
-        ```screen
-        ncn-m001# sat status --filter State=Off \> sat.status.off
+        ```bash
+        ncn-m001# sat status --filter State=Off > sat.status.off
         ```
 
     5.  Capture the state of nodes in the workload manager, for example, if the system uses Slurm.
 
-        ```screen
-        ncn-m001# ssh uan01 sinfo \> sinfo
+        ```bash
+        ncn-m001# ssh uan01 sinfo > sinfo
         ```
 
     6.  Capture the list of down nodes in the workload manager and the reason.
 
-        ```screen
-        ncn-m001# ssh nid001000 sinfo --list-reasons \> sinfo.reasons
+        ```bash
+        ncn-m001# ssh nid001000 sinfo --list-reasons > sinfo.reasons
         ```
 
     7.  Check ceph status.
 
-        ```screen
-        ncn-m001# ceph -s \> ceph.status
+        ```bash
+        ncn-m001# ceph -s > ceph.status
         ```
 
     8.  Check k8s pod status for all pods.
 
-        ```screen
-        ncn-m001# kubectl get pods -o wide -A \> k8s.pods
+        ```bash
+        ncn-m001# kubectl get pods -o wide -A > k8s.pods
         ```
 
         Additional k8s status check examples :
 
-        ```screen
-        ncn-m001# kubectl get pods -o wide -A \| egrep  "CrashLoopBackOff" \> k8s.pods.CLBO
-        ncn-m001# kubectl get pods -o wide -A \| egrep  "ContainerCreating" \> k8s.pods.CC
-        ncn-m001# kubectl get pods -o wide -A \| egrep -v "Run\|Completed" \> k8s.pods.errors
+        ```bash
+        ncn-m001# kubectl get pods -o wide -A | egrep  "CrashLoopBackOff" > k8s.pods.CLBO
+        ncn-m001# kubectl get pods -o wide -A | egrep  "ContainerCreating" > k8s.pods.CC
+        ncn-m001# kubectl get pods -o wide -A | egrep -v "Run\|Completed" > k8s.pods.errors
         ```
 
     9.  Check HSN status.
 
         Determine the name of the slingshot-fabric-manager pod:
 
-        ```screen
+        ```bash
         ncn-m001# kubectl get pods -l app.kubernetes.io/name=slingshot-fabric-manager -n services
         NAME                                        READY   STATUS    RESTARTS   AGE
         slingshot-fabric-manager-5dc448779c-d8n6q   2/2     Running   0          4d21h
@@ -137,37 +126,36 @@ This procedure prepares the system to remove power from all system cabinets.
 
         Run `fmn_status` in the fabric manager pod and save it to a file:
 
-        ```screen
-        ncn-m001# kubectl exec -it -n services slingshot-fabric-manager-5dc448779c-d8n6q \\
-        -c slingshot-fabric-manager -- fmn\_status --details \> fabric.status
+        ```bash
+        ncn-m001# kubectl exec -it -n services slingshot-fabric-manager-5dc448779c-d8n6q \
+        -c slingshot-fabric-manager -- fmn_status --details > fabric.status
         ```
 
     10. Check management switches to verify they are reachable \(switch host names depend on system configuration\).
 
-        ```screen
-        ncn-m001# for switch in sw-leaf-00\{1,2\}.mtl sw-spine-00\{1,2\}.mtl sw-cdu-00\{1,2\}.mtl; \\
-        do while true; do ping -c 1 $switch \> /dev/null; if \[\[ $? == 0 \]\]; then echo \\
+        ```bash
+        ncn-m001# for switch in sw-leaf-00{1,2}.mtl sw-spine-00{1,2}.mtl sw-cdu-00{1,2}.mtl; \
+        do while true; do ping -c 1 $switch > /dev/null; if [[ $? == 0 ]]; then echo \
         "switch $switch is up"; break; else echo "switch $switch is not yet up"; fi; sleep 5; done; done
-        
         ```
 
     11. Check Lustre server health.
 
-        ```screen
+        ```bash
         ncn-m001# ssh admin@cls01234n00.us.cray.com
-        admin@cls01234n00 ~]$ cscli show\_nodes
+        admin@cls01234n00 ~]$ cscli show_nodes
         ```
 
     12. From a node which has the Lustre file system mounted.
 
-        ```screen
+        ```bash
         uan01:~ # lfs check servers
         uan01:~ # lfs df
         ```
 
 6.  Check for running sessions.
 
-    ```screen
+    ```bash
     ncn-m001# sat bootsys shutdown --stage session-checks
     Checking for active BOS sessions.
     Found no active BOS sessions.
@@ -180,7 +168,6 @@ This procedure prepares the system to remove power from all system cabinets.
     Checking for active NMD dumps.
     Found no active NMD dumps.
     No active sessions exist. It is safe to proceed with the shutdown procedure.
-    
     ```
 
     If active sessions are running, either wait for them to complete or shutdown/cancel/delete the session.

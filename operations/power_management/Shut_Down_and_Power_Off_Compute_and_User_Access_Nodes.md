@@ -2,28 +2,19 @@
 
 ## Shut Down and Power Off Compute and User Access Nodes
 
-An authentication token is required to access the API gateway and to use the sat command. See the *System Security and Authentication* and *SAT Authentication* sections in the *HPE Cray EX System Administration Guide S-8001* for more information.
+Shut down and power off compute and user access nodes \(UANs\). This procedure powers off all compute nodes in the context of an entire system shutdown.
 
-This procedure powers off all compute nodes in the context of an entire system shutdown.
+### Prerequisites
 
--   **LEVEL**
+An authentication token is required to access the API gateway and to use the `sat` command. See the [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md) and "SAT Authentication" in the SAT repository for more information.
 
-    **Level 1 HaaS**
-
--   **ROLE**
-
-    System administrator
-
--   **OBJECTIVE**
-
-    Shut down and power off compute and user access nodes \(UANs\).
-
+### Procedure
 
 1.  List detailed information about the available boot orchestration service \(BOS\) session template names.
 
     Identify the BOS session template names such as `"cos-2.0.x"`, `uan-slurm`, and choose the appropriate compute and UAN node templates for the shutdown.
 
-    ```screen
+    ```bash
     ncn-m001# cray bos v1 sessiontemplate list
     [[results]]
     name = "cos-2.0.x"
@@ -39,7 +30,7 @@ This procedure powers off all compute nodes in the context of an entire system s
 
 2.  To display more information about a session template, for example `cos-2.0.x`, use the `describe` option.
 
-    ```screen
+    ```bash
     ncn-m001# cray bos v1 sessiontemplate describe cos-2.0.x
     ```
 
@@ -49,9 +40,9 @@ This procedure powers off all compute nodes in the context of an entire system s
 
     An optional `--loglevel debug` can be used to provide more information as the system shuts down in this example.
 
-    ```screen
-    ncn-m001# sat bootsys shutdown --stage bos-operations \\
-    --bos-templates COS\_SESSION\_TEMPLATE,UAN\_SESSION\_TEMPLATE
+    ```bash
+    ncn-m001# sat bootsys shutdown --stage bos-operations \
+    --bos-templates COS_SESSION_TEMPLATE,UAN_SESSION_TEMPLATE
     Started boot operation on BOS session templates: cos-2.0.x, uan.
     Waiting up to 600 seconds for sessions to complete.
      
@@ -70,8 +61,8 @@ This procedure powers off all compute nodes in the context of an entire system s
 
     The command to run is displayed in the output of the `sat bootsys shutdown` command.
 
-    ```screen
-    ncn-m001# kubectl logs -n services -c boa -f \\
+    ```bash
+    ncn-m001# kubectl logs -n services -c boa -f \
     --selector job-name=boa-boa-79584ffe-104c-4766-b584-06c5a3a60996
     2020-08-21 17:27:02,358 - DEBUG   - cray.boa - BOA starting
     2020-08-21 17:27:02,358 - DEBUG   - cray.boa - Boot Agent Image:  created.
@@ -91,7 +82,7 @@ This procedure powers off all compute nodes in the context of an entire system s
 
 5.  In another shell window, use a similar command to monitor the UAN session.
 
-    ```screen
+    ```bash
     ncn-m001# kubectl -n services logs -c boa -f --selector job-name=boa-a1a697fc-e040-4707-8a44-a6aef9e4d6ea
     ```
 
@@ -99,7 +90,7 @@ This procedure powers off all compute nodes in the context of an entire system s
 
     There may be delay in nodes reaching the Off state in the hardware state manager \(HSM\).
 
-    ```screen
+    ```bash
     ncn-m001# sat status
     +----------------+------+----------+-------+------+---------+------+----------+-------------+----------+
     | xname          | Type | NID      | State | Flag | Enabled | Arch | Class    | Role        | Net Type |

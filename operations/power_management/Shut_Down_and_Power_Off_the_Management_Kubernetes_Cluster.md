@@ -1,8 +1,5 @@
----
-category: Product Subject Type of Manual numbered
----
 
-# Shut Down and Power Off the Management Kubernetes Cluster
+## Shut Down and Power Off the Management Kubernetes Cluster
 
 Shut down management services and power off the HPE Cray EX management Kubernetes cluster.
 
@@ -13,8 +10,6 @@ Be aware of the following concepts before powering off the management non-comput
 -   **Avoid Spinning up Replacement Pods on Worker Nodes** - Kubernetes keeps all pods running on the management cluster. The `kubelet` process on each node retrieves information from the etcd cluster about what pods must be running. If a node becomes unavailable for more than five minutes, Kubernetes creates replacement pods on other management nodes.
 -   **High-Speed Network \(HSN\)** - When the management cluster is shut down the HSN is also shut down.
 
-An authentication token is required to access the API gateway and to use the sat command. See the *System Security and Authentication* and *SAT Authentication* sections in the *HPE Cray EX System Administration Guide S-8001* for more information.
-
 The `sat bootsys` command automates the shutdown of Ceph and the Kubernetes management cluster and performs these tasks:
 
 -   Stops etcd and which freezes the state of the Kubernetes cluster on each management node.
@@ -23,34 +18,28 @@ The `sat bootsys` command automates the shutdown of Ceph and the Kubernetes mana
 -   Stop `containerd` on each management and worker node.
 -   Stops ceph from rebalancing on the management node that is running a `mon` process.
 
--   **LEVEL**
+### Prerequisites
 
-    **Level 1 HaaS**
+An authentication token is required to access the API gateway and to use the `sat` command. See the [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md) and "SAT Authentication" in the SAT repository for more information.
 
--   **ROLE**
+### Procedure
 
-    System administrator
-
--   **OBJECTIVE**
-
-    Shutdown and power off the Kubernetes management cluster.
 
 **CHECK HEALTH OF THE MANAGEMENT CLUSTER**
 
+1.  To check the health and status of the management cluster before shutdown, see the "Platform Health Checks" section in [Validate CSM Health](../validate_csm_health.md).
 
-2.  To check the health and status of the management cluster before shutdown, see *Platform Health Checks* section in *HPE Cray EX System Administration Guide S-8001*.
+2.  To check the status of Border Gateway Protocol \(BGP\), refer to [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
 
-3.  To check the status of Border Gateway Protocol \(BGP\), refer to the *Network Administration*, section, and *Check BGP Status and Reset Sessions* in the *HPE Cray EX System Administration Guide S-8001*.
+3.  Check the health and backup etcd clusters:
 
-4.  Check the health and backup etcd clusters:
+    1.  Determine what etcd clusters must be backed up and if they are healthy. See [Check the Health and Balance of etcd Clusters](../kubernetes/Check_the_Health_and_Balance_of_etcd_Clusters.md).
 
-    1.  Determine what etcd clusters must be backed up and if they are healthy. See *Check the Health and Balance of etcd Clusters* in the *HPE Cray EX System Administration Guide S-8001*.
+    2.  Backup etcd clusters. See [Backups for etcd-operator Clusters](../kubernetes/Backups_for_etcd-operator_Clusters.md).
 
-    2.  Backup etcd clusters. See *Backups for etcd-operator Clusters* in the *HPE Cray EX System Administration Guide S-8001*.
+4. Check the status of NCN no wipe settings. Make sure `metal.no-wipe=1`. If a management NCN is set to `metal.no-wipe==wipe`, see [Check and Set the metal.no-wipe Setting on NCNs](../node_management/Check_and_Set_the_metalno-wipe_Setting_on_NCNs.md) before proceeding.
 
-4. Check the status of NCN no wipe settings. Make sure `metal.no-wipe=1`. If a management NCN is set to `metal.no-wipe==wipe`, see *Check and Set the metal.no-wipe Setting on NCNs* in the *HPE Cray EX System Administration Guide S-8001* before proceeding.
-
-   ```screen
+   ```bash
    ncn-m001# /opt/cray/platform-utils/getXnames.sh
                 +++++ Get NCN Xnames +++++
    === Can be executed on any worker or master ncn node. ===
@@ -77,12 +66,11 @@ The `sat bootsys` command automates the shutdown of Ceph and the Kubernetes mana
 
 
 
-
 **SHUT DOWN THE KUBERNETES MANAGEMENT CLUSTER**
 
 7.  Shutdown platform services.
 
-    ```screen
+    ```bash
     ncn-m001# sat bootsys shutdown --stage platform-services
     Identified the following Non-compute Node (NCN) groups as follows.
     managers: ['ncn-m001', 'ncn-m002', 'ncn-m003']
@@ -107,8 +95,8 @@ The `sat bootsys` command automates the shutdown of Ceph and the Kubernetes mana
 
     In the above example, the commands to stop containers timed out on all the worker nodes and reported `WARNING` and `ERROR` messages. A summary of the issue displays and the user to continue or stop. Respond `no` stop the shutdown. Then view the containers running on the nodes and stop them manually if necessary.
 
-    ```screen
-    ncn-m001# for ncn in ncn-w00\{1,2,3\}; do echo "$ncn"; ssh $ncn "crictl ps"; echo; done
+    ```bash
+    ncn-m001# for ncn in ncn-w00{1,2,3}; do echo "$ncn"; ssh $ncn "crictl ps"; echo; done
     ncn-w001
     CONTAINER         IMAGE             CREATED           STATE         NAME              ATTEMPT         POD ID
     032d69162ad24     302d9780da639     54 minutes ago    Running       cray-dhcp-kea     0               e4d1c01818a5a
@@ -124,7 +112,7 @@ The `sat bootsys` command automates the shutdown of Ceph and the Kubernetes mana
 
     Run the `sat` command again and enter `yes` at the prompt about the `etcd` snapshot not being created:
 
-    ```screen
+    ```bash
     ncn-m001# sat bootsys shutdown --stage platform-services
     Identified the following Non-compute Node (NCN) groups as follows.
     managers: ['ncn-m001', 'ncn-m002', 'ncn-m003']
@@ -148,7 +136,7 @@ The `sat bootsys` command automates the shutdown of Ceph and the Kubernetes mana
 
 8.  Shut down and power off all management NCNs except ncn-m001.
 
-    ```screen
+    ```bash
     ncn-m001# sat bootsys shutdown --stage ncn-power
     ```
 
@@ -156,7 +144,7 @@ The `sat bootsys` command automates the shutdown of Ceph and the Kubernetes mana
 
     Alternately attach to the screen session \(screen sessions real time, but not saved\):
 
-    ```screen
+    ```bash
     ncn-m001# screen -ls
     There are screens on:
     26745.SAT-console-ncn-m003-mgmt (Detached)
@@ -173,15 +161,15 @@ The `sat bootsys` command automates the shutdown of Ceph and the Kubernetes mana
 
 10. Use `ipmitool` to check the power off status of management nodes.
 
-    ```screen
-    ncn-m001# for h in ncn-w001 ncn-w002 ncn-w003 ncn-s001 ncn-s002 ncn-s003 ncn-m002 ncn-m003; \\
-     do echo -n "$h: "; ipmitool -U root -H $\{h\}-mgmt -P PASSWORD -I lanplus chassis power status; done
+    ```bash
+    ncn-m001# for h in ncn-w001 ncn-w002 ncn-w003 ncn-s001 ncn-s002 ncn-s003 ncn-m002 ncn-m003; \
+     do echo -n "$h: "; ipmitool -U root -H ${h}-mgmt -P PASSWORD -I lanplus chassis power status; done
     ```
 
 11. From a remote system, activate the serial console for ncn-m001.
 
-    ```screen
-    remote$ ipmitool -I lanplus -U root -P PASSWORD -H NCN-M001\_BMC\_HOSTNAME sol activate
+    ```bash
+    remote$ ipmitool -I lanplus -U root -P PASSWORD -H NCN-M001_BMC_HOSTNAME sol activate
     
     ncn-m001 login: root
     Password:
@@ -189,7 +177,7 @@ The `sat bootsys` command automates the shutdown of Ceph and the Kubernetes mana
     
 12. From the serial console, shut down Linux.
 
-    ```screen
+    ```bash
     ncn-m001# shutdown -h now
     ```
 
@@ -197,10 +185,10 @@ The `sat bootsys` command automates the shutdown of Ceph and the Kubernetes mana
 
 14. From a remote system that has access to the management plane, use IPMItool to power off ncn-w001.
 
-    ```screen
-    remote$ ipmitool -I lanplus -U root -P initial0 -H NCN-M001\_BMC\_HOSTNAME chassis power status
-    remote$ ipmitool -I lanplus -U root -P initial0 -H NCN-M001\_BMC\_HOSTNAME chassis power off
-    remote$ ipmitool -I lanplus -U root -P initial0 -H NCN-M001\_BMC\_HOSTNAME chassis power status
+    ```bash
+    remote$ ipmitool -I lanplus -U root -P initial0 -H NCN-M001_BMC_HOSTNAME chassis power status
+    remote$ ipmitool -I lanplus -U root -P initial0 -H NCN-M001_BMC_HOSTNAME chassis power off
+    remote$ ipmitool -I lanplus -U root -P initial0 -H NCN-M001_BMC_HOSTNAME chassis power status
     ```
 
     **CAUTION:** The modular coolant distribution unit \(MDCU\) in a liquid-cooled TDS cabinet typically receives power from its management cabinet PDUs. If the system includes a liquid-cooled TDS cabinet, **do not power off** the management cabinet PDUs, Powering off the MDCU will cause an emergency power off \(EPO\) of the TDS cabinet and may result in data loss or equipment damage.
