@@ -11,13 +11,15 @@ While the spire-agent systemctl service on the Kubernetes node should eventually
 
 ```bash
 function renewncnjoin() {
-	for pod in $(kubectl get pods - n spire | grep request - ncn - join - token | awk '{print $1}');
-	do
-		if kubectl
-	describe - n spire pods $pod | grep - q "Node:.*$1";
-	then echo "Restarting $pod running on $1";
-	kubectl delete - n spire pod "$pod";
-	fi done
+    if [ -z "$1" ]; then echo "usage: renewncnjoin NODE_XNAME"
+    else
+        for pod in $(kubectl get pods -n spire | grep request-ncn-join-token | awk '{print $1}');
+        do
+            if kubectl describe -n spire pods $pod | grep -q "Node:.*$1";
+            then echo "Restarting $pod running on $1"; kubectl delete -n spire pod "$pod";
+            fi
+        done
+    fi
 }
 ```
 
