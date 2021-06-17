@@ -19,27 +19,11 @@ export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
 export UPGRADE_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
      jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$UPGRADE_NCN\")) | .Xname")
 
+
+export UPGRADE_MGMT_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+     jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$UPGRADE_NCN\")) | .Parent")
+
 export UPGRADE_IP_NMN=$(dig +short $UPGRADE_NCN.nmn)
-
-if [[ -z ${IPMI_USERNAME} ]]; then
-   export IPMI_USERNAME=root
-   echo "IPMI_USERNAME environment variable is not set. Use default value"
-fi
-
-if [[ -z ${IPMI_PASSWORD} ]]; then
-   export IPMI_PASSWORD=initial0
-   echo "IPMI_PASSWORD environment variable is not set. Use default value"
-fi
-
-if [[ -z ${SW_USERNAME} ]]; then
-   export SW_USERNAME=root
-   echo "SW_USERNAME environment variable is not set. Use default value"
-fi
-
-if [[ -z ${SW_PASSWORD} ]]; then
-   export SW_PASSWORD="!nitial0"
-   echo "SW_PASSWORD environment variable is not set. Use default value"
-fi
 
 function drain_node() {
    upgrade_ncn=$1
