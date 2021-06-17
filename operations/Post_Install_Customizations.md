@@ -18,7 +18,7 @@ Use the Grafana "Kubernetes/Compute Resources/Pod" Dashboard to view the memory 
 
 Check Prometheus for recent CPUThrottlingHigh Alerts.
 
-From Prometheus (https://prometheus.SYSTEM-NAME_DOMAIN-NAME/), select the **Alert** tab and scroll down to the alert for **CPUThrottlingHigh**.  
+From Prometheus (https://prometheus.SYSTEM-NAME_DOMAIN-NAME/), select the **Alert** tab and scroll down to the alert for CPUThrottlingHigh.  
 
 Use the Grafana "Kubernetes/Compute Resources/Pod" Dashboard to view the throttling graphs over time for any pod that is alerting.  
 
@@ -39,7 +39,9 @@ pod: prometheus-cray-sysmgmt-health-promet-prometheus-0
 
 Select the **CPU Throttling** drop down to see the CPU Throttling graph for the pod during the selected time (from the top right), and select the container (from the legends under the x axis).
 
-The presence of CPU throttling doesn't always indicate a problem, but if a service is being slow or experiencing latency issues, reviewing the graph and adjusting the resources.requests.cpu and/or resources.limits.cpu can be beneficial. If the pod is being throttled at or near 100% for any period of time, then adjustments are likely needed. If the service's response time is critical, then adjusting the pod's resources to greatly reduce or eliminate any CPU throttling may be required.
+The presence of CPU throttling doesn't always indicate a problem, but if a service is being slow or experiencing latency issues, reviewing the graph and adjusting the resources.limits.cpu can be beneficial. If the pod is being throttled at or near 100% for any period of time, then adjustments are likely needed. If the service's response time is critical, then adjusting the pod's resources to greatly reduce or eliminate any CPU throttling may be required.  
+
+The resources.requests.cpu are used by the kubernetes scheduler to decide which node to place the Pod on and do not impact CPU Throttling.  The resources.limits.cpu can never be lower than the resources.requests.cpu.
 
 **For Memory Usage:**
 
@@ -67,7 +69,7 @@ ncn-w001# kubectl get cm -n loftsman loftsman-platform -o jsonpath='{.data.manif
 ncn-w001# yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.requests.cpu' --style=double '2'
 ncn-w001# yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.requests.memory' '15Gi'
 ncn-w001# yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.limits.cpu' --style=double '6'
-ncn-w001# yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.limits.memory' '30Gi
+ncn-w001# yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.limits.memory' '30Gi'
 ```
 
 4. Check that the customization file has been updated.
@@ -156,7 +158,7 @@ ncn-w001# kubectl get cm -n loftsman loftsman-sysmgmt -o jsonpath='{.data.manife
 ncn-w001# yq write -i customizations.yaml 'spec.kubernetes.services.spire.cray-service.sqlCluster.resources.requests.cpu' --style=double '4'
 ncn-w001# yq write -i customizations.yaml 'spec.kubernetes.services.spire.cray-service.sqlCluster.resources.requests.memory' '4Gi'
 ncn-w001# yq write -i customizations.yaml 'spec.kubernetes.services.spire.cray-service.sqlCluster.resources.limits.cpu' --style=double '8'
-ncn-w001# yq write -i customizations.yaml 'spec.kubernetes.services.spire.cray-service.sqlCluster.resources.limits.memory' '8Gi
+ncn-w001# yq write -i customizations.yaml 'spec.kubernetes.services.spire.cray-service.sqlCluster.resources.limits.memory' '8Gi'
 ```
 
 4. Check that the customization file has been updated.
@@ -167,7 +169,7 @@ requests:
   cpu: "4"
   memory: 4Gi
 limits:
-  cpu: 8"
+  cpu: "8"
   memory: 8Gi
 ```
 
