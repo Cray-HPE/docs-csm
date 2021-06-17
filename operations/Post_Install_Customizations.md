@@ -41,7 +41,7 @@ Select the **CPU Throttling** drop down to see the CPU Throttling graph for the 
 
 The presence of CPU throttling doesn't always indicate a problem, but if a service is being slow or experiencing latency issues, reviewing the graph and adjusting the resources.limits.cpu can be beneficial. If the pod is being throttled at or near 100% for any period of time, then adjustments are likely needed. If the service's response time is critical, then adjusting the pod's resources to greatly reduce or eliminate any CPU throttling may be required.  
 
-The resources.requests.cpu are used by the kubernetes scheduler to decide which node to place the Pod on and do not impact CPU Throttling.  The resources.limits.cpu can never be lower than the resources.requests.cpu.
+The resources.requests.cpu are used by the Kubernetes scheduler to decide which node to place the pod on and do not impact CPU Throttling. The resources.limits.cpu can never be lower than the resources.requests.cpu.
 
 **For Memory Usage:**
 
