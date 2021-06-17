@@ -51,7 +51,7 @@ The following administrative topics can be found in this guide:
    * [Update SLS with UAN Aliases](update_sls_with_uan_aliases.md)
    * [Configure NTP on NCNs](configure_ntp_on_ncns.md)
    * [Change NCN Image Root Password and SSH Keys](change_ncn_image_root_password_and_ssh_keys.md)
-   * [Remove Artifacts from Product Installations](Remove_Artifacts_from_Product_Installations.md)
+   * [Post-Install Customizations](Post_Install_Customizations.md)
 
 
 <a name="image-management"></a>
@@ -283,7 +283,6 @@ The system management components are broken down into a series of microservices.
        *   [Troubleshoot Postgres Databases with the Patroni Tool](kubernetes/Troubleshoot_Postgres_Databases_with_the_Patroni_Tool.md)
        *   [View Postgres Information for System Databases](kubernetes/View_Postgres_Information_for_System_Databases.md)
    *   [Configure Kubernetes on Compute Nodes](kubernetes/Configure_Kubernetes_on_Compute_Nodes.md)
-   *   [Post-Install Customizations](kubernetes/Post_Install_Customizations.md)
    *   [Kubernetes Troubleshooting Information](kubernetes/Kubernetes_Troubleshooting_Information.md)
       *   [Kubernetes Log File Locations](kubernetes/Kubernetes_Log_File_Locations.md)
       *   [Troubleshoot Liveliness or Readiness Probe Failures](kubernetes/Troubleshoot_Liveliness_Readiness_Probe_Failures.md)

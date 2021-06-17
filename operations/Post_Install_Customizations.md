@@ -18,7 +18,7 @@ Use the Grafana "Kubernetes/Compute Resources/Pod" Dashboard to view the memory 
 
 Check Prometheus for recent CPUThrottlingHigh Alerts.
 
-From Prometheus (https://prometheus\.SYSTEM-NAME_DOMAIN-NAME/), select the **Alert** tab and scroll down to the alert for **CPUThrottlingHigh**.  
+From Prometheus (https://prometheus.SYSTEM-NAME_DOMAIN-NAME/), select the **Alert** tab and scroll down to the alert for **CPUThrottlingHigh**.  
 
 Use the Grafana "Kubernetes/Compute Resources/Pod" Dashboard to view the throttling graphs over time for any pod that is alerting.  
 
@@ -26,7 +26,7 @@ Use the Grafana "Kubernetes/Compute Resources/Pod" Dashboard to view the throttl
 
 Use Grafana to investigate and analyze CPU Throttling and/or Memory Usage.
 
-From Grafana (https://grafana.\.SYSTEM-NAME_DOMAIN-NAME/) and the Home Dashboard, select the "Kubernetes/Compute Resources/Pod" Dashboard.
+From Grafana (https://grafana.SYSTEM-NAME_DOMAIN-NAME/) and the Home Dashboard, select the "Kubernetes/Compute Resources/Pod" Dashboard.
 
 Select the datasource, namespace, and pod based on the pod being examined. For example:
 ```
@@ -39,7 +39,7 @@ pod: prometheus-cray-sysmgmt-health-promet-prometheus-0
 
 Select the **CPU Throttling** drop down to see the CPU Throttling graph for the pod during the selected time (from the top right), and select the container (from the legends under the x axis).
 
-The presence of CPU throttling doesn't always indicate a problem, but if a service is being slow or experiencing latency issues, reviewing the graph and adjusting the resources.requests.cpu and/or resources.limits.cpu can be beneficial. If the pod is being throttled at or near 100% for any period of time, then adjustments are likely needed. If the service's response time is critical, then adjusting the pod's resources to greatly reduce or eliminate any cpu throttling may be required.
+The presence of CPU throttling doesn't always indicate a problem, but if a service is being slow or experiencing latency issues, reviewing the graph and adjusting the resources.requests.cpu and/or resources.limits.cpu can be beneficial. If the pod is being throttled at or near 100% for any period of time, then adjustments are likely needed. If the service's response time is critical, then adjusting the pod's resources to greatly reduce or eliminate any CPU throttling may be required.
 
 **For Memory Usage:**
 
@@ -248,7 +248,7 @@ gitea-vcs-postgres:
 
 ### References
 
-To make changes that will not persist installs or upgrades see the following references. These procedures will also help to verify and eliminate any issues in the short term. As other resource customizations are needed, contact support to request the feature.
+To make changes that will not persist across installs or upgrades, see the following references. These procedures will also help to verify and eliminate any issues in the short term. As other resource customizations are needed, contact support to request the feature.
 
 * Reference [Determine if Pods are Hitting Resource Limits](Determine_if_Pods_are_Hitting_Resource_Limits.md)
 * Reference [Increase Pod Resource Limits](Increase_Pod_Resource_Limits.md)
