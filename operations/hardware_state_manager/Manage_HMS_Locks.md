@@ -27,11 +27,10 @@ ReservationDisabled = false
 
 ### Disable Reservations
 
-Disabling a lock prevents a service from being able to make a reservation on it, and it releases/ends any current reservations. Even though SMD removes the reservation when disabling a lock, it does not mean that the Firmware Action Service (FAS) is aware that it has lost the reservation. 
+Disabling a lock prevents a service from being able to make a reservation on it, and it releases/ends any current reservations. Even though SMD removes the reservation when disabling a lock, it does not mean that the Firmware Action Service (FAS) is aware that it has lost the reservation. Additionally, if CAPMC has a reservation that is cancelled, disabled, or broken, it will do nothing to the existing CAPMC operation. There are no checks by CAPMC to make sure things are still reserved at any time during a power operation.
 
 This is a way to stop new operations from happening, not a way to prevent currently executing operations. 
 
-A potential side effect of disabling a reservation on a lock is that it may also cause the currently executing operations to stop or fail. For example, if the Cray Advanced Platform Monitoring and Control (CAPMC) service has a reservation to do a power operation, but then someone disables reservations, it might cause CAPMC to fail. CAPMC periodically checks reservation validity and renews reservations. Upon failure, CAPMC will halt the operation.
 
 ```bash
 ncn-m001# cray hsm locks disable create --component-ids x1003c5s2b1n1
