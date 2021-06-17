@@ -1,3 +1,9 @@
+
+
+
+
+
+
 ## Manage System Passwords
 
 Many system services require login credentials to gain access to them. The information below is a comprehensive list of system passwords and how to change them.
@@ -63,19 +69,27 @@ Each rack type includes a different set of passwords. During different stages of
 
 The tables below include the default login credentials for each rack type. These passwords can be changed by going into the console on a given switch and changing it. However, if the user gets locked out attempting to change the password or the configuration gets corrupted for an individual switch, it can wipe out the entire network configuration for the system.
 
+**Liquid Cooled Cabinet**:
+
 |Name|Role|Switch|IP|Login|Password|
 |----|----|------|--|-----|--------|
 |smn01|Leaf/Mgmt|Dell S3048-ON|10.254.0.2|admin|!nitial0|
 |smn02|Spine-001|Mellanox SN2100|10.254.0.1|admin|!nitial0|
 |smn03|Spine-002|Mellanox SN2100|10.254.0.3|admin|!nitial0|
 
+**Air Cooled Cabinet:**
+
 |Name|Role|Switch|IP|Login|Password|
 |----|----|------|--|-----|--------|
 |mtnsw01|Leaf/Mgmt|Dell S3048-ON|10.254.0.2|admin|!nitial0|
 
+**Coolant Distribution Unit (CDU):**
+
 |Name|Role|Switch|IP|Login|Password|
 |----|----|------|--|-----|--------|
 |cdu-s1|CDU|Dell S4048T-ON|10.254.0.2|admin|shasta0|
+
+**ClusterStor:**
 
 |Name|Role|Switch|IP|Login|Password|
 |----|----|------|--|-----|--------|
@@ -249,5 +263,4 @@ The following are the default login credentials for Gigabyte:
 
 -   Username: admin
 -   Password: password
-
 
