@@ -32,14 +32,37 @@ if [[ ${first_master_hostname} == ${upgrade_ncn} ]]; then
    state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
    if [[ $state_recorded == "0" ]]; then
       echo "====> ${state_name} ..."
-      csi handoff bss-update-cloud-init --set meta-data.first-master-hostname=$STABLE_NCN --limit Global
-      /usr/share/doc/csm/upgrade/1.0/scripts/k8s/promote-initial-master.sh
+      promotingMaster="none"
+      masterNodes=$(kubectl get nodes| grep "ncn-m" | awk '{print $1}')
+      for node in $masterNodes; do
+        # skip upgrade_ncn
+        if [[ ${node} == ${upgrade_ncn} ]]; then
+            continue;
+        fi
+        # check if cloud-init data is healthy
+        ssh $node -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null 'cloud-init query -a > /dev/null 2>&1'
+        rc=$?
+        if [[ "$rc" -eq 0 ]]; then
+            promotingMaster=$node
+            echo "Promote: ${promotingMaster} to be FIRST_MASTER"
+            break;
+        fi
+      done  
+
+      if [[ ${promotingMaster} == "none" ]];then
+        echo "No master nodes has healthy cloud-init metadata, fail upgrade. You may try to upgrade another master node first. If that still fails, we don't have any master nodes that can be promoted."
+        exit 1
+      fi
+
+      csi handoff bss-update-cloud-init --set meta-data.first-master-hostname=$promotingMaster --limit Global
+      ssh $promotingMaster -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "rpm --force -Uvh ${DOC_RPM_NEXUS_URL} || /usr/share/doc/csm/upgrade/1.0/scripts/k8s/promote-initial-master.sh"
       
       record_state "${state_name}" ${upgrade_ncn}
    else
       echo "====> ${state_name} has beed completed"
    fi
 fi
+
 
 state_name="STOP_ETCD_SERVICE"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
