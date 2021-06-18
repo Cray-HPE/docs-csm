@@ -103,10 +103,10 @@ else
 fi
 
 # polling console logs in background
+kill $(ps -ef | grep kubectl | grep -v "grep" | awk '{print $2}') || true
 CON_POD=$(kubectl get pods -n services -o wide|grep cray-console-operator|awk '{print $1}')
 CON_NODE=$(kubectl -n services exec $CON_POD -- sh -c "/app/get-node $UPGRADE_XNAME" | jq .podname | sed 's/"//g')
 kubectl -n services logs -f pod/$CON_NODE -c log-forwarding | grep $UPGRADE_XNAME >> $upgrade_ncn.boot.log &
-export RUNNING_BOOT_LOG_PID=$!
 
 
 state_name="POWER_CYCLE_NCN"

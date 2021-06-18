@@ -42,6 +42,5 @@ function is_state_recorded () {
 
 function err_report() {
     echo "[ERROR] - Unexpected erros, check output above"
-    kill ${RUNNING_BOOT_LOG_PID} || true
 }
 
