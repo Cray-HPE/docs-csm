@@ -142,6 +142,32 @@ Run `csm-service-upgrade.sh` to deploy upgraded CSM applications and services:
 /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/csm-service-upgrade.sh
 ```
 
-### Troubleshooting and Recovering from Failed Upgrades
+### Troubleshooting and Recovering from Errors During or After Upgrade
 
+##### General Kubernetes Commands for Troubleshooting
+Please see [Kubernetes_Troubleshooting_Information.md](../../operations/kubernetes/Kubernetes_Troubleshooting_Information.md).
+
+##### Troubleshooting PXE Boot Issues
+If execution of the upgrade procedures results in NCNs that have errors booting, please refer to these troubleshooting procedures: 
+[PXE Booting Runbook](https://connect.us.cray.com/confluence/display/CASMNET/PXE+Booting+Runbook)
+
+##### Troubleshooting NTP
+During execution of the upgrade procedure, if it is noted that there is clock skew on one or more NCNs, the following procedure can be used to troubleshoot NTP config or to sync time:
+[configure_ntp_on_ncns.md](../../operations/configure_ntp_on_ncns.md)
+
+##### Bare-Metal Etcd Recovery
+If in the upgrade process of the master nodes, it is found that the bare-metal etcd cluster (that houses values for the kubernetes cluster) has a failure,
+it may be necessary to restore that cluster from back-up.  Please see
+[Restore_Bare-Metal_etcd_Clusters_from_an_S3_Snapshot.md](../../operations/kubernetes/Restore_Bare-Metal_etcd_Clusters_from_an_S3_Snapshot.md) for that procedure.
+
+##### Back-ups for Etcd-Operator Clusters
+After upgrading, if health checks indicate that etcd pods are not in a healthy/running state, recovery procedures may be needed.  Please see
+[Backups_for_etcd-operator_Clusters.md](../../operations/kubernetes/Backups_for_etcd-operator_Clusters.md) for these procedures.
+
+##### Recovering from Postgres Dbase Issues
+After upgrading, if health checks indicate the postgres pods are not in a healthy/running state, recovery procedures may be needed.
+Please see [Troubleshoot_Postgres_Databases_with_the_Patroni_Tool.md](../../operations/kubernetes/Troubleshoot_Postgres_Databases_with_the_Patroni_Tool.md) for troubleshooting and recovery procedures.
+
+##### Troubleshooting Spire Pods Not Staring on NCNs
+Please see [Troubleshoot_SPIRE_Failing_to_Start_on_NCNs.md](../../operations/security_and_authentication/Troubleshoot_SPIRE_Failing_to_Start_on_NCNs.md).
 
