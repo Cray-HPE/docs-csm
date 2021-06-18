@@ -85,6 +85,16 @@ else
     echo "mgmt IP/Host: ${upgrade_ncn_mgmt_host}"
 fi
 
+# retrieve IPMI username/password from vault
+VAULT_TOKEN=$(kubectl get secrets cray-vault-unseal-keys -n vault -o jsonpath={.data.vault-root} | base64 -d)
+IPMI_USERNAME=$(kubectl exec -it -n vault -c vault cray-vault-1 -- sh -c "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo $VAULT_TOKEN`; vault kv get -format=json secret/hms-creds/$UPGRADE_MGMT_XNAME" | jq -r '.data.Username')
+IPMI_PASSWORD=$(kubectl exec -it -n vault -c vault cray-vault-1 -- sh -c "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo $VAULT_TOKEN`; vault kv get -format=json secret/hms-creds/$UPGRADE_MGMT_XNAME" | jq -r '.data.Password')
+# during worker upgrade, one vault pod might be offline, so we just try another one
+if [[ -z ${IPMI_USERNAME} ]]; then
+    IPMI_USERNAME=$(kubectl exec -it -n vault -c vault cray-vault-0 -- sh -c "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo $VAULT_TOKEN`; vault kv get -format=json secret/hms-creds/$UPGRADE_MGMT_XNAME" | jq -r '.data.Username')
+    IPMI_PASSWORD=$(kubectl exec -it -n vault -c vault cray-vault-0 -- sh -c "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo $VAULT_TOKEN`; vault kv get -format=json secret/hms-creds/$UPGRADE_MGMT_XNAME" | jq -r '.data.Password')
+fi
+
 state_name="SET_PXE_BOOT"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
@@ -96,6 +106,13 @@ if [[ $state_recorded == "0" ]]; then
 else
     echo "====> ${state_name} has beed completed"
 fi
+
+# polling console logs in background
+kill $(ps -ef | grep kubectl | grep -v "grep" | awk '{print $2}') || true
+CON_POD=$(kubectl get pods -n services -o wide|grep cray-console-operator|awk '{print $1}')
+CON_NODE=$(kubectl -n services exec $CON_POD -- sh -c "/app/get-node $UPGRADE_XNAME" | jq .podname | sed 's/"//g')
+kubectl -n services logs -f pod/$CON_NODE -c log-forwarding | grep $UPGRADE_XNAME >> $upgrade_ncn.boot.log &
+
 
 state_name="POWER_CYCLE_NCN"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
@@ -120,11 +137,9 @@ if [[ $state_recorded == "0" ]]; then
     # inline tips for watching boot logs
     cat <<EOF
 TIPS:
-    Watch the console for the node being rebuilt by exec'ing into the conman pod and connect to the console (press &. to exit).
+    Watch the console for the node being rebuilt by:
 
-    NOTE: if this is an install of ncn-m001, you won't be able to use conman to monitor booting progress
-
-    kubectl -n services exec -it $(kubectl get po -n services | grep conman | awk '{print $1}') -- /bin/sh -c 'conman -j $UPGRADE_XNAME'
+    tail -f $upgrade_ncn.boot.log
 EOF
     # wait for boot
     counter=0
@@ -163,7 +178,7 @@ EOF
     ssh-keygen -R $upgrade_ncn -f /root/.ssh/known_hosts || true
     ssh-keyscan -H $upgrade_ncn >> ~/.ssh/known_hosts || true
     printf "%s" "waiting for cloud-init: $upgrade_ncn  ..."
-    while ! ssh $upgrade_ncn 'cat /var/log/messages  | grep "Cloud-init" | grep "finished"' &> /dev/null
+    while ! ssh $upgrade_ncn -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null 'cat /var/log/messages  | grep "Cloud-init" | grep "finished"' &> /dev/null
     do
         printf "%c" "."
         sleep 20
