@@ -13,14 +13,6 @@ affected.  Then the "upgrade" node is the node to next be upgraded.
 When doing a rolling upgrade of the entire cluster, at some point you will need to transfer the
 responsibility of the "stable" NCN to another master node. However, you do not need to do this before you are ready to
 upgrade that node.
-
-### Credentials & Environment Variables
-> Internal use: Default credentials are set for internal systems. We don't have to speicify below environment variables unless the system has different ones set.
-
-- IPMI_USERNAME: username of ipmitool
-- IPMI_PASSWORD: password of ipmitool
-- SW_USERNAME:   username of switches
-- SW_PASSWORD:   password of switches
 ### Stage 0 - Prerequisites & Preflight Checks
 
 > NOTE: CSM-0.9.3 is the version of CSM required in order to upgrade to CSM-1.0.0 (available with Shasta v1.5).

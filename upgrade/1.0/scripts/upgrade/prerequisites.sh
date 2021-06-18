@@ -80,7 +80,7 @@ if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     tar -xzf ${TARBALL_FILE}
     rm -rf ${TARBALL_FILE}
-    
+
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has beed completed"
@@ -256,6 +256,31 @@ if [[ $state_recorded == "0" ]]; then
 
     rpm --force -Uvh $(find $CSM_RELEASE -name \*csm-testing\* | sort | tail -1)
     goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-preflight-tests.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
+
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has beed completed"
+fi
+
+state_name="SCALE_DOWN_CONMAN"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+
+    kubectl scale deployment -n services cray-conman --replicas=0
+
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has beed completed"
+fi
+
+state_name="INSTALL_NEW_CONSOLE"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    helm -n services upgrade --install --wait cray-console-operator ./${CSM_RELEASE}/helm/cray-console-operator-*.tgz
+    helm -n services upgrade --install --wait cray-console-node ./${CSM_RELEASE}/helm/cray-console-node-*.tgz
+    helm -n services upgrade --install --wait cray-console-data ./${CSM_RELEASE}/helm/cray-console-data-*.tgz
 
     record_state ${state_name} $(hostname)
 else
