@@ -51,7 +51,7 @@ The following administrative topics can be found in this guide:
    * [Update SLS with UAN Aliases](update_sls_with_uan_aliases.md)
    * [Configure NTP on NCNs](configure_ntp_on_ncns.md)
    * [Change NCN Image Root Password and SSH Keys](change_ncn_image_root_password_and_ssh_keys.md)
-   * [Remove Artifacts from Product Installations](Remove_Artifacts_from_Product_Installations.md)
+   * [Post-Install Customizations](Post_Install_Customizations.md)
 
 
 <a name="image-management"></a>
