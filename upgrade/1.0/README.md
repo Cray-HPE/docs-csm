@@ -142,7 +142,7 @@ Run `csm-service-upgrade.sh` to deploy upgraded CSM applications and services:
 /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/csm-service-upgrade.sh
 ```
 
-### Troubleshooting and Recovering from Errors During of After Upgrade
+### Troubleshooting and Recovering from Errors During or After Upgrade
 
 ##### General Kubernetes Commands for Troubleshooting
 Please see [Kubernetes_Troubleshooting_Information.md](../../operations/kubernetes/Kubernetes_Troubleshooting_Information.md).
