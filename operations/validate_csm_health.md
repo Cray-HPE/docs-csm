@@ -97,6 +97,12 @@ The ncnHealthChecks script reports the following health information:
 
 Execute ncnHealthChecks script and analyze the output of each individual check. 
 
+**IMPORTANT:** If the output of the ncnHealthChecks.sh script shows that there are nodes that do not have the metal.no_wipe=1 then please to the following
+
+```bash
+ncn# csi handoff bss-update-param --set metal.no-wipe=1 --limit <SERVER_XNAME>
+```
+
 **Note**: The `cray-crus-` pod is expected to be in the Init state until slurm and munge
 are installed. In particular, this will be the case if you are executing this as part of the validation after completing the [Install CSM Services](../install/install_csm_services.md).
 If in doubt, you can validate the CRUS service using the [CMS Validation Tool](#sms-health-checks). If the CRUS check passes using that tool, you don't need to worry
@@ -379,6 +385,9 @@ Count: 2, Failed: 0, Skipped: 0
 There are multiple [Goss](https://github.com/aelsabbahy/goss) test suites available that cover a variety of sub-systems.
 
 You should now run the NCN health checks against the three different types of nodes with the following commands:
+
+**IMPORTANT:** These tests may only be successful while booted into the pit node.  You should not run these as part of your upgrade testing.  This includes the kubernetes check in the next block.
+
 
 ```bash
 pit# /opt/cray/tests/install/ncn/automated/ncn-healthcheck-master

@@ -1,23 +1,23 @@
-#
+#!/bin/bash
 # Copyright 2021 Hewlett Packard Enterprise Development LP
-#
+
 ###
 # Part 1.  Prep work
 ###
 
-file="/etc/cray/ceph/_upgraded"
-pre_pull_images_file="/etc/cray/ceph/images_pre_pulled"
-convert_rgw_file="/etc/cray/ceph/radosgw_converted"
-upgrade_init_file="/etc/cray/ceph/upgrade_initialized"
-upgrade_mons_file="/etc/cray/ceph/mons_upgraded"
-upgrade_mgrs_file="/etc/cray/ceph/mgrs_upgraded"
-distribute_keys_file="/etc/cray/ceph/keys_distributed"
-setup_orch_file="/etc/cray/ceph/converted_to_orch"
-upgrade_osds_file="/etc/cray/ceph/osds_upgraded"
-upgrade_mds_file="/etc/cray/ceph/mds_upgraded"
-upgrade_rgws_file="/etc/cray/ceph/rgws_upgraded"
+export file="/etc/cray/ceph/_upgraded"
+export pre_pull_images_file="/etc/cray/ceph/images_pre_pulled"
+export convert_rgw_file="/etc/cray/ceph/radosgw_converted"
+export upgrade_init_file="/etc/cray/ceph/upgrade_initialized"
+export upgrade_mons_file="/etc/cray/ceph/mons_upgraded"
+export upgrade_mgrs_file="/etc/cray/ceph/mgrs_upgraded"
+export distribute_keys_file="/etc/cray/ceph/keys_distributed"
+export setup_orch_file="/etc/cray/ceph/converted_to_orch"
+export upgrade_osds_file="/etc/cray/ceph/osds_upgraded"
+export upgrade_mds_file="/etc/cray/ceph/mds_upgraded"
+export upgrade_rgws_file="/etc/cray/ceph/rgws_upgraded"
+export registry="${1:-registry.local}"
 num_storage_nodes=$(craysys metadata get num-storage-nodes)
-registry="${1:-registry.local}"
 
 . ./lib/ceph-health.sh
 . ./lib/mark_step_complete.sh
@@ -42,14 +42,14 @@ if [ ! -d "/etc/cray/ceph" ]; then
  mkdir /etc/cray/ceph
 fi
 
-for node in $(seq 1 $num_storage_nodes); do
- nodename=$(printf "ncn-s%03d" $node)
- ssh-keyscan -H $nodename >> ~/.ssh/known_hosts
+for node in $(seq 1 "$num_storage_nodes"); do
+ nodename=$(printf "ncn-s%03d" "$node")
+ ssh-keyscan -H "$nodename" >> ~/.ssh/known_hosts
 done
 
-for node in $(seq 1 $num_storage_nodes); do
- nodename=$(printf "ncn-s%03d.nmn" $node)
- ssh-keyscan -H $nodename >> ~/.ssh/known_hosts
+for node in $(seq 1 "$num_storage_nodes"); do
+ nodename=$(printf "ncn-s%03d.nmn" "$node")
+ ssh-keyscan -H "$nodename" >> ~/.ssh/known_hosts
 done
 
 if [ -f "$pre_pull_images_file" ]; then
