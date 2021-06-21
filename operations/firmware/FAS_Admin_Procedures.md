@@ -282,7 +282,7 @@ The firmware image file must be on the system to update. Firmware file can be ex
 
 ---
 
-<a name="dry-run"></a>
+<a name="dryrun"></a>
 
 ### Check for New Firmware Versions with a Dry-Run
 
@@ -369,61 +369,84 @@ This procedure includes information on how check the firmware versions for the e
 
 	The following returned messages will help determine if a firmware update is needed.
 
-  -   `NoOperation`: Nothing to do, already at version.
-  -   `NoSolution`: No image is available or data is missing.
-  -   `succeeded`: A firmware version that FAS can update the firmware to is available and it should work when actually updating the firmware.
-  -   `failed`: There is something that FAS could do, but it likely would fail; most likely because the file is missing.
+  	-   `NoOperation`: Nothing to do, already at version.
+  	-   `NoSolution`: No image is available or data is missing.
+  	-   `succeeded`: A firmware version that FAS can update the firmware to is available and it should work when actually updating the firmware.
+  	-   `failed`: There is something that FAS could do, but it likely would fail; most likely because the file is missing.
 
-  1. Get a high-level summary of the FAS job to determine if there are any upgradeable firmware images available.
+  	1. Get a high-level summary of the FAS job to determine if there are any upgradeable firmware images available.
 
-     Use the returned `actionID` from the cray fas actions create command.
+		Use the returned `actionID` from the cray fas actions create command.
 
-     In the example below, there are two operations in the `succeeded` state, indicating there is an available firmware version that FAS can use to update firmware.
+		In the example below, there are two operations in the `succeeded` state, indicating there is an available firmware version that FAS can use to update firmware.
 
-     ```bash
-     ncn-m001# cray fas actions status describe actionID
-     blockedBy = []
-     state = "completed"
-     actionID = "0a305f36-6d89-4cf8-b4a1-b9f199afaf3b" startTime = "2020-06-23 15:43:42.939100799 +0000 UTC"
-     snapshotID = "00000000-0000-0000-0000-000000000000"
-     endTime = "2020-06-23 15:48:59.586748151 +0000 UTC"
-         
-     [actions.command]
-     description = "upgrade of x9000c1s3b1 Nodex.BIOS to WNC 1.1.2" tag = "default"
-     restoreNotPossibleOverride = true timeLimit = 1000
-     version = "latest" overrideDryrun = false [actions.operationCounts] noOperation = 0
-     succeeded = 2 
-     verifying = 0
-     unknown = 0
-     configured = 0
-     initial = 0
-     failed = 0
-     noSolution = 0
-     aborted = 0
-     needsVerified = 0
-     total = 2
-     inProgress = 0
-     blocked = 0 [[actions]] blockedBy = [] state = "completed"
-     actionID = "0b9300d6-8f06-4019-a8fa-7b3ff65e5aa8" startTime = "2020-06-18 03:06:25.694573366 +0000 UTC"
-     snapshotID = "00000000-0000-0000-0000-000000000000"
-     endTime = "2020-06-18 03:11:06.806297546 +0000 UTC"
-     ```
+     	```bash
+       ncn-m001# cray fas actions status describe actionID
+       blockedBy = []
+       state = "completed"
+       actionID = "0a305f36-6d89-4cf8-b4a1-b9f199afaf3b" startTime = "2020-06-23 15:43:42.939100799 +0000 UTC"
+       snapshotID = "00000000-0000-0000-0000-000000000000"
+       endTime = "2020-06-23 15:48:59.586748151 +0000 UTC"
 
-     The action is still in progress if the state field is not completed or aborted.
+       [actions.command]
+       description = "upgrade of x9000c1s3b1 Nodex.BIOS to WNC 1.1.2" tag = "default"
+       restoreNotPossibleOverride = true timeLimit = 1000
+       version = "latest" overrideDryrun = false [actions.operationCounts] noOperation = 0
+       succeeded = 2 
+       verifying = 0
+       unknown = 0
+       configured = 0
+       initial = 0
+       failed = 0
+       noSolution = 0
+       aborted = 0
+       needsVerified = 0
+       total = 2
+       inProgress = 0
+       blocked = 0 [[actions]] blockedBy = [] state = "completed"
+       actionID = "0b9300d6-8f06-4019-a8fa-7b3ff65e5aa8" startTime = "2020-06-18 03:06:25.694573366 +0000 UTC"
+       snapshotID = "00000000-0000-0000-0000-000000000000"
+       endTime = "2020-06-18 03:11:06.806297546 +0000 UTC"
+       ```
 
-  2. View the details of an action to get more information on each operation in the FAS action.
+       The action is still in progress if the state field is not completed or aborted.
 
-     In the example below, there is an operation for an xname in the failed state, indicating there is something that FAS could do, but it likely would fail. A common cause for an operation failing is because the firmware image file is missing.
+	
+    2. View the details of an action to get more information on each operation in the FAS action.
 
-     ```bash
-     ncn-m001# cray fas actions describe actionID --format json
-     {
-           "parameters": {
-             "stateComponentFilter": {
-               "deviceTypes": [
-                 "routerBMC"
-               ]
+		In the example below, there is an operation for an xname in the failed state, indicating there is something that FAS could do, but it likely would fail. A common cause for an operation failing is because the firmware image file is missing.
+
+       ```bash
+       ncn-m001# cray fas actions describe actionID --format json
+       {
+             "parameters": {
+               "stateComponentFilter": {
+                 "deviceTypes": [
+                   "routerBMC"
+                 ]
+               },
+               "command": {
+                 "dryrun": false,
+                 "description": "upgrade of routerBMCs for cray",
+                 "tag": "default",
+                 "restoreNotPossibleOverride": true,
+                 "timeLimit": 1000,
+                 "version": "latest"
+               },
+               "inventoryHardwareFilter": {
+                 "manufacturer": "cray"
+               },
+               "imageFilter": {
+                 "imageID": "00000000-0000-0000-0000-000000000000"
+               },
+               "targetFilter": {
+                 "targets": [
+                   "BMC"
+                 ]
+               }
              },
+             "blockedBy": [],
+             "state": "completed",
              "command": {
                "dryrun": false,
                "description": "upgrade of routerBMCs for cray",
@@ -432,80 +455,58 @@ This procedure includes information on how check the firmware versions for the e
                "timeLimit": 1000,
                "version": "latest"
              },
-             "inventoryHardwareFilter": {
-               "manufacturer": "cray"
-             },
-             "imageFilter": {
-               "imageID": "00000000-0000-0000-0000-000000000000"
-             },
-             "targetFilter": {
-               "targets": [
-                 "BMC"
-               ]
-             }
-           },
-           "blockedBy": [],
-           "state": "completed",
-           "command": {
-             "dryrun": false,
-             "description": "upgrade of routerBMCs for cray",
-             "tag": "default",
-             "restoreNotPossibleOverride": true,
-             "timeLimit": 1000,
-             "version": "latest"
-           },
-           "actionID": "e0cdd7c2-32b1-4a25-9b2a-8e74217eafa7",
-           "startTime": "2020-06-26 20:03:37.316932354 +0000 UTC",
-           "snapshotID": "00000000-0000-0000-0000-000000000000",
-           "endTime": "2020-06-26 20:04:07.118243184 +0000 UTC",
-           "operationSummary": {
-             "succeeded": {
-               "OperationsKeys": []
-             },
-             "verifying": {
-               "OperationsKeys": []
-             },
-             "unknown": {
-               "OperationsKeys": []
-             },
-             "configured": {
-               "OperationsKeys": []
-             },
-             "initial": {
-               "OperationsKeys": []
-             },
-             "failed": {   
-               "OperationsKeys": [
-                 {
-                   "stateHelper": "unexpected change detected in firmware version. Expected sc.1.4.35-prod- master.arm64.2020-06-26T08:36:42+00:00.0c2bb02 got: sc.1.3.307-prod-master.arm64.2020-06-13T00:28:26+00:00.f91edff",
-                   "fromFirmwareVersion": "",
-                   "xname": "x5000c1r7b0",
-                   "target": "BMC",
-                   "operationID": "0796eed0-e95d-45ea-bc71-8903d52cffde"
-                 },
-               ]
-             },
-             "noSolution": {
-               "OperationsKeys": []
-             },
-             "aborted": {
-               "OperationsKeys": []
-             },
-             "needsVerified": {
-               "OperationsKeys": []
-             },
-             "noOperation": {
-               "OperationsKeys": []
-             },
-             "inProgress": {
-               "OperationsKeys": []
-             },
-             "blocked": {
-               "OperationsKeys": []
+             "actionID": "e0cdd7c2-32b1-4a25-9b2a-8e74217eafa7",
+             "startTime": "2020-06-26 20:03:37.316932354 +0000 UTC",
+             "snapshotID": "00000000-0000-0000-0000-000000000000",
+             "endTime": "2020-06-26 20:04:07.118243184 +0000 UTC",
+             "operationSummary": {
+               "succeeded": {
+                 "OperationsKeys": []
+               },
+               "verifying": {
+                 "OperationsKeys": []
+               },
+               "unknown": {
+                 "OperationsKeys": []
+               },
+               "configured": {
+                 "OperationsKeys": []
+               },
+               "initial": {
+                 "OperationsKeys": []
+               },
+               "failed": {   
+                 "OperationsKeys": [
+                   {
+                     "stateHelper": "unexpected change detected in firmware version. Expected sc.1.4.35-prod- master.arm64.2020-06-26T08:36:42+00:00.0c2bb02 got: sc.1.3.307-prod-master.arm64.2020-06-13T00:28:26+00:00.f91edff",
+                     "fromFirmwareVersion": "",
+                     "xname": "x5000c1r7b0",
+                     "target": "BMC",
+                     "operationID": "0796eed0-e95d-45ea-bc71-8903d52cffde"
+                   },
+                 ]
+               },
+               "noSolution": {
+                 "OperationsKeys": []
+               },
+               "aborted": {
+                 "OperationsKeys": []
+               },
+               "needsVerified": {
+                 "OperationsKeys": []
+               },
+               "noOperation": {
+                 "OperationsKeys": []
+               },
+               "inProgress": {
+                 "OperationsKeys": []
+               },
+               "blocked": {
+                 "OperationsKeys": []
+               }
              }
            }
-         }
-     ```
+       ```
 
 3. View the details for a specific operation.
 
