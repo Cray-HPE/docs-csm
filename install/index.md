@@ -193,7 +193,7 @@ sections, but there is also a general troubleshooting topic.
    with many devices on the system. FAS can be used to update the firmware for all of the devices it
    communicates with at once, or specific devices can be targeted for a firmware update.  
    
-      See [Update Firmware with FAS](../operations/update_firmware_with_fas.md)
+      See [Firmware Action Service (FAS)](../operations/firmware/Firmware_Action_Service.md)
    <a name="prepare_compute_nodes"></a>
 
    1. Prepare Compute Nodes  
