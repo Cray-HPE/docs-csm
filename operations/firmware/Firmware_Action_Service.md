@@ -8,7 +8,7 @@ FAS images contain the following information that is needed for a hardware devic
 * Selection criteria: How to link a firmware image to a specific hardware type.
 * Image data: Where the firmware image resides in Simple Storage Service (S3) and what firmwareVersion it will report after it is successfully applied. See [Artifact Management](../artifact_management/Artifact_Management.md) for more information.
 
-### Topics:
+### Topics
    * [Prerequisites](#prerequisites)
    * [Warning](#warning)
    * [Current Capabilities](#current-capabilities)
@@ -17,6 +17,7 @@ FAS images contain the following information that is needed for a hardware devic
    * [FAS Use Cases](#fas-use-cases)
    * [Firwmare Actions](#firmware-actions)
    * [Firmware Images](#firmware-images)
+   * [Table of Contents](#toc)
 
 <a name="prerequisites"></a>
 
@@ -92,25 +93,26 @@ For each item in the `Hardware Precedence Order`:
 <a name="hardware-precedence-order"></a>
 
 ### Hardware Precedence Order
-After you identify which hardware you have; start with the top most item on this list to update.  If you don't have the hardware, skip it.
 
-**IMPORTANT**: This process does not communicate the SAFE way to update NCNs. If you have not locked NCNs, or blindly use FAS to update NCNs without following the correct process, then **YOU WILL VIOLATE THE STABILITY OF THE SYSTEM**
+After identifying which hardware is in the system, start with the top most item on this list to update. If any of the following hardware is not in the system, skip it.
 
-**IMPORTANT** : Read the corresponding recipes! There are sometimes ancillary actions that must be completed in order to ensure update integrity.
+**IMPORTANT:**
+* This process does not communicate the SAFE way to update NCNs. If the NCNs have not been locked, or FAS is blindly used to update NCNs without following the correct process, then **THE STABILITY OF THE SYSTEM WILL BE  JEOPARDIZED**.
+* Read the corresponding recipes before updating. There are sometimes ancillary actions that must be completed in order to ensure update integrity.
 
 1. [Cray](FAS_Recipes.md#manufacturer-cray)
-     2. [RouterBMC](FAS_Recipes.md#cray-device-type-routerbmc-target-bmc)
-     2. [ChassisBMC](FAS_Recipes.md#cray-device-type-chassisbmc-target-bmc)
-     4. NodeBMC
-        4. [BMC](FAS_Recipes.md#cray-device-type-nodebmc-target-bmc)
-        5. [NodeBIOS](FAS_Recipes.md#cray-device-type-nodebmc-target-nodebios)
-        6. [Redstone FPGA 	](FAS_Recipes.md#cray-device-type-nodebmc-target-redstone-fpga) 
-5. [Gigabyte](FAS_Recipes.md#manufacturer-gigabyte)
-	6. [BMC](FAS_Recipes.md#gb-device-type-nodebmc-target-bmc) 
-	7. [BIOS](FAS_Recipes.md#gb-device-type-nodebmc-target-bios) 
+   1. [RouterBMC](FAS_Recipes.md#cray-device-type-routerbmc-target-bmc)
+   2. [ChassisBMC](FAS_Recipes.md#cray-device-type-chassisbmc-target-bmc)
+   3. NodeBMC
+      1. [BMC](FAS_Recipes.md#cray-device-type-nodebmc-target-bmc)
+      2. [NodeBIOS](FAS_Recipes.md#cray-device-type-nodebmc-target-nodebios)
+      3. [Redstone FPGA](FAS_Recipes.md#cray-device-type-nodebmc-target-redstone-fpga) 
+2. [Gigabyte](FAS_Recipes.md#manufacturer-gigabyte)
+   1. [BMC](FAS_Recipes.md#gb-device-type-nodebmc-target-bmc) 
+   2. [BIOS](FAS_Recipes.md#gb-device-type-nodebmc-target-bios) 
 3. [HPE](FAS_Recipes.md#manufacturer-hpe)
-     1. [BMC (iLO5)](FAS_Recipes.md#hpe-device-type-nodebmc-target--aka-bmc)
-     2. [BIOS (System ROM)](FAS_Recipes.md#hpe-device-type-nodebmc-target--aka-bios)
+   1. [BMC (iLO5)](FAS_Recipes.md#hpe-device-type-nodebmc-target--aka-bmc)
+   2. [BIOS (System ROM)](FAS_Recipes.md#hpe-device-type-nodebmc-target--aka-bios)
 
 
 <a name="fas-use-cases"></a>
@@ -191,3 +193,24 @@ The main components of an image are described below:
 
   The URL that FAS uses to get the firmware binary and the download link that is supplied to Redfish devices. Redfish devices are not able to directly communicate with S3.
 
+
+<a name="toc"></a>
+
+### Table of Contents
+
+* [FAS CLI](FAS_CLI.md)
+* [FAS Filters](FAS_Filters.md)
+* [FAS Recipes](FAS_Recipes.md)
+* [FAS Admin Procedures](FAS_Admin_Procedures.md)
+  * [Warning for Non-Compute Nodes (NCNs)](FAS_Admin_Procedures.md#warning)
+  * [Ignore Nodes within FAS](FAS_Admin_Procedures.md#ignore)
+  * [Use the `cray-fas-loader` Kubernetes Job](FAS_Admin_Procedures.md#k8s)
+  * [Override an Image for an Update](FAS_Admin_Procedures.md#overrideImage)
+  * [Load Firmware into FAS Manually](FAS_Admin_Procedures.md#manualLoad)
+  * [Check for New Firmware Versions with a Dry-Run](FAS_Admin_Procedures.md#dryrun)
+* [FAS Use Cases](FAS_Use_Cases.md)
+  * [Update Liquid-Cooled Node or Switch Firmware](FAS_Use_Cases.md#liquidcooled)
+  * [Update Chassis Management Module (CMM) Firmware](FAS_Use_Cases.md#cmm)
+  * [Update NCN BIOS and BMC Firmware with FAS](FAS_Use_Cases.md#ncn-bios-bmc)
+  * [Update Liquid-Cooled Compute Node BIOS Firmware](FAS_Use_Cases.md#cn-bios)
+  * [Compute Node BIOS Workaround for HPE CRAY EX425](FAS_Use_Cases.md#cn-workaround)

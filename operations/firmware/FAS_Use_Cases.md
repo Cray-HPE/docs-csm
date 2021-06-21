@@ -8,6 +8,8 @@ Use the Firmware Action Service (FAS) to update the firmware on supported hardwa
 4. [Update Liquid-Cooled Compute Node BIOS Firmware](#cn-bios)
 5. [Compute Node BIOS Workaround for HPE CRAY EX425](#cn-workaround)
 
+---
+
 <a name="liquidcooled"></a>
 
 ### Update Liquid-Cooled Node or Switch Firmware
@@ -284,6 +286,8 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
     ```
 
 
+---
+
 <a name="cmm"></a>
 
 ### Update Chassis Management Module Firmware
@@ -446,6 +450,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
     
 6.  After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
 
+---
 
 <a name="ncn-bios-bmc"></a>
 
@@ -598,6 +603,8 @@ Use `2` as the `target` to indicate `System ROM`.
 ```
 
 The NCN must be rebooted after updating the BIOS firmware. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure.
+
+---
 
 <a name="cn-bios"></a>
 
@@ -839,6 +846,7 @@ Use this procedure to update compute node BIOS firmware using FAS. There are two
 
 The nodes can be powered back on after the BIOS is updated.
 
+---
 
 <a name="cn-workaround"></a>
 
@@ -892,34 +900,35 @@ Correct an issue where the model of the liquid-cooled compute node BIOS is the i
 
     The model in this example is `WNC-Rome` and the firmware version currently running is `wnc.bios-1.2.5`.
 
-    #### Procedure
-    1.  Search for a FAS image record with `cray` as the manufacturer, `Node1.BIOS` as the target, and `HPE CRAY EX425` as the model.
+#### Procedure
+1.  Search for a FAS image record with `cray` as the manufacturer, `Node1.BIOS` as the target, and `HPE CRAY EX425` as the model.
 
-    ```bash
-    ncn# cray fas images list --format json | jq '.images[] | select(.manufacturer=="cray") | select(.target=="Node1.BIOS") | select(any(.models[]; contains("EX425")))'
-    {
-        "imageID": "e23f5465-ed29-4b18-9389-f8cf0580ca60",
-        "createTime": "2021-03-04T00:04:05Z",
-        "deviceType": "nodeBMC",
-        "manufacturer": "cray",
-        "models": [
-          "HPE CRAY EX425"
-        ],
-        "softwareIds": [
-          "bios.ex425.."
-        ],
-        "target": "Node1.BIOS",
-        "tags": [
-          "default"
-        ],
-        "firmwareVersion": "ex425.bios-1.4.3",
-        "semanticFirmwareVersion": "1.4.3",
-        "pollingSpeedSeconds": 30,
-        "s3URL": "s3:/fw-update/2227040f7c7d11eb9fa00e2f2e08fd5d/ex425.bios-1.4.3.tar.gz"
+  ```bash
+  ncn# cray fas images list --format json | jq '.images[] | select(.manufacturer=="cray") \
+  | select(.target=="Node1.BIOS") | select(any(.models[]; contains("EX425")))'
+  {
+      "imageID": "e23f5465-ed29-4b18-9389-f8cf0580ca60",
+      "createTime": "2021-03-04T00:04:05Z",
+      "deviceType": "nodeBMC",
+      "manufacturer": "cray",
+      "models": [
+        "HPE CRAY EX425"
+      ],
+      "softwareIds": [
+        "bios.ex425.."
+      ],
+      "target": "Node1.BIOS",
+      "tags": [
+        "default"
+      ],
+      "firmwareVersion": "ex425.bios-1.4.3",
+      "semanticFirmwareVersion": "1.4.3",
+      "pollingSpeedSeconds": 30,
+      "s3URL": "s3:/fw-update/2227040f7c7d11eb9fa00e2f2e08fd5d/ex425.bios-1.4.3.tar.gz"
     }
     ```
-    
-Take note of the returned imageID value to use in the next step.
+
+  Take note of the returned imageID value to use in the next step.
 
 2.  Create a JSON file to override the existing image with the corrected values.
 
