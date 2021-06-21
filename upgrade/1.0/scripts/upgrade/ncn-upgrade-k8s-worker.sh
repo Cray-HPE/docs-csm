@@ -13,7 +13,7 @@ upgrade_ncn=$1
 
 cat <<EOF
 NOTE: 
-    In upgrade/1.0/resource_material/stage3/k8s-worker-node-upgrade.md
+    In upgrade/1.0/resource_material/k8s/worker-reference.md
     step 1 and 2 are not automated
 EOF
 read -p "Read and act on above steps. Press any key to continue ..."
