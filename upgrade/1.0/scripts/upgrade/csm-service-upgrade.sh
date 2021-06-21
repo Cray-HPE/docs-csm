@@ -18,7 +18,7 @@ if [[ $state_recorded == "0" ]]; then
 
     record_state ${state_name} $(hostname)
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 state_name="CSM_SERVICE_UPGRADE"
@@ -30,7 +30,7 @@ if [[ $state_recorded == "0" ]]; then
     
     record_state ${state_name} $(hostname)
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 state_name="POST_CSM_UPGRADE_RESIZE"
@@ -42,5 +42,15 @@ if [[ $state_recorded == "0" ]]; then
     
     record_state ${state_name} $(hostname)
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
+fi
+
+state_name="POST_CSM_UPGRADE_APPLY_POD_PRIORITY"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/add_pod_priority.sh
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
 fi

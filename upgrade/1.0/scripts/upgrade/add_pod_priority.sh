@@ -43,6 +43,34 @@ globalDefault: false
 description: "This priority class should be used for CSM critical service pods only."
 EOF
 
+function wait_for_running_pods() {
+  while true; do
+    ns=$1
+    etcd_cluster=$2
+    desired_size=$3
+    current_running_num=$(kubectl get po -n $ns | grep $etcd_cluster | grep Running | wc -l)
+    if [[ "$desired_size" -eq "$current_running_num" ]]; then
+      echo "Found $desired_size running pods in $etcd_cluster etcd cluster"
+      break
+    fi
+    echo "Sleeping for ten seconds waiting for $desired_size pods in $etcd_cluster etcd cluster"
+    sleep 10
+  done
+}
+
+function restart_etcd_pods() {
+  ns=$1
+  etcd_cluster=$2
+  num_pods=$(kubectl get etcd $etcd_cluster -n $ns -o jsonpath='{.status.size}')
+  member_list=$(kubectl get etcd $etcd_cluster -n $ns -o jsonpath='{.status.members.ready}')
+  pods=$(echo "$member_list" | sed 's/,//g; s/"/ /g; s/\]//g; s/\[//g')
+  stringarray=($pods)
+  for pod in "${stringarray[@]}"; do
+    kubectl delete pod -n $ns $pod
+    wait_for_running_pods $ns $etcd_cluster $num_pods
+  done
+}
+
 echo "Creating csm-high-priority-service pod priority class"
 kubectl apply -f /tmp/csm-high-priority-service.yaml
 echo ""
@@ -70,6 +98,8 @@ for etcdcluster in $ETCDCLUSTERS; do
   if [ ! -z "$ns" ]; then
     echo "Patching $etcdcluster etcdcluster in $ns namespace"
     kubectl -n $ns patch etcdcluster $etcdcluster --type merge -p '{"spec": {"template": {"spec": {"priorityClassName": "csm-high-priority-service"}}}}'
+    echo ""
+    restart_etcd_pods $ns $etcdcluster
     echo ""
   fi
 done
