@@ -5,7 +5,7 @@ The ability to ignore non-compute nodes \(NCNs\) is turned off by default. Manag
 This section only covers using locks with the Hardware State Manager \(HSM\). For more information on ignoring nodes, refer to the following sections:
 
 -   Firmware Action Service \(FAS\): Refer to "Ignore Node within FAS".
--   Cray Advanced Platform Monitoring and Control \(CAPMC\): Refer to "Ignore Node with CAPMC".
+-   Cray Advanced Platform Monitoring and Control \(CAPMC\): Refer to [Ignore Node with CAPMC](../power_management/Ignore_Nodes_with_CAPMC.md).
 
 The following actions can be prevented when NCNs are locked.
 
