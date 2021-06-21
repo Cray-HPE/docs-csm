@@ -47,7 +47,7 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
 
 #### Device Type: ChassisBMC | Target: BMC
 
-**IMPORTANT**: Before updating a CMM, make sure all slot and rectifier power is off. The hms-discovery job must also be stopped before updates and restarted after updates are complete:
+**IMPORTANT**: Before updating a CMM, make sure all slot and rectifier power is off. The hms-discovery job must also be stopped before updates and restarted after updates are complete.
 
 * Stop hms-discovery job: `kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":true}}'`
 * Start hms-discovery job: `kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":false}}'`
@@ -218,7 +218,7 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
 }
 ```
 
-**NOTE**: `1` must be used as the `target` to indicate `iLO 5`. 
+**NOTE:** `1` must be used as the `target` to indicate `iLO 5`. 
 
 
 <a name="hpe-device-type-nodebmc-target--aka-bios"></a>
@@ -299,7 +299,7 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
 }
 ```
 
-**Note:** The timeLimit is `2000` because the gigabytes can take a lot longer to update. 
+**NOTE:** The timeLimit is `2000` because the Gigabytes can take a lot longer to update. 
 
 
 <a name="gb-device-type-nodebmc-target-bios"></a>
@@ -335,8 +335,8 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
 
 ### Update Non-Compute Nodes (NCNs)
 
-NCNs are compute blades. The current NCNs in use are manufactured by Gigabyte or HPE. Use the `NodeBMC` examples in this section updating NCN firmware, and include the `xname` parameter as part of the `stateComponentFilter` to target **ONLY** the xnames that have been separately identified as NCNs.  
+NCNs are compute blades. The current NCNs in use are manufactured by Gigabyte or HPE. Use the `NodeBMC` examples in this section when updating NCN firmware. Include the `xname` parameter as part of the `stateComponentFilter` to target **ONLY** the xnames that have been separately identified as NCNs.  
 
-Updating more than one NCN at a time **MAY** cause system instability. Be sure to follow the correct process for updating NCN; FAS accepts no responbility for updates that do not follow the correct process. Firmware updates have the capacity to harm the system; follow the appropriate guides.
+**WARNING:** Updating more than one NCN at a time **MAY** cause system instability. Be sure to follow the correct process for updating NCNs. Firmware updates have the capacity to harm the system.
 
 
