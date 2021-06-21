@@ -52,6 +52,8 @@ Preparation of the environment must be done before attempting to deploy the mana
 
 > **`INTERNAL USE`** -- This procedure to configure a bootstrap registry to proxy to an upstream registry is only relevant for HPE Cray internal systems.
 
+> **`SKIP IF AIRGAP/OFFLINE`** - Do **NOT** reconfigure the bootstrap registry to proxy an upstream registry if performing an _airgap/offline_ install.
+
 By default, the bootstrap registry is a `type: hosted` Nexus repository to
 support _airgap/offline_ installs, which requires container images to be
 imported prior to platform installation. However, it may be reconfigured to
