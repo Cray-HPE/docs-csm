@@ -24,8 +24,37 @@ It is assumed that you have connectivity to the switch and have done the [Config
 
 ## Configure Uplink
 The uplink ports are the ports connecting the leaf switches to the upstream switch.
+Set the description to indicate the appropriate switch names and ports from the SHCD.
 
-TODO What is needed to configure Uplink on Dell leaf switch
+   ```bash
+   interface port-channel100
+   description vertex_to_sw-40g0x
+   no shutdown
+   switchport mode trunk
+   switchport access vlan 1
+   switchport trunk allowed vlan 2,4,7,10
+   mtu 9216
+
+   interface ethernet1/1/51
+   description to:sw-40g02_x3000u34-j15:from:sw-smn01_x3000u38-j51
+   no shutdown
+   channel-group 100 mode active
+   no switchport
+   mtu 9216
+   speed 10000
+   flowcontrol receive off
+   flowcontrol transmit off
+   !
+   interface ethernet1/1/52
+   description to:sw-40g01_x3000u33-j15:from:sw-smn01_x3000u38-j52
+   no shutdown
+   channel-group 100 mode active
+   no switchport
+   mtu 9216
+   speed 10000
+   flowcontrol receive off
+   flowcontrol transmit off
+   ```
 
 ## Configure VLAN
 
@@ -134,7 +163,7 @@ Dell switches should have these settings for spanning-tree using bpduguard and n
    ```
    sw-leaf-001(config)#
    spanning-tree vlan 1-2,4,7,10 priority 61440
-   spanning-tree vlan 4 disable
+   spanning-tree vlan 4 enable
    ```
 
 1. The following configuration is applied to Dell leaf switches.
@@ -217,7 +246,15 @@ The IP addresses used here will be the first three worker nodes on the NMN netwo
    ```
 ## Configure Flow Control
 
-TODO What is needed to configure flow control for Dell and Mellanox switches
+sw-leaf01(config)# interface range ethernet 1/1/1-1/1/48
+sw-leaf01(conf-range-eth1/1/1-1/1/48)# flowcontrol receive on
+sw-leaf01(conf-range-eth1/1/1-1/1/48)# flowcontrol transmit off
+sw-leaf01(conf-range-eth1/1/1-1/1/48)# end
+
+sw-leaf01(config)# interface range ethernet 1/1/51-1/1/52
+sw-leaf01(conf-if-eth1/1/51-1/1/52)# flowcontrol receive off
+sw-leaf01(conf-if-eth1/1/51-1/1/52)# flowcontrol transmit off
+sw-leaf01(conf-if-eth1/1/51-1/1/52)# end
 
 ## Configure Edge port
 
