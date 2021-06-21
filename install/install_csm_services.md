@@ -11,6 +11,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
    1. [Deploy CSM Applications and Services](#deploy-csm-applications-and-services)
    1. [Setup Nexus](#setup-nexus)
    1. [Set NCNs to use Unbound](#set-ncns-to-use-unbound)
+   1. [Apply Pod Priorities](#apply-pod-priorities)
    1. [Apply After Sysmgmt Manifest Workarounds](#apply-after-sysmgmt-manifest-workarounds)
    1. [Known Issues](#known-issues)
       * [Error: not ready: https://packages.local](#error-not-ready)
@@ -326,8 +327,36 @@ ncn-w003: nameserver 10.92.100.225
 > **`NOTE`** The script connects to ncn-m001 which will be the PIT node, whose
 > password may be different from that of the other NCNs.
 
+<a name="apply-pod-priorities"></a>
+### 7. Apply Pod Priorities
+
+Run the `add_pod_priority.sh` script to create and apply a pod priority class to services critical to CSM.  This will give these services a higher priority than others to ensure they get scheduled by Kubernetes in the event that resources limited on smaller deployments.
+
+```bash
+pit# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/add_pod_priority.sh
+Creating csm-high-priority-service pod priority class
+priorityclass.scheduling.k8s.io/csm-high-priority-service configured
+
+Patching cray-postgres-operator deployment in services namespace
+deployment.apps/cray-postgres-operator patched
+
+Patching cray-postgres-operator-postgres-operator-ui deployment in services namespace
+deployment.apps/cray-postgres-operator-postgres-operator-ui patched
+
+Patching istio-operator deployment in istio-operator namespace
+deployment.apps/istio-operator patched
+
+Patching istio-ingressgateway deployment in istio-system namespace
+deployment.apps/istio-ingressgateway patched
+.
+.
+.
+```
+
+After running the `add_pod_priority.sh` script, the affected pods will be restarted as the pod priority class is applied to them.
+
 <a name="apply-after-sysmgmt-manifest-workarounds"></a>
-### 7. Apply After Sysmgmt Manifest Workarounds
+### 8. Apply After Sysmgmt Manifest Workarounds
 
 Check for workarounds in the `/opt/cray/csm/workarounds/after-sysmgmt-manifest` directory within the CSM tar. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
 
@@ -342,7 +371,7 @@ CASMCMS-6857  CASMNET-423
 ```
 
 <a name="known-issues"></a>
-### 8. Known Issues
+### 9. Known Issues
 
 The `install.sh` script changes cluster state and should not simply be rerun
 in the event of a failure without careful consideration of the specific
@@ -355,7 +384,7 @@ stderr prefixed with the expanded value of PS4, namely, `+ `.)
 Known potential issues with suggested fixes are listed below.
 
 <a name="error-not-ready"></a>
-#### 8.1 Error: not ready: https://packages.local
+#### 9.1 Error: not ready: https://packages.local
 
 The infamous `error: not ready: https://packages.local` indicates that from
 the caller’s perspective, Nexus not ready to receive writes. However, it most
@@ -396,7 +425,7 @@ removed before attempting to deploy again.
 
 
 <a name="error-initiating-layer-upload"></a>
-#### 8.2 Error initiating layer upload ... in registry.local: received unexpected HTTP status: 200 OK
+#### 9.2 Error initiating layer upload ... in registry.local: received unexpected HTTP status: 200 OK
 
 The following error may occur when running `./lib/setup-nexus.sh`:
 
@@ -414,7 +443,7 @@ This error is most likely _intermittent_ and running `./lib/setup-nexus.sh`
 again is expected to succeed.
 
 <a name="error-registry-local-no-such-host"></a>
-#### 8.3 Error lookup registry.local: no such host
+#### 9.3 Error lookup registry.local: no such host
 
 The following error may occur when running `./lib/setup-nexus.sh`:
 
