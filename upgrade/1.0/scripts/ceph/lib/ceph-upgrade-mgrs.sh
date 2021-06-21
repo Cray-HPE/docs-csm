@@ -1,13 +1,13 @@
-### Begin run on each mon/mgr
-#
+#!/bin/bash
 # Copyright 2021 Hewlett Packard Enterprise Development LP
-#
+
+# Begin run on each mon/mgr
 
 function upgrade_ceph_mgrs () {
 for host in $(ceph node ls| jq -r '.mgr|keys[]')
  do
   echo "Converting ceph-mgr to Octopus"
-  ssh $host "cephadm --image $registry/ceph/ceph:v15.2.8 adopt --style legacy --name mgr.$host" --skip-pull
+  ssh "$host" "cephadm --image $registry/ceph/ceph:v15.2.8 adopt --style legacy --name mgr.$host" --skip-pull
  done
  echo "Sleeping 20 seconds..."
  sleep 20

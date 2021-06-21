@@ -1,7 +1,7 @@
-# stop the ceph-rgw daemon on all hosts as the command needs the cluster status to be in HEALTH_OK
-#
+#!/bin/bash
 # Copyright 2021 Hewlett Packard Enterprise Development LP
-#
+
+# stop the ceph-rgw daemon on all hosts as the command needs the cluster status to be in HEALTH_OK
 
 function upgrade_rgws () {
 
