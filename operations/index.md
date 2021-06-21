@@ -98,6 +98,8 @@ Use the Boot Orchestration Service \(BOS\) to boot, configure, and shutdown coll
      * [Troubleshoot Booting Nodes with Hardware Issues](boot_orchestration/Troubleshoot_Booting_Nodes_with_Hardware_Issues.md)
    * [BOS Limitations for Gigabyte BMC Hardware](boot_orchestration/Limitations_for_Gigabyte_BMC_Hardware.md)
 
+<a name="system-power-off-procedures"></a>
+
 ### System Power Off Procedures
 
 Procedures required to fully power off an HPE Cray EX system.
@@ -110,6 +112,9 @@ Procedures required to fully power off an HPE Cray EX system.
   * [Shut Down and Power Off the Management Kubernetes Cluster](power_management/Shut_Down_and_Power_Off_the_Management_Kubernetes_Cluster.md)
   * [Power Off the External Lustre File System](power_management/Power_Off_the_External_Lustre_File_System.md)
 
+
+<a name="system-power-on-procedures"></a>
+
 ### System Power On Procedures
 
 Procedures required to fully power on an HPE Cray EX system.
@@ -121,6 +126,8 @@ Procedures required to fully power on an HPE Cray EX system.
   * [Bring Up the Slingshot Fabric](power_management/Bring_up_the_Slingshot_Fabric.md)
   * [Power On and Boot Compute and User Access Nodes](power_management/Power_On_and_Boot_Compute_Nodes_and_User_Access_Nodes.md)
   * [Recover from a Liquid Cooled Cabinet EPO Event]
+
+<a name="power-management"></a>
 
 ### Power Management
 
@@ -379,14 +386,14 @@ HPE Cray EX systems are designed so that system management services \(SMS\) are 
 
 ConMan is a tool used for connecting to remote consoles and collecting console logs. These node logs can then be used for various administrative purposes, such as troubleshooting node boot issues.
 
-  * [Access Compute Node Logs](Access_Compute_Node_Logs.md)
-  * [Access Console Log Data Via the System Monitoring Framework \(SMF\)](Access_Console_Log_Data_Via_the_System_Monitoring_Framework_SMF.md)
-  * [Log in to a Node Using ConMan](Log_in_to_a_Node_Using_ConMan.md)
-  * [Establish a Serial Connection to NCNs](Establish_a_Serial_Connection_to_NCNs.md)
-  * [Disable ConMan After System Software Installation](Disable_ConMan_After_System_Software_Installation.md)
-  * [Troubleshoot ConMan Blocking Access to a Node BMC](Troubleshoot_ConMan_Blocking_Access_to_a_Node_BMC.md)
-  * [Troubleshoot ConMan Failing to Connect to a Console](Troubleshoot_ConMan_Failing_to_Connect_to_a_Console.md)
-  * [Troubleshoot ConMan Asking for Password on SSH Connection](Troubleshoot_ConMan_Asking_for_Password_on_SSH_Connection.md)
+  * [Access Compute Node Logs](conman/Access_Compute_Node_Logs.md)
+  * [Access Console Log Data Via the System Monitoring Framework \(SMF\)](conman/Access_Console_Log_Data_Via_the_System_Monitoring_Framework_SMF.md)
+  * [Log in to a Node Using ConMan](conman/Log_in_to_a_Node_Using_ConMan.md)
+  * [Establish a Serial Connection to NCNs](conman/Establish_a_Serial_Connection_to_NCNs.md)
+  * [Disable ConMan After System Software Installation](conman/Disable_ConMan_After_System_Software_Installation.md)
+  * [Troubleshoot ConMan Blocking Access to a Node BMC](conman/Troubleshoot_ConMan_Blocking_Access_to_a_Node_BMC.md)
+  * [Troubleshoot ConMan Failing to Connect to a Console](conman/Troubleshoot_ConMan_Failing_to_Connect_to_a_Console.md)
+  * [Troubleshoot ConMan Asking for Password on SSH Connection](conman/Troubleshoot_ConMan_Asking_for_Password_on_SSH_Connection.md)
 
 
 <a name="utility-storage"></a>
@@ -396,24 +403,24 @@ ConMan is a tool used for connecting to remote consoles and collecting console l
 Ceph is the utility storage platform that is used to enable pods to store persistent data. It is deployed to provide block, object, and file storage to the management services running on Kubernetes, as well as for telemetry data coming from the compute nodes.
 
   * [Utility Storage](utility_storage/Utility_Storage.md)
-  * [Collect Information about the Ceph Cluster](Collect_Information_About_the_Ceph_Cluster.md)  
-  * [Ceph Services](Ceph_Services.md)  
-  * [Manage Ceph Services](Manage_Ceph_Services.md)  
-  * [Restart Ceph Services via Ansible](Restart_Ceph_Services_via_Ansible.md)  
-  * [Adjust Ceph Pool Quotas](Adjust_Ceph_Pool_Quotas.md)  
-  * [Add Ceph OSDs](Add_Ceph_OSDs.md)  
-  * [Shrink Ceph OSDs](Shrink_Ceph_OSDs.md)  
-  * [Ceph Health States](Ceph_Health_States.md)  
-  * [Dump Ceph Crash Data](Dump_Ceph_Crash_Data.md)  
-  * [Identify Ceph Latency Issues](Identify_Ceph_Latency_Issues.md)  
-  * [Troubleshoot Failure to Get Ceph Health](Troubleshoot_Failure_to_Get_Ceph_Health.md)  
-  * [Troubleshoot a Down OSD](Troubleshoot_a_Down_OSD.md)  
-  * [Troubleshoot Ceph OSDs Reporting Full](Troubleshoot_Ceph_OSDs_Reporting_Full.md)  
-  * [Troubleshoot System Clock Skew](Troubleshoot_System_Clock_Skew.md)  
-  * [Troubleshoot an Unresponsive S3 Endpoint](Troubleshoot_an_Unresponsive_S3_Endpoint.md)  
-  * [Troubleshoot Ceph-Mon Processes Stopping and Exceeding Max Restarts](Troubleshoot_Ceph-Mon_Processes_Stopping_and_Exceeding_Max_Restarts.md)  
-  * [Troubleshoot Pods Failing to Restart on Other Worker Nodes](Troubleshoot_Pods_Failing_to_Restart_on_Other_Worker_Nodes.md)  
-  * [Troubleshoot Large Object Map Objects in Ceph Health](Troubleshoot_Large_Object_Map_Objects_in_Ceph_Health.md)  
+  * [Collect Information about the Ceph Cluster](utility_storage/Collect_Information_About_the_Ceph_Cluster.md)  
+  * [Ceph Services](utility_storage/Ceph_Services.md)  
+  * [Manage Ceph Services](utility_storage/Manage_Ceph_Services.md)  
+  * [Restart Ceph Services via Ansible](utility_storage/Restart_Ceph_Services_via_Ansible.md)  
+  * [Adjust Ceph Pool Quotas](utility_storage/Adjust_Ceph_Pool_Quotas.md)  
+  * [Add Ceph OSDs](utility_storage/Add_Ceph_OSDs.md)  
+  * [Shrink Ceph OSDs](utility_storage/Shrink_Ceph_OSDs.md)  
+  * [Ceph Health States](utility_storage/Ceph_Health_States.md)  
+  * [Dump Ceph Crash Data](utility_storage/Dump_Ceph_Crash_Data.md)  
+  * [Identify Ceph Latency Issues](utility_storage/Identify_Ceph_Latency_Issues.md)  
+  * [Troubleshoot Failure to Get Ceph Health](utility_storage/Troubleshoot_Failure_to_Get_Ceph_Health.md)  
+  * [Troubleshoot a Down OSD](utility_storage/Troubleshoot_a_Down_OSD.md)  
+  * [Troubleshoot Ceph OSDs Reporting Full](utility_storage/Troubleshoot_Ceph_OSDs_Reporting_Full.md)  
+  * [Troubleshoot System Clock Skew](utility_storage/Troubleshoot_System_Clock_Skew.md)  
+  * [Troubleshoot an Unresponsive S3 Endpoint](utility_storage/Troubleshoot_an_Unresponsive_S3_Endpoint.md)  
+  * [Troubleshoot Ceph-Mon Processes Stopping and Exceeding Max Restarts](utility_storage/Troubleshoot_Ceph-Mon_Processes_Stopping_and_Exceeding_Max_Restarts.md)  
+  * [Troubleshoot Pods Failing to Restart on Other Worker Nodes](utility_storage/Troubleshoot_Pods_Failing_to_Restart_on_Other_Worker_Nodes.md)  
+  * [Troubleshoot Large Object Map Objects in Ceph Health](utility_storage/Troubleshoot_Large_Object_Map_Objects_in_Ceph_Health.md)  
 
 
 <a name="system-management-health"></a>
@@ -423,9 +430,9 @@ Ceph is the utility storage platform that is used to enable pods to store persis
 Enable system administrators to assess the health of their system. Operators need to quickly and efficiently troubleshoot system issues as they occur and be confident that a lack of issues indicates the system is operating normally.
 
   * [System Management Health](system_management_health/System_Management_Health.md)
-  * [System Management Health Checks and Alerts](System_Management_Health_Checks_and_Alerts.md)
-  * [Access System Management Health Services](Access_System_Management_Health_Services.md)
-  * [Configure Prometheus Email Alert Notifications](Configure_Prometheus_Email_Alert_Notifications.md)
+  * [System Management Health Checks and Alerts](system_management_health/System_Management_Health_Checks_and_Alerts.md)
+  * [Access System Management Health Services](system_management_health/Access_System_Management_Health_Services.md)
+  * [Configure Prometheus Email Alert Notifications](system_management_health/Configure_Prometheus_Email_Alert_Notifications.md)
 
 
 <a name="system-layout-service-sls"></a>
@@ -435,9 +442,9 @@ Enable system administrators to assess the health of their system. Operators nee
 The System Layout Service \(SLS\) holds information about the system design, such as the physical locations of network hardware, compute nodes, and cabinets. It also stores information about the network, such as which port on which switch should be connected to each compute node.
 
   * [System Layout Service (SLS)](system_layout_service/System_Layout_Service_SLS.md)
-  * [Dump SLS Information](Dump_SLS_Information.md)
-  * [Load SLS Database with Dump File](Load_SLS_Database_with_Dump_File.md)
-  * [Add UAN CAN IP Addresses to SLS](Add_UAN_CAN_IP_Addresses_to_SLS.md)
+  * [Dump SLS Information](system_layout_service/Dump_SLS_Information.md)
+  * [Load SLS Database with Dump File](system_layout_service/Load_SLS_Database_with_Dump_File.md)
+  * [Add UAN CAN IP Addresses to SLS](system_layout_service/Add_UAN_CAN_IP_Addresses_to_SLS.md)
 
 
 <a name="system-configuration-service"></a>
@@ -447,8 +454,8 @@ The System Layout Service \(SLS\) holds information about the system design, suc
 The System Configuration Service \(SCSD\) allows admins to set various BMC and controller parameters. These parameters are typically set during discovery, but this tool enables parameters to be set before or after discovery. The operations to change these parameters are available in the Cray CLI under the `scsd` command.
 
   * [System Configuration Service](system_configuration_service/System_Configuration_Service.md)
-  * [Manage Parameteres with the scsd Service](Manage_Parameters_with_the_scsd_Service.md)
-  * [Set BMC Credentials](Set_BMC_Credentials.md)
+  * [Manage Parameteres with the scsd Service](system_configuration_service/Manage_Parameters_with_the_scsd_Service.md)
+  * [Set BMC Credentials](system_configuration_service/Set_BMC_Credentials.md)
 
 
 <a name="hardware-state-manager-hsm"></a>
@@ -458,18 +465,19 @@ The System Configuration Service \(SCSD\) allows admins to set various BMC and c
 Use the Hardware State Manager \(HSM\) to monitor and interrogate hardware components in the HPE Cray EX system, tracking hardware state and inventory information, and making it available via REST queries and message bus events when changes occur.
 
   * [Hardware State Manager (HSM)](hardware_state_manager/Hardware_State_Manager.md)
-  * [Hardware Management Services (HMS) Locking API](Hardware_Management_Services_HMS_Locking_API.md)
-    * [NCN and Management Node Locking](NCN_and_Management_Node_Locking.md)
-  * [Component Groups and Partitions](Component_Groups_and_Partitions.md)
-    * [Manage Component Groups](Manage_Component_Groups.md)
-    * [Component Group Members](Component_Group_Members.md)
-    * [Manage Component Partitions](Manage_Component_Partitions.md)
-    * [Component Partition Members](Component_Partition_Members.md)
-    * [Component Memberships](Component_Memberships.md)
-  * [Hardware State Manager (HSM) State and Flag Fields](Hardware_State_Manager_HSM_State_and_Flag_Fields.md)
-  * [Add a NCN into the HSM Database](Add_a_NCN_into_HSM_Database.md)
-  * [Add a Switch to the HSM Database](Add_a_Switch_to_the_HSM_Database.md)
-  * [Manage NodeMaps with HSM](Manage_NodeMaps_with_HSM.md)
+  * [Hardware Management Services (HMS) Locking API](hardware_state_manager/Hardware_Management_Services_HMS_Locking_API.md)
+    * [NCN and Management Node Locking](hardware_state_manager/NCN_and_Management_Node_Locking.md)
+    * [Manage HMS Locks](hardware_state_manager/Manage_HMS_Locks.md)
+  * [Component Groups and Partitions](hardware_state_manager/Component_Groups_and_Partitions.md)
+    * [Manage Component Groups](hardware_state_manager/Manage_Component_Groups.md)
+    * [Component Group Members](hardware_state_manager/Component_Group_Members.md)
+    * [Manage Component Partitions](hardware_state_manager/Manage_Component_Partitions.md)
+    * [Component Partition Members](hardware_state_manager/Component_Partition_Members.md)
+    * [Component Memberships](hardware_state_manager/Component_Memberships.md)
+  * [Hardware State Manager (HSM) State and Flag Fields](hardware_state_manager/Hardware_State_Manager_HSM_State_and_Flag_Fields.md)
+  * [Add a NCN into the HSM Database](hardware_state_manager/Add_a_NCN_into_HSM_Database.md)
+  * [Add a Switch to the HSM Database](hardware_state_manager/Add_a_Switch_to_the_HSM_Database.md)
+  * [Manage NodeMaps with HSM](hardware_state_manager/Manage_NodeMaps_with_HSM.md)
 
 
 <a name="node_management"></a>
@@ -479,42 +487,42 @@ Use the Hardware State Manager \(HSM\) to monitor and interrogate hardware compo
 Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the HPE Cray EX system.
 
   * [Node Management](node_management/Node_Management.md)
-  * [Node Management Workflows](Node_Management_Workflows.md)
-  * [Rebuild NCNs](Rebuild_NCNs.md)
-  * [Reboot NCNs](Reboot_NCNs.md)
-    * [Check and Set the metalno-wipe Setting on NCNs](Check_and_Set_the_metalno-wipe_Setting_on_NCNs.md)
-  * [Enable Nodes](Enable_Nodes.md)
-  * [Disable Nodes](Disable_Nodes.md)
-  * [Find Node Type and Manufacturer](Find_Node_Type_and_Manufacturer.md)
-  * [Add a Standard Rack Node](Add_a_Standard_Rack_Node.md)
-    * [Move a Standard Rack Node](Move_a_Standard_Rack_Node.md)
-    * [Move a Standard Rack Node (Same Rack/Same HSN Ports)](Move_a_Standard_Rack_Node_SameRack_SameHSNPorts.md)
-  * [Clear Space in Root File System on Worker Nodes](Clear_Space_in_Root_File_System_on_Worker_Nodes.md)
-  * [Manually Wipe Boot Configuration on Nodes to be Reinstalled](Manually_Wipe_Boot_Configuration_on_Nodes_to_be_Reinstalled.md)
-  * [Troubleshoot Issues with Redfish Endpoint DiscoveryCheck for Redfish Events from Nodes](Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md)
-  * [Reset Credentials on Redfish Devices](Reset_Credentials_on_Redfish_Devices_for_Reinstallation.md)
-  * [Access and Update Settings for Replacement NCNs](Access_and_Update_the_Settings_for_Replacement_NCNs_.md)
-  * [Change Settings for HMS Collector Polling of Air Cooled Nodes](Change_Settings_for_HMS_Collector_Polling_of_Air_Cooled_Nodes.md)
-  * [Use the Physical KVM](Use_the_Physical_KVM.md)
-  * [Launch a Virtual KVM on Gigabyte Servers](Launch_a_Virtual_KVM_on_Gigabyte_Servers.md)
-  * [Launch a Virtual KVM on Intel Servers](Launch_a_Virtual_KVM_on_Intel_Servers.md)
-  * [Change Java Security Settings](Change_Java_Security_Settings.md)
-  * [Verify Accuracy of the System Clock](Verify_Accuracy_of_the_System_Clock.md)
-  * [Configuration of NCN Bonding](Configuration_of_NCN_Bonding.md)
-    * [Change Interfaces in the Bond](Change_Interfaces_in_the_Bond.md)
-    * [Troubleshoot Interfaces with IP Address Issues](Troubleshoot_Interfaces_with_IP_Address_Issues.md)
-  * [Troubleshoot Loss of Console Connections and Logs on Gigabyte Nodes](Troubleshoot_Loss_of_Console_Connections_and_Logs_on_Gigabyte_Nodes.md)
-  * [Check the BMC Failover Mode](Check_the_BMC_Failover_Mode.md)
-  * [Update Compute Node Mellanox HSN NIC Firmware](Update_Compute_Node_Mellanox_HSN_NIC_Firmware.md)
-  * [TLS Certificates for Redfish BMCs](TLS_Certificates_for_Redfish_BMCs.md)
-    * [Add TLS Certificates to BMCs](Add_TLS_Certificates_to_BMCs.md)
-  * [Run a Manual ckdump on Compute Nodes](Run_a_Manual_ckdump_on_Compute_Nodes.md)
-  * [Dump a Compute Node with Node Memory Dump (NMD)](Dump_a_Compute_Node_with_Node_Memory_Dump_nmd.md)
-  * [Dump a Non-Compute Node](Dump_a_Non-Compute_Node.md)
-  * [Enable Passwordless Connections to Liquid Cooled Node BMCs](Enable_Passwordless_Connections_to_Liquid_Cooled_Node_BMCs.md)
-    * [View BIOS Logs for Liquid Cooled Nodes](View_BIOS_Logs_for_Liquid_Cooled_Nodes.md)
-  * [Enable Nvidia GPU Support](Enable_Nvidia_GPU_Support.md)
-    * [Update Nvidia GPU Software without Rebooting](Update_Nvidia_GPU_Software_without_Rebooting.md)
+  * [Node Management Workflows](node_management/Node_Management_Workflows.md)
+  * [Rebuild NCNs](node_management/Rebuild_NCNs.md)
+  * [Reboot NCNs](node_management/Reboot_NCNs.md)
+    * [Check and Set the metalno-wipe Setting on NCNs](node_management/Check_and_Set_the_metalno-wipe_Setting_on_NCNs.md)
+  * [Enable Nodes](node_management/Enable_Nodes.md)
+  * [Disable Nodes](node_management/Disable_Nodes.md)
+  * [Find Node Type and Manufacturer](node_management/Find_Node_Type_and_Manufacturer.md)
+  * [Add a Standard Rack Node](node_management/Add_a_Standard_Rack_Node.md)
+    * [Move a Standard Rack Node](node_management/Move_a_Standard_Rack_Node.md)
+    * [Move a Standard Rack Node (Same Rack/Same HSN Ports)](node_management/Move_a_Standard_Rack_Node_SameRack_SameHSNPorts.md)
+  * [Clear Space in Root File System on Worker Nodes](node_management/Clear_Space_in_Root_File_System_on_Worker_Nodes.md)
+  * [Manually Wipe Boot Configuration on Nodes to be Reinstalled](node_management/Manually_Wipe_Boot_Configuration_on_Nodes_to_be_Reinstalled.md)
+  * [Troubleshoot Issues with Redfish Endpoint DiscoveryCheck for Redfish Events from Nodes](node_management/Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md)
+  * [Reset Credentials on Redfish Devices](node_management/Reset_Credentials_on_Redfish_Devices_for_Reinstallation.md)
+  * [Access and Update Settings for Replacement NCNs](node_management/Access_and_Update_the_Settings_for_Replacement_NCNs_.md)
+  * [Change Settings for HMS Collector Polling of Air Cooled Nodes](node_management/Change_Settings_for_HMS_Collector_Polling_of_Air_Cooled_Nodes.md)
+  * [Use the Physical KVM](node_management/Use_the_Physical_KVM.md)
+  * [Launch a Virtual KVM on Gigabyte Servers](node_management/Launch_a_Virtual_KVM_on_Gigabyte_Servers.md)
+  * [Launch a Virtual KVM on Intel Servers](node_management/Launch_a_Virtual_KVM_on_Intel_Servers.md)
+  * [Change Java Security Settings](node_management/Change_Java_Security_Settings.md)
+  * [Verify Accuracy of the System Clock](node_management/Verify_Accuracy_of_the_System_Clock.md)
+  * [Configuration of NCN Bonding](node_management/Configuration_of_NCN_Bonding.md)
+    * [Change Interfaces in the Bond](node_management/Change_Interfaces_in_the_Bond.md)
+    * [Troubleshoot Interfaces with IP Address Issues](node_management/Troubleshoot_Interfaces_with_IP_Address_Issues.md)
+  * [Troubleshoot Loss of Console Connections and Logs on Gigabyte Nodes](node_management/Troubleshoot_Loss_of_Console_Connections_and_Logs_on_Gigabyte_Nodes.md)
+  * [Check the BMC Failover Mode](node_management/Check_the_BMC_Failover_Mode.md)
+  * [Update Compute Node Mellanox HSN NIC Firmware](node_management/Update_Compute_Node_Mellanox_HSN_NIC_Firmware.md)
+  * [TLS Certificates for Redfish BMCs](node_management/TLS_Certificates_for_Redfish_BMCs.md)
+    * [Add TLS Certificates to BMCs](node_management/Add_TLS_Certificates_to_BMCs.md)
+  * [Run a Manual ckdump on Compute Nodes](node_management/Run_a_Manual_ckdump_on_Compute_Nodes.md)
+  * [Dump a Compute Node with Node Memory Dump (NMD)](node_management/Dump_a_Compute_Node_with_Node_Memory_Dump_nmd.md)
+  * [Dump a Non-Compute Node](node_management/Dump_a_Non-Compute_Node.md)
+  * [Enable Passwordless Connections to Liquid Cooled Node BMCs](node_management/Enable_Passwordless_Connections_to_Liquid_Cooled_Node_BMCs.md)
+    * [View BIOS Logs for Liquid Cooled Nodes](node_management/View_BIOS_Logs_for_Liquid_Cooled_Nodes.md)
+  * [Enable Nvidia GPU Support](node_management/Enable_Nvidia_GPU_Support.md)
+    * [Update Nvidia GPU Software without Rebooting](node_management/Update_Nvidia_GPU_Software_without_Rebooting.md)
 
 
 <a name="reds"></a>
@@ -523,12 +531,12 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
 
 The River Endpoint Discovery Service \(REDS\) performs geolocation and initialization of compute nodes, based on a mapping file that is provided with each system.
 
-  * [Configure a Management Switch for REDS](Configure_a_Management_Switch_for_REDS.md)
-  * [Initialize and Geolocate Nodes](Initialize_and_Geolocate_Nodes.md)
-  * [Verify Node Removal](Verify_Node_Removal.md)
-  * [Troubleshoot Common REDS Issues](Troubleshoot_Common_REDS_Issues.md)
-    * [Troubleshot Common Error Messages in REDS Logs](Troubleshoot_Common_Error_Messages_in_REDS_Logs.md)
-    * [Clear State and Restart REDS](Clear_State_and_Restart_REDS.md)
+  * [Configure a Management Switch for REDS](river_endpoint_discovery_service/Configure_a_Management_Switch_for_REDS.md)
+  * [Initialize and Geolocate Nodes](river_endpoint_discovery_service/Initialize_and_Geolocate_Nodes.md)
+  * [Verify Node Removal](river_endpoint_discovery_service/Verify_Node_Removal.md)
+  * [Troubleshoot Common REDS Issues](river_endpoint_discovery_service/Troubleshoot_Common_REDS_Issues.md)
+    * [Troubleshot Common Error Messages in REDS Logs](river_endpoint_discovery_service/Troubleshoot_Common_Error_Messages_in_REDS_Logs.md)
+    * [Clear State and Restart REDS](river_endpoint_discovery_service/Clear_State_and_Restart_REDS.md)
 
 
 <a name="network"></a>
@@ -538,9 +546,9 @@ The River Endpoint Discovery Service \(REDS\) performs geolocation and initializ
 Overview of the several different networks supported by the HPE Cray EX system.
 
   * [Network](network/Network.md)
-  * [Access to System Management Services](Access_to_System_Management_Services.md)
-  * [Default IP Address Ranges](Default_IP_Address_Ranges.md)
-  * [Connect to the HPE Cray EX Environment](Connect_to_the_HPE_Cray_EX_Environment.md)
+  * [Access to System Management Services](network/Access_to_System_Management_Services.md)
+  * [Default IP Address Ranges](network/Default_IP_Address_Ranges.md)
+  * [Connect to the HPE Cray EX Environment](network/Connect_to_the_HPE_Cray_EX_Environment.md)
 
 
 <a name="customer-access-network-can"></a>
@@ -563,9 +571,9 @@ The Customer Access Network \(CAN\) provides access from outside the customer ne
 
 The DHCP service on the HPE Cray EX system uses the Internet Systems Consortium \(ISC\) Kea tool. Kea provides more robust management capabilities for DHCP servers.
 
-  * [DHCP](/operations/network/dhcp/DHCP.md)
-  * [Troubleshoot DHCP Issues](Troubleshoot_DHCP_Issues.md)
-  * [Clear HSM Tables to Resolve DHCP Issues](Clear_HSM_Tables_to_Resolve_DHCP_Issues.md)
+  * [DHCP](/network/dhcp/DHCP.md)
+  * [Troubleshoot DHCP Issues](/network/dhcp/Troubleshoot_DHCP_Issues.md)
+  * [Clear HSM Tables to Resolve DHCP Issues](/network/dhcp/Clear_HSM_Tables_to_Resolve_DHCP_Issues.md)
 
 
 <a name="domain-name-service-dns"></a>
@@ -574,11 +582,11 @@ The DHCP service on the HPE Cray EX system uses the Internet Systems Consortium 
 
 The central DNS infrastructure provides the structural networking hierarchy and datastore for the system.
 
-  * [DNS](/operations/network/dns/DNS.md)
-  * [Manage the DNS Unbound Resolver](Manage_the_DNS_Unbound_Resolver.md)
-  * [Enable ncsd on UANS](Enable_ncsd_on_UANs.md)
-  * [Troubleshoot Common DNS Issues](Troubleshoot_Common_DNS_Issues.md)
-  * [Troubleshoot Services Needed by the DNS](Troubleshoot_Services_Needed_by_the_DNS_Unbound_Resolver.md)
+  * [DNS](network/dns/DNS.md)
+  * [Manage the DNS Unbound Resolver](network/dns/Manage_the_DNS_Unbound_Resolver.md)
+  * [Enable ncsd on UANS](network/dns/Enable_ncsd_on_UANs.md)
+  * [Troubleshoot Common DNS Issues](network/dns/Troubleshoot_Common_DNS_Issues.md)
+  * [Troubleshoot Services Needed by the DNS](network/dns/Troubleshoot_Services_Needed_by_the_DNS_Unbound_Resolver.md)
 
 
 <a name="external_dns"></a>
@@ -588,14 +596,14 @@ The central DNS infrastructure provides the structural networking hierarchy and 
 External DNS, along with the Customer Access Network \(CAN\), Border Gateway Protocol \(BGP\), and MetalLB, makes it simpler to access the HPE Cray EX API and system management services. Services are accessible directly from a laptop without needing to tunnel into a non-compute node \(NCN\) or override /etc/hosts settings.
 
   * [External DNS](network/external_dns/External_DNS.md)
-  * [External DNS csi config init Input Values](External_DNS_csi_config_init_Input_Values.md)
-  * [Update the system-name.site-domain Value Post-Installation](Update_the_system-name_site-domain_Value_Post-Installation.md)
-  * [Update the can-external-dns Value Post-Installation](Update_the_can-external-dns_Value_Post-Installation.md)
-  * [Ingress Routing](Ingress_Routing.md)
-  * [Add NCNs and UANs to External DNS](Add_NCNs_and_UANs_to_External_DNS.md)
-  * [External DNS Failing to Discover Services Workaround](External_DNS_Failing_to_Discover_Services_Workaround.md)
-  * [Troubleshoot Connectivity to Services with External IPs](Troubleshoot_Systems_Not_Provisioned_with_External_IPs.md)
-  * [Troubleshoot DNS Configuration Issues](Troubleshoot_DNS_Configuration_Issues.md)
+  * [External DNS csi config init Input Values](network/external_dns/External_DNS_csi_config_init_Input_Values.md)
+  * [Update the system-name.site-domain Value Post-Installation](network/external_dns/Update_the_system-name_site-domain_Value_Post-Installation.md)
+  * [Update the can-external-dns Value Post-Installation](network/external_dns/Update_the_can-external-dns_Value_Post-Installation.md)
+  * [Ingress Routing](network/external_dns/Ingress_Routing.md)
+  * [Add NCNs and UANs to External DNS](network/external_dns/Add_NCNs_and_UANs_to_External_DNS.md)
+  * [External DNS Failing to Discover Services Workaround](network/external_dns/External_DNS_Failing_to_Discover_Services_Workaround.md)
+  * [Troubleshoot Connectivity to Services with External IPs](network/external_dns/Troubleshoot_Systems_Not_Provisioned_with_External_IPs.md)
+  * [Troubleshoot DNS Configuration Issues](network/external_dns/Troubleshoot_DNS_Configuration_Issues.md)
 
 
 <a name="metallb-in-bgp-mode"></a>
@@ -607,9 +615,9 @@ MetalLB is a component in Kubernetes that manages access to LoadBalancer service
 MetalLB can run in either Layer2-mode or BGP-mode for each address pool it manages. BGP-mode is used for the NMN, HMN, and CAN. This enables true load balancing \(Layer2-mode does failover, not load balancing\) and allows for a more robust layer 3 configuration for these networks.
 
   * [MetalLB in BGP-Mode](network/metallb_bgp/MetalLB_in_BGP-Mode.md)
-  * [MetalLB in BGP-Mode Configuration](MetalLB_in_BGP-Mode_Configuration.md)
-  * [Check BGP Status and Reset Sessions](Check_BGP_Status_and_Reset_Sessions.md)
-  * [Troubleshoot Services without an Allocated IP Address](Troubleshoot_Services_without_an_Allocated_IP_Address.md)
-  * [Troubleshoot BGP not Accepting Routes from MetalLB](Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
+  * [MetalLB in BGP-Mode Configuration](network/metallb_bgp/MetalLB_in_BGP-Mode_Configuration.md)
+  * [Check BGP Status and Reset Sessions](network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md)
+  * [Troubleshoot Services without an Allocated IP Address](network/metallb_bgp/Troubleshoot_Services_without_an_Allocated_IP_Address.md)
+  * [Troubleshoot BGP not Accepting Routes from MetalLB](network/metallb_bgp/Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
 
 

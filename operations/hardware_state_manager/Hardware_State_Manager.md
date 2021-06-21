@@ -8,6 +8,7 @@ In the HPE Cray EX 1.4 release, v1 of the HSM API has begun its deprecation proc
 
 * [Hardware Management Services (HMS) Locking API](Hardware_Management_Services_HMS_Locking_API.md)
   * [NCN and Management Node Locking](NCN_and_Management_Node_Locking.md)
+  * [Manage HMS Locks](Manage_HMS_Locks.md)
 * [Component Groups and Partitions](Component_Groups_and_Partitions.md)
   * [Manage Component Groups](Manage_Component_Groups.md)
   * [Component Group Members](Component_Group_Members.md)
