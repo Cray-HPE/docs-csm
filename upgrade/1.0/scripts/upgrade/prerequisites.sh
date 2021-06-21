@@ -69,7 +69,7 @@ if [[ -z ${TARBALL_FILE} ]]; then
         record_state ${state_name} $(hostname)
         echo
     else
-        echo "====> ${state_name} has beed completed"
+        echo "====> ${state_name} has been completed"
     fi
 fi
 
@@ -83,7 +83,7 @@ if [[ $state_recorded == "0" ]]; then
 
     record_state ${state_name} $(hostname)
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 state_name="INSTALL_CSI"
@@ -94,7 +94,7 @@ if [[ $state_recorded == "0" ]]; then
     
     record_state ${state_name} $(hostname)
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 state_name="INSTALL_WAR_DOC"
@@ -104,7 +104,7 @@ if [[ $state_recorded == "0" ]]; then
     rpm --force -Uvh ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/noarch/csm-install-workarounds-*.noarch.rpm
     record_state ${state_name} $(hostname)
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 state_name="SETUP_NEXUS"
@@ -114,7 +114,7 @@ if [[ $state_recorded == "0" ]]; then
     ./${CSM_RELEASE}/lib/setup-nexus.sh
     record_state ${state_name} $(hostname)
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 state_name="UPGRADE_BSS"
@@ -124,7 +124,7 @@ if [[ $state_recorded == "0" ]]; then
     helm -n services upgrade cray-hms-bss ./${CSM_RELEASE}/helm/cray-hms-bss-*.tgz
     record_state ${state_name} $(hostname)
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 state_name="APPLY_POD_PRIORITY"
@@ -134,7 +134,7 @@ if [[ $state_recorded == "0" ]]; then
     . ${BASEDIR}/add_pod_priority.sh
     record_state ${state_name} $(hostname)
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 state_name="UPDATE_BSS_CLOUD_INIT_RECORDS"
@@ -172,7 +172,7 @@ if [[ $state_recorded == "0" ]]; then
     record_state ${state_name} $(hostname)
     echo
 else
-    echo "${state_name} has beed completed"
+    echo "${state_name} has been completed"
 fi
 
 state_name="UPDATE_CRAY_DHCP_KEA_TRAFFIC_POLICY"
@@ -186,7 +186,7 @@ if [[ $state_recorded == "0" ]]; then
     record_state ${state_name} $(hostname)
     echo
 else
-    echo "${state_name} has beed completed"
+    echo "${state_name} has been completed"
 fi
 
 state_name="UPLOAD_NEW_NCN_IMAGE"
@@ -208,7 +208,7 @@ if [[ $state_recorded == "0" ]]; then
     CEPH_VERSION=`cat $temp_file | grep "export CEPH_VERSION=" | awk -F'=' '{print $2}'`
     record_state ${state_name} $(hostname)
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 state_name="EXPORT_GLOBAL_ENV"
@@ -224,7 +224,7 @@ if [[ $state_recorded == "0" ]]; then
 
     record_state ${state_name} $(hostname)
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 state_name="PREFLIGHT_CHECK"
@@ -259,7 +259,7 @@ if [[ $state_recorded == "0" ]]; then
 
     record_state ${state_name} $(hostname)
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 state_name="SCALE_DOWN_CONMAN"
@@ -271,7 +271,7 @@ if [[ $state_recorded == "0" ]]; then
 
     record_state ${state_name} $(hostname)
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 state_name="INSTALL_NEW_CONSOLE"
@@ -284,5 +284,5 @@ if [[ $state_recorded == "0" ]]; then
 
     record_state ${state_name} $(hostname)
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
