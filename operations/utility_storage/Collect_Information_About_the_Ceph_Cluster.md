@@ -1,29 +1,20 @@
-## Collect Information about the Ceph Cluster
+# Collect Information about the Ceph Cluster
 
 These general commands for Ceph are helpful for obtaining information pertinent to troubleshooting issues.
 
 As a reference, the ceph commands below are run from a ceph-mon node. Certain commands will work on different systems. For example, the rbd command can be used on the worker nodes if specifying the proper key.
 
-### Ceph Log and File Locations
+## Ceph Log and File Locations
 
-Ceph configurations are located under /etc/ceph/ceph.conf.
+- Ceph configurations are located under /etc/ceph/ceph.conf.
+- Ceph data structure and bootstrap is located under /var/lib/ceph/<fsid>/
+- Ceph logs are now accessible by a couple of different methods.
+  - utilizing cephadm ls to resrieve the systemd_unit on the node for the process, then utilize journalctl to dump the logs
+  - ceph log last [<num:int>] [debug|info|sec|warn|error] [*|cluster|audit|cephadm]
+    - note that that this will dumpt general cluster logs
+  - cephadm logs [-h] [--fsid FSID] --name <systemd_unit>
 
-Ceph data structure and bootstrap is located under /var/lib/ceph.
-
-Ceph logs are located under /var/log/ceph. The following is a list of log types for Ceph:
-
--   ceph.log - General log for the Ceph cluster
--   ceph.audit.log - The cephx logs for authentication
--   ceph-osd-NUMBER.log - Individual Ceph OSD logs
-
-    The Ceph OSD log is local to the node that is running the OSD.
-
--   ceph-mon.NODE\_NAME.log - Individual monitor logs
--   ceph-rgw-NODE\_NAME.RGW\_ID.log - The ragdosgw \(object\) logs
--   ceph-mgr.NODE\_NAME.log - Ceph manager and module logs
--   ceph-mds.NODE\_NAME.log - Ceph metadata server \(file\) logs
-
-### Check the Status of Ceph
+## Check the Status of Ceph
 
 Print the status of the Ceph cluster with the following command:
 
@@ -169,5 +160,3 @@ ncn-m001# ceph osd lspools
 10 kube
 11 smf
 ```
-
-

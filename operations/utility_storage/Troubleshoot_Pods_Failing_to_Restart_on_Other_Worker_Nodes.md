@@ -1,4 +1,4 @@
-## Troubleshoot Pods Failing to Restart on Other Worker Nodes
+# Troubleshoot Pods Failing to Restart on Other Worker Nodes
 
 Troubleshoot an issue where pods can't restart on another worker node due to the "Volume is already exclusively attached to one node and can't be attached to another" error. Kubernetes does not currently support "readwritemany" access mode for Rados Block Device \(RBD\) devices, which causes an issue where devices fail to unmap correctly.
 
@@ -6,13 +6,13 @@ The issue occurs when unmounting the mounts tied to the RBD devices, which cause
 
 **Warning:** If this process is followed and there are mount points that cannot be unmounted without using the force option, then a process may still be writing to them. If mount points are forcefully unmounted, there is a high probability of data loss or corruption.
 
-### Prerequistes
+## Prerequistes
 
 This procedure requires administrative privileges.
 
-### Procedure
+## Procedure
 
-1.  Force delete the pod.
+1. Force delete the pod.
 
     This may not be successful, but it is important to try before proceeding.
 
@@ -20,9 +20,9 @@ This procedure requires administrative privileges.
     ncn-w001# kubectl delete pod -n NAMESPACE POD_NAME --force --grace-period=0
     ```
 
-2.  Log in to a manager node and proceed if the previous step did not fix the issue.
+1. Log in to a manager node and proceed if the previous step did not fix the issue.
 
-3.  Describe the pod experiencing issues.
+1. Describe the pod experiencing issues.
 
     The returned Persistent Volume Claim \(PVC\) information will be needed in future steps.
 
@@ -39,7 +39,7 @@ This procedure requires administrative privileges.
 
     In this example, pvc-6ac68e32-de91-4e21-ac9f-c743b3ecb776 is the PVC information required for the next step.
 
-4.  Retrieve the Ceph volume.
+1. Retrieve the Ceph volume.
 
     ```bash
     ncn-m001# kubectl describe -n NAMESPACE pv PVC_NAME
@@ -70,9 +70,9 @@ This procedure requires administrative privileges.
     Events:            <none>
     ```
 
-5.  Find the worker node that has the RBD locked.
+1. Find the worker node that has the RBD locked.
 
-    1.  Find the RBD status.
+    1. Find the RBD status.
 
         Take a note of the returned IP address.
 
@@ -88,7 +88,7 @@ This procedure requires administrative privileges.
             watcher=**10.252.0.4**:0/3520479722 client.689192 cookie=18446462598732840976
         ```
 
-    2.  Use the returned IP to get the host name attached to it.
+    1. Use the returned IP to get the host name attached to it.
 
         Take note of the returned host name.
 
@@ -98,15 +98,15 @@ This procedure requires administrative privileges.
         
         ```
 
-6.  SSH to the host name returned in the previous step.
+1. SSH to the host name returned in the previous step.
 
     ```bash
     ncn-m001# ssh HOST_NAME
     ```
 
-7.  Unmap the device.
+1. Unmap the device.
 
-    1.  Find the RBD number.
+    1. Find the RBD number.
 
         Use the CEPH\_IMAGE\_NAME value returned in step 4.
 
@@ -117,7 +117,7 @@ This procedure requires administrative privileges.
 
         Take note of the returned RBD number, which will be used in the next step.
 
-    2.  Verify it is not in use by an unstopped container.
+    1. Verify it is not in use by an unstopped container.
 
         ```bash
         ncn-m001# mount|grep RBD_NUMBER
@@ -133,13 +133,13 @@ This procedure requires administrative privileges.
 
         **Warning:** If mount points are forcefully unmounted, there is a chance for data loss or corruption.
 
-    3.  Unmap the device.
+    1. Unmap the device.
 
         ```bash
         ncn-m001# rbd unmap -o force /dev/RBD_NUMBER
         ```
 
-8.  Check the status of the pod.
+1. Check the status of the pod.
 
     ```bash
     ncn-m001# kubectl get pod -n NAMESPACE POD_NAME
@@ -150,5 +150,3 @@ This procedure requires administrative privileges.
     ```bash
     ncn-m001# kubectl delete pod -n NAMESPACE POD_NAME
     ```
-
-

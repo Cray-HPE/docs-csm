@@ -1,4 +1,4 @@
-## Troubleshoot System Clock Skew
+# Troubleshoot System Clock Skew
 
 Resynchronize system clocks after Ceph reports a clock skew.
 
@@ -8,13 +8,13 @@ Major time jumps where the clock is set back in time will require a full restart
 
 Clock skew can cause issues with Kubernetes operations, etcd, node responsiveness, and more.
 
-### Prerequisites
+## Prerequisites
 
 This procedure requires admin privileges.
 
-### Procedure
+## Procedure
 
-1.  Verify that the system is impact by clock skew.
+1. Verify that the system is impact by clock skew.
 
     Ceph provides block storage and requires a clock skew of less than 0.05 seconds to report back healthy.
 
@@ -42,9 +42,9 @@ This procedure requires admin privileges.
        client:   919 KiB/s wr, 0 op/s rd, 16 op/s wr
     ```
 
-2.  View the Ceph health details.
+2. View the Ceph health details.
 
-    1.  View the Ceph logs.
+    1. View the Ceph logs.
 
         If looking back to earlier logs, use the xzgrep command for the ceph.log or the ceph-mon\*.log. There are cases where the MGR and OSD logs are not in the ceph-mon logs. This indicates that the skew was very drastic and sudden, thus causing the ceph-mon process to panic and not log the issue.
 
@@ -52,13 +52,13 @@ This procedure requires admin privileges.
         ncn-m001# grep skew /var/log/ceph/*.log
         ```
 
-    2.  View the system time.
+    2. View the system time.
 
         ```bash
         ncn-w001# ansible ceph_all -m shell -a date
         ```
 
-3.  Sync the clocks to fix the issue.
+3. Sync the clocks to fix the issue.
 
     ```bash
     ncn-w001# systemctl restart chronyd.service
@@ -66,7 +66,7 @@ This procedure requires admin privileges.
 
     Wait a bit after running the command and the ceph alert will clear. Restart the Ceph mon service on that node if the alert does not clear.
 
-4.  Check Ceph health to verify the clock skew issue is resolved.
+4. Check Ceph health to verify the clock skew issue is resolved.
 
     It may take up to 15 minutes for this warning to resolve.
 
@@ -90,7 +90,4 @@ This procedure requires admin privileges.
       pgs:     240 active+clean
     ```
 
-    If clocks are in sync and Ceph is still reporting skew, refer to [Restart Ceph Services via Ansible](Restart_Ceph_Services_via_Ansible.md).
-
-
-
+    If clocks are in sync and Ceph is still reporting skew, refer to [Manage Ceph Services](Manage_Ceph_Services.md) on restarting services.
