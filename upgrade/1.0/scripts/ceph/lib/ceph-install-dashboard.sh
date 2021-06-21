@@ -1,18 +1,19 @@
-#
+#!/bin/bash
 # Copyright 2021 Hewlett Packard Enterprise Development LP
 #
 
 function install_dashboard () {
     echo "Enabling the Ceph Dashboard"
-    until $(ceph mgr services|jq .dashboard) =~ "ncn-s00"
-    ceph mgr module enable dashboard
+    until [[ "$(ceph mgr services|jq .dashboard)" =~ "ncn-s00" ]]
+    do
+        ceph mgr module enable dashboard
     done
     echo "Copying or Creating certificates"
     ceph dashboard create-self-signed-cert
     echo "Checking port info"
     if $(ceph config get mgr mgr/dashboard/server_port) != 8443
     then
-     ceph config set mgr/dashboard/server_port 8443
+        ceph config set mgr/dashboard/server_port 8443
     fi
     echo "Creating cray_cephadm dashboard user"
     ceph dashboard ac-user-create cray_cephadm initial0 administrator
@@ -20,8 +21,8 @@ function install_dashboard () {
     radosgw-admin user create --uid=cray_cephadm --display-name=cray_cephadm --system
     access_key=$(radosgw-admin user info --uid cray_cephadm|jq '.keys[0].access_key')
     secret_key=$(radosgw-admin user info --uid cray_cephadm|jq '.keys[0].secret_key')
-    ceph dashboard set-rgw-api-access-key -i $access_key
-    ceph dashboard set-rgw-api-secret-key -i $secret_key
+    ceph dashboard set-rgw-api-access-key -i "$access_key"
+    ceph dashboard set-rgw-api-secret-key -i "$secret_key"
     # Leaving a place where we can set the rgw-vip address
     # ceph dashboard set-rgw-api-host <host>
     ceph dashboard set-rgw-api-port 8080

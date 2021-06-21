@@ -1,6 +1,5 @@
-#
+#!/bin/bash
 # Copyright 2021 Hewlett Packard Enterprise Development LP
-#
 
 function create_cephadm_keys () {
  echo "Creating cephadm key"
