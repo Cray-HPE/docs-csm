@@ -66,7 +66,7 @@ To power on and boot compute nodes and UANs, refer to [Power On and Boot Compute
 
 ### Run System Health Checks
 
-After power on, refer to "*CSM Health Checks and Install Validation*" in the *HPE Cray EX System Administration Guide S-8001* to check system health and status.
+After power on, refer to [Validate CSM Health](../validate_csm_health.md) to check system health and status.
 
 
 

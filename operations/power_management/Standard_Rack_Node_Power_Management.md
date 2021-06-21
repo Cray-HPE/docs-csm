@@ -8,7 +8,7 @@ Out-of-band power management data is polled by a collector and published on a Ka
 
 **Important:** Always use the Boot Orchestration Service \(BOS\) to power off or power on compute nodes.
 
-## Redfish API
+### Redfish API
 
 The Redfish API for rack-mounted nodes is the node's Chassis Power resource which is presented by the BMC. OEM properties may be used to augment the Power schema and allow for feature parity with previous Cray system power management capabilities. A PowerControl resource presents the various power management capabilities for the node.
 
@@ -18,15 +18,15 @@ CAPMC does not enable power capping on all standard rack nodes because each serv
 
 **Get Node Power Limit Settings**
 
-```screen
-# curl -k -u $login:$pass -H "Content-Type: application/json" \\
--X GET https://$BMC\_IP/redfish/v1/Chassis/Self/Power 2\>/dev/null \| python -m json.tool \| egrep 'LimitInWatts'
+```bash
+# curl -k -u $login:$pass -H "Content-Type: application/json" \
+-X GET https://$BMC_IP/redfish/v1/Chassis/Self/Power 2>/dev/null | python -m json.tool | egrep 'LimitInWatts'
 ```
 
 Use the Cray CLI to get the node power limit settings:
 
-```screen
-# cray capmc get\_power\_cap create --nids 100006 --format json \| jq
+```bash
+# cray capmc get_power_cap create --nids 100006 --format json | jq
 {
   "e": 0,
   "err_msg": "",
@@ -58,38 +58,41 @@ Use the Cray CLI to get the node power limit settings:
 
 **Set Node Power Limit**
 
-```screen
-# curl -k -u $login:$pass -H "Content-Type: application/json" \\
--H 'If-Match: W/"'$\{o\_data\}'"' -X PATCH https://$BMC\_IP/redfish/v1/Chassis/Self/Power \\
---data '\{"PowerControl": \[\{"PowerLimit": \{"LimitInWatts": '$LimitValue'\}\}\]\}'
+```bash
+# curl -k -u $login:$pass -H "Content-Type: application/json" \
+-H 'If-Match: W/"'${o_data}'"' -X PATCH https://$BMC_IP/redfish/v1/Chassis/Self/Power \
+--data '{"PowerControl": [{"PowerLimit": {"LimitInWatts": '$LimitValue'}}]}'
 ```
 
 Set the node power limit to 600 Watts:
 
-```screen
-# cray capmc set\_power\_cap create --nids 1,2,3 --node 600
+```bash
+# cray capmc set_power_cap create --nids 1,2,3 --node 600
 ```
 
 **Get Node Energy Counter**
 
-```screen
-# curl -k -u $login:$pass -H "Content-Type: application/json" \\
--X GET https://$BMC\_IP/redfish/v1/Chassis/Self/Power 2\>/dev/null \| python -m json.tool \| egrep 'PowerConsumedWatts'
+```bash
+# curl -k -u $login:$pass -H "Content-Type: application/json" \
+-X GET https://$BMC_IP/redfish/v1/Chassis/Self/Power 2>/dev/null \
+| python -m json.tool | egrep 'PowerConsumedWatts'
 
 ```
 
 **Activate Node Power Limit**
 
-```screen
-# curl -k -u $login:$pass -H "Content-Type: application/json" \\
--X POST https://$BMC\_IP/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger --data '\{"PowerLimitTrigger": "Activate"\}'
+```bash
+# curl -k -u $login:$pass -H "Content-Type: application/json" \
+-X POST https://$BMC_IP/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger \
+--data '{"PowerLimitTrigger": "Activate"}'
 ```
 
 **Deactivate Node Power Limit**
 
-```screen
-# curl -k -u $login:$pass -H "Content-Type: application/json" \\
--X POST https://$BMC\_IP/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger --data '\{"PowerLimitTrigger": "Deactivate"\}' 
+```bash
+# curl -k -u $login:$pass -H "Content-Type: application/json" \
+-X POST https://$BMC_IP/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger \
+--data '{"PowerLimitTrigger": "Deactivate"}' 
 ```
 
 

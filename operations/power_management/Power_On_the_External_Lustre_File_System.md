@@ -2,23 +2,25 @@
 
 ## Power On the External Lustre File System
 
-General procedure for powering on an external ClusterStor Lustre file system.
+Use this procedure as a general guide to power on an external ClusterStor system. Refer to the detailed procedures that support each ClusterStor hardware and software release:
 
-Use this procedure as a general guide to power on an external ClusterStor system. Refer to the detailed procedures that support each ClusterStor hardware and software release.
-
-*ClusterStor E1000 Administration Guide 4.2 - S-2758* for ClusterStor E1000 systems
-*ClusterStor Administration Guide 3.4 - S-2756* for ClusterStor L300, L300N systems
-*ClusterStor Administration Guide - S-2755* for Legacy ClusterStor systems
-
-
--   Facility power must be connected to the PDUs the PDU circuit breakers are set to ON.
--   This procedure assumes that power switches on all storage equipment are set to OFF.
+* *ClusterStor E1000 Administration Guide 4.2 - S-2758* for ClusterStor E1000 systems
+* *ClusterStor Administration Guide 3.4 - S-2756* for ClusterStor L300, L300N systems
+* *ClusterStor Administration Guide - S-2755* for Legacy ClusterStor systems
 
 Power up storage nodes in the following sequence:
 
 1.  Storage Management Unit \(SMU\) nodes
 2.  Metadata server MGS/MDS nodes
 3.  Object storage server \(OSS\) nodes
+
+### Prerequisites
+
+* Facility power must be connected to the PDUs the PDU circuit breakers are set to ON.
+* This procedure assumes that power switches on all storage equipment are set to OFF.
+
+
+### Procedure
 
 1.  Set the System Management Unit \(SMU\) chassis power switches to ON.
 
@@ -32,14 +34,14 @@ Power up storage nodes in the following sequence:
 
     For example, on system `cls01234`.
 
-    ```screen
+    ```bash
     remote$ ssh -l admin cls01234n000.systemname.com
     ```
 
 6.  Check that the shared storage targets are available for the management nodes.
 
-    ```screen
-    [n000]$ pdsh -g mgmt cat /proc/mdstat \| dshbak -c
+    ```bash
+    [n000]$ pdsh -g mgmt cat /proc/mdstat | dshbak -c
     ----------------
     cls01234n000
     ----------------
@@ -64,35 +66,35 @@ Power up storage nodes in the following sequence:
 
 7.  Check HA status once the node is up and HA configuration has been established.
 
-    ```screen
-    [n000]$ sudo crm\_mon -1r
+    ```bash
+    [n000]$ sudo crm_mon -1r
     ```
 
     The output indicates that all resources have started and are balanced between two nodes.
 
 8.  In cases when all resources started on a single node \(for example, all resources have started on node 00 and did not fail back to node 01, run the failback operation:
 
-    ```screen
-    [n000]$ cscli failback –n primary\_MGMT\_node
+    ```bash
+    [n000]$ cscli failback –n primary_MGMT_node
     ```
 
 9.  As root on the primary management node, power on the MGS and MDS nodes, for example:
 
-    ```screen
-    [n000]# cscli power\_manage -n cls01234n\[02-03\] --power-on
+    ```bash
+    [n000]# cscli power_manage -n cls01234n[02-03] --power-on
     
     ```
 
 10. Power on the OSS nodes and, if present, the ADU nodes.
 
-    ```screen
-    [n000]# cscli power\_manage -n oss\_adu\_nodes --power-on
+    ```bash
+    [n000]# cscli power_manage -n oss_adu_nodes --power-on
     
     ```
 
 11. Check the status of the nodes.
 
-    ```screen
+    ```bash
     [n000]# pdsh -a date
     cls01234n000: Thu Aug 7 01:29:28 PDT 2014
     cls01234n003: Thu Aug 7 01:29:28 PDT 2014
@@ -106,29 +108,28 @@ Power up storage nodes in the following sequence:
 
 12. Check the health of the system.
 
-    ```screen
+    ```bash
     [n000]# cscli csinfo
-    [n000]# cscli show\_nodes
-    [n000]# cscli fs\_info
+    [n000]# cscli show_nodes
+    [n000]# cscli fs_info
     ```
 
 13. Check resources before mounting the file system.
 
-    ```screen
-    [n000]# ssh cls01234n000 crm\_mon -r1 \| grep fsys
-    [n000]# ssh cls01234n002 crm\_mon -r1 \| grep fsys
-    [n000]# ssh cls01234n004 crm\_mon -r1 \| grep fsys
-    [n000]# ssh cls01234n006 crm\_mon -r1 \| grep fsys
-    [n000]# ssh cls01234n008 crm\_mon -r1 \| grep fsys
-    [n000]# ssh cls01234n010 crm\_mon -r1 \| grep fsys
-    [n000]# ssh cls01234n012 crm\_mon -r1 \| grep fsys
+    ```bash
+    [n000]# ssh cls01234n000 crm_mon -r1 | grep fsys
+    [n000]# ssh cls01234n002 crm_mon -r1 | grep fsys
+    [n000]# ssh cls01234n004 crm_mon -r1 | grep fsys
+    [n000]# ssh cls01234n006 crm_mon -r1 | grep fsys
+    [n000]# ssh cls01234n008 crm_mon -r1 | grep fsys
+    [n000]# ssh cls01234n010 crm_mon -r1 | grep fsys
+    [n000]# ssh cls01234n012 crm_mon -r1 | grep fsys
     ```
 
 14. Mount the file system.
 
-    ```screen
+    ```bash
     [n000]# cscli mount -f cls01234
-    
     ```
 
 
