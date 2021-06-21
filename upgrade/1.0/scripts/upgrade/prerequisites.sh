@@ -232,12 +232,12 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
 
-    REQUIRED_PATCH_NUM=3
+    REQUIRED_PATCH_NUM=4
     versions=$(kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm')
     patch_versions=$(echo "${versions}" | grep ^0.9)
 
     if [ "$patch_versions" == "" ]; then
-      echo "Required CSM patch 0.9.3 has not been applied to this system"
+      echo "Required CSM patch 0.9.4 has not been applied to this system"
       exit 1
     fi
 
@@ -250,7 +250,7 @@ if [[ $state_recorded == "0" ]]; then
     done
 
     if [[ "$highest_patch_num" -ne "$REQUIRED_PATCH_NUM" ]]; then
-      echo "Required CSM patch 0.9.3 has not been applied to this system"
+      echo "Required CSM patch 0.9.4 has not been applied to this system"
       exit 1
     fi
 
