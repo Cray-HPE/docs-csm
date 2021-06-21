@@ -2,9 +2,9 @@
 
 Set a new password for non-compute nodes \(NCNs\) on the system using the standard Linux password change command.
 
-The NCNs deploy with a default password, which are changed during the system install. See the "Set Default Passwords During NCN Image Customization" procedure in the ** for more information.
+The NCNs deploy with a default password, which are changed during the system install. See [Change NCN Image Root Password and SSH Keys](change_ncn_image_root_password_and_ssh_keys.md) for more information.
 
-It is a recommended best practice for system security to change the root password at least once.
+It is a recommended best practice for system security to change the root password at least once after the install is complete.
 
 ### Procedure
 

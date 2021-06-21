@@ -98,5 +98,5 @@ If a new switch has been added to this system, Cray recommends contacting the Cr
     ```
 
 
-There may be another action to perform after switch configuration is complete. Please consult the use cases in [River Endpoint Discovery Service \(REDS\)](River_Endpoint_Discovery_Service_REDS.md).
+There may be another action to perform after switch configuration is complete. Please consult the use cases in [River Endpoint Discovery Service \(REDS\)](River_Endpoint_Discovery_Service.md).
 
