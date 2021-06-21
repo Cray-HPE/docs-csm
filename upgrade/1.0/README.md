@@ -2,7 +2,7 @@
 
 ### Introduction
 
-This document is intended to guide an administrator through the upgrade process going from Cray Systems Management 0.9 to v1.0.  When upgrading a system, this top-level README.md file should be followed top to bottom, and the content on this top level page is meant to be terse.  See the additional files (like KNOWN_ISSUES.md and REFERENCE_MATERIAL.md in the various directories under the linked resource_material sub-directories.
+This document is intended to guide an administrator through the upgrade process going from Cray Systems Management 0.9 to v1.0.  When upgrading a system, this top-level README.md file should be followed top to bottom, and the content on this top level page is meant to be terse.  See the additional files in the various directories under the resource_material directory for additional reference material in support of the process/scripts mentioned explicitly on this page.
 
 ### Terminology
 
@@ -66,7 +66,7 @@ cd /usr/share/doc/csm/upgrade/1.0/scripts/ceph
 **IMPORTANT NOTES**
 > - At this point your ceph commands will still be working.  
 > - You have a new way of executing ceph commands in addition to the traditional way.  
->   - Please see [cephadm-reference.md](resource_material/common/cephadm-reference.md) for more information.
+>   - Please see [cephadm-reference.md](resource_material/storage/cephadm-reference.md) for more information.
 > - Both methods are dependent on the master nodes and storage nodes 001/2/3 have a ceph.client.admin.keyring and/or a ceph.conf file (cephadm will not require the ceph.conf). 
 > - When you continue with Stage 2, you may have issues running your ceph commands.  
 >   - If you are experiencing this, please double check that you restored your /etc/ceph directory from your tar backup.
