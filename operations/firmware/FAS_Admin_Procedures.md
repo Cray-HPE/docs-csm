@@ -298,16 +298,16 @@ This procedure includes information on how check the firmware versions for the e
 
 1. Run a dry-run firmware update.
 
-  The following command parameters should be included in dry-run JSON files:
+	The following command parameters should be included in dry-run JSON files:
 
-      - overrideDryrun: The overrideDryrun parameter is set to false by default. FAS will only update the system if this is parameter is set to true.
-     - restoreNotPossibleOverride: FAS will not perform an update if the currently running firmware is not available in the images repository. Set to true to allow FAS to update firmware, even if the current firmware is unavailable on the system.
-     - description: A brief description that helps admins distinguish between actions.
-     - version: Determine if the firmware should be set to the `latest`, the `earliest` semantic version, or set to a specific firmware version.
+	- overrideDryrun: The overrideDryrun parameter is set to false by default. FAS will only update the system if this is parameter is set to true.
+	- restoreNotPossibleOverride: FAS will not perform an update if the currently running firmware is not available in the images repository. Set to true to allow FAS to update firmware, even if the current firmware is unavailable on the system.
+	- description: A brief description that helps admins distinguish between actions.
+	- version: Determine if the firmware should be set to the `latest`, the `earliest` semantic version, or set to a specific firmware version.
 
-  Use one of the options below to run on a dry-run on every system device or on targeted devices:
+	Use one of the options below to run on a dry-run on every system device or on targeted devices:
 
-  **Option 1:** Determine the available firmware for every device on the system:
+	**Option 1:** Determine the available firmware for every device on the system:
    
     1. Create a JSON file for the command parameters.
 
@@ -327,7 +327,7 @@ This procedure includes information on how check the firmware versions for the e
 
         Proceed to the next step to determine if any firmware needs to be updated.
 
-  **Option 2:** Determine the available firmware for specific devices:
+	**Option 2:** Determine the available firmware for specific devices:
 
     1. Create a JSON file with the specific device information to target when doing a dry-run.
 
@@ -367,7 +367,7 @@ This procedure includes information on how check the firmware versions for the e
 
 2.  View the status of the dry-run to determine if any firmware updates can be made.
 
-  The following returned messages will help determine if a firmware update is needed.
+	The following returned messages will help determine if a firmware update is needed.
 
   -   `NoOperation`: Nothing to do, already at version.
   -   `NoSolution`: No image is available or data is missing.
