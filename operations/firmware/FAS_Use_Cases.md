@@ -613,7 +613,7 @@ The NCN must be rebooted after updating the BIOS firmware. Follow the [Reboot NC
 Use this procedure to update compute node BIOS firmware using FAS. There are two nodes that must be updated, which have the “Node0.BIOS” and “Node1.BIOS” targets.
 
 #### Prerequisites
--   The Cray nodeBMC device needs to be updated before the nodeBIOS because the nodeBMC adds a new field Redfish \(softwareID\) that the NodeX.BIOS update will require. See "Update Liquid-Cooled Node or Switch Firmware" for more information.
+-   The Cray nodeBMC device needs to be updated before the nodeBIOS because the nodeBMC adds a new field Redfish \(softwareID\) that the NodeX.BIOS update will require. See [Update Liquid-Cooled Node or Switch Firmware](#liquidcooled) for more information.
 -   Compute node BIOS updates require the nodes to be off. If nodes are not off when update command is issued, it will report as a failed update.
 -   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 
@@ -901,6 +901,7 @@ Correct an issue where the model of the liquid-cooled compute node BIOS is the i
     The model in this example is `WNC-Rome` and the firmware version currently running is `wnc.bios-1.2.5`.
 
 #### Procedure
+
 1.  Search for a FAS image record with `cray` as the manufacturer, `Node1.BIOS` as the target, and `HPE CRAY EX425` as the model.
 
   ```bash
@@ -932,51 +933,51 @@ Correct an issue where the model of the liquid-cooled compute node BIOS is the i
 
 2.  Create a JSON file to override the existing image with the corrected values.
 
-    **IMPORTANT:** The `imageID` must be changed to match the identified image ID in the previous step.
+  **IMPORTANT:** The `imageID` must be changed to match the identified image ID in the previous step.
 
-    ```bash
-    {
-       "stateComponentFilter":{
-          "deviceTypes":[
-             "nodeBMC"
-          ]
-       },
-       "inventoryHardwareFilter":{
-          "manufacturer":"cray"
-       },
-       "targetFilter":{
-          "targets":[
-             "Node0.BIOS",
-             "Node1.BIOS"
-          ]
-       },
-       "imageFilter":{
-          "imageID":"e23f5465-ed29-4b18-9389-f8cf0580ca60",
-          "overrideImage":true
-       },
-       "command":{
-          "version":"latest",
-          "tag":"default",
-          "overrideDryrun":true,
-          "restoreNotPossibleOverride":true,
-          "timeLimit":1000,
-          "description":" upgrade of Node BIOS"
-       }
-    }
-    ```
+  ```bash
+  {
+     "stateComponentFilter":{
+        "deviceTypes":[
+           "nodeBMC"
+        ]
+     },
+     "inventoryHardwareFilter":{
+        "manufacturer":"cray"
+     },
+     "targetFilter":{
+        "targets":[
+           "Node0.BIOS",
+           "Node1.BIOS"
+        ]
+     },
+     "imageFilter":{
+        "imageID":"e23f5465-ed29-4b18-9389-f8cf0580ca60",
+        "overrideImage":true
+     },
+     "command":{
+        "version":"latest",
+        "tag":"default",
+        "overrideDryrun":true,
+        "restoreNotPossibleOverride":true,
+        "timeLimit":1000,
+        "description":" upgrade of Node BIOS"
+     }
+  }
+  ```
 
 3.  Run a firmware upgrade using the updated parameters defined in the new JSON file.
 
-    ```bash
-    ncn# cray fas actions create UPDATED_COMMAND.json
-    ```
+  ```bash
+  ncn# cray fas actions create UPDATED_COMMAND.json
+  ```
 
 4.  Get a high-level summary of the job to verify the changes corrected the issue.
 
-    Use the returned actionID from the cray fas actions create command.
+  Use the returned actionID from the `cray fas actions create` command.
 
-    ```bash
-    ncn# cray fas actions describe {actionID}
-    ```
+  ```bash
+  ncn# cray fas actions describe {actionID}
+  ```
 
     

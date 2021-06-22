@@ -14,7 +14,7 @@ FAS images contain the following information that is needed for a hardware devic
    * [Current Capabilities](#current-capabilities)
    * [Order Of Operations](#order-of-operations)
    * [Hardware Precedence Order](#hardware-precedence-order)
-   * [FAS Use Cases](#fas-use-cases)
+   * [FAS Use Cases](#fas-admin-procedures)
    * [Firwmare Actions](#firmware-actions)
    * [Firmware Images](#firmware-images)
    * [Table of Contents](#toc)
@@ -115,9 +115,9 @@ After identifying which hardware is in the system, start with the top most item 
    2. [BIOS (System ROM)](FAS_Recipes.md#hpe-device-type-nodebmc-target--aka-bios)
 
 
-<a name="fas-use-cases"></a>
+<a name="fas-admin-procedures"></a>
 
-### FAS Use Cases
+### FAS Admin Procedures
 
 There are several use cases for using the FAS to update firmware on the system. These use cases are intended to be run by system administrators with a good understanding of firmware. Under no circumstances should non-admin users attempt to use FAS or perform a firmware update.
 

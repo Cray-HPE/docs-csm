@@ -75,11 +75,11 @@ The chapters with topics which need to be done as part of an ordered procedure a
    1. [Upgrade CSM Services](upgrade/upgrade_csm_services.md)
    1. [Restore from Backup](upgrade/restore_from_backup.md)
    1. [Validate CSM Health](operations/validate_csm_health.md)
-   1. [Update Firmware with FAS](operations/update_firmware_with_fas.md)
-   1. [Next Topic](upgrade/index.md#next_topic)
-   1. [Troubleshooting Upgrade Problems](upgrade/troubleshooting_upgrade.md)
+   2. [Update Firmware with FAS](operations/firmware/Firmware_Action_Service.md)
+   3. [Next Topic](upgrade/index.md#next_topic)
+   4. [Troubleshooting Upgrade Problems](upgrade/troubleshooting_upgrade.md)
 
-1. [CSM Operational Activities](operations/index.md)
+2. [CSM Operational Activities](operations/index.md)
 
    Topics:
    * [Lock and Unlock Nodes](operations/lock_and_unlock_nodes.md)
