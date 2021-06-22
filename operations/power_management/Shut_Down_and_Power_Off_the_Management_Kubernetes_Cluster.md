@@ -186,9 +186,9 @@ An authentication token is required to access the API gateway and to use the `sa
 14. From a remote system that has access to the management plane, use IPMItool to power off ncn-w001.
 
     ```bash
-    remote$ ipmitool -I lanplus -U root -P initial0 -H NCN-M001_BMC_HOSTNAME chassis power status
-    remote$ ipmitool -I lanplus -U root -P initial0 -H NCN-M001_BMC_HOSTNAME chassis power off
-    remote$ ipmitool -I lanplus -U root -P initial0 -H NCN-M001_BMC_HOSTNAME chassis power status
+    remote$ ipmitool -I lanplus -U root -P <BMC root password> -H NCN-M001_BMC_HOSTNAME chassis power status
+    remote$ ipmitool -I lanplus -U root -P <BMC root password> -H NCN-M001_BMC_HOSTNAME chassis power off
+    remote$ ipmitool -I lanplus -U root -P <BMC root password> -H NCN-M001_BMC_HOSTNAME chassis power status
     ```
 
     **CAUTION:** The modular coolant distribution unit \(MDCU\) in a liquid-cooled TDS cabinet typically receives power from its management cabinet PDUs. If the system includes a liquid-cooled TDS cabinet, **do not power off** the management cabinet PDUs, Powering off the MDCU will cause an emergency power off \(EPO\) of the TDS cabinet and may result in data loss or equipment damage.
