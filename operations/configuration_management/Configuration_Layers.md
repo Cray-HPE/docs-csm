@@ -4,14 +4,72 @@ The Configuration Framework Service \(CFS\) uses configuration layers to specify
 
 Configurations with a single layer are useful when testing out a new configuration on targets, or when configuring system components with one product at a time. To fully configure a node or boot image component with all of the software products required, multiple layers can be used to apply all configurations in a single CFS session. When applying layers in a session, CFS runs through the configuration layers serially in the order specified.
 
+### Use Branches in Configuration Layers
+
+Configuration layers support using the `branch` value instead of the `commit` value. In this case, when the configuration is created or updated, CFS will automatically check with VCS to get the commit at the head of the branch. Both the commit and the branch are then stored. The commit acts as normal, and the branch is stored to make future updates to the commit easier.
+
+```bash
+ncn-m001# cat configurations-example.json
+
+{
+  "layers": [
+    {
+      "name": "configurations-layer-example-1",
+      "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/example-repo.git",
+      "playbook": "site.yml",
+      "branch": "main"
+    }
+  ]
+}
+```
+
+```bash
+ncn-m001# cray cfs configurations update configurations-example \
+--file ./configurations-example.json \
+--format json
+
+{
+  "lastUpdated": "2021-07-28T03:26:30:37Z",
+  "layers": [
+    {
+      "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/example-repo.git",
+      "commit": "<git commit id>",
+      "branch": "main",
+      "name": "configurations-layer-example-1",
+      "playbook": "site.yml"
+    }
+  ],
+  "name": "configurations-example"
+}
+```
+
+If changes are made to a repository and branches are specified in the configuration, users can then use the `--update-branches` flag to update a configuration so that all commits reflect the latest commit on the branches specified.
+
+```bash
+ncn-m001# cray cfs configurations update configurations-example --update-branches
+
+{
+  "lastUpdated": "2021-07-28T03:26:30:37Z",
+  "layers": [
+    {
+      "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/example-repo.git",
+      "commit": "<latest git commit id>",
+      "branch": "main",
+      "name": "configurations-layer-example-1",
+      "playbook": "site.yml"
+    }
+  ],
+  "name": "configurations-example"
+}
+```
 
 ### Manage Configurations
 
-See the cray cfs configurations --help command to manage CFS configurations on the system. The following operations are available:
+Use the `cray cfs configurations --help` command to manage CFS configurations on the system. The following operations are available:
 
--   list: List all configurations.
--   describe: Display info about a single configuration and its layer\(s\).
--   update: Create a new configuration or modify an existing configuration.
--   delete: Delete an existing configuration.
+-   `list`: List all configurations.
+-   `describe`: Display info about a single configuration and its layer\(s\).
+-   `update`: Create a new configuration or modify an existing configuration.
+-   `delete`: Delete an existing configuration.
 
 
