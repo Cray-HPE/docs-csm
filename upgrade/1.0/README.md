@@ -1,4 +1,4 @@
-# CSM 0.9.3 to 1.0.0 Upgrade Process
+# CSM 0.9.4 to 1.0.0 Upgrade Process
 
 ### Introduction
 
@@ -15,7 +15,7 @@ responsibility of the "stable" NCN to another master node. However, you do not n
 upgrade that node.
 ### Stage 0 - Prerequisites & Preflight Checks
 
-> NOTE: CSM-0.9.3 is the version of CSM required in order to upgrade to CSM-1.0.0 (available with Shasta v1.5).
+> NOTE: CSM-0.9.4 is the version of CSM required in order to upgrade to CSM-1.0.0 (available with Shasta v1.5).
 
 The following command can be used to check the CSM version on the system:
 
@@ -23,7 +23,7 @@ The following command can be used to check the CSM version on the system:
 kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm'
 ``` 
 
-This check will also be conducted in the 'prerequisites.sh' script listed below and will fail if the system is not running CSM-0.9.3.
+This check will also be conducted in the 'prerequisites.sh' script listed below and will fail if the system is not running CSM-0.9.4.
 
 #### Option 1 - Internet Connected Environment
 Install document rpm package:
