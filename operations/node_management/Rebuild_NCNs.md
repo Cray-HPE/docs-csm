@@ -475,14 +475,14 @@ This section applies to NCN master and worker nodes. If rebuilding a storage nod
     1.  Set the PXE/efiboot option.
 
         ```bash
-        ncn# ipmitool -I lanplus -U root -P initial0 \
+        ncn# ipmitool -I lanplus -U root -P <BMC root password> \
         -H XNAME chassis bootdev pxe options=efiboot
         ```
 
     2.  Power off the server.
 
         ```bash
-        ncn# ipmitool -I lanplus -U root -P initial0 \
+        ncn# ipmitool -I lanplus -U root -P <BMC root password> \
         -H XNAME chassis power off
         ```
 
@@ -491,14 +491,14 @@ This section applies to NCN master and worker nodes. If rebuilding a storage nod
         Wait a couple seconds after powering off the server before running the following command.
 
         ```bash
-        ncn# ipmitool -I lanplus -U root -P initial0 \
+        ncn# ipmitool -I lanplus -U root -P <BMC root password> \
         -H XNAME chassis power status
         ```
 
     4.  Power on the server.
 
         ```bash
-        ncn#  ipmitool -I lanplus -U root -P initial0 \
+        ncn#  ipmitool -I lanplus -U root -P <BMC root password> \
         -H XNAME chassis power on
         ```
 
