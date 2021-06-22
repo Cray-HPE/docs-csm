@@ -229,7 +229,7 @@ should resolve itself once the workload manager product is installed.
    done
    ```
 
-1. Run the `/opt/cray/ncn/set-bmc-ntp-dns.sh` script each NCN.
+1. Run the `/opt/cray/ncn/set-bmc-ntp-dns.sh` script on each NCN.
 
    > **`NOTE:`** For Gigabyte or Intel NCNs this **step can be skipped**.
 
@@ -370,6 +370,7 @@ Other health checks may be run as desired.
 >
 > Failures of these tests due to locked components as shown above can be safely
 > ignored.
+
 
 <a name="exit-typescript"></a>
 ## Exit Typescript
