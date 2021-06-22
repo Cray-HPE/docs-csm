@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 if ! kubectl exec -n spire spire-server-0 --container spire-server -- ./bin/spire-server entry show -spiffeID spiffe://shasta/ncn/workload/cpsmount_helper | grep -q "spiffe://shasta/ncn/workload/cpsmount_helper"; then
     echo "Adding spiffe://shasta/ncn/workload/cpsmount_helper"
     kubectl exec -n spire spire-server-0 --container spire-server -- ./bin/spire-server entry create \
