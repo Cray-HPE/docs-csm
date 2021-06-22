@@ -76,19 +76,19 @@ For each item in the `Hardware Precedence Order`:
      	*	IF `dryrun`: The operation should succeed if performed as a `live update`. `succeeded` means that FAS identified that it COULD update an xname + target with the declared strategy. 
      	*	IF `live update`: the operation succeeded, and has updated the xname + target to the identified version.
      *	`failed`: 
-     	*	IF `dryrun` : There is something that FAS could do, but it likely would fail; most likely because the file is missing. 
-     	*	IF `live update` : the operation failed, the identified version could not be put on the xname + target.
+     	*	IF `dryrun`: There is something that FAS could do, but it likely would fail; most likely because the file is missing. 
+     	*	IF `live update`: the operation failed, the identified version could not be put on the xname + target.
 
 3. If `succeeded` count > 0, now perform a live update.
 
-4. Update the json file `overrideDryrun` to `true`:
+4. Update the JSON file `overrideDryrun` to `true`:
 
    1. `cray fas actions create {jsonfile}`
      2. Note the ActionID!
      3. Poll the status of the action until the action `state` is `completed`:
         1. `cray fas actions describe {actionID} --format json`
 
-5. Interpret the outcome of the live update; proceed to next type of hardware
+5. Interpret the outcome of the live update; proceed to next type of hardware.
 
 <a name="hardware-precedence-order"></a>
 

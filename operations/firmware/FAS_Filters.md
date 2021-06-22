@@ -2,12 +2,12 @@
 
 FAS uses five primary filters for `actions` and `snapshots` to determine what operations to create. The filters are listed below:
 
-* Selection Filters -> determine `what` operations will be created
+* Selection Filters - Determine `what` operations will be created. The following selection filters are available:
 	* `stateComponentFilter`
 	* `targetFilter`
 	* `inventoryHardwareFilter`
-	*  ` imageFilter`
-* Command Filters -> determine `how` the operations will be executed
+	* ` imageFilter`
+* Command Filters - Determine `how` the operations will be executed. The following command filters are available:
 	* `command` 	
 
 
@@ -57,11 +57,11 @@ For example, if a user specifies an image that only applies to gigabyte, nodeBMC
 
 #### `targetFilter` 
 
-The target filter selects targets that match against the list. For example, if the user specifies only the BIOS target, FAS will include only operations that explicitly have BIOS as a target.  A Redfish device has potentially many targets (members). Targets for FAS are case sensitive and must match Redfish.
+The target filter selects targets that match against the list. For example, if the user specifies only the BIOS target, FAS will include only operations that explicitly have BIOS as a target. A Redfish device has potentially many targets (members). Targets for FAS are case sensitive and must match Redfish.
 
 ##### Parameters
 
-1. `targets` - The actual 'members' that will be upgraded. Examples include, but are not limited to the following: 
+* `targets` - The actual 'members' that will be upgraded. Examples include, but are not limited to the following: 
   * BIOS
   * BMC
   * NIC
