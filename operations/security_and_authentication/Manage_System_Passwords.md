@@ -1,12 +1,8 @@
-
-
-
-
-
-
 ## Manage System Passwords
 
 Many system services require login credentials to gain access to them. The information below is a comprehensive list of system passwords and how to change them.
+
+Contact Cray/HPE service in order to obtain the default usernames and passwords for any of these components or services.
 
 ### Keycloak
 
@@ -54,47 +50,40 @@ The initial Gitea login credentials for the `crayvcs` username are stored in thr
 
 ### System Management Health Service
 
-Default login credentials for Grafana and Kiali:
-
--   Username: admin
--   Password: admin
+Contact Cray/HPE service in order to obtain the default password for Grafana and Kiali. The default username is admin.
 
 ### Management Network Switches
 
-Each rack type includes a different set of passwords. During different stages of installation, these passwords are subject to change. The default login username is always admin, but the password may change to any of the following depending on if the switches are configured or not:
-
--   admin
--   initial0
--   !initial0
+Each rack type includes a different set of passwords. During different stages of installation, these passwords are subject to change. Contact Cray/HPE service in order to obtain the default passwords.
 
 The tables below include the default login credentials for each rack type. These passwords can be changed by going into the console on a given switch and changing it. However, if the user gets locked out attempting to change the password or the configuration gets corrupted for an individual switch, it can wipe out the entire network configuration for the system.
 
 **Liquid Cooled Cabinet:**
 
-| Name  | Role      | Switch          | IP         | Login | Password |
-| ----- | --------- | --------------- | ---------- | ----- | -------- |
-| smn01 | Leaf/Mgmt | Dell S3048-ON   | 10.254.0.2 | admin | !nitial0 |
-| smn02 | Spine-001 | Mellanox SN2100 | 10.254.0.1 | admin | !nitial0 |
-| smn03 | Spine-002 | Mellanox SN2100 | 10.254.0.3 | admin | !nitial0 |
+| Name  | Role      | Switch          | IP         | Login |
+| ----- | --------- | --------------- | ---------- | ----- |
+| smn01 | Leaf/Mgmt | Dell S3048-ON   | 10.254.0.2 | admin |
+| smn02 | Spine-001 | Mellanox SN2100 | 10.254.0.1 | admin |
+| smn03 | Spine-002 | Mellanox SN2100 | 10.254.0.3 | admin |
 
 **Air Cooled Cabinet:**
 
-| Name    | Role      | Switch        | IP         | Login | Password |
-| ------- | --------- | ------------- | ---------- | ----- | -------- |
-| mtnsw01 | Leaf/Mgmt | Dell S3048-ON | 10.254.0.2 | admin | !nitial0 |
+| Name    | Role      | Switch        | IP         | Login |
+| ------- | --------- | ------------- | ---------- | ----- |
+| mtnsw01 | Leaf/Mgmt | Dell S3048-ON | 10.254.0.2 | admin |
 
 **Coolant Distribution Unit (CDU):**
 
-| Name   | Role | Switch         | IP         | Login | Password |
-| ------ | ---- | -------------- | ---------- | ----- | -------- |
-| cdu-s1 | CDU  | Dell S4048T-ON | 10.254.0.2 | admin | shasta0  |
+| Name   | Role | Switch         | IP         | Login |
+| ------ | ---- | -------------- | ---------- | ----- |
+| cdu-s1 | CDU  | Dell S4048T-ON | 10.254.0.2 | admin |
 
 **ClusterStor:**
 
-| Name     | Role                  | Switch         | IP            | Login | Password |
-| -------- | --------------------- | -------------- | ------------- | ----- | -------- |
-| Arista   |                       | DCS-7060CX-32S | 172.16.249.10 | admin | admin    |
-| Sonexion | Entry point to Arista | CS-L300        | 172.30.49.178 | admin | crayadm  |
+| Name     | Role                  | Switch         | IP            | Login |
+| -------- | --------------------- | -------------- | ------------- | ----- |
+| Arista   |                       | DCS-7060CX-32S | 172.16.249.10 | admin |
+| Sonexion | Entry point to Arista | CS-L300        | 172.30.49.178 | admin |
 
 
 ### Redfish Credentials
@@ -103,13 +92,15 @@ Redfish accounts are only valid with the Redfish API. They do not allow system l
 
 -   Root - Administrative account
     -   Username: root
-    -   Password: initial0
+    -   Password: <your password>
 -   Operator - Power components on/off, read values, and configure accounts
     -   Username: operator
-    -   Password: initial0\_op
+    -   Password: <your password>
 -   ReadOnly - Log in, configure self, and read values
     -   Username: guest
-    -   Password: initial0\_ro
+    -   Password: <your password>
+
+Contact Cray/HPE service in order to obtain the default passwords.
 
 The account database is automatically saved to the non-volatile settings partition \(/nvram/redfish/redfish-accounts\) any time an account or account policy is modified. The file is stored as a redis command dump and is replayed \(if it exists\) anytime the core Redfish schema is loaded via the init script. If default accounts must be restored, delete the redis command dump and reboot the controller.
 
@@ -228,18 +219,20 @@ For SSH access, the system controllers have the following default credentials:
 
 -   Node controller \(nC\)
     -   Username: root
-    -   Password: None
+    -   Password: <your password>
 -   Chassis controller \(cC\)
     -   Username: root
-    -   Password: None
+    -   Password: <your password>
 -   Switch controller \(sC\)
     -   Username: root
-    -   Password: initial0
+    -   Password: <your password>
 -   sC minimal recovery firmware image \(rec\)
     -   Username: root
-    -   Password: None
+    -   Password: <your password>
 
-All of the embedded controllers use the same unix password configuration. Passwords for nC, cC, and sC controllers are all managed with the following process. The cfgsh tool is a configuration shell that can be used interactively or scripted. Interactively, it may be used as follows after logging in as root via SSH:
+Contact Cray/HPE service in order to obtain the default passwords. 
+
+Passwords for nC, cC, and sC controllers are all managed with the following process. The cfgsh tool is a configuration shell that can be used interactively or scripted. Interactively, it may be used as follows after logging in as root via SSH:
 
 ```bash
 x0c1# config 
@@ -260,8 +253,4 @@ In both cases, a `running-config` must be saved out to non-volatile storage in a
 
 ### Gigabyte
 
-The following are the default login credentials for Gigabyte:
-
--   Username: admin
--   Password: password
-
+Contact Cray/HPE service in order to obtain the default password for Gigabyte. The default username is admin.

@@ -16,7 +16,7 @@ Administrative privileges are required.
     {
         "Force": false,
         "Username": "root",
-        "Password": "initial0",
+        "Password": "<BMC root password>",
         "Targets": [
             "x0c0s0b0",
             "x0c0s1b0"
