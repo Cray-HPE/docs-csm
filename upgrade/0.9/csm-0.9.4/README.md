@@ -23,6 +23,7 @@ Procedures:
 - [Restore VCS Content](#restore-vcs-content)
 - [Disable TPM Kernel Module](#disable-tpm-kernel-module)
 - [Run Validation Checks (Post-Upgrade)](#run-validation-checks-post-upgrade)
+- [Verify CSM Version in Product Catalog](#verify-version)
 - [Exit Typescript](#exit-typescript)
 
 
@@ -370,6 +371,24 @@ Other health checks may be run as desired.
 >
 > Failures of these tests due to locked components as shown above can be safely
 > ignored.
+
+
+<a name="verify-version"></a>
+## Verify CSM Version in Product Catalog
+
+1. Verify the CSM version has been updated in the product catalog. The
+   following command should return `0.9.4`:
+
+   ```bash
+   ncn-m001# kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r -j - | jq -r 'to_entries[] | .key'
+   0.9.4
+   ```
+
+2. Confirm the `import_date` reflects the timestamp of the upgrade:
+
+   ```bash
+   ncn-m001# kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r  - '"0.9.4".configuration.import_date'
+   ```
 
 
 <a name="exit-typescript"></a>
