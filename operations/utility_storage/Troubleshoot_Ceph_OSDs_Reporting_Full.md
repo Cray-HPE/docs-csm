@@ -1,4 +1,4 @@
-## Troubleshoot Ceph OSDs Reporting Full
+# Troubleshoot Ceph OSDs Reporting Full
 
 Use this procedure to examine the Ceph cluster and troubleshoot issues where Ceph runs out of space and the Kubernetes cluster cannot write data. The OSDs need to be reweighed to move data from the drive and get it back under the warning threshold.
 
@@ -6,13 +6,13 @@ When a single OSD for a pool fills up, the pool will go into read-only mode to p
 
 Return the Ceph cluster to a healthy state after it reports a full OSD.
 
-### Prerequisites
+## Prerequisites
 
 The commands in this procedure need to be run on a ceph-mon node.
 
 ### Procedure
 
-1.  View the status of the Ceph cluster.
+1. View the status of the Ceph cluster.
 
     ```bash
     ncn-m001# ceph -s
@@ -39,7 +39,7 @@ The commands in this procedure need to be run on a ceph-mon node.
         client:   379 KiB/s rd, 2.2 KiB/s wr, 13 op/s rd, 1 op/s wr
     ```
 
-2.  View the Ceph health detail.
+1. View the Ceph health detail.
 
     The OSD\_NEARFULL list can have multiple results. Take a note of the returned results to compare with the output of the ceph osd df output.
 
@@ -50,7 +50,7 @@ The commands in this procedure need to be run on a ceph-mon node.
         osd.9 is near full  <<-- Note this value
     ```
 
-3.  View the storage utilization of the cluster and pools.
+1. View the storage utilization of the cluster and pools.
 
     ```bash
     ncn-m001# ceph df
@@ -76,7 +76,7 @@ The commands in this procedure need to be run on a ceph-mon node.
        default.rgw.buckets.non-ec     13     305 KiB          34     1.9 MiB         0        39 GiB
     ```
 
-4.  View the utilization of the OSDs to see if data is not balanced across them.
+1. View the utilization of the OSDs to see if data is not balanced across them.
 
     In the example below, the OSD.9 value is showing that it is 95.17 percent full.
 
@@ -101,7 +101,7 @@ The commands in this procedure need to be run on a ceph-mon node.
     15   ssd 3.49219  1.00000 3.5 TiB 1.2 TiB 1.2 TiB  179 KiB 2.5 GiB 2.3 TiB 34.44 0.60  41     up
     ```
 
-5.  Use the ceph osd reweight command to on the OSD to move data from the drive and get it back under the warning threshold of 85 percent.
+1. Use the ceph osd reweight command to on the OSD to move data from the drive and get it back under the warning threshold of 85 percent.
 
     This command tells Ceph that the drive can now only hold 80 percent of the usable space \(crush weight\).
 
@@ -109,7 +109,7 @@ The commands in this procedure need to be run on a ceph-mon node.
     ncn-m001# ceph osd reweight osd.9 0.80
     ```
 
-6.  Confirm the reweight command made the change.
+1. Confirm the reweight command made the change.
 
     In this example, the new reweight is .79999 and the use is now at 80 percent.
 
@@ -136,10 +136,8 @@ The commands in this procedure need to be run on a ceph-mon node.
     MIN/MAX VAR: 0.27/1.49  STDDEV: 18.51
     ```
 
-7.  Monitor the Ceph cluster during recovery.
+1. Monitor the Ceph cluster during recovery.
 
     ```bash
     ncn-m001# ceph -s
     ```
-
-

@@ -1,8 +1,8 @@
-## Troubleshoot Large Object Map Objects in Ceph Health
+# Troubleshoot Large Object Map Objects in Ceph Health
 
 Troubleshoot an issue where Ceph reports a HEALTH\_WARN of 1 large omap objects. Adjust the omap object key threshold or number of placement groups \(PG\) to resolve this issue.
 
-### Prerequisites
+## Prerequisites
 
 Ceph health is reporting a HEALTH\_WARN for large Object Map \(omap\) objects.
 
@@ -33,13 +33,13 @@ ncn-m001# ceph -s
 
 ```
 
-### Procedure
+## Procedure
 
-1.  Adjust the number of omap objects.
+1. Adjust the number of omap objects.
 
     Use one of the options below to resolve the issue:
 
-    -   Use the ceph config command.
+    - Use the ceph config command.
 
         In the example below, the omap object key threshold is set to 350000, but it can be set to a higher number if desired.
 
@@ -47,8 +47,8 @@ ncn-m001# ceph -s
         ncn-m001# ceph config set client.osd osd_deep_scrub_large_omap_object_key_threshold 350000
         ```
 
-    -   Increase the number of PGs for the Ceph pool.
-        1.  Get the current threshold and PG numbers.
+    - Increase the number of PGs for the Ceph pool.
+        1. Get the current threshold and PG numbers.
 
             ```bash
             ncn-m001# ceph osd pool autoscale-status
@@ -66,7 +66,7 @@ ncn-m001# ceph -s
              default.rgw.buckets.non-ec      0                 3.0        64368G  0.0000                 1.0       4              on
             ```
 
-        2.  Adjust the target\_size\_ratio value to increase the PGs for the pool.
+        1. Adjust the target\_size\_ratio value to increase the PGs for the pool.
 
             This number should be increased a tenth or smaller at a time. Check the autoscale-status between each adjustment. When there is a change to the New PG NUM, stop adjusting the number.
 
@@ -76,19 +76,16 @@ ncn-m001# ceph -s
             ncn-m001# ceph osd pool set POOL_NAME target_size_ratio 0.2
             ```
 
-        3.  Check to see if the change is taking effect.
+        1. Check to see if the change is taking effect.
 
             ```bash
             ncn-m001# ceph osd pool autoscale-status
             ```
 
-        4.  Watch the status of the Ceph health.
+        1. Watch the status of the Ceph health.
 
             Verify the recovery traffic is taking place on the keys. The -w option can be used to watch the cluster.
 
             ```bash
             ncn-m001# ceph -s
             ```
-
-
-

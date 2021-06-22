@@ -1,22 +1,22 @@
-## Adjust Ceph Pool Quotas
+# Adjust Ceph Pool Quotas
 
 Ceph pools are used for storing data. Use this procedure to set the Ceph pool quotas to determine the wanted number of bytes per pool. The `smf` Ceph pool now has replication factor of two.
 
 Resolve Ceph health issues caused by a pool reaching its quota.
 
-### Prerequisites
+## Prerequisites
 
 This procedure requires administrative privileges.
 
-### Limitations
+## Limitations
 
 Currently, only `smf` includes a quota.
 
-### Procedure
+## Procedure
 
-1.  Log in as root on `ncn-m001`.
+1. Log in as root on `ncn-m001`.
 
-2.  Determine the available space.
+1. Determine the available space.
 
     In the following example, the 3.5 TiB is 33 percent of the 21 TiB total. Ceph keeps three copies of data, so a 3.5 TiB quota is actually provisioning 7.0 TiB of storage, which is 33 percent of 21 TiB.
 
@@ -42,7 +42,7 @@ Currently, only `smf` includes a quota.
       default.rgw.buckets.non-ec     11         0 B           0         0 B         0       9.9 TiB     N/A               N/A                   0            0 B             0 B
     ```
 
-3.  Determine the maximum quota percentage.
+1. Determine the maximum quota percentage.
 
     6TiB must be left for Kubernetes, Ceph RGW, and other services. To calculate the quota percentage, use the following equation:
 
@@ -56,7 +56,7 @@ Currently, only `smf` includes a quota.
     (21-6)/21 = .71
     ```
 
-4.  Edit the quota percentage as wanted.
+1. Edit the quota percentage as wanted.
 
     Do not exceed the percentage determined in the previous step.
 
@@ -68,13 +68,13 @@ Currently, only `smf` includes a quota.
         replication_factor: 2.0
     ```
 
-5.  Run the ceph-pool-quotas.yml playbook from `ncn-s001`.
+1. Run the ceph-pool-quotas.yml playbook from `ncn-s001`.
 
     ```bash
     ncn-s001# ansible-playbook /etc/ansible/ceph-rgw-users/ceph-pool-quotas.yml
     ```
 
-6.  View the quota/pool usage.
+1. View the quota/pool usage.
 
     Look at the USED and QUOTA BYTES columns to view usage and the new quota setting.
 
@@ -99,7 +99,3 @@ Currently, only `smf` includes a quota.
       smf                            10      19 TiB       7.88k      28 GiB      0.14       9.9 TiB     N/A               **7.4 TiB**           7.88k        9.4 GiB          19 GiB
       default.rgw.buckets.non-ec     11         0 B           0         0 B         0       9.9 TiB     N/A               N/A                   0            0 B             0 B
     ```
-
-
-
-

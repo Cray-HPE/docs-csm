@@ -1,22 +1,22 @@
-## Troubleshoot a Down OSD
+# Troubleshoot a Down OSD
 
 Identify down OSDs and manually bring them back up.
 
 Troubleshoot the Ceph health detail reporting down OSDs. Ensuring that OSDs are operational and data is balanced across them will help remove the likelihood of hotspots being created.
 
-### Prerequisites
+## Prerequisites
 
 This procedure requires admin privileges.
 
 ### Procedure
 
-1.  Identify the down OSDs.
+1. Identify the down OSDs.
 
     ```bash
     ncn-m001# ceph osd tree
     ```
 
-2.  Check the logs for the OSD that is down.
+1. Check the logs for the OSD that is down.
 
     Use the OSD number for the down OSD returned in the command above.
 
@@ -24,15 +24,17 @@ This procedure requires admin privileges.
     ncn-m001# ceph osd find OSD_ID
     ```
 
-3.  Manually restart the OSD.
+1. Manually restart the OSD.
 
     This step must be done on the node with the reported down OSD.
 
     ```bash
-    ncn-m001# systemctl restart ceph-osd@OSD_NUMBER
+    ncn-(s001/2/3)# ceph orch restart osd.<number>
     ```
 
-4.  Verify the OSDs are running again.
+    **Note:** If the service is not restart via ceph orch you can restart it using [Manage_Ceph_services.md](Manage_Ceph_Services.md)
+
+1. Verify the OSDs are running again.
 
     ```bash
     ncn-m001# ceph osd tree
@@ -49,7 +51,4 @@ This procedure requires admin privileges.
      5   smf 0.01859         osd.5       up  1.00000 1.00000
     ```
 
-
 If the OSD dies again, check dmesg for drive failures.
-
-

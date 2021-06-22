@@ -1,14 +1,14 @@
-## Dump Ceph Crash Data
+# Dump Ceph Crash Data
 
 Ceph includes an option to dump crash data. Retrieve this data to get more information on a Ceph cluster that has crashed.
 
-### Prerequisites
+## Prerequisites
 
 Ceph is reporting the cluster \[WRN\] overall HEALTH\_WARN 1 daemons have recently crashed error in the output of the ceph -s or ceph health detail commands.
 
-### Procedure
+## Procedure
 
-1.  Get the Ceph crash listing and the corresponding IDs.
+1. Get the Ceph crash listing and the corresponding IDs.
 
     ```bash
     ncn-m001# ceph crash ls
@@ -16,7 +16,7 @@ Ceph is reporting the cluster \[WRN\] overall HEALTH\_WARN 1 daemons have recent
     2021-02-02_13:45:18.543633Z_a31173f7-44c8-45b1-a253-80efa25b45f1 mon.ncn-s003  *
     ```
 
-2.  Get information about the crash to include in a support ticket.
+1. Get information about the crash to include in a support ticket.
 
     Replace the CRASH\_ID value with the ID returned in the previous step.
 
@@ -59,13 +59,10 @@ Ceph is reporting the cluster \[WRN\] overall HEALTH\_WARN 1 daemons have recent
     }
     ```
 
-3.  Archive the crash data for further triage.
+1. Archive the crash data for further triage.
 
     This command can be used to archive all crash data, or just the data for a specific Ceph entity.
 
     ```bash
     ncn-m001# ceph crash archive ALL/CRASH_ID
     ```
-
-
-
