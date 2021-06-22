@@ -1,23 +1,23 @@
-## Troubleshoot an Unresponsive S3 Endpoint
+# Troubleshoot an Unresponsive S3 Endpoint
 
 Restart Ceph OSDs to help make the rgw.local:8080 endpoint responsive.
 
 Ceph has an issue where it appears healthy but the rgw.local:8080 endpoint is unresponsive. This issue occurs when `ceph -s` is run and produces a very high reads per second output:
 
-```
+```bash
 io:
     client:   103 TiB/s rd, 725 KiB/s wr, 2 op/s rd, 44 op/s wr
 ```
 
 The rgw.local endpoint needs to be responsive in order to interact directly with the Simple Storage Service \(S3\) RESTful API.
 
-### Prerequisites
+## Prerequisites
 
 This procedure requires admin privileges.
 
-### Procedure
+## Procedure
 
-1.  View the OSD status.
+1. View the OSD status.
 
     ```bash
     ncn-m001# ceph osd tree
@@ -35,15 +35,12 @@ This procedure requires admin privileges.
     
     ```
 
-2.  Log in to each node and restart the OSDs.
+1. Log in to each node and restart the OSDs.
 
     The OSD number in the example below should be replaced with the number of the OSD being restarted.
 
     ```bash
-    ncn-m001# systemctl restart ceph-osd@3
+    ncn-m001# ceph orch restart osd.3
     ```
 
     Wait for Ceph health to return to OK before moving between nodes.
-
-
-
