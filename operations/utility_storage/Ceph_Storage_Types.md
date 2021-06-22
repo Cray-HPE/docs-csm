@@ -1,8 +1,8 @@
-## Ceph Services
+# Ceph Storage Types
 
-As a reference, the below ceph and rbd commands are run from a ceph-mon node. Certain commands will work on different systems. For example, the rbd command can be used on the worker nodes if specifying the proper key.
+As a reference, the below ceph and rbd commands are run from a master node or ncn-s001/2/3. Certain commands will work on different systems. For example, the rbd command can be used on the worker nodes if specifying the proper key.
 
-### Ceph Block \(rbd\)
+## Ceph Block \(rbd\)
 
 List block devices in a specific pool:
 
@@ -34,7 +34,7 @@ id pool namespace image    snap device
 2  smf            smf_vol  -    /dev/rbd2
 ```
 
-### Ceph MDS \(File\)
+## Ceph MDS \(File\)
 
 Display CephFS shares with their pool information:
 
@@ -70,7 +70,7 @@ MDS version: ceph version 14.2.0-300-gacd2f2b9e1 (acd2f2b9e196222b0350b3b59af998
 
 ```
 
-### Ceph RadosGW \(object/s3\)
+## Ceph RadosGW \(object/s3\)
 
 List the services to learn more about the radosgw service. The following command lists more than just the radosgw service, so ensure the correct sections are used.
 
@@ -172,6 +172,3 @@ To remove a specific bucket:
 ```bash
 ncn-m001# radosgw-admin bucket rm --bucket-name BUCKET_NAME
 ```
-
-
-
