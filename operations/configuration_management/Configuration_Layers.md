@@ -6,7 +6,7 @@ Configurations with a single layer are useful when testing out a new configurati
 
 ### Use Branches in Configuration Layers
 
-Configuration layers support using the `branch` value instead of the `commit` value. In this case, when the configuration is created or updated, CFS will automatically check with VCS to get the commit at the head of the branch. Both the commit and the branch are then stored. The commit acts as normal, and the branch is stored to make future updates to the commit easier.
+When defining a configuration layer, the `branch` or `commit` values can be used to reference a Git commit. The `commit` value is the recommended way to reference a Git commit. In the following example, when the configuration is created or updated, CFS will automatically check with VCS to get the commit at the head of the branch. Both the commit and the branch are then stored. The commit acts as normal, and the branch is stored to make future updates to the commit easier.
 
 ```bash
 ncn-m001# cat configurations-example.json
