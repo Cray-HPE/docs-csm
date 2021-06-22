@@ -28,5 +28,5 @@ The SNMP walk output of `OID BRIDGE-MIB::dot1dTpFdbAddress` returns fewer MAC ad
 
 ## Workaround:
 
-Delete SNMP configuration from affected switch and reconfigure the SNMP server.
+Delete SNMP configuration from affected switch and reconfigure the SNMP server. Refer to the `SNMP configuration` section of the [Configure Aruba Leaf Switch](configure_aruba_leaf_switch.md) procedure for reference.
 
