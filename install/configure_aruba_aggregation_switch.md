@@ -333,7 +333,7 @@ sw-agg-001 & sw-agg-002 (config)#
 Aruba UAN NMN Configuration
 One port is shutdown.
 ```
-sw-spine-001 (config)#
+sw-agg-001 (config)#
     interface 1/1/16
     no shutdown
     mtu 9198
@@ -343,7 +343,7 @@ sw-spine-001 (config)#
     spanning-tree port-type admin-edge
     exit
 
-sw-spine-002 (config)#
+sw-agg-002 (config)#
     interface 1/1/16
     shutdown
     mtu 9198
@@ -358,7 +358,7 @@ Aruba UAN CAN Configuration
 
 Port Configuration is the same on both switches.
 ```
-sw-spine-001 & sw-spine-002 (config)#
+sw-agg-001 & sw-agg-002 (config)#
     interface lag 17 multi-chassis
     no shutdown
     no routing
@@ -370,7 +370,7 @@ sw-spine-001 & sw-spine-002 (config)#
     spanning-tree port-type admin-edge
     exit
 
-sw-spine-001 & sw-spine-002 (config)#
+sw-agg-001 & sw-agg-002 (config)#
     interface 1/1/17
     no shutdown
     mtu 9198
