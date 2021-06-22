@@ -12,7 +12,7 @@ Procedures:
 
 - [Preparation](#preparation)
 - [Run Validation Checks (Pre-Upgrade)](#run-validation-checks-pre-upgrade)
-- [Updatetc/hosts on Workers](#update-hosts-on-workers)
+- [Update /etc/hosts on Workers](#update-hosts-on-workers)
 - [Setup Nexus](#setup-nexus)
 - [Backup VCS Content](#backup-vcs-content)
 - [Upgrade Services](#upgrade-services)
@@ -39,9 +39,9 @@ changes in each CSM release. This patch includes the following changes:
 - Configure NTP and DNS for HPE NCN BMCs.
 - Unbound no longer forwards requests to Shasta zones to site DNS.
 - Add static entries for `registry.local` and `packages.local` to the
- etc/hosts` files on the worker nodes.
+  `/etc/hosts` files on the worker nodes.
 - Update Kea externTrafficPolicy from `Cluster` to `Local`.
-- Prometheus can now to scrape kubelkube-proxy for metrics.
+- Prometheus can now to scrape kubelet/kube-proxy for metrics.
 - Install node-exporter on storage nodes.
 - BOS will now leave any nodes that it cannot communicate with behind. These
   nodes will not prolong a BOS session. A message describing how to relaunch
@@ -71,7 +71,7 @@ section sets the expected environment variables to appropriate values.
    > **`NOTE:`** Installed CSM versions may be listed from the product catalog using:
    >
    > ```bash
-   > ncn-m001# kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' | yq r -j - | jq -r 'keys[]' | sed-/!{s/$/_/}' | sort -V | sed 's/_$//'
+   > ncn-m001# kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' | yq r -j - | jq -r 'keys[]' | sed '/-/!{s/$/_/}' | sort -V | sed 's/_$//'
    > ```
 
 1. Set `CSM_DISTDIR` to the directory of the extracted release distribution for
@@ -85,37 +85,37 @@ section sets the expected environment variables to appropriate values.
    If using a release distribution:
    ```bash
    ncn-m001# tar --no-same-owner --no-same-permissions -zxvf csm-0.9.4.tar.gz
-   ncn-m001# CSM_DISTDIR="$(pwcsm-0.9.4"
+   ncn-m001# CSM_DISTDIR="$(pwd)/csm-0.9.4"
    ```
    Else if using a hotfix distribution:
    ```bash
    ncn-m001# tar --no-same-owner --no-same-permissions-zxvf csm-0.9.4-hotfix.tar.gz
-   ncn-m001# CSM_DISTDIR="$(pwcsm-0.9.4-hotfix"
+   ncn-m001# CSM_DISTDIR="$(pwd)/csm-0.9.4-hotfix"
    ```
 
 1. Set `CSM_RELEASE_VERSION` to the version reported by
-   `${CSM_DISTDIlib/version.sh`:
+   `${CSM_DISTDIR}/lib/version.sh`:
 
    ```bash
-   ncn-m001# CSM_RELEASE_VERSION="$(${CSM_DISTDIlib/version.sh --version)"
+   ncn-m001# CSM_RELEASE_VERSION="$(${CSM_DISTDIR}/lib/version.sh --version)"
    ```
 
-1. **NEEDS REVIEW** Download and instaupgrade the _latest_ workaround and
+1. **NEEDS REVIEW** Download and install/upgrade the _latest_ workaround and
    documentation RPMs. If this machine does not have direct internet access
    these RPMs will need to be externally downloaded and then copied to be
    installed.
 
    ```bash
-   ncn-m001# rpm -Uvh http/storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm-install/docs-csm-install-latest.noarch.rpm
-   ncn-m001# rpm -Uvh http/storage.googleapis.com/csm-release-public/shasta-1.4/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
+   ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm-install/docs-csm-install-latest.noarch.rpm
+   ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
    ```
 
 1. Set `CSM_SCRIPTDIR` to the scripts directory included in the docs-csm RPM
    for the CSM 0.9.4 upgrade:
 
    ```bash
-   ncn-m001# CSM_SCRIPTDIusr/share/doc/csm/upgrade/0.9/csm-0.9.4/scripts
-
+   ncn-m001# CSM_SCRIPTDIR=/usr/share/doc/csm/upgrade/0.9/csm-0.9.4/scripts
+   ```
 
 <a name="run-validation-checks-pre-upgrade"></a>
 ## Run Validation Checks (Pre-Upgrade)
@@ -127,31 +127,31 @@ proceeding.
 
 
 <a name="update-hosts-on-workers"></a>
-## Updatetc/hosts on Workers
+## Update /etc/hosts on Workers
 
-1. Run the `update-host-records.sh` script to updatetc/hosts on NCN workers:
+1. Run the `update-host-records.sh` script to update /etc/hosts on NCN workers:
 
    ```bash
-   ncn-m001# "${CSM_SCRIPTDIupdate-host-records.sh"
+   ncn-m001# "${CSM_SCRIPTDIR}/update-host-records.sh"
    ```
 
 
 <a name="setup-nexus"></a>
 ## Setup Nexus
 
-Run `lsetup-nexus.sh` to configure Nexus and upload new CSM RPM
+Run `lib/setup-nexus.sh` to configure Nexus and upload new CSM RPM
 repositories, container images, and Helm charts:
 
 ```bash
 ncn-m001# cd "$CSM_DISTDIR"
-ncn-m001#lib/setup-nexus.sh
+ncn-m001# ./lib/setup-nexus.sh
 ```
 
 On success, `setup-nexus.sh` will output to `OK` on stderr and exit with status
 code `0`, e.g.:
 
 ```bash
-ncn-m001#lib/setup-nexus.sh
+ncn-m001# ./lib/setup-nexus.sh
 ...
 + Nexus setup complete
 setup-nexus.sh: OK
@@ -172,7 +172,7 @@ report `FAIL` when uploading duplicate assets. This is ok as long as
    location.
 
    ```bash
-   ncn-m001# "${CSM_SCRIPTDIvcs-backup.sh"
+   ncn-m001# "${CSM_SCRIPTDIR}/vcs-backup.sh"
    ```
 
 1. Confirm the local tar file `vcs.tar` was created. It contains the Git
@@ -193,7 +193,7 @@ report `FAIL` when uploading duplicate assets. This is ok as long as
 1. Run `upgrade.sh` to deploy upgraded CSM applications and services:
 
    ```bash
-   ncn-m001#upgrade.sh
+   ncn-m001# ./upgrade.sh
    ```
 
 **Note**: If you have not already installed the workload manager product
@@ -222,14 +222,14 @@ should resolve itself once the workload manager product is installed.
 1. Deploy the `set-bmc-ntp-dns.sh` script to each NCN:
 
    ```bash
-   ncn-m001# for h in $( grep ncetc/hosts | grep nmn | awk '{print $2}' ); do
-      pdsh -w $h "mkdir -opt/cray/ncn"
-      scp "${CSM_SCRIPTDIset-bmc-ntp-dns.sh" root@$h:/opt/cray/ncn/set-bmc-ntp-dns.sh
-      pdsh -w $h "chmod 75opt/cray/ncn/set-bmc-ntp-dns.sh"
+   ncn-m001# for h in $( grep ncn /etc/hosts | grep nmn | awk '{print $2}' ); do
+      pdsh -w $h "mkdir -p /opt/cray/ncn"
+      scp "${CSM_SCRIPTDIR}/set-bmc-ntp-dns.sh" root@$h:/opt/cray/ncn/set-bmc-ntp-dns.sh
+      pdsh -w $h "chmod 755 /opt/cray/ncn/set-bmc-ntp-dns.sh"
    done
    ```
 
-1. Run theopt/cray/ncn/set-bmc-ntp-dns.sh` script each NCN.
+1. Run the `/opt/cray/ncn/set-bmc-ntp-dns.sh` script each NCN.
 
    > **`NOTE:`** For Gigabyte or Intel NCNs this **step can be skipped**.
 
@@ -243,7 +243,7 @@ should resolve itself once the workload manager product is installed.
 
    1. Determine HMN IP address for m001:
       ```bash
-      ncn# M001_HMN_IP=$(caetc/hosts | grep m001.hmn | awk '{print $1}')
+      ncn# M001_HMN_IP=$(cat /etc/hosts | grep m001.hmn | awk '{print $1}')
       ncn# echo $M001_HMN_IP
       10.254.1.4
       ```
@@ -254,15 +254,15 @@ should resolve itself once the workload manager product is installed.
       ````
    3. View the existing DNS and NTP settings on the BMC:
       ```bash
-      ncnopt/cray/ncn/set-bmc-ntp-dns.sh ilo -s
+      ncn# /opt/cray/ncn/set-bmc-ntp-dns.sh ilo -s
       ```
    4. Set the NTP servers to point toward time-hmn and ncn-m001. 
       ```bash
-      ncnopt/cray/ncn/set-bmc-ntp-dns.sh ilo -N "time-hmn,$M001_HMN_IP" -n
+      ncn# /opt/cray/ncn/set-bmc-ntp-dns.sh ilo -N "time-hmn,$M001_HMN_IP" -n
       ```
    5. Set the DNS server to point toward Unbound and ncn-m001.
       ```bash
-      ncnopt/cray/ncn/set-bmc-ntp-dns.sh ilo -D "10.94.100.225,$M001_HMN_IP" -d
+      ncn# /opt/cray/ncn/set-bmc-ntp-dns.sh ilo -D "10.94.100.225,$M001_HMN_IP" -d
       ```
 
 
@@ -277,14 +277,14 @@ should resolve itself once the workload manager product is installed.
    alert.
 
    ```bash
-   ncn-m001# "${CSM_SCRIPTDIfix-kube-proxy-target-down-alert.sh"
+   ncn-m001# "${CSM_SCRIPTDIR}/fix-kube-proxy-target-down-alert.sh"
    ```
 
 1. Run the `fix-kubelet-target-down-alert.sh` script to fix the kube-proxy
    alert.
 
    ```bash
-   ncn-m001# "${CSM_SCRIPTDIfix-kubelet-target-down-alert.sh"
+   ncn-m001# "${CSM_SCRIPTDIR}/fix-kubelet-target-down-alert.sh"
    ```
 
 
@@ -294,8 +294,8 @@ should resolve itself once the workload manager product is installed.
 1. Copy the `install-node-exporter-storage.sh` script out to the storage nodes.
 
    ```bash
-   ncn-m001# for h in $( caetc/hosts | grep ncn-s | grep nmn | awk '{print $2}' ); do
-     scp "${CSM_SCRIPTDIinstall-node-exporter-storage.sh" root@$h:/tmp
+   ncn-m001# for h in $( cat /etc/hosts | grep ncn-s | grep nmn | awk '{print $2}' ); do
+     scp "${CSM_SCRIPTDIR}/install-node-exporter-storage.sh" root@$h:/tmp
    done
    ```
 
@@ -305,7 +305,7 @@ should resolve itself once the workload manager product is installed.
    > **NOTE**: This script should be run on each storage node.
 
    ```bash
-   ncn-stmp/install-node-exporter-storage.sh
+   ncn-s# /tmp/install-node-exporter-storage.sh
    ```
 
 
@@ -315,7 +315,7 @@ should resolve itself once the workload manager product is installed.
 1. Run the `vcs-restore.sh` script to restore all VCS content.
 
    ```bash
-   ncn-m001# "${CSM_SCRIPTDIvcs-restore.sh"
+   ncn-m001# "${CSM_SCRIPTDIR}/vcs-restore.sh"
    ```
 
 
@@ -325,7 +325,7 @@ should resolve itself once the workload manager product is installed.
 1. Disable the TPM kernel module from being loaded by the GRUB bootloader.
 
    ```bash
-   ncn-m001# "${CSM_SCRIPTDItpm-fix-install.sh"
+   ncn-m001# "${CSM_SCRIPTDIR}/tpm-fix-install.sh"
    ```
 
 
@@ -352,20 +352,20 @@ Other health checks may be run as desired.
 >
 > ```bash
 >         Traceback (most recent call last):
->           Fileusr/lib/python3.8/site-packages/tavern/schemas/files.py", line 106, in verify_generic
+>           File "/usr/lib/python3.8/site-packages/tavern/schemas/files.py", line 106, in verify_generic
 >             verifier.validate()
->           Fileusr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
+>           File "/usr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
 >             raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
 >         pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
->          - Key 'Locked' was not defined. Path:Components/0'.
->          - Key 'Locked' was not defined. Path:Components/5'.
->          - Key 'Locked' was not defined. Path:Components/6'.
->          - Key 'Locked' was not defined. Path:Components/7'.
->          - Key 'Locked' was not defined. Path:Components/8'.
->          - Key 'Locked' was not defined. Path:Components/9'.
->          - Key 'Locked' was not defined. Path:Components/10'.
->          - Key 'Locked' was not defined. Path:Components/11'.
->          - Key 'Locked' was not defined. Path:Components/12'.: Path: '/'>
+>          - Key 'Locked' was not defined. Path: '/Components/0'.
+>          - Key 'Locked' was not defined. Path: '/Components/5'.
+>          - Key 'Locked' was not defined. Path: '/Components/6'.
+>          - Key 'Locked' was not defined. Path: '/Components/7'.
+>          - Key 'Locked' was not defined. Path: '/Components/8'.
+>          - Key 'Locked' was not defined. Path: '/Components/9'.
+>          - Key 'Locked' was not defined. Path: '/Components/10'.
+>          - Key 'Locked' was not defined. Path: '/Components/11'.
+>          - Key 'Locked' was not defined. Path: '/Components/12'.: Path: '/'>
 > ```
 >
 > Failures of these tests due to locked components as shown above can be safely
