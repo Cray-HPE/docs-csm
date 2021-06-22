@@ -32,6 +32,7 @@ The following administrative topics can be found in this guide:
       - [Domain Name Service (DNS)](#domain-name-service-dns)
       - [External DNS](#external-dns)
       - [MetalLB in BGP-Mode](#metallb-in-bgp-mode)
+    - [Firmware](#firmware)
   
 
 ### CSM **TBD: topics need to be re-organized**
@@ -621,3 +622,14 @@ MetalLB can run in either Layer2-mode or BGP-mode for each address pool it manag
   * [Troubleshoot BGP not Accepting Routes from MetalLB](network/metallb_bgp/Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
 
 
+<a name="firmware"></a>
+
+### Firmware
+
+The Firmware Action Service (FAS) provides an interface for managing firmware versions of Redfish-enabled hardware in the system. FAS interacts with the Hardware State Managers (HSM), device data, and image data in order to update firmware.
+
+  * [FAS CLI](FAS_CLI.md)
+  * [FAS Filters](FAS_Filters.md)
+  * [FAS Recipes](FAS_Recipes.md)
+  * [FAS Admin Procedures](FAS_Admin_Procedures.md)
+  * [FAS Use Cases](FAS_Use_Cases.md)
