@@ -6,7 +6,7 @@ set -o errexit
 set -o pipefail
 set -o xtrace
 
-mountpoint=/metal/boot
+mountpoint=/metal/recovery
 
 trim() {
     local var="$*"
