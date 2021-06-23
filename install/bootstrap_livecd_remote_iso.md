@@ -213,7 +213,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 1. Install/upgrade the CSI RPM.
 
    ```bash
-   pit:/var/www/ephemeral# rpm -Uvh $(ls -r ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm | head -n 1)
+   pit:/var/www/ephemeral# rpm -Uvh --force $(ls -r ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm | head -n 1)
    ```
 
 1. Show the version of CSI installed.
@@ -245,8 +245,8 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
    linux# scp -p docs-csm-install-*rpm csm-install-workarounds-*rpm ncn-m001:/root
    linux# ssh ncn-m001
-   pit# rpm -Uvh docs-csm-install-latest.noarch.rpm
-   pit# rpm -Uvh csm-install-workarounds-latest.noarch.rpm
+   pit# rpm -Uvh --force docs-csm-install-latest.noarch.rpm
+   pit# rpm -Uvh --force csm-install-workarounds-latest.noarch.rpm
    ```
 
 1. Generate configuration files.
