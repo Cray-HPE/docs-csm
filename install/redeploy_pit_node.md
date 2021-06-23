@@ -424,11 +424,17 @@ data so run them only when indicated. Instructions are in the `README` files.
     ```
     
 1. Verify we **do not** have a metal bootstrap IP.
+ 
+    ```bash
+     ncn-m001# ip a show bond0
+     ```
+
+ 1. Verify zypper repos are empty and all remote SUSE repos are disabled.
 
     ```bash
     ncn-m001# rm -v /etc/zypp/repos.d/* && zypper ms --remote --disable
     ```
-    
+
 1. Install the latest documentation and workaround packages. This will require external access. 
 
    If this machine does not have direct Internet access these RPMs will need to be externally downloaded and then copied to the system.
