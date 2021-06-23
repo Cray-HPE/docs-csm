@@ -90,8 +90,10 @@ section sets the expected environment variables to appropriate values.
    ```
    Else if using a hotfix distribution:
    ```bash
-   ncn-m001# tar --no-same-owner --no-same-permissions-zxvf csm-0.9.4-hotfix.tar.gz
-   ncn-m001# CSM_DISTDIR="$(pwd)/csm-0.9.4-hotfix"
+   ncn-m001# CSM_HOTFIX="csm-0.9.4-hotfix-0.0.1"
+   ncn-m001# tar --no-same-owner --no-same-permissions -zxvf ${CSM_HOTFIX}.tar.gz
+   ncn-m001# CSM_DISTDIR="$(pwd)/${CSM_HOTFIX}"
+   ncn-m001# echo $CSM_DISTDIR
    ```
 
 1. Set `CSM_RELEASE_VERSION` to the version reported by
@@ -99,6 +101,7 @@ section sets the expected environment variables to appropriate values.
 
    ```bash
    ncn-m001# CSM_RELEASE_VERSION="$(${CSM_DISTDIR}/lib/version.sh --version)"
+   ncn-m001# echo $CSM_RELEASE_VERSION
    ```
 
 1. **NEEDS REVIEW** Download and install/upgrade the _latest_ workaround and
@@ -115,7 +118,7 @@ section sets the expected environment variables to appropriate values.
    for the CSM 0.9.4 upgrade:
 
    ```bash
-   ncn-m001# CSM_SCRIPTDIR=/usr/share/doc/csm/upgrade/0.9/csm-0.9.4/scripts
+   ncn-m001# CSM_SCRIPTDIR=/usr/share/doc/metal/upgrade/0.9/csm-0.9.4/scripts
    ```
 
 <a name="run-validation-checks-pre-upgrade"></a>
@@ -130,12 +133,11 @@ proceeding.
 <a name="update-hosts-on-workers"></a>
 ## Update /etc/hosts on Workers
 
-1. Run the `update-host-records.sh` script to update /etc/hosts on NCN workers:
+Run the `update-host-records.sh` script to update /etc/hosts on NCN workers:
 
-   ```bash
-   ncn-m001# "${CSM_SCRIPTDIR}/update-host-records.sh"
-   ```
-
+```bash
+ncn-m001# "${CSM_SCRIPTDIR}/update-host-records.sh"
+```
 
 <a name="setup-nexus"></a>
 ## Setup Nexus
@@ -148,7 +150,7 @@ ncn-m001# cd "$CSM_DISTDIR"
 ncn-m001# ./lib/setup-nexus.sh
 ```
 
-On success, `setup-nexus.sh` will output to `OK` on stderr and exit with status
+On success, `setup-nexus.sh` will output `OK` on stderr and exit with status
 code `0`, e.g.:
 
 ```bash
@@ -156,6 +158,8 @@ ncn-m001# ./lib/setup-nexus.sh
 ...
 + Nexus setup complete
 setup-nexus.sh: OK
+ncn-m001# echo $?
+0
 ```
 
 In the event of an error, consult the [known
@@ -199,7 +203,7 @@ report `FAIL` when uploading duplicate assets. This is ok as long as
 
 **Note**: If you have not already installed the workload manager product
 including slurm and munge, then the `cray-crus` pod is expected to be in the
-`Init` state. After running `ugrade.sh`, you may observe there are now *two*
+`Init` state. After running `upgrade.sh`, you may observe there are now *two*
 copies of the `cray-crus` pod in the `Init` state. This situation is benign and
 should resolve itself once the workload manager product is installed.
 
@@ -220,13 +224,13 @@ should resolve itself once the workload manager product is installed.
 <a name="update-ntp-dns-on-bmcs"></a>
 ## Update NTP and DNS servers on BMCs
 
-1. Deploy the `set-bmc-ntp-dns.sh` script to each NCN:
+1. Deploy the `set-bmc-ntp-dns.sh` script (and its helper script `make_api_call.py`) to each NCN:
 
    ```bash
    ncn-m001# for h in $( grep ncn /etc/hosts | grep nmn | awk '{print $2}' ); do
-      pdsh -w $h "mkdir -p /opt/cray/ncn"
-      scp "${CSM_SCRIPTDIR}/set-bmc-ntp-dns.sh" root@$h:/opt/cray/ncn/set-bmc-ntp-dns.sh
-      pdsh -w $h "chmod 755 /opt/cray/ncn/set-bmc-ntp-dns.sh"
+      ssh $h "mkdir -p /opt/cray/ncn"
+      scp "${CSM_SCRIPTDIR}/make_api_call.py" "${CSM_SCRIPTDIR}/set-bmc-ntp-dns.sh" root@$h:/opt/cray/ncn/
+      ssh $h "chmod 755 /opt/cray/ncn/set-bmc-ntp-dns.sh"
    done
    ```
 
@@ -248,22 +252,23 @@ should resolve itself once the workload manager product is installed.
       ncn# echo $M001_HMN_IP
       10.254.1.4
       ```
-   2. Specify the credentials for the BMC:
+   2. Specify the name and credentials for the BMC:
       ```bash
+      ncn# BMC=ncn-<NCN name>-mgmt # e.g. ncn-w003-mgmt
       ncn# export USERNAME=root 
       ncn# export IPMI_PASSWORD=changeme
       ````
    3. View the existing DNS and NTP settings on the BMC:
       ```bash
-      ncn# /opt/cray/ncn/set-bmc-ntp-dns.sh ilo -s
+      ncn# /opt/cray/ncn/set-bmc-ntp-dns.sh ilo -H $BMC -s
       ```
    4. Set the NTP servers to point toward time-hmn and ncn-m001. 
       ```bash
-      ncn# /opt/cray/ncn/set-bmc-ntp-dns.sh ilo -N "time-hmn,$M001_HMN_IP" -n
+      ncn# /opt/cray/ncn/set-bmc-ntp-dns.sh ilo -H $BMC -N "time-hmn,$M001_HMN_IP" -n
       ```
    5. Set the DNS server to point toward Unbound and ncn-m001.
       ```bash
-      ncn# /opt/cray/ncn/set-bmc-ntp-dns.sh ilo -D "10.94.100.225,$M001_HMN_IP" -d
+      ncn# /opt/cray/ncn/set-bmc-ntp-dns.sh ilo -H $BMC -D "10.94.100.225,$M001_HMN_IP" -d
       ```
 
 
@@ -376,12 +381,13 @@ Other health checks may be run as desired.
 <a name="verify-version"></a>
 ## Verify CSM Version in Product Catalog
 
-1. Verify the CSM version has been updated in the product catalog. The
-   following command should return `0.9.4`:
+1. Verify the CSM version has been updated in the product catalog. Verify that the
+   following command includes version `0.9.4`:
 
    ```bash
    ncn-m001# kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r -j - | jq -r 'to_entries[] | .key'
    0.9.4
+   0.9.3
    ```
 
 2. Confirm the `import_date` reflects the timestamp of the upgrade:
