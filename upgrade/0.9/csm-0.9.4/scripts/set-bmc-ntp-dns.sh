@@ -1,20 +1,28 @@
-#!/usr/bin/env bash
-
+#!/bin/bash
 # Copyright (C) 2021 Hewlett Packard Enterprise Development LP
-
-# Sets static NTP, timezone, and DNS entries on a BMC.
-# Note: Functionality is vendor-dependent.
-
-set -o errexit
-set -o pipefail
+# Sets static NTP, timezone, and DNS entries on a BMC *functionality is vendor-dependent
+# Author: Jacob Salmela <jacob.salmela@hpe.com>
+set -eo pipefail
 
 # set_vars() sets some global variables used throughout the script
 function set_vars() {
+  if [[ -z ${USERNAME} ]] || [[ -z ${IPMI_PASSWORD} ]]; then
+    echo "\$USERNAME \$IPMI_PASSWORD must be set"
+    exit 1
+  fi
+  
+  # Find my current directory
+  mydir=$(dirname ${BASH_SOURCE[0]})
+  # Set the path to our Python API-call helper script
+  make_api_call_py=${mydir}/make_api_call.py
+  
   if [[ -z $BMC ]]; then
     VENDOR="$(ipmitool fru | awk '/Board Mfg/ && !/Date/ {print $4}')"
   else
-    VENDOR="$(ipmitool -I lanplus -U $USERNAME -P $IPMI_PASSWORD -H $BMC fru | awk '/Board Mfg/ && !/Date/ {print $4}')"
+    VENDOR="$(ipmitool -I lanplus -U $USERNAME -E -H $BMC fru | awk '/Board Mfg/ && !/Date/ {print $4}')"
   fi
+  # Export VENDOR variable for use by Python API helper script
+  export VENDOR
 
   if [[ "$VENDOR" = *Marvell* ]] || [[ "$VENDOR" = HP* ]] || [[ "$VENDOR" = Hewlett* ]]; then
     manager=1
@@ -38,11 +46,6 @@ function set_vars() {
     sdptool="cray-sdptool:2.1.0"
     sdptool_repo="ssh://git@stash.us.cray.com:7999/~jsalmela/cray-sdptool.git"
   fi
-
-  if [[ -z ${USERNAME} ]] || [[ -z ${IPMI_PASSWORD} ]]; then
-    echo "\$USERNAME \$IPMI_PASSWORD must be set"
-    exit 1
-  fi
 }
 
 usage() {
@@ -51,7 +54,7 @@ usage() {
   grep '^#/' "$0" | cut -c4-
 }
 
-#/ Usage: set-bmc-ntp-dns.sh [-h] ilo|gb|intel [-N NTP_SERVERS]|[-D DNS_SERVERS] [-options]
+#/ Usage: set-bmc-ntp-dns.sh [-h] ilo|gb|intel [-N NTP_SERVERS]|[-D DNS_SERVERS] [-H BMC] [-options]
 #/
 #/    Sets static NTP and DNS servers on BMCs using data defined in cloud-init (or by providing manual overrides)
 #/
@@ -140,7 +143,7 @@ function pit_die() {
   fi
 }
 
-# make_api_call() uses curl to contact an API endpoint
+# make_api_call() uses Python requests to contact an API endpoint
 function make_api_call() {
 
   pit_die
@@ -149,49 +152,25 @@ function make_api_call() {
   local method="$2"
   local payload="$3"
   local filter="$4"
-  if [[ "$method" == GET ]]; then
-    # A simple GET request is mostly the same
-    curl "https://${BMC}/${endpoint}" --insecure -L -s -u ${USERNAME}:${IPMI_PASSWORD} | jq ${filter}
+  local url="https://${BMC}/${endpoint}"
 
-  elif [[ "$method" == PATCH ]]; then
+  # Export variables for use by the make_api_call Python script
+  export method
+  export payload
+  export url
 
-    if [[ "$VENDOR" = *GIGA*BYTE* ]]; then
-
-      # GIGABYTE seems to need If-Match headers.  For now, just accept * all since we don't know yet what they are looking for
-      curl -X PATCH "https://${BMC}/${endpoint}" --insecure -L -u ${USERNAME}:${IPMI_PASSWORD} \
-        -H "Content-Type: application/json" -H "Accept: application/json" \
-        -H "If-Match: *" \
-        -d "${payload}"
-      echo -e "\n"
-
-    else
-
-      curl -X PATCH "https://${BMC}/${endpoint}" --insecure -L -u ${USERNAME}:${IPMI_PASSWORD} \
-        -H "Content-Type: application/json" -H "Accept: application/json" \
-        -d "${payload}"
-      echo -e "\n"
-
-    fi
-
-  elif [[ "$method" == POST ]]; then
-
-    if [[ "$VENDOR" = *GIGA*BYTE* ]]; then
-
-      curl -X POST "https://${BMC}/${endpoint}" --insecure -L -u ${USERNAME}:${IPMI_PASSWORD} \
-        -H "Content-Type: application/json" -H "Accept: application/json" \
-        -H "If-Match: *" \
-        -d "${payload}"
-      echo -e "\n"
-
-    else
-
-      curl -X POST "https://${BMC}/${endpoint}" --insecure -L -u ${USERNAME}:${IPMI_PASSWORD} \
-        -H "Content-Type: application/json" -H "Accept: application/json" \
-        -d "${payload}"
-      echo -e "\n"
-
-    fi
-  fi
+  case "$method" in
+    "GET")
+        /usr/bin/python3 ${make_api_call_py} | jq ${filter}
+        ;;
+    "PATCH"|"POST")
+        /usr/bin/python3 ${make_api_call_py}
+        ;;
+    *)
+        echo "ERROR: make_api_call: Unrecognized method: $method"
+        exit 1
+        ;;
+  esac
 }
 
 # show_current_bmc_datetime() shows the current datetime on the BMC
@@ -258,16 +237,16 @@ function show_current_ipmi_lan() {
   # Don't run on the PIT
   pit_die
 
-  local ip_src="" && ip_src=$(ipmitool -I lanplus -U $USERNAME -P $IPMI_PASSWORD -H $BMC lan print $channel \
+  local ip_src="" && ip_src=$(ipmitool -I lanplus -U $USERNAME -E -H $BMC lan print $channel \
                               | grep -Ei 'IP Address Source\s+\:')
 
-  local ipaddr="" && ipaddr=$(ipmitool -I lanplus -U $USERNAME -P $IPMI_PASSWORD -H $BMC lan print $channel \
+  local ipaddr="" && ipaddr=$(ipmitool -I lanplus -U $USERNAME -E -H $BMC lan print $channel \
                               | grep -Ei 'IP Address\s+\:')
 
-  local netmask="" && netmask=$(ipmitool -I lanplus -U $USERNAME -P $IPMI_PASSWORD -H $BMC lan print $channel \
+  local netmask="" && netmask=$(ipmitool -I lanplus -U $USERNAME -E -H $BMC lan print $channel \
                                 | grep -Ei 'Subnet Mask\s+\:')
 
-  local defgw="" && defgw=$(ipmitool -I lanplus -U $USERNAME -P $IPMI_PASSWORD -H $BMC lan print $channel \
+  local defgw="" && defgw=$(ipmitool -I lanplus -U $USERNAME -E -H $BMC lan print $channel \
                             | grep -Ei 'Default Gateway IP\s+\:')
 
   echo "$ip_src"
@@ -380,15 +359,22 @@ function reset_bmc_manager() {
 
 # disable_ilo_dhcp() disables dhcp on the iLO since ipmitool cannot fully disable it.  This requres a restart.
 function disable_ilo_dhcp() {
+  local method
+  local payload
+  local url
+  export payload=""
+  export method="GET"
 
   echo "Disabling DHCP on $BMC..."
 
   if [[ "$VENDOR" = *Marvell* ]] || [[ "$VENDOR" = HP* ]] || [[ "$VENDOR" = Hewlett* ]]; then
     # Check if it's already disabled
-    dhcpv4_dns_enabled=$(curl "https://${BMC}/redfish/v1/Managers/${manager}/ethernetinterfaces/${interface}" --insecure -u ${USERNAME}:${IPMI_PASSWORD} -L -s | jq .Oem.Hpe.DHCPv4.UseDNSServers)
-    dhcpv4_ntp_enabled=$(curl "https://${BMC}/redfish/v1/Managers/${manager}/ethernetinterfaces/${interface}" --insecure -u ${USERNAME}:${IPMI_PASSWORD} -L -s | jq .Oem.Hpe.DHCPv4.UseNTPServers)
-    dhcpv6_dns_enabled=$(curl "https://${BMC}/redfish/v1/Managers/${manager}/ethernetinterfaces/${interface}" --insecure -u ${USERNAME}:${IPMI_PASSWORD} -L -s | jq .Oem.Hpe.DHCPv6.UseDNSServers)
-    dhcpv6_ntp_enabled=$(curl "https://${BMC}/redfish/v1/Managers/${manager}/ethernetinterfaces/${interface}" --insecure -u ${USERNAME}:${IPMI_PASSWORD} -L -s | jq .Oem.Hpe.DHCPv6.UseNTPServers)
+    export url="https://${BMC}/redfish/v1/Managers/${manager}/ethernetinterfaces/${interface}"
+
+    dhcpv4_dns_enabled=$(/usr/bin/python3 ${make_api_call_py} | jq .Oem.Hpe.DHCPv4.UseDNSServers)
+    dhcpv4_ntp_enabled=$(/usr/bin/python3 ${make_api_call_py} | jq .Oem.Hpe.DHCPv4.UseNTPServers)
+    dhcpv6_dns_enabled=$(/usr/bin/python3 ${make_api_call_py} | jq .Oem.Hpe.DHCPv6.UseDNSServers)
+    dhcpv6_ntp_enabled=$(/usr/bin/python3 ${make_api_call_py} | jq .Oem.Hpe.DHCPv6.UseNTPServers)
 
     # Disable DHCPv4
     echo -e "Disabling DHCPv4 on iLO..."
@@ -444,6 +430,17 @@ function disable_ilo_dhcp() {
 function get_ci_ntp_servers() {
 
   pit_die
+
+  if ! command -v yq &> /dev/null
+  then
+    echo "yq could not be found in $PATH"
+    exit 1
+  fi
+
+  if ! [ -f /var/lib/cloud/instance/user-data.txt ]; then
+    echo "error: /var/lib/cloud/instance/user-data.txt not found"
+    exit 1
+  fi
 
   # get ntp servers from cloud-init
   echo "{\"StaticNTPServers\": $(cat /var/lib/cloud/instance/user-data.txt \
@@ -684,13 +681,13 @@ function set_bmc_dns() {
 
     fi
 
-    local ipaddr="" && ipaddr=$(ipmitool -I lanplus -U $USERNAME -P $IPMI_PASSWORD -H $BMC lan print $channel \
+    local ipaddr="" && ipaddr=$(ipmitool -I lanplus -U $USERNAME -E -H $BMC lan print $channel \
                                 | grep -Ei 'IP Address\s+\:' \
                                 | awk '{print $NF}')
-    local netmask="" && netmask=$(ipmitool -I lanplus -U $USERNAME -P $IPMI_PASSWORD -H $BMC lan print $channel \
+    local netmask="" && netmask=$(ipmitool -I lanplus -U $USERNAME -E -H $BMC lan print $channel \
                                   | grep -Ei 'Subnet Mask\s+\:' \
                                   | awk '{print $NF}')
-    local defgw="" && defgw=$(ipmitool -I lanplus -U $USERNAME -P $IPMI_PASSWORD -H $BMC lan print $channel \
+    local defgw="" && defgw=$(ipmitool -I lanplus -U $USERNAME -E -H $BMC lan print $channel \
                               | grep -Ei 'Default Gateway IP\s+\:' \
                               | awk '{print $NF}')
 
@@ -721,6 +718,12 @@ function set_bmc_dns() {
 if [[ "$#" -eq 0 ]];then
   echo "No arguments supplied."
   usage && exit 1
+fi
+
+if ! command -v jq &> /dev/null
+then
+  echo "jq could not be found in $PATH"
+  exit 1
 fi
 
 while getopts "h" opt; do
@@ -821,7 +824,7 @@ case "$subcommand" in
   # Intel-specific flags
   intel)
     set_vars
-    while getopts "H:tsD:dr" opt; do
+    while getopts "H:tsD:dnr" opt; do
       case ${opt} in
         # user-defined hostname
         H) BMC="$OPTARG"
@@ -832,6 +835,7 @@ case "$subcommand" in
         D) DNS_SERVERS="$OPTARG"
            ;;
         d) set_bmc_dns ;;
+        n) echo "Invalid Option: -n not supported for Intel" 1>&2 ; exit 1 ;;
         r) reset_bmc_manager ;;
         \?)
           echo "Invalid Option: -$OPTARG" 1>&2
