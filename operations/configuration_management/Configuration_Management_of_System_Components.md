@@ -2,9 +2,20 @@
 
 The configuration of individual system components is managed with the cray cfs components command. The Configuration Framework Service \(CFS\) contains a database of the configuration state of available hardware known to the Hardware State Manager \(HSM\). When new nodes are added to the HSM database, a CFS Hardware Sync Agent enters the component into the CFS database with a null state of configuration.
 
-Admins are able to set a desired CFS configuration for each component, and the CFS Batcher ensures the desired configuration state and the current configuration state match. When rebooted, components that have the cfs-state-reporter package installed will register a null configuration. CFS Batcher recognizes the component state mismatch, and the component is scheduled for configuration per the CFS Batcher algorithm. See [Configuration Management with the CFS Batcher](Configuration_Management_with_the_CFS_Batcher.md) for more information.
+Admins are able to set a desired CFS configuration for each component, and the CFS Batcher ensures the desired configuration state and the current configuration state match.
 
-Admins may also reset the configuration state of a component manually to force reconfiguration as well without rebooting a node. CFS only tracks the current and desired configuration state of components as they are configured by CFS sessions created by the CFS Batcher. It does not track configuration state created or modified by other tooling on the system.
+### Automatic Configuration
+
+Whenever CFS detects that the desired configuration does not match the current configuration state, CFS Batcher will automatically start a CFS session to apply the necessary configuration. See [Configuration Management with CFS Batcher](Configuration_Management_with_the_CFS_Batcher.md) for more information.
+
+There are several situations that will cause automatic configuration:
+
+* When rebooted, components that have the `cfs-state-reporter` package installed will register a null current configuration, resulting in a full configuration.
+* When a configuration is updated, all components with that desired configuration will automatically get updates for the layers of the configuration that have changed.
+* If a configuration is only partially applied due to a previous failed configuration session and the component has not exceeded its maximum retries, it will be configured with any layers of the configurations that have not yet been successfully applied.
+* Users may also reset the configuration state of a component manually to force reconfiguration without rebooting a node.
+* If a manual CFS session applies a version of a playbook that conflicts with the version in the desired configuration, CFS will re-apply the desired version after the manual session is completed.
+* Any other situation that causes the desired state to not match with the current state of a component will trigger automatic configuration.  Note that CFS only tracks the current state of components as they are configured by CFS sessions. It does not track configuration state created or modified by other tooling on the system.
 
 ### View Component Configuration
 
