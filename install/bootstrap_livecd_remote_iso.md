@@ -350,10 +350,6 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
           --bootstrap-ncn-bmc-user root \
           --bootstrap-ncn-bmc-pass changeme \
           --system-name ${SYSTEM_NAME}  \
-          --mountain-cabinets 4 \
-          --starting-mountain-cabinet 1000 \
-          --hill-cabinets 0 \
-          --river-cabinets 1 \
           --can-cidr 10.103.11.0/24 \
           --can-external-dns 10.103.11.113 \
           --can-gateway 10.103.11.1 \
@@ -388,9 +384,9 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
          * p1p1,p10p1 for HPE nodes
          * p1p1,p1p2 for Gigabyte nodes
          * p801p1,p801p2 for Intel nodes
-      * Set the three cabinet parameters (mountain-cabinets, hill-cabinets, and river-cabinets) to the number of each cabinet which are part of this system.
+      * If you're not using a cabinets-yaml file, set the three cabinet parameters (mountain-cabinets, hill-cabinets, and river-cabinets) to the number of each cabinet which are part of this system.
       * The starting cabinet number for each type of cabinet (for example, starting-mountain-cabinet) has a default that can be overridden.  See the "csi config init --help"
-      * For systems that use non-sequential cabinet id numbers, use cabinets-yaml to include the cabinets.yaml file.  This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to explicitly specify the id of every cabinet in the system.  See [Create Cabinets YAML](create_cabinets_yaml.md).
+      * For systems that use non-sequential cabinet id numbers, use cabinets-yaml to include the cabinets.yaml file.  This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to explicitly specify the id of every cabinet in the system.  If you're using a cabinets-yaml file, flags specified on the `csi` command-line related to cabinets will be ignored. See [Create Cabinets YAML](create_cabinets_yaml.md).
       * An override to default cabinet IPv4 subnets can be made with the hmn-mtn-cidr and nmn-mtn-cidr parameters.
       * Several parameters (can-gateway, can-cidr, can-static-pool, can-dynamic-pool) describe the CAN (Customer Access network).  The can-gateway is the common gateway IP used for both spine switches and commonly referred to as the Virtual IP for the CAN.  The can-cidr is the IP subnet for the CAN assigned to this system. The can-static-pool and can-dynamic-pool are the MetalLB address static and dynamic pools for the CAN. The can-external-dns is the static IP assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded.   The can-external-dns IP must be within the can-static-pool range.
       * Set ntp-pool to a reachable NTP server
