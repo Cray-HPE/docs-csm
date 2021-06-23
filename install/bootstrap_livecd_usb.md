@@ -56,7 +56,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 1. Install/upgrade the CSI RPM.
 
    ```bash
-   linux# rpm -Uvh ${CSM_PATH}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
+   linux# rpm -Uvh --force ${CSM_PATH}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
    ```
 
 1. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet 
@@ -656,8 +656,8 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
    linux# scp -p docs-csm-install-*rpm csm-install-workarounds-*rpm ncn-m001:/root
    linux# ssh ncn-m001
-   pit# rpm -Uvh docs-csm-install-latest.noarch.rpm
-   pit# rpm -Uvh csm-install-workarounds-latest.noarch.rpm
+   pit# rpm -Uvh --force docs-csm-install-latest.noarch.rpm
+   pit# rpm -Uvh --force csm-install-workarounds-latest.noarch.rpm
    ```
 
 1. Check the pit-release version.
