@@ -185,49 +185,39 @@ data so run them only when indicated. Instructions are in the `README` files.
     ```bash
     pit# csi handoff bss-update-cloud-init --set meta-data.dns-server=10.92.100.225 --limit Global
     ```
-        
+    
 1. Upload the bootstrap information; note this denotes information that should always be kept together in order to fresh-install the system again.
 
     > **`NOTE`** This is important for installations using the RemoteISO (not USB device). For USBs, this is recommended as to remove 
     > the need for safekeeping the USB.
    
-    - **Option 1**: Copy to ncn-m002 and ncn-m003
+    1. Login; setup passwordless SSH _to_ the pit node by copying ONLY the public keys from `ncn-m002` and `ncn-m003` to the `pit` (**do not setup passwordless SSH _from_ the PIT** or the key will have to be securely tracked or expunged if using a USB installation).
         
-        1. Login; setup passwordless SSH _to_ the pit node by copying ONLY the public keys from `ncn-m002` and `ncn-m003` to the `pit` (**do not setup passwordless SSH _from_ the PIT** or the key will have to be securely tracked or expunged if using a USB installation).
+        ```bash
+        pit# CSM_RELEASE=$(basename $(ls -d /var/www/ephemeral/csm*/ | head -n 1))
         
-            ```bash
-            pit# CSM_RELEASE=$(basename $(ls -d /var/www/ephemeral/csm*/ | head -n 1))
-            
-            # these will prompt for a password:
-            pit# ssh ncn-m002 cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
-            pit# ssh ncn-m003 cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
-            ```
+        # these will prompt for a password:
+        pit# ssh ncn-m002 cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
+        pit# ssh ncn-m003 cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
+        ```
         
-        1. Run this to create the backup; in one swoop, login to m002 and pull the files off the pit. _This runs `rsync` with specific parameters; `partial`, `non-verbose`, and `progress`._
-            
-            ```bash
-            pit# ssh ncn-m002 CSM_RELEASE=$(basename $(ls -d /var/www/ephemeral/csm*/ | head -n 1)) \
-            "mkdir -pv /metal/bootstrap
-            rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/prep /metal/bootstrap/
-            rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/${CSM_RELEASE}/cray-pre-install-toolkit*.iso /metal/bootstrap/"
-            ```
-
-            ```bash
-            pit# ssh ncn-m003 CSM_RELEASE=$(basename $(ls -d /var/www/ephemeral/csm*/ | head -n 1)) \
-            "mkdir -pv /metal/bootstrap
-            rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/prep /metal/bootstrap/
-            rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/${CSM_RELEASE}/cray-pre-install-toolkit*.iso /metal/bootstrap/"
-            ```
+    1. Run this to create the backup; in one swoop, login to m002 and pull the files off the pit. _This runs `rsync` with specific parameters; `partial`, `non-verbose`, and `progress`._
         
-        1. Handoff prep and CSM backups are done. Move to the next step and skip Option 2.
-
-    - **Option 2**: Create an S3 bucket
-        
-        > **`STUB`** This is not done (CASMINST-1850); this is preferred, it could be done anytime after an installation as well.
+        ```bash
+        pit# ssh ncn-m002 CSM_RELEASE=$(basename $(ls -d /var/www/ephemeral/csm*/ | head -n 1)) \
+        "mkdir -pv /metal/bootstrap
+        rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/prep /metal/bootstrap/
+        rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/${CSM_RELEASE}/cray-pre-install-toolkit*.iso /metal/bootstrap/"
+        ```
 
         ```bash
-        # placeholder;
+        pit# ssh ncn-m003 CSM_RELEASE=$(basename $(ls -d /var/www/ephemeral/csm*/ | head -n 1)) \
+        "mkdir -pv /metal/bootstrap
+        rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/prep /metal/bootstrap/
+        rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/${CSM_RELEASE}/cray-pre-install-toolkit*.iso /metal/bootstrap/"
         ```
+        
+    1. Handoff prep and CSM backups are done. Move to the next step and skip Option 2.
     
 1. List ipv4 boot options using `efibootmgr`:
     
