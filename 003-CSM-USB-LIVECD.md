@@ -52,19 +52,28 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    ```
    The ISO and other files are now available in the extracted CSM tar.
 
-4. Install/upgrade the CSI RPM.
+4. Remove any previously-installed versions of CSI, the CSM install docs, and the CSM install workarounds.
+
+    > It is okay if this command reports that one or more of the packages are not installed.
+
+    ```bash
+    linux# rpm -e cray-site-init csm-install-workarounds docs-csm-install
+    ```
+
+5. Install the CSI RPM.
    ```bash
-   linux# rpm -Uvh ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
+   linux# rpm -Uvh --force ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
    ```
 
-5. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet 
+6. Download and install the workaround and documentation RPMs. If this machine does not have direct internet 
    access these RPMs will need to be externally downloaded and then copied to be installed.
+
    ```bash
    linux# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm-install/docs-csm-install-latest.noarch.rpm
    linux# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
    ```
 
-6. Show the version of CSI installed.
+7. Show the version of CSI installed.
    ```bash
    linux# csi version
    ```
@@ -80,7 +89,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    App. Version   : 1.5.18
     ```
 
-6. Install podman or docker to support container tools required to generated
+8. Install podman or docker to support container tools required to generated
    sealed secrets.
 
    Podman RPMs are included in the `embedded` repository in the CSM release and
@@ -99,7 +108,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
    from the `./${CSM_RELEASE}/rpm/embedded` directory.
 
-7. Install lsscsi to view attached storage devices.
+9. Install lsscsi to view attached storage devices.
 
    lsscsi RPMs are included in the `embedded` repository in the CSM release and
    may be installed in your pre-LiveCD environment using `zypper` as follows:
@@ -117,7 +126,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
    from the `./${CSM_RELEASE}/rpm/embedded` directory.
 
-8. Although not strictly required, the procedures for setting up the
+10. Although not strictly required, the procedures for setting up the
    `site-init` directory recommend persisting `site-init` files in a Git
    repository.
 
