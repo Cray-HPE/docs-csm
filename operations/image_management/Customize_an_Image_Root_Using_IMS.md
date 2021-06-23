@@ -131,6 +131,39 @@ The steps in this section apply only if the SquashFS image root is not yet in S3
     ncn# export IMS_INITRD_MD5SUM=`md5sum image-root/boot/$IMS_INITRD_FILENAME | awk '{ print $1 }'`
     ```
 
+1. After uploading the new image, initrd, and kernel to S3, use the `cray artifacts` 
+   command to get the s3 generated etag value for each artifact.
+
+   ```bash
+   ncn# # cray artifacts describe boot-images ${NEW_IMAGE_ID}/rootfs
+   [artifact]
+   AcceptRanges = "bytes"
+   LastModified = "2021-05-05T00:25:21+00:00"
+   ContentLength = 1647050752
+   ETag = "\"db5582fd817c8a8dc084e1b8b4f0ea3b-197\""  <---
+   ContentType = "binary/octet-stream"
+     
+   [artifact.Metadata]
+   md5sum = "cb6a8934ad3c483e740c648238800e93"
+
+   ncn# cray artifacts describe boot-images ${NEW_IMAGE_ID}/initrd
+   ...
+    
+   ncn# cray artifacts describe boot-images ${NEW_IMAGE_ID}/kernel
+   ...
+   ```
+
+   If successful, create a variable for each artifact's etag value. Note that 
+   when adding the etag to the IMS manifest below, remove the quotation marks 
+   from the etag value. So, for the above artifact, the etag would be 
+   `db5582fd817c8a8dc084e1b8b4f0ea3b-197`.
+
+    ```bash
+   ncn# export IMS_ROOTFS_ETAG db5582fd817c8a8dc084e1b8b4f0ea3b-197
+   ncn# export IMS_INITRD_ETAG ...
+   ncn# export IMS_KERNEL_ETAG ...
+    ```
+        
 **Create an Image Manifest and Upload it to S3**
 
 Cray uses a manifest file that associates multiple related boot artifacts \(kernel, initrd, rootfs\) into an image description that is used by IMS and other services to boot nodes. Artifacts listed within the manifest are identified by a `type` value:
@@ -151,7 +184,8 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
         {
           "link": {
               "path": "s3://boot-images/$IMS_IMAGE_ID/$IMS_ROOTFS_FILENAME",
-              "type": "s3"
+              "type": "s3",
+              "etag": "$IMS_ROOTFS_ETAG"
           },
           "md5": "$IMS_ROOTFS_MD5SUM",
           "type": "application/vnd.cray.image.rootfs.squashfs"
@@ -159,7 +193,8 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
         {
           "link": {
               "path": "s3://boot-images/$IMS_IMAGE_ID/$IMS_KERNEL_FILENAME",
-              "type": "s3"
+              "type": "s3",
+              "etag": "$IMS_KERNEL_ETAG"
           },
           "md5": "$IMS_KERNEL_MD5SUM",
           "type": "application/vnd.cray.image.kernel"
@@ -167,7 +202,8 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
         {
           "link": {
               "path": "s3://boot-images/$IMS_IMAGE_ID/$IMS_INITRD_FILENAME",
-              "type": "s3"
+              "type": "s3",
+              "etag": "$IMS_INITRD_ETAG"
           },
           "md5": "$IMS_INITRD_MD5SUM",
           "type": "application/vnd.cray.image.initrd"
@@ -182,8 +218,8 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     ```bash
     ncn# cray artifacts create boot-images $IMS_IMAGE_ID/manifest.json manifest.json
     ```
-<a name="register"></a>
-**Register the Image Root with the IMS Service**
+
+**Register the Image `manifest.json` with the IMS Service**
 
 1.  Update the IMS image record.
 
