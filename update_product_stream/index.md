@@ -145,8 +145,8 @@ None.
    1. Download and upgrade the latest workaround and documentation RPMs.
 
    ```bash
-   linux# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
-   linux# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
+   linux# rpm -Uvh --force https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
+   linux# rpm -Uvh --force https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
    ```
 
    If this machine does not have direct Internet access these RPMs will need to be externally downloaded and then copied to the system.  This example copies them to ncn-m001.
@@ -156,8 +156,8 @@ None.
    linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
    linux# scp -p docs-csm-install-*rpm csm-install-workarounds-*rpm ncn-m001:/root
    linux# ssh ncn-m001
-   ncn-m001# rpm -Uvh docs-csm-install-latest.noarch.rpm
-   ncn-m001# rpm -Uvh csm-install-workarounds-latest.noarch.rpm
+   ncn-m001# rpm -Uvh --force docs-csm-install-latest.noarch.rpm
+   ncn-m001# rpm -Uvh --force csm-install-workarounds-latest.noarch.rpm
    ```
 
 <a name="hotfixes"></a>
