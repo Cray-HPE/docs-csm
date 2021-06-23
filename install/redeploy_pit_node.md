@@ -217,8 +217,6 @@ data so run them only when indicated. Instructions are in the `README` files.
         rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/${CSM_RELEASE}/cray-pre-install-toolkit*.iso /metal/bootstrap/"
         ```
         
-    1. Handoff prep and CSM backups are done. Move to the next step and skip Option 2.
-    
 1. List ipv4 boot options using `efibootmgr`:
     
     ```bash
