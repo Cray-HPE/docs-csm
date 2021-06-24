@@ -262,6 +262,30 @@ ncn-m001# pdsh -w $(./lib/list-ncns.sh | grep ncn-w | paste -sd,) "echo kernel.p
        ncn-m001# kubectl apply -f cray-unbound-coredns-psp.yaml
        ```
 
+1. Add a ClusterRoleBinding to update the PodSecurityPolicies used by the cray-hms-rts-init job.
+
+    1. Create `cray-hms-rts-init-psp.yaml` with the following contents:
+        ```yaml
+        ---
+        apiVersion: rbac.authorization.k8s.io/v1
+        kind: ClusterRoleBinding
+        metadata:
+          name: cray-rts-vault-watcher-psp
+        roleRef:
+          apiGroup: rbac.authorization.k8s.io
+          kind: ClusterRole
+          name: restricted-transition-net-raw-psp
+        subjects:
+        - kind: ServiceAccount
+          name: cray-rts-vault-watcher
+          namespace: services 
+        ```
+
+    2. Run kubectl apply -f on cray-hms-rts-init-psp.yaml:
+        ```bash
+        ncn-m001# kubectl apply -f cray-hms-rts-init-psp.yaml
+        ```
+
 1. Run `kubectl delete -n spire job spire-update-bss` to allow the spire chart to be updated properly:
 
 	```bash
