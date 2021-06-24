@@ -13,9 +13,9 @@ There are several situations that will cause automatic configuration:
 * When rebooted, components that have the `cfs-state-reporter` package installed will register a null current configuration, resulting in a full configuration.
 * When a configuration is updated, all components with that desired configuration will automatically get updates for the layers of the configuration that have changed.
 * If a configuration is only partially applied due to a previous failed configuration session and the component has not exceeded its maximum retries, it will be configured with any layers of the configurations that have not yet been successfully applied.
-* Users may also reset the configuration state of a component manually to force reconfiguration without rebooting a node.
+* When a user manually resets the configuration state of a component, it will force reconfiguration without rebooting a node.
 * If a manual CFS session applies a version of a playbook that conflicts with the version in the desired configuration, CFS will re-apply the desired version after the manual session is completed.
-* Any other situation that causes the desired state to not match with the current state of a component will trigger automatic configuration.  Note that CFS only tracks the current state of components as they are configured by CFS sessions. It does not track configuration state created or modified by other tooling on the system.
+* Any other situation that causes the desired state to not match with the current state of a component will trigger automatic configuration. CFS only tracks the current state of components as they are configured by CFS sessions. It does not track configuration state created or modified by other tooling on the system.
 
 ### View Component Configuration
 
