@@ -1,8 +1,8 @@
 # Configure Aruba Leaf Switch
 
-This page describes how aruba leaf switches are configured and will show users how to validate configuration.
+This page describes how Aruba leaf switches are configured and will show users how to validate configuration.
 
-Leaf switches are located in river cabinets and provide connectivity to MTN components.
+Leaf switches are located in air-cooled cabinets and provide connectivity to components in those cabinets.
 Aruba JL762A 6300M 48G 4SFP56 is the model used.
 
 Requirements:
@@ -10,223 +10,242 @@ Requirements:
 
 ![Diagram of Leaf Wiring to Upstream Switch](../img/network/Leaf-Wiring.png)
 
-Here are example snippets from a Leaf switch in the SHCD.
+Here are example snippets from a leaf switch in the SHCD.
 
-![Example Leaf Connections in SHCD](../img/network/Leaf-SHCD.png)
+   | Source | Source Label Info | Destination Label Info | Destination | Description |
+   | --- | --- | ---| --- | --- | 
+   | sw-smn01 | x3000u40-j49 | x3105u38-j47 | sw-25g01 | 25g-15m-LC-LC |
+   | sw-smn01 | x3000u40-j50 | x3105u39-j47 | sw-25g02 | 25g-15m-LC-LC |
+
 
 The uplinks are port 49 and 50 on the leaf.  They connect to Aggregation switch 1 and 2 on port 47.
 
-It is assumed that you have connectivity to the switch and the [Base Config](configure_mgmt_net_base_config.md) has been applied.
+It is assumed that you have connectivity to the switch and have done the [Configure Aruba Management Network Base](configure_aruba_management_network_base.md) procedure.
 
-## Uplink Config
-The uplink ports are the ports connecting the Leaf switches to the upstream switch.
 
-Create the LAG.
-```
-sw-leaf-001(config)#
-interface lag 99
-    no shutdown
-    no routing
-    vlan trunk native 1
-    vlan trunk allowed all
-    lacp mode active
-    exit
-```
+## Configure Uplink
+The uplink ports are the ports connecting the leaf switches to the upstream switch.
 
-Add ports to the LAG
-```
-sw-leaf-001(config)#
-interface 1/1/49 - 1/1/50
-    no shutdown
-    mtu 9198
-    lag 99
-    exit
-```
+1. Create the LAG.
+   ```
+   sw-leaf-001(config)#
+   interface lag 99
+       no shutdown
+       no routing
+       vlan trunk native 1
+       vlan trunk allowed all
+       lacp mode active
+       exit
+   ```
 
-## VLAN Config
+2. Add ports to the LAG
+   ```
+   sw-leaf-001(config)#
+   interface 1/1/49 - 1/1/50
+       no shutdown
+       mtu 9198
+       lag 99
+       exit
+   ```
+
+## Configure VLAN
 
 **Cray Site Init (CSI) generates the IPs used by the system, below are samples only.**
 The VLAN information is located in the network yaml files.  Below are examples.
-The Leaf switches will have VLAN interfaces in NMN, and the HMN networks
+1. The leaf switches will have VLAN interfaces in NMN and the HMN networks.
 
-```
-sif-ncn-m001-pit:/var/www/ephemeral/prep/sif/networks # cat NMN.yaml
-SNIPPET
-  - ip_address: 10.252.0.4
-    name: sw-leaf-001
-    comment: x3000c0w14
-    aliases: []
-  name: network_hardware
-  net-name: NMN
-  vlan_id: 2
-  comment: ""
-  gateway: 10.252.0.1
-```
-```
-sif-ncn-m001-pit:/var/www/ephemeral/prep/sif/networks # cat HMN.yaml
-SNIPPET
-  - ip_address: 10.254.0.4
-    name: sw-leaf-001
-    comment: x3000c0w14
-    aliases: []
-  name: network_hardware
-  net-name: HMN
-  vlan_id: 4
-  comment: ""
-  gateway: 10.254.0.1
-```
+   ```
+   sif-ncn-m001-pit:/var/www/ephemeral/prep/sif/networks # cat NMN.yaml
+   SNIPPET
+     - ip_address: 10.252.0.4
+       name: sw-leaf-001
+       comment: x3000c0w14
+       aliases: []
+     name: network_hardware
+     net-name: NMN
+     vlan_id: 2
+     comment: ""
+     gateway: 10.252.0.1
+   ```
+   ```
+   sif-ncn-m001-pit:/var/www/ephemeral/prep/sif/networks # cat HMN.yaml
+   SNIPPET
+     - ip_address: 10.254.0.4
+       name: sw-leaf-001
+       comment: x3000c0w14
+       aliases: []
+     name: network_hardware
+     net-name: HMN
+     vlan_id: 4
+     comment: ""
+     gateway: 10.254.0.1
+   ```
 
-NMN VLAN config
-```
-sw-leaf-001(config)#
-    vlan 2
-    interface vlan2
-    description RIVER_NMN
-    ip address 10.252.0.4/17
-    exit
-```
-HMN VLAN config
-```
-sw-leaf-001(config)#
-    vlan 4
-    interface vlan4
-    description RIVER_HMN
-    ip address 10.254.0.4/17
-    exit
-```
+1. NMN VLAN config
+   ```
+   sw-leaf-001(config)#
+       vlan 2
+       interface vlan2
+       description RIVER_NMN
+       ip address 10.252.0.4/17
+       exit
+   ```
+1. HMN VLAN config
+   ```
+   sw-leaf-001(config)#
+       vlan 4
+       interface vlan4
+       description RIVER_HMN
+       ip address 10.254.0.4/17
+       exit
+   ```
 
-## SNMP configuration
+## Configure SNMP
 
-This configuration is required for hardware discovery of the Shasta system.
-```
-snmp-server vrf default
-snmpv3 user testuser auth md5 auth-pass plaintext testpass1 priv des priv-pass plaintext testpass2
-```
+1. This configuration is required for hardware discovery of the Shasta system.
+   ```
+   snmp-server vrf default
+   snmpv3 user testuser auth md5 auth-pass plaintext testpass1 priv des priv-pass plaintext testpass2
+   ```
 
-## ACL configuration
+## Configure ACL
 
 These ACLs are designed to block traffic from the node management network to and from the hardware management network.
 
-The first step is to create the access list, once it's created we have to apply it to a VLAN.
+1. The first step is to create the access list, once it's created we have to apply it to a VLAN.
 
-NOTE: these are examples only, the IP addresses below need to match what was generated by CSI.
-```
-sw-leaf-001(config)#
-    access-list ip nmn-hmn
-    10 deny any 10.252.0.0/255.255.128.0 10.254.0.0/255.255.128.0 
-    20 deny any 10.252.0.0/255.255.128.0 10.104.0.0/255.252.0.0
-    30 deny any 10.254.0.0/255.255.128.0 10.252.0.0/255.255.128.0 
-    40 deny any 10.254.0.0/255.255.128.0 10.100.0.0/255.252.0.0
-    50 deny any 10.100.0.0/255.252.0.0 10.254.0.0/255.255.128.0 
-    60 deny any 10.100.0.0/255.252.0.0 10.104.0.0/255.252.0.0
-    70 deny any 10.104.0.0/255.252.0.0 10.252.0.0/255.255.128.0 
-    80 deny any 10.104.0.0/255.252.0.0 10.100.0.0/255.252.0.0
-    90 permit any any any
-```
+   NOTE: these are examples only, the IP addresses below need to match what was generated by CSI.
+   ```
+   sw-leaf-001(config)#
+       access-list ip nmn-hmn
+       10 deny any 10.252.0.0/255.255.128.0 10.254.0.0/255.255.128.0 
+       20 deny any 10.252.0.0/255.255.128.0 10.104.0.0/255.252.0.0
+       30 deny any 10.254.0.0/255.255.128.0 10.252.0.0/255.255.128.0 
+       40 deny any 10.254.0.0/255.255.128.0 10.100.0.0/255.252.0.0
+       50 deny any 10.100.0.0/255.252.0.0 10.254.0.0/255.255.128.0 
+       60 deny any 10.100.0.0/255.252.0.0 10.104.0.0/255.252.0.0
+       70 deny any 10.104.0.0/255.252.0.0 10.252.0.0/255.255.128.0 
+       80 deny any 10.104.0.0/255.252.0.0 10.100.0.0/255.252.0.0
+       90 permit any any any
+   ```
 
-Apply ACL to a VLANs
-```
-sw-leaf-001(config)#
-    vlan 2
-    name RVR_NMN
-    apply access-list ip nmn-hmn in
-    apply access-list ip nmn-hmn out
-    vlan 4
-    name RVR_HMN
-    apply access-list ip nmn-hmn in
-    apply access-list ip nmn-hmn out
-```
+1. Apply ACL to a VLANs
+   ```
+   sw-leaf-001(config)#
+       vlan 2
+       name RVR_NMN
+       apply access-list ip nmn-hmn in
+       apply access-list ip nmn-hmn out
+       vlan 4
+       name RVR_HMN
+       apply access-list ip nmn-hmn in
+       apply access-list ip nmn-hmn out
+   ```
 
-## Spanning-tree configuration
+## Configure Spanning-tree
 
-The following configuration is applied to Aruba leaf/Aggregation switches.
-```
-sw-leaf-001(config)#
-    spanning-tree mode rpvst
-    spanning-tree
-    spanning-tree vlan 1,2,4
-```
+1. The following configuration is applied to Aruba leaf/Aggregation switches.
+   ```
+   sw-leaf-001(config)#
+       spanning-tree mode rpvst
+       spanning-tree
+       spanning-tree vlan 1,2,4
+   ```
 
-## OSPF configuration
+## Configure OSPF
 
-OSPF is a dynamic routing protocol used to exchange routes.
-It provides reachability from the leaf switch to k8s
-The router-id used here is the NMN ip address. (VLAN 2 IP) 
+1. OSPF is a dynamic routing protocol used to exchange routes.
+   It provides reachability from the leaf switch to k8s
+   The router-id used here is the NMN ip address. (VLAN 2 IP) 
 
-```
-sw-leaf-001(config)#
-    router ospf 1
-    router-id 10.252.0.x
-    interface vlan2
-    ip ospf 1 area 0.0.0.2
-    interface vlan4
-    ip ospf 1 area 0.0.0.4
-```
+   ```
+   sw-leaf-001(config)#
+       router ospf 1
+       router-id 10.252.0.x
+       interface vlan2
+       ip ospf 1 area 0.0.0.2
+       interface vlan4
+       ip ospf 1 area 0.0.0.4
+   ```
 
-## NTP configuration
+## Configure NTP
 
-The IPs used here will be the first 3 Worker nodes on the NMN network.  These can be found in NMN.yaml.
-```
-sw-leaf-001(config)#
-    ntp server 10.252.1.7
-    ntp server 10.252.1.8
-    ntp server 10.252.1.9
-    ntp enable
-```
+1. The IPs used here will be the first three worker nodes on the NMN network.  These can be found in NMN.yaml.
+   ```
+   sw-leaf-001(config)#
+       ntp server 10.252.1.7
+       ntp server 10.252.1.8
+       ntp server 10.252.1.9
+       ntp enable
+   ```
 
-## DNS configuration
+## Configure DNS
 
-This will point to the unbound DNS server. 
-```
-sw-leaf-001(config)#
-    ip dns server-address 10.92.100.225
-```
+1. This will point to the unbound DNS server. 
+   ```
+   sw-leaf-001(config)#
+       ip dns server-address 10.92.100.225
+   ```
 
-## Edge port config
+## Configure Edge port
 
-Ports that need to be on the HMN (hardware management network) This would include BMCs/PDUs
-```
-sw-leaf-001(config)#
-    interface 1/1/35
-    no shutdown
-    no routing
-    vlan access 4
-    spanning-tree bpdu-guard
-    spanning-tree port-type admin-edge
-```
+1. Ports that need to be on the HMN (hardware management network) This would include BMCs/PDUs
+   ```
+   sw-leaf-001(config)#
+       interface 1/1/35
+       no shutdown
+       no routing
+       vlan access 4
+       spanning-tree bpdu-guard
+       spanning-tree port-type admin-edge
+   ```
 
-Ports that need to be on the NMN (node management network) This would include river computes.
-```
-sw-leaf-001(config)#
-    interface 1/1/35
-    no shutdown
-    no routing
-    vlan access 2
-    spanning-tree bpdu-guard
-    spanning-tree port-type admin-edge
-```
+1. Ports that need to be on the NMN (node management network).  This would include air-cooled compute nodes.
+   ```
+   sw-leaf-001(config)#
+       interface 1/1/35
+       no shutdown
+       no routing
+       vlan access 2
+       spanning-tree bpdu-guard
+       spanning-tree port-type admin-edge
+   ```
 
-## Apollo Server port config
+## Configure Apollo Server port
 
-iLO BMC port
-```
-sw-leaf-001(config)#
-    interface 1/1/46 
-    no shutdown 
-    no routing
-    vlan trunk native 1
-    vlan trunk allowed 4
-    spanning-tree bpdu-guard
-    spanning-tree port-type admin-edge
-    exit 
-```
-NMN port from OCP card
-```
-interface 1/1/14 
-    no shutdown 
-    no routing
-    vlan access 2
-    spanning-tree bpdu-guard
-    spanning-tree port-type admin-edge
-    exit 
-```
+1. iLO BMC port
+   ```
+   sw-leaf-001(config)#
+       interface 1/1/46 
+       no shutdown 
+       no routing
+       vlan trunk native 1
+       vlan trunk allowed 4
+       spanning-tree bpdu-guard
+       spanning-tree port-type admin-edge
+       exit 
+   ```
+1. NMN port from OCP card
+   ```
+   interface 1/1/14 
+       no shutdown 
+       no routing
+       vlan access 2
+       spanning-tree bpdu-guard
+       spanning-tree port-type admin-edge
+       exit 
+   ```
+
+## Save configuration
+   ```
+   sw-leaf-001(config)# exit
+   sw-leaf-001# write memory
+   ```
+
+
+## Show Running Configuration
+
+   ```
+   sw-leaf-001# show running-config
+   ```
+

@@ -102,7 +102,7 @@ interface lag 17 multi-chassis
 ```
 
 # Gigabyte/Intel NCN Worker port configuration
-The cabling guidelines for all servers can be found here [MGMT-NET-CABLING](416-MGMT-NET-CABLING.md).
+The cabling guidelines for all servers can be found in [Cable Management Network Servers](../install/cable_management_network_servers.md).
 
 Mellanox Port Config
 ```

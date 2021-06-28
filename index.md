@@ -50,7 +50,9 @@ The chapters with topics which need to be done as part of an ordered procedure a
 1. [Install CSM](install/index.md)
 
    Topics:
+   1. [Validate Management Network Cabling](#validate_management_network_cabling)
    1. [Prepare Configuration Payload](install/prepare_configuration_payload.md)
+   1. [Prepare Management Nodes](#prepare_management_nodes)
    1. [Bootstrap PIT Node](install/index.md#bootstrap_pit_node)
    1. [Configure Management Network Switches](install/configure_management_network.md)
    1. [Deploy Management Nodes](install/deploy_management_nodes.md)

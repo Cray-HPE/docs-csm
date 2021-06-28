@@ -1,10 +1,27 @@
-# Cabling
+# Cable Management Network Servers
+
+This topic describes nodes in the air-cooled cabinet with diagrams and pictures showing where to find the 
+ports on the nodes and how to cable the nodes to the management network switches.
+
 * [HPE Hardware](#hpe-hardware)
+  * [HPE DL385](#hpe_dl385)
+  * [HPE DL325](#hpe_dl325)
+  * [HPE Worker Node Cabling](#hpe_worker_node_cabling)
+  * [HPE Master Node Cabling](#hpe_master_node_cabling)
+  * [HPE Storage Node Cabling](#hpe_storage_node_cabling)
+  * [HPE UAN Cabling](#hpe_uan_cabling)
+  * [HPE Apollo 6500 XL645D](#hpe_apollo_6500_xl645d)
+  * [HPE Apollo 6500 XL675D](#hpe_apollo_6500_xl675d)
 * [Gigabyte/Intel Hardware](#gigabyte-hardware)
+  * [Worker Node Cabling](#worker_node_cabling)
+  * [Master Node Cabling](#master_node_cabling)
+  * [Storage Node Cabling](#storage_node_cabling)
+  * [UAN Cabling](#uan_cabling)
 
 <a name="hpe-hardware"></a>
 ## HPE Hardware
 
+<a name="hpe_dl385"></a>
 ### HPE DL385
 ![Diagram of Rear View of HPE ProLiant DL385 Gen10 Plus](../img/network/DL385-back.png)
 * The OCP Slot is noted (number 7) in the image above.  
@@ -14,6 +31,7 @@
   * Ports are numbered left-to-right:  the far left port is port 1.
 
 
+<a name="hpe_dl325"></a>
 ### HPE DL325
 ![Diagram of Rear View of HPE ProLiant DL325 with OCP](../img/network/DL325-back.png)
 * The OCP Slot is noted (number 9) in the image above.
@@ -22,12 +40,13 @@
 * The PCIE Slot 1 is on the top left side of the image above (under number 1).
   * Ports are numbered left-to-right:  the far left port is port 1.
 
-### NCN Worker Cabling
+<a name="hpe_worker_node_cabling"></a>
+### HPE Worker Node Cabling
 
 | Server Port        | Management Network Port        | Speed | Use / Configuration            |
 |--------------------|--------------------------------|-------|--------------------------------|
-| OCP port 1         | spine or aggr pair, switch 1/2 | 25Gb  | Management Network NMN/HMN/CAN |
-| OCP port 2         | spine or aggr pair, switch 2/2 | 25Gb  | Management Network NMN/HMN/CAN |
+| OCP port 1         | spine or aggregation pair, switch 1/2 | 25Gb  | Management Network NMN/HMN/CAN |
+| OCP port 2         | spine or aggregation pair, switch 2/2 | 25Gb  | Management Network NMN/HMN/CAN |
 
 #### SHCD Example
 
@@ -38,7 +57,8 @@
 
 ![Diagram of HPE Worker Node Cabling](../img/network/HPE_Worker.png)
 
-### NCN Master Cabling
+<a name="hpe_master_node_cabling"></a>
+### HPE Master Node Cabling
 
 
 #### Dual Card Installations
@@ -46,7 +66,7 @@ The table below describes the cabling of dual card configurations.  Also read no
 
 | Server Port        | Management Network Port        | Speed | Use / Configuration            |
 |--------------------|--------------------------------|-------|--------------------------------|
-| OCP port 1         | spine or aggr pair, switch 1/2 | 25Gb  | Management Network NMN/HMN/CAN |
+| OCP port 1         | spine or aggregation pair, switch 1/2 | 25Gb  | Management Network NMN/HMN/CAN |
 | OCP port 2         | NONE                           | NONE  | NONE                           |
 | PCIe Slot 1 port 1 | spine or aggr pair, switch 2/2 | 25Gb  | Management Network NMN/HMN/CAN |
 | PCIe Slot 1 port 2 | NONE (See note below for ncn-m001) | NONE  | Site (See note below for ncn-m001) |
@@ -59,20 +79,22 @@ The table below describes the cabling of dual card configurations.  Also read no
 | mn01	 | x3000u01s1-j1  | x3000u13-j1	| sw-25g02   |
 
 ![Diagram of HPE Master Node Cabling](../img/network/HPE_Master.png)
+
 **NOTE**: Master 1 (ncn-m001) is required to have a site connection for installation and non-CAN system access.  This can have several configurations depending on customer requirements/equipment:
 
 * Dual 10/25Gb card configurations as described in the table above should use PCIe Slot 1, Port 2 as a site connection if the customer supports 10/25Gb.
 * If the customer does not support 10/25Gb speeds (or connection type) and requires RJ45 copper or 1Gb, then a new and separate card will be installed on ncn-m001 and that card will provide site connectivity.
 * Another possibility (non-HPE hardware mainly) is that a built-in 1Gb port will be used if available (similar to Shasta v1.3 PoR on Gigabyte hardware).
 
-### NCN Storage Cabling
+<a name="hpe_storage_node_cabling"></a>
+### HPE Storage Node Cabling
 
 | Server Port        | Management Network Port        | Speed | Use / Configuration            |
 |--------------------|--------------------------------|-------|--------------------------------|
-| OCP port 1         | spine or aggr pair, switch 1/2 | 25Gb  | Management Network NMN/HMN/CAN |
-| OCP port 2         | spine or aggr pair, switch 1/2 | 25Gb  | Storage SUN (future use)                           |
-| PCIe Slot 1 port 1 | spine or aggr pair, switch 2/2 | 25Gb  | Management Network NMN/HMN/CAN |
-| PCIe Slot 1 port 2 | spine or aggr pair, switch 2/2 | 25Gb  | Storage SUN (future use) |
+| OCP port 1         | spine or aggregation pair, switch 1/2 | 25Gb  | Management Network NMN/HMN/CAN |
+| OCP port 2         | spine or aggregation pair, switch 1/2 | 25Gb  | Storage SUN (future use)                           |
+| PCIe Slot 1 port 1 | spine or aggregation pair, switch 2/2 | 25Gb  | Management Network NMN/HMN/CAN |
+| PCIe Slot 1 port 2 | spine or aggregation pair, switch 2/2 | 25Gb  | Storage SUN (future use) |
 
 #### SHCD Example
 
@@ -97,14 +119,15 @@ For systems that include 4 aggregation switches the cabling will look like the f
 | sn01	 | x3000u10ocp-j1 | x3000u34-j6	 | sw-25g02   |
 | sn01	 | x3000u10s1-j1  | x3000u33-j6	 | sw-25g01   |
 
-### UAN Cabling
+<a name="hpe_uan_cabling"></a>
+### HPE UAN Cabling
 
 | Server Port        | Management Network Port        | Speed | Use / Configuration         |
 |--------------------|--------------------------------|-------|-----------------------------|
-| OCP port 1         | spine or aggr pair, switch 1/2 | 25Gb  | Management Network NMN      |
-| OCP port 2         | spine or aggr pair, switch 1/2 | 25Gb  | Management Network CAN bond |
-| PCIe Slot 1 port 1 | spine or aggr pair, switch 2/2 | 25Gb  | NONE (Shasta v1.4)          |
-| PCIe Slot 1 port 2 | spine or aggr pair, switch 2/2 | 25Gb  | Management Network CAN bond |
+| OCP port 1         | spine or aggregation pair, switch 1/2 | 25Gb  | Management Network NMN      |
+| OCP port 2         | spine or aggregation pair, switch 1/2 | 25Gb  | Management Network CAN bond |
+| PCIe Slot 1 port 1 | spine or aggregation pair, switch 2/2 | 25Gb  | NONE (Shasta v1.4)          |
+| PCIe Slot 1 port 2 | spine or aggregation pair, switch 2/2 | 25Gb  | Management Network CAN bond |
 
 #### SHCD Example
 
@@ -117,6 +140,7 @@ For systems that include 4 aggregation switches the cabling will look like the f
 
 ![Diagram of HPE UAN Cabling](../img/network/HPE_UAN.png)
 
+<a name="hpe_apollo_6500_xl645d"></a>
 ### HPE Apollo 6500 XL645D
 ![Diagram of Rear View of HPE Apollo 6500 XL645D](../img/network/XL645D-back.png)
 * The XL645D has two servers in the same chassis.
@@ -136,6 +160,7 @@ For systems that include 4 aggregation switches the cabling will look like the f
 | OCP port 4         | None                           | None  | None                        |
 | iLO                | 1G leaf switch                 |  1Gb  | Management Network HMN      |
 
+<a name="hpe_apollo_6500_xl675d"></a>
 ### HPE Apollo 6500 XL675D
 ![Diagram of Rear View of HPE Apollo 6500 XL675D](../img/network/XL675D-back.png)
 * Two PCIe slots (chassis slots 21 and 22) are highlighted.  One will contain the 1Gb management network card and one will be for the HSN.
@@ -158,13 +183,14 @@ For systems that include 4 aggregation switches the cabling will look like the f
 <a name="gigabyte-hardware"></a>
 ## Gigabyte/Intel Hardware
 
-### NCN Worker Cabling
+<a name="worker_node_cabling"></a>
+### Worker Node Cabling
 ![Diagram of Gigabyte Worker Node](../img/network/gigabyte-worker.png)
 
 | Server Port        | Management Network Port        | Speed | Use / Configuration            |
 |--------------------|--------------------------------|-------|--------------------------------|
-| PCIe Slot 1 port 1 | spine or aggr pair, switch 1/2 | 40Gb  | Management Network NMN/HMN/CAN |
-| PCIe Slot 1 port 2 | spine or aggr pair, switch 2/2 | 40Gb  | Management Network NMN/HMN/CAN |
+| PCIe Slot 1 port 1 | spine or aggregation pair, switch 1/2 | 40Gb  | Management Network NMN/HMN/CAN |
+| PCIe Slot 1 port 2 | spine or aggregation pair, switch 2/2 | 40Gb  | Management Network NMN/HMN/CAN |
 
 #### SHCD Example
 
@@ -177,13 +203,14 @@ For systems that include 4 aggregation switches the cabling will look like the f
 
 **NOTE**: Cabling of ncn-w001 has changed in Shasta v1.4.  Please see ncn-m001 note below.
 
-### NCN Master Cabling
+<a name="master_node_cabling"></a>
+### Master Node Cabling
 ![Diagram of Gigabyte Master Node](../img/network/gigabyte-master.png)
 
 | Server Port        | Management Network Port        | Speed | Use / Configuration            |
 |--------------------|--------------------------------|-------|--------------------------------|
-| PCIe Slot 1 port 1 | spine or aggr pair, switch 1/2 | 40Gb  | Management Network NMN/HMN/CAN |
-| PCIe Slot 1 port 2 | spine or aggr pair, switch 2/2 | 40Gb  | Management Network NMN/HMN/CAN |
+| PCIe Slot 1 port 1 | spine or aggregation pair, switch 1/2 | 40Gb  | Management Network NMN/HMN/CAN |
+| PCIe Slot 1 port 2 | spine or aggregation pair, switch 2/2 | 40Gb  | Management Network NMN/HMN/CAN |
 | LAN0 port 1        | NONE (See note below for ncn-m001) | NONE  | Site (See note below for ncn-m001) |
 
 #### SHCD Example
@@ -200,13 +227,14 @@ For systems that include 4 aggregation switches the cabling will look like the f
 * The default configuration for Gigabyte systems uses the built-in 1Gb lan0 port for site connection on ncn-m001.
 * If the customer requires connectivity greater than 1Gb (or a different connection type), then a new and separate card will be installed on ncn-m001 and that card will provide site connectivity.
 
-### NCN Storage Cabling
+<a name="storage_node_cabling"></a>
+### Storage Node Cabling
 ![Diagram of Gigabyte Storage Node](../img/network/gigabyte-storage.png)
 
 | Server Port        | Management Network Port        | Speed | Use / Configuration            |
 |--------------------|--------------------------------|-------|--------------------------------|
-| PCIe Slot 1 port 1 | spine or aggr pair, switch 1/2 | 40Gb  | Management Network NMN/HMN/CAN |
-| PCIe Slot 1 port 2 | spine or aggr pair, switch 2/2 | 40Gb  | Management Network NMN/HMN/CAN |
+| PCIe Slot 1 port 1 | spine or aggregation pair, switch 1/2 | 40Gb  | Management Network NMN/HMN/CAN |
+| PCIe Slot 1 port 2 | spine or aggregation pair, switch 2/2 | 40Gb  | Management Network NMN/HMN/CAN |
 
 #### SHCD Example
 
@@ -217,13 +245,14 @@ For systems that include 4 aggregation switches the cabling will look like the f
 
 ![Diagram of Gigabyte Storage Node Cabling](../img/network/GigaIntel_storage.png)
 
+<a name="uan_cabling"></a>
 ### UAN Cabling
 
 | Server Port        | Management Network Port        | Speed | Use / Configuration         |
 |--------------------|--------------------------------|-------|-----------------------------|
 | LAN0 port 1        | leaf (see note)                |  1Gb  | Management Network NMN      |
-| PCIe Slot 1 port 1 | spine or aggr pair, switch 1/2 | 40Gb  | Management Network CAN bond |
-| PCIe Slot 1 port 2 | spine or aggr pair, switch 2/2 | 40Gb  | Management Network CAN bond |
+| PCIe Slot 1 port 1 | spine or aggregation pair, switch 1/2 | 40Gb  | Management Network CAN bond |
+| PCIe Slot 1 port 2 | spine or aggregation pair, switch 2/2 | 40Gb  | Management Network CAN bond |
 
 #### SHCD Example
 
