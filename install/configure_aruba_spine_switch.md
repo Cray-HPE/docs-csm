@@ -399,6 +399,7 @@ sw-spine-001 & sw-spine-002 (config)#
 - One Bond (two connections) will be going to the MLAG/VSX pair of switches. This will be a TRUNK port for the CAN connection.
 
 Aruba UAN NMN Configuration
+One port is shutdown.
 ```
 sw-spine-001 (config)#
     interface 1/1/16
@@ -436,4 +437,10 @@ sw-spine-001 & sw-spine-002 (config)#
     spanning-tree bpdu-guard
     spanning-tree port-type admin-edge
     exit
+
+sw-spine-001 & sw-spine-002 (config)#
+    interface 1/1/17
+    no shutdown
+    mtu 9198
+    lag 17
 ```

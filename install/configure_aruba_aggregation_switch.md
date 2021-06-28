@@ -331,8 +331,9 @@ sw-agg-001 & sw-agg-002 (config)#
 - One Bond (two connections) will be going to the MLAG/VSX pair of switches. This will be a TRUNK port for the CAN connection.
 
 Aruba UAN NMN Configuration
+One port is shutdown.
 ```
-sw-agg-001 & sw-agg-002 (config)#
+sw-agg-001 (config)#
     interface 1/1/16
     no shutdown
     mtu 9198
@@ -341,6 +342,17 @@ sw-agg-001 & sw-agg-002 (config)#
     spanning-tree bpdu-guard
     spanning-tree port-type admin-edge
     exit
+
+sw-agg-002 (config)#
+    interface 1/1/16
+    shutdown
+    mtu 9198
+    no routing
+    vlan access 2
+    spanning-tree bpdu-guard
+    spanning-tree port-type admin-edge
+    exit
+```
 
 Aruba UAN CAN Configuration
 
@@ -357,4 +369,10 @@ sw-agg-001 & sw-agg-002 (config)#
     spanning-tree bpdu-guard
     spanning-tree port-type admin-edge
     exit
+
+sw-agg-001 & sw-agg-002 (config)#
+    interface 1/1/17
+    no shutdown
+    mtu 9198
+    lag 17
 ```
