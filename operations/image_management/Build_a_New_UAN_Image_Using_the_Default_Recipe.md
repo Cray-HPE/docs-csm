@@ -5,7 +5,7 @@ Build or rebuild the UAN image using either the default UAN image or image recip
 ### Prerequisites
 
 -   Both the COS and UAN product streams must be installed.
--   The cray administrative CLI must be initialized.
+-   The Cray administrative CLI must be initialized.
 
 ### Procedure
 
@@ -54,7 +54,7 @@ The Cray EX User Access Node \(UAN\) recipe currently requires the Slingshot Dia
         }
         ```
 
-    2.  Save the id of the IMS recipe in an environment variable.
+    2.  Save the ID of the IMS recipe in an environment variable.
 
         ```bash
         ncn-m001# export IMS_RECIPE_ID=4a5d1178-80ad-4151-af1b-bbe1480958d1
@@ -62,15 +62,8 @@ The Cray EX User Access Node \(UAN\) recipe currently requires the Slingshot Dia
 
     3.  Use the saved IMS recipe id in the procedure [Build an Image Using IMS REST Service](Build_an_Image_Using_IMS_REST_Service.md) to build the UAN image.
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 4. **Optional:** Build the UAN image by customizing it manually. Skip this step if the UAN image was built automatically in the previous step.
-=======
-4.  **Optional:**Build the UAN image by customizing it manually. Skip this step if the UAN image was built automatically in the previous step.
->>>>>>> c36c198 (STP-2624: added image management files)
-=======
-4. **Optional:** Build the UAN image by customizing it manually. Skip this step if the UAN image was built automatically in the previous step.
->>>>>>> 89b783f (STP-2624: minor formatting changes)
 
     1.  Identify the base UAN image to customize.
 
@@ -88,13 +81,13 @@ The Cray EX User Access Node \(UAN\) recipe currently requires the Slingshot Dia
         }
         ```
 
-    2.  Save the id of the IMS image in an environment variable.
+    2.  Save the ID of the IMS image in an environment variable.
 
         ```bash
         ncn-m001# export IMS_IMAGE_ID=4a5d1178-80ad-4151-af1b-bbe1480958d1
         ```
 
-    3.  Use the saved IMS image id in the procedure [Customize an Image Root Using IMS](Customize_an_Image_Root_Using_IMS.md) to build the UAN image.
+    3.  Use the saved IMS image ID in the procedure [Customize an Image Root Using IMS](Customize_an_Image_Root_Using_IMS.md) to build the UAN image.
 
 
 
