@@ -11,6 +11,34 @@ upgrade_ncn=$1
 
 . ${BASEDIR}/ncn-upgrade-common.sh ${upgrade_ncn}
 
+# Back up local files and directories used by System Admin Toolkit (SAT)
+state_name="BACKUP_SAT_LOCAL_FILES"
+state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    sat_paths_to_backup="/root/.config/sat/sat.toml
+        /root/.config/sat/tokens/
+        /root/.config/sat/s3_access_key
+        /root/.config/sat/s3_secret_key
+        /var/log/cray/sat/sat.log"
+    # We would use mktemp here, but that will not work if this script runs multiple times.
+    sat_backup_directory="/tmp/sat-backup-${upgrade_ncn}"
+    mkdir -p $sat_backup_directory
+    for path in $sat_paths_to_backup; do
+        # Check path exists on the remote host
+        if ssh "$upgrade_ncn" "ls $path" 2>/dev/null; then
+            echo "Copying $path from $upgrade_ncn to $sat_backup_directory"
+            mkdir -p "$(dirname "${sat_backup_directory}/${path}")"
+            rsync -azl "${upgrade_ncn}:${path}" "${sat_backup_directory}/${path}"
+        else
+            echo "Path $path does not exist on host $upgrade_ncn"
+        fi
+    done
+    echo "SAT local files backed up to $sat_backup_directory"
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 if [[ ${upgrade_ncn} == "ncn-m001" ]]; then
    state_name="BACKUP_M001_NET_CONFIG"
    state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
@@ -105,6 +133,24 @@ fi
 drain_node $upgrade_ncn
 
 ${BASEDIR}/ncn-upgrade-wipe-rebuild.sh $upgrade_ncn
+
+# Restore files used by the System Admin Toolkit (SAT) that were previously backed up
+state_name="RESTORE_SAT_LOCAL_FILES"
+state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    sat_backup_directory="/tmp/sat-backup-${upgrade_ncn}/"
+    # Check the existence of the SAT backup directory. The directory missing should
+    # not happen, but if it does the upgrade script probably should not fail.
+    if [ -d "$sat_backup_directory" ]; then
+        # Do not preserve ownership as this could lead to the owner of /root/ changing.
+        rsync -az --no-o "$sat_backup_directory" "${upgrade_ncn}:/"
+    else
+        echo "$sat_backup_directory does not exist"
+    fi
+else
+    echo "====> ${state_name} has been completed"
+fi
 
 cat <<EOF
 NOTE:
