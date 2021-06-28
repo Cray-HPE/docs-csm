@@ -88,11 +88,11 @@ fi
 # retrieve IPMI username/password from vault
 VAULT_TOKEN=$(kubectl get secrets cray-vault-unseal-keys -n vault -o jsonpath={.data.vault-root} | base64 -d)
 IPMI_USERNAME=$(kubectl exec -it -n vault -c vault cray-vault-1 -- sh -c "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo $VAULT_TOKEN`; vault kv get -format=json secret/hms-creds/$UPGRADE_MGMT_XNAME" | jq -r '.data.Username')
-IPMI_PASSWORD=$(kubectl exec -it -n vault -c vault cray-vault-1 -- sh -c "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo $VAULT_TOKEN`; vault kv get -format=json secret/hms-creds/$UPGRADE_MGMT_XNAME" | jq -r '.data.Password')
+export IPMI_PASSWORD=$(kubectl exec -it -n vault -c vault cray-vault-1 -- sh -c "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo $VAULT_TOKEN`; vault kv get -format=json secret/hms-creds/$UPGRADE_MGMT_XNAME" | jq -r '.data.Password')
 # during worker upgrade, one vault pod might be offline, so we just try another one
 if [[ -z ${IPMI_USERNAME} ]]; then
     IPMI_USERNAME=$(kubectl exec -it -n vault -c vault cray-vault-0 -- sh -c "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo $VAULT_TOKEN`; vault kv get -format=json secret/hms-creds/$UPGRADE_MGMT_XNAME" | jq -r '.data.Username')
-    IPMI_PASSWORD=$(kubectl exec -it -n vault -c vault cray-vault-0 -- sh -c "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo $VAULT_TOKEN`; vault kv get -format=json secret/hms-creds/$UPGRADE_MGMT_XNAME" | jq -r '.data.Password')
+    export IPMI_PASSWORD=$(kubectl exec -it -n vault -c vault cray-vault-0 -- sh -c "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo $VAULT_TOKEN`; vault kv get -format=json secret/hms-creds/$UPGRADE_MGMT_XNAME" | jq -r '.data.Password')
 fi
 
 state_name="SET_PXE_BOOT"
@@ -111,7 +111,7 @@ fi
 kill $(ps -ef | grep kubectl | grep -v "grep" | awk '{print $2}') || true
 CON_POD=$(kubectl get pods -n services -o wide|grep cray-console-operator|awk '{print $1}')
 CON_NODE=$(kubectl -n services exec $CON_POD -- sh -c "/app/get-node $UPGRADE_XNAME" | jq .podname | sed 's/"//g')
-kubectl -n services logs -f pod/$CON_NODE -c log-forwarding | grep $UPGRADE_XNAME >> $upgrade_ncn.boot.log &
+kubectl -n services exec pod/$CON_NODE -c cray-console-node -- sh -c "tail -f /var/log/conman/console.$UPGRADE_XNAME" >> $upgrade_ncn.boot.log &
 
 
 state_name="POWER_CYCLE_NCN"
@@ -120,10 +120,10 @@ if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
 
     # power cycle node
-    ipmitool -I lanplus -U ${IPMI_USERNAME} -P ${IPMI_PASSWORD} -E -H $upgrade_ncn_mgmt_host chassis power off
+    ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $upgrade_ncn_mgmt_host chassis power off
     sleep 20
-    ipmitool -I lanplus -U ${IPMI_USERNAME} -P ${IPMI_PASSWORD} -E -H $upgrade_ncn_mgmt_host chassis power status
-    ipmitool -I lanplus -U ${IPMI_USERNAME} -P ${IPMI_PASSWORD} -E -H $upgrade_ncn_mgmt_host chassis power on
+    ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $upgrade_ncn_mgmt_host chassis power status
+    ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $upgrade_ncn_mgmt_host chassis power on
 
     record_state "${state_name}" ${upgrade_ncn}
 else
@@ -150,7 +150,7 @@ EOF
         counter=$((counter+1))
         if [ $counter -gt 30 ]; then
             counter=0
-            ipmitool -I lanplus -U ${IPMI_USERNAME} -P ${IPMI_PASSWORD} -E -H $upgrade_ncn_mgmt_host chassis power cycle
+            ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $upgrade_ncn_mgmt_host chassis power cycle
             echo "Boot timeout, power cycle again"
         fi
         sleep 20
