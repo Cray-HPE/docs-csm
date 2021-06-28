@@ -134,11 +134,11 @@ Execute ncnPostgresHealthChecks script and analyze the output of each individual
    ncn# /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
    ```
 
-For each Postgres cluster, the ncnPostgresHealthChecks script determines the leader pod and then reports the status of all Postgres pods in the cluster.
+For each postgres cluster, the ncnPostgresHealthChecks script determines the leader pod and then reports the status of all postgres pods in the cluster.
 
 Execute ncnPostgresHealthChecks script. Verify the leader for each cluster and the status of cluster members.
 
-For a particular Postgres cluster, the expected output is similar to the following:
+For a particular postgres cluster, the expected output is similar to the following:
 
 ```bash
 --- patronictl, version 1.6.5, list for services leader pod cray-sls-postgres-0 ---
