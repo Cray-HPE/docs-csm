@@ -20,7 +20,7 @@ total 2.7G
 -rw-r--r-- 1 root root 577M Oct 28 11:45 OS10_Enterprise_10.5.1.4.stable.tar
 ```
 
-## 1.4 Switch firmware.
+## Switch firmware
 
 | Vendor | Model | Version |
 | --- | --- | --- |
