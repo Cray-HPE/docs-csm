@@ -134,11 +134,19 @@ Execute ncnPostgresHealthChecks script and analyze the output of each individual
    ncn# /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
    ```
 
+<<<<<<< HEAD
 For each postgres cluster, the ncnPostgresHealthChecks script determines the leader pod and then reports the status of all postgres pods in the cluster.
 
 Execute ncnPostgresHealthChecks script. Verify the leader for each cluster and the status of cluster members.
 
 For a particular postgres cluster, the expected output is similar to the following:
+=======
+For each Postgres cluster, the ncnPostgresHealthChecks script determines the leader pod and then reports the status of all Postgres pods in the cluster.
+
+Execute ncnPostgresHealthChecks script. Verify the leader for each cluster and the status of cluster members.
+
+For a particular Postgres cluster, the expected output is similar to the following:
+>>>>>>> b2c1c45 (STP-2728: edits for grammar and consistency)
 
 ```bash
 --- patronictl, version 1.6.5, list for services leader pod cray-sls-postgres-0 ---
@@ -202,14 +210,23 @@ data:
     - name: customer-access
 ```
 
+<<<<<<< HEAD
 Using the first peer-address (10.252.0.2 here), log in using `ssh` as the administrator to the first switch and note in the returned output if a Mellanox or Aruba switch is indicated.
+=======
+Using the first peer-address (10.252.0.2 here), SSH as the administrator to the first switch and note in the returned output if a Mellanox or Aruba switch is indicated.
+>>>>>>> b2c1c45 (STP-2728: edits for grammar and consistency)
 
 ```bash
 ncn-m001# ssh admin@10.252.0.2
 ```
 
+<<<<<<< HEAD
 * On a Mellanox switch, `Mellanox Onyx Switch Management` or `Mellanox Switch` may be displayed after logging in to the switch with `ssh`. In this case, proceed to the [Mellanox steps](#pet-bgp-mellanox).
 * On an Aruba switch, `Please register your products now at: https://asp.arubanetworks.com` may be displayed after logging in to the switch with `ssh`. In this case, proceed to the [Aruba steps](#pet-bgp-aruba).
+=======
+* On a Mellanox switch, `Mellanox Onyx Switch Management` or `Mellanox Switch` may be displayed after logging in to the switch with SSH. In this case, proceed to the [Mellanox steps](#pet-bgp-mellanox).
+* On an Aruba switch, `Please register your products now at: https://asp.arubanetworks.com` may be displayed after logging in to the switch with SSH. In this case, proceed to the [Aruba steps](#pet-bgp-aruba).
+>>>>>>> b2c1c45 (STP-2728: edits for grammar and consistency)
 
 <a name="pet-bgp-mellanox"></a>
 ##### 1.3.1 Mellanox Switch 
@@ -614,7 +631,11 @@ At the time of this writing there is a bug ([CASMTRIAGE-553](https://connect.us.
 <a name="sms-checks"></a>
 #### 3.4 SMS Checks To Run
 
+<<<<<<< HEAD
 Run a check for each of the following services after an install. These should be run on at least one worker node and at least one master node (but **not** ncn-m001 if it is still the PIT node).
+=======
+Run a check for each of the following services after an install. These should be run on at least one worker NCN and at least one master NCN (but **not** ncn-m001 if it is still the PIT node).
+>>>>>>> b2c1c45 (STP-2728: edits for grammar and consistency)
 
 | Services  | Shortcut |
 | ---  | --- |
