@@ -64,9 +64,20 @@ function wait_for_osd() {
   osd=$1
   cnt=0
   while true; do
+    #
+    # We've already slept 2 minutes adopting the OSD, so if it's not
+    # here yet (after 30 seconds of the 5 minutes), let's kick the
+    # active mgr.
+    #
+    if [[ "$cnt" -eq 6 ]]; then
+      echo "INFO: Restarting active mgr daemon to kick things along..."
+      ceph mgr fail $(ceph mgr dump | jq -r .active_name)
+      cnt=$((cnt+1))
+      continue
+    fi
     if [[ "$cnt" -eq 60 ]]; then
       echo "ERROR: Giving up on waiting for osd.$osd daemon to be running..."
-      break
+      exit 1
     fi
     output=$(ceph orch ps --daemon-type osd -f json-pretty | jq -r '.[] | select(.status_desc=="running") | .daemon_id')
     if [[ "$?" -eq 0 ]]; then
