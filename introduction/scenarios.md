@@ -3,11 +3,10 @@
 There are multiple scenarios for installing CSM software which are described in this documentation 
 with many supporting procedures.
 
-* [Installation](#installation)
-  * First Time Install
-  * Reinstall
-* [Upgrade](#upgrade)
-* [Migration](#migration)
+- [Scenarios for Shasta v1.5](#scenarios-for-shasta-v15)
+  - [Installation](#installation)
+  - [Upgrade](#upgrade)
+  - [Migration](#migration)
 
 <a name="installation"></a>
 ## Installation
@@ -41,7 +40,7 @@ the same regardless of the starting point in the workflow.
    1. [Redeploy PIT Node](../install/index.md#redeploy_pit_node)
    1. [Configure Administrative Access](../install/index.md#configure_administrative_access)
    1. [Validate CSM Health](../install/index.md#validate_csm_health)
-   1. [Update Firmware with FAS](../install/index.md#update_firmware_with_fas)
+   1. [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md)
    1. [Prepare Compute Nodes](../install/index.md#prepare_compute_nodes)
 
 After completion of the firmware update with FAS and the preparation of compute nodes, the CSM product stream has

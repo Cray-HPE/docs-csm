@@ -61,7 +61,7 @@ The chapters with topics which need to be done as part of an ordered procedure a
    1. [Redeploy PIT Node](install/redeploy_pit_node.md)
    1. [Configure Administrative Access](install/configure_administrative_access.md)
    1. [Validate CSM Health](operations/validate_csm_health.md)
-   1. [Update Firmware with FAS](operations/update_firmware_with_fas.md)
+   1. [Update Firmware with FAS](operations/firmware/Update_Firmware_with_FAS.md)
    1. [Prepare Compute Nodes](install/index.md#prepare_compute_nodes)
    1. [Next Topic](install/index.md#next_topic)
    1. [Troubleshooting Installation Problems](install/troubleshooting_installation.md)
@@ -75,11 +75,11 @@ The chapters with topics which need to be done as part of an ordered procedure a
    1. [Upgrade CSM Services](upgrade/upgrade_csm_services.md)
    1. [Restore from Backup](upgrade/restore_from_backup.md)
    1. [Validate CSM Health](operations/validate_csm_health.md)
-   2. [Update Firmware with FAS](operations/firmware/Firmware_Action_Service.md)
-   3. [Next Topic](upgrade/index.md#next_topic)
-   4. [Troubleshooting Upgrade Problems](upgrade/troubleshooting_upgrade.md)
+   1. [Update Firmware with FAS](operations/firmware/Update_Firmware_with_FAS.md)
+   1. [Next Topic](upgrade/index.md#next_topic)
+   1. [Troubleshooting Upgrade Problems](upgrade/troubleshooting_upgrade.md)
 
-2. [CSM Operational Activities](operations/index.md)
+1. [CSM Operational Activities](operations/index.md)
 
    Topics:
    * [Lock and Unlock Nodes](operations/lock_and_unlock_nodes.md)
@@ -88,7 +88,7 @@ The chapters with topics which need to be done as part of an ordered procedure a
    * [Configure the Cray Command Line Interface (cray CLI)](operations/configure_cray_cli.md)
    * [Configure BMC and Controller Parameters with SCSD](operations/configure_with_scsd.md)
    * [Update BGP Neighbors](operations/update_bgp_neighbors.md)
-   * [Update Firmware with FAS](operations/update_firmware_with_fas.md)
+   * [Update Firmware with FAS](operations/firmware/Update_Firmware_with_FAS.md)
    * [Manage Node Consoles](operations/manage_node_consoles.md)
    * [Changing Passwords and Credentials](operations/changing_passwords_and_credentials.md)
    * [Managing Configuration with CFS](operations/managing_configuration_with_CFS.md)
@@ -115,6 +115,5 @@ The chapters with topics which need to be done as part of an ordered procedure a
    * [NCN Packages](background/ncn_packages.md)
    * [NCN Operating System Releases](background/ncn_operating_system_releases.md)
    * [cloud-init Basecamp Configuration](background/cloud-init_basecamp_configuration.md)
-
 
 1. [Glossary](glossary.md)

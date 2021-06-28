@@ -1,4 +1,4 @@
-## Firmware Action Service (FAS)
+## Update Firmware with FAS
 
 The Firmware Action Service (FAS) provides an interface for managing firmware versions of Redfish-enabled hardware in the system. FAS interacts with the Hardware State Managers (HSM), device data, and image data in order to update firmware.
 
@@ -17,7 +17,6 @@ FAS images contain the following information that is needed for a hardware devic
    * [FAS Use Cases](#fas-admin-procedures)
    * [Firwmare Actions](#firmware-actions)
    * [Firmware Images](#firmware-images)
-   * [Table of Contents](#toc)
 
 <a name="prerequisites"></a>
 
@@ -33,7 +32,7 @@ FAS images contain the following information that is needed for a hardware devic
 
 **WARNING:** Non-compute nodes (NCNs) should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS. See [NCN and Management Node Locking](../hardware_state_manager/NCN_and_Management_Node_Locking.md) for more information. Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
 
-Using the process outlined in [`255-FIRMWARE-ACTION-SERVICE-FAS.md`](255-FIRMWARE-ACTION-SERVICE-FAS.md) follow the process to update the system. Use the recipes listed in [FAS_Recipes](FAS_Recipes.md) to update each supported type.
+Follow the process outlined in [FAS CLI](FAS_CLI.md) to update the system. Use the recipes listed in [FAS_Recipes](FAS_Recipes.md) to update each supported type.
 
 **NOTE**: Each system is different and may not have all hardware options.
 
@@ -192,25 +191,3 @@ The main components of an image are described below:
 - **`s3URL`**
 
   The URL that FAS uses to get the firmware binary and the download link that is supplied to Redfish devices. Redfish devices are not able to directly communicate with S3.
-
-
-<a name="toc"></a>
-
-### Table of Contents
-
-* [FAS CLI](FAS_CLI.md)
-* [FAS Filters](FAS_Filters.md)
-* [FAS Recipes](FAS_Recipes.md)
-* [FAS Admin Procedures](FAS_Admin_Procedures.md)
-  * [Warning for Non-Compute Nodes (NCNs)](FAS_Admin_Procedures.md#warning)
-  * [Ignore Nodes within FAS](FAS_Admin_Procedures.md#ignore)
-  * [Use the `cray-fas-loader` Kubernetes Job](FAS_Admin_Procedures.md#k8s)
-  * [Override an Image for an Update](FAS_Admin_Procedures.md#overrideImage)
-  * [Load Firmware into FAS Manually](FAS_Admin_Procedures.md#manualLoad)
-  * [Check for New Firmware Versions with a Dry-Run](FAS_Admin_Procedures.md#dryrun)
-* [FAS Use Cases](FAS_Use_Cases.md)
-  * [Update Liquid-Cooled Node or Switch Firmware](FAS_Use_Cases.md#liquidcooled)
-  * [Update Chassis Management Module (CMM) Firmware](FAS_Use_Cases.md#cmm)
-  * [Update NCN BIOS and BMC Firmware with FAS](FAS_Use_Cases.md#ncn-bios-bmc)
-  * [Update Liquid-Cooled Compute Node BIOS Firmware](FAS_Use_Cases.md#cn-bios)
-  * [Compute Node BIOS Workaround for HPE CRAY EX425](FAS_Use_Cases.md#cn-workaround)
