@@ -2,16 +2,6 @@
 
 Before beginning an upgrade to a new version of CSM, there are a few things to do on the system first.
 
-1. Update the firmware
-
-  Ensure the firmware is up-to-date using the procedures described in [Update NCN Firmware](../install/update_ncn_firmware.md) using this table as a guide for the versions needed prior to upgrading:
-
-  | Node Type | Manufacturer | Board Product | Device Type | Version | Downgrade (Y/n)?
-  | :---: | :---: | :--- | :---: | ---: | :---: |
-  | | | | | | |
-  | NCN | HPE | iLO5 | BMC | 2.44 | `NO` |
-  | | | | | | |
-
 1. Graceful Shutdown of Workloads affected by CSM Upgrade
 
    **Warning:** Although it is expected that compute nodes and application nodes will continue to provide their services
@@ -95,3 +85,4 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
    After completing this procedure the next step is to update the management network.
 
    * See [Update Management Network](index.md#update_management_network)
+
