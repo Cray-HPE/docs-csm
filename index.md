@@ -96,6 +96,11 @@ The chapters with topics which need to be done as part of an ordered procedure a
    * [Configure NTP on NCNs](operations/configure_ntp_on_ncns.md)
    * [Change NCN Image Root Password and SSH Keys](operations/change_ncn_image_root_password_and_ssh_keys.md)
 
+1. [CSM Troubleshooting Information](troubleshooting/index.md)
+
+   Topics:
+   * [Known Issues](troubleshooting/index.md#known-issues)
+
 1. [CSM Background Information](background/index.md)
 
    Topics:
