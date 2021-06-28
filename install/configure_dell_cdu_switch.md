@@ -147,6 +147,7 @@ sw-cdu-001(config)#
     ip address 10.100.0.2/22
     ip access-group nmn-hmn in
     ip access-group nmn-hmn out
+    ip ospf 1 area 0.0.0.2
     ip ospf passive
     ip helper-address 10.92.100.222
     !
@@ -161,6 +162,7 @@ sw-cdu-002(config)#
     ip address 10.100.0.3/22
     ip access-group nmn-hmn in
     ip access-group nmn-hmn out
+    ip ospf 1 area 0.0.0.2
     ip ospf passive
     ip helper-address 10.92.100.222
     !
@@ -179,7 +181,7 @@ sw-cdu-001(config)#
     ip address 10.104.0.2/22
     ip access-group nmn-hmn in
     ip access-group nmn-hmn out
-    ip ospf 1 area 0.0.0.0
+    ip ospf 1 area 0.0.0.4
     ip ospf passive
     ip helper-address 10.94.100.222
     !
@@ -194,7 +196,7 @@ sw-cdu-002(config)#
     ip address 10.104.0.3/22
     ip access-group nmn-hmn in
     ip access-group nmn-hmn out
-    ip ospf 1 area 0.0.0.0
+    ip ospf 1 area 0.0.0.4
     ip ospf passive
     ip helper-address 10.94.100.222
     !
