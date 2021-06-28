@@ -452,7 +452,6 @@ These ACLs are designed to block traffic from the node management network to and
 
 ## Configure Downlink port
 
-TODO What is needed for Downlink on an Aruba CDU switch?
 
 ## Configure LAG for CMMs
 

@@ -18,11 +18,10 @@ Here is an example snippet from a aggregation switch on the 25G_10G tab of the S
    | sw-25g01 | x3105u38-j50 | x3105u39-j50 | sw-25g02 | 100g-1m-DAC | |
    | sw-25g01 | x3105u38-j53 | x3105u39-j53 | sw-25g02 | 100g-1m-DAC | keepalive |
 
-It is assumed that you have connectivity to the switch and have done the [Configure Dell Management Network Base](configure_dell_management_network_base.md) procedure.
+It is assumed that you have connectivity to the switch.
 
 ## Configure VLT
 
-TODO What is needed to configure VLT on Dell aggregation switch
 
 ## Configure VLAN
 
@@ -111,7 +110,6 @@ The VLAN information is located in the network yaml files.  Below are examples.
 ## Configure Uplink
 The uplink ports are the ports connecting the aggregation switches to the spine switches.
 
-TODO What is needed to configure Uplink on Dell aggregation switch
 
 ## Configure ACL
 
@@ -236,11 +234,9 @@ The IP addresses used here will be the first three worker nodes on the NMN netwo
 
 ## Configure Flow Control
 
-TODO What is needed to configure flow control for Dell and Mellanox switches
 
 ## Configure Edge Port
 
-TODO What is needed to configure Edge port on Dell aggregation switch.  Is this info from Aruba valid for use on Dell?
 
 These are ports that are connected to management nodes.
 
@@ -295,7 +291,6 @@ These are ports that are connected to management nodes.
 
 ## Configure User Access/Login/Application node port
 
-TODO What is needed to configure UAN node port on Dell aggregation switch.  Is this info from Aruba valid for use on Dell?
 
 - One connection will go to a NMN (VLAN2) access port, this is where the UAN will PXE boot and communicate with internal nodes. (see SHCD for UAN cabling).
 - One Bond (two connections) will be going to the MLAG/VSX pair of switches. This will be a trunk port for the CAN connection.

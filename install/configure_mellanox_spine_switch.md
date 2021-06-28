@@ -9,7 +9,6 @@ Requirements:
 
 Here is an example snippet from a spine switch on the SHCD.
 
-TODO is the table valid data for Mellanox?  
 
 The ISL ports is port 32 on both spine switches.
 
@@ -17,7 +16,7 @@ The ISL ports is port 32 on both spine switches.
    | --- | --- | ---| --- | --- | --- |
    | sw-100g01 | x3105u40-j32 | x3105u41-j32 | sw-100g02 | 100g-1m-DAC | |
 
-It is assumed that you have connectivity to the switch and have done the [Configure Mellanox Management Network Base](configure_mellanox_management_network_base.md) procedure.
+It is assumed that you have connectivity to the switch.
 
 ## Configure VLAN
 
@@ -318,7 +317,6 @@ System-id           State                        Hostname
 
 ## Configure Uplink
 
-TODO What is needed to configure Uplink on Mellanox spine switch
 
 The uplink ports are the ports connecting the spine switches to the downstream switches, these switches can be aggregation, leaf, or spine switches.
 
@@ -566,11 +564,9 @@ IP-Helpers will reside on VLANs 1,2,4, and 7.
 
 ## Configure Flow Control
 
-TODO What is needed to configure flow control for Dell and Mellanox switches
 
 ## Configure Edge port
 
-TODO  What is needed to configure Edge port on Mellanox spine switch.  Is this info from Aruba valid for use on Mellanox?
 
 - These are ports that are connected to NCNs.
 
@@ -626,7 +622,6 @@ TODO  What is needed to configure Edge port on Mellanox spine switch.  Is this i
 
 ## Configure User Access/Login/Application node port
 
-TODO  What is needed to configure UAN node port on Mellanox spine switch.  Is this info from Aruba valid for use on Mellanox?
 
 - One connection will go to a NMN(VLAN2) access port, this is where the UAN will pxe boot and communicate with internal systems. (see SHCD for UAN cabling).
 - ONE OF THESE PORTS IS SHUTDOWN.

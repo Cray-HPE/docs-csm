@@ -19,7 +19,7 @@ Here are example snippets from a leaf switch in the SHCD.
 
 The uplinks are port 49 and 50 on the leaf.  They connect to Aggregation switch 1 and 2 on port 47.
 
-It is assumed that you have connectivity to the switch and have done the [Configure Dell Management Network Base](configure_dell_management_network_base.md) procedure.
+It is assumed that you have connectivity to the switch.
 
 
 ## Configure Uplink
@@ -258,7 +258,6 @@ sw-leaf01(conf-if-eth1/1/51-1/1/52)# end
 
 ## Configure Edge port
 
-TODO  What is needed to configure Edge port on Dell leaf switch.  Is this info from Aruba valid for use on Dell?
 
 1. Ports that need to be on the HMN (hardware management network) This would include BMCs/PDUs
    ```

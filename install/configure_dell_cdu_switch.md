@@ -35,7 +35,7 @@ The Keepalive is port 48.
    | d100sw1 | d100u01-j49 | d100u02-j49 | d100sw2 | 100g-1m-DAC | |
    | d100sw1 | d100u01-j50 | d100u02-j50 | d100sw2 | 100g-1m-DAC | |
 
-It is assumed that you have connectivity to the switch and have done the [Configure Dell Management Network Base](configure_dell_management_network_base.md) procedure.
+It is assumed that you have connectivity to the switch.
 
 ## Configure VLT
 
