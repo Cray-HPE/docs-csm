@@ -2425,7 +2425,7 @@ Create a directory to mount the squashfs:
 ```
 ncn-w001# mkdir -v mount
 
-ncn-w001# mount -v -o loop,rdonly rootfs.squashfs `pwd`/mount
+ncn-w001# mount -v -o loop,ro rootfs.squashfs `pwd`/mount
 ```
 
 Create the tarball.
