@@ -153,6 +153,7 @@ A similar flow can be used to update the resources for cray-sls-postgres, cray-s
 
 1. Get the current cached customizations.
 
+<<<<<<< HEAD
    ```
    ncn-w001# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
    ```
@@ -247,7 +248,7 @@ A similar flow can be used to update the resources for cray-sls-postgres, cray-s
 
 10. Store the modified customizations.yaml in the site-init repository in the customer-managed location. **This step is critical.** If not done, these changes will not persist in future installs or updates.
 
-**IMPORTANT:** If cray-sls-postgres, cray-smd-postgres, or gitea-vcs-postgres resources need to be adjusted, the same procedure as above can be used with the following changes:
+  **IMPORTANT:** If cray-sls-postgres, cray-smd-postgres, or gitea-vcs-postgres resources need to be adjusted, the same procedure as above can be used with the following changes:
 
   cray-sls-postgres:
 

@@ -844,7 +844,7 @@ to the following near its end:
 <a name="uas-uai-init-cli"></a>
 #### 5.1 Initialize and Authorize the CLI
 
-The procedures below use the CLI as an authorized user and run on two separate node types. The first part runs on the LiveCD node, while the second part runs on a non-LiveCD Kubernetes master or worker node. When using the CLI on either node, the CLI configuration needs to be initialized and the user running the procedure needs to be authorized. This section describes how to initialize the CLI for use by a user, and how to authorize the CLI as a user to run the procedures on any given node. The procedures will need to be repeated in both stages of the validation procedure.
+The procedures below use the CLI as an authorized user and run on two separate node types. The first part runs on the LiveCD node, while the second part runs on a non-LiveCD Kubernetes master or worker node. When using the CLI on either node, the CLI configuration needs to be initialized and the user running the procedure needs to be authorized. This section describes how to initialize the CLI for use by a user, and how to authorize the CLI as a user to run the procedures on any given node. The following procedures will need to be repeated in both stages of the validation procedure.
 
 <a name="uas-uai-init-cli-stop"></a>
 ##### 5.1.1 Stop Using the CRAY_CREDENTIALS Service Account Token
