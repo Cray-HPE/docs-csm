@@ -184,6 +184,13 @@ report `FAIL` when uploading duplicate assets. This is ok as long as
    repository data. Once [`upgrade.sh`](#upgrade-services) is run, the git data
    will not be recoverable if this step failed.
 
+1. If `vcs.tar` was successfully created, run `vcs-prep.sh`.  This will force
+   the PVC into the correct state for the upgrade if necessary.
+
+   ```bash
+   ncn-m001# "${CSM_SCRIPTDIR}/vcs-prep.sh"
+   ```
+
 1. It is also recommended to save the VCS password to a safe location prior to
    making changes to VCS. The current password can can be retrieved with:
 
