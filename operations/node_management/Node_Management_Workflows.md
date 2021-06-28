@@ -4,8 +4,10 @@ The following workflows are intended to be high-level overviews of node manageme
 
 The workflows in this section include:
 
--   Add Nodes
--   Remove Nodes
+  - [Add Nodes](#add-nodes)
+  - [Remove Nodes](#remove-nodes)
+
+<a name="add-nodes"></a>
 
 ### Add Nodes
 
@@ -79,6 +81,7 @@ Mentioned in this workflow:
 
     HSM sends the new compute node state information with State as ON to HMNFD. HMNFD fans out these notifications to the subscribing compute nodes.
 
+<a name="remove-nodes"></a>
 
 ### Remove Nodes
 

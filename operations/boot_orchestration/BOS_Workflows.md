@@ -4,9 +4,11 @@ The following workflows present a high-level overview of common Boot Orchestrati
 
 The following workflows are included in this section:
 
--   Boot and Configure Nodes
--   Reconfigure Nodes
--   Power Off Nodes
+  - [Boot and Configure Nodes](#boot-and-configure)
+  - [Reconfigure Nodes](#reconfigure)
+  - [Power Off Nodes](#power-off)
+
+<a name="boot-and-configure"></a>
 
 ### Boot and Configure Nodes
 
@@ -115,6 +117,7 @@ Mentioned in this workflow:
 
     CFS runs Ansible on the nodes and applies post-boot configuration \(also called node personalization\). CFS then communicates the results back to BOA.
 
+<a name="reconfigure"></a>
 
 ### Reconfigure Nodes
 
@@ -176,6 +179,7 @@ Mentioned in this workflow:
 
     CFS then communicates the results back to BOA.
 
+<a name="power-off"></a>
 
 ### Power Off Nodes
 

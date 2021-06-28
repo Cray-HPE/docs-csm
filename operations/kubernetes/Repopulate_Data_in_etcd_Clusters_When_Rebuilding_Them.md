@@ -2,17 +2,17 @@
 
 When an etcd cluster is not healthy, it needs to be rebuilt. During that process, the pods that rely on etcd clusters lose data. That data needs to be repopulated in order for the cluster to go back to a healthy state.
 
-    The following services need their data repopulated in the etcd cluster:
+The following services need their data repopulated in the etcd cluster:
 
-    -   Boot Orchestration Service \(BOS\)
-    -   Boot Script Service \(BSS\)
-    -   Content Projection Service \(CPS\)
-    -   Compute Rolling Upgrade Service \(CRUS\)
-    -   External DNS
-    -   Firmware Action Service \(FAS\)
-    -   HMS Notification Fanout Daemon \(HMNFD\)
-    -   Mountain Endpoint Discovery Service \(MEDS\)
-    -   River Endpoint Discovery Service \(REDS\)
+-   Boot Orchestration Service \(BOS\)
+-   Boot Script Service \(BSS\)
+-   Content Projection Service \(CPS\)
+-   Compute Rolling Upgrade Service \(CRUS\)
+-   External DNS
+-   Firmware Action Service \(FAS\)
+-   HMS Notification Fanout Daemon \(HMNFD\)
+-   Mountain Endpoint Discovery Service \(MEDS\)
+-   River Endpoint Discovery Service \(REDS\)
 
 ### Prerequisites
 
@@ -23,17 +23,17 @@ A etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unheal
 
 1.  Reconstruct boot session templates for impacted product streams to repopulate data.
 
-    Boot preparation information for other product streams can be found in the **:
+    Boot preparation information for other product streams can be found in the following locations:
 
-    -   UANs: refer to the "PREPARE UAN BOOT SESSION TEMPLATES" header in the "Install and Configure UANs" procedure.
-    -   Cray Operating System \(COS\): refer to the "BOOT PREPARATION" header in the "Install and Configure the Cray Operating System \(COS\)" procedure.
+    -   UANs: refer to the UAN product stream repository and search for the "PREPARE UAN BOOT SESSION TEMPLATES" header in the "Install and Configure UANs" procedure.
+    -   Cray Operating System \(COS\): refer to the COS product stream repository and search for the "Create a Boot Session Template" header in the "Install or Upgrade COS" procedure.
 
 
 ### CPS
 
 1.  Repopulate clusters for CPS.
 
-    -   If there are no clients using CPS when the etcd cluster is rebuilt, then nothing needs to be done other than to rebuild the cluster and make sure all of the components are up and running. See "Rebuild Unhealthy etcd Clusters" in the ** for more information.
+    -   If there are no clients using CPS when the etcd cluster is rebuilt, then nothing needs to be done other than to rebuild the cluster and make sure all of the components are up and running. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhealthy_etcd_Clusters.md) for more information.
     -   If any clients have already mounted content provided by CPS, that content should be unmounted before rebuilding the etcd cluster, and then re-mounted after the etcd cluster is rebuilt. Compute nodes that use CPS to access their root file system must be shut down to unmount, and then booted to perform the re-mount.
 
 
@@ -62,7 +62,7 @@ A etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unheal
 
     2.  Describe the CRUS session to see if the session failed or is stuck.
 
-        If the session continued and appears to be in a healthy state, proceed to [step 11](#step_ydd_kth_bkb).
+        If the session continued and appears to be in a healthy state, proceed to the [BSS](#bss) section.
 
         ```bash
         ncn-w001# cray crus session describe CRUS_UPGRADE_ID
@@ -149,6 +149,8 @@ The etcd cluster for external DNS maintains an ephemeral cache for CoreDNS. Ther
     ```
 
 
+<a name="bss"></a>
+
 ### BSS
 
 Data is repopulated in BSS when the REDS init job is run.
@@ -193,7 +195,7 @@ Data is repopulated in BSS when the REDS init job is run.
 
 1.  Run the `cray-fas-loader` Kubernetes job.
 
-    Refer to the FAS documentation for more information.
+    Refer to the [FAS](../firmware/Firmware_Action_Service.md) documentation for more information.
 
     When the etcd cluster is rebuilt, all historic data for firmware actions and all recorded snapshots will be lost. Image data will need to be reloaded by following the `cray-fas-loader` Kubernetes job procedure. After images are reloaded any running actions at time of failure will need to be recreated.
 
