@@ -10,9 +10,15 @@ To add an IP address to the **Exception Site List**:
 
 The following figures show examples of the **Security** tab of the **Java Control Panel** on several different operating systems.
 
+### Linux Java Control Panel Security Tab
+
 ![Java Control Panel Security Tab: Linux](../../img/operations/Java_Control_Panel_Security_Tab_Linux.png "Java Control Panel Security Tab: Linux")
 
+### MacOS Java Control Panel Security Tab
+
 ![Java Control Panel Security Tab: MAC](../../img/operations/Java_Control_Panel_Security_Tab_MAC.png "Java Control Panel Security Tab: MAC")
+
+### Windows Java Control Panel Security Tab
 
 ![Java Control Panel Security Tab: Windows](../../img/operations/Java_Control_Panel_Security_Tab_Windows.png "Java Control Panel Security Tab: Windows")
 
