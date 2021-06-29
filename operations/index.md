@@ -621,7 +621,7 @@ MetalLB can run in either Layer2-mode or BGP-mode for each address pool it manag
   * [Troubleshoot BGP not Accepting Routes from MetalLB](network/metallb_bgp/Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
 
 
-<a name="firmware"></a>
+<a name="update-firmware-with-fas"></a>
 
 ### Update Firmware with FAS
 

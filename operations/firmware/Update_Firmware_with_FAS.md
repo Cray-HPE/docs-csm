@@ -32,7 +32,7 @@ FAS images contain the following information that is needed for a hardware devic
 
 **WARNING:** Non-compute nodes (NCNs) should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS. See [NCN and Management Node Locking](../hardware_state_manager/NCN_and_Management_Node_Locking.md) for more information. Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
 
-Follow the process outlined in [FAS CLI](FAS_CLI.md) to update the system. Use the recipes listed in [FAS_Recipes](FAS_Recipes.md) to update each supported type.
+Follow the process outlined in [FAS CLI](FAS_CLI.md) to update the system. Use the recipes listed in [FAS Recipes](FAS_Recipes.md) to update each supported type.
 
 **NOTE**: Each system is different and may not have all hardware options.
 
