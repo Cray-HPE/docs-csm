@@ -205,7 +205,7 @@ compute node and application node firmware.
    | | | | | | |
    | NCN | HPE | `A42` ProLiant DL385 Gen10 Plus | BIOS | 10/30/2020 1.38 | `NO` | `http://pit/fw/river/hpe/A42_1.38_10_30_2020.signed.flash` | 
    | NCN | HPE | `A43` ProLiant DL325 Gen10 Plus | BIOS | 10/30/2020 1.38 | `NO` | `http://pit/fw/river/hpe/A43_1.38_10_30_2020.signed.flash` | 
-   | NCN | HPE | iLO5 | BMC | 2.33 | `NO` |`http://pit/fw/river/hpe/ilo5_233.bin` |
+   | NCN | HPE | iLO5 | BMC | 2.44 | `NO` |`http://pit/fw/river/hpe/ilo5_244.bin` |
    | | | | | | |
    | CN | CRAY | EX235n | BIOS | ex235n.bios-1.0.3 | `NO` | `http://pit/fw/mountain/cray/ex235n.bios-1.0.3.tar.gz` | 
    | CN | CRAY | EX425 | BIOS | ex425.bios-1.4.3 | `NO` | `http://pit/fw/mountain/cray/ex425.bios-1.4.3.tar.gz` |
