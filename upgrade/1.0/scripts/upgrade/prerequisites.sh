@@ -28,7 +28,7 @@ case $key in
     shift # past value
     ;;
     *)    # unknown option
-    echo "[ERROR] - unknow options"
+    echo "[ERROR] - unknown options"
     exit 1
     ;;
 esac
@@ -53,7 +53,7 @@ if [[ -z ${TARBALL_FILE} ]]; then
     reqSpace=100000000 # ~100GB 
     availSpace=$(df "$HOME" | awk 'NR==2 { print $4 }')
     if (( availSpace < reqSpace )); then
-        echo "Not enough Space, required: $reqSpace, availSpace: $availSpace" >&2
+        echo "Not enough space, required: $reqSpace, available space: $availSpace" >&2
         exit 1
     fi
 

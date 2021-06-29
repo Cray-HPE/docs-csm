@@ -49,7 +49,7 @@ if [[ ${upgrade_ncn} == "ncn-m001" ]]; then
       scp root@ncn-m001:/etc/sysconfig/network/ifroute-lan0 .
       record_state "${state_name}" ${upgrade_ncn}
    else
-      echo "====> ${state_name} has beed completed"
+      echo "====> ${state_name} has been completed"
    fi
 fi
 
@@ -88,7 +88,7 @@ if [[ ${first_master_hostname} == ${upgrade_ncn} ]]; then
       
       record_state "${state_name}" ${upgrade_ncn}
    else
-      echo "====> ${state_name} has beed completed"
+      echo "====> ${state_name} has been completed"
    fi
 fi
 
@@ -101,7 +101,7 @@ if [[ $state_recorded == "0" ]]; then
     ssh $upgrade_ncn 'systemctl stop etcd.service'
     record_state "${state_name}" ${upgrade_ncn}
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 state_name="PREPARE_ETCD"
@@ -127,7 +127,7 @@ if [[ $state_recorded == "0" ]]; then
     
     record_state "${state_name}" ${upgrade_ncn}
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 drain_node $upgrade_ncn

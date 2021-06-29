@@ -36,6 +36,6 @@ function drain_node() {
       record_state "${state_name}" ${upgrade_ncn}
       echo
    else
-      echo "====> ${state_name} has beed completed"
+      echo "====> ${state_name} has been completed"
    fi
 }
