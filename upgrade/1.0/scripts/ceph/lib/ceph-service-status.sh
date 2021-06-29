@@ -210,7 +210,7 @@ fi
 
 echo "Tests run: $tests  Tests Passed: $passed"
 
-if $tests -ne $passed 
+if [ $tests -ne $passed ]
 then
  echo "Tests run: $tests  Tests Passed: $passed"
  exit 1
