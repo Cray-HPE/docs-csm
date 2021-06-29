@@ -310,7 +310,7 @@ should resolve itself once the workload manager product is installed.
 
    ```bash
    ncn-m001# for h in $( cat /etc/hosts | grep ncn-s | grep nmn | awk '{print $2}' ); do
-     ssh $h "zypper ar SUSE-SLE-Module-Basesystem-15-SP1-x86_64-Updates https://packages.local/repository/SUSE-SLE-Module-Basesystem-15-SP1-x86_64-Updates"
+     ssh $h "zypper ar https://packages.local/repository/SUSE-SLE-Module-Basesystem-15-SP1-x86_64-Updates SUSE-SLE-Module-Basesystem-15-SP1-x86_64-Updates"
    done
    ```
 
