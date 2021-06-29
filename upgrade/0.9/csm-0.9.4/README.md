@@ -304,6 +304,16 @@ should resolve itself once the workload manager product is installed.
 <a name="install-prometheus-node-exporter-on-utility-storage-nodes"></a>
 ## Install Prometheus Node-Exporter on Utility Storage Nodes
 
+1. Verify the zypper repository in nexus that contains the golang-github-prometheus-node_exporter
+   rpm is enabled.  Typically this is the SUSE-SLE-Module-Basesystem-15-SP1-x86_64-Updates repository.
+   If not enabled, enable it (or the repository in nexus that contains the rpm) on all storage nodes:
+
+   ```bash
+   ncn-m001# for h in $( cat /etc/hosts | grep ncn-s | grep nmn | awk '{print $2}' ); do
+     ssh $h "zypper ar SUSE-SLE-Module-Basesystem-15-SP1-x86_64-Updates https://packages.local/repository/SUSE-SLE-Module-Basesystem-15-SP1-x86_64-Updates"
+   done
+   ```
+
 1. Copy the `install-node-exporter-storage.sh` script out to the storage nodes.
 
    ```bash
