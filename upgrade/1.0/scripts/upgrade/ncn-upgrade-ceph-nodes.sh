@@ -128,6 +128,21 @@ fi
 . /usr/shar/doc/csm/upgrade/1.0/scripts/ceph/lib/ceph-health.sh
 wait_for_health_ok
 
+if [[ ${upgrade_ncn} == "ncn-s001" ]]; then
+  state_name="POST_CEPH_IMAGE_UPGRADE_BUCKETS"
+  state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+  if [[ $state_recorded == "0" ]]; then
+      echo "====> ${state_name} ..."
+
+      scp /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/create_rgw_buckets.sh $upgrade_ncn:/tmp
+      ssh ${upgrade_ncn} '/tmp/create_rgw_buckets.sh'
+
+      record_state "${state_name}" ${upgrade_ncn}
+  else
+      echo "====> ${state_name} has beed completed"
+  fi
+fi
+
 cat <<EOF
 
 NOTE:
