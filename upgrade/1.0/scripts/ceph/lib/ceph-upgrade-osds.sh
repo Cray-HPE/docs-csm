@@ -8,11 +8,16 @@ for host in $(ceph node ls| jq -r '.osd|keys[]')
  do
   for osd in $(ceph node ls| jq --arg host_key "$host" -r '.osd[$host_key]|values|tostring|ltrimstr("[")|rtrimstr("]")'| sed "s/,/ /g")
    do
-    ssh "$host" "cephadm --image $registry/ceph/ceph:v15.2.8 adopt --style legacy --name osd.$osd" --skip-pull
-    ceph mgr fail $(ceph mgr dump | jq -r .active_name)
-    sleep 20
+    timeout 300 ssh "$host" "cephadm --image $registry/ceph/ceph:v15.2.8 adopt --style legacy --name osd.$osd" --skip-pull
+    if [ $? -ne 0 ]
+       then
+	ceph mgr fail $(ceph mgr dump | jq -r .active_name)
+    fi
+    sleep 10
    done
+   sleep 180
  done
+ ceph osd require-osd-release octopus
 }
 
 # End  OSD conversion.  Run on each node that has OSDS
