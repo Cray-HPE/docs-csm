@@ -1,4 +1,5 @@
 #!/bin/sh
+# Copyright 2021 Hewlett Packard Enterprise Development LP
 
 EXPECTED_VERSION="v1.19.9"
 display_output=$(kubectl get nodes)

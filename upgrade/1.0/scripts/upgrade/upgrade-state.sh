@@ -41,6 +41,6 @@ function is_state_recorded () {
 }
 
 function err_report() {
-    echo "[ERROR] - Unexpected erros, check output above"
+    echo "[ERROR] - Unexpected errors, check output above"
 }
 

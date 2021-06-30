@@ -53,7 +53,7 @@ if [ $lowest_count -eq 0 ]; then
     done
     echo "      3. Upgrade the remaining worker nodes in any order."
 else
-    echo "      1. Run the following commands to move all criticial pods from ${emptiest_worker} to ${other_worker}:"
+    echo "      1. Run the following commands to move all critical pods from ${emptiest_worker} to ${other_worker}:"
     for pod in $lowest_podlist; do
         echo "         # /usr/share/doc/csm/upgrade/1.0/scripts/k8s/move-pod.sh $pod ${other_worker}"
     done

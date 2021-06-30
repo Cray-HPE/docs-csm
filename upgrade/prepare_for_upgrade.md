@@ -10,7 +10,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
    that should maintain enough nodes of each type to continue to provide services.  However, while one node is being upgraded,
    if another node of the same type has an unplanned fault that removes it from service, there may be a degraded system.  For
    example, if there are three Kubernetes master nodes and one is being upgraded, the quorum is maintained by the remaining
-   two nodes.  If one of those two nodes has a fault before the third node completes its upgrade, then quorom would be lost.
+   two nodes.  If one of those two nodes has a fault before the third node completes its upgrade, then quorum would be lost.
    There is a similar issue on small systems which have only three worker nodes for some services which have a data store that
    is based on three copies of etcd or postrgres since some of those pods have anti-affinity to avoid two pods of that type
    being on the same worker node.

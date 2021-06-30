@@ -298,7 +298,7 @@ ncn-m001# pdsh -w $(./lib/list-ncns.sh | grep ncn-w | paste -sd,) "echo kernel.p
     ```
 
 **Note**: If you have not already installed the workload manager product including slurm and munge, then the `cray-crus` pod is
-expected to be in the `Init` state. After running `ugrade.sh`, you may observe there are now *two* copies of the `cray-crus` pod in
+expected to be in the `Init` state. After running `upgrade.sh`, you may observe there are now *two* copies of the `cray-crus` pod in
 the `Init` state. This situation is benign and should resolve itself once the workload manager product is installed.
 
 <a name="upgrade-ncn-packages"></a>
