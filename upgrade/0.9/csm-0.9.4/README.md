@@ -231,6 +231,8 @@ should resolve itself once the workload manager product is installed.
 <a name="update-ntp-dns-on-bmcs"></a>
 ## Update NTP and DNS servers on BMCs
 
+> **`NOTE:`** For Gigabyte or Intel NCNs **skip this section**.
+
 1. Deploy the `set-bmc-ntp-dns.sh` script (and its helper script `make_api_call.py`) to each NCN:
 
    ```bash
@@ -242,8 +244,6 @@ should resolve itself once the workload manager product is installed.
    ```
 
 1. Run the `/opt/cray/ncn/set-bmc-ntp-dns.sh` script on each NCN.
-
-   > **`NOTE:`** For Gigabyte or Intel NCNs this **step can be skipped**.
 
    > Pass `-h` to see some examples and use the information below to run the
    > script.
@@ -269,9 +269,9 @@ should resolve itself once the workload manager product is installed.
       ```bash
       ncn# /opt/cray/ncn/set-bmc-ntp-dns.sh ilo -H $BMC -s
       ```
-   4. Set the NTP servers to point toward time-hmn and ncn-m001. 
+   4. Disable DHCP and set the NTP servers to point toward time-hmn and ncn-m001. 
       ```bash
-      ncn# /opt/cray/ncn/set-bmc-ntp-dns.sh ilo -H $BMC -N "time-hmn,$M001_HMN_IP" -n
+      ncn# /opt/cray/ncn/set-bmc-ntp-dns.sh ilo -H $BMC -S -N "time-hmn,$M001_HMN_IP" -n
       ```
    5. Set the DNS server to point toward Unbound and ncn-m001.
       ```bash

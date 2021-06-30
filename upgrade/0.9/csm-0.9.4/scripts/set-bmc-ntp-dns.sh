@@ -353,6 +353,17 @@ function reset_bmc_manager() {
     : $((secs--))
 
   done
+  
+  local total
+  total=0
+  while ! ping -c 2 $BMC > /dev/null 2>&1 && [ $total -lt 30 ]; do
+    echo "Waiting another 5 seconds for the BMC to become pingable..."
+    sleep 5
+    let total+=5
+  done
+  if ! ping -c 2 $BMC > /dev/null 2>&1 ; then
+    echo "WARNING: BMC $BMC still not pingable" 1>&2
+  fi
 
   echo -e "\n"
 }
@@ -362,7 +373,7 @@ function disable_ilo_dhcp() {
   local method
   local payload
   local url
-  export payload=""
+  export payload="null"
   export method="GET"
 
   echo "Disabling DHCP on $BMC..."
@@ -460,7 +471,7 @@ function set_bmc_ntp() {
     if [[ "$VENDOR" = *Marvell* ]] || [[ "$VENDOR" = HP* ]] || [[ "$VENDOR" = Hewlett* ]]; then
 
       ntp_key=$(echo "{\"StaticNTPServers\": [")
-      ntp_close="]}\""
+      ntp_close="]}"
 
     elif [[ "$VENDOR" = *GIGA*BYTE* ]] || [[ "$VENDOR" = *Intel* ]]; then
 
