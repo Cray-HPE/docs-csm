@@ -510,33 +510,34 @@ data so run them only when indicated. Instructions are in the `README` files.
 <a name="configure-dns-and-ntp-on-each-bmc"></a>
 ### 6. Configure DNS and NTP on each BMC
 
- **`INTERNAL USE`** This section works for Intel only if SDPTool is available. See /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh -h for examples
+ > **`NOTE`** If your systemn is Gigabyte or Intel hardware, skip this section.
 
-1. Set environment variables. Make sure to set appropriate values for the `bmctype` and `IPMI_PASSWORD` variables. The `bmctype` variable should be set to the appropriate value for your BMCs: `gb`, `ilo`, or `intel`
+Perform the following steps on every NCN.
 
-   ```bash
-   ncn-m001# export bmctype=yourbmctype
-   ncn-m001# export IPMI_PASSWORD=changeme
-   ncn-m001# export USERNAME=root
-   ```
+1. Set environment variables. Make sure to set the appropriate value for the `IPMI_PASSWORD` variable.
 
-2. Configure NTP on each BMC using data from cloud-init.
+    ```bash
+    ncn# export IPMI_PASSWORD=changeme
+    ncn# export USERNAME=root
+    ```
 
-      ```bash
-      ncn-m001# grep ncn /etc/hosts | grep mgmt | grep -v m001 | sort -u | awk '{print $2}' | xargs -t -i /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh "$bmctype" -H {} -n
-      ```
+1. Disable DHCP and configure NTP on the BMC using data from cloud-init.
 
-3. Configure DNS on each BMC using data from cloud-init.
+    ```bash
+    ncn# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "$(hostname)-mgmt" -S -n
+    ```
 
-      ```bash
-      ncn-m001# grep ncn /etc/hosts | grep mgmt | grep -v m001 | sort -u | awk '{print $2}' | xargs -t -i /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh "$bmctype" -H {} -d
-      ```
+1. Configure DNS on the BMC using data from cloud-init.
 
-4. Show the settings of each BMC, if desired:
+    ```bash
+    ncn# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "$(hostname)-mgmt" -d
+    ```
 
-   ```bash
-   ncn-m001# grep ncn /etc/hosts | grep mgmt | grep -v m001 | sort -u | awk '{print $2}' | xargs -t -i /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh "$bmctype" -H {} -s
-   ```
+1. Show the settings of the BMC, if desired:
+
+    ```bash
+    ncn# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "$(hostname)-mgmt" -s
+    ```
 
 <a name="next-topic"></a>
 # Next Topic
