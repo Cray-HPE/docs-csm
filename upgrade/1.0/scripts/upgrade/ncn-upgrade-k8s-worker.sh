@@ -29,7 +29,7 @@ if [[ $state_recorded == "0" ]]; then
 
     record_state "${state_name}" ${upgrade_ncn}
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 # Ensure that the previously rebuilt worker node (if applicable) has started any etcd pods (if necessary). 
@@ -47,11 +47,11 @@ if [[ $state_recorded == "0" ]]; then
 
     record_state "${state_name}" ${upgrade_ncn}
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 drain_node $upgrade_ncn
 
 ${BASEDIR}/ncn-upgrade-wipe-rebuild.sh $upgrade_ncn
-read -s -p "Switches SSH password:" SW_PASSWORD
+read -s -p "Enter SSH password of switches:" SW_PASSWORD
 ssh $upgrade_ncn -t "GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-worker.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml --vars-inline=\"{switch_aruba: {'password':'$SW_PASSWORD'}, switch_mellanox: {'password':'$SW_PASSWORD'}}\" validate"

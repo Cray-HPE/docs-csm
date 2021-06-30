@@ -34,7 +34,7 @@ if [[ $state_recorded == "0" ]]; then
     
     record_state "${state_name}" ${upgrade_ncn}
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 state_name="WIPE_NODE_DISK"
@@ -73,13 +73,13 @@ EOF
     
     record_state "${state_name}" ${upgrade_ncn}
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 upgrade_ncn_mgmt_host="$UPGRADE_NCN-mgmt"
 if [[ ${upgrade_ncn} == "ncn-m001" ]]; then
     echo ""
-    read -p "mgmt IP/Host of ncn-m001:" upgrade_ncn_mgmt_host
+    read -p "Enter the IP or hostname of the BMC for ncn-m001:" upgrade_ncn_mgmt_host
     echo ""
 else 
     echo "mgmt IP/Host: ${upgrade_ncn_mgmt_host}"
@@ -100,11 +100,11 @@ state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
 
-    ipmitool -I lanplus -U ${IPMI_USERNAME} -P ${IPMI_PASSWORD} -H $upgrade_ncn_mgmt_host chassis bootdev pxe options=efiboot
+    ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $upgrade_ncn_mgmt_host chassis bootdev pxe options=efiboot
 
     record_state "${state_name}" ${upgrade_ncn}
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 # polling console logs in background
@@ -127,7 +127,7 @@ if [[ $state_recorded == "0" ]]; then
 
     record_state "${state_name}" ${upgrade_ncn}
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 state_name="WAIT_FOR_NCN_BOOT"
@@ -159,7 +159,7 @@ EOF
 
     record_state "${state_name}" ${upgrade_ncn}
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 state_name="WAIT_FOR_CLOUD_INIT"
@@ -187,7 +187,7 @@ EOF
 
     record_state "${state_name}" ${upgrade_ncn}
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 state_name="SET_BSS_NO_WIPE"
@@ -199,7 +199,7 @@ if [[ $state_recorded == "0" ]]; then
     
     record_state "${state_name}" ${upgrade_ncn}
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 if [[ ${upgrade_ncn} == "ncn-m001" ]]; then
@@ -215,7 +215,7 @@ if [[ ${upgrade_ncn} == "ncn-m001" ]]; then
       ssh root@ncn-m001 'wicked ifreload lan0'
       record_state "${state_name}" ${upgrade_ncn}
    else
-      echo "====> ${state_name} has beed completed"
+      echo "====> ${state_name} has been completed"
    fi
 fi
 
@@ -231,7 +231,7 @@ if [[ ${upgrade_ncn} != ncn-s* ]]; then
       
       record_state "${state_name}" ${upgrade_ncn}
    else
-      echo "====> ${state_name} has beed completed"
+      echo "====> ${state_name} has been completed"
    fi
 fi
 
@@ -256,6 +256,6 @@ if [[ ${upgrade_ncn} != ncn-s* ]]; then
       
       record_state "${state_name}" ${upgrade_ncn}
    else
-      echo "====> ${state_name} has beed completed"
+      echo "====> ${state_name} has been completed"
    fi
 fi
