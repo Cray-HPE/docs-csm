@@ -56,4 +56,4 @@ ${BASEDIR}/ncn-upgrade-wipe-rebuild.sh $upgrade_ncn
 read -s -p "Enter SSH password of switches:" SW_PASSWORD
 export SW_ARUBA_PASSWORD=$SW_PASSWORD
 export SW_MELLANOX_PASSWORD=$SW_PASSWORD
-ssh $upgrade_ncn -t "GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-worker.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate"
+ssh -o SendEnv=SW_ARUBA_PASSWORD SendEnv=SW_MELLANOX_PASSWORD $upgrade_ncn -t "GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-worker.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate"
