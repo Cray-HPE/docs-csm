@@ -3,8 +3,10 @@
 import json
 import os
 import requests
+from requests.adapters import HTTPAdapter
 from requests.auth import HTTPBasicAuth
 import sys
+from urllib3.util.retry import Retry
 import warnings
 
 # Read in username, password, vendor, method, url, and payload from environment variables
@@ -20,19 +22,32 @@ except KeyError:
 url=os.environ['url']
 method=os.environ['method']
 
-# Determine the requests module function we will be calling.
+# Because we are often issuing requests to BMCs which may have just been restarted using
+# a cold reset, we want to do more retries than we otherwise would. The settings below
+# mean that if our first attempt fails, we will sleep 0.1 seconds, retry, sleep 0.2 seconds,
+# retry, etc, finally sleeping for 0.5 seconds before the final attempt. This is a total of
+# 0.1 + 0.2 + 0.3 + 0.4 + 0.5 + 0.6 + 0.7 + 0.8 + 0.9 + 1 = 5.5 seconds
+#
+# These settings also enable retries when "server busy" type status codes are received.
+s = requests.Session()
+retries = Retry(total=10, backoff_factor=0.1, status_forcelist=[ 500, 502, 503, 504 ])
+
+# This tells our session to apply the above retry options when making requests to our url
+s.mount(url, HTTPAdapter(max_retries=retries))
+
+# Determine the requests function we will be calling.
 # Even though the script currently only makes get, patch, and post calls, no reason
 # not to include delete and put, in case they are needed in the future
 if method.lower() == "delete":
-    rfunc = requests.delete
+    rfunc = s.delete
 elif method.lower() == "get":
-    rfunc = requests.get
+    rfunc = s.get
 elif method.lower() == "patch":
-    rfunc = requests.patch
+    rfunc = s.patch
 elif method.lower() == "post":
-    rfunc = requests.post
+    rfunc = s.post
 elif method.lower() == "put":
-    rfunc = requests.put
+    rfunc = s.put
 else:
     raise AssertionError("Invalid method specified: %s" % method)
 
@@ -45,7 +60,11 @@ kwargs = {
 
 if payload != "null":
     # Convert to JSON and add to argument list
-    kwargs["json"] = json.loads(payload)
+    try:
+        kwargs["json"] = json.loads(payload)
+    except json.decoder.JSONDecodeError:
+        print("Invalid JSON found in payload string: %s" % payload, file=sys.stderr)
+        raise
 
 # Build up our headers
 if method in { "patch", "post" }:
