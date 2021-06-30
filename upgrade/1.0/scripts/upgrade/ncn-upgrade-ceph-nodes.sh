@@ -20,7 +20,7 @@ if [[ $state_recorded == "0" ]]; then
 
     record_state "${state_name}" ${upgrade_ncn}
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 if [[ ${upgrade_ncn} == "ncn-s001" ]]; then
@@ -33,7 +33,7 @@ if [[ ${upgrade_ncn} == "ncn-s001" ]]; then
 
       record_state "${state_name}" ${upgrade_ncn}
    else
-      echo "====> ${state_name} has beed completed"
+      echo "====> ${state_name} has been completed"
    fi
 fi
 
@@ -47,7 +47,7 @@ if [[ $state_recorded == "0" ]]; then
 
     record_state "${state_name}" ${upgrade_ncn}
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 ${BASEDIR}/ncn-upgrade-wipe-rebuild.sh $upgrade_ncn
@@ -63,7 +63,7 @@ if [[ $state_recorded == "0" ]]; then
 
     record_state "${state_name}" ${upgrade_ncn}
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 state_name="RESTORE_CEPH"
@@ -76,7 +76,7 @@ if [[ $state_recorded == "0" ]]; then
 
     record_state "${state_name}" ${upgrade_ncn}
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 cat <<EOF
@@ -100,7 +100,7 @@ if [[ $state_recorded == "0" ]]; then
     
     record_state "${state_name}" ${upgrade_ncn}
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 cat <<EOF
@@ -122,7 +122,7 @@ if [[ $state_recorded == "0" ]]; then
 
     record_state "${state_name}" ${upgrade_ncn}
 else
-    echo "====> ${state_name} has beed completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 
