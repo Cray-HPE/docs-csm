@@ -53,7 +53,9 @@ fi
 drain_node $upgrade_ncn
 
 ${BASEDIR}/ncn-upgrade-wipe-rebuild.sh $upgrade_ncn
+echo
 read -s -p "Enter SSH password of switches:" SW_PASSWORD
+echo
 export SW_ARUBA_PASSWORD=$SW_PASSWORD
 export SW_MELLANOX_PASSWORD=$SW_PASSWORD
 
