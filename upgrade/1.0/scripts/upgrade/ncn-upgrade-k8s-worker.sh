@@ -45,6 +45,15 @@ if [[ $state_recorded == "0" ]]; then
         sleep 5
     done
 
+    etcdClusters=$(kubectl get Etcdclusters -n services | grep "cray-"|awk '{print $1}')
+    for cluster in $etcdClusters
+    do 
+        numOfPods=$(kubectl get pods -A -l 'app=etcd'| grep $cluster | grep "Running" | wc -l)
+        if [[ $numOfPods -ne 3 ]];then
+            echo "ERROR - Etcd cluster: $cluster should have 3 pods running but only $numOfPods are running"
+        fi
+    done
+
     record_state "${state_name}" ${upgrade_ncn}
 else
     echo "====> ${state_name} has been completed"
