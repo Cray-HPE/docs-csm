@@ -278,12 +278,12 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-state_name="SCALE_DOWN_CONMAN"
+state_name="UNINSTALL_CONMAN"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
 
-    kubectl scale deployment -n services cray-conman --replicas=0
+    helm uninstall -n services cray-conman
 
     record_state ${state_name} $(hostname)
 else
