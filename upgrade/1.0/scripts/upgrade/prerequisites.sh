@@ -302,3 +302,5 @@ if [[ $state_recorded == "0" ]]; then
 else
     echo "====> ${state_name} has been completed"
 fi
+
+ok_report
