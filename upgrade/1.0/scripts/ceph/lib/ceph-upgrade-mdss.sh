@@ -26,8 +26,12 @@ function upgrade_mds () {
   ceph fs status
 
   date=$(date +%m%e.%H%M)
+ 
   echo "Backing up the Ceph MDS Journal"
-  cephfs-journal-tool --rank cephfs:all  journal export /root/backup."$date".bin
+  for mds_node in $(ceph mds metadata -f json-pretty|jq -r '.[].name'|cut -d . -f 2)
+  do
+    pdsh -w $mds_node cephfs-journal-tool --rank cephfs:all  journal export /root/backup."$date".bin
+  done
 
   export standby_mdss=$(ceph fs dump -f json-pretty|jq -r '.standbys|map(.name)|join(" ")')
   export active_mds=$(ceph fs status -f json-pretty|jq -r '.mdsmap[]|select(.state=="active")|.name')
