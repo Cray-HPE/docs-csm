@@ -341,6 +341,21 @@ should resolve itself once the workload manager product is installed.
    ncn-m001# "${CSM_SCRIPTDIR}/vcs-restore.sh"
    ```
 
+1. Re-run the csm-config-import job pod if it exists and is in `Error` state.
+   Find the `csm-config-import` job pod:
+
+   ```bash
+   ncn-m001# kubectl get pods -n services | grep csm-config-import
+   ```
+
+   If the pod exists, confirm it is not in an Error state. If the pod is in
+   Error state, then delete it:
+
+   ```bash
+   ncn-m001# CSM_CONFIG_POD=$(kubectl get pods --no-headers -o custom-columns=":metadata.name" -n services | grep csm-config-import)
+   ncn-m001# echo $CSM_CONFIG_POD
+   ncn-m001# kubectl delete pod -n services $CSM_CONFIG_POD
+   ```
 
 <a name="disable-tpm-kernel-module"></a>
 ## Disable TPM Kernel Module
