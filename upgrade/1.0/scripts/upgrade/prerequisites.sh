@@ -127,6 +127,22 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="CHECK_CLOUD_INIT_PREREQ"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    echo "Ensuring cloud-init is healthy"
+    cloud-init query -a > /dev/null 2>&1
+    rc=$?
+    if [[ "$rc" -ne 0 ]]; then
+      echo "cloud-init isn't healthy -- re-running 'cloud-init init' to repair cached data"
+      cloud-init init > /dev/null 2>&1
+    fi
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="APPLY_POD_PRIORITY"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
@@ -243,7 +259,7 @@ if [[ $state_recorded == "0" ]]; then
 
     highest_patch_num=0
     for patch_version in $patch_versions; do
-      patch_num=$(echo $patch_version | sed 's/://' | awk -F '.' '{print $NF}')
+      patch_num=$(echo $patch_version | sed 's/://' | awk -F '.' '{print $3}' | awk -F '-' '{print $1}')
       if [[ "$patch_num" -gt "$highest_patch_num" ]]; then
         highest_patch_num=$patch_num
       fi
