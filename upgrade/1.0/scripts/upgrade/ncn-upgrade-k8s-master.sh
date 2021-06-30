@@ -82,7 +82,7 @@ if [[ ${first_master_hostname} == ${upgrade_ncn} ]]; then
         exit 1
       fi
 
-      csi handoff bss-update-cloud-init --set meta-data.first-master-hostname=$promotingMaster --limit Global
+      VERBOSE=1 csi handoff bss-update-cloud-init --set meta-data.first-master-hostname=$promotingMaster --limit Global
       ssh $promotingMaster -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "rpm --force -Uvh ${DOC_RPM_NEXUS_URL}"
       ssh $promotingMaster -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "/usr/share/doc/csm/upgrade/1.0/scripts/k8s/promote-initial-master.sh"
       
