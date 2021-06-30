@@ -47,5 +47,5 @@ function err_report() {
 
 function ok_report() {
     echo
-    echo "[OK] - Succeffully completed"
+    echo "[OK] - Successfully completed"
 }
