@@ -45,6 +45,15 @@ if [[ $state_recorded == "0" ]]; then
         sleep 5
     done
 
+    etcdClusters=$(kubectl get Etcdclusters -n services | grep "cray-"|awk '{print $1}')
+    for cluster in $etcdClusters
+    do 
+        numOfPods=$(kubectl get pods -A -l 'app=etcd'| grep $cluster | grep "Running" | wc -l)
+        if [[ $numOfPods -ne 3 ]];then
+            echo "ERROR - Etcd cluster: $cluster should have 3 pods running but only $numOfPods are running"
+        fi
+    done
+
     record_state "${state_name}" ${upgrade_ncn}
 else
     echo "====> ${state_name} has been completed"
@@ -53,5 +62,18 @@ fi
 drain_node $upgrade_ncn
 
 ${BASEDIR}/ncn-upgrade-wipe-rebuild.sh $upgrade_ncn
+echo
 read -s -p "Enter SSH password of switches:" SW_PASSWORD
-ssh $upgrade_ncn -t "GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-worker.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml --vars-inline=\"{switch_aruba: {'password':'$SW_PASSWORD'}, switch_mellanox: {'password':'$SW_PASSWORD'}}\" validate"
+echo
+export SW_ARUBA_PASSWORD=$SW_PASSWORD
+export SW_MELLANOX_PASSWORD=$SW_PASSWORD
+
+cat <<EOF
+
+NOTE:
+    If below test failed, try to fix it based on test output. Then run current script again
+EOF
+
+ssh $upgrade_ncn -t "SW_ARUBA_PASSWORD=$SW_PASSWORD SW_MELLANOX_PASSWORD=$SW_PASSWORD GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-worker.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate"
+
+ok_report

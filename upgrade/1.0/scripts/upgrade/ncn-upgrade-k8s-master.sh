@@ -82,7 +82,7 @@ if [[ ${first_master_hostname} == ${upgrade_ncn} ]]; then
         exit 1
       fi
 
-      csi handoff bss-update-cloud-init --set meta-data.first-master-hostname=$promotingMaster --limit Global
+      VERBOSE=1 csi handoff bss-update-cloud-init --set meta-data.first-master-hostname=$promotingMaster --limit Global
       ssh $promotingMaster -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "rpm --force -Uvh ${DOC_RPM_NEXUS_URL}"
       ssh $promotingMaster -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "/usr/share/doc/csm/upgrade/1.0/scripts/k8s/promote-initial-master.sh"
       
@@ -153,10 +153,10 @@ else
 fi
 
 cat <<EOF
-NOTE:
-    If below test failed, try to fix it based on test output. Then run the test again:
 
-    ssh $upgrade_ncn -t 'GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-master.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate'
+NOTE:
+    If below test failed, try to fix it based on test output. Then run current script again
 EOF
 ssh $upgrade_ncn -t 'GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-master.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate'
 
+ok_report
