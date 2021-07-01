@@ -282,8 +282,10 @@ state_name="UNINSTALL_CONMAN"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-
-    helm uninstall -n services cray-conman
+    numOfDeployments=$(helm list -n services | grep cray-conman | wc -l)
+    if [[ $numOfDeployments -ne 0 ]]; then
+        helm uninstall -n services cray-conman
+    fi
 
     record_state ${state_name} $(hostname)
 else
@@ -294,9 +296,12 @@ state_name="INSTALL_NEW_CONSOLE"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    helm -n services upgrade --install --wait cray-console-operator ./${CSM_RELEASE}/helm/cray-console-operator-*.tgz
-    helm -n services upgrade --install --wait cray-console-node ./${CSM_RELEASE}/helm/cray-console-node-*.tgz
-    helm -n services upgrade --install --wait cray-console-data ./${CSM_RELEASE}/helm/cray-console-data-*.tgz
+    numOfDeployments=$(helm list -n services | grep cray-console | wc -l)
+    if [[ $numOfDeployments -eq 0 ]]; then 
+        helm -n services upgrade --install --wait cray-console-operator ./${CSM_RELEASE}/helm/cray-console-operator-*.tgz
+        helm -n services upgrade --install --wait cray-console-node ./${CSM_RELEASE}/helm/cray-console-node-*.tgz
+        helm -n services upgrade --install --wait cray-console-data ./${CSM_RELEASE}/helm/cray-console-data-*.tgz
+    fi
 
     record_state ${state_name} $(hostname)
 else
