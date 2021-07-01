@@ -62,7 +62,35 @@ fi
 drain_node $upgrade_ncn
 
 ${BASEDIR}/ncn-upgrade-wipe-rebuild.sh $upgrade_ncn
-echo
+
+state_name="ENSURE_KEY_PODS_HAVE_STARTED"
+state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+
+    while true; do
+      output=$(kubectl get po -A -o wide | grep -e etcd -e speaker | grep $upgrade_ncn | awk '{print $4}')
+      if [ ! -n "$output" ]; then
+        #
+        # No pods scheduled to start on this node, we're done
+        #
+        break
+      fi
+      echo "$output" | grep -v -e Running -e Completed > /dev/null
+      rc=$?
+      if [[ "$rc" -eq 1 ]]; then
+        echo "All etcd and speaker pods are running on $upgrade_ncn"
+        break
+      fi
+      echo "Some etcd and speaker pods aren't running on $upgrade_ncn -- sleeping for 10 seconds..."
+      sleep 10
+    done
+
+    record_state "${state_name}" ${upgrade_ncn}
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 read -s -p "Enter SSH password of switches:" SW_PASSWORD
 echo
 export SW_ARUBA_PASSWORD=$SW_PASSWORD
