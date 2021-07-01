@@ -125,6 +125,8 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+. /usr/shar/doc/csm/upgrade/1.0/scripts/ceph/lib/ceph-health.sh
+wait_for_health_ok
 
 cat <<EOF
 
