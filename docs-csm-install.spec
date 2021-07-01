@@ -1,14 +1,18 @@
-# Copyright 2020 Cray Inc. All Rights Reserved.
+# Copyright 2021 Hewlett Packard Enterprise Development LP
 Name: docs-csm-install
 License: MIT License
-Summary: Documentation for Cray System Management Installation and Upgrade
+Summary: Documentation for Cray System Management (CSM) Installation and Upgrade
 BuildArchitectures: noarch
 Version: %(cat .version)
 Release: %(echo ${BUILD_METADATA})
 Source: %{name}-%{version}.tar.bz2
-Vendor: Cray Inc.
+Vendor: Hewlett Packard Enterprise Company
 
 %description
+This package contains documentation about how to install or upgrade
+the Cray System Management (CSM) software and related supporting
+operational procedures to manage HPE Cray EX systems.  This documentation
+is in Markdown format starting at /usr/share/doc/csm/README.md.
 
 %prep
 %setup -q
