@@ -58,8 +58,17 @@ EOF
 EOF
     else
     cat <<'EOF' > wipe_disk.sh
+    lsblk | grep -q /var/lib/sdu
+    sdu_rc=$?
     set -e
-    umount /var/lib/containerd /var/lib/kubelet /var/lib/sdu || true
+    systemctl disable kubelet.service || true
+    systemctl stop kubelet.service || true
+    systemctl disable containerd.service || true
+    systemctl stop containerd.service || true
+    umount /var/lib/containerd /var/lib/kubelet || true
+    if [[ "$sdu_rc" -eq 0 ]]; then
+      umount /var/lib/sdu || true
+    fi
     for md in /dev/md/*; do mdadm -S $md || echo nope ; done
     vgremove -f --select 'vg_name=~metal*'
     pvremove /dev/md124 || true
