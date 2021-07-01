@@ -41,6 +41,11 @@ function is_state_recorded () {
 }
 
 function err_report() {
+    echo
     echo "[ERROR] - Unexpected errors, check output above"
 }
 
+function ok_report() {
+    echo
+    echo "[OK] - Successfully completed"
+}
