@@ -164,6 +164,8 @@ Run `csm-service-upgrade.sh` to deploy upgraded CSM applications and services:
 ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/csm-service-upgrade.sh
 ```
 
+**NOTE:** This script will re-try up to three times if failures are encountered -- but if the script seems to hang for thirty minutes or longer without progressing, the administrator should interrupt the script (CTRL-C) and re-run it.
+
 ## Troubleshooting and Recovering from Errors During or After Upgrade
 
 ### General Kubernetes Commands for Troubleshooting
