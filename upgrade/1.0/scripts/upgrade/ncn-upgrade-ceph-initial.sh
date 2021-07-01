@@ -52,3 +52,5 @@ NOTE:
       health: HEALTH_OK
 EOF
 read -p "Read and act on above steps. Press any key to continue ..."
+
+ok_report
