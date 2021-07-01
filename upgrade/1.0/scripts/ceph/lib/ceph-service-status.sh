@@ -150,6 +150,19 @@ echo "FSID: $FSID  FSID_STR: $FSID_STR"
 tests=0
 passed=0
 active_test=0
+num_storage_nodes=$(craysys metadata get num-storage-nodes)
+
+echo "Updating ssh keys.."
+
+for node_num in $(seq 1 "$num_storage_nodes"); do
+ nodename=$(printf "ncn-s%03d" "$node_num")
+ ssh-keyscan -H "$nodename" >> ~/.ssh/known_hosts &>/dev/null
+done
+
+for node_num in $(seq 1 "$num_storage_nodes"); do
+ nodename=$(printf "ncn-s%03d.nmn" "$node_num")
+ ssh-keyscan -H "$nodename" >> ~/.ssh/known_hosts &>/dev/null
+done
 
 if [[ $all == "true" ]]
 then
