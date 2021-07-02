@@ -60,6 +60,8 @@ EOF
     cat <<'EOF' > wipe_disk.sh
     lsblk | grep -q /var/lib/sdu
     sdu_rc=$?
+    vgs | grep -q metal
+    vgs_rc=$?
     set -e
     systemctl disable kubelet.service || true
     systemctl stop kubelet.service || true
@@ -70,8 +72,10 @@ EOF
       umount /var/lib/sdu || true
     fi
     for md in /dev/md/*; do mdadm -S $md || echo nope ; done
-    vgremove -f --select 'vg_name=~metal*'
-    pvremove /dev/md124 || true
+    if [[ "$vgs_rc" -eq 0 ]]; then
+      vgremove -f --select 'vg_name=~metal*' || true
+      pvremove /dev/md124 || true
+    fi
     wipefs --all --force /dev/sd* /dev/disk/by-label/* || true
     sgdisk --zap-all /dev/sd* 
 EOF
