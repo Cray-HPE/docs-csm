@@ -104,7 +104,7 @@ section sets the expected environment variables to appropriate values.
    ncn-m001# echo $CSM_RELEASE_VERSION
    ```
 
-1. **NEEDS REVIEW** Download and install/upgrade the _latest_ workaround and
+1. Download and install/upgrade the _latest_ workaround and
    documentation RPMs. If this machine does not have direct internet access
    these RPMs will need to be externally downloaded and then copied to be
    installed.
@@ -112,6 +112,20 @@ section sets the expected environment variables to appropriate values.
    ```bash
    ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm-install/docs-csm-install-latest.noarch.rpm
    ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
+   ```
+
+1. **After completing the previous step**, apply the workaround in the following directory, 
+   even if it has been previously applied on the system.
+
+   ```
+   /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-1612
+   ```
+   
+   See the `README.md` file in that directory for instructions on how to apply the workaround. 
+   It requires you to run a script. On successful application of the workaround, verify that 
+   this is the final line of script output:
+   ```
+   Done. WAR successfully applied.
    ```
 
 1. Set `CSM_SCRIPTDIR` to the scripts directory included in the docs-csm RPM
@@ -409,6 +423,9 @@ Other health checks may be run as desired.
 > Failures of these tests due to locked components as shown above can be safely
 > ignored.
 
+**`NOTE:`** If you plan to do any further CSM health validation, you should follow the validation
+procedures found in the CSM v1.0 documentation. Some of the information in the CSM v0.9 validation
+documentation is no longer accurate in CSM v1.0.
 
 <a name="verify-version"></a>
 ## Verify CSM Version in Product Catalog
