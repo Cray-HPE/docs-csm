@@ -66,10 +66,8 @@ ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-ceph-initia
 
 #### Stage 1.2
 
-On ncn-s001 execute the ceph-upgrade.sh script:
 ```bash
-ncn-s001# cd /usr/share/doc/csm/upgrade/1.0/scripts/ceph
-ncn-s001# ./ceph-upgrade.sh
+ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-ceph.sh
 ```
 
 **IMPORTANT NOTES**
