@@ -181,3 +181,10 @@ wait_for_health_ok
 
 echo "Scaling up cephfs clients"
 scale_up_cephfs_clients
+
+echo "enabling all Ceph services to start on boot"
+for host in $(ceph node ls| jq -r '.osd|keys[]')
+  do
+    echo "enabling services on host: $host"
+    ssh "$host" 'for service in $(cephadm ls |jq -r .[].systemd_unit|grep $(ceph status -f json-pretty |jq -r .fsid));do echo "enabling service $service on ncn-s002"; systemctl enable $service;done'
+  done
