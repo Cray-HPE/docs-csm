@@ -149,6 +149,8 @@ proceed to step 2.
 
 1. Ensure that the PIT node has the current and correct time.
 
+   The time can be inaccurate if the system has been powered off for a long time, or, for example, the CMOS was cleared on a Gigabyte node.  See [Clear Gigabyte CMOS](clear_gigabyte_cmos.md).
+
    > This step should not be skipped
 
    Check the time on the PIT node to see whether it matches the current time:
@@ -156,8 +158,6 @@ proceed to step 2.
    ```
    pit# date "+%Y-%m-%d %H:%M:%S.%6N%z"
    ```
-
-   The time can be inaccurate if the system has been off for a long time, or, for example, the CMOS was cleared on a Gigabyte node.  See [Clear Gigabyte CMOS](clear_gigabyte_cmos.md).
 
    If the time is inaccurate, set the time manually.
 
@@ -380,8 +380,8 @@ The configuration workflow described here is intended to help understand the exp
 
 1. Wait. Observe the installation through ncn-s001-mgmt's console:
 
+    Print the console name
     ```bash
-    # Print the console name
     pit# conman -q | grep s001
     ```
 
@@ -393,7 +393,6 @@ The configuration workflow described here is intended to help understand the exp
     Then join the console:
 
     ```bash
-    # Join the console
     pit# conman -j ncn-s001-mgmt
     ```
 
@@ -417,6 +416,14 @@ The configuration workflow described here is intended to help understand the exp
 
     ```bash
     pit# grep -oP "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power on
+    ```
+
+1.  Stop watching the console from ncn-s001.
+
+    Type the ampersand character and then the period character to exit from the conman session on ncn-s001.
+    ```
+    &.
+    pit#
     ```
 
 1.  Wait. Observe the installation through ncn-m002-mgmt's console:
@@ -465,6 +472,14 @@ The configuration workflow described here is intended to help understand the exp
     ncn-w001   Ready    <none>   6m30s   v1.18.6   10.252.1.7    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
     ncn-w002   Ready    <none>   6m16s   v1.18.6   10.252.1.8    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
     ncn-w003   Ready    <none>   5m58s   v1.18.6   10.252.1.12   <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
+    ```
+
+1.  Stop watching the console from ncn-m002.
+
+    Type the ampersand character and then the period character to exit from the conman session on ncn-m002.
+    ```
+    &.
+    pit#
     ```
 
 <a name="check-for-unused-drives-on-utility-storage-nodes"></a>
@@ -548,7 +563,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
    - Aruba:`clear bgp *`
    - Mellanox: `clear ip bgp all`
 
-   > **`NOTE`**: At this point all but possibly one of the peering sessions with the BGP neighbors should be in IDLE or CONNECT state and not ESTABLISHED state.   If the switch is an Aruba, you will have one peering session established with the other switch.  You should check that all of the neighbor IPs are correct.
+1. **`NOTE`**: At this point all but possibly one of the peering sessions with the BGP neighbors should be in IDLE or CONNECT state and not ESTABLISHED state.   If the switch is an Aruba, you will have one peering session established with the other switch.  You should check that all of the neighbor IP addresses are correct.
 
 1. If needed, the following helper scripts are available for the various switch types:
 
