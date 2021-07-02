@@ -28,21 +28,21 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
     1.  Check ceph status.
 
         ```screen
-        ncn-m001# ceph -s \> ceph.status
+        ncn-m001# ceph -s > ceph.status
         ```
 
     1.  Check Kubernetes pod status for all pods.
 
         ```screen
-        ncn-m001# kubectl get pods -o wide -A \> k8s.pods
+        ncn-m001# kubectl get pods -o wide -A > k8s.pods
         ```
 
         Additional Kubernetes status check examples :
 
         ```screen
-        ncn-m001# kubectl get pods -o wide -A \| egrep  "CrashLoopBackOff" \> k8s.pods.CLBO
-        ncn-m001# kubectl get pods -o wide -A \| egrep  "ContainerCreating" \> k8s.pods.CC
-        ncn-m001# kubectl get pods -o wide -A \| egrep -v "Run\|Completed" \> k8s.pods.errors
+        ncn-m001# kubectl get pods -o wide -A | egrep  "CrashLoopBackOff" > k8s.pods.CLBO
+        ncn-m001# kubectl get pods -o wide -A | egrep  "ContainerCreating" > k8s.pods.CC
+        ncn-m001# kubectl get pods -o wide -A | egrep -v "Run|Completed" > k8s.pods.errors
         ```
 1.  Check for running sessions.
 

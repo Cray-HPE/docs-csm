@@ -142,7 +142,7 @@ Compute nodes can be booted to use a Kubernetes customized image after this proc
         ncn-m001# function get_token () {
         ADMIN_SECRET=$(kubectl get secrets admin-client-auth -ojsonpath='{.data.client-secret}' | base64 -d)
         curl -s -d grant_type=client_credentials -d client_id=admin-client -d client_secret=$ADMIN_SECRET \
-        https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | python -c 'import sys, json; print json.load(sys.stdin)\["access_token"]'
+        https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | python -c 'import sys, json; print json.load(sys.stdin)["access_token"]'
         }
         ```
 

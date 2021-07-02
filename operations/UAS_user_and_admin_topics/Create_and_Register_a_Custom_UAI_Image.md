@@ -59,7 +59,7 @@ The default end-user UAI is not suitable for use with the Cray PE. The generic i
 
     ```screen
     ncn# SESSION\_ID=$\(cray bos v1 sessiontemplate describe $SESSION\_NAME \\
-    --format json \| jq -r '.boot\_sets.compute.path' \| awk -F/ '\{print $4\}'\)
+    --format json | jq -r '.boot\_sets.compute.path' | awk -F/ '\{print $4\}'\)
     ncn# cray artifacts get boot-images $SESSION\_ID/rootfs rootfs.squashfs
     ```
 
@@ -77,7 +77,7 @@ The default end-user UAI is not suitable for use with the Cray PE. The generic i
     ```screen
     ncn# \(cd \`pwd\`/mount; tar --xattrs --xattrs-include='\*' \\
     --exclude="99-slingshot-network.conf" -cf "../$SESSION\_ID.tar" .\) \\
-    \> /dev/null
+    > /dev/null
     ```
 
     This command may take several minutes to complete. This command creates an uncompressed tar archive so that files can be added after the tarball is made. Using an uncompressed tarball also shortens the time required to complete this procedure.
@@ -85,7 +85,7 @@ The default end-user UAI is not suitable for use with the Cray PE. The generic i
 5.  Wait for the previous command to complete. Then verify that the tarball contains the script /usr/bin/uai-ssh.sh from the squashfs.
 
     ```screen
-    ncn# tar tf $SESSION\_ID.tar \| grep '\[.\]/usr/bin/uai-ssh\[.\]sh'
+    ncn# tar tf $SESSION\_ID.tar | grep '\[.\]/usr/bin/uai-ssh\[.\]sh'
     ./usr/bin/uai-ssh.sh
     ```
 

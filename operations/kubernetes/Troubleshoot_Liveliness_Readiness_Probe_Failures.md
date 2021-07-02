@@ -27,7 +27,7 @@ This procedure requires administrative privileges.
 2.  Troubleshoot a client timeout.
 
     ```bash
-    ncn-w001# kubectl get events -A | grep -i unhealthy | grep "Client.Timeout\|DeadlineExceeded"
+    ncn-w001# kubectl get events -A | grep -i unhealthy | grep "Client.Timeout|DeadlineExceeded"
     services    40m         Warning   Unhealthy     pod/cray-bos-69f85bcd89-vdq52      Liveness probe failed: Get http://10.45.0.20:15020/app-health/cray-bos/livez: net/http: request canceled (Client.Timeout exceeded while awaiting headers)
     ```
 
