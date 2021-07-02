@@ -25,7 +25,8 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
        ```
   
     * **Kubernetes Secret**:
-  1. Find the key and write it to a file.
+    
+    1. Find the key and write it to a file.
        
         ```bash
         ncn-m001# kubectl -n services get secrets hpe-signing-key -o jsonpath='{.data.gpg-pubkey}' | base64 -d | tee hpe-signing-key.asc
