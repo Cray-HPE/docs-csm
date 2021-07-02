@@ -1,29 +1,28 @@
-## Rebuild NCNs
+# Rebuild NCNs
 
 Rebuild a master, worker, or storage non-compute node \(NCN\). Use this procedure in the event that a node has a hardware failure, or some other issue with the node has occurred that warrants rebuilding the node.
 
-### Prerequisites
+## Prerequisites
 
 The system is fully installed and has transitioned off of the LiveCD.
 
-### Procedure
+## Procedure
 
-#### 1. Prepare Nodes
+### Prepare Nodes
 
 Only follow the steps in the section for the node type that is being rebuilt:
 
--   [worker node](#step1)
--   [master node](#step2)
--   [storage node](#step3)
+- NCN Worker Node: [click here](#ncn-worker-node)
+- NCN master node: [click here](#ncn-master-node)
+- NCN storage node: [click here](#ncn-storage-node)
 
-<a name="step1"></a>
-##### 1.1. Prepare Node: Worker Node
+#### NCN Worker Node
 
 Prepare a worker node before rebuilding it.
 
 Skip this section if rebuilding a master or storage node. The examples in this section assume `ncn-w002` is being rebuilt. Unless otherwise noted, these commands can be run on any node in the system.
 
-1.  Determine if the worker being rebuilt is running the `cray-cps-cm-pm` pod.
+1. Determine if the worker being rebuilt is running the `cray-cps-cm-pm` pod.
 
     If the `cray-cps-cm-pm` pod is running, there will be an extra step to redeploy this pod after the node is rebuilt.
 
@@ -51,10 +50,10 @@ Skip this section if rebuilding a master or storage node. The examples in this s
     ```
 
     In this case, the `ncn-w001` and `ncn-w002` nodes have the pod.
-    
+
     A `404 Not Found` error is expected if the Content Projection Service \(CPS\) is not installed on the system.
 
-2.  Confirm what the Configuration Framework Service \(CFS\) setting is for the desired state before shutting down the node.
+1. Confirm what the Configuration Framework Service \(CFS\) setting is for the desired state before shutting down the node.
 
     The following command will indicate if a CFS job is currently in progress. Replace the `XNAME` value in the following command with the xname of the node being rebuilt.
 
@@ -71,7 +70,7 @@ Skip this section if rebuilding a master or storage node. The examples in this s
 
     If the state is `pending`, wait for the job finish before rebooting this node. If the state is `failed`, this means the failed CFS job state preceded this worker rebuild, and that can be addressed independent of rebuilding this worker.
 
-3.  Drain the node to clear any pods running on the node.
+1. Drain the node to clear any pods running on the node.
 
     The following command will both cordon and drain the node. If there are messages indicating that the pods cannot be evicted because of a pod distribution budget, note those pod names and manually delete them.
 
@@ -79,20 +78,19 @@ Skip this section if rebuilding a master or storage node. The examples in this s
     ncn# kubectl drain --ignore-daemonsets --delete-local-data ncn-w002
     ```
 
-4.  Remove the node from the cluster after the node is drained. This command should not be run on the node being rebuilt.
+1. Remove the node from the cluster after the node is drained.
 
     ```bash
     ncn-m001# kubectl delete node ncn-w002
     ```
 
-<a name="step2"></a>
-##### 1.2. Prepare Node: Master Node
+### NCN Master Node
 
-Prepare a master node before rebuilding it.
+1. Prepare an NCN master node before rebuilding it.
 
-Skip this section if rebuilding a worker or storage node. The examples in this section assume `ncn-m002` is being rebuilt. The commands should be run on a master node that is remaining in the cluster.
+     Skip this section if rebuilding a worker or storage node. The examples in this section assume `ncn-m002` is being rebuilt. The commands should be run on a master node that is remaining in the cluster.
 
-1.  Determine if the master node being rebuilt is the first master node.
+1. Determine if the master node being rebuilt is the first master node.
 
     The first master node is the node others contact to join the Kubernetes cluster. If this is the node being rebuilt, promote another master node to the initial node before proceeding. Run the following command from any master node:
 
@@ -101,125 +99,111 @@ Skip this section if rebuilding a worker or storage node. The examples in this s
     ncn-m002
     ```
 
-    If the node returned is not the one being rebuilt, proceed to step [2.8](#stop-etcd).
+     If the node returned is not the one being rebuilt, proceed to step [2.8](#stop-etcd).
 
-2.  Reconfigure the Boot Script Service \(BSS\) to point to a new first master node.
+     1. Reconfigure the Boot Script Service \(BSS\) to point to a new first master node.
 
-    Run this step on a master or worker node that is not being rebuilt.
+         Run this step on a master or worker node that is not being rebuilt.
 
-    ```bash
-    ncn# cray bss bootparameters list --name Global --format=json | jq '.[]' > Global.json
-    ```
+         ```bash
+         ncn# cray bss bootparameters list --name Global --format=json | jq '.[]' > Global.json
+         ```
 
-3.  Edit the Global.json file and edit the indicated line.
+     1. Edit the Global.json file and edit the indicated line.
 
-    Change the `first-master-hostname` value to another node that will be promoted to the first master node. In this case, the first node is changing from `ncn-m002` to `ncn-m001`, so the line would be changed to the following:
+         Change the `first-master-hostname` value to another node that will be promoted to the first master node. In this case, the first node is changing from `ncn-m002` to `ncn-m001`, so the line would be changed to the following:
 
-    ```
-    "first-master-hostname": "ncn-m001",
-    ```
+         ```bash
+         "first-master-hostname": "ncn-m001",
+         ```
 
-4.  Get a token to interact with BSS via the REST API, and update BSS with your modified file.
-    ```bash
-    ncn# TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
-                    -d client_id=admin-client \
-                    -d client_secret=`kubectl get secrets admin-client-auth \
-                    -o jsonpath='{.data.client-secret}' | base64 -d` \
-                    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token |
-                    jq -r '.access_token')
-    ```
+     1. Get a token to interact with BSS via the REST API.
 
-5. Do a PUT action for the new JSON file.
-    ```bash
-    ncn# curl -i -s -k -H "Content-Type: application/json" \
+         ```bash
+         ncn# curl -i -s -k -H "Content-Type: application/json" \
                     -H "Authorization: Bearer ${TOKEN}" \
                     "https://api_gw_service.local/apis/bss/boot/v1/bootparameters" \
                     -X PUT -d @./Global.json
-    ```
+         ```
 
-    Ensure a good response, such as `HTTP CODE 200`, is returned in the curl output.
+        Ensure a good response, such as `HTTP CODE 200`, is returned in the curl output.
 
-6. Configure the newly promoted first master node so it is able to have other nodes join the cluster.
+     1. Configure the newly promoted first master node so it is able to have other nodes join the cluster.
 
-    Use `ssh` to log in to the newly promoted master node chosen in the previous steps \(`ncn-m001` in this case\), 
-    copy/paste the following script to a file, and then execute it.
+         Use `ssh` to login to the newly-promoted master node chosen in the previous steps \(`ncn-m001` in this case\),
+         copy/paste the following script to a file, and then execute it.
 
-    > **NOTE**: The output from the script below can be misleading as it is relying on cached cloud-init data. Ignore the output that indicates **FIRST_MASTER_HOSTNAME has been set to ncn-...**.
-
-    ```bash
-    #!/bin/bash
+         ```bash
+         #!/bin/bash
     
-    source /srv/cray/scripts/metal/lib.sh
-    export KUBERNETES_VERSION="v$(cat /etc/cray/kubernetes/version)"
-    echo $(kubeadm init phase upload-certs --upload-certs 2>&1 | tail -1) > /etc/cray/kubernetes/certificate-key
-    export CERTIFICATE_KEY=$(cat /etc/cray/kubernetes/certificate-key)
-    export MAX_PODS_PER_NODE=$(craysys metadata get kubernetes-max-pods-per-node)
-    export PODS_CIDR=$(craysys metadata get kubernetes-pods-cidr)
-    export SERVICES_CIDR=$(craysys metadata get kubernetes-services-cidr)
-    envsubst < /srv/cray/resources/common/kubeadm.yaml > /etc/cray/kubernetes/kubeadm.yaml
-    
-    kubeadm token create --print-join-command > /etc/cray/kubernetes/join-command 2>/dev/null
-    echo "$(cat /etc/cray/kubernetes/join-command) --control-plane --certificate-key $(cat /etc/cray/kubernetes/certificate-key)" > /etc/cray/kubernetes/join-command-control-plane
-    
-    mkdir -p /srv/cray/scripts/kubernetes
-    cat > /srv/cray/scripts/kubernetes/token-certs-refresh.sh <<'EOF'
-    #!/bin/bash
-    
-    if [[ "$1" != "skip-upload-certs" ]]; then
-      kubeadm init phase upload-certs --upload-certs --config /etc/cray/kubernetes/kubeadm.yaml
-    fi
-    kubeadm token create --print-join-command > /etc/cray/kubernetes/join-command 2>/dev/null
-    echo "$(cat /etc/cray/kubernetes/join-command) --control-plane --certificate-key $(cat /etc/cray/kubernetes/certificate-key)" \
-      > /etc/cray/kubernetes/join-command-control-plane
-    
-    EOF
-    chmod +x /srv/cray/scripts/kubernetes/token-certs-refresh.sh
-    /srv/cray/scripts/kubernetes/token-certs-refresh.sh skip-upload-certs
-    echo "0 */1 * * * root /srv/cray/scripts/kubernetes/token-certs-refresh.sh >> /var/log/cray/cron.log 2>&1" > /etc/cron.d/cray-k8s-token-certs-refresh
-    ```
+         source /srv/cray/scripts/metal/lib.sh
+         export KUBERNETES_VERSION="v$(cat /etc/cray/kubernetes/version)"
+         echo $(kubeadm init phase upload-certs --upload-certs 2>&1 | tail -1) > /etc/cray/kubernetes/certificate-key
+         export CERTIFICATE_KEY=$(cat /etc/cray/kubernetes/certificate-key)
+         export MAX_PODS_PER_NODE=$(craysys metadata get kubernetes-max-pods-per-node)
+         export PODS_CIDR=$(craysys metadata get kubernetes-pods-cidr)
+         export SERVICES_CIDR=$(craysys metadata get kubernetes-services-cidr)
+         envsubst < /srv/cray/resources/common/kubeadm.yaml > /etc/cray/kubernetes/kubeadm.yaml
+         
+         kubeadm token create --print-join-command > /etc/cray/kubernetes/join-command 2>/dev/null
+         echo "$(cat /etc/cray/kubernetes/join-command) --control-plane --certificate-key $(cat /etc/cray/kubernetes/certificate-key)" > /etc/cray/kubernetes/join-command-control-plane
+         
+         mkdir -p /srv/cray/scripts/kubernetes
+         cat > /srv/cray/scripts/kubernetes/token-certs-refresh.sh <<'EOF'
+         #!/bin/bash
+         
+         if [[ "$1" != "skip-upload-certs" ]]; then
+           kubeadm init phase upload-certs --upload-certs --config /etc/cray/kubernetes/kubeadm.yaml
+         fi
+         kubeadm token create --print-join-command > /etc/cray/kubernetes/join-command 2>/dev/null
+         echo "$(cat /etc/cray/kubernetes/join-command) --control-plane --certificate-key $(cat /etc/cray/kubernetes/certificate-key)" \
+           > /etc/cray/kubernetes/join-command-control-plane
+         
+         EOF
+         chmod +x /srv/cray/scripts/kubernetes/token-certs-refresh.sh
+         /srv/cray/scripts/kubernetes/token-certs-refresh.sh skip-upload-certs
+         echo "0 */1 * * * root /srv/cray/scripts/kubernetes/token-certs-refresh.sh >> /var/log/cray/cron.log 2>&1" > /etc/cron.d/cray-k8s-token-certs-refresh
+         ```
 
-7. Find the member ID and IP address of the master node being removed.
+     1. Find the member ID of the master node being removed.
+ 
+         ```bash
+         ncn# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+             --cert=/etc/kubernetes/pki/etcd/ca.crt  \
+             --key=/etc/kubernetes/pki/etcd/ca.key --endpoints=localhost:2379 member list
+         ```
 
-    ```bash
-    ncn# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt \
-            --cert=/etc/kubernetes/pki/etcd/ca.crt  \
-            --key=/etc/kubernetes/pki/etcd/ca.key --endpoints=localhost:2379 member list
-    ```
+     1. Find the line with the name of the master being removed. The member ID is the alphanumeric string in the first field o that      line. The IP address is in the URL in the fourth field in the line. Note the member ID and IP address for us in subsequent      steps.
+ 
+     1. Remove the master node from the etcd cluster backing Kubernetes.
+ 
+        Replace the MEMBER\_ID value with the value returned in the previous sub-step.
+ 
+         ```bash
+         ncn# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+             --cert=/etc/kubernetes/pki/etcd/ca.crt --key=/etc/kubernetes/pki/etcd/ca.key \
+             --endpoints=localhost:2379 member remove <MEMBER_ID>
+         ```
+ 
+     1. Stop the etcd service on the master node being removed.
+ 
+         ```bash
+         ncn-m002# systemctl stop etcd.service
+         ```
+ 
+     1. Remove the node from the Kubernetes cluster.
+ 
+         ```bash
+         ncn# kubectl delete node ncn-m002
+         ```
 
-    Find the line with the name of the master being removed. The member ID is the alphanumeric string in the first field of that line. The IP address is in the URL in the fourth field in the line. Note the member ID and IP address for use in subsequent steps.
+#### NCN Storage Node
 
-8. Remove the master node from the etcd cluster backing Kubernetes.
+1. Prepare an NCN storage node before rebuilding it.
 
-    Replace the MEMBER\_ID value with the value returned in the previous sub-step.
+   Skip this section if rebuilding a master or worker node. The examples in this section assume `ncn-s003` is being rebuilt.
 
-    ```bash
-    ncn# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt \
-            --cert=/etc/kubernetes/pki/etcd/ca.crt --key=/etc/kubernetes/pki/etcd/ca.key \
-            --endpoints=localhost:2379 member remove <MEMBER_ID>
-    ```
-
-<a name="stop-etcd"></a>
-
-9. Stop the etcd service on the master node being removed. **This command is executed on the master node being removed.** \(ncn-m002 in this example\)
-
-    ```bash
-    ncn-m002# systemctl stop etcd.service
-    ```
-
-10. Remove the node from the Kubernetes cluster.
-
-    ```bash
-    ncn# kubectl delete node ncn-m002
-    ```
-
-<a name="step3"></a>
-##### 1.3. Prepare Node: Storage Node
-
-Prepare a storage node before rebuilding it.
-
-Skip this section if rebuilding a master or worker node. The examples in this section assume `ncn-s003` is being rebuilt.
-
-1.  Check the status of Ceph.
+1. Check the status of Ceph.
 
     Check the OSD status, weight, and location:
 
@@ -277,7 +261,7 @@ Skip this section if rebuilding a master or worker node. The examples in this se
                  17  active+clean
     ```
 
-2.  If the node is a ceph-mon node, remove it from the mon map.
+ 1. If the node is a ceph-mon node, remove it from the mon map.
 
     Skip this step if the node is not a ceph-mon node.
 
@@ -337,7 +321,7 @@ Skip this section if rebuilding a master or worker node. The examples in this se
                  60  active+undersized+degraded
     ```
 
-3.  Remove Ceph OSDs.
+ 1. Remove Ceph OSDs.
 
     The `ceph osd tree` capture indicated that there are down OSDs on `ncn-s003`.
 
@@ -382,7 +366,7 @@ This section applies to all node types.
 
    Note the xname for use in subsequent steps.
 
-2. Generate the Boot Script Service \(BSS\) boot parameters JSON file for modification and review.
+1. Generate the Boot Script Service \(BSS\) boot parameters JSON file for modification and review.
 
    Replace the XNAME value with the value retrieved in the previous step.
 
@@ -390,36 +374,36 @@ This section applies to all node types.
    ncn# cray bss bootparameters list --name XNAME --format=json > XNAME.json
    ```
 
-<a name="step6"></a>
+    <a name="step6"></a>
 
-3. Inspect and modify the JSON file.
+ 1. Inspect and modify the JSON file.
    1. Remove the outer array brackets.
 
       Do this by removing the first and last line of the XNAME.json file, indicated with the '\[' and '\]' brackets.
 
-   2. Remove the leading whitespace on the new first and last lines.
-   
+   1. Remove the leading whitespace on the new first and last lines.
+
       On the new first and last lines of the file, removing all whitespace characters at the beginning of those lines. The first
       line should now just be a '\{' character and the last line should now just be a '\}' character.
 
-   3. Ensure the current boot parameters are appropriate for PXE booting.
+   1. Ensure the current boot parameters are appropriate for PXE booting.
 
       Inspect the `"params": "kernel..."` line. If the line begins with `BOOT_IMAGE` and/or does not contain `metal.server`, the following steps are needed:
 
-      1.  Remove everything before `kernel` on the `"params": "kernel"` line.
-      2.  Re-run steps [4-5](#step4) for another node/xname. Look for an example that does not contain `BOOT_IMAGE`.
+      1. Remove everything before `kernel` on the `"params": "kernel"` line.
+      1. Re-run steps [4-5](#step4) for another node/xname. Look for an example that does not contain `BOOT_IMAGE`.
 
           Once an example is found, copy a portion of the `"params"` line for everything including and after `'biosdevname'`, and use that in the XNAME.json file.
 
-      3.  After copying the content after `'biosdevname'`, change the `"hostname=<hostname>"` to the correct host.
+      1. After copying the content after `'biosdevname'`, change the `"hostname=<hostname>"` to the correct host.
 
-4. Set the kernel parameters to wipe the disk.
+1. Set the kernel parameters to wipe the disk.
 
    Locate the portion of the line that contains `"metal.no-wipe"` and ensure it is set to zero `"metal.no-wipe=0"`.
 
-5. Re-apply the boot parameters list for the node using the XNAME.json file.
+1. Re-apply the boot parameters list for the node using the XNAME.json file.
 
-   1.  Get a token to interact with BSS using the REST API.
+   1. Get a token to interact with BSS using the REST API.
 
        ```bash
        ncn# TOKEN=$(curl -s -k -S -d grant_type=client_credentials \
@@ -429,7 +413,7 @@ This section applies to all node types.
        | jq -r '.access_token')
        ```
 
-   2.  Do a PUT action for the new JSON file.
+   1. Do a PUT action for the new JSON file.
 
        Replace the XNAME value before running the following command.
 
@@ -440,9 +424,9 @@ This section applies to all node types.
 
        Ensure a good response \(`HTTP CODE 200`\) is returned in the output.
 
-6. Verify the `bss bootparameters list` command returns the expected information.
+1. Verify the `bss bootparameters list` command returns the expected information.
 
-   1.  Export the list from BSS to a file with a different name.
+   1. Export the list from BSS to a file with a different name.
 
        Replace the XNAME value before running the following command.
 
@@ -450,15 +434,16 @@ This section applies to all node types.
        ncn# cray bss bootparameters list --name XNAME --format=json > XNAME.check.json
        ```
 
-   2.  Compare the new JSON file with what was PUT to BSS.
+   1. Compare the new JSON file with what was PUT to BSS.
 
        Replace the XNAME value before running the following command.
 
        ```bash
        ncn# diff XNAME.json XNAME.check.json
        ```
-       
+
        The only difference between the files should be the square brackets that were removed from the XNAME.json file, and the whitespace changes on the first and last lines with curly braces. Expected output will look similar to:
+
        ```
        1,2c1
        < [
@@ -472,17 +457,36 @@ This section applies to all node types.
        > }
        ```
 
-7. Watch the console for the node being rebuilt using the instructions in the following document: [Log in to a Node Using ConMan](../conman/Log_in_to_a_Node_Using_ConMan.md)
+1. Watch the console for the node being rebuilt using the instructions in the following document: [Log in to a Node Using ConMan](../conman/Log_in_to_a_Node_Using_ConMan.md)
 
+   1. Get the ConMan pod name.
+
+       ```bash
+       ncn# kubectl get po -n services| grep conman
+       cray-conman-76df958b6-24jh9     3/3     Running      2          139m
+       ```
+
+   1. Exec into the pod returned in the previous sub-step.
+
+       ```bash
+       ncn# kubectl exec -it -n services cray-conman-76df958b6-24jh9 -- /bin/sh
+       ```
+
+   1. Connect to the console.
+
+       ```bash
+       sh-4.4# conman -j XNAME
+       ```
 
 #### 3. Rebuild Node
 
 Only follow the steps in the section for the node type that is being rebuilt:
 
--   [master or worker node](#rebuild_master_worker)
--   [storage node](#rebuild_storage)
+- [master or worker node](#rebuild_master_worker)
+- [storage node](#rebuild_storage)
 
 <a name="rebuild_master_worker"></a>
+
 ##### 3.1. Rebuild Node: Master or Worker
 
 This section applies to master and worker nodes. Skip this section if rebuilding a storage node. All commands in this section must be run on any master or worker node that is already in the cluster and is not being rebuilt \(unless otherwise indicated\).
@@ -491,41 +495,41 @@ This section applies to master and worker nodes. Skip this section if rebuilding
 
     This can be done from the ConMan console window.
 
-    **Warning:** This is the point of no return. Once the disks are wiped,the node must be rebuilt.	
+    **Warning:** This is the point of no return. Once the disks are wiped,the node must be rebuilt. 
 
     ```
     ncn# wipefs --all --force /dev/sd* /dev/disk/by-label/*
     ```
 
-2. Set the PXE boot option and power cycle the node.
+1. Set the PXE boot option and power cycle the node.
 
-    1.  Set the BMC variable to the hostname of the BMC of the node being rebuilt.
+    1. Set the BMC variable to the hostname of the BMC of the node being rebuilt.
 
         ```bash
         ncn# export BMC=<NCN name>-mgmt
         ```
-        
+
         For example, if you are rebuilding ncn-w003, this would be `ncn-w003-mgmt`.
 
     1. Export the root password of the BMC.
-    
+
         ```bash
         ncn# export IPMI_PASSWORD=changeme
         ```
 
-    2.  Set the PXE/efiboot option.
+    1. Set the PXE/efiboot option.
 
         ```bash
         ncn# ipmitool -I lanplus -U root -E -H $BMC chassis bootdev pxe options=efiboot
         ```
 
-    3.  Power off the server.
+    1. Power off the server.
 
         ```bash
         ncn# ipmitool -I lanplus -U root -E -H $BMC chassis power off
         ```
 
-    4.  Verify that the server is off.
+    1. Verify that the server is off.
 
         Wait a couple seconds after powering off the server before running the following command.
 
@@ -533,30 +537,30 @@ This section applies to master and worker nodes. Skip this section if rebuilding
         ncn# ipmitool -I lanplus -U root -E -H $BMC chassis power status
         ```
 
-    5.  Power on the server.
+    1. Power on the server.
 
         ```bash
         ncn# ipmitool -I lanplus -U root -E -H $BMC chassis power on
         ```
 
-3. Observe the boot.
+1. Observe the boot.
 
     After a bit, the server should begin to boot. This can be viewed from the ConMan console window. Eventually, there will be a `NBP file...` message in the console output. When this message is displayed, exit the console \(**&** then **.**\), and then use `ssh` to log in to the node to complete the remaining validation steps.
 
     **Troubleshooting:** If the `NBP file...` output never appears, or something else goes wrong, go back to the steps for modifying XNAME.json file \(see step [6](#step6)\) and make sure these instructions were completed correctly.
 
-4. Confirm vlan004 is up with the correct IP address on the rebuilt ncn.
+1. Confirm vlan004 is up with the correct IP address on the rebuilt ncn.
 
     The following examples assume the NCN/hostname is `ncn-w005`.
 
-    1.  Find the desired IP address.
+    1. Find the desired IP address.
 
         ```bash
         ncn# dig +short ncn-w005.hmn
         10.254.1.16
         ```
 
-    2.  Confirm the output from the dig command matches the interface.
+    1. Confirm the output from the dig command matches the interface.
 
         If the IP addresses match, proceed to the next step. If they do not match, continue with the following sub-steps.
 
@@ -570,7 +574,7 @@ This section applies to master and worker nodes. Skip this section if rebuilding
                valid_lft forever preferred_lft forever
         ```
 
-    3.  Change the IP for vlan004 if necessary.
+    1. Change the IP for vlan004 if necessary.
 
         ```bash
         ncn# vim /etc/sysconfig/network/ifcfg-vlan004
@@ -582,30 +586,30 @@ This section applies to master and worker nodes. Skip this section if rebuilding
         IPADDR='10.254.1.16/17'
         ```
 
-    4.  Restart the vlan004 network interface.
+    1. Restart the vlan004 network interface.
 
         ```bash
         ncn# wicked ifreload vlan004
         ```
 
-    5.  Confirm the output from the dig command matches the interface.
+    1. Confirm the output from the dig command matches the interface.
 
         ```bash
         ncn# ip addr show vlan004
         ```
 
-5. Confirm that vlan007 is up with the correct IP address on the rebuilt ncn.
+1. Confirm that vlan007 is up with the correct IP address on the rebuilt ncn.
 
     The following examples assume the NCN/hostname is `ncn-w005`.
 
-    1.  Find the desired IP address.
+    1. Find the desired IP address.
 
         ```bash
         ncn# dig +short ncn-w005.can
         10.103.8.11
         ```
 
-    2.  Confirm the output from the dig command matches the interface.
+    1. Confirm the output from the dig command matches the interface.
 
         If the IP addresses match, proceed to the next step. If they do not match, continue with the following sub-steps.
 
@@ -619,7 +623,7 @@ This section applies to master and worker nodes. Skip this section if rebuilding
                valid_lft forever preferred_lft forever
         ```
 
-    3.  Change the IP for vlan007 if necessary.
+    1. Change the IP for vlan007 if necessary.
 
         ```bash
         ncn# vim /etc/sysconfig/network/ifcfg-vlan007
@@ -631,19 +635,19 @@ This section applies to master and worker nodes. Skip this section if rebuilding
         IPADDR='10.103.8.11/24'
         ```
 
-    4.  Restart the vlan007 network interface.
+    1. Restart the vlan007 network interface.
 
         ```bash
         ncn# wicked ifreload vlan007
         ```
 
-    5.  Confirm the output from the dig command matches the interface.
+    1. Confirm the output from the dig command matches the interface.
 
         ```bash
         ncn# ip addr show vlan007
         ```
 
-6. Verify the new node is in the cluster.
+1. Verify the new node is in the cluster.
 
     Run the following command several times to watch for the newly rebuilt node to join the cluster. This should occur within 10 to 20 minutes.
 
@@ -658,11 +662,11 @@ This section applies to master and worker nodes. Skip this section if rebuilding
     ncn-w003   Ready    <none>   112m   v1.18.6
     ```
 
-7. Set the wipe flag back so it will not wipe the disk when the node is rebooted.
+1. Set the wipe flag back so it will not wipe the disk when the node is rebooted.
 
-    1.  Edit the XNAME.json file and set the `metal.no-wipe=1` value.
+    1. Edit the XNAME.json file and set the `metal.no-wipe=1` value.
 
-    2.  Do a PUT action for the edited JSON file.
+    1. Do a PUT action for the edited JSON file.
 
         ```bash
         ncn# curl -i -s -k -H "Content-Type: application/json" \
@@ -673,8 +677,7 @@ This section applies to master and worker nodes. Skip this section if rebuilding
 
     The output from the ncnHealthChecks.sh script \(run later in the "Validation" steps\) can be used to verify what `metal.no-wipe` value has been set on every NCN.
 
-<a name="rebuild_storage"></a>
-##### 3.2. Rebuild Node: Storage
+1. Ensure there is proper routing set up for liquid-cooled hardware.
 
 This section applies to storage nodes. Skip this section if rebuilding a master or worker node. All commands in this section must be run on any storage node that is already in the cluster and is not being rebuilt \(unless otherwise indicated\).
 
@@ -688,9 +691,9 @@ This section applies to storage nodes. Skip this section if rebuilding a master 
 
     -   If rebuilding any other storage node, log in to `ncn-s001` and proceed to the next step.
 
-2. Update the Ansible inventory.
+1. Update the Ansible inventory.
 
-    1.  Update the number of the last storage node.
+    1. Update the number of the last storage node.
 
         There will be no output returned from the following commands. This step changes LASTNODE into the number of the last storage node. In this example, LASTNODE is changed to `ncn-s003`.
 
@@ -699,7 +702,7 @@ This section applies to storage nodes. Skip this section if rebuilding a master 
         ncn-s002# fix_inventory
         ```
 
-    2.  Verify the Ansible inventory was changed.
+    1. Verify the Ansible inventory was changed.
 
         Verify that LASTNODE no longer exists in the inventory file \(`/etc/ansible/hosts`\).
 
@@ -719,7 +722,7 @@ This section applies to storage nodes. Skip this section if rebuilding a master 
         ncn-s[001:003].nmn
         ```
 
-3. Set the environment variable for the rados gateway vip.
+1. Set the environment variable for the rados gateway vip.
 
     ```bash
     ncn-s002# cd /etc/ansible/group_vars
@@ -728,7 +731,7 @@ This section applies to storage nodes. Skip this section if rebuilding a master 
     10.252.1.3
     ```
 
-4. Run the ceph-ansible playbook to reinstall the node and bring it back into the cluster.
+1. Run the ceph-ansible playbook to reinstall the node and bring it back into the cluster.
 
     The following example shows it running for `ncn-s001`, but where Ansible is running from is dependent on which storage node needs to be rebuilt.
 
@@ -737,13 +740,13 @@ This section applies to storage nodes. Skip this section if rebuilding a master 
     ncn-s001# ansible-playbook /etc/ansible/ceph-ansible/site.yml
     ```
 
-5. Open another SSH session to a storage node that is not currently being rebuilt, and then monitor the build.	
+1. Open another SSH session to a storage node that is not currently being rebuilt, and then monitor the build. 
 
     ```bash
     ncn-s002# watch ceph -s
     ```
 
-6. Run the `radosgw-sts-setup.yml` Ansible play on `ncn-s001`.
+1. Run the radosgw-sts-setup.yml Ansible play on `ncn-s001`.
 
     Ensure Ceph is healthy and the ceph-ansible playbook has finished before running the following Ansible play.
 
@@ -759,10 +762,10 @@ This section applies to storage nodes. Skip this section if rebuilding a master 
     rgw_sts_key = <REDACTED_KEY>
     ```
 
-7. Set the wipe flag back so it will not wipe the disk when the node is rebooted.
+1. Set the wipe flag back so it will not wipe the disk when the node is rebooted.
     1. Edit the XNAME.json file and set the `metal.no-wipe=1` value.
 
-    2. Do a PUT action for the edited JSON file.
+    1. Do a PUT action for the edited JSON file.
 
         ```bash
         ncn# curl -i -s -k -H "Content-Type: application/json" \
@@ -777,18 +780,19 @@ This section applies to storage nodes. Skip this section if rebuilding a master 
 
 Only follow the steps in the section for the node type that was rebuilt:
 
--   [worker node](#step25)
--   [master node](#step26)
--   [storage node](#step27)
+- [worker node](#step25)
+- [master node](#step26)
+- [storage node](#step27)
 
 <a name="step25"></a>
+
 ##### 4.1. Validation: Worker Node
 
-Validate the worker node rebuilt successfully.
+ 1. Validate the worker node rebuilt successfully.
 
-Skip this section if a master or storage node was rebuilt. The examples in this step assume `ncn-w002` was rebuilt.
+    Skip this section if a master or storage node was rebuilt. The examples in this step assume `ncn-w002` was rebuilt.
 
-1.  Verify the new node is in the cluster.
+ 1. Verify the new node is in the cluster.
 
     Run the following command from any master or worker node that is already in the cluster. It is helpful to run this command several times to watch for the newly rebuilt node to join the cluster. This should occur within 10 to 20 minutes.
 
@@ -803,7 +807,7 @@ Skip this section if a master or storage node was rebuilt. The examples in this 
     ncn-w003   Ready    <none>   112m   v1.18.6
     ```
 
-2.  Confirm /var/lib/containerd is on overlay.
+ 1. Confirm /var/lib/containerd is on overlay.
 
     ```bash
     ncn-m001# df -h /var/lib/containerd
@@ -813,17 +817,17 @@ Skip this section if a master or storage node was rebuilt. The examples in this 
 
     After several minutes of the node joining the cluster, pods should be in a `Running` state for the worker node.
 
-3.  Confirm the pods are beginning to get scheduled and reach a Running state on the worker node.
+ 1. Confirm the pods are beginning to get scheduled and reach a Running state on the worker node.
 
     ```bash
     ncn-m001# kubectl get po -A -o wide | grep ncn-w002
     ```
 
-4.  Confirm BGP is healthy.
+ 1. Confirm BGP is healthy.
 
     Follow the steps in the [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md) to verify and fix BGP if needed.
 
-5.  Redeploy the `cray-cps-cm-pm` pod.
+ 1. Redeploy the cray-cps-cm-pm pod.
 
     This step is only required if the `cray-cps-cm-pm` pod was running on the node before it was rebuilt.
 
@@ -831,7 +835,7 @@ Skip this section if a master or storage node was rebuilt. The examples in this 
     ncn-m001# cray cps deployment update --nodes "ncn-w001,ncn-w002"
     ```
 
-6.  Collect data about the system management platform health \(can be run from a master or worker node\).
+ 1. Collect data about the system management platform health \(can be run from a master or worker NCN\).
 
     ```bash
     ncn-m001# sh /opt/cray/platform-utils/ncnHealthChecks.sh
@@ -839,13 +843,14 @@ Skip this section if a master or storage node was rebuilt. The examples in this 
     ```
 
 <a name="step26"></a>
+
 ##### 4.2. Validation: Master Node
 
-Validate the master node rebuilt successfully.
+ 1. Validate the master node rebuilt successfully.
 
-Skip this section if a worker or storage node was rebuilt. The examples in this step assume `ncn-m001` was rebuilt.
+    Skip this section if a worker or storage node was rebuilt. The examples in this step assume `ncn-m001` was rebuilt.
 
-1.  Add the newly rebuilt node to the etcd cluster.
+ 1. Add the newly-rebuilt node to the etcd cluster.
 
     Manually add the node to the cluster from a healthy/existing master node. The IP and hostname of the rebuilt node is needed for the following command. Replace the NCN-M\_HOSTNAME and IP\_ADDRESS address values. Use the IP address you noted in an earlier step from the `etcdctl` command.
 
@@ -864,7 +869,7 @@ Skip this section if a worker or storage node was rebuilt. The examples in this 
             systemctl start etcd.service; /srv/cray/scripts/common/kubernetes-cloudinit.sh
     ```
 
-2.  Verify the new node is in the cluster.
+ 1. Verify the new node is in the cluster.
 
     Run the following command from any master or worker node that is already in the cluster. It is helpful to run this command several times to watch for the newly rebuilt node to join the cluster. This should occur within 10 to 20 minutes.
 
@@ -879,100 +884,98 @@ Skip this section if a worker or storage node was rebuilt. The examples in this 
     ncn-w003   Ready    <none>   112m   v1.18.6
     ```
 
-3.  On the rebuilt master node confirm the `sdc` disk has the correct lvm.
+     1. Confirm the `sdc` disk has the correct lvm.
 
-    ```bash
-    ncn-m001# lsblk | grep -A2 ^sdc
-      sdc                   8:32   0 447.1G  0 disk
-      └─ETCDLVM           254:0    0 447.1G  0 crypt
-        └─etcdvg0-ETCDK8S 254:1    0    32G  0 lvm   /run/lib-etcd
-    ```
+         ```bash
+         ncn-m001# lsblk | grep -A2 ^sdc
+         sdc                   8:32   0 447.1G  0 disk
+          └─ETCDLVM           254:0    0 447.1G  0 crypt
+            └─etcdvg0-ETCDK8S 254:1    0    32G  0 lvm   /run/lib-etcd
+         ```
 
-4.  Confirm etcd is running and shows the node as a member once again.
+ 1. Confirm etcd is running and shows the node as a member once again.
 
-    The newly built master node should be in the returned list.
+     The newly built master node should be in the returned list.
 
-    ```bash
-    ncn-m001# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/ca.crt \
-                --key=/etc/kubernetes/pki/etcd/ca.key --endpoints=localhost:2379 member list
-    ```
+     ```bash
+     ncn-m001# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/ca.crt \
+                 --key=/etc/kubernetes/pki/etcd/ca.key --endpoints=localhost:2379 member list
+     ```
 
-5.  Collect data about the system management platform health \(can be run from a master or worker node\).
+     1. Collect data about the system management platform health \(can be run from a master or worker NCN\).
 
-    ```bash
-    ncn-m001# sh /opt/cray/platform-utils/ncnHealthChecks.sh
-    ncn-m001# sh /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
-    ```
+         ```bash
+         ncn-m001# sh /opt/cray/platform-utils/ncnHealthChecks.sh
+         ncn-m001# sh /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
+         ```
 
-<a name="step27"></a>
-##### 4.3. Validation: Storage Node
+ 1. Validate the storage node rebuilt successfully.
 
-Validate the storage node rebuilt successfully.
+     Validate the storage node rebuilt successfully.
 
-Skip this section if a master or worker node was rebuilt.
+     Skip this section if a master or worker node was rebuilt.
 
-1.  Verify there are 3 mons, 3 mds, 3 mgr processes, and rgw.s
+ 1. Verify there are 3 mons, 3 mds, 3 mgr processes, and rgw.s
 
-    ```bash
-    ncn-m001# ceph -s
-      cluster:
-        id:     22d01fcd-a75b-4bfc-b286-2ed8645be2b5
-        health: HEALTH_OK
+     ```bash
+     ncn-m001# ceph -s
+       cluster:
+         id:     22d01fcd-a75b-4bfc-b286-2ed8645be2b5
+         health: HEALTH_OK
      
-      services:
-        mon: 3 daemons, quorum ncn-s001,ncn-s002,ncn-s003 (age 4m)
-        mgr: ncn-s001(active, since 19h), standbys: ncn-s002, ncn-s003
-        mds: cephfs:1 {0=ncn-s001=up:active} 2 up:standby
-        osd: 12 osds: 12 up (since 2m), 12 in (since 2m)
-        rgw: 3 daemons active (ncn-s001.rgw0, ncn-s002.rgw0, ncn-s003.rgw0)
+       services:
+         mon: 3 daemons, quorum ncn-s001,ncn-s002,ncn-s003 (age 4m)
+         mgr: ncn-s001(active, since 19h), standbys: ncn-s002, ncn-s003
+         mds: cephfs:1 {0=ncn-s001=up:active} 2 up:standby
+         osd: 12 osds: 12 up (since 2m), 12 in (since 2m)
+         rgw: 3 daemons active (ncn-s001.rgw0, ncn-s002.rgw0, ncn-s003.rgw0)
      
-      task status:
-        scrub status:
-            mds.ncn-s001: idle
+       task status:
+         scrub status:
+             mds.ncn-s001: idle
      
-      data:
-        pools:   10 pools, 480 pgs
-        objects: 926 objects, 31 KiB
-        usage:   12 GiB used, 21 TiB / 21 TiB avail
-        pgs:     480 active+clean
-    ```
+       data:
+         pools:   10 pools, 480 pgs
+         objects: 926 objects, 31 KiB
+         usage:   12 GiB used, 21 TiB / 21 TiB avail
+         pgs:     480 active+clean
+     ```
 
-2.  Verify the OSDs are back in the cluster.
+ 1. Verify the OSDs are back in the cluster.
 
-    ```bash
-    ncn-m001# ceph osd tree
-    ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
-    -1       20.95917 root default
-    -3        6.98639     host ncn-s001
-     2   ssd  1.74660         osd.2         up  1.00000 1.00000
-     5   ssd  1.74660         osd.5         up  1.00000 1.00000
-     8   ssd  1.74660         osd.8         up  1.00000 1.00000
-    11   ssd  1.74660         osd.11        up  1.00000 1.00000
-    -7        6.98639     host ncn-s002
-     0   ssd  1.74660         osd.0         up  1.00000 1.00000
-     4   ssd  1.74660         osd.4         up  1.00000 1.00000
-     7   ssd  1.74660         osd.7         up  1.00000 1.00000
-    10   ssd  1.74660         osd.10        up  1.00000 1.00000
-    -5        6.98639     host ncn-s003
-     1   ssd  1.74660         osd.1         up  1.00000 1.00000
-     3   ssd  1.74660         osd.3         up  1.00000 1.00000
-     6   ssd  1.74660         osd.6         up  1.00000 1.00000
-     9   ssd  1.74660         osd.9         up  1.00000 1.00000
-    ```
+     ```bash
+     ncn-m001# ceph osd tree
+     ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
+     -1       20.95917 root default
+     -3        6.98639     host ncn-s001
+      2   ssd  1.74660         osd.2         up  1.00000 1.00000
+      5   ssd  1.74660         osd.5         up  1.00000 1.00000
+      8   ssd  1.74660         osd.8         up  1.00000 1.00000
+     11   ssd  1.74660         osd.11        up  1.00000 1.00000
+     -7        6.98639     host ncn-s002
+      0   ssd  1.74660         osd.0         up  1.00000 1.00000
+      4   ssd  1.74660         osd.4         up  1.00000 1.00000
+      7   ssd  1.74660         osd.7         up  1.00000 1.00000
+     10   ssd  1.74660         osd.10        up  1.00000 1.00000
+     -5        6.98639     host ncn-s003
+      1   ssd  1.74660         osd.1         up  1.00000 1.00000
+      3   ssd  1.74660         osd.3         up  1.00000 1.00000
+      6   ssd  1.74660         osd.6         up  1.00000 1.00000
+      9   ssd  1.74660         osd.9         up  1.00000 1.00000
+     ```
 
-3.  Verify the radosgw and haproxy are correct.
+ 1. Verify the radosgw and haproxy are correct.
 
-    There will be an output \(without an error\) returned if radosgw and haproxy are correct.
+     There will be an output \(without an error\) returned if radosgw and haproxy are correct.
+ 
+     ```bash
+     ncn# curl -k https://rgw-vip.nmn
+     <?xml version="1.0" encoding="UTF-8"?><ListAllMyBucketsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/ "><Owner><ID>anonymous</ID><DisplayName></DisplayName></Owner><Buckets></Buckets></ListAllMyBucketsResult
+     ```
 
-    ```bash
-    ncn# curl -k https://rgw-vip.nmn
-    <?xml version="1.0" encoding="UTF-8"?><ListAllMyBucketsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Owner><ID>anonymous</ID><DisplayName></DisplayName></Owner><Buckets></Buckets></ListAllMyBucketsResult
-    ```
+ 1. Collect data about the system management platform health \(can be run from a master or worker NCN\).
 
-4.  Collect data about the system management platform health \(can be run from a master or worker node\).
-
-    ```bash
-    ncn-m001# sh /opt/cray/platform-utils/ncnHealthChecks.sh
-    ncn-m001# sh /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
-    ```
-
+     ```bash
+     ncn-m001# sh /opt/cray/platform-utils/ncnHealthChecks.sh
+     ncn-m001# sh /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
+     ```
