@@ -7,7 +7,7 @@ Users can expect that staging the image and generating an inventory will be a lo
 In order to use the `image` target definition, an image must be registered with the IMS. For example, if the image ID is 5d64c8b2-4f0e-4b2e-b334-51daba16b7fb, use jq along with the CLI `--format json` output option to determine if the image ID is known to IMS:
 
 ```bash
-ncn# cray ims images list --format json | \
+ncn# cray ims images list --format json | 
 jq -r 'any(.[]; .id == "5d64c8b2-4f0e-4b2e-b334-51daba16b7fb")'
 true
 ```

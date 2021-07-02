@@ -16,7 +16,7 @@ This procedure explains both how to identify and modify the list of current UAI 
     Kubernetes master NCNs cannot host UAIs.
 
     ```screen
-    ncn-m001-pit# kubectl get no \| grep -v master
+    ncn-m001-pit# kubectl get no | grep -v master
     NAME       STATUS   ROLES    AGE   VERSION
     ncn-w001   Ready    <none>   10d   v1.18.6
     ncn-w002   Ready    <none>   25d   v1.18.6

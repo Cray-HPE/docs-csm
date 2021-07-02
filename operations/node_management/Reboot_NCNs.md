@@ -83,7 +83,7 @@ The `kubectl` command is installed.
         The bottom of the output returned after running the /opt/cray/platform-utils/ncnHealthChecks.sh script will show a list of pods that may be in a bad state. The following command can also be used to look for any pods that are not in a Running or Completed state:
 
         ```bash
-        ncn-m001# kubectl get pods -o wide -A | grep -Ev 'Running\|Completed'
+        ncn-m001# kubectl get pods -o wide -A | grep -Ev 'Running|Completed'
         ```
 
         It is important to pay attention to that list, but it is equally important to note what pods are in that list before and after NCN reboots to determine if the reboot caused any new issues.

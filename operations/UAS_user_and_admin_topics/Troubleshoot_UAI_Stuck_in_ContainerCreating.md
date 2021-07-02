@@ -26,7 +26,7 @@ Instructions for admin to resovle issue when a UAI is stuck in the ContainerCrea
 2.  List the pods to find the name of the pod in `ContainerCreating`.
 
     ```screen
-    ncn-w001# kubectl get pods -n user \| grep uai
+    ncn-w001# kubectl get pods -n user | grep uai
     uai-user-04e0e58c-674d9d5b97-kgtj6                        1/1     Running             0          11m
     uai-user-91654d73-6f67c84676-zssq8                        1/1     Running             0          17m
     **uai-user-f62bef19-548dcd856-lg26j                         0/1     ContainerCreating   0          4m8s**

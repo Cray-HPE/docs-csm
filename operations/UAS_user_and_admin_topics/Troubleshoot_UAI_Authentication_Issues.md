@@ -45,11 +45,11 @@ Error: Bad Request: Token not valid for UAS. Attributes missing: ['name', 'uidNu
 To resolve this issue, make sure the cray command is configured to use one of the following URLs for an API gateway \(excluding the /keycloak/realms/shastaendpoint\).
 
 ```screen
- # kubectl exec -c api-gateway api-gateway-544d5c676f-682m2 -- curl -s http://localhost:8001/consumers/remote-admin/jwt \| python -mjson.tool \| grep "\\"key\\""
+ # kubectl exec -c api-gateway api-gateway-544d5c676f-682m2 -- curl -s http://localhost:8001/consumers/remote-admin/jwt | python -mjson.tool | grep "\\"key\\""
             "key": "https://api-gateway.default.svc.cluster.local/keycloak/realms/shasta",
             "key": "https://api-gw-service-nmn.local/keycloak/realms/shasta",
             "key": "https://mgmt-plane-cmn.local/keycloak/realms/shasta",
- # cray config describe \| grep hostname
+ # cray config describe | grep hostname
     "hostname": "https://172.30.51.127:30443" <---- 172.30.51.127:30443 won't work
  
  
@@ -66,7 +66,7 @@ Initialization complete.
 ## Invalid Credentials
 
 ```screen
- # cray auth login --username <user\> --password <wrongpassword\>
+ # cray auth login --username <user> --password <wrongpassword>
 Usage: cray auth login [OPTIONS]
 Try "cray auth login --help" for help.
  
@@ -80,12 +80,12 @@ To resolve this issue:
 
 ## Invalid Username
 
-## cray uas describe <user\> Does Not Work
+## cray uas describe <user> Does Not Work
 
-The cray uas describe <user\> is not longer a valid command.
+The cray uas describe <user> is not longer a valid command.
 
 ```screen
- # cray uas describe <user\>
+ # cray uas describe <user>
 Usage: cray uas [OPTIONS] COMMAND [ARGS]...
 Try "cray uas --help" for help.
  
