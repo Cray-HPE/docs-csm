@@ -9,7 +9,7 @@ This procedure can be used to access the interface to manage Keycloak users. Use
 
     ```screen
     ncn-w001# kubectl get secret -n services keycloak-master-admin-auth \\
-    --template=\{\{.data.password\}\} \| base64 --decode
+    --template=\{\{.data.password\}\} | base64 --decode
     ```
 
 ### Procedure

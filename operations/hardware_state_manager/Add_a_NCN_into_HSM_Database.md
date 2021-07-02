@@ -109,7 +109,7 @@ The examples in this procedure use `ncn-w0003-nmn` as the Customer Access Node \
 
         Once the load job completes, if there are no errors returned, the session is removed.
 
-        Running `cray cfs sessions list \| grep "name ="` again should return with no sessions active. If Ansible errors were encountered during the unload or load sessions, the dormant CFS session artifacts remain for CFS Ansible failure troubleshooting.
+        Running `cray cfs sessions list | grep "name ="` again should return with no sessions active. If Ansible errors were encountered during the unload or load sessions, the dormant CFS session artifacts remain for CFS Ansible failure troubleshooting.
 
 
 
