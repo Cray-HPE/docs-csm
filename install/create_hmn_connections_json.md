@@ -39,7 +39,7 @@ The [SHCD/HMN Connections Rules document](shcd_hmn_connections_rules.md) explain
 
     Load the hms-shcd-parser docker image. This script will load the image into either Podman or Docker.
     ```
-    linux# ${CSM_RELEASE}/hack/load-container-image.sh dtr.dev.cray.com/cray/hms-shcd-parser:1.4.2
+    linux# ${CSM_RELEASE}/hack/load-container-image.sh dtr.dev.cray.com/cray/hms-shcd-parser:1.5.0
     ```
 3. Set environment to point to the system's SHCD Excel file:
     > Note: Make sure to quote the SHCD file path if there are spaces in the document's filename.
@@ -53,10 +53,10 @@ The [SHCD/HMN Connections Rules document](shcd_hmn_connections_rules.md) explain
 
     __If using Podman__:
     ```
-    linux# podman run --rm -it --name hms-shcd-parser -v "$(realpath "$SHCD_FILE")":/input/shcd_file.xlsx -v "$(pwd)":/output dtr.dev.cray.com/cray/hms-shcd-parser:1.4.2
+    linux# podman run --rm -it --name hms-shcd-parser -v "$(realpath "$SHCD_FILE")":/input/shcd_file.xlsx -v "$(pwd)":/output dtr.dev.cray.com/cray/hms-shcd-parser:1.5.0
     ```
 
     __If using Docker__:
     ```
-    linux# docker run --rm -it --name hms-shcd-parser -v "$(realpath "$SHCD_FILE")":/input/shcd_file.xlsx -v "$(pwd)":/output dtr.dev.cray.com/cray/hms-shcd-parser:1.4.2
+    linux# docker run --rm -it --name hms-shcd-parser -v "$(realpath "$SHCD_FILE")":/input/shcd_file.xlsx -v "$(pwd)":/output dtr.dev.cray.com/cray/hms-shcd-parser:1.5.0
     ```
