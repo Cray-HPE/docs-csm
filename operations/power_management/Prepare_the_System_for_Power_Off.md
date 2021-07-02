@@ -111,7 +111,7 @@ An authentication token is required to access the API gateway and to use the `sa
         ```bash
         ncn-m001# kubectl get pods -o wide -A | egrep  "CrashLoopBackOff" > k8s.pods.CLBO
         ncn-m001# kubectl get pods -o wide -A | egrep  "ContainerCreating" > k8s.pods.CC
-        ncn-m001# kubectl get pods -o wide -A | egrep -v "Run\|Completed" > k8s.pods.errors
+        ncn-m001# kubectl get pods -o wide -A | egrep -v "Run|Completed" > k8s.pods.errors
         ```
 
     9.  Check HSN status.

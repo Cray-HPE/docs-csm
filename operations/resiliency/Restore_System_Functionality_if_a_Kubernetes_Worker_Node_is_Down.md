@@ -172,7 +172,7 @@ This procedure requires administrative privileges.
     2.  Take note of any pods that are in a `Pending` or `Error` state.
 
         ```bash
-        ncn-w001# kubectl get pods -A -o wide | grep -e 'Pending\|Error'
+        ncn-w001# kubectl get pods -A -o wide | grep -e 'Pending|Error'
         ```
 
     3.  Capture the details for any pod that is in an unexpected state.

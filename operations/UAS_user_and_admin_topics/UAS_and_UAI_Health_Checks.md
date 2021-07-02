@@ -203,9 +203,9 @@ There also may be a problem with the Istio service mesh inside of the Shasta sys
 There are typically two UAS pods. View logs from both pods to identify the specific failure. The logs have a very large number of GET events listed as part of the aliveness checking. The following shows an example of viewing UAS logs \(the example shows only one UAS manage, normally there would be two\).
 
 ```screen
-ncn-w003# kubectl get po -n services \| grep uas-mgr \| grep -v etcd
+ncn-w003# kubectl get po -n services | grep uas-mgr | grep -v etcd
 cray-uas-mgr-6bbd584ccb-zg8vx            2/2     Running            0          12d
-ncn-w003# kubectl logs -n services cray-uas-mgr-6bbd584ccb-zg8vx cray-uas-mgr \| grep -v 'GET ' \| tail -25
+ncn-w003# kubectl logs -n services cray-uas-mgr-6bbd584ccb-zg8vx cray-uas-mgr | grep -v 'GET ' | tail -25
 2021-02-08 15:32:41,211 - uas_mgr - INFO - getting deployment uai-vers-87a0ff6e in namespace user
 2021-02-08 15:32:41,225 - uas_mgr - INFO - creating deployment uai-vers-87a0ff6e in namespace user
 2021-02-08 15:32:41,241 - uas_mgr - INFO - creating the UAI service uai-vers-87a0ff6e-ssh
@@ -258,13 +258,13 @@ Various packages install volumes in the UAS configuration. All of those volumes 
 Run the following command to locate the pod.
 
 ```screen
-ncn-w003# kubectl get po -n user \| grep <uai-name\>
+ncn-w003# kubectl get po -n user | grep <uai-name>
 ```
 
 Run the following command to investigate the problem.
 
 ```screen
-ncn-w003# kubectl describe -n user <pod-name\>
+ncn-w003# kubectl describe -n user <pod-name>
 ```
 
 If volumes are missing, they will be in the Events:section of the output. Other problems may show up there as well. The names of the missing volumes or other issues should indicate what needs to be fixed to enable the UAI.

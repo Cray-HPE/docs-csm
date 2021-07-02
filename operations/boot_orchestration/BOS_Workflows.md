@@ -67,7 +67,7 @@ Mentioned in this workflow:
     
     ```screen
     # cray bos session create \
-    --template-uuid SESSIONTEMPLATE_NAME\
+    --template-uuid SESSIONTEMPLATE_NAME \
     --operation Boot
     ```
 

@@ -665,7 +665,7 @@ This section applies to NCN storage nodes. Proceed to step [25](#step25) if a ma
         There will be no output returned from the following commands. This step changes LASTNODE into the number of the last storage node. In this example, LASTNODE is changed to `ncn-s003`.
 
         ```bash
-        ncn-s002# source /srv/cray/scripts/commmon/fix_ansible_inv.sh
+        ncn-s002# source /srv/cray/scripts/common/fix_ansible_inv.sh
         ncn-s002# fix_inventory
         ```
 

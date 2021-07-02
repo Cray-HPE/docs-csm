@@ -45,7 +45,7 @@ ncn# kubectl describe pod POD_NAME -n NAMESPACE_NAME
 ### Retrieve a List of Healthy Pods
 
 ```bash
-ncn# kubectl get pods -A | grep -e 'Completed\|Running'
+ncn# kubectl get pods -A | grep -e 'Completed|Running'
 ceph-cephfs       cephfs-provisioner-74599ccfcd-bzf5b                1/1     Running      3    2d11h
 ceph-rbd          rbd-provisioner-76c464c567-jvvk6                   1/1     Running      3    2d11h
 cert-manager      cray-certmanager-cainjector-8487d996d7-phbfr       1/1     Running      0    2d11h
@@ -66,7 +66,7 @@ istio-system      istio-init-crd-11-1.2.10-dcp4h                     0/1     Com
 ### Retrieve a List of Unhealthy Pods
 
 ```bash
-ncn# kubectl get pods -A | grep -e 'Creating\|ImagePull\|Error\|Init\|Crash'
+ncn# kubectl get pods -A | grep -e 'Creating|ImagePull|Error|Init|Crash'
 services   cray-conman-68fffd8d9d-8h6zb               1/2    CrashLoopBackOff             694    2d10h
 services   cray-crus-549cb9cb5d-7gv6n                 0/4    Init:0/2                     0      2d10h
 services   cray-hms-badger-api-69bd7bc5b6-2v5sf       0/2    Init:0/2                     0      2d10h
