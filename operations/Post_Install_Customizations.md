@@ -55,7 +55,6 @@ From the Memory Usage graph for the container, determine the steady state memory
 Update resources associated with Prometheus in the sysmgmt-health namespace.
 
 1. Get the current cached customizations.
-
    ```
    ncn-w001# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
    ```
@@ -152,7 +151,6 @@ Update resources associated with spire-postgres in the spire namespace.
 A similar flow can be used to update the resources for cray-sls-postgres, cray-smd-postgres, or gitea-vcs-postgres. Refer to the note at the end of this section for more details.
 
 1. Get the current cached customizations.
-
    ```
    ncn-w001# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
    ```
