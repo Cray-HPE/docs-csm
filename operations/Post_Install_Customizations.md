@@ -60,13 +60,13 @@ Update resources associated with Prometheus in the sysmgmt-health namespace.
    ncn-w001# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
    ```
 
-2. Get the current cached platform manifest.
+1. Get the current cached platform manifest.
 
    ```
    ncn-w001# kubectl get cm -n loftsman loftsman-platform -o jsonpath='{.data.manifest\.yaml}'  > platform.yaml
    ```
 
-3.  Edit the customizations as desired - add or update spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.
+1.  Edit the customizations as desired - add or update spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.
 
    ```
    ncn-w001# yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.requests.cpu' --style=double '2'
@@ -75,7 +75,7 @@ Update resources associated with Prometheus in the sysmgmt-health namespace.
    ncn-w001# yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.limits.memory' '30Gi'
    ```
 
-4. Check that the customization file has been updated.
+1. Check that the customization file has been updated.
 
    ```
    ncn-w001# yq read customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources'
@@ -88,7 +88,7 @@ Update resources associated with Prometheus in the sysmgmt-health namespace.
      memory: 30Gi
    ```
 
-5. Edit the platform.yaml to only include the cray-sysmgmt-health chart and all its current data. (The resources specified above will be updated in the next step and the version may differ as this is an example).
+1. Edit the platform.yaml to only include the cray-sysmgmt-health chart and all its current data. (The resources specified above will be updated in the next step and the version may differ as this is an example).
 
    ```
    apiVersion: manifests/v1beta1
@@ -105,13 +105,13 @@ Update resources associated with Prometheus in the sysmgmt-health namespace.
        version: 0.12.0
    ```
 
-6. Generate the manifest that will be used to re-deploy the chart with the modified resources.
+1. Generate the manifest that will be used to re-deploy the chart with the modified resources.
 
    ```
    ncn-w001# manifestgen -c customizations.yaml -i platform.yaml -o manifest.yaml
    ```
 
-7. Check that the manifest file contains the desired resource settings.
+1. Check that the manifest file contains the desired resource settings.
 
    ```
    ncn-w001# yq read manifest.yaml 'spec.charts.(name==cray-sysmgmt-health).values.prometheus-operator.prometheus.prometheusSpec.resources'
@@ -124,13 +124,13 @@ Update resources associated with Prometheus in the sysmgmt-health namespace.
      memory: 30Gi
    ```
 
-8. Re-deploy the same chart version but with the desired resource settings.
+1. Re-deploy the same chart version but with the desired resource settings.
 
    ```
    ncn-w001# loftsman ship --charts-repo http://helmrepo.dev.cray.com:8080 --manifest-path $PWD/manifest.yaml
    ```
 
-9. Verify the pod restarts and that the desired resources have been applied.
+1. Verify the pod restarts and that the desired resources have been applied.
 
    ```
    # Watch the pod prometheus-cray-sysmgmt-health-promet-prometheus-0 restart
@@ -143,7 +143,7 @@ Update resources associated with Prometheus in the sysmgmt-health namespace.
    ncn-w001#  kubectl get pod prometheus-cray-sysmgmt-health-promet-prometheus-0 -n sysmgmt-health -o json | jq -r '.spec.containers[] | select(.name == "prometheus").resources'
    ```
 
-10. Store the modified customizations.yaml in the site-init repository in the customer-managed location. **This step is critical.**  If not done, these changes will not persist in future installs or updates.
+1. Store the modified customizations.yaml in the site-init repository in the customer-managed location. **This step is critical.**  If not done, these changes will not persist in future installs or updates.
 
 #### Postgres Pods are OOMKilled or CPU Throttled
 
@@ -153,18 +153,17 @@ A similar flow can be used to update the resources for cray-sls-postgres, cray-s
 
 1. Get the current cached customizations.
 
-<<<<<<< HEAD
    ```
    ncn-w001# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
    ```
 
-2. Get the current cached sysmgmt manifest.
+1. Get the current cached sysmgmt manifest.
 
    ```
    ncn-w001# kubectl get cm -n loftsman loftsman-sysmgmt -o jsonpath='{.data.manifest\.yaml}'  > sysmgmt.yaml
    ```
 
-3.  Edit the customizations as desired by adding or updating spec.kubernetes.services.spire.cray-service.sqlCluster. resources.
+1.  Edit the customizations as desired by adding or updating spec.kubernetes.services.spire.cray-service.sqlCluster.resources.
 
    ```
    ncn-w001# yq write -i customizations.yaml 'spec.kubernetes.services.spire.cray-service.sqlCluster.resources.requests.cpu' --style=double '4'
@@ -173,7 +172,7 @@ A similar flow can be used to update the resources for cray-sls-postgres, cray-s
    ncn-w001# yq write -i customizations.yaml 'spec.kubernetes.services.spire.cray-service.sqlCluster.resources.limits.memory' '8Gi'
    ```
 
-4. Check that the customization file has been updated.
+1. Check that the customization file has been updated.
 
    ```
    ncn-w001# yq read customizations.yaml 'spec.kubernetes.services.spire.cray-service.sqlCluster.resources'
@@ -186,7 +185,7 @@ A similar flow can be used to update the resources for cray-sls-postgres, cray-s
      memory: 8Gi
    ```
 
-5. Edit the sysmgmt.yaml to only include the spire chart and all its current data. (The resources specified above will be updated in the next step and the version may differ as this is an example).
+1. Edit the sysmgmt.yaml to only include the spire chart and all its current data. (The resources specified above will be updated in the next step and the version may differ as this is an example).
 
    ```
    apiVersion: manifests/v1beta1
@@ -203,7 +202,7 @@ A similar flow can be used to update the resources for cray-sls-postgres, cray-s
        version: 0.9.1
    ```
 
-6. Generate the manifest that will be used to re-deploy the chart with the modified resources.
+1. Generate the manifest that will be used to re-deploy the chart with the modified resources.
 
    ```
    ncn-w001# manifestgen -c customizations.yaml -i sysmgmt.yaml -o manifest.yaml
@@ -222,13 +221,13 @@ A similar flow can be used to update the resources for cray-sls-postgres, cray-s
      memory: 8Gi
    ```
 
-8. Redeploy the same chart version but with the desired resource settings.
+1. Redeploy the same chart version but with the desired resource settings.
 
    ```
    ncn-w001# loftsman ship --charts-repo http://helmrepo.dev.cray.com:8080 --manifest-path $PWD/manifest.yaml
    ```
 
-9. Verify the pods restart and that the desired resources have been applied.
+1. Verify the pods restart and that the desired resources have been applied.
 
    ```
    ncn-w001# watch "kubectl get pods -n spire -l application=spilo,cluster-name=spire-postgres"
@@ -246,7 +245,7 @@ A similar flow can be used to update the resources for cray-sls-postgres, cray-s
    }
    ```
 
-10. Store the modified customizations.yaml in the site-init repository in the customer-managed location. **This step is critical.** If not done, these changes will not persist in future installs or updates.
+1. Store the modified customizations.yaml in the site-init repository in the customer-managed location. **This step is critical.** If not done, these changes will not persist in future installs or updates.
 
   **IMPORTANT:** If cray-sls-postgres, cray-smd-postgres, or gitea-vcs-postgres resources need to be adjusted, the same procedure as above can be used with the following changes:
 
