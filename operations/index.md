@@ -32,6 +32,7 @@ The following administrative topics can be found in this guide:
       - [Domain Name Service (DNS)](#domain-name-service-dns)
       - [External DNS](#external-dns)
       - [MetalLB in BGP-Mode](#metallb-in-bgp-mode)
+    - [Update Firmware with FAS](#update-firmware-with-fas)
   
 
 ### CSM **TBD: topics need to be re-organized**
@@ -42,7 +43,6 @@ The following administrative topics can be found in this guide:
    * [Configure the Cray Command Line Interface (cray CLI)](configure_cray_cli.md)
    * [Configure BMC and Controller Parameters with SCSD](configure_with_scsd.md)
    * [Update BGP Neighbors](update_bgp_neighbors.md)
-   * [Update Firmware with FAS](update_firmware_with_fas.md)
    * [Manage Node Consoles](manage_node_consoles.md)
    * [Changing Passwords and Credentials](changing_passwords_and_credentials.md)
    * [Managing Configuration with CFS](managing_configuration_with_CFS.md)
@@ -621,3 +621,17 @@ MetalLB can run in either Layer2-mode or BGP-mode for each address pool it manag
   * [Troubleshoot BGP not Accepting Routes from MetalLB](network/metallb_bgp/Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
 
 
+<a name="update-firmware-with-fas"></a>
+
+### Update Firmware with FAS
+
+The Firmware Action Service (FAS) provides an interface for managing firmware versions of Redfish-enabled hardware in the system. FAS interacts with the Hardware State Managers (HSM), device data, and image data in order to update firmware.
+
+See [Update Firmware with FAS](firmware/Update_Firmware_with_FAS.md) for a list components that are upgradeable with FAS. Refer to the HPC Firmware Pack product stream to update firmware on other components.
+
+  * [Update Firmware with FAS](firmware/Update_Firmware_with_FAS.md)
+  * [FAS CLI](firmware/FAS_CLI.md)
+  * [FAS Filters](firmware/FAS_Filters.md)
+  * [FAS Recipes](firmware/FAS_Recipes.md)
+  * [FAS Admin Procedures](firmware/FAS_Admin_Procedures.md)
+  * [FAS Use Cases](firmware/FAS_Use_Cases.md)

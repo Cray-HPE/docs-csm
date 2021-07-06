@@ -4,11 +4,12 @@ Firmware and BIOS updates for the management nodes may be necessary before an in
 
 Only non-compute nodes (NCNs) can upgrade firmware during a CSM install.
 Other devices, such as compute nodes or application nodes, have their upgrades managed by FAS
-once all CSM software and services have been installed..
+once all CSM software and services have been installed.
 
 FAS tracks and performs actions (upgrade, downgrade, restore and create snapshots) on system firmware.
 FAS is a runtime service deployed in Kubernetes. Fresh installs use FAS for upgrading
-compute node and application node firmware.
+compute node and application node firmware. See [Firmware Action Service (FAS)](../operations/firmware/Firmware_Action_Service.md)
+for more information.
 
 ### Topics 
    1. [Prepare BIOS and Firmware Content for Installation](#prepare-bios-and-firmware-for-installation)
