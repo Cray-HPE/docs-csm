@@ -563,7 +563,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
    - Aruba:`clear bgp *`
    - Mellanox: `clear ip bgp all`
 
-1. **`NOTE`**: At this point all but possibly one of the peering sessions with the BGP neighbors should be in IDLE or CONNECT state and not ESTABLISHED state. If the switch is an Aruba, you will have one peering session established with the other switch. You should check that all of the neighbor IP addresses are correct.
+1. **`NOTE`**: At this point the peering sessions with the BGP neighbors should be in IDLE, CONNECT, or ACTIVE state and not ESTABLISHED state. This is because the MetalLB speaker pods have not been deployed yet. If the switch is an Aruba, you will have one peering session ESTABLISHED with the other switch. You should check that all of the neighbor IP addresses are correct.
 
 1. If needed, the following helper scripts are available for the various switch types:
 
