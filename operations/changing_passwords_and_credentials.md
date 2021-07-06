@@ -1,7 +1,7 @@
 # Changing Passwords and Credentials
 
-There are many passwords and credentials used in different contexts to manage the system.  These
-can be changed as needed.  Their initial settings are documented, so it is recommended to change 
+There are many passwords and credentials used in different contexts to manage the system. These
+can be changed as needed. Their initial settings are documented, so it is recommended to change 
 them during or soon after a CSM software installation.
 
 Refer to the _HPE Cray EX System Administration Guide 1.5 S-8001_ for more information about these topics.

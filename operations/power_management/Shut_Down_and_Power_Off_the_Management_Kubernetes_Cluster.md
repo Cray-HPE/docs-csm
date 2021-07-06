@@ -16,7 +16,7 @@ The `sat bootsys` command automates the shutdown of Ceph and the Kubernetes mana
 -   Stops **and disables** the kubelet on each management and worker node.
 -   Stops all containers on each management and worker node.
 -   Stop `containerd` on each management and worker node.
--   Stops ceph from rebalancing on the management node that is running a `mon` process.
+-   Stops Ceph from rebalancing on the management node that is running a `mon` process.
 
 ### Prerequisites
 

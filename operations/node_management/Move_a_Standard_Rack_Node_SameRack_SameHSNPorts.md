@@ -35,7 +35,7 @@ This procedure assumes there are no changes to the node high-speed network switc
 
 2.  Disconnect the power cables, management network cables, and high-speed network \(HSN\) cables.
 
-3.  Move the node to the new location in the rack \(U27\), connect the mangement cables and HSN cables, but do not connect the power cables.
+3.  Move the node to the new location in the rack \(U27\), connect the management cables and HSN cables, but do not connect the power cables.
 
 #### Update Node in the System Layout Service \(SLS\)
 

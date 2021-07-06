@@ -5,7 +5,7 @@ to CSM 1.0, which is part of Shasta v1.5, has many steps in multiple procedures 
 specific order.
 
 After the upgrade of CSM software, the CSM health checks will validate the system before doing any other operational
-tasks like the check and update of firmware on system components.  Once the CSM upgrade has completed, other 
+tasks like the check and update of firmware on system components. Once the CSM upgrade has completed, other 
 product streams for the HPE Cray EX system can be installed or upgraded.
 
 ### Topics:
@@ -80,5 +80,5 @@ sections, but there is also a general troubleshooting topic.
 1. Next Topic
 
    After completion of the firmware update with FAS, the CSM product stream has been fully upgraded and
-   configured.  Refer to the _HPE Cray EX Installation and Configuration Guide 1.5 S-8000_ for other product streams
+   configured. Refer to the _HPE Cray EX Installation and Configuration Guide 1.5 S-8000_ for other product streams
    to be upgraded and configured after CSM.

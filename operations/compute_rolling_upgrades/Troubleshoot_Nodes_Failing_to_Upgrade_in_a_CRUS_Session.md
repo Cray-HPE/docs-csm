@@ -4,7 +4,7 @@ Troubleshoot compute nodes failing to upgrade during a Compute Rolling Upgrade S
 
 When a nodes are marked as failed they are added to the failed node group associated with the upgrade session, and the nodes are marked as down in the workload manager \(WLM\). If the WLM supports some kind of reason string, that string contains the cause of the down status.
 
-Complete a CRUS session that didn't successfully upgrade all of the intended compute nodes.
+Complete a CRUS session that did not successfully upgrade all of the intended compute nodes.
 
 
 ### Prerequisites

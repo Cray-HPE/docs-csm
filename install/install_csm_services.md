@@ -28,7 +28,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
 > **`EXTERNAL USE`** -- Every customer system should follow this procedure.  
 > 
 > **`INTERNAL USE`** This procedure **is needed** for HPE Cray internal systems which did not reconfigure to proxy from an
->  upstream registry. This procedure **is NOT needed** for HPE Cray internal systems which **did** reconfigure to proxy from an upstream registry.  Online installs cannot upload container images to the bootstrap registry since it proxies an upstream source.  
+>  upstream registry. This procedure **is NOT needed** for HPE Cray internal systems which **did** reconfigure to proxy from an upstream registry. Online installs cannot upload container images to the bootstrap registry since it proxies an upstream source.  
 >  **Warning:** **DO NOT** perform this procedure if the bootstrap registry was [reconfigured to proxy from an
 > upstream registry](deploy_management_nodes.md#configure-bootstrap-registry-to-proxy-an-upstream-registry). 
 
@@ -174,7 +174,7 @@ This is expected and can safely be ignored.
 <a name="deploy-csm-applications-and-services"></a>
 ### 4. Deploy CSM Applications and Services
 
-***IMPORTANT:*** If you have to re-run install.sh to re-deploy failed ceph-csi provisioners you must make sure to delete the jobs that haven't completed.  These are left there for investigation on failure.  They are automatically removed on a successful deployment.
+***IMPORTANT:*** If you have to re-run install.sh to re-deploy failed ceph-csi provisioners you must make sure to delete the jobs that have not completed. These are left there for investigation on failure. They are automatically removed on a successful deployment.
 
 ```bash
 # kubectl get jobs
@@ -404,7 +404,7 @@ settings in sls_input_file.json and must be updated via the Unbound manager.
 
 If packages.local resolves to the correct addresses, verify basic
 connectivity using ping. If `ping packages.local` is unsuccessful, verify the
-IP routes from the PIT node to the NMN load balancer network.  The
+IP routes from the PIT node to the NMN load balancer network. The
 typical `ip route` configuration is `10.92.100.0/24 via 10.252.0.1 dev
 vlan002`. If pings are successful, try checking the status of Nexus by
 running `curl -sS https://packages.local/service/rest/v1/status/writable`. If

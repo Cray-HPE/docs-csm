@@ -7,7 +7,7 @@ LiveCD will no longer be active. The node it was using will join the Kubernetes 
 nodes forming a quorum.
 
 Important: While the node is rebooting, it will be available only through Serial-over-LAN and local terminals. This
-procedure entails deactivating the LiveCD, meaning the LiveCD and all of it's resources will be unavailable.
+procedure entails deactivating the LiveCD, meaning the LiveCD and all of its resources will be unavailable.
 
 Topics:
 
@@ -45,7 +45,7 @@ Required Platform Services:
 > 
 > - SSH will cease to work when the LiveCD reboots; the serial console will need to be leveraged
 > 
-> - Rebooting a remoteISO will dump all running changes on the `pit` node; USBs are accessible after the install
+> - Rebooting a remoteISO will dump all running changes on the PIT node; USBs are accessible after the install
 > 
 > - The NCN **will never wipe a USB device** during installation
 > 
@@ -67,7 +67,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 #### 3.1 Start Hand-Off
 
 1. Start a new typescript (quit )
-   (Run this on the `pit` node as root, the prompts are removed for easier copy-paste; this step is only useful as a whole)
+   (Run this on the PIT node as root, the prompts are removed for easier copy-paste; this step is only useful as a whole)
    - Exit the current typescript if one has arrived here from the prior pages:
 
       ```bash
@@ -191,7 +191,7 @@ data so run them only when indicated. Instructions are in the `README` files.
     > **`NOTE`** This is important for installations using the RemoteISO (not USB device). For USBs, this is recommended as to remove 
     > the need for safekeeping the USB.
    
-    1. Login; setup passwordless SSH _to_ the pit node by copying ONLY the public keys from `ncn-m002` and `ncn-m003` to the `pit` (**do not setup passwordless SSH _from_ the PIT** or the key will have to be securely tracked or expunged if using a USB installation).
+    1. Login; setup passwordless SSH _to_ the PIT node by copying ONLY the public keys from `ncn-m002` and `ncn-m003` to the PIT (**do not setup passwordless SSH _from_ the PIT** or the key will have to be securely tracked or expunged if using a USB installation).
         
         ```bash
         pit# CSM_RELEASE=$(basename $(ls -d /var/www/ephemeral/csm*/ | head -n 1))
@@ -264,7 +264,7 @@ data so run them only when indicated. Instructions are in the `README` files.
     If the reboot successfully deploys the LiveCD, this terminal can be exited.
     
     > **POINT OF NO RETURN** The next step will wipe the underlying nodes disks clean, it will ignore USB devices. RemoteISOs are at risk here, even though a backup has been
-    > performed of the pit node we can't simply boot back to the same state.
+    > performed of the PIT node we cannot simply boot back to the same state.
     > This is the last step before rebooting the node.
 
 1. **`IN-PLACE WAR`** This is a WAR until the auto-wipe feature ceases preventing the creation of the 3rd disk (CASMINST-169. This step is safe to do even after auto-wipe is fixed.
@@ -331,7 +331,7 @@ data so run them only when indicated. Instructions are in the `README` files.
     
     > **`NOTE`**: If the nodes has PXE boot issues, such as getting PXE errors or not pulling the ipxe.efi binary, see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
     
-    > **`NOTE`**: If ncn-m001 didn't run all the cloud-init scripts, the following commands need to be run **(but only in that circumstance)**.
+    > **`NOTE`**: If ncn-m001 did not run all the cloud-init scripts, the following commands need to be run **(but only in that circumstance)**.
     
     1. Run the following commands:
 
@@ -428,7 +428,7 @@ data so run them only when indicated. Instructions are in the `README` files.
    If this machine does not have direct Internet access these RPMs will need to be externally downloaded and then copied to the system.
 
    **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hotfixes
-   were downloaded to a system using the instructions in [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds).  Use that set of rpms rather than downloading again.
+   were downloaded to a system using the instructions in [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds).  Use that set of RPMs rather than downloading again.
 
    ```bash
    linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
@@ -510,7 +510,7 @@ data so run them only when indicated. Instructions are in the `README` files.
 <a name="configure-dns-and-ntp-on-each-bmc"></a>
 ### 6. Configure DNS and NTP on each BMC
 
- > **`NOTE`** If your systemn is Gigabyte or Intel hardware, skip this section.
+ > **`NOTE`** If your system is Gigabyte or Intel hardware, skip this section.
 
 Perform the following steps on every NCN.
 

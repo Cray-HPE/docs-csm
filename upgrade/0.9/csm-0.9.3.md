@@ -349,7 +349,7 @@ If your Shasta system is using CDU switches you will need to update the configur
 - A static LAG will be configured on the CDU switches.
 - The CDU switches have two cables (10Gb RJ45) connecting to each CMM.
 - This configuration offers increased throughput and redundancy.
-- The CEC will not need to be programmed in order to support the LAG configuration as it was required in previous versions.  The updated firmware takes care of this.
+- The CEC will not need to be programmed in order to support the LAG configuration as it was required in previous versions. The updated firmware takes care of this.
 
 ## Aruba
 ### Aruba Firmware Update - when used as a MLAG pair using VSX
@@ -394,7 +394,7 @@ After the firmware is uploaded you will need to boot the switch to the correct i
 sw-cdu-002# boot system primary
 ```
 
-Once the reboot is complete check and make sure the firmware version is correct.  You should also see that the VSX Peer is empty of information.  This will resolve after the other switch is updated. For now the current switch (sw-cdu-002) is the master and will be accepting all traffic.
+Once the reboot is complete check and make sure the firmware version is correct. You should also see that the VSX Peer is empty of information. This will resolve after the other switch is updated. For now the current switch (sw-cdu-002) is the master and will be accepting all traffic.
 
 ```
 sw-cdu-002# show vsx status

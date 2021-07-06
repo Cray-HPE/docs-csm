@@ -6,7 +6,7 @@ can be passed to the `csi` (Cray Site Init) program during the CSM installation 
 Information gathered from a site survey is needed to feed into the CSM installation process, such as system name, system size, site network information for the CAN, site DNS configuration, site NTP configuration, network information for the node used to bootstrap the installation. More detailed component level information about the system hardware is encapsulated in the SHCD (Shasta Cabling Diagram), which is a spreadsheet prepared by HPE Cray Manufacturing to assemble the components of the system and connect appropriately labeled cables.
 
 How the configuration payload is prepared depends on whether this is a first time install of CSM
-software on this system or the CSM software is being reinstalled.  The reinstall scenario has the
+software on this system or the CSM software is being reinstalled. The reinstall scenario has the
 advantage of being able to use the configuration payload from a previous first time install of CSM
 and an extra configuration file which that generated.
 
@@ -25,10 +25,10 @@ and an extra configuration file which that generated.
 ### Command Line Configuration Payload
 
 This information from a site survey can be given to the `csi` command as command line arguments.
-The information is shown here to explain what data is needed.  It won't be used until moving
+The information is shown here to explain what data is needed. It will not be used until moving
 to the procedure [Bootstrap PIT Node](index.md#bootstrap_pit_node)
 
-The air-cooled cabinet is known to `csi` as a `river` cabinet.  The liquid-cooled cabinets are either
+The air-cooled cabinet is known to `csi` as a `river` cabinet. The liquid-cooled cabinets are either
 `mountain` or `hill` (if a TDS system).
 
 For more description of these settings and the default values, see [[Default IP Address Ranges](../introduction/csm_overview.md#default_ip_address_ranges) and the other topics in [CSM Overview](../introduction/csm_overview.md)
@@ -63,17 +63,17 @@ For more description of these settings and the default values, see [[Default IP 
 
 
    * The bootstrap-ncn-bmc-user and bootstrap-ncn-bmc-pass must match what is used for the BMC account and its password for the management nodes.
-   * Set site parameters (site-domain, site-ip, site-gw, site-nic, site-dns) for the information which connects the ncn-m001 (PIT) node to the site.  The site-nic is the interface on this node connected to the site.  
+   * Set site parameters (site-domain, site-ip, site-gw, site-nic, site-dns) for the information which connects the ncn-m001 (PIT) node to the site. The site-nic is the interface on this node connected to the site.  
    * There are other interfaces possible, but the install-ncn-bond-members are typically:
       * p1p1,p10p1 for HPE nodes
       * p1p1,p1p2 for Gigabyte nodes
       * p801p1,p801p2 for Intel nodes
-   * The starting cabinet number for each type of cabinet (for example, starting-mountain-cabinet) has a default that can be overridden.  See the "csi config init --help".
+   * The starting cabinet number for each type of cabinet (for example, starting-mountain-cabinet) has a default that can be overridden. See the "csi config init --help".
    * An override to default cabinet IPv4 subnets can be made with the hmn-mtn-cidr and nmn-mtn-cidr parameters.
-   * Several parameters (can-gateway, can-cidr, can-static-pool, can-dynamic-pool) describe the CAN (Customer Access network).  The can-gateway is the common gateway IP used for both spine switches and commonly referred to as the Virtual IP for the CAN.  The can-cidr is the IP subnet for the CAN assigned to this system. The can-static-pool and can-dynamic-pool are the MetalLB address static and dynamic pools for the CAN. The can-external-dns is the static IP assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded.   The can-external-dns IP must be within the can-static-pool range.
+   * Several parameters (can-gateway, can-cidr, can-static-pool, can-dynamic-pool) describe the CAN (Customer Access network).  The can-gateway is the common gateway IP used for both spine switches and commonly referred to as the Virtual IP for the CAN.  The can-cidr is the IP subnet for the CAN assigned to this system. The can-static-pool and can-dynamic-pool are the MetalLB address static and dynamic pools for the CAN. The can-external-dns is the static IP assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded. The can-external-dns IP must be within the can-static-pool range.
    * Set ntp-pool to a reachable NTP server.
-   * The application_node_config.yaml file is optional, but if you have one describing the mapping between prefixes in hmn_connections.csv that should be mapped to HSM subroles, you need to include a command line option to have it used.  See [Create Application Node YAML](create_application_node_config_yaml.md).
-   * For systems that use non-sequential cabinet id numbers, use cabinets-yaml to include the cabinets.yaml file.  This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to explicitly specify the id of every cabinet in the system.  See [Create Cabinets YAML](create_cabinets_yaml.md).
+   * The application_node_config.yaml file is optional, but if you have one describing the mapping between prefixes in hmn_connections.csv that should be mapped to HSM subroles, you need to include a command line option to have it used. See [Create Application Node YAML](create_application_node_config_yaml.md).
+   * For systems that use non-sequential cabinet id numbers, use cabinets-yaml to include the cabinets.yaml file. This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to explicitly specify the id of every cabinet in the system. See [Create Cabinets YAML](create_cabinets_yaml.md).
 
 <a name="configuration_payload_files"></a>
 ### Configuration Payload Files
@@ -90,7 +90,7 @@ command during the installation process.
 | [switch_metadata.csv](#switch_metadata_csv) | SHCD | Inventory of all spine, aggregation, CDU, and leaf switches |
 
 Although some information in these files can be populated from site survey information, the SHCD prepared by
-HPE Cray Manufacturing is the best source of data for hmn_connections.json.  The `ncn_metadata.csv` does
+HPE Cray Manufacturing is the best source of data for hmn_connections.json. The `ncn_metadata.csv` does
 require collection of MAC addresses from the management nodes since that information is not present in the SHCD.
 
 <a name="application_node_config_yaml"></a>
@@ -99,9 +99,9 @@ require collection of MAC addresses from the management nodes since that informa
 The `application_node_config.yaml` file controls how the `csi config init` command finds and treats
 application nodes discovered in the `hmn_connections.json` file when building the SLS Input file. 
 
-Different node prefixes in the SHCD can be identified as Application nodes.  Each node prefix
-can be mapped to a specific HSM sub role.  These sub roles can then be used as the targets of Ansible
-plays run by CFS to configure these nodes.  The xname for each Application node can be assigned one or
+Different node prefixes in the SHCD can be identified as Application nodes. Each node prefix
+can be mapped to a specific HSM sub role. These sub roles can then be used as the targets of Ansible
+plays run by CFS to configure these nodes. The xname for each Application node can be assigned one or
 more hostname aliases.
 
 See [Create Application Node YAML](create_application_node_config_yaml.md) for instructions about creating this file.
@@ -110,7 +110,7 @@ See [Create Application Node YAML](create_application_node_config_yaml.md) for i
 #### `cabinets.yaml`
 
 The `cabinets.yaml` file describes the type of cabinets in the system, the number of each type of cabinet,
-and the starting cabinet ID for every cabinet in the system.  This file can be used to indicate that a system
+and the starting cabinet ID for every cabinet in the system. This file can be used to indicate that a system
 has non-contiguous cabinet ID numbers or non-standard VLAN numbers.
 
 See [Create Cabinets YAML](create_cabinets_yaml.md) for instructions about creating this file.
@@ -118,7 +118,7 @@ See [Create Cabinets YAML](create_cabinets_yaml.md) for instructions about creat
 <a name="hmn_connections_json"></a>
 #### `hmn_connections.json`
 
-The `hmn_connections.json` file is extracted from the HMN tab of the SHCD spreadsheet.  The CSM release
+The `hmn_connections.json` file is extracted from the HMN tab of the SHCD spreadsheet. The CSM release
 includes the `hms-shcd-parser` container which can be used on the PIT node booted from the LiveCD (RemoteISO
 or USB device) or a Linux system to do this extraction.
 
@@ -132,8 +132,8 @@ as a master, worker, or storage node, and provides the MAC address information n
 the NIC which will be used to boot the node.
 
 For each management node, the xname, role, and subrole can be extracted from the SHCD.  However, the rest of the
-MAC address information needs to be collected another way.  Collect as much information as possible 
-before the PIT node is booted from the LiveCD and then get the rest later when directed.  See the scenarios
+MAC address information needs to be collected another way. Collect as much information as possible 
+before the PIT node is booted from the LiveCD and then get the rest later when directed. See the scenarios
 which enable partial data collection below in [First Time Install](#first_time_install).
 
 See [Create NCN Metadata CSV](create_ncn_metadata_csv.md) for instructions about creating this file.
@@ -142,7 +142,7 @@ See [Create NCN Metadata CSV](create_ncn_metadata_csv.md) for instructions about
 #### `switch_metadata.csv`
 
 The `switch_metadata.csv` file is manually created to include information about all spine, aggregation, CDU, 
-and leaf switches in the system.  None of the Slingshot switches for the HSN should be included in this file.
+and leaf switches in the system. None of the Slingshot switches for the HSN should be included in this file.
 
 See [Create Switch Metadata CSV](create_switch_metadata_csv.md) for instructions about creating this file.
 
@@ -187,17 +187,17 @@ The process to reinstall must have the configuration payload files available.
       - `switch_metadata.csv`
       - `system_config.yaml`
    
-      If the `system_config.yaml` is not available, then a reinstall cannot be done.  Switch to the install process
+      If the `system_config.yaml` is not available, then a reinstall cannot be done. Switch to the install process
       and generate any of the other files for the [Configuration Payload Files](#configuration_payload_files)
       which are missing. 
    
    1. The command line options used to call `csi config init` are not needed. 
    
       When doing a reinstall, all of the command line options which had been given to `csi config init` during the
-      previous installation will be found inside the `system_config.yaml` file.  This simplifies the reinstall process.
+      previous installation will be found inside the `system_config.yaml` file. This simplifies the reinstall process.
    
       When you are ready to bootstrap the LiveCD, it will indicate when to run this command without any 
-      extra command line options.  It will expect to find  all of the above files in the current working
+      extra command line options. It will expect to find  all of the above files in the current working
       directory.
    
       ```bash

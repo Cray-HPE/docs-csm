@@ -149,7 +149,7 @@ The default end-user UAI is not suitable for use with the Cray PE. The generic i
 -   **[Add a Volume to UAS](Add_a_Volume_to_UAS.md)**  
 How to add a volume to UAS. Adding a volume registers it with UAS and makes it available to UAIs.
 -   **[Delete a Volume Configuration](Delete_a_Volume_Configuration.md)**  
-How to delete a volume configuration and prevent its being mounted in UAIs.
+How to delete a volume configuration and prevent it from being mounted in UAIs.
 -   **[Reset the UAS Configuration to Original Installed Settings](Reset_the_UAS_Configuration_to_Original_Installed_Settings.md)**  
 How to remove a customized UAS configuration and restore the base installed configuration.
 

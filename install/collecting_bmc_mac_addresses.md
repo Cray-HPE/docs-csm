@@ -63,14 +63,14 @@ If you are here with an unconfigured switch, mileage may vary.
     sw-leaf-001# show mac-address-table
 
     ```
-1. In the output from the previous "show mac address-table" command, information will be available for all management NCNs which do not have an external connection for their BMC, such as ncn-m001.  
+1. In the output from the previous `show mac address-table` command, information will be available for all management NCNs which do not have an external connection for their BMC, such as ncn-m001.  
 
    All of the management NCNs should be present in the ncn_metadata.csv file.  
 
    Fill in the Bootstrap MAC, Bond0 MAC0, and Bond0 MAC1 columns with a dummy value, such as `de:ad:be:ef:00:00`,
    as a marker that the correct value is not in this file yet.
 
-   > Tip: Mind the index for each group of nodes (3, 2, 1.... ; not 1, 2, 3).  If storage nodes are ncn-s001 x3000c0s7b0n0, ncn-s002 x3000c0s8b0n0, ncn-s003 x3000c0s9b0n0, then their portion of the file would be orderd x3000c0s9b0n0, x3000c0s8b0n0, x3000c0s7b0n0.
+   > Tip: Mind the index for each group of nodes (3, 2, 1.... ; not 1, 2, 3).  If storage nodes are ncn-s001 x3000c0s7b0n0, ncn-s002 x3000c0s8b0n0, ncn-s003 x3000c0s9b0n0, then their portion of the file would be ordered x3000c0s9b0n0, x3000c0s8b0n0, x3000c0s7b0n0.
 
 
    ```
@@ -81,7 +81,7 @@ If you are here with an unconfigured switch, mileage may vary.
                                      ^^^^^^^^^^^^^^^^^
     ```
 
-   The column heading must match that shown above for csi to correctly parse it. 
+   The column heading must match that shown above for `csi` to correctly parse it. 
 
 1. Collect the BMC MAC address information for the PIT node. 
    The PIT node BMC is not connected to the switch like the other management nodes.
@@ -93,7 +93,7 @@ If you are here with an unconfigured switch, mileage may vary.
 
    > **Note:** an Intel node would need to use `ipmitool lan print 3` instead of `ipmitool lan print`.
 
-   Add this information for ncn-m001 to the `ncn_metadata.csv` file.  There should be ncn-m003, then ncn-m002, and this new entry for ncn-m001 as the last line in the file.
+   Add this information for ncn-m001 to the `ncn_metadata.csv` file. There should be ncn-m003, then ncn-m002, and this new entry for ncn-m001 as the last line in the file.
    ```
    x3000c0s1b0n0,Management,Master,a4:bf:01:37:87:32,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
    ```

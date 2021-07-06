@@ -138,7 +138,7 @@ The `chrony` logs are stored at `/var/log/chrony/`
 
 1. If the time is out of sync, force a sync of NTP.
 
-   If Kubernetes or other services are already up, they don't always react well if there is a large time jump.
+   If Kubernetes or other services are already up, they do not always react well if there is a large time jump.
    Ideally, this action should be made as the node is booting.
 
    ```bash
@@ -168,9 +168,9 @@ This procedure needs to be completed on the PIT node before the other management
 <a name="configure_ntp_on_pit_to_local_timezone"></a>
 #### Configure NTP on PIT to Local Timezone
 
-HPE Cray EX systems with CSM software have UTC as the default time zone.  To change this, you'll need
+HPE Cray EX systems with CSM software have UTC as the default time zone. To change this, you will need
 to set an environment variable, as well as `chroot` into the node images and change some files
-there.  You can find a list of timezones to use in the commands below by running `timedatectl list-timezones`.
+there. You can find a list of timezones to use in the commands below by running `timedatectl list-timezones`.
 
 1. Run the following commands, replacing them with your timezone as needed.
 
@@ -241,7 +241,7 @@ there.  You can find a list of timezones to use in the commands below by running
 <a name="configure_ncn_images_to_use_local_timezone"></a>
 #### Configure NCN Images to Use Local Timezone
 
-You need to adjust the node images so that they also boot in the local timezone.  This is accomplished by `chroot`ing into the unsquashed images, making some modifications, and then squashing it back up and moving the new images into place.
+You need to adjust the node images so that they also boot in the local timezone. This is accomplished by `chroot`ing into the unsquashed images, making some modifications, and then squashing it back up and moving the new images into place.
 
 1. Set some variables.
 
@@ -254,7 +254,7 @@ You need to adjust the node images so that they also boot in the local timezone.
    pit# export IMGDIR=/var/www/ephemeral/data/${IMGTYPE}
    ```
 
-1. Go to the ceph image directory and unsquash the image.
+1. Go to the Ceph image directory and unsquash the image.
 
     ```bash
     pit# cd ${IMGDIR}

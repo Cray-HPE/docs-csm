@@ -131,7 +131,7 @@ is being monitored by conman for console logs.
    rtt min/avg/max/mdev = 0.170/0.237/0.311/0.051 ms
    ```
 
-   When this node boots, the DHCP request of it's -nmn interface will cause the uan01 to be created and resolved.
+   When this node boots, the DHCP request of its -nmn interface will cause the uan01 to be created and resolved.
 
 1. Confirm that the UAN is being monitored by the console services. Follow the procedure in [Manage Node Consoles](manage_node_consoles.md).
 

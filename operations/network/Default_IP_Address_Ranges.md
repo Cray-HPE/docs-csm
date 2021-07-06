@@ -29,7 +29,7 @@ Allocate a `/22` from this range per liquid-cooled cabinet. For example, the fol
 
 For the Mountain HMN:
 
-Allocate a `/22` from this range per liquid-cooled cabinet.  For example, the following cabinets would be given the following IP addresses in the allocated ranges:
+Allocate a `/22` from this range per liquid-cooled cabinet. For example, the following cabinets would be given the following IP addresses in the allocated ranges:
 
 -   cabinet 1 = 10.104.0.0/22
 -   cabinet 2 = 10.104.4.0/22

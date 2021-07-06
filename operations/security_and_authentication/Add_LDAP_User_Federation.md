@@ -4,7 +4,7 @@ Add LDAP user federation using the  Keycloak localization tool.
 
 ### Prerequisites
 
-LDAP user federation isn't currently configured in Keycloak. For example, if it wasn't configured in Keycloak when the system was initially installed or the LDAP user federation was removed.
+LDAP user federation is not currently configured in Keycloak. For example, if it was not configured in Keycloak when the system was initially installed or the LDAP user federation was removed.
 
 ### Procedure
 
@@ -50,7 +50,7 @@ LDAP user federation isn't currently configured in Keycloak. For example, if it 
         * <cray-keycloak-users-localize chart option name> : <description>
           - default: <the default value if not overridden in customizations.yaml
           - type: <type that the value in customizations.yaml has to be. e.g., if type is string and a number is entered then you need to quote it>
-          - allowed values: <if only certain values are allowed they're listed here>
+          - allowed values: <if only certain values are allowed they are listed here>
         )
          
         * ldapProviderId : The Keycloak provider ID for the component. This must be "ldap"
@@ -66,7 +66,7 @@ LDAP user federation isn't currently configured in Keycloak. For example, if it 
           - default: READ_ONLY
           - type: string
           - allowed values: READ_ONLY, WRITEABLE, or UNSYNCED
-        * ldapSyncRegistrations : If true, then newly created users will be created in the LDAP server.
+        * ldapSyncRegistrations : If true, then newly-created users will be created in the LDAP server.
           - default: false
           - type: string
           - allowed values: true or false
@@ -236,7 +236,7 @@ LDAP user federation isn't currently configured in Keycloak. For example, if it 
 
         ```bash
         ncn-w001# kubectl logs -n services KEYCLOAK_POD_NAME keycloak-localize
-        <logs showing it's updated the "s3" objects and ConfigMaps>
+        <logs showing it has updated the "s3" objects and ConfigMaps>
         2020-07-20 18:26:15,774 - INFO    - keycloak_localize - keycloak-localize complete
         ```
 

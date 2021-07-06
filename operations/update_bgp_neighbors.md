@@ -2,18 +2,18 @@
 
 This page will detail how to manually configure and verify BGP neighbors on the management switches.
 
-You will not have BGP peers until CSM ```install.sh``` has run.  This is where MetalLB is deployed.
+You will not have BGP peers until CSM ```install.sh``` has run. This is where MetalLB is deployed.
 
 - How do I check the status of the BGP neighbors?
   - Log into the spine switches and run `show bgp ipv4 unicast summary` for Aruba/HPE switches and `show ip bgp summary` for Mellanox.
 - Are my Neighbors stuck in IDLE?
-  -  Running `clear ip bgp all` on the mellanox and `clear bgp *` on the Arubas will restart the BGP process, this process may need to be done when a system is reinstalled.  If only some neighbors are showing `ESTABLISHED` you may need to run the command multiple times for all the BGP peers to come up. 
-  - If you cannot get the neighbors out of IDLE, make sure that passive neighbors are configured.  This is in the automated scripts and shown in the example below.  Passive neighbors should only be configured on NCN neighbors not the switch to switch neighbors (Aruba Only)
+  -  Running `clear ip bgp all` on the Mellanox and `clear bgp *` on the Arubas will restart the BGP process, this process may need to be done when a system is reinstalled. If only some neighbors are showing `ESTABLISHED` you may need to run the command multiple times for all the BGP peers to come up. 
+  - If you cannot get the neighbors out of IDLE, make sure that passive neighbors are configured. This is in the automated scripts and shown in the example below. Passive neighbors should only be configured on NCN neighbors not the switch to switch neighbors (Aruba Only)
 - The BGP neighbors will be the worker NCN IPs on the NMN (node management network) (VLAN002). If your system is using HPE/Aruba, one of the neighbors will be the other spine switch.
 - On the Aruba/HPE switches properly configured BGP will look like the following.
 
 ## Generate MetalLB configmap
-- Depending on the network architecture of your system you may need to peer with switches other than the spines.  CSI has a BGP peers argument that accepts 'aggregation' as an option, if no option is defined it will default to the spines as being the MetalLB peers. 
+- Depending on the network architecture of your system you may need to peer with switches other than the spines. CSI has a BGP peers argument that accepts 'aggregation' as an option, if no option is defined it will default to the spines as being the MetalLB peers. 
 
 CSI cli arguments with ```--bgp-peers aggregation```
 ```
@@ -22,7 +22,7 @@ linux# ~/src/mtl/cray-site-init/bin/csi config init --bootstrap-ncn-bmc-user roo
 ```
 
 ## Automated Process
-There is an automated script to update the BGP configuration on both the Mellanox and Aruba switches.  This script is installed into the `$PATH` by the `metal-net-scripts` package.
+There is an automated script to update the BGP configuration on both the Mellanox and Aruba switches. This script is installed into the `$PATH` by the `metal-net-scripts` package.
 The scripts are named `mellanox_set_bgp_peers.py` and `aruba_set_bgp_peers.py`
 These scripts pull in data from CSI generated `.yaml` files. The files required are ```CAN.yaml, HMN.yaml, HMNLB.yaml, NMNLB.yaml, NMN.yaml```, these exist in the `networks/` subdirectory of the generated configs.
 
@@ -42,7 +42,7 @@ Script Usage
 ```
 USAGE: - <Spine01/Agg01> <Spine02/Agg02> <Path to CSI generated network files>
 
-       - The IPs used should be Node Management Network IPs (NMN), these IPs will be what's used for the BGP Router-ID.
+       - The IPs used should be Node Management Network IPs (NMN), these IPs will be what is used for the BGP Router-ID.
 
        - The path must include CAN.yaml', 'HMN.yaml', 'HMNLB.yaml', 'NMNLB.yaml', 'NMN.yaml
 
@@ -111,7 +111,7 @@ dhcp-host=98:03:9b:bb:a9:94,10.252.1.15,ncn-w001,20m # Bond0 Mac0/Mac1
 dhcp-host=98:03:9b:bb:a9:94,10.254.1.24,ncn-w001,20m # HMN
 dhcp-host=98:03:9b:bb:a9:94,10.102.4.14,ncn-w001,20m # CAN
 ```
-- The Aruba configuration will require you to set the other peering switch as a BGP neighbor, the mellanox configuration does not require this. 
+- The Aruba configuration will require you to set the other peering switch as a BGP neighbor, the Mellanox configuration does not require this. 
 - You will need to delete the previous route-map, and BGP configuration on both switches.
 Aruba delete commands.
 ```
@@ -270,9 +270,9 @@ Mellanox configuration example.
    router bgp 65533 vrf default neighbor 10.252.0.9 transport connection-mode passive
 ```
 
-- Once the IPs are updated for the route-maps and BGP neighbors you may need to restart the BGP process on the switches, you do this by running `clear ip bgp all` on the mellanox and `clear bgp *` on the Arubas. (This may need to be done multiple times for all the peers to come up)
+- Once the IPs are updated for the route-maps and BGP neighbors you may need to restart the BGP process on the switches, you do this by running `clear ip bgp all` on the Mellanox and `clear bgp *` on the Arubas. (This may need to be done multiple times for all the peers to come up)
 - When worker nodes are reinstalled, the BGP process will need to be restarted. 
-- If the BGP peers are still not coming up you should check the metallb.yaml config file for errors.  The MetalLB config file should point to the NMN IPs of the switches configured.
+- If the BGP peers are still not coming up you should check the metallb.yaml config file for errors. The MetalLB config file should point to the NMN IPs of the switches configured.
 
 metallb.yaml configuration example.
 - The peer-address should be the IP of the switch that you are doing BGP peering with.  

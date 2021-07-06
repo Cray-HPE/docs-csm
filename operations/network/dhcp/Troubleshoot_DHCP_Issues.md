@@ -40,7 +40,7 @@ cray-dhcp-kea-udp-hmn          LoadBalancer  10.25.203.31   10.94.100.222  67:30
 cray-dhcp-kea-udp-nmn          LoadBalancer  10.19.187.168  10.92.100.222  67:31904/UDP  5d23h
 ```
 
-If the services shown in the output above are not present, it could be an indication that something isn't working correctly. To check to see if the Kea pods are running:
+If the services shown in the output above are not present, it could be an indication that something is not working correctly. To check to see if the Kea pods are running:
 
 ```bash
 ncn-w001# kubectl get pods -n services -o wide | grep kea

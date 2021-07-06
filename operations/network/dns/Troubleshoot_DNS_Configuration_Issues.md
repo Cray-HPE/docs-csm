@@ -6,7 +6,7 @@ To get names to resolve correctly in a browser, modifying /etc/hosts to map the 
 
 Assuming CAN, BGP, MetalLB, and external DNS are properly configured on a system, name resolution requests can be sent directly to the desired DNS server.
 
-Use this procedure to gain access to system services when exeternal DNS is not configured properly.
+Use this procedure to gain access to system services when external DNS is not configured properly.
 
 ### Prerequisites
 

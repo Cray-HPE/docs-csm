@@ -678,7 +678,7 @@ Use this procedure to update compute node BIOS firmware using FAS. There are two
 
 **Manufacturer: Cray | Device Type : NodeBMC | Target : NodeBIOS**
 
-**IMPORTANT**: The Nodes themselves must be powered **off** in order to update the BIOS on the nodes.  The BMC will still have power and will perform the update.
+**IMPORTANT**: The Nodes themselves must be powered **off** in order to update the BIOS on the nodes. The BMC will still have power and will perform the update.
 
 **IMPORTANT:** When the BMC is updated or rebooted after updating the Node0.BIOS and/or Node1.BIOS liquid-cooled nodes, the node BIOS version will not report the new version string until the nodes are powered back on. It is recommended that the Node0/1 BIOS be updated in a separate action, either before or after a BMC update and the nodes are powered back on after a BIOS update. The liquid-cooled nodes must be powered off for the BIOS to be updated.
 

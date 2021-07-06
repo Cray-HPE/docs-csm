@@ -11,11 +11,11 @@ with many supporting procedures.
 <a name="installation"></a>
 ## Installation
 
-There are two ways to install the CSM software.  There are some differences between a first time install 
+There are two ways to install the CSM software. There are some differences between a first time install 
 which must create the initial configuration payload and configure the management network switches,
 whereas a a reinstall can reuse a previous configuration payload and skip the configuration of management
-network switches.  The first time install will check and then may update firmware for various components
-whereas the reinstall will check and indicate that no firmware update is required.  There are two different
+network switches. The first time install will check and then may update firmware for various components
+whereas the reinstall will check and indicate that no firmware update is required. There are two different
 ways to use the LiveCD, either from a RemoteISO or a USB device, which are described in [Bootstrap PIT Node](../install/index.md#bootstrap_pit_node).
 There are a few places where a comment will be made in a procedure for how one of the scenarios needs to do something different.
 
@@ -44,7 +44,7 @@ the same regardless of the starting point in the workflow.
    1. [Prepare Compute Nodes](../install/index.md#prepare_compute_nodes)
 
 After completion of the firmware update with FAS and the preparation of compute nodes, the CSM product stream has
-been fully installed and configured.  Refer to the _HPE Cray EX Installation and Configuration Guide 1.5 S-8000_
+been fully installed and configured. Refer to the _HPE Cray EX Installation and Configuration Guide 1.5 S-8000_
 for other product streams to be installed and configured after CSM.
 
 See [Install CSM](../install/index.md) for the details on the installation process for either a first time install
@@ -54,8 +54,8 @@ or a reinstall..
 ## Upgrade
 
    The upgrade from Shasta v1.4.2 (including CSM 0.9.3) to Shasta v1.5 (including CSM 1.0) is supported.
-   This process will upgrade the ceph storage software, then the storage nodes, then the Kubernetes master nodes and worker nodes,
-   and finally the CSM services.   The management nodes are upgraded using a rolling upgrade approach which enables
+   This process will upgrade the Ceph storage software, then the storage nodes, then the Kubernetes master nodes and worker nodes,
+   and finally the CSM services. The management nodes are upgraded using a rolling upgrade approach which enables
    management services to continue to function even as one or a few nodes are being upgraded.
 
    See [Upgrade CSM](../upgrade/index.md).

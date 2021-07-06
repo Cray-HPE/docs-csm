@@ -29,7 +29,7 @@ for more information.
 <a name="prepare-bios-and-firmware-for-installation"></a>
 ### 1. Prepare BIOS and Firmware Content for Installation
 
-> **`CUSTOMER NOTE`** If there's doubt that the tar contains latest, the customer should check [CrayPort][1] for newer firmware.
+> **`CUSTOMER NOTE`** If there is doubt that the tar contains the latest, the customer should check [CrayPort][1] for newer firmware.
 
 1. Prepare the inventory. The RPMs providing firmware need to be installed:
     
@@ -368,7 +368,7 @@ For Gigabyte upgrades a tftp server needs to be referred to.
    pit# reboot
    ```
 
-You're now finished with firmware updates.
+You are now finished with firmware updates.
 
 <a name="component-firmware-checkout"></a>
 ### 3. Component Firmware Checkout

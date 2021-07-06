@@ -1,6 +1,6 @@
 # Remove the Email Mapper from the LDAP User Federation
 
-The email mapper is automatically added to the LDAP user federation in Keycloak, but it can be removed. The system doesn't use the user's email for anything, so this function can be removed.
+The email mapper is automatically added to the LDAP user federation in Keycloak, but it can be removed. The system does not use the user's email for anything, so this function can be removed.
 
 If there are duplicate email addresses for LDAP users, it can cause Keycloak to have issues syncing with LDAP. Removing the email mapper will fix this problem.
 

@@ -33,7 +33,7 @@ Mentioned in this workflow:
 
     The Administrator physically adds select compute nodes and powers them on. Because the nodes are unknown, the DHCP and TFTP servers give it the special initialization ramdisk. The compute nodes performs local configuration.
 
-    The following steps \(3-11\) occur automatically as different API's interact with each other.
+    The following steps \(3-11\) occur automatically as different APIs interact with each other.
 
 3.  **Set BMC credentials**
 
@@ -106,7 +106,7 @@ Mentioned in this workflow:
 
     The Administrator physically removes the compute nodes and powers them off.
 
-    The following steps \(3-9\) occur automatically as different API's interact with each other.
+    The following steps \(3-9\) occur automatically as different APIs interact with each other.
 
 3.  **No heartbeats**
 

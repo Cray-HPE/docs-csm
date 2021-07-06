@@ -4,7 +4,7 @@ Ceph includes an option to dump crash data. Retrieve this data to get more infor
 
 ## Prerequisites
 
-Ceph is reporting the cluster \[WRN\] overall HEALTH\_WARN 1 daemons have recently crashed error in the output of the ceph -s or ceph health detail commands.
+Ceph is reporting the cluster \[WRN\] overall HEALTH\_WARN 1 daemons have recently crashed error in the output of the `ceph -s` or `ceph health detail` commands.
 
 ## Procedure
 

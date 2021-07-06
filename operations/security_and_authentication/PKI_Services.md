@@ -4,7 +4,7 @@ The services in this section are integral parts of the Public Key Infrastructure
 
 ### Hashicorp Vault
 
-A deployment of Hashicorp Vault, managed via the Bitnami Bank-vaults operator, stores private and public Certificate Authority \(CA\) material, and serves APIs through a PKI engine instance. This instance also serves as a general secrets engine for the  system.
+A deployment of Hashicorp Vault, managed via the Bitnami Bank-vaults operator, stores private and public Certificate Authority \(CA\) material, and serves APIs through a PKI engine instance. This instance also serves as a general secrets engine for the system.
 
 Kubernetes service account authorization is utilized to authenticate access to Vault. The configuration of Vault, as deployed on the system, can be viewed with the following command:
 
@@ -28,7 +28,7 @@ A deployment of Jetstack Cert-manager provides a Kubernetes-native API to reques
 
 Cert-manager is integrated with Hashicorp Vault for use as a CA. Cert-manager generates key material and a certificate signing request \(CSR\), and then submits the CSR to Vault for signature. Once Vault has signed the certificate, it is made available, along with other key materials, via a Kubernetes Secret. Kubernetes pods or other platform aware components can then source the resulting secret.
 
-Cert-manager will also automatically manage renewal of certificates prior to their expiration time. Cert-manager is deployed on the  system using namespace specific \(certificate\) issuers.
+Cert-manager will also automatically manage renewal of certificates prior to their expiration time. Cert-manager is deployed on the system using namespace-specific \(certificate\) issuers.
 
 To view Issuers:
 

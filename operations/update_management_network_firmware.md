@@ -60,9 +60,9 @@ sw-leaf-001# config
 sw-leaf-001(config)# allow-unsafe-updates 30
 
 This command will enable non-failsafe updates of programmable devices for
-the next 30 minutes.  You will first need to wait for all line and fabric
+the next 30 minutes. You will first need to wait for all line and fabric
 modules to reach the ready state, and then reboot the switch to begin
-applying any needed updates.  Ensure that the switch will not lose power,
+applying any needed updates. Ensure that the switch will not lose power,
 be rebooted again, or have any modules removed until all updates have
 finished and all line and fabric modules have returned to the ready state.
 
@@ -221,7 +221,7 @@ File Transfer State:     download
   Transfer Rate:         869 kbps
 ```
 
-Once the image is uploaded all that's left is a reboot.
+Once the image is uploaded all that is left is a reboot.
 ```
 sw-leaf-001# write memory 
 sw-leaf-001# reload

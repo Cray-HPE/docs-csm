@@ -26,7 +26,7 @@ Expected output
 ```
 
 - If the firmware is not on 1.4.20, notify the admin and get it updated before proceeding. 
-- If you can't get the firmware version, have the admin check for you. 
+- If you cannot get the firmware version, have the admin check for you. 
 - (Aruba & Dell) If the CMMs are on the correct version, verify the LAG configuration is setup correctly.
 - These configurations can be found on the CDU switch pages under the "Configure LAG for CMMs" section.
     - Dell [Dell CDU](../install/configure_dell_cdu_switch.md)
@@ -52,7 +52,7 @@ Displaying ipv4 routes selected for forwarding
 sw-spine01(config)# no ip route 10.92.100.60/32 10.252.1.9
 ```
 
-- (ARUBA ONLY) re-run the bgp script if it's missing the TFTP prefix-list and route-maps as shown in the example below.
+- (ARUBA ONLY) re-run the bgp script if it is missing the TFTP prefix-list and route-maps as shown in the example below.
 - These configuration changes also noted on the [BGP](../operations/update_bgp_neighbors.md) page.
 
 Example TFTP prefix-list and route-map from running config. 

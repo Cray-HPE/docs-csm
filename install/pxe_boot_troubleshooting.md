@@ -26,7 +26,7 @@ snippet of MTL.yaml
 
 Check the configuration for ```interface vlan x```
 This configuration will be the same on BOTH Switches (except the ```ip address```).
-You'll see that there is an ```active-gateway``` and ```ip helper-address``` configured.
+You will see that there is an ```active-gateway``` and ```ip helper-address``` configured.
 ```
 sw-spine-002(config)# show run int vlan 1
 interface vlan1
@@ -69,7 +69,7 @@ interface vlan7
     exit
 ```
 
-If any of this configuration is missing, you'll need to update it to BOTH switches.
+If any of this configuration is missing, you will need to update it to BOTH switches.
 ```
 sw-spine-002# conf t
 sw-spine-002(config)# int vlan 1
@@ -120,7 +120,7 @@ Displaying ipv4 routes selected for forwarding
 ```
 You can see that the route is ```10.92.100.60/32 via 10.252.1.7``` with ```10.252.1.7``` being the worker node.
 
-If that static route is missing you'll need to add it.
+If that static route is missing you will need to add it.
 ```
 sw-spine-001(config)# ip route 10.92.100.60/32 10.252.1.7
 ```
@@ -129,7 +129,7 @@ sw-spine-001(config)# ip route 10.92.100.60/32 10.252.1.7
 
 Check the configuration for ```interface vlan 1```
 This configuration will be the same on BOTH Switches (except the ```ip address```).
-You'll see that there is ```magp``` and ```ip dhcp relay``` configured.
+You will see that there is ```magp``` and ```ip dhcp relay``` configured.
 
 ```
 sw-spine-001 [standalone: master] # show run int vlan 1
@@ -140,7 +140,7 @@ interface vlan 1 magp 1
 interface vlan 1 magp 1 ip virtual-router address 10.1.0.1
 interface vlan 1 magp 1 ip virtual-router mac-address 00:00:5E:00:01:01
 ```
-If this configuration is missing, you'll need to add it to BOTH switches.
+If this configuration is missing, you will need to add it to BOTH switches.
 ```
 sw-spine-001 [standalone: master] # conf t
 sw-spine-001 [standalone: master] (config) # interface vlan 1 magp 1
@@ -246,7 +246,7 @@ EFITIME is 2021-02-26 21:55:04
 HTTP 0x6d35da88 status 404 Not Found
 ```
 
-Rollout a restart of the BSS deployment from any other NCN (likely ncn-m002 if you're executing the ncn-m001 reboot):
+Rollout a restart of the BSS deployment from any other NCN (likely ncn-m002 if you are executing the ncn-m001 reboot):
 ```bash
 ncn-m002# kubectl -n services rollout restart deployment cray-bss
 deployment.apps/cray-bss restarted

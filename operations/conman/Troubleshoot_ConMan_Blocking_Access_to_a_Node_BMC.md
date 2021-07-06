@@ -21,8 +21,8 @@ The Cray command line interface \(CLI\) tool is initialized and configured on th
 
 2. Disable the SOL session.
     
-    Even after the console services are disabled, the conman sol session might need to be directly disabled using `ipmitool`. Note that this is only required for river nodes as mountain hardware
-    does not use ipmi.
+    Even after the console services are disabled, the conman sol session might need to be directly disabled using `ipmitool`. Note that this is only required for River nodes as Mountain hardware
+    does not use IPMI.
     
     ```
     ncn-m001# ipmitool -I lanplus -H BMC_IP -U USERNAME -P BMC_PASSWORD sol deactivate

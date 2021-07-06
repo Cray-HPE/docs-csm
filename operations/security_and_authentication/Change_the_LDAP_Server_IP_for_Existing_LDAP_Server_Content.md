@@ -13,7 +13,7 @@ The contents of the new LDAP server are the same as the previous LDAP server. Fo
 Follow the steps in only one of the sections below depending on if it is preferred to use the Keycloak REST API or Keycloak administration console UI.
 
 
-### Use the Keycloak Administration Consule UI 
+### Use the Keycloak Administration Console UI 
 
 1.  Log in to the administration console.
 

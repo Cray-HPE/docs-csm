@@ -46,7 +46,7 @@ On Mellanox switches if the console is not responding when opened try holding `C
 
 ##### Tip : No USB TTY Device
 
-If you can't see your device in `/dev/tty*` then follow `dmesg -w` and try reseating your USB cable (unplug the end in the NCN, and plug it back in). Observe the `dmesg -w` output, does it show errors pertaining to USB? The cable may be bad, or you may need to reboot.
+If you cannot see your device in `/dev/tty*` then follow `dmesg -w` and try reseating your USB cable (unplug the end in the NCN, and plug it back in). Observe the `dmesg -w` output, does it show errors pertaining to USB? The cable may be bad, or you may need to reboot.
 
 ## Additional External References
 

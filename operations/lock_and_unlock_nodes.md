@@ -1,7 +1,7 @@
 # Lock and Unlock Nodes
 
 Starting with Shasta v1.4, CAPMC and FAS have the ability to ignore management nodes by honoring
-a lock state, however this ability is turned off by default.  The administrator must lock the
+a lock state, however this ability is turned off by default. The administrator must lock the
 management nodes to prevent unwanted actions from affecting these nodes.  
 
 This section only covers using locks with the Hardware State Manager (HSM). For more information
@@ -37,8 +37,8 @@ failure.
 ### When To Lock Management Nodes
 
 To best protect system health, management nodes should be locked as early as possible in the
-install/upgrade cycle.   The later in the process, the more risk of accidentally taking
-down a critical node.  Management node locking must be done after Kubernetes is running and
+install/upgrade cycle. The later in the process, the more risk of accidentally taking
+down a critical node. Management node locking must be done after Kubernetes is running and
 the HSM (Hardware State Manager) service is operational.
 
 Check whether HSM is running with the following command.
@@ -62,7 +62,7 @@ The `cray-smd` pods need to be in the 'Running' state, except for `cray-smd-init
 ### When To Unlock Management Nodes
 
 Any time a management NCN has to be power cycled, reset, or have its firmware updated
-it will first need to be unlocked.  After the operation is complete the targeted nodes
+it will first need to be unlocked. After the operation is complete the targeted nodes
 should once again be locked.
 
 <a name="how-to-lock-management-nodes"></a>

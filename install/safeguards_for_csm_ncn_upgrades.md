@@ -14,7 +14,7 @@ This page covers safe-guards for preventing destructive behaviors on management 
    ```json
    {
      ..
-     // Disables ceph wipe:
+     // Disables Ceph wipe:
      "wipe-ceph-osds": "no"
      ..
    }

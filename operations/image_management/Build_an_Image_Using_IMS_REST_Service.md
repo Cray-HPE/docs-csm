@@ -94,7 +94,7 @@ The commands in this procedure must be run as the `root` user in this release.
 
 4.  Create an IMS job record and start the image creation job.
 
-    After building an image, IMS will automatically upload any build artifacts \(root filesystem, kernel and initrd\) to the artifact repository, and associate them with IMS. IMS is not able to dynamically determine the Linux kernel and initrd to look for since the file name for these vary depending upon linux distribution, linux version, dracut configuration, and more. Thus, the user must pass the name of the kernel and initrd that IMS will look for in the resultant image root’s /boot directory.
+    After building an image, IMS will automatically upload any build artifacts \(root filesystem, kernel and initrd\) to the artifact repository, and associate them with IMS. IMS is not able to dynamically determine the Linux kernel and initrd to look for since the file name for these vary depending upon Linux distribution, Linux version, dracut configuration, and more. Thus, the user must pass the name of the kernel and initrd that IMS will look for in the resultant image root’s /boot directory.
 
     Use the following table to help determine the default kernel and initrd file names to specify when submitting the job to customize an image. These are just default names. Please consult with the site administrator to determine if these names have been changed for a given image or recipe.
 
@@ -388,7 +388,7 @@ The commands in this procedure must be run as the `root` user in this release.
 
     If the image creation operation fails, the build artifacts will not be uploaded to S3. If enable\_debug is set to true, the IMS creation job will enable a debug SSH shell that is accessible by one or more dynamic host names. The user needs to know if they will SSH from inside or outside the Kubernetes cluster to determine which host name to use. Typically, customers access the system from outside the Kubernetes cluster using the Customer Access Network \(CAN\).
 
-7.  Use the `IMS_JOB_ID` to look up the ID of the newly created image.
+7.  Use the `IMS_JOB_ID` to look up the ID of the newly-created image.
 
     Steps 7-9 should only be run if the image creation job fails. If it was successful, proceed to step 10.
 
