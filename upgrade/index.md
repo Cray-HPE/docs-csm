@@ -1,6 +1,6 @@
 # Upgrade CSM
 
-The upgrade process for Cray Systems Management (CSM) 0.9.3, which is part of Shasta v1.4.2,
+The upgrade process for Cray Systems Management (CSM) 0.9.4, which is part of Shasta v1.4.3,
 to CSM 1.0, which is part of Shasta v1.5, has many steps in multiple procedures which should be done in a 
 specific order.
 
