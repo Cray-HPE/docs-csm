@@ -247,7 +247,7 @@ A similar flow can be used to update the resources for cray-sls-postgres, cray-s
 
 1. Store the modified customizations.yaml in the site-init repository in the customer-managed location. **This step is critical.** If not done, these changes will not persist in future installs or updates.
 
-  **IMPORTANT:** If cray-sls-postgres, cray-smd-postgres, or gitea-vcs-postgres resources need to be adjusted, the same procedure as above can be used with the following changes:
+**IMPORTANT:** If cray-sls-postgres, cray-smd-postgres, or gitea-vcs-postgres resources need to be adjusted, the same procedure as above can be used with the following changes:
 
   cray-sls-postgres:
 
