@@ -144,7 +144,7 @@ echo "disable stray host/daemon warnings"
 ceph config set mgr mgr/cephadm/warn_on_stray_hosts false
 ceph config set mgr mgr/cephadm/warn_on_stray_daemons false
 
-echo "Sleeping 30 seconds to allow daemons to being launching..."
+echo "Sleeping 30 seconds to allow daemons to begin launching..."
 sleep 30
 
 wait_for_running_daemons mon 3
