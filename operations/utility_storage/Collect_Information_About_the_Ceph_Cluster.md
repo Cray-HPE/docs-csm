@@ -2,16 +2,16 @@
 
 These general commands for Ceph are helpful for obtaining information pertinent to troubleshooting issues.
 
-As a reference, the ceph commands below are run from a ceph-mon node. Certain commands will work on different systems. For example, the rbd command can be used on the worker nodes if specifying the proper key.
+As a reference, the Ceph commands below are run from a ceph-mon node. Certain commands will work on different systems. For example, the rbd command can be used on the worker nodes if specifying the proper key.
 
 ## Ceph Log and File Locations
 
 - Ceph configurations are located under /etc/ceph/ceph.conf.
 - Ceph data structure and bootstrap is located under /var/lib/ceph/<fsid>/
 - Ceph logs are now accessible by a couple of different methods.
-  - utilizing cephadm ls to resrieve the systemd_unit on the node for the process, then utilize journalctl to dump the logs
+  - utilizing cephadm ls to retrieve the systemd_unit on the node for the process, then utilize journalctl to dump the logs
   - ceph log last [<num:int>] [debug|info|sec|warn|error] [*|cluster|audit|cephadm]
-    - note that that this will dumpt general cluster logs
+    - note that that this will dump general cluster logs
   - cephadm logs [-h] [--fsid FSID] --name <systemd_unit>
 
 ## Check the Status of Ceph

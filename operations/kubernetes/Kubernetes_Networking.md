@@ -29,7 +29,7 @@ As part of the SMS installation, the following network policies are configured o
 -   `hms-badger`: Allows only badger services to access the badger Postgres instance
 -   `api-gateway-database`: Allows only the API gateway to access the API gateway Postgres instance
 -   `api-gateway-upstream`: Allows only the API gateway to access the upstream services
--   `vcs-database`: Allows only gitea to access the VCS instance
+-   `vcs-database`: Allows only Gitea to access the VCS instance
 
 To learn more about Kubernetes, refer to [https://kubernetes.io/](https://kubernetes.io/).
 

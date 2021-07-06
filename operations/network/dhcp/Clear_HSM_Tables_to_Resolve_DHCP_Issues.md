@@ -86,7 +86,7 @@ In some instances, the Hardware State Manager \(HSM\) ethernetInterfaces and red
     done
     ```
 
-    An IP address should be associated with each BMC. If any records say did NOT resolve!, DNS hasn't been updated for that BMC yet.
+    An IP address should be associated with each BMC. If any records say did NOT resolve!, DNS has not been updated for that BMC yet.
 
     The output will look similar to the following while DNS is still coming up:
 

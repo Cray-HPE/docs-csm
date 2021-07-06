@@ -41,7 +41,7 @@ The commands in this procedure need to be run on a ceph-mon node.
 
 1. View the Ceph health detail.
 
-    The OSD\_NEARFULL list can have multiple results. Take a note of the returned results to compare with the output of the ceph osd df output.
+    The OSD\_NEARFULL list can have multiple results. Take a note of the returned results to compare with the output of the `ceph osd df` output.
 
     ```bash
     ncn-m001# ceph health detail
@@ -101,7 +101,7 @@ The commands in this procedure need to be run on a ceph-mon node.
     15   ssd 3.49219  1.00000 3.5 TiB 1.2 TiB 1.2 TiB  179 KiB 2.5 GiB 2.3 TiB 34.44 0.60  41     up
     ```
 
-1. Use the ceph osd reweight command to on the OSD to move data from the drive and get it back under the warning threshold of 85 percent.
+1. Use the `ceph osd reweight` command on the OSD to move data from the drive and get it back under the warning threshold of 85 percent.
 
     This command tells Ceph that the drive can now only hold 80 percent of the usable space \(crush weight\).
 

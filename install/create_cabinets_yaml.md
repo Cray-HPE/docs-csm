@@ -27,8 +27,8 @@ cabinets:
   starting_id: 3000
 ```
 
-In the above example file, there are 2 Hill cabinets that will be automatically numbered as 9000 and 9001.   The Mountain cabinets appear in 3 groupings of four ids.  The River cabinets are non-contiguous in 4 separated ids.
+In the above example file, there are 2 Hill cabinets that will be automatically numbered as 9000 and 9001.   The Mountain cabinets appear in 3 groupings of four ids. The River cabinets are non-contiguous in 4 separated ids.
 
-A system will Hill cabinets can have 1 to 4 cabinet ids.  There is no limit on the number of Mountain or River cabinets.
+A system will Hill cabinets can have 1 to 4 cabinet ids. There is no limit on the number of Mountain or River cabinets.
 
 When the above `cabinets.yaml` file is used, `csi` will ignore any command-line argument to `csi config init` for starting-mountain-cabinet, starting-river-cabinet, starting-hill-cabinet, mountain-cabinets, river-cabinets, or hill-cabinets.

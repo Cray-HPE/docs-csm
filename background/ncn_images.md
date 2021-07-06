@@ -20,7 +20,7 @@ stable (Release) and unstable (pre-release/dev) images.
 > For details on how these images behave and inherit from the base and common images, see [node-image-docs][1].
 
 In short, each image (i.e. Kubernetes and storage-ceph) inherit from the non-compute-common layer. Operationally these are all
-that matter; the common layer, Kubernetes layer, ceph layer, and any other new images.
+that matter; the common layer, Kubernetes layer, Ceph layer, and any other new images.
 
 To boot an NCN, you need 3 artifacts for each node-type (kubernetes-manager/worker, ceph):
 

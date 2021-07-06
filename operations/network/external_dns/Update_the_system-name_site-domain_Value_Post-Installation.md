@@ -1,6 +1,6 @@
 ## Update the system-name.site-domain Value Post-Installation
 
-Update the domain name specified by the csi config init input. Updating the system-name.site-domain value without reinstalling the platform involves the following actions:
+Update the domain name specified by the `csi config init` input. Updating the system-name.site-domain value without reinstalling the platform involves the following actions:
 
   -   Edit the Service object definitions and update all `external-dns.alpha.kubernetes.io/hostname` annotations.
   -   Edit the VirtualService \(and possibly Gateway\) object definitions and update `spec.hosts` and `spec.http[].match[].authority` settings.

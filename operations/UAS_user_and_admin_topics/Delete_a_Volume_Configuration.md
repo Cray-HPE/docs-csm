@@ -4,7 +4,7 @@ category: [numbered, numbered]
 
 # Delete a Volume Configuration
 
-How to delete a volume configuration and prevent its being mounted in UAIs.
+How to delete a volume configuration and prevent it from being mounted in UAIs.
 
 -   Install and initialize the cray administrative CLI.
 -   Obtain the `volume_id` of the UAS volume to delete. Perform [List Volumes Registered in UAS](List_Volumes_Registered_in_UAS.md) if necessary.

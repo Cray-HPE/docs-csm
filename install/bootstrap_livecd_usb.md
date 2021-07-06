@@ -1,8 +1,8 @@
 # Bootstrap PIT Node from LiveCD USB
 
 The Pre-Install Toolkit (PIT) node needs to be bootstrapped from the LiveCD.  There are two media available
-to bootstrap the PIT node--the RemoteISO or a bootable USB device.  This procedure describes using the USB 
-device.  If not using the USB device, see [Bootstrap Pit Node from LiveCD Remote ISO](bootstrap_livecd_remote_iso.md).
+to bootstrap the PIT node--the RemoteISO or a bootable USB device. This procedure describes using the USB 
+device. If not using the USB device, see [Bootstrap Pit Node from LiveCD Remote ISO](bootstrap_livecd_remote_iso.md).
 
 There are 5 overall steps that provide a bootable USB with SSH enabled, capable of installing Shasta v1.5 (or higher).
 
@@ -169,7 +169,7 @@ which device that is.
     [14:0:0:1]   enclosu SanDisk  SES Device       1012  -      
     ```
 
-    In the above example, we can see our internal disks as the `ATA` devices and our USB as the `disk` or `enclosu` device. Since the `SanDisk` fits the profile we're looking for, we are going to use `/dev/sdd` as our disk.
+    In the above example, we can see our internal disks as the `ATA` devices and our USB as the `disk` or `enclosu` device. Since the `SanDisk` fits the profile we are looking for, we are going to use `/dev/sdd` as our disk.
 
     Set a variable with your disk to avoid mistakes:
 
@@ -210,7 +210,7 @@ The USB device is now bootable and contains our artifacts. This may be useful fo
 <a name="configuration-payload"></a>
 ### 3. Configuration Payload
 
-The SHASTA-CFG structure and other configuration files will be prepared, then csi will generate system-unique configuration payload used for the rest of the CSM installation on the USB device.
+The SHASTA-CFG structure and other configuration files will be prepared, then `csi` will generate system-unique configuration payload used for the rest of the CSM installation on the USB device.
 
 * [Before Configuration Payload Workarounds](#before-configuration-payload-workarounds)
 * [Generate Installation Files](#generate-installation-files)
@@ -234,7 +234,7 @@ Check for workarounds in the `/opt/cray/csm/workarounds/before-configuration-pay
 <a name="generate-installation-files"></a>
 #### 3.2 Generate Installation Files
 
-Some files are needed for generating the configuration payload.  See these topics in [Prepare Configuration Payload](prepare_configuration_payload.md) if you have not already prepared the information for this system.
+Some files are needed for generating the configuration payload. See these topics in [Prepare Configuration Payload](prepare_configuration_payload.md) if you have not already prepared the information for this system.
 
    * [Command Line Configuration Payload](prepare_configuration_payload.md#command_line_configuration_payload)
    * [Configuration Payload Files](prepare_configuration_payload.md#configuration_payload_files)
@@ -249,11 +249,11 @@ Pull these files into the current working directory:
 - `switch_metadata.csv`
 - `system_config.yaml` (see below)
 
-> The optional `application_node_config.yaml` file may be provided for further defining of settings relating to how application nodes will appear in HSM for roles and subroles.  See [Create Application Node YAML](create_application_node_config_yaml.md)
+> The optional `application_node_config.yaml` file may be provided for further defining of settings relating to how application nodes will appear in HSM for roles and subroles. See [Create Application Node YAML](create_application_node_config_yaml.md)
 
 > The optional `cabinets.yaml` file allows cabinet naming and numbering as well as some VLAN overrides. See [Create Cabinets YAML](create_cabinets_yaml.md).
 
-> The `system_config.yaml` is required for a reinstall, since it was created during a previous install.  For a first time install, the information in it can be provided as command line arguments to `csi config init`.
+> The `system_config.yaml` is required for a reinstall, since it was created during a previous install. For a first time install, the information in it can be provided as command line arguments to `csi config init`.
 
 
 1. Change into the preparation directory:
@@ -304,7 +304,7 @@ Pull these files into the current working directory:
 
 1. If doing a first time install or the `system_config.yaml` parameter file for a reinstall is not available, generate the system configuration.
 
-   If doing a first time install, this step is required.  If you did the previous step as part of a reinstall, skip this.
+   If doing a first time install, this step is required. If you did the previous step as part of a reinstall, skip this.
 
    The needed files should be in the current directory.
 
@@ -328,7 +328,7 @@ Pull these files into the current working directory:
    linux# export SYSTEM_NAME=eniac
    ```
 
-   Generate the system configuration.  See below for an explanation of the command line parameters and some common settings.
+   Generate the system configuration. See below for an explanation of the command line parameters and some common settings.
 
    ```bash
    linux# csi config init \
@@ -357,23 +357,23 @@ Pull these files into the current working directory:
 
    A new directory matching your `--system-name` argument will now exist in your working directory.
 
-   > After generating a configuration, particularly when upgrading from Shasta v1.3 a visual audit of the generated files for network data should be performed.  Specifically, the <systemname>/networks/HMN_MTN.yaml and <systemname>/networks/NMN_MTN.yaml files should be viewed to ensure that cabinet names, subnets and VLANs have been preserved for an upgrade to Shasta v1.4.  Failure of these parameters to match will likely mean a re-installation or reprogramming of CDU switches and CMM VLANs.
+   > After generating a configuration, particularly when upgrading from Shasta v1.3 a visual audit of the generated files for network data should be performed. Specifically, the <systemname>/networks/HMN_MTN.yaml and <systemname>/networks/NMN_MTN.yaml files should be viewed to ensure that cabinet names, subnets and VLANs have been preserved for an upgrade to Shasta v1.4.  Failure of these parameters to match will likely mean a re-installation or reprogramming of CDU switches and CMM VLANs.
 
    Run the command "csi config init --help" to get more information about the parameters mentioned in the example command above and others which are available.
 
    Notes about parameters to "csi config init":
-   * The application_node_config.yaml file is optional, but if you have one describing the mapping between prefixes in hmn_connections.csv that should be mapped to HSM subroles, you need to include a command line option to have it used.  See [Create Application Node YAML](create_application_node_config_yaml.md).
+   * The application_node_config.yaml file is optional, but if you have one describing the mapping between prefixes in hmn_connections.csv that should be mapped to HSM subroles, you need to include a command line option to have it used. See [Create Application Node YAML](create_application_node_config_yaml.md).
    * The bootstrap-ncn-bmc-user and bootstrap-ncn-bmc-pass must match what is used for the BMC account and its password for the management NCNs.
-   * Set site parameters (site-domain, site-ip, site-gw, site-nic, site-dns) for the information which connects the ncn-m001 (PIT) node to the site.  The site-nic is the interface on this node connected to the site.
+   * Set site parameters (site-domain, site-ip, site-gw, site-nic, site-dns) for the information which connects the ncn-m001 (PIT) node to the site. The site-nic is the interface on this node connected to the site.
    * There are other interfaces possible, but the install-ncn-bond-members are typically: 
       * p1p1,p10p1 for HPE nodes
       * p1p1,p1p2 for Gigabyte nodes
       * p801p1,p801p2 for Intel nodes
-   * If you're not using a cabinets-yaml file, set the three cabinet parameters (mountain-cabinets, hill-cabinets, and river-cabinets) to the number of each cabinet which are part of this system.
-   * The starting cabinet number for each type of cabinet (for example, starting-mountain-cabinet) has a default that can be overridden.  See the "csi config init --help" 
-   * For systems that use non-sequential cabinet id numbers, use cabinets-yaml to include the cabinets.yaml file.  This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to explicitly specify the id of every cabinet in the system.  If you're using a cabinets-yaml file, flags specified on the `csi` command-line related to cabinets will be ignored.  See [Create Cabinets YAML](create_cabinets_yaml.md).
+   * If you are not using a cabinets-yaml file, set the three cabinet parameters (mountain-cabinets, hill-cabinets, and river-cabinets) to the number of each cabinet which are part of this system.
+   * The starting cabinet number for each type of cabinet (for example, starting-mountain-cabinet) has a default that can be overridden. See the "csi config init --help" 
+   * For systems that use non-sequential cabinet ID numbers, use cabinets-yaml to include the cabinets.yaml file. This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to explicitly specify the id of every cabinet in the system. If you are using a cabinets-yaml file, flags specified on the `csi` command-line related to cabinets will be ignored. See [Create Cabinets YAML](create_cabinets_yaml.md).
    * An override to default cabinet IPv4 subnets can be made with the hmn-mtn-cidr and nmn-mtn-cidr parameters.
-   * Several parameters (can-gateway, can-cidr, can-static-pool, can-dynamic-pool) describe the CAN (Customer Access network).  The can-gateway is the common gateway IP used for both spine switches and commonly referred to as the Virtual IP for the CAN.  The can-cidr is the IP subnet for the CAN assigned to this system. The can-static-pool and can-dynamic-pool are the MetalLB address static and dynamic pools for the CAN. The can-external-dns is the static IP assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded.   The can-external-dns IP must be within the can-static-pool range.
+   * Several parameters (can-gateway, can-cidr, can-static-pool, can-dynamic-pool) describe the CAN (Customer Access network).  The can-gateway is the common gateway IP used for both spine switches and commonly referred to as the Virtual IP for the CAN.  The can-cidr is the IP subnet for the CAN assigned to this system. The can-static-pool and can-dynamic-pool are the MetalLB address static and dynamic pools for the CAN. The can-external-dns is the static IP assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded. The can-external-dns IP must be within the can-static-pool range.
    * Set ntp-pool to a reachable NTP server
 
    These warnings from "csi config init" for issues in hmn_connections.json can be ignored.
@@ -383,7 +383,7 @@ Pull these files into the current working directory:
       "Couldn't find switch port for NCN: x3000c0s1b0"
       ```
 
-   * An unexpected component may have this message.  If this component is an application node with an unusual prefix, it should be added to the application_node_config.yaml file and then rerun "csi config init".   See the procedure to [Create Application Node Config YAML](create_application_node_config_yaml.md)
+   * An unexpected component may have this message. If this component is an application node with an unusual prefix, it should be added to the application_node_config.yaml file and then rerun "csi config init".   See the procedure to [Create Application Node Config YAML](create_application_node_config_yaml.md)
 
       ```json
       {"level":"warn","ts":1610405168.8705149,"msg":"Found unknown source prefix! If this is expected to be an Application node, please update application_node_config.yaml","row":
@@ -466,7 +466,7 @@ This will enable SSH, and other services when the LiveCD starts.
    linux# echo "${SYSTEM_NAME}-ncn-m001-pit" >/mnt/cow/rw/etc/hostname
    ```
 
-1. Unmount the Overlay, we're done with it
+1. Unmount the Overlay, we are done with it
 
     ```bash
     linux# umount -v /mnt/cow    
@@ -617,7 +617,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
    You can disconnect from the IPMI console by using the "~.", that is, the tilde character followed by a period character.
 
-   Login via ssh to the node as root.
+   Login via `ssh` to the node as root.
 
    ```bash
    external# ssh root@${SYSTEM_NAME}-ncn-m001
@@ -649,7 +649,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    If this machine does not have direct Internet access these RPMs will need to be externally downloaded and then copied to the system.
 
    **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hotfixes
-   were downloaded to a system using the instructions in [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds).  Use that set of rpms rather than downloading again.
+   were downloaded to a system using the instructions in [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds).  Use that set of RPMs rather than downloading again.
 
    ```bash
    linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm

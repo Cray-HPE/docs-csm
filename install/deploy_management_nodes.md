@@ -6,7 +6,7 @@ and worker nodes together.
 After the operating system boots on each node, there are some configuration actions which
 take place. Watching the console or the console log for certain nodes can help to understand
 what happens and when. When the process completes for all nodes, the Ceph storage is
-initialized and the Kubernetes cluster is created and ready for a workload.  The PIT node
+initialized and the Kubernetes cluster is created and ready for a workload. The PIT node
 will join Kubernetes after it is rebooted later in
 [Redeploy PIT Node](index.md#redeploy_pit_node).
 
@@ -149,7 +149,7 @@ proceed to step 2.
 
 1. Ensure that the PIT node has the current and correct time.
 
-   The time can be inaccurate if the system has been powered off for a long time, or, for example, the CMOS was cleared on a Gigabyte node.  See [Clear Gigabyte CMOS](clear_gigabyte_cmos.md).
+   The time can be inaccurate if the system has been powered off for a long time, or, for example, the CMOS was cleared on a Gigabyte node. See [Clear Gigabyte CMOS](clear_gigabyte_cmos.md).
 
    > This step should not be skipped
 
@@ -226,7 +226,7 @@ proceed to step 2.
       > ```
       > Opening a web browser to `https://localhost:9443` will give access to the BMC's web interface.
 
-   1. When the node boots, you will be able to use the conman session to see the BIOS menu to check and set the time to current UTC time.  The process varies depending on the vendor of the NCN.
+   1. When the node boots, you will be able to use the conman session to see the BIOS menu to check and set the time to current UTC time. The process varies depending on the vendor of the NCN.
 
    Repeat the above process for each NCN.
 
@@ -234,10 +234,10 @@ proceed to step 2.
 ### 2. Update Management Node Firmware
 
 The management nodes are expected to have certain minimum firmware installed for BMC, node BIOS, and PCIe card
-firmware.  Where possible, the firmware should be updated prior to install.  Some firmware can be updated
+firmware. Where possible, the firmware should be updated prior to install. Some firmware can be updated
 during or after the installation, but it is better to meet the minimum NCN firmware requirement before starting.
 
-1. Check thes BIOS settings on management nodes.
+1. Check these BIOS settings on management nodes.
 
    For setting each one, please refer to the vendor manuals for the system's inventory.
 
@@ -258,11 +258,11 @@ during or after the installation, but it is better to meet the minimum NCN firmw
    See [Update NCN Firmware](update_ncn_firmware.md).
 
    > **`WARNING:`** Gigabyte NCNs running BIOS version C20 can become unusable
-   > when Shasta 1.5 is installed.  This is a result of a bug in the Gigabyte
-   > firmware.  This bug has not been observed in BIOS version C17.
+   > when Shasta 1.5 is installed. This is a result of a bug in the Gigabyte
+   > firmware. This bug has not been observed in BIOS version C17.
    >
    > A key symptom of this bug is that the NCN will not PXE boot and will instead
-   > fall through to the boot menu, despite being configure to PXE boot.  This
+   > fall through to the boot menu, despite being configure to PXE boot. This
    > behavior will persist until the failing node's CMOS is cleared.
 
    * See [Clear Gigabyte CMOS](clear_gigabyte_cmos.md).
@@ -271,20 +271,20 @@ during or after the installation, but it is better to meet the minimum NCN firmw
 ### 3. Deploy Management Nodes
 
 Deployment of the nodes starts with booting the storage nodes first, then the master nodes and worker nodes together.
-After the operating system boots on each node there are some configuration actions which take place.  Watching the
-console or the console log for certain nodes can help to understand what happens and when.  When the process is complete
+After the operating system boots on each node there are some configuration actions which take place. Watching the
+console or the console log for certain nodes can help to understand what happens and when. When the process is complete
 for all nodes, the Ceph storage will have been initialized and the Kubernetes cluster will be created ready for a workload.
 
 
 <a name="deploy-workflow"></a>
 ##### 3.1 Deploy Workflow
-The configuration workflow described here is intended to help understand the expected path for booting and configuring.  See the actual steps below for the commands to deploy these management NCNs.
+The configuration workflow described here is intended to help understand the expected path for booting and configuring. See the actual steps below for the commands to deploy these management NCNs.
 
 1. Start watching the consoles for ncn-s001 and at least one other storage node
 1. Boot all storage nodes at the same time
     - The first storage node ncn-s001 will boot and then starts a loop as ceph-ansible configuration waits for all other storage nodes to boot
-    - The other storage nodes boot and become passive.  They will be fully configured when ceph-ansible runs to completion on ncn-s001
-1. Once ncn-s001 notices that all other storage nodes have booted, ceph-ansible will begin ceph configuration.  This takes several minutes.
+    - The other storage nodes boot and become passive. They will be fully configured when ceph-ansible runs to completion on ncn-s001
+1. Once ncn-s001 notices that all other storage nodes have booted, ceph-ansible will begin Ceph configuration. This takes several minutes.
 1. Once ceph-ansible has finished on ncn-s001, then ncn-s001 waits for ncn-m002 to create /etc/kubernetes/admin.conf.
 1. Start watching the consoles for ncn-m002, ncn-m003 and at least one worker node
 1. Boot master nodes (ncn-m002 and ncn-m003) and all worker nodes at the same time
@@ -294,14 +294,14 @@ The configuration workflow described here is intended to help understand the exp
 1. Once ncn-s001 notices that ncn-m002 has created /etc/kubernetes/admin.conf, then ncn-s001 waits for any worker node to become available.
 1. Once each worker node notices that ncn-m002 has created /etc/cray/kubernetes/join-command-control-plan, then it will join the Kubernetes cluster.  
     - Now ncn-s001 should notice this from any one of the worker nodes and move forward with creation of config maps and running the post-ceph playbooks (s3, OSD pools, quotas, etc.)
-1. Once ncn-s001 creates etcd-backup-s3-credentials during the benji-backups role which is one of the last roles after ceph has been set up, then ncn-m001 notices this and moves forward
+1. Once ncn-s001 creates etcd-backup-s3-credentials during the benji-backups role which is one of the last roles after Ceph has been set up, then ncn-m001 notices this and moves forward
 
 
 <a name="deploy"></a>
 ##### 3.2 Deploy
 
-1. Change the default root password and ssh keys
-   > If you want to avoid using the default install root password and ssh keys for the NCNs, follow the
+1. Change the default root password and SSH keys
+   > If you want to avoid using the default install root password and SSH keys for the NCNs, follow the
    > NCN image customization steps in [Change NCN Image Root Password and SSH Keys](../operations/change_ncn_image_root_password_and_ssh_keys.md)
 
    This step is **strongly encouraged** for external/site deployments.
@@ -315,9 +315,9 @@ The configuration workflow described here is intended to help understand the exp
 
 1. Customize boot scripts for any out-of-baseline NCNs
     - **kubernetes-worker nodes** with more than 2 small disks need to make adjustments to [prevent bare-metal etcd creation](../background/ncn_mounts_and_file_systems.md#worker-nodes-with-etcd)
-    - A brief overview of what's expected is here, in [disk plan of record / baseline](../background/ncn_mounts_and_file_systems.md#plan-of-record--baseline)
+    - A brief overview of what is expected is here, in [disk plan of record / baseline](../background/ncn_mounts_and_file_systems.md#plan-of-record--baseline)
 
-1. Set each node to always UEFI Network Boot, and ensure they're powered off
+1. Set each node to always UEFI Network Boot, and ensure they are powered off
 
     ```bash
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=efiboot,persistent
@@ -402,7 +402,7 @@ The configuration workflow described here is intended to help understand the exp
 
     **`NOTE`**: If the nodes have PXE boot issues (e.g. getting PXE errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
 
-    **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to linux with no hostname) see the CSM workarounds for fixes around mutual symptoms.  If there is a workaround here, the output will look similar to the following.
+    **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to Linux with no hostname) see the CSM workarounds for fixes around mutual symptoms. If there is a workaround here, the output will look similar to the following.
 
       > ```bash
       > pit# ls /opt/cray/csm/workarounds/after-ncn-boot
@@ -449,7 +449,7 @@ The configuration workflow described here is intended to help understand the exp
 
     **`NOTE`**: If one of the master nodes seems hung waiting for the storage nodes to create a secret, check the storage node consoles for error messages. If any are found, consult [CEPH CSI Troubleshooting](ceph_csi_troubleshooting.md)
 
-    **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to linux with no hostname) see the CSM workarounds for fixes around mutual symptoms.  If there is a workaround here, the output will look similar to the following.
+    **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to Linux with no hostname) see the CSM workarounds for fixes around mutual symptoms. If there is a workaround here, the output will look similar to the following.
 
     > ```bash
     > pit# ls /opt/cray/csm/workarounds/after-ncn-boot
@@ -493,7 +493,7 @@ The configuration workflow described here is intended to help understand the exp
     ncn-s# cephadm shell -- ceph-volume inventory
     ```
 
-    The field "available" would be true if ceph sees the drive as empty and can
+    The field "available" would be true if Ceph sees the drive as empty and can
     be used, e.g.:
 
     ```
@@ -525,7 +525,7 @@ More information can be found at [cephadm reference page](../upgrade/1.0/resourc
 <a name="apply-ncn-post-boot-workarounds"></a>
 #### 3.4 Apply NCN Post-Boot Workarounds
 
-Check for workarounds in the `/opt/cray/csm/workarounds/after-ncn-boot` directory.  If there are any workarounds in that directory, run those now.   Instructions are in the `README` files.
+Check for workarounds in the `/opt/cray/csm/workarounds/after-ncn-boot` directory. If there are any workarounds in that directory, run those now. Instructions are in the `README` files.
 
 If there is a workaround here, the output looks similar to the following:
 ```
@@ -563,7 +563,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
    - Aruba:`clear bgp *`
    - Mellanox: `clear ip bgp all`
 
-1. **`NOTE`**: At this point all but possibly one of the peering sessions with the BGP neighbors should be in IDLE or CONNECT state and not ESTABLISHED state.   If the switch is an Aruba, you will have one peering session established with the other switch.  You should check that all of the neighbor IP addresses are correct.
+1. **`NOTE`**: At this point all but possibly one of the peering sessions with the BGP neighbors should be in IDLE or CONNECT state and not ESTABLISHED state. If the switch is an Aruba, you will have one peering session established with the other switch. You should check that all of the neighbor IP addresses are correct.
 
 1. If needed, the following helper scripts are available for the various switch types:
 
@@ -593,7 +593,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 <a name="validate_management_node_deployment"></a>
 ### 5. Validate Management Node Deployment
 
-Do all of the validation steps.  The optional validation steps are manual steps which could be skipped.
+Do all of the validation steps. The optional validation steps are manual steps which could be skipped.
 
 <a name="validation"></a>
 #### 5.1 Validation
@@ -629,18 +629,18 @@ Observe the output of the checks and note any failures, then remediate them.
    > ncn# blkid -L K8SLET
    > ```
    >
-   > The test should be looking for the ephemeral disk, that disk is sometimes `/dev/sdc`. The name of the disk is a more accurate test, and isn't prone to the random path change.
+   > The test should be looking for the ephemeral disk, that disk is sometimes `/dev/sdc`. The name of the disk is a more accurate test, and is not prone to the random path change.
 
    > Note: If your shell terminal is not echoing your input after running this, type "reset" and press enter to recover.
 
-1. Ensure that weave hasn't split-brained
+1. Ensure that weave has not split-brained
 
    Run the following command on each member of the Kubernetes cluster (master nodes and worker nodes) to ensure that weave is operating as a single cluster:
 
    ```bash
    ncn# weave --local status connections  | grep failed
    ```
-   If you see messages like **'IP allocation was seeded by different peers'** then weave looks to have split-brained.  At this point it is necessary to wipe the ncns and start the PXE boot again:
+   If you see messages like **'IP allocation was seeded by different peers'** then weave looks to have split-brained. At this point it is necessary to wipe the ncns and start the PXE boot again:
 
    1. Wipe the ncns using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md).
    1. Return to the 'Boot the **Storage Nodes**' step of [Deploy Management Nodes](#deploy_management_nodes) section above.
@@ -665,7 +665,7 @@ Observe the output of the checks and note any failures, then remediate them.
 
 # Important Checkpoint
 
-> Before you move on, this is the last point where you will be able to rebuild nodes without having to rebuild the pit node.  So take time to double check either the cluster or the validation test results**
+> Before you move on, this is the last point where you will be able to rebuild nodes without having to rebuild the PIT node. So take time to double check either the cluster or the validation test results**
 
 <a name="next-topic"></a>
 # Next Topic

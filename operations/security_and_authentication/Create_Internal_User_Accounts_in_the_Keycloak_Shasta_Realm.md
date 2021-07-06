@@ -42,7 +42,7 @@ New admin and user accounts are authenticated with Keycloak. Authenticated accou
 
     3.  Select the **Save** button at the bottom once both the `uid` and `gid` attributes have been added.
 
-    In addition, other attributes can be added as needed by site specific applications. The User Access Service \(UAS\) requires these attributes.
+    In addition, other attributes can be added as needed by site-specific applications. The User Access Service \(UAS\) requires these attributes.
 
     User accounts need the following attributes defined to create a User Access Instance \(UAI\):
 

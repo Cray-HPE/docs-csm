@@ -242,7 +242,7 @@ Enable Nvidia Cuda support on the system via a Content Projection Service \(CPS\
 
     The file in the Git branch that provides the repository information is roles/cray\_nvidia\_customize/defaults/main.yml.
 
-    If the default repository path differs from the newly created one, update the hpc-sdk\_repo\_uri and hpc-sdk\_repo fields in that file to refer to the recently created packages.local branch path and name.
+    If the default repository path differs from the newly-created one, update the hpc-sdk\_repo\_uri and hpc-sdk\_repo fields in that file to refer to the recently created packages.local branch path and name.
 
     ```bash
     ncn-m001# vi roles/cray_nvidia_customize/defaults/main.yml
@@ -415,7 +415,7 @@ Enable Nvidia Cuda support on the system via a Content Projection Service \(CPS\
 
     1.  Access the log for the CFS pod found in the previous step.
 
-        Follow the Ansible log as it runs the jobs to install and configure the image. Watch for errors in the ansible plays. At the end of the run, check the "PLAY RECAP" output for any failed Ansible plays.
+        Follow the Ansible log as it runs the jobs to install and configure the image. Watch for errors in the Ansible plays. At the end of the run, check the "PLAY RECAP" output for any failed Ansible plays.
 
         ```bash
         ncn-m001# kubectl logs -n services CFS_POD_ID -f -c ansible-0
@@ -426,7 +426,7 @@ Enable Nvidia Cuda support on the system via a Content Projection Service \(CPS\
 
 1.  Monitor the CFS session until it completes and reports as successful.
 
-    When the Ansible play completes, CFS will package the newly generated image and upload it to S3. This can take a while to complete. Wait for the CFS session to report status: complete and targets: success: 1.
+    When the Ansible play completes, CFS will package the newly-generated image and upload it to S3. This can take a while to complete. Wait for the CFS session to report status: complete and targets: success: 1.
 
     ```bash
     ncn-m001# cray cfs sessions describe $CFS_SESSION
@@ -436,7 +436,7 @@ Enable Nvidia Cuda support on the system via a Content Projection Service \(CPS\
 
 1.  Record the resultant image ID reported under the artifacts section.
 
-    The result\_id value is the IMS image ID for the newly created Nvidia CPS image.
+    The result\_id value is the IMS image ID for the newly-created Nvidia CPS image.
 
     ```bash
     ncn-m001# cray cfs sessions describe $CFS_SESSION | grep result_id
@@ -485,7 +485,7 @@ Enable Nvidia Cuda support on the system via a Content Projection Service \(CPS\
 
     1.  Edit the roles/cray\_nvidia\_common/defaults/main.yml file.
 
-        Edit the "cray\_nvidia\_sqfs\_img\_id" field to provide the resultant IMS image ID of the newly created CPS image from the step to retrieve the [resultant ID](#resultant-id).
+        Edit the "cray\_nvidia\_sqfs\_img\_id" field to provide the resultant IMS image ID of the newly-created CPS image from the step to retrieve the [resultant ID](#resultant-id).
 
         ```bash
         ncn-m001# vim roles/cray_nvidia_common/defaults/main.yml
@@ -528,7 +528,7 @@ Enable Nvidia Cuda support on the system via a Content Projection Service \(CPS\
 
 #### REBOOT/RECONFIGURE GRIZZLY PEAK COMPUTE NODES
 
-1.  Create a new BOS session template to be used to boot and configure the Grizzly Peak nodes with a newly created CFS configuration.
+1.  Create a new BOS session template to be used to boot and configure the Grizzly Peak nodes with a newly-created CFS configuration.
 
     1.  Create a new CFS configuration JSON file using the new commit ID generated in the step to commit changes to the [Grizzly Peak configuration manifest branch](#grizzly-peak-commit).
 
@@ -669,7 +669,7 @@ Enable Nvidia Cuda support on the system via a Content Projection Service \(CPS\
         ncn-m001# cray cfs sessions list
         ```
 
-        If successful, the end of the CFS Ansible log will report a number of successful ansible plays and no failures. If there are issues, review the log output for the failing play.
+        If successful, the end of the CFS Ansible log will report a number of successful Ansible plays and no failures. If there are issues, review the log output for the failing play.
 
         ```bash
         ncn-m001# kubectl logs -n services cfs-ff124b54-ca10-47d2-babe-cdd1dabfe8a8 -c ansible
@@ -784,7 +784,7 @@ Enable Nvidia Cuda support on the system via a Content Projection Service \(CPS\
 
     The file in the Git branch that provides the repository information is roles/cray\_nvidia\_customize/defaults/main.yml.
 
-    If the default repository path differs from the newly created one, update the nvidia\_repo\_uri and nvidia\_repo fields in that file to refer to the recently created packages.local branch path and name.
+    If the default repository path differs from the newly-created one, update the nvidia\_repo\_uri and nvidia\_repo fields in that file to refer to the recently created packages.local branch path and name.
 
     ```bash
     ncn-m001# vi roles/cray_nvidia_customize/defaults/main.yml

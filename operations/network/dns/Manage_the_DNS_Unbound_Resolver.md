@@ -32,7 +32,7 @@ For more information about the pods displayed in the output above:
 
 The table below describes what the status of each pod means for the health of the `cray-dns-unbound` services and pods. The Init and NotReady states are not necessarily bad, but it means the pod is being started or is processing. The `cray-dns-manager` and `cray-dns-coredns` pods for `cray-dns-unbound` are job pods that run periodically.
 
-|Pod|Heathly Status|Error Status|Other|
+|Pod|Healthy Status|Error Status|Other|
 |---|--------------|------------|-----|
 |`cray-dns-unbound`|Running|CrashBackOffLoop|
 |`cray-dns-coredns`|Completed|CrashBackOffLoop|InitNotReady|
@@ -83,7 +83,7 @@ ncn-w001# kubectl logs -n services pod/$(kubectl get -n services pods \
 uid: bc1e8b7f-39e2-49e5-b586-2028953d2940
  
 Comparing new and existing DNS records.
-    No differences found.  Skipping DNS update
+    No differences found. Skipping DNS update
 ```
 
 Any log with `ERROR` or `Exception` is an indication that DNS is not healthy. The above example includes one of two possible reports for a healthy manager run. The healthy states are described below, as long as the write to the ConfigMap has not failed:

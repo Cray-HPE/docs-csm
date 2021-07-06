@@ -56,7 +56,7 @@ This procedure does not cover the list of all possible issues that can be encoun
 
             When finished viewing the log, press **Ctrl-c** to exit.
 
-            -   If the following error message is in the log, REDS can't communicate with SLS. If nodes still cannot be geolocated, restart this procedure.
+            -   If the following error message is in the log, REDS cannot communicate with SLS. If nodes still cannot be geolocated, restart this procedure.
 
                 ```
                 WARNING: Unable to get new switch list:

@@ -103,7 +103,7 @@ grep unbound | tail -n 1 | cut -f 1 -d ' ') -c manager | tail -n4
   uid: bc1e8b7f-39e2-49e5-b586-2028953d2940
  
 Comparing new and existing DNS records.
-    No differences found.  Skipping DNS update
+    No differences found. Skipping DNS update
 ```
 
 ### Verify that MetalLB/BGP Peering and Routes are Correct

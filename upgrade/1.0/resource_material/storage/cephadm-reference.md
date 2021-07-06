@@ -2,15 +2,15 @@
 
 
 ## CEPHADM
-cephadm is a new function introduced in Ceph Octopus 15.  It allows for an easier method to install and manage ceph nodes.
+cephadm is a new function introduced in Ceph Octopus 15.  It allows for an easier method to install and manage Ceph nodes.
 
 Common Examples:
 
-**Invoking shells to run traditional ceph commands**
+**Invoking shells to run traditional Ceph commands**
 
 On ncn-s001/2/3:
 ```bash
-ncn-s00[123]# cephadm shell  # creates a container with access to run ceph commands the traditional way
+ncn-s00[123]# cephadm shell  # creates a container with access to run Ceph commands the traditional way
 ```
 
 or optionally, you can execute your command
@@ -20,7 +20,7 @@ ncn-s00[123]# cephadm shell -- ceph -s
 
 **CEPH-VOLUME**
 
-There are multiple ways to do ceph device operations now.
+There are multiple ways to do Ceph device operations now.
 
 ***via cephadm***
 ```bash

@@ -35,7 +35,7 @@ The most noteworthy changes since the previous release are described here.
 <a name="deprecated_features"></a>
 ### Deprecated Features
 
-   * cray-conman pod.  This has been replaced by cray-console-node.
+   * cray-conman pod. This has been replaced by cray-console-node.
 
 <a name="other_changes"></a>
 ### Other Changes

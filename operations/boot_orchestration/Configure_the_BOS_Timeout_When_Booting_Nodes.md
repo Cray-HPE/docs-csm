@@ -5,9 +5,9 @@ Manually update the boa-job-template config map to tune the timeout and sleep in
 If the BOS timeout occurs when booting compute nodes, the system will be unable to boot via BOS.
 
 
-### Prerequisties
+### Prerequisites
 
-A Boot Orchestartion Service \(BOS\) session was run and compute nodes are failing to move to a Ready state.
+A Boot Orchestration Service \(BOS\) session was run and compute nodes are failing to move to a Ready state.
 
 
 ### Procedure

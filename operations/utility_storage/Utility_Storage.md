@@ -6,14 +6,14 @@ Ceph is the utility storage platform that is used to enable pods to store persis
 
 ***IMPORTANT NOTES***
 >
-> - When running commands for ceph health you must run those from either ncn-m or ncn-s001/2/3.  
-> - Unless otherwise specified to run on the host in quesstion, you can run the commands on either masters or ncn-s00(1/2/3)
+> - When running commands for Ceph health you must run those from either ncn-m or ncn-s001/2/3.  
+> - Unless otherwise specified to run on the host in question, you can run the commands on either masters or ncn-s00(1/2/3)
 > - Those are the only servers with the credentials.  
 > - The document will specify when to run a command from a node other than those
 
 ## Table of Contents
 
-- [Running ceph commands in 1.5](cephadm-reference.md)
+- [Running Ceph commands in 1.5](cephadm-reference.md)
 - [Collect Information about the Ceph Cluster](Collect_Information_About_the_Ceph_Cluster.md)  
 - [Ceph Services](Ceph_Services.md)  
 - [Manage Ceph Services](Manage_Ceph_Services.md)  

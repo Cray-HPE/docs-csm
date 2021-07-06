@@ -67,7 +67,7 @@ This procedure requires administrative privileges.
     ...
     ```
 
-    Take note of any pods that aren't in a `Running` or `Completed` state, or have another state that is not considered to be healthy. This will help identify after the node is brought back up what new issues have occurred.
+    Take note of any pods that are not in a `Running` or `Completed` state, or have another state that is not considered to be healthy. This will help identify after the node is brought back up what new issues have occurred.
 
     To view the pods in an unhealthy state:
 

@@ -34,7 +34,7 @@ An NCN has an interface that is failing to assign a static IP address or that ha
             ncn-w001# wicked ifreload INTERFACE_NAME
             ```
 
-            If that doesn't work, attempt to forcefully add it:
+            If that does not work, attempt to forcefully add it:
 
             ```bash
             ncn-w001# systemctl restart wickedd-nanny

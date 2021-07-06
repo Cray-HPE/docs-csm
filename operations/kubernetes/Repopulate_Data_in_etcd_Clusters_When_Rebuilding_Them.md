@@ -26,7 +26,7 @@ A etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unheal
     Boot preparation information for other product streams can be found in the **:
 
     -   UANs: refer to the "PREPARE UAN BOOT SESSION TEMPLATES" header in the "Install and Configure UANs" procedure.
-    -   Cray Operating System \(COS\): refer to the "BOOT PREPERATION" header in the "Install and Configure the Cray Operating System \(COS\)" procedure.
+    -   Cray Operating System \(COS\): refer to the "BOOT PREPARATION" header in the "Install and Configure the Cray Operating System \(COS\)" procedure.
 
 
 ### CPS

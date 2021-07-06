@@ -33,7 +33,7 @@ State descriptions:
 
 -   **`On`**
 
-    Powered on. If no heartbeat mechanism is available, it's software state may be unknown.
+    Powered on. If no heartbeat mechanism is available, its software state may be unknown.
 
 -   **`Standby`**
 

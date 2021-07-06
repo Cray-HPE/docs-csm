@@ -300,7 +300,7 @@ data:
 ---
 Key: `upstream_ntp_server`
 
-> **`WARNING`** at this time, multiple upstream-NTP servers can not be specified.
+> **`WARNING`** at this time, multiple upstream-NTP servers cannot be specified.
 
 data:
 

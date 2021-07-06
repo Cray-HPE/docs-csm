@@ -13,9 +13,9 @@ doing the [Configure Management Network Switches](index.md#configure_management_
    - There you will see what type of hardware is on the system.
    - Take note of the hardware.
 - Look at the ```25G_10G``` or ```40G_10G``` tab, this will depend on the SHCD.
-   - Look  at this part of the page.  The source is either a node or a switch.  The destination is usually a switch.
+   - Look  at this part of the page. The source is either a node or a switch. The destination is usually a switch.
      The `source label info` and `destination label info` indicate the component name (xname) and the port on that component to which
-     the cable is connected.  For example, `x3000u01s1-j1`, means the device in cabinet x3000 at location u01 within the cabinet and in slot s1 with port j1.
+     the cable is connected. For example, `x3000u01s1-j1`, means the device in cabinet x3000 at location u01 within the cabinet and in slot s1 with port j1.
      The physical cable connecting source to destination should be labelled with `source label info` and `destination label info`.
 
      Refer to "Component Names (xnames)" in the _HPE Cray EX Hardware Management Administration Guide 1.5 S-8015_.
@@ -48,8 +48,8 @@ doing the [Configure Management Network Switches](index.md#configure_management_
       | uan03 | x3000u031s1-j1 | x3000u24L-j14 | sw-25g01 |
       | uan03 | x3000u031s1-j2 | x3000u24R-j14 | sw-25g02 |
 
-    - Based on the vendor of the nodes and the name in the first column we can determine how it's supposed to be cabled. 
-    - We can use ```mn01``` as an example.  This is a master node, and in the ```device diagrams``` tab it is identified as an HPE DL325 node.
+    - Based on the vendor of the nodes and the name in the first column we can determine how it is supposed to be cabled. 
+    - We can use ```mn01``` as an example. This is a master node, and in the ```device diagrams``` tab it is identified as an HPE DL325 node.
     - Once you have those two pieces of information you can use the [Cable Management Network Servers](cable_management_network_servers.md) for all nodes listed on the SHCD.
     - UANs and Application Nodes
     - Worker nodes
@@ -65,26 +65,26 @@ doing the [Configure Management Network Switches](index.md#configure_management_
 |             | Go to the ```Device Diagrams``` tab, take note of the type of hardware on the system        |          |
 |             | Depending on the hardware, open either the **25G_10G** tab or the **40G_10G** tab. |        |
 |             | Locate the nodes prefixed with ```uan``` or another prefix for application node |        |
-|             | Based on the vendor of the node and the name in the first column we can determine how it's supposed to be cabled.  |         |
-|             | Check cabling against the [Cable Management Network Servers](cable_management_network_servers.md) If it's cabled incorrectly, contact the team in charge of cabling and request a change.             |               |
+|             | Based on the vendor of the node and the name in the first column we can determine how it is supposed to be cabled.  |         |
+|             | Check cabling against the [Cable Management Network Servers](cable_management_network_servers.md) If it is cabled incorrectly, contact the team in charge of cabling and request a change.             |               |
 | NCN-Master         |             |               |
 |             | Open the SHCD from the system |             |
 |             | Go to the ```Device Diagrams``` tab, take note of the type of hardware on the system        |          |
 |             | Depending on the hardware, open either the **25G_10G** tab or the **40G_10G** tab. |        |
 |             | Locate the nodes named ```mnxx``` |        |
-|             | Based on the vendor of the node and the name in the first column we can determine how it's supposed to be cabled.  |         |
-|             | Check cabling against the [Cable Management Network Servers](cable_management_network_servers.md) If it's cabled incorrectly, contact the team in charge of cabling and request a change.             |               |
+|             | Based on the vendor of the node and the name in the first column we can determine how it is supposed to be cabled.  |         |
+|             | Check cabling against the [Cable Management Network Servers](cable_management_network_servers.md) If it is cabled incorrectly, contact the team in charge of cabling and request a change.             |               |
 | NCN-Worker         |             |               |
 |             | Open the SHCD from the system |             |
 |             | Go to the ```Device Diagrams``` tab, take note of the type of hardware on the system        |          |
 |             | Depending on the hardware, open either the **25G_10G** tab or the **40G_10G** tab. |        |
 |             | Locate the nodes named ```wnxx``` |        |
-|             | Based on the vendor of the node and the name in the first column we can determine how it's supposed to be cabled.  |         |
-|             | Check cabling against the [Cable Management Network Servers](cable_management_network_servers.md) If it's cabled incorrectly, contact the team in charge of cabling and request a change.             |               |
+|             | Based on the vendor of the node and the name in the first column we can determine how it is supposed to be cabled.  |         |
+|             | Check cabling against the [Cable Management Network Servers](cable_management_network_servers.md) If it is cabled incorrectly, contact the team in charge of cabling and request a change.             |               |
 | NCN-Storage         |             |               |
 |             | Open the SHCD from the system |             |
 |             | Go to the ```Device Diagrams``` tab, take note of the type of hardware on the system        |          |
 |             | Depending on the hardware, open either the **25G_10G** tab or the **40G_10G** tab. |        |
 |             | Locate the nodes named ```snxx``` |        |
-|             | Based on the vendor of the node and the name in the first column we can determine how it's supposed to be cabled.  |         |
-|             | Check cabling against the [Cable Management Network Servers](cable_management_network_servers.md) If it's cabled incorrectly, contact the team in charge of cabling and request a change.             |               |
+|             | Based on the vendor of the node and the name in the first column we can determine how it is supposed to be cabled.  |         |
+|             | Check cabling against the [Cable Management Network Servers](cable_management_network_servers.md) If it is cabled incorrectly, contact the team in charge of cabling and request a change.             |               |

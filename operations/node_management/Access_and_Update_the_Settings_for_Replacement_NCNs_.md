@@ -26,7 +26,7 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
     Chassis Power is on
     ```
 
-    **Troubleshooting:** Follow the steps below if the credentials aren't available:
+    **Troubleshooting:** Follow the steps below if the credentials are not available:
 
     1.  Power cycle the replacement NCN.
     2.  Boot into Linux.

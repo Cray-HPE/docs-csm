@@ -23,10 +23,10 @@ The use cases for resetting services:
 <a name="restart_network_services_and_interfaces"></a>
 ### Restart Network Services
 
-There's a few daemons that makeup the SUSE network stack.  The following are  
+There are a few daemons that make up the SUSE network stack. The following are  
 sorted by safest to touch relative to keeping an SSH connection up.
 
-1. `wickedd.service`: The daemons handling each interface.  Resetting this clears stale configuration.
+1. `wickedd.service`: The daemons handling each interface. Resetting this clears stale configuration.
     This command restarts the `wickedd` service without reconfiguring the network interfaces.
 
     ```bash
@@ -44,8 +44,8 @@ sorted by safest to touch relative to keeping an SSH connection up.
 3. `network.service`: Responsible for network configuration per interface; This does not reload `wicked`.
     This command restarts the network interface configuration, but leaves wicked daemons alone.
 
-    > NOTE: Commonly the problem exists within `wicked`, this is a last resort in the event the
-    configuration is so bad `wicked` can't handle it.
+    > NOTE: Commonly the problem exists within `wicked`. This is a last resort in the event the
+    configuration is so bad `wicked` cannot handle it.
 
     ```bash
     # Restart the network interface configuration, but leaves wicked daemons alone.

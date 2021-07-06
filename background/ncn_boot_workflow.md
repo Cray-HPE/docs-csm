@@ -42,7 +42,7 @@ PXE. The method to use will vary depending on the system environment.
 <a name="set-bmcs-to-dhcp"></a>
 ### Set BMCs to DHCP
 
-If you are reinstalling a system, the BMCs for the NCNs may be set to static. We check `/var/lib/misc/dnsmasq.leases` for setting up the symlinks for the artifacts each node needs to boot.  So if your BMCs are set to static, those artifacts will not get setup correctly. You can set them back to DHCP by using a command as such:
+If you are reinstalling a system, the BMCs for the NCNs may be set to static. We check `/var/lib/misc/dnsmasq.leases` for setting up the symlinks for the artifacts each node needs to boot. So if your BMCs are set to static, those artifacts will not get setup correctly. You can set them back to DHCP by using a command such as:
 
 ```bash
 ncn# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
@@ -359,7 +359,7 @@ Parsing the output of `efibootmgr` can be helpful in determining which device is
    ```
    1. Set next boot entry.
 
-   In the example above, our device is 0014 or 0015. We'll guess its the first one, and can correct this on-the-fly in POST
+   In the example above, our device is 0014 or 0015. We will guess it is the first one, and can correct this on-the-fly in POST.
    Notice the lack of "Boot" in the ID number given, we want Boot0014 so we pass '0014' to efibootmgr:
 
    ```bash

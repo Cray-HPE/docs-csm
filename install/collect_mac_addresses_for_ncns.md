@@ -1,16 +1,16 @@
 # Collect MAC Addresses for NCNs  
 
 Now that the PIT node has been booted with the LiveCD and the management network switches have been configured,
-the actual MAC address for the management nodes can be collected.  This process will include repitition of some 
+the actual MAC address for the management nodes can be collected. This process will include repitition of some 
 of the steps done up to this point because `csi config init` will need to be run with the proper
 MAC addresses and some services will need to be restarted.
 
 **Note**: If a reinstall of this software release is being done on this system and the `ncn_metadata.csv` 
-file aleady had valid MAC addresses for both BMC and node interfaces before `csi config init` was run, then
+file already had valid MAC addresses for both BMC and node interfaces before `csi config init` was run, then
 this topic could be skipped and instead move to [Deploy Management Nodes](#deploy_management_nodes).
 
 **Note**: If a first time install of this software release is being done on this system and the `ncn_metadata.csv` 
-file aleady had valid MAC addresses for both BMC and node interfaces before `csi config init` was run, then this
+file already had valid MAC addresses for both BMC and node interfaces before `csi config init` was run, then this
 topic could be skipped and instead move to [Deploy Management Nodes](#deploy_management_nodes).
 
 ### Topics
@@ -219,7 +219,7 @@ so several earlier steps need to be repeated.
 
 1. Confirm that the `ncn_metadata.csv` file in this directory has the new information.
    There should be no remaining dummy data (de:ad:be:ef:00:00) for columns or rows in the file.
-   Every row should have uniquely different MAC addressess from the other rows.
+   Every row should have uniquely different MAC addresses from the other rows.
 
    ```bash
    pit# grep -v "de:ad:be:ef:00:00" ncn_metadata.csv

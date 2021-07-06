@@ -7,7 +7,7 @@ an external Identity Provider (IdP), such as an LDAP or AD server, which enables
 of external accounts in keycloak.
 
 However, if the external accounts are not available, then an "internal user account" could be 
-created in keycloak.  Having a usable account in keycloak with administrative authorization
+created in keycloak. Having a usable account in keycloak with administrative authorization
 enables the use of the `cray` CLI for many administrative commands, such as those used to
 [Validate CSM Health](validate_csm_health.md) and general operation of the management services
 via the API gateway.

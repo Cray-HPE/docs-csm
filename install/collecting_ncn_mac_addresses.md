@@ -1,6 +1,6 @@
 # Collecting NCN MAC Addresses
 
-This procedure will detail how to collect the NCN MAC addresses from a Shasta system.  After completing this procedure,
+This procedure will detail how to collect the NCN MAC addresses from a Shasta system. After completing this procedure,
 you will have the MAC addresses needed for the Bootstrap MAC, Bond0 MAC0, and Bond0 MAC1 columns in `ncn_metadata.csv`.
 
 The Bootstrap MAC address will be used for identification of this node during the early part of the PXE boot process before the bonded interface can be established.
@@ -72,7 +72,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
 4. Now wait for the nodes to netboot. You can follow them with `conman -j ncn-*id*-mgmt` (use `conman -q` to see ). This takes less than 3 minutes, speed depends on how quickly your nodes POST.
-5. Print off what's been found in the console logs, this snippet will omit duplicates from multiple boot attempts:
+5. Print off what has been found in the console logs, this snippet will omit duplicates from multiple boot attempts:
     ```bash
     pit# for file in /var/log/conman/*; do
         echo $file
@@ -207,5 +207,5 @@ If there is a workaround here, the output looks similar to the following:
 CASMINST-980
 ```
 
-8. Before relaunching NCNs, be sure to wipe the disks first.  To wipe all disks in all NCNs, refer to the disk wipe procedure in the
+8. Before relaunching NCNs, be sure to wipe the disks first. To wipe all disks in all NCNs, refer to the disk wipe procedure in the
 [Degraded System Notice](prepare_configuration_payload.md#degraded-system-notice).

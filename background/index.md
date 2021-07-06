@@ -1,7 +1,7 @@
 # CSM Background Information
 
 This document provides background information about the NCNs (non-compute nodes) which function as
-management nodes for the HPE Cray EX system.  This information is not normally needed to install
+management nodes for the HPE Cray EX system. This information is not normally needed to install
 software, but provides background which might be helpful for troubleshooting an installation.
 
 ### Topics:
@@ -37,7 +37,7 @@ software, but provides background which might be helpful for troubleshooting an 
 <a name="certificate_authority"></a>
 ### Certificate Authority
 
-   While a system is being installed for the first time, a certificate authority (CA) is needed.  This can be
+   While a system is being installed for the first time, a certificate authority (CA) is needed. This can be
    generated for a system, or one can be supplied from a customer intermediate CA.  Outside of a new
    installation, there is no supported method to rotate or change the platform CA in this release.
 
@@ -93,7 +93,7 @@ software, but provides background which might be helpful for troubleshooting an 
 <a name="ncn_packages"></a>
 ### NCN Packages
 
-   The management nodes boot from images which have many (rpm) packages installed.  The packages
+   The management nodes boot from images which have many (RPM) packages installed. The packages
    installed differ between the Kubernetes master and worker nodes versus the utility storage nodes.
 
    * [NCN Packages](ncn_packages.md)

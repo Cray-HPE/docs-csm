@@ -55,7 +55,7 @@ ncn-w001# kubectl exec -it -n services -c postgres keycloak-postgres-1 \
 833M    /home/postgres/pgdata/pgroot/data/pg_wal
 ```
 
-In this case, the wal directory is full because replication was not working. Postgres doesn't delete any wal files in order to get the failed replica back to an operational state.
+In this case, the wal directory is full because replication was not working. Postgres does not delete any wal files in order to get the failed replica back to an operational state.
 
 ### Recover a Database if the wal Directory is Full
 
@@ -80,7 +80,7 @@ ncn-w001# kubectl delete pod -n services cray-postgres-operator-67d5467444-ffdc6
 
 ### Check if Replication is Working
 
-When services have a postgres cluster of pods, they need to be able to replicate data between them. When the pods are not able to replicate data, the database will become full. The patronictl list command will show the status of replication:
+When services have a Postgres cluster of pods, they need to be able to replicate data between them. When the pods are not able to replicate data, the database will become full. The patronictl list command will show the status of replication:
 
 ```bash
 postgres@keycloak-postgres-0:~$ patronictl list
@@ -109,7 +109,7 @@ The following is an example where replication is broken:
 
 In the event that a state of broken Postgres replication persists and the space allocated for the WAL files fills-up, the affected database will likely shut down and create a state where it cannot be brought up again. This can impact the reliability of the related service and can require that it be redeployed with data repopulation procedures.
 
-A reinitialize will get the lagging replica member re-synced and replicating again. This should be done as soon as replication lag is detected. In the preceeding example, keycloak-postgres-0 and keycloak-postgres-2 were not replicating properly. To reinitialize a member, run the following commands.
+A reinitialize will get the lagging replica member re-synced and replicating again. This should be done as soon as replication lag is detected. In the preceding example, keycloak-postgres-0 and keycloak-postgres-2 were not replicating properly. To reinitialize a member, run the following commands.
 
 This example is for the keycloak-postgres-2 member, and the same commands were run for the keycloak-postgres-0 member, where keycloak-postgres-1 is the leader pod. Exec into the leader pod and reinitialize the keycloak-postgres cluster member that is not replicating.
 

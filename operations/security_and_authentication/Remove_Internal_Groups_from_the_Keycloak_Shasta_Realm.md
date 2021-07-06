@@ -15,7 +15,7 @@ Remove a group in the Keycloak Shasta realm. Unused Keycloak groups can be remov
 
 ### Procedure
 
-1.  Click the Groups text in the Manage section in the naviagation area on the left side of the screen.
+1.  Click the Groups text in the Manage section in the navigation area on the left side of the screen.
 
 2.  Search for the group and select the group in the groups table.
 

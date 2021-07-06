@@ -5,7 +5,7 @@ Glossary of terms used in CSM documentation.
 ### Application Node (AN)
 
 An application node (AN) is an NCN which is not providing management functions for the Cray EX system.
-The AN is not part of the Kubernetes cluster to which management nodes belong.  One special type of AN
+The AN is not part of the Kubernetes cluster to which management nodes belong. One special type of AN
 is the UAN (User Access Node), but different systems may have need for other types of AN, such as nodes
 which provide a Lustre routing function (LNet router), or gateway between HSN and Infiniband, or data 
 mover between two different network file systems, or visualization servers, or some other special purpose
@@ -77,7 +77,7 @@ long as the other CMMs/CEC enables CDU cooling.
 
 ### Compute Node (CN)
 
-The compute node (CN) is where high performance computing application are run.  These have
+The compute node (CN) is where high performance computing application are run. These have
 hostnames that are of the form "nidXXXXXX", that is, "nid" followed by six digits.
 where the XXXXXX is a six digit number starting with zero padding.
 
@@ -85,7 +85,7 @@ where the XXXXXX is a six digit number starting with zero padding.
 
 The Cray Site Init (CSI) program creates, validates, installs, and upgrades a Cray EX system.
 CSI can prepare the LiveCD for booting the PIT node and then is used from a booted PIT node
-to do its other functions during an installation.  During an upgrade, CSI is installed on
+to do its other functions during an installation. During an upgrade, CSI is installed on
 one of the nodes to facilitate the CSM software upgrade.
 
 ### Cray System Management (CSM)
@@ -143,7 +143,7 @@ The High Speed Network (HSN) in an HPE Cray EX system is based on the Slingshot 
 ### LiveCD
 
 The liveCD has a complete bootable Linux operating system that can be run from a read-only CD or
-DVD or from a writable USB flash drive or hard disk.  It is used to bootstrap the installation
+DVD or from a writable USB flash drive or hard disk. It is used to bootstrap the installation
 process for CSM software.
 
 ### Management Cabinet
@@ -158,9 +158,9 @@ point for managing the system.
 The management nodes are one grouping of NCNs.  The management nodes include the master nodes
 with hostnames of the form of ncn-mXXX, the worker nodes with hostnames of the form ncn-wXXX,
 and utility storage nodes, with hostnames of the form ncn-sXXX, where the XXX is a three
-digit number starting with zero padding.  The utility storage nodes provide Ceph storage for use
-by the management nodes.  The master nodes provide Kubernetes master functions and have the 
-etcd cluster which provides a datastore for Kubernetes.  The worker nodes provide Kubernetes
+digit number starting with zero padding. The utility storage nodes provide Ceph storage for use
+by the management nodes. The master nodes provide Kubernetes master functions and have the 
+etcd cluster which provides a datastore for Kubernetes. The worker nodes provide Kubernetes
 worker functions where most of the containerized workload is scheduled by Kubernetes.
 
 ### NIC Mezzanine Card (NMC)
@@ -270,7 +270,7 @@ cables (PEC) or active optical cables (AOC).
 ### Shasta Cabling Diagram (SHCD)
 
 The Shasta Cabling Diagram (SHCD) is a multiple tab spreadsheet prepared by HPE Cray Manufacturing with information about the components
-in an HPE Cray EX system.   This document has much information about the system.  Included in the SHCD are a configuration summary with
+in an HPE Cray EX system. This document has much information about the system. Included in the SHCD are a configuration summary with
 revision history, floor layout plan, type and location of components in the air-cooled cabinets, type and location of components in the
 liquid-cooled cabinets, device diagrams for switches and nodes in the cabinets, list of source and destination of every HSN cable,
 list of source and destination of every cable connected to the spine switches, list of source and destination of every cable connected
@@ -311,16 +311,16 @@ manage the switch power, HSN ASIC, and FPGA interfaces.
 ### UAI
 
 The User Access Instance (UAI) is a lightweight, disposable platform that runs under Kubernetes orchestration
-on worker nodes.  The UAI provides a single user containerized environment for users on a Cray Ex system to
-develop, build, and execute their applications on the Cray EX compute node.  See UAN for another
+on worker nodes. The UAI provides a single user containerized environment for users on a Cray Ex system to
+develop, build, and execute their applications on the Cray EX compute node. See UAN for another
 way for users to gain access.
 
 ### UAN
 
 The User Access Node (UAN) is an NCN, but is really one of the special types of Application nodes.
 The UAN provides a traditional multi-user Linux environment for users on a Cray Ex system to
-develop, build, and execute their applications on the Cray EX compute node.  See UAI for another
-way for users to gain access.  Some sites refer to their UANs as Login nodes.
+develop, build, and execute their applications on the Cray EX compute node. See UAI for another
+way for users to gain access. Some sites refer to their UANs as Login nodes.
 
 ### xname
 
@@ -329,4 +329,4 @@ component is uniquely identified by these component names. Some, like the system
 number, can be changed by site needs. There is no geolocation encoded within the cabinet number, such as an
 X-Y coordinate system to relate to the floor layout of the cabinets. Other component names refer to the location
 within a cabinet and go down to the port on a card or switch or the socket holding a processor or a memory DIMM
-location.  Refer to "Component Names (xnames)" in the _HPE Cray EX Hardware Management Administration Guide 1.5 S-8015_.
+location. Refer to "Component Names (xnames)" in the _HPE Cray EX Hardware Management Administration Guide 1.5 S-8015_.

@@ -1,6 +1,6 @@
 # NCN Packages
 
-The management nodes boot from images which have many (rpm) packages installed. Lists of the packages for
+The management nodes boot from images which have many (RPM) packages installed. Lists of the packages for
 these images are generated on running nodes. A list of images can be collected by running a zypper
 command on one of the storage, worker, or master nodes.
 

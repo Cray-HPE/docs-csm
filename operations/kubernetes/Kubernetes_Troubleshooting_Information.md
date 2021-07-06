@@ -4,7 +4,7 @@ Commands for performing basic Kubernetes cluster troubleshooting.
 
 ### Access Pod Logs
 
-Use one of the following commands to retrieve pod related logs:
+Use one of the following commands to retrieve pod-related logs:
 
 ```bash
 ncn# kubectl logs POD_NAME
@@ -30,7 +30,7 @@ ncn# kubectl describe node NODE_NAME
 
 ### Describe a Pod
 
-Use the following command to retrieve information that can help debug pod related errors.
+Use the following command to retrieve information that can help debug pod-related errors.
 
 ```bash
 ncn# kubectl describe pod POD_NAME

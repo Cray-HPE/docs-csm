@@ -35,7 +35,7 @@ Use this procedure to quickly sync changes made in Keycloak to the compute nodes
 
     ```bash
     ncn-w001# kubectl logs -n services KEYCLOAK_POD_NAME keycloak-localize
-    <logs showing it's updated the "s3" objects and ConfigMaps>
+    <logs showing it has updated the "s3" objects and ConfigMaps>
     2020-07-20 18:26:15,774 - INFO    - keycloak_localize - keycloak-localize complete
     ```
 

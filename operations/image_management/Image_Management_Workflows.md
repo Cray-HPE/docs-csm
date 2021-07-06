@@ -78,7 +78,7 @@ Mentioned in this workflow:
 
     IMS calls Kiwi-NG to build the image root from the recipe and accesses packages in zypper/yum repositories. The building of the image using kiwi happens in the `build-image` container. After kiwi is done building the image \(either success or fail\), the `buildenv-sidecar` container packages the artifacts, or in the case of failure, enables the debug shell if enable-debug is True. In the buildenv-sidecar container, the image artifacts are packaged and new image artifact records are created for each.
 
-    If there is a failure and enable-debug is true, a debug ssh shell is established. Admin can inspect image build root. Use commands touch /mnt/image/complete in a non-jailed environment or touch /tmp/complete in a jailed \(chroot\) environment to exit.
+    If there is a failure and enable-debug is true, a debug SSH shell is established. Admin can inspect image build root. Use commands touch /mnt/image/complete in a non-jailed environment or touch /tmp/complete in a jailed \(chroot\) environment to exit.
 
 10. **Save the new image record in IMS**
 
@@ -93,7 +93,7 @@ Mentioned in this workflow:
 
 **Use Case:** The system administrator customizes an existing image and makes desired changes.
 
-**Components:** This workflow is based on the interaction of the Image Management Service \(IMS\) with Ceph S3 during the image customization process. The customization workflow sets up a temporary image customization environment within a Kubernetes pod and mounts the image to be customized in that environment. A system administrator then makes the desired changes to the image root within the customization environment. IMS then compresses the customized image root and uploads it and it's associated initrd image and kernel image \(needed to boot a node\) to Ceph S3.
+**Components:** This workflow is based on the interaction of the Image Management Service \(IMS\) with Ceph S3 during the image customization process. The customization workflow sets up a temporary image customization environment within a Kubernetes pod and mounts the image to be customized in that environment. A system administrator then makes the desired changes to the image root within the customization environment. IMS then compresses the customized image root and uploads it and its associated initrd image and kernel image \(needed to boot a node\) to Ceph S3.
 
 Mentioned in this workflow:
 
@@ -114,7 +114,7 @@ Mentioned in this workflow:
 
 2.  **Administrator uploads public key**
 
-    A public key is uploaded to allow them to access ssh shells that IMS provides.
+    A public key is uploaded to allow them to access SSH shells that IMS provides.
 
     ```bash
     ncn# cray ims public-keys create --name "username public key" --public-key ~/.ssh/id_rsa.pub

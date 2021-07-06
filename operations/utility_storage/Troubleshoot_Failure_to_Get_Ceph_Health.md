@@ -1,6 +1,6 @@
 # Troubleshoot Failure to Get Ceph Health
 
-Inspect Ceph commands that are failing by looking into the Ceph monitor logs \(ceph-mon\). For example, the monitoring logs can help determine any issues causing the ceph -s command to hang.
+Inspect Ceph commands that are failing by looking into the Ceph monitor logs \(ceph-mon\). For example, the monitoring logs can help determine any issues causing the `ceph -s` command to hang.
 
 Troubleshoot Ceph commands failing to run and determine how to make them operational again. These commands need to be operational to obtain critical information about the Ceph cluster on the system.
 

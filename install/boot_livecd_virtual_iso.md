@@ -19,7 +19,7 @@ This page will walk-through booting the LiveCD `.iso` file directly onto a BMC.
 
 A Cray Pre-Install Toolkit ISO is required for this process. This ISO can be obtained from:
 
-- The Cray Pre-Install Toolkit ISO included in a CSM release tarball.  It will have a filename similar to
+- The Cray Pre-Install Toolkit ISO included in a CSM release tarball. It will have a filename similar to
   `cray-pre-install-toolkit-sle15sp2.x86_64-1.4.10-20210514183447-gc054094.iso`
 
 - **`INTERNAL USE`** The latest ISO in HPE Cray Artifactory can change without notice, so it is advised to use the full filename of the ISO name. Every `latest` ISO has a matching ISO with the real buildID in the name, this ISO will have the same File-Time metadata as the latest ISO.

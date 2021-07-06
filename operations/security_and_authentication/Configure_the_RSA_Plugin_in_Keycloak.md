@@ -53,7 +53,7 @@ Access to the Keycloak UI is needed.
         
     8. Set the **Shared username** if applicable.
     
-       If the usernames are the same in Keycloak and RSA, then this can be set to ON. This means the browser flow won't ask for the username for the RSA validation.
+       If the usernames are the same in Keycloak and RSA, then this can be set to ON. This means the browser flow will not ask for the username for the RSA validation.
     
     9. Click **Save**.
 
@@ -89,7 +89,7 @@ Access to the Keycloak UI is needed.
     3.  Click **Save**.
 
 
-Here are a couple of things to try after this is set up to verify that it's working:
+Here are a couple of things to try after this is set up to verify that it is working:
 
 -   Point a browser at the following URL:
 

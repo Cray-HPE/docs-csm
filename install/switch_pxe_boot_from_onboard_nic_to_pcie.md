@@ -32,7 +32,7 @@ however some older systems still have this legacy connection to their leaf switc
 This uses the [Mellanox CLI Tools][1] for configuring UEFI PXE from the Linux command line.
 
 On any NCN (using 0.0.10 k8s, or 0.0.8 ceph; anything built on ncn-0.0.21 or higher) can run this to begin interacting with Mellanox cards:
-If you are recovering NCNs with an earlier image without the mellanox tools, please refer to the section on the bottom of the Mellanox this segment.
+If you are recovering NCNs with an earlier image without the Mellanox tools, please refer to the section on the bottom of the Mellanox this segment.
 
 ```bash
 ncn# mst start
@@ -137,7 +137,7 @@ If you want to disable the connection, you will need to login to your respective
 
 1. Connect to the leaf switch using serial or SSH connections.
 
-Select one of the connection options below.  The IP addresses and device names may vary in the commands below.
+Select one of the connection options below. The IP addresses and device names may vary in the commands below.
     ```bash 
     # SSH over METAL MANAGEMENT
     pit# ssh admin@10.1.0.4
@@ -155,7 +155,7 @@ Select one of the connection options below.  The IP addresses and device names m
     sw-leaf-001(config)#>  
     ```
 3. Disable the NCN interfaces.
-Check your SHCD for reference before continuing so that the interfaces which are connected to management NCNs are being changes.  Ports 2 to 10 are commonly the master, worker, and storage nodes when there are 3 of each.  Some systems may have more worker nodes or utility storage nodes, or may be racked and cabled differently.
+Check your SHCD for reference before continuing so that the interfaces which are connected to management NCNs are being changes. Ports 2 to 10 are commonly the master, worker, and storage nodes when there are 3 of each. Some systems may have more worker nodes or utility storage nodes, or may be racked and cabled differently.
     ```
     sw-leaf-001(config)#> interface range 1/1/2-1/1/10
     sw-leaf-001(config)#> shutdown  

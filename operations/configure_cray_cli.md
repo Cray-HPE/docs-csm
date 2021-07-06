@@ -5,7 +5,7 @@ APIs into easily usable commands.
 
 Later procedures in the installation workflow use the `cray` CLI to interact with multiple services.
 The `cray` CLI configuration needs to be initialized for the Linux account and the keycloak user running
-the procedure needs to be authorized.  This section describes how to initialize the `cray` CLI for use by
+the procedure needs to be authorized. This section describes how to initialize the `cray` CLI for use by
 a user and authorize that user.
 
 The `cray` CLI only needs to be initialized once per user on a node.
@@ -13,7 +13,7 @@ The `cray` CLI only needs to be initialized once per user on a node.
 1. Unset CRAY_CREDENTIALS environment variable, if previously set.
 
    Some of the installation procedures leading up to this point use the CLI with a Kubernetes managed service
-   account normally used for internal operations.  There is a procedure for extracting the OAUTH token for
+   account normally used for internal operations. There is a procedure for extracting the OAUTH token for
    this service account and assigning it to the `CRAY_CREDENTIALS` environment variable to permit simple CLI operations.  
 
    ```bash
@@ -23,8 +23,8 @@ The `cray` CLI only needs to be initialized once per user on a node.
 1. Initialize the `cray` CLI for the root account.
 
    The `cray` CLI needs to know what host to use to obtain authorization and what user is requesting authorization
-   so it can obtain an OAUTH token to talk to the API Gateway.  This is accomplished by initializing the CLI
-   configuration.  In this example, the `vers` username and its password are used. 
+   so it can obtain an OAUTH token to talk to the API Gateway. This is accomplished by initializing the CLI
+   configuration. In this example, the `vers` username and its password are used. 
 
    If LDAP configuration was enabled, then use a valid account in LDAP instead of the example account 'vers'.
 
@@ -83,7 +83,7 @@ The `cray` CLI only needs to be initialized once per user on a node.
    ```
 
    1.  ssh to ncn-s001/2/3
-   2.  Restart your ceph radosgw process
+   2.  Restart your Ceph radosgw process
    
        ***The expected output will be like below but will vary based on the number of nodes running radosgw.***
 
@@ -95,7 +95,7 @@ The `cray` CLI only needs to be initialized once per user on a node.
        ```
    3.  Check to see that the processes were restarted
 
-       ***The "running" time should be in seconds.  You restarting all of them could require a couple of mins depending on how many***
+       ***The "running" time should be in seconds. You restarting all of them could require a couple of mins depending on how many***
 
        ```bash
        ncn-s001:~ # ceph orch ps --daemon_type rgw
@@ -106,7 +106,7 @@ The `cray` CLI only needs to be initialized once per user on a node.
        ```
    4.  In the event that more than 5 minutes has passed and the radosgw services have not restarted you can fail the ceph-mgr process to the standby.
 
-       ***There are cases where an orchestration task gets stuck and our current remediation is to fail the ceph manager process.***
+       ***There are cases where an orchestration task gets stuck and our current remediation is to fail the Ceph manager process.***
        ```bash
        # Get active ceph-mgr
        ncn-s00(1/2/3)#ceph mgr dump | jq -r .active_name

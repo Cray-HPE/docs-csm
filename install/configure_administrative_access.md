@@ -2,9 +2,9 @@
   
 There are several operations which configure administrative access to different parts of the system.
 Ensuring that the `cray` CLI can be used by administrative credentials enables use of many management
-services via commands.  The management nodes can be locked from accidental manipulation by the
+services via commands. The management nodes can be locked from accidental manipulation by the
 `cray capmc` and `cray fas` commands when then intent is to work on the entire system except the
-management nodes.  The `cray scsd` command can change the SSH keys, NTP server, syslog server, and
+management nodes. The `cray scsd` command can change the SSH keys, NTP server, syslog server, and
 BMC/controller passwords.
 
 ### Topics: 
@@ -16,7 +16,7 @@ BMC/controller passwords.
    1. [Next Topic](#next-topic)
 
    Note: The procedures in this section of installation documentation are intended to be done in order, even though the topics are
-   administrative or operational procedures.  The topics themselves do not have navigational links to the next topic in the sequence.
+   administrative or operational procedures. The topics themselves do not have navigational links to the next topic in the sequence.
 
 ## Details
 
@@ -24,7 +24,7 @@ BMC/controller passwords.
    1. Configure Keycloak Account
 
       Upcoming steps in the installation workflow require an account to be configured in Keycloak for
-      authentication.  This can be either a local keycloak account or an external Identity Provider (IdP),
+      authentication. This can be either a local keycloak account or an external Identity Provider (IdP),
       such as LDAP.  Having an account in keycloak with adminstrative credentials enables the use of many
       management services via the `cray` command.
 
@@ -43,9 +43,9 @@ BMC/controller passwords.
    <a name="lock_management_nodes"></a>
    1. Lock Management Nodes
 
-      The management nodes are unlocked at this point in the installation.  Locking them will prevent actions from FAS to
-      update their firmware or CAPMC to power off or do a power reset.  Doing any of these by accident will take down a
-      management node.  If the management node is a Kubernetes master or worker node, this can have serious negative effects
+      The management nodes are unlocked at this point in the installation. Locking them will prevent actions from FAS to
+      update their firmware or CAPMC to power off or do a power reset. Doing any of these by accident will take down a
+      management node. If the management node is a Kubernetes master or worker node, this can have serious negative effects
       on system operation.
    
       If a single node is taken down by mistake, it is possible that things will recover. However, if all management
@@ -59,8 +59,8 @@ BMC/controller passwords.
    1. Configure BMC and Controller Parameters with SCSD
 
       The System Configuration Service (SCSD) allows admins to set various BMC and controller parameters for 
-      components in liquid-cooled cabinets.  At this point in the install, SCSD should be used to set the
-      SSH key in the node controllers (BMCs) to enable troubleshooting.  If any of the nodes fail to power
+      components in liquid-cooled cabinets. At this point in the install, SCSD should be used to set the
+      SSH key in the node controllers (BMCs) to enable troubleshooting. If any of the nodes fail to power
       down or power up as part of the compute node booting process, it may be necessary to look at the logs
       on the BMC for node power down or node power up.
    

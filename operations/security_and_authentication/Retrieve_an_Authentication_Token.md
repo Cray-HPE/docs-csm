@@ -4,7 +4,7 @@ Retrieve a token for authenticating to the API gateway.
 
 The following are important properties of authentication tokens:
 -   Keycloak access tokens remain valid for 365 days
--   Secrets don't expire; they are persistent in Keycloak
+-   Secrets do not expire; they are persistent in Keycloak
 -   Tokens and/or secrets can be revoked at anytime by an admin
 
 The API gateway uses OAuth2 for authentication. A token is required to authenticate with this gateway.

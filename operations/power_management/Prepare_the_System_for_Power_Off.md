@@ -94,7 +94,7 @@ An authentication token is required to access the API gateway and to use the `sa
         ncn-m001# ssh nid001000 sinfo --list-reasons > sinfo.reasons
         ```
 
-    7.  Check ceph status.
+    7.  Check Ceph status.
 
         ```bash
         ncn-m001# ceph -s > ceph.status

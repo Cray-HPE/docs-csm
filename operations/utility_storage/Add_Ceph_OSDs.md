@@ -4,7 +4,7 @@ Add one or more OSDs to a Ceph cluster and reset the Ceph pool quotas once they 
 
 Adding OSDs helps increase the Ceph cluster object storage.
 
->**NOTE:** Ceph version 15.2.x and newer will utilize the ceph orchestrator to add any available drives on the storage nodes to the osd pool.  The process below is in the event that the orchestraotr did not add the available drives into the cluster
+>**NOTE:** Ceph version 15.2.x and newer will utilize the ceph orchestrator to add any available drives on the storage nodes to the OSD pool. The process below is in the event that the orchestrator did not add the available drives into the cluster
 
 ## Prerequisites
 
@@ -52,10 +52,10 @@ This procedure requires administrative privileges and will require at least two 
     ncn-w001# ceph mgr fail $(ceph mgr dump | jq -r .active_name)
     ```
 
-1. In the second window, list your available drives on the node(s) where the osds are missing
+1. In the second window, list your available drives on the node(s) where the OSDs are missing
   
    ```bash
-   # Out example is utilizng ncn-s001 so make sure you are on the correct host for you situtation
+   # Our example is utilizing ncn-s001 so make sure you are on the correct host for your situation
 
    ncn-s001# ceph orch device ls
    ceph orch device ls ncn-s001
@@ -63,7 +63,7 @@ This procedure requires administrative privileges and will require at least two 
    ncn-s001  /dev/sdb  hdd   f94bd091-cc25-476b-9  48.3G  Unknown  N/A    N/A    No
    ```
 
-   >**Note** that our drive in question is reporting available.  The following steps are going to erase that drive so PLEASE make sure you know that drive is not being used.
+   >**Note** that our drive in question is reporting available. The following steps are going to erase that drive so PLEASE make sure you know that drive is not being used.
 
    ```bash
    ncn-s001:~ # podman ps
@@ -78,7 +78,7 @@ This procedure requires administrative privileges and will require at least two 
 
    ```
 
-  If you find an Running OSD container then we should assume that the drive is being used or might have critical data on it.  If you know this to 100% not be the case (example a rebuild), then you can proceed.
+  If you find an Running OSD container then we should assume that the drive is being used or might have critical data on it. If you know this to 100% not be the case (example a rebuild), then you can proceed.
 
   Repeat this step for all drives on the storage node\(s\) that have unused storage which should be added to Ceph.
 

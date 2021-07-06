@@ -191,7 +191,7 @@ The firmware image file must be on the system to update. Firmware file can be ex
 
 1. Upload the firmware image into S3.
 
-   The S3 bucket is `fw-update` and the path in the example is `slingshot`, but it can be any directory.  The image file in the example below is `controllers-1.4.409.itb`.
+   The S3 bucket is `fw-update` and the path in the example is `slingshot`, but it can be any directory. The image file in the example below is `controllers-1.4.409.itb`.
 
    ```bash
    ncn-m001# cray artifacts create fw-update slingshot/controllers-1.4.409.itb controllers-1.4.409.itb

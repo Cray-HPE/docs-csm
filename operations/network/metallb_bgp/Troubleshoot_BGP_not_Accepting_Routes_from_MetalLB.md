@@ -113,7 +113,7 @@ This procedure requires administrative privileges.
                                               c        10.102.3.6        vlan7            bgp        200/0 
         ```
 
-        If the expected routes aren't present, check the route-map or prefix-list configuration on the spine switch.
+        If the expected routes are not present, check the route-map or prefix-list configuration on the spine switch.
 
     -   **Aruba:**
 

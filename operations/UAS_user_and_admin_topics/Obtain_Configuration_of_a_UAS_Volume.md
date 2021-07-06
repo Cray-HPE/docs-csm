@@ -25,7 +25,7 @@ View the configuration information of a specific UAS volume. This procedure requ
 
 1.  View the configuration of a specific UAS volume.
 
-    This command returns output in TOML format by default. JSON or YAML formatted output can be obtained by using the --format json or --format yaml options respectively.
+    This command returns output in TOML format by default. JSON or YAML formatted output can be obtained by using the `--format json` or `--format yaml` options respectively.
 
     ```screen
     ncn-m001-pit# cray uas admin config volumes describe \\
