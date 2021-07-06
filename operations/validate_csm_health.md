@@ -202,14 +202,14 @@ data:
     - name: customer-access
 ```
 
-Using the first peer-address (10.252.0.2 here), SSH as the administrator to the first switch and note in the returned output if a Mellanox or Aruba switch is indicated.
+Using the first peer-address (10.252.0.2 here), log in using `ssh` as the administrator to the first switch and note in the returned output if a Mellanox or Aruba switch is indicated.
 
 ```bash
 ncn-m001# ssh admin@10.252.0.2
 ```
 
-* On a Mellanox switch, `Mellanox Onyx Switch Management` or `Mellanox Switch` may be displayed after logging in to the switch with SSH. In this case, proceed to the [Mellanox steps](#pet-bgp-mellanox).
-* On an Aruba switch, `Please register your products now at: https://asp.arubanetworks.com` may be displayed after logging in to the switch with SSH. In this case, proceed to the [Aruba steps](#pet-bgp-aruba).
+* On a Mellanox switch, `Mellanox Onyx Switch Management` or `Mellanox Switch` may be displayed after logging in to the switch with `ssh`. In this case, proceed to the [Mellanox steps](#pet-bgp-mellanox).
+* On an Aruba switch, `Please register your products now at: https://asp.arubanetworks.com` may be displayed after logging in to the switch with `ssh`. In this case, proceed to the [Aruba steps](#pet-bgp-aruba).
 
 <a name="pet-bgp-mellanox"></a>
 ##### 1.3.1 Mellanox Switch 
@@ -614,7 +614,7 @@ At the time of this writing there is a bug ([CASMTRIAGE-553](https://connect.us.
 <a name="sms-checks"></a>
 #### 3.4 SMS Checks To Run
 
-Run a check for each of the following services after an install. These should be run on at least one worker NCN and at least one master NCN (but **not** ncn-m001 if it is still the PIT node).
+Run a check for each of the following services after an install. These should be run on at least one worker node and at least one master node (but **not** ncn-m001 if it is still the PIT node).
 
 | Services  | Shortcut |
 | ---  | --- |
