@@ -9,19 +9,13 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
 
 1. Retrieve the signing key required to validate the RPMs.
    
-    Use either the CrayPort or Kubernetes Secret method to find and import the signing key.
+    Use either the CrayPort or Kubernetes Secret method to find the signing key.
     
     * **CrayPort**:
     
     1. Find the signing key.
         ```bash
        ncn-m001# curl LINK_TO_KEY_IN_CRAYPORT
-       ```
-
-    1. Import the key.
-    
-        ```bash
-       ncn-m001# rpm --import crayxe.key
        ```
   
     * **Kubernetes Secret**:
@@ -66,17 +60,13 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
         =pzE0
         -----END PGP PUBLIC KEY BLOCK-----
         ```
-    
-    1. Import the key.
-   
-        ```bash
-        ncn-m001# rpm --import hpe-signing-key.asc
-        ```
-   
-1. View the metadata of the key to verify that HPE is the issuer of the signed packages.
+
+1. Verify that HPE is the issuer of the signed packages.
+
+   Replace the *PATH-TO-KEY* value in the following command with the path to the signing key.
    
    ```bash
-   ncn-m001# rpm -qi gpg-pubkey-9da39f44-5669d183
+   ncn-m001# rpm -qpi PATH-TO-KEY/hpe-signing-key.asc
    Name        : gpg-pubkey
    Version     : 9da39f44
    Release     : 5669d183
@@ -131,10 +121,16 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
    -----END PGP PUBLIC KEY BLOCK-----
    ```
 
+1. Import the signing key after validating the issuer.
+
+    ```bash
+    ncn-m001# rpm --import hpe-singing-key.asc
+    ```
+   
 1. Search for the signed packages using the version number from the previous step.
 
     ```bash
-    ncn-m001# rpm -qa --qf '%{NAME}-%{VERSION}-%{RELEASE} %{SIGPGP:pgpsig} %{SIGGPG:pgpsig}\n' | grep '9da39f44'
+    ncn-m001# rpm -qa --qf '%{NAME}-%{VERSION}-%{RELEASE} %{SIGGPG:pgpsig}\n' | grep '9da39f44'
     ```
 
 1. Validate the signature on an RPM.
