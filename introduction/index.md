@@ -17,12 +17,12 @@ for an HPE Cray EX system.
 ## CSM Overview
 
    The CSM installation prepares and deploys a distributed system across a group of management
-   nodes organized into a Kubernetes cluster which uses Ceph for utility storage.  These nodes
+   nodes organized into a Kubernetes cluster which uses Ceph for utility storage. These nodes
    perform their function as Kubernetes master nodes, Kubernetes worker nodes, or utility storage
    nodes with the Ceph storage.
 
    System services on these nodes are provided as containerized microservices packaged for deployment
-   as helm charts.  These services are orchestrated by Kubernetes to be scheduled on Kubernetes worker
+   as helm charts. These services are orchestrated by Kubernetes to be scheduled on Kubernetes worker
    nodes with horizontal scaling to increase or decrease the number of instances of some services as
    demand for them varies, such as when booting many compute nodes or application nodes.
 
@@ -48,7 +48,7 @@ See [Scenarios for Shasta v1.5](scenarios.md)
 <a name="product-stream-updates"></a>
 ## CSM Product Stream Updates
 
-   The software included in the CSM product stream is released in more than one way.  The initial product release may be augmented with late-breaking workarounds and documentation updates or hotfixes after the release. 
+   The software included in the CSM product stream is released in more than one way. The initial product release may be augmented with late-breaking workarounds and documentation updates or hotfixes after the release. 
 
    See [CSM Product Stream Updates](../update_product_stream/index.md)
 
@@ -56,8 +56,8 @@ See [Scenarios for Shasta v1.5](scenarios.md)
 ## CSM Operational Activities
 
    Procedures which are used during either installation or upgrading of software or in both, but which
-   may also be used for general operation of the system reside here.  They are referenced in the context
-   of the installation workflow.  For example, updating firmware with FAS or running the CSM health checks.
+   may also be used for general operation of the system reside here. They are referenced in the context
+   of the installation workflow. For example, updating firmware with FAS or running the CSM health checks.
 
    See [CSM Operational Activities](../operations/index.md)
 

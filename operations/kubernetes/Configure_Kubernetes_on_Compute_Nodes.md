@@ -10,7 +10,7 @@ Cray's Linux Environment \(CLE\) ships with a set of Ansible plays that can be u
 
 ### Limitations
 
-The Configuration Framework Service \(CFS\) hangs when given an image ID that doesn't exist.
+The Configuration Framework Service \(CFS\) hangs when given an image ID that does not exist.
 
 ### Procedure
 
@@ -96,7 +96,7 @@ The Configuration Framework Service \(CFS\) hangs when given an image ID that do
 
 10. Add the ck8s roles to the site.yml file to target the compute nodes specified in the Hardware State Manager \(HSM\) dynamic inventory.
 
-    To create a custom inventory or target a subset of the Compute nodes, please refer to the "Ansible Inventory" section in the Configuration Framework Service (CFS) documenation.
+    To create a custom inventory or target a subset of the Compute nodes, please refer to the "Ansible Inventory" section in the Configuration Framework Service (CFS) documentation.
 
     ```bash
     ncn-m001# vi site.yml
@@ -295,7 +295,7 @@ The Configuration Framework Service \(CFS\) hangs when given an image ID that do
 
         In this example, the play is executed on all nodes specified in the hosts file. See the "Ansible Inventory" section in the CFS documentation if the use of a static inventory file is desired.
 
-        The example below also assumes a CFS configuration has already been created. All CFS create sessions will start by creating a configuration if one isn't provided.
+        The example below also assumes a CFS configuration has already been created. All CFS create sessions will start by creating a configuration if one is not provided.
 
         ```bash
         ncn-m001# cray cfs sessions create --name ck8s \

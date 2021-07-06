@@ -11,7 +11,7 @@ This procedure requires administrative privileges.
 1. Check for general network availability.
    
     If the Kubernetes worker node the cray-console-node pod that is attempting to connect with
-    a console can't access that network address the connection will fail.
+    a console cannot access that network address the connection will fail.
     
     1. Find the cray-console-node pod that is connecting with the console of interest.
     
@@ -37,7 +37,7 @@ This procedure requires administrative privileges.
         ncn-w003#
         ```
 
-    4. Check that the BMC for this node is accessable from this worker.
+    4. Check that the BMC for this node is accessible from this worker.
       
         The xname of the BMC is the same as the node, but with the node designation at the
         end removed. For example if the node is x3000c0s15b0n0, the BMC is x3000c0s15b0.
@@ -52,12 +52,12 @@ This procedure requires administrative privileges.
         ```
         
         This indicates there is a network issue between the worker node and the node of
-        interest.  When the issue is resolved the console connection will be reestablished
+        interest. When the issue is resolved the console connection will be reestablished
         automatically.
 
 2. Check for something else using the serial console connection.
    
-    For ipmi based connections, there can only be one active connection at a time. If
+    For IPMI-based connections, there can only be one active connection at a time. If
     something else has taken that connection, ConMan will not be able to connect to it.
 
     1. Find the cray-console-node pod that is connecting with the console of interest.
@@ -87,7 +87,7 @@ This procedure requires administrative privileges.
     
     3. Force the connection to become available again.
        
-        The bmc username and password must be known for this command to work.
+        The BMC username and password must be known for this command to work.
         
         ```
         ncn-m001# ipmitool -H XNAME -U USER -P PASSWORD -I lanplus sol deactivate

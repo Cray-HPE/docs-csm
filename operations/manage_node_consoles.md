@@ -20,7 +20,7 @@ for more information about these topics.
 ## Procedure
 
 This procedure can be run from any member of the Kubernetes cluster to verify node consoles are being managed
-by conman and to connect to a console. **Note** this procedure has changed since the csm 0.9 release.
+by conman and to connect to a console. **Note** this procedure has changed since the CSM 0.9 release.
 
 1. Find the cray-console-operator pod ID
     ```bash

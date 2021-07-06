@@ -88,7 +88,7 @@ The tables below include the default login credentials for each rack type. These
 
 ### Redfish Credentials
 
-Redfish accounts are only valid with the Redfish API. They do not allow system logins via ssh or serial console. Three accounts are created by default:
+Redfish accounts are only valid with the Redfish API. They do not allow system logins via `ssh` or serial console. Three accounts are created by default:
 
 -   Root - Administrative account
     -   Username: root
@@ -232,7 +232,7 @@ For SSH access, the system controllers have the following default credentials:
 
 Contact Cray/HPE service in order to obtain the default passwords. 
 
-Passwords for nC, cC, and sC controllers are all managed with the following process. The cfgsh tool is a configuration shell that can be used interactively or scripted. Interactively, it may be used as follows after logging in as root via SSH:
+Passwords for nC, cC, and sC controllers are all managed with the following process. The cfgsh tool is a configuration shell that can be used interactively or scripted. Interactively, it may be used as follows after logging in as root via `ssh`:
 
 ```bash
 x0c1# config 

@@ -1,6 +1,6 @@
 # Update CSM Product Stream
 
-The software included in the CSM product stream is released in more than one way.  The initial product release may be augmented with patches, late-breaking workarounds and documentation updates, or hotfixes after the release.
+The software included in the CSM product stream is released in more than one way. The initial product release may be augmented with patches, late-breaking workarounds and documentation updates, or hotfixes after the release.
 
 ### Topics:
    * [Download and Extract CSM Product Release](#download-and-extract)
@@ -51,7 +51,7 @@ None.
    linux# tar -xzvf ${CSM_RELEASE}.tar.gz
    ```
 
-   1. Before using this software release, check for any patches available for it.  If patches are available, see [Apply Patch to CSM Release](#patch).
+   1. Before using this software release, check for any patches available for it. If patches are available, see [Apply Patch to CSM Release](#patch).
 
 <a name="patch"></a>
 ## Apply Patch to CSM Release
@@ -62,7 +62,7 @@ None.
 System installer
 
 #### Objective
-Apply a CSM update patch to the release tarball.  This ensures that the latest CSM product artifacts are installed on the HPE Cray EX supercomputer.
+Apply a CSM update patch to the release tarball. This ensures that the latest CSM product artifacts are installed on the HPE Cray EX supercomputer.
 
 #### Limitations
 None.
@@ -135,7 +135,7 @@ None.
 System installer
 
 #### Objective
-Acquire the late-breaking CSM workarounds and documentation update rpms.  These fixes were not available until after the software release.  The software installation and upgrade processes have several breakpoints where you check and apply workarounds before or after a critical procedure.
+Acquire the late-breaking CSM workarounds and documentation update rpms. These fixes were not available until after the software release. The software installation and upgrade processes have several breakpoints where you check and apply workarounds before or after a critical procedure.
 
 #### Limitations
 None.
@@ -149,7 +149,7 @@ None.
    linux# rpm -Uvh --force https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
    ```
 
-   If this machine does not have direct Internet access these RPMs will need to be externally downloaded and then copied to the system.  This example copies them to ncn-m001.
+   If this machine does not have direct Internet access these RPMs will need to be externally downloaded and then copied to the system. This example copies them to ncn-m001.
 
    ```bash
    linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm

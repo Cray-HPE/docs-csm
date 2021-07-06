@@ -46,9 +46,9 @@ The `cray-precache-images` DaemonSet is used to keep select container images res
 
 ### Bootstrap Registry
 
-During installation, a Nexus instance is run on the pit node at port 8081 to facilitate cluster bootstrap. It is only configured with a `docker` registry available at http://pit.nmn:5000, which is populated with container images included in the CSM release.
+During installation, a Nexus instance is run on the PIT node at port 8081 to facilitate cluster bootstrap. It is only configured with a `docker` registry available at http://pit.nmn:5000, which is populated with container images included in the CSM release.
 
-By default, http://pit.nmn:5000 is the default mirror configured in /etc/containerd/config.toml. However, once the pit node is rebooted as `ncn-m001`, it will no longer be available.
+By default, http://pit.nmn:5000 is the default mirror configured in /etc/containerd/config.toml. However, once the PIT node is rebooted as `ncn-m001`, it will no longer be available.
 
 ### Product installers
 

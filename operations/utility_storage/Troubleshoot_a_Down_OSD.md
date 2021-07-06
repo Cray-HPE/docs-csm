@@ -32,7 +32,7 @@ This procedure requires admin privileges.
     ncn-(s001/2/3)# ceph orch restart osd.<number>
     ```
 
-    **Note:** If the service is not restart via ceph orch you can restart it using [Manage_Ceph_services.md](Manage_Ceph_Services.md)
+    **Note:** If the service is not restarting via `ceph orch`you can restart it using [Manage_Ceph_services.md](Manage_Ceph_Services.md)
 
 1. Verify the OSDs are running again.
 

@@ -1,6 +1,6 @@
 # Ceph CSI Troubleshooting
 
-If there has been a failure to initialize all ceph csi components on ncn-s001, then the storage node
+If there has been a failure to initialize all Ceph CSI components on ncn-s001, then the storage node
 cloud-init may need to be rerun.
 
 ### Topics:
@@ -19,8 +19,8 @@ Verify that the ceph-csi requirements are in place
       ```bash
       ncn-s001# ceph -s
       ```
-      If it returns a connection error then assume ceph is not installed. See [Rerun Storage Node cloud-init](#rerun_storage_node_cloud-init).  
-   1. Verify all post ceph install tasks have run
+      If it returns a connection error then assume Ceph is not installed. See [Rerun Storage Node cloud-init](#rerun_storage_node_cloud-init).  
+   1. Verify all post-Ceph-install tasks have run
 
       Log in to ncn-s001 and check /etc/cray/ceph for completed task files.
 
@@ -59,7 +59,7 @@ Verify that the ceph-csi requirements are in place
 <a name="rerun_storage_node_cloud-init"></a>
 ### 1. Rerun Storage Node cloud-init
 
-   This procedure will restart the storage node cloud-init process to prepare ceph for use by the utility storage nodes.
+   This procedure will restart the storage node cloud-init process to prepare Ceph for use by the utility storage nodes.
 
    1. Run the following:
 

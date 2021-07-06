@@ -50,17 +50,17 @@ Spine and aggregation switches use the format `xXcChHsS`. Leaf switches use `xXc
         - Newer side-by-side switches use slot numbers of s1 and s2 instead of R and L
     >   ![Diagram of Cabinet with side-by-side switches in SHCD](../img/shcd-rack-example.png)
 2. Each spine or aggregation switch will follow this format: `xXcChHsS`
-    > This format also applies to CDU switches that are in a river cabinet that make connections to an adjacent hill cabinet.
-    - xX : where "X" is the river cabinet identification number (the figure above is "3000")
+    > This format also applies to CDU switches that are in a River cabinet that make connections to an adjacent Hill cabinet.
+    - xX : where "X" is the River cabinet identification number (the figure above is "3000")
     - cC : where "C" is the cabinet identification number (the figure above is "0")
     - hH : where "H" is the slot number in the cabinet (height)
     - sS : where "S" is the horizontal space number'
 3. Each leaf switch will follow this format: `xXcCwW`:
-    - xX : where "X" is the river cabinet identification number (the figure above is "3000")
+    - xX : where "X" is the River cabinet identification number (the figure above is "3000")
     - cC : where "C" is the cabinet identification number (the figure above is "0")
     - wW : where "W" is the slot number in the cabinet (height)
 4. Each CDU switch will follow this format: `dDwW`:
-    > If a CDU switch is in a river cabinet, then follow the naming convention in step 2 instead.
+    > If a CDU switch is in a River cabinet, then follow the naming convention in step 2 instead.
     - dD : where "D" is the Coolant Distribution Unit (CDU)
     - wW : where "W" is the management switch in a CDU
 5. Each item in the file is either of type `Aggregation`, `CDU`, `Leaf`, or `Spine`.

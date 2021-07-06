@@ -114,10 +114,10 @@ x3000c0s1b0n0,Management,Master,94:40:c9:37:87:32,14:02:ec:da:b9:98,14:02:ec:da:
 ### Collection of MAC Addresses
 
    Collect as much information as possible for the `ncn_metadata.csv` file before the PIT node is booted
-   from the LiveCD and then get the rest later when directed.  Having dummy MAC addresses, such as `de:ad:be:ef:00:00`,
+   from the LiveCD and then get the rest later when directed. Having dummy MAC addresses, such as `de:ad:be:ef:00:00`,
    in the `ncn_metadata.csv` file is acceptable until the point during the install at which the management network
-   switches have been configured and the PIT node can be used to collect the information.  The correct MAC addresses
-   are needed before attempting to boot the managemenent nodes with their real image in
+   switches have been configured and the PIT node can be used to collect the information. The correct MAC addresses
+   are needed before attempting to boot the management nodes with their real image in
    [Deploy Management Nodes](index.md#deploy_management_nodes)
 
    * If the nodes are booted to Linux, then the data can be collected by `ipmitool lan print` for the BMC MAC,
@@ -138,10 +138,10 @@ x3000c0s1b0n0,Management,Master,94:40:c9:37:87:32,14:02:ec:da:b9:98,14:02:ec:da:
       * The BMC MAC address can be collected from the switches using knowledge about the cabling of the NMN from the SHCD.  See [Collecting BMC MAC Addresses](collecting_bmc_mac_addresses.md).
       * The node MAC addresses cannot be collected until after the PIT node has booted from the LiveCD.  At that point, a partial boot of the management nodes can be done to collect the remaining information from the conman console logs on the PIT node using the [Procedure: iPXE Consoles](collecting_ncn_mac_addresses.md#procedure-ipxe-consoles)
 
-   * In all other cases, the full information needed for `ncn_metadata.csv` won't be available for collection
+   * In all other cases, the full information needed for `ncn_metadata.csv` will not be available for collection
    until after the PIT node has been booted from the LiveCD.  Having incorrect MAC addresses
    in the `ncn_metadata.csv` file as placeholders is acceptable until the point during the install at which the management
-   network swiches have been configured and the PIT node can be used to collect the information.
+   network switches have been configured and the PIT node can be used to collect the information.
       * At that point in the installation workflow, you will be directed to see [Collect MAC Addresses for NCNs](collect_mac_addresses_for_ncns.md).
 
    * Unless your system does not use or does not have onboard NICs on the management nodes, then this topic

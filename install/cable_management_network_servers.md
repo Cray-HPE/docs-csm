@@ -62,7 +62,7 @@ ports on the nodes and how to cable the nodes to the management network switches
 
 
 #### Dual Card Installations
-The table below describes the cabling of dual card configurations.  Also read notes in this section to see other possible customer-based configurations.
+The table below describes the cabling of dual card configurations. Also read notes in this section to see other possible customer-based configurations.
 
 | Server Port        | Management Network Port        | Speed | Use / Configuration            |
 |--------------------|--------------------------------|-------|--------------------------------|
@@ -80,7 +80,7 @@ The table below describes the cabling of dual card configurations.  Also read no
 
 ![Diagram of HPE Master Node Cabling](../img/network/HPE_Master.png)
 
-**NOTE**: Master 1 (ncn-m001) is required to have a site connection for installation and non-CAN system access.  This can have several configurations depending on customer requirements/equipment:
+**NOTE**: Master 1 (ncn-m001) is required to have a site connection for installation and non-CAN system access. This can have several configurations depending on customer requirements/equipment:
 
 * Dual 10/25Gb card configurations as described in the table above should use PCIe Slot 1, Port 2 as a site connection if the customer supports 10/25Gb.
 * If the customer does not support 10/25Gb speeds (or connection type) and requires RJ45 copper or 1Gb, then a new and separate card will be installed on ncn-m001 and that card will provide site connectivity.
@@ -104,7 +104,7 @@ The table below describes the cabling of dual card configurations.  Also read no
 | sn01	 | x3000u17s1-j1 | x3000u34-j8	| sw-25g02   |
 | sn01	 | x3000u17ocp-j2| x3000u33-j14	| sw-25g01   |
 | sn01	 | x3000u17ocp-j1| x3000u33-j8	| sw-25g01   |
-The OCP ports go to the First switch and the PCIe ports go to the Second switch.  OCP port 1 and PCIe port 1 form a Bond.  OCP port 2 and PCIe port 2 form a Bond.
+The OCP ports go to the First switch and the PCIe ports go to the Second switch. OCP port 1 and PCIe port 1 form a Bond. OCP port 2 and PCIe port 2 form a Bond.
 ![Diagram of HPE Storage Node Cabling for Small System](../img/network/HPE_Storage.png)
 
 For systems that include 4 aggregation switches the cabling will look like the following.
@@ -144,7 +144,7 @@ For systems that include 4 aggregation switches the cabling will look like the f
 ### HPE Apollo 6500 XL645D
 ![Diagram of Rear View of HPE Apollo 6500 XL645D](../img/network/XL645D-back.png)
 * The XL645D has two servers in the same chassis.
-* The iLO BMC RJ45 port is a shared network port.  Both iLO/BMC traffic and compute node traffic could transit this link.
+* The iLO BMC RJ45 port is a shared network port. Both iLO/BMC traffic and compute node traffic could transit this link.
   * Isolating this port to iLO/BMC only traffic is not possible within firmware configuration alone.
   * iLO configuration settings **must** be paired with management switch port settings to ensure only BMC traffic exits the port.
   * The iLO firmware must be set to tag traffic to VLAN 4.  The switch port must be set to trunk VLAN 4.
@@ -163,8 +163,8 @@ For systems that include 4 aggregation switches the cabling will look like the f
 <a name="hpe_apollo_6500_xl675d"></a>
 ### HPE Apollo 6500 XL675D
 ![Diagram of Rear View of HPE Apollo 6500 XL675D](../img/network/XL675D-back.png)
-* Two PCIe slots (chassis slots 21 and 22) are highlighted.  One will contain the 1Gb management network card and one will be for the HSN.
-* The iLO BMC RJ45 port is a shared network port.  Both iLO/BMC traffic and compute node traffic could transit this link.
+* Two PCIe slots (chassis slots 21 and 22) are highlighted. One will contain the 1Gb management network card and one will be for the HSN.
+* The iLO BMC RJ45 port is a shared network port. Both iLO/BMC traffic and compute node traffic could transit this link.
   * Isolating this port to iLO/BMC only traffic is not possible within firmware configuration alone.
   * iLO configuration settings **must** be paired with management switch port settings to ensure only BMC traffic exits the port.
   * The iLO firmware must be set to tag traffic to VLAN 4.  The switch port must be set to trunk VLAN 4.
@@ -222,7 +222,7 @@ For systems that include 4 aggregation switches the cabling will look like the f
 
 ![Diagram of Gigabyte Master Node Cabling](../img/network/Gigaintel_Master.png)
 
-**NOTE**: Master 1 (ncn-m001) is required to have a site connection for installation and non-CAN system access.  In Shasta versions <=1.3 this connection was on ncn-w001.  This can have several configurations depending on customer requirements/equipment:
+**NOTE**: Master 1 (ncn-m001) is required to have a site connection for installation and non-CAN system access. In Shasta versions <=1.3 this connection was on ncn-w001.  This can have several configurations depending on customer requirements/equipment:
 
 * The default configuration for Gigabyte systems uses the built-in 1Gb lan0 port for site connection on ncn-m001.
 * If the customer requires connectivity greater than 1Gb (or a different connection type), then a new and separate card will be installed on ncn-m001 and that card will provide site connectivity.

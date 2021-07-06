@@ -11,19 +11,19 @@ Several conventions have been used in the preparation of this documentation.
 <a name="markdown-format"></a>
 ## Markdown Format
 
-This documentation is in Markdown format.  Although much of it can be viewed with any text editor,
+This documentation is in Markdown format. Although much of it can be viewed with any text editor,
 a richer experience will come from using a tool which can render the Markdown to show different font
 sizes, the use of bold and italics formatting, inclusion of diagrams and screen shots as image files,
 and to follow navigational links within a topic file and to other files.
 
-There are many tools which can render the Markdown format to get these advantages.  Any Internet search
-for Markdown tools will provide a long list of these tools.  Some of the tools are better than others
+There are many tools which can render the Markdown format to get these advantages. Any Internet search
+for Markdown tools will provide a long list of these tools. Some of the tools are better than others
 at displaying the images and allowing you to follow the navigational links.
 
 <a name="file-formats"></a>
 ## File Formats
 
-Some of the installation instructions require updating files in JSON, YAML, or TOML format.  These files should be updated with care since some file formats do not accept tab characters for indentation of lines. Only space characters are supported.  Refer to online documentation to learn more about the syntax of JSON, YAML, and TOML files.
+Some of the installation instructions require updating files in JSON, YAML, or TOML format. These files should be updated with care since some file formats do not accept tab characters for indentation of lines. Only space characters are supported. Refer to online documentation to learn more about the syntax of JSON, YAML, and TOML files.
 
 <a name="typographic-conventions"></a>
 ## Typographic Conventions
@@ -60,7 +60,7 @@ information as an example but are not intended for their use.
 
 #### Host name and account in command prompts
 
-The host name in a command prompt indicates where the command must be run.  The account that must run the command is also indicated in the prompt.
+The host name in a command prompt indicates where the command must be run. The account that must run the command is also indicated in the prompt.
 - The root or super-user account always has the # character at the end of the prompt
 - Any non-root account is indicated with account@hostname>.  A non-privileged account is referred to as user.
 
@@ -83,7 +83,7 @@ The following list contains abbreviations for nodes used below
 | ncn-s# | Run the command as root on any NCN-S (NCN which is a Utility Storage node).|
 | ncn-s003# | Run the command as root on the specific NCN-S (NCN which is a Utility Storage node) which has this hostname (ncn-s003). |
 | pit# | Run the command as root on the PIT node. |
-| linux# | Run the command as root on a linux host. |
+| linux# | Run the command as root on a Linux host. |
 | uan# | Run the command as root on any UAN. |
 | uan01# | Run the command as root on hostname uan01. |
 | user@uan> | Run the command as any non-root user on any UAN. |
@@ -164,7 +164,7 @@ user@hostname > ./command
 
 The prompts when doing network switch configuration can vary widely
 depending on which vendor switch is being configured and the context
-of the item being configured on that switch.  There may be two levels
+of the item being configured on that switch. There may be two levels
 of user privilege which have different commands available and a
 special command to enter configuration mode.
 

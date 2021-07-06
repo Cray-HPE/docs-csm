@@ -1,8 +1,8 @@
 # Configure BMC and Controller Parameters with SCSD
 
 The System Configuration Service (SCSD) allows admins to set various BMC and controller parameters for
-components in liquid-cooled cabinets.  These parameters are typically set during discovery, but this
-tool enables parameters to be set before or after discovery.  The operations to change these parameters
+components in liquid-cooled cabinets. These parameters are typically set during discovery, but this
+tool enables parameters to be set before or after discovery. The operations to change these parameters
 are available in the `cray` CLI under the scsd command.
 
 The parameters which can be set are:
@@ -18,7 +18,7 @@ The parameters which can be set are:
    ConMan Containerized Service" in the _HPE Cray EX System Administration Guide 1.5 S-8001_.
 
 
-However, this procedure only describes how to change the SSH key to enable passwordless ssh for
+However, this procedure only describes how to change the SSH key to enable passwordless SSH for
 troubleshooting of power down and power up logs on the node BMCs.
 
 Refer to the _HPE Cray EX Hardware Management Administration Guide 1.5 S-8015_ for more information about
@@ -76,7 +76,7 @@ The admin must be authenticated to the Cray CLI before proceeding.
    SSH into the node controller for the host xname. For example, if the host xname is x1000c1s0b0n0, the
    node controller xname would be x1000c1s0b0. 
 
-   If the node controller is not powered up, this ssh attempt will fail.
+   If the node controller is not powered up, this SSH attempt will fail.
 
    ```bash
    ncn-w001# ssh x1000c1s0b0

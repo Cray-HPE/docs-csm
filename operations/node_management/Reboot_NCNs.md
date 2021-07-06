@@ -203,7 +203,7 @@ Before rebooting NCNs, ensure pre-reboot checks have been completed, including c
 
     6.  Repeat all of the sub-steps above for the remaining storage nodes, going from the highest to lowest number until all storage nodes have successfully rebooted.
 
-        **Important:** Ensure the ceph -s shows that Ceph is healthy BEFORE MOVING ON to reboot the next storage node. Once Ceph has recovered the downed mon, it may take a several minutes for Ceph to resolve clock skew.
+        **Important:** Ensure `ceph -s` shows that Ceph is healthy BEFORE MOVING ON to reboot the next storage node. Once Ceph has recovered the downed mon, it may take a several minutes for Ceph to resolve clock skew.
 
 6.  Reboot each of the NCN worker nodes \(one at a time\).
 

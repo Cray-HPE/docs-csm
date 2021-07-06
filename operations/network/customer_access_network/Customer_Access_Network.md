@@ -14,7 +14,7 @@ The Customer Access Network \(CAN\) provides access from outside the customer ne
 
 These nodes and services need an IP address that routes to the customer’s network in order to be accessed from outside the network.
 
-### Implications if CAN isn't Configured
+### Implications if CAN is not Configured
 
 -   No direct access to the NCNs other than `ncn-m001`. Will need to hop through `ncn-m001` to get to the rest of the NCNs.
 -   No direct access to the UANs unless the UAN has a direct connection to the customer network.
@@ -27,7 +27,7 @@ These nodes and services need an IP address that routes to the customer’s netw
 
 ### CAN Subnets
 
-IP addresses are allocated from a single IP subnet that is configured as the `can-cidr` value in the csi config init input. This subnet is further divided into three smaller subnets:
+IP addresses are allocated from a single IP subnet that is configured as the `can-cidr` value in the `csi config init` input. This subnet is further divided into three smaller subnets:
 
 -   Subnet for NCNs, UANs, and switches.
 -   Subnet for the MetalLB static pool \(can-static-pool\).
@@ -54,7 +54,7 @@ If there are more than 27 IPs needed for NCNs, UANs, and switches, and/or more t
 
 ### Customer Variables
 
-The following variables are defined in the csi config init input. This example uses values for the /26 layout described above. The `can-gateway` value should be an IP at the end of the range for NCNs, UANs, and switches. For example, the IP would be 10.102.5.27 using the figure shown above.
+The following variables are defined in the `csi config init` input. This example uses values for the /26 layout described above. The `can-gateway` value should be an IP at the end of the range for NCNs, UANs, and switches. For example, the IP would be 10.102.5.27 using the figure shown above.
 
 ```screen
 linux# csi config init 

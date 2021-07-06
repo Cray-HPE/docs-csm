@@ -1,32 +1,26 @@
 # Managing Configuration with CFS
 
-Many product streams need to use the Configuration Framework Service (CFS) to
-apply post-boot configuration to the management nodes. This post-boot
-configuration is known as NCN personalization.
+Many product streams need to use the Configuration Framework Service (CFS) to apply post-boot configuration to the management nodes.
+This post-boot configuration by CFS is known as NCN personalization. CFS is also used for the compute nodes and application nodes
+for node personalization (post-boot) and for pre-boot configuration of images (image customization).
 
-NCN personalization applies post-boot configuration to the HPE Cray EX
-management nodes. Many HPE Cray EX management services outside of CSM
-(including DVS and SMA) require NCN personalization to function.
+NCN Personalization performs automated post-boot configuration tasks on the HPE Cray EX management nodes. Many HPE
+Cray EX management services (including DVS and SMA) require NCN personalization to function.
 
-NCN Personalization is set up via the following steps:
-1. Create and upload a configuration file for the NCNs to CFS. This file lists
-   the Ansible playbooks and their location in the Version Control Service (VCS)
-   that configure each NCN.
-1. Set the desired configuration from the previous step in CFS for each
-   management node requiring post-boot configuration. This step directs CFS to
-   apply the configuration automatically to each node.
+In this release, NCN Personalization must be set up manually. In general, this process requires two steps:
+1. Create and upload a CFS Configuration file. This file lists the Ansible playbooks stored in the Version Control Service or VCS (gitea) that configure each NCN.
+1. Update the component endpoints in CFS for each management node requiring post-boot configuration. This step tells CFS to apply the CFS configuration automatically to a specific node.
 
-Hewlett Packard Enterprise recommends that the configurations for both CNs and
-NCNs use the same git commit IDs. This requirement ensures that the
-configurations remain compatible. This compatibility is necessary for services
-like DVS which require low-level compatibility between CNs and NCNs.
+Hewlett Packard Enterprise recommends that the configurations for both CNs and NCNs use the same git
+commit IDs. This requirement ensures that the configurations remain compatible. This compatibility is necessary for
+services like DVS which require low-level compatibility between CNs and NCNs.
 
-Additional software product streams may require NCN personalization of the
-management nodes in addition to the configuration required by CSM. Consult the
-documentation for these products for more information.
+Software product streams which include configuration content to be applied to the management nodes 
+may include those which configure management functionality, such as COS, SMA, and CSM,
+or optional functionality to enable user productivity with UAI, such as PE, Analytics, and filesystem
+mounts like Lustre or SpectrumScale.
 
-For more detailed information on configuration management with CFS, see these
-topics in [Configuration Management](configuration_management/Configuration_Management.md)
+For more detailed information see these topics in [Configuration Management](configuration_management/Configuration_Management.md)
    * Configuration Layers
    * Ansible Inventory
    * Configuration Management with the CFS Batcher
@@ -85,7 +79,7 @@ injected into the authorized keys file are not automatically removed during reco
 
 ##### CSM keys in Vault 
 
-Passwordless SSH Keys are generated using vault under the csm key. The private half of the key is published as
+Passwordless SSH Keys are generated using vault under the CSM key. The private half of the key is published as
 a Kubernetes secret:
 
    ```bash
@@ -184,7 +178,7 @@ In this case, deleting the associated configmap and secrets will republish them.
 ###### Create a CFS Configuration for the Application of Passwordless SSH to NCNs
 
 It may be necessary to create or update a CFS configuration entry to apply changes to the NCN environment.
-Typically, this needs to be done for newly installed HPE Cray EX product releases.
+Typically, this needs to be done for newly-installed HPE Cray EX product releases.
 
 The following example creates a new CFS configuration with a single product configuration layer (csm-1.5.8).
 Multiple product configuration layers may be created later to apply multiple changes to a node at one time. 
@@ -299,12 +293,16 @@ procedure.
 1. Create a CFS configuration JSON file for NCN personalization.
 
    **Note:** During the early part of a first time installation of software, the CSM product is the only one
+<<<<<<< HEAD
    which is available to be added to the configuration layers.  As more software product streams are installed,
+=======
+   which is avaiable to be added to the configuration layers. As more software product streams are installed,
+>>>>>>> 04842c27bdd4b745ee99576ff822bb9c2ea68412
    these other layers will become available to be added to the NCN personalization.
 
    All products that must be configured on the NCNs must have a corresponding layer in the CFS JSON file. Each node
    in the HPE Cray EX system can only have one configuration applied. The CSM layer must always be the first
-   layer in the file, if present.  This procedure assumes that the example CFS configuration file is saved as
+   layer in the file, if present. This procedure assumes that the example CFS configuration file is saved as
    ncn-personalization.json on a master node. Replace the values for commit and cloneUrl with the
    values obtained for each of the configuration repositories.
 
@@ -320,10 +318,10 @@ procedure.
    such as the sma-base-config and sma-ldms-ncn layers for SMA.
 
    Obtain the git commit ID and cloneUrl for the appropriate branch or branches using
-   the same method used for CSM or the method recommended by the documenation for that product stream.
+   the same method used for CSM or the method recommended by the documentation for that product stream.
 
    It is possible for a customer to create their own repository in VCS with Ansible plays which are to be run on
-   the management nodes as another layer in the CFS configuration file for NCN personalization.  That layer is not
+   the management nodes as another layer in the CFS configuration file for NCN personalization. That layer is not
    included in this sample ncn-personalization.json file.
 
    ```bash

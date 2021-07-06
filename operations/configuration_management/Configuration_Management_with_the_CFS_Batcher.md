@@ -11,7 +11,7 @@ The CFS-Batcher schedules CFS sessions according to the following rules:
 -   Batches are scheduled as CFS sessions when the batch is full or the batch window time has been exceeded.
     -   The timer for the batch window is started when the first component is added, and is never reset. Nodes should never wait more than the window period between being ready for configuration and being scheduled in a CFS session
 
--   CFS can't guarantee that jobs for similar batches will start at the same time, even if all CFS sessions are created at the same time. This variability is due to the nature of Kubernetes scheduling.
+-   CFS cannot guarantee that jobs for similar batches will start at the same time, even if all CFS sessions are created at the same time. This variability is due to the nature of Kubernetes scheduling.
     -   Checking the start time for the CFS session is more accurate than checking the pod start time when determining when a batch was scheduled.
 
 There are two safety mechanisms built into the Batcher scheduling that can delay batches more than the usual amount of time. Both mechanisms are indicated in the logs:
@@ -23,7 +23,7 @@ There are two safety mechanisms built into the Batcher scheduling that can delay
 -   If several CFS sessions that are created by the Batcher Agent fail in a row \(the most recent 20 sessions\), Batcher will start throttling the creation of new sessions.
     -   The throttling is automatically reset if a single session succeeds. Users can also manually reset this by restarting Batcher.
     -   The back-off is increased if new sessions continue to fail.
-    -   This helps protect against cases where high numbers of retries are allowed so that Batcher can not flood Kubernetes with new jobs in a short period of time.
+    -   This helps protect against cases where high numbers of retries are allowed so that Batcher cannot flood Kubernetes with new jobs in a short period of time.
 
 ### Configure Batcher
 

@@ -278,7 +278,7 @@ ncn-m001# cray scsd bmc discreetcreds create PAYLOAD_FILE --format json
 
 ### Set Redfish Credentials for a Single Target
 
-Set Redfish credentials for a single target. This command is similar to the cray scsd bmc discreetcreds create command, except it can't be used to set different credentials for multiple targets.
+Set Redfish credentials for a single target. This command is similar to the `cray scsd bmc discreetcreds create` command, except it cannot be used to set different credentials for multiple targets.
 
 The following is an example payload file that was used to generate the output in the command below:
 

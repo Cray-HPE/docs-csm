@@ -1,6 +1,6 @@
 ## External DNS csi config init Input Values
 
-External DNS requires the system-name, site-domain, and can-external-dns values that are defined with the csi config init command. These values are used to customize the External DNS configuration during installation.
+External DNS requires the system-name, site-domain, and can-external-dns values that are defined with the `csi config init` command. These values are used to customize the External DNS configuration during installation.
 
 ### The system-name and site-domain Values
 
@@ -8,7 +8,7 @@ The system-name and site-domain values specified as part of the csi config init 
 
 **Warning:** Changing the system-name.site-domain value post-installation is not recommended due to the complexity of changes required.
 
-Input for csi config init:
+Input for `csi config init`:
 
 ```bash
 --system-name testsystem
@@ -19,11 +19,11 @@ Input for csi config init:
 
 The can-external-dns value is the IP address that DNS queries under the combined system-name.site-domain values need to be delegated.
 
-This will be the shared IP address for `services/cray-externaldns-coredns-tcp` and services/cray-externaldns-coredns-udp services, which must be an IP in the `customer_access_static_metallb_address_pool` subnet defined in the csi config init input. See [Customer Access Network \(CAN\)](Customer_Access_Network_CAN.md) for more information.
+This will be the shared IP address for `services/cray-externaldns-coredns-tcp` and services/cray-externaldns-coredns-udp services, which must be an IP in the `customer_access_static_metallb_address_pool` subnet defined in the `csi config init` input. See [Customer Access Network \(CAN\)](Customer_Access_Network_CAN.md) for more information.
 
 Changing this value requires updating the loadBalancerIP value of the `services/cray-externaldns-coredns-tcp` and `services/cray-externaldns-coredns-udp` services.
 
-Input for csi config init:
+Input for `csi config init`:
 
 ```bash
 --can-external-dns 10.102.5.30

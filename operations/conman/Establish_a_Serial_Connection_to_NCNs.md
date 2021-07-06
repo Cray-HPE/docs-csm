@@ -1,6 +1,6 @@
 ## Establish a Serial Connection to NCNs
 
-The ConMan pod can be used to establish a serial console connection with each non-compute node (NCN) in the system.  In the scenario of a power down or reboot of an NCN worker, it will be important to check which NCN the conman pod is running on, and to ensure that it is NOT running on the NCN worker that will be impacted. If the NCN worker (where ConMan is running) is powered down or rebooted, the ConMan pod will be unavailable until the node comes back up or until the ConMan pod has terminated on the downed NCN worker node and come up on another NCN worker node.
+The ConMan pod can be used to establish a serial console connection with each non-compute node (NCN) in the system. In the scenario of a power down or reboot of an NCN worker, it will be important to check which NCN the conman pod is running on, and to ensure that it is NOT running on the NCN worker that will be impacted. If the NCN worker (where ConMan is running) is powered down or rebooted, the ConMan pod will be unavailable until the node comes back up or until the ConMan pod has terminated on the downed NCN worker node and come up on another NCN worker node.
 
 ### Prerequisites
 

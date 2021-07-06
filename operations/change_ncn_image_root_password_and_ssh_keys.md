@@ -134,7 +134,7 @@ The Ceph image is used by the utility storage nodes.
 
 1. Clean up the SquashFS creation
 
-   The ceph image directory is /var/www/ephemeral/data/ceph.
+   The Ceph image directory is /var/www/ephemeral/data/ceph.
 
    ```bash
    pit# umount -v /var/www/ephemeral/data/ceph/squashfs-root/mnt/squashfs

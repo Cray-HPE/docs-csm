@@ -2,7 +2,7 @@
 
 Use this procedure to check if any kworkers are in an error state due to a high load. Once the error has been identified, workaround the issue by returning the high load to a normal level.
 
-The kubectl command can become unresponsive due to a high load. Another symptom is that ps aux can't return or complete due to aspects of the proc filesystem being locked.
+The kubectl command can become unresponsive due to a high load. Another symptom is that `ps aux` cannot return or complete due to aspects of the proc filesystem being locked.
 
 If kubectl is non-responsive on `ncn-w001`, the commands can be run from any other master or worker non-compute node \(NCN\).
 
@@ -14,7 +14,7 @@ The `kubectl` command is not responsive on a node.
 
 ### Identify the kworker Issue
 
-1.  Check to see if kubectl isn't responding due to a kworker issue.
+1.  Check to see if kubectl is not responding due to a kworker issue.
 
     1.  List the process identification \(pid\) numbers of the kworkers in the D state.
 

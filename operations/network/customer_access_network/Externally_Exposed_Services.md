@@ -4,7 +4,7 @@ The following services are exposed on the Customer Access Network \(CAN\). Each 
 
 Services under Istio Ingress Gateway and Keycloak Gatekeeper Ingress share an ingress, so they all use the IP allocated to the Ingress.
 
-Each service is given a DNS name that is served by the External DNS service to make them resolvable from the site network. This makes it possible to access each of these services by name rather than finding the allocated IP. The DNS name is pre-pended to the `system-name.site-domain` specified during csi config init. For example, if the system is named TestSystem, and the site is example.com, the HPE Cray EX domain would be testsystem.example.com.
+Each service is given a DNS name that is served by the External DNS service to make them resolvable from the site network. This makes it possible to access each of these services by name rather than finding the allocated IP. The DNS name is pre-pended to the `system-name.site-domain` specified during `csi config init`. For example, if the system is named TestSystem, and the site is example.com, the HPE Cray EX domain would be testsystem.example.com.
 
 See [External DNS](../external_dns/External_DNS.md) for more information.
 

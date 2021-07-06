@@ -54,7 +54,7 @@ This procedure requires administrative privileges.
     Events:                   <none>
     ```
 
-    Run the following command to view the config map. There is no customer-access address pool in the example below, indicated it hasn't been added yet. This is why the external IP value is <pending\>.
+    Run the following command to view the config map. There is no customer-access address pool in the example below, indicated it has not been added yet. This is why the external IP value is <pending\>.
 
     ```bash
     ncn-w001# kubectl -n metallb-system get cm config -o yaml

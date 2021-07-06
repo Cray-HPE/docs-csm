@@ -97,7 +97,7 @@ Only follow the step in this section for the node type being rebuilt:
         ncn-m002
         ```
 
-        If the node returned isn't the one being rebuilt, proceed to step [2.8](#stop-etcd).
+        If the node returned is not the one being rebuilt, proceed to step [2.8](#stop-etcd).
 
     2.  Reconfigure the Boot Script Service \(BSS\) to point to a new first master node.
 
@@ -380,10 +380,10 @@ Only follow the step in this section for the node type being rebuilt:
 
    2. Ensure the current boot parameters are appropriate for PXE booting.
 
-      Inspect the `"params": "kernel..."` line. If the line begins with `BOOT_IMAGE` and/or doesn't contain `metal.server`, the following steps are needed:
+      Inspect the `"params": "kernel..."` line. If the line begins with `BOOT_IMAGE` and/or does not contain `metal.server`, the following steps are needed:
 
       1.  Remove everything before `kernel` on the `"params": "kernel"` line.
-      2.  Re-run steps [4-5](#step4) for another node/xname. Look for an example that doesn't contain `BOOT_IMAGE`.
+      2.  Re-run steps [4-5](#step4) for another node/xname. Look for an example that does not contain `BOOT_IMAGE`.
 
           Once an example is found, copy a portion of the `"params"` line for everything including and after `'biosdevname'`, and use that in the XNAME.json file.
 

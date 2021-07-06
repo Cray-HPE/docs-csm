@@ -73,7 +73,7 @@ ncn-m# cray hsm partitions describe PARTITION_NAME
 
 ### Delete a Partition
 
-Once a partition is deleted, the former members won't have a partition assigned to them and are ready to be assigned to a new partition.
+Once a partition is deleted, the former members will not have a partition assigned to them and are ready to be assigned to a new partition.
 
 Delete a partition so all members are no longer in it:
 

@@ -12,7 +12,7 @@ This procedure requires admin privileges.
 
 See [Collect Information about the Ceph Cluster](Collect_Information_About_the_Ceph_Cluster.md) for more information on how to interpret the output of the Ceph commands used in this procedure.
 
-1. Log on to the manager nodes via SSH.
+1. Log on to the manager nodes via `ssh`.
 
     The commands in the next step will need to be run on each manager node.
 
@@ -20,7 +20,7 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
 
     1. Check to see if the ceph-mon process is running on all of the manager nodes.
 
-        This command needs to be run on each manager node to determine where the issues are occurring. Make a note of which nodes don't have the ceph-mon process running.
+        This command needs to be run on each manager node to determine where the issues are occurring. Make a note of which nodes do not have the ceph-mon process running.
 
         ```bash
         ncn-m001# ps -ef |grep ceph-mon
@@ -39,13 +39,13 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
 
 1. Check the health of the Ceph cluster on one of the manager nodes.
 
-    This command will report a HEALTH\_WARN status. There will be a message below this warning indicating that a ceph-mon node or multiple ceph-mon nodes are out of quorom.
+    This command will report a HEALTH\_WARN status. There will be a message below this warning indicating that a ceph-mon node or multiple ceph-mon nodes are out of quorum.
 
     ```bash
     ncn-s00(1/2/3)# ceph -s
     ```
 
-    To watch nodes that drop out of quorom, run the following command:
+    To watch nodes that drop out of quorum, run the following command:
 
     ```bash
     ncn-s00(1/2/3)# ceph -ws

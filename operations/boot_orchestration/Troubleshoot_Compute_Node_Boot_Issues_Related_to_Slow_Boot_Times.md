@@ -109,7 +109,7 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
         
         ```
 
-        If multiple BOA jobs exist, describe the CFS sessions and look at the configuration, as well as which components are included. It's unlikely, but a single session may contain components from multiple separate BOS sessions if they both request the same configuration for different components at around the same time.
+        If multiple BOA jobs exist, describe the CFS sessions and look at the configuration, as well as which components are included. It is unlikely, but a single session may contain components from multiple separate BOS sessions if they both request the same configuration for different components at around the same time.
 
         ```bash
         ncn-m001# kubectl -n services describe cfs SESSION_NAME

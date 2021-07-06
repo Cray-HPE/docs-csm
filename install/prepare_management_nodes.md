@@ -4,7 +4,7 @@ Some preparation of the management nodes might be needed before starting an inst
 
 For either scenario, the BMC and BIOS firmware should be checked and may need to be updated on the node which will become the PIT node.
 
-For an install, if the system ever had any previous software installed, then storage might need to be wiped on management nodes.  And if switching a system from USB LiveCD to RemoteISO LiveCD, the old USB device might need to be wiped.
+For an install, if the system ever had any previous software installed, then storage might need to be wiped on management nodes. And if switching a system from USB LiveCD to RemoteISO LiveCD, the old USB device might need to be wiped.
 
 For a reinstall, the preparation includes quiescing the compute nodes and application nodes, scaling back DHCP on the management nodes,
 wiping the storage on the management nodes, and powering off the management nodes.
@@ -57,7 +57,7 @@ Later in the installation process the HPC Firmware Pack will be installed on the
    * cray-kea (DHCP leases)
    * Access to the API gateway for node heartbeats
 
-   While the reinstall process happens, these nodes would not be able to function normally.  As part of the
+   While the reinstall process happens, these nodes would not be able to function normally. As part of the
    reinstall, they will be rebooted with new boot images and configuration.
 
    Refer to "Shut Down and Power Off Compute and User Access Nodes" in the _HPE Cray EX Hardware Management Administration Guide 1.5 S-8015_.

@@ -55,7 +55,7 @@ Use the following procedures to manage configurations with CFS.
     -   [Change the Ansible Verbosity Logs](Change_the_Ansible_Verbosity_Logs.md)
     -   [Set the ansible.cfg for a Session](Set_the_ansible-cfg_for_a_Session.md)
     -   [Delete CFS Sessions](Delete_CFS_Sessions.md)
-    -   [Automatic Session Deletion with sessionTTL](Automaitc_Session_Deletion_with_sessionTTL.md)
+    -   [Automatic Session Deletion with sessionTTL](Automatic_Session_Deletion_with_sessionTTL.md)
     -   [Track the Status of a Session](Track_the_Status_of_a_Session.md)
     -   [View Configuration Session Logs](View_Configuration_Session_Logs.md)
     -   [Troubleshoot Ansible Play Failures in CFS Sessions](Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)

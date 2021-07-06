@@ -3,11 +3,11 @@
 
 function convert_radosgw () {
   echo "Converting radsogw to support Ceph 15.x requirements"
-  echo "Verifying that a realm doesn't exist"
+  echo "Verifying that a realm does not exist"
   radosgw-admin realm list
   echo "Creating realm..."
   radosgw-admin realm create --rgw-realm=site1 --default
-  echo "Verifying that a zonegroup doesn't exist"
+  echo "Verifying that a zonegroup does not exist"
   radosgw-admin zonegroup list
   echo "Creating zonegroup ..."
   radosgw-admin zonegroup rename --rgw-zonegroup default --zonegroup-new-name=zonegroup1
