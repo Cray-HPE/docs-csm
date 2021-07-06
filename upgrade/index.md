@@ -44,7 +44,7 @@ sections, but there is also a general troubleshooting topic.
       
    The upgrade of CSM software will do a controlled, rolling reboot of all management nodes before updating the CSM services.
    * Prerequisites & Preflight Checks
-   * Stage 1.  Ceph upgrade from Nautilus (14.2.x) to Octopus (15.2.x)
+   * Stage 1. Ceph upgrade from Nautilus (14.2.x) to Octopus (15.2.x)
    * Stage 2. Ceph image upgrade
    * Stage 3. Kubernetes Upgrade from 1.18.6 to 1.19.9
    * Stage 4. CSM Service Upgrades
@@ -74,7 +74,7 @@ sections, but there is also a general troubleshooting topic.
 
 1. Update Firmware with FAS
       
-   See [Update Firmware with FAS](../operations/update_firmware_with_fas.md)
+   See [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md)
 <a name="next_topic"></a>
 
 1. Next Topic
