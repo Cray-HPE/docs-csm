@@ -22,7 +22,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
         **Important:** SDU takes about 15 minutes to run on a small system \(longer for large systems\).
 
         ```screen
-        ncn-m001# sdu --scenario triage --start\_time '-4 hours' \\
+        ncn-m001# sdu --scenario triage --start_time '-4 hours' \
         --reason "saving state before powerdown/up"
         ```
     1.  Check ceph status.
