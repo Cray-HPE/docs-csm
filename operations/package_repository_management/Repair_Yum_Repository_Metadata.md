@@ -52,7 +52,7 @@ The system is fully installed.
 
     The new task will now be available on the main Tasks page.
 
-6.  Click on the newly created task.
+6.  Click on the newly-created task.
 
     ![New Task on Task Page](../../img/operations/Nexus_New_Task.png "New Task on Task Page")
 

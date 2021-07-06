@@ -39,7 +39,7 @@ ncn-m001# ceph -s
 
     Use one of the options below to resolve the issue:
 
-    - Use the ceph config command.
+    - Use the `ceph config` command.
 
         In the example below, the omap object key threshold is set to 350000, but it can be set to a higher number if desired.
 

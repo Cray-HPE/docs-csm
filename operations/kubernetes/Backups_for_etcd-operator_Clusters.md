@@ -53,7 +53,7 @@ cray-externaldns/etcd.backup_v2_2020-02-02-20:45:48
 cray-externaldns/etcd.backup_v2_2020-02-03-20:45:48
 ```
 
-The returned output includes the date and time of the latest backup for each service. If a recent backup for any service isn't included, it is an indication that the service isn't backed up automatically. Create a manual backup for that service by following the [Create a Manual Backup of a Healthy etcd Cluster](Create_a_Manual_Backup_of_a_Healthy_etcd_Cluster.md) procedure.
+The returned output includes the date and time of the latest backup for each service. If a recent backup for any service is not included, it is an indication that the service is not backed up automatically. Create a manual backup for that service by following the [Create a Manual Backup of a Healthy etcd Cluster](Create_a_Manual_Backup_of_a_Healthy_etcd_Cluster.md) procedure.
 
 ### Clusters without Automated Backups
 

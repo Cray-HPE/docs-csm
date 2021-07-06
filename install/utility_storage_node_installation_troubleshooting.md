@@ -1,9 +1,7 @@
 # Utility Storage Installation Troubleshooting
 
-If there is a failure in the creation of ceph storage on the utility storage nodes for one of these scenarios,
+If there is a failure in the creation of Ceph storage on the utility storage nodes for one of these scenarios,
 the ceph storage might need to be reinitialized.
-
-Please match your scenario prior to executing any workarounds.
 
 ### Topics
 
@@ -15,7 +13,7 @@ Please match your scenario prior to executing any workarounds.
 <a name="scenario-1"></a>
 ### Scenario 1  (Shasta 1.4 only)
 
-**`IMPORTANT (FOR NODE INSTALLS/REINSTALLS ONLY)`**: If your ceph install failed please check the following
+**`IMPORTANT (FOR NODE INSTALLS/REINSTALLS ONLY)`**: If the Ceph install failed please check the following
 
 ```bash
  ncn-s# ceph osd tree
@@ -39,46 +37,46 @@ ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
 11   ssd  3.49309         osd.11      down  1.00000 1.00000
 13   ssd  3.49309         osd.13      down  1.00000 1.00000
 15   ssd  3.49309         osd.15      down  1.00000 1.00000
--7       27.94519     host ncn-s003                            <--- node where our issue exists
- 2   ssd 27.94519         osd.2       down  1.00000 1.00000    <--- our problematic VG.  
+-7       27.94519     host ncn-s003                            <--- node where the issue exists
+ 2   ssd 27.94519         osd.2       down  1.00000 1.00000    <--- the problematic VG.  
 
 ```
 
-   **SSH to our node(s) where the issue exists and do the following:**
+   **SSH to the node(s) where the issue exists and do the following:**
 
    1. ncn-s# systemctl stop ceph-osd.target
    2. ncn-s# vgremove -f --select 'vg_name=~ceph*'  
-   *This will take a little bit of time, so don't panic.*
+   *This will take a little bit of time, so do not panic.*
    3. ncn-s# for i in {g..n}; do sgdisk --zap-all /dev/sd$i; done.
 
-   **This will vary node to node and you should use lsblk to identify all drives available to ceph**
+   **This will vary node to node. Use lsblk to identify all drives available to ceph**
 
    >**Manually create OSDs on the problematic nodes**
    >ncn-s# for i in {g..n}; do ceph-volume lvm create --data /dev/sd$i  --bluestore; done
 
    **ALL THE BELOW WORK WILL BE RUN FROM NCN-S001**
 
-   1. Verify the /etc/cray/ceph directory is empty.  If there are any files there then delete them
+   1. Verify the /etc/cray/ceph directory is empty. If there are any files there then delete them
    2. Put in safeguard
         * Edit /srv/cray/scripts/metal/lib.sh
        * Comment out the below lines
 
-   ```bash
-   22   if [ $wipe == 'yes' ]; then
-   23     ansible osds -m shell -a "vgremove -f --select 'vg_name=~ceph*'"
-   24   fi
-   ```
+       ```bash
+       22   if [ $wipe == 'yes' ]; then
+       23     ansible osds -m shell -a "vgremove -f --select 'vg_name=~ceph*'"
+       24   fi
+       ```
 
-   Run the cloud init script.
+   3. Run the cloud init script.
    
-   ```bash
-   ncn-s001# /srv/cray/scripts/common/storage-ceph-cloudinit.sh
-   ```
+       ```bash
+       ncn-s001# /srv/cray/scripts/common/storage-ceph-cloudinit.sh
+       ```
 
 <a name="scenario-2"></a>
 ### Scenario 2  (Shasta 1.5 only)
 
-IMPORTANT (FOR NODE INSTALLS/REINSTALLS ONLY): If your ceph install failed please check the following
+IMPORTANT (FOR NODE INSTALLS/REINSTALLS ONLY): If the Ceph install failed please check the following
 
 ```bash
  nncn-s001:~ # ceph osd tree
@@ -92,7 +90,7 @@ ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
 12    ssd   1.74660          osd.12         up   1.00000  1.00000
 15    ssd   1.74660          osd.15         up   1.00000  1.00000
 -5         10.47958      host ncn-s002
- 0    ssd   1.74660          osd.0          down   1.00000  1.00000   <-- our bad OSD
+ 0    ssd   1.74660          osd.0          down   1.00000  1.00000   <-- the bad OSD
  4    ssd   1.74660          osd.4          up   1.00000  1.00000
  7    ssd   1.74660          osd.7          up   1.00000  1.00000
 10    ssd   1.74660          osd.10         up   1.00000  1.00000
@@ -108,7 +106,7 @@ ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
 ```
 
 
-Since we know our host and osd, we can easily get more information.
+Get more information using the host and OSD.
 
 ```bash
 ceph orch ps --daemon-type osd ncn-s002
@@ -121,9 +119,9 @@ osd.4   ncn-s002  running (23h)  7m ago     2d   15.2.8   registry.local/ceph/ce
 osd.7   ncn-s002  running (23h)  7m ago     2d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  78a89eaef92a
 ```
 
->>**optionally leave off the host name and it will return all the osd processing the cluster**
+>>**optionally leave off the host name and it will return all the OSD processing the cluster**
 
-On the node in question you will have to gather some information to zap a single OSD.
+In order to zap a single OSD, it is necessary to gather some information.
 
 
 To list out the devices on that host:
@@ -141,9 +139,9 @@ To list out the devices on that host:
    ncn-s002  /dev/sdh  ssd   Unknown    Unknown  ATA     SAMSUNG MZ7LH1T9  S455NY0M811873  1920G  Unknown  N/A    N/A    No         locked, LVM detected, Insufficient space (<10 extents) on vgs
    ```
 
-You may see devices on a node where it is not starting osds.  The locked is more than likely a result of a wipe failure.
+The locked status in the Reject column is likely the result of a wipe failure.
 
-Find your drive path
+Find the drive path
 
 ```bash
 cephadm ceph-volume lvm list
@@ -164,11 +162,11 @@ Using recent ceph image docker.io/ceph/ceph@sha256:16d37584df43bd6545d16e5aeba52
 /usr/bin/podman: stdout       crush device class        None
 /usr/bin/podman: stdout       encrypted                 0
 /usr/bin/podman: stdout       osd fsid                  b2eb119c-4f45-430b-96b0-bad9e8b9aca6
-/usr/bin/podman: stdout       osd id                    0  <-- our osd number
+/usr/bin/podman: stdout       osd id                    0  <-- the osd number
 /usr/bin/podman: stdout       osdspec affinity
 /usr/bin/podman: stdout       type                      block
 /usr/bin/podman: stdout       vdo                       0
-/usr/bin/podman: stdout       devices                   /dev/sdf  <-- our path
+/usr/bin/podman: stdout       devices                   /dev/sdf  <--the path
 /usr/bin/podman: stdout
 
 # Shortened output for example

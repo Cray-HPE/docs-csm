@@ -63,8 +63,8 @@ for additional information on system hardware, troubleshooting, and administrati
 
    1. Utility Storage Node Installation Troubleshooting
 
-      If there is a failure in the creation of ceph storage on the utility storage nodes for one of these scenarios,
-      the ceph storage might need to be reinitialized. 
+      If there is a failure in the creation of Ceph storage on the utility storage nodes for one of these scenarios,
+      the Ceph storage might need to be reinitialized. 
          * Sometimes a large OSD can be created which is a concatenation of multiple devices, instead of one OSD per device
 
       See [Utility Storage Node Installation Troubleshooting](utility_storage_node_installation_troubleshooting.md)
@@ -72,7 +72,7 @@ for additional information on system hardware, troubleshooting, and administrati
 
    1. Ceph CSI Troubleshooting
 
-      If there has been a failure to initialize all ceph csi components on ncn-s001, then the storage node 
+      If there has been a failure to initialize all Ceph CSI components on ncn-s001, then the storage node 
       cloud-init may need to be rerun.
          * Verify Ceph CSI
          * Rerun Storage Node cloud-init
@@ -83,7 +83,7 @@ for additional information on system hardware, troubleshooting, and administrati
    1. Safeguards for CSM NCN Upgrades
 
       If a reinstall or upgrade is being done, there might be a reason to use one of these safeguards.
-         * Preserve Ceph on Utiity Storage Nodes
+         * Preserve Ceph on Utility Storage Nodes
          * Protect RAID Configuration on Management Nodes
 
       See [Safeguards for CSM NCN Upgrades](safeguards_for_csm_ncn_upgrades.md)

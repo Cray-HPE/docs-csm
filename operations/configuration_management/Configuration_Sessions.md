@@ -2,7 +2,7 @@
 
 Once configurations have been created with the required layers and values set in the configuration repositories \(or the additional inventory repository\), create a Configuration Framework Session \(CFS\) session to apply the configuration to the targets.
 
-Sessions are created via the Cray CLI or through the CFS REST API. A session stages ansible inventory \(whether dynamic, static, or image customization\), launches Ansible Execution Environments \(AEE\) in order for each configuration layer in the service mesh, tears down the environments as required, and reports the session status to the CFS API.
+Sessions are created via the Cray CLI or through the CFS REST API. A session stages Ansible inventory \(whether dynamic, static, or image customization\), launches Ansible Execution Environments \(AEE\) in order for each configuration layer in the service mesh, tears down the environments as required, and reports the session status to the CFS API.
 
 When a session target is an Image Management Service \(IMS\) image ID for the purposes of pre-boot image customization, the CFS session workflow varies slightly. The inventory staging instead calls IMS to expose the requested image root\(s\) via SSH. After the AEE\(s\) finish applying the configuration layers, CFS then instructs IMS to tear down the image root environment and package up the resultant image and records the new image ID in the session metadata.
 

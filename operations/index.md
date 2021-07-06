@@ -185,7 +185,7 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
        *   [Change the Ansible Verbosity Logs](configuration_management/Change_the_Ansible_Verbosity_Logs.md)
        *   [Set the ansible.cfg for a Session](configuration_management/Set_the_ansible-cfg_for_a_Session.md)
        *   [Delete CFS Sessions](configuration_management/Delete_CFS_Sessions.md)
-       *   [Automatic Session Deletion with sessionTTL](configuration_management/Automaitc_Session_Deletion_with_sessionTTL.md)
+       *   [Automatic Session Deletion with sessionTTL](configuration_management/Automatic_Session_Deletion_with_sessionTTL.md)
        *   [Track the Status of a Session](configuration_management/Track_the_Status_of_a_Session.md)
        *   [View Configuration Session Logs](configuration_management/View_Configuration_Session_Logs.md)
        *   [Troubleshoot Ansible Play Failures in CFS Sessions](configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
@@ -213,7 +213,7 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
        *   [Change the Ansible Verbosity Logs](configuration_management/Change_the_Ansible_Verbosity_Logs.md)
        *   [Set the ansible.cfg for a Session](configuration_management/Set_the_ansible-cfg_for_a_Session.md)
        *   [Delete CFS Sessions](configuration_management/Delete_CFS_Sessions.md)
-       *   [Automatic Session Deletion with sessionTTL](configuration_management/Automaitc_Session_Deletion_with_sessionTTL.md)
+       *   [Automatic Session Deletion with sessionTTL](configuration_management/Automatic_Session_Deletion_with_sessionTTL.md)
        *   [Track the Status of a Session](configuration_management/Track_the_Status_of_a_Session.md)
        *   [View Configuration Session Logs](configuration_management/View_Configuration_Session_Logs.md)
        *   [Troubleshoot Ansible Play Failures in CFS Sessions](configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
@@ -454,7 +454,7 @@ The System Layout Service \(SLS\) holds information about the system design, suc
 The System Configuration Service \(SCSD\) allows admins to set various BMC and controller parameters. These parameters are typically set during discovery, but this tool enables parameters to be set before or after discovery. The operations to change these parameters are available in the Cray CLI under the `scsd` command.
 
   * [System Configuration Service](system_configuration_service/System_Configuration_Service.md)
-  * [Manage Parameteres with the scsd Service](system_configuration_service/Manage_Parameters_with_the_scsd_Service.md)
+  * [Manage Parameters with the scsd Service](system_configuration_service/Manage_Parameters_with_the_scsd_Service.md)
   * [Set BMC Credentials](system_configuration_service/Set_BMC_Credentials.md)
 
 

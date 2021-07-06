@@ -2,9 +2,9 @@
 
 ## Ignore Nodes with CAPMC
 
-Update the Cray Advanced Platform Monitoring and Control \(CAPMC\) configmap to ignore non-compute nodes \(NCNs\) and ensure they can not be powered off or reset.
+Update the Cray Advanced Platform Monitoring and Control \(CAPMC\) configmap to ignore non-compute nodes \(NCNs\) and ensure they cannot be powered off or reset.
 
-Modifing the CAPMC configmap to ignore nodes can prevent them from accidentally being power cycled.
+Modifying the CAPMC configmap to ignore nodes can prevent them from accidentally being power cycled.
 
 Nodes can also be locked with the Hardware State Manager \(HSM\) API. Refer to [NCN and Management Node Locking](../hardware_state_manager/NCN_and_Management_Node_Locking.md) for more information.
 

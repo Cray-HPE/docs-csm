@@ -8,7 +8,7 @@ Initialize and authorize the CLI so a user may run procedures on any given node.
 
 ## Initialize and Authorize the CLI
 
-The procedures below use the CLI as an authorized user and run on two separate node types. The first part runs on the LiveCD node while the second part runs on a non-LiveCD kubernetes master or worker node. When using the CLI on either node, the CLI configuration must be initialized and the user running the procedure must be authorized. This section describes how to initialize the CLI for use by a user and authorize the CLI as a user to run the procedures on any given node. The procedures will need to be repeated in both stages of the validation procedure.
+The procedures below use the CLI as an authorized user and run on two separate node types. The first part runs on the LiveCD node while the second part runs on a non-LiveCD Kubernetes master or worker node. When using the CLI on either node, the CLI configuration must be initialized and the user running the procedure must be authorized. This section describes how to initialize the CLI for use by a user and authorize the CLI as a user to run the procedures on any given node. The procedures will need to be repeated in both stages of the validation procedure.
 
 ## Discontinue Use of the CRAY\_CREDENTIALS Service Account Token
 

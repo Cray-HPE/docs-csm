@@ -6,7 +6,7 @@ category: numbered
 
 UAS troubleshooting tips and techniques.
 
-This section provides examples of some commands that can be used to troubleshoot UAS related issues.
+This section provides examples of some commands that can be used to troubleshoot UAS-related issues.
 
 ## Troubleshoot Connection Issues
 

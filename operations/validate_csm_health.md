@@ -105,7 +105,7 @@ ncn# csi handoff bss-update-param --set metal.no-wipe=1 --limit <SERVER_XNAME>
 
 **Note**: The `cray-crus-` pod is expected to be in the Init state until slurm and munge
 are installed. In particular, this will be the case if you are executing this as part of the validation after completing the [Install CSM Services](../install/install_csm_services.md).
-If in doubt, you can validate the CRUS service using the [CMS Validation Tool](#sms-health-checks). If the CRUS check passes using that tool, you don't need to worry
+If in doubt, you can validate the CRUS service using the [CMS Validation Tool](#sms-health-checks). If the CRUS check passes using that tool, you do not need to worry
 about the `cray-crus-` pod state.
 
 <a name="pet-ncnpostgreshealthchecks"></a>
@@ -117,11 +117,11 @@ Health Check scripts can be found and run on any worker or master node from any 
    ncn# /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
    ```
 
-For each postgres cluster the ncnPostgresHealthChecks script determines the leader pod and then reports the status of all postgres pods in the cluster.
+For each Postgres cluster the ncnPostgresHealthChecks script determines the leader pod and then reports the status of all postgres pods in the cluster.
 
 Execute ncnPostgresHealthChecks script. Verify leader for each cluster and status of cluster members.
 
-For a particular postgres cluster expected output similar to the following:
+For a particular Postgres cluster expected output similar to the following:
 ```bash
 --- patronictl, version 1.6.5, list for services leader pod cray-sls-postgres-0 ---
 + Cluster: cray-sls-postgres (6938772644984361037) ---+----+-----------+
@@ -309,7 +309,7 @@ Retrieve all the Leases currently in KEA:
 ncn# curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq
 ```
 
-If there is an non-zero amount of DHCP leases for river hardware returned that is a good indication that KEA is working.
+If there is an non-zero amount of DHCP leases for River hardware returned that is a good indication that KEA is working.
 
 <a name="net-extdns"></a>
 #### 1.5 Verify ability to resolve external DNS
@@ -386,7 +386,7 @@ There are multiple [Goss](https://github.com/aelsabbahy/goss) test suites availa
 
 You should now run the NCN health checks against the three different types of nodes with the following commands:
 
-**IMPORTANT:** These tests may only be successful while booted into the pit node.  You should not run these as part of your upgrade testing.  This includes the kubernetes check in the next block.
+**IMPORTANT:** These tests may only be successful while booted into the PIT node. You should not run these as part of your upgrade testing. This includes the Kubernetes check in the next block.
 
 
 ```bash
@@ -421,7 +421,7 @@ Execute the HMS smoke and functional tests after the CSM install to confirm that
 <a name="install-latest-hms-team-rpm"></a>
 #### 2.1 Install Latest hms-team rpm
 
-**`INTERNAL USE`** Only HPE Cray internal systems have access to this latest rpm of hms-team tests.
+**`INTERNAL USE`** Only HPE Cray internal systems have access to this latest RPM of hms-team tests.
 
 The HMS tests are provided by the hms-ct-test-crayctldeploy RPM which comes preinstalled on the NCNs. However, the tests receive frequent updates so it is recommended to check for a newer version of the RPM and if so, to download and install the latest version of the RPM prior to executing the tests. The latest versions of the hms-ct-test-crayctldeploy RPM can be retrieved from car.dev.cray.com in the following locations:
 * Master: [ct-tests/HMS/sle15_sp2_ncn/x86_64/dev/master/hms-team/](http://car.dev.cray.com/artifactory/ct-tests/HMS/sle15_sp2_ncn/x86_64/dev/master/hms-team)
@@ -450,15 +450,15 @@ ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-
 ### 2.3 Hardware State Manager Discovery Validation
 
 By this point in the installation process the Hardware State Manager should 
-have done it's discovery of the system.
+have done its discovery of the system.
 
 The foundational information for this discovery is gotten from SLS.  Thus, a
 comparison needs to be done to see that what is specified in SLS (focusing on 
 BMC components and Redfish endpoints) are present in HSM.
 
 The `hpe-csm-scripts` package provides a script called `hsm_discovery_verify.sh`
-that can be run at this time to do this validation.  This script can be run 
-from any kubernetes master or worker (should also work from a laptop or any 
+that can be run at this time to do this validation. This script can be run 
+from any Kubernetes master or worker (should also work from a laptop or any 
 machine that can get an access token and run curl commands to HMS services via 
 the API GW):
 
@@ -466,7 +466,7 @@ the API GW):
 ncn-m001# /opt/cray/csm/scripts/hms_verification/hsm_discovery_verify.sh
 ```
 
-There are no command line arguments.  The output will ideally appear as follows:
+There are no command line arguments. The output will ideally appear as follows:
 
 ```bash
 ncn-m001# /opt/cray/csm/scripts/hms_verification/hsm_discovery_verify.sh
@@ -489,10 +489,10 @@ the output.
 
 **NOTES:**
 * BMCs for management cluster master node 'm001' will not typically be present in HSM component data
-* Chassis Management Controllers (CMC) may show up as not being present in HSM.  CMCs for Intel server blades can be ignored.  Gigabyte server blade CMCs not found in HSM is not normal and should be investigated.   If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored.
+* Chassis Management Controllers (CMC) may show up as not being present in HSM.  CMCs for Intel server blades can be ignored. Gigabyte server blade CMCs not found in HSM is not normal and should be investigated. If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored.
 * HPE PDUs are not supported at this time and will likely show up as not being found in HSM.
-* BMCs having no association with a management switch port will be annotated as such, and should be investigated.  Exceptions to this are in Mountain or Hill configurations where mountain BMCs will show this condition on SLS/HSM mismatches, which is normal.
-* In Hill configurations SLS assumes BMCs in chassis 1 and 3 are populated, and in mountain configurations SLS assumes all BMCs are populated.   Any non-populated BMCs will have no HSM data and will show up in the mismatch list.
+* BMCs having no association with a management switch port will be annotated as such, and should be investigated. Exceptions to this are in Mountain or Hill configurations where Mountain BMCs will show this condition on SLS/HSM mismatches, which is normal.
+* In Hill configurations SLS assumes BMCs in chassis 1 and 3 are populated, and in Mountain configurations SLS assumes all BMCs are populated. Any non-populated BMCs will have no HSM data and will show up in the mismatch list.
 
 **Known issues:**
 A listing of known hardware discovery issues and workarounds can be found here in the [CSM Troubleshooting Information](../troubleshooting/index.md#known-issues-hardware-discovery) chapter.
@@ -509,7 +509,7 @@ The Software Management Services health checks are run using `/usr/local/bin/cms
 
 <a name="install-latest-cmsdev-rpm-usage"></a>
 #### 3.1 Install Latest cmsdev rpm
-**`INTERNAL USE`** Only HPE Cray internal systems have access to this latest rpm of cmsdev tests.
+**`INTERNAL USE`** Only HPE Cray internal systems have access to this latest RPM of cmsdev tests.
 
 The cmsdev tool is included in the `cray-cmstools-crayctldeploy` RPM, which comes preinstalled on the ncns. However, the tool is receiving frequent updates so it is recommended to check for a newer version of the RPM and if so, to download and install the latest version.
 
@@ -544,7 +544,7 @@ At the time of this writing there is a bug ([CASMTRIAGE-553](https://connect.us.
 <a name="sms-checks"></a>
 #### 3.4 SMS Checks To Run
 
-You should run a check for each of the following services after an install. These should be run on at least one worker ncn and at least one master ncn (but **not** ncn-m001 if it is still the PIT node).
+You should run a check for each of the following services after an install. These should be run on at least one worker NCN and at least one master NCN (but **not** ncn-m001 if it is still the PIT node).
 
 | Services  | Shortcut |
 | ---  | --- |
@@ -774,12 +774,12 @@ to the following near its end:
 <a name="uas-uai-init-cli"></a>
 #### 5.1 Initialize and Authorize the CLI
 
-The procedures below use the CLI as an authorized user and run on two separate node types.  The first part runs on the LiveCD node while the second part runs on a non-LiveCD Kubernetes master or worker node.  When using the CLI on either node, the CLI configuration needs to be initialized and the user running the procedure needs to be authorized.  This section describes how to initialize the CLI for use by a user and authorize the CLI as a user to run the procedures on any given node.  The procedures will need to be repeated in both stages of the validation procedure.
+The procedures below use the CLI as an authorized user and run on two separate node types. The first part runs on the LiveCD node while the second part runs on a non-LiveCD Kubernetes master or worker node. When using the CLI on either node, the CLI configuration needs to be initialized and the user running the procedure needs to be authorized. This section describes how to initialize the CLI for use by a user and authorize the CLI as a user to run the procedures on any given node. The procedures will need to be repeated in both stages of the validation procedure.
 
 <a name="uas-uai-init-cli-stop"></a>
 ##### 5.1.1 Stop Using the CRAY_CREDENTIALS Service Account Token
 
-Installation procedures leading up to production mode on Shasta use the CLI with a Kubernetes managed service account normally used for internal operations.  There is a procedure for extracting the OAUTH token for this service account and assigning it to the `CRAY_CREDENTIALS` environment variable to permit simple CLI operations.  The UAS / UAI validation procedure runs as a post-installation procedure and requires an actual user with Linux credentials, not this service account. Prior to running any of the steps below you must unset the `CRAY_CREDENTIALS` environment variable:
+Installation procedures leading up to production mode on Shasta use the CLI with a Kubernetes managed service account normally used for internal operations. There is a procedure for extracting the OAUTH token for this service account and assigning it to the `CRAY_CREDENTIALS` environment variable to permit simple CLI operations. The UAS / UAI validation procedure runs as a post-installation procedure and requires an actual user with Linux credentials, not this service account. Prior to running any of the steps below you must unset the `CRAY_CREDENTIALS` environment variable:
 
 ```bash
 ncn# unset CRAY_CREDENTIALS
@@ -788,7 +788,7 @@ ncn# unset CRAY_CREDENTIALS
 <a name="uas-uai-init-cli-init"></a>
 ##### 5.1.2 Initialize the CLI Configuration
 
-The CLI needs to know what host to use to obtain authorization and what user is requesting authorization so it can obtain an OAUTH token to talk to the API Gateway.  This is accomplished by initializing the CLI configuration.  In this example, I am using the `vers` username.  In practice, `vers` and the response to the `password: ` prompt should be replaced with the username and password of the administrator running the validation procedure.
+The CLI needs to know what host to use to obtain authorization and what user is requesting authorization so it can obtain an OAUTH token to talk to the API Gateway. This is accomplished by initializing the CLI configuration. In this example, I am using the `vers` username. In practice, `vers` and the response to the `password: ` prompt should be replaced with the username and password of the administrator running the validation procedure.
 
 To check whether the CLI needs initialization, run:
 
@@ -834,7 +834,7 @@ ncn# cray config describe
 <a name="uas-uai-init-cli-auth"></a>
 ##### 5.1.3 Authorize the CLI for Your User
 
-If, when you check for an initialized CLI you find it is initialized but authorized for a user different from you, you will want to authorize the CLI for your self.  Do this with the following (remembering to substitute your username and password for `vers`):
+If, when you check for an initialized CLI you find it is initialized but authorized for a user different from you, you will want to authorize the CLI for your self. Do this with the following (remembering to substitute your username and password for `vers`):
 
 ```bash
 ncn# cray auth login
@@ -858,7 +858,7 @@ While resolving these issues is beyond the scope of this section, you may get cl
 <a name="uas-uai-validate"></a>
 #### 5.2 Validate UAS and UAI Functionality
 
-The following procedures run on separate nodes of the Shasta system.  They are, therefore, separated into separate sub-sections.
+The following procedures run on separate nodes of the Shasta system. They are, therefore, separated into separate sub-sections.
 
 <a name="uas-uai-validate-install"></a>
 ##### 5.2.1 Validate the Basic UAS Installation
@@ -1035,7 +1035,7 @@ Try 'cray uas list --help' for help.
 Error: Internal Server Error: An error was encountered while accessing Keycloak
 ```
 
-You may be using the wrong hostname to reach the API gateway, re-run the CLI initialization steps above and try again to check that.  There may also be a problem with the Istio service mesh inside of your Shasta system. Troubleshooting this is beyond the scope of this section, but you may find more useful information by looking at the UAS pod logs in Kubernetes.  There are, generally, two UAS pods, so you may need to look at logs from both to find the specific failure. The logs tend to have a very large number of `GET` events listed as part of the liveness checking.  
+You may be using the wrong hostname to reach the API gateway, re-run the CLI initialization steps above and try again to check that. There may also be a problem with the Istio service mesh inside of your Shasta system. Troubleshooting this is beyond the scope of this section, but you may find more useful information by looking at the UAS pod logs in Kubernetes. There are, generally, two UAS pods, so you may need to look at logs from both to find the specific failure. The logs tend to have a very large number of `GET` events listed as part of the liveness checking.  
 
 The following shows an example of looking at UAS logs effectively (this example shows only one UAS manager, normally there would be two):
 
@@ -1113,7 +1113,7 @@ This means the pre-made end-user UAI image is not in your local registry (or wha
 <a name="uas-uai-validate-debug-container"></a>
 ###### 5.2.3.4 Missing Volumes and other Container Startup Issues
 
-Various packages install volumes in the UAS configuration.  All of those volumes must also have the underlying resources available, sometimes on the host node where the UAI is running sometimes from with Kubernetes.  If your UAI gets stuck with a `ContainerCreating` `uai_msg` field for an extended time, this is a likely cause.  UAIs run in the `user` Kubernetes namespace, and are pods that can be examined using `kubectl describe`.  Use
+Various packages install volumes in the UAS configuration. All of those volumes must also have the underlying resources available, sometimes on the host node where the UAI is running sometimes from with Kubernetes. If your UAI gets stuck with a `ContainerCreating` `uai_msg` field for an extended time, this is a likely cause. UAIs run in the `user` Kubernetes namespace, and are pods that can be examined using `kubectl describe`.  Use
 
 ```bash
 ncn# kubectl get po -n user | grep <uai-name>
@@ -1125,4 +1125,4 @@ to locate the pod, and then use
 ncn# kubectl describe -n user <pod-name>
 ```
 
-to investigate the problem.  If volumes are missing they will show up in the `Events:` section of the output.  Other problems may show up there as well.  The names of the missing volumes or other issues should indicate what needs to be fixed to make the UAI run.
+to investigate the problem. If volumes are missing they will show up in the `Events:` section of the output. Other problems may show up there as well. The names of the missing volumes or other issues should indicate what needs to be fixed to make the UAI run.

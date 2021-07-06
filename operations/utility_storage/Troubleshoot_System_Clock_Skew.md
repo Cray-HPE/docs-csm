@@ -64,7 +64,7 @@ This procedure requires admin privileges.
     ncn-w001# systemctl restart chronyd.service
     ```
 
-    Wait a bit after running the command and the ceph alert will clear. Restart the Ceph mon service on that node if the alert does not clear.
+    Wait a bit after running the command and the Ceph alert will clear. Restart the Ceph mon service on that node if the alert does not clear.
 
 4. Check Ceph health to verify the clock skew issue is resolved.
 

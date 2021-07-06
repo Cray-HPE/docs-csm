@@ -4,7 +4,7 @@ Troubleshoot issues where Configuration Framework Service \(CFS\) sessions/pods 
 
 ### Prerequisites
 
-A CFS session or pod is failing to complete, and the Ansible logs aren't showing progress or completion.
+A CFS session or pod is failing to complete, and the Ansible logs are not showing progress or completion.
 
 The following is an example of the error causing Ansible to hang:
 

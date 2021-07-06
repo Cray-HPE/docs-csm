@@ -24,7 +24,7 @@ System services on these nodes are provided as containerized microservices packa
 The HPE Cray EX system has two types of nodes:
 
 * Compute Nodes, where high performance computing applications are run, have hostnames in the form of
-nidXXXXXX, that is, "nid" followed by six digits.  These six digits will be padded with zeroes at the beginning.
+nidXXXXXX, that is, "nid" followed by six digits. These six digits will be padded with zeroes at the beginning.
 All other nodes provide supporting functions to these compute nodes.
 * Non-Compute Nodes (NCNs), which carry out system functions and come in many types:
    * Management nodes in a Kubernetes cluster which host system services.
@@ -174,7 +174,7 @@ node (master, worker, or storage) goes down temporarily:
    * Within around 20 minutes or less, it should be possible to launch a job using a UAI or UAN after planned or
    unplanned outages characterized by the loss of a master node, worker node, or storage node.
       * In the case of a UAN, the recovery time is expected to be quicker. However, launching a UAI after a
-      management node outage means that some UAI pods may need to relocate to other worker nodes.  And the
+      management node outage means that some UAI pods may need to relocate to other worker nodes. And the
       status of those new UAI pods will remain unready until all necessary content has been loaded on the new
       worker node that the UAI is starting up on. This process can take approximately 10 minutes.
    * Within around 20 minutes or less, it should be possible to boot and configure compute nodes after planned or

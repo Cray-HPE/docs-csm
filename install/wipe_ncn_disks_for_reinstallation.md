@@ -12,8 +12,8 @@ Ideally the Basic Wipe is enough, and should be tried first. All type of disk wi
 The following are potential use cases for wiping disks:
 
 <a name="use-cases"></a>
-   * Adding a node that isn't bare.
-   * Adopting new disks that aren't bare.
+   * Adding a node that is not bare.
+   * Adopting new disks that are not bare.
    * Doing a fresh install.
 
 
@@ -92,7 +92,7 @@ See [Basic Wipe](#basic-wipe) section for expected output from the wipefs comman
 This section is preferred method for all nodes. A full wipe includes deleting the Ceph volumes (where applicable), stopping the
 RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
-**IMPORTANT:** Step 1 is to wipe the ceph osd drives.  ***Steps 2, 3, 4 and 5 are for all node types.***
+**IMPORTANT:** Step 1 is to wipe the Ceph OSD drives.  ***Steps 2, 3, 4 and 5 are for all node types.***
 
 1. Delete CEPH Volumes ***on Utility Storage Nodes ONLY***
 
@@ -146,7 +146,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
    ncn# vgremove -f --select 'vg_name=~metal*'
    ```
 
-   >>***Note***: Optionally you can run a pvs and if any drives are still listed, you can remove them with a pvremove.   This is rarely needed.
+   >>***Note***: Optionally you can run a pvs and if any drives are still listed, you can remove them with a pvremove. This is rarely needed.
 
 4. Stop the RAIDs.
 

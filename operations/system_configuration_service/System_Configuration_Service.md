@@ -27,7 +27,7 @@ Version = "v1.2.3"
 
 ### Table of Contents
   
-* [Manage Parameteres with the scsd Service](Manage_Parameters_with_the_scsd_Service.md)
+* [Manage Parameters with the scsd Service](Manage_Parameters_with_the_scsd_Service.md)
 * [Set BMC Credentials](Set_BMC_Credentials.md)
 
 

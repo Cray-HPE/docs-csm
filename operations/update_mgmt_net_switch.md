@@ -1,8 +1,8 @@
 # Management Network Switch Rename
 
-Any system moving from Shasta v1.3 to Shasta v1.4 software needs to adjust the hostnames and IP addresses for all switches to match the new standard.  There is now a virtual IP ending in .1 which is used by spine switches.  In Shasta v1.3, the first spine switch used the .1 address.  In Shasta v1.4, the ordering of the switches has changed with spine switches being grouped first.  The hostname for switches has changed from two digits to a dash and then 3 digits.  All IPv4 data for the switches and switch naming comes from Cray Site Init (CSI).
+Any system moving from Shasta v1.3 to Shasta v1.4 software needs to adjust the hostnames and IP addresses for all switches to match the new standard. There is now a virtual IP ending in .1 which is used by spine switches. In Shasta v1.3, the first spine switch used the .1 address. In Shasta v1.4, the ordering of the switches has changed with spine switches being grouped first. The hostname for switches has changed from two digits to a dash and then 3 digits. All IPv4 data for the switches and switch naming comes from Cray Site Init (CSI).
 
-From v1.3, this example system had these IP addresses and hostnames on the HMN network. Similar names and IP address numbers for the NMN and CAN networks as well.  Also note that some systems may not have an agg or aggregation set of switches. This is ok. Simply follow the directions below, always paying attention to the CSI specified IPv4 addresses and skip the aggregation switch directions.
+From v1.3, this example system had these IP addresses and hostnames on the HMN network. Similar names and IP address numbers for the NMN and CAN networks as well. Also note that some systems may not have an agg or aggregation set of switches. This is ok. Simply follow the directions below, always paying attention to the CSI specified IPv4 addresses and skip the aggregation switch directions.
 
 ```
 10.1.0.1        sw-spine01
@@ -164,7 +164,7 @@ This system needs to do the renames in this order: do CDU switches (8 to 9, 7 to
    Save this information in a text file for later evaluation and comparison after all changes have been made.
    pit# vi before.sw-spine01.txt
 
-   Repeat this for all of the switches.  The example system has switches up to 10.1.0.8.
+   Repeat this for all of the switches. The example system has switches up to 10.1.0.8.
 
 3. Start moves with the highest numbered switch. In this case, that is sw-cdu02.  Said another way, if a switch is in a pair, start with the second half of the pair (i.e.. 2 of 2).
 
@@ -457,6 +457,6 @@ This system needs to do the renames in this order: do CDU switches (8 to 9, 7 to
    Save this information in a text file for comparison with the running-config saved before all changes were made.
    `pit# vi after.sw-spine01.txt`
 
-   Repeat this for all of the switches.  The example system has switches up to 10.1.0.7.
+   Repeat this for all of the switches. The example system has switches up to 10.1.0.7.
 
 There are other changes needed, as described in [Dell and Mellanox Changes for Shasta v1.3 to v1.4 Upgrades](412-MGMT-NET-DELL-MELLANOX-UPGRADES.md)

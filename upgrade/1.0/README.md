@@ -2,13 +2,13 @@
 
 ## Introduction
 
-This document is intended to guide an administrator through the upgrade process going from Cray Systems Management 0.9 to v1.0.  When upgrading a system, this top-level README.md file should be followed top to bottom, and the content on this top level page is meant to be terse.  See the additional files in the various directories under the resource_material directory for additional reference material in support of the process/scripts mentioned explicitly on this page.
+This document is intended to guide an administrator through the upgrade process going from Cray Systems Management 0.9 to v1.0.  When upgrading a system, this top-level README.md file should be followed top to bottom, and the content on this top level page is meant to be terse. See the additional files in the various directories under the resource_material directory for additional reference material in support of the process/scripts mentioned explicitly on this page.
 
 ## Terminology
 
 Throughout the guide the terms "stable" and "upgrade" are used in the context of the management nodes (NCNs). The
 "stable" NCN is the master node from which all of these commands will be run and therefore cannot have its power state
-affected.  Then the "upgrade" node is the node to next be upgraded.
+affected. Then the "upgrade" node is the node to next be upgraded.
 
 When doing a rolling upgrade of the entire cluster, at some point you will need to transfer the
 responsibility of the "stable" NCN to another master node. However, you do not need to do this before you are ready to
@@ -26,7 +26,7 @@ ncn# kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm'
 This check will also be conducted in the 'prerequisites.sh' script listed below and will fail if the system is not running CSM-0.9.4.
 
 ### Option 1 - Internet Connected Environment
-Install document rpm package:
+Install document RPM package:
 
 ```bash
 ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
@@ -40,7 +40,7 @@ ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-
 **NOTE** ENDPOINT is optional for internal use. It is pointing to internal arti by default
 
 ### Option 2 - Air Gapped Environment
-Install document rpm package: 
+Install document RPM package: 
 
 ```bash
 ncn-m001# rpm -Uvh [PATH_TO_docs-csm-install-*.noarch.rpm]
@@ -71,11 +71,11 @@ ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-ceph.sh
 ```
 
 **IMPORTANT NOTES**
-> - At this point your ceph commands will still be working.  
-> - You have a new way of executing ceph commands in addition to the traditional way.  
+> - At this point your Ceph commands will still be working.  
+> - You have a new way of executing Ceph commands in addition to the traditional way.  
 >   - Please see [cephadm-reference.md](resource_material/storage/cephadm-reference.md) for more information.
 > - Both methods are dependent on the master nodes and storage nodes 001/2/3 have a ceph.client.admin.keyring and/or a ceph.conf file (cephadm will not require the ceph.conf). 
-> - When you continue with Stage 2, you may have issues running your ceph commands.  
+> - When you continue with Stage 2, you may have issues running your Ceph commands.  
 >   - If you are experiencing this, please double check that you restored your /etc/ceph directory from your tar backup.
 
 ### Stage 2. Ceph image upgrade
@@ -112,7 +112,7 @@ ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-worker.
 > NOTE: using vlan007/CAN IP to ssh to ncn-m002 for ncn-m001 install
 
 ##### Option 1 - Internet Connected Environment
-Install document rpm package:
+Install document RPM package:
 
 ```bash
 ncn-m002# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
@@ -127,7 +127,7 @@ ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-
 **NOTE** ENDPOINT is optional for internal use. It is pointing to internal arti by default
 
 ##### Option 2 - Air Gapped Environment
-Install document rpm package: 
+Install document RPM package: 
 
 ```bash
 ncn-m002# rpm -Uvh [PATH_TO_docs-csm-install-*.noarch.rpm]
@@ -147,7 +147,7 @@ ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-
 ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-master.sh ncn-m001
 ```
 
-#### Stage 3.4. On each master node in the cluster, run the following command to complete the kubernetes upgrade _(this will restart several pods on each master to their new docker containers)_:
+#### Stage 3.4. On each master node in the cluster, run the following command to complete the Kubernetes upgrade _(this will restart several pods on each master to their new docker containers)_:
 
    ```bash
    ncn-m# kubeadm upgrade apply v1.19.9 -y
@@ -178,16 +178,16 @@ During execution of the upgrade procedure, if it is noted that there is clock sk
 [configure_ntp_on_ncns.md](../../operations/configure_ntp_on_ncns.md)
 
 ### Bare-Metal Etcd Recovery
-If in the upgrade process of the master nodes, it is found that the bare-metal etcd cluster (that houses values for the kubernetes cluster) has a failure,
-it may be necessary to restore that cluster from back-up.  Please see
+If in the upgrade process of the master nodes, it is found that the bare-metal etcd cluster (that houses values for the Kubernetes cluster) has a failure,
+it may be necessary to restore that cluster from back-up. Please see
 [Restore_Bare-Metal_etcd_Clusters_from_an_S3_Snapshot.md](../../operations/kubernetes/Restore_Bare-Metal_etcd_Clusters_from_an_S3_Snapshot.md) for that procedure.
 
 ### Back-ups for Etcd-Operator Clusters
-After upgrading, if health checks indicate that etcd pods are not in a healthy/running state, recovery procedures may be needed.  Please see
+After upgrading, if health checks indicate that etcd pods are not in a healthy/running state, recovery procedures may be needed. Please see
 [Backups_for_etcd-operator_Clusters.md](../../operations/kubernetes/Backups_for_etcd-operator_Clusters.md) for these procedures.
 
 ### Recovering from Postgres Dbase Issues
-After upgrading, if health checks indicate the postgres pods are not in a healthy/running state, recovery procedures may be needed.
+After upgrading, if health checks indicate the Postgres pods are not in a healthy/running state, recovery procedures may be needed.
 Please see [Troubleshoot_Postgres_Databases_with_the_Patroni_Tool.md](../../operations/kubernetes/Troubleshoot_Postgres_Databases_with_the_Patroni_Tool.md) for troubleshooting and recovery procedures.
 
 ### Troubleshooting Spire Pods Not Staring on NCNs

@@ -2,21 +2,21 @@
 # Cray System Management (CSM) - Documentation
 
 The documentation included here describes how to install or upgrade the Cray System Management (CSM)
-software and related supporting operational procedures.  CSM software is the foundation upon which
+software and related supporting operational procedures. CSM software is the foundation upon which
 other software product streams for the HPE Cray EX system depend.
 
-This documentation is in Markdown format.  Although much of it can be viewed with any text editor,
+This documentation is in Markdown format. Although much of it can be viewed with any text editor,
 a richer experience will come from using a tool which can render the Markdown to show different font
 sizes, the use of bold and italics formatting, inclusion of diagrams and screen shots as image files,
 and to follow navigational links within a topic file and to other files.
 
-There are many tools which can render the Markdown format to get these advantages.  Any Internet search
-for Markdown tools will provide a long list of these tools.  Some of the tools are better than others
+There are many tools which can render the Markdown format to get these advantages. Any Internet search
+for Markdown tools will provide a long list of these tools. Some of the tools are better than others
 at displaying the images and allowing you to follow the navigational links.
 
 The exploration of the CSM documentation begins with the Table of Contents in
 the [Cray System Management Installation Guide](index.md) which introduces 
-topics related to CSM software installation, upgrade, and operational use.  Notice that the
+topics related to CSM software installation, upgrade, and operational use. Notice that the
 previous sentence had a link to the index.md file for the Cray System Management Installation Guide. 
 If the link does not work, then a better Markdown viewer is needed.
 
@@ -32,7 +32,7 @@ Within this README.md file, these topics are described.
 <a name="offline-documentation"></a>
 ### Offline Documentation
 
-The CSM documentation is included within the CSM product release tarball.  After it has been installed, the 
+The CSM documentation is included within the CSM product release tarball. After it has been installed, the 
 documentation will be available at `/usr/share/doc/metal` as installed by the `docs-csm-install` rpm.
 
 This command will report the version of your installed documentation:
@@ -55,7 +55,7 @@ ncn# zypper in -y --from csm-sle-15sp2 docs-csm-install
 Anyone with Git access to this repo may feel free to submit changes for review -- tagging to the
 relevant ticket(s) (if necessary).
 
-All changes undergo a review process.  This governance is up to the reviewers' discretion. The
+All changes undergo a review process. This governance is up to the reviewers' discretion. The
 review serves to keep core contributors in alignment while maintaining coherency throughout
 the documentation.
 

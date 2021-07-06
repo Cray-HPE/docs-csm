@@ -261,7 +261,7 @@ if [[ ${upgrade_ncn} != ncn-s* ]]; then
       ssh $UPGRADE_NCN 'cloud-init query -a > /dev/null 2>&1'
       rc=$?
       if [[ "$rc" -ne 0 ]]; then
-        echo "cloud-init on $UPGRADE_NCN isn't healthy -- re-running 'cloud-init init' to repair cached data"
+        echo "cloud-init on $UPGRADE_NCN is not healthy -- re-running 'cloud-init init' to repair cached data"
         ssh $UPGRADE_NCN 'cloud-init init > /dev/null 2>&1'
       fi
 

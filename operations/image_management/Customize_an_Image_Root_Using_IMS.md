@@ -540,7 +540,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
    The IMS customization workflow automatically copies the NCN Certificate Authority’s public certificate to /etc/cray/ca/certificate\_authority.crt within the image root being customized. This can be used to enable secure communications between the NCN and the client node.
 
-6. Look up the ID of the newly created image.
+6. Look up the ID of the newly-created image.
 
    ```bash
    ncn# cray ims jobs describe $IMS_JOB_ID

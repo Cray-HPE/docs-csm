@@ -114,7 +114,7 @@ The crashed node requires a working spire-agent to communicate with NMD. However
         data_file="./data.json"
         # makedumpfile dump level:  Example
         # 16 : Exclude the free pages. Keeps user data and files etc
-        # 31 : Exclude all.  This is the NMD default
+        # 31 : Exclude all. This is the NMD default
         dump_level=31
         # default 8388608
         chunk_size=$((1<<23))

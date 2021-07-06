@@ -152,7 +152,7 @@ ncn-s# cephadm ls
 - restart the service
   
 ```bash
-ncn-s# systemctl retart ceph-01a0d9d2-ea7f-43dc-af25-acdfa5242a48@mgr.ncn-s001
+ncn-s# systemctl restart ceph-01a0d9d2-ea7f-43dc-af25-acdfa5242a48@mgr.ncn-s001
 ```
 
 ## Ceph Manager Modules
@@ -173,9 +173,9 @@ ncn-m001# ceph mgr MODULE_NAME disable MODULE
 
 ## Scale Ceph services
 
-  We can use the ability to deploy/scale/reconfigure/redeploy ceph processes down and back up to restart the services.  
+  We can use the ability to deploy/scale/reconfigure/redeploy Ceph processes down and back up to restart the services.  
 
-  **IMPORTANT:** When scaling the ceph manager daemon (mgr.hostname.<containerid>), you need to keep in mind that you need to have a running manager daemon as it is what is controlling the orchestration processes.
+  **IMPORTANT:** When scaling the Ceph manager daemon (mgr.hostname.<containerid>), you need to keep in mind that you need to have a running manager daemon as it is what is controlling the orchestration processes.
 
   **IMPORTANT:** You cannot scale osd.all-available-devices, this is the process to auto-discover available OSDs.  
 
@@ -183,7 +183,7 @@ ncn-m001# ceph mgr MODULE_NAME disable MODULE
 
   ***For our example we are going to show scaling the mgr service down and back up.***
 
-  You will need 2 ssh sessions.  1 to do the work from and another that is running a "watch ceph -s" so you can monitor the progress.
+  You will need two SSH sessions. One to do the work from and another that is running `watch ceph -s` so you can monitor the progress.
 
   1. List your services
 
@@ -208,7 +208,7 @@ ncn-m001# ceph mgr MODULE_NAME disable MODULE
        mgr       3/3  17s ago    4d   ncn-s001;ncn-s002;ncn-s003;count:3  registry.local/ceph/ceph:v15.2.8  5553b0cb212c
        ```
 
-       - From this we can get our placement of the servcies.
+       - From this we can get our placement of the services.
 
 
   1. Choose the service you want to scale.  ***(reminder the example will use the MGR service)***
@@ -240,7 +240,7 @@ ncn-m001# ceph mgr MODULE_NAME disable MODULE
      Scheduled mgr update...
      ```
 
-  1. Watch your ssh session that is showing the ceph status (ceph -s)
+  1. Watch your SSH session that is showing the Ceph status (`ceph -s`)
 
      ```bash
      ncn-s001:~ # ceph -s
@@ -277,23 +277,23 @@ ncn-m001# ceph mgr MODULE_NAME disable MODULE
      Scheduled mgr update...
      ```
 
-  1. When you see your ceph status output shows you have 3 running mgr daemons then you can scale down the last daemon back down and up.
+  1. When you see your Ceph status output shows you have 3 running mgr daemons then you can scale down the last daemon back down and up.
       - **IF it is the MDS or MGR daemons then REMEMBER we have to fail over the active daemon**
 
      ```bash
      ncn-s001:~ # ceph mgr fail ncn-s002.fumzfm   # This was our active MGR.
      ```
 
-     in your ceph status output you should see the ACTIVE ceph mgr process change.
+     in your Ceph status output you should see the ACTIVE ceph mgr process change.
 
      ```bash
      mgr: ncn-s003.wtvbtz(active, since 2m), standbys: ncn-s001.cgbxdw
      ```
 
-  1. Finally scale your service back to it's orignial deployment size
+  1. Finally scale your service back to its original deployment size
      ```bash
      ncn-s001:~ # ceph orch apply mgr  --placement="3 ncn-s001 ncn-s002 ncn-s003"
      Scheduled mgr update...
      ```
 
-   1. Monitor the ceph status to make sure all your daemons come back online.
+   1. Monitor the Ceph status to make sure all your daemons come back online.

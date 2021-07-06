@@ -82,7 +82,7 @@ if [[ $state_recorded == "0" ]]; then
         echo "All etcd and speaker pods are running on $upgrade_ncn"
         break
       fi
-      echo "Some etcd and speaker pods aren't running on $upgrade_ncn -- sleeping for 10 seconds..."
+      echo "Some etcd and speaker pods are not running on $upgrade_ncn -- sleeping for 10 seconds..."
       sleep 10
     done
 

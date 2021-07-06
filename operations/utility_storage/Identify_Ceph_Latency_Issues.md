@@ -51,5 +51,5 @@ This procedure requires admin privileges.
     - health - Shows latency and what daemons/OSDs are associated with it.
     - mds - MDS is functional, but it is in replay due to the slow ops.
     - osd - All OSDs are up and in. This could be related to a network issue or a single system issue if both OSDs are on the same box.
-    - client - Shows the amount of IO/Throughput that clients using ceph are performing. If health is not set to HEALTH\_OK and traffic is passing through, then Ceph is functioning and re-balancing data due to typical hardware/network issues.
+    - client - Shows the amount of IO/Throughput that clients using Ceph are performing. If health is not set to HEALTH\_OK and traffic is passing through, then Ceph is functioning and re-balancing data due to typical hardware/network issues.
     - recovery - Shows recovery traffic as the system ensures all the copies of data are available to ensure data redundancy.

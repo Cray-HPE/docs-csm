@@ -7,7 +7,7 @@ echo "Ensuring cloud-init is healthy"
 cloud-init query -a > /dev/null 2>&1
 rc=$?
 if [[ "$rc" -ne 0 ]]; then
-  echo "cloud-init isn't healthy -- re-running 'cloud-init init' to repair cached data"
+  echo "cloud-init is not healthy -- re-running 'cloud-init init' to repair cached data"
   cloud-init init > /dev/null 2>&1
 fi
 

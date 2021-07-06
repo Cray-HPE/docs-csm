@@ -6,7 +6,7 @@
 
 # Configuration
 
-- This configuration describes the edge port configuration, you'll find these in the NMN/HMN/Mountain-TDS Management Tab of the SHCD.
+- This configuration describes the edge port configuration, you will find these in the NMN/HMN/Mountain-TDS Management Tab of the SHCD.
 - Typically these are ports that are connected to iLOs (BMCs), gateway nodes, or compute nodes/CMM switches.
 
 ```
