@@ -202,14 +202,14 @@ data:
     - name: customer-access
 ```
 
-Using the first peer-address (10.252.0.2 here), SSH as the administrator to the first switch and note in the returned output if a Mellanox or Aruba switch is indicated.
+Using the first peer-address (10.252.0.2 here), log in using `ssh` as the administrator to the first switch and note in the returned output if a Mellanox or Aruba switch is indicated.
 
 ```bash
 ncn-m001# ssh admin@10.252.0.2
 ```
 
-* On a Mellanox switch, `Mellanox Onyx Switch Management` or `Mellanox Switch` may be displayed after logging in to the switch with SSH. In this case, proceed to the [Mellanox steps](#pet-bgp-mellanox).
-* On an Aruba switch, `Please register your products now at: https://asp.arubanetworks.com` may be displayed after logging in to the switch with SSH. In this case, proceed to the [Aruba steps](#pet-bgp-aruba).
+* On a Mellanox switch, `Mellanox Onyx Switch Management` or `Mellanox Switch` may be displayed after logging in to the switch with `ssh`. In this case, proceed to the [Mellanox steps](#pet-bgp-mellanox).
+* On an Aruba switch, `Please register your products now at: https://asp.arubanetworks.com` may be displayed after logging in to the switch with `ssh`. In this case, proceed to the [Aruba steps](#pet-bgp-aruba).
 
 <a name="pet-bgp-mellanox"></a>
 ##### 1.3.1 Mellanox Switch 
