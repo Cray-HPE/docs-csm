@@ -468,11 +468,11 @@ This will enable SSH, and other services when the LiveCD starts.
     config------------------------> /mnt/cow/rw/etc/sysconfig/network/config...OK
     ifcfg-bond0-------------------> /mnt/cow/rw/etc/sysconfig/network/ifcfg-bond0...OK
     ifcfg-lan0--------------------> /mnt/cow/rw/etc/sysconfig/network/ifcfg-lan0...OK
-    ifcfg-vlan002-----------------> /mnt/cow/rw/etc/sysconfig/network/ifcfg-vlan002...OK
-    ifcfg-vlan004-----------------> /mnt/cow/rw/etc/sysconfig/network/ifcfg-vlan004...OK
-    ifcfg-vlan007-----------------> /mnt/cow/rw/etc/sysconfig/network/ifcfg-vlan007...OK
+    ifcfg-bond0.nmn0-----------------> /mnt/cow/rw/etc/sysconfig/network/ifcfg-bond0.nmn0...OK
+    ifcfg-bond0.hmn0-----------------> /mnt/cow/rw/etc/sysconfig/network/ifcfg-bond0.hmn0...OK
+    ifcfg-bond0.cmn0-----------------> /mnt/cow/rw/etc/sysconfig/network/ifcfg-bond0.cmn0...OK
     ifroute-lan0------------------> /mnt/cow/rw/etc/sysconfig/network/ifroute-lan0...OK
-    ifroute-vlan002---------------> /mnt/cow/rw/etc/sysconfig/network/ifroute-vlan002...OK
+    ifroute-bond0.nmn0---------------> /mnt/cow/rw/etc/sysconfig/network/ifroute-bond0.nmn0...OK
     CAN.conf----------------------> /mnt/cow/rw/etc/dnsmasq.d/CAN.conf...OK
     HMN.conf----------------------> /mnt/cow/rw/etc/dnsmasq.d/HMN.conf...OK
     NMN.conf----------------------> /mnt/cow/rw/etc/dnsmasq.d/NMN.conf...OK

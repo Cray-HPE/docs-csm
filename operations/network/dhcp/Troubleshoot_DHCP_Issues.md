@@ -167,10 +167,10 @@ ncn-w001# kubectl logs -n services -l app.kubernetes.io/instance=cray-dhcp-kea \
 If a host is not getting an IP address, run a packet capture to see if DHCP traffic is being transmitted.
 
 ```bash
-ncn-w001# tcpdump -w dhcp.pcap -envli vlan002 port 67 or port 68
+ncn-w001# tcpdump -w dhcp.pcap -envli bond0.nmn0 port 67 or port 68
 ```
 
-This will make a .pcap file named dhcp in the current directory. It will collect all DHCP traffic on the specified port. In this example. it would be the DHCP traffic on interface vlan002 \(10.252.0.0/17\).
+This will make a .pcap file named dhcp in the current directory. It will collect all DHCP traffic on the specified port. In this example. it would be the DHCP traffic on interface bond0.nmn0 \(10.252.0.0/17\).
 
 To view the DHCP traffic:
 

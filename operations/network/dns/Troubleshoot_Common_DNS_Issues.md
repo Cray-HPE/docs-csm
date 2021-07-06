@@ -161,7 +161,7 @@ VRF Name default:
 Verify if the NCN is receiving DNS queries. On an NCN worker or manager with kubectl installed, run the following command:
 
 ```bash
-ncn-w001# tcpdump -envli vlan002 port 53
+ncn-w001# tcpdump -envli bond0.nmn0 port 53
 ```
 
 ### The ping and SSH Commands Fail for Hosts in DNS

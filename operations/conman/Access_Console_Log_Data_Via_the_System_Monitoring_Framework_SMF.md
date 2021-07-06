@@ -45,7 +45,7 @@ This procedure requires the Kibana service to be up and running on a non-compute
 
     ```
     console.hostname: x3000c0s19b4n0 <ConMan> Console [x3000c0s19b4n0] joined by <root@localhost> on pts/0 at 10-09 15:11.
-    console.hostname: x3000c0s19b4n0 2020-10-09 15:11:39 Keepalived_vrrp[38]: bogus VRRP packet received on vlan002 !!!
+    console.hostname: x3000c0s19b4n0 2020-10-09 15:11:39 Keepalived_vrrp[38]: bogus VRRP packet received on bond0.nmn0 !!!
     ```
 
 5.  Enter **Search** terms for the specific console xname using the "console.hostname: XNAME" string.
