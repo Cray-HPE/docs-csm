@@ -12,8 +12,8 @@ The following table describes how to interpret when the state of hardware change
 | --------- | ------------- | ------------------------------------------------------------ |
 | Ready     | Standby       | HBTD if node has many missed heartbeats                      |
 | Ready     | Ready/Warning | HBTD if node has a few missed heartbeats                     |
-| Standby   | Ready         | HBTD Node re-starts heartbeating                             |
-| On        | Ready         | HBTD Node started heartbeating                               |
+| Standby   | Ready         | HBTD node re-starts heartbeating                             |
+| On        | Ready         | HBTD node started heartbeating                               |
 | Off       | Ready         | HBTD sees heartbeats before Redfish Event (On)               |
 | Standby   | On            | Redfish Event (On) or if re-discovered while in the standby state |
 | Off       | On            | Redfish Event (On)                                           |
