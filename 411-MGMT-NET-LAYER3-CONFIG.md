@@ -88,7 +88,7 @@ Neighbor ID      Priority  State             Nbr Address       Interface
 
 # Aruba Static route
 This route is needed for consistent PXE booting on Aruba switches.
-The second IP ```10.252.1.10``` will be a worker node.  Here we are using worker 1. 
+The second IP ```10.252.1.10``` will be a worker node. Here we are using worker 1. 
 ```
 ip route 10.92.100.60/32 10.252.1.10
 ip route 10.94.100.60/32 10.252.1.10

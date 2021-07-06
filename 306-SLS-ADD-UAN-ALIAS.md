@@ -112,7 +112,7 @@ This guide shows the process for manually adding aliases to UAN nodes in SLS. St
     rtt min/avg/max/mdev = 0.170/0.237/0.311/0.051 ms
     ```
 
-    When this node boots, the DHCP request of it's -nmn interface will cause the uan01 to be created and resolved.
+    When this node boots, the DHCP request of its -nmn interface will cause the uan01 to be created and resolved.
 
 5. Confirm that the UAN is being monitored by the cray-conman service
 
@@ -144,7 +144,7 @@ This guide shows the process for manually adding aliases to UAN nodes in SLS. St
     ```
 
     If the node is not being reported as connected to conman, the conman service will need to
-    be re-initialized.  This is done by killing the existing conmand process.
+    be re-initialized. This is done by killing the existing conmand process.
     ```
     cray-conman# ps -ax | grep conmand
      13 ?           Sl     0:45 conmand -F -v -c /etc/conman.conf

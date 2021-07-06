@@ -72,4 +72,4 @@ If you are here with an unconfigured switch, mileage may vary.
                                      ^^^^^^^^^^^^^^^^^
     ```
 
-The column heading must match that shown above for csi to correctly parse it.  You can take the file you've started and move onto [NCN Metadata BondX](302-NCN-METADATA-BONDX.md).
+The column heading must match that shown above for csi to correctly parse it. You can take the file you've started and move onto [NCN Metadata BondX](302-NCN-METADATA-BONDX.md).

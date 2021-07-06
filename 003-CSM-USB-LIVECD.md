@@ -233,7 +233,7 @@ Check for workarounds in the `/opt/cray/csm/workarounds/before-configuration-pay
 <a name="generate-installation-files"></a>
 ### Generate Installation Files
 
-Some files are needed for generating the configuration payload. New systems will need to create these files before continuing.  Systems upgrading from Shasta v1.3 should prepare by [gathering data from the existing system](068-HARVEST-13-CONFIG.md).
+Some files are needed for generating the configuration payload. New systems will need to create these files before continuing. Systems upgrading from Shasta v1.3 should prepare by [gathering data from the existing system](068-HARVEST-13-CONFIG.md).
 
 > Note: The USB stick is usable at this time, but without SSH enabled as well as core services. This means the stick could be used to boot the system now, and a user can return to this step at another time.
 
@@ -292,9 +292,9 @@ After gathering the files into the working directory, generate your configs:
 
 3. Generate the system configuration when a pre-existing parameter file is unavailable:
 
-   If moving from a Shasta v1.3 system, this step is required.  If you did step 2 above, skip this step.
+   If moving from a Shasta v1.3 system, this step is required. If you did step 2 above, skip this step.
 
-   The needed files should be in the current directory.  The application_node_config.yaml file is optional.
+   The needed files should be in the current directory. The application_node_config.yaml file is optional.
    ```bash
    linux# ls -1
    ```
@@ -313,7 +313,7 @@ After gathering the files into the working directory, generate your configs:
    linux# export SYSTEM_NAME=eniac
    ```
 
-   Generate the system configuration.  See below for an explanation of the command line parameters and some common settings.
+   Generate the system configuration. See below for an explanation of the command line parameters and some common settings.
    ```bash
    linux# csi config init \
        --bootstrap-ncn-bmc-user root \
@@ -345,28 +345,28 @@ After gathering the files into the working directory, generate your configs:
 
    A new directory matching your `--system-name` argument will now exist in your working directory.
 
-   > After generating a configuration, particularly when upgrading from Shasta v1.3 a visual audit of the generated files for network data should be performed.  Specifically, the <systemname>/networks/HMN_MTN.yaml and <systemname>/networks/NMN_MTN.yaml files should be viewed to ensure that cabinet names, subnets and VLANs have been preserved for an upgrade to Shasta v1.4.  Failure of these parameters to match will likely mean a re-installation or reprogramming of CDU switches and CMM VLANs.
+   > After generating a configuration, particularly when upgrading from Shasta v1.3 a visual audit of the generated files for network data should be performed. Specifically, the <systemname>/networks/HMN_MTN.yaml and <systemname>/networks/NMN_MTN.yaml files should be viewed to ensure that cabinet names, subnets and VLANs have been preserved for an upgrade to Shasta v1.4.  Failure of these parameters to match will likely mean a re-installation or reprogramming of CDU switches and CMM VLANs.
 
    Run the command "csi config init --help" to get more information about the parameters mentioned in the example command above and others which are available.
 
    Notes about parameters to "csi config init":
    * The application_node_config.yaml file is optional, but if you have one describing the mapping between prefixes in hmn_connections.csv that should be mapped to HSM subroles, you need to include a command line option to have it used.
    * The bootstrap-ncn-bmc-user and bootstrap-ncn-bmc-pass must match what is used for the BMC account and its password for the management NCNs.
-   * Set site parameters (site-domain, site-ip, site-gw, site-nic, site-dns) for the information which connects the ncn-m001 (PIT) node to the site.  The site-nic is the interface on this node connected to the site.  If coming from Shasta v1.3, the information for all of these site parameters was collected.
-   * There are other interfaces possible, but the install-ncn-bond-members are typically: p1p1,p10p1 for HPE nodes; p1p1,p1p2 for Gigabyte nodes; and p801p1,p801p2 for Intel nodes.  If coming from Shasta v1.3, this information was collected for ncn-m001.
+   * Set site parameters (site-domain, site-ip, site-gw, site-nic, site-dns) for the information which connects the ncn-m001 (PIT) node to the site. The site-nic is the interface on this node connected to the site. If coming from Shasta v1.3, the information for all of these site parameters was collected.
+   * There are other interfaces possible, but the install-ncn-bond-members are typically: p1p1,p10p1 for HPE nodes; p1p1,p1p2 for Gigabyte nodes; and p801p1,p801p2 for Intel nodes. If coming from Shasta v1.3, this information was collected for ncn-m001.
    * Set the three cabinet parameters (mountain-cabinets, hill-cabinets, and river-cabinets) to the number of each cabinet which are part of this system.
-   * The starting cabinet number for each type of cabinet (for example, starting-mountain-cabinet) has a default that can be overridden.  See the "csi config init --help" 
-   * For systems that use non-sequential cabinet id numbers, use cabinets-yaml to include the cabinets.yaml file.  This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to explicitly specify the id of every cabinet in the system.  This process is described [here](310-CABINETS.md).
-   * An override to default cabinet IPv4 subnets can be made with the hmn-mtn-cidr and nmn-mtn-cidr parameters.  These are also used to maintain existing configuration in a Shasta v1.3 system.
-   * Several parameters (can-gateway, can-cidr, can-static-pool, can-dynamic-pool) describe the CAN (Customer Access network).  The can-gateway is the common gateway IP used for both spine switches and commonly referred to as the Virtual IP for the CAN.  The can-cidr is the IP subnet for the CAN assigned to this system. The can-static-pool and can-dynamic-pool are the MetalLB address static and dynamic pools for the CAN. The can-external-dns is the static IP assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded.   The can-external-dns IP must be within the can-static-pool range.
+   * The starting cabinet number for each type of cabinet (for example, starting-mountain-cabinet) has a default that can be overridden. See the "csi config init --help" 
+   * For systems that use non-sequential cabinet id numbers, use cabinets-yaml to include the cabinets.yaml file. This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to explicitly specify the id of every cabinet in the system. This process is described [here](310-CABINETS.md).
+   * An override to default cabinet IPv4 subnets can be made with the hmn-mtn-cidr and nmn-mtn-cidr parameters. These are also used to maintain existing configuration in a Shasta v1.3 system.
+   * Several parameters (can-gateway, can-cidr, can-static-pool, can-dynamic-pool) describe the CAN (Customer Access network).  The can-gateway is the common gateway IP used for both spine switches and commonly referred to as the Virtual IP for the CAN. The can-cidr is the IP subnet for the CAN assigned to this system. The can-static-pool and can-dynamic-pool are the MetalLB address static and dynamic pools for the CAN. The can-external-dns is the static IP assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded. The can-external-dns IP must be within the can-static-pool range.
    * Set ntp-pool to a reachable NTP server
 
    These warnings from "csi config init" for issues in hmn_connections.json can be ignored.
-   * The node with the external connection (ncn-m001) will have a warning similar to this because its BMC is connected to the site and not the HMN like the other management NCNs.  It can be ignored.
+   * The node with the external connection (ncn-m001) will have a warning similar to this because its BMC is connected to the site and not the HMN like the other management NCNs. It can be ignored.
       ```
       "Couldn't find switch port for NCN: x3000c0s1b0"
       ```
-   * An unexpected component may have this message.  If this component is an application node with an unusual prefix, it should be added to the application_node_config.yaml file and then rerun "csi config init".   See the procedure to [create the application_node_config.yaml](308-APPLICATION-NODE-CONFIG.md)
+   * An unexpected component may have this message. If this component is an application node with an unusual prefix, it should be added to the application_node_config.yaml file and then rerun "csi config init".   See the procedure to [create the application_node_config.yaml](308-APPLICATION-NODE-CONFIG.md)
       ```json
       {"level":"warn","ts":1610405168.8705149,"msg":"Found unknown source prefix! If this is expected to be an Application node, please update application_node_config.yaml","row":
       {"Source":"gateway01","SourceRack":"x3000","SourceLocation":"u33","DestinationRack":"x3002","DestinationLocation":"u48","DestinationPort":"j29"}}
@@ -578,11 +578,11 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
 2. Disconnect from IPMI console.
 
-   Once the network is up so that ssh to the node works, disconnect from the IPMI console.
+   Once the network is up so that SSH to the node works, disconnect from the IPMI console.
 
    You can disconnect from the IPMI console by using the "~.", that is, the tilde character followed by a period character.
 
-   Login via ssh to the node as root.
+   Login via SSH to the node as root.
 
    ```bash
    external# ssh root@${SYSTEM_NAME}-ncn-m001

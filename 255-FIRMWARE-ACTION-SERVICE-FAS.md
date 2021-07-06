@@ -8,18 +8,18 @@ The Cray command line interface (CLI) tool is initialized and configured on the 
 ##  <a name="action"></a>Execute an Action
 
 ### Objective
-Use the Firmware Action Service (FAS) to execute an action.  An action produces a  set of firmware operations. Each operation represents an xname + target on that xname that will be targeted for update.  There are two of firmware action modes: : `dryrun` or `liveupdate`; the parameters used when creating either are completely identical except for the `overrideDryrun` setting. `overrideDryrun` will determine if feature to determine what firmware can be updated on the system. Dry-runs are enabled by default, and can be configured with the `overrideDryrun` parameter. A dry-run will create a query according to the filters requested by the admin. It will initiate an update sequence to determine what firmware is available, but will not actually change the state of the firmware
+Use the Firmware Action Service (FAS) to execute an action. An action produces a  set of firmware operations. Each operation represents an xname + target on that xname that will be targeted for update. There are two of firmware action modes: : `dryrun` or `liveupdate`; the parameters used when creating either are completely identical except for the `overrideDryrun` setting. `overrideDryrun` will determine if feature to determine what firmware can be updated on the system. Dry-runs are enabled by default, and can be configured with the `overrideDryrun` parameter. A dry-run will create a query according to the filters requested by the admin. It will initiate an update sequence to determine what firmware is available, but will not actually change the state of the firmware
 
 **WARNING**: It is crucial that an admin is familiar with the release notes of any firmware. The release notes will indicate what new features the firmware provides and if there are any incompatibilities. FAS does not know about incompatibilities or dependencies between versions. The admin assumes full responsibility for this knowledge.
 
 **WARNING**: It is likely that when performing a firmware update, that the current version of firmware will not be available. This means that after successfully upgrading, the firmware cannot be reverted (i.e. downgraded to previous version).
 
 ### Steps
-This will cover the generic process for executing an action.  For more specific examples and detailed explanations of options see the `recipes.md` file.
+This will cover the generic process for executing an action. For more specific examples and detailed explanations of options see the `recipes.md` file.
 
-1. Identify the selection of filters you want to apply.  Filters narrow the scope of FAS to target-specific xnames, manufacturers, targets, etc. For our purpose we will run FAS 'wide open', with no selection filters applied.
+1. Identify the selection of filters you want to apply. Filters narrow the scope of FAS to target-specific xnames, manufacturers, targets, etc. For our purpose we will run FAS 'wide open', with no selection filters applied.
 
-2. create a json file {whole-system-dryrun.json}; to make this a `live update` set `"overrideDryrun": true`
+2. create a JSON file {whole-system-dryrun.json}; to make this a `live update` set `"overrideDryrun": true`
 
 ```json
  {  "command": { 
@@ -280,14 +280,14 @@ This command would display one or more images available for updates.
 ```
 If the `firmwareVersion` from the FAS image matches the `fromFirmwareVersion` from the FAS action, the firmware is at the latest version and no update is needed.
 
-Using the imageID from the `cray images list` command above (in the example above it would be: `ff268e8a-8f73-414f-a9c7-737a34bb02fc`) add the following line to your action json file, replacing *IMAGEID* with the imageID:
+Using the imageID from the `cray images list` command above (in the example above it would be: `ff268e8a-8f73-414f-a9c7-737a34bb02fc`) add the following line to your action JSON file, replacing *IMAGEID* with the imageID:
 ```json
 "imageFilter": {
   "imageID":"IMAGEID",
   "overrideImage":true
 }
 ```
-Example actions json file with imageFilter added:
+Example actions JSON file with imageFilter added:
 ```json
 {
   "stateComponentFilter": {
@@ -316,5 +316,5 @@ cray fas images describe imageID
 ```
 ***WARNING: FAS will force a flash of the device, using incorrect firmware may make it inoperable.***
 
-Rerun FAS actions command using the updated json file.
+Rerun FAS actions command using the updated JSON file.
 **It is strongly recommended you run a Dry Run (overrideDryrun=false) first and check the actions output.**

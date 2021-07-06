@@ -51,7 +51,7 @@
 | PCIe Slot 1 port 2 | NONE (See note below for ncn-m001) | NONE  | Site (See note below for ncn-m001) |
 
 #### Dual Card Installations
-A dual card configuration is much less common, but can occur based on customer requirements.  The table below describes the cabling of dual card configurations.  Also read notes in this section to see other possible customer-based configurations.
+A dual card configuration is much less common, but can occur based on customer requirements. The table below describes the cabling of dual card configurations. Also read notes in this section to see other possible customer-based configurations.
 
 | Server Port        | Management Network Port        | Speed | Use / Configuration            |
 |--------------------|--------------------------------|-------|--------------------------------|
@@ -68,7 +68,7 @@ A dual card configuration is much less common, but can occur based on customer r
 | mn01	 | x3000u01s1-j1  | x3000u13-j1	| sw-25g02   |
 
 ![HPE_Worker](img/network/HPE_Master.png)
-**NOTE**: Master 1 (ncn-m001) is required to have a site connection for installation and non-CAN system access.  This can have several configurations depending on customer requirements/equipment:
+**NOTE**: Master 1 (ncn-m001) is required to have a site connection for installation and non-CAN system access. This can have several configurations depending on customer requirements/equipment:
 
 * Dual 10/25Gb card configurations as described in the table above should use PCIe Slot 1, Port 2 as a site connection if the customer supports 10/25Gb.
 * If the customer does not support 10/25Gb speeds (or connection type) and requires RJ45 copper or 1Gb, then a new and separate card will be installed on ncn-m001 and that card will provide site connectivity.
@@ -166,7 +166,7 @@ For systems that include 4 aggregation switches the cabling will look like the f
 
 ![Gig_intel_master](img/network/Gigaintel_Master.png)
 
-**NOTE**: Master 1 (ncn-m001) is required to have a site connection for installation and non-CAN system access.  In Shasta versions <=1.3 this connection was on ncn-w001.  This can have several configurations depending on customer requirements/equipment:
+**NOTE**: Master 1 (ncn-m001) is required to have a site connection for installation and non-CAN system access. In Shasta versions <=1.3 this connection was on ncn-w001.  This can have several configurations depending on customer requirements/equipment:
 
 * The default configuration for Gigabyte systems uses the built-in 1Gb lan0 port for site connection on ncn-m001.
 * If the customer requires connectivity greater than 1Gb (or a different connection type), then a new and separate card will be installed on ncn-m001 and that card will provide site connectivity.

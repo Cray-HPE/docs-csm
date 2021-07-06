@@ -104,7 +104,7 @@ spanning-tree vlan 1-2,4,4091 priority 61440
 
 # Mellanox Configuration
 
-Spanning tree will need to be applied to each MAGP pair.  Spine01 will have a lower priority making it the root bridge.
+Spanning tree will need to be applied to each MAGP pair. Spine01 will have a lower priority making it the root bridge.
 Spanning tree configuration has not changed from 1.3 to 1.4.
 
 ```

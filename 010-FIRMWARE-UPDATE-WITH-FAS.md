@@ -9,14 +9,14 @@
 <a name="prerequisites"></a>
 ## Prerequisites
 
-1. 001-008 have been completed; CSM has been installed and HSM is running with discovered nodes.  Firmware has been loaded into FAS as part of the CSM install
+1. 001-008 have been completed; CSM has been installed and HSM is running with discovered nodes. Firmware has been loaded into FAS as part of the CSM install
 2. 009 has been applied and the NCNs are locked.
-3. Identify the type and manufacturers of hardware in your system.  If you don't have Gigabyte nodes, don't update them!
+3. Identify the type and manufacturers of hardware in your system. If you don't have Gigabyte nodes, don't update them!
 
 **WARNING:** Non-compute nodes (NCNs) should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS. See [`009-NCN-LOCKING.md`](009-NCN-LOCKING.md) for more information. Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
 
 
-Using the process outlined in [`255-FIRMWARE-ACTION-SERVICE-FAS.md`](255-FIRMWARE-ACTION-SERVICE-FAS.md) follow the process to update the system.  We recommend that you use the 'recipes' listed in [`256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md`](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md) to update each supported type.
+Using the process outlined in [`255-FIRMWARE-ACTION-SERVICE-FAS.md`](255-FIRMWARE-ACTION-SERVICE-FAS.md) follow the process to update the system. We recommend that you use the 'recipes' listed in [`256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md`](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md) to update each supported type.
 
 **NOTE**: each system is different and may not have all hardware options.
 
@@ -64,7 +64,7 @@ For each item in the `Hardware Precedence Order`:
 
 3. If `succeeded` count > 0, now perform a live update
 
-4. Update the json file `overrideDryrun` to `true`
+4. Update the JSON file `overrideDryrun` to `true`
 
    1. `cray fas actions create {jsonfile}`
      2. Note the ActionID!
@@ -75,7 +75,7 @@ For each item in the `Hardware Precedence Order`:
 
 <a name="hardware-precedence-order"></a>
 ## Hardware Precedence Order
-After you identify which hardware you have; start with the top most item on this list to update.  If you don't have the hardware, skip it.
+After you identify which hardware you have; start with the top most item on this list to update. If you don't have the hardware, skip it.
 
 **IMPORTANT**: This process does not communicate the SAFE way to update NCNs. If you have not locked NCNs, or blindly use FAS to update NCNs without following the correct process, then **YOU WILL VIOLATE THE STABILITY OF THE SYSTEM**
 

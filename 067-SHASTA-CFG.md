@@ -98,7 +98,7 @@ with system-specific customizations.
     linux# diff /mnt/pitdata/prep/site-init/customizations.yaml /mnt/pitdata/prep/site-init/customizations.yaml.prepassword
     ```
     
-1. Validate that REDS/MEDS/RTS sealed secrets contain valid json using `jq`:
+1. Validate that REDS/MEDS/RTS sealed secrets contain valid JSON using `jq`:
     
     ```bash
     # Validate REDS credentials (used by the REDS and HMS discovery services, 
@@ -108,8 +108,8 @@ with system-specific customizations.
     linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray_reds_credentials.generate.data[1].args.value' | jq
     
     # NOTE: For vault_redfish_defaults, the only entry used is '{"Cray": {"Username": "root", "Password": "XXXX"}'
-    # Make sure it is specified as shown, with the 'Cray' key.  This key is not
-    # used in any of the other credential specifications.  Make sure Username and
+    # Make sure it is specified as shown, with the 'Cray' key. This key is not
+    # used in any of the other credential specifications. Make sure Username and
     # Password entries are correct.
     
     # Validate MEDS credentials (used by the MEDS service, targeting 

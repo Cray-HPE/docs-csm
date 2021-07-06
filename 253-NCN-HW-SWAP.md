@@ -77,7 +77,7 @@ Swapping a node for an entirely new node mandates a "rebuild" (or a "build" if t
 <a name='quorum'></a>
 ### Quorum
 
-> **`STUB`** This is a stub that requires definition of constraints put on by the ceph cluster when rebuilding nodes.
+> **`STUB`** This is a stub that requires definition of constraints put on by the Ceph cluster when rebuilding nodes.
 
 
 <a name='rebuilding-k8s-ncns'></a>

@@ -1,11 +1,11 @@
 
 ### Utility Storage Installation Troubleshooting
 
-Occasionally we observe an installation failure during the ceph install.  We will break these up into scenarios.  Please match your scenario prior to executing any workarounds
+Occasionally we observe an installation failure during the ceph install. We will break these up into scenarios. Please match your scenario prior to executing any workarounds
 
 #### Scenario 1
 
-**`IMPORTANT (FOR NODE INSTALLS/REINSTALLS ONLY)`**: If your ceph install failed please check the following
+**`IMPORTANT (FOR NODE INSTALLS/REINSTALLS ONLY)`**: If your Ceph install failed please check the following
 
 ```bash
  ncn-s# ceph osd tree
@@ -41,14 +41,14 @@ ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
    *This will take a little bit of time, so don't panic.**
    3.  ncn-s# for i in {g..n}; do sgdisk --zap-all /dev/sd$i; done.
    
-   **This will vary node to node and you should use lsblk to identify all drives available to ceph** 
+   **This will vary node to node and you should use lsblk to identify all drives available to Ceph** 
 
    >**Manually create OSDs on the problematic nodes**
    >ncn-s# for i in {g..n}; do ceph-volume lvm create --data /dev/sd$i  --bluestore; done
    
    **ALL THE BELOW WORK WILL BE RUN FROM NCN-S001**
    
-   1. Verify the /etc/cray/ceph directory is empty.  If there are any files there then delete them
+   1. Verify the /etc/cray/ceph directory is empty. If there are any files there then delete them
    2. Put in safeguard
         - Edit /srv/cray/scripts/metal/lib.sh
        - Comment out the below lines

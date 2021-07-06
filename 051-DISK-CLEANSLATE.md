@@ -26,7 +26,7 @@ Ideally the Basic Wipe is enough, and should be tried first. All of these proced
 <a name="basic-wipe"></a>
 ### Basic Wipe
 
-These basic wipe instructions can be executed on **any ncn nodes** (master, worker and storage).
+These basic wipe instructions can be executed on **any NCN nodes** (master, worker and storage).
 
 - Wipe Magic Bits
 

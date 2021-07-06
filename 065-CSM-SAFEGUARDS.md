@@ -14,7 +14,7 @@ Edit `/var/www/ephemeral/configs/data.json` and align the following options:
 ```json
 {
   ..
-  // Disables ceph wipe:
+  // Disables Ceph wipe:
   "wipe-ceph-osds": "no"
   ..
 }

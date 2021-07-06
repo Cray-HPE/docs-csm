@@ -354,7 +354,7 @@ The 'cray' CLI only needs to be initialized once per user on a node.
 1. Unset CRAY_CREDENTIALS environment variable, if previously set.
 
    Some of the installation procedures leading up to this point use the CLI with a Kubernetes managed service
-   account normally used for internal operations.  There is a procedure for extracting the OAUTH token for
+   account normally used for internal operations. There is a procedure for extracting the OAUTH token for
    this service account and assigning it to the `CRAY_CREDENTIALS` environment variable to permit simple CLI operations.  
 
    ```bash
@@ -364,8 +364,8 @@ The 'cray' CLI only needs to be initialized once per user on a node.
 1. Initialize the 'cray' CLI for the root account.
 
    The 'cray' CLI needs to know what host to use to obtain authorization and what user is requesting authorization
-   so it can obtain an OAUTH token to talk to the API Gateway.  This is accomplished by initializing the CLI
-   configuration.  In this example, the `vers` username and its password are used. 
+   so it can obtain an OAUTH token to talk to the API Gateway. This is accomplished by initializing the CLI
+   configuration. In this example, the `vers` username and its password are used. 
 
    If LDAP configuration has enabled, then use a valid account in LDAP instead of 'vers'.
 
@@ -517,7 +517,7 @@ settings in sls_input_file.json and must be updated via the Unbound manager.
 
 If packages.local resolves to the correct addresses, verify basic
 connectivity using ping. If `ping packages.local` is unsuccessful, verify the
-IP routes from the PIT node to the NMN load balancer network.  The
+IP routes from the PIT node to the NMN load balancer network. The
 typical `ip route` configuration is `10.92.100.0/24 via 10.252.0.1 dev
 vlan002`. If pings are successful, try checking the status of Nexus by
 running `curl -sS https://packages.local/service/rest/v1/status/writable`. If

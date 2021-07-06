@@ -2,7 +2,7 @@
 
 This page will describe how to setup IP-Helpers on Aruba, Dell, and Mellanox switches.
 
-If you are migrating from a 1.3.2 system, the IP-helpers are being moved to the switches that are doing the Layer3 Routing.  For most systems this will be moving the helper from the leaf to the spine.
+If you are migrating from a 1.3.2 system, the IP-helpers are being moved to the switches that are doing the Layer3 Routing. For most systems this will be moving the helper from the leaf to the spine.
 
 IP-Helpers will reside on VLANs 1,2,4,7,2xxx, and 3xxx.
 
@@ -50,7 +50,7 @@ sw-leaf-001(config)# interface vlan 4
 sw-leaf-001(conf-if-vl-4)# no ip helper-address 10.94.100.222
 ```
 
-On CDU switches the IP-Helpers need to be set accordingly.  This is the same setting as 1.3.
+On CDU switches the IP-Helpers need to be set accordingly. This is the same setting as 1.3.
 For 2xxx VLANS the config should look like the following.
 ```
 sw-cdu-001# show running-configuration interface vlan 2000

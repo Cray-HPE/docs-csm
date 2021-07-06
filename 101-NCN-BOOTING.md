@@ -27,7 +27,7 @@ Two ways, one may be easier depending on your env.
 <a name="set-bmcs-to-dhcp"></a>
 ### Set BMCs to DHCP
 
-If you are reinstalling a system, the BMCs for the NCNs may be set to static. We check `/var/lib/misc/dnsmasq.leases` for setting up the symlinks for the artifacts each node needs to boot.  So if your BMCs are set to static, those artifacts will not get setup correctly. You can set them back to DHCP by using a command as such:
+If you are reinstalling a system, the BMCs for the NCNs may be set to static. We check `/var/lib/misc/dnsmasq.leases` for setting up the symlinks for the artifacts each node needs to boot. So if your BMCs are set to static, those artifacts will not get setup correctly. You can set them back to DHCP by using a command as such:
 
 ```bash
 for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
@@ -347,7 +347,7 @@ Boot0018* UEFI SAMSUNG MZ7LH480HAHQ-00005 S45PNA0M838871
 Boot1001* Enter Setup
 ```
 
-In the example above, our device is 0014 or 0015. We'll guess its the first one, and can correct this on-the-fly in POST
+In the example above, our device is 0014 or 0015. We'll guess it's the first one, and can correct this on-the-fly in POST
 Notice the lack of "Boot" in the ID number given, we want Boot0014 so we pass '0014' to efibootmgr:
 
 ```bash

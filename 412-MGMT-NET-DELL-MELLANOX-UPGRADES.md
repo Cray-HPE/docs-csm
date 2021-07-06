@@ -199,7 +199,7 @@ System-id           State                        Hostname
 98:03:9B:EF:D6:48   Up
 ```
 If output looks like the above, MLAG is already setup.
-If MLAG needs to be setup on the system follow these steps.  Most 1.3 systems will have this already configured.
+If MLAG needs to be setup on the system follow these steps. Most 1.3 systems will have this already configured.
 #### Spine01
 ```
 (config) # protocol mlag
@@ -320,7 +320,7 @@ See [SNMP](407-MGMT-NET-SNMP-CONFIG.md)
 
 ## Update CAN configuration
 
-Some systems may have had many switches on the CAN with Shasta v1.3.  In Shasta v1.4, only the spine switches should be on the CAN.  Other switches should remove their IP addresses on vlan7.
+Some systems may have had many switches on the CAN with Shasta v1.3.  In Shasta v1.4, only the spine switches should be on the CAN. Other switches should remove their IP addresses on vlan7.
 
 See [CAN](408-MGMT-NET-CAN-CONFIG.md)
 
@@ -333,7 +333,7 @@ See [NTP](414-MGMT-NET-NTP-CONFIG.md)
 
 ## Verify flow-control settings
 
-With Shasta v1.3.2, some changes were made for the flow-control settings which may not be on Shasta v1.3.0 systems.  Verify that these are set correctly for Shasta v1.4.
+With Shasta v1.3.2, some changes were made for the flow-control settings which may not be on Shasta v1.3.0 systems. Verify that these are set correctly for Shasta v1.4.
 These changes for flow-control will also disable iSCSI on Dell Switches (Leaf, CDU, and Aggregation).
 
 See [Flow Control](417-MGMT-NET-FLOW-CONTROL.md)
@@ -341,8 +341,8 @@ https://connect.us.cray.com/confluence/display/SSI/Management+Network+Changes+fo
 
 ## Update DHCP IP helper configuration
 
-With Shasta v1.3.2, some changes were made for the ip-helper settings which may not be on Shasta v1.3.0 systems.  Verify that these are set correctly for Shasta v1.4.
-The IP-helpers are being moved for the switches that are doing the Layer3 Routing.  For most systems this will be moving the helper from the leaf to the spine.
+With Shasta v1.3.2, some changes were made for the ip-helper settings which may not be on Shasta v1.3.0 systems. Verify that these are set correctly for Shasta v1.4.
+The IP-helpers are being moved for the switches that are doing the Layer3 Routing. For most systems this will be moving the helper from the leaf to the spine.
 Also the IP-helpers are being added on VLAN1 and VLAN7 to PXE boot NCNs.
 
 See [IP-Helper](418-MGMT-NET-IP-HELPER.md)

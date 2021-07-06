@@ -14,9 +14,9 @@ The LiveCD is equipped for "re-squashing" an SquashFS images.
 <a name="set-the-default-password"></a>
 #### Set the Default Password
 
-Customize the NCN images by changing the root password or adding different ssh keys for the root account.
+Customize the NCN images by changing the root password or adding different SSH keys for the root account.
 
-This process should be done for the "Kubernetes" image used by master and worker nodes and then repeated for the "ceph" image used by the utility storage nodes.
+This process should be done for the "Kubernetes" image used by master and worker nodes and then repeated for the Ceph image used by the utility storage nodes.
 
 
 1. Open the image.
@@ -26,7 +26,7 @@ This process should be done for the "Kubernetes" image used by master and worker
    pit# cd /var/www/ephemeral/data/k8s
    pit# unsquashfs kubernetes-0.0.53.squashfs
    ```
-   The ceph image will be of the form "ceph-0.0.44.squashfs" in /var/www/ephemeral/data/ceph.
+   The Ceph image will be of the form "ceph-0.0.44.squashfs" in /var/www/ephemeral/data/ceph.
    ```bash
    pit# cd /var/www/ephemeral/data/ceph
    pit# unsquashfs ceph-0.0.44.squashfs
@@ -39,11 +39,11 @@ This process should be done for the "Kubernetes" image used by master and worker
    ```bash
    chroot-pit# passwd
    ```
-4. Replace the ssh keys
+4. Replace the SSH keys
    ```bash
    chroot-pit# cd root
    ```
-   Replace the default root public and private ssh keys with your own or generate a new pair with `ssh-keygen(1)`
+   Replace the default root public and private SSH keys with your own or generate a new pair with `ssh-keygen(1)`
 
 5. Create the new SquashFS artifact
    ```bash
@@ -59,7 +59,7 @@ This process should be done for the "Kubernetes" image used by master and worker
    ```bash
    pit# umount /var/www/ephemeral/data/k8s/squashfs-root/mnt/squashfs
    ```
-   The ceph image directory is /var/www/ephemeral/data/ceph.
+   The Ceph image directory is /var/www/ephemeral/data/ceph.
    ```bash
    pit# umount /var/www/ephemeral/data/ceph/squashfs-root/mnt/squashfs
    ```

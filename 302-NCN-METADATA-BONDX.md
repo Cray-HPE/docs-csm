@@ -1,6 +1,6 @@
 # Collecting NCN MAC Addresses
 
-This procedure will detail how to collect the NCN MAC addresses from a Shasta system.  After completing this procedure,
+This procedure will detail how to collect the NCN MAC addresses from a Shasta system. After completing this procedure,
 you will have the MAC addresses needed for the Bootstrap MAC, Bond0 MAC0, and Bond0 MAC1 columns in `ncn_metadata.csv`.
 
 The Bootstrap Mac address will be used for identification of this node during the early part of the PXE boot process before the bonded interface can be established.
@@ -147,7 +147,7 @@ is quicker.
 <a name="procedure-recovering-from-an-incorrect-metadata-file"></a>
 ## Procedure: Recovering from an incorrect NCN metadata file
 
-If you are coming from 1.3 and happened to use the `ncn_metadata.csv` without modification, you will be unable to deploy the NCNs.  This section details a recovery procedure in case that happens.
+If you are coming from 1.3 and happened to use the `ncn_metadata.csv` without modification, you will be unable to deploy the NCNs. This section details a recovery procedure in case that happens.
 
 1. Remove the incorrectly-generated configs. Before deleting the incorrectly-generated configs consider making a backup of them. In case they need to be examined at a later time. 
 
@@ -204,4 +204,4 @@ If there is a workaround here, the output looks similar to the following:
 CASMINST-980
 ```
 
-8. Before relaunching NCNs, be sure to wipe the disks first.  To wipe all disks in all NCNs, refer to the disk wipe procedure in the Degraded System Notice section of 002-CSM-INSTALL.md.
+8. Before relaunching NCNs, be sure to wipe the disks first. To wipe all disks in all NCNs, refer to the disk wipe procedure in the Degraded System Notice section of 002-CSM-INSTALL.md.

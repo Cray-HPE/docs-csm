@@ -60,7 +60,7 @@ This is a manual path that can be taken if the PREFERRED section is not possible
 
 ## Host name and account in command prompts
 
-The host name in a command prompt indicates where the command must be run.  The account that must run the command is also indicated in the prompt.
+The host name in a command prompt indicates where the command must be run. The account that must run the command is also indicated in the prompt.
 - The root or super-user account always has the # character at the end of the prompt
 - Any non-root account is indicated with account@hostname>.  A non-privileged account is referred to as user.
 
@@ -87,7 +87,7 @@ The following list contains abbreviations for nodes used below
 | uan# | Run the command as root on any UAN. |
 | uan01# | Run the command as root on any UAN. |
 | user@uan> | Run the command as any non-root user on any UAN. |
-| cn# | Run the command as root on any CN.  Note that a CN will have a hostname of the form nid124356, that is "nid" and a six digit, zero padded number. |
+| cn# | Run the command as root on any CN. Note that a CN will have a hostname of the form nid124356, that is "nid" and a six digit, zero padded number. |
 | hostname# | Run the command as root on the specified hostname. |
 | user@hostname> | Run the command as any non-root user son the specified hostname. |
 
@@ -116,7 +116,7 @@ pod#
 
 ## Command prompt inside image customization session
 
-If using ssh during an image customization session, the prompt
+If using SSH during an image customization session, the prompt
 changes to indicate that it is inside the image customization
 environment (pod). This example uses $PORT and $HOST as
 environment variables with specific settings. When using chroot in
@@ -164,7 +164,7 @@ user@hostname > ./command
 
 The prompts when doing network switch configuration can vary widely
 depending on which vendor switch is being configured and the context
-of the item being configured on that switch.  There may be two levels
+of the item being configured on that switch. There may be two levels
 of user privilege which have different commands available and a
 special command to enter configuration mode.
 

@@ -2,7 +2,7 @@
 
 Verify that the ceph-csi requirements are in place
 
-### Verify all post ceph install tasks have run
+### Verify all post-Ceph install tasks have run
 
 Log in to ncn-s001 and check /etc/cray/ceph for completed task files.
 ```bash
@@ -38,7 +38,7 @@ If you are missing any components then you will want to re-run the storage node 
     ```bash
     ncn-s001# ceph -s
     ```
-       * If it returns a connection error then assume ceph is not installed and you can re-run the cloud-init script
+       * If it returns a connection error then assume Ceph is not installed and you can re-run the cloud-init script
    3. Run the following:
     ```bash
     ncn-s001# ls /etc/cray/ceph
@@ -65,5 +65,5 @@ If you are missing any components then you will want to re-run the storage node 
        ceph-csi configuration has been already been completed
        ```
         * If your output is like above then that means that all the steps ran.
-            - You can also locate file in /etc/cray/ceph that are create as each step completes
+            - You can also locate file in /etc/cray/ceph that are created as each step completes
         * If the script failed out then you will have more output for the tasks that are being run. 

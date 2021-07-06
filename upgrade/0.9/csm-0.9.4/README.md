@@ -327,7 +327,7 @@ should resolve itself once the workload manager product is installed.
 ## Install Prometheus Node-Exporter on Utility Storage Nodes
 
 1. Verify the zypper repository in nexus that contains the golang-github-prometheus-node_exporter
-   rpm is enabled.  Typically this is the SUSE-SLE-Module-Basesystem-15-SP1-x86_64-Updates repository.
+   RPM is enabled. Typically this is the SUSE-SLE-Module-Basesystem-15-SP1-x86_64-Updates repository.
    If not enabled, enable it (or the repository in nexus that contains the rpm) on all storage nodes:
 
    ```bash

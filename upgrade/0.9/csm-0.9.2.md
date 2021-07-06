@@ -286,14 +286,14 @@ credentials. CSM services that clone repositories have been upgraded to use the
 
 Three new Prometheus alert definitions have been added in CSM 0.9.1 for
 monitoring replication across Postgres instances, which are used by some system
-management services.  The new alerts are `PostgresqlReplicationLagSMA` (for
+management services. The new alerts are `PostgresqlReplicationLagSMA` (for
 Postgres instances in the `sma` namespace), `PostgresqlReplicationLagServices`
 (for Postgres instances in all other namespaces), and
 `PostgresqlInactiveReplicationSlot`.
 
 In the event that a state of broken Postgres replication persists to the extent
 that space allocated for its WAL files fills-up, the affected database will
-likely shut down and create a state where it cannot be brought up again.  This
+likely shut down and create a state where it cannot be brought up again. This
 can impact the reliability of the related service and can require that it be
 redeployed with data re-population procedures.
 
@@ -468,7 +468,7 @@ script `/opt/cray/csm/scripts/networking/BGP/Aruba_BGP_Peers.py`.
    ncn-m001# cray capmc xname_off create --xnames x[1000-1003]c[0-7] --recursive true --continue true
    ```
 
-  Create an upgrade json file `ccBMCupdate.json`:
+  Create an upgrade JSON file `ccBMCupdate.json`:
 
   ```json
   {
@@ -496,7 +496,7 @@ script `/opt/cray/csm/scripts/networking/BGP/Aruba_BGP_Peers.py`.
   }
   ```
 
-  Using the above json file run a dry-run with FAS:
+  Using the above JSON file run a dry-run with FAS:
 
   ```bash
   ncn-w001# cray fas actions create ccBMCupdate.json
@@ -507,8 +507,8 @@ script `/opt/cray/csm/scripts/networking/BGP/Aruba_BGP_Peers.py`.
   `fas actions create` command)
 
   If dry-run succeeded with updates to version 1.4.19, change
-  `"overrideDryrun"` in the above json file to `true` and update the description.
-  Rerun FAS with the updated json file to do the actual updates.
+  `"overrideDryrun"` in the above JSON file to `true` and update the description.
+  Rerun FAS with the updated JSON file to do the actual updates.
 
   After firmware update completes, restart the hms-discovery cronjob:
 

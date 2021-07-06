@@ -373,7 +373,7 @@ ncn-m001# ./lib/0.9.3/enable-psp.sh
 
 Apply the workaround for the following CVEs: CVE-2021-27365, CVE-2021-27364, CVE-2021-27363.
 
-The affected kernel modules are not typically loaded on Shasta NCNs.  The following prevents them
+The affected kernel modules are not typically loaded on Shasta NCNs. The following prevents them
 from ever being loaded.
 
 ```bash
@@ -395,7 +395,7 @@ If your Shasta system is using CDU switches you will need to update the configur
 - A static LAG will be configured on the CDU switches.
 - The CDU switches have two cables (10Gb RJ45) connecting to each CMM.
 - This configuration offers increased throughput and redundancy.
-- The CEC will not need to be programmed in order to support the LAG configuration as it was required in previous versions.  The updated firmware takes care of this.
+- The CEC will not need to be programmed in order to support the LAG configuration as it was required in previous versions. The updated firmware takes care of this.
 
 ### Aruba CDU switch configuration.
 This configuration is identical across CDU VSX pairs.

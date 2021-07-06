@@ -1,12 +1,12 @@
 # Management Network Flow Control Settings
 
-This page is designed to go over all the flow control settings for Dell/Mellanox systems.  These changes were introduced in 1.3.2. These changes are required for Shasta 1.4.
+This page is designed to go over all the flow control settings for Dell/Mellanox systems. These changes were introduced in 1.3.2. These changes are required for Shasta 1.4.
 
 ## Leaf Switch Node Connections
 
-For the node connections to a leaf switch, we want the transmit flowcontrol disabled, and receive flowcontrol enabled.  The following commands will accomplish this.  
+For the node connections to a leaf switch, we want the transmit flowcontrol disabled, and receive flowcontrol enabled. The following commands will accomplish this.  
 
-NOTE: If you have a TDS system involving a Hill cabinet, make sure to confirm that no CMM nor CEC components are connected to any leaf switches in your system.  If these components are connected to the leaf, confirm to which ports they are connected, and modify the commands below to avoid modifying the flowcontrol settings of those ports.
+NOTE: If you have a TDS system involving a Hill cabinet, make sure to confirm that no CMM nor CEC components are connected to any leaf switches in your system. If these components are connected to the leaf, confirm to which ports they are connected, and modify the commands below to avoid modifying the flowcontrol settings of those ports.
 ```
 sw-leaf-001# configure terminal
 sw-leaf-001(config)# interface range ethernet 1/1/1-1/1/48
@@ -18,8 +18,8 @@ sw-leaf-001# write memory
 
 ## Switch-to-Switch Connections
 
-We want to disable flowcontrol in both directions for all switch-to-switch connections: spine-to-leaf; spine-to-CDU; spine-to-aggregate; and aggregate-to-leaf.  (It is unlikely that any system has every type of connection.)  We will first cover how to identify which ports are part of a switch-to-switch connection, and then we will provide the commands to make the changes.  We will provide the commands for each switch group separately, but it is strongly recommended to make the configuration changes for each end of the connection in short order; for example, for a spine-leaf connection, do not make the changes on the spine side, if you cannot also make the changes to the leaf switch end of the connection within a couple minutes.
-Repeat the above commands for each leaf switch in your system.  These changes can be performed before the switch-to-switch connections, or concurrent with those changes.
+We want to disable flowcontrol in both directions for all switch-to-switch connections: spine-to-leaf; spine-to-CDU; spine-to-aggregate; and aggregate-to-leaf.  (It is unlikely that any system has every type of connection.)  We will first cover how to identify which ports are part of a switch-to-switch connection, and then we will provide the commands to make the changes. We will provide the commands for each switch group separately, but it is strongly recommended to make the configuration changes for each end of the connection in short order; for example, for a spine-leaf connection, do not make the changes on the spine side, if you cannot also make the changes to the leaf switch end of the connection within a couple minutes.
+Repeat the above commands for each leaf switch in your system. These changes can be performed before the switch-to-switch connections, or concurrent with those changes.
 
 Recommended Order of Flow Control Changes for Switch-to-Switch Connections
 1. Make change on sw-spine-001 side of leaf/aggregate/CDU ISL connections.
@@ -35,7 +35,7 @@ Recommended Order of Flow Control Changes for Switch-to-Switch Connections
 
 #### Leaf Switches
 
-Our standard for the configuration uses 'port-channel 100' for the connection to the spine or aggregate switch.  To get what ports are part of this composite interface, use this command:
+Our standard for the configuration uses 'port-channel 100' for the connection to the spine or aggregate switch. To get what ports are part of this composite interface, use this command:
 ```
 sw-leaf-001# show interface port-channel 100 summary
 LAG     Mode      Status    Uptime              Ports
@@ -48,18 +48,18 @@ Based on this example, we see that the physical ports are '1/1/51' and '1/1/52'.
 
 In order to get the ports involved in the connection to the spine switches, you can use the command shared for the leaf switch, above.  
 
-In addition to this, we also need the ports which connect the pair of CDU switches together.  The best way to determine the ports involved is to run the following command:
+In addition to this, we also need the ports which connect the pair of CDU switches together. The best way to determine the ports involved is to run the following command:
 ```
 sw-cdu-001# show running-configuration | grep discovery
  discovery-interface ethernet1/1/25,1/1/29
 ```
-Here, we can see ports 1/1/25 and 1/1/29 are being used as connections between the CDU switches.  As with the connection to the spine, record the ports involved.
+Here, we can see ports 1/1/25 and 1/1/29 are being used as connections between the CDU switches. As with the connection to the spine, record the ports involved.
 
 NOTE: It is very important that the flowcontrol settings for the CMM and CEC devices connected to the CDU switches NOT be modified.
 
 #### Aggregate Switches
 
-On large River systems, aggregate switches are situated between the leaf and spine switches.  In general, we'd expect every port which is up on these switches to either be a connection to the spine (as 'port-channel 100'), a connection to a leaf, or a connection to its peer aggregate switch.  To see which ports are currently up, run this:
+On large River systems, aggregate switches are situated between the leaf and spine switches. In general, we'd expect every port which is up on these switches to either be a connection to the spine (as 'port-channel 100'), a connection to a leaf, or a connection to its peer aggregate switch. To see which ports are currently up, run this:
 
 ```
 sw-10g01# show interface status
@@ -123,7 +123,7 @@ Eth 1/1/53                      down     0        full     A    1    -
 Eth 1/1/54                      down     0        full     A    1    -
 --------------------------------------------------------------------------------------------------
 ```
-From this output, we can see that ports 1/1/1 through 1/1/9, 1/1/25, and 1/1/27 through 1/1/29 are up.  Record this information.
+From this output, we can see that ports 1/1/1 through 1/1/9, 1/1/25, and 1/1/27 through 1/1/29 are up. Record this information.
 
 #### Spine Switches
 
@@ -188,7 +188,7 @@ Eth1/30               Down                  Enabled                         Unkn
 Eth1/31               Down                  Enabled                         Unknown           1500              -
 Eth1/32               Down                  Enabled                         Unknown           1500  
 ```
-The links between the 2 spines should be port-channel 100 ('Po100').  The 'mlag-port-channel' interfaces which are connections to leaf, aggregate or CDU switches would be 'Mpo' interfaces with indices greater than 100.  So here, 'Mpo1'-'Mpo11' and 'Mpo17' are connections to NCN's, whereas 'Mpo113', 'Mpo151' and 'Mpo152' are connections to other switches.  So identifying the port-channel and mlag-port-channel devices, we look for the "Eth" rows which have one of these labels in parentheses next to it.  In the example above, these are:
+The links between the 2 spines should be port-channel 100 ('Po100').  The 'mlag-port-channel' interfaces which are connections to leaf, aggregate or CDU switches would be 'Mpo' interfaces with indices greater than 100.  So here, 'Mpo1'-'Mpo11' and 'Mpo17' are connections to NCN's, whereas 'Mpo113', 'Mpo151' and 'Mpo152' are connections to other switches. So identifying the port-channel and mlag-port-channel devices, we look for the "Eth" rows which have one of these labels in parentheses next to it. In the example above, these are:
 
 - Eth1/12
 - Eth1/13
@@ -201,7 +201,7 @@ Record these ports AND the port-channel and mlag-port-channel interfaces, as we 
 
 #### Spine Switch 'flowcontrol' Configuration Change
 
-On the Mellanox spine switches, we need to modify the flowcontrol settings on the port-channel, mlag-port-channel, and Ethernet interfaces.  The general form looks like this:
+On the Mellanox spine switches, we need to modify the flowcontrol settings on the port-channel, mlag-port-channel, and Ethernet interfaces. The general form looks like this:
 
 ```
 sw-spine-001 [standalone: master] # configure terminal
@@ -218,7 +218,7 @@ sw-spine-001 [standalone: master] # write memory
 
 #### Leaf, CDU, and Aggregate Switch 'flowcontrol' Configuration Change
 
-On the Dell switches, we only need to modify the Ethernet interface configurations.  The general form looks like this:
+On the Dell switches, we only need to modify the Ethernet interface configurations. The general form looks like this:
 
 ```
 sw-leaf-001# configure terminal
@@ -228,7 +228,7 @@ sw-leaf-001(conf-if-eth<port>)# flowcontrol transmit off
 sw-leaf-001(conf-if-eth<port>)# end
 sw-leaf-001# write memory
 ```
-One would need to do this for each port.  Alternatively, you can set it up to do multiple ports as one command.  For instance, the common leaf switch would have ports 51 and 52 as connections to the spine.  So in that case, these commands would work:
+One would need to do this for each port. Alternatively, you can set it up to do multiple ports as one command. For instance, the common leaf switch would have ports 51 and 52 as connections to the spine. So in that case, these commands would work:
 
 ```
 sw-leaf-001# configure terminal
@@ -239,7 +239,7 @@ sw-leaf-001(conf-if-eth1/1/51-1/1/52)# end
 sw-leaf-001# write memory
 ```
 
-Alternatively, a typical CDU switch would have ports 27 and 28 as uplinks to the spine, with ports 25 and 29 as connections to the peer CDU switch.  So in that case, we'd use these commands:
+Alternatively, a typical CDU switch would have ports 27 and 28 as uplinks to the spine, with ports 25 and 29 as connections to the peer CDU switch. So in that case, we'd use these commands:
 
 ```
 sw-cdu-001# configure terminal
@@ -252,7 +252,7 @@ sw-cdu-001# write memory
 
 #### Disable iSCSI on Dell Switches (Leaf, CDU, and Aggregate)
 
-The final configuration change needed on the Dell switches is to disable iSCSI in the configuration.  This change ensures that all of the flowcontrol changes made above will persist through a reboot of the switch.
+The final configuration change needed on the Dell switches is to disable iSCSI in the configuration. This change ensures that all of the flowcontrol changes made above will persist through a reboot of the switch.
 
 Run the following commands on all Dell switches in your system:
 

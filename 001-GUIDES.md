@@ -1,6 +1,6 @@
 # CSM Documentation Guide
 
-The installation of CSM software has three scenarios which are described in this documentation with many supporting procedures.  Here is an overview of the workflow through the documentation to support these scenarios.
+The installation of CSM software has three scenarios which are described in this documentation with many supporting procedures. Here is an overview of the workflow through the documentation to support these scenarios.
 
 [CSM Install] (002-CSM-INSTALL.md)
 
@@ -8,11 +8,11 @@ Installation prerequisites
 
 Satisfy the prerequisites for one of these three installation scenarios 
 
-* Migration from a Shasta v1.3.x system.  How to collect information from a v1.3.x system to be used during the v1.4 installation, quiescing v1.3.x, checking and updating firmware to required versions, recabling site connection to shift from ncn-w001 to ncn-m001, adjust management NCNs to boot over PCIe instead of onboard NICs, shutting down Kubernetes, and powering off NCNs.  Then you move to Starting an Installation.
-* First time installation of Shasta software (a bare-metal install).  This describes now to setup the LiveCD to be able to collect the configuration payload, configure network switches, update firmware for switches and nodes to required versions.  Then you move to Starting an Installation.
-* Reinstalling Shasta v1.4 software on a system which previously had Shasta v1.4 installed.  These steps here are scaling down DHCP, wiping disks on the NCNs (except ncn-m001), power off NCNs, change management node BMCs to be DHCP not Static, and powering off the LiveCD or ncn-m001 (unless it will be used to prepare the LiveCD).  Then you move to Starting an Installation.
+* Migration from a Shasta v1.3.x system. How to collect information from a v1.3.x system to be used during the v1.4 installation, quiescing v1.3.x, checking and updating firmware to required versions, recabling site connection to shift from ncn-w001 to ncn-m001, adjust management NCNs to boot over PCIe instead of onboard NICs, shutting down Kubernetes, and powering off NCNs. Then you move to Starting an Installation.
+* First time installation of Shasta software (a bare-metal install).  This describes now to setup the LiveCD to be able to collect the configuration payload, configure network switches, update firmware for switches and nodes to required versions. Then you move to Starting an Installation.
+* Reinstalling Shasta v1.4 software on a system which previously had Shasta v1.4 installed. These steps here are scaling down DHCP, wiping disks on the NCNs (except ncn-m001), power off NCNs, change management node BMCs to be DHCP not Static, and powering off the LiveCD or ncn-m001 (unless it will be used to prepare the LiveCD).  Then you move to Starting an Installation.
 
-Once the installation prerequisites have been addressed, the installation is very similar for all of them.  There are a few places where a comment will be made for how one of the scenarios needs to do something different.
+Once the installation prerequisites have been addressed, the installation is very similar for all of them. There are a few places where a comment will be made for how one of the scenarios needs to do something different.
 
 Starting an installation
 

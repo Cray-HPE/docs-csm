@@ -47,12 +47,12 @@ Although some configuration data can be saved from a Shasta v1.3 system, there a
 needed for Shasta v1.4.  Some of this data is easier to collect from a running Shasta v1.3 system.
 
 There may be some operational data to be saved such as any nodes which are disabled or marked down in a
-workload manager.  These nodes might need hardware or firmware actions to repair them.  If not addressed,
+workload manager. These nodes might need hardware or firmware actions to repair them. If not addressed,
 and the newer firmware in v1.4 does not improve their performance or operation, then these may need to be
 disabled with v1.4 as well.
 
 There may be site modifications to the system from v1.3 which are desired in v1.4.  They cannot be directly
-copied to v1.4, however, recommendation will be made about what to save.  Some saved information from v1.3
+copied to v1.4, however, recommendation will be made about what to save. Some saved information from v1.3
 may be referenced when making a similar site modification to v1.3.
 
 See the [Harvest Shasta v1.3 Information](068-HARVEST-13-CONFIG.md) page for the data harvesting procedure.
@@ -129,7 +129,7 @@ firmware.
 
 Known issues for Shasta v1.3 systems include:
 * Gigabyte nodes should use the Gigabyte Node Firmware Update Guide (1.3.2) S-8010 while booted with Shasta v1.3.2.  However, since v1.3 will never be booted again on this system, there is no need to ensure that the etcd clusters are healthy and that BGP Peering has been ESTABLISHED as recommended in that guide.
-* Nodes with Mellanox ConnectX-4 and ConnectX-5 PCIe NICs need to update their firmware.  This should be done while Shasta v1.3.2 is booted.  The Mellanox ConnectX-4 cards will be enabled for PXE booting later.
+* Nodes with Mellanox ConnectX-4 and ConnectX-5 PCIe NICs need to update their firmware. This should be done while Shasta v1.3.2 is booted. The Mellanox ConnectX-4 cards will be enabled for PXE booting later.
 
 1. For minimum BIOS spec (required settings), see [Node BIOS Preferences](200-NCN-BIOS-PREF.md).
 
@@ -180,7 +180,7 @@ PCIe card PXE boot.
 <a name="shut-down-management-kubernetes-cluster"></a>
 ### Shut Down Management Kubernetes Cluster
 
-Shut down Ceph and the Kubernetes management cluster.  This performs several actions to quiesce the
+Shut down Ceph and the Kubernetes management cluster. This performs several actions to quiesce the
 management services and leaves each management NCN running Linux, but no other services.
 
 If Shasta v1.3.2 or later is installed, use this command.
@@ -298,7 +298,7 @@ configurations, firmware, and more, see [Management network install](401-MANAGEM
 ### Upgrading BIOS and Firmware
 
 The management NCNs are expected to have certain minimum firmware installed for BMC, node BIOS, and PCIe card
-firmware.  Where possible, the firmware should be updated prior to install.  Some firmware can be updated
+firmware. Where possible, the firmware should be updated prior to install. Some firmware can be updated
 during or after the Shasta v1.4 installation, but it is better to meet the minimum NCN firmware requirement
 before starting.
 

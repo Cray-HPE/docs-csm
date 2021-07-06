@@ -60,7 +60,7 @@ In 1.4, the site connections that were previously connection to ncn-w001 will be
    
 3. Set ncn-w001 BMC to dhcp
  
-    DCHW may do this step for you.  If not, do the following after the above changes have been made
+    DCHW may do this step for you. If not, do the following after the above changes have been made
 
     a. SSH from your laptop to ncn-m001 via the new external connection.  
 
@@ -70,13 +70,13 @@ In 1.4, the site connections that were previously connection to ncn-w001 will be
 
     d. If it is set to Static, run the command `ipmitool lan set 1 ipsrc dhcp`
 
-    e. Execute `ipmitool lan print 1` to verify that it is now set to DHCP and record if it has picked up an address.  (This will depend on if Kea is still running on the 1.3 system.  If it doesn't have an IP, we can get it later.)
+    e. Execute `ipmitool lan print 1` to verify that it is now set to DHCP and record if it has picked up an address.  (This will depend on if Kea is still running on the 1.3 system. If it doesn't have an IP, we can get it later.)
 
 
 
 4. Capture bond0 MACs and ncn-w001 BMC MAC
 
-   For 1.4, we need to know the MAC address for the bond0 interface.  We also need to know the BMC and em1 MACs for ncn-w001 since that is not capture in ncn_metadata.csv.  You can capture all of this this from ncn-w001 by running the following commands.
+   For 1.4, we need to know the MAC address for the bond0 interface. We also need to know the BMC and em1 MACs for ncn-w001 since that is not capture in ncn_metadata.csv. You can capture all of this this from ncn-w001 by running the following commands.
 
    ```bash
    ansible ncn -m shell -a "ip addr show bond0 | grep ether" > /root/macs.txt
@@ -95,7 +95,7 @@ In 1.4, the site connections that were previously connection to ncn-w001 will be
 
 6. Shutdown all of the nodes except for ncn-m001 
 
-    We want to make sure all of the NCNs are shutdown before starting the 1.4 installation to avoid having multiple DHCP servers running.   Because Kea is also serving the BMCs their addresses, we will want to do this all at approximately the same time before they lose their leases.
+    We want to make sure all of the NCNs are shutdown before starting the 1.4 installation to avoid having multiple DHCP servers running. Because Kea is also serving the BMCs their addresses, we will want to do this all at approximately the same time before they lose their leases.
 
     Use ipmitool from ncn-m001 to shutdown all of the NCNs other than ncn-m001 and ncn-w001.
 

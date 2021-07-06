@@ -75,12 +75,12 @@ The following conditions must be true in order to qualify for this problem:
     }
     ```
 
-2. Using the imageID from that record create an update command json file that will use the image override.
+2. Using the imageID from that record create an update command JSON file that will use the image override.
 
     >  **NOTE** YOU MUST CHANGE THE `imageID` to match your identified image ID
 
 3. Using `FAS` as normal, launch the action referencing the new JSON file.
-4. At this point you should use `FAS` as normal.  The expectation would be that the operations should be `succeeded` after using the new JSON file.
+4. At this point you should use `FAS` as normal. The expectation would be that the operations should be `succeeded` after using the new JSON file.
 
     ```json
     {

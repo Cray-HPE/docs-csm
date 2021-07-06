@@ -10,12 +10,12 @@ Although some configuration data can be saved from a Shasta v1.3 system, there a
 needed for Shasta v1.4.  Some of this data is easier to collect from a running Shasta v1.3 system.
 
 There may be some operational data to be saved such as any nodes which are disabled or marked down in a
-workload manager.  These nodes might need hardware or firmware actions to repair them.  If not addressed,
+workload manager. These nodes might need hardware or firmware actions to repair them. If not addressed,
 and the newer firmware in v1.4 does not improve their performance or operation, then these may need to be
 disabled with v1.4 as well.
 
 There may be site modifications to the system from v1.3 which are desired in v1.4.  They cannot be directly
-copied to v1.4, however, recommendation will be made about what to save.  Some saved information from v1.3
+copied to v1.4, however, recommendation will be made about what to save. Some saved information from v1.3
 may be referenced when making a similar site modification to v1.3.
 
 
@@ -538,9 +538,9 @@ may be referenced when making a similar site modification to v1.3.
 
 25. Dump the information from SLS.
 
-    Some information from SLS can be extracted for use in the pre-config file, hmn_connections.json, and cabinets.yaml for the v1.4 installation.  The Cray Shasta_administration Guide 1.3 S-8001 has a section "Dump SLS Information".
+    Some information from SLS can be extracted for use in the pre-config file, hmn_connections.json, and cabinets.yaml for the v1.4 installation. The Cray Shasta_administration Guide 1.3 S-8001 has a section "Dump SLS Information".
 
-    If there is a fully current SHCD (Shasta Cabling Diagram, previously called CCD for Cray Cabling Diagram) spreadsheet file for this system, there is a way to extract information from it to create the hmn_connections.json file later in the v1.4 installation process.  However, SLS data may be more current than the SHCD or there may not be a valid SHCD file for this system if cabling changes have not been recorded as updates to the SHCD file.  Saving this SLS information while v1.3 is booted may provide a point of comparison with the data in the SHCD.
+    If there is a fully current SHCD (Shasta Cabling Diagram, previously called CCD for Cray Cabling Diagram) spreadsheet file for this system, there is a way to extract information from it to create the hmn_connections.json file later in the v1.4 installation process. However, SLS data may be more current than the SHCD or there may not be a valid SHCD file for this system if cabling changes have not been recorded as updates to the SHCD file. Saving this SLS information while v1.3 is booted may provide a point of comparison with the data in the SHCD.
 
     This procedure will create three files in the current directory (private_key.pem, public_key.pem, sls_dump.json). These files should be kept in a safe and secure place as the private key can decrypt the encrypted passwords stored in the SLS dump file.
 
@@ -756,7 +756,7 @@ may be referenced when making a similar site modification to v1.3.
 
     For minimum NCN firmware versions see [Node Firmware](252-FIRMWARE-NCN.md)
 
-    Confirm the version of the mft rpm installed on the management NCNs. The mft-4.14.0-105.x86_64 version is known to work to report the firmware version installed.
+    Confirm the version of the mft RPM installed on the management NCNs. The mft-4.14.0-105.x86_64 version is known to work to report the firmware version installed.
 
     ```bash
     ncn-w001# for ncn in $nodes; do echo $ncn; ssh $ncn rpm -q mft; done

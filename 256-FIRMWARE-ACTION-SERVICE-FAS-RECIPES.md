@@ -68,12 +68,12 @@ For example, if a user specifies an image that only applies to gigabyte, nodeBMC
 #### Parameters
 
 1. `imageID` -> this is the id of the image you want to force onto the system; 
-2. `overrideImage` - if this is combined with imageID; it will FORCE the selected image onto all hardware identified, even if it is not applicable.  This may cause undesirable outcomes, but most hardware will prevent a bad image from being loaded.
+2. `overrideImage` - if this is combined with imageID; it will FORCE the selected image onto all hardware identified, even if it is not applicable. This may cause undesirable outcomes, but most hardware will prevent a bad image from being loaded.
 
 ---
 
 ### `targetFilter` 
-The target filter selects targets that match against the list. For example, if the user specifies only the BIOS target, FAS will include only operations that explicitly have BIOS as a target.  A Redfish device has potentially many targets (members). Targets for FAS are case sensitive and must match Redfish.
+The target filter selects targets that match against the list. For example, if the user specifies only the BIOS target, FAS will include only operations that explicitly have BIOS as a target. A Redfish device has potentially many targets (members). Targets for FAS are case sensitive and must match Redfish.
 
 #### Parameters
 
@@ -104,16 +104,16 @@ These filters are then applied; and then `command` parameter applies settings fo
 - `version` - usually `latest` because we want to upgrade usually
 - `tag` - usually `default` because we only care about the default image (this can be mostly ignored)
 - `overrideDryrun` - This determines if this is a LIVE UPDATE or a DRYRUN; if you override; then it will provide a live update
-- `restoreNotPossibleOverride` - this determines if an update (live or dry run) will be attempted if a restore cannot be performed.  Typically we don't have enough firmware to be able to do a rollback; that means if you UPDATE away from a particular version, we probably cannot go back to a previous version.  Given our context it is most likely that this value will ALWAYS need to be set `true` 
+- `restoreNotPossibleOverride` - this determines if an update (live or dry run) will be attempted if a restore cannot be performed. Typically we don't have enough firmware to be able to do a rollback; that means if you UPDATE away from a particular version, we probably cannot go back to a previous version. Given our context it is most likely that this value will ALWAYS need to be set `true` 
 - `overwriteSameImage` - this will cause a firmware update to be performed EVEN if the device is already at the identified, selected version.  
-- `timeLimit` - this is the amount of time in seconds that any operation should be allowed to execute.  Most `cray` stuff can be completed in about 1000 seconds or less; but the `gigabyte` stuff will commonly take 1,500 seconds or greater.   We recommend setting the value to 2000; this is just a stop gap to prevent the  operation from never ending, should something get stuck.
+- `timeLimit` - this is the amount of time in seconds that any operation should be allowed to execute. Most `cray` stuff can be completed in about 1000 seconds or less; but the `gigabyte` stuff will commonly take 1,500 seconds or greater. We recommend setting the value to 2000; this is just a stop gap to prevent the  operation from never ending, should something get stuck.
 - `description`- this is a human friendly description; use it!
 
 
 ---
 # <a name="recipes"></a>Recipes
 
-Below are some example `json` files that you may find useful when updating specific hardware components.  In all of these examples the `overrideDryrun` field will be set to `false`; set them to `true` to perform a live update.  We would recommend that when updating an entire system that you walk down the device hierarchy component type by component type, starting first with 'Routers' aka switches, proceeding to Chassis, then finally Nodes.  While this is not strictly necessary we have found that it helps eliminate confusion. 
+Below are some example `json` files that you may find useful when updating specific hardware components. In all of these examples the `overrideDryrun` field will be set to `false`; set them to `true` to perform a live update. We would recommend that when updating an entire system that you walk down the device hierarchy component type by component type, starting first with 'Routers' aka switches, proceeding to Chassis, then finally Nodes. While this is not strictly necessary we have found that it helps eliminate confusion. 
 
 ## <a name="manufacturer-cray"></a>Manufacturer : Cray
 
@@ -213,7 +213,7 @@ The hms-discovery job must also be stopped before updates and restarted after up
 
 #### <a name="cray-device-type-nodebmc-target-nodebios"></a> Device Type : NodeBMC | Target : NodeBIOS
 
-**IMPORTANT**: The Nodes themselves must be powered **off** in order to update the BIOS on the nodes.  The BMC will still have power and will perform the update.
+**IMPORTANT**: The Nodes themselves must be powered **off** in order to update the BIOS on the nodes. The BMC will still have power and will perform the update.
 
 **IMPORTANT:** When the BMC is updated or rebooted after updating the Node0.BIOS and/or Node1.BIOS liquid-cooled nodes, the node BIOS version will not report the new version string until the nodes are powered back on. It is recommended that the Node0/1 BIOS be updated in a separate action, either before or after a BMC update and the nodes are powered back on after a BIOS update. The liquid-cooled nodes must be powered off for the BIOS to be updated.
 
@@ -345,7 +345,7 @@ The hms-discovery job must also be stopped before updates and restarted after up
 
 **NOTE**: You MUST use `2` as `target` to indicate `System ROM`
 
-**NOTE**: Because of an incorrect string in the image meta data in FAS.  Update of System ROM may report as an error when it actually succeeded.  You may have to manually check the update version.
+**NOTE**: Because of an incorrect string in the image meta data in FAS. Update of System ROM may report as an error when it actually succeeded. You may have to manually check the update version.
 
 ---
 
@@ -412,4 +412,4 @@ The hms-discovery job must also be stopped before updates and restarted after up
 
 ## <a name="special-note-updating-ncns"></a>Special Note: updating NCNs
 
-NCNs are compute blades; we currently only have NCNs that are manufactured by Gigabyte or HPE.  We recommend using the `NodeBMC` examples from above and including the `xname` param as part of the `stateComponentFilter` to target **ONLY** the xnames you have separately identified as an NCN.  Updating more than one NCN at a time **MAY** cause system instability. Be sure to follow the correct process for updating NCN; FAS accepts no responsibility for updates that do not follow the correct process.  Firmware updates have the capacity to harm the system; follow the appropriate guides!
+NCNs are compute blades; we currently only have NCNs that are manufactured by Gigabyte or HPE. We recommend using the `NodeBMC` examples from above and including the `xname` param as part of the `stateComponentFilter` to target **ONLY** the xnames you have separately identified as an NCN. Updating more than one NCN at a time **MAY** cause system instability. Be sure to follow the correct process for updating NCN; FAS accepts no responsibility for updates that do not follow the correct process. Firmware updates have the capacity to harm the system; follow the appropriate guides!

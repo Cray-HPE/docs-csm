@@ -10,7 +10,7 @@
 
 ##  <a name="why"></a>Why?
 
-In Shasta 1.4 NCN black listing is turned off by default for CAPMC and FAS.  Also, please note
+In Shasta 1.4 NCN black listing is turned off by default for CAPMC and FAS. Also, please note
 that Management NCNs are NOT locked by default either.
 
 Thus it is up to the administrator to properly lock NCNs to prevent things 
@@ -20,7 +20,7 @@ from accidentally being done to them, namely:
 * Power down operations
 * Reset operations
 
-Doing any of these by accident will take down an NCN.  If the NCN is a 
+Doing any of these by accident will take down an NCN. If the NCN is a 
 Kubernetes master or worker node, this can have serious negative effects on
 system operation.  
 
@@ -63,14 +63,14 @@ See below for instructions and examples.
 ## <a name="locked-behavior"></a>Locked Behavior
 
 Once critical nodes are locked, then no power/reset (CAPMC) or firmware (FAS)
-operations can be done to them unless they are first unlocked.   Any node
+operations can be done to them unless they are first unlocked. Any node
 included in a list of nodes to reset, for example, which are locked, will
 result in a failure.
 
 ## <a name="how-to-lock-management-ncns"></a>START-> How To Lock Management NCNs
 
-Use the standard CLI to perform locking.  The simplest command will lock all
-nodes with a **Management** role.  The *processing-model rigid* parameter means that the
+Use the standard CLI to perform locking. The simplest command will lock all
+nodes with a **Management** role. The *processing-model rigid* parameter means that the
 operation must succeed on all target nodes or the entire operation will fail.
 
 Example:
@@ -135,5 +135,5 @@ ComponentIDs = [ "x3000c0s6b0n0",]
 
 ## <a name="next-steps"></a>Next Steps
 
-Check and update firmware next.  See [Firmware updates with FAS](010-FIRMWARE-UPDATE-WITH-FAS.md)
+Check and update firmware next. See [Firmware updates with FAS](010-FIRMWARE-UPDATE-WITH-FAS.md)
 

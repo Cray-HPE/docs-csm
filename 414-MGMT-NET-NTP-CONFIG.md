@@ -7,7 +7,7 @@ This page describes how NTP is setup and configured on the management network sw
 - CSI NMN.yaml file
 
 # Configuration
-Our NTP servers will be the first 3 worker nodes.  You can find these IPs from the CSI generated NMN.yaml file.
+Our NTP servers will be the first 3 worker nodes. You can find these IPs from the CSI generated NMN.yaml file.
 
 # Aruba
 

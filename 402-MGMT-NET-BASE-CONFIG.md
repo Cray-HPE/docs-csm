@@ -35,7 +35,7 @@ sw-25g04(config-if)# no shut
 ```
 You will need to add an IPv6 interface to VLAN 1 and start the OSPv3 process.
 In addition to this, you will need a unique router-id, this is an IPv4 address that will only be used for
-identifying the router, this is not a routable address.  You can increment this by 1 for each switch.  You can use other IPs for router-IDs if desired. 
+identifying the router, this is not a routable address. You can increment this by 1 for each switch. You can use other IPs for router-IDs if desired. 
 ```
 sw-25g04(config)# router ospfv3 1
 sw-25g04(config-ospfv3-1)# area 0

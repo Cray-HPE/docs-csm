@@ -1,12 +1,12 @@
 # CSM Metal Install
 
 > **`WARNING:`** Gigabyte NCNs running firmware version C20 can become unusable
-> when Shasta 1.4 is installed.  This is a result of a bug in the Gigabyte
+> when Shasta 1.4 is installed. This is a result of a bug in the Gigabyte
 > firmware that ships with Shasta 1.4.  This bug has not been observed in
 > firmware version C17.
 >
 > A key symptom of this bug is that the NCN will not PXE boot and will instead
-> fall through to the boot menu, despite being configure to PXE boot.  This
+> fall through to the boot menu, despite being configure to PXE boot. This
 > behavior will persist until the failing node's CMOS is cleared.
 >
 > A procedure is available in
@@ -215,7 +215,7 @@ proceed to step 2.
       > ```
       > Opening a web browser to `https://localhost:9443` will give access to the BMC's web interface.
 
-   1. When the node boots, you will be able to use the conman session to see the BIOS menu to check and set the time to current UTC time.  The process varies depending on the vendor of the NCN.
+   1. When the node boots, you will be able to use the conman session to see the BIOS menu to check and set the time to current UTC time. The process varies depending on the vendor of the NCN.
 
    Repeat this process for each NCN.
 
@@ -225,20 +225,20 @@ proceed to step 2.
 
 
 Deployment of the nodes starts with booting the storage nodes first, then the master nodes and worker nodes together.
-After the operating system boots on each node there are some configuration actions which take place.  Watching the
-console or the console log for certain nodes can help to understand what happens and when.  When the process is complete
+After the operating system boots on each node there are some configuration actions which take place. Watching the
+console or the console log for certain nodes can help to understand what happens and when. When the process is complete
 for all nodes, the Ceph storage will have been initialized and the Kubernetes cluster will be created ready for a workload.
 
 
 <a name="workflow"></a>
 #### Workflow
-The configuration workflow described here is intended to help understand the expected path for booting and configuring.  See the actual steps below for the commands to deploy these management NCNs.
+The configuration workflow described here is intended to help understand the expected path for booting and configuring. See the actual steps below for the commands to deploy these management NCNs.
 
 1. Start watching the consoles for ncn-s001 and at least one other storage node
 1. Boot all storage nodes at the same time
     - The first storage node ncn-s001 will boot and then starts a loop as ceph-ansible configuration waits for all other storage nodes to boot
-    - The other storage nodes boot and become passive.  They will be fully configured when ceph-ansible runs to completion on ncn-s001
-1. Once ncn-s001 notices that all other storage nodes have booted, ceph-ansible will begin ceph configuration.  This takes several minutes.
+    - The other storage nodes boot and become passive. They will be fully configured when ceph-ansible runs to completion on ncn-s001
+1. Once ncn-s001 notices that all other storage nodes have booted, ceph-ansible will begin Ceph configuration. This takes several minutes.
 1. Once ceph-ansible has finished on ncn-s001, then ncn-s001 waits for ncn-m002 to create /etc/kubernetes/admin.conf.
 1. Start watching the consoles for ncn-m002, ncn-m003 and at least one worker node
 1. Boot master nodes (ncn-m002 and ncn-m003) and all worker nodes at the same time
@@ -248,14 +248,14 @@ The configuration workflow described here is intended to help understand the exp
 1. Once ncn-s001 notices that ncn-m002 has created /etc/kubernetes/admin.conf, then ncn-s001 waits for any worker node to become available.
 1. Once each worker node notices that ncn-m002 has created /etc/cray/kubernetes/join-command-control-plan, then it will join the Kubernetes cluster.  
     - Now ncn-s001 should notice this from any one of the worker nodes and move forward with creation of config maps and running the post-ceph playbooks (s3, OSD pools, quotas, etc.)
-1. Once ncn-s001 creates etcd-backup-s3-credentials during the benji-backups role which is one of the last roles after ceph has been set up, then ncn-m001 notices this and moves forward
+1. Once ncn-s001 creates etcd-backup-s3-credentials during the benji-backups role which is one of the last roles after Ceph has been set up, then ncn-m001 notices this and moves forward
 
 
 <a name="deploy"></a>
 #### Deploy
 
-1. Change the default root password and ssh keys
-   > If you want to avoid using the default install root password and ssh keys for the NCNs, follow the
+1. Change the default root password and SSH keys
+   > If you want to avoid using the default install root password and SSH keys for the NCNs, follow the
    > NCN image customization steps in [110 NCN Image Customization](110-NCN-IMAGE-CUSTOMIZATION.md).
 
    This step is **strongly encouraged** for external/site deployments.
@@ -408,7 +408,7 @@ The configuration workflow described here is intended to help understand the exp
     ncn-s# ceph-volume inventory
     ```
     
-    The field "available" would be true if ceph sees the drive as empty and can
+    The field "available" would be true if Ceph sees the drive as empty and can
     be used, e.g.:
 
     ```
@@ -437,7 +437,7 @@ The configuration workflow described here is intended to help understand the exp
 <a name="apply-ncn-post-boot-workarounds"></a>
 ### Apply NCN Post-Boot Workarounds
 
-Check for workarounds in the `/opt/cray/csm/workarounds/after-ncn-boot` directory.  If there are any workarounds in that directory, run those now.   Instructions are in the `README` files.
+Check for workarounds in the `/opt/cray/csm/workarounds/after-ncn-boot` directory. If there are any workarounds in that directory, run those now. Instructions are in the `README` files.
 
 ```
 # Example
@@ -477,7 +477,7 @@ Note: If migrating from Shasta v1.3.x, the worker nodes have different IP addres
    - Aruba:`clear bgp *`
    - Mellanox: `clear ip bgp all`
 
-   > **`NOTE`**: At this point all but possibly one of the peering sessions with the BGP neighbors should be in IDLE or CONNECT state and not ESTABLISHED state.   If the switch is an Aruba, you will have one peering session established with the other switch.  You should check that all of the neighbor IPs are correct.
+   > **`NOTE`**: At this point all but possibly one of the peering sessions with the BGP neighbors should be in IDLE or CONNECT state and not ESTABLISHED state. If the switch is an Aruba, you will have one peering session established with the other switch. You should check that all of the neighbor IPs are correct.
 
 1. If needed, the following helper scripts are available for the various switch types:
 
@@ -532,7 +532,7 @@ Observe the output of the checks and note any failures, then remediate them.
    ```bash
    ncn# weave --local status connections  | grep failed
    ```
-   If you see messages like **'IP allocation was seeded by different peers'** then weave looks to have split-brained.  At this point it is necessary to wipe the ncns and start the pxe boot again:
+   If you see messages like **'IP allocation was seeded by different peers'** then weave looks to have split-brained. At this point it is necessary to wipe the ncns and start the pxe boot again:
 
    1. Wipe the ncns using the 'Basic Wipe' section of [DISK CLEANSLATE](051-DISK-CLEANSLATE.md).
    1. Return to the 'Boot the **Storage Nodes**' step of [Start Deployment](#start-deployment) section above.
