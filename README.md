@@ -26,14 +26,13 @@ Within this README.md file, these topics are described.
    * [Review and Contribution](#review-and-contribution)
    * [Releases](#releases)
    * [Versioning](#versioning)
-   * [Discussions](#discussions)
 
 
 <a name="offline-documentation"></a>
 ### Offline Documentation
 
-The CSM documentation is included within the CSM product release tarball. After it has been installed, the 
-documentation will be available at `/usr/share/doc/metal` as installed by the `docs-csm-install` RPM.
+The CSM documentation is included within the CSM product release tarball. After it has been installed, the
+documentation will be available at `/usr/share/doc/csm` as installed by the docs-csm-install RPM.
 
 This command will report the version of your installed documentation:
 
@@ -91,9 +90,3 @@ owner(s). This pattern follows semantic version as described by http://semver.or
   a page.
 
 Any contributor should feel welcome to ask for clarification on versioning within their change's review.
-
-<a name="discussions"></a>
-### Discussions
-
-For discussion about the CSM documentation, see the HPE Cray Slack [#docs-csm]. This is not public.
-External access may be available for various partners and customers.
