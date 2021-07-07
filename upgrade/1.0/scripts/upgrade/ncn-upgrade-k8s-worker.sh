@@ -76,8 +76,10 @@ if [[ $state_recorded == "0" ]]; then
         #
         break
       fi
+      set +e
       echo "$output" | grep -v -e Running -e Completed > /dev/null
       rc=$?
+      set -e
       if [[ "$rc" -eq 1 ]]; then
         echo "All etcd and speaker pods are running on $upgrade_ncn"
         break
