@@ -2,9 +2,16 @@
 
 This page provides directions on constructing the `application_node_config.yaml` file. This file controls how the `csi config init` command finds and treats application nodes discovered in the `hmn_connections.json` file when building the SLS Input file. 
 
-The `application_node_config.yaml` file can be constructed solely from information in the SHCD, but if the `hmn_connections.json` file is available, then it can be used as well.
+The `application_node_config.yaml` file can be constructed solely from information in the SHCD, but if the `hmn_connections.json` file is available, then that can be used instead.
 
-The following `hmn_connections.json` file contains 4 application nodes. When the `csi config init` command is used without a `application_node_config.yaml` file, only the application node `uan01` will be included the generated SLS input file. The other 3 application nodes will be ignored as they have unknown prefixes and will not be present in the SLS Input file.
+The HMN tab of the SHCD describes the air-cooled hardware present in the system and how these devices are connected to the Hardware Management Network (HMN). This information is required by CSM to perform hardware discovery and geolocation of air-cooled hardware in the system. The HMN tab may contain other hardware that is not managed by CSM, but is connected to the HMN.
+
+The `hmn_connections.json` file is derived from the HMN tab of a system SHCD, and is one of the seed files required by Cray Site Init (CSI) command to generate configuration files required to install CSM. The `hmn_connections.json` file is almost a 1 to 1 copy of the right-hand table in the HMN tab of the SHCD. It is an array of JSON objects, and each object represents a row from the HMN tab. Any row that is not understood by CSI will be ignored, this includes any additional devices connected to the HMN that are not managed by CSM.
+
+For a detailed mapping between the data in the SHCD and the equivalent information the `hmn_connections.json` file, see [Introduction to SHCD HMN Connections Rules](shcd_hmn_connections_rules.md#introduction) and [Application Nodes in SHCD HMN Connections Rules](shcd_hmn_connections_rules.md#application-node).
+
+The following excerpt from an `hmn_connections.json` file contains 4 application nodes. When the `csi config init` command is used without an `application_node_config.yaml` file, only the application node `uan01` will be included the generated SLS input file. The other 3 application nodes will be ignored because they have unknown prefixes and so will not be present in the generated SLS input file.
+
 ```json
 [
   {"Source":"uan01",     "SourceRack":"x3000", "SourceLocation":"u23", "DestinationRack":"x3000", "DestinationLocation":"u13", "DestinationPort":"j37"},
@@ -14,7 +21,7 @@ The following `hmn_connections.json` file contains 4 application nodes. When the
 ]
 ```
 
-This file is manually created and follows this format. The 3 fields `prefixes`, `prefix_hsm_subroles`, and `aliases` are optional and do not need to be specified if not needed.
+The `application_node_config.yaml` file is manually created and follows this format. The 3 fields `prefixes`, `prefix_hsm_subroles`, and `aliases` are optional and do not need to be specified if not needed.
 ```yaml
 ---
 # Additional application node prefixes to match on the Source field in the hmn_connections.json file
@@ -57,7 +64,7 @@ aliases: {}
 For this you will need:
 - The SHCD spreadsheet or the `hmn_connections.json` file for your system
 - Check the description for component names while mapping names between the SHCD and your `application_node_config.yaml` file.
-Refer to "Component Names (xnames)" in the _HPE Cray EX Hardware Management Administration Guide 1.5 S-8015_.
+See [Component Names (xnames)](../operations/Component_Names_xnames.md).
 
 
 #### Background
@@ -116,7 +123,7 @@ Example entry from the `hmn_connections.json` file. The source name is the `Sour
 
 3. __Add Application node aliases__
     The `aliases` field is an map of xnames (strings) to an array of aliases (strings).
-    Refer to "Component Names (xnames)" in the _HPE Cray EX Hardware Management Administration Guide 1.5 S-8015_.
+    See [Component Names (xnames)](../operations/Component_Names_xnames.md).
 
     By default, the `csi config init` command does not set the `ExtraProperties.Alias` field for application nodes in the SLS input file. 
 
@@ -130,3 +137,21 @@ Example entry from the `hmn_connections.json` file. The source name is the `Sour
       x3114c0s23b0n0: ["visualization-02", "vn-02"]
       x3115c0s23b0n0: ["uan-02"] # Added alias for the application node with the xname x3115c0s23b0n0
     ```
+
+4. Final information in example `application_node_config.yaml` from the data in the above steps.
+
+   ```yaml
+   ---
+   prefixes: # Additional application node prefixes
+     - gateway
+     - vn
+     - login # New prefix. Match source names that start with "login", such as login02
+   prefix_hsm_subroles:
+     gateway: Gateway
+     vn: Visualization
+     login: UAN # Application nodes that have the non-default prefix "login" are assigned the HSM SubRole "UAN"
+   aliases: # Application Node alias 
+     x3113c0s23b0n0: ["gateway-01"]
+     x3114c0s23b0n0: ["visualization-02", "vn-02"]
+     x3115c0s23b0n0: ["uan-02"] # Added alias for the application node with the xname x3115c0s23b0n0
+   ```
