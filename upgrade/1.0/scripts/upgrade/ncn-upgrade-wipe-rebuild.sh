@@ -48,7 +48,14 @@ if [[ $state_recorded == "0" ]]; then
 EOF
     elif [[ $upgrade_ncn == ncn-m* ]]; then
     cat <<'EOF' > wipe_disk.sh
+    usb_device=$(lsblk -b -l -o TRAN,PATH | grep usb)
+    usb_rc=$?
     set -e
+    if [[ "$usb_rc" -eq 0 ]]; then
+      umount /mnt/rootfs /mnt/sqfs /mnt/livecd /mnt/pitdata || true
+      usb_device_path=$(echo $usb_device | awk '{print $2}') || true
+      eject $usb_device_path || true
+    fi
     umount /var/lib/etcd /var/lib/sdu || true
     for md in /dev/md/*; do mdadm -S $md || echo nope ; done
     vgremove -f --select 'vg_name=~metal*' || true
