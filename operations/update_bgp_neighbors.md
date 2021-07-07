@@ -7,10 +7,9 @@ You will not have BGP peers until CSM ```install.sh``` has run. This is where Me
 - How do I check the status of the BGP neighbors?
   - Log into the spine switches and run `show bgp ipv4 unicast summary` for Aruba/HPE switches and `show ip bgp summary` for Mellanox.
 - Are my Neighbors stuck in IDLE?
-  -  Running `clear ip bgp all` on the Mellanox and `clear bgp *` on the Arubas will restart the BGP process, this process may need to be done when a system is reinstalled. If only some neighbors are showing `ESTABLISHED` you may need to run the command multiple times for all the BGP peers to come up. 
+  - Running `clear ip bgp all` on the Mellanox and `clear bgp *` on the Arubas will restart the BGP process. This process may need to be done when a system is reinstalled or when a worker node is rebuilt.
   - If you cannot get the neighbors out of IDLE, make sure that passive neighbors are configured. This is in the automated scripts and shown in the example below. Passive neighbors should only be configured on NCN neighbors not the switch to switch neighbors (Aruba Only)
 - The BGP neighbors will be the worker NCN IPs on the NMN (node management network) (VLAN002). If your system is using HPE/Aruba, one of the neighbors will be the other spine switch.
-- On the Aruba/HPE switches properly configured BGP will look like the following.
 
 ## Generate MetalLB configmap
 - Depending on the network architecture of your system you may need to peer with switches other than the spines. CSI has a BGP peers argument that accepts 'aggregation' as an option, if no option is defined it will default to the spines as being the MetalLB peers. 
@@ -48,10 +47,11 @@ USAGE: - <Spine01/Agg01> <Spine02/Agg02> <Path to CSI generated network files>
 
 Example: ./aruba_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/eniac/networks
 ```
-After this script is run you will need to verify the configuration and verify the BGP peers are ```ESTABLISHED```
+After this script is run you will need to verify the configuration and verify the BGP peers are ```ESTABLISHED```.   If it is early in the install process and the CSM services have not been deployed yet, there will not be speakers to peer with so the peering sessions may not be ```ESTABLISHED``` yet.
 
 ## Manual Process
 
+On the Aruba switches, the output of the `show bgp ipv4 unicast summary` command should look like the following if the MetalLB speaker pods are running.   If it is early in the install process and the CSM services have not been deployed yet, you may see the neighbors in Idle, Active, or Connect state.
 ```
 sw-spine-001# show bgp ipv4 unicast summary
 VRF : default
@@ -67,7 +67,7 @@ BGP Summary
  10.252.2.9      65533       54732   62927   00m:02w:04d  Established   Up         
  10.252.2.18     65533       54732   62911   00m:02w:04d  Established   Up 
  ```
-On the Mellanox switches, first you must run the switch commands listed in the Automated section above. Then the output should look like the following.
+On the Mellanox switches, first you must run the switch commands listed in the Automated section above. The output of the `show ip bgp summary` command should look like the following if the MetalLB speaker pods are running.   If it is early in the install process and the CSM services have not been deployed yet, you may see the neighbors in IDLE, ACTIVE, or CONNECT state.
  
 ```
 sw-spine-001 [standalone: master] # show ip bgp summary 
@@ -88,7 +88,7 @@ Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   
 10.252.0.8        4    65533        37421     42920     308       0      0      12:23:16:07   ESTABLISHED/51
 10.252.0.9        4    65533        37420     42962     308       0      0      12:23:16:07   ESTABLISHED/51
 ```
-- If the BGP neighbors are not in the `ESTABLISHED` state make sure the IPs are correct for the route-map and BGP configuration.
+- If the BGP neighbors are not in the `ESTABLISHED` state make sure the IPs are correct for the route-map and BGP configuration and the MetalLB speaker pods are running on all of the workers.
 - If IPs are incorrect you will have to update the configuration to match the IPs, the configuration below will need to be edited.
 - You can get the NCN IPs from the CSI generated files (NMN.yaml, CAN.yaml, HMN.yaml), these IPs are also located in /etc/dnsmasq.d/statics.conf on the LiveCD/ncn-m001.
 
@@ -111,7 +111,7 @@ dhcp-host=98:03:9b:bb:a9:94,10.252.1.15,ncn-w001,20m # Bond0 Mac0/Mac1
 dhcp-host=98:03:9b:bb:a9:94,10.254.1.24,ncn-w001,20m # HMN
 dhcp-host=98:03:9b:bb:a9:94,10.102.4.14,ncn-w001,20m # CAN
 ```
-- The Aruba configuration will require you to set the other peering switch as a BGP neighbor, the Mellanox configuration does not require this. 
+- The Aruba configuration will require you to set the other peering switch as a BGP neighbor, the Mellanox configuration does not require this.
 - You will need to delete the previous route-map, and BGP configuration on both switches.
 Aruba delete commands.
 ```
