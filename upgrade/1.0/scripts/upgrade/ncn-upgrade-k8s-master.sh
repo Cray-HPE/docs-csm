@@ -149,6 +149,7 @@ if [[ $state_recorded == "0" ]]; then
     else
         echo "$sat_backup_directory does not exist"
     fi
+    record_state "${state_name}" ${upgrade_ncn}
 else
     echo "====> ${state_name} has been completed"
 fi
