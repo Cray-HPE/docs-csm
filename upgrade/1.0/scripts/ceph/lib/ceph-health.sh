@@ -10,7 +10,9 @@ function wait_for_health_ok() {
       echo "ERROR: Giving up on waiting for ceph to become healthy..."
       break
     fi
+    set +e
     output=$(ceph -s | grep -q HEALTH_OK)
+    set -e
     if [[ "$?" -eq 0 ]]; then
       echo "Ceph is healthy -- continuing..."
       break
