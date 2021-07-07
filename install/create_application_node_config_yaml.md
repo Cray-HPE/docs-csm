@@ -123,7 +123,7 @@ Example entry from the `hmn_connections.json` file. The source name is the `Sour
 
 3. __Add Application node aliases__
     The `aliases` field is an map of xnames (strings) to an array of aliases (strings).
-    Refer to "Component Names (xnames)" in the _HPE Cray EX Hardware Management Administration Guide 1.5 S-8015_.
+    See [Component Names (xnames)](../operations/Component_Names_xnames.md).
 
     By default, the `csi config init` command does not set the `ExtraProperties.Alias` field for application nodes in the SLS input file. 
 
