@@ -103,14 +103,6 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-cat <<EOF
-Run: watch "ceph -s"
-
-- Make sure ceph health is OK
-- If ceph health is HEALTH_WARN and the cause is clock skew, you can still continue and next steps will attempt to fix it for you
-EOF
-read -p "After ceph health is ok then press any key to continue ..."
-
 state_name="POST_CEPH_IMAGE_UPGRADE_CONFIG"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
