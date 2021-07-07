@@ -48,7 +48,6 @@ Reference the following procedures when working with Kubernetes on the system:
 -   [About Postgres](About_Postgres.md)
     -   [Troubleshoot Postgres Databases with the Patroni Tool](Troubleshoot_Postgres_Databases_with_the_Patroni_Tool.md)
     -   [View Postgres Information for System Databases](View_Postgres_Information_for_System_Databases.md)
--   [Configure Kubernetes on Compute Nodes](Configure_Kubernetes_on_Compute_Nodes.md)
 -   [Kubernetes Troubleshooting Information](Kubernetes_Troubleshooting_Information.md)
     -   [Kubernetes Log File Locations](Kubernetes_Log_File_Locations.md)
     -   [Troubleshoot Liveliness or Readiness Probe Failures](Troubleshoot_Liveliness_Readiness_Probe_Failures.md)

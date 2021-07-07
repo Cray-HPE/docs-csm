@@ -40,7 +40,6 @@ The procedures in this section include the information required to boot, configu
 - [BOS Sessions](Sessions.md)
     - [Manage a BOS Session](Manage_a_BOS_Session.md)
     - [View the Status of a BOS Session](View_the_Status_of_a_BOS_Session.md)
-    - [Boot Compute Nodes with a Kubernetes Customized Image](Boot_Compute_Nodes_with_a_Kubernetes_Customized_Image.md)
     - [Limit the Scope of a BOS Session](Limit_the_Scope_of_a_BOS_Session.md)
     - [Configure the BOS Timeout When Booting Compute Nodes](Configure_the_BOS_Timeout_When_Booting_Nodes.md)
     - [Check the Progress of BOS Session Operations](Check_the_Progress_of_BOS_Session_Operations.md)

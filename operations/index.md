@@ -69,7 +69,6 @@ Build and customize image recipes with the Image Management Service (IMS).
      * [Create UAN Boot Images](image_management/Create_UAN_Boot_Images.md)
      * [Convert TGZ Archives to SquashFS Images](image_management/Convert_TGZ_Archives_to_SquashFS_Images.md)
      * [Customize an Image Root to Install Singularity](/operations/image_management/Customize_an_Image_Root_to_Install_Singularity.md)
-     * [Customize an Image Root to Install Compute Kubernetes](image_management/Customize_an_Image_Root_to_Install_Compute_Kubernetes.md)
    * [Delete or Recover Deleted IMS Content](image_management/Delete_or_Recover_Deleted_IMS_Content.md)
 
 <a name="boot-orchestration"></a>
@@ -87,7 +86,6 @@ Use the Boot Orchestration Service \(BOS\) to boot, configure, and shutdown coll
    * [BOS Sessions](boot_orchestration/Sessions.md)
      * [Manage a BOS Session](boot_orchestration/Manage_a_BOS_Session.md)
      * [View the Status of a BOS Session](boot_orchestration/View_the_Status_of_a_BOS_Session.md)
-     * [Boot Compute Nodes with a Kubernetes Customized Image](boot_orchestration/Boot_Compute_Nodes_with_a_Kubernetes_Customized_Image.md)
      * [Limit the Scope of a BOS Session](boot_orchestration/Limit_the_Scope_of_a_BOS_Session.md)
      * [Configure the BOS Timeout When Booting Compute Nodes](boot_orchestration/Configure_the_BOS_Timeout_When_Booting_Nodes.md)
      * [Check the Progress of BOS Session Operations](boot_orchestration/Check_the_Progress_of_BOS_Session_Operations.md)
@@ -289,7 +287,6 @@ The system management components are broken down into a series of microservices.
    *   [About Postgres](kubernetes/About_Postgres.md)
        *   [Troubleshoot Postgres Databases with the Patroni Tool](kubernetes/Troubleshoot_Postgres_Databases_with_the_Patroni_Tool.md)
        *   [View Postgres Information for System Databases](kubernetes/View_Postgres_Information_for_System_Databases.md)
-   *   [Configure Kubernetes on Compute Nodes](kubernetes/Configure_Kubernetes_on_Compute_Nodes.md)
    *   [Kubernetes Troubleshooting Information](kubernetes/Kubernetes_Troubleshooting_Information.md)
       *   [Kubernetes Log File Locations](kubernetes/Kubernetes_Log_File_Locations.md)
       *   [Troubleshoot Liveliness or Readiness Probe Failures](kubernetes/Troubleshoot_Liveliness_Readiness_Probe_Failures.md)
