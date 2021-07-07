@@ -35,6 +35,7 @@ if [[ $state_recorded == "0" ]]; then
         fi
     done
     echo "SAT local files backed up to $sat_backup_directory"
+    record_state "${state_name}" ${upgrade_ncn}
 else
     echo "====> ${state_name} has been completed"
 fi
