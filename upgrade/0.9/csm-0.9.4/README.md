@@ -24,6 +24,7 @@ Procedures:
 - [Disable TPM Kernel Module](#disable-tpm-kernel-module)
 - [Run Validation Checks (Post-Upgrade)](#run-validation-checks-post-upgrade)
 - [Verify CSM Version in Product Catalog](#verify-version)
+- [Update customizations.yaml](#update-customizations)
 - [Exit Typescript](#exit-typescript)
 
 
@@ -104,7 +105,7 @@ section sets the expected environment variables to appropriate values.
    ncn-m001# echo $CSM_RELEASE_VERSION
    ```
 
-1. **NEEDS REVIEW** Download and install/upgrade the _latest_ workaround and
+1. Download and install/upgrade the _latest_ workaround and
    documentation RPMs. If this machine does not have direct internet access
    these RPMs will need to be externally downloaded and then copied to be
    installed.
@@ -112,6 +113,20 @@ section sets the expected environment variables to appropriate values.
    ```bash
    ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm-install/docs-csm-install-latest.noarch.rpm
    ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
+   ```
+
+1. **After completing the previous step**, apply the workaround in the following directory, 
+   even if it has been previously applied on the system.
+
+   ```
+   /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-1612
+   ```
+   
+   See the `README.md` file in that directory for instructions on how to apply the workaround. 
+   It requires you to run a script. On successful application of the workaround, verify that 
+   this is the final line of script output:
+   ```
+   Done. WAR successfully applied.
    ```
 
 1. Set `CSM_SCRIPTDIR` to the scripts directory included in the docs-csm RPM
@@ -409,6 +424,9 @@ Other health checks may be run as desired.
 > Failures of these tests due to locked components as shown above can be safely
 > ignored.
 
+**`NOTE:`** If you plan to do any further CSM health validation, you should follow the validation
+procedures found in the CSM v1.0 documentation. Some of the information in the CSM v0.9 validation
+documentation is no longer accurate in CSM v1.0.
 
 <a name="verify-version"></a>
 ## Verify CSM Version in Product Catalog
@@ -426,6 +444,48 @@ Other health checks may be run as desired.
 
    ```bash
    ncn-m001# kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r  - '"0.9.4".configuration.import_date'
+   ```
+
+
+<a name="update-customizations"></a>
+## Update customizations.yaml
+
+1. If you manage customizations.yaml in an external Git repository ([as
+   recommended](../../../install/prepare_site_init.md#version-control-site-init-files)),
+   then clone a local working tree, e.g.:
+
+   ```bash
+   ncn-m001# git clone <URL> site-init
+   ncn-m001# cd site-init
+   ```
+
+   Otherwise extract customizations.yaml from the `site-init` secret:
+
+   ```bash
+   ncn-m001# cd /tmp
+   ncn-m001# kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
+   ```
+
+2. Remove the Gitea PVC configuration from customizations.yaml:
+
+   ```bash
+   ncn-m001# yq d -i customizations.yaml 'spec.kubernetes.services.gitea.cray-service.persistentVolumeClaims'
+   ```
+
+3. Update the `site-init` secret:
+
+   ```bash
+   ncn-m001# kubectl delete secret -n loftsman site-init
+   ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ```
+
+4. Commit changes to customizations.yaml if using an external Git repository,
+   e.g.:
+
+   ```bash
+   ncn-m001# git add customizations.yaml
+   ncn-m001# git commit -m 'Remove Gitea PVC configuration from customizations.yaml'
+   ncn-m001# git push
    ```
 
 
