@@ -111,48 +111,87 @@ about the `cray-crus-` pod state.
 <a name="pet-ncnpostgreshealthchecks"></a>
 #### 1.2 ncnPostgresHealthChecks
 
-Health Check scripts can be found and run on any worker or master node from any directory.
+
+Postgres Health Check scripts can be found and run on any worker or master node from any directory.
+The ncnPostgresHealthChecks script reports the following postgres health information:
+* The status of each postgresql resource
+* The number of cluster members
+* The node which is the Leader
+* The state of the each cluster member
+* Replication Lag for any cluster member
+* Kubernetes postgres pod status
+
+Execute ncnPostgresHealthChecks script and analyze the output of each individual check.
 
    ```bash
    ncn# /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
    ```
+1. Check the STATUS of the postgresql resources which are managed by the operator:
+    ```bash
+    NAMESPACE   NAME                         TEAM                VERSION   PODS   VOLUME   CPU-REQUEST   MEMORY-REQUEST   AGE   STATUS
+    services    cray-sls-postgres            cray-sls            11        3      1Gi                                     12d   Running
+    ```
+    If any postgresql resources remains in a STATUS other than Running (such as SyncFailed), refer to "About Postgres" in the _HPE Cray EX System Administration Guide 1.5 S-8001_.
 
-For each Postgres cluster the ncnPostgresHealthChecks script determines the leader pod and then reports the status of all postgres pods in the cluster.
 
-Execute ncnPostgresHealthChecks script. Verify leader for each cluster and status of cluster members.
+2. For a particular Postgres cluster, the expected output is similar to the following:
+    ```bash
+    --- patronictl, version 1.6.5, list for services leader pod cray-sls-postgres-0 ---
+    + Cluster: cray-sls-postgres (6938772644984361037) ---+----+-----------+
+    |        Member       |    Host    |  Role  |  State  | TL | Lag in MB |
+    +---------------------+------------+--------+---------+----+-----------+
+    | cray-sls-postgres-0 | 10.47.0.35 | Leader | running |  1 |           |
+    | cray-sls-postgres-1 | 10.36.0.33 |        | running |  1 |         0 |
+    | cray-sls-postgres-2 | 10.44.0.42 |        | running |  1 |         0 |
+    +---------------------+------------+--------+---------+----+-----------+
+    ```
+    The points below will cover the data in the table above for Member, Role, State and Lag in MB columns.
 
-For a particular Postgres cluster expected output similar to the following:
-```bash
---- patronictl, version 1.6.5, list for services leader pod cray-sls-postgres-0 ---
-+ Cluster: cray-sls-postgres (6938772644984361037) ---+----+-----------+
-|        Member       |    Host    |  Role  |  State  | TL | Lag in MB |
-+---------------------+------------+--------+---------+----+-----------+
-| cray-sls-postgres-0 | 10.47.0.35 | Leader | running |  1 |           |
-| cray-sls-postgres-1 | 10.36.0.33 |        | running |  1 |         0 |
-| cray-sls-postgres-2 | 10.44.0.42 |        | running |  1 |         0 |
-+---------------------+------------+--------+---------+----+-----------+
-```
-Check the leader pod’s log output for its status as the leader. Such as:
-```bash
-i am the leader with the lock
-```
-For example:
-```bash
---- Logs for services Leader Pod cray-sls-postgres-0 ---
-  ERROR: get_cluster
-  INFO: establishing a new patroni connection to the postgres cluster
-  INFO: initialized a new cluster
-  INFO: Lock owner: cray-sls-postgres-0; I am cray-sls-postgres-0
-  INFO: Lock owner: None; I am cray-sls-postgres-0
-  INFO: no action. i am the leader with the lock
-  INFO: No PostgreSQL configuration items changed, nothing to reload.
-  INFO: postmaster pid=87
-  INFO: running post_bootstrap
-  INFO: trying to bootstrap a new cluster
-```
-Errors reported previous to the lock status, such as **ERROR: get_cluster** can be ignored.
+For each Postgres cluster:
+- Verify there are three cluster members (with the exception of sma-postgres-cluster where there should be only two cluster members).
+If the number of cluster members is not correct, refer to "About Postgres" in the _HPE Cray EX System Administration Guide 1.5 S-8001_.
 
-Refer to "About Postgres" in the _HPE Cray EX System Administration Guide 1.5 S-8001_.
+- Verify there is one cluster member with the Leader Role and log output indicates expected status. Such as:
+    ```bash
+    i am the leader with the lock
+    ```
+    For example:
+    ```bash
+    --- Logs for services Leader Pod cray-sls-postgres-0 ---
+      ERROR: get_cluster
+      INFO: establishing a new patroni connection to the postgres cluster
+      INFO: initialized a new cluster
+      INFO: Lock owner: cray-sls-postgres-0; I am cray-sls-postgres-0
+      INFO: Lock owner: None; I am cray-sls-postgres-0
+      INFO: no action. i am the leader with the lock
+      INFO: No PostgreSQL configuration items changed, nothing to reload.
+      INFO: postmaster pid=87
+      INFO: running post_bootstrap
+      INFO: trying to bootstrap a new cluster
+    ```
+    Errors reported previous to the lock status, such as **ERROR: get_cluster** can be ignored.  
+    If there is no Leader, refer to "About Postgres" in the _HPE Cray EX System Administration Guide 1.5 S-8001_.
+
+- Verify the State of each cluster member is 'running'.
+If any cluster members are found to be in a non 'running' state (such as 'start failed'), refer to "About Postgres" in the _HPE Cray EX System Administration Guide 1.5 S-8001_.
+
+- Verify there is no large or growing Lag.
+If any cluster members are found to have Lag, refer to "About Postgres" in the _HPE Cray EX System Administration Guide 1.5 S-8001_.
+
+3. Check that all Kubernetes Postgres pods have a STATUS of Running
+    ```bash
+    NAMESPACE           NAME                                                              READY   STATUS             RESTARTS   AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+    services            cray-sls-postgres-0                                               3/3     Running            3          6d      10.38.0.102   ncn-w002   <none>           <none>
+    services            cray-sls-postgres-1                                               3/3     Running            3          5d20h   10.42.0.89    ncn-w001   <none>           <none>
+    services            cray-sls-postgres-2                                               3/3     Running            0          5d20h   10.36.0.31    ncn-w003   <none>           <none>
+    ```
+
+    If any postgres pods have a STATUS other then Running, gather more information from the pod and refer to "About Postgres" in the _HPE Cray EX System Administration Guide 1.5 S-8001_.
+
+    ```bash
+    ncn# kubectl describe pod <pod name> -n <pod namespace>
+    ncn# kubectl logs <pod name> -n <pod namespace> -c <pod container name>
+    ```
 
 <a name="pet-bgp"></a>
 #### 1.3 BGP Peering Status and Reset
