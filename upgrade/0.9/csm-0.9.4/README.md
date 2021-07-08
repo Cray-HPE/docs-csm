@@ -13,6 +13,7 @@ Procedures:
 - [Preparation](#preparation)
 - [Run Validation Checks (Pre-Upgrade)](#run-validation-checks-pre-upgrade)
 - [Update /etc/hosts on Workers](#update-hosts-on-workers)
+- [Check For Manually Created Unbound PSP](#check-unbound-psp)
 - [Setup Nexus](#setup-nexus)
 - [Backup VCS Content](#backup-vcs-content)
 - [Upgrade Services](#upgrade-services)
