@@ -236,7 +236,7 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
 
 ### Kubernetes
 
-The system management components are broken down into a series of microservices. Each service is independently deployable, fine-grained, and uses lightweight protocols. As a result, the system's microservices are modular, resilient, and can be updated independently. Services within the Kubernetes architecture communicate via REST APIs.
+The system management components are broken down into a series of micro-services. Each service is independently deployable, fine-grained, and uses lightweight protocols. As a result, the system's micro-services are modular, resilient, and can be updated independently. Services within the Kubernetes architecture communicate via REST APIs.
 
    *   [Kubernetes Architecture](kubernetes/Kubernetes_Architecture.md)
    *   [About kubectl](kubernetes/About_kubectl.md)
@@ -272,25 +272,6 @@ The system management components are broken down into a series of microservices.
        *   [Determine if Pods are Hitting Resource Limits](kubernetes/Determine_if_Pods_are_Hitting_Resource_Limits.md)
        *   [Increase Pod Resource Limits](kubernetes/Increase_Pod_Resource_Limits.md)
        *   [Increase Kafka Pod Resource Limits](kubernetes/Increase_Kafka_Pod_Resource_Limits.md)
-   *   [About etcd](kubernetes/About_etcd.md)
-       *   [Check the Health and Balance of etcd Clusters](kubernetes/Check_the_Health_and_Balance_of_etcd_Clusters.md)
-       *   [Rebuild Unhealthy etcd Clusters](kubernetes/Rebuild_Unhealthy_etcd_Clusters.md)
-       *   [Backups for etcd-operator Clusters](kubernetes/Backups_for_etcd-operator_Clusters.md)
-       *   [Create a Manual Backup of a Healthy etcd Cluster](kubernetes/Create_a_Manual_Backup_of_a_Healthy_etcd_Cluster.md)
-       *   [Restore an etcd Cluster from a Backup](kubernetes/Restore_an_etcd_Cluster_from_a_Backup.md)
-       *   [Repopulate Data in etcd Clusters When Rebuilding Them](kubernetes/Repopulate_Data_in_etcd_Clusters_When_Rebuilding_Them.md)
-       *   [Restore Bare-Metal etcd Clusters from an S3 Snapshot](kubernetes/Restore_Bare-Metal_etcd_Clusters_from_an_S3_Snapshot.md)
-       *   [Rebalance Healthy etcd Clusters](kubernetes/Rebalance_Healthy_etcd_Clusters.md)
-       *   [Check for and Clear etcd Cluster Alarms](kubernetes/Check_for_and_Clear_etcd_Cluster_Alarms.md)
-       *   [Report the Endpoint Status for etcd Clusters](kubernetes/Report_the_Endpoint_Status_for_etcd_Clusters.md)
-       *   [Clear Space in an etcd Cluster Database](kubernetes/Clear_Space_in_an_etcd_Cluster_Database.md)
-   *   [About Postgres](kubernetes/About_Postgres.md)
-       *   [Troubleshoot Postgres Databases with the Patroni Tool](kubernetes/Troubleshoot_Postgres_Databases_with_the_Patroni_Tool.md)
-       *   [View Postgres Information for System Databases](kubernetes/View_Postgres_Information_for_System_Databases.md)
-   *   [Kubernetes Troubleshooting Information](kubernetes/Kubernetes_Troubleshooting_Information.md)
-      *   [Kubernetes Log File Locations](kubernetes/Kubernetes_Log_File_Locations.md)
-      *   [Troubleshoot Liveliness or Readiness Probe Failures](kubernetes/Troubleshoot_Liveliness_Readiness_Probe_Failures.md)
-      *   [Troubleshoot Unresponsive kubectl Commands](kubernetes/Troubleshoot_Unresponsive_kubectl_Commands.md)
 
 
 <a name="package-repository-management"></a>
@@ -372,7 +353,7 @@ HPE Cray EX systems are designed so that system management services \(SMS\) are 
 
    * [Resiliency](resiliency/Resiliency.md)
    * [Resilience of System Management Services](resiliency/Resilience_of_System_Management_Services.md)
-   * [Restore System Functionality if a Kubernetes Worker Node is Down](resiliency/Restore_System_Functionality_if_a_Kubernetes%20Worker_Node_is_Down.md)
+   * [Restore System Functionality if a Kubernetes Worker Node is Down](resiliency/Restore_System_Functionality_if_a_Kubernetes_Worker_Node_is_Down.md)
    * [Recreate StatefulSet Pods on Another Node](resiliency/Recreate_StatefulSet_Pods_on_Another_Node.md)
    * [NTP Resiliency](resiliency/NTP_Resiliency.md)
 
@@ -498,7 +479,7 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   * [Manually Wipe Boot Configuration on Nodes to be Reinstalled](node_management/Manually_Wipe_Boot_Configuration_on_Nodes_to_be_Reinstalled.md)
   * [Troubleshoot Issues with Redfish Endpoint DiscoveryCheck for Redfish Events from Nodes](node_management/Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md)
   * [Reset Credentials on Redfish Devices](node_management/Reset_Credentials_on_Redfish_Devices_for_Reinstallation.md)
-  * [Access and Update Settings for Replacement NCNs](node_management/Access_and_Update_the_Settings_for_Replacement_NCNs_.md)
+  * [Access and Update Settings for Replacement NCNs](node_management/Access_and_Update_the_Settings_for_Replacement_NCNs.md)
   * [Change Settings for HMS Collector Polling of Air Cooled Nodes](node_management/Change_Settings_for_HMS_Collector_Polling_of_Air_Cooled_Nodes.md)
   * [Use the Physical KVM](node_management/Use_the_Physical_KVM.md)
   * [Launch a Virtual KVM on Gigabyte Servers](node_management/Launch_a_Virtual_KVM_on_Gigabyte_Servers.md)

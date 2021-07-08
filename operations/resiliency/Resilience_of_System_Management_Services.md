@@ -6,12 +6,12 @@ HPE Cray EX systems are designed so that system management services \(SMS\) are 
 -   At least three utility storage nodes provide persistent storage for the services running on the Kubernetes management nodes. When one of the utility storage nodes goes down, operations \(such as jobs running across compute nodes\) are expected to continue.
 -   At least three NCNs are configured as Kubernetes worker nodes. If one of only three Kubernetes worker nodes were to go down, it would be much more difficult for the remaining two NCN worker nodes to handle the total balance of pods. It is less significant to lose one of the NCN worker nodes if the system has more than three NCN worker nodes because there are more worker nodes able to handle the pod load.
 -   The state and configuration of the Kubernetes cluster are stored in an etcd cluster distributed across the Kubernetes master nodes. This cluster is also backed up on an interval, and backups are pushed to Ceph Rados Gateway \(S3\).
--   A microservice can run on any node that meets the requirements for that microservice, such as appropriate hardware attributes, which are indicated by labels and taints.
--   All microservices have shared persistent storage so that they can be restarted on any NCN in the Kubernetes management cluster without losing state.
+-   A micro-service can run on any node that meets the requirements for that micro-service, such as appropriate hardware attributes, which are indicated by labels and taints.
+-   All micro-services have shared persistent storage so that they can be restarted on any NCN in the Kubernetes management cluster without losing state.
 
-Kubernetes is designed to ensure that the wanted number of deployments of a microservice are always running on one or more worker nodes. In addition, it ensures that if one wotker node becomes unresponsive, the microservices that were running on it are migrated to another NCN that is up and meets the requirements of those microservices.
+Kubernetes is designed to ensure that the wanted number of deployments of a micro-service are always running on one or more worker nodes. In addition, it ensures that if one wotker node becomes unresponsive, the micro-services that were running on it are migrated to another NCN that is up and meets the requirements of those micro-services.
 
-See [Restore System Functionality if a Kubernetes Worker Node is Down](Restore_System_Functionality_if_a_Kubernetes%20Worker_Node_is_Down.md) for more information.
+See [Restore System Functionality if a Kubernetes Worker Node is Down](Restore_System_Functionality_if_a_Kubernetes_Worker_Node_is_Down.md) for more information.
 
 ### Resiliency Improvements
 
@@ -41,7 +41,7 @@ In addition, the following general criteria describe the expected behavior of th
 
 ### Known Issues and Workarounds
 
-Though an effort was made to increase the number of pod replicas for services that were critical to system operations such as booting computes, launching jobs, and running applications across the compute plane, there are still some services that remain with single copies of their pods. In general, this does not result in a critical issue if these singleton pods are on an NCN worker node that goes down. Most microservices should \(after being terminated by Kubernetes\), simply be rescheduled onto a remaining NCN worker node. That assumes that the remaining NCN worker nodes have sufficient resources available and meet the hardware/network requirements of the pods.
+Though an effort was made to increase the number of pod replicas for services that were critical to system operations such as booting computes, launching jobs, and running applications across the compute plane, there are still some services that remain with single copies of their pods. In general, this does not result in a critical issue if these singleton pods are on an NCN worker node that goes down. Most micro-services should \(after being terminated by Kubernetes\), simply be rescheduled onto a remaining NCN worker node. That assumes that the remaining NCN worker nodes have sufficient resources available and meet the hardware/network requirements of the pods.
 
 However, it is important to note that some pods, when running on a worker NCN that goes down, may require some manual intervention to be rescheduled. Note the workarounds in this section for such pods. Work is on-going to correct these issues in a future release.
 

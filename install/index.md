@@ -6,7 +6,7 @@ payload. The initial node used to bootstrap the installation process is called t
 Pre-Install Toolkit is installed there. Once the management network switches have been configured, the other
 management nodes can be deployed with an operating system and the software to create a Kubernetes cluster
 utilizing Ceph storage. The CSM services provide essential software infrastructure including the API gateway
-and many microservices with REST APIs for managing the system. Once administrative access has been configured,
+and many micro-services with REST APIs for managing the system. Once administrative access has been configured,
 the installation of CSM software and nodes can be validated with health checks before doing operational tasks
 like the check and update of firmware on system components or the preparation of compute nodes. 
 Once the CSM installation has completed, other product streams for the HPE Cray EX system can be installed.

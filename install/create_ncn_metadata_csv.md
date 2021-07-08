@@ -33,7 +33,7 @@ For each management node, the xname, role, and subrole can be extracted from the
 MAC address information needs to be collected another way.
 
 Check the description for component names while mapping names between the SHCD and your `ncn_metadata.csv` file.
-Refer to "Component Names (xnames)" in the _HPE Cray EX Hardware Management Administration Guide 1.5 S-8015_.
+See [Component Names (xnames)](../operations/Component_Names_xnames.md).
 
 There are two interesting parts to the NCN metadata file:
 - The MAC of the BMC

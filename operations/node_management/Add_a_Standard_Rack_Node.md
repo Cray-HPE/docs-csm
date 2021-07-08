@@ -211,7 +211,7 @@ For this procedure, a new object must be created in the SLS and modifications wi
     ncn-m001# cray fas actions create CUSTOM_DEVICE_PARAMETERS.json
     ```
 
-    See Firmware Action Service \(FAS\) in the *HPE Cray EX Hardware Administration Guide, S-8015*.
+    See [Update Firmware with FAS](../firmware/Update_Firmware_with_FAS.md).
 
 14. Use the Boot Orchestration Service \(BOS\) to power on and boot the nodes.
 

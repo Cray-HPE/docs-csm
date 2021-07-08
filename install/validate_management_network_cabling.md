@@ -18,7 +18,7 @@ doing the [Configure Management Network Switches](index.md#configure_management_
      the cable is connected. For example, `x3000u01s1-j1`, means the device in cabinet x3000 at location u01 within the cabinet and in slot s1 with port j1.
      The physical cable connecting source to destination should be labelled with `source label info` and `destination label info`.
 
-     Refer to "Component Names (xnames)" in the _HPE Cray EX Hardware Management Administration Guide 1.5 S-8015_.
+     See [Component Names (xnames)](../operations/Component_Names_xnames.md).
      
 
       | Source | Source Label Info | Destination Label Info | Destination |
