@@ -51,7 +51,7 @@ Perform these steps to ensure the Gitea PVC configuration is not in customizatio
 2. Remove the Gitea PVC configuration from customizations.yaml:
 
    ```bash
-   ncn-m001# yq d -i customizations.yaml 'spec.kubernetes.services.gitea.cray-service.persistentVolumeClaims'
+   ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/update-customizations.sh -i customizations.yaml
    ```
 
 3. Update the `site-init` secret:
