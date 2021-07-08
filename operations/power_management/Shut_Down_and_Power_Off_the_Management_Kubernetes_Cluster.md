@@ -40,7 +40,7 @@ An authentication token is required to access the API gateway and to use the `sa
 4. Check the status of NCN no wipe settings. Make sure `metal.no-wipe=1`. If a management NCN is set to `metal.no-wipe==wipe`, see [Check and Set the metal.no-wipe Setting on NCNs](../node_management/Check_and_Set_the_metalno-wipe_Setting_on_NCNs.md) before proceeding.
 
    ```bash
-   ncn-m001# /opt/cray/platform-utils/getXnames.sh
+   ncn-m001# /opt/cray/platform-utils/ncnGetXnames.sh
                 +++++ Get NCN Xnames +++++
    === Can be executed on any worker or master ncn node. ===
    === Executing on ncn-m001, Thu Mar 18 20:58:04 UTC 2021 ===
