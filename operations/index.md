@@ -472,7 +472,7 @@ Use the Hardware State Manager \(HSM\) to monitor and interrogate hardware compo
     * [Component Partition Members](hardware_state_manager/Component_Partition_Members.md)
     * [Component Memberships](hardware_state_manager/Component_Memberships.md)
   * [Hardware State Manager (HSM) State and Flag Fields](hardware_state_manager/Hardware_State_Manager_HSM_State_and_Flag_Fields.md)
-  * [Add a NCN into the HSM Database](hardware_state_manager/Add_a_NCN_into_HSM_Database.md)
+  * [Add an NCN to the HSM Database](hardware_state_manager/Add_an_NCN_to_the_HSM_Database.md)
   * [Add a Switch to the HSM Database](hardware_state_manager/Add_a_Switch_to_the_HSM_Database.md)
   * [Manage NodeMaps with HSM](hardware_state_manager/Manage_NodeMaps_with_HSM.md)
 

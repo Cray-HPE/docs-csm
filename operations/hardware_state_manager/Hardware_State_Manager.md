@@ -37,7 +37,7 @@ Generally, nodes transition from `Off`  to `On`  to `Ready` when going from `Off
   * [Component Partition Members](Component_Partition_Members.md)
   * [Component Memberships](Component_Memberships.md)
 * [Hardware State Manager (HSM) State and Flag Fields](Hardware_State_Manager_HSM_State_and_Flag_Fields.md)
-* [Add a NCN into the HSM Database](Add_a_NCN_into_HSM_Database.md)
+* [Add an NCN to the HSM Database](Add_an_NCN_to_the_HSM_Database.md)
 * [Add a Switch to the HSM Database](Add_a_Switch_to_the_HSM_Database.md)
 * [Manage NodeMaps with HSM](Manage_NodeMaps_with_HSM.md)
 * [HSM Subroles](HSM_Subroles.md)

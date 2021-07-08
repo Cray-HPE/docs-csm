@@ -6,8 +6,10 @@ The following workflows are intended to be high-level overviews of image managem
 
 The workflows in this section include:
 
-  * Create a New Image
-  * Customize an Image
+  * [Create a New Image](#create-image)
+  * [Customize an Image](#customize-image)
+
+<a name="create-image"></a>
 
 ### Create a New Image
 
@@ -88,6 +90,8 @@ Mentioned in this workflow:
 
     The new image artifacts are uploaded to Ceph S3.
 
+
+<a name="customize-image"></a>
 
 ### Customize an Image
 

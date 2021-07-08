@@ -4,7 +4,7 @@ Boot UANs with an image so that they are ready for user logins.
 
 ### Prerequisites
 
-[Create UAN Boot Images](Create_UAN_Boot_Images.md)
+UAN boot images and a BOS session template have been created. See [Create UAN Boot Images](../image_management/Create_UAN_Boot_Images.md).
 
 ### Procedure
 

@@ -1,4 +1,4 @@
-## Add a NCN into the HSM Database
+## Add an NCN to the HSM Database
 
 This procedure details how to customize the bare-metal non-compute node \(NCN\) on a system and add the NCN to the Hardware State Manager \(HSM\) database.
 
@@ -11,7 +11,6 @@ The examples in this procedure use `ncn-w0003-nmn` as the Customer Access Node \
 -   Keycloak authentication is complete.
 
 ### Procedure
-
 
 1.  Locate the xname of the system.
 
