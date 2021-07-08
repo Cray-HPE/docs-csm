@@ -31,7 +31,7 @@ however some older systems still have this legacy connection to their leaf switc
 
 This uses the [Mellanox CLI Tools][1] for configuring UEFI PXE from the Linux command line.
 
-On any NCN (using 0.0.10 k8s, or 0.0.8 ceph; anything built on ncn-0.0.21 or higher) can run this to begin interacting with Mellanox cards:
+On any NCN (using 0.0.10 k8s, or 0.0.8 Ceph; anything built on ncn-0.0.21 or higher) can run this to begin interacting with Mellanox cards:
 If you are recovering NCNs with an earlier image without the Mellanox tools, please refer to the section on the bottom of the Mellanox this segment.
 
 ```bash

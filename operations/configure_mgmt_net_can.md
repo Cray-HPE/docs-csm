@@ -17,7 +17,7 @@ The customer's switch must be connected to the spine switches with a p2p subnet 
 
 There are two routes configured on the customer's switch to route traffic for the CAN subnet to each of the spine switches. ECMP will load balance the traffic across each of the switches when both links are up and only use the active link when one of the links goes down.
 
-The CAN is connected between each spine switch and the NCNs through vlan 7 running over the physical connections between the spines and the port on the NCN.  This is the same physical connection used for the NMN and HMN on the NCNs.
+The CAN is connected between each spine switch and the NCNs through vlan 7 running over the physical connections between the spines and the port on the NCN. This is the same physical connection used for the NMN and HMN on the NCNs.
 
 The two physical connections between the NCN and spines is MLAG'ed. MAGP/VSX is used to provide a single virtual router gateway that can be used as the default route on each of the NCNs.
 
