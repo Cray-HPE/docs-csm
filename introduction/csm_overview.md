@@ -5,15 +5,12 @@ This CSM Overview describes the Cray System Management ecosystem with the hardwa
 
 The CSM installation prepares and deploys a distributed system across a group of management nodes organized into a Kubernetes cluster which uses Ceph for utility storage. These nodes perform their function as Kubernetes master nodes, Kubernetes worker nodes, or utility storage nodes with the Ceph storage.
 
-System services on these nodes are provided as containerized microservices packaged for deployment as helm charts. These services are orchestrated by Kubernetes to be scheduled on Kubernetes worker nodes with horizontal scaling to increase or decrease the number of instances of some services as demand for them varies, such as when booting many compute nodes or application nodes.
+System services on these nodes are provided as containerized micro-services packaged for deployment as helm charts. These services are orchestrated by Kubernetes to be scheduled on Kubernetes worker nodes with horizontal scaling to increase or decrease the number of instances of some services as demand for them varies, such as when booting many compute nodes or application nodes.
 
 ### Topics: 
    1. [System Nodes and Networks](#system_nodes_and_networks)
    1. [Default IP Address Ranges](#default_ip_address_ranges)
    1. [Resilience of System Management Services](#resilience_of_system_management_services)
-      1. [Expected Resiliency Behavior](#expected_resiliency_behavior)
-      1. [Known Resiliency Issues and Workarounds](#known_resiliency_issues_and_workarounds)
-      1. [Future Resiliency Improvements](#future_resiliency_improvements)
    1. [Access to System Management Services](#access_to_system_management_services)
 
 ## Details
@@ -112,7 +109,7 @@ There are several network values and other pieces of system information that are
    * The main Customer Access Network (CAN) subnet and the two address pools mentioned below need to be
 part of the main subnet.
 
-      For more information on the CAN, refer to "Customer Access Network (CAN)" in the _HPE Cray EX System Administration Guide 1.5 S-8001_.
+      For more information on the CAN, see [Customer Access Network (CAN)](../operations/network/customer_access_network/Customer_Access_Network_CAN.md).
 
       * Subnet for the MetalLB static address pool (can-static-pool), which is used for services that need to be pinned to the same IP address, such as the system DNS service.
       * Subnet for the MetalLB dynamic address pool (can-dynamic-pool), which is used for services such as User Access Instances (UAIs) that can be reached by DNS.
@@ -145,113 +142,18 @@ is no single point of failure. The design of the system allows for resiliency in
    * The state and configuration of the Kubernetes cluster are stored in an etcd cluster distributed across the
    Kubernetes master nodes. This cluster is also backed up on an interval, and backups are pushed to Ceph
    Rados Gateway (S3).
-   * A microservice can run on any node that meets the requirements for that microservice, such as appropriate
-   hardware attributes, which are indicated by labels and taints.
-   * All microservices have shared persistent storage so that they can be restarted on any worker node in the Kubernetes
+   * A micro-service can run on any node that meets the requirements for that micro-service, such as appropriate
+   hardware attributes, which are indicated by Kubernetes labels and taints.
+   * All micro-services have shared persistent storage so that they can be restarted on any worker node in the Kubernetes
    management cluster without losing state.
 
-Kubernetes is designed to ensure that the wanted number of deployments of a microservice are always running
+Kubernetes is designed to ensure that the desired number of deployments of a micro-service are always running
 on one or more worker nodes. In addition, it ensures that if one wotker node becomes unresponsive, the
-microservices that were running on it are migrated to another worker node that is up and meets the requirements of those
-microservices.
+micro-services that were running on it are migrated to another worker node that is up and meets the requirements of those
+micro-services.
 
-Refer to "Restore System Functionality if a Kubernetes Worker Node is Down" in the "Resilience of System
-Management Services" section of the _HPE Cray EX System Administration Guide 1.5 S-8001_.
-
-<a name="expected_resiliency_behavior"></a>
-### Expected Resiliency Behavior
-
-In addition, the following general criteria describe the expected behavior of the system if a single Kubernetes
-node (master, worker, or storage) goes down temporarily:
-
-   * Once a job has been launched and is executing on the compute nodes, it is expected that it will continue to
-   run without interruption during planned or unplanned outages characterized by the loss of an master node,
-   worker node, or storage node. Applications launched through PALS may show error messages and lost
-   output if a worker node goes down during application runtime.
-   * If a worker node goes down, it will take between 4 and 5 minutes before most of the pods which had
-   been running on the downed worker node will begin terminating. This is a predefined Kubernetes behavior, not
-   something inherent to HPE Cray EX.
-   * Within around 20 minutes or less, it should be possible to launch a job using a UAI or UAN after planned or
-   unplanned outages characterized by the loss of a master node, worker node, or storage node.
-      * In the case of a UAN, the recovery time is expected to be quicker. However, launching a UAI after a
-      management node outage means that some UAI pods may need to relocate to other worker nodes. And the
-      status of those new UAI pods will remain unready until all necessary content has been loaded on the new
-      worker node that the UAI is starting up on. This process can take approximately 10 minutes.
-   * Within around 20 minutes or less, it should be possible to boot and configure compute nodes after planned or
-   unplanned outages characterized by the loss of an master node, worker node, or storage node.
-   * At least three utility storage nodes provide persistent storage for the services running on the Kubernetes
-   management nodes. When one of the utility storage nodes goes down, critical operations such as job launch,
-   app run, or compute boot are expected to continue to work.
-   * Not all pods running on a downed worker node are expected to migrate to a remaining worker
-   node. There are some pods which are configured with anti-affinity such that if the pod exists on another 
-   worker node, it will not start another of those pods on that same worker node. At this time, this mostly
-   only applies to etcd clusters running in the cluster. It is optimal to have those pods balanced across the 
-   worker nodes (and not have multiple etcd pods, from the same etcd cluster, running on the same worker
-   node). Thus, when a worker node goes down, the etcd pods running on it will remain in terminated
-   state and will not attempt to relocate to another worker node. This should be fine as there should be at
-   least two other etcd pods (from the cluster of 3) running on other worker nodes. Additionally, any pods
-   that are part of a stateful set will not migrate off a worker node when it goes down. Those are expected to stay
-   on the node and also remain in the terminated state until the worker node comes back up or unless
-   deliberate action is taken to force that pod off the worker node which is down.
-      * The cps-cm-pm pods are part of a daemonset and they only run on designated nodes. When the node
-      comes back up the containers will be restarted and service restored. For more information on changing node
-      assignments refer to "Content Projection Service (CPS)" in the _HPE Cray EX System Administration Guide 1.5 S-8001_.
-   * After a worker node, storage node, or master node goes down, if there are issues with launching a UAI session or
-   booting compute nodes, that does not necessarily mean that the problem is due to the management node being
-   down. It is certainly, possible, but it is advised to also refer to the relevant "Compute Node Boot
-   Troubleshooting Information" and "User Access Service" (specifically with respect to "Troubleshooting UAS
-   Issues") sections in the _HPE Cray EX System Administration Guide 1.5 S-8001_. Those sections can give
-   guidance around general known issues and how to troubleshoot them. For any customer support ticket
-   opened on these issues, however, it would be an important piece of data to include in that ticket if the issue
-   was encountered while one or more of the management nodes were down.
-
-<a name="known_resiliency_issues_and_workarounds"></a>
-### Known Resiliency Issues and Workarounds
-
-
-Though an effort was made to increase the number of pod replicas for services that were critical to system
-operations such as booting computes, launching jobs, and running applications across the compute nodes, there
-are still some services that remain with single copies of their pods. In general, this does not result in a critical
-issue if these singleton pods are on a worker node that goes down. Most microservices should (after being
-terminated by Kubernetes), simply be rescheduled onto a remaining worker node. That assumes that the
-remaining worker nodes have sufficient resources available and meet the hardware/network requirements of
-the pods.
-
-However, it is important to note that some pods, when running on a worker node that goes down, may require
-some manual intervention to be rescheduled. Note the workarounds in this section for such pods. Work is ongoing
-to correct these issues in a future release.
-   * Nexus pod
-      * The nexus pod is a single pod deployment and serves as our image repository. If it is on a worker
-      node that goes down, it will attempt to start up on another worker node. However, it is likely that it
-      can also encounter the "Multi-Attach error for volume" error that can be seen in the kubectl describe
-      output for the pod that is trying to come up on the new node.
-      * To determine if this is happening, run the following:
-         ```bash
-         # kubectl get pods -n nexus | grep nexus
-         ```
-      * Describe the pod obtained in the previous bullet:
-         ```bash
-         # kubectl describe pod -n nexus NEXUS_FULL_POD_NAME
-         ```
-      * If the event data at the bottom of the describe command output indicates that a Multi-Attach PVC error
-      has occurred. Refer to the "Troubleshooting Pods Failing to Restart on Other Worker Nodes" procedure in the
-      _HPE Cray EX System Administration Guide 1.5 S-8001_ to unmount the PVC. This will allow the Nexus pod to
-      begin successfully running on the new worker node.
-
-<a name="future_resiliency_improvements"></a>
-### Future Resiliency Improvements
-
-In a future release, strides will be made to further improve the resiliency of the system. These improvements may
-include one or more of the following:
-
-   * Further emphasis on eliminating singleton system management pods.
-   * Reduce time delays for individual service responsiveness after its pods are terminated, due to running on a
-   worker node that has gone down.
-   * Rebalancing of pods/workloads after an worker node that was down, comes back up.
-   * Analysis/improvements wrt outages of the Node Management Network (NMN) and the impact to critical
-   system management services.
-   * Expanded analysis/improvements of resiliency of noncritical services (those that are not directly related to job
-   launch, application run, or compute boot).
+For more information about resiliency topics see
+[Resilience of System Management Services](../operations/resiliency/Resilience_of_System_Management_Services.md).
 
 <a name="access_to_system_management_services"></a>
 ## 4. Access to System Management Services
@@ -268,7 +170,8 @@ Access to individual APIs through the gateway is controlled by a policy-driven a
 users must retrieve a token for authentication before attempting to access APIs through the gateway and present
 a valid token with each API call. The authentication and authorization decisions are made at the gateway level
 which prevent unauthorized API calls from reaching the underlying micro-services. For more detail on the process
-of obtaining tokens and user management, refer to the _HPE Cray EX System Administration Guide 1.5 S-8001_.
+of obtaining tokens and user management, see
+[System Security and Authentication](../operations/security_and_authentication/System_security_and_Authentication.md).
 
 Review the API documentation in the supplied container before attempting to use the API services. This container
 is generated with the release using the most current API descriptions in OpenAPI 2.0 format. Since this file serves

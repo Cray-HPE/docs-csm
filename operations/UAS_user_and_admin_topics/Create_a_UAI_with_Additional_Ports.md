@@ -30,7 +30,7 @@ Displays when you mouse over the topic on the Cray Portal.
     
     ```
 
-    **Troubleshooting:** If the Cray CLI has not been initialized, the CLI commands will not work. See "Configure the Cray Command Line Interface \(CLI\)" in the *HPE Cray EX System Administration Guide S-8001* for more information.
+    **Troubleshooting:** If the Cray CLI has not been initialized, the CLI commands will not work. See [Configure the Cray Command Line Interface \(CLI\)](../configure_cray_cli.md).
 
     When these ports are exposed in the UAI, they will be mapped to unique ports on the UAI IP address. The mapping of these ports is displayed in the `uai_portmap` element of the return output from cray uas create, cray uas describe, and cray uas uais list. The mapping is shown as a dictionary where the key is the port requested and the value is the port that key is mapped to.
 

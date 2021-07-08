@@ -14,7 +14,7 @@ A UAI is up and running.
 
 -   **OBJECTIVE**
 
-    The cray uas command allows users to manage UAIs. This procedure deletes one of the user's UAIs. To delete all UAIs on the system, see "List and Delete UAIs" in the *HPE Cray EX System Administration Guide S-8001*.
+    The cray uas command allows users to manage UAIs. This procedure deletes one of the user's UAIs. To delete all UAIs on the system, see [List and Delete All UAIs](List_and_Delete_All_UAIs.md).
 
 -   **LIMITATIONS**
 

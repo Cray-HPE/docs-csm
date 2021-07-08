@@ -2,7 +2,7 @@
 
 Many system services require login credentials to gain access to them. The information below is a comprehensive list of system passwords and how to change them.
 
-Contact Cray/HPE service in order to obtain the default usernames and passwords for any of these components or services.
+Contact HPE Cray service in order to obtain the default usernames and passwords for any of these components or services.
 
 ### Keycloak
 
@@ -50,11 +50,11 @@ The initial Gitea login credentials for the `crayvcs` username are stored in thr
 
 ### System Management Health Service
 
-Contact Cray/HPE service in order to obtain the default password for Grafana and Kiali. The default username is admin.
+Contact HPE Cray service in order to obtain the default password for Grafana and Kiali. The default username is admin.
 
 ### Management Network Switches
 
-Each rack type includes a different set of passwords. During different stages of installation, these passwords are subject to change. Contact Cray/HPE service in order to obtain the default passwords.
+Each rack type includes a different set of passwords. During different stages of installation, these passwords are subject to change. Contact HPE Cray service in order to obtain the default passwords.
 
 The tables below include the default login credentials for each rack type. These passwords can be changed by going into the console on a given switch and changing it. However, if the user gets locked out attempting to change the password or the configuration gets corrupted for an individual switch, it can wipe out the entire network configuration for the system.
 
@@ -100,7 +100,7 @@ Redfish accounts are only valid with the Redfish API. They do not allow system l
     -   Username: guest
     -   Password: <your password>
 
-Contact Cray/HPE service in order to obtain the default passwords.
+Contact HPE Cray service in order to obtain the default passwords.
 
 The account database is automatically saved to the non-volatile settings partition \(/nvram/redfish/redfish-accounts\) any time an account or account policy is modified. The file is stored as a redis command dump and is replayed \(if it exists\) anytime the core Redfish schema is loaded via the init script. If default accounts must be restored, delete the redis command dump and reboot the controller.
 
@@ -230,7 +230,7 @@ For SSH access, the system controllers have the following default credentials:
     -   Username: root
     -   Password: <your password>
 
-Contact Cray/HPE service in order to obtain the default passwords. 
+Contact HPE Cray service in order to obtain the default passwords. 
 
 Passwords for nC, cC, and sC controllers are all managed with the following process. The cfgsh tool is a configuration shell that can be used interactively or scripted. Interactively, it may be used as follows after logging in as root via `ssh`:
 
@@ -253,4 +253,4 @@ In both cases, a `running-config` must be saved out to non-volatile storage in a
 
 ### Gigabyte
 
-Contact Cray/HPE service in order to obtain the default password for Gigabyte. The default username is admin.
+Contact HPE Cray service in order to obtain the default password for Gigabyte. The default username is admin.

@@ -56,7 +56,7 @@ This procedure enables admins to set up the service and access its components vi
 
     -   **https://jaeger-istio.\{\{shasta\_domain\}\}/**
 
-        Jaeger provides distributed tracing of requests across microservices based on headers automatically injected by Envoy.
+        Jaeger provides distributed tracing of requests across micro-services based on headers automatically injected by Envoy.
 
         For more information regarding the `jaeger-istio` front end/UI configuration, refer to the online documentation \([https://www.jaegertracing.io/](https://www.jaegertracing.io/)\). Click on the 'Docs' section to get more information around the Jaeger Frontend/UI.
 

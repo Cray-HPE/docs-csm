@@ -52,7 +52,7 @@ Enable Nvidia Cuda support on the system via a Content Projection Service \(CPS\
 
     1.  Create a new Nexus repository to host the Cuda content.
 
-        See the instructions in the "Create a New Repository in Nexus" procedure in the *HPE Cray EX System Administration Guide S-8001*.
+        See the instructions in [Manage Repositories with Nexus](../package_repository_management/Manage_Repositories_with_Nexus.md)
 
     1.  Select the **yum \(hosted\)** option on the Select Recipe page.
 
