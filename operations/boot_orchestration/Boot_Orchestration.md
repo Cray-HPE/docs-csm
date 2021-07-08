@@ -75,5 +75,5 @@ The procedures in this section include the information required to boot, configu
     - - [Troubleshoot Compute Node Boot Issues Related to Slow Boot Times](Troubleshoot_Compute_Node_Boot_Issues_Related_to_Slow_Boot_Times.md)
   - [Edit the iPXE Embedded Boot Script](Edit_the_iPXE_Embedded_Boot_Script.md)
   - [Redeploy the iPXE and TFTP Services](Redeploy_the_IPXE_and_TFTP_Services.md)
-  - [Upload Node Boot Information to Boot Script Service](Upload_Node_Boot_Information_to_Boot_Script_Service_BSS.md)
+  - [Upload Node Boot Information to Boot Script Service (BSS)](Upload_Node_Boot_Information_to_Boot_Script_Service_BSS.md)
   
