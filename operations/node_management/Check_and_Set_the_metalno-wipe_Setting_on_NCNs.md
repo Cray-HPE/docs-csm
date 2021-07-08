@@ -2,7 +2,7 @@
 
 Configure the `metal.no-wipe` setting on non-compute nodes \(NCNs\) to preserve data on the nodes before doing an NCN reboot.
 
-Run the `./getXnames.sh`script to view the `metal.no-wipe` settings for each NCN. The xname and `metal.no-wipe` settings are also dumped out when executing the /opt/cray/platform-utils/ncnHealthChecks.sh script.
+Run the `./ncnGetXnames.sh`script to view the `metal.no-wipe` settings for each NCN. The xname and `metal.no-wipe` settings are also dumped out when executing the /opt/cray/platform-utils/ncnHealthChecks.sh script.
 
 ### Prerequisites
 
@@ -16,12 +16,12 @@ This procedure requires administrative privileges.
     ncn-m001# cd /opt/cray/platform-utils
     ```
 
-2.  Run the `./getXnames.sh` script.
+2.  Run the `./ncnGetXnames.sh` script.
 
     The output will include a listing of all of the NCNs, their xnames, and what the `metal.no-wipe` setting is for each.
 
     ```bash
-    ncn-m001# ./getXnames.sh
+    ncn-m001# ./ncnGetXnames.sh
     ncn-m001: x3000c0s1b0n0 - metal.no-wipe=1
      
     ncn-m002: x3000c0s2b0n0 - metal.no-wipe=1
@@ -41,7 +41,7 @@ This procedure requires administrative privileges.
     ncn-s003: x3000c0s9b0n0 - metal.no-wipe=1
     ```
 
-    The `metal.no-wipe` setting must be set to 1 \(metal.no-wipe=1\) if doing a reboot of an NCN to preserve the current data on it. If it is not set to 1 when the NCN is rebooted, it will be completely wiped and will subsequently have to be rebuilt. If the `metal.no-wipe` status for one or more NCNs is not returned, re-run the getXnames.sh script.
+    The `metal.no-wipe` setting must be set to 1 \(metal.no-wipe=1\) if doing a reboot of an NCN to preserve the current data on it. If it is not set to 1 when the NCN is rebooted, it will be completely wiped and will subsequently have to be rebuilt. If the `metal.no-wipe` status for one or more NCNs is not returned, re-run the ncnGetXnames.sh script.
 
 3.  Reset the `metal.no-wipe` settings for any NCN where it is set to 0.
 
@@ -62,10 +62,10 @@ This procedure requires administrative privileges.
         ncn-m001# /tmp/csi handoff bss-update-param --set metal.no-wipe=1
         ```
 
-    3.  Run the `./getXnames.sh` script again to verify the no-wipe settings have been reset as expected.
+    3.  Run the `./ncnGetXnames.sh` script again to verify the no-wipe settings have been reset as expected.
 
         ```bash
-        ncn-m001# ./getXnames.sh
+        ncn-m001# ./ncnGetXnames.sh
         ncn-m001: x3000c0s1b0n0 - metal.no-wipe=1
          
         ncn-m002: x3000c0s2b0n0 - metal.no-wipe=1
