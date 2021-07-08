@@ -78,7 +78,7 @@ The expected states of a node memory dump are described below:
         Try 'cray nmd status describe --help' for help.Error: Data not found: status_xname_get: xname=x3000c0s19b3n0 not found
         ```
 
-    -   To trigger a node crash and then determine its readiness for nmd, set up a serial-over-LAN connection to the node, trigger a crash, and then monitor its console log. For more information about setting up a serial-over-LAN connection to the node, refer to "Log in to a Node Using ConMan" in the *HPE Cray EX System Administration Guide S-8001*.
+    -   To trigger a node crash and then determine its readiness for nmd, login to the node console, trigger a crash, and then monitor its console log. For more information about logging in to the node, see [Log in to a Node Using ConMan](../conman/Log_in_to_a_Node_Using_ConMan.md).
 
         Execute the following to trigger a node crash:
 

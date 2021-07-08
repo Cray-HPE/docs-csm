@@ -455,7 +455,7 @@ These ACLs are designed to block traffic from the node management network to and
 
 ## Configure LAG for CMMs
 
-- This **requires** updated CMM firmware. (version 1.4.20 or later) Refer to the _HPE Cray EX Hardware Management Administration Guide 1.5 S-8015_ for details on updating CMM firmware with FAS.
+- This **requires** updated CMM firmware. (version 1.4.20 or later).  See [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md) for details on updating CMM firmware with FAS.
 - A static LAG will be configured on the CDU switches.
 - The CDU switches have two cables (10Gb RJ45) connecting to each CMM.
 - This configuration offers increased throughput and redundancy.

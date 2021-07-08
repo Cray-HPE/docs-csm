@@ -4,9 +4,9 @@ There are many passwords and credentials used in different contexts to manage th
 can be changed as needed. Their initial settings are documented, so it is recommended to change 
 them during or soon after a CSM software installation.
 
-Refer to the _HPE Cray EX System Administration Guide 1.5 S-8001_ for more information about these topics.
+See these topics for more information.
 
-   * Manage System Passwords
+   * [Manage System Passwords](../operations/security_and_authentication/Manage_System_Passwords.md)
       * keycloak
       * gitea
       * grafana
@@ -14,7 +14,7 @@ Refer to the _HPE Cray EX System Administration Guide 1.5 S-8001_ for more infor
       * Management Network Switches
       * Redfish Credentials
       * System Controllers (in a Liquid-cooled cabinet)
-   * Update NCN Passwords
-   * Change Root Passwords for Compute Nodes
-   * Change the Keycloak Admin Password
+   * [Update NCN Passwords](../operations/security_and_authentication/Update_NCN_Passwords.md)
+   * [Change Root Passwords for Compute Nodes](../operations/security_and_authentication/System_Security_and_Authentication.md)
+   * [Change the Keycloak Admin Password](../operations/security_and_authentication/Change_the_Keycloak_Admin_Password.md)
 

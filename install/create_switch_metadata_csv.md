@@ -34,7 +34,7 @@ For this you will need:
 
 - The SHCD for your system
 Check the description for component names while mapping names between the SHCD and your `switch_metadata.csv` file.
-Refer to "Component Names (xnames)" in the _HPE Cray EX Hardware Management Administration Guide 1.5 S-8015_.
+See [Component Names (xnames)](../operations/Component_Names_xnames.md).
 
 #### Format
 

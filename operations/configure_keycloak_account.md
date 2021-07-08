@@ -12,23 +12,23 @@ enables the use of the `cray` CLI for many administrative commands, such as thos
 [Validate CSM Health](validate_csm_health.md) and general operation of the management services
 via the API gateway.
 
-Refer to the _HPE Cray EX System Administration Guide 1.5 S-8001_ for more information about these topics.
+See [System Security and Authentication](security_and_authentication/System_Security_and_Authentication.md)
+in the " Default Keycloak Realms, Accounts and Clients" section for more information about these topics.
 
-   * Default Keycloak Realms, Accounts, and Clients
-      * Certificate Types
-      * Change the Keycloak Admin Password
-      * Create a Service Account in Keycloak
-      * Retrieve the Client Secret for Service Accounts
-      * Get a Long-Lived Token for a Service Account
-      * Access the Keycloak user Management UI
-      * Create Internal User Accounts in the Keycloak Shasta Realm
-      * Delete Internal User Accounts in the Keycloak Shasta Realm
-      * Remove the Email Mapper from the LDAP User Federation
-      * Re-Sync Keycloak Users to Compute Nodes
-      * Configure Keycloak for LDAP/AD Authentication
-      * Configure the RSA Plugin in Keycloak
-      * Preserve Username Capitalization for Users Exported from Keycloak
-      * Change the LDAP Server IP for Existing LDAP Server Content
-      * Change the LDAP Server IP for New LDAP Server Content
-      * Remove the LDAP User Federation from Keycloak
-      * Add LDAP User Federation
+   * Certificate Types
+   * Change the Keycloak Admin Password
+   * Create a Service Account in Keycloak
+   * Retrieve the Client Secret for Service Accounts
+   * Get a Long-Lived Token for a Service Account
+   * Access the Keycloak user Management UI
+   * Create Internal User Accounts in the Keycloak Shasta Realm
+   * Delete Internal User Accounts in the Keycloak Shasta Realm
+   * Remove the Email Mapper from the LDAP User Federation
+   * Re-Sync Keycloak Users to Compute Nodes
+   * Configure Keycloak for LDAP/AD Authentication
+   * Configure the RSA Plugin in Keycloak
+   * Preserve Username Capitalization for Users Exported from Keycloak
+   * Change the LDAP Server IP for Existing LDAP Server Content
+   * Change the LDAP Server IP for New LDAP Server Content
+   * Remove the LDAP User Federation from Keycloak
+   * Add LDAP User Federation

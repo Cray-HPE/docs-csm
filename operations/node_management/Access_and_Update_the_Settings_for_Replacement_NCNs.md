@@ -1,6 +1,6 @@
 ## Access and Update Settings for Replacement NCNs
 
-When a new NCN is added to the system as a hardware replacement, it might use the default credentials. Contact Cray/HPE service to learn what these are.
+When a new NCN is added to the system as a hardware replacement, it might use the default credentials. Contact HPE Cray service to learn what these are.
 
 Use this procedure to verify that the default BMC credentials are set correctly after a replacement NCN is installed, cabled, and powered on.
 

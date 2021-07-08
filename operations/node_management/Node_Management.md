@@ -33,7 +33,7 @@ The HPE Cray EX system includes the following nodes:
 * [Manually Wipe Boot Configuration on Nodes to be Reinstalled](Manually_Wipe_Boot_Configuration_on_Nodes_to_be_Reinstalled.md)
 * [Troubleshoot Issues with Redfish Endpoint DiscoveryCheck for Redfish Events from Nodes](Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md)
 * [Reset Credentials on Redfish Devices](Reset_Credentials_on_Redfish_Devices_for_Reinstallation.md)
-* [Access and Update Settings for Replacement NCNs](Access_and_Update_the_Settings_for_Replacement_NCNs_.md)
+* [Access and Update Settings for Replacement NCNs](Access_and_Update_the_Settings_for_Replacement_NCNs.md)
 * [Change Settings for HMS Collector Polling of Air Cooled Nodes](Change_Settings_for_HMS_Collector_Polling_of_Air_Cooled_Nodes.md)
 * [Use the Physical KVM](Use_the_Physical_KVM.md)
 * [Launch a Virtual KVM on Gigabyte Servers](Launch_a_Virtual_KVM_on_Gigabyte_Servers.md)

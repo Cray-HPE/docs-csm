@@ -7,8 +7,8 @@ management nodes to prevent unwanted actions from affecting these nodes.
 This section only covers using locks with the Hardware State Manager (HSM). For more information
 on ignoring nodes, refer to the following sections:
 
-   * Firmware Action Service (FAS): Refer to "Ignore Node within FAS" in the _HPE Cray EX Hardware Management Administration Guide 1.5 S-8015_
-   * Cray Advanced Platform Monitoring and Control (CAPMC): Refer to "Ignore Node with CAPMC" in the _HPE Cray EX Hardware Management Administration Guide 1.5 S-8015_
+   * Firmware Action Service (FAS): See [Ignore Node within FAS](firmware/FAS_Admin_Procedures.md#ignore).
+   * Cray Advanced Platform Monitoring and Control (CAPMC): See [Ignore Nodes with CAPMC](power_management/Ignore_Nodes_with_CAPMC.md)
 
 The following actions can be prevented when a node is locked.
    * Firmware upgrades with FAS

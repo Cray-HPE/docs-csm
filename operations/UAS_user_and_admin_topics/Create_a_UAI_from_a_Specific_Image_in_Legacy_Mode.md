@@ -22,7 +22,7 @@ How users can choose a specific registered image for their UAIs when legacy mode
     image_list = [ "registry.local/cray/cray-uas-sles15sp1-slurm:latest", "registry.local/cray/cray-uas-sles15sp1:latest",]
     ```
 
-    **Troubleshooting:** If the Cray CLI has not been initialized, the CLI commands will not work. See "Configure the Cray Command Line Interface \(CLI\)" in the *HPE Cray EX System Administration Guide S-8001* for more information.
+    **Troubleshooting:** If the Cray CLI has not been initialized, the CLI commands will not work. See [Configure the Cray Command Line Interface \(CLI\)](../configure_cray_cli.md).
 
 3.  Create a new UAI.
 
