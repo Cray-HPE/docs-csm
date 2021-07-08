@@ -13,4 +13,4 @@ if [[ "$unbound_psp" -eq "0" ]]; then
     kubectl delete ClusterRoleBinding -n services cray-dns-unbound-psp
     echo "Delete ClusterRoleBinding cray-dns-unbound-psp"
 fi
-echo "Done"
+echo "cray-dns-unbound-psp check Done"
