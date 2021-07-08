@@ -13,6 +13,7 @@ Procedures:
 - [Preparation](#preparation)
 - [Run Validation Checks (Pre-Upgrade)](#run-validation-checks-pre-upgrade)
 - [Update /etc/hosts on Workers](#update-hosts-on-workers)
+- [Check For Manually Created Unbound PSP](#check-unbound-psp)
 - [Setup Nexus](#setup-nexus)
 - [Backup VCS Content](#backup-vcs-content)
 - [Upgrade Services](#upgrade-services)
@@ -153,7 +154,13 @@ Run the `update-host-records.sh` script to update /etc/hosts on NCN workers:
 ```bash
 ncn-m001# "${CSM_SCRIPTDIR}/update-host-records.sh"
 ```
+<a name="check-unbound-psp"></a>
+## Check Unbound PSP
+Check for manually created unbound-psp and delete the psp.  Helm will manage the psp during the upgrade.
 
+   ```bash
+   ncn-m001# ${CSM_SCRIPTDIR}/check-unbound-psp.sh
+   ```
 <a name="setup-nexus"></a>
 ## Setup Nexus
 
