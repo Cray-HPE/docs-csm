@@ -90,9 +90,9 @@ The User Access Service (UAS) is responsible for managing User Access Instances 
 
 ### End-User UAIs <a name="main-concepts-enduser"></a>
 
-UAIs used for interactive logins are called end-user UAIs.  End-user UAIs can be seen as lightweight User Access Nodes (UANs), but there are important differences between UAIs and UANs.  First, end-user UAIs are not dedicated hardware like UANs.  They are implemented as containers orchestrated by Kubernetes, which makes them subject to Kubernetes scheduling and resource management rules. One key element of Kubernetes orchestration is impermanence. While end-user UAIs are often long running, Kubernetes can re-schedule or re-create them as needed to meet resource and node availability constraints. UAIs can also be removed administratively. When either of these things happen, a new UAI may be created, but that new UAI reverts to its initial state, discarding any internal changes that might have been made in its previous incarnation. An administratively removed end-user UAI may or may not ever be re-created, and an end-user UAI that is preempted because of resource pressure may become unavailable for an extended time until the pressure is relieved.
+UAIs used for interactive logins are called end-user UAIs. End-user UAIs can be seen as lightweight User Access Nodes (UANs), but there are important differences between UAIs and UANs. First, end-user UAIs are not dedicated hardware like UANs. They are implemented as containers orchestrated by Kubernetes, which makes them subject to Kubernetes scheduling and resource management rules. One key element of Kubernetes orchestration is impermanence. While end-user UAIs are often long running, Kubernetes can re-schedule or re-create them as needed to meet resource and node availability constraints. UAIs can also be removed administratively. When either of these things happen, a new UAI may be created, but that new UAI reverts to its initial state, discarding any internal changes that might have been made in its previous incarnation. An administratively removed end-user UAI may or may not ever be re-created, and an end-user UAI that is preempted because of resource pressure may become unavailable for an extended time until the pressure is relieved.
 
-The impermanence of end-user UAIs makes them suitable for tasks that are immediate and interactive over relatively short time frames, such as building and testing software or launching workloads. It makes them unsuitable for unattended activities like executing cron jobs or monitoring progress of a job in a logged-in shell unless those activities are built into the UAI image itself (more on custom UAI images later).  These kinds of activities are more suited to UANs, which are more permanent and, unless they are re-installed, retain modified state through reboots and so forth.
+The impermanence of end-user UAIs makes them suitable for tasks that are immediate and interactive over relatively short time frames, such as building and testing software or launching workloads. It makes them unsuitable for unattended activities like executing cron jobs or monitoring progress of a job in a logged-in shell unless those activities are built into the UAI image itself (more on custom UAI images later). These kinds of activities are more suited to UANs, which are more permanent and, unless they are re-installed, retain modified state through reboots and so forth.
 
 Another way end-user UAIs differ from UANs is that any given end-user UAI is restricted to serving a single user. This protects users from interfering with each other within UAIs and means that any user who wants to use a UAI has to arrange for the UAI to be created and assigned. Once a user has an end-user UAI assigned, the user may initiate any number of SSH sessions to that UAI, but no other user will be recognized by the UAI when attempting to connect.
 
@@ -109,11 +109,11 @@ All UAIs can have the following attributes associated with them:
 * An optional [resource specification](#main-uasconfig-resources)
 * An optional [collection of smaller configuration items](#main-uasconfig-classes)
 
-The container image for a UAI (UAI image), defines the basic environment including the flavor of operating system, the installed packages, and so forth available to the user. UAI images can be customized by a site and added to the UAS configuration to be used in UAI creation. Any number of UAI images can be configured in the UAS, though only one will be used by any given UAI.  The UAS comes with some pre-defined UAI images that make it possible to set up UAIs and run many common tasks without further customization. Later in this document there is a [procedure for making custom UAIs](#main-uaiimages-customenduser) as needed.
+The container image for a UAI (UAI image), defines the basic environment including the flavor of operating system, the installed packages, and so forth available to the user. UAI images can be customized by a site and added to the UAS configuration to be used in UAI creation. Any number of UAI images can be configured in the UAS, though only one will be used by any given UAI. The UAS comes with some pre-defined UAI images that make it possible to set up UAIs and run many common tasks without further customization. Later in this document there is a [procedure for making custom UAIs](#main-uaiimages-customenduser) as needed.
 
 The volumes defined for a UAI provide for external access to data provided by the host system. Examples of this range from Kubernetes "configmaps" and "secrets" to external file systems used for persistent storage or external data access. Anything that can be defined as a volume in a Kubernetes pod specification can be configured in UAS as a volume and used within a UAI.
 
-Resource requests and limits tell Kubernetes how much memory and CPU a given UAI wants all the time (request) and how much memory and CPU a UAI can ever be given (limit).  Resource specifications configured into UAS contain resource requests and / or limits that can be associated with a UAI.  Any resource request or limit that can be set up on a Kubernetes pod can be set up as a resource specification under UAS.
+Resource requests and limits tell Kubernetes how much memory and CPU a given UAI wants all the time (request) and how much memory and CPU a UAI can ever be given (limit). Resource specifications configured into UAS contain resource requests and / or limits that can be associated with a UAI. Any resource request or limit that can be set up on a Kubernetes pod can be set up as a resource specification under UAS.
 
 The smaller configuration items control things like whether the UAI can talk to compute nodes over the high-speed network (needed for workload management), whether the UAI presents a public facing or private facing IP address for SSH, Kubernetes scheduling priority and others.
 
@@ -125,7 +125,7 @@ UAIs run on Kubernetes worker nodes. There is a mechanism using Kubernetes label
 
 ### UAI Network Attachments (macvlans) <a name="main-concepts-netattach"></a>
 
-UAIs need to be able to reach compute nodes across the node management network (NMN).  When the compute node NMN is structured as multiple subnets, this requires routing form the UAIs to those subnets. The default route in a UAI goes to the public network through the customer access network (CAN) so that will not work for reaching compute nodes. To solve this problem, UAS installs Kubernetes network attachments within the Kubernetes `user` namespace, one of which is used by UAIs.  The type of network attachment used on Shasta hardware for this purpose is a `macvlan` network attachment, so this is often referred to on Shasta systems as "macvlans".  This network attachment integrates the UAI into the NMN on the UAI host node where the UAI is running and assigns the UAI an IP address on that network. It also installs a set of routes in the UAI that are used to reach the compute node subnets on the NMN.
+UAIs need to be able to reach compute nodes across the node management network (NMN). When the compute node NMN is structured as multiple subnets, this requires routing form the UAIs to those subnets. The default route in a UAI goes to the public network through the customer access network (CAN) so that will not work for reaching compute nodes. To solve this problem, UAS installs Kubernetes network attachments within the Kubernetes `user` namespace, one of which is used by UAIs. The type of network attachment used on Shasta hardware for this purpose is a `macvlan` network attachment, so this is often referred to on Shasta systems as "macvlans". This network attachment integrates the UAI into the NMN on the UAI host node where the UAI is running and assigns the UAI an IP address on that network. It also installs a set of routes in the UAI that are used to reach the compute node subnets on the NMN.
 
 ## UAI Host Node Selection <a name="main-hostnodes"></a>
 
@@ -151,9 +151,9 @@ NAME       STATUS   ROLES    AGE   VERSION
 ncn-w001   Ready    <none>   10d   v1.18.6
 ```
 
-    NOTE: given the fact that labels are textual not boolean, it is a good idea to try various common spellings of false. The ones that will prevent UAIs from running are 'False', 'false' and 'FALSE'.  Repeat the above with all three options to be sure.
+    NOTE: given the fact that labels are textual not boolean, it is a good idea to try various common spellings of false. The ones that will prevent UAIs from running are 'False', 'false' and 'FALSE'. Repeat the above with all three options to be sure.
 
-Of the non-master nodes, there is one node that is configured to reject UAIs, `ncn-w001`.  So, `ncn-w002` and `ncn-w003` are UAI host nodes.
+Of the non-master nodes, there is one node that is configured to reject UAIs, `ncn-w001`. So, `ncn-w002` and `ncn-w003` are UAI host nodes.
 
 ### Specifying UAI Host Nodes <a name="main-hostnodes-specifying"></a>
 
@@ -167,7 +167,7 @@ Please note here that setting `uas=True` or any variant of that, while potential
 
 ### Maintaining an HSM Group for UAI Host Nodes <a name="main-hostnodes-hsmgroup"></a>
 
-When it comes to customizing non-compute node (NCN) contents for UAIs, it is useful to have a Hardware State Manager (HSM) node group containing the NCNs that are UAI hosts nodes. The `hpe-csm-scripts` package provides a script called `make_node_groups` that is useful for this purpose. This script is normally installed as `/opt/cray/csm/scripts/node_management/make_node_groups`.  It can create and update node groups for management master nodes, storage nodes, management worker nodes, and UAI host nodes. The following summarizes its use:
+When it comes to customizing non-compute node (NCN) contents for UAIs, it is useful to have a Hardware State Manager (HSM) node group containing the NCNs that are UAI hosts nodes. The `hpe-csm-scripts` package provides a script called `make_node_groups` that is useful for this purpose. This script is normally installed as `/opt/cray/csm/scripts/node_management/make_node_groups`. It can create and update node groups for management master nodes, storage nodes, management worker nodes, and UAI host nodes. The following summarizes its use:
 
 ```
 ncn-m001# /opt/cray/csm/scripts/node_management/make_node_groups --help
@@ -213,7 +213,7 @@ So, to create a new node group or replace an existing one, called `uai`, contain
 
 ## UAI Network Attachments <a name="main-netattach"></a>
 
-The UAI network attachment configuration flows from the CRAY Site Initializer (CSI) localization data through `customizations.yaml` into the UAS Helm chart and, ultimately, into Kubernetes in the form of a "network-attachment-definition".  This section describes the data at each of those stages to show how the final network attachment gets created.
+The UAI network attachment configuration flows from the CRAY Site Initializer (CSI) localization data through `customizations.yaml` into the UAS Helm chart and, ultimately, into Kubernetes in the form of a "network-attachment-definition". This section describes the data at each of those stages to show how the final network attachment gets created.
 
 ### CSI Localization Data <a name="main-netattach-localization"></a>
 
@@ -276,7 +276,7 @@ These values, in turn, feed into the following translation to UAS Helm chart set
 
 ### UAS Helm Chart <a name="main-netattach-helm"></a>
 
-The inputs above tell the UAS Helm chart how to install the network attachment for UAIs.  While the actual template used for this is more complex, here is a simplified view of the template used to generate the network attachment (if you are reading this document from the UAS source code, you can find the real template in the Helm chart there):
+The inputs above tell the UAS Helm chart how to install the network attachment for UAIs. While the actual template used for this is more complex, here is a simplified view of the template used to generate the network attachment (if you are reading this document from the UAS source code, you can find the real template in the Helm chart there):
 
 ```
 apiVersion: "k8s.cni.cncf.io/v1"
@@ -310,7 +310,7 @@ The `range` templating in the `routes` section expands the routes from `customiz
 
 ### UAI Network Attachment in Kubernetes <a name="main-netattach-kubernetes"></a>
 
-All of this produces a network attachment definition in Kubernetes called `macvlan-uas-nmn-conf` which is used by UAS.  Here are the contents that would result from the above data:
+All of this produces a network attachment definition in Kubernetes called `macvlan-uas-nmn-conf` which is used by UAS. Here are the contents that would result from the above data:
 
 ```
 apiVersion: v1
@@ -365,11 +365,11 @@ Options for the elements of a UAI are maintained in the UAS configuration. The f
 * Resource specifications
 * UAI Classes
 
-To configure the UAS a user needs to be defined as an administrator in the Shasta system and logged in using the Shasta CLI (`cray` command).  This can be done from a LiveCD node or from any system with the Shasta CLI installed that can reach the Shasta API Gateway. The following sections illustrate creating, updating, examining and removing configuration items from the UAS. More information on configuring and authenticating through the Shasta CLI can be found in the Shasta installation and administration guides.
+To configure the UAS a user needs to be defined as an administrator in the Shasta system and logged in using the Shasta CLI (`cray` command). This can be done from a LiveCD node or from any system with the Shasta CLI installed that can reach the Shasta API Gateway. The following sections illustrate creating, updating, examining and removing configuration items from the UAS. More information on configuring and authenticating through the Shasta CLI can be found in the Shasta installation and administration guides.
 
 ### UAI Images <a name="main-uasconfig-images"></a>
 
-UAS provides two stock UAI images when installed. The first is a standard end-user UAI Image that has the necessary software installed in it to support a basic Linux distribution login experience. This image also comes with with the Slurm and PBS Professional workload management client software installed, allowing users to take advantage of one or both of these if the underlying support is installed on the host system. The second image is a broker UAI image. Broker UAIs are a special type of UAIs used in the ["broker based" operation model](#main-uaimanagement-brokermode).  Broker UAIs present a single SSH endpoint that responds to each SSH connection by locating or creating a suitable end-user UAI and redirecting the SSH session to that end-user UAI.
+UAS provides two stock UAI images when installed. The first is a standard end-user UAI Image that has the necessary software installed in it to support a basic Linux distribution login experience. This image also comes with with the Slurm and PBS Professional workload management client software installed, allowing users to take advantage of one or both of these if the underlying support is installed on the host system. The second image is a broker UAI image. Broker UAIs are a special type of UAIs used in the ["broker based" operation model](#main-uaimanagement-brokermode). Broker UAIs present a single SSH endpoint that responds to each SSH connection by locating or creating a suitable end-user UAI and redirecting the SSH session to that end-user UAI.
 
 UAS also permits [creation and registration of custom UAI images](#main-uaiimages-customenduser).
 
@@ -482,7 +482,7 @@ ncn-m001-pit# cray uas admin config images delete 8fdf5d4a-c190-24c1-2b96-74ab98
 
 ### Volumes <a name="main-uasconfig-volumes"></a>
 
-Volumes provide a way to connect UAIs to external data, whether they be Kubernetes managed objects, external file systems or files, host node files and directories, or remote networked data to be used within the UAI.  Some examples of how volumes are commonly used by UAIs are:
+Volumes provide a way to connect UAIs to external data, whether they be Kubernetes managed objects, external file systems or files, host node files and directories, or remote networked data to be used within the UAI. Some examples of how volumes are commonly used by UAIs are:
 
 * To connect UAIs to configuration files like `/etc/localtime` maintained by the host node
 * To connect end-user UAIs to Slurm or PBS Professional Workload Manager configuration shared through Kubernetes
@@ -490,9 +490,9 @@ Volumes provide a way to connect UAIs to external data, whether they be Kubernet
 * To connect end-user UAIs to Lustre or other external storage for user data
 * To connect broker UAIs to a [directory service](#main-uaimanagement-brokermode-brokerclasses-ldap) or [SSH configuration](#main-uaiimages-providedbroker-customizingbroker) needed to authenticate and redirect user sessions.
 
-Any kind of volume recognized by the Kubernetes installation can be installed as a volume within UAS and will be used when creating UAIs.  There is more information on Kubernetes volumes <a href="https://kubernetes.io/docs/concepts/storage/volumes" target="_blank">here</a>.
+Any kind of volume recognized by the Kubernetes installation can be installed as a volume within UAS and will be used when creating UAIs. There is more information on Kubernetes volumes <a href="https://kubernetes.io/docs/concepts/storage/volumes" target="_blank">here</a>.
 
-    NOTE: as with UAI images, registering a volume with UAS creates the configuration that will be used to create a UAI.  If the underlying object referred to by the volume does not exist at the time the UAI is created, the UAI will, in most cases, wait until the object becomes available before starting up. This will be visible in the UAI state which will eventually move to `waiting`.
+    NOTE: as with UAI images, registering a volume with UAS creates the configuration that will be used to create a UAI. If the underlying object referred to by the volume does not exist at the time the UAI is created, the UAI will, in most cases, wait until the object becomes available before starting up. This will be visible in the UAI state which will eventually move to `waiting`.
 
 #### Listing UAS Volumes <a name="main-uasconfig-volumes-list"></a>
 
@@ -725,7 +725,7 @@ For example:
 ncn-m001-pit# cray uas admin config volumes create --mount-path /host_files/host_passwd --volume-description '{"host_path": {"path": "/etc/passwd", "type": "FileOrCreate"}}' --volumename 'my-volume-with-passwd-from-the-host-node'
 ```
 
-will create a directory `/host_files` in every UAI configured to use this volume and mount the file `/etc/passwd` from the host node into that directory as a file named `host_passwd`.  Notice the form of the `--volume-description` argument. It is a JSON string encapsulating an entire `volume_description` field as shown in the JSON output in the previous section.
+will create a directory `/host_files` in every UAI configured to use this volume and mount the file `/etc/passwd` from the host node into that directory as a file named `host_passwd`. Notice the form of the `--volume-description` argument. It is a JSON string encapsulating an entire `volume_description` field as shown in the JSON output in the previous section.
 
 #### Examining a UAS Volume <a name="main-uasconfig-volumes-examine"></a>
 
@@ -784,7 +784,7 @@ ncn-m001-pit# cray uas admin config volumes delete a0066f48-9867-4155-9268-d001a
 
 ### Resource Specifications <a name="main-uasconfig-resources"></a>
 
-Kubernetes uses <a href="https://kubernetes.io/docs/tasks/configure-pod-container/assign-memory-resource" target="_blank">resource limits and resource requests</a>, to manage the system resources available to pods. Since UAIs run as pods under Kubernetes, UAS takes advantage of Kubernetes to manage the system resources available to UAIs.  In the UAS configuration, resource specifications contain that configuration. A UAI that is assigned a resource specification will use that instead of the default resource limits / requests on the Kubernetes namespace containing the UAI.  This can be used to fine-tune resources assigned to UAIs.
+Kubernetes uses <a href="https://kubernetes.io/docs/tasks/configure-pod-container/assign-memory-resource" target="_blank">resource limits and resource requests</a>, to manage the system resources available to pods. Since UAIs run as pods under Kubernetes, UAS takes advantage of Kubernetes to manage the system resources available to UAIs. In the UAS configuration, resource specifications contain that configuration. A UAI that is assigned a resource specification will use that instead of the default resource limits / requests on the Kubernetes namespace containing the UAI. This can be used to fine-tune resources assigned to UAIs.
 
 #### Listing Resource Specifications <a name="main-uasconfig-resources-list"></a>
 
@@ -827,7 +827,7 @@ For example:
 ncn-m001-pit# cray uas admin config resources create --request '{"cpu": "300m", "memory": "250Mi"}' --limit '{"cpu": "300m", "memory": "250Mi"}' --comment "my first example resource specification"
 ```
 
-This specifies a request / limit pair that requests and is constrained to 300 mili-CPUs (0.3 CPUs) and 250 MiB of memory (`250 * 1024 * 1024` bytes) for any UAI created with this limit specification. By keeping the request and the limit the same, this ensures that a host node will not be oversubscribed by UAIs.  It is also legitimate to request less than the limit, though that risks over-subscription and is not recommended in most cases. If the request is greater than the limit, UAIs created with the request specification will never be scheduled because they will not be able to provide the requested resources.
+This specifies a request / limit pair that requests and is constrained to 300 mili-CPUs (0.3 CPUs) and 250 MiB of memory (`250 * 1024 * 1024` bytes) for any UAI created with this limit specification. By keeping the request and the limit the same, this ensures that a host node will not be oversubscribed by UAIs. It is also legitimate to request less than the limit, though that risks over-subscription and is not recommended in most cases. If the request is greater than the limit, UAIs created with the request specification will never be scheduled because they will not be able to provide the requested resources.
 
 All of the configurable parts are optional when adding a resource specification. If none are provided, an empty resource specification with only a `resource_id` will be created.
 
@@ -1104,7 +1104,7 @@ command. The `comment` field is a free form string describing the UAI class. The
 ncn-m001-pit# cray uas create
 ```
 
-command is used to create an end-user UAI for a user. Setting a class to default gives the administrator fine grained control over the behavior of end-user UAIs that are created by authorized users in [legacy mode](#main-uaimanagement-legacymode).  The `namespace` field specifies the Kubernetes namespace in which this UAI will run. It has the default setting of `user` here. The `opt_ports` field is an empty list of TCP port numbers that will be opened on the external IP address of the UAI when it runs. This controls whether services other than SSH can be run and reached publicly on the UAI.  The `priority_class_name` `"uai_priority"` is the default <a href="https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass">Kubernetes priority class</a> of UAIs.  If it were a different class, it would affect both Kubernetes default resource limit / request assignments and Kubernetes scheduling priority for the UAI.  The `public_ip` field is a flag that indicates whether the UAI should be given an external IP address LoadBalancer service so that clients outside the Kubernetes cluster can reach it, or only be given a Kubernetes Cluster-IP address. For the most part, this controls whether the UAI is reachable by SSH from external clients, but it also controls whether the ports in `opt_ports` are reachable as well. The `resource_config` field is not set, but could be set to a resource specification to override namespace defaults on Kubernetes resource requests / limits. The `uai_compute_network` flag indicates whether this UAI uses the macvlan mechanism to gain access to the Shasta compute node network. This needs to be `true` to support workload management. The `uai_creation_class` field is used by [broker UAIs](#main-uaimanagement-brokermode-brokerclasses) to tell the broker what kind of UAI to create when automatically generating a UAI.
+command is used to create an end-user UAI for a user. Setting a class to default gives the administrator fine grained control over the behavior of end-user UAIs that are created by authorized users in [legacy mode](#main-uaimanagement-legacymode). The `namespace` field specifies the Kubernetes namespace in which this UAI will run. It has the default setting of `user` here. The `opt_ports` field is an empty list of TCP port numbers that will be opened on the external IP address of the UAI when it runs. This controls whether services other than SSH can be run and reached publicly on the UAI. The `priority_class_name` `"uai_priority"` is the default <a href="https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass">Kubernetes priority class</a> of UAIs. If it were a different class, it would affect both Kubernetes default resource limit / request assignments and Kubernetes scheduling priority for the UAI. The `public_ip` field is a flag that indicates whether the UAI should be given an external IP address LoadBalancer service so that clients outside the Kubernetes cluster can reach it, or only be given a Kubernetes Cluster-IP address. For the most part, this controls whether the UAI is reachable by SSH from external clients, but it also controls whether the ports in `opt_ports` are reachable as well. The `resource_config` field is not set, but could be set to a resource specification to override namespace defaults on Kubernetes resource requests / limits. The `uai_compute_network` flag indicates whether this UAI uses the macvlan mechanism to gain access to the Shasta compute node network. This needs to be `true` to support workload management. The `uai_creation_class` field is used by [broker UAIs](#main-uaimanagement-brokermode-brokerclasses) to tell the broker what kind of UAI to create when automatically generating a UAI.
 
 After all these individual items, we see the UAI Image to be used to create UAIs of this class:
 
@@ -1164,7 +1164,7 @@ Finally we see a list of volumes that will show up in UAIs created using this cl
       }
 ```
 
-Here we are inheriting the timezone from the host node by importing `/etc/localtime` to the UAI.  We are picking up access to the Lustre file system mounted on the host node as `/lus` and mounting that within the UAI at the same path. We then pick up two pieces of Slurm configuration, the munge key and the slurm configuration file, from Kubernetes and mount them as files at `/root/slurm_config/munge` and `/etc/slurm` respectively.
+Here we are inheriting the timezone from the host node by importing `/etc/localtime` to the UAI. We are picking up access to the Lustre file system mounted on the host node as `/lus` and mounting that within the UAI at the same path. We then pick up two pieces of Slurm configuration, the munge key and the slurm configuration file, from Kubernetes and mount them as files at `/root/slurm_config/munge` and `/etc/slurm` respectively.
 
 #### Adding a UAI Class <a name="main-uasconfig-classes-add"></a>
 
@@ -1291,7 +1291,7 @@ Direct administrative UAI management is available mostly to allow administrators
 
 The legacy mode of UAI management gives users the authority to create, list and delete UAIs that belong to them. While this is a conceptually simple mode, it can lead to an unnecessary proliferation of UAIs belonging to a single user if the user is not careful to create UAIs only when needed. The legacy mode also cannot take advantage of UAI classes to create more than one kind of UAI for different users' needs.
 
-The UAI broker mode creates / re-uses UAIs on demand when a user logs into a broker UAI using SSH.  A site may run multiple broker UAIs, each configured to create UAIs of a different UAI class and each running with its own externally visible IP address. By choosing the correct IP address and logging into the broker, a user ultimately arrives in a UAI tailored for a given use case. Since the broker is responsible for managing the underlying end-user UAIs, users need not be given authority to create UAIs directly and, therefore, cannot cause a proliferation of unneeded UAIs. Since the broker UAIs each run separately on different IP addresses with, potentially, different user authorizations configured, a site can control which users are given access to which classes of end-user UAIs.
+The UAI broker mode creates / re-uses UAIs on demand when a user logs into a broker UAI using SSH. A site may run multiple broker UAIs, each configured to create UAIs of a different UAI class and each running with its own externally visible IP address. By choosing the correct IP address and logging into the broker, a user ultimately arrives in a UAI tailored for a given use case. Since the broker is responsible for managing the underlying end-user UAIs, users need not be given authority to create UAIs directly and, therefore, cannot cause a proliferation of unneeded UAIs. Since the broker UAIs each run separately on different IP addresses with, potentially, different user authorizations configured, a site can control which users are given access to which classes of end-user UAIs.
 
 ### Administrative Management of UAIs <a name="main-uaimanagement-adminuai"></a>
 
@@ -1336,8 +1336,8 @@ cray uas admin uais create [options]
 where options are:
 * `--class-id <class-id>` the class of the UAI to be created. This option must be specified unless a default UAI class exists, in which case, it can be omitted and the default will be used
 * `--owner '<user-name>'` create the UAI as owned by the specified user
-* `--passwd str '<passwd-string>'` specify the `/etc/password` format string for the user who owns the UAI.  This will be used to set up credentials within the UAI for the owner when the owner logs into the UAI
-* `--publickey-str '<public-ssh-key>'` specify the SSH public key that will be used to authenticate with the UAI.  The key should be, for example, the contents of an `id_rsa.pub` file used by SSH.
+* `--passwd str '<passwd-string>'` specify the `/etc/password` format string for the user who owns the UAI. This will be used to set up credentials within the UAI for the owner when the owner logs into the UAI
+* `--publickey-str '<public-ssh-key>'` specify the SSH public key that will be used to authenticate with the UAI. The key should be, for example, the contents of an `id_rsa.pub` file used by SSH.
 
 #### Examining UAIs <a name="main-uaimanagement-adminuai-examine"></a>
 
@@ -1388,13 +1388,13 @@ results = [ "Successfully deleted uai-vers-715fa89d", "Successfully deleted uai-
 
 ### Legacy Mode UAI Management <a name="main-uaimanagement-legacymode"></a>
 
-In the legacy mode, users create and manage their own UAIs through the Shasta CLI.  A user may create, list and delete only UAIs owned by the user. The user may not create a UAI for another user, nor may the user see or delete UAIs owned by another user. Once created, the information describing the UAI gives the user the information needed to reach the UAI using SSH and log into it.
+In the legacy mode, users create and manage their own UAIs through the Shasta CLI. A user may create, list and delete only UAIs owned by the user. The user may not create a UAI for another user, nor may the user see or delete UAIs owned by another user. Once created, the information describing the UAI gives the user the information needed to reach the UAI using SSH and log into it.
 
-The following diagram illustrates a system running with UAIs created in the legacy mode by four users, each of whom has created at least one end-user UAI.  Notice that the user Pat has created two end-user UAIs:
+The following diagram illustrates a system running with UAIs created in the legacy mode by four users, each of whom has created at least one end-user UAI. Notice that the user Pat has created two end-user UAIs:
 
 ![UAS Legacy Mode](../img/uas_legacy_mode.svg)
 
-In the simplest UAS configuration, there is some number of UAI images available for use in legacy mode and there is a set of volumes defined. In this configuration, when a UAI is created, the user may specify the UAI image to use as an option when creating the UAI, or may allow a default UAI image, if one is assigned, to be used. Every volume defined at the time the UAI is created will be mounted unconditionally in every newly-created UAI if this approach is used. This can lead to problems with [conflicting volume mount points](#main-trouble-dupmounts) and [unresolvable volumes](#main-trouble-stuckuais) in some configurations of UAS.  Unless UAI classes are used to make UAIs, care must be taken to ensure all volumes have unique mount-path settings and are accessible in the `user` Kubernetes namespace.
+In the simplest UAS configuration, there is some number of UAI images available for use in legacy mode and there is a set of volumes defined. In this configuration, when a UAI is created, the user may specify the UAI image to use as an option when creating the UAI, or may allow a default UAI image, if one is assigned, to be used. Every volume defined at the time the UAI is created will be mounted unconditionally in every newly-created UAI if this approach is used. This can lead to problems with [conflicting volume mount points](#main-trouble-dupmounts) and [unresolvable volumes](#main-trouble-stuckuais) in some configurations of UAS. Unless UAI classes are used to make UAIs, care must be taken to ensure all volumes have unique mount-path settings and are accessible in the `user` Kubernetes namespace.
 
 A slightly more sophisticated configuration approach defines a default UAI Class that is always used by legacy mode UAI creation. When this approach is taken, the user can no longer specify the image to use, as it will be supplied by the UAI class, and the volumes mounted in any UAI created in legacy mode will be based on the specified UAI class. As long as volumes do not conflict within the list of volumes in a given UAI class, there is no need to avoid duplicate mount-path settings in the global list of volumes when this approach is used.
 
@@ -1621,7 +1621,7 @@ where `<path>` is the path to a file containing an SSH public-key matched to the
 user> cray uas list
 ```
 
-to watch the UAI and see when it is ready for logins. The user logs into the UAI over SSH to do work in the UAI.  When the user is finished with the UAI it can be deleted using a command of the form
+to watch the UAI and see when it is ready for logins. The user logs into the UAI over SSH to do work in the UAI. When the user is finished with the UAI it can be deleted using a command of the form
 
 ```
 user> cray uas delete --uai-list '<uai-list>'
@@ -1683,7 +1683,7 @@ vers> cray uas delete --uai-list uai-vers-8ee103bf
 results = [ "Successfully deleted uai-vers-8ee103bf",]
 ```
 
-In this example the user logs into the CLI using `cray auth login` and a user name and password matching that user's credentials in Keycloak on Shasta. From there the user creates a UAI. The UAI starts out in a `Pending` or `Waiting` state as Kubernetes constructs its pod and starts its container running. Using `cray uas list` the user watches the UAI until it reaches a `Running: Ready` state. The UAI is now ready to accept SSH logins from the user, and the user then logs into the UAI to run a simple Slurm job, and logs out. Now finished with the UAI, the user deletes it with `cray uas delete`.  If the user has more than one UAI to delete, the argument to the `--uai-list` option can be a comma separated list of UAI names.
+In this example the user logs into the CLI using `cray auth login` and a user name and password matching that user's credentials in Keycloak on Shasta. From there the user creates a UAI. The UAI starts out in a `Pending` or `Waiting` state as Kubernetes constructs its pod and starts its container running. Using `cray uas list` the user watches the UAI until it reaches a `Running: Ready` state. The UAI is now ready to accept SSH logins from the user, and the user then logs into the UAI to run a simple Slurm job, and logs out. Now finished with the UAI, the user deletes it with `cray uas delete`. If the user has more than one UAI to delete, the argument to the `--uai-list` option can be a comma separated list of UAI names.
 
 #### Listing Available UAI Images in Legacy Mode <a name="main-uaimanagement-legacymode-list"></a>
 
@@ -1730,17 +1730,17 @@ username = "vers"
 
 ### The UAI Broker Based Mode <a name="main-uaimanagement-brokermode"></a>
 
-A UAI broker is a special kind of UAI whose job is not to host users directly but to field attempts to reach a UAI, locate or create a UAI for the user making the attempt, and then pass the connection on to the correct UAI.  Multiple UAI brokers can be created, each serving a UAI of a different class, making it possible to set up UAIs for varying workflows and environments as needed. The following illustrates a system using the UAI broker mode of UAI management:
+A UAI broker is a special kind of UAI whose job is not to host users directly but to field attempts to reach a UAI, locate or create a UAI for the user making the attempt, and then pass the connection on to the correct UAI. Multiple UAI brokers can be created, each serving a UAI of a different class, making it possible to set up UAIs for varying workflows and environments as needed. The following illustrates a system using the UAI broker mode of UAI management:
 
 ![UAS Broker Mode](../img/uas_broker_mode.svg)
 
-Notice that, unlike in the legacy model, in this model users log into their UAIs through the UAI broker. After that, each user is assigned an end-user UAI by the broker and the SSH session is forwarded to the end-user UAI.  This is seamless from the user's perspective, as the SSH session is carried through the UAI broker and into the end-user UAI.
+Notice that, unlike in the legacy model, in this model users log into their UAIs through the UAI broker. After that, each user is assigned an end-user UAI by the broker and the SSH session is forwarded to the end-user UAI. This is seamless from the user's perspective, as the SSH session is carried through the UAI broker and into the end-user UAI.
 
-To make all of this work, the administrator must define at least one UAI class containing the configuration for the end-user UAIs to be created by the UAI broker and one UAI class containing the UAI broker configuration itself. The UAI broker should be [configured by the site to permit authentication](#main-uaimanagement-brokermode-brokerclasses-ldap) of users. This can be carried out using volumes to place configuration files as needed in the file system namespace of the broker UAI.  Finally, once all of this is prepared, the administrator launches the broker UAI, and makes the IP address of the broker UAI available for users to log into.
+To make all of this work, the administrator must define at least one UAI class containing the configuration for the end-user UAIs to be created by the UAI broker and one UAI class containing the UAI broker configuration itself. The UAI broker should be [configured by the site to permit authentication](#main-uaimanagement-brokermode-brokerclasses-ldap) of users. This can be carried out using volumes to place configuration files as needed in the file system namespace of the broker UAI. Finally, once all of this is prepared, the administrator launches the broker UAI, and makes the IP address of the broker UAI available for users to log into.
 
 #### Configuring End-User UAI Classes for Broker Mode <a name="main-uaimanagement-brokermode-enduserclasses"></a>
 
-Each UAI broker will create and manage a single class of end-user UAIs.  Setting up UAI classes for this is similar to [configuring a default UAI class for legacy mode](#main-uaimanagement-legacymode-defaultclass) with the following exceptions:
+Each UAI broker will create and manage a single class of end-user UAIs. Setting up UAI classes for this is similar to [configuring a default UAI class for legacy mode](#main-uaimanagement-legacymode-defaultclass) with the following exceptions:
 
 * the `public_ip` flag for brokered UAI classes should be set to `false`
 * the `default` flag for brokered UAI classes may be set to `true` or `false` but should, most likely, be set to `false`.
@@ -1763,7 +1763,7 @@ Configuring a broker UAI class consists of the following:
 
 ##### An Example of Volumes to Connect broker UAIs to LDAP <a name="main-uaimanagement-brokermode-brokerclasses-ldap"></a>
 
-Broker UAIs authenticate users in SSH and pass the SSH connection on to the selected / created end-user UAI.  To do this authentication, they need an authentication source. For sites that use LDAP as a directory server for authentication, connecting broker UAIs to LDAP is simply a matter of replicating the LDAP configuration used by other nodes / systems at the site (UANs can be a good source of this configuration) inside the broker UAI.  This section shows how to do that using volumes, which permits the standard broker UAI image to be used out of the box and reconfigured externally.
+Broker UAIs authenticate users in SSH and pass the SSH connection on to the selected / created end-user UAI. To do this authentication, they need an authentication source. For sites that use LDAP as a directory server for authentication, connecting broker UAIs to LDAP is simply a matter of replicating the LDAP configuration used by other nodes / systems at the site (UANs can be a good source of this configuration) inside the broker UAI. This section shows how to do that using volumes, which permits the standard broker UAI image to be used out of the box and reconfigured externally.
 
 While it would be possible to make the configuration available as files volume mounted from the host node of the broker UAI, this is difficult to set up and maintain because it means that the configuration files must be present and synchronized across all UAI host nodes. A more practical approach to this is to install the configuration files in Kubernetes as secrets and then mount them from Kubernetes directly. This ensures that no matter where a broker UAI runs, it has access to the configuration.
 
@@ -1969,7 +1969,7 @@ Are you sure you want to continue connecting (yes/no)? yes
 Warning: Permanently added '10.21.138.52' (ECDSA) to the list of known hosts.
 ```
 
-There are several things to notice here. First, the first time the user logs in the broker UAI's SSH host key is unknown, as is normal for SSH.  Next, the user is asked for a password in this example. If the user's home directory, as defined in LDAP had been mounted in the broker UAI and a `.ssh/authorized_keys` entry had been present, there would not have been a password prompt. Home directory trees can be mounted as volumes just as any other directory can. Next, the broker mechanism in the broker UAI creates a new UAI since `vers` has never logged into this broker UAI before. Finally, there is a second prompt to acknowledge an unknown host which is, in this case, the end-user UAI itself. The broker UAI constructs a public/private key pair for the hidden SSH connection between the broker and the end-user UAI shown in the [overview figure](#main-uaimanagement-brokermode) above.
+There are several things to notice here. First, the first time the user logs in the broker UAI's SSH host key is unknown, as is normal for SSH. Next, the user is asked for a password in this example. If the user's home directory, as defined in LDAP had been mounted in the broker UAI and a `.ssh/authorized_keys` entry had been present, there would not have been a password prompt. Home directory trees can be mounted as volumes just as any other directory can. Next, the broker mechanism in the broker UAI creates a new UAI since `vers` has never logged into this broker UAI before. Finally, there is a second prompt to acknowledge an unknown host which is, in this case, the end-user UAI itself. The broker UAI constructs a public/private key pair for the hidden SSH connection between the broker and the end-user UAI shown in the [overview figure](#main-uaimanagement-brokermode) above.
 
 The next time `vers` logs in, it looks more like this:
 
@@ -1993,18 +1993,18 @@ This section describes how to manage and customize these images.
 
 ### The Provided Broker UAI Image <a name="main-uaiimages-providedbroker"></a>
 
-The broker UAI image that comes with UAS is the image used to construct broker UAIs.  The key pieces of the broker UAI image are:
+The broker UAI image that comes with UAS is the image used to construct broker UAIs. The key pieces of the broker UAI image are:
 
 * an entrypoint shell script that initializes the container and starts the SSH daemon running
 * an SSH configuration that forces logged in users into the `switchboard` command which creates / selects end-user UAIs and redirects connections
 
 #### Customizing the Broker UAI Image <a name="main-uaiimages-providedbroker-customizingbroker"></a>
 
-The primary way to customize the broker UAI image is by defining volumes and connecting them to the broker UAI class for a given broker. An example of this is configuring the broker for LDAP shown [above](#main-uaimanagement-brokermode-brokerclasses-ldap).  Some customizations may require action that cannot be covered simply by using a volume. Those cases can be covered either by volume mounting a customized entrypoint script, or volume mounting a customized SSH configuration. Both of these are shown below.
+The primary way to customize the broker UAI image is by defining volumes and connecting them to the broker UAI class for a given broker. An example of this is configuring the broker for LDAP shown [above](#main-uaimanagement-brokermode-brokerclasses-ldap). Some customizations may require action that cannot be covered simply by using a volume. Those cases can be covered either by volume mounting a customized entrypoint script, or volume mounting a customized SSH configuration. Both of these are shown below.
 
 ##### Customizing the Broker UAI Entrypoint Script <a name="main-uaiimages-providedbroker-customizingbroker-entrypoint"></a>
 
-The broker UAI entrypoint script runs once every time the broker UAI starts. It resides at `/app/broker/entrypoint.sh` in the broker UAI image. The entrypoint script is the only file in that directory, so it can be overridden by creating a Kubernetes config-map in the `uas` namespace containing the modified script and creating a volume using that config-map with a mount point of `/app/broker`.  There is critical content in the entrypoint script that should not be modified. Here is a tour the unmodified script:
+The broker UAI entrypoint script runs once every time the broker UAI starts. It resides at `/app/broker/entrypoint.sh` in the broker UAI image. The entrypoint script is the only file in that directory, so it can be overridden by creating a Kubernetes config-map in the `uas` namespace containing the modified script and creating a volume using that config-map with a mount point of `/app/broker`. There is critical content in the entrypoint script that should not be modified. Here is a tour the unmodified script:
 
 ```
 #!/bin/bash
@@ -2031,7 +2031,7 @@ sssd
 sleep infinity
 ```
 
-Starting at the top, `pam_config ...` can be customized to set up PAM as needed. The configuration here assumes the broker is using SSSD to reach a directory server for authentication and that, if a home directory is not present for a user at login, one should be made on the broker. The `ssh-keygen...` part is needed to set up the SSH host key for the broker and should be left alone. The `UAI_CREATION_CLASS` code should be left alone, as it sets up information used by `switchboard` to create end-user UAIs.  The `/usr/sbin/sshd...` part starts the SSH server on the broker and should be left alone. Configuration of SSH is covered in the next section and is done by replacing `/etc/switchboard/sshd_config` not by modifying this line. The `sssd` part assumes the broker is using SSSD to reach a directory server, it can be changed as needed. The `sleep infinity` prevents the script from exiting which keeps the broker UAI running. It should not be removed or altered. As long as the basic flow and contents described here are honored, other changes to this script should work without compromising the broker UAI's function.
+Starting at the top, `pam_config ...` can be customized to set up PAM as needed. The configuration here assumes the broker is using SSSD to reach a directory server for authentication and that, if a home directory is not present for a user at login, one should be made on the broker. The `ssh-keygen...` part is needed to set up the SSH host key for the broker and should be left alone. The `UAI_CREATION_CLASS` code should be left alone, as it sets up information used by `switchboard` to create end-user UAIs. The `/usr/sbin/sshd...` part starts the SSH server on the broker and should be left alone. Configuration of SSH is covered in the next section and is done by replacing `/etc/switchboard/sshd_config` not by modifying this line. The `sssd` part assumes the broker is using SSSD to reach a directory server, it can be changed as needed. The `sleep infinity` prevents the script from exiting which keeps the broker UAI running. It should not be removed or altered. As long as the basic flow and contents described here are honored, other changes to this script should work without compromising the broker UAI's function.
 
 Here is an example of replacing the entrypoint script with a new entrypoint script that changes the SSSD invocation to explicitly specify the `sssd.conf` file path (the standard path is used here, but a different path might make customizing SSSD for a given site simpler under some set of circumstances):
 
@@ -2360,7 +2360,7 @@ Password:
 
 ### The Provided End-User UAI Image <a name="main-uaiimages-providedenduser"></a>
 
-The provided end-user UAI image is a basic UAI image that includes an up-to-date version of the Sles Linux Distribution and client support for both the Slurm and PBS Professional workload managers. It provides an entrypoint to using UAIs and doing workload management from UAIs.  This UAI image is not suitable for use with the Cray PE because it cannot be assured of being up-to-date with what is running on Shasta compute nodes at a given site. To support building software to be run in compute nodes, it is necessary to create a custom end-user UAI image and use that.
+The provided end-user UAI image is a basic UAI image that includes an up-to-date version of the Sles Linux Distribution and client support for both the Slurm and PBS Professional workload managers. It provides an entrypoint to using UAIs and doing workload management from UAIs. This UAI image is not suitable for use with the Cray PE because it cannot be assured of being up-to-date with what is running on Shasta compute nodes at a given site. To support building software to be run in compute nodes, it is necessary to create a custom end-user UAI image and use that.
 
 ### Custom End-User UAI Images <a name="main-uaiimages-customenduser"></a>
 
@@ -2368,7 +2368,7 @@ A custom end-user UAI image can be any container image set up with the end-user 
 
 #### Building a Custom End-User UAI Image <a name="main-uaiimages-customenduser-build"></a>
 
-The following steps are used to build a custom End-User UAI image called `registry.local/cray/cray-uai-compute:latest`.  Alter this name as needed by changing the following in the procedure:
+The following steps are used to build a custom End-User UAI image called `registry.local/cray/cray-uai-compute:latest`. Alter this name as needed by changing the following in the procedure:
 
 ```
 ncn-w001# UAI_IMAGE_NAME=registry.local/cray/cray-uai-compute:latest
@@ -2509,7 +2509,7 @@ This section contains troubleshooting tips for common problems that can arise wi
 
 ### Getting Log Output from UAS <a name="main-trouble-uaslogs"></a>
 
-At times there will be problems with UAS.  Usually this takes the form of errors showing up on CLI commands that are not immediately interpretable as some sort of input error. It is sometimes useful to examine the UAS service logs to find out what is wrong.
+At times there will be problems with UAS. Usually this takes the form of errors showing up on CLI commands that are not immediately interpretable as some sort of input error. It is sometimes useful to examine the UAS service logs to find out what is wrong.
 
 The first thing to do is to find out the names of the Kubernetes pods running UAS:
 
@@ -2616,7 +2616,7 @@ No home directory exists, creating one
 Checking for munge.key
 Setting up munge.key
 Check for pbs.conf
-Generating ssh keys and sshd_config
+Generating SSH keys and sshd_config
 ssh-keygen: generating new host keys: RSA DSA ECDSA ED25519 
 ...
 ```
@@ -2639,7 +2639,7 @@ The above is from a successful broker starting and running.
 
 ### Stale Brokered UAIs <a name="main-trouble-staleuais"></a>
 
-When a broker UAI terminates and re-starts the SSH key used to forward SSH sessions to end-user UAIs changes (this is a known problem) and subsequent broker UAIs are unable to forward sessions to end-user UAIs.  The symptom of this is that a user logging into a broker UAI will receive a password prompt from the end-user UAI and be unable to log in even if providing the correct password. To fix this, remove the stale end-user UAIs and allow the broker UAI to re-create them. The easy way to do this is to use the
+When a broker UAI terminates and re-starts the SSH key used to forward SSH sessions to end-user UAIs changes (this is a known problem) and subsequent broker UAIs are unable to forward sessions to end-user UAIs. The symptom of this is that a user logging into a broker UAI will receive a password prompt from the end-user UAI and be unable to log in even if providing the correct password. To fix this, remove the stale end-user UAIs and allow the broker UAI to re-create them. The easy way to do this is to use the
 
 ```
 cray uas admin uais delete --class-id <creation-class-id>
@@ -2667,7 +2667,7 @@ After that, users should be able to log into the broker UAI and be directed to a
 
 ### Stuck UAIs <a name="main-trouble-stuckuais"></a>
 
-Sometimes the UAI will show a `uai_status` field of `Waiting` and a `uai_msg` field of `ContainerCreating`.  It is possible that this is just a matter of starting the UAI taking longer than normal, perhaps as it pulls in a new UAI image from a registry, but, if it persists for a long time, it is worth investigating. To do this, first find the UAI:
+Sometimes the UAI will show a `uai_status` field of `Waiting` and a `uai_msg` field of `ContainerCreating`. It is possible that this is just a matter of starting the UAI taking longer than normal, perhaps as it pulls in a new UAI image from a registry, but, if it persists for a long time, it is worth investigating. To do this, first find the UAI:
 
 ```
 ncn-m001-pit# cray uas admin uais list --owner ctuser
@@ -2784,7 +2784,7 @@ If a UAI shows a `uai_status` of `Waiting` and a `uai_msg` of `ImagePullBackOff`
 
 ### Administrative Access to UAIs for Diagnosis <a name="main-trouble-adminaccess"></a>
 
-Sometimes there is no better way to figure out a problem with a UAI than to get inside it and look around as an administrator. This is done using `kubectl exec` to start a shell inside the running container as "root" (in the container).  With this an administrator can diagnose problems, make changes to the running UAI and find solutions. It is important to remember, though, that any change made inside a UAI is transitory. These changes only last as long as the UAI is running. To make a permanent change, either the UAI image has to be changed or external customizations must be applied.
+Sometimes there is no better way to figure out a problem with a UAI than to get inside it and look around as an administrator. This is done using `kubectl exec` to start a shell inside the running container as "root" (in the container). With this an administrator can diagnose problems, make changes to the running UAI and find solutions. It is important to remember, though, that any change made inside a UAI is transitory. These changes only last as long as the UAI is running. To make a permanent change, either the UAI image has to be changed or external customizations must be applied.
 
 Here is an example session showing a `ps` command inside the container of a UAI by an administrator:
 
