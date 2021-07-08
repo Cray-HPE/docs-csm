@@ -567,6 +567,6 @@ This guide only details how to apply UAN-specific configuration to the UAN image
     ```
 
 
-Perform [Boot UANs](Boot_UANs.md) to boot the UANs with the new image and BOS session template.
+Perform [Boot UANs](../boot_orchestration/Boot_UANs.md) to boot the UANs with the new image and BOS session template.
 
 

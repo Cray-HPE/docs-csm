@@ -6,11 +6,13 @@ REDS reads its configuration from the System Layout Service \(SLS\). Systems shi
 
 ### REDS Use Cases
 
+---
+
 **Use Case:** Switch replaced \(for example, if a switch fails\).
 
 **Entry Point:** [Configure a Management Switch for REDS](Configure_a_Management_Switch_for_REDS.md)
 
-
+---
 
 **Use Case:**
 
@@ -24,7 +26,7 @@ REDS reads its configuration from the System Layout Service \(SLS\). Systems shi
 1.  Update the SLS configuration; see [Update the SLS File for REDS](Update_the_SLS_File_for_REDS.md)
 2.  [Initialize and Geolocate Nodes](Initialize_and_Geolocate_Nodes.md)
 
-
+---
 
 **Use Case:** Cold Start.
 
@@ -35,13 +37,13 @@ REDS reads its configuration from the System Layout Service \(SLS\). Systems shi
 3.  If any nodes are added, or the wiring is changed, check the SLS configuration.
 4.  [Initialize and Geolocate Nodes](Initialize_and_Geolocate_Nodes.md).
 
-
+---
 
 **Use Case:** Geolocation has failed for one or more compute nodes.
 
 **Entry Point:** [Troubleshoot Common REDS Issues](Troubleshoot_Common_REDS_Issues.md)
 
-
+---
 
 ### Table of Contents
 
