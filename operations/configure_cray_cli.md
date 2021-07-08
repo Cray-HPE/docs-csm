@@ -1,19 +1,18 @@
-# Configure the Cray Command Line Interface (cray CLI)
+# Configure the Cray Command Line Interface (`cray` CLI)
 
-The `cray` command line interface (CLI) is a framework created to integrate all of the system management REST
-APIs into easily usable commands. 
+The `cray` command line interface (CLI) is a framework created to integrate all of the system management REST APIs into easily usable commands. 
 
 Later procedures in the installation workflow use the `cray` CLI to interact with multiple services.
-The `cray` CLI configuration needs to be initialized for the Linux account and the keycloak user running
+The `cray` CLI configuration needs to be initialized for the Linux account, and the Keycloak user running
 the procedure needs to be authorized. This section describes how to initialize the `cray` CLI for use by
-a user and authorize that user.
+a user and how to authorize that user.
 
 The `cray` CLI only needs to be initialized once per user on a node.
 
-1. Unset CRAY_CREDENTIALS environment variable, if previously set.
+1. Unset the CRAY_CREDENTIALS environment variable, if previously set.
 
    Some of the installation procedures leading up to this point use the CLI with a Kubernetes managed service
-   account normally used for internal operations. There is a procedure for extracting the OAUTH token for
+   account that is normally used for internal operations.  There is a procedure for extracting the OAUTH token for
    this service account and assigning it to the `CRAY_CREDENTIALS` environment variable to permit simple CLI operations.  
 
    ```bash
@@ -23,21 +22,21 @@ The `cray` CLI only needs to be initialized once per user on a node.
 1. Initialize the `cray` CLI for the root account.
 
    The `cray` CLI needs to know what host to use to obtain authorization and what user is requesting authorization
-   so it can obtain an OAUTH token to talk to the API Gateway. This is accomplished by initializing the CLI
-   configuration. In this example, the `vers` username and its password are used. 
+   so it can obtain an OAUTH token to talk to the API Gateway.  This is accomplished by initializing the CLI
+   configuration.  In this example, the 'vers' username and its password are used. 
 
    If LDAP configuration was enabled, then use a valid account in LDAP instead of the example account 'vers'.
 
-   If LDAP configuration was not enabled, or is not working, then a keycloak local account could be created. 
-   See [Configure Keycloak Account](configure_keycloak_account.md) to create this local account in keycloak 
+   If LDAP configuration was not enabled, or is not working, then a Keycloak local account could be created. 
+   See [Configure Keycloak Account](configure_keycloak_account.md) to create this local account in Keycloak 
    and then use it instead of the example account 'vers'.
 
    ```bash
    ncn# cray init
    ```
 
-   When prompted, remember to substitute your username instead of 'vers'.
-   Expected output (including your typed input) should look similar to the following:
+   When prompted, remember to use the correct username instead of 'vers'.
+   Expected output (including the typed input) should look similar to the following:
    ```
    Cray Hostname: api-gw-service-nmn.local
    Username: vers
@@ -49,7 +48,7 @@ The `cray` CLI only needs to be initialized once per user on a node.
 
 ## Troubleshooting
 
-***NOTE:***  While resolving these issues is beyond the scope of this section, you may get clues to what is failing by adding `-vvvvv` to the `cray init ...` commands.
+***NOTE:***  While resolving these issues is beyond the scope of this section, more information about what is failing can be found by adding `-vvvvv` to the `cray init ...` commands.
 
    If initialization fails in the above step, there are several common causes:
 
@@ -57,12 +56,12 @@ The `cray` CLI only needs to be initialized once per user on a node.
    * Network connectivity issues with the NMN may be preventing the CLI from reaching the API Gateway and Keycloak for authorization
    * Certificate mismatch or trust issues may be preventing a secure connection to the API Gateway
    * Istio failures may be preventing traffic from reaching Keycloak
-   * Keycloak may not yet be set up to authorize you as a user
+   * Keycloak may not yet be set up to authorize the user
 
-   If the initialization fails and the reason output is like the below example then follow then you will need to restart radosgw on the storage nodes
+   If the initialization fails and the reason output is similar to the following example, restart radosgw on the storage nodes.
 
    ```bash
-   ncn-m002:~ # cray artifacts buckets list -vvv
+   ncn-m002# cray artifacts buckets list -vvv
    Loaded token: /root/.config/cray/tokens/api_gw_service_nmn_local.vers
    REQUEST: PUT to https://api-gw-service-nmn.local/apis/sts/token
 
@@ -82,10 +81,10 @@ The `cray` CLI only needs to be initialized once per user on a node.
     Error: Internal Server Error: The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application.
    ```
 
-   1.  ssh to ncn-s001/2/3
-   2.  Restart your Ceph radosgw process
+   1.  SSH to ncn-s001/2/3.
+   1.  Restart the Ceph radosgw process.
    
-       ***The expected output will be like below but will vary based on the number of nodes running radosgw.***
+       ***The expected output will be similar to the following, but it will vary based on the number of nodes running radosgw.***
 
        ```bash
        ncn-s00(1/2/3)# ceph orch restart rgw.site1.zone1
@@ -93,18 +92,18 @@ The `cray` CLI only needs to be initialized once per user on a node.
        restart rgw.site1.zone1.ncn-s002.tlegbb from host 'ncn-s002'
        restart rgw.site1.zone1.ncn-s003.vwjwew from host 'ncn-s003'
        ```
-   3.  Check to see that the processes were restarted
+   1.  Check to see that the processes restarted.
 
-       ***The "running" time should be in seconds. You restarting all of them could require a couple of mins depending on how many***
+       ***The "running" time should be in seconds. Restarting all of them could require a couple of minutes depending on how many.***
 
        ```bash
-       ncn-s001:~ # ceph orch ps --daemon_type rgw
+       ncn-s001# ceph orch ps --daemon_type rgw
        NAME                             HOST      STATUS         REFRESHED  AGE  VERSION  IMAGE NAME                        IMAGE ID      CONTAINER ID
        rgw.site1.zone1.ncn-s001.cshvbb  ncn-s001  running (29s)  23s ago    9h   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  2a712824adc1
        rgw.site1.zone1.ncn-s002.tlegbb  ncn-s002  running (29s)  28s ago    9h   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  e423f22d06a5
        rgw.site1.zone1.ncn-s003.vwjwew  ncn-s003  running (29s)  23s ago    9h   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  1e6ad6bc2c62
        ```
-   4.  In the event that more than 5 minutes has passed and the radosgw services have not restarted you can fail the ceph-mgr process to the standby.
+   1.  In the event that more than 5 minutes has passed and the radosgw services have not restarted, fail the ceph-mgr process to the standby.
 
        ***There are cases where an orchestration task gets stuck and our current remediation is to fail the Ceph manager process.***
        ```bash
@@ -120,5 +119,7 @@ The `cray` CLI only needs to be initialized once per user on a node.
        ncn-s001.qucrpr
        ```
 
-   5.  At this point your process should restart, but confirm they have restarted like in step 3, and there is the outside case you may need to do steps 2 and 3 again.  
+   1.  Verify that the processes restarted using the command from step 3.
+    
+        At this point the processes should restart. If they do not, it is possible that steps 2 and 3 will need to be done again.  
 

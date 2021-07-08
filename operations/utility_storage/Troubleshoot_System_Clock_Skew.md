@@ -46,7 +46,7 @@ This procedure requires admin privileges.
 
     1. View the Ceph logs.
 
-        If looking back to earlier logs, use the xzgrep command for the ceph.log or the ceph-mon\*.log. There are cases where the MGR and OSD logs are not in the ceph-mon logs. This indicates that the skew was very drastic and sudden, thus causing the ceph-mon process to panic and not log the issue.
+        If looking back to earlier logs, use the `xzgrep` command for the ceph.log or the ceph-mon\*.log. There are cases where the MGR and OSD logs are not in the ceph-mon logs. This indicates that the skew was very drastic and sudden, thus causing the ceph-mon process to panic and not log the issue.
 
         ```bash
         ncn-m001# grep skew /var/log/ceph/*.log

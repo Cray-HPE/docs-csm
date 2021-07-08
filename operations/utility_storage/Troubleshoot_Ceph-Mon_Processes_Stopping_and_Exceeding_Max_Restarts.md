@@ -8,7 +8,7 @@ Return the Ceph cluster to a healthy state by resolving issues with ceph-mon pro
 
 This procedure requires admin privileges.
 
-### Procedure
+## Procedure
 
 See [Collect Information about the Ceph Cluster](Collect_Information_About_the_Ceph_Cluster.md) for more information on how to interpret the output of the Ceph commands used in this procedure.
 
