@@ -14,7 +14,9 @@ When doing a rolling upgrade of the entire cluster, at some point you will need 
 responsibility of the "stable" NCN to another master node. However, you do not need to do this before you are ready to
 upgrade that node.
 
-### Stage 0 - Prerequisites & Preflight Checks
+## Upgrade Stages
+
+### Stage 0. - Prerequisites & Preflight Checks
 
 > NOTE: CSM-0.9.4 is the version of CSM required in order to upgrade to CSM-1.0.0 (available with Shasta v1.5).
 
@@ -26,7 +28,9 @@ ncn# kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm'
 
 This check will also be conducted in the 'prerequisites.sh' script listed below and will fail if the system is not running CSM-0.9.4.
 
-#### Ensure Gitea PVC configuration is not in customizations.yaml
+#### Stage 0.1. - Validate customizations.yaml
+
+Perform these steps to ensure the Gitea PVC configuration is not in customizations.yaml
 
 1. If you manage customizations.yaml in an external Git repository ([as
    recommended](../../install/prepare_site_init.md#version-control-site-init-files)),
@@ -72,39 +76,41 @@ This check will also be conducted in the 'prerequisites.sh' script listed below 
    ncn-m001# cd -
    ```
 
+#### Stage 0.2. - Execute Prerequisites Check
 
-### Option 1 - Internet Connected Environment
-Install document RPM package:
+1. Install document RPM package:
 
-```bash
-ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
-```
+    * Internet Connected
+        ```bash
+        ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
+        ```
 
-Run: 
-```bash
-ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --endpoint [ENDPOINT]
-```
+    * Air Gapped
 
-**NOTE** ENDPOINT is optional for internal use. It is pointing to internal arti by default
+        ```bash
+        ncn-m001# rpm -Uvh [PATH_TO_docs-csm-install-*.noarch.rpm]
+        ```
 
-### Option 2 - Air Gapped Environment
-Install document RPM package: 
+2. Run check script:
 
-```bash
-ncn-m001# rpm -Uvh [PATH_TO_docs-csm-install-*.noarch.rpm]
-```
+    * Internet Connected
 
-Run: 
-```bash
-ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --tarball-file [PATH_TO_CSM_TARBALL_FILE]
-```
+        ```bash
+        ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --endpoint [ENDPOINT]
+        ```
 
-Above script also runs the goss tests on the initial stable node (typically `ncn-m001`) where the latest version of CSM has been installed. Make sure the goss test pass before continue.
+        **NOTE** ENDPOINT is optional for internal use. It is pointing to internal arti by default
 
-## Upgrade Stages
+    * Air Gapped
+
+        ```bash
+        ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --tarball-file [PATH_TO_CSM_TARBALL_FILE]
+        ```
+
+3. The script also runs the goss tests on the initial stable node (typically `ncn-m001`) where the latest version of CSM has been installed. Make sure the goss test pass before continue.
 
 ### Stage 1.  Ceph upgrade from Nautilus (14.2.x) to Octopus (15.2.x)
-#### Stage 1.1
+#### Stage 1.1.
 Run: 
 ```bash
 ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-ceph-initial.sh ncn-s001
@@ -112,7 +118,7 @@ ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-ceph-initia
 
 > NOTE: Run the script once each for all storage nodes. Follow output of the script carefully. The script will pause for manual interaction
 
-#### Stage 1.2
+#### Stage 1.2.
 
 ```bash
 ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-ceph.sh
@@ -142,7 +148,9 @@ ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-ceph-nodes.
 
 > NOTE: During the CSM-0.9 install the LiveCD containing the initial install files for this system should have been unmounted from the master node when rebooting into the Kubernetes cluster.  The scripts run in this section will also attempt to unmount/eject it if found to ensure the USB stick doesn't get erased.
 
-#### Stage 3.1. For each master node in the cluster (exclude m001), again follow the steps:
+#### Stage 3.1.
+
+For each master node in the cluster (exclude m001), again follow the steps:
 
 ```bash
 ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-master.sh ncn-m002
@@ -150,7 +158,9 @@ ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-master.
 
 > NOTE: Run the script once each for all master nodes, excluding ncn-m001. Follow output of above script carefully. The script will pause for manual interaction
 
-#### Stage 3.2. For each worker node in the cluster, also follow the steps:
+#### Stage 3.2.
+
+For each worker node in the cluster, also follow the steps:
 
 ```bash
 ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-worker.sh ncn-w002
@@ -158,7 +168,9 @@ ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-worker.
 
 > NOTE: Run the script once each for all worker nodes. Follow output of above script carefully. The script will pause for manual interaction
 
-#### Stage 3.3. For ncn-m001, use ncn-m002 as the stable NCN:
+#### Stage 3.3. 
+
+For ncn-m001, use ncn-m002 as the stable NCN:
 > NOTE: using vlan007/CAN IP to ssh to ncn-m002 for ncn-m001 install
 
 ##### Option 1 - Internet Connected Environment
@@ -197,14 +209,16 @@ ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-
 ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-master.sh ncn-m001
 ```
 
-#### Stage 3.4. On each master node in the cluster, run the following command to complete the Kubernetes upgrade _(this will restart several pods on each master to their new docker containers)_:
+#### Stage 3.4. 
 
-   ```bash
-   ncn-m# kubeadm upgrade apply v1.19.9 -y
-   ```
+On each master node in the cluster, run the following command to complete the Kubernetes upgrade _(this will restart several pods on each master to their new docker containers)_:
+
+```bash
+ncn-m# kubeadm upgrade apply v1.19.9 -y
+```
 
 <a name="deploy-manifests"></a>
-### Stage 4. CSM Service Upgrades
+### Stage 4. - CSM Service Upgrades
 
 Run `csm-service-upgrade.sh` to deploy upgraded CSM applications and services:
 
