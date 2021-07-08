@@ -92,7 +92,7 @@ one of the nodes to facilitate the CSM software upgrade.
 
 Cray System Management (CSM) refers to the product stream which provides the infrastructure to 
 manage a Cray EX system using Kubernetes to manage the containerized workload of layered
-microservices with well-defined REST APIs which provide the ability to discover and control the
+micro-services with well-defined REST APIs which provide the ability to discover and control the
 hardware platform, manage configuration of the system, configure the network, boot nodes, gather
 log and telemetry data, connect API access and user level access to Identity Providers (IdPs),
 and provide a method for system administrators and end-users to access the Cray EX system.

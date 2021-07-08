@@ -287,7 +287,7 @@ ncn-m001# ssh admin@10.252.0.2
 
    * It may take several minutes for all sessions to become **Established**. Wait a minute or so, and then verify that all sessions now are all reported as **Established**. If some sessions remain in an **Idle** state, re-run the **clear ip bgp all** command and check again.
 
-   * If after several tries one or more BGP session remains **Idle**, refer to [Check BGP Status and Reset Sessions](network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md) for more information.
+   * If after several tries one or more BGP session remains **Idle**, see [Check BGP Status and Reset Sessions](network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
 
 2. Repeat the above **Mellanox** procedure using the second peer-address (10.252.0.3 here).
 
@@ -330,7 +330,7 @@ On an Aruba switch, the prompt may include `sw-spine` or `sw-agg`.
    verify that all sessions now are reported as **Established**. If some sessions remain in an **Idle** state,
    re-run the **clear bgp * ** command and check again.
 
-   * If after several tries one or more BGP session remains **Idle**, refer to [Check BGP Status and Reset Sessions](network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md) for more information.
+   * If after several tries one or more BGP session remains **Idle**, see [Check BGP Status and Reset Sessions](network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md)
 
 
 1. Repeat the above **Aruba** procedure using the second peer-address (10.252.0.5 in this example).

@@ -14,23 +14,22 @@ The parameters which can be set are:
 * SSH console key
 
    IMPORTANT: If the scsd tool is used to update the SSHConsoleKey value outside of ConMan, it will
-   disrupt the ConMan connection to the console and collection of console logs. Refer to "About the
-   ConMan Containerized Service" in the _HPE Cray EX System Administration Guide 1.5 S-8001_.
+   disrupt the ConMan connection to the console and collection of console logs. See [ConMan](conman/ConMan.md)
+   for more information about remote consoles and collecting console logs.
 
 
 However, this procedure only describes how to change the SSH key to enable passwordless SSH for
 troubleshooting of power down and power up logs on the node BMCs.
 
-Refer to the _HPE Cray EX Hardware Management Administration Guide 1.5 S-8015_ for more information about
-these other topics for changing the other parameters.
+See [Manage Parameters with the scsd Service](system_configuration_service/Manage_Parameters_with_the_scsd_Service.md)
+for more information about these topics for changing the other parameters.
 
-   * Manage Parameters with the scsd Service
-      * Retrieve Current Information from Targets
-      * Retrieve Information from a Single target
-      * Set Parameters for Targets
-      * Set Parameters for a Single BMC or Controller
-      * Set Redfish Credentials for Multiple Targets
-      * Set Redfish Credentials for a Single Target
+   * Retrieve Current Information from Targets
+   * Retrieve Information from a Single target
+   * Set Parameters for Targets
+   * Set Parameters for a Single BMC or Controller
+   * Set Redfish Credentials for Multiple Targets
+   * Set Redfish Credentials for a Single Target
 
 The NTP server and syslog server for BMCs in the liquid-cooled cabinet are typically set by MEDS.
 

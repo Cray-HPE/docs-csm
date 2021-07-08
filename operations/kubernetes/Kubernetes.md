@@ -1,14 +1,14 @@
 ## Kubernetes
 
-The system management components are broken down into a series of microservices. Each service is independently deployable, fine-grained, and uses lightweight protocols. As a result, the system's microservices are modular, resilient, and can be updated independently. Services within this architecture communicate via REST APIs.
+The system management components are broken down into a series of micro-services. Each service is independently deployable, fine-grained, and uses lightweight protocols. As a result, the system's micro-services are modular, resilient, and can be updated independently. Services within this architecture communicate via REST APIs.
 
 ### About Kubernetes
 
-Kubernetes is a portable and extensible platform for managing containerized workloads and services. Kubernetes serves as a microservices platform on the system that facilitates application deployment, scaling, and management. The system uses Kubernetes for container orchestration.
+Kubernetes is a portable and extensible platform for managing containerized workloads and services. Kubernetes serves as a micro-services platform on the system that facilitates application deployment, scaling, and management. The system uses Kubernetes for container orchestration.
 
 ### Resiliency
 
-The resiliency feature of Kubernetes ensures that the desired number of deployments of a microservice are always running on one or more NCNs. In addition, Kubernetes ensures that if one NCN becomes unresponsive, the microservices that were running on it are migrated to another NCN that is up and meets the requirements of the microservices.
+The resiliency feature of Kubernetes ensures that the desired number of deployments of a micro-service are always running on one or more NCNs. In addition, Kubernetes ensures that if one NCN becomes unresponsive, the micro-services that were running on it are migrated to another NCN that is up and meets the requirements of the micro-services.
 
 ### Kubernetes Components
 

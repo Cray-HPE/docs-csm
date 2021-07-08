@@ -1,21 +1,16 @@
 # Manage Node Consoles
 
-The cray-conman service determines which nodes it should monitor by checking with the Hardware State
-Manager (HSM) service. It does this once when it starts. If HSM has not discovered some nodes when
-cray-conman starts, then HSM is unaware of them and so is cray-conman.
+ConMan is used for connecting to remote consoles and collecting console logs. These node logs can then be used for various administrative purposes, such as troubleshooting node boot issues.
+
+ConMan runs on the system in a set of containers within Kubernetes pods named cray-console-operator and cray-console-node.
+
+The cray-console-operator and cray-console-node pods determine which nodes they should monitor by checking with the
+Hardware State Manager (HSM) service. They do this once when they starts. If HSM has not discovered some nodes when
+they start, then HSM is unaware of them and so are cray-console-operator and cray-console-node pods.
 
 Verify that all nodes are being monitored for console logging and connect to them if desired.
 
-Refer to "About the ConMan Containerized Service" in the _HPE Cray EX System Administration Guide 1.5 S-8001_
-for more information about these topics.
-
-   * Access Compute Node Logs Using ConMan
-   * Access Console Log Data Via the System Monitoring Framework (SMF)
-   * Log in to a Node Using ConMan
-   * Establish a Serial Connection to NCNs
-   * Troubleshoot ConMan Blocking Access to a Node BMC
-   * Troubleshoot ConMan Failing to Recognize New or Removed Nodes
-
+See [ConMan](coman/ConMan.md) for other procedures related to remote consoles and node console logging.
 
 ## Procedure
 

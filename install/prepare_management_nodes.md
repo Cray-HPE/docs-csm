@@ -60,7 +60,7 @@ Later in the installation process the HPC Firmware Pack will be installed on the
    While the reinstall process happens, these nodes would not be able to function normally. As part of the
    reinstall, they will be rebooted with new boot images and configuration.
 
-   Refer to "Shut Down and Power Off Compute and User Access Nodes" in the _HPE Cray EX Hardware Management Administration Guide 1.5 S-8015_.
+   See [Shut Down and Power Off Compute and User Access Nodes](../operations/power_management/Shut_Down_and_Power_Off_Compute_and_User_Access_Nodes.md).
 
 <a name="disable_dhcp_service"></a>
 ### Disable DHCP Service

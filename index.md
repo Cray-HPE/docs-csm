@@ -3,15 +3,15 @@
 ### Scope and Audience
 
 The documentation included here describes how to install or upgrade the Cray System Management (CSM)
-software and related supporting operational procedures. CSM software is the foundation upon which
-other software product streams for the HPE Cray EX system depend.
+software and related supporting operational procedures to manage an HPE Cray EX system. CSM software
+is the foundation upon which other software product streams for the HPE Cray EX system depend.
 
 The CSM installation prepares and deploys a distributed system across a group of management
 nodes organized into a Kubernetes cluster which uses Ceph for utility storage. These nodes
 perform their function as Kubernetes master nodes, Kubernetes worker nodes, or utility storage
 nodes with the Ceph storage.
 
-System services on these nodes are provided as containerized microservices packaged for deployment
+System services on these nodes are provided as containerized micro-services packaged for deployment
 as helm charts. These services are orchestrated by Kubernetes to be scheduled on Kubernetes worker
 nodes with horizontal scaling to increase or decrease the number of instances of some services as 
 demand for them varies, such as when booting many compute nodes or application nodes.

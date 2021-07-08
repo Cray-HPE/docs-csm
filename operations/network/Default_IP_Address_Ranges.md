@@ -47,7 +47,7 @@ There are several network values and other pieces of system information that mus
 -   IP values and the network for `ncn-m001` and the BMC on `ncn-m001`.
 -   The main Customer Access Network \(CAN\) subnet and the two address pools mentioned below need to be part of the main subnet.
 
-    For more information on the CAN, see "Customer Access Network \(CAN\)" in the HPE Cray EX System Administration Guide S-8001.
+    For more information on the CAN, see [Customer Access Network](customer_access_network/Customer_Access_Network_CAN.md).
 
     -   Subnet for the MetalLB static address pool \(can-static-pool\), which is used for services that need to be pinned to the same IP address, such as the system DNS service.
     -   Subnet for the MetalLB dynamic address pool \(can-dynamic-pool\), which is used for services such as User Access Instances \(UAIs\) that can be reached by DNS.
