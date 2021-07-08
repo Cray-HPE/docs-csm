@@ -195,7 +195,7 @@ Data is repopulated in BSS when the REDS init job is run.
 
 1.  Run the `cray-fas-loader` Kubernetes job.
 
-    Refer to the [FAS](../firmware/Firmware_Action_Service.md) documentation for more information.
+    Refer to the "Use the `cray-fas-loader` Kubernetes Job" section in [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md) for more information.
 
     When the etcd cluster is rebuilt, all historic data for firmware actions and all recorded snapshots will be lost. Image data will need to be reloaded by following the `cray-fas-loader` Kubernetes job procedure. After images are reloaded any running actions at time of failure will need to be recreated.
 
