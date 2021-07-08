@@ -383,7 +383,7 @@ Pull these files into the current working directory:
       "Couldn't find switch port for NCN: x3000c0s1b0"
       ```
 
-   * An unexpected component may have this message. If this component is an application node with an unusual prefix, it should be added to the application_node_config.yaml file and then rerun "csi config init".   See the procedure to [Create Application Node Config YAML](create_application_node_config_yaml.md)
+   * An unexpected component may have this message. If this component is an application node with an unusual prefix, it should be added to the application_node_config.yaml file and then rerun "csi config init". See the procedure to [Create Application Node Config YAML](create_application_node_config_yaml.md)
 
       ```json
       {"level":"warn","ts":1610405168.8705149,"msg":"Found unknown source prefix! If this is expected to be an Application node, please update application_node_config.yaml","row":
@@ -613,7 +613,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
 1. Disconnect from IPMI console.
 
-   Once the network is up so that ssh to the node works, disconnect from the IPMI console.
+   Once the network is up so that SSH to the node works, disconnect from the IPMI console.
 
    You can disconnect from the IPMI console by using the "~.", that is, the tilde character followed by a period character.
 
