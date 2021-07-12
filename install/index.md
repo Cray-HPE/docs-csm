@@ -73,7 +73,7 @@ sections, but there is also a general troubleshooting topic.
    <a name="bootstrap_pit_node"></a>
    
    1. Bootstrap PIT Node  
-   The Pre-Install Toolkit (PIT) node needs to be bootstrapped from the LiveCD.  There are two media available
+   The Pre-Install Toolkit (PIT) node needs to be bootstrapped from the LiveCD. There are two media available
    to bootstrap the PIT node--the RemoteISO or a bootable USB device. The recommended media is the RemoteISO,
    since it does not require any physical media to prepare. However, remotely mounting an ISO on a BMC does not
    work smoothly for nodes from all vendors. It is recommended to try the RemoteISO first.  

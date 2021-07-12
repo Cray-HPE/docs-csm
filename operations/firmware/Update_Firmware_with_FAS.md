@@ -67,7 +67,7 @@ For each item in the `Hardware Precedence Order`:
 
   2. Interpret the outcome of the dry-run. Look at the counts and determine if the dry-run identified any hardware to update:
 
-     For the steps below, the following returned messages will help determine if a firmware update is needed. The following are end `state`s for `operations`.  The Firmware `action` itself should be in `completed` once all operations have finished.
+     For the steps below, the following returned messages will help determine if a firmware update is needed. The following are end `state`s for `operations`. The Firmware `action` itself should be in `completed` once all operations have finished.
 
      *	`NoOp`: Nothing to do, already at version.
      *	`NoSol`: No viable image is available; this will not be updated.

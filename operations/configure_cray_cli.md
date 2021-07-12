@@ -12,7 +12,7 @@ The `cray` CLI only needs to be initialized once per user on a node.
 1. Unset the CRAY_CREDENTIALS environment variable, if previously set.
 
    Some of the installation procedures leading up to this point use the CLI with a Kubernetes managed service
-   account that is normally used for internal operations.  There is a procedure for extracting the OAUTH token for
+   account that is normally used for internal operations. There is a procedure for extracting the OAUTH token for
    this service account and assigning it to the `CRAY_CREDENTIALS` environment variable to permit simple CLI operations.  
 
    ```bash
@@ -22,8 +22,8 @@ The `cray` CLI only needs to be initialized once per user on a node.
 1. Initialize the `cray` CLI for the root account.
 
    The `cray` CLI needs to know what host to use to obtain authorization and what user is requesting authorization
-   so it can obtain an OAUTH token to talk to the API Gateway.  This is accomplished by initializing the CLI
-   configuration.  In this example, the 'vers' username and its password are used. 
+   so it can obtain an OAUTH token to talk to the API Gateway. This is accomplished by initializing the CLI
+   configuration. In this example, the 'vers' username and its password are used. 
 
    If LDAP configuration was enabled, then use a valid account in LDAP instead of the example account 'vers'.
 

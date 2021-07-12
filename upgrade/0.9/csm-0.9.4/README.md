@@ -156,7 +156,7 @@ ncn-m001# "${CSM_SCRIPTDIR}/update-host-records.sh"
 ```
 <a name="check-unbound-psp"></a>
 ## Check Unbound PSP
-Check for manually created unbound-psp and delete the psp.  Helm will manage the psp during the upgrade.
+Check for manually created unbound-psp and delete the psp. Helm will manage the psp during the upgrade.
 
    ```bash
    ncn-m001# ${CSM_SCRIPTDIR}/check-unbound-psp.sh
@@ -206,7 +206,7 @@ report `FAIL` when uploading duplicate assets. This is ok as long as
    repository data. Once [`upgrade.sh`](#upgrade-services) is run, the git data
    will not be recoverable if this step failed.
 
-1. If `vcs.tar` was successfully created, run `vcs-prep.sh`.  This will force
+1. If `vcs.tar` was successfully created, run `vcs-prep.sh`. This will force
    the PVC into the correct state for the upgrade if necessary.
 
    ```bash
@@ -305,7 +305,7 @@ should resolve itself once the workload manager product is installed.
 ## Fix Kubelet and Kube-Proxy Target Down Prometheus Alerts
 
 > **NOTE**: These scripts should be run from a Kubernetes NCN (manager or
-> worker).  Also note it can take several minutes for the target down alerts to
+> worker). Also note it can take several minutes for the target down alerts to
 > clear after the scripts have been executed.
 
 1. Run the `fix-kube-proxy-target-down-alert.sh` script to fix the kube-proxy

@@ -62,7 +62,7 @@ sw-spine-001# write memory
 ```
 
 # Dell Configuration
-Create the Access list then apply it to all the vlan interfaces. In the example below we only show the NMN VLAN.  This will need to go on all River and MTN networks.
+Create the Access list then apply it to all the vlan interfaces. In the example below we only show the NMN VLAN. This will need to go on all River and MTN networks.
 ```
 ip access-list nmn-hmn
  seq 10 deny ip 10.252.0.0/17 10.254.0.0/17

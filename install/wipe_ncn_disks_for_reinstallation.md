@@ -27,7 +27,7 @@ The following are potential use cases for wiping disks:
 <a name="basic-wipe"></a>
 ### 1. Basic Wipe
 
-A basic wipe includes wiping the disks and all of the RAIDs.  These basic wipe instructions can be
+A basic wipe includes wiping the disks and all of the RAIDs. These basic wipe instructions can be
 executed on **any management nodes** (master, worker and storage).
 
 1. List the disks for verification:

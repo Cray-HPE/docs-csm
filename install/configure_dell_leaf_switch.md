@@ -270,7 +270,7 @@ sw-leaf01(conf-if-eth1/1/51-1/1/52)# end
        spanning-tree port-type admin-edge
    ```
 
-1. Ports that need to be on the NMN (node management network).  This would include air-cooled compute nodes.
+1. Ports that need to be on the NMN (node management network). This would include air-cooled compute nodes.
    ```
    sw-leaf-001(config)#
        interface 1/1/35
