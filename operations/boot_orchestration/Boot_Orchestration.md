@@ -28,6 +28,14 @@ href = "https://api-gw-service-nmn.local/apis/bos/v1"
 rel = "self"
 ```
 
+### BOS API Changes in Upcoming CSM-1.2.0 Release
+
+This is a forewarning of changes that will be made to the BOS API in the upcoming CSM-1.2.0 release. The following changes will be made:
+
+* The `--template-body` option for the Cray CLI `bos` command will be deprecated.
+* Performing a GET on the session status for a boot set (i.e. /v1/session/{session_id}/status/{boot_set_name}) currently returns a status code of 201, but instead it should return a status code of 200. This will be corrected to return 200.
+
+
 ### Table of Contents
 
 The procedures in this section include the information required to boot, configure, and shut down collections of nodes with BOS.
@@ -43,6 +51,7 @@ The procedures in this section include the information required to boot, configu
     - [Limit the Scope of a BOS Session](Limit_the_Scope_of_a_BOS_Session.md)
     - [Configure the BOS Timeout When Booting Compute Nodes](Configure_the_BOS_Timeout_When_Booting_Nodes.md)
     - [Check the Progress of BOS Session Operations](Check_the_Progress_of_BOS_Session_Operations.md)
+    - [Kernel Boot Paramaters](Kernel_Boot_Parameters.md)
     - [Clean Up Logs After a BOA Kubernetes Job](Clean_Up_Logs_After_a_BOA_Kubernetes_Job.md)
     - [Clean Up After a BOS/BOA Job is Completed or Cancelled](Clean_Up_After_a_BOS-BOA_Job_is_Completed_or_Cancelled.md)
     - [Troubleshoot UAN Boot Issues](Troubleshoot_UAN_Boot_Issues.md)
