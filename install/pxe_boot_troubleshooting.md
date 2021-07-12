@@ -8,7 +8,7 @@ In order for PXE booting to successfully work, the management network switches n
 
 To successfully PXE boot nodes, the following is required.
 
-- The IP helper-address must be configured on VLAN 1,2,4,7.  This will be where the layer 3 gateway exists (spine or aggregation)
+- The IP helper-address must be configured on VLAN 1,2,4,7. This will be where the layer 3 gateway exists (spine or aggregation)
 - The virtual-IP/VSX/MAGP IP must be configured on VLAN 1,2,4,7.
 - There must be a static route pointing to the TFTP server (Aruba Only).
 - ncn-m001 needs an active gateway on VLAN1 this can be identified from MTL.yaml generated from CSI.

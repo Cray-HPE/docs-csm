@@ -155,7 +155,7 @@ point for managing the system.
 
 ### Management Nodes
 
-The management nodes are one grouping of NCNs.  The management nodes include the master nodes
+The management nodes are one grouping of NCNs. The management nodes include the master nodes
 with hostnames of the form of ncn-mXXX, the worker nodes with hostnames of the form ncn-wXXX,
 and utility storage nodes, with hostnames of the form ncn-sXXX, where the XXX is a three
 digit number starting with zero padding. The utility storage nodes provide Ceph storage for use
@@ -187,13 +187,13 @@ general access to management REST APIs.
 
 ### Non-Compute Node (NCN)
 
-Any node which is not a compute node may be called a Non-Compute Node (NCN).  The NCNs include
+Any node which is not a compute node may be called a Non-Compute Node (NCN). The NCNs include
 management nodes and application nodes.
 
 ### Pre-Install Toolkit (PIT) node
 
 The Pre-Install Toolkit is installed onto the initial node used as the inception node during software
-installation which is booted from a LiveCD.  The node running the Pre-Install Toolkit is known
+installation which is booted from a LiveCD. The node running the Pre-Install Toolkit is known
 as the PIT node during the installation process until it reboots from a normal management node image
 like the other master nodes.
 

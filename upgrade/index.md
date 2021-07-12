@@ -30,7 +30,7 @@ sections, but there is also a general troubleshooting topic.
 
 1. Update Management Network 
       
-   There are new features and functions with Shasta v1.5.  Some of these changes were available as patches and hotfixes
+   There are new features and functions with Shasta v1.5. Some of these changes were available as patches and hotfixes
    for Shasta v1.4, so may already be applied.
    * Static Lags from the CDU switches to the CMMs (Aruba and Dell).
    * HPE Apollo node port config, requires a trunk port to the iLO.

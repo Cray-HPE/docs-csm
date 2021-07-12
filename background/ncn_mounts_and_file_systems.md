@@ -164,13 +164,12 @@ There are a few overlays used for NCN image boots. These enable two critical fun
 > 2. `losetup -a` will show where the squashFS is mounted from
 > 3. `mount | grep ' / '` will show you the overlay being layered atop the squashFS
 
-
-Let us pick a part the `SQFSRAID` and `ROOTRAID` overlays. 
+Let us pick apart the `SQFSRAID` and `ROOTRAID` overlays. 
 - `/run/rootfsbase` is the SquashFS image itself
 - `/run/initramfs/live` is the squashFS's storage array, where one or more squashFS can live
 - `/run/initramfs/overlayfs` is the overlayFS storage array, where the persistent directories live
 - `/run/overlayfs` and `/run/ovlwork` are symlinks to `/run/initramfs/overlayfs/overlayfs-SQFSRAID-$(blkid -s UUID -o value /dev/disk/by-label/SQFSRAID) and the neighboring work directory
-- Admin note: The "work" directory is where the operating system processes data, it is the interim where data passes between RAM and persistent storage
+- Admin note: The "work" directory is where the operating system processes data. It is the interim where data passes between RAM and persistent storage.
 
 Using the above bullets, one may be able to better understand the machine output below:
 

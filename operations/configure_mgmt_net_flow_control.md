@@ -52,7 +52,7 @@ LAG     Mode      Status    Uptime              Ports
 100     L2-HYBRID up        2 weeks 5 days 01:2 Eth 1/1/51 (Up)
                                                 Eth 1/1/52 (Up)
 ```
-Based on this example, we see that the physical ports are '1/1/51' and '1/1/52'.  Record this information for each leaf switch.
+Based on this example, we see that the physical ports are '1/1/51' and '1/1/52'. Record this information for each leaf switch.
 
 #### CDU Switches
 
@@ -198,7 +198,7 @@ Eth1/30               Down                  Enabled                         Unkn
 Eth1/31               Down                  Enabled                         Unknown           1500              -
 Eth1/32               Down                  Enabled                         Unknown           1500  
 ```
-The links between the 2 spines should be port-channel 100 ('Po100').  The 'mlag-port-channel' interfaces which are connections to leaf, aggregate or CDU switches would be 'Mpo' interfaces with indices greater than 100.  So here, 'Mpo1'-'Mpo11' and 'Mpo17' are connections to NCN's, whereas 'Mpo113', 'Mpo151' and 'Mpo152' are connections to other switches. So identifying the port-channel and mlag-port-channel devices, we look for the "Eth" rows which have one of these labels in parentheses next to it. In the example above, these are:
+The links between the 2 spines should be port-channel 100 ('Po100'). The 'mlag-port-channel' interfaces which are connections to leaf, aggregate or CDU switches would be 'Mpo' interfaces with indices greater than 100. So here, 'Mpo1'-'Mpo11' and 'Mpo17' are connections to NCN's, whereas 'Mpo113', 'Mpo151' and 'Mpo152' are connections to other switches. So identifying the port-channel and mlag-port-channel devices, we look for the "Eth" rows which have one of these labels in parentheses next to it. In the example above, these are:
 
 - Eth1/12
 - Eth1/13
@@ -224,7 +224,7 @@ sw-spine-001 [standalone: master] (config) # interface ethernet <port> flowcontr
 sw-spine-001 [standalone: master] (config) # exit
 sw-spine-001 [standalone: master] # write memory
 ```
-"index" would just be the number after "Po" or "Mpo", so "113" or "151".  "<port>" would be the value after "Eth", so "1/14" or "1/15/2".  Make sure to run the 'flowcontrol' commands for each mlag-port-channel and Ethernet port.
+"index" would just be the number after "Po" or "Mpo", so "113" or "151".  "<port>" would be the value after "Eth", so "1/14" or "1/15/2". Make sure to run the 'flowcontrol' commands for each mlag-port-channel and Ethernet port.
 
 #### Leaf, CDU, and Aggregate Switch 'flowcontrol' Configuration Change
 

@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This document is intended to guide an administrator through the upgrade process going from Cray Systems Management 0.9 to v1.0.  When upgrading a system, this top-level README.md file should be followed top to bottom, and the content on this top level page is meant to be terse. See the additional files in the various directories under the resource_material directory for additional reference material in support of the process/scripts mentioned explicitly on this page.
+This document is intended to guide an administrator through the upgrade process going from Cray Systems Management 0.9 to v1.0. When upgrading a system, this top-level README.md file should be followed top to bottom, and the content on this top level page is meant to be terse. See the additional files in the various directories under the resource_material directory for additional reference material in support of the process/scripts mentioned explicitly on this page.
 
 ## Terminology
 
@@ -146,7 +146,7 @@ ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-ceph-nodes.
 
 ### Stage 3. Kubernetes Upgrade from 1.18.6 to 1.19.9
 
-> NOTE: During the CSM-0.9 install the LiveCD containing the initial install files for this system should have been unmounted from the master node when rebooting into the Kubernetes cluster.  The scripts run in this section will also attempt to unmount/eject it if found to ensure the USB stick doesn't get erased.
+> NOTE: During the CSM-0.9 install the LiveCD containing the initial install files for this system should have been unmounted from the master node when rebooting into the Kubernetes cluster. The scripts run in this section will also attempt to unmount/eject it if found to ensure the USB stick doesn't get erased.
 
 #### Stage 3.1.
 

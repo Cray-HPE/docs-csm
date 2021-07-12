@@ -130,7 +130,7 @@ data so run them only when indicated. Instructions are in the `README` files.
     1. Set variables
     
         **IMPORTANT**: The variables you set depend on whether or not you followed the steps in 
-        [Configure NCN Images to Use Local Timezone](../operations/configure_ntp_on_ncns.md#configure_ncn_images_to_use_local_timezone).  The
+        [Configure NCN Images to Use Local Timezone](../operations/configure_ntp_on_ncns.md#configure_ncn_images_to_use_local_timezone). The
         two paths forward are listed below:
         
         * If you customized the timezones, set the following variables:
@@ -428,7 +428,7 @@ data so run them only when indicated. Instructions are in the `README` files.
    If this machine does not have direct Internet access these RPMs will need to be externally downloaded and then copied to the system.
 
    **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hotfixes
-   were downloaded to a system using the instructions in [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds).  Use that set of RPMs rather than downloading again.
+   were downloaded to a system using the instructions in [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds). Use that set of RPMs rather than downloading again.
 
    ```bash
    linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm

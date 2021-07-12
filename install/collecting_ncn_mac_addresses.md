@@ -150,7 +150,7 @@ is quicker.
 <a name="procedure-recovering-from-an-incorrect-ncn_metadata_csv-file"></a>
 ## Procedure: Recovering from an incorrect `ncn_metadata.csv` file
 
-If you have an incorrect `ncn_metadata.csv` file, you will be unable to deploy the NCNs.  This section details a recovery procedure in case that happens.
+If you have an incorrect `ncn_metadata.csv` file, you will be unable to deploy the NCNs. This section details a recovery procedure in case that happens.
 
 1. Remove the incorrectly-generated configs. Before deleting the incorrectly-generated configs consider making a backup of them. In case they need to be examined at a later time. 
 

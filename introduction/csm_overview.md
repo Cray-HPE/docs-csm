@@ -25,9 +25,9 @@ nidXXXXXX, that is, "nid" followed by six digits. These six digits will be padde
 All other nodes provide supporting functions to these compute nodes.
 * Non-Compute Nodes (NCNs), which carry out system functions and come in many types:
    * Management nodes in a Kubernetes cluster which host system services.
-      * Kubernetes master nodes, with names in the form of ncn-mXXX.  Every system has three or more master nodes.
-      * Kubernetes worker nodes, with names in the form of ncn-wXXX.  Every system has three or more worker nodes.
-      * Utility Storage nodes providing Ceph storage to Kubernetes nodes, with names in the form of ncn-sXXX.  Every system has three or more storage nodes.
+      * Kubernetes master nodes, with names in the form of ncn-mXXX. Every system has three or more master nodes.
+      * Kubernetes worker nodes, with names in the form of ncn-wXXX. Every system has three or more worker nodes.
+      * Utility Storage nodes providing Ceph storage to Kubernetes nodes, with names in the form of ncn-sXXX. Every system has three or more storage nodes.
    * Application nodes (ANs) which are not part of the Kubernetes management cluster
       * User Access Nodes (UANs), known by some as login or front-end nodes
       * Other site-defined types:
