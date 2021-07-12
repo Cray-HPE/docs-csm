@@ -13,6 +13,7 @@ BMC/controller passwords.
    1. [Configure the Cray Command Line Interface (cray CLI)](#configure_cray_cli)
    1. [Lock Management Nodes](#lock_management_nodes)
    1. [Configure BMC and Controller Parameters with SCSD](#configure_with_scsd)
+   1. [Upload Olympus BMC Recovery Firmware into TFTP server](#cray_upload_recovery_images)
    1. [Next Topic](#next-topic)
 
    Note: The procedures in this section of installation documentation are intended to be done in order, even though the topics are
