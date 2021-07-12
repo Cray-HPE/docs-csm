@@ -235,7 +235,7 @@ Please see [Kubernetes_Troubleshooting_Information.md](../../operations/kubernet
 
 ### Troubleshooting PXE Boot Issues
 If execution of the upgrade procedures results in NCNs that have errors booting, please refer to these troubleshooting procedures: 
-[PXE Booting Runbook](https://connect.us.cray.com/confluence/display/CASMNET/PXE+Booting+Runbook)
+[PXE Booting Runbook](../../troubleshooting/pxe_runbook.md)
 
 ### Troubleshooting NTP
 During execution of the upgrade procedure, if it is noted that there is clock skew on one or more NCNs, the following procedure can be used to troubleshoot NTP config or to sync time:
