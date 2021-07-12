@@ -2,9 +2,9 @@
 
 `cray-upload-recovery-images` is a utility for uploading the Olympus BMC recovery files to be served by the *cray-tftp* service. The tool uses the cray cli (*fas*, *artifacts*) and *cray-tftp* to download the s3 recovery images (as remembered by FAS) then upload them into the PVC that is used by *cray-tfpt*.
 
-## Details:
+## Procedure:
 
-1. execute the `cray-upload-recovery-images` script
+1. Execute the `cray-upload-recovery-images` script.
 
 	```bash
 	ncn# cray-upload-recovery-images
