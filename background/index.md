@@ -38,7 +38,7 @@ software, but provides background which might be helpful for troubleshooting an 
 ### Certificate Authority
 
    While a system is being installed for the first time, a certificate authority (CA) is needed. This can be
-   generated for a system, or one can be supplied from a customer intermediate CA.  Outside of a new
+   generated for a system, or one can be supplied from a customer intermediate CA. Outside of a new
    installation, there is no supported method to rotate or change the platform CA in this release.
 
    For more information about these topics, see [Certificate Authority](certificate_authority.md)

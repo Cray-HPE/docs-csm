@@ -63,7 +63,7 @@ or a reinstall..
 <a name="migration"></a>
 ## Migration
 
-There is no direct migration from Shasta v1.3.x releases to Shasta v1.5.  However there is a supported path.
+There is no direct migration from Shasta v1.3.x releases to Shasta v1.5. However there is a supported path.
 
   * Migration from v1.3.x to v1.4.0
 

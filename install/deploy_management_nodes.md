@@ -100,7 +100,7 @@ installs as follows:
 
 1. Define shell environment variables that will simplify later commands to deploy management nodes.
 
-    **Notice** that one of them is the `IPMI_PASSWORD`.  Replace `changeme` with the real root password for BMCs.
+    **Notice** that one of them is the `IPMI_PASSWORD`. Replace `changeme` with the real root password for BMCs.
 
    ```bash
    pit# export mtoken='ncn-m(?!001)\w+-mgmt'

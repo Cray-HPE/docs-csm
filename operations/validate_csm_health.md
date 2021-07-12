@@ -534,7 +534,7 @@ the output.
 
 **NOTES:**
 * BMCs for management cluster master node 'm001' will not typically be present in HSM component data.
-* Chassis Management Controllers (CMC) may show up as not being present in HSM.  CMCs for Intel server blades can be ignored. Gigabyte server blade CMCs not found in HSM is not normal and should be investigated. If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored.
+* Chassis Management Controllers (CMC) may show up as not being present in HSM. CMCs for Intel server blades can be ignored. Gigabyte server blade CMCs not found in HSM is not normal and should be investigated. If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored.
 * HPE PDUs are not supported at this time and will likely show up as not being found in HSM.
 * BMCs having no association with a management switch port will be annotated as such, and should be investigated. Exceptions to this are in Mountain or Hill configurations where Mountain BMCs will show this condition on SLS/HSM mismatches, which is normal.
 * In Hill configurations SLS assumes BMCs in chassis 1 and 3 are populated, and in Mountain configurations SLS assumes all BMCs are populated. Any non-populated BMCs will have no HSM data and will show up in the mismatch list.
@@ -876,7 +876,7 @@ The procedures below use the CLI as an authorized user and run on two separate n
 <a name="uas-uai-init-cli-stop"></a>
 ##### 5.1.1 Stop Using the CRAY_CREDENTIALS Service Account Token
 
-Installation procedures leading up to production mode on Shasta use the CLI with a Kubernetes managed service account normally used for internal operations.  There is a procedure for extracting the OAUTH token for this service account and assigning it to the `CRAY_CREDENTIALS` environment variable to permit simple CLI operations.  The UAS / UAI validation procedure runs as a post-installation procedure and requires an actual user with Linux credentials, not this service account. Unset the `CRAY_CREDENTIALS` environment variable prior to running any of the steps below:
+Installation procedures leading up to production mode on Shasta use the CLI with a Kubernetes managed service account normally used for internal operations. There is a procedure for extracting the OAUTH token for this service account and assigning it to the `CRAY_CREDENTIALS` environment variable to permit simple CLI operations. The UAS / UAI validation procedure runs as a post-installation procedure and requires an actual user with Linux credentials, not this service account. Unset the `CRAY_CREDENTIALS` environment variable prior to running any of the steps below:
 
 ```bash
 ncn# unset CRAY_CREDENTIALS
@@ -1210,7 +1210,7 @@ This means the pre-made end-user UAI image is not in the local registry (or what
 <a name="uas-uai-validate-debug-container"></a>
 ###### 5.2.3.4 Missing Volumes and other Container Startup Issues
 
-Various packages install volumes in the UAS configuration.  All of those volumes must also have the underlying resources available, sometimes on the host node where the UAI is running sometimes from with Kubernetes. If a UAI gets stuck with a `ContainerCreating` `uai_msg` field for an extended time, this is a likely cause. UAIs run in the `user` Kubernetes namespace, and are pods that can be examined using `kubectl describe`.
+Various packages install volumes in the UAS configuration. All of those volumes must also have the underlying resources available, sometimes on the host node where the UAI is running sometimes from with Kubernetes. If a UAI gets stuck with a `ContainerCreating` `uai_msg` field for an extended time, this is a likely cause. UAIs run in the `user` Kubernetes namespace, and are pods that can be examined using `kubectl describe`.
 
 1. Locate the pod.
 

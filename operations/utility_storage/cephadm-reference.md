@@ -2,7 +2,7 @@
 
 ## CEPHADM
 
-cephadm is a new function introduced in Ceph Octopus 15.  It allows for an easier method to install and manage Ceph nodes.
+cephadm is a new function introduced in Ceph Octopus 15. It allows for an easier method to install and manage Ceph nodes.
 
 Common Examples:
 
