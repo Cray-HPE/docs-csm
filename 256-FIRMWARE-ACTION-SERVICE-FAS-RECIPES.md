@@ -55,7 +55,7 @@ The inventory hardware filter takes place after the state component filter has b
 #### Parameters:
 
 1. `manufacturer` - (like Cray, HPE, Gigabyte)
-2. `model` - this is the Redfish reported model, you can specify this but we typically do not for the in-house updates we've done.
+2. `model` - this is the Redfish reported model, you can specify this but we typically do not for the in-house updates we have done.
 
 ---
 
@@ -104,7 +104,7 @@ These filters are then applied; and then `command` parameter applies settings fo
 - `version` - usually `latest` because we want to upgrade usually
 - `tag` - usually `default` because we only care about the default image (this can be mostly ignored)
 - `overrideDryrun` - This determines if this is a LIVE UPDATE or a DRYRUN; if you override; then it will provide a live update
-- `restoreNotPossibleOverride` - this determines if an update (live or dry run) will be attempted if a restore cannot be performed. Typically we don't have enough firmware to be able to do a rollback; that means if you UPDATE away from a particular version, we probably cannot go back to a previous version. Given our context it is most likely that this value will ALWAYS need to be set `true` 
+- `restoreNotPossibleOverride` - this determines if an update (live or dry run) will be attempted if a restore cannot be performed. Typically we do not have enough firmware to be able to do a rollback; that means if you UPDATE away from a particular version, we probably cannot go back to a previous version. Given our context it is most likely that this value will ALWAYS need to be set `true` 
 - `overwriteSameImage` - this will cause a firmware update to be performed EVEN if the device is already at the identified, selected version.  
 - `timeLimit` - this is the amount of time in seconds that any operation should be allowed to execute. Most `cray` stuff can be completed in about 1000 seconds or less; but the `gigabyte` stuff will commonly take 1,500 seconds or greater. We recommend setting the value to 2000; this is just a stop gap to prevent the  operation from never ending, should something get stuck.
 - `description`- this is a human friendly description; use it!
@@ -250,7 +250,7 @@ The hms-discovery job must also be stopped before updates and restarted after up
 
 **IMPORTANT**: The Nodes themselves must be powered **on** in order to update the firmware of the Redstone FPGA on the nodes.  
 
-**NOTE**: If updating FPGAs fail due to "No Image available", you can update using the Override Image for Update procedure in [255-FIRMWARE-ACTIONS-SERVICE-FAS.md](255-FIRMWARE-ACTION-SERVICE-FAS.md).  You can find the imageID using the following command: `cray fas images list --format json | jq '.[] | .[] | select(.target=="Node0.AccFPGA0")'`
+**NOTE**: If updating FPGAs fail due to "No Image available", you can update using the Override Image for Update procedure in [255-FIRMWARE-ACTIONS-SERVICE-FAS.md](255-FIRMWARE-ACTION-SERVICE-FAS.md). You can find the imageID using the following command: `cray fas images list --format json | jq '.[] | .[] | select(.target=="Node0.AccFPGA0")'`
 
 ```json
 {

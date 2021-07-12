@@ -275,7 +275,7 @@ Once you create the MLAG you need to add ports to it.
 
 Configuration with Recommended MLAG-VIP cable.
 - This is recommended by Mellanox but not required.
-- It's purpose is to prevent "split brain" which is where both spines think they are the active gateway.
+- Its purpose is to prevent "split brain" which is where both spines think they are the active gateway.
 - It requires an RJ45 cable between the mgmt0 ports on both switches.
 - https://community.mellanox.com/s/article/how-to-configure-mlag-on-mellanox-switches#jive_content_id_MLAG_VIP
 
@@ -320,13 +320,13 @@ See [SNMP](407-MGMT-NET-SNMP-CONFIG.md)
 
 ## Update CAN configuration
 
-Some systems may have had many switches on the CAN with Shasta v1.3.  In Shasta v1.4, only the spine switches should be on the CAN. Other switches should remove their IP addresses on vlan7.
+Some systems may have had many switches on the CAN with Shasta v1.3. In Shasta v1.4, only the spine switches should be on the CAN. Other switches should remove their IP addresses on vlan7.
 
 See [CAN](408-MGMT-NET-CAN-CONFIG.md)
 
 ## Update NTP configuration
 
-Some Shasta v1.3 systems may have set the switch ntp server to be the IP address of ncn-w001.  With the switch rename, the old IP address for ncn-w001 may now be assigned to one of the switches.
+Some Shasta v1.3 systems may have set the switch ntp server to be the IP address of ncn-w001. With the switch rename, the old IP address for ncn-w001 may now be assigned to one of the switches.
 The Shasta v1.4 configuration sets the switches to have the first three worker nodes as their ntp servers.
 
 See [NTP](414-MGMT-NET-NTP-CONFIG.md)

@@ -38,7 +38,7 @@ ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
    
    1.  ncn-s# systemctl stop ceph-osd.target
    2.  ncn-s# vgremove -f --select 'vg_name=~ceph*'  
-   *This will take a little bit of time, so don't panic.**
+   *This will take a little bit of time, so do not panic.**
    3.  ncn-s# for i in {g..n}; do sgdisk --zap-all /dev/sd$i; done.
    
    **This will vary node to node and you should use lsblk to identify all drives available to Ceph** 

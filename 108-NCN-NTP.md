@@ -10,7 +10,7 @@ The NTP peers are set in `data.json`, which is normally created during an initia
 
 ## Upstream
 
-The upstream NTP server is also set in `data.json`.  If left blank, the NCNs will simply peer with themselves. Until an upstream NTP server is configured, the time on the NCNs may not match the current time at the site, but they will stay in sync with each other.
+The upstream NTP server is also set in `data.json`. If left blank, the NCNs will simply peer with themselves. Until an upstream NTP server is configured, the time on the NCNs may not match the current time at the site, but they will stay in sync with each other.
 
 ## Changing the config
 
@@ -20,7 +20,7 @@ If you need to adjust the config, you have three options:
 - edit `data.json`, restart basecamp, restart nodes so cloud-init runs on boot
 - manually edit `/etc/chrony.d/cray.conf` and restart chrony (`systemctl restart chronyd`) on each node
 
-The first two options are not fully fleshed out yet as we haven't done much testing around changing things. Cloud-init does cache data, so there could be inconsistent results until further testing is done.
+The first two options are not fully fleshed out yet as we have not done much testing around changing things. Cloud-init does cache data, so there could be inconsistent results until further testing is done.
 
 ## Troubleshooting
 
@@ -100,7 +100,7 @@ Logs exist at `/var/log/chrony/`, which can be used for further troubleshooting.
 
 ### Forcing a time sync
 
-You can step the clocks and force a sync of NTP. If Kubernetes is already up or other services, they don't always react well if there is a large jump, so ideally, you would do this as the node is booting (our images do this automatically now):
+You can step the clocks and force a sync of NTP. If Kubernetes is already up or other services, they do not always react well if there is a large jump, so ideally, you would do this as the node is booting (our images do this automatically now):
 
 ```
 chronyc burst 4/4
@@ -117,7 +117,7 @@ chronyc makestep
 
 ## Configure NTP on PIT to your local timezone
 
-Shasta ships with UTC as the default time zone. To change this, you'll need to set an environment variable, as well as `chroot` into the node images and change some files there. You can find a list of timezones to use in the commands below by running `timedatectl list-timezones`.
+Shasta ships with UTC as the default time zone. To change this, you will need to set an environment variable, as well as `chroot` into the node images and change some files there. You can find a list of timezones to use in the commands below by running `timedatectl list-timezones`.
 
 Run the following commands, replacing them with your timezone as needed.
 

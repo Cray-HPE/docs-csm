@@ -146,7 +146,7 @@ For systems that include 4 aggregation switches the cabling will look like the f
 
 ![Gig_intel_worker](img/network/Gigaintel_Worker.png)
 
-**NOTE**: Cabling of ncn-w001 has changed in Shasta v1.4.  Please see ncn-m001 note below.
+**NOTE**: Cabling of ncn-w001 has changed in Shasta v1.4. Please see ncn-m001 note below.
 
 ### NCN Master Cabling
 ![Gigabyte Master](img/network/gigabyte-master.png)
@@ -166,7 +166,7 @@ For systems that include 4 aggregation switches the cabling will look like the f
 
 ![Gig_intel_master](img/network/Gigaintel_Master.png)
 
-**NOTE**: Master 1 (ncn-m001) is required to have a site connection for installation and non-CAN system access. In Shasta versions <=1.3 this connection was on ncn-w001.  This can have several configurations depending on customer requirements/equipment:
+**NOTE**: Master 1 (ncn-m001) is required to have a site connection for installation and non-CAN system access. In Shasta versions <=1.3 this connection was on ncn-w001. This can have several configurations depending on customer requirements/equipment:
 
 * The default configuration for Gigabyte systems uses the built-in 1Gb lan0 port for site connection on ncn-m001.
 * If the customer requires connectivity greater than 1Gb (or a different connection type), then a new and separate card will be installed on ncn-m001 and that card will provide site connectivity.

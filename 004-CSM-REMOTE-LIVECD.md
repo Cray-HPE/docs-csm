@@ -39,8 +39,8 @@ pit# site_dns=172.30.84.40
 pit# site_nic=p1p2
 ```
 
-- `site_nic` The interface that is directly attached to the site network on ncn-m001.  This should not be lan0.
-- `site_ip` The IP address and netmask in CIDR notation that is assigned to the site connection on ncn-m001.  NOTE:  This is NOT just the network, but also the IP address.
+- `site_nic` The interface that is directly attached to the site network on ncn-m001. This should not be lan0.
+- `site_ip` The IP address and netmask in CIDR notation that is assigned to the site connection on ncn-m001. NOTE:  This is NOT just the network, but also the IP address.
 - `site_gw` The gateway address for the site network. This will be used to set up the default gateway route on ncn-m001.
 - `site_dns` ONE of the site DNS servers. The script does not currently handle setting more than one IP address here.
 
@@ -63,7 +63,7 @@ pit# /root/bin/csi-setup-lan0.sh $site_ip $site_gw $site_dns $site_nic
 pit# /root/bin/csi-set-hostname.sh
 ```
 
-If there's an IP showing for `ip a s lan0` then you could exit your CONSOLE and return with an SSH connection (if you prefer).
+If there is an IP showing for `ip a s lan0` then you could exit your CONSOLE and return with an SSH connection (if you prefer).
 
 <a name="setup-internal-connections"></a>
 #### Setup Internal Connections

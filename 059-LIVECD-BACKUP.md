@@ -39,7 +39,7 @@ next step.
     mylinuxpc> ls -R /mnt
     ``` 
 
-5. The tarball should've extracted everything into the install-data partition. You will need to re-fetch
+5. The tarball should have extracted everything into the install-data partition. You will need to re-fetch
  your squashFS artifacts, they can be fetched into (respectively):
  - `/mnt/var/www/ephemeral/k8s/`
  - `/mnt/var/www/ephemeral/ceph/`

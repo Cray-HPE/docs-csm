@@ -7,14 +7,14 @@ This procedure provides advice for information to collect from a healthy Shasta 
 * Save site customizations to use as a guide for customizing a Shasta v1.4 system
 
 Although some configuration data can be saved from a Shasta v1.3 system, there are new configuration files
-needed for Shasta v1.4.  Some of this data is easier to collect from a running Shasta v1.3 system.
+needed for Shasta v1.4. Some of this data is easier to collect from a running Shasta v1.3 system.
 
 There may be some operational data to be saved such as any nodes which are disabled or marked down in a
 workload manager. These nodes might need hardware or firmware actions to repair them. If not addressed,
 and the newer firmware in v1.4 does not improve their performance or operation, then these may need to be
 disabled with v1.4 as well.
 
-There may be site modifications to the system from v1.3 which are desired in v1.4.  They cannot be directly
+There may be site modifications to the system from v1.3 which are desired in v1.4. They cannot be directly
 copied to v1.4, however, recommendation will be made about what to save. Some saved information from v1.3
 may be referenced when making a similar site modification to v1.3.
 

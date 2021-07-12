@@ -69,12 +69,12 @@ There are several ways to get more information about a firmware update. An `acti
 
 ### Interpreting Output
 
-For the steps below, the following returned messages will help determine if a firmware update is needed. The following are end `state`s for `operations`.  The Firmware `action` itself should be in `completed` once all operations have finished.
+For the steps below, the following returned messages will help determine if a firmware update is needed. The following are end `state`s for `operations`. The Firmware `action` itself should be in `completed` once all operations have finished.
 
 *	`NoOp`: Nothing to do, already at version.
 *	`NoSol`: No viable image is available; this will not be updated.
 *	`succeeded`: 
-	*	IF `dryrun`: The operation should succeed if performed as a `live update`.  `succeeded` means that FAS identified that it COULD update an xname + target with the declared strategy. 
+	*	IF `dryrun`: The operation should succeed if performed as a `live update`. `succeeded` means that FAS identified that it COULD update an xname + target with the declared strategy. 
 	*	IF `live update`: the operation succeeded, and has updated the xname + target to the identified version.
 *	`failed`: 
 	*	IF `dryrun` : There is something that FAS could do, but it likely would fail; most likely because the file is missing. 

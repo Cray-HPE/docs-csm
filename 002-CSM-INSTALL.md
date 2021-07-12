@@ -44,14 +44,14 @@ v1.3 installations. Optional steps are noted as such.
 ### Collect Shasta v1.4 Config Payload
 
 Although some configuration data can be saved from a Shasta v1.3 system, there are new configuration files
-needed for Shasta v1.4.  Some of this data is easier to collect from a running Shasta v1.3 system.
+needed for Shasta v1.4. Some of this data is easier to collect from a running Shasta v1.3 system.
 
 There may be some operational data to be saved such as any nodes which are disabled or marked down in a
 workload manager. These nodes might need hardware or firmware actions to repair them. If not addressed,
 and the newer firmware in v1.4 does not improve their performance or operation, then these may need to be
 disabled with v1.4 as well.
 
-There may be site modifications to the system from v1.3 which are desired in v1.4.  They cannot be directly
+There may be site modifications to the system from v1.3 which are desired in v1.4. They cannot be directly
 copied to v1.4, however, recommendation will be made about what to save. Some saved information from v1.3
 may be referenced when making a similar site modification to v1.3.
 
@@ -128,7 +128,7 @@ The management NCNs are expected to have certain minimum firmware installed for 
 firmware.
 
 Known issues for Shasta v1.3 systems include:
-* Gigabyte nodes should use the Gigabyte Node Firmware Update Guide (1.3.2) S-8010 while booted with Shasta v1.3.2.  However, since v1.3 will never be booted again on this system, there is no need to ensure that the etcd clusters are healthy and that BGP Peering has been ESTABLISHED as recommended in that guide.
+* Gigabyte nodes should use the Gigabyte Node Firmware Update Guide (1.3.2) S-8010 while booted with Shasta v1.3.2. However, since v1.3 will never be booted again on this system, there is no need to ensure that the etcd clusters are healthy and that BGP Peering has been ESTABLISHED as recommended in that guide.
 * Nodes with Mellanox ConnectX-4 and ConnectX-5 PCIe NICs need to update their firmware. This should be done while Shasta v1.3.2 is booted. The Mellanox ConnectX-4 cards will be enabled for PXE booting later.
 
 1. For minimum BIOS spec (required settings), see [Node BIOS Preferences](200-NCN-BIOS-PREF.md).
@@ -209,7 +209,7 @@ will avoid boot mistakes, making the only viable option the PXE option. Below, u
 for wiping and shutting down the NCNs. 
 
 1. Since 1.3 installs used ncn-w001 as a place to run Ansible and host Ansible inventory, 
-we'll start by jumping from the manager node to ncn-w001.
+we will start by jumping from the manager node to ncn-w001.
     ```bash
     # jumpbox
     ncn-m001# ssh ncn-w001

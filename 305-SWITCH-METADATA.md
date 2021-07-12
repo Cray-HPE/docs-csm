@@ -40,7 +40,7 @@ while mapping names between the SHCD and your `switch_metadata.csv` file.
 
 #### Format
 
-Spine and aggregation switches use the format `xXcChHsS`. Leaf switches use `xXcCwW`.  CDU switches use `dDwW`.
+Spine and aggregation switches use the format `xXcChHsS`. Leaf switches use `xXcCwW`. CDU switches use `dDwW`.
 
 #### Directions
 

@@ -23,7 +23,7 @@
 
 <a name="new-for-v1.4"></a>
 # New for v1.4
-The network architecture and configuration changes from v1.3 to v1.4 are fairly small. The biggest change is the introduction of HPE/Aruba switches, as well as Cray Site Init (CSI) generating switch IPs. HPE Aruba switch configuration is contained in separate documents as described in the index [above](#overview).  Dell and Mellanox changes to upgrade from v1.3 to v.14 Shasta releases are describe in [separate document](412-MGMT-NET-DELL-MELLANOX-UPGRADES.md).
+The network architecture and configuration changes from v1.3 to v1.4 are fairly small. The biggest change is the introduction of HPE/Aruba switches, as well as Cray Site Init (CSI) generating switch IPs. HPE Aruba switch configuration is contained in separate documents as described in the index [above](#overview). Dell and Mellanox changes to upgrade from v1.3 to v.14 Shasta releases are describe in [separate document](412-MGMT-NET-DELL-MELLANOX-UPGRADES.md).
 
 *   New Aruba/HPE switches.
 *   ACL configuration.

@@ -12,7 +12,7 @@ available hardware. For more information, see [NCN Networking](103-NCN-NETWORKIN
 
 ### Network Stack
 
-There's a few daemons that makeup the SUSE network stack:
+There are a few daemons that makeup the SUSE network stack:
 
 Sorted by safest to touch relative to keeping your SSH connection up.
 1. wickedd.service : The daemons handling each interface ; resetting this clears stale configuration.
@@ -26,7 +26,7 @@ Sorted by safest to touch relative to keeping your SSH connection up.
     ncn# systemctl restart wicked
     ```
 3. network.service : Responsible for network configuration per interface; does not reload Wicked.
-    > NOTE: Commonly the problem exists within Wicked, this is a last resort in the event the configuration is so bad Wicked can't handle it.
+    > NOTE: Commonly the problem exists within Wicked, this is a last resort in the event the configuration is so bad Wicked cannot handle it.
     ```bash
     # Restart the network interface configuration, but leaves wicked daemons alone.
     ncn# systemctl restart network

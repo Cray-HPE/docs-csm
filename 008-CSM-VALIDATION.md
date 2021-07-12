@@ -57,7 +57,7 @@ Execute ncnHealthChecks script and analyze the output of each individual check.
 
 **Note**: The `cray-crus-` pod is expected to be in the Init state until slurm and munge
 are installed. In particular, this will be the case if you are executing this as part of the validation after completing the [CSM Platform Install](006-CSM-PLATFORM-INSTALL.md).
-If in doubt, you can validate the CRUS service using the [CMS Validation Tool](#cms-validation-utility). If the CRUS check passes using that tool, you don't need to worry
+If in doubt, you can validate the CRUS service using the [CMS Validation Tool](#cms-validation-utility). If the CRUS check passes using that tool, you do not need to worry
 about the `cray-crus-` pod state.
 
 <a name="pet-ncnpostgreshealthchecks"></a>
@@ -911,7 +911,7 @@ Make sure you are running on the LiveCD node and have initialized and authorized
 <a name="uas-uai-validate-create"></a>
 #### Validate UAI Creation
 
-This procedure must run on a master or worker node (and not `ncn-w001`) on the Shasta system (or from an external host, but the procedure for that is not covered here).  It requires that the CLI be initialized and authorized as you.
+This procedure must run on a master or worker node (and not `ncn-w001`) on the Shasta system (or from an external host, but the procedure for that is not covered here). It requires that the CLI be initialized and authorized as you.
 
 In this procedure, we will show the steps being run on `ncn-w003`
 
@@ -1119,7 +1119,7 @@ This means the pre-made end-user UAI image is not in your local registry (or wha
 <a name="uas-uai-validate-debug-container"></a>
 ##### Missing Volumes and other Container Startup Issues
 
-Various packages install volumes in the UAS configuration. All of those volumes must also have the underlying resources available, sometimes on the host node where the UAI is running sometimes from with Kubernetes. If your UAI gets stuck with a `ContainerCreating` `uai_msg` field for an extended time, this is a likely cause. UAIs run in the `user` Kubernetes namespace, and are pods that can be examined using `kubectl describe`.  Use
+Various packages install volumes in the UAS configuration. All of those volumes must also have the underlying resources available, sometimes on the host node where the UAI is running sometimes from with Kubernetes. If your UAI gets stuck with a `ContainerCreating` `uai_msg` field for an extended time, this is a likely cause. UAIs run in the `user` Kubernetes namespace, and are pods that can be examined using `kubectl describe`. Use
 
 ```bash
 ncn# kubectl get po -n user | grep <uai-name>

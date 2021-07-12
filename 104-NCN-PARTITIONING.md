@@ -124,7 +124,7 @@ The table below represents all recognizable FS labels on any given NCN, varying 
 | k8s-manager | k8s-worker | storage-ceph | FS Label | Partitions | Device |  Partition Size | OverlayFS | Work Order(s) | Memo
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | ✅ | ✅ | ✅ | `BOOTRAID` | _Not Mounted_ | 2 small disks in RAID1 | `500 MiB` | ❌ | Present since Shasta-Preview 1 |
-| ✅ | ✅ | ✅ | `SQFSRAID` | `/run/initramfs/live` | 2 small disks in RAID1 | `100 GiB` | ✅ | [CASM-1885](https://connect.us.cray.com/jira/browse/MTL-1885) |  squashfs should compress our images to about 1/3rd their uncompressed size. (20G → 6.6G)  On pepsi's ncn-w001, we're at about 20G of non-volatile data storage needed. |
+| ✅ | ✅ | ✅ | `SQFSRAID` | `/run/initramfs/live` | 2 small disks in RAID1 | `100 GiB` | ✅ | [CASM-1885](https://connect.us.cray.com/jira/browse/MTL-1885) |  squashfs should compress our images to about 1/3rd their uncompressed size. (20G → 6.6G)  On pepsi's ncn-w001, we are at about 20G of non-volatile data storage needed. |
 | ✅ | ✅ | ✅ | `ROOTRAID` | `/run/initramfs/overlayfs` | 2 small disks in RAID1 | Max/Remainder | ✅ | Present since Shasta-Preview 1 | The persistent image file is loaded from this partition, when the image file is loaded the underlying drive is lazily unmounted (`umount -l`) so that when the overlay closes the disk follows suit. |
 | ❌ | ✅ | ❌ | `CONRUN` | `/run/containerd` | Ephemeral | `75 GiB` | ❌ | [MTL-916](https://connect.us.cray.com/jira/browse/MTL-916) | On pepsi ncn-w001, we have less than 200G of operational storage for this. |
 | ❌ | ✅ | ❌ | `CONLIB` | `/run/lib-containerd` | Ephemeral | `25%` | ✅ | [MTL-892](https://connect.us.cray.com/jira/browse/MTL-892) [CASMINST-255](https://connect.us.cray.com/jira/browse/CASMINST-255) | |
@@ -145,7 +145,7 @@ The above table's rows with overlayFS map their "Mount Paths" to the "Upper Dire
 <a name="overlayfs-and-persistence"></a>
 # OverlayFS and Persistence
 
-There are a few overlays used for NCN image boots. These enable two critical functions; changes to data and new data will persist between reboots, and RAM (memory) is freed because we're using our block-devices (SATA/PCIe).
+There are a few overlays used for NCN image boots. These enable two critical functions; changes to data and new data will persist between reboots, and RAM (memory) is freed because we are using our block-devices (SATA/PCIe).
 
 1. `ROOTRAID` is the persistent root overlayFS, it commits and saves all changes made to the running OS and it stands on a RAID1 mirror.
 2. `CONLIB` is a persistent overlayFS for containerd, it commits and saves all new changes while allowing read-through to pre-existing (baked-in) data from the squashFS.
@@ -160,12 +160,12 @@ There are a few overlays used for NCN image boots. These enable two critical fun
 > 3. `mount | grep ' / '` will show you the overlay being layered atop the squashFS
 
 
-Let's pick apart the `SQFSRAID` and `ROOTRAID` overlays. 
+Let us pick apart the `SQFSRAID` and `ROOTRAID` overlays. 
 - `/run/rootfsbase` is the SquashFS image itself
 - `/run/initramfs/live` is the squashFS's storage array, where one or more squashFS can live
 - `/run/initramfs/overlayfs` is the overlayFS storage array, where the persistent directories live
 - `/run/overlayfs` and `/run/ovlwork` are symlinks to `/run/initramfs/overlayfs/overlayfs-SQFSRAID-$(blkid -s UUID -o value /dev/disk/by-label/SQFSRAID) and the neighboring work directory
-- Admin note: The "work" directory is where the operating system processes data, it's the interim where data passes between RAM and persistent storage
+- Admin note: The "work" directory is where the operating system processes data. It is the interim where data passes between RAM and persistent storage.
 
 Using the above bullets, one may be able to better understand the machine output below:
 
@@ -181,7 +181,7 @@ ncn-m002#  losetup -a
 /dev/loop0: [2430]:100 (/run/initramfs/live/LiveOS/filesystem.squashfs)
 ```
 
-> The THIN OVERLAY is the transient space the system uses behind the scenes to allow data to live in RAM as it's written to disk.
+> The THIN OVERLAY is the transient space the system uses behind the scenes to allow data to live in RAM as it is written to disk.
 > The THIN part of the overlay is the magic, using THIN overlays means the kernel will automatically clear free blocks.
 
 Below is the layout of what a persistent system looks like. Note, this means that persistent capacity
@@ -265,7 +265,7 @@ The file-system the user is working on is really two layered file-systems (overl
 <a name="layering-real-world-example"></a>
 ##### Layering Real World Example
 
-Let's take `/root` for example, we can see in the upper-dir (the overlay) we have these files:
+Let us take `/root` for example, we can see in the upper-dir (the overlay) we have these files:
 
 The upper-dir has these files:
 ```bash
@@ -290,7 +290,7 @@ drwx------ 2 root root  70 Oct 21 21:57 .ssh
 -rw-r--r-- 1 root root 172 Oct 26 15:25 .wget-hsts
 ```
 
-- Notice how the `.bash_history` file in the lower-dir is `0` bytes, but it's `252` bytes in the upperdir?
+- Notice how the `.bash_history` file in the lower-dir is `0` bytes, but it is `252` bytes in the upperdir?
 - Notice the `.kube` dir exists in the upper, but not the lower?
 
 Finally, looking at `/root` we see the magic:

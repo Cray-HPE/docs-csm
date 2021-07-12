@@ -153,7 +153,7 @@ File Transfer State:     download
   Transfer Rate:         869 kbps
 ```
 
-Once the image is uploaded all that's left is a reboot.
+Once the image is uploaded all that is left is a reboot.
 ```
 sw-leaf-001# write memory 
 sw-leaf-001# reload

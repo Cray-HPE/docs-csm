@@ -114,9 +114,9 @@ in the `site-init` secret in the `loftsman` namespace must be updated.
 
    > **`NOTE:`** If `site-init` was cloned from a remote repository in step 1,
    > there may not be any differences and hence nothing to commit. This is
-   > okay. If there are differences between what's in the repository and what
+   > okay. If there are differences between what is in the repository and what
    > was stored in the `site-init`, then it suggests settings were improperly
-   > changed at some point. If that's the case then be cautious, _there may be
+   > changed at some point. If that is the case then be cautious, _there may be
    > dragons ahead_.
 
    ```bash

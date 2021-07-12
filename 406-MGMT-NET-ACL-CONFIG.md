@@ -10,7 +10,7 @@ This page describes the purpose of the ACLs and how they are configured
 These ACLs are designed to block traffic from the node management network to and from the hardware management network.
 These need to be set where the Layer3 interface is located, this will most likely be a VSX pair of switches. These ACLs are required on both switches in the pair.
 
-The first step is to create the access list, once it's created we have to apply it to a VLAN.
+The first step is to create the access list, once it is created we have to apply it to a VLAN.
 ```
 access-list ip nmn-hmn
     10 deny any 10.252.0.0/255.255.128.0 10.254.0.0/255.255.128.0 

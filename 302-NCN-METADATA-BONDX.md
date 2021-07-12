@@ -71,7 +71,7 @@ will prevent the nodes from continuing to boot and end in undesired states.
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
 4. Now wait for the nodes to netboot. You can follow them with `conman -j ncn-*id*-mgmt` (use `conman -q` to see ). This takes less than 3 minutes, speed depends on how quickly your nodes POST.
-5. Print off what's been found in the console logs, this snippet will omit duplicates from multiple boot attempts:
+5. Print off what has been found in the console logs, this snippet will omit duplicates from multiple boot attempts:
     ```bash
     pit# for file in /var/log/conman/*; do
         echo $file

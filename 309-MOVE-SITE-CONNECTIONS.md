@@ -1,6 +1,6 @@
 # Move Site Connections 
 
-In 1.4, the site connections that were previously connection to ncn-w001 will be moved to ncn-m001.  This page will go over the process to make that change.
+In 1.4, the site connections that were previously connection to ncn-w001 will be moved to ncn-m001. This page will go over the process to make that change.
 > Note: In Shasta v1.4, any number of master nodes may have external connections, before Shasta v1.4 this was strictly ncn-w001.
 1. Make request to DCHW to move the BMC/Host Connections and attach a USB storage device to ncn-m001.
 
@@ -27,7 +27,7 @@ In 1.4, the site connections that were previously connection to ncn-w001 will be
    ipmitool -I lanplus -U $username -E -H $bmcaddr sol activate
    ``` 
 
-   Set the new static em1 IP address in `/etc/sysconfig/network/ifcfg-em1`.  Replace `172.30.XX.XX` with the `em1` IP for your system.
+   Set the new static em1 IP address in `/etc/sysconfig/network/ifcfg-em1`. Replace `172.30.XX.XX` with the `em1` IP for your system.
 
    ```bash
    BOOTPROTO='static'
@@ -70,7 +70,7 @@ In 1.4, the site connections that were previously connection to ncn-w001 will be
 
     d. If it is set to Static, run the command `ipmitool lan set 1 ipsrc dhcp`
 
-    e. Execute `ipmitool lan print 1` to verify that it is now set to DHCP and record if it has picked up an address.  (This will depend on if Kea is still running on the 1.3 system. If it doesn't have an IP, we can get it later.)
+    e. Execute `ipmitool lan print 1` to verify that it is now set to DHCP and record if it has picked up an address.  (This will depend on if Kea is still running on the 1.3 system. If it does not have an IP, we can get it later.)
 
 
 
@@ -90,7 +90,7 @@ In 1.4, the site connections that were previously connection to ncn-w001 will be
     ```
 
 
-5. Log out of ncn-w001.   You should now be back on ncn-m001.
+5. Log out of ncn-w001. You should now be back on ncn-m001.
 
 
 6. Shutdown all of the nodes except for ncn-m001 
@@ -107,7 +107,7 @@ In 1.4, the site connections that were previously connection to ncn-w001 will be
 
     If you found an IP in step 3e, use ipmitool from ncn-m001 to power off ncn-w001.  
 
-    If you did not find an IP in step 3e or you cannot access that IP, then SSH to ncn-w001 from ncn-m001 and execute `shutdown -h now`.   Make sure you have moved anything you need from ncn-w001 because we will not have access to bring it back up until we bring up another DHCP server on the LiveCD.
+    If you did not find an IP in step 3e or you cannot access that IP, then SSH to ncn-w001 from ncn-m001 and execute `shutdown -h now`. Make sure you have moved anything you need from ncn-w001 because we will not have access to bring it back up until we bring up another DHCP server on the LiveCD.
 
 
 You can now go back to [LiveCD Creation](002-CSM-INSTALL.md)

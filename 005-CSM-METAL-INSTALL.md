@@ -2,7 +2,7 @@
 
 > **`WARNING:`** Gigabyte NCNs running firmware version C20 can become unusable
 > when Shasta 1.4 is installed. This is a result of a bug in the Gigabyte
-> firmware that ships with Shasta 1.4.  This bug has not been observed in
+> firmware that ships with Shasta 1.4. This bug has not been observed in
 > firmware version C17.
 >
 > A key symptom of this bug is that the NCN will not PXE boot and will instead
@@ -269,9 +269,9 @@ The configuration workflow described here is intended to help understand the exp
 
 1. Customize boot scripts for any out-of-baseline NCNs
     - **kubernetes-workers** with more than 2 small disks need to make adjustments to [prevent bare-metal etcd creation](104-NCN-PARTITIONING.md#worker-nodes-with-etcd)
-    - A brief overview of what's expected is here, in [disk plan of record / baseline](104-NCN-PARTITIONING.md#plan-of-record--baseline)
+    - A brief overview of what is expected is here, in [disk plan of record / baseline](104-NCN-PARTITIONING.md#plan-of-record--baseline)
 
-1. Set each node to always UEFI Network Boot, and ensure they're powered off
+1. Set each node to always UEFI Network Boot, and ensure they are powered off
     ```bash
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} chassis bootdev pxe options=efiboot,persistent
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
@@ -521,11 +521,11 @@ Observe the output of the checks and note any failures, then remediate them.
    > ncn# blkid -L K8SLET
    > ```
    >
-   > The test should be looking for the ephemeral disk, that disk is sometimes `/dev/sdc`. The name of the disk is a more accurate test, and isn't prone to the random path change.
+   > The test should be looking for the ephemeral disk, that disk is sometimes `/dev/sdc`. The name of the disk is a more accurate test, and is not prone to the random path change.
 
    > Note: If your shell terminal is not echoing your input after running this, type "reset" and press enter to recover.
 
-1. Ensure that weave hasn't split-brained
+1. Ensure that weave has not split-brained
 
    Run the following command on each member of the Kubernetes cluster (master nodes and worker nodes) to ensure that weave is operating as a single cluster:
 

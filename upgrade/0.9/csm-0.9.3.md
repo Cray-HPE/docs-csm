@@ -235,7 +235,7 @@ ncn-m001# pdsh -w $(./lib/list-ncns.sh | grep ncn-w | paste -sd,) "echo kernel.p
 
 1. Add a ClusterRoleBinding for cray-unbound-coredns PodSecurityPolicies
 
-	a.  create `cray-unbound-coredns-psp.yaml` with the following contents
+	a. create `cray-unbound-coredns-psp.yaml` with the following contents
 
        ```
        ---

@@ -1,6 +1,6 @@
 # NCN Development
 
-This page will help you if you're trying to test new images on a metal system. Here you can
+This page will help you if you are trying to test new images on a metal system. Here you can
 find a basic flow for iterative boots.
 
 > We assume you are internally developing; these scripts are for internal use only.
@@ -14,7 +14,7 @@ find a basic flow for iterative boots.
    ```
 
 2. Set your Image IDs
-    > This finds the newest pair, so it'll find the last downloaded set (i.e. your set of images). 
+    > This finds the newest pair, so it will find the last downloaded set (i.e. your set of images). 
     ```bash
    pit# /root/bin/set-sqfs-links.sh
    ```

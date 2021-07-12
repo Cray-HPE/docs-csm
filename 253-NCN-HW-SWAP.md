@@ -86,7 +86,7 @@ Swapping a node for an entirely new node mandates a "rebuild" (or a "build" if t
 <a name='master-nodes'></a>
 ### Master Nodes
 
-If etcd has met quorum, if there are 3 master nodes active, then etcd must expunge the node we're rebuilding.
+If etcd has met quorum, if there are 3 master nodes active, then etcd must expunge the node we are rebuilding.
 
 1. Evict etcd:
     > **`STUB`** This is a stub that requires code snippets to search-and-destroy OOM.

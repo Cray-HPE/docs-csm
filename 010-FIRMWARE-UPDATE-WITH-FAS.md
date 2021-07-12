@@ -11,7 +11,7 @@
 
 1. 001-008 have been completed; CSM has been installed and HSM is running with discovered nodes. Firmware has been loaded into FAS as part of the CSM install
 2. 009 has been applied and the NCNs are locked.
-3. Identify the type and manufacturers of hardware in your system. If you don't have Gigabyte nodes, don't update them!
+3. Identify the type and manufacturers of hardware in your system. If you do not have Gigabyte nodes, do not update them!
 
 **WARNING:** Non-compute nodes (NCNs) should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS. See [`009-NCN-LOCKING.md`](009-NCN-LOCKING.md) for more information. Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
 
@@ -51,7 +51,7 @@ For each item in the `Hardware Precedence Order`:
 
   2. Interpret the outcome of the dryrun; look at the counts and determine if the dryrun identified any hardware to update
 
-     For the steps below, the following returned messages will help determine if a firmware update is needed. The following are end `state`s for `operations`.  The Firmware `action` itself should be in `completed` once all operations have finished.
+     For the steps below, the following returned messages will help determine if a firmware update is needed. The following are end `state`s for `operations`. The Firmware `action` itself should be in `completed` once all operations have finished.
 
      *	`NoOp`: Nothing to do, already at version.
      *	`NoSol`: No viable image is available; this will not be updated.
@@ -75,7 +75,7 @@ For each item in the `Hardware Precedence Order`:
 
 <a name="hardware-precedence-order"></a>
 ## Hardware Precedence Order
-After you identify which hardware you have; start with the top most item on this list to update. If you don't have the hardware, skip it.
+After you identify which hardware you have; start with the top most item on this list to update. If you do not have the hardware, skip it.
 
 **IMPORTANT**: This process does not communicate the SAFE way to update NCNs. If you have not locked NCNs, or blindly use FAS to update NCNs without following the correct process, then **YOU WILL VIOLATE THE STABILITY OF THE SYSTEM**
 

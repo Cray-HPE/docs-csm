@@ -37,7 +37,7 @@ Script Usage
 ```
 USAGE: - <Spine01/Agg01> <Spine02/Agg02> <Path to CSI generated network files>
 
-       - The IPs used should be Node Management Network IPs (NMN), these IPs will be what's used for the BGP Router-ID.
+       - The IPs used should be Node Management Network IPs (NMN), these IPs will be what is used for the BGP Router-ID.
 
        - The path must include CAN.yaml', 'HMN.yaml', 'HMNLB.yaml', 'NMNLB.yaml', 'NMN.yaml
 

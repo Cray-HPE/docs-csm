@@ -106,7 +106,7 @@ all been run by the administrator before starting this stage.
     
     1. Set variables
     
-        **IMPORTANT**: The variables you set depend on whether or not you followed the steps in [108-NCN-NTP.md#setting-a-local-timezone](108-NCN-NTP.md#setting-a-local-timezone).  The two paths forward are listed below:
+        **IMPORTANT**: The variables you set depend on whether or not you followed the steps in [108-NCN-NTP.md#setting-a-local-timezone](108-NCN-NTP.md#setting-a-local-timezone). The two paths forward are listed below:
     
         * If you customized the timezones, set the following variables:
             
@@ -153,7 +153,7 @@ all been run by the administrator before starting this stage.
     
 1. Identify Port-1 of Riser-1 in `efibootmgr` output and set `PXEPORT` variable.
     
-    > **`WARNING`** Pay attention to the boot order, if doesn't show any of these examples please double-check that PCIe booting was enabled. Simply run-through the ["Print Current UEFI and SR-IOV State"](304-NCN-PCIE-NET-BOOT-AND-RE-CABLE.md#print-current-uefi-and-sr-iov-state) section, then fixup as needed with the ["Setting Expected Values"](304-NCN-PCIE-NET-BOOT-AND-RE-CABLE.md#setting-expected-values) section before returning here.
+    > **`WARNING`** Pay attention to the boot order, if does not show any of these examples please double-check that PCIe booting was enabled. Simply run-through the ["Print Current UEFI and SR-IOV State"](304-NCN-PCIE-NET-BOOT-AND-RE-CABLE.md#print-current-uefi-and-sr-iov-state) section, then fixup as needed with the ["Setting Expected Values"](304-NCN-PCIE-NET-BOOT-AND-RE-CABLE.md#setting-expected-values) section before returning here.
     
     * *Example 1*:
         > Possible output of `efibootmgr` command in the previous step:
@@ -309,7 +309,7 @@ all been run by the administrator before starting this stage.
     
     > **`NOTE`**: If the nodes has pxe boot issues, such as getting pxe errors or not pulling the ipxe.efi binary, see [PXE boot troubleshooting](420-MGMT-NET-PXE-TSHOOT.md)
     
-    > **`NOTE`**: If ncn-m001 booted without a hostname or it didn't run all the cloud-init scripts, the following commands need to be run **(but only in that circumstance)**.
+    > **`NOTE`**: If ncn-m001 booted without a hostname or it did not run all the cloud-init scripts, the following commands need to be run **(but only in that circumstance)**.
     
     1. Make directory to copy network config files to.
         ```bash

@@ -18,7 +18,7 @@ ansible ncn-m* -m command -a 'ceph health'
 ```
 
 ## Fixing Ceph and Kubernetes
-If things aren't quite working, you can try starting these services back up on the affected nodes.
+If things are not quite working, you can try starting these services back up on the affected nodes.
 ```
 # Restart dead OSDs
 for i in 0 3 6 9;do systemctl status ceph-osd@${i}.service | grep active;done

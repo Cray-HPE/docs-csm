@@ -63,7 +63,7 @@ If you are here with an unconfigured switch, mileage may vary.
     sw-leaf-001# show mac-address-table
 
     ```
-3. In the output from the previous "show mac address-table" command, information will be available for all management NCNs which do not have an external connection for their BMC, such as ncn-m001.  The information from these nodes is also needed in ncn_metadata.csv, but will have to be collected via another method, such as the "ipmitool lan print" command. 
+3. In the output from the previous "show mac address-table" command, information will be available for all management NCNs which do not have an external connection for their BMC, such as ncn-m001. The information from these nodes is also needed in ncn_metadata.csv, but will have to be collected via another method, such as the "ipmitool lan print" command. 
     All of the management NCNs should be present in the ncn_metadata.csv file.  
     > Tip: Mind the index (3, 2, 1.... ; not 1, 2, 3)
     ```
@@ -72,4 +72,4 @@ If you are here with an unconfigured switch, mileage may vary.
                                      ^^^^^^^^^^^^^^^^^
     ```
 
-The column heading must match that shown above for csi to correctly parse it. You can take the file you've started and move onto [NCN Metadata BondX](302-NCN-METADATA-BONDX.md).
+The column heading must match that shown above for csi to correctly parse it. You can take the file you have started and move onto [NCN Metadata BondX](302-NCN-METADATA-BONDX.md).

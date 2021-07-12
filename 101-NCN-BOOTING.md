@@ -347,7 +347,7 @@ Boot0018* UEFI SAMSUNG MZ7LH480HAHQ-00005 S45PNA0M838871
 Boot1001* Enter Setup
 ```
 
-In the example above, our device is 0014 or 0015. We'll guess it's the first one, and can correct this on-the-fly in POST
+In the example above, our device is 0014 or 0015. We will guess it is the first one, and can correct this on-the-fly in POST
 Notice the lack of "Boot" in the ID number given, we want Boot0014 so we pass '0014' to efibootmgr:
 
 ```bash

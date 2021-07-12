@@ -21,7 +21,7 @@ To complete firmware checkout, proceed through the below sections:
 <a name="confirm-bios-and-firmware-inventory"></a>
 ## Confirm BIOS and Firmware Inventory
 
-> **`CUSTOMER NOTE`** If there's doubt that the tar contains latest, the customer should check [CrayPort][1] for newer firmware.
+> **`CUSTOMER NOTE`** If there is doubt that the tar contains latest, the customer should check [CrayPort][1] for newer firmware.
 
 1. Prepare the inventory; the RPMs providing firmware need to be installed:
 
@@ -248,7 +248,7 @@ For Gigabyte upgrades a tftp server needs to be referred to.
    pit# reboot
    ```
 
-You're now finished with FW updates.
+You are now finished with FW updates.
 
 <a name="hpe-ilo-upgrades"></a>
 ### HPE (iLO) Upgrades
