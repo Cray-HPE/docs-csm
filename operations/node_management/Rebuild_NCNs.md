@@ -144,6 +144,8 @@ Skip this section if rebuilding a worker or storage node. The examples in this s
     Use `ssh` to login to the newly-promoted master node chosen in the previous steps \(`ncn-m001` in this case\), 
     copy/paste the following script to a file, and then execute it.
 
+    > **NOTE**: The output from the script below can be misleading as it is relying on cached cloud-init data.  Ignore the output that indicates **FIRST_MASTER_HOSTNAME has been set to ncn-...**.
+
     ```bash
     #!/bin/bash
     
@@ -520,7 +522,7 @@ This section applies to master and worker nodes. Skip this section if rebuilding
     1.  Set the BMC variable to the hostname of the BMC of the node being rebuilt.
 
         ```bash
-        ncn# BMC=<NCN name>-mgmt
+        ncn# export BMC=<NCN name>-mgmt
         ```
         
         For example, if you are rebuilding ncn-w003, this would be `ncn-w003-mgmt`.
@@ -563,7 +565,7 @@ This section applies to master and worker nodes. Skip this section if rebuilding
 
     **Troubleshooting:** If the `NBP file...` output never appears, or something else goes wrong, go back to the steps for modifying XNAME.json file \(see step [6](#step6)\) and make sure these instructions were completed correctly.
 
-4. Confirm vlan004 is up with the correct IP address.
+4. Confirm vlan004 is up with the correct IP address on the rebuilt ncn.
 
     The following examples assume the NCN/hostname is `ncn-w005`.
 
@@ -612,7 +614,7 @@ This section applies to master and worker nodes. Skip this section if rebuilding
         ncn# ip addr show vlan004
         ```
 
-5. Confirm that vlan007 is up with the correct IP address.
+5. Confirm that vlan007 is up with the correct IP address on the rebuilt ncn.
 
     The following examples assume the NCN/hostname is `ncn-w005`.
 
@@ -897,7 +899,7 @@ Skip this section if a worker or storage node was rebuilt. The examples in this 
     ncn-w003   Ready    <none>   112m   v1.18.6
     ```
 
-3.  Confirm the `sdc` disk has the correct lvm.
+3.  On the rebuilt master node confirm the `sdc` disk has the correct lvm.
 
     ```bash
     ncn-m001# lsblk | grep -A2 ^sdc
