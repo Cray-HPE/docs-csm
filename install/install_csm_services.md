@@ -330,7 +330,7 @@ ncn-w003: nameserver 10.92.100.225
 <a name="apply-pod-priorities"></a>
 ### 7. Apply Pod Priorities
 
-Run the `add_pod_priority.sh` script to create and apply a pod priority class to services critical to CSM.  This will give these services a higher priority than others to ensure they get scheduled by Kubernetes in the event that resources limited on smaller deployments.
+Run the `add_pod_priority.sh` script to create and apply a pod priority class to services critical to CSM. This will give these services a higher priority than others to ensure they get scheduled by Kubernetes in the event that resources limited on smaller deployments.
 
 ```bash
 pit# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/add_pod_priority.sh

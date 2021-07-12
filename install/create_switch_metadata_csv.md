@@ -38,7 +38,7 @@ See [Component Names (xnames)](../operations/Component_Names_xnames.md).
 
 #### Format
 
-Spine and aggregation switches use the format `xXcChHsS`. Leaf switches use `xXcCwW`.  CDU switches use `dDwW`.
+Spine and aggregation switches use the format `xXcChHsS`. Leaf switches use `xXcCwW`. CDU switches use `dDwW`.
 
 #### Directions
 

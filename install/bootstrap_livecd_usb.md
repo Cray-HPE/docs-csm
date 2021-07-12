@@ -1,6 +1,6 @@
 # Bootstrap PIT Node from LiveCD USB
 
-The Pre-Install Toolkit (PIT) node needs to be bootstrapped from the LiveCD.  There are two media available
+The Pre-Install Toolkit (PIT) node needs to be bootstrapped from the LiveCD. There are two media available
 to bootstrap the PIT node--the RemoteISO or a bootable USB device. This procedure describes using the USB 
 device. If not using the USB device, see [Bootstrap Pit Node from LiveCD Remote ISO](bootstrap_livecd_remote_iso.md).
 
@@ -255,7 +255,6 @@ Pull these files into the current working directory:
 
 > The `system_config.yaml` is required for a reinstall, since it was created during a previous install. For a first time install, the information in it can be provided as command line arguments to `csi config init`.
 
-
 1. Change into the preparation directory:
 
    ```bash
@@ -357,7 +356,7 @@ Pull these files into the current working directory:
 
    A new directory matching your `--system-name` argument will now exist in your working directory.
 
-   > After generating a configuration, particularly when upgrading from Shasta v1.3 a visual audit of the generated files for network data should be performed. Specifically, the <systemname>/networks/HMN_MTN.yaml and <systemname>/networks/NMN_MTN.yaml files should be viewed to ensure that cabinet names, subnets and VLANs have been preserved for an upgrade to Shasta v1.4.  Failure of these parameters to match will likely mean a re-installation or reprogramming of CDU switches and CMM VLANs.
+   > After generating a configuration, a visual audit of the generated files for network data should be performed.
 
    Run the command "csi config init --help" to get more information about the parameters mentioned in the example command above and others which are available.
 
@@ -373,11 +372,11 @@ Pull these files into the current working directory:
    * The starting cabinet number for each type of cabinet (for example, starting-mountain-cabinet) has a default that can be overridden. See the "csi config init --help" 
    * For systems that use non-sequential cabinet ID numbers, use cabinets-yaml to include the cabinets.yaml file. This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to explicitly specify the id of every cabinet in the system. If you are using a cabinets-yaml file, flags specified on the `csi` command-line related to cabinets will be ignored. See [Create Cabinets YAML](create_cabinets_yaml.md).
    * An override to default cabinet IPv4 subnets can be made with the hmn-mtn-cidr and nmn-mtn-cidr parameters.
-   * Several parameters (can-gateway, can-cidr, can-static-pool, can-dynamic-pool) describe the CAN (Customer Access network).  The can-gateway is the common gateway IP used for both spine switches and commonly referred to as the Virtual IP for the CAN.  The can-cidr is the IP subnet for the CAN assigned to this system. The can-static-pool and can-dynamic-pool are the MetalLB address static and dynamic pools for the CAN. The can-external-dns is the static IP assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded. The can-external-dns IP must be within the can-static-pool range.
+   * Several parameters (can-gateway, can-cidr, can-static-pool, can-dynamic-pool) describe the CAN (Customer Access network). The can-gateway is the common gateway IP used for both spine switches and commonly referred to as the Virtual IP for the CAN. The can-cidr is the IP subnet for the CAN assigned to this system. The can-static-pool and can-dynamic-pool are the MetalLB address static and dynamic pools for the CAN. The can-external-dns is the static IP assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded. The can-external-dns IP must be within the can-static-pool range.
    * Set ntp-pool to a reachable NTP server
 
    These warnings from "csi config init" for issues in hmn_connections.json can be ignored.
-   * The node with the external connection (ncn-m001) will have a warning similar to this because its BMC is connected to the site and not the HMN like the other management NCNs.  It can be ignored.
+   * The node with the external connection (ncn-m001) will have a warning similar to this because its BMC is connected to the site and not the HMN like the other management NCNs. It can be ignored.
 
       ```
       "Couldn't find switch port for NCN: x3000c0s1b0"
@@ -649,7 +648,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    If this machine does not have direct Internet access these RPMs will need to be externally downloaded and then copied to the system.
 
    **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hotfixes
-   were downloaded to a system using the instructions in [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds).  Use that set of RPMs rather than downloading again.
+   were downloaded to a system using the instructions in [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds). Use that set of RPMs rather than downloading again.
 
    ```bash
    linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm

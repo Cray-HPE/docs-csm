@@ -219,13 +219,13 @@ ncn-m001# ceph mgr MODULE_NAME disable MODULE
 
      ncn-s# ceph fs status -f json-pretty|jq -r '.mdsmap[]|select(.state=="active")|.name'
 
-     cephfs.ncn-s001.juehkw <-- current active MDS.  note this will change when you fail it over so keep this command handy
+     cephfs.ncn-s001.juehkw <-- current active MDS. note this will change when you fail it over so keep this command handy
 
      # To get the active MGR
 
      ncn-s# ceph mgr dump | jq -r .active_name
 
-     ncn-s002.fumzfm  <-- current active MGR.  note this will change when you fail it over so keep this command handy
+     ncn-s002.fumzfm  <-- current active MGR. note this will change when you fail it over so keep this command handy
      ```
 
   1. Now we have our service, the current placement policy, and if applicable the active MGR/MDS daemon

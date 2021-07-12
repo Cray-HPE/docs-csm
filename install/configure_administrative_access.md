@@ -25,7 +25,7 @@ BMC/controller passwords.
 
       Upcoming steps in the installation workflow require an account to be configured in Keycloak for
       authentication. This can be either a local keycloak account or an external Identity Provider (IdP),
-      such as LDAP.  Having an account in keycloak with adminstrative credentials enables the use of many
+      such as LDAP. Having an account in keycloak with adminstrative credentials enables the use of many
       management services via the `cray` command.
 
       See [Configure Keycloak Account](../operations/configure_keycloak_account.md)  

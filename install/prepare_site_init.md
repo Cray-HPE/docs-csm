@@ -122,12 +122,12 @@ with system-specific customizations.
     # Password entries are correct.
     
     # Validate MEDS credentials (used by the MEDS service, targeting 
-    # Redfish BMC endpoints).  Make sure Username and Password entries are correct.
+    # Redfish BMC endpoints). Make sure Username and Password entries are correct.
     
     linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray_meds_credentials.generate.data[0].args.value' | jq
     
     # Validate RTS credentials (used by the Redfish Translation Service, targeting
-    # River Redfish BMC endpoints and PDU controllers).  Make sure Username and 
+    # River Redfish BMC endpoints and PDU controllers). Make sure Username and 
     # Password entries are correct.
     
     linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray_hms_rts_credentials.generate.data[0].args.value' | jq

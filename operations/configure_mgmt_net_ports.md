@@ -317,7 +317,7 @@ sw-cdu-001 & sw-cdu-002 (config)#
 
 # CEC port configuration.
 
-The VLAN used here is generated from CSI.  It is the HMN_MTN VLAN that is assigned to that cabinet.
+The VLAN used here is generated from CSI. It is the HMN_MTN VLAN that is assigned to that cabinet.
 
 ## Dell
 ```

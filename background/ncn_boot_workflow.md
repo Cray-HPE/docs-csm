@@ -291,7 +291,7 @@ Boot000D* UEFI: PXE IP4 Intel(R) I350 Gigabit Network Connection
 <a name="reverting-changes"></a>
 #### Reverting Changes
 
-Reset the BIOS.  Refer to vendor documentation for resetting the BIOS or attempt to reset the BIOS with `ipmitool`
+Reset the BIOS. Refer to vendor documentation for resetting the BIOS or attempt to reset the BIOS with `ipmitool`
 
 > **`NOTE`** When using `ipmitool` against a machine remotely, it requires more arguments:
 > ```bash

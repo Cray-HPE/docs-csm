@@ -412,7 +412,7 @@ The IP addresses used here will be the first three worker nodes on the NMN netwo
 
 ## CEC port configuration.
 
-The VLAN used here is generated from CSI.  It is the HMN_MTN VLAN that is assigned to that cabinet.
+The VLAN used here is generated from CSI. It is the HMN_MTN VLAN that is assigned to that cabinet.
 
    ```
    sw-cdu-001 & sw-cdu-002 (config)#

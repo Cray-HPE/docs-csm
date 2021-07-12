@@ -47,11 +47,11 @@ USAGE: - <Spine01/Agg01> <Spine02/Agg02> <Path to CSI generated network files>
 
 Example: ./aruba_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/eniac/networks
 ```
-After this script is run you will need to verify the configuration and verify the BGP peers are ```ESTABLISHED```.   If it is early in the install process and the CSM services have not been deployed yet, there will not be speakers to peer with so the peering sessions may not be ```ESTABLISHED``` yet.
+After this script is run you will need to verify the configuration and verify the BGP peers are ```ESTABLISHED```. If it is early in the install process and the CSM services have not been deployed yet, there will not be speakers to peer with so the peering sessions may not be ```ESTABLISHED``` yet.
 
 ## Manual Process
 
-On the Aruba switches, the output of the `show bgp ipv4 unicast summary` command should look like the following if the MetalLB speaker pods are running.   If it is early in the install process and the CSM services have not been deployed yet, you may see the neighbors in Idle, Active, or Connect state.
+On the Aruba switches, the output of the `show bgp ipv4 unicast summary` command should look like the following if the MetalLB speaker pods are running. If it is early in the install process and the CSM services have not been deployed yet, you may see the neighbors in Idle, Active, or Connect state.
 ```
 sw-spine-001# show bgp ipv4 unicast summary
 VRF : default
@@ -67,7 +67,7 @@ BGP Summary
  10.252.2.9      65533       54732   62927   00m:02w:04d  Established   Up         
  10.252.2.18     65533       54732   62911   00m:02w:04d  Established   Up 
  ```
-On the Mellanox switches, first you must run the switch commands listed in the Automated section above. The output of the `show ip bgp summary` command should look like the following if the MetalLB speaker pods are running.   If it is early in the install process and the CSM services have not been deployed yet, you may see the neighbors in IDLE, ACTIVE, or CONNECT state.
+On the Mellanox switches, first you must run the switch commands listed in the Automated section above. The output of the `show ip bgp summary` command should look like the following if the MetalLB speaker pods are running. If it is early in the install process and the CSM services have not been deployed yet, you may see the neighbors in IDLE, ACTIVE, or CONNECT state.
  
 ```
 sw-spine-001 [standalone: master] # show ip bgp summary 

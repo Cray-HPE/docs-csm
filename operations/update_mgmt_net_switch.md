@@ -139,7 +139,7 @@ This system needs to do the renames in this order: do CDU switches (8 to 9, 7 to
    pit# vi CAN.yaml
    ```
 
-   Excerpt from CAN.yaml showing the two spine switches. Most v1.3 systems would have had these as ending in .1 and in .3.  Note these switches are not named "spine" or "agg" since the SHCD may specify differing exit points, but with either option the IPv4 address is specified.
+   Excerpt from CAN.yaml showing the two spine switches. Most v1.3 systems would have had these as ending in .1 and in .3. Note these switches are not named "spine" or "agg" since the SHCD may specify differing exit points, but with either option the IPv4 address is specified.
 
    ```
      ip_reservations:
@@ -166,7 +166,7 @@ This system needs to do the renames in this order: do CDU switches (8 to 9, 7 to
 
    Repeat this for all of the switches. The example system has switches up to 10.1.0.8.
 
-3. Start moves with the highest numbered switch. In this case, that is sw-cdu02.  Said another way, if a switch is in a pair, start with the second half of the pair (i.e.. 2 of 2).
+3. Start moves with the highest numbered switch. In this case, that is sw-cdu02. Said another way, if a switch is in a pair, start with the second half of the pair (i.e.. 2 of 2).
 
    Move sw-cdu02 to sw-cdu-002 and increase IP addresses as specified in CSI output. It is a Dell switch.
 

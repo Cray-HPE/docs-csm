@@ -70,7 +70,7 @@ For more description of these settings and the default values, see [[Default IP 
       * p801p1,p801p2 for Intel nodes
    * The starting cabinet number for each type of cabinet (for example, starting-mountain-cabinet) has a default that can be overridden. See the "csi config init --help".
    * An override to default cabinet IPv4 subnets can be made with the hmn-mtn-cidr and nmn-mtn-cidr parameters.
-   * Several parameters (can-gateway, can-cidr, can-static-pool, can-dynamic-pool) describe the CAN (Customer Access network).  The can-gateway is the common gateway IP used for both spine switches and commonly referred to as the Virtual IP for the CAN.  The can-cidr is the IP subnet for the CAN assigned to this system. The can-static-pool and can-dynamic-pool are the MetalLB address static and dynamic pools for the CAN. The can-external-dns is the static IP assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded. The can-external-dns IP must be within the can-static-pool range.
+   * Several parameters (can-gateway, can-cidr, can-static-pool, can-dynamic-pool) describe the CAN (Customer Access network). The can-gateway is the common gateway IP used for both spine switches and commonly referred to as the Virtual IP for the CAN. The can-cidr is the IP subnet for the CAN assigned to this system. The can-static-pool and can-dynamic-pool are the MetalLB address static and dynamic pools for the CAN. The can-external-dns is the static IP assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded. The can-external-dns IP must be within the can-static-pool range.
    * Set ntp-pool to a reachable NTP server.
    * The application_node_config.yaml file is optional, but if you have one describing the mapping between prefixes in hmn_connections.csv that should be mapped to HSM subroles, you need to include a command line option to have it used. See [Create Application Node YAML](create_application_node_config_yaml.md).
    * For systems that use non-sequential cabinet id numbers, use cabinets-yaml to include the cabinets.yaml file. This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to explicitly specify the id of every cabinet in the system. See [Create Cabinets YAML](create_cabinets_yaml.md).
@@ -78,7 +78,7 @@ For more description of these settings and the default values, see [[Default IP 
 <a name="configuration_payload_files"></a>
 ### Configuration Payload Files
 
-A few configuration files are needed for the installation of Shasta v1.5.  These are all provided to the `csi`
+A few configuration files are needed for the installation of Shasta v1.5. These are all provided to the `csi`
 command during the installation process.
 
 | Filename | Source | Information |
@@ -131,7 +131,7 @@ The information in the `ncn_metadata.csv` file identifies each of the management
 as a master, worker, or storage node, and provides the MAC address information needed to identify the BMC and
 the NIC which will be used to boot the node.
 
-For each management node, the xname, role, and subrole can be extracted from the SHCD.  However, the rest of the
+For each management node, the xname, role, and subrole can be extracted from the SHCD. However, the rest of the
 MAC address information needs to be collected another way. Collect as much information as possible 
 before the PIT node is booted from the LiveCD and then get the rest later when directed. See the scenarios
 which enable partial data collection below in [First Time Install](#first_time_install).
