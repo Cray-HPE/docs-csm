@@ -435,10 +435,10 @@ data so run them only when indicated. Instructions are in the `README` files.
    linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
    linux# scp -p docs-csm-install-*rpm csm-install-workarounds-*rpm ncn-m001:/root
    linux# ssh ncn-m001
-   pit# rpm -Uvh docs-csm-install-latest.noarch.rpm
-   pit# rpm -Uvh csm-install-workarounds-latest.noarch.rpm
+   ncn-m001# rpm -Uvh docs-csm-install-latest.noarch.rpm
+   ncn-m001# rpm -Uvh csm-install-workarounds-latest.noarch.rpm
    ```
-    
+
 1. Now check for workarounds in the `/opt/cray/csm/workarounds/livecd-post-reboot` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
     
     **Note:** The following command assumes that the data partition of the USB device has been remounted at /mnt/pitdata
