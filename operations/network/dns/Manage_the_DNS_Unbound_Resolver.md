@@ -106,31 +106,17 @@ Any log with `ERROR` or `Exception` is an indication that DNS is not healthy. Th
 
 ### Restart Unbound
 
-If any errors discovered in the sections above have been deemed transient or have been resolved, the Unbound pods can be restarted.
+If any errors discovered in the sections above have been deemed transient or have not been resolved, the Unbound pods can be restarted.
 
-**CAUTION:** This will cause loss of all DNS during the restart procedure, if it is not effectively stopped by an Error/Exception already.
+Use the following command to restart the pods:
 
-Use the following steps to restart the pods:
-
-1.  Scale the deployment to 0 to stop Unbound.
+1.  Restart Unbound
 
     ```bash
-    ncn-w001# kubectl scale deployments/cray-dns-unbound --replicas=0
+    ncn-w001# kubectl -n services rollout restart deployment cray-dns-unbound
     ```
 
-2.  Ensure all cray-dns-unbound pods have terminated and are removed.
-
-    ```bash
-    ncn-w001# watch kubectl get -n services pods -l \
-    app.kubernetes.io/instance=cray-dns-unbound
-    ```
-
-3.  Scale the deployment back up to 2 pods.
-
-    ```bash
-    ncn-w001# kubectl scale deployments/cray-dns-unbound --replicas=2
-    ```
-
+A rolling restart of the Unbound pods will occur, old pods will not be terminated and new pods will not be added to the load balancer until the new pods have successfully loaded the DNS records.
 
 ### Clear Bad Data in the Unbound ConfigMap
 
