@@ -146,7 +146,7 @@ The following clears the \(DNS Helper\) Manager generated data in the ConfigMap.
 
 ```bash
 ncn-w001# kubectl -n services patch configmaps cray-dns-unbound \
---type merge -p '{"data":{"records.json":"[]"}}'
+--type merge -p '{"binaryData":{"records.json.gz":"H4sICLQ/Z2AAA3JlY29yZHMuanNvbgCLjuUCAETSaHADAAAA"}}'
 ```
 
 
