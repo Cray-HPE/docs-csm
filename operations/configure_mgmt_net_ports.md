@@ -268,7 +268,7 @@ interface lag 4 multi-chassis
 ## Aruba
 Aruba CDU switch configuration.
 This configuration is identical across CDU VSX pairs.
-The VLANS used here are generated from CSI.
+The VLANs used here are generated from CSI.
 
 ```
 sw-cdu-001 & sw-cdu-002 (config)#
@@ -291,7 +291,7 @@ sw-cdu-001 & sw-cdu-002 (config)#
 
 Dell CDU switch configuration.
 This configuration is identical across CDU VLT pairs.
-The VLANS used here are generated from CSI.
+The VLANs used here are generated from CSI.
 
 ```
 sw-cdu-001 & sw-cdu-002 (config)#

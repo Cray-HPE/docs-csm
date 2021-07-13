@@ -385,7 +385,7 @@ The IP addresses used here will be the first three worker nodes on the NMN netwo
 - The CEC will not need to be programmed in order to support the LAG configuration as it was required in previous versions. The updated firmware takes care of this.
 
 1. Ports going to CMM switches.
-   The VLANs used are the cabinet VLANS that are generated from CSI
+   The VLANs used are the cabinet VLANs that are generated from CSI
    The Description should be changed to match the cabinet number.
 
    ```

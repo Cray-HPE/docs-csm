@@ -9,7 +9,7 @@ HPE Cray EX systems are designed so that system management services \(SMS\) are 
 -   A micro-service can run on any node that meets the requirements for that micro-service, such as appropriate hardware attributes, which are indicated by labels and taints.
 -   All micro-services have shared persistent storage so that they can be restarted on any NCN in the Kubernetes management cluster without losing state.
 
-Kubernetes is designed to ensure that the wanted number of deployments of a micro-service are always running on one or more worker nodes. In addition, it ensures that if one wotker node becomes unresponsive, the micro-services that were running on it are migrated to another NCN that is up and meets the requirements of those micro-services.
+Kubernetes is designed to ensure that the wanted number of deployments of a micro-service are always running on one or more worker nodes. In addition, it ensures that if one worker node becomes unresponsive, the micro-services that were running on it are migrated to another NCN that is up and meets the requirements of those micro-services.
 
 See [Restore System Functionality if a Kubernetes Worker Node is Down](Restore_System_Functionality_if_a_Kubernetes_Worker_Node_is_Down.md) for more information.
 

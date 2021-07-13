@@ -59,7 +59,7 @@ If there are duplicate email addresses for LDAP users, it can cause Keycloak to 
 
 6.  Verify in the Keycloak UI that there is no longer an email mapper for the LDAP user federation.
 
-    For more information on accessing the Keycloak UI, see [Access the Keycloak User Management UI](Access_the_Keycloak_User_Managment_UI.md).
+    For more information on accessing the Keycloak UI, see [Access the Keycloak User Management UI](Access_the_Keycloak_User_Management_UI.md).
 
     The email row shown in the image below should no longer be present.
     

@@ -148,7 +148,7 @@ is no single point of failure. The design of the system allows for resiliency in
    management cluster without losing state.
 
 Kubernetes is designed to ensure that the desired number of deployments of a micro-service are always running
-on one or more worker nodes. In addition, it ensures that if one wotker node becomes unresponsive, the
+on one or more worker nodes. In addition, it ensures that if one worker node becomes unresponsive, the
 micro-services that were running on it are migrated to another worker node that is up and meets the requirements of those
 micro-services.
 

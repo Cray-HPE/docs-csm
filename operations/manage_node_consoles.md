@@ -10,7 +10,7 @@ they start, then HSM is unaware of them and so are cray-console-operator and cra
 
 Verify that all nodes are being monitored for console logging and connect to them if desired.
 
-See [ConMan](coman/ConMan.md) for other procedures related to remote consoles and node console logging.
+See [ConMan](conman/ConMan.md) for other procedures related to remote consoles and node console logging.
 
 ## Procedure
 
