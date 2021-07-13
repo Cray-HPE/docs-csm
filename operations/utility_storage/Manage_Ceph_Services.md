@@ -211,7 +211,7 @@ ncn-m001# ceph mgr MODULE_NAME disable MODULE
        - From this we can get our placement of the services.
 
 
-  1. Choose the service you want to scale.  ***(reminder the example will use the MGR service)***
+  1. Choose the service you want to scale. ***(reminder the example will use the MGR service)***
      1. If you are scaling mds or mgr daemons then you will want to make sure you are failing over the active mgr/mds daemon so you always have one running.
 
      ```bash

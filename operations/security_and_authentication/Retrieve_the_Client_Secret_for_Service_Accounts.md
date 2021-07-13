@@ -17,7 +17,7 @@ Follow the steps in only one of the sections below depending on if it is preferr
 
 1.  Log in to the administration console.
 
-    See [Access the Keycloak User Management UI](Access_the_Keycloak_User_Managment_UI.md) for more information.
+    See [Access the Keycloak User Management UI](Access_the_Keycloak_User_Management_UI.md) for more information.
 
 2.  Click on **Clients** under the Configure header of the navigation panel on the left side of the page.
 

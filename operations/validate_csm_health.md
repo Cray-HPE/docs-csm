@@ -495,7 +495,7 @@ ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-
 ### 2.3 Hardware State Manager Discovery Validation
 
 By this point in the installation process, the Hardware State Manager (HSM) should 
-have done it's discovery of the system.
+have done its discovery of the system.
 
 The foundational information for this discovery is from the System Layout Service (SLS). Thus, a
 comparison needs to be done to see that what is specified in SLS (focusing on 
