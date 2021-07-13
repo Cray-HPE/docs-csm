@@ -13,6 +13,7 @@ BMC/controller passwords.
    1. [Configure the Cray Command Line Interface (cray CLI)](#configure_cray_cli)
    1. [Lock Management Nodes](#lock_management_nodes)
    1. [Configure BMC and Controller Parameters with SCSD](#configure_with_scsd)
+   1. [Upload Olympus BMC Recovery Firmware into TFTP server](#cray_upload_recovery_images)
    1. [Next Topic](#next-topic)
 
    Note: The procedures in this section of installation documentation are intended to be done in order, even though the topics are
@@ -66,7 +67,14 @@ BMC/controller passwords.
    
       Note: If there are no liquid-cooled cabinets present in the HPE Cray EX system, then this procedure can be skipped.
    
-      See [Configure BMC and Controller Parameters with SCSD](../operations/configure_with_scsd.md)  
+      See [Configure BMC and Controller Parameters with SCSD](../operations/configure_with_scsd.md)
+   <a name="cray_upload_recovery_images"></a>   
+   1. Upload Olympus BMC Recovery Firmware into TFTP server
+
+      The Olympus hardware (NodeBMCs, ChassisBMCs, RouterBMCs) needs to have recovery firmware loaded to the cray-tftp server incase the BMC loses its firmware.  The BMC's are configured to load a recovery firmware from a TFTP server.  This procedure does not modify any BMC firmware, but only stages the firmware on the TFPT server for download in the event it is needed.  
+   
+      See [Load Olympus BMC Recovery Firmware into TFTP server](../operations/cray_upload_recovery_images.md)
+            
    <a name="next-topic"></a>
    1. Next Topic
 
