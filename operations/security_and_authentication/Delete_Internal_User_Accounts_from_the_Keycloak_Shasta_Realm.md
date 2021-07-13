@@ -6,7 +6,7 @@ Removing an account from Keycloak is a good way to revoke admin or user privileg
 
 ### Prerequisites
 
--   This procedure assumes the user has already accessed Keycloak's user management interface. See [Access the Keycloak User Management UI](Access_the_Keycloak_User_Managment_UI.md) for more information.
+-   This procedure assumes the user has already accessed Keycloak's user management interface. See [Access the Keycloak User Management UI](Access_the_Keycloak_User_Management_UI.md) for more information.
 -   This procedure assumes that the password for the Keycloak `admin` account is known. The Keycloak password is set during the software installation process. The password can be obtained with the following command:
 
     ```bash

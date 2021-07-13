@@ -10,7 +10,7 @@ Displays when you mouse over the topic on the Cray Portal.
 
 -   **ROLE**
 
-    System Adminstrator, User
+    System Administrator, User
 
 -   **OBJECTIVE**
 

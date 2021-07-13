@@ -1,7 +1,7 @@
 # PXE Booting Runbook
 
 PXE booting is a key component of a working Shasta system. There are a lot of different components involved which increases the complexity.
-This guide runs through the most common issues and shows the user what's needed in order to have a successful PXE boot.
+This guide runs through the most common issues and shows the user what is needed in order to have a successful PXE boot.
 
 1. [NCNs on install](#ncns-on-install)<br>
 2. [M001 on reboot or NCN boot](#m001-on-reboot)<br>
@@ -13,18 +13,14 @@ This guide runs through the most common issues and shows the user what's needed 
 	2.6. [Verify the DHCP traffic on the Workers](#verify-the-dhcp-traffic)<br>	
     2.7. [Verify the switches are forwarding DHCP traffic.](#verify-the-switches)<br>
 3. [Computes/UANs/Application Nodes](#computes-uans-applications-nodes)<br>
-4. [Information To Gather For Support Request](#information-to-gather-for-support-request)
-<br>
-<br>
-<br>
+
 <a name="ncns-on-install"></a>
 
 ## 1. NCNs on install
 
 
-* Verify the DNSMASQ config file matches what's configured on the switches.
-	* Here's a DNSMASQ config file for the Metal network (VLAN1). As you can see the router is 10.1.0.1, this Has to match what the IP address is on the switches doing the routing for the MTL network. This is most commonly on the spines. This configuration is commonly missed on the CSI input file.
-
+* Verify the DNSMASQ configuration file matches what is configured on the switches.
+	* Here is a DNSMASQ configuration file for the Metal network (VLAN1). As you can see, the router is `10.1.0.1`. This has to match what the IP address is on the switches doing the routing for the MTL network. This is most commonly on the spines. This configuration is commonly missed on the CSI input file.
 
 >MTL dnsmasq file
 
@@ -46,11 +42,11 @@ dhcp-option=interface:bond0,option:router,10.1.0.
 dhcp-range=interface:bond0,10.1.1.33,10.1.1.233,10m
 ```
 
-* Here's an example of what the Spine config should be.
+* Here is an example of what the Spine switch configuration should be.
 
 
 
->Mellanox Config
+>Mellanox Configuration
 
 ```
 sw-spine-001 [standalone: master] # show run int vlan 1
@@ -73,7 +69,7 @@ interface vlan 1 magp 1 ip virtual-router mac-address
 00:00:5E:00:01:
 ```
 
->Aruba Config
+>Aruba Configuration
 
 ```
 sw-spine-001# show run int vlan 1
@@ -98,9 +94,7 @@ ip mtu 9198
 ip helper-address 10.92.100.
 exit
 ```
-* You should be able to ping the MTL router from m001.<br>
-
-<a href="#top">Back to top</a>
+* You should be able to ping the MTL router from m001.
 
 <a name="m001-on-reboot"></a>
 
@@ -118,13 +112,11 @@ exit
 
 * Verify the ip helper-address on VLAN 1 on the switches. This is the same configuration as above ^ "Mellanox Config" & "Aruba Config"
 
-<a href="#top">Back to top</a>
-
 <a name="Verify-DHCP-packets"></a>
 ## 2.1. Verify DHCP packets can be forwarded from the workers to the MTL network (VLAN1)
 
 
-* If the Worker nodes can't reach the metal network DHCP will fail.
+* If the Worker nodes cannot reach the metal network DHCP will fail.
 * ALL WORKERS need to be able to reach the MTL network!
 * This can normally be achieved by having a default route
 * TEST
@@ -141,8 +133,6 @@ PING 10.1.0.1 (10.1.0.1) 56(84) bytes of data.
 ```bash
 ncn-w001:~ # ip route add 10.1.0.0/16 via 10.252.0.1 dev vlan
 ```
-
-<a href="#top">Back to top</a>
 
 <a name="verify-bgp"></a>
 ## 2.2. Verify BGP
@@ -192,8 +182,6 @@ Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   
 10.252.1.9        4    65533        18010     20671     39        0      0      6:05:52:03    ESTABLISHED/6
 ```
 
-<a href="#top">Back to top</a>
-
 <a name="verify-route-to-tftp"></a>
 
 ## 2.3. Verify route to TFTP
@@ -213,11 +201,9 @@ Displaying ipv4 routes selected for forwarding
     via  10.252.1.9,  [70/0],  bgp
 ```
 
-* This route can be a static route or a BGP route that's pinned to a single worker. (1.4.2 patch introduces the BGP pinned route)
+* This route can be a static route or a BGP route that is pinned to a single worker. (1.4.2 patch introduces the BGP pinned route)
 * Verify that you can ping the next hop of this route.
 * For the example above we would ping 10.252.1.9. If this is not reachable this is your problem.
-
-<a href="#top">Back to top</a>
 
 <a name="test-tftp-traffic"></a>
 ## 2.4. Test TFTP traffic (Aruba Only)
@@ -239,11 +225,9 @@ tftp> get ipxe.efi
 Received 1007200 bytes in 2.2 seconds
 ```
 
-* You can see here that the ipxe.efi binary is downloaded three times in a row. When we've seen issues with ECMP hashing this
+* You can see here that the ipxe.efi binary is downloaded three times in a row. When we have seen issues with ECMP hashing this
 would fail intermittently.
 
-<a href="#top">Back to top</a>
- 
 <a name="check-dhcp-lease"></a>
 ## 2.5. Check DHCP lease is getting allocated
 
@@ -259,22 +243,20 @@ grep kea | head -n1 | cut -f 1 -d ' ') -c cray-dhcp-kea
 ```
 
 * Here we can see that KEA is allocating a lease to 10.104.0.23.
-* The lease MUST say DHCP4_LEASE_ALLOC, if it says DHCP4_LEASE_ADVERT, there is likely a problem.  Restarting KEA will fix this issue most of the time.
+* The lease MUST say DHCP4_LEASE_ALLOC. If it says DHCP4_LEASE_ADVERT, there is likely a problem. Restarting KEA will fix this issue most of the time.
 
 ```
 2021-06-21 16:44:31.124 INFO  [kea-dhcp4.leases/18.139837089017472] DHCP4_LEASE_ADVERT [hwtype=1 14:02:ec:d9:79:88], cid=[no info], tid=0xe87fad10: lease 10.252.1.16 will be advertised
 ```
 
-<a href="#top">Back to top</a>
-
 <a name="verify-the-dhcp-traffic"></a>
 ## 2.6. Verify the DHCP traffic on the Workers
 
 
-* We've ran into issues on HPE servers and Aruba switches where the source address of the DHCP Offer is the Metallb address
-of KEA "10.92.100.222". The source address of the DHCP Reply/Offer NEEDS to be the address of the vlan interface on the
+* We have ran into issues on HPE servers and Aruba switches where the source address of the DHCP Offer is the Metallb address
+of KEA "10.92.100.222". The source address of the DHCP Reply/Offer NEEDS to be the address of the VLAN interface on the
 Worker.
-* Here's how to look at DHCP traffic on the workers.
+* Here is how to look at DHCP traffic on the workers.
 
 ```bash
 ncn-w001:~ # tcpdump -envli bond0 port 67 or 68
@@ -304,37 +286,34 @@ this is below.
   file "ipxe.efi"[|bootp]
 ```
 
-* If you run into this, the only solution that we've found so far is restarting KEA and making sure that it gets moved to a different
+* If you run into this, the only solution that we have found so far is restarting KEA and making sure that it gets moved to a different
 worker. We believe this has something to do with conntrack.
-
-<a href="#top">Back to top</a>
 
 <a name="verify-the-switches"></a>
 ## 2.7. Verify the switches are forwarding DHCP traffic.
 
-
-* If you made it this far and still can't pxe boot, you may have run into the IP-Helper breaking on the switch.
-* On all our switch vendors Aruba, Dell, Mellanox we've seen the IP-Helpers get wedged and stop forwarding DHCP traffic to the client.
-	* The solutions vary from Vendor to Vendor so your mileage may vary on this.
-	* On the Arubas we've had to delete the entire VLAN config and re-apply it in order for the DHCP traffic to come back. This was even after a reboot.
-	* On the Dells we've had to do reboots in order to restore DHCP traffic.
-	* On the Mellanox we've had to delete the VLAN config and re-apply it in order for the DHCP traffic to come back.
-	* There seems to be something inherently wrong with how the IP-helper is implemented on switches or we are doing DHCP so
-backwards that it breaks every switch...
-
-<a href="#top">Back to top</a>
+* If you made it this far and still cannot pxe boot, you may have run into the IP-Helper breaking on the switch.
+* On all our switch vendors (Aruba, Dell, Mellanox) we have seen the IP-Helpers get stuck and stop forwarding DHCP traffic to the client.
+    * The solutions vary from Vendor to Vendor so your mileage may vary on this.
+    * On the Arubas we have had to delete the entire VLAN configuration and re-apply it in order for the DHCP traffic to come back. This was even after a reboot.
+    * On the Dells we have had to do reboots in order to restore DHCP traffic.
+    * On the Mellanox we have had to delete the VLAN configuration and re-apply it in order for the DHCP traffic to come back.
+    * There seems to be something inherently wrong with how the IP-helper is implemented on switches, or we are doing DHCP so backwards that it breaks every switch...
 
 <a name="computes-uans-applications-nodes"></a>
-## 3. Computes/UANs/Application Nodes
+## 3. Compute Nodes/UANs/Application Nodes
 
+* The following are required for compute node PXE booting.
+    * [Verify BGP](#ncns-on-install)<br>
+    * [Verify route to TFTP](#verify-route-to-tftp)
+    * [Test TFTP traffic](#test-tftp-traffic)
+    * [Check DHCP lease is getting allocated](#check-dhcp-lease)
+    * [Verify the DHCP traffic on the Workers](#verify-the-dhcp-traffic)
+    * [Verify the switches are forwarding DHCP traffic](#verify-the-switches)
+* Verify the IP-Helpers on the VLAN the computes nodes are booting over. This is typically VLAN 2 or VLAN 2xxx (MTN Computes)
+* If the compute nodes make it past PXE and go into the PXE shell you can verify DNS and connectivity.
 
-* The following are required for Compute PXE booting.
-	* [Verify BGP](#ncns-on-install)<br>
-	* [Verify route to TFTP](#verify-route-to-tftp)<br>	* [Test TFTP traffic](#test-tftp-traffic)<br>	* [Check DHCP lease is getting allocated](#check-dhcp-lease)<br>	* [Verify the DHCP traffic on the Workers](#verify-the-dhcp-traffic)<br>	* [Verify the switches are forwarding DHCP traffic](#verify-the-switches)<br>
-* Verify the IP-Helpers on the VLAN the computes are booting over. This is typically VLAN 2 or VLAN 2xxx (MTN Computes)
-* If the Computes make it past PXE and go into the PXE shell you can verify DNS and connectivity.
-
-```bash
+```
 iPXE> dhcp
 Configuring (net0 98:03:9b:a8:60:88).................. No configuration methods succeeded (http://ipxe.org/040ee186)
 Configuring (net1 b4:2e:99:be:1a:37)...... ok
@@ -346,6 +325,4 @@ iPXE> nslookup address api-gw-service-nmn.local
 iPXE> echo ${address}
 10.92.100.71
 ```
-<a href="#top">Back to top</a>
 
-<a name="information-to-gather-for-support-request"></a>

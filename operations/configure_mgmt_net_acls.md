@@ -34,7 +34,7 @@ sw-s24g03(config-vlan-4)# apply access-list ip nmn-hmn in
 sw-s24g03(config-vlan-4)# apply access-list ip nmn-hmn out
 ```
 
-If you are on a Aruba CDU switch you will need to apply the same access-list to the 2xxx and 3xxx VLANs (MTN VLANS)
+If you are on a Aruba CDU switch you will need to apply the same access-list to the 2xxx and 3xxx VLANs (MTN VLANs)
 
 # Mellanox Configuration
 
