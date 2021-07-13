@@ -28,9 +28,23 @@ ncn# kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm'
 
 This check will also be conducted in the 'prerequisites.sh' script listed below and will fail if the system is not running CSM-0.9.4.
 
-#### Stage 0.1. - Validate customizations.yaml
+#### Stage 0.1. - Install latest docs RPM
 
-Perform these steps to ensure the Gitea PVC configuration is not in customizations.yaml
+1. Install latest document RPM package:
+
+    * Internet Connected
+        ```bash
+        ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
+        ```
+
+    * Air Gapped
+        ```bash
+        ncn-m001# rpm -Uvh [PATH_TO_docs-csm-install-*.noarch.rpm]
+        ```
+
+#### Stage 0.2. - Update customizations.yaml
+
+Perform these steps to update customizations.yaml:
 
 1. If you manage customizations.yaml in an external Git repository ([as
    recommended](../../install/prepare_site_init.md#version-control-site-init-files)),
@@ -48,7 +62,7 @@ Perform these steps to ensure the Gitea PVC configuration is not in customizatio
    ncn-m001# kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
    ```
 
-2. Remove the Gitea PVC configuration from customizations.yaml:
+2. Update customizations.yaml:
 
    ```bash
    ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/update-customizations.sh -i customizations.yaml
@@ -76,22 +90,9 @@ Perform these steps to ensure the Gitea PVC configuration is not in customizatio
    ncn-m001# cd -
    ```
 
-#### Stage 0.2. - Execute Prerequisites Check
+#### Stage 0.3. - Execute Prerequisites Check
 
-1. Install document RPM package:
-
-    * Internet Connected
-        ```bash
-        ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
-        ```
-
-    * Air Gapped
-
-        ```bash
-        ncn-m001# rpm -Uvh [PATH_TO_docs-csm-install-*.noarch.rpm]
-        ```
-
-2. Run check script:
+1. Run check script:
 
     * Internet Connected
 
@@ -107,7 +108,7 @@ Perform these steps to ensure the Gitea PVC configuration is not in customizatio
         ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --tarball-file [PATH_TO_CSM_TARBALL_FILE]
         ```
 
-3. The script also runs the goss tests on the initial stable node (typically `ncn-m001`) where the latest version of CSM has been installed. Make sure the goss test pass before continue.
+2. The script also runs the goss tests on the initial stable node (typically `ncn-m001`) where the latest version of CSM has been installed. Make sure the goss test pass before continue.
 
 ### Stage 1.  Ceph upgrade from Nautilus (14.2.x) to Octopus (15.2.x)
 #### Stage 1.1.
