@@ -353,7 +353,7 @@ If your Shasta system is using CDU switches you will need to update the configur
 
 ### Aruba CDU switch configuration.
 This configuration is identical across CDU VSX pairs.
-The VLANS used here are generated from CSI.
+The VLANs used here are generated from CSI.
 ```
 sw-cdu-001(config)# int lag 2 multi-chassis static
 sw-cdu-001(config-lag-if)# no shutdown
@@ -373,7 +373,7 @@ sw-cdu-001(config-if)# exit
 
 Dell CDU switch configuration.
 This configuration is identical across CDU VLT pairs.
-The VLANS used here are generated from CSI.
+The VLANs used here are generated from CSI.
 ```
 interface port-channel1
  description CMM_CAB_1000

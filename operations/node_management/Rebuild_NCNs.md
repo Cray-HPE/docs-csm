@@ -355,7 +355,7 @@ Skip this section if rebuilding a master or worker node. The examples in this se
 
     ```bash
     # for osd in $(ceph osd ls-tree NODE_NAME); do ceph osd destroy osd.$osd \
-        --force;  ceph osd purge osd.$osd --force; done
+        --force; ceph osd purge osd.$osd --force; done
     destroyed osd.1
     purged osd.1
     destroyed osd.3

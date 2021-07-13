@@ -95,6 +95,6 @@ Any contributor should feel welcome to ask for clarification on versioning withi
 <a name="discussions"></a>
 ### Discussions
 
-For discussion about the CSM documentation, see the HPE Cray Slack [#docs-csm].  This is not public.
+For discussion about the CSM documentation, see the HPE Cray Slack [#docs-csm]. This is not public.
 External access may be available for various partners & customers.
 

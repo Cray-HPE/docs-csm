@@ -92,7 +92,7 @@ See [Basic Wipe](#basic-wipe) section for expected output from the wipefs comman
 This section is preferred method for all nodes. A full wipe includes deleting the Ceph volumes (where applicable), stopping the
 RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
-**IMPORTANT:** Step 1 is to wipe the Ceph OSD drives.  ***Steps 2, 3, 4 and 5 are for all node types.***
+**IMPORTANT:** Step 1 is to wipe the Ceph OSD drives. ***Steps 2, 3, 4 and 5 are for all node types.***
 
 1. Delete CEPH Volumes ***on Utility Storage Nodes ONLY***
 
