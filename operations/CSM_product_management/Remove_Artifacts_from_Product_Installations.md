@@ -12,7 +12,7 @@ The examples in this procedure show how to remove the product artifacts for the 
 1. View the imported artifacts by printing them from the Cray Product Catalog ConfigMap.
 
     ```bash
-    ncn-m001# kubectl get cm  cray-product-catalog -n services -o json | jq -r .data.csm
+    ncn-m001# kubectl get cm cray-product-catalog -n services -o json | jq -r .data.csm
     1.0.0:
     configuration:
         clone_url: https://vcs.gamora.dev.cray.com/vcs/cray/csm-config-management.git
@@ -69,7 +69,7 @@ The examples in this procedure show how to remove the product artifacts for the 
     
 5. Update the product catalog.
 
-    Once the images, recipes, and repositories/branches have been removed from the system, update the product catalog to remove the references to them. This is done by editing the cray-product-catalog Kubernetes Config Map.
+    Once the images, recipes, and repositories/branches have been removed from the system, update the product catalog to remove the references to them. This is done by editing the cray-product-catalog Kubernetes ConfigMap.
 
     ```bash
     ncn-m001# kubectl edit configmap -n services cray-product-catalog
