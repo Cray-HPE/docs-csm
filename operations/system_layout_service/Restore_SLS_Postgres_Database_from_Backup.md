@@ -1,6 +1,6 @@
 # Restore SLS Postgres Database from Backup
 
-This procedure can be used to restore the SLS Postgres database from a previously taken manual backup created by the [Create a Backup of the SLS Postgres Database](Create_a_Backup_of_the_SLS_Postgres_Database.md) procedure.
+This procedure can be used to restore the SLS Postgres database from a previously taken backup. This can be a manual backup created by the [Create a Backup of the SLS Postgres Database](Create_a_Backup_of_the_SLS_Postgres_Database.md) procedure, or an automatic backup created by the `cray-sls-postgresql-db-backup` Kubernetes cronjob.
 
 ## Prerequisites
 - Healthy Postgres Cluster.
@@ -16,22 +16,55 @@ This procedure can be used to restore the SLS Postgres database from a previousl
     > +---------------------+------------+--------+---------+----+-----------+
     > ```
 
-- Perviously taken backup of the SLS Postgres cluster.
+- Previously taken backup of the SLS Postgres cluster either a manual or automatic backup.
+    > Check for any available automatic SLS Postgres backups:
+    > ```bash
+    > ncn# cray artifacts list postgres-backup --format json | jq -r '.artifacts[].Key | select(contains("sls"))'
+    > cray-sls-postgres-2021-07-11T23:10:08.manifest
+    > cray-sls-postgres-2021-07-11T23:10:08.psql
 
 ## Procedure
-1. Retrieve a previously taken SLS Postgres backup. This will be a perviously taken manual SLS backup.
+1. Retrieve a previously taken SLS Postgres backup. This can be either a Previously taken manual SLS backup or an automatic Postgres backup in the `postgres-backup` S3 bucket.
+    - From a previous manual backup:
+        1. Copy over the folder or tarball containing the Postgres back up to be restored. If it is a tarball extract it.
+        
+        2. Set the environment variable `POSTGRES_SQL_FILE` to point toward the `.psql` file in the backup folder:
+            ```bash
+            ncn# export POSTGRES_SQL_FILE=/root/cray-sls-postgres-backup_2021-07-07_16-39-44/cray-sls-postgres-backup_2021-07-07_16-39-44.psql
+            ```
+        
+        3. Set the environment variable `POSTGRES_SECRET_MANIFEST` to point toward the `.manifest` file in the backup folder:
+            ```bash
+            ncn# export POSTGRES_SECRET_MANIFEST=/root/cray-sls-postgres-backup_2021-07-07_16-39-44/cray-sls-postgres-backup_2021-07-07_16-39-44.manifest
+            ```
 
-    1. Copy over the folder or tarball containing the Postgres back up to be restored. If it is a tarball extract it.
+    - From a previous automatic Postgres backup:
+        1. Check for available backups:
+            ```bash
+            ncn# cray artifacts list postgres-backup --format json | jq -r '.artifacts[].Key | select(contains("sls"))'
+            cray-sls-postgres-2021-07-11T23:10:08.manifest
+            cray-sls-postgres-2021-07-11T23:10:08.psql
+            ```
 
-    2. Set the environment variable `POSTGRES_SQL_FILE` to point toward the `.psql` file in the backup folder:
-        ```bash
-        ncn# export POSTGRES_SQL_FILE=/root/cray-sls-postgres-backup_2021-07-07_16-39-44/cray-sls-postgres-backup_2021-07-07_16-39-44.psql
-        ```
+            Then set the following environment variables for the name of the files in the backup:
+            ```bash
+            ncn# export POSTGRES_SECRET_MANIFEST_NAME=cray-sls-postgres-2021-07-11T23:10:08.manifest
+            ncn# export POSTGRES_SQL_FILE_NAME=cray-sls-postgres-2021-07-11T23:10:08.psql
+            ```
+        2. Download the `.psql` file for the postgres backup:
+            ```bash
+            ncn# cray artifacts get postgres-backup "$POSTGRES_SQL_FILE_NAME" "$POSTGRES_SQL_FILE_NAME" 
+            ```
 
-    3. Set the environment variable `POSTGRES_SECRET_MANIFEST` to point toward the `.manifest` file in the backup folder:
-        ```bash
-        ncn# export POSTGRES_SECRET_MANIFEST=/root/cray-sls-postgres-backup_2021-07-07_16-39-44/cray-sls-postgres-backup_2021-07-07_16-39-44.manifest
-        ```
+        3. Download the `.manifest` file for the SLS backup:
+            ```bash
+            ncn# cray artifacts get postgres-backup "$POSTGRES_SECRET_MANIFEST_NAME" "$POSTGRES_SECRET_MANIFEST_NAME" 
+            ```
+        4. Setup environment variables pointing to the full path of the `.psql` and `.manifest` files:
+            ```bash
+            ncn# export POSTGRES_SQL_FILE=$(realpath "$POSTGRES_SQL_FILE_NAME")
+            ncn# export POSTGRES_SECRET_MANIFEST=$(realpath "$POSTGRES_SECRET_MANIFEST_NAME")
+            ```
 
 2. Verify the `POSTGRES_SQL_FILE` and `POSTGRES_SECRET_MANIFEST` environment variables are set correctly:
     ```bash
