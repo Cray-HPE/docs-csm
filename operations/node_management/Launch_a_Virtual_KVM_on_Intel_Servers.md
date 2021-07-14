@@ -17,7 +17,7 @@ This procedure shows how to launch a virtual KVM to connect to an Intel server. 
 
     **Troubleshooting:**
 
-    -   **Java exception**: If a Java exception occurs when trying to connect via SOL, see [Change Java Security Settings](Change_Java_Security_Settings.md#).
+    -   **Java exception**: If a Java exception occurs when trying to connect via SOL, see [Change Java Security Settings](Change_Java_Security_Settings.md).
     -   **Unable to access BMC**: If unable to access the node's BMC and ConMan is being used, ConMan may be blocking that access. See [../conman/Troubleshoot ConMan Blocking Access to a Node BMC](Troubleshoot_ConMan_Blocking_Access_to_a_Node_BMC.md#).
 
 2.  Log in to the BMC.

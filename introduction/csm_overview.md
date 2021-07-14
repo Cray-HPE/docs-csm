@@ -171,7 +171,7 @@ users must retrieve a token for authentication before attempting to access APIs 
 a valid token with each API call. The authentication and authorization decisions are made at the gateway level
 which prevent unauthorized API calls from reaching the underlying micro-services. For more detail on the process
 of obtaining tokens and user management, see
-[System Security and Authentication](../operations/security_and_authentication/System_security_and_Authentication.md).
+[System Security and Authentication](../operations/security_and_authentication/System_Security_and_Authentication.md).
 
 Review the API documentation in the supplied container before attempting to use the API services. This container
 is generated with the release using the most current API descriptions in OpenAPI 2.0 format. Since this file serves

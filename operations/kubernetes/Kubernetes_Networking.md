@@ -32,9 +32,3 @@ As part of the SMS installation, the following network policies are configured o
 -   `vcs-database`: Allows only Gitea to access the VCS instance
 
 To learn more about Kubernetes, refer to [https://kubernetes.io/](https://kubernetes.io/).
-
-In the following illustration, the dotted lines indicate a subset of nodes, whereas the solid lines represent all the nodes.
-
-![Kubernetes Storage and Networking Components](Kubernetes_Networking_and_Storage_Components.png "Kubernetes Storage and Networking Components")
-
-

@@ -54,6 +54,7 @@ The crashed node requires a working spire-agent to communicate with NMD. However
         # ip addr show
         ```
 
+<a name="step_three"></a>
 3.  Create a manual dump data file with S3 access and dump the requested JSON data on an NCN.
 
     Storing the required S3 access information in a file is not required, but it will make it easier to import the JSON string in the run\_manual\_ckdump.sh script that is run in a future step.
@@ -143,7 +144,7 @@ The crashed node requires a working spire-agent to communicate with NMD. However
 
     3.  Run the manual dump for the compute node.
 
-        Give the S3 access and dump data from step [3](#step_jgm_qhg_dpb) as a single-line string, and press **enter** so that "read -s data" in the script can get all input and create a valid JSON file.
+        Give the S3 access and dump data from [step 3](#step_three) as a single-line string, and press **enter** so that "read -s data" in the script can get all input and create a valid JSON file.
 
         ```bash
         :/root# ./run_manual_ckdump.sh x3000c0s17b3n0

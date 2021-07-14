@@ -144,7 +144,7 @@ Skip this section if rebuilding a worker or storage node. The examples in this s
     Use `ssh` to login to the newly-promoted master node chosen in the previous steps \(`ncn-m001` in this case\), 
     copy/paste the following script to a file, and then execute it.
 
-    > **NOTE**: The output from the script below can be misleading as it is relying on cached cloud-init data.  Ignore the output that indicates **FIRST_MASTER_HOSTNAME has been set to ncn-...**.
+    > **NOTE**: The output from the script below can be misleading as it is relying on cached cloud-init data. Ignore the output that indicates **FIRST_MASTER_HOSTNAME has been set to ncn-...**.
 
     ```bash
     #!/bin/bash
@@ -339,7 +339,7 @@ Skip this section if rebuilding a master or worker node. The examples in this se
 
 3.  Remove Ceph OSDs.
 
-    The ceph osd tree capture indicated that there are down OSDs on `ncn-s003`.
+    The `ceph osd tree` capture indicated that there are down OSDs on `ncn-s003`.
 
     ```
     -5        6.98639     host ncn-s003
@@ -472,28 +472,8 @@ This section applies to all node types.
        > }
        ```
 
-7. Watch the console for the node being rebuilt.
+7. Watch the console for the node being rebuilt using the instructions in the following document: [Log in to a Node Using ConMan](../conman/Log_in_to_a_Node_Using_ConMan.md)
 
-   1.  Get the ConMan pod name.
-
-       ```bash
-       ncn# kubectl get po -n services| grep conman
-       cray-conman-76df958b6-24jh9     3/3     Running      2          139m
-       ```
-
-   2.  Exec into the pod returned in the previous sub-step.
-
-       ```bash
-       ncn# kubectl exec -it -n services cray-conman-76df958b6-24jh9 -- /bin/sh
-       ```
-
-   3.  Connect to the console.
-
-       ```bash
-       sh-4.4# conman -j XNAME
-       ```
-
-       Enter **&** and then **.** to exit.
 
 #### 3. Rebuild Node
 

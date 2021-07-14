@@ -269,5 +269,5 @@ ncn-w003# kubectl describe -n user <pod-name>
 
 If volumes are missing, they will be in the Events:section of the output. Other problems may show up there as well. The names of the missing volumes or other issues should indicate what needs to be fixed to enable the UAI.
 
-**Parent topic:**[CSM Health Checks and Install Validation](CSM_Health_Checks_and_Install_Validation.md)
+**Parent topic:**[CSM Health Checks and Install Validation](../validate_csm_health.md)
 
