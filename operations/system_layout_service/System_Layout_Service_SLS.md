@@ -18,3 +18,6 @@ SLS is responsible for the following:
 * [Dump SLS Information](Dump_SLS_Information.md)
 * [Load SLS Database with Dump File](Load_SLS_Database_with_Dump_File.md)
 * [Add UAN CAN IP Addresses to SLS](Add_UAN_CAN_IP_Addresses_to_SLS.md)
+* [Create a Backup of the SLS Postgres Database](Create_a_Backup_of_the_SLS_Postgres_Database.md)
+* [Restore SLS Postgres Database from Backup](Restore_SLS_Postgres_Database_from_Backup.md)
+* [Restore SLS Postgres without an Existing Backup](Restore_SLS_Postgres_without_an_Existing_Backup.md)

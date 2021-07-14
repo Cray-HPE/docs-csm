@@ -423,6 +423,9 @@ The System Layout Service \(SLS\) holds information about the system design, suc
   * [Dump SLS Information](system_layout_service/Dump_SLS_Information.md)
   * [Load SLS Database with Dump File](system_layout_service/Load_SLS_Database_with_Dump_File.md)
   * [Add UAN CAN IP Addresses to SLS](system_layout_service/Add_UAN_CAN_IP_Addresses_to_SLS.md)
+  * [Create a Backup of the SLS Postgres Database](system_layout_service/Create_a_Backup_of_the_SLS_Postgres_Database.md)
+  * [Restore SLS Postgres Database from Backup](system_layout_service/Restore_SLS_Postgres_Database_from_Backup.md)
+  * [Restore SLS Postgres without an Existing Backup](system_layout_service/Restore_SLS_Postgres_without_an_Existing_Backup.md)
 
 
 <a name="system-configuration-service"></a>
