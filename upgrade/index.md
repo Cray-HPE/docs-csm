@@ -26,8 +26,8 @@ sections, but there is also a general troubleshooting topic.
 1. Prepare for Upgrade
       
    See [Prepare for Upgrade](prepare_for_upgrade.md)
-<a name="update_management_network"></a>
 
+<a name="update_management_network"></a>
 1. Update Management Network 
       
    There are new features and functions with Shasta v1.5. Some of these changes were available as patches and hotfixes
@@ -38,8 +38,8 @@ sections, but there is also a general troubleshooting topic.
    * BGP passive neighbors (Aruba and Mellanox)
 
    See [Update Management Network](update_management_network.md)
-<a name="upgrade_management_nodes_csm_services"></a>
 
+<a name="upgrade_management_nodes_csm_services"></a>
 1. Upgrade Management Nodes and CSM Services
       
    The upgrade of CSM software will do a controlled, rolling reboot of all management nodes before updating the CSM services.
@@ -50,8 +50,8 @@ sections, but there is also a general troubleshooting topic.
    * Stage 4. CSM Service Upgrades
 
    See [Upgrade Management Nodes and CSM Services](1.0/README.md)
-<a name="validate_csm_health"></a>
 
+<a name="validate_csm_health"></a>
 1. Validate CSM Health
 
    > **`IMPORTANT:`** Wait at least 15 minutes after 
@@ -70,13 +70,13 @@ sections, but there is also a general troubleshooting topic.
    application workload during the the CSM upgrade.
       
    See [Validate CSM Health](../operations/validate_csm_health.md)
-<a name="update_firmware_with_fas"></a>
 
+<a name="update_firmware_with_fas"></a>
 1. Update Firmware with FAS
       
    See [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md)
-<a name="next_topic"></a>
 
+<a name="next_topic"></a>
 1. Next Topic
 
    After completion of the firmware update with FAS, the CSM product stream has been fully upgraded and

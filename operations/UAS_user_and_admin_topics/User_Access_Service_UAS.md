@@ -68,54 +68,16 @@ UAS troubleshooting tips and techniques.
 
 **Related information**  
 
-
-[About the HPE Cray EX System Administration Guide](About_the_HPE_Cray_EX_System_Administration_Guide.md)
-
-[System Services](System_Services.md)
-
-[Cray System Management \(CSM\) Support](Cray_System_Management_Support.md)
-
-[Reboot NCNs](Reboot_NCNs.md)
-
-[Compute Node Boot Sequence](Compute_Node_Boot_Sequence.md)
-
-[Boot Orchestration Service \(BOS\)](Boot_Orchestration_Service_BOS.md)
-
-[Compute Rolling Upgrade Service \(CRUS\)](Compute_Rolling_Upgrade_Service_CRUS.md)
-
-[System Security and Authentication](System_Security_and_Authentication.md)
-
-[Artifact Management](Artifact_Management.md)
-
-[Image Management with Kiwi-NG Recipes](Image_Management_with_Kiwi-NG_Recipes.md)
-
-[Package Repository Management with Nexus](Package_Repository_Management_with_Nexus.md)
-
-[Configuration Management](Configuration_Management.md)
-
-[Utility Storage](Utility_Storage.md)
-
-[Kubernetes Architecture](Kubernetes_Architecture.md)
-
-[Resilience of System Management Services](Resilience_of_System_Management_Services.md)
-
-[Network Administration](Network_Administration.md)
-
-[Slingshot Network Management](Slingshot_Network_Management.md)
-
-[Use Slurm Workload Manager](Use%20Slurm%20Workload%20Manager.md)
-
-[Use PBS Pro Workload Manager](Use_PBS_Pro_Workload_Manager.md)
-
-[Application Task Orchestration and Management \(ATOM\)](Application_Task_Orchestration_and_Management.md)
-
-[Parallel Application Launch Service \(PALS\)](Parallel_Application_Launch_Service_PALS.md)
-
-[About UAN Configuration](About_UAN_Configuration.md)
-
-[Content Projection Service \(CPS\)](Content_Projection_Service_CPS.md)
-
-[Configure Overlay Preload](Configure_Overlay_Preload.md)
-
-[About the System Admin Toolkit \(SAT\)](About_the_System_Admin_Toolkit.md)
-
+* [System Management Services](../network/Access_to_System_Management_Services.md)
+* [Reboot NCNs](../node_management/Reboot_NCNs.md)
+* [Compute Node Boot Sequence](../boot_orchestration/BOS_Workflows.md)
+* [Boot Orchestration Service \(BOS\)](../boot_orchestration/Boot_Orchestration.md)
+* [Compute Rolling Upgrade Service \(CRUS\)](../compute_rolling_upgrades/Compute_Rolling_Upgrades.md)
+* [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md)
+* [Artifact Management](../artifact_management/Artifact_Management.md)
+* [Image Management with Kiwi-NG Recipes](../image_management/Image_Management.md)
+* [Package Repository Management with Nexus](../package_repository_management/Package_Repository_Management_with_Nexus.md)
+* [Configuration Management](../configuration_management/Configuration_Management.md)
+* [Utility Storage](../utility_storage/Utility_Storage.md)
+* [Kubernetes Architecture](../kubernetes/Kubernetes.md)
+* [Resilience of System Management Services](../resiliency/Resilience_of_System_Management_Services.md)

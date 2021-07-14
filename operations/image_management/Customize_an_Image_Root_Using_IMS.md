@@ -80,7 +80,7 @@ The Image Management Service \(IMS\) customization workflow sets up a temporary 
     Select one of the following options based on the current state of the image root being used:
 
     -   If the image root being customized meets the above requirements, proceed to [Locate an IMS Image to Customize](#locate).
-    -   If the image root being customized is not in SquashFS format, refer to [Convert TGZ Archives to SquashFS Images](Convert_TGZ_Archives_to_SquashFS_Images.mdConvert_TGZ_Archives_to_SquashFS_Images.md).
+    -   If the image root being customized is not in SquashFS format, refer to [Convert TGZ Archives to SquashFS Images](Convert_TGZ_Archives_to_SquashFS_Images.md).
     -   If the image root being customized is in SquashFS format and in S3, but not registered with the IMS service, proceed to [Register the Image Root with the IMS Service](#register).
 
 
@@ -182,7 +182,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     ```bash
     ncn# cray artifacts create boot-images $IMS_IMAGE_ID/manifest.json manifest.json
     ```
-
+<a name="register"></a>
 **Register the Image Root with the IMS Service**
 
 1.  Update the IMS image record.

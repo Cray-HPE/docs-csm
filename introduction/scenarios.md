@@ -3,7 +3,7 @@
 There are multiple scenarios for installing CSM software which are described in this documentation 
 with many supporting procedures.
 
-- [Scenarios for Shasta v1.5](#scenarios-for-shasta-v15)
+- Scenarios for Shasta v1.5
   - [Installation](#installation)
   - [Upgrade](#upgrade)
   - [Migration](#migration)

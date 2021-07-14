@@ -14,7 +14,6 @@ The following CLI operations are described:
      1. [Create a Snapshot](#create)
      2. [View a Snapshot](#view)
      3. [List Snapshots](#list)
-     4. [Restore a Snapshot](#restore)
 3. [Update an Image](#update)
 
 ### Prerequisites
@@ -31,7 +30,7 @@ Use FAS to execute an action. An action produces a  set of firmware operations. 
 
 #### Procedure
 
-This will cover the generic process for executing an action. For more specific examples and detailed explanations of options see the [Recipes](recipes.md) and [Filters](filters.md) sections.
+This will cover the generic process for executing an action. For more specific examples and detailed explanations of options see the [Recipes](FAS_Recipes.md) and [Filters](FAS_Filters.md) sections.
 
 1. Identify the selection of filters to apply. 
 
