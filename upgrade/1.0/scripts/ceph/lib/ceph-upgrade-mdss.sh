@@ -59,11 +59,12 @@ function upgrade_mds () {
   ceph fs set cephfs standby_count_wanted 2
   ceph fs set cephfs allow_standby_replay true
   wait_for_health_ok
-
-  output=$(ceph -s 2>&1 | grep 'mds daemon damaged')
-  rc=$?
+  
+  fsmap_in=$(ceph status -f json-pretty |jq '.fsmap.in')
+  fsmap_up=$(ceph status -f json-pretty |jq '.fsmap.up')
+  
   echo "Checking to see if mds filesystem is healthy"
-  if [ "$rc" -eq 0 ]; then
+  if [[ $fsmap_in -ne $fsmap_up ]]; then
     repair_cephfs
   fi
 
