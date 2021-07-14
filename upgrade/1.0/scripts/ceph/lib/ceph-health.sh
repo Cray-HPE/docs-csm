@@ -10,10 +10,8 @@ function wait_for_health_ok() {
       echo "ERROR: Giving up on waiting for ceph to become healthy..."
       break
     fi
-    set +e
-    output=$(ceph -s | grep -q HEALTH_OK)
-    set -e
-    if [[ "$?" -eq 0 ]]; then
+    ceph_status=$(ceph health -f json-pretty | jq -r .status)
+    if [[ $ceph_status == "HEALTH_OK" ]]; then
       echo "Ceph is healthy -- continuing..."
       break
     fi
