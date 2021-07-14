@@ -53,10 +53,12 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 
    The ISO and other files are now available in the directory from the extracted CSM tar.
 
-1. Install/upgrade the CSI RPM.
+1. Install/upgrade the CSI and testing RPMs.
 
    ```bash
    linux# rpm -Uvh --force ${CSM_PATH}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
+   linux# rpm -Uvh --force $(ls -r ${CSM_PATH}/rpm/cray/csm/sle-15sp2/noarch/goss-servers*.rpm | head -n 1)
+   linux# rpm -Uvh --force $(ls -r ${CSM_PATH}/rpm/cray/csm/sle-15sp2/noarch/csm-testing*.rpm | head -n 1)
    ```
 
 1. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet 

@@ -210,6 +210,11 @@ if [[ $state_recorded == "0" ]]; then
 	    --data @cloud-init-global_update.json \
 	    https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters
 
+    # perform additional cloud-init updates
+    for upgrade_ncn in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ' '); do
+        . ${BASEDIR}/ncn-upgrade-cloud-init.sh $upgrade_ncn
+    done
+
     record_state ${state_name} $(hostname)
     echo
 else
