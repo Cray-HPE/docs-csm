@@ -210,10 +210,12 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
    > The PIT ISO, Helm charts/images, and bootstrap RPMs are now available in the extracted CSM tar.
 
-1. Install/upgrade the CSI RPM.
+1. Install/upgrade the CSI and testing RPMs.
 
    ```bash
    pit:/var/www/ephemeral# rpm -Uvh --force $(ls -r ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm | head -n 1)
+   pit:/var/www/ephemeral# rpm -Uvh --force $(ls -r ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/noarch/goss-servers*.rpm | head -n 1)
+   pit:/var/www/ephemeral# rpm -Uvh --force $(ls -r ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/noarch/csm-testing*.rpm | head -n 1)
    ```
 
 1. Show the version of CSI installed.
