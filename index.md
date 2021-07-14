@@ -50,9 +50,9 @@ The chapters with topics which need to be done as part of an ordered procedure a
 1. [Install CSM](install/index.md)
 
    Topics:
-   1. [Validate Management Network Cabling](#validate_management_network_cabling)
+   1. [Validate Management Network Cabling](install/index.md#validate_management_network_cabling)
    1. [Prepare Configuration Payload](install/prepare_configuration_payload.md)
-   1. [Prepare Management Nodes](#prepare_management_nodes)
+   1. [Prepare Management Nodes](install/index.md#prepare_management_nodes)
    1. [Bootstrap PIT Node](install/index.md#bootstrap_pit_node)
    1. [Configure Management Network Switches](install/configure_management_network.md)
    1. [Deploy Management Nodes](install/deploy_management_nodes.md)
@@ -69,15 +69,12 @@ The chapters with topics which need to be done as part of an ordered procedure a
 1. [Upgrade CSM](upgrade/index.md)
 
    Topics:
-   1. [Prepare for Upgrade](upgrade/prepare_for_upgrade.md)
-   1. [Update Management Network Configuration](upgrade/update_management_network.md)
-   1. [Upgrade Management Nodes](upgrade/upgrade_management_nodes.md)
-   1. [Upgrade CSM Services](upgrade/upgrade_csm_services.md)
-   1. [Restore from Backup](upgrade/restore_from_backup.md)
-   1. [Validate CSM Health](operations/validate_csm_health.md)
-   1. [Update Firmware with FAS](operations/firmware/Update_Firmware_with_FAS.md)
+   1. [Prepare for Upgrade](upgrade/index.md#prepare_for_upgrade)
+   1. [Update Management Network Configuration](upgrade/index.md#update_management_network)
+   1. [Upgrade Management Nodes and CSM Services](upgrade/index.md#upgrade_management_nodes_csm_services)
+   1. [Validate CSM Health](upgrade/index.md#validate_csm_health)
+   1. [Update Firmware with FAS](upgrade/index.md#update_firmware_with_fas)
    1. [Next Topic](upgrade/index.md#next_topic)
-   1. [Troubleshooting Upgrade Problems](upgrade/troubleshooting_upgrade.md)
 
 1. [CSM Operational Activities](operations/index.md)
 

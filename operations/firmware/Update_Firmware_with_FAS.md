@@ -36,7 +36,7 @@ Follow the process outlined in [FAS CLI](FAS_CLI.md) to update the system. Use t
 
 **NOTE**: Each system is different and may not have all hardware options.
 
-<a name="current-capabilites"></a>
+<a name="current-capabilities"></a>
 
 ### Current Capabilities 
 
