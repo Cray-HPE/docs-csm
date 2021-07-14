@@ -7,7 +7,7 @@ function wait_for_health_ok() {
   cnt=0
   while true; do
     if [[ "$cnt" -eq 360 ]]; then
-      echo "ERROR: Giving up on waiting for ceph to become healthy..."
+      echo "ERROR: Giving up on waiting for Ceph to become healthy..."
       break
     fi
     ceph_status=$(ceph health -f json-pretty | jq -r .status)

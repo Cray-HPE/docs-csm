@@ -22,7 +22,7 @@ To increase the overall resiliency of system management services and software wi
 -   Modified procedures for reloading DVS on NCNs to reduce DVS service interruptions.
 -   DVS now retries DNS queries in dvs\_generate\_map, which improves boot resiliency at scale.
 -   Additional retries implemented in the BOA, IMS, and CFS services for increased protection around outages of dependent services.
--   Image based installs emphasizing "non-special" node types eliminated single points of failure previously encountered with DNS, administrative and installation tooling, and gathering of Cray System Management \(CSM\) logging for Ceph and Kubernetes.
+-   Image-based installs emphasizing "non-special" node types eliminated single points of failure previously encountered with DNS, administrative and installation tooling, and gathering of Cray System Management \(CSM\) logging for Ceph and Kubernetes.
 
 ### Expected Resiliency Behavior
 

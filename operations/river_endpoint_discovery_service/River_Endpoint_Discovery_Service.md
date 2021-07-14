@@ -23,7 +23,7 @@ REDS reads its configuration from the System Layout Service \(SLS\). Systems shi
 
 **Entry Point:**
 
-1.  Update the SLS configuration; see [Update the SLS File for REDS](Update_the_SLS_File_for_REDS.md)
+1.  Update the SLS configuration
 2.  [Initialize and Geolocate Nodes](Initialize_and_Geolocate_Nodes.md)
 
 ---

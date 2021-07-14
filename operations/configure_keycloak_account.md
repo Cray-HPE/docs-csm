@@ -13,7 +13,7 @@ enables the use of the `cray` CLI for many administrative commands, such as thos
 via the API gateway.
 
 See [System Security and Authentication](security_and_authentication/System_Security_and_Authentication.md)
-in the " Default Keycloak Realms, Accounts and Clients" section for more information about these topics.
+in the " Default Keycloak Realms, Accounts, and Clients" section for more information about these topics.
 
    * Certificate Types
    * Change the Keycloak Admin Password

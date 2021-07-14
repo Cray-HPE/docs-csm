@@ -8,7 +8,7 @@ The primary goal of the System Management Health service is to enable system adm
 -   The stable/prometheus-operator Helm chart integrates the Prometheus operator, Prometheus, Alertmanager, Grafana, node exporters \(daemon set\), and kube-state-metrics to provide a monitoring solution for Kubernetes clusters
 -   Istio supports service mesh tracing and observability using Jaeger and Kiali, respectively
 
-The System Management Health service is intended to complement the System Monitoring Application \(SMA\) Framework, but the two are currently not integrated and the System Management Health metrics are not available using the Telemetry API. This service scrapes metrics from system components like Ceph, Kubernetes, and the hosts using node exporter, kube-state-metrics and cadvisor. The design is flexible and supports:
+The System Management Health service is intended to complement the System Monitoring Application \(SMA\) Framework, but the two are currently not integrated. The System Management Health metrics are not available using the Telemetry API. This service scrapes metrics from system components like Ceph, Kubernetes, and the hosts using node exporter, kube-state-metrics, and cadvisor. The design is flexible and supports:
 
 -   Filtering metrics such that only those necessary to determine system health are aggregated to the top level; all metrics are currently aggregated—no filtering is implemented
 -   Independent retention and persistence settings based on needs for specific services; the current default configuration retains metrics for ten days at the top level and four hours at intermediate levels

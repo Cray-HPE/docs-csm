@@ -16,10 +16,10 @@ This procedure can be used to restore the SLS Postgres database from a previousl
     > +---------------------+------------+--------+---------+----+-----------+
     > ```
 
-- Perviously taken backup of the SLS Postgres cluster.
+- Previously-taken backup of the SLS Postgres cluster.
 
 ## Procedure
-1. Retrieve a previously taken SLS Postgres backup. This will be a perviously taken manual SLS backup.
+1. Retrieve a previously taken SLS Postgres backup. This will be a previously-taken manual SLS backup.
 
     1. Copy over the folder or tarball containing the Postgres back up to be restored. If it is a tarball extract it.
 

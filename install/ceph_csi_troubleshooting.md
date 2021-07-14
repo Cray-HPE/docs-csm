@@ -5,7 +5,7 @@ cloud-init may need to be rerun.
 
 ### Topics:
    1. [Verify Ceph CSI](#verify_ceph_csi)
-   1. [Rerun Storage Node cloud-init](rerun_storage_node_cloud-init)
+   1. [Rerun Storage Node cloud-init](#rerun_storage_node_cloud-init)
 
 ## Details
 

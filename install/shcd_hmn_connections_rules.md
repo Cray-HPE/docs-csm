@@ -32,7 +32,7 @@ Column mapping from SHCD to hmn_connections.json:
 | J20         | Source           | Source                | Name of the device connected to the HMN network |
 | K20         | Rack             | SourceRack            | Source Rack, matches regex `x\d+`               |
 | L20         | Location         | SourceLocation        | For nodes (Management, Compute, Application), this is bottom most rack slot that the node occupies, and can be extracted by `[a-zA-Z]*(\d+)([a-zA-Z]*)`. For other device types this is ignored. |
-| M20         |                  | SourceSubLocation     | For compute nodes, this can be `L`, `l`, `R`, `r` or blank. For other device types this is ignored. |
+| M20         |                  | SourceSubLocation     | For compute nodes, this can be `L`, `l`, `R`, `r`, or blank. For other device types this is ignored. |
 | N20         | Parent           | SourceParent          |                                                 |
 | O20         |                  | `not used`            |                                                 |
 | P20         | Port             | `not used`            |                                                 |
@@ -702,7 +702,7 @@ Management Switch Connector:
 
 <a name="application-node"></a>
 ## Application Node
-The naming conventions for application nodes can be unique to a system. Refer to the [application node config procedure](308-APPLICATION-NODE-CONFIG) for the rules related to application nodes.
+The naming conventions for application nodes can be unique to a system. Refer to the [application node config procedure](create_application_node_config_yaml.md) for the rules related to application nodes.
 
 <a name="columbia-slingshot-switch"></a>
 ## Columbia Slingshot Switch

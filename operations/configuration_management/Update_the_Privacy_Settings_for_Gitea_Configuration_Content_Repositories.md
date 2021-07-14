@@ -20,15 +20,15 @@ Change the visibility of Gitea configuration content repositories from public to
 
 3.  Select the repository title for each repository listed on the page.
 
-    ![](gitea_repositories.png "Gitea Repositories")
+    ![](../../img/operations/gitea_repositories.png "Gitea Repositories")
 
 4.  Click the **Settings** button in the repository header section.
 
-    ![](gitea_repository_settings.png "Gitea Repository Settings")
+    ![](../../img/operations/gitea_repository_settings.png "Gitea Repository Settings")
 
 5.  Update the visibility settings for the repository.
 
-    ![](gitea_repository_visibility.png "Gitea Repository Visibility")
+    ![](../../img/operations/gitea_repository_visibility.png "Gitea Repository Visibility")
 
     1.  Click the **Visibility** check box to make the repository private.
 
