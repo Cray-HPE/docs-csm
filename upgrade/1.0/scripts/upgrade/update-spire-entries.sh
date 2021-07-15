@@ -33,7 +33,7 @@ fi
 if ! kubectl exec -n spire spire-server-0 --container spire-server -- ./bin/spire-server entry show -spiffeID spiffe://shasta/compute/workload/cpsmount_helper | grep -q "spiffe://shasta/compute/workload/cpsmount_helper"; then
     echo "Adding spiffe://shasta/compute/workload/cpsmount_helper"
     kubectl exec -n spire spire-server-0 --container spire-server -- ./bin/spire-server entry create \
-        -parentID spiffe://shasta/ncn \
+        -parentID spiffe://shasta/compute \
         -spiffeID spiffe://shasta/compute/workload/cpsmount_helper \
         -selector unix:uid:0 \
         -selector unix:gid:0 \
@@ -45,7 +45,7 @@ fi
 if ! kubectl exec -n spire spire-server-0 --container spire-server -- ./bin/spire-server entry show -spiffeID "spiffe://shasta/compute/workload/ckdump_helper" | grep -q "spiffe://shasta/compute/workload/ckdump_helper"; then
     echo "Adding spiffe://shasta/compute/workload/ckdump_helper"
     kubectl exec -n spire spire-server-0 --container spire-server -- ./bin/spire-server entry create \
-        -parentID spiffe://shasta/ncn \
+        -parentID spiffe://shasta/compute \
         -spiffeID spiffe://shasta/compute/workload/ckdump_helper \
         -selector unix:uid:0 \
         -selector unix:gid:0 \
