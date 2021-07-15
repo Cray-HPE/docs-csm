@@ -4,6 +4,8 @@ Many system services require login credentials to gain access to them. The infor
 
 Contact HPE Cray service in order to obtain the default usernames and passwords for any of these components or services.
 
+For Linux user account password management on NCNs, see [Update NCN Passwords](Update_NCN_Passwords.md).
+
 ### Keycloak
 
 Default Keycloak admin user login credentials:
