@@ -257,7 +257,7 @@ These ACLs are designed to block traffic from the node management network to and
 Control plane ACL
 - This restricts management traffic to the HMN.
 
-   ```
+```
    sw-agg-001 & sw-agg-002 (config)#
     access-list ip mgmt
     05 comment ALLOW SSH, HTTPS, AND SNMP ON HMN SUBNET
