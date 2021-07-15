@@ -2,7 +2,7 @@
 
 Post-install customizations may be needed as systems scale. These customizations also need to persist across future installs or upgrades. Not all resources can be customized post-install; common scenarios are documented in the following sections.
 
-The following is a guide for determining where issues may exist and how to adjust the resources as needed to ensure the change will persist.
+The following is a guide for determining where issues may exist, how to adjust the resources and how to ensure the changes will persist. Different values may be be needed for systems as they scale.
 
 ### Kubectl Events OOMKilled
 
@@ -51,8 +51,33 @@ From the Memory Usage graph for the container, determine the steady state memory
 
 ### Common Customization Scenarios
 
-#### Prometheus Pod is OOMKilled or CPU Throttled
-Update resources associated with Prometheus in the sysmgmt-health namespace.
+- [Prerequisite](#prerequisite)
+- [Prometheus Pod is OOMKilled or CPU Throttled](#prometheus_resources)
+- [Postgres Pods are OOMKilled or CPU Throttled](#postgres_resources)
+- [Scale cray-bss Service](#bss_scale)
+
+<a name="prerequisite"></a>
+### Prerequisite
+
+In order to apply post install customizations to a system, the affected Helm chart must exist on the system so that the same chart version can be re-deployed with the desired customizations.
+
+This example unpacks the the csm-1.0.0 tarball under /root and lists the Helm charts that are now on your system.  Set PATH_TO_RELEASE to the release directory where the Helm directory exists. PATH_TO_RELEASE will be used below when deploying a customization.
+
+These unpacked files can be safely removed after the customizations are deployed through `loftsman ship` in the examples below.
+
+```
+## This example assumes the csm-1.0.0 release is currentrly running and the csm-1.0.0.tar.gz has been pulled down under /root
+ncn-w001# cd /root
+ncn-w001# tar -xzf csm-1.0.0.tar.gz
+ncn-w001# rm csm-1.0.0.tar.gz
+ncn-w001# PATH_TO_RELEASE=/root/csm-1.0.0
+ncn-w001# ls $PATH_TO_RELEASE/helm
+```
+
+<a name="prometheus_resources"></a>
+### Prometheus Pod is OOMKilled or CPU Throttled
+Update resources associated with Prometheus in the sysmgmt-health namespace. This example is based on what was needed for a system with 4000 compute nodes. Trial and error may be needed to determine what is best for a given system at scale.
+
 
 1. Get the current cached customizations.
    ```
@@ -64,7 +89,7 @@ Update resources associated with Prometheus in the sysmgmt-health namespace.
    ncn-w001# kubectl get cm -n loftsman loftsman-platform -o jsonpath='{.data.manifest\.yaml}'  > platform.yaml
    ```
    
-1.  Edit the customizations as desired - add or update spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.
+1. Edit the customizations as desired - add or update spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.
    ```
    ncn-w001# yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.requests.cpu' --style=double '2'
    ncn-w001# yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.requests.memory' '15Gi'
@@ -119,7 +144,7 @@ Update resources associated with Prometheus in the sysmgmt-health namespace.
 
 1. Re-deploy the same chart version but with the desired resource settings.
    ```
-   ncn-w001# loftsman ship --charts-repo http://helmrepo.dev.cray.com:8080 --manifest-path $PWD/manifest.yaml
+   ncn-w001# loftsman ship charts-path ${PATH_TO_RELEASE}/helm --manifest-path ${PWD}/manifest.yaml
    ```
 
 1. Verify the pod restarts and that the desired resources have been applied.
@@ -136,9 +161,11 @@ Update resources associated with Prometheus in the sysmgmt-health namespace.
 
 1. Store the modified customizations.yaml in the site-init repository in the customer-managed location. **This step is critical.**  If not done, these changes will not persist in future installs or updates.
 
-#### Postgres Pods are OOMKilled or CPU Throttled
+<a name="postgres_resources"></a>
+### Postgres Pods are OOMKilled or CPU Throttled
 
-Update resources associated with spire-postgres in the spire namespace.
+Update resources associated with spire-postgres in the spire namespace. This example is based on what was needed for a system with 4000 compute nodes. Trial and error may be needed to determine what is best for a given system at scale.
+
 
 A similar flow can be used to update the resources for cray-sls-postgres, cray-smd-postgres, or gitea-vcs-postgres. Refer to the note at the end of this section for more details.
 
@@ -152,7 +179,7 @@ A similar flow can be used to update the resources for cray-sls-postgres, cray-s
    ncn-w001# kubectl get cm -n loftsman loftsman-sysmgmt -o jsonpath='{.data.manifest\.yaml}'  > sysmgmt.yaml
    ```
 
-1.  Edit the customizations as desired by adding or updating spec.kubernetes.services.spire.cray-service.sqlCluster.resources.
+1. Edit the customizations as desired by adding or updating spec.kubernetes.services.spire.cray-service.sqlCluster.resources.
    ```
    ncn-w001# yq write -i customizations.yaml 'spec.kubernetes.services.spire.cray-service.sqlCluster.resources.requests.cpu' --style=double '4'
    ncn-w001# yq write -i customizations.yaml 'spec.kubernetes.services.spire.cray-service.sqlCluster.resources.requests.memory' '4Gi'
@@ -207,7 +234,7 @@ A similar flow can be used to update the resources for cray-sls-postgres, cray-s
 
 1. Redeploy the same chart version but with the desired resource settings.
    ```
-   ncn-w001# loftsman ship --charts-repo http://helmrepo.dev.cray.com:8080 --manifest-path $PWD/manifest.yaml
+   ncn-w001# loftsman ship charts-path ${PATH_TO_RELEASE}/helm --manifest-path ${PWD}/manifest.yaml
    ```
 
 1. Verify the pods restart and that the desired resources have been applied.
@@ -245,6 +272,83 @@ A similar flow can be used to update the resources for cray-sls-postgres, cray-s
 
     Get the current cached manifest configmap from: loftsman-sysmgmt
     Resource path: spec.kubernetes.services.gitea.cray-service.sqlCluster.resources
+
+
+<a name="bss_scale"></a>
+### Scale cray-bss Service
+Scale the replica count associated with the cray-bss service in the services namespace. This example is based on what was needed for a system with 4000 compute nodes. Trial and error may be needed to determine what is best for a given system at scale.
+
+1. Get the current cached customizations.
+   ```
+   ncn-w001# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
+   ```
+
+1. Get the current cached sysmgmt manifest.
+   ```
+   ncn-w001# kubectl get cm -n loftsman loftsman-sysmgmt -o jsonpath='{.data.manifest\.yaml}' > sysmgmt.yaml
+   ```
+   
+1. Edit the customizations as desired - add or update spec.kubernetes.services.cray-hms-bss.cray-service.replicaCount.
+   ```
+   ncn-w001# yq write -i customizations.yaml 'spec.kubernetes.services.cray-hms-bss.cray-service.replicaCount' '5'
+   ```
+   
+1. Check that the customization file has been updated.
+   ```
+   ncn-w001# yq read customizations.yaml 'spec.kubernetes.services.cray-hms-bss.cray-service.replicaCount'
+   5
+   ```
+
+1. Edit the sysmgmt.yaml to only include the cray-hms-bss chart and all its current data. (The replicaCount specified above will be updated in the next step and the version may differ as this is an example).
+   ```
+   apiVersion: manifests/v1beta1
+   metadata:
+     name: sysmgmt
+   spec:
+     charts:
+     - name: cray-hms-bss
+       namespace: services
+       values:
+   .
+   .
+   .
+       version: 1.5.8
+   ```
+
+1. Generate the manifest that will be used to re-deploy the chart with the modified resources.
+   ```
+   ncn-w001# manifestgen -c customizations.yaml -i sysmgmt.yaml -o manifest.yaml
+   ```
+
+1. Check that the manifest file contains the desired resource settings.
+   ```
+   ncn-w001# yq read manifest.yaml 'spec.charts.(name==cray-hms-bss).values.cray-service.replicaCount'
+   5
+   ```
+
+1. Re-deploy the same chart version but with the desired resource settings.
+   ```
+   ncn-w001# loftsman ship charts-path ${PATH_TO_RELEASE}/helm --manifest-path ${PWD}/manifest.yaml
+   ```
+
+1. Verify the cray-bss pods scale.
+   ```
+   # Watch the cray-bss pods scale to 5 and each reach a 2/2 ready state
+   ncn-w001# watch "kubectl get pods -l app.kubernetes.io/instance=cray-hms-bss -n services"
+
+   NAME                       READY   STATUS    RESTARTS   AGE
+   cray-bss-fccbc9f7d-7jw2q   2/2     Running   0          82m
+   cray-bss-fccbc9f7d-l524g   2/2     Running   0          93s
+   cray-bss-fccbc9f7d-qwzst   2/2     Running   0          93s
+   cray-bss-fccbc9f7d-sw48b   2/2     Running   0          82m
+   cray-bss-fccbc9f7d-xr26l   2/2     Running   0          82m
+
+   # Verify that the replicas change is present in the kubernetes cray-bss deployment
+   ncn-w001# kubectl get deployment cray-bss -n services -o json | jq -r '.spec.replicas' 
+   5
+   ```
+
+1. Store the modified customizations.yaml in the site-init repository in the customer-managed location. **This step is critical.**  If not done, these changes will not persist in future installs or updates.
 
 
 ### References
