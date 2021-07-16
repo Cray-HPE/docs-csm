@@ -148,7 +148,7 @@ Reserved = false
 ReservationDisabled = true
 
 
-ncn-m001# cray hsm locks  lock create --component-ids x1003c5s2b1n1
+ncn-m001# cray hsm locks lock create --component-ids x1003c5s2b1n1
 Usage: cray hsm locks lock create [OPTIONS]
 Try 'cray hsm locks lock create --help' for help.
 

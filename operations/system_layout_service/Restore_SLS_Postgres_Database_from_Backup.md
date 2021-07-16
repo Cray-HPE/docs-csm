@@ -1,6 +1,6 @@
 # Restore SLS Postgres Database from Backup
 
-This procedure can be used to restore the SLS Postgres database from a previously-taken backup. This can be a manual backup created by the [Create a Backup of the SLS Postgres Database](Create_a_Backup_of_the_SLS_Postgres_Database.md) procedure, or an automatic backup created by the `cray-sls-postgresql-db-backup` Kubernetes cronjob.
+This procedure can be used to restore the SLS Postgres database from a previously taken backup. This can be a manual backup created by the [Create a Backup of the SLS Postgres Database](Create_a_Backup_of_the_SLS_Postgres_Database.md) procedure, or an automatic backup created by the `cray-sls-postgresql-db-backup` Kubernetes cronjob.
 
 ## Prerequisites
 - Healthy Postgres Cluster.
@@ -16,7 +16,7 @@ This procedure can be used to restore the SLS Postgres database from a previousl
     > +---------------------+------------+--------+---------+----+-----------+
     > ```
 
-- Previously-taken backup of the SLS Postgres cluster either a manual or automatic backup.
+- Previously taken backup of the SLS Postgres cluster either a manual or automatic backup.
     > Check for any available automatic SLS Postgres backups:
     > ```bash
     > ncn# cray artifacts list postgres-backup --format json | jq -r '.artifacts[].Key | select(contains("sls"))'
@@ -24,7 +24,7 @@ This procedure can be used to restore the SLS Postgres database from a previousl
     > cray-sls-postgres-2021-07-11T23:10:08.psql
 
 ## Procedure
-1. Retrieve a previously-taken SLS Postgres backup. This can be either a previously-taken manual SLS backup or an automatic Postgres backup in the `postgres-backup` S3 bucket.
+1. Retrieve a previously taken SLS Postgres backup. This can be either a previously taken manual SLS backup or an automatic Postgres backup in the `postgres-backup` S3 bucket.
     - From a previous manual backup:
         1. Copy over the folder or tarball containing the Postgres back up to be restored. If it is a tarball extract it.
         

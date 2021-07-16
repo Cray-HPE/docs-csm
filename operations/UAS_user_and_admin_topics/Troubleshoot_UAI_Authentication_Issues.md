@@ -4,7 +4,7 @@ Several troubleshooting steps related to authentication in a UAI.
 
 ## Internal Server Error
 
-An error was encountered while accessing Keycloak due to an invalid token.
+An error was encountered while accessing Keycloak because of an invalid token.
 
 ```screen
 # cray uas create --publickey ~/.ssh/id\_rsa.pub
@@ -28,7 +28,7 @@ The keycloak pod logs shows:
 18:53:19,617 WARN  [org.keycloak.events] (default task-1) type=USER_INFO_REQUEST_ERROR, realmId=028be52c-ceca-4dbd-b765-0386b42b1866, clientId=cray, userId=null, ipAddress=10.40.0.0, error=user_session_not_found, auth_method=validate_access_token
 ```
 
-This is caused by the authentication token being invalid. This can happen for many reasons, such as the token expiring after its lifetime has ended or the Keycloak server restarting due to a failure or being moved to a different node.
+This is caused by the authentication token being invalid. This can happen for many reasons, such as the token expiring after its lifetime has ended or the Keycloak server restarting because of a failure or being moved to a different node.
 
 To resolve this issue, run cray auth login to refresh the access token.
 

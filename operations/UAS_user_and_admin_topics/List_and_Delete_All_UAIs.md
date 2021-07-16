@@ -21,7 +21,7 @@ At least one UAI is running.
     None
 
 
-1.  Log in to a NCN as `root`.
+1.  Log in to an NCN as `root`.
 
 2.  List all the UAIs on the system.
 

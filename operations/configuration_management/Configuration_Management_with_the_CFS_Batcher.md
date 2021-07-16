@@ -93,7 +93,7 @@ Use the cray cfs sessions list --help command output for all filtering options, 
 
 ### Map CFS Batcher Sessions to BOS Sessions
 
-To find all of the sessions created by the CFS Batcher due to configuration requests made by a specific Boot Orchestration Service \(BOS\) session, filter the sessions by the name of the BOS session, which is added as a tag on the sessions. The BOS session ID is required to run the following command.
+To find all of the sessions created by the CFS Batcher because of configuration requests made by a specific Boot Orchestration Service \(BOS\) session, filter the sessions by the name of the BOS session, which is added as a tag on the sessions. The BOS session ID is required to run the following command.
 
 ```bash
 # cray cfs sessions list --tags bos_session=BOS_SESSION_ID

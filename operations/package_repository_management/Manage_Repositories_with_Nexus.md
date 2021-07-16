@@ -10,7 +10,7 @@ Use the hostname set in `istio.ingress.hosts.ui.authority` \(see below\) to conn
 https://nexus.{{network.dns.external}}/
 ```
 
-Users will be redirected to Keycloak to login, and based on the default OPA policy, only admin users will be authorized. Scripts may connect by first obtaining a JWT token from Keycloak and passing it in the HTTP `Authorization` header.
+Users will be redirected to Keycloak to log in, and based on the default OPA policy, only admin users will be authorized. Scripts may connect by first obtaining a JWT token from Keycloak and passing it in the HTTP `Authorization` header.
 
 ### Access Nexus with the REST API
 

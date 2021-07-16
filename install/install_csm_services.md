@@ -412,7 +412,7 @@ the connection times out, it indicates there is a more complex connection
 issue. Verify switches are configured properly and BGP peering is operating
 correctly, see [Update BGP Neighbors](../operations/update_bgp_neighbors.md) for more information. Lastly,
 check Istio and OPA logs to see if connections to packages.local are not
-reaching Nexus, perhaps due to an authorization issue.
+reaching Nexus, perhaps because of an authorization issue.
 
 If https://packages.local/service/rest/v1/status/writable returns an HTTP
 code other than `200 OK`, it indicates there is an issue with Nexus. Verify

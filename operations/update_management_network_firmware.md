@@ -51,7 +51,7 @@ It is considered to be a best practice to keep all of your Aruba CX platform dev
 
 Aruba CX devices two software image banks, which means you can pre-stage sw images to the device without booting to the new image. 
 
-If you  are upgrading to a new major branch, in Aruba identified by the second integer in the software image number
+If you are upgrading to a new major branch, in Aruba identified by the second integer in the software image number
 
 When upgrading past a major software release say from 10.6 to 10.8 (and skipping 10.7) you will need to issue 'allow-unsafe-upgrades' to allow any low level firmware/driver upgrades to complete. If going from say 10.6 branch to 10.7 branch, this step can be skipped as the low level firmware/driver upgrade would be automatically completed. 
 
@@ -73,7 +73,7 @@ Continue (y/n)? y
     Unsafe updates      : allowed (less than 30 minute(s) remaining)
 ...
 
-VSX software upgrade command can automatically upgrade both of the peers in VSX topology by staging upgrade and automatically doing traffic shifting between peers to minimize impact to network. In below examples we will  give you the option for standalone and vsx-pair upgrade. 
+VSX software upgrade command can automatically upgrade both of the peers in VSX topology by staging upgrade and automatically doing traffic shifting between peers to minimize impact to network. In below examples we will give you the option for standalone and vsx-pair upgrade. 
 
 ## Aruba Firmware Update - standalone
 

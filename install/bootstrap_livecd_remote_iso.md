@@ -126,7 +126,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       pit# /root/bin/csi-setup-lan0.sh $site_ip $site_gw $site_dns $site_nics
       ```
 
-   1. (recommended) print `lan0`, and if it has an IP address then exit console and login again using SSH. The
+   1. (recommended) print `lan0`, and if it has an IP address then exit console and log in again using SSH. The
       SSH connection will provide larger window sizes and better bufferhandling (screen wrapping).
 
       ```bash

@@ -124,7 +124,7 @@ The table below represents all recognizable FS labels on any given management no
 | k8s-master | k8s-worker | storage-ceph | FS Label | Partitions | Device |  Partition Size | OverlayFS | Work Order(s) | Memo
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | ✅ | ✅ | ✅ | `BOOTRAID` | `/metal/recovery` | 2 small disks in RAID1 | `500 MiB` | ❌ | Present since Shasta-Preview 1 |
-| ✅ | ✅ | ✅ | `SQFSRAID` | `/run/initramfs/live` | 2 small disks in RAID1 | `25 GiB` | ✅ | [CASM-1885](https://connect.us.cray.com/jira/browse/MTL-1885) |  squashfs should compress our images to about 1/3rd their uncompressed size. (20G → 6.6G)  On pepsi's ncn-w001, we are at about 20G of non-volatile data storage needed. |
+| ✅ | ✅ | ✅ | `SQFSRAID` | `/run/initramfs/live` | 2 small disks in RAID1 | `25 GiB` | ✅ | [CASM-1885](https://connect.us.cray.com/jira/browse/MTL-1885) |  squashfs should compress our images to about 1/3rd their uncompressed size. (20G → 6.6G) On pepsi's ncn-w001, we are at about 20G of non-volatile data storage needed. |
 | ✅ | ✅ | ✅ | `ROOTRAID` | `/run/initramfs/overlayfs` | 2 small disks in RAID1 | `150 GiB` | ✅ | Present since Shasta-Preview 1 | The persistent image file is loaded from this partition, when the image file is loaded the underlying drive is lazily unmounted (`umount -l`) so that when the overlay closes the disk follows suit. |
 | ✅ | ✅ | ✅ | `AUX` | `/dev/md/AUX` _(Not Mounted)_ | 2 small disks in RAID1 | `150 GiB` | ❌ | [MTL-1308](https://connect.us.cray.com/jira/browse/MTL-1308) | Auxiliary RAID array for cloud-init to use. |
 | ❌ | ❌ | ✅ | `CEPHETC` | `/etc/ceph` | LVM | `10 GiB` | ❌ | [MTL-1308](https://connect.us.cray.com/jira/browse/MTL-1308) | |
@@ -258,7 +258,7 @@ drwxr-xr-x 8 root root  76 Oct 13 16:52 var
 <a name="layering---upperdir-and-lowerdirs"></a>
 ###### Layering - Upperdir and Lowerdir(s)
 
-The file-system the user is working on is really two layered file-systems (overlays).
+The file system the user is working on is really two layered file systems (overlays).
 - The lower layer is the SquashFS image itself, read-only, which provides all that we need to run.
 - The upper layer is the OverlayFS, read-write, which does a bit-wise `xor` with the lower-layer
 - Anything in the upper-layer takes precedence by default.
@@ -398,7 +398,7 @@ rd.live.overlay.size=1000000
 
 The persistent overlayFS leverages newer, "thin" overlays that support discards and that will
 free blocks that are not claimed by the file system. This means that memory is free/released
-when the filesystem does not claim it anymore.
+when the file system does not claim it anymore.
 
 Thin overlays can be disabled, and instead classic DM Snapshots can be used to manage the overlay. This
 will use more RAM. It is not recommended, since dmraid is not included in the initrd.

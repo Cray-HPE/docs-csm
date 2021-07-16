@@ -45,7 +45,7 @@ These are context clues for steps, if they contain these, and you are not in tha
 
 > **`EXTERNAL USE`** 
 
-This tag should be used to highlight anything that an HPE Cray  internal user should ignore or skip.
+This tag should be used to highlight anything that an HPE Cray internal user should ignore or skip.
 
 > **`INTERNAL USE`** 
 

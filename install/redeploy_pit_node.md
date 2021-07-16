@@ -191,7 +191,7 @@ data so run them only when indicated. Instructions are in the `README` files.
     > **`NOTE`** This is important for installations using the RemoteISO (not USB device). For USBs, this is recommended as to remove 
     > the need for safekeeping the USB.
    
-    1. Login; setup passwordless SSH _to_ the PIT node by copying ONLY the public keys from `ncn-m002` and `ncn-m003` to the PIT (**do not setup passwordless SSH _from_ the PIT** or the key will have to be securely tracked or expunged if using a USB installation).
+    1. Log in; setup passwordless SSH _to_ the PIT node by copying ONLY the public keys from `ncn-m002` and `ncn-m003` to the PIT (**do not setup passwordless SSH _from_ the PIT** or the key will have to be securely tracked or expunged if using a USB installation).
         
         ```bash
         pit# CSM_RELEASE=$(basename $(ls -d /var/www/ephemeral/csm*/ | head -n 1))
@@ -201,7 +201,7 @@ data so run them only when indicated. Instructions are in the `README` files.
         pit# ssh ncn-m003 cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
         ```
         
-    1. Run this to create the backup; in one swoop, login to m002 and pull the files off the pit. _This runs `rsync` with specific parameters; `partial`, `non-verbose`, and `progress`._
+    1. Run this to create the backup; in one swoop, log in to m002 and pull the files off the pit. _This runs `rsync` with specific parameters; `partial`, `non-verbose`, and `progress`._
         
         ```bash
         pit# ssh ncn-m002 CSM_RELEASE=$(basename $(ls -d /var/www/ephemeral/csm*/ | head -n 1)) \
@@ -253,7 +253,7 @@ data so run them only when indicated. Instructions are in the `README` files.
         inet6 fe80::1602:ecff:fed9:7820/64 scope link
         ```
     
-    1. Login from another external machine to verify SSH is up and running for this session.
+    1. Log in from another external machine to verify SSH is up and running for this session.
 
         ```bash
         external# ssh root@10.102.11.13
@@ -343,7 +343,7 @@ data so run them only when indicated. Instructions are in the `README` files.
         ncn-m001# cloud-init modules -m final
         ```
     
-1. Once cloud-init has completed successfully, login and start a typescript (the IP used here is the one we noted for ncn-m002 in an earlier step).
+1. Once cloud-init has completed successfully, log in and start a typescript (the IP used here is the one we noted for ncn-m002 in an earlier step).
     
     ```bash
     external# ssh root@10.102.11.13

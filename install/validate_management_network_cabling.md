@@ -13,7 +13,7 @@ doing the [Configure Management Network Switches](index.md#configure_management_
    - There you will see what type of hardware is on the system.
    - Take note of the hardware.
 - Look at the ```25G_10G``` or ```40G_10G``` tab, this will depend on the SHCD.
-   - Look  at this part of the page. The source is either a node or a switch. The destination is usually a switch.
+   - Look at this part of the page. The source is either a node or a switch. The destination is usually a switch.
      The `source label info` and `destination label info` indicate the component name (xname) and the port on that component to which
      the cable is connected. For example, `x3000u01s1-j1`, means the device in cabinet x3000 at location u01 within the cabinet and in slot s1 with port j1.
      The physical cable connecting source to destination should be labelled with `source label info` and `destination label info`.
