@@ -132,7 +132,7 @@ Execute ncnPostgresHealthChecks script and analyze the output of each individual
     NAMESPACE   NAME                         TEAM                VERSION   PODS   VOLUME   CPU-REQUEST   MEMORY-REQUEST   AGE   STATUS
     services    cray-sls-postgres            cray-sls            11        3      1Gi                                     12d   Running
     ```
-    If any postgresql resources remains in a STATUS other than Running (such as SyncFailed), refer to [About Postgres](kubernetes/About_Postgres.md).
+    If any postgresql resources remains in a STATUS other than Running (such as SyncFailed), refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#syncfailed).
 
 1. For a particular Postgres cluster, the expected output is similar to the following:
     ```bash
@@ -149,7 +149,7 @@ Execute ncnPostgresHealthChecks script and analyze the output of each individual
 
     For each Postgres cluster:
       - Verify there are three cluster members (with the exception of sma-postgres-cluster where there should be only two cluster members).
-      If the number of cluster members is not correct, refer to [About Postgres](kubernetes/About_Postgres.md).
+      If the number of cluster members is not correct, refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#missing).
 
       - Verify there is one cluster member with the Leader Role and log output indicates expected status. Such as:
          ```bash
@@ -170,13 +170,13 @@ Execute ncnPostgresHealthChecks script and analyze the output of each individual
             INFO: trying to bootstrap a new cluster
          ```
          Errors reported previous to the lock status, such as **ERROR: get_cluster** can be ignored.  
-         If there is no Leader, refer to [About Postgres](kubernetes/About_Postgres.md).
+         If there is no Leader, refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#leader).
 
       - Verify the State of each cluster member is 'running'.
-      If any cluster members are found to be in a non 'running' state (such as 'start failed'), refer to [About Postgres](kubernetes/About_Postgres.md).
+      If any cluster members are found to be in a non 'running' state (such as 'start failed'), refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#diskfull).
 
       - Verify there is no large or growing Lag.
-      If any cluster members are found to have Lag, refer to [About Postgres](kubernetes/About_Postgres.md).
+      If any cluster members are found to have Lag, refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#lag).
 
 1. Check that all Kubernetes Postgres pods have a STATUS of Running.
     ```bash
@@ -186,7 +186,7 @@ Execute ncnPostgresHealthChecks script and analyze the output of each individual
     services            cray-sls-postgres-2                                               3/3     Running            0          5d20h   10.36.0.31    ncn-w003   <none>           <none>
     ```
 
-    If any Postgres pods have a STATUS other then Running, gather more information from the pod and refer to [About Postgres](kubernetes/About_Postgres.md).
+    If any Postgres pods have a STATUS other then Running, gather more information from the pod and refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#missing).
 
     ```bash
     ncn# kubectl describe pod <pod name> -n <pod namespace>

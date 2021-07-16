@@ -253,7 +253,7 @@ After upgrading, if health checks indicate that etcd pods are not in a healthy/r
 
 ### Recovering from Postgres Dbase Issues
 After upgrading, if health checks indicate the Postgres pods are not in a healthy/running state, recovery procedures may be needed.
-Please see [Troubleshoot_Postgres_Databases_with_the_Patroni_Tool.md](../../operations/kubernetes/Troubleshoot_Postgres_Databases_with_the_Patroni_Tool.md) for troubleshooting and recovery procedures.
+Please see [Troubleshoot_Postgres_Database.md](../../operations/kubernetes/Troubleshoot_Postgres_Database.md) for troubleshooting and recovery procedures.
 
 ### Troubleshooting Spire Pods Not Staring on NCNs
 Please see [Troubleshoot_SPIRE_Failing_to_Start_on_NCNs.md](../../operations/security_and_authentication/Troubleshoot_SPIRE_Failing_to_Start_on_NCNs.md).
