@@ -46,7 +46,7 @@ Reference the following procedures when working with Kubernetes on the system:
     -   [Report the Endpoint Status for etcd Clusters](Report_the_Endpoint_Status_for_etcd_Clusters.md)
     -   [Clear Space in an etcd Cluster Database](Clear_Space_in_an_etcd_Cluster_Database.md)
 -   [About Postgres](About_Postgres.md)
-    -   [Troubleshoot Postgres Databases with the Patroni Tool](Troubleshoot_Postgres_Databases_with_the_Patroni_Tool.md)
+    -   [Troubleshoot Postgres Database](Troubleshoot_Postgres_Database.md)
     -   [View Postgres Information for System Databases](View_Postgres_Information_for_System_Databases.md)
 -   [Kubernetes Troubleshooting Information](Kubernetes_Troubleshooting_Information.md)
     -   [Kubernetes Log File Locations](Kubernetes_Log_File_Locations.md)
