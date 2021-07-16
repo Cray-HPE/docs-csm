@@ -327,7 +327,7 @@ Control plane ACL
     105 comment ALLOW ANYTHING ELSE
     110 permit any any any
     apply access-list ip mgmt control-plane vrf default
-    ```
+```
 
 ## Configure Spanning-tree
 
