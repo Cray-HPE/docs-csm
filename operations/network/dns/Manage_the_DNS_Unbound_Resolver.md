@@ -120,7 +120,7 @@ A rolling restart of the Unbound pods will occur, old pods will not be terminate
 
 ### Clear Bad Data in the Unbound ConfigMap
 
-Unbound stores records it obtains from DHCP, SLS and SMD via the Manager job in a ConfigMap. It is possible to clear this ConfigMap and allow the next Manager job to regenerate the content.
+Unbound stores records it obtains from DHCP, SLS, and SMD via the Manager job in a ConfigMap. It is possible to clear this ConfigMap and allow the next Manager job to regenerate the content.
 
 This is useful in the following cases:
 

@@ -2,7 +2,7 @@
 
 A health check corresponds to a Prometheus query against metrics aggregated to the Prometheus instance. Core platform components like Kubernetes and Istio collect service-related metrics by default, which enables the System Management Health service to implement generic service health checks without custom instrumentation. Health checks are intended to be coarse-grained and comprehensive, as opposed to fine-grained and exhaustive. Health checks related to infrastructure adhere to the Utilization Saturation Errors \(USE\) method whereas services follow the Rate Errors Duration \(RED\) method.
 
-Prometheus alerting rules periodically evaluate health checks and trigger alerts to Alertmanager, which manages silencing, inhibition, aggregation and sending out notifications. Alertmanager supports a number of notification options, but the most relevant ones are listed below:
+Prometheus alerting rules periodically evaluate health checks and trigger alerts to Alertmanager, which manages silencing, inhibition, aggregation, and sending out notifications. Alertmanager supports a number of notification options, but the most relevant ones are listed below:
 
 -   Email - Sends notification emails periodically regarding alerts
 -   Slack - Publishes notifications to a Slack channel

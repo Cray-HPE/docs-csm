@@ -131,7 +131,7 @@ if [[ ${upgrade_ncn} == "ncn-s001" ]]; then
 
       record_state "${state_name}" ${upgrade_ncn}
   else
-      echo "====> ${state_name} has beed completed"
+      echo "====> ${state_name} has been completed"
   fi
 fi
 

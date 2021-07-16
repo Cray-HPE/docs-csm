@@ -63,7 +63,7 @@ If there are duplicate email addresses for LDAP users, it can cause Keycloak to 
 
     The email row shown in the image below should no longer be present.
     
-    ![LDAP User Federation Mappers](LDAP_User_Federation_Mappers.PNG)
+    ![LDAP User Federation Mappers](../../img/operations/LDAP_User_Federation_Mappers.PNG)
 
 7.  Click the **Synchronize all users** button in the **Settings** tab for the LDAP user federation.
 

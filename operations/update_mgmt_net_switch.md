@@ -459,4 +459,3 @@ This system needs to do the renames in this order: do CDU switches (8 to 9, 7 to
 
    Repeat this for all of the switches. The example system has switches up to 10.1.0.7.
 
-There are other changes needed, as described in [Dell and Mellanox Changes for Shasta v1.3 to v1.4 Upgrades](412-MGMT-NET-DELL-MELLANOX-UPGRADES.md)

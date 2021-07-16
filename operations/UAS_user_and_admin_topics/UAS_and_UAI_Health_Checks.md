@@ -20,7 +20,7 @@ ncn-m002# unset CRAY\_CREDENTIALS
 
 ## Initialize the CLI Configuration
 
-The CLI needs to know what host to use to obtain authorization and what user is requesting authorization so it can obtain an OAUTH token to talk to the API Gateway. This is accomplished by initializing the CLI configuration. This example uses the vers username. In practice, vers and the response to the password: prompt should be replaced with the username and password of the administrator running the validation procedure.
+The CLI needs to know what host to use to obtain authorization and what user is requesting authorization so it can obtain an OAUTH token to talk to the API Gateway. This is accomplished by initializing the CLI configuration. This example uses the `vers` username. In practice, `vers` and the response to the `password:` prompt should be replaced with the username and password of the administrator running the validation procedure.
 
 To check whether the CLI needs initialization, run the following command.
 

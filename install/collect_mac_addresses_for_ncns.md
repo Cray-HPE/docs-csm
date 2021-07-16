@@ -7,11 +7,11 @@ MAC addresses and some services will need to be restarted.
 
 **Note**: If a reinstall of this software release is being done on this system and the `ncn_metadata.csv` 
 file already had valid MAC addresses for both BMC and node interfaces before `csi config init` was run, then
-this topic could be skipped and instead move to [Deploy Management Nodes](#deploy_management_nodes).
+this topic could be skipped and instead move to [Deploy Management Nodes](index.md#deploy_management_nodes).
 
 **Note**: If a first time install of this software release is being done on this system and the `ncn_metadata.csv` 
 file already had valid MAC addresses for both BMC and node interfaces before `csi config init` was run, then this
-topic could be skipped and instead move to [Deploy Management Nodes](#deploy_management_nodes).
+topic could be skipped and instead move to [Deploy Management Nodes](index.md#deploy_management_nodes).
 
 ### Topics
 

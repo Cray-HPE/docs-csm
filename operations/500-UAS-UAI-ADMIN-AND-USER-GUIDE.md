@@ -117,7 +117,7 @@ Resource requests and limits tell Kubernetes how much memory and CPU a given UAI
 
 The smaller configuration items control things like whether the UAI can talk to compute nodes over the high-speed network (needed for workload management), whether the UAI presents a public facing or private facing IP address for SSH, Kubernetes scheduling priority and others.
 
-All of the above can be customized on a given set of UAIs by defining a UAI class. UAI classes are templates used to create UAIs, and provide access to fine grained configuration and selection of image, volumes and resource specification. While an end-user UAI can be created by simply specifying its UAI image and the user's public key, to make more precisely constructed UAIs a UAI class must be used.
+All of the above can be customized on a given set of UAIs by defining a UAI class. UAI classes are templates used to create UAIs, and provide access to fine grained configuration and selection of image, volumes, and resource specification. While an end-user UAI can be created by simply specifying its UAI image and the user's public key, to make more precisely constructed UAIs a UAI class must be used.
 
 ### UAI Host Nodes <a name="main-concepts-hostnodes"></a>
 
@@ -151,9 +151,9 @@ NAME       STATUS   ROLES    AGE   VERSION
 ncn-w001   Ready    <none>   10d   v1.18.6
 ```
 
-    NOTE: given the fact that labels are textual not boolean, it is a good idea to try various common spellings of false. The ones that will prevent UAIs from running are 'False', 'false' and 'FALSE'. Repeat the above with all three options to be sure.
+    NOTE: given the fact that labels are textual not boolean, it is a good idea to try various common spellings of false. The ones that will prevent UAIs from running are `False`, `false`, and `FALSE`. Repeat the above with all three options to be sure.
 
-Of the non-master nodes, there is one node that is configured to reject UAIs, `ncn-w001`. So, `ncn-w002` and `ncn-w003` are UAI host nodes.
+Of the non-master nodes, there is one node that is configured to reject UAIs: `ncn-w001`. So, `ncn-w002` and `ncn-w003` are UAI host nodes.
 
 ### Specifying UAI Host Nodes <a name="main-hostnodes-specifying"></a>
 
@@ -163,7 +163,7 @@ UAI host nodes are determined by tainting the nodes against UAIs, so the followi
 ncn-m001-pit# kubectl label node ncn-w001 uas=False --overwrite
 ```
 
-Please note here that setting `uas=True` or any variant of that, while potentially useful for local book keeping purposes, does NOT transform the node into a UAS host node. With that setting the node will be a UAS node because the value of the `uas` flag is not in the list `False`, `false` or `FALSE`, but unless the node previously had one of the false values, it was a UAI node all along. Perhaps more to the point, removing the `uas` label from a node labeled `uas=True` does not take the node out of the list of UAI host nodes. The only way to make a non-master Kubernetes node not be a UAS host node is to explicitly set the label to `False`, `false` or `FALSE`.
+Please note here that setting `uas=True` or any variant of that, while potentially useful for local bookkeeping purposes, does NOT transform the node into a UAS host node. With that setting the node will be a UAS node because the value of the `uas` flag is not in the list `False`, `false`, or `FALSE`, but unless the node previously had one of the false values, it was a UAI node all along. Perhaps more to the point, removing the `uas` label from a node labeled `uas=True` does not take the node out of the list of UAI host nodes. The only way to make a non-master Kubernetes node not be a UAS host node is to explicitly set the label to `False`, `false`, or `FALSE`.
 
 ### Maintaining an HSM Group for UAI Host Nodes <a name="main-hostnodes-hsmgroup"></a>
 
@@ -365,7 +365,7 @@ Options for the elements of a UAI are maintained in the UAS configuration. The f
 * Resource specifications
 * UAI Classes
 
-To configure the UAS a user needs to be defined as an administrator in the Shasta system and logged in using the Shasta CLI (`cray` command). This can be done from a LiveCD node or from any system with the Shasta CLI installed that can reach the Shasta API Gateway. The following sections illustrate creating, updating, examining and removing configuration items from the UAS. More information on configuring and authenticating through the Shasta CLI can be found in the Shasta installation and administration guides.
+To configure the UAS a user needs to be defined as an administrator in the Shasta system and logged in using the Shasta CLI (`cray` command). This can be done from a LiveCD node or from any system with the Shasta CLI installed that can reach the Shasta API Gateway. The following sections illustrate creating, updating, examining, and removing configuration items from the UAS. More information on configuring and authenticating through the Shasta CLI can be found in the Shasta installation and administration guides.
 
 ### UAI Images <a name="main-uasconfig-images"></a>
 
@@ -701,7 +701,7 @@ ncn-m001-pit# cray uas admin config volumes list --format json
 
     NOTE: The JSON format above will be useful in figuring out how to add or update a volume in the UAS configuration because that is the form in which the volume description is applied to the volume.
 
-Looking at the above output, each volume has a `mount_path`, `volume_description`, 'volume_name` and `volume_id` entry. The `mount_path` specifies where in the UAI the volume will be mounted.
+Looking at the above output, each volume has a `mount_path`, `volume_description`, `volume_name`, and `volume_id` entry. The `mount_path` specifies where in the UAI the volume will be mounted.
 
     NOTE: While it is acceptable to have multiple volumes configured in UAS with the same `mount_path` any given UAI will fail creation if it has more than one volume specified for a given mount path. If multiple volumes with the same mount path exist in the UAS configuration all UAIs must be created using UAI classes that specify a workable subset of volumes. A UAI created without a UAI Class under such a UAS configuration will try to use all configured volumes and creation will fail.
 
@@ -709,7 +709,7 @@ The `volume_description` is the JSON description of the volume, specified as a d
 
 The `volumename` is a string the creator of the volume may chose to describe or name the volume. It must be comprised of only lower case alphanumeric characters and dashes ('-') and must begin and end with an alphanumeric character. It is used inside the UAI pod specification to identify the volume that is mounted in a given location in a container. It is required and administrators are free to use any name that meets the requirements. Volume names do need to be unique within any given UAI and are far more useful when searching for a volume if they are unique across the UAS configuration.
 
-The `volume_id` is a unique identifier used to identify the UAS volume when examining, updating or deleting a volume and when linking a volume to a UAI class.
+The `volume_id` is a unique identifier used to identify the UAS volume when examining, updating, or deleting a volume and when linking a volume to a UAI class.
 
 #### Adding a UAS Volume <a name="main-uasconfig-volumes-add"></a>
 
@@ -811,7 +811,7 @@ request = "{\"cpu\": \"4\", \"memory\": \"1Gi\"}"
 resource_id = "eff9e1f2-3560-4ece-a9ce-8093e05e032d"
 ```
 
-There are three configurable parts to a resource specification, a `limit` which is a JSON string describing a Kubernetes resource limit, a `request` which is a JSON string describing a Kubernetes resource request and an optional `comment` which is a free form string containing any information an administrator might find useful about the resource specification. There is also a `resource-id` that can be used for examining, updating or deleting the resource specification as well as linking the resource specification into a UAI class.
+There are three configurable parts to a resource specification, a `limit` which is a JSON string describing a Kubernetes resource limit, a `request` which is a JSON string describing a Kubernetes resource request and an optional `comment` which is a free form string containing any information an administrator might find useful about the resource specification. There is also a `resource-id` that can be used for examining, updating, or deleting the resource specification as well as linking the resource specification into a UAI class.
 
 #### Adding a Resource Specification <a name="main-uasconfig-resources-add"></a>
 
@@ -1092,7 +1092,7 @@ Taking apart the non-brokered end-user UAI class, the first part is:
     "uai_creation_class": null,
 ```
 
-The `class_id` field is the identifier used to refer to this class when examining, updating and deleting this class as well as when using this class with the
+The `class_id` field is the identifier used to refer to this class when examining, updating, and deleting this class as well as when using this class with the
 
 ```
 ncn-m001-pit# cray uas admin uais create
@@ -1287,15 +1287,15 @@ UAS supports two manual methods and one automated method of UAI management. Thes
 * Legacy mode user driven UAI management
 * UAI broker mode UAI management
 
-Direct administrative UAI management is available mostly to allow administrators to set up UAI brokers for the UAI broker mode of UAI management and to control UAIs that are created under one of the other two methods. It is unlikely that a site will choose to create end-user UAIs this way, but it is possible to do. The administrative UAI management API  provides an administrative way to list, create, examine and delete UAIs.
+Direct administrative UAI management is available mostly to allow administrators to set up UAI brokers for the UAI broker mode of UAI management and to control UAIs that are created under one of the other two methods. It is unlikely that a site will choose to create end-user UAIs this way, but it is possible to do. The administrative UAI management API  provides an administrative way to list, create, examine, and delete UAIs.
 
-The legacy mode of UAI management gives users the authority to create, list and delete UAIs that belong to them. While this is a conceptually simple mode, it can lead to an unnecessary proliferation of UAIs belonging to a single user if the user is not careful to create UAIs only when needed. The legacy mode also cannot take advantage of UAI classes to create more than one kind of UAI for different users' needs.
+The legacy mode of UAI management gives users the authority to create, list, and delete UAIs that belong to them. While this is a conceptually simple mode, it can lead to an unnecessary proliferation of UAIs belonging to a single user if the user is not careful to create UAIs only when needed. The legacy mode also cannot take advantage of UAI classes to create more than one kind of UAI for different users' needs.
 
 The UAI broker mode creates / re-uses UAIs on demand when a user logs into a broker UAI using SSH. A site may run multiple broker UAIs, each configured to create UAIs of a different UAI class and each running with its own externally visible IP address. By choosing the correct IP address and logging into the broker, a user ultimately arrives in a UAI tailored for a given use case. Since the broker is responsible for managing the underlying end-user UAIs, users need not be given authority to create UAIs directly and, therefore, cannot cause a proliferation of unneeded UAIs. Since the broker UAIs each run separately on different IP addresses with, potentially, different user authorizations configured, a site can control which users are given access to which classes of end-user UAIs.
 
 ### Administrative Management of UAIs <a name="main-uaimanagement-adminuai"></a>
 
-Direct administration of UAIs includes listing, manual creation (rare), examination and deletion. Some of these activities have [legacy mode](#main-uaimanagement-legacymode) user oriented analogs. This section focuses on administrative actions not user oriented actions.
+Direct administration of UAIs includes listing, manual creation (rare), examination, and deletion. Some of these activities have [legacy mode](#main-uaimanagement-legacymode) user oriented analogs. This section focuses on administrative actions not user oriented actions.
 
 #### Listing UAIs <a name="main-uaimanagement-adminuai-list"></a>
 
@@ -1388,7 +1388,7 @@ results = [ "Successfully deleted uai-vers-715fa89d", "Successfully deleted uai-
 
 ### Legacy Mode UAI Management <a name="main-uaimanagement-legacymode"></a>
 
-In the legacy mode, users create and manage their own UAIs through the Shasta CLI. A user may create, list and delete only UAIs owned by the user. The user may not create a UAI for another user, nor may the user see or delete UAIs owned by another user. Once created, the information describing the UAI gives the user the information needed to reach the UAI using SSH and log into it.
+In the legacy mode, users create and manage their own UAIs through the Shasta CLI. A user may create, list, and delete only UAIs owned by the user. The user may not create a UAI for another user, nor may the user see or delete UAIs owned by another user. Once created, the information describing the UAI gives the user the information needed to reach the UAI using SSH and log into it.
 
 The following diagram illustrates a system running with UAIs created in the legacy mode by four users, each of whom has created at least one end-user UAI. Notice that the user Pat has created two end-user UAIs:
 

@@ -61,10 +61,10 @@ sections, but there is also a general troubleshooting topic.
    Run the following validation checks to ensure that everything is still working
    properly after the upgrade:
 
-   1. [Platform Health Checks](../../operations/validate_csm_health.md#platform-health-checks)
-   1. [Hardware Management Services Health Checks](../../operations/validate_csm_health.md#hms-health-checks)
-   1. [Software Management Services Validation Utility](../../operations/validate_csm_health.md#sms-health-checks)
-   1. [Validate UAS and UAI Functionality](../../operations/validate_csm_health.md#uas-uai-validate)
+   1. [Platform Health Checks](../operations/validate_csm_health.md#platform-health-checks)
+   1. [Hardware Management Services Health Checks](../operations/validate_csm_health.md#hms-health-checks)
+   1. [Software Management Services Validation Utility](../operations/validate_csm_health.md#sms-health-checks)
+   1. [Validate UAS and UAI Functionality](../operations/validate_csm_health.md#uas-uai-validate)
 
    Booting the barebones image on the compute nodes should be skipped if the compute nodes have been running
    application workload during the the CSM upgrade.
