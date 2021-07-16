@@ -43,6 +43,18 @@ if [[ ${upgrade_ncn} == "ncn-s001" ]]; then
    fi
 fi
 
+state_name="BSS_CEPH_NODES_BACKUP"
+state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+
+    ./create-bss-etcd-backup.sh $upgrade_ncn
+
+    record_state "${state_name}" ${upgrade_ncn}
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="BACKUP_CEPH_DATA"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then

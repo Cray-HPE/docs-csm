@@ -81,6 +81,7 @@ cat <<EOF>write-files-user-data.json
 EOF
     # update bss
     csi handoff bss-update-cloud-init --user-data=write-files-user-data.json --limit=${UPGRADE_XNAME}
+    ./create-bss-etcd-backup.sh $upgrade_ncn
 }
 
 function update_k8s_runcmd_user_data() {
@@ -106,6 +107,7 @@ cat <<EOF>k8s-runcmd-user-data.json
 EOF
     # update bss
     csi handoff bss-update-cloud-init --user-data=k8s-runcmd-user-data.json --limit=${UPGRADE_XNAME}
+    ./create-bss-etcd-backup.sh $upgrade_ncn
 }
 
 function update_first_ceph_runcmd_user_data() {
@@ -132,6 +134,7 @@ cat <<EOF>first-ceph-runcmd-user-data.json
 EOF
     # update bss
     csi handoff bss-update-cloud-init --user-data=first-ceph-runcmd-user-data.json --limit=${UPGRADE_XNAME}
+    ./create-bss-etcd-backup.sh $upgrade_ncn
 }
 
 function update_ceph_worker_runcmd_user_data() {
@@ -157,6 +160,7 @@ cat <<EOF>ceph-worker-runcmd-user-data.json
 EOF
     # update bss
     csi handoff bss-update-cloud-init --user-data=ceph-worker-runcmd-user-data.json --limit=${UPGRADE_XNAME}
+    ./create-bss-etcd-backup.sh $upgrade_ncn
 }
 
 # same data on all NCNs
