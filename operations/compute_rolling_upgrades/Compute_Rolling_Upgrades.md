@@ -22,5 +22,5 @@ The following procedures are required to upgrade compute nodes with CRUS.
 - [CRUS Workflow](CRUS_Workflow.md)
 - [Upgrade Compute Nodes with CRUS](Upgrade_Compute_Nodes_with_CRUS.md)
 - [Troubleshoot Nodes Failing to Upgrade in a CRUS Session](Troubleshoot_Nodes_Failing_to_Upgrade_in_a_CRUS_Session.md)
-- [Troubleshoot a Failed CRUS Session Due to Unmet Conditions](Troubleshoot_a_Failed_CRUS_Session_Due_to_Unmet_Conditions.md)
-- [Troubleshoot a Failed CRUS Session Due to Bad Parameters](Troubleshoot_a_Failed_CRUS_Session_Due_to_Bad_Parameters.md)
+- [Troubleshoot a Failed CRUS Session Because of Unmet Conditions](Troubleshoot_a_Failed_CRUS_Session_Due_to_Unmet_Conditions.md)
+- [Troubleshoot a Failed CRUS Session Because of Bad Parameters](Troubleshoot_a_Failed_CRUS_Session_Due_to_Bad_Parameters.md)

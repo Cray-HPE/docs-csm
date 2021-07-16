@@ -197,7 +197,7 @@ The process to reinstall must have the configuration payload files available.
       previous installation will be found inside the `system_config.yaml` file. This simplifies the reinstall process.
    
       When you are ready to bootstrap the LiveCD, it will indicate when to run this command without any 
-      extra command line options. It will expect to find  all of the above files in the current working
+      extra command line options. It will expect to find all of the above files in the current working
       directory.
    
       ```bash

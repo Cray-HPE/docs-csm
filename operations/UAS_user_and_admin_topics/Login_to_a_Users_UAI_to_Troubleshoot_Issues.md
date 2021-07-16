@@ -63,7 +63,7 @@ This procedure requires root access.
     ncn-m001# kubectl exec -n user -it FULL\_POD\_NAME /bin/bash
     ```
 
-    As root in the user's UAI, an administrator will have the user's UID, GID, and full access to their filesystem mounts.
+    As root in the user's UAI, an administrator will have the user's UID, GID, and full access to their file system mounts.
 
 
 Assist the user with issues, and use exit to exit the UAI.

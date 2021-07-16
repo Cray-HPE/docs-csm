@@ -19,7 +19,7 @@ The following services are currently available:
 In general, external hostnames should resolve to a CAN external IP for the following services:
 
 -   `istio-system/istio-ingressgateway-can` - Istio’s ingress gateway.
--   `services/cray-keycloak-gatekeeper-ingress` - Keycloak Gatekeeper’s ingress reverse proxy that redirects browsers to Keycloak for login, and then to Istio’s ingress gateway with a valid JWT for authorized access.
+-   `services/cray-keycloak-gatekeeper-ingress` - Keycloak Gatekeeper’s ingress reverse proxy that redirects browsers to Keycloak for log in, and then to Istio’s ingress gateway with a valid JWT for authorized access.
 
 This can be verified using the dig command to resolve the external hostname and compare it with Kubernetes.
 

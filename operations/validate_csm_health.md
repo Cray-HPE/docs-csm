@@ -9,7 +9,7 @@ The following are examples of when to run health checks:
 * Any time there is unexpected behavior observed
 * In order to provide relevant information to create support tickets
 
-The areas should be tested in the order they are listed on this page. Errors in an earlier check may cause errors in later checks due to dependencies.
+The areas should be tested in the order they are listed on this page. Errors in an earlier check may cause errors in later checks because of dependencies.
 
 ## Topics: 
 
@@ -447,7 +447,7 @@ pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
 * K8S Test: Kubernetes Query BSS Cloud-init for ca-certs
   - May fail immediately after platform install. Should pass after the TrustedCerts Operator has updated BSS (Global cloud-init meta) with CA certificates.
 * K8S Test: Kubernetes Velero No Failed Backups
-  - Due to a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (for example, vault). It may be necessary to use the ```velero``` command to delete backups from a Kubernetes node to clear this situation.
+  - Because of a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (for example, vault). It may be necessary to use the ```velero``` command to delete backups from a Kubernetes node to clear this situation.
 
 <a name="hms-health-checks"></a>
 ## 2. Hardware Management Services Health Checks

@@ -50,14 +50,14 @@ HPE iLO BMCs allow for booting directly from an HTTP accessible ISO location.
 
 > Open up the virtual terminal by choosing the `HTML5 Console` option when clicking the terminal image in the bottom left corner.
 
-> **`NOTE`** It may appear that the boot is stalled at a line of `EXT4-fs (loop1): mounted ...` or `Starting dracut pre-mount hook...`. This is the step when it actually begins downloading the ISO's squashfs root filesystem and can take a few minutes
+> **`NOTE`** It may appear that the boot is stalled at a line of `EXT4-fs (loop1): mounted ...` or `Starting dracut pre-mount hook...`. This is the step when it actually begins downloading the ISO's squashfs root file system and can take a few minutes
 
 <a name="gigabyte-bmcs"></a>
 #### Gigabyte BMCs
 
 Gigabyte BMCs allow for booting over HTTP.
 
-**Note:** Due to problems in the Gigabyte firmware, do not try to boot over NFS or CIFS. 
+**Note:** Because of problems in the Gigabyte firmware, do not try to boot over NFS or CIFS. 
 
 Go to the BMC settings and setup the remote ISO for your protocol and node.
 

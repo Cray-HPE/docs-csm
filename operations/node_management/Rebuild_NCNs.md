@@ -139,9 +139,9 @@ Skip this section if rebuilding a worker or storage node. The examples in this s
 
     Ensure a good response, such as `HTTP CODE 200`, is returned in the curl output.
 
-6. Configure the newly-promoted first master node so it is able to have other nodes join the cluster.
+6. Configure the newly promoted first master node so it is able to have other nodes join the cluster.
 
-    Use `ssh` to login to the newly-promoted master node chosen in the previous steps \(`ncn-m001` in this case\), 
+    Use `ssh` to log in to the newly promoted master node chosen in the previous steps \(`ncn-m001` in this case\), 
     copy/paste the following script to a file, and then execute it.
 
     > **NOTE**: The output from the script below can be misleading as it is relying on cached cloud-init data. Ignore the output that indicates **FIRST_MASTER_HOSTNAME has been set to ncn-...**.
@@ -541,7 +541,7 @@ This section applies to master and worker nodes. Skip this section if rebuilding
 
 3. Observe the boot.
 
-    After a bit, the server should begin to boot. This can be viewed from the ConMan console window. Eventually, there will be a `NBP file...` message in the console output. When this message is displayed, exit the console \(**&** then **.**\), and then use `ssh` to login to the node to complete the remaining validation steps.
+    After a bit, the server should begin to boot. This can be viewed from the ConMan console window. Eventually, there will be a `NBP file...` message in the console output. When this message is displayed, exit the console \(**&** then **.**\), and then use `ssh` to log in to the node to complete the remaining validation steps.
 
     **Troubleshooting:** If the `NBP file...` output never appears, or something else goes wrong, go back to the steps for modifying XNAME.json file \(see step [6](#step6)\) and make sure these instructions were completed correctly.
 
@@ -645,7 +645,7 @@ This section applies to master and worker nodes. Skip this section if rebuilding
 
 6. Verify the new node is in the cluster.
 
-    Run the following command several times to watch for the newly-rebuilt node to join the cluster. This should occur within 10 to 20 minutes.
+    Run the following command several times to watch for the newly rebuilt node to join the cluster. This should occur within 10 to 20 minutes.
 
     ```bash
     ncn# kubectl get nodes
@@ -680,13 +680,13 @@ This section applies to storage nodes. Skip this section if rebuilding a master 
 
 <a name="step18"></a>
 
-1. Use `ssh` to login to the node where Ansible will run.
+1. Use `ssh` to log in to the node where Ansible will run.
 
-    -   If rebuilding `ncn-s001`, login to either `ncn-s002` or `ncn-s003`.
+    -   If rebuilding `ncn-s001`, log in to either `ncn-s002` or `ncn-s003`.
 
         In the following storage node example steps, `ncn-s001` is being rebuilt, so `ncn-s002` is the node being used.
 
-    -   If rebuilding any other storage node, login to `ncn-s001` and proceed to the next step.
+    -   If rebuilding any other storage node, log in to `ncn-s001` and proceed to the next step.
 
 2. Update the Ansible inventory.
 
@@ -790,7 +790,7 @@ Skip this section if a master or storage node was rebuilt. The examples in this 
 
 1.  Verify the new node is in the cluster.
 
-    Run the following command from any master or worker node that is already in the cluster. It is helpful to run this command several times to watch for the newly-rebuilt node to join the cluster. This should occur within 10 to 20 minutes.
+    Run the following command from any master or worker node that is already in the cluster. It is helpful to run this command several times to watch for the newly rebuilt node to join the cluster. This should occur within 10 to 20 minutes.
 
     ```bash
     ncn-m001# kubectl get nodes
@@ -845,7 +845,7 @@ Validate the master node rebuilt successfully.
 
 Skip this section if a worker or storage node was rebuilt. The examples in this step assume `ncn-m001` was rebuilt.
 
-1.  Add the newly-rebuilt node to the etcd cluster.
+1.  Add the newly rebuilt node to the etcd cluster.
 
     Manually add the node to the cluster from a healthy/existing master node. The IP and hostname of the rebuilt node is needed for the following command. Replace the NCN-M\_HOSTNAME and IP\_ADDRESS address values. Use the IP address you noted in an earlier step from the `etcdctl` command.
 
@@ -855,7 +855,7 @@ Skip this section if a worker or storage node was rebuilt. The examples in this 
             --peer-urls=https://IP_ADDRESS:2380
     ```
 
-    Once the new node is up, use `ssh` to login to it, reconfigure the etcd service, and restart the cloud init:
+    Once the new node is up, use `ssh` to log in to it, reconfigure the etcd service, and restart the cloud init:
 
     ```bash
     ncn# systemctl stop etcd.service; sed -i 's/new/existing/' \
@@ -866,7 +866,7 @@ Skip this section if a worker or storage node was rebuilt. The examples in this 
 
 2.  Verify the new node is in the cluster.
 
-    Run the following command from any master or worker node that is already in the cluster. It is helpful to run this command several times to watch for the newly-rebuilt node to join the cluster. This should occur within 10 to 20 minutes.
+    Run the following command from any master or worker node that is already in the cluster. It is helpful to run this command several times to watch for the newly rebuilt node to join the cluster. This should occur within 10 to 20 minutes.
 
     ```bash
     ncn-m001# kubectl get nodes

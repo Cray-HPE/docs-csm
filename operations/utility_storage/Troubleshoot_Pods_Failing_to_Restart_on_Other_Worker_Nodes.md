@@ -1,6 +1,6 @@
 # Troubleshoot Pods Failing to Restart on Other Worker Nodes
 
-Troubleshoot an issue where pods cannot restart on another worker node due to the "Volume is already exclusively attached to one node and can't be attached to another" error. Kubernetes does not currently support "readwritemany" access mode for Rados Block Device \(RBD\) devices, which causes an issue where devices fail to unmap correctly.
+Troubleshoot an issue where pods cannot restart on another worker node because of the "Volume is already exclusively attached to one node and can't be attached to another" error. Kubernetes does not currently support "readwritemany" access mode for Rados Block Device \(RBD\) devices, which causes an issue where devices fail to unmap correctly.
 
 The issue occurs when unmounting the mounts tied to the RBD devices, which causes the rbd-task \(watcher\) to not stop for the RBD device.
 

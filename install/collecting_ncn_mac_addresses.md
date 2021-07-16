@@ -30,7 +30,7 @@ boot-check nodes to dump network device information without an operating system.
 <a name="requirements"></a>
 #### Requirements
 
-> If CSI does not work due to requiring a file, please file a bug. By default, dnsmasq
+> If CSI does not work because of a file requirement, please file a bug. By default, dnsmasq
 > and conman are already running on the LiveCD but bond0 needs to be configured, dnsmasq needs to
 > serve/listen over bond0, and conman needs the BMC information.
 
@@ -152,7 +152,7 @@ is quicker.
 
 If you have an incorrect `ncn_metadata.csv` file, you will be unable to deploy the NCNs. This section details a recovery procedure in case that happens.
 
-1. Remove the incorrectly-generated configs. Before deleting the incorrectly-generated configs consider making a backup of them. In case they need to be examined at a later time. 
+1. Remove the incorrectly generated configs. Before deleting the incorrectly generated configs consider making a backup of them. In case they need to be examined at a later time. 
 
 > **`WARNING`** Ensure that the `SYSTEM_NAME` environment variable is correctly set. If `SYSTEM_NAME` is
 > not set the command below could potentially remove the entire prep directory.
@@ -168,7 +168,7 @@ pit# rm -rf /var/www/ephemeral/prep/$SYSTEM_NAME
 
 3. Re-run `csi config init` with the required flags
 
-4. Copy all the newly-generated files into place
+4. Copy all the newly generated files into place
 
 ```bash
 pit# \

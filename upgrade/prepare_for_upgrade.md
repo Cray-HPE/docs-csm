@@ -47,7 +47,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 1.  Check for running sessions.
 
     Ensure that these services do not have any sessions in progress: BOS, CFS, CRUS, FAS, or NMD.
-    > This SAT command has "shutdown" as one of the commandline  options, but it will not start a shutdown process on the system.
+    > This SAT command has "shutdown" as one of the commandline options, but it will not start a shutdown process on the system.
 
     ```screen
     ncn-m001# sat bootsys shutdown --stage session-checks

@@ -1,6 +1,6 @@
 ## Add LDAP User Federation
 
-Add LDAP user federation using the  Keycloak localization tool.
+Add LDAP user federation using the Keycloak localization tool.
 
 ### Prerequisites
 
@@ -66,7 +66,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
           - default: READ_ONLY
           - type: string
           - allowed values: READ_ONLY, WRITEABLE, or UNSYNCED
-        * ldapSyncRegistrations : If true, then newly-created users will be created in the LDAP server.
+        * ldapSyncRegistrations : If true, then newly created users will be created in the LDAP server.
           - default: false
           - type: string
           - allowed values: true or false

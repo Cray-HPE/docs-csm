@@ -6,7 +6,7 @@ External DNS requires the system-name, site-domain, and can-external-dns values 
 
 The system-name and site-domain values specified as part of the csi config init are used together in the system-name.site-domain format, creating the external domain for external hostnames for services accessible from the Customer Access Network \(CAN\). Changing this value requires updating all impacted `external-dns.alpha.kubernetes.io/hostname` annotations, VirtualService and possibly Gateway objects, the CoreDNS configmap, Keycloak settings for valid OAuth callback URLs, Keycloak gatekeeper configuration, and generating new certificates.
 
-**Warning:** Changing the system-name.site-domain value post-installation is not recommended due to the complexity of changes required.
+**Warning:** Changing the system-name.site-domain value post-installation is not recommended because of the complexity of changes required.
 
 Input for `csi config init`:
 

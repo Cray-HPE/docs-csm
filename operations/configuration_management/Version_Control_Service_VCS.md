@@ -42,11 +42,11 @@ The `NEW_PASSWORD` value must be replaced with the updated password.
 
 ### Access the `cray` Gitea Organization
 
-The VCS UI uses Keycloak to authenticate users on the system. However, users from external authentication sources are not automatically associated with permissions in the `cray` Gitea organization. As a result, users configured via Keycloak can login and create organizations and repositories of their own, but they cannot modify the cray organization that is created during system installation unless they are given permissions to do so.
+The VCS UI uses Keycloak to authenticate users on the system. However, users from external authentication sources are not automatically associated with permissions in the `cray` Gitea organization. As a result, users configured via Keycloak can log in and create organizations and repositories of their own, but they cannot modify the cray organization that is created during system installation unless they are given permissions to do so.
 
-The `crayvcs` Gitea admin user that is created during CSM installation can login to the UI via Keycloak. To allow users other than `crayvcs` to have access to repositories in the `cray` organization, use the following procedure:
+The `crayvcs` Gitea admin user that is created during CSM installation can log in to the UI via Keycloak. To allow users other than `crayvcs` to have access to repositories in the `cray` organization, use the following procedure:
 
-1.  Login to VCS as the `crayvcs` user on the system:
+1.  Log in to VCS as the `crayvcs` user on the system:
 
     ```screen
     https://vcs.SHASTA_CLUSTER_DNS_NAME
@@ -68,7 +68,7 @@ For granting non-administrative access to the organization and its repositories,
 https://vcs.SHASTA_CLUSTER_DNS_NAME/vcs/org/cray/teams/new
 ```
 
-Select the permissions appropriately, and then navigate to the following URL to add members to the newly-created team:
+Select the permissions appropriately, and then navigate to the following URL to add members to the newly created team:
 
 ```screen
 https://vcs.SHASTA_CLUSTER_DNS_NAME/vcs/org/cray/teams

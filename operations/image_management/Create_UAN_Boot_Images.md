@@ -5,7 +5,7 @@ Update configuration management git repository to match the installed version of
 This is the overall workflow for preparing UAN images for booting UANs:
 
 1.  Clone the UAN configuration git repository and create a branch based on the branch imported by the UAN installation.
-2.  Update the configuration content and push the changes to the newly-created branch.
+2.  Update the configuration content and push the changes to the newly created branch.
 3.  Create a Configuration Framework Service \(CFS\) configuration for the UANs, specifying the git configuration and the UAN image to apply the configuration to. More Cray products can also be added to the CFS configuration so that the UANs can install multiple Cray products into the UAN image at the same time.
 4.  Configure the UAN image using CFS and generate a newly configured version of the UAN image.
 5.  Create a Boot Orchestration Service \(BOS\) boot session template for the UANs. This template maps the configured image, the CFS configuration to be applied post-boot, and the nodes which will receive the image and configuration.

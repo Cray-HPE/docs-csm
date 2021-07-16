@@ -210,7 +210,7 @@ capacity:
 ...
 ```
 
-When UAIs are created, some UAIs might left in the "Pending" state. The Kubernetes scheduler is unable to schedule them to a node, due to CPU, memory, or pod limit constraints. Use kubectl describe pod to check why the pod is pending. For example, this pod is "Pending" because the node has reached the hard limit of 110 pods.
+When UAIs are created, some UAIs might left in the "Pending" state. The Kubernetes scheduler is unable to schedule them to a node, because of CPU, memory, or pod limit constraints. Use kubectl describe pod to check why the pod is pending. For example, this pod is "Pending" because the node has reached the hard limit of 110 pods.
 
 ```
 # kubectl describe pod UAI-POD

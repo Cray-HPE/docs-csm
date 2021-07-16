@@ -64,7 +64,7 @@ See the external [Ansible documentation on re-using playbooks](https://docs.ansi
 
 To remove a role from a provided playbook, the best practice is to determine if the role provides a variable to skip the roles tasks altogether. See the `roles/[role name]/README` file for a listing of the role variables.
 
-If changes to role variables are not able to skip the role, the role may be commented out in the playbook. However, note that an upgrade to the configuration will result in a merge conflict due to the changes made in the playbook if the upgrade pristine branch is merged with the branch containing the commented playbook.
+If changes to role variables are not able to skip the role, the role may be commented out in the playbook. However, note that an upgrade to the configuration will result in a merge conflict because of the changes made in the playbook if the upgrade pristine branch is merged with the branch containing the commented playbook.
 
 
 
