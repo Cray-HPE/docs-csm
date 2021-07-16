@@ -353,6 +353,17 @@ should resolve itself once the workload manager product is installed.
    ncn-s# /tmp/install-node-exporter-storage.sh
    ```
 
+   > **NOTE**: While running install-node-exporter-storage.sh, you may see an error similar to the following:
+   > ```bash
+   > Error building the cache:
+   > [SUSE-SLE-Module-Basesystem-15-SP1-x86_64-Updates|https://packages.local/repository/SUSE-SLE-Module-Basesystem-15-SP1-x86_64-Updates] Valid metadata not found at specified URL
+   > History:
+   > - [SUSE-SLE-Module-Basesystem-15-SP1-x86_64-Updates|https://packages.local/repository/SUSE-SLE-Module-Basesystem-15-SP1-x86_64-Updates] Repository type can't be determined.
+   >
+   > Warning: Skipping repository 'SUSE-SLE-Module-Basesystem-15-SP1-x86_64-Updates' because of the above error.
+   > ```
+   >
+   > This error can be safely ignored.
 
 <a name="restore-vcs-content"></a>
 ## Restore VCS Content
