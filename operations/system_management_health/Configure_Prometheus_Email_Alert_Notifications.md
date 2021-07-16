@@ -95,6 +95,6 @@ Configure an email alert notification for PostgresReplicationLagSMA and Postgres
 
 An email notification will be sent once either of the alerts set in this procedure is `FIRING` in Prometheus. See https://prometheus.SYSTEM-NAME.SITE-DOMAIN/alerts for more information.
 
-If an alert is received, refer to [Troubleshoot Postgres Databases with the Patroni Tool](../kubernetes/Troubleshoot_Postgres_Databases_with_the_Patroni_Tool.md) section for more information about recovering replication.
+If an alert is received, refer to [Troubleshoot Postgres Database](../kubernetes/Troubleshoot_Postgres_Database.md) section for more information about recovering replication.
 
 
