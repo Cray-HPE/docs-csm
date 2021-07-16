@@ -590,7 +590,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     ncn# cray ims jobs delete $IMS_JOB_ID
     ```
 
-    Deleting the job record also deletes the underlying Kubernetes job, service and config map that were created when the job record was submitted.
+    Deleting the job record also deletes the underlying Kubernetes job, service, and config map that were created when the job record was submitted.
 
 
 The image root has been modified, compressed, and uploaded to S3 along with its associated initrd and kernel files. The image customization environment has also been cleaned up.

@@ -512,7 +512,7 @@ data so run them only when indicated. Instructions are in the `README` files.
 
  > **`NOTE`** If your system is Gigabyte or Intel hardware, skip this section.
 
-Perform the following steps on every NCN.
+Perform the following steps on every NCN **except m001**.
 
 1. Set environment variables. Make sure to set the appropriate value for the `IPMI_PASSWORD` variable.
 

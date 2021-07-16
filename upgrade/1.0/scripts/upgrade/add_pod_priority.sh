@@ -34,6 +34,10 @@ ETCDCLUSTERS="\
 cray-bss-etcd \
 "
 
+DAEMONSETS="\
+cray-metallb-speaker \
+"
+
 cat > /tmp/csm-high-priority-service.yaml <<'EOF'
 apiVersion: scheduling.k8s.io/v1
 kind: PriorityClass
@@ -81,6 +85,15 @@ for deployment in $DEPLOYMENTS; do
   if [ ! -z "$ns" ]; then
     echo "Patching $deployment deployment in $ns namespace"
     kubectl -n $ns patch deployment $deployment --type merge -p '{"spec": {"template": {"spec": {"priorityClassName": "csm-high-priority-service"}}}}'
+    echo ""
+  fi
+done
+
+for daemonset in $DAEMONSETS; do
+  ns=$(kubectl get daemonset -A | grep " $daemonset " | awk '{print $1}')
+  if [ ! -z "$ns" ]; then
+    echo "Patching $daemonset daemonset in $ns namespace"
+    kubectl -n $ns patch daemonset $daemonset --type merge -p '{"spec": {"template": {"spec": {"priorityClassName": "csm-high-priority-service"}}}}'
     echo ""
   fi
 done

@@ -23,11 +23,11 @@
 set -eo pipefail
 
 if [[ -z "${BACKUP_FOLDER}" ]]; then
-    echo "BACKUP_FOLDER envrioment variable was not defined"
+    echo "BACKUP_FOLDER environment variable was not defined"
     exit 1
 fi
 if [[ -z "${BACKUP_NAME}" ]]; then
-    echo "BACKUP_NAME envrioment variable was not defined"
+    echo "BACKUP_NAME environment variable was not defined"
     exit 1
 fi
 

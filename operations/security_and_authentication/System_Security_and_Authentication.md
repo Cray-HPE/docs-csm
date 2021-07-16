@@ -35,7 +35,7 @@ All connections through the Istio ingress gateway require authentication with a 
 -   [Retrieve an Authentication Token](Retrieve_an_Authentication_Token.md)
 -   [SSH Keys](SSH_Keys.md)
 -   [Authenticate an Account with the Command Line](Authenticate_an_Account_with_the_Command_Line.md)
--   [Default Keycloak Realms, Accounts and Clients](Default_Keycloak_Realms_Accounts_and_Clients.md)
+-   [Default Keycloak Realms, Accounts, and Clients](Default_Keycloak_Realms_Accounts_and_Clients.md)
     -   [Certificate Types](Certificate_Types.md)
     -   [Change the Keycloak Admin Password](Change_the_Keycloak_Admin_Password.md)
     -   [Create a Service Account in Keycloak](Create_a_Service_Account_in_Keycloak.md)

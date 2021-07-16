@@ -20,7 +20,7 @@ the number of storage and worker nodes.
 
 ### Topics:
 
-   1. [Prepare for Management Node Deployment](prepare_for_management_node_deployment)
+   1. [Prepare for Management Node Deployment](#prepare_for_management_node_deployment)
       1. [Configure Bootstrap Registry to Proxy an Upstream Registry](#configure-bootstrap-registry-to-proxy-an-upstream-registry)
       1. [Tokens and IPMI Password](#tokens-and-ipmi-password)
       1. [Apply NCN Pre-Boot Workarounds](#apply-ncn-pre-boot-workarounds)
@@ -287,14 +287,14 @@ The configuration workflow described here is intended to help understand the exp
     - The other storage nodes boot and become passive. They will be fully configured when ceph-ansible runs to completion on ncn-s001
 1. Once ncn-s001 notices that all other storage nodes have booted, ceph-ansible will begin Ceph configuration. This takes several minutes.
 1. Once ceph-ansible has finished on ncn-s001, then ncn-s001 waits for ncn-m002 to create /etc/kubernetes/admin.conf.
-1. Start watching the consoles for ncn-m002, ncn-m003 and at least one worker node
+1. Start watching the consoles for ncn-m002, ncn-m003, and at least one worker node
 1. Boot master nodes (ncn-m002 and ncn-m003) and all worker nodes at the same time
     - The worker nodes will boot and wait for ncn-m002 to create the `/etc/cray/kubernetes/join-command-control-plane` so they can join Kubernetes
     - The third master node ncn-m003 boots and waits for ncn-m002 to create the `/etc/cray/kubernetes/join-command-control-plane` so it can join Kubernetes
     - The second master node ncn-m002 boots, runs the kubernetes-cloudinit.sh which will create /etc/kubernetes/admin.conf and /etc/cray/kubernetes/join-command-control-plan, then waits for the storage node to create etcd-backup-s3-credentials
 1. Once ncn-s001 notices that ncn-m002 has created /etc/kubernetes/admin.conf, then ncn-s001 waits for any worker node to become available.
 1. Once each worker node notices that ncn-m002 has created /etc/cray/kubernetes/join-command-control-plan, then it will join the Kubernetes cluster.  
-    - Now ncn-s001 should notice this from any one of the worker nodes and move forward with creation of config maps and running the post-ceph playbooks (s3, OSD pools, quotas, etc.)
+    - Now ncn-s001 should notice this from any one of the worker nodes and move forward with creation of config maps and running the post-Ceph playbooks (s3, OSD pools, quotas, etc.)
 1. Once ncn-s001 creates etcd-backup-s3-credentials during the benji-backups role which is one of the last roles after Ceph has been set up, then ncn-m001 notices this and moves forward
 
 
@@ -325,8 +325,8 @@ The configuration workflow described here is intended to help understand the exp
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
     ```
 
-    > Note: some BMCs will "flake" and ignore the bootorder setting by `ipmitool`. As a fallback, cloud-init will
-    > correct the bootorder after NCNs complete their first boot. The first boot may need manual effort to set the boot order over the conman console. The NCN boot order is further explained in [NCN Boot Workflow](../background/ncn_boot_workflow.md).
+    > Note: some BMCs will "flake" and ignore the boot order setting by `ipmitool`. As a fallback, cloud-init will
+    > correct the boot order after NCNs complete their first boot. The first boot may need manual effort to set the boot order over the conman console. The NCN boot order is further explained in [NCN Boot Workflow](../background/ncn_boot_workflow.md).
 
 1. Validate that the LiveCD is ready for installing NCNs
     Observe the output of the checks and note any failures, then remediate them.
@@ -521,7 +521,7 @@ The configuration workflow described here is intended to help understand the exp
     ncn-s# cephadm shell -- ceph-volume lvm create --data /dev/sd<drive to add>  --bluestore
     ```
 
-More information can be found at [cephadm reference page](../upgrade/1.0/resource_material/common/cephadm-reference.md)
+More information can be found at [the cephadm reference page](../operations/utility_storage/cephadm-reference.md).
 
 <a name="apply-ncn-post-boot-workarounds"></a>
 #### 3.4 Apply NCN Post-Boot Workarounds

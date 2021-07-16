@@ -163,4 +163,4 @@ This procedure needs to be done for each of the HPE Apollo 6500 XL645d nodes to 
    After completing the preparation for compute management nodes, the CSM product stream has
    been fully installed and configured. Check the next topic.
 
-   See [Next Topic](index.md#next-topic)
+   See [Next Topic](index.md#next_topic)

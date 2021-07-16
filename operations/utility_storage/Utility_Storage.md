@@ -15,9 +15,8 @@ Ceph is the utility storage platform that is used to enable pods to store persis
 
 - [Running Ceph commands in 1.5](cephadm-reference.md)
 - [Collect Information about the Ceph Cluster](Collect_Information_About_the_Ceph_Cluster.md)  
-- [Ceph Services](Ceph_Services.md)  
-- [Manage Ceph Services](Manage_Ceph_Services.md)  
-- [Restart Ceph Services via Ansible](Restart_Ceph_Services_via_Ansible.md)  
+- [Ceph Storage Types](Ceph_Storage_Types.md)
+- [Manage Ceph Services](Manage_Ceph_Services.md)
 - [Adjust Ceph Pool Quotas](Adjust_Ceph_Pool_Quotas.md)  
 - [Add Ceph OSDs](Add_Ceph_OSDs.md)  
 - [Shrink Ceph OSDs](Shrink_Ceph_OSDs.md)  

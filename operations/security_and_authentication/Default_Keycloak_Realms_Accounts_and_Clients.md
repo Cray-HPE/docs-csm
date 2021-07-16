@@ -1,6 +1,6 @@
-## Default Keycloak Realms, Accounts and Clients
+## Default Keycloak Realms, Accounts, and Clients
 
-The following default realms, accounts and clients are created when the system software is installed:
+The following default realms, accounts, and clients are created when the system software is installed:
 
 ### Default Realms
 

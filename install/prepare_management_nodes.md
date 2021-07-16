@@ -89,7 +89,7 @@ Later in the installation process the HPC Firmware Pack will be installed on the
 
    1. **REQUIRED** For each management node, **excluding** ncn-m001, login and do a full wipe of the storage on the node. 
 
-   See  [full wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#full-wipe)
+   See [full wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#full-wipe)
 
 <a name="power_off_booted_nodes"></a>
 ### Power Off Booted Nodes

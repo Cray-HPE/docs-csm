@@ -23,7 +23,7 @@
 set -eo pipefail
 
 if [[ -z "${POSTGRES_SQL_FILE}" ]]; then
-    echo "POSTGRES_SQL_FILE envrioment variable was not defined"
+    echo "POSTGRES_SQL_FILE environment variable was not defined"
     exit 1
 fi
 
@@ -38,7 +38,7 @@ if [[ ! $POSTGRES_SQL_FILE =~ \.psql$ ]]; then
 fi
 
 if [[ -z "${POSTGRES_SECRET_MANIFEST}" ]]; then
-    echo "POSTGRES_SECRET_MANIFEST envrioment variable was not defined"
+    echo "POSTGRES_SECRET_MANIFEST environment variable was not defined"
     exit 1
 fi
 
@@ -100,14 +100,14 @@ GRANT CONNECT ON DATABASE service_db TO public
 
 
 # Delete and reapply secrets for the postgres database.
-echo "Removing secrets contains postgres credentails"
+echo "Removing secrets contains postgres credentials"
 kubectl -n services delete secret \
     service-account.cray-sls-postgres.credentials \
     postgres.cray-sls-postgres.credentials \
     standby.cray-sls-postgres.credentials \
     slsuser.cray-sls-postgres.credentials
 
-echo "Apply secrets containing postgres credentails from the backup"
+echo "Apply secrets containing postgres credentials from the backup"
 kubectl apply -f "$POSTGRES_SECRET_MANIFEST"
 
 # Restart the postgres pods

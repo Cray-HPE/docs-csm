@@ -26,7 +26,7 @@ This procedure enables admins to set up the service and access its components vi
 
     -   **https://prometheus.\{\{shasta\_domain\}\}/**
 
-        Central Prometheus instance scrapes metrics from Kubernetes, Ceph and the hosts \(part of `prometheus-operator` Helm chart\).
+        Central Prometheus instance scrapes metrics from Kubernetes, Ceph, and the hosts \(part of `prometheus-operator` Helm chart\).
 
         Prometheus generates alerts based on metrics and reports them to the alertmanager. The 'Alerts' link at the top of the page will show all of the inactive, pending, and firing alerts on the system. Clicking on any of the alerts will expand them, enabling users to use the 'Labels' data to discern the details of the alert. The details will also show the state of the alert, how long it has been active, and the value for the alert.
 

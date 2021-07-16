@@ -135,7 +135,7 @@ The `kubectl` command is installed.
 
         This check will need to be run after all worker NCNs have been rebooted. Ensure that the checks have been run to check BGP peering sessions on the spine switches \(instructions will vary for Aruba and Mellanox switches\)
 
-        If there are BGP Peering sessions that are not ESTABLISHED on either switch, refer to [Check BGP Status and Reset Sessions](../metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
+        If there are BGP Peering sessions that are not ESTABLISHED on either switch, refer to [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
 
 4.  Establish a serial console session to the NCNs.
 
@@ -253,7 +253,7 @@ Before rebooting NCNs, ensure pre-reboot checks have been completed, including c
 
     7.  Ensure that BGP sessions are reset so that all BGP peering sessions with the spine switches are in an ESTABLISHED state.
 
-        See [Check BGP Status and Reset Sessions](../metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
+        See [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
 
 7.  Reboot each of the NCN master nodes \(one at a time\).
 
@@ -337,5 +337,5 @@ Before rebooting NCNs, ensure pre-reboot checks have been completed, including c
 
     See [Validate CSM Health](../validate_csm_health.md) for the platform health checks.
 
-    See [Check BGP Status and Reset Sessions](../metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md) to check the BGP peering sessions.
+    See [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md) to check the BGP peering sessions.
 

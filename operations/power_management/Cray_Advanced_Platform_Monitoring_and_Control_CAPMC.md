@@ -1,6 +1,3 @@
-
-
-
 ## Cray Advanced Platform Monitoring and Control \(CAPMC\)
 
 CAPMC provides remote monitoring and hardware on/off control.
@@ -23,7 +20,7 @@ Power sequencing using CAPMC assumes that all cabinets and PDUs have been plugge
 
 Power management strategies may vary and can be simple or complex using 3rd party software. A simple power management strategy is to power off idle compute nodes, then power on nodes when demand increases.
 
-The `cray` CLI can be used from any system that has HTTPS access to [SMS](SMS.md). Refer to the CAPMC API documentation for detailed information about API options and features.
+The `cray` CLI can be used from any system that has HTTPS access to [System Management Services](../network/Access_to_System_Management_Services.md). Refer to the CAPMC API documentation for detailed information about API options and features.
 
 The `cray capmc` command \(see `--help`\) can be used to control power to specific components by specifying the component NID, xname, or group.
 
