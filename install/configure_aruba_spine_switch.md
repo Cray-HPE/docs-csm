@@ -2,7 +2,7 @@
 
 This page describes how Aruba spine switches are configured and will show users how to validate configuration.
 
-Depending on the size of the Shasta system the spine switches will serve different purposes. On TDS systems, the NCNs will plug directly into the spine switches, on larger systems with spineregation switches, the spine switches will provide connection between the spineregation switches.
+Depending on the size of the Shasta system the spine switches will serve different purposes. On TDS systems, the NCNs will plug directly into the spine switches, on larger systems with aggregation switches, the spine switches will provide connection between the aggregation switches.
 
 Switch Models used
 JL635A Aruba 8325-48Y8C and JL636A Aruba 8325-32C
@@ -243,7 +243,7 @@ The VLAN information is located in the network YAML files. Below are examples.
    ```
 
 ## Configure Uplink
-The uplink ports are the ports connecting the spine switches to the downstream switches, these switches can be spineregation, leaf, or spine switches.
+The uplink ports are the ports connecting the spine switches to the downstream switches, these switches can be aggregation, leaf, or spine switches.
 
 1. Create the LAG.
    ```
@@ -266,10 +266,9 @@ The uplink ports are the ports connecting the spine switches to the downstream s
        lag 1
        exit
    ```
-   
 ## Configure ACL
 
-These ACLs are designed to block traffic from the node management network to and from the hardware management network and restrict management access to the hardware management network.
+These ACLs are designed to block traffic from the node management network to and from the hardware management network.
 
 1. The first step is to create the access list, once it is created we have to apply it to a VLAN.
 
@@ -288,47 +287,18 @@ These ACLs are designed to block traffic from the node management network to and
        90 permit any any any
    ```
 
-1. Apply ACL to a VLANs.
+1. Apply ACL to a VLANs
    ```
    sw-spine-001 & sw-spine-002 (config)#
        vlan 2
+       name RVR_NMN
        apply access-list ip nmn-hmn in
        apply access-list ip nmn-hmn out
        vlan 4
-       apply access-list ip nmn-hmn in
-       apply access-list ip nmn-hmn out
-       vlan 2000
-       apply access-list ip nmn-hmn in
-       apply access-list ip nmn-hmn out
-       vlan 3000
+       name RVR_HMN
        apply access-list ip nmn-hmn in
        apply access-list ip nmn-hmn out
    ```
-
-Control plane ACL
-- This restricts management traffic to the HMN.
-
-   ```
-   sw-spine-001 & sw-spine-002 (config)#
-    access-list ip mgmt
-    05 comment ALLOW SSH, HTTPS, AND SNMP ON HMN SUBNET
-    10 permit tcp 10.254.0.0/17 any eq 22
-    20 permit tcp 10.254.0.0/17 any eq 443
-    30 permit udp 10.254.0.0/17 any eq 161
-    40 permit udp 10.254.0.0/17 any eq 162
-    45 comment ALLOW SNMP FROM HMN METALLB SUBNET
-    50 permit udp 10.94.100.0/24 any eq 161
-    60 permit udp 10.94.100.0/24 any eq 162
-    65 comment BLOCK SSH, HTTPS, AND SNMP FROM EVERYWHERE ELSE
-    70 deny tcp any any eq 22
-    80 deny tcp any any eq 443
-    90 deny udp any any eq 161
-    100 deny udp any any eq 162
-    105 comment ALLOW ANYTHING ELSE
-    110 permit any any any
-    apply access-list ip mgmt control-plane vrf default
-```
-
 ## Configure Spanning-tree
 
 1. The following config is applied to Aruba spine switches.
