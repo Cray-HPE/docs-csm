@@ -203,8 +203,9 @@ report `FAIL` when uploading duplicate assets. This is ok as long as
    ```
 
 1. Confirm the local tar file `vcs.tar` was created. It contains the Git
-   repository data. Once [`upgrade.sh`](#upgrade-services) is run, the git data
-   will not be recoverable if this step failed.
+   repository data and will be needed in the restore step. Once
+   [`upgrade.sh`](#upgrade-services) is run, the git data will not be
+   recoverable if this step failed.
 
 1. If `vcs.tar` was successfully created, run `vcs-prep.sh`. This will force
    the PVC into the correct state for the upgrade if necessary.
@@ -368,7 +369,10 @@ should resolve itself once the workload manager product is installed.
 <a name="restore-vcs-content"></a>
 ## Restore VCS Content
 
-1. Run the `vcs-restore.sh` script to restore all VCS content.
+1. Run the `vcs-restore.sh` script to restore all VCS content.  This should be
+   run from the same directory that `vcs-backup.sh` was run from so that the tar
+   file can be located.  If successful, this script will list the data files
+   that have been restored.
 
    ```bash
    ncn-m001# "${CSM_SCRIPTDIR}/vcs-restore.sh"
