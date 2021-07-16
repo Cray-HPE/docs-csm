@@ -199,6 +199,8 @@ ncn-w001# kubectl logs "${POSTGRESQL}-2" -n ${NAMESPACE} -c postgres | grep -i e
 error: could not get write-ahead log end position from server: ERROR:  invalid segment number
 ```
 
+13. In order to persist any Postgres PVC storage volume size changes, it is necessary that this change also be made to the customer-managed customizations.yaml file. See the Postgres PVC Resize information in the [Post Install Customizations](../Post_Install_Customizations.md#postgres_pvc_resize).
+
 <a name="dump"></a>
 ### Dump the data
 
