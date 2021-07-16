@@ -29,7 +29,7 @@ Another option when compute nodes are booted is to download their rootfs into RA
 
     -   **<transport\>**
 
-        Filesystem network transport \(For example, NFS and DVS\).
+        File system network transport \(For example, NFS and DVS\).
 
         Can be left as an empty string to use the default value dvs.
 
@@ -57,7 +57,7 @@ Another option when compute nodes are booted is to download their rootfs into RA
 
     -   **<ramroot\>**
 
-        Indicates that the specified S3 path should be copied to RAM \(tmpfs\) and mounted locally instead of persisting as a remote filesystem mount.
+        Indicates that the specified S3 path should be copied to RAM \(tmpfs\) and mounted locally instead of persisting as a remote file system mount.
 
         Can be left empty. Any string except "0" is interpreted as True.
 

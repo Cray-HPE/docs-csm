@@ -2,7 +2,7 @@
 
 Use the Keycloak UI or Keycloak REST API to remove the LDAP user federation from Keycloak.
 
-Removing user federation is useful if the LDAP server was decommissioned or if the administrator would like to make changes to the Keycloak configuration using the  Keycloak user localization tool.
+Removing user federation is useful if the LDAP server was decommissioned or if the administrator would like to make changes to the Keycloak configuration using the Keycloak user localization tool.
 
 ### Prerequisites
 

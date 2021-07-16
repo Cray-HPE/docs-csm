@@ -160,8 +160,8 @@ Upgrade sets of compute nodes with the Compute Rolling Upgrade Service \(CRUS\) 
    * [CRUS Workflow](compute_rolling_upgrades/CRUS_Workflow.md)
    * [Upgrade Compute Nodes with CRUS](compute_rolling_upgrades/Upgrade_Compute_Nodes_with_CRUS.md)
    * [Troubleshoot Nodes Failing to Upgrade in a CRUS Session](compute_rolling_upgrades/Troubleshoot_Nodes_Failing_to_Upgrade_in_a_CRUS_Session.md)
-   * [Troubleshoot a Failed CRUS Session Due to Unmet Conditions](compute_rolling_upgrades/Troubleshoot_a_Failed_CRUS_Session_Due_to_Unmet_Conditions.md)
-   * [Troubleshoot a Failed CRUS Session Due to Bad Parameters](compute_rolling_upgrades/Troubleshoot_a_Failed_CRUS_Session_Due_to_Bad_Parameters.md)
+   * [Troubleshoot a Failed CRUS Session Because of Unmet Conditions](compute_rolling_upgrades/Troubleshoot_a_Failed_CRUS_Session_Due_to_Unmet_Conditions.md)
+   * [Troubleshoot a Failed CRUS Session Because of Bad Parameters](compute_rolling_upgrades/Troubleshoot_a_Failed_CRUS_Session_Due_to_Bad_Parameters.md)
 
 <a name="configuration-management"></a>
 
@@ -278,7 +278,7 @@ The system management components are broken down into a series of micro-services
 
 ## Package Repository Management
 
-Repositories are added to  systems to extend the system functionality beyond what is initially delivered. The Sonatype Nexus Repository Manager is the primary method for repository management. Nexus hosts the Yum, Docker, raw, and Helm repositories for software and firmware content.
+Repositories are added to systems to extend the system functionality beyond what is initially delivered. The Sonatype Nexus Repository Manager is the primary method for repository management. Nexus hosts the Yum, Docker, raw, and Helm repositories for software and firmware content.
 
    * [Package Repository Management](package_repository_management/Package_Repository_Management.md)
    * [Package Repository Management with Nexus](package_repository_management/Package_Repository_Management_with_Nexus.md)

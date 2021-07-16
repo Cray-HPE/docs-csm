@@ -63,7 +63,7 @@ function upgrade_mds () {
   fsmap_in=$(ceph status -f json-pretty |jq '.fsmap.in')
   fsmap_up=$(ceph status -f json-pretty |jq '.fsmap.up')
   
-  echo "Checking to see if mds filesystem is healthy"
+  echo "Checking to see if mds file system is healthy"
   if [[ $fsmap_in -ne $fsmap_up ]]; then
     repair_cephfs
   fi

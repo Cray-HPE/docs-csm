@@ -265,5 +265,5 @@ For systems that include 4 aggregation switches the cabling will look like the f
 
 NOTE that there are a couple configurations possible for LAN0:
 * Existing Gigabyte systems on Dell and Mellanox network hardware will use the (existing) Dell leaf port.
-* Any Gigabyte system on Aruba network hardware will use a Aruba 6300 (for the 1Gb port).
+* Any Gigabyte system on Aruba network hardware will use an Aruba 6300 (for the 1Gb port).
 * Optionally a 10/25Gb card could be added in an Aruba hardware system to match the HPE UANs.

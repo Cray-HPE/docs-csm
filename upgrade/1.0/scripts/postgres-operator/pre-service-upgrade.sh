@@ -34,7 +34,7 @@ function pre_install_resize ()
     capacity_in_bytes=$( to_bytes "$capacity" )
     resize_capacity_in_bytes=$( to_bytes "$PGRESIZE" )
 
-    # If current pvc size is less then the chart resize value, then proceed to resize
+    # If current pvc size is less than the chart resize value, then proceed to resize
     if [ $capacity_in_bytes -lt $resize_capacity_in_bytes ]; then
       echo "Proceed with pre upgrade steps to resize the ${POSTGRESQL} cluster ${PGDATA} PVCs ${PGRESIZE}"
 

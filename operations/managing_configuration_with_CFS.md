@@ -17,7 +17,7 @@ services like DVS which require low-level compatibility between CNs and NCNs.
 
 Software product streams which include configuration content to be applied to the management nodes 
 may include those which configure management functionality, such as COS, SMA, and CSM,
-or optional functionality to enable user productivity with UAI, such as PE, Analytics, and filesystem
+or optional functionality to enable user productivity with UAI, such as PE, Analytics, and file system
 mounts like Lustre or SpectrumScale.
 
 For more detailed information see these topics in [Configuration Management](configuration_management/Configuration_Management.md)
@@ -134,7 +134,7 @@ time-limited vault signed public certificate along with its own key pair.
 ##### Passwordless SSH Use Cases
 Administrators can manage the implementation of passwordless SSH keypairs for Cray System Management
 (CSM) by using the provided keys, providing their own keys, or using their own solution for authentication. This
-section outlines common use cases for working with passwordless SSH and keys on a HPE Cray EX system.
+section outlines common use cases for working with passwordless SSH and keys on an HPE Cray EX system.
 
 The following use cases are covered in this section:
    * Provide Custom Keys
@@ -178,7 +178,7 @@ In this case, deleting the associated configmap and secrets will republish them.
 ###### Create a CFS Configuration for the Application of Passwordless SSH to NCNs
 
 It may be necessary to create or update a CFS configuration entry to apply changes to the NCN environment.
-Typically, this needs to be done for newly-installed HPE Cray EX product releases.
+Typically, this needs to be done for newly installed HPE Cray EX product releases.
 
 The following example creates a new CFS configuration with a single product configuration layer (csm-1.5.8).
 Multiple product configuration layers may be created later to apply multiple changes to a node at one time. 

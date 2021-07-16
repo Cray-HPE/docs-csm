@@ -181,7 +181,7 @@ sections, but there is also a general troubleshooting topic.
    should be validated. There are no exceptions to running the tests--all can be run now.  
    
       This CSM health validation can also be run at other points during the system lifecycle, such as when replacing
-      a management node, checking the health after a management node has rebooted due to a crash, as part of doing
+      a management node, checking the health after a management node has rebooted because of a crash, as part of doing
       a full system power down or power up, or after other types of system maintenance.  
    
       See [Validate CSM Health](../operations/validate_csm_health.md)

@@ -87,7 +87,7 @@ Later in the installation process the HPC Firmware Pack will be installed on the
 
    If any of the management nodes are booted with Linux, they have previous disk data on them which should be wiped.
 
-   1. **REQUIRED** For each management node, **excluding** ncn-m001, login and do a full wipe of the storage on the node. 
+   1. **REQUIRED** For each management node, **excluding** ncn-m001, log in and do a full wipe of the storage on the node. 
 
    See [full wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#full-wipe)
 
@@ -104,7 +104,7 @@ install).
       ```bash
       pit# export username=root
       pit# export IPMI_PASSWORD=changeme
-      pit# conman -q | grep mgmt | grep -v m001 | xargs -t -i  ipmitool -I lanplus -U $username -E -H {} power off
+      pit# conman -q | grep mgmt | grep -v m001 | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
          ```
 
    * Shutdown from **ncn-m001**

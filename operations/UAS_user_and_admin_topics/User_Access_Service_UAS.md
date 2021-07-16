@@ -10,7 +10,7 @@ The User Access Service \(UAS\) is a containerized service managed by Kubernetes
 
 Users launch a User Access Instance \(UAI\) using the cray command. Users can also transfer data between the Cray system and external systems using the UAI.
 
-When a user requests a new UAI, the UAS service returns status and connection information to the newly-created UAI. External access to UAS is routed through a node that hosts gateway services.
+When a user requests a new UAI, the UAS service returns status and connection information to the newly created UAI. External access to UAS is routed through a node that hosts gateway services.
 
 The timezone inside the UAI container matches the timezone on the host on which it is running, For example, if the timezone on the host is set to CDT, the UAIs on that host will also be set to CDT.
 

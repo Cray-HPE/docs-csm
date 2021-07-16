@@ -2,7 +2,7 @@
 
 Public Key Infrastructure \(PKI\) represents the algorithms, infrastructure, policies, and processes required to leverage applied public key cryptography methods for operational security use cases. The Rivest-Shamir-Adleman \(RSA\) and Elliptic-curve \(ECC\) are some example algorithm systems.
 
-The use of PKI for the  system is in the Transport Layer Security \(TLS\) protocol, which is the successor of the now deprecated Secure Sockets Layer \(SSL\). This is where trusted chains of Certificate Authorities \(CAs\) are used to authenticate the identity of servers, and sometimes clients \(for example, mutual TLS\) for relying parties. This chain of trust is anchored by a root CA and is used to make assertions that a particular public and private key pair belong to a given party by assigning a certificate for the party. This party is still required to prove they actually own the key material through enciphering, deciphering, and digital signature operations that require private keys that are not shared amongst parties. However, public keys are shared through certificates and are policy bound in that respect.
+The use of PKI for the system is in the Transport Layer Security \(TLS\) protocol, which is the successor of the now deprecated Secure Sockets Layer \(SSL\). This is where trusted chains of Certificate Authorities \(CAs\) are used to authenticate the identity of servers, and sometimes clients \(for example, mutual TLS\) for relying parties. This chain of trust is anchored by a root CA and is used to make assertions that a particular public and private key pair belong to a given party by assigning a certificate for the party. This party is still required to prove they actually own the key material through enciphering, deciphering, and digital signature operations that require private keys that are not shared amongst parties. However, public keys are shared through certificates and are policy bound in that respect.
 
 The PKI implementation for the system, post-installation, is made up of Kubernetes services \(illustrated in the "PKI Infrastructure" figure\). During installation, the platform can be directed to either generate certificate authorities \(CAs\), or a customer-supplied intermediate CA can be supplied. After installation, the CA material resides in a Kubernetes Secret, and ultimately in the Hashicorp Vault.
 
@@ -30,8 +30,8 @@ The following limitations exist within the PKI implementation:
 
         If a customer supplies a CA to the platform, and the CA is part of an expanded PKI trust realm, a compromise of platform CA material could be leveraged to compromise the broader environment through PKI APIs available on the system. Customers should consider this risk, and, if providing a CA is desired, maybe strictly limit the PKI trust realm established by the provided CA.
 
--   Abuse of  PKI APIs to Sign Malicious Products
-    -   Compromise of a  platform could lead to the generation of certificates for potentially malicious workloads.
+-   Abuse of PKI APIs to Sign Malicious Products
+    -   Compromise of a platform could lead to the generation of certificates for potentially malicious workloads.
 
         Current Hashicorp Vault policies that control legitimate signing activities are fairly broad in allowed certificate CSR properties. This is due largely to common name and SAN requirements for certificate workloads across the platform.
 

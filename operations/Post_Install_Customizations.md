@@ -37,7 +37,7 @@ pod: prometheus-cray-sysmgmt-health-promet-prometheus-0
 
 **For CPU Throttling:**
 
-Select the **CPU Throttling** drop down to see the CPU Throttling graph for the pod during the selected time (from the top right), and select the container (from the legends under the x axis).
+Select the **CPU Throttling** drop-down to see the CPU Throttling graph for the pod during the selected time (from the top right), and select the container (from the legends under the x axis).
 
 The presence of CPU throttling does not always indicate a problem, but if a service is being slow or experiencing latency issues, reviewing the graph and adjusting the resources.limits.cpu can be beneficial. If the pod is being throttled at or near 100% for any period of time, then adjustments are likely needed. If the service's response time is critical, then adjusting the pod's resources to greatly reduce or eliminate any CPU throttling may be required.  
 
@@ -45,7 +45,7 @@ The resources.requests.cpu are used by the Kubernetes scheduler to decide which 
 
 **For Memory Usage:**
 
-Select the **Memory Usage** drop down to see the Memory Usage graph for the pod during the selected time (from the top right), and select the container (from the legends under the x axis).
+Select the **Memory Usage** drop-down to see the Memory Usage graph for the pod during the selected time (from the top right), and select the container (from the legends under the x axis).
 
 From the Memory Usage graph for the container, determine the steady state memory usage. This is where the resources.requests.memory should be minimally set. But more importantly, determine the spike usage for the container and set the resources.limits.memory based on the spike values with some additional headroom.
 

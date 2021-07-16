@@ -12,7 +12,7 @@ There are several situations that will cause automatic configuration:
 
 * When rebooted, components that have the `cfs-state-reporter` package installed will register a null current configuration, resulting in a full configuration.
 * When a configuration is updated, all components with that desired configuration will automatically get updates for the layers of the configuration that have changed.
-* If a configuration is only partially applied due to a previous failed configuration session and the component has not exceeded its maximum retries, it will be configured with any layers of the configurations that have not yet been successfully applied.
+* If a configuration is only partially applied because of a previous failed configuration session and the component has not exceeded its maximum retries, it will be configured with any layers of the configurations that have not yet been successfully applied.
 * When a user manually resets the configuration state of a component, it will force reconfiguration without rebooting a node.
 * If a manual CFS session applies a version of a playbook that conflicts with the version in the desired configuration, CFS will re-apply the desired version after the manual session is completed.
 * Any other situation that causes the desired state to not match with the current state of a component will trigger automatic configuration. CFS only tracks the current state of components as they are configured by CFS sessions. It does not track configuration state created or modified by other tooling on the system.
@@ -105,7 +105,7 @@ In the event that a playbook is specified in the configuration that does not app
 }
 ```
 
-If a playbook exits early due to the Ansible any\_errors\_fatal setting, CFS will append \_incomplete to the commit field for all components that did not cause the failure. This situation would most likely occur only when using an Ansible linear playbook execution strategy.
+If a playbook exits early because of the Ansible any\_errors\_fatal setting, CFS will append \_incomplete to the commit field for all components that did not cause the failure. This situation would most likely occur only when using an Ansible linear playbook execution strategy.
 
 ```bash
 {
