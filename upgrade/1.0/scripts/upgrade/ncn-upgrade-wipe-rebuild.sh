@@ -31,7 +31,19 @@ if [[ $state_recorded == "0" ]]; then
         --initrd s3://ncn-images/k8s/${KUBERNETES_VERSION}/initrd \
         --limit $UPGRADE_XNAME
      fi
-    
+
+    record_state "${state_name}" ${upgrade_ncn}
+else
+    echo "====> ${state_name} has been completed"
+fi
+
+state_name="BSS_BACKUP_POST_UPDATE_PARAM"
+state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+
+    ./create-bss-etcd-backup.sh $upgrade_ncn
+
     record_state "${state_name}" ${upgrade_ncn}
 else
     echo "====> ${state_name} has been completed"
@@ -216,6 +228,18 @@ if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
 
     csi handoff bss-update-param --set metal.no-wipe=1 --limit $UPGRADE_XNAME
+    
+    record_state "${state_name}" ${upgrade_ncn}
+else
+    echo "====> ${state_name} has been completed"
+fi
+
+state_name="BSS_BACKUP_POST_SET_NO_WIPE"
+state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+
+    ./create-bss-etcd-backup.sh $upgrade_ncn
     
     record_state "${state_name}" ${upgrade_ncn}
 else

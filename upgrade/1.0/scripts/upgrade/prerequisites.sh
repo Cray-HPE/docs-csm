@@ -257,6 +257,18 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="BSS_PREREQUISITES_BACKUP"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+
+    ./create-bss-etcd-backup.sh prerequisites
+
+    record_state "${state_name}" $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="EXPORT_GLOBAL_ENV"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
