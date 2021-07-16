@@ -10,7 +10,7 @@ The generated S3 credentials will expire after one hour.
 
     1.  Obtain a JWT token.
 
-        See [Retrieve an Authentication Token](Retrieve_an_Authentication_Token.md) for more information.
+        See [Retrieve an Authentication Token](../security_and_authentication/Retrieve_an_Authentication_Token.md) for more information.
 
     2.  Generate temporary S3 credentials.
 

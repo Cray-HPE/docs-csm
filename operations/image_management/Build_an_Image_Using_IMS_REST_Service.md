@@ -286,7 +286,7 @@ The commands in this procedure must be run as the `root` user in this release.
 
     The `buildenv-sidecar` container determines if the Kiwi-NG build was successful or not.
 
-    -   If the Kiwi-NG build completed successfully, the image root, kernel and initrd artifacts are uploaded to the artifact repository.
+    -   If the Kiwi-NG build completed successfully, the image root, kernel, and initrd artifacts are uploaded to the artifact repository.
     -   If the Kiwi-NG build failed to complete successfully, an optional SSH Debug shell is enabled so the image build can be debugged.
     
     ```bash
@@ -522,7 +522,7 @@ The commands in this procedure must be run as the `root` user in this release.
     ncn# cray ims jobs delete $IMS_JOB_ID
     ```
 
-    Deleting the job record will delete the underlying Kubernetes job, service and config map that were created when the job record was submitted.
+    Deleting the job record will delete the underlying Kubernetes job, service, and config map that were created when the job record was submitted.
 
 
 Images built by IMS contain only the packages and settings that are referenced in the Kiwi-NG recipe used to build the image. The only exception is that IMS will dynamically install the system's root CA certificate to allow Zypper \(via Kiwi-NG\) to talk securely with the required Nexus RPM repositories. Images that are intended to be used to boot a CN or other node must be configured with DNS and other settings that enable the image to talk to vital  services. A base level of customization is provided by the default Ansible plays used by the Configuration Framework Service \(CFS\) to enable DNS resolution, which are typically run against an image after it is built by IMS.

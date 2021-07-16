@@ -44,7 +44,7 @@ This procedure explains both how to identify and modify the list of current UAI 
 
 7.  Exclude the appropriate NCNs from hosting UAIs by labeling those NCNs.
 
-    Site administrators may set uas=True, or any capitalization variant of that, for local book keeping purposes. Such a setting does **not** transform the node into a UAS host node. Any node that does not have a uas label value of either False, false or FALSE is a UAI host node.
+    Site administrators may set `uas=True`, or any capitalization variant of that, for local bookkeeping purposes. Such a setting does **not** transform the node into a UAS host node. Any node that does not have a `uas` label value of either `False`, `false`, or `FALSE` is a UAI host node.
 
     Therefore, removing the uas label from a node labeled uas=True does not take the node out of the list of UAI host nodes. The only way to prevent a non-master NCN from hosting UAIs is to explicitly set the uas label to False, false, or FALSE.
 

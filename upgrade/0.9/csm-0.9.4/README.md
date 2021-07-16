@@ -255,27 +255,27 @@ should resolve itself once the workload manager product is installed.
 
 > **`NOTE:`** For Gigabyte or Intel NCNs **skip this section**.
 
-1. Deploy the `set-bmc-ntp-dns.sh` script (and its helper script `make_api_call.py`) to each NCN:
+1. Deploy the `set-bmc-ntp-dns.sh` script (and its helper script `make_api_call.py`) to each NCN **except m001**:
 
    ```bash
-   ncn-m001# for h in $( grep ncn /etc/hosts | grep nmn | awk '{print $2}' ); do
+   ncn-m001# for h in $( grep ncn /etc/hosts | grep nmn | grep -v m001 | awk '{print $2}' ); do
       ssh $h "mkdir -p /opt/cray/ncn"
       scp "${CSM_SCRIPTDIR}/make_api_call.py" "${CSM_SCRIPTDIR}/set-bmc-ntp-dns.sh" root@$h:/opt/cray/ncn/
       ssh $h "chmod 755 /opt/cray/ncn/set-bmc-ntp-dns.sh"
    done
    ```
 
-1. Run the `/opt/cray/ncn/set-bmc-ntp-dns.sh` script on each NCN.
+1. Run the `/opt/cray/ncn/set-bmc-ntp-dns.sh` script on each NCN **except m001**.
 
    > Pass `-h` to see some examples and use the information below to run the
    > script.
 
-   > The following process can restoring NTP and DNS server values after a
-   > firmware is update to HPE NCNs. If you update the System ROM of a NCN, you
+   > The following process can restore NTP and DNS server values after a
+   > firmware update to HPE NCNs. If you update the System ROM of an NCN, you
    > will lose NTP and DNS server values. Correctly setting these also allows
    > FAS to function properly.
 
-   1. Determine HMN IP address for m001:
+   1. Determine the HMN IP address for m001:
       ```bash
       ncn# M001_HMN_IP=$(cat /etc/hosts | grep m001.hmn | awk '{print $1}')
       ncn# echo $M001_HMN_IP
@@ -291,11 +291,11 @@ should resolve itself once the workload manager product is installed.
       ```bash
       ncn# /opt/cray/ncn/set-bmc-ntp-dns.sh ilo -H $BMC -s
       ```
-   4. Disable DHCP and set the NTP servers to point toward time-hmn and ncn-m001. 
+   4. Disable DHCP and set the NTP servers to point toward `time-hmn` and `ncn-m001`. 
       ```bash
       ncn# /opt/cray/ncn/set-bmc-ntp-dns.sh ilo -H $BMC -S -N "time-hmn,$M001_HMN_IP" -n
       ```
-   5. Set the DNS server to point toward Unbound and ncn-m001.
+   5. Set the DNS server to point toward Unbound and `ncn-m001`.
       ```bash
       ncn# /opt/cray/ncn/set-bmc-ntp-dns.sh ilo -H $BMC -D "10.94.100.225,$M001_HMN_IP" -d
       ```
@@ -328,7 +328,7 @@ should resolve itself once the workload manager product is installed.
 
 1. Verify the zypper repository in nexus that contains the golang-github-prometheus-node_exporter
    RPM is enabled. Typically this is the SUSE-SLE-Module-Basesystem-15-SP1-x86_64-Updates repository.
-   If not enabled, enable it (or the repository in nexus that contains the rpm) on all storage nodes:
+   If not enabled, enable it (or the repository in nexus that contains the RPM) on all storage nodes:
 
    ```bash
    ncn-m001# for h in $( cat /etc/hosts | grep ncn-s | grep nmn | awk '{print $2}' ); do

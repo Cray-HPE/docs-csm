@@ -6,7 +6,7 @@ The use of PKI for the  system is in the Transport Layer Security \(TLS\) protoc
 
 The PKI implementation for the system, post-installation, is made up of Kubernetes services \(illustrated in the "PKI Infrastructure" figure\). During installation, the platform can be directed to either generate certificate authorities \(CAs\), or a customer-supplied intermediate CA can be supplied. After installation, the CA material resides in a Kubernetes Secret, and ultimately in the Hashicorp Vault.
 
-![](PKI_Infrastructure.png "PKI Infrastructure")
+![](../../img/operations/PKI_Infrastructure.png "PKI Infrastructure")
 
 Refer to [PKI Services](PKI_Services.md) in the ** for more information on the services in the figure above.
 

@@ -13,7 +13,7 @@ The HPE Cray EX system includes the following nodes:
 -   Nine or more non-compute nodes \(NCNs\) that host system services:
     -   `ncn-m001`, `ncn-m002`, and `ncn-m003` are configured as Kubernetes master nodes.
     -   `ncn-w001`, `ncn-w002`, and `ncn-w003` are configured as Kubernetes worker nodes. Every system contains three or more worker nodes.
-    -   `ncn-s001`, `ncn-s002` and `ncn-s003` for storage. Every system contains three or more utility storage node.
+    -   `ncn-s001`, `ncn-s002`, and `ncn-s003` for storage. Every system contains three or more utility storage node.
 -   Four or more compute nodes, starting at `nid000001`.
 
 

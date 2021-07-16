@@ -56,7 +56,7 @@ UAN boot images and a BOS session template have been created. See [Create UAN Bo
 
     If this occurs, repeat the BOS command.
 
-2.  Verify that the Day Zero patch was applied correctly during [Create UAN Boot Images](Create_UAN_Boot_Images.md). Skip this step if the patch has already been verified.
+2.  Verify that the Day Zero patch was applied correctly during [Create UAN Boot Images](../image_management/Create_UAN_Boot_Images.md). Skip this step if the patch has already been verified.
 
     1.  SSH into a newly-booted UAN.
 

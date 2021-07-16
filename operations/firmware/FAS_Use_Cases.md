@@ -573,7 +573,7 @@ Use `1` as the `target` to indicate `iLO 5`.
 
 Use `2` as the `target` to indicate `System ROM`.
 
-**IMPORTANT:** If updating the System ROM of an NCN, the NTP and DNS server values will be lost. Those values must be restored using the `set-bmc-ntp-dns.sh` script located in the */opt/cray* directory. Use the `-h` option to get a list of command line options required to restore the NTP and DNS values.
+**IMPORTANT:** If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored. For NCNs **other than m001** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script. Use the `-h` option to get a list of command line options required to restore the NTP and DNS values.
 
 
 ```json

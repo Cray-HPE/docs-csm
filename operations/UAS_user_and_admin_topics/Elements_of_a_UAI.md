@@ -17,7 +17,7 @@ This topic explains each of these attributes.
 
 ## UAI container image
 
-The container image for a UAI \(UAI image\), defines and provides the basic environment available to the user. This environment includes, among other things:
+The container image for a UAI \(UAI image\) defines and provides the basic environment available to the user. This environment includes, among other things:
 
 -   The operating system \(including version\)
 -   Preinstalled packages
@@ -66,7 +66,7 @@ UAI resource specifications have three configurable parameters:
 -   a request which is a JSON string describing a Kubernetes resource request
 -   an optional comment which is a free-form string containing any information an administrator might find useful about the resource specification.
 
-Resource specifications also contain a resource-id that is used for examining, updating or deleting the resource specification as well as linking the resource specification into a UAI class.
+Resource specifications also contain a resource-id that is used for examining, updating, or deleting the resource specification as well as linking the resource specification into a UAI class.
 
 Resource specifications configured in UAS contain resource requests, limits, or both, that can be associated with a UAI. Any resource request or limit that can be set up on a Kubernetes pod can be set up as a resource specification under UAS.
 

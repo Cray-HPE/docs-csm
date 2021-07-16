@@ -264,7 +264,7 @@ Pull these files into the current working directory:
    linux# cd /mnt/pitdata/prep
    ```
 
-   After gathering the files into this working directory, generate your configs:
+   After gathering the files into this working directory, generate your configurations:
 
 1. If doing a reinstall and have the `system_config.yaml` parameter file avail available, then generate the system configuration reusing this parameter file (see [avoiding parameters](../background/cray_site_init_files.md#save-file--avoiding-parameters)).
 
@@ -515,7 +515,7 @@ This will enable SSH, and other services when the LiveCD starts.
     kubernetes-0.0.6.squashfs-------------------------> /mnt/pitdata/data/k8s/...OK
     ```
 
-1. Copy ceph/storage artifacts:
+1. Copy Ceph/storage artifacts:
 
     ```bash
     linux# csi pit populate pitdata "${CSM_PATH}/images/storage-ceph/" /mnt/pitdata/data/ceph/ -kiC

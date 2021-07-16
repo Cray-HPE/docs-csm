@@ -11,7 +11,7 @@ lack of removable storage.
 [Prepare Configuration Payload](prepare_configuration_payload.md) for the relevant installation scenario.
 
 ### Topics:
-   * [Known Compatibility Issues](*known-compatibility-issues)
+   * [Known Compatibility Issues](#known-compatibility-issues)
    * [Attaching and Booting the LiveCD with the BMC](#attaching-and-booting-the-livecd-with-the-bmc)
    * [First Login](#first-login)
    * [Configure the Running LiveCD](#configure-the-running-livecd)
@@ -255,8 +255,8 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
    Some files are needed for generating the configuration payload. See these topics in [Prepare Configuration Payload](prepare_configuration_payload.md) if you have not already prepared the information for this system.
    
-      * [Command Line Configuration Payload](#command_line_configuration_payload)
-      * [Configuration Payload Files](#configuration_payload_files)
+      * [Command Line Configuration Payload](prepare_configuration_payload.md#command_line_configuration_payload)
+      * [Configuration Payload Files](prepare_configuration_payload.md#configuration_payload_files)
    
    Pull these files into the current working directory.
    - `application_node_config.yaml` (optional - see below)
@@ -280,7 +280,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       linux# cd /var/www/ephemeral/prep
       ```
    
-      After gathering the files into this working directory, generate your configs.
+      After gathering the files into this working directory, generate your configurations.
    
    1. If doing a reinstall and have the `system_config.yaml` parameter file avail available, then generate the system configuration reusing this parameter file (see [avoiding parameters](../background/cray_site_init_files.md#save-file--avoiding-parameters)).
    

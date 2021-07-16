@@ -6,9 +6,9 @@ Only non-compute nodes (NCNs) can upgrade firmware during a CSM install.
 Other devices, such as compute nodes or application nodes, have their upgrades managed by FAS
 once all CSM software and services have been installed.
 
-FAS tracks and performs actions (upgrade, downgrade, restore and create snapshots) on system firmware.
+FAS tracks and performs actions (upgrade, downgrade, restore, and create snapshots) on system firmware.
 FAS is a runtime service deployed in Kubernetes. Fresh installs use FAS for upgrading
-compute node and application node firmware. See [Firmware Action Service (FAS)](../operations/firmware/Firmware_Action_Service.md)
+compute node and application node firmware. See [Update Firmware with Firmware Action Service (FAS)](../operations/firmware/Update_Firmware_with_FAS.md)
 for more information.
 
 ### Topics 

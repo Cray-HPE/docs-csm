@@ -4,7 +4,7 @@ The System Layout Service \(SLS\) holds information about the system design, suc
 
 SLS stores a generalized abstraction of the system that other services can access. The Hardware State Manager \(HSM\) keeps track of information for hardware state or identifiers. SLS does not need to change as hardware within the system is replaced.
 
-Interaction with SLS is required if the system setup changes. For example, if system cabling is altered, or if the system is expanded or reduced. SLS does not interact with the hardware. Interaction with SLS should occur only during system installation, expansion and contraction.
+Interaction with SLS is required if the system setup changes. For example, if system cabling is altered, or if the system is expanded or reduced. SLS does not interact with the hardware. Interaction with SLS should occur only during system installation, expansion, and contraction.
 
 SLS is responsible for the following:
 

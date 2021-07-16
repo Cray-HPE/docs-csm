@@ -103,7 +103,7 @@ This procedure requires administrative privileges.
 
     Once all sessions are in an Established state, BGP reset is complete for the Mellanox switches.
 
-    **Troubleshooting:** If some sessions remain Idle, re-run the Mellanox reset steps to clear and re-check status. If some sessions still remain Idle, proceed to step [5](#step_kwt_qkv_r4b) to reapply the cray-metallb helm chart, along with the BGP reset to force the speaker pods to re-establish sessions with the switch.
+    **Troubleshooting:** If some sessions remain Idle, re-run the Mellanox reset steps to clear and re-check status. If some sessions still remain Idle, proceed to [reapply the cray-metallb helm chart](#reapply), along with the BGP reset, to force the speaker pods to re-establish sessions with the switch.
 
 #### Aruba
 
@@ -181,6 +181,7 @@ This procedure requires administrative privileges.
 
     **Troubleshooting:** If some sessions remain Idle, re-run the Aruba reset steps to clear and re-check status. If some sessions still remain Idle, proceed to the next step to reapply the cray-metallb helm chart, along with the BGP reset to force the speaker pods to re-establish sessions with the switch.
 
+<a name="reapply"></a>
 #### Re-apply the cray-metalb Helm Chart
 
 1.  Determine the cray-metallb chart version that is currently deployed.

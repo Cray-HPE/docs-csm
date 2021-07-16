@@ -24,6 +24,6 @@ The following figure shows a high-level overview of the various components used 
 * [Manage the DNS Unbound Resolver](Manage_the_DNS_Unbound_Resolver.md)
 * [Enable ncsd on UANS](Enable_ncsd_on_UANs.md)
 * [Troubleshoot Common DNS Issues](Troubleshoot_Common_DNS_Issues.md)
-* [Troubleshoot Services Needed by the DNS](Troubleshoot_Services_Needed_by_the_DNS_Unbound_Resolver.md)
+* [Troubleshoot DNS Configuration Issues](Troubleshoot_DNS_Configuration_Issues.md)
 
 

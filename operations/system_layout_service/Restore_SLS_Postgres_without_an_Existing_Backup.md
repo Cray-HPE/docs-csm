@@ -41,7 +41,7 @@ This procedure is intended to repopulate SLS in the event when no Postgres backu
 3. Any previously made customizations made to SLS will need to be applied again. This includes any SLS API operations that modified the state of SLS.
     - The HSN network in SLS will be missing HSN subnet data, this data will need to be repopulated again using the "Set up DNS for HSN IP addresses" procedure in the *Slingshot Operations Guide*.
 
-    - Any hardware that was added or moved in the system using one of the following procedures will need to be preformed again. 
+    - Any hardware that was added or moved in the system using one of the following procedures will need to be performed again. 
         - [Add a Standard Rack Node](../node_management/Add_a_Standard_Rack_Node.md)
         - [Move a Standard Rack Node Same Rack/Same HSN Ports](../node_management/Move_a_Standard_Rack_Node_SameRack_SameHSNPorts.md)
         - [Move a Standard Rack Node](../node_management/Move_a_Standard_Rack_Node.md)

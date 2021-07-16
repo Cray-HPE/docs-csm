@@ -78,14 +78,10 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
     
     ncn-m001# screen -x 26745.SAT-console-ncn-m003-mgmt
     ```
-
-    
 **VERIFY ACCESS TO LUSTRE FILESYSTEM**
 
 11. Verify that the Lustre file system is available from the management cluster.
     
-    
-
 **CHECK STATUS OF THE MANAGEMENT CLUSTER**
     
 12. If Ceph is frozen, use the following commands as workaround.
@@ -128,7 +124,7 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
         recovery: 3.6 MiB/s, 1 objects/s
     ```
 
-14. If Ceph does not recover and become healthy, refer to the [Restart Ceph Services](../utility_storage/Restart_Ceph_Services_via_Ansible.md) section.
+14. If Ceph does not recover and become healthy, refer to [Manage Ceph Services](../utility_storage/Manage_Ceph_Services.md).
 
     
 **START KUBERNETES \(k8s\)**
@@ -148,7 +144,7 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
     
     ```
 
-    The warning message will vary. In this example, it is POOL\_NO\_REDUNDANCY. See [Restart Ceph Services](../utility_storage/Restart_Ceph_Services_via_Ansible.md).
+    The warning message will vary. In this example, it is POOL\_NO\_REDUNDANCY. See [Manage Ceph Services](../utility_storage/Manage_Ceph_Services.md).
 
     From storage node ncn-s001, restart Ceph services.
 

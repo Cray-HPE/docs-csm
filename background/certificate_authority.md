@@ -68,7 +68,7 @@ spec:
 <a name="customize_platform_generated_ca"></a>
 ## Customize Platform Generated CA
 
-The ```platform_ca``` generator inputs can be customized, if desired. Notably, the ```root_days```, ```int_days```, ```root_cn``` and ```int_cn``` fields can be modified. While the shasta-cfg documentation on the use of generators supplies additional detail, the ```*_days``` settings control the validity period and the ```*_cn``` settings control the common name value for the resulting CA certificates. Ensure the Sealed Secret name reference in ```spec.kubernetes.services.cray-vault.sealedSecrets``` is updated if you opt to use a different name. 
+The ```platform_ca``` generator inputs can be customized, if desired. Notably, the ```root_days```, ```int_days```, ```root_cn```, and ```int_cn``` fields can be modified. While the shasta-cfg documentation on the use of generators supplies additional detail, the ```*_days``` settings control the validity period and the ```*_cn``` settings control the common name value for the resulting CA certificates. Ensure the Sealed Secret name reference in ```spec.kubernetes.services.cray-vault.sealedSecrets``` is updated if you opt to use a different name. 
 
 > Outside of a new installation, there is currently no supported method to rotate (change) the platform CA. Please set validity periods accordingly. The ability to rotate CAs is anticipated as part of a future release. 
 
