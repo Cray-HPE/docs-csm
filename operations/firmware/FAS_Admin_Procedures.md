@@ -94,7 +94,7 @@ To re-run the cray-fas-loader job:
 
 ### Override an Image for an Update
 
-If an update fails due to `"No Image available"`, it may be caused by FAS unable to match the data on the node to find an image in the image list.
+If an update fails because of `"No Image available"`, it may be caused by FAS unable to match the data on the node to find an image in the image list.
 
 ### Procedure
 

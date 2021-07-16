@@ -11,7 +11,7 @@ Vendor: Hewlett Packard Enterprise Company
 %description
 This package contains documentation about how to install or upgrade
 the Cray System Management (CSM) software and related supporting
-operational procedures to manage HPE Cray EX systems.  This documentation
+operational procedures to manage HPE Cray EX systems. This documentation
 is in Markdown format starting at /usr/share/doc/csm/README.md.
 
 %prep

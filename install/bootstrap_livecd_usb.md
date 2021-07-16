@@ -618,7 +618,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
    You can disconnect from the IPMI console by using the "~.", that is, the tilde character followed by a period character.
 
-   Login via `ssh` to the node as root.
+   Log in via `ssh` to the node as root.
 
    ```bash
    external# ssh root@${SYSTEM_NAME}-ncn-m001

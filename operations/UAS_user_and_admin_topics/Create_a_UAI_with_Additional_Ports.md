@@ -14,7 +14,7 @@ Displays when you mouse over the topic on the Cray Portal.
 
 -   **OBJECTIVE**
 
-    A option is available to expose UAI ports to the customer user network in addition to the the port used for SSH access. These ports are restricted to ports 80, 443, and 8888. This procedure allows a user or administrator to create a new UAI with these additional ports.
+    An option is available to expose UAI ports to the customer user network in addition to the the port used for SSH access. These ports are restricted to ports 80, 443, and 8888. This procedure allows a user or administrator to create a new UAI with these additional ports.
 
 -   **LIMITATIONS**
 

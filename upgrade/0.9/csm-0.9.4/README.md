@@ -404,7 +404,7 @@ properly after the upgrade:
 
 Other health checks may be run as desired.
 
-> **`CAUTION:`** The following HMS functional tests may fail due to locked
+> **`CAUTION:`** The following HMS functional tests may fail because of locked
 > components in HSM:
 >
 > 1. `test_bss_bootscript_ncn-functional_remote-functional.tavern.yaml`
@@ -428,7 +428,7 @@ Other health checks may be run as desired.
 >          - Key 'Locked' was not defined. Path: '/Components/12'.: Path: '/'>
 > ```
 >
-> Failures of these tests due to locked components as shown above can be safely
+> Failures of these tests because of locked components as shown above can be safely
 > ignored.
 
 **`NOTE:`** If you plan to do any further CSM health validation, you should follow the validation

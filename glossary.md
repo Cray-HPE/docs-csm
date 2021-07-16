@@ -55,7 +55,7 @@ liquid cooling and then enables the DC rectifiers so that a chassis can be power
 CEC does not provide a REST endpoint on SMNet, it simply provides the cabinet
 environmental and CDU status to the CMM for evaluation or action; the CEC takes no
 action. The CEC firmware is flashed automatically when the CMM firmware is flashed. If
-there are momentary erroneous signals due to a CEC reset or cable disconnection, the
+there are momentary erroneous signals because of a CEC reset or cable disconnection, the
 system can ride through these events without issuing an EPO.
 
 ### Chassis Management Module (CMM)
@@ -286,7 +286,7 @@ cluster and Kubernetes container orchestration.
 Manual coolant supply and return shutoff valves at the top of each cabinet can be closed to
 isolate a single cabinet from the other cabinets in the cooling group for maintenance. If the
 valves are closed during operation, the action automatically causes the CMMs to remove
-±190VDC from each chassis in the cabinet due to the loss of coolant pressure.
+±190VDC from each chassis in the cabinet because of the loss of coolant pressure.
 
 ### System Management Services (SMS)
 

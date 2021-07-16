@@ -45,7 +45,7 @@ This procedure requires administrative privileges and will require at least two 
         client:   1.7 KiB/s rd, 12 MiB/s wr, 1 op/s rd, 1.32k op/s wr
     ```
 
-1. In the second window, log into ncn-s00(1/2/3) or a ncn-m node and fail over the mgr process.
+1. In the second window, log into ncn-s00(1/2/3) or an ncn-m node and fail over the mgr process.
     1. There is an issue where orchestration tasks can get hung up and the failover will clear that up.
 
     ```bash

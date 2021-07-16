@@ -51,7 +51,7 @@ linux# csi config init
 .
 .
      --can-cidr 10.102.5.0/26 
-     --can-gateway  10.102.5.27 
+     --can-gateway 10.102.5.27 
      --can-static-pool 10.102.5.28/30 
      --can-dynamic-pool 10.102.5.32/27
 .

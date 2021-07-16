@@ -32,7 +32,7 @@ The Kubernetes cluster on master nodes is being rebuilt.
 
 2.  Configure the S3 client credentials.
 
-    The first NCN master node in a  deployment contains a couple of helper scripts related to backup and restore. Use the values from the previous step to update the credentials.json file in the /opt/cray/platform/utils/s3 directory.
+    The first NCN master node in a deployment contains a couple of helper scripts related to backup and restore. Use the values from the previous step to update the credentials.json file in the /opt/cray/platform/utils/s3 directory.
 
     ```bash
     ncn# cd /opt/cray/platform-utils/s3

@@ -1,6 +1,6 @@
 ## HashiCorp Vault
 
-A deployment of Hashicorp Vault, managed via the Bitnami Bank-vaults operator, stores private and public Certificate Authority \(CA\) material, and serves APIs through a PKI engine instance. This instance also serves as a general secrets engine for the  system.
+A deployment of Hashicorp Vault, managed via the Bitnami Bank-vaults operator, stores private and public Certificate Authority \(CA\) material, and serves APIs through a PKI engine instance. This instance also serves as a general secrets engine for the system.
 
 Kubernetes service account authorization is utilized to authenticate access to Vault. The configuration of Vault, as deployed on the system, can be viewed with the following command:
 
@@ -23,7 +23,7 @@ Prior to release 1.4, Vault used etcd as a high-availability \(HA\) storage back
 
 ### Unseal Keys
 
-Vault requires unseal keys for start-up. If the unseal keys are not present, or are incorrect, Vault \(by design\) will not start. Unseal keys are stored in the `cray-vault-unseal-keys` Kubernetes Secret on a  system, which is inside the `vault` namespace.
+Vault requires unseal keys for start-up. If the unseal keys are not present, or are incorrect, Vault \(by design\) will not start. Unseal keys are stored in the `cray-vault-unseal-keys` Kubernetes Secret on a system, which is inside the `vault` namespace.
 
 ### Admin Access
 

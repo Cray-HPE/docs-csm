@@ -49,7 +49,7 @@ The previous step updated `ncn_metadata.csv` with the BMC MAC Addresses so sever
    pit# cat ncn_metadata.csv
    ```
 
-1. Remove the incorrectly-generated configs. Before deleting the incorrectly-generated configs consider
+1. Remove the incorrectly generated configs. Before deleting the incorrectly generated configs consider
 making a backup of them, in case they need to be examined at a later time.
 
    > **`WARNING`** Ensure that the `SYSTEM_NAME` environment variable is correctly set.
@@ -226,7 +226,7 @@ so several earlier steps need to be repeated.
    pit# cat ncn_metadata.csv
    ```
 
-1. Remove the incorrectly-generated configs. Before deleting the incorrectly-generated configs consider
+1. Remove the incorrectly generated configs. Before deleting the incorrectly generated configs consider
 making a backup of them, in case they need to be examined at a later time.
 
    > **`WARNING`** Ensure that the `SYSTEM_NAME` environment variable is correctly set.

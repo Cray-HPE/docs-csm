@@ -253,7 +253,7 @@ Firmware is located on the LiveCD (versions 1.4.6 or higher).
          https://127.0.0.1:12443
          https://127.0.0.1:13443
 
-   1. Login with the default credentials.
+   1. Log in with the default credentials.
    2. On the _Left_, select "Firmware & OS Software"
    3. On the _Right_, select "Upload Firmware"
    4. Select "Remote File" and "Confirm TPM override", and then choose your firmware file:
@@ -339,7 +339,7 @@ For Gigabyte upgrades a tftp server needs to be referred to.
          https://127.0.0.1:12443
          https://127.0.0.1:13443
 
-   1. Login with the default credentials.
+   1. Log in with the default credentials.
    2. On the _Left_, select "Maintenance"
    3. In the new pane, select "Firmware Image Location"
       ![Screen Shot of Gigabyte Maintenance Window](../img/fw-gb-2.png)

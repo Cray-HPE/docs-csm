@@ -190,7 +190,7 @@ done
 > BootOrder: 000E,0014,0011,0012
 > ```
 
-After following the twp-steps on a given NCN, that NCN will now use the desired Shasta boot order.
+After following the two steps on a given NCN, that NCN will now use the desired Shasta boot order.
 
 <a name="trimming_boot_order"></a>
 #### Trimming Boot Order

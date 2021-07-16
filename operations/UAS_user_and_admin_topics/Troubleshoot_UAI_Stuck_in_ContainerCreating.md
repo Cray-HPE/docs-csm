@@ -14,7 +14,7 @@ Instructions for admin to resovle issue when a UAI is stuck in the ContainerCrea
 
 -   **OBJECTIVE**
 
-    Resolve issue causing a new UAI to be stuck in the `ContainerCreating`. This issue may occur due to an error with Macvlan showing no available IPs
+    Resolve issue causing a new UAI to be stuck in the `ContainerCreating`. This issue may occur because of an error with Macvlan showing no available IPs
 
     **Attention:** There is a hard limit to how many IP addresses \(and as a result UAIs\) are available on a node. If this limit is reached, the Macvlan error is valid. The UAI will be stay in the `ContainerCreating` status until an IP becomes available. However, if the admin knows there are available IPs and the error code still occurs, follow the steps below.
 

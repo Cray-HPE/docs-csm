@@ -30,7 +30,7 @@ etag = ""
 ...
 ```
 
-Deleting an IMS image can create a situation where boot artifacts referenced by a Boot Orchestration Service \(BOS\) session template no longer exist, making that template unable to boot. Previously, to recover from this situation, an admin would have had to rebuild the boot image using IMS and/or reinstall the prebuilt image from the  installer, reapply any Cray and site customizations, and recreate a new BOS template for the IMS image.
+Deleting an IMS image can create a situation where boot artifacts referenced by a Boot Orchestration Service \(BOS\) session template no longer exist, making that template unable to boot. Previously, to recover from this situation, an admin would have had to rebuild the boot image using IMS and/or reinstall the prebuilt image from the installer, reapply any Cray and site customizations, and recreate a new BOS template for the IMS image.
 
 New functionality has been added to IMS to enable admins to soft delete, recover \(undelete\), or hard delete public-keys, recipes, and images. The added functionality provides a way to recover IMS items that were mistakenly deleted. There is no undelete operation for IMS Jobs.
 
@@ -44,7 +44,7 @@ Soft deleting an IMS public key, recipe, or image removes the record\(s\) from t
 
 Deleting an IMS public-key, recipe, or image record performs the following actions:
 
-1.  The IMS record\(s\) being deleted are moved from the collection of available items to a new deleted collection. Any newly-created records within the deleted collection will have the same IMS ID value as it did before being moved there.
+1.  The IMS record\(s\) being deleted are moved from the collection of available items to a new deleted collection. Any newly created records within the deleted collection will have the same IMS ID value as it did before being moved there.
 2.  Any Simple Storage Service \(S3\) artifacts that are associated with the record or records being deleted are renamed within their S3 buckets so as to make them unavailable under their original key name.
 
 #### Prerequisites

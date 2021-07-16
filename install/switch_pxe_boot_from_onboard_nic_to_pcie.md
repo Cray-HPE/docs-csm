@@ -133,7 +133,7 @@ may shutdown the switchport as well.
 If you can remove the physical connection, this is preferred and can be done so after enabling PXE on
 the PCIe cards.
 
-If you want to disable the connection, you will need to login to your respective leaf switch.
+If you want to disable the connection, you will need to log in to your respective leaf switch.
 
 1. Connect to the leaf switch using serial or SSH connections.
 

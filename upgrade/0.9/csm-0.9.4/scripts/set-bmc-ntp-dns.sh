@@ -122,10 +122,10 @@ usage() {
 #/       Checking the datetime on all NCN BMCs:
 #/          for i in ncn-m00{2..3} ncn-{w,s}00{1..3}; do echo "------$i--------"; ssh $i 'export USERNAME=root; export IPMI_PASSWORD=password; /set-bmc-ntp-dns.sh gb -t'; done
 #/
-#/       Check the current timezone on a NCN BMC (iLO only):
+#/       Check the current timezone on an NCN BMC (iLO only):
 #/          set-bmc-ntp-dns.sh ilo -z
 #/
-#/       Set the timezone on a NCN BMC (iLO only):
+#/       Set the timezone on an NCN BMC (iLO only):
 #/          curl https://$HOSTNAME-mgmt/redfish/v1/Managers/1/DateTime --insecure -u $USERNAME:$IPMI_PASSWORD -L | jq .TimeZoneList
 #/          # Pick a desired timezone index number
 #/          set-bmc-ntp-dns.sh ilo -Z 7

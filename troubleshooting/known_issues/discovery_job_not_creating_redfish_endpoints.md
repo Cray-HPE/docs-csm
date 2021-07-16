@@ -9,7 +9,7 @@ This troubleshooting procedure is only applicable for Air Cooled NodeBMCs and Ro
 - Only applicable to an Air Cooled NodeBMC or RouterBMC.
 
 ## Symptoms
-- The MAC address for the BMC in HSM has a IP and component id.
+- The MAC address for the BMC in HSM has an IP and component id.
 - The BMC is pingable.
 - There is no RedfishEndpoint for the BMC in HSM.
 
@@ -44,7 +44,7 @@ This troubleshooting procedure is only applicable for Air Cooled NodeBMCs and Ro
     IPAddresses = []
     ```
 
-    Now set a environment variable to store the MAC address of the BMC that has an IP address:
+    Now set an environment variable to store the MAC address of the BMC that has an IP address:
     > Make sure to use the normalized MAC address from the `ID` field.
     ```bash
     ncn# export BMC_MAC=54802852b706

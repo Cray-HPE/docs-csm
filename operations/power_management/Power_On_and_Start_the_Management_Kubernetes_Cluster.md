@@ -78,7 +78,7 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
     
     ncn-m001# screen -x 26745.SAT-console-ncn-m003-mgmt
     ```
-**VERIFY ACCESS TO LUSTRE FILESYSTEM**
+**VERIFY ACCESS TO LUSTRE FILE SYSTEM**
 
 11. Verify that the Lustre file system is available from the management cluster.
     

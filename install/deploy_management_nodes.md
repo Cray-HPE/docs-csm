@@ -218,7 +218,7 @@ proceed to step 2.
       >
       > For HPE NCNs the date configuration menu can be found at the following path: `System Configuration -> BIOS/Platform Configuration (RBSU) -> Date and Time`
       >
-      > Alternatively for HPE NCNs you can login to the BMC's web interface and access the HTML5 console for the node to interact with the graphical BIOS.
+      > Alternatively for HPE NCNs you can log in to the BMC's web interface and access the HTML5 console for the node to interact with the graphical BIOS.
       > From the administrators own machine create a SSH tunnel (-L creates the tunnel, and -N prevents a shell and stubs the connection):
       >
       > ```bash

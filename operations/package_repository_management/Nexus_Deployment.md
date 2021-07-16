@@ -42,7 +42,7 @@ replicaset.apps/nexus-55d8c77547   1         1         1       19dd
 
 The `cray-precache-images` DaemonSet is used to keep select container images resident in the image cache on each worker node to ensure Nexus resiliency. It is deployed as a critical platform component prior to Nexus.
 
-**Warning:** The `cray-nexus` chart deploys Nexus with a single replica and the corresponding `nexus-data` PVC with `RWX` access mode. Nexus should **NEVER** be scaled to more than one replica; otherwise, the instance data in `nexus-data` PV will most likely be corrupted. Using `RWX` access mode enables Nexus to quickly restart on another worker node in the event of a node failure and avoid additional delay due to volume multi-attach errors.
+**Warning:** The `cray-nexus` chart deploys Nexus with a single replica and the corresponding `nexus-data` PVC with `RWX` access mode. Nexus should **NEVER** be scaled to more than one replica; otherwise, the instance data in `nexus-data` PV will most likely be corrupted. Using `RWX` access mode enables Nexus to quickly restart on another worker node in the event of a node failure and avoid additional delay because of volume multi-attach errors.
 
 ### Bootstrap Registry
 

@@ -63,7 +63,7 @@ New admin and user accounts are authenticated with Keycloak. Authenticated accou
 
     -   Ensure that the new user is listed under **Manage Users** on the **Administration Console** page.
     -   Retrieve a token for the user.
-    -   Login to the Keycloak `Shasta` realm as the new user, which would verify the account's validity and allow the user to reset their password. This functionally is supported for internal Keycloak accounts only.
+    -   Log in to the Keycloak `Shasta` realm as the new user, which would verify the account's validity and allow the user to reset their password. This functionally is supported for internal Keycloak accounts only.
 
 12. Verify that the new local Keycloak account can authenticate to the Cray CLI.
 

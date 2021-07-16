@@ -1,6 +1,6 @@
 ## About Postgres
 
-The  system uses PostgreSQL \(known as Postgres\) as a database solution. Postgres databases use SQL language to store and manage databases on the system.
+The system uses PostgreSQL \(known as Postgres\) as a database solution. Postgres databases use SQL language to store and manage databases on the system.
 
 To learn more about Postgres, see [https://www.postgresql.org/docs/](https://www.postgresql.org/docs/).
 

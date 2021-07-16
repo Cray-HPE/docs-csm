@@ -22,7 +22,7 @@ The system is fully installed.
     https://nexus.{{network.dns.external}}/
     ```
 
-    Users will be redirected to Keycloak to login, and based on the default OPA policy, only admin users will be authorized. Scripts may connect by first obtaining a JWT token from Keycloak and passing it in the HTTP Authorization header.
+    Users will be redirected to Keycloak to log in, and based on the default OPA policy, only admin users will be authorized. Scripts may connect by first obtaining a JWT token from Keycloak and passing it in the HTTP Authorization header.
 
     ![Nexus Web UI](../../img/operations/Nexus_Web_UI.png "Nexus Web UI")
 
@@ -52,7 +52,7 @@ The system is fully installed.
 
     The new task will now be available on the main Tasks page.
 
-6.  Click on the newly-created task.
+6.  Click on the newly created task.
 
     ![New Task on Task Page](../../img/operations/Nexus_New_Task.png "New Task on Task Page")
 
