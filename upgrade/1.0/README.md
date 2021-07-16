@@ -217,6 +217,7 @@ On each master node in the cluster, run the following command to complete the Ku
 ```bash
 ncn-m# kubeadm upgrade apply v1.19.9 -y
 ```
+> NOTE: kubelet has been upgrade already so you can ignore the warning to upgrade kubelet
 
 <a name="deploy-manifests"></a>
 ### Stage 4. - CSM Service Upgrades
