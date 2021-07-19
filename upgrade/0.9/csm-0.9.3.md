@@ -304,12 +304,59 @@ the `Init` state. This situation is benign and should resolve itself once the wo
 <a name="upgrade-ncn-packages"></a>
 ## Upgrade NCN Packages
 
-Upgrade CSM packages on NCNs:
+Upgrade CSM packages on NCNs.
 
-```bash
-ncn-m001# pdsh -w $(./lib/list-ncns.sh | paste -sd,) "zypper ar -fG https://packages.local/repository/csm-sle-15sp2/ csm-sle-15sp2 && zypper up -y"
-```
+1. Get the list of NCNs:
 
+   ```bash
+   ncn-m001# ncns="$(./lib/list-ncns.sh | paste -sd,)"
+   ```
+
+1. Use `zypper ms -d` to **disable** the following zypper RIS services that
+   configure repositories external to the system:
+
+   - `Basesystem_Module_15_SP2_x86_64`
+   - `Public_Cloud_Module_15_SP2_x86_64`
+   - `SUSE_Linux_Enterprise_Server_15_SP2_x86_64`
+   - `Server_Applications_Module_15_SP2_x86_64`
+
+   ```bash
+   ncn-m001# pdsh -w "$ncns" 'zypper ms -d Basesystem_Module_15_SP2_x86_64'
+   ncn-m001# pdsh -w "$ncns" 'zypper ms -d Public_Cloud_Module_15_SP2_x86_64'
+   ncn-m001# pdsh -w "$ncns" 'zypper ms -d SUSE_Linux_Enterprise_Server_15_SP2_x86_64'
+   ncn-m001# pdsh -w "$ncns" 'zypper ms -d Server_Applications_Module_15_SP2_x86_64'
+   ```
+
+   > **`NOTE`**: Field notice _FN #6615a - Shasta V1.4 & V1.4.1 Install Issue
+   > with NCN Personalization for SMA_ included similar guidance as below. If
+   > these zypper services have been previously disabled, verify that they are
+   > in fact disabled:
+   >
+   > ```bash
+   > ncn-m001# pdsh -w "$ncns" 'zypper ls -u'
+   > ```
+
+1. Ensure the `csm-sle-15sp2` repository is configured on every NCN:
+
+   ```bash
+   ncn-m001# pdsh -w "$ncns" 'zypper ar -fG https://packages.local/repository/csm-sle-15sp2/ csm-sle-15sp2'
+   ```
+
+   > **`WARNING`**: If the `csm-sle-15sp2` repository is already configured on a
+   > node `zypper ar` will error with e.g.:
+   >
+   > ```
+   > Adding repository 'csm-sle-15sp2' [...error]
+   > Repository named 'csm-sle-15sp2' already exists. Please use another alias.
+   > ```
+   >
+   > These errors may be ignored.
+
+1. Use `zypper up` on each NCN to upgrade installed packages:
+
+   ```bash
+   ncn-m001# pdsh -w "$ncns" 'zypper up -y'
+   ```
 
 <a name="enable-psp"></a>
 ## Enable PodSecurityPolicy
@@ -345,7 +392,6 @@ ncn-m001# pdsh -w $(./lib/list-ncns.sh | paste -sd,) "echo 'install libiscsi /bi
 If your Shasta system is using CDU switches you will need to update the configuration going to the CMMs.
 
 - This **requires** updated CMM firmware. (version 1.4.20) `See v1.4 Admin Guide for details on updating CMM firmware`
-- This **requires** updated Aruba firmware on CDU switch pairs only. (version 10.06.011) `See below for the Aruba firmware upgrade process.`
 - A static LAG will be configured on the CDU switches.
 - The CDU switches have two cables (10Gb RJ45) connecting to each CMM.
 - This configuration offers increased throughput and redundancy.
