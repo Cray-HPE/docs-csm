@@ -369,9 +369,9 @@ should resolve itself once the workload manager product is installed.
 <a name="restore-vcs-content"></a>
 ## Restore VCS Content
 
-1. Run the `vcs-restore.sh` script to restore all VCS content.  This should be
+1. Run the `vcs-restore.sh` script to restore all VCS content. This should be
    run from the same directory that `vcs-backup.sh` was run from so that the tar
-   file can be located.  If successful, this script will list the data files
+   file can be located. If successful, this script will list the data files
    that have been restored.
 
    ```bash
