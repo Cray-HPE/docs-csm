@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "The following deployments are cephfs clients and will be unavailable during initial ceph upgrade:"
+echo "The following deployments are cephfs clients and will be unavailable during initial Ceph upgrade:"
 echo ""
 
 client_list=$(kubectl get pvc -A -o json | jq -r '.items[] | select(.spec.storageClassName=="ceph-cephfs-external") | .metadata.namespace, .metadata.name')
