@@ -298,7 +298,7 @@ ncn-m001# pdsh -w $(./lib/list-ncns.sh | grep ncn-w | paste -sd,) "echo kernel.p
     ```
 
 **Note**: If you have not already installed the workload manager product including slurm and munge, then the `cray-crus` pod is
-expected to be in the `Init` state. After running `ugrade.sh`, you may observe there are now *two* copies of the `cray-crus` pod in
+expected to be in the `Init` state. After running `upgrade.sh`, you may observe there are now *two* copies of the `cray-crus` pod in
 the `Init` state. This situation is benign and should resolve itself once the workload manager product is installed.
 
 <a name="upgrade-ncn-packages"></a>
@@ -399,7 +399,7 @@ If your Shasta system is using CDU switches you will need to update the configur
 
 ### Aruba CDU switch configuration.
 This configuration is identical across CDU VSX pairs.
-The VLANS used here are generated from CSI.
+The VLANs used here are generated from CSI.
 ```
 sw-cdu-001(config)# int lag 2 multi-chassis static
 sw-cdu-001(config-lag-if)# no shutdown
@@ -419,7 +419,7 @@ sw-cdu-001(config-if)# exit
 
 Dell CDU switch configuration.
 This configuration is identical across CDU VLT pairs.
-The VLANS used here are generated from CSI.
+The VLANs used here are generated from CSI.
 ```
 interface port-channel1
  description CMM_CAB_1000
@@ -455,7 +455,7 @@ properly after the upgrade:
 
 Other health checks may be run as desired.
 
-> **`CAUTION:`** The following HMS functional tests may fail due to locked
+> **`CAUTION:`** The following HMS functional tests may fail because of locked
 > components in HSM:
 >
 > 1. `test_bss_bootscript_ncn-functional_remote-functional.tavern.yaml`
@@ -479,7 +479,7 @@ Other health checks may be run as desired.
 >          - Key 'Locked' was not defined. Path: '/Components/12'.: Path: '/'>
 > ```
 >
-> Failures of these tests due to locked components as shown above can be safely
+> Failures of these tests because of locked components as shown above can be safely
 > ignored.
 
 <a name="exit-typescript"></a>

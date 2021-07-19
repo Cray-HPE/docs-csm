@@ -122,10 +122,10 @@ usage() {
 #/       Checking the datetime on all NCN BMCs:
 #/          for i in ncn-m00{2..3} ncn-{w,s}00{1..3}; do echo "------$i--------"; ssh $i 'export USERNAME=root; export IPMI_PASSWORD=password; /set-bmc-ntp-dns.sh gb -t'; done
 #/
-#/       Check the current timezone on a NCN BMC (iLO only):
+#/       Check the current timezone on an NCN BMC (iLO only):
 #/          set-bmc-ntp-dns.sh ilo -z
 #/
-#/       Set the timezone on a NCN BMC (iLO only):
+#/       Set the timezone on an NCN BMC (iLO only):
 #/          curl https://$HOSTNAME-mgmt/redfish/v1/Managers/1/DateTime --insecure -u $USERNAME:$IPMI_PASSWORD -L | jq .TimeZoneList
 #/          # Pick a desired timezone index number
 #/          set-bmc-ntp-dns.sh ilo -Z 7
@@ -215,7 +215,7 @@ function set_bmc_timezone() {
   if [[ -z $TIMEZONE ]]; then
 
     echo "No timezone index provided."
-    echo "View available indicies at redfish/v1/Managers/${manager}/DateTime | jq .TimeZoneList"
+    echo "View available indices at redfish/v1/Managers/${manager}/DateTime | jq .TimeZoneList"
     exit 1
 
   else
@@ -449,7 +449,7 @@ function get_ci_ntp_servers() {
   fi
 
   if ! [ -f /var/lib/cloud/instance/user-data.txt ]; then
-    echo "error: /var/lib/cloud/instance/user-data.txt not found"
+    echo "ERROR: /var/lib/cloud/instance/user-data.txt not found"
     exit 1
   fi
 
@@ -677,7 +677,7 @@ function set_bmc_dns() {
 
       if ! eval podman image ls | grep sdptool >/dev/null; then
 
-        echo "SDPtool container needed for $VENDOR functionality"
+        echo "SDPTool container needed for $VENDOR functionality"
         echo "    git clone $sdptool_repo"
         echo "    cd cray-sdptool && podman build -t $sdptool -f Dockerfile ."
 

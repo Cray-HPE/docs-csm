@@ -369,9 +369,9 @@ should resolve itself once the workload manager product is installed.
 <a name="restore-vcs-content"></a>
 ## Restore VCS Content
 
-1. Run the `vcs-restore.sh` script to restore all VCS content.  This should be
+1. Run the `vcs-restore.sh` script to restore all VCS content. This should be
    run from the same directory that `vcs-backup.sh` was run from so that the tar
-   file can be located.  If successful, this script will list the data files
+   file can be located. If successful, this script will list the data files
    that have been restored.
 
    ```bash
@@ -419,7 +419,7 @@ properly after the upgrade:
 
 Other health checks may be run as desired.
 
-> **`CAUTION:`** The following HMS functional tests may fail due to locked
+> **`CAUTION:`** The following HMS functional tests may fail because of locked
 > components in HSM:
 >
 > 1. `test_bss_bootscript_ncn-functional_remote-functional.tavern.yaml`
@@ -443,7 +443,7 @@ Other health checks may be run as desired.
 >          - Key 'Locked' was not defined. Path: '/Components/12'.: Path: '/'>
 > ```
 >
-> Failures of these tests due to locked components as shown above can be safely
+> Failures of these tests because of locked components as shown above can be safely
 > ignored.
 
 **`NOTE:`** If you plan to do any further CSM health validation, you should follow the validation
