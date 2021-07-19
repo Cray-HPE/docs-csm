@@ -14,7 +14,7 @@
    ```
    
 2. Look at the logs of the HMS discovery job to find the MAC addresses associated with instances of the `MAC address in HSM not found in any switch!` error messages. The following command will parse the logs are report these MAC addresses.
-   > Each of the following MAC address does not contain a ComponentID in Hardware State Manager in the ethernet interfaces table, which can be viewed with: `cray hsm inventory ethernetInterfaces list`.
+   > Each of the following MAC address does not contain a ComponentID in Hardware State Manager in the Ethernet interfaces table, which can be viewed with: `cray hsm inventory ethernetInterfaces list`.
    ```bash
    ncn# UNKNOWN_MACS=$(kubectl -n services logs $HMS_DISCOVERY_POD hms-discovery | jq 'select(.msg == "MAC address in HSM not found in any switch!").unknownComponent.ID' -r -c)
    ncn# echo "$UNKNOWN_MACS"

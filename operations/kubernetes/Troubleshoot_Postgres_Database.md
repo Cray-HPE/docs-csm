@@ -126,9 +126,9 @@ The following is an example where replication is broken:
 
 ### Recover Replication
 
-In the event that a state of broken Postgres replication persists and the space allocated for the WAL files fills-up, the affected database will likely shut down and create a state where it can be very difficult to recover. This can impact the reliability of the related service and may require that it be redeployed with data repopulation procedures.  If replication lag is caught and remediated before the database shuts down, replication can be recovered using `patronictl reinit`.
+In the event that a state of broken Postgres replication persists and the space allocated for the WAL files fills up, the affected database will likely shut down and create a state where it can be very difficult to recover. This can impact the reliability of the related service and may require that it be redeployed with data repopulation procedures. If replication lag is caught and remediated before the database shuts down, replication can be recovered using `patronictl reinit`.
 
-A reinitialize will get the lagging replica member re-synced and replicating again. This should be done as soon as replication lag is detected. In the preceding example, keycloak-postgres-0 and keycloak-postgres-2 were not replicating properly (Lag>0 or unknown). To remediate, exec into the leader pod and use `patronictl reinit <cluster> <lagging cluster member>` to reinit the lagging member(s).  For example:
+A reinitialize will get the lagging replica member re-synced and replicating again. This should be done as soon as replication lag is detected. In the preceding example, keycloak-postgres-0 and keycloak-postgres-2 were not replicating properly (Lag>0 or unknown). To remediate, exec into the leader pod and use `patronictl reinit <cluster> <lagging cluster member>` to reinit the lagging member(s). For example:
 
 ```bash
 ncn-w001# kubectl exec keycloak-postgres-1 -n services -it -- bash
@@ -224,7 +224,7 @@ function resize-postgresql-pvc
     NAMESPACE=$3
     PGRESIZE=$4
      
-    # Check for required args
+    # Check for required arguments
     if [ $# -ne 4 ]; then
         echo "Illegal number of parameters"
         exit 2
@@ -349,7 +349,7 @@ ncn-w001# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="
 <a name="missing"></a>
 ## Is a Cluster Member missing?
 
-Most services expect to maintain a Postgres cluster consisting of three pods for resilency (SMA is one exception where only two pods are expected to exist).
+Most services expect to maintain a Postgres cluster consisting of three pods for resiliency (SMA is one exception where only two pods are expected to exist).
 
 ### Determine if a cluster member is missing
 
