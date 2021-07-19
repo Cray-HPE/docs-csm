@@ -215,7 +215,7 @@ function set_bmc_timezone() {
   if [[ -z $TIMEZONE ]]; then
 
     echo "No timezone index provided."
-    echo "View available indicies at redfish/v1/Managers/${manager}/DateTime | jq .TimeZoneList"
+    echo "View available indices at redfish/v1/Managers/${manager}/DateTime | jq .TimeZoneList"
     exit 1
 
   else
@@ -449,7 +449,7 @@ function get_ci_ntp_servers() {
   fi
 
   if ! [ -f /var/lib/cloud/instance/user-data.txt ]; then
-    echo "error: /var/lib/cloud/instance/user-data.txt not found"
+    echo "ERROR: /var/lib/cloud/instance/user-data.txt not found"
     exit 1
   fi
 
@@ -677,7 +677,7 @@ function set_bmc_dns() {
 
       if ! eval podman image ls | grep sdptool >/dev/null; then
 
-        echo "SDPtool container needed for $VENDOR functionality"
+        echo "SDPTool container needed for $VENDOR functionality"
         echo "    git clone $sdptool_repo"
         echo "    cd cray-sdptool && podman build -t $sdptool -f Dockerfile ."
 
