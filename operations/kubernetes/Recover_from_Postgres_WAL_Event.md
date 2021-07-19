@@ -70,7 +70,7 @@ Type "help" for help.
 postgres=#   <----- success!!  Type \q
 ```
 4. If the database is still not running, delete files from /home/postgres/pgdata/pgroot/data/pg\_wal/. 
-CAUTION: This method could result in unintended consequences for the Postgres database and long service downtime; do not use unless there is a known [Disaster Recovery for Postgres](Disaster_Recovery_Postgres.md)  procedure for repopulating the Postgres cluster.
+CAUTION: This method could result in unintended consequences for the Postgres database and long service downtime; do not use unless there is a known [Disaster Recovery for Postgres](Disaster_Recovery_Postgres.md) procedure for repopulating the Postgres cluster.
 ```
 ncn-w001# kubectl exec "${POSTGRESQL}-1" -n ${NAMESPACE} -c postgres -it -- bash 
 root@cray-smd-postgres-1:/home/postgres# rm pgdata/pgroot/data/pg_wal/0*

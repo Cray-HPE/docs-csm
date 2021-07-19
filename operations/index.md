@@ -430,7 +430,7 @@ The System Layout Service \(SLS\) holds information about the system design, suc
 
 ## System Configuration Service
 
-The System Configuration Service \(SCSD\) allows admins to set various BMC and controller parameters. These parameters are typically set during discovery, but this tool enables parameters to be set before or after discovery. The operations to change these parameters are available in the Cray CLI under the `scsd` command.
+The System Configuration Service \(SCSD\) allows administrators to set various BMC and controller parameters. These parameters are typically set during discovery, but this tool enables parameters to be set before or after discovery. The operations to change these parameters are available in the Cray CLI under the `scsd` command.
 
   * [System Configuration Service](system_configuration_service/System_Configuration_Service.md)
   * [Manage Parameters with the scsd Service](system_configuration_service/Manage_Parameters_with_the_scsd_Service.md)
@@ -563,7 +563,7 @@ The central DNS infrastructure provides the structural networking hierarchy and 
 
   * [DNS](network/dns/DNS.md)
   * [Manage the DNS Unbound Resolver](network/dns/Manage_the_DNS_Unbound_Resolver.md)
-  * [Enable ncsd on UANS](network/dns/Enable_ncsd_on_UANs.md)
+  * [Enable ncsd on UANs](network/dns/Enable_ncsd_on_UANs.md)
   * [Troubleshoot Common DNS Issues](network/dns/Troubleshoot_Common_DNS_Issues.md)
   * [Troubleshoot DNS Configuration Issues](network/dns/Troubleshoot_DNS_Configuration_Issues.md)
 

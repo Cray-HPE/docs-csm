@@ -26,11 +26,11 @@ The areas should be tested in the order they are listed on this page. Errors in 
   - [1.8 Automated Goss Testing](#automated-goss-testing)
     - [1.8.1 Known Test Issues](#autogoss-issues)
 - [2. Hardware Management Services Health Checks](#hms-health-checks)
-  - [2.1 Install Latest hms-team rpm](#install-latest-hms-team-rpm)
+  - [2.1 Install Latest hms-team RPM](#install-latest-hms-team-rpm)
   - [2.2 HMS Test Execution](#hms-test-execution)
   - [2.3 Hardware State Manager Discovery Validation](#hms-smd-discovery-validation)
 - [3 Software Management Services Health Checks](#sms-health-checks)
-  - [3.1 Install Latest cmsdev rpm](#install-latest-cmsdev-rpm)
+  - [3.1 Install Latest cmsdev RPM](#install-latest-cmsdev-rpm)
   - [3.2 cmsdev Usage](#cmsdev-usage)
     - [3.3 Interpreting cmsdev Results](#cmsdev-results)
   - [3.4 SMS Checks To Run](#sms-checks)
@@ -62,7 +62,7 @@ Scripts do not verify results. Script output includes analysis needed to determi
 
 Health Check scripts can be run:
 * After CSM install.sh has been run (not before)
-* Before and after one of the NCN's reboot
+* Before and after one of the NCNs reboots
 * After the system or a single node goes down unexpectedly
 * After the system is gracefully shut down and brought up
 * Any time there is unexpected behavior on the system to get a baseline of data for CSM services and components
@@ -455,7 +455,7 @@ pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
 Execute the HMS smoke and functional tests after the CSM install to confirm that the Hardware Management Services are running and operational.
 
 <a name="install-latest-hms-team-rpm"></a>
-### 2.1 Install Latest hms-team rpm
+### 2.1 Install Latest hms-team RPM
 
 **`INTERNAL USE`** Only HPE Cray internal systems have access to this latest RPM of hms-team tests.
 
@@ -549,7 +549,7 @@ A listing of known hardware discovery issues and workarounds can be found here i
       ```
    
    2. Look at the logs of the HMS discovery job to find the MAC addresses associated with instances of the `MAC address in HSM not found in any switch!` error messages. The following command will parse the logs are report these MAC addresses.
-      > Each of the following MAC address does not contain a ComponentID in Hardware State Manager in the ethernet interfaces table, which can be viewed with: `cray hsm inventory ethernetInterfaces list`.
+      > Each of the following MAC address does not contain a ComponentID in Hardware State Manager in the Ethernet interfaces table, which can be viewed with: `cray hsm inventory ethernetInterfaces list`.
       ```bash
       ncn# UNKNOWN_MACS=$(kubectl -n services logs $HMS_DISCOVERY_POD hms-discovery | jq 'select(.msg == "MAC address in HSM not found in any switch!").unknownComponent.ID' -r -c)
       ncn# echo "$UNKNOWN_MACS"
@@ -588,13 +588,13 @@ A listing of known hardware discovery issues and workarounds can be found here i
 
 The Software Management Services health checks are run using `/usr/local/bin/cmsdev`.
 
-1. [Install Latest cmsdev rpm](#install-latest-cmsdev-rpm)
+1. [Install Latest cmsdev RPM](#install-latest-cmsdev-rpm)
 1. [cmsdev Usage](#cmsdev-usage)
 1. [Interpreting cmsdev Results](#cmsdev-results)
 1. [SMS Checks To Run](#sms-checks)
 
 <a name="install-latest-cmsdev-rpm"></a>
-### 3.1 Install Latest cmsdev rpm
+### 3.1 Install Latest cmsdev RPM
 **`INTERNAL USE`** Only HPE Cray internal systems have access to this latest RPM of cmsdev tests.
 
 The cmsdev tool is included in the `cray-cmstools-crayctldeploy` RPM, which comes preinstalled on the ncns. However, the tool is receiving frequent updates so it is recommended to check for a newer version of the RPM and if so, to download and install the latest version.
