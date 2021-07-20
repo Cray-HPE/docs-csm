@@ -43,7 +43,7 @@ sections, but there is also a general troubleshooting topic.
 1. Upgrade Management Nodes and CSM Services
       
    The upgrade of CSM software will do a controlled, rolling reboot of all management nodes before updating the CSM services.
-   * Prerequisites & Preflight Checks
+   * Prerequisites and Preflight Checks
    * Stage 1. Ceph upgrade from Nautilus (14.2.x) to Octopus (15.2.x)
    * Stage 2. Ceph image upgrade
    * Stage 3. Kubernetes Upgrade from 1.18.6 to 1.19.9

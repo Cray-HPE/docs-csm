@@ -18,8 +18,8 @@ The following table includes information about the different NCN network interfa
 
 | Name | Type | MTU |
 | ---- | ---- | ---- |
-| `mgmt0` | Slot 1 on the SMNET card. | 9000
-| `mgmt1` | Slot 2 on the SMNET card, or slot 1 on the 2nd SMNET card. | 9000
+| `mgmt0` | Slot 1 on the SMNet card. | 9000
+| `mgmt1` | Slot 2 on the SMNet card, or slot 1 on the 2nd SMNet card. | 9000
 | `bond0` | LACP Link Agg. of `mgmt0` and `mgmt1`, or `mgmt0` and `mgmt2` on dual-bonds (when `bond1` is present). | 9000
 | `bond1` | LACP Link Agg. of `mgmt1` and `mgmt3`. | 9000
 | `lan0` | Externally facing interface. | 1500
