@@ -4,7 +4,7 @@
 * Access to the API gateway `api-gw-service` (legacy: `api-gw-service-nmn.local`)
 
 ### About this task
-This guide shows the process for manually adding aliases to UAN nodes in SLS. Steps 3 & 4 of this guide can be repeated for each UAN alias that needs to be added in SLS. This guide is intended to be run on any k8s node that has access to the API gateway `api-gw-service` (current/legacy: `api-gw-service-nmn.local`).
+This guide shows the process for manually adding aliases to UAN nodes in SLS. Steps 3 and 4 of this guide can be repeated for each UAN alias that needs to be added in SLS. This guide is intended to be run on any k8s node that has access to the API gateway `api-gw-service` (current/legacy: `api-gw-service-nmn.local`).
 
 ### Procedure
 1. Authenticate with Keycloak to obtain an API token:

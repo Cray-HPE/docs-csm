@@ -102,7 +102,7 @@ review.
 ### Discussions
 
 See the Cray /HPE Slack [#docs-csm-install][1] (not public; external access may be available for
-various partners & customers).
+various partners and customers).
 
 <a name="original-authors--reviewers"></a>
 

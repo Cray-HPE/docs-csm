@@ -17,7 +17,7 @@ This guide may receive more installments for other files as time goes on.
 ### Table of Contents:
 
 - [Environments](#environments)
-- [Nomenclature & Constraints](#nomenclature--constraints)
+- [Nomenclature and Constraints](#nomenclature--constraints)
 - [Files](#files)
     - [`ncn_metadata.csv`](#ncn_metadatacsv)
     - [`switch_metadata.csv`](#switch_metadatacsv)
@@ -58,7 +58,7 @@ permutations (for redundancy minimums within Shasta cluster):
 For more information, see [103-NETWORKING](103-NCN-NETWORKING.md) page for NCNs.
 
 <a name="nomenclature--constraints"></a>
-## Nomenclature & Constraints
+## Nomenclature and Constraints
 
 #### "PXE" or "BOOTSTRAP" MAC
 

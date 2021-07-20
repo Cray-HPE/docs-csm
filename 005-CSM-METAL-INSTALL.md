@@ -30,7 +30,7 @@ This document specifies the procedures for deploying the non-compute nodes
 - [BGP Routing](#bgp-routing)
 - [Validation](#validation)
 - [Optional Validation](#optional-validation)
-- [Configure & Trim UEFI Entries](#configure-and-trim-uefi-entries)
+- [Configure and Trim UEFI Entries](#configure-and-trim-uefi-entries)
 
 
 <a name="configure-bootstrap-registry-to-proxy-an-upstream-registry"></a>

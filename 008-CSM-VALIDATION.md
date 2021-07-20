@@ -1,4 +1,4 @@
-# CSM Install Validation & Health Checks
+# CSM Install Validation and Health Checks
 This page lists available CSM install and health checks that can be executed to validate the CSM install. They can be run anytime after the install has run to completion, but not before.
 
 1. [Platform Health Checks](#platform-health-checks)
