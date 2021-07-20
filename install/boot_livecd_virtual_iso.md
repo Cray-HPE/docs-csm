@@ -19,10 +19,10 @@ This page will walk-through booting the LiveCD `.iso` file directly onto a BMC.
 
 A Cray Pre-Install Toolkit ISO is required for this process. This ISO can be obtained from:
 
-- The Cray Pre-Install Toolkit ISO included in a CSM release tarball. It will have a filename similar to
+- The Cray Pre-Install Toolkit ISO included in a CSM release tar file. It will have a filename similar to
   `cray-pre-install-toolkit-sle15sp2.x86_64-1.4.10-20210514183447-gc054094.iso`
 
-- **`INTERNAL USE`** The latest ISO in HPE Cray Artifactory can change without notice, so it is advised to use the full filename of the ISO name. Every `latest` ISO has a matching ISO with the real buildID in the name, this ISO will have the same File-Time metadata as the latest ISO.
+- **`INTERNAL USE`** The latest ISO in HPE Cray Artifactory can change without notice, so it is advised to use the full filename of the ISO. Every `latest` ISO file has a matching ISO file with the real buildID in its name; this ISO will have the same file time metadata as the latest ISO file.
   http://car.dev.cray.com/artifactory/csm/MTL/sle15_sp2_ncn/x86_64/dev/master/metal-team/cray-pre-install-toolkit-latest.iso
 
 <a name="bmcs-virtual-mounts"></a>
@@ -88,14 +88,9 @@ Finally, reboot the node and select the `Virtual CDROM` option from the manual b
    * [Backing up the Overlay COW FS](#backing-up-the-overlay-cow-fs)
    * [Restoring from an Overlay COW FS Backup](#restoring-from-an-overlay-cow-fs-backup)
 
-
-After attaching and booting into the ISO, the password will need to be changed before using 
-the booted OS.
-
-1. The ISO boots with no password, requiring one be set on first login.
-2. You can now use the LiveCD to look around or you may continue the bootstrap process by setting the root password
+The ISO boots with no password, requiring one be set on first login.
+Continue the bootstrap process by setting the root password
 following the procedure [First Login](bootstrap_livecd_remote_iso.md#first-login).
-
 
 > **`NOTE`** The root OS `/` directory is writable without persistence. This means that restarting the machine will result in all changes being lost. Before restarting, consider following [Backing up the Overlay COW FS](#backing-up-the-overlay-cow-fs) and the accompanying [Restoring from an Overlay COW FS Backup](#restoring-from-an-overlay-cow-fs-backup) section.
 
@@ -104,19 +99,18 @@ following the procedure [First Login](bootstrap_livecd_remote_iso.md#first-login
 
 You can backup the writable overlay upper-dir so that your changes are not lost after a reboot or when updating your ISO.
 
-This requires that you have a location that you can SSH at tarball to as a backup.
+This requires that you have a location to which you can `scp` a tar file as a backup.
 
 ```bash
 tar czf /run/overlay.tar.gz -C /run/overlayfs/rw .
 scp /run/overlay.tar.gz <somelocation>
 ```
-> **`NOTE`** If you want to reduce the size of the backup you can also delete any squashfs files first or exclude them in the tar command `--exclude='*.squashfs'`. You will then need to re-populate those after you restore your backup
-
+> **`NOTE`** If you want to reduce the size of the backup you can also delete any squashfs files first, or exclude them in the tar command using `--exclude='*.squashfs'`. You will then need to re-populate those after you restore your backup
 
 <a name="restoring-from-an-overlay-cow-fs-backup"></a>
 #### Restoring from an Overlay COW FS Backup
 
-Restore a backed up tarball from the previous command with
+Restore a backed up tar file from the previous command with
 
 ```bash
 scp <somelocation> /run/overlay.tar.gz
@@ -124,4 +118,4 @@ tar xf /run/overlay.tar.gz -C /run/overlayfs/rw
 mount -o remount /
 ```
 
-If you excluded the `squashfs` files from the backup you will also want to repopulate them following the configuration section.
+If you excluded the `squashfs` files from the backup you will also need to repopulate them following the configuration section.
