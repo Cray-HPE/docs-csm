@@ -51,6 +51,7 @@ The following administrative topics can be found in this guide:
    * [Configure NTP on NCNs](configure_ntp_on_ncns.md)
    * [Change NCN Image Root Password and SSH Keys](change_ncn_image_root_password_and_ssh_keys.md)
    * [Post-Install Customizations](Post_Install_Customizations.md)
+   * [Validate Signed RPMs](Validate_Signed_RPMs.md)
 
 
 <a name="image-management"></a>
