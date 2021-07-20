@@ -87,6 +87,7 @@ Use the Boot Orchestration Service \(BOS\) to boot, configure, and shutdown coll
      * [View the Status of a BOS Session](boot_orchestration/View_the_Status_of_a_BOS_Session.md)
      * [Limit the Scope of a BOS Session](boot_orchestration/Limit_the_Scope_of_a_BOS_Session.md)
      * [Configure the BOS Timeout When Booting Compute Nodes](boot_orchestration/Configure_the_BOS_Timeout_When_Booting_Nodes.md)
+     * [Kernel Boot Parameters](boot_orchestration/Kernel_Boot_Parameters.md)
      * [Check the Progress of BOS Session Operations](boot_orchestration/Check_the_Progress_of_BOS_Session_Operations.md)
      * [Clean Up Logs After a BOA Kubernetes Job](boot_orchestration/Clean_Up_Logs_After_a_BOA_Kubernetes_Job.md)
      * [Clean Up After a BOS/BOA Job is Completed or Cancelled](boot_orchestration/Clean_Up_After_a_BOS-BOA_Job_is_Completed_or_Cancelled.md)
