@@ -1,6 +1,6 @@
 ## Configure Prometheus Email Alert Notifications
 
-Configure an email alert notification for PostgresReplicationLagSMA and PostgresReplicationServices in Prometheus.
+Configure an email alert notification for all Prometheus Postgres replication alerts: PostgresReplicationLagSMA, PostgresReplicationServices, PostgresqlFollowerReplicationLagSMA and PostgresqlFollowerReplicationLagServices.
 
 ### Procedure
 
@@ -12,7 +12,7 @@ Configure an email alert notification for PostgresReplicationLagSMA and Postgres
     | base64 --decode > /tmp/alertmanager-default.yaml
     ```
 
-2.  Create a secret and an alert configuration that will be used to add email notifications for PostgresReplicationLagSMA and PostgresReplicationServices alerts.
+2.  Create a secret and an alert configuration that will be used to add email notifications for the alerts.
 
     Create these files on `ncn-w001`.
 
@@ -56,6 +56,12 @@ Configure an email alert notification for PostgresReplicationLagSMA and Postgres
         receiver:  email-alert
       - match:
           alertname: PostgresqlReplicationLagServices
+        receiver:  email-alert
+      - match: 
+          alertname: PostgresqlFollowerReplicationLagSMA
+        receiver:  email-alert
+      - match:
+          alertname: PostgresqlFollowerReplicationLagServices
         receiver:  email-alert
     receivers:
     - name: "null"
