@@ -179,6 +179,7 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
        *   [Create a CFS Session with Dynamic Inventory](configuration_management/Create_a_CFS_Session_with_Dynamic_Inventory.md)
        *   [Create an Image Customization CFS Session](configuration_management/Create_an_Image_Customization_CFS_Session.md)
        *   [Set Limits for a Configuration Session](configuration_management/Set_Limits_for_a_Configuration_Session.md)
+       *   [Use a Specific Inventory for a Configuration Session](configuration_management/Use_a_Specific_Inventory_in_a_Configuration_Session.md)
        *   [Change the Ansible Verbosity Logs](configuration_management/Change_the_Ansible_Verbosity_Logs.md)
        *   [Set the ansible.cfg for a Session](configuration_management/Set_the_ansible-cfg_for_a_Session.md)
        *   [Delete CFS Sessions](configuration_management/Delete_CFS_Sessions.md)
