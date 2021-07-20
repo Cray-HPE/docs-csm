@@ -169,11 +169,13 @@ None.
 System installer
 
 #### Objective
-Check with HPE Pointnext for any Field Notices about Hotfixes which should be applied to this CSM software release. 
+Collect all available Field Notices about Hotfixes which should be applied to this CSM software release. 
 
 #### Limitations
 None.
 
 ### Procedure
 
-   1. TODO CASMINST-2189
+1. Check with HPE Cray service for any Field Notices about Hotfixes which should be applied to this CSM software release. 
+
+
