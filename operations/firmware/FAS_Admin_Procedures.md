@@ -31,7 +31,7 @@ Nodes can also be locked with the Hardware State Manager (HSM) API. Refer to [NC
 
 #### Procedure
 
-1. Check that there are no FAS actions that are running.
+1. Check that there are no FAS actions running.
 
     ```
     ncn-m001# cray fas actions list	
@@ -53,7 +53,7 @@ Nodes can also be locked with the Hardware State Manager (HSM) API. Refer to [NC
 
 ### Use the cray-fas-loader Kubernetes Job
 
-FAS requires image data in order to load firmware into different devices in the system. Firmware images bundles are retrieved by the system via Nexus in order to be used by FAS. This process is managed by the cray-fas-loader Kubernetes job.
+FAS requires image data in order to load firmware into different devices in the system. Firmware images bundles are retrieved by the system with Nexus in order to be used by FAS. This process is managed by the cray-fas-loader Kubernetes job.
 
 The workflow for the cray-fas-loader is shown below:
 
@@ -106,7 +106,7 @@ If an update fails because of `"No Image available"`, it may be caused by FAS un
    ncn-m001# cray fas images list --format json | jq '.[] | .[] | select(.target=="TARGETNAME")'
    ```
 
-   This command would display one or more images available for updates.
+   The example command displays one or more images available for updates.
 
    ```
    {
@@ -288,7 +288,7 @@ The firmware image file must be on the system to update. Firmware file can be ex
 
 Use the Firmware Action Service \(FAS\) dry-run feature to determine what firmware can be updated on the system. Dry-runs are enabled by default, and can be configured with the overrideDryrun parameter. A dry-run will create a query according to the filters requested by the admin. It will initiate an update sequence to determine what firmware is available, but will not actually change the state of the firmware.
 
-**Warning:** It is crucial that an admin is familiar with the release notes of any firmware. The release notes will indicate what new features the firmware provides and if there are any incompatibilities. FAS does not know about incompatibilities or dependencies between versions. The admin assumes full responsibility for this knowledge.
+**WARNING:** It is crucial that an admin is familiar with the release notes of any firmware. The release notes will indicate what new features the firmware provides and if there are any incompatibilities. FAS does not know about incompatibilities or dependencies between versions. The admin assumes full responsibility for this knowledge.
 
 It is likely that when performing a firmware update, that the current version of firmware will not be available. This means that after successfully upgrading, the firmware cannot be downgraded.
 

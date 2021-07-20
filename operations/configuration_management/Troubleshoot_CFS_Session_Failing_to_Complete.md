@@ -35,7 +35,7 @@ The steps in this procedure are independent from each other and are used to trou
 
     -   Update the Ansible configuration to produce less output.
 
-        See [Enable Ansible Profiling](Enable_Ansible_Profiling.md) in the ** for an example of modifying the configuration.
+        See [Enable Ansible Profiling](Enable_Ansible_Profiling.md) for an example of modifying the configuration.
 
     -   Adjust the use of flags used when running Ansible commands.
 

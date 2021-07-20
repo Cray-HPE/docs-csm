@@ -59,7 +59,7 @@ If you are here with an unconfigured switch, mileage may vary.
     VlanId	Mac Address		Type		Interface
     4	a4:bf:01:4d:d9:9a	dynamic		ethernet1/1/32
     ....
-    # Onyx & Aruba
+    # Onyx and Aruba
     sw-leaf-001# show mac-address-table
 
     ```

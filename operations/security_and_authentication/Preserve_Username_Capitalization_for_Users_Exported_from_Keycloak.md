@@ -6,7 +6,7 @@ The LDAP server that provides password resolution and user account federation su
 
 ### Prerequisites
 
--   The kubectl command is installed.
+-   The `kubectl` command is installed.
 -   Each user's `homeDirectory` attribute has the exact username as the last element of the path.
 
 ### Procedure

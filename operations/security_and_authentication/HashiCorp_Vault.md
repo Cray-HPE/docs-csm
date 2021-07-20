@@ -10,7 +10,7 @@ ncn# kubectl get vault -n vault cray-vault -o yaml
 
 A Kubernetes operator manages the deployment of Vault, based on this definition. The operator is deployed to the `vault` namespace. The resulting instance will also be deployed to the `vault` namespace.
 
-**Important:** Changing the cray-vault custom resource definition or modifying data directly in Vault is not supported unless directed by customer support.
+**IMPORTANT:** Changing the cray-vault custom resource definition or modifying data directly in Vault is not supported unless directed by customer support.
 
 For more information, refer to the following resources:
 
@@ -19,7 +19,7 @@ For more information, refer to the following resources:
 
 ### Storage Model
 
-Prior to release 1.4, Vault used etcd as a high-availability \(HA\) storage back-end. In release 1.4, Vault now uses Hashicorp's Raft Implementation. Raft is now configured to run natively inside the Vault statefulset instead of as an independent deployment.
+In previous releases, Vault used etcd as a high-availability \(HA\) storage back-end. Currently, Vault uses Hashicorp's Raft Implementation. Raft is now configured to run natively inside the Vault statefulset instead of as an independent deployment.
 
 ### Unseal Keys
 

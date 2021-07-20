@@ -468,7 +468,7 @@ data so run them only when indicated. Instructions are in the `README` files.
 <a name="enable-ncn-disk-wiping-safeguard"></a>
 ### 5. Enable NCN Disk Wiping Safeguard
 
-> The next steps require `csi` from the installation media. `csi` will not be provided on an NCN otherwise since it is used for CRAY installation & bootstrap. The CSI binary is compiled against the NCN base, simply fetching it from the bootable media will suffice.
+> The next steps require `csi` from the installation media. `csi` will not be provided on an NCN otherwise since it is used for Cray installation and bootstrap. The CSI binary is compiled against the NCN base, simply fetching it from the bootable media will suffice.
     
 1. SSH back into ncn-m001, or restart a local console and resume the typescript
     

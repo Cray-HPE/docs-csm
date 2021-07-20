@@ -4,7 +4,7 @@ This procedure updates liquid-cooled or standard rack compute node NIC mezzanine
 
 **Attention:** The NIC firmware update is performed while the node is running the compute image \(in-band\). Use the CX-5 NIC firmware that is deployed with the compute node RPMs and not from some other repository.
 
-See the *Firmware Action Service \(FAS\)* for information about automated firmware updates using Redfish.
+See [Update Firmware with FAS](../firmware/Update_Firmware_with_FAS.md) for information about automated firmware updates using Redfish.
 
 ### Time Required
 

@@ -90,7 +90,7 @@ If the reset does not recover the BMCs, shut down the nodes, unplug the servers 
     ncn-m001# cray capmc get_xname_status create --xnames LIST_OF_NODES
     ```
 
-After these steps, the nodes should be ready to be booted again via the Boot Orchestration Service (BOS).
+After these steps, the nodes should be ready to be booted again with the Boot Orchestration Service (BOS).
 
 
 
