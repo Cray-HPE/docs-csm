@@ -535,7 +535,7 @@ This will enable SSH, and other services when the LiveCD starts.
     linux# cd; umount -v /mnt/pitdata
     ```
 
-1. Quit the typescript session with the `exit` command and copy the file (csm-usb-livecd.<date>.txt) to a location on another server for reference later.
+1. Quit the typescript session with the `exit` command and copy the file (csm-install-usb.<date>.txt) to a location on another server for reference later.
 
 Now the USB device may be reattached to the management node, or if it was made on the management node then it can now
 reboot into the LiveCD.
