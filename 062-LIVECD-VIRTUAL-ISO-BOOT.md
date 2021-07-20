@@ -17,7 +17,7 @@ This page will walk-through booting the LiveCD `.iso` file directly onto a BMC.
 
 A Cray Pre-Install Toolkit ISO is required for this process. This ISO can be obtained from:
 
-- The Cray Pre-Install Toolkit ISO included in a CSM release tarball.
+- The Cray Pre-Install Toolkit ISO included in a CSM release tar file.
 - Internal endpoints (HPE Artifactory)
 
 <a name="bmcs-virtual-mounts"></a>
@@ -105,9 +105,9 @@ Intel BMCs allow for booting with direct ISO mounts.
 After attaching and booting into the ISO, the password will need to be changed before using 
 the booted OS.
 
-1. The ISO boots with no password, requiring one be set on first login. Enter blank as the password and
+1. The ISO boots with no password, requiring one to be set on first login. Enter blank as the password and
    follow the prompts.
-2. You can no use the LiveCD to look around, or you may continue setting the LiveCD up for [a CSM installation](004-CSM-REMOTE-LIVECD.md).
+2. You can now use the LiveCD to look around, or continue preparing for [a CSM installation](004-CSM-REMOTE-LIVECD.md).
 
 > **`NOTE`** The root OS `/` directory is writable without persistence. This means that restarting the machine will result in all changes being lost. Before restarting, consider following [Backing up the Overlay COW FS](#backing-up-the-overlay-cow-fs) and the accompanying [Restoring from an Overlay COW FS Backup](#restoring-from-an-overlay-cow-fs-backup) section.
 
@@ -116,19 +116,18 @@ the booted OS.
 
 You can backup the writable overlay upper-dir so that your changes are not lost after a reboot or when updating your ISO.
 
-This requires that you have a location that you can SSH at tar-ball to as a backup.
+This requires that you have a location to which you can `scp` a tar file as a backup.
 
 ```bash
 tar czf /run/overlay.tar.gz -C /run/overlayfs/rw .
 scp /run/overlay.tar.gz <somelocation>
 ```
-> **`NOTE`** If you want to reduce the size of the backup you can also delete any squashfs files first or exclude them in the tar command `--exclude='*.squashfs'`. You will then need to re-populate those after you restore your backup
-
+> **`NOTE`** If you want to reduce the size of the backup you can also delete any squashfs files first, or exclude them in the tar command using `--exclude='*.squashfs'`. You will then need to re-populate those after you restore your backup
 
 <a name="restoring-from-an-overlay-cow-fs-backup"></a>
 ### Restoring from an Overlay COW FS Backup
 
-Restore a backed up tarball from the previous command with
+Restore a backed up tar file from the previous command with
 
 ```bash
 scp <somelocation> /run/overlay.tar.gz
@@ -136,4 +135,4 @@ tar xf /run/overlay.tar.gz -C /run/overlayfs/rw
 mount -o remount /
 ```
 
-If you excluded the `squashfs` files from the backup you will also want to repopulate them following the configuration section.
+If you excluded the `squashfs` files from the backup you will also need to repopulate them following the configuration section.
