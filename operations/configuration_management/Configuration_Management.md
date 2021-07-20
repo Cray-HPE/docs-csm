@@ -52,6 +52,7 @@ Use the following procedures to manage configurations with CFS.
     -   [Create a CFS Session with Dynamic Inventory](Create_a_CFS_Session_with_Dynamic_Inventory.md)
     -   [Create an Image Customization CFS Session](Create_an_Image_Customization_CFS_Session.md)
     -   [Set Limits for a Configuration Session](Set_Limits_for_a_Configuration_Session.md)
+    -   [Use a Specific Inventory in a Configuration Session](Use_a_Specific_Inventory_in_a_Configuration_Session.md)
     -   [Change the Ansible Verbosity Logs](Change_the_Ansible_Verbosity_Logs.md)
     -   [Set the ansible.cfg for a Session](Set_the_ansible-cfg_for_a_Session.md)
     -   [Delete CFS Sessions](Delete_CFS_Sessions.md)
