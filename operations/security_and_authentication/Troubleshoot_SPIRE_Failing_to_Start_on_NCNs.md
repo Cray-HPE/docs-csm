@@ -23,7 +23,7 @@ function renewncnjoin() {
 }
 ```
 
-Run the renewncnjoin function on the NCN where kubectl is running:
+Run the renewncnjoin function on the NCN where `kubectl` is running:
 
 ```bash
 # renewncnjoin NODE_XNAME

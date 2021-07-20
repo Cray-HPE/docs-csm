@@ -118,7 +118,7 @@ The system is installed.
 
         ![Keycloak Gatekeeper Settings](../../../img/operations/Keykloak_Gatekeeper_Settings.png "Keycloak gatekeeper Settings")
 
-5.  Update the hostnames listed in the --self-signed-tls-hostname arguments in the `cray-keycloak-gatekeeper-ingress` deployment configuration, as well as`spec.template.spec.containers.hostAliases[].hostnames[]`.
+5.  Update the hostnames listed in the `--self-signed-tls-hostname` arguments in the `cray-keycloak-gatekeeper-ingress` deployment configuration, as well as`spec.template.spec.containers.hostAliases[].hostnames[]`.
 
     ```bash
     ncn-w001# kubectl get deployment -n services cray-keycloak-gatekeeper-ingress -o yaml

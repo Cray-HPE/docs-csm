@@ -8,9 +8,9 @@ This configuration is done automatically during the software installation proces
 
 The following items used in the examples of this procedure should be replaced with actual values when this procedure is performed:
 
--   username is used as an example for the SNMP user.
--   password1 is used as an example for the SNMP authentication password.
--   password2 is used as an example for the SNMP privacy password.
+-   username is used as an example for the SNMP user
+-   password1 is used as an example for the SNMP authentication password
+-   password2 is used as an example for the SNMP privacy password
 
 ### Prerequisites
 
@@ -18,7 +18,7 @@ Ability to connect to the switch using a serial terminal or network.
 
 ### Limitations
 
-If a new switch has been added to this system, Cray recommends contacting the Cray customer account representative for this site to help with full switch configuration because this procedure covers only the portion related to REDS.
+If a new switch has been added to this system, contact the customer account representative for this site to help with full switch configuration because this procedure covers only the portion related to REDS.
 
 ### Procedure
 

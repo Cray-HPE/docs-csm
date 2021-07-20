@@ -110,7 +110,7 @@ exit
 2021-02-02 17:06:13 PXE-E99: Unexpected network error.
 ```
 
-* Verify the ip helper-address on VLAN 1 on the switches. This is the same configuration as above ^ "Mellanox Config" & "Aruba Config"
+* Verify the ip helper-address on VLAN 1 on the switches. This is the same configuration as above ^ "Mellanox Config" and "Aruba Config"
 
 <a name="Verify-DHCP-packets"></a>
 ## 2.1. Verify DHCP packets can be forwarded from the workers to the MTL network (VLAN1)

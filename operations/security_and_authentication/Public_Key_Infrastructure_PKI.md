@@ -8,7 +8,7 @@ The PKI implementation for the system, post-installation, is made up of Kubernet
 
 ![](../../img/operations/PKI_Infrastructure.png "PKI Infrastructure")
 
-Refer to [PKI Services](PKI_Services.md) in the ** for more information on the services in the figure above.
+Refer to [PKI Services](PKI_Services.md) for more information on the services in the figure above.
 
 ### Limitations
 

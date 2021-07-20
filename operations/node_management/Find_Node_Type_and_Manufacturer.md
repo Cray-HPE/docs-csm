@@ -4,21 +4,21 @@ There are three different vendors providing nodes for air-cooled cabinets, which
 
 HPE nodes contain the /redfish/v1/Systems/1 endpoint:
 
-```screen
+```
 ncn-m001# cray hsm inventory componentEndpoints describe XNAME | jq '.RedfishURL'
 "x3000c0s18b0/redfish/v1/Systems/1"
 ```
 
 Gigabyte nodes contain the /redfish/v1/Systems/Self endpoint:
 
-```screen
+```
 ncn-m001# cray hsm inventory componentEndpoints describe XNAME | jq '.RedfishURL'
 "x3000c0s7b0/redfish/v1/Systems/Self"
 ```
 
 Intel nodes contain the /redfish/v1/Systems/SERIAL\_NUMBER endpoint:
 
-```screen
+```
 ncn-m001# cray hsm inventory componentEndpoints describe XNAME | jq '.RedfishURL'
 "x3000c0s15b0/redfish/v1/Systems/BQWT92000021"
 ```

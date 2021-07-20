@@ -7,9 +7,9 @@ This procedure can be used to access the interface to manage Keycloak users. Use
 -   This procedure uses SYSTEM\_DOMAIN\_NAME as an example for the DNS name of the non-compute node \(NCN\). Replace this name with the actual NCN's DNS name while executing this procedure.
 -   This procedure assumes that the password for the Keycloak `admin` account is known. The Keycloak password is set during the software installation process. The password can be obtained with the following command:
 
-    ```screen
-    ncn-w001# kubectl get secret -n services keycloak-master-admin-auth \\
-    --template=\{\{.data.password\}\} | base64 --decode
+    ```bash
+    ncn-w001# kubectl get secret -n services keycloak-master-admin-auth \
+    --template={{.data.password}} | base64 --decode
     ```
 
 ### Procedure

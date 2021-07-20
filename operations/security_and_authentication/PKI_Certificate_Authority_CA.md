@@ -9,9 +9,9 @@ CA material is injected as a start-up secret into Vault through a SealedSecret t
 Trusted CA certificates are distributed via two channels:
 
 -   Cloud-init metadata
--   Kubernetes Configmaps
+-   Kubernetes ConfigMaps
 
-Kubernetes-native workloads generally leverage Configmap-based distribution. The Cloud-init based method is used for non-compute node \(NCN\) OS distribution.
+Kubernetes-native workloads generally leverage ConfigMap-based distribution. The Cloud-init based method is used for non-compute node \(NCN\) OS distribution.
 
 On NCNs, trusted certificates are installed by Cloud-init in the /etc/pki/trust/anchors/platform-ca-certs.crt file. Refer to [Make HTTPS Requests from Sources Outside the Management Kubernetes Cluster](Make_HTTPS_Requests_from_Sources_Outside_the_Management_Kubernetes_Cluster.md) for more information for clients that are outside the system's management cluster.
 

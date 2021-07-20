@@ -46,7 +46,7 @@ The initial Gitea login credentials for the `crayvcs` username are stored in thr
 
 -   Keycloak - These credentials are used to allow access to the Gitea UI. They must be changed through Keycloak.
 
-**Important:** These three sources of credentials are not currently synced by any mechanism, and so changing the default password requires that it be changed in all three places. Changing only one many result in difficulty determining the password at a later date, or may result in lost access to Gitea.
+**IMPORTANT:** These three sources of credentials are not currently synced by any mechanism, and so changing the default password requires that it be changed in all three places. Changing only one many result in difficulty determining the password at a later date, or may result in lost access to Gitea.
 
 ### System Management Health Service
 
