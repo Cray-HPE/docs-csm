@@ -38,17 +38,17 @@ Refer to the following pages based on your node vendor for help mounting an ISO 
 <a name="hpe-ilo-bmcs"></a>
 #### HPE iLO BMCs
 
-HPE iLO BMCs allow for booting directly from an HTTP accessible ISO location.
+HPE iLO BMCs allow for booting directly from an HTTP-accessible ISO location.
 
-> Here you can insert the Virtual Media URL, select Boot on Next Reset, and click Insert Media
+> Enter the `Virtual Media URL`, select `Boot on Next Reset`, and click `Insert Media`.
 
 ![Screen Shot of iLO BMC Virtual Media Mount](../img/bmc-virtual-media-ilo.png)
 
-> Next go ahead and reboot by select reset in the top right menu control option
+> Next reboot by selecting `Reset` in the top right power menu.
 
 ![Screen Shot of iLO BMC Reboot](../img/bmc-reboot-ilo.png)
 
-> Open up the virtual terminal by choosing the `HTML5 Console` option when clicking the terminal image in the bottom left corner.
+> Open the virtual terminal by choosing the `HTML5 Console` option when clicking the terminal image in the bottom left corner.
 
 > **`NOTE`** It may appear that the boot is stalled at a line of `EXT4-fs (loop1): mounted ...` or `Starting dracut pre-mount hook...`. This is the step when it actually begins downloading the ISO's squashfs root file system and can take a few minutes
 
@@ -65,15 +65,15 @@ Go to the BMC settings and setup the remote ISO for your protocol and node.
 
 **Web Interface**
 
-Access your BMC's web interface and navigate to `Settings -> Media Redirection Settings -> General Settings`.
+Access your BMC's web interface and navigate to `Settings` -> `Media Redirection Settings` -> `General Settings`.
 
-Enable `Remote Media Support` and `Mount CD/DVD` and then fill in the server IP or DNS name and the path to server.
+Enable `Remote Media Support` and `Mount CD/DVD` and then fill in the server IP or DNS name and the path to the server.
 
 ![Screen Shot of Gigabyte BMC General Settings](../img/bmc-virtual-media-settings-gigabyte.png)
 
-> **`NOTE`** The Gigabyte URL appears to not allow certain characters and has a limit on path length. So you may need to move or rename the ISO to a location with a smaller file name.
+> **`NOTE`** The Gigabyte URL appears to not allow certain characters and has a limit on path length. You may need to move or rename the ISO to a location with a smaller file name.
 
-Next head to `Image Redirection -> Remote Images` and click on the `Start` button to start the Virtual ISO mount.
+Next navigate to `Image Redirection` -> `Remote Images` and click on the `Start` button to start the Virtual ISO mount.
 
 ![Screen Shot of Gigabyte BMC Start](../img/bmc-virtual-media-start-gigabyte.png)
 
@@ -89,7 +89,7 @@ Finally, reboot the node and select the `Virtual CDROM` option from the manual b
    * [Restoring from an Overlay COW FS Backup](#restoring-from-an-overlay-cow-fs-backup)
 
 
-After attaching and booting into the ISO, the password will need to be changed at least before using 
+After attaching and booting into the ISO, the password will need to be changed before using 
 the booted OS.
 
 1. The ISO boots with no password, requiring one be set on first login.

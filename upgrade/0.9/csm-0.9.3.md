@@ -327,7 +327,7 @@ Upgrade CSM packages on NCNs.
    ncn-m001# pdsh -w "$ncns" 'zypper ms -d Server_Applications_Module_15_SP2_x86_64'
    ```
 
-   > **`NOTE`**: Field notice _FN #6615a - Shasta V1.4 & V1.4.1 Install Issue
+   > **`NOTE`**: Field notice _FN #6615a - Shasta V1.4 and V1.4.1 Install Issue
    > with NCN Personalization for SMA_ included similar guidance as below. If
    > these zypper services have been previously disabled, verify that they are
    > in fact disabled:
