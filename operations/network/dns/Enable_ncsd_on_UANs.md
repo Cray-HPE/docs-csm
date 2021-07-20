@@ -1,4 +1,4 @@
-## Enable ncsd on UANS
+## Enable ncsd on UANs
 
 Configure User Access Nodes (UANs) to start the `ncsd` service at boot time.
 

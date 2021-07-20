@@ -8,7 +8,7 @@ Console log information is no longer being collected for Gigabyte nodes or ConMa
 
 ### Procedure
 
-1.  Use ipmitool to deactivate the current console connection.
+1.  Use `ipmitool` to deactivate the current console connection.
 
     ```bash
     ncn-m001# ipmitool -H xname -U USER -P PASSWORD sol deactivate

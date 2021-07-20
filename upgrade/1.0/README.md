@@ -16,7 +16,7 @@ upgrade that node.
 
 ## Upgrade Stages
 
-### Stage 0. - Prerequisites & Preflight Checks
+### Stage 0. - Prerequisites and Preflight Checks
 
 > NOTE: CSM-0.9.4 is the version of CSM required in order to upgrade to CSM-1.0.0 (available with Shasta v1.5).
 
@@ -132,7 +132,7 @@ ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-ceph.sh
 > - Both methods are dependent on the master nodes and storage nodes 001/2/3 have a ceph.client.admin.keyring and/or a ceph.conf file (cephadm will not require the ceph.conf). 
 > - When you continue with Stage 2, you may have issues running your Ceph commands.  
 >   - If you are experiencing this, please double check that you restored your /etc/ceph directory from your tar backup.
-> - Any deployments that are backed by a cephfs pvc will be unavailable during this stage of the upgrade.  These deployments will be scaled down and back up automatically. This includes **(but can vary by deployment)**: `nexus`, `cray-ipxe`, `cray-tftp`, `cray-ims`, `cray-console-operator`, `cray-cfs-api-db`. To view the complete list for the system being upgraded, run the following script to list them:
+> - Any deployments that are backed by a cephfs PVC will be unavailable during this stage of the upgrade.  These deployments will be scaled down and back up automatically. This includes **(but can vary by deployment)**: `nexus`, `cray-ipxe`, `cray-tftp`, `cray-ims`, `cray-console-operator`, `cray-cfs-api-db`. To view the complete list for the system being upgraded, run the following script to list them:
 >   ```bash
 >   ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/list-cephfs-clients.sh
 >   ```

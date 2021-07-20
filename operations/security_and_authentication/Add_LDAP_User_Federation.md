@@ -4,13 +4,13 @@ Add LDAP user federation using the Keycloak localization tool.
 
 ### Prerequisites
 
-LDAP user federation is not currently configured in Keycloak. For example, if it was not configured in Keycloak when the system was initially installed or the LDAP user federation was removed.
+LDAP user federation is not currently configured in Keycloak. For example, if it was not configured in Keycloak when the system was initially installed or the LDAP user federation was removed. 
 
 ### Procedure
 
 1.  Update the LDAP settings in the customizations.yaml file.
 
-    The LDAP server CA certificate goes into SealedSecret. Refer to "Regenerate Certificates to Encrypt Sealed Secrets" in the ** for instructions on how to do that.
+    The LDAP server CA certificate goes into SealedSecret. Refer to the "Generate Sealed Secrets" header in the [Prepare Site Init](../../install/prepare_site_init.md) procedure for instructions on how to do that.
 
     1.  Update the customizations.yaml file.
 

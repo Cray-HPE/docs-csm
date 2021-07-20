@@ -4,7 +4,7 @@ General Postgres Troubleshooting Topics
 - [Is the Database Unavailable?](#unavailable)
 - [Is the Database Disk Full?](#diskfull)
 - [Is Replication Lagging?](#lag)
-- [Is the Postgres status SyncFailed?](#syncfailed)
+- [Is the Postgres status `SyncFailed`?](#syncfailed)
 - [Is a Cluster Member missing?](#missing)
 - [Is the Postgres Leader missing?](#leader)
 
@@ -35,7 +35,7 @@ NAME                ENDPOINTS         AGE
 keycloak-postgres   <none>            3d22h
 ```
 
-If the database is unavailable, check if the [Disk Full](#diskfull) is the cause of the issue. Otherwise, check the postgres-operator logs for errors.
+If the database is unavailable, check if the [Disk Full](#diskfull) is the cause of the issue. Otherwise, check the `postgres-operator` logs for errors.
 ```bash
 ncn-w001# kubectl logs -l app.kubernetes.io/name=postgres-operator -n services
 ```
@@ -43,7 +43,7 @@ ncn-w001# kubectl logs -l app.kubernetes.io/name=postgres-operator -n services
 <a name="diskfull"></a>
 ## Is the Database Disk Full?
 
-The following is an example for `keycloak-postgres`. One cluster member is failing to start due to a full pgdata disk. This was likely due to replication issues which caused the pg_wal files to grow.
+The following is an example for `keycloak-postgres`. One cluster member is failing to start because of a full pgdata disk. This was likely due to replication issues which caused the pg_wal files to grow.
 
 ```bash
 ncn-w001# POSTGRESQL=keycloak-postgres
@@ -74,7 +74,7 @@ ncn-w001#  kubectl logs "${POSTGRESQL}-0" -n ${NAMESPACE} -c postgres | grep FAT
 ncn-w001# kubectl exec "${POSTGRESQL}-0" -n ${NAMESPACE} -c postgres -it -- du -h --max-depth 1 /home/postgres/pgdata/pgroot/data/pg_wal
 
 ```
-To recover the cluster member that had failed to start due to disk pressure, attempt to reclaim some space on the pgdata disk.
+To recover the cluster member that had failed to start because of disk pressure, attempt to reclaim some space on the pgdata disk.
 
 Exec into that pod, copy the logs off (optional) and then clear the logs to recover some disk space. Then restart the Postgres cluster and postgres-operator.
 ```
@@ -93,7 +93,7 @@ If disk issues persist or exist on multiple nodes and the above does not resolve
 <a name="lag"></a>
 ## Is Replication Lagging?
 
-Postgres replication lag can be detected with Prometheus alerts and alert notifications (See [Configure Prometheus Email Alert Notifications](../system_management_health/Configure_Prometheus_Email_Alert_Notifications.md)). If replication lag is not caught early, it can cause the disk mounted on /home/postgres/pgdata to fill up and the database to stop running. If this issue is caught before the database stops, it can be easily remediated using a partonictl command to reinit the lagging cluster member.
+Postgres replication lag can be detected with Prometheus alerts and alert notifications (See [Configure Prometheus Email Alert Notifications](../system_management_health/Configure_Prometheus_Email_Alert_Notifications.md)). If replication lag is not caught early, it can cause the disk mounted on /home/postgres/pgdata to fill up and the database to stop running. If this issue is caught before the database stops, it can be easily remediated using a partonictl command to reinitialize the lagging cluster member.
 
 ### Check if Replication is Working
 
@@ -128,7 +128,7 @@ The following is an example where replication is broken:
 
 In the event that a state of broken Postgres replication persists and the space allocated for the WAL files fills up, the affected database will likely shut down and create a state where it can be very difficult to recover. This can impact the reliability of the related service and may require that it be redeployed with data repopulation procedures. If replication lag is caught and remediated before the database shuts down, replication can be recovered using `patronictl reinit`.
 
-A reinitialize will get the lagging replica member re-synced and replicating again. This should be done as soon as replication lag is detected. In the preceding example, keycloak-postgres-0 and keycloak-postgres-2 were not replicating properly (Lag>0 or unknown). To remediate, exec into the leader pod and use `patronictl reinit <cluster> <lagging cluster member>` to reinit the lagging member(s). For example:
+A reinitialize will get the lagging replica member re-synced and replicating again. This should be done as soon as replication lag is detected. In the preceding example, `keycloak-postgres-0` and `keycloak-postgres-2` were not replicating properly (Lag>0 or unknown). To remediate, `kubectl exec` into the leader pod and use `patronictl reinit <cluster> <lagging cluster member>` to reinitialize the lagging member(s). For example:
 
 ```bash
 ncn-w001# kubectl exec keycloak-postgres-1 -n services -it -- bash
@@ -171,13 +171,13 @@ Alerts exist in prometheus for the following:
 When alert notifications are configured, replication issues can be detected quickly. If the replication issue persists such that the database becomes unavailable, recovery will likely be much more involved. Catching such issues as soon as possible is desired. See [Configure Prometheus Email Alert Notifications](../system_management_health/Configure_Prometheus_Email_Alert_Notifications.md).
 
 <a name="syncfailed"></a>
-## Is the Postgres status SyncFailed?
+## Is the Postgres status `SyncFailed`?
 
 ### Check all the postgresql resources
 
-Check for any postgresql resource that has a STATUS of SyncFaied. SyncFailed generally means that there is something between the postgres-operator and the Postgres cluster that is out of sync. This does not always mean that the cluster is unhealthy. To determine the underlying sync issue, check the postgres-operator logs for messages to further root cause the issue.
+Check for any postgresql resource that has a `STATUS` of `SyncFailed`. `SyncFailed` generally means that there is something between the `postgres-operator` and the Postgres cluster that is out of sync. This does not always mean that the cluster is unhealthy. To determine the underlying sync issue, check the `postgres-operator` logs for messages to further root cause the issue.
 
-Other STATUS values such as 'Updating' are a non issue. It is expected that this will eventually change to Running or possibly SyncFailed if the postgres-operator encounters issues syncing updates to the postgresql cluster.
+Other `STATUS` values such as `Updating` are a non issue. It is expected that this will eventually change to `Running` or possibly `SyncFailed` if the `postgres-operator` encounters issues syncing updates to the postgresql cluster.
 
 ```bash
 ncn-w001# kubectl get postgresql -A
@@ -202,7 +202,7 @@ ncn-w001# kubectl logs cray-postgres-operator-6fffc48b4c-mqz7z -n services -c po
 
 This generally means that the postgresql resource was updated to change the volume size from the Postgres operator's perspective, but the additional step to resize the actual PVCs was not done so the operator and the Postgres cluster are not able to sync the resize change. The cluster is still healthy, but to complete the resize of the underlying Postgres PVCs, additional steps are needed. 
 
-The example below assumes that the cray-smd-postgres is in SyncFailed and the volume size was recently increased to 100Gi (possibly by editing the volume size of postgresql cray-smd-postgres resource), but the pgdata-cray-smd-postgres PVCs storage capacity was not updated at align with the change. To confirm this is the case: 
+The example below assumes that `cray-smd-postgres` is in `SyncFailed` and the volume size was recently increased to `100Gi` (possibly by editing the volume size of postgresql `cray-smd-postgres` resource), but the `pgdata-cray-smd-postgres` PVC's storage capacity was not updated at align with the change. To confirm this is the case: 
 
 ```bash
 ncn-w001# kubectl get postgresql cray-smd-postgres -n services -o jsonpath="{.spec.volume.size}"
@@ -214,7 +214,7 @@ pgdata-cray-smd-postgres-0   Bound    pvc-020cf339-e372-46ae-bc37-de2b55320e88  
 pgdata-cray-smd-postgres-1   Bound    pvc-3d42598a-188e-4301-a58e-0f0ce3944c89   30Gi       RWO            k8s-block-replicated   27m
 pgdata-cray-smd-postgres-2   Bound    pvc-0d659080-7d39-409a-9ee5-1a1806971054   30Gi       RWO            k8s-block-replicated   27m
 ```
-To resolve this SyncFailed case, resize the pgdata PVCs for the selected Postgres cluster. Create the following function in the shell and execute the function by calling it with the appropriate arguments. For this example the pgdata-cray-smd-postgres PVCs will be resized to 100Gi to match that of the postgresql cray-smd-postgres volume size.
+To resolve this `SyncFailed` case, resize the `pgdata` PVCs for the selected Postgres cluster. Create the following function in the shell and execute the function by calling it with the appropriate arguments. For this example the `pgdata-cray-smd-postgres` PVCs will be resized to `100Gi` to match that of the postgresql `cray-smd-postgres` volume size.
 
 ```bash
 function resize-postgresql-pvc
@@ -244,7 +244,7 @@ function resize-postgresql-pvc
     ## Delete the inactive PVCs, resize the active PVC and wait for the resize to complete
     kubectl delete pvc "${PGDATA}-1" "${PGDATA}-2" -n "${NAMESPACE}"
     kubectl patch -p '{"spec": {"resources": {"requests": {"storage": "'${PGRESIZE}'"}}}}' "pvc/${PGDATA}-0" -n "${NAMESPACE}"
-    while [ -z '$(kubectl describe pvc "{PGDATA}-0" -n "${NAMESPACE}" | grep FileSystemResizeSuccessful' ] ; do echo "  waiting for pvc to resize"; sleep 2; done
+    while [ -z '$(kubectl describe pvc "{PGDATA}-0" -n "${NAMESPACE}" | grep FileSystemResizeSuccessful' ] ; do echo "  waiting for PVC to resize"; sleep 2; done
  
     ## Scale the postgres cluster back to 3 members
     kubectl patch postgresql "${POSTGRESQL}" -n "${NAMESPACE}" --type='json' -p='[{"op" : "replace", "path":"/spec/numberOfInstances", "value" : 3}]'
@@ -259,18 +259,18 @@ In order to persist any Postgres PVC storage volume size changes, it is necessar
 
 #### Case 2: msg="could not sync cluster: could not sync roles: could not init db connection: could not init db connection: still failing after 8 retries"
 
-This generally means that some state in the Postgres operator is out of sync with that of the postgresql cluster resulting on db connection issues. To resolve this SyncFailed case, restarting the Postgres operator by deleting the pod may clear up the issue.
+This generally means that some state in the Postgres operator is out of sync with that of the postgresql cluster, resulting in database connection issues. To resolve this `SyncFailed` case, restarting the Postgres operator by deleting the pod may clear up the issue.
 
 ```bash
 ncn-w001# kubectl delete pod -l app.kubernetes.io/name=postgres-operator -n services
  
-## Wait for the postgres-operator to restart
+## Wait for the `postgres-operator` to restart
 ncn-w001# kubectl get pods -l app.kubernetes.io/name=postgres-operator -n services
 NAME                                      READY   STATUS    RESTARTS   AGE
 cray-postgres-operator-6fffc48b4c-mqz7z   2/2     Running   0           6m
 ```
 
-If the database connection has been down for a long period of time and the SyncFailed persists after the above steps, a restart of the cluster and the postgres-operator may be needed for the service to reconnect to the Postgres cluster. For example, if the cray-gitea service is not able to connect to the Postgres database and the connection has been failing for many hours, restart the cluster and operator.
+If the database connection has been down for a long period of time and the `SyncFailed` persists after the above steps, a restart of the cluster and the `postgres-operator` may be needed for the service to reconnect to the Postgres cluster. For example, if the `cray-gitea` service is not able to connect to the Postgres database and the connection has been failing for many hours, restart the cluster and operator.
 
 ```bash
 ncn-w001# CLIENT=gitea-vcs
@@ -292,7 +292,7 @@ ncn-w001# kubectl scale deployment ${CLIENT} -n ${NAMESPACE} --replicas=1
 
 #### Case 3: msg="error while syncing cluster state: could not sync roles: could not init db connection: could not init db connection: pq: password authentication failed for user \<username\>"
 
-This generally means that the password for the given user is not the same as that specified in the Kubernetes secret. This can occur if the postgresql cluster was rebuilt and the data was restored leaving the Kubernetes secrets out of sync with the Postgres cluster. To resolve this SyncFailed case, gather the username and password for the credential from Kubernetes, and update the database with these values. For example, if the user "postgres" is failing to authenticate between the cray-smd services and the cray-smd-postgres cluster, get the password for the postgres user from the Kubernetes secret and update the password in the database.
+This generally means that the password for the given user is not the same as that specified in the Kubernetes secret. This can occur if the postgresql cluster was rebuilt and the data was restored, leaving the Kubernetes secrets out of sync with the Postgres cluster. To resolve this `SyncFailed` case, gather the username and password for the credential from Kubernetes, and update the database with these values. For example, if the user `postgres` is failing to authenticate between the `cray-smd` services and the `cray-smd-postgres` cluster, get the password for the `postgres` user from the Kubernetes secret and update the password in the database.
 
 ```bash
 ncn-w001# CLIENT=cray-smd

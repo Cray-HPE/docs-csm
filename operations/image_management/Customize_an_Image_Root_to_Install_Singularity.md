@@ -458,6 +458,6 @@ There are several starting points for modifying compute images. An admin can sta
     ncn# cray ims jobs delete $IMS_JOB_ID
     ```
 
-    Deleting the job record also deletes the underlying Kubernetes job, service and config map that were created when the job record was submitted.
+    Deleting the job record also deletes the underlying Kubernetes job, service and ConfigMap that were created when the job record was submitted.
 
 

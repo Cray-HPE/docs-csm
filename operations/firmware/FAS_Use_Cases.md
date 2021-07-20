@@ -613,7 +613,7 @@ The NCN must be rebooted after updating the BIOS firmware. Follow the [Reboot NC
 Use this procedure to update compute node BIOS firmware using FAS. There are two nodes that must be updated, which have the “Node0.BIOS” and “Node1.BIOS” targets.
 
 #### Prerequisites
--   The Cray nodeBMC device needs to be updated before the nodeBIOS because the nodeBMC adds a new field Redfish \(softwareID\) that the NodeX.BIOS update will require. See [Update Liquid-Cooled Node or Switch Firmware](#liquidcooled) for more information.
+-   The Cray nodeBMC device needs to be updated before the nodeBIOS because the nodeBMC adds a new field Redfish \(softwareId\) that the NodeX.BIOS update will require. See [Update Liquid-Cooled Node or Switch Firmware](#liquidcooled) for more information.
 -   Compute node BIOS updates require the nodes to be off. If nodes are not off when update command is issued, it will report as a failed update.
 -   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 

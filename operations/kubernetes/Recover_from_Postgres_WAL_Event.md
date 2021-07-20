@@ -1,6 +1,6 @@
 ## Recover from Postgres WAL Event
 
-A WAL event can occur due to lag, network communication or bandwidth issues. This can cause the PVC hosted by Ceph and mounted inside the container on /home/postgres/pgdata to fill and the database to stop running. If no database dump exists, the disk space issue needs to be fixed so that a dump can be taken. Then the dump can be restored to a newly created postgresql cluster. If a dump already exists, skip to [rebuild-restore](#rebuild-restore).
+A WAL event can occur because of lag, network communication, or bandwidth issues. This can cause the PVC hosted by Ceph and mounted inside the container on /home/postgres/pgdata to fill and the database to stop running. If no database dump exists, the disk space issue needs to be fixed so that a dump can be taken. Then the dump can be restored to a newly created postgresql cluster. If a dump already exists, skip to [rebuild-restore](#rebuild-restore).
 
 If no database dump exists and neither option results in a successful dump, then services specific [Disaster Recovery for Postgres](Disaster_Recovery_Postgres.md) will be required.
 
@@ -16,7 +16,7 @@ The Recovery Workflow:
 
 A running database is needed to be able to dump the current data. 
 
-The following example is based on cray-smd-postgres.
+The following example is based on `cray-smd-postgres`.
 
 1. Confirm that the database is down (no endpoint exists) and that the disk is full on one or more postgresql cluster member.
 
@@ -42,12 +42,12 @@ Filesystem      Size  Used Avail Use% Mounted on
 /dev/rbd6        30G  383M   30G   2% /home/postgres/pgdata
 ```
 
-If the database is down and the disk is full due to replication issues, there are two ways to attempt to get back to a running database: either delete files or resize the Postgres PVCs until the database is able to start running again.
+If the database is down and the disk is full because of replication issues, there are two ways to attempt to get back to a running database: either delete files or resize the Postgres PVCs until the database is able to start running again.
 
 <a name="option1"></a>
 #### Option 1 : Clear logs and/or WAL files 
 
-The following example is based on cray-smd-postgres.
+The following example is based on `cray-smd-postgres`.
 
 1. Clear files from /home/postgres/pgdata/pgroot/pg_log/ until the database is running again and you can successfully connect. For example, if the disk space is at 100%, exec into that pod, copy the logs off (optional) and then clear the logs to recover some disk space.  
 ```
@@ -95,7 +95,7 @@ postgres=#   <----- success!!  Type \q
 <a name="option2"></a>
 #### Option 2 : Resize the Postgres PVCs
 
-The following example is based on cray-smd-postgres, where the postgresql cray-smd-postgres resource and the pgdata-cray-smd-postgres PVCs will be resized from 100Gi to 120Gi.
+The following example is based on `cray-smd-postgres`, where the postgresql `cray-smd-postgres` resource and the `pgdata-cray-smd-postgres` PVCs will be resized from `100Gi` to `120Gi`.
 
 1. Determine the current size of the Postgres PVCs and set PGRESIZE to the desired new size (it must be larger than the current size).
 ```
@@ -142,7 +142,7 @@ persistentvolumeclaim/pgdata-cray-smd-postgres-0 patched
 
 6. Wait for the PVC to resize.
 ```
-ncn-w001# while [ -z '$(kubectl describe pvc "${PGDATA}-0" -n ${NAMESPACE} | grep FileSystemResizeSuccessful' ] ; do echo "  waiting for pvc to resize"; sleep 2; done
+ncn-w001# while [ -z '$(kubectl describe pvc "${PGDATA}-0" -n ${NAMESPACE} | grep FileSystemResizeSuccessful' ] ; do echo "  waiting for PVC to resize"; sleep 2; done
 ```
 
 7. Update the postgresql resource spec.volume.size to $PGRESIZE.
@@ -209,7 +209,7 @@ If the recovery was successful such that the database is now running, then conti
 <a name="scale"></a>
 1. Scale the client service to 0.
 
-The following example is based on cray-smd. The cray-smd client service is deployed as a deployment. Other services may differ; e.g. statefulset.
+The following example is based on `cray-smd`. The `cray-smd` client service is deployed as a deployment. Other services may differ; e.g. statefulset.
 
 ```
 ncn-w001# CLIENT=cray-smd
@@ -249,7 +249,7 @@ cray-smd-postgres-dumpall.sql
 
 If recovery was successful such that a dump could be taken or a dump already exists, then continue with the following steps to rebuild the postgresql cluster and restore the data.
 
-The following example restores the dump to the cray-smd-postgres cluster.
+The following example restores the dump to the `cray-smd-postgres` cluster.
 
 1. If your client service is not yet scaled to 0, follow the step above to [Scale the client service to 0](#scale).
 
