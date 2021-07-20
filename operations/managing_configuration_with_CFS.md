@@ -387,13 +387,13 @@ Multiple product configuration layers may be created later to apply multiple cha
             "commit": "eb724e7135dc60d3fdfff9fb01672538f241e588"
          },
          {
+            "name": "cos-integration-2.1.0",
             "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git",
             "commit": "ccd964f8eeeb52ab8f895b480c5d1142c7bc0a8e",
-            "name": "cos-integration-2.0.18",
             "playbook": "ncn.yml"
          },
          {
-            "name": "cpe-integration-21.4.6",
+            "name": "cpe-integration-21.6.4",
             "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/cpe-config-management.git",
             "playbook": "pe_deploy.yml",
             "commit": "fde47749dcbe2fedca5a546a478115cc6468fa7f"
