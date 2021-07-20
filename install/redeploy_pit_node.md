@@ -312,7 +312,7 @@ data so run them only when indicated. Instructions are in the `README` files.
     
 1. If you wish to preserve your conman console logs for the other NCNs, this is your last chance to do so. They will be lost after rebooting. They are located in `/var/log/conman` on the PIT node.
 
-1. Quit the typescript session with the `exit` command and copy the file (`booted-csm-livecd.<date>.txt`) to a location on another server for reference later.
+1. Quit the typescript session with the `exit` command and copy the file (`csm-livecd-reboot.<date>.txt`) to a location on another server for reference later.
     
     ```bash
     pit# exit
