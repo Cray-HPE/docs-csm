@@ -498,13 +498,9 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   * [Update Compute Node Mellanox HSN NIC Firmware](node_management/Update_Compute_Node_Mellanox_HSN_NIC_Firmware.md)
   * [TLS Certificates for Redfish BMCs](node_management/TLS_Certificates_for_Redfish_BMCs.md)
     * [Add TLS Certificates to BMCs](node_management/Add_TLS_Certificates_to_BMCs.md)
-  * [Run a Manual ckdump on Compute Nodes](node_management/Run_a_Manual_ckdump_on_Compute_Nodes.md)
-  * [Dump a Compute Node with Node Memory Dump (NMD)](node_management/Dump_a_Compute_Node_with_Node_Memory_Dump_nmd.md)
   * [Dump a Non-Compute Node](node_management/Dump_a_Non-Compute_Node.md)
   * [Enable Passwordless Connections to Liquid Cooled Node BMCs](node_management/Enable_Passwordless_Connections_to_Liquid_Cooled_Node_BMCs.md)
     * [View BIOS Logs for Liquid Cooled Nodes](node_management/View_BIOS_Logs_for_Liquid_Cooled_Nodes.md)
-  * [Enable Nvidia GPU Support](node_management/Enable_Nvidia_GPU_Support.md)
-    * [Update Nvidia GPU Software without Rebooting](node_management/Update_Nvidia_GPU_Software_without_Rebooting.md)
 
 
 <a name="reds"></a>
