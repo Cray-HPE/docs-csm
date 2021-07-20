@@ -283,8 +283,9 @@ Multiple product configuration layers may be created later to apply multiple cha
 
    When multiple layers are present, the expected order is:
    1. CSM (optional, see [CSM Configuration Layer](#csm_configuration_layer))
-   1. COS
+   1. SAT
    1. SMA
+   1. COS
    1. CPE (optional)
    1. Analytics (optional)
    1. customer (optional)
@@ -311,10 +312,10 @@ Multiple product configuration layers may be created later to apply multiple cha
             "commit": "755820ea8a999121c7191519309eaedc17b4e3d4"
          },
          {
-            "name": "cos-integration-2.1.0",
-            "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git",
-            "playbook": "ncn.yml"
-            "commit": "ccd964f8eeeb52ab8f895b480c5d1142c7bc0a8e",
+           "name": "sat-ncn",
+           "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/sat-config-management.git",
+           "commit": "2a388b1dcdaf59710b9c4a7ece0b549a4e95bae5",
+           "playbook": "sat-ncn.yml"
          },
          {
             "name": "sma-base-config",
@@ -327,6 +328,12 @@ Multiple product configuration layers may be created later to apply multiple cha
             "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/sma-config-management.git",
             "playbook": "sma-ldms-ncn.yml",
             "commit": "eb724e7135dc60d3fdfff9fb01672538f241e588"
+         },
+         {
+            "name": "cos-integration-2.1.0",
+            "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git",
+            "playbook": "ncn.yml"
+            "commit": "ccd964f8eeeb52ab8f895b480c5d1142c7bc0a8e",
          },
          {
             "name": "cpe-integration-21.6.4",
@@ -362,10 +369,10 @@ Multiple product configuration layers may be created later to apply multiple cha
             "commit": "755820ea8a999121c7191519309eaedc17b4e3d4"
          },
          {
-            "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git",
-            "commit": "ccd964f8eeeb52ab8f895b480c5d1142c7bc0a8e",
-            "name": "cos-integration-2.0.18",
-            "playbook": "ncn.yml"
+           "name": "sat-ncn",
+           "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/sat-config-management.git",
+           "commit": "2a388b1dcdaf59710b9c4a7ece0b549a4e95bae5",
+           "playbook": "sat-ncn.yml"
          },
          {
             "name": "sma-base-config",
@@ -378,6 +385,12 @@ Multiple product configuration layers may be created later to apply multiple cha
             "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/sma-config-gmanagement.git",
             "playbook": "sma-ldms-ncn.yml",
             "commit": "eb724e7135dc60d3fdfff9fb01672538f241e588"
+         },
+         {
+            "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git",
+            "commit": "ccd964f8eeeb52ab8f895b480c5d1142c7bc0a8e",
+            "name": "cos-integration-2.0.18",
+            "playbook": "ncn.yml"
          },
          {
             "name": "cpe-integration-21.4.6",
