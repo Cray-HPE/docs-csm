@@ -33,13 +33,13 @@ This procedure is performed automatically during installation of the system's so
     ncn-m001# cray hsm inventory redfishEndpoints list
     ```
 
-    If the endpoint for the node to be discovered is already present, skip the rest of this procedure, otherwise proceed to the next step.
+    If the endpoint for the node to be discovered is already present, skip the rest of this procedure. Otherwise, proceed to the next step.
 
 2.  Power on all nodes that need to be initialized and geolocated.
 
-    This can be done by pressing the power button on the machine or by using the BMC console interface \(if BMC credentials are known\). If the node is already powered on, power it off for a minimum of two \(2\) minutes before powering it back on.
+    This can be done by pressing the power button on the machine or by using the BMC console interface \(if BMC credentials are known\). If the node is already powered on, power it off for a minimum of two minutes before powering it back on.
 
-3.  Wait about five \(5\) minutes for all nodes to power on.
+3.  Wait about five minutes for all nodes to power on.
 
 4.  View the Redfish endpoints inventory again to verify that new endpoints have been added.
 

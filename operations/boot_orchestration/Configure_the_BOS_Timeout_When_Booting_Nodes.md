@@ -1,6 +1,6 @@
 ## Configure the BOS Timeout When Booting Compute Nodes
 
-Manually update the boa-job-template config map to tune the timeout and sleep intervals for the Boot Orchestration Agent \(BOA\). Correcting the timeout value is a good troubleshooting option for when BOS sessions hang waiting for nodes to be in a Ready state.
+Manually update the boa-job-template ConfigMap to tune the timeout and sleep intervals for the Boot Orchestration Agent \(BOA\). Correcting the timeout value is a good troubleshooting option for when BOS sessions hang waiting for nodes to be in a Ready state.
 
 If the BOS timeout occurs when booting compute nodes, the system will be unable to boot via BOS.
 
@@ -12,13 +12,13 @@ A Boot Orchestration Service \(BOS\) session was run and compute nodes are faili
 
 ### Procedure
 
-1.  Edit the boa-job-template config map to add the new timeout values.
+1.  Edit the boa-job-template ConfigMap to add the new timeout values.
 
     ```bash
     ncn-m001# kubectl edit configmap -n services boa-job-template
     ```
 
-    Node boots can be set to time out faster by adding the following environment variables to the boa-job-template. These variables do not appear in the config map by default.
+    Node boots can be set to time out faster by adding the following environment variables to the boa-job-template. These variables do not appear in the ConfigMap by default.
 
     -   **NODE\_STATE\_CHECK\_NUMBER\_OF\_RETRIES**
 
@@ -39,14 +39,14 @@ A Boot Orchestration Service \(BOS\) session was run and compute nodes are faili
 
     The example below increases the number of retries to 360, which results in a timeout of 1800 seconds or 30 minutes if the sleep interval is not changed from the default value of 5 seconds. Different values might be needed depending on system size.
 
-    Add the following values to the config map:
+    Add the following values to the ConfigMap:
 
     ```bash
     - name: "NODE_STATE_CHECK_NUMBER_OF_RETRIES"
       value: "360"
     ```
 
-    The new variables need to be placed under the environment \(`env:`\) section in the config map. As an example, the `env` section in the config map looks as below.
+    The new variables need to be placed under the environment \(`env:`\) section in the ConfigMap. As an example, the `env` section in the ConfigMap looks as below.
 
     ```bash
     env:

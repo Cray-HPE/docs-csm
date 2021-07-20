@@ -122,7 +122,7 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
     16                   true    false      false      NO ACCESS
     ```
 
-6.  Confirm the new credentials can be used with ipmitool.
+6.  Confirm the new credentials can be used with `ipmitool`.
 
     The new credentials work if the command succeeds and generates output similar to the example below.
 

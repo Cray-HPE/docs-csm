@@ -2,9 +2,9 @@
 
 Use this procedure to check if any kworkers are in an error state because of a high load. Once the error has been identified, workaround the issue by returning the high load to a normal level.
 
-The kubectl command can become unresponsive because of a high load. Another symptom is that `ps aux` cannot return or complete because of aspects of the proc file system being locked.
+The `kubectl` command can become unresponsive because of a high load. Another symptom is that `ps aux` cannot return or complete because of aspects of the proc file system being locked.
 
-If kubectl is non-responsive on `ncn-w001`, the commands can be run from any other master or worker non-compute node \(NCN\).
+If `kubectl` is non-responsive on `ncn-w001`, the commands can be run from any other master or worker non-compute node \(NCN\).
 
 
 ### Prerequisites
@@ -14,7 +14,7 @@ The `kubectl` command is not responsive on a node.
 
 ### Identify the kworker Issue
 
-1.  Check to see if kubectl is not responding because of a kworker issue.
+1.  Check to see if `kubectl` is not responding because of a kworker issue.
 
     1.  List the process identification \(pid\) numbers of the kworkers in the D state.
 
@@ -105,7 +105,7 @@ The `kubectl` command is not responsive on a node.
     ```
 
 
-### RECOVERY STEPS
+### Recovery Steps
 
 1.  Restart the kubelet.
 
@@ -129,8 +129,7 @@ The `kubectl` command is not responsive on a node.
 
     The node must be rebooted if the remediation of restarting kubelet and containerd did not resolve the kworker and high load average issue.
 
-    **Important:** If the node experiencing issues is `ncn-w001`, the ipmitool command must be run from another node that has access to the management plane. The admin will be cut off if using `ncn-w001` when powering off `ncn-w001-mgmt`.
-
+    **IMPORTANT:** If the node experiencing issues is `ncn-w001`, the ipmitool command must be run from another node that has access to the management plane. The admin will be cut off if using `ncn-w001` when powering off `ncn-w001-mgmt`.
 
     Replace NODE\_NAME in the commands below with the node experiencing the issue. In this example, it is `ncn-w001`.
 
@@ -147,7 +146,7 @@ The `kubectl` command is not responsive on a node.
 
 4.  Watch the console of the node being rebooted.
 
-    This command will not return anything, but will show the ttyS0 console of the node. Use ~. to disconnect. The same ~. keystroke can also break an SSH session. After doing this, the connection to the SSH session may need to be reestablished.
+    This command will not return anything, but will show the ttyS0 console of the node. Use `~.` to disconnect. The same `~.` keystroke can also break an SSH session. After doing this, the connection to the SSH session may need to be reestablished.
 
     ```bash
     ncn-w001# ipmitool -U root -P PASSWORD -I lanplus \

@@ -14,7 +14,7 @@ Kubernetes service account authorization is utilized to authenticate access to V
 
 A Kubernetes operator manages the deployment of Vault, based on this definition. The resulting instance will also be deployed to the `vault` namespace.
 
-**Important:** Changing the cray-vault custom resource definition is not supported unless directed by customer support.
+**IMPORTANT:** Changing the cray-vault custom resource definition is not supported unless directed by customer support.
 
 For more information, refer to the following resources:
 
@@ -72,7 +72,7 @@ To see the deployed `TrustedCertificates` resources:
 # kubectl get trustedcertificates -A
 ```
 
-These resources can be used to further examine the configmap and Boot Script Service \(BSS\) destination references. The TrustedCerts workload is deployed to the `pki-operator` namespace.
+These resources can be used to further examine the ConfigMap and Boot Script Service \(BSS\) destination references. The TrustedCerts workload is deployed to the `pki-operator` namespace.
 
 
 

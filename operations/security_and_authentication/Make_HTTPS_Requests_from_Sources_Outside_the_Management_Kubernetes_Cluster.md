@@ -1,6 +1,8 @@
 ## Make HTTPS Requests from Sources Outside the Management Kubernetes Cluster
 
-Clients lying outside the system's management cluster need to trust the Certificate Authority \(CA\) certificate or host certificate in order to make requests to a non-compute node \(NCN\). Getting the client system to trust the CA certificate depends on the operating system. This procedure shows how to have a client trust the system's CA certificate on a Mac OS X system. It should be used as an example only.
+Clients lying outside the system's management cluster need to trust the Certificate Authority \(CA\) certificate or host certificate in order to make requests to a non-compute node \(NCN\). Getting the client system to trust the CA certificate depends on the operating system. 
+
+This procedure shows an example of how to have a client trust the system's CA certificate on a Mac OS X system.
 
 Updating the default certificates and password of the Keycloak master admin is not supported.
 
@@ -8,12 +10,11 @@ Updating the default certificates and password of the Keycloak master admin is n
 
 This procedure assumes that it is being carried out on a Mac OS X system.
 
-
 ### Procedure
 
 1.  Retrieve the CA public certificate file.
 
-    The scp command is used in the following example to copy the CA public certificate file to the current directory.
+    The `scp` command is used in the following example to copy the CA public certificate file to the current directory.
 
     ```bash
     $ scp sms-jones.us.cray.com:/etc/pki/trust/anchors/platform-ca-certs.crt .

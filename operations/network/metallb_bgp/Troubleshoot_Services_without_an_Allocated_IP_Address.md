@@ -10,7 +10,7 @@ This procedure requires administrative privileges.
 
 ### Procedure
 
-1.  Check the status of the services with the kubectl command to see the External-IP of the service.
+1.  Check the status of the services with the `kubectl` command to see the External-IP of the service.
 
     If <pending\> appears in this column, the service is having a problem getting an IP address assigned from MetalLB.
 
@@ -23,7 +23,7 @@ This procedure requires administrative privileges.
     istio-system   istio-ingressgateway-hmn                                LoadBalancer   10.17.46.139   10.94.100.1   80:32444/TCP                 3d5h
     ```
 
-2.  Check that the address pool in the annotation for the service matches one of the address pools in the metalLB config map.
+2.  Check that the address pool in the annotation for the service matches one of the address pools in the MetalLB ConfigMap.
 
     To view information on the service:
 
@@ -54,7 +54,7 @@ This procedure requires administrative privileges.
     Events:                   <none>
     ```
 
-    Run the following command to view the config map. There is no customer-access address pool in the example below, indicated it has not been added yet. This is why the external IP value is <pending\>.
+    Run the following command to view the ConfigMap. There is no customer-access address pool in the example below, indicated it has not been added yet. This is why the external IP value is <pending\>.
 
     ```bash
     ncn-w001# kubectl -n metallb-system get cm config -o yaml

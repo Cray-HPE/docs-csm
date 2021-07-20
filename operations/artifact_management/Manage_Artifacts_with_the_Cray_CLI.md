@@ -22,7 +22,7 @@ results = [ "alc", "badger", "benji-backups", "boot-images", "etcd-backup", "fw-
 
 ### Create and Upload Artifacts
 
-Use the cray artifacts create command to create an object and upload it to S3.
+Use the `cray artifacts create` command to create an object and upload it to S3.
 
 In the example below, S3\_BUCKET is a placeholder for the bucket name, site/repos/repo.tgz is the object name, and /path/to/repo.tgz is the location of the file to be uploaded to S3 on the local file system.
 
@@ -54,7 +54,7 @@ No output is shown unless an error occurs.
 
 ### Delete Artifacts
 
-Artifacts are removed from buckets with the cray artifacts delete command. Provide the object name and the bucket to delete it.
+Artifacts are removed from buckets with the `cray artifacts delete` command. Provide the object name and the bucket to delete it.
 
 ```bash
 ncn# cray artifacts delete S3_BUCKET S3_OBJECT_KEY
@@ -64,7 +64,7 @@ No output is shown unless an error occurs.
 
 ### List Artifacts
 
-Use the cray artifacts list command to list all artifacts in a bucket.
+Use the `cray artifacts list` command to list all artifacts in a bucket.
 
 ```bash
 ncn# cray artifacts list S3_BUCKET
@@ -84,9 +84,9 @@ ID = "IMS"
 
 ### Retrieve Artifact Details
 
-Details of an artifact object in a bucket are found with the cray artifacts describe command. The output of this command provides information about the size of the artifact and any metadata associated with the object.
+Details of an artifact object in a bucket are found with the `cray artifacts describe` command. The output of this command provides information about the size of the artifact and any metadata associated with the object.
 
-**Important:** The Cray-specific metadata provided by this command is automatically generated. This metadata should be considered deprecated and should not be used for future development.
+**IMPORTANT:** The Cray-specific metadata provided by this command is automatically generated. This metadata should be considered deprecated and should not be used for future development.
 
 ```bash
 ncn# cray artifacts describe S3_BUCKET S3_OBJECT_KEY

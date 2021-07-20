@@ -6,7 +6,7 @@ Return Kubernetes pods to a healthy state with resources available.
 
 ### Prerequisites
 
--   kubectl is installed.
+-   `kubectl` is installed.
 -   The names of the pods hitting their resource limits are known. See [Determine if Pods are Hitting Resource Limits](Determine_if_Pods_are_Hitting_Resource_Limits.md).
 
 ### Procedure

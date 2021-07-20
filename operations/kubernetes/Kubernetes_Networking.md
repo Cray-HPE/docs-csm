@@ -6,7 +6,7 @@ Every Kubernetes pod has an IP address in the pod network that is reachable with
 
 All services with a REST API must be accessed from outside the cluster using the Istio Ingress Gateway. This gateway can be accessed using a URL in the following format:
 
-```screen
+```
 https://api.SYSTEM-NAME_DOMAIN-NAME
 ```
 

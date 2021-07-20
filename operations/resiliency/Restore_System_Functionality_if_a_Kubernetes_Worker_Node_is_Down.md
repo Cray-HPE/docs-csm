@@ -127,7 +127,7 @@ This procedure requires administrative privileges.
 
 3.  View the pods on the system to see if their states have changed.
 
-    1.  View all the pods on the system.
+    1.  View all of the pods on the system.
 
         The following are important things to look for when viewing the pods:
 
