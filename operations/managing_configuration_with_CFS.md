@@ -293,11 +293,7 @@ procedure.
 1. Create a CFS configuration JSON file for NCN personalization.
 
    **Note:** During the early part of a first time installation of software, the CSM product is the only one
-<<<<<<< HEAD
    which is available to be added to the configuration layers.  As more software product streams are installed,
-=======
-   which is avaiable to be added to the configuration layers. As more software product streams are installed,
->>>>>>> 04842c27bdd4b745ee99576ff822bb9c2ea68412
    these other layers will become available to be added to the NCN personalization.
 
    All products that must be configured on the NCNs must have a corresponding layer in the CFS JSON file. Each node
