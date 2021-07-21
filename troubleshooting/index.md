@@ -51,32 +51,33 @@ Run these commands to fix the issue:
 
 ```bash
 git clone -b release/0.9 ssh://git@stash.us.cray.com:7999/csm/csm-install-workarounds.git
-csm-install-workarounds/workarounds/livecd-post-reboot/CASMINST-1612/CASMINST-1612.sh
+csm-install-workarounds/workarounds/livecd-post-reboot/CASMINST-2689/CASMINST-2689.sh
+for i in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ' ');
+do
+  scp -r csm-install-workarounds/workarounds/livecd-post-reboot/CASMINST-2689/ $i:/opt/cray/csm/workarounds/livecd-post-reboot/
+done
+pdsh -b -S -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') '/opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689/CASMINST-2689.sh'
 ```
 
 ###### Validate
 
-You can validate the fix worked by running this:
+Running the script again will produce this output:
 
-```bash
-pdsh -b -S -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') '
-if ! mkdir -p /tmp/mount.$$ ; then
-echo "mkdir failed"
-exit 1
-elif ! mount -L BOOTRAID /tmp/mount.$$/ ; then
-echo "mount failed"
-exit 1
-fi
-RC=1
-INITRD=$(grep initrdefi /tmp/mount.$$/boot/grub2/grub.cfg | awk -F/ "{ print \$NF }")
-if [ -z "$INITRD" ]; then
-echo "No initrd found in grub.cfg"
-elif [ ! -f /tmp/mount.$$/boot/$INITRD ]; then
-echo "Expected initrd not found: boot/$INITRD"
-else
-echo ok
-RC=0
-fi
-umount /tmp/mount.$$
-exit $RC' && echo "All checks passed" || echo "At least one check did not pass"
+```
+Examining /metal/boot/boot/kernel...kernel is OK.
+Examining /metal/boot/boot/initrd.img.xz...initrd.img.xz is OK.
+Examining /metal/boot/boot/kernel...kernel is OK.
+Examining /metal/boot/boot/initrd.img.xz...initrd.img.xz is OK.
+Examining /metal/boot/boot/kernel...kernel is OK.
+Examining /metal/boot/boot/initrd.img.xz...initrd.img.xz is OK.
+Examining /metal/boot/boot/kernel...kernel is OK.
+Examining /metal/boot/boot/initrd.img.xz...initrd.img.xz is OK.
+Examining /metal/boot/boot/kernel...kernel is OK.
+Examining /metal/boot/boot/initrd.img.xz...initrd.img.xz is OK.
+Examining /metal/boot/boot/kernel...kernel is OK.
+Examining /metal/boot/boot/initrd.img.xz...initrd.img.xz is OK.
+Examining /metal/boot/boot/kernel...kernel is OK.
+Examining /metal/boot/boot/initrd.img.xz...initrd.img.xz is OK.
+Examining /metal/boot/boot/kernel...kernel is OK.
+Examining /metal/boot/boot/initrd.img.xz...initrd.img.xz is OK.
 ```
