@@ -5,11 +5,6 @@ The following procedure shows the process for generating the `hmn_connections.js
 
 The [SHCD/HMN Connections Rules document](shcd_hmn_connections_rules.md) explains the expected naming conventions and rules for the HMN tab of the SHCD, and the `hmn_connections.json` file.
 
-> **`INTERNAL USE`** For HPE Cray internal systems, this file should come from the [shasta_system_configs](https://stash.us.cray.com/projects/DST/repos/shasta_system_configs/browse) repository.
-> Each system has its own directory in the repository. If this is a new system that does not yet have the `hmn_connections.json` file (or needs to be regenerated), then one will need to be generated from the SHCD (Cabling Diagram) for the system. 
->
-> If you need to fetch the system's SHCD, you can use your HPE login to fetch it from [SharePoint](https://hpe.sharepoint.com/sites/HPC-AI-Install/CID/Install%20Documents/Forms/AllItems.aspx?FolderCTID=0x0120009859972694683B4C93C09EA98DDBB640&viewid=d6b54e31%2D74ce%2D44a9%2D924a%2Df5c0627cd172&id=%2Fsites%2FHPC%2DAI%2DInstall%2FCID%2FInstall%20Documents%2FCray%2FShasta%20River). May need to request permission to access this SharePoint folder.
-
 ### Prerequisites
 * SHCD Excel file for your system
 * Podman or Docker running
@@ -33,7 +28,6 @@ The [SHCD/HMN Connections Rules document](shcd_hmn_connections_rules.md) explain
     ```
 
 2. Load the hms-shcd-parser docker image from the CSM release distribution. Only required if the CSM release distribution includes container images, otherwise this step can be skipped.
-    > **`INTERNAL USE`** When the version of the hms-shcd-parser image changes in the CSM release distribution the following section will need to be updated with the corrected tag
 
     > Note: The load-container-image.sh script works with both Podman and Docker
 
@@ -49,7 +43,6 @@ The [SHCD/HMN Connections Rules document](shcd_hmn_connections_rules.md) explain
     ```
 
 4. Generate the hmn_connections.json file from the SHCD. This will either create or overwrite the `hmn_connections.json` file in the current directory:
-    > **`INTERNAL USE`** When the version of the hms-shcd-parser image changes in the CSM release distribution the following section will need to be updated with the corrected tag
 
     __If using Podman__:
     ```
