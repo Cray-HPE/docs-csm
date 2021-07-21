@@ -116,19 +116,15 @@ section sets the expected environment variables to appropriate values.
    ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
    ```
 
-1. **After completing the previous step**, apply the workaround in the following directory, 
+1. **After completing the previous step**, apply the workaround in the following directory,
    even if it has been previously applied on the system.
 
    ```
-   /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-1612
+   /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689
    ```
-   
-   See the `README.md` file in that directory for instructions on how to apply the workaround. 
-   It requires you to run a script. On successful application of the workaround, verify that 
-   this is the final line of script output:
-   ```
-   Done. WAR successfully applied.
-   ```
+
+   See the `README.md` file in that directory for instructions on how to apply the workaround.
+   It requires you to run a script.
 
 1. Set `CSM_SCRIPTDIR` to the scripts directory included in the docs-csm RPM
    for the CSM 0.9.4 upgrade:
@@ -285,14 +281,14 @@ should resolve itself once the workload manager product is installed.
    2. Specify the name and credentials for the BMC:
       ```bash
       ncn# BMC=ncn-<NCN name>-mgmt # e.g. ncn-w003-mgmt
-      ncn# export USERNAME=root 
+      ncn# export USERNAME=root
       ncn# export IPMI_PASSWORD=changeme
       ````
    3. View the existing DNS and NTP settings on the BMC:
       ```bash
       ncn# /opt/cray/ncn/set-bmc-ntp-dns.sh ilo -H $BMC -s
       ```
-   4. Disable DHCP and set the NTP servers to point toward `time-hmn` and `ncn-m001`. 
+   4. Disable DHCP and set the NTP servers to point toward `time-hmn` and `ncn-m001`.
       ```bash
       ncn# /opt/cray/ncn/set-bmc-ntp-dns.sh ilo -H $BMC -S -N "time-hmn,$M001_HMN_IP" -n
       ```
