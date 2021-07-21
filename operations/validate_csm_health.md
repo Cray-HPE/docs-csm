@@ -605,7 +605,7 @@ The Software Management Services health checks are run using `/usr/local/bin/cms
   * The same amount of data is written to the log file in either case.
 
 <a name="cmsdev-results"></a>
-#### 3.1 Interpreting cmsdev Results
+#### 3.2 Interpreting cmsdev Results
 
 * If a test passes:
   * The last line of output from the tool reports SUCCESS.
