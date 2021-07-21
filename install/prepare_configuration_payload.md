@@ -91,7 +91,7 @@ command during the installation process.
 
 Although some information in these files can be populated from site survey information, the SHCD prepared by
 HPE Cray Manufacturing is the best source of data for hmn_connections.json. The `ncn_metadata.csv` does
-require collection of MAC addresses from the management nodes since that information is not present in the SHCD.
+require collection of MAC addresses from the management nodes because that information is not present in the SHCD.
 
 <a name="application_node_config_yaml"></a>
 #### `application_node_config.yaml`

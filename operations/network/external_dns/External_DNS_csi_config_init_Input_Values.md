@@ -21,7 +21,7 @@ The can-external-dns value is the IP address that DNS queries under the combined
 
 This will be the shared IP address for `services/cray-externaldns-coredns-tcp` and services/cray-externaldns-coredns-udp services, which must be an IP in the `customer_access_static_metallb_address_pool` subnet defined in the `csi config init` input. See [Customer Access Network \(CAN\)](../customer_access_network/Customer_Access_Network_CAN.md) for more information.
 
-Changing this value requires updating the loadBalancerIP value of the `services/cray-externaldns-coredns-tcp` and `services/cray-externaldns-coredns-udp` services.
+Changing this value requires updating the `loadBalancerIP` value of the `services/cray-externaldns-coredns-tcp` and `services/cray-externaldns-coredns-udp` services.
 
 Input for `csi config init`:
 

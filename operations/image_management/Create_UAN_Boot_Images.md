@@ -78,7 +78,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
     --template={{.data.vcs_password}} | base64 --decode
     ```
 
-6.  Clone the UAN configuration management repository. Replace CRAY\_EX\_HOSTNAME in clone url with **api-gw-service-nmn.local** when cloning the repository.
+6.  Clone the UAN configuration management repository. Replace `CRAY_EX_HOSTNAME` in the `clone_url` with **api-gw-service-nmn.local** when cloning the repository.
 
     The repository is in the VCS/Gitea service and the location is reported in the cray-product-catalog Kubernetes ConfigMap in the `configuration.clone_url` key. The CRAY\_EX\_HOSTNAME from the `clone_url` is replaced with `api-gw-service-nmn.local` in the command that clones the repository.
 
@@ -135,7 +135,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
 
 10. Verify that the System Layout Service \(SLS\) and the uan\_interfaces configuration role refer to the Mountain Node Management Network by the same name. Skip this step if there are no Mountain cabinets in the HPE Cray EX system.
 
-    1.  Edit the roles/uan\_interfaces/tasks/main.yml file and change the line that reads `url: http://cray-sls/v1/search/networks?name=MNMN` to read `url: http://cray-sls/v1/search/networks?name=NMN_MTN`.
+    1.  Edit the `roles/uan_interfaces/tasks/main.yml` file and change the line that reads `url: http://cray-sls/v1/search/networks?name=MNMN` to read `url: http://cray-sls/v1/search/networks?name=NMN_MTN`.
 
         The following excerpt of the relevant section of the file shows the result of the change.
 

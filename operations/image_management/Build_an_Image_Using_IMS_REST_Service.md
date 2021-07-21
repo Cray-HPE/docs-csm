@@ -94,7 +94,7 @@ The commands in this procedure must be run as the `root` user in this release.
 
 4.  Create an IMS job record and start the image creation job.
 
-    After building an image, IMS will automatically upload any build artifacts \(root file system, kernel and initrd\) to the artifact repository, and associate them with IMS. IMS is not able to dynamically determine the Linux kernel and initrd to look for since the file name for these vary depending upon Linux distribution, Linux version, dracut configuration, and more. Thus, the user must pass the name of the kernel and initrd that IMS will look for in the resultant image root’s /boot directory.
+    After building an image, IMS will automatically upload any build artifacts \(root file system, kernel and initrd\) to the artifact repository, and associate them with IMS. IMS is not able to dynamically determine the Linux kernel and initrd to look for because the file name for these vary depending upon Linux distribution, Linux version, dracut configuration, and more. Thus, the user must pass the name of the kernel and initrd that IMS will look for in the resultant image root’s /boot directory.
 
     Use the following table to help determine the default kernel and initrd file names to specify when submitting the job to customize an image. These are just default names. Please consult with the site administrator to determine if these names have been changed for a given image or recipe.
 
@@ -154,7 +154,7 @@ The commands in this procedure must be run as the `root` user in this release.
     ncn# export POD=cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-create-lt69t
     ```
 
-6.  Watch the logs from the `fetch-recipe`, `wait-for-reops`, `build-ca-rpm`, `build-image`, and `buildenv-sidecar` containers to monitor the image creation process.
+6.  Watch the logs from the `fetch-recipe`, `wait-for-repos`, `build-ca-rpm`, `build-image`, and `buildenv-sidecar` containers to monitor the image creation process.
 
     Use `kubectl` and the returned pod name from the previous step to retrieve this information.
 
@@ -525,7 +525,7 @@ The commands in this procedure must be run as the `root` user in this release.
     Deleting the job record will delete the underlying Kubernetes job, service, and ConfigMap that were created when the job record was submitted.
 
 
-Images built by IMS contain only the packages and settings that are referenced in the Kiwi-NG recipe used to build the image. The only exception is that IMS will dynamically install the system's root CA certificate to allow Zypper \(via Kiwi-NG\) to talk securely with the required Nexus RPM repositories. Images that are intended to be used to boot a CN or other node must be configured with DNS and other settings that enable the image to talk to vital  services. A base level of customization is provided by the default Ansible plays used by the Configuration Framework Service \(CFS\) to enable DNS resolution, which are typically run against an image after it is built by IMS.
+Images built by IMS contain only the packages and settings that are referenced in the Kiwi-NG recipe used to build the image. The only exception is that IMS will dynamically install the system's root CA certificate to allow zypper \(via Kiwi-NG\) to talk securely with the required Nexus RPM repositories. Images that are intended to be used to boot a CN or other node must be configured with DNS and other settings that enable the image to talk to vital  services. A base level of customization is provided by the default Ansible plays used by the Configuration Framework Service \(CFS\) to enable DNS resolution, which are typically run against an image after it is built by IMS.
 
 When customizing an image via [Customize an Image Root Using IMS](Customize_an_Image_Root_Using_IMS.md), once chrooted into the image root \(or if using a \`jailed\` environment\), the image will only have access to whatever configuration the image already contains. In order to talk to  services, including Nexus RPM repositories, the image root must first be configured with DNS and other settings. That base level of customization is provided by the default Ansible plays used by the CFS to enable DNS resolution.
 

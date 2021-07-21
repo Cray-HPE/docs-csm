@@ -35,7 +35,7 @@ This procedure explains both how to identify and modify the list of current UAI 
 
 4.  Repeat the previous command with alternative capitalizations of False \(for example, false and FALSE\).
 
-    Hewlett Packard Enterprise recommends this step to identify all labeled NCNs, since labels are case-sensitive text strings and not boolean values.
+    Hewlett Packard Enterprise recommends this step to identify all labeled NCNs, because labels are case-sensitive text strings and not boolean values.
 
 5.  **Configure the NCNs that will host UAIs**
 6.  Determine which and how many worker NCNs will host UAIs.

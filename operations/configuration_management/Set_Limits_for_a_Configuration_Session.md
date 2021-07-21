@@ -44,7 +44,7 @@ ncn# cray cfs sessions create --name example \
 
 ### Limit CFS Session Configuration Layers
 
-It is possible to limit the session to only specific layers of the configuration that is specified. This is useful when re-applying configuration of a specific layer and applying the other layers is not necessary or desired. This option may also reduce the number of configurations that need to be created and stored by CFS since sessions can specify layers from a master configuration layer list.
+It is possible to limit the session to only specific layers of the configuration that is specified. This is useful when re-applying configuration of a specific layer and applying the other layers is not necessary or desired. This option may also reduce the number of configurations that need to be created and stored by CFS because sessions can specify layers from a master configuration layer list.
 
 Use the --configuration-limit option when creating a CFS session to apply configuration layer limits. Multiple layers to limit the session are specified as a comma-separated list either by name \(if layers were given names when created\) or by zero-based index as defined in the configuration submitted to CFS.
 

@@ -99,7 +99,7 @@ The Kubernetes cluster on master nodes is being rebuilt.
         ncn-m001# cd /tmp/etcd_restore
         ```
 
-    4.  Retrieve the 'initial-cluster' and 'initial-advertise-peer-urls' values from the kubeadmcfg.yaml file.
+    4.  Retrieve the 'initial-cluster' and 'initial-advertise-peer-urls' values from the `kubeadmcfg.yaml` file.
 
         The returned values will be used in the next step.
 
@@ -139,7 +139,7 @@ The Kubernetes cluster on master nodes is being rebuilt.
         ncn-m002# cd /tmp/etcd_restore
         ```
 
-    4.  Retrieve the 'initial-cluster' and 'initial-advertise-peer-urls' values from the kubeadmcfg.yaml file.
+    4.  Retrieve the 'initial-cluster' and 'initial-advertise-peer-urls' values from the `kubeadmcfg.yaml` file.
 
         The returned values will be used in the next step.
 
@@ -179,7 +179,7 @@ The Kubernetes cluster on master nodes is being rebuilt.
         ncn-m003# cd /tmp/etcd_restore
         ```
 
-    4.  Retrieve the 'initial-cluster' and 'initial-advertise-peer-urls' values from the kubeadmcfg.yaml file.
+    4.  Retrieve the 'initial-cluster' and 'initial-advertise-peer-urls' values from the `kubeadmcfg.yaml` file.
 
         The returned values will be used in the next step.
 

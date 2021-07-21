@@ -85,7 +85,7 @@ ncn-m001# cray scsd bmc dumpcfg create PAYLOAD_FILE --format json
 
 ### Retrieve Information from a Single Target
 
-Retrieve NTP sever information, syslog information, or the SSH key from a single target.
+Retrieve NTP server information, syslog information, or the SSH key from a single target.
 
 ```
 ncn-m001# cray scsd bmc cfg describe XNAME --format json
