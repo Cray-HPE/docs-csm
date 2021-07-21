@@ -95,7 +95,7 @@ Example `ncn_metadata.csv` file for a system that has been configured as follows
  * NCNs are configured to boot over the PCIe NICs
  * Master and Storage nodes have two 2 port PCIe cards
  * Worker nodes have one 2 port PCIe card
-> Since the NCN have been configured to boot over their PCIe NICs the values for the columns `Bootstrap MAC` and `Bond0 MAC0` have the same value.
+> Because the NCNs have been configured to boot over their PCIe NICs, the values for the columns `Bootstrap MAC` and `Bond0 MAC0` have the same value.
 
 ```
 Xname,Role,Subrole,BMC MAC,Bootstrap MAC,Bond0 MAC0,Bond0 MAC1

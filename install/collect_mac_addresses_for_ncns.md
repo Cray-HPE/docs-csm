@@ -186,7 +186,7 @@ making a backup of them, in case they need to be examined at a later time.
 
    **Note:** It may take about 10 minutes from when dnsmasq is restarted to when the BMCs pick up new DHCP leases.
 
-   This step will check all management nodes except ncn-m001-mgmt since that has an external connection and could
+   This step will check all management nodes except `ncn-m001-mgmt` because that has an external connection and could
    not be booted by itself as the PIT node. 
 
    ```bash

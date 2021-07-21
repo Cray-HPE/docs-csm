@@ -171,7 +171,7 @@ which device that is.
     [14:0:0:1]   enclosu SanDisk  SES Device       1012  -      
     ```
 
-    In the above example, we can see our internal disks as the `ATA` devices and our USB as the `disk` or `enclosu` device. Since the `SanDisk` fits the profile we are looking for, we are going to use `/dev/sdd` as our disk.
+    In the above example, we can see our internal disks as the `ATA` devices and our USB as the `disk` or `enclosu` device. Because the `SanDisk` fits the profile we are looking for, we are going to use `/dev/sdd` as our disk.
 
     Set a variable with your disk to avoid mistakes:
 
@@ -255,7 +255,7 @@ Pull these files into the current working directory:
 
 > The optional `cabinets.yaml` file allows cabinet naming and numbering as well as some VLAN overrides. See [Create Cabinets YAML](create_cabinets_yaml.md).
 
-> The `system_config.yaml` is required for a reinstall, since it was created during a previous install. For a first time install, the information in it can be provided as command line arguments to `csi config init`.
+> The `system_config.yaml` is required for a reinstall, because it was created during a previous install. For a first time install, the information in it can be provided as command line arguments to `csi config init`.
 
 1. Change into the preparation directory:
 

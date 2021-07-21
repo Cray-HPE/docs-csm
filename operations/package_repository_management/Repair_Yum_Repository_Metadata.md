@@ -84,7 +84,7 @@ The system is fully installed.
 
 11. View the log file on the system.
 
-    Even though the Nexus logs contains messages pertaining to tasks, it can be difficult to track messages for a specific task, especially since rebuilding Yum metadata takes a long time.
+    Even though the Nexus logs contains messages pertaining to tasks, it can be difficult to track messages for a specific task, especially because rebuilding Yum metadata takes a long time.
 
     1.  Retrieve the Nexus pod name.
 

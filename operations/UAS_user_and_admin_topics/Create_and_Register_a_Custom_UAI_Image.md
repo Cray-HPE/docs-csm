@@ -137,7 +137,7 @@ The default end-user UAI is not suitable for use with the Cray PE. The generic i
 
 9.  Delete the squashfs mount directory and tarball.
 
-    Since the commands in the following example are executed by the root user and these temporary directories are similar to an important system path, the second rm command does not use the common -r as a precaution.
+    Because the commands in the following example are executed by the root user and these temporary directories are similar to an important system path, the second rm command does not use the common -r as a precaution.
 
     ```screen
     ncn# umount mount; rmdir mount

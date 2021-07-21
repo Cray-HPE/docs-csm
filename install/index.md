@@ -75,7 +75,7 @@ sections, but there is also a general troubleshooting topic.
    1. Bootstrap PIT Node  
    The Pre-Install Toolkit (PIT) node needs to be bootstrapped from the LiveCD. There are two media available
    to bootstrap the PIT node--the RemoteISO or a bootable USB device. The recommended media is the RemoteISO,
-   since it does not require any physical media to prepare. However, remotely mounting an ISO on a BMC does not
+   because it does not require any physical media to prepare. However, remotely mounting an ISO on a BMC does not
    work smoothly for nodes from all vendors. It is recommended to try the RemoteISO first.  
    
       Use one of these procedures to bootstrap the PIT node from the LiveCD.  
@@ -138,7 +138,7 @@ sections, but there is also a general troubleshooting topic.
    After installing all of the CSM services now would be an good time to validate the health of the
    management nodes and all CSM services. The advantage in doing it now is that if there are any problems
    detected with the core infrastructure or the nodes, it is easy to rewind the installation to
-   [Deploy Management Nodes](#deploy_management_nodes) since the PIT node has not yet been redeployed.  
+   [Deploy Management Nodes](#deploy_management_nodes) because the PIT node has not yet been redeployed.  
    
       After installing all of the CSM services, wait at least 15 minutes to let the various Kubernetes
       resources get initialized and started before trying to validate CSM health. Because there are a number

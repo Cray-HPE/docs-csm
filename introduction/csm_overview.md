@@ -174,7 +174,7 @@ of obtaining tokens and user management, see
 [System Security and Authentication](../operations/security_and_authentication/System_Security_and_Authentication.md).
 
 Review the API documentation in the supplied container before attempting to use the API services. This container
-is generated with the release using the most current API descriptions in OpenAPI 2.0 format. Since this file serves
+is generated with the release using the most current API descriptions in OpenAPI 2.0 format. Because this file serves
 as both an internal definition of the API contract and the external documentation of the API function, it is the most
 up-to-date reference available.
 
