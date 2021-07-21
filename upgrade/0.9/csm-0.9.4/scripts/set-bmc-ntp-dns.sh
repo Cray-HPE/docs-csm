@@ -368,7 +368,7 @@ function reset_bmc_manager() {
   echo -e "\n"
 }
 
-# disable_ilo_dhcp() disables DHCP on the iLO since ipmitool cannot fully disable it. This requires a restart.
+# disable_ilo_dhcp() disables DHCP on the iLO because ipmitool cannot fully disable it. This requires a restart.
 function disable_ilo_dhcp() {
   local method
   local payload
