@@ -103,33 +103,33 @@ Perform these steps to update customizations.yaml:
 
  1. If you manage customizations.yaml in an external Git repository (as recommended), then clone a local working tree.
 
-   ```
-   ncn-m001# git clone <URL> site-init
-   ncn-m001# cd site-init
-   ```
+    ```
+    ncn-m001# git clone <URL> site-init
+    ncn-m001# cd site-init
+    ```
 
- If you do not have a backup of site-init then perform the following steps to create a new one using the values stored in the Kubernetes clluster
+    If you do not have a backup of site-init then perform the following steps to create a new one using the values stored in the Kubernetes clluster
 
-  * Create a new site-init directory using from the CSM tarball
+    * Create a new site-init directory using from the CSM tarball
 
-     ```
-     ncn-m001# cp -r ${CSM_DISTDIR}/shasta-cfg /tmp/site-init
-     ncn-m001# cd /tmp/site-init
-     ```
+      ```
+      ncn-m001# cp -r ${CSM_DISTDIR}/shasta-cfg /tmp/site-init
+      ncn-m001# cd /tmp/site-init
+      ```
 	
-  * Extract customizations.yaml from the site-init secret
+    * Extract customizations.yaml from the site-init secret
 	
-     ```
-     ncn-m001# kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
-     ```
+      ```
+      ncn-m001# kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
+      ```
 	
-  * Extract the certificate and key used to creaate the sealed secrets
+    * Extract the certificate and key used to creaate the sealed secrets
 	
-     ```
-     ncn-m001# mkdir certs
-     ncn-m001# kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.crt}' | base64 -d - > certs/sealed_secrets.crt
-     ncn-m001# kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.key}' | base64 -d - > certs/sealed_secrets.key
-     ```
+      ```
+      ncn-m001# mkdir certs
+      ncn-m001# kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.crt}' | base64 -d - > certs/sealed_secrets.crt
+      ncn-m001# kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.key}' | base64 -d - > certs/sealed_secrets.key
+      ```
 
 1. Update customizations.yaml
 
@@ -156,7 +156,7 @@ Perform these steps to update customizations.yaml:
 
    ```
    ncn-m001# git add customizations.yaml
-   ncn-m001# git commit -m 'Remove Gitea PVC configuration from customizations.yaml'
+   ncn-m001# git commit -m 'Add required PowerDNS configuration'
    ncn-m001# git push
    ```
 
