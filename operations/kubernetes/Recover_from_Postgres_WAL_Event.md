@@ -297,7 +297,7 @@ ncn-w001# kubectl exec ${POSTGRES_LEADER} -c postgres -n ${NAMESPACE} -it -- psq
 
 5. Restore the secrets.
 
-Once the dump has been restored onto the newly built postgresql cluster, the current Kubernetes secrets need to be updated in the postgresql cluster, otherwise the service will experience readiness and liveness probe failures since it will be unable to authenticate to the database.
+Once the dump has been restored onto the newly built postgresql cluster, the current Kubernetes secrets need to be updated in the postgresql cluster, otherwise the service will experience readiness and liveness probe failures because it will be unable to authenticate to the database.
 
 Determine which Postgres member is the leader.
 ```

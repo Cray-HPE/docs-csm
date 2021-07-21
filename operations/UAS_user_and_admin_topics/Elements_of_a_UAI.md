@@ -58,7 +58,7 @@ Refer to https://kubernetes.io/docs/concepts/storage/volumes for more informatio
 
 ## Resource specifications
 
-A resource request tells Kubernetes the minimum amount of memory and CPU to give to each UAI. A resource limit sets the maximum amount that Kubernetes can give to any UAI. Kubernetes uses resource limits and requests to manage the system resources available to pods. Since UAIs run as pods under Kubernetes, UAS takes advantage of Kubernetes to manage the system resources available to UAIs. In UAS, resource specifications contain that configuration. A UAI that is assigned a resource specification will use that instead of the default resource limits or requests on the Kubernetes namespace containing the UAI. This way, resource specifications can be used to fine-tune resources assigned to UAIs.
+A resource request tells Kubernetes the minimum amount of memory and CPU to give to each UAI. A resource limit sets the maximum amount that Kubernetes can give to any UAI. Kubernetes uses resource limits and requests to manage the system resources available to pods. Because UAIs run as pods under Kubernetes, UAS takes advantage of Kubernetes to manage the system resources available to UAIs. In UAS, resource specifications contain that configuration. A UAI that is assigned a resource specification will use that instead of the default resource limits or requests on the Kubernetes namespace containing the UAI. This way, resource specifications can be used to fine-tune resources assigned to UAIs.
 
 UAI resource specifications have three configurable parameters:
 

@@ -270,7 +270,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    
    > The optional `cabinets.yaml` file allows cabinet naming and numbering as well as some VLAN overrides. See [Create Cabinets YAML](create_cabinets_yaml.md).
    
-   > The `system_config.yaml` is required for a reinstall, since it was created during a previous install. For a first time install, the information in it can be provided as command line arguments to `csi config init`.
+   > The `system_config.yaml` is required for a reinstall, because it was created during a previous install. For a first time install, the information in it can be provided as command line arguments to `csi config init`.
    
    
    1. Change into the preparation directory.

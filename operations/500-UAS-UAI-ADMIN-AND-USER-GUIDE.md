@@ -133,7 +133,7 @@ When selecting UAI host nodes, it is a good idea to take into account the amount
 
 ### Identifying UAI Host Nodes <a name="main-hostnodes-identifying"></a>
 
-Since UAI host node identification is an exclusive activity, not an inclusive one, it starts by identifying the nodes that could potentially be UAI host nodes by their Kubernetes role:
+Because UAI host node identification is an exclusive activity, not an inclusive one, it starts by identifying the nodes that could potentially be UAI host nodes by their Kubernetes role:
 
 ```
 ncn-m001-pit# kubectl get nodes | grep -v master
@@ -784,7 +784,7 @@ ncn-m001-pit# cray uas admin config volumes delete a0066f48-9867-4155-9268-d001a
 
 ### Resource Specifications <a name="main-uasconfig-resources"></a>
 
-Kubernetes uses <a href="https://kubernetes.io/docs/tasks/configure-pod-container/assign-memory-resource" target="_blank">resource limits and resource requests</a>, to manage the system resources available to pods. Since UAIs run as pods under Kubernetes, UAS takes advantage of Kubernetes to manage the system resources available to UAIs. In the UAS configuration, resource specifications contain that configuration. A UAI that is assigned a resource specification will use that instead of the default resource limits / requests on the Kubernetes namespace containing the UAI. This can be used to fine-tune resources assigned to UAIs.
+Kubernetes uses <a href="https://kubernetes.io/docs/tasks/configure-pod-container/assign-memory-resource" target="_blank">resource limits and resource requests</a>, to manage the system resources available to pods. Because UAIs run as pods under Kubernetes, UAS takes advantage of Kubernetes to manage the system resources available to UAIs. In the UAS configuration, resource specifications contain that configuration. A UAI that is assigned a resource specification will use that instead of the default resource limits / requests on the Kubernetes namespace containing the UAI. This can be used to fine-tune resources assigned to UAIs.
 
 #### Listing Resource Specifications <a name="main-uasconfig-resources-list"></a>
 
@@ -1291,7 +1291,7 @@ Direct administrative UAI management is available mostly to allow administrators
 
 The legacy mode of UAI management gives users the authority to create, list, and delete UAIs that belong to them. While this is a conceptually simple mode, it can lead to an unnecessary proliferation of UAIs belonging to a single user if the user is not careful to create UAIs only when needed. The legacy mode also cannot take advantage of UAI classes to create more than one kind of UAI for different users' needs.
 
-The UAI broker mode creates / re-uses UAIs on demand when a user logs into a broker UAI using SSH. A site may run multiple broker UAIs, each configured to create UAIs of a different UAI class and each running with its own externally visible IP address. By choosing the correct IP address and logging into the broker, a user ultimately arrives in a UAI tailored for a given use case. Since the broker is responsible for managing the underlying end-user UAIs, users need not be given authority to create UAIs directly and, therefore, cannot cause a proliferation of unneeded UAIs. Since the broker UAIs each run separately on different IP addresses with, potentially, different user authorizations configured, a site can control which users are given access to which classes of end-user UAIs.
+The UAI broker mode creates / re-uses UAIs on demand when a user logs into a broker UAI using SSH. A site may run multiple broker UAIs, each configured to create UAIs of a different UAI class and each running with its own externally visible IP address. By choosing the correct IP address and logging into the broker, a user ultimately arrives in a UAI tailored for a given use case. Because the broker is responsible for managing the underlying end-user UAIs, users need not be given authority to create UAIs directly and, therefore, cannot cause a proliferation of unneeded UAIs. Because the broker UAIs each run separately on different IP addresses with, potentially, different user authorizations configured, a site can control which users are given access to which classes of end-user UAIs.
 
 ### Administrative Management of UAIs <a name="main-uaimanagement-adminuai"></a>
 
@@ -1969,7 +1969,7 @@ Are you sure you want to continue connecting (yes/no)? yes
 Warning: Permanently added '10.21.138.52' (ECDSA) to the list of known hosts.
 ```
 
-There are several things to notice here. First, the first time the user logs in the broker UAI's SSH host key is unknown, as is normal for SSH. Next, the user is asked for a password in this example. If the user's home directory, as defined in LDAP had been mounted in the broker UAI and a `.ssh/authorized_keys` entry had been present, there would not have been a password prompt. Home directory trees can be mounted as volumes just as any other directory can. Next, the broker mechanism in the broker UAI creates a new UAI since `vers` has never logged into this broker UAI before. Finally, there is a second prompt to acknowledge an unknown host which is, in this case, the end-user UAI itself. The broker UAI constructs a public/private key pair for the hidden SSH connection between the broker and the end-user UAI shown in the [overview figure](#main-uaimanagement-brokermode) above.
+There are several things to notice here. First, the first time the user logs in the broker UAI's SSH host key is unknown, as is normal for SSH. Next, the user is asked for a password in this example. If the user's home directory, as defined in LDAP, had been mounted in the broker UAI and a `.ssh/authorized_keys` entry had been present, there would not have been a password prompt. Home directory trees can be mounted as volumes just as any other directory can. Next, the broker mechanism in the broker UAI creates a new UAI because `vers` has never logged into this broker UAI before. Finally, there is a second prompt to acknowledge an unknown host which is, in this case, the end-user UAI itself. The broker UAI constructs a public/private key pair for the hidden SSH connection between the broker and the end-user UAI shown in the [overview figure](#main-uaimanagement-brokermode) above.
 
 The next time `vers` logs in, it looks more like this:
 
@@ -1979,7 +1979,7 @@ Password:
 vers@uai-vers-ee6f427e-6c7468cdb8-2rqtv> 
 ```
 
-Only the password prompt appears now, since the hosts are all known and the end-user UAI exists but there is no `.ssh/authorized_keys` known yet by the broker UAI for `vers`.
+Only the password prompt appears now, because the hosts are all known and the end-user UAI exists but there is no `.ssh/authorized_keys` known yet by the broker UAI for `vers`.
 
 ## UAI Images <a name="main-uaiimages"></a>
 
@@ -2497,9 +2497,9 @@ ncn-w001# umount -v mount; rmdir -v mount
 
 ncn-w001# rm $SESSION_ID.tar rootfs.squashfs
 
-# NOTE: the next step could be done as an `rm -rf` but, since the user
+# NOTE: The next step could be done using `rm -rf` but, because the user
 #       is `root` and the path is very similar to an important system
-#       path a more cautious approach is taken.
+#       path, a more cautious approach is taken.
 ncn-w001# rm -fv ./usr/bin/uai-ssh.sh && rmdir ./usr/bin ./usr
 ```
 
@@ -2519,7 +2519,7 @@ cray-uas-mgr-6bbd584ccb-zg8vx                                    2/2     Running
 cray-uas-mgr-6bbd584ccb-acg7y                                    2/2     Running     0          7d7h
 ```
 
-The logs are collected in the pods, and can be seen using the `kubectl logs` command on each of the pods. Since the pods produce a lot of debug logging in the form
+The logs are collected in the pods, and can be seen using the `kubectl logs` command on each of the pods. Because the pods produce a lot of debug logging in the form
 
 ```
 127.0.0.1 - - [02/Feb/2021 22:57:18] "GET /v1/mgr-info HTTP/1.1" 200 -

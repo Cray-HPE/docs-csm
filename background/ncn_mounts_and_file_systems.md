@@ -401,7 +401,7 @@ free blocks that are not claimed by the file system. This means that memory is f
 when the file system does not claim it anymore.
 
 Thin overlays can be disabled, and instead classic DM Snapshots can be used to manage the overlay. This
-will use more RAM. It is not recommended, since dmraid is not included in the initrd.
+will use more RAM. It is not recommended, because `dmraid` is not included in the initrd.
 
 ```shell script
 # Enable (default)

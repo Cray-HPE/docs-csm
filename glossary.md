@@ -15,7 +15,7 @@ node.
 
 Air-Cooled cabinet COTS servers include a Redfish-enabled baseboard management
 controller (BMC) and REST endpoint for API control and management. Either IPMI
-commands or REST API calls can be used to manage a COTS sever.
+commands or REST API calls can be used to manage a COTS server.
 
 ### Blade Switch Controller (sC)
 
