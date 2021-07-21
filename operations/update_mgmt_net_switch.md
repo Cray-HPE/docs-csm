@@ -28,7 +28,7 @@ The desired settings for the HMN network would be more like these.
 10.1.0.9        sw-cdu-002
 ```
 
-This system needs to do the renames in this order: do CDU switches (8 to 9, 7 to 8) and then leaf switches (4 to 7, but also 2 to 6), then aggregation switches (6 to 5, 5 to 4) and spine switches (3 to 3, and 1 to 2). These have IP address changes and name changes since we now have 3 digits instead of 2 for the switch hostname.
+This system needs to do the renames in this order: do CDU switches (8 to 9, 7 to 8) and then leaf switches (4 to 7, but also 2 to 6), then aggregation switches (6 to 5, 5 to 4) and spine switches (3 to 3, and 1 to 2). These have IP address changes and name changes because we now have 3 digits instead of 2 for the switch hostname.
 
 1. Check switch IP addresses, names, and component names in /var/www/ephemeral/prep/${SYSTEM_NAME}/networks when booted from the LiveCD on ncn-m001.
 
@@ -139,7 +139,7 @@ This system needs to do the renames in this order: do CDU switches (8 to 9, 7 to
    pit# vi CAN.yaml
    ```
 
-   Excerpt from CAN.yaml showing the two spine switches. Most v1.3 systems would have had these as ending in .1 and in .3. Note these switches are not named "spine" or "agg" since the SHCD may specify differing exit points, but with either option the IPv4 address is specified.
+   Excerpt from CAN.yaml showing the two spine switches. Most v1.3 systems would have had these as ending in .1 and in .3. Note these switches are not named "spine" or "agg" because the SHCD may specify differing exit points, but with either option the IPv4 address is specified.
 
    ```
      ip_reservations:

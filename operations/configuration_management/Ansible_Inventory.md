@@ -29,7 +29,7 @@ Consult the `cray-hms-base-config` Kubernetes ConfigMap in the services namespac
 
 During a CFS session, the dynamic inventory is generated and placed in the hosts/01-cfs-generated.yaml file, relative to the configuration management repository root defined in the current configuration layer. Refer to the external [Ansible Inventory](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#using-multiple-inventory-sources) documentation for more information about managing inventory, as well as variable precedence within multiple inventory files.
 
-CFS prefixes its dynamic inventory file with `01-` so that its variables can be easily overridden as needed since Ansible reads inventory files in lexicographic order.
+CFS prefixes its dynamic inventory file with `01-` so that its variables can be easily overridden as needed because Ansible reads inventory files in lexicographic order.
 
 
 ### Static Inventory

@@ -12,7 +12,7 @@ The Cray command line interface \(CLI\) tool is initialized and configured on th
 
 1. Disable the console services.
     
-    Since the console services are looking for new hardware and continually verifying that console
+    Because the console services are looking for new hardware and continually verifying that console
     connections are established with all the nodes in the system, these services must be disabled
     to stop automatic console connections.
 

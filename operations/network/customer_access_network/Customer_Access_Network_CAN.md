@@ -35,7 +35,7 @@ IP addresses are allocated from a single IP subnet that is configured as the `ca
     -   This subnet currently needs only a few IPs.
 -   Subnet for the MetalLB dynamic pool \(can-dynamic-pool\).
     -   This is the largest subnet because it is used for most of the other services, which includes UAIs. These IPs can be allocated differently across deployments because these services are accessed by DNS name rather than by IP.
-    -   The size of this subnet depends on how many UAI and Image Management Service \(IMS\) pods are needed at a given time since these IPs will come out of this subnet.
+    -   The size of this subnet depends on how many UAI and Image Management Service \(IMS\) pods are needed at a given time because these IPs will come out of this subnet.
 
 The minimum size for the CAN subnet is /26. The CAN /26 subnet allows for the following:
 

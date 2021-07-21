@@ -23,7 +23,7 @@ at displaying the images and allowing you to follow the navigational links.
 <a name="file-formats"></a>
 ## File Formats
 
-Some of the installation instructions require updating files in JSON, YAML, or TOML format. These files should be updated with care since some file formats do not accept tab characters for indentation of lines. Only space characters are supported. Refer to online documentation to learn more about the syntax of JSON, YAML, and TOML files.
+Some of the installation instructions require updating files in JSON, YAML, or TOML format. These files should be updated with care because some file formats do not accept tab characters for indentation of lines. Only space characters are supported. Refer to online documentation to learn more about the syntax of JSON, YAML, and TOML files.
 
 <a name="typographic-conventions"></a>
 ## Typographic Conventions
