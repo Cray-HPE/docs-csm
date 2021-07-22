@@ -37,11 +37,11 @@ ceph orch ps
 ceph orch host ls
 
 
-# Begin OSD conversion.  Run on each node that has OSDS
+# Begin OSD conversion. Run on each node that has OSDs
 
 cephadm adopt --style legacy --name osd.# --skip-pull
 
-# End  OSD conversion.  Run on each node that has OSDS
+# End  OSD conversion. Run on each node that has OSDs
 
 ceph fs ls
 ceph orch apply mds cephfs 3

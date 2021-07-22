@@ -26,9 +26,9 @@ ports on the nodes and how to cable the nodes to the management network switches
 ![Diagram of Rear View of HPE ProLiant DL385 Gen10 Plus](../img/network/DL385-back.png)
 * The OCP Slot is noted (number 7) in the image above.  
   * This is the bottom middle slot to the left of the VGA port.
-  * Ports are numbered left-to-right:  the far left port is port 1.
+  * Ports are numbered left-to-right: the far left port is port 1.
 * The PCIe Slot 1 is on the top left side of the image above (under number 1).
-  * Ports are numbered left-to-right:  the far left port is port 1.
+  * Ports are numbered left-to-right: the far left port is port 1.
 
 
 <a name="hpe_dl325"></a>
@@ -36,9 +36,9 @@ ports on the nodes and how to cable the nodes to the management network switches
 ![Diagram of Rear View of HPE ProLiant DL325 with OCP](../img/network/DL325-back.png)
 * The OCP Slot is noted (number 9) in the image above.
   * This is the slot on the bottom left of the node.
-  * Ports are numbered left-to-right:  the far left port is port 1.
+  * Ports are numbered left-to-right: the far left port is port 1.
 * The PCIE Slot 1 is on the top left side of the image above (under number 1).
-  * Ports are numbered left-to-right:  the far left port is port 1.
+  * Ports are numbered left-to-right: the far left port is port 1.
 
 <a name="hpe_worker_node_cabling"></a>
 ### HPE Worker Node Cabling
@@ -147,8 +147,8 @@ For systems that include 4 aggregation switches the cabling will look like the f
 * The iLO BMC RJ45 port is a shared network port. Both iLO/BMC traffic and compute node traffic could transit this link.
   * Isolating this port to iLO/BMC only traffic is not possible within firmware configuration alone.
   * iLO configuration settings **must** be paired with management switch port settings to ensure only BMC traffic exits the port.
-  * The iLO firmware must be set to tag traffic to VLAN 4.  The switch port must be set to trunk VLAN 4.
-* Ports on the OCP card are numbered left-to-right:  the far left port is port 1.
+  * The iLO firmware must be set to tag traffic to VLAN 4. The switch port must be set to trunk VLAN 4.
+* Ports on the OCP card are numbered left-to-right: the far left port is port 1.
 
 #### Apollo XL645D Cabling (per server)
 
@@ -167,8 +167,8 @@ For systems that include 4 aggregation switches the cabling will look like the f
 * The iLO BMC RJ45 port is a shared network port. Both iLO/BMC traffic and compute node traffic could transit this link.
   * Isolating this port to iLO/BMC only traffic is not possible within firmware configuration alone.
   * iLO configuration settings **must** be paired with management switch port settings to ensure only BMC traffic exits the port.
-  * The iLO firmware must be set to tag traffic to VLAN 4.  The switch port must be set to trunk VLAN 4.
-* Ports on the PCIe card are numbered left-to-right:  the far left port is port 1.
+  * The iLO firmware must be set to tag traffic to VLAN 4. The switch port must be set to trunk VLAN 4.
+* Ports on the PCIe card are numbered left-to-right: the far left port is port 1.
 
 #### Apollo XL675D Cabling
 

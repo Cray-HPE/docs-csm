@@ -10,7 +10,7 @@ from urllib3.util.retry import Retry
 import warnings
 
 # Read in username, password, vendor, method, URL, and payload from environment variables
-# Payload may not be set, but that's okay -- we only look at it if the method
+# Payload may not be set, but that is okay -- we only look at it if the method
 # is post or patch, in which case it needs to be set
 user=os.environ['USERNAME']
 pw=os.environ['IPMI_PASSWORD']
@@ -76,7 +76,7 @@ if method in { "patch", "post" }:
     # whether or not this is Gigabyte
     if -1 < vendor.find("GIGA") < vendor.find("BYTE"):
         # Adding this header based on this comment in the shell script:
-        # GIGABYTE seems to need If-Match headers.  For now, just accept * all because we don't 
+        # GIGABYTE seems to need If-Match headers.  For now, just accept * all because we do not 
         # know yet what they are looking for
         headers["If-Match"] = "*"
 

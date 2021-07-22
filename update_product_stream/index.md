@@ -135,7 +135,7 @@ None.
 System installer
 
 #### Objective
-Acquire the late-breaking CSM workarounds and documentation update rpms. These fixes were not available until after the software release. The software installation and upgrade processes have several breakpoints where you check and apply workarounds before or after a critical procedure.
+Acquire the late-breaking CSM workarounds and documentation update RPMs. These fixes were not available until after the software release. The software installation and upgrade processes have several breakpoints where you check and apply workarounds before or after a critical procedure.
 
 #### Limitations
 None.

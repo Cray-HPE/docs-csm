@@ -6,10 +6,12 @@ Glossary of terms used in CSM documentation.
 
 An application node (AN) is an NCN which is not providing management functions for the Cray EX system.
 The AN is not part of the Kubernetes cluster to which management nodes belong. One special type of AN
-is the UAN (User Access Node), but different systems may have need for other types of AN, such as nodes
-which provide a Lustre routing function (LNet router), or gateway between HSN and Infiniband, or data 
-mover between two different network file systems, or visualization servers, or some other special purpose
-node. 
+is the UAN (User Access Node), but different systems may have need for other types of ANs, such as:
+* nodes which provide a Lustre routing function (LNet router)
+* gateways between HSN and Infiniband
+* data movers between two different network file systems
+* visualization servers
+* other special-purpose nodes
 
 ### Baseboard Management Controller (BMC)
 

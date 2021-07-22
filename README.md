@@ -33,7 +33,7 @@ Within this README.md file, these topics are described.
 ### Offline Documentation
 
 The CSM documentation is included within the CSM product release tarball. After it has been installed, the 
-documentation will be available at `/usr/share/doc/metal` as installed by the `docs-csm-install` rpm.
+documentation will be available at `/usr/share/doc/metal` as installed by the `docs-csm-install` RPM.
 
 This command will report the version of your installed documentation:
 

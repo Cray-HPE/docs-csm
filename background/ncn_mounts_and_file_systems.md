@@ -359,8 +359,8 @@ There are two options one can leave enabled to accomplish this:
 
 For long-term usage, `rd.live.overlay.readonly=1` should be added to the command line.
 
-The `reset=1` toggle is usually used to fix a side-ways overlay, if you want to completely refresh 
-and purge the overlay then  `rd.live.overlay.reset` is your friend.
+The `reset=1` toggle is usually used to fix a problematic overlay. If you want to completely refresh 
+and purge the overlay, then use `rd.live.overlay.reset`.
 
 
 ```

@@ -1,7 +1,7 @@
 #!/bin/bash
 # Copyright 2021 Hewlett Packard Enterprise Development LP
 
-# Begin OSD conversion.  Run on each node that has OSDS
+# Begin OSD conversion. Run on each node that has OSDs
 
 function upgrade_osds () {
 for host in $(ceph node ls| jq -r '.osd|keys[]')
@@ -20,5 +20,5 @@ for host in $(ceph node ls| jq -r '.osd|keys[]')
  ceph osd require-osd-release octopus
 }
 
-# End  OSD conversion.  Run on each node that has OSDS
+# End  OSD conversion. Run on each node that has OSDs
 
