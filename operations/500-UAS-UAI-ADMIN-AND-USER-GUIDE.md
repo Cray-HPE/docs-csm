@@ -404,7 +404,7 @@ The output shown above shows three image registrations. Each has an `imagename` 
 
     NOTE: simply registering a UAI image name does not make the image available. The image must also be created and stored in the container registry. This is covered in [???where???].
 
-There is also a `default` flag. If this flag is `true` the image will be used  whenever a UAI is created without specifying an image or UAI class as part of the creation. Finally, there is an `image_id`, which identifies this image registration for later inspection, update, or deletion and for linking the image to a [UAI class](#main-uasconfig-classes).
+There is also a `default` flag. If this flag is `true` the image will be used whenever a UAI is created without specifying an image or UAI class as part of the creation. Finally, there is an `image_id`, which identifies this image registration for later inspection, update, or deletion and for linking the image to a [UAI class](#main-uasconfig-classes).
 
 #### Registering UAI Images <a name="main-uasconfig-images-add"></a>
 
@@ -1287,7 +1287,7 @@ UAS supports two manual methods and one automated method of UAI management. Thes
 * Legacy mode user driven UAI management
 * UAI broker mode UAI management
 
-Direct administrative UAI management is available mostly to allow administrators to set up UAI brokers for the UAI broker mode of UAI management and to control UAIs that are created under one of the other two methods. It is unlikely that a site will choose to create end-user UAIs this way, but it is possible to do. The administrative UAI management API  provides an administrative way to list, create, examine, and delete UAIs.
+Direct administrative UAI management is available mostly to allow administrators to set up UAI brokers for the UAI broker mode of UAI management and to control UAIs that are created under one of the other two methods. It is unlikely that a site will choose to create end-user UAIs this way, but it is possible to do. The administrative UAI management API provides an administrative way to list, create, examine, and delete UAIs.
 
 The legacy mode of UAI management gives users the authority to create, list, and delete UAIs that belong to them. While this is a conceptually simple mode, it can lead to an unnecessary proliferation of UAIs belonging to a single user if the user is not careful to create UAIs only when needed. The legacy mode also cannot take advantage of UAI classes to create more than one kind of UAI for different users' needs.
 
@@ -2219,11 +2219,11 @@ Match User !root,*
 	PermitTTY yes
 	ForceCommand /usr/bin/switchboard broker --class-id $UAI_CREATION_CLASS
 ```
-Important content here  is as follows:
+Important content here is as follows:
 
 * `Port 30123` tells sshd to listen on a port that can be reached through port forwarding by the publicly visible Kubernetes service,
 * The `UseDNS no` avoids any DNS issues resulting from the broker UAI running in the Kubernetes network space.
-* The `permitTTY yes`  setting permits interactive UAI logins
+* The `permitTTY yes` setting permits interactive UAI logins
 * The `ForceCommand ...` statement ensures that users are always sent on to end-user UAIs or drop out of the broker UAI on failure, preventing users from directly accessing the broker UAI.
 * The `AcceptEnv UAI_ONE_SHOT` setting is not required, but it allows a user to set the UAI_ONE_SHOT variable which instructs the broker to delete any created end-user UAI after the user logs out.
 

@@ -133,7 +133,7 @@ The Kubernetes cluster on master nodes is being rebuilt.
         ncn-m002# mkdir /tmp/etcd_restore
         ```
 
-    3.  Change to the /tmp/etcd\_restore directory.
+    3.  Change to the `/tmp/etcd_restore` directory.
 
         ```bash
         ncn-m002# cd /tmp/etcd_restore
@@ -173,7 +173,7 @@ The Kubernetes cluster on master nodes is being rebuilt.
         ncn-m003# mkdir /tmp/etcd_restore
         ```
 
-    3.  Change to the /tmp/etcd\_restore directory.
+    3.  Change to the `/tmp/etcd_restore` directory.
 
         ```bash
         ncn-m003# cd /tmp/etcd_restore
