@@ -40,8 +40,8 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
         Additional Kubernetes status check examples :
 
         ```screen
-        ncn-m001# kubectl get pods -o wide -A | egrep  "CrashLoopBackOff" > k8s.pods.CLBO
-        ncn-m001# kubectl get pods -o wide -A | egrep  "ContainerCreating" > k8s.pods.CC
+        ncn-m001# kubectl get pods -o wide -A | egrep "CrashLoopBackOff" > k8s.pods.CLBO
+        ncn-m001# kubectl get pods -o wide -A | egrep "ContainerCreating" > k8s.pods.CC
         ncn-m001# kubectl get pods -o wide -A | egrep -v "Run|Completed" > k8s.pods.errors
         ```
 1.  Check for running sessions.

@@ -363,23 +363,21 @@ The configuration workflow described here is intended to help understand the exp
 
 1. Boot the **Storage Nodes**
 
-    **`Note`**: You can boot all the storage nodes at the same time, but we have had better success boot all storage nodes except ncn-s001.  then boot that node approximately 1 minute after the other nodes.
-
-    1. Boot all storage nodes except ncn-s001:
+    1. Boot all storage nodes except `ncn-s001`:
     
         ```bash
         pit# grep -oP $stoken /etc/dnsmasq.d/statics.conf | grep -v "ncn-s001-" | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power on
         ```
     
-    1. Wait 1 minute.
+    1. Wait approximately 1 minute.
     
-    1. Boot ncn-s001:
+    1. Boot `ncn-s001`:
     
         ```bash
         pit# ipmitool -I lanplus -U $USERNAME -E -H ncn-s001-mgmt power on
         ```
 
-1. Wait. Observe the installation through ncn-s001-mgmt's console:
+1. Wait. Observe the installation through `ncn-s001-mgmt`'s console:
 
     Print the console name
     ```bash

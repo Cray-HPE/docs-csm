@@ -24,7 +24,7 @@ Register a UAI image with UAS. Registration tells UAS where to locate the image 
 
 1.  Register a UAI image.
 
-    The following example registers the stock UAI image registry.local/cray/custom-end-user-uai:latest. This example also implicitly sets the default attribute to `false` because the --default option is omitted in the command.
+    The following example registers the stock UAI image registry.local/cray/custom-end-user-uai:latest. This example also implicitly sets the default attribute to `false` because the `--default` option is omitted in the command.
 
     ```screen
     ncn-m001-pit# cray uas admin config images create --imagename registry.local/cray/custom-end-user-uai:latest
@@ -37,6 +37,6 @@ Register a UAI image with UAS. Registration tells UAS where to locate the image 
     --default yes
     ```
 
-    Registering an image with the --default no option is usually unnecessary. Omitting the --default option causes UAS to set the default attribute as `false` internally.
+    Registering an image with the --default no option is usually unnecessary. Omitting the `--default` option causes UAS to set the default attribute as `false` internally.
 
 

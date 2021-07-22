@@ -93,7 +93,7 @@ The system is fully installed.
         nexus-55d8c77547-65k6q              2/2     Running     1          22h
         ```
 
-    2.  Use kubectl exec to access the running `nexus` pod.
+    2.  Use `kubectl exec` to access the running `nexus` pod.
 
         ```bash
         ncn# kubectl -n nexus exec -ti nexus-55d8c77547-65k6q \
