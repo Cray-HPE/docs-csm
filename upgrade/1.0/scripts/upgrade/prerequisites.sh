@@ -47,7 +47,7 @@ if [[ $(hostname) == "ncn-m001" ]]; then
   if [[ -f /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689/CASMINST-2689.sh ]]; then
     /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689/CASMINST-2689.sh
   else
-    echo "Please install the latest csm-install-workarounds"
+    echo "Please install the latest csm-install-workarounds RPM for shasta-1.4"
     exit 1
   fi
 
