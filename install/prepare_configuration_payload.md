@@ -155,10 +155,6 @@ The process to install for the first time must collect the information needed to
 
    See [Create Cabinets YAML](create_cabinets_yaml.md) for instructions about creating this file.
 
-1. Collect data for `hmn_connections.json`
-
-   See [Create HMN Connections JSON](create_hmn_connections_json.md) for instructions about creating this file.
-
 1. Collect data for `ncn_metadata.csv`
 
    See [Create NCN Metadata CSV](create_ncn_metadata_csv.md) for instructions about creating this file.
