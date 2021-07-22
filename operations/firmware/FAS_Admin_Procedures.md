@@ -8,9 +8,8 @@ Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmwa
 2. [Ignore Nodes within FAS](#ignore)
 3. [Override an Image for an Update](#overrideImage)
 4. [Check for New Firmware Versions with a Dry-Run](#dryrun)
-5. [Loading Firmware from Nexus](#loadNexus)
-6. [Loading Firmware from RPM or ZIP file](#loadRPM)
-7. [FAS loader commands](#loader)
+5. [Load Firmware from Nexus](#loadNexus)
+6. [Load Firmware from RPM or ZIP file](#loadRPM)
 
 ---
 
@@ -401,35 +400,35 @@ Update the firmware on any devices indicating a new version is needed.
 
 <a name="loadNexus"></a>
 
-### Loading Firmware from Nexus
+### Load Firmware from Nexus
 
-To reload firmware from Nexus repository, or add firmware that was released into the Nexus Repository:
+This procedure will read all RPMs in the Nexus repository and upload firmware images to S3 and create image records for firmware not already in FAS.
 
 1. Check the loader status:
 ```bash
-cray fas loader list | grep loaderStatus
+ncn-m001# cray fas loader list | grep loaderStatus
 ```
-this will return a `ready` or `busy` status
+This will return a `ready` or `busy` status.
 ```bash
 loaderStatus = "ready"
 ```
-The loader can only run one job at a time, so if the loader is `busy`, it will return an error on any attempt to create an additional job.
+The loader can only run one job at a time, if the loader is `busy`, it will return an error on any attempt to create an additional job.
 
-2. Run the loader nexus command:
+2. Run the loader Nexus command:
 ```bash
-cray fas loader nexus create
+ncn-m001# cray fas loader nexus create
 ```
-This will return an id which will be used to check the status of the run
+This will return an ID which will be used to check the status of the run
 ```bash
 loaderRunID = "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce"
 ```
-Note: Depending on how many files are in Nexus and how large those files are, the loader may take several minutes to complete.
+**NOTE:** Depending on how many files are in Nexus and how large those files are, the loader may take several minutes to complete.
 
 3. Check the results of the loader run:
 ```bash
-cray fas loader describe *loaderRunID* --format json
+ncn-m001# cray fas loader describe *loaderRunID* --format json
 ```
-Note: `*loadRunID*` is the id from step #2 above in that case "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce".
+**NOTE:** `*loadRunID*` is the ID from step #2 above in that case "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce".
 Use the `--format json` to make it easier to read.
 ```bash
 {
@@ -463,41 +462,42 @@ Use the `--format json` to make it easier to read.
 }
 ```
 A successful run will end with `*** Number of Updates: x ***`.
-NOTE: The FAS loader will not overwrite image records already in FAS.  Number of Updates will be the number of new images found in Nexus.  If the number is 0, all images were already in FAS.
+**NOTE:** The FAS loader will not overwrite image records already in FAS.  Number of Updates will be the number of new images found in Nexus.  If the number is 0, all images were already in FAS.
 
 ---
 
 <a name="loadRPM"></a>
 
-### Loading Firmware from RPM or ZIP file
+### Load Firmware from RPM or ZIP file
 
-To load firmware from RPM or ZIP file into FAS:
+This procedure will read a single local RPM (or ZIP) file and upload firmware images to S3 and create image records for firmware not already in FAS.
+
 1. Copy the file to m001 or one of the ncn.
 
 2. Check the loader status:
 ```bash
-cray fas loader list | grep loaderStatus
+ncn-m001# cray fas loader list | grep loaderStatus
 ```
-this will return a `ready` or `busy` status
+This will return a `ready` or `busy` status.
 ```bash
 loaderStatus = "ready"
 ```
-The loader can only run one job at a time, so if the loader is `busy`, it will return an error on any attempt to create an additional job.
+The loader can only run one job at a time, if the loader is `busy`, it will return an error on any attempt to create an additional job.
 
 3. Run the loader command: (firmware.rpm is the name of the RPM) - If the file is not in the current directory, add the path to the filename.
 ```bash
-cray fas loader create --file firmware.RPM
+ncn-m001# cray fas loader create --file firmware.RPM
 ```
-This will return an id which will be used to check the status of the run
+This will return an ID which will be used to check the status of the run.
 ```bash
 loaderRunID = "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce"
 ```
 
 4. Check the results of the loader run:
 ```bash
-cray fas loader describe *loaderRunID* --format json
+ncn-m001# cray fas loader describe *loaderRunID* --format json
 ```
-Note: `*loadRunID*` is the id from step #2 above in that case "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce".
+**NOTE:** `*loadRunID*` is the ID from step #2 above in that case "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce".
 Use the `--format json` to make it easier to read.
 ```bash
 {
@@ -528,97 +528,4 @@ Use the `--format json` to make it easier to read.
 }
 ```
 A successful run will end with `*** Number of Updates: x ***`.
-NOTE: The FAS loader will not overwrite image records already in FAS.  Number of Updates will be the number of new images found in the RPM.  If the number is 0, all images were already in FAS.
-
----
-
-<a name="loader"></a>
-
-### FAS loader commands
-
-##### Loader Status
-To check if the loader is currently busy and receive a list of loader run IDs:
-```bash
-cray fas loader list
-
-loaderStatus = "ready"
-[[loaderRunList]]
-loaderRunID = "770af5a4-15bf-4e9f-9983-03069479dc23"
-
-[[loaderRunList]]
-loaderRunID = "8efb19c4-77a2-41da-9a8f-fccbfe06f674"
-```
-
-##### Loading Firmware From Nexus
-Firmware may be released and placed into the Nexus repository.
-FAS will return a loaderRunID.
-Use the loaderRunID to check the results of the loader run.
-To load the firmware from Nexus into FAS, use the following command:
-```bash
-cray fas loader nexus create
-
-loaderRunID = "c2b7e9bb-f428-4e4c-aa83-d8fd8bcfd820"
-```
-See 5. [Loading Firmware from Nexus](#loadNexus)
-
-##### Loading Individual RPM or ZIP into FAS
-To load an RPM or ZIP into FAS on a system, copy the RPM or ZIP file to m001 or one of the ncn.
-FAS will return a loaderRunID.
-Use the loaderRunID to check the results of the loader run.
-Run the following command (RPM is this case is firmware.rpm):
-*`NOTE:` if firmware is not in the current directory, you will need to add the path to the filename*
-```bash
-cray fas loader create --file firmware.rpm
-
-loaderRunID = "dd37dd45-84ec-4bd6-b3c9-7af480048966"
-```
-See 6. [Loading Firmware from RPM or ZIP file](#loadRPM)
-
-##### Display Results of Loader Run
-
-Using the loaderRunID returned from the loader upload command, run the following command to get the output from the upload *(Note the --format json, this makes it easier to read)*:
-*NOTE: `dd37dd45-84ec-4bd6-b3c9-7af480048966` is the loaderRunID from previous run command.*
-
-```bash
-cray fas loader describe dd37dd45-84ec-4bd6-b3c9-7af480048966 --format json
-
-{
-  "loaderRunOutput": [
-    "2021-04-28T14:40:45Z-FWLoader-INFO-Starting FW Loader, LOG_LEVEL: INFO; value: 20",
-    "2021-04-28T14:40:45Z-FWLoader-INFO-urls: {'fas': 'http://localhost:28800', 'fwloc': 'file://download/'}",
-    "2021-04-28T14:40:45Z-FWLoader-INFO-Using local file: /ilo5_241.zip",
-    "2021-04-28T14:40:45Z-FWLoader-INFO-unzip /ilo5_241.zip",
-    "Archive:  /ilo5_241.zip",
-    "  inflating: ilo5_241.bin",
-    "  inflating: ilo5_241.json",
-    "2021-04-28T14:40:45Z-FWLoader-INFO-Processing files from file://download/",
-    "2021-04-28T14:40:45Z-FWLoader-INFO-get_file_list(file://download/)",
-    "2021-04-28T14:40:45Z-FWLoader-INFO-Processing File: file://download/ ilo5_241.json",
-    "2021-04-28T14:40:45Z-FWLoader-INFO-Uploading b73a48cea82f11eb8c8a0242c0a81003/ilo5_241.bin",
-    "2021-04-28T14:40:45Z-FWLoader-INFO-Metadata {'imageData': \"{'deviceType': 'nodeBMC', 'manufacturer': 'hpe', 'models': ['ProLiant XL270d Gen10', 'ProLiant DL325 Gen10', 'ProLiant DL325 Gen10 Plus', 'ProLiant DL385 Gen10', 'ProLiant DL385 Gen10 Plus', 'ProLiant XL645d Gen10 Plus', 'ProLiant XL675d Gen10 Plus'], 'targets': ['iLO 5'], 'tags': ['default'], 'firmwareVersion': '2.41 Mar 08 2021', 'semanticFirmwareVersion': '2.41.0', 'pollingSpeedSeconds': 30, 'fileName': 'ilo5_241.bin'}\"}",
-    "2021-04-28T14:40:46Z-FWLoader-INFO-IMAGE: {\"s3URL\": \"s3:/fw-update/b73a48cea82f11eb8c8a0242c0a81003/ilo5_241.bin\", \"target\": \"iLO 5\", \"deviceType\": \"nodeBMC\", \"manufacturer\": \"hpe\", \"models\": [\"ProLiant XL270d Gen10\", \"ProLiant DL325 Gen10\", \"ProLiant DL325 Gen10 Plus\", \"ProLiant DL385 Gen10\", \"ProLiant DL385 Gen10 Plus\", \"ProLiant XL645d Gen10 Plus\", \"ProLiant XL675d Gen10 Plus\"], \"softwareIds\": [], \"tags\": [\"default\"], \"firmwareVersion\": \"2.41 Mar 08 2021\", \"semanticFirmwareVersion\": \"2.41.0\", \"allowableDeviceStates\": [], \"needManualReboot\": false, \"pollingSpeedSeconds\": 30}",
-    "2021-04-28T14:40:46Z-FWLoader-INFO-Number of Updates: 1",
-    "2021-04-28T14:40:46Z-FWLoader-INFO-Iterate images",
-    "2021-04-28T14:40:46Z-FWLoader-INFO-update ACL to public-read for 5ab9f804a82b11eb8a700242c0a81003/wnc.bios-1.1.2.tar.gz",
-    "2021-04-28T14:40:46Z-FWLoader-INFO-update ACL to public-read for 5ab9f804a82b11eb8a700242c0a81003/wnc.bios-1.1.2.tar.gz",
-    "2021-04-28T14:40:46Z-FWLoader-INFO-update ACL to public-read for 53c060baa82a11eba26c0242c0a81003/controllers-1.3.317.itb",
-    "2021-04-28T14:40:46Z-FWLoader-INFO-update ACL to public-read for b73a48cea82f11eb8c8a0242c0a81003/ilo5_241.bin",
-    "2021-04-28T14:40:46Z-FWLoader-INFO-finished updating images ACL",
-    "2021-04-28T14:40:46Z-FWLoader-INFO-removing local file: /ilo5_241.zip",
-    "2021-04-28T14:40:46Z-FWLoader-INFO-*** Number of Updates: 1 ***"
-  ]
-}
-```
-A successful run will end with `*** Number of Updates: x ***`.
-NOTE: The FAS loader will not overwrite image records already in FAS.  Number of Updates will be the number of new images found in the RPM.  If the number is 0, all images were already in FAS.
-
-##### Deleting Loader Run Data
-
-To delete the output from a loader run and remove it from the loader run list:
-*NOTE: `dd37dd45-84ec-4bd6-b3c9-7af480048966` is the loaderRunID from previous run command.*
-
-```bash
-cray fas loader delete dd37dd45-84ec-4bd6-b3c9-7af480048966
-```
-The delete command does not return anything if successful
-Note: the loader delete command does not delete any images from FAS, it only deletes the loader run saved status and removes the id from the loader run list.
+**NOTE:** The FAS loader will not overwrite image records already in FAS.  Number of Updates will be the number of new images found in the RPM.  If the number is 0, all images were already in FAS.
