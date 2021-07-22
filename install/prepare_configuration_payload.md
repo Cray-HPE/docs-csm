@@ -31,7 +31,7 @@ to the procedure [Bootstrap PIT Node](index.md#bootstrap_pit_node)
 The air-cooled cabinet is known to `csi` as a `river` cabinet. The liquid-cooled cabinets are either
 `mountain` or `hill` (if a TDS system).
 
-For more description of these settings and the default values, see [[Default IP Address Ranges](../introduction/csm_overview.md#default_ip_address_ranges) and the other topics in [CSM Overview](../introduction/csm_overview.md)
+For more description of these settings and the default values, see [Default IP Address Ranges](../introduction/csm_overview.md#default_ip_address_ranges) and the other topics in [CSM Overview](../introduction/csm_overview.md)
 
 | CSI option | Information |
 | --- | --- |
