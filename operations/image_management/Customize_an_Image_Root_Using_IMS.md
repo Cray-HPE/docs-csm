@@ -240,7 +240,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
    |Recipe|Recipe Name|Kernel File Name|Initrd File Name|
    |------|-----------|----------------|----------------|
    |SLES 15 SP1 Barebones|cray-sles15sp1-barebones|vmlinuz|initrd|
-   |CLE|cray-sles15sp1-cle|vmlinuz|initrd|
+   |COS|cray-sles15sp1-cle|vmlinuz|initrd|
 
    1. Start the image customization job.
 
