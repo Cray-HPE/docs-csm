@@ -1,46 +1,36 @@
----
-category: numbered
----
 
-# Create a UAI Class
+## Create a UAI Class
 
-Create a UAI class with one command. After the class is created, it can be used to configure UAIs.
+Add a new User Access Instance (UAI) class to the User Access Service (UAS) so that the class can be used to configure UAIs.
 
-Install and initialize the cray administrative CLI.
+### Prerequisites
 
--   **ROLE**
+Install and initialize the `cray` administrative CLI.
 
-    System Administrator
-
--   **OBJECTIVE**
-
-    Add a new UAI class to UAS so that the class can be used to configure UAIs.
-
--   **LIMITATIONS**
-
-    None.
-
+### Procedure
 
 1.  Add a UAI class by using the command in the following example.
 
-    IMAGE\_ID is the UAI image identifier of the UAI image to be used in creating UAIs of the new class. Any number of classes using the same IMAGE\_ID can be defined. The IMAGE\_ID is required.
-
-    These are the supported optional OPTIONS:
-
-    -   --volume-list VOLUME\_ID\_1, VOLUME\_ID\_2, . . .: a list of one or more UAS volume IDs that will be mounted by UAIs of this class.
-    -   --resource-id RESOURCE\_SPECIFICATION\_ID: the ID of a resource specification to be used for UAIs of this class.
-    -   --uai-compute-network: this value can be either yes or no and sets the uai\_compute\_network field in the UAI class accordingly.
-    -   --opt-ports PORT\_NUMBER\_1,PORT\_NUMBER\_2, . . .: a list of one or more additional TCP ports on which UAIs of this class will listen on their external IP address. These ports are in addition to SSH, which accepts connections on that external IP address.
-    -   --uai-creation-class UAI\_CLASS\_ID: the UAS ID of the class of end-user UAIs that a broker UAI will create when handling a login. This option is only used when creating broker UAIs.
-    -   --namespace K8S\_NAMESPACE\_NAME: the Kubernetes namespace for the UAIs of this class
-    -   --priority-class-name K8S\_PRIORITY\_CLASS: set the Kubernetes priority class of UAIs created with this class.
-    -   --public-ip: A yes value means UAIs created with this class will listen on a public IP address provided by LoadBalancer. A no value means UAIs of this class will be given only a private ClusterIP reachable only within the Kubernetes cluster.
-    -   --default: This yes or no value specifies whether this UAI class will be used as a default UAI class.
-    -   --comment TEXT: a comment on this UAI class in the form of free-form text string.
-    ```screen
-    ncn-m001-pit# cray uas admin config classes create --image-id IMAGE\_ID OPTIONS
     ```
+    ncn-m001-pit# cray uas admin config classes create --image-id <image-id> [options]
+    ```
+    `--image-id <image-id>` specifies the UAI image identifier of the UAI image to be used in creating UAIs of the new class.  Any number of classes using the same image id can be defined.  
+    
+    The following options are available:
 
-    See [About UAI Classes](About_UAI_Classes.md) for more information about configuring UAI classes.
+    * `--image-id <image-id>` set the UAI image to be used creating UAIs of this class (included here for completeness, this option is required for creation, not for updates)
+    * `--volume-list '<volume-id>[,<volume-id[,...]]'` set up the list of volumes mounted by UAIs of this class
+    * `--resource-id <resource-id>` set a resource specification to be used for UAIs of this class
+    * `--uai-compute-network yes|no` set the `uai_compute_network` flag described above in the UAI class
+    * `--opt-ports '<port-number>[,<port-number[,...]]'` sets up TCP ports in addition to SSH on which UAIs of this class will listen on their external IP address (i.e. the address SSH is listening on)
+    * `-uai-creation-class <class-id>` for broker UAIs only, the class of end-user UAIs the broker will create when handling a login
+    * `--namespace '<namespace-name>'` sets the Kubernetes namespace where UAIs of this class will run
+    * `--priority-class-name '<priority-class-name>'` set the Kubernetes priority class of UAIs created with this class
+    * `--public-ip yes|no` specify whether UAIs created with this class will listen on a public (LoadBalancer) IP address (`yes`) or a Kubernetes private (ClusterIP) IP address (`no`)
+    * `--default yes|no` specify whether this UAI class should be used as a default UAI class or not (see description in the previous section)
+    * `--comment 'text'` set a free-form text comment on the UAI class
+
+    Only the `--image-id` option is required to create a UAI class. In that case, a UAI class with the specified UAI Image and no volumes will be created.
+
 
 

@@ -1,25 +1,7 @@
----
-category: [numbered, numbered]
----
 
-# Add a Volume to UAS
+## Add a Volume to UAS
 
-How to add a volume to UAS. Adding a volume registers it with UAS and makes it available to UAIs.
-
-Install and initialize the cray administrative CLI.
-
--   **ROLE**
-
-    System Administrator
-
--   **OBJECTIVE**
-
-    This procedure registers and configures a volume in UAS so that the volume can be mounted in UAIs.
-
--   **LIMITATIONS**
-
-    None.
-
+This procedure registers and configures a volume in UAS so that the volume can be mounted in UAIs.
 
 See [List Volumes Registered in UAS](List_Volumes_Registered_in_UAS.md) for examples of valid volume configurations. Refer to [Elements of a UAI](Elements_of_a_UAI.md) for descriptions of the volume configuration fields and values.
 
@@ -30,25 +12,54 @@ Note the following caveats about adding volumes to UAS:
 3.  The `volumename` is a string that can describe or name the volume. It must be composed of only lowercase letters, numbers, and dashes \('-'\). The `volumename` also must begin and end with an alphanumeric character.
 4.  As with UAI images, registering a volume with UAS creates the configuration that will be used to create a UAI. If the underlying object referred to by the volume does not exist at the time the UAI is created, the UAI will, in most cases, wait until the object becomes available before starting up. This will be visible in the UAI state which will eventually move to Waiting
 
+### Prerequisites
+
+Install and initialize the `cray` administrative CLI.
+
+### Procedure
+
 To create a volume, follow this procedure.
 
-1.  Use the cray CLI to create the volume, specifying volumename, mount\_path, and volume\_description.
+1.  Use the `cray` CLI to create the volume, specifying volumename, mount\_path, and volume\_description.
+   
+    Note the difference between the UAS name for the volume type and the Kubernetes name for that type. Kubernetes uses `camelCase` for its type names, while UAS uses `lower_case_with_underscores`.
 
-    The following command creates a /host\_files directory in every UAI configured to use this volume and mounts the file /etc/passwd from the host node into that directory as a file named host\_passwd. Note the form of the --volume-description argument. It is a JSON string encapsulating an entire `volume_description` field as shown in the JSON output in [List Volumes Registered in UAS](List_Volumes_Registered_in_UAS.md).
-
-    Note the difference between the UAS name for the volume type and the Kubernetes name for that type. Kubernetes uses `camelCase` for its type names, while UAS uses `lower_case_with_underscores`. In the following example, `host_path` is the UAS name for a Kubernetes `hostPath`.
-
-    ```screen
-    ncn-w001-pit # cray uas admin config volumes create --mount-path \\
-    /host\_files/host\_passwd --volume-description \\
-    '\{"host\_path": \{"path": "/etc/passwd", "type": "FileOrCreate"\}\}' \\
-    --volumename 'my-volume-with-passwd-from-the-host-node'
     ```
+    ncn-m001-pit# cray uas admin config volumes create --mount-path <path in UAI> --volume-description '{"<volume-kind>": <k8s-volume-description>}' --volumename '<string>'
+    ```
+
+To create a volume, follow this procedure.
+
+1.  Use the `cray` CLI to create the volume, specifying volumename, mount\_path, and volume\_description.
+
+    ```
+    ncn-m001-pit# cray uas admin config volumes create --mount-path <path in UAI> --volume-description '{"<volume-kind>": <k8s-volume-description>}' --volumename '<string>'
+    ```
+
+### Prerequisites
+
+Install and initialize the `cray` administrative CLI.
+
+### Procedure
+
+To create a volume, follow this procedure.
+
+1.  Use the `cray` CLI to create the volume, specifying volumename, mount\_path, and volume\_description.
+
+    ```
+    ncn-m001-pit# cray uas admin config volumes create --mount-path <path in UAI> --volume-description '{"<volume-kind>": <k8s-volume-description>}' --volumename '<string>'
+    ```
+
+    For example:
+
+    ```
+    ncn-m001-pit# cray uas admin config volumes create --mount-path /host_files/host_passwd --volume-description '{"host_path": {"path": "/etc/passwd", "type": "FileOrCreate"}}' --volumename 'my-volume-with-passwd-from-the-host-node'
+    ```
+
+    The example above will create a directory `/host_files` in every UAI configured to use this volume and mount the file `/etc/passwd` from the host node into that directory as a file named `host_passwd`. Notice the form of the `--volume-description` argument. It is a JSON string encapsulating an entire `volume_description` field as shown in the JSON output in the previous section.
 
 2.  Perform [List Volumes Registered in UAS](List_Volumes_Registered_in_UAS.md) to verify that the new volume is configured.
 
-    The new volume appears in the output of cray uas admin config volumes list.
-
-
-**Parent topic:**[Create and Register a Custom UAI Image](Create_and_Register_a_Custom_UAI_Image.md)
+    The new volume appears in the output of the `cray uas admin config volumes list` command.
+    
 

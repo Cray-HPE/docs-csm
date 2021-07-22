@@ -1,12 +1,9 @@
----
-category: numbered
----
 
-# About UAI Classes
+## UAI Classes
 
-This topic explains all the fields in a UAI class and gives guidance on setting them when creating UAI classes.
+This topic explains all the fields in a User Access Instance (UAI) class and gives guidance on setting them when creating UAI classes.
 
-## Example listing and overview
+### Example Listing and Overview
 
 The following is JSON-formatted example output from the cray uas admin config classes list command \(see [List Available UAI Classes](List_Available_UAI_Classes.md)\). This output contains examples of three UAI classes:
 
@@ -16,7 +13,7 @@ The following is JSON-formatted example output from the cray uas admin config cl
 
 This topic uses the end-user UAI class section to explain each of fields within a UAI class.
 
-```screen
+```bash
 ncn-m001-pit# cray uas admin config classes list --format json
 [
   {
@@ -185,11 +182,11 @@ ncn-m001-pit# cray uas admin config classes list --format json
 ]
 ```
 
-## UAI class parameters
+### UAI Class Parameters
 
 The following selection is the first part of the end-user UAI class section:
 
-```screen
+```bash
  "class_id": "bb28a35a-6cbc-4c30-84b0-6050314af76b",
     "comment": "Non-Brokered UAI User Class",
     "default": false,
@@ -217,11 +214,11 @@ The following table explains each of these fields.
 |uai\_compute\_network|A flag that indicates whether this UAI uses the macvlan mechanism to gain access to the HPE Cray EX compute node network.|This field must be true to support workload management.|
 |uai\_creation\_class|A field used by broker UAIs to tell the broker what kind of UAI to create when automatically generating a UAI.|This field is not set in the preceding example.|
 
-## UAI images and volumes in UAI classes
+### UAI Images and Volumes in UAI Classes
 
 The following section is used to create UAIs of this class:
 
-```screen
+```bash
  "uai_image": {
       "default": true,
       "image_id": "ff86596e-9699-46e8-9d49-9cb20203df8c",
@@ -231,7 +228,7 @@ The following section is used to create UAIs of this class:
 
 At the end of this end-user UAI class, there is a list of volumes that will be mounted by UAIs created using the class:
 
-```screen
+```bash
  "volume_mounts": [
       {
         "mount_path": "/etc/localtime",
@@ -280,6 +277,4 @@ At the end of this end-user UAI class, there is a list of volumes that will be m
 Refer to [Elements of a UAI](Elements_of_a_UAI.md) for a full explanation of UAI images and volumes.
 
 In the preceding section of output, the end-user UAI inherits the timezone from the host node by importing /etc/localtime. This UAI also gains access to the Lustre file system mounted on the host node. On the host node, the file system is mounted at /lus and the UAI mounts the file system at the same mount point as the host node. Lastly, the UAI class includes two Slurm configuration items, the munge key and the Slurm configuration file. These are obtained from Kubernetes and the UAI mounts them as files at /root/slurm\_config/munge and /etc/slurm respectively.
-
-**Parent topic:**[User Access Service \(UAS\)](User_Access_Service_UAS.md)
 

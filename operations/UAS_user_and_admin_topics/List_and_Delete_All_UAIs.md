@@ -1,31 +1,19 @@
----
-category: numbered
----
 
-# List and Delete All UAIs
+## List and Delete All UAIs
 
-Displays when you mouse over the topic on the Cray Portal.
+Delete all UAIs currently on the system.
+
+### Prerequisites
 
 At least one UAI is running.
 
--   **ROLE**
-
-    System Administrator
-
--   **OBJECTIVE**
-
-    Delete all UAIs currently on the system.
-
--   **LIMITATIONS**
-
-    None
-
+### Procedure
 
 1.  Log in to an NCN as `root`.
 
 2.  List all the UAIs on the system.
 
-    ```screen
+    ```bash
     ncn-m001# cray uas uais list
     [[results]]
     username = "uastest"
@@ -56,7 +44,7 @@ At least one UAI is running.
 
 3.  Delete all the UAIs on the system.
 
-    ```screen
+    ```bash
     ncn-m001 # cray uas uais delete
     This will delete all running UAIs, Are you sure? [y/N]: y
     [
@@ -68,7 +56,7 @@ At least one UAI is running.
 
 4.  Verify all UAIs are in the "Terminating" status.
 
-    ```screen
+    ```bash
     ncn-m001# cray uas uais list
     [[results]]
     username = "uastest"
@@ -99,11 +87,10 @@ At least one UAI is running.
 
 5.  Verify there are no running UAIs on the system.
 
-    ```screen
+    ```bash
     ncn-m001# cray uas uais list
     [[results]]
     ```
 
 
-**Parent topic:**[User Access Service \(UAS\)](User_Access_Service_UAS.md)
 
