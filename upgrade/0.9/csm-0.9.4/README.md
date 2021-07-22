@@ -207,8 +207,7 @@ report `FAIL` when uploading duplicate assets. This is ok as long as
    [`upgrade.sh`](#upgrade-services) is run, the git data will not be
    recoverable if this step failed.
 
-1. If `vcs.tar` was successfully created, run `vcs-prep.sh`. This will force
-   the PVC into the correct state for the upgrade if necessary.
+1. If `vcs.tar` was successfully created, run `vcs-prep.sh`. This will remove the existing pvc in preparation for the upgrade.  
 
    ```bash
    ncn-m001# "${CSM_SCRIPTDIR}/vcs-prep.sh"
