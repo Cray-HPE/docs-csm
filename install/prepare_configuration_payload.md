@@ -122,7 +122,7 @@ The `hmn_connections.json` file is extracted from the HMN tab of the SHCD spread
 includes the `hms-shcd-parser` container which can be used on the PIT node booted from the LiveCD (RemoteISO
 or USB device) or a Linux system to do this extraction.
 
-See [Create HMN Connections JSON](create_hmn_connections_json.md) for instructions about creating this file.
+No action is required to create this file at this point, and will be created when the PIT node is bootstrapped.
 
 <a name="ncn_metadata_csv"></a>
 #### `ncn_metadata.csv`

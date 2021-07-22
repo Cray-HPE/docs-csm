@@ -15,7 +15,7 @@ The [SHCD/HMN Connections Rules document](shcd_hmn_connections_rules.md) explain
 * Podman or Docker running
 
 > Note: Docker can be used instead of Podman if the system being used to prepare this file does not have Podman available. 
-> Podman is available on the CSM LiveCD, and is installed onto an NCN running Shasta v1.3 during the procedure to create the [CSM USB LiveCD](bootstrap_livecd_remote_iso.md).
+> Podman is available on the CSM LiveCD, and is installed onto a NCN when being used as an environment to create the CSM PIT in the [Bootstrap PIT Node from LiveCD USB](bootstrap_livecd_usb.md) procedure.
 
 ### Procedure
 1. __If using Docker__: Make sure that the docker service is running:
