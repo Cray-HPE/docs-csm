@@ -89,10 +89,6 @@ command during the installation process.
 | [ncn_metadata.csv](#ncn_metadata_csv) | SHCD, other| The number of master, worker, and storage nodes and MAC address information for BMC and bootable NICs |
 | [switch_metadata.csv](#switch_metadata_csv) | SHCD | Inventory of all spine, aggregation, CDU, and leaf switches |
 
-Although some information in these files can be populated from site survey information, the SHCD prepared by
-HPE Cray Manufacturing is the best source of data for hmn_connections.json. The `ncn_metadata.csv` does
-require collection of MAC addresses from the management nodes because that information is not present in the SHCD.
-
 <a name="application_node_config_yaml"></a>
 #### `application_node_config.yaml`
 
@@ -120,7 +116,7 @@ See [Create Cabinets YAML](create_cabinets_yaml.md) for instructions about creat
 
 The `hmn_connections.json` file is extracted from the HMN tab of the SHCD spreadsheet. The CSM release
 includes the `hms-shcd-parser` container which can be used on the PIT node booted from the LiveCD (RemoteISO
-or USB device) or a Linux system to do this extraction.
+or USB device) or a Linux system to do this extraction. Although some information in these files can be populated from site survey information, the SHCD prepared by HPE Cray Manufacturing is the best source of data for hmn_connections.json.
 
 No action is required to create this file at this point, and will be created when the PIT node is bootstrapped.
 
