@@ -1,10 +1,5 @@
----
-category: numbered
----
 
-# Default UAI Class Configuration for Legacy Mode
-
-Guidance for, and examples of UAI classes to use as the default for legacy mode UAI management.
+## Default UAI Class Configuration for Legacy Mode
 
 Using a default UAI class is optional but recommended for any site using the legacy UAI management mode that wants to have some control over UAIs created by users. UAI classes used for this purpose must have certain minimum configuration in them:
 
@@ -21,11 +16,11 @@ To make UAIs useful, there is a minimum set of volumes that must be defined in t
 
 In addition to this, there may be volumes defined to support a workload manager \(Slurm or PBS Professional\) or the Cray PE or other packages the full extent of these volumes is outside the scope of this document, but whatever list of these other volumes is needed to get a suitable end-user UAI must be included in the default UAI class configuration.
 
-## Example of a minimal default UAI class
+### Example of a Minimal Default UAI Class
 
 For an example minimal system, here is an example set of volumes and an example creation of a UAI class that would use those volumes:
 
-```
+```bash
 ncn-m001-pit# cray uas admin config volumes list --format json
 [
   {
@@ -68,8 +63,8 @@ default = true
 image_id = "ff86596e-9699-46e8-9d49-9cb20203df8c"
 imagename = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
 
-ncn-m001-pit# cray uas admin config classes create --image-id ff86596e-9699-46e8-9d49-9cb20203df8c \\
---volume-list '55a02475-5770-4a77-b621-f92c5082475c,9fff2d24-77d9-467f-869a-235ddcd37ad7' \\
+ncn-m001-pit# cray uas admin config classes create --image-id ff86596e-9699-46e8-9d49-9cb20203df8c \
+--volume-list '55a02475-5770-4a77-b621-f92c5082475c,9fff2d24-77d9-467f-869a-235ddcd37ad7' \
 --uai-compute-network yes --public-ip yes --comment "my default legacy mode uai class" --default yes
 class_id = "e2ea4845-5951-4c79-93d7-186ced8ce8ad"
 comment = "my default legacy mode uai class"
@@ -102,11 +97,11 @@ image_id = "ff86596e-9699-46e8-9d49-9cb20203df8c"
 imagename = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
 ```
 
-## Example of a default UAI Class with Slurm Support
+### Example of a Default UAI Class with Slurm Support
 
 Here is an example of a default UAI class configured for Slurm support if Slurm has been installed on the host system:
 
-```
+```bash
 ncn-m001-pit# cray uas admin config volumes list --format json
 [
   {
@@ -169,9 +164,9 @@ default = true
 image_id = "ff86596e-9699-46e8-9d49-9cb20203df8c"
 imagename = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
 
-ncn-m001-pit# cray uas admin config classes create --image-id ff86596e-9699-46e8-9d49-9cb20203df8c \\
---volume-list '55a02475-5770-4a77-b621-f92c5082475c,9fff2d24-77d9-467f-869a-235ddcd37ad7,\\
-7aeaf158-ad8d-4f0d-bae6-47f8fffbd1ad,ea97325c-2b1d-418a-b3b5-3f6488f4a9e2' --uai-compute-network yes \\
+ncn-m001-pit# cray uas admin config classes create --image-id ff86596e-9699-46e8-9d49-9cb20203df8c \
+--volume-list '55a02475-5770-4a77-b621-f92c5082475c,9fff2d24-77d9-467f-869a-235ddcd37ad7,\
+7aeaf158-ad8d-4f0d-bae6-47f8fffbd1ad,ea97325c-2b1d-418a-b3b5-3f6488f4a9e2' --uai-compute-network yes \
 --public-ip yes --comment "my default legacy mode uai class" --default yes
 class_id = "c0a6dfbc-f74c-4f2c-8c8e-e278ff0e14c6"
 comment = "my default legacy mode uai class"

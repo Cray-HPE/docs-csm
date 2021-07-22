@@ -1,29 +1,17 @@
----
-category: numbered
----
 
-# List UAIs Using a Direct Administrative Command
+## List UAIs Using a Direct Administrative Command
 
-View the details of all running UAIs by running a single UAS administrative command.
+View the details of every UAI that is running by using a direct UAS administrative command.
 
-Install and initialize the cray administrative CLI.
+### Prerequisites
 
--   **ROLE**
+Install and initialize the `cray` administrative CLI.
 
-    System Administrator
-
--   **OBJECTIVE**
-
-    View the details of every UAI that is running by using a direct UAS administrative command.
-
--   **LIMITATIONS**
-
-    None.
-
+### Procedure
 
 To list UAIs, use a command of the form:
 
-```screen
+```bash
 cray uas admin uais list OPTIONS
 ```
 
@@ -34,7 +22,7 @@ where OPTIONS is one or both of the following:
 
 1.  List all running UAIs.
 
-    ```screen
+    ```bash
     ncn-m001-pit# cray uas admin uais list --owner vers
     [[results]]
     uai_age = "6h22m"

@@ -1,36 +1,33 @@
----
-category: numbered
----
 
-# UAS and UAI Health Checks
+## UAS and UAI Health Checks
 
 Initialize and authorize the CLI so a user may run procedures on any given node.
 
-## Initialize and Authorize the CLI
+### Initialize and Authorize the CLI
 
 The procedures below use the CLI as an authorized user and run on two separate node types. The first part runs on the LiveCD node while the second part runs on a non-LiveCD Kubernetes master or worker node. When using the CLI on either node, the CLI configuration must be initialized and the user running the procedure must be authorized. This section describes how to initialize the CLI for use by a user and authorize the CLI as a user to run the procedures on any given node. The procedures will need to be repeated in both stages of the validation procedure.
 
-## Discontinue Use of the CRAY\_CREDENTIALS Service Account Token
+### Discontinue Use of the CRAY\_CREDENTIALS Service Account Token
 
 Installation procedures leading up to production mode on Shasta use the CLI with a Kubernetes managed service account normally used for internal operations. There is a procedure for extracting the OAUTH token for this service account and assigning it to the CRAY\_CREDENTIALS environment variable to permit simple CLI operations. The UAS / UAI validation procedure runs as a post-installation procedure and requires an actual user with Linux credentials, not this service account. Prior to running any of the steps below you must unset the CRAY\_CREDENTIALS environment variable.
 
-```screen
-ncn-m002# unset CRAY\_CREDENTIALS
+```bash
+ncn-m002# unset CRAY_CREDENTIALS
 ```
 
-## Initialize the CLI Configuration
+### Initialize the CLI Configuration
 
 The CLI needs to know what host to use to obtain authorization and what user is requesting authorization so it can obtain an OAUTH token to talk to the API Gateway. This is accomplished by initializing the CLI configuration. This example uses the `vers` username. In practice, `vers` and the response to the `password:` prompt should be replaced with the username and password of the administrator running the validation procedure.
 
 To check whether the CLI needs initialization, run the following command.
 
-```screen
+```bash
 ncn-m002# cray config describe
 ```
 
 If the output appears as follows, the CLI requires initialization.
 
-```screen
+```bash
 Usage: cray config describe [OPTIONS]
 
 Error: No configuration exists. Run `cray init`
@@ -40,7 +37,7 @@ If the output appears more like the following, then the CLI is initialized and l
 
 If the CLI must be initialized again, use the following command and include the correct username, password, and the password response.
 
-```screen
+```bash
 ncn-m002# cray init
 Cray Hostname: api-gw-service-nmn.local
 Username: vers
@@ -50,18 +47,18 @@ Success!
 Initialization complete.
 ```
 
-## Authorize the Correct CLI User
+### Authorize the Correct CLI User
 
 If the CLI is initialized but authorized for a user different, run the following command and substitute the correct username and password.
 
-```screen
+```bash
 ncn-m002# cray auth login
 Username: vers
 Password:
 Success!
 ```
 
-## Troubleshoot CLI Initialization or Authorization Issues
+### Troubleshoot CLI Initialization or Authorization Issues
 
 If initialization or authorization fails in any of the preceding steps, there are several common causes.
 
@@ -73,11 +70,11 @@ If initialization or authorization fails in any of the preceding steps, there ar
 
 While resolving these issues is beyond the scope of this section, adding -vvvvv to the cray auth or cray init commands may offer clues as to why the initialization or authorization is failing.
 
-## Validate the Basic UAS Installation
+### Validate the Basic UAS Installation
 
 This procedure and the following procedures run on separate nodes on the system and validate the basic UAS installation. Ensure this runs on the LiveCD node and that the CLI is authorized for the user.
 
-```screen
+```bash
 ncn-m002# cray uas mgr-info list
 service_name = "cray-uas-mgr"
 version = "1.11.5"
@@ -90,7 +87,7 @@ This shows that UAS is installed and running version 1.11.5 and that no UAIs are
 
 To verify that the pre-made UAI images are registered with UAS, run the following command.
 
-```screen
+```bash
 ncn-m002# cray uas images list
 default_image = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
 image_list = [ "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest",]
@@ -98,18 +95,18 @@ image_list = [ "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest",]
 
 The output shows that the pre-made end-user UAI image, cray/cray-uai-sles15sp1:latest, is registered with UAS. This does not necessarily mean this image is installed in the container image registry, but it is configured for use. If other UAI images have been created and registered, they may also appear in the output.
 
-## Validate UAI Creation
+### Validate UAI Creation
 
 This procedure:
 
--   must run on a master or worker node \(and not ncn-w001\)
--   must run on the Shasta system \(or from an external host, but the procedure for that is not covered here\)
--   requires that the CLI be initialized and authorized as for the current user.
+-   Must run on a master or worker node \(and not ncn-w001\).
+-   Must run on the HPE Cray EX system \(or from an external host, but the procedure for that is not covered here\).
+-   Requires that the CLI be initialized and authorized as for the current user.
 
 To verify that the user account can create a UAI, use the following command.
 
-```screen
-ncn-w003# cray uas create --publickey ~/.ssh/id\_rsa.pub
+```bash
+ncn-w003# cray uas create --publickey ~/.ssh/id_rsa.pub
 uai_connect_string = "ssh vers@10.16.234.10"
 uai_host = "ncn-w001"
 uai_img = "registry.local/cray/cray-uai-sles15sp1:latest"
@@ -126,7 +123,7 @@ The UAI is now created and in the process of initializing and running.
 
 The following can be repeated as needed to view the UAIs state. If the results appear like the following, the UAI is ready for use.
 
-```screen
+```bash
 ncn-w003# cray uas list
 [[results]]
 uai_age = "0m"
@@ -142,7 +139,7 @@ username = "vers"
 
 Log into the UAI \(without a password\) as follows:
 
-```screen
+```bash
 ncn-w003# ssh vers@10.16.234.10
 The authenticity of host '10.16.234.10 (10.16.234.10)' can't be established.
 ECDSA key fingerprint is SHA256:BifA2Axg5O0Q9wqESkLqK4z/b9e1usiDUZ/puGIFiyk.
@@ -165,18 +162,18 @@ Connection to 10.16.234.10 closed.
 
 Clean up the UAI and note that the UAI name used is the same as the name in the output from `cray uas create` above.
 
-```screen
+```bash
 ncn-w003# cray uas delete --uai-list uai-vers-a00fb46b
 results = [ "Successfully deleted uai-vers-a00fb46b",]
 ```
 
-## Troubleshoot UAS and UAI Operations Issues
+### Troubleshoot UAS and UAI Operations Issues
 
 **Authorization Issues**
 
-If the user is not logged in as a valid Keycloak user or is inadvertently using the `CRAY_CREDENTIALS` environment variable \(i.e. the variable is set if the user is logged in with the their username or another username\), the output of running the cray uas list command will produce output like the following.
+If the user is not logged in as a valid Keycloak user or is inadvertently using the `CRAY_CREDENTIALS` environment variable \(i.e. the variable is set if the user is logged in with the their username or another username\), the output of running the `cray uas list command` will produce output like the following.
 
-```screen
+```bash
 ncn-w003# cray uas list
 Usage: cray uas list [OPTIONS]
 Try 'cray uas list --help' for help.
@@ -186,11 +183,11 @@ Error: Bad Request: Token not valid for UAS. Attributes missing: ['gidNumber', '
 
 Fix this by logging in as a "real user" \(a user with Linux credentials\) and ensure that CRAY\_CREDENTIALS is unset.
 
-## UAS Cannot Access Keycloak
+### UAS Cannot Access Keycloak
 
 If the output of the cray uas list command appears similar to the following, the wrong hostname to reach the API gateway may be in use. In that case, run the CLI initialization steps again.
 
-```screen
+```bash
 ncn-w003# cray uas list
 Usage: cray uas list [OPTIONS]
 Try 'cray uas list --help' for help.
@@ -202,7 +199,7 @@ There also may be a problem with the Istio service mesh inside of the Shasta sys
 
 There are typically two UAS pods. View logs from both pods to identify the specific failure. The logs have a very large number of GET events listed as part of the aliveness checking. The following shows an example of viewing UAS logs \(the example shows only one UAS manage, normally there would be two\).
 
-```screen
+```bash
 ncn-w003# kubectl get po -n services | grep uas-mgr | grep -v etcd
 cray-uas-mgr-6bbd584ccb-zg8vx            2/2     Running            0          12d
 ncn-w003# kubectl logs -n services cray-uas-mgr-6bbd584ccb-zg8vx cray-uas-mgr | grep -v 'GET ' | tail -25
@@ -233,11 +230,11 @@ ncn-w003# kubectl logs -n services cray-uas-mgr-6bbd584ccb-zg8vx cray-uas-mgr | 
 127.0.0.1 - - [08/Feb/2021 15:40:51] "DELETE /v1/uas?uai_list=uai-vers-87a0ff6e HTTP/1.1" 200 -
 ```
 
-## UAI Images not in Registry
+### UAI Images not in Registry
 
 If output is similar to the following, the pre-made end-user UAI image is not in the user's local registry \(or whatever registry it is being pulled from, see the uai\_img value for details\). Locate and the image and push / import it to the registry.
 
-```screen
+```bash
 ncn-w003# cray uas list
 [[results]]
 uai_age = "0m"
@@ -251,23 +248,22 @@ uai_status = "Waiting"
 username = "vers"
 ```
 
-## Missing Volumes and Other Container Startup Issues
+### Missing Volumes and Other Container Startup Issues
 
 Various packages install volumes in the UAS configuration. All of those volumes must also have the underlying resources available, sometimes on the host node where the UAI is running and sometimes from within Kubernetes. If the UAI gets stuck with a ContainerCreating uai\_msg field for an extended time, this is a likely cause. UAIs run in the user Kubernetes namespace and are pods that can be examined using kubectl describe.
 
 Run the following command to locate the pod.
 
-```screen
+```bash
 ncn-w003# kubectl get po -n user | grep <uai-name>
 ```
 
 Run the following command to investigate the problem.
 
-```screen
+```bash
 ncn-w003# kubectl describe -n user <pod-name>
 ```
 
 If volumes are missing, they will be in the Events:section of the output. Other problems may show up there as well. The names of the missing volumes or other issues should indicate what needs to be fixed to enable the UAI.
 
-**Parent topic:**[CSM Health Checks and Install Validation](../validate_csm_health.md)
 

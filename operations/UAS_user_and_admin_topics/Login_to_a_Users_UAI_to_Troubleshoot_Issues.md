@@ -1,39 +1,23 @@
----
-category: numbered
----
 
-# Log in to a User's UAI to Troubleshoot Issues
+## Log in to a User's UAI to Troubleshoot Issues
 
-Displays when you mouse over the topic on the Cray Portal.
+Log in to a user's User Access Instance \(UAI\) to help the user troubleshoot issues.
+
+### Prerequisites
 
 This procedure requires root access.
 
--   **LEVEL**
+### Limitations
 
-    **Level 3 PaaS**
+This procedure does not work if the pod is in either "Error" or "Terminating" states.
 
--   **ROLE**
-
-    System administrator
-
--   **OBJECTIVE**
-
-    Log in to a user's User Access Instance \(UAI\) to help the user troubleshoot issues.
-
--   **LIMITATIONS**
-
-    This procedure does not work if the pod is in either "Error" or "Terminating" states.
-
--   **NEW IN THIS RELEASE**
-
-    This entire procedure is new for this release.
-
+### Procedure
 
 1.  Log in to the first NCN acting as a Kubernetes master node \(ncn-m001\) as `root`.
 
 2.  Find and record the name of the UAI.
 
-    ```screen
+    ```bash
     ncn-m001# cray uas uais list
     [[results]]
     username = "user"
@@ -47,8 +31,8 @@ This procedure requires root access.
 
 3.  Find the full name of the pod that represents this user's UAI.
 
-    ```screen
-    ncn-m001# kubectl get pods -n user -l app=USERS\_UAI\_NAME
+    ```bash
+    ncn-m001# kubectl get pods -n user -l app=USERS_UAI_NAME
     
     NAME                                 READY   STATUS    RESTARTS   AGE
     **
@@ -59,8 +43,8 @@ This procedure requires root access.
 
 4.  Connect to the pod.
 
-    ```screen
-    ncn-m001# kubectl exec -n user -it FULL\_POD\_NAME /bin/bash
+    ```bash
+    ncn-m001# kubectl exec -n user -it FULL_POD_NAME /bin/bash
     ```
 
     As root in the user's UAI, an administrator will have the user's UID, GID, and full access to their file system mounts.
@@ -68,5 +52,5 @@ This procedure requires root access.
 
 Assist the user with issues, and use exit to exit the UAI.
 
-**Parent topic:**[Troubleshoot UAS Issues](Troubleshoot_UAS_Issues.md)
+
 

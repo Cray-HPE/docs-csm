@@ -1,34 +1,22 @@
----
-category: numbered
----
 
-# Delete a UAI Class
+## Delete a UAI Class
 
-Erase a UAI class from UAS.
+Delete a UAI class. After deletion, the class will no longer be available for new UAIs.
 
--   Install and initialize the cray administrative CLI.
+### Prerequisites
+
+-   Install and initialize the `cray` administrative CLI.
 -   Obtain the ID of the UAI class that will be deleted.
 
--   **ROLE**
+### Procedure
 
-    System Administrator
+Delete a UAI by using a command of the following form:
 
--   **OBJECTIVE**
-
-    Delete a UAI class. After deletion, the class will no longer be available for new UAIs.
-
--   **LIMITATIONS**
-
-    None.
-
-
-Delete a UAI by using a command of the form:
-
-```screen
-cray uas admin config classes delete UAI\_CLASS\_ID
+```bash
+cray uas admin config classes delete UAI_CLASS_ID
 ```
 
-where UAI\_CLASS\_ID is the UAS ID of the UAI class.
+`UAI_CLASS_ID` is the UAS ID of the UAI class.
 
 1.  Delete a UAI class.
 

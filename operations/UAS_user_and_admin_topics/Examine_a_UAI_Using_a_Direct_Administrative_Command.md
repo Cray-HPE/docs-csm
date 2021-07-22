@@ -1,29 +1,24 @@
----
-category: numbered
----
 
-# Examine a UAI Using a Direct Administrative Command
+## Examine a UAI Using a Direct Administrative Command
 
-Administrators can retrieve information about a UAI using the UAI name and one command.
+Print out information about a UAI.
 
-Install and initialize the cray administrative CLI.
+### Prerequisites
 
--   **ROLE**
+Install and initialize the `cray` administrative CLI.
 
-    System Administrator
-
--   **OBJECTIVE**
-
-    Print out information about a UAI.
-
--   **LIMITATIONS**
-
-    None.
-
+### Procedure
 
 1.  Print out information about a UAI.
 
-    ```screen
+    To examine an existing UAI use a command of the following form:
+
+    ```
+    cray uas admin uais describe <uai-name>
+    ```
+    For example:
+
+    ```bash
     ncn-m001-pit# cray uas admin uais describe uai-vers-715fa89d
     uai_age = "2d23h"
     uai_connect_string = "ssh vers@10.28.212.166"
