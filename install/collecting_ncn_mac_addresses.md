@@ -132,6 +132,21 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
                                                       ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
     ```
 
+9. Collect the NCN MAC address for the PIT node.
+
+   ```bash
+   pit# cat /proc/net/bonding/bond0  | grep Perm
+   Permanent HW addr: b8:59:9f:c7:12:f2
+   Permanent HW addr: b8:59:9f:c7:12:f3
+   ```
+
+   Add this information to the `ncn_metadata.csv` file for the row which represents ncn-m001.
+   This information from bond0 should be placed in the Bootstrap MAC, Bond0 MAC0 columns.
+   The Bond0 MAC1 is typically incremented by 1 in the last octet of the MAC address.  
+   ```
+   x3000c0s1b0n0,Management,Master,a4:bf:01:37:87:32,b8:59:9f:c7:12:f2,b8:59:9f:c7:12:f2,b8:59:9f:c7:12:f3
+   ```
+
 <a name="procedure-serial-consoles"></a>
 ## Procedure: Serial Consoles
 
