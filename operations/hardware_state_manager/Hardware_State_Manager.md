@@ -22,7 +22,7 @@ The following table describes how to interpret when the state of hardware change
 | On        | Off           | Redfish Event (Off)                                          |
 | Any State | Empty         | Redfish Endpoint is disabled meaning component removal       |
 
-Generally, nodes transition from `Off`  to `On`  to `Ready` when going from `Off` to booted, and from `Ready` to `Ready/Warning` to `Standby` to `Off` when shutdown.
+Generally, nodes transition from `Off` to `On` to `Ready` when going from `Off` to booted, and from `Ready` to `Ready/Warning` to `Standby` to `Off` when shut down.
 
 
 ### Table of Contents

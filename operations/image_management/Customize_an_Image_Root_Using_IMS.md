@@ -11,7 +11,7 @@ The Image Management Service \(IMS\) customization workflow sets up a temporary 
 -   An IMS created image root archive or a pre-built image root SquashFS archive is available to customize.
 -   The NCN Certificate Authority \(CA\) public key has been properly installed into the CA cache for this system. 
 -   A token providing Simple Storage Service \(S3\) credentials has been generated.
--   When customizing an image using IMS Image Customization, once chrooted into the image root \(if using a \`jailed\` environment\), the image will only have access to whatever configuration the image already contains. In order to talk to  services, including Nexus RPM repositories, the image root must first be configured with DNS and other settings. A base level of customization is provided by the default Ansible plays used by the Configuration Framework Service \(CFS\) to enable DNS resolution.
+-   When customizing an image using IMS Image Customization, once chrooted into the image root \(if using a \`jailed\` environment\), the image will only have access to whatever configuration the image already contains. In order to talk to services, including Nexus RPM repositories, the image root must first be configured with DNS and other settings. A base level of customization is provided by the default Ansible plays used by the Configuration Framework Service \(CFS\) to enable DNS resolution.
 
 ### Limitations
 
@@ -233,7 +233,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
 1. Create an IMS job record and start the image customization job.
 
-   After customizing the image, IMS will automatically upload any build artifacts \(root file system, kernel and initrd\) to S3, and associate the S3 artifacts with IMS. Unfortunately, IMS is not able to dynamically determine the Linux kernel and initrd to look for because the file name for these vary depending upon Linux distribution, Linux version, dracut configuration, and more. Thus, the user must pass the name of the kernel and initrd that IMS is to look for in the resultant image root’s /boot directory.
+   After customizing the image, IMS will automatically upload any build artifacts \(root file system, kernel, and initrd\) to S3, and associate the S3 artifacts with IMS. Unfortunately, IMS is not able to dynamically determine the names of the Linux kernel and initrd to look for, because the file name for these vary depending upon Linux distribution, Linux version, dracut configuration, and more. Thus, the user must pass the name of the kernel and initrd that IMS is to look for in the resultant image root’s /boot directory.
 
    Use the following table to help determine the default kernel and initrd file names to specify when submitting the job to customize an image. These are just default names. Please consult with the site administrator to determine if these names have been changed for a given image or recipe.
 
@@ -313,7 +313,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
        Optionally, IMS can be told to create a jailed SSH environment by specifying the --ssh-containers-jail True parameter.
 
-       A jailed environment lets users SSH into the SSH container and be immediately within the image root for the image being customized. Users do not need to `cd` or `chroot` into the image root. Using a jailed environment has some advantages, such as making the IMS SSH job shell look more like a compute node. This allows applications like the CFS to perform actions on both IMS job pods \(pre-boot\) and  compute nodes \(post-boot\).
+       A jailed environment lets users SSH into the SSH container and be immediately within the image root for the image being customized. Users do not need to `cd` or `chroot` into the image root. Using a jailed environment has some advantages, such as making the IMS SSH job shell look more like a compute node. This allows applications like the CFS to perform actions on both IMS job pods \(pre-boot\) and compute nodes \(post-boot\).
 
 2. Use `kubectl` and the returned IMS\_KUBERNETES\_JOB value to describe the image create job.
 
@@ -368,7 +368,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
 4. Customize the image in the image customization environment.
 
-    Once chrooted into the image root \(or if using a \`jailed\` environment\) during image customization, the image will only have access to whatever configuration the image already contains. In order to talk to  services, including Nexus RPM repositories, the image root must first be configured with DNS and other settings. A base level of customization is provided by the default Ansible plays used by the CFS to enable DNS resolution.
+    Once chrooted into the image root \(or if using a \`jailed\` environment\) during image customization, the image will only have access to whatever configuration the image already contains. In order to talk to services, including Nexus RPM repositories, the image root must first be configured with DNS and other settings. A base level of customization is provided by the default Ansible plays used by the CFS to enable DNS resolution.
 
     -   **Option 1:** SSH to the image customization environment.
 

@@ -84,11 +84,11 @@ usage() {
 #/    options specific to the 'intel' command:
 #/       [-d IP]            IP of the BMC to configure with static DNS
 #/                          *this uses SDPTool, which normally runs from the PIT
-#/                          as it's not included in the image(s)
+#/                          as it is not included in the image(s)
 #/
 #/    EXAMPLES:
 #/
-#/       Upgrading 1.4 to 1.5 passing in NTP and DNS entries that don't exist in 1.4 metadata:
+#/       Upgrading 1.4 to 1.5 passing in NTP and DNS entries that do not exist in 1.4 metadata:
 #/           set-bmc-ntp-dns.sh ilo -s
 #/           set-bmc-ntp-dns.sh ilo -S #(iLO only)
 #/           set-bmc-ntp-dns.sh ilo -N time-hmn,time.nist.gov -n
@@ -234,7 +234,7 @@ function show_current_ipmi_lan() {
 
   echo "Showing current ipmitool lan print $channel output for $BMC..."
 
-  # Don't run on the PIT
+  # Do not run on the PIT
   pit_die
 
   local ip_src="" && ip_src=$(ipmitool -I lanplus -U $USERNAME -E -H $BMC lan print $channel \
@@ -379,7 +379,7 @@ function disable_ilo_dhcp() {
   echo "Disabling DHCP on $BMC..."
 
   if [[ "$VENDOR" = *Marvell* ]] || [[ "$VENDOR" = HP* ]] || [[ "$VENDOR" = Hewlett* ]]; then
-    # Check if it's already disabled
+    # Check if it is already disabled
     export url="https://${BMC}/redfish/v1/Managers/${manager}/ethernetinterfaces/${interface}"
 
     dhcpv4_dns_enabled=$(/usr/bin/python3 ${make_api_call_py} | jq .Oem.Hpe.DHCPv4.UseDNSServers)
@@ -567,7 +567,7 @@ function get_ci_dns_servers() {
   if [[ -f /var/www/ephemeral/configs/data.json ]] \
     || [[ $HOSTNAME == *pit ]]; then
 
-    # if we're on the pit, pull from basecamp data
+    # if we are on the pit, pull from basecamp data
     dns_servers=$(jq '.Global."meta-data"."dns-server"' < /var/www/ephemeral/configs/data.json)
 
   elif [[ -f /run/cloud-init/instance-data.json ]]; then
@@ -576,7 +576,7 @@ function get_ci_dns_servers() {
 
   else
 
-    # Sometimes the cloud-init files aren't there
+    # Sometimes the cloud-init files are not there
     cloud-init init
     dns_servers=$(jq '.ds.meta_data.Global."dns-server"' < /run/cloud-init/instance-data.json)
 
@@ -707,7 +707,7 @@ function set_bmc_dns() {
     # For internal systems only.
     # https://stash.us.cray.com/users/jsalmela/repos/cray-sdptool/browse
     # docker build -t cray-sdptool:2.1.0 -f Dockerfile .
-    # You can also install SDPTool manually, but it needs a bunch of Python stuff we don't currently install
+    # You can also install SDPTool manually, but it needs a bunch of Python stuff we do not currently install
     podman run \
       --rm \
       --mount type=bind,source=$PWD,target=/usr/local/log/SDPTool/Logfiles/ \
