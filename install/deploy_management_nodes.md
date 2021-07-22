@@ -487,6 +487,51 @@ The configuration workflow described here is intended to help understand the exp
 #### 3.3 Check for Unused Drives on Utility Storage Nodes
 
 > **`IMPORTANT:`** Do the following if NCNs use Gigabyte hardware.
+> **`IMPORTANT:`** the cephadm may output this warning "WARNING: The same type, major and minor should not be used for multiple devices.".  You can ignore this warning. 
+
+##### Option 1
+
+  If you have OSDs on each node (ceph osd tree can show this) then you have all your nodes in ceph.  That means you can utilize the orchestrator to look for the devices.
+
+
+  ```bash
+  ncn-s001:~ # ceph orch device ls
+Hostname  Path      Type  Serial              Size   Health   Ident  Fault  Available
+ncn-s001  /dev/sda  ssd   PHYF015500M71P9DGN  1920G  Unknown  N/A    N/A    No
+ncn-s001  /dev/sdb  ssd   PHYF016500TZ1P9DGN  1920G  Unknown  N/A    N/A    No
+ncn-s001  /dev/sdc  ssd   PHYF016402EB1P9DGN  1920G  Unknown  N/A    N/A    No
+ncn-s001  /dev/sdd  ssd   PHYF016504831P9DGN  1920G  Unknown  N/A    N/A    No
+ncn-s001  /dev/sde  ssd   PHYF016500TV1P9DGN  1920G  Unknown  N/A    N/A    No
+ncn-s001  /dev/sdf  ssd   PHYF016501131P9DGN  1920G  Unknown  N/A    N/A    No
+ncn-s001  /dev/sdi  ssd   PHYF016500YB1P9DGN  1920G  Unknown  N/A    N/A    No
+ncn-s001  /dev/sdj  ssd   PHYF016500WN1P9DGN  1920G  Unknown  N/A    N/A    No
+ncn-s002  /dev/sda  ssd   PHYF0155006W1P9DGN  1920G  Unknown  N/A    N/A    No
+ncn-s002  /dev/sdb  ssd   PHYF0155006Z1P9DGN  1920G  Unknown  N/A    N/A    No
+ncn-s002  /dev/sdc  ssd   PHYF015500L61P9DGN  1920G  Unknown  N/A    N/A    No
+ncn-s002  /dev/sdd  ssd   PHYF015502631P9DGN  1920G  Unknown  N/A    N/A    No
+ncn-s002  /dev/sde  ssd   PHYF0153000G1P9DGN  1920G  Unknown  N/A    N/A    No
+ncn-s002  /dev/sdf  ssd   PHYF016401T41P9DGN  1920G  Unknown  N/A    N/A    No
+ncn-s002  /dev/sdi  ssd   PHYF016504C21P9DGN  1920G  Unknown  N/A    N/A    No
+ncn-s002  /dev/sdj  ssd   PHYF015500GQ1P9DGN  1920G  Unknown  N/A    N/A    No
+ncn-s003  /dev/sda  ssd   PHYF016402FP1P9DGN  1920G  Unknown  N/A    N/A    No
+ncn-s003  /dev/sdb  ssd   PHYF016401TE1P9DGN  1920G  Unknown  N/A    N/A    No
+ncn-s003  /dev/sdc  ssd   PHYF015500N51P9DGN  1920G  Unknown  N/A    N/A    No
+ncn-s003  /dev/sdd  ssd   PHYF0165010Z1P9DGN  1920G  Unknown  N/A    N/A    No
+ncn-s003  /dev/sde  ssd   PHYF016500YR1P9DGN  1920G  Unknown  N/A    N/A    No
+ncn-s003  /dev/sdf  ssd   PHYF016500X01P9DGN  1920G  Unknown  N/A    N/A    No
+ncn-s003  /dev/sdi  ssd   PHYF0165011H1P9DGN  1920G  Unknown  N/A    N/A    No
+ncn-s003  /dev/sdj  ssd   PHYF016500TQ1P9DGN  1920G  Unknown  N/A    N/A    No
+```
+
+If you have devices that are "Available = Yes" then and they are not being automatically added you may have to zap that device.
+
+```bash
+example: ceph orch device zap ncn-s002 /dev/sdc --force 
+```
+
+##### Option 2
+
+**`IMPORTANT:`** the cephadm may output this warning "WARNING: The same type, major and minor should not be used for multiple devices.".  You can ignore this warning. 
 
 1. Log into **each** ncn-s node and check for unused drives
 
@@ -497,7 +542,7 @@ The configuration workflow described here is intended to help understand the exp
     The field "available" would be true if Ceph sees the drive as empty and can
     be used, e.g.:
 
-    ```
+    ```bash
     Device Path               Size         rotates available Model name
     /dev/sda                  447.13 GB    False   False     SAMSUNG MZ7LH480
     /dev/sdb                  447.13 GB    False   False     SAMSUNG MZ7LH480
@@ -668,7 +713,7 @@ Observe the output of the checks and note any failures, then remediate them.
    1. Verify all nodes have joined the cluster
    1. Verify etcd is running outside Kubernetes on master nodes
    1. Verify that all the pods in the kube-system namespace are running
-   1. Verify that the ceph-csi requirements are in place (see [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md)
+   2. Verify that the ceph-csi requirements are in place [Ceph CSI Troubleshooting](ceph_csi_troubleshooting.md)
 
 # Important Checkpoint
 
