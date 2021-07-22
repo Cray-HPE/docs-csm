@@ -1,31 +1,19 @@
----
-category: numbered
----
 
-# Create a UAI Using a Direct Administrative Command
+## Create a UAI Using a Direct Administrative Command
 
 Administrators can use this method to manually create UAIs. This method is intended more for creating broker UAIs than for creating end-user UAIs.
 
-Install and initialize the cray administrative CLI.
+### Prerequisites
 
--   **ROLE**
+Install and initialize the `cray` administrative CLI.
 
-    System Administrator
-
--   **OBJECTIVE**
-
-    Manually create a UAI.
-
--   **LIMITATIONS**
-
-    None.
-
+### Procedure
 
 This method is intended more for creating broker UAIs than for creating end-user UAIs. Administrators can, however, create end-user UAIs using this method.
 
 1.  Create a UAI manually with a command of the form:
 
-    ```screen
+    ```bash
     ncn-m001-pit# cray uas admin uais create OPTIONS
     ```
 

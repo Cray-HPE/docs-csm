@@ -1,8 +1,5 @@
----
-category: numbered
----
 
-# Configure UAIs in UAS
+## Configure UAIs in UAS
 
 The four main items of UAI configuration in UAS. Links to procedures for listing, adding, examining, updating, and deleting each item.
 
@@ -13,7 +10,7 @@ Options for the elements of a UAI are maintained in the UAS configuration. The f
 -   Resource specifications
 -   UAI Classes
 
-Only users who are defined as administrators in an HPE Cray EX system and are logged in using the administrative CLI \(cray command\) can configure UAS. Configure UAS from a LiveCD node or from any system with the administrative CLI installed that can reach the HPE Cray EX API Gateway. See publications *HPE Cray EX System Installation and Configuration Guide \(S-8000\)* and *HPE Cray EX System Administration Guide \(S-8001\)* for more information on the administrative CLI.
+Only users who are defined as administrators in an HPE Cray EX system and are logged in using the administrative CLI \(`cray` command\) can configure UAS. Configure UAS from a LiveCD node or from any system with the administrative CLI installed that can reach the HPE Cray EX API Gateway.
 
 The following procedures provide instructions for creating, updating, examining, and removing configuration items from UAS:
 
@@ -43,5 +40,4 @@ The following procedures provide instructions for creating, updating, examining,
     -   [Modify a UAI Class](Modify_a_UAI_Class.md)
     -   [Delete a UAI Class](Delete_a_UAI_Class.md)
 
-**Parent topic:**[User Access Service \(UAS\)](User_Access_Service_UAS.md)
 

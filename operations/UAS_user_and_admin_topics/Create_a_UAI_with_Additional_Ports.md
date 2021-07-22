@@ -1,40 +1,31 @@
----
-category: numbered
----
 
-# Create a UAI with Additional Ports
+## Create a UAI with Additional Ports
 
-Displays when you mouse over the topic on the Cray Portal.
+An option is available to expose UAI ports to the customer user network in addition to the the port used for SSH access. These ports are restricted to ports 80, 443, and 8888. This procedure allows a user or administrator to create a new UAI with these additional ports.
 
--   A public SSH key
+### Prerequisites
 
--   **ROLE**
+A public SSH key
 
-    System Administrator, User
+### Limitations
 
--   **OBJECTIVE**
+Only ports 80, 443, and 8888 can be exposed. Attempting to open any other ports will result in an error.
 
-    An option is available to expose UAI ports to the customer user network in addition to the the port used for SSH access. These ports are restricted to ports 80, 443, and 8888. This procedure allows a user or administrator to create a new UAI with these additional ports.
-
--   **LIMITATIONS**
-
-    Only ports 80, 443, and 8888 can be exposed. Attempting to open any other ports will result in an error.
-
+### Procedure
 
 1.  Log in to a UAN.
 
-2.  Create a new UAI with the --ports option.
+2.  Create a new UAI with the `--ports` option.
 
-    ```screen
-    ncn-w001# cray uas create --publickey PUBLIC\_SSH\_KEY\_FILE --ports PORT\_LIST
-    
+    ```bash
+    ncn-w001# cray uas create --publickey PUBLIC_SSH_KEY_FILE --ports PORT_LIST
     ```
 
-    **Troubleshooting:** If the Cray CLI has not been initialized, the CLI commands will not work. See [Configure the Cray Command Line Interface \(CLI\)](../configure_cray_cli.md).
+    **Troubleshooting:** If the Cray CLI has not been initialized, the CLI commands will not work. See [Configure the Cray Command Line Interface (`cray` CLI)](../configure_cray_cli.md) for more information.
 
     When these ports are exposed in the UAI, they will be mapped to unique ports on the UAI IP address. The mapping of these ports is displayed in the `uai_portmap` element of the return output from cray uas create, cray uas describe, and cray uas uais list. The mapping is shown as a dictionary where the key is the port requested and the value is the port that key is mapped to.
 
-    ```screen
+    ```bash
     ncn-w001# cray uas create --publickey /root/.ssh/id_rsa.pub --ports 80,443
     username = "user"
     uai_msg = "ContainerCreating"
@@ -53,10 +44,8 @@ Displays when you mouse over the topic on the Cray Portal.
 
 3.  Log in to the UAI with the connection string.
 
-    ```screen
-    $ ssh USERNAME@UAI\_IP\_ADDRESS -i ~/.ssh/id\_rsa
+    ```bash
+    $ ssh USERNAME@UAI_IP_ADDRESS -i ~/.ssh/id_rsa
     ```
 
-
-**Parent topic:**[User Access Service \(UAS\)](User_Access_Service_UAS.md)
 

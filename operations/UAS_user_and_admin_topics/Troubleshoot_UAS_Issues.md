@@ -1,16 +1,11 @@
----
-category: numbered
----
 
-# Troubleshoot UAS Issues
-
-UAS troubleshooting tips and techniques.
+## Troubleshoot UAS Issues
 
 This section provides examples of some commands that can be used to troubleshoot UAS-related issues.
 
-## Troubleshoot Connection Issues
+### Troubleshoot Connection Issues
 
-```screen
+```bash
 packet_write_wait: Connection to 203.0.113.0 port 30841: Broken pipe
 ```
 
@@ -22,9 +17,9 @@ ServerAliveInterval 120
 ServerAliveCountMax 720
 ```
 
-## Invalid Credentials
+### Invalid Credentials
 
-```screen
+```bash
 ncn-w001 # cray auth login --username USER --password WRONGPASSWORD
 Usage: cray auth login [OPTIONS]
 Try "cray auth login --help" for help.
@@ -37,41 +32,41 @@ To resolve this issue:
 -   Log in to Keycloak and verify the user exists.
 -   Make sure the username and password are correct.
 
-## Retrieve UAS Logs
+### Retrieve UAS Logs
 
 The system administrator can execute the following commands to retrieve UAS and the remote execution service logs:
 
-```screen
+```bash
 ncn-w001# kubectl logs -n services -c cray-uas-mgr -l "app=cray-uas-mgr"
 ```
 
-## Ensure that Slurm is Running and Configured Correctly
+### Ensure that Slurm is Running and Configured Correctly
 
 Check if Slurm is running:
 
-```screen
-\[user@uai-user-be3a6770-6876c88676-2p2lk ~\] $ sinfo
+```bash
+[user@uai-user-be3a6770-6876c88676-2p2lk ~] $ sinfo
 ```
 
 The system returns a message similar to the following if Slurm is not running:
 
-```screen
+```bash
 slurm_load_partitions: Unable to contact slurm controller (connect failure)
 ```
 
 If this error is returned, it is likely that Slurm is not running. The system administrator can use the following commands to debug the issue:
 
-```screen
- ncn-w001# kubectl logs -n user -l app=slurmdb -c slurmdb  --tail=-1
+```bash
+ncn-w001# kubectl logs -n user -l app=slurmdb -c slurmdb  --tail=-1
 ncn-w001# kubectl logs -n user -l app=slurmdbd -c slurmdbd  --tail=-1
 ncn-w001# kubectl logs -n user -l app=slurmctld -c slurmctld  --tail=-1
 ```
 
-## Troubleshoot Default Images Issues when Using the CLI
+### Troubleshoot Default Images Issues when Using the CLI
 
 If the image name provided while creating a new UAI is not registered for use by the system, the system returns an error message similar to the following:
 
-```screen
+```bash
 ncn-w001# cray uas create --publickey ~/.ssh/id_rsa.pub  --imagename fred
 Usage: cray uas create [OPTIONS]
 Try "cray uas create --help" for help.
@@ -81,11 +76,11 @@ Error: Bad Request: Invalid image (fred). Valid images: ['dtr.dev.cray.com:443/c
 
 Retry creating the UAI using the list of images and the name of the default image provided in the error message.
 
-## Verify that the User Access Instances \(UAIs\) are Running
+### Verify that the User Access Instances \(UAIs\) are Running
 
-The system administrator can use the kubectl command to check the status of the UAI.
+The system administrator can use the `kubectl` command to check the status of the UAI.
 
-```screen
+```bash
 ncn-w001# kubectl get pod -n user -l uas=managed -o wide
 NAME                                    READY   STATUS              RESTARTS   AGE    IP       NODE    NOMINATED NODE   READINESS GATES
 uai-user-603d55f1-85d5ddb4b7-zk6nl   0/1     ContainerCreating   0          109s   <none>   sms-2   <none>           <none>
@@ -95,21 +90,20 @@ uai-user-f6b72c9f-5dccd879bd-grbjw   0/1     ContainerCreating   0          113s
 
 If UAS pods are stuck in the `Pending` state, the admin needs to ensure the Kubernetes cluster has nodes available for running UAIs. Check that nodes are labeled with `uas=True` and are in the `Ready` state.
 
-```screen
+```bash
 ncn-w001# kubectl get nodes -l uas
 NAME        STATUS   ROLES    AGE   VERSION
 ncn-w001   Ready    master   11d   v1.13.3
-
 ```
 
 If none of the nodes are found or if the nodes listed are marked as `NotReady`, the UAI pods will not be scheduled and will not start.
 
-## Troubleshoot kubectl Certificate Issues
+### Troubleshoot `kubectl` Certificate Issues
 
-While kubectl is supported in a UAI, kubeconfig file to access a Kubernetes cluster is not provided. To use kubectl to interface with a Kubernetes cluster, the user must supply their own kubeconfig.
+While `kubectl` is supported in a UAI, kubeconfig file to access a Kubernetes cluster is not provided. To use `kubectl` to interface with a Kubernetes cluster, the user must supply their own kubeconfig.
 
-```screen
-\[user@uai-user-be3a6770-6876c88676-2p2lk ~\]# kubectl get nodes
+```bash
+[user@uai-user-be3a6770-6876c88676-2p2lk ~]# kubectl get nodes
 The connection to the server localhost:8080 was refused - did you specify the right host or port?
 ```
 
@@ -117,8 +111,8 @@ For instructions to copy certificates into a UAI, see *Move Application Data fro
 
 Specify the location of the Kubernetes certificate with `KUBECONFIG`.
 
-```screen
-\[user@uai-user-be3a6770-6876c88676-2p2lk ~\]# KUBECONFIG=/tmp/CONFIG kubectl get nodes
+```bash
+[user@uai-user-be3a6770-6876c88676-2p2lk ~]# KUBECONFIG=/tmp/CONFIG kubectl get nodes
 NAME STATUS ROLES AGE VERSION
 ncn-m001 Ready master 16d v1.13.3
 ncn-m002 Ready master 16d v1.13.3```
@@ -126,38 +120,40 @@ ncn-m002 Ready master 16d v1.13.3```
 
 Users must specify `KUBECONFIG` with every kubectl command or specify the kubeconfig file location for the life of the UAI. To do this, either set the `KUBECONFIG` environment variable or set the `--kubeconfig` flag .
 
-## Troubleshoot X11 Issues
+### Troubleshoot X11 Issues
 
 The system may return the following error if the user attempts to use an application that requires an X window \(such as xeyes\):
 
-```screen
-$ ssh user@203.0.113.0 -i ~/.ssh/id\_rsa
+```bash
+$ ssh user@203.0.113.0 -i ~/.ssh/id_rsa
    ______ ____   ___ __  __   __  __ ___     ____
   / ____// __ \ /   |\ \/ /  / / / //   |   /  _/
  / /    / /_/ // /| | \  /  / / / // /| |   / /
 / /___ / _, _// ___ | / /  / /_/ // ___ | _/ /
 \____//_/ |_|/_/  |_|/_/   \____//_/  |_|/___/
-\[user@uai-user-be3a6770-6876c88676-2p2lk ~\]$ xeyes
+
+[user@uai-user-be3a6770-6876c88676-2p2lk ~]$ xeyes
 Error: Can't open display: 
 ```
 
 To resolve this issue, pass the -X option with the ssh command as show below:
 
-```screen
-$ ssh UAI\_USERNAME@UAI\_IP\_ADDRESS -i ~/.ssh/id\_rsa -X
+```bash
+$ ssh UAI_USERNAME@UAI_IP_ADDRESS -i ~/.ssh/id_rsa -X
    ______ ____   ___ __  __   __  __ ___     ____
   / ____// __ \ /   |\ \/ /  / / / //   |   /  _/
  / /    / /_/ // /| | \  /  / / / // /| |   / /
 / /___ / _, _// ___ | / /  / /_/ // ___ | _/ /
 \____//_/ |_|/_/  |_|/_/   \____//_/  |_|/___/
 /usr/bin/xauth:  file /home/users/user/.Xauthority does not exist
-\[user@uai-user-be3a6770-6876c88676-2p2lk ~\]$ echo $DISPLAY
+
+[user@uai-user-be3a6770-6876c88676-2p2lk ~]$ echo $DISPLAY
 203.0.113.0 
 ```
 
 The warning stating "Xauthority does not exist" will disappear with subsequent logins.
 
-## Troubleshoot SSH Host Key Issues
+### Troubleshoot SSH Host Key Issues
 
 If strict host key checking enabled is enabled on the user's client, the below error may appear when connecting to a UAI over ssh.
 
@@ -167,7 +163,7 @@ WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED
 
 This can occur in a few circumstances, but is most likely to occur after the UAI container is restarted. If this occurs, remove the offending `ssh` hostkey from the local `known_hosts` file and try to connect again. The error message from `ssh` will contain the correct path to the `known_hosts` file and the line number of the problematic key.
 
-## Delete UAS Objects with kubectl
+### Delete UAS Objects with kubectl
 
 If Kubernetes resources used to create a UAI are not cleaned up during the normal deletion process, resources can be deleted with the following commands.
 
@@ -175,30 +171,30 @@ Delete anything created by the User Access Service \(`uas-mgr`\):
 
 **Warning:** This command will delete all UAS resources for the entire system, it is not for targeted cleanup of a single UAI.
 
-```screen
+```bash
 ncn-w001# kubectl delete all -n user -l uas=managed
 ```
 
 Delete all objects associated with a particular UAI:
 
-```screen
+```bash
 ncn-w001# kubectl delete all -n user -l app=UAI-NAME
 ```
 
 Delete all objects for a single user:
 
-```screen
+```bash
 ncn-w001# kubectl delete all -n user -l user=USERNAME 
 ```
 
-## Hard limits on UAI Creation
+### Hard limits on UAI Creation
 
 Each Kubernetes worker node has limits on how many pods it can run. Nodes are installed by default with a hard limit of 110 pods per node, but the number of pods may be further limited by memory and CPU utilization constraints. For a standard node the maximum number of UAIs per node is 110; if other pods are co-scheduled on the node, the number will be reduced.
 
 Determine the hard limit on Kubernetes pods with kubectrl describe node and look for the `Capacity` section.
 
 ```
-# kubectl describe node NODE\_NAME -o yaml
+# kubectl describe node NODE_NAME -o yaml
 ...
 capacity:
     cpu: "16"
@@ -217,11 +213,4 @@ When UAIs are created, some UAIs might left in the "Pending" state. The Kubernet
 Warning  Failed
 Scheduling  21s (x20 over 4m31s)  default-scheduler  0/4 nodes are available: 1 Insufficient pods, 3 node(s) didn't match node selector.
 ```
-
--   **[Log in to a User's UAI to Troubleshoot Issues](Login_to_a_Users_UAI_to_Troubleshoot_Issues.md)**  
-Displays when you mouse over the topic on the Cray Portal.
--   **[Troubleshoot UAI Stuck in "ContainerCreating"](Troubleshoot_UAI_Stuck_in_ContainerCreating.md)**  
-Instructions for admin to resovle issue when a UAI is stuck in the ContainerCreating state.
-
-**Parent topic:**[User Access Service \(UAS\)](User_Access_Service_UAS.md)
 

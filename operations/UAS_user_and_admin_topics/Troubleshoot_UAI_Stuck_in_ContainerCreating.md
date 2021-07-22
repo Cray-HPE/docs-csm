@@ -1,114 +1,60 @@
----
-category: numbered
----
 
-# Troubleshoot UAI Stuck in "ContainerCreating"
+## Troubleshoot UAI Stuck in "ContainerCreating"
 
-Instructions for admin to resovle issue when a UAI is stuck in the ContainerCreating state.
+Resolve an issue causing UAIs to show a `uai_status` field of `Waiting`, and a `uai_msg` field of `ContainerCreating`.  It is possible that this is just a matter of starting the UAI taking longer than normal, perhaps as it pulls in a new UAI image from a registry. If the issue persists for a long time, it is worth investigating.
 
--   The UAI has been in the `ContainerCreating` status for several minutes.
+### Prerequisites
 
--   **ROLE**
+The UAI has been in the `ContainerCreating` status for several minutes.
 
-    System Administrator
+### Procedure
 
--   **OBJECTIVE**
+1. Find the UAI.
 
-    Resolve issue causing a new UAI to be stuck in the `ContainerCreating`. This issue may occur because of an error with Macvlan showing no available IPs
-
-    **Attention:** There is a hard limit to how many IP addresses \(and as a result UAIs\) are available on a node. If this limit is reached, the Macvlan error is valid. The UAI will be stay in the `ContainerCreating` status until an IP becomes available. However, if the admin knows there are available IPs and the error code still occurs, follow the steps below.
-
-    **Warning:** This procedure restarts `kubelet` and `dockerd` and could have unintended consequences. Other services may stop and not restart correctly.
-
-
-1.  Log in to an NCN as `root`.
-
-2.  List the pods to find the name of the pod in `ContainerCreating`.
-
-    ```screen
-    ncn-w001# kubectl get pods -n user | grep uai
-    uai-user-04e0e58c-674d9d5b97-kgtj6                        1/1     Running             0          11m
-    uai-user-91654d73-6f67c84676-zssq8                        1/1     Running             0          17m
-    **uai-user-f62bef19-548dcd856-lg26j                         0/1     ContainerCreating   0          4m8s**
+    ```
+    ncn-m001-pit# cray uas admin uais list --owner ctuser
+    [[results]]
+    uai_age = "1m"
+    uai_connect_string = "ssh ctuser@10.103.13.159"
+    uai_host = "ncn-w001"
+    uai_img = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
+    uai_ip = "10.103.13.159"
+    uai_msg = "ContainerCreating"
+    uai_name = "uai-ctuser-bcd1ff74"
+    uai_status = "Waiting"
+    username = "ctuser"
     ```
 
-3.  List the pod details.
+2. Look up the UAI's pod in Kubernetes.
 
-    Below is the "Events" section of the output, look for the bolded information.
-
-    ```screen
-    ncn-w001# kubectl describe pod -n user uai-user-f62bef19-548dcd856-lg26j
-    Events:  Type     Reason                  Age                     From                Message  ----     ------                  ----                    ----                
-    -------  Normal   Scheduled               5m14s                   default-scheduler   Successfully assigned default/uai-user-baecc887-5d88c99fd6-2wwtd to ncn-w001  
-    Warning  FailedCreatePodSandBox  5m11s                   kubelet, ncn-w001  Failed create pod sandbox: rpc error: code = Unknown desc = failed to set up sandbox container
-     "ae15df320f5456fa557549e8750775c5eb4cedb6fdc2ed6875ab31e188e8ae7f" network for pod "uai-user-baecc887-5d88c99fd6-2wwtd": NetworkPlugin cni failed to set up pod 
-    "uai-user-baecc887-5d88c99fd6-2wwtd_default" network: Multus: Err in tearing down failed plugins: Multus: error in invoke 
-    Delegate add - "macvlan": failed to allocate for range 0: no IP addresses available in range set: 10.2.200.100-10.2.200.200  
-    Warning  FailedCreatePodSandBox  5m8s                    kubelet, ncn-w001  Failed create pod sandbox: rpc error: code = Unknown desc = failed to set up sandbox container
-     "17a01880a3676b72766327cdda01abfeb95479f127cb0d72c23e30acfc34ce35" network for pod "uai-user-baecc887-5d88c99fd6-2wwtd": NetworkPlugin cni failed to set up pod
-     "uai-user-baecc887-5d88c99fd6-2wwtd_default" network: Multus: Err in tearing down failed plugins: Multus: error in invoke 
-    Delegate add - "macvlan": failed to allocate for range 0: no IP addresses available in range set: 10.2.200.100-10.2.200.200  
-    Warning  FailedCreatePodSandBox  5m6s                    kubelet, ncn-w001  Failed create pod sandbox: 
-    rpc error: code = Unknown desc = failed to set up sandbox container "37129554e71e75d7ecc50783dc7d7b5f02586fafabb7ceca1109cd56e7c8f6db" network for pod "uai-user-baecc887-5d88c99fd6-2wwtd": 
-    NetworkPlugin cni failed to set up pod "uai-user-baecc887-5d88c99fd6-2wwtd_default" network: Multus: Err in tearing down failed plugins: Multus: error in invoke 
-    **Delegate add - "macvlan": failed to allocate for range 0: no IP addresses available in range set: 10.2.200.100-10.2.200.200**
+    ```
+    ncn-m001-pit# kubectl get po -n user | grep uai-ctuser-bcd1ff74
+    uai-ctuser-bcd1ff74-7d94967bdc-4vm66   0/1     ContainerCreating   0          2m58s
     ```
 
-4.  Delete all the UAIs on the system.
+3. Describe the pod in Kubernetes.
 
-    ```screen
-    ncn-w001# cray uas uais delete
-    This will delete all running UAIs, Are you sure? [y/N]: y
-    [
-    "Successfully deleted uai-user-04e0e58c-674d9d5b97-kgtj6",
-    "Successfully deleted uai-user-91654d73-6f67c84676-zssq8",
-    "Successfully deleted uai-user-f62bef19-548dcd856-lg26j",
-    ]
+    ```
+    ncn-m001-pit# kubectl describe pod -n user uai-ctuser-bcd1ff74-7d94967bdc-4vm66
+    Name:                 uai-ctuser-bcd1ff74-7d94967bdc-4vm66
+    Namespace:            user
+    Priority:             -100
+    Priority Class Name:  uai-priority
+    Node:                 ncn-w001/10.252.1.12
+    Start Time:           Wed, 03 Feb 2021 18:33:00 -0600
+
+    ...
+
+    Events:
+    Type     Reason       Age                    From               Message
+    ----     ------       ----                   ----               -------
+    Normal   Scheduled    <unknown>              default-scheduler  Successfully assigned user/uai-ctuser-bcd1ff74-7d94967bdc-4vm66 to ncn-w001
+    Warning  FailedMount  2m53s (x8 over 3m57s)  kubelet, ncn-w001  MountVolume.SetUp failed for volume "broker-sssd-config" : secret "broker-sssd-conf" not found
+    Warning  FailedMount  2m53s (x8 over 3m57s)  kubelet, ncn-w001  MountVolume.SetUp failed for volume "broker-sshd-config" : configmap "broker-sshd-conf" not found
+    Warning  FailedMount  2m53s (x8 over 3m57s)  kubelet, ncn-w001  MountVolume.SetUp failed for volume "broker-entrypoint" : configmap "broker-entrypoint" not found
+    Warning  FailedMount  114s                   kubelet, ncn-w001  Unable to attach or mount volumes: unmounted volumes=[broker-sssd-config broker-entrypoint broker-sshd-config], unattached volumes=[optcraype optlmod etcprofiled optr optforgelicense broker-sssd-config lustre timezone optintel optmodulefiles usrsharelmod default-token-58t5p optarmlicenceserver optcraycrayucx slurm-config opttoolworks optnvidiahpcsdk munge-key optamd opttotalview optgcc opttotalviewlicense broker-entrypoint broker-sshd-config etccrayped opttotalviewsupport optcraymodulefilescrayucx optforge usrlocalmodules varoptcraypepeimages]: timed out waiting for the condition
     ```
 
-5.  Log in to `ncn-w001`.
+    This produces a lot of output, all of which can be useful for diagnosis. A good place to start is in the `Events` section at the bottom. Notice the warnings here about volumes whose secrets and configmaps are not found. In this case, that means the UAI can't start because it was started in legacy mode without a default UAI class, and some of the volumes configured in the UAS are in the `uas` namespace to support localization of broker UAIs and cannot be found in the `user` namespace. To solve this particular problem, the best move would be to configure a default UAI class with the correct volume list in it, delete the UAI, and allow the user to try creating it again using the default class.
 
-6.  Stop kubelet on `ncn-w001`.
-
-    ```screen
-    ncn-w001# systemctl stop kubelet.service
-    ncn-w001# systemctl is-active kubeletdocker.service
-    inactive
-    ```
-
-7.  Stop Docker on `ncn-w001`.
-
-    ```screen
-    ncn-w001# systemctl stop docker.service
-    ncn-w001# systemctl is-active docker.service
-    inactive
-    ```
-
-8.  Remove all files from /var/lib/cni/networks/macvlan-uas-nmn-conf.
-
-    ```screen
-    ncn-w001:/var/lib/cni/networks/macvlan-uas-nmn-conf # ls
-    10.2.200.101  10.2.200.105  last_reserved_ip.0    lock
-     
-    ncn-w001:/var/lib/cni/networks/macvlan-uas-nmn-conf # sudo rm -rf \*
-    ```
-
-9.  Start kubelet.
-
-    ```screen
-    ncn-w001# systemctl start kubelet.service
-    ncn-w001# systemctl is-active kubelet.service
-    active 
-    ```
-
-10. Start Docker on `ncn-w001`.
-
-    ```screen
-    ncn-w001# systemctl start docker.service
-    ncn-w001# systemctl is-active docker.service
-    active 
-    ```
-
-
-**Parent topic:**[Troubleshoot UAS Issues](Troubleshoot_UAS_Issues.md)
-
+    Other problems can usually be quickly identified using this and other information found in the output from the `kubectl describe pod` command.
