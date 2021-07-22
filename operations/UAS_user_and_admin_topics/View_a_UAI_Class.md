@@ -1,35 +1,29 @@
----
-category: numbered
----
 
-# View a UAI Class
+## View a UAI Class
 
 Display all the information for a specific UAI class by referencing its class ID.
 
--   Install and initialize the cray administrative CLI.
+### Prerequisites
+
+-   Install and initialize the `cray` administrative CLI.
 -   Obtain the ID of a UAI class.
 
--   **ROLE**
-
-    System Administrator
-
--   **OBJECTIVE**
-
-    Display the configuration information for a specific UAI class.
-
--   **LIMITATIONS**
-
-    None.
-
+### Procedure
 
 1.  View all the information about a specific UAI class.
 
-    The following example uses the `--format yaml` option to display the UAI class configuration in YAML format. Replace `yaml` with `json` to return JSON-formatted output. Omitting the `--format` option displays the UAI class in the default TOML format.
+    To examine an existing UAI class, use a command of the following form:
+
+    ```
+    ncn-m001-pit# cray uas admin config classes describe <class-id>
+    ```
+
+    The following example uses the `--format yaml` option to display the UAI class configuration in YAML format. Replace yaml with json to return JSON-formatted output. Omitting the `--format` option displays the UAI class in the default TOML format.
 
     Replace bb28a35a-6cbc-4c30-84b0-6050314af76b in the example command with the ID of the UAI class to be examined.
 
-    ```screen
-    ncn-m001-pit# cray uas admin config classes describe \\
+    ```bash
+    ncn-m001-pit# cray uas admin config classes describe \
     --format yaml bb28a35a-6cbc-4c30-84b0-6050314af76b
     class_id: bb28a35a-6cbc-4c30-84b0-6050314af76b
     comment: Non-Brokered UAI User Class
