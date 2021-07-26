@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-set -o errexit
+set -e
+BASEDIR=$(dirname $0)
+. ${BASEDIR}/upgrade-state.sh
+trap 'err_report' ERR
 set -o pipefail
 
 usage() {
@@ -75,3 +78,5 @@ if [[ "$inplace" == "yes" ]]; then
 else
     cat "$c"
 fi
+
+ok_report
