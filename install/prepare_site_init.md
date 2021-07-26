@@ -109,27 +109,23 @@ with system-specific customizations.
     
 1. Validate that REDS/MEDS/RTS sealed secrets contain valid JSON using `jq`:
     
+    Validate REDS credentials (used by the REDS and HMS discovery services, targeting River Redfish BMC endpoints and management switches).
     ```bash
-    # Validate REDS credentials (used by the REDS and HMS discovery services, 
-    # targeting River Redfish BMC endpoints and management switches)
-    
     linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray_reds_credentials.generate.data[0].args.value' | jq
     linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray_reds_credentials.generate.data[1].args.value' | jq
+    ```
+    > NOTE: For vault_redfish_defaults, the only entry used is '{"Cray": {"Username": "root", "Password": "XXXX"}'
+    > Make sure it is specified as shown, with the 'Cray' key. This key is not
+    > used in any of the other credential specifications. Make sure Username and
+    > Password entries are correct.
     
-    # NOTE: For vault_redfish_defaults, the only entry used is '{"Cray": {"Username": "root", "Password": "XXXX"}'
-    # Make sure it is specified as shown, with the 'Cray' key. This key is not
-    # used in any of the other credential specifications. Make sure Username and
-    # Password entries are correct.
-    
-    # Validate MEDS credentials (used by the MEDS service, targeting 
-    # Redfish BMC endpoints). Make sure Username and Password entries are correct.
-    
+    Validate MEDS credentials (used by the MEDS service, targeting Redfish BMC endpoints). Make sure Username and Password entries are correct.
+    ```bash    
     linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray_meds_credentials.generate.data[0].args.value' | jq
+    ```
     
-    # Validate RTS credentials (used by the Redfish Translation Service, targeting
-    # River Redfish BMC endpoints and PDU controllers). Make sure Username and 
-    # Password entries are correct.
-    
+    Validate RTS credentials (used by the Redfish Translation Service, targeting River Redfish BMC endpoints and PDU controllers). Make sure Username and Password entries are correct.
+    ```bash
     linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray_hms_rts_credentials.generate.data[0].args.value' | jq
     linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray_hms_rts_credentials.generate.data[1].args.value' | jq
     ```
