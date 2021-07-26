@@ -262,7 +262,7 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
 
-    ./create-bss-etcd-backup.sh prerequisites
+    ./create-bss-etcd-backup.sh prerequisites-$(hostname)
 
     record_state "${state_name}" $(hostname)
 else
