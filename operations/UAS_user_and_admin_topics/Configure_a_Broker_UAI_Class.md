@@ -16,13 +16,13 @@ Configuring a broker UAI class consists of the following:
 
 ### Example of Volumes to Connect Broker UAIs to LDAP
 
-Broker UAIs authenticate users in SSH and pass the SSH connection on to the selected / created end-user UAI.  To do this authentication, they need an authentication source.  For sites that use LDAP as a directory server for authentication, connecting broker UAIs to LDAP is simply a matter of replicating the LDAP configuration used by other nodes / systems at the site (UANs can be a good source of this configuration) inside the broker UAI.  This section shows how to do that using volumes, which permits the standard broker UAI image to be used out of the box and reconfigured externally.
+Broker UAIs authenticate users in SSH and pass the SSH connection on to the selected / created end-user UAI. To do this authentication, they need an authentication source. For sites that use LDAP as a directory server for authentication, connecting broker UAIs to LDAP is simply a matter of replicating the LDAP configuration used by other nodes / systems at the site (UANs can be a good source of this configuration) inside the broker UAI. This section shows how to do that using volumes, which permits the standard broker UAI image to be used out of the box and reconfigured externally.
 
-While it would be possible to make the configuration available as files volume mounted from the host node of the broker UAI, this is difficult to set up and maintain because it means that the configuration files must be present and synchronized across all UAI host nodes.  A more practical approach to this is to install the configuration files in Kubernetes as secrets and then mount them from Kubernetes directly.  This ensures that no matter where a broker UAI runs, it has access to the configuration.
+While it would be possible to make the configuration available as files volume mounted from the host node of the broker UAI, this is difficult to set up and maintain because it means that the configuration files must be present and synchronized across all UAI host nodes. A more practical approach to this is to install the configuration files in Kubernetes as secrets and then mount them from Kubernetes directly. This ensures that no matter where a broker UAI runs, it has access to the configuration.
 
-This example, uses Kubernetes secrets and assumes that the broker UAIs run in the `uas` Kubernetes namespace.  If a different namespace is used, the creation of the configmaps is different but the contents are the same.  Using a namespace other than `uas` for broker UAIs is not recommended and is beyond the scope of this document.
+This example, uses Kubernetes secrets and assumes that the broker UAIs run in the `uas` Kubernetes namespace. If a different namespace is used, the creation of the configmaps is different but the contents are the same. Using a namespace other than `uas` for broker UAIs is not recommended and is beyond the scope of this document.
 
-To configure LDAP, first determine which files need to be changed in the broker UAI and what their contents should be.  In this example, the file is `/etc/sssd/sssd.conf` and its contents are (the contents have been sanitized, substitute appropriate contents in their place):
+To configure LDAP, first determine which files need to be changed in the broker UAI and what their contents should be. In this example, the file is `/etc/sssd/sssd.conf` and its contents are (the contents have been sanitized, substitute appropriate contents in their place):
 
 ```
 [sssd]
@@ -98,7 +98,7 @@ Two important things to notice here are:
 * The secret is mounted on the directory `/etc/sssd` not the file `/etc/sssd/sssd.conf` because Kubernetes does not permit the replacement of an existing regular file with a volume but does allow overriding a directory
 * The value `384` is used here for the default mode of the file instead of `0600`, which would be easier to read, because JSON does not accept octal numbers in the leading zero form
 
-The last part that is needed is a UAI class for the broker UAI with the updated configuration in the volume list.  For this we need the image-id of the broker UAI image, the volume-ids of the volumes to be added to the broker class and the class-id of the end-user UAI class managed by the broker:
+The last part that is needed is a UAI class for the broker UAI with the updated configuration in the volume list. For this we need the image-id of the broker UAI image, the volume-ids of the volumes to be added to the broker class and the class-id of the end-user UAI class managed by the broker:
 
 ```
 ncn-m001-pit# cray uas admin config images list

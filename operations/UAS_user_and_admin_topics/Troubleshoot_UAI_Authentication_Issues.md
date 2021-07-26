@@ -49,7 +49,7 @@ To resolve this issue, make sure the `cray` command is configured to use one of 
             "key": "https://api-gw-service-nmn.local/keycloak/realms/shasta",
             "key": "https://mgmt-plane-cmn.local/keycloak/realms/shasta",
 # cray config describe | grep hostname
-    "hostname": "https://172.30.51.127:30443" <---- 172.30.51.127:30443 won't work
+    "hostname": "https://172.30.51.127:30443" <---- 172.30.51.127:30443 will not work
  
  
 # Change to "https://api-gw-service-nmn.local"

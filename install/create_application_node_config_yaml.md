@@ -1,5 +1,7 @@
 # Create Application Node Config YAML
 
+In general, everything that does not follow the [SHCD/HMN Connections Rules](shcd_hmn_connections_rules.md) should be considered an [application node](../glossary.md#application-node), unless it is a `KVM`.
+
 This page provides directions on constructing the `application_node_config.yaml` file. This file controls how the `csi config init` command finds and treats application nodes discovered in the `hmn_connections.json` file when building the SLS Input file. 
 
 The `application_node_config.yaml` file can be constructed solely from information in the SHCD, but if the `hmn_connections.json` file is available, then that can be used instead.

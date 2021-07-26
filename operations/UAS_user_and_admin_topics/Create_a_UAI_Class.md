@@ -14,7 +14,7 @@ Install and initialize the `cray` administrative CLI.
     ```
     ncn-m001-pit# cray uas admin config classes create --image-id <image-id> [options]
     ```
-    `--image-id <image-id>` specifies the UAI image identifier of the UAI image to be used in creating UAIs of the new class.  Any number of classes using the same image id can be defined.  
+    `--image-id <image-id>` specifies the UAI image identifier of the UAI image to be used in creating UAIs of the new class. Any number of classes using the same image id can be defined.  
     
     The following options are available:
 

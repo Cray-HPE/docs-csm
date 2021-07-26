@@ -219,7 +219,7 @@ Install and initialize the `cray` administrative CLI.
   ncn-m001-pit# cray uas admin uais create
   ```
 
-  The `comment` field is a free form string describing the UAI class. The `default` field is a flag indicating whether this class is the default class.  The default class will be applied, overriding both the default UAI image and any specified image name, when the following command is used to create an end-user UAI for a user:
+  The `comment` field is a free form string describing the UAI class. The `default` field is a flag indicating whether this class is the default class. The default class will be applied, overriding both the default UAI image and any specified image name, when the following command is used to create an end-user UAI for a user:
 
   ```
   ncn-m001-pit# cray uas create
@@ -228,11 +228,11 @@ Install and initialize the `cray` administrative CLI.
   Setting a class to default gives the administrator fine grained control over the behavior of end-user UAIs that are created by authorized users in legacy mode (see [Legacy Mode User-Driven UAI Management](Legacy_Mode_User-Driven_UAI_Management.md)).
 
   The remaining fields are as follows:
-  * The `namespace` field specifies the Kubernetes namespace in which this UAI will run.  It has the default setting of `user` here.
-  * The `opt_ports` field is an empty list of TCP port numbers that will be opened on the external IP address of the UAI when it runs.  This controls whether services other than SSH can be run and reached publicly on the UAI.  The `priority_class_name` `"uai_priority"` is the default <a href="https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass">Kubernetes priority class</a> of UAIs.  If it were a different class, it would affect both Kubernetes default resource limit / request assignments and Kubernetes scheduling priority for the UAI.
-  * The `public_ip` field is a flag that indicates whether the UAI should be given an external IP address LoadBalancer service so that clients outside the Kubernetes cluster can reach it, or only be given a Kubernetes Cluster-IP address.  For the most part, this controls whether the UAI is reachable by SSH from external clients, but it also controls whether the ports in `opt_ports` are reachable as well.
+  * The `namespace` field specifies the Kubernetes namespace in which this UAI will run. It has the default setting of `user` here.
+  * The `opt_ports` field is an empty list of TCP port numbers that will be opened on the external IP address of the UAI when it runs. This controls whether services other than SSH can be run and reached publicly on the UAI. The `priority_class_name` `"uai_priority"` is the default <a href="https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass">Kubernetes priority class</a> of UAIs. If it were a different class, it would affect both Kubernetes default resource limit / request assignments and Kubernetes scheduling priority for the UAI.
+  * The `public_ip` field is a flag that indicates whether the UAI should be given an external IP address LoadBalancer service so that clients outside the Kubernetes cluster can reach it, or only be given a Kubernetes Cluster-IP address. For the most part, this controls whether the UAI is reachable by SSH from external clients, but it also controls whether the ports in `opt_ports` are reachable as well.
   * The `resource_config` field is not set, but could be set to a resource specification to override namespace defaults on Kubernetes resource requests / limits.
-  * The `uai_compute_network` flag indicates whether this UAI uses the macvlan mechanism to gain access to the Shasta compute node network.  This needs to be `true` to support workload management. 
+  * The `uai_compute_network` flag indicates whether this UAI uses the macvlan mechanism to gain access to the Shasta compute node network. This needs to be `true` to support workload management. 
   * The `uai_creation_class` field is used by [broker UAIs](#main-uaimanagement-brokermode-brokerclasses) to tell the broker what kind of UAI to create when automatically generating a UAI.
 
   After all these individual items, we see the UAI Image to be used to create UAIs of this class:

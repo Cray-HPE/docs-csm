@@ -8,7 +8,7 @@ A custom end-user UAI image can be any container image set up with the end-user 
 ### Prerequisites
 
 -   This procedure requires administrator privileges.
--   All steps in this procedure must be run from a true NCN (master or worker node), not from the LiveCD node.  In particular, pushing the final image to `registry.local` will fail with an error reporting a bad x509 certificate if it is attempted on the LiveCD node.
+-   All steps in this procedure must be run from a true NCN (master or worker node), not from the LiveCD node. In particular, pushing the final image to `registry.local` will fail with an error reporting a bad x509 certificate if it is attempted on the LiveCD node.
 
 ### Procedure
 
@@ -47,7 +47,7 @@ A custom end-user UAI image can be any container image set up with the end-user 
     name: wlm-sessiontemplate-0.1.0
     ```
 
-    Alternatively, collect the sessiontemplate name used when performing the intallation/configuration procedure in the Cray Operating System (COS) documentation repository. Near the end of that procedure, the step to create a BOS session to boot the compute nodes should contain the name. 
+    Alternatively, collect the sessiontemplate name used when performing the installation/configuration procedure in the Cray Operating System (COS) documentation repository. Near the end of that procedure, the step to create a BOS session to boot the compute nodes should contain the name. 
 
     ```
     ncn-w001# SESSION_NAME=wlm-sessiontemplate-0.1.0
@@ -144,7 +144,7 @@ A custom end-user UAI image can be any container image set up with the end-user 
 
     ncn-w001# rm $SESSION_ID.tar rootfs.squashfs
 
-    # NOTE: the next step could be done as an `rm -rf` but, since the user
+    # NOTE: the next step could be done as an `rm -rf` but, because the user
     #       is `root` and the path is very similar to an important system
     #       path a more cautious approach is taken.
     ncn-w001# rm -fv ./usr/bin/uai-ssh.sh && rmdir ./usr/bin ./usr

@@ -55,7 +55,7 @@ Disks are chosen by dracut. Kubernetes and storage nodes use different dracut mo
 The master nodes and worker nodes use the same artifacts, and thus have the same dracut modules assimilating disks. Therefore, it is important
 to beware of:
 - k8s-master nodes with one or more extra "large" disk(s); these disks help but are unnecessary 
-- ceph-storage nodes do not run the same dracut modules since they have different disk demands
+- ceph-storage nodes do not run the same dracut modules because they have different disk demands
 
 <a name="worker-nodes-with-etcd"></a>
 #### Worker Nodes with ETCD

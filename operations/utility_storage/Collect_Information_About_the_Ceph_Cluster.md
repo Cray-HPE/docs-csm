@@ -28,7 +28,7 @@ ncn-m001# ceph -s
     mon: 3 daemons, quorum ncn-s001,ncn-s002,ncn-s003 (age 20h) <<-- Should have quorum and ideally an odd number of mon nodes
     mgr: ncn-s003(active, since 9d), standbys: ncn-s001, ncn-s002 <<-- The watchdog for the cluster
     mds: cephfs:1 {0=ncn-s002=up:active} 2 up:standby <<-- Filesystem service
-    osd: 18 osds: 18 up (since 20h), 18 in (since 9d) <<-- Data devices: 1 OSD = 1 hard drive designated for ceph
+    osd: 18 osds: 18 up (since 20h), 18 in (since 9d) <<-- Data devices: 1 OSD = 1 hard drive designated for Ceph
     rgw: 3 daemons active (ncn-s001.rgw0, ncn-s002.rgw0, ncn-s003.rgw0) <<-- Object storage
 
   data: <<-- Health stats related to the above services
