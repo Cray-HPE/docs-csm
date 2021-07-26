@@ -21,7 +21,6 @@ the number of storage and worker nodes.
 ### Topics:
 
    1. [Prepare for Management Node Deployment](#prepare_for_management_node_deployment)
-      1. [Configure Bootstrap Registry to Proxy an Upstream Registry](#configure-bootstrap-registry-to-proxy-an-upstream-registry)
       1. [Tokens and IPMI Password](#tokens-and-ipmi-password)
       1. [Apply NCN Pre-Boot Workarounds](#apply-ncn-pre-boot-workarounds)
       1. [Ensure Time Is Accurate Before Deploying NCNs](#ensure-time-is-accurate-before-deploying-ncns)
@@ -48,56 +47,8 @@ the number of storage and worker nodes.
 
 Preparation of the environment must be done before attempting to deploy the management nodes.
 
-<a name="configure-bootstrap-registry-to-proxy-an-upstream-registry"></a>
-#### 1.1 Configure Bootstrap Registry to Proxy an Upstream Registry
-
-> **`INTERNAL USE`** -- This procedure to configure a bootstrap registry to proxy to an upstream registry is only relevant for HPE Cray internal systems.
-
-> **`SKIP IF AIRGAP/OFFLINE`** - Do **NOT** reconfigure the bootstrap registry to proxy an upstream registry if performing an _airgap/offline_ install.
-
-By default, the bootstrap registry is a `type: hosted` Nexus repository to
-support _airgap/offline_ installs, which requires container images to be
-imported prior to platform installation. However, it may be reconfigured to
-proxy container images from an upstream registry in order to support _online_
-installs as follows:
-
-1. Stop Nexus:
-
-    ```bash
-    pit# systemctl stop nexus
-    ```
-
-1. Remove `nexus` container:
-
-    ```bash
-    pit# podman container exists nexus && podman container rm nexus
-    ```
-
-1. Remove `nexus-data` volume:
-
-    ```bash
-    pit# podman volume rm nexus-data
-    ```
-
-1. Add the corresponding URL to the `ExecStartPost` script in
-    `/usr/lib/systemd/system/nexus.service`.
-
-    > **`INTERNAL USE`** Cray internal systems may want to proxy to https://dtr.dev.cray.com as follows:
-    >
-    > ```bash
-    > pit# URL=https://dtr.dev.cray.com
-    > pit# sed -e "s,^\(ExecStartPost=/usr/sbin/nexus-setup.sh\).*$,\1 $URL," -i /usr/lib/systemd/system/nexus.service
-    > ```
-
-1. Restart Nexus
-
-    ```bash
-    pit# systemctl daemon-reload
-    pit# systemctl start nexus
-    ```
-
 <a name="tokens-and-ipmi-password"></a>
-#### 1.2 Tokens and IPMI Password
+#### 1.1 Tokens and IPMI Password
 
 1. Define shell environment variables that will simplify later commands to deploy management nodes.
 
@@ -128,7 +79,7 @@ installs as follows:
    ```
 
 <a name="apply-ncn-pre-boot-workarounds"></a>
-#### 1.3 Apply NCN Pre-Boot Workarounds
+#### 1.2 Apply NCN Pre-Boot Workarounds
 
 _There will be post-boot workarounds as well._
 
@@ -142,7 +93,7 @@ _There will be post-boot workarounds as well._
    ```
 
 <a name="ensure-time-is-accurate-before-deploying-ncns"></a>
-#### 1.4 Ensure Time Is Accurate Before Deploying NCNs
+#### 1.3 Ensure Time Is Accurate Before Deploying NCNs
 
 **NOTE**: If you wish to use a timezone other than UTC, instead of step 1 below, follow
 [this procedure for setting a local timezone](../operations/configure_ntp_on_ncns.md#set-a-local-timezone), then
@@ -335,7 +286,7 @@ The configuration workflow described here is intended to help understand the exp
     pit# csi pit validate --livecd-preflight
     ```
 
-    > Note: If you are **not** on an internal HPE Cray system or if you are on an offline/airgapped system, then you can ignore any errors about not being able resolve arti.dev.cray.com
+    > Note: You can ignore any errors about not being able resolve arti.dev.cray.com.
 
 1. Print the consoles available to you:
 

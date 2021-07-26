@@ -25,14 +25,6 @@ This procedure will install CSM applications and services into the CSM Kubernete
 <a name="initialize-bootstrap-registry"></a>
 ### 1. Initialize Bootstrap Registry
 
-> **`EXTERNAL USE`** -- Every customer system should follow this procedure.  
-> 
-> **`INTERNAL USE`** This procedure **is needed** for HPE Cray internal systems which did not reconfigure to proxy from an
->  upstream registry. This procedure **is NOT needed** for HPE Cray internal systems which **did** reconfigure to proxy from an upstream registry. Online installs cannot upload container images to the bootstrap registry because it proxies an upstream source.  
->  **Warning:** **DO NOT** perform this procedure if the bootstrap registry was [reconfigured to proxy from an
-> upstream registry](deploy_management_nodes.md#configure-bootstrap-registry-to-proxy-an-upstream-registry). 
-
-
 1.  Verify that Nexus is running:
 
     ```bash
