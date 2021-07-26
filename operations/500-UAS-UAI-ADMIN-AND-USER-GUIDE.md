@@ -827,7 +827,7 @@ For example:
 ncn-m001-pit# cray uas admin config resources create --request '{"cpu": "300m", "memory": "250Mi"}' --limit '{"cpu": "300m", "memory": "250Mi"}' --comment "my first example resource specification"
 ```
 
-This specifies a request / limit pair that requests and is constrained to 300 mili-CPUs (0.3 CPUs) and 250 MiB of memory (`250 * 1024 * 1024` bytes) for any UAI created with this limit specification. By keeping the request and the limit the same, this ensures that a host node will not be oversubscribed by UAIs. It is also legitimate to request less than the limit, though that risks over-subscription and is not recommended in most cases. If the request is greater than the limit, UAIs created with the request specification will never be scheduled because they will not be able to provide the requested resources.
+This specifies a request / limit pair that requests and is constrained to 300 milli-CPUs (0.3 CPUs) and 250 MiB of memory (`250 * 1024 * 1024` bytes) for any UAI created with this limit specification. By keeping the request and the limit the same, this ensures that a host node will not be oversubscribed by UAIs. It is also legitimate to request less than the limit, though that risks over-subscription and is not recommended in most cases. If the request is greater than the limit, UAIs created with the request specification will never be scheduled because they will not be able to provide the requested resources.
 
 All of the configurable parts are optional when adding a resource specification. If none are provided, an empty resource specification with only a `resource_id` will be created.
 
@@ -2223,7 +2223,7 @@ Important content here is as follows:
 
 * `Port 30123` tells sshd to listen on a port that can be reached through port forwarding by the publicly visible Kubernetes service,
 * The `UseDNS no` avoids any DNS issues resulting from the broker UAI running in the Kubernetes network space.
-* The `permitTTY yes` setting permits interactive UAI logins
+* The `PermitTTY yes` setting permits interactive UAI logins
 * The `ForceCommand ...` statement ensures that users are always sent on to end-user UAIs or drop out of the broker UAI on failure, preventing users from directly accessing the broker UAI.
 * The `AcceptEnv UAI_ONE_SHOT` setting is not required, but it allows a user to set the UAI_ONE_SHOT variable which instructs the broker to delete any created end-user UAI after the user logs out.
 

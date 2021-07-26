@@ -1,6 +1,6 @@
 # Clear Gigabyte CMOS
 
-Due to a bug in the Gigabyte firmware, the Shasta 1.5 install may negatively impact Gigabyte motherboards when attempting to boot using bonded Mellanox network cards. The result is a board that is unusable until a CMOS clear is physically done via a jumper on the board itself.
+Because of a bug in the Gigabyte firmware, the Shasta 1.5 install may negatively impact Gigabyte motherboards when attempting to boot using bonded Mellanox network cards. The result is a board that is unusable until a CMOS clear is physically done via a jumper on the board itself.
 
 A patched firmware release (newer than C20 BIOS) is expected to be available for a future release of Shasta. It is recommended that Gigabyte users wait for this new firmware before attempting an installation of Shasta 1.5. The procedure to recover the boards is included below.
 

@@ -28,6 +28,9 @@ If you are here with an unconfigured switch, mileage may vary.
     pit# minicom -b 115200 -D /dev/tty.USB1
     ```
 1. If you know the ports of your BMCs, you can display the MAC for those ports -or- if they exist on the same VLAN you should be able to dump the VLAN.
+
+    In order to find the ports of the BMCs, cross reference the HMN tab of the SHCD.
+
     > Syntax is for Onyx and Dell EMC devices - please resort to your CLI usage (press `?` or `tab` to assist on-the-fly).
 
     If you know the VLAN ID:

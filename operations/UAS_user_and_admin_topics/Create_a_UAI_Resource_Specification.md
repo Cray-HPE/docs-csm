@@ -25,7 +25,7 @@ Install and initialize the `cray` administrative CLI.
 
     See [Elements of a UAI](Elements_of_a_UAI.md) for an explanation of UAI resource specifications.
 
-    The example above specifies a request / limit pair that requests and is constrained to 300 mili-CPUs (0.3 CPUs) and 250 MiB of memory (`250 * 1024 * 1024` bytes) for any UAI created with this limit specification. By keeping the request and the limit the same, this ensures that a host node will not be oversubscribed by UAIs. It is also legitimate to request less than the limit, though that risks over-subscription and is not recommended in most cases. If the request is greater than the limit, UAIs created with the request specification will never be scheduled because they will not be able to provide the requested resources.
+    The example above specifies a request / limit pair that requests and is constrained to 300 milli-CPUs (0.3 CPUs) and 250 MiB of memory (`250 * 1024 * 1024` bytes) for any UAI created with this limit specification. By keeping the request and the limit the same, this ensures that a host node will not be oversubscribed by UAIs. It is also legitimate to request less than the limit, though that risks over-subscription and is not recommended in most cases. If the request is greater than the limit, UAIs created with the request specification will never be scheduled because they will not be able to provide the requested resources.
 
     All of the configurable parts are optional when adding a resource specification. If none are provided, an empty resource specification with only a `resource_id` will be created.
 

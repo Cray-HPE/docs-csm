@@ -1,7 +1,7 @@
 
 ## Troubleshoot UAIs with Administrative Access
 
-Sometimes there is no better way to figure out a problem with a UAI than to get inside it and look around as an administrator.  This is done using `kubectl exec` to start a shell inside the running container as "root" (in the container).  With this an administrator can diagnose problems, make changes to the running UAI and find solutions.  It is important to remember, though, that any change made inside a UAI is transitory.  These changes only last as long as the UAI is running.  To make a permanent change, either the UAI image has to be changed or external customizations must be applied.
+Sometimes there is no better way to figure out a problem with a UAI than to get inside it and look around as an administrator. This is done using `kubectl exec` to start a shell inside the running container as "root" (in the container). With this an administrator can diagnose problems, make changes to the running UAI and find solutions. It is important to remember, though, that any change made inside a UAI is transitory. These changes only last as long as the UAI is running. To make a permanent change, either the UAI image has to be changed or external customizations must be applied.
 
 Here is an example session showing a `ps` command inside the container of a UAI by an administrator:
 
@@ -44,4 +44,4 @@ root          97      90  0 22:58 pts/0    00:00:00 ps -afe
 sh-4.4# 
 ```
 
-The procedure is to find the name of the UAI in question, use that with `kubectl` to find the pod containing that UAI, use the pod name and the `user` namespace to set up the `kubectl exec` specifying the UAI name as the container to `exec` into and specifying `/bin/sh` as the command to run.  From there, the administrator can look around inside the UAI as needed.
+The procedure is to find the name of the UAI in question, use that with `kubectl` to find the pod containing that UAI, use the pod name and the `user` namespace to set up the `kubectl exec` specifying the UAI name as the container to `exec` into and specifying `/bin/sh` as the command to run. From there, the administrator can look around inside the UAI as needed.
