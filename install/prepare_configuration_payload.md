@@ -83,11 +83,29 @@ command during the installation process.
 
 | Filename | Source | Information |
 | --- | --- | --- |
-| [application_node_config.yaml](#application_node_config_yaml) | SHCD | The number and type of application nodes with mapping from the name in the SHCD to the desired hostname |
 | [cabinets.yaml](#cabinets_yaml) | SHCD | The number and type of air-cooled and liquid-cooled cabinets. cabinet IDs, and VLAN numbers |
+| [application_node_config.yaml](#application_node_config_yaml) | SHCD | The number and type of application nodes with mapping from the name in the SHCD to the desired hostname |
 | [hmn_connections.json](#hmn_connections_json) | SHCD | The network topology for HMN of the entire system |
 | [ncn_metadata.csv](#ncn_metadata_csv) | SHCD, other| The number of master, worker, and storage nodes and MAC address information for BMC and bootable NICs |
 | [switch_metadata.csv](#switch_metadata_csv) | SHCD | Inventory of all spine, aggregation, CDU, and leaf switches |
+
+Although some information in these files can be populated from site survey information, the SHCD prepared by
+HPE Cray Manufacturing is the best source of data for hmn_connections.json. The `ncn_metadata.csv` does
+require collection of MAC addresses from the management nodes because that information is not present in the SHCD.
+
+<a name="cabinets_yaml"></a>
+#### `cabinets.yaml`
+
+The `cabinets.yaml` file describes the type of cabinets in the system, the number of each type of cabinet,
+and the starting cabinet ID for every cabinet in the system. This file can be used to indicate that a system
+has non-contiguous cabinet ID numbers or non-standard VLAN numbers.
+
+The xnames used in the other files should fit within the cabinet ids defined by the starting cabinet id for River
+cabinets (modified by the number of cabinets). It is OK for management nodes not to be in x3000 (as the first River
+cabinet), but they must be in one of the River cabinets. For example, x3000 with 2 cabinets would mean x3000 or x3001
+should have all management nodes.
+
+See [Create Cabinets YAML](create_cabinets_yaml.md) for instructions about creating this file.
 
 <a name="application_node_config_yaml"></a>
 #### `application_node_config.yaml`
@@ -101,15 +119,6 @@ plays run by CFS to configure these nodes. The xname for each Application node c
 more hostname aliases.
 
 See [Create Application Node YAML](create_application_node_config_yaml.md) for instructions about creating this file.
-
-<a name="cabinets_yaml"></a>
-#### `cabinets.yaml`
-
-The `cabinets.yaml` file describes the type of cabinets in the system, the number of each type of cabinet,
-and the starting cabinet ID for every cabinet in the system. This file can be used to indicate that a system
-has non-contiguous cabinet ID numbers or non-standard VLAN numbers.
-
-See [Create Cabinets YAML](create_cabinets_yaml.md) for instructions about creating this file.
 
 <a name="hmn_connections_json"></a>
 #### `hmn_connections.json`
