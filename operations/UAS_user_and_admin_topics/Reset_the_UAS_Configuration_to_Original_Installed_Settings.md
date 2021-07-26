@@ -5,9 +5,7 @@ How to remove a customized UAS configuration and restore the base installed conf
 
 The configuration set up using the Cray CLI to interact with UAS persists as long as UAS remains installed and survives upgrades. This is called the running configuration and it is both persistent and malleable. During installation and localization, however, the installer creates a base installed configuration. It may be necessary to return to this base configuration. To do this, delete the running configuration, which will cause the UAS to reset to the base installed configuration.
 
-**Note:** Deleting the running configuration discards all changes that have been made since initial installation and is not recoverable. Be certain you want to do this before you proceed.
-
-To delete the running configuration and reset to the base installed configuration, follow these steps.
+**WARNING:** Deleting the running configuration discards all changes that have been made since initial installation and is not recoverable. Be certain this is acceptable before proceeding.
 
 ### Prerequisites
 

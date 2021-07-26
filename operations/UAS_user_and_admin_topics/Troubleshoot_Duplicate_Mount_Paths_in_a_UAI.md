@@ -47,7 +47,7 @@ volume_id = "fc95d0da-6296-4d0b-8f26-2d4338604991"
 volumename = "optforge"
 ```
 
-Looking through this list, the mount path for the volume named `delete-me` and the mount path for the volume named `optforge` are the same. The obvious candidate for deletion in this case is `delete-me` so it can be deleted
+Looking through this list, the mount path for the volume named `delete-me` and the mount path for the volume named `optforge` are the same. The obvious candidate for deletion in this case is `delete-me`, so it can be deleted.
 
 ```
 ncn-m001-pit# cray uas admin config volumes delete 7b924270-c9e9-4b0e-85f5-5bc62c02457e

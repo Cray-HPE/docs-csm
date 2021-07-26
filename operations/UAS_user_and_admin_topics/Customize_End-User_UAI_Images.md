@@ -20,9 +20,9 @@ A custom end-user UAI image can be any container image set up with the end-user 
     ncn-w001# UAI_IMAGE_NAME=registry.local/cray/cray-uai-compute:latest
     ```
 
-1. Query BOS for a sessiontemplate ID
+1. Query BOS for a sessiontemplate ID.
     
-    Identify the Sessiontemplate name to use. A full list may be found with:
+    Identify the Sessiontemplate name to use. A full list may be found with the following command:
 
     ```
     ncn-w001# cray bos sessiontemplate list --format yaml
@@ -53,7 +53,7 @@ A custom end-user UAI image can be any container image set up with the end-user 
     ncn-w001# SESSION_NAME=wlm-sessiontemplate-0.1.0
     ```
 
-1. Download a compute node squashfs.
+1. Download a compute node SquashFS.
 
     Use the Sessiontemplate name to download a compute node squashfs from a BOS sessiontemplate name:
 
@@ -63,9 +63,9 @@ A custom end-user UAI image can be any container image set up with the end-user 
     ncn-w001# cray artifacts get boot-images $SESSION_ID/rootfs rootfs.squashfs
     ```
 
-1. Mount the squashfs and create a tarball. 
+1. Mount the SquashFS and create a tarball. 
 
-    1. Create a directory to mount the squashfs:
+    1. Create a directory to mount the SquashFS:
 
         ```
         ncn-w001# mkdir -v mount
@@ -75,7 +75,7 @@ A custom end-user UAI image can be any container image set up with the end-user 
 
     1. Create the tarball.
 
-        **IMPORTANT:** 99-slingshot-network.conf is omitted from the tarball as that prevents the UAI from running sshd as the UAI user with the su command:
+        **IMPORTANT:** 99-slingshot-network.conf is omitted from the tarball as that prevents the UAI from running sshd as the UAI user with the `su` command:
 
         ```
         ncn-w001# (cd `pwd`/mount; tar --xattrs --xattrs-include='*' --exclude="99-slingshot-network.conf" -cf "../$SESSION_ID.tar" .) > /dev/null
@@ -149,3 +149,5 @@ A custom end-user UAI image can be any container image set up with the end-user 
     #       path a more cautious approach is taken.
     ncn-w001# rm -fv ./usr/bin/uai-ssh.sh && rmdir ./usr/bin ./usr
     ```
+
+    
