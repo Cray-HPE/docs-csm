@@ -281,21 +281,21 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 ##### 3.1 Deploy Workflow
 The configuration workflow described here is intended to help understand the expected path for booting and configuring. See the actual steps below for the commands to deploy these management NCNs.
 
-1. Start watching the consoles for ncn-s001 and at least one other storage node
+1. Start watching the consoles for `ncn-s001` and at least one other storage node
 1. Boot all storage nodes at the same time
-    - The first storage node ncn-s001 will boot and then starts a loop as ceph-ansible configuration waits for all other storage nodes to boot
-    - The other storage nodes boot and become passive. They will be fully configured when ceph-ansible runs to completion on ncn-s001
-1. Once ncn-s001 notices that all other storage nodes have booted, ceph-ansible will begin Ceph configuration. This takes several minutes.
-1. Once ceph-ansible has finished on ncn-s001, then ncn-s001 waits for ncn-m002 to create /etc/kubernetes/admin.conf.
-1. Start watching the consoles for ncn-m002, ncn-m003, and at least one worker node
-1. Boot master nodes (ncn-m002 and ncn-m003) and all worker nodes at the same time
-    - The worker nodes will boot and wait for ncn-m002 to create the `/etc/cray/kubernetes/join-command-control-plane` so they can join Kubernetes
-    - The third master node ncn-m003 boots and waits for ncn-m002 to create the `/etc/cray/kubernetes/join-command-control-plane` so it can join Kubernetes
-    - The second master node ncn-m002 boots, runs the kubernetes-cloudinit.sh which will create /etc/kubernetes/admin.conf and /etc/cray/kubernetes/join-command-control-plan, then waits for the storage node to create etcd-backup-s3-credentials
-1. Once ncn-s001 notices that ncn-m002 has created /etc/kubernetes/admin.conf, then ncn-s001 waits for any worker node to become available.
-1. Once each worker node notices that ncn-m002 has created /etc/cray/kubernetes/join-command-control-plan, then it will join the Kubernetes cluster.  
-    - Now ncn-s001 should notice this from any one of the worker nodes and move forward with creation of ConfigMaps and running the post-Ceph playbooks (s3, OSD pools, quotas, etc.)
-1. Once ncn-s001 creates etcd-backup-s3-credentials during the benji-backups role which is one of the last roles after Ceph has been set up, then ncn-m001 notices this and moves forward
+    - The first storage node `ncn-s001` will boot and then starts a loop as ceph-ansible configuration waits for all other storage nodes to boot
+    - The other storage nodes boot and become passive. They will be fully configured when ceph-ansible runs to completion on `ncn-s001`
+1. Once `ncn-s001` notices that all other storage nodes have booted, ceph-ansible will begin Ceph configuration. This takes several minutes.
+1. Once ceph-ansible has finished on `ncn-s001`, then `ncn-s001` waits for `ncn-m002` to create /etc/kubernetes/admin.conf.
+1. Start watching the consoles for `ncn-m002`, `ncn-m003`, and at least one worker node
+1. Boot master nodes (`ncn-m002` and `ncn-m003`) and all worker nodes at the same time
+    - The worker nodes will boot and wait for `ncn-m002` to create the `/etc/cray/kubernetes/join-command-control-plane` so they can join Kubernetes
+    - The third master node `ncn-m003` boots and waits for `ncn-m002` to create the `/etc/cray/kubernetes/join-command-control-plane` so it can join Kubernetes
+    - The second master node `ncn-m002` boots, runs the kubernetes-cloudinit.sh which will create /etc/kubernetes/admin.conf and /etc/cray/kubernetes/join-command-control-plan, then waits for the storage node to create etcd-backup-s3-credentials
+1. Once `ncn-s001` notices that `ncn-m002` has created /etc/kubernetes/admin.conf, then `ncn-s001` waits for any worker node to become available.
+1. Once each worker node notices that `ncn-m002` has created /etc/cray/kubernetes/join-command-control-plan, then it will join the Kubernetes cluster.  
+    - Now `ncn-s001` should notice this from any one of the worker nodes and move forward with creation of ConfigMaps and running the post-Ceph playbooks (s3, OSD pools, quotas, etc.)
+1. Once `ncn-s001` creates etcd-backup-s3-credentials during the benji-backups role which is one of the last roles after Ceph has been set up, then `ncn-m001` notices this and moves forward
 
 
 <a name="deploy"></a>
@@ -411,21 +411,21 @@ The configuration workflow described here is intended to help understand the exp
 
 1. Wait for storage nodes before booting Kubernetes master nodes and worker nodes.
 
-   **`NOTE`**: Once all storage nodes are up and the message "...sleeping 5 seconds until /etc/kubernetes/admin.conf" appears on the ncn-s001 console, it is safe to proceed with booting the **Kubernetes master nodes and worker nodes**
+   **`NOTE`**: Once all storage nodes are up and the message `...sleeping 5 seconds until /etc/kubernetes/admin.conf` appears on `ncn-s001`'s console, it is safe to proceed with booting the **Kubernetes master nodes and worker nodes**
 
     ```bash
     pit# grep -oP "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power on
     ```
 
-1.  Stop watching the console from ncn-s001.
+1.  Stop watching the console from `ncn-s001`.
 
-    Type the ampersand character and then the period character to exit from the conman session on ncn-s001.
+    Type the ampersand character and then the period character to exit from the conman session on `ncn-s001`.
     ```
     &.
     pit#
     ```
 
-1.  Wait. Observe the installation through ncn-m002-mgmt's console:
+1.  Wait. Observe the installation through `ncn-m002-mgmt`'s console:
 
     Print the console name
     ```bash
@@ -473,9 +473,9 @@ The configuration workflow described here is intended to help understand the exp
     ncn-w003   Ready    <none>   5m58s   v1.18.6   10.252.1.12   <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
     ```
 
-1.  Stop watching the console from ncn-m002.
+1.  Stop watching the console from `ncn-m002`.
 
-    Type the ampersand character and then the period character to exit from the conman session on ncn-m002.
+    Type the ampersand character and then the period character to exit from the conman session on `ncn-m002`.
     ```
     &.
     pit#
@@ -485,11 +485,11 @@ The configuration workflow described here is intended to help understand the exp
 #### 3.3 Check for Unused Drives on Utility Storage Nodes
 
 > **`IMPORTANT:`** Do the following if NCNs use Gigabyte hardware.
-> **`IMPORTANT:`** the cephadm may output this warning "WARNING: The same type, major and minor should not be used for multiple devices.".  You can ignore this warning. 
+> **`IMPORTANT:`** the cephadm may output this warning "WARNING: The same type, major and minor should not be used for multiple devices.". You can ignore this warning. 
 
 ##### Option 1
 
-  If you have OSDs on each node (ceph osd tree can show this) then you have all your nodes in ceph.  That means you can utilize the orchestrator to look for the devices.
+  If you have OSDs on each node (`ceph osd tree` can show this) then you have all your nodes in Ceph. That means you can utilize the orchestrator to look for the devices.
 
 
   ```bash
@@ -529,7 +529,7 @@ example: ceph orch device zap ncn-s002 /dev/sdc --force
 
 ##### Option 2
 
-**`IMPORTANT:`** the cephadm may output this warning "WARNING: The same type, major and minor should not be used for multiple devices.".  You can ignore this warning. 
+**`IMPORTANT:`** the cephadm may output this warning "WARNING: The same type, major and minor should not be used for multiple devices.". You can ignore this warning. 
 
 1. Log into **each** ncn-s node and check for unused drives
 
@@ -561,7 +561,7 @@ example: ceph orch device zap ncn-s002 /dev/sdc --force
 1. Add unused drives
 
     ```bash
-    ncn-s# cephadm shell -- ceph-volume lvm create --data /dev/sd<drive to add>  --bluestore
+    ncn-s# cephadm shell -- ceph-volume lvm create --data /dev/sd<drive to add> --bluestore
     ```
 
 More information can be found at [the cephadm reference page](../operations/utility_storage/cephadm-reference.md).
@@ -688,7 +688,7 @@ Observe the output of the checks and note any failures, then remediate them.
    Run the following command on each member of the Kubernetes cluster (master nodes and worker nodes) to ensure that weave is operating as a single cluster:
 
    ```bash
-   ncn# weave --local status connections  | grep failed
+   ncn# weave --local status connections | grep failed
    ```
    If you see messages like **'IP allocation was seeded by different peers'** then weave looks to have split-brained. At this point it is necessary to wipe the ncns and start the PXE boot again:
 

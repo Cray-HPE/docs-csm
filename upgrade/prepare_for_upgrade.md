@@ -12,7 +12,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
    example, if there are three Kubernetes master nodes and one is being upgraded, the quorum is maintained by the remaining
    two nodes. If one of those two nodes has a fault before the third node completes its upgrade, then quorum would be lost.
    There is a similar issue on small systems which have only three worker nodes for some services which have a data store that
-   is based on three copies of etcd or postrgres since some of those pods have anti-affinity to avoid two pods of that type
+   is based on three copies of etcd or postrgres because some of those pods have anti-affinity to avoid two pods of that type
    being on the same worker node.
 
 1. Optional system health checks.
@@ -77,7 +77,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
    Some of the CSM health checks, such as booting the barebones image on the compute nodes, could be skipped.
 
-   See [Validate CSM Health](../operations/validate_csm_health.md)
+   See the `CSM Install Validation and Health Checks` procedures **in the CSM 0.9 documentation**. The validation procedures in the CSM 1.0 documentation are not all intended to work on CSM 0.9.
 
 <a name="next-topic"></a>
 # Next Topic
