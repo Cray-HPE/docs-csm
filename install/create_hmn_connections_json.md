@@ -27,7 +27,7 @@ The [SHCD/HMN Connections Rules document](shcd_hmn_connections_rules.md) explain
     linux# systemctl start docker
     ```
 
-2. Load the hms-shcd-parser docker image from the CSM release distribution. Only required if the CSM release distribution includes container images, otherwise this step can be skipped.
+2. Load the hms-shcd-parser container image from the CSM release distribution. Only required if the CSM release distribution includes container images, otherwise this step can be skipped.
 
     > Note: The load-container-image.sh script works with both Podman and Docker
 
