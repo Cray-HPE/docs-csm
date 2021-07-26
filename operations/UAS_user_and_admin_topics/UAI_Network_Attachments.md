@@ -50,7 +50,7 @@ spec:
         gw: 10.252.0.1
 ```
 
-The `nmn_subnet` value shown here is not relavent for this section.
+The `nmn_subnet` value shown here is not relevant for this section.
 
 These values, in turn, feed into the following translation to UAS Helm chart settings:
 

@@ -31,7 +31,7 @@ The broker UAI is running. See [Start a Broker UAI](Start_a_Broker_UAI.md).
     There are several things to notice here:
     * The first time the user logs in the broker UAI's SSH host key is unknown, as is normal for SSH.
     * The user is asked for a password in this example. If the user's home directory, as defined in LDAP had been mounted in the broker UAI and a `.ssh/authorized_keys` entry had been present, there would not have been a password prompt. Home directory trees can be mounted as volumes just as any other directory can.
-    * The broker mechanism in the broker UAI creates a new UAI since `vers` has never logged into this broker UAI before.
+    * The broker mechanism in the broker UAI creates a new UAI because `vers` has never logged into this broker UAI before.
     * There is a second prompt to acknowledge an unknown host which is, in this case, the end-user UAI itself. The broker UAI constructs a public/private key pair for the hidden SSH connection between the broker and the end-user UAI shown in the image in [Broker Mode UAI Management](Broker_Mode_UAI_Management.md).
 
 1. Log out of the broker UAI.
@@ -46,4 +46,4 @@ The broker UAI is running. See [Start a Broker UAI](Start_a_Broker_UAI.md).
     vers@uai-vers-ee6f427e-6c7468cdb8-2rqtv> 
     ```
 
-    Only the password prompt appears now, since the hosts are all known and the end-user UAI exists but there is no `.ssh/authorized_keys` known yet by the broker UAI for `vers`.
+    Only the password prompt appears now, because the hosts are all known and the end-user UAI exists but there is no `.ssh/authorized_keys` known yet by the broker UAI for `vers`.

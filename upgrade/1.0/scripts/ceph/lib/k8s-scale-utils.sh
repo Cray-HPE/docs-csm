@@ -12,7 +12,7 @@ function scale_down_cephfs_clients () {
   echo "Taking a snapshot of nexus pvc ($backup_name)"
   output=$(kubectl -n nexus exec -it $(kubectl get po -n nexus -l 'app=nexus' -o json | jq -r '.items[].metadata.name') -c nexus -- /bin/sh -c "mkdir /nexus-data/.snap/$backup_name" 2>&1)
   if [[ "$?" -ne 0 ]]; then
-    echo "Didn't find nexus pod to take snapshot from -- continuing..."
+    echo "Did not find nexus pod to take snapshot from -- continuing..."
   fi
 
 

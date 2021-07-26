@@ -11,13 +11,13 @@ cray-uas-mgr-6bbd584ccb-zg8vx                                    2/2     Running
 cray-uas-mgr-6bbd584ccb-acg7y                                    2/2     Running     0          7d7h
 ```
 
-The logs are collected in the pods, and can be seen using the `kubectl logs` command on each of the pods.  Since the pods produce a lot of debug logging in the form
+The logs are collected in the pods, and can be seen using the `kubectl logs` command on each of the pods. Because the pods produce a lot of debug logging in the form
 
 ```
 127.0.0.1 - - [02/Feb/2021 22:57:18] "GET /v1/mgr-info HTTP/1.1" 200 -
 ```
 
-it is a good idea to filter this out unless the problem lies in specifically in the area of GET operations or aliveness checks.  Here is an example where the last 25 lines of useful log output are retrieved from the pod `cray-uas-mgr-6bbd584ccb-zg8vx`:
+it is a good idea to filter this out unless the problem lies in specifically in the area of GET operations or aliveness checks. Here is an example where the last 25 lines of useful log output are retrieved from the pod `cray-uas-mgr-6bbd584ccb-zg8vx`:
 
 ```
 kubectl logs -n services cray-uas-mgr-6bbd584ccb-zg8vx cray-uas-mgr | grep -v '"GET ' | tail -25
@@ -48,6 +48,6 @@ kubectl logs -n services cray-uas-mgr-6bbd584ccb-zg8vx cray-uas-mgr | grep -v '"
 127.0.0.1 - - [03/Feb/2021 22:15:32] "DELETE /v1/uas?uai_list=uai-vers-32079250 HTTP/1.1" 200 -
 ```
 
-If an error had occurred in UAS that error would likely show up here.  Because there are two replicas of `cray-uas-mgr` running, the logging of interest may be in the other pod, so apply the same command to the other pod if the information isn't here.
+If an error had occurred in UAS that error would likely show up here. Because there are two replicas of `cray-uas-mgr` running, the logging of interest may be in the other pod, so apply the same command to the other pod if the information is not here.
 
 

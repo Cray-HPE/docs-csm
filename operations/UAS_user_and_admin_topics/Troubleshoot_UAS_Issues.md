@@ -57,9 +57,9 @@ slurm_load_partitions: Unable to contact slurm controller (connect failure)
 If this error is returned, it is likely that Slurm is not running. The system administrator can use the following commands to debug the issue:
 
 ```bash
-ncn-w001# kubectl logs -n user -l app=slurmdb -c slurmdb  --tail=-1
-ncn-w001# kubectl logs -n user -l app=slurmdbd -c slurmdbd  --tail=-1
-ncn-w001# kubectl logs -n user -l app=slurmctld -c slurmctld  --tail=-1
+ncn-w001# kubectl logs -n user -l app=slurmdb -c slurmdb --tail=-1
+ncn-w001# kubectl logs -n user -l app=slurmdbd -c slurmdbd --tail=-1
+ncn-w001# kubectl logs -n user -l app=slurmctld -c slurmctld --tail=-1
 ```
 
 ### Troubleshoot Default Images Issues when Using the CLI
@@ -67,7 +67,7 @@ ncn-w001# kubectl logs -n user -l app=slurmctld -c slurmctld  --tail=-1
 If the image name provided while creating a new UAI is not registered for use by the system, the system returns an error message similar to the following:
 
 ```bash
-ncn-w001# cray uas create --publickey ~/.ssh/id_rsa.pub  --imagename fred
+ncn-w001# cray uas create --publickey ~/.ssh/id_rsa.pub --imagename fred
 Usage: cray uas create [OPTIONS]
 Try "cray uas create --help" for help.
 

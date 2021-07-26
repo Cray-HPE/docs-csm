@@ -36,12 +36,12 @@ For more description of these settings and the default values, see [Default IP A
 | CSI option | Information |
 | --- | --- |
 | --bootstrap-ncn-bmc-user root | Administrative account for the management node BMCs |
-| --bootstrap-ncn-bmc-pass changeme | Password for bootstrap-ncn-bmc-user account |
+| --bootstrap-ncn-bmc-pass changeme | Password for `bootstrap-ncn-bmc-user` account |
 | --system-name eniac  | Name of the HPE Cray EX system |
-| --mountain-cabinets 4 | Number of Mountain cabinets, but this could also be in cabinets.yaml |
+| --mountain-cabinets 4 | Number of Mountain cabinets, but this could also be in `cabinets.yaml` |
 | --starting-mountain-cabinet 1000 | Starting Mountain cabinet |
-| --hill-cabinets 0 | Number of Hill cabinets, but this could also be in cabinets.yaml |
-| --river-cabinets 1 | Number of River cabinets, but this could also be in cabinets.yaml |
+| --hill-cabinets 0 | Number of Hill cabinets, but this could also be in `cabinets.yaml` |
+| --river-cabinets 1 | Number of River cabinets, but this could also be in `cabinets.yaml` |
 | --can-cidr 10.103.11.0/24 | IP subnet for the CAN assigned to this system |
 | --can-external-dns 10.103.11.113 | IP on CAN for this system's DNS server |
 | --can-gateway 10.103.11.1 | Virtual IP for the CAN (on the spine switches) |
@@ -58,22 +58,22 @@ For more description of these settings and the default values, see [Default IP A
 | --site-nic p1p2 | NIC on the PIT node to become lan0 |
 | --site-dns 172.30.84.40 | Site DNS servers to be used by the PIT node |
 | --install-ncn-bond-members p1p1,p10p1 | NICs on each management node to become bond0 |
-| --application-node-config-yaml application_node_config.yaml | Name of application_node_config.yaml |
-| --cabinets-yaml cabinets.yaml | Name of application_node_config.yaml |
+| --application-node-config-yaml application_node_config.yaml | Name of `application_node_config.yaml` |
+| --cabinets-yaml cabinets.yaml | Name of `application_node_config.yaml` |
 
    * This is a long list of options. It can be helpful to create a Bash script file to call the `csi` command with all of these options, and then edit that file to adjust the values for the particular system being installed.
-   * The bootstrap-ncn-bmc-user and bootstrap-ncn-bmc-pass must match what is used for the BMC account and its password for the management nodes.
-   * Set site parameters (site-domain, site-ip, site-gw, site-nic, site-dns) for the information which connects the ncn-m001 (PIT) node to the site. The site-nic is the interface on this node connected to the site.  
-   * There are other interfaces possible, but the install-ncn-bond-members are typically:
-      * p1p1,p10p1 for HPE nodes
-      * p1p1,p1p2 for Gigabyte nodes
-      * p801p1,p801p2 for Intel nodes
-   * The starting cabinet number for each type of cabinet (for example, starting-mountain-cabinet) has a default that can be overridden. See the "csi config init --help".
-   * An override to default cabinet IPv4 subnets can be made with the hmn-mtn-cidr and nmn-mtn-cidr parameters.
-   * Several parameters (can-gateway, can-cidr, can-static-pool, can-dynamic-pool) describe the CAN (Customer Access network). The can-gateway is the common gateway IP used for both spine switches and commonly referred to as the Virtual IP for the CAN. The can-cidr is the IP subnet for the CAN assigned to this system. The can-static-pool and can-dynamic-pool are the MetalLB address static and dynamic pools for the CAN. The can-external-dns is the static IP assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded. The can-external-dns IP must be within the can-static-pool range.
-   * Set ntp-pool to a reachable NTP server.
-   * The application_node_config.yaml file is optional, but if you have one describing the mapping between prefixes in hmn_connections.csv that should be mapped to HSM subroles, you need to include a command line option to have it used. See [Create Application Node YAML](create_application_node_config_yaml.md).
-   * For systems that use non-sequential cabinet id numbers, use cabinets-yaml to include the cabinets.yaml file. This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to explicitly specify the id of every cabinet in the system. See [Create Cabinets YAML](create_cabinets_yaml.md).
+   * The `bootstrap-ncn-bmc-user` and `bootstrap-ncn-bmc-pass` must match what is used for the BMC account and its password for the management nodes.
+   * Set site parameters (`site-domain`, `site-ip`, `site-gw`, `site-nic`, `site-dns`) for the information which connects `ncn-m001` (the PIT node) to the site. The `site-nic` is the interface on this node connected to the site.  
+   * There are other interfaces possible, but the `install-ncn-bond-members` are typically:
+      * `p1p1,p10p1` for HPE nodes
+      * `p1p1,p1p2` for Gigabyte nodes
+      * `p801p1,p801p2` for Intel nodes
+   * The starting cabinet number for each type of cabinet (for example, `starting-mountain-cabinet`) has a default that can be overridden. See the "csi config init --help".
+   * An override to default cabinet IPv4 subnets can be made with the `hmn-mtn-cidr` and `nmn-mtn-cidr` parameters.
+   * Several parameters (`can-gateway`, `can-cidr`, `can-static-pool`, `can-dynamic-pool`) describe the CAN (Customer Access network). The `can-gateway` is the common gateway IP used for both spine switches and commonly referred to as the Virtual IP for the CAN. The `can-cidr` is the IP subnet for the CAN assigned to this system. The `can-static-pool` and `can-dynamic-pool` are the MetalLB address static and dynamic pools for the CAN. The `can-external-dns` is the static IP assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded. The `can-external-dns` IP must be within the `can-static-pool` range.
+   * Set `ntp-pool` to a reachable NTP server.
+   * The `application_node_config.yaml` file is optional, but if you have one describing the mapping between prefixes in `hmn_connections.csv` that should be mapped to HSM subroles, you need to include a command line option to have it used. See [Create Application Node YAML](create_application_node_config_yaml.md).
+   * For systems that use non-sequential cabinet id numbers, use `cabinets-yaml` to include the `cabinets.yaml` file. This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to explicitly specify the id of every cabinet in the system. See [Create Cabinets YAML](create_cabinets_yaml.md).
 
 <a name="configuration_payload_files"></a>
 ### Configuration Payload Files
@@ -83,14 +83,14 @@ command during the installation process.
 
 | Filename | Source | Information |
 | --- | --- | --- |
-| [cabinets.yaml](#cabinets_yaml) | SHCD | The number and type of air-cooled and liquid-cooled cabinets. cabinet IDs, and VLAN numbers |
-| [application_node_config.yaml](#application_node_config_yaml) | SHCD | The number and type of application nodes with mapping from the name in the SHCD to the desired hostname |
-| [hmn_connections.json](#hmn_connections_json) | SHCD | The network topology for HMN of the entire system |
-| [ncn_metadata.csv](#ncn_metadata_csv) | SHCD, other| The number of master, worker, and storage nodes and MAC address information for BMC and bootable NICs |
-| [switch_metadata.csv](#switch_metadata_csv) | SHCD | Inventory of all spine, aggregation, CDU, and leaf switches |
+| [`cabinets.yaml`](#cabinets_yaml) | SHCD | The number and type of air-cooled and liquid-cooled cabinets. cabinet IDs, and VLAN numbers |
+| [`application_node_config.yaml`](#application_node_config_yaml) | SHCD | The number and type of application nodes with mapping from the name in the SHCD to the desired hostname |
+| [`hmn_connections.json`](#hmn_connections_json) | SHCD | The network topology for HMN of the entire system |
+| [`ncn_metadata.csv`](#ncn_metadata_csv) | SHCD, other| The number of master, worker, and storage nodes and MAC address information for BMC and bootable NICs |
+| [`switch_metadata.csv`](#switch_metadata_csv) | SHCD | Inventory of all spine, aggregation, CDU, and leaf switches |
 
 Although some information in these files can be populated from site survey information, the SHCD prepared by
-HPE Cray Manufacturing is the best source of data for hmn_connections.json. The `ncn_metadata.csv` does
+HPE Cray Manufacturing is the best source of data for `hmn_connections.json`. The `ncn_metadata.csv` does
 require collection of MAC addresses from the management nodes because that information is not present in the SHCD.
 
 <a name="cabinets_yaml"></a>
