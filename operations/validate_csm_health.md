@@ -26,14 +26,12 @@ The areas should be tested in the order they are listed on this page. Errors in 
   - [1.8 Automated Goss Testing](#automated-goss-testing)
     - [1.8.1 Known Test Issues](#autogoss-issues)
 - [2. Hardware Management Services Health Checks](#hms-health-checks)
-  - [2.1 Install Latest hms-team RPM](#install-latest-hms-team-rpm)
-  - [2.2 HMS Test Execution](#hms-test-execution)
-  - [2.3 Hardware State Manager Discovery Validation](#hms-smd-discovery-validation)
+  - [2.1 HMS Test Execution](#hms-test-execution)
+  - [2.2 Hardware State Manager Discovery Validation](#hms-smd-discovery-validation)
 - [3 Software Management Services Health Checks](#sms-health-checks)
-  - [3.1 Install Latest cmsdev RPM](#install-latest-cmsdev-rpm)
-  - [3.2 cmsdev Usage](#cmsdev-usage)
-    - [3.3 Interpreting cmsdev Results](#cmsdev-results)
-  - [3.4 SMS Checks To Run](#sms-checks)
+  - [3.1 cmsdev Usage](#cmsdev-usage)
+  - [3.2 Interpreting cmsdev Results](#cmsdev-results)
+  - [3.3 SMS Checks To Run](#sms-checks)
 - [4. Booting CSM Barebones Image](#booting-csm-barebones-image)
   - [4.1 Locate CSM Barebones Image in IMS](#locate-csm-barebones-image-in-ims)
   - [4.2 Create a BOS Session Template for the CSM Barebones Image](#csm-bos-session-template)
@@ -471,19 +469,8 @@ pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
 
 Execute the HMS smoke and functional tests after the CSM install to confirm that the Hardware Management Services are running and operational.
 
-<a name="install-latest-hms-team-rpm"></a>
-### 2.1 Install Latest hms-team RPM
-
-**`INTERNAL USE`** Only HPE Cray internal systems have access to this latest RPM of hms-team tests.
-
-The HMS tests are provided by the hms-ct-test-crayctldeploy RPM which comes preinstalled on the NCNs. However, the tests receive frequent updates so it is recommended to check for a newer version of the RPM and if so, to download and install the latest version of the RPM prior to executing the tests. The latest versions of the hms-ct-test-crayctldeploy RPM can be retrieved from car.dev.cray.com in the following locations:
-* Master: [ct-tests/HMS/sle15_sp2_ncn/x86_64/dev/master/hms-team/](http://car.dev.cray.com/artifactory/ct-tests/HMS/sle15_sp2_ncn/x86_64/dev/master/hms-team)
-* 1.5 Release: [ct-tests/HMS/sle15_sp2_ncn/x86_64/release/csm-1.0/hms-team/](http://car.dev.cray.com/artifactory/ct-tests/HMS/sle15_sp2_ncn/x86_64/release/csm-1.0/hms-team/)
-
-Install the RPM on every worker node and master node (except for ncn-m001 if it is still the PIT node).
-
 <a name="hms-test-execution"></a>
-### 2.2 HMS Test Execution
+### 2.1 HMS Test Execution
 
 These tests should be executed as root on at least one worker NCN and one master NCN (but **not** ncn-m001 if it is still the PIT node).
 
@@ -500,7 +487,7 @@ ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-
 1. Examine the output for errors or failures.
 
 <a name="hms-smd-discovery-validation"></a>
-### 2.3 Hardware State Manager Discovery Validation
+### 2.2 Hardware State Manager Discovery Validation
 
 By this point in the installation process, the Hardware State Manager (HSM) should 
 have done its discovery of the system.
@@ -605,29 +592,12 @@ A listing of known hardware discovery issues and workarounds can be found here i
 
 The Software Management Services health checks are run using `/usr/local/bin/cmsdev`.
 
-1. [Install Latest cmsdev RPM](#install-latest-cmsdev-rpm)
 1. [cmsdev Usage](#cmsdev-usage)
 1. [Interpreting cmsdev Results](#cmsdev-results)
 1. [SMS Checks To Run](#sms-checks)
 
-<a name="install-latest-cmsdev-rpm"></a>
-### 3.1 Install Latest cmsdev RPM
-**`INTERNAL USE`** Only HPE Cray internal systems have access to this latest RPM of cmsdev tests.
-
-The cmsdev tool is included in the `cray-cmstools-crayctldeploy` RPM, which comes preinstalled on the ncns. However, the tool is receiving frequent updates so it is recommended to check for a newer version of the RPM and if so, to download and install the latest version.
-
-The latest version of the RPM can be retrieved from car.dev.cray.com in the following locations:
-* Master: [corresponding folder in the master branch](http://car.dev.cray.com/artifactory/webapp/#/artifacts/browse/tree/General/csm/SCMS/sle15_sp2_ncn/x86_64/release/master/cms-team)
-* 1.5 Release: [csm/SCMS/sle15_sp2_ncn/x86_64/release/shasta-1.4/cms-team/](http://car.dev.cray.com/artifactory/webapp/#/artifacts/browse/tree/General/csm/SCMS/sle15_sp2_ncn/x86_64/release/shasta-1.4/cms-team)
-
-Install it on every worker node and master node (except for ncn-m001 if it is still the PIT node).
-
-At the time of this writing there is a bug ([CASMTRIAGE-553](https://connect.us.cray.com/jira/browse/CASMTRIAGE-553)) which causes some git pushes to VCS to hang. Prior to cmsdev version 0.8.21, this would result in the VCS test hanging. Starting in cmsdev version 0.8.21, the test was modified to try to avoid this issue.
-
-**If the VCS test hangs on cmsdev version 0.8.21 or later**, please record this in ([CASMTRIAGE-553](https://connect.us.cray.com/jira/browse/CASMTRIAGE-553)) and include the cmsdev version. If the test does not hang, stop the test with control-C and re-run it. It may take a few tries but so far it has always eventually executed.
-
 <a name="cmsdev-usage"></a>
-### 3.2 cmsdev Usage
+### 3.1 cmsdev Usage
 `cmsdev test [-q | -v] <shortcut>`
 * The shortcut determines which component will be tested. See the table in the next section for the list of shortcuts.
 * The tool logs to /opt/cray/tests/cmsdev.log
@@ -635,7 +605,7 @@ At the time of this writing there is a bug ([CASMTRIAGE-553](https://connect.us.
   * The same amount of data is written to the log file in either case.
 
 <a name="cmsdev-results"></a>
-#### 3.3 Interpreting cmsdev Results
+#### 3.2 Interpreting cmsdev Results
 
 * If a test passes:
   * The last line of output from the tool reports SUCCESS.
@@ -647,7 +617,7 @@ At the time of this writing there is a bug ([CASMTRIAGE-553](https://connect.us.
 * For more detailed information on the tests, please see the CSM Validation section of the admin guide (note to docs writers: replace this with the actual document name and section number/title once available).
 
 <a name="sms-checks"></a>
-### 3.4 SMS Checks To Run
+### 3.3 SMS Checks To Run
 
 Run a check for each of the following services after an install. These should be run on at least one worker node and at least one master node (but **not** ncn-m001 if it is still the PIT node).
 

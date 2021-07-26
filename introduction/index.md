@@ -80,7 +80,6 @@ See [Differences from Previous Release](differences.md)
 
    * File Formats
    * Typographic Conventions 
-   * Annotations for how we identify sections of the documentation that do not apply to all systems
    * Command Prompt Conventions which indicate the context for user, host, directory, chroot environment, or container environment
 
 See [Documentation Conventions](documentation_conventions.md)

@@ -54,10 +54,10 @@ the instructions for attaching to the BMC will differ.
 
       * HPE nodes can use http or https.
 
-   **Note:** that a shorter path name is better than a long path name on the webserver.
+   **Note:** A shorter path name is better than a long path name on the webserver.
 
-   **`INTERNAL USE`** The latest ISO in HPE Cray Artifactory can change, it is advised to use the full filename of the ISO name. Every `latest` ISO has a matching ISO with the real buildID in the name, this ISO will have the same File-Time metadata as the latest ISO.
-   http://car.dev.cray.com/artifactory/csm/MTL/sle15_sp2_ncn/x86_64/dev/master/metal-team/cray-pre-install-toolkit-latest.iso
+      - The Cray Pre-Install Toolkit ISO is included in the CSM release tarball.  It will have a long filename similar to
+        `cray-pre-install-toolkit-sle15sp2.x86_64-1.4.10-20210514183447-gc054094.iso`, so pick a shorter name on the webserver.
 
 1. See the respective procedure below to attach an ISO.
 

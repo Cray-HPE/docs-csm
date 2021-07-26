@@ -5,7 +5,6 @@ Several conventions have been used in the preparation of this documentation.
    * [Markdown Format](#markdown-format)
    * [File Formats](#file-formats)
    * [Typographic Conventions](#typographic-conventions)
-   * [Annotations](#annotations) for how we identify sections of the documentation that do not apply to all systems 
    * [Command Prompt Conventions](#command-prompt-conventions) which describe the context for user, host, directory, chroot environment, or container environment
 
 <a name="markdown-format"></a>
@@ -33,27 +32,6 @@ screen output, file/path names, and other software constructs.
 
 \ (backslash) At the end of a command line, indicates the Linux shell line continuation character
 (lines joined by a backslash are parsed as a single line).
-
-<a name="annotations"></a>
-## Annotations
-
-This repository may change annotations, for now, under the MarkDown governance these are the available annotations.
-
-**You must use these to denote the right steps to the right audience.**
-
-These are context clues for steps, if they contain these, and you are not in that context you ought to skip them.
-
-> **`EXTERNAL USE`** 
-
-This tag should be used to highlight anything that an HPE Cray internal user should ignore or skip.
-
-> **`INTERNAL USE`** 
-
-This tag is used before any block of instruction or text that is only usable or recommended for 
-internal HPE Cray systems.
-
-External (GitHub or customer) should disregard these annotated blocks - they maybe contain useful
-information as an example but are not intended for their use.
 
 <a name="command-prompt-conventions"></a>
 ## Command Prompt Conventions

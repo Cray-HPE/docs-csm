@@ -22,9 +22,6 @@ A Cray Pre-Install Toolkit ISO is required for this process. This ISO can be obt
 - The Cray Pre-Install Toolkit ISO included in a CSM release tar file. It will have a filename similar to
   `cray-pre-install-toolkit-sle15sp2.x86_64-1.4.10-20210514183447-gc054094.iso`
 
-- **`INTERNAL USE`** The latest ISO in HPE Cray Artifactory can change without notice, so it is advised to use the full filename of the ISO. Every `latest` ISO file has a matching ISO file with the real buildID in its name; this ISO will have the same file time metadata as the latest ISO file.
-  http://car.dev.cray.com/artifactory/csm/MTL/sle15_sp2_ncn/x86_64/dev/master/metal-team/cray-pre-install-toolkit-latest.iso
-
 <a name="bmcs-virtual-mounts"></a>
 ### BMCs' Virtual Mounts
 

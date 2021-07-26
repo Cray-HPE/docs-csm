@@ -141,17 +141,12 @@ with system-specific customizations.
 
 1.  To federate Keycloak with an upstream LDAP:
 
-    > **`INTERNAL USE`** On internal HPE Cray systems, if the IP address for
-    > the ncn-m001 node is even then use `ldaps://dcldap2.us.cray.com`,
-    > otherwise use `ldaps://dcldap3.us.cray.com`. For example, `ping
-    > fanta-ncn-m001.us.cray.com` shows the IP address is `172.30.52.72`,
-    > so fanta would use `ldaps://dcldap2.us.cray.com` as the
-    > `ldap_connection_url`. This just spreads the load over the two LDAP
-    > replicas.
-    >
-    > ```bash
-    > linux# export LDAP=dcldap2.us.cray.com
-    > ```
+    In the example below, the LDAP server has the hostname `dcldap2.us.cray.com` and is using the port 636.
+    
+    ```bash
+    linux# export LDAP=dcldap2.us.cray.com
+    linux# export PORT=636
+    ```
 
     *   If LDAP requires TLS (recommended), update the `cray-keycloak` sealed
         secret value by supplying a base64 encoded Java KeyStore (JKS) that
@@ -181,94 +176,94 @@ with system-specific customizations.
         -storepass password -noprompt
         ```
 
-        > **`INTERNAL USE`** For example, on internal HPE Cray systems, create the `certs.jks.b64` file as follows:
-        > 
-        > *   Get the issuer certificate for dcldap. Use `openssl s_client` to connect
-        >     and show the certificate chain returned by the LDAP host:
-        > 
-        >     ```bash
-        >     linux# openssl s_client -showcerts -connect $LDAP:636 </dev/null
-        >     ```
-        > 
-        >     Either manually extract (i.e., cut/paste) the issuer's
-        >     certificate into `cacert.pem` or try the following commands to
-        >     create it automatically.
-        > 
-        >     > **`NOTE`** The following commands were verified using OpenSSL
-        >     > version 1.1.1d and use the `-nameopt RFC2253` option to ensure
-        >     > consistent formatting of distinguished names (DNs).
-        >     > Unfortunately, older versions of OpenSSL may not support
-        >     > `-nameopt` on the `s_client` command or may use a different
-        >     > default format. As a result, your mileage may vary; however,
-        >     > you should be able to manually extract the issuer certificate
-        >     > from the output of the above `openssl s_client` example if the
-        >     > following commands are unsuccessful.
-        > 
-        >     1.  Observe the issuer's DN:
-        > 
-        >         ```bash
-        >         linux# openssl s_client -showcerts -nameopt RFC2253 -connect $LDAP:636 </dev/null 2>/dev/null | grep issuer= | sed -e 's/^issuer=//'
-        >         ```
-        >
-        >         Expected output looks like:
-        >
-        >         ```
-        >         emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC/MCS,O=HPE,ST=WI,C=US
-        >         ```
-        > 
-        >     2.  Extract the issuer's certificate using `awk`:
-        > 
-        >         > **`NOTE`** The issuer DN is properly escaped as part of the
-        >         > `awk` pattern below. If the value you are using is
-        >         > different, be sure to escape it properly!
-        > 
-        >         ```bash
-        >         linux# openssl s_client -showcerts -nameopt RFC2253 -connect $LDAP:636 </dev/null 2>/dev/null | \
-        >                   awk '/s:emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC\/MCS,O=HPE,ST=WI,C=US/,/END CERTIFICATE/' | \
-        >                   awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' > cacert.pem
-        >         ```
-        > 
-        > *   Verify issuer's certificate was properly extracted and saved in `cacert.pem`:
-        > 
-        >     ```bash
-        >     linux# cat cacert.pem
-        >     ```
-        >
-        >     Expected output looks like:
-        >
-        >     ```
-        >     -----BEGIN CERTIFICATE-----
-        >     MIIDvTCCAqWgAwIBAgIUYxrG/PrMcmIzDuJ+U1Gh8hpsU8cwDQYJKoZIhvcNAQEL
-        >     BQAwbjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAldJMQwwCgYDVQQKDANIUEUxEDAO
-        >     BgNVBAsMB0hQQy9NQ1MxFDASBgNVBAMMC0RhdGEgQ2VudGVyMRwwGgYJKoZIhvcN
-        >     AQkBFg1kY29wc0BocGUuY29tMB4XDTIwMTEyNDIwMzM0MVoXDTMwMTEyMjIwMzM0
-        >     MVowbjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAldJMQwwCgYDVQQKDANIUEUxEDAO
-        >     BgNVBAsMB0hQQy9NQ1MxFDASBgNVBAMMC0RhdGEgQ2VudGVyMRwwGgYJKoZIhvcN
-        >     AQkBFg1kY29wc0BocGUuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-        >     AQEAuBIZkKitHHVQHymtaQt4D8ZhG4qNJ0cTsLhODPMtVtBjPZp59e+PWzbc9Rj5
-        >     +wfjLGteK6/fNJsJctWlS/ar4jw/xBIPMk5pg0dnkMT2s7lkSCmyd9Uib7u6y6E8
-        >     yeGoGcb7I+4ZI+E3FQV7zPact6b17xmajNyKrzhBGEjYucYJUL5iTgZ6a7HOZU2O
-        >     aQSXe7ctiHBxe7p7RhHCuKRrqJnxoohakloKwgHHzDLFQzX/5ADp1hdJcduWpaXY
-        >     RMBu6b1mhmwo5vmc+fDnfUpl5/X4i109r9VN7JC7DQ5+JX8u9SHDGLggBWkrhpvl
-        >     bNXMVCnwnSFfb/rnmGO7rdJSpwIDAQABo1MwUTAdBgNVHQ4EFgQUVg3VYExUAdn2
-        >     WE3e8Xc8HONy/+4wHwYDVR0jBBgwFoAUVg3VYExUAdn2WE3e8Xc8HONy/+4wDwYD
-        >     VR0TAQH/BAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAWLDQLB6rrmK+gwUY+4B7
-        >     0USbQK0JkLWuc0tCfjTxNQTzFb75PeH+GH21QsjUI8VC6QOAAJ4uzIEV85VpOQPp
-        >     qjz+LI/Ej1xXfz5ostZQu9rCMnPtVu7JT0B+NV7HvgqidTfa2M2dw9yUYS2surZO
-        >     8S0Dq3Bi6IEhtGU3T8ZpbAmAp+nNsaJWdUNjD4ECO5rAkyA/Vu+WyMz6F3ZDBmRr
-        >     ipWM1B16vx8rSpQpygY+FNX4e1RqslKhoyuzXfUGzyXux5yhs/ufOaqORCw3rJIx
-        >     v4sTWGsSBLXDsFM3lBgljSAHfmDuKdO+Qv7EqGzCRMpgSciZihnbQoRrPZkOHUxr
-        >     NA==
-        >     -----END CERTIFICATE-----
-        >     ```
-        > 
-        > *   Create `certs.jks`:
-        > 
-        >     ```bash
-        >     linux# podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool -importcert \
-        >     -trustcacerts -file /data/cacert.pem -alias cray-data-center-ca -keystore /data/certs.jks \
-        >     -storepass password -noprompt
-        >     ```
+        For example, create the `certs.jks.b64` file as follows:
+         
+        *   Get the issuer certificate for the LDAP server at port 636. Use `openssl s_client` to connect
+            and show the certificate chain returned by the LDAP host:
+        
+            ```bash
+            linux# openssl s_client -showcerts -connect $LDAP:${PORT} </dev/null
+            ```
+        
+            Either manually extract (i.e., cut/paste) the issuer's
+            certificate into `cacert.pem` or try the following commands to
+            create it automatically.
+        
+            > **`NOTE`** The following commands were verified using OpenSSL
+            > version 1.1.1d and use the `-nameopt RFC2253` option to ensure
+            > consistent formatting of distinguished names (DNs).
+            > Unfortunately, older versions of OpenSSL may not support
+            > `-nameopt` on the `s_client` command or may use a different
+            > default format. As a result, your mileage may vary; however,
+            > you should be able to manually extract the issuer certificate
+            > from the output of the above `openssl s_client` example if the
+            > following commands are unsuccessful.
+        
+            1.  Observe the issuer's DN:
+        
+                ```bash
+                linux# openssl s_client -showcerts -nameopt RFC2253 -connect $LDAP:${PORT} </dev/null 2>/dev/null | grep issuer= | sed -e 's/^issuer=//'
+                ```
+       
+                Expected output would include a line similar to this:
+        
+                ```
+                emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC/MCS,O=HPE,ST=WI,C=US
+                ```
+        
+            2.  Extract the issuer's certificate using `awk`:
+        
+                > **`NOTE`** The issuer DN is properly escaped as part of the
+                > `awk` pattern below. If the value you are using is
+                > different, be sure to escape it properly!
+        
+                ```bash
+                linux# openssl s_client -showcerts -nameopt RFC2253 -connect $LDAP:${PORT} </dev/null 2>/dev/null | \
+                          awk '/s:emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC\/MCS,O=HPE,ST=WI,C=US/,/END CERTIFICATE/' | \
+                          awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' > cacert.pem
+                ```
+        
+        *   Verify issuer's certificate was properly extracted and saved in `cacert.pem`:
+        
+            ```bash
+            linux# cat cacert.pem
+            ```
+       
+            Expected output looks like:
+        
+            ```
+            -----BEGIN CERTIFICATE-----
+            MIIDvTCCAqWgAwIBAgIUYxrG/PrMcmIzDuJ+U1Gh8hpsU8cwDQYJKoZIhvcNAQEL
+            BQAwbjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAldJMQwwCgYDVQQKDANIUEUxEDAO
+            BgNVBAsMB0hQQy9NQ1MxFDASBgNVBAMMC0RhdGEgQ2VudGVyMRwwGgYJKoZIhvcN
+            AQkBFg1kY29wc0BocGUuY29tMB4XDTIwMTEyNDIwMzM0MVoXDTMwMTEyMjIwMzM0
+            MVowbjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAldJMQwwCgYDVQQKDANIUEUxEDAO
+            BgNVBAsMB0hQQy9NQ1MxFDASBgNVBAMMC0RhdGEgQ2VudGVyMRwwGgYJKoZIhvcN
+            AQkBFg1kY29wc0BocGUuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+            AQEAuBIZkKitHHVQHymtaQt4D8ZhG4qNJ0cTsLhODPMtVtBjPZp59e+PWzbc9Rj5
+            +wfjLGteK6/fNJsJctWlS/ar4jw/xBIPMk5pg0dnkMT2s7lkSCmyd9Uib7u6y6E8
+            yeGoGcb7I+4ZI+E3FQV7zPact6b17xmajNyKrzhBGEjYucYJUL5iTgZ6a7HOZU2O
+            aQSXe7ctiHBxe7p7RhHCuKRrqJnxoohakloKwgHHzDLFQzX/5ADp1hdJcduWpaXY
+            RMBu6b1mhmwo5vmc+fDnfUpl5/X4i109r9VN7JC7DQ5+JX8u9SHDGLggBWkrhpvl
+            bNXMVCnwnSFfb/rnmGO7rdJSpwIDAQABo1MwUTAdBgNVHQ4EFgQUVg3VYExUAdn2
+            WE3e8Xc8HONy/+4wHwYDVR0jBBgwFoAUVg3VYExUAdn2WE3e8Xc8HONy/+4wDwYD
+            VR0TAQH/BAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAWLDQLB6rrmK+gwUY+4B7
+            0USbQK0JkLWuc0tCfjTxNQTzFb75PeH+GH21QsjUI8VC6QOAAJ4uzIEV85VpOQPp
+            qjz+LI/Ej1xXfz5ostZQu9rCMnPtVu7JT0B+NV7HvgqidTfa2M2dw9yUYS2surZO
+            8S0Dq3Bi6IEhtGU3T8ZpbAmAp+nNsaJWdUNjD4ECO5rAkyA/Vu+WyMz6F3ZDBmRr
+            ipWM1B16vx8rSpQpygY+FNX4e1RqslKhoyuzXfUGzyXux5yhs/ufOaqORCw3rJIx
+            v4sTWGsSBLXDsFM3lBgljSAHfmDuKdO+Qv7EqGzCRMpgSciZihnbQoRrPZkOHUxr
+            NA==
+            -----END CERTIFICATE-----
+            ```
+        
+        *   Create `certs.jks`:
+        
+            ```bash
+            linux# podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool -importcert \
+            -trustcacerts -file /data/cacert.pem -alias cray-data-center-ca -keystore /data/certs.jks \
+            -storepass password -noprompt
+            ```
 
         Create `certs.jks.b64` by base-64 encoding `certs.jks`:
 
@@ -300,39 +295,30 @@ with system-specific customizations.
 
         Set `ldap_connection_url` in `customizations.yaml`:
 
-        > **`IMPORTANT`** Replace `<ldap-url>` as appropriate.
-
+        For example:
+        
         ```bash
         linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml \
-        'spec.kubernetes.sealed_secrets.keycloak_users_localize.generate.data.(args.name==ldap_connection_url).args.value' '<ldap-url>'
+        'spec.kubernetes.sealed_secrets.keycloak_users_localize.generate.data.(args.name==ldap_connection_url).args.value' "ldaps://$LDAP"
         ```
-
-        > **`INTERNAL USE`** for example, on internal HPE Cray systems settings are:
-        > 
-        > Set `ldap_connection_url` in `customizations.yaml`:
-        > 
-        > ```bash
-        > linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml \
-        > 'spec.kubernetes.sealed_secrets.keycloak_users_localize.generate.data.(args.name==ldap_connection_url).args.value' "ldaps://$LDAP"
-        > ```
-        > 
-        > On success, review the `keycloak_users_localize` sealed secret.
-        > 
-        > ```bash
-        > linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.sealed_secrets.keycloak_users_localize
-        > ```
-        > 
-        > Expected output is similar to:
-        >
-        > ```
-        > generate:
-        >     name: keycloak-users-localize
-        >     data:
-        >     - type: static
-        >         args:
-        >         name: ldap_connection_url
-        >         value: ldaps://dcldap2.us.cray.com
-        > ```
+        
+        On success, review the `keycloak_users_localize` sealed secret.
+        
+        ```bash
+        linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.sealed_secrets.keycloak_users_localize
+        ```
+        
+        Expected output is similar to:
+       
+      > ```
+      > generate:
+      >     name: keycloak-users-localize
+      >     data:
+      >     - type: static
+      >         args:
+      >         name: ldap_connection_url
+      >         value: ldaps://dcldap2.us.cray.com
+      > ```
 
     *   Configure the `ldapSearchBase` and `localRoleAssignments` settings for
         the `cray-keycloak-users-localize` chart in `customizations.yaml`.
@@ -363,67 +349,67 @@ with system-specific customizations.
         EOF
         ```
 
-        > **`INTERNAL USE`** For example, on internal HPE Cray systems appropriate settings are:
-        > 
-        > ```yaml
-        > ldapSearchBase: "dc=dcldap,dc=dit"
-        > localRoleAssignments:
-        >     - {"group": "criemp", "role": "admin", "client": "shasta"}
-        >     - {"group": "criemp", "role": "admin", "client": "cray"}
-        >     - {"group": "craydev", "role": "admin", "client": "shasta"}
-        >     - {"group": "craydev", "role": "admin", "client": "cray"}
-        >     - {"group": "shasta_admins", "role": "admin", "client": "shasta"}
-        >     - {"group": "shasta_admins", "role": "admin", "client": "cray"}
-        >     - {"group": "shasta_users", "role": "user", "client": "shasta"}
-        >     - {"group": "shasta_users", "role": "user", "client": "cray"}
-        > ```
-        > 
-        > Set `ldapSearchBase` in `customizations.yaml`:
-        > 
-        > ```bash
-        > linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-keycloak-users-localize.ldapSearchBase 'dc=dcldap,dc=dit'
-        > ```
-        > 
-        > Set `localRoleAssignments` in `customizations.yaml`:
-        > 
-        > ```bash
-        > linux# yq write -s - -i /mnt/pitdata/prep/site-init/customizations.yaml <<EOF
-        > - command: update
-        >   path: spec.kubernetes.services.cray-keycloak-users-localize.localRoleAssignments
-        >   value:
-        >   - {"group": "criemp", "role": "admin", "client": "shasta"}
-        >   - {"group": "criemp", "role": "admin", "client": "cray"}
-        >   - {"group": "craydev", "role": "admin", "client": "shasta"}
-        >   - {"group": "craydev", "role": "admin", "client": "cray"}
-        >   - {"group": "shasta_admins", "role": "admin", "client": "shasta"}
-        >   - {"group": "shasta_admins", "role": "admin", "client": "cray"}
-        >   - {"group": "shasta_users", "role": "user", "client": "shasta"}
-        >   - {"group": "shasta_users", "role": "user", "client": "cray"}
-        > EOF
-        > ```
-        > 
-        > On success, review the `cray-keycloak-users-localize` values.
-        > 
-        > ```bash
-        > linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-keycloak-users-localize
-        > ```
-        >
-        > Expected output looks similar to:
-        >
-        > ```
-        > sealedSecrets:
-        >     - '{{ kubernetes.sealed_secrets.keycloak_users_localize | toYaml }}'
-        > localRoleAssignments:
-        >     - {"group": "criemp", "role": "admin", "client": "shasta"}
-        >     - {"group": "criemp", "role": "admin", "client": "cray"}
-        >     - {"group": "craydev", "role": "admin", "client": "shasta"}
-        >     - {"group": "craydev", "role": "admin", "client": "cray"}
-        >     - {"group": "shasta_admins", "role": "admin", "client": "shasta"}
-        >     - {"group": "shasta_admins", "role": "admin", "client": "cray"}
-        >     - {"group": "shasta_users", "role": "user", "client": "shasta"}
-        >     - {"group": "shasta_users", "role": "user", "client": "cray"}
-        > ldapSearchBase: dc=dcldap,dc=dit
-        > ```
+        For example, if you wanted to set the search-base and localRoleAssignments to look like this:
+        
+        ```yaml
+        ldapSearchBase: "dc=dcldap,dc=dit"
+        localRoleAssignments:
+            - {"group": "criemp", "role": "admin", "client": "shasta"}
+            - {"group": "criemp", "role": "admin", "client": "cray"}
+            - {"group": "craydev", "role": "admin", "client": "shasta"}
+            - {"group": "craydev", "role": "admin", "client": "cray"}
+            - {"group": "shasta_admins", "role": "admin", "client": "shasta"}
+            - {"group": "shasta_admins", "role": "admin", "client": "cray"}
+            - {"group": "shasta_users", "role": "user", "client": "shasta"}
+            - {"group": "shasta_users", "role": "user", "client": "cray"}
+        ```
+        
+        Then set `ldapSearchBase` in `customizations.yaml`:
+        
+        ```bash
+        linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-keycloak-users-localize.ldapSearchBase 'dc=dcldap,dc=dit'
+        ```
+        
+        And then set `localRoleAssignments` in `customizations.yaml`:
+        
+        ```bash
+        linux# yq write -s - -i /mnt/pitdata/prep/site-init/customizations.yaml <<EOF
+        - command: update
+          path: spec.kubernetes.services.cray-keycloak-users-localize.localRoleAssignments
+          value:
+          - {"group": "criemp", "role": "admin", "client": "shasta"}
+          - {"group": "criemp", "role": "admin", "client": "cray"}
+          - {"group": "craydev", "role": "admin", "client": "shasta"}
+          - {"group": "craydev", "role": "admin", "client": "cray"}
+          - {"group": "shasta_admins", "role": "admin", "client": "shasta"}
+          - {"group": "shasta_admins", "role": "admin", "client": "cray"}
+          - {"group": "shasta_users", "role": "user", "client": "shasta"}
+          - {"group": "shasta_users", "role": "user", "client": "cray"}
+        EOF
+        ```
+        
+        On success, review the `cray-keycloak-users-localize` values.
+        
+        ```bash
+        linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-keycloak-users-localize
+        ```
+       
+        Expected output looks similar to:
+       
+        ```
+        sealedSecrets:
+            - '{{ kubernetes.sealed_secrets.keycloak_users_localize | toYaml }}'
+        localRoleAssignments:
+            - {"group": "criemp", "role": "admin", "client": "shasta"}
+            - {"group": "criemp", "role": "admin", "client": "cray"}
+            - {"group": "craydev", "role": "admin", "client": "shasta"}
+            - {"group": "craydev", "role": "admin", "client": "cray"}
+            - {"group": "shasta_admins", "role": "admin", "client": "shasta"}
+            - {"group": "shasta_admins", "role": "admin", "client": "cray"}
+            - {"group": "shasta_users", "role": "user", "client": "shasta"}
+            - {"group": "shasta_users", "role": "user", "client": "cray"}
+        ldapSearchBase: dc=dcldap,dc=dit
+        ```
 
 1.  If there is no requirement to resolve external hostnames or no upstream DNS server
     then remove the DNS forwarding configuration from the `cray-dns-unbound` service.
