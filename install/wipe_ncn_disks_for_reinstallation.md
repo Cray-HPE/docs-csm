@@ -128,13 +128,16 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
         ```
 
 2. Unmount volumes
+
+   > **`NOTE`** Some of the following umount commands may fail or have warnings depending on the state of the NCN.  Failures in this section can be ignored and will not inhibit the wipe process.
+
    1. Storage nodes
       ```bash
       ncn-s# umount -v /var/lib/ceph /var/lib/containers /etc/ceph
       ```
    2. Master nodes
       ```bash
-      ncn-m# umount -v /var/lib/etcd
+      ncn-m# umount -v /var/lib/etcd /var/lib/sdu
       ```
    3. Worker nodes
       ```bash
@@ -142,11 +145,27 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
       ```
 3. Remove auxiliary LVMs
 
-   ```bash
-   ncn# vgremove -f --select 'vg_name=~metal*'
-   ```
+   1. Stop sdu container if necessary
+      ```bash
+      ncn# podman ps
+      CONTAINER ID  IMAGE                                                      COMMAND               CREATED      STATUS          PORTS   NAMES
+      7741d5096625  registry.local/sdu-docker-stable-local/cray-sdu-rda:1.1.1  /bin/sh -c /usr/s...  6 weeks ago  Up 6 weeks ago          cray-sdu-rda
+      ```
 
-   >>***Note***: Optionally you can run a pvs and if any drives are still listed, you can remove them with a pvremove. This is rarely needed.
+      If there is a running `cray-sdu-rda` container in the above output, stop it using the container id:
+
+      ```bash
+      ncn# podman stop 7741d5096625
+      7741d50966259410298bb4c3210e6665cdbd57a82e34e467d239f519ae3f17d4
+      ```
+
+   2. Remove metal LVM
+
+      ```bash
+      ncn# vgremove -f --select 'vg_name=~metal*'
+      ```
+
+      > **`NOTE`** Optionally you can run the `pvs` command and if any drives are still listed, you can remove them with `pvremove`, but this is rarely needed.  Also, if the above command fails or returns a warning about the filesystem being in use, you should ignore the error and proceed to the next step, as this will not inhibit the wipe process.
 
 4. Stop the RAIDs.
 
