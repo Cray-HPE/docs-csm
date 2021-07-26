@@ -2,7 +2,8 @@
 
 Glossary of terms used in CSM documentation.
 
-### Application Node (AN)
+<a name="application-node"></a>
+## Application Node (AN)
 
 An application node (AN) is an NCN which is not providing management functions for the Cray EX system.
 The AN is not part of the Kubernetes cluster to which management nodes belong. One special type of AN
@@ -13,25 +14,25 @@ is the UAN (User Access Node), but different systems may have need for other typ
 * visualization servers
 * other special-purpose nodes
 
-### Baseboard Management Controller (BMC)
+## Baseboard Management Controller (BMC)
 
-Air-Cooled cabinet COTS servers include a Redfish-enabled baseboard management
+Air-Cooled cabinet COTS servers that include a Redfish-enabled baseboard management
 controller (BMC) and REST endpoint for API control and management. Either IPMI
-commands or REST API calls can be used to manage a COTS server.
+commands or REST API calls can be used to manage a BMC.
 
-### Blade Switch Controller (sC)
+## Blade Switch Controller (sC)
 
 The Slingshot blade switch embedded controller (sC) provides a hardware management
 REST endpoint to monitor environmental conditions and manage the blade power, switch
 ASIC, FPGA buffer/interfaces, and firmware.
 
-### Cabinet Cooling Group
+## Cabinet Cooling Group
 A cabinet cooling group is a group of cabinets that are connected to a floor-standing coolant
 distribution unit (CDU). Management network CDU switches in the CDU aggregate all the
 node management network (NMN) and hardware management network (HMN) connections
 for the cabinet group.
 
-### Customer Access Network
+## Customer Access Network
 
 The Customer Access Network (CAN) provides access from outside the customer network to services, noncompute
 nodes (NCNs), and User Access Nodes (UANs) in the system. This allows for the following:
@@ -48,7 +49,7 @@ nodes (NCNs), and User Access Nodes (UANs) in the system. This allows for the fo
 These nodes and services need an IP address that routes to the customer’s network in order to be accessed from
 outside the network.
 
-### Cabinet Environmental Controller (CEC)
+## Cabinet Environmental Controller (CEC)
 
 The Liquid-Cooled cabinet environmental controller (CEC) sets the cabinet's geolocation,
 monitors environmental sensors, and communicates status to the cooling distribution unit
@@ -99,7 +100,7 @@ hardware platform, manage configuration of the system, configure the network, bo
 log and telemetry data, connect API access and user level access to Identity Providers (IdPs),
 and provide a method for system administrators and end-users to access the Cray EX system.
 
-### eC
+### CEC microcontroller (eC)
 
 The CEC microcontroller (eC) sets the cabinet's geolocation, monitors the cabinet
 environmental sensors, and communicates cabinet status to the cooling distribution unit
@@ -199,9 +200,9 @@ installation which is booted from a LiveCD. The node running the Pre-Install Too
 as the PIT node during the installation process until it reboots from a normal management node image
 like the other master nodes.
 
-### PDU
+### Power Distribution Unit (PDU)
 
-The cabinet power distribution unit (PDU) receives 480VAC 3-phase facility power and
+The cabinet PDU receives 480VAC 3-phase facility power and
 provides circuit breaker, fuse protection, and EMI filtered power to the rectifier/power
 supplies that distribute ±190VDC (HVDC) to a chassis. PDUs are passive devices that do
 not connect to the SMNet.
@@ -262,7 +263,7 @@ switches. The front-panel top ports support passive electrical cables (PEC) or a
 cables (AOC). The front-panel bottom ports support only PECs for proper cooling in the
 blade enclosure.
 
-### Slingshot ToR Switch
+### Slingshot Top of Rack (ToR) Switch
 
 A standard cabinet can support one, two, or four, rack-mounted Slingshot ToR switches.
 Each switch supports a total of 64 fabric ports. 32 QSFP-DD connectors on the front panel
@@ -278,10 +279,10 @@ liquid-cooled cabinets, device diagrams for switches and nodes in the cabinets, 
 list of source and destination of every cable connected to the spine switches, list of source and destination of every cable connected
 to the NMN, list of source and destination of every cable connected to the HMN. list of cabling for the KVM, and routing of power to the PDUs.
 
-### SMS Nodes
+### System Management Services (SMS) nodes
 
-System management services (SMS) nodes provide access to the entire management
-cluster and Kubernetes container orchestration. 
+System Management Services (SMS) nodes provide access to the entire management
+cluster and Kubernetes container orchestration.
 
 ### Supply/Return Cutoff Valves
 
@@ -304,20 +305,20 @@ The system management network (SMNet) is a dedicated out-of-band (OOB) spine-lea
 topology Ethernet network that interconnects all the nodes in the system to management
 services.
 
-### ToR Switch Controller (sC-ToR)
+### Top of Rack Switch Controller (sC-ToR)
 
 The Air-Cooled cabinet HSN ToR switch embedded controller (sC-ToR) provides a hardware
 management REST endpoint to monitor the ToR switch environmental conditions and
 manage the switch power, HSN ASIC, and FPGA interfaces.
 
-### UAI
+### User Access Instance (UAI)
 
 The User Access Instance (UAI) is a lightweight, disposable platform that runs under Kubernetes orchestration
 on worker nodes. The UAI provides a single user containerized environment for users on a Cray Ex system to
 develop, build, and execute their applications on the Cray EX compute node. See UAN for another
 way for users to gain access.
 
-### UAN
+### User Access Node (UAN)
 
 The User Access Node (UAN) is an NCN, but is really one of the special types of Application nodes.
 The UAN provides a traditional multi-user Linux environment for users on a Cray Ex system to
