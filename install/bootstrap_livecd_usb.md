@@ -236,7 +236,7 @@ Check for workarounds in the `/opt/cray/csm/workarounds/before-configuration-pay
 <a name="generate-installation-files"></a>
 #### 3.2 Generate Installation Files
 
-Some files are needed for generating the configuration payload. See these topics in [Prepare Configuration Payload](prepare_configuration_payload.md) if you have not already prepared the information for this system.
+Some files are needed for generating the configuration payload. See these topics in [Prepare Configuration Payload](prepare_configuration_payload.md) if you have not already prepared the information for this system. At this time see [Create HMN Connections JSON](create_hmn_connections_json.md) for instructions about creating the `hmn_connections.json`.
 
    * [Command Line Configuration Payload](prepare_configuration_payload.md#command_line_configuration_payload)
    * [Configuration Payload Files](prepare_configuration_payload.md#configuration_payload_files)
