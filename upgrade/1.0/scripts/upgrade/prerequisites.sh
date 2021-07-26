@@ -43,22 +43,15 @@ fi
 if [[ $(hostname) == "ncn-m001" ]]; then
   echo "Opening and refreshing fallback artifacts on the NCNs.."
 
-  # Run the workaround on ncn-m001 or exit if it's not there
-  if [[ -f /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689/CASMINST-2689.sh ]]; then
-    /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689/CASMINST-2689.sh
-  else
-    echo "Please install the latest csm-install-workarounds RPM for shasta-1.4"
-    exit 1
-  fi
 
   # Copy it to the other NCNs
   for i in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ' ');
   do
-    scp -r /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689 $i:/opt/cray/csm/workarounds/livecd-post-reboot/
+    scp -r ${BASEDIR}/CASMINST-2689.sh $i:/tmp/CASMINST-2689.sh
   done
 
   # Run the workaround on all the NCNs
-  pdsh -b -S -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') '/opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689/CASMINST-2689.sh'
+  pdsh -b -S -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') '/tmp/CASMINST-2689.sh'
 fi
 
 if [[ -z ${TARBALL_FILE} ]]; then
