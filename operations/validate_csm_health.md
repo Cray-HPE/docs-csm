@@ -105,6 +105,23 @@ Execute the ncnHealthChecks script and analyze the output of each individual che
 ncn# csi handoff bss-update-param --set metal.no-wipe=1 --limit <SERVER_XNAME>
 ```
 
+**IMPORTANT:** If the output of pod statuses indicates that there are pods in the ‘Evicted’ state, it may be due to the /root file system being filled up on the Kubernetes node in question.  Kubernetes will begin evicting pods once the root file system space is at 85% until it is back under 80%.  This may commonly happen on ncn-m001 as it is a location that install and doc files may be downloaded to.  It may be necessary to clean-up space in the /root directory if this is the root cause of pod evictions.  The following commands can be used to determine if analysis of files under /root is needed to free-up space.
+
+```bash
+ncn# df -h /root
+Filesystem      Size  Used Avail Use% Mounted on
+LiveOS_rootfs   280G  245G   35G  88% /
+```
+
+```bash
+ncn# du -h -s /root/
+225G  /root/
+```
+
+```bash
+ncn# du -ah -B 1024M /root | sort -n -r | head -n 10
+```
+
 **Note**: The `cray-crus-` pod is expected to be in the Init state until slurm and munge
 are installed. In particular, this will be the case if executing this as part of the validation after completing the [Install CSM Services](../install/install_csm_services.md).
 If in doubt, validate the CRUS service using the [CMS Validation Tool](#sms-health-checks). If the CRUS check passes using that tool, do not worry about the `cray-crus-` pod state.
