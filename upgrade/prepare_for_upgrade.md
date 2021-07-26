@@ -77,7 +77,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
    Some of the CSM health checks, such as booting the barebones image on the compute nodes, could be skipped.
 
-   See [Validate CSM Health](../operations/validate_csm_health.md)
+   See the `CSM Install Validation and Health Checks` procedures **in the CSM 0.9 documentation**. The validation procedures in the CSM 1.0 documentation are not all intended to work on CSM 0.9.
 
 <a name="next-topic"></a>
 # Next Topic
