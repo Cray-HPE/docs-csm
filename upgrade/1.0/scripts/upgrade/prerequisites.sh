@@ -39,6 +39,21 @@ if [[ -z ${CSM_RELEASE} ]]; then
     exit 1
 fi
 
+# Apply WAR for CASMINST-2689, just in case
+if [[ $(hostname) == "ncn-m001" ]]; then
+  echo "Opening and refreshing fallback artifacts on the NCNs.."
+
+
+  # Copy it to the other NCNs
+  for i in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ' ');
+  do
+    scp -r ${BASEDIR}/CASMINST-2689.sh $i:/tmp/CASMINST-2689.sh
+  done
+
+  # Run the workaround on all the NCNs
+  pdsh -b -S -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') '/tmp/CASMINST-2689.sh'
+fi
+
 if [[ -z ${TARBALL_FILE} ]]; then
     # Download tarball from internet
 
