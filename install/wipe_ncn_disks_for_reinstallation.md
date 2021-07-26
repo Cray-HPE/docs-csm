@@ -109,7 +109,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
         * ***1.5 or later***
 
             ```bash
-            ncn-s# cephadm rm-cluster --fsid $(ceph status -f json-pretty|jq -r '.fsid') --force
+            ncn-s# cephadm rm-cluster --fsid $(cephadm ls|jq -r '.[0].fsid') --force
             ```
 
    2. Make sure the OSDs (if any) are not running.
