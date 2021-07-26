@@ -61,7 +61,7 @@ For more description of these settings and the default values, see [Default IP A
 | --application-node-config-yaml application_node_config.yaml | Name of application_node_config.yaml |
 | --cabinets-yaml cabinets.yaml | Name of application_node_config.yaml |
 
-
+   * This is a long list of options. It can be helpful to create a Bash script file to call the `csi` command with all of these options, and then edit that file to adjust the values for the particular system being installed.
    * The bootstrap-ncn-bmc-user and bootstrap-ncn-bmc-pass must match what is used for the BMC account and its password for the management nodes.
    * Set site parameters (site-domain, site-ip, site-gw, site-nic, site-dns) for the information which connects the ncn-m001 (PIT) node to the site. The site-nic is the interface on this node connected to the site.  
    * There are other interfaces possible, but the install-ncn-bond-members are typically:
