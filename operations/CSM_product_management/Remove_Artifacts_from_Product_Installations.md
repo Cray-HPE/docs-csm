@@ -15,11 +15,11 @@ The examples in this procedure show how to remove the product artifacts for the 
     ncn-m001# kubectl get cm cray-product-catalog -n services -o json | jq -r .data.csm
     1.0.0:
     configuration:
-        clone_url: https://vcs.gamora.dev.cray.com/vcs/cray/csm-config-management.git
+        clone_url: https://vcs.SYSTEM_DOMAIN_NAME/vcs/cray/csm-config-management.git
         commit: 123264ba75c809c0db7742ea83ff57f713bc1562
         import_branch: cray/csm/1.4.5
         import_date: 2021-03-12 15:12:49.938936
-        ssh_url: git@vcs.gamora.dev.cray.com:cray/csm-config-management.git
+        ssh_url: git@vcs.SYSTEM_DOMAIN_NAME:cray/csm-config-management.git
     images:
         cray-shasta-csm-sles15sp1-barebones.x86_64-shasta-1.4:
         id: 4871cb4a-e055-4131-a228-c0a26f0903cd
