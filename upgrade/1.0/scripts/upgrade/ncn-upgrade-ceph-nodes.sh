@@ -79,11 +79,8 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-cat <<EOF
-Open another terminal on stable ncn and run:
-    watch "ceph orch ps | grep ${upgrade_ncn}; echo ''; ceph osd tree"
-EOF
-read -p "Read above steps and press any key to continue ..."
+# sleep 30s before redeploy ceph
+sleep 30
 
 state_name="REDEPLOY_CEPH"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})

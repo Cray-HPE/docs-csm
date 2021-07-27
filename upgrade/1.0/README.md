@@ -236,6 +236,29 @@ ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/csm-service-upgrade.sh
 
 ## Troubleshooting and Recovering from Errors During or After Upgrade
 
+### Rerun a step/script
+When running upgrade scripts, each script record what has been done successfully on a node. This `state` file is stored at `/ect/cray/upgrade/csm/{CSM_VERSION}/{NAME_OF_NODE}/state`. If a rerun is required, you will need to remove the recorded steps from this file.
+
+Here is an example of state file of `ncn-m001`:
+```
+ncn-m001:~ # cat /etc/cray/upgrade/csm/csm-1.0.0-beta.46/ncn-m001/state
+[2021-07-22 20:05:27] UNTAR_CSM_TARBALL_FILE
+[2021-07-22 20:05:30] INSTALL_CSI
+[2021-07-22 20:05:30] INSTALL_WAR_DOC
+[2021-07-22 20:13:15] SETUP_NEXUS
+[2021-07-22 20:13:16] UPGRADE_BSS <=== Remove this line if you want to rerun this step
+[2021-07-22 20:16:30] CHECK_CLOUD_INIT_PREREQ
+[2021-07-22 20:19:17] APPLY_POD_PRIORITY
+[2021-07-22 20:19:38] UPDATE_BSS_CLOUD_INIT_RECORDS
+[2021-07-22 20:19:38] UPDATE_CRAY_DHCP_KEA_TRAFFIC_POLICY
+[2021-07-22 20:21:03] UPLOAD_NEW_NCN_IMAGE
+[2021-07-22 20:21:03] EXPORT_GLOBAL_ENV
+[2021-07-22 20:50:36] PREFLIGHT_CHECK
+[2021-07-22 20:50:38] UNINSTALL_CONMAN
+[2021-07-22 20:58:39] INSTALL_NEW_CONSOLE
+```
+- See the inline comment above on how to rerun a single step
+- If you need to rerun the whole upgrade of a node, you can just delete the state file 
 ### General Kubernetes Commands for Troubleshooting
 Please see [Kubernetes_Troubleshooting_Information.md](../../operations/kubernetes/Kubernetes_Troubleshooting_Information.md).
 
