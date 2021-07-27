@@ -66,8 +66,8 @@ Perform these steps to update customizations.yaml:
    ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
    ```
 
-4. If using an exteral git repository for managing customizations ([as recommended](../../install/prepare_site_init.md#version-control-site-init-files)),
-   clone a local working tree and and commit appropriate changes to customizations.yaml,
+4. If using an exteral Git repository for managing customizations ([as recommended](../../install/prepare_site_init.md#version-control-site-init-files)),
+   clone a local working tree and commit appropriate changes to customizations.yaml,
    e.g.:
 
    ```bash
