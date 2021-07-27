@@ -68,7 +68,7 @@ For more description of these settings and the default values, see [Default IP A
       * `p1p1,p10p1` for HPE nodes
       * `p1p1,p1p2` for Gigabyte nodes
       * `p801p1,p801p2` for Intel nodes
-   * The starting cabinet number for each type of cabinet (for example, `starting-mountain-cabinet`) has a default that can be overridden. See the "csi config init --help".
+   * The starting cabinet number for each type of cabinet (for example, `starting-mountain-cabinet`) has a default that can be overridden. See the `csi config init --help` output for more information.
    * An override to default cabinet IPv4 subnets can be made with the `hmn-mtn-cidr` and `nmn-mtn-cidr` parameters.
    * Several parameters (`can-gateway`, `can-cidr`, `can-static-pool`, `can-dynamic-pool`) describe the CAN (Customer Access network). The `can-gateway` is the common gateway IP used for both spine switches and commonly referred to as the Virtual IP for the CAN. The `can-cidr` is the IP subnet for the CAN assigned to this system. The `can-static-pool` and `can-dynamic-pool` are the MetalLB address static and dynamic pools for the CAN. The `can-external-dns` is the static IP assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded. The `can-external-dns` IP must be within the `can-static-pool` range.
    * Set `ntp-pool` to a reachable NTP server.
