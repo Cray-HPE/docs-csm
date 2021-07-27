@@ -6,8 +6,8 @@ set -e
 BASEDIR=$(dirname $0)
 . ${BASEDIR}/upgrade-state.sh
 trap 'err_report' ERR
-touch ./myenv
-. ./myenv
+touch /etc/cray/upgrade/csm/myenv
+. /etc/cray/upgrade/csm/myenv
 
 export UPGRADE_NCN=$1
 export STABLE_NCN=$(hostname)

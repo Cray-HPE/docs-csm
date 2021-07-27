@@ -7,7 +7,7 @@ BASEDIR=$(dirname $0)
 . ${BASEDIR}/upgrade-state.sh
 trap 'err_report' ERR
 
-. ./myenv
+. /etc/cray/upgrade/csm/myenv
 
 state_name="VERIFY_K8S_NODES_UPGRADED"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
