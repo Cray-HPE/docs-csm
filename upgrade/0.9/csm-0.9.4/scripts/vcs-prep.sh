@@ -25,9 +25,9 @@ if [ $DELETING != null ]; then
     kubectl -n services delete pvc $DATA_CLAIM --wait=false
 fi
 kubectl -n services rollout restart deployment gitea-vcs
-while kubectl -n services get pvc $DATA_CLAIM > /dev/null;
+while kubectl -n services get pvc $DATA_CLAIM 2> /dev/null;
 do
     echo "Waiting for pvc to be deleted."
     sleep 1;
 done
-echo "pvc has been deleted."
+echo "pvc has successfully been deleted."
