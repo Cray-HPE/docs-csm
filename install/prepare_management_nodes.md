@@ -134,19 +134,29 @@ install).
       pit# export IPMI_PASSWORD=changeme
       pit# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
       do
+         echo "Setting $h to DHCP"
          ipmitool -U $username -I lanplus -H $h -E lan set $lan ipsrc dhcp
       done
       ```
 
-      The timing of this change can vary based on the hardware, so if the IP can no longer be reached after running the above command, run these commands.
-
+      Verify the BMCs have been set to DHCP:
       ```bash
       pit# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
       do
+         printf "$h: "
          ipmitool -U $username -I lanplus -H $h -E lan print $lan | grep Source
       done
+      ```
+      > If an error similar to the following occurs, it means that the BMC is no longer reachable by its IP. 
+      > ```
+      > 10.254.1.5: Error: Unable to establish IPMI v2 / RMCP+ session
+      > ```
+
+      The timing of this change can vary based on the hardware, so if the IP of any BMC can still be reached after running the above commands then run the following. A BMC is considered reachable if it can still be pinged by its IP or hostname (such as `ncn-w001-mgmt`).
+      ```bash
       pit# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
       do
+         printf "$h: "
          ipmitool -U $username -I lanplus -H $h -E mc reset cold
       done
       ```
@@ -159,19 +169,29 @@ install).
       ncn-m001# export IPMI_PASSWORD=changeme
       ncn-m001# for h in $( grep ncn /etc/hosts | grep mgmt | grep -v m001 | awk '{print $2}' )
       do
+         echo "Setting $h to DHCP"
          ipmitool -U $username -I lanplus -H $h -E lan set $lan ipsrc dhcp
       done
       ```
 
-      The timing of this change can vary based on the hardware, so if the IP can no longer be reached after running the above command, run these commands.
-
-      ```
+      Verify the BMCs have been set to DHCP:
+      ```bash
       ncn-m001# for h in $( grep ncn /etc/hosts | grep mgmt | grep -v m001 | awk '{print $2}' )
       do
+         printf "$h: "
          ipmitool -U $username -I lanplus -H $h -E lan print $lan | grep Source
       done
+      ```
+      > If an error similar to the following occurs, it means that the BMC is no longer reachable by its IP. 
+      > ```
+      > ncn-w001-mgmt: Error: Unable to establish IPMI v2 / RMCP+ session
+      > ```
+
+      The timing of this change can vary based on the hardware, so if the IP of any BMC can still be reached after running the above commands then run the following. A BMC is considered reachable if it can still be pinged by its IP or hostname (such as `ncn-w001-mgmt`).
+      ```bash
       ncn-m001# for h in $( grep ncn /etc/hosts | grep mgmt | grep -v m001 | awk '{print $2}' )
       do
+         printf "$h: "
          ipmitool -U $username -I lanplus -H $h -E mc reset cold
       done
       ```

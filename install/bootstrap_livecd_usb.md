@@ -105,6 +105,10 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
    from the `${CSM_PATH}/rpm/embedded` directory.
+   ```bash
+   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/15-SP2/x86_64/update/x86_64/podman-*.x86_64.rpm
+   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/15-SP2/x86_64/update/noarch/podman-cni-config-*.noarch.rpm
+   ```
 
 1. Install lsscsi to view attached storage devices.
 
@@ -125,6 +129,10 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
    from the `${CSM_PATH}/rpm/embedded` directory.
+   ```bash
+   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/product/x86_64/lsscsi-*.x86_64.rpm
+   ```
+
 
 1. Although not strictly required, the procedures for setting up the
    `site-init` directory recommend persisting `site-init` files in a Git
@@ -147,6 +155,10 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
    from the `${CSM_PATH}/rpm/embedded` directory.
+   ```bash
+   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/update/x86_64/git-core-2.26.2-3.34.1.x86_64.rpm
+   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Development-Tools/15-SP2/x86_64/update/x86_64/git-*.x86_64.rpm
+   ```
 
 <a name="create-the-bootable-media"></a>
 ### 2. Create the Bootable Media
