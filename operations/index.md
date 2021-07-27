@@ -551,8 +551,6 @@ The DHCP service on the HPE Cray EX system uses the Internet Systems Consortium 
 
   * [DHCP](/network/dhcp/DHCP.md)
   * [Troubleshoot DHCP Issues](/network/dhcp/Troubleshoot_DHCP_Issues.md)
-  * [Clear HSM Tables to Resolve DHCP Issues](/network/dhcp/Clear_HSM_Tables_to_Resolve_DHCP_Issues.md)
-
 
 <a name="domain-name-service-dns"></a>
 
