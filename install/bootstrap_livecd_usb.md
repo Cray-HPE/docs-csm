@@ -571,7 +571,7 @@ See the [set boot order](../background/ncn_boot_workflow.md#set-boot-order) page
    external# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
-Confirm that the IPMI credentials work for the BMC by checking the power status.
+   Confirm that the IPMI credentials work for the BMC by checking the power status.
 
    ```bash
    external# export SYSTEM_NAME=eniac
@@ -580,7 +580,7 @@ Confirm that the IPMI credentials work for the BMC by checking the power status.
    external# ipmitool -I lanplus -U $username -P $password -H ${SYSTEM_NAME}-ncn-m001-mgmt chassis power status
    ```
 
-Connect to the IPMI console.
+   Connect to the IPMI console.
 
    ```bash
    external# ipmitool -I lanplus -U $username -P $password -H ${SYSTEM_NAME}-ncn-m001-mgmt sol activate
