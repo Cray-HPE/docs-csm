@@ -38,4 +38,3 @@ The order can vary in the workflow outlined below, and the services in this work
 ### Table of Contents
 
 * [Troubleshoot DHCP Issues](Troubleshoot_DHCP_Issues.md)
-* [Clear HSM Tables to Resolve DHCP Issues](Clear_HSM_Tables_to_Resolve_DHCP_Issues.md)
