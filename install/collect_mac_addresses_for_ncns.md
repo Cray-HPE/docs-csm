@@ -244,7 +244,13 @@ making a backup of them, in case they need to be examined at a later time.
 
 1. Generate system configuration again.
 
-   The needed files should be in the current directory.
+   Copy over the `system_config.yaml` file from first attempt at generating the system configuration files. 
+   
+   ```bash
+   pit# cp /var/www/ephemeral/prep/${SYSTEM_NAME}.oldNCN/system_config.yaml /var/www/ephemeral/prep/
+   ```
+
+   Check for the expected files that should exist be in the current directory.
   
    ```bash
    pit# ls -1
@@ -261,14 +267,12 @@ making a backup of them, in case they need to be examined at a later time.
    system_config.yaml
    ```
 
-   The `system_config.yaml` file will make it easier to run the next command because it has the saved information
-   from the command line arguments which were used initially for this command.
-
+   Regenerate the system configuration. The `system_config.yaml` file contains all of the options that where used to generate the initial system configuration, and can be used in place of specifying CLI flags to CSI.  
    ```bash
    pit# csi config init
    ```
 
-   A new directory matching your `--system-name` argument will now exist in your working directory.
+   A new directory matching your `$SYSTEM_NAME` environment variable will now exist in your working directory.
 
 1. Check for workarounds in the `/opt/cray/csm/workarounds/csi-config` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
 

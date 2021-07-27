@@ -44,7 +44,8 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
 #### MAC Collection
 
 1. (optional) Shim the boot so nodes bail after dumping their netdevs. 
-   Removing the iPXE script will prevent network booting but beware of disk-boots.
+   Removing the iPXE script will prevent network booting, but be aware of the possibility of the nodes disk booting.
+   
    This will prevent the nodes from continuing to boot and end in undesired states.
     ```bash
     pit# mv /var/www/boot/script.ipxe /var/www/boot/script.ipxe.bak
@@ -100,52 +101,53 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
             grep -Eoh '(net[0-9] MAC .*)' $file | sort -u | grep PCI | grep -Ev "$did" && echo -----
         done
         ```
-7. Examine the output from `grep`, use the lowest value MAC address per PCIe card.
+7. Examine the output from `grep` to identify the MAC address that make up Bond0 for each management NCN, use the lowest value MAC address per PCIe card.
 
     > example: 1 PCIe card with 2 ports for a total of 2 ports per node.\
 
     ```bash
     -----
-    /var/log/conman/console.ncn-w003-mt
+    /var/log/conman/console.ncn-w003-mgmt
     net2 MAC b8:59:9f:d9:9e:2c PCI.DeviceID 1013 PCI.VendorID 15b3 <-bond0-mac0 (0x2c < 0x2d)
     net3 MAC b8:59:9f:d9:9e:2d PCI.DeviceID 1013 PCI.VendorID 15b3 <-bond0-mac1
     -----
     ```
+
+    The above output identified MAC0 and MAC1 of the bond as b8:59:9f:d9:9e:2c and b8:59:9f:d9:9e:2d respectively.
 
     > example: 2 PCIe cards with 2 ports each for a total of 4 ports per node.
 
     ```bash
     -----
     /var/log/conman/console.ncn-w006-mgmt
-    net0 MAC 94:40:c9:5f:b5:df PCI.DeviceID 8070 PCI.VendorID 1077 <-bond0-mac0 (0x38 < 0x39)
+    net0 MAC 94:40:c9:5f:b5:df PCI.DeviceID 8070 PCI.VendorID 1077 <-bond0-mac0 (0xdf < 0xe0)
     net1 MAC 94:40:c9:5f:b5:e0 PCI.DeviceID 8070 PCI.VendorID 1077 (future use)
-    net2 MAC 14:02:ec:da:b9:98 PCI.DeviceID 8070 PCI.VendorID 1077 <-bond0-mac1 (0x61f0 < 0x7104)
+    net2 MAC 14:02:ec:da:b9:98 PCI.DeviceID 8070 PCI.VendorID 1077 <-bond0-mac1 (0x98 < 0x99)
     net3 MAC 14:02:ec:da:b9:99 PCI.DeviceID 8070 PCI.VendorID 1077 (future use)
     -----
     ```
 
-8. The above output identified MAC0 and MAC1 of the bond as 14:02:ec:df:9c:38 and 94:40:c9:c1:61:f0 respectively.
-    > Tip: Mind the index (3, 2, 1.... ; not 1, 2, 3)
-    ```
-    Xname,Role,Subrole,BMC MAC,Bootstrap MAC,Bond0 MAC0,Bond0 MAC1
-    x3000c0s9b0n0,Management,Worker,94:40:c9:37:77:26,14:02:ec:df:9c:38,14:02:ec:df:9c:38,94:40:c9:c1:61:f0
-                                                      ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
-    ```
+    The above output identified MAC0 and MAC1 of the bond as 94:40:c9:5f:b5:df and 14:02:ec:da:b9:99 respectively.
 
-9. Collect the NCN MAC address for the PIT node.
+8. Collect the NCN MAC address for the PIT node. This information will be used to populate the MAC addresses for ncn-m001.
 
    ```bash
    pit# cat /proc/net/bonding/bond0  | grep Perm
-   Permanent HW addr: b8:59:9f:c7:12:f2
-   Permanent HW addr: b8:59:9f:c7:12:f3
+   Permanent HW addr: b8:59:9f:c7:12:f2 <-bond0-mac0
+   Permanent HW addr: b8:59:9f:c7:12:f3 <-bond0-mac1
    ```
 
-   Add this information to the `ncn_metadata.csv` file for the row which represents ncn-m001.
-   This information from bond0 should be placed in the Bootstrap MAC, Bond0 MAC0 columns.
-   The Bond0 MAC1 is typically incremented by 1 in the last octet of the MAC address.  
-   ```
-   x3000c0s1b0n0,Management,Master,a4:bf:01:37:87:32,b8:59:9f:c7:12:f2,b8:59:9f:c7:12:f2,b8:59:9f:c7:12:f3
-   ```
+9. Update `ncn_metadata.csv` with the collected MAC addresses for Bond0 from all of the management NCNs.
+    > Tip: Mind the index (3, 2, 1.... ; not 1, 2, 3)
+
+    For each NCN update the corresponding row in `ncn_metadata` with the values for Bond0 MAC0 and Bond0 MAC1. The Bootstrap MAC should have the same value as the Bond0 MAC0.
+
+    ```
+    Xname,Role,Subrole,BMC MAC,Bootstrap MAC,Bond0 MAC0,Bond0 MAC1
+    x3000c0s9b0n0,Management,Worker,94:40:c9:37:77:26,b8:59:9f:c7:12:f2,b8:59:9f:c7:12:f2,b8:59:9f:c7:12:f3
+                                                      ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+                                                      bond0-mac0        bond0-mac0        bond0-mac1
+    ```
 
 10. If the `script.ipxe` file was renamed in the first step of this procedure, then restore it to its original location.
     
@@ -175,15 +177,15 @@ If you have an incorrect `ncn_metadata.csv` file, you will be unable to deploy t
 
 1. Remove the incorrectly generated configs. Before deleting the incorrectly generated configs consider making a backup of them. In case they need to be examined at a later time. 
 
-> **`WARNING`** Ensure that the `SYSTEM_NAME` environment variable is correctly set. If `SYSTEM_NAME` is
-> not set the command below could potentially remove the entire prep directory.
-> ```bash
-> pit# export SYSTEM_NAME=eniac
-> ```
+    > **`WARNING`** Ensure that the `SYSTEM_NAME` environment variable is correctly set. If `SYSTEM_NAME` is
+    > not set the command below could potentially remove the entire prep directory.
+    > ```bash
+    > pit# export SYSTEM_NAME=eniac
+    > ```
 
-```bash
-pit# rm -rf /var/www/ephemeral/prep/$SYSTEM_NAME
-```
+    ```bash
+    pit# rm -rf /var/www/ephemeral/prep/$SYSTEM_NAME
+    ```
 
 2. Manually edit `ncn_metadata.csv`, replacing the bootstrap MAC address with Bond0 MAC0 address for the afflicted nodes that failed to boot
 
@@ -191,41 +193,49 @@ pit# rm -rf /var/www/ephemeral/prep/$SYSTEM_NAME
 
 4. Copy all the newly generated files into place
 
-```bash
-pit# \
-cp -p /var/www/ephemeral/prep/$SYSTEM_NAME/dnsmasq.d/* /etc/dnsmasq.d/*
-cp -p /var/www/ephemeral/prep/$SYSTEM_NAME/basecamp/* /var/www/ephemeral/configs/
-cp -p /var/www/ephemeral/prep/$SYSTEM_NAME/conman.conf /etc/
-cp -p /var/www/ephemeral/prep/$SYSTEM_NAME/pit-files/* /etc/sysconfig/network/
-```
+    ```bash
+    pit# \
+    cp -p /var/www/ephemeral/prep/$SYSTEM_NAME/dnsmasq.d/* /etc/dnsmasq.d/*
+    cp -p /var/www/ephemeral/prep/$SYSTEM_NAME/basecamp/* /var/www/ephemeral/configs/
+    cp -p /var/www/ephemeral/prep/$SYSTEM_NAME/conman.conf /etc/
+    cp -p /var/www/ephemeral/prep/$SYSTEM_NAME/pit-files/* /etc/sysconfig/network/
+    ```
 
 5. Update CA Cert on the copied data.json file. Provide the path to the data.json, the path to our customizations.yaml, and finally the sealed_secrets.key
 
-```bash
-pit# csi patch ca \
---cloud-init-seed-file /var/www/ephemeral/configs/data.json \
---customizations-file /var/www/ephemeral/prep/site-init/customizations.yaml \
---sealed-secret-key-file /var/www/ephemeral/prep/site-init/certs/sealed_secrets.key
-```
+    ```bash
+    pit# csi patch ca \
+    --cloud-init-seed-file /var/www/ephemeral/configs/data.json \
+    --customizations-file /var/www/ephemeral/prep/site-init/customizations.yaml \
+    --sealed-secret-key-file /var/www/ephemeral/prep/site-init/certs/sealed_secrets.key
+    ```
 
 6. Now restart everything to apply the new configs:
 
-```bash
-pit# \
-wicked ifreload all
-systemctl restart dnsmasq conman basecamp
-systemctl restart nexus
-```
+    ```bash
+    pit# \
+    wicked ifreload all
+    systemctl restart dnsmasq conman basecamp
+    systemctl restart nexus
+    ```
 
-7. Apply any NCN pre-boot Workarounds. Check for workarounds in the `/opt/cray/csm/workarounds/before-ncn-boot` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective README.md files.
+7. Ensure system-specific settings generated by CSI are merged into `customizations.yaml`:
+   > The `yq` tool used in the following procedures is available under `/var/www/ephemeral/prep/site-init/utils/bin` once the SHASTA-CFG repo has been cloned.
+   
+   ```bash
+   pit# alias yq="/var/www/ephemeral/prep/site-init/utils/bin/$(uname | awk '{print tolower($0)}')/yq"
+   pit# yq merge -xP -i /var/www/ephemeral/prep/site-init/customizations.yaml <(yq prefix -P "/var/www/ephemeral/prep/${SYSTEM_NAME}/customizations.yaml" spec)
+   ```
 
-```bash
-pit# ls /opt/cray/csm/workarounds/before-ncn-boot
-```
+8. Apply any NCN pre-boot Workarounds. Check for workarounds in the `/opt/cray/csm/workarounds/before-ncn-boot` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective README.md files.
 
-If there is a workaround here, the output looks similar to the following:
-```
-CASMINST-980
-```
+    ```bash
+    pit# ls /opt/cray/csm/workarounds/before-ncn-boot
+    ```
+
+    If there is a workaround here, the output looks similar to the following:
+    ```
+    CASMINST-980
+    ```
 
 8. Before relaunching NCNs, be sure to wipe the disks first. See [full wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#full-wipe).
