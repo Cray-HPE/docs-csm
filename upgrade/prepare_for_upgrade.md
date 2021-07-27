@@ -79,6 +79,74 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
    See the `CSM Install Validation and Health Checks` procedures **in the CSM 0.9 documentation**. The validation procedures in the CSM 1.0 documentation are not all intended to work on CSM 0.9.
 
+1. Validate Lustre Health
+
+   If a Lustre file system is being used, see the ClustreStor documentation for details on how to check
+   for Lustre health. Here are a few commands which could be used to validate Lustre health. This example
+   is for a ClusterStor providing the cls01234 filesystem.
+
+   1. SSH to the primary management node.
+      For example, on system cls01234.
+      ```screen
+      remote$ ssh -l admin cls01234n000.systemname.com
+      ```
+
+   1. Check that the shared storage targets are available for the management nodes.
+
+      ```screen
+      [n000]$ pdsh -g mgmt cat /proc/mdstat | dshbak -c
+      ----------------
+      cls01234n000
+      ----------------
+      Personalities : [raid1] [raid6] [raid5] [raid4] [raid10]
+      md64 : active raid10 sda[0] sdc[3] sdw[2] sdl[1]
+      1152343680 blocks super 1.2 64K chunks 2 near-copies [4/4] [UUUU]
+      bitmap: 2/9 pages [8KB], 65536KB chunk
+      md127 : active raid1 sdy[0] sdz[1]
+      439548848 blocks super 1.0 [2/2] [UU]
+      unused devices: <none>
+      ----------------
+      cls01234n001
+      ----------------
+      Personalities : [raid1] [raid6] [raid5] [raid4] [raid10]
+      md67 : active raid1 sdi[0] sdt[1]
+      576171875 blocks super 1.2 [2/2] [UU]
+      bitmap: 0/5 pages [0KB], 65536KB chunk
+      md127 : active raid1 sdy[0] sdz[1]
+      439548848 blocks super 1.0 [2/2] [UU]
+      unused devices: <none>
+      ```
+
+   1. Check HA status.
+
+      ```screen
+      [n000]$ sudo crm_mon -1r
+      ```
+
+      The output indicates whether all resources are started and balanced between two nodes.
+
+   1. Check the status of the nodes.
+
+      ```screen
+      [n000]# pdsh -a date
+      cls01234n000: Thu Aug 7 01:29:28 PDT 2014
+      cls01234n003: Thu Aug 7 01:29:28 PDT 2014
+      cls01234n002: Thu Aug 7 01:29:28 PDT 2014
+      cls01234n001: Thu Aug 7 01:29:28 PDT 2014
+      cls01234n007: Thu Aug 7 01:29:28 PDT 2014
+      cls01234n006: Thu Aug 7 01:29:28 PDT 2014
+      cls01234n004: Thu Aug 7 01:29:28 PDT 2014
+      cls01234n005: Thu Aug 7 01:29:28 PDT 2014
+      ```
+
+   1. Check the health of the Lustre file system.
+
+      ```screen
+      [n000]# cscli csinfo
+      [n000]# cscli show_nodes
+      [n000]# cscli fs_info
+      ```
+
 <a name="next-topic"></a>
 # Next Topic
 
