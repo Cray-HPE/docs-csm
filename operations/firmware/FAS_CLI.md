@@ -15,7 +15,7 @@ The following CLI operations are described:
      2. [View a Snapshot](#view)
      3. [List Snapshots](#list)
 3. [Update an Image](#update)
-4. [FAS loader commands](#loader)
+4. [FAS Loader Commands](#loader)
 
 ### Prerequisites
 
@@ -677,7 +677,7 @@ Given the nature of the `model` field and its likelihood to not be standardized,
 
 <a name="loader"></a>
 
-### FAS loader commands
+### FAS Loader Commands
 
 ##### Loader Status
 To check if the loader is currently busy and receive a list of loader run IDs:
@@ -706,11 +706,11 @@ loaderRunID = "c2b7e9bb-f428-4e4c-aa83-d8fd8bcfd820"
 See [Load Firmware from Nexus in FAS Admin Procedures](./FAS_Admin_Procedures.md#loadNexus)
 
 ##### Load Individual RPM or ZIP into FAS
-To load an RPM or ZIP into FAS on a system, copy the RPM or ZIP file to m001 or one of the ncn.
+To load an RPM or ZIP into FAS on a system, copy the RPM or ZIP file to ncn-m001 or one of the other NCNs.
 FAS will return a loaderRunID.
 Use the loaderRunID to check the results of the loader run.
 Run the following command (RPM is this case is firmware.rpm):
-**NOTE:** if firmware is not in the current directory, you will need to add the path to the filename.
+**NOTE:** If firmware is not in the current directory, you will need to add the path to the filename.
 ```bash
 ncn-m001# cray fas loader create --file firmware.rpm
 
@@ -720,7 +720,7 @@ See [Load Firmware from RPM or ZIP file in FAS Admin Procedures](./FAS_Admin_Pro
 
 ##### Display Results of Loader Run
 
-Using the loaderRunID returned from the loader upload command, run the following command to get the output from the upload *(Note the --format json, this makes it easier to read)*:
+Using the loaderRunID returned from the loader upload command, run the following command to get the output from the upload *(Note the `--format json`, this makes it easier to read)*:
 **NOTE:** `dd37dd45-84ec-4bd6-b3c9-7af480048966` is the loaderRunID from previous run command.
 
 ```bash
@@ -765,4 +765,4 @@ To delete the output from a loader run and remove it from the loader run list:
 ncn-m001# cray fas loader delete dd37dd45-84ec-4bd6-b3c9-7af480048966
 ```
 The delete command does not return anything if successful
-**NOTE:** the loader delete command does not delete any images from FAS, it only deletes the loader run saved status and removes the ID from the loader run list.
+**NOTE:** The loader delete command does not delete any images from FAS, it only deletes the loader run saved status and removes the ID from the loader run list.

@@ -472,7 +472,7 @@ A successful run will end with `*** Number of Updates: x ***`.
 
 This procedure will read a single local RPM (or ZIP) file and upload firmware images to S3 and create image records for firmware not already in FAS.
 
-1. Copy the file to m001 or one of the ncn.
+1. Copy the file to ncn-m001 or one of the other NCNs.
 
 2. Check the loader status:
 ```bash
