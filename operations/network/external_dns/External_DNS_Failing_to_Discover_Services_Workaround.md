@@ -19,16 +19,16 @@ This procedure requires administrative privileges.
     ```bash
     ncn-w001# kubectl get vs -A | grep -v '[*]'
     NAMESPACE        NAME                              GATEWAYS                       HOSTS                                                      AGE
-    istio-system     kiali                             [services/services-gateway]    [kiali-istio.groot.dev.cray.com]                           2d16h
-    istio-system     prometheus                        [services/services-gateway]    [prometheus-istio.groot.dev.cray.com]                      2d16h
-    istio-system     tracing                           [services/services-gateway]    [jaeger-istio.groot.dev.cray.com]                          2d16h
-    nexus            nexus                             [services/services-gateway]    [packages.local registry.local nexus.groot.dev.cray.com]   2d16h
-    services         gitea-vcs-external                [services/services-gateway]    [vcs.groot.dev.cray.com]                                   2d16h
-    services         sma-grafana                       [services-gateway]             [sma-grafana.groot.dev.cray.com]                           2d16h
-    services         sma-kibana                        [services-gateway]             [sma-kibana.groot.dev.cray.com]                            2d16h
-    sysmgmt-health   cray-sysmgmt-health-alertmanager  [services/services-gateway]    [alertmanager.groot.dev.cray.com]                          2d16h
-    sysmgmt-health   cray-sysmgmt-health-grafana       [services/services-gateway]    [grafana.groot.dev.cray.com]                               2d16h
-    sysmgmt-health   cray-sysmgmt-health-prometheus    [services/services-gateway]    [prometheus.groot.dev.cray.com]                            2d16h
+    istio-system     kiali                             [services/services-gateway]    [kiali-istio.SYSTEM_DOMAIN_NAME]                           2d16h
+    istio-system     prometheus                        [services/services-gateway]    [prometheus-istio.SYSTEM_DOMAIN_NAME]                      2d16h
+    istio-system     tracing                           [services/services-gateway]    [jaeger-istio.SYSTEM_DOMAIN_NAME]                          2d16h
+    nexus            nexus                             [services/services-gateway]    [packages.local registry.local nexus.SYSTEM_DOMAIN_NAME]   2d16h
+    services         gitea-vcs-external                [services/services-gateway]    [vcs.SYSTEM_DOMAIN_NAME]                                   2d16h
+    services         sma-grafana                       [services-gateway]             [sma-grafana.SYSTEM_DOMAIN_NAME]                           2d16h
+    services         sma-kibana                        [services-gateway]             [sma-kibana.SYSTEM_DOMAIN_NAME]                            2d16h
+    sysmgmt-health   cray-sysmgmt-health-alertmanager  [services/services-gateway]    [alertmanager.SYSTEM_DOMAIN_NAME]                          2d16h
+    sysmgmt-health   cray-sysmgmt-health-grafana       [services/services-gateway]    [grafana.SYSTEM_DOMAIN_NAME]                               2d16h
+    sysmgmt-health   cray-sysmgmt-health-prometheus    [services/services-gateway]    [prometheus.SYSTEM_DOMAIN_NAME]                            2d16h
     ```
 
 2.  Inspect the VirtualService object\(s\) to learn the destination service and port.
@@ -58,11 +58,11 @@ This procedure requires administrative privileges.
       gateways:
       - services/services-gateway
       hosts:
-      - prometheus.pepsi.dev.cray.com
+      - prometheus.SYSTEM_DOMAIN_NAME
       http:
       - match:
         - authority:
-            exact: prometheus.pepsi.dev.cray.com
+            exact: prometheus.SYSTEM_DOMAIN_NAME
         route:
         - destination:
             host: cray-sysmgmt-health-promet-prometheus
@@ -70,7 +70,7 @@ This procedure requires administrative privileges.
               number: 9090
     ```
 
-    From the VirtualService data, it is straightforward to see how traffic will be routed. In this example, connections to prometheus.pepsi.dev.cray.com will be routed to the cray-sysmgmt-health-prometheus service in the sysmgmt-health namespace on port 9090.
+    From the VirtualService data, it is straightforward to see how traffic will be routed. In this example, connections to prometheus.SYSTEM_DOMAIN_NAME will be routed to the cray-sysmgmt-health-prometheus service in the sysmgmt-health namespace on port 9090.
 
 
 External DNS will now be connected to the back-end service.

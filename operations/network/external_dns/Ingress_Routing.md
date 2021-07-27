@@ -2,12 +2,12 @@
 
 Ingress routing to services via Istio’s ingress gateway is configured by VirtualService custom resource definitions \(CRD\). When using external hostnames, there needs to be a VirtualService CRD that matches the external hostname to the desired destination.
 
-For example, the configuration below controls the ingress routing for prometheus.rocket.dev.cray.com:
+For example, the configuration below controls the ingress routing for prometheus.SYSTEM_DOMAIN_NAME:
 
 ```bash
 ncn-w001# kubectl get vs -n sysmgmt-health cray-sysmgmt-health-prometheus
 NAME                             GATEWAYS                      HOSTS                              AGE
-cray-sysmgmt-health-prometheus   [services/services-gateway]   [prometheus.rocket.dev.cray.com]   22h
+cray-sysmgmt-health-prometheus   [services/services-gateway]   [prometheus.SYSTEM_DOMAIN_NAME]   22h
 
 ncn-w001# kubectl get vs -n sysmgmt-health cray-sysmgmt-health-prometheus -o yaml
 apiVersion: networking.istio.io/v1beta1
@@ -31,11 +31,11 @@ spec:
   gateways:
   - services/services-gateway
   hosts:
-  - prometheus.rocket.dev.cray.com
+  - prometheus.SYSTEM_DOMAIN_NAME
   http:
   - match:
     - authority:
-        exact: prometheus.rocket.dev.cray.com
+        exact: prometheus.SYSTEM_DOMAIN_NAME
     route:
     - destination:
         host: cray-sysmgmt-health-promet-prometheus
@@ -44,7 +44,7 @@ spec:
 
 ```
 
-By matching the external hostname in the authority field, Istio’s ingress gateway is able to route incoming traffic from Keycloak Gatekeeper to the `cray-sysmgmt-health-prometheus` service in the `sysmgmt-health` namespace. Also, notice that the VirtualService for prometheus.rocket.dev.cray.com uses the existing `services/services-gateway` Gateway CRD and does not create a new one.
+By matching the external hostname in the authority field, Istio’s ingress gateway is able to route incoming traffic from Keycloak Gatekeeper to the `cray-sysmgmt-health-prometheus` service in the `sysmgmt-health` namespace. Also, notice that the VirtualService for prometheus.SYSTEM_DOMAIN_NAME uses the existing `services/services-gateway` Gateway CRD and does not create a new one.
 
 ### Secure Ingress via Keycloak Gatekeeper
 
