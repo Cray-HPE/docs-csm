@@ -46,16 +46,7 @@ This check will also be conducted in the 'prerequisites.sh' script listed below 
 
 Perform these steps to update customizations.yaml:
 
-1. If you manage customizations.yaml in an external Git repository ([as
-   recommended](../../install/prepare_site_init.md#version-control-site-init-files)),
-   then clone a local working tree, e.g.:
-
-   ```bash
-   ncn-m001# git clone <URL> site-init
-   ncn-m001# cd site-init
-   ```
-
-   Otherwise extract customizations.yaml from the `site-init` secret:
+1. Extract customizations.yaml from the `site-init` secret:
 
    ```bash
    ncn-m001# cd /tmp
@@ -75,10 +66,14 @@ Perform these steps to update customizations.yaml:
    ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
    ```
 
-4. Commit changes to customizations.yaml if using an external Git repository,
+4. If using an exteral git repository for managing customizations ([as recommended](../../install/prepare_site_init.md#version-control-site-init-files)),
+   clone a local working tree and and commit appropriate changes to customizations.yaml,
    e.g.:
 
    ```bash
+   ncn-m001# git clone <URL> site-init
+   ncn-m001# cp /tmp/customizations.yaml site-init
+   ncn-m001# cd site-init
    ncn-m001# git add customizations.yaml
    ncn-m001# git commit -m 'Remove Gitea PVC configuration from customizations.yaml'
    ncn-m001# git push
