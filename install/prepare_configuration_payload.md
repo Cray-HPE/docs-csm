@@ -59,7 +59,7 @@ For more description of these settings and the default values, see [Default IP A
 | --site-dns 172.30.84.40 | Site DNS servers to be used by the PIT node |
 | --install-ncn-bond-members p1p1,p10p1 | NICs on each management node to become bond0 |
 | --application-node-config-yaml application_node_config.yaml | Name of `application_node_config.yaml` |
-| --cabinets-yaml cabinets.yaml | Name of `application_node_config.yaml` |
+| --cabinets-yaml cabinets.yaml | Name of `cabinets.yaml` |
 
    * This is a long list of options. It can be helpful to create a Bash script file to call the `csi` command with all of these options, and then edit that file to adjust the values for the particular system being installed.
    * The `bootstrap-ncn-bmc-user` and `bootstrap-ncn-bmc-pass` must match what is used for the BMC account and its password for the management nodes.
@@ -72,7 +72,7 @@ For more description of these settings and the default values, see [Default IP A
    * An override to default cabinet IPv4 subnets can be made with the `hmn-mtn-cidr` and `nmn-mtn-cidr` parameters.
    * Several parameters (`can-gateway`, `can-cidr`, `can-static-pool`, `can-dynamic-pool`) describe the CAN (Customer Access network). The `can-gateway` is the common gateway IP used for both spine switches and commonly referred to as the Virtual IP for the CAN. The `can-cidr` is the IP subnet for the CAN assigned to this system. The `can-static-pool` and `can-dynamic-pool` are the MetalLB address static and dynamic pools for the CAN. The `can-external-dns` is the static IP assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded. The `can-external-dns` IP must be within the `can-static-pool` range.
    * Set `ntp-pool` to a reachable NTP server.
-   * The `application_node_config.yaml` file is optional, but if you have one describing the mapping between prefixes in `hmn_connections.csv` that should be mapped to HSM subroles, you need to include a command line option to have it used. See [Create Application Node YAML](create_application_node_config_yaml.md).
+   * The `application_node_config.yaml` file is required. It is used to describe the mapping between prefixes in `hmn_connections.csv` and HSM subroles. This file also defines aliases application nodes. For details, see [Create Application Node YAML](create_application_node_config_yaml.md).
    * For systems that use non-sequential cabinet id numbers, use `cabinets-yaml` to include the `cabinets.yaml` file. This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to explicitly specify the id of every cabinet in the system. See [Create Cabinets YAML](create_cabinets_yaml.md).
 
 <a name="configuration_payload_files"></a>
