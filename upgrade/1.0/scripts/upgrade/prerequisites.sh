@@ -291,7 +291,7 @@ if [[ $state_recorded == "0" ]]; then
       exit 1
     fi
 
-    rpm --force -Uvh $(find $CSM_RELEASE -name \*csm-testing\* | sort | tail -1)
+    rpm --force -Uvh $(find $CSM_RELEASE/rpm/cray/csm/sle-15sp2/noarch/ -name \*csm-testing\* | sort | tail -1)
     GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-preflight-tests.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
 
     record_state ${state_name} $(hostname)
