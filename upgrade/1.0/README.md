@@ -236,7 +236,7 @@ ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/csm-service-upgrade.sh
 
 ## Troubleshooting and Recovering from Errors During or After Upgrade
 
-### Rerun failed steps
+### Rerun a step/script
 When running upgrade scripts, each script record what has been done successfully on a node. This `state` file is stored at `/ect/cray/upgrade/csm/{CSM_VERSION}/{NAME_OF_NODE}/state`. If a rerun is required, you will need to remove the recorded steps from this file.
 
 Here is an example of state file of `ncn-m001`:
