@@ -147,6 +147,12 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
    x3000c0s1b0n0,Management,Master,a4:bf:01:37:87:32,b8:59:9f:c7:12:f2,b8:59:9f:c7:12:f2,b8:59:9f:c7:12:f3
    ```
 
+10. If the `script.ipxe` file was renamed in the first step of this procedure, then restore it to its original location.
+    
+    ```bash
+    pit# mv /var/www/boot/script.ipxe.bak /var/www/boot/script.ipxe
+    ```
+
 <a name="procedure-serial-consoles"></a>
 ## Procedure: Serial Consoles
 
