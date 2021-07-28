@@ -596,16 +596,44 @@ The LiveCD needs to authenticate with the cluster to facilitate the rest of the 
 <a name="bgp-routing"></a>
 #### 4.2 BGP Routing
 
-After the NCNs are booted, the BGP peers will need to be checked and updated if the neighbor IPs are incorrect on the switches. See the doc to [Check and Update BGP Neighbors](../operations/update_bgp_neighbors.md).
+After the NCNs are booted, the BGP peers will need to be checked and updated if the neighbor IP addresses are incorrect on the switches. Follow the steps below and see [Check and Update BGP Neighbors](../operations/update_bgp_neighbors.md) for more details on the BGP configuration.
 
-1. Make sure you clear the BGP sessions here.
-   - Aruba:`clear bgp *`
+1. Make sure the SYSTEM_NAME variable is set to name of your system.
+
+   ```bash
+   pit# export SYSTEM_NAME=eniac
+   ```
+
+1. Determine the IP addresses for the switches that are peering.
+
+   ```bash
+   pit# grep peer-address /var/www/ephemeral/prep/${SYSTEM_NAME}/metallb.yaml
+   ```
+
+1. Determine the IP address of the worker NCNs.
+
+   ```bash
+   pit# grep -B1 "name: ncn-w" /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN.yaml
+   ```
+ 
+1. Clear the BGP peering sessions by running the following commands on BOTH of the switches found above.  You should see either "arubanetworks" or "Mellanox" in the first output you see when you log in to the switch.
+   - Aruba: `clear bgp *`
    - Mellanox: `clear ip bgp all`
+     - Make sure to run `enable` when you first log in to the Mellanox switch.
 
-1. **`NOTE`**: At this point the peering sessions with the BGP neighbors should be in IDLE, CONNECT, or ACTIVE state and not ESTABLISHED state. This is because the MetalLB speaker pods have not been deployed yet. If the switch is an Aruba, you will have one peering session ESTABLISHED with the other switch. You should check that all of the neighbor IP addresses are correct.
+1. Check the status of the BGP peering sessions.
+   - Aruba: `show bgp ipv4 unicast summary`
+   - Mellanox:  `show ip bgp summary`
 
-1. If needed, the following helper scripts are available for the various switch types:
+   You should see a neighbor for each of the workers NCN IP addresses found above.   If it is an Aruba switch, you will also see a neighbor for the other switch of the pair that are peering.
 
+   At this point the peering sessions with the worker IP addresses should be in IDLE, CONNECT, or ACTIVE state and not ESTABLISHED state.  This is because the MetalLB speaker pods have not been deployed yet.
+ 
+   You should see that the MsgRcvd and MsgSent columns for the worker IP addresses are 0.
+
+1. If the neighbor IP addresses do not match the worker NCN IP addresses, use the helper script for your switch type to configure the BGP peers.
+
+   This command will list the available helper scripts.
    ```bash
    pit# ls -1 /usr/bin/*peer*py
    ```
