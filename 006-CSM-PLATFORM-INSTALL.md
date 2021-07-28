@@ -500,7 +500,7 @@ Once the loader job has completed successfully running `./install.sh` again is e
 ### Error: not ready: https://packages.local
 
 The infamous `error: not ready: https://packages.local` indicates that from
-the caller’s perspective, Nexus not ready to receive writes. However, it most
+the caller's perspective, Nexus not ready to receive writes. However, it most
 likely indicates that a Nexus setup utility was unable to connect to Nexus
 via the `packages.local` name. Since the install does not attempt to connect
 to `packages.local` until Nexus has been successfully deployed, the error

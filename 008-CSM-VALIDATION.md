@@ -78,7 +78,7 @@ For a particular postgres cluster expected output similar to the following:
 | cray-sls-postgres-2 | 10.44.0.42 |        | running |  1 |         0 |
 +---------------------+------------+--------+---------+----+-----------+
 ```
-Check the leader pod’s log output for its status as the leader. Such as:
+Check the leader pod's log output for its status as the leader. Such as:
 ```bash
 i am the leader with the lock
 ```
