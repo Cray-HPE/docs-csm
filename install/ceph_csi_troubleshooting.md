@@ -22,7 +22,7 @@ Verify that the ceph-csi requirements are in place
       If it returns a connection error then assume Ceph is not installed. See [Rerun Storage Node cloud-init](#rerun_storage_node_cloud-init).  
    1. Verify all post-Ceph-install tasks have run
 
-      Log in to ncn-s001 and check /etc/cray/ceph for completed task files.
+      Log in to ncn-s001 and check /etc/cray/ceph for completed task files (ceph_k8s_initialized & csi_initialized).
 
       ```bash
       ncn-s001# ls /etc/cray/ceph/
@@ -35,7 +35,7 @@ Verify that the ceph-csi requirements are in place
 
    1. Check to see if k8s ceph-csi prerequisites have been created
 
-      These commands can be run this from any storage, master, or worker node.
+      These commands can be run this from any master, worker node, or ncn-s001.
 
       ```bash
       ncn# kubectl get cm

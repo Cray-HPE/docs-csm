@@ -85,11 +85,11 @@ Later in the installation process the HPC Firmware Pack will be installed on the
 
    > **Skip this section if none of the management nodes are booted**
 
-   If any of the management nodes are booted with Linux, they have previous disk data on them which should be wiped.
+   If any of the management nodes are booted with Linux, then they have previous installations data on them which should be wiped.
 
-   1. **REQUIRED** For each management node, **excluding** ncn-m001, log in and do a full wipe of the storage on the node. 
-
-   See [full wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#full-wipe)
+   >**REQUIRED** If the above is true, then For each management node, **excluding** ncn-m001, log in and do a full wipe of the of the node.
+   >
+   > See [full wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#full-wipe)
 
 <a name="power_off_booted_nodes"></a>
 ### Power Off Booted Nodes
