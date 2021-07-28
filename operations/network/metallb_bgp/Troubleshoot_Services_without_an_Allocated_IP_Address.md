@@ -36,7 +36,7 @@ This procedure requires administrative privileges.
                               heritage=Tiller
                               istio=ingressgateway
                               release=cray-istio
-    Annotations:              external-dns.alpha.kubernetes.io/hostname: shasta.drax.dev.cray.com,auth.drax.dev.cray.com,s3.drax.dev.cray.com
+    Annotations:              external-dns.alpha.kubernetes.io/hostname: shasta.SYSTEM_DOMAIN_NAME,auth.SYSTEM_DOMAIN_NAME,s3.SYSTEM_DOMAIN_NAME
                              ** metallb.universe.tf/address-pool: customer-access**
     Selector:                 app=istio-ingressgateway,istio=ingressgateway,release=cray-istio
     Type:                     LoadBalancer
