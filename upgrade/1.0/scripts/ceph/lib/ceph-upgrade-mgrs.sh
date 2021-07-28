@@ -11,7 +11,7 @@ for host in $(ceph node ls| jq -r '.mgr|keys[]')
  done
  echo "Sleeping 20 seconds..."
  sleep 20
- echo "Enabling ceph orchestrator"
+ echo "Enabling Ceph orchestrator"
  ceph mgr module enable orchestrator
  echo "Sleeping 20 seconds..."
  sleep 20
@@ -19,14 +19,14 @@ for host in $(ceph node ls| jq -r '.mgr|keys[]')
  ceph mgr module enable cephadm
  echo "Sleeping 20 seconds..."
  sleep 20
- echo "Setting the ceph orchestrator backend to cephadm"
+ echo "Setting the Ceph orchestrator backend to cephadm"
  ceph orch set backend cephadm
  
- echo "Verify ceph orchestrator's backend is cephadm"
+ echo "Verify Ceph orchestrator's backend is cephadm"
  while [[ $avail != "true" ]] && [[ $backend != "cephadm" ]]
  do
   avail=$(ceph orch status -f json-pretty|jq .available)
   backend=$(ceph orch status -f json-pretty|jq -r .backend)
 done
-echo "Ceph orchestrator has been set to backend $backend and it's availability is : $avail"
+echo "Ceph orchestrator has been set to backend $backend and its availability is : $avail"
 }
