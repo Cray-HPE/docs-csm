@@ -1,4 +1,4 @@
-# Management Network Access Port configurations.
+# Management Network Access Port configurations
 
 # Requirements
 - Access to switches
@@ -102,7 +102,7 @@ interface lag 17 multi-chassis
 ```
 
 # Gigabyte/Intel NCN Worker port configuration
-The cabling guidelines for all servers can be found in [Cable Management Network Servers](../install/cable_management_network_servers.md).
+The cabling guidelines for all servers can be found in [Cable Management Network Servers](../../../install/cable_management_network_servers.md).
 
 Mellanox Port Config
 ```
