@@ -65,7 +65,7 @@ The system is installed.
             kubernetes cluster.local
             k8s_external internal.shasta
             prometheus 0.0.0.0:9153
-            etcd mug.dev.cray.com {
+            etcd SYSTEM_DOMAIN_NAME {
                 stubzones
                 path /skydns
                 endpoint http://cray-externaldns-etcd-client:2379
@@ -170,29 +170,29 @@ The system is installed.
             - --self-signed-tls-hostnames
             - $(INSTANCE_IP)
             - --self-signed-tls-hostnames
-            - prometheus.mug.dev.cray.com
+            - prometheus.SYSTEM_DOMAIN_NAME
             - --self-signed-tls-hostnames
-            - alertmanager.mug.dev.cray.com
+            - alertmanager.SYSTEM_DOMAIN_NAME
             - --self-signed-tls-hostnames
-            - grafana.mug.dev.cray.com
+            - grafana.SYSTEM_DOMAIN_NAME
             - --self-signed-tls-hostnames
-            - prometheus-istio.mug.dev.cray.com
+            - prometheus-istio.SYSTEM_DOMAIN_NAME
             - --self-signed-tls-hostnames
-            - grafana-istio.mug.dev.cray.com
+            - grafana-istio.SYSTEM_DOMAIN_NAME
             - --self-signed-tls-hostnames
-            - kiali-istio.mug.dev.cray.com
+            - kiali-istio.SYSTEM_DOMAIN_NAME
             - --self-signed-tls-hostnames
-            - jaeger-istio.mug.dev.cray.com
+            - jaeger-istio.SYSTEM_DOMAIN_NAME
             - --self-signed-tls-hostnames
-            - prometheus-kube.mug.dev.cray.com
+            - prometheus-kube.SYSTEM_DOMAIN_NAME
             - --self-signed-tls-hostnames
-            - alertmanager-kube.mug.dev.cray.com
+            - alertmanager-kube.SYSTEM_DOMAIN_NAME
             - --self-signed-tls-hostnames
-            - grafana-kube.mug.dev.cray.com
+            - grafana-kube.SYSTEM_DOMAIN_NAME
             - --self-signed-tls-hostnames
-            - prometheus-ceph.mug.dev.cray.com
+            - prometheus-ceph.SYSTEM_DOMAIN_NAME
             - --self-signed-tls-hostnames
-            - vcs.mug.dev.cray.com
+            - vcs.SYSTEM_DOMAIN_NAME
             - --secure-cookie=false
             - --preserve-host
             - --resources
@@ -256,7 +256,7 @@ The system is installed.
           dnsPolicy: ClusterFirst
           hostAliases:
           - hostnames:
-            - auth.mug.dev.cray.com
+            - auth.SYSTEM_DOMAIN_NAME
             ip: 10.92.100.50
           restartPolicy: Always
           schedulerName: default-scheduler
@@ -346,7 +346,7 @@ The system is installed.
                 X509v3 Authority Key Identifier: 
                     keyid:E2:A3:D6:77:B9:BB:98:55:D6:15:00:2A:A7:6F:AA:E0:56:82:CE:D0
                 X509v3 Subject Alternative Name: 
-                    DNS:ncn-m001.local, DNS:ncn-m002.local, DNS:ncn-m003.local, DNS:istio-ingressgateway.istio-system.svc.cluster.local, DNS:*.mug.dev.cray.com, DNS:mgmt-plane-cmn.local, DNS:api-gw-service-nmn.local
+                    DNS:ncn-m001.local, DNS:ncn-m002.local, DNS:ncn-m003.local, DNS:istio-ingressgateway.istio-system.svc.cluster.local, DNS:*.SYSTEM_DOMAIN_NAME, DNS:mgmt-plane-cmn.local, DNS:api-gw-service-nmn.local
         Signature Algorithm: sha256WithRSAEncryption
              0c:e9:a5:9b:58:2f:b3:c8:4c:c8:20:4b:0f:7d:07:f0:4a:7b:
              f4:8f:31:de:27:1a:59:17:bc:d6:c3:a5:af:ff:8d:f5:a9:58:

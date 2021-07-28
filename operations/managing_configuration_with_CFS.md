@@ -189,11 +189,11 @@ Multiple product configuration layers may be created later to apply multiple cha
    ncn# kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}'
    1.0.0-beta.19:
      configuration:
-       clone_url: https://vcs.eniac.dev.cray.com/vcs/cray/csm-config-management.git
+       clone_url: https://vcs.SYSTEM_DOMAIN_NAME/vcs/cray/csm-config-management.git
        commit: 43ecfa8236bed625b54325ebb70916f55884b3a4
        import_branch: cray/csm/1.5.8
        import_date: 2021-06-01 22:55:34.869501
-       ssh_url: git@vcs.eniac.dev.cray.com:cray/csm-config-management.git
+       ssh_url: git@vcs.SYSTEM_DOMAIN_NAME:cray/csm-config-management.git
      images:
        cray-shasta-csm-sles15sp2-barebones.x86_64-shasta-1.5:
          id: eea6f5d2-8fa0-4a58-a435-d519b0b7d481
