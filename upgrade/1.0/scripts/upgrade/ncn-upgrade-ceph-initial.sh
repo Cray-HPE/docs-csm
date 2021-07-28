@@ -26,7 +26,7 @@ NOTE:
       .
       .
 EOF
-read -p "Read and act on above steps. Press any key to continue ..."
+read -p "Read and act on above steps. Press Enter key to continue ..."
 
 state_name="CEPH_PARTITIONS"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
@@ -51,6 +51,6 @@ NOTE:
       id:     0534e7c4-dea8-49f2-9c56-cc5be5c9b9f7
       health: HEALTH_OK
 EOF
-read -p "Read and act on above steps. Press any key to continue ..."
+read -p "Read and act on above steps. Press Enter key to continue ..."
 
 ok_report
