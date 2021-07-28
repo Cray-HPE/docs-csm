@@ -41,6 +41,8 @@ The HPC Firmware Pack is available in the same location as other product streams
 
 See the HPC Firmware Pack product stream for required minimum levels and procedures to check and update.
 
+**`INTERNAL USE`**  The HPC Firmware Pack is available at https://arti.dev.cray.com/artifactory/shasta-distribution-stable-local/HFP-firmware/
+
 Later in the installation process the HPC Firmware Pack will be installed on the PIT node and added to the Nexus repository so that it can be used in conjunction with the Firmware Action Services (FAS) to update firmware on other components.
 
 <a name="quiesce_compute_and_application_nodes"></a>
