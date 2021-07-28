@@ -45,7 +45,7 @@ The following administrative topics can be found in this guide:
    * [Configure the Cray Command Line Interface (cray CLI)](configure_cray_cli.md)
    * [Change Passwords and Credentials](CSM_product_management/Change_Passwords_and_Credentials.md)
    * [Manage a Configuration with CFS](CSM_product_management/Manage_a_Configuration_with_CFS.md)
-   * [Accessing LiveCD USB Device After Reboot](accessing_livecd_usb_device_after_reboot.md)
+   * [Access the LiveCD USB Device After Reboot](Access_LiveCD_USB_Device_After_Reboot.md)
    * [Post-Install Customizations](CSM_product_management/Post_Install_Customizations.md)
    * [Validate Signed RPMs](CSM_product_management/Validate_Signed_RPMs.md)
 
@@ -643,6 +643,7 @@ See [Update Firmware with FAS](firmware/Update_Firmware_with_FAS.md) for a list 
   * [FAS Recipes](firmware/FAS_Recipes.md)
   * [FAS Admin Procedures](firmware/FAS_Admin_Procedures.md)
   * [FAS Use Cases](firmware/FAS_Use_Cases.md)
+  * [Upload Olympus BMC Recovery Firmware into TFTP Server](firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md)
 
 
 <a name="user-access-service-uas"></a>
