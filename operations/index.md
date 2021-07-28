@@ -44,9 +44,8 @@ The following administrative topics can be found in this guide:
    * [Configure Keycloak Account](CSM_product_management/Configure_Keycloak_Account.md)
    * [Configure the Cray Command Line Interface (cray CLI)](configure_cray_cli.md)
    * [Change Passwords and Credentials](CSM_product_management/Change_Passwords_and_Credentials.md)
-   * [Managing Configuration with CFS](managing_configuration_with_CFS.md)
+   * [Manage a Configuration with CFS](CSM_product_management/Manage_a_Configuration_with_CFS.md)
    * [Accessing LiveCD USB Device After Reboot](accessing_livecd_usb_device_after_reboot.md)
-   * [Configure NTP on NCNs](configure_ntp_on_ncns.md)
    * [Post-Install Customizations](CSM_product_management/Post_Install_Customizations.md)
    * [Validate Signed RPMs](CSM_product_management/Validate_Signed_RPMs.md)
 
@@ -518,6 +517,7 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   * [Dump a Non-Compute Node](node_management/Dump_a_Non-Compute_Node.md)
   * [Enable Passwordless Connections to Liquid Cooled Node BMCs](node_management/Enable_Passwordless_Connections_to_Liquid_Cooled_Node_BMCs.md)
     * [View BIOS Logs for Liquid Cooled Nodes](node_management/View_BIOS_Logs_for_Liquid_Cooled_Nodes.md)
+  * [Configure NTP on NCNs](node_management/Configure_NTP_on_NCNs.md)
 
 
 <a name="reds"></a>

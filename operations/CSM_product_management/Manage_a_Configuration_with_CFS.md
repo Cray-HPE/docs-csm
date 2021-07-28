@@ -1,4 +1,4 @@
-# Managing Configuration with CFS
+# Manage a Configuration with CFS
 
 Many product streams need to use the Configuration Framework Service (CFS) to apply post-boot configuration to the management nodes.
 This post-boot configuration by CFS is known as NCN personalization. CFS is also used for the compute nodes and application nodes
