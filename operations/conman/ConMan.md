@@ -11,7 +11,8 @@ In previous releases, the entire service was contained in the cray-conman pod, a
 ### Table of Contents
 
 * [Access Compute Node Logs](Access_Compute_Node_Logs.md)
-* [Access Console Log Data Via the System Monitoring Framework \(SMF\)](Access_Console_Log_Data_Via_the_System_Monitoring_Framework_SMF.md)
+* [Access Console Log Data Via the System Monitoring Framework (SMF)](Access_Console_Log_Data_Via_the_System_Monitoring_Framework_SMF.md)
+* [Manage Node Consoles](Manage_Node_Consoles.md)
 * [Log in to a Node Using ConMan](Log_in_to_a_Node_Using_ConMan.md)
 * [Establish a Serial Connection to NCNs](Establish_a_Serial_Connection_to_NCNs.md)
 * [Disable ConMan After System Software Installation](Disable_ConMan_After_System_Software_Installation.md)
