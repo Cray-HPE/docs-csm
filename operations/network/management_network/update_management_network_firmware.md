@@ -4,7 +4,7 @@ This page describes how to update firmware on the Management network switches.
 
 ## Requirements
 
-Access to the switches from the liveCD/ncn-m001
+Access to the switches from the liveCD/ncn-m001.
 
 ## Configuration
 
@@ -20,7 +20,7 @@ total 2.7G
 -rw-r--r-- 1 root root 577M Oct 28 11:45 OS10_Enterprise_10.5.1.4.stable.tar
 ```
 
-## Switch firmware
+## Switch Firmware
 
 | Vendor | Model | Version |
 | --- | --- | --- |
@@ -34,7 +34,7 @@ total 2.7G
 | Mellanox | MSN2100 | 3.9.1014 |
 | Mellanox | MSN2700 | 3.9.1014 |
 
-## Aruba Firmware Best practices
+## Aruba Firmware Best Practices
 
 Aruba software version number explained:
 
@@ -75,7 +75,7 @@ Continue (y/n)? y
 
 VSX software upgrade command can automatically upgrade both of the peers in VSX topology by staging upgrade and automatically doing traffic shifting between peers to minimize impact to network. In below examples we will give you the option for standalone and vsx-pair upgrade. 
 
-## Aruba Firmware Update - standalone
+## Aruba Firmware Update - Standalone
 
 SSH into the switch you want to upgrade.
 
@@ -121,7 +121,7 @@ Active Image : primary
 Service OS Version : FL.01.07.0002                 
 BIOS Version       : FL.01.0002
 ```
-## Aruba Firmware Update - VSX software upgrade
+## Aruba Firmware Update - VSX Software Upgrade
 
 SSH into the Primary VSX member of the VSX-pair you want to upgrade.
 

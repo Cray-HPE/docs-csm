@@ -1,10 +1,10 @@
-# Management Network Access Port configurations
+# Management Network Access Port Configurations
 
-# Requirements
+## Requirements
 - Access to switches
 - SHCD
 
-# Configuration
+## Configuration
 
 - This configuration describes the edge port configuration, you will find these in the NMN/HMN/Mountain-TDS Management Tab of the SHCD.
 - Typically these are ports that are connected to iLOs (BMCs), gateway nodes, or compute nodes/CMM switches.
@@ -32,7 +32,7 @@ sw-leaf-001(config)#
     spanning-tree port-type admin-edge
 ```
 
-## Apollo Server port config
+## Apollo Server Port Configuration
 This is for the Apollo XL645d only.
 
 iLO BMC port
@@ -58,7 +58,7 @@ interface 1/1/14
     exit 
 ```
 
-# UAN port configuration
+## UAN Port Configuration
 - UANs have the same network connections as Shasta v1.3.
 - One connection will go to a NMN(VLAN2) access port, this is where the UAN will pxe boot and communicate with internal systems. (see SHCD for UAN cabling).
 - ONE OF THESE PORTS IS SHUTDOWN.
@@ -101,7 +101,7 @@ interface lag 17 multi-chassis
     exit
 ```
 
-# Gigabyte/Intel NCN Worker port configuration
+## Gigabyte/Intel NCN Worker Port Configuration
 The cabling guidelines for all servers can be found in [Cable Management Network Servers](../../../install/cable_management_network_servers.md).
 
 Mellanox Port Config
@@ -124,7 +124,7 @@ interface mlag-port-channel 1 switchport hybrid allowed-vlan add 7
 interface mlag-port-channel 1 switchport hybrid allowed-vlan add 10
 ```
 
-# HPE NCN Worker port configuration
+## HPE NCN Worker Port Configuration
 Aruba Port Config
 ```
 sw-spine-001 & sw-spine-002 (config)#
@@ -147,7 +147,7 @@ sw-spine-001 & sw-spine-002 (config)#
     spanning-tree port-type admin-edge
 ```
 
-# Gigabyte/Intel NCN Master port configuration
+## Gigabyte/Intel NCN Master port configuration
 Mellanox Port config
 ```
 sw-spine-002 [gamora-mlag-domain: master] # show run int ethernet 1/1
@@ -169,7 +169,7 @@ interface mlag-port-channel 1 switchport hybrid allowed-vlan add 7
 interface mlag-port-channel 1 switchport hybrid allowed-vlan add 10
 ```
 
-# HPE NCN Master port configuration
+## HPE NCN Master Port Configuration
 Aruba Port Config
 ```
 sw-spine02# show run int 1/1/7
@@ -192,7 +192,7 @@ interface lag 4 multi-chassis
     exit
 ```
 
-# Gigabyte/Intel NCN Storage port configuration
+## Gigabyte/Intel NCN Storage Port Configuration
 Mellanox Port config
 ```
 sw-spine-002 [gamora-mlag-domain: master] # show run int ethernet 1/7
@@ -213,7 +213,7 @@ interface mlag-port-channel 7 switchport hybrid allowed-vlan add 7
 interface mlag-port-channel 7 switchport hybrid allowed-vlan add
 ```
 
-# HPE NCN Storage port configuration
+## HPE NCN Storage Port Configuration
 
 Aruba Port Config
 ```
@@ -258,7 +258,7 @@ interface lag 4 multi-chassis
     exit
 ```
 
-# CMM port configuration.
+# CMM Port Configuration
 
 - This requires updated CMM firmware. (version 1.4.20)
 - A static LAG will be configured on the CDU switches.
@@ -315,7 +315,7 @@ sw-cdu-001 & sw-cdu-002 (config)#
     flowcontrol transmit on
 ```
 
-# CEC port configuration.
+# CEC Port Configuration
 
 The VLAN used here is generated from CSI. It is the HMN_MTN VLAN that is assigned to that cabinet.
 
@@ -329,9 +329,9 @@ interface ethernet1/1/50
     flowcontrol transmit off
     spanning-tree bpduguard enable
     spanning-tree port type edge
-    ```
+```
 
- ## Aruba
+## Aruba
 ```
 sw-cdu-001 & sw-cdu-002 (config)#
     interface 1/1/1

@@ -1,6 +1,6 @@
-# Management Network ACL configuration
+# Management Network ACL Configuration
 
-This page describes the purpose of the ACLs and how they are configured
+This page describes the purpose of the ACLs and how they are configured.
 
 # Requirements
 - Access to the switches 

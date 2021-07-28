@@ -1,11 +1,10 @@
-# Management Network CAN setup
+# Management Network CAN Setup
 
-Access from the customer site to the system over shared networks is known as the Customer Access Network (CAN)
+Access from the customer site to the system over shared networks is known as the Customer Access Network (CAN).
 
 # Requirements
-Access to switches
-
-SHCD
+- Access to switches
+- SHCD
 
 # Configuration
 
