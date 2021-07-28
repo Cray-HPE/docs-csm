@@ -471,7 +471,7 @@ This will enable SSH, and other services when the LiveCD starts.
     conman.conf-------------------> /mnt/cow/rw/etc/conman.conf...OK
     ```
 
-1. Optionally set the hostname, print it into the hostname file.
+1. Set the hostname and print it into the hostname file.
    > Do not confuse other admins and name the LiveCD "ncn-m001", please append the "-pit" suffix
    > which will indicate that the node is booted from the LiveCD.
 
