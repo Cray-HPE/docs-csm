@@ -36,7 +36,7 @@ function scale_down_cephfs_clients () {
           # the upgrade script.  Let's be careful not to write zeros in the 
           # replica count file.
           #
-          if [ "$deployment" == "cray-ipxe" ]; then
+          if [ "$deployment" == "cray-tftp" ]; then
             num_replicas=3
           else
             num_replicas=1
