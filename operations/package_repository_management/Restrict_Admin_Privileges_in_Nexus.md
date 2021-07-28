@@ -23,6 +23,8 @@ The system is fully installed.
     ```
 
 2.  Patch the `nexus` VirtualService resource in the nexus namespace to remove the `X-WEBAUTH-USER` request header when the `authority` matches `packages.local` or `registry.local`.
+    
+    Replace SYSTEM_DOMAIN_NAME in the following command before running it.
 
     ```bash
     ncn# kubectl patch virtualservice -n nexus nexus --type merge --patch \
@@ -31,7 +33,7 @@ The system is fully installed.
     "request":{"remove":["X-WEBAUTH-USER"]}}}]},{"match":[{"authority":\
     {"exact":"registry.local"}}],"route":[{"destination":{"host":"nexus",\
     "port":{"number":5003}},"headers":{"request":{"remove":["X-WEBAUTH-USER"]}}}]},\
-    {"match":[{"authority":{"exact":"nexus.baldar.dev.cray.com"}}],"route":\
+    {"match":[{"authority":{"exact":"nexus.SYSTEM_DOMAIN_NAME"}}],"route":\
     [{"destination":{"host":"nexus","port":{"number":80}},"headers":\
     {"request":{"add":{"X-WEBAUTH-USER":"admin"},"remove":["Authorization"]}}}]}]}}'
     ```
@@ -105,6 +107,8 @@ The system is fully installed.
 
 **Troubleshooting:** If the patch needs to be removed for maintenance activities or any other purpose, run the following command:
 
+Replace SYSTEM_DOMAIN_NAME in the following command before running it.
+
 ```bash
 ncn# kubectl patch virtualservice -n nexus nexus --type merge \
 --patch '{"spec":{"http":[{"match":[{"authority":{"exact":"packages.local"}}]\
@@ -113,7 +117,7 @@ ncn# kubectl patch virtualservice -n nexus nexus --type merge \
 {"match":[{"authority":{"exact":"registry.local"}}],"route":[{"destination":\
 {"host":"nexus","port":{"number":5003}},"headers":{"request":{"add":\
 {"X-WEBAUTH-USER":"admin"},"remove":["Authorization"]}}}]},{"match":\
-[{"authority":{"exact":"nexus.baldar.dev.cray.com"}}],"route":\
+[{"authority":{"exact":"nexus.SYSTEM_DOMAIN_NAME"}}],"route":\
 [{"destination":{"host":"nexus","port":{"number":80}},"headers":\
 {"request":{"add":{"X-WEBAUTH-USER":"admin"},"remove":["Authorization"]}}}]}]}}'
 ```

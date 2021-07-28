@@ -154,7 +154,7 @@ There are several starting points for modifying compute images. An admin can sta
     host = "cray-ims-0e633134-41dc-48eb-a6a4-a2535cb1a36c-service.default.svc.cluster.local"
     port = 22
     [ssh_containers.connection_info.customer_access]
-    host = "0e633134-41dc-48eb-a6a4-a2535cb1a36c.ims.system.dev.cray.com"
+    host = "0e633134-41dc-48eb-a6a4-a2535cb1a36c.ims.SYSTEM_DOMAIN_NAME"
     port = 22
     ```
 
@@ -162,7 +162,7 @@ There are several starting points for modifying compute images. An admin can sta
 
     ```bash
     ncn# export IMS_JOB_ID=0e633134-41dc-48eb-a6a4-a2535cb1a36c
-    ncn# export IMS_SSH_HOST=0e633134-41dc-48eb-a6a4-a2535cb1a36c.ims.system.dev.cray.com
+    ncn# export IMS_SSH_HOST=0e633134-41dc-48eb-a6a4-a2535cb1a36c.ims.SYSTEM_DOMAIN_NAME
     ncn# export IMS_SSH_PORT=22
     ```
 

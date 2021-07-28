@@ -22,7 +22,7 @@ This procedure requires administrative privileges.
         kubernetes cluster.local
         k8s_external internal.shasta
         prometheus 0.0.0.0:9153
-        etcd vulcan.dev.cray.com {
+        etcd SYSTEM_DOMAIN_NAME {
             stubzones
             path /skydns
             endpoint http://cray-externaldns-etcd-client:2379
@@ -52,7 +52,7 @@ This procedure requires administrative privileges.
             hosts /etc/coredns/hosts {
                fallthrough
             }
-            etcd vulcan.dev.cray.com {
+            etcd SYSTEM_DOMAIN_NAME {
                 stubzones
                 path /skydns
                 endpoint http://cray-externaldns-etcd-client:2379
@@ -60,7 +60,7 @@ This procedure requires administrative privileges.
         }
       hosts: |-
         # IP FQDN short
-        10.99.1.51 dn07.vulcan.dev.cray.com dn07
+        10.99.1.51 dn07.SYSTEM_DOMAIN_NAME dn07
     ```
 
 3.  Restart the CoreDNS pods once the ConfigMap is updated.
