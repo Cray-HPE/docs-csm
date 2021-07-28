@@ -284,6 +284,7 @@ The system management components are broken down into a series of micro-services
    *   [About Postgres](kubernetes/About_Postgres.md)
        *   [Troubleshoot Postgres Database](kubernetes/Troubleshoot_Postgres_Database.md)
        *   [Recover from Postgres WAL Event](kubernetes/Recover_from_Postgres_WAL_Event.md)
+       *   [Restore Postgres](kubernetes/Restore_Postgres.md)
        *   [Disaster Recovery for Postgres](kubernetes/Disaster_Recovery_Postgres.md)
        *   [View Postgres Information for System Databases](kubernetes/View_Postgres_Information_for_System_Databases.md)
    *   [Kubernetes Troubleshooting Information](kubernetes/Kubernetes_Troubleshooting_Information.md)
