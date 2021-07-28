@@ -92,8 +92,10 @@ if [[ $state_recorded == "0" ]]; then
 else
     echo "====> ${state_name} has been completed"
 fi
-
-read -s -p "Enter SSH password of switches:" SW_PASSWORD
+echo "******************************************"
+echo "******************************************"
+echo "****  Enter SSH password of switches: ****"
+read -s -p "" SW_PASSWORD
 echo
 export SW_ARUBA_PASSWORD=$SW_PASSWORD
 export SW_MELLANOX_PASSWORD=$SW_PASSWORD
