@@ -16,7 +16,7 @@ NOTE:
     In upgrade/1.0/resource_material/k8s/worker-reference.md
     step 1 and 2 are not automated
 EOF
-read -p "Read and act on above steps. Press any key to continue ..."
+read -p "Read and act on above steps. Press Enter key to continue ..."
 
 state_name="ENSURE_NEXUS_CAN_START_ON_ANY_NODE"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
