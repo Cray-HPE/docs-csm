@@ -435,48 +435,86 @@ The configuration workflow described here is intended to help understand the exp
 <a name="check-for-unused-drives-on-utility-storage-nodes"></a>
 #### 3.3 Check for Unused Drives on Utility Storage Nodes
 
-> **`IMPORTANT:`** Do the following if NCNs use Gigabyte hardware.
+> **`IMPORTANT:`** Do the following if NCNs are Gigabyte hardware.
 > **`IMPORTANT:`** the cephadm may output this warning "WARNING: The same type, major and minor should not be used for multiple devices.". You can ignore this warning. 
 
 ##### Option 1
 
   If you have OSDs on each node (`ceph osd tree` can show this) then you have all your nodes in Ceph. That means you can utilize the orchestrator to look for the devices.
 
+1. Get the number of osds in the cluster
 
-  ```bash
-  ncn-s001:~ # ceph orch device ls
-Hostname  Path      Type  Serial              Size   Health   Ident  Fault  Available
-ncn-s001  /dev/sda  ssd   PHYF015500M71P9DGN  1920G  Unknown  N/A    N/A    No
-ncn-s001  /dev/sdb  ssd   PHYF016500TZ1P9DGN  1920G  Unknown  N/A    N/A    No
-ncn-s001  /dev/sdc  ssd   PHYF016402EB1P9DGN  1920G  Unknown  N/A    N/A    No
-ncn-s001  /dev/sdd  ssd   PHYF016504831P9DGN  1920G  Unknown  N/A    N/A    No
-ncn-s001  /dev/sde  ssd   PHYF016500TV1P9DGN  1920G  Unknown  N/A    N/A    No
-ncn-s001  /dev/sdf  ssd   PHYF016501131P9DGN  1920G  Unknown  N/A    N/A    No
-ncn-s001  /dev/sdi  ssd   PHYF016500YB1P9DGN  1920G  Unknown  N/A    N/A    No
-ncn-s001  /dev/sdj  ssd   PHYF016500WN1P9DGN  1920G  Unknown  N/A    N/A    No
-ncn-s002  /dev/sda  ssd   PHYF0155006W1P9DGN  1920G  Unknown  N/A    N/A    No
-ncn-s002  /dev/sdb  ssd   PHYF0155006Z1P9DGN  1920G  Unknown  N/A    N/A    No
-ncn-s002  /dev/sdc  ssd   PHYF015500L61P9DGN  1920G  Unknown  N/A    N/A    No
-ncn-s002  /dev/sdd  ssd   PHYF015502631P9DGN  1920G  Unknown  N/A    N/A    No
-ncn-s002  /dev/sde  ssd   PHYF0153000G1P9DGN  1920G  Unknown  N/A    N/A    No
-ncn-s002  /dev/sdf  ssd   PHYF016401T41P9DGN  1920G  Unknown  N/A    N/A    No
-ncn-s002  /dev/sdi  ssd   PHYF016504C21P9DGN  1920G  Unknown  N/A    N/A    No
-ncn-s002  /dev/sdj  ssd   PHYF015500GQ1P9DGN  1920G  Unknown  N/A    N/A    No
-ncn-s003  /dev/sda  ssd   PHYF016402FP1P9DGN  1920G  Unknown  N/A    N/A    No
-ncn-s003  /dev/sdb  ssd   PHYF016401TE1P9DGN  1920G  Unknown  N/A    N/A    No
-ncn-s003  /dev/sdc  ssd   PHYF015500N51P9DGN  1920G  Unknown  N/A    N/A    No
-ncn-s003  /dev/sdd  ssd   PHYF0165010Z1P9DGN  1920G  Unknown  N/A    N/A    No
-ncn-s003  /dev/sde  ssd   PHYF016500YR1P9DGN  1920G  Unknown  N/A    N/A    No
-ncn-s003  /dev/sdf  ssd   PHYF016500X01P9DGN  1920G  Unknown  N/A    N/A    No
-ncn-s003  /dev/sdi  ssd   PHYF0165011H1P9DGN  1920G  Unknown  N/A    N/A    No
-ncn-s003  /dev/sdj  ssd   PHYF016500TQ1P9DGN  1920G  Unknown  N/A    N/A    No
-```
+    ```bash
+    ncn-s001:~ # ceph -f json-pretty osd stat |jq .num_osds
+    24
+    ```
 
-If you have devices that are "Available = Yes" then and they are not being automatically added you may have to zap that device.
+2. Compare your number of OSDs to the output below. 
+   > **NOTE:**  If your ceph cluster is large and has a lot of nodes, you can specify a node after the below command to limit the results.
 
-```bash
-example: ceph orch device zap ncn-s002 /dev/sdc --force 
-```
+    ```bash
+     ncn-s001:~ # ceph orch device ls
+     Hostname  Path      Type  Serial              Size   Health   Ident  Fault  Available
+     ncn-s001  /dev/sda  ssd   PHYF015500M71P9DGN  1920G  Unknown  N/A    N/A    No
+     ncn-s001  /dev/sdb  ssd   PHYF016500TZ1P9DGN  1920G  Unknown  N/A    N/A    No
+     ncn-s001  /dev/sdc  ssd   PHYF016402EB1P9DGN  1920G  Unknown  N/A    N/A    No
+     ncn-s001  /dev/sdd  ssd   PHYF016504831P9DGN  1920G  Unknown  N/A    N/A    No
+     ncn-s001  /dev/sde  ssd   PHYF016500TV1P9DGN  1920G  Unknown  N/A    N/A    No
+     ncn-s001  /dev/sdf  ssd   PHYF016501131P9DGN  1920G  Unknown  N/A    N/A    No
+     ncn-s001  /dev/sdi  ssd   PHYF016500YB1P9DGN  1920G  Unknown  N/A    N/A    No
+     ncn-s001  /dev/sdj  ssd   PHYF016500WN1P9DGN  1920G  Unknown  N/A    N/A    No
+     ncn-s002  /dev/sda  ssd   PHYF0155006W1P9DGN  1920G  Unknown  N/A    N/A    No
+     ncn-s002  /dev/sdb  ssd   PHYF0155006Z1P9DGN  1920G  Unknown  N/A    N/A    No
+     ncn-s002  /dev/sdc  ssd   PHYF015500L61P9DGN  1920G  Unknown  N/A    N/A    No
+     ncn-s002  /dev/sdd  ssd   PHYF015502631P9DGN  1920G  Unknown  N/A    N/A    No
+     ncn-s002  /dev/sde  ssd   PHYF0153000G1P9DGN  1920G  Unknown  N/A    N/A    No
+     ncn-s002  /dev/sdf  ssd   PHYF016401T41P9DGN  1920G  Unknown  N/A    N/A    No
+     ncn-s002  /dev/sdi  ssd   PHYF016504C21P9DGN  1920G  Unknown  N/A    N/A    No
+     ncn-s002  /dev/sdj  ssd   PHYF015500GQ1P9DGN  1920G  Unknown  N/A    N/A    No
+     ncn-s003  /dev/sda  ssd   PHYF016402FP1P9DGN  1920G  Unknown  N/A    N/A    No
+     ncn-s003  /dev/sdb  ssd   PHYF016401TE1P9DGN  1920G  Unknown  N/A    N/A    No
+     ncn-s003  /dev/sdc  ssd   PHYF015500N51P9DGN  1920G  Unknown  N/A    N/A    No
+     ncn-s003  /dev/sdd  ssd   PHYF0165010Z1P9DGN  1920G  Unknown  N/A    N/A    No
+     ncn-s003  /dev/sde  ssd   PHYF016500YR1P9DGN  1920G  Unknown  N/A    N/A    No
+     ncn-s003  /dev/sdf  ssd   PHYF016500X01P9DGN  1920G  Unknown  N/A    N/A    No
+     ncn-s003  /dev/sdi  ssd   PHYF0165011H1P9DGN  1920G  Unknown  N/A    N/A    No
+     ncn-s003  /dev/sdj  ssd   PHYF016500TQ1P9DGN  1920G  Unknown  N/A    N/A    No
+    ```
+
+    If you have devices that are "Available = Yes" and they are not being automatically added you may have to zap that device.
+
+    **IMPORTANT:** Prior to zapping any device please ensure it is not being used.
+
+3. Check to see if the number of devices is less than the number of listed drives or your output from step 1.
+
+   ```bash
+    ncn-s001:~ # ceph orch device ls|grep dev|wc -l
+    24
+    ```
+
+    If the numbers are equal, then you may need to fail your ceph-mgr daemon to get a fresh inventory.
+
+    ```bash
+    ceph mgr fail $(ceph mgr dump | jq -r .active_name)
+    ```
+
+    Give it a minute then re-check `ceph orch` ls to see if the drives are still showing as available.  If so, then proceed to the next step.
+
+4. ssh to the host and look at `lsblk` output and check against the device from the above ceph `orch device ls`
+
+    ```bash
+    ncn-s001:~ # lsblk
+    NAME                                                                                                 MAJ:MIN RM   SIZE RO TYPE   MOUNTPOINT
+    loop0                                                                                                   7:0    0   4.2G  1 loop  / run/    rootfsbase
+    loop1                                                                                                  7:1    0    30G  0 loop
+     └─live-overlay-pool                                                                                  254:8    0   300G  0 dm
+    loop2                                                                                                  7:2    0   300G  0 loop
+     └─live-overlay-pool                                                                                  254:8    0   300G  0 dm
+    sda                                                                                                    8:0    0   1.8T  0 disk
+     └─ceph--0a476f53--8b38--450d--8779--4e587402f8a8-osd--data--b620b7ef--184a--46d7--9a99--771239e7a323 254:7    0   1.8T  0 lvm
+    ```
+
+    1. If it has an LVM volume like above, then it may be in use and you should do the option 2 check below to make sure we can wipe the drive.
 
 ##### Option 2
 
@@ -507,6 +545,12 @@ example: ceph orch device zap ncn-s002 /dev/sdc --force
 
     ```bash
     ncn-s# cephadm shell -- ceph-volume inventory --format json-pretty | jq -r '.[]|select(.available==true)|.path'
+    ```
+
+1. Wipe the drive ONLY after you have confirmed the drive is not being used by the current ceph cluster via options 1, 2, or both
+
+    ```bash
+    example: ceph orch device zap ncn-s002 /dev/sdc --force 
     ```
 
 1. Add unused drives
