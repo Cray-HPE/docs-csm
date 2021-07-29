@@ -80,7 +80,7 @@ Available Platform Health Checks:
 <a name="pet-ncnhealthchecks"></a>
 ### 1.1 ncnHealthChecks
 
-Health Check scripts can be found and run on any worker or master node from any directory.
+Health Check scripts can be found and run on any worker or master node, not on PIT node, from any directory.
 
    ```bash
    ncn# /opt/cray/platform-utils/ncnHealthChecks.sh
@@ -104,7 +104,7 @@ Execute the ncnHealthChecks script and analyze the output of each individual che
 
 **IMPORTANT:** When the PIT node is booted the NCN node metal.no-wipe status is not available and is correctly reported as 'unavailable'. Once ncn-m001 has been booted the NCN metal.no-wipe status is expected to be reported as metal.no-wipe=1.
 
-**IMPORTANT:** When the PIT node is not booted, if the output of the ncnHealthChecks.sh script shows that there are nodes that do not have the metal.no-wipe=1 status, then do the following:
+**IMPORTANT:** Only when ncn-m001 has been booted, if the output of the ncnHealthChecks.sh script shows that there are nodes that do not have the metal.no-wipe=1 status, then do the following:
 
 ```bash
 ncn# csi handoff bss-update-param --set metal.no-wipe=1 --limit <SERVER_XNAME>
