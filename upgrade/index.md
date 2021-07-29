@@ -61,6 +61,13 @@ sections, but there is also a general troubleshooting topic.
    Run the following validation checks to ensure that everything is still working
    properly after the upgrade:
 
+   > **`IMPORTANT:`** If your site does not use UAIs, skip UAS and UAI validation.  If you do use
+   > UAIs, there are products that configure UAS like Cray Analytics and Cray Programming Environment that
+   > must be working correctly with UAIs and should be validated and corrected (the procedures for this are
+   > beyond the scope of this document) prior to validating UAS and UAI.  Failures in UAI creation that result
+   > from incorrect or incomplete installation of these products will generally take the form of UAIs stuck in
+   > waiting state trying to set up volume mounts.
+
    1. [Platform Health Checks](../operations/validate_csm_health.md#platform-health-checks)
    1. [Hardware Management Services Health Checks](../operations/validate_csm_health.md#hms-health-checks)
    1. [Software Management Services Validation Utility](../operations/validate_csm_health.md#sms-health-checks)
