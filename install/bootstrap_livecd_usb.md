@@ -53,12 +53,10 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 
    The ISO and other files are now available in the directory from the extracted CSM tar.
 
-1. Install/upgrade the CSI and testing RPMs.
+1. Install/upgrade the CSI RPM
 
    ```bash
    linux# rpm -Uvh --force ${CSM_PATH}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
-   linux# rpm -Uvh --force $(ls -r ${CSM_PATH}/rpm/cray/csm/sle-15sp2/noarch/goss-servers*.rpm | head -n 1)
-   linux# rpm -Uvh --force $(ls -r ${CSM_PATH}/rpm/cray/csm/sle-15sp2/noarch/csm-testing*.rpm | head -n 1)
    ```
 
 1. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet 
@@ -706,6 +704,15 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    pit# systemctl start nexus
    pit# systemctl start basecamp
    pit# systemctl start conman
+   ```
+
+1. Install Goss Tests and Server
+
+   The following assumes the CSM_PATH environment variable is set to the path of the unpacked CSM release.
+
+   ```bash
+   pit# rpm -Uvh --force $(ls -r ${CSM_PATH}/rpm/cray/csm/sle-15sp2/noarch/goss-servers*.rpm | head -n 1)
+   pit# rpm -Uvh --force $(ls -r ${CSM_PATH}/rpm/cray/csm/sle-15sp2/noarch/csm-testing*.rpm | head -n 1)
    ```
 
 1. Verify the system:
