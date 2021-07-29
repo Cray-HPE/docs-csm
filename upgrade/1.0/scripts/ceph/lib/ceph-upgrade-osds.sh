@@ -49,4 +49,4 @@ for host in $(ceph node ls| jq -r '.osd|keys[]')
   done
 }
 
-# End  OSD conversion. Run on each node that has OSDs
+# End OSD conversion. Run on each node that has OSDs

@@ -5,6 +5,6 @@ The first step in debugging compute node boot-related issues is to determine the
 
 The ConMan tool collects compute node logs. To learn more about conman, refer to [ConMan](../conman/ConMan.md). 
 
-A node’s console data can be accessed via its log file, as described in [Access Compute Node Logs](../conman/Access_Compute_Node_Logs.md)). This information can also be accessed by connecting to the node's console via ipmitool. Refer to online documentation to learn more about using ipmitool.
+A node's console data can be accessed via its log file, as described in [Access Compute Node Logs](../conman/Access_Compute_Node_Logs.md)). This information can also be accessed by connecting to the node's console via ipmitool. Refer to online documentation to learn more about using ipmitool.
 
 

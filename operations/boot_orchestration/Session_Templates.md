@@ -67,7 +67,7 @@ There are three different ways to specify the nodes inside a boot set in a BOS s
 
 -   **Node roles groups**
 
-    The node role groups is a list of groups based on a node’s designated role. Each node’s role is specified in the HSM database. For example, to target all of the nodes with a "Compute" role, "Compute" would need to be specified in the `"node_role_groups"` value.
+    The node role groups is a list of groups based on a node's designated role. Each node's role is specified in the HSM database. For example, to target all of the nodes with a "Compute" role, "Compute" would need to be specified in the `"node_role_groups"` value.
 
     For example:
 

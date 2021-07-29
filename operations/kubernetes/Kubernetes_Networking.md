@@ -14,11 +14,11 @@ The API requests then get routed to the appropriate node running that service.
 
 ### Access services from within the cluster
 
-All services running inside the cluster can access each other using their Pod IP address or the service’s cluster IP address, along with the service’s exposed port. The exception to this is a service that has a Cray REST API. These services are configured such that they must be accessed through the API gateway service.
+All services running inside the cluster can access each other using their Pod IP address or the service's cluster IP address, along with the service's exposed port. The exception to this is a service that has a Cray REST API. These services are configured such that they must be accessed through the API gateway service.
 
 ### Network Policies
 
-Kubernetes supports network policies to limit access to pods. Therefore, services running inside the cluster generally cannot access each other using their Pod IP address or the service’s cluster IP address. Any other services that must be accessed through a protocol other than REST, can do so using the cluster VIP and the service’s NodePort. Only services that are configured to expose a NodePort or ExternalIP can be accessed from outside the cluster.
+Kubernetes supports network policies to limit access to pods. Therefore, services running inside the cluster generally cannot access each other using their Pod IP address or the service's cluster IP address. Any other services that must be accessed through a protocol other than REST, can do so using the cluster VIP and the service's NodePort. Only services that are configured to expose a NodePort or ExternalIP can be accessed from outside the cluster.
 
 As part of the SMS installation, the following network policies are configured on the system:
 

@@ -198,7 +198,7 @@ Eth1/30               Down                  Enabled                         Unkn
 Eth1/31               Down                  Enabled                         Unknown           1500              -
 Eth1/32               Down                  Enabled                         Unknown           1500  
 ```
-The links between the 2 spines should be port-channel 100 ('Po100'). The 'mlag-port-channel' interfaces which are connections to leaf, aggregate, or CDU switches would be 'Mpo' interfaces with indices greater than 100. So here, 'Mpo1'-'Mpo11' and 'Mpo17' are connections to NCNs, whereas 'Mpo113', 'Mpo151', and 'Mpo152' are connections to other switches. So identifying the port-channel and mlag-port-channel devices, we look for the "Eth" rows which have one of these labels in parentheses next to it. In the example above, these are:
+The links between the 2 spines should be `port-channel` 100 (`Po100`). The `mlag-port-channel` interfaces which are connections to leaf, aggregate, or CDU switches would be `Mpo` interfaces with indices greater than 100. So here, `Mpo1`-`Mpo11` and `Mpo17` are connections to NCNs, whereas `Mpo113`, `Mpo151`, and `Mpo152` are connections to other switches. So identifying the `port-channel` and `mlag-port-channel` devices, we look for the `Eth` rows which have one of these labels in parentheses next to it. In the example above, these are:
 
 - Eth1/12
 - Eth1/13

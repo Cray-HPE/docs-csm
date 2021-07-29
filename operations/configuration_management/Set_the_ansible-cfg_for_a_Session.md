@@ -14,7 +14,7 @@ ncn# kubectl get cm -n services cfs-default-ansible-cfg \
 ....
 ```
 
-**Warning:** Much of the configuration in this file is required by CFS to function properly. Particularly the `cfs_aggregator` callback plug-in, which is used for reporting configuration state to the CFS APIs, and the `cfs_*` strategy plug-ins. Exercise extreme caution when making changes to this ConfigMap’s contents. See [Ansible Execution Environments](Ansible_Execution_Environments.md) for more information
+**Warning:** Much of the configuration in this file is required by CFS to function properly. Particularly the `cfs_aggregator` callback plug-in, which is used for reporting configuration state to the CFS APIs, and the `cfs_*` strategy plug-ins. Exercise extreme caution when making changes to this ConfigMap's contents. See [Ansible Execution Environments](Ansible_Execution_Environments.md) for more information
 
 The default `ansible.cfg` file ConfigMap can be changed to a custom ConfigMap \(within the services Kubernetes namespace\) by updating it in the CFS service options. This will update all CFS sessions to use this file for `ansible.cfg`.
 

@@ -9,7 +9,7 @@ A healthy DHCP exchange between server and client looks like the following:
 
 |Traffic|Description|Sender|
 |-------|-----------|------|
-|DHCP Discover|A broadcast request from the client requesting an IP address. The request contains the client’s MAC address.|Client|
+|DHCP Discover|A broadcast request from the client requesting an IP address. The request contains the client's MAC address.|Client|
 |DHCP Offer|The server offers an IP address to the client.|Server|
 |DHCP Request|After testing the IP address to see that it is not in use, the client requests the proffered IP address.|Client|
 |DHCP ACK|The server acknowledges that the client owns the lease on the IP address.|Server|
@@ -27,7 +27,7 @@ A healthy TFTP exchange between server and client looks like the following.
 |Traffic|Description|Sender|
 |-------|-----------|------|
 |`Read Request File: filename tsize=0`|The client requests a file with a `tsize` equal to zero.|Client|
-|`Option Acknowledgement`|The server acknowledges the request and provides the file’s size and block transfer size.|Server|
+|`Option Acknowledgement`|The server acknowledges the request and provides the file's size and block transfer size.|Server|
 |`Error Code, Code: Option negotiation failed, Message: User aborted the transfer`|The client aborts the transfer once it determines the file size.|Client|
 |`Read Request File: filename`|The client requests the file again.|Client|
 |`Option Acknowledgement`|The server acknowledges the request and provides the block transfer size.|Server|

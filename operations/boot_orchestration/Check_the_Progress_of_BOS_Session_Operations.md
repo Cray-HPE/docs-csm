@@ -77,7 +77,7 @@ ncn-m001# cray cfs sessions describe BOA_JOB_ID
 For example:
 
 ```bash
-# cray cfs sessions describe boa-86b78489-1d76-4957-9c0e-a7b1d6665c35
+# cray cfs sessions describe boa-86b78489-1d76-4957-9c0e-a7b1d6665c35 --format json
 {
     "ansible": {
         "limit": "x3000c0s19b4n0,x3000c0s19b3n0,x3000c0s19b2n0,x3000c0s19b1n0",
@@ -86,14 +86,14 @@ For example:
     "id": "ffdda2c6-2277-11ea-8db8-b42e993b706a",
     "links": [
         {
-        "href": "/apis/cfs/sessions/boa-86b78489-1d76-4957-9c0e-a7b1d6665c35",
-        "rel": "self"
+            "href": "/apis/cfs/sessions/boa-86b78489-1d76-4957-9c0e-a7b1d6665c35",
+            "rel": "self"
         },
-    {
-    "href": "/apis/cms.cray.com/v1/namespaces/services/cfsessions/boa-86b78489-1d76-4957-9c0e-a7b1d6665c35",
-    "rel": "k8s"
-    }
- ],
+        {
+            "href": "/apis/cms.cray.com/v1/namespaces/services/cfsessions/boa-86b78489-1d76-4957-9c0e-a7b1d6665c35",
+            "rel": "k8s"
+        }
+    ],
     "name": "boa-86b78489-1d76-4957-9c0e-a7b1d6665c35",
     "repo": {
         "branch": "master",
@@ -101,24 +101,24 @@ For example:
     },
     "status": {
         "artifacts": [],
-    "session": {
-        "completionTime": "2019-12-19T16:05:11+00:00",
-        "job": "cfs-85e3e48f-6795-4570-b379-347b05b39dbe", <<-- Kubernetes CFS job ID 
-        "startTime": "2019-12-19T15:55:37+00:00",
-        "status": "complete",
-        "succeeded": "true"        
+        "session": {
+            "completionTime": "2019-12-19T16:05:11+00:00",
+            "job": "cfs-85e3e48f-6795-4570-b379-347b05b39dbe", <<-- Kubernetes CFS job ID 
+            "startTime": "2019-12-19T15:55:37+00:00",
+            "status": "complete",
+            "succeeded": "true"        
         },
-    "targets": {
-        "failed": 0,
-        "running": 0,
-        "success": 0
+        "targets": {
+            "failed": 0,
+            "running": 0,
+            "success": 0
         }
     },
     "target": {
         "definition": "dynamic",
         "groups": []
-        }
     }
+}
 ```
 
 Use the Kubernetes CFS job ID in the returned output above to find the CFS pod ID. It is the pod with three containers listed, not two.

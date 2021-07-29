@@ -379,7 +379,7 @@ To delete a repository, send an HTTP `DELETE` request to the /service/rest/beta/
 For example:
 
 ```bash
-# curl -sfkSL -X DELETE "https://packages.local/service/rest/beta/repositories/NAME”
+# curl -sfkSL -X DELETE "https://packages.local/service/rest/beta/repositories/NAME"
 ```
 
 ### Create a Blob Store

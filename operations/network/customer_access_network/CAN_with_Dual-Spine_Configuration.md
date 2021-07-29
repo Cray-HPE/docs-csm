@@ -31,7 +31,7 @@ The following is an example of the point-to-point configuration on the spine swi
     ```
 
 
-There must then be two routes on the customer's switch directing traffic for the customer\_access\_network subnet to the endpoint on the spine switch. The following is an example of the route configuration on the customer switch. These addresses and subnets are generated from CSI and can be found in the CAN.yaml file.
+There must then be two routes on the customer's switch directing traffic for the `customer_access_network` subnet to the endpoint on the spine switch. The following is an example of the route configuration on the customer switch. These addresses and subnets are generated from CSI and can be found in the CAN.yaml file.
 
 ```screen
 - full_name: CAN Bootstrap DHCP Subnet
@@ -59,7 +59,7 @@ There must be a default route on each spine switch that will direct traffic that
     ```
 
 
-The spine switch must also have the customer\_access\_gateway IP address assigned to the vlan 7 interface on the switch. This provides a gateway for the default route on the NCNs and UANs, as well as a direct route to the customer\_access\_network from the spine switch. For example:
+The spine switch must also have the `customer_access_gateway` IP address assigned to the `vlan 7` interface on the switch. This provides a gateway for the default route on the NCNs and UANs, as well as a direct route to the `customer_access_network` from the spine switch. For example:
 
 -   Mellanox:
 
@@ -98,7 +98,7 @@ ip route 10.102.5/26 10.101.15.154
 
 Each of the NCNs has a connection to each spine. These ports on the NCN will be configured as bonded. The spine ports on the other end of these connections will be configured as a multi-chassis link aggregation group \(MLAG\) port channel.
 
-The NCN will also need to configure a default route pointing to a gateway IP on the CAN. In a dual-spine configuration, this will continue to use the IP specified in the `can-gateway` value. The main difference in the dual-spine configuration is that this IP will now be a virtual IP address on the spine switches rather than the IP of the vlan 7 IP. This virtual IP is part of MAGP configuration. Each spine will have an IP on its vlan 7 interface that is not the `can-gateway` IP.
+The NCN will also need to configure a default route pointing to a gateway IP on the CAN. In a dual-spine configuration, this will continue to use the IP specified in the `can-gateway` value. The main difference in the dual-spine configuration is that this IP will now be a virtual IP address on the spine switches rather than the IP of the `vlan 7` IP. This virtual IP is part of MAGP configuration. Each spine will have an IP on its `vlan 7` interface that is not the `can-gateway` IP.
 
 Then the following MAGP configuration will be added \(same configuration on each of the spines\):
 
