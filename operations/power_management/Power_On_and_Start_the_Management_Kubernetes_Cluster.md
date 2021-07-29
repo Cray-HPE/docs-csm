@@ -54,11 +54,33 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
 **POWER ON ALL OTHER MANAGEMENT NCNs**
 
-9.  Power on and boot other management NCNs.
+9. Power on and boot other management NCNs.
 
-    ```screen
-    ncn-m001# sat bootsys boot --stage ncn-power
-    ```
+   ```bash
+   ncn-m001# sat bootsys boot --stage ncn-power
+   IPMI username: root
+   IPMI password:
+   The following Non-compute Nodes (NCNs) will be included in this operation:
+   managers:
+   - ncn-m002
+   - ncn-m003
+   storage:
+   - ncn-s001
+   - ncn-s002
+   - ncn-s003
+   workers:
+   - ncn-w001
+   - ncn-w002
+   - ncn-w003
+   
+   The following Non-compute Nodes (NCNs) will be excluded from this operation:
+   managers:
+   - ncn-m001
+   storage: []
+   workers: []
+   
+   Are the above NCN groupings and exclusions correct? [yes,no] yes
+   ```
 
 10. Use `tail` to monitor the log files in `/var/log/cray/console_logs` for each NCN.
 
@@ -81,7 +103,7 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 **VERIFY ACCESS TO LUSTRE FILE SYSTEM**
 
 11. Verify that the Lustre file system is available from the management cluster.
-    
+
 **CHECK STATUS OF THE MANAGEMENT CLUSTER**
     
 12. If Ceph is frozen, use the following commands as workaround.
@@ -127,12 +149,26 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 14. If Ceph does not recover and become healthy, refer to [Manage Ceph Services](../utility_storage/Manage_Ceph_Services.md).
 
     
+
 **START KUBERNETES \(k8s\)**
 
 15. Use `sat bootsys` to start the k8s cluster.
 
     ```bash
-    ncn-m001# sat bootsys boot --stage platform-services 
+    ncn-m001# sat bootsys boot --stage platform-services
+    The following Non-compute Nodes (NCNs) will be included in this operation:
+    managers:
+    - ncn-m001
+    storage:
+    - ncn-s001
+    - ncn-s002
+    - ncn-s003
+    workers:
+    - ncn-w001
+    - ncn-w002
+    - ncn-w003
+    
+    Are the above NCN groupings correct? [yes,no] yes
     ```
 
 16. If the previous step fails with the following, or similar message, restart Ceph services and wait for services to be healthy.
