@@ -28,7 +28,7 @@ After the CDU is switched on and healthy, the liquid-cooled PDU circuit breakers
 
    2.  Set the control panel circuit breakers to ON.
 
-   ![](../../img/operations/CDU_Circuit_Breakers.svg "CDU Circuit Breakers")
+   ![](../../img/operations/CDU_Circuit_Breakers.png "CDU Circuit Breakers")
 
 4. Set the PDU circuit breakers to on in each Cray EX cabinet.
 

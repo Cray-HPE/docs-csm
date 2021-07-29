@@ -1,424 +1,469 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="6.5in" height="8.003in" viewBox="0 0 468 576.229">
-  <g id="Mountain_Cabinet_Front">
-    <g>
-      <rect x="65.466" y="18.446" width="375.53" height="546.44" fill="none" stroke="#435663" stroke-linecap="square" stroke-miterlimit="10" stroke-width="3"/>
-      <g>
-        <rect x="90.095" y="27.735" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="106.489" y="27.735" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="122.587" y="27.735" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="138.981" y="27.735" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="155.079" y="27.735" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="171.473" y="27.735" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="187.57" y="27.735" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="203.965" y="27.735" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-      </g>
-      <g>
-        <rect x="271.636" y="27.735" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-        <rect x="288.03" y="27.735" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-        <rect x="304.127" y="27.735" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-        <rect x="320.522" y="27.735" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-        <rect x="336.619" y="27.735" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-        <rect x="353.013" y="27.735" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-        <rect x="369.111" y="27.735" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-        <rect x="385.505" y="27.735" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-      </g>
-      <rect x="129.724" y="36.837" width="54.601" height="13.009" fill="#fffbde"/>
-      <rect x="309.609" y="36.837" width="54.601" height="13.009" fill="#fff"/>
-      <rect x="403.797" y="34.018" width="22.856" height="114.295" fill="#fff" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel"/>
-      <rect x="87.662" y="24.794" width="314.012" height="132.201" fill="none" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-      <g>
-        <rect x="90.095" y="161.511" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="106.489" y="161.511" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="122.587" y="161.511" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="138.981" y="161.511" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="155.079" y="161.511" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="171.473" y="161.511" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="187.57" y="161.511" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="203.965" y="161.511" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-      </g>
-      <g>
-        <rect x="271.636" y="161.511" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-        <rect x="288.03" y="161.511" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-        <rect x="304.127" y="161.511" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-        <rect x="320.522" y="161.511" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-        <rect x="336.619" y="161.511" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-        <rect x="353.013" y="161.511" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-        <rect x="369.111" y="161.511" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-        <rect x="385.505" y="161.511" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-      </g>
-      <rect x="129.439" y="170.613" width="54.601" height="13.009" fill="#fffbde"/>
-      <rect x="311.185" y="170.613" width="54.601" height="13.009" fill="#fff"/>
-      <rect x="403.797" y="167.794" width="22.856" height="114.295" fill="#fff" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel"/>
-      <rect x="87.662" y="160.076" width="314.012" height="132.201" fill="none" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel"/>
-      <g>
-        <rect x="90.095" y="298.395" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="106.489" y="298.395" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="122.587" y="298.395" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="138.981" y="298.395" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="155.079" y="298.395" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="171.473" y="298.395" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="187.57" y="298.395" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="203.965" y="298.395" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-      </g>
-      <g>
-        <rect x="271.636" y="298.395" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-        <rect x="288.03" y="298.395" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-        <rect x="304.127" y="298.395" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-        <rect x="320.522" y="298.395" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-        <rect x="336.619" y="298.395" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-        <rect x="353.013" y="298.395" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-        <rect x="369.111" y="298.395" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-        <rect x="385.505" y="298.395" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-      </g>
-      <rect x="129.724" y="307.497" width="54.601" height="13.009" fill="#fffbde"/>
-      <rect x="311.816" y="307.497" width="54.601" height="13.009" fill="#fff"/>
-      <rect x="403.797" y="304.678" width="22.856" height="114.295" fill="#fff" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel"/>
-      <rect x="87.662" y="295.454" width="314.012" height="132.201" fill="none" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel"/>
-      <g>
-        <rect x="90.095" y="433.773" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="106.489" y="433.773" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="122.587" y="433.773" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="138.981" y="433.773" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="155.079" y="433.773" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="171.473" y="433.773" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="187.57" y="433.773" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="203.965" y="433.773" width="14.503" height="127.356" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-      </g>
-      <g>
-        <rect x="271.636" y="433.773" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-        <rect x="288.03" y="433.773" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-        <rect x="304.127" y="433.773" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-        <rect x="320.522" y="433.773" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-        <rect x="336.619" y="433.773" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-        <rect x="353.013" y="433.773" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-        <rect x="369.111" y="433.773" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-        <rect x="385.505" y="433.773" width="14.503" height="127.356" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-      </g>
-      <rect x="127.158" y="442.875" width="54.601" height="13.009" fill="#fffbde"/>
-      <rect x="311.5" y="442.875" width="54.601" height="13.009" fill="#fff"/>
-      <rect x="403.797" y="440.056" width="22.856" height="114.295" fill="#fff" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel"/>
-      <rect x="87.662" y="430.832" width="314.012" height="132.201" fill="none" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel"/>
-      <text transform="translate(100.815 152.426) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(117.209 152.426) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(133.306 152.426) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(149.7 152.426) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(165.798 152.426) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(182.192 152.426) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(198.289 152.426) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(214.684 152.426) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(282.355 152.426) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(298.749 152.426) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(314.846 152.426) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(331.241 152.426) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(347.339 152.426) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(363.732 152.426) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(379.83 152.426) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(396.225 152.426) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <g>
-        <text transform="translate(95.22 82.146)" font-size="8.512" fill="#141414" font-family="Verdana">0</text>
-        <text transform="translate(111.079 82.146)" font-size="8.512" fill="#141414" font-family="Verdana">1</text>
-        <text transform="translate(126.939 82.146)" font-size="8.512" fill="#141414" font-family="Verdana">2</text>
-        <text transform="translate(143.958 82.146)" font-size="8.512" fill="#141414" font-family="Verdana">3</text>
-        <text transform="translate(159.43 82.146)" font-size="8.512" fill="#141414" font-family="Verdana">4</text>
-        <text transform="translate(176.063 82.146)" font-size="8.512" fill="#141414" font-family="Verdana">5</text>
-        <text transform="translate(192.309 82.146)" font-size="8.512" fill="#141414" font-family="Verdana">6</text>
-        <text transform="translate(208.554 82.146)" font-size="8.512" fill="#141414" font-family="Verdana">7</text>
-        <text transform="translate(276.761 82.146)" font-size="8.512" fill="#141414" font-family="Verdana">0</text>
-        <text transform="translate(292.62 82.146)" font-size="8.512" fill="#141414" font-family="Verdana">1</text>
-        <text transform="translate(308.479 82.146)" font-size="8.512" fill="#141414" font-family="Verdana">2</text>
-        <text transform="translate(325.498 82.146)" font-size="8.512" fill="#141414" font-family="Verdana">3</text>
-        <text transform="translate(340.971 82.146)" font-size="8.512" fill="#141414" font-family="Verdana">4</text>
-        <text transform="translate(357.604 82.146)" font-size="8.512" fill="#141414" font-family="Verdana">5</text>
-        <text transform="translate(373.85 82.146)" font-size="8.512" fill="#141414" font-family="Verdana">6</text>
-        <text transform="translate(390.095 82.146)" font-size="8.512" fill="#141414" font-family="Verdana">7</text>
-      </g>
-      <text transform="translate(133.357 46.623)" font-size="9.202" fill="#141414" font-family="Verdana">Chassis 6</text>
-      <text transform="translate(313.241 46.623)" font-size="9.202" fill="#141414" font-family="Verdana">Chassis 7</text>
-      <text transform="translate(405.841 93.043)" font-size="8.512" fill="#141414" font-family="Verdana">PDU<tspan x="6.255" y="10.215">3</tspan></text>
-      <text transform="translate(100.815 285.67) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(117.209 285.67) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(133.306 285.67) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(149.7 285.67) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(165.798 285.67) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(182.192 285.67) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(198.289 285.67) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(214.684 285.67) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(282.355 285.246) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(298.749 285.246) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(314.846 285.246) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(331.241 285.246) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(347.339 285.246) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(363.732 285.246) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(379.83 285.246) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(396.225 285.246) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <g>
-        <text transform="translate(95.22 215.292)" font-size="8.512" fill="#141414" font-family="Verdana">0</text>
-        <text transform="translate(111.079 215.292)" font-size="8.512" fill="#141414" font-family="Verdana">1</text>
-        <text transform="translate(126.939 215.292)" font-size="8.512" fill="#141414" font-family="Verdana">2</text>
-        <text transform="translate(143.958 215.292)" font-size="8.512" fill="#141414" font-family="Verdana">3</text>
-        <text transform="translate(159.43 215.292)" font-size="8.512" fill="#141414" font-family="Verdana">4</text>
-        <text transform="translate(176.063 215.292)" font-size="8.512" fill="#141414" font-family="Verdana">5</text>
-        <text transform="translate(192.309 215.292)" font-size="8.512" fill="#141414" font-family="Verdana">6</text>
-        <text transform="translate(208.554 215.292)" font-size="8.512" fill="#141414" font-family="Verdana">7</text>
-        <text transform="translate(276.761 215.292)" font-size="8.512" fill="#141414" font-family="Verdana">0</text>
-        <text transform="translate(292.62 215.292)" font-size="8.512" fill="#141414" font-family="Verdana">1</text>
-        <text transform="translate(308.479 215.292)" font-size="8.512" fill="#141414" font-family="Verdana">2</text>
-        <text transform="translate(325.498 215.292)" font-size="8.512" fill="#141414" font-family="Verdana">3</text>
-        <text transform="translate(340.971 215.292)" font-size="8.512" fill="#141414" font-family="Verdana">4</text>
-        <text transform="translate(357.604 215.292)" font-size="8.512" fill="#141414" font-family="Verdana">5</text>
-        <text transform="translate(373.85 215.292)" font-size="8.512" fill="#141414" font-family="Verdana">6</text>
-        <text transform="translate(390.095 215.292)" font-size="8.512" fill="#141414" font-family="Verdana">7</text>
-      </g>
-      <text transform="translate(132.77 180.954)" font-size="9.202" fill="#141414" font-family="Verdana">Chassis 4</text>
-      <text transform="translate(314.516 180.636)" font-size="9.202" fill="#141414" font-family="Verdana">Chassis 5</text>
-      <text transform="translate(405.841 224.905)" font-size="8.512" fill="#141414" font-family="Verdana">PDU<tspan x="6.255" y="10.215">2</tspan></text>
-      <text transform="translate(100.815 422.677) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(117.209 422.677) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(133.306 422.677) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(149.7 422.677) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(165.798 422.677) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(182.192 422.677) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(198.289 422.677) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(214.684 422.677) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(282.355 422.256) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(298.749 422.256) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(314.846 422.256) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(331.241 422.256) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(347.339 422.256) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(363.732 422.256) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(379.83 422.256) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(396.225 422.256) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <g>
-        <text transform="translate(95.22 353.237)" font-size="8.512" fill="#141414" font-family="Verdana">0</text>
-        <text transform="translate(111.079 353.237)" font-size="8.512" fill="#141414" font-family="Verdana">1</text>
-        <text transform="translate(126.939 353.237)" font-size="8.512" fill="#141414" font-family="Verdana">2</text>
-        <text transform="translate(143.958 353.237)" font-size="8.512" fill="#141414" font-family="Verdana">3</text>
-        <text transform="translate(159.43 353.237)" font-size="8.512" fill="#141414" font-family="Verdana">4</text>
-        <text transform="translate(176.063 353.237)" font-size="8.512" fill="#141414" font-family="Verdana">5</text>
-        <text transform="translate(192.309 353.237)" font-size="8.512" fill="#141414" font-family="Verdana">6</text>
-        <text transform="translate(208.554 353.237)" font-size="8.512" fill="#141414" font-family="Verdana">7</text>
-        <text transform="translate(276.761 353.237)" font-size="8.512" fill="#141414" font-family="Verdana">0</text>
-        <text transform="translate(292.62 353.237)" font-size="8.512" fill="#141414" font-family="Verdana">1</text>
-        <text transform="translate(308.479 353.237)" font-size="8.512" fill="#141414" font-family="Verdana">2</text>
-        <text transform="translate(325.498 353.237)" font-size="8.512" fill="#141414" font-family="Verdana">3</text>
-        <text transform="translate(340.971 353.237)" font-size="8.512" fill="#141414" font-family="Verdana">4</text>
-        <text transform="translate(357.604 353.237)" font-size="8.512" fill="#141414" font-family="Verdana">5</text>
-        <text transform="translate(373.85 353.237)" font-size="8.512" fill="#141414" font-family="Verdana">6</text>
-        <text transform="translate(390.095 353.237)" font-size="8.512" fill="#141414" font-family="Verdana">7</text>
-      </g>
-      <text transform="translate(133.055 317.639)" font-size="9.202" fill="#141414" font-family="Verdana">Chassis 2</text>
-      <text transform="translate(315.146 317.639)" font-size="9.202" fill="#141414" font-family="Verdana">Chassis 3</text>
-      <text transform="translate(405.841 359.055)" font-size="8.512" fill="#141414" font-family="Verdana">PDU<tspan x="6.255" y="10.215">1</tspan></text>
-      <text transform="translate(100.815 557.545) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(117.209 557.545) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(133.306 557.545) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(149.7 557.545) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(165.798 557.545) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(182.192 557.545) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(198.289 557.545) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(214.684 557.545) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(95.22 486.791)" font-size="8.512" fill="#141414" font-family="Verdana">0</text>
-      <text transform="translate(111.079 486.791)" font-size="8.512" fill="#141414" font-family="Verdana">1</text>
-      <text transform="translate(126.939 486.791)" font-size="8.512" fill="#141414" font-family="Verdana">2</text>
-      <text transform="translate(143.958 486.791)" font-size="8.512" fill="#141414" font-family="Verdana">3</text>
-      <text transform="translate(159.43 486.791)" font-size="8.512" fill="#141414" font-family="Verdana">4</text>
-      <text transform="translate(176.063 486.791)" font-size="8.512" fill="#141414" font-family="Verdana">5</text>
-      <text transform="translate(192.309 486.791)" font-size="8.512" fill="#141414" font-family="Verdana">6</text>
-      <text transform="translate(208.554 486.791)" font-size="8.512" fill="#141414" font-family="Verdana">7</text>
-      <text transform="translate(282.355 557.122) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(298.749 557.122) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(314.846 557.122) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(331.241 557.122) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(347.339 557.122) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(363.732 557.122) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(379.83 557.122) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(396.225 557.122) rotate(-90)" font-size="8.512" fill="#141414" font-family="Verdana">Compute Blade</text>
-      <text transform="translate(292.62 486.791)" font-size="8.512" fill="#141414" font-family="Verdana">1</text>
-      <text transform="translate(276.761 486.791)" font-size="8.512" fill="#141414" font-family="Verdana">0</text>
-      <text transform="translate(308.479 486.791)" font-size="8.512" fill="#141414" font-family="Verdana">2</text>
-      <text transform="translate(325.498 486.791)" font-size="8.512" fill="#141414" font-family="Verdana">3</text>
-      <text transform="translate(340.971 486.791)" font-size="8.512" fill="#141414" font-family="Verdana">4</text>
-      <text transform="translate(357.604 486.791)" font-size="8.512" fill="#141414" font-family="Verdana">5</text>
-      <text transform="translate(373.85 486.791)" font-size="8.512" fill="#141414" font-family="Verdana">6</text>
-      <text transform="translate(390.095 486.791)" font-size="8.512" fill="#141414" font-family="Verdana">7</text>
-      <text transform="translate(131.851 453.137)" font-size="9.202" fill="#141414" font-family="Verdana">Chassis 0</text>
-      <text transform="translate(314.831 453.455)" font-size="9.202" fill="#141414" font-family="Verdana">Chassis 1</text>
-      <text transform="translate(405.841 492.117)" font-size="8.512" fill="#141414" font-family="Verdana">PDU<tspan x="6.255" y="10.215">0</tspan></text>
-      <text transform="translate(229.469 13.079)" font-size="11" fill="#141414" font-family="Verdana">Front</text>
-      <g>
-        <g>
-          <rect x="220.287" y="95.88" width="16.441" height="58.777" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-          <rect x="236.895" y="95.88" width="16.441" height="58.777" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-          <rect x="253.712" y="95.88" width="16.441" height="58.777" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-          <rect x="219.489" y="27.118" width="51.308" height="127.972" fill="none" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel"/>
-          <text transform="translate(226.689 104.099)" font-size="8.512" fill="#141414" font-family="Verdana">0</text>
-          <text transform="translate(243.298 104.099)" font-size="8.512" fill="#141414" font-family="Verdana">1</text>
-          <text transform="translate(260.115 104.099)" font-size="8.512" fill="#141414" font-family="Verdana">2</text>
-          <rect x="220.054" y="85.79" width="50.156" height="9.908" fill="#fff"/>
-          <g>
-            <rect x="222.06" y="105.779" width="46.923" height="36.905" fill="#fffbde"/>
-            <text transform="translate(226.134 111.57)" font-size="5.675" fill="#141414" font-family="Verdana">P<tspan x="3.422" y="0" letter-spacing="-0.01em">h</tspan><tspan x="6.958" y="0">ysical PSUs</tspan></text>
-            <text transform="translate(227.701 139.802)" font-size="5.675" fill="#141414" font-family="Verdana">Logical PSUs</text>
-          </g>
-          <g>
-            <g>
-              <rect x="220.287" y="27.659" width="16.441" height="58.175" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-              <rect x="236.895" y="27.659" width="16.441" height="58.175" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-              <rect x="253.712" y="27.659" width="16.441" height="58.175" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-            </g>
-            <g>
-              <text transform="translate(226.689 36.225)" font-size="8.512" fill="#141414" font-family="Verdana">3</text>
-              <text transform="translate(243.298 36.225)" font-size="8.512" fill="#141414" font-family="Verdana">4</text>
-              <text transform="translate(260.115 36.225)" font-size="8.512" fill="#141414" font-family="Verdana">5</text>
-            </g>
-            <g>
-              <rect x="222.06" y="39.34" width="46.923" height="37.636" fill="#fff"/>
-              <g>
-                <text transform="translate(226.689 82.876)" font-size="8.512" fill="#141414" font-family="Verdana">0</text>
-                <text transform="translate(243.298 82.876)" font-size="8.512" fill="#141414" font-family="Verdana">1</text>
-                <text transform="translate(260.115 82.876)" font-size="8.512" fill="#141414" font-family="Verdana">2</text>
-              </g>
-              <text transform="translate(226.134 45.27)" font-size="5.675" fill="#141414" font-family="Verdana">P<tspan x="3.422" y="0" letter-spacing="-0.01em">h</tspan><tspan x="6.958" y="0">ysical PSUs</tspan></text>
-              <text transform="translate(227.701 74.301)" font-size="5.675" fill="#141414" font-family="Verdana">Logical PSUs</text>
-            </g>
-          </g>
-          <g>
-            <text transform="translate(226.689 151.555)" font-size="8.512" fill="#141414" font-family="Verdana">0</text>
-            <text transform="translate(243.298 151.555)" font-size="8.512" fill="#141414" font-family="Verdana">1</text>
-            <text transform="translate(260.115 151.555)" font-size="8.512" fill="#141414" font-family="Verdana">2</text>
-          </g>
-        </g>
-        <text transform="translate(222.715 93.727)" font-size="7.529" fill="#141414" font-family="Verdana"><tspan letter-spacing="-0.024em">R</tspan><tspan x="5.051" y="0">ect Shelf 3</tspan></text>
-      </g>
-      <g>
-        <rect x="220.287" y="228.694" width="16.441" height="58.777" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="236.895" y="228.694" width="16.441" height="58.777" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="253.712" y="228.694" width="16.441" height="58.777" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="219.489" y="159.933" width="51.308" height="127.972" fill="none" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel"/>
-        <text transform="translate(226.689 236.914)" font-size="8.512" fill="#141414" font-family="Verdana">0</text>
-        <text transform="translate(243.298 236.914)" font-size="8.512" fill="#141414" font-family="Verdana">1</text>
-        <text transform="translate(260.115 236.914)" font-size="8.512" fill="#141414" font-family="Verdana">2</text>
-        <rect x="220.054" y="218.604" width="50.156" height="9.908" fill="#fff"/>
-        <g>
-          <rect x="222.06" y="238.593" width="46.923" height="36.905" fill="#fffbde"/>
-          <text transform="translate(226.134 244.385)" font-size="5.675" fill="#141414" font-family="Verdana">P<tspan x="3.422" y="0" letter-spacing="-0.01em">h</tspan><tspan x="6.958" y="0">ysical PSUs</tspan></text>
-          <text transform="translate(227.701 272.616)" font-size="5.675" fill="#141414" font-family="Verdana">Logical PSUs</text>
-        </g>
-        <g>
-          <g>
-            <rect x="220.287" y="160.473" width="16.441" height="58.175" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-            <rect x="236.895" y="160.473" width="16.441" height="58.175" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-            <rect x="253.712" y="160.473" width="16.441" height="58.175" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-          </g>
-          <g>
-            <text transform="translate(226.689 169.04)" font-size="8.512" fill="#141414" font-family="Verdana">3</text>
-            <text transform="translate(243.298 169.04)" font-size="8.512" fill="#141414" font-family="Verdana">4</text>
-            <text transform="translate(260.115 169.04)" font-size="8.512" fill="#141414" font-family="Verdana">5</text>
-          </g>
-          <g>
-            <rect x="222.06" y="172.155" width="46.923" height="37.636" fill="#fff"/>
-            <g>
-              <text transform="translate(226.689 215.69)" font-size="8.512" fill="#141414" font-family="Verdana">0</text>
-              <text transform="translate(243.298 215.69)" font-size="8.512" fill="#141414" font-family="Verdana">1</text>
-              <text transform="translate(260.115 215.69)" font-size="8.512" fill="#141414" font-family="Verdana">2</text>
-            </g>
-            <text transform="translate(226.134 178.084)" font-size="5.675" fill="#141414" font-family="Verdana">P<tspan x="3.422" y="0" letter-spacing="-0.01em">h</tspan><tspan x="6.958" y="0">ysical PSUs</tspan></text>
-            <text transform="translate(227.701 207.115)" font-size="5.675" fill="#141414" font-family="Verdana">Logical PSUs</text>
-          </g>
-        </g>
-        <g>
-          <text transform="translate(226.689 284.369)" font-size="8.512" fill="#141414" font-family="Verdana">0</text>
-          <text transform="translate(243.298 284.369)" font-size="8.512" fill="#141414" font-family="Verdana">1</text>
-          <text transform="translate(260.115 284.369)" font-size="8.512" fill="#141414" font-family="Verdana">2</text>
-        </g>
-      </g>
-      <g>
-        <rect x="220.287" y="366.799" width="16.441" height="58.777" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="236.895" y="366.799" width="16.441" height="58.777" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="253.712" y="366.799" width="16.441" height="58.777" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="219.489" y="298.037" width="51.308" height="127.972" fill="none" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel"/>
-        <text transform="translate(226.689 375.018)" font-size="8.512" fill="#141414" font-family="Verdana">0</text>
-        <text transform="translate(243.298 375.018)" font-size="8.512" fill="#141414" font-family="Verdana">1</text>
-        <text transform="translate(260.115 375.018)" font-size="8.512" fill="#141414" font-family="Verdana">2</text>
-        <rect x="220.054" y="356.709" width="50.156" height="9.908" fill="#fff"/>
-        <g>
-          <rect x="222.06" y="376.697" width="46.923" height="36.905" fill="#fffbde"/>
-          <text transform="translate(226.134 382.489)" font-size="5.675" fill="#141414" font-family="Verdana">P<tspan x="3.422" y="0" letter-spacing="-0.01em">h</tspan><tspan x="6.958" y="0">ysical PSUs</tspan></text>
-          <text transform="translate(227.701 410.721)" font-size="5.675" fill="#141414" font-family="Verdana">Logical PSUs</text>
-        </g>
-        <g>
-          <g>
-            <rect x="220.287" y="298.578" width="16.441" height="58.175" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-            <rect x="236.895" y="298.578" width="16.441" height="58.175" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-            <rect x="253.712" y="298.578" width="16.441" height="58.175" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-          </g>
-          <g>
-            <text transform="translate(226.689 307.144)" font-size="8.512" fill="#141414" font-family="Verdana">3</text>
-            <text transform="translate(243.298 307.144)" font-size="8.512" fill="#141414" font-family="Verdana">4</text>
-            <text transform="translate(260.115 307.144)" font-size="8.512" fill="#141414" font-family="Verdana">5</text>
-          </g>
-          <g>
-            <rect x="222.06" y="310.259" width="46.923" height="37.636" fill="#fff"/>
-            <g>
-              <text transform="translate(226.689 353.795)" font-size="8.512" fill="#141414" font-family="Verdana">0</text>
-              <text transform="translate(243.298 353.795)" font-size="8.512" fill="#141414" font-family="Verdana">1</text>
-              <text transform="translate(260.115 353.795)" font-size="8.512" fill="#141414" font-family="Verdana">2</text>
-            </g>
-            <text transform="translate(226.134 316.188)" font-size="5.675" fill="#141414" font-family="Verdana">P<tspan x="3.422" y="0" letter-spacing="-0.01em">h</tspan><tspan x="6.958" y="0">ysical PSUs</tspan></text>
-            <text transform="translate(227.701 345.22)" font-size="5.675" fill="#141414" font-family="Verdana">Logical PSUs</text>
-          </g>
-        </g>
-        <g>
-          <text transform="translate(226.689 422.473)" font-size="8.512" fill="#141414" font-family="Verdana">0</text>
-          <text transform="translate(243.298 422.473)" font-size="8.512" fill="#141414" font-family="Verdana">1</text>
-          <text transform="translate(260.115 422.473)" font-size="8.512" fill="#141414" font-family="Verdana">2</text>
-        </g>
-      </g>
-      <g>
-        <rect x="220.287" y="501.587" width="16.441" height="58.777" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="236.895" y="501.587" width="16.441" height="58.777" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="253.712" y="501.587" width="16.441" height="58.777" fill="#fffbde" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="0.75"/>
-        <rect x="219.489" y="432.826" width="51.308" height="127.972" fill="none" stroke="#454547" stroke-linecap="round" stroke-linejoin="bevel"/>
-        <text transform="translate(226.689 509.806)" font-size="8.512" fill="#141414" font-family="Verdana">0</text>
-        <text transform="translate(243.298 509.806)" font-size="8.512" fill="#141414" font-family="Verdana">1</text>
-        <text transform="translate(260.115 509.806)" font-size="8.512" fill="#141414" font-family="Verdana">2</text>
-        <rect x="220.054" y="491.497" width="50.156" height="9.908" fill="#fff"/>
-        <g>
-          <rect x="222.06" y="511.486" width="46.923" height="36.905" fill="#fffbde"/>
-          <text transform="translate(226.134 517.278)" font-size="5.675" fill="#141414" font-family="Verdana">P<tspan x="3.422" y="0" letter-spacing="-0.01em">h</tspan><tspan x="6.958" y="0">ysical PSUs</tspan></text>
-          <text transform="translate(227.701 545.51)" font-size="5.675" fill="#141414" font-family="Verdana">Logical PSUs</text>
-        </g>
-        <g>
-          <g>
-            <rect x="220.287" y="433.367" width="16.441" height="58.175" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-            <rect x="236.895" y="433.367" width="16.441" height="58.175" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-            <rect x="253.712" y="433.367" width="16.441" height="58.175" fill="#fff" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
-          </g>
-          <g>
-            <text transform="translate(226.689 441.933)" font-size="8.512" fill="#141414" font-family="Verdana">3</text>
-            <text transform="translate(243.298 441.933)" font-size="8.512" fill="#141414" font-family="Verdana">4</text>
-            <text transform="translate(260.115 441.933)" font-size="8.512" fill="#141414" font-family="Verdana">5</text>
-          </g>
-          <g>
-            <rect x="222.06" y="445.048" width="46.923" height="37.636" fill="#fff"/>
-            <g>
-              <text transform="translate(226.689 488.584)" font-size="8.512" fill="#141414" font-family="Verdana">0</text>
-              <text transform="translate(243.298 488.584)" font-size="8.512" fill="#141414" font-family="Verdana">1</text>
-              <text transform="translate(260.115 488.584)" font-size="8.512" fill="#141414" font-family="Verdana">2</text>
-            </g>
-            <text transform="translate(226.134 450.977)" font-size="5.675" fill="#141414" font-family="Verdana">P<tspan x="3.422" y="0" letter-spacing="-0.01em">h</tspan><tspan x="6.958" y="0">ysical PSUs</tspan></text>
-            <text transform="translate(227.701 480.009)" font-size="5.675" fill="#141414" font-family="Verdana">Logical PSUs</text>
-          </g>
-        </g>
-        <g>
-          <text transform="translate(226.689 557.263)" font-size="8.512" fill="#141414" font-family="Verdana">0</text>
-          <text transform="translate(243.298 557.263)" font-size="8.512" fill="#141414" font-family="Verdana">1</text>
-          <text transform="translate(260.115 557.263)" font-size="8.512" fill="#141414" font-family="Verdana">2</text>
-        </g>
-      </g>
-      <text transform="translate(221.743 226.336)" font-size="7.529" fill="#141414" font-family="Verdana"><tspan letter-spacing="-0.024em">R</tspan><tspan x="5.051" y="0">ect Shelf 2</tspan></text>
-      <text transform="translate(222.715 363.893)" font-size="7.529" fill="#141414" font-family="Verdana"><tspan letter-spacing="-0.024em">R</tspan><tspan x="5.051" y="0">ect Shelf 1</tspan></text>
-      <text transform="translate(222.715 499.229)" font-size="7.529" fill="#141414" font-family="Verdana"><tspan letter-spacing="-0.024em">R</tspan><tspan x="5.051" y="0">ect Shelf 0</tspan></text>
-    </g>
-  </g>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 25.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 432 624.2" style="enable-background:new 0 0 432 624.2;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFFFFF;}
+	.st1{fill:none;stroke:#435663;stroke-width:2;stroke-linecap:square;stroke-miterlimit:9.9998;}
+	.st2{fill:#FFFBDE;stroke:#454547;stroke-width:0.75;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:3.9999;}
+	.st3{fill:#FFFFFF;stroke:#1F1F1F;stroke-width:0.75;stroke-miterlimit:9.9998;}
+	.st4{fill:#FFFBDE;}
+	.st5{fill:#FFFFFF;stroke:#454547;stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:3.9999;}
+	.st6{fill:none;stroke:#454547;stroke-width:0.75;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:3.9999;}
+	.st7{fill:none;stroke:#454547;stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:3.9999;}
+	.st8{fill:#141414;}
+	.st9{font-family:'Verdana';}
+	.st10{font-size:9.2568px;}
+	.st11{font-size:10.0072px;}
+	.st12{font-size:12px;}
+	.st13{font-size:6.1716px;}
+	.st14{font-size:8.1878px;}
+</style>
+<rect x="4" y="2" class="st0" width="427" height="621"/>
+<g id="Mountain_Cabinet_Front">
+	<g>
+		<rect x="12.5" y="19.7" class="st1" width="408.4" height="594.3"/>
+		<g>
+			<rect x="39.3" y="29.8" class="st2" width="15.8" height="138.5"/>
+			<rect x="57.1" y="29.8" class="st2" width="15.8" height="138.5"/>
+			<rect x="74.6" y="29.8" class="st2" width="15.8" height="138.5"/>
+			<rect x="92.4" y="29.8" class="st2" width="15.8" height="138.5"/>
+			<rect x="109.9" y="29.8" class="st2" width="15.8" height="138.5"/>
+			<rect x="127.8" y="29.8" class="st2" width="15.8" height="138.5"/>
+			<rect x="145.3" y="29.8" class="st2" width="15.8" height="138.5"/>
+			<rect x="163.1" y="29.8" class="st2" width="15.8" height="138.5"/>
+		</g>
+		<g>
+			<rect x="236.7" y="29.8" class="st3" width="15.8" height="138.5"/>
+			<rect x="254.5" y="29.8" class="st3" width="15.8" height="138.5"/>
+			<rect x="272" y="29.8" class="st3" width="15.8" height="138.5"/>
+			<rect x="289.8" y="29.8" class="st3" width="15.8" height="138.5"/>
+			<rect x="307.3" y="29.8" class="st3" width="15.8" height="138.5"/>
+			<rect x="325.2" y="29.8" class="st3" width="15.8" height="138.5"/>
+			<rect x="342.7" y="29.8" class="st3" width="15.8" height="138.5"/>
+			<rect x="360.5" y="29.8" class="st3" width="15.8" height="138.5"/>
+		</g>
+		<rect x="82.4" y="39.7" class="st4" width="59.4" height="14.1"/>
+		<rect x="278" y="39.7" class="st0" width="59.4" height="14.1"/>
+		<rect x="380.4" y="36.7" class="st5" width="24.9" height="124.3"/>
+		<rect x="36.6" y="26.7" class="st6" width="341.5" height="143.8"/>
+		<g>
+			<rect x="39.3" y="175.3" class="st2" width="15.8" height="138.5"/>
+			<rect x="57.1" y="175.3" class="st2" width="15.8" height="138.5"/>
+			<rect x="74.6" y="175.3" class="st2" width="15.8" height="138.5"/>
+			<rect x="92.4" y="175.3" class="st2" width="15.8" height="138.5"/>
+			<rect x="109.9" y="175.3" class="st2" width="15.8" height="138.5"/>
+			<rect x="127.8" y="175.3" class="st2" width="15.8" height="138.5"/>
+			<rect x="145.3" y="175.3" class="st2" width="15.8" height="138.5"/>
+			<rect x="163.1" y="175.3" class="st2" width="15.8" height="138.5"/>
+		</g>
+		<g>
+			<rect x="236.7" y="175.3" class="st3" width="15.8" height="138.5"/>
+			<rect x="254.5" y="175.3" class="st3" width="15.8" height="138.5"/>
+			<rect x="272" y="175.3" class="st3" width="15.8" height="138.5"/>
+			<rect x="289.8" y="175.3" class="st3" width="15.8" height="138.5"/>
+			<rect x="307.3" y="175.3" class="st3" width="15.8" height="138.5"/>
+			<rect x="325.2" y="175.3" class="st3" width="15.8" height="138.5"/>
+			<rect x="342.7" y="175.3" class="st3" width="15.8" height="138.5"/>
+			<rect x="360.5" y="175.3" class="st3" width="15.8" height="138.5"/>
+		</g>
+		<rect x="82" y="185.2" class="st4" width="59.4" height="14.1"/>
+		<rect x="279.7" y="185.2" class="st0" width="59.4" height="14.1"/>
+		<rect x="380.4" y="182.2" class="st5" width="24.9" height="124.3"/>
+		<rect x="36.6" y="173.8" class="st7" width="341.5" height="143.8"/>
+		<g>
+			<rect x="39.3" y="324.2" class="st2" width="15.8" height="138.5"/>
+			<rect x="57.1" y="324.2" class="st2" width="15.8" height="138.5"/>
+			<rect x="74.6" y="324.2" class="st2" width="15.8" height="138.5"/>
+			<rect x="92.4" y="324.2" class="st2" width="15.8" height="138.5"/>
+			<rect x="109.9" y="324.2" class="st2" width="15.8" height="138.5"/>
+			<rect x="127.8" y="324.2" class="st2" width="15.8" height="138.5"/>
+			<rect x="145.3" y="324.2" class="st2" width="15.8" height="138.5"/>
+			<rect x="163.1" y="324.2" class="st2" width="15.8" height="138.5"/>
+		</g>
+		<g>
+			<rect x="236.7" y="324.2" class="st3" width="15.8" height="138.5"/>
+			<rect x="254.5" y="324.2" class="st3" width="15.8" height="138.5"/>
+			<rect x="272" y="324.2" class="st3" width="15.8" height="138.5"/>
+			<rect x="289.8" y="324.2" class="st3" width="15.8" height="138.5"/>
+			<rect x="307.3" y="324.2" class="st3" width="15.8" height="138.5"/>
+			<rect x="325.2" y="324.2" class="st3" width="15.8" height="138.5"/>
+			<rect x="342.7" y="324.2" class="st3" width="15.8" height="138.5"/>
+			<rect x="360.5" y="324.2" class="st3" width="15.8" height="138.5"/>
+		</g>
+		<rect x="82.4" y="334.1" class="st4" width="59.4" height="14.1"/>
+		<rect x="280.4" y="334.1" class="st0" width="59.4" height="14.1"/>
+		<rect x="380.4" y="331" class="st5" width="24.9" height="124.3"/>
+		<rect x="36.6" y="321" class="st7" width="341.5" height="143.8"/>
+		<g>
+			<rect x="39.3" y="471.4" class="st2" width="15.8" height="138.5"/>
+			<rect x="57.1" y="471.4" class="st2" width="15.8" height="138.5"/>
+			<rect x="74.6" y="471.4" class="st2" width="15.8" height="138.5"/>
+			<rect x="92.4" y="471.4" class="st2" width="15.8" height="138.5"/>
+			<rect x="109.9" y="471.4" class="st2" width="15.8" height="138.5"/>
+			<rect x="127.8" y="471.4" class="st2" width="15.8" height="138.5"/>
+			<rect x="145.3" y="471.4" class="st2" width="15.8" height="138.5"/>
+			<rect x="163.1" y="471.4" class="st2" width="15.8" height="138.5"/>
+		</g>
+		<g>
+			<rect x="236.7" y="471.4" class="st3" width="15.8" height="138.5"/>
+			<rect x="254.5" y="471.4" class="st3" width="15.8" height="138.5"/>
+			<rect x="272" y="471.4" class="st3" width="15.8" height="138.5"/>
+			<rect x="289.8" y="471.4" class="st3" width="15.8" height="138.5"/>
+			<rect x="307.3" y="471.4" class="st3" width="15.8" height="138.5"/>
+			<rect x="325.2" y="471.4" class="st3" width="15.8" height="138.5"/>
+			<rect x="342.7" y="471.4" class="st3" width="15.8" height="138.5"/>
+			<rect x="360.5" y="471.4" class="st3" width="15.8" height="138.5"/>
+		</g>
+		<rect x="79.6" y="481.3" class="st4" width="59.4" height="14.1"/>
+		<rect x="280" y="481.3" class="st0" width="59.4" height="14.1"/>
+		<rect x="380.4" y="478.2" class="st5" width="24.9" height="124.3"/>
+		<rect x="36.6" y="468.2" class="st7" width="341.5" height="143.8"/>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 50.9116 165.4492)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 68.7407 165.4492)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 86.2456 165.4492)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 104.0747 165.4492)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 121.5815 165.4492)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 139.4097 165.4492)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 156.9146 165.4492)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 174.7446 165.4492)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 248.3369 165.4492)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 266.166 165.4492)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 283.6709 165.4492)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 301.501 165.4492)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 319.0068 165.4492)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 336.834 165.4492)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 354.3418 165.4492)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 372.1709 165.4492)" class="st8 st9 st10">Compute Blade</text>
+		<g>
+			<text transform="matrix(1 0 0 1 44.8267 89.0205)" class="st8 st9 st10">0</text>
+			<text transform="matrix(1 0 0 1 62.0737 89.0205)" class="st8 st9 st10">1</text>
+			<text transform="matrix(1 0 0 1 79.3208 89.0205)" class="st8 st9 st10">2</text>
+			<text transform="matrix(1 0 0 1 97.8296 89.0205)" class="st8 st9 st10">3</text>
+			<text transform="matrix(1 0 0 1 114.6558 89.0205)" class="st8 st9 st10">4</text>
+			<text transform="matrix(1 0 0 1 132.7437 89.0205)" class="st8 st9 st10">5</text>
+			<text transform="matrix(1 0 0 1 150.4116 89.0205)" class="st8 st9 st10">6</text>
+			<text transform="matrix(1 0 0 1 168.0776 89.0205)" class="st8 st9 st10">7</text>
+			<text transform="matrix(1 0 0 1 242.2529 89.0205)" class="st8 st9 st10">0</text>
+			<text transform="matrix(1 0 0 1 259.5 89.0205)" class="st8 st9 st10">1</text>
+			<text transform="matrix(1 0 0 1 276.7471 89.0205)" class="st8 st9 st10">2</text>
+			<text transform="matrix(1 0 0 1 295.2549 89.0205)" class="st8 st9 st10">3</text>
+			<text transform="matrix(1 0 0 1 312.082 89.0205)" class="st8 st9 st10">4</text>
+			<text transform="matrix(1 0 0 1 330.1699 89.0205)" class="st8 st9 st10">5</text>
+			<text transform="matrix(1 0 0 1 347.8369 89.0205)" class="st8 st9 st10">6</text>
+			<text transform="matrix(1 0 0 1 365.5039 89.0205)" class="st8 st9 st10">7</text>
+		</g>
+		<text transform="matrix(1 0 0 1 86.3013 50.3887)" class="st8 st9 st11">Chassis 6</text>
+		<text transform="matrix(1 0 0 1 281.9258 50.3887)" class="st8 st9 st11">Chassis 7</text>
+		<text transform="matrix(1 0 0 1 382.6279 100.8711)" class="st8 st9 st10">PDU</text>
+		<text transform="matrix(1 0 0 1 389.4297 111.9795)" class="st8 st9 st10">3</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 50.9116 310.3535)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 68.7407 310.3535)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 86.2456 310.3535)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 104.0747 310.3535)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 121.5815 310.3535)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 139.4097 310.3535)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 156.9146 310.3535)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 174.7446 310.3535)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 248.3369 309.8916)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 266.166 309.8916)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 283.6709 309.8916)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 301.501 309.8916)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 319.0068 309.8916)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 336.834 309.8916)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 354.3418 309.8916)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 372.1709 309.8916)" class="st8 st9 st10">Compute Blade</text>
+		<g>
+			<text transform="matrix(1 0 0 1 44.8267 233.8164)" class="st8 st9 st10">0</text>
+			<text transform="matrix(1 0 0 1 62.0737 233.8164)" class="st8 st9 st10">1</text>
+			<text transform="matrix(1 0 0 1 79.3208 233.8164)" class="st8 st9 st10">2</text>
+			<text transform="matrix(1 0 0 1 97.8296 233.8164)" class="st8 st9 st10">3</text>
+			<text transform="matrix(1 0 0 1 114.6558 233.8164)" class="st8 st9 st10">4</text>
+			<text transform="matrix(1 0 0 1 132.7437 233.8164)" class="st8 st9 st10">5</text>
+			<text transform="matrix(1 0 0 1 150.4116 233.8164)" class="st8 st9 st10">6</text>
+			<text transform="matrix(1 0 0 1 168.0776 233.8164)" class="st8 st9 st10">7</text>
+			<text transform="matrix(1 0 0 1 242.2529 233.8164)" class="st8 st9 st10">0</text>
+			<text transform="matrix(1 0 0 1 259.5 233.8164)" class="st8 st9 st10">1</text>
+			<text transform="matrix(1 0 0 1 276.7471 233.8164)" class="st8 st9 st10">2</text>
+			<text transform="matrix(1 0 0 1 295.2549 233.8164)" class="st8 st9 st10">3</text>
+			<text transform="matrix(1 0 0 1 312.082 233.8164)" class="st8 st9 st10">4</text>
+			<text transform="matrix(1 0 0 1 330.1699 233.8164)" class="st8 st9 st10">5</text>
+			<text transform="matrix(1 0 0 1 347.8369 233.8164)" class="st8 st9 st10">6</text>
+			<text transform="matrix(1 0 0 1 365.5039 233.8164)" class="st8 st9 st10">7</text>
+		</g>
+		<text transform="matrix(1 0 0 1 85.6626 196.4736)" class="st8 st9 st11">Chassis 4</text>
+		<text transform="matrix(1 0 0 1 283.3115 196.1279)" class="st8 st9 st11">Chassis 5</text>
+		<text transform="matrix(1 0 0 1 382.6279 244.2705)" class="st8 st9 st10">PDU</text>
+		<text transform="matrix(1 0 0 1 389.4297 255.3799)" class="st8 st9 st10">2</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 50.9116 459.3486)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 68.7407 459.3486)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 86.2456 459.3486)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 104.0747 459.3486)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 121.5815 459.3486)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 139.4097 459.3486)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 156.9146 459.3486)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 174.7446 459.3486)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 248.3369 458.8887)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 266.166 458.8887)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 283.6709 458.8887)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 301.501 458.8887)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 319.0068 458.8887)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 336.834 458.8887)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 354.3418 458.8887)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 372.1709 458.8887)" class="st8 st9 st10">Compute Blade</text>
+		<g>
+			<text transform="matrix(1 0 0 1 44.8267 383.832)" class="st8 st9 st10">0</text>
+			<text transform="matrix(1 0 0 1 62.0737 383.832)" class="st8 st9 st10">1</text>
+			<text transform="matrix(1 0 0 1 79.3208 383.832)" class="st8 st9 st10">2</text>
+			<text transform="matrix(1 0 0 1 97.8296 383.832)" class="st8 st9 st10">3</text>
+			<text transform="matrix(1 0 0 1 114.6558 383.832)" class="st8 st9 st10">4</text>
+			<text transform="matrix(1 0 0 1 132.7437 383.832)" class="st8 st9 st10">5</text>
+			<text transform="matrix(1 0 0 1 150.4116 383.832)" class="st8 st9 st10">6</text>
+			<text transform="matrix(1 0 0 1 168.0776 383.832)" class="st8 st9 st10">7</text>
+			<text transform="matrix(1 0 0 1 242.2529 383.832)" class="st8 st9 st10">0</text>
+			<text transform="matrix(1 0 0 1 259.5 383.832)" class="st8 st9 st10">1</text>
+			<text transform="matrix(1 0 0 1 276.7471 383.832)" class="st8 st9 st10">2</text>
+			<text transform="matrix(1 0 0 1 295.2549 383.832)" class="st8 st9 st10">3</text>
+			<text transform="matrix(1 0 0 1 312.082 383.832)" class="st8 st9 st10">4</text>
+			<text transform="matrix(1 0 0 1 330.1699 383.832)" class="st8 st9 st10">5</text>
+			<text transform="matrix(1 0 0 1 347.8369 383.832)" class="st8 st9 st10">6</text>
+			<text transform="matrix(1 0 0 1 365.5039 383.832)" class="st8 st9 st10">7</text>
+		</g>
+		<text transform="matrix(1 0 0 1 85.9722 345.1191)" class="st8 st9 st11">Chassis 2</text>
+		<text transform="matrix(1 0 0 1 283.9971 345.1191)" class="st8 st9 st11">Chassis 3</text>
+		<text transform="matrix(1 0 0 1 382.6279 390.1582)" class="st8 st9 st10">PDU</text>
+		<text transform="matrix(1 0 0 1 389.4297 401.2676)" class="st8 st9 st10">1</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 50.9116 606.0146)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 68.7407 606.0146)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 86.2456 606.0146)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 104.0747 606.0146)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 121.5815 606.0146)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 139.4097 606.0146)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 156.9146 606.0146)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 174.7446 606.0146)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(1 0 0 1 44.8267 529.0723)" class="st8 st9 st10">0</text>
+		<text transform="matrix(1 0 0 1 62.0737 529.0723)" class="st8 st9 st10">1</text>
+		<text transform="matrix(1 0 0 1 79.3208 529.0723)" class="st8 st9 st10">2</text>
+		<text transform="matrix(1 0 0 1 97.8296 529.0723)" class="st8 st9 st10">3</text>
+		<text transform="matrix(1 0 0 1 114.6558 529.0723)" class="st8 st9 st10">4</text>
+		<text transform="matrix(1 0 0 1 132.7437 529.0723)" class="st8 st9 st10">5</text>
+		<text transform="matrix(1 0 0 1 150.4116 529.0723)" class="st8 st9 st10">6</text>
+		<text transform="matrix(1 0 0 1 168.0776 529.0723)" class="st8 st9 st10">7</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 248.3369 605.5576)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 266.166 605.5576)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 283.6709 605.5576)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 301.501 605.5576)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 319.0068 605.5576)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 336.834 605.5576)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 354.3418 605.5576)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 372.1709 605.5576)" class="st8 st9 st10">Compute Blade</text>
+		<text transform="matrix(1 0 0 1 259.5 529.0723)" class="st8 st9 st10">1</text>
+		<text transform="matrix(1 0 0 1 242.2529 529.0723)" class="st8 st9 st10">0</text>
+		<text transform="matrix(1 0 0 1 276.7471 529.0723)" class="st8 st9 st10">2</text>
+		<text transform="matrix(1 0 0 1 295.2549 529.0723)" class="st8 st9 st10">3</text>
+		<text transform="matrix(1 0 0 1 312.082 529.0723)" class="st8 st9 st10">4</text>
+		<text transform="matrix(1 0 0 1 330.1699 529.0723)" class="st8 st9 st10">5</text>
+		<text transform="matrix(1 0 0 1 347.8369 529.0723)" class="st8 st9 st10">6</text>
+		<text transform="matrix(1 0 0 1 365.5039 529.0723)" class="st8 st9 st10">7</text>
+		<text transform="matrix(1 0 0 1 84.6636 492.4727)" class="st8 st9 st11">Chassis 0</text>
+		<text transform="matrix(1 0 0 1 283.6543 492.8193)" class="st8 st9 st11">Chassis 1</text>
+		<text transform="matrix(1 0 0 1 382.6279 534.8643)" class="st8 st9 st10">PDU</text>
+		<text transform="matrix(1 0 0 1 389.4297 545.9727)" class="st8 st9 st10">0</text>
+		<text transform="matrix(1 0 0 1 190.8228 13.9102)" class="st8 st9 st12">Front</text>
+		<g>
+			<g>
+				<rect x="180.8" y="104" class="st2" width="17.9" height="63.9"/>
+				<rect x="198.9" y="104" class="st2" width="17.9" height="63.9"/>
+				<rect x="217.2" y="104" class="st2" width="17.9" height="63.9"/>
+				<rect x="180" y="29.2" class="st7" width="55.8" height="139.2"/>
+				<text transform="matrix(1 0 0 1 187.8003 112.8945)" class="st8 st9 st10">0</text>
+				<text transform="matrix(1 0 0 1 205.8618 112.8945)" class="st8 st9 st10">1</text>
+				<text transform="matrix(1 0 0 1 224.1509 112.8945)" class="st8 st9 st10">2</text>
+				<rect x="180.6" y="93" class="st0" width="54.5" height="10.8"/>
+				<g>
+					<rect x="182.8" y="114.7" class="st4" width="51" height="40.1"/>
+					<text transform="matrix(1 0 0 1 187.1958 121.0195)" class="st8 st9 st13">P</text>
+					<text transform="matrix(1 0 0 1 190.9175 121.0195)" class="st8 st9 st13">h</text>
+					<text transform="matrix(1 0 0 1 194.7622 121.0195)" class="st8 st9 st13">ysical PSUs</text>
+					<text transform="matrix(1 0 0 1 188.8999 151.7217)" class="st8 st9 st13">Logical PSUs</text>
+				</g>
+				<g>
+					<g>
+						<rect x="180.8" y="29.8" class="st3" width="17.9" height="63.3"/>
+						<rect x="198.9" y="29.8" class="st3" width="17.9" height="63.3"/>
+						<rect x="217.2" y="29.8" class="st3" width="17.9" height="63.3"/>
+					</g>
+					<g>
+						<text transform="matrix(1 0 0 1 187.8003 39.0811)" class="st8 st9 st10">3</text>
+						<text transform="matrix(1 0 0 1 205.8618 39.0811)" class="st8 st9 st10">4</text>
+						<text transform="matrix(1 0 0 1 224.1509 39.0811)" class="st8 st9 st10">5</text>
+					</g>
+					<g>
+						<rect x="182.8" y="42.5" class="st0" width="51" height="40.9"/>
+						<g>
+							<text transform="matrix(1 0 0 1 187.8003 89.8145)" class="st8 st9 st10">0</text>
+							<text transform="matrix(1 0 0 1 205.8618 89.8145)" class="st8 st9 st10">1</text>
+							<text transform="matrix(1 0 0 1 224.1509 89.8145)" class="st8 st9 st10">2</text>
+						</g>
+						<text transform="matrix(1 0 0 1 187.1958 48.918)" class="st8 st9 st13">P</text>
+						<text transform="matrix(1 0 0 1 190.9175 48.918)" class="st8 st9 st13">h</text>
+						<text transform="matrix(1 0 0 1 194.7622 48.918)" class="st8 st9 st13">ysical PSUs</text>
+						<text transform="matrix(1 0 0 1 188.8999 80.4893)" class="st8 st9 st13">Logical PSUs</text>
+					</g>
+				</g>
+				<g>
+					<text transform="matrix(1 0 0 1 187.8003 164.5029)" class="st8 st9 st10">0</text>
+					<text transform="matrix(1 0 0 1 205.8618 164.5029)" class="st8 st9 st10">1</text>
+					<text transform="matrix(1 0 0 1 224.1509 164.5029)" class="st8 st9 st10">2</text>
+				</g>
+			</g>
+			<text transform="matrix(1 0 0 1 183.478 101.6143)" class="st8 st9 st14">R</text>
+			<text transform="matrix(1 0 0 1 188.9712 101.6143)" class="st8 st9 st14">ect Shelf 3</text>
+		</g>
+		<g>
+			<rect x="180.8" y="248.4" class="st2" width="17.9" height="63.9"/>
+			<rect x="198.9" y="248.4" class="st2" width="17.9" height="63.9"/>
+			<rect x="217.2" y="248.4" class="st2" width="17.9" height="63.9"/>
+			<rect x="180" y="173.6" class="st7" width="55.8" height="139.2"/>
+			<text transform="matrix(1 0 0 1 187.8003 257.3311)" class="st8 st9 st10">0</text>
+			<text transform="matrix(1 0 0 1 205.8618 257.3311)" class="st8 st9 st10">1</text>
+			<text transform="matrix(1 0 0 1 224.1509 257.3311)" class="st8 st9 st10">2</text>
+			<rect x="180.6" y="237.4" class="st0" width="54.5" height="10.8"/>
+			<g>
+				<rect x="182.8" y="259.2" class="st4" width="51" height="40.1"/>
+				<text transform="matrix(1 0 0 1 187.1958 265.4551)" class="st8 st9 st13">P</text>
+				<text transform="matrix(1 0 0 1 190.9175 265.4551)" class="st8 st9 st13">h</text>
+				<text transform="matrix(1 0 0 1 194.7622 265.4551)" class="st8 st9 st13">ysical PSUs</text>
+				<text transform="matrix(1 0 0 1 188.8999 296.1572)" class="st8 st9 st13">Logical PSUs</text>
+			</g>
+			<g>
+				<g>
+					<rect x="180.8" y="174.2" class="st3" width="17.9" height="63.3"/>
+					<rect x="198.9" y="174.2" class="st3" width="17.9" height="63.3"/>
+					<rect x="217.2" y="174.2" class="st3" width="17.9" height="63.3"/>
+				</g>
+				<g>
+					<text transform="matrix(1 0 0 1 187.8003 183.5176)" class="st8 st9 st10">3</text>
+					<text transform="matrix(1 0 0 1 205.8618 183.5176)" class="st8 st9 st10">4</text>
+					<text transform="matrix(1 0 0 1 224.1509 183.5176)" class="st8 st9 st10">5</text>
+				</g>
+				<g>
+					<rect x="182.8" y="186.9" class="st0" width="51" height="40.9"/>
+					<g>
+						<text transform="matrix(1 0 0 1 187.8003 234.25)" class="st8 st9 st10">0</text>
+						<text transform="matrix(1 0 0 1 205.8618 234.25)" class="st8 st9 st10">1</text>
+						<text transform="matrix(1 0 0 1 224.1509 234.25)" class="st8 st9 st10">2</text>
+					</g>
+					<text transform="matrix(1 0 0 1 187.1958 193.3525)" class="st8 st9 st13">P</text>
+					<text transform="matrix(1 0 0 1 190.9175 193.3525)" class="st8 st9 st13">h</text>
+					<text transform="matrix(1 0 0 1 194.7622 193.3525)" class="st8 st9 st13">ysical PSUs</text>
+					<text transform="matrix(1 0 0 1 188.8999 224.9238)" class="st8 st9 st13">Logical PSUs</text>
+				</g>
+			</g>
+			<g>
+				<text transform="matrix(1 0 0 1 187.8003 308.9385)" class="st8 st9 st10">0</text>
+				<text transform="matrix(1 0 0 1 205.8618 308.9385)" class="st8 st9 st10">1</text>
+				<text transform="matrix(1 0 0 1 224.1509 308.9385)" class="st8 st9 st10">2</text>
+			</g>
+		</g>
+		<g>
+			<rect x="180.8" y="398.6" class="st2" width="17.9" height="63.9"/>
+			<rect x="198.9" y="398.6" class="st2" width="17.9" height="63.9"/>
+			<rect x="217.2" y="398.6" class="st2" width="17.9" height="63.9"/>
+			<rect x="180" y="323.8" class="st7" width="55.8" height="139.2"/>
+			<text transform="matrix(1 0 0 1 187.8003 407.5195)" class="st8 st9 st10">0</text>
+			<text transform="matrix(1 0 0 1 205.8618 407.5195)" class="st8 st9 st10">1</text>
+			<text transform="matrix(1 0 0 1 224.1509 407.5195)" class="st8 st9 st10">2</text>
+			<rect x="180.6" y="387.6" class="st0" width="54.5" height="10.8"/>
+			<g>
+				<rect x="182.8" y="409.3" class="st4" width="51" height="40.1"/>
+				<text transform="matrix(1 0 0 1 187.1958 415.6436)" class="st8 st9 st13">P</text>
+				<text transform="matrix(1 0 0 1 190.9175 415.6436)" class="st8 st9 st13">h</text>
+				<text transform="matrix(1 0 0 1 194.7622 415.6436)" class="st8 st9 st13">ysical PSUs</text>
+				<text transform="matrix(1 0 0 1 188.8999 446.3457)" class="st8 st9 st13">Logical PSUs</text>
+			</g>
+			<g>
+				<g>
+					<rect x="180.8" y="324.4" class="st3" width="17.9" height="63.3"/>
+					<rect x="198.9" y="324.4" class="st3" width="17.9" height="63.3"/>
+					<rect x="217.2" y="324.4" class="st3" width="17.9" height="63.3"/>
+				</g>
+				<g>
+					<text transform="matrix(1 0 0 1 187.8003 333.7061)" class="st8 st9 st10">3</text>
+					<text transform="matrix(1 0 0 1 205.8618 333.7061)" class="st8 st9 st10">4</text>
+					<text transform="matrix(1 0 0 1 224.1509 333.7061)" class="st8 st9 st10">5</text>
+				</g>
+				<g>
+					<rect x="182.8" y="337.1" class="st0" width="51" height="40.9"/>
+					<g>
+						<text transform="matrix(1 0 0 1 187.8003 384.4385)" class="st8 st9 st10">0</text>
+						<text transform="matrix(1 0 0 1 205.8618 384.4385)" class="st8 st9 st10">1</text>
+						<text transform="matrix(1 0 0 1 224.1509 384.4385)" class="st8 st9 st10">2</text>
+					</g>
+					<text transform="matrix(1 0 0 1 187.1958 343.541)" class="st8 st9 st13">P</text>
+					<text transform="matrix(1 0 0 1 190.9175 343.541)" class="st8 st9 st13">h</text>
+					<text transform="matrix(1 0 0 1 194.7622 343.541)" class="st8 st9 st13">ysical PSUs</text>
+					<text transform="matrix(1 0 0 1 188.8999 375.1133)" class="st8 st9 st13">Logical PSUs</text>
+				</g>
+			</g>
+			<g>
+				<text transform="matrix(1 0 0 1 187.8003 459.125)" class="st8 st9 st10">0</text>
+				<text transform="matrix(1 0 0 1 205.8618 459.125)" class="st8 st9 st10">1</text>
+				<text transform="matrix(1 0 0 1 224.1509 459.125)" class="st8 st9 st10">2</text>
+			</g>
+		</g>
+		<g>
+			<rect x="180.8" y="545.2" class="st2" width="17.9" height="63.9"/>
+			<rect x="198.9" y="545.2" class="st2" width="17.9" height="63.9"/>
+			<rect x="217.2" y="545.2" class="st2" width="17.9" height="63.9"/>
+			<rect x="180" y="470.4" class="st7" width="55.8" height="139.2"/>
+			<text transform="matrix(1 0 0 1 187.8003 554.1006)" class="st8 st9 st10">0</text>
+			<text transform="matrix(1 0 0 1 205.8618 554.1006)" class="st8 st9 st10">1</text>
+			<text transform="matrix(1 0 0 1 224.1509 554.1006)" class="st8 st9 st10">2</text>
+			<rect x="180.6" y="534.2" class="st0" width="54.5" height="10.8"/>
+			<g>
+				<rect x="182.8" y="555.9" class="st4" width="51" height="40.1"/>
+				<text transform="matrix(1 0 0 1 187.1958 562.2256)" class="st8 st9 st13">P</text>
+				<text transform="matrix(1 0 0 1 190.9175 562.2256)" class="st8 st9 st13">h</text>
+				<text transform="matrix(1 0 0 1 194.7622 562.2256)" class="st8 st9 st13">ysical PSUs</text>
+				<text transform="matrix(1 0 0 1 188.8999 592.9277)" class="st8 st9 st13">Logical PSUs</text>
+			</g>
+			<g>
+				<g>
+					<rect x="180.8" y="471" class="st3" width="17.9" height="63.3"/>
+					<rect x="198.9" y="471" class="st3" width="17.9" height="63.3"/>
+					<rect x="217.2" y="471" class="st3" width="17.9" height="63.3"/>
+				</g>
+				<g>
+					<text transform="matrix(1 0 0 1 187.8003 480.2891)" class="st8 st9 st10">3</text>
+					<text transform="matrix(1 0 0 1 205.8618 480.2891)" class="st8 st9 st10">4</text>
+					<text transform="matrix(1 0 0 1 224.1509 480.2891)" class="st8 st9 st10">5</text>
+				</g>
+				<g>
+					<rect x="182.8" y="483.7" class="st0" width="51" height="40.9"/>
+					<g>
+						<text transform="matrix(1 0 0 1 187.8003 531.0215)" class="st8 st9 st10">0</text>
+						<text transform="matrix(1 0 0 1 205.8618 531.0215)" class="st8 st9 st10">1</text>
+						<text transform="matrix(1 0 0 1 224.1509 531.0215)" class="st8 st9 st10">2</text>
+					</g>
+					<text transform="matrix(1 0 0 1 187.1958 490.124)" class="st8 st9 st13">P</text>
+					<text transform="matrix(1 0 0 1 190.9175 490.124)" class="st8 st9 st13">h</text>
+					<text transform="matrix(1 0 0 1 194.7622 490.124)" class="st8 st9 st13">ysical PSUs</text>
+					<text transform="matrix(1 0 0 1 188.8999 521.6963)" class="st8 st9 st13">Logical PSUs</text>
+				</g>
+			</g>
+			<g>
+				<text transform="matrix(1 0 0 1 187.8003 605.71)" class="st8 st9 st10">0</text>
+				<text transform="matrix(1 0 0 1 205.8618 605.71)" class="st8 st9 st10">1</text>
+				<text transform="matrix(1 0 0 1 224.1509 605.71)" class="st8 st9 st10">2</text>
+			</g>
+		</g>
+		<text transform="matrix(1 0 0 1 182.4204 245.8271)" class="st8 st9 st14">R</text>
+		<text transform="matrix(1 0 0 1 187.9136 245.8271)" class="st8 st9 st14">ect Shelf 2</text>
+		<text transform="matrix(1 0 0 1 183.478 395.4209)" class="st8 st9 st14">R</text>
+		<text transform="matrix(1 0 0 1 188.9712 395.4209)" class="st8 st9 st14">ect Shelf 1</text>
+		<text transform="matrix(1 0 0 1 183.478 542.5986)" class="st8 st9 st14">R</text>
+		<text transform="matrix(1 0 0 1 188.9712 542.5986)" class="st8 st9 st14">ect Shelf 0</text>
+	</g>
+</g>
 </svg>

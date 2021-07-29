@@ -71,7 +71,7 @@ When the PDU breakers are switched to OFF, the Chassis Management Modules \(CMMs
 
 8.  If other systems are **not** being cooled by the floor-standing CDU, open the CDU rear door to access the control panel and set the circuit breakers to OFF.
 
-    ![](../../img/operations/CDU_Circuit_Breakers.svg "CDU Circuit Breakers")
+    ![](../../img/operations/CDU_Circuit_Breakers.png "CDU Circuit Breakers")
 
 **POWER OFF STANDARD RACK PDU CIRCUIT BREAKERS**
 
