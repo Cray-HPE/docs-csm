@@ -10,7 +10,7 @@ disk2=$(echo $disks | awk '{print $2}')
 echo "Creating dedicated partition for /var/lib/ceph"
 parted /dev/$disk1 mkpart ext4 401GB 470G
 mkfs.ext4 /dev/${disk1}4
-echo "Stopping all ceph services"
+echo "Stopping all Ceph services"
 systemctl stop ceph.target
 echo "Sleeping for thirty seconds to let things stop"
 sleep 30
@@ -18,7 +18,7 @@ mount /dev/${disk1}4 /mnt
 cp -rp /var/lib/ceph/* /mnt
 umount /mnt
 mount /dev/${disk1}4 /var/lib/ceph
-echo "Starting ceph services"
+echo "Starting Ceph services"
 systemctl start ceph.target
 
 echo "Creating dedicated partition for /var/lib/containers"

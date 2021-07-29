@@ -33,7 +33,7 @@ else
 fi
 
 # Ensure that the previously rebuilt worker node (if applicable) has started any etcd pods (if necessary). 
-# We don't want to begin rebuilding the next worker node until etcd pods have reached quorum. 
+# We do not want to begin rebuilding the next worker node until etcd pods have reached quorum. 
 state_name="ENSURE_ETCD_PODS_RUNNING"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
@@ -72,7 +72,7 @@ if [[ $state_recorded == "0" ]]; then
       output=$(kubectl get po -A -o wide | grep -e etcd -e speaker | grep $upgrade_ncn | awk '{print $4}')
       if [ ! -n "$output" ]; then
         #
-        # No pods scheduled to start on this node, we're done
+        # No pods scheduled to start on this node, we are done
         #
         break
       fi

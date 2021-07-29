@@ -56,7 +56,7 @@ the instructions for attaching to the BMC will differ.
 
    **Note:** A shorter path name is better than a long path name on the webserver.
 
-      - The Cray Pre-Install Toolkit ISO is included in the CSM release tarball.  It will have a long filename similar to
+      - The Cray Pre-Install Toolkit ISO is included in the CSM release tarball. It will have a long filename similar to
         `cray-pre-install-toolkit-sle15sp2.x86_64-1.4.10-20210514183447-gc054094.iso`, so pick a shorter name on the webserver.
 
 1. See the respective procedure below to attach an ISO.

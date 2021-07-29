@@ -86,15 +86,15 @@ ncn-m001# ls -l test-ipxe.efi
 
 ### Serial Over Lan \(SOL\) Sessions
 
-There are two tools that can be used to access a BMC’s console via SOL:
+There are two tools that can be used to access a BMC's console via SOL:
 
 -   ipmitool - ipmitool is a utility for controlling IPMI-enabled devices.
 
-    Use the following command to access a node’s SOL via ipmitool:
+    Use the following command to access a node's SOL via ipmitool:
 
     ```bash
     ncn-m001# ipmitool -I lanplus -U root -P compute_node_BMC_password \
-    -H node_mangement_network_IP_address_of_node sol activate
+    -H node_management_network_IP_address_of_node sol activate
     ```
 
     Example:
@@ -103,6 +103,6 @@ There are two tools that can be used to access a BMC’s console via SOL:
     ncn-m001# ipmitool -I lanplus -U root -P password -H  10.100.165.2 sol activate
     ```
 
--   ConMan - The ConMan tool is used to collect logs from nodes. It is also used to attach to the node’s SOL console. For more information, refer to [ConMan](../conman/ConMan.md) and [Access Compute Node Logs](../conman/Access_Compute_Node_Logs.md).
+-   ConMan - The ConMan tool is used to collect logs from nodes. It is also used to attach to the node's SOL console. For more information, refer to [ConMan](../conman/ConMan.md) and [Access Compute Node Logs](../conman/Access_Compute_Node_Logs.md).
 
 

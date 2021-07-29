@@ -46,7 +46,7 @@ nodes (NCNs), and User Access Nodes (UANs) in the system. This allows for the fo
    *  NCNs and UANs to access systems outside the cluster (e.g. LDAP, license servers, and more).
    *  Services within the cluster to access systems outside the cluster.
 
-These nodes and services need an IP address that routes to the customer’s network in order to be accessed from
+These nodes and services need an IP address that routes to the customer's network in order to be accessed from
 outside the network.
 
 ## Cabinet Environmental Controller (CEC)

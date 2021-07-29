@@ -223,6 +223,7 @@ report `FAIL` when uploading duplicate assets. This is ok as long as
 1. Run `upgrade.sh` to deploy upgraded CSM applications and services:
 
    ```bash
+   ncn-m001# cd "$CSM_DISTDIR"
    ncn-m001# ./upgrade.sh
    ```
 

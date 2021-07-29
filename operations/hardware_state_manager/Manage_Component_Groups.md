@@ -58,7 +58,7 @@ ncn-m# cray hsm groups create -v --label GROUP_LABEL
 Add a description of the group:
 
 ```screen
-ncn-m# cray hsm groups update test_group --description “Description of group”
+ncn-m# cray hsm groups update test_group --description "Description of group"
 ```
 
 Add a new component to a group:

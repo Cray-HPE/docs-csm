@@ -187,7 +187,7 @@ This system needs to do the renames in this order: do CDU switches (8 to 9, 7 to
    sw-cdu-002# write memory
    ```
 
-   Logout of the switch and return using the new IP address for vlan 2 so that vlan 1 can be corrected.
+   Log out of the switch and return using the new IP address for `vlan 2` so that `vlan 1` can be corrected.
 
    ```
    sw-cdu-002# exit
@@ -221,7 +221,7 @@ This system needs to do the renames in this order: do CDU switches (8 to 9, 7 to
    sw-cdu-001# write memory
    ```
 
-   Logout of the switch and return using the new IP address for vlan 2 so that vlan 1 can be corrected.
+   Log out of the switch and return using the new IP address for `vlan 2` so that `vlan 1` can be corrected.
 
    ```
    sw-cdu-001# exit
@@ -238,7 +238,7 @@ This system needs to do the renames in this order: do CDU switches (8 to 9, 7 to
 
 5. Move sw-leaf02 to sw-leaf-002 and increase IP addresses as specified in CSI output. It is a Dell switch.
 
-   Note: You can change many addresses in a single session, but not the one you used to connect. This first connection will skip vlan 1 and change all of the other vlans (vlan 2, vlan 4, vlan 7, vlan 10) on a leaf switch.
+   Note: You can change many addresses in a single session, but not the one you used to connect. This first connection will skip `vlan 1` and change all of the others (`vlan 2`, `vlan 4`, `vlan 7`, and `vlan 10`) on a leaf switch.
 
    ```
    pit# ssh admin@10.1.0.4
@@ -259,7 +259,7 @@ This system needs to do the renames in this order: do CDU switches (8 to 9, 7 to
    sw-leaf-002# write memory
    ```
 
-   Logout of the switch and return using the new IP address for vlan 2 so that vlan 1 can be corrected.
+   Log out of the switch and return using the new IP address for `vlan 2` so that `vlan 1` can be corrected.
 
    ```
    sw-leaf-002# exit
@@ -276,7 +276,7 @@ This system needs to do the renames in this order: do CDU switches (8 to 9, 7 to
 
 6. Move sw-leaf01 to sw-leaf-001 and increase IP addresses as specified in CSI output. It is a Dell switch.
 
-   Note: You can change many addresses in a single session, but not the one you used to connect. This first connection will skip vlan 1 and change all of the other vlans (vlan 2, vlan 4, vlan 7, vlan 10) on a leaf switch.
+   Note: You can change many addresses in a single session, but not the one you used to connect. This first connection will skip `vlan 1` and change all of the others (`vlan 2`, `vlan 4`, `vlan 7`, and `vlan 10`) on a leaf switch.
 
    ```
    pit# ssh admin@10.1.0.2
@@ -293,7 +293,7 @@ This system needs to do the renames in this order: do CDU switches (8 to 9, 7 to
    sw-leaf-001# write memory
    ```
 
-   Logout of the switch and return using the new IP address for vlan 2 so that vlan 1 can be corrected.
+   Log out of the switch and return using the new IP address for `vlan 2` so that `vlan 1` can be corrected.
 
    ```
    sw-leaf-001# exit
@@ -311,7 +311,7 @@ This system needs to do the renames in this order: do CDU switches (8 to 9, 7 to
 7. Move sw-spine02 to sw-spine-002. It already has the .3 IP address so does not need to change. It is a Mellanox switch.
 
 
-   Note: You can change many addresses in a single session, but not the one you used to connect. This first connection will skip vlan 1 and change all of the other vlans (vlan 2, vlan 4, vlan 7, vlan 10) on a leaf switch.
+   Note: You can change many addresses in a single session, but not the one you used to connect. This first connection will skip `vlan 1` and change all of the others (`vlan 2`, `vlan 4`, `vlan 7`, and `vlan 10`) on a leaf switch.
 
    Note: The addresses for the spine switches in CAN.yaml shown above (ip_address: 10.103.8.2, name: can-switch-1) and (ip_address: 10.103.8.3, name: can-switch-2) were shown on the 10.103.8.0 subnet so the virtual-router address on interface vlan7 magp 7 should be 10.103.8.1.
 
@@ -332,7 +332,7 @@ This system needs to do the renames in this order: do CDU switches (8 to 9, 7 to
    sw-spine-002# write memory
    ```
 
-   Logout of the switch and return using the new IP address for vlan 2 so that vlan 1 can be corrected.
+   Log out of the switch and return using the new IP address for `vlan 2` so that `vlan 1` can be corrected.
 
    ```
    sw-spine-002# exit
@@ -373,7 +373,7 @@ This system needs to do the renames in this order: do CDU switches (8 to 9, 7 to
 
 8. Move sw-spine01 to sw-spine-001 and increase IP addresses as specified in CSI output. It is a Mellanox switch.
 
-   Note: You can change many addresses in a single session, but not the one you used to connect. This first connection will skip vlan 1 and change all of the other vlans (vlan 2, vlan 4, vlan 7, vlan 10) on a leaf switch.
+   Note: You can change many addresses in a single session, but not the one you used to connect. This first connection will skip `vlan 1` and change all of the others (`vlan 2`, `vlan 4`, `vlan 7`, and `vlan 10`) on a leaf switch.
 
    Note: The addresses for the spine switches in CAN.yaml shown above (ip_address: 10.103.8.2, name: can-switch-1) and (ip_address: 10.103.8.3, name: can-switch-2) were shown on the 10.103.8.0 subnet so the virtual-router address on interface vlan7 magp 7 should be 10.103.8.1.
 
@@ -405,7 +405,7 @@ This system needs to do the renames in this order: do CDU switches (8 to 9, 7 to
    sw-spine-001 [standalone: master] # write memory
    ```
 
-   Logout of the switch and return using the new IP address for vlan 2 so that vlan 1 can be corrected.
+   Log out of the switch and return using the new IP address for `vlan 2` so that `vlan 1` can be corrected.
 
    ```
    sw-spine-001# exit

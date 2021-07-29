@@ -61,7 +61,7 @@ ncn-w001# kubectl delete pod -n ${NAMESPACE} "${POSTGRESQL}-0" "${POSTGRESQL}-1"
 ncn-w001# kubectl delete pod -n services -l app.kubernetes.io/name=postgres-operator
 
 ```
-3. Check if the database is running.  If it is running, continue with [Dumping the data](#dump).
+3. Check if the database is running. If it is running, continue with [Dumping the data](#dump).
 ```
 ncn-w001# kubectl exec "${POSTGRESQL}-1" -n ${NAMESPACE} -c postgres -it -- psql -U postgres
 psql (12.2 (Ubuntu 12.2-1.pgdg18.04+1), server 11.7 (Ubuntu 11.7-1.pgdg18.04+1))

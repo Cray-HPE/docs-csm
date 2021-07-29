@@ -393,9 +393,9 @@ This section applies to all node types.
       1. Remove everything before `kernel` on the `"params": "kernel"` line.
       1. Re-run steps [4-5](#step4) for another node/xname. Look for an example that does not contain `BOOT_IMAGE`.
 
-          Once an example is found, copy a portion of the `"params"` line for everything including and after `'biosdevname'`, and use that in the XNAME.json file.
+          Once an example is found, copy a portion of the `params` line for everything including and after `biosdevname`, and use that in the `XNAME.json` file.
 
-      1. After copying the content after `'biosdevname'`, change the `"hostname=<hostname>"` to the correct host.
+      1. After copying the content after `biosdevname`, change the `"hostname=<hostname>"` to the correct host.
 
 1. Set the kernel parameters to wipe the disk.
 

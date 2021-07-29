@@ -5,7 +5,7 @@ If either or both of the `kernel` or the `initrd` boot artifacts are missing fro
 
 ### Symptoms
 
-The node’s console or log will display lines beginning with, ''`Could not start download`''. Refer to the image below for an example of this error message.
+The node's console or log will display lines beginning with, ''`Could not start download`''. Refer to the image below for an example of this error message.
 
 ![](../../img/operations/BSS_Missing_an_Artifact.png "BSS Missing an Artifact")
 
@@ -70,7 +70,7 @@ This command will return 404 errors if the specified object does not exist in th
 
 ### Resolution
 
-Ensure that the required boot artifacts are stored in the artifact repository and/or BSS. If the artifact’s name is different than what is already in BSS, then BSS needs to be updated to match.
+Ensure that the required boot artifacts are stored in the artifact repository and/or BSS. If the artifact's name is different than what is already in BSS, then BSS needs to be updated to match.
 
 
 

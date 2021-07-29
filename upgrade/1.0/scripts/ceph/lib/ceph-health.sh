@@ -16,7 +16,7 @@ function wait_for_health_ok() {
       break
     fi
     sleep 5
-    echo "Sleeping for five seconds waiting ceph to be healthy..."
+    echo "Sleeping for five seconds waiting for Ceph to be healthy..."
     cnt=$((cnt+1))
   done
 }
@@ -65,7 +65,7 @@ function wait_for_osd() {
   cnt=0
   while true; do
     #
-    # We've already slept 2 minutes adopting the OSD, so if it's not
+    # We have already slept 2 minutes adopting the OSD, so if it is not
     # here yet (after 30 seconds of the 5 minutes), let's kick the
     # active mgr.
     #

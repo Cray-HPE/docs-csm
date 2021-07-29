@@ -16,7 +16,7 @@ function install_dashboard () {
         ceph config set mgr/dashboard/server_port 8443
     fi
     read -s -p "Enter a password for the initial deployment" passwd
-    read  -s -p "Confirm passwd" passwd2
+    read -s -p "Confirm passwd" passwd2
     if [[ $passwd == $passwd2 ]] then
       echo "Creating cray_cephadm dashboard user"
       ceph dashboard ac-user-create cray_cephadm $passwd administrator

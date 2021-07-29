@@ -46,7 +46,7 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
 
     2.  Analyze the NCN tcpdump data to ensure that the TFTP discover request is visible.
 
-8.  Go back to the original terminal to analyze the TFTP pod’s tcpdump data in order to ensure that the TFTP request is visible inside the pod.
+8.  Go back to the original terminal to analyze the TFTP pod's tcpdump data in order to ensure that the TFTP request is visible inside the pod.
 
     **Troubleshooting Information:**
 

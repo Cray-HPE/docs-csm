@@ -42,18 +42,18 @@ This check will also be conducted in the 'prerequisites.sh' script listed below 
         ncn-m001# rpm -Uvh [PATH_TO_docs-csm-install-*.noarch.rpm]
         ```
 
-#### Stage 0.2. - Update customizations.yaml
+#### Stage 0.2. - Update `customizations.yaml`
 
-Perform these steps to update customizations.yaml:
+Perform these steps to update `customizations.yaml`:
 
-1. Extract customizations.yaml from the `site-init` secret:
+1. Extract `customizations.yaml` from the `site-init` secret:
 
    ```bash
    ncn-m001# cd /tmp
    ncn-m001# kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
    ```
 
-2. Update customizations.yaml:
+2. Update `customizations.yaml`:
 
    ```bash
    ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/update-customizations.sh -i customizations.yaml
@@ -66,8 +66,8 @@ Perform these steps to update customizations.yaml:
    ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
    ```
 
-4. If using an exteral Git repository for managing customizations ([as recommended](../../install/prepare_site_init.md#version-control-site-init-files)),
-   clone a local working tree and commit appropriate changes to customizations.yaml,
+4. If using an external Git repository for managing customizations ([as recommended](../../install/prepare_site_init.md#version-control-site-init-files)),
+   clone a local working tree and commit appropriate changes to `customizations.yaml`,
    e.g.:
 
    ```bash
