@@ -2,7 +2,7 @@
 
 The following procedure contains information for rebooting and deploying the management node that is currently
 hosting the LiveCD. The following steps detail how an administrator through loading hand-off data and rebooting
-the node. This assists with remote-console setup to aide in observing the reboot. At the end of this procedure, the
+the node. This assists with remote-console setup to aid in observing the reboot. At the end of this procedure, the
 LiveCD will no longer be active. The node it was using will join the Kubernetes cluster as the final of three master
 nodes forming a quorum.
 
