@@ -120,7 +120,7 @@ There are several starting points for modifying compute images. An admin can sta
 
 6.  Create an IMS job record and start the image customization job.
 
-    After customizing the image, IMS will automatically upload any build artifacts \(root file system, kernel, and initrd\) to S3, and associate the S3 artifacts with IMS. Unfortunately, IMS is not able to dynamically determine the names of the Linux kernel and initrd to look for, because the file name for these vary depending upon Linux distribution, Linux version, dracut configuration, and more. Thus, the user must pass the name of the kernel and initrd that IMS is to look for in the resultant image root’s /boot directory.
+    After customizing the image, IMS will automatically upload any build artifacts \(root file system, kernel, and initrd\) to S3, and associate the S3 artifacts with IMS. Unfortunately, IMS is not able to dynamically determine the names of the Linux kernel and initrd to look for, because the file name for these vary depending upon Linux distribution, Linux version, dracut configuration, and more. Thus, the user must pass the name of the kernel and initrd that IMS is to look for in the resultant image root's /boot directory.
 
     ```bash
     ncn# cray ims jobs create \
@@ -383,7 +383,7 @@ There are several starting points for modifying compute images. An admin can sta
     ncn# export IMS_JOB_ID=ad5163d2-398d-4e93-94f0-2f439f114fe7
     ```
 
-    The IMS customization workflow automatically copies the NCN Certificate Authority’s public certificate to /etc/cray/ca/certificate\_authority.crt within the image root being customized. This can be used to enable secure communications between the NCN and the client node.
+    The IMS customization workflow automatically copies the NCN Certificate Authority's public certificate to /etc/cray/ca/certificate\_authority.crt within the image root being customized. This can be used to enable secure communications between the NCN and the client node.
 
 15. Look up the ID of the newly created image.
 

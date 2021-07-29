@@ -30,14 +30,14 @@ cleanup() {
 	fi
 
 	if [[ "$REBOOT_NEEDED" == "true" ]]; then
-		echo "The new on-disk boot artifacts won't take effect until a restart of the machine."
+		echo "The new on-disk boot artifacts will not take effect until a restart of the machine."
 	fi
 }
 
 mount_bootraid() {
 	if ! eval pit_check; then
 		if ! eval mount | grep "${BOOTRAID}" >/dev/null; then
-			# Mount the BOOTRAID parititon
+			# Mount the BOOTRAID partition
 			mount -L BOOTRAID -T /etc/fstab.metal
 		fi
 	fi

@@ -50,7 +50,7 @@ Use the --configuration-limit option when creating a CFS session to apply config
 
 Use the following command to create a CFS session to run only on `example-layer1`, and then `example-layer5` of a previously created `configurations-example` configuration:
 
-**Warning:** If the configuration’s layers do not have names, then indices must be specified. Do not mix layer names and layer indices when using limits.
+**Warning:** If the configuration's layers do not have names, then indices must be specified. Do not mix layer names and layer indices when using limits.
 
 ```bash
 ncn# cray cfs sessions create --name example \

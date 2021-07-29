@@ -33,7 +33,7 @@ DHCPACK on 10.100.160.195 to a4:bf:01:2e:81:4c via eth0
 Abandoning IP address 10.100.160.195: declined.
 ```
 
-Notice that two different components \(identifiable by the two different MAC address `a4:bf:01:29:92:eb` and `a4:bf:01:2e:81:4c`\) have made DHCP requests for the IP address `10.100.160.195`.
+Notice that two different components \(identifiable by the two different MAC addresses `a4:bf:01:29:92:eb` and `a4:bf:01:2e:81:4c`\) have made DHCP requests for the IP address `10.100.160.195`.
 
 `a4:bf:01:29:92:eb` is the component that owns the IP address `10.100.160.195`, while `a4:bf:01:2e:81:4c` has been statically assigned the IP address `10.100.160.195` in the DHCP configuration file. As such, DHCP keeps trying to assign it that address, but after being offered the address, `a4:bf:01:2e:81:4c` declines it because it realizes that `a4:bf:01:29:92:eb` already owns it.
 

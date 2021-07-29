@@ -134,7 +134,7 @@ This procedure requires root privileges.
 
 3.  Check the health of an etcd cluster database.
 
-    -   To check the health of an etcd cluster’s database in the services namespace:
+    -   To check the health of an etcd cluster's database in the services namespace:
 
         ```bash
         for pod in $(kubectl get pods -l app=etcd -n services \

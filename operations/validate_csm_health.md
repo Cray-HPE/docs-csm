@@ -110,7 +110,7 @@ Execute the ncnHealthChecks script and analyze the output of each individual che
 ncn# csi handoff bss-update-param --set metal.no-wipe=1 --limit <SERVER_XNAME>
 ```
 
-**IMPORTANT:** If the output of pod statuses indicates that there are pods in the ‘Evicted’ state, it may be due to the /root file system being filled up on the Kubernetes node in question.  Kubernetes will begin evicting pods once the root file system space is at 85% until it is back under 80%.  This may commonly happen on ncn-m001 as it is a location that install and doc files may be downloaded to.  It may be necessary to clean-up space in the /root directory if this is the root cause of pod evictions.  The following commands can be used to determine if analysis of files under /root is needed to free-up space.
+**IMPORTANT:** If the output of pod statuses indicates that there are pods in the `Evicted` state, it may be due to the /root file system being filled up on the Kubernetes node in question. Kubernetes will begin evicting pods once the root file system space is at 85% until it is back under 80%. This may commonly happen on ncn-m001 as it is a location that install and doc files may be downloaded to. It may be necessary to clean-up space in the /root directory if this is the root cause of pod evictions. The following commands can be used to determine if analysis of files under /root is needed to free-up space.
 
 ```bash
 ncn# df -h /root

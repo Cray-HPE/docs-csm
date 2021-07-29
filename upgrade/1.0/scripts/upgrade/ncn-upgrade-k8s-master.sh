@@ -79,7 +79,7 @@ if [[ ${first_master_hostname} == ${upgrade_ncn} ]]; then
       done  
 
       if [[ ${promotingMaster} == "none" ]];then
-        echo "No master nodes has healthy cloud-init metadata, fail upgrade. You may try to upgrade another master node first. If that still fails, we don't have any master nodes that can be promoted."
+        echo "No master nodes has healthy cloud-init metadata, fail upgrade. You may try to upgrade another master node first. If that still fails, we do not have any master nodes that can be promoted."
         exit 1
       fi
 

@@ -637,7 +637,7 @@ branches into `master` branch of `/mnt/pitdata/prep/site-init`.
 When considering merges, and especially when resolving conflicts, carefully
 examine differences to ensure all changes are relevant. For example, when
 applying a customer-specific customization used in a prior version, be sure the
-change still makes sense. It’s common for options to change as new features are
+change still makes sense. It is common for options to change as new features are
 introduced and bugs are fixed.
 
 

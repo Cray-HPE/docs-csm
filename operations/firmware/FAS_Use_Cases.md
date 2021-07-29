@@ -471,7 +471,7 @@ All of the example JSON files below are set to run a dry-run. Update the overrid
 
 #### Update NCNs
 
-NCNs are compute blades; we currently only have NCNs that are manufactured by Gigabyte or HPE. Use the `NodeBMC` examples from above and include the `xname` param as part of the `stateComponentFilter` to target **ONLY** the xnames identified as NCNs. 
+NCNs are compute blades; we currently only have NCNs that are manufactured by Gigabyte or HPE. Use the `NodeBMC` examples from above and include the `xname` parameter as part of the `stateComponentFilter` to target **ONLY** the xnames identified as NCNs. 
 
 **WARNING:** Updating more than one NCN at a time **MAY** cause system instability. Be sure to follow the correct process for updating NCN; FAS accepts no responbility for updates that do not follow the correct process. Firmware updates have the capacity to harm the system; follow the appropriate guides.
 
@@ -610,7 +610,7 @@ The NCN must be rebooted after updating the BIOS firmware. Follow the [Reboot NC
 
 ### Update Liquid-Cooled Compute Node BIOS Firmware
 
-Use this procedure to update compute node BIOS firmware using FAS. There are two nodes that must be updated, which have the “Node0.BIOS” and “Node1.BIOS” targets.
+Use this procedure to update compute node BIOS firmware using FAS. There are two nodes that must be updated, which have the `Node0.BIOS` and `Node1.BIOS` targets.
 
 #### Prerequisites
 -   The Cray nodeBMC device needs to be updated before the nodeBIOS because the nodeBMC adds a new field Redfish \(softwareId\) that the NodeX.BIOS update will require. See [Update Liquid-Cooled Node or Switch Firmware](#liquidcooled) for more information.
