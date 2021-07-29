@@ -2,11 +2,11 @@
 
 Access from the customer site to the system over shared networks is known as the Customer Access Network (CAN).
 
-# Requirements
+## Requirements
 - Access to switches
 - SHCD
 
-# Configuration
+## Configuration
 
 The CAN configuration is highly dependent on customer requirements and may not meet the specifications below.
 
@@ -84,7 +84,7 @@ sw-spine-002(config)# int vlan 7
 sw-spine-002(config-if-vlan)# ip address 10.102.11.3/24
 ```
 
-# Verification of CAN Configuration
+## Verification of CAN Configuration
 
 After completing this configuration you should be able to ping and log in to all of the NCNs at the external CAN IP address from a device on the customer network.
 
