@@ -33,7 +33,7 @@ function scale_down_cephfs_clients () {
         if [[ "$num_replicas" -eq 0 ]]; then
           #
           # We may have already scaled this deployment down or are re-running
-          # the upgrade script.  Let's be careful not to write zeros in the 
+          # the upgrade script. Be careful not to write zeros in the 
           # replica count file.
           #
           if [ "$deployment" == "cray-tftp" ]; then

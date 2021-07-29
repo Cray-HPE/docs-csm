@@ -24,7 +24,7 @@ ncn# kubectl logs -n services ${CFS_POD_NAME} -c ${CONTAINER_NAME}
 
 The `${CONTAINER_NAME}` value is one of the containers mentioned in [Configuration Sessions](Configuration_Sessions.md). Depending on the number of configuration layers in the session, some sessions will have more containers available. Use the -f option in the previous command to follow the logs if the session is still running.
 
-To view the Ansible logs, determine which configuration layer’s logs to view from the order of the configuration set in the session. For example, if it is the first layer, the `${CONTAINER_NAME}` will be `ansible-0`.
+To view the Ansible logs, determine which configuration layer's logs to view from the order of the configuration set in the session. For example, if it is the first layer, the `${CONTAINER_NAME}` will be `ansible-0`.
 
 ```bash
 ncn# kubectl logs -n services ${CFS_POD_NAME} -c ansible-0

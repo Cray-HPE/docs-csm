@@ -44,7 +44,7 @@ When a session is launched, the items below are created:
 
     ```bash
     ncn-m001# kubectl -n services describe job BOA_JOB_NAME
-    …
+    ...
       Volumes:
        boot-session:
         Type:      ConfigMap (a volume populated by a ConfigMap)
@@ -89,7 +89,7 @@ When a session is launched, the items below are created:
             ncn-m001# cray cfs sessions delete CFS_SESSION_NAME
             ```
 
-    -   Configuration has completed and the desired state needs to be cleaned up so that configuration doesn’t happen on restart:
+    -   Configuration has completed and the desired state needs to be cleaned up so that configuration does not happen on restart:
         1.  Unset the desired state for all components affected.
 
             To find the impacted xnames for the components with the desired configuration matching what was applied:

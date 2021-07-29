@@ -12,7 +12,7 @@ The Customer Access Network \(CAN\) provides access from outside the customer ne
 -   NCNs and UANs to access systems outside the cluster \(e.g. LDAP, license servers, and more\).
 -   Services within the cluster to access systems outside the cluster.
 
-These nodes and services need an IP address that routes to the customer’s network in order to be accessed from outside the network.
+These nodes and services need an IP address that routes to the customer's network in order to be accessed from outside the network.
 
 ### Implications if CAN is not Configured
 

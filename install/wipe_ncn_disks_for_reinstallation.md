@@ -129,7 +129,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
 2. Unmount volumes
 
-   > **`NOTE`** Some of the following umount commands may fail or have warnings depending on the state of the NCN.  Failures in this section can be ignored and will not inhibit the wipe process.
+   > **`NOTE`** Some of the following umount commands may fail or have warnings depending on the state of the NCN. Failures in this section can be ignored and will not inhibit the wipe process.
 
    1. Storage nodes
       ```bash
@@ -165,7 +165,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
       ncn# vgremove -f --select 'vg_name=~metal*'
       ```
 
-      > **`NOTE`** Optionally you can run the `pvs` command and if any drives are still listed, you can remove them with `pvremove`, but this is rarely needed.  Also, if the above command fails or returns a warning about the filesystem being in use, you should ignore the error and proceed to the next step, as this will not inhibit the wipe process.
+      > **`NOTE`** Optionally you can run the `pvs` command and if any drives are still listed, you can remove them with `pvremove`, but this is rarely needed. Also, if the above command fails or returns a warning about the filesystem being in use, you should ignore the error and proceed to the next step, as this will not inhibit the wipe process.
 
 4. Stop the RAIDs.
 

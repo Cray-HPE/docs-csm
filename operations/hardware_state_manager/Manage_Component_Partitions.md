@@ -52,7 +52,7 @@ ncn-m# cray hsm partitions create -v --label PARTITION_LABEL
 Add a description of the partition:
 
 ```screen
-ncn-m# cray hsm partitions update test_group --description “Description of partition”
+ncn-m# cray hsm partitions update test_group --description "Description of partition"
 ```
 
 Add a new component to the partition:

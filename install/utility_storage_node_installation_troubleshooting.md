@@ -38,7 +38,7 @@ ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
 13   ssd  3.49309         osd.13      down  1.00000 1.00000
 15   ssd  3.49309         osd.15      down  1.00000 1.00000
 -7       27.94519     host ncn-s003                            <--- node where the issue exists
- 2   ssd 27.94519         osd.2       down  1.00000 1.00000    <--- the problematic VG.  
+ 2   ssd 27.94519         osd.2       down  1.00000 1.00000    <--- the problematic VG  
 
 ```
 
@@ -162,7 +162,7 @@ Using recent ceph image docker.io/ceph/ceph@sha256:16d37584df43bd6545d16e5aeba52
 /usr/bin/podman: stdout       crush device class        None
 /usr/bin/podman: stdout       encrypted                 0
 /usr/bin/podman: stdout       osd fsid                  b2eb119c-4f45-430b-96b0-bad9e8b9aca6
-/usr/bin/podman: stdout       osd id                    0  <-- the osd number
+/usr/bin/podman: stdout       osd id                    0  <-- the OSD number
 /usr/bin/podman: stdout       osdspec affinity
 /usr/bin/podman: stdout       type                      block
 /usr/bin/podman: stdout       vdo                       0

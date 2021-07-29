@@ -17,7 +17,7 @@ The workflows in this section include:
 
 Mentioned in this workflow:
 
--   System Layout Service \(SLS\) serves as a “single source of truth” for the system design. It details the physical locations of network hardware, compute nodes and cabinets. Further, it stores information about the network, such as which port on which switch should be connected to each compute node.
+-   System Layout Service \(SLS\) serves as a "single source of truth" for the system design. It details the physical locations of network hardware, compute nodes and cabinets. Further, it stores information about the network, such as which port on which switch should be connected to each compute node.
 -   Hardware State Manager \(HSM\) monitors and interrogates hardware components in an HPE Cray EX system, tracking hardware state and inventory information, and making it available via REST queries and message bus events when changes occur.
 -   HMS Notification Fanout Daemon \(hmnfd\) receives component state change notifications from the HSM. It fans notifications out to subscribers \(typically compute nodes\).
 -   Endpoint Discovery Service \(REDS/MEDS\) manages initial discovery, configuration, and geolocation of Redfish-enabled BMCs. It periodically makes Redfish requests to determine if hardware is present or missing.
@@ -91,7 +91,7 @@ Mentioned in this workflow:
 
 Mentioned in this workflow:
 
--   System Layout Service \(SLS\) serves as a “single source of truth” for the system design. It details the physical locations of network hardware, compute nodes and cabinets. Further, it stores information about the network, such as which port on which switch should be connected to each compute node.
+-   System Layout Service \(SLS\) serves as a "single source of truth" for the system design. It details the physical locations of network hardware, compute nodes and cabinets. Further, it stores information about the network, such as which port on which switch should be connected to each compute node.
 -   Hardware State Manager \(HSM\) monitors and interrogates hardware components in an HPE Cray EX system, tracking hardware state and inventory information, and making it available via REST queries and message bus events when changes occur.
 -   HMS Notification Fanout Daemon \(hmnfd\) receives component state change notifications from the HSM. It fans notifications out to subscribers \(typically compute nodes\).
 -   Endpoint Discovery Service \(REDS/MEDS\) manages initial discovery, configuration, and geolocation of Redfish-enabled BMCs. It periodically makes Redfish requests to determine if hardware is present or missing.

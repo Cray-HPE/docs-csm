@@ -5,7 +5,7 @@ On rare occasions, the processor hardware may lose the Serial Over Lan \(SOL\) c
 
 ### Symptoms
 
-This issue can be identified if the following is displayed in the node’s console or log:
+This issue can be identified if the following is displayed in the node's console or log:
 
 ```bash
 console.38:2018-09-08 04:54:51 [   16.721165] ixgbe 0000:18:00.0: The EEPROM Checksum Is Not Valid
@@ -22,7 +22,7 @@ Run dmidecode from the compute node to identify its model. H87926-500 is the sil
 
 ```bash
 cmp4:~ # dmidecode|grep H87926
-Verion: H87926-550
+        Version: H87926-550
 ```
 
 ### Resolution

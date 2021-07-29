@@ -14,8 +14,8 @@ This procedure enables admins to set up the service and access its components vi
 
 ### Prerequisites
 
--   Access to the System Management Health web UIs is through Istio’s ingress gateway and requires clients \(browsers\) to set the appropriate HTTP Host header to route traffic to the desired service.
--   This procedure requires administrative privileges on the workstation running the user’s web browser.
+-   Access to the System Management Health web UIs is through Istio's ingress gateway and requires clients \(browsers\) to set the appropriate HTTP Host header to route traffic to the desired service.
+-   This procedure requires administrative privileges on the workstation running the user's web browser.
 -   The Customer Access Network \(CAN\), Border Gateway Protocol \(BGP\), MetalLB, and external DNS are properly configured.
 
 ### Procedure

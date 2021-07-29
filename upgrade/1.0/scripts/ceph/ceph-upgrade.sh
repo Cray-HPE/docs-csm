@@ -55,7 +55,7 @@ done
 if [ -f "$pre_pull_images_file" ]; then
   echo "Images have already been pre-pulled"
 else
-  echo "Pre-pulling ceph images"
+  echo "Pre-pulling Ceph images"
   pre_pull_ceph_images
   mark_initialized $pre_pull_images_file
 fi
@@ -76,7 +76,7 @@ fi
 if [ -f "$upgrade_init_file" ]; then
   echo "This cephadm preparation has already been completed"
 else
-  echo "Preparing cephadm to upgrade ceph"
+  echo "Preparing cephadm to upgrade Ceph"
   ceph_upgrade_init
   echo "Sleeping 10 second"
   mark_initialized $upgrade_init_file
@@ -101,7 +101,7 @@ fi
 if [ -f "$upgrade_mgrs_file" ]; then
   echo "The ceph mgr daemons have been upgraded"
 else
-  echo "upgrading ceph"
+  echo "upgrading Ceph"
   upgrade_ceph_mgrs
   #Add check for mgrs here (find else repeat)
   mark_initialized $upgrade_mgrs_file
@@ -111,7 +111,7 @@ fi
 ### End run on each mon/mgr
 
 if [ -f "$distribute_keys_file" ]; then
-  echo "This ceph cluster keys have already been distributed"
+  echo "This Ceph cluster keys have already been distributed"
 else
   echo "Creating and distributing keys for cephadm"
   create_cephadm_keys
@@ -119,9 +119,9 @@ else
 fi
 
 if [ -f "$setup_orch_file" ]; then
-  echo "This ceph cluster has been converted to ceph-orchestrator"
+  echo "This Ceph cluster has been converted to ceph-orchestrator"
 else
-  echo "upgrading ceph"
+  echo "upgrading Ceph"
   ceph_orch_tasks
   wait_for_orch_hosts
   mark_initialized $setup_orch_file
@@ -130,9 +130,9 @@ fi
 ceph -s
 
 if [ -f "$upgrade_osds_file" ]; then
-  echo "The osds daemons have been upgraded"
+  echo "The OSD daemons have been upgraded"
 else
-  echo "Upgrading ceph OSDs..."
+  echo "Upgrading Ceph OSDs..."
   upgrade_osds
   wait_for_osds
   mark_initialized $upgrade_osds_file

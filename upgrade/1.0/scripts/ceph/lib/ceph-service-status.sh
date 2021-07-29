@@ -9,11 +9,11 @@ do
           a) all_services=$OPTARG;;
           A) all=$OPTARG;;
           h) echo "usage:  ceph-service-status.sh -n <node> -s <service> # checks a single service on a single node"
-             echo "        ceph-service-status.sh -n <node> -a true # checks all ceph services on a node"
-             echo "        ceph-service-status.sh -A true # checks all ceph services on all nodes in a rolling fashion";;
+             echo "        ceph-service-status.sh -n <node> -a true # checks all Ceph services on a node"
+             echo "        ceph-service-status.sh -A true # checks all Ceph services on all nodes in a rolling fashion";;
           \?) echo "usage: ceph-service-status.sh -n <node> -s <service> # checks a single service on a single node"
-             echo "        ceph-service-status.sh -n <node> -A true # checks all ceph services on a node"
-             echo "        ceph-service-status.sh -a true # checks all ceph services on all nodes in a rolling fashion";;
+             echo "        ceph-service-status.sh -n <node> -A true # checks all Ceph services on a node"
+             echo "        ceph-service-status.sh -a true # checks all Ceph services on all nodes in a rolling fashion";;
   esac
 done
 
@@ -51,7 +51,7 @@ function check_service(){
        if [[ $up != "$in" ]]
        then
          echo "OSD: $osd is reporting down"
-         read -r  -p "Press 'y' to attempt to fix it, press 'w' to pause the install so it can be manually fixed, press 'x' to exit the install."
+         read -r -p "Press 'y' to attempt to fix it, press 'w' to pause the install so it can be manually fixed, press 'x' to exit the install."
          case "${REPLY}"  in
          y)
            ceph orch system start "$osd";;

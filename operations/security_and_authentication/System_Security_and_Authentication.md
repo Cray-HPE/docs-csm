@@ -11,7 +11,7 @@ The system uses a number of mechanisms to ensure the security and authentication
 
 ![Security Infrastructure](../../img/operations/Security_Infrastructure.png "Security Infrastructure")
 
-All connections through the Istio ingress gateway require authentication with a valid JWT from Keycloak, except for the following endpoints accessed via the “shasta” external hostname:
+All connections through the Istio ingress gateway require authentication with a valid JWT from Keycloak, except for the following endpoints accessed via the `shasta` external hostname:
 
 -   /keycloak
 -   /apis/tokens

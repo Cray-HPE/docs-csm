@@ -55,7 +55,7 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
 
     2.  Analyze the NCN tcpdump data in order to ensure that the DHCP discover request is visible.
 
-8.  Go back to the original terminal to analyze the DHCP pod’s tcpdump data in order to ensure that the DHCP discover request is visible inside the pod.
+8.  Go back to the original terminal to analyze the DHCP pod's tcpdump data in order to ensure that the DHCP discover request is visible inside the pod.
 
     **Troubleshooting Information:**
 

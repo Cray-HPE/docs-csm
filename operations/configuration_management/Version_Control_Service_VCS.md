@@ -24,8 +24,8 @@ ncn# kubectl get secret -n services vcs-user-credentials \
 The initial VCS login credentials for the `crayvcs` user are stored in three places:
 
 -   `vcs-user-credentials` Kubernetes secret: This is used to initialize the other two locations, as well as providing a place where other users can query for the password.
--   VCS \(Gitea\):  These credentials are used when pushing to Git using the default username and password. The password should be changed through the Gitea UI.
--   Keycloak: These credentials are used to access the VCS UI. They must be changed through Keycloak.
+-   VCS \(Gitea\): These credentials are used when pushing to Git using the default username and password. The password should be changed through the Gitea UI.
+-   Keycloak: These credentials are used to access the VCS UI. They must be changed through Keycloak.
 
 **Warning:** These 3 sources of credentials are not synced by any mechanism. Changing the default password requires that is it changed in all three places. Changing only one may result in difficulty determining the password at a later date, or may result in losing access to VCS altogether.
 
@@ -58,7 +58,7 @@ The `crayvcs` Gitea admin user that is created during CSM installation can log i
     https://vcs.SHASTA_CLUSTER_DNS_NAME/vcs/cray/teams/owners
     ```
 
-3.  Enter the username of the user who should have access to the organization in the **Search user…** text field, and click the **Add Team Member** button.
+3.  Enter the username of the user who should have access to the organization in the **Search user...** text field, and click the **Add Team Member** button.
 
 **Important:** The "Owner" role has full access to all repositories in the organization, as well as administrative access to the organization, including the ability to create and delete repositories.
 

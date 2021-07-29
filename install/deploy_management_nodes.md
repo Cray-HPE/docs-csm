@@ -713,7 +713,7 @@ Observe the output of the checks and note any failures, then remediate them.
    ```bash
    ncn# weave --local status connections | grep failed
    ```
-   If you see messages like **'IP allocation was seeded by different peers'** then weave looks to have split-brained. At this point it is necessary to wipe the ncns and start the PXE boot again:
+   If you see messages like **IP allocation was seeded by different peers** then weave looks to have split-brained. At this point it is necessary to wipe the ncns and start the PXE boot again:
 
    1. Wipe the ncns using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md).
    1. Return to the 'Boot the **Storage Nodes**' step of [Deploy Management Nodes](#deploy_management_nodes) section above.
