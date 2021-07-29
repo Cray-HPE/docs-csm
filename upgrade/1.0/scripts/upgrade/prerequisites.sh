@@ -52,6 +52,34 @@ if [[ $(hostname) == "ncn-m001" ]]; then
 
   # Run the workaround on all the NCNs
   pdsh -b -S -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') '/tmp/CASMINST-2689.sh'
+
+  # Check if ncn-m001 is using itself for an upstream server
+  if [[ "$(awk '/^server/ {print $2}' /etc/chrony.d/cray.conf)" == ncn-m001 ]] ||
+      [[ "$(chronyc tracking | awk '/Reference ID/ {print $5}' | tr -d '()')" == ncn-m001 ]]; then
+        # Get the upstream NTP server from cloud-init metadata, trying a few different sources before failing
+        upstream_ntp_server=$(craysys metadata get upstream_ntp_server)
+        # check to make sure we're not re-creating the bug by setting m001 to use itself as an upstream
+        if [[ "$upstream_ntp_server" == "ncn-m001" ]]; then
+          # if a pool is set, and we didn't find an upstream server, just use the pool
+          grep "^\(pool\).*" /etc/chrony.d/cray.conf >/dev/null
+
+          if [[ $? -eq 0 ]] ; then
+            sed -i "/^\(server ncn-m001\).*/d" /etc/chrony.d/cray.conf
+          # otherwise error
+          else
+            echo "Upsteam server cannot be $upstream_ntp_server"
+            exit 1
+          fi
+        else
+          # Swap in the "real" NTP server
+          sed -i "s/^\(server ncn-m001\).*/server $upstream_ntp_server iburst trust/" /etc/chrony.d/cray.conf
+          # add a new config that will step the clock if it's less that 1s of drift, otherwise, it will slew it
+          # this applies on startups of the system from a reboot only
+          sed -i "/^\(logchange 1.0\)\$/a initstepslew 1 $upstream_ntp_server" /etc/chrony.d/cray.conf
+          # Apply the change to use the new upstream server
+          # systemctl restart chronyd
+        fi
+  fi
 fi
 
 if [[ -z ${TARBALL_FILE} ]]; then
