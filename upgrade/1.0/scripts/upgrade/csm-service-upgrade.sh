@@ -42,9 +42,10 @@ if [[ $state_recorded == "0" ]]; then
     set +e
     n=0
     csm_upgraded=0
+    pushd ${CSM_RELEASE}
     until [ "$n" -ge 3 ]
     do
-        ${CSM_RELEASE}/upgrade.sh
+        ./upgrade.sh
         if [[ $? -eq 0 ]]; then
             csm_upgraded=1
             break
@@ -52,6 +53,7 @@ if [[ $state_recorded == "0" ]]; then
             n=$((n+1)) 
         fi
     done
+    popd +0
     set -e
     if [[ $csm_upgraded -ne 1 ]]; then
         echo "CSM Service upgrade failed after 3 retries"
