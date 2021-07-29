@@ -80,7 +80,7 @@ Available Platform Health Checks:
 <a name="pet-ncnhealthchecks"></a>
 ### 1.1 ncnHealthChecks
 
-Health Check scripts can be found and run on any worker or master node, not on PIT node, from any directory.
+Health Check scripts can be found and run on any worker or master node (not on PIT node), from any directory.
 
    ```bash
    ncn# /opt/cray/platform-utils/ncnHealthChecks.sh
@@ -137,7 +137,7 @@ Additionally, hmn-discovery and unbound manager cronjob pods may be in a 'NotRea
 ### 1.2 ncnPostgresHealthChecks
 
 
-Postgres Health Check scripts can be found and run on any worker or master node, not on PIT node, from any directory.
+Postgres Health Check scripts can be found and run on any worker or master node (not on PIT node), from any directory.
 The ncnPostgresHealthChecks script reports the following postgres health information:
 * The status of each postgresql resource
 * The number of cluster members
