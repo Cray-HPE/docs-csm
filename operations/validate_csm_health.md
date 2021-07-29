@@ -80,7 +80,7 @@ Available Platform Health Checks:
 <a name="pet-ncnhealthchecks"></a>
 ### 1.1 ncnHealthChecks
 
-Health Check scripts can be found and run on any worker or master node from any directory.
+Health Check scripts can be found and run on any worker or master node (not on PIT node), from any directory.
 
    ```bash
    ncn# /opt/cray/platform-utils/ncnHealthChecks.sh
@@ -91,13 +91,20 @@ The ncnHealthChecks script reports the following health information:
 * Ceph health status
 * Health of etcd clusters
 * Number of pods on each worker node for each etcd cluster
-* List of automated etcd backups for the Boot Orchestration Service (BOS), Boot Script Service (BSS), Compute Rolling Upgrade Service (CRUS), and Domain Name Service (DNS)
-* Management node uptimes
+* Alarms set for any of the Etcd clusters
+* Health of Etcd cluster’s database
+* List of automated etcd backups for the Boot Orchestration Service (BOS), Boot Script Service (BSS), Compute Rolling Upgrade Service (CRUS), and Domain Name Service (DNS), and Firmware Action Service (FAS) clusters
+* NCN node uptimes
+* NCN master and worker node resource consumption
+* NCN node xnames and metal.no-wipe status
+* NCN worker node pod counts
 * Pods yet to reach the running state
 
 Execute the ncnHealthChecks script and analyze the output of each individual check. 
 
-**IMPORTANT:** If the output of the ncnHealthChecks.sh script shows that there are nodes that do not have the metal.no_wipe=1, then do the following:
+**IMPORTANT:** When the PIT node is booted the NCN node metal.no-wipe status is not available and is correctly reported as 'unavailable'. Once ncn-m001 has been booted the NCN metal.no-wipe status is expected to be reported as metal.no-wipe=1.
+
+**IMPORTANT:** Only when ncn-m001 has been booted, if the output of the ncnHealthChecks.sh script shows that there are nodes that do not have the metal.no-wipe=1 status, then do the following:
 
 ```bash
 ncn# csi handoff bss-update-param --set metal.no-wipe=1 --limit <SERVER_XNAME>
@@ -124,11 +131,13 @@ ncn# du -ah -B 1024M /root | sort -n -r | head -n 10
 are installed. In particular, this will be the case if executing this as part of the validation after completing the [Install CSM Services](../install/install_csm_services.md).
 If in doubt, validate the CRUS service using the [CMS Validation Tool](#sms-health-checks). If the CRUS check passes using that tool, do not worry about the `cray-crus-` pod state.
 
+Additionally, hmn-discovery and unbound manager cronjob pods may be in a 'NotReady' state. This is expected as these pods are periodically started and transition to the completed state. 
+
 <a name="pet-ncnpostgreshealthchecks"></a>
 ### 1.2 ncnPostgresHealthChecks
 
 
-Postgres Health Check scripts can be found and run on any worker or master node from any directory.
+Postgres Health Check scripts can be found and run on any worker or master node (not on PIT node), from any directory.
 The ncnPostgresHealthChecks script reports the following postgres health information:
 * The status of each postgresql resource
 * The number of cluster members
