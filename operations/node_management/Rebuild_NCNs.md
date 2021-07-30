@@ -382,7 +382,7 @@ This section applies to all node types.
 
 <a name="inspect"></a>
 
- 1. Inspect and modify the JSON file.
+1. Inspect and modify the JSON file.
    1. Remove the outer array brackets.
 
       Do this by removing the first and last line of the XNAME.json file, indicated with the '\[' and '\]' brackets.
