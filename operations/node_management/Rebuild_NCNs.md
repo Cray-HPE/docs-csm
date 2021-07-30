@@ -1,6 +1,6 @@
 # Rebuild NCNs
 
-Rebuild a master, worker, or storage non-compute node \(NCN\). Use this procedure in the event that a node has a hardware failure, or some other issue with the node has occurred that warrants rebuilding the node.
+Rebuild a master, worker, or storage non-compute node (NCN). Use this procedure in the event that a node has a hardware failure, or some other issue with the node has occurred that warrants rebuilding the node.
 
 ## Prerequisites
 
@@ -8,15 +8,17 @@ The system is fully installed and has transitioned off of the LiveCD.
 
 ## Procedure
 
-### Prepare Nodes
+### 1. Prepare Nodes
 
 Only follow the steps in the section for the node type that is being rebuilt:
 
-- NCN Worker Node: [click here](#ncn-worker-node)
-- NCN master node: [click here](#ncn-master-node)
-- NCN storage node: [click here](#ncn-storage-node)
+- [NCN worker node](#ncn-worker-node)
+- [NCN master node](#ncn-master-node)
+- [NCN storage node](#ncn-storage-node)
 
-#### NCN Worker Node
+<a name="ncn-worker-node"></a>
+
+#### 1.1. NCN Worker Node
 
 Prepare a worker node before rebuilding it.
 
@@ -51,9 +53,9 @@ Skip this section if rebuilding a master or storage node. The examples in this s
 
     In this case, the `ncn-w001` and `ncn-w002` nodes have the pod.
 
-    A `404 Not Found` error is expected if the Content Projection Service \(CPS\) is not installed on the system.
+    A `404 Not Found` error is expected if the Content Projection Service (CPS) is not installed on the system.
 
-1. Confirm what the Configuration Framework Service \(CFS\) setting is for the desired state before shutting down the node.
+1. Confirm what the Configuration Framework Service (CFS) setting is for the desired state before shutting down the node.
 
     The following command will indicate if a CFS job is currently in progress. Replace the `XNAME` value in the following command with the xname of the node being rebuilt.
 
@@ -84,7 +86,9 @@ Skip this section if rebuilding a master or storage node. The examples in this s
     ncn-m001# kubectl delete node ncn-w002
     ```
 
-### NCN Master Node
+<a name="ncn-master-node"></a>
+
+### 1.2. NCN Master Node
 
 1. Prepare an NCN master node before rebuilding it.
 
@@ -126,7 +130,7 @@ Skip this section if rebuilding a master or storage node. The examples in this s
                     -X PUT -d @./Global.json
          ```
 
-        Ensure a good response, such as `HTTP CODE 200`, is returned in the curl output.
+        Ensure a good response, such as `HTTP CODE 200`, is returned in the `curl` output.
 
      1. Configure the newly promoted first master node so it is able to have other nodes join the cluster.
 
@@ -173,11 +177,11 @@ Skip this section if rebuilding a master or storage node. The examples in this s
              --key=/etc/kubernetes/pki/etcd/ca.key --endpoints=localhost:2379 member list
          ```
 
-     1. Find the line with the name of the master being removed. The member ID is the alphanumeric string in the first field o that      line. The IP address is in the URL in the fourth field in the line. Note the member ID and IP address for us in subsequent      steps.
+     1. Find the line with the name of the master being removed. The member ID is the alphanumeric string in the first field of that line. The IP address is in the URL in the fourth field in the line. Note the member ID and IP address for us in subsequent steps.
  
      1. Remove the master node from the etcd cluster backing Kubernetes.
  
-        Replace the MEMBER\_ID value with the value returned in the previous sub-step.
+        Replace the MEMBER_ID value with the value returned in the previous sub-step.
  
          ```bash
          ncn# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt \
@@ -197,7 +201,9 @@ Skip this section if rebuilding a master or storage node. The examples in this s
          ncn# kubectl delete node ncn-m002
          ```
 
-#### NCN Storage Node
+<a name="ncn-storage-node"></a>
+
+#### 1.3. NCN Storage Node
 
 1. Prepare an NCN storage node before rebuilding it.
 
@@ -281,7 +287,7 @@ Skip this section if rebuilding a master or storage node. The examples in this s
     
     ```
 
-    Remove the out of quorum node from the mon map. Replace the NODE\_NAME value with the name of the known down ceph-mon node.
+    Remove the out of quorum node from the mon map. Replace the NODE_NAME value with the name of the known down ceph-mon node.
 
     ```bash
     ncn-s001# cd /etc/ansible/ceph-ansible
@@ -335,7 +341,7 @@ Skip this section if rebuilding a master or storage node. The examples in this s
 
     Remove the OSDs to prevent the install from creating new OSDs on the drives, but there is still a reference to them in the crush map. It will time out trying to restart the old OSDs because of that reference.
 
-    Replace NODE\_NAME with the host you are removing
+    Replace NODE_NAME with the host you are removing
 
     ```bash
     # for osd in $(ceph osd ls-tree NODE_NAME); do ceph osd destroy osd.$osd \
@@ -374,7 +380,7 @@ This section applies to all node types.
    ncn# cray bss bootparameters list --name XNAME --format=json > XNAME.json
    ```
 
-    <a name="step6"></a>
+<a name="inspect"></a>
 
  1. Inspect and modify the JSON file.
    1. Remove the outer array brackets.
@@ -547,7 +553,7 @@ This section applies to master and worker nodes. Skip this section if rebuilding
 
     After a bit, the server should begin to boot. This can be viewed from the ConMan console window. Eventually, there will be a `NBP file...` message in the console output. When this message is displayed, exit the console \(**&** then **.**\), and then use `ssh` to log in to the node to complete the remaining validation steps.
 
-    **Troubleshooting:** If the `NBP file...` output never appears, or something else goes wrong, go back to the steps for modifying XNAME.json file \(see step [6](#step6)\) and make sure these instructions were completed correctly.
+    **Troubleshooting:** If the `NBP file...` output never appears, or something else goes wrong, go back to the steps for modifying XNAME.json file (see the step to [inspect and modify the JSON file](#inspect)) and make sure these instructions were completed correctly.
 
 1. Confirm vlan004 is up with the correct IP address on the rebuilt ncn.
 
