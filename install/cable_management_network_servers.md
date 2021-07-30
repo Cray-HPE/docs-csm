@@ -43,10 +43,18 @@ ports on the nodes and how to cable the nodes to the management network switches
 <a name="hpe_worker_node_cabling"></a>
 ### HPE Worker Node Cabling
 
-| Server Port        | Management Network Port        | Speed | Use / Configuration            |
-|--------------------|--------------------------------|-------|--------------------------------|
-| OCP port 1         | spine or aggregation pair, switch 1/2 | 25Gb  | Management Network NMN/HMN/CAN |
-| OCP port 2         | spine or aggregation pair, switch 2/2 | 25Gb  | Management Network NMN/HMN/CAN |
+| Device | Port | Linux Device | Destination | Name | VLAN | LAG |
+|:-------|------|:------|:-------------------------|:--------------|:--------------------|:-----|
+| OCP | 1 |  mgmt0 | primary |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
+| OCP | 2 |  mgmt1 | secondary |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
+| ILO | 1 |  None | HMN Leaf |  N/A |  HMN  |  N/A |
+
+<br>
+NOTES:
+
+* A single OCP card is the default worker configuration.
+<br>
+<br>
 
 #### SHCD Example
 
@@ -64,12 +72,22 @@ ports on the nodes and how to cable the nodes to the management network switches
 #### Dual Card Installations
 The table below describes the cabling of dual card configurations. Also read notes in this section to see other possible customer-based configurations.
 
-| Server Port        | Management Network Port        | Speed | Use / Configuration            |
-|--------------------|--------------------------------|-------|--------------------------------|
-| OCP port 1         | spine or aggregation pair, switch 1/2 | 25Gb  | Management Network NMN/HMN/CAN |
-| OCP port 2         | NONE                           | NONE  | NONE                           |
-| PCIe Slot 1 port 1 | spine or aggr pair, switch 2/2 | 25Gb  | Management Network NMN/HMN/CAN |
-| PCIe Slot 1 port 2 | NONE (See note below for ncn-m001) | NONE  | Site (See note below for ncn-m001) |
+| Device | Port | Linux Device | Destination | Name | VLAN | LAG |
+|:-------|------|:------|:-------------------------|:--------------|:--------------------|:-----|
+| OCP | 1 |  mgmt0 | primary |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
+| OCP | 2 |  mgmt1 | site |  N/A |  N/A  |  N/A |
+| PCIE-SLOT1 | 1 |  mgmt2 | secondary |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
+| PCIE-SLOT1 | 2 |  mgmt3 | None |  N/A |  N/A  |  N/A |
+| ILO | 1 |  None | HMN Leaf |  N/A |  HMN  |  N/A |
+
+<br>
+NOTES:
+
+* REQUIRED:  Master 001 (ncn-m001) is required to have a site connection on OCP Port 2 for installation and maintenance.
+* RECOMMENDED: Masters 002 and 003 may optionally have a site connection on OCP Port 2 for emergency system access.
+* REQUIRED:  Master 001 (ncn-m001) is required to have it's BMC/iLO connected to the site.
+<br>
+<br>
 
 #### SHCD Example
 
@@ -89,12 +107,22 @@ The table below describes the cabling of dual card configurations. Also read not
 <a name="hpe_storage_node_cabling"></a>
 ### HPE Storage Node Cabling
 
-| Server Port        | Management Network Port        | Speed | Use / Configuration            |
-|--------------------|--------------------------------|-------|--------------------------------|
-| OCP port 1         | spine or aggregation pair, switch 1/2 | 25Gb  | Management Network NMN/HMN/CAN |
-| OCP port 2         | spine or aggregation pair, switch 1/2 | 25Gb  | Storage SUN (future use)                           |
-| PCIe Slot 1 port 1 | spine or aggregation pair, switch 2/2 | 25Gb  | Management Network NMN/HMN/CAN |
-| PCIe Slot 1 port 2 | spine or aggregation pair, switch 2/2 | 25Gb  | Storage SUN (future use) |
+| Device | Port | Linux Device | Destination | Name | VLAN | LAG |
+|:-------|------|:------|:-------------------------|:--------------|:--------------------|:-----|
+| OCP | 1 |  mgmt0 | primary |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
+| OCP | 2 |  mgmt1 | primary |  N/A |  SUN  |  MLAG-LACP |
+| PCIE-SLOT1 | 1 |  mgmt2 | secondary |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
+| PCIE-SLOT1 | 2 |  mgmt3 | secondary |  N/A |  SUN  |  MLAG-LACP |
+| ILO | 1 |  None | HMN Leaf |  N/A |  HMN  |  N/A |
+
+<br>
+NOTES:
+
+* All ports are cabled.
+* OCP Port 1 and PCIE Slot 1 Port 1 (first ports) are bonded for the NMN, HMN and CAN.
+* OCP Port 2 and PCIE Slot 1 Port 2 (second ports) cabled but not configured in this release.
+<br>
+<br>
 
 #### SHCD Example
 
@@ -122,12 +150,23 @@ For systems that include 4 aggregation switches the cabling will look like the f
 <a name="hpe_uan_cabling"></a>
 ### HPE UAN Cabling
 
-| Server Port        | Management Network Port        | Speed | Use / Configuration         |
-|--------------------|--------------------------------|-------|-----------------------------|
-| OCP port 1         | spine or aggregation pair, switch 1/2 | 25Gb  | Management Network NMN      |
-| OCP port 2         | spine or aggregation pair, switch 1/2 | 25Gb  | Management Network CAN bond |
-| PCIe Slot 1 port 1 | spine or aggregation pair, switch 2/2 | 25Gb  | NONE (Shasta v1.4)          |
-| PCIe Slot 1 port 2 | spine or aggregation pair, switch 2/2 | 25Gb  | Management Network CAN bond |
+| Device | Port | Linux Device | Destination | Name | VLAN | LAG |
+|:-------|------|:------|:-------------------------|:--------------|:--------------------|:-----|
+| OCP | 1 |  mgmt0 | primary |  N/A |  NMN  |  N/A |
+| OCP | 2 |  mgmt1 | primary |  N/A |  CAN  |  MLAG-LACP |
+| PCIE-SLOT1 | 1 |  mgmt2 | secondary |  N/A |  N/A  |  N/A |
+| PCIE-SLOT1 | 2 |  mgmt3 | secondary |  N/A |  CAN  |  MLAG-LACP |
+| ILO | 1 |  None | HMN Leaf |  N/A |  HMN  |  N/A |
+
+<br>
+NOTES:
+
+* All ports are cabled.
+* The OCP Port 1 connects to the NMN in a non-bonded configuration.
+* The PCIE Slot 1 Port 1 is cabled but not configured/used in this release.
+* OCP Port 2 and PCIE Slot 1 Port 2 (second ports) are bonded for the CAN.
+<br>
+<br>
 
 #### SHCD Example
 
