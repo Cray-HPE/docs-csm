@@ -51,6 +51,7 @@ The HPE Cray EX system includes the following nodes:
 * [Dump a Non-Compute Node](Dump_a_Non-Compute_Node.md)
 * [Enable Passwordless Connections to Liquid Cooled Node BMCs](Enable_Passwordless_Connections_to_Liquid_Cooled_Node_BMCs.md)
   * [View BIOS Logs for Liquid Cooled Nodes](View_BIOS_Logs_for_Liquid_Cooled_Nodes.md)
+  * [Configure NTP on NCNs](Configure_NTP_on_NCNs.md)
 
 
 

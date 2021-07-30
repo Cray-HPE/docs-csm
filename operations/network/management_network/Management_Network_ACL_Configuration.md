@@ -1,11 +1,11 @@
-# Management Network ACL configuration
+# Management Network ACL Configuration
 
-This page describes the purpose of the ACLs and how they are configured
+This page describes the purpose of the ACLs and how they are configured.
 
-# Requirements
+## Requirements
 - Access to the switches 
 
-# Aruba Configuration
+## Aruba Configuration
 
 These ACLs are designed to block traffic from the node management network to and from the hardware management network.
 These need to be set where the Layer3 interface is located, this will most likely be a VSX pair of switches. These ACLs are required on both switches in the pair.
@@ -36,7 +36,7 @@ sw-s24g03(config-vlan-4)# apply access-list ip nmn-hmn out
 
 If you are on an Aruba CDU switch you will need to apply the same access-list to the 2xxx and 3xxx VLANs (MTN VLANs)
 
-# Mellanox Configuration
+## Mellanox Configuration
 
 Create the `nmn-hmn` `access-list` and apply it to `vlan 2` and `vlan 4`.
 
@@ -61,8 +61,10 @@ sw-spine-001(config) # exit
 sw-spine-001# write memory
 ```
 
-# Dell Configuration
+## Dell Configuration
+
 Create the Access list then apply it to all the `vlan` interfaces. In the example below we only show the NMN VLAN. This will need to go on all River and MTN networks.
+
 ```
 ip access-list nmn-hmn
  seq 10 deny ip 10.252.0.0/17 10.254.0.0/17

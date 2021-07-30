@@ -444,7 +444,7 @@ This system needs to do the renames in this order: do CDU switches (8 to 9, 7 to
    pit#
    ```
 
-9. Save the running-config from all switches after completion
+9. Save the running-config from all switches after completion.
 
    Note: Mellanox switches require the "enable" command before doing "show running-config"
 
