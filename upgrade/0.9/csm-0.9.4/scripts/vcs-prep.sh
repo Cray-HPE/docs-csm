@@ -21,9 +21,7 @@ if [ $MODE = "ReadWriteMany" ] && [ $DELETING = null ]; then
 fi
 
 echo "Terminating the current pvc."
-if [ $DELETING != null ]; then
-    kubectl -n services delete pvc $DATA_CLAIM --wait=false
-fi
+kubectl -n services delete pvc $DATA_CLAIM --wait=false
 kubectl -n services rollout restart deployment gitea-vcs
 while kubectl -n services get pvc $DATA_CLAIM 2> /dev/null;
 do
