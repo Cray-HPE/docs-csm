@@ -24,9 +24,19 @@ for host in $(ceph node ls| jq -r '.osd|keys[]')
          echo "$osd has already been upgraded"
       fi
       echo "Waiting for osd.$osd status to update from booting -> active.  This will take minutes, be patient.."
+      (( counter=0 ))
       until ssh "$host" journalctl -u ceph-$FSID@osd.$osd --no-pager |grep "booting -> active"
-       do 
-           sleep 30 
+       do
+	   (( counter++ ))
+           sleep 30
+	   if [[ $counter > 10 ]]
+	   then
+	     echo "OSD status should have been active by now, failing the mgr process and restarting the osd"
+             ceph mgr fail $(ceph mgr dump | jq -r .active_name)
+	     echo "Sleep 30 seconds to allow the new mgr process to start"
+             echo "Restarting OSD $osd"
+	     ceph orch daemon restart osd.$osd
+	   fi
        done
     done
 
@@ -42,8 +52,8 @@ for host in $(ceph node ls| jq -r '.osd|keys[]')
       do
         echo "Waiting for osd.$id require_osd_release update nautilus -> octopus.  This will take minutes, be patient.."
         until ssh "$host" journalctl -u ceph-$FSID@osd.$id --no-pager |grep "nautilus -> octopus"
-        do 
-           sleep 30 
+        do
+           sleep 30
         done
     done
   done
