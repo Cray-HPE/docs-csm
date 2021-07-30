@@ -6,10 +6,10 @@ Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmwa
 
 1. [Warning for Non-Compute Nodes (NCNs)](#warning)
 2. [Ignore Nodes within FAS](#ignore)
-3. [Use the `cray-fas-loader` Kubernetes Job](#k8s)
-4. [Override an Image for an Update](#overrideImage)
-5. [Load Firmware into FAS Manually](#manualLoad)
-6. [Check for New Firmware Versions with a Dry-Run](#dryrun)
+3. [Override an Image for an Update](#overrideImage)
+4. [Check for New Firmware Versions with a Dry-Run](#dryrun)
+5. [Load Firmware from Nexus](#loadNexus)
+6. [Load Firmware from RPM or ZIP file](#loadRPM)
 
 ---
 
@@ -34,59 +34,18 @@ Nodes can also be locked with the Hardware State Manager (HSM) API. Refer to [NC
 1. Check that there are no FAS actions running.
 
     ```
-    ncn-m001# cray fas actions list	
+    ncn-m001# cray fas actions list
     ```
 
 2. Edit the cray-fas deployment.
 
     ```
-    ncn-m001# kubectl -n services edit deployment cray-fas	
+    ncn-m001# kubectl -n services edit deployment cray-fas
     ```
 
 3. Change the `NODE_BLACKLIST` value from `ignore_ignore_ignore` to `management`.
 
 4. Save and quit the deployment. This will restart FAS.
-
----
-
-<a name="k8s"></a>
-
-### Use the cray-fas-loader Kubernetes Job
-
-FAS requires image data in order to load firmware into different devices in the system. Firmware images bundles are retrieved by the system with Nexus in order to be used by FAS. This process is managed by the cray-fas-loader Kubernetes job.
-
-The workflow for the cray-fas-loader is shown below:
-
-1. It pulls firmware bundled (currently RPMs) from Nexus. The firmware is in the *shasta-firmware* repository.
-2. It extracts the RPM and gets the JSON imagefile.
-3. It uploads the binaries into S3 and loads the data from the imagefile into FAS using the S3 reference. The binaries have the `public-read` ACL applied so that Redfish devices do not have to authenticate against s3.
-
-#### Re-run the cray-fas-loader Job
-
-If new firmware is available in Nexus, the cray-fas-loader job needs to be re-run. This should only occur if there is a new release or patch.
-
-#### Procedure
-
-To re-run the cray-fas-loader job:
-
-1. Identify the current `cray-fas-loader` job.
-
-    ```
-    ncn-w001# kubectl -n services get jobs | grep fas-loader
-    ...
-    cray-fas-loader-1	1/1	8m57s	7d15h
-    ```
-
-    Note the returned job name in the previous command, which is *cray-fas-loader-1* in this example.
-
-2. Re-create the job.  
-   
-   Use the same job name as identified in the previous step.
-
-   ```
-   ncn-w001# kubectl -n services get job cray-fas-loader-1 -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels."controller-uid")' | kubectl replace --force -f -
-   
-   ```
 
 ---
 
@@ -181,107 +140,6 @@ Re-run the FAS actions command using the updated json file. **It is strongly rec
 
 ---
 
-<a name="manualLoad"></a>
-
-### Load Firmware into FAS Manually
-
-The firmware image file must be on the system to update. Firmware file can be extracted from the FAS RPM with the command `rpm2cpio firmwarefile.rpm | cpio -idmv`.
-
-#### Procedure
-
-1. Upload the firmware image into S3.
-
-   The S3 bucket is `fw-update` and the path in the example is `slingshot`, but it can be any directory. The image file in the example below is `controllers-1.4.409.itb`.
-
-   ```bash
-   ncn-m001# cray artifacts create fw-update slingshot/controllers-1.4.409.itb controllers-1.4.409.itb
-   artifact = "slingshot/controllers-1.4.409.itb"
-   Key = "slingshot/controllers-1.4.409.itb"
-
-2. Create FAS image record (example: slingshotImage.json). 
-
-     **NOTE:** This is slightly different from the image meta file in the RPM.
-
-     Use the image record of the previous release as a reference.
-
-     Update to match current version of software:
-
-   ``` json
-           "firmwareVersion": "sc.1.4.409-shasta-release.arm64.2021-02-06T06:06:52+00:00.957b64c",
-           "semanticFirmwareVersion": "1.4.409",
-           "s3URL": "s3:/fw-update/slingshot/controllers-1.4.409.itb"
-   ```
-
-   ``` json
-         {
-           "deviceType": "RouterBMC",
-           "manufacturer": "cray",
-           "models": [
-             "ColoradoSwitchBoard_REV_A",
-             "ColoradoSwitchBoard_REV_B",
-             "ColoradoSwitchBoard_REV_C",
-             "ColoradoSwtBrd_revA",
-             "ColoradoSwtBrd_revB",
-             "ColoradoSwtBrd_revC",
-             "ColoradoSWB_revA",
-             "ColoradoSWB_revB",
-             "ColoradoSWB_revC",
-             "101878104_",
-             "ColumbiaSwitchBoard_REV_A",
-             "ColumbiaSwitchBoard_REV_B",
-             "ColumbiaSwitchBoard_REV_D",
-             "ColumbiaSwtBrd_revA",
-             "ColumbiaSwtBrd_revB",
-             "ColumbiaSwtBrd_revD",
-             "ColumbiaSWB_revA",
-             "ColumbiaSWB_revB",
-             "ColumbiaSWB_revD"
-           ],
-           "target": "BMC",
-           "tags": [
-             "default"
-           ],
-           "softwareIds": [
-             "sc:*:*"
-           ],
-           "firmwareVersion": "sc.1.4.409-shasta-release.arm64.2021-02-06T06:06:52+00:00.957b64c",
-           "semanticFirmwareVersion": "1.4.409",
-           "pollingSpeedSeconds": 30,
-           "s3URL": "s3:/fw-update/slingshot/controllers-1.4.409.itb"
-         }
-
-3. Upload image record to FAS.
-
-   ``` bash
-   ncn-m001# cray fas images create slingshotImage.json
-   imageID = "b6e035ec-2f42-4024-b544-32f7b4d035cf"
-   ```
-
-   To verify image, use the imageID returned from the images create command:
-
-   ```bash
-   ncn-m001# cray fas images describe "b6e035ec-2f42-4024-b544-32f7b4d035cf"
-
-4. Run the FAS loader to set permissions on file uploaded.
-
-   ```bash
-   ncn-m001# kubectl -n services get jobs | grep fas-loader
-   cray-fas-loader-1  1/1  8m57s  7d15h
-   ````
-   **NOTE:** In the above example, the returned job name is cray-fas-loader-1, hence that is the job to re-run.
-
-   ```bash
-   ncn-m001# kubectl -n services get job cray-fas-loader-1 -o json | jq 'del(.spec.selector)' \
-   | jq 'del(.spec.template.metadata.labels."controller-uid")' \
-   | kubectl replace --force -f -
-   ```
-
-5. Update firmware using FAS as normal.
-
-     It is recommended to run a dry-run to make sure the correct firmware is selected before attempting an update.
-
----
-
 <a name="dryrun"></a>
 
 ### Check for New Firmware Versions with a Dry-Run
@@ -308,7 +166,7 @@ This procedure includes information on how check the firmware versions for the e
 	Use one of the options below to run on a dry-run on every system device or on targeted devices:
 
 	**Option 1:** Determine the available firmware for every device on the system:
-   
+
     1. Create a JSON file for the command parameters.
 
         ``` json
@@ -360,7 +218,7 @@ This procedure includes information on how check the firmware versions for the e
     2. Run a dry-run on the targeted devices.
 
        ``` bash
-       ncn-m001# cray fas actions create CUSTOM_DEVICE_PARAMETERS.json 
+       ncn-m001# cray fas actions create CUSTOM_DEVICE_PARAMETERS.json
        ```
 
        Proceed to the next step to determine if any firmware needs to be updated.
@@ -392,7 +250,7 @@ This procedure includes information on how check the firmware versions for the e
        description = "upgrade of x9000c1s3b1 Nodex.BIOS to WNC 1.1.2" tag = "default"
        restoreNotPossibleOverride = true timeLimit = 1000
        version = "latest" overrideDryrun = false [actions.operationCounts] noOperation = 0
-       succeeded = 2 
+       succeeded = 2
        verifying = 0
        unknown = 0
        configured = 0
@@ -411,7 +269,7 @@ This procedure includes information on how check the firmware versions for the e
 
        The action is still in progress if the state field is not completed or aborted.
 
-	
+
     2. View the details of an action to get more information on each operation in the FAS action.
 
 		In the example below, there is an operation for an xname in the failed state, indicating there is something that FAS could do, but it likely would fail. A common cause for an operation failing is because the firmware image file is missing.
@@ -529,12 +387,145 @@ This procedure includes information on how check the firmware versions for the e
        "toTag": "",
        "state": "succeeded",
        "stateHelper": "unexpected change detected in firmware version. Expected nc.1.3.8-shasta-release.arm.2020-06-15T22:57:31+00:00.b7f0725 got: nc.1.2.25-shasta-release.arm.2020-05-15T17:27:16+00:00.0cf7f51",
-       "deviceType": "", 
-       "expirationTime": "", 
-       "manufacturer": "cray", 
+       "deviceType": "",
+       "expirationTime": "",
+       "manufacturer": "cray",
        "xname": "x9000c1s3b1",
        "toFirmwareVersion": ""
        }
 
 Update the firmware on any devices indicating a new version is needed.
 
+---
+
+<a name="loadNexus"></a>
+
+### Load Firmware from Nexus
+
+This procedure will read all RPMs in the Nexus repository and upload firmware images to S3 and create image records for firmware not already in FAS.
+
+1. Check the loader status:
+```bash
+ncn-m001# cray fas loader list | grep loaderStatus
+```
+This will return a `ready` or `busy` status.
+```bash
+loaderStatus = "ready"
+```
+The loader can only run one job at a time, if the loader is `busy`, it will return an error on any attempt to create an additional job.
+
+2. Run the loader Nexus command:
+```bash
+ncn-m001# cray fas loader nexus create
+```
+This will return an ID which will be used to check the status of the run
+```bash
+loaderRunID = "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce"
+```
+**NOTE:** Depending on how many files are in Nexus and how large those files are, the loader may take several minutes to complete.
+
+3. Check the results of the loader run:
+```bash
+ncn-m001# cray fas loader describe *loaderRunID* --format json
+```
+**NOTE:** `*loadRunID*` is the ID from step #2 above in that case "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce".
+Use the `--format json` to make it easier to read.
+```bash
+{
+  "loaderRunOutput": [
+    "2021-07-20T18:17:58Z-FWLoader-INFO-Starting FW Loader, LOG_LEVEL: INFO; value: 20",
+    "2021-07-20T18:17:58Z-FWLoader-INFO-urls: {'fas': 'http://cray-fas', 'fwloc': 'file://download/'}",
+    "2021-07-20T18:17:58Z-INFO: LOG_LEVEL: DEBUG; value: 10",
+    "2021-07-20T18:17:58Z-INFO: NEXUS_ENDPOINT: http://nexus.nexus.svc.cluster.local",
+    "2021-07-20T18:17:58Z-INFO: NEXUS_REPO: shasta-firmware",
+    "2021-07-20T18:17:58Z-INFO: Repomd URL: http://nexus.nexus.svc.cluster.local/repository/shasta-firmware/repodata/repomd.xml",
+    "2021-07-20T18:17:58Z-DEBUG: Starting new HTTP connection (1): nexus.nexus.svc.cluster.local:80",
+    "2021-07-20T18:17:58Z-DEBUG: http://nexus.nexus.svc.cluster.local:80 \"GET /repository/shasta-firmware/repodata/repomd.xml HTTP/1.1\" 200 3080",
+    "2021-07-20T18:17:58Z-INFO: Packages URL: http://nexus.nexus.svc.cluster.local/repository/shasta-firmware/repodata/7f727fc9c4a8d0df528798dc85f1c5178128f3e00a0820a4d07bf9842ddcb6e1-primary.xml.gz",
+    "2021-07-20T18:17:58Z-DEBUG: Starting new HTTP connection (1): nexus.nexus.svc.cluster.local:80",
+    "2021-07-20T18:17:58Z-DEBUG: http://nexus.nexus.svc.cluster.local:80 \"GET /repository/shasta-firmware/repodata/7f727fc9c4a8d0df528798dc85f1c5178128f3e00a0820a4d07bf9842ddcb6e1-primary.xml.gz HTTP/1.1\" 200 6137",
+    ...
+    ...
+    "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for e7b20c7ae98611eb880aa2c40cff7c62/nc-1.5.15.itb",
+    "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for ec324d05e98611ebbb9da2c40cff7c62/rom.ima_enc",
+    "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for e74c5977e98611eb8e9aa2c40cff7c62/cc-1.5.15.itb",
+    "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for e1feb6d6e98611eb877aa2c40cff7c62/accfpga_nvidia_2.7.tar.gz",
+    "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for dc830cb2e98611ebb4d2a2c40cff7c62/A48_2.40_02_24_2021.signed.flash",
+    "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for e28626d4e98611ebb0a7a2c40cff7c62/wnc.i210-p2sn01.tar.gz",
+    "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for eee87acde98611eba8f4a2c40cff7c62/image.RBU",
+    "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for de3d01bee98611eb9affa2c40cff7c62/A47_2.40_02_23_2021.signed.flash",
+    "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for e8ab6f61e98611eb913fa2c40cff7c62/ex235n.bios-1.1.1.tar.gz",
+    "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for e8ab6f61e98611eb913fa2c40cff7c62/ex235n.bios-1.1.1.tar.gz",
+    "2021-07-20T18:19:04Z-FWLoader-INFO-finished updating images ACL",
+    "2021-07-20T18:19:04Z-FWLoader-INFO-*** Number of Updates: 24 ***"
+  ]
+}
+```
+A successful run will end with `*** Number of Updates: x ***`.
+**NOTE:** The FAS loader will not overwrite image records already in FAS.  Number of Updates will be the number of new images found in Nexus.  If the number is 0, all images were already in FAS.
+
+---
+
+<a name="loadRPM"></a>
+
+### Load Firmware from RPM or ZIP file
+
+This procedure will read a single local RPM (or ZIP) file and upload firmware images to S3 and create image records for firmware not already in FAS.
+
+1. Copy the file to ncn-m001 or one of the other NCNs.
+
+2. Check the loader status:
+```bash
+ncn-m001# cray fas loader list | grep loaderStatus
+```
+This will return a `ready` or `busy` status.
+```bash
+loaderStatus = "ready"
+```
+The loader can only run one job at a time, if the loader is `busy`, it will return an error on any attempt to create an additional job.
+
+3. Run the loader command: (firmware.rpm is the name of the RPM) - If the file is not in the current directory, add the path to the filename.
+```bash
+ncn-m001# cray fas loader create --file firmware.RPM
+```
+This will return an ID which will be used to check the status of the run.
+```bash
+loaderRunID = "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce"
+```
+
+4. Check the results of the loader run:
+```bash
+ncn-m001# cray fas loader describe *loaderRunID* --format json
+```
+**NOTE:** `*loadRunID*` is the ID from step #2 above in that case "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce".
+Use the `--format json` to make it easier to read.
+```bash
+{
+  "loaderRunOutput": [
+    "2021-04-28T14:40:45Z-FWLoader-INFO-Starting FW Loader, LOG_LEVEL: INFO; value: 20",
+    "2021-04-28T14:40:45Z-FWLoader-INFO-urls: {'fas': 'http://localhost:28800', 'fwloc': 'file://download/'}",
+    "2021-04-28T14:40:45Z-FWLoader-INFO-Using local file: /ilo5_241.zip",
+    "2021-04-28T14:40:45Z-FWLoader-INFO-unzip /ilo5_241.zip",
+    "Archive:  /ilo5_241.zip",
+    "  inflating: ilo5_241.bin",
+    "  inflating: ilo5_241.json",
+    "2021-04-28T14:40:45Z-FWLoader-INFO-Processing files from file://download/",
+    "2021-04-28T14:40:45Z-FWLoader-INFO-get_file_list(file://download/)",
+    "2021-04-28T14:40:45Z-FWLoader-INFO-Processing File: file://download/ ilo5_241.json",
+    "2021-04-28T14:40:45Z-FWLoader-INFO-Uploading b73a48cea82f11eb8c8a0242c0a81003/ilo5_241.bin",
+    "2021-04-28T14:40:45Z-FWLoader-INFO-Metadata {'imageData': \"{'deviceType': 'nodeBMC', 'manufacturer': 'hpe', 'models': ['ProLiant XL270d Gen10', 'ProLiant DL325 Gen10', 'ProLiant DL325 Gen10 Plus', 'ProLiant DL385 Gen10', 'ProLiant DL385 Gen10 Plus', 'ProLiant XL645d Gen10 Plus', 'ProLiant XL675d Gen10 Plus'], 'targets': ['iLO 5'], 'tags': ['default'], 'firmwareVersion': '2.41 Mar 08 2021', 'semanticFirmwareVersion': '2.41.0', 'pollingSpeedSeconds': 30, 'fileName': 'ilo5_241.bin'}\"}",
+    "2021-04-28T14:40:46Z-FWLoader-INFO-IMAGE: {\"s3URL\": \"s3:/fw-update/b73a48cea82f11eb8c8a0242c0a81003/ilo5_241.bin\", \"target\": \"iLO 5\", \"deviceType\": \"nodeBMC\", \"manufacturer\": \"hpe\", \"models\": [\"ProLiant XL270d Gen10\", \"ProLiant DL325 Gen10\", \"ProLiant DL325 Gen10 Plus\", \"ProLiant DL385 Gen10\", \"ProLiant DL385 Gen10 Plus\", \"ProLiant XL645d Gen10 Plus\", \"ProLiant XL675d Gen10 Plus\"], \"softwareIds\": [], \"tags\": [\"default\"], \"firmwareVersion\": \"2.41 Mar 08 2021\", \"semanticFirmwareVersion\": \"2.41.0\", \"allowableDeviceStates\": [], \"needManualReboot\": false, \"pollingSpeedSeconds\": 30}",
+    "2021-04-28T14:40:46Z-FWLoader-INFO-Number of Updates: 1",
+    "2021-04-28T14:40:46Z-FWLoader-INFO-Iterate images",
+    "2021-04-28T14:40:46Z-FWLoader-INFO-update ACL to public-read for 5ab9f804a82b11eb8a700242c0a81003/wnc.bios-1.1.2.tar.gz",
+    "2021-04-28T14:40:46Z-FWLoader-INFO-update ACL to public-read for 5ab9f804a82b11eb8a700242c0a81003/wnc.bios-1.1.2.tar.gz",
+    "2021-04-28T14:40:46Z-FWLoader-INFO-update ACL to public-read for 53c060baa82a11eba26c0242c0a81003/controllers-1.3.317.itb",
+    "2021-04-28T14:40:46Z-FWLoader-INFO-update ACL to public-read for b73a48cea82f11eb8c8a0242c0a81003/ilo5_241.bin",
+    "2021-04-28T14:40:46Z-FWLoader-INFO-finished updating images ACL",
+    "2021-04-28T14:40:46Z-FWLoader-INFO-removing local file: /ilo5_241.zip",
+    "2021-04-28T14:40:46Z-FWLoader-INFO-*** Number of Updates: 1 ***"
+  ]
+}
+```
+A successful run will end with `*** Number of Updates: x ***`.
+**NOTE:** The FAS loader will not overwrite image records already in FAS.  Number of Updates will be the number of new images found in the RPM.  If the number is 0, all images were already in FAS.
