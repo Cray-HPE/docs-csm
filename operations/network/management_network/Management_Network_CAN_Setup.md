@@ -1,13 +1,12 @@
-# Management Network CAN setup
+# Management Network CAN Setup
 
-Access from the customer site to the system over shared networks is known as the Customer Access Network (CAN)
+Access from the customer site to the system over shared networks is known as the Customer Access Network (CAN).
 
-# Requirements
-Access to switches
+## Requirements
+- Access to switches
+- SHCD
 
-SHCD
-
-# Configuration
+## Configuration
 
 The CAN configuration is highly dependent on customer requirements and may not meet the specifications below.
 
@@ -21,7 +20,7 @@ The CAN is connected between each spine switch and the NCNs through `vlan 7` run
 
 The two physical connections between the NCN and spines is MLAG'ed. MAGP/VSX is used to provide a single virtual router gateway that can be used as the default route on each of the NCNs.
 
-![Diagram of Switch Configuration for CAN](../img/network/can-diagram.png)
+![Diagram of Switch Configuration for CAN](../../../img/network/can-diagram.png)
 
 This is an example of the p2p configuration on the spine switches. The IP address should be replaced with the IP chosen by the customer matching the customer's switch configuration.
 
@@ -85,7 +84,7 @@ sw-spine-002(config)# int vlan 7
 sw-spine-002(config-if-vlan)# ip address 10.102.11.3/24
 ```
 
-# Verification of CAN Configuration
+## Verification of CAN Configuration
 
 After completing this configuration you should be able to ping and log in to all of the NCNs at the external CAN IP address from a device on the customer network.
 

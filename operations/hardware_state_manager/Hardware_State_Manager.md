@@ -28,7 +28,7 @@ Generally, nodes transition from `Off` to `On` to `Ready` when going from `Off` 
 ### Table of Contents
 
 * [Hardware Management Services (HMS) Locking API](Hardware_Management_Services_HMS_Locking_API.md)
-  * [NCN and Management Node Locking](NCN_and_Management_Node_Locking.md)
+  * [Lock and Unlock Management Nodes](Lock_and_Unlock_Management_Nodes.md)
   * [Manage HMS Locks](Manage_HMS_Locks.md)
 * [Component Groups and Partitions](Component_Groups_and_Partitions.md)
   * [Manage Component Groups](Manage_Component_Groups.md)

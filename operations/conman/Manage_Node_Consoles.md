@@ -1,4 +1,4 @@
-# Manage Node Consoles
+## Manage Node Consoles
 
 ConMan is used for connecting to remote consoles and collecting console logs. These node logs can then be used for various administrative purposes, such as troubleshooting node boot issues.
 
@@ -10,12 +10,14 @@ they start, then HSM is unaware of them and so are cray-console-operator and cra
 
 Verify that all nodes are being monitored for console logging and connect to them if desired.
 
-See [ConMan](conman/ConMan.md) for other procedures related to remote consoles and node console logging.
+See [ConMan](ConMan.md) for other procedures related to remote consoles and node console logging.
 
-## Procedure
+### Procedure
 
 This procedure can be run from any member of the Kubernetes cluster to verify node consoles are being managed
-by conman and to connect to a console. **Note** this procedure has changed since the CSM 0.9 release.
+by ConMan and to connect to a console. 
+
+**Note:** this procedure has changed since the CSM 0.9 release.
 
 1. Find the cray-console-operator pod ID
     ```bash
