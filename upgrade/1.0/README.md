@@ -178,8 +178,8 @@ For ncn-m001, use ncn-m002 as the stable NCN:
 Install document RPM package:
 
 ```bash
-ncn-m001# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
-ncn-m001# rpm -Uvh docs-csm-install-latest.noarch.rpm
+ncn-m002# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
+ncn-m002# rpm -Uvh docs-csm-install-latest.noarch.rpm
 ```
 
 Run: 
