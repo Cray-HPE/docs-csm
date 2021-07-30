@@ -24,7 +24,7 @@ access-list ip nmn-hmn
     90 permit any any any
 ```
 
-Apply ACL to a VLANs
+Apply ACL to a VLANs:
 ```
 sw-24g03(config)# vlan 2
 sw-s24g03(config-vlan-2)# apply access-list ip nmn-hmn in
@@ -34,7 +34,7 @@ sw-s24g03(config-vlan-4)# apply access-list ip nmn-hmn in
 sw-s24g03(config-vlan-4)# apply access-list ip nmn-hmn out
 ```
 
-If you are on an Aruba CDU switch you will need to apply the same access-list to the 2xxx and 3xxx VLANs (MTN VLANs)
+If on an Aruba CDU switch, apply the same access-list to the 2xxx and 3xxx VLANs (MTN VLANs).
 
 ## Mellanox Configuration
 
@@ -63,7 +63,7 @@ sw-spine-001# write memory
 
 ## Dell Configuration
 
-Create the Access list then apply it to all the `vlan` interfaces. In the example below we only show the NMN VLAN. This will need to go on all River and MTN networks.
+Create the Access list then apply it to all the `vlan` interfaces. In the example below, only the NMN VLAN is shown. This will need to go on all River and MTN networks.
 
 ```
 ip access-list nmn-hmn
