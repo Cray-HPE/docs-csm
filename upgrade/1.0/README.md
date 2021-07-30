@@ -34,7 +34,8 @@ This check will also be conducted in the 'prerequisites.sh' script listed below 
 
     * Internet Connected
         ```bash
-        ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
+        ncn-m001# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
+        ncn-m001# rpm -Uvh docs-csm-install-latest.noarch.rpm
         ```
 
     * Air Gapped
@@ -177,7 +178,8 @@ For ncn-m001, use ncn-m002 as the stable NCN:
 Install document RPM package:
 
 ```bash
-ncn-m002# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
+ncn-m001# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
+ncn-m001# rpm -Uvh docs-csm-install-latest.noarch.rpm
 ```
 
 Run: 
