@@ -380,9 +380,7 @@ data so run them only when indicated. Instructions are in the `README` files.
     ncn-w003   Ready    <none>   4h39m   v1.18.6
     ```
 
-1. Restore and verify the site link. It will be necessary to restore the `ifcfg-lan0` file, and both the
-   `ifroute-lan0` and `ifroute-vlan002` file from either manual backup take in step 6 or re-mount the USB and copy it
-   from the prep directory to `/etc/sysconfig/network/`.
+1. Restore and verify the site link. It will be necessary to restore the `ifcfg-lan0` file from either manual backup taken during the prior "Hand-Off" step or re-mount the USB and copy it from the prep directory to `/etc/sysconfig/network/`.
    
     ```bash
     ncn-m001# SYSTEM_NAME=eniac
@@ -397,18 +395,24 @@ data so run them only when indicated. Instructions are in the `README` files.
        addr:     ipv4 172.30.53.88/20 [static]
     ```
     
-1. Run `ip a` to show our IPs, verify the site link.
+1. Run `ip a` to show our lan0 IP address, verify the site link.
     
     ```bash
     ncn-m001# ip a show lan0
     ```
     
-1. Run `ip a` to show our VLANs, verify they all have IPs.
+1. Run `ip a` to show our VLANs, verify they all have IP addresses.
     
     ```bash
     ncn-m001# ip a show vlan002
     ncn-m001# ip a show vlan004
     ncn-m001# ip a show vlan007
+    ```
+    
+1. Run `ip r` to show our default route is via the CAN/vlan007.
+    
+    ```bash
+    ncn-m001# ip r show default
     ```
     
 1. Verify we **do not** have a metal bootstrap IP.
