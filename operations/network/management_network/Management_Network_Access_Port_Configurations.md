@@ -20,7 +20,7 @@ sw-leaf-001(config)#
 ```
 
 - This configuration describes the ports that go to the Node Management Network (NMN/VLAN2).
-- You can Identify these ports by referencing the NMN tab on the SHCD.
+- Identify these ports by referencing the NMN tab on the SHCD.
 
 ```
 sw-leaf-001(config)#
@@ -35,7 +35,7 @@ sw-leaf-001(config)#
 ## Apollo Server Port Configuration
 This is for the Apollo XL645d only.
 
-iLO BMC port
+iLO BMC port:
 ```
 sw-leaf-001(config)#
     interface 1/1/46 
@@ -47,7 +47,7 @@ sw-leaf-001(config)#
     spanning-tree port-type admin-edge
     exit 
 ```
-NMN port from OCP card
+NMN port from OCP card:
 ```
 interface 1/1/14 
     no shutdown 
@@ -64,7 +64,7 @@ interface 1/1/14
 - ONE OF THESE PORTS IS SHUTDOWN.
 - One Bond (two connections) will be going to the MLAG/VSX pair of switches. This will be a TRUNK port for the CAN connection.
 
-Aruba UAN NMN Configuration
+Aruba UAN NMN Configuration:
 ```
 sw-spine-001 (config)#
     interface 1/1/16
@@ -87,7 +87,7 @@ sw-spine-002 (config)#
     exit
 ```
 
-Aruba UAN CAN Configuration
+Aruba UAN CAN Configuration:
 
 Port Configuration is the same on both switches.
 ```
@@ -104,14 +104,14 @@ interface lag 17 multi-chassis
 ## Gigabyte/Intel NCN Worker Port Configuration
 The cabling guidelines for all servers can be found in [Cable Management Network Servers](../../../install/cable_management_network_servers.md).
 
-Mellanox Port Config
+Mellanox Port configuration:
 ```
 sw-spine-002 [gamora-mlag-domain: master] # show run int ethernet 1/1
 interface ethernet 1/1 speed 40G force
 interface ethernet 1/1 mtu 9216 force
 interface ethernet 1/1 mlag-channel-group 1 mode active
 ```
-Mellanox MLAG config
+Mellanox MLAG configuration:
 ```
 sw-spine-002 [gamora-mlag-domain: master] # show run int mlag-port-channel 1
 interface mlag-port-channel 1
@@ -125,7 +125,7 @@ interface mlag-port-channel 1 switchport hybrid allowed-vlan add 10
 ```
 
 ## HPE NCN Worker Port Configuration
-Aruba Port Config
+Aruba port configuration:
 ```
 sw-spine-001 & sw-spine-002 (config)#
     interface 1/1/7
@@ -134,7 +134,7 @@ sw-spine-001 & sw-spine-002 (config)#
     lag 4
     exit
 ```
-Aruba LAG Configuration
+Aruba LAG configuration:
 ```
 sw-spine-001 & sw-spine-002 (config)#
     interface lag 4 multi-chassis
@@ -148,7 +148,7 @@ sw-spine-001 & sw-spine-002 (config)#
 ```
 
 ## Gigabyte/Intel NCN Master port configuration
-Mellanox Port config
+Mellanox port configuration:
 ```
 sw-spine-002 [gamora-mlag-domain: master] # show run int ethernet 1/1
 interface ethernet 1/1 speed 40G force
@@ -156,7 +156,7 @@ interface ethernet 1/1 mtu 9216 force
 interface ethernet 1/1 mlag-channel-group 1 mode active
 ```
 
-Mellanox MLAG port config
+Mellanox MLAG port configuration:
 ```
 sw-spine-002 [gamora-mlag-domain: master] # show run int mlag-port-channel 1
 interface mlag-port-channel 1
@@ -170,7 +170,7 @@ interface mlag-port-channel 1 switchport hybrid allowed-vlan add 10
 ```
 
 ## HPE NCN Master Port Configuration
-Aruba Port Config
+Aruba port configuration:
 ```
 sw-spine02# show run int 1/1/7
 interface 1/1/7
@@ -179,7 +179,7 @@ interface 1/1/7
     lag 4
     exit
 ```
-Aruba LAG Configuration
+Aruba LAG configuration:
 ```
 sw-spine02# show run int lag 4
 interface lag 4 multi-chassis
@@ -193,14 +193,14 @@ interface lag 4 multi-chassis
 ```
 
 ## Gigabyte/Intel NCN Storage Port Configuration
-Mellanox Port config
+Mellanox port configuration:
 ```
 sw-spine-002 [gamora-mlag-domain: master] # show run int ethernet 1/7
 interface ethernet 1/7 speed 40G force
 interface ethernet 1/7 mtu 9216 force
 interface ethernet 1/7 mlag-channel-group 7 mode active
 ```
-Mellanox MLAG port config
+Mellanox MLAG port configuration:
 ```
 sw-spine-002 [gamora-mlag-domain: master] # show run int mlag-port-channel 7
 interface mlag-port-channel 7
@@ -215,7 +215,7 @@ interface mlag-port-channel 7 switchport hybrid allowed-vlan add
 
 ## HPE NCN Storage Port Configuration
 
-Aruba Port Config
+Aruba port configuration:
 ```
 sw-spine02# show run int 1/1/7
 interface 1/1/7
@@ -224,7 +224,7 @@ interface 1/1/7
     lag 4
     exit
 ```
-Aruba LAG Configuration
+Aruba LAG configuration:
 ```
 sw-spine02# show run int lag 4
 interface lag 4 multi-chassis
@@ -236,7 +236,7 @@ interface lag 4 multi-chassis
     lacp fallback
     exit
 ```
-Aruba Storage port configuration (future use)
+Aruba Storage port configuration (future use):
 These will be configured, but the ports will be shut down until needed.
 ```
 sw-spine02# show run int 1/1/7
@@ -246,7 +246,7 @@ interface 1/1/7
     lag 4
     exit
 ```
-Aruba LAG Configuration
+Aruba LAG configuration:
 ```
 sw-spine02# show run int lag 4
 interface lag 4 multi-chassis
@@ -260,7 +260,7 @@ interface lag 4 multi-chassis
 
 # CMM Port Configuration
 
-- This requires updated CMM firmware. (version 1.4.20)
+- This requires updated CMM firmware (version 1.4.20).
 - A static LAG will be configured on the CDU switches.
 - The CDU switches have two cables (10Gb RJ45) connecting to each CMM. 
 - This configuration offers increased throughput and redundancy.

@@ -8,8 +8,8 @@ Access to the switches from the liveCD/ncn-m001.
 
 ## Configuration
 
-- All firmware will be located at ```/var/www/fw/network``` on the LiveCD
-- It should contain the following files.
+- All firmware will be located at ```/var/www/fw/network``` on the LiveCD.
+- It should contain the following files:
 ```
 ncn-m001-pit:/var/www/network/firmware # ls -lh
 total 2.7G
@@ -47,11 +47,11 @@ Aruba software version number explained:
 0120	= CPE release (bug fixes)
 
 
-It is considered to be a best practice to keep all of your Aruba CX platform devices running the same software version.  
+It is considered to be a best practice to keep all Aruba CX platform devices running the same software version.  
 
-Aruba CX devices two software image banks, which means you can pre-stage sw images to the device without booting to the new image. 
+Aruba CX devices two software image banks, which means sw images can be pre-staged to the device without booting to the new image. 
 
-If you are upgrading to a new major branch, in Aruba identified by the second integer in the software image number
+If upgrading to a new major branch, in Aruba identified by the second integer in the software image number.
 
 When upgrading past a major software release say from 10.6 to 10.8 (and skipping 10.7) you will need to issue 'allow-unsafe-upgrades' to allow any low level firmware/driver upgrades to complete. If going from say 10.6 branch to 10.7 branch, this step can be skipped as the low level firmware/driver upgrade would be automatically completed. 
 
@@ -66,7 +66,7 @@ applying any needed updates. Ensure that the switch will not lose power,
 be rebooted again, or have any modules removed until all updates have
 finished and all line and fabric modules have returned to the ready state.
 
-WARNING: Interrupting these updates may make the product unusable!
+**WARNING:** Interrupting these updates may make the product unusable!
 
 Continue (y/n)? y
 
@@ -77,16 +77,16 @@ VSX software upgrade command can automatically upgrade both of the peers in VSX 
 
 ## Aruba Firmware Update - Standalone
 
-SSH into the switch you want to upgrade.
+SSH into the switch being upgraded.
 
-Example: the IP ```10.252.1.12``` used is the liveCD 
+Example: the IP ```10.252.1.12``` used is the liveCD.
 ```
 sw-leaf-001# copy sftp://root@10.252.1.12//var/www/ephemeral/data/network_images/ArubaOS-CX_6400-6300_10_06_0010.stable.swi primary
 
 sw-leaf-001# write mem
 Copying configuration: [Success]
 ```
-Once the upload is complete you can check the images
+Once the upload is complete, check the images:
 
 ```
 sw-leaf-001# show image
@@ -98,13 +98,13 @@ Size    : 643 MB
 Date    : 2020-12-14 10:06:34 PST       
 SHA-256 : 78dc27c5e521e92560a182ca44dc04b60d222b9609129c93c1e329940e1e11f9 
 ```
-After the firmware is uploaded you will need to boot the switch to the correct image.
+After the firmware is uploaded, boot the switch to the correct image.
 
 ```
 sw-leaf-001# boot system primary
 ```
 
-Once the reboot is complete check and make sure the firmware version is correct.
+Once the reboot is complete, check and make sure the firmware version is correct.
 
 ```
 sw-leaf-001# show version
@@ -123,16 +123,16 @@ BIOS Version       : FL.01.0002
 ```
 ## Aruba Firmware Update - VSX Software Upgrade
 
-SSH into the Primary VSX member of the VSX-pair you want to upgrade.
+SSH into the Primary VSX member of the VSX-pair to upgrade.
 
-Example: the IP ```10.252.1.12``` used is the liveCD 
+Example: the IP ```10.252.1.12``` used is the liveCD. 
 ```
 sw-leaf-001# copy sftp://root@10.252.1.12//var/www/ephemeral/data/network_images/ArubaOS-CX_6400-6300_10_06_0120.stable.swi primary
 
 sw-leaf-001# write mem
 Copying configuration: [Success]
 ```
-Once the upload is complete you can check the images
+Once the upload is complete, check the images:
 
 ```
 sw-leaf-001# show image
@@ -144,7 +144,7 @@ Size    : 643 MB
 Date    : 2021-03-14 10:06:34 PST       
 SHA-256 : 78dc27c5e521e92560a182ca44dc04b60d222b9609129c93c1e329940e1e11f9 
 ```
-After the firmware is uploaded you will need to boot the switch to the correct image. Now that we are upgrading a VSX pair we can use the VSX upgrade command to automatically upgrade both pairs. 
+After the firmware is uploaded, boot the switch to the correct image. When upgrading a VSX pair, use the VSX upgrade command to automatically upgrade both pairs. 
 ```
 sw-leaf-001# vsx update-software boot-bank primary
 ```
@@ -152,7 +152,7 @@ This will trigger the upgrade process on the VSX pair and it will start the dial
 
 ## Mellanox Firmware Update
 
-SSH into the switch you want to upgrade
+SSH into the switch being upgraded:
 
 Fetch the image from ncn-m001.
 ```
@@ -197,7 +197,7 @@ Images available to be installed:
 
 ## Dell Firmware Update
 
-SSH into the switch you want to upgrade
+SSH into the switch being upgraded.
 
 Fetch the image from ncn-m001.
 ```

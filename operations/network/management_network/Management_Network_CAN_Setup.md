@@ -10,7 +10,7 @@ Access from the customer site to the system over shared networks is known as the
 
 The CAN configuration is highly dependent on customer requirements and may not meet the specifications below.
 
-To access the Shasta nodes and services from the customer network, there is minimal configuration needed on the spine switch and the customer switch connected upstream from the spine switch to allow the `customer_access_network` subnet to be routed to the Shasta system.
+To access the Shasta nodes and services from the customer network, there is minimal configuration needed on the spine switch and the customer switch connected upstream from the spine switch to allow the `customer_access_network` subnet to be routed to the HPE Cray EX system.
 
 The customer's switch must be connected to the spine switches with a p2p subnet for each switch. In the example below, these two p2p subnets are 10.11.15.148/30 and 10.101.15.152/30. The subnets used are up to the customer.
 
@@ -24,14 +24,14 @@ The two physical connections between the NCN and spines is MLAG'ed. MAGP/VSX is 
 
 This is an example of the p2p configuration on the spine switches. The IP address should be replaced with the IP chosen by the customer matching the customer's switch configuration.
 
-Mellanox
+Mellanox:
 ```
 interface ethernet 1/11 speed auto force
 interface ethernet 1/11 description to-can
 interface ethernet 1/11 no switchport force
 interface ethernet 1/11 ip address 10.101.15.150/30 primary
 ```
-Aruba
+Aruba:
 ```
 interface 1/1/36
     no shutdown
@@ -55,7 +55,7 @@ Example Snippet from CAN.yaml.
     - 255
     - 0
 ```
-Customer switch example config.
+Customer switch example configuration:
 ```
 ip route vrf default 10.101.8.0/24 10.101.15.150
 ip route vrf default 10.101.8.0/24 10.101.15.154
@@ -74,11 +74,11 @@ ip route 0.0.0.0/0 10.101.15.149
 ```
 
 The spine switch must also have the `customer_access_gateway` IP address assigned to the `vlan 7` interface on the switch. This provides a gateway for the default route on the NCNs and UANs as well as a direct route to the `customer_access_network` from the spine switch.
-Mellanox
+Mellanox:
 ```
 interface vlan 7 ip address 10.101.8.2/26 primary
 ```
-Aruba
+Aruba:
 ```
 sw-spine-002(config)# int vlan 7
 sw-spine-002(config-if-vlan)# ip address 10.102.11.3/24
