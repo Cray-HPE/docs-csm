@@ -5,7 +5,7 @@ The Cray System Management (CSM) operational activities are administrative proce
 The following administrative topics can be found in this guide:
 
 - [CSM Operational Activities](#csm-operational-activities)
-    - [CSM **TBD: topics need to be re-organized**](#csm-tbd-topics-need-to-be-re-organized)
+    - [CSM Product Management](#csm-product-management)
   - [Image Management](#image-management)
   - [Boot Orchestration](#boot-orchestration)
   - [System Power Off Procedures](#system-power-off-procedures)
@@ -27,6 +27,7 @@ The following administrative topics can be found in this guide:
   - [Node Management](#node-management)
   - [River Endpoint Discovery Service (REDS)](#river-endpoint-discovery-service-reds)
   - [Network](#network)
+    - [Management Network](#management-network)
     - [Customer Access Network (CAN)](#customer-access-network-can)
     - [Dynamic Host Configuration Protocol (DHCP)](#dynamic-host-configuration-protocol-dhcp)
     - [Domain Name Service (DNS)](#domain-name-service-dns)
@@ -35,23 +36,18 @@ The following administrative topics can be found in this guide:
   - [Update Firmware with FAS](#update-firmware-with-fas)
   - [User Access Service (UAS)](#user-access-service-uas)
 
-### CSM **TBD: topics need to be re-organized**
+<a name="csm-product-management"></a>
 
-   * [Lock and Unlock Nodes](lock_and_unlock_nodes.md)
+### CSM Product Management
+
    * [Validate CSM Health](validate_csm_health.md)
-   * [Configure Keycloak Account](configure_keycloak_account.md)
+   * [Configure Keycloak Account](CSM_product_management/Configure_Keycloak_Account.md)
    * [Configure the Cray Command Line Interface (cray CLI)](configure_cray_cli.md)
-   * [Configure BMC and Controller Parameters with SCSD](configure_with_scsd.md)
-   * [Update BGP Neighbors](update_bgp_neighbors.md)
-   * [Manage Node Consoles](manage_node_consoles.md)
-   * [Changing Passwords and Credentials](changing_passwords_and_credentials.md)
-   * [Managing Configuration with CFS](managing_configuration_with_CFS.md)
-   * [Accessing LiveCD USB Device After Reboot](accessing_livecd_usb_device_after_reboot.md)
-   * [Update SLS with UAN Aliases](update_sls_with_uan_aliases.md)
-   * [Configure NTP on NCNs](configure_ntp_on_ncns.md)
-   * [Change NCN Image Root Password and SSH Keys](change_ncn_image_root_password_and_ssh_keys.md)
-   * [Post-Install Customizations](Post_Install_Customizations.md)
-   * [Validate Signed RPMs](Validate_Signed_RPMs.md)
+   * [Change Passwords and Credentials](CSM_product_management/Change_Passwords_and_Credentials.md)
+   * [Manage a Configuration with CFS](CSM_product_management/Manage_a_Configuration_with_CFS.md)
+   * [Access the LiveCD USB Device After Reboot](Access_LiveCD_USB_Device_After_Reboot.md)
+   * [Post-Install Customizations](CSM_product_management/Post_Install_Customizations.md)
+   * [Validate Signed RPMs](CSM_product_management/Validate_Signed_RPMs.md)
 
 
 <a name="image-management"></a>
@@ -321,9 +317,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
    *   [Manage System Passwords](security_and_authentication/Manage_System_Passwords.md)
       *   [Update NCN Passwords](security_and_authentication/Update_NCN_Passwords.md)
       *   [Change Root Passwords for Compute Nodes](security_and_authentication/Change_Root_Passwords_for_Compute_Nodes.md)
-       *   [Update NCN Passwords](security_and_authentication/Update_NCN_Passwords.md)
-       *   [Change Root Passwords for Compute Nodes](security_and_authentication/Change_Root_Passwords_for_Compute_Nodes.md)
-   *   [Retrieve an Authentication Token](security_and_authentication/Retrieve_an_Authentication_Token.md)
+      *   [Change NCN Image Root Password and SSH Keys](security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md)
    *   [SSH Keys](security_and_authentication/SSH_Keys.md)
    *   [Authenticate an Account with the Command Line](security_and_authentication/Authenticate_an_Account_with_the_Command_Line.md)
    *   [Default Keycloak Realms, Accounts, and Clients](security_and_authentication/Default_Keycloak_Realms_Accounts_and_Clients.md)
@@ -387,7 +381,8 @@ HPE Cray EX systems are designed so that system management services \(SMS\) are 
 ConMan is a tool used for connecting to remote consoles and collecting console logs. These node logs can then be used for various administrative purposes, such as troubleshooting node boot issues.
 
   * [Access Compute Node Logs](conman/Access_Compute_Node_Logs.md)
-  * [Access Console Log Data Via the System Monitoring Framework \(SMF\)](conman/Access_Console_Log_Data_Via_the_System_Monitoring_Framework_SMF.md)
+  * [Access Console Log Data Via the System Monitoring Framework (SMF)](conman/Access_Console_Log_Data_Via_the_System_Monitoring_Framework_SMF.md)
+  * [Manage Node Consoles](conman/Manage_Node_Consoles.md)
   * [Log in to a Node Using ConMan](conman/Log_in_to_a_Node_Using_ConMan.md)
   * [Establish a Serial Connection to NCNs](conman/Establish_a_Serial_Connection_to_NCNs.md)
   * [Disable ConMan After System Software Installation](conman/Disable_ConMan_After_System_Software_Installation.md)
@@ -443,6 +438,7 @@ The System Layout Service \(SLS\) holds information about the system design, suc
   * [Dump SLS Information](system_layout_service/Dump_SLS_Information.md)
   * [Load SLS Database with Dump File](system_layout_service/Load_SLS_Database_with_Dump_File.md)
   * [Add UAN CAN IP Addresses to SLS](system_layout_service/Add_UAN_CAN_IP_Addresses_to_SLS.md)
+  * * [Update SLS with UAN Aliases](system_layout_service/Update_SLS_with_UAN_Aliases.md)
   * [Create a Backup of the SLS Postgres Database](system_layout_service/Create_a_Backup_of_the_SLS_Postgres_Database.md)
   * [Restore SLS Postgres Database from Backup](system_layout_service/Restore_SLS_Postgres_Database_from_Backup.md)
   * [Restore SLS Postgres without an Existing Backup](system_layout_service/Restore_SLS_Postgres_without_an_Existing_Backup.md)
@@ -455,6 +451,7 @@ The System Layout Service \(SLS\) holds information about the system design, suc
 The System Configuration Service \(SCSD\) allows administrators to set various BMC and controller parameters. These parameters are typically set during discovery, but this tool enables parameters to be set before or after discovery. The operations to change these parameters are available in the Cray CLI under the `scsd` command.
 
   * [System Configuration Service](system_configuration_service/System_Configuration_Service.md)
+  * [Configure BMC and Controller Parameters with SCSD](system_configuration_service/Configure_BMC_and_Controller_Parameters_with_scsd.md)
   * [Manage Parameters with the scsd Service](system_configuration_service/Manage_Parameters_with_the_scsd_Service.md)
   * [Set BMC Credentials](system_configuration_service/Set_BMC_Credentials.md)
 
@@ -467,7 +464,7 @@ Use the Hardware State Manager \(HSM\) to monitor and interrogate hardware compo
 
   * [Hardware State Manager (HSM)](hardware_state_manager/Hardware_State_Manager.md)
   * [Hardware Management Services (HMS) Locking API](hardware_state_manager/Hardware_Management_Services_HMS_Locking_API.md)
-    * [NCN and Management Node Locking](hardware_state_manager/NCN_and_Management_Node_Locking.md)
+    * [Lock and Unlock Management Nodes](hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
     * [Manage HMS Locks](hardware_state_manager/Manage_HMS_Locks.md)
   * [Component Groups and Partitions](hardware_state_manager/Component_Groups_and_Partitions.md)
     * [Manage Component Groups](hardware_state_manager/Manage_Component_Groups.md)
@@ -520,6 +517,7 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   * [Dump a Non-Compute Node](node_management/Dump_a_Non-Compute_Node.md)
   * [Enable Passwordless Connections to Liquid Cooled Node BMCs](node_management/Enable_Passwordless_Connections_to_Liquid_Cooled_Node_BMCs.md)
     * [View BIOS Logs for Liquid Cooled Nodes](node_management/View_BIOS_Logs_for_Liquid_Cooled_Nodes.md)
+  * [Configure NTP on NCNs](node_management/Configure_NTP_on_NCNs.md)
 
 
 <a name="reds"></a>
@@ -546,6 +544,19 @@ Overview of the several different networks supported by the HPE Cray EX system.
   * [Access to System Management Services](network/Access_to_System_Management_Services.md)
   * [Default IP Address Ranges](network/Default_IP_Address_Ranges.md)
   * [Connect to the HPE Cray EX Environment](network/Connect_to_the_HPE_Cray_EX_Environment.md)
+
+<a name="management-network"></a>
+
+### Management Network
+
+HPE Cray EX systems can have network switches in many roles: spine switches, leaf switches, aggregation switches, and CDU switches. Newer systems have HPE Aruba switches, while older systems have Dell and Mellanox switches. Switch IP addresses are generated by Cray Site Init (CSI).
+
+  * [Management Network Switch Rename](network/management_network/Management_Network_Switch_Rename.md)
+  * [Management Network ACL configuration](network/management_network/Management_Network_ACL_Configuration.md)
+  * [Management Network CAN setup](network/management_network/Management_Network_CAN_Setup.md)
+  * [Management Network Flow Control Settings](network/management_network/Management_Network_Flow_Control_Settings.md)
+  * [Management Network Access Port configurations](network/management_network/Management_Network_Access_Port_Configurations.md)
+  * [Update Management Network Firmware](network/management_network/Update_Management_Network_Firmware.md)
 
 
 <a name="customer-access-network-can"></a>
@@ -612,6 +623,7 @@ MetalLB can run in either Layer2-mode or BGP-mode for each address pool it manag
   * [MetalLB in BGP-Mode](network/metallb_bgp/MetalLB_in_BGP-Mode.md)
   * [MetalLB in BGP-Mode Configuration](network/metallb_bgp/MetalLB_in_BGP-Mode_Configuration.md)
   * [Check BGP Status and Reset Sessions](network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md)
+  * [Update BGP Neighbors](network/metallb_bgp/Update_BGP_Neighbors.md)
   * [Troubleshoot Services without an Allocated IP Address](network/metallb_bgp/Troubleshoot_Services_without_an_Allocated_IP_Address.md)
   * [Troubleshoot BGP not Accepting Routes from MetalLB](network/metallb_bgp/Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
 
@@ -630,6 +642,7 @@ See [Update Firmware with FAS](firmware/Update_Firmware_with_FAS.md) for a list 
   * [FAS Recipes](firmware/FAS_Recipes.md)
   * [FAS Admin Procedures](firmware/FAS_Admin_Procedures.md)
   * [FAS Use Cases](firmware/FAS_Use_Cases.md)
+  * [Upload Olympus BMC Recovery Firmware into TFTP Server](firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md)
 
 
 <a name="user-access-service-uas"></a>

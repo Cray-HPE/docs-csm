@@ -1,8 +1,8 @@
-# Upload Olympus BMC Recovery Firmware into TFTP server
+## Upload Olympus BMC Recovery Firmware into TFTP Server
 
 `cray-upload-recovery-images` is a utility for uploading the Olympus BMC recovery files to be served by the *cray-tftp* service. The tool uses the cray cli (*fas*, *artifacts*) and *cray-tftp* to download the s3 recovery images (as remembered by FAS) then upload them into the PVC that is used by *cray-tfpt*.
 
-## Procedure:
+### Procedure
 
 1. Execute the `cray-upload-recovery-images` script.
 

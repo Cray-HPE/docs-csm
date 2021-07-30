@@ -1,14 +1,12 @@
-# Lock and Unlock Nodes
+## Lock and Unlock Management Nodes 
 
-Starting with Shasta v1.4, CAPMC and FAS have the ability to ignore management nodes by honoring
-a lock state, however this ability is turned off by default. The administrator must lock the
-management nodes to prevent unwanted actions from affecting these nodes.  
+The ability to ignore non-compute nodes (NCNs) is turned off by default. Management nodes and NCNs are also not locked by default. The administrator must lock the NCNs to prevent unwanted actions from affecting these nodes.  
 
 This section only covers using locks with the Hardware State Manager (HSM). For more information
 on ignoring nodes, refer to the following sections:
 
-   * Firmware Action Service (FAS): See [Ignore Node within FAS](firmware/FAS_Admin_Procedures.md#ignore).
-   * Cray Advanced Platform Monitoring and Control (CAPMC): See [Ignore Nodes with CAPMC](power_management/Ignore_Nodes_with_CAPMC.md)
+   * Firmware Action Service (FAS): See [Ignore Node within FAS](../firmware/FAS_Admin_Procedures.md#ignore).
+   * Cray Advanced Platform Monitoring and Control (CAPMC): See [Ignore Nodes with CAPMC](../power_management/Ignore_Nodes_with_CAPMC.md)
 
 The following actions can be prevented when a node is locked.
    * Firmware upgrades with FAS
@@ -17,8 +15,7 @@ The following actions can be prevented when a node is locked.
 
 Doing any of these actions by accident will shut down a management node. If the node is a Kubernetes master or worker
 node, this can have serious negative effects on system operations. If a single node is taken down by mistake, it is
-possible that services will recover. If all management nodes are taken down, or all Kubernetes worker nodes are taken down by
-mistake, the system must be restarted.
+possible that services will recover. If all management nodes are taken down, or all Kubernetes worker nodes are taken down by mistake, the system must be restarted.
 
 After critical nodes are locked, power/reset (CAPMC) or firmware (FAS) operations cannot affect the nodes unless
 they are unlocked. For example, any locked node that is included in a list of nodes to be reset will result in a
@@ -31,17 +28,14 @@ failure.
    * [How To Lock Management Nodes](#how-to-lock-management-nodes)
    * [How To Unlock Management Nodes](#how-to-unlock-management-nodes) 
 
-## Details
 
 <a name="when-to-lock-management-nodes"></a>
+
 ### When To Lock Management Nodes
 
-To best protect system health, management nodes should be locked as early as possible in the
-install/upgrade cycle. The later in the process, the more risk of accidentally taking
-down a critical node. Management node locking must be done after Kubernetes is running and
-the HSM (Hardware State Manager) service is operational.
+To best protect system health, NCNs should be locked as early as possible in the install/upgrade cycle. The later in the process, the more risk there is of accidentally taking down a critical node. NCN locking must be done after Kubernetes is running and the HSM service is operational.
 
-Check whether HSM is running with the following command.
+Check whether HSM is running with the following command:
 
 ```bash
 linux# kubectl -n services get pods | grep smd
@@ -56,9 +50,10 @@ cray-smd-wait-for-postgres-4-7c78j  0/3     Completed  0          9d
 ```
 
 The `cray-smd` pods need to be in the 'Running' state, except for `cray-smd-init` and
-`cray-smd-wait-for-postgres` which should be in 'Completed' state..
+`cray-smd-wait-for-postgres` which should be in 'Completed' state.
 
 <a name="when-to-unlock-management-nodes"></a>
+
 ### When To Unlock Management Nodes
 
 Any time a management NCN has to be power cycled, reset, or have its firmware updated
@@ -66,6 +61,7 @@ it will first need to be unlocked. After the operation is complete the targeted 
 should once again be locked.
 
 <a name="how-to-lock-management-nodes"></a>
+
 ### How To Lock Management Nodes
 
 Use the `cray hsm locks lock` command to perform locking. 
@@ -104,6 +100,7 @@ Use the `cray hsm locks lock` command to perform locking.
    ```
 
 <a name="how-to-unlock-management-nodes"></a>
+
 ### How To Unlock Management Nodes
 
 Use the `cray hsm locks unlock` command to perform unlocking. 

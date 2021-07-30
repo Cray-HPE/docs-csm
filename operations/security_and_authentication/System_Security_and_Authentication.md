@@ -32,6 +32,7 @@ All connections through the Istio ingress gateway require authentication with a 
 -   [Manage System Passwords](Manage_System_Passwords.md)
     -   [Update NCN Passwords](Update_NCN_Passwords.md)
     -   [Change Root Passwords for Compute Nodes](Change_Root_Passwords_for_Compute_Nodes.md)
+    -   [Change NCN Image Root Password and SSH Keys](Change_NCN_Image_Root_Password_and_SSH_Keys.md)
 -   [Retrieve an Authentication Token](Retrieve_an_Authentication_Token.md)
 -   [SSH Keys](SSH_Keys.md)
 -   [Authenticate an Account with the Command Line](Authenticate_an_Account_with_the_Command_Line.md)
