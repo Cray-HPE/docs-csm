@@ -4,8 +4,8 @@ The Image Management Service \(IMS\) uses the open source Kiwi-NG tool to build 
 
 Even though Kiwi recipes can be developed from scratch or found on the Internet, Cray suggests that recipes are based on existing Cray image recipes. Cray provides multiple types of recipes including, but not limited to the following:
 
--   Barebones Image Recipes - The barebones recipes contain only the upstream Linux packages needed to successfully boot the image on a Cray compute node using upstream packages. Bare-bones recipes are primarily meant to be used to validate the Cray IMS tools, without requiring Cray's Linux Environment \(CLE\) content.
--   CLE Recipes - CLE recipes contain a Linux environment with a Cray customized kernel and optimized Cray services for our most demanding customers and workloads.
+-   Barebones Image Recipes - The barebones recipes contain only the upstream Linux packages needed to successfully boot the image on a Cray compute node using upstream packages. Bare-bones recipes are primarily meant to be used to validate the Cray IMS tools, without requiring HPE Cray Operating System (COS) content.
+-   COS Recipes - COS recipes contain a Linux environment with a Cray customized kernel and optimized Cray services for our most demanding customers and workloads.
 
 Cray provided recipes are uploaded to the Simple Storage Service \(S3\) and registered with IMS as part of the install.
 
