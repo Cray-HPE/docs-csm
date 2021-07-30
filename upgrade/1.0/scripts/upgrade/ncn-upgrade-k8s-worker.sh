@@ -87,7 +87,7 @@ if [[ $state_recorded == "0" ]]; then
       echo "Some etcd and speaker pods are not running on $upgrade_ncn -- sleeping for 10 seconds..."
       sleep 10
     done
-
+    ssh $upgrade_ncn -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "rpm --force -Uvh ${DOC_RPM_NEXUS_URL}"
     record_state "${state_name}" ${upgrade_ncn}
 else
     echo "====> ${state_name} has been completed"
