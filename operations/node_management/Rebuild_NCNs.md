@@ -379,9 +379,8 @@ This section applies to all node types.
    ```bash
    ncn# cray bss bootparameters list --name XNAME --format=json > XNAME.json
    ```
-
+   
 <a name="inspect"></a>
-
 1. Inspect and modify the JSON file.
    1. Remove the outer array brackets.
 
