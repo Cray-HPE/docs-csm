@@ -1,6 +1,6 @@
 
 
-## FAS CLI 
+## FAS CLI
 
 This section describes the basic capabilities of the Firmware Action Service (FAS) CLI commands. These commands can be used to manage firmware for system hardware supported by FAS. Refer to the prerequisites section before proceding to any of the sections for the supported operations.
 
@@ -15,10 +15,11 @@ The following CLI operations are described:
      2. [View a Snapshot](#view)
      3. [List Snapshots](#list)
 3. [Update an Image](#update)
+4. [FAS Loader Commands](#loader)
 
 ### Prerequisites
 
-The Cray command line interface (CLI) tool is initialized and configured on the system. 
+The Cray command line interface (CLI) tool is initialized and configured on the system.
 
 <a name="action"></a>
 
@@ -32,20 +33,20 @@ Use FAS to execute an action. An action produces a set of firmware operations. E
 
 This will cover the generic process for executing an action. For more specific examples and detailed explanations of options see the [Recipes](FAS_Recipes.md) and [Filters](FAS_Filters.md) sections.
 
-1. Identify the selection of filters to apply. 
+1. Identify the selection of filters to apply.
 
   Filters narrow the scope of FAS to target specific xnames, manufacturers, targets, and so on. For this example, FAS will run with no selection filters applied.
 
 2. Create a JSON file {whole-system-dryrun.json}; to make this a `live update` set `"overrideDryrun": true`.
 
     ```json
-    {  "command": { 
+    {  "command": {
           "version": "latest",
-          "tag":  "default", 
-          "overrideDryrun": false, 
-          "restoreNotPossibleOverride": true, 
-          "timeLimit": 1000, 
-          "description": "dryrun of full system" } 
+          "tag":  "default",
+          "overrideDryrun": false,
+          "restoreNotPossibleOverride": true,
+          "timeLimit": 1000,
+          "description": "dryrun of full system" }
     }
     ```
 
@@ -99,11 +100,11 @@ For the steps below, the following returned messages will help determine if a fi
 
 *	`NoOp`: Nothing to do, already at version.
 *	`NoSol`: No image is available.
-*	`succeeded`: 
-	*	IF `dryrun`: The operation should succeed if performed as a `live update`. `succeeded` means that FAS identified that it COULD update an xname + target with the declared strategy. 
+*	`succeeded`:
+	*	IF `dryrun`: The operation should succeed if performed as a `live update`. `succeeded` means that FAS identified that it COULD update an xname + target with the declared strategy.
 	*	IF `live update`: the operation succeeded, and has updated the xname + target to the identified version.
-*	`failed`: 
-	*	IF `dryrun` : There is something that FAS could do, but it likely would fail; most likely because the file is missing. 
+*	`failed`:
+	*	IF `dryrun` : There is something that FAS could do, but it likely would fail; most likely because the file is missing.
 	*	IF `live update` : the operation failed, the identified version could not be put on the xname + target.
 
 Data can be viewed at several levels of information:
@@ -121,7 +122,7 @@ To view counts of operations, what state they are in, the overall state of the a
   actionID = "0a305f36-6d89-4cf8-b4a1-b9f199afaf3b" startTime = "2020-06-23 15:43:42.939100799 +0000 UTC"
   snapshotID = "00000000-0000-0000-0000-000000000000"
   endTime = "2020-06-23 15:48:59.586748151 +0000 UTC"
-    
+
   [actions.command]
   description = "upgrade of x9000c1s3b1 Nodex.BIOS to WNC 1.1.2" tag = "default"
   restoreNotPossibleOverride = true timeLimit = 1000
@@ -143,7 +144,7 @@ To view counts of operations, what state they are in, the overall state of the a
   endTime = "2020-06-18 03:11:06.806297546 +0000 UTC"
   ```
 
-**IMPORTANT:** Unless the action's `state` is `completed` or `aborted`; then this action is still under progress. 
+**IMPORTANT:** Unless the action's `state` is `completed` or `aborted`; then this action is still under progress.
 
 ##### Get Details of Action
 
@@ -260,9 +261,9 @@ Using the `operationID` listed in the actions array we can see the full detail o
   "toTag": "",
   "state": "succeeded",
   "stateHelper": "unexpected change detected in firmware version. Expected nc.1.3.8-shasta-release.arm.2020-06-15T22:57:31+00:00.b7f0725 got: nc.1.2.25-shasta-release.arm.2020-05-15T17:27:16+00:00.0cf7f51",
-  "deviceType": "", 
-  "expirationTime": "", 
-  "manufacturer": "cray", 
+  "deviceType": "",
+  "expirationTime": "",
+  "manufacturer": "cray",
   "xname": "x9000c1s3b1",
   "toFirmwareVersion": ""
   }
@@ -281,7 +282,7 @@ A snapshot of the system captures the firmware version for every device that is 
 #### Procedure
 
 1. Determine what part of the system to take a snapshot.
-   
+
    * Full System:
          ```json
          {
@@ -455,9 +456,9 @@ Given the nature of the `model` field and its likelihood to not be standardized,
     ```bash
     ncn-m001# cray fas images describe {imageID}
     {
-      "semanticFirmwareVersion": "0.2.6", 
+      "semanticFirmwareVersion": "0.2.6",
       "target": "Node0.BIOS",
-      "waitTimeBeforeManualRebootSeconds": 0, 
+      "waitTimeBeforeManualRebootSeconds": 0,
       "tags": [
         "default"
       ],
@@ -470,7 +471,7 @@ Given the nature of the `model` field and its likelihood to not be standardized,
       "s3URL": "s3:/fw-update/794c47d1b7e011ea8d20569839947aa5/gprnc.bios-0.2.6.tar.gz",
       "forceResetType": "",
       "deviceType": "nodeBMC",
-      "pollingSpeedSeconds": 30, 
+      "pollingSpeedSeconds": 30,
       "createTime": "2020-06-26T19:08:52Z",
       "firmwareVersion": "gprnc.bios-0.2.6",
       "manufacturer": "cray"
@@ -618,11 +619,11 @@ Given the nature of the `model` field and its likelihood to not be standardized,
         }
       }
     }
-    
+
     ```
 
     View the operation data. If the model name is different between identical hardware, it may be appropriate to update the image model with the model of the noSolution hardware.
-    
+
     ```bash
     ncn-m001# cray fas operations describe {operationID} --format json
     {
@@ -652,12 +653,12 @@ Given the nature of the `model` field and its likelihood to not be standardized,
       "toFirmwareVersion": "sc.1.4.35-prod-master.arm64.2020-06-26T08:36:42+00:00.0c2bb02"
     }
     ```
-    
+
 4. Update the firmware image file.
 
    This step should be skipped if there is no clear evidence of a missing image or incorrect model name.
 
-   **WARNING:** The admin needs to be certain the firmware is compatible before proceeding.	
+   **WARNING:** The admin needs to be certain the firmware is compatible before proceeding.
 
    1. Dump the content of the firmware image to a JSON file.
 
@@ -672,4 +673,96 @@ Given the nature of the `model` field and its likelihood to not be standardized,
       ```bash
       ncn-m001# cray fas images update {imagedata.json} {imageID}
       ```
+---
 
+<a name="loader"></a>
+
+### FAS Loader Commands
+
+##### Loader Status
+To check if the loader is currently busy and receive a list of loader run IDs:
+```bash
+ncn-m001# cray fas loader list
+
+loaderStatus = "ready"
+[[loaderRunList]]
+loaderRunID = "770af5a4-15bf-4e9f-9983-03069479dc23"
+
+[[loaderRunList]]
+loaderRunID = "8efb19c4-77a2-41da-9a8f-fccbfe06f674"
+```
+The loader can only run one job at a time, if the loader is `busy`, it will return an error on any attempt to create an additional job.
+
+##### Load Firmware From Nexus
+Firmware may be released and placed into the Nexus repository.
+FAS will return a loaderRunID.
+Use the loaderRunID to check the results of the loader run.
+To load the firmware from Nexus into FAS, use the following command:
+```bash
+ncn-m001# cray fas loader nexus create
+
+loaderRunID = "c2b7e9bb-f428-4e4c-aa83-d8fd8bcfd820"
+```
+See [Load Firmware from Nexus in FAS Admin Procedures](./FAS_Admin_Procedures.md#loadNexus)
+
+##### Load Individual RPM or ZIP into FAS
+To load an RPM or ZIP into FAS on a system, copy the RPM or ZIP file to ncn-m001 or one of the other NCNs.
+FAS will return a loaderRunID.
+Use the loaderRunID to check the results of the loader run.
+Run the following command (RPM is this case is firmware.rpm):
+**NOTE:** If firmware is not in the current directory, you will need to add the path to the filename.
+```bash
+ncn-m001# cray fas loader create --file firmware.rpm
+
+loaderRunID = "dd37dd45-84ec-4bd6-b3c9-7af480048966"
+```
+See [Load Firmware from RPM or ZIP file in FAS Admin Procedures](./FAS_Admin_Procedures.md#loadRPM)
+
+##### Display Results of Loader Run
+
+Using the loaderRunID returned from the loader upload command, run the following command to get the output from the upload *(Note the `--format json`, this makes it easier to read)*:
+**NOTE:** `dd37dd45-84ec-4bd6-b3c9-7af480048966` is the loaderRunID from previous run command.
+
+```bash
+ncn-m001# cray fas loader describe dd37dd45-84ec-4bd6-b3c9-7af480048966 --format json
+
+{
+  "loaderRunOutput": [
+    "2021-04-28T14:40:45Z-FWLoader-INFO-Starting FW Loader, LOG_LEVEL: INFO; value: 20",
+    "2021-04-28T14:40:45Z-FWLoader-INFO-urls: {'fas': 'http://localhost:28800', 'fwloc': 'file://download/'}",
+    "2021-04-28T14:40:45Z-FWLoader-INFO-Using local file: /ilo5_241.zip",
+    "2021-04-28T14:40:45Z-FWLoader-INFO-unzip /ilo5_241.zip",
+    "Archive:  /ilo5_241.zip",
+    "  inflating: ilo5_241.bin",
+    "  inflating: ilo5_241.json",
+    "2021-04-28T14:40:45Z-FWLoader-INFO-Processing files from file://download/",
+    "2021-04-28T14:40:45Z-FWLoader-INFO-get_file_list(file://download/)",
+    "2021-04-28T14:40:45Z-FWLoader-INFO-Processing File: file://download/ ilo5_241.json",
+    "2021-04-28T14:40:45Z-FWLoader-INFO-Uploading b73a48cea82f11eb8c8a0242c0a81003/ilo5_241.bin",
+    "2021-04-28T14:40:45Z-FWLoader-INFO-Metadata {'imageData': \"{'deviceType': 'nodeBMC', 'manufacturer': 'hpe', 'models': ['ProLiant XL270d Gen10', 'ProLiant DL325 Gen10', 'ProLiant DL325 Gen10 Plus', 'ProLiant DL385 Gen10', 'ProLiant DL385 Gen10 Plus', 'ProLiant XL645d Gen10 Plus', 'ProLiant XL675d Gen10 Plus'], 'targets': ['iLO 5'], 'tags': ['default'], 'firmwareVersion': '2.41 Mar 08 2021', 'semanticFirmwareVersion': '2.41.0', 'pollingSpeedSeconds': 30, 'fileName': 'ilo5_241.bin'}\"}",
+    "2021-04-28T14:40:46Z-FWLoader-INFO-IMAGE: {\"s3URL\": \"s3:/fw-update/b73a48cea82f11eb8c8a0242c0a81003/ilo5_241.bin\", \"target\": \"iLO 5\", \"deviceType\": \"nodeBMC\", \"manufacturer\": \"hpe\", \"models\": [\"ProLiant XL270d Gen10\", \"ProLiant DL325 Gen10\", \"ProLiant DL325 Gen10 Plus\", \"ProLiant DL385 Gen10\", \"ProLiant DL385 Gen10 Plus\", \"ProLiant XL645d Gen10 Plus\", \"ProLiant XL675d Gen10 Plus\"], \"softwareIds\": [], \"tags\": [\"default\"], \"firmwareVersion\": \"2.41 Mar 08 2021\", \"semanticFirmwareVersion\": \"2.41.0\", \"allowableDeviceStates\": [], \"needManualReboot\": false, \"pollingSpeedSeconds\": 30}",
+    "2021-04-28T14:40:46Z-FWLoader-INFO-Number of Updates: 1",
+    "2021-04-28T14:40:46Z-FWLoader-INFO-Iterate images",
+    "2021-04-28T14:40:46Z-FWLoader-INFO-update ACL to public-read for 5ab9f804a82b11eb8a700242c0a81003/wnc.bios-1.1.2.tar.gz",
+    "2021-04-28T14:40:46Z-FWLoader-INFO-update ACL to public-read for 5ab9f804a82b11eb8a700242c0a81003/wnc.bios-1.1.2.tar.gz",
+    "2021-04-28T14:40:46Z-FWLoader-INFO-update ACL to public-read for 53c060baa82a11eba26c0242c0a81003/controllers-1.3.317.itb",
+    "2021-04-28T14:40:46Z-FWLoader-INFO-update ACL to public-read for b73a48cea82f11eb8c8a0242c0a81003/ilo5_241.bin",
+    "2021-04-28T14:40:46Z-FWLoader-INFO-finished updating images ACL",
+    "2021-04-28T14:40:46Z-FWLoader-INFO-removing local file: /ilo5_241.zip",
+    "2021-04-28T14:40:46Z-FWLoader-INFO-*** Number of Updates: 1 ***"
+  ]
+}
+```
+A successful run will end with `*** Number of Updates: x ***`.
+**NOTE:** The FAS loader will not overwrite image records already in FAS.  Number of Updates will be the number of new images found in the RPM.  If the number is 0, all images were already in FAS.
+
+##### Delete Loader Run Data
+
+To delete the output from a loader run and remove it from the loader run list:
+**NOTE:** `dd37dd45-84ec-4bd6-b3c9-7af480048966` is the loaderRunID from previous run command.
+
+```bash
+ncn-m001# cray fas loader delete dd37dd45-84ec-4bd6-b3c9-7af480048966
+```
+The delete command does not return anything if successful
+**NOTE:** The loader delete command does not delete any images from FAS, it only deletes the loader run saved status and removes the ID from the loader run list.
