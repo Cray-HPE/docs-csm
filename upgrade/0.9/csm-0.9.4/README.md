@@ -217,6 +217,48 @@ report `FAIL` when uploading duplicate assets. This is ok as long as
    ```
 
 
+<a name="update-customizations"></a>
+## Update customizations.yaml
+
+1. If you manage customizations.yaml in an external Git repository ([as
+   recommended](../../../install/prepare_site_init.md#version-control-site-init-files)),
+   then clone a local working tree, e.g.:
+
+   ```bash
+   ncn-m001# git clone <URL> site-init
+   ncn-m001# cd site-init
+   ```
+
+   Otherwise extract customizations.yaml from the `site-init` secret:
+
+   ```bash
+   ncn-m001# cd /tmp
+   ncn-m001# kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
+   ```
+
+2. Remove the Gitea PVC configuration from customizations.yaml:
+
+   ```bash
+   ncn-m001# yq d -i customizations.yaml 'spec.kubernetes.services.gitea.cray-service.persistentVolumeClaims'
+   ```
+
+3. Update the `site-init` secret:
+
+   ```bash
+   ncn-m001# kubectl delete secret -n loftsman site-init
+   ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ```
+
+4. Commit changes to customizations.yaml if using an external Git repository,
+   e.g.:
+
+   ```bash
+   ncn-m001# git add customizations.yaml
+   ncn-m001# git commit -m 'Remove Gitea PVC configuration from customizations.yaml'
+   ncn-m001# git push
+   ```
+
+
 <a name="upgrade-services"></a>
 ## Upgrade Services
 
@@ -462,48 +504,6 @@ documentation is no longer accurate in CSM v1.0.
 
    ```bash
    ncn-m001# kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r  - '"0.9.4".configuration.import_date'
-   ```
-
-
-<a name="update-customizations"></a>
-## Update customizations.yaml
-
-1. If you manage customizations.yaml in an external Git repository ([as
-   recommended](../../../install/prepare_site_init.md#version-control-site-init-files)),
-   then clone a local working tree, e.g.:
-
-   ```bash
-   ncn-m001# git clone <URL> site-init
-   ncn-m001# cd site-init
-   ```
-
-   Otherwise extract customizations.yaml from the `site-init` secret:
-
-   ```bash
-   ncn-m001# cd /tmp
-   ncn-m001# kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
-   ```
-
-2. Remove the Gitea PVC configuration from customizations.yaml:
-
-   ```bash
-   ncn-m001# yq d -i customizations.yaml 'spec.kubernetes.services.gitea.cray-service.persistentVolumeClaims'
-   ```
-
-3. Update the `site-init` secret:
-
-   ```bash
-   ncn-m001# kubectl delete secret -n loftsman site-init
-   ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
-   ```
-
-4. Commit changes to customizations.yaml if using an external Git repository,
-   e.g.:
-
-   ```bash
-   ncn-m001# git add customizations.yaml
-   ncn-m001# git commit -m 'Remove Gitea PVC configuration from customizations.yaml'
-   ncn-m001# git push
    ```
 
 
