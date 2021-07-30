@@ -101,7 +101,7 @@ The commands in this procedure must be run as the `root` user in this release.
     |Recipe|Recipe Name|Kernel File Name|Initrd File Name|
     |------|-----------|----------------|----------------|
     |SLES 15 SP1 Barebones|cray-sles15sp1-barebones|vmlinuz|initrd|
-    |CLE|cray-sles15sp1-cle|vmlinuz|initrd|
+    |COS|cray-shasta-compute-sles15sp1.x86_64-1.4.66|vmlinuz|initrd|
 
     ```bash
     ncn# cray ims jobs create \
