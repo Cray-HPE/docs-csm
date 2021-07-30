@@ -29,9 +29,6 @@ The areas should be tested in the order they are listed on this page. Errors in 
   - [2.1 HMS Test Execution](#hms-test-execution)
   - [2.2 Hardware State Manager Discovery Validation](#hms-smd-discovery-validation)
 - [3 Software Management Services Health Checks](#sms-health-checks)
-  - [3.1 cmsdev Usage](#cmsdev-usage)
-  - [3.2 Interpreting cmsdev Results](#cmsdev-results)
-  - [3.3 SMS Checks To Run](#sms-checks)
 - [4. Booting CSM Barebones Image](#booting-csm-barebones-image)
   - [4.1 Locate CSM Barebones Image in IMS](#locate-csm-barebones-image-in-ims)
   - [4.2 Create a BOS Session Template for the CSM Barebones Image](#csm-bos-session-template)
@@ -599,67 +596,15 @@ A listing of known hardware discovery issues and workarounds can be found here i
 <a name="sms-health-checks"></a>
 ## 3 Software Management Services Health Checks
 
-The Software Management Services health checks are run using `/usr/local/bin/cmsdev`.
-
-1. [cmsdev Usage](#cmsdev-usage)
-1. [Interpreting cmsdev Results](#cmsdev-results)
-1. [SMS Checks To Run](#sms-checks)
-
-<a name="cmsdev-usage"></a>
-### 3.1 cmsdev Usage
-`cmsdev test [-q | -v] <shortcut>`
-* The shortcut determines which component will be tested. See the table in the next section for the list of shortcuts.
-* The tool logs to /opt/cray/tests/cmsdev.log
-* The -q (quiet) and -v (verbose) flags can be used to decrease or increase the amount of information sent to the screen.
-  * The same amount of data is written to the log file in either case.
-
-<a name="cmsdev-results"></a>
-#### 3.2 Interpreting cmsdev Results
-
-* If a test passes:
-  * The last line of output from the tool reports SUCCESS.
-  * The return code is 0.
-* If a test fails:
-  * The last line of output from the tool reports FAILURE.
-  * The return code is non-0.
-* Unless the test was run in verbose mode, the log file will contain additional information about the execution.
-* For more detailed information on the tests, please see the CSM Validation section of the admin guide (note to docs writers: replace this with the actual document name and section number/title once available).
-
-<a name="sms-checks"></a>
-### 3.3 SMS Checks To Run
-
-Run a check for each of the following services after an install. These should be run on at least one worker node and at least one master node (but **not** ncn-m001 if it is still the PIT node).
-
-| Services  | Shortcut |
-| ---  | --- |
-| BOS (Boot Orchestration Service) | bos |
-| CFS (Configuration Framework Service) | cfs |
-| ConMan (Console Manager) | conman |
-| CRUS (Compute Rolling Upgrade Service) | crus |
-| IMS (Image Management Service) | ims |
-| iPXE, TFTP (Trivial File Transfer Protocol) | ipxe* |
-| VCS (Version Control Service) | vcs |
-
-\* The iPXE shortcut runs a check of both the iPXE service and the TFTP service.
-
-The following is a convenient way to run all of the tests and see if they passed:
+Run the Software Management Services health checks. These can be run from any master or worker node (but **not** the PIT).
 
 ```bash
-ncn# for S in bos cfs conman crus ims ipxe vcs ; do
-    LOG=/root/cmsdev-$S-$(date +"%Y%m%d_%H%M%S").log
-    echo -n "$(date) Starting $S check ... "
-    START=$SECONDS
-    /usr/local/bin/cmsdev test -v $S > $LOG 2>&1
-    rc=$?
-    let DURATION=SECONDS-START
-    if [ $rc -eq 0 ]; then
-        echo "PASSED (duration: $DURATION seconds)"
-    else
-        echo "FAILED (duration: $DURATION seconds)"
-        echo " # See $LOG for details"
-    fi
-done
+ncn# /usr/local/bin/cmsdev test -q all
 ```
+
+The final line of output will state `SUCCESS` or `FAILURE`. In the case of success, it will exit with return code 0. Otherwise it will exit with non-0 return code.
+
+Additional test execution details can be found in `/opt/cray/tests/cmsdev.log`.
 
 <a name="booting-csm-barebones-image"></a>
 ## 4. Booting CSM Barebones Image
