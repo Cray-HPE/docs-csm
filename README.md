@@ -89,4 +89,35 @@ owner(s). This pattern follows semantic version as described by http://semver.or
 - Z: Bug Fix/patch - This should be incremented by the developer when making amendments confined to
   a page.
 
-Any contributor should feel welcome to ask for clarification on versioning within their change's review.
+Any contributor should feel welcome to ask for clarification on versioning within their change's
+review.
+
+<a name="discussions"></a>
+
+### Discussions
+
+See the Cray /HPE Slack [#docs-csm-install][1] (not public; external access may be available for
+various partners and customers).
+
+<a name="original-authors--reviewers"></a>
+
+##### Original Authors / Reviewers
+
+This document can be discussed in [#docs-csm-install][1].
+
+These folks are main contributors or reviewers, none of which are the owners of this repository. Any
+email should include the list, otherwise ping the slack channel.
+
+- PET: [Brad Klein](mailto:bradley.klein@hpe.com)
+- PET: [Craig DeLatte](mailto:craig.delatte@hpe.com)
+- METAL: [Jacob Salmela](mailto:jacob.salmela@hpe.com)
+- PET: [Jeanne Ohren](mailto:jeanne.ohren@hpe.com)
+- METAL: [Russell Bunch](mailto:doomslayer@hpe.com)
+- CMS: [Mitch Harding](mailto:mitchell.harding@hpe.com)
+
+[1]: https://cray.slack.com/messages/docs-csm-install
+
+[2]: https://semver.org/
+
+[3]: http://web.us.cray.com/~ekoen/slingshot_portal/master/portal/public/developer-portal/overview/
+>>>>>>> release/0.9
