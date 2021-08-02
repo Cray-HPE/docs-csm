@@ -41,7 +41,7 @@ It may be useful to only adjust the XMIT value to `layer2`; the current setting 
 
 Wicked is the SUSE NetworkManager and Daemon wrapper for handling interfaces' processes and applying their configuration. See the [SUSE Wicked](https://documentation.suse.com/external-tree/en-us/sles/12-SP4/networking_with_wicked_in_suse_linux_enterprise_12_guide.pdf) external documentation for more information.
 
-For admins familiar with the more common Linux distribution, Ubuntu, it has an analogue to Wicked called NetPlan. The benefit is that it removes tedious, low-level configurations. However, Wicked and NetPlan each have their own web of configuration. The examples below are useful ways Wicked can be used to debug and triage interfaces.
+For administrators familiar with the more common Linux distribution, Ubuntu, it has an analogue to Wicked called NetPlan. The benefit is that it removes tedious, low-level configurations. However, Wicked and NetPlan each have their own web of configuration. The examples below are useful ways Wicked can be used to debug and triage interfaces.
 
 To view a system wide interface network configuration:
 

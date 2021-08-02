@@ -163,7 +163,7 @@ UAI host nodes are determined by tainting the nodes against UAIs, so the followi
 ncn-m001-pit# kubectl label node ncn-w001 uas=False --overwrite
 ```
 
-Please note here that setting `uas=True` or any variant of that, while potentially useful for local bookkeeping purposes, does NOT transform the node into a UAS host node. With that setting the node will be a UAS node because the value of the `uas` flag is not in the list `False`, `false`, or `FALSE`, but unless the node previously had one of the false values, it was a UAI node all along. Perhaps more to the point, removing the `uas` label from a node labeled `uas=True` does not take the node out of the list of UAI host nodes. The only way to make a non-master Kubernetes node not be a UAS host node is to explicitly set the label to `False`, `false`, or `FALSE`.
+Please note here that setting `uas=True` or any variant of that, while potentially useful for local bookkeeping purposes, does NOT transform the node into a UAS host node. With that setting the node will be a UAS node because the value of the `uas` flag is not in the list `False`, `false`, or `FALSE`, but unless the node previously had one of the false values, it was a UAI node all along. Perhaps more to the point, removing the `uas` label from a node labeled `uas=True` does not take the node out of the list of UAI host nodes. The only way to make a non-master Kubernetes node not be a UAS host node is to set the label explicitly to `False`, `false`, or `FALSE`.
 
 ### Maintaining an HSM Group for UAI Host Nodes <a name="main-hostnodes-hsmgroup"></a>
 
@@ -2033,7 +2033,7 @@ sleep infinity
 
 Starting at the top, `pam_config ...` can be customized to set up PAM as needed. The configuration here assumes the broker is using SSSD to reach a directory server for authentication and that, if a home directory is not present for a user at login, one should be made on the broker. The `ssh-keygen...` part is needed to set up the SSH host key for the broker and should be left alone. The `UAI_CREATION_CLASS` code should be left alone, as it sets up information used by `switchboard` to create end-user UAIs. The `/usr/sbin/sshd...` part starts the SSH server on the broker and should be left alone. Configuration of SSH is covered in the next section and is done by replacing `/etc/switchboard/sshd_config` not by modifying this line. The `sssd` part assumes the broker is using SSSD to reach a directory server, it can be changed as needed. The `sleep infinity` prevents the script from exiting which keeps the broker UAI running. It should not be removed or altered. As long as the basic flow and contents described here are honored, other changes to this script should work without compromising the broker UAI's function.
 
-Here is an example of replacing the entrypoint script with a new entrypoint script that changes the SSSD invocation to explicitly specify the `sssd.conf` file path (the standard path is used here, but a different path might make customizing SSSD for a given site simpler under some set of circumstances):
+Here is an example of replacing the entrypoint script with a new entrypoint script that changes the SSSD invocation to specify explicitly the `sssd.conf` file path (the standard path is used here, but a different path might make customizing SSSD for a given site simpler under some set of circumstances):
 
 ```
 # Notice special here document form to prevent variable substitution in the file

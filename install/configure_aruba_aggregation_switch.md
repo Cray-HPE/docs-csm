@@ -1,6 +1,6 @@
 # Configure Aruba Aggregation Switch
 
-This page describes how Aruba aggregation switches are configured and will show users how to validate configuration.
+This page describes how Aruba aggregation switches are configured.
 
 Management nodes and Application nodes will be plugged into aggregation switches. 
 
@@ -15,11 +15,11 @@ Requirements:
 
 Here is an example snippet from a aggregation switch on the 25G_10G tab of the SHCD spreadsheet.
 
-   | Source | Source Label Info | Destination Label Info | Destination | Description | Notes
-   | --- | --- | ---| --- | --- | --- |
-   | sw-25g01 | x3105u38-j49 | x3105u39-j49 | sw-25g02 | 100g-1m-DAC | |
-   | sw-25g01 | x3105u38-j50 | x3105u39-j50 | sw-25g02 | 100g-1m-DAC | |
-   | sw-25g01 | x3105u38-j53 | x3105u39-j53 | sw-25g02 | 100g-1m-DAC | keepalive |
+| Source | Source Label Info | Destination Label Info | Destination | Description | Notes
+| --- | --- | ---| --- | --- | --- |
+| sw-25g01 | x3105u38-j49 | x3105u39-j49 | sw-25g02 | 100g-1m-DAC | |
+| sw-25g01 | x3105u38-j50 | x3105u39-j50 | sw-25g02 | 100g-1m-DAC | |
+| sw-25g01 | x3105u38-j53 | x3105u39-j53 | sw-25g02 | 100g-1m-DAC | keepalive |
 
 It is assumed that you have connectivity to the switch and have done the [Configure Aruba Management Network Base](configure_aruba_management_network_base.md) procedure.
 
@@ -295,6 +295,7 @@ Control plane ACL
 1. OSPF is a dynamic routing protocol used to exchange routes.
    It provides reachability from the MTN networks to NMN/Kubernetes networks.
    The router-id used here is the NMN IP address. (VLAN 2 IP) 
+
    ```
    sw-agg-001 & sw-agg-002 (config)#
        router ospf 1
@@ -308,6 +309,7 @@ Control plane ACL
 ## Configure NTP
 
 1. The IP addresses used here will be the first three worker nodes on the NMN network. These can be found in NMN.yaml.
+
    ```
    sw-agg-001 & sw-agg-002 (config)#
        ntp server 10.252.1.7
@@ -319,6 +321,7 @@ Control plane ACL
 ## Configure DNS
 
 1. This will point to the unbound DNS server. 
+
    ```
    sw-agg-001 & sw-agg-002 (config)#
        ip dns server-address 10.92.100.225
@@ -330,6 +333,7 @@ These are ports that are connected to management nodes.
 
 1. Worker node and master node configuration
    Refer to [Cable Management Network Servers](cable_management_network_servers.md) for cabling specs.
+
    ```
    sw-agg-001 & sw-agg-002 (config)#
        interface lag 4 multi-chassis
@@ -355,6 +359,7 @@ These are ports that are connected to management nodes.
 1. Aruba Storage port configuration (future use)
    These will be configured, but the ports will be shut down until needed.
    These are OCP and PCIe port 2 on storage nodes.
+
    ```
    sw-agg-001 & sw-agg-002 (config)#
        interface 1/1/7
@@ -383,6 +388,7 @@ These are ports that are connected to management nodes.
 
 1. Aruba UAN NMN Configuration
    One port is shutdown.
+
    ```
    sw-agg-001 (config)#
        interface 1/1/16
@@ -408,6 +414,7 @@ These are ports that are connected to management nodes.
 1. Aruba UAN CAN Configuration
 
    Port Configuration is the same on both switches.
+
    ```
    sw-agg-001 (config)#
        interface 1/1/16
@@ -439,6 +446,7 @@ These are ports that are connected to management nodes.
    ```
 
 ## Save configuration
+
    ```
    sw-agg-001(config)# exit
    sw-agg-001# write memory

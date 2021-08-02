@@ -300,7 +300,7 @@ NOTES:
 | uan01	 | x3000u27s1-j1 | x3000u24L-j10| sw-smn02   |
 | uan01	 | x3000u27s1-j2 | x3000u24R-j10| sw-smn03   |
 
-![Diagram of Gigaabyte UAN Cabling](../img/network/Gigaintel_UAN.png)
+![Diagram of Gigabyte UAN Cabling](../img/network/Gigaintel_UAN.png)
 
 NOTE that there are a couple configurations possible for LAN0:
 * Existing Gigabyte systems on Dell and Mellanox network hardware will use the (existing) Dell leaf port.

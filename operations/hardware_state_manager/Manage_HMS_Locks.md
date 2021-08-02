@@ -11,7 +11,7 @@ Use the following command to verify if an xname is locked or not. The command wi
 The following shows how to interpret the output:
 
 * Locked: Shows if the xname has been locked with the `cray hsm locks lock create` command.
-* Reserved: Shows if the xname has been locked for a time-boxed event. Only service can reserve xnames; admins are not able to reserve xnames.
+* Reserved: Shows if the xname has been locked for a time-boxed event. Only service can reserve xnames; administrators are not able to reserve xnames.
 * ReservationDisable: Shows if the ability to reserved an xname has been changed by an EPO or admin command. 
 
 ```bash

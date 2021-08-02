@@ -160,7 +160,7 @@ This procedure includes information on how check the firmware versions for the e
 
 	- overrideDryrun: The overrideDryrun parameter is set to false by default. FAS will only update the system if this is parameter is set to true.
 	- restoreNotPossibleOverride: FAS will not perform an update if the currently running firmware is not available in the images repository. Set to true to allow FAS to update firmware, even if the current firmware is unavailable on the system.
-	- description: A brief description that helps admins distinguish between actions.
+	- description: A brief description that helps administrators distinguish between actions.
 	- version: Determine if the firmware should be set to the `latest`, the `earliest` semantic version, or set to a specific firmware version.
 
 	Use one of the options below to run on a dry-run on every system device or on targeted devices:
@@ -232,7 +232,7 @@ This procedure includes information on how check the firmware versions for the e
   	-   `succeeded`: A firmware version that FAS can update the firmware to is available and it should work when actually updating the firmware.
   	-   `failed`: There is something that FAS could do, but it likely would fail; most likely because the file is missing.
 
-  	1. Get a high-level summary of the FAS job to determine if there are any upgradeable firmware images available.
+  	1. Get a high-level summary of the FAS job to determine if there are any upgradable firmware images available.
 
 		Use the returned `actionID` from the cray fas actions create command.
 
@@ -462,7 +462,7 @@ Use the `--format json` to make it easier to read.
 }
 ```
 A successful run will end with `*** Number of Updates: x ***`.
-**NOTE:** The FAS loader will not overwrite image records already in FAS.  Number of Updates will be the number of new images found in Nexus.  If the number is 0, all images were already in FAS.
+**NOTE:** The FAS loader will not overwrite image records already in FAS. Number of Updates will be the number of new images found in Nexus. If the number is 0, all images were already in FAS.
 
 ---
 
@@ -528,4 +528,4 @@ Use the `--format json` to make it easier to read.
 }
 ```
 A successful run will end with `*** Number of Updates: x ***`.
-**NOTE:** The FAS loader will not overwrite image records already in FAS.  Number of Updates will be the number of new images found in the RPM.  If the number is 0, all images were already in FAS.
+**NOTE:** The FAS loader will not overwrite image records already in FAS. Number of Updates will be the number of new images found in the RPM. If the number is 0, all images were already in FAS.

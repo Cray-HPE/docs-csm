@@ -14,7 +14,7 @@ for more information.
 ### Topics 
    1. [Prepare BIOS and Firmware Content for Installation](#prepare-bios-and-firmware-for-installation)
    2. [Check BIOS and Hardware](#check-bios-and-hardware)
-      1. [Ugrade HPE (iLO) Firmware](#upgrade-hpe-ilo-firmware)
+      1. [Upgrade HPE (iLO) Firmware](#upgrade-hpe-ilo-firmware)
          * [HPE Pre-Reqs](#hpe-pre-reqs)
          * [HPE GUI](#hpe-gui)
          * [HPE Redfish](#hpe-redfish)

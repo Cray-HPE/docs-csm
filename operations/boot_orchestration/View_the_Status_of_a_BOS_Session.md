@@ -123,7 +123,7 @@ Run the following command to view the status for a specific boot set in a sessio
 
     The name parameter is the name of the boot set.
 
-    The links section displays links that enable admins to drill down into each phase of the boot set.
+    The links section displays links that enable administrators to drill down into each phase of the boot set.
 
     There is metadata section for the boot set as a whole.
 

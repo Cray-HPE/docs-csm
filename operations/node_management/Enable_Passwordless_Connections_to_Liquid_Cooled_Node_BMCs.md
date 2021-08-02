@@ -4,7 +4,7 @@ Set the passwordless SSH keys for the root account and/or console of all liquid-
 
 **Warning:** If admin uses SCSD to update the SSHConsoleKey value outside of ConMan, it will disrupt the ConMan connection to the console and collection of console logs. Refer to [ConMan](../conman/ConMan.md) for more information.
 
-Setting up SSH keys enables admins to view recent console messages and interact with the console device for nodes.
+Setting up SSH keys enables administrators to view recent console messages and interact with the console device for nodes.
 
 ### Prerequisites
 

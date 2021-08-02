@@ -142,7 +142,7 @@ The following use cases are covered in this section:
    * Create a CFS Configuration for the Application of Passwordless SSH to NCNs
 
 ###### Provide Custom Keys
-Admins may elect to replace the provided keys with their own custom keys. This is best done before the impacted
+Administrators may elect to replace the provided keys with their own custom keys. This is best done before the impacted
 environments are configured or installed, because it can be difficult to know where all of the key portions are
 populated.
 
@@ -285,10 +285,10 @@ procedure.
 ### Create a CFS Configuration JSON File
 
 1. For every layer of configuration, four fields are required.
-   * name of the layer
-   * cloneURL which indicates where to find the configuration management repository in VCS
-   * playbook to be run for this layer
-   * commit ID in the named cloneURL in VCS
+   * `name` of the layer
+   * `cloneUrl` which indicates where to find the configuration management repository in VCS
+   * `playbook` to be run for this layer
+   * `commit` ID in the named `cloneUrl` in VCS
 
 1. Create a CFS configuration JSON file for NCN personalization.
 
@@ -403,7 +403,7 @@ procedure.
          },
          {
             "name": "sma-ldms-ncn",
-            "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/sma-config-gmanagement.git",
+            "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/sma-config-management.git",
             "playbook": "sma-ldms-ncn.yml",
             "commit": "eb724e7135dc60d3fdfff9fb01672538f241e588"
          },

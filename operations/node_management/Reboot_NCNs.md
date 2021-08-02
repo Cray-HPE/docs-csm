@@ -130,19 +130,28 @@ The `kubectl` command is installed.
 
         -   /var/lib/cni/networks/macvlan-slurmctld-nmn-conf
         -   /var/lib/cni/networks/macvlan-slurmdbd-nmn-conf
-    
+
     6.  Check that the BGP peering sessions are established.
 
         This check will need to be run after all worker NCNs have been rebooted. Ensure that the checks have been run to check BGP peering sessions on the spine switches \(instructions will vary for Aruba and Mellanox switches\)
 
         If there are BGP Peering sessions that are not ESTABLISHED on either switch, refer to [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
 
+    7.  Validate the NCNs have good boot artifacts
+
+    Run the CASMINST-2689 workaround, which ensures good boot artifacts.  This is especially critical during an upgrade path.
+
+    ```bash
+    ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
+    /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689
+    ```
+
 4.  Establish a serial console session to the NCNs.
 
     See [Establish a Serial Connection to NCNs](../conman/Establish_a_Serial_Connection_to_NCNs.md).
 
 
-#### NCN Rolling Reboot 
+#### NCN Rolling Reboot
 
 Before rebooting NCNs, ensure pre-reboot checks have been completed, including checking the `metal.no-wipe` setting for each NCN. Do not proceed if any of the NCN `metal.no-wipe` settings are zero.
 

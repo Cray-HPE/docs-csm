@@ -16,11 +16,13 @@ The purpose of this configuration is to have an IPv6 underlay that allows us to 
 The base config is running OSPFv3 over IPv6 on VLAN 1, so the switches can dynamically form neighborship which allows us to gain remote access to them. 
 
 1. The admin username and password needs to be applied.
+
    ```
    switch# conf terminal
    switch(config)# user admin group administrators password plaintext xxxxxxxx
    ```
 1. Set the hostname of the switch, you can use the name defined in the SHCD for this.
+
    ```
    switch(config)# hostname sw-25g04
    ```
@@ -37,6 +39,7 @@ The base config is running OSPFv3 over IPv6 on VLAN 1, so the switches can dynam
 
    In addition to this, you will need a unique router-id, this is an IPv4 address that will only be used for
    identifying the router, this is not a routable address. You can increment this by 1 for each switch. You can use other IPs for router-IDs if desired. 
+
    ```
    sw-25g04(config)# router ospfv3 1
    sw-25g04(config-ospfv3-1)# area 0
@@ -44,6 +47,7 @@ The base config is running OSPFv3 over IPv6 on VLAN 1, so the switches can dynam
    sw-25g04(config-ospfv3-1)# exit
    ```
 1. Add VLAN 1 interface to OSPF area 0
+
    ```
    sw-25g04(config)# int vlan 1
    sw-25g04(config-if-vlan)# ipv6 address autoconfig
@@ -52,12 +56,14 @@ The base config is running OSPFv3 over IPv6 on VLAN 1, so the switches can dynam
    ```
 1. Add a unique IPv6 Loopback address, this is the address that we will be remotely connecting to.
    You can increment this address by 1 for every switch you have.
+
    ```
    sw-25g04(config)# interface loopback 0
    sw-25g04(config-loopback-if)# ipv6 address fd01::0/64
    sw-25g04(config-loopback-if)# ipv6 ospfv3 1 area 0
    ```
 1. The following commands will need to be applied to gain remote access via SSH/HTTPS/API
+
    ```
    sw-25g04(config)# ssh server vrf default
    sw-25g04(config)# ssh server vrf mgmt
@@ -66,6 +72,7 @@ The base config is running OSPFv3 over IPv6 on VLAN 1, so the switches can dynam
    sw-25g04(config)# https-server rest access-mode read-write
    ```
 1. The running configuration will look like the following
+
    ```
    sw-25g04(config)# show running
    Current configuration:
@@ -124,6 +131,7 @@ The base config is running OSPFv3 over IPv6 on VLAN 1, so the switches can dynam
    ```
 
 1. You can now connect to the neighbors via the IPv6 loopback that we set earlier.
+
    ```
    sw-25g03# ssh admin@fd01::1
    ```

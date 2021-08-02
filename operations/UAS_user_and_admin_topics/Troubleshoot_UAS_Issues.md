@@ -191,7 +191,7 @@ ncn-w001# kubectl delete all -n user -l user=USERNAME
 
 Each Kubernetes worker node has limits on how many pods it can run. Nodes are installed by default with a hard limit of 110 pods per node, but the number of pods may be further limited by memory and CPU utilization constraints. For a standard node the maximum number of UAIs per node is 110; if other pods are co-scheduled on the node, the number will be reduced.
 
-Determine the hard limit on Kubernetes pods with kubectrl describe node and look for the `Capacity` section.
+Determine the hard limit on Kubernetes pods with `kubectl describe node` and look for the `Capacity` section.
 
 ```
 # kubectl describe node NODE_NAME -o yaml

@@ -109,7 +109,7 @@ data so run them only when indicated. Instructions are in the `README` files.
     Expected output looks similar to the following:
 
     ```
-    2021/02/02 14:05:15 Retrieving S3 credentails ( sls-s3-credentials ) for SLS
+    2021/02/02 14:05:15 Retrieving S3 credentials ( sls-s3-credentials ) for SLS
     2021/02/02 14:05:15 Uploading SLS file: /var/www/ephemeral/prep/eniac/sls_input_file.json
     2021/02/02 14:05:15 Successfully uploaded SLS Input File.
     ```
@@ -221,7 +221,7 @@ data so run them only when indicated. Instructions are in the `README` files.
     pit# efibootmgr | grep -Ei "ip(v4|4)"
     ```
     
-1. Set the boot order for **master nodes** from one of the following guides:
+1. Set and trim the boot order for **master nodes** using one of the following guides:
     
     > `**NOTE**` If your boot order from `efibootmgr` looks like one of [these examples](../background/ncn_boot_workflow.md#examples) then you can proceed to the next step.
     
@@ -419,7 +419,7 @@ data so run them only when indicated. Instructions are in the `README` files.
      ncn-m001# ip a show bond0
      ```
 
- 1. Verify zypper repos are empty and all remote SUSE repos are disabled.
+ 1. Verify zypper repositories are empty and all remote SUSE repositories are disabled.
 
     ```bash
     ncn-m001# rm -v /etc/zypp/repos.d/* && zypper ms --remote --disable

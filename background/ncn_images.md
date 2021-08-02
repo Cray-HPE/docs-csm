@@ -53,7 +53,7 @@ To boot an NCN, you need 3 artifacts for each node-type (kubernetes-manager/work
    drwxr-xr-x 2 root root 4096 Dec 17 21:26 0.0.8
    ```
 
-1. Setup the "booting repos":
+1. Setup the "booting repositories":
 
    ```bash
    pit# set-sqfs-links.sh

@@ -179,6 +179,7 @@ proceed to step 2.
       > Opening a web browser to `https://localhost:9443` will give access to the BMC's web interface.
 
    1. When the node boots, you will be able to use the conman session to see the BIOS menu to check and set the time to current UTC time. The process varies depending on the vendor of the NCN.
+   1. After you have verified the correct time, power off the NCN.
 
    Repeat the above process for each NCN.
 
@@ -498,7 +499,7 @@ The configuration workflow described here is intended to help understand the exp
     ceph mgr fail $(ceph mgr dump | jq -r .active_name)
     ```
 
-    Give it a minute then re-check `ceph orch` ls to see if the drives are still showing as available.  If so, then proceed to the next step.
+    Give it a minute then re-check `ceph orch` ls to see if the drives are still showing as available. If so, then proceed to the next step.
 
 4. ssh to the host and look at `lsblk` output and check against the device from the above ceph `orch device ls`
 
@@ -616,7 +617,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
    pit# grep -B1 "name: ncn-w" /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN.yaml
    ```
  
-1. Clear the BGP peering sessions by running the following commands on BOTH of the switches found above.  You should see either "arubanetworks" or "Mellanox" in the first output you see when you log in to the switch.
+1. Clear the BGP peering sessions by running the following commands on BOTH of the switches found above. You should see either "arubanetworks" or "Mellanox" in the first output you see when you log in to the switch.
    - Aruba: `clear bgp *`
    - Mellanox: `clear ip bgp all`
      - Make sure to run `enable` when you first log in to the Mellanox switch.
@@ -627,7 +628,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 
    You should see a neighbor for each of the workers NCN IP addresses found above.   If it is an Aruba switch, you will also see a neighbor for the other switch of the pair that are peering.
 
-   At this point the peering sessions with the worker IP addresses should be in IDLE, CONNECT, or ACTIVE state and not ESTABLISHED state.  This is because the MetalLB speaker pods have not been deployed yet.
+   At this point the peering sessions with the worker IP addresses should be in IDLE, CONNECT, or ACTIVE state and not ESTABLISHED state. This is because the MetalLB speaker pods have not been deployed yet.
  
    You should see that the MsgRcvd and MsgSent columns for the worker IP addresses are 0.
 
@@ -678,18 +679,44 @@ Observe the output of the checks and note any failures, then remediate them.
 1. Check Ceph
 
    ```bash
-   pit# csi pit validate --ceph
+   pit# csi pit validate --ceph | tee csi-pit-validate-ceph.log 
    ```
-
+   
    **`Note`**: Throughout the output there are multiple lines of test totals; be sure to check all of them and not just the final one.
+   > The following will extract the test totals:
+   > ```bash
+   > grep "Total" csi-pit-validate-ceph.log
+   > ```
+   >
+   > Example output for a system with 3 storage nodes:
+   > ```
+   > Total Tests: 7, Total Passed: 7, Total Failed: 0, Total Execution Time: 1.4226 seconds
+   > Total Tests: 7, Total Passed: 7, Total Failed: 0, Total Execution Time: 1.4077 seconds
+   > Total Tests: 7, Total Passed: 7, Total Failed: 0, Total Execution Time: 1.4246 seconds
+   > ```
 
    **`Note`**: Please refer to the **Utility Storage** section of the Admin guide to help resolve any failed tests.
 
 1. Check Kubernetes
 
    ```bash
-   pit# csi pit validate --k8s
+   pit# csi pit validate --k8s | tee csi-pit-validate-k8s.log
    ```
+
+   **`Note`**: Throughout the output there are multiple lines of test totals; be sure to check all of them and not just the final one.
+   > The following will extract the test totals:
+   > ```bash
+   > grep "Total" csi-pit-validate-k8s.log
+   > ```
+   >
+   > Example output for a system with 5 kubenetes nodes:
+   > ```
+   > Total Tests: 16, Total Passed: 16, Total Failed: 0, Total Execution Time: 0.3072 seconds
+   > Total Tests: 16, Total Passed: 16, Total Failed: 0, Total Execution Time: 0.2727 seconds
+   > Total Tests: 12, Total Passed: 12, Total Failed: 0, Total Execution Time: 0.2841 seconds
+   > Total Tests: 12, Total Passed: 12, Total Failed: 0, Total Execution Time: 0.3622 seconds
+   > Total Tests: 12, Total Passed: 12, Total Failed: 0, Total Execution Time: 0.2353 seconds
+   > ```
 
    > **`WARNING`** if test failures for "/dev/sdc" are observed they should be discarded for a manual test:
    >
