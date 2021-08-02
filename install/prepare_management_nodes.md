@@ -2,7 +2,7 @@
 
 Some preparation of the management nodes might be needed before starting an install or reinstall.  
 
-For either scenario, the BMC and BIOS firmware should be checked and may need to be updated on the node which will become the PIT node.
+For either scenario, the BMC and BIOS firmware should be checked and may need to be updated on the node which will become the PIT node. If necessary, [Set Gigabyte Node BMC to Factory Defaults](set_gigabyte_node_bmc_to_factory_defaults.md).
 
 For an install, if the system ever had any previous software installed, then storage might need to be wiped on management nodes. And if switching a system from USB LiveCD to RemoteISO LiveCD, the old USB device might need to be wiped.
 
@@ -95,7 +95,7 @@ Later in the installation process the HPC Firmware Pack will be installed on the
 > **Skip this section if none of the management nodes are booted**
 
 1. Power each NCN off using `ipmitool` from ncn-m001 (or the booted LiveCD if reinstalling an incomplete
-install).
+   install).
 
    * Shut down from **LiveCD** (`pit`)
 
@@ -103,7 +103,7 @@ install).
       pit# export username=root
       pit# export IPMI_PASSWORD=changeme
       pit# conman -q | grep mgmt | grep -v m001 | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
-         ```
+      ```
 
    * Shut down from **ncn-m001**
 
@@ -120,7 +120,7 @@ install).
       ```bash
       ncn# export lan=3
       ```
-    
+   
       Otherwise set it to 1.
       ```bash
       ncn# export lan=1
