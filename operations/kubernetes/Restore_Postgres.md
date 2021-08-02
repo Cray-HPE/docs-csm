@@ -407,9 +407,9 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
     cray-keycloak-2   2/2     Running   0          35s
     ````
 
-11. Re-run the keycloak-setup and keycloak-users-localize jobs
+11. Re-run the keycloak-setup and keycloak-users-localize jobs and restart Keycloak gatekeeper.
     
-    keycloak-setup:
+  - Run the keycloak-setup job to restore the Kubernetes client secrets:
 
     ```bash
     ncn-w001# kubectl get job -n ${NAMESPACE} -l app.kubernetes.io/instance=cray-keycloak -o json > keycloak-setup.json
@@ -425,7 +425,7 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
     keycloak-setup-2   1/1           59s        91s
     ````
 
-    keycloak-users-localize:
+  - Run the keycloak-users-localize job to restore the users and groups in s3 and the Kubernetes configmap:
     
     ```bash
     ncn-w001# kubectl get job -n ${NAMESPACE} -l app.kubernetes.io/instance=cray-keycloak-users-localize -o json > cray-keycloak-users-localize.json
@@ -438,6 +438,12 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
 
     NAME                        COMPLETIONS   DURATION   AGE
     keycloak-users-localize-2   1/1           45s        49s
+    ````
+    
+  - Restart Keycloak gatekeeper:
+
+    ```bash
+    ncn-w001# kubectl rollout restart -n ${NAMESPACE} deployment/cray-keycloak-gatekeeper-ingress
     ````
 
 12. Verify the service is working. The following should return an access_token for an existing user. Replace the <username> and <password> as appropriate.
