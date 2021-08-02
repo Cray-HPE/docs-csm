@@ -146,8 +146,9 @@ sections, but there is also a general troubleshooting topic.
       script completes. Some of the time waiting can be spent preparing the `cray` CLI.  
       
       **Note**: If doing the CSM validation at this point, some of the tests which use the 'cray' CLI may fail
-      until these two procedures have been done. These tests, such as Booting the CSM Barebones Image on compute
-      nodes or the UAS/UAI Tests can be skipped until after the PIT node has been redeployed.  
+      until these two procedures have been done. These tests, such as Hardware State Manager Discovery Validation, 
+      Booting the CSM Barebones Image on compute nodes, or the UAS/UAI Tests can be skipped until after the PIT 
+      node has been redeployed.  
    
       To enable the 'cray' CLI, these two procedures could be done now.  
       
