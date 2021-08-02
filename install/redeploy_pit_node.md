@@ -221,7 +221,7 @@ data so run them only when indicated. Instructions are in the `README` files.
     pit# efibootmgr | grep -Ei "ip(v4|4)"
     ```
     
-1. Set the boot order for **master nodes** from one of the following guides:
+1. Set and trim the boot order for **master nodes** using one of the following guides:
     
     > `**NOTE**` If your boot order from `efibootmgr` looks like one of [these examples](../background/ncn_boot_workflow.md#examples) then you can proceed to the next step.
     
