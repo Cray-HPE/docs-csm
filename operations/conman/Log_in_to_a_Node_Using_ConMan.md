@@ -42,7 +42,7 @@ The user performing this procedure needs to have access permission to the cray-c
 
     nid000009 login:
     ```
-    Using the command above, a user can also attach to an already active SOL session that is being used byanother user, so both can access the node's SOL simultaneously.
+    Using the command above, a user can also attach to an already active SOL session that is being used by another user, so both can access the node's SOL simultaneously.
 
 6. Exit the connection to the console with the `&.` command.
 

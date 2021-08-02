@@ -375,7 +375,7 @@ CASMCMS-6857  CASMNET-423
 The `install.sh` script changes cluster state and should not simply be rerun
 in the event of a failure without careful consideration of the specific
 error. It may be possible to resume installation from the last successful
-command executed by `install.sh`, but admins will need to appropriately
+command executed by `install.sh`, but administrators will need to appropriately
 modify `install.sh` to pick up where the previous run left off. (Note: The
 `install.sh` script runs with `set -x`, so each command will be printed to
 stderr prefixed with the expanded value of PS4, namely, `+ `.)

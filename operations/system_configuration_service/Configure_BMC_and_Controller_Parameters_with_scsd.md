@@ -1,6 +1,6 @@
 # Configure BMC and Controller Parameters with SCSD
 
-The System Configuration Service (SCSD) allows admins to set various BMC and controller parameters for
+The System Configuration Service (SCSD) allows administrators to set various BMC and controller parameters for
 components in liquid-cooled cabinets. These parameters are typically set during discovery, but this
 tool enables parameters to be set before or after discovery. The operations to change these parameters
 are available in the `cray` CLI under the scsd command.

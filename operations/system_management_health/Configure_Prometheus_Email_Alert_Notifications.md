@@ -34,7 +34,7 @@ Configure an email alert notification for all Prometheus Postgres replication al
     EOF
     ```
 
-    In the following example file, the Gmail SMTP server is used in this example to relay the notification to receiver-email@yourcompany.com. Update the fields under email\_configs: accordingly before running the following command.
+    In the following example file, the Gmail SMTP server is used in this example to relay the notification to receiver-email@yourcompany.com. Update the fields under `email_configs:` accordingly before running the following command.
 
     ```bash
     cat << 'EOF' > /tmp/alertmanager-new.yaml

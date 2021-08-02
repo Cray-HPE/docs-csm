@@ -51,7 +51,7 @@ ipmitool -U username -I lanplus -H $h -P password lan set 1 ipsrc dhcp
 done
 ```
 
-Some BMCs need a cold reset in order to fully pick up this change:
+Some BMCs need a cold reset in order to pick up this change fully:
 
 ```bash
 ncn# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
@@ -227,7 +227,7 @@ Simply run the reverse-pattern of the PXE commands from the [setting boot order]
    ncn# cat /tmp/rbbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -t -i efibootmgr -b {} -B
    ```
 
-Your boot menu should be trimmed down to only contain relevant entries.
+Your boot menu should be trimmed down to contain only relevant entries.
 
 <a name="examples"></a>
 ###### Examples

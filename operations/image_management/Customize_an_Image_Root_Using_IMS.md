@@ -287,7 +287,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
        Before setting the SSH values, determine the appropriate method to SSH into the customization pod:
 
-       -   `[ssh_containers.connection_info.customer_access]` values \(**preferred**\): The `custer_access` address is a dynamic hostname that is made available for use by the customer to access the IMS Job from outside the Kubernetes cluster.
+       -   `[ssh_containers.connection_info.customer_access]` values \(**preferred**\): The `customer_access` address is a dynamic hostname that is made available for use by the customer to access the IMS Job from outside the Kubernetes cluster.
        -   `[ssh_containers.connection_info."cluster.local"]` values: The `cluster.local` address is used when trying to access an IMS Job from a pod that is running within the HPE Cray EX Kubernetes cluster. For example, this is the address that CFS uses to talk to the IMS Job during a pre-boot customization session.
 
            The external IP address should only be used if the dynamic `customer_access` hostname does not resolve properly. In the following example, the admin could then SSH to the 10.103.2.160 IP address.

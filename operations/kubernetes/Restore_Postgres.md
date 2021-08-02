@@ -10,13 +10,13 @@ Restore Postgres Procedures by Service:
 <a name="spire"> </a>
 ### Restore Postgres for Spire
 
-In the event that the spire Postgres cluster is in a state that the cluster must be rebuilt and the data restored, the following procedures are recommended.  This assumes that a dump of the database exists. 
+In the event that the spire Postgres cluster is in a state that the cluster must be rebuilt and the data restored, the following procedures are recommended. This assumes that a dump of the database exists. 
 
 1. Copy the database dump to an accessible location.
 
-    - If a manual dump of the database was taken, check that the dump file exists in a location off the Postgres cluster.  It will be needed in the steps below.
+    - If a manual dump of the database was taken, check that the dump file exists in a location off the Postgres cluster. It will be needed in the steps below.
 
-    - If the database is being auto backed up, then the most recent version of the dump and the secrets should exist in the postgres-backup s3 bucket. These will be needed in the steps below.  List the files in the postgres-backup s3 bucket and if the files exist, download the dump and secrets out of the s3 bucket. The python3 scripts below can be used to help list and download the files. Note that the .psql file contains the database dump and the .manifest file contains the secrets. The aws_access_key_id and aws_secret_access_key will need to be set based on the postgres-backup-s3-credentials secret.
+    - If the database is being automatically backed up, then the most recent version of the dump and the secrets should exist in the `postgres-backup` S3 bucket. These will be needed in the steps below. List the files in the `postgres-backup` S3 bucket and if the files exist, download the dump and secrets out of the S3 bucket. The python3 scripts below can be used to help list and download the files. Note that the .psql file contains the database dump and the .manifest file contains the secrets. The `aws_access_key_id` and `aws_secret_access_key` will need to be set based on the `postgres-backup-s3-credentials` secret.
 
     ```bash
     ncn-w001# export S3_ACCESS_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.access_key}' | base64 --decode`
@@ -26,7 +26,7 @@ In the event that the spire Postgres cluster is in a state that the cluster must
 
     list.py:
 
-    ```bash
+    ```python
     import io
     import boto3
     import os
@@ -50,9 +50,9 @@ In the event that the spire Postgres cluster is in a state that the cluster must
 
     download.py:
 
-    Update the script for the specific .manifest and .psql file you wish to download from s3.
+    Update the script for the specific .manifest and .psql files you wish to download from S3.
 
-    ```bash
+    ```python
     import io
     import boto3
     import os
@@ -124,13 +124,13 @@ In the event that the spire Postgres cluster is in a state that the cluster must
     ncn-w001# kubectl exec "${POSTGRESQL}-0" -c postgres -n ${NAMESPACE} -it -- psql -U postgres < ${DUMPFILE}
     ```
 
-7. Either update or re-create the spire-postgres secrets.
+7. Either update or re-create the `spire-postgres` secrets.
 
   - Update the secrets in Postgres.
 
     If a manual dump was done, and the secrets were not saved, then the secrets in the newly created Postgres cluster will need to be updated.
 
-    Based off the four spire-postgres secrets, collect the password for each Postgres username: postgres, service_account, spire, standby. Then exec into the Postgres pod and update the password for each user. For example:
+    Based off the four `spire-postgres` secrets, collect the password for each Postgres username: `postgres`, `service_account`, `spire`, and `standby`. Then `kubectl exec` into the Postgres pod and update the password for each user. For example:
 
     ```bash 
     ncn-w001# for secret in postgres.spire-postgres.credentials service-account.spire-postgres.credentials spire.spire-postgres.credentials standby.spire-postgres.credentials; do echo -n "secret ${secret} username & password: "; echo -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
@@ -159,7 +159,7 @@ In the event that the spire Postgres cluster is in a state that the cluster must
 
     If the Postgres secrets were auto-backed up, then re-create the secrets in Kubernetes.
 
-    Delete and re-create the four spire-postgres secrets using the manifest that was copied from s3 in Step 1 above.
+    Delete and re-create the four `spire-postgres` secrets using the manifest that was copied from S3 in step 1 above.
 
     ```bash
     ncn-w001# MANIFEST=spire-postgres-2021-07-21T19:03:18.manifest
@@ -178,7 +178,7 @@ In the event that the spire Postgres cluster is in a state that the cluster must
     ncn-w001# while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 1 ] ; do echo "  waiting for pods to start running"; sleep 2; done
     ```
 
-9. Scale the Postgres Cluster back to 3 Instances.
+9. Scale the Postgres cluster back to 3 instances.
 
     ```bash
     ncn-w001# kubectl patch postgresql "${POSTGRESQL}" -n "${NAMESPACE}" --type='json' -p='[{"op" : "replace", "path":"/spec/numberOfInstances", "value" : 3}]'
@@ -196,7 +196,7 @@ In the event that the spire Postgres cluster is in a state that the cluster must
     ncn-w001# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${CLIENT}" | grep -v NAME | wc -l) != 3 ] ; do echo "  waiting for pods to start"; sleep 2; done
     ```
 
-11. Restart the spire-agent on all the nodes.
+11. Restart the `spire-agent` on all the nodes.
 
     ```bash
     ncn-w001# pdsh -w ncn-m00[1-3] 'systemctl restart spire-agent'
@@ -213,13 +213,13 @@ In the event that the spire Postgres cluster is in a state that the cluster must
 <a name="keycloak"> </a>
 ### Restore Postgres for Keycloak
 
-In the event that the keycloak Postgres cluster is in a state that the cluster must be rebuilt and the data restored, the following procedures are recommended.  This assumes that a dump of the database exists. 
+In the event that the keycloak Postgres cluster is in a state that the cluster must be rebuilt and the data restored, the following procedures are recommended. This assumes that a dump of the database exists. 
 
 1. Copy the database dump to an accessible location.
 
-    - If a manual dump of the database was taken, check that the dump file exists in a location off the Postgres cluster.  It will be needed in the steps below.
+    - If a manual dump of the database was taken, check that the dump file exists in a location off the Postgres cluster. It will be needed in the steps below.
 
-    - If the database is being auto backed up, then the most recent version of the dump and the secrets should exist in the postgres-backup s3 bucket. These will be needed in the steps below.  List the files in the postgres-backup s3 bucket and if the files exist, download the dump and secrets out of the s3 bucket. The python3 scripts below can be used to help list and download the files. Note that the .psql file contains the database dump and the .manifest file contains the secrets. The aws_access_key_id and aws_secret_access_key will need to be set based on the postgres-backup-s3-credentials secret.
+    - If the database is being automatically backed up, then the most recent version of the dump and the secrets should exist in the `postgres-backup` S3 bucket. These will be needed in the steps below. List the files in the `postgres-backup` S3 bucket and if the files exist, download the dump and secrets out of the S3 bucket. The python3 scripts below can be used to help list and download the files. Note that the .psql file contains the database dump and the .manifest file contains the secrets. The `aws_access_key_id` and `aws_secret_access_key` will need to be set based on the `postgres-backup-s3-credentials` secret.
 
     ```bash
     ncn-w001# export S3_ACCESS_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.access_key}' | base64 --decode`
@@ -229,7 +229,7 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
 
     list.py:
 
-    ```bash
+    ```python
     import io
     import boto3
     import os
@@ -253,9 +253,9 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
 
     download.py:
 
-    Update the script for the specific .manifest and .psql file you wish to download from s3.
+    Update the script for the specific .manifest and .psql files you wish to download from S3.
 
-    ```bash
+    ```python
     import io
     import boto3
     import os
@@ -327,13 +327,13 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
     ncn-w001# kubectl exec "${POSTGRESQL}-0" -c postgres -n ${NAMESPACE} -it -- psql -U postgres < ${DUMPFILE}
     ```
 
-7. Either update or re-create the keycloak-postgres secrets.
+7. Either update or re-create the `keycloak-postgres` secrets.
 
   - Update the secrets in Postgres.
 
     If a manual dump was done, and the secrets were not saved, then the secrets in the newly created Postgres cluster will need to be updated.
 
-    Based off the three keycloak-postgres secrets, collect the password for each Postgres username: postgres, service_account, standby. Then exec into the Postgres pod and update the password for each user. For example:
+    Based off the three `keycloak-postgres` secrets, collect the password for each Postgres username: `postgres`, `service_account`, and `standby`. Then `kubectl exec` into the Postgres pod and update the password for each user. For example:
 
     ```bash 
     ncn-w001# for secret in postgres.keycloak-postgres.credentials service-account.keycloak-postgres.credentials standby.keycloak-postgres.credentials; do echo -n "secret ${secret} username & password: "; echo -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
@@ -357,9 +357,9 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
   
   - Re-create secrets in Kubernetes.
 
-    If the Postgres secrets were auto-backed up, then re-create the secrets in Kubernetes.
+    If the Postgres secrets were automatically backed up, then re-create the secrets in Kubernetes.
 
-    Delete and re-create the three keycloak-postgres secrets using the manifest that was copied from s3 in Step 1 above.
+    Delete and re-create the three `keycloak-postgres` secrets using the manifest that was copied from S3 in step 1 above.
 
     ```bash
     ncn-w001# MANIFEST=keycloak-postgres-2021-07-29T17:56:07.manifest
@@ -378,7 +378,7 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
     ncn-w001# while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 1 ] ; do echo "  waiting for pods to start running"; sleep 2; done
     ```
 
-9. Scale the Postgres Cluster back to 3 Instances.
+9. Scale the Postgres cluster back to 3 instances.
 
     ```bash
     ncn-w001# kubectl patch postgresql "${POSTGRESQL}" -n "${NAMESPACE}" --type='json' -p='[{"op" : "replace", "path":"/spec/numberOfInstances", "value" : 3}]'
@@ -396,7 +396,7 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
     ncn-w001# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/instance="${CLIENT}" | grep -v NAME | wc -l) != 3 ] ; do echo "  waiting for pods to start"; sleep 2; done
     ```
 
-    Also check the status of the keycloak pods. If there are pods that do not show that both containers are ready (READY is 2/2), wait a few seconds and re-run the command until all containers are ready.
+    Also check the status of the keycloak pods. If there are pods that do not show that both containers are ready (READY is `2/2`), wait a few seconds and re-run the command until all containers are ready.
 
     ```bash
     ncn-w001# kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/instance="${CLIENT}"
@@ -407,16 +407,16 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
     cray-keycloak-2   2/2     Running   0          35s
     ````
 
-11. Re-run the keycloak-setup and keycloak-users-localize jobs and restart Keycloak gatekeeper.
+11. Re-run the `keycloak-setup` and `keycloak-users-localize` jobs, and restart Keycloak gatekeeper.
     
-  - Run the keycloak-setup job to restore the Kubernetes client secrets:
+  - Run the `keycloak-setup` job to restore the Kubernetes client secrets:
 
     ```bash
     ncn-w001# kubectl get job -n ${NAMESPACE} -l app.kubernetes.io/instance=cray-keycloak -o json > keycloak-setup.json
     ncn-w001# cat keycloak-setup.json | jq '.items[0]' | jq 'del(.metadata.creationTimestamp)' | jq 'del(.metadata.managedFields)' | jq 'del(.metadata.resourceVersion)' | jq 'del(.metadata.selfLink)' | jq 'del(.metadata.uid)' | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels)' | jq 'del(.status)' | kubectl replace --force -f -
     ````
 
-    Check the status of the keycloak-setup job. If the COMPLETIONS value isn't 1/1, wait a few seconds and run the command again until the COMPLETIONS value is 1/1. 
+    Check the status of the `keycloak-setup` job. If the `COMPLETIONS` value is not `1/1`, wait a few seconds and run the command again until the `COMPLETIONS` value is `1/1`. 
 
     ```bash
     ncn-w001# kubectl get jobs -n ${NAMESPACE} -l app.kubernetes.io/instance=cray-keycloak
@@ -425,13 +425,14 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
     keycloak-setup-2   1/1           59s        91s
     ````
 
-  - Run the keycloak-users-localize job to restore the users and groups in s3 and the Kubernetes configmap:
+  - Run the `keycloak-users-localize` job to restore the users and groups in S3 and the Kubernetes configmap:
     
     ```bash
     ncn-w001# kubectl get job -n ${NAMESPACE} -l app.kubernetes.io/instance=cray-keycloak-users-localize -o json > cray-keycloak-users-localize.json
     ncn-w001# cat cray-keycloak-users-localize.json | jq '.items[0]' | jq 'del(.metadata.creationTimestamp)' | jq 'del(.metadata.managedFields)' | jq 'del(.metadata.resourceVersion)' | jq 'del(.metadata.selfLink)' | jq 'del(.metadata.uid)' | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels)' | jq 'del(.status)' | kubectl replace --force -f -`
     ````
-    Check the status of the cray-keycloak-users-localize job. If the COMPLETIONS value isn't 1/1, wait a few seconds and run the command again until the COMPLETIONS value is 1/1. 
+
+    Check the status of the `cray-keycloak-users-localize` job. If the `COMPLETIONS` value is not `1/1`, wait a few seconds and run the command again until the `COMPLETIONS` value is `1/1`. 
 
     ```bash
     ncn-w001# kubectl get jobs -n ${NAMESPACE} -l app.kubernetes.io/instance=cray-keycloak-users-localize

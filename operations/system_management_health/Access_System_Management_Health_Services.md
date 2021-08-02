@@ -10,7 +10,7 @@ ncn-m001# kubectl get secret site-init -n loftsman -o jsonpath='{.data.customiza
       external: SHASTA_EXTERNAL_DOMAIN
 ```
 
-This procedure enables admins to set up the service and access its components via the Grafana and Kiali applications.
+This procedure enables administrators to set up the service and access its components via the Grafana and Kiali applications.
 
 ### Prerequisites
 

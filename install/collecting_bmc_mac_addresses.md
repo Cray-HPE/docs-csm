@@ -84,7 +84,7 @@ If you are here with an unconfigured switch, mileage may vary.
                                      ^^^^^^^^^^^^^^^^^
     ```
 
-   The column heading must match that shown above for `csi` to correctly parse it. 
+   The column heading must match that shown above for `csi` to parse it correctly. 
 
 1. Collect the BMC MAC address information for the PIT node. 
    The PIT node BMC is not connected to the switch like the other management nodes.

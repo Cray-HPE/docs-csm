@@ -897,9 +897,9 @@ This section requires commands to be run on the LiveCD node, and the user must b
    > **`IMPORTANT:`** If you are upgrading CSM and your site does not use UAIs, skip UAS and UAI validation.
    > If you do use UAIs, there are products that configure UAS like Cray Analytics and Cray Programming
    > Environment. These must be working correctly with UAIs and should be validated and corrected (the
-   > procedures for this are beyond the scope of this document) prior to validating UAS and UAI.  Failures
+   > procedures for this are beyond the scope of this document) prior to validating UAS and UAI. Failures
    > in UAI creation that result from incorrect or incomplete installation of these products will generally
-   > take the form of UAIs stuck in 'waiting' state trying to set up volume mounts.  See the
+   > take the form of UAIs stuck in 'waiting' state trying to set up volume mounts. See the
    > [UAI Troubleshooting](#uas-uai-validate-debug) section for more information.
 
 This procedure must run on a master or worker node (and not `ncn-w001`) on the system (or from an external host, but the procedure for that is not covered here). It requires that the CLI be initialized and authorized as the user.

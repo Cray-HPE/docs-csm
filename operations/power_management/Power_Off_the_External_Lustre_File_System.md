@@ -103,7 +103,7 @@ Use this procedure as a general guide to power off an external ClusterStor syste
 11. Power off the non-MGMT diskless nodes.
 
     ```bash
-    n000# cscli power_manage -n DISKLES_NODES[XX-YY --power-off
+    n000# cscli power_manage -n DISKLESS_NODES[XX-YY --power-off
     ```
 
 12. Check power state of all non-MGMT nodes and list the node hostnames \(in this example `cls01234n[02-15]`\) before power off.
