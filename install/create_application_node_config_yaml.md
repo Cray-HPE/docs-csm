@@ -125,8 +125,10 @@ Example entry from the `hmn_connections.json` file. The source name is the `Sour
 
 3. __Add Application node aliases__
     The `aliases` field is an map of xnames (strings) to an array of aliases (strings).
-    See [Component Names (xnames)](../operations/Component_Names_xnames.md).
-
+    > For guidance on building application node xnames follow one of the following:
+    > * [Building xnames for nodes in a single application node chassis](shcd_hmn_connections_rules.md#application-node-dual-node-chassis-xname)
+    > * [Building xnames for nodes in a dual application node chassis](shcd_hmn_connections_rules.md#application-node-dual-node-chassis-xname) 
+    
     By default, the `csi config init` command does not set the `ExtraProperties.Alias` field for application nodes in the SLS input file. 
 
     Instead of manually adding the application node alias as described after the system is installed [in this procedure](../operations/update_sls_with_uan_aliases.md) the application node aliases can be included when the SLS Input file is built.
