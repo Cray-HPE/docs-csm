@@ -43,7 +43,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
 <a name="mac-collection"></a>
 #### MAC Collection
 
-1. (optional) Shim the boot so nodes bail after dumping their netdevs. 
+1. (optional) Shim the boot so nodes bail after dumping their network devices. 
    Removing the iPXE script will prevent network booting, but be aware of the possibility of the nodes disk booting.
    
    This will prevent the nodes from continuing to boot and end in undesired states.
@@ -175,7 +175,7 @@ is quicker.
 
 If you have an incorrect `ncn_metadata.csv` file, you will be unable to deploy the NCNs. This section details a recovery procedure in case that happens.
 
-1. Remove the incorrectly generated configs. Before deleting the incorrectly generated configs consider making a backup of them. In case they need to be examined at a later time. 
+1. Remove the incorrectly generated configurations. Before deleting the incorrectly generated configurations, consider making a backup of them. In case they need to be examined at a later time. 
 
     > **`WARNING`** Ensure that the `SYSTEM_NAME` environment variable is correctly set. If `SYSTEM_NAME` is
     > not set the command below could potentially remove the entire prep directory.
@@ -210,7 +210,7 @@ If you have an incorrect `ncn_metadata.csv` file, you will be unable to deploy t
     --sealed-secret-key-file /var/www/ephemeral/prep/site-init/certs/sealed_secrets.key
     ```
 
-6. Now restart everything to apply the new configs:
+6. Now restart everything to apply the new configurations:
 
     ```bash
     pit# \

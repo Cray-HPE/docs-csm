@@ -15,7 +15,7 @@ FAS images contain the following information that is needed for a hardware devic
    * [Order Of Operations](#order-of-operations)
    * [Hardware Precedence Order](#hardware-precedence-order)
    * [FAS Use Cases](#fas-admin-procedures)
-   * [Firwmare Actions](#firmware-actions)
+   * [Firmware Actions](#firmware-actions)
    * [Firmware Images](#firmware-images)
 
 <a name="prerequisites"></a>
@@ -40,7 +40,7 @@ Follow the process outlined in [FAS CLI](FAS_CLI.md) to update the system. Use t
 
 ### Current Capabilities 
 
-The following table describes the hardware items that can have their firmware updated via FAS. For more information about the upgradeable targets, refer to the Firmware product stream repository.
+The following table describes the hardware items that can have their firmware updated via FAS. For more information about the upgradable targets, refer to the Firmware product stream repository.
 
 *Table 1. Upgradable Firmware Items*
 
@@ -124,7 +124,7 @@ There are several use cases for using the FAS to update firmware on the system. 
 -   Determine what hardware can be updated by performing a dry-run: The easiest was to determine what can be updated is to perform a dry-run of the update.
 -   Take a snapshot of the system: Record the firmware versions present on each target for the identified xnames. If the firmware version corresponds to an image available in the images repository, link the `imageID` to the record.
 -   Restore the snapshot of the system: Take the previously recorded snapshot and use the related `imageIDs` to put the xname/targets back to the firmware version they were at, at the time of the snapshot.
--   Provide firmware for updating: FAS can only update an xname/target if it has an image record that is applicable. Most admins will not encounter this use case.
+-   Provide firmware for updating: FAS can only update an xname/target if it has an image record that is applicable. Most administrators will not encounter this use case.
 
 <a name="firmware-actions"></a>
 
@@ -180,7 +180,7 @@ The main components of an image are described below:
 
   This includes the `deviceType`, `manufacturer`, `model`, `target`, `tag`, `semanticFirmwareVersion` \(firmware version\) fields.
 
-  These fields are how admins assess what firmware is on a device, and if an image is applicable to that device.
+  These fields are how administrators assess what firmware is on a device, and if an image is applicable to that device.
 
 - **Process guides**
 

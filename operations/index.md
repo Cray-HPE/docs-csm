@@ -634,7 +634,7 @@ MetalLB can run in either Layer2-mode or BGP-mode for each address pool it manag
 
 The Firmware Action Service (FAS) provides an interface for managing firmware versions of Redfish-enabled hardware in the system. FAS interacts with the Hardware State Managers (HSM), device data, and image data in order to update firmware.
 
-See [Update Firmware with FAS](firmware/Update_Firmware_with_FAS.md) for a list components that are upgradeable with FAS. Refer to the HPC Firmware Pack product stream to update firmware on other components.
+See [Update Firmware with FAS](firmware/Update_Firmware_with_FAS.md) for a list components that are upgradable with FAS. Refer to the HPC Firmware Pack product stream to update firmware on other components.
 
   * [Update Firmware with FAS](firmware/Update_Firmware_with_FAS.md)
   * [FAS CLI](firmware/FAS_CLI.md)

@@ -25,7 +25,7 @@ This can be verified using the dig command to resolve the external hostname and 
 
 ### What Happens if External DNS is not Used?
 
-Without forwarding to External DNS, admins will not have the ability to use the externally exposed services, such as Prometheus, Grafana, the HPE Cray EX REST API, and more. See [Externally Exposed Services](../customer_access_network/Externally_Exposed_Services.md) for more information.
+Without forwarding to External DNS, administrators will not have the ability to use the externally exposed services, such as Prometheus, Grafana, the HPE Cray EX REST API, and more. See [Externally Exposed Services](../customer_access_network/Externally_Exposed_Services.md) for more information.
 
 Accessing most of these services by IP will not work because the Ingress Gateway uses the name to direct requests to the appropriate service.
 

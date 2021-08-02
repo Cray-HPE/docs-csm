@@ -499,7 +499,7 @@ The configuration workflow described here is intended to help understand the exp
     ceph mgr fail $(ceph mgr dump | jq -r .active_name)
     ```
 
-    Give it a minute then re-check `ceph orch` ls to see if the drives are still showing as available.  If so, then proceed to the next step.
+    Give it a minute then re-check `ceph orch` ls to see if the drives are still showing as available. If so, then proceed to the next step.
 
 4. ssh to the host and look at `lsblk` output and check against the device from the above ceph `orch device ls`
 
@@ -617,7 +617,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
    pit# grep -B1 "name: ncn-w" /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN.yaml
    ```
  
-1. Clear the BGP peering sessions by running the following commands on BOTH of the switches found above.  You should see either "arubanetworks" or "Mellanox" in the first output you see when you log in to the switch.
+1. Clear the BGP peering sessions by running the following commands on BOTH of the switches found above. You should see either "arubanetworks" or "Mellanox" in the first output you see when you log in to the switch.
    - Aruba: `clear bgp *`
    - Mellanox: `clear ip bgp all`
      - Make sure to run `enable` when you first log in to the Mellanox switch.
@@ -628,7 +628,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 
    You should see a neighbor for each of the workers NCN IP addresses found above.   If it is an Aruba switch, you will also see a neighbor for the other switch of the pair that are peering.
 
-   At this point the peering sessions with the worker IP addresses should be in IDLE, CONNECT, or ACTIVE state and not ESTABLISHED state.  This is because the MetalLB speaker pods have not been deployed yet.
+   At this point the peering sessions with the worker IP addresses should be in IDLE, CONNECT, or ACTIVE state and not ESTABLISHED state. This is because the MetalLB speaker pods have not been deployed yet.
  
    You should see that the MsgRcvd and MsgSent columns for the worker IP addresses are 0.
 

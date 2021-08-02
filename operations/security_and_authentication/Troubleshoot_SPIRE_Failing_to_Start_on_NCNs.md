@@ -7,7 +7,7 @@ The spire-agent service may fail to start on Kubernetes non-compute nodes \(NCNs
 
 Deleting the `request-ncn-join-token` daemonset pod running on the node may clear the issue.
 
-While the spire-agent systemctl service on the Kubernetes node should eventually restart cleanly, admins may need to log in to the impacted nodes and restart the service. The easiest way to delete the appropriate pod is to create the following function and run it on the impacted node.
+While the spire-agent systemctl service on the Kubernetes node should eventually restart cleanly, administrators may need to log in to the impacted nodes and restart the service. The easiest way to delete the appropriate pod is to create the following function and run it on the impacted node.
 
 ```bash
 function renewncnjoin() {

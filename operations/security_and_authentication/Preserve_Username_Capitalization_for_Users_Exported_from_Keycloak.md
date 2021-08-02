@@ -1,6 +1,6 @@
 ## Preserve Username Capitalization for Users Exported from Keycloak
 
-Keycloak converts all characters in a username to lowercase when users are exported. Use this procedure to update the `keycloak-users-localize` tool with a configuration option that enables admins to preserve the username letter case when users are exported from Keycloak.
+Keycloak converts all characters in a username to lowercase when users are exported. Use this procedure to update the `keycloak-users-localize` tool with a configuration option that enables administrators to preserve the username letter case when users are exported from Keycloak.
 
 The LDAP server that provides password resolution and user account federation supports mixed case usernames. If the usernames are changed to lowercase when exported from Keycloak, it can cause issues.
 

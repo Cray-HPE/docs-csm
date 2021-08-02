@@ -23,7 +23,7 @@ for host in $(ceph node ls| jq -r '.osd|keys[]')
       else
          echo "$osd has already been upgraded"
       fi
-      echo "Waiting for osd.$osd status to update from booting -> active.  This will take minutes, be patient.."
+      echo "Waiting for osd.$osd status to update from booting to active. This will take minutes, be patient.."
       (( counter=0 ))
       until ssh "$host" journalctl -u ceph-$FSID@osd.$osd --no-pager |grep "booting -> active"
        do
@@ -50,7 +50,7 @@ for host in $(ceph node ls| jq -r '.osd|keys[]')
  do
     for id in $(ceph osd ls-tree $host)
       do
-        echo "Waiting for osd.$id require_osd_release update nautilus -> octopus.  This will take minutes, be patient.."
+        echo "Waiting for osd.$id require_osd_release update nautilus -> octopus. This will take minutes, be patient.."
         until ssh "$host" journalctl -u ceph-$FSID@osd.$id --no-pager |grep "nautilus -> octopus"
         do
            sleep 30

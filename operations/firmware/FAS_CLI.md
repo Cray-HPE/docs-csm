@@ -2,7 +2,7 @@
 
 ## FAS CLI
 
-This section describes the basic capabilities of the Firmware Action Service (FAS) CLI commands. These commands can be used to manage firmware for system hardware supported by FAS. Refer to the prerequisites section before proceding to any of the sections for the supported operations.
+This section describes the basic capabilities of the Firmware Action Service (FAS) CLI commands. These commands can be used to manage firmware for system hardware supported by FAS. Refer to the prerequisites section before proceeding to any of the sections for the supported operations.
 
 The following CLI operations are described:
 
@@ -72,7 +72,7 @@ See [Interpreting Output](#interpreting) for more information.
 
 Firmware updates can be stopped if required. This is useful given only one action can be run at a time. This is to protect hardware from multiple actions trying to modify it at the same time.
 
-**IMPORTANT:** If a Redfish update is already in progress, the abort will not stop that process on the device. It is likely the device will update. If the device needs to be manually power cycled (`needManualReboot`), it is possible that the device will update, but not actually apply the update until its next reboot. Admins must verify the state of the system after an abort. Only perform an abort if truly necessary. The best way to check the state of the system is to do a snapshot or do a dry-run of an update.
+**IMPORTANT:** If a Redfish update is already in progress, the abort will not stop that process on the device. It is likely the device will update. If the device needs to be manually power cycled (`needManualReboot`), it is possible that the device will update, but not actually apply the update until its next reboot. Administrators must verify the state of the system after an abort. Only perform an abort if truly necessary. The best way to check the state of the system is to do a snapshot or do a dry-run of an update.
 
 #### Procedure
 
@@ -754,7 +754,7 @@ ncn-m001# cray fas loader describe dd37dd45-84ec-4bd6-b3c9-7af480048966 --format
 }
 ```
 A successful run will end with `*** Number of Updates: x ***`.
-**NOTE:** The FAS loader will not overwrite image records already in FAS.  Number of Updates will be the number of new images found in the RPM.  If the number is 0, all images were already in FAS.
+**NOTE:** The FAS loader will not overwrite image records already in FAS. Number of Updates will be the number of new images found in the RPM. If the number is 0, all images were already in FAS.
 
 ##### Delete Loader Run Data
 

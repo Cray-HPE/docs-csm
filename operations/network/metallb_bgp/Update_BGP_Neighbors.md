@@ -23,7 +23,7 @@ linux# ~/src/mtl/cray-site-init/bin/csi config init --bootstrap-ncn-bmc-user roo
 ## Automated Process
 There is an automated script to update the BGP configuration on both the Mellanox and Aruba switches. This script is installed into the `$PATH` by the `metal-net-scripts` package.
 The scripts are named `mellanox_set_bgp_peers.py` and `aruba_set_bgp_peers.py`
-These scripts pull in data from CSI generated `.yaml` files. The files required are ```CAN.yaml, HMN.yaml, HMNLB.yaml, NMNLB.yaml, NMN.yaml```, these exist in the `networks/` subdirectory of the generated configs.
+These scripts pull in data from CSI generated `.yaml` files. The files required are ```CAN.yaml, HMN.yaml, HMNLB.yaml, NMNLB.yaml, NMN.yaml```, these exist in the `networks/` subdirectory of the generated configurations.
 
 In order for these scripts to work the following commands will need to be present on the switches.
 

@@ -17,7 +17,7 @@ shared port is plugged into a port on the TOR Ethernet switch designated for the
 Hardware Management Network (HMN) causing the NIC to get an IP address assigned
 to it from the wrong pool. To prevent this from happening, the iLO VLAN tag
 needs to be configured for VLAN 4 and the switch port the NIC/shared iLO is
-plugged into needs to be configured to only allow VLAN 4 traffic. This prevents
+plugged into needs to be configured to allow only VLAN 4 traffic. This prevents
 the NIC from communicating over the switch and it will no longer DHCP an IP
 address.
 

@@ -18,7 +18,7 @@ This procedure requires administrative privileges.
     -o yaml > /root/k8s/cray-ipxe-bss-ipxe-backup.yaml
     ```
 
-    Admins can add, remove, or reorder sections in the config map related to the interface being used.
+    Administrators can add, remove, or reorder sections in the config map related to the interface being used.
 
     In the example below, the `net2` section is located before the `net0` section. If an admin wants `net0` to be run first, they could move the `net0` section to be located before the `net2` section.
 
