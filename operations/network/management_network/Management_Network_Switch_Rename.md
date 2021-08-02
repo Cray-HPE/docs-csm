@@ -2,7 +2,9 @@
 
 Any system moving from Shasta v1.3 to Shasta v1.4 software needs to adjust the hostnames and IP addresses for all switches to match the new standard. There is now a virtual IP address ending in .1 which is used by spine switches. In Shasta v1.3, the first spine switch used the .1 address. In Shasta v1.4, the ordering of the switches has changed with spine switches being grouped first. The hostname for switches has changed from two digits to a dash and then 3 digits. All IPv4 data for the switches and switch naming comes from Cray Site Init (CSI).
 
-From v1.3, this example system had these IP addresses and hostnames on the HMN network. Similar names and IP address numbers for the NMN and CAN networks as well. Also note that some systems may not have an agg or aggregation set of switches. This is ok. Simply follow the directions below, always paying attention to the CSI specified IPv4 addresses and skip the aggregation switch directions.
+Currently, the ordering of the switches has changed with spine switches being grouped first. The hostname for switches has changed from two digits to a dash followed by three digits. All IPv4 data for the switches and switch naming comes from Cray Site Init (CSI).
+
+From v1.3, this example system had these IP addresses and hostnames on the Hardware Management Network (HMN). Similar names and IP address numbers for the Node Management Network (NMN) and Customer Access Network (CAN) as well. Also note that some systems may not have an agg or aggregation set of switches. This is ok. Simply follow the directions in this section, always paying attention to the CSI specified IPv4 addresses, and skipping the aggregation switch directions.
 
 ```
 10.1.0.1        sw-spine01
@@ -15,7 +17,7 @@ From v1.3, this example system had these IP addresses and hostnames on the HMN n
 10.1.0.8        sw-cdu02
 ```
 
-The desired settings for the HMN network would be more like these.
+The desired settings for the HMN will be similar to the following:
 
 ```
 10.1.0.2        sw-spine-001
@@ -28,19 +30,25 @@ The desired settings for the HMN network would be more like these.
 10.1.0.9        sw-cdu-002
 ```
 
-This system needs to do the renames in this order: do CDU switches (8 to 9, 7 to 8) and then leaf switches (4 to 7, but also 2 to 6), then aggregation switches (6 to 5, 5 to 4) and spine switches (3 to 3, and 1 to 2). These have IP address changes and name changes because there are now 3 digits instead of 2 for the switch hostname.
+The system in this example needs to do the renames in the following order: 
+  1. CDU switches: 8 to 9, and 7 to 8
+  2. Leaf switches: 4 to 7, and 2 to 6
+  3. Aggregation switches: 6 to 5, and 5 to 4
+  4. Spine switches: 3 to 3, and 1 to 2 
+
+These have IP address changes and name changes because there are now three digits instead of two for the switch hostname.
 
 1. Check switch IP addresses, names, and component names in /var/www/ephemeral/prep/${SYSTEM_NAME}/networks when booted from the LiveCD on ncn-m001.
 
    ```
    pit# export SYSTEM_NAME=eniac
    pit# cd /var/www/ephemeral/prep/${SYSTEM_NAME}/networks
-   pit# vi NMN.yaml
    ```
 
    Excerpt from NMN.yaml:
 
    ```
+   pit# vi NMN.yaml
      ip_reservations:
      - ip_address: 10.252.0.2
        name: sw-spine-001
@@ -68,13 +76,10 @@ This system needs to do the renames in this order: do CDU switches (8 to 9, 7 to
        aliases: []
    ```
 
-   ```
-   pit# vi HMN.yaml
-   ```
-
    Excerpt from HMN.yaml:
 
    ```
+   pit# vi HMN.yaml  
      ip_reservations:
      - ip_address: 10.254.0.2
        name: sw-spine-001
@@ -101,12 +106,11 @@ This system needs to do the renames in this order: do CDU switches (8 to 9, 7 to
        comment: x3000c0w36
        aliases: []
    ```
-   pit# vi MTL.yaml
-   ```
 
    Excerpt from MTL.yaml:
 
    ```
+   pit# vi MTL.yaml 
      ip_reservations:
      - ip_address: 10.1.0.2
        name: sw-spine-001
@@ -134,14 +138,12 @@ This system needs to do the renames in this order: do CDU switches (8 to 9, 7 to
        aliases: []
    ```
 
+   Excerpt from CAN.yaml: 
+
+   The following example includes two spine switches. Systems running a previous release would have had these as ending in .1 and in .3. Note these switches are not named "spine" or "agg" because the SHCD may specify differing exit points, but with either option the IPv4 address is specified.
 
    ```
    pit# vi CAN.yaml
-   ```
-
-   Excerpt from CAN.yaml showing the two spine switches. Most v1.3 systems would have had these as ending in .1 and in .3. Note these switches are not named "spine" or "agg" because the SHCD may specify differing exit points, but with either option the IPv4 address is specified.
-
-   ```
      ip_reservations:
      - ip_address: 10.103.8.2
        name: can-switch-1
@@ -156,7 +158,7 @@ This system needs to do the renames in this order: do CDU switches (8 to 9, 7 to
 2. Save the running-config from all switches before starting.
 
    **NOTE:** Mellanox switches require the `enable` command before doing `show running-config`.
-   
+
    ```
    pit# ssh admin@10.1.0.1
    switch# show running-config
@@ -164,17 +166,20 @@ This system needs to do the renames in this order: do CDU switches (8 to 9, 7 to
    ```
 
    Save this information in a text file for later evaluation and comparison after all changes have been made.
+
    ```
    pit# vi before.sw-spine01.txt
    ```
 
    Repeat this for all of the switches. The example system has switches up to 10.1.0.8.
 
-3. Start moves with the highest numbered switch. In this case, that is sw-cdu02. Said another way, if a switch is in a pair, start with the second half of the pair (i.e.. 2 of 2).
+3. Start moves with the highest numbered switch. I
+
+   In this case, that is sw-cdu02. If a switch is in a pair, start with the second half of the pair. For instance, switch 2 of 2.
 
    Move sw-cdu02 to sw-cdu-002 and increase IP addresses as specified in CSI output. It is a Dell switch.
 
-   **NOTE:** Several addresses can be changed in a single session, but not the one used to connect. This first connection will skip vlan 1 and change all of the other vlans (vlan 2 and vlan 4 on a CDU switch.)
+   **NOTE:** Several addresses can be changed in a single session, but not the one used to connect. This first connection will skip vlan 1 and change all of the other vlans (vlan 2 and vlan 4 on a CDU switch).
 
    ```
    pit# ssh admin@10.1.0.6
@@ -208,7 +213,7 @@ This system needs to do the renames in this order: do CDU switches (8 to 9, 7 to
 
 4. Move sw-cdu01 to sw-cdu-001 and increase IP addresses as specified in CSI output. It is a Dell switch.
 
-   **NOTE:** Several addresses can be changed in a single session, but not the one used to connect. This first connection will skip vlan 1 and change all of the other vlans (vlan 2 and vlan 4 on a CDU switch.)
+   **NOTE:** Several addresses can be changed in a single session, but not the one used to connect. This first connection will skip vlan 1 and change all of the other vlans (vlan 2 and vlan 4 on a CDU switch).
 
    ```
    pit# ssh admin@10.1.0.5
@@ -449,16 +454,19 @@ This system needs to do the renames in this order: do CDU switches (8 to 9, 7 to
 
 9. Save the running-config from all switches after completion.
 
-   Note: Mellanox switches require the "enable" command before doing "show running-config"
+   **NOTE:** Mellanox switches require the `enable` command before doing `show running-config`.
 
    ```
    pit# ssh admin@10.1.0.2
    switch# show running-config
    switch# exit
    ```
-   
+
    Save this information in a text file for comparison with the running-config saved before all changes were made.
-   `pit# vi after.sw-spine01.txt`
+
+   ```
+   pit# vi after.sw-spine01.txt
+   ```
 
    Repeat this for all of the switches. The example system has switches up to 10.1.0.7.
 

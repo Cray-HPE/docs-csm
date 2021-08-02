@@ -1,16 +1,16 @@
 # Update Management Network Firmware
 
-This page describes how to update firmware on the Management network switches.
+This page describes how to update firmware on the management network switches.
 
 ## Requirements
 
-Access to the switches from the liveCD/ncn-m001.
+Access to the switches from the LiveCD/ncn-m001.
 
 ## Configuration
 
-- All firmware will be located at ```/var/www/fw/network``` on the LiveCD.
-- It should contain the following files:
-```
+All firmware will be located at `/var/www/fw/network` on the LiveCD. It should contain the following files:
+
+``` 
 ncn-m001-pit:/var/www/network/firmware # ls -lh
 total 2.7G
 -rw-r--r-- 1 root root 614M Jan 15 18:57 ArubaOS-CX_6400-6300_10_05_0040.stable.swi
@@ -38,13 +38,13 @@ total 2.7G
 
 Aruba software version number explained:
 
-10.06.0120
+For example: 10.06.0120
 
-10		= OS
+- 10		= OS
 
-06		= Major branch (new features)
+- 06		= Major branch (new features)
 
-0120	= CPE release (bug fixes)
+- 0120	= CPE release (bug fixes)
 
 
 It is considered to be a best practice to keep all Aruba CX platform devices running the same software version.  
@@ -53,14 +53,15 @@ Aruba CX devices two software image banks, which means sw images can be pre-stag
 
 If upgrading to a new major branch, in Aruba identified by the second integer in the software image number.
 
-When upgrading past a major software release say from 10.6 to 10.8 (and skipping 10.7) you will need to issue 'allow-unsafe-upgrades' to allow any low level firmware/driver upgrades to complete. If going from say 10.6 branch to 10.7 branch, this step can be skipped as the low level firmware/driver upgrade would be automatically completed. 
+When upgrading past a major software release, for example, from 10.6 to 10.8 (and skipping 10.7), issue the `allow-unsafe-upgrades` command to allow any low level firmware/driver upgrades to complete. If going from the 10.6 branch to 10.7 branch, this step can be skipped as the low level firmware/driver upgrade would be automatically completed. 
 
-...
+``` 
 sw-leaf-001# config
 sw-leaf-001(config)# allow-unsafe-updates 30
+```
 
 This command will enable non-failsafe updates of programmable devices for
-the next 30 minutes. You will first need to wait for all line and fabric
+the next 30 minutes. First, wait for all line and fabric
 modules to reach the ready state, and then reboot the switch to begin
 applying any needed updates. Ensure that the switch will not lose power,
 be rebooted again, or have any modules removed until all updates have
@@ -68,12 +69,12 @@ finished and all line and fabric modules have returned to the ready state.
 
 **WARNING:** Interrupting these updates may make the product unusable!
 
+```
 Continue (y/n)? y
+Unsafe updates      : allowed (less than 30 minute(s) remaining)
+```
 
-    Unsafe updates      : allowed (less than 30 minute(s) remaining)
-...
-
-VSX software upgrade command can automatically upgrade both of the peers in VSX topology by staging upgrade and automatically doing traffic shifting between peers to minimize impact to network. In below examples we will give you the option for standalone and vsx-pair upgrade. 
+VSX software upgrade command can automatically upgrade both of the peers in VSX topology by staging upgrade and automatically doing traffic shifting between peers to minimize impact to network. The following examples include the option for standalone and vsx-pair upgrade. 
 
 ## Aruba Firmware Update - Standalone
 
@@ -123,7 +124,33 @@ BIOS Version       : FL.01.0002
 ```
 ## Aruba Firmware Update - VSX Software Upgrade
 
-SSH into the Primary VSX member of the VSX-pair to upgrade.
+1. SSH into the Primary VSX member of the VSX-pair to upgrade.
+
+     Example: the IP ```10.252.1.12``` used is the LiveCD. 
+
+2. Upload the firmware.
+
+   ```
+   sw-leaf-001# copy sftp://root@10.252.1.12//var/www/ephemeral/data/network_images/ArubaOS-CX_6400-6300_10_06_0120.stable.swi primary
+   
+   sw-leaf-001# write mem
+   Copying configuration: [Success]
+   ```
+
+3. Once the upload is complete, check the images.
+
+   ```
+   sw-leaf-001# show image
+   ---------------------------------------------------------------------------
+   ArubaOS-CX Primary Image
+   ---------------------------------------------------------------------------
+   Version : FL.10.06.0120                 
+   Size    : 643 MB                        
+   Date    : 2021-03-14 10:06:34 PST       
+   SHA-256 : 78dc27c5e521e92560a182ca44dc04b60d222b9609129c93c1e329940e1e11f9 
+   ```
+
+4. After the firmware is uploaded, boot the switch to the correct image. 
 
 Example: the IP address ```10.252.1.12``` used is the liveCD. 
 ```
@@ -152,86 +179,94 @@ This will trigger the upgrade process on the VSX pair and it will start the dial
 
 ## Mellanox Firmware Update
 
-SSH into the switch being upgraded:
+1. SSH into the switch being upgraded.
 
-Fetch the image from ncn-m001.
-```
-sw-spine-001 [standalone: master] # image fetch http://10.252.1.4/fw/network/onyx-X86_64-3.9.1014.stable.img
-```
+1. Fetch the image from ncn-m001.
 
-Install the image.
-```
-sw-spine-001 [standalone: master] # image install onyx-X86_64-3.9.1014.stable.img 
-```
+   ```
+   sw-spine-001 [standalone: master] # image fetch http://10.252.1.4/fw/network/onyx-X86_64-3.9.1014.stable.img
+   ```
 
-Select the image to boot next.
-```
-sw-spine-001 [standalone: master] # image boot next
-```
+3. Install the image.
 
-Write memory and reload.
-```
-sw-spine-001 [standalone: master] # write memory 
-sw-spine-001 [standalone: master] # reload
-```
+   ```
+   sw-spine-001 [standalone: master] # image install onyx-X86_64-3.9.1014.stable.img 
+   ```
 
-Once the switch is available, verify the image is installed.
-```
-sw-spine-001 [standalone: master] # show images 
+4. Select the image to boot next.
 
-Installed images:
-  Partition 1:
-    version: X86_64 3.9.0300 2020-02-26 19:25:24 x86_64
+   ```
+   sw-spine-001 [standalone: master] # image boot next
+   ```
 
-  Partition 2:
-    version: X86_64 3.9.1014 2020-08-05 18:06:58 x86_64
+5. Write memory and reload.
 
-Last boot partition: 2
-Next boot partition: 1
+   ```
+   sw-spine-001 [standalone: master] # write memory 
+   sw-spine-001 [standalone: master] # reload
+   ```
 
-Images available to be installed:
-  1:
-    Image  : onyx-X86_64-3.9.1014.stable.img
-    Version: X86_64 3.9.1014 2020-08-05 18:06:58 x86_64
-```
+6. Once the switch is available, verify the image is installed.
+
+   ```
+   sw-spine-001 [standalone: master] # show images 
+   
+   Installed images:
+   Partition 1:
+     version: X86_64 3.9.0300 2020-02-26 19:25:24 x86_64
+   
+   Partition 2:
+     version: X86_64 3.9.1014 2020-08-05 18:06:58 x86_64
+   
+   Last boot partition: 2
+   Next boot partition: 1
+   
+   Images available to be installed:
+   1:
+     Image  : onyx-X86_64-3.9.1014.stable.img
+     Version: X86_64 3.9.1014 2020-08-05 18:06:58 x86_64
+   ```
 
 ## Dell Firmware Update
 
-SSH into the switch being upgraded.
+1. SSH into the switch being upgraded.
 
-Fetch the image from ncn-m001.
-```
-sw-leaf-001# image install http://10.252.1.4/fw/network/OS10_Enterprise_10.5.1.4.stable.tar
-```
+1. Fetch the image from ncn-m001.
 
-Check the image upload status.
+   ```
+   sw-leaf-001# image install http://10.252.1.4/fw/network/OS10_Enterprise_10.5.1.4.stable.tar
+   ```
 
-```
-sw-leaf-001# show image status
-Image Upgrade State:     download
-==================================================
-File Transfer State:     download
---------------------------------------------------
-  State Detail:          In progress
-  Task Start:            2021-02-08T21:24:14Z
-  Task End:              0000-00-00T00:00:00Z
-  Transfer Progress:     7 %
-  Transfer Bytes:        40949640 bytes
-  File Size:             604119040 bytes
-  Transfer Rate:         869 kbps
-```
+3. Check the image upload status.
 
-Once the image is uploaded all that is left is a reboot.
-```
-sw-leaf-001# write memory 
-sw-leaf-001# reload
-```
+   ```
+   sw-leaf-001# show image status
+   Image Upgrade State:     download
+   ==================================================
+   File Transfer State:     download
+   --------------------------------------------------
+     State Detail:          In progress
+     Task Start:            2021-02-08T21:24:14Z
+     Task End:              0000-00-00T00:00:00Z
+     Transfer Progress:     7 %
+     Transfer Bytes:        40949640 bytes
+     File Size:             604119040 bytes
+     Transfer Rate:         869 kbps
+   ```
 
-Once the switch is available, verify the image is installed.
-```
-sw-leaf-001# show version 
-Dell EMC Networking OS10 Enterprise
-Copyright (c) 1999-2020 by Dell Inc. All Rights Reserved.
-OS Version: 10.5.1.4
-Build Version: 10.5.1.4.249
-```
+4. Reboot after the image is uploaded.
+
+   ```
+   sw-leaf-001# write memory 
+   sw-leaf-001# reload
+   ```
+
+5. Once the switch is available, verify the image is installed.
+
+   ```
+   sw-leaf-001# show version 
+   Dell EMC Networking OS10 Enterprise
+   Copyright (c) 1999-2020 by Dell Inc. All Rights Reserved.
+   OS Version: 10.5.1.4
+   Build Version: 10.5.1.4.249
+   ```

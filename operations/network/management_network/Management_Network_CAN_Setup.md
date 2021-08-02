@@ -10,7 +10,7 @@ Access from the customer site to the system over shared networks is known as the
 
 The CAN configuration is highly dependent on customer requirements and may not meet the specifications below.
 
-To access the Shasta nodes and services from the customer network, there is minimal configuration needed on the spine switch and the customer switch connected upstream from the spine switch to allow the `customer_access_network` subnet to be routed to the HPE Cray EX system.
+To access the HPE Cray EX nodes and services from the customer network, there is minimal configuration needed on the spine switch and the customer switch connected upstream from the spine switch to allow the `customer_access_network` subnet to be routed to the HPE Cray EX system.
 
 The customer's switch must be connected to the spine switches with a p2p subnet for each switch. In the example below, these two p2p subnets are 10.11.15.148/30 and 10.101.15.152/30. The subnets used are up to the customer.
 
@@ -24,27 +24,32 @@ The two physical connections between the NCN and spines is MLAG'ed. MAGP/VSX is 
 
 This is an example of the p2p configuration on the spine switches. The IP address should be replaced with the IP address chosen by the customer matching the customer's switch configuration.
 
-Mellanox:
-```
-interface ethernet 1/11 speed auto force
-interface ethernet 1/11 description to-can
-interface ethernet 1/11 no switchport force
-interface ethernet 1/11 ip address 10.101.15.150/30 primary
-```
-Aruba:
-```
-interface 1/1/36
-    no shutdown
-    description to-can
-    ip address 10.101.15.150/30
-    exit
-```
+- Mellanox:
+
+  ```
+  interface ethernet 1/11 speed auto force
+  interface ethernet 1/11 description to-can
+  interface ethernet 1/11 no switchport force
+  interface ethernet 1/11 ip address 10.101.15.150/30 primary
+  ```
+
+- Aruba:
+
+  ```
+  interface 1/1/36
+      no shutdown
+      description to-can
+      ip address 10.101.15.150/30
+      exit
+  ```
 
 There must then be two routes on the customer's switch directing traffic for the `customer_access_network` subnet to the endpoint on the spine switch.   
 
-This is an example of the route configuration on the customer switch.
-These addresses/subnets are generated from CSI and can be found in ```CAN.yaml```
+The following is an example of the route configuration on the customer switch.
+These addresses/subnets are generated from CSI and can be found in ```CAN.yaml```.
+
 Example Snippet from CAN.yaml.
+
 ```
 - full_name: CAN Bootstrap DHCP Subnet
   cidr:
@@ -64,29 +69,37 @@ ip route vrf default 10.101.8.0/24 10.101.15.154
 Going the other direction, there must be a default route on each spine switch directing traffic not matching other routes to the endpoint on the customer's switch.
 
 This is an example of the route configuration on sw-spine-001.
-Mellanox
-```
-ip route vrf default 0.0.0.0/0 10.101.15.149
-```
-Aruba
-```
-ip route 0.0.0.0/0 10.101.15.149
-```
 
-The spine switch must also have the `customer_access_gateway` IP address assigned to the `vlan 7` interface on the switch. This provides a gateway for the default route on the NCNs and UANs as well as a direct route to the `customer_access_network` from the spine switch.
-Mellanox:
-```
-interface vlan 7 ip address 10.101.8.2/26 primary
-```
-Aruba:
-```
-sw-spine-002(config)# int vlan 7
-sw-spine-002(config-if-vlan)# ip address 10.102.11.3/24
-```
+- Mellanox:
+
+  ```
+  ip route vrf default 0.0.0.0/0 10.101.15.149
+  ```
+
+- Aruba:
+
+  ```
+  ip route 0.0.0.0/0 10.101.15.149
+  ```
+
+The spine switch must also have the `customer_access_gateway` IP address assigned to the `vlan 7` interface on the switch. This provides a gateway for the default route on the NCNs and UANs, as well as a direct route to the `customer_access_network` from the spine switch.
+
+- Mellanox:
+
+  ```
+  interface vlan 7 ip address 10.101.8.2/26 primary
+  ```
+
+- Aruba:
+
+  ``` 
+  sw-spine-002(config)# int vlan 7
+  sw-spine-002(config-if-vlan)# ip address 10.102.11.3/24
+  ```
 
 ## Verification of CAN Configuration
 
-After completing this configuration you should be able to ping and log in to all of the NCNs at the external CAN IP address from a device on the customer network.
+After completing this configuration, the administrator will be able to ping and log in to all of the NCNs at the external CAN IP address from a device on the customer network.
 
 ```
 external> ping 10.101.8.6

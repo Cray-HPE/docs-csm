@@ -6,31 +6,33 @@
 
 ## Configuration
 
-- This configuration describes the edge port configuration, you will find these in the NMN/HMN/Mountain-TDS Management Tab of the SHCD.
-- Typically these are ports that are connected to iLOs (BMCs), gateway nodes, or compute nodes/CMM switches.
+- This configuration describes the edge port configuration. This configuration is in the NMN/HMN/Mountain-TDS Management Tab of the SHCD.
 
-```
-sw-leaf-001(config)#
-    interface 1/1/35
-    no shutdown
-    no routing
-    vlan access 4
-    spanning-tree bpdu-guard
-    spanning-tree port-type admin-edge
-```
+- Typically, these are ports that are connected to iLOs (BMCs), gateway nodes, or compute nodes/CMM switches.
+
+  ```
+  sw-leaf-001(config)#
+      interface 1/1/35
+      no shutdown
+      no routing
+      vlan access 4
+      spanning-tree bpdu-guard
+      spanning-tree port-type admin-edge
+  ```
 
 - This configuration describes the ports that go to the Node Management Network (NMN/VLAN2).
+
 - Identify these ports by referencing the NMN tab on the SHCD.
 
-```
-sw-leaf-001(config)#
-    interface 1/1/35
-    no shutdown
-    no routing
-    vlan access 2
-    spanning-tree bpdu-guard
-    spanning-tree port-type admin-edge
-```
+  ```
+  sw-leaf-001(config)#
+      interface 1/1/35
+      no shutdown
+      no routing
+      vlan access 2
+      spanning-tree bpdu-guard
+      spanning-tree port-type admin-edge
+  ```
 
 ## Apollo Server Port Configuration
 This is for the Apollo XL645d only.
@@ -60,7 +62,7 @@ interface 1/1/14
 
 ## UAN Port Configuration
 - UANs have the same network connections as Shasta v1.3.
-- One connection will go to a NMN(VLAN2) access port, this is where the UAN will pxe boot and communicate with internal systems. (see SHCD for UAN cabling).
+- One connection will go to a NMN(VLAN2) access port, this is where the UAN will pxe boot and communicate with internal systems (see SHCD for UAN cabling).
 - ONE OF THESE PORTS IS SHUTDOWN.
 - One Bond (two connections) will be going to the MLAG/VSX pair of switches. This will be a TRUNK port for the CAN connection.
 
@@ -89,7 +91,7 @@ sw-spine-002 (config)#
 
 Aruba UAN CAN Configuration:
 
-Port Configuration is the same on both switches.
+Port configuration is the same on both switches.
 ```
 interface lag 17 multi-chassis
     no shutdown
@@ -104,7 +106,7 @@ interface lag 17 multi-chassis
 ## Gigabyte/Intel NCN Worker Port Configuration
 The cabling guidelines for all servers can be found in [Cable Management Network Servers](../../../install/cable_management_network_servers.md).
 
-Mellanox Port configuration:
+Mellanox port configuration:
 ```
 sw-spine-002 [gamora-mlag-domain: master] # show run int ethernet 1/1
 interface ethernet 1/1 speed 40G force
