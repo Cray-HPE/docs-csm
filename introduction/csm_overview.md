@@ -166,7 +166,7 @@ configured certificate authority. All services and the API gateway are not depen
 resilient arrangement ensures that services remain available during possible underlying hardware and network
 failures.
 
-Access to individual APIs through the gateway is controlled by a policy-driven access control system. Admins and
+Access to individual APIs through the gateway is controlled by a policy-driven access control system. Administrators and
 users must retrieve a token for authentication before attempting to access APIs through the gateway and present
 a valid token with each API call. The authentication and authorization decisions are made at the gateway level
 which prevent unauthorized API calls from reaching the underlying micro-services. For more detail on the process

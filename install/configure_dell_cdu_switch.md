@@ -1,6 +1,6 @@
 # Configure Dell CDU switch
 
-This page describes how Dell CDU switches are configured and will show users how to validate configuration.
+This page describes how Dell CDU switches are configured.
 
 CDU switches are located in liquid-cooled cabinets and provide connectivity to MTN (Mountain) components.
 CDU switches act as leaf switches in the architecture.
@@ -25,15 +25,15 @@ The Keepalive is port 48.
    Note: These are examples only, your installation and cabling may vary.
    This information is on the 25G_10G tab of the SHCD spreadsheet.
 
-   | Source | Source Label Info | Destination Label Info | Destination | Description | Notes
-   | --- | --- | ---| --- | --- | --- |
-   | sw-100g01 | x3105u40-j01 | d100u01-j51 | d100sw1 | 100g-30m-AOC | |
-   | sw-100g02 | x3105u41-j01 | d100u01-j52 | d100sw1 | 100g-30m-AOC | |
-   | sw-100g01 | x3105u40-j02 | d100u02-j51 | d100sw2 | 100g-30m-AOC | |
-   | sw-100g02 | x3105u41-j02 | d100u02-j52 | d100sw2 | 100g-30m-AOC | |
-   | d100sw1 | d100u01-j48 | d100u02-j48 | d100sw2 | 6ft | keepalive |
-   | d100sw1 | d100u01-j49 | d100u02-j49 | d100sw2 | 100g-1m-DAC | |
-   | d100sw1 | d100u01-j50 | d100u02-j50 | d100sw2 | 100g-1m-DAC | |
+| Source | Source Label Info | Destination Label Info | Destination | Description | Notes
+| --- | --- | ---| --- | --- | --- |
+| sw-100g01 | x3105u40-j01 | d100u01-j51 | d100sw1 | 100g-30m-AOC | |
+| sw-100g02 | x3105u41-j01 | d100u01-j52 | d100sw1 | 100g-30m-AOC | |
+| sw-100g01 | x3105u40-j02 | d100u02-j51 | d100sw2 | 100g-30m-AOC | |
+| sw-100g02 | x3105u41-j02 | d100u02-j52 | d100sw2 | 100g-30m-AOC | |
+| d100sw1 | d100u01-j48 | d100u02-j48 | d100sw2 | 6ft | keepalive |
+| d100sw1 | d100u01-j49 | d100u02-j49 | d100sw2 | 100g-1m-DAC | |
+| d100sw1 | d100u01-j50 | d100u02-j50 | d100sw2 | 100g-1m-DAC | |
 
 It is assumed that you have connectivity to the switch.
 
@@ -45,6 +45,7 @@ It is assumed that you have connectivity to the switch.
 **Cray Site Init (CSI) generates the IPs used by the system, below are samples only.**
 The VLAN information is located in the network YAML files. Below are examples.
 1. The CDU switches will have VLAN interfaces in NMN, HMN, NMN_MTN, HMN_MTN networks.
+
    ```
    sif-ncn-m001-pit:/var/www/ephemeral/prep/sif/networks # cat NMN.yaml
    SNIPPET
@@ -129,6 +130,7 @@ The VLAN information is located in the network YAML files. Below are examples.
      iprange-end: 10.104.3.254
    name: HMN_MTN
    ```
+
    Note: CSI does not yet generate IPs for the CDU switches on VLANs HMN_MTN and NMN_MTN.
    - The first CDU switch in the pair will always have an IP address ending in .2 on the HMN_MTN and NMN_MTN networks.
    - The second CDU switch in the pair will always have an IP address ending in .3 on the HMN_MTN and NMN_MTN networks.  
@@ -266,12 +268,14 @@ Spanning tree is used to protect the network against layer2 loops.
 Dell switches should have these settings for spanning-tree using bpduguard and not bpdufilter.  
 
 1. Enable spanning tree for these VLANs.
+
    ```
    sw-cdu-001 & sw-cdu-002 (config)#
    spanning-tree vlan 1-2,4,4091 priority 61440
    ```
 
 1. Ensure that no ports have bpduguard enabled.
+
    ```
    sw-cdu-001 & sw-cdu-002 (config)#
    interface ethernet 1/1/x
@@ -318,6 +322,7 @@ OSPF is a dynamic routing protocol used to exchange routes. It provides reachabi
 The IP addresses used here will be the first three worker nodes on the NMN network. These can be found in NMN.yaml.
 
 1. Get current NTP configuration.
+
    ```
    sw-cdu-001# show running-configuration | grep ntp
    ntp server 10.252.1.12
@@ -326,6 +331,7 @@ The IP addresses used here will be the first three worker nodes on the NMN netwo
    ```
 
 1. Delete any current NTP configuration.
+
    ```
    sw-cdu-001# configure terminal
    sw-cdu-001(config)# no ntp server 10.252.1.12
@@ -334,6 +340,7 @@ The IP addresses used here will be the first three worker nodes on the NMN netwo
    ```
 
 1. Add new NTP server configuration.
+
    ```
    ntp server 10.252.1.10 prefer
    ntp server 10.252.1.11
@@ -342,6 +349,7 @@ The IP addresses used here will be the first three worker nodes on the NMN netwo
    ```
 
 1. Verify NTP status.
+
    ```
    sw-cdu-001# show ntp associations
         remote           refid      st t when poll reach   delay   offset  jitter
@@ -355,6 +363,7 @@ The IP addresses used here will be the first three worker nodes on the NMN netwo
 ## Configure DNS
 
 1. This will point to the unbound DNS server.
+
    ```
    sw-cdu-001 & sw-cdu-002 (config)#
    ip name-server 10.92.100.225
@@ -363,6 +372,7 @@ The IP addresses used here will be the first three worker nodes on the NMN netwo
 ## Configure SNMP
 
 1. Configure SNMP
+
    ```
    sw-cdu-001 & sw-cdu-002 (config)#
    snmp-server group cray-reds-group 3 noauth read cray-reds-view
@@ -436,6 +446,7 @@ Disable iSCSI in the configuration.
    ```
 
 ## Save configuration
+
    ```
    sw-cdu-001(config)# exit
    sw-cdu-001# write memory

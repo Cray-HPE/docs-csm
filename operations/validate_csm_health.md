@@ -28,6 +28,9 @@ The areas should be tested in the order they are listed on this page. Errors in 
   - [2. Hardware Management Services Health Checks](#2-hardware-management-services-health-checks)
     - [2.1 HMS Test Execution](#21-hms-test-execution)
     - [2.2 Hardware State Manager Discovery Validation](#22-hardware-state-manager-discovery-validation)
+      - [2.2.1 Interpreting results](#hms-smd-discovery-validation-known-issues-interpreting-results)
+      - [2.2.2 Known Issues](#hms-smd-discovery-validation-known-issues)
+
   - [3 Software Management Services Health Checks](#3-software-management-services-health-checks)
   - [4. Booting CSM Barebones Image](#4-booting-csm-barebones-image)
     - [4.1 Locate CSM Barebones Image in IMS](#41-locate-csm-barebones-image-in-ims)
@@ -502,20 +505,16 @@ The foundational information for this discovery is from the System Layout Servic
 comparison needs to be done to see that what is specified in SLS (focusing on 
 BMC components and Redfish endpoints) are present in HSM.
 
-The `hpe-csm-scripts` package provides a script called `hsm_discovery_verify.sh`
-that can be run at this time to do this validation. This script can be run 
-from any Kubernetes master or worker (should also work from a laptop or any 
-machine that can get an access token and run `curl` commands to HMS services via 
-the API GW):
+The Cray CLI is required to complete this task. If needed, see the [Initialize and Authorize the CLI](#uas-uai-init-cli) section.
 
+Execute the `hsm_discovery_verify.sh` script on a Kubernetes master or worker NCN:
 ```
-ncn-m001# /opt/cray/csm/scripts/hms_verification/hsm_discovery_verify.sh
+ncn# /opt/cray/csm/scripts/hms_verification/hsm_discovery_verify.sh
 ```
 
-There are no command line arguments. The output will ideally appear as follows:
-
+The output will ideally appear as follows, if it does not look like the following see [2.2.1 Interpreting results](hms-smd-discovery-validation-known-issues-interpreting-results) and [2.2.2 Known Issues](#hms-smd-discovery-validation-known-issues).
 ```bash
-ncn-m001# /opt/cray/csm/scripts/hms_verification/hsm_discovery_verify.sh
+ncn# /opt/cray/csm/scripts/hms_verification/hsm_discovery_verify.sh
 
 Fetching SLS Components...
  
@@ -533,65 +532,26 @@ ALL OK
 If there are mismatches, these will be displayed in the appropriate section of
 the output.
 
-**NOTES:**
-* BMCs for management cluster master node 'm001' will not typically be present in HSM component data.
+<a name="hms-smd-discovery-validation-known-issues"></a>
+#### 2.2.1 Interpreting results
+
+For each of the BMCs that show up in the mismatch list use the following notes to determine if that BMC can be safely ignored, or if there is a legitimate issue with the BMC. 
+* The BMC of 'ncn-m001' will not typically be present in HSM component data, as it is typically connected to the site network instead of the HMN network.
+   > The following can be used to determine the friendly name of the Node that the NodeBMC controls: 
+   > ```bash
+   > ncn# cray sls search hardware list --parent <NODE_BMC_XNAME> --format json | \
+   >   jq '.[] | { Xname: .Xname, Aliases: .ExtraProperties.Aliases }' -c
+   > ```
 * Chassis Management Controllers (CMC) may show up as not being present in HSM. CMCs for Intel server blades can be ignored. Gigabyte server blade CMCs not found in HSM is not normal and should be investigated. If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored.
-* HPE PDUs are not supported at this time and will likely show up as not being found in HSM.
+   > CMCs have xnames in the form of `xXc0sSb999`, where `X` is the cabinet and `S` is the rack U of the compute node chassis.
+* HPE PDUs are not supported at this time and will likely show up as not being found in HSM. They can be ignored.
+   > Cabinet PDU Controllers have xnames in the form of `xXmM`, where `X` is the cabinet and `M` is the ordinal of the Cabibnet PDU Controller.
 * BMCs having no association with a management switch port will be annotated as such, and should be investigated. Exceptions to this are in Mountain or Hill configurations where Mountain BMCs will show this condition on SLS/HSM mismatches, which is normal.
-* In Hill configurations SLS assumes BMCs in chassis 1 and 3 are populated, and in Mountain configurations SLS assumes all BMCs are populated. Any non-populated BMCs will have no HSM data and will show up in the mismatch list.
+* In Hill configurations SLS assumes BMCs in chassis 1 and 3 are fully populated (32 Node BMCs), and in Mountain configurations SLS assumes all BMCs are fully populated (128 Node BMCs). Any non-populated BMCs will have no HSM data and will show up in the mismatch list.
 
-**Known issues:**
+<a name="hms-smd-discovery-validation-known-issues"></a>
+#### 2.2.2 Known Issues
 A listing of known hardware discovery issues and workarounds can be found here in the [CSM Troubleshooting Information](../troubleshooting/index.md#known-issues-hardware-discovery) chapter.
-
-* Air cooled hardware is not getting properly discovered with an Aruba leaf switches.
-
-   Symptoms:
-   - The System has Aruba leaf switches.
-   - Air cooled hardware is reported to not be present under State Components and Inventory Redfish Endpoints in Hardware State Manager by the hsm_discovery_verify.sh script.
-   - BMCs have IP addresses given out by DHCP, but in DNS their xname hostname does not resolve. 
-
-   Procedure to determine if the system is affected by this known issue:
-   1. Determine the name of the last HSM discovery job that ran.
-      ```bash
-      ncn# HMS_DISCOVERY_POD=$(kubectl -n services get pods -l app=hms-discovery | tail -n 1 | awk '{ print $1 }')
-      ncn# echo $HMS_DISCOVERY_POD 
-      hms-discovery-1624314420-r8c49
-      ```
-   
-   2. Look at the logs of the HMS discovery job to find the MAC addresses associated with instances of the `MAC address in HSM not found in any switch!` error messages. The following command will parse the logs are report these MAC addresses.
-      > Each of the following MAC address does not contain a ComponentID in Hardware State Manager in the Ethernet interfaces table, which can be viewed with: `cray hsm inventory ethernetInterfaces list`.
-      ```bash
-      ncn# UNKNOWN_MACS=$(kubectl -n services logs $HMS_DISCOVERY_POD hms-discovery | jq 'select(.msg == "MAC address in HSM not found in any switch!").unknownComponent.ID' -r -c)
-      ncn# echo "$UNKNOWN_MACS"
-      b42e99dff361
-      9440c9376780
-      b42e99bdd255
-      b42e99dfecf1
-      b42e99dfebc1
-      b42e99dfec49
-      ```
-
-   3. Look at the logs of the HMS discovery job to find the MAC address associated with instances of the `Found MAC address in switch.` log messages. The following command will parse the logs are report these MAC addresses. 
-      ```bash
-      ncn# FOUND_IN_SWITCH_MACS=$(kubectl -n services logs $HMS_DISCOVERY_POD hms-discovery | jq 'select(.msg == "Found MAC address in switch.").macWithoutPunctuation' -r)
-      ncn# echo "$FOUND_IN_SWITCH_MACS"
-      b42e99bdd255
-      ```
-   
-   4. Perform a `diff` between the two sets of collected MAC addresses to see if the Aruba leaf switches in the system are affected by a known SNMP issues with Aruba switches. 
-      ```bash
-      ncn# diff -y <(echo "$UNKNOWN_MACS" | sort -u) <(echo "$FOUND_IN_SWITCH_MACS" | sort -u)
-      9440c9376780                                                  <
-      b42e99bdd255                                                    b42e99bdd255
-      b42e99dfebc1                                                  <
-      b42e99dfec49                                                  <
-      b42e99dfecf1                                                  <
-      b42e99dff361                                                  <
-      ```
-
-      If there are any MAC addresses on the left column that are not on the right column, then it is likely the leaf switches in the system are being affected by the SNMP issue. Apply the workaround described in [the following procedure](../install/aruba_snmp_known_issue_10_06_0010.md) to the Aruba leaf switches in the system.
-
-      If all of the MAC addresses on the left column are present in the right column, then the system is not affected by this known issue.
 
 <a name="sms-health-checks"></a>
 ## 3 Software Management Services Health Checks
@@ -937,9 +897,9 @@ This section requires commands to be run on the LiveCD node, and the user must b
    > **`IMPORTANT:`** If you are upgrading CSM and your site does not use UAIs, skip UAS and UAI validation.
    > If you do use UAIs, there are products that configure UAS like Cray Analytics and Cray Programming
    > Environment. These must be working correctly with UAIs and should be validated and corrected (the
-   > procedures for this are beyond the scope of this document) prior to validating UAS and UAI.  Failures
+   > procedures for this are beyond the scope of this document) prior to validating UAS and UAI. Failures
    > in UAI creation that result from incorrect or incomplete installation of these products will generally
-   > take the form of UAIs stuck in 'waiting' state trying to set up volume mounts.  See the
+   > take the form of UAIs stuck in 'waiting' state trying to set up volume mounts. See the
    > [UAI Troubleshooting](#uas-uai-validate-debug) section for more information.
 
 This procedure must run on a master or worker node (and not `ncn-w001`) on the system (or from an external host, but the procedure for that is not covered here). It requires that the CLI be initialized and authorized as the user.

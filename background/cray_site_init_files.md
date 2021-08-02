@@ -21,8 +21,8 @@ This page describes administrative knowledge around the pre-config files to `csi
 
 A `system_config.yaml` file may be provided by the administrator that will omit the need for specifying parameters on the command line.
 
-> This file is dumped in the generated configs after every `csi config init` call, the new dumped file
-serves as a fingerprint for re-generated the same configs.
+> This file is dumped in the generated configuration after every `csi config init` call. The new dumped file
+serves as a fingerprint for re-generating the same configuration.
 
 Here is an example file
 

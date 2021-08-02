@@ -179,7 +179,7 @@ ncn-m001# ceph mgr MODULE_NAME disable MODULE
 
   **IMPORTANT:** You cannot scale osd.all-available-devices, this is the process to auto-discover available OSDs.  
 
-  **IMPORTANT:** You cannot scale the crash service, this is the equivalent of a kuberenets daemon set and runs on all nodes to collect crash data.
+  **IMPORTANT:** You cannot scale the crash service; this is the equivalent of a Kubernetes daemon set and runs on all nodes to collect crash data.
 
   ***For our example we are going to show scaling the mgr service down and back up.***
 

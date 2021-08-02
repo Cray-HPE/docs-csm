@@ -2,7 +2,7 @@
 
 This page is designed to cover various issues that arise when trying to PXE boot nodes in a Shasta system.
 
-In order for PXE booting to successfully work, the management network switches need to be configured correctly.
+In order for PXE booting to work successfully, the management network switches need to be configured correctly.
 
 ## Configuration required for PXE booting
 

@@ -2,7 +2,7 @@
 
 Gigabyte BMCs must have their failover mode disabled to prevent incorrect network assignment.
 
-If Gigabyte BMC failover mode is not disabled, some BMCs may receive incorrect IP addresses. Specifically, a BMC may request an IP address on the wrong subnet and be unable to re-acquire a new IP on the correct subnet. If this occurs, admins should ensure that the impacted BMC has its failover feature disabled.
+If Gigabyte BMC failover mode is not disabled, some BMCs may receive incorrect IP addresses. Specifically, a BMC may request an IP address on the wrong subnet and be unable to re-acquire a new IP on the correct subnet. If this occurs, administrators should ensure that the impacted BMC has its failover feature disabled.
 
 ### Procedure
 

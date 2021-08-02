@@ -32,7 +32,7 @@ The order can vary in the workflow outlined below, and the services in this work
 4.  Check to see if the NIC in SMD needs to have an IP added.
     -   Update the IP from Kea if NIC in SMD does not have an IP set
 5.  Remove any potential race conditions between the DHCP reservation in Kea and the NIC information in SMD.
-    -   Compare information in NIC information in SMD and Kea DHCP reservation configs
+    -   Compare information in NIC information in SMD and Kea DHCP reservation configurations
     -   Delete any active leases that did not match SMD
 
 ### Table of Contents

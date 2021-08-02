@@ -147,7 +147,7 @@ with system-specific customizations.
     *   If LDAP requires TLS (recommended), update the `cray-keycloak` sealed
         secret value by supplying a base64 encoded Java KeyStore (JKS) that
         contains the CA certificate that signed the LDAP server's host key. The
-        password for the JKS file must be `password`. Admins may use the
+        password for the JKS file must be `password`. Administrators may use the
         `keytool` command from the `openjdk:11-jre-slim` container image
         packaged with CSM to create a JKS file that includes a PEM-encoded
         CA certificate to verify the LDAP host(s) as follows:
@@ -191,7 +191,7 @@ with system-specific customizations.
             > Unfortunately, older versions of OpenSSL may not support
             > `-nameopt` on the `s_client` command or may use a different
             > default format. As a result, your mileage may vary; however,
-            > you should be able to manually extract the issuer certificate
+            > you should be able to extract the issuer certificate manually
             > from the output of the above `openssl s_client` example if the
             > following commands are unsuccessful.
         

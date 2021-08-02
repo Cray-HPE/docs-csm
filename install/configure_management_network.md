@@ -5,6 +5,15 @@ Newer systems have HPE Aruba switches, while older systems have Dell and Mellano
 
 The configuration steps are different for these switch vendors. The switch configuration procedures for HPE Aruba will be grouped separately from the switch configuration procedures for other vendors.
 
+It is assumed that the admin configuring the Management Network has a basic understanding of networking protocols (STP, VLAN, OSPF, LAG/MLAG) and knows how to configure network equipment.  It is also assumed that they understand and know how to read an SHCD file.
+
+Before configuring/reconfiguring any switches make sure to get the current running config and save that incase you need to revert the config.
+
+save the output of.
+```
+show run
+```
+
 ### Topics:
 
    * [HPE Aruba switch configuration](#hpe_aruba_switch_configuration)
@@ -25,7 +34,7 @@ will have Aggregation switches.
    1. [Configure Aruba Aggregation Switch](configure_aruba_aggregation_switch.md) (if present)
    1. [Configure Aruba CDU Switch](configure_aruba_cdu_switch.md) (if present)
    1. [Configure Aruba Leaf Switch](configure_aruba_leaf_switch.md)
-   1. [Update Management Network Firmware](../operations/network/management_network/Update_Management_Network_Firmware.md)
+   1. [Update Management Network Firmware](../operations/update_management_network_firmware.md)
 
 <a name="dell_and_mellanox_switch_configuration"></a>
 ### Dell and Mellanox Switch Configuration
@@ -40,7 +49,7 @@ On a typical system, the Mellanox switches are Spine switches and the Dell switc
    1. [Configure Dell Aggregation Switch](configure_dell_aggregation_switch.md) (if present)
    1. [Configure Dell CDU Switch](configure_dell_cdu_switch.md) (if present)
    1. [Configure Dell Leaf Switch](configure_dell_leaf_switch.md)
-   1. [Update Management Network Firmware](../operations/network/management_network/Update_Management_Network_Firmware.md)
+   1. [Update Management Network Firmware](../operations/update_management_network_firmware.md)
 
 <a name="next-topic"></a>
 # Next Topic

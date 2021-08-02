@@ -15,7 +15,7 @@ This procedure requires administrative privileges.
     ```bash
     ncn-w001# kubectl -n services exec -it cray-smd-postgres-0 -- bash
     Defaulting container name to postgres.
-    Use 'kubectl describe pod/cray-smd-postgres-0 -n services' to see all of the con                                         tainers in this pod.
+    Use 'kubectl describe pod/cray-smd-postgres-0 -n services' to see all of the containers in this pod.
     
      ____        _ _
     / ___| _ __ (_) | ___

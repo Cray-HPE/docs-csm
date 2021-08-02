@@ -189,7 +189,7 @@ ncn-m002#  losetup -a
 > The THIN part of the overlay is the magic, using THIN overlays means the kernel will automatically clear free blocks.
 
 Below is the layout of what a persistent system looks like. Note, this means that persistent capacity
-is there, but admins should beware of reset toggles on unfamiliar systems. There are toggles to reset
+is there, but administrators should beware of reset toggles on unfamiliar systems. There are toggles to reset
 overlays that are, by default, toggled `off` (so data persistence be default is safe but one should
 not assume).
 
