@@ -678,18 +678,44 @@ Observe the output of the checks and note any failures, then remediate them.
 1. Check Ceph
 
    ```bash
-   pit# csi pit validate --ceph
+   pit# csi pit validate --ceph | tee csi-pit-validate-ceph.log 
    ```
-
+   
    **`Note`**: Throughout the output there are multiple lines of test totals; be sure to check all of them and not just the final one.
+   > The following will extract the test totals:
+   > ```bash
+   > grep "Total" csi-pit-validate-ceph.log
+   > ```
+   >
+   > Example output for a system with 3 storage nodes:
+   > ```
+   > Total Tests: 7, Total Passed: 7, Total Failed: 0, Total Execution Time: 1.4226 seconds
+   > Total Tests: 7, Total Passed: 7, Total Failed: 0, Total Execution Time: 1.4077 seconds
+   > Total Tests: 7, Total Passed: 7, Total Failed: 0, Total Execution Time: 1.4246 seconds
+   > ```
 
    **`Note`**: Please refer to the **Utility Storage** section of the Admin guide to help resolve any failed tests.
 
 1. Check Kubernetes
 
    ```bash
-   pit# csi pit validate --k8s
+   pit# csi pit validate --k8s | tee csi-pit-validate-k8s.log
    ```
+
+   **`Note`**: Throughout the output there are multiple lines of test totals; be sure to check all of them and not just the final one.
+   > The following will extract the test totals:
+   > ```bash
+   > grep "Total" csi-pit-validate-k8s.log
+   > ```
+   >
+   > Example output for a system with 5 kubenetes nodes:
+   > ```
+   > Total Tests: 16, Total Passed: 16, Total Failed: 0, Total Execution Time: 0.3072 seconds
+   > Total Tests: 16, Total Passed: 16, Total Failed: 0, Total Execution Time: 0.2727 seconds
+   > Total Tests: 12, Total Passed: 12, Total Failed: 0, Total Execution Time: 0.2841 seconds
+   > Total Tests: 12, Total Passed: 12, Total Failed: 0, Total Execution Time: 0.3622 seconds
+   > Total Tests: 12, Total Passed: 12, Total Failed: 0, Total Execution Time: 0.2353 seconds
+   > ```
 
    > **`WARNING`** if test failures for "/dev/sdc" are observed they should be discarded for a manual test:
    >

@@ -169,13 +169,12 @@ This is expected and can safely be ignored.
 ***IMPORTANT:*** If you have to re-run install.sh to re-deploy failed ceph-csi provisioners you must make sure to delete the jobs that have not completed. These are left there for investigation on failure. They are automatically removed on a successful deployment.
 
 ```bash
-# kubectl get jobs
+pit# kubectl get jobs
 NAME                   COMPLETIONS   DURATION   AGE
 cray-ceph-csi-cephfs   0/1                      3m35s
 cray-ceph-csi-rbd      0/1                      8m36s
-
-#IF THESE JOBS EXIST THEN kubectl delete job <jobname>
 ```
+> If these jobs exist then `kubectl delete job <jobname>`
 
 Run `install.sh` to deploy CSM applications services:
 
@@ -185,6 +184,14 @@ Run `install.sh` to deploy CSM applications services:
 > `sls_input_file.json` configuration files.
 >
 > Some commands will also need to have the CSM_RELEASE variable set.
+>
+> Verify that the `SYSTEM_NAME` and `CSM_RELEASE` environment variables are set:
+>
+> ```bash
+> pit# echo $SYSTEM_NAME
+> pit# echo $CSM_RELEASE
+> ```
+> If they are not set perform the following:
 >
 > ```bash
 > pit# export SYSTEM_NAME=eniac
