@@ -179,6 +179,7 @@ proceed to step 2.
       > Opening a web browser to `https://localhost:9443` will give access to the BMC's web interface.
 
    1. When the node boots, you will be able to use the conman session to see the BIOS menu to check and set the time to current UTC time. The process varies depending on the vendor of the NCN.
+   1. After you have verified the correct time, power off the NCN.
 
    Repeat the above process for each NCN.
 
