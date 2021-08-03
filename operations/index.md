@@ -115,7 +115,7 @@ Use the Boot Orchestration Service \(BOS\) to boot, configure, and shutdown coll
 
 ## System Power Off Procedures
 
-Procedures required to fully power off an HPE Cray EX system.
+Procedures required for a full power off of an HPE Cray EX system.
 
   * [System Power Off Procedures](power_management/System_Power_Off_Procedures.md)
   * [Prepare the System for Power Off](power_management/Prepare_the_System_for_Power_Off.md)
@@ -130,7 +130,7 @@ Procedures required to fully power off an HPE Cray EX system.
 
 ## System Power On Procedures
 
-Procedures required to fully power on an HPE Cray EX system.
+Procedures required for a full power on of an HPE Cray EX system.
 
   * [System Power On Procedures](power_management/System_Power_On_Procedures.md)
   * [Power On and Start the Management Kubernetes Cluster](power_management/Power_On_and_Start_the_Management_Kubernetes_Cluster.md)

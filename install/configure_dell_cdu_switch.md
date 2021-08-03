@@ -244,7 +244,7 @@ These ACLs are designed to block traffic from the node management network to and
    seq 90 permit ip any any
    ```
 
-1. Apply ACL to a VLANs.
+1. Apply ACL to VLANs.
 
    ```
    sw-cdu-001 & sw-cdu-002 (config)#

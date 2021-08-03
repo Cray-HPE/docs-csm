@@ -96,7 +96,7 @@ For each item in the `Hardware Precedence Order`:
 After identifying which hardware is in the system, start with the top most item on this list to update. If any of the following hardware is not in the system, skip it.
 
 **IMPORTANT:**
-* This process does not communicate the SAFE way to update NCNs. If the NCNs have not been locked, or FAS is blindly used to update NCNs without following the correct process, then **THE STABILITY OF THE SYSTEM WILL BE JEOPARDIZED**.
+* Updating NCN firmware with FAS is not supported. Refer to HPE documentation for further instruction.
 * Read the corresponding recipes before updating. There are sometimes ancillary actions that must be completed in order to ensure update integrity.
 
 1. [Cray](FAS_Recipes.md#manufacturer-cray)

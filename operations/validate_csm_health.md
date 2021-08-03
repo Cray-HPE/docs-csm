@@ -551,7 +551,7 @@ For each of the BMCs that show up in the mismatch list use the following notes t
 * Chassis Management Controllers (CMC) may show up as not being present in HSM. CMCs for Intel server blades can be ignored. Gigabyte server blade CMCs not found in HSM is not normal and should be investigated. If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored.
    > CMCs have xnames in the form of `xXc0sSb999`, where `X` is the cabinet and `S` is the rack U of the compute node chassis.
 * HPE PDUs are not supported at this time and will likely show up as not being found in HSM. They can be ignored.
-   > Cabinet PDU Controllers have xnames in the form of `xXmM`, where `X` is the cabinet and `M` is the ordinal of the Cabibnet PDU Controller.
+   > Cabinet PDU Controllers have xnames in the form of `xXmM`, where `X` is the cabinet and `M` is the ordinal of the Cabinet PDU Controller.
 * BMCs having no association with a management switch port will be annotated as such, and should be investigated. Exceptions to this are in Mountain or Hill configurations where Mountain BMCs will show this condition on SLS/HSM mismatches, which is normal.
 * In Hill configurations SLS assumes BMCs in chassis 1 and 3 are fully populated (32 Node BMCs), and in Mountain configurations SLS assumes all BMCs are fully populated (128 Node BMCs). Any non-populated BMCs will have no HSM data and will show up in the mismatch list.
 
@@ -586,7 +586,6 @@ The Software Management Services health checks are run using `/usr/local/bin/cms
   * The last line of output from the tool reports FAILURE.
   * The return code is non-0.
 * Unless the test was run in verbose mode, the log file will contain additional information about the execution.
-* For more detailed information on the tests, please see the CSM Validation section of the admin guide (note to docs writers: replace this with the actual document name and section number/title once available).
 
 <a name="sms-checks"></a>
 ### 3.3 SMS Checks To Run
@@ -640,7 +639,7 @@ the Cray OS (COS) product, or similar, be used.
 the beyond the dracut stage of the boot process. However, if the dracut stage is reached the
 boot can be considered successful and shows that the necessary CSM services needed to
 boot a node are up and available.
-   * This inability to fully boot the barebones image will be resolved in future releases of the
+   * This inability to boot the barebones image fully will be resolved in future releases of the
    CSM product.
 * In addition to the CSM Barebones image, the release also includes an IMS Recipe that
 can be used to build the CSM Barebones image. However, the CSM Barebones recipe currently requires

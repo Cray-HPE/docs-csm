@@ -14,14 +14,14 @@ The parameters which can be set are:
 * SSH console key
 
    IMPORTANT: If the scsd tool is used to update the SSHConsoleKey value outside of ConMan, it will
-   disrupt the ConMan connection to the console and collection of console logs. See [ConMan](conman/ConMan.md)
+   disrupt the ConMan connection to the console and collection of console logs. See [ConMan](../conman/ConMan.md)
    for more information about remote consoles and collecting console logs.
 
 
 However, this procedure only describes how to change the SSH key to enable passwordless SSH for
 troubleshooting of power down and power up logs on the node BMCs.
 
-See [Manage Parameters with the scsd Service](system_configuration_service/Manage_Parameters_with_the_scsd_Service.md)
+See [Manage Parameters with the scsd Service](Manage_Parameters_with_the_scsd_Service.md)
 for more information about these topics for changing the other parameters.
 
    * Retrieve Current Information from Targets
