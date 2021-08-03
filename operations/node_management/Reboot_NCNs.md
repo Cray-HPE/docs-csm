@@ -5,7 +5,7 @@ The following is a high-level overview of the non-compute node \(NCN\) reboot wo
 - Run the NCN pre-reboot checks and procedures:
   - Ensure `ncn-m001` is not running in "LiveCD" or install mode
   - Check the `metal.no-wipe` settings for all NCNs
-    - Run all platform health checks, including checks on the Border Gateway Protocol \(BGP\) peering sessions
+  - Run all platform health checks, including checks on the Border Gateway Protocol \(BGP\) peering sessions
 - Run the rolling NCN reboot procedure:
   - Loop through reboots on storage NCNs, worker NCNs, and master NCNs, where each boot consists of the following workflow:
          - Establish console session with NCN to reboot
@@ -145,10 +145,6 @@ The `kubectl` command is installed.
         ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
         /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689
         ```
-
-1. Establish a serial console session to the NCNs
-
-    See [Establish a Serial Connection to NCNs](../conman/Establish_a_Serial_Connection_to_NCNs.md)
 
 ### NCN Rolling Reboot
 
@@ -325,7 +321,7 @@ Before rebooting NCNs:
 
     1. Disconnect from the console.
 
-    1. Repeat all of the sub-steps above for the remaining master nodes \(excluded `ncn-m001`\), going from the highest to lowest number until all master nodes have successfully rebooted.
+    1. Repeat all of the sub-steps above for the remaining master nodes \(excluding `ncn-m001`\), going from the highest to lowest number until all master nodes have successfully rebooted.
 
 1. Reboot `ncn-m001`.
 
