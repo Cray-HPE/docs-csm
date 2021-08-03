@@ -2,13 +2,9 @@
 
 Use this procedure to determine why the "rgw health check" failed and what needs to be fixed.
 
-## Prerequisites
-
-Anything to write here? Which node to run the commands on??
-
 ## Procedure
 
-In the key-value pair outputted by the goss test "Expected \< int \>: x", look at the value of 'x' (possible values are 1,2,3,4,5). Based on this, navigate to corresponding numbered item below for troubleshooting this issue.
+In the information outputted by the goss test, look at the value of 'x' in "Expected \< int \>: x" (possible values are 1,2,3,4,5). Based on the value, navigate to corresponding numbered item below for troubleshooting this issue.
 
 Optional: Manually run the rgw health check script to see descriptive output.
 
@@ -24,10 +20,14 @@ ncn-m001# GOSS_BASE=/opt/cray/tests/install/ncn /opt/cray/tests/install/ncn/scri
     ncn-m001# curl -i -s -S http://rgw-vip.nmn
     ncn-m001# curl -i -s -S http://rgw-vip.hmn
     ```
+    Log into a storage node ncn-s00\[123\] and look at the version and status of ceph.
+    ```bash
+    ncn-s001# ceph --version
+    ncn-s001# ceph -s
+    ```
 
-    To fix this, Do THIS
 
-1. A value of 2 is returned if a storage node is not able to be reached. In this case, run the "rgw_health_check.sh" described in the optional step above. Find which storage node(s) is not able to be reached, and run the following checks on that node.
+1. A value of 2 is returned if a storage node is not able to be reached. In this case, run the "rgw_health_check.sh" as statued in the optional step above. Find which storage node(s) is not able to be reached, and run the following checks on that node.
 
     - Check HAProxy is running on the node.
         
@@ -55,7 +55,7 @@ ncn-m001# GOSS_BASE=/opt/cray/tests/install/ncn /opt/cray/tests/install/ncn/scri
         ```bash
         ncn-s001# ceph -s | grep rgw
         ```
-        If ceph-rgw daemon is not running on 3 storage nodes (CRAIG CHECK should just run on 3??), restart the deamon and watch it come up within a few seconds.
+        If ceph-rgw daemon is not running on 3 storage nodes, restart the deamon and watch it come up within a few seconds.
 
         ```bash
         ncn-s001# ceph orch ps | grep rgw           #use this to wach the daemon start
@@ -82,7 +82,7 @@ ncn-m001# GOSS_BASE=/opt/cray/tests/install/ncn /opt/cray/tests/install/ncn/scri
     ncn-s001# ceph -s
     ```
 
-    If ceph reports any status other than "HEALTH_OK", go to [Utility Storage](Utility_Storage.md) for general ceph troubleshooting. 
+    If ceph reports any status other than "HEALTH_OK", refer to [Utility Storage](Utility_Storage.md) for general ceph troubleshooting. 
 
 1. Refer to point 4. 
 
