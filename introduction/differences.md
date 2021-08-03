@@ -28,9 +28,12 @@ The most noteworthy changes since the previous release are described here.
          * Milan-Based HPE DL 385(v2) Gen10+
          * Rome-Based HPE DL 385(v1) Gen10
    * Node consoles are now managed by cray-console-node which is based on conman.
+   * HSM now has a v2 REST API
 
 <a name="deprecating_features"></a>
 ### Deprecating Features
+
+   * HSM v1 REST API has been deprecated as of CSM version 0.9.3. The v1 HSM API’s will be removed in the CSM version 1.3 release.
 
 <a name="deprecated_features"></a>
 ### Deprecated Features

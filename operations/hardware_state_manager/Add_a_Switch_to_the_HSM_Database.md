@@ -25,7 +25,7 @@ Manually add a switch to the Hardware State Manager \(HSM\) database. Switches n
     ncn-m001# cray hsm inventory redfishEndpoints create --id x3000c0r41b0 --fqdn 10.254.2.17 --user root \
     --password YourPassword --rediscover-on-update true
     [[results]]
-    URI = "/hsm/v1/Inventory/RedfishEndpoints/x3000c0r41b0"
+    URI = "/hsm/v2/Inventory/RedfishEndpoints/x3000c0r41b0"
     ```
 
 2.  Verify that HSM successfully discovered the switch.
