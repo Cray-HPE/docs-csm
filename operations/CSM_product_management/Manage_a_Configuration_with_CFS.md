@@ -221,8 +221,8 @@ Multiple product configuration layers may be created later to apply multiple cha
    The `git ls-remote` command in this step will require a valid username and password in VCS. See previous step for the `crayvcs` username and its password.
    ```bash
    ncn-m001# COMMIT=$(git ls-remote \
-   https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git \
-   refs/heads/cray/csm/${RELEASE} | awk '{print $1}')
+     https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git \
+     grep refs/heads/cray/csm/${RELEASE} | awk '{print $1}')
    Username for 'https://api-gw-service-nmn.local': crayvcs
    Password for 'https://crayvcs@api-gw-service-nmn.local': 
    ncn-m001# echo $COMMIT
