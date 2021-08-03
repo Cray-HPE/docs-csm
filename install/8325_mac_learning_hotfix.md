@@ -62,13 +62,9 @@ Give run permissions for the script:
 
 **Step 2:** 
 
-> pit-ncn-m001:~ # chmod +x nae_upload.py
-
-**Step 3:** 
-
 > pit-non-m991”:~ # ./nae_upload.py
 
-**step 4:**
+**step 3:**
 
 > Type in your switch password and the script will upload and enable the NAE script. 
 
