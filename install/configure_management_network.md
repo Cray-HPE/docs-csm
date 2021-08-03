@@ -35,6 +35,7 @@ will have Aggregation switches.
    1. [Configure Aruba CDU Switch](configure_aruba_cdu_switch.md) (if present)
    1. [Configure Aruba Leaf Switch](configure_aruba_leaf_switch.md)
    1. [Update Management Network Firmware](../operations/update_management_network_firmware.md)
+   1. [Apply hotfix for 8325 mac-learning issue](../operations/8325_mac_learning_hotfix.md)
 
 <a name="dell_and_mellanox_switch_configuration"></a>
 ### Dell and Mellanox Switch Configuration
