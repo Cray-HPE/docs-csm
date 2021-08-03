@@ -10,6 +10,10 @@ upgrade_ncn=$1
 
 . ${BASEDIR}/ncn-upgrade-common.sh ${upgrade_ncn}
 
+echo " ****** DATA LOSS ON ${upgrade_ncn} - FRESH OS INSTALL UPON REBOOT ******"
+echo " ****** BACKUP DATA ON ${upgrade_ncn} TO USB OR OTHER SAFE LOCATION ******"
+read -p "Read and act on above steps. Press Enter key to continue ..."
+
 state_name="CSI_HANDOFF_BSS_UPDATE_PARAM"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
