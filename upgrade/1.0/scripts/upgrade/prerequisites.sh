@@ -346,7 +346,7 @@ state_name="PRECACHE_NEXUS_IMAGES"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-
+    export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
     pdsh -b -S -w $(grep -oP 'ncn-w\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'for image in sonatype/nexus3:3.25.0 dtr.dev.cray.com/cray/proxyv2:1.6.13-cray1 dtr.dev.cray.com/baseos/busybox:1 docker.io/sonatype/nexus3:3.25.0 dtr.dev.cray.com/cray/cray-nexus-setup:0.3.2; do crictl pull $image; done'
 
     record_state ${state_name} $(hostname)
