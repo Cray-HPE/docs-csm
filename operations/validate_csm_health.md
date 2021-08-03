@@ -615,9 +615,9 @@ ncn# for S in bos cfs conman crus ims ipxe vcs ; do
     rc=$?
     let DURATION=SECONDS-START
     if [ $rc -eq 0 ]; then
-        echo "PASSED (duration: $DURATION seconds)"
+        echo "SUCCESS (duration: $DURATION seconds)"
     else
-        echo "FAILED (duration: $DURATION seconds)"
+        echo "FAILURE (duration: $DURATION seconds)"
         echo " # See $LOG for details"
     fi
 done
