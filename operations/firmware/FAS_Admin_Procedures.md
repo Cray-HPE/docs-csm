@@ -13,6 +13,7 @@ Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmwa
   - [Procedure](#procedure-1)
   - [Check for New Firmware Versions with a Dry-Run](#check-for-new-firmware-versions-with-a-dry-run)
     - [Procedure](#procedure-2)
+  - [Load Firmware from Nexus](#load-firmware-from-nexus)
   - [Load Firmware from RPM or ZIP file](#load-firmware-from-rpm-or-zip-file)
 
 ---
@@ -417,65 +418,76 @@ Update the firmware on any devices indicating a new version is needed.
 
 This procedure will read all RPMs in the Nexus repository and upload firmware images to S3 and create image records for firmware not already in FAS.
 
-1. Check the loader status:
-```bash
-ncn-m001# cray fas loader list | grep loaderStatus
-```
-This will return a `ready` or `busy` status.
-```bash
-loaderStatus = "ready"
-```
-The loader can only run one job at a time, if the loader is `busy`, it will return an error on any attempt to create an additional job.
+1. Check the loader status.
+    ```bash
+    ncn-m001# cray fas loader list | grep loaderStatus
+    ```
 
-2. Run the loader Nexus command:
-```bash
-ncn-m001# cray fas loader nexus create
-```
-This will return an ID which will be used to check the status of the run
-```bash
-loaderRunID = "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce"
-```
-**NOTE:** Depending on how many files are in Nexus and how large those files are, the loader may take several minutes to complete.
+    This will return a `ready` or `busy` status.
 
-3. Check the results of the loader run:
-```bash
-ncn-m001# cray fas loader describe *loaderRunID* --format json
-```
-**NOTE:** `*loadRunID*` is the ID from step #2 above in that case "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce".
-Use the `--format json` to make it easier to read.
-```bash
-{
-  "loaderRunOutput": [
-    "2021-07-20T18:17:58Z-FWLoader-INFO-Starting FW Loader, LOG_LEVEL: INFO; value: 20",
-    "2021-07-20T18:17:58Z-FWLoader-INFO-urls: {'fas': 'http://cray-fas', 'fwloc': 'file://download/'}",
-    "2021-07-20T18:17:58Z-INFO: LOG_LEVEL: DEBUG; value: 10",
-    "2021-07-20T18:17:58Z-INFO: NEXUS_ENDPOINT: http://nexus.nexus.svc.cluster.local",
-    "2021-07-20T18:17:58Z-INFO: NEXUS_REPO: shasta-firmware",
-    "2021-07-20T18:17:58Z-INFO: Repomd URL: http://nexus.nexus.svc.cluster.local/repository/shasta-firmware/repodata/repomd.xml",
-    "2021-07-20T18:17:58Z-DEBUG: Starting new HTTP connection (1): nexus.nexus.svc.cluster.local:80",
-    "2021-07-20T18:17:58Z-DEBUG: http://nexus.nexus.svc.cluster.local:80 \"GET /repository/shasta-firmware/repodata/repomd.xml HTTP/1.1\" 200 3080",
-    "2021-07-20T18:17:58Z-INFO: Packages URL: http://nexus.nexus.svc.cluster.local/repository/shasta-firmware/repodata/7f727fc9c4a8d0df528798dc85f1c5178128f3e00a0820a4d07bf9842ddcb6e1-primary.xml.gz",
-    "2021-07-20T18:17:58Z-DEBUG: Starting new HTTP connection (1): nexus.nexus.svc.cluster.local:80",
-    "2021-07-20T18:17:58Z-DEBUG: http://nexus.nexus.svc.cluster.local:80 \"GET /repository/shasta-firmware/repodata/7f727fc9c4a8d0df528798dc85f1c5178128f3e00a0820a4d07bf9842ddcb6e1-primary.xml.gz HTTP/1.1\" 200 6137",
-    ...
-    ...
-    "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for e7b20c7ae98611eb880aa2c40cff7c62/nc-1.5.15.itb",
-    "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for ec324d05e98611ebbb9da2c40cff7c62/rom.ima_enc",
-    "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for e74c5977e98611eb8e9aa2c40cff7c62/cc-1.5.15.itb",
-    "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for e1feb6d6e98611eb877aa2c40cff7c62/accfpga_nvidia_2.7.tar.gz",
-    "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for dc830cb2e98611ebb4d2a2c40cff7c62/A48_2.40_02_24_2021.signed.flash",
-    "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for e28626d4e98611ebb0a7a2c40cff7c62/wnc.i210-p2sn01.tar.gz",
-    "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for eee87acde98611eba8f4a2c40cff7c62/image.RBU",
-    "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for de3d01bee98611eb9affa2c40cff7c62/A47_2.40_02_23_2021.signed.flash",
-    "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for e8ab6f61e98611eb913fa2c40cff7c62/ex235n.bios-1.1.1.tar.gz",
-    "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for e8ab6f61e98611eb913fa2c40cff7c62/ex235n.bios-1.1.1.tar.gz",
-    "2021-07-20T18:19:04Z-FWLoader-INFO-finished updating images ACL",
-    "2021-07-20T18:19:04Z-FWLoader-INFO-*** Number of Updates: 24 ***"
-  ]
-}
-```
-A successful run will end with `*** Number of Updates: x ***`.
-**NOTE:** The FAS loader will not overwrite image records already in FAS. Number of Updates will be the number of new images found in Nexus. If the number is 0, all images were already in FAS.
+    ```bash
+    loaderStatus = "ready"
+    ```
+
+    The loader can only run one job at a time, if the loader is `busy`, it will return an error on any attempt to create an additional job.
+
+2. Run the loader Nexus command.
+
+    ```bash
+    ncn-m001# cray fas loader nexus create
+    ```
+
+    This will return an ID which will be used to check the status of the run.
+
+    ```bash
+    loaderRunID = "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce"
+    ```
+
+    **NOTE:** Depending on how many files are in Nexus and how large those files are, the loader may take several minutes to complete.
+
+3. Check the results of the loader run.
+
+    ```bash
+    ncn-m001# cray fas loader describe *loaderRunID* --format json
+    ```
+
+    **NOTE:** `*loadRunID*` is the ID from step #2 above in that case "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce".
+    Use the `--format json` to make it easier to read.
+
+    ```bash
+    {
+      "loaderRunOutput": [
+        "2021-07-20T18:17:58Z-FWLoader-INFO-Starting FW Loader, LOG_LEVEL: INFO; value: 20",
+        "2021-07-20T18:17:58Z-FWLoader-INFO-urls: {'fas': 'http://cray-fas', 'fwloc': 'file://download/'}",
+        "2021-07-20T18:17:58Z-INFO: LOG_LEVEL: DEBUG; value: 10",
+        "2021-07-20T18:17:58Z-INFO: NEXUS_ENDPOINT: http://nexus.nexus.svc.cluster.local",
+        "2021-07-20T18:17:58Z-INFO: NEXUS_REPO: shasta-firmware",
+        "2021-07-20T18:17:58Z-INFO: Repomd URL: http://nexus.nexus.svc.cluster.local/repository/shasta-firmware/repodata/repomd.xml",
+        "2021-07-20T18:17:58Z-DEBUG: Starting new HTTP connection (1): nexus.nexus.svc.cluster.local:80",
+        "2021-07-20T18:17:58Z-DEBUG: http://nexus.nexus.svc.cluster.local:80 \"GET /repository/shasta-firmware/repodata/repomd.xml HTTP/1.1\" 200 3080",
+        "2021-07-20T18:17:58Z-INFO: Packages URL: http://nexus.nexus.svc.cluster.local/repository/shasta-firmware/repodata/7f727fc9c4a8d0df528798dc85f1c5178128f3e00a0820a4d07bf9842ddcb6e1-primary.xml.gz",
+        "2021-07-20T18:17:58Z-DEBUG: Starting new HTTP connection (1): nexus.nexus.svc.cluster.local:80",
+        "2021-07-20T18:17:58Z-DEBUG: http://nexus.nexus.svc.cluster.local:80 \"GET /repository/shasta-firmware/repodata/7f727fc9c4a8d0df528798dc85f1c5178128f3e00a0820a4d07bf9842ddcb6e1-primary.xml.gz HTTP/1.1\" 200 6137",
+        ...
+        ...
+        "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for e7b20c7ae98611eb880aa2c40cff7c62/nc-1.5.15.itb",
+        "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for ec324d05e98611ebbb9da2c40cff7c62/rom.ima_enc",
+        "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for e74c5977e98611eb8e9aa2c40cff7c62/cc-1.5.15.itb",
+        "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for e1feb6d6e98611eb877aa2c40cff7c62/accfpga_nvidia_2.7.tar.gz",
+        "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for dc830cb2e98611ebb4d2a2c40cff7c62/A48_2.40_02_24_2021.signed.flash",
+        "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for e28626d4e98611ebb0a7a2c40cff7c62/wnc.i210-p2sn01.tar.gz",
+        "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for eee87acde98611eba8f4a2c40cff7c62/image.RBU",
+        "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for de3d01bee98611eb9affa2c40cff7c62/A47_2.40_02_23_2021.signed.flash",
+        "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for e8ab6f61e98611eb913fa2c40cff7c62/ex235n.bios-1.1.1.tar.gz",
+        "2021-07-20T18:19:04Z-FWLoader-INFO-update ACL to public-read for e8ab6f61e98611eb913fa2c40cff7c62/ex235n.bios-1.1.1.tar.gz",
+        "2021-07-20T18:19:04Z-FWLoader-INFO-finished updating images ACL",
+        "2021-07-20T18:19:04Z-FWLoader-INFO-*** Number of Updates: 24 ***"
+      ]
+    }
+    ```
+    A successful run will end with `*** Number of Updates: x ***`.
+
+    **NOTE:** The FAS loader will not overwrite image records already in FAS. `Number of Updates` will be the number of new images found in Nexus. If the number is 0, all images were already in FAS.
 
 ---
 
@@ -488,57 +500,70 @@ This procedure will read a single local RPM (or ZIP) file and upload firmware im
 1. Copy the file to ncn-m001 or one of the other NCNs.
 
 2. Check the loader status:
-```bash
-ncn-m001# cray fas loader list | grep loaderStatus
-```
-This will return a `ready` or `busy` status.
-```bash
-loaderStatus = "ready"
-```
-The loader can only run one job at a time, if the loader is `busy`, it will return an error on any attempt to create an additional job.
 
-3. Run the loader command: (firmware.rpm is the name of the RPM) - If the file is not in the current directory, add the path to the filename.
-```bash
-ncn-m001# cray fas loader create --file firmware.RPM
-```
-This will return an ID which will be used to check the status of the run.
-```bash
-loaderRunID = "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce"
-```
+    ```bash
+    ncn-m001# cray fas loader list | grep loaderStatus
+    ```
 
-4. Check the results of the loader run:
-```bash
-ncn-m001# cray fas loader describe *loaderRunID* --format json
-```
-**NOTE:** `*loadRunID*` is the ID from step #2 above in that case "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce".
-Use the `--format json` to make it easier to read.
-```bash
-{
-  "loaderRunOutput": [
-    "2021-04-28T14:40:45Z-FWLoader-INFO-Starting FW Loader, LOG_LEVEL: INFO; value: 20",
-    "2021-04-28T14:40:45Z-FWLoader-INFO-urls: {'fas': 'http://localhost:28800', 'fwloc': 'file://download/'}",
-    "2021-04-28T14:40:45Z-FWLoader-INFO-Using local file: /ilo5_241.zip",
-    "2021-04-28T14:40:45Z-FWLoader-INFO-unzip /ilo5_241.zip",
-    "Archive:  /ilo5_241.zip",
-    "  inflating: ilo5_241.bin",
-    "  inflating: ilo5_241.json",
-    "2021-04-28T14:40:45Z-FWLoader-INFO-Processing files from file://download/",
-    "2021-04-28T14:40:45Z-FWLoader-INFO-get_file_list(file://download/)",
-    "2021-04-28T14:40:45Z-FWLoader-INFO-Processing File: file://download/ ilo5_241.json",
-    "2021-04-28T14:40:45Z-FWLoader-INFO-Uploading b73a48cea82f11eb8c8a0242c0a81003/ilo5_241.bin",
-    "2021-04-28T14:40:45Z-FWLoader-INFO-Metadata {'imageData': \"{'deviceType': 'nodeBMC', 'manufacturer': 'hpe', 'models': ['ProLiant XL270d Gen10', 'ProLiant DL325 Gen10', 'ProLiant DL325 Gen10 Plus', 'ProLiant DL385 Gen10', 'ProLiant DL385 Gen10 Plus', 'ProLiant XL645d Gen10 Plus', 'ProLiant XL675d Gen10 Plus'], 'targets': ['iLO 5'], 'tags': ['default'], 'firmwareVersion': '2.41 Mar 08 2021', 'semanticFirmwareVersion': '2.41.0', 'pollingSpeedSeconds': 30, 'fileName': 'ilo5_241.bin'}\"}",
-    "2021-04-28T14:40:46Z-FWLoader-INFO-IMAGE: {\"s3URL\": \"s3:/fw-update/b73a48cea82f11eb8c8a0242c0a81003/ilo5_241.bin\", \"target\": \"iLO 5\", \"deviceType\": \"nodeBMC\", \"manufacturer\": \"hpe\", \"models\": [\"ProLiant XL270d Gen10\", \"ProLiant DL325 Gen10\", \"ProLiant DL325 Gen10 Plus\", \"ProLiant DL385 Gen10\", \"ProLiant DL385 Gen10 Plus\", \"ProLiant XL645d Gen10 Plus\", \"ProLiant XL675d Gen10 Plus\"], \"softwareIds\": [], \"tags\": [\"default\"], \"firmwareVersion\": \"2.41 Mar 08 2021\", \"semanticFirmwareVersion\": \"2.41.0\", \"allowableDeviceStates\": [], \"needManualReboot\": false, \"pollingSpeedSeconds\": 30}",
-    "2021-04-28T14:40:46Z-FWLoader-INFO-Number of Updates: 1",
-    "2021-04-28T14:40:46Z-FWLoader-INFO-Iterate images",
-    "2021-04-28T14:40:46Z-FWLoader-INFO-update ACL to public-read for 5ab9f804a82b11eb8a700242c0a81003/wnc.bios-1.1.2.tar.gz",
-    "2021-04-28T14:40:46Z-FWLoader-INFO-update ACL to public-read for 5ab9f804a82b11eb8a700242c0a81003/wnc.bios-1.1.2.tar.gz",
-    "2021-04-28T14:40:46Z-FWLoader-INFO-update ACL to public-read for 53c060baa82a11eba26c0242c0a81003/controllers-1.3.317.itb",
-    "2021-04-28T14:40:46Z-FWLoader-INFO-update ACL to public-read for b73a48cea82f11eb8c8a0242c0a81003/ilo5_241.bin",
-    "2021-04-28T14:40:46Z-FWLoader-INFO-finished updating images ACL",
-    "2021-04-28T14:40:46Z-FWLoader-INFO-removing local file: /ilo5_241.zip",
-    "2021-04-28T14:40:46Z-FWLoader-INFO-*** Number of Updates: 1 ***"
-  ]
-}
-```
-A successful run will end with `*** Number of Updates: x ***`.
-**NOTE:** The FAS loader will not overwrite image records already in FAS. Number of Updates will be the number of new images found in the RPM. If the number is 0, all images were already in FAS.
+    This will return a `ready` or `busy` status.
+
+    ```bash
+    loaderStatus = "ready"
+    ```
+
+    The loader can only run one job at a time, if the loader is `busy`, it will return an error on any attempt to create an additional job.
+
+3. Run the `loader` command.
+
+    firmware.rpm is the name of the RPM. If the file is not in the current directory, add the path to the filename.
+
+    ```bash
+    ncn-m001# cray fas loader create --file firmware.RPM
+    ```
+
+    This will return an ID which will be used to check the status of the run.
+
+    ```bash
+    loaderRunID = "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce"
+    ```
+
+4. Check the results of the loader run.
+
+    ```bash
+    ncn-m001# cray fas loader describe *loaderRunID* --format json
+    ```
+    
+    **NOTE:** `*loadRunID*` is the ID from step #2 above in that case "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce".
+    Use the `--format json` to make it easier to read.
+
+    ```bash
+    {
+      "loaderRunOutput": [
+        "2021-04-28T14:40:45Z-FWLoader-INFO-Starting FW Loader, LOG_LEVEL: INFO; value: 20",
+        "2021-04-28T14:40:45Z-FWLoader-INFO-urls: {'fas': 'http://localhost:28800', 'fwloc': 'file://download/'}",
+        "2021-04-28T14:40:45Z-FWLoader-INFO-Using local file: /ilo5_241.zip",
+        "2021-04-28T14:40:45Z-FWLoader-INFO-unzip /ilo5_241.zip",
+        "Archive:  /ilo5_241.zip",
+        "  inflating: ilo5_241.bin",
+        "  inflating: ilo5_241.json",
+        "2021-04-28T14:40:45Z-FWLoader-INFO-Processing files from file://download/",
+        "2021-04-28T14:40:45Z-FWLoader-INFO-get_file_list(file://download/)",
+        "2021-04-28T14:40:45Z-FWLoader-INFO-Processing File: file://download/ ilo5_241.json",
+        "2021-04-28T14:40:45Z-FWLoader-INFO-Uploading b73a48cea82f11eb8c8a0242c0a81003/ilo5_241.bin",
+        "2021-04-28T14:40:45Z-FWLoader-INFO-Metadata {'imageData': \"{'deviceType': 'nodeBMC', 'manufacturer': 'hpe', 'models': ['ProLiant XL270d Gen10', 'ProLiant DL325 Gen10', 'ProLiant DL325 Gen10 Plus', 'ProLiant DL385 Gen10', 'ProLiant DL385 Gen10 Plus', 'ProLiant XL645d Gen10 Plus', 'ProLiant XL675d Gen10 Plus'], 'targets': ['iLO 5'], 'tags': ['default'], 'firmwareVersion': '2.41 Mar 08 2021', 'semanticFirmwareVersion': '2.41.0', 'pollingSpeedSeconds': 30, 'fileName': 'ilo5_241.bin'}\"}",
+        "2021-04-28T14:40:46Z-FWLoader-INFO-IMAGE: {\"s3URL\": \"s3:/fw-update/b73a48cea82f11eb8c8a0242c0a81003/ilo5_241.bin\", \"target\": \"iLO 5\", \"deviceType\": \"nodeBMC\", \"manufacturer\": \"hpe\", \"models\": [\"ProLiant XL270d Gen10\", \"ProLiant DL325 Gen10\", \"ProLiant DL325 Gen10 Plus\", \"ProLiant DL385 Gen10\", \"ProLiant DL385 Gen10 Plus\", \"ProLiant XL645d Gen10 Plus\", \"ProLiant XL675d Gen10 Plus\"], \"softwareIds\": [], \"tags\": [\"default\"], \"firmwareVersion\": \"2.41 Mar 08 2021\", \"semanticFirmwareVersion\": \"2.41.0\", \"allowableDeviceStates\": [], \"needManualReboot\": false, \"pollingSpeedSeconds\": 30}",
+        "2021-04-28T14:40:46Z-FWLoader-INFO-Number of Updates: 1",
+        "2021-04-28T14:40:46Z-FWLoader-INFO-Iterate images",
+        "2021-04-28T14:40:46Z-FWLoader-INFO-update ACL to public-read for 5ab9f804a82b11eb8a700242c0a81003/wnc.bios-1.1.2.tar.gz",
+        "2021-04-28T14:40:46Z-FWLoader-INFO-update ACL to public-read for 5ab9f804a82b11eb8a700242c0a81003/wnc.bios-1.1.2.tar.gz",
+        "2021-04-28T14:40:46Z-FWLoader-INFO-update ACL to public-read for 53c060baa82a11eba26c0242c0a81003/controllers-1.3.317.itb",
+        "2021-04-28T14:40:46Z-FWLoader-INFO-update ACL to public-read for b73a48cea82f11eb8c8a0242c0a81003/ilo5_241.bin",
+        "2021-04-28T14:40:46Z-FWLoader-INFO-finished updating images ACL",
+        "2021-04-28T14:40:46Z-FWLoader-INFO-removing local file: /ilo5_241.zip",
+        "2021-04-28T14:40:46Z-FWLoader-INFO-*** Number of Updates: 1 ***"
+      ]
+    }
+    ```
+    A successful run will end with `*** Number of Updates: x ***`.
+
+    **NOTE:** The FAS loader will not overwrite image records already in FAS. `Number of Updates` will be the number of new images found in the RPM. If the number is 0, all images were already in FAS.

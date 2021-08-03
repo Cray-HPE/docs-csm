@@ -35,7 +35,7 @@ The inventory hardware filter takes place after the state component filter has b
 
 **IMPORTANT:** There can be a mismatch of hardware models. The model field is human-readable and is human-programmable. In some cases, there can be typos where the wrong model is programmed, which causes issues filtering. If this occurs, query the hardware, find the model name, and add it to the images repository on the desired image.
 
-##### Parameters:
+##### Parameters
 
 * `manufacturer` - Set to Cray, HPE, or Gigabyte.
 * `model` - The Redfish reported model, which can be specified.
@@ -46,7 +46,7 @@ The inventory hardware filter takes place after the state component filter has b
 
 FAS applies images to xname/targets. The image filter is a way to specify an explicit image that should be used. When included with other filters, the image filter reduces the devices considered to only those devices where the image can be applied.
 
-For example, if a user specifies an image that only applies to gigabyte, nodeBMCs, BIOS targets. If all hardware in the system is targeted with an empty stateComponentFilter, FAS would find all devices in the system that can be updated via Redfish, and then the image filter would remove all xname/ targets that this image could not be applied. In this example, FAS would remove any device that is not a gigabyte nodeBMC, as well as any target that is not BIOS.
+For example, if a user specifies an image that only applies to gigabyte, nodeBMCs, BIOS targets. If all hardware in the system is targeted with an empty stateComponentFilter, FAS would find all devices in the system that can be updated via Redfish, and then the image filter would remove all xname/ targets that this image could not be applied. In this example, FAS would remove any device that is not a Gigabyte nodeBMC, as well as any target that is not BIOS.
 
 ##### Parameters
 

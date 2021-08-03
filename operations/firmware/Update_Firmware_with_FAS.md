@@ -121,7 +121,7 @@ After identifying which hardware is in the system, start with the top most item 
 
 ### FAS Admin Procedures
 
-There are several use cases for using the FAS to update firmware on the system. These use cases are intended to be run by system administrators with a good understanding of firmware. Under no circumstances should non-admin users attempt to use FAS or perform a firmware update.
+There are several use cases for using the FAS to update firmware on the system. These use cases are intended to be run by system administrators with a good understanding of firmware. Under no circumstances should non-administrator users attempt to use FAS or perform a firmware update.
 
 -   Perform a firmware update: Update the firmware of an xname's target to the latest, earliest, or an explicit version.
 -   Determine what hardware can be updated by performing a dry-run: The easiest was to determine what can be updated is to perform a dry-run of the update.
