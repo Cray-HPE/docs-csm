@@ -29,7 +29,7 @@ Upgrade a set of compute nodes with the Compute Rolling Upgrade Service \(CRUS\)
         ```bash
         ncn# cray hsm groups members create slurm-nodes --id XNAME
         [[results]]
-        URI = "/hsm/v1/groups/slurm-nodes/members/x0c0s28b0n0"
+        URI = "/hsm/v2/groups/slurm-nodes/members/x0c0s28b0n0"
         ```
 
 2.  Create a group for upgrading nodes \(upgrading label\).

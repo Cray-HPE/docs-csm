@@ -42,7 +42,7 @@ The following are examples of unmet conditions:
     ```bash
     ncn# cray hsm groups create --label failed-node-group
     [[results]]
-    URI = "/hsm/v1/groups/failed-node-group"
+    URI = "/hsm/v2/groups/failed-node-group"
     ```
 
 3.  View the details for the CRUS session again to see if the job started.

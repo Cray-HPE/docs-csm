@@ -14,7 +14,7 @@ The following is an example of partition members:
 
 ### Retrieve Partition Members
 
-Retrieving members of a partition is very similar to how group members are retrieved and modified. No filtering options are available in partitions. However, there are partition and group filtering parameters for the /hsm/v1/State/Components and /hsm/v1/memberships collections, with both essentially working the same way.
+Retrieving members of a partition is very similar to how group members are retrieved and modified. No filtering options are available in partitions. However, there are partition and group filtering parameters for the /hsm/v2/State/Components and /hsm/v2/memberships collections, with both essentially working the same way.
 
 Retrieve only the members array for a single partition:
 
