@@ -293,7 +293,7 @@ ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/csm-service-upgrade.sh
 
 **`IMPORTANT`:** This script will re-try up to three times if failures are encountered -- but if the script seems to hang for thirty minutes or longer without progressing, the administrator should interrupt the script (CTRL-C) and re-run it.
 
-### Stage 5. - Hotfix to workaround known mac-learning issue with 8325. 
+### Stage 5. - Workaround for known mac-learning issue with 8325. 
 
 
 #### Issue description
@@ -316,26 +316,10 @@ ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/csm-service-upgrade.sh
 
 	You can run a NAE script on the 8325 platform switches to resolve mac learning issue.
 
-#### Important information:
-
-	- This NAE script creates a bash script in /tmp and runs every 60s.
-	- The script writes file to a storage every 60s (NAE alert file)
-	- There are no controls over alert status.
-	- Event log is created when a problem is detected
-	
-	“BCML2X has quit unexpectedly, attempting to restart...”
-
-	- You can also grep the error from /var/log/messages
-	- REST-API URI = /rest/v10.04/logs/event?SYSLOG_IDENTIFIER=root&since=yesterday
-	- Delete agent & script after upgrading to 10.06.0130+
-	- Monitor eMMC health if you plan on running for a long time
-	- show system resource | include utiliz
-
 #### The file locations in doc-csm
 
-	- The NAE script (L2X-Watchdog-creates-bash-script.py) is located at: ../docs-csm/troubleshooting/known_issue
-	- Automatic NAE install script (nae_upload.py) is located at: ../docs-csm/troubleshooting/known_issue
-
+	- The NAE script (L2X-Watchdog-creates-bash-script.py) is located at: ../docs-csm/upgrade/1.0/scripts/aruba
+	- Automatic NAE install script (nae_upload.py) is located at: ../docs-csm/upgrade/1.0/scripts/aruba
 
 ### Automated install of NAE script 
 
@@ -351,69 +335,11 @@ NOTE: 	The nae-upload script automatically detects 8325’s and only applies the
 
 **Step 1:** 
 
-Give run permissions for the script: 
+> pit-ncn-001”:~ # ./nae_upload.py
 
-> pit-ncn-m001:~ # chmod +x nae_upload.py
-
-
-**Step 2:** 
-
-> pit-non-m991”:~ # ./nae_upload.py
-
-**step 3:**
+**step 2:**
 
 > Type in your switch password and the script will upload and enable the NAE script. 
-
-### Manually Install of NAE script:
- 
-**Step 1:**
- 
-	To get started, login to an AOS-CX device via the Web User Interface, and click on the Analytics section on the left, then click on the Scripts button on the top middle section.
-
-**Step 2:** 
-
-	On the Scripts page: 
-
-	Install the script from your PC to your AOS-CX device by clicking the Upload button on the scripts page and navigating to the file location on your PC.
-
-**Step 3:**
- 
-	After you have the script on the AOS-CX device, you now need to create an agent. On the Scripts page, you can click the Create Agent button and a Create Agent popup box will appear.
-
-	Give the Agent a name (no spaces).
-
-	NOTE: You can leave all other default values and click Create.
-
-**Step 4:** 
-
-	Navigate you to the Agents page, where you can click on the name of the Agent you made to confirm it is running and no errors are generated. 
-
-	The Network Analytics Engine will monitor the switch and automatically fix the mac learning issue. 
-
-#### Troubleshooting and known error messages: 
-
-Incorrect password: 
-
-> pit-ncn-m001:~ # ./nae_upload.py
-> Switch login password:
-> Traceback (most recent call last):
-> File "./nae_upload.py", line 57, in <module>
-> platform = system.json()
-> File "/usr/lib/python3.6/site-packages/requests/models.py", line 898, in json
-> return complexjson.loads(self.text, **kwargs)
-> File "/usr/lib64/python3.6/site-packages/simplejson/__init__.py", line 518, in loads
-> return _default_decoder.decode(s)
-> File "/usr/lib64/python3.6/site-packages/simplejson/decoder.py", line 373, in decode
-> raise JSONDecodeError("Extra data", s, end, len(s))
-> simplejson.errors.JSONDecodeError: Extra data: line 1 column 5 - line 1 column 27 (char 4 - 26)
-
-Script has already been loaded: 
-
-> pit-ncn-m001:~ # ./nae_upload.py
-> Switch login password:
-> L2X-Watchdog NAE script is already installed on sw-spine-001.
-> L2X-Watchdog NAE script is already installed on sw-spine-002.
-> loki-ncn-m001:~ #
 
 ## Troubleshooting and Recovering from Errors During or After Upgrade
 
