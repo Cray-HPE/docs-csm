@@ -47,9 +47,9 @@ Example hmn_connections.json row representing an application node with SourceNam
     aliases: {}  
     ```
 
-2. Identify application nodes present in `hmn_connections.json` or the HMN tab of the system's SHCD. 
+2. Identify application nodes present in `hmn_connections.json` or the HMN tab of the system's SHCD. In general, everything in the HMN tab of the SHCD or `hmn_connections.json` file that does not follow the [SHCD/HMN Connections Rules](shcd_hmn_connections_rules.md) should be considered an [application node](../glossary.md#application-node), unless it is a `KVM`.
     
-    If the `hmn_connections.json` is available, then execute the following in the same directory as it. This will print out the HMN rows that are application nodes.
+    If the `hmn_connections.json` file is available, then the following command can be used to show the HMN rows that are application nodes.
     ```bash
     linux# cat hmn_connections.json | jq -rc '.[] | select(.Source |
       test("^((mn|wn|sn|nid|cn|cn\\-|pdu)\\d+|.*(cmc|rcm|kvm|door).*|x\\d+p\\d*|sw-.+|columbia$)"; "i") | not)'
@@ -65,7 +65,7 @@ Example hmn_connections.json row representing an application node with SourceNam
     {"Source":"uan01","SourceRack":"x3000","SourceLocation":"u23","DestinationRack":"x3000","DestinationLocation":"u32","DestinationPort":"j39"},
     ```
 
-    If the HMN Connections.json file is not available, then the HMN tab of SHCD spreadsheet will need to be used instead. In general, everything that does not follow the [SHCD/HMN Connections Rules](shcd_hmn_connections_rules.md) should be considered an [application node](../glossary.md#application-node), unless it is a `KVM`.
+    If the HMN Connections.json file is not available, then the HMN tab of SHCD spreadsheet will need to be used instead. The table below is equivalent to the [example hmn_connections.json output](#hmn-connections-example-output) above.
 
 | Source (J20) | Rack (K20) | Location (L20) | (M20) | Parent (N20) | (O20) | Port (P20) | Destination (Q20) | Rack (R20) | Location (S20) | (T20) | Port (U20) |
 | ------------ | ---------- | -------------- | ----- | ------------ | ----- | ---------- | ----------------- | ---------- | -------------- | ----- | ---------- | 
