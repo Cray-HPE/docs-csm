@@ -294,7 +294,7 @@ NOTE: 	The nae-upload script automatically detects 8325’s and only applies the
 
 Give run permissions for the script: 
 
-> pit-ncn-m001:~ # chmod +x nae-upload.py
+> pit-ncn-m001:~ # chmod +x nae_upload.py
 
 **Step 2:** 
 
