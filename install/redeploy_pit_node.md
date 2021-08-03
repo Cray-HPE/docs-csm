@@ -316,6 +316,18 @@ data so run them only when indicated. Instructions are in the `README` files.
     pit# exit
     ```
 
+1. Optionally, setup conman or serial console if not already on one from any laptop or other system with network connectivity to the cluster.
+    
+    ```bash
+    external# script -a boot.livecd.$(date +%Y-%m-%d).txt
+    external# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+    external# SYSTEM_NAME=eniac
+    external# username=root
+    external# IPMI_PASSWORD=changeme
+    external# ipmitool -I lanplus -U $username -E -H ${SYSTEM_NAME}-ncn-m001-mgmt chassis power status
+    external# ipmitool -I lanplus -U $username -E -H ${SYSTEM_NAME}-ncn-m001-mgmt sol activate
+    ```
+
 <a name="reboot"></a>
 ### 4. Reboot
 
