@@ -33,7 +33,7 @@ The most noteworthy changes since the previous release are described here.
 <a name="deprecating_features"></a>
 ### Deprecating Features
 
-   * HSM v1 REST API has been deprecated as of CSM version 0.9.3. The v1 HSM API’s will be removed in the CSM version 1.3 release.
+   * HSM v1 REST API has been deprecated as of CSM version 0.9.3. The v1 HSM APIs will be removed in the CSM version 1.3 release.
 
 <a name="deprecated_features"></a>
 ### Deprecated Features
