@@ -12,6 +12,7 @@ upgrade_ncn=$1
 
 echo " ****** DATA LOSS ON ${upgrade_ncn} - FRESH OS INSTALL UPON REBOOT ******"
 echo " ****** BACKUP DATA ON ${upgrade_ncn} TO USB OR OTHER SAFE LOCATION ******"
+echo " ****** DATA MANAGED BY K8S/CEPH WILL BE BACKED UP/RESTORED AUTOMATATICALLY ******"
 read -p "Read and act on above steps. Press Enter key to continue ..."
 
 state_name="CSI_HANDOFF_BSS_UPDATE_PARAM"
