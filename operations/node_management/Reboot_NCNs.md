@@ -156,6 +156,8 @@ Before rebooting NCNs:
   * Ensure pre-reboot checks have been completed, including checking the `metal.no-wipe` setting for each NCN. Do not proceed if any of the NCN `metal.no-wipe` settings are zero.
   * Apply any workaround located in /opt/cray/csm/workarounds/ if instructed.  If you did not apply CASMINST-2689 from step 7 above, then please do so now, otherwise you may encounter boot issues.
 
+#### Utility Storage Nodes (Ceph)
+
 1. Reboot each of the NCN storage nodes \(one at a time\).
 
     1. Establish a console session to each NCN storage node.
@@ -215,13 +217,15 @@ Before rebooting NCNs:
 
         **Important:** Ensure `ceph -s` shows that Ceph is healthy BEFORE MOVING ON to reboot the next storage node. Once Ceph has recovered the downed mon, it may take a several minutes for Ceph to resolve clock skew.
 
+#### NCN Worker Nodes
+
 1. Reboot each of the NCN worker nodes \(one at a time\).
 
     **NOTE:** You are doing a single worker at a time, so pleae keep track of what ncn-w0xx you are on for these steps.
 
     1. Establish a console session to the NCN worker node you are rebooting.
 
-        Ensure that ConMan is not running on the worker node being rebooted.
+        **`IMPORTANT:`** If the ConMan console pod is on the node being rebooted you will need to re-establish your session after the Cordon/Drain in step 2
 
         See [Establish a Serial Connection to NCNs](../conman/Establish_a_Serial_Connection_to_NCNs.md) for more information.
 
@@ -234,7 +238,7 @@ Before rebooting NCNs:
     1. reboot the selected NCN worker node \(`ncn-w0xx`\).
 
         1. ```bash
-            ncn-m001# shutdown -r now
+            ncn-w# shutdown -r now
            ```
 
         **`IMPORTANT:`** If the node does not shutdown after 5 mins, then proceed with the power reset below
@@ -259,6 +263,12 @@ Before rebooting NCNs:
 
     1. Watch on the console until the NCN has successfully booted and the login prompt is reached.
 
+    1. Uncordon the node
+
+       ```bash
+       ncn-m# kubectl uncordon <node you just rebooted>
+       ```
+
     1. Run the platform health checks from the [Validate CSM Health](../validate_csm_health.md) procedure.
 
         Verify that the `Check the Health of the Etcd Clusters in the Services Namespace` check from the ncnHealthChecks.sh script returns a healthy report for all members of each etcd cluster.
@@ -272,6 +282,8 @@ Before rebooting NCNs:
     1. Ensure that BGP sessions are reset so that all BGP peering sessions with the spine switches are in an ESTABLISHED state.
 
         See [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
+
+#### NCN Master Nodes
 
 1. Reboot each of the NCN master nodes \(one at a time\).
 
@@ -308,12 +320,6 @@ Before rebooting NCNs:
         Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
 
     1. Watch on the console until the NCN has successfully booted and the login prompt is reached.
-
-    1. Uncordon the node
-
-       ```bash
-       ncn-m# kubectl uncordon <node you just rebooted>
-       ```
 
     1. Run the platform health checks in [Validate CSM Health](../validate_csm_health.md).
 
