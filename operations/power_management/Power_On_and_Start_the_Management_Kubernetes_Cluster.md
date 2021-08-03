@@ -391,7 +391,7 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
     ```bash
     ncn-m001# cray hsm inventory discover create --xnames x3000c0s12b0,x3000c0s20b0
     [[results]]
-    URI = "/hsm/v1/Inventory/DiscoveryStatus/0"
+    URI = "/hsm/v2/Inventory/DiscoveryStatus/0"
     ```
 
 12. Check for NCN status.

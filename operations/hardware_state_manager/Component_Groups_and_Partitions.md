@@ -6,7 +6,7 @@ There is no limit to the number of members a group or partition contains. The on
 
 ### Groups
 
-Groups are collections of components \(primarily nodes\) in /hsm/v1/State/Components. Components can be members of any number of groups. Groups can be created freely, and HSM does not assign them any predetermined meaning.
+Groups are collections of components \(primarily nodes\) in /hsm/v2/State/Components. Components can be members of any number of groups. Groups can be created freely, and HSM does not assign them any predetermined meaning.
 
 If a group has `exclusiveGroup=EXCLUSIVE_LABEL_NAME` set, then a component may only be a member of one group that matches that exclusive label. For example, if the exclusive group label colors is associated with groups blue, red, and green, then a node that is part of the green group could not also be placed in the red group.
 
