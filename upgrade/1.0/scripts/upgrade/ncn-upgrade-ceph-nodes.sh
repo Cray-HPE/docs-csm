@@ -2,6 +2,7 @@
 #
 # Copyright 2021 Hewlett Packard Enterprise Development LP
 #
+
 set -e
 BASEDIR=$(dirname $0)
 . ${BASEDIR}/upgrade-state.sh
@@ -10,6 +11,11 @@ trap 'err_report' ERR
 upgrade_ncn=$1
 
 . ${BASEDIR}/ncn-upgrade-common.sh ${upgrade_ncn}
+
+# Record this state locally instead of using is_state_recorded(),
+# because it does not hurt to re-do the ssh keys, and it is the
+# kind of thing which may need to be re-done in case of problems.
+ssh_keys_done=0
 
 state_name="CEPH_NODES_SET_NO_WIPE"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
@@ -42,6 +48,10 @@ state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     
+    if [[ $ssh_keys_done == "0" ]]; then
+        ssh_keygen_keyscan "${upgrade_ncn}"
+        ssh_keys_done=1
+    fi
     ssh ${upgrade_ncn} 'systemctl stop ceph.target;sleep 30;tar -zcvf /tmp/$(hostname)-ceph.tgz /var/lib/ceph /var/lib/containers /etc/ceph;systemctl start ceph.target'
     scp ${upgrade_ncn}:/tmp/${upgrade_ncn}-ceph.tgz .
 
@@ -56,9 +66,11 @@ state_name="INSTALL_UPGRADE_SCRIPT"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    
-    ssh-keygen -R ${upgrade_ncn} -f /root/.ssh/known_hosts
-    ssh-keyscan -H ${upgrade_ncn} >> ~/.ssh/known_hosts
+
+    if [[ $ssh_keys_done == "0" ]]; then
+        ssh_keygen_keyscan "${upgrade_ncn}"
+        ssh_keys_done=1
+    fi
     ssh $upgrade_ncn "rpm --force -Uvh ${DOC_RPM_NEXUS_URL}"
 
     record_state "${state_name}" ${upgrade_ncn}
@@ -71,6 +83,10 @@ state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
 
+    if [[ $ssh_keys_done == "0" ]]; then
+        ssh_keygen_keyscan "${upgrade_ncn}"
+        ssh_keys_done=1
+    fi
     scp ./${upgrade_ncn}-ceph.tgz $upgrade_ncn:/
     ssh ${upgrade_ncn} 'cd /; tar -xvf ./$(hostname)-ceph.tgz; rm /$(hostname)-ceph.tgz'
 
@@ -105,9 +121,12 @@ state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
 
+    if [[ $ssh_keys_done == "0" ]]; then
+        ssh_keygen_keyscan "${upgrade_ncn}"
+        ssh_keys_done=1
+    fi
     ssh ${upgrade_ncn} '/usr/share/doc/csm/upgrade/1.0/scripts/ceph/ceph-services-stage2.sh'
     ssh ${upgrade_ncn} '/srv/cray/scripts/metal/ntp-upgrade-config.sh'
-
 
     record_state "${state_name}" ${upgrade_ncn}
 else
@@ -118,18 +137,22 @@ fi
 wait_for_health_ok
 
 if [[ ${upgrade_ncn} == "ncn-s001" ]]; then
-  state_name="POST_CEPH_IMAGE_UPGRADE_BUCKETS"
-  state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
-  if [[ $state_recorded == "0" ]]; then
-      echo "====> ${state_name} ..."
+    state_name="POST_CEPH_IMAGE_UPGRADE_BUCKETS"
+    state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+    if [[ $state_recorded == "0" ]]; then
+        echo "====> ${state_name} ..."
 
-      scp /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/create_rgw_buckets.sh $upgrade_ncn:/tmp
-      ssh ${upgrade_ncn} '/tmp/create_rgw_buckets.sh'
+        if [[ $ssh_keys_done == "0" ]]; then
+            ssh_keygen_keyscan "${upgrade_ncn}"
+            ssh_keys_done=1
+        fi
+        scp /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/create_rgw_buckets.sh $upgrade_ncn:/tmp
+        ssh ${upgrade_ncn} '/tmp/create_rgw_buckets.sh'
 
-      record_state "${state_name}" ${upgrade_ncn}
-  else
-      echo "====> ${state_name} has been completed"
-  fi
+        record_state "${state_name}" ${upgrade_ncn}
+    else
+        echo "====> ${state_name} has been completed"
+    fi
 fi
 
 cat <<EOF
@@ -138,6 +161,10 @@ NOTE:
     If below test failed, try to fix it based on test output. Then run current script again
 EOF
 
+if [[ $ssh_keys_done == "0" ]]; then
+    ssh_keygen_keyscan "${upgrade_ncn}"
+    ssh_keys_done=1
+fi
 ssh $upgrade_ncn -t 'GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-storage.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate'
 
 ok_report
