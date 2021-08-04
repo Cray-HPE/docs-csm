@@ -374,7 +374,33 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         Key = "ac31e971-f990-4b5f-821d-c0c18daefb6e/UAN-1.4.0-day-zero.kernel" 
         ```
 
-    14. Obtain the md5sum of the squashfs image, initrd, and kernel.
+    14. After uploading the new image, initrd, and kernel to S3, use the `cray artifacts` 
+        command to get the s3 generated etag value for each artifact.
+
+        ```bash
+        ncn-m001# cray artifacts describe boot-images ${NEW_IMAGE_ID}/rootfs
+        [artifact]
+        AcceptRanges = "bytes"
+        LastModified = "2021-05-05T00:25:21+00:00"
+        ContentLength = 1647050752
+        ETag = "\"db5582fd817c8a8dc084e1b8b4f0ea3b-197\""  <---
+        ContentType = "binary/octet-stream"
+         
+        [artifact.Metadata]
+        md5sum = "cb6a8934ad3c483e740c648238800e93"
+
+        ncn-m00# cray artifacts describe boot-images ${NEW_IMAGE_ID}/initrd
+        ...
+        
+        ncn-m001# cray artifacts describe boot-images ${NEW_IMAGE_ID}/kernel
+        ...
+        ```
+
+        Note that when adding the etag to the IMS manifest below, remove the quotation 
+        marks from the etag value. So, for the above artifact, the etag would be 
+        `db5582fd817c8a8dc084e1b8b4f0ea3b-197`.
+
+    15. Obtain the md5sum of the squashfs image, initrd, and kernel.
 
         ```bash
         ncn-m001# md5sum UAN-1.4.0-day-zero.squashfs initrd vmlinuz
@@ -383,19 +409,21 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         5edcf3fd42ab1eccfbf1e52008dac5b9  vmlinuz
         ```
 
-    15. Use the image id from Step 1 to print out all the IMS details about the current UAN image.
+    16. Use the image id from Step 1 to print out all the IMS details about the current UAN image.
 
         ```bash
         ncn-m001# cray ims images describe c880251d-b275-463f-8279-e6033f61578b
         created = "2021-03-24T18:00:24.464755+00:00"
         id = "c880251d-b275-463f-8279-e6033f61578b"
-        name = "cray-shasta-uan-cos-sles15sp1.x86_64-0.1.32"[link]
+        name = "cray-shasta-uan-cos-sles15sp1.x86_64-0.1.32"
+        
+        [link]
         etag = "d4e09fb028d5d99e4a0d4d9b9d930e13"
         path = "s3://boot-images/c880251d-b275-463f-8279-e6033f61578b/manifest.json"
         type = "s3"
         ```
 
-    16. Use the path of the manifest.json file to download that JSON to a local file. Omit everything before the image id in the cray artifacts get boot-images command, as shown in the following example what does this sentence even mean? should we cut it?.
+    17. Use the path of the manifest.json file to download that JSON to a local file.
 
         ```bash
         ncn-m001# cray artifacts get boot-images \
@@ -436,25 +464,25 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         }
         ```
 
-        Alternatively, a manifest.json can be created from scratch. In that case, create a new hexadecimal value for the `etag` if the image referred to by the manifest does not already have one. The `etag` field cannot be left blank.
+        Alternatively, a mainfest.json can be created from scratch.
 
-    17. Replace the path and md5 values of the initrd, kernel, and rootfs with the values obtained in substeps m and n.
+    18. Replace the path, md5, and etag values of the initrd, kernel, and rootfs with the values obtained in substeps above.
 
-    18. Update the value for the `"created"` line in the manifest with the output of the following command:
+    19. Update the value for the `"created"` line in the manifest with the output of the following command:
 
         ```bash
         ncn-m001# date '+%Y%m%d%H%M%S'
         ```
 
-    19. Verify that the modified JSON file is still valid.
+    20. Verify that the modified JSON file is still valid.
 
         ```bash
         ncn-m001# cat manifest.json | jq
         ```
 
-    20. Save the changes to the file.
+    21. Save the changes to the file.
 
-    21. Upload the updated manifest.json file.
+    22. Upload the updated manifest.json file.
 
         ```bash
         ncn-m001# cray artifacts create boot-images \
@@ -463,7 +491,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         Key = "ac31e971-f990-4b5f-821d-c0c18daefb6e/manifest.json"  
         ```
 
-    22. Update the IMS image to use the new uan-manifest.json file.
+    23. Update the IMS image to use the new uan-manifest.json file.
 
         ```bash
         ncn-m001# cray ims images update ${NEW_IMAGE_ID} \
