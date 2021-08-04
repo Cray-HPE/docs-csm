@@ -14,7 +14,7 @@ upgrade_ncn=$1
 cat <<EOF
 NOTE:
 
-  On the stable ncn (master node), start a separate terminal that will watch the status of the ceph cluster.
+  On the stable NCN (master node), start a separate terminal that will watch the status of the Ceph cluster.
 
   ncn-m001# watch ceph -s
 

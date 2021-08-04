@@ -1,6 +1,6 @@
 ## Create Internal User Accounts in the Keycloak Shasta Realm
 
-The following procedure can be used to manually create a user in the Keycloak `Shasta` realm. New accounts can be created with the Keycloak UI.
+The following manual procedure can be used to create a user in the Keycloak `Shasta` realm. New accounts can be created with the Keycloak UI.
 
 New admin and user accounts are authenticated with Keycloak. Authenticated accounts are needed to use the Cray CLI.
 

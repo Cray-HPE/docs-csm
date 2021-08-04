@@ -451,7 +451,7 @@ The configuration workflow described here is intended to help understand the exp
     ```
 
 2. Compare your number of OSDs to the output below. 
-   > **NOTE:**  If your ceph cluster is large and has a lot of nodes, you can specify a node after the below command to limit the results.
+   > **NOTE:**  If your Ceph cluster is large and has a lot of nodes, you can specify a node after the below command to limit the results.
 
     ```bash
      ncn-s001:~ # ceph orch device ls
@@ -499,9 +499,9 @@ The configuration workflow described here is intended to help understand the exp
     ceph mgr fail $(ceph mgr dump | jq -r .active_name)
     ```
 
-    Give it a minute then re-check `ceph orch` ls to see if the drives are still showing as available. If so, then proceed to the next step.
+    Give it a minute then re-check `ceph orch device ls` to see if the drives are still showing as available. If so, then proceed to the next step.
 
-4. ssh to the host and look at `lsblk` output and check against the device from the above ceph `orch device ls`
+4. `ssh` to the host and look at `lsblk` output and check against the device from the above `ceph orch device ls`
 
     ```bash
     ncn-s001:~ # lsblk
@@ -548,7 +548,7 @@ The configuration workflow described here is intended to help understand the exp
     ncn-s# cephadm shell -- ceph-volume inventory --format json-pretty | jq -r '.[]|select(.available==true)|.path'
     ```
 
-1. Wipe the drive ONLY after you have confirmed the drive is not being used by the current ceph cluster via options 1, 2, or both
+1. Wipe the drive ONLY after you have confirmed the drive is not being used by the current Ceph cluster via options 1, 2, or both
 
     ```bash
     example: ceph orch device zap ncn-s002 /dev/sdc --force 

@@ -140,7 +140,7 @@ These ACLs are designed to block traffic from the node management network to and
    seq 80 deny ip 10.104.0.0/14 10.100.0.0/14
    ```
 
-1. Apply ACL to a VLANs
+1. Apply ACL to VLANs
 
    ```
    sw-leaf-001(config)#

@@ -24,7 +24,7 @@ access-list ip nmn-hmn
     90 permit any any any
 ```
 
-Apply ACL to a VLANs:
+Apply ACL to VLANs:
 ```
 sw-24g03(config)# vlan 2
 sw-s24g03(config-vlan-2)# apply access-list ip nmn-hmn in

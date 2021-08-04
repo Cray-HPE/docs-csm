@@ -28,7 +28,7 @@ The `cray` CLI only needs to be initialized once per user on a node.
    If LDAP configuration was enabled, then use a valid account in LDAP instead of the example account 'vers'.
 
    If LDAP configuration was not enabled, or is not working, then a Keycloak local account could be created. 
-   See [Configure Keycloak Account](configure_keycloak_account.md) to create this local account in Keycloak 
+   See [Configure Keycloak Account](CSM_product_management/Configure_Keycloak_Account.md) to create this local account in Keycloak 
    and then use it instead of the example account 'vers'.
 
    ```bash
