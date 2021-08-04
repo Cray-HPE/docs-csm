@@ -873,6 +873,8 @@ ncn# cray auth login
 
 Verify that the output of the command reports success. The current user is now authorized to use the CLI.
 
+**Authorization Is Local to a Host:** whenever you are using the CLI (`cray` command) on a host (e.g. a workstation or NCN) where it has not been used before, it is necessary to authenticate on that host using `cray auth login`.  There is no mechanism to distribute CLI authorization amongst hosts.
+
 <a name="uas-uai-init-cli-debug"></a>
 #### 5.1.4 CLI Troubleshooting
 
