@@ -608,7 +608,7 @@ External DNS, along with the Customer Access Network \(CAN\), Border Gateway Pro
   * [Ingress Routing](network/external_dns/Ingress_Routing.md)
   * [Add NCNs and UANs to External DNS](network/external_dns/Add_NCNs_and_UANs_to_External_DNS.md)
   * [External DNS Failing to Discover Services Workaround](network/external_dns/External_DNS_Failing_to_Discover_Services_Workaround.md)
-  * [Troubleshoot Connectivity to Services with External IPs](network/external_dns/Troubleshoot_Systems_Not_Provisioned_with_External_IPs.md)
+  * [Troubleshoot Connectivity to Services with External IP addresses](network/external_dns/Troubleshoot_Systems_Not_Provisioned_with_External_IP_Addresses.md)
   * [Troubleshoot DNS Configuration Issues](network/external_dns/Troubleshoot_DNS_Configuration_Issues.md)
 
 

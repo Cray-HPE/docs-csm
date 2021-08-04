@@ -28,7 +28,7 @@ The speakers get their peering configuration from the MetalLB ConfigMap. This co
 
 ### CAN Configuration
 
-This network has two MetalLB address pools, one for static IP allocation and the other for dynamic IP allocation. Static allocation guarantees the same IP allocation for services using this pool across deployment and installations. Dynamic allocations means that the allocated IPs will be in this pool, but may change depending on the timing and ordering of the IP allocation.
+This network has two MetalLB address pools, one for static IP allocation and the other for dynamic IP allocation. Static allocation guarantees the same IP allocation for services using this pool across deployment and installations. Dynamic allocations means that the allocated IP addresses will be in this pool, but may change depending on the timing and ordering of the IP allocation.
 
 View the address pool configurations in the MetalLB ConfigMap after localization occurs. The MetalLB ConfigMap should not be edited directly. The following is an example of the values in the ConfigMap:
 

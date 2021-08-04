@@ -25,7 +25,7 @@ It is assumed that you have connectivity to the switch.
 
 ## Configure VLAN
 
-**Cray Site Init (CSI) generates the IPs used by the system, below are samples only.**
+**Cray Site Init (CSI) generates the IP addresses used by the system, below are samples only.**
 The VLAN information is located in the network YAML files. Below are examples.
 
 1. The aggregation switches will have VLAN interfaces in NMN, HMN networks

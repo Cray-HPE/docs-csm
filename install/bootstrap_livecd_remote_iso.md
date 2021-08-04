@@ -446,9 +446,9 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       pit# /root/bin/csi-setup-vlan007.sh $can_cidr
       ```
 
-1. Check that IPs are set for each interface and investigate any failures.
+1. Check that IP addresses are set for each interface and investigate any failures.
 
-    1. Check IPs, do not run tests if these are missing and instead start triage.
+    1. Check IP addresses, do not run tests if these are missing and instead start triage.
 
        ```bash
        pit# wicked show bond0 vlan002 vlan004 vlan007

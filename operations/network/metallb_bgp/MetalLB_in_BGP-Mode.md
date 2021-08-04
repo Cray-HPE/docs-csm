@@ -4,11 +4,11 @@ MetalLB is a component in Kubernetes that manages access to LoadBalancer service
 
 MetalLB can run in either Layer2-mode or BGP-mode for each address pool it manages. BGP-mode is used for the NMN, HMN, and CAN. This enables true load balancing \(Layer2-mode does failover, not load balancing\) and allows for a more robust layer 3 configuration for these networks.
 
-In BGP-mode, the MetalLB speakers will peer with the BGP router on the spine switches and advertise the service LoadBalancer IPs. The BGP routers will accept those advertised prefixes and add them to the route table. The spines are configured with Equal-Cost Multi-Path \(ECMP\), meaning that each of these BGP route prefixes will load balance to any of the workers that has advertised the prefix. This process allows clients outside the cluster with access to the NMN, HMN, or CAN to be able to route to these Kubernetes services.
+In BGP-mode, the MetalLB speakers will peer with the BGP router on the spine switches and advertise the service LoadBalancer IP addresses. The BGP routers will accept those advertised prefixes and add them to the route table. The spines are configured with Equal-Cost Multi-Path \(ECMP\), meaning that each of these BGP route prefixes will load balance to any of the workers that has advertised the prefix. This process allows clients outside the cluster with access to the NMN, HMN, or CAN to be able to route to these Kubernetes services.
 
 BGP peering is only between the MetalLB speakers and the spine switches. It does not do any peering beyond that.
 
-The routes in the BGP route table will only be the IPs of the Kubernetes LoadBalancer services. This is the fifth column displayed in the output of the following command:
+The routes in the BGP route table will only be the IP addresses of the Kubernetes LoadBalancer services. This is the fifth column displayed in the output of the following command:
 
 ```bash
 ncn-w001# kubectl get service -A | grep LoadBalancer

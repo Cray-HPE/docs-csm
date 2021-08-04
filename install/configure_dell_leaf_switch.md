@@ -57,7 +57,7 @@ Set the description to indicate the appropriate switch names and ports from the 
 
 ## Configure VLAN
 
-**Cray Site Init (CSI) generates the IPs used by the system, below are samples only.**
+**Cray Site Init (CSI) generates the IP addresses used by the system, below are samples only.**
 The VLAN information is located in the network YAML files. Below are examples.
 1. The leaf switches will have VLAN interfaces in NMN and the HMN networks.
 

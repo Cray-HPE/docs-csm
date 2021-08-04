@@ -56,7 +56,7 @@ The External DNS instance currently does not support zone transfer.
 * [Ingress Routing](Ingress_Routing.md)
 * [Add NCNs and UANs to External DNS](Add_NCNs_and_UANs_to_External_DNS.md)
 * [External DNS Failing to Discover Services Workaround](External_DNS_Failing_to_Discover_Services_Workaround.md)
-* [Troubleshoot Connectivity to Services with External IPs](Troubleshoot_Systems_Not_Provisioned_with_External_IPs.md)
+* [Troubleshoot Connectivity to Services with External IP addresses](Troubleshoot_Systems_Not_Provisioned_with_External_IP_Addresses.md)
 * [Troubleshoot DNS Configuration Issues](Troubleshoot_DNS_Configuration_Issues.md)
 
 
