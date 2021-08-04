@@ -267,7 +267,7 @@ ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-worker.
 
 > NOTE: Run the script once each for all worker nodes. Follow output of above script carefully. The script will pause for manual interaction
 
-> NOTE: It is expected that some pods may be in bad state during a worker node upgrade. This is because of temporarily lack of computing resources during a worker upgrade. Once the worker node has been upgraded and rejoined cluster, those pods will be up and running again. All critical services have more than one replica so if one pod is down, the service is still available. 
+> NOTE: It is expected that some pods may be in bad state during a worker node upgrade. This is because of a temporary lack of computing resources during a worker upgrade. Once the worker node has been upgraded and rejoined cluster, those pods will be up and running again. All critical services have more than one replica so if one pod is down, the service is still available. 
 
 #### Stage 3.3
 
