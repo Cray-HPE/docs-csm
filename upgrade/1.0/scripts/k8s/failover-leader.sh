@@ -12,7 +12,7 @@ fi
 
 worker=$1
 
-# For each postgres pod running on the specificed worker, if it is the master (aka leader or primary), failover to a different cluster member
+# For each postgres pod running on the specified worker, if it is the master (aka leader or primary), failover to a different cluster member
 while read namespace podname
 do
     echo "NAME : $podname"
@@ -27,14 +27,14 @@ do
     fi
 
     # An http 200 response code is returned only if the pod is the master  of the postgres cluster
-    master="$(kubectl exec $podname -c postgres -n $namespace -- curl -sL -w "%{http_code}" -I -X GET -H "Content-Type: application" http://localhost:8008/master -o /dev/null)"
+    master="$(kubectl exec $podname -c postgres -n $namespace -- curl -sL -w "%{http_code}" -I -X GET http://localhost:8008/master -o /dev/null)"
 
     if [ "$master" == "200" ]
     then
         echo "$podname is master - failover to $new_master"
         kubectl exec $podname -c postgres -n $namespace -- patronictl failover --master $podname --candidate $new_master --force 2>/dev/null
-        while [ $(kubectl exec $new_master -c postgres -n $namespace -- curl -sL -w "%{http_code}" -I -X GET -H "Content-Type: application" http://localhost:8008/master -o /dev/null) != 200 ] ; do echo "  waiting for master to respond"; sleep 2; done
+        while [ $(kubectl exec $new_master -c postgres -n $namespace -- curl -sL -w "%{http_code}" -I -X GET http://localhost:8008/master -o /dev/null) != 200 ] ; do echo "  waiting for master to respond"; sleep 2; done
     else
         echo "$podname is not master - do nothing"
     fi
-done < <(kubectl get pods -A -l application=spilo -o wide | grep -v NAME | grep $worker | awk '{print $1" " " "$2}')
+done < <(kubectl get pods -A -l application=spilo --no-headers=true -o wide | grep $worker | awk '{print $1" " " "$2}')
