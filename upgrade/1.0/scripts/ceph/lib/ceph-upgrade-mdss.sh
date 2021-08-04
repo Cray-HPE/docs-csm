@@ -25,7 +25,7 @@ function upgrade_mds () {
   ceph orch ps --daemon-type mds
   ceph fs status
 
-  date=$(date +%m%e.%H%M)
+  date=$(date +%m%d%y.%H%M)
  
   echo "Backing up the Ceph MDS Journal"
   for mds_node in $(ceph mds metadata -f json-pretty|jq -r '.[].name'|cut -d . -f 2)
