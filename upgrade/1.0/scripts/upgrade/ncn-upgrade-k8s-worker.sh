@@ -59,6 +59,8 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+${BASEDIR}/../k8s/failover-leader.sh $upgrade_ncn
+
 drain_node $upgrade_ncn
 
 ${BASEDIR}/ncn-upgrade-wipe-rebuild.sh $upgrade_ncn
