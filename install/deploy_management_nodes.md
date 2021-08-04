@@ -695,7 +695,7 @@ Observe the output of the checks and note any failures, then remediate them.
    > Total Tests: 7, Total Passed: 7, Total Failed: 0, Total Execution Time: 1.4246 seconds
    > ```
 
-   **`Note`**: Please refer to the **Utility Storage** section of the Admin guide to help resolve any failed tests.
+   **`Note`**: Please see [Utility Storage](../operations/utility_storage/Utility_Storage.md) to help resolve any failed tests.
 
 1. Check Kubernetes
 
