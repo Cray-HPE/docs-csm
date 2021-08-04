@@ -11,6 +11,10 @@
     2. [Worker](#management-node-worker)
     3. [Storage](#management-node-storage)
 5. [Application Node](#application-node)
+    1. [Single Node Chassis](#application-node-single-node-chassis)
+        1. [Building xnames for nodes in a single application node chassis](#application-node-dual-node-chassis-xname)
+    2. [Dual Node Chassis](#application-node-dual-node-chassis)
+        1. [Building xnames for nodes in a dual application node chassis](#application-node-dual-node-chassis-xname) 
 6. [Columbia Slingshot Switch](#columbia-slingshot-switch)
 7. [PDU Cabinet Controller](#pdu-cabinet-controller)
 8. [Cooling Door](#cooling-door)
@@ -369,8 +373,8 @@ A compute node chassis with 2 nodes located in slot 8 of cabinet 3000. NID 1 is 
 #### HMN Connections
 The HMN connections representation for the two SHCD table rows above.
 ```json
-{"Source":"nid000001","SourceRack":"x3000","SourceLocation":"u08","SourceSubLocation":"R","DestinationRack":"x3000","DestinationLocation":"u40","DestinationPort":"j37"}
-{"Source":"nid000002","SourceRack":"x3000","SourceLocation":"u08","SourceSubLocation":"L","DestinationRack":"x3000","DestinationLocation":"u40","DestinationPort":"j38"}
+{"Source":"nid000001","SourceRack":"x3000","SourceLocation":"u08","SourceSubLocation":"L","DestinationRack":"x3000","DestinationLocation":"u40","DestinationPort":"j37"}
+{"Source":"nid000002","SourceRack":"x3000","SourceLocation":"u08","SourceSubLocation":"R","DestinationRack":"x3000","DestinationLocation":"u40","DestinationPort":"j38"}
 ```
 > Note that Source values like `cn1` and `cn-01` are equivalent to the value `nid000001`
 
@@ -702,7 +706,93 @@ Management Switch Connector:
 
 <a name="application-node"></a>
 ## Application Node
-The naming conventions for application nodes can be unique to a system. Refer to the [application node config procedure](create_application_node_config_yaml.md) for the rules related to application nodes.
+
+The Source field needs to match these conditions to be considered an application node:
+* Has the prefix of:
+  * `uan`
+  * `gn`
+  * `ln`
+  > The naming conventions for application nodes can be unique to a system. Refer to the [application node config procedure](create_application_node_config_yaml.md) for the process to to adding additional Source name prefixes for application nodes.
+
+
+<a name="application-node-single-node-chassis"></a>
+### Single Node Chassis
+
+A single application node chassis needs to match these additional conditions:
+* No SourceParent defined
+* No SourceSubLocation defined
+
+This convention applies to all application nodes that have a single node in a chassis.
+
+
+#### SHCD
+Example application node is in slot 4 of cabinet 3000, and its BMC is connected to port 25 of management leaf switch in slot 14 of cabinet 3000. 
+
+| Source          | Rack  | Location |     | Parent          |     | Port | Destination | Rack   | Location |     | Port |
+| --------------- | ----- | -------- | --- | --------------- | --- | ---- | ----------- | ------ | -------- | --- | ---- | 
+| uan01           | x3000 | u04      | -   |                 |     | j3   | sw-smn01    | x3000  | u14      | -   | j25  |
+
+#### HMN Connections
+The HMN connections representation for the SHCD table row above.
+```json
+{"Source":"uan01","SourceRack":"x3000","SourceLocation":"u04","DestinationRack":"x3000","DestinationLocation":"u14","DestinationPort":"j25"}
+```
+
+#### Building xnames for nodes in a single application node chassis
+The xname format for nodes takes the form of `xXcCsSbBnN`:
+  - xX: where `X` is the Cabinet or Rack identification number.
+  - cC: where `C` is the chassis identification number. This should be `0`.
+  - sS: where `S` is the lowest slot the node chassis occupies.
+  - bB: where `B` is the ordinal of the node BMC. This should be `0`.
+  - nN: where `N` is the ordinal of the node This should be `0`.
+
+For example, if an application node is in slot 4 of cabinet 3000, then it would have `x3000c0s4b0n0` as its xname.  
+ 
+<a name="application-node-dual-node-chassis"></a>
+### Dual Node Chassis
+Additional matching conditions:
+
+* SourceSubLocation field contains one of: `L`, `l`, `R`, `r`.
+
+In addition to the top-level compute node naming requirements when they are 2 nodes in a single chassis the SourceSubLocation is required. The SourceSubLocation can contain one of the following values: `L`, `l`, `R`, `r`. These values are used to determine the BMC ordinal for the node.
+* `L`, `l` translates into the xname having `b1`
+  * Such as x3000c0s10b1b0
+* `R`, `r` translates into the xname having `b2`
+  * Such as x3000c0s10b1b0
+
+This convention applies to all application nodes that have two nodes in a single chassis.
+
+#### SHCD
+A application node chassis with 2 nodes located in slot 8 of cabinet 3000. uan01 is on the left side of the chassis, and uan02 is on the right side. The two node BMCs are connected to ports 37 and 38 of the management leaf switch in slot 40 of cabinet 3000. 
+
+| Source          | Rack  | Location |     | Parent          |     | Port | Destination | Rack   | Location |     | Port |
+| --------------- | ----- | -------- | --- | --------------- | --- | ---- | ----------- | ------ | -------- | --- | ---- | 
+| uan01           | x3000 | u08      | L   |                 | -   | j03  | sw-smn01    | x3000  | u40      | -   | j38  |
+| uan02           | x3000 | u08      | R   |                 | -   | j03  | sw-smn01    | x3000  | u40      | -   | j37  |
+> Note that Source values like `cn1` and `cn-01` are equivalent to the value `nid000001`
+
+#### HMN Connections
+The HMN connections representation for the two SHCD table rows above.
+```json
+{"Source":"uan01","SourceRack":"x3000","SourceLocation":"u08","SourceSubLocation":"L","DestinationRack":"x3000","DestinationLocation":"u40","DestinationPort":"j37"}
+{"Source":"uan02","SourceRack":"x3000","SourceLocation":"u08","SourceSubLocation":"R","DestinationRack":"x3000","DestinationLocation":"u40","DestinationPort":"j38"}
+```
+
+<a name="application-node-dual-node-chassis-xname"></a>
+#### Building xnames for nodes in a dual application node chassis
+
+The xname format for nodes takes the form of `xXcCsSbBnN`:
+  - xX: where `X` is the Cabinet or Rack identification number.
+  - cC: where `C` is the chassis identification number. This should be `0`.
+  - sS: where `S` is the lowest slot the node chassis occupies.
+  - bB: where `B` is the ordinal of the node BMC.
+    - If the SourceSubLocation is `L` or `l`, then this should be `1`.
+    - If the SourceSubLocation is `R` or `r`, then this should be `2`.
+  - nN: where `N` is the ordinal of the node This should be `0`.
+
+For example:
+  - If an application node is in slot 8 of cabinet 3000 with a SourceSubLocation of `L`, then it would have `x3000c0s8b1n0` as its xname.  
+  - If an application node is in slot 8 of cabinet 3000 with a SourceSubLocation of `R`, then it would have `x3000c0s8b2n0` as its xname.  
 
 <a name="columbia-slingshot-switch"></a>
 ## Columbia Slingshot Switch
