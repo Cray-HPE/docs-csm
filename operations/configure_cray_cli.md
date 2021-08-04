@@ -46,6 +46,21 @@ The `cray` CLI only needs to be initialized once per user on a node.
    Initialization complete.
    ```
 
+1. Verify the `cray` CLI is operational.
+    ```bash
+    ncn# cray artifacts buckets list -vvv
+    ```
+
+    Expected output, if an error occurs see the troubleshooting section below in this topic. 
+    ```
+    Loaded token: /root/.config/cray/tokens/api_gw_service_nmn_local.vers
+    REQUEST: PUT to https://api-gw-service-nmn.local/apis/sts/token
+    OPTIONS: {'verify': False}
+    S3 credentials retrieved successfully
+    results = [ "alc", "badger", "benji-backups", "boot-images", "etcd-backup", "fw-update", "ims", "install-artifacts", "nmd", "postgres-backup",
+    "prs", "sat", "sds", "sls", "sma", "ssd", "ssm", "vbis", "velero", "wlm",]
+    ```
+
 ## Troubleshooting
 
 ***NOTE:***  While resolving these issues is beyond the scope of this section, more information about what is failing can be found by adding `-vvvvv` to the `cray init ...` commands.

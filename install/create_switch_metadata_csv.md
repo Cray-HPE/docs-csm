@@ -56,12 +56,12 @@ Spine and aggregation switches use the format `xXcChHsS`. Leaf switches use `xXc
 2. Each spine or aggregation switch will follow this format: `xXcChHsS`
     > This format also applies to CDU switches that are in a River cabinet that make connections to an adjacent Hill cabinet.
     - xX : where "X" is the River cabinet identification number (the figure above is "3000")
-    - cC : where "C" is the cabinet identification number. This should be "0".
+    - cC : where "C" is the chassis identification number. This should be "0".
     - hH : where "H" is the slot number in the cabinet (height)
     - sS : where "S" is the horizontal space number'
 3. Each leaf switch will follow this format: `xXcCwW`:
     - xX : where "X" is the River cabinet identification number (the figure above is "3000")
-    - cC : where "C" is the cabinet identification number. This should be "0".
+    - cC : where "C" is the chassis identification number. This should be "0".
     - wW : where "W" is the slot number in the cabinet (height)
 4. Each CDU switch will follow this format: `dDwW`:
     > If a CDU switch is in a River cabinet, then follow the naming convention in step 2 instead.
