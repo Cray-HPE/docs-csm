@@ -56,7 +56,7 @@ NOTE:     The nae-upload script automatically detects 8325’s and only applies 
 
 **Step 1:** 
 
-> ncn-001”:~ # ./docs-csm/upgrade/1.0/scripts/aruba/nae_upload.py
+> ncn-m001”:~ # ./docs-csm/upgrade/1.0/scripts/aruba/nae_upload.py
 
 **step 2:**
 
@@ -92,7 +92,7 @@ NOTE:     The nae-upload script automatically detects 8325’s and only applies 
 
 Incorrect password: 
 
-> pit-ncn-m001:~ # ./nae_upload.py
+> ncn-m001:~ # ./nae_upload.py
 > Switch login password:
 > Traceback (most recent call last):
 > File "./nae_upload.py", line 57, in <module>
@@ -107,9 +107,9 @@ Incorrect password:
 
 Script has already been loaded: 
 
-> pit-ncn-m001:~ # ./nae_upload.py
+> ncn-m001:~ # ./nae_upload.py
 > Switch login password:
 > L2X-Watchdog NAE script is already installed on sw-spine-001.
 > L2X-Watchdog NAE script is already installed on sw-spine-002.
-> loki-ncn-m001:~ #
+
 
