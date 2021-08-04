@@ -178,9 +178,8 @@ data so run them only when indicated. Instructions are in the `README` files.
     ```bash
     pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json
     ```
-    
-1. Ensure the DNS server value is set correctly. If for any reason you have changed the IP address of the DNS server,
-   use that value instead.
+
+1. Ensure the DNS server value is correctly set to point toward Unbound at `10.92.100.225`.
     
     ```bash
     pit# csi handoff bss-update-cloud-init --set meta-data.dns-server=10.92.100.225 --limit Global
