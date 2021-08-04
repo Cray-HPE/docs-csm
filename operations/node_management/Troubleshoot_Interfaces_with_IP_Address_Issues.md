@@ -81,7 +81,7 @@ An NCN has an interface that is failing to assign a static IP address or that ha
 
     -   \(Not Recommended\) Allow the duplicate IP address to exist.
 
-        This is not recommended because it is unstable and can make the work harder to correct down the line. The easiest way to deal with the duplicate is by adding another IP address, and then logging into the duplicate and nullifying it. This block will disable the safeguard for duplicate IPs.
+        This is not recommended because it is unstable and can make the work harder to correct down the line. The easiest way to deal with the duplicate is by adding another IP address, and then logging into the duplicate and nullifying it. This block will disable the safeguard for duplicate IP addresses.
 
         ```bash
         ncn-w001# sed -i '^CHECK_DUPLICATE_IP=.*/CHECK_DUPLICATE_IP="no"/' \

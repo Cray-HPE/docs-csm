@@ -42,7 +42,7 @@ It is assumed that you have connectivity to the switch.
 
 ## Configure VLAN
 
-**Cray Site Init (CSI) generates the IPs used by the system, below are samples only.**
+**Cray Site Init (CSI) generates the IP addresses used by the system, below are samples only.**
 The VLAN information is located in the network YAML files. Below are examples.
 1. The CDU switches will have VLAN interfaces in NMN, HMN, NMN_MTN, HMN_MTN networks.
 
@@ -131,7 +131,7 @@ The VLAN information is located in the network YAML files. Below are examples.
    name: HMN_MTN
    ```
 
-   Note: CSI does not yet generate IPs for the CDU switches on VLANs HMN_MTN and NMN_MTN.
+   Note: CSI does not yet generate IP addresses for the CDU switches on VLANs HMN_MTN and NMN_MTN.
    - The first CDU switch in the pair will always have an IP address ending in .2 on the HMN_MTN and NMN_MTN networks.
    - The second CDU switch in the pair will always have an IP address ending in .3 on the HMN_MTN and NMN_MTN networks.  
    - Both CDU MTN VLAN IP addresses will be at the beginning of the subnet. 

@@ -53,7 +53,7 @@ The Domain Name Service \(DNS\) is not configured properly.
 
 5.  Access services in the event that external DNS is down, the backing etcd database is having issues, or something was configured incorrectly.
 
-    Search through Kubernetes service objects for `external-dns.alpha.kubernetes.io/hostname` annotations to find the corresponding external IP. The kubectl command makes it easy to generate an /etc/hosts compatible listing of IPs to hostnames using the go-template output format shown below.
+    Search through Kubernetes service objects for `external-dns.alpha.kubernetes.io/hostname` annotations to find the corresponding external IP. The kubectl command makes it easy to generate an /etc/hosts compatible listing of IP addresses to hostnames using the go-template output format shown below.
 
     ```screen
     ncn-w001# kubectl get svc --all-namespaces -o go-template --template \

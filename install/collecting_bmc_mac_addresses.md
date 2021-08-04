@@ -13,7 +13,7 @@ If you are here with an unconfigured switch, mileage may vary.
 ## Procedure
 
 1. Establish an SSH or [Connect to Switch over USB-Serial Cable](connect_to_switch_over_usb_serial_cable.md) to the leaf switch.
-    > Note: These IPs are examples; 10.X.0.4 may or may not match your setup.
+    > Note: These IP addresses are examples; 10.X.0.4 may or may not match your setup.
     ```bash
     # SSH over METAL MANAGEMENT
     pit# ssh admin@10.1.0.4

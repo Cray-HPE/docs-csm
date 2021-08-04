@@ -49,7 +49,7 @@ Required Platform Services:
 > 
 > - The NCN **will never wipe a USB device** during installation
 > 
-> - Learning the CAN IPs of the other NCNs will be a benefit if troubleshooting is required 
+> - Learning the CAN IP addresses of the other NCNs will be a benefit if troubleshooting is required 
 > 
 > This procedure entails deactivating the LiveCD, meaning the LiveCD and all of its resources will be
 > **unavailable**.

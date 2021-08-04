@@ -10,7 +10,7 @@ Functionality that is currently not supported while using UAS.
 -   Building Docker containers within the UAS environment
 -   Building containerd containers within the UAS environment
 -   `dmesg` cannot run inside a UAI because of container security limitations
--   Users cannot ssh from `ncn-w001` to a UAI. This is because UAIs use LoadBalancer IPs on the Customer Access Network \(CAN\) instead of NodePorts and the LoadBalancer IPs are not accessible from `ncn-w001`.
+-   Users cannot ssh from `ncn-w001` to a UAI. This is because UAIs use LoadBalancer IP addresses on the Customer Access Network \(CAN\) instead of NodePorts and the LoadBalancer IP addresses are not accessible from `ncn-w001`.
 
 ### Other Limitations
 

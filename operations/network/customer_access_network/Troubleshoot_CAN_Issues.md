@@ -2,7 +2,7 @@
 
 Various connection points to check when using the CAN and how to fix any issues that arise.
 
-The most frequent issue with the Customer Access Network \(CAN\) is trouble accessing IPs outside of the HPE Cray EX system from a node or pod inside the system.
+The most frequent issue with the Customer Access Network \(CAN\) is trouble accessing IP addresses outside of the HPE Cray EX system from a node or pod inside the system.
 
 The best way to resolve this issue is to try to ping an outside IP from one of the NCNs other than `ncn-m001`, which has a direct connection that it can use instead of the Customer Access Network \(CAN\). The following are some things to check to make sure CAN is configured correctly:
 
