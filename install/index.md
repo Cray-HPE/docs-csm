@@ -170,8 +170,9 @@ sections, but there is also a general troubleshooting topic.
    Now that all of the CSM services have been installed and the PIT node has been redeployed, administrative access
    can be prepared. This may include configuring Keycloak with a local Keycloak account or confirming Keycloak
    is properly federating LDAP or other Identity Provider (IdP), initializing the 'cray' CLI for administrative 
-   commands, locking the management nodes from accidental actions firmware updates by FAS or power actions by
-   CAPMC, and configuring node BMCs (node controllers) for nodes in liquid cooled cabinets.  
+   commands, locking the management nodes from accidental actions such as firmware updates by FAS or power actions by
+   CAPMC, configuring the CSM layer of configuration by CFS in NCN personalization,and configuring the node BMCs (node
+   controllers) for nodes in liquid cooled cabinets.  
    
       See [Configure Administrative Access](configure_administrative_access.md)
    <a name="validate_csm_health"></a>
