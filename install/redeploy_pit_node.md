@@ -191,14 +191,14 @@ data so run them only when indicated. Instructions are in the `README` files.
         
         ```bash
         pit# CSM_RELEASE=$(basename $(ls -d /var/www/ephemeral/csm*/ | head -n 1))
-        
+        pit# echo "${CSM_RELEASE}"
         # these will prompt for a password:
         pit# ssh ncn-m002 cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
         pit# ssh ncn-m003 cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
         pit# chmod 600 /root/.ssh/authorized_keys
         ```
         
-    1. Run this to create the backup; in one swoop, log in to ncn-m002 and ncn-m003 and pull the files off the pit. _This runs `rsync` with specific parameters; `partial`, `non-verbose`, and `progress`._
+    1. Run this to create the backup; in one swoop, log in to `ncn-m002` and `ncn-m003` and pull the files off the PIT. _This runs `rsync` with specific parameters; `partial`, `non-verbose`, and `progress`._
         
         ```bash
         pit# ssh ncn-m002 CSM_RELEASE=$(basename $(ls -d /var/www/ephemeral/csm*/ | head -n 1)) \
@@ -235,7 +235,7 @@ data so run them only when indicated. Instructions are in the `README` files.
     BootNext: 0014
     ```
 
-1. Collect a backdoor login ... fetch the CAN IP for ncn-m002 for a backdoor during the reboot of ncn-m001.
+1. Collect a backdoor login ... fetch the CAN IP address for `ncn-m002` for a backdoor during the reboot of `ncn-m001`.
 
     1. Get the IP
 
@@ -264,7 +264,7 @@ data so run them only when indicated. Instructions are in the `README` files.
     > performed of the PIT node we cannot simply boot back to the same state.
     > This is the last step before rebooting the node.
 
-1. **`IN-PLACE WAR`** This is a WAR until the auto-wipe feature ceases preventing the creation of the 3rd disk (CASMINST-169. This step is safe to do even after auto-wipe is fixed.
+1. **`IN-PLACE WORKAROUND`** This is a workaround until the auto-wipe feature ceases preventing the creation of the 3rd disk (CASMINST-169. This step is safe to do even after auto-wipe is fixed.
    
     > **`WARNING : USER ERROR`** Do not assume to wipe the first three disks (e.g. `sda, sdb, and sdc`), they float and are not pinned to any physical disk layout. **Choosing the wrong ones may result in wiping the USB device**, the USB device can only be wiped by operators at this point in the install. The USB device are never wiped by the CSM installer.
 
@@ -336,11 +336,11 @@ data so run them only when indicated. Instructions are in the `README` files.
     pit# reboot
     ```
     
-1. The node should boot, acquire its hostname (i.e. ncn-m001), and run cloud-init.
+1. The node should boot, acquire its hostname (i.e. `ncn-m001`), and run cloud-init.
     
     > **`NOTE`**: If the nodes has PXE boot issues, such as getting PXE errors or not pulling the ipxe.efi binary, see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
     
-    > **`NOTE`**: If ncn-m001 did not run all the cloud-init scripts, the following commands need to be run **(but only in that circumstance)**.
+    > **`NOTE`**: If `ncn-m001` did not run all the cloud-init scripts, the following commands need to be run **(but only in that circumstance)**.
     
     1. Run the following commands:
 
@@ -352,7 +352,7 @@ data so run them only when indicated. Instructions are in the `README` files.
         ncn-m001# cloud-init modules -m final
         ```
     
-1. Once cloud-init has completed successfully, log in and start a typescript (the IP used here is the one we noted for ncn-m002 in an earlier step).
+1. Once cloud-init has completed successfully, log in and start a typescript (the IP address used here is the one we noted for `ncn-m002` in an earlier step).
     
     ```bash
     external# ssh root@10.102.11.13
@@ -362,7 +362,7 @@ data so run them only when indicated. Instructions are in the `README` files.
       ncn-m002# ssh ncn-m001
       ```
     
-1. If the pre-NCN deployment password change method was **not** used, then the root password on ncn-m001 needs to be changed now.
+1. If the pre-NCN deployment password change method was **not** used, then the root password on `ncn-m001` needs to be changed now.
    Run `passwd` on ncn-m001 and complete the prompts.
     
     ```bash
@@ -467,7 +467,7 @@ data so run them only when indicated. Instructions are in the `README` files.
     CASMINST-1309  CASMINST-1570
     ```
     
-1. Now exit the typescript and relocate the backup over to ncn-m001, thus removing the need to track ncn-m002 as yet-another bootstrapping agent. This is required to facilitate reinstallations, because it pulls the preparation data back over to the documented area (`ncn-m001`).
+1. Now exit the typescript and relocate the backup over to `ncn-m001`, thus removing the need to track `ncn-m002` as yet-another bootstrapping agent. This is required to facilitate reinstallations, because it pulls the preparation data back over to the documented area (`ncn-m001`).
 
     ```bash
     ncn-m001# exit
@@ -483,7 +483,7 @@ data so run them only when indicated. Instructions are in the `README` files.
 
 > The next steps require `csi` from the installation media. `csi` will not be provided on an NCN otherwise because it is used for Cray installation and bootstrap. The CSI binary is compiled against the NCN base, simply fetching it from the bootable media will suffice.
     
-1. SSH back into ncn-m001, or restart a local console and resume the typescript
+1. SSH back into `ncn-m001`, or restart a local console and resume the typescript
     
     ```bash
     ncn-m001# script -af /metal/bootstrap/prep/admin/csm-verify.$(date +%Y-%m-%d).txt
@@ -506,19 +506,19 @@ data so run them only when indicated. Instructions are in the `README` files.
 1. Authenticate with the cluster
     
     ```bash
-    ncn# export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+    ncn-m001# export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
     -d client_id=admin-client \
     -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
     https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
     
-1.  **`IN-PLACE WAR`** Set the wipe safeguard to allow safe net-reboots. **This will set the safeguard on all NCNs**. This is fixed by MTL
+1.  **`IN-PLACE WORKAROUND`** Set the wipe safeguard to allow safe net-reboots. **This will set the safeguard on all NCNs**. This is fixed by MTL
     
     ```bash
-    ncn# /tmp/csi handoff bss-update-param --set metal.no-wipe=1
+    ncn-m001# /tmp/csi handoff bss-update-param --set metal.no-wipe=1
     ```
     
-> **`CSI NOTE`** `/tmp/csi` will delete itself on the next reboot. The /tmp directory is `tmpfs` and runs in memory, it normally will not persist on restarts.
+> **`CSI NOTE`** `/tmp/csi` will delete itself on the next reboot. The `/tmp` directory is `tmpfs` and runs in memory, it normally will not persist on restarts.
 
 <a name="configure-dns-and-ntp-on-each-bmc"></a>
 ### 6. Configure DNS and NTP on each BMC

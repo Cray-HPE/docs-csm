@@ -71,7 +71,7 @@ Build and customize image recipes with the Image Management Service (IMS).
 
 ## Boot Orchestration
 
-Use the Boot Orchestration Service \(BOS\) to boot, configure, and shutdown collections of nodes.
+Use the Boot Orchestration Service \(BOS\) to boot, configure, and shut down collections of nodes.
 
    * [Boot Orchestration Service (BOS)](boot_orchestration/Boot_Orchestration.md)
    * [BOS Workflows](boot_orchestration/BOS_Workflows.md)
@@ -337,8 +337,8 @@ Mechanisms used by the system to ensure the security and authentication of inter
        *   [Configure Keycloak for LDAP/AD authentication](security_and_authentication/Configure_Keycloak_for_LDAPAD_Authentication.md)
        *   [Configure the RSA Plugin in Keycloak](security_and_authentication/Configure_the_RSA_Plugin_in_Keycloak.md)
        *   [Preserve Username Capitalization for Users Exported from Keycloak](security_and_authentication/Preserve_Username_Capitalization_for_Users_Exported_from_Keycloak.md)
-       *   [Change the LDAP Server IP for Existing LDAP Server Content](security_and_authentication/Change_the_LDAP_Server_IP_for_Existing_LDAP_Server_Content.md)
-       *   [Change the LDAP Server IP for New LDAP Server Content](security_and_authentication/Change_the_LDAP_Server_IP_for_New_LDAP_Server_Content.md)
+       *   [Change the LDAP Server IP Address for Existing LDAP Server Content](security_and_authentication/Change_the_LDAP_Server_IP_Address_for_Existing_LDAP_Server_Content.md)
+       *   [Change the LDAP Server IP Address for New LDAP Server Content](security_and_authentication/Change_the_LDAP_Server_IP_Address_for_New_LDAP_Server_Content.md)
        *   [Remove the LDAP User Federation from Keycloak](security_and_authentication/Remove_the_LDAP_User_Federation_from_Keycloak.md)
        *   [Add LDAP User Federation](security_and_authentication/Add_LDAP_User_Federation.md)
    *   [Public Key Infrastructure \(PKI\)](security_and_authentication/Public_Key_Infrastructure_PKI.md)

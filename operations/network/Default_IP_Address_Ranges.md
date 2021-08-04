@@ -44,7 +44,7 @@ Contact customer support for this site if it is required to change the IP addres
 
 There are several network values and other pieces of system information that must be unique to the customer system.
 
--   IP values and the network for `ncn-m001` and the BMC on `ncn-m001`.
+-   IP address values and the network for `ncn-m001` and the BMC on `ncn-m001`.
 -   The main Customer Access Network \(CAN\) subnet and the two address pools mentioned below need to be part of the main subnet.
 
     For more information on the CAN, see [Customer Access Network](customer_access_network/Customer_Access_Network_CAN.md).
@@ -53,7 +53,7 @@ There are several network values and other pieces of system information that mus
     -   Subnet for the MetalLB dynamic address pool \(can-dynamic-pool\), which is used for services such as User Access Instances \(UAIs\) that can be reached by DNS.
 -   HPE Cray EX Domain: The value of the subdomain that is used to access externally exposed services.
 
-    For example, if the system is named TestSystem, and the site is example.com, the HPE Cray EX domain would be *testsystem.example.com*. Central DNS would need to be configured to delegate requests for addresses in this domain to the HPE Cray EX DNS IP for resolution.
+    For example, if the system is named TestSystem, and the site is example.com, the HPE Cray EX domain would be *testsystem.example.com*. Central DNS would need to be configured to delegate requests for addresses in this domain to the HPE Cray EX DNS IP address for resolution.
 
 -   HPE Cray EX DNS IP: The IP address used for the HPE Cray EX DNS service. Central DNS delegates the resolution for addresses in the HPE Cray EX Domain to this server. The IP address will be in the can-static-pool subnet.
 -   CAN gateway IP address: The IP address assigned to a specific port on the spine switch, which will act as the gateway between the CAN and the rest of the customer's internal networks. This address would be the last-hop route to the CAN network.

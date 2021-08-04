@@ -26,9 +26,9 @@ The diagram below shows how the point-to-point routing topology works:
 
 **Option 2: Single Gateway**
 
-The single gateway options requires the customer to provide an IP address that is on a `/24` network. This IP will act as the gateway for traffic bound to the HPE Cray EX CAN.
+The single gateway options requires the customer to provide an IP address that is on a `/24` network. This IP address will act as the gateway for traffic bound to the HPE Cray EX CAN.
 
-For example, a customer could use the 192.168.30.0/24 network to connect via the HPE Cray EX CAN uplink connection. The customer also needs to provide an IP address on this network, such as 192.168.30.253. This IP will be assigned to the uplink port on the HPE Cray EX TOR Spine Switch.
+For example, a customer could use the 192.168.30.0/24 network to connect via the HPE Cray EX CAN uplink connection. The customer also needs to provide an IP address on this network, such as 192.168.30.253. This IP address will be assigned to the uplink port on the HPE Cray EX TOR Spine Switch.
 
 For a dual-spine configuration, the admin would need to extended the customer network to both switches using one IP address for each switch. After extending the network, two equal routes need to be configured. The spine switches are configured to support multi-chassis link aggregation group \(MLAG\) from NCNs and UANs. These nodes are configured for bonding mode layer 2 and layer 3. See [CAN with Dual-Spine Configuration](CAN_with_Dual-Spine_Configuration.md) for more information.
 

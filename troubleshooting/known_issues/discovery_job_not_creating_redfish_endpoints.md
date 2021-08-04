@@ -1,6 +1,6 @@
 # HMS Discovery job not creating RedfishEndpoints in Hardware State Manager
 
-There is a known issue with the HMS Discovery cronjob when a BMC does not respond by its IP for some reason the discovery job will not create a RedfishEndpoint for the BMC in Hardware State Manager (HSM). However, it does update the BMC MAC address in HSM with its xname. The discovery job only creates a new RedfishEndpoints when it encounters an unknown MAC address without a xname associated with it.
+There is a known issue with the HMS Discovery cronjob when a BMC does not respond by its IP address for some reason the discovery job will not create a RedfishEndpoint for the BMC in Hardware State Manager (HSM). However, it does update the BMC MAC address in HSM with its xname. The discovery job only creates a new RedfishEndpoints when it encounters an unknown MAC address without a xname associated with it.
 
 This troubleshooting procedure is only applicable for Air Cooled NodeBMCs and RouterBMCs.
 
@@ -81,7 +81,7 @@ This troubleshooting procedure is only applicable for Air Cooled NodeBMCs and Ro
     ncn# cray hsm inventory ethernetInterfaces delete $BMC_MAC
     ```
 
-    After a few minutes the MAC address and IP should get added back into HSM:
+    After a few minutes the MAC address and IP address should get added back into HSM:
     ```bash
     ncn# cray hsm inventory ethernetInterfaces describe $BMC_MAC
     ID = "54802852b706"

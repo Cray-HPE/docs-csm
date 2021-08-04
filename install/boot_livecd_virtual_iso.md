@@ -64,7 +64,7 @@ Go to the BMC settings and setup the remote ISO for your protocol and node.
 
 Access your BMC's web interface and navigate to `Settings` -> `Media Redirection Settings` -> `General Settings`.
 
-Enable `Remote Media Support` and `Mount CD/DVD` and then fill in the server IP or DNS name and the path to the server.
+Enable `Remote Media Support` and `Mount CD/DVD` and then fill in the server IP address or DNS name and the path to the server.
 
 ![Screen Shot of Gigabyte BMC General Settings](../img/bmc-virtual-media-settings-gigabyte.png)
 

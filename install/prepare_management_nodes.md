@@ -99,7 +99,7 @@ Later in the installation process the HPC Firmware Pack will be installed on the
 1. Power each NCN off using `ipmitool` from ncn-m001 (or the booted LiveCD if reinstalling an incomplete
 install).
 
-   * Shutdown from **LiveCD** (`pit`)
+   * Shut down from **LiveCD** (`pit`)
 
       ```bash
       pit# export username=root
@@ -107,7 +107,7 @@ install).
       pit# conman -q | grep mgmt | grep -v m001 | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
          ```
 
-   * Shutdown from **ncn-m001**
+   * Shut down from **ncn-m001**
 
       ```bash
       ncn-m001# export username=root
@@ -154,7 +154,7 @@ install).
       > 10.254.1.5: Error: Unable to establish IPMI v2 / RMCP+ session
       > ```
 
-      The timing of this change can vary based on the hardware, so if the IP of any BMC can still be reached after running the above commands then run the following. A BMC is considered reachable if it can still be pinged by its IP or hostname (such as `ncn-w001-mgmt`).
+      The timing of this change can vary based on the hardware, so if the IP address of any BMC can still be reached after running the above commands then run the following. A BMC is considered reachable if it can still be pinged by its IP address or hostname (such as `ncn-w001-mgmt`).
       ```bash
       pit# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
       do
@@ -189,7 +189,7 @@ install).
       > ncn-w001-mgmt: Error: Unable to establish IPMI v2 / RMCP+ session
       > ```
 
-      The timing of this change can vary based on the hardware, so if the IP of any BMC can still be reached after running the above commands then run the following. A BMC is considered reachable if it can still be pinged by its IP or hostname (such as `ncn-w001-mgmt`).
+      The timing of this change can vary based on the hardware, so if the IP address of any BMC can still be reached after running the above commands then run the following. A BMC is considered reachable if it can still be pinged by its IP address or hostname (such as `ncn-w001-mgmt`).
       ```bash
       ncn-m001# for h in $( grep ncn /etc/hosts | grep mgmt | grep -v m001 | awk '{print $2}' )
       do

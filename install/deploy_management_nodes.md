@@ -446,7 +446,7 @@ The configuration workflow described here is intended to help understand the exp
 1. Get the number of osds in the cluster
 
     ```bash
-    ncn-s001:~ # ceph -f json-pretty osd stat |jq .num_osds
+    ncn-s001# ceph -f json-pretty osd stat |jq .num_osds
     24
     ```
 
@@ -489,14 +489,14 @@ The configuration workflow described here is intended to help understand the exp
 3. Check to see if the number of devices is less than the number of listed drives or your output from step 1.
 
    ```bash
-    ncn-s001:~ # ceph orch device ls|grep dev|wc -l
+    ncn-s001# ceph orch device ls|grep dev|wc -l
     24
     ```
 
     If the numbers are equal, then you may need to fail your ceph-mgr daemon to get a fresh inventory.
 
     ```bash
-    ceph mgr fail $(ceph mgr dump | jq -r .active_name)
+    ncn-s001# ceph mgr fail $(ceph mgr dump | jq -r .active_name)
     ```
 
     Give it a minute then re-check `ceph orch device ls` to see if the drives are still showing as available. If so, then proceed to the next step.
@@ -504,7 +504,7 @@ The configuration workflow described here is intended to help understand the exp
 4. `ssh` to the host and look at `lsblk` output and check against the device from the above `ceph orch device ls`
 
     ```bash
-    ncn-s001:~ # lsblk
+    ncn-s001# lsblk
     NAME                                                                                                 MAJ:MIN RM   SIZE RO TYPE   MOUNTPOINT
     loop0                                                                                                   7:0    0   4.2G  1 loop  / run/    rootfsbase
     loop1                                                                                                  7:1    0    30G  0 loop
@@ -515,7 +515,7 @@ The configuration workflow described here is intended to help understand the exp
      └─ceph--0a476f53--8b38--450d--8779--4e587402f8a8-osd--data--b620b7ef--184a--46d7--9a99--771239e7a323 254:7    0   1.8T  0 lvm
     ```
 
-    1. If it has an LVM volume like above, then it may be in use and you should do the option 2 check below to make sure we can wipe the drive.
+    * If it has an LVM volume like above, then it may be in use and you should do the option 2 check below to make sure we can wipe the drive.
 
 ##### Option 2
 
@@ -548,10 +548,11 @@ The configuration workflow described here is intended to help understand the exp
     ncn-s# cephadm shell -- ceph-volume inventory --format json-pretty | jq -r '.[]|select(.available==true)|.path'
     ```
 
-1. Wipe the drive ONLY after you have confirmed the drive is not being used by the current Ceph cluster via options 1, 2, or both
+1. Wipe the drive ONLY after you have confirmed the drive is not being used by the current Ceph cluster via options 1, 2, or both.
 
+    > The following example wipes drive /dev/sdc on ncn-s002. You should replace these values with the appropriate ones for your situation.
     ```bash
-    example: ceph orch device zap ncn-s002 /dev/sdc --force 
+    ncn-s# ceph orch device zap ncn-s002 /dev/sdc --force
     ```
 
 1. Add unused drives
@@ -624,7 +625,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 
 1. Check the status of the BGP peering sessions.
    - Aruba: `show bgp ipv4 unicast summary`
-   - Mellanox:  `show ip bgp summary`
+   - Mellanox: `show ip bgp summary`
 
    You should see a neighbor for each of the workers NCN IP addresses found above.   If it is an Aruba switch, you will also see a neighbor for the other switch of the pair that are peering.
 
@@ -661,7 +662,10 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 #### 4.4 Install Tests and Test Server on NCNs
 
     ```bash
-    pit:/var/www/ephemeral# $CSM_RELEASE/lib/install-goss-tests.sh
+    pit# export CSM_RELEASE=csm-x.y.z
+    pit# pushd /var/www/ephemeral
+    pit# ${CSM_RELEASE}/lib/install-goss-tests.sh
+    pit# popd
     ```
 
 <a name="validate_management_node_deployment"></a>
@@ -709,7 +713,7 @@ Observe the output of the checks and note any failures, then remediate them.
    > grep "Total" csi-pit-validate-k8s.log
    > ```
    >
-   > Example output for a system with 5 kubenetes nodes:
+   > Example output for a system with 5 Kubernetes nodes:
    > ```
    > Total Tests: 16, Total Passed: 16, Total Failed: 0, Total Execution Time: 0.3072 seconds
    > Total Tests: 16, Total Passed: 16, Total Failed: 0, Total Execution Time: 0.2727 seconds

@@ -116,7 +116,7 @@ part of the main subnet.
    * HPE Cray EX Domain: The value of the subdomain that is used to access externally exposed services.
    For example, if the system is named TestSystem, and the site is example.com, the HPE Cray EX domain
    would be testsystem.example.com. Central DNS would need to be configured to delegate requests for
-   addresses in this domain to the HPE Cray EX DNS IP for resolution.
+   addresses in this domain to the HPE Cray EX DNS IP address for resolution.
    * HPE Cray EX DNS IP: The IP address used for the HPE Cray EX DNS service. Central DNS delegates the
    resolution for addresses in the HPE Cray EX Domain to this server. The IP address will be in the
    can-static-pool subnet.

@@ -4,9 +4,9 @@ Various connection points to check when using the CAN and how to fix any issues 
 
 The most frequent issue with the Customer Access Network \(CAN\) is trouble accessing IP addresses outside of the HPE Cray EX system from a node or pod inside the system.
 
-The best way to resolve this issue is to try to ping an outside IP from one of the NCNs other than `ncn-m001`, which has a direct connection that it can use instead of the Customer Access Network \(CAN\). The following are some things to check to make sure CAN is configured correctly:
+The best way to resolve this issue is to try to ping an outside IP address from one of the NCNs other than `ncn-m001`, which has a direct connection that it can use instead of the Customer Access Network \(CAN\). The following are some things to check to make sure CAN is configured correctly:
 
-### Does the NCN have an IP Configured on the vlan007 Interface?
+### Does the NCN have an IP Address Configured on the vlan007 Interface?
 
 Check the status of the vlan007 interface. Make sure it has an address specified.
 
@@ -54,7 +54,7 @@ If the default gateway cannot be accessed, check the spine switch configuration.
 
 ### Can the Spines Reach Outside of the System?
 
-Check that each of the spines can ping an IP address outside of the HPE Cray EX system. This must be an IP that is reachable from the network to which the CAN is connected. If there is only one spine being used on the system, only spine-001 needs to be checked.
+Check that each of the spines can ping an IP address outside of the HPE Cray EX system. This must be an IP address that is reachable from the network to which the CAN is connected. If there is only one spine being used on the system, only `spine-001` needs to be checked.
 
 ```screen
 sw-spine-001 [standalone: master] # ping 8.8.8.8
@@ -69,11 +69,11 @@ PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
 rtt min/avg/max/mdev = 12.501/15.022/22.440/4.285 ms
 ```
 
-If the outside IP cannot be reached, check the spine switch configuration and the connection to the customer network.
+If the outside IP address cannot be reached, check the spine switch configuration and the connection to the customer network.
 
 ### Can the Spines Reach the NCN?
 
-Check that each of the spines can ping one or more of the NCNs at its vlan007 IP address. If there is only one spine being used on the system, only spine-001 needs to be checked.
+Check that each of the spines can ping one or more of the NCNs at its vlan007 IP address. If there is only one spine being used on the system, only `spine-001` needs to be checked.
 
 ```screen
 sw-spine-001 [standalone: master] # ping 10.102.5.5

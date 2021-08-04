@@ -33,7 +33,7 @@ When the PDU breakers are switched to OFF, the Chassis Management Modules \(CMMs
     ncn-m001# cray capmc get_xname_status create --xnames x[1000-1003]c[0-7] --format json
     ```
 
-5.  Use `sat bootsys shutdown` to shutdown services and power off liquid-cooled cabinets.
+5.  Use `sat bootsys shutdown` to shut down services and power off liquid-cooled cabinets.
 
     ```bash
     ncn-m001# sat bootsys shutdown --stage cabinet-power

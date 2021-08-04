@@ -16,7 +16,7 @@ The following services are currently available:
 -   Kiali, for Istio service mesh visibility \(redirects to Keycloak for SSO\)
 -   Jaeger, for Istio tracing \(redirects to Keycloak for SSO\)
 
-In general, external hostnames should resolve to a CAN external IP for the following services:
+In general, external hostnames should resolve to a CAN external IP address for the following services:
 
 -   `istio-system/istio-ingressgateway-can` - Istio's ingress gateway.
 -   `services/cray-keycloak-gatekeeper-ingress` - Keycloak Gatekeeper's ingress reverse proxy that redirects browsers to Keycloak for log in, and then to Istio's ingress gateway with a valid JWT for authorized access.
@@ -27,7 +27,7 @@ This can be verified using the dig command to resolve the external hostname and 
 
 Without forwarding to External DNS, administrators will not have the ability to use the externally exposed services, such as Prometheus, Grafana, the HPE Cray EX REST API, and more. See [Externally Exposed Services](../customer_access_network/Externally_Exposed_Services.md) for more information.
 
-Accessing most of these services by IP will not work because the Ingress Gateway uses the name to direct requests to the appropriate service.
+Accessing most of these services by IP address will not work because the Ingress Gateway uses the name to direct requests to the appropriate service.
 
 ### DNS for HPE Cray EX Systems
 

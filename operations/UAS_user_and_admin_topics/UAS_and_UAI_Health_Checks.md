@@ -58,7 +58,7 @@ Password:
 Success!
 ```
 
-**Authorization Is Local to a Host:** whenever you are using the CLI (`cray` command) on a host (e.g. a workstation or NCN) where it has not been used before, it is necessary to authenticate on that host using `cray auth login`.  There is no mechanism to distribute CLI authorization amongst hosts.
+**Authorization Is Local to a Host:** whenever you are using the CLI (`cray` command) on a host (e.g. a workstation or NCN) where it has not been used before, it is necessary to authenticate on that host using `cray auth login`. There is no mechanism to distribute CLI authorization amongst hosts.
 
 ### Troubleshoot CLI Initialization or Authorization Issues
 

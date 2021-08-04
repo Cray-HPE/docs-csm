@@ -91,7 +91,7 @@ The `cray` CLI only needs to be initialized once per user on a node.
 
     Usage: cray artifacts buckets list [OPTIONS]
 
-    Try 'cray artifacts buckets list --help' for  help.
+    Try 'cray artifacts buckets list --help' for help.
 
     Error: Internal Server Error: The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application.
    ```
