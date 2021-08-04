@@ -56,7 +56,7 @@ NOTE:     The nae-upload script automatically detects 8325’s and only applies 
 
 **Step 1:** 
 
-> pit-ncn-m001”:~ # ./nae_upload.py
+> ncn-001”:~ # ./docs-csm/upgrade/1.0/scripts/aruba/nae_upload.py
 
 **step 2:**
 
