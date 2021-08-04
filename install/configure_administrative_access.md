@@ -13,6 +13,7 @@ BMC/controller passwords.
    1. [Configure the Cray Command Line Interface (cray CLI)](#configure_cray_cli)
    1. [Lock Management Nodes](#lock_management_nodes)
    1. [Configure BMC and Controller Parameters with SCSD](#configure_with_scsd)
+   1. [Manage a Configuration with CFS](#manage_a_configuration_with_CFS)
    1. [Upload Olympus BMC Recovery Firmware into TFTP server](#cray_upload_recovery_images)
    1. [Next Topic](#next-topic)
 
@@ -68,6 +69,17 @@ BMC/controller passwords.
       Note: If there are no liquid-cooled cabinets present in the HPE Cray EX system, then this procedure can be skipped.
    
       See [Configure BMC and Controller Parameters with SCSD](../operations/system_configuration_service/Configure_BMC_and_Controller_Parameters_with_scsd.md)
+   <a name="manage_a_configuration_with_CFS"></a>   
+   1. Manage a Configuration with CFS
+
+      The Configuration Framework Service (CFS) is used to apply post-boot configuration to all types of nodes.
+      Many of the software products installed on an HPE Cray EX system provide their own layer of configuration to be applied
+      by CFS either pre-boot or post-boot. When this configuration is applied post-boot to the management nodes, it is called
+      "NCN personalization". The CSM layer of configuration should be configured now, but this reference link does include
+      information about the layers from other software products which are installed after CSM during a first time installation
+      of software.
+
+      See [Manage a Configuration with CFS](../operations/CSM_product_management/Manage_a_Configuration_with_CFS.md)
    <a name="cray_upload_recovery_images"></a>   
    1. Upload Olympus BMC Recovery Firmware into TFTP server
 
