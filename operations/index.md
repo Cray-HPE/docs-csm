@@ -66,6 +66,7 @@ Build and customize image recipes with the Image Management Service (IMS).
      * [Convert TGZ Archives to SquashFS Images](image_management/Convert_TGZ_Archives_to_SquashFS_Images.md)
      * [Customize an Image Root to Install Singularity](image_management/Customize_an_Image_Root_to_Install_Singularity.md)
    * [Delete or Recover Deleted IMS Content](image_management/Delete_or_Recover_Deleted_IMS_Content.md)
+   * [Configure IMS to validate RPMS](image_management/Configure_IMS_to_validate_rpms.md)
 
 <a name="boot-orchestration"></a>
 
