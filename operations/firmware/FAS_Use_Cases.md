@@ -24,7 +24,7 @@ This procedure updates the following hardware:
 -   Chassis Management Module \(CMM\) controller \(cC\) firmware
 
 #### Prerequisites
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system. 
+-   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 -   The compute nodes must be powered off before upgrading the BMC image for a nodeBMC. BMC firmware with FPGA updates require the nodes to be off. If the nodes are not off when the update command is issued, the update will get deferred until the next power cycle of the BMC, which may be a long period of time.
 
 #### Example Recipes
@@ -177,7 +177,7 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
         startTime = "2020-08-31 15:49:44.568271843 +0000 UTC"
         snapshotID = "00000000-0000-0000-0000-000000000000"
         endTime = "2020-08-31 15:51:35.426714612 +0000 UTC"
-        
+
         [command]
         description = "Update Cray Node BMCs Dryrun"
         tag = "default"
@@ -375,7 +375,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
         startTime = "2020-08-31 15:49:44.568271843 +0000 UTC"
         snapshotID = "00000000-0000-0000-0000-000000000000"
         endTime = "2020-08-31 15:51:35.426714612 +0000 UTC"
-        
+
         [command]
         description = "Update Cray Chassis Management Module controllers Dryrun"
         tag = "default"
@@ -445,20 +445,18 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
     ```bash
     ncn-m001 # cray capmc xname_on create --xnames x[1000-1003]c[0-7]r[0-7],x[1000-1003]c[0-7]s[0-7] --prereq true --continue true
     ```
-    
+
     The `--prereq` option ensures all required components are powered on first. The `--continue` option allows the command to complete in systems without fully populated hardware.
-    
+
 6.  After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
 
 ---
 
 <a name="ncn-bios-bmc"></a>
 
-### Update Non-Compute Node BIOS and BMC Firmware
+### Update Non-Compute Node (NCN) BIOS and BMC Firmware
 
 Gigabyte and HPE non-compute nodes \(NCNs\) firmware can be updated with FAS. This section includes templates for JSON files that can be used to update firmware with the cray fas actions create command.
-
-**WARNING**: The compute nodes must be powered off before upgrading the BMC image for a nodeBMC. BMC firmware with FPGA updates require the nodes to be off. If the nodes are not off when the update command is issued, the update will get deferred until the next power cycle of the BMC, which may be a long period of time.
 
 After creating the JSON file for the device being upgraded, use the following command to run the FAS job:
 
@@ -468,25 +466,42 @@ ncn-w001# cray fas actions create CUSTOM_DEVICE_PARAMETERS.json
 
 All of the example JSON files below are set to run a dry-run. Update the overrideDryrun value to True to update the firmware.
 
-
-#### Update NCNs
-
-The current NCNs in use are manufactured by Gigabyte or HPE. Use the `NodeBMC` examples in this section when updating NCN firmware. Include the `xname` parameter as part of the `stateComponentFilter` to target **ONLY** the xnames that have been separately identified as NCNs.
-
 **WARNING:** Rebooting more than one NCN at a time **MAY** cause system instability. Be sure to follow the correct process for updating NCNs. Firmware updates have the capacity to harm the system.
 
-When updating the BIOS, the NCN will need to be rebooted. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure.
+After updating the BIOS, the NCN will need to be rebooted. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure.
 
-#### Gigabyte Nodes
+Procedure for updating NCNs:
+1. Run a dryrun for all NCNs first to determine which NCNs and targets need updating.
+2. For each NCN requiring updates to target `BMC` or `iLO5`
+   (Update of `BMC` and `iLO 5` will not affect the nodes):
+   1. Unlock the NCN -
+See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
+   2. Run the FAS action on the NCN
+   3. Relock the NCN -
+See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
+3. For each NCN requiring updates to target `BIOS` or `System ROM`:
+   1. Unlock the NCN -
+See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
+   2. Run the FAS action on the NCN
+   3. Reboot the Node -
+   See [Reboot NCNs](../node_management/Reboot_NCNs.md)
+   4. For `HPE` NCNs, run the script `/opt/cray/csm/scripts/node_mangement/set-bmc-ntp-dns.sh` -
+   See [Configure DNS and NTP on Each BMC](../../install/redploy_pit_node.md#configure-dns-and-ntp-on-each-bmc")
+   5. Relock the NCN -
+See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
+
+#### Gigabyte
 
 **Device Type: NodeBMC | Target: BMC**
 
 ```json
 {
 "stateComponentFilter": {
-
     "deviceTypes": [
       "nodeBMC"
+    ],
+    "xnames": [
+      "x3000c0s1b0"
     ]
 },
 "inventoryHardwareFilter": {
@@ -508,7 +523,7 @@ When updating the BIOS, the NCN will need to be rebooted. Follow the [Reboot NCN
 }
 ```
 
-**IMPORTANT**: The *timeLimit* is `2000` because the gigabytes can take a lot longer to update. 
+**IMPORTANT**: The *timeLimit* is `2000` because the gigabytes can take a lot longer to update.
 
 **Device Type: NodeBMC | Target: BIOS**
 ```json
@@ -517,6 +532,9 @@ When updating the BIOS, the NCN will need to be rebooted. Follow the [Reboot NCN
 
     "deviceTypes": [
       "nodeBMC"
+    ],
+    "xnames": [
+      "x3000c0s1b0"
     ]
 },
 "inventoryHardwareFilter": {
@@ -542,12 +560,13 @@ When updating the BIOS, the NCN will need to be rebooted. Follow the [Reboot NCN
 
 **Device Type: NodeBMC | Target: `iLO 5` aka BMC**
 
-Use `1` as the `target` to indicate `iLO 5`.
-
 ```json
 "stateComponentFilter": {
     "deviceTypes": [
       "nodeBMC"
+    ],
+    "xnames": [
+      "x3000c0s1b0"
     ]
 },
 "inventoryHardwareFilter": {
@@ -555,7 +574,7 @@ Use `1` as the `target` to indicate `iLO 5`.
     },
 "targetFilter": {
     "targets": [
-      "1"
+      "iLO 5"
     ]
   },
 "command": {
@@ -571,8 +590,6 @@ Use `1` as the `target` to indicate `iLO 5`.
 
 **Device Type: NodeBMC | Target: `System ROM` aka BIOS**
 
-Use `2` as the `target` to indicate `System ROM`.
-
 **IMPORTANT:** If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored. For NCNs **other than m001** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script. Use the `-h` option to get a list of command line options required to restore the NTP and DNS values.
 
 
@@ -581,6 +598,9 @@ Use `2` as the `target` to indicate `System ROM`.
 "stateComponentFilter": {
     "deviceTypes": [
       "NodeBMC"
+    ],
+    "xnames": [
+      "x3000c0s1b0"
     ]
 },
 "inventoryHardwareFilter": {
@@ -588,7 +608,7 @@ Use `2` as the `target` to indicate `System ROM`.
     },
 "targetFilter": {
     "targets": [
-      "2"
+      "System ROM"
     ]
   },
 "command": {
@@ -648,8 +668,6 @@ Use this procedure to update compute node BIOS firmware using FAS. There are two
 
 **Manufacturer: HPE | Device Type: NodeBMC | Target: `System ROM` aka BIOS**
 
-**IMPORTANT**: Use `2` as the `target` to indicate `System ROM`.
-
 ```json
 {
 "stateComponentFilter": {
@@ -662,7 +680,7 @@ Use this procedure to update compute node BIOS firmware using FAS. There are two
     },
 "targetFilter": {
     "targets": [
-      "2"
+      "System ROM"
     ]
   },
 "command": {
@@ -737,7 +755,7 @@ Use this procedure to update compute node BIOS firmware using FAS. There are two
         startTime = "2020-08-31 15:49:44.568271843 +0000 UTC"
         snapshotID = "00000000-0000-0000-0000-000000000000"
         endTime = "2020-08-31 15:51:35.426714612 +0000 UTC"
-        
+
         [command]
         description = "Update Cray Node BIOS Dryrun"
         tag = "default"
@@ -893,7 +911,7 @@ Correct an issue where the model of the liquid-cooled compute node BIOS is the i
        "toImageURL":"",
        "toTag":"",
        "blockedBy":[
-    
+
        ]
     }
     ```
@@ -979,5 +997,3 @@ Correct an issue where the model of the liquid-cooled compute node BIOS is the i
   ```bash
   ncn# cray fas actions describe {actionID}
   ```
-
-    

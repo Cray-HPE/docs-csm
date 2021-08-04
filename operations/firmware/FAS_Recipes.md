@@ -194,6 +194,7 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
 #### Device Type: NodeBMC | Target: `iLO 5` aka BMC
 
 ```json
+{
 "stateComponentFilter": {
     "deviceTypes": [
       "nodeBMC"
@@ -204,7 +205,7 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
     },
 "targetFilter": {
     "targets": [
-      "1"
+      "iLO 5"
     ]
   },
 "command": {
@@ -218,14 +219,11 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
 }
 ```
 
-**NOTE:** `1` must be used as the `target` to indicate `iLO 5`. 
-
-
 <a name="hpe-device-type-nodebmc-target--aka-bios"></a>
 
 #### Device Type: NodeBMC | Target: `System ROM` aka BIOS
 
-**IMPORTANT:** 
+**IMPORTANT:**
 * If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored. For NCNs **other than m001** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script. Use the `-h` option to get a list of command line options required to restore the NTP and DNS values.
 * Node should be powered on for System ROM update and will need to be rebooted to use the updated BIOS.
 
@@ -242,7 +240,7 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
     },
 "targetFilter": {
     "targets": [
-      "2"
+      "System ROM"
     ]
   },
 "command": {
@@ -256,8 +254,7 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
 }
 ```
 
-**NOTE:** 
-* `2` must be used as the `target` to indicate `System ROM`. 
+**NOTE:**
 * Update of System ROM may report as an error when it actually succeeded because of an incorrect string in the image metadata in FAS. Manually check the update version to get around this error.
 
 
@@ -299,7 +296,7 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
 }
 ```
 
-**NOTE:** The timeLimit is `2000` because the Gigabytes can take a lot longer to update. 
+**NOTE:** The timeLimit is `2000` because the Gigabytes can take a lot longer to update.
 
 
 <a name="gb-device-type-nodebmc-target-bios"></a>
@@ -335,8 +332,4 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
 
 ### Update Non-Compute Nodes (NCNs)
 
-The current NCNs in use are manufactured by Gigabyte or HPE. Use the `NodeBMC` examples in this section when updating NCN firmware. Include the `xname` parameter as part of the `stateComponentFilter` to target **ONLY** the xnames that have been separately identified as NCNs.  
-
-**WARNING:** Rebooting more than one NCN at a time **MAY** cause system instability. Be sure to follow the correct process for updating NCNs. Firmware updates have the capacity to harm the system.
-
-
+See [Uploading BIOS and BMC Firmware for NCNs in FAS Use Cases](./FAS_Use_Cases.md#ncn-bios-bmc)
