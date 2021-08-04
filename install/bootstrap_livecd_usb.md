@@ -197,6 +197,18 @@ which device that is.
     linux# csi pit format $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
     ```
 
+    > Note: If the previous command fails with this error message indicating that this Linux computer does not have the checkmedia rpm install, then the rpm can be installed and the `csi pit format` can be run again
+    > ```
+    > ERROR: Unable to validate ISO. Please install checkmedia
+    > ```
+    >
+    >   1.  Install the missing rpms
+    >
+    >   ```bash
+    >   linux# zypper in -y libmediacheck5 checkmedia
+    >   linux# csi pit format $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
+    >   ```
+
     On MacOS using the bash script:
 
     ```bash
