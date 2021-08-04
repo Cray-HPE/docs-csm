@@ -471,9 +471,9 @@ All of the example JSON files below are set to run a dry-run. Update the overrid
 
 #### Update NCNs
 
-NCNs are compute blades; we currently only have NCNs that are manufactured by Gigabyte or HPE. Use the `NodeBMC` examples from above and include the `xname` parameter as part of the `stateComponentFilter` to target **ONLY** the xnames identified as NCNs. 
+The current NCNs in use are manufactured by Gigabyte or HPE. Use the `NodeBMC` examples in this section when updating NCN firmware. Include the `xname` parameter as part of the `stateComponentFilter` to target **ONLY** the xnames that have been separately identified as NCNs.
 
-**WARNING:** Updating more than one NCN at a time **MAY** cause system instability. Be sure to follow the correct process for updating NCN; FAS accepts no responsibility for updates that do not follow the correct process. Firmware updates have the capacity to harm the system; follow the appropriate guides.
+**WARNING:** Rebooting more than one NCN at a time **MAY** cause system instability. Be sure to follow the correct process for updating NCNs. Firmware updates have the capacity to harm the system.
 
 When updating the BIOS, the NCN will need to be rebooted. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure.
 
