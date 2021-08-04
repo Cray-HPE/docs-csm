@@ -335,8 +335,8 @@ The BMC on the RouterBMC for a Cray includes the ASIC.
 
 ### Update Non-Compute Nodes (NCNs)
 
-NCNs are compute blades. The current NCNs in use are manufactured by Gigabyte or HPE. Use the `NodeBMC` examples in this section when updating NCN firmware. Include the `xname` parameter as part of the `stateComponentFilter` to target **ONLY** the xnames that have been separately identified as NCNs.  
+The current NCNs in use are manufactured by Gigabyte or HPE. Use the `NodeBMC` examples in this section when updating NCN firmware. Include the `xname` parameter as part of the `stateComponentFilter` to target **ONLY** the xnames that have been separately identified as NCNs.  
 
-**WARNING:** Updating more than one NCN at a time **MAY** cause system instability. Be sure to follow the correct process for updating NCNs. Firmware updates have the capacity to harm the system.
+**WARNING:** Rebooting more than one NCN at a time **MAY** cause system instability. Be sure to follow the correct process for updating NCNs. Firmware updates have the capacity to harm the system.
 
 
