@@ -14,6 +14,10 @@ echo " ****** DATA LOSS ON ${upgrade_ncn} - FRESH OS INSTALL UPON REBOOT ******"
 echo " ****** BACKUP DATA ON ${upgrade_ncn} TO USB OR OTHER SAFE LOCATION ******"
 echo " ****** DATA MANAGED BY K8S/CEPH WILL BE BACKED UP/RESTORED AUTOMATATICALLY ******"
 read -p "Read and act on above steps. Press Enter key to continue ..."
+# Record this state locally instead of using is_state_recorded(),
+# because it does not hurt to re-do the ssh keys, and it is the
+# kind of thing which may need to be re-done in case of problems.
+ssh_keys_done=0
 
 state_name="CSI_HANDOFF_BSS_UPDATE_PARAM"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
@@ -93,15 +97,15 @@ EOF
 EOF
     fi
     chmod +x wipe_disk.sh
-    scp wipe_disk.sh $UPGRADE_NCN:/tmp/wipe_disk.sh
-    ssh $UPGRADE_NCN '/tmp/wipe_disk.sh'
+    scp wipe_disk.sh $upgrade_ncn:/tmp/wipe_disk.sh
+    ssh $upgrade_ncn '/tmp/wipe_disk.sh'
     
     record_state "${state_name}" ${upgrade_ncn}
 else
     echo "====> ${state_name} has been completed"
 fi
 
-upgrade_ncn_mgmt_host="$UPGRADE_NCN-mgmt"
+upgrade_ncn_mgmt_host="${upgrade_ncn}-mgmt"
 if [[ ${upgrade_ncn} == "ncn-m001" ]]; then
     echo ""
     read -p "Enter the IP or hostname of the BMC for ncn-m001:" upgrade_ncn_mgmt_host
@@ -200,8 +204,10 @@ TIPS:
 EOF
     sleep 60
     # wait for cloud-init
-    ssh-keygen -R $upgrade_ncn -f /root/.ssh/known_hosts || true
-    ssh-keyscan -H $upgrade_ncn >> ~/.ssh/known_hosts || true
+    if [[ $ssh_keys_done == "0" ]]; then
+        ssh_keygen_keyscan "${upgrade_ncn}"
+        ssh_keys_done=1
+    fi
     printf "%s" "waiting for cloud-init: $upgrade_ncn  ..."
     while ! ssh $upgrade_ncn -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null 'cat /var/log/messages  | grep "Cloud-init" | grep "finished"' &> /dev/null
     do
@@ -228,59 +234,62 @@ else
 fi
 
 if [[ ${upgrade_ncn} == "ncn-m001" ]]; then
-   state_name="RESTORE_M001_NET_CONFIG"
-   state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
-   if [[ $state_recorded == "0" ]]; then
-      echo "====> ${state_name} ..."
+    state_name="RESTORE_M001_NET_CONFIG"
+    state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+    if [[ $state_recorded == "0" ]]; then
+        echo "====> ${state_name} ..."
       
-      ssh-keygen -R ncn-m001 -f /root/.ssh/known_hosts
-      ssh-keyscan -H ncn-m001 >> ~/.ssh/known_hosts
-      scp ifcfg-lan0 root@ncn-m001:/etc/sysconfig/network/ifcfg-lan0
-      scp ifroute-lan0 root@ncn-m001:/etc/sysconfig/network/ifroute-lan0
-      ssh root@ncn-m001 'wicked ifreload lan0'
-      record_state "${state_name}" ${upgrade_ncn}
-   else
-      echo "====> ${state_name} has been completed"
-   fi
+        if [[ $ssh_keys_done == "0" ]]; then
+            ssh_keygen_keyscan "${upgrade_ncn}"
+            ssh_keys_done=1
+        fi
+        scp ifcfg-lan0 ifroute-lan0 root@ncn-m001:/etc/sysconfig/network/
+        ssh root@ncn-m001 'wicked ifreload lan0'
+        record_state "${state_name}" ${upgrade_ncn}
+    else
+        echo "====> ${state_name} has been completed"
+    fi
 fi
 
 if [[ ${upgrade_ncn} != ncn-s* ]]; then
-   state_name="CRAY_INIT"
-   state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
-   if [[ $state_recorded == "0" ]]; then
-      echo "====> ${state_name} ..."
+    state_name="CRAY_INIT"
+    state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+    if [[ $state_recorded == "0" ]]; then
+        echo "====> ${state_name} ..."
+
+        if [[ $ssh_keys_done == "0" ]]; then
+            ssh_keygen_keyscan "${upgrade_ncn}"
+            ssh_keys_done=1
+        fi
+        ssh ${UPGRADE_NCN} 'cray init --no-auth --overwrite --hostname https://api-gw-service-nmn.local'
       
-      ssh-keygen -R $UPGRADE_NCN -f /root/.ssh/known_hosts
-      ssh-keyscan -H $UPGRADE_NCN >> ~/.ssh/known_hosts
-      ssh $UPGRADE_NCN 'cray init --no-auth --overwrite --hostname https://api-gw-service-nmn.local'
-      
-      record_state "${state_name}" ${upgrade_ncn}
-   else
-      echo "====> ${state_name} has been completed"
-   fi
+        record_state "${state_name}" ${upgrade_ncn}
+    else
+        echo "====> ${state_name} has been completed"
+    fi
 fi
 
 if [[ ${upgrade_ncn} != ncn-s* ]]; then
-   state_name="NTP_SETUP"
-   state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
-   if [[ $state_recorded == "0" ]]; then
-      echo "====> ${state_name} ..."
+    state_name="NTP_SETUP"
+    state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+    if [[ $state_recorded == "0" ]]; then
+        echo "====> ${state_name} ..."
       
-      ssh-keygen -R $UPGRADE_NCN -f /root/.ssh/known_hosts
-      ssh-keyscan -H $UPGRADE_NCN >> ~/.ssh/known_hosts
+        if [[ $ssh_keys_done == "0" ]]; then
+            ssh_keygen_keyscan "${upgrade_ncn}"
+            ssh_keys_done=1
+        fi
 
-      echo "Ensuring cloud-init on $UPGRADE_NCN is healthy"
-      ssh $UPGRADE_NCN 'cloud-init query -a > /dev/null 2>&1'
-      rc=$?
-      if [[ "$rc" -ne 0 ]]; then
-        echo "cloud-init on $UPGRADE_NCN is not healthy -- re-running 'cloud-init init' to repair cached data"
-        ssh $UPGRADE_NCN 'cloud-init init > /dev/null 2>&1'
-      fi
+        echo "Ensuring cloud-init on $upgrade_ncn is healthy"
+        if ! ssh $upgrade_ncn 'cloud-init query -a > /dev/null 2>&1' ; then
+            echo "cloud-init on $upgrade_ncn is not healthy -- re-running 'cloud-init init' to repair cached data"
+            ssh $upgrade_ncn 'cloud-init init > /dev/null 2>&1'
+        fi
 
-      ssh $UPGRADE_NCN '/srv/cray/scripts/metal/ntp-upgrade-config.sh'
+        ssh $upgrade_ncn '/srv/cray/scripts/metal/ntp-upgrade-config.sh'
       
-      record_state "${state_name}" ${upgrade_ncn}
-   else
-      echo "====> ${state_name} has been completed"
-   fi
+        record_state "${state_name}" ${upgrade_ncn}
+    else
+        echo "====> ${state_name} has been completed"
+    fi
 fi
