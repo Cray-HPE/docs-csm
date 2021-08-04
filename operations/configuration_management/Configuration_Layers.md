@@ -67,7 +67,7 @@ ncn-m001# cray cfs configurations update configurations-example --update-branche
 
 Use the `cray cfs configurations --help` command to manage CFS configurations on the system. The following operations are available:
 
--   `list`: List all configurations.
+-   `list`: List all configurations.
 -   `describe`: Display info about a single configuration and its layer\(s\).
 -   `update`: Create a new configuration or modify an existing configuration.
 -   `delete`: Delete an existing configuration.
