@@ -50,7 +50,7 @@ The uplink ports are the ports connecting the leaf switches to the upstream swit
 
 ## Configure VLAN
 
-**Cray Site Init (CSI) generates the IPs used by the system, below are samples only.**
+**Cray Site Init (CSI) generates the IP addresses used by the system, below are samples only.**
 The VLAN information is located in the network YAML files. Below are examples.
 1. The leaf switches will have VLAN interfaces in NMN and the HMN networks.
 
@@ -204,7 +204,7 @@ Control plane ACL
 
 ## Configure NTP
 
-1. The IPs used here will be the first three worker nodes on the NMN network. These can be found in NMN.yaml.
+1. The IP addresses used here will be the first three worker nodes on the NMN network. These can be found in NMN.yaml.
 
    ```
    sw-leaf-001(config)#

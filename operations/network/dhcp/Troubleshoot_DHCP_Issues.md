@@ -4,7 +4,7 @@ There are several things to check for when troubleshooting issues with Dynamic H
 
 ### Incorrect DHCP IP Addresses
 
-One of the most common issues is when the DHCP IPs are not matching in the Domain Name Service \(DNS\).
+One of the most common issues is when the DHCP IP addresses are not matching in the Domain Name Service \(DNS\).
 
 Check to make sure `cray-dhcp` is not running in Kubernetes:
 
@@ -19,7 +19,7 @@ If the `cray-dhcp` pod is running, use the following command to shut down the po
 ncn-w001# kubectl scale deploy cray-dhcp --replicas=0
 ```
 
-If the IPs are still not lining up with DNS and `cray-dhcp` is confirmed not running, wait 800 seconds for DHCP leases to expire and renew.
+If the IP addresses are still not lining up with DNS and `cray-dhcp` is confirmed not running, wait 800 seconds for DHCP leases to expire and renew.
 
 ### Verify the Status of the `cray-dhcp-kea` Pods and Services
 

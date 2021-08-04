@@ -22,7 +22,7 @@ This procedure requires administrative privileges.
 
     -   **Mellanox:**
 
-        Look at the number under the State/Pfx column in the output. There should be a number that matches the number of unique LoadBalancer IPs configured in the cluster.
+        Look at the number under the State/Pfx column in the output. There should be a number that matches the number of unique LoadBalancer IP addresses configured in the cluster.
 
         ```bash
         sw-spine-001# show ip bgp summary

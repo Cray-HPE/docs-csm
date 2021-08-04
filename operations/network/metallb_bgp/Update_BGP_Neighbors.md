@@ -9,7 +9,7 @@ You will not have BGP peers until CSM ```install.sh``` has run. This is where Me
 - Are my Neighbors stuck in IDLE?
   - Running `clear ip bgp all` on the Mellanox and `clear bgp *` on the Arubas will restart the BGP process. This process may need to be done when a system is reinstalled or when a worker node is rebuilt.
   - If you cannot get the neighbors out of IDLE, make sure that passive neighbors are configured. This is in the automated scripts and shown in the example below. Passive neighbors should only be configured on NCN neighbors not the switch to switch neighbors (Aruba Only)
-- The BGP neighbors will be the worker NCN IPs on the NMN (node management network) (VLAN002). If your system is using HPE/Aruba, one of the neighbors will be the other spine switch.
+- The BGP neighbors will be the worker NCN IP addresses on the NMN (node management network) (VLAN002). If your system is using HPE/Aruba, one of the neighbors will be the other spine switch.
 
 ## Generate MetalLB configmap
 - Depending on the network architecture of your system you may need to peer with switches other than the spines. CSI has a BGP peers argument that accepts 'aggregation' as an option, if no option is defined it will default to the spines as being the MetalLB peers. 
@@ -41,7 +41,7 @@ Script Usage
 ```
 USAGE: - <Spine01/Agg01> <Spine02/Agg02> <Path to CSI generated network files>
 
-       - The IPs used should be Node Management Network IPs (NMN), these IPs will be what is used for the BGP Router-ID.
+       - The IP addresses used should be Node Management Network IP addresses (NMN), these IP addresses will be what is used for the BGP Router-ID.
 
        - The path must include CAN.yaml', 'HMN.yaml', 'HMNLB.yaml', 'NMNLB.yaml', 'NMN.yaml
 
@@ -88,9 +88,9 @@ Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   
 10.252.0.8        4    65533        37421     42920     308       0      0      12:23:16:07   ESTABLISHED/51
 10.252.0.9        4    65533        37420     42962     308       0      0      12:23:16:07   ESTABLISHED/51
 ```
-- If the BGP neighbors are not in the `ESTABLISHED` state make sure the IPs are correct for the route-map and BGP configuration and the MetalLB speaker pods are running on all of the workers.
-- If IPs are incorrect you will have to update the configuration to match the IPs, the configuration below will need to be edited.
-- You can get the NCN IPs from the CSI generated files (NMN.yaml, CAN.yaml, HMN.yaml), these IPs are also located in /etc/dnsmasq.d/statics.conf on the LiveCD/ncn-m001.
+- If the BGP neighbors are not in the `ESTABLISHED` state make sure the IP addresses are correct for the route-map and BGP configuration and the MetalLB speaker pods are running on all of the workers.
+- If IP addresses are incorrect you will have to update the configuration to match the IP addresses, the configuration below will need to be edited.
+- You can get the NCN IP addresses from the CSI generated files (NMN.yaml, CAN.yaml, HMN.yaml), these IP addresses are also located in /etc/dnsmasq.d/statics.conf on the LiveCD/ncn-m001.
 
 ```
 pit# grep w00 /etc/dnsmasq.d/statics.conf | grep nmn
@@ -98,7 +98,7 @@ host-record=ncn-w003,ncn-w003.nmn,10.252.1.13
 host-record=ncn-w002,ncn-w002.nmn,10.252.1.14
 host-record=ncn-w001,ncn-w001.nmn,10.252.1.15
 ```
-- The route-map configuration will require you to get the HMN, and CAN IPs as well. Note the `Bond0 Mac0/Mac1` entry is for the NMN.
+- The route-map configuration will require you to get the HMN, and CAN IP addresses as well. Note the `Bond0 Mac0/Mac1` entry is for the NMN.
 ```
 pit# grep ncn-w /etc/dnsmasq.d/statics.conf | egrep "Bond0|HMN|CAN" | grep -v mgmt
 dhcp-host=50:6b:4b:08:d0:4a,10.252.1.13,ncn-w003,20m # Bond0 Mac0/Mac1
@@ -270,9 +270,9 @@ Mellanox configuration example.
    router bgp 65533 vrf default neighbor 10.252.0.9 transport connection-mode passive
 ```
 
-- Once the IPs are updated for the route-maps and BGP neighbors you may need to restart the BGP process on the switches, you do this by running `clear ip bgp all` on the Mellanox and `clear bgp *` on the Arubas. (This may need to be done multiple times for all the peers to come up)
+- Once the IP addresses are updated for the route-maps and BGP neighbors you may need to restart the BGP process on the switches, you do this by running `clear ip bgp all` on the Mellanox and `clear bgp *` on the Arubas. (This may need to be done multiple times for all the peers to come up)
 - When worker nodes are reinstalled, the BGP process will need to be restarted. 
-- If the BGP peers are still not coming up you should check the metallb.yaml config file for errors. The MetalLB config file should point to the NMN IPs of the switches configured.
+- If the BGP peers are still not coming up you should check the metallb.yaml config file for errors. The MetalLB config file should point to the NMN IP addresses of the switches configured.
 
 metallb.yaml configuration example.
 - The peer-address should be the IP of the switch that you are doing BGP peering with.  
