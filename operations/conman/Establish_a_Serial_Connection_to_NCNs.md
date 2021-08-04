@@ -14,7 +14,7 @@ The user performing this procedure needs to have access permission to the cray-c
 
     ```
     ncn-m001# CONPOD=$(kubectl get pods -n services -o wide|grep cray-console-operator|awk '{print $1}')
-    ncn-m001# NODEPOD=$(kubectl -n services exec $CONPOD -c cray-console-operator -- sh -c '/app/get-node XNAME' \
+    ncn-m001# NODEPOD=$(kubectl -n services exec $CONPOD -- sh -c '/app/get-node XNAME' \
     | jq .podname | sed 's/"//g')
     ncn-m001# echo $NODEPOD
     cray-console-node-2
@@ -53,7 +53,7 @@ The user performing this procedure needs to have access permission to the cray-c
     4. Check which cray-console-node pod the NCN is connected to.
       
         ```
-        ncn-m001# NODEPOD=$(kubectl -n services exec $CONPOD -c cray-console-operator -- sh -c '/app/get-node XNAME' \
+        ncn-m001# NODEPOD=$(kubectl -n services exec $CONPOD -- sh -c '/app/get-node XNAME' \
         | jq .podname | sed 's/"//g')
         ncn-m001# echo $NODEPOD
         ```
