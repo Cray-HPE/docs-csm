@@ -149,8 +149,10 @@ The `kubectl` command is installed.
 ### NCN Rolling Reboot
 
 Before rebooting NCNs:
-  * Ensure pre-reboot checks have been completed, including checking the `metal.no-wipe` setting for each NCN. Do not proceed if any of the NCN `metal.no-wipe` settings are zero.
-  * Apply any workaround located in /opt/cray/csm/workarounds/ if instructed.  If you did not apply CASMINST-2689 from step 7 above, then please do so now, otherwise you may encounter boot issues.
+
+* Ensure pre-reboot checks have been completed, including checking the `metal.no-wipe` setting for each NCN. Do not proceed if any of the NCN `metal.no-wipe` settings are zero.
+
+* Apply any workaround located in /opt/cray/csm/workarounds/ if instructed.  If you did not apply CASMINST-2689 from step 7 above, then please do so now, otherwise you may encounter boot issues.
 
 #### Utility Storage Nodes (Ceph)
 
@@ -160,35 +162,34 @@ Before rebooting NCNs:
 
         Use the [Establish a Serial Connection to NCNs](../conman/Establish_a_Serial_Connection_to_NCNs.md) procedure referenced in step 4.
 
-    1. Power cycle the highest numbered NCN storage node \(`ncn-s0xx`\).
+    2. reboot the selected NCN
 
-        Ensure the expected results are returned from the power status check before rebooting:
+        1. ```bash
+            ncn-s# shutdown -r now
+           ```
 
-        ```bash
-        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
-        ```
+        **`IMPORTANT:`** If the node does not shutdown after 5 mins, then proceed with the power reset below
 
         To power off the node:
 
-        ```bash
-        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power off
-        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
-        ```
+        1. ```bash
+           ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power off
+           ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
+           ```
 
-        Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
+            Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
 
         To power back on the node:
 
-        ```bash
-        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power on
-        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
-        ```
+        1. ```bash
+            ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power on
+            ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
+            ```
 
         Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
+    3. Watch on the console until the NCN has successfully booted and the login prompt is reached.
 
-    1. Watch on the console until the NCN has successfully booted and the login prompt is reached.
-
-    1. Run the platform health checks from the [Validate CSM Health](../validate_csm_health.md) procedure.
+    4. Run the platform health checks from the [Validate CSM Health](../validate_csm_health.md) procedure.
 
         **Troubleshooting:** If the slurmctld and slurmdbd pods do not start after powering back up the node, check for the following error:
 
@@ -207,9 +208,9 @@ Before rebooting NCNs:
         - /var/lib/cni/networks/macvlan-slurmctld-nmn-conf
         - /var/lib/cni/networks/macvlan-slurmdbd-nmn-conf
 
-    1. Disconnect from the console.
+    5. Disconnect from the console.
 
-    1. Repeat all of the sub-steps above for the remaining storage nodes, going from the highest to lowest number until all storage nodes have successfully rebooted.
+    6. Repeat all of the sub-steps above for the remaining storage nodes, going from the highest to lowest number until all storage nodes have successfully rebooted.
 
         **Important:** Ensure `ceph -s` shows that Ceph is healthy BEFORE MOVING ON to reboot the next storage node. Once Ceph has recovered the downed mon, it may take a several minutes for Ceph to resolve clock skew.
 
@@ -237,7 +238,7 @@ Before rebooting NCNs:
        ncn-m# kubectl drain  --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
        ```
 
-    1. reboot the selected NCN worker node \(`ncn-w0xx`\).
+    1. Reboot the selected NCN
 
         1. ```bash
             ncn-w# shutdown -r now
@@ -287,13 +288,13 @@ Before rebooting NCNs:
 
 #### NCN Master Nodes
 
-1. Reboot each of the NCN master nodes \(one at a time\).
+1. Reboot each of the NCN \(one at a time\).
 
     1. Establish a console session to the NCN master node you are rebooting.
 
         See step [Establish a Serial Connection to NCNs](../conman/Establish_a_Serial_Connection_to_NCNs.md) for more information.
 
-    1. Reboot the selected NCN master node \(`ncn-m0xx`\).
+    2. Reboot the selected NCN.
 
         1. ```bash
             ncn-m001# shutdown -r now
@@ -321,21 +322,21 @@ Before rebooting NCNs:
 
         Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
 
-    1. Watch on the console until the NCN has successfully booted and the login prompt is reached.
+    3. Watch on the console until the NCN has successfully booted and the login prompt is reached.
 
-    1. Run the platform health checks in [Validate CSM Health](../validate_csm_health.md).
+    4. Run the platform health checks in [Validate CSM Health](../validate_csm_health.md).
 
-    1. Disconnect from the console.
+    5. Disconnect from the console.
 
-    1. Repeat all of the sub-steps above for the remaining master nodes \(excluding `ncn-m001`\), going from the highest to lowest number until all master nodes have successfully rebooted.
+    6. Repeat all of the sub-steps above for the remaining master nodes \(excluding `ncn-m001`\), going from the highest to lowest number until all master nodes have successfully rebooted.
 
-1. Reboot `ncn-m001`.
+2. Reboot `ncn-m001`.
 
     1. Determine the CAN IP address for one of the other NCNs in the system to establish an SSH session with that NCN.
 
-    1. Establish a console session to `ncn-m001` from a remote system, as `ncn-m001` is the NCN that has an externally facing IP address.
+    2. Establish a console session to `ncn-m001` from a remote system, as `ncn-m001` is the NCN that has an externally facing IP address.
 
-    1. Power cycle the node
+    3. Power cycle the node
 
         Ensure the expected results are returned from the power status check before rebooting:
 
@@ -361,13 +362,13 @@ Before rebooting NCNs:
 
         Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
 
-    1. Watch on the console until the NCN has successfully booted and the login prompt is reached.
+    4. Watch on the console until the NCN has successfully booted and the login prompt is reached.
 
-    1. Run the platform health checks in [Validate CSM Health](../validate_csm_health.md).
+    5. Run the platform health checks in [Validate CSM Health](../validate_csm_health.md).
 
-    1. Disconnect from the console.
+    6. Disconnect from the console.
 
-1. Re-run the platform health checks and ensure that all BGP peering sessions are Established with both spine switches.
+3. Re-run the platform health checks and ensure that all BGP peering sessions are Established with both spine switches.
 
     See [Validate CSM Health](../validate_csm_health.md) for the platform health checks.
 
