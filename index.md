@@ -79,11 +79,11 @@ The chapters with topics which need to be done as part of an ordered procedure a
 1. [CSM Operational Activities](operations/index.md)
 
    Topics:
-   * [Lock and Unlock Nodes](operations/lock_and_unlock_nodes.md)
+   * [Lock and Unlock Nodes](operations/hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
    * [Validate CSM Health](operations/validate_csm_health.md)
-   * [Configure Keycloak Account](operations/configure_keycloak_account.md)
+   * [Configure Keycloak Account](operations/CSM_product_management/Configure_Keycloak_Account.md)
    * [Configure the Cray Command Line Interface (cray CLI)](operations/configure_cray_cli.md)
-   * [Configure BMC and Controller Parameters with SCSD](operations/configure_with_scsd.md)
+   * [Configure BMC and Controller Parameters with SCSD](operations/system_configuration_service/Configure_BMC_and_Controller_Parameters_with_scsd.md)
    * [Update BGP Neighbors](operations/update_bgp_neighbors.md)
    * [Update Firmware with FAS](operations/firmware/Update_Firmware_with_FAS.md)
    * [Manage Node Consoles](operations/manage_node_consoles.md)

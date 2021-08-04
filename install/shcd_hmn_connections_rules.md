@@ -75,7 +75,7 @@ Air-cooled compute nodes are typically in a 2U chassis that contains 4 compute n
 
 The value of the SourceParent field is used to group together the 4 nodes that are contained within the same chassis, and it is used to reference another row in the SHCD HMN table. The referenced SourceParent row is used to determine the rack slot that the compute nodes in occupy.
 * The SourceParent row can be a Chassis Management Controller which can be used to control devices underneath it. This device typically will have a connection to the HMN. A Gigabyte CMC is an example of a CMC. If a CMC is not connected to the HMN network, this will prevent CSM services from managing that device.
-* The SourceParent row can be a virtual parent that is used to symbolically group the compute nodes together into a chassis. Does not need to not have a connection to the HMN.
+* The SourceParent row can be a virtual parent that is used to group the compute nodes together symbolically into a chassis. Does not need to not have a connection to the HMN.
 
 
 The rack slot that a compute node occupies is determined by the Rack Slot of the SourceParent. The SourceLocation of the parent is the bottom most U of the chassis. The xname that is given to the 4 nodes in the same chassis used by the HMS/SLS services specify that all of the computes are in the same rack U (bottommost U of the chassis)

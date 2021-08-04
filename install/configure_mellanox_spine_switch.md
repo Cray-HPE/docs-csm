@@ -345,7 +345,7 @@ These ACLs are designed to block traffic from the node management network to and
    sw-spine-001(config ipv4 access-list nmn-hmn) # exit
    ```
 
-1. Apply ACL to a VLANs
+1. Apply ACL to VLANs
 
    ```
    sw-spine-001(config) # interface vlan 2 ipv4 port access-group nmn-hmn
@@ -357,7 +357,7 @@ These ACLs are designed to block traffic from the node management network to and
 Spanning tree will need to be applied to each MAGP pair. Spine01 will have a lower priority making it the root bridge.
 Spanning tree configuration has not changed from 1.3 to 1.5.
 
-1. The following config is applied to Mellanox spine switches.  This is an example of a switch to switch connection. 
+1. The following config is applied to Mellanox spine switches. This is an example of a switch to switch connection. 
 
    ```
    sw-spine-001 & sw-spine-002 (config)#

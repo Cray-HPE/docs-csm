@@ -545,7 +545,7 @@ For each of the BMCs that show up in the mismatch list use the following notes t
 * Chassis Management Controllers (CMC) may show up as not being present in HSM. CMCs for Intel server blades can be ignored. Gigabyte server blade CMCs not found in HSM is not normal and should be investigated. If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored.
    > CMCs have xnames in the form of `xXc0sSb999`, where `X` is the cabinet and `S` is the rack U of the compute node chassis.
 * HPE PDUs are not supported at this time and will likely show up as not being found in HSM. They can be ignored.
-   > Cabinet PDU Controllers have xnames in the form of `xXmM`, where `X` is the cabinet and `M` is the ordinal of the Cabibnet PDU Controller.
+   > Cabinet PDU Controllers have xnames in the form of `xXmM`, where `X` is the cabinet and `M` is the ordinal of the Cabinet PDU Controller.
 * BMCs having no association with a management switch port will be annotated as such, and should be investigated. Exceptions to this are in Mountain or Hill configurations where Mountain BMCs will show this condition on SLS/HSM mismatches, which is normal.
 * In Hill configurations SLS assumes BMCs in chassis 1 and 3 are fully populated (32 Node BMCs), and in Mountain configurations SLS assumes all BMCs are fully populated (128 Node BMCs). Any non-populated BMCs will have no HSM data and will show up in the mismatch list.
 
@@ -556,7 +556,49 @@ A listing of known hardware discovery issues and workarounds can be found here i
 <a name="sms-health-checks"></a>
 ## 3 Software Management Services Health Checks
 
-Run the Software Management Services health checks. These can be run from any master or worker node (but **not** the PIT).
+The Software Management Services health checks are run using `/usr/local/bin/cmsdev`.
+
+1. [cmsdev Usage](#cmsdev-usage)
+1. [Interpreting cmsdev Results](#cmsdev-results)
+1. [SMS Checks To Run](#sms-checks)
+
+<a name="cmsdev-usage"></a>
+### 3.1 cmsdev Usage
+`cmsdev test [-q | -v] <shortcut>`
+* The shortcut determines which component will be tested. See the table in the next section for the list of shortcuts.
+* The tool logs to /opt/cray/tests/cmsdev.log
+* The -q (quiet) and -v (verbose) flags can be used to decrease or increase the amount of information sent to the screen.
+  * The same amount of data is written to the log file in either case.
+
+<a name="cmsdev-results"></a>
+#### 3.2 Interpreting cmsdev Results
+
+* If a test passes:
+  * The last line of output from the tool reports SUCCESS.
+  * The return code is 0.
+* If a test fails:
+  * The last line of output from the tool reports FAILURE.
+  * The return code is non-0.
+* Unless the test was run in verbose mode, the log file will contain additional information about the execution.
+
+<a name="sms-checks"></a>
+### 3.3 SMS Checks To Run
+
+Run a check for each of the following services after an install. These should be run on at least one worker node and at least one master node (but **not** ncn-m001 if it is still the PIT node).
+
+| Services  | Shortcut |
+| ---  | --- |
+| BOS (Boot Orchestration Service) | bos |
+| CFS (Configuration Framework Service) | cfs |
+| ConMan (Console Manager) | conman |
+| CRUS (Compute Rolling Upgrade Service) | crus |
+| IMS (Image Management Service) | ims |
+| iPXE, TFTP (Trivial File Transfer Protocol) | ipxe* |
+| VCS (Version Control Service) | vcs |
+
+\* The iPXE shortcut runs a check of both the iPXE service and the TFTP service.
+
+The following is a convenient way to run all of the tests and see if they passed:
 
 ```bash
 ncn# /usr/local/bin/cmsdev test -q all
@@ -582,7 +624,7 @@ the Cray OS (COS) product, or similar, be used.
 the beyond the dracut stage of the boot process. However, if the dracut stage is reached the
 boot can be considered successful and shows that the necessary CSM services needed to
 boot a node are up and available.
-   * This inability to fully boot the barebones image will be resolved in future releases of the
+   * This inability to boot the barebones image fully will be resolved in future releases of the
    CSM product.
 * In addition to the CSM Barebones image, the release also includes an IMS Recipe that
 can be used to build the CSM Barebones image. However, the CSM Barebones recipe currently requires

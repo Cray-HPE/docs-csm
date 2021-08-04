@@ -1,6 +1,6 @@
 # Update BGP Neighbors
 
-This page will detail how to manually configure and verify BGP neighbors on the management switches.
+This page will detail the manual procedure to configure and verify BGP neighbors on the management switches.
 
 You will not have BGP peers until CSM ```install.sh``` has run. This is where MetalLB is deployed.
 

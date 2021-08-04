@@ -133,7 +133,7 @@ These ACLs are designed to block traffic from the node management network to and
        90 permit any any any
    ```
 
-1. Apply ACL to a VLANs.
+1. Apply ACL to VLANs
 
    ```
    sw-leaf-001(config)#

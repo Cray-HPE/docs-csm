@@ -255,7 +255,7 @@ function resize-postgresql-pvc
 ncn-w001# resize-postgresql-pvc cray-smd-postgres pgdata-cray-smd-postgres services 100Gi
 ```
 
-In order to persist any Postgres PVC storage volume size changes, it is necessary that this change also be made to the customer-managed customizations.yaml file. See the Postgres PVC Resize information in the [Post Install Customizations](../Post_Install_Customizations.md#postgres_pvc_resize).
+In order to persist any Postgres PVC storage volume size changes, it is necessary that this change also be made to the customer-managed customizations.yaml file. See the Postgres PVC Resize information in the [Post Install Customizations](../CSM_product_management/Post_Install_Customizations.md#postgres_pvc_resize).
 
 #### Case 2: msg="could not sync cluster: could not sync roles: could not init db connection: could not init db connection: still failing after 8 retries"
 

@@ -239,7 +239,7 @@ One port is shutdown.
        90 permit any any any
    ```
 
-1. Apply ACL to a VLANs.
+1. Apply ACL to VLANs.
    ```
    sw-cdu-001 & sw-cdu-002 (config)#
        vlan 2

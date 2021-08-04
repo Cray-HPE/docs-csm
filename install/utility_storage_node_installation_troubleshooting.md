@@ -1,7 +1,7 @@
 # Utility Storage Installation Troubleshooting
 
 If there is a failure in the creation of Ceph storage on the utility storage nodes for one of these scenarios,
-the ceph storage might need to be reinitialized.
+the Ceph storage might need to be reinitialized.
 
 ### Topics
 
@@ -49,7 +49,7 @@ ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
    *This will take a little bit of time, so do not panic.*
    3. ncn-s# for i in {g..n}; do sgdisk --zap-all /dev/sd$i; done.
 
-   **This will vary node to node. Use lsblk to identify all drives available to ceph**
+   **This will vary node to node. Use lsblk to identify all drives available to Ceph**
 
    >**Manually create OSDs on the problematic nodes**
    >ncn-s# for i in {g..n}; do ceph-volume lvm create --data /dev/sd$i  --bluestore; done
@@ -147,7 +147,7 @@ Find the drive path
 cephadm ceph-volume lvm list
 ncn-s002:~ #  cephadm ceph-volume lvm list
 Inferring fsid 8f4dd38b-ee84-4d29-8305-1ef24e61a5d8
-Using recent ceph image docker.io/ceph/ceph@sha256:16d37584df43bd6545d16e5aeba527de7d6ac3da3ca7b882384839d2d86acc7d
+Using recent Ceph image docker.io/ceph/ceph@sha256:16d37584df43bd6545d16e5aeba527de7d6ac3da3ca7b882384839d2d86acc7d
 /usr/bin/podman: stdout
 /usr/bin/podman: stdout
 /usr/bin/podman: stdout ====== osd.0 =======
