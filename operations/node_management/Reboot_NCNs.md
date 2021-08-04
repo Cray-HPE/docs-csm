@@ -225,6 +225,12 @@ Before rebooting NCNs:
 
         See [Establish a Serial Connection to NCNs](../conman/Establish_a_Serial_Connection_to_NCNs.md) for more information.
 
+    1. Failover any postgres leader that is running on the NCN worker node you are rebooting.
+
+       ````bash
+       ncn-m# /usr/share/doc/csm/upgrade/1.0/scripts/k8s/failover-leader.sh <node to be rebooted>
+       ````
+
     1. Cordon and Drain the node
 
        ```bash
