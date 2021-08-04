@@ -129,7 +129,7 @@ install).
       ```
 
    * from the **LiveCD** (`pit`):
-      > **`NOTE`** This step uses the old statics.conf on the system in case CSI changes IPs:
+      > **`NOTE`** This step uses the old statics.conf on the system in case CSI changes IP addresses:
 
       ```bash
       pit# export username=root

@@ -113,9 +113,9 @@ making a backup of them, in case they need to be examined at a later time.
    pit# systemctl restart wickedd-nanny && sleep 5
    ```
 
-1. Check that IPs are set for each interface and investigate any failures.
+1. Check that IP addresses are set for each interface and investigate any failures.
 
-    1. Check IPs, do not run tests if these are missing and instead start triage.
+    1. Check IP addresses, do not run tests if these are missing and instead start triage.
 
        ```bash
        pit# wicked show bond0 vlan002 vlan004 vlan007
@@ -294,9 +294,9 @@ making a backup of them, in case they need to be examined at a later time.
    pit# systemctl restart wickedd-nanny && sleep 5
    ```
 
-1. Check that IPs are set for each interface and investigate any failures.
+1. Check that IP addresses are set for each interface and investigate any failures.
 
-    1. Check IPs, do not run tests if these are missing and instead start triage.
+    1. Check IP addresses, do not run tests if these are missing and instead start triage.
 
        ```bash
        pit# wicked show bond0 vlan002 vlan004 vlan007

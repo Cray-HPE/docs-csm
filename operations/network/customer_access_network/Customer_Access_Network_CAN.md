@@ -32,23 +32,23 @@ IP addresses are allocated from a single IP subnet that is configured as the `ca
 -   Subnet for NCNs, UANs, and switches.
 -   Subnet for the MetalLB static pool \(can-static-pool\).
     -   This is used for services that need to be pinned to the same IP address. For example, the external DNS service that needs to be configured in the upstream DNS server.
-    -   This subnet currently needs only a few IPs.
+    -   This subnet currently needs only a few IP addresses.
 -   Subnet for the MetalLB dynamic pool \(can-dynamic-pool\).
-    -   This is the largest subnet because it is used for most of the other services, which includes UAIs. These IPs can be allocated differently across deployments because these services are accessed by DNS name rather than by IP.
-    -   The size of this subnet depends on how many UAI and Image Management Service \(IMS\) pods are needed at a given time because these IPs will come out of this subnet.
+    -   This is the largest subnet because it is used for most of the other services, which includes UAIs. These IP addresses can be allocated differently across deployments because these services are accessed by DNS name rather than by IP.
+    -   The size of this subnet depends on how many UAI and Image Management Service \(IMS\) pods are needed at a given time because these IP addresses will come out of this subnet.
 
 The minimum size for the CAN subnet is /26. The CAN /26 subnet allows for the following:
 
--   27 IPs for the NCNs, UANs, and Switches.
--   4 IPs for the CAN static service IPs.
--   32 IPs for the rest of the external CAN services.
+-   27 IP addresses for the NCNs, UANs, and Switches.
+-   4 IP addresses for the CAN static service IP addresses.
+-   32 IP addresses for the rest of the external CAN services.
 
-    The 32 service IPs will be used for the 5 standard customer-access service IPs and the remaining 27 IPs are for UAI and/or IMS services.
+    The 32 service IP addresses will be used for the 5 standard customer-access service IP addresses and the remaining 27 IP addresses are for UAI and/or IMS services.
 
 
 ![CAN /26 Subnet Layout](../../../img/operations/CAN_26_Subnet.PNG "CAN /26 Subnet Layout")
 
-If there are more than 27 IPs needed for NCNs, UANs, and switches, and/or more than 32 IPs needed for the external CAN services, then the CAN subnet will need to be larger than a /26.
+If there are more than 27 IP addresses needed for NCNs, UANs, and switches, and/or more than 32 IP addresses needed for the external CAN services, then the CAN subnet will need to be larger than a /26.
 
 ![CAN /25 Subnet Layout](../../../img/operations/CAN_25_Subnet.PNG "CAN /25 Subnet Layout")
 
