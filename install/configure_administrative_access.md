@@ -29,7 +29,7 @@ BMC/controller passwords.
       such as LDAP. Having an account in keycloak with administrative credentials enables the use of many
       management services via the `cray` command.
 
-      See [Configure Keycloak Account](../operations/configure_keycloak_account.md)  
+      See [Configure Keycloak Account](../operations/CSM_product_management/Configure_Keycloak_Account.md)  
    <a name="configure_cray_cli"></a>
    1. Configure the Cray Command Line Interface (cray CLI)
 
@@ -55,7 +55,7 @@ BMC/controller passwords.
    
       Lock the management nodes **now**!
    
-      See [Lock and Unlock Nodes](../operations/lock_and_unlock_nodes.md)
+      See [Lock and Unlock Nodes](../operations/hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
    <a name="configure_with_scsd"></a>
    1. Configure BMC and Controller Parameters with SCSD
 
@@ -67,13 +67,13 @@ BMC/controller passwords.
    
       Note: If there are no liquid-cooled cabinets present in the HPE Cray EX system, then this procedure can be skipped.
    
-      See [Configure BMC and Controller Parameters with SCSD](../operations/configure_with_scsd.md)
+      See [Configure BMC and Controller Parameters with SCSD](../operations/system_configuration_service/Configure_BMC_and_Controller_Parameters_with_scsd.md)
    <a name="cray_upload_recovery_images"></a>   
    1. Upload Olympus BMC Recovery Firmware into TFTP server
 
       The Olympus hardware (NodeBMCs, ChassisBMCs, RouterBMCs) needs to have recovery firmware loaded to the cray-tftp server in case the BMC loses its firmware. The BMCs are configured to load a recovery firmware from a TFTP server. This procedure does not modify any BMC firmware, but only stages the firmware on the TFPT server for download in the event it is needed.  
    
-      See [Load Olympus BMC Recovery Firmware into TFTP server](../operations/cray_upload_recovery_images.md)
+      See [Load Olympus BMC Recovery Firmware into TFTP server](../operations/firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md)
             
    <a name="next-topic"></a>
    1. Next Topic

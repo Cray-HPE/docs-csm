@@ -17,7 +17,7 @@ Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmwa
 
 ### Warning for Non-Compute Nodes (NCNs)</a>
 
-**WARNING:** NCNs should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS. Research [NCN and Management Node Locking](../hardware_state_manager/NCN_and_Management_Node_Locking.md) for more information. Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
+**WARNING:** NCNs should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS. Research [NCN and Management Node Locking](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information. Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
 
 ---
 
@@ -27,7 +27,7 @@ Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmwa
 
 The default configuration of FAS no longer ignores `management` nodes, which prevents FAS from firmware updating the NCNs. To reconfigure the FAS deployment to exclude non-compute nodes (NCNs) and ensure they cannot have their firmware upgraded, the `NODE_BLACKLIST` value must be manually enabled
 
-Nodes can also be locked with the Hardware State Manager (HSM) API. Refer to [NCN and Management Node Locking](../hardware_state_manager/NCN_and_Management_Node_Locking.md) for more information.
+Nodes can also be locked with the Hardware State Manager (HSM) API. Refer to [NCN and Management Node Locking](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information.
 
 #### Procedure
 

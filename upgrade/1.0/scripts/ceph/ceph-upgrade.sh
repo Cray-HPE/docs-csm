@@ -68,7 +68,7 @@ if [ -f "$convert_rgw_file" ]; then
 else
   echo "Converting radosgw to a cephadm compatible config"
   convert_radosgw
-  echo "restarting radosgw daemons"
+  echo "Restarting radosgw daemons"
   restart_radosgw_daemons
   mark_initialized $convert_rgw_file
 fi
@@ -85,9 +85,9 @@ fi
 ### Begin run on each mon/mgr
 
 if [ -f "$upgrade_mons_file" ]; then
-  echo "The ceph mon daemons have been upgraded"
+  echo "The Ceph mon daemons have been upgraded"
 else
-  echo "upgrading ceph mons"
+  echo "Upgrading Ceph mons"
   upgrade_ceph_mons
   ## Check if everything was converted
   ## FIXME - ceph orch is not available yet.  
@@ -99,9 +99,9 @@ fi
 
 
 if [ -f "$upgrade_mgrs_file" ]; then
-  echo "The ceph mgr daemons have been upgraded"
+  echo "The Ceph mgr daemons have been upgraded"
 else
-  echo "upgrading Ceph"
+  echo "Upgrading Ceph"
   upgrade_ceph_mgrs
   #Add check for mgrs here (find else repeat)
   mark_initialized $upgrade_mgrs_file
@@ -121,7 +121,7 @@ fi
 if [ -f "$setup_orch_file" ]; then
   echo "This Ceph cluster has been converted to ceph-orchestrator"
 else
-  echo "upgrading Ceph"
+  echo "Upgrading Ceph"
   ceph_orch_tasks
   wait_for_orch_hosts
   mark_initialized $setup_orch_file
@@ -140,7 +140,7 @@ fi
 
 update_image_values
 
-echo "disable stray host/daemon warnings"
+echo "Disable stray host/daemon warnings"
 ceph config set mgr mgr/cephadm/warn_on_stray_hosts false
 ceph config set mgr mgr/cephadm/warn_on_stray_daemons false
 
@@ -169,11 +169,11 @@ else
   mark_initialized $upgrade_rgws_file
 fi
 
-echo "enable ceph orch to manage all services"
+echo "Enable Ceph orch to manage all services"
 ceph orch apply mon --placement="3 $(ceph node ls|jq -r '.mon|keys| join(" ")')"
 ceph orch apply mgr --placement="3 $(ceph node ls|jq -r '.mon|keys| join(" ")')"
 
-echo "enable stray host warnings"
+echo "Enable stray host warnings"
 ceph config set mgr mgr/cephadm/warn_on_stray_hosts true
 ceph config set mgr mgr/cephadm/warn_on_stray_daemons true
 
@@ -182,9 +182,9 @@ wait_for_health_ok
 echo "Scaling up cephfs clients"
 scale_up_cephfs_clients
 
-echo "enabling all Ceph services to start on boot"
+echo "Enabling all Ceph services to start on boot"
 for host in $(ceph node ls| jq -r '.osd|keys[]')
   do
-    echo "enabling services on host: $host"
-    ssh "$host" 'for service in $(cephadm ls |jq -r .[].systemd_unit|grep $(ceph status -f json-pretty |jq -r .fsid));do echo "enabling service $service on ncn-s002"; systemctl enable $service;done'
+    echo "Enabling services on host: $host"
+    ssh "$host" 'for service in $(cephadm ls |jq -r .[].systemd_unit|grep $(ceph status -f json-pretty |jq -r .fsid));do echo "Enabling service $service on ncn-s002"; systemctl enable $service;done'
   done

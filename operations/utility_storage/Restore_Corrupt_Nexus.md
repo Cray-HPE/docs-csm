@@ -51,7 +51,7 @@ The commands in this procedure should be run from a master NCN (unless otherwise
    ncn-m001# kubectl -n nexus delete pvc nexus-data
    ```
 
-1. Re-install the `cray-nexus` helm chart (using the chart and manfest determined in step 1).
+1. Re-install the `cray-nexus` helm chart (using the chart and manifest determined in step 1).
 
    ```bash
    ncn-m001# loftsman ship --manifest-path /mnt/pitdata/csm-0.9.4/manifests/nexus.yaml --charts-path /mnt/pitdata/csm-0.9.4/helm/cray-nexus-0.6.0.tgz

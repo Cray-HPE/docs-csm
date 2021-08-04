@@ -297,7 +297,7 @@ These ACLs are designed to block traffic from the node management network to and
        90 permit any any any
    ```
 
-1. Apply ACL to a VLANs.
+1. Apply ACL to VLANs
 
    ```
    sw-spine-001 & sw-spine-002 (config)#
