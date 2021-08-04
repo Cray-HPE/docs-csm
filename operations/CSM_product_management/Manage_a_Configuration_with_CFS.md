@@ -335,8 +335,8 @@ procedure.
          {
            "name": "sat-ncn",
            "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/sat-config-management.git",
-           "commit": "2a388b1dcdaf59710b9c4a7ece0b549a4e95bae5",
-           "playbook": "sat-ncn.yml"
+           "playbook": "sat-ncn.yml",
+           "commit": "2a388b1dcdaf59710b9c4a7ece0b549a4e95bae5"
          },
          {
             "name": "sma-base-config",
@@ -353,8 +353,8 @@ procedure.
          {
             "name": "cos-integration-2.1.0",
             "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git",
-            "playbook": "ncn.yml"
-            "commit": "ccd964f8eeeb52ab8f895b480c5d1142c7bc0a8e",
+            "playbook": "ncn.yml",
+            "commit": "ccd964f8eeeb52ab8f895b480c5d1142c7bc0a8e"
          },
          {
             "name": "cpe-integration-21.6.4",
@@ -392,8 +392,8 @@ procedure.
          {
            "name": "sat-ncn",
            "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/sat-config-management.git",
-           "playbook": "sat-ncn.yml"
-           "commit": "2a388b1dcdaf59710b9c4a7ece0b549a4e95bae5",
+           "playbook": "sat-ncn.yml",
+           "commit": "2a388b1dcdaf59710b9c4a7ece0b549a4e95bae5"
          },
          {
             "name": "sma-base-config",
@@ -410,8 +410,8 @@ procedure.
          {
             "name": "cos-integration-2.1.0",
             "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git",
-            "playbook": "ncn.yml"
-            "commit": "ccd964f8eeeb52ab8f895b480c5d1142c7bc0a8e",
+            "playbook": "ncn.yml",
+            "commit": "ccd964f8eeeb52ab8f895b480c5d1142c7bc0a8e"
          },
          {
             "name": "cpe-integration-21.6.4",
