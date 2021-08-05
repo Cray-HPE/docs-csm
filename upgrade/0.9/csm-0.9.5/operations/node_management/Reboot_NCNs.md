@@ -226,7 +226,7 @@ Before rebooting NCNs:
 	If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot.  The following command will need to be run on the cli for the NCN that has just been rebooted (and is incorrect).
 
         ```bash
-        ncn-s# hostnamectl set-hostname $hostnam
+        ncn-s# hostnamectl set-hostname $hostname
         ```
 
 	where `$hostname` is the original hostname from before reboot
@@ -237,7 +237,7 @@ Before rebooting NCNs:
 
 	Recall that updated copies of the two HealthCheck scripts referenced in the `Platform Health Checks` can be run from here:
 
-	```bash
+        ```bash
         ncn-m001# "${CSM_SCRIPTDIR}/ncnHealthChecks.sh"
         ncn-m001# "${CSM_SCRIPTDIR}/ncnPostgresHealthChecks.sh"
         ```
