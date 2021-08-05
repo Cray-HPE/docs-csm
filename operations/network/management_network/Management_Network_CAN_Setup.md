@@ -22,7 +22,7 @@ The two physical connections between the NCN and spines is MLAG'ed. MAGP/VSX is 
 
 ![Diagram of Switch Configuration for CAN](../../../img/network/can-diagram.png)
 
-This is an example of the p2p configuration on the spine switches. The IP address should be replaced with the IP chosen by the customer matching the customer's switch configuration.
+This is an example of the p2p configuration on the spine switches. The IP address should be replaced with the IP address chosen by the customer matching the customer's switch configuration.
 
 Mellanox:
 ```

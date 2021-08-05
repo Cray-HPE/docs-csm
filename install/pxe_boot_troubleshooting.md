@@ -9,7 +9,7 @@ In order for PXE booting to work successfully, the management network switches n
 To successfully PXE boot nodes, the following is required.
 
 - The IP helper-address must be configured on VLAN 1,2,4,7. This will be where the layer 3 gateway exists (spine or aggregation)
-- The virtual-IP/VSX/MAGP IP must be configured on VLAN 1,2,4,7.
+- The virtual-IP/VSX/MAGP IP address must be configured on VLAN 1,2,4,7.
 - There must be a static route pointing to the TFTP server (Aruba Only).
 - ncn-m001 needs an active gateway on VLAN1 this can be identified from MTL.yaml generated from CSI.
 - ncn-m001 needs an IP helper-address on VLAN1 pointing to 10.92.100.222. 
@@ -98,7 +98,7 @@ sw-spine-002(config-if-vlan)# write mem
 
 Verify the route to the TFTP server is in place.
 This is a static route to get to the TFTP server via a worker node.
-You can get the worker node IP from NMN.yaml from CSI generated data.
+You can get the worker node IP address from `NMN.yaml` from CSI-generated data.
 ```
   - ip_address: 10.252.1.9
     name: ncn-w001

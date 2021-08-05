@@ -1,8 +1,8 @@
 ## Troubleshoot Connectivity to Services with External IP addresses
 
-Systems that do not support CAN will not have services provisioned with external IP addresses on CAN. Kubernetes will report a `<pending>` status for the external IP of the service experiencing connectivity issues.
+Systems that do not support CAN will not have services provisioned with external IP addresses on CAN. Kubernetes will report a `<pending>` status for the external IP address of the service experiencing connectivity issues.
 
-If SSH access to a non-compute node \(NCN\) is available, it is possible to override resolution of external hostnames and forward local ports into the cluster for the cluster IP of the corresponding service.
+If SSH access to a non-compute node \(NCN\) is available, it is possible to override resolution of external hostnames and forward local ports into the cluster for the cluster IP address of the corresponding service.
 
 **Warning:** This will bypass the Keycloak gatekeeper and Istio ingress gateway, which handle authentication and authorization.
 

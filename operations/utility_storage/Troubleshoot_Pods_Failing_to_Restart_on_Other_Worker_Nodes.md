@@ -88,7 +88,7 @@ This procedure requires administrative privileges.
             watcher=**10.252.0.4**:0/3520479722 client.689192 cookie=18446462598732840976
         ```
 
-    1. Use the returned IP to get the host name attached to it.
+    1. Use the returned IP address to get the host name attached to it.
 
         Take note of the returned host name.
 

@@ -579,7 +579,7 @@ This section applies to master and worker nodes. Skip this section if rebuilding
                valid_lft forever preferred_lft forever
         ```
 
-    1. Change the IP for vlan004 if necessary.
+    1. Change the IP address for vlan004 if necessary.
 
         ```bash
         ncn# vim /etc/sysconfig/network/ifcfg-vlan004
@@ -628,7 +628,7 @@ This section applies to master and worker nodes. Skip this section if rebuilding
                valid_lft forever preferred_lft forever
         ```
 
-    1. Change the IP for vlan007 if necessary.
+    1. Change the IP address for vlan007 if necessary.
 
         ```bash
         ncn# vim /etc/sysconfig/network/ifcfg-vlan007

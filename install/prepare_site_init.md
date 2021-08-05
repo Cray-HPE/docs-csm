@@ -407,8 +407,10 @@ with system-specific customizations.
         ldapSearchBase: dc=dcldap,dc=dit
         ```
 
-1.  If there is no requirement to resolve external hostnames or no upstream DNS server
-    then remove the DNS forwarding configuration from the `cray-dns-unbound` service.
+1.  If you need to resolve outside hostnames, you will need to configure
+    forwarding in the cray-dns-unbound service. For example, if you are using a
+    hostname and not an IP address for the upstream LDAP server in step 4 above, you
+    will need to be able to resolve that hostname.
 
     Default configuration:
 

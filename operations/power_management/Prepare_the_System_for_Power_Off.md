@@ -2,7 +2,7 @@
 
 ## Prepare the System for Power Off
 
-This procedure prepares the system to remove power from all system cabinets. Be sure the system is healthy and ready to be shutdown and powered off.
+This procedure prepares the system to remove power from all system cabinets. Be sure the system is healthy and ready to be shut down and powered off.
 
 The `sat bootsys shutdown` and `sat bootsys boot` commands are used to shut down the system.
 
@@ -37,7 +37,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
     3.  If the Slingshot network includes edge switches, obtain the user ID and password for these switches.
 
-2.  Determine which Boot Orchestration Service \(BOS\) templates to use to shutdown compute nodes and UANs. For example:
+2.  Determine which Boot Orchestration Service \(BOS\) templates to use to shut down compute nodes and UANs. For example:
 
     Compute nodes: `slurm`
 
@@ -170,7 +170,7 @@ An authentication token is required to access the API gateway and to use the `sa
     No active sessions exist. It is safe to proceed with the shutdown procedure.
     ```
 
-    If active sessions are running, either wait for them to complete or shutdown/cancel/delete the session.
+    If active sessions are running, either wait for them to complete or shut down/cancel/delete the session.
 
 7.  Coordinate with the site to prevent new sessions from starting in the services listed.
 

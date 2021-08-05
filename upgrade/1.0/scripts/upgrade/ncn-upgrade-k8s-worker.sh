@@ -96,7 +96,7 @@ else
 fi
 echo "******************************************"
 echo "******************************************"
-echo "****  Enter SSH password of switches: ****"
+echo "**** Enter SSH password of switches: ****"
 read -s -p "" SW_PASSWORD
 echo
 export SW_ARUBA_PASSWORD=$SW_PASSWORD

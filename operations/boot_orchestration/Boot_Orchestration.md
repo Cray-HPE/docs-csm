@@ -57,6 +57,7 @@ The procedures in this section include the information required to boot, configu
     - [Troubleshoot UAN Boot Issues](Troubleshoot_UAN_Boot_Issues.md)
     - [Troubleshoot Booting Nodes with Hardware Issues](Troubleshoot_Booting_Nodes_with_Hardware_Issues.md)
 - [BOS Limitations for Gigabyte BMC Hardware](Limitations_for_Gigabyte_BMC_Hardware.md)
+- [Stage Changes without BOS](Stage_Changes_Without_BOS.md)
 - [Compute Node Boot Sequence](Compute_Node_Boot_Sequence.md)
   - [Healthy Compute Node Boot Process](Healthy_Compute_Node_Boot_Process.md)
   - [Node Boot Root Cause Analysis](Node_Boot_Root_Cause_Analysis.md)
@@ -76,4 +77,3 @@ The procedures in this section include the information required to boot, configu
   - [Edit the iPXE Embedded Boot Script](Edit_the_iPXE_Embedded_Boot_Script.md)
   - [Redeploy the iPXE and TFTP Services](Redeploy_the_IPXE_and_TFTP_Services.md)
   - [Upload Node Boot Information to Boot Script Service (BSS)](Upload_Node_Boot_Information_to_Boot_Script_Service_BSS.md)
-  
