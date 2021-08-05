@@ -6,7 +6,7 @@ This document describes how to interpret the results of the HMS health check scr
 
 The HMS smoke tests consist of bash scripts that check the status of HMS service pods in Kubernetes and verify HTTP status codes returned by the HMS service APIs. Additionally, there is one test called *smd_discovery_status_test_ncn-smoke.sh* which verifies that the system hardware has been discovered successfully. The *hms_run_ct_smoke_tests_ncn-resources.sh* wrapper script checks for executable files in the HMS smoke test directory on the NCN and runs all tests found in succession.
 
-```bash
+```
 ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resources.sh
 searching for HMS CT smoke tests...
 found 11 HMS CT smoke tests...
@@ -15,7 +15,7 @@ running HMS CT smoke tests...
 
 A summary of the test results is printed at the bottom of the output.
 
-```bash
+```
 HMS smoke tests ran with 2/11 failures
 exiting with status code: 1
 ```
@@ -24,7 +24,7 @@ The tests print the commands being executed while running. They also print the c
 
 The following is an example of a pod status failure:
 
-```bash
+```
 running '/opt/cray/tests/ncn-smoke/hms/hms-reds/reds_smoke_test_ncn-smoke.sh'...
 Running reds_smoke_test...
 (11:40:33) Running '/opt/cray/tests/ncn-resources/hms/hms-test/hms_check_pod_status_ncn-resources_remote-resources.sh cray-reds'...
@@ -39,7 +39,7 @@ cleaning up...
 
 The following is an example of an API call failure:
 
-```bash
+```
 running '/opt/cray/tests/ncn-smoke/hms/hms-capmc/capmc_smoke_test_ncn-smoke.sh'...
 Running capmc_smoke_test...
 (11:40:27) Running '/opt/cray/tests/ncn-resources/hms/hms-test/hms_check_pod_status_ncn-resources_remote-resources.sh cray-capmc'...
@@ -59,7 +59,7 @@ cleaning up...
 
 The HMS functional tests consist of Tavern-based API tests for HMS services that are written in yaml and execute within *hms-pytest* containers on the NCNs that are spun up using podman. The functional tests are more rigorous than the smoke tests and verify the behavior of HMS service APIs in greater detail. The *hms_run_ct_functional_tests_ncn-resources.sh* wrapper script checks for executable files in the HMS functional test directory on the NCN and runs all tests found in succession.
 
-```bash
+```
 ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-resources.sh
 searching for HMS CT functional tests...
 found 4 HMS CT functional tests...
@@ -68,7 +68,7 @@ running HMS CT functional tests...
 
 A summary of the test results is printed at the bottom of the output.
 
-```bash
+```
 HMS functional tests ran with 1/4 failures
 exiting with status code: 1
 ```
@@ -77,7 +77,7 @@ The tests print the commands being executed while running. They also print the c
 
 The following is an example of an *hms-pytest* container spin-up failure, which may occur if the *hms-pytest* image is unavailable or missing from the local image registry on the NCN:
 
-```bash
+```
 (20:06:04) Running '/usr/bin/hms-pytest --tavern-global-cfg=/opt/cray/tests/ncn-functional/hms/hms-bss/common.yaml /opt/cray/tests/ncn-functional/hms/hms-bss'...
 Trying to pull registry.local/cray/hms-pytest:1.1.1...
   manifest unknown: manifest unknown
@@ -90,7 +90,7 @@ A summary of the test suites executed and their results is printed for each HMS 
 
 The following is an example of a *pytest* summary table for Tavern test suites executed against a service:
 
-```bash
+```
 ============================= test session starts ==============================
 platform linux -- Python 3.8.5, pytest-6.1.2, py-1.10.0, pluggy-0.13.1
 rootdir: /opt/cray/tests/ncn-functional/hms/hms-smd, configfile: pytest.ini
@@ -122,7 +122,7 @@ When API test failures occur, output from Tavern is printed by *pytest* indicati
 
 The following is an example *Source test stage*:
 
-```bash
+```
 Source test stage (line 179):
   - name: Ensure the boot script service can provide the bootscript for a given node
     request:
@@ -137,7 +137,7 @@ Source test stage (line 179):
 
 The following is an example *Formatted stage*:
 
-```bash
+```
 Formatted stage:
   name: Ensure the boot script service can provide the bootscript for a given node
   request:
@@ -152,7 +152,7 @@ Formatted stage:
 
 The following is an example *Errors*:
 
-```bash
+```
 Errors:
 E   tavern.util.exceptions.TestFailError: Test 'Ensure the boot script service can provide the bootscript for a given node' failed:
     - Status code was 400, expected 200:
@@ -169,7 +169,7 @@ This test verifies that the system hardware has been discovered successfully.
 
 The following is an example of a failed test execution:
 
-```bash
+```
 Running smd_discovery_status_test...
 (22:19:34) Running 'kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}''...
 (22:19:34) Running 'curl -k -i -s -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=4c591ddc-b770-41c8-a4de-465ec034c7cf https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token'...
@@ -188,28 +188,28 @@ The expected state of LastDiscoveryStatus is *DiscoverOK* for all components wit
 
 ##### HTTPsGetFailed
 1. Check to see if the failed xname responds to *ping*. If not, then the problem may be a network or hardware issue.
-```bash
+```
 ncn# ping -c 1 <xname>
 ```
 2. Check to see if the failed xname resolves using nslookup. If not, then the problem may be a DNS issue.
-```bash
+```
 ncn# nslookup <xname>
 ```
 3. Check to see if the failed xname responds to a Redfish query. If not, then the problem may be a credentials issue. Use the password set in the REDS sealed secret when creating site init.
-```bash
+```
 ncn# curl -s -k -u root:<password> https://<xname>/redfish/v1/Managers | jq
 ```
     
 ##### ChildVerificationFailed
 
 Check the SMD logs to determine the cause of the bad Redfish path.
-```bash
+```
 ncn# kubectl -n services logs <cray-smd-pod> cray-smd > smd_logs
 ```
     
 ##### DiscoveryStarted
 The endpoint is in the process of being inventoried. Wait until the discovery job completes and rerun the test.
 
-```bash
+```
 ncn# kubectl -n services get jobs | grep hms-discovery
 ```
