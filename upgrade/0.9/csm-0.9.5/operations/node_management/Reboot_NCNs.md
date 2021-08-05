@@ -31,29 +31,29 @@ It also requires that the **CSM_SCRIPTDIR variable was previously defined** as p
 
 ### NCN Pre-Reboot Health Checks
 
-1. Ensure that `ncn-m001` is not running in "LiveCD" mode.
+1.  Ensure that `ncn-m001` is not running in "LiveCD" mode.
 
     This mode should only be in effect during the initial product install. If the word "pit" is NOT in the hostname of `ncn-m001`, then it is not in the "LiveCD" mode.
 
     If "pit" is in the hostname of `ncn-m001`, the system is not in normal operational mode and rebooting `ncn-m001` may have unexpected results. This procedure assumes that the node is not running in the "LiveCD" mode that occurs during product install.
 
-2. Check and set the `metal.no-wipe` setting on NCNs to ensure data on the node is preserved when rebooting.
+2.  Check and set the `metal.no-wipe` setting on NCNs to ensure data on the node is preserved when rebooting.
 
     Refer to [Check and Set the metal.no-wipe Setting on NCNs](Check_and_Set_the_metalno-wipe_Setting_on_NCNs.md).
 
-3. Run the following script to enable a kubernetes scheduling pod priority class for a set of critical pods.
+3.  Run the following script to enable a kubernetes scheduling pod priority class for a set of critical pods.
 
-        ```bash
-        ncn-m001# "${CSM_SCRIPTDIR}/add_pod_priority.sh"
-        ```
+    ```bash
+    ncn-m001# "${CSM_SCRIPTDIR}/add_pod_priority.sh"
+    ```
 
-4. Run the platform health checks and analyze the results.
+4.  Run the platform health checks and analyze the results.
 
     Refer to the "Platform Health Checks" section in [Validate CSM Health](../../../../../008-CSM-VALIDATION.md) for an overview of the health checks.
 
     Please note that though the CSM validation document references running the the HealthCheck scripts from /opt/cray/platform-utils, more recent versions of those scripts are referenced in the instructions below.  Please ensure they are run from the location referenced below.
   
-    1. Run the platform health scripts from ncn-m001:
+    1.  Run the platform health scripts from ncn-m001:
 
         The output of the following scripts will need to be referenced in the remaining sub-steps.
 
@@ -62,7 +62,7 @@ It also requires that the **CSM_SCRIPTDIR variable was previously defined** as p
         ncn-m001# "${CSM_SCRIPTDIR}/ncnPostgresHealthChecks.sh"
         ```
 
-    2. Check the status of the Kubernetes nodes.
+    2.  Check the status of the Kubernetes nodes.
 
         Ensure all Kubernetes nodes are in the Ready state.
 
@@ -90,7 +90,7 @@ It also requires that the **CSM_SCRIPTDIR variable was previously defined** as p
         ncn-m001# kubectl get nodes
         ```
 
-    3. Check the status of the Kubernetes pods.
+    3.  Check the status of the Kubernetes pods.
 
         The bottom of the output returned after running the "${CSM_SCRIPTDIR}/ncnHealthChecks.sh" script will show a list of pods that may be in a bad state. The following command can also be used to look for any pods that are not in a Running or Completed state:
 
@@ -102,7 +102,7 @@ It also requires that the **CSM_SCRIPTDIR variable was previously defined** as p
 
         There are pods that may normally be in an Error, Not Ready, or Init state, and this may not indicate any problems caused by the NCN reboots. Error states can indicate that a job pod ran and ended in an Error. That means that there may be a problem with that job, but does not necessarily indicate that there is an overall health issue with the system. The key takeaway \(for health purposes\) is understanding the statuses of pods prior to doing an action like rebooting all of the NCNs. Comparing the pod statuses in between each NCN reboot will give a sense of what is new or different with respect to health.
 
-    4. Verify Ceph health.
+    4.  Verify Ceph health.
 
         This output is included in the "${CSM_SCRIPTDIR}/ncnHealthChecks.sh" script.
 
@@ -114,7 +114,7 @@ It also requires that the **CSM_SCRIPTDIR variable was previously defined** as p
 
         This window can be kept up throughout the reboot process to ensure Ceph remains healthy and to watch if Ceph goes into a WARN state when rebooting storage NCNs.  It will be necessary to run it from an ssh session to an NCN that is not the one being rebooted.
 
-    5. Check the status of the `slurmctld` and `slurmdbd` pods to determine if they are starting:
+    5.  Check the status of the `slurmctld` and `slurmdbd` pods to determine if they are starting:
 
         ```bash
         ncn-m001# kubectl describe pod -n user -lapp=slurmctld
@@ -143,7 +143,7 @@ It also requires that the **CSM_SCRIPTDIR variable was previously defined** as p
         - /var/lib/cni/networks/macvlan-slurmctld-nmn-conf
         - /var/lib/cni/networks/macvlan-slurmdbd-nmn-conf
 
-    6. Check that the BGP peering sessions are established.
+    6.  Check that the BGP peering sessions are established.
 
         This check will need to be run after all worker NCNs have been rebooted. Ensure that the checks have been run to check BGP peering sessions on the spine switches \(instructions will vary for Aruba and Mellanox switches\)
 
@@ -172,7 +172,7 @@ Before rebooting NCNs:
 
 1. Reboot each of the NCN storage nodes \(one at a time\).
 
-    1. Establish a console session to each NCN storage node.
+    1.  Establish a console session to each NCN storage node.
 
         Locate the `Booting CSM Barebones Image` section in [Validate CSM Health](../../../../../008-CSM-VALIDATION.md). 
         Within that section, there are sub-steps for `Verify Consoles` and `Watch Boot on Console`.  Follow these procedures to establish a console session and watch the boot-up of the appropriate NCN.
