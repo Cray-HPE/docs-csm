@@ -181,13 +181,13 @@ Before rebooting NCNs:
 
         **ALSO NOTE:** Exiting the connection to the console can be achieved with the `&.` command.
 
-    2. Check and take note of the hostname of the storage NCN by running the following command on the NCN which will be rebooted.
+    2.  Check and take note of the hostname of the storage NCN by running the following command on the NCN which will be rebooted.
 
-	```bash
-        ncn-s# hostname
-        ``` 
+        ```bash
+	ncn-s# hostname	
+        ```
 
-    3. Reboot the selected NCN (run this command on the NCN which needs to be rebooted).
+    3.  Reboot the selected NCN (run this command on the NCN which needs to be rebooted).
 
         1. 
 	```bash
@@ -204,7 +204,7 @@ Before rebooting NCNs:
         ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
         ```
 
-            Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
+        Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
 
         To power back on the node:
 
@@ -215,6 +215,7 @@ Before rebooting NCNs:
         ```
 
         Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
+
     4. Watch on the console until the NCN has successfully booted and the login prompt is reached.
 
     5. Login to the storage NCN and ensure that the hostname matches what was being reported before the reboot.
