@@ -189,7 +189,6 @@ Before rebooting NCNs:
 
     3.  Reboot the selected NCN (run this command on the NCN which needs to be rebooted).
 
-        1. 
 
         ```bash
         ncn-s# shutdown -r now
@@ -199,7 +198,6 @@ Before rebooting NCNs:
 
         To power off the node:
 
-        2. 
 	```bash
         ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power off
         ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
@@ -209,7 +207,6 @@ Before rebooting NCNs:
 
         To power back on the node:
 
-        3. 
 	```bash
         ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power on
         ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
