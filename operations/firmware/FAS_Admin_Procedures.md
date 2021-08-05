@@ -17,7 +17,7 @@ Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmwa
 
 ### Warning for Non-Compute Nodes (NCNs)</a>
 
-**WARNING:** NCNs should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS. Research [NCN and Management Node Locking](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information. Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
+**WARNING:** NCNs should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS. Research [NCN and Management Node Locking](../hardware_state_manager/NCN_and_Management_Node_Locking.md) for more information. Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
 
 ---
 
@@ -27,7 +27,7 @@ Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmwa
 
 The default configuration of FAS no longer ignores `management` nodes, which prevents FAS from firmware updating the NCNs. To reconfigure the FAS deployment to exclude non-compute nodes (NCNs) and ensure they cannot have their firmware upgraded, the `NODE_BLACKLIST` value must be manually enabled
 
-Nodes can also be locked with the Hardware State Manager (HSM) API. Refer to [NCN and Management Node Locking](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information.
+Nodes can also be locked with the Hardware State Manager (HSM) API. Refer to [NCN and Management Node Locking](../hardware_state_manager/NCN_and_Management_Node_Locking.md) for more information.
 
 #### Procedure
 
@@ -64,6 +64,11 @@ If an update fails because of `"No Image available"`, it may be caused by FAS un
    ```bash
    ncn-m001# cray fas images list --format json | jq '.[] | .[] | select(.target=="TARGETNAME")'
    ```
+   To narrow down the selection, you can update the select to match multiple items, such as:
+   ```bash
+   ncn-m001# cray fas images list --format json | jq '.[] | .[] | select(.target=="BMC" and .manufacturer=="cray" and .deviceType=="NodeBMC")'
+   ```
+
 
    The example command displays one or more images available for updates.
 
@@ -130,7 +135,7 @@ If an update fails because of `"No Image available"`, it may be caused by FAS un
 
 3. Verify the correct image ID was found.
 
-   ``` bash
+   ```bash
    ncn-m001# cray fas images describe imageID
    ```
 
@@ -169,13 +174,15 @@ This procedure includes information on how check the firmware versions for the e
 
     1. Create a JSON file for the command parameters.
 
-        ``` json
+        ```json
         {
-        "command": {
-          "restoreNotPossibleOverride": true,
-          "timeLimit": 1000,
-          "description": "full system dryrun 2020623_0"
+          "command": {
+            "restoreNotPossibleOverride": true,
+            "timeLimit": 1000,
+            "description": "full system dryrun 2020623_0"
+          }
         }
+        ```
 
     1. Run the dry-run for the full system.
 
@@ -189,7 +196,7 @@ This procedure includes information on how check the firmware versions for the e
 
     1. Create a JSON file with the specific device information to target when doing a dry-run.
 
-       ``` json
+       ```json
        {
        "stateComponentFilter": {
            "xnames": [
@@ -214,10 +221,11 @@ This procedure includes information on how check the firmware versions for the e
            "description": "dryrun upgrade of x9000c1s3b1 Nodex.BIOS to WNC 1.1.2"
          }
        }
+       ```
 
     2. Run a dry-run on the targeted devices.
 
-       ``` bash
+       ```bash
        ncn-m001# cray fas actions create CUSTOM_DEVICE_PARAMETERS.json
        ```
 
@@ -227,8 +235,8 @@ This procedure includes information on how check the firmware versions for the e
 
 	The following returned messages will help determine if a firmware update is needed.
 
-  	-   `NoOperation`: Nothing to do, already at version.
-  	-   `NoSolution`: No image is available or data is missing.
+  	-   `noOperation`: Nothing to do, already at version.
+  	-   `noSolution`: No image is available or data is missing.
   	-   `succeeded`: A firmware version that FAS can update the firmware to is available and it should work when actually updating the firmware.
   	-   `failed`: There is something that FAS could do, but it likely would fail; most likely because the file is missing.
 
@@ -370,7 +378,7 @@ This procedure includes information on how check the firmware versions for the e
 
    In this example, there is a device that is available for a firmware upgrade because the operation being viewed is a succeeded operation.
 
-   ``` bash
+   ```bash
    ncn-m001# cray fas operations describe operationID --format json
        {
        "fromFirmwareVersion": "", "fromTag": "",
@@ -393,6 +401,7 @@ This procedure includes information on how check the firmware versions for the e
        "xname": "x9000c1s3b1",
        "toFirmwareVersion": ""
        }
+       ```
 
 Update the firmware on any devices indicating a new version is needed.
 
