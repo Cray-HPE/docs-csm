@@ -330,10 +330,10 @@ Before rebooting NCNs:
 
     7.  Login to the worker NCN and ensure that the hostname matches what was being reported before the reboot.
 
-	```bash
+        ```bash
         ncn-w# hostname
         ```
-        2. If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot.  
+        If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot.  
         The following command will need to be run on the cli for the NCN that has just been rebooted (and is incorrect).
 
         ```bash
@@ -462,14 +462,14 @@ Before rebooting NCNs:
         Ensure the expected results are returned from the power status check before rebooting:
 
         ```bash
-        # ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
+        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
         ```
 
         To power off the node:
 
         ```bash
-        # ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power off
-        # ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
+        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power off
+        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
         ```
 
         Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
@@ -477,8 +477,8 @@ Before rebooting NCNs:
         To power back on the node:
 
         ```bash
-        # ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power on
-        # ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
+        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power on
+        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
         ```
 
         Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
@@ -488,7 +488,7 @@ Before rebooting NCNs:
     5.  Login to the worker NCN and ensure that the hostname matches what was being reported before the reboot.
 
         ```bash
-        ncn-w# hostname
+        ncn-m001# hostname
         ```
         If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot.  
         The following command will need to be run on the cli for the NCN that has just been rebooted (and is incorrect).
