@@ -53,7 +53,7 @@ if [[ $state_recorded == "0" ]]; then
     if [[ $upgrade_ncn == ncn-s* ]]; then
     cat <<'EOF' > wipe_disk.sh
     set -e
-    for d in $(lsblk | grep -B2 -F md1  | grep ^s | awk '{print $1}'); do wipefs -af "/dev/$d"; done
+    for d in $(lsblk | grep -B2 -F md1 | grep ^s | awk '{print $1}'); do wipefs -af "/dev/$d"; done
 EOF
     elif [[ $upgrade_ncn == ncn-m* ]]; then
     cat <<'EOF' > wipe_disk.sh
@@ -108,7 +108,7 @@ fi
 upgrade_ncn_mgmt_host="${upgrade_ncn}-mgmt"
 if [[ ${upgrade_ncn} == "ncn-m001" ]]; then
     echo ""
-    read -p "Enter the IP or hostname of the BMC for ncn-m001:" upgrade_ncn_mgmt_host
+    read -p "Enter the IP address or hostname of the BMC for ncn-m001:" upgrade_ncn_mgmt_host
     echo ""
 else 
     echo "mgmt IP/Host: ${upgrade_ncn_mgmt_host}"
@@ -172,7 +172,7 @@ TIPS:
 EOF
     # wait for boot
     counter=0
-    printf "%s" "waiting for boot: $upgrade_ncn  ..."
+    printf "%s" "waiting for boot: $upgrade_ncn ..."
     while ! ping -c 1 -n -w 1 $upgrade_ncn &> /dev/null
     do
         printf "%c" "."
@@ -208,8 +208,8 @@ EOF
         ssh_keygen_keyscan "${upgrade_ncn}"
         ssh_keys_done=1
     fi
-    printf "%s" "waiting for cloud-init: $upgrade_ncn  ..."
-    while ! ssh $upgrade_ncn -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null 'cat /var/log/messages  | grep "Cloud-init" | grep "finished"' &> /dev/null
+    printf "%s" "waiting for cloud-init: $upgrade_ncn ..."
+    while ! ssh $upgrade_ncn -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null 'cat /var/log/messages | grep "Cloud-init" | grep "finished"' &> /dev/null
     do
         printf "%c" "."
         sleep 20

@@ -166,7 +166,7 @@ ncn-w001# tcpdump -envli vlan002 port 53
 
 ### The ping and SSH Commands Fail for Hosts in DNS
 
-If the IP returned by the ping command is different than the IP returned by the dig command, restart nscd on the impacted node. This is done with the following command:
+If the IP address returned by the ping command is different than the IP address returned by the dig command, restart nscd on the impacted node. This is done with the following command:
 
 ```bash
 ncn-w001# systemctl restart nscd.service

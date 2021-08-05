@@ -200,7 +200,7 @@ ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-worker.
 #### Stage 3.3
 
 For ncn-m001, use ncn-m002 as the stable NCN:
-> NOTE: using vlan007/CAN IP to ssh to ncn-m002 for ncn-m001 install
+> NOTE: using vlan007/CAN IP address to `ssh` to `ncn-m002` for `ncn-m001` install
 
 ##### Option 1 - Internet Connected Environment
 

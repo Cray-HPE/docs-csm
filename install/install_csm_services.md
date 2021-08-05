@@ -432,7 +432,7 @@ does not usually indicate something is actually wrong with Nexus. Instead, it
 is most commonly a network issue with name resolution (i.e., DNS), IP
 routes from the PIT node, switch misconfiguration, or Istio ingress.
 
-Verify that packages.local resolves to **ONLY** the load balancer IP for the
+Verify that packages.local resolves to **ONLY** the load balancer IP address for the
 istio-ingressgateway service in the istio-system namespace, typically
 10.92.100.71. If name resolution returns addresses on other networks (such as
 HMN) this must be corrected. Prior to DNS/DHCP hand-off to Unbound, these

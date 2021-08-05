@@ -1,6 +1,6 @@
 ## Manage a BOS Session
 
-Once there is a Boot Orchestration Service \(BOS\) session template created, users can perform operations on nodes, such as boot, reboot, configure, and shutdown. Managing sessions through the Cray CLI can be accomplished using the `cray bos session` commands.
+Once there is a Boot Orchestration Service \(BOS\) session template created, users can perform operations on nodes, such as `boot`, `reboot`, `configure`, and `shutdown`. Managing sessions through the Cray CLI can be accomplished using the `cray bos session` commands.
 
 
 ### Create a New Session
@@ -8,7 +8,7 @@ Once there is a Boot Orchestration Service \(BOS\) session template created, use
 Creating a new BOS session requires the following command-line options:
 
 -   `--template-uuid`: Use this option to specify the name value returned in the `cray bos sessiontemplate list` command.
--   `--operation`: Use this option to indicate if a boot, reboot, configure, or shutdown action is being taken.
+-   `--operation`: Use this option to indicate if a `boot`, `reboot`, `configure`, or `shutdown` action is being taken.
 
 The following is an example of a boot operation:
 

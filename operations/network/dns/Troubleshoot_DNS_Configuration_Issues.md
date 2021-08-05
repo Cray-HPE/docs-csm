@@ -1,8 +1,8 @@
 ## Troubleshoot DNS Configuration Issues
 
-Troubleshoot issues when DNS is not properly configured to delegate name resolution to the core DNS instance on a specific cluster. Although the CAN IP address may still be routable using the IP directly, it may not work because Istio's ingress gateway depends on the hostname \(or SNI\) to route traffic. For command line tools like cURL, using the `--resolve` option to force correct resolution can be used to work around this issue.
+Troubleshoot issues when DNS is not properly configured to delegate name resolution to the core DNS instance on a specific cluster. Although the CAN IP address may still be routable using the IP address directly, it may not work because Istio's ingress gateway depends on the hostname \(or SNI\) to route traffic. For command line tools like cURL, using the `--resolve` option to force correct resolution can be used to work around this issue.
 
-To get names to resolve correctly in a browser, modifying /etc/hosts to map the external hostname to the appropriate CAN IP may be necessary. In either case, knowing the correct CAN IP is required to use the cURL `--resolve` option or to update /etc/hosts.
+To get names to resolve correctly in a browser, modifying /etc/hosts to map the external hostname to the appropriate CAN IP address may be necessary. In either case, knowing the correct CAN IP address is required to use the cURL `--resolve` option or to update /etc/hosts.
 
 Assuming CAN, BGP, MetalLB, and external DNS are properly configured on a system, name resolution requests can be sent directly to the desired DNS server.
 
@@ -42,7 +42,7 @@ The Domain Name Service \(DNS\) is not configured properly.
     10.102.14.131
     ```
 
-4.  Direct DNS requests to the cluster IP from an NCN.
+4.  Direct DNS requests to the cluster IP address from an NCN.
 
     Replace the example cluster IP address \(10.25.156.88\) with the CLUSTER-IP value returned in step 1. If an IP address is returned, external DNS is configured on the cluster and something is likely wrong with CAN/BGP.
 

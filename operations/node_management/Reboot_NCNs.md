@@ -10,7 +10,7 @@ The following is a high-level overview of the non-compute node \(NCN\) reboot wo
   - Loop through reboots on storage NCNs, worker NCNs, and master NCNs, where each boot consists of the following workflow:
          - Establish console session with NCN to reboot
          - Execute a power off/on sequence to the NCN to allow it to boot up to completion
-         - Execute NCN/platform health checks and do not go on to reboot the next NCN until health has been ensured on the most recently  rebooted NCN
+         - Execute NCN/platform health checks and do not go on to reboot the next NCN until health has been ensured on the most recently rebooted NCN
          -   Disconnect console session with the NCN that was rebooted
 - Re-run all platform health checks, including checks on BGP peering sessions
 
@@ -139,7 +139,7 @@ The `kubectl` command is installed.
 
     1.  Validate the NCNs have good boot artifacts
 
-        Run the `CASMINST-2689` workaround, which ensures good boot artifacts.  This is especially critical during an upgrade path.
+        Run the `CASMINST-2689` workaround, which ensures good boot artifacts. This is especially critical during an upgrade path.
 
         ```bash
         ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
@@ -152,7 +152,7 @@ Before rebooting NCNs:
 
 * Ensure pre-reboot checks have been completed, including checking the `metal.no-wipe` setting for each NCN. Do not proceed if any of the NCN `metal.no-wipe` settings are zero.
 
-* Apply any workaround located in /opt/cray/csm/workarounds/ if instructed.  If you did not apply CASMINST-2689 from step 7 above, then please do so now, otherwise you may encounter boot issues.
+* Apply any workaround located in `/opt/cray/csm/workarounds/` if instructed. If you did not apply CASMINST-2689 from step 7 above, then please do so now, otherwise you may encounter boot issues.
 
 #### Utility Storage Nodes (Ceph)
 
@@ -168,7 +168,7 @@ Before rebooting NCNs:
             ncn-s# shutdown -r now
            ```
 
-        **`IMPORTANT:`** If the node does not shutdown after 5 mins, then proceed with the power reset below
+        **`IMPORTANT:`** If the node does not shut down after 5 minutes, then proceed with the power reset below
 
         To power off the node:
 
@@ -235,7 +235,7 @@ Before rebooting NCNs:
     1. Cordon and Drain the node
 
        ```bash
-       ncn-m# kubectl drain  --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
+       ncn-m# kubectl drain --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
        ```
 
     1. Reboot the selected NCN
@@ -244,7 +244,7 @@ Before rebooting NCNs:
             ncn-w# shutdown -r now
            ```
 
-        **`IMPORTANT:`** If the node does not shutdown after 5 mins, then proceed with the power reset below
+        **`IMPORTANT:`** If the node does not shut down after 5 minutes, then proceed with the power reset below
 
         To power off the node:
 
@@ -300,7 +300,7 @@ Before rebooting NCNs:
             ncn-m001# shutdown -r now
            ```
 
-        **`IMPORTANT:`** If the node does not shutdown after 5 mins, then proceed with the power reset below
+        **`IMPORTANT:`** If the node does not shut down after 5 minutes, then proceed with the power reset below
 
         To power off the node:
 

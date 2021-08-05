@@ -28,7 +28,7 @@ in the "Default Keycloak Realms, Accounts, and Clients" section for more informa
    * Configure Keycloak for LDAP/AD Authentication
    * Configure the RSA Plugin in Keycloak
    * Preserve Username Capitalization for Users Exported from Keycloak
-   * Change the LDAP Server IP for Existing LDAP Server Content
-   * Change the LDAP Server IP for New LDAP Server Content
+   * Change the LDAP Server IP Address for Existing LDAP Server Content
+   * Change the LDAP Server IP Address for New LDAP Server Content
    * Remove the LDAP User Federation from Keycloak
    * Add LDAP User Federation

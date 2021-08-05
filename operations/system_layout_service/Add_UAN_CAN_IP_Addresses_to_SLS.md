@@ -1,6 +1,6 @@
 ## Add UAN CAN IP Addresses to SLS
 
-Add the Customer Access Network \(CAN\) IP addresses for User Access Nodes \(UANs\) to the IP reservations in the System Layout Service \(SLS\). Adding these IP addresses will propagate the data needed for the Domain Name Service \(DNS\).
+Add the Customer Access Network \(CAN\) IP addresses for User Access Nodes \(UANs\) to the IP address reservations in the System Layout Service \(SLS\). Adding these IP addresses will propagate the data needed for the Domain Name Service \(DNS\).
 
 For more information on CAN IP addresses, refer to the [Customer Access Network (CAN)](../network/customer_access_network/Customer_Access_Network_CAN.md).
 
@@ -28,7 +28,7 @@ This procedure requires administrative privileges.
 
 2.  Edit the CAN.json file and add the desired UAN CAN IP addresses in the ExtraProperties.Subnets section.
 
-    This subsection is located under the CAN Bootstrap DHCP Subnet section. The IP reservations array needs to be added in the following JSON format:
+    This subsection is located under the CAN Bootstrap DHCP Subnet section. The IP address reservations array needs to be added in the following JSON format:
 
     ```json
            {

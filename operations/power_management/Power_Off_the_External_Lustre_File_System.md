@@ -138,7 +138,7 @@ Use this procedure as a general guide to power off an external ClusterStor syste
     n000# cscli power_manage -n cls01234n[000-001] --power-off
     ```
 
-17. Shutdown the primary management node.
+17. Shut down the primary management node.
 
     ```bash
     n000# shutdown -h now

@@ -126,7 +126,7 @@ This procedure needs to be done for each of the HPE Apollo 6500 XL645d nodes to 
       After a few minutes the switch will be configured and access to the
       WebUI will be regained.
 
-1. Clear bad MAC and IP out of kea
+1. Clear bad MAC and IP address out of kea
 
    Skip this step if there was no MAC and IP address found in step 1.
 

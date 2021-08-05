@@ -344,7 +344,7 @@ For Gigabyte upgrades a tftp server needs to be referred to.
    3. In the new pane, select "Firmware Image Location"
       ![Screen Shot of Gigabyte Maintenance Window](../img/fw-gb-2.png)
    4. Configure the TFTP Server:
-      - Server Address: The HMN IP of the PIT node (`ip a show vlan004`)
+      - Server Address: The HMN IP address of the PIT node (`ip a show vlan004`)
       - Image Name: The LiveCD Location from the above table, minus the base URL (e.g. `/fw/river/gb/sh-svr-1264up-bios/bios/RBU/image.RBU`)
       - Press **`SAVE`** when done
          ![Screen Shot of Gigabyte Firmware Image Location for BIOS](../img/fw-gb-4.png)

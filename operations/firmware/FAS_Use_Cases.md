@@ -333,7 +333,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 #### Procedure
 1.  Power off the liquid-cooled chassis slots and chassis rectifiers.
 
-    1.  Disable the hms-discovery kubernetes cronjob:
+    1.  Disable the `hms-discovery` Kubernetes cronjob:
 
         ```bash
         ncn-m001# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : true }}'
@@ -434,13 +434,13 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 
         The time it takes for a firmware update varies. It can be a few minutes or over 20 minutes depending on response time.
 
-5.  Restart the hms-discovery cronjob.
+5.  Restart the `hms-discovery` cronjob.
 
     ```bash
     ncn-m001 # kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
     ```
 
-    The hms-discovery cronjob will run within 5 minutes of being unsuspended and start powering on the chassis enclosures, switches, and compute blades. If components are not being powered back on, then power them on manually:
+    The `hms-discovery` cronjob will run within 5 minutes of being unsuspended and start powering on the chassis enclosures, switches, and compute blades. If components are not being powered back on, then power them on manually:
 
     ```bash
     ncn-m001 # cray capmc xname_on create --xnames x[1000-1003]c[0-7]r[0-7],x[1000-1003]c[0-7]s[0-7] --prereq true --continue true
