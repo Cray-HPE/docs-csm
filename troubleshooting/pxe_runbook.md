@@ -32,12 +32,10 @@ domain=mtl,10.1.1.0,10.1.1.233,local
 dhcp-option=interface:bond0,option:domain-search,mtl
 interface=bond
 interface-name=pit.mtl,bond
-# This needs to point to the liveCD IP for provisioning in
-bare-metal environments.
+# This needs to point to the LiveCD IP address for provisioning in bare-metal environments.
 dhcp-option=interface:bond0,option:dns-server,10.1.1.
 dhcp-option=interface:bond0,option:ntp-server,10.1.1.
-# This must point at the router for the network; the L3/IP for
-the VLAN.
+# This must point at the router for the network; the L3/IP address for the VLAN.
 dhcp-option=interface:bond0,option:router,10.1.0.
 dhcp-range=interface:bond0,10.1.1.33,10.1.1.233,10m
 ```
@@ -262,7 +260,7 @@ Worker.
 ncn-w001:~ # tcpdump -envli bond0 port 67 or 68
 ```
 
-* You are looking for the source IP of the DHCP Reply/Offer.
+* You are looking for the source IP address of the DHCP Reply/Offer.
 
 ```
 
@@ -274,7 +272,7 @@ ncn-w001:~ # tcpdump -envli bond0 port 67 or 68
       file "ipxe.efi"[|bootp]
 ```
 
-* If the Source IP of the DHCP Reply/Offer is the MetalLB IP, the DHCP packet will never make it out of the NCN An example of
+* If the Source IP address of the DHCP Reply/Offer is the MetalLB IP address, the DHCP packet will never make it out of the NCN An example of
 this is below.
 
 ```

@@ -18,7 +18,7 @@ This procedure requires administrative privileges.
         ```
         ncn-m001# CONPOD=$(kubectl get pods -n services \
         -o wide|grep cray-console-operator|awk '{print $1}')
-        ncn-m001# kubectl -n services exec $CONPOD -- sh -c \
+        ncn-m001# kubectl -n services exec $CONPOD -c cray-console-operator -- sh -c \
         '/app/get-node XNAME' | jq .podname | sed 's/"//g'
         cray-console-node-2
         ```
@@ -64,7 +64,7 @@ This procedure requires administrative privileges.
     
         ```
         ncn-m001# CONPOD=$(kubectl get pods -n services \-o wide|grep cray-console-operator|awk '{print $1}')
-        ncn-m001# kubectl -n services exec $CONPOD -- sh -c '/app/get-node XNAME' \
+        ncn-m001# kubectl -n services exec $CONPOD -c cray-console-operator -- sh -c '/app/get-node XNAME' \
         | jq .podname | sed 's/"//g'
         cray-console-node-2
         ```

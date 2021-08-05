@@ -357,7 +357,7 @@ Pull these files into the current working directory:
    linux# csi config init \
        --bootstrap-ncn-bmc-user root \
        --bootstrap-ncn-bmc-pass changeme \
-       --system-name ${SYSTEM_NAME}  \
+       --system-name ${SYSTEM_NAME} \
        --can-cidr 10.103.11.0/24 \
        --can-external-dns 10.103.11.113 \
        --can-gateway 10.103.11.1 \
@@ -396,7 +396,7 @@ Pull these files into the current working directory:
    * The starting cabinet number for each type of cabinet (for example, `starting-mountain-cabinet`) has a default that can be overridden. See the `csi config init --help`
    * For systems that use non-sequential cabinet ID numbers, use `cabinets-yaml` to include the `cabinets.yaml` file. This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to specify explicitly the id of every cabinet in the system. If you are using a `cabinets-yaml` file, flags specified on the `csi` command-line related to cabinets will be ignored. See [Create Cabinets YAML](create_cabinets_yaml.md).
    * An override to default cabinet IPv4 subnets can be made with the `hmn-mtn-cidr` and `nmn-mtn-cidr` parameters.
-   * Several parameters (`can-gateway`, `can-cidr`, `can-static-pool`, `can-dynamic-pool`) describe the CAN (Customer Access network). The `can-gateway` is the common gateway IP used for both spine switches and commonly referred to as the Virtual IP for the CAN. The `can-cidr` is the IP subnet for the CAN assigned to this system. The `can-static-pool` and `can-dynamic-pool` are the MetalLB address static and dynamic pools for the CAN. The `can-external-dns` is the static IP assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded. The `can-external-dns` IP must be within the `can-static-pool` range.
+   * Several parameters (`can-gateway`, `can-cidr`, `can-static-pool`, `can-dynamic-pool`) describe the CAN (Customer Access network). The `can-gateway` is the common gateway IP address used for both spine switches and commonly referred to as the Virtual IP address for the CAN. The `can-cidr` is the IP subnet for the CAN assigned to this system. The `can-static-pool` and `can-dynamic-pool` are the MetalLB address static and dynamic pools for the CAN. The `can-external-dns` is the static IP address assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded. The `can-external-dns` IP address must be within the `can-static-pool` range.
    * Set `ntp-pool` to a reachable NTP server
 
    These warnings from `csi config init` for issues in `hmn_connections.json` can be ignored.

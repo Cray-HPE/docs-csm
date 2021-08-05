@@ -32,7 +32,7 @@ It is assumed that you have connectivity to the switch and have done the [Config
    ```
 
 1. Set up the keepalive link.
-   This will require a unique IP on both switches. The IP is in its own VRF so this address will not be reachable from anywhere besides the aggregation pair.
+   This will require a unique IP address on both switches. The IP address is in its own VRF so this address will not be reachable from anywhere besides the aggregation pair.
 
    ```
    sw-agg-001(config)# 

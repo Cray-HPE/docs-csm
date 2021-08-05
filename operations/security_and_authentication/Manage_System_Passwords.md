@@ -62,7 +62,7 @@ The tables below include the default login credentials for each rack type. These
 
 **Liquid Cooled Cabinet:**
 
-| Name  | Role      | Switch          | IP         | Login |
+| Name  | Role      | Switch          | IP Address | Login |
 | ----- | --------- | --------------- | ---------- | ----- |
 | smn01 | Leaf/Mgmt | Dell S3048-ON   | 10.254.0.2 | admin |
 | smn02 | Spine-001 | Mellanox SN2100 | 10.254.0.1 | admin |
@@ -70,19 +70,19 @@ The tables below include the default login credentials for each rack type. These
 
 **Air Cooled Cabinet:**
 
-| Name    | Role      | Switch        | IP         | Login |
+| Name    | Role      | Switch        | IP Address | Login |
 | ------- | --------- | ------------- | ---------- | ----- |
 | mtnsw01 | Leaf/Mgmt | Dell S3048-ON | 10.254.0.2 | admin |
 
 **Coolant Distribution Unit (CDU):**
 
-| Name   | Role | Switch         | IP         | Login |
+| Name   | Role | Switch         | IP Address | Login |
 | ------ | ---- | -------------- | ---------- | ----- |
 | cdu-s1 | CDU  | Dell S4048T-ON | 10.254.0.2 | admin |
 
 **ClusterStor:**
 
-| Name     | Role                  | Switch         | IP            | Login |
+| Name     | Role                  | Switch         | IP Address    | Login |
 | -------- | --------------------- | -------------- | ------------- | ----- |
 | Arista   |                       | DCS-7060CX-32S | 172.16.249.10 | admin |
 | Sonexion | Entry point to Arista | CS-L300        | 172.30.49.178 | admin |

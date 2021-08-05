@@ -54,7 +54,7 @@ If there are more than 27 IP addresses needed for NCNs, UANs, and switches, and/
 
 ### Customer Variables
 
-The following variables are defined in the `csi config init` input. This example uses values for the /26 layout described above. The `can-gateway` value should be an IP at the end of the range for NCNs, UANs, and switches. For example, the IP would be 10.102.5.27 using the figure shown above.
+The following variables are defined in the `csi config init` input. This example uses values for the /26 layout described above. The `can-gateway` value should be an IP address at the end of the range for NCNs, UANs, and switches. For example, the IP address would be 10.102.5.27 using the figure shown above.
 
 ```screen
 linux# csi config init 

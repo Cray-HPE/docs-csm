@@ -1,6 +1,6 @@
 ## Externally Exposed Services
 
-The following services are exposed on the Customer Access Network \(CAN\). Each of these services requires an IP on the CAN subnet so they are reachable on the CAN. This IP address is allocated by the MetalLB component.
+The following services are exposed on the Customer Access Network \(CAN\). Each of these services requires an IP address on the CAN subnet so they are reachable on the CAN. This IP address is allocated by the MetalLB component.
 
 Services under Istio Ingress Gateway and Keycloak Gatekeeper Ingress share an ingress, so they all use the IP allocated to the Ingress.
 

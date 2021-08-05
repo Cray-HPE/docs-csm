@@ -13,7 +13,7 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 
 <a name="cray-device-type-routerbmc-target-bmc"></a>
 
-#### Device Type: RouterBMC |  Target: BMC
+#### Device Type: RouterBMC | Target: BMC
 
 The BMC on the RouterBMC for a Cray includes the ASIC.  
 

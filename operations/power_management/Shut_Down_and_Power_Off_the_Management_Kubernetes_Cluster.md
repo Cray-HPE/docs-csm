@@ -68,7 +68,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
 **SHUT DOWN THE KUBERNETES MANAGEMENT CLUSTER**
 
-7.  Shutdown platform services.
+7.  Shut down platform services.
 
     ```bash
     ncn-m001# sat bootsys shutdown --stage platform-services
@@ -181,7 +181,7 @@ An authentication token is required to access the API gateway and to use the `sa
     ncn-m001# shutdown -h now
     ```
 
-13. Wait until the console indicates that the node has shutdown.
+13. Wait until the console indicates that the node has shut down.
 
 14. From a remote system that has access to the management plane, use IPMItool to power off ncn-w001.
 

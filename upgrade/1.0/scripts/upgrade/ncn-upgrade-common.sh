@@ -46,7 +46,7 @@ function ssh_keygen_keyscan() {
     known_hosts="/root/.ssh/known_hosts"
     upgrade_ncn="$1"
     ncn_ip=$(host ${upgrade_ncn} | awk '{ print $NF }')
-    echo "${upgrade_ncn} IP is ${ncn_ip}"
+    echo "${upgrade_ncn} IP address is ${ncn_ip}"
     ssh-keygen -R "${upgrade_ncn}" -f "${known_hosts}"
     ssh-keygen -R "${ncn_ip}" -f "${known_hosts}"
     ssh-keyscan -H "${upgrade_ncn},${ncn_ip}" >> "${known_hosts}"

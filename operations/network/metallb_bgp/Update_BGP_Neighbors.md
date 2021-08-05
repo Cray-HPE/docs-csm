@@ -275,7 +275,7 @@ Mellanox configuration example.
 - If the BGP peers are still not coming up you should check the metallb.yaml config file for errors. The MetalLB config file should point to the NMN IP addresses of the switches configured.
 
 metallb.yaml configuration example.
-- The peer-address should be the IP of the switch that you are doing BGP peering with.  
+- The peer-address should be the IP address of the switch that you are doing BGP peering with.  
 ```
 ---
 apiVersion: v1
