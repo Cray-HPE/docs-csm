@@ -176,49 +176,56 @@ Before rebooting NCNs:
 
         Locate the `Booting CSM Barebones Image` section in [Validate CSM Health](../../../../../008-CSM-VALIDATION.md). 
         Within that section, there are sub-steps for `Verify Consoles` and `Watch Boot on Console`.  Follow these procedures to establish a console session and watch the boot-up of the appropriate NCN.
+
         **NOTE:** "${CSM_SCRIPTDIR}/ncnGetXnames.sh" can be run to get the xname for each NCN.
+
         **ALSO NOTE:** Exiting the connection to the console can be achieved with the `&.` command.
 
     2. Check and take note of the hostname of the storage NCN by running the following command on the NCN which will be rebooted.
 
 	```bash
         ncn-s# hostname
-        ```
+        ``` 
 
     3. Reboot the selected NCN (run this command on the NCN which needs to be rebooted).
 
-        1. ```bash
-            ncn-s# shutdown -r now
-           ```
+        1. 
+	```bash
+        ncn-s# shutdown -r now
+        ```
 
         **`IMPORTANT:`** If the node does not shutdown after 5 mins, then proceed with the power reset below
 
         To power off the node:
 
-        2. ```bash
-           ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power off
-           ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
-           ```
+        2. 
+	```bash
+        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power off
+        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
+        ```
 
             Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
 
         To power back on the node:
 
-        3. ```bash
-            ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power on
-            ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
-            ```
+        3. 
+	```bash
+        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power on
+        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
+        ```
 
         Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
     4. Watch on the console until the NCN has successfully booted and the login prompt is reached.
 
     5. Login to the storage NCN and ensure that the hostname matches what was being reported before the reboot.
 
-	1. ```bash
-           ncn-s# hostname
-           ```
+	1. 
+	```bash
+        ncn-s# hostname
+        ```
 
 	2. If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot.  The following command will need to be run on the cli for the NCN that has just been rebooted (and is incorrect).
+
 	```bash
 	ncn-s# hostnamectl set-hostname $hostname
 	```
@@ -293,27 +300,30 @@ Before rebooting NCNs:
 
     5. Reboot the selected NCN (run this command on the NCN which needs to be rebooted).
 
-        1. ```bash
-            ncn-w# shutdown -r now
-           ```
+        1. 
+	```bash
+        ncn-w# shutdown -r now
+        ```
 
         **`IMPORTANT:`** If the node does not shutdown after 5 mins, then proceed with the power reset below
 
         To power off the node:
 
-        2. ```bash
-           ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power off
-           ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
-           ```
+        2. 
+	```bash
+        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power off
+        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
+        ```
 
             Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
 
         To power back on the node:
 
-        3. ```bash
-            ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power on
-            ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
-            ```
+        3. 
+	```bash
+        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power on
+        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
+        ```
 
         Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
 
@@ -321,9 +331,10 @@ Before rebooting NCNs:
 
     7.  Login to the worker NCN and ensure that the hostname matches what was being reported before the reboot.
 
-        1. ```bash
-           ncn-w# hostname
-           ```
+        1. 
+	```bash
+        ncn-w# hostname
+        ```
         2. If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot.  The following command will need to be run on the
 cli for the NCN that has just been rebooted (and is incorrect).
         ```bash
@@ -379,9 +390,10 @@ cli for the NCN that has just been rebooted (and is incorrect).
 
     3. Reboot the selected NCN (run this command on the NCN which needs to be rebooted).
 
-        1. ```bash
-            ncn-m001# shutdown -r now
-           ```
+        1. 
+	```bash
+        ncn-m001# shutdown -r now
+        ```
 
         **`IMPORTANT:`** If the node does not shutdown after 5 mins, then proceed with the power reset below
 
@@ -407,12 +419,14 @@ cli for the NCN that has just been rebooted (and is incorrect).
 
     5. Login to the master NCN and ensure that the hostname matches what was being reported before the reboot.
 
-        1. ```bash
-           ncn-m# hostname
-           ```
+        1. 
+	```bash
+        ncn-m# hostname
+        ```
 
         2. If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot.  The following command will need to be run on the
 cli for the NCN that has just been rebooted (and is incorrect).
+
         ```bash
         ncn-m# hostnamectl set-hostname $hostname
         ```
@@ -476,9 +490,10 @@ cli for the NCN that has just been rebooted (and is incorrect).
 
     5.  Login to the worker NCN and ensure that the hostname matches what was being reported before the reboot.
 
-        1. ```bash
-           ncn-w# hostname
-           ```
+        1. 
+	```bash
+        ncn-w# hostname
+        ```
         2. If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot.  The following command will need to be run on the
 cli for the NCN that has just been rebooted (and is incorrect).
         ```bash
@@ -508,5 +523,6 @@ cli for the NCN that has just been rebooted (and is incorrect).
         ```bash
         ncn-m001# "${CSM_SCRIPTDIR}/ncnHealthChecks.sh"
         ncn-m001# "${CSM_SCRIPTDIR}/ncnPostgresHealthChecks.sh"
+	```
 
     See [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md) to check the BGP peering sessions.
