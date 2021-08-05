@@ -184,17 +184,17 @@ FAIL: smd_discovery_status_test found 4 endpoints that failed discovery, maximum
 '/opt/cray/tests/ncn-smoke/hms/hms-smd/smd_discovery_status_test_ncn-smoke.sh' exited with status code: 1
 ```
 
-The expected state of LastDiscoveryStatus is *DiscoverOK* for all components with the exception of the BMC for ncn-m001 which is not normally connected to the site network and expected to be *HTTPsGetFailed*. If the test fails due to two or more endpoints not having been discovered successfully, the following additional steps can be taken to determine the cause of the failure:
+The expected state of LastDiscoveryStatus is *DiscoverOK* for all endpoints with the exception of the BMC for ncn-m001 which is not normally connected to the site network and expected to be *HTTPsGetFailed*. If the test fails due to two or more endpoints not having been discovered successfully, the following additional steps can be taken to determine the cause of the failure:
 
 ##### HTTPsGetFailed
 
-1. Check to see if the failed xname responds to the *ping* command. If not, then the problem may be a network or hardware issue.
-```
-ncn# ping -c 1 <xname>
-```
-2. Check to see if the failed xname resolves using the *nslookup* command. If not, then the problem may be a DNS issue.
+1. Check to see if the failed xname resolves using the *nslookup* command. If not, then the problem may be a DNS issue.
 ```
 ncn# nslookup <xname>
+```
+2. Check to see if the failed xname responds to the *ping* command. If not, then the problem may be a network or hardware issue.
+```
+ncn# ping -c 1 <xname>
 ```
 3. Check to see if the failed xname responds to a Redfish query. If not, then the problem may be a credentials issue. Use the password set in the REDS sealed secret when creating site init.
 ```
@@ -204,14 +204,27 @@ ncn# curl -s -k -u root:<password> https://<xname>/redfish/v1/Managers | jq
 ##### ChildVerificationFailed
 
 Check the SMD logs to determine the cause of the bad Redfish path encountered during discovery.
+
 ```
-ncn# kubectl -n services logs <cray-smd-pod> cray-smd > smd_logs
+# get the SMD pod names
+ncn # kubectl -n services get pods -l app.kubernetes.io/name=cray-smd
+NAME                        READY   STATUS    RESTARTS   AGE
+cray-smd-5b9d574756-9b2lj   2/2     Running   0          24d
+cray-smd-5b9d574756-bnztf   2/2     Running   0          24d
+cray-smd-5b9d574756-hhc5p   2/2     Running   0          24d
+
+# get the logs from each of the SMD pods
+ncn# kubectl -n services logs <cray-smd-pod1> cray-smd > smd_pod1_logs
+ncn# kubectl -n services logs <cray-smd-pod2> cray-smd > smd_pod2_logs
+ncn# kubectl -n services logs <cray-smd-pod3> cray-smd > smd_pod3_logs
 ```
 
 ##### DiscoveryStarted
 
-The endpoint is in the process of being inventoried. Wait until the discovery job completes and rerun the test.
+The endpoint is in the process of being inventoried by Hardware State Manager (HSM). Wait for the current discovery process to end which should result in a new LastDiscoveryStatus state being set for the endpoint. 
+
+Use the following command to check the current discovery status of the endpoint:
 
 ```
-ncn# kubectl -n services get jobs | grep hms-discovery
+ncn# cray hsm inventory redfishEndpoints describe <xname>
 ```
