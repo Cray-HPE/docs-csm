@@ -187,11 +187,12 @@ FAIL: smd_discovery_status_test found 4 endpoints that failed discovery, maximum
 The expected state of LastDiscoveryStatus is *DiscoverOK* for all components with the exception of the BMC for ncn-m001 which is not normally connected to the site network and expected to be *HTTPsGetFailed*. If the test fails due to two or more endpoints not having been discovered successfully, the following additional steps can be taken to determine the cause of the failure:
 
 ##### HTTPsGetFailed
-1. Check to see if the failed xname responds to *ping*. If not, then the problem may be a network or hardware issue.
+
+1. Check to see if the failed xname responds to the *ping* command. If not, then the problem may be a network or hardware issue.
 ```
 ncn# ping -c 1 <xname>
 ```
-2. Check to see if the failed xname resolves using nslookup. If not, then the problem may be a DNS issue.
+2. Check to see if the failed xname resolves using the *nslookup* command. If not, then the problem may be a DNS issue.
 ```
 ncn# nslookup <xname>
 ```
@@ -199,15 +200,16 @@ ncn# nslookup <xname>
 ```
 ncn# curl -s -k -u root:<password> https://<xname>/redfish/v1/Managers | jq
 ```
-    
+
 ##### ChildVerificationFailed
 
-Check the SMD logs to determine the cause of the bad Redfish path.
+Check the SMD logs to determine the cause of the bad Redfish path encountered during discovery.
 ```
 ncn# kubectl -n services logs <cray-smd-pod> cray-smd > smd_logs
 ```
-    
+
 ##### DiscoveryStarted
+
 The endpoint is in the process of being inventoried. Wait until the discovery job completes and rerun the test.
 
 ```
