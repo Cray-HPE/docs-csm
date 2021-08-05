@@ -200,7 +200,7 @@ Before rebooting NCNs:
 
         ```bash
         ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power off
-	ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
+        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
         ```
 
         Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
