@@ -184,7 +184,7 @@ Before rebooting NCNs:
     2.  Check and take note of the hostname of the storage NCN by running the following command on the NCN which will be rebooted.
 
         ```bash
-	ncn-s# hostname	
+        ncn-s# hostname	
         ```
 
     3.  Reboot the selected NCN (run this command on the NCN which needs to be rebooted).
@@ -521,9 +521,9 @@ cli for the NCN that has just been rebooted (and is incorrect).
 
      Recall that updated copies of the two HealthCheck scripts referenced in the `Platform Health Checks` can be run from here:
 
-        ```bash
-        ncn-m001# "${CSM_SCRIPTDIR}/ncnHealthChecks.sh"
-        ncn-m001# "${CSM_SCRIPTDIR}/ncnPostgresHealthChecks.sh"
-	```
+    ```bash
+    ncn-m001# "${CSM_SCRIPTDIR}/ncnHealthChecks.sh"
+    ncn-m001# "${CSM_SCRIPTDIR}/ncnPostgresHealthChecks.sh"
+    ```
 
     See [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md) to check the BGP peering sessions.
