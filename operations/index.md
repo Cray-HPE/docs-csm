@@ -1,6 +1,6 @@
 # CSM Operational Activities
 
-The Cray System Management (CSM) operational activities are administrative procedures required to operate an HPE Cray EX system with CSM software installed. 
+The Cray System Management (CSM) operational activities are administrative procedures required to operate an HPE Cray EX system with CSM software installed.
 
 The following administrative topics can be found in this guide:
 
@@ -634,7 +634,7 @@ MetalLB can run in either Layer2-mode or BGP-mode for each address pool it manag
 
 The Firmware Action Service (FAS) provides an interface for managing firmware versions of Redfish-enabled hardware in the system. FAS interacts with the Hardware State Managers (HSM), device data, and image data in order to update firmware.
 
-See [Update Firmware with FAS](firmware/Update_Firmware_with_FAS.md) for a list components that are upgradable with FAS. Refer to the HPC Firmware Pack product stream to update firmware on other components.
+See [Update Firmware with FAS](firmware/Update_Firmware_with_FAS.md) for a list components that are upgradable with FAS. Refer to the HPC Firmware Pack (HFP) product stream to update firmware on other components.
 
   * [Update Firmware with FAS](firmware/Update_Firmware_with_FAS.md)
   * [FAS CLI](firmware/FAS_CLI.md)
@@ -711,4 +711,3 @@ The User Access Service \(UAS\) is a containerized service managed by Kubernetes
       * [Troubleshoot Missing or Incorrect UAI Images](UAS_user_and_admin_topics/Troubleshoot_Missing_or_Incorrect_UAI_Images.md)
       * [Troubleshoot UAIs with Administrative Access](UAS_user_and_admin_topics/Troubleshoot_UAIs_with_Administrative_Access.md)
       * [Troubleshoot Common Mistakes when Creating a Custom End-User UAI Image](UAS_user_and_admin_topics/Troubleshoot_Common_Mistakes_when_Creating_a_Custom_End-User_UAI_Image.md)
-
