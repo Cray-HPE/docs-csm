@@ -184,7 +184,7 @@ Before rebooting NCNs:
     2.  Check and take note of the hostname of the storage NCN by running the following command on the NCN which will be rebooted.
 
         ```bash
-        ncn-s# hostname	
+        ncn-s# hostname
         ```
 
     3.  Reboot the selected NCN (run this command on the NCN which needs to be rebooted).
