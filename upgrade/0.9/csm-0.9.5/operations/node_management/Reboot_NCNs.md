@@ -223,20 +223,20 @@ Before rebooting NCNs:
         ncn-s# hostname
         ```
 
-	If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot.  
-	The following command will need to be run on the cli for the NCN that has just been rebooted (and is incorrect).
+        If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot.  
+        The following command will need to be run on the cli for the NCN that has just been rebooted (and is incorrect).
 
         ```bash
         ncn-s# hostnamectl set-hostname $hostname
         ```
 
-	where `$hostname` is the original hostname from before reboot
+        where `$hostname` is the original hostname from before reboot
 
-	Follow the procedure outlined above to `Reboot the selected NCN` again and verify the hostname is correctly set, afterward.
+        Follow the procedure outlined above to `Reboot the selected NCN` again and verify the hostname is correctly set, afterward.
 
     6.  Run the platform health checks from the [Validate CSM Health](../../../../../008-CSM-VALIDATION.md) procedure.
 
-	Recall that updated copies of the two HealthCheck scripts referenced in the `Platform Health Checks` can be run from here:
+        Recall that updated copies of the two HealthCheck scripts referenced in the `Platform Health Checks` can be run from here:
 
         ```bash
         ncn-m001# "${CSM_SCRIPTDIR}/ncnHealthChecks.sh"
@@ -277,7 +277,7 @@ Before rebooting NCNs:
 
         **`IMPORTANT:`** If the ConMan console pod is on the worker node being rebooted you will need to re-establish your session after the Cordon/Drain in step 2
 
-	Locate the `Booting CSM Barebones Image` section in [Validate CSM Health](../../../../../008-CSM-VALIDATION.md).
+        Locate the `Booting CSM Barebones Image` section in [Validate CSM Health](../../../../../008-CSM-VALIDATION.md).
         Within that section, there are sub-steps for `Verify Consoles` and `Watch Boot on Console`.  Follow these procedures to establish a console session and watch the boot-up of the appropriate NCN.
         **NOTE:** "${CSM_SCRIPTDIR}/ncnGetXnames.sh" can be run to get the xname for each NCN.
         **ALSO NOTE:** Exiting the connection to the console can be achieved with the `&.` command.
@@ -302,8 +302,7 @@ Before rebooting NCNs:
 
     5.  Reboot the selected NCN (run this command on the NCN which needs to be rebooted).
 
-        1. 
-	```bash
+        ```bash
         ncn-w# shutdown -r now
         ```
 
@@ -311,8 +310,7 @@ Before rebooting NCNs:
 
         To power off the node:
 
-        2. 
-	```bash
+        ```bash
         ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power off
         ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
         ```
@@ -321,8 +319,7 @@ Before rebooting NCNs:
 
         To power back on the node:
 
-        3. 
-	```bash
+        ```bash
         ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power on
         ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
         ```
@@ -333,12 +330,12 @@ Before rebooting NCNs:
 
     7.  Login to the worker NCN and ensure that the hostname matches what was being reported before the reboot.
 
-        1. 
 	```bash
         ncn-w# hostname
         ```
         2. If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot.  
-	The following command will need to be run on the cli for the NCN that has just been rebooted (and is incorrect).
+        The following command will need to be run on the cli for the NCN that has just been rebooted (and is incorrect).
+
         ```bash
         ncn-w# hostnamectl set-hostname $hostname
         ```
@@ -359,7 +356,7 @@ Before rebooting NCNs:
         ```bash
         ncn-m001# "${CSM_SCRIPTDIR}/ncnHealthChecks.sh"
         ncn-m001# "${CSM_SCRIPTDIR}/ncnPostgresHealthChecks.sh"
-	```
+        ```
 
         Verify that the `Check the Health of the Etcd Clusters in the Services Namespace` check from the ncnHealthChecks.sh script returns a healthy report for all members of each etcd cluster.
 
@@ -379,7 +376,7 @@ Before rebooting NCNs:
 
     1.  Establish a console session to the NCN master node you are rebooting.
 
-	Locate the `Booting CSM Barebones Image` section in [Validate CSM Health](../../../../../008-CSM-VALIDATION.md).
+        Locate the `Booting CSM Barebones Image` section in [Validate CSM Health](../../../../../008-CSM-VALIDATION.md).
         Within that section, there are sub-steps for `Verify Consoles` and `Watch Boot on Console`.  Follow these procedures to establish a console session and watch the boot-up of the appropriate NCN.
         **NOTE:** "${CSM_SCRIPTDIR}/ncnGetXnames.sh" can be run to get the xname for each NCN.
         **ALSO NOTE:** Exiting the connection to the console can be achieved with the `&.` command.
@@ -388,11 +385,11 @@ Before rebooting NCNs:
 
         ```bash
         ncn-m# hostname
-	```
+        ```
 
     3.  Reboot the selected NCN (run this command on the NCN which needs to be rebooted).
 
-	```bash
+        ```bash
         ncn-m001# shutdown -r now
         ```
 
@@ -420,12 +417,12 @@ Before rebooting NCNs:
 
     5.  Login to the master NCN and ensure that the hostname matches what was being reported before the reboot.
 
-	```bash
+        ```bash
         ncn-m# hostname
         ```
 
         If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot.  
-	The following command will need to be run on the cli for the NCN that has just been rebooted (and is incorrect).
+        The following command will need to be run on the cli for the NCN that has just been rebooted (and is incorrect).
 
         ```bash
         ncn-m# hostnamectl set-hostname $hostname
@@ -442,7 +439,7 @@ Before rebooting NCNs:
         ```bash
         ncn-m001# "${CSM_SCRIPTDIR}/ncnHealthChecks.sh"
         ncn-m001# "${CSM_SCRIPTDIR}/ncnPostgresHealthChecks.sh"
-	```
+        ```
 
     7.  Disconnect from the console.
 
@@ -490,11 +487,11 @@ Before rebooting NCNs:
 
     5.  Login to the worker NCN and ensure that the hostname matches what was being reported before the reboot.
 
-	```bash
+        ```bash
         ncn-w# hostname
         ```
         If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot.  
-	The following command will need to be run on the cli for the NCN that has just been rebooted (and is incorrect).
+        The following command will need to be run on the cli for the NCN that has just been rebooted (and is incorrect).
 
         ```bash
         ncn-m001# hostnamectl set-hostname $hostname
