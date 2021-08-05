@@ -14,15 +14,16 @@ FAS images contain the following information that is needed for a hardware devic
    * [Current Capabilities](#current-capabilities)
    * [Order Of Operations](#order-of-operations)
    * [Hardware Precedence Order](#hardware-precedence-order)
-   * [FAS Use Cases](#fas-admin-procedures)
+   * [FAS Admin Procedures](#fas-admin-procedures)
    * [Firmware Actions](#firmware-actions)
+   * [Firmware Operations](#firmware-operations)
    * [Firmware Images](#firmware-images)
 
 <a name="prerequisites"></a>
 
 ### Prerequisites
 
-1. CSM software has been installed, firmware has been loaded into FAS as part of the CSM install, HSM is running, and nodes have been discovered. 
+1. CSM software has been installed, firmware has been loaded into FAS as part of the HPC Firmware Pack (HFP) install, HSM is running, and nodes have been discovered.
 2. All management nodes have been locked.  
 3. Identify the type and manufacturers of hardware in the system. If Gigabyte nodes are not in use on the system, do not update them!
 
@@ -96,7 +97,7 @@ For each item in the `Hardware Precedence Order`:
 After identifying which hardware is in the system, start with the top most item on this list to update. If any of the following hardware is not in the system, skip it.
 
 **IMPORTANT:**
-* Updating NCN firmware with FAS is not supported. Refer to HPE documentation for further instruction.
+* This process does not communicate the SAFE way to update NCNs. If the NCNs have not been locked, or FAS is blindly used to update NCNs without following the correct process, then **THE STABILITY OF THE SYSTEM WILL BE JEOPARDIZED**.
 * Read the corresponding recipes before updating. There are sometimes ancillary actions that must be completed in order to ensure update integrity.
 
 1. [Cray](FAS_Recipes.md#manufacturer-cray)
@@ -140,6 +141,23 @@ The static portion of the life cycle is where the action is created and configur
 -   Indirect: Request to restore a snapshot via the /snapshots API.
 
 The dynamic portion of the life cycle is where the action is executed to completion. It begins when the actions is transitioned from the `new` to `configured` state. The action will then be ultimately transitioned to an end state of `aborted` or `completed`.
+
+<a name="firmware-operations"></a>
+
+### Firmware Operations
+
+Operations are individual tasks in a FAS action.
+FAS will create operations based on the configureation sent through the `actions create` command.
+FAS operations will have one of the following states:
+- initial - Operation just created.
+- configured - The operation is configured, but nothing has been started.
+- blocked - Only one operation can be preformed on a node at a time.  If more than one update is required for a xname, operations will be blocked.  This will have a message of "blocked by sibling".
+- inProgress - Update is in progress, but not completed.
+- verifying - Waiting for update to complete.
+- failed - An update was attempted, but could FAS is unable to tell that the update successed in the time allowed.
+- noOperation - Firmware is at the correct version according to the images loaded into FAS.
+- noSolution - FAS does not have a sutable image for an update.
+- aborted - the operation was aborted before it could determn if it was successful.  If aborted after the update command was sent to the node, the node may still have updated.
 
 <a name="firmware-images"></a>
 
