@@ -489,17 +489,19 @@ Execute the HMS smoke and functional tests after the CSM install to confirm that
 
 These tests should be executed as root on at least one worker NCN and one master NCN (but **not** ncn-m001 if it is still the PIT node).
 
-1. Run the HMS smoke tests.
-
-```bash
+Run the HMS smoke tests.
+```
 ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resources.sh
 ```
-1. Examine the output for errors or failures.
-1. If no failures occur, then run the HMS functional tests. 
-```bash
+
+Examine the output. If one or more failures occur, investigate the cause of each failure. See the [interpreting_hms_health_check_results](https://stash.us.cray.com/projects/CSM/repos/docs-csm/browse/troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
+
+Otherwise, run the HMS functional tests.
+```
 ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-resources.sh
 ```
-1. Examine the output for errors or failures.
+
+Examine the output. If one or more failures occur, investigate the cause of each failure. See the [interpreting_hms_health_check_results](https://stash.us.cray.com/projects/CSM/repos/docs-csm/browse/troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
 
 <a name="hms-smd-discovery-validation"></a>
 ### 2.2 Hardware State Manager Discovery Validation
