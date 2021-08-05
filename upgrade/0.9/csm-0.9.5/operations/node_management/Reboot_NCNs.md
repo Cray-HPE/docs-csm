@@ -190,7 +190,8 @@ Before rebooting NCNs:
     3.  Reboot the selected NCN (run this command on the NCN which needs to be rebooted).
 
         1. 
-	```bash
+
+        ```bash
         ncn-s# shutdown -r now
         ```
 
