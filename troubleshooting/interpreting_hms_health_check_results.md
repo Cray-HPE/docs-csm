@@ -14,7 +14,7 @@ This document describes how to interpret the results of the HMS health check scr
 <a name="hms-smoke-tests"></a>
 ### HMS Smoke Tests
 
-The HMS smoke tests consist of bash scripts that check the status of HMS service pods in Kubernetes and verify HTTP status codes returned by the HMS service APIs. Additionally, there is one test called *smd_discovery_status_test_ncn-smoke.sh* which verifies that the system hardware has been discovered successfully. The *hms_run_ct_smoke_tests_ncn-resources.sh* wrapper script checks for executable files in the HMS smoke test directory on the NCN and runs all tests found in succession.
+The HMS smoke tests consist of bash scripts that check the status of HMS service pods and jobs in Kubernetes and verify HTTP status codes returned by the HMS service APIs. Additionally, there is one test called *smd_discovery_status_test_ncn-smoke.sh* which verifies that the system hardware has been discovered successfully. The *hms_run_ct_smoke_tests_ncn-resources.sh* wrapper script checks for executable files in the HMS smoke test directory on the NCN and runs all tests found in succession.
 
 ```
 ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resources.sh
@@ -97,7 +97,7 @@ FAIL: bss_tavern_api_test ran with failures
 cleaning up...
 ```
 
-A summary of the test suites executed and their results is printed for each HMS service tested. Period characters represent test cases that passed and letter F characters represent test cases that failed within each test suite.
+A summary of the test suites executed and their results is printed for each HMS service tested. Period '.' characters represent test cases that passed and letter 'F' characters represent test cases that failed within each test suite.
 
 The following is an example of a *pytest* summary table for Tavern test suites executed against a service:
 
@@ -161,7 +161,7 @@ Formatted stage:
     status_code: 200
 ```
 
-The following is an example *Errors*:
+The following is an example *Errors* section:
 
 ```
 Errors:
@@ -233,7 +233,7 @@ ncn# kubectl -n services logs <cray-smd-pod3> cray-smd > smd_pod3_logs
 
 ##### DiscoveryStarted
 
-The endpoint is in the process of being inventoried by Hardware State Manager (HSM). Wait for the current discovery process to end which should result in a new LastDiscoveryStatus state being set for the endpoint. 
+The endpoint is in the process of being inventoried by Hardware State Manager (HSM). Wait for the current discovery operation to end which should result in a new LastDiscoveryStatus state being set for the endpoint.
 
 Use the following command to check the current discovery status of the endpoint:
 
