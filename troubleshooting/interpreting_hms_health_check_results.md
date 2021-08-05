@@ -1,7 +1,17 @@
 ## Interpreting HMS Health Check Results
 
+### Table of contents:
+1. [Introduction](#introduction)
+2. [HMS Smoke Tests](#hms-smoke-tests)
+3. [HMS Functional Tests](#hms-functional-tests)
+4. [Additional Troubleshooting](#additional-troubleshooting)
+
+<a name="introduction"></a>
+### Introduction
+
 This document describes how to interpret the results of the HMS health check scripts and techniques for troubleshooting when failures occur.
 
+<a name="hms-smoke-tests"></a>
 ### HMS Smoke Tests
 
 The HMS smoke tests consist of bash scripts that check the status of HMS service pods in Kubernetes and verify HTTP status codes returned by the HMS service APIs. Additionally, there is one test called *smd_discovery_status_test_ncn-smoke.sh* which verifies that the system hardware has been discovered successfully. The *hms_run_ct_smoke_tests_ncn-resources.sh* wrapper script checks for executable files in the HMS smoke test directory on the NCN and runs all tests found in succession.
@@ -55,6 +65,7 @@ cleaning up...
 '/opt/cray/tests/ncn-smoke/hms/hms-capmc/capmc_smoke_test_ncn-smoke.sh' exited with status code: 1
 ```
 
+<a name="hms-functional-tests"></a>
 ### HMS Functional Tests
 
 The HMS functional tests consist of Tavern-based API tests for HMS services that are written in yaml and execute within *hms-pytest* containers on the NCNs that are spun up using podman. The functional tests are more rigorous than the smoke tests and verify the behavior of HMS service APIs in greater detail. The *hms_run_ct_functional_tests_ncn-resources.sh* wrapper script checks for executable files in the HMS functional test directory on the NCN and runs all tests found in succession.
@@ -159,6 +170,7 @@ E   tavern.util.exceptions.TestFailError: Test 'Ensure the boot script service c
         {"type": "about:blank", "title": "Bad Request", "detail": "Need a mac=, name=, or nid= parameter", "status": 400}
 ```
 
+<a name="additional-troubleshooting"></a>
 ### Additional Troubleshooting
 
 This section provides guidance for handling specific HMS Health Check failures that may occur.
