@@ -58,6 +58,24 @@ Flag descriptions:
 
     There is a critical error. Generally coupled with a `Standby` state. Otherwise, reported via Redfish.
 
+### Hardware State Transitions
 
+The following table describes how to interpret when the state of hardware changes:
+
+| Prior State | New State     | Reason                                                       |
+| ---------   | ------------- | ------------------------------------------------------------ |
+| Ready       | Standby       | HBTD if node has many missed heartbeats                      |
+| Ready       | Ready/Warning | HBTD if node has a few missed heartbeats                     |
+| Standby     | Ready         | HBTD node re-starts heartbeating                             |
+| On          | Ready         | HBTD node started heartbeating                               |
+| Off         | Ready         | HBTD sees heartbeats before Redfish Event (On)               |
+| Standby     | On            | Redfish Event (On) or if re-discovered while in the standby state |
+| Off         | On            | Redfish Event (On)                                           |
+| Standby     | Off           | Redfish Event (Off)                                          |
+| Ready       | Off           | Redfish Event (Off)                                          |
+| On          | Off           | Redfish Event (Off)                                          |
+| Any State   | Empty         | Redfish Endpoint is disabled meaning component removal       |
+
+Generally, nodes transition from `Off` to `On` to `Ready` when going from `Off` to booted, and from `Ready` to `Ready/Warning` to `Standby` to `Off` when shut down.
 
 
