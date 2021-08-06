@@ -128,7 +128,7 @@ The default end-user UAI is not suitable for use with the Cray PE. The generic i
     ```bash
     ncn# umount mount; rmdir mount
     ncn# rm $SESSION_ID.tar rootfs.squashfs
-    ncn# rm -f ./usr/bin/uai-ssh.sh && rmdir ./usr/bin ./usr
+    ncn# if [ -f ./usr/bin/uai-ssh.sh ]; then rm -f ./usr/bin/uai-ssh.sh && rmdir ./usr/bin ./usr; fi
     ```
 
 
