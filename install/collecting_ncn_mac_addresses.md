@@ -209,7 +209,6 @@ If you have an incorrect `ncn_metadata.csv` file, you will be unable to deploy t
     --customizations-file /var/www/ephemeral/prep/site-init/customizations.yaml \
     --sealed-secret-key-file /var/www/ephemeral/prep/site-init/certs/sealed_secrets.key
     ```
-
 6. Now restart everything to apply the new configurations:
 
     ```bash

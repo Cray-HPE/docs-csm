@@ -1,7 +1,7 @@
 
 ## Create and Register a Custom UAI Image
 
-Create a custom UAI image based on the current compute node image. This UAI image can then be used to build compute node software with Cray PE.
+Create a custom UAI image based on the current compute node image. This UAI image can then be used to build compute node software with the Cray Programming Environment (PE).
 
 ### Prerequisites
 
@@ -41,7 +41,7 @@ The default end-user UAI is not suitable for use with the Cray PE. The generic i
       name: wlm-sessiontemplate-0.1.0
     ```
 
-2.  Download the compute node squashfs image specified by the BOS session template.
+2.  Download the compute node SquashFS image specified by the BOS session template.
 
     ```bash
     ncn# SESSION_ID=$(cray bos v1 sessiontemplate describe $SESSION_NAME \
@@ -49,14 +49,14 @@ The default end-user UAI is not suitable for use with the Cray PE. The generic i
     ncn# cray artifacts get boot-images $SESSION_ID/rootfs rootfs.squashfs
     ```
 
-3.  Create a directory to mount the downloaded squashfs.
+3.  Create a directory to mount the downloaded SquashFS.
 
     ```bash
     ncn# mkdir mount
     ncn# mount -o loop,rdonly rootfs.squashfs \`pwd\`/mount
     ```
 
-4.  Create a tarball of the squashfs file system.
+4.  Create a tarball of the SquashFS file system.
 
     The file 99-slingshot-network.conf must be omitted from the tarball as that prevents the UAI from running `sshd` as the UAI user with the su command.
 
@@ -68,7 +68,7 @@ The default end-user UAI is not suitable for use with the Cray PE. The generic i
 
     This command may take several minutes to complete. This command creates an uncompressed tar archive so that files can be added after the tarball is made. Using an uncompressed tarball also shortens the time required to complete this procedure.
 
-5.  Wait for the previous command to complete. Then verify that the tarball contains the script /usr/bin/uai-ssh.sh from the squashfs.
+5.  Wait for the previous command to complete. Then verify that the tarball contains the script /usr/bin/uai-ssh.sh from the SquashFS.
 
     ```bash
     ncn# tar tf $SESSION_ID.tar | grep '[.]/usr/bin/uai-ssh[.]sh'
@@ -102,7 +102,7 @@ The default end-user UAI is not suitable for use with the Cray PE. The generic i
     ncn# tar rf 0c0d4081-2e8b-433f-b6f7-e1ef0b907be3.tar ./usr/bin/uai-ssh.sh
     ```
 
-7.  Create a container image using podman or docker and push it to the site container registry. Perform any container-specific modifications, if wanted, with a dockerfile before pushing the container image.
+7.  Create a container image using `podman` or `docker` and push it to the site container registry. Perform any container-specific modifications, if wanted, with a dockerfile before pushing the container image.
 
     The `ENTRYPOINT` layer must be /usr/bin/uai-ssh.sh as that starts `sshd` for the user in the UAI container started by UAS.
 
@@ -121,9 +121,9 @@ The default end-user UAI is not suitable for use with the Cray PE. The generic i
     ncn# cray uas admin config images create --imagename $UAI_IMAGE_NAME
     ```
 
-9.  Delete the squashfs mount directory and tarball.
+9.  Delete the SquashFS mount directory and tarball.
 
-    Because the commands in the following example are executed by the root user and these temporary directories are similar to an important system path, the second rm command does not use the common -r as a precaution.
+    Because the commands in the following example are executed by the root user and these temporary directories are similar to an important system path, the second `rm` command does not use the common `-r` as a precaution.
 
     ```bash
     ncn# umount mount; rmdir mount

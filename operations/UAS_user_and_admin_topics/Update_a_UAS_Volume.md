@@ -5,7 +5,7 @@ Modify the configuration of an already-registered UAS volume. Almost any part of
 
 ### Prerequisites
 
--   Install and initialize the cray administrative CLI.
+-   Install and initialize the `cray` administrative CLI.
 -   Obtain the UAS volume ID of a volume. Perform [List Volumes Registered in UAS](List_Volumes_Registered_in_UAS.md) if needed.
 -   Read [Add a Volume to UAS](Add_a_Volume_to_UAS.md). The options and caveats for updating volumes are the same as for creating volumes.
 

@@ -15,11 +15,11 @@ Install and initialize the `cray` administrative CLI.
     ncn-m001-pit# cray uas admin uais delete OPTIONS
     ```
 
-    where OPTIONS is one or more of the following:
+    OPTIONS is one or more of the following:
 
-    -   --owner USERNAME: delete all UAIs owned by the named user.
-    -   --class-id CLASS\_ID: delete all UAIs of the specified UAI class.
-    -   --uai-list LIST\_OF\_UAI\_NAMES: delete all the listed UAIs
+    -   `--owner USERNAME`: delete all UAIs owned by the named user
+    -   `--class-id CLASS_ID`: delete all UAIs of the specified UAI class
+    -   `--uai-list LIST_OF_UAI_NAMES`: delete all the listed UAIs
     
     The following example deletes two UAIs by name:
 

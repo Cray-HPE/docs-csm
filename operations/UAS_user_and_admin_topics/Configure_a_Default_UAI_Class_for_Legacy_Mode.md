@@ -1,5 +1,5 @@
 
-## Configure a Default UAI Class for Legacy Mode.
+## Configure a Default UAI Class for Legacy Mode
 
 Using a default UAI class is optional but recommended for any site using the legacy UAI management mode that wants to have some control over UAIs created by users. UAI classes used for this purpose need to have certain minimum configuration in them:
 
@@ -12,13 +12,13 @@ Using a default UAI class is optional but recommended for any site using the leg
 To make UAIs useful, there is a minimum set of volumes that should be defined in the UAS configuration:
 
 * `/etc/localtime` for default timezone information
-* whatever directory on the host nodes holds persistent end-user storage, typically `/lus`.
+* whatever directory on the host nodes holds persistent end-user storage, typically `/lus`
 
-In addition to this, there may be volumes defined to support a workload manager (Slurm or PBS Professional) or the Cray PE or other packages the full extent of these volumes is outside the scope of this document, but whatever list of these other volumes is needed to get a suitable end-user UAI should be included in the default UAI class configuration.
+In addition to this, there may be volumes defined to support a workload manager (Slurm or PBS Professional) or the Cray Programming Environment (PE) or other packages the full extent of these volumes is outside the scope of this document, but whatever list of these other volumes is needed to get a suitable end-user UAI should be included in the default UAI class configuration.
 
 ### Example Minimal Default UAI Class
 
-For an example minimal system, here is an example set of volumes and an example creation of a UAI class that would use those volumes:
+The following is an example set of volumes and an example of how to create a UAI class that would use those volumes for a minimal system:
 
 ```
 ncn-m001-pit# cray uas admin config volumes list --format json
@@ -97,7 +97,7 @@ imagename = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
 
 ### Example Default UAI Class with Slurm Support 
 
-Here is an example of a default UAI class configured for Slurm support if Slurm has been installed on the host system:
+The following is an example of a default UAI class configured for Slurm support if Slurm has been installed on the host system:
 
 ```
 ncn-m001-pit# cray uas admin config volumes list --format json

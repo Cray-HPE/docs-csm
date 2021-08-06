@@ -20,7 +20,6 @@ The following procedures provide instructions for creating, updating, examining,
     -   [Retrieve UAI Image Registration Information](Retrieve_UAI_Image_Registration_Information.md)
     -   [Update a UAI Image Registration](Update_a_UAI_Image_Registration.md)
     -   [Delete a UAI Image Registration](Delete_a_UAI_Image_Registration.md)
-
 -   UAS Volumes:
     -   [List Volumes Registered in UAS](List_Volumes_Registered_in_UAS.md)
     -   [Add a Volume to UAS](Add_a_Volume_to_UAS.md)

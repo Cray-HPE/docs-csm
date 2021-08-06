@@ -62,7 +62,7 @@ ssh-keygen: generating new host keys: RSA DSA ECDSA ED25519
 ...
 ```
 
-or, for the broker using the broker UAI pod's name and the `uas` namespace:
+This can also be done for the broker using the broker UAI pod's name and the `uas` namespace:
 
 ```
 ncn-m001-pit# kubectl logs -n uas uai-broker-2e6ce6b7-68d78c6c95-s28dh uai-broker-2e6ce6b7

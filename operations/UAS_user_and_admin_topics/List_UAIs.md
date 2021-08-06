@@ -1,11 +1,12 @@
 
 ## List UAIs
 
-View the UAIs on the system.
+View the details of every UAI that is running by using a direct UAS administrative command.
 
 ### Prerequisites
 
-This procedure requires administrative privileges. 
+* This procedure requires administrative privileges.
+* Install and initialize the `cray` administrative CLI.
 
 ### Procedure
 
