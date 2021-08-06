@@ -17,7 +17,7 @@ Install and initialize the `cray` administrative CLI.
     ncn-m001-pit# cray uas admin config classes list
     ```
 
-    The `cray uas admin config classes list` command supports the same `--format` options as the cray uas admin config volumes list command. See [List Volumes Registered in UAS](List_Volumes_Registered_in_UAS.md) for details.
+    The `cray uas admin config classes list` command supports the same `--format` options as the `cray uas admin config volumes list` command. See [List Volumes Registered in UAS](List_Volumes_Registered_in_UAS.md) for details.
 
     For example:
 

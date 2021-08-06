@@ -31,8 +31,8 @@ The volumes defined for a UAI provide external access to data provided by the ho
 
 When UAIs are created they mount a list of volumes inside their containers to give them access to various data provided either by Kubernetes resources or through Kubernetes by the host node where the UAI runs. Which volumes are in that list depends on how the UAI is created:
 
--   UAIs not created using a UAI class mount all volumes configured in UAS
--   UAIs created using a class only mount the volumes listed in the class and configured in UAS
+-   UAIs not created using a UAI class mount all volumes configured in UAS.
+-   UAIs created using a class only mount the volumes listed in the class and configured in UAS.
 
 The following are some example use cases for UAI volumes:
 
@@ -44,10 +44,10 @@ The following are some example use cases for UAI volumes:
 
 Every UAS volume includes the following values in its registration information:
 
--   `mount_path`: specifies where in the UAI the volume will be mounted
--   `volume_description`: a dictionary with one entry, whose key identifies the kind of Kubernetes volume is described \(for example, `host_path`, `configmap`, `secret`\). The value is another dictionary containing the Kubernetes volume description itself.
--   `volumename`: a required string chosen by the creator of the volume. This may describe or name the volume. It is used inside the UAI pod specification to identify the volume that is mounted in a given location in a container. A `volumename` is unique within any given UAI, but not necessarily within UAS. These are useful when searching for a volume if they are unique across the UAS configuration.
--   `volume_id`: used to identify the UAS volume when examining, updating, or deleting a volume and when linking a volume to a UAI class. A `volume_id` is unique within UAS.
+-   `mount_path`: Specifies where in the UAI the volume will be mounted.
+-   `volume_description`: A dictionary with one entry, whose key identifies the kind of Kubernetes volume is described \(for example, `host_path`, `configmap`, `secret`\). The value is another dictionary containing the Kubernetes volume description itself.
+-   `volumename`: A required string chosen by the creator of the volume. This may describe or name the volume. It is used inside the UAI pod specification to identify the volume that is mounted in a given location in a container. A `volumename` is unique within any given UAI, but not necessarily within UAS. These are useful when searching for a volume if they are unique across the UAS configuration.
+-   `volume_id`: Used to identify the UAS volume when examining, updating, or deleting a volume and when linking a volume to a UAI class. A `volume_id` is unique within UAS.
 
 Refer to https://kubernetes.io/docs/concepts/storage/volumes for more information about Kubernetes volumes.
 
@@ -57,8 +57,8 @@ A resource request tells Kubernetes the minimum amount of memory and CPU to give
 
 UAI resource specifications have three configurable parameters:
 
--   A limit which is a JSON string describing a Kubernetes resource limit
--   A request which is a JSON string describing a Kubernetes resource request
+-   A limit which is a JSON string describing a Kubernetes resource limit.
+-   A request which is a JSON string describing a Kubernetes resource request.
 -   An optional comment which is a free-form string containing any information an administrator might find useful about the resource specification.
 
 Resource specifications also contain a resource-id that is used for examining, updating, or deleting the resource specification as well as linking the resource specification into a UAI class.
@@ -85,4 +85,5 @@ Resource requests and limits tell Kubernetes how much memory and CPU a given UAI
 
 The smaller configuration items control things like whether the UAI can talk to compute nodes over the high-speed network (needed for workload management), whether the UAI presents a public facing or private facing IP address for SSH, Kubernetes scheduling priority and others.
 
-All of the above can be customized on a given set of UAIs by defining a UAI class. UAI classes are templates used to create UAIs, and provide access to fine grained configuration and selection of image, volumes and resource specification. While an end-user UAI can be created by simply specifying its UAI image and the user's public key, to make more precisely constructed UAIs a UAI class must be used.
+All of the above can be customized on a given set of UAIs by defining a UAI class. UAI classes are templates used to create UAIs, and provide access to fine grained configuration and selection of image, volumes and resource specification.  While an end-user UAI can be created by simply specifying its UAI image and the user's public key, to make more precisely constructed UAIs a UAI class must be used.
+

@@ -1,7 +1,7 @@
 
 ## List UAS Information
 
-Use cray uas command to gather information about the User Access Service's version, images, and running User Access Instances \(UAIs\).
+Use the `cray uas` command to gather information about the User Access Service's version, images, and running User Access Instances \(UAIs\).
 
 ### List UAS Version with `cray uas mgr-info list`
 

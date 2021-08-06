@@ -23,7 +23,7 @@ Only ports 80, 443, and 8888 can be exposed. Attempting to open any other ports 
 
     **Troubleshooting:** If the Cray CLI has not been initialized, the CLI commands will not work. See [Configure the Cray Command Line Interface (`cray` CLI)](../configure_cray_cli.md) for more information.
 
-    When these ports are exposed in the UAI, they will be mapped to unique ports on the UAI IP address. The mapping of these ports is displayed in the `uai_portmap` element of the return output from cray uas create, cray uas describe, and cray uas uais list. The mapping is shown as a dictionary where the key is the port requested and the value is the port that key is mapped to.
+    When these ports are exposed in the UAI, they will be mapped to unique ports on the UAI IP address. The mapping of these ports is displayed in the `uai_portmap` element of the return output from `cray uas create`, `cray uas describe`, and `cray uas uais list`. The mapping is shown as a dictionary where the key is the port requested and the value is the port that key is mapped to.
 
     ```bash
     ncn-w001# cray uas create --publickey /root/.ssh/id_rsa.pub --ports 80,443

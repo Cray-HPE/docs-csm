@@ -9,7 +9,7 @@ This section provides examples of some commands that can be used to troubleshoot
 packet_write_wait: Connection to 203.0.113.0 port 30841: Broken pipe
 ```
 
-If an error message related to broken pipes returns, enable keep-alives on the client side. The admin should update the /etc/ssh/sshd\_config and /etc/ssh/ssh\_config files to add the following
+If an error message related to broken pipes returns, enable keep-alives on the client side. The admin should update the /etc/ssh/sshd\_config and /etc/ssh/ssh\_config files to add the following:
 
 ```
 TCPKeepAlive yes
@@ -169,7 +169,7 @@ If Kubernetes resources used to create a UAI are not cleaned up during the norma
 
 Delete anything created by the User Access Service \(`uas-mgr`\):
 
-**Warning:** This command will delete all UAS resources for the entire system, it is not for targeted cleanup of a single UAI.
+**WARNING:** This command will delete all UAS resources for the entire system, it is not for targeted cleanup of a single UAI.
 
 ```bash
 ncn-w001# kubectl delete all -n user -l uas=managed

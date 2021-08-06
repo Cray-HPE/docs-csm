@@ -17,10 +17,10 @@ This method is intended more for creating broker UAIs than for creating end-user
     ncn-m001-pit# cray uas admin uais create OPTIONS
     ```
 
-    where OPTIONS is one or more of the following:
+    OPTIONS is one or more of the following:
 
-    -   --owner USERNAME: create the UAI as owned by the specified user
-    -   --class-id CLASS\_ID: the class of the UAI to be created. This option must be specified unless a default UAI class exists, in which case, it can be omitted and the default will be used.
-    -   --passwd str PASSWORD\_STRING: the /etc/password format string for the user who owns the UAI. This will be used to set up credentials within the UAI for the owner when the owner logs into the UAI.
-    -   --publickey-str PUBLIC\_SSH\_KEY: the SSH public key that will be used to authenticate with the UAI. The key should be, for example, the contents of an id\_rsa.pub file used by SSH.
+    -   `--owner USERNAME`: Create the UAI as owned by the specified user.
+    -   `--class-id CLASS_ID`: The class of the UAI to be created. This option must be specified unless a default UAI class exists, in which case, it can be omitted and the default will be used.
+    -   `--passwd str PASSWORD_STRING`: The /etc/password format string for the user who owns the UAI. This will be used to set up credentials within the UAI for the owner when the owner logs into the UAI.
+    -   `--publickey-str PUBLIC_SSH_KEY`: The SSH public key that will be used to authenticate with the UAI. The key should be, for example, the contents of an id\_rsa.pub file used by SSH.
 
