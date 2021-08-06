@@ -7,11 +7,13 @@ The key pieces of the broker UAI image are:
 * An entrypoint shell script that initializes the container and starts the SSH daemon running.
 * An SSH configuration that forces logged in users into the `switchboard` command which creates / selects end-user UAIs and redirects connections.
 
-The primary way to customize the broker UAI image is by defining volumes and connecting them to the broker UAI class for a given broker. An example of this is configuring the broker for LDAP is shown in [Configure a Broker UAI Class](Configure_a_Broker_UAI_Class.md). Some customizations may require action that cannot be covered simply by using a volume. Those cases can be covered either by volume mounting a customized entrypoint script, or volume mounting a customized SSH configuration. Both of these are shown below.
+The primary way to customize the broker UAI image is by defining volumes and connecting them to the broker UAI class for a given broker. An example of this is configuring the broker for LDAP is shown in [Configure a Broker UAI Class](Configure_a_Broker_UAI_Class.md). Some customizations may require action that cannot be covered simply by using a volume. Those cases can be covered either by volume mounting a customized entrypoint script, or volume mounting a customized SSH configuration. Both of these cases are shown in the following examples.
 
 ### Customize the Broker UAI Entrypoint Script
 
-The broker UAI entrypoint script runs once every time the broker UAI starts. It resides at `/app/broker/entrypoint.sh` in the broker UAI image. The entrypoint script is the only file in that directory, so it can be overridden by creating a Kubernetes config-map in the `uas` namespace containing the modified script and creating a volume using that config-map with a mount point of `/app/broker`. There is critical content in the entrypoint script that should not be modified. Here is a tour the unmodified script:
+The broker UAI entrypoint script runs once every time the broker UAI starts. It resides at `/app/broker/entrypoint.sh` in the broker UAI image. The entrypoint script is the only file in that directory, so it can be overridden by creating a Kubernetes ConfigMap in the `uas` namespace containing the modified script and creating a volume using that ConfigMap with a mount point of `/app/broker`. There is critical content in the entrypoint script that should not be modified. 
+
+The following shows the contents of an unmodified script:
 
 ```
 #!/bin/bash
@@ -38,7 +40,7 @@ sssd
 sleep infinity
 ```
 
-Starting at the top, `pam_config ...` can be customized to set up PAM as needed. The configuration here assumes the broker is using SSSD to reach a directory server for authentication and that, if a home directory is not present for a user at login, one should be made on the broker. The `ssh-keygen...` part is needed to set up the SSH host key for the broker and should be left alone. The `UAI_CREATION_CLASS` code should be left alone, as it sets up information used by `switchboard` to create end-user UAIs. The `/usr/sbin/sshd...` part starts the SSH server on the broker and should be left alone. Configuration of SSH is covered in the next section and is done by replacing `/etc/switchboard/sshd_config` not by modifying this line. The `sssd` part assumes the broker is using SSSD to reach a directory server, it can be changed as needed. The `sleep infinity` prevents the script from exiting which keeps the broker UAI running. It should not be removed or altered. As long as the basic flow and contents described here are honored, other changes to this script should work without compromising the broker UAI's function.
+Starting at the top, `pam_config ...` can be customized to set up PAM as needed. The configuration here assumes the broker is using SSSD to reach a directory server for authentication and that, if a home directory is not present for a user at login, one should be made on the broker. The `ssh-keygen...` part is needed to set up the SSH host key for the broker and should be left alone. The `UAI_CREATION_CLASS` code should be left alone, as it sets up information used by `switchboard` to create end-user UAIs. The `/usr/sbin/sshd...` part starts the SSH server on the broker and should be left alone.  Configuration of SSH is covered in the next section and is done by replacing `/etc/switchboard/sshd_config` not by modifying this line. The `sssd` part assumes the broker is using SSSD to reach a directory server, it can be changed as needed. The `sleep infinity` prevents the script from exiting which keeps the broker UAI running. It should not be removed or altered. As long as the basic flow and contents described here are honored, other changes to this script should work without compromising the broker UAI's function.
 
 The following is an example of replacing the entrypoint script with a new entrypoint script that changes the SSSD invocation to explicitly specify the `sssd.conf` file path (the standard path is used here, but a different path might make customizing SSSD for a given site simpler under some set of circumstances):
 
@@ -228,15 +230,15 @@ Match User !root,*
 ```
 The important content here is as follows:
 
-* `Port 30123` tells sshd to listen on a port that can be reached through port forwarding by the publicly visible Kubernetes service,
+* `Port 30123` tells sshd to listen on a port that can be reached through port forwarding by the publicly visible Kubernetes service.
 * The `UseDNS no` avoids any DNS issues resulting from the broker UAI running in the Kubernetes network space.
-* The `PermitTTY yes` setting permits interactive UAI logins
+* The `permitTTY yes` setting permits interactive UAI logins.
 * The `ForceCommand ...` statement ensures that users are always sent on to end-user UAIs or drop out of the broker UAI on failure, preventing users from directly accessing the broker UAI.
 * The `AcceptEnv UAI_ONE_SHOT` setting is not required, but it allows a user to set the UAI_ONE_SHOT variable which instructs the broker to delete any created end-user UAI after the user logs out.
 
 These should be left unchanged. The rest of the configuration can be customized as needed.
 
-The following is an example that follows on from the previous section and configures SSH to provide a pre-login banner. Both a new `banner` file and a new `sshd_config` are placed in a Kubernetes configmap and mounted over `/etc/switchboard`:
+The following is an example that follows on from the previous section and configures SSH to provide a pre-login banner.  Both a new `banner` file and a new `sshd_config` are placed in a Kubernetes ConfigMap and mounted over `/etc/switchboard`:
 
 ```
 # Notice special here document form to prevent variable substitution in the file
@@ -364,3 +366,5 @@ Here is a banner that will be displayed before login to SSH
 on Broker UAIs
 Password: 
 ```
+
+

@@ -89,18 +89,18 @@ The chapters with topics which need to be done as part of an ordered procedure a
    * [Manage Node Consoles](operations/manage_node_consoles.md)
    * [Changing Passwords and Credentials](operations/changing_passwords_and_credentials.md)
    * [Managing Configuration with CFS](operations/managing_configuration_with_CFS.md)
-   * [UAS/UAI Admin and User Guide](operations/500-UAS-UAI-ADMIN-AND-USER-GUIDE.md)
+   * [User Access Service (UAS)](operations/UAS_user_and_admin_topics/User_Access_Service_UAS.md)
    * [Accessing LiveCD USB Device After Reboot](operations/accessing_livecd_usb_device_after_reboot.md)
    * [Update SLS with UAN Aliases](operations/update_sls_with_uan_aliases.md)
    * [Configure NTP on NCNs](operations/configure_ntp_on_ncns.md)
    * [Change NCN Image Root Password and SSH Keys](operations/change_ncn_image_root_password_and_ssh_keys.md)
 
-1. [CSM Troubleshooting Information](troubleshooting/index.md)
+2. [CSM Troubleshooting Information](troubleshooting/index.md)
 
    Topics:
    * [Known Issues](troubleshooting/index.md#known-issues)
 
-1. [CSM Background Information](background/index.md)
+3. [CSM Background Information](background/index.md)
 
    Topics:
    * [Cray Site Init Files](background/cray_site_init_files.md)
@@ -113,4 +113,4 @@ The chapters with topics which need to be done as part of an ordered procedure a
    * [NCN Operating System Releases](background/ncn_operating_system_releases.md)
    * [cloud-init Basecamp Configuration](background/cloud-init_basecamp_configuration.md)
 
-1. [Glossary](glossary.md)
+4. [Glossary](glossary.md)
