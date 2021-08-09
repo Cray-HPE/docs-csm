@@ -142,7 +142,7 @@ uname -a
    ```bash
    ncn-m001# cd "$CSM_DISTDIR"
    ncn-m001# ./upgrade.sh
-
+   ```
 
 <a name="run-validation-checks-post-upgrade"></a>
 ## Run Validation Checks (Post-Upgrade)
@@ -176,7 +176,7 @@ Other health checks may be run as desired.
 2. Confirm the `import_date` reflects the timestamp of the upgrade:
 
    ```bash
-   ncn-m001# kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r  - '"0.9.4".configuration.import_date'
+   ncn-m001# kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r  - '"0.9.5".configuration.import_date'
    ```
 
 
