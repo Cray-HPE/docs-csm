@@ -12,28 +12,20 @@ It also requires that the CSM_SCRIPTDIR variable was previously defined as part 
 
 ### Procedure
 
-1.  Run the `./ncnGetXnames.sh` script.
+1.  Run the `${CSM_SCRIPTDIR}/ncnGetXnames.sh` script.
 
     The output will include a listing of all of the NCNs, their xnames, and what the `metal.no-wipe` setting is for each.
 
     ```bash
     ncn-m001# "${CSM_SCRIPTDIR}/ncnGetXnames.sh"
     ncn-m001: x3000c0s1b0n0 - metal.no-wipe=1
-     
     ncn-m002: x3000c0s2b0n0 - metal.no-wipe=1
-     
     ncn-m003: x3000c0s3b0n0 - metal.no-wipe=1
-     
     ncn-w001: x3000c0s4b0n0 - metal.no-wipe=1
-     
     ncn-w002: x3000c0s5b0n0 - metal.no-wipe=1
-     
     ncn-w003: x3000c0s6b0n0 - metal.no-wipe=1
-     
     ncn-s001: x3000c0s7b0n0 - metal.no-wipe=1
-     
     ncn-s002: x3000c0s8b0n0 - metal.no-wipe=1
-     
     ncn-s003: x3000c0s9b0n0 - metal.no-wipe=1
     ```
 
@@ -55,29 +47,21 @@ It also requires that the CSM_SCRIPTDIR variable was previously defined as part 
     2.  Update the `metal.no-wipe` settings.
 
         ```bash
-        ncn-m001# /tmp/csi handoff bss-update-param --set metal.no-wipe=1
+        ncn-m001# csi handoff bss-update-param --set metal.no-wipe=1
         ```
 
-    3.  Run the `./ncnGetXnames.sh` script again to verify the no-wipe settings have been reset as expected.
+    3.  Run the `${CSM_SCRIPTDIR}/ncnGetXnames.sh` script again to verify the no-wipe settings have been reset as expected.
 
         ```bash
         ncn-m001# "${CSM_SCRIPTDIR}/ncnGetXnames.sh"
         ncn-m001: x3000c0s1b0n0 - metal.no-wipe=1
-         
         ncn-m002: x3000c0s2b0n0 - metal.no-wipe=1
-         
         ncn-m003: x3000c0s3b0n0 - metal.no-wipe=1
-         
         ncn-w001: x3000c0s4b0n0 - metal.no-wipe=1
-         
         ncn-w002: x3000c0s5b0n0 - metal.no-wipe=1
-         
         ncn-w003: x3000c0s6b0n0 - metal.no-wipe=1
-         
         ncn-s001: x3000c0s7b0n0 - metal.no-wipe=1
-         
         ncn-s002: x3000c0s8b0n0 - metal.no-wipe=1
-         
         ncn-s003: x3000c0s9b0n0 - metal.no-wipe=1
         ```
 

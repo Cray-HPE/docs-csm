@@ -76,14 +76,6 @@ It also requires that the **CSM_SCRIPTDIR variable was previously defined** as p
         ncn-m001# kubectl describe node NCN_HOSTNAME
         ```
 
-        If that file is empty, run the following work-around to populate this file:
-
-        ```bash
-        ncn-m001# cp /srv/cray/resources/common/containerd/00-multus.conf \
-        /etc/cni/net.d/00-multus.conf
-        ncn-m001# cat /etc/cni/net.d/00-multus.conf
-        ```
-
         Verify the worker or master NCN is now in a Ready state:
 
         ```bash
@@ -92,7 +84,7 @@ It also requires that the **CSM_SCRIPTDIR variable was previously defined** as p
 
     3.  Check the status of the Kubernetes pods.
 
-        The bottom of the output returned after running the "${CSM_SCRIPTDIR}/ncnHealthChecks.sh" script will show a list of pods that may be in a bad state. The following command can also be used to look for any pods that are not in a Running or Completed state:
+        The bottom of the output returned after running the `${CSM_SCRIPTDIR}/ncnHealthChecks.sh` script will show a list of pods that may be in a bad state. The following command can also be used to look for any pods that are not in a Running or Completed state:
 
         ```bash
         ncn-m001# kubectl get pods -o wide -A | grep -Ev 'Running|Completed'
@@ -100,13 +92,11 @@ It also requires that the **CSM_SCRIPTDIR variable was previously defined** as p
 
         It is important to pay attention to that list, but it is equally important to note what pods are in that list before and after NCN reboots to determine if the reboot caused any new issues.
 
-        There are pods that may normally be in an Error, Not Ready, or Init state, and this may not indicate any problems caused by the NCN reboots. Error states can indicate that a job pod ran and ended in an Error. That means that there may be a problem with that job, but does not necessarily indicate that there is an overall health issue with the system. The key takeaway \(for health purposes\) is understanding the statuses of pods prior to doing an action like rebooting all of the NCNs. Comparing the pod statuses in between each NCN reboot will give a sense of what is new or different with respect to health.
+        There are pods that may normally be in an Error, Not Ready, or Init state, and this may not indicate any problems caused by the NCN reboots. Error states can indicate that a job pod ran and ended in an Error. That means that there may be a problem with that job, but does not necessarily indicate that there is an overall health issue with the system. The key takeaway (for health purposes) is understanding the statuses of pods prior to doing an action like rebooting all of the NCNs. Comparing the pod statuses in between each NCN reboot will give a sense of what is new or different with respect to health.
 
-    4.  Verify Ceph health.
+    4.  Monitor Ceph health continuously.
 
-        This output is included in the "${CSM_SCRIPTDIR}/ncnHealthChecks.sh" script.
-
-        In a separate cli session, run the following command during NCN reboots
+        In a separate cli session, run the following command during NCN reboots:
 
         ```bash
         ncn-m001# watch -n 10 'ceph -s'
@@ -143,22 +133,9 @@ It also requires that the **CSM_SCRIPTDIR variable was previously defined** as p
         - /var/lib/cni/networks/macvlan-slurmctld-nmn-conf
         - /var/lib/cni/networks/macvlan-slurmdbd-nmn-conf
 
-    6.  Check that the BGP peering sessions are established.
+    6.  Check that the BGP peering sessions are established by using [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
 
-        This check will need to be run after all worker NCNs have been rebooted. Ensure that the checks have been run to check BGP peering sessions on the spine switches \(instructions will vary for Aruba and Mellanox switches\)
-
-        If there are BGP Peering sessions that are not ESTABLISHED on either switch, refer to [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
-
-    7.  Validate the NCNs have good boot artifacts
-
-        Install the latest install-workarounds rpm and run the `CASMINST-2689` workaround, which ensures good boot artifacts.  This is especially critical during an upgrade path.
-
-        ```bash
-        ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
-        ncn-m001# cray init
-        ncn-m001# /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689/CASMINST-2689.sh
-        ```
-        Additional instructions and expected output for this work-around can be found in `/opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689/README.md`.
+        This check will need to be run now and after all worker NCNs have been rebooted. Ensure that the checks have been run to check BGP peering sessions on the BGP peer switches (instructions will vary for Aruba and Mellanox switches).
 
 ### NCN Rolling Reboot
 
@@ -166,106 +143,105 @@ Before rebooting NCNs:
 
 * Ensure pre-reboot checks have been completed, including checking the `metal.no-wipe` setting for each NCN. **Do not proceed** if any of the NCN `metal.no-wipe` settings are zero.
 
-* Apply any workaround located in /opt/cray/csm/workarounds/ if instructed.  If you did not apply CASMINST-2689 from step 7 above, then please do so now, otherwise you may encounter boot issues.
-
 #### Utility Storage Nodes (Ceph)
 
-1. Reboot each of the NCN storage nodes \(one at a time\).
+Reboot each of the NCN storage nodes **one at a time** going from the highest to the lowest number.
 
-    1.  Establish a console session to each NCN storage node.
+1. Establish a console session to each NCN storage node.
+   1. Use the `${CSM_SCRIPTDIR}/ncnGetXnames.sh` script to get the xnames for each of the NCNs.
+   2. Use cray-conman to observe each node as it boots:
 
-        Locate the `Booting CSM Barebones Image` section in [Validate CSM Health](../../../../../008-CSM-VALIDATION.md#booting-csm-barebones-image). 
-        Within that section, there are sub-steps for [Verify Consoles](../../../../../008-CSM-VALIDATION.md#booting-csm-barebones-image#csm-consoles) and [Watch Boot on Console](../../../../../008-CSM-VALIDATION.md#booting-csm-barebones-image#csm-watch). Follow these procedures to establish a console session and watch the boot-up of the appropriate NCN.
+      ```bash
+      ncn-m001# kubectl exec -it -n services cray-conman-<hash> cray-conman -- /bin/bash
+      cray-conman# conman -q
+      cray-conman# conman -j XNAME
+      ```
 
-        **NOTE:** "${CSM_SCRIPTDIR}/ncnGetXnames.sh" can be run to get the xname for each NCN.
+      **NOTE:** Exiting the connection to the console can be achieved with the `&.` command.
 
-        **ALSO NOTE:** Exiting the connection to the console can be achieved with the `&.` command.
+2. Check and take note of the hostname of the storage NCN by running the following command on the NCN which will be rebooted.
 
-    2.  Check and take note of the hostname of the storage NCN by running the following command on the NCN which will be rebooted.
+    ```bash
+    ncn-s# hostname
+    ```
 
-        ```bash
-        ncn-s# hostname
-        ```
+3. Reboot the selected NCN (run this command on the NCN which needs to be rebooted).
 
-    3.  Reboot the selected NCN (run this command on the NCN which needs to be rebooted).
+    ```bash
+    ncn-s# shutdown -r now
+    ```
 
+    **`IMPORTANT:`** If the node does not shutdown after 5 mins, then proceed with the power reset below
 
-        ```bash
-        ncn-s# shutdown -r now
-        ```
+    To power off the node:
 
-        **`IMPORTANT:`** If the node does not shutdown after 5 mins, then proceed with the power reset below
+    ```bash
+    ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power off
+    ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power status
+    ```
 
-        To power off the node:
+    Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
 
-        ```bash
-        ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power off
-        ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power status
-        ```
+    To power back on the node:
 
-        Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
+    ```bash
+    ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power on
+    ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power status
+    ```
 
-        To power back on the node:
+    Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
 
-        ```bash
-        ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power on
-        ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power status
-        ```
+4.  Watch on the console until the NCN has successfully booted and the login prompt is reached.
 
+5.  Login to the storage NCN and ensure that the hostname matches what was being reported before the reboot.
 
-        Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
+    ```bash
+    ncn-s# hostname
+    ```
 
-    4.  Watch on the console until the NCN has successfully booted and the login prompt is reached.
+    If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot. 
+    The following command will need to be run on the cli for the NCN that has just been rebooted (and is incorrect).
 
-    5.  Login to the storage NCN and ensure that the hostname matches what was being reported before the reboot.
+    ```bash
+    ncn-s# hostnamectl set-hostname $hostname
+    ```
 
-        ```bash
-        ncn-s# hostname
-        ```
+    where `$hostname` is the original hostname from before reboot
 
-        If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot. 
-        The following command will need to be run on the cli for the NCN that has just been rebooted (and is incorrect).
+    Follow the procedure outlined above to `Reboot the selected NCN` again and verify the hostname is correctly set, afterward.
 
-        ```bash
-        ncn-s# hostnamectl set-hostname $hostname
-        ```
+6.  Run the platform health checks from the [Validate CSM Health](../../../../../008-CSM-VALIDATION.md) procedure.
 
-        where `$hostname` is the original hostname from before reboot
+    Recall that updated copies of the two HealthCheck scripts referenced in the `Platform Health Checks` can be run from here:
 
-        Follow the procedure outlined above to `Reboot the selected NCN` again and verify the hostname is correctly set, afterward.
+    ```bash
+    ncn-m001# "${CSM_SCRIPTDIR}/ncnHealthChecks.sh"
+    ncn-m001# "${CSM_SCRIPTDIR}/ncnPostgresHealthChecks.sh"
+    ```
 
-    6.  Run the platform health checks from the [Validate CSM Health](../../../../../008-CSM-VALIDATION.md) procedure.
+    **Troubleshooting:** If the slurmctld and slurmdbd pods do not start after powering back up the node, check for the following error:
 
-        Recall that updated copies of the two HealthCheck scripts referenced in the `Platform Health Checks` can be run from here:
+    ```bash
+    ncn-m001# kubectl describe pod -n user -lapp=slurmctld
+    Warning  FailedCreatePodSandBox  27m              kubelet, ncn-w001  Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox "82c575cc978db00643b1bf84a4773c064c08dcb93dbd9741ba2e581bc7c5d545": Multus: Err in tearing down failed plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for range 0: no IP addresses available in range set: 10.252.2.4-10.252.2.4
+    ```
 
-        ```bash
-        ncn-m001# "${CSM_SCRIPTDIR}/ncnHealthChecks.sh"
-        ncn-m001# "${CSM_SCRIPTDIR}/ncnPostgresHealthChecks.sh"
-        ```
+    ```bash
+    ncn-m001# kubectl describe pod -n user -lapp=slurmdbd
+    Warning  FailedCreatePodSandBox  29m                    kubelet, ncn-w001  Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox "314ca4285d0706ec3d76a9e953e412d4b0712da4d0cb8138162b53d807d07491": Multus: Err in tearing down failed plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for range 0: no IP addresses available in range set: 10.252.2.4-10.252.2.4
+    ```
 
-        **Troubleshooting:** If the slurmctld and slurmdbd pods do not start after powering back up the node, check for the following error:
+    Remove the following files on every worker node to resolve the failure:
 
-        ```bash
-        ncn-m001# kubectl describe pod -n user -lapp=slurmctld
-        Warning  FailedCreatePodSandBox  27m              kubelet, ncn-w001  Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox "82c575cc978db00643b1bf84a4773c064c08dcb93dbd9741ba2e581bc7c5d545": Multus: Err in tearing down failed plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for range 0: no IP addresses available in range set: 10.252.2.4-10.252.2.4
-        ```
+    - /var/lib/cni/networks/macvlan-slurmctld-nmn-conf
+    - /var/lib/cni/networks/macvlan-slurmdbd-nmn-conf
 
-        ```bash
-        ncn-m001# kubectl describe pod -n user -lapp=slurmdbd
-        Warning  FailedCreatePodSandBox  29m                    kubelet, ncn-w001  Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox "314ca4285d0706ec3d76a9e953e412d4b0712da4d0cb8138162b53d807d07491": Multus: Err in tearing down failed plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for range 0: no IP addresses available in range set: 10.252.2.4-10.252.2.4
-        ```
+7.  Disconnect from the console.
 
-        Remove the following files on every worker node to resolve the failure:
+8.  Repeat all of the sub-steps above for the remaining storage nodes, going from the highest to lowest number until all storage nodes have successfully rebooted.
 
-        - /var/lib/cni/networks/macvlan-slurmctld-nmn-conf
-        - /var/lib/cni/networks/macvlan-slurmdbd-nmn-conf
-
-    7.  Disconnect from the console.
-
-    8.  Repeat all of the sub-steps above for the remaining storage nodes, going from the highest to lowest number until all storage nodes have successfully rebooted.
-
-        **Important:** Ensure `ceph -s` shows that Ceph is healthy BEFORE MOVING ON to reboot the next storage node. Once Ceph has recovered the downed mon, 
-	it may take a several minutes for Ceph to resolve clock skew.
+    **Important:** Ensure `ceph -s` shows that Ceph is healthy BEFORE MOVING ON to reboot the next storage node. Once Ceph has recovered the downed mon, 
+it may take a several minutes for Ceph to resolve clock skew.
 
 #### NCN Worker Nodes
 
