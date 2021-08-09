@@ -4,7 +4,7 @@
 NCNS=$(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  paste -sd ',')
 
 function run_pdsh_command() {
-    pdsh -b -w "$NCNS" "$1"
+    pdsh -S -b -w "$NCNS" "$1"
 }
 
 set -x
@@ -19,6 +19,23 @@ run_pdsh_command 'zypper removelock kernel-default'
 
 # Install patches.
 run_pdsh_command 'zypper in -t patch -y SUSE-SLE-Module-Development-Tools-15-SP2-2021-2438 SUSE-SLE-Module-Basesystem-15-SP2-2021-2438'
+patchRetVal=$?
+# Check to see if one or both of these packages is missing or any other failures.
+if [ $patchRetVal -gt 0 ]; then
+  if [ $patchRetVal -eq 104 ]
+  then
+    echo -n "Failed to find SUSE-SLE-Module-Development-Tools-15-SP2-2021-2438 and/or "
+    echo "SUSE-SLE-Module-Basesystem-15-SP2-2021-2438 patch."
+    echo "Please see section, \"Install SLE for V1.4.2A-security0821 Patch\" in the main patch README."
+  else
+    echo "The patch failed to install on one or more NCNs. Investigate the above output for any errors."
+  fi
+
+  exit $patchRetVal
+else
+  echo "Patch installed on all NCNs."
+fi
+
 
 # Put the kernel lock back in place.
 run_pdsh_command 'zypper addlock kernel-default'

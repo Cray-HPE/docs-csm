@@ -96,7 +96,8 @@ proceeding.
    2. Patches the kernel/initrd/squash image to have the correctly patched assets.
    3. Applies a pod priority to essential deployments to ensure that they are scheduled when rebooting the NCNs.
    
-      **This step assumes the latest SUSE updates tarball has been extracted and installed (i.e., synced with Nexus).**
+      **This step requires the latest SUSE updates tarball has been extracted and installed (i.e., synced with Nexus).**
+      **Please see section, "Install SLE for V1.4.2A-security0821 Patch" in the main patch README.**
     
        ```
        ncn-m001# "${CSM_SCRIPTDIR}/run-patch.sh"
