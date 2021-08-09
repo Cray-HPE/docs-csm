@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+# Identify the bootraid.
+BOOTRAID="$(awk '/LABEL=BOOTRAID/ {print $2}' /etc/fstab.metal)"
+
+# Make sure the boot raid isn't mounted first. This might fail and that's ok.
+umount "$BOOTRAID"
+
 set -e
 
 version_full=$(rpm -q --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}\n' kernel-default | tail -n 1)
@@ -14,9 +20,6 @@ set -x
 
 # This should return 0 and show the files.
 ls "$kernel" "$initrd"
-
-# Identify the bootraid.
-BOOTRAID="$(awk '/LABEL=BOOTRAID/ {print $2}' /etc/fstab.metal)"
 
 ###
 ### Kernel/initrd updates.

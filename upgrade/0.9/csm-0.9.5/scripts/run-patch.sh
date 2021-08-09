@@ -17,6 +17,11 @@ then
   echo "Cray CLI appears to not be setup correctly!"
   exit 1
 fi
+if ! command -v csi &> /dev/null
+then
+  echo "CSI appears to not be installed!"
+  exit 1
+fi
 
 # Add the repos with the new RPMs and refresh them.
 run_pdsh_command 'zypper ar https://packages.local/repository/SUSE-SLE-Module-Basesystem-15-SP2-x86_64-Updates SUSE-SLE-Module-Basesystem-15-SP2-x86_64-Updates'
@@ -41,7 +46,9 @@ fi
 run_pdsh_command 'zypper in -t patch -y SUSE-SLE-Module-Development-Tools-15-SP2-2021-2438 SUSE-SLE-Module-Basesystem-15-SP2-2021-2438'
 patchRetVal=$?
 # Check to see if one or both of these packages is missing or any other failures.
-if [ $patchRetVal -gt 0 ]; then
+# Error code 102 is Zypper for "you need to reboot". We're not doing that now, so it's not actually an error.
+if [ $patchRetVal -gt 0 ] && [ $patchRetVal -ne 102 ]
+then
   if [ $patchRetVal -eq 104 ]
   then
     echo -n "Failed to find SUSE-SLE-Module-Development-Tools-15-SP2-2021-2438 and/or "
@@ -66,7 +73,7 @@ then
 fi
 
 # Copy the kernel/initrd/squash update script to all the NCNs.
-pdcp -pw "$NCNS" update-kernel_squashfs.sh /tmp
+pdcp -pw "$NCNS" "${CSM_SCRIPTDIR}/update-kernel_squashfs.sh" /tmp
 if [ $? -gt 0 ]
 then
   echo "Failed to copy update-kernel_squashfs script to all NCNs!"
@@ -103,15 +110,12 @@ fi
 
 
 csi handoff ncn-images \
-    --k8s-kernel-path    ${CSM_DISTDIR}/kubernetes/*.kernel \
-    --k8s-initrd-path    ${CSM_DISTDIR}/kubernetes/initrd.img*.xz \
-    --k8s-squashfs-path  ${CSM_DISTDIR}/kubernetes/*.squashfs \
-    --ceph-kernel-path   ${CSM_DISTDIR}/storage-ceph/*.kernel \
-    --ceph-initrd-path   ${CSM_DISTDIR}/storage-ceph/initrd.img*.xz \
-    --ceph-squashfs-path ${CSM_DISTDIR}/storage-ceph/*.squashfs
+    --k8s-kernel-path    ${CSM_DISTDIR}/images/kubernetes/*.kernel \
+    --k8s-initrd-path    ${CSM_DISTDIR}/images/kubernetes/initrd.img*.xz \
+    --k8s-squashfs-path  ${CSM_DISTDIR}/images/kubernetes/*.squashfs \
+    --ceph-kernel-path   ${CSM_DISTDIR}/images/storage-ceph/*.kernel \
+    --ceph-initrd-path   ${CSM_DISTDIR}/images/storage-ceph/initrd.img*.xz \
+    --ceph-squashfs-path ${CSM_DISTDIR}/images/storage-ceph/*.squashfs
 
 # Should show all the assets from above.
 cray artifacts list ncn-images
-
-# Add priority class and classify essential deployments as such.
-#./add_pod_priority.sh
