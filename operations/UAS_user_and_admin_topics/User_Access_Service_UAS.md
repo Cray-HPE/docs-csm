@@ -34,6 +34,12 @@ Use `cray uas list` to list the following parameters for a UAI.
 |`uai_age`|The age of the UAI.|`11m`|
 |`uai_host`|The node hosting the UAI.|`ncn-w001`|
 
+### Getting started
+
+UAS is highly configurable and it is recommended that administrators familiarize themselves with the service by reading this topic before allowing users to use UAIs.
+
+Once administrators are familiar with the configurable options of UAS, they may want to create a UAI image that matches the booted compute nodes by following the procedure [Customize End-User UAI Images](Customize_End-User_UAI_Images.md).
+
 ### Table of Contents
 
 * [End-User UAIs](End_User_UAIs.md)
