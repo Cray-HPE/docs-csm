@@ -164,7 +164,7 @@ It also requires that the **CSM_SCRIPTDIR variable was previously defined** as p
 
 Before rebooting NCNs:
 
-* Ensure pre-reboot checks have been completed, including checking the `metal.no-wipe` setting for each NCN. Do not proceed if any of the NCN `metal.no-wipe` settings are zero.
+* Ensure pre-reboot checks have been completed, including checking the `metal.no-wipe` setting for each NCN. **Do not proceed** if any of the NCN `metal.no-wipe` settings are zero.
 
 * Apply any workaround located in /opt/cray/csm/workarounds/ if instructed.  If you did not apply CASMINST-2689 from step 7 above, then please do so now, otherwise you may encounter boot issues.
 
@@ -174,8 +174,8 @@ Before rebooting NCNs:
 
     1.  Establish a console session to each NCN storage node.
 
-        Locate the `Booting CSM Barebones Image` section in [Validate CSM Health](../../../../../008-CSM-VALIDATION.md). 
-        Within that section, there are sub-steps for `Verify Consoles` and `Watch Boot on Console`.  Follow these procedures to establish a console session and watch the boot-up of the appropriate NCN.
+        Locate the `Booting CSM Barebones Image` section in [Validate CSM Health](../../../../../008-CSM-VALIDATION.md#booting-csm-barebones-image). 
+        Within that section, there are sub-steps for [Verify Consoles](../../../../../008-CSM-VALIDATION.md#booting-csm-barebones-image#csm-consoles) and [Watch Boot on Console](../../../../../008-CSM-VALIDATION.md#booting-csm-barebones-image#csm-watch). Follow these procedures to establish a console session and watch the boot-up of the appropriate NCN.
 
         **NOTE:** "${CSM_SCRIPTDIR}/ncnGetXnames.sh" can be run to get the xname for each NCN.
 
@@ -199,8 +199,8 @@ Before rebooting NCNs:
         To power off the node:
 
         ```bash
-        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power off
-        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
+        ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power off
+        ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power status
         ```
 
         Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
@@ -208,8 +208,8 @@ Before rebooting NCNs:
         To power back on the node:
 
         ```bash
-        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power on
-        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
+        ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power on
+        ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power status
         ```
 
 
@@ -223,7 +223,7 @@ Before rebooting NCNs:
         ncn-s# hostname
         ```
 
-        If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot.  
+        If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot. 
         The following command will need to be run on the cli for the NCN that has just been rebooted (and is incorrect).
 
         ```bash
@@ -277,9 +277,11 @@ Before rebooting NCNs:
 
         **`IMPORTANT:`** If the ConMan console pod is on the worker node being rebooted you will need to re-establish your session after the Cordon/Drain in step 2
 
-        Locate the `Booting CSM Barebones Image` section in [Validate CSM Health](../../../../../008-CSM-VALIDATION.md).
-        Within that section, there are sub-steps for `Verify Consoles` and `Watch Boot on Console`.  Follow these procedures to establish a console session and watch the boot-up of the appropriate NCN.
+        Locate the `Booting CSM Barebones Image` section in [Validate CSM Health](../../../../../008-CSM-VALIDATION.md#booting-csm-barebones-image). 
+        Within that section, there are sub-steps for [Verify Consoles](../../../../../008-CSM-VALIDATION.md#booting-csm-barebones-image#csm-consoles) and [Watch Boot on Console](../../../../../008-CSM-VALIDATION.md#booting-csm-barebones-image#csm-watch). Follow these procedures to establish a console session and watch the boot-up of the appropriate NCN.
+        
         **NOTE:** "${CSM_SCRIPTDIR}/ncnGetXnames.sh" can be run to get the xname for each NCN.
+        
         **ALSO NOTE:** Exiting the connection to the console can be achieved with the `&.` command.
 
     2.  Check and take note of the hostname of the worker NCN by running the following command on the NCN which will be rebooted.
@@ -297,7 +299,7 @@ Before rebooting NCNs:
     4.  Cordon and Drain the node
 
         ```bash
-        ncn-w# kubectl drain  --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
+        ncn-w# kubectl drain --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
         ```
 
     5.  Reboot the selected NCN (run this command on the NCN which needs to be rebooted).
@@ -311,8 +313,8 @@ Before rebooting NCNs:
         To power off the node:
 
         ```bash
-        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power off
-        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
+        ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power off
+        ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power status
         ```
 
         Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
@@ -320,8 +322,8 @@ Before rebooting NCNs:
         To power back on the node:
 
         ```bash
-        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power on
-        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
+        ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power on
+        ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power status
         ```
 
         Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
@@ -372,13 +374,15 @@ Before rebooting NCNs:
 
 #### NCN Master Nodes
 
-1. Reboot each of the NCN \(one at a time\).
+1. Reboot each of the NCN master nodes \(one at a time\), **except for ncn-m001**.
 
     1.  Establish a console session to the NCN master node you are rebooting.
 
-        Locate the `Booting CSM Barebones Image` section in [Validate CSM Health](../../../../../008-CSM-VALIDATION.md).
-        Within that section, there are sub-steps for `Verify Consoles` and `Watch Boot on Console`.  Follow these procedures to establish a console session and watch the boot-up of the appropriate NCN.
+        Locate the `Booting CSM Barebones Image` section in [Validate CSM Health](../../../../../008-CSM-VALIDATION.md#booting-csm-barebones-image). 
+        Within that section, there are sub-steps for [Verify Consoles](../../../../../008-CSM-VALIDATION.md#booting-csm-barebones-image#csm-consoles) and [Watch Boot on Console](../../../../../008-CSM-VALIDATION.md#booting-csm-barebones-image#csm-watch). Follow these procedures to establish a console session and watch the boot-up of the appropriate NCN.
+
         **NOTE:** "${CSM_SCRIPTDIR}/ncnGetXnames.sh" can be run to get the xname for each NCN.
+        
         **ALSO NOTE:** Exiting the connection to the console can be achieved with the `&.` command.
 
     2.  Check and take note of the hostname of the master NCN by running the command on the NCN that will be rebooted.
@@ -398,8 +402,8 @@ Before rebooting NCNs:
         To power off the node:
 
         ```bash
-        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power off
-        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
+        ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power off
+        ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power status
         ```
 
         Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
@@ -407,8 +411,8 @@ Before rebooting NCNs:
         To power back on the node:
 
         ```bash
-        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power on
-        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
+        ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power on
+        ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power status
         ```
 
         Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
@@ -421,7 +425,7 @@ Before rebooting NCNs:
         ncn-m# hostname
         ```
 
-        If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot.  
+        If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot. 
         The following command will need to be run on the cli for the NCN that has just been rebooted (and is incorrect).
 
         ```bash
@@ -462,14 +466,15 @@ Before rebooting NCNs:
         Ensure the expected results are returned from the power status check before rebooting:
 
         ```bash
-        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
+        external# SYSTEM_NAME=eniac
+        external# ipmitool -U root -P PASSWORD -H ${SYSTEM_NAME}-ncn-m001-mgmt -I lanplus power status
         ```
 
         To power off the node:
 
         ```bash
-        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power off
-        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
+        external# ipmitool -U root -P PASSWORD -H ${SYSTEM_NAME}-ncn-m001-mgmt -I lanplus power off
+        external# ipmitool -U root -P PASSWORD -H ${SYSTEM_NAME}-ncn-m001-mgmt -I lanplus power status
         ```
 
         Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
@@ -485,7 +490,7 @@ Before rebooting NCNs:
 
     4.  Watch on the console until the NCN has successfully booted and the login prompt is reached.
 
-    5.  Login to the worker NCN and ensure that the hostname matches what was being reported before the reboot.
+    5.  Login to `ncn-m001` and ensure that the hostname matches what was being reported before the reboot.
 
         ```bash
         ncn-m001# hostname
