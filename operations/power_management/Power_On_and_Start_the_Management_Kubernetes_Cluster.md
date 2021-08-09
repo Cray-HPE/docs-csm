@@ -54,11 +54,33 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
 **POWER ON ALL OTHER MANAGEMENT NCNs**
 
-9.  Power on and boot other management NCNs.
+9. Power on and boot other management NCNs.
 
-    ```screen
-    ncn-m001# sat bootsys boot --stage ncn-power
-    ```
+   ```bash
+   ncn-m001# sat bootsys boot --stage ncn-power
+   IPMI username: root
+   IPMI password:
+   The following Non-compute Nodes (NCNs) will be included in this operation:
+   managers:
+   - ncn-m002
+   - ncn-m003
+   storage:
+   - ncn-s001
+   - ncn-s002
+   - ncn-s003
+   workers:
+   - ncn-w001
+   - ncn-w002
+   - ncn-w003
+   
+   The following Non-compute Nodes (NCNs) will be excluded from this operation:
+   managers:
+   - ncn-m001
+   storage: []
+   workers: []
+   
+   Are the above NCN groupings and exclusions correct? [yes,no] yes
+   ```
 
 10. Use `tail` to monitor the log files in `/var/log/cray/console_logs` for each NCN.
 
@@ -82,69 +104,53 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
 11. Verify that the Lustre file system is available from the management cluster.
     
-**CHECK STATUS OF THE MANAGEMENT CLUSTER**
-    
-12. If Ceph is frozen, use the following commands as workaround.
 
-    ```bash
-    ncn-m001# ceph osd unset noout
-    noout is unset
-    ncn-m001# ceph osd unset nobackfill
-    nobackfill is unset
-    ncn-m001# ceph osd unset norecover
-    norecover is unset
-    ```
-
-13. Check Ceph status.
-
-    ```bash
-    ncn-m001# ceph -s
-      cluster:
-        id:     e6536923-2bf5-4fb1-b132-2532b4d01eae
-        health: HEALTH_OK
-     
-      services:
-        mon: 3 daemons, quorum ncn-s003,ncn-s002,ncn-s001 (age 12m)
-        mgr: ncn-s002(active, since 12m), standbys: ncn-s001, ncn-s003
-        mds: cephfs:1 {0=ncn-s003=up:active} 2 up:standby
-        osd: 24 osds: 24 up (since 12m), 24 in (since 26h)
-        rgw: 3 daemons active (ncn-s001.rgw0, ncn-s002.rgw0, ncn-s003.rgw0)
-     
-      task status:
-        scrub status:
-            mds.ncn-s003: idle
-     
-      data:
-        pools:   11 pools, 816 pgs
-        objects: 25.93k objects, 40 GiB
-        usage:   128 GiB used, 42 TiB / 42 TiB avail
-        pgs:     816 active+clean
-     
-      io:
-        recovery: 3.6 MiB/s, 1 objects/s
-    ```
-
-14. If Ceph does not recover and become healthy, refer to [Manage Ceph Services](../utility_storage/Manage_Ceph_Services.md).
-
-    
 **START KUBERNETES \(k8s\)**
 
-15. Use `sat bootsys` to start the k8s cluster.
+12. Use `sat bootsys` to start the k8s cluster. Note that the default timeout
+    for Ceph to become healthy is 600 seconds, which is excessive. To work
+    around this issue, set the timeout to a more reasonable value like 60
+    seconds using the `--ceph-timeout` option as shown below.
 
     ```bash
-    ncn-m001# sat bootsys boot --stage platform-services 
+    ncn-m001# sat bootsys boot --stage platform-services --ceph-timeout 60
+    The following Non-compute Nodes (NCNs) will be included in this operation:
+    managers:
+    - ncn-m001
+    storage:
+    - ncn-s001
+    - ncn-s002
+    - ncn-s003
+    workers:
+    - ncn-w001
+    - ncn-w002
+    - ncn-w003
+
+    Are the above NCN groupings correct? [yes,no] yes
     ```
 
-16. If the previous step fails with the following, or similar message, restart Ceph services and wait for services to be healthy.
+13. The previous step may fail with a message like the following:
 
     ```bash
-    Executing step: Check health of Ceph cluster and unfreeze state.
-    ERROR: Ceph is not healthy. The following fatal Ceph health warnings were found: POOL_NO_REDUNDANCY
-    ERROR: Fatal error in step "Check health of Ceph cluster and unfreeze state." of platform services start: Ceph is not healthy. Please correct Ceph health and try again.
-    
+    Executing step: Start inactive Ceph services, unfreeze Ceph cluster and wait for Ceph health.
+    Waiting up to 60 seconds for Ceph to become healthy after unfreeze
+    Waiting for condition "Ceph cluster in healthy state" timed out after 60 seconds
+    ERROR: Fatal error in step "Start inactive Ceph services, unfreeze Ceph cluster and wait for Ceph health." of platform services start: Ceph is not healthy. Please correct Ceph health and try again.
     ```
 
-    The warning message will vary. In this example, it is POOL\_NO\_REDUNDANCY. See [Manage Ceph Services](../utility_storage/Manage_Ceph_Services.md).
+    If a failure like the above occurs, see the info-level log messages for
+    details about the Ceph health check failure. Depending on the configured log
+    level for `sat`, the log messages may appear in stderr or only in the log
+    file. For example:
+
+    ```bash
+    ncn-m001# grep "fatal Ceph health warnings" /var/log/cray/sat/sat.log | tail -n 1
+    2021-08-04 17:28:21,945 - INFO - sat.cli.bootsys.ceph - Ceph is not healthy: The following fatal Ceph health warnings were found: POOL_NO_REDUNDANCY
+    ```
+
+    The particular Ceph health warning may vary. In this example, it is POOL\_NO\_REDUNDANCY. See
+    [Manage Ceph Services](../utility_storage/Manage_Ceph_Services.md) for Ceph troubleshooting
+    steps, which may include restarting Ceph services as described below for convenience.
 
     From storage node ncn-s001, restart Ceph services.
 
@@ -156,7 +162,9 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
     ansible ceph_all -m shell -a "systemctl restart ceph-mds.target"
     ```
 
-17. Check the space available on the Ceph cluster.
+    Once Ceph is healthy, repeat the previous step to finish starting the Kubernetes cluster.
+
+14. Check the space available on the Ceph cluster.
 
     ```bash
     ncn-m001# ceph df
@@ -181,11 +189,11 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
     
     ```
 
-18. If `%USED` for any pool approaches 80% used, resolve the space issue.
+15. If `%USED` for any pool approaches 80% used, resolve the space issue.
 
     To resolve the space issue, see [Troubleshoot Ceph OSDs Reporting Full](../utility_storage/Troubleshoot_Ceph_OSDs_Reporting_Full.md).
 
-19. Monitor the status of the management cluster and which pods are restarting as indicated by either a `Running` or `Completed` state.
+16. Monitor the status of the management cluster and which pods are restarting as indicated by either a `Running` or `Completed` state.
 
     ```bash
     ncn-m001# kubectl get pods -A -o wide | grep -v -e Running -e Completed
@@ -197,7 +205,7 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
     If there are pods in the `MatchNodeSelector` state, delete these pods. Then verify that the pods restart and are in the `Running` state.
 
-20. Check the status of the `slurmctld` and `slurmdbd` pods to determine if they are starting:
+17. Check the status of the `slurmctld` and `slurmdbd` pods to determine if they are starting:
 
     ```bash
     ncn-m001# kubectl describe pod -n user -lapp=slurmctld
@@ -225,7 +233,7 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
     -   /var/lib/cni/networks/macvlan-slurmctld-nmn-conf
     -   /var/lib/cni/networks/macvlan-slurmdbd-nmn-conf
     
-21. Check that spire pods have started.
+18. Check that spire pods have started.
 
     ```bash
     ncn-m001# kubectl get pods -n spire -o wide | grep spire-jwks
@@ -234,13 +242,13 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
     spire-jwks-6b97457548-lvqmf    2/3  CrashLoopBackOff   9    23h   10.39.0.79   ncn-w001 <none>   <none>
     ```
 
-22. If spire pods indicate `CrashLoopBackOff`, then restart the spire pods.
+19. If spire pods indicate `CrashLoopBackOff`, then restart the spire pods.
 
     ```bash
     ncn-m001# kubectl rollout restart -n spire deployment spire-jwks
     ```
 
-23. Determine whether the cfs-state-reporter service is failing to start on each manager/master and worker NCN while trying to contact CFS.
+20. Determine whether the cfs-state-reporter service is failing to start on each manager/master and worker NCN while trying to contact CFS.
 
     ```bash
     ncn-m001# pdsh -w ncn-m00[1-3],ncn-w00[1-3] systemctl status cfs-state-reporter

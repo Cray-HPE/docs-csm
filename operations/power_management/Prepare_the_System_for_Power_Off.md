@@ -91,7 +91,7 @@ An authentication token is required to access the API gateway and to use the `sa
     6.  Capture the list of down nodes in the workload manager and the reason.
 
         ```bash
-        ncn-m001# ssh nid001000 sinfo --list-reasons > sinfo.reasons
+        ncn-m001# ssh nid001000-nmn sinfo --list-reasons > sinfo.reasons
         ```
 
     7.  Check Ceph status.
