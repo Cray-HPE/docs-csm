@@ -7,15 +7,35 @@ function run_pdsh_command() {
     pdsh -S -b -w "$NCNS" "$1"
 }
 
-set -x
+# Run sanity checks to see if we should even try to start.
+if [[ -z "${TOKEN}" ]]; then
+  echo "API token must be set in TOKEN environment variable!"
+  exit 1
+fi
+if ! cray artifacts list ncn-images &> /dev/null
+then
+  echo "Cray CLI appears to not be setup correctly!"
+  exit 1
+fi
 
 # Add the repos with the new RPMs and refresh them.
 run_pdsh_command 'zypper ar https://packages.local/repository/SUSE-SLE-Module-Basesystem-15-SP2-x86_64-Updates SUSE-SLE-Module-Basesystem-15-SP2-x86_64-Updates'
 run_pdsh_command 'zypper ar https://packages.local/repository/SUSE-SLE-Module-Development-Tools-15-SP2-x86_64-Updates SUSE-SLE-Module-Development-Tools-15-SP2-x86_64-Updates'
+
 run_pdsh_command 'zypper refresh SUSE-SLE-Module-Basesystem-15-SP2-x86_64-Updates SUSE-SLE-Module-Development-Tools-15-SP2-x86_64-Updates'
+if [ $? -gt 0 ]
+then
+  echo "Failed to refresh repositories on one or more NCNs!"
+  exit 1
+fi
 
 # Remove the zypper lock on the kernel on every NCN.
 run_pdsh_command 'zypper removelock kernel-default'
+if [ $? -gt 0 ]
+then
+  echo "Failed to remove lock on kernel-default on one or more NCNs!"
+  exit 1
+fi
 
 # Install patches.
 run_pdsh_command 'zypper in -t patch -y SUSE-SLE-Module-Development-Tools-15-SP2-2021-2438 SUSE-SLE-Module-Basesystem-15-SP2-2021-2438'
@@ -39,13 +59,30 @@ fi
 
 # Put the kernel lock back in place.
 run_pdsh_command 'zypper addlock kernel-default'
-
+if [ $? -gt 0 ]
+then
+  echo "Failed to replace lock on kernel-default on one or more NCNs!"
+  exit 1
+fi
 
 # Copy the kernel/initrd/squash update script to all the NCNs.
 pdcp -pw "$NCNS" update-kernel_squashfs.sh /tmp
+if [ $? -gt 0 ]
+then
+  echo "Failed to copy update-kernel_squashfs script to all NCNs!"
+  exit 1
+fi
 
 # Update kernel/initrd/squash on all NCNs.
 run_pdsh_command '/tmp/update-kernel_squashfs.sh'
+if [ $? -gt 0 ]
+then
+  echo "Failed to update kernel/squashfs on one or more NCNs!"
+  exit 1
+fi
+
+
+set -ex
 
 # Remove any existing artifacts in S3.
 cray artifacts delete ncn-images k8s-kernel
@@ -64,6 +101,7 @@ then
   ln -snf /etc/kubernetes/admin.conf ~/.kube/config
 fi
 
+
 csi handoff ncn-images \
     --k8s-kernel-path    ${CSM_DISTDIR}/kubernetes/*.kernel \
     --k8s-initrd-path    ${CSM_DISTDIR}/kubernetes/initrd.img*.xz \
@@ -76,4 +114,4 @@ csi handoff ncn-images \
 cray artifacts list ncn-images
 
 # Add priority class and classify essential deployments as such.
-./add_pod_priority.sh
+#./add_pod_priority.sh
