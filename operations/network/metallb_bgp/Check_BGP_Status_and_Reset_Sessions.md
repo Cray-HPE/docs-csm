@@ -80,6 +80,7 @@ This procedure requires administrative privileges.
         It may take a few minutes for sessions to become Established.
 
         ```bash
+        sw-spine-001 [standalone: master] > enable
         sw-spine-001 [standalone: master] # show ip bgp summary
         
         VRF name                  : default
