@@ -136,6 +136,25 @@ ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-ceph-initia
 
 **`IMPORTANT:`** We scale down the conman deployements during stage 1.2 (this stage), so all console sessions will be down for portion of the upgrade
 
+**`IMPORTANT`** If this has be run previously, then check point files may need to be deleted.
+
+```bash
+Directory location = /etc/cray/ceph/_upgraded
+
+/etc/cray/ceph/images_pre_pulled
+/etc/cray/ceph/radosgw_converted
+/etc/cray/ceph/upgrade_initialized
+/etc/cray/ceph/mons_upgraded
+/etc/cray/ceph/mgrs_upgraded
+/etc/cray/ceph/keys_distributed
+/etc/cray/ceph/converted_to_orch
+/etc/cray/ceph/osds_upgraded
+/etc/cray/ceph/mds_upgraded
+/etc/cray/ceph/rgws_upgraded
+```
+
+**`NOTE:`** You can delete all these files and rerun or you can just delete any files from your last step. You may end up with checkpoint files if the upgrade was exited out of by the user.  But if you know you exited out of OSDs and it wasn't a clean exit, then you would only need remove `osd_upgraded`, `mds_upgraded` and `rgw_upgraded`.
+
 1. Start the Ceph upgrade
 
    ```bash
