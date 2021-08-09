@@ -398,7 +398,7 @@ When running upgrade scripts, each script record what has been done successfully
 Here is an example of state file of `ncn-m001`:
 
 ```bash
-ncn-m001:~ # cat /etc/cray/upgrade/csm/csm-1.0.0-beta.46/ncn-m001/state
+ncn-m001:~ # cat /etc/cray/upgrade/csm/{CSM_VERSION}/ncn-m001/state
 [2021-07-22 20:05:27] UNTAR_CSM_TARBALL_FILE
 [2021-07-22 20:05:30] INSTALL_CSI
 [2021-07-22 20:05:30] INSTALL_WAR_DOC
