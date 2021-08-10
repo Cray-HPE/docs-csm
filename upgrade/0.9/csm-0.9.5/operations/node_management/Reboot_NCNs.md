@@ -25,7 +25,7 @@ This same procedure can be used to reboot a single NCN node as outlined above. B
 
 This procedure requires that the `kubectl` command is installed.
 
-It also requires that the **CSM_SCRIPTDIR variable was previously defined** as part of the execution of the steps in the csm-0.9.5 upgrade README.  You can verify that it is set by running `echo $CSM_SCRIPTDIR` on the ncn-m001 cli.  If that returns nothing, re-execute the setting of that variable from the csm-0.9.5 README file.
+It also requires that the **CSM_SCRIPTDIR variable was previously defined** as part of the execution of the steps in the csm-0.9.5 upgrade README.  You can verify that it is set by running `echo $CSM_SCRIPTDIR` on the ncn-m001 cli.  If that returns nothing, re-execute the setting of that variable from the [csm-0.9.5 README](../../README.md) file.
 
 ## Procedure
 
@@ -176,6 +176,7 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
     To power off the node:
 
     ```bash
+    ncn-m001# hostname=ncn-s001 # Set the NCN being rebooted
     ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power off
     ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power status
     ```
@@ -289,6 +290,7 @@ it may take a several minutes for Ceph to resolve clock skew.
         To power off the node:
 
         ```bash
+        ncn-m001# hostname=ncn-w001 # Set the NCN being rebooted
         ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power off
         ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power status
         ```
@@ -370,7 +372,7 @@ it may take a several minutes for Ceph to resolve clock skew.
     3.  Reboot the selected NCN (run this command on the NCN which needs to be rebooted).
 
         ```bash
-        ncn-m001# shutdown -r now
+        ncn-m# shutdown -r now
         ```
 
         **`IMPORTANT:`** If the node does not shutdown after 5 mins, then proceed with the power reset below
@@ -378,6 +380,7 @@ it may take a several minutes for Ceph to resolve clock skew.
         To power off the node:
 
         ```bash
+        ncn-m001# hostname=ncn-m002 # Set the NCN being rebooted
         ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power off
         ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power status
         ```
@@ -429,7 +432,31 @@ it may take a several minutes for Ceph to resolve clock skew.
 
     1.  Determine the CAN IP address for one of the other NCNs in the system to establish an SSH session with that NCN.
 
-    2.  Establish a console session to `ncn-m001` from a remote system, as `ncn-m001` is the NCN that has an externally facing IP address.
+        ```bash
+        ncn-m001# ssh ncn-m002
+        ncn-m002# ip a show vlan007 | grep inet
+        ```
+
+        Expected output looks similar to the following:
+    
+        ```
+        inet 10.102.11.13/24 brd 10.102.11.255 scope global vlan007
+        inet6 fe80::1602:ecff:fed9:7820/64 scope link
+        ```
+        
+        Now login from another machine to verify that IP is usable:
+        
+        ```bash
+        external# ssh root@10.102.11.13
+        ncn-m002#
+        ```
+
+    2.  Establish a console session to `ncn-m001` from a remote system, as the BMC of `ncn-m001` is the NCN that has an externally facing IP address.
+        ```bash
+        external# SYSTEM_NAME=eniac
+        external# ipmitool -I lanplus -U root -P PASSWORD -H ${SYSTEM_NAME}-ncn-m001-mgmt chassis power status
+        external# ipmitool -I lanplus -U root -P PASSWORD -H ${SYSTEM_NAME}-ncn-m001-mgmt sol activate
+        ```
 
     3.  Check and take note of the hostname of the ncn-m001 NCN by running this command on it:
 
@@ -437,18 +464,18 @@ it may take a several minutes for Ceph to resolve clock skew.
         ncn-m001# hostname
         ```
 
-    3.  Power cycle the node
-
-        Ensure the expected results are returned from the power status check before rebooting:
+    3.  Reboot `ncn-m001`.
 
         ```bash
-        external# SYSTEM_NAME=eniac
-        external# ipmitool -U root -P PASSWORD -H ${SYSTEM_NAME}-ncn-m001-mgmt -I lanplus power status
+        ncn-m001# shutdown -r now
         ```
+
+        **`IMPORTANT:`** If the node does not shutdown after 5 mins, then proceed with the power reset below
 
         To power off the node:
 
         ```bash
+        external# SYSTEM_NAME=eniac
         external# ipmitool -U root -P PASSWORD -H ${SYSTEM_NAME}-ncn-m001-mgmt -I lanplus power off
         external# ipmitool -U root -P PASSWORD -H ${SYSTEM_NAME}-ncn-m001-mgmt -I lanplus power status
         ```
@@ -458,8 +485,8 @@ it may take a several minutes for Ceph to resolve clock skew.
         To power back on the node:
 
         ```bash
-        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power on
-        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
+        ncn-m001# ipmitool -U root -P PASSWORD -H ${SYSTEM_NAME}-ncn-m001-mgmt -I lanplus power on
+        ncn-m001# ipmitool -U root -P PASSWORD -H ${SYSTEM_NAME}-ncn-m001-mgmt -I lanplus power status
         ```
 
         Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
@@ -475,11 +502,18 @@ it may take a several minutes for Ceph to resolve clock skew.
         The following command will need to be run on the cli for the NCN that has just been rebooted (and is incorrect).
 
         ```bash
+        ncn-m001# hostname=ncn-m001
         ncn-m001# hostnamectl set-hostname $hostname
         ```
         where `$hostname` is the original hostname from before reboot
 
         Follow the procedure outlined above to `Power cycle the node` again and verify the hostname is correctly set, afterward.
+
+    7. Set `CSM_SCRIPTDIR` to the scripts directory included in the docs-csm RPM for the CSM 0.9.5 patch:
+
+        ```bash
+        ncn-m001# export CSM_SCRIPTDIR=/usr/share/doc/metal/upgrade/0.9/csm-0.9.5/scripts
+        ```
 
     6.  Run the platform health checks from the [Validate CSM Health](../../../../../008-CSM-VALIDATION.md) procedure.
 
