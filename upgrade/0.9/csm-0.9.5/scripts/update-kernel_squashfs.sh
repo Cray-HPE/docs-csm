@@ -13,10 +13,21 @@ version_base="${version_full%%-*}"
 version_suse="${version_full##*-}"
 version_suse="${version_suse%.*.*}"
 version="$version_base-$version_suse-default"
-initrd=/boot/initrd-$version
+initrd=/tmp/initrd.img.xz
 kernel=/boot/vmlinuz-$version
 
 set -x
+
+# Produce a new initrd from the new kernel.
+dracut --xz --force \
+    --omit 'cifs ntfs-3g btrfs nfs fcoe iscsi modsign fcoe-uefi nbd dmraid multipath dmsquash-live-ntfs' \
+    --omit-drivers 'ecb md5 hmac' \
+    --add 'mdraid' \
+    --force-add 'dmsquash-live livenet mdraid' \
+    --install 'rmdir wipefs sgdisk vgremove less' \
+    --persistent-policy by-label --show-modules --ro-mnt --no-hostonly --no-hostonly-cmdline \
+    --kver "${version}" \
+    --printsize "$initrd"
 
 # This should return 0 and show the files.
 ls "$kernel" "$initrd"
@@ -47,7 +58,7 @@ mount -o remount,rw /run/initramfs/live
 cp -pv "$BOOTRAID/boot/kernel" /run/initramfs/live/LiveOS
 
 # Copy the initrd into place
-cp -pv "$(ls $BOOTRAID/boot/initrd*)" /run/initramfs/live/LiveOS/
+cp -pv "$initrd" /run/initramfs/live/LiveOS/
 
 # Remount as read-only
 mount -o remount,ro /run/initramfs/live

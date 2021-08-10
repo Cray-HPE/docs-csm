@@ -108,7 +108,7 @@ then
   ln -snf /etc/kubernetes/admin.conf ~/.kube/config
 fi
 
-
+# Push the new images into S3.
 csi handoff ncn-images \
     --k8s-kernel-path    ${CSM_DISTDIR}/images/kubernetes/*.kernel \
     --k8s-initrd-path    ${CSM_DISTDIR}/images/kubernetes/initrd.img*.xz \
@@ -119,3 +119,6 @@ csi handoff ncn-images \
 
 # Should show all the assets from above.
 cray artifacts list ncn-images
+
+
+echo "Patch process completed!"
