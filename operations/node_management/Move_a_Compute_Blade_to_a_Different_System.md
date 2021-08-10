@@ -4,6 +4,8 @@ Move an HPE Cray EX liquid-cooled compute blade from one system to another syste
 
 ### Prerequisites
 
+- The Slingshot fabric is configured with the desired topology that includes the removed and added blades. 
+- Make sure SLS is updated with the desired HSN configuration.
 - **If the the system in operation**, perform the following tasks on the donor system:
   - Use WLM remove jobs from the affected blade.
   - Determine if the nodes exist in the "in memory" version of the DVS node map.
@@ -13,14 +15,14 @@ Move an HPE Cray EX liquid-cooled compute blade from one system to another syste
         - Remove the node MAC address from the DVS node map on the donor system. 
      - If No, then ... ? 
     - Are there tasks to manage the Lustre mounts?
-  
+
 ### Procedure
 
   This procedure assumes the system is down for maintenance.
 
 #### On the donor system, shutdown software on the nodes
 
-1. Use Boot Orchestration Services (BOS) to shut down the affected nodes on the blade. Specify the appropriate BOS template for the node type.
+1. Use Boot Orchestration Services (BOS) to shut down the affected nodes on the blade. Specify the appropriate BOS template for the node type. **The blade being remove is x1000c3s0.**
    
    ```bash
    ncn-m001# cray bos v1 session create --template-uuid COS-VERSION --operation shutdown --limit x1000c3s0b0n0,x1000c3s0b0n1,x1000c3s0b1n0,x1000c3s0b1n1
@@ -38,23 +40,21 @@ Move an HPE Cray EX liquid-cooled compute blade from one system to another syste
 
    Disabling the slot prevents hms-discovery from attempting to automatically power on slots. 
 
-#### Use CAPMC to power off the slot
+3. **Wipe the Node BMC.** Remove SSH keys, syslog, NTP.
 
-3. The example uses CAPMC to power off slot 0 in chassis 3.
-
-   ```bash
-   ncn-m001# cray capmc xname_off create --xnames x1000c3s0 --recursive true --format json
+   ```
+   NEED PROCEDURE - Matt Kelly, BMC firmware, Sean Byland
    ```
 
-   a. If the slot powers off, proceed to step 4.
+#### Use CAPMC to power off the slot
 
-   b. If the slot automatically powers back on, then suspend the hms-discovery cron job:
+3. Suspend the hms-discovery cron job:
 
    ```bash
    ncn-m001# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : true }}'
    ```
 
-   c. Verify that the hms-discovery cron job has stopped (ACTIVE column = 0).
+   a. Verify that the hms-discovery cron job has stopped (ACTIVE column = 0).
 
    ```bash
    ncn-m001# kubectl get cronjobs -n services hms-discovery
@@ -62,7 +62,11 @@ Move an HPE Cray EX liquid-cooled compute blade from one system to another syste
    hms-discovery */3 * * * * True 0 117s 15d
    ```
 
-   d. Repeat the `capmc xname_off` command to power off slot 0 in chassis 3.
+   b. The example uses CAPMC to power off slot 0 in chassis 3.
+
+   ```bash
+   ncn-m001# cray capmc xname_off create --xnames x1000c3s0 --recursive true --format json
+   ```
 
 #### Disable the slot in the HSM
 
@@ -80,12 +84,20 @@ addresses for the node NICs must be updated in the DHCP/DNS configuration when a
 blade is replaced. Their entries must be deleted from the HSM Ethernet interfaces table and be rediscovered. The BMC NIC MAC addresses for liquid-cooled blades are assigned algorithmically
 and should not be deleted from the HSM.
 
+Record the the following **for each node in the blade.**
+
+- ComponentID: "x1000c3s0b0n0"
+- MACAddress: "b4:2e:99:be:1a:2b"
+- IPAddress: "10.252.1.26"
+
 5. Query HSM to determine the Node NIC MAC addresses associated with the blade in cabinet 1000, chassis 3, slot 0, node card 0, node 0.
 
+   The following command must run 4 times for Windom blades.
+   
    ```bash
    ncn-m001# cray hsm inventory ethernetInterfaces list --component-id x1000c3s0b0n0 --format json
-   [
-   	{
+	[
+		{
 			"ID": "b42e99be1a2b",
 			"Description": "Ethernet Interface Lan1",
 			"MACAddress": "b4:2e:99:be:1a:2b",
@@ -108,55 +120,186 @@ and should not be deleted from the HSM.
 			"IPAddresses": []
 		}
 	]
-	```
-	
-   a. Delete each node NIC MAC address from the HSM Ethernet interfaces table.
+   ```
 
+   a. Delete every node NIC MAC address from the HSM Ethernet interfaces table for each node. (For example Windom blade, each node has 2 NICs).
+   
    ```bash
    ncn-m001# cray hsm inventory ethernetInterfaces delete b42e99be1a2b
    ncn-m001# cray hsm inventory ethernetInterfaces delete b42e99be1a2c
    ```
 
    b. Delete the Redfish endpoint for the removed node.
-
+   
    ```bash
    ncn-m001# cray hsm inventory redfishEndpoints delete x1000c3s0b0
+   ncn-m001# cray hsm inventory redfishEndpoints delete x1000c3s0b1
    ```
 
-#### Prepare the destination system
-
-7. Query HSM to determine the if there is an existing node NIC MAC addresses associated with the slot in destination cabinet. For the examples below, the destination is cabinet 1005, chassis 3, slot 0.
-
-   ```bash
-   ncn-m001# cray hsm inventory ethernetInterfaces list --component-id x1005c3s0b0n0 --format json
-   ```
-
-   a. Delete each node NIC MAC address the HSM Ethernet interfaces table associated with the destination cabinet slot.
-
-   ```bash
-   ncn-m001# cray hsm inventory ethernetInterfaces delete MAC_ADDRESS
-   ncn-m001# cray hsm inventory ethernetInterfaces delete MAC_ADDRESS
-   ```
-
-   b. Delete the Redfish endpoint associated with the destination cabinet slot.
-
-   ```bash
-   ncn-m001# cray hsm inventory redfishEndpoints delete x1005c3s0b0
-   ```
-
-   Deleting the Redfish endpoint triggers MEDS to act on the blade as if it is new hardware.
-
-#### Replace the hardware
+#### Remove the blade from the Donor System
 
 6. Remove the blade hardware from the donor system.  Review the *Remove a Compute Blade Using the Lift* procedure in *HPE Cray EX Hardware Replacement Procedures H-6173* for detailed instructions for replacing liquid-cooled blades (https://internal.support.hpe.com/).
 
-   **CAUTION**: Always power off the chassis slot or device before removal. The best practice is to unlatch and unseat the device while the coolant hoses are still connected, then disconnect the coolant hoses.
-   If this is not possible, disconnect the coolant hoses, then quickly unlatch/unseat the device (within 10
-   seconds). Failure to do so may damage the equipment.
+## Prepare the destination system
 
-7. Install the blade hardware in the destination system. Review the *Install a Compute Blade Using the Lift* procedure in *HPE Cray EX Hardware Replacement Procedures H-6173*.
+This procedures assumes there was a blade in the slot previously. 
 
-#### Power on and boot the compute nodes
+#### On the destination system, shutdown software on the nodes
+
+1. Use Boot Orchestration Services (BOS) to shut down the affected nodes on the blade. Specify the appropriate BOS template for the node type.  The blade being installed is in x1005c3s0.
+
+   ```bash
+   ncn-m001# cray bos v1 session create --template-uuid COS-VERSION --operation shutdown --limit x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
+   ```
+
+   Specify all the nodes in the blade using a comma separated list. This example shows the command to shut down an EX425 compute blade (Windom) in cabinet 1000, chassis 3, slot 0. This blade type includes two node cards, each with two logical nodes (4 processors).
+
+#### Disable Redfish endpoints for the nodes
+
+2. Temporarily disable endpoint discovery service (MEDS) for the compute nodes(s) being replaced.
+   This example disables MEDS for the compute nodes in cabinet 1000, chassis 3, slot 0 (x1005c3s0b0 and x1005c3s0b1). 
+
+   ```bash
+   ncn-m001# cray hsm inventory redfishEndpoints update --enabled false x1005c3s0b0
+   ncn-m001# cray hsm inventory redfishEndpoints update --enabled false x1005c3s0b1
+   ```
+
+   Disabling the slot prevents hms-discovery from attempting to automatically power on slots. 
+
+3. **Remove system specific settings from the Node BMC?????** Remove SSH keys, syslog, NTP.
+
+   ```
+   NEED PROCEDURE - Matt Kelly, BMC firmware, Sean Byland
+   ```
+
+#### Use CAPMC to power off the slot
+
+3. Suspend the hms-discovery cron job:
+
+   ```bash
+   ncn-m001# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : true }}'
+   ```
+
+   a. Verify that the hms-discovery cron job has stopped (ACTIVE column = 0).
+
+   ```bash
+   ncn-m001# kubectl get cronjobs -n services hms-discovery
+   NAME SCHEDULE SUSPEND ACTIVE LAST SCHEDULE AGE^M
+   hms-discovery */3 * * * * True 0 117s 15d
+   ```
+
+   b. The example uses CAPMC to power off slot 0 in chassis 3.
+
+   ```bash
+   ncn-m001# cray capmc xname_off create --xnames x1005c3s0 --recursive true --format json
+   ```
+
+#### Disable the slot in the HSM
+
+4. This example disables slot 0 (x1005c3s0) in cabinet 1005, chassis 3.
+
+   ```bash
+   ncn-m001# cray hsm state components enabled update --enabled false x1005c3s0
+   ```
+
+#### Delete the Ethernet MAC and Redfish endpoint from destination system HSM
+
+**IMPORTANT**: The HSM stores the node's BMC NIC MAC addresses for the hardware management
+network and the node's Ethernet NIC MAC addresses for the node management network. The MAC
+addresses for the node NICs must be updated in the DHCP/DNS configuration when a liquid-cooled
+blade is replaced. Their entries must be deleted from the HSM Ethernet interfaces table and be rediscovered. The BMC NIC MAC addresses for liquid-cooled blades are assigned algorithmically
+and should not be deleted from the HSM.
+
+Record the the following **for each node in the blade.**
+
+- ComponentID: "x1005c3s0b0n0"
+- MACAddress: "b4:fe:99:be:1a:2b"
+- IPAddress: "10.252.1.32"
+
+5. Query HSM to determine the Node NIC MAC addresses associated with the blade in cabinet 1000, chassis 3, slot 0, node card 0, node 0.
+
+   The following command must run 4 times for Windom blades.
+
+   ```bash
+   ncn-m001# cray hsm inventory ethernetInterfaces list --component-id x1000c3s0b0n0 --format json
+   [
+   	{
+   		"ID": "b4fe99be1a2b",
+   		"Description": "Ethernet Interface Lan1",
+   		"MACAddress": "b4:fe:99:be:1a:2b",
+   		"LastUpdate": "2021-01-27T00:07:08.658927Z",
+   		"ComponentID": "x1005c3s0b0n0",
+   		"Type": "Node",
+   		"IPAddresses": [
+   		{
+   			"IPAddress": "10.252.1.32"
+   		}
+   		]
+   	},
+   	{
+   		"ID": "b4fe99be1a2c",
+   		"Description": "Ethernet Interface Lan2",
+   		"MACAddress": "b4:fe:99:be:1a:2c",
+   		"LastUpdate": "2021-01-26T22:43:10.593193Z",
+   		"ComponentID": "x1005c3s0b0n0",
+   		"Type": "Node",
+   		"IPAddresses": []
+   	}
+   ]
+   ```
+
+   a. Delete every node NIC MAC address from the HSM Ethernet interfaces table for each node. (For example Windom blade, each node has 2 NICs).
+
+   ```bash
+   ncn-m001# cray hsm inventory ethernetInterfaces delete b4fe99be1a2b
+   ncn-m001# cray hsm inventory ethernetInterfaces delete b4fe99be1a2c
+   ```
+
+   b. Delete the Redfish endpoint for the removed node.
+
+   ```bash
+   ncn-m001# cray hsm inventory redfishEndpoints delete x1005c3s0b0
+   ncn-m001# cray hsm inventory redfishEndpoints delete x1005c3s0b1
+   ```
+
+6. Add the MAC addresses for the nodes removed from the donor system. For Windom blades, there will be four MAC address that have IP addresses.
+
+   - ComponentID: "x1000c3s0b0n0"
+
+   - MACAddress: "b4:2e:99:be:1a:2b"
+
+   - IPAddress: "10.252.1.26"
+
+     a. Setup environment variables for each parameter:
+     The only xname values that should change are the cabinet, chassis, and slot (xXcCsS). The BMC and node should not change (bBnN).
+
+     ```bash
+     ncn-m001# MAC=DONOR_MAC
+     ncn-m001# DEST_XNAME=DESTINATION_XNAME
+     ncn-m001# DEST_IP_ADDRESS=DESTINATION_IP_ADDRESS
+     ```
+
+     ```bash
+     ncn-m001# curl -H "Authorization: Bearer ${TOKEN}" -L -X POST 'https://api_gw_service.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces' -H 'Content-Type: application/json' --data-raw '{
+           "MACAddress": "$MAC",
+           "IPAddress": "$DEST_IP_ADDRESS",
+           "ComponentID": "$DEST_XNAME"
+         }'
+     ```
+
+     This command updates HSM so that the nodes in the blade being installed will have the same IP addresses as the nodes in the blade that was removed.
+
+#### Remove the blade from the Destination System
+
+7. Remove the blade hardware from the destination system.
+
+**CAUTION**: Always power off the chassis slot or device before removal. The best practice is to unlatch and unseat the device while the coolant hoses are still connected, then disconnect the coolant hoses.
+If this is not possible, disconnect the coolant hoses, then quickly unlatch/unseat the device (within 10
+seconds). Failure to do so may damage the equipment.
+
+8. Install the donor blade hardware in the destination system. 
+
+#### Power on and boot the nodes
 
 8. Verify the the hms-discovery is cronjob not suspended in k8s.
 
@@ -170,27 +313,16 @@ and should not be deleted from the HSM.
    ncn-m001# kubectl -n services logs hms-discovery-1600117560-5w95d hms-discovery | grep 
    "Mountain discovery finished" | jq '.discoveredXnames'
    [
-   "x1000c3s0b0"
+   "x1005c3s0b0"
    ]
    ```
 
 9. Wait for 3-5 minutes for the blade to power on and the node BMCs to be discovered.
 
-10. Verify that the affected nodes are enabled in the HSM.
-
-    ```bash
-    ncn-m001# cray hsm state components describe x1005c3s0b0n0
-    Type = "Node"
-    Enabled = true
-    State = "Off"
-    . . .
-    ```
-
-    If discovery fails, the command will return "not found."
 
 #### Verify discovery has completed
 
-11. To verify the BMC(s) have been discovered by the HSM:
+11. To verify the BMC(s) have been discovered by the HSM. Run this command for each BMC in the blade.
 
     ```bash
     ncn-m001# cray hsm inventory redfishEndpoints describe x1005c3s0b0 --format json
@@ -252,6 +384,16 @@ and should not be deleted from the HSM.
     ncn-m001# cray hsm state components enabled update --enabled true x1005c3s0b0n0-n3
     ```
 
+15. Verify that the affected nodes are enabled in the HSM. This command must be run for each node in the blade.
+
+    ```bash
+    ncn-m001# cray hsm state components describe x1005c3s0b0n0
+    Type = "Node"
+    Enabled = true
+    State = "Off"
+    . . .
+    ```
+
 #### Check Firmware
 
 15. Verify that the correct firmware versions for node BIOS, node controller (nC), NIC mezzanine card (NMC), GPUs, and so on.
@@ -262,11 +404,11 @@ and should not be deleted from the HSM.
     ncn-m001# cray fas actions create CUSTOM_DEVICE_PARAMETERS.json
     ```
 
-#### Modify the HSN Network
+#### Modify the HSN Network???
 
-17. Use fabric manger to update Slingshot fabric.
+17. Use fabric manger to update Slingshot fabric ????
 
-18. Use the fabric manager to update the System Layout Service. **SEE Slingshot SME**
+18. Use the fabric manager to update the System Layout Service ??? **Need Slingshot SME**
 
     a. Dump the existing SLS configuration.
 
