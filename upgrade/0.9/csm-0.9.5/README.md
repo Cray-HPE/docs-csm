@@ -123,14 +123,6 @@ Run the `run-patch.sh` script. This does a few things:
 
 Reference the [Reboot NCNs procedure](operations/node_management/Reboot_NCNs.md).
 
-Optionally, use cray-conman to observe the node as it boots:
-
-```bash
-ncn-m001# kubectl exec -it -n services cray-conman-<hash> cray-conman -- /bin/bash
-cray-conman# conman -q
-cray-conman# conman -j <name of terminal>
-```
-
 
 <a name="validate-new-kernel"></a>
 ## Validate NCNs Running Patched Kernel

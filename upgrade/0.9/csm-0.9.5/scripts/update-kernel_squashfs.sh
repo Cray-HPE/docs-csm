@@ -3,7 +3,8 @@
 # Identify the bootraid.
 BOOTRAID="$(awk '/LABEL=BOOTRAID/ {print $2}' /etc/fstab.metal)"
 
-# Make sure the boot raid isn't mounted first. This might fail and that's ok.
+# Make sure the boot raid isn't mounted first. This might fail and that's ok because that probably just means it
+# wasn't mounted in the first place.
 umount "$BOOTRAID"
 
 set -e
@@ -18,6 +19,10 @@ kernel=/boot/vmlinuz-$version
 
 set -x
 
+# If this is a master node this file will get in the way as it will make what needs to be a generic initrd specific
+# to this node and that won't work.
+rm -f /etc/dracut.conf.d/05-metal.conf
+
 # Produce a new initrd from the new kernel.
 dracut --xz --force \
     --omit 'cifs ntfs-3g btrfs nfs fcoe iscsi modsign fcoe-uefi nbd dmraid multipath dmsquash-live-ntfs' \
@@ -31,6 +36,9 @@ dracut --xz --force \
 
 # This should return 0 and show the files.
 ls "$kernel" "$initrd"
+
+# Put back the removed file.
+cp /run/rootfsbase/etc/dracut.conf.d/05-metal.conf /etc/dracut.conf.d/05-metal.conf
 
 ###
 ### Kernel/initrd updates.
