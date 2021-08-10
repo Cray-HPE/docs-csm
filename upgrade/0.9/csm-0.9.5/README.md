@@ -34,7 +34,10 @@ Procedures:
    > **`NOTE:`** Installed CSM versions may be listed from the product catalog using:
    >
    > ```
-   > ncn-m001# kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' | yq r -j - | jq -r 'keys[]' | sed '/-/!{s/$/_/}' | sort -V | sed 's/_$//'
+   > ncn-m001# kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r -j - | jq -r 'to_entries[] | .key' | sort -V
+   > 0.9.2
+   > 0.9.3
+   > 0.9.4
    > ```
 
 3. Set `CSM_DISTDIR` to the directory of the extracted release distribution for CSM 0.9.5:
@@ -68,7 +71,7 @@ Procedures:
    ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm-install/docs-csm-install-latest.noarch.rpm
    ```
    
-7. Set `CSM_SCRIPTDIR` to the scripts directory included in the docs-csm RPM for the CSM 0.9.5 patch:
+7. Set `CSM_SCRIPTDIR` to the scripts directory included in the docs-csm-install RPM for the CSM 0.9.5 patch:
 
    ```bash
    ncn-m001# export CSM_SCRIPTDIR=/usr/share/doc/metal/upgrade/0.9/csm-0.9.5/scripts
@@ -114,8 +117,8 @@ Run the `run-patch.sh` script. This does a few things:
     
        > **DO NOT REBOOT**
        > 
-       > The system (`zypper`) may indicate a reboot is needed at several points during the script run but this will 
-       > happen in a later step so do not reboot the NCNs yet.
+       > The `zypper` commands issued by the `run-patch.sh` may indicate a reboot is needed at several points during the
+       > script run but this will happen in a later step so do not reboot the NCNs yet.
 
 
 <a name="reboot-ncns"></a>
@@ -127,11 +130,11 @@ Reference the [Reboot NCNs procedure](operations/node_management/Reboot_NCNs.md)
 <a name="validate-new-kernel"></a>
 ## Validate NCNs Running Patched Kernel
 
-Once a system has booted, verify the new kernel is running.  This should match `5.3.18-24.75`, which is the version 
+Once a system has booted, verify the new kernel is running.  This should match `5.3.18-24.75-default`, which is the version 
 of the kernel that addresses the CVE.
 
 ```bash
-uname -a
+uname -r
 ```
 
 
@@ -168,10 +171,11 @@ Other health checks may be run as desired.
    following command includes version `0.9.5`:
 
    ```bash
-   ncn-m001# kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r -j - | jq -r 'to_entries[] | .key'
-   0.9.5
-   0.9.4
+   ncn-m001# kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r -j - | jq -r 'to_entries[] | .key' | sort -V
+   0.9.2
    0.9.3
+   0.9.4
+   0.9.5
    ```
 
 2. Confirm the `import_date` reflects the timestamp of the upgrade:
