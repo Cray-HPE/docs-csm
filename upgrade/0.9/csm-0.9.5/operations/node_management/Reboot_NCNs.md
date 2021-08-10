@@ -47,6 +47,11 @@ It also requires that the **CSM_SCRIPTDIR variable was previously defined** as p
     ncn-m001# "${CSM_SCRIPTDIR}/add_pod_priority.sh"
     ```
 
+    After the `add_pod_priority.sh` script completes, wait five minutes for the changes to take effect.
+    ```
+    ncn-m001# sleep 5m
+    ```
+
 4.  Run the platform health checks and analyze the results.
 
     Refer to the "Platform Health Checks" section in [Validate CSM Health](../../../../../008-CSM-VALIDATION.md) for an overview of the health checks.

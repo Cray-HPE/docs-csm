@@ -11,25 +11,25 @@ This procedure requires administrative privileges.
 The following procedures will require knowing a list of switches that are BGP peers to connect to. You can obtain this 
 list by running the following from an NCN node:
     
-    ```bash
-    ncn-m001# kubectl get cm config -n metallb-system -o yaml | head -12
-    ```
+```bash
+ncn-m001# kubectl get cm config -n metallb-system -o yaml | head -12
+```
     
-    Expected output looks similar to the following:
-    ```
-    apiVersion: v1
-    data:
-      config: |
-        peers:
-        - peer-address: 10.252.0.2
-          peer-asn: 65533
-          my-asn: 65533
-        - peer-address: 10.252.0.3
-          peer-asn: 65533
-          my-asn: 65533
-        address-pools:
-        - name: customer-access
-    ```
+Expected output looks similar to the following:
+```
+apiVersion: v1
+data:
+    config: |
+    peers:
+    - peer-address: 10.252.0.2
+        peer-asn: 65533
+        my-asn: 65533
+    - peer-address: 10.252.0.3
+        peer-asn: 65533
+        my-asn: 65533
+    address-pools:
+    - name: customer-access
+```
 
 The switch IPs are the `peer-address` values. 
 

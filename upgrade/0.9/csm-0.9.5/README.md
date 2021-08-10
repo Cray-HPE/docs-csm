@@ -117,7 +117,7 @@ Run the `run-patch.sh` script. This does a few things:
     
        > **DO NOT REBOOT**
        > 
-       > The `zypper` commands issued by the `run-patch.sh` may indicate a reboot is needed at several points during the
+       > The `zypper` commands issued by the `run-patch.sh` script may indicate a reboot is needed at several points during the
        > script run but this will happen in a later step so do not reboot the NCNs yet.
 
 
@@ -130,11 +130,11 @@ Reference the [Reboot NCNs procedure](operations/node_management/Reboot_NCNs.md)
 <a name="validate-new-kernel"></a>
 ## Validate NCNs Running Patched Kernel
 
-Once a system has booted, verify the new kernel is running.  This should match `5.3.18-24.75-default`, which is the version 
+Once a system has booted, verify the new kernel is running on each NCN. This should match `5.3.18-24.75-default`, which is the version 
 of the kernel that addresses the CVE.
 
 ```bash
-uname -r
+ncn# uname -r
 ```
 
 
