@@ -207,6 +207,7 @@ The switch IPs are the `peer-address` values.
     **Troubleshooting:** If some sessions remain Idle, re-run the Aruba reset steps to clear and re-check status. If some sessions still remain Idle, proceed to the next step to reapply the cray-metallb helm chart, along with the BGP reset to force the speaker pods to re-establish sessions with the switch.
 
 <a name="reapply"></a>
+### Troubleshooting
 #### Re-apply the `cray-metallb` Helm Chart
 
 1.  Determine the cray-metallb chart version that is currently deployed.
