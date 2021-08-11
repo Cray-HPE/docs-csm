@@ -367,7 +367,12 @@ should resolve itself once the workload manager product is installed.
 
 1. Verify the zypper repository in nexus that contains the golang-github-prometheus-node_exporter
    RPM is enabled. Typically this is the SUSE-SLE-Module-Basesystem-15-SP1-x86_64-Updates repository.
-   If not enabled, enable it (or the repository in nexus that contains the RPM) on all storage nodes:
+   If not enabled, enable it (or the repository in nexus that contains the RPM) on all storage nodes.
+   The easiest way to find the repository that contains this RPM is to login to the Nexus UI at
+   https://nexus.SYSTEM-NAME.cray.com, click the search icon in the navigation pane on the
+   left, and enter golang-github-prometheus-node_exporter as the keyword.  Then click on the
+   search result that has the latest version of the RPM, and on that screen the repository name
+   to use is listed as the repository at the top.
 
    ```bash
    ncn-m001# for h in $( cat /etc/hosts | grep ncn-s | grep nmn | awk '{print $2}' ); do
@@ -403,6 +408,20 @@ should resolve itself once the workload manager product is installed.
    > ```
    >
    > This error can be safely ignored.
+   >
+   > The following error may occur for air-gapped systems that do not have connectivity to the internet:
+   > ```bash
+   > Refreshing service 'Public_Cloud_Module_15_SP2_x86_64'.
+   > Problem retrieving the repository index file for service 'Public_Cloud_Module_15_SP2_x86_64':
+   > Download (curl) error for 'https://scc.suse.com/access/services/1973/repo/repoindex.xml?cookies=0&credentials=Public_Cloud_Module_15_SP2_x86_64':
+   > Error code: Connection failed
+   > Error message: Failed to connect to scc.suse.com port 443: Connection timed out
+   > ```
+   >
+   > If this error is encountered, move files out of the following directory (for each storage node) and re-run the install-node-exporter-storage.sh script:
+   > ```bash
+   > /etc/zypp/services.d
+   > ```
 
 <a name="restore-vcs-content"></a>
 ## Restore VCS Content
