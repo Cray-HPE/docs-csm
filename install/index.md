@@ -188,7 +188,6 @@ sections, but there is also a general troubleshooting topic.
       a full system power down or power up, or after other types of system maintenance.  
    
       See [Validate CSM Health](../operations/validate_csm_health.md)
-
    <a name="configure_prometheus_alert_notifications"></a>
 
    1. Option to Configure Prometheus Alert Notifications
@@ -198,9 +197,8 @@ sections, but there is also a general troubleshooting topic.
    as well as [Notification Template Examples](https://prometheus.io/docs/alerting/latest/notification_examples/).  Currently supported notification
    types include Slack, Pager Duty, email, or a custom integration via a generic webhook interface.
    
-   See [Configure Prometheus Email Alert Notifications](system_management_health/Configure_Prometheus_Email_Alert_Notifications.md) for example
-   configuration of an email alert notification for postgres replication alerts that are defined on the system.
-
+      See [Configure Prometheus Email Alert Notifications](system_management_health/Configure_Prometheus_Email_Alert_Notifications.md) for example
+      configuration of an email alert notification for postgres replication alerts that are defined on the system.
    <a name="update_firmware_with_fas"></a>
 
    1. Update Firmware with FAS  
