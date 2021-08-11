@@ -240,7 +240,7 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
 
 #### NCN Worker Nodes
 
-1.  Reboot each of the NCN worker nodes \(one at a time\).
+1. Reboot each of the NCN worker nodes **one at a time** going from the highest to the lowest number.
 
     **NOTE:** You are doing a single worker at a time, so pleae keep track of what ncn-w0xx you are on for these steps.
 
@@ -393,13 +393,13 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
 
 #### NCN Master Nodes
 
-1. Reboot each of the NCN master nodes \(one at a time\), **except for ncn-m001**.
+1. Reboot each of the NCN master nodes **one at a time** **except for ncn-m001** going from the highest to the lowest number.
 
     1. Establish a console session to the NCN storage node that is going to be rebooted.
         1. Use the `${CSM_SCRIPTDIR}/ncnGetXnames.sh` script to get the xnames for each of the NCNs.
 
             ```bash
-            ncn-m001# "${CSM_SCRIPTDIR}/ncnGetXnames.sh
+            ncn-m001# "${CSM_SCRIPTDIR}/ncnGetXnames.sh"
             ```
 
         2. Use cray-conman to observe each node as it boots:
