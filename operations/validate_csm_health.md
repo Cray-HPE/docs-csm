@@ -487,7 +487,7 @@ pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
 If all designated prerequisites are met, the availability of system management health services may optionally be validated by accessing the URLs listed in [Access System Management Health Services](system_management_health/Access_System_Management_Health_Services.md).  
 It is very important to check the `Prerequisites` section of this document.
 
-If the URLs listed in the doc are inaccessible, it does not mean that system is not healthy.  It may simply mean that not all of the prerequisites have been met to allow access to the system management health tools via URL.
+If one or more of the the URLs listed in the procedure are inaccessible, it does not necessarily mean that system is not healthy.  It may simply mean that not all of the prerequisites have been met to allow access to the system management health tools via URL.
 
 Information to assist with troubleshooting some of the components mentioned in the prerequisites can be accessed here:
 * [Troubleshoot CAN Issues](network/customer_access_network/Troubleshoot_CAN_Issues.md)
