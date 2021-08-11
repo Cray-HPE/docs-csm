@@ -43,7 +43,7 @@ then
 fi
 
 # Install patches.
-run_pdsh_command 'zypper in -t patch -y SUSE-SLE-Module-Development-Tools-15-SP2-2021-2438 SUSE-SLE-Module-Basesystem-15-SP2-2021-2438'
+run_pdsh_command 'zypper in -t patch -y SUSE-SLE-Module-Development-Tools-15-SP2-2021-2438 SUSE-SLE-Module-Basesystem-15-SP2-2021-2438 SUSE-SLE-Module-Basesystem-15-SP2-2021-1843'
 patchRetVal=$?
 # Check to see if one or both of these packages is missing or any other failures.
 # Error code 102 is Zypper for "you need to reboot". We're not doing that now, so it's not actually an error.
@@ -51,8 +51,8 @@ if [ $patchRetVal -gt 0 ] && [ $patchRetVal -ne 102 ]
 then
   if [ $patchRetVal -eq 104 ]
   then
-    echo -n "Failed to find SUSE-SLE-Module-Development-Tools-15-SP2-2021-2438 and/or "
-    echo "SUSE-SLE-Module-Basesystem-15-SP2-2021-2438 patch."
+    echo -n "Failed to find SUSE-SLE-Module-Development-Tools-15-SP2-2021-2438, "
+    echo "SUSE-SLE-Module-Basesystem-15-SP2-2021-2438, and/or SUSE-SLE-Module-Basesystem-15-SP2-2021-1843 patch."
     echo "Please see section, \"Install SLE for V1.4.2A-security0821 Patch\" in the main patch README."
   else
     echo "The patch failed to install on one or more NCNs. Investigate the above output for any errors."
