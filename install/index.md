@@ -197,7 +197,7 @@ sections, but there is also a general troubleshooting topic.
    as well as [Notification Template Examples](https://prometheus.io/docs/alerting/latest/notification_examples/).  Currently supported notification
    types include Slack, Pager Duty, email, or a custom integration via a generic webhook interface.
    
-      See [Configure Prometheus Email Alert Notifications](system_management_health/Configure_Prometheus_Email_Alert_Notifications.md) for example
+      See [Configure Prometheus Email Alert Notifications](../operations/system_management_health/Configure_Prometheus_Email_Alert_Notifications.md) for example
       configuration of an email alert notification for postgres replication alerts that are defined on the system.
    <a name="update_firmware_with_fas"></a>
 
