@@ -152,12 +152,18 @@ Before rebooting NCNs:
 
 Reboot each of the NCN storage nodes **one at a time** going from the highest to the lowest number.
 
-1. Establish a console session to each NCN storage node.
-   1. Use the `${CSM_SCRIPTDIR}/ncnGetXnames.sh` script to get the xnames for each of the NCNs.
-   2. Use cray-conman to observe each node as it boots:
+1. Establish a console session to the NCN storage node that is going to be rebooted.
+    1. Use the `${CSM_SCRIPTDIR}/ncnGetXnames.sh` script to get the xnames for each of the NCNs.
+
+     ```bash
+     ncn-m001# "${CSM_SCRIPTDIR}/ncnGetXnames.sh
+     ```
+
+    2. Use cray-conman to observe each node as it boots:
 
       ```bash
-      ncn-m001# kubectl exec -it -n services cray-conman-<hash> cray-conman -- /bin/bash
+      ncn-m001# export CONMAN_POD=$(kubectl -n services get pods -l app.kubernetes.io/name=cray-conman -o json | jq -r .items[].metadata.name)
+      ncn-m001# kubectl exec -it -n services $CONMAN_POD cray-conman -- /bin/bash
       cray-conman# conman -q
       cray-conman# conman -j XNAME
       ```
@@ -216,7 +222,7 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
 
     Follow the procedure outlined above to `Reboot the selected NCN` again and verify the hostname is correctly set, afterward.
 
-6.  Run the platform health checks from the [Validate CSM Health](../../../../../008-CSM-VALIDATION.md) procedure.
+6.  Run the platform health checks from the [Validate CSM Health](../../../../../008-CSM-VALIDATION.md#platform-health-checks) procedure.
 
     Recall that updated copies of the two HealthCheck scripts referenced in the `Platform Health Checks` can be run from here:
 
@@ -225,29 +231,12 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
     ncn-m001# "${CSM_SCRIPTDIR}/ncnPostgresHealthChecks.sh"
     ```
 
-    **Troubleshooting:** If the slurmctld and slurmdbd pods do not start after powering back up the node, check for the following error:
-
-    ```bash
-    ncn-m001# kubectl describe pod -n user -lapp=slurmctld
-    Warning  FailedCreatePodSandBox  27m              kubelet, ncn-w001  Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox "82c575cc978db00643b1bf84a4773c064c08dcb93dbd9741ba2e581bc7c5d545": Multus: Err in tearing down failed plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for range 0: no IP addresses available in range set: 10.252.2.4-10.252.2.4
-    ```
-
-    ```bash
-    ncn-m001# kubectl describe pod -n user -lapp=slurmdbd
-    Warning  FailedCreatePodSandBox  29m                    kubelet, ncn-w001  Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox "314ca4285d0706ec3d76a9e953e412d4b0712da4d0cb8138162b53d807d07491": Multus: Err in tearing down failed plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for range 0: no IP addresses available in range set: 10.252.2.4-10.252.2.4
-    ```
-
-    Remove the following files on every worker node to resolve the failure:
-
-    - /var/lib/cni/networks/macvlan-slurmctld-nmn-conf
-    - /var/lib/cni/networks/macvlan-slurmdbd-nmn-conf
-
 7.  Disconnect from the console.
 
 8.  Repeat all of the sub-steps above for the remaining storage nodes, going from the highest to lowest number until all storage nodes have successfully rebooted.
 
-    **Important:** Ensure `ceph -s` shows that Ceph is healthy BEFORE MOVING ON to reboot the next storage node. Once Ceph has recovered the downed mon, 
-it may take a several minutes for Ceph to resolve clock skew.
+    **Important:** Ensure `ceph -s` shows that Ceph is healthy (`HEALTH_OK`) **BEFORE MOVING ON** to reboot the next storage node. Once Ceph has recovered the downed mon, 
+    it may take a several minutes for Ceph to resolve clock skew.
 
 #### NCN Worker Nodes
 
@@ -255,34 +244,49 @@ it may take a several minutes for Ceph to resolve clock skew.
 
     **NOTE:** You are doing a single worker at a time, so pleae keep track of what ncn-w0xx you are on for these steps.
 
-    1.  Establish a console session to the NCN worker node you are rebooting.
-
-        **`IMPORTANT:`** If the ConMan console pod is on the worker node being rebooted you will need to re-establish your session after the Cordon/Drain in step 2
-
-        Locate the `Booting CSM Barebones Image` section in [Validate CSM Health](../../../../../008-CSM-VALIDATION.md#booting-csm-barebones-image). 
-        Within that section, there are sub-steps for [Verify Consoles](../../../../../008-CSM-VALIDATION.md#booting-csm-barebones-image#csm-consoles) and [Watch Boot on Console](../../../../../008-CSM-VALIDATION.md#booting-csm-barebones-image#csm-watch). Follow these procedures to establish a console session and watch the boot-up of the appropriate NCN.
-        
-        **NOTE:** "${CSM_SCRIPTDIR}/ncnGetXnames.sh" can be run to get the xname for each NCN.
-        
-        **ALSO NOTE:** Exiting the connection to the console can be achieved with the `&.` command.
-
-    2.  Check and take note of the hostname of the worker NCN by running the following command on the NCN which will be rebooted.
-
-        ```bash
-    	ncn-w# hostname
-    	```
-
-    3.  Failover any postgres leader that is running on the NCN worker node you are rebooting.
+    1.  Failover any postgres leader that is running on the NCN worker node you are rebooting.
 
         ````bash
         ncn-m001# "${CSM_SCRIPTDIR}/failover-leader.sh <node to be rebooted>"
         ````
 
-    4.  Cordon and Drain the node
+    2. Cordon and Drain the node.
+        ```bash
+        ncn-m001# kubectl drain --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
+        ```
+    
+    3.  Establish a console session to the NCN worker node you are rebooting.
+
+        1. Use the `${CSM_SCRIPTDIR}/ncnGetXnames.sh` script to get the xnames for each of the NCNs.
+
+            ```bash
+            ncn-m001# "${CSM_SCRIPTDIR}/ncnGetXnames.sh
+            ```
+
+        2. Wait for the cray-conman pod to become healthy before continue:
+
+            ```bash
+            ncn-m001# kubectl -n services get pods -l app.kubernetes.io/name=cray-conman
+            NAME                           READY   STATUS    RESTARTS   AGE
+            cray-conman-7f956fc9bc-npf7d   3/3     Running   0          5d13h
+            ```
+
+        3. Use cray-conman to observe each node as it boots:
+
+            ```bash
+            ncn-m001# export CONMAN_POD=$(kubectl -n services get pods -l app.kubernetes.io/name=cray-conman -o json | jq -r .items[].metadata.name)
+            ncn-m001# kubectl exec -it -n services $CONMAN_POD cray-conman -- /bin/bash
+            cray-conman# conman -q
+            cray-conman# conman -j XNAME
+            ```
+
+        **NOTE:** Exiting the connection to the console can be achieved with the `&.` command.
+    
+    4.  Check and take note of the hostname of the worker NCN by running the following command on the NCN which will be rebooted.
 
         ```bash
-        ncn-w# kubectl drain --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
-        ```
+    	ncn-w# hostname
+    	```
 
     5.  Reboot the selected NCN (run this command on the NCN which needs to be rebooted).
 
@@ -347,6 +351,23 @@ it may take a several minutes for Ceph to resolve clock skew.
 
         If terminating pods are reported when checking the status of the Kubernetes pods, wait for all pods to recover before proceeding.
 
+        **Troubleshooting:** If the slurmctld and slurmdbd pods do not start after powering back up the node, check for the following error:
+
+        ```bash
+        ncn-m001# kubectl describe pod -n user -lapp=slurmctld
+        Warning  FailedCreatePodSandBox  27m              kubelet, ncn-w001  Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox "82c575cc978db00643b1bf84a4773c064c08dcb93dbd9741ba2e581bc7c5d545": Multus: Err in tearing down failed plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for range 0: no IP addresses available in range set: 10.252.2.4-10.252.2.4
+        ```
+
+        ```bash
+        ncn-m001# kubectl describe pod -n user -lapp=slurmdbd
+        Warning  FailedCreatePodSandBox  29m                    kubelet, ncn-w001  Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox "314ca4285d0706ec3d76a9e953e412d4b0712da4d0cb8138162b53d807d07491": Multus: Err in tearing down failed plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for range 0: no IP addresses available in range set: 10.252.2.4-10.252.2.4
+        ```
+
+        Remove the following files on every worker node to resolve the failure:
+
+        - /var/lib/cni/networks/macvlan-slurmctld-nmn-conf
+        - /var/lib/cni/networks/macvlan-slurmdbd-nmn-conf
+
     10. Disconnect from the console.
 
     11. Repeat all of the sub-steps above for the remaining worker nodes, going from the highest to lowest number until all worker nodes have successfully rebooted.
@@ -359,14 +380,23 @@ it may take a several minutes for Ceph to resolve clock skew.
 
 1. Reboot each of the NCN master nodes \(one at a time\), **except for ncn-m001**.
 
-    1.  Establish a console session to the NCN master node you are rebooting.
+    1. Establish a console session to the NCN storage node that is going to be rebooted.
+        1. Use the `${CSM_SCRIPTDIR}/ncnGetXnames.sh` script to get the xnames for each of the NCNs.
 
-        Locate the `Booting CSM Barebones Image` section in [Validate CSM Health](../../../../../008-CSM-VALIDATION.md#booting-csm-barebones-image). 
-        Within that section, there are sub-steps for [Verify Consoles](../../../../../008-CSM-VALIDATION.md#booting-csm-barebones-image#csm-consoles) and [Watch Boot on Console](../../../../../008-CSM-VALIDATION.md#booting-csm-barebones-image#csm-watch). Follow these procedures to establish a console session and watch the boot-up of the appropriate NCN.
+            ```bash
+            ncn-m001# "${CSM_SCRIPTDIR}/ncnGetXnames.sh
+            ```
 
-        **NOTE:** "${CSM_SCRIPTDIR}/ncnGetXnames.sh" can be run to get the xname for each NCN.
-        
-        **ALSO NOTE:** Exiting the connection to the console can be achieved with the `&.` command.
+        2. Use cray-conman to observe each node as it boots:
+
+            ```bash
+            ncn-m001# export CONMAN_POD=$(kubectl -n services get pods -l app.kubernetes.io/name=cray-conman -o json | jq -r .items[].metadata.name)
+            ncn-m001# kubectl exec -it -n services $CONMAN_POD cray-conman -- /bin/bash
+            cray-conman# conman -q
+            cray-conman# conman -j XNAME
+            ```
+
+            **NOTE:** Exiting the connection to the console can be achieved with the `&.` command.
 
     2.  Check and take note of the hostname of the master NCN by running the command on the NCN that will be rebooted.
 
