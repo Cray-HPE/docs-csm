@@ -156,7 +156,7 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
     1. Use the `${CSM_SCRIPTDIR}/ncnGetXnames.sh` script to get the xnames for each of the NCNs.
 
      ```bash
-     ncn-m001# "${CSM_SCRIPTDIR}/ncnGetXnames.sh
+     ncn-m001# "${CSM_SCRIPTDIR}/ncnGetXnames.sh"
      ```
 
     2. Use cray-conman to observe each node as it boots:
@@ -247,12 +247,22 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
     1.  Failover any postgres leader that is running on the NCN worker node you are rebooting.
 
         ````bash
-        ncn-m001# "${CSM_SCRIPTDIR}/failover-leader.sh <node to be rebooted>"
+        ncn-m001# "${CSM_SCRIPTDIR}/failover-leader.sh" <node to be rebooted>
         ````
 
     2. Cordon and Drain the node.
         ```bash
-        ncn-m001# kubectl drain --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
+        ncn-m001# kubectl drain --timeout=300s --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
+        ```
+
+        If the command above exits with similar output to the following, then the drain command ran successfully amd you can proceed to the next step. 
+        ```
+        error: unable to drain node "ncn-w003", aborting command...
+
+        There are pending nodes to be drained:
+        ncn-w003
+        error when evicting pod "cray-dns-unbound-7bb85f9b5b-fjs95": global timeout reached: 5m0s
+        error when evicting pod "cray-dns-unbound-7bb85f9b5b-kc72b": global timeout reached: 5m0s
         ```
     
     3.  Establish a console session to the NCN worker node you are rebooting.
@@ -260,7 +270,7 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
         1. Use the `${CSM_SCRIPTDIR}/ncnGetXnames.sh` script to get the xnames for each of the NCNs.
 
             ```bash
-            ncn-m001# "${CSM_SCRIPTDIR}/ncnGetXnames.sh
+            ncn-m001# "${CSM_SCRIPTDIR}/ncnGetXnames.sh"
             ```
 
         2. Wait for the cray-conman pod to become healthy before continue:
@@ -338,7 +348,7 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
         ncn-m# kubectl uncordon <node you just rebooted>
         ```
 
-    9.  Run the platform health checks from the [Validate CSM Health](../../../../../008-CSM-VALIDATION.md) procedure.
+    9.  Run the platform health checks from the [Validate CSM Health](../../../../../008-CSM-VALIDATION.md#platform-health-checks) procedure.
 
         Recall that updated copies of the two HealthCheck scripts referenced in the `Platform Health Checks` can be run from here:
 
@@ -346,10 +356,15 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
         ncn-m001# "${CSM_SCRIPTDIR}/ncnHealthChecks.sh"
         ncn-m001# "${CSM_SCRIPTDIR}/ncnPostgresHealthChecks.sh"
         ```
+       
+        Verify that the `Check if any "alarms" are set for any of the Etcd Clusters in the Services Namespace.` check from the ncnHealthChecks.sh script reports no alarms set for any of the etcd pods. If an alarm similar to is reported, then wait a few minutes for the alarm to clear and try the ncnHealthChecks.sh script again.
+        ```json
+        {"level":"warn","ts":"2021-08-11T15:43:36.486Z","caller":"clientv3/retry_interceptor.go:62","msg":"retrying of unary invoker failed","target":"endpoint://client-4d8f7712-2c91-4096-bbbe-fe2853cd6959/127.0.0.1:2379","attempt":0,"error":"rpc error: code = DeadlineExceeded desc = context deadline exceeded"}
+        ```
 
-        Verify that the `Check the Health of the Etcd Clusters in the Services Namespace` check from the ncnHealthChecks.sh script returns a healthy report for all members of each etcd cluster.
+        Verify that the `Check the Health of the Etcd Clusters in the Services Namespace` check from the ncnHealthChecks.sh script returns a healthy report for all members of each etcd cluster. 
 
-        If terminating pods are reported when checking the status of the Kubernetes pods, wait for all pods to recover before proceeding.
+        If pods are reported as Terminating, Init, or Pending when checking the status of the Kubernetes pods, wait for all pods to recover before proceeding.
 
         **Troubleshooting:** If the slurmctld and slurmdbd pods do not start after powering back up the node, check for the following error:
 
@@ -450,7 +465,7 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
         Follow the procedure outlined above to `Reboot the selected NCN` again and verify the hostname is correctly set, afterward.
 
 
-    6.  Run the platform health checks from the [Validate CSM Health](../../../../../008-CSM-VALIDATION.md) procedure.
+    6.  Run the platform health checks from the [Validate CSM Health](../../../../../008-CSM-VALIDATION.md#platform-health-checks) procedure.
 
         Recall that updated copies of the two HealthCheck scripts referenced in the `Platform Health Checks` can be run from here:
 
@@ -550,7 +565,7 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
         ncn-m001# export CSM_SCRIPTDIR=/usr/share/doc/metal/upgrade/0.9/csm-0.9.5/scripts
         ```
 
-    6.  Run the platform health checks from the [Validate CSM Health](../../../../../008-CSM-VALIDATION.md) procedure.
+    6.  Run the platform health checks from the [Validate CSM Health](../../../../../008-CSM-VALIDATION.md#platform-health-checks) procedure.
 
         Recall that updated copies of the two HealthCheck scripts referenced in the `Platform Health Checks` can be run from here:
 
@@ -563,7 +578,7 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
 
 3.  Re-run the platform health checks and ensure that all BGP peering sessions are Established with both spine switches.
 
-    See [Validate CSM Health](../../../../../008-CSM-VALIDATION.md) for the section titled `Platform Health Checks.`
+    See [Validate CSM Health](../../../../../008-CSM-VALIDATION.md#platform-health-checks) for the section titled `Platform Health Checks.`
 
     Recall that updated copies of the two HealthCheck scripts referenced in the `Platform Health Checks` can be run from here:
 
