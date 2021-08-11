@@ -4,12 +4,16 @@ Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmwa
 
 ### Topics
 
-1. [Warning for Non-Compute Nodes (NCNs)](#warning)
-2. [Ignore Nodes within FAS](#ignore)
-3. [Override an Image for an Update](#overrideImage)
-4. [Check for New Firmware Versions with a Dry-Run](#dryrun)
-5. [Load Firmware from Nexus](#loadNexus)
-6. [Load Firmware from RPM or ZIP file](#loadRPM)
+- [FAS Admin Procedures](#fas-admin-procedures)
+  - [Topics](#topics)
+  - [Warning for Non-Compute Nodes (NCNs)</a>](#warning-for-non-compute-nodes-ncnsa)
+  - [Ignore Nodes within FAS](#ignore-nodes-within-fas)
+    - [Procedure](#procedure)
+  - [Override an Image for an Update](#override-an-image-for-an-update)
+  - [Procedure](#procedure-1)
+  - [Check for New Firmware Versions with a Dry-Run](#check-for-new-firmware-versions-with-a-dry-run)
+    - [Procedure](#procedure-2)
+  - [Load Firmware from RPM or ZIP file](#load-firmware-from-rpm-or-zip-file)
 
 ---
 
@@ -64,7 +68,7 @@ If an update fails because of `"No Image available"`, it may be caused by FAS un
    ```bash
    ncn-m001# cray fas images list --format json | jq '.[] | .[] | select(.target=="TARGETNAME")'
    ```
-   To narrow down the selection, you can update the select to match multiple items, such as:
+   To narrow down the selection, update the select field to match multiple items. For example:
    ```bash
    ncn-m001# cray fas images list --format json | jq '.[] | .[] | select(.target=="BMC" and .manufacturer=="cray" and .deviceType=="NodeBMC")'
    ```

@@ -3,7 +3,7 @@
 
 A number of Kubernetes commands can be used to debug issues related to the node boot process. All of the traffic bound for the DHCP server, TFTP server, and Boot Script Service \(BSS\) is sent on the Node Management Network \(NMN\).
 
-In the current arrangement, all three services are located on a non-compute node \(NCN\). Thus, traffic must first travel through the NCN to reach these services inside their pods. When attempting to track down missing requests for either DHCP or TFTP, it is helpful to set up `tcpdump` on the NCN where the pod is resident to ensure that the request got that far. The `NODE` column in the output of kubectl get pods -o wide shows which node the pod is running on.
+In the current arrangement, all three services are located on a non-compute node \(NCN\). Thus, traffic must first travel through the NCN to reach these services inside their pods. When attempting to track down missing requests for either DHCP or TFTP, it is helpful to set up `tcpdump` on the NCN where the pod is resident to ensure that the request got that far. The `NODE` column in the output of `kubectl get pods -o wide` shows which node the pod is running on.
 
 ### Troubleshooting Tips
 

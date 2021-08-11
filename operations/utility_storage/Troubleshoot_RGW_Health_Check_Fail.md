@@ -63,7 +63,7 @@ ncn-m001# GOSS_BASE=/opt/cray/tests/install/ncn /opt/cray/tests/install/ncn/scri
         ```
 
 
-1. A value of `3` is returned if a 'craysys' command fails. This implies 'cloud-init' is not healthy. Run the command below to determine the health.
+1. A value of `3` is returned if a `craysys` command fails. This implies 'cloud-init' is not healthy. Run the command below to determine the health.
 
     ```bash
     ncn-s# cloud-init query -a

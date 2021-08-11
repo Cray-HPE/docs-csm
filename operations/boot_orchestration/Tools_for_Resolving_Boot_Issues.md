@@ -5,7 +5,7 @@ A number of tools can be used to analyze and debug issues encountered during the
 
 ### nmap
 
-Use nmap to send out DHCP Discover requests to test DHCP. nmap can be installed using the following command:
+Use `nmap` to send out DHCP Discover requests to test DHCP. `nmap` can be installed using the following command:
 
 ```bash
 ncn-m001# zypper install nmap
@@ -13,7 +13,7 @@ ncn-m001# zypper install nmap
 
 To reach the DHCP server, the request generally needs to be sent over the Node Management network \(NMN\) from the non-compute node \(NCN\).
 
-In the following example, nmap is used to send a broadcast request over the `eth1` interface:
+In the following example, `nmap` is used to send a broadcast request over the `eth1` interface:
 
 ```bash
 ncn-m001# nmap --script broadcast-dhcp-discover -e eth1
@@ -25,42 +25,42 @@ Use Wireshark to display network traffic. It has powerful display filters that h
 
 ### tcpdump
 
-Use tcpdump to capture network traffic, such as DHCP or TFTP requests. It can be installed using the following mechanisms:
+Use `tcpdump` to capture network traffic, such as DHCP or TFTP requests. It can be installed using the following mechanisms:
 
--   Install tcpdump inside an Alpine-based pod:
+-   Install `tcpdump` inside an Alpine-based pod:
 
     ```bash
     alpine_pod# apk add --no-cache tcpdump
     ```
 
--   Install tcpdump on an NCN or some other node that is running SUSE:
+-   Install `tcpdump` on an NCN or some other node that is running SUSE:
 
     ```bash
     ncn-m001# zypper install tcpdump
     ```
 
 
-Invoking tcpdump without any arguments will write all of its output to `stdout`. This is reasonable for some tasks, but the volume of traffic that tcpdump can capture is large, so it is often better to write the output to a file.
+Invoking `tcpdump` without any arguments will write all of its output to `stdout`. This is reasonable for some tasks, but the volume of traffic that `tcpdump` can capture is large, so it is often better to write the output to a file.
 
-Use the following command to send tcpdump output to stdout:
+Use the following command to send `tcpdump` output to stdout:
 
 ```bash
 pod# tcpdump
 ```
 
-Use the following command to send tcpdump output to a file, such as a filed named tcpdump.output in the following example:
+Use the following command to send `tcpdump` output to a file, such as a filed named tcpdump.output in the following example:
 
 ```bash
 pod# tcpdump -w /tmp/tcpdump.output
 ```
 
-Use either tcpdump or Wireshark to read from the tcpdump file. Here is how to read the file using tcpdump:
+Use either `tcpdump` or Wireshark to read from the tcpdump file. Here is how to read the file using `tcpdump`:
 
 ```bash
 pod# tcpdump -r /tmp/tcpdump.output
 ```
 
-Filtering the traffic using tcpdump filters is not recommended because when a TFTP server answers a client they will usually use an ephemeral port that the user may not be able to identify and will not be captured by tcpdump. It is better to capture everything with tcpdump and then filter with Wireshark when looking at the resulting output. Filtering on DHCP traffic can be performed because that uses ports 67 and 68 specifically.
+Filtering the traffic using `tcpdump` filters is not recommended because when a TFTP server answers a client they will usually use an ephemeral port that the user may not be able to identify and will not be captured by `tcpdump`. It is better to capture everything with `tcpdump` and then filter with Wireshark when looking at the resulting output. Filtering on DHCP traffic can be performed because that uses ports 67 and 68 specifically.
 
 ### TFTP Client
 

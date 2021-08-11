@@ -20,7 +20,7 @@ may include those which configure management functionality, such as COS, SMA, an
 or optional functionality to enable user productivity with UAI, such as PE, Analytics, and file system
 mounts like Lustre or SpectrumScale.
 
-For more detailed information see these topics in [Configuration Management](configuration_management/Configuration_Management.md)
+For more detailed information see these topics in [Configuration Management](../configuration_management/Configuration_Management.md)
    * Configuration Layers
    * Ansible Inventory
    * Configuration Management with the CFS Batcher

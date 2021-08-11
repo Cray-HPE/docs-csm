@@ -2,7 +2,7 @@
 
 Determine if a pod is being CPU throttled or hitting its memory limits \(OOMKilled\). Use the detect\_cpu\_throttling.sh script to determine if any pods are being CPU throttled, and check the Kubernetes events to see if any pods are hitting a memory limit.
 
-**Important:** The presence of CPU throttling does not always indicate a problem, but if a service is being slow or experiencing latency issues, this procedure can be used to evaluate if it is not performing well as a result of CPU throttling.
+**IMPORTANT:** The presence of CPU throttling does not always indicate a problem, but if a service is being slow or experiencing latency issues, this procedure can be used to evaluate if it is not performing well as a result of CPU throttling.
 
 Identify pods that are hitting resource limits in order to increase the resource limits for those pods.
 
