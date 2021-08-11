@@ -128,7 +128,7 @@ The switch IPs are the `peer-address` values.
 
     Once all sessions are in an Established state, BGP reset is complete for the Mellanox switches.
 
-    **Troubleshooting:** If some sessions remain Idle, re-run the Mellanox reset steps to clear and re-check status. If some sessions still remain Idle, proceed to [reapply the cray-metallb helm chart](#reapply), along with the BGP reset, to force the speaker pods to re-establish sessions with the switch.
+    **Troubleshooting:** If some sessions remain Idle, re-run the Mellanox reset steps to clear and re-check status. The `clear ip bgp all` command may need to be be ran multiple times (up to 10 times). In between each clear command wait a few minutes before re-checking the BGP Sessions. If some sessions still remain Idle, proceed to [reapply the cray-metallb helm chart](#reapply), along with the BGP reset, to force the speaker pods to re-establish sessions with the switch.
 
 #### Aruba
 
@@ -204,7 +204,7 @@ The switch IPs are the `peer-address` values.
 
     Once all sessions are in an Established state, BGP reset is complete for the Aruba switches.
 
-    **Troubleshooting:** If some sessions remain Idle, re-run the Aruba reset steps to clear and re-check status. If some sessions still remain Idle, proceed to the next step to reapply the cray-metallb helm chart, along with the BGP reset to force the speaker pods to re-establish sessions with the switch.
+    **Troubleshooting:** If some sessions remain Idle, re-run the Aruba reset steps to clear and re-check status. The `clear bgp *` command may need to be be ran multiple times (up to 10 times). In between each clear command wait a few minutes before re-checking the BGP Sessions. If some sessions still remain Idle, proceed to the next step to reapply the cray-metallb helm chart, along with the BGP reset to force the speaker pods to re-establish sessions with the switch.
 
 <a name="reapply"></a>
 ### Troubleshooting

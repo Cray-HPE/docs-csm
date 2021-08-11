@@ -188,7 +188,7 @@ ncn-m001# ssh admin@10.252.0.2
 
    * It may take several minutes for all sessions to become **Established**. Wait a minute, or so, and then verify that all sessions now are all reported as **Established**. If some sessions remain in an **Idle** state, re-run the **clear ip bgp all** command and check again.
 
-   * If after several tries one or more BGP session remains **Idle**, see Check BGP Status and Reset Sessions, in the HPE Cray EX Administration Guide S-8001.
+   * If after several tries (around 10 attempts) one or more BGP session remains **Idle**, see Check BGP Status and Reset Sessions, in the HPE Cray EX Administration Guide S-8001.
 
 1. Repeat the above **Mellanox** procedure using the second peer-address (10.252.0.3 here)
 

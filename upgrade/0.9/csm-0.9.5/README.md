@@ -168,6 +168,36 @@ of the kernel that addresses the CVE.
    > ncn# uname -r
    > ```
 
+<a name="setup-nexus"></a>
+## Setup Nexus
+
+Run `lib/setup-nexus.sh` to configure Nexus and upload new CSM RPM
+repositories, container images, and Helm charts:
+
+```bash
+ncn-m001# cd "$CSM_DISTDIR"
+ncn-m001# ./lib/setup-nexus.sh
+```
+
+On success, `setup-nexus.sh` will output `OK` on stderr and exit with status
+code `0`, e.g.:
+
+```bash
+ncn-m001# ./lib/setup-nexus.sh
+...
++ Nexus setup complete
+setup-nexus.sh: OK
+ncn-m001# echo $?
+0
+```
+
+In the event of an error, consult the [known
+issues](../../../006-CSM-PLATFORM-INSTALL.md#known-issues) from the install
+documentation to resolve potential problems and then try running
+`setup-nexus.sh` again. Note that subsequent runs of `setup-nexus.sh` may
+report `FAIL` when uploading duplicate assets. This is ok as long as
+`setup-nexus.sh` outputs `setup-nexus.sh: OK` and exits with status code `0`.
+
 <a name="upgrade-services"></a>
 ## Upgrade Services
 

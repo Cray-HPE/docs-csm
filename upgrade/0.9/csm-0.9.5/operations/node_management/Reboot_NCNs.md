@@ -187,7 +187,7 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
     To power off the node:
 
     ```bash
-    ncn-m001# hostname=ncn-s001 # Set the NCN being rebooted
+    ncn-m001# hostname=<ncn being rebooted> # Example value: ncn-s003
     ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power off
     ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power status
     ```
@@ -309,7 +309,7 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
         To power off the node:
 
         ```bash
-        ncn-m001# hostname=ncn-w001 # Set the NCN being rebooted
+        ncn-m001# hostname=<ncn being rebooted> # Example value: ncn-w003
         ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power off
         ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power status
         ```
@@ -348,7 +348,7 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
         ncn-m# kubectl uncordon <node you just rebooted>
         ```
 
-    9.  Run the platform health checks from the [Validate CSM Health](../../../../../008-CSM-VALIDATION.md#platform-health-checks) procedure.
+    9.  Run the platform health checks from the [Validate CSM Health](../../../../../008-CSM-VALIDATION.md#platform-health-checks) procedure. The `BGP Peering Status and Reset` procedure can be skipped, as a different procedure in step 12 will be used to verify the BGP peering status.
 
         Recall that updated copies of the two HealthCheck scripts referenced in the `Platform Health Checks` can be run from here:
 
@@ -430,7 +430,7 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
         To power off the node:
 
         ```bash
-        ncn-m001# hostname=ncn-m002 # Set the NCN being rebooted
+        ncn-m001# hostname=<ncn being rebooted> # Example value: ncn-m003
         ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power off
         ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power status
         ```
