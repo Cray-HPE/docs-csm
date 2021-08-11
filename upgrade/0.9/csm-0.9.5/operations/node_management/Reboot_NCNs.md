@@ -504,7 +504,6 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
     2.  Establish a console session to `ncn-m001` from a remote system, as the BMC of `ncn-m001` is the NCN that has an externally facing IP address.
         ```bash
         external# SYSTEM_NAME=eniac
-        external# ipmitool -I lanplus -U root -P PASSWORD -H ${SYSTEM_NAME}-ncn-m001-mgmt chassis power status
         external# ipmitool -I lanplus -U root -P PASSWORD -H ${SYSTEM_NAME}-ncn-m001-mgmt sol activate
         ```
 

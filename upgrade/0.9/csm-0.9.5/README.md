@@ -127,16 +127,46 @@ Run the `run-patch.sh` script. This does a few things:
 Reference the [Reboot NCNs procedure](operations/node_management/Reboot_NCNs.md).
 
 
+
+
 <a name="validate-new-kernel"></a>
 ## Validate NCNs Running Patched Kernel
 
-Once a system has booted, verify the new kernel is running on each NCN. This should match `5.3.18-24.75-default`, which is the version 
+1. Start a typescript to capture the commands and output from this procedure.
+   ```bash
+   ncn-m001# script -af csm-update-post-reboot.$(date +%Y-%m-%d).txt
+   ncn-m001# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+   ```
+
+2. Setup `CSM_DISTDIR` to point toward the location where the extracted csm-0.9.5 tarball.
+   > If the tarball was not extracted to `~/csm-0.9.5`, then provide the alternative path instead.
+   ```bash
+   ncn-m001# CSM_DISTDIR=~/csm-0.9.5
+   ```
+
+3. Once a system has booted, verify the new kernel is running on each NCN. This should match `5.3.18-24.75-default`, which is the version 
 of the kernel that addresses the CVE.
 
-```bash
-ncn# uname -r
-```
-
+   ```bash
+   ncn-m001# cd "$CSM_DISTDIR"
+   ncn-m001# pdsh -w $(./lib/list-ncns.sh| paste -sd,) "uname -r"
+   + Getting admin-client-auth secret
+   + Obtaining access token
+   + Querying SLS
+   ncn-s003: 5.3.18-24.75-default
+   ncn-s002: 5.3.18-24.75-default
+   ncn-s001: 5.3.18-24.75-default
+   ncn-m001: 5.3.18-24.75-default
+   ncn-m002: 5.3.18-24.75-default
+   ncn-m003: 5.3.18-24.75-default
+   ncn-w003: 5.3.18-24.75-default
+   ncn-w001: 5.3.18-24.75-default
+   ncn-w002: 5.3.18-24.75-default
+   ```
+   > Alternatively, login to each NCN and run the following command to get get currently running kernel version.
+   > ```bash
+   > ncn# uname -r
+   > ```
 
 <a name="upgrade-services"></a>
 ## Upgrade Services
