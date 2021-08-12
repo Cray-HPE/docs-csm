@@ -244,6 +244,20 @@ Other health checks may be run as desired.
    ncn-m001# kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r  - '"0.9.5".configuration.import_date'
    ```
 
+## Update UAS / UAI
+
+This update includes a new basic UAI image. The HPE supplied basic UAI image, `cray-uai-sles15sp1:latest` simply needs to be updated by pulling it to the NCN worker nodes and restarting the UAI Kubernetes pods that are using it.  The following commands will do that:
+```
+ncn-m001:~ # pdsh -w ncn-w[000-999] crictl pull cray-uai-sles15sp1:latest 2>&1 | grep -v -e "Could not resolve hostname" -e "ssh exited with exit code 255"
+ncn-m001:~ # kubectl delete po -n user $(kubectl get po -n user | grep "^uai-" | awk '{ print $1 }')
+```
+This update also provides new Broker UAI image, `cray-uai-broker:latest`.  If you are using Broker UAIs on your system, you will need to pull it and restart the Broker UAI pods as well:
+```
+ncn-m001:~ # pdsh -w ncn-w[000-999] crictl pull cray-uai-broker:latest 2>&1 | grep -v -e "Could not resolve hostname" -e "ssh exited with exit code 255"
+ncn-m001:~ # kubectl delete po -n uas $(kubectl get po -n uas | grep "^uai-" | awk '{ print $1 }')
+```
+
+Finally, this update provides new Compute Node images.  If your site uses UAI images built from the Compute Node Image, you will need to [build new images and register the new images with UAS](../../../500-UAS-UAI-ADMIN-AND-USER-GUIDE.md#main-uaiimages-customenduser), then delete and recreate your running UAIs (if any).
 
 <a name="exit-typescript"></a>
 ## Exit Typescript
