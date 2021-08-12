@@ -20,6 +20,7 @@ Procedures:
 - [Upgrade Services](#upgrade-services)
 - [Run Validation Checks (Post-Upgrade)](#run-validation-checks-post-upgrade)
 - [Verify CSM Version in Product Catalog](#verify-version)
+- [Update UAS/UAI](#update-uas-uai)
 - [Exit Typescript](#exit-typescript)
 
 <a name="preparation"></a>
@@ -244,6 +245,7 @@ Other health checks may be run as desired.
    ncn-m001# kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r  - '"0.9.5".configuration.import_date'
    ```
 
+<a name="update-uas-uai"></a>
 ## Update UAS / UAI
 
 This update includes a new basic UAI image and a new Broker UAI image. The HPE supplied basic UAI image, `cray-uai-sles15sp1:latest` simply needs to be updated by pulling it to the NCN worker nodes and restarting the UAI Kubernetes pods that are using it.  The following commands ensure that the updated images are used for non-Broker and Broker UAIs:
