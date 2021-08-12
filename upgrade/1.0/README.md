@@ -204,6 +204,45 @@ ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-ceph-nodes.
 > NOTE: Run the script once each for all storage nodes. Follow output of the script carefully. The script will pause for manual interaction
 > Note that these steps should be performed on one storage node at a time.
 
+After the last storage node has been rebooted you will need to deploy node-exporter and alertmanager
+
+**NOTE:** This process will need to run on a node running ceph-mon, which in most cases will be ncn-s00(1/2/3)
+
+1. Load the images into podman.
+
+    ```bash
+    ncn-s# for node in $(seq 1 $num_storage_nodes); do
+      nodename=$(printf "ncn-s%03d" $node)
+      ssh "$nodename" /srv/cray/scripts/common/pre-load-images.sh
+    done
+    ```
+
+1. Deploy node-exporter and alertmanager
+
+    ```bash
+    ncn-s00(1/2/3)# ceph orch apply node-exporter
+    Scheduled node-exporter update...
+
+    ncn-s00(1/2/3)# ceph orch apply alertmanager
+    Scheduled alertmanager update...
+    ```
+
+1. Verify node-exporter and alertmanager are running
+
+    ```bash
+    ncn-s00(1/2/3)# ceph orch ps --daemon_type node-exporter
+     NAME                    HOST      STATUS         REFRESHED  AGE  VERSION  IMAGE NAME                                       IMAGE ID           CONTAINER ID
+     node-exporter.ncn-s001  ncn-s001  running (57m)  3m ago     67m  0.18.1   docker.io/prom/node-exporter:v0.18.1             e5a616e4b9cf       3465eade21da
+     node-exporter.ncn-s002  ncn-s002  running (57m)  3m ago     67m  0.18.1   registry.local/prometheus/node-exporter:v0.18.1  e5a616e4b9cf       7ed9b6cc9991
+     node-exporter.ncn-s003  ncn-s003  running (57m)  3m ago     67m  0.18.1   registry.local/prometheus/node-exporter:v0.18.1  e5a616e4b9cf       1078d9e555e4
+     
+     ncn-s00(1/2/3)# ceph orch ps --daemon_type alertmanager
+     NAME                   HOST      STATUS         REFRESHED  AGE  VERSION  IMAGE NAME                                      IMAGE ID           CONTAINER ID
+     alertmanager.ncn-s001  ncn-s001  running (66m)  3m ago     68m  0.20.0   registry.local/prometheus/alertmanager:v0.20.0  0881eb8f169f       775aa53f938f
+     ```
+  
+  **IMPORTANT:** There should be a node-exporter container per ceph node and a single alertmanager container for the cluster.
+
 ### Stage 3. Kubernetes Upgrade from 1.18.6 to 1.19.9
 
 > NOTE: During the CSM-0.9 install the LiveCD containing the initial install files for this system should have been unmounted from the master node when rebooting into the Kubernetes cluster. The scripts run in this section will also attempt to unmount/eject it if found to ensure the USB stick does not get erased.
@@ -227,6 +266,8 @@ ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-worker.
 ```
 
 > NOTE: Run the script once each for all worker nodes. Follow output of above script carefully. The script will pause for manual interaction
+
+> NOTE: It is expected that some pods may be in bad state during a worker node upgrade. This is because of a temporary lack of computing resources during a worker upgrade. Once the worker node has been upgraded and rejoined cluster, those pods will be up and running again. All critical services have more than one replica so if one pod is down, the service is still available. 
 
 #### Stage 3.3
 
@@ -274,10 +315,11 @@ ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-master.
 
 #### Stage 3.4
 
-On each master node in the cluster, run the following command to complete the Kubernetes upgrade _(this will restart several pods on each master to their new docker containers)_:
+Run the following command to complete the Kubernetes upgrade _(this will restart several pods on each master to their new docker containers)_:
 
 ```bash
-ncn-m# kubeadm upgrade apply v1.19.9 -y
+ncn-m002# export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+ncn-m002# pdsh -b -S -w $(grep -oP 'ncn-m\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'kubeadm upgrade apply v1.19.9 -y'
 ```
 
 > **`NOTE`**: kubelet has been upgraded already so you can ignore the warning to upgrade kubelet
@@ -293,6 +335,102 @@ ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/csm-service-upgrade.sh
 
 **`IMPORTANT`:** This script will re-try up to three times if failures are encountered -- but if the script seems to hang for thirty minutes or longer without progressing, the administrator should interrupt the script (CTRL-C) and re-run it.
 
+### Stage 5. - Workaround for known mac-learning issue with 8325. 
+
+
+#### Issue description
+
+> **Aruba CR:**          90598
+>
+> **Affected platform:** 8325
+>
+>**Symptom:**           MAC learning stops.
+>
+>**Scenario:**          Under extremely rare DMA stress conditions, anL2 learning thread may timeout and exit preventing future MAC learning.
+>
+>**Workaround:**        Reboot the switch or monitor the L2 thread and restart it with an NAE script
+>
+>**Fixed in:**	       10.06.0130, 10.7.0010 and above. 
+>
+>[Aruba release notes](https://asp.arubanetworks.com/downloads;products=Aruba%20Switches;productSeries=Aruba%208325%20Switch%20Series) 
+
+#### To fix the issue without upgrading software:
+
+	You can run a NAE script on the 8325 platform switches to resolve mac learning issue.
+
+#### The file locations in doc-csm
+
+	- The NAE script (L2X-Watchdog-creates-bash-script.py) is located at: ../docs-csm/upgrade/1.0/scripts/aruba
+	- Automatic NAE install script (nae_upload.py) is located at: ../docs-csm/upgrade/1.0/scripts/aruba
+
+### Automated install of NAE script 
+
+#### Prerequisites: 
+
+1. The nae-upload.py script relies on /etc/hosts file to pull IP addresses of the switch. Without this information the script won’t run.
+2. You have 8325 in your setup that is running software version below 10.06.0130. 
+3. Script assumes you  are using default username "admin"  for the switch and it will prompt you for password. 
+
+NOTE: 	The nae-upload script automatically detects 8325’s and only applies the fix to this platform.
+
+#### How to run the install script: 
+
+**Step 1:** 
+
+> ncn-m001”:~ # ./docs-csm/upgrade/1.0/scripts/aruba/nae_upload.py
+
+**step 2:**
+
+> Type in your switch password and the script will upload and enable the NAE script. 
+
+### Stage 5. - Workaround for known mac-learning issue with 8325. 
+
+
+#### Issue description
+
+> **Aruba CR:**          90598
+>
+> **Affected platform:** 8325
+>
+>**Symptom:**           MAC learning stops.
+>
+>**Scenario:**          Under extremely rare DMA stress conditions, anL2 learning thread may timeout and exit preventing future MAC learning.
+>
+>**Workaround:**        Reboot the switch or monitor the L2 thread and restart it with an NAE script
+>
+>**Fixed in:**	       10.06.0130, 10.7.0010 and above. 
+>
+>[Aruba release notes](https://asp.arubanetworks.com/downloads;products=Aruba%20Switches;productSeries=Aruba%208325%20Switch%20Series) 
+
+#### To fix the issue without upgrading software:
+
+	You can run a NAE script on the 8325 platform switches to resolve mac learning issue.
+
+#### The file locations in doc-csm
+
+	- The NAE script (L2X-Watchdog-creates-bash-script.py) is located at: ../docs-csm/upgrade/1.0/scripts/aruba
+	- Automatic NAE install script (nae_upload.py) is located at: ../docs-csm/upgrade/1.0/scripts/aruba
+
+### Automated install of NAE script 
+
+#### Prerequisites: 
+
+1. The nae-upload.py script relies on /etc/hosts file to pull IP addresses of the switch. Without this information the script won’t run.
+2. You have 8325 in your setup that is running software version below 10.06.0130. 
+3. Script assumes you  are using default username "admin"  for the switch and it will prompt you for password. 
+
+NOTE: 	The nae-upload script automatically detects 8325’s and only applies the fix to this platform.
+
+#### How to run the install script: 
+
+**Step 1:** 
+
+> ncn-m001”:~ # ./docs-csm/upgrade/1.0/scripts/aruba/nae_upload.py
+
+**step 2:**
+
+> Type in your switch password and the script will upload and enable the NAE script. 
+
 ## Troubleshooting and Recovering from Errors During or After Upgrade
 
 ### Rerun a step/script
@@ -302,7 +440,7 @@ When running upgrade scripts, each script record what has been done successfully
 Here is an example of state file of `ncn-m001`:
 
 ```bash
-ncn-m001:~ # cat /etc/cray/upgrade/csm/csm-1.0.0-beta.46/ncn-m001/state
+ncn-m001:~ # cat /etc/cray/upgrade/csm/{CSM_VERSION}/ncn-m001/state
 [2021-07-22 20:05:27] UNTAR_CSM_TARBALL_FILE
 [2021-07-22 20:05:30] INSTALL_CSI
 [2021-07-22 20:05:30] INSTALL_WAR_DOC

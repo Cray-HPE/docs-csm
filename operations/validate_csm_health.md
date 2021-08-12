@@ -25,6 +25,7 @@ The areas should be tested in the order they are listed on this page. Errors in 
     - [1.7 Verify the Vault Cluster is Healthy](#17-verify-the-vault-cluster-is-healthy)
     - [1.8 Automated Goss Testing](#18-automated-goss-testing)
       - [1.8.1 Known Test Issues](#181-known-test-issues)
+    - [1.9 OPTIONAL Check of System Management Monitoring Tools](#19-optional-check-of-system-management-monitoring-tools)
   - [2. Hardware Management Services Health Checks](#2-hardware-management-services-health-checks)
     - [2.1 HMS Test Execution](#21-hms-test-execution)
     - [2.2 Hardware State Manager Discovery Validation](#22-hardware-state-manager-discovery-validation)
@@ -472,6 +473,23 @@ pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
   - May fail immediately after platform install. Should pass after the TrustedCerts Operator has updated BSS (Global cloud-init meta) with CA certificates.
 * K8S Test: Kubernetes Velero No Failed Backups
   - Because of a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (for example, vault). It may be necessary to use the ```velero``` command to delete backups from a Kubernetes node to clear this situation.
+
+
+<a name="optional-check-of-system-management-monitoring-tools"></a>
+### 1.9 Optional Check of System Management Monitoring Tools
+
+If all designated prerequisites are met, the availability of system management health services may optionally be validated by accessing the URLs listed in [Access System Management Health Services](system_management_health/Access_System_Management_Health_Services.md).  
+It is very important to check the `Prerequisites` section of this document.
+
+If one or more of the the URLs listed in the procedure are inaccessible, it does not necessarily mean that system is not healthy.  It may simply mean that not all of the prerequisites have been met to allow access to the system management health tools via URL.
+
+Information to assist with troubleshooting some of the components mentioned in the prerequisites can be accessed here:
+* [Troubleshoot CAN Issues](network/customer_access_network/Troubleshoot_CAN_Issues.md)
+* [Troubleshoot DNS Configuration Issues](network/external_dns/Troubleshoot_DNS_Configuration_Issues.md)
+* [Check BGP Status and Reset Sessions](network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md)
+* [Troubleshoot BGP not Accepting Routes from MetalLB](network/metallb_bgp/Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
+* [Troubleshoot Services without an Allocated IP Address](network/metallb_bgp/Troubleshoot_Services_without_an_Allocated_IP_Address.md)
+
 
 <a name="hms-health-checks"></a>
 ## 2. Hardware Management Services Health Checks

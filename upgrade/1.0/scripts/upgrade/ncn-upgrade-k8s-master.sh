@@ -47,7 +47,6 @@ if [[ ${upgrade_ncn} == "ncn-m001" ]]; then
       echo "====> ${state_name} ..."
       
       scp root@ncn-m001:/etc/sysconfig/network/ifcfg-lan0 .
-      scp root@ncn-m001:/etc/sysconfig/network/ifroute-lan0 .
       record_state "${state_name}" ${upgrade_ncn}
    else
       echo "====> ${state_name} has been completed"

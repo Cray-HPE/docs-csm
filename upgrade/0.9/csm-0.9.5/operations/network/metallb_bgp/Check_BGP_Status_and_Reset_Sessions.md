@@ -1,6 +1,6 @@
 ## Check BGP Status and Reset Sessions
 
-Check the Border Gateway Protocol \(BGP\) status on the Aruba and Mellanox switches and verify that all sessions are in an Established state. If the state of any session in the table is Idle, the BGP sessions needs to be reset.
+Check the Border Gateway Protocol (BGP) status on the Aruba and Mellanox switches and verify that all sessions are in an Established state. If the state of any session in the table is Idle, the BGP sessions needs to be reset.
 
 ### Prerequisites
 
@@ -8,18 +8,43 @@ This procedure requires administrative privileges.
 
 ### Procedure
 
+The following procedures will require knowing a list of switches that are BGP peers to connect to. You can obtain this 
+list by running the following from an NCN node:
+    
+    ```bash
+    ncn-m001# kubectl get cm config -n metallb-system -o yaml | head -12
+    ```
+    
+    Expected output looks similar to the following:
+    ```
+    apiVersion: v1
+    data:
+      config: |
+        peers:
+        - peer-address: 10.252.0.2
+          peer-asn: 65533
+          my-asn: 65533
+        - peer-address: 10.252.0.3
+          peer-asn: 65533
+          my-asn: 65533
+        address-pools:
+        - name: customer-access
+    ```
+
+The switch IPs are the `peer-address` values. 
+
 #### MELLANOX
 
-1.  Verify that all BGP sessions are in an Established state for the Mellanox spine switches.
+1. Verify that all BGP sessions are in an Established state for the Mellanox spine switches.
 
-    SSH to each spine switch to check the status of all BGP sessions.
+    SSH to each BGP peer switch to check the status of all BGP sessions.
 
-    1.  SSH to a spine switch.
+    1.  SSH to a BGP peer switch.
 
         For example:
 
         ```bash
-        ncn-m001# ssh admin@sw-spine-001.mtl
+        ncn-m001# ssh admin@10.252.0.2
         ```
 
     1.  View the status of the BGP sessions.
@@ -49,16 +74,16 @@ This procedure requires administrative privileges.
 
         If any of the sessions are in an Idle state, proceed to the next step.
 
-1.  Reset BGP to re-establish the sessions.
+1. Reset BGP to re-establish the sessions.
 
     <a name="mellanox-ssh"></a>
 
-    1.  SSH to each spine switch.
+    1.  SSH to each BGP peer switch.
 
         For example:
 
         ```bash
-        ncn-m001# ssh admin@sw-spine-001.mtl
+        ncn-m001# ssh admin@10.252.0.2
         ```
 
     1.  Verify BGP is enabled.
@@ -80,7 +105,6 @@ This procedure requires administrative privileges.
         It may take a few minutes for sessions to become Established.
 
         ```bash
-        sw-spine-001 [standalone: master] > enable
         sw-spine-001 [standalone: master] # show ip bgp summary
         
         VRF name                  : default
@@ -110,12 +134,12 @@ This procedure requires administrative privileges.
 
 1.  Verify that all BGP sessions are in an Established state for the Aruba spine switches.
 
-    SSH to each spine switch to check the status of all BGP sessions.
+    SSH to each BGP peer switch to check the status of all BGP sessions.
 
-    1.  SSH to a spine switch.
+    1.  SSH to a BGP peer switch.
 
         ```bash
-        ncn-m001# ssh admin@sw-spine-001.mtl
+        ncn-m001# ssh admin@10.252.0.2
         ```
 
     1.  View the status of the BGP sessions.
@@ -143,12 +167,12 @@ This procedure requires administrative privileges.
 
     <a name="aruba-ssh"></a>
 
-    1.  SSH to each spine switch.
+    1.  SSH to each BGP peer switch.
 
         For example:
 
         ```bash
-        ncn-m001# ssh admin@sw-spine-001.mtl
+        ncn-m001# ssh admin@10.252.0.2
         ```
 
     1.  Clear the BGP sessions.
@@ -211,7 +235,7 @@ This procedure requires administrative privileges.
 
 1. Open SSH sessions to all spine switches.
 
-1. Determine the CSM\_RELEASE version that is currently running and set an environment variable.
+1. Determine the `CSM_RELEASE` version that is currently running and set an environment variable.
 
     For example:
 

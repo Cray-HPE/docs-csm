@@ -119,12 +119,9 @@ fi
 
 upgrade_ncn_mgmt_host="${upgrade_ncn}-mgmt"
 if [[ ${upgrade_ncn} == "ncn-m001" ]]; then
-    echo ""
-    read -p "Enter the IP address or hostname of the BMC for ncn-m001:" upgrade_ncn_mgmt_host
-    echo ""
-else 
-    echo "mgmt IP/Host: ${upgrade_ncn_mgmt_host}"
+    upgrade_ncn_mgmt_host=$(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ncn-m001 "ipmitool lan print | grep 'IP Address' | grep -v 'Source'"  | awk -F ": " '{print $2}')
 fi
+echo "mgmt IP/Host: ${upgrade_ncn_mgmt_host}"
 
 # retrieve IPMI username/password from vault
 VAULT_TOKEN=$(kubectl get secrets cray-vault-unseal-keys -n vault -o jsonpath={.data.vault-root} | base64 -d)
@@ -178,9 +175,7 @@ if [[ $state_recorded == "0" ]]; then
     # inline tips for watching boot logs
     cat <<EOF
 TIPS:
-    Watch the console for the node being rebuilt by:
-
-    tail -f /etc/cray/upgrade/csm/$CSM_RELEASE/$upgrade_ncn$/console.log
+    operations/conman/ConMan.md has instructions for watching boot/console output of a node
 EOF
     # wait for boot
     counter=0
@@ -207,13 +202,6 @@ state_name="WAIT_FOR_CLOUD_INIT"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    # tips for watching cloud-init logs
-    cat <<EOF
-TIPS:
-    Watch the cloud-init logs for the node being rebuilt on another terminal from stable ncn:
-
-    ssh $upgrade_ncn 'tail -f /var/log/cloud-init-output.log'
-EOF
     sleep 60
     # wait for cloud-init
     if [[ $ssh_keys_done == "0" ]]; then
@@ -267,7 +255,7 @@ if [[ ${upgrade_ncn} == "ncn-m001" ]]; then
             ssh_keygen_keyscan "${upgrade_ncn}"
             ssh_keys_done=1
         fi
-        scp ifcfg-lan0 ifroute-lan0 root@ncn-m001:/etc/sysconfig/network/
+        scp ifcfg-lan0 root@ncn-m001:/etc/sysconfig/network/
         ssh root@ncn-m001 'wicked ifreload lan0'
         record_state "${state_name}" ${upgrade_ncn}
     else
