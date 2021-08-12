@@ -24,6 +24,104 @@ then
     exit 1
 fi
 
+# # sem_version() converts a semver string so it can be compared in a test statement
+# function sem_version { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; }
+#
+# # Get the current csi version
+# csi_version=$(csi version | awk '/App\. Version/ {print $4}')
+#
+# # v1.5.32 is when the new NTP metadata was installed, so check it is older than that
+# if [ "$(sem_version $csi_version)" -le "$(sem_version "1.6.32")" ]; then
+#     echo "Update csi to at least v1.5.32"
+#     exit 2
+# fi
+
+# upgrade_ntp_timezone_metadata() will query a data.json to pull out the new ntp keys and then push them back into bss
+upgrade_ntp_timezone_metadata() {
+  local ntp_query
+  local ntp_payload
+  local timezone_query
+  local timezone_payload
+  local upgrade_file
+  # jq -r '.["b8:59:9f:fe:49:f1"]["user-data"]["ntp"]' ntp.json
+  for k in $(jq -r 'to_entries[] | "\(.key)"' data.json)
+  do
+    # if it's not the global key, it's one of the host records we need to manipulate
+    if ! [[ "$k" == "Global" ]]; then
+      # shellcheck disable=SC2089
+      ntp_query=".[\"$k\"][\"user-data\"][\"ntp\"]"
+      # shellcheck disable=SC2090
+      ntp_payload="$(jq $ntp_query data.json)"
+
+      # shellcheck disable=SC2089
+      timezone_query=".[\"$k\"][\"user-data\"][\"timezone\"]"
+      # shellcheck disable=SC2090
+      timezone_payload="$(jq $timezone_query data.json)"
+
+      # save the payload to a unique file
+      upgrade_file="upgrade-metadata-${k//:}.json"
+      cat <<EOF>"$upgrade_file"
+{
+  "user-data": {
+    "ntp": $ntp_payload,
+    "timezone": $timezone_payload
+  }
+}
+EOF
+      # handoff the new payload to bss
+      csi handoff bss-update-cloud-init --user-data="$upgrade_file" --limit=${UPGRADE_XNAME}
+    fi
+  done
+  # jq -r 'keys[] as $k | "\($k), \(.[$k] | .["user-data"]["ntp"])"' data.json
+}
+
+# patch_in_new_metadata() will mount PITDATA and run 'csi config init' in order to grab the newly-generated data.json and then push it into bss
+patch_in_new_metadata() {
+  # mount the partition that should have the files we need
+  mkdir -p /mnt/pitdata
+  if ! eval mount | grep '\/mnt\/pitdata' >/dev/null; then
+    mount -L PITDATA /mnt/pitdata/
+  fi
+
+  prep_dir=/mnt/pitdata/prep
+  # find the three seed files
+  ncn_metadata="$prep_dir"/ncn_metadata.csv
+  switch_metadata="$prep_dir"/switch_metadata.csv
+  hmn_connections="$prep_dir"/hmn_connections.json
+  system_config="$prep_dir"/system_config.yaml
+
+  # we need the three seed files and the system_config to generate the metadata
+  # this also ensures we're in the right place to run config init without any arguments
+  if [[ -f "$ncn_metadata" ]] \
+      && [[ -f "$switch_metadata" ]] \
+      && [[ -f "$hmn_connections" ]] \
+      && [[ -f "$system_config" ]]; then
+        # find the system name
+        system_name=$(awk '/system-name/ {print $2}' "$system_config")
+        if ! [[ -d "$prep_dir/$system_name-0.9" ]]; then
+          pushd "$prep_dir" || exit 1
+            # move the original generated configs out of the way
+            mv "$system_name" "$system_name-0.9"
+            echo "Generating new config payload for $system_name with csi..."
+            # Run config init to get the new metadata
+            csi config init
+            echo "Getting new ntp metadata..."
+            # handoff the new data to bss
+            pushd "$system_name/basecamp" || exit 1
+              upgrade_ntp_timezone_metadata
+            popd || exit 1
+          popd || exit 1
+        fi
+  else
+    echo "Missing seed file or system_config.yaml"
+    exit 1
+  fi
+
+  if eval mount | grep '\/mnt\/pitdata' >/dev/null; then
+    umount /mnt/pitdata/
+  fi
+}
+
 # Generate mountain/hill routes for NCNs and add to write_files
 function update_write_files_user_data() {
     # Collect network information from SLS
@@ -165,6 +263,7 @@ EOF
 
 # same data on all NCNs
 update_write_files_user_data
+patch_in_new_metadata
 
 case ${upgrade_ncn} in
     ncn-s001)
