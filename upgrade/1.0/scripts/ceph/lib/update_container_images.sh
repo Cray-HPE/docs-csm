@@ -13,4 +13,10 @@ function update_image_values () {
     ceph config set $SERVICE $IMAGE
    fi
   done
+
+  echo "Setting additional ceph container images"
+  ceph config set mgr mgr/cephadm/container_image_grafana       "$registry/ceph/ceph-grafana:6.6.2"
+  ceph config set mgr mgr/cephadm/container_image_prometheus    "$registry/prometheus/prometheus:v2.18.1"
+  ceph config set mgr mgr/cephadm/container_image_alertmanager  "$registry/quay.io/prometheus/alertmanager:v0.20.0"
+  ceph config set mgr mgr/cephadm/container_image_node_exporter "$registry/quay.io/prometheus/node-exporter:v0.18.1"
 }
