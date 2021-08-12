@@ -207,6 +207,7 @@ ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-ceph-nodes.
 After the last storage node has been rebooted you will need to deploy node-exporter and alertmanager
 
 **NOTE:** This process will need to run on a node running ceph-mon, which in most cases will be ncn-s00(1/2/3)
+**NOTE:** You may need to reset the root password for each node after it is rebooted
 
 1. Load the images into podman.
 
@@ -256,6 +257,7 @@ ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-master.
 ```
 
 > NOTE: Run the script once each for all master nodes, excluding ncn-m001. Follow output of above script carefully. The script will pause for manual interaction
+> NOTE: You may need to reset the root password for each node after it is rebooted
 
 #### Stage 3.2
 
