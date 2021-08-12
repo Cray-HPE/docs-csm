@@ -3,6 +3,7 @@
 # Copyright 2021 Hewlett Packard Enterprise Development LP
 #
 set -e
+set -u
 BASEDIR=$(dirname $0)
 . ${BASEDIR}/upgrade-state.sh
 trap 'err_report' ERR
@@ -52,6 +53,34 @@ if [[ $(hostname) == "ncn-m001" ]]; then
 
   # Run the workaround on all the NCNs
   pdsh -b -S -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') '/tmp/CASMINST-2689.sh'
+
+  # Check if ncn-m001 is using itself for an upstream server
+  if [[ "$(awk '/^server/ {print $2}' /etc/chrony.d/cray.conf)" == ncn-m001 ]] ||
+      [[ "$(chronyc tracking | awk '/Reference ID/ {print $5}' | tr -d '()')" == ncn-m001 ]]; then
+        # Get the upstream NTP server from cloud-init metadata, trying a few different sources before failing
+        upstream_ntp_server=$(craysys metadata get upstream_ntp_server)
+        # check to make sure we're not re-creating the bug by setting m001 to use itself as an upstream
+        if [[ "$upstream_ntp_server" == "ncn-m001" ]]; then
+          # if a pool is set, and we didn't find an upstream server, just use the pool
+          grep "^\(pool\).*" /etc/chrony.d/cray.conf >/dev/null
+
+          if [[ $? -eq 0 ]] ; then
+            sed -i "/^\(server ncn-m001\).*/d" /etc/chrony.d/cray.conf
+          # otherwise error
+          else
+            echo "Upsteam server cannot be $upstream_ntp_server"
+            exit 1
+          fi
+        else
+          # Swap in the "real" NTP server
+          sed -i "s/^\(server ncn-m001\).*/server $upstream_ntp_server iburst trust/" /etc/chrony.d/cray.conf
+          # add a new config that will step the clock if it's less that 1s of drift, otherwise, it will slew it
+          # this applies on startups of the system from a reboot only
+          sed -i "/^\(logchange 1.0\)\$/a initstepslew 1 $upstream_ntp_server" /etc/chrony.d/cray.conf
+          # Apply the change to use the new upstream server
+          # systemctl restart chronyd
+        fi
+  fi
 fi
 
 if [[ -z ${TARBALL_FILE} ]]; then
@@ -64,7 +93,7 @@ if [[ -z ${TARBALL_FILE} ]]; then
     fi
 
     # Ensure we have enough disk space
-    reqSpace=80000000 # ~80GB 
+    reqSpace=80000000 # ~80GB
     availSpace=$(df "$HOME" | awk 'NR==2 { print $4 }')
     if (( availSpace < reqSpace )); then
         echo "Not enough space, required: $reqSpace, available space: $availSpace" >&2
@@ -105,7 +134,7 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     rpm --force -Uvh ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
-    
+
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
@@ -239,6 +268,76 @@ else
     echo "${state_name} has been completed"
 fi
 
+state_name="MODIFYING_NEW_NCN_IMAGE"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    artdir=./${CSM_RELEASE}/images
+    # for both the kubernetes and storage images,
+    for d in kubernetes storage-ceph
+    do
+      # begin the perilious process of unsquashing the image, modifying it, and re-creating the artifacts
+      pushd "$artdir/$d" || exit 1
+        # get the original file names for naming new artifacts
+        # shellcheck disable=SC2061
+        initrd_name=$(find . -name *.xz)
+        # shellcheck disable=SC2061
+        squashfs_name=$(find . -name *.squashfs)
+
+        # Make a spot for the original artifacts
+        mkdir -pv ../images-bak/$d
+
+        # unsquash the image
+        # shellcheck disable=SC2061
+        find . -name *.squashfs -print0 | xargs --null unsquashfs
+
+        # back up the existing artifacts there in case of catastrophe
+        mv *.squashfs *.kernel *.xz ../images-bak/$d
+
+        echo "Fixing ntp-upgrade and create-kis-artifacts script via chroot..."
+        # Some images may not have the upgrade script yet, so copy it into place
+        if ! [[ -f squashfs-root/srv/cray/scripts/metal/ntp-upgrade-config.sh ]]; then
+          cp squashfs-root/srv/cray/scripts/metal/set-ntp-config.sh squashfs-root/srv/cray/scripts/metal/ntp-upgrade-config.sh
+        fi
+
+        chroot squashfs-root/ /bin/bash <<'EOF'
+# Remove set -e for this run
+sed -i 's/^set -e$/#set -e/' srv/cray/scripts/common/create-kis-artifacts.sh
+# it is possible more than one kernel is installed, so this version of the script needs to be adjusted to account for that
+kernel_version_full=$(rpm -qa | grep kernel-default | grep -v devel | tail -n 1 | cut -f3- -d'-')
+kernel_version=$(ls -1tr /boot/vmlinuz-* | tail -n 1 | cut -d '-' -f2,3,4)
+sed -i 's/version_full=.*/version_full='"$kernel_version_full"'/g' srv/cray/scripts/common/create-kis-artifacts.sh
+sed -i 's/kernel_version=.*/kernel_version='"$kernel_version"'/g' srv/cray/scripts/common/create-kis-artifacts.sh
+# set the local stratum lower so it isn't selected over ncn-m001 in most cases
+sed -i 's/^\(  echo "local stratum 3 orphan" >>"$CHRONY_CONF"$\)/  echo "local stratum 10 orphan" >>"$CHRONY_CONF"/' srv/cray/scripts/metal/ntp-upgrade-config.sh
+# if drift > 1s, step the clock on reboot, otherwise, slew it.  Add this line after the logchange line in the script
+sed -i '/^\(  echo "logchange 1.0" >>"$CHRONY_CONF"$\)/a \ \ echo "initstepslew 1 $UPSTREAM_NTP_SERVER" >>"$CHRONY_CONF"' srv/cray/scripts/metal/ntp-upgrade-config.sh
+# remove the unreachable default ntp pools
+rm -f etc/chrony.d/pool.conf
+# Create the new artifacts
+srv/cray/scripts/common/create-kis-artifacts.sh
+# set -e back
+sed -i 's/^#set -e$/set -e/' srv/cray/scripts/common/create-kis-artifacts.sh
+EOF
+        # unmount the chroot
+        umount -l "$(mount | grep "$CSM_RELEASE" | awk '$3 ~ /squashfs$/ {print $3}')"
+        # Move the newly-generated artifacts into place
+        # We may have more than one kernel, so mv them all over
+        mv squashfs-root/squashfs/*.kernel .
+        mv squashfs-root/squashfs/*.xz "${initrd_name}"
+        # initrd also needs it's permissions adjusted
+        chmod 644 "${initrd_name}"
+        mv squashfs-root/squashfs/*.squashfs "${squashfs_name}"
+        # cleanup by removing the unsquashed image
+        rm -rf squashfs-root/
+      # pop out of the dir
+      popd || exit 1
+    done
+    record_state ${state_name} "$(hostname)"
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="UPLOAD_NEW_NCN_IMAGE"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
@@ -331,7 +430,7 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     numOfDeployments=$(helm list -n services | grep cray-console | wc -l)
-    if [[ $numOfDeployments -eq 0 ]]; then 
+    if [[ $numOfDeployments -eq 0 ]]; then
         helm -n services upgrade --install --wait cray-console-operator ./${CSM_RELEASE}/helm/cray-console-operator-*.tgz
         helm -n services upgrade --install --wait cray-console-node ./${CSM_RELEASE}/helm/cray-console-node-*.tgz
         helm -n services upgrade --install --wait cray-console-data ./${CSM_RELEASE}/helm/cray-console-data-*.tgz
