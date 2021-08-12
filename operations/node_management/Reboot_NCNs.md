@@ -90,11 +90,11 @@ The `kubectl` command is installed.
 
         There are pods that may normally be in an Error, Not Ready, or Init state, and this may not indicate any problems caused by the NCN reboots. Error states can indicate that a job pod ran and ended in an Error. That means that there may be a problem with that job, but does not necessarily indicate that there is an overall health issue with the system. The key takeaway \(for health purposes\) is understanding the statuses of pods prior to doing an action like rebooting all of the NCNs. Comparing the pod statuses in between each NCN reboot will give a sense of what is new or different with respect to health.
 
-    1. Verify Ceph health.
+    1. Verify Ceph health (the command mentioned below can be run on any master or storage NCN).
 
         This output is included in the /opt/cray/platform-utils/ncnHealthChecks.sh script
 
-        Run the following command during NCN reboots
+        Run the following command during NCN reboots:
 
         ```bash
         ncn-m001# watch -n 10 'ceph -s'
@@ -137,22 +137,13 @@ The `kubectl` command is installed.
 
         If there are BGP Peering sessions that are not ESTABLISHED on either switch, refer to [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
 
-    1.  Validate the NCNs have good boot artifacts
-
-        Run the `CASMINST-2689` workaround, which ensures good boot artifacts. This is especially critical during an upgrade path.
-
-        ```bash
-        ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
-        /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689
-        ```
-
 ### NCN Rolling Reboot
 
 Before rebooting NCNs:
 
 * Ensure pre-reboot checks have been completed, including checking the `metal.no-wipe` setting for each NCN. Do not proceed if any of the NCN `metal.no-wipe` settings are zero.
 
-* Apply any workaround located in `/opt/cray/csm/workarounds/` if instructed. If you did not apply CASMINST-2689 from step 7 above, then please do so now, otherwise you may encounter boot issues.
+* Apply any workaround located in `/opt/cray/csm/workarounds/` if instructed.
 
 #### Utility Storage Nodes (Ceph)
 
@@ -238,6 +229,24 @@ Before rebooting NCNs:
        ncn-m# kubectl drain --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
        ```
 
+       You may run into pods that can't be gracefully evicted due to Pod Disruption Budgets (PDB), for example:
+
+       ```bash
+       ncn-m# error when evicting pod "<pod>" (will retry after 5s): Cannot evict pod as it would violate the pod's disruption budget.
+       ```
+
+       In this case, there are some options.  First, if the service is scaleable, you can increase the scale to start up another pod on another node, and then the drain will be able to delete it.  However, it will probably be necessary to force the deletion of the pod:
+
+       ```bash
+       ncn-m# kubectl delete pod [-n <namespace>] --force --grace-period=0 <pod>
+       ```
+
+       This will delete the offending pod, and Kubernetes should schedule a replacement on another node.  You can then rerun the kubectl drain command, and it should report that the node is drained
+
+       ```bash
+       ncn-m# kubectl drain --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
+       ```
+
     1. Reboot the selected NCN
 
         1. ```bash
@@ -266,11 +275,29 @@ Before rebooting NCNs:
 
     1. Watch on the console until the NCN has successfully booted and the login prompt is reached.
 
+    1. Confirm NCN personalization has completed
+
+        Check the cfs state of the worker
+
+        ```bash
+        ncn-m# cray cfs compontents describe <xname of node being rebooted>
+        ```
+
+        The `configurationStatus` should be `configured` when successful.  If in a failed state, refer to the pod logs for `cray-cfs` to determine why the configuration may not have completed. 
+
     1. Uncordon the node
 
        ```bash
        ncn-m# kubectl uncordon <node you just rebooted>
        ```
+
+    1. Verify pods are running on the rebooted NCN
+
+        Within a minute or two, the following command should begin to show pods in a `Running` state (replace NCN in the command below with the name of the worker node):
+
+        ```bash
+        ncn-m# kubectl get pods -o wide -A | grep <node to be rebooted>
+        ```
 
     1. Run the platform health checks from the [Validate CSM Health](../validate_csm_health.md) procedure.
 
