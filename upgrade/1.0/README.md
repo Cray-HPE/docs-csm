@@ -315,10 +315,11 @@ ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-master.
 
 #### Stage 3.4
 
-On each master node in the cluster, run the following command to complete the Kubernetes upgrade _(this will restart several pods on each master to their new docker containers)_:
+Run the following command to complete the Kubernetes upgrade _(this will restart several pods on each master to their new docker containers)_:
 
 ```bash
-ncn-m# kubeadm upgrade apply v1.19.9 -y
+ncn-m002# export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+ncn-m002# pdsh -b -S -w $(grep -oP 'ncn-m\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'kubeadm upgrade apply v1.19.9 -y'
 ```
 
 > **`NOTE`**: kubelet has been upgraded already so you can ignore the warning to upgrade kubelet

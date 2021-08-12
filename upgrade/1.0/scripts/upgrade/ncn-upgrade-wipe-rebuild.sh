@@ -231,7 +231,7 @@ if [[ ${upgrade_ncn} == "ncn-m001" ]]; then
             ssh_keygen_keyscan "${upgrade_ncn}"
             ssh_keys_done=1
         fi
-        scp ifcfg-lan0 ifroute-lan0 root@ncn-m001:/etc/sysconfig/network/
+        scp ifcfg-lan0 root@ncn-m001:/etc/sysconfig/network/
         ssh root@ncn-m001 'wicked ifreload lan0'
         record_state "${state_name}" ${upgrade_ncn}
     else
