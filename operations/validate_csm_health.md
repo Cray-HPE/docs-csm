@@ -206,8 +206,8 @@ Execute ncnPostgresHealthChecks script and analyze the output of each individual
       - Verify the State of each cluster member is 'running'.
       If any cluster members are found to be in a non 'running' state (such as 'start failed'), refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#diskfull).
 
-      - Verify there is no large or growing Lag.
-      If any cluster members are found to have Lag, refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#lag).
+      - Verify there is no large or growing lag.
+      If any cluster members are found to have lag or lag is 'unknown', refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#lag).
 
 1. Check that all Kubernetes Postgres pods have a STATUS of Running.
     ```bash
