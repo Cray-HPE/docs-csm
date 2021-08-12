@@ -167,6 +167,8 @@ An authentication token is required to access the API gateway and to use the `sa
     Found no active FAS actions.
     Checking for active NMD dumps.
     Found no active NMD dumps.
+    Checking for active SDU sessions.
+    Found no active SDU sessions.
     No active sessions exist. It is safe to proceed with the shutdown procedure.
     ```
 
