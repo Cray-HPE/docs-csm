@@ -259,6 +259,8 @@ cray uas admin uais list
 ```
 Then you have UAIs.  If you are using Broker UAIs, there will be a mix of Broker and Non-Broker UAIs in the list.  If not, you will only have non-Broker UAIs.
 
+The following steps will interrupt any users who are working on UAIs (either through a broker or in legacy mode).  To minimize surprise, make sure users are notfied that you will be restarting UAIs before proceeding.
+
 To refresh non-Broker UAIs (if you have them):
 ```
 ncn-m001:~ # kubectl delete po -n user $(kubectl get po -n user | grep "^uai-" | awk '{ print $1 }')
