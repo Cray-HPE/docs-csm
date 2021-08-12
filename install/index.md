@@ -25,6 +25,7 @@ Once the CSM installation has completed, other product streams for the HPE Cray 
    1. [Redeploy PIT Node](#redeploy_pit_node)
    1. [Configure Administrative Access](#configure_administrative_access)
    1. [Validate CSM Health](#validate_csm_health)
+   1. [Option to Configure Prometheus Alert Notifications](#configure_prometheus_alert_notifications)
    1. [Update Firmware with FAS](#update_firmware_with_fas)
    1. [Prepare Compute Nodes](#prepare_compute_nodes)
    1. [Next Topic](#next_topic)
@@ -187,6 +188,17 @@ sections, but there is also a general troubleshooting topic.
       a full system power down or power up, or after other types of system maintenance.  
    
       See [Validate CSM Health](../operations/validate_csm_health.md)
+   <a name="configure_prometheus_alert_notifications"></a>
+
+   1. Option to Configure Prometheus Alert Notifications
+   Now that CSM has been installed and health has been validated, if the system management health monitoring tools and specifically,
+   prometheus, are found to be useful, email notifications can be configured for specific alerts defined in prometheus.
+   Prometheus upstream documentation can be leveraged for an [Alert Notification Template Reference](https://prometheus.io/docs/alerting/latest/notifications/)
+   as well as [Notification Template Examples](https://prometheus.io/docs/alerting/latest/notification_examples/).  Currently supported notification
+   types include Slack, Pager Duty, email, or a custom integration via a generic webhook interface.
+   
+      See [Configure Prometheus Email Alert Notifications](../operations/system_management_health/Configure_Prometheus_Email_Alert_Notifications.md) for example
+      configuration of an email alert notification for postgres replication alerts that are defined on the system.
    <a name="update_firmware_with_fas"></a>
 
    1. Update Firmware with FAS  

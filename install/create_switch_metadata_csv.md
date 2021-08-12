@@ -5,7 +5,7 @@ This page provides directions on constructing the `switch_metadata.csv` file.
 This file is manually created to include information about all spine, leaf, CDU, and aggregation switches in the system.
 None of the Slingshot switches for the HSN should be included in this file.
 
-The file follows this format in ascending order for the switches of each type:
+The file should have the following format, in ascending order by Xname:
 
 ```
 Switch Xname,Type,Brand
@@ -28,6 +28,8 @@ The above file would lead to this pairing between component name and hostname:
 | sw-cdu-001 | d0w1 |
 | sw-cdu-002 | d0w2 |
 
+The hostname's are automatically generated in ascending order by switch type. 
+
 #### Requirements
 
 For this you will need:
@@ -40,13 +42,14 @@ See [Component Names (xnames)](../operations/Component_Names_xnames.md).
 
 Spine and aggregation switches use the format `xXcChHsS`. Leaf switches use `xXcCwW`. CDU switches use `dDwW`.
 
+#### Reference Diagram for Subsequent Sections
+
+    ![Reference diagram of a cabinet with side-by-side switches in SHCD](../img/shcd-rack-example.png)
+    > Diagram of a cabinet with side-by-side switches in SHCD.
+
 #### Directions
 
 1. In your SHCD, identify your switches.
-
-    ![Diagram of Cabinet with side-by-side switches in SHCD](../img/shcd-rack-example.png)
-    > Diagram of Cabinet with side-by-side switches in SHCD.
-
     Look for:
     - The slot number(s) for the leaf switches (usually 48-port switches)
         - In the above diagram this is x3000u22
