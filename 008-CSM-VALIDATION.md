@@ -5,6 +5,7 @@ This page lists available CSM install and health checks that can be executed to 
     1. [ncnHealthChecks](#pet-ncnhealthchecks)
     1. [ncnPostgresHealthChecks](#pet-ncnpostgreshealthchecks)
     1. [BGP Peering Status and Reset](#pet-bgp)
+    1. [Clock Skew](#pet-clock-skew)
 1. [Network Health Checks](#network-health-checks)
     1. [KEA / DHCP](#net-kea)
     1. [External DNS](#net-extdns)
@@ -103,6 +104,55 @@ For example:
 Errors reported previous to the lock status, such as **ERROR: get_cluster** can be ignored.
 
 See see the **About Postgres** section in the HPE Cray EX Administration Guide S-8001 for further information.
+
+<a name="pet-clock-skew"></a>
+### Clock Skew
+Verify that NCNs clocks are synced (these commands should be run on ncn-m001 unless otherwise noted).
+
+```bash
+ncn-m001# pdsh -b -S -w "$(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',')" 'date'
+```
+
+If there is skew (output from the above command shows different times across the NCNs), the system may be suffering from a bug where ncn-m001 uses itself as it's own upstream NTP server.  The following will check if this is the case:
+
+```bash
+grep server /etc/chrony.d/cray.conf
+```
+If the output from the above command returns `ncn-m001`, correct the server in the command below (the example below assumes `time.nist.gov` is the correct server, use the appropriate NTP server if desired):
+
+```bash
+ncn-m001# upstream_ntp_server=time.nist.gov
+ncn-m001# sed -i "s/^\(server ncn-m001\).*/server $upstream_ntp_server iburst trust/" /etc/chrony.d/cray.conf
+```
+Restart chronyd
+
+```bash
+ncn-m001# systemctl restart chronyd
+```
+
+Check skew again
+
+```bash
+ncn-m001# pdsh -b -S -w "$(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',')" 'date'
+```
+
+If the skew is large (more than a few seconds) it's usually recommnded to allow the nodes to come back in sync gradually.  However, you can opt to force them to sync by running this on the affected nodes:
+
+```bash
+ncn-m001# chronyc burst 4/4 ; sleep 15
+ncn-m001# chronyc makestep
+```
+
+After clocks have been synced, it may be necessary to restart Ceph services.  Check Ceph health:
+
+```bash
+ncn-m001# ceph -s
+```
+If the output from the above command notes a storage node has clock skew, restart the following services on the storage node mentioned in the output:
+
+```bash
+ncn-s# systemctl restart ceph-mon@<node-name> && systemctl restart ceph-mgr@<node-name> && systemctl restart ceph-mds@<node-name>
+```
 
 <a name="pet-bgp"></a>
 ### BGP Peering Status and Reset
