@@ -247,9 +247,9 @@ The configuration workflow described here is intended to help understand the exp
 
 1. Change the default root password and SSH keys
    > If you want to avoid using the default install root password and SSH keys for the NCNs, follow the
-   > NCN image customization steps in [Change NCN Image Root Password and SSH Keys](../operations/change_ncn_image_root_password_and_ssh_keys.md)
+   > NCN image customization steps in [Change NCN Image Root Password and SSH Keys](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md)
 
-   This step is **strongly encouraged** for external/site deployments.
+   This step is **strongly encouraged** for all systems.
 
 1. Create boot directories for any NCN in DNS:
     > This will create folders for each host in `/var/www`, allowing each host to have their own unique set of artifacts; kernel, initrd, SquashFS, and `script.ipxe` bootscript.
