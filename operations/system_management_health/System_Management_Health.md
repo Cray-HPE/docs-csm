@@ -23,4 +23,5 @@ The System Management Health service is intended to complement the System Monito
 * [System Management Health Checks and Alerts](System_Management_Health_Checks_and_Alerts.md)
 * [Access System Management Health Services](Access_System_Management_Health_Services.md)
 * [Configure Prometheus Email Alert Notifications](Configure_Prometheus_Email_Alert_Notifications.md)
+* [Troubleshoot Prometheus Alerts](Troubleshoot_Prometheus_Alerts.md)
 
