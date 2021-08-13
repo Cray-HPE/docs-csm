@@ -493,27 +493,6 @@ to a management node.
    ncn-w# cray cfs components update XNAME --state '[]'
    ```
 
-1. If the previous step was unsuccessful, clear the state of the node in CFS using the following commands.
-   unsuccessful.
-
-   1. Retrieve the authenticated credentials required to rerun the configuration for a node.
-
-      ```bash
-      ncn-w# ADMIN_SECRET=$(kubectl get secrets admin-client-auth \
-      -ojsonpath='{.data.client-secret}' | base64 -d)
-      ```
-
-   1. Replace the XNAME value in the following command with the xname of the node being reconfigured.
-
-      ```bash
-      ncn-w# function get_token { curl -s -d grant_type=client_credentials \
-      -d client_id=admin-client -d client_secret=$ADMIN_SECRET \
-      https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \
-      | python -c 'import sys, json; print json.load(sys.stdin)["access_token"]';}
-      ncn-w# curl -H "Authorization: Bearer $(get_token)" https://api-gw-service-nmn.local/apis/cfs/v2/components/XNAME \
-      -X PATCH -H "Content-type: application/json" -d '{"state": []}'
-      ```
-
 1. Clear the error count for the node in CFS.
 
    Replace the XNAME value in the following command before running it.
