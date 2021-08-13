@@ -15,51 +15,48 @@ The areas should be tested in the order they are listed on this page. Errors in 
 
 - [Validate CSM Health](#validate-csm-health)
   - [Topics:](#topics)
-  - [1. Platform Health Checks](#1-platform-health-checks)
-    - [1.1 ncnHealthChecks](#11-ncnhealthchecks)
-    - [1.2 ncnPostgresHealthChecks](#12-ncnpostgreshealthchecks)
-    - [1.3 BGP Peering Status and Reset](#13-bgp-peering-status-and-reset)
-      - [1.3.1 Mellanox Switch](#131-mellanox-switch)
-      - [1.3.2 Aruba Switch](#132-aruba-switch)
-    - [1.4 Verify that KEA has active DHCP leases](#14-verify-that-kea-has-active-dhcp-leases)
-    - [1.5 Verify ability to resolve external DNS](#15-verify-ability-to-resolve-external-dns)
-    - [1.6 Verify Spire Agent is Running on Kubernetes NCNs](#16-verify-spire-agent-is-running-on-kubernetes-ncns)
-    - [1.7 Verify the Vault Cluster is Healthy](#17-verify-the-vault-cluster-is-healthy)
-    - [1.8 Automated Goss Testing](#18-automated-goss-testing)
-      - [1.8.1 Known Test Issues](#181-known-test-issues)
-    - [1.9 OPTIONAL Check of System Management Monitoring Tools](#19-optional-check-of-system-management-monitoring-tools)
-  - [2. Hardware Management Services Health Checks](#2-hardware-management-services-health-checks)
-    - [2.1 HMS Test Execution](#21-hms-test-execution)
-    - [2.2 Hardware State Manager Discovery Validation](#22-hardware-state-manager-discovery-validation)
-      - [2.2.1 Interpreting results](#hms-smd-discovery-validation-known-issues-interpreting-results)
+  - [1. Platform Health Checks](#platform-health-checks)
+    - [1.1 ncnHealthChecks](#pet-ncnhealthchecks)
+    - [1.2 ncnPostgresHealthChecks](#pet-ncnpostgreshealthchecks)
+    - [1.3 BGP Peering Status and Reset](#pet-bgp)
+      - [1.3.1 Mellanox Switch](#pet-bgp-mellanox)
+      - [1.3.2 Aruba Switch](#pet-bgp-aruba)
+    - [1.4 Verify that KEA has active DHCP leases](#net-kea)
+    - [1.5 Verify ability to resolve external DNS](#net-extdns)
+    - [1.6 Verify Spire Agent is Running on Kubernetes NCNs](#net-spire)
+    - [1.7 Verify the Vault Cluster is Healthy](#net-vault)
+    - [1.8 Automated Goss Testing](#automated-goss-testing)
+      - [1.8.1 Known Test Issues](#autogoss-issues)
+    - [1.9 OPTIONAL Check of System Management Monitoring Tools](#optional-check-of-system-management-monitoring-tools)
+  - [2. Hardware Management Services Health Checks](#hms-health-checks)
+    - [2.1 HMS Test Execution](#hms-test-execution)
+    - [2.2 Hardware State Manager Discovery Validation](#hms-smd-discovery-validation)
+      - [2.2.1 Interpreting results](#hms-smd-discovery-validation-interpreting-results)
       - [2.2.2 Known Issues](#hms-smd-discovery-validation-known-issues)
+  - [3 Software Management Services Health Checks](#sms-health-checks)
+    - [3.1 SMS Test Execution](#sms-checks)
+    - [3.2 Interpreting cmsdev Results](#cmsdev-results)
+  - [4. Booting CSM Barebones Image](#booting-csm-barebones-image)
+    - [4.1 Locate CSM Barebones Image in IMS](#locate-csm-barebones-image-in-ims)
+    - [4.2 Create a BOS Session Template for the CSM Barebones Image](#csm-bos-session-template)
+    - [4.3 Find an available compute node](#csm-node)
+    - [4.4 Reboot the node using a BOS session template](#csm-reboot)
+    - [4.6 Connect to the node's console and watch the boot](#csm-watch-boot)
+  - [5. UAS / UAI Tests](#uas-uai-tests)
+    - [5.1 Initialize and Authorize the CLI](#uas-uai-init-cli)
+      - [5.1.1 Stop Using the CRAY_CREDENTIALS Service Account Token](#uas-uai-init-cli-stop)
+      - [5.1.2 Initialize the CLI Configuration](#uas-uai-init-cli-init)
+      - [5.1.3 Authorize the CLI for a User](#uas-uai-init-cli-auth)
+      - [5.1.4 CLI Troubleshooting](#uas-uai-init-cli-debug)
+    - [5.2 Validate UAS and UAI Functionality](#uas-uai-validate)
+      - [5.2.1 Validate the Basic UAS Installation](#uas-uai-validate-install)
+      - [5.2.2 Validate UAI Creation](#uas-uai-validate-create)
+      - [5.2.3 UAS/UAI Troubleshooting](#uas-uai-validate-debug)
+        - [5.2.3.1 Authorization Issues](#uas-uai-validate-debug-auth)
+        - [5.2.3.2 UAS Cannot Access Keycloak](#uas-uai-validate-debug-keycloak)
+        - [5.2.3.3 UAI Images not in Registry](#uas-uai-validate-debug-registry)
+        - [5.2.3.4 Missing Volumes and other Container Startup Issues](#uas-uai-validate-debug-container)
 
-  - [3 Software Management Services Health Checks](#3-software-management-services-health-checks)
-    - [3.1 cmsdev Usage](#31-cmsdev-usage)
-      - [3.2 Interpreting cmsdev Results](#32-interpreting-cmsdev-results)
-    - [3.3 SMS Checks To Run](#33-sms-checks-to-run)
-  - [4. Booting CSM Barebones Image](#4-booting-csm-barebones-image)
-  - [* Use the CLI to complete these tasks. If needed, see the Initialize and Authorize the CLI section.](#-use-the-cli-to-complete-these-tasks-if-needed-see-the-initialize-and-authorize-the-cli-section)
-    - [4.1 Locate CSM Barebones Image in IMS](#41-locate-csm-barebones-image-in-ims)
-    - [4.2 Create a BOS Session Template for the CSM Barebones Image](#42-create-a-bos-session-template-for-the-csm-barebones-image)
-    - [4.3 Find an available compute node](#43-find-an-available-compute-node)
-    - [4.4 Reboot the node using a BOS session template](#44-reboot-the-node-using-a-bos-session-template)
-    - [4.6 Connect to the node's console and watch the boot](#46-connect-to-the-nodes-console-and-watch-the-boot)
-  - [5. UAS / UAI Tests](#5-uas--uai-tests)
-    - [5.1 Initialize and Authorize the CLI](#51-initialize-and-authorize-the-cli)
-      - [5.1.1 Stop Using the CRAY_CREDENTIALS Service Account Token](#511-stop-using-the-cray_credentials-service-account-token)
-      - [5.1.2 Initialize the CLI Configuration](#512-initialize-the-cli-configuration)
-      - [5.1.3 Authorize the CLI for a User](#513-authorize-the-cli-for-a-user)
-      - [5.1.4 CLI Troubleshooting](#514-cli-troubleshooting)
-    - [5.2 Validate UAS and UAI Functionality](#52-validate-uas-and-uai-functionality)
-      - [5.2.1 Validate the Basic UAS Installation](#521-validate-the-basic-uas-installation)
-      - [5.2.2 Validate UAI Creation](#522-validate-uai-creation)
-      - [5.2.3 UAS/UAI Troubleshooting](#523-uasuai-troubleshooting)
-        - [5.2.3.1 Authorization Issues](#5231-authorization-issues)
-        - [5.2.3.2 UAS Cannot Access Keycloak](#5232-uas-cannot-access-keycloak)
-        - [5.2.3.3 UAI Images not in Registry](#5233-uai-images-not-in-registry)
-        - [5.2.3.4 Missing Volumes and other Container Startup Issues](#5234-missing-volumes-and-other-container-startup-issues)
-  
 <a name="platform-health-checks"></a>
 ## 1. Platform Health Checks
 
@@ -538,7 +535,7 @@ Execute the `hsm_discovery_verify.sh` script on a Kubernetes master or worker NC
 ncn# /opt/cray/csm/scripts/hms_verification/hsm_discovery_verify.sh
 ```
 
-The output will ideally appear as follows, if it does not look like the following see [2.2.1 Interpreting results](hms-smd-discovery-validation-known-issues-interpreting-results) and [2.2.2 Known Issues](#hms-smd-discovery-validation-known-issues).
+The output will ideally appear as follows, if it does not look like the following see [2.2.1 Interpreting results](#hms-smd-discovery-validation-interpreting-results) and [2.2.2 Known Issues](#hms-smd-discovery-validation-known-issues).
 ```bash
 ncn# /opt/cray/csm/scripts/hms_verification/hsm_discovery_verify.sh
 
@@ -558,7 +555,7 @@ ALL OK
 If there are mismatches, these will be displayed in the appropriate section of
 the output.
 
-<a name="hms-smd-discovery-validation-known-issues"></a>
+<a name="hms-smd-discovery-validation-interpreting-results"></a>
 #### 2.2.1 Interpreting results
 
 For each of the BMCs that show up in the mismatch list use the following notes to determine if that BMC can be safely ignored, or if there is a legitimate issue with the BMC. 
@@ -584,64 +581,50 @@ A listing of known hardware discovery issues and workarounds can be found here i
 
 The Software Management Services health checks are run using `/usr/local/bin/cmsdev`.
 
-1. [cmsdev Usage](#cmsdev-usage)
-1. [Interpreting cmsdev Results](#cmsdev-results)
-1. [SMS Checks To Run](#sms-checks)
-
-<a name="cmsdev-usage"></a>
-### 3.1 cmsdev Usage
-`cmsdev test [-q | -v] <shortcut>`
-* The shortcut determines which component will be tested. See the table in the next section for the list of shortcuts.
-* The tool logs to /opt/cray/tests/cmsdev.log
+* The tool logs to `/opt/cray/tests/cmsdev.log`
 * The -q (quiet) and -v (verbose) flags can be used to decrease or increase the amount of information sent to the screen.
   * The same amount of data is written to the log file in either case.
 
-<a name="cmsdev-results"></a>
-#### 3.2 Interpreting cmsdev Results
-
-* If a test passes:
-  * The last line of output from the tool reports SUCCESS.
-  * The return code is 0.
-* If a test fails:
-  * The last line of output from the tool reports FAILURE.
-  * The return code is non-0.
-* Unless the test was run in verbose mode, the log file will contain additional information about the execution.
+1. [SMS Test Execution](#sms-checks)
+1. [Interpreting cmsdev Results](#cmsdev-results)
 
 <a name="sms-checks"></a>
-### 3.3 SMS Checks To Run
+### 3.1 SMS Test Execution
 
-Run a check for each of the following services after an install. These should be run on at least one worker node and at least one master node (but **not** ncn-m001 if it is still the PIT node).
-
-| Services  | Shortcut |
-| ---  | --- |
-| BOS (Boot Orchestration Service) | bos |
-| CFS (Configuration Framework Service) | cfs |
-| ConMan (Console Manager) | conman |
-| CRUS (Compute Rolling Upgrade Service) | crus |
-| IMS (Image Management Service) | ims |
-| iPXE, TFTP (Trivial File Transfer Protocol) | ipxe* |
-| VCS (Version Control Service) | vcs |
-
-\* The iPXE shortcut runs a check of both the iPXE service and the TFTP service.
-
-The following is a convenient way to run all of the tests and see if they passed:
+The following test can be run on any Kubernetes node (**not** `ncn-m001` if it is still the PIT node).
 
 ```bash
-ncn# for S in bos cfs conman crus ims ipxe vcs ; do
-    LOG=/root/cmsdev-$S-$(date +"%Y%m%d_%H%M%S").log
-    echo -n "$(date) Starting $S check ... "
-    START=$SECONDS
-    /usr/local/bin/cmsdev test -v $S > $LOG 2>&1
-    rc=$?
-    let DURATION=SECONDS-START
-    if [ $rc -eq 0 ]; then
-        echo "SUCCESS (duration: $DURATION seconds)"
-    else
-        echo "FAILURE (duration: $DURATION seconds)"
-        echo " # See $LOG for details"
-    fi
-done
+ncn# /usr/local/bin/cmsdev test -q all
 ```
+
+<a name="cmsdev-results"></a>
+### 3.2 Interpreting cmsdev Results
+
+If all checks passed:
+   * The return code will be 0
+   * The final line of output will begin with `SUCCESS`
+   * For example:
+        ```bash
+        ncn# /usr/local/bin/cmsdev test -q all
+        ...
+        SUCCESS: All 7 service tests passed: bos, cfs, conman, crus, ims, tftp, vcs
+        ncn# echo $?
+        0
+        ```
+
+If one or more checks failed:
+   * The return code will be non-0
+   * The final line of output will begin with `FAILURE` and will list which checks failed
+   * For example:
+        ```bash
+        ncn# /usr/local/bin/cmsdev test -q all
+        ...
+        FAILURE: 2 service tests FAILED (conman, ims), 5 passed (bos, cfs, crus, tftp, vcs)
+        ncn# echo $?
+        1
+        ```
+
+Additional test execution details can be found in `/opt/cray/tests/cmsdev.log`.
 
 <a name="booting-csm-barebones-image"></a>
 ## 4. Booting CSM Barebones Image
