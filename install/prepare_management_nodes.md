@@ -39,9 +39,7 @@ Check the BMC and BIOS firmware for the PIT node and update if necessary.
 If the PIT node does not have the minimum level, it is possible to update it using a method described in the HPC Firmware Pack (HFP).
 The HPC Firmware Pack is available in the same location as other product streams which are part of the software stack for HPE Cray Ex systems.
 
-See the HPC Firmware Pack product stream for required minimum levels and procedures to check and update.
-
-**`INTERNAL USE`** The HPC Firmware Pack is available at https://arti.dev.cray.com/artifactory/shasta-distribution-stable-local/HFP-firmware/
+See the HPC Firmware Pack product stream for required minimum levels and procedures to check and update firmware.
 
 Later in the installation process the HPC Firmware Pack will be installed on the PIT node and added to the Nexus repository so that it can be used in conjunction with the Firmware Action Services (FAS) to update firmware on other components.
 
