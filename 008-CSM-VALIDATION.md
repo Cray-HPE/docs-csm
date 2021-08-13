@@ -55,10 +55,14 @@ The ncnHealthChecks script reports the following health information:
 
 Execute ncnHealthChecks script and analyze the output of each individual check. 
 
-**Note**: The `cray-crus-` pod is expected to be in the Init state until slurm and munge
+**Notes**:
+
+* The `cray-crus-` pod is expected to be in the Init state until slurm and munge
 are installed. In particular, this will be the case if you are executing this as part of the validation after completing the [CSM Platform Install](006-CSM-PLATFORM-INSTALL.md).
 If in doubt, you can validate the CRUS service using the [CMS Validation Tool](#cms-validation-utility). If the CRUS check passes using that tool, you do not need to worry
 about the `cray-crus-` pod state.
+
+* If the script output indicates any `kube-multus-ds-` pods are in a `Termininating` state, that can indicate a previous restart of these pods did not complete.  In this case, it is safe to force delete these pods in order to let them properly restart by executing the `kubectl delete po -n kube-system kube-multus-ds.. --force` command.  After executing this command, re-running the ncnHealthChecks script should indicate a new pod is in a `Running` state.
 
 <a name="pet-ncnpostgreshealthchecks"></a>
 ### ncnPostgresHealthChecks
