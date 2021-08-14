@@ -452,4 +452,19 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="UPDATE_SSH_KEYS"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m002" ]]; then
+    echo "====> ${state_name} ..."
+    . ${BASEDIR}/ncn-upgrade-common.sh ${upgrade_ncn}
+    for i in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ' ')
+    do
+        ssh_keygen_keyscan $i
+    done
+
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 ok_report
