@@ -196,10 +196,7 @@ if [[ $state_recorded == "0" ]]; then
     printf "%s" "waiting for cloud-init: $upgrade_ncn ..."
     while ! ssh $upgrade_ncn -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null 'cat /var/log/messages | grep "Cloud-init" | grep "finished"' &> /dev/null
     do
-        if [[ $ssh_keys_done == "0" ]]; then
-            ssh_keygen_keyscan "${upgrade_ncn}"
-            ssh_keys_done=1
-        fi
+        ssh_keygen_keyscan "${upgrade_ncn}"
         printf "%c" "."
         sleep 20
     done
