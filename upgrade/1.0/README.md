@@ -134,7 +134,7 @@ ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-ceph-initia
 
 #### Stage 1.2
 
-**`IMPORTANT:`** We scale down the conman deployements during stage 1.2 (this stage), so all console sessions will be down for portion of the upgrade
+**`IMPORTANT:`** We scale down the conman deployments during stage 1.2 (this stage), so all console sessions will be down for this portion of the upgrade
 
 **`IMPORTANT`** If this has be run previously, then check point files may need to be deleted.
 
@@ -153,7 +153,7 @@ Directory location = /etc/cray/ceph/_upgraded
 /etc/cray/ceph/rgws_upgraded
 ```
 
-**`NOTE:`** You can delete all these files and rerun or you can just delete any files from your last step. You may end up with checkpoint files if the upgrade was exited out of by the user.  But if you know you exited out of OSDs and it wasn't a clean exit, then you would only need remove `osd_upgraded`, `mds_upgraded` and `rgw_upgraded`.
+**`NOTE:`** You can delete all these files and rerun or you can just delete any files from your last step. You may end up with checkpoint files if the upgrade was exited out of by the user.  But if you know you exited out of OSDs and it was not a clean exit, then you would only need remove `osd_upgraded`, `mds_upgraded` and `rgw_upgraded`.
 
 1. Start the Ceph upgrade
 
@@ -191,7 +191,7 @@ Directory location = /etc/cray/ceph/_upgraded
     csm-config-import-1.0.0-beta.46-5t7kx                          0/3     Completed          0          4d
     ```
 
-**`NOTE:`** if conman is not running please see [establising conman console connections](operations/../../../operations/conman/Establish_a_Serial_Connection_to_NCNs.md)
+**`NOTE:`** if conman is not running please see [establishing conman console connections](operations/../../../operations/conman/Establish_a_Serial_Connection_to_NCNs.md)
 
 ### Stage 2. Ceph image upgrade
 

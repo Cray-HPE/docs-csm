@@ -3,8 +3,8 @@
 # Identify the bootraid.
 BOOTRAID="$(awk '/LABEL=BOOTRAID/ {print $2}' /etc/fstab.metal)"
 
-# Make sure the boot raid isn't mounted first. This might fail and that's ok because that probably just means it
-# wasn't mounted in the first place.
+# Make sure the boot raid is not mounted first. This might fail and that is ok because that probably just means it
+# was not mounted in the first place.
 umount "$BOOTRAID"
 
 set -e

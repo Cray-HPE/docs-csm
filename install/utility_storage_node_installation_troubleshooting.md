@@ -44,21 +44,24 @@ ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
 
    **SSH to the node(s) where the issue exists and do the following:**
 
-   1. ncn-s# systemctl stop ceph-osd.target
-   2. ncn-s# vgremove -f --select 'vg_name=~ceph*'  
-   *This will take a little bit of time, so do not panic.*
-   3. ncn-s# for i in {g..n}; do sgdisk --zap-all /dev/sd$i; done.
+   ```bash
+   ncn-s# systemctl stop ceph-osd.target
+   ncn-s# vgremove -f --select 'vg_name=~ceph*' # This will take a little bit of time, so do not panic
+   ncn-s# for i in {g..n}; do sgdisk --zap-all /dev/sd$i; done
+   ```
 
    **This will vary node to node. Use lsblk to identify all drives available to Ceph**
 
    >**Manually create OSDs on the problematic nodes**
-   >ncn-s# for i in {g..n}; do ceph-volume lvm create --data /dev/sd$i  --bluestore; done
+   ```bash
+   ncn-s# for i in {g..n}; do ceph-volume lvm create --data /dev/sd$i  --bluestore; done
+   ```
 
    **ALL THE BELOW WORK WILL BE RUN FROM NCN-S001**
 
-   1. Verify the /etc/cray/ceph directory is empty. If there are any files there then delete them
+   1. Verify the `/etc/cray/ceph` directory is empty. If there are any files there then delete them
    2. Put in safeguard
-        * Edit /srv/cray/scripts/metal/lib.sh
+        * Edit `/srv/cray/scripts/metal/lib.sh`
        * Comment out the below lines
 
        ```bash

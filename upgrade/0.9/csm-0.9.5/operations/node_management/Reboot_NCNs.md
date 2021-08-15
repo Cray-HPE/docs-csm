@@ -248,7 +248,7 @@ it may take a several minutes for Ceph to resolve clock skew.
 
 1.  Reboot each of the NCN worker nodes \(one at a time\).
 
-    **NOTE:** You are doing a single worker at a time, so pleae keep track of what ncn-w0xx you are on for these steps.
+    **NOTE:** You are doing a single worker at a time, so please keep track of what ncn-w0xx you are on for these steps.
 
     1.  Establish a console session to the NCN worker node you are rebooting.
 
