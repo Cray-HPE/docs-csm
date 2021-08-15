@@ -1,6 +1,6 @@
 # CVE-2021-22555 CVE-2021-33909
 
-This procedure covers patching `CVE-2021-22555` and `CVE-2021-33909` on Shasta V1.4.X (and upgrades CSM to v0.9.5).  
+This procedure covers patching `CVE-2021-22555` and `CVE-2021-33909` on Shasta V1.4.X (and upgrades CSM to v0.9.5).
 These special directions are only for Linux dependencies, such as the kernel and internal packages compiled against the kernel.
 
 A high-level overview of the procedure is as follows:
@@ -43,7 +43,7 @@ Procedures:
 
 3. Set `CSM_DISTDIR` to the directory of the extracted release distribution for CSM 0.9.5:
 
-   > **`NOTE:`** Use `--no-same-owner` and `--no-same-permissions` options to `tar` when extracting a CSM release 
+   > **`NOTE:`** Use `--no-same-owner` and `--no-same-permissions` options to `tar` when extracting a CSM release
    > distribution as `root` to ensure the current `umask` value.
 
    If using a release distribution:
@@ -58,7 +58,7 @@ Procedures:
    ncn-m001# CSM_RELEASE_VERSION="$(${CSM_DISTDIR}/lib/version.sh --version)"
    ncn-m001# echo $CSM_RELEASE_VERSION
    ```
-   
+
 5. Install/upgrade CSI.
 
    ```bash
@@ -76,7 +76,7 @@ Procedures:
    ```bash
    ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm-install/docs-csm-install-latest.noarch.rpm
    ```
-   
+
 7. Set `CSM_SCRIPTDIR` to the scripts directory included in the docs-csm-install RPM for the CSM 0.9.5 patch:
 
    ```bash
@@ -94,7 +94,7 @@ proceeding.
 <a name="run-cve-patch"></a>
 ## Run CVE Patch Script
 
-The `run-patch.sh` script expects that the `TOKEN` environment variable is set. Either set this to a valid token of 
+The `run-patch.sh` script expects that the `TOKEN` environment variable is set. Either set this to a valid token of
 your choosing or get a new one using the following:
 
 ```bash
@@ -104,25 +104,25 @@ ncn-m001# export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
   https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
 ```
 
-The script also expects that the Cray CLI is configured and authenticated. 
-Please see [Initialize cray CLI](../../../006-CSM-PLATFORM-INSTALL.md#initialize-cray-cli) for more information on 
+The script also expects that the Cray CLI is configured and authenticated.
+Please see [Initialize cray CLI](../../../006-CSM-PLATFORM-INSTALL.md#initialize-cray-cli) for more information on
 how to do this.
 
-Run the `run-patch.sh` script. This does a few things: 
+Run the `run-patch.sh` script. This does a few things:
    1. Updates all the NCNs via `zypper` to have the latest patched packages.
    2. Patches the kernel/initrd/squash image to have the correctly patched assets.
    3. Applies a pod priority to essential deployments to ensure that they are scheduled when rebooting the NCNs.
-   
+
       **This step requires the latest SUSE updates tarball has been extracted and installed (i.e., synced with Nexus).**
-   
+
       **Please see section, "Install SLE for V1.4.2A-security0821 Patch" in the main patch README if you have not already.**
-    
+
        ```
        ncn-m001# "${CSM_SCRIPTDIR}/run-patch.sh"
        ```
-    
+
        > **DO NOT REBOOT**
-       > 
+       >
        > The `zypper` commands issued by the `run-patch.sh` script may indicate a reboot is needed at several points during the
        > script run but this will happen in a later step so do not reboot the NCNs yet.
 
@@ -147,7 +147,7 @@ Reference the [Reboot NCNs procedure](operations/node_management/Reboot_NCNs.md)
    ncn-m001# CSM_DISTDIR=~/csm-0.9.5
    ```
 
-3. Once a system has booted, verify the new kernel is running on each NCN. This should match `5.3.18-24.75-default`, which is the version 
+3. Once a system has booted, verify the new kernel is running on each NCN. This should match `5.3.18-24.75-default`, which is the version
 of the kernel that addresses the CVE.
 
    ```bash

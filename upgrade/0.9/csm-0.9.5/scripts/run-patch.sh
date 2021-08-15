@@ -46,7 +46,7 @@ fi
 run_pdsh_command 'zypper in -t patch -y SUSE-SLE-Module-Development-Tools-15-SP2-2021-2438 SUSE-SLE-Module-Basesystem-15-SP2-2021-2438 SUSE-SLE-Module-Basesystem-15-SP2-2021-1843'
 patchRetVal=$?
 # Check to see if one or both of these packages is missing or any other failures.
-# Error code 102 is Zypper for "you need to reboot". We're not doing that now, so it's not actually an error.
+# Error code 102 is Zypper for "you need to reboot". We are not doing that now, so it is not actually an error.
 if [ $patchRetVal -gt 0 ] && [ $patchRetVal -ne 102 ]
 then
   if [ $patchRetVal -eq 104 ]

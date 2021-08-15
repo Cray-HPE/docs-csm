@@ -63,7 +63,7 @@ are installed. In particular, this will be the case if you are executing this as
 If in doubt, you can validate the CRUS service using the [CMS Validation Tool](#cms-validation-utility). If the CRUS check passes using that tool, you do not need to worry
 about the `cray-crus-` pod state.
 
-* If the script output indicates any `kube-multus-ds-` pods are in a `Termininating` state, that can indicate a previous restart of these pods did not complete.  In this case, it is safe to force delete these pods in order to let them properly restart by executing the `kubectl delete po -n kube-system kube-multus-ds.. --force` command.  After executing this command, re-running the ncnHealthChecks script should indicate a new pod is in a `Running` state.
+* If the script output indicates any `kube-multus-ds-` pods are in a `Termininating` state, that can indicate a previous restart of these pods did not complete. In this case, it is safe to force delete these pods in order to let them properly restart by executing the `kubectl delete po -n kube-system kube-multus-ds.. --force` command. After executing this command, re-running the ncnHealthChecks script should indicate a new pod is in a `Running` state.
 
 <a name="pet-ncnpostgreshealthchecks"></a>
 ### ncnPostgresHealthChecks
@@ -119,7 +119,7 @@ Verify that NCNs clocks are synced (these commands should be run on ncn-m001 unl
 ncn-m001# pdsh -b -S -w "$(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',')" 'date'
 ```
 
-If there is skew (output from the above command shows different times across the NCNs), the system may be suffering from a bug where ncn-m001 uses itself as it's own upstream NTP server.  The following will check if this is the case:
+If there is skew (output from the above command shows different times across the NCNs), the system may be suffering from a bug where ncn-m001 uses itself as its own upstream NTP server. The following will check if this is the case:
 
 ```bash
 grep server /etc/chrony.d/cray.conf
@@ -142,14 +142,14 @@ Check skew again
 ncn-m001# pdsh -b -S -w "$(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',')" 'date'
 ```
 
-If the skew is large (more than a few seconds) it's usually recommnded to allow the nodes to come back in sync gradually.  However, you can opt to force them to sync by running this on the affected nodes:
+If the skew is large (more than a few seconds) it is usually recommended to allow the nodes to come back in sync gradually. However, you can opt to force them to sync by running this on the affected nodes:
 
 ```bash
 ncn-m001# chronyc burst 4/4 ; sleep 15
 ncn-m001# chronyc makestep
 ```
 
-After clocks have been synced, it may be necessary to restart Ceph services.  Check Ceph health:
+After clocks have been synced, it may be necessary to restart Ceph services. Check Ceph health:
 
 ```bash
 ncn-m001# ceph -s

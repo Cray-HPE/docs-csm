@@ -370,7 +370,7 @@ should resolve itself once the workload manager product is installed.
    If not enabled, enable it (or the repository in nexus that contains the RPM) on all storage nodes.
    The easiest way to find the repository that contains this RPM is to login to the Nexus UI at
    https://nexus.SYSTEM-NAME.cray.com, click the search icon in the navigation pane on the
-   left, and enter golang-github-prometheus-node_exporter as the keyword.  Then click on the
+   left, and enter golang-github-prometheus-node_exporter as the keyword. Then click on the
    search result that has the latest version of the RPM, and on that screen the repository name
    to use is listed as the repository at the top.
 
