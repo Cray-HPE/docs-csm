@@ -3,7 +3,6 @@
 # Copyright 2021 Hewlett Packard Enterprise Development LP
 #
 set -e
-set -x 
 BASEDIR=$(dirname $0)
 . ${BASEDIR}/upgrade-state.sh
 trap 'err_report' ERR
