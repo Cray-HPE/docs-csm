@@ -25,7 +25,7 @@ This same procedure can be used to reboot a single NCN node as outlined above. B
 
 This procedure requires that the `kubectl` command is installed.
 
-It also requires that the **CSM_SCRIPTDIR variable was previously defined** as part of the execution of the steps in the csm-0.9.5 upgrade README.  You can verify that it is set by running `echo $CSM_SCRIPTDIR` on the ncn-m001 cli.  If that returns nothing, re-execute the setting of that variable from the [csm-0.9.5 README](../../README.md) file.
+It also requires that the **CSM_SCRIPTDIR variable was previously defined** as part of the execution of the steps in the csm-0.9.5 upgrade README. You can verify that it is set by running `echo $CSM_SCRIPTDIR` on the ncn-m001 cli. If that returns nothing, re-execute the setting of that variable from the [csm-0.9.5 README](../../README.md) file.
 
 ## Procedure
 
@@ -41,7 +41,7 @@ It also requires that the **CSM_SCRIPTDIR variable was previously defined** as p
 
     Refer to [Check and Set the metal.no-wipe Setting on NCNs](Check_and_Set_the_metalno-wipe_Setting_on_NCNs.md).
 
-3.  Run the following script to enable a kubernetes scheduling pod priority class for a set of critical pods.
+3.  Run the following script to enable a Kubernetes scheduling pod priority class for a set of critical pods.
 
     ```bash
     ncn-m001# "${CSM_SCRIPTDIR}/add_pod_priority.sh"
@@ -51,7 +51,7 @@ It also requires that the **CSM_SCRIPTDIR variable was previously defined** as p
 
     Refer to the "Platform Health Checks" section in [Validate CSM Health](../../../../../008-CSM-VALIDATION.md) for an overview of the health checks.
 
-    Please note that though the CSM validation document references running the the HealthCheck scripts from /opt/cray/platform-utils, more recent versions of those scripts are referenced in the instructions below.  Please ensure they are run from the location referenced below.
+    Please note that though the CSM validation document references running the the HealthCheck scripts from /opt/cray/platform-utils, more recent versions of those scripts are referenced in the instructions below. Please ensure they are run from the location referenced below.
   
     1.  Run the platform health scripts from ncn-m001:
 
@@ -61,6 +61,8 @@ It also requires that the **CSM_SCRIPTDIR variable was previously defined** as p
         ncn-m001# "${CSM_SCRIPTDIR}/ncnHealthChecks.sh"
         ncn-m001# "${CSM_SCRIPTDIR}/ncnPostgresHealthChecks.sh"
         ```
+
+        **`NOTE`**: If the ncnHealthChecks script output indicates any `kube-multus-ds-` pods are in a `Termininating` state, that can indicate a previous restart of these pods did not complete. In this case, it is safe to force delete these pods in order to let them properly restart by executing the `kubectl delete po -n kube-system kube-multus-ds.. --force` command. After executing this command, re-running the ncnHealthChecks script should indicate a new pod is in a `Running` state.
 
     2.  Check the status of the Kubernetes nodes.
 
@@ -102,7 +104,7 @@ It also requires that the **CSM_SCRIPTDIR variable was previously defined** as p
         ncn-m001# watch -n 10 'ceph -s'
         ```
 
-        This window can be kept up throughout the reboot process to ensure Ceph remains healthy and to watch if Ceph goes into a WARN state when rebooting storage NCNs.  It will be necessary to run it from an ssh session to an NCN that is not the one being rebooted.
+        This window can be kept up throughout the reboot process to ensure Ceph remains healthy and to watch if Ceph goes into a WARN state when rebooting storage NCNs. It will be necessary to run it from an ssh session to an NCN that is not the one being rebooted.
 
     5.  Check the status of the `slurmctld` and `slurmdbd` pods to determine if they are starting:
 

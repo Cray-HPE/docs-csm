@@ -180,6 +180,32 @@ Other health checks may be run as desired.
    ncn-m001# kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r  - '"0.9.5".configuration.import_date'
    ```
 
+<a name="update-uas-uai"></a>
+## Update UAS / UAI
+
+This update includes a new basic UAI image and a new Broker UAI image. The HPE supplied basic UAI image, `cray-uai-sles15sp1:latest` simply needs to be updated by pulling it to the NCN worker nodes and restarting the UAI Kubernetes pods that are using it. The following commands ensure that the updated images are used for non-Broker and Broker UAIs:
+```
+ncn-m001:~ # pdsh -w ncn-w[000-999] crictl pull dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest 2>&1 | grep -v -e "Could not resolve hostname" -e "ssh exited with exit code 255"
+ncn-m001:~ # pdsh -w ncn-w[000-999] crictl pull dtr.dev.cray.com/cray/cray-uai-broker:latest 2>&1 | grep -v -e "Could not resolve hostname" -e "ssh exited with exit code 255"
+```
+If you have any UAIs running, you will want to cause them to restart with the new images. If you get a non-empty list back from:
+```
+cray uas admin uais list
+```
+Then you have UAIs. If you are using Broker UAIs, there will be a mix of Broker and Non-Broker UAIs in the list. If not, you will only have non-Broker UAIs.
+
+The following steps will interrupt any users who are working on UAIs (either through a broker or in legacy mode). To minimize surprise, make sure users are notified that you will be restarting UAIs before proceeding.
+
+To refresh non-Broker UAIs (if you have them):
+```
+ncn-m001:~ # kubectl delete po -n user $(kubectl get po -n user | grep "^uai-" | awk '{ print $1 }')
+```
+To refresh Broker UAIs (if you have them):
+```
+ncn-m001:~ # kubectl delete po -n uas $(kubectl get po -n uas | grep "^uai-" | awk '{ print $1 }')
+```
+
+Finally, this update provides new Compute Node images. If your site uses UAI images built from the Compute Node Image, you will need to [build new images and register the new images with UAS](../../../500-UAS-UAI-ADMIN-AND-USER-GUIDE.md#main-uaiimages-customenduser), then delete and recreate your running UAIs (if any).
 
 <a name="exit-typescript"></a>
 ## Exit Typescript

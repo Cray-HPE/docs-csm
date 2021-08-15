@@ -20,7 +20,7 @@ kernel=/boot/vmlinuz-$version
 set -x
 
 # If this is a master node this file will get in the way as it will make what needs to be a generic initrd specific
-# to this node and that won't work.
+# to this node and that will not work.
 rm -f /etc/dracut.conf.d/05-metal.conf
 
 # Produce a new initrd from the new kernel.
