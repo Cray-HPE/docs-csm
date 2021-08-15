@@ -3,6 +3,7 @@
 # Copyright 2021 Hewlett Packard Enterprise Development LP
 #
 set -e
+set -x 
 BASEDIR=$(dirname $0)
 . ${BASEDIR}/upgrade-state.sh
 trap 'err_report' ERR
@@ -196,12 +197,17 @@ if [[ $state_recorded == "0" ]]; then
     printf "%s" "waiting for cloud-init: $upgrade_ncn ..."
     while ! ssh $upgrade_ncn -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null 'cat /var/log/messages | grep "Cloud-init" | grep "finished"' &> /dev/null
     do
-        ssh_keygen_keyscan "${upgrade_ncn}"
         printf "%c" "."
         sleep 20
     done
     set -e
     printf "\n%s\n"  "$upgrade_ncn finished cloud-init"
+
+    # we ignored ssh host key validation in above step
+    # we should make sure we load key fingerprint now
+    # we can't load it before because we don't know whether
+    # sshd is running or not, and that causes problem
+    ssh_keygen_keyscan "${upgrade_ncn}"
 
     record_state "${state_name}" ${upgrade_ncn}
 else
