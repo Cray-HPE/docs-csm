@@ -11,25 +11,25 @@ This procedure requires administrative privileges.
 The following procedures will require knowing a list of switches that are BGP peers to connect to. You can obtain this 
 list by running the following from an NCN node:
     
-    ```bash
-    ncn-m001# kubectl get cm config -n metallb-system -o yaml | head -12
-    ```
+```bash
+ncn-m001# kubectl get cm config -n metallb-system -o yaml | head -12
+```
     
-    Expected output looks similar to the following:
-    ```
-    apiVersion: v1
-    data:
-      config: |
-        peers:
-        - peer-address: 10.252.0.2
-          peer-asn: 65533
-          my-asn: 65533
-        - peer-address: 10.252.0.3
-          peer-asn: 65533
-          my-asn: 65533
-        address-pools:
-        - name: customer-access
-    ```
+Expected output looks similar to the following:
+```
+apiVersion: v1
+data:
+    config: |
+    peers:
+    - peer-address: 10.252.0.2
+        peer-asn: 65533
+        my-asn: 65533
+    - peer-address: 10.252.0.3
+        peer-asn: 65533
+        my-asn: 65533
+    address-pools:
+    - name: customer-access
+```
 
 The switch IPs are the `peer-address` values. 
 
@@ -128,7 +128,7 @@ The switch IPs are the `peer-address` values.
 
     Once all sessions are in an Established state, BGP reset is complete for the Mellanox switches.
 
-    **Troubleshooting:** If some sessions remain Idle, re-run the Mellanox reset steps to clear and re-check status. If some sessions still remain Idle, proceed to [reapply the cray-metallb helm chart](#reapply), along with the BGP reset, to force the speaker pods to re-establish sessions with the switch.
+    **Troubleshooting:** If some sessions remain Idle, re-run the Mellanox reset steps to clear and re-check status. The `clear ip bgp all` command may need to be be ran multiple times (up to 10 times). In between each clear command wait a few minutes before re-checking the BGP Sessions. If some sessions still remain Idle, proceed to [reapply the cray-metallb helm chart](#reapply), along with the BGP reset, to force the speaker pods to re-establish sessions with the switch.
 
 #### Aruba
 
@@ -204,9 +204,10 @@ The switch IPs are the `peer-address` values.
 
     Once all sessions are in an Established state, BGP reset is complete for the Aruba switches.
 
-    **Troubleshooting:** If some sessions remain Idle, re-run the Aruba reset steps to clear and re-check status. If some sessions still remain Idle, proceed to the next step to reapply the cray-metallb helm chart, along with the BGP reset to force the speaker pods to re-establish sessions with the switch.
+    **Troubleshooting:** If some sessions remain Idle, re-run the Aruba reset steps to clear and re-check status. The `clear bgp *` command may need to be be ran multiple times (up to 10 times). In between each clear command wait a few minutes before re-checking the BGP Sessions. If some sessions still remain Idle, proceed to the next step to reapply the cray-metallb helm chart, along with the BGP reset to force the speaker pods to re-establish sessions with the switch.
 
 <a name="reapply"></a>
+### Troubleshooting
 #### Re-apply the `cray-metallb` Helm Chart
 
 1.  Determine the cray-metallb chart version that is currently deployed.
