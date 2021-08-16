@@ -3,9 +3,7 @@
 Change the passwords for non-compute nodes (NCNs) on the system using the
 `rotate-pw-mgmt-nodes.yml` Ansible playbook provided by CSM.
 
-The NCNs deploy with a default password, which are changed during the system
-install. See [Change NCN Image Root Password and SSH Keys](../change_ncn_image_root_password_and_ssh_keys.md)
-for more information.
+The NCNs deploy with a default password, which are changed during the system install. See [Change NCN Image Root Password and SSH Keys](Change_NCN_Image_Root_Password_and_SSH_Keys.md) for more information.
 
 It is a recommended best practice for system security to change the root
 password after the install is complete.
