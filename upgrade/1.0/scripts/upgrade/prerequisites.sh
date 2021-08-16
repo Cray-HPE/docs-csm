@@ -5,6 +5,7 @@
 set -e
 BASEDIR=$(dirname $0)
 . ${BASEDIR}/upgrade-state.sh
+. ${BASEDIR}/ncn-upgrade-common.sh $(hostname)
 trap 'err_report' ERR
 
 while [[ $# -gt 0 ]]
