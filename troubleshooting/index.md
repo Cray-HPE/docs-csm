@@ -6,6 +6,7 @@ This document provides troubleshooting information for services and functionalit
  * [Known Issues](#known-issues)
     * [Hardware Discovery](#known-issues-hardware-discovery)
     * [initrd.img.xz not found](#initrd-not-found)
+    * [SAT/HSM/CAPMC Component Power State Mismatch](known_issues/component_power_state_mismatch.md)
 
 <a name="known-issues"></a>
 
