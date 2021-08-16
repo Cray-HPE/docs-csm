@@ -309,7 +309,7 @@ sed -i 's/version_full=.*/version_full='"$kernel_version_full"'/g' srv/cray/scri
 sed -i 's/kernel_version=.*/kernel_version='"$kernel_version"'/g' srv/cray/scripts/common/create-kis-artifacts.sh
 # set the local stratum lower so it is not selected over ncn-m001 in most cases
 sed -i 's/^\(  echo "local stratum 3 orphan" >>"$CHRONY_CONF"$\)/  echo "local stratum 10 orphan" >>"$CHRONY_CONF"/' srv/cray/scripts/metal/ntp-upgrade-config.sh
-# if drift > 1s, step the clock on reboot, otherwise, slew it.  Add this line after the logchange line in the script
+# if drift > 1s, step the clock on reboot, otherwise, slew it. Add this line after the logchange line in the script
 sed -i '/^\(  echo "logchange 1.0" >>"$CHRONY_CONF"$\)/a \ \ echo "initstepslew 1 $UPSTREAM_NTP_SERVER" >>"$CHRONY_CONF"' srv/cray/scripts/metal/ntp-upgrade-config.sh
 # remove the unreachable default ntp pools
 rm -f etc/chrony.d/pool.conf

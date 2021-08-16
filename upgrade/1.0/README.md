@@ -153,7 +153,7 @@ Directory location = /etc/cray/ceph/_upgraded
 /etc/cray/ceph/rgws_upgraded
 ```
 
-**`NOTE:`** You can delete all these files and rerun or you can just delete any files from your last step. You may end up with checkpoint files if the upgrade was exited out of by the user.  But if you know you exited out of OSDs and it was not a clean exit, then you would only need remove `osd_upgraded`, `mds_upgraded` and `rgw_upgraded`.
+**`NOTE:`** You can delete all these files and rerun or you can just delete any files from your last step. You may end up with checkpoint files if the upgrade was exited out of by the user. But if you know you exited out of OSDs and it was not a clean exit, then you would only need remove `osd_upgraded`, `mds_upgraded` and `rgw_upgraded`.
 
 1. Start the Ceph upgrade
 

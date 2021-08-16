@@ -151,13 +151,13 @@ FAS will create operations based on the configureation sent through the `actions
 FAS operations will have one of the following states:
 - initial - Operation just created.
 - configured - The operation is configured, but nothing has been started.
-- blocked - Only one operation can be preformed on a node at a time.  If more than one update is required for a xname, operations will be blocked.  This will have a message of "blocked by sibling".
+- blocked - Only one operation can be preformed on a node at a time. If more than one update is required for a xname, operations will be blocked. This will have a message of "blocked by sibling".
 - inProgress - Update is in progress, but not completed.
 - verifying - Waiting for update to complete.
 - failed - An update was attempted, but could FAS is unable to tell that the update successed in the time allowed.
 - noOperation - Firmware is at the correct version according to the images loaded into FAS.
 - noSolution - FAS does not have a sutable image for an update.
-- aborted - the operation was aborted before it could determn if it was successful.  If aborted after the update command was sent to the node, the node may still have updated.
+- aborted - the operation was aborted before it could determn if it was successful. If aborted after the update command was sent to the node, the node may still have updated.
 
 <a name="firmware-images"></a>
 

@@ -235,13 +235,13 @@ Before rebooting NCNs:
        ncn-m# error when evicting pod "<pod>" (will retry after 5s): Cannot evict pod as it would violate the pod's disruption budget.
        ```
 
-       In this case, there are some options.  First, if the service is scalable, you can increase the scale to start up another pod on another node, and then the drain will be able to delete it.  However, it will probably be necessary to force the deletion of the pod:
+       In this case, there are some options. First, if the service is scalable, you can increase the scale to start up another pod on another node, and then the drain will be able to delete it. However, it will probably be necessary to force the deletion of the pod:
 
        ```bash
        ncn-m# kubectl delete pod [-n <namespace>] --force --grace-period=0 <pod>
        ```
 
-       This will delete the offending pod, and Kubernetes should schedule a replacement on another node.  You can then rerun the kubectl drain command, and it should report that the node is drained
+       This will delete the offending pod, and Kubernetes should schedule a replacement on another node. You can then rerun the kubectl drain command, and it should report that the node is drained
 
        ```bash
        ncn-m# kubectl drain --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
@@ -283,7 +283,7 @@ Before rebooting NCNs:
         ncn-m# cray cfs components describe <xname of node being rebooted>
         ```
 
-        The `configurationStatus` should be `configured` when successful.  If in a failed state, refer to the pod logs for `cray-cfs` to determine why the configuration may not have completed. 
+        The `configurationStatus` should be `configured` when successful. If in a failed state, refer to the pod logs for `cray-cfs` to determine why the configuration may not have completed. 
 
     1. Uncordon the node
 
