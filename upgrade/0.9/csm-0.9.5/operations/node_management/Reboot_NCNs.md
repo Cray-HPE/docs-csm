@@ -54,7 +54,7 @@ It also requires that the **CSM_SCRIPTDIR variable was previously defined** as p
 
 4.  Run the platform health checks and analyze the results.
 
-    Refer to the "Platform Health Checks" section in [Validate CSM Health](../../../../../008-CSM-VALIDATION.md) for an overview of the health checks.
+    Refer to the "Platform Health Checks" section in [Validate CSM Health](../../../../../008-CSM-VALIDATION.md#platform-health-checks) for an overview of the health checks.
 
     Please note that though the CSM validation document references running the the HealthCheck scripts from /opt/cray/platform-utils, more recent versions of those scripts are referenced in the instructions below.  Please ensure they are run from the location referenced below.
   
@@ -154,6 +154,8 @@ Before rebooting NCNs:
 
 Reboot each of the NCN storage nodes **one at a time** going from the highest to the lowest number.
 
+   **NOTE:** You are doing a single storage node at a time, so please keep track of what ncn-s0xx you are on for these steps.
+
 1. Establish a console session to the NCN storage node that is going to be rebooted.
     1. Use the `${CSM_SCRIPTDIR}/ncnGetXnames.sh` script to get the xnames for each of the NCNs.
 
@@ -207,6 +209,31 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
 
 4.  Watch on the console until the NCN has successfully booted and the login prompt is reached.
 
+    > If the NCN fails to PXE boot, then it may be necessary to force the NCN to boot from disk.
+    > 
+    > Power off the NCN:
+    > 
+    > ```bash
+    > ncn-m001# hostname=<ncn being rebooted> # Example value: ncn-s003
+    > ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power off
+    > ncn-m001# sleep 10
+    > ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power status
+    > ```
+    > 
+    > Set the boot device for the next boot to disk: 
+    > 
+    > ```bash
+    > ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus chassis bootdev disk
+    > ```
+    > 
+    > Power on the NCN:
+    > 
+    > ```bash
+    > ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power on
+    > ```
+    > 
+    > Continue to watch the console as the NCN boots.
+
 5.  Login to the storage NCN and ensure that the hostname matches what was being reported before the reboot.
 
     ```bash
@@ -224,7 +251,9 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
 
     Follow the procedure outlined above to `Reboot the selected NCN` again and verify the hostname is correctly set, afterward.
 
-6.  Run the platform health checks from the [Validate CSM Health](../../../../../008-CSM-VALIDATION.md#platform-health-checks) procedure.
+6.  Disconnect from the console.
+
+7.  Run the platform health checks from the [Validate CSM Health](../../../../../008-CSM-VALIDATION.md#platform-health-checks) procedure.
 
     Recall that updated copies of the two HealthCheck scripts referenced in the `Platform Health Checks` can be run from here:
 
@@ -232,8 +261,6 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
     ncn-m001# "${CSM_SCRIPTDIR}/ncnHealthChecks.sh"
     ncn-m001# "${CSM_SCRIPTDIR}/ncnPostgresHealthChecks.sh"
     ```
-
-7.  Disconnect from the console.
 
 8.  Repeat all of the sub-steps above for the remaining storage nodes, going from the highest to lowest number until all storage nodes have successfully rebooted.
 
@@ -244,7 +271,7 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
 
 1. Reboot each of the NCN worker nodes **one at a time** going from the highest to the lowest number.
 
-    **NOTE:** You are doing a single worker at a time, so pleae keep track of what ncn-w0xx you are on for these steps.
+    **NOTE:** You are doing a single worker at a time, so please keep track of what ncn-w0xx you are on for these steps.
 
     1.  Failover any postgres leader that is running on the NCN worker node you are rebooting.
 
@@ -329,6 +356,31 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
 
     6.  Watch on the console until the NCN has successfully booted and the login prompt is reached.
 
+        > If the NCN fails to PXE boot, then it may be necessary to force the NCN to boot from disk.
+        > 
+        > Power off the NCN:
+        > 
+        > ```bash
+        > ncn-m001# hostname=<ncn being rebooted> # Example value: ncn-w003
+        > ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power off
+        > ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power status
+        > ```
+        > 
+        > Set the boot device for the next boot to disk: 
+        > 
+        > ```bash
+        > ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus chassis bootdev disk
+        > ```
+        > 
+        > Power on the NCN:
+        > 
+        > ```bash
+        > ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power on
+        > ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power status
+        > ```
+        > 
+        > Continue to watch the console as the NCN boots.
+
     7.  Login to the worker NCN and ensure that the hostname matches what was being reported before the reboot.
 
         ```bash
@@ -344,13 +396,15 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
 
         Follow the procedure outlined above to `Reboot the selected NCN` again and verify the hostname is correctly set, afterward.
 
-    8.  Uncordon the node
+    8.  Disconnect from the console.
+
+    9.  Uncordon the node
 
         ```bash
         ncn-m# kubectl uncordon <node you just rebooted>
         ```
 
-    9.  Run the platform health checks from the [Validate CSM Health](../../../../../008-CSM-VALIDATION.md#platform-health-checks) procedure. The `BGP Peering Status and Reset` procedure can be skipped, as a different procedure in step 12 will be used to verify the BGP peering status.
+    10.  Run the platform health checks from the [Validate CSM Health](../../../../../008-CSM-VALIDATION.md#platform-health-checks) procedure. The `BGP Peering Status and Reset` procedure can be skipped, as a different procedure in step 12 will be used to verify the BGP peering status.
 
         Recall that updated copies of the two HealthCheck scripts referenced in the `Platform Health Checks` can be run from here:
 
@@ -385,17 +439,17 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
         - /var/lib/cni/networks/macvlan-slurmctld-nmn-conf
         - /var/lib/cni/networks/macvlan-slurmdbd-nmn-conf
 
-    10. Disconnect from the console.
-
-    11. Repeat all of the sub-steps above for the remaining worker nodes, going from the highest to lowest number until all worker nodes have successfully rebooted.
-
-    12. Ensure that BGP sessions are reset so that all BGP peering sessions with the spine switches are in an ESTABLISHED state.
+    11. Ensure that BGP sessions are reset so that all BGP peering sessions with the spine switches are in an ESTABLISHED state.
 
         See [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
+
+    12. Repeat all of the sub-steps above for the remaining worker nodes, going from the highest to lowest number until all worker nodes have successfully rebooted.
 
 #### NCN Master Nodes
 
 1. Reboot each of the NCN master nodes **one at a time** **except for ncn-m001** going from the highest to the lowest number.
+
+   **NOTE:** You are doing a single master node at a time, so please keep track of what ncn-s0xx you are on for these steps.
 
     1. Establish a console session to the NCN storage node that is going to be rebooted.
         1. Use the `${CSM_SCRIPTDIR}/ncnGetXnames.sh` script to get the xnames for each of the NCNs.
@@ -450,6 +504,31 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
 
     4.  Watch on the console until the NCN has successfully booted and the login prompt is reached.
 
+        > If the NCN fails to PXE boot, then it may be necessary to force the NCN to boot from disk.
+        > 
+        > Power off the NCN:
+        > 
+        > ```bash
+        > ncn-m001# hostname=<ncn being rebooted> # Example value: ncn-m003
+        > ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power off
+        > ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power status
+        > ```
+        > 
+        > Set the boot device for the next boot to disk: 
+        > 
+        > ```bash
+        > ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus chassis bootdev disk
+        > ```
+        > 
+        > Power on the NCN:
+        > 
+        > ```bash
+        > ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power on
+        > ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power status
+        > ```
+        > 
+        > Continue to watch the console as the NCN boots.
+
     5.  Login to the master NCN and ensure that the hostname matches what was being reported before the reboot.
 
         ```bash
@@ -466,8 +545,9 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
 
         Follow the procedure outlined above to `Reboot the selected NCN` again and verify the hostname is correctly set, afterward.
 
+    6.  Disconnect from the console.
 
-    6.  Run the platform health checks from the [Validate CSM Health](../../../../../008-CSM-VALIDATION.md#platform-health-checks) procedure.
+    7.  Run the platform health checks from the [Validate CSM Health](../../../../../008-CSM-VALIDATION.md#platform-health-checks) procedure. The `BGP Peering Status and Reset` procedure can be skipped, as a different procedure in step 8 will be used to verify the BGP peering status.
 
         Recall that updated copies of the two HealthCheck scripts referenced in the `Platform Health Checks` can be run from here:
 
@@ -476,9 +556,11 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
         ncn-m001# "${CSM_SCRIPTDIR}/ncnPostgresHealthChecks.sh"
         ```
 
-    7.  Disconnect from the console.
+    8. Ensure that BGP sessions are reset so that all BGP peering sessions with the spine switches are in an ESTABLISHED state.
 
-    8.  Repeat all of the sub-steps above for the remaining master nodes \(excluding `ncn-m001`\), going from the highest to lowest number until all master nodes have successfully rebooted.
+        See [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
+
+    9.  Repeat all of the sub-steps above for the remaining master nodes \(excluding `ncn-m001`\), going from the highest to lowest number until all master nodes have successfully rebooted.
 
 2. Reboot `ncn-m001`.
 
@@ -515,7 +597,7 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
         ncn-m001# hostname
         ```
 
-    3.  Reboot `ncn-m001`.
+    4.  Reboot `ncn-m001`.
 
         ```bash
         ncn-m001# shutdown -r now
@@ -536,15 +618,40 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
         To power back on the node:
 
         ```bash
-        ncn-m001# ipmitool -U root -P PASSWORD -H ${SYSTEM_NAME}-ncn-m001-mgmt -I lanplus power on
-        ncn-m001# ipmitool -U root -P PASSWORD -H ${SYSTEM_NAME}-ncn-m001-mgmt -I lanplus power status
+        external# ipmitool -U root -P PASSWORD -H ${SYSTEM_NAME}-ncn-m001-mgmt -I lanplus power on
+        external# ipmitool -U root -P PASSWORD -H ${SYSTEM_NAME}-ncn-m001-mgmt -I lanplus power status
         ```
 
         Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
 
-    4.  Watch on the console until the NCN has successfully booted and the login prompt is reached.
+    5.  Watch on the console until the NCN has successfully booted and the login prompt is reached.
 
-    5.  Login to `ncn-m001` and ensure that the hostname matches what was being reported before the reboot.
+        > If the NCN fails to PXE boot, then it may be necessary to force the NCN to boot from disk.
+        > 
+        > Power off the NCN:
+        > 
+        > ```bash
+        > external# SYSTEM_NAME=eniac
+        > external# ipmitool -U root -P PASSWORD -H ${SYSTEM_NAME}-ncn-m001-mgmt -I lanplus power off
+        > external# ipmitool -U root -P PASSWORD -H ${SYSTEM_NAME}-ncn-m001-mgmt -I lanplus power status
+        > ```
+        > 
+        > Set the boot device for the next boot to disk: 
+        > 
+        > ```bash
+        > external# ipmitool -U root -P PASSWORD -H ${SYSTEM_NAME}-ncn-m001-mgmt -I lanpluschassis bootdev disk
+        > ```
+        > 
+        > Power on the NCN:
+        > 
+        > ```bash
+        > external# ipmitool -U root -P PASSWORD -H ${SYSTEM_NAME}-ncn-m001-mgmt -I lanplus power on
+        > external# ipmitool -U root -P PASSWORD -H ${SYSTEM_NAME}-ncn-m001-mgmt -I lanplus power status
+        > ```
+        > 
+        > Continue to watch the console as the NCN boots.
+
+    6.  Login to `ncn-m001` and ensure that the hostname matches what was being reported before the reboot.
 
         ```bash
         ncn-m001# hostname
@@ -560,13 +667,15 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
 
         Follow the procedure outlined above to `Power cycle the node` again and verify the hostname is correctly set, afterward.
 
-    7. Set `CSM_SCRIPTDIR` to the scripts directory included in the docs-csm RPM for the CSM 0.9.5 patch:
+    7.  Disconnect from the console.
+
+    8. Set `CSM_SCRIPTDIR` to the scripts directory included in the docs-csm RPM for the CSM 0.9.5 patch:
 
         ```bash
         ncn-m001# export CSM_SCRIPTDIR=/usr/share/doc/metal/upgrade/0.9/csm-0.9.5/scripts
         ```
 
-    6.  Run the platform health checks from the [Validate CSM Health](../../../../../008-CSM-VALIDATION.md#platform-health-checks) procedure.
+    9.  Run the platform health checks from the [Validate CSM Health](../../../../../008-CSM-VALIDATION.md#platform-health-checks) procedure. The `BGP Peering Status and Reset` procedure can be skipped, as a different procedure in the next step step 10 will be used to verify the BGP peering status.
 
         Recall that updated copies of the two HealthCheck scripts referenced in the `Platform Health Checks` can be run from here:
 
@@ -575,17 +684,6 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
         ncn-m001# "${CSM_SCRIPTDIR}/ncnPostgresHealthChecks.sh"
         ```
 
-    7.  Disconnect from the console.
+    10. Ensure that BGP sessions are reset so that all BGP peering sessions with the spine switches are in an ESTABLISHED state.
 
-3.  Re-run the platform health checks and ensure that all BGP peering sessions are Established with both spine switches.
-
-    See [Validate CSM Health](../../../../../008-CSM-VALIDATION.md#platform-health-checks) for the section titled `Platform Health Checks.`
-
-    Recall that updated copies of the two HealthCheck scripts referenced in the `Platform Health Checks` can be run from here:
-
-    ```bash
-    ncn-m001# "${CSM_SCRIPTDIR}/ncnHealthChecks.sh"
-    ncn-m001# "${CSM_SCRIPTDIR}/ncnPostgresHealthChecks.sh"
-    ```
-
-    See [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md) to check the BGP peering sessions.
+        See [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
