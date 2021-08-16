@@ -17,4 +17,5 @@ The following administrative procedures are needed to operate Nexus.
 -   [Nexus Deployment](Nexus_Deployment.md)
 -   [Restrict Admin Privileges in Nexus](Restrict_Admin_Privileges_in_Nexus.md)
 -   [Repair Yum Repository Metadata](Repair_Yum_Repository_Metadata.md)
+-   [Troubleshoot Nexus](Troubleshoot_Nexus.md)
 
