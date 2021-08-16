@@ -404,7 +404,7 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
         ncn-m# kubectl uncordon <node you just rebooted>
         ```
 
-    10.  Run the platform health checks from the [Validate CSM Health](../../../../../008-CSM-VALIDATION.md#platform-health-checks) procedure. The `BGP Peering Status and Reset` procedure can be skipped, as a different procedure in step 12 will be used to verify the BGP peering status.
+    10. Run the platform health checks from the [Validate CSM Health](../../../../../008-CSM-VALIDATION.md#platform-health-checks) procedure. The `BGP Peering Status and Reset` procedure can be skipped, as a different procedure in step 12 will be used to verify the BGP peering status.
 
         Recall that updated copies of the two HealthCheck scripts referenced in the `Platform Health Checks` can be run from here:
 
@@ -412,7 +412,7 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
         ncn-m001# "${CSM_SCRIPTDIR}/ncnHealthChecks.sh"
         ncn-m001# "${CSM_SCRIPTDIR}/ncnPostgresHealthChecks.sh"
         ```
-       
+    
         Verify that the `Check if any "alarms" are set for any of the Etcd Clusters in the Services Namespace.` check from the ncnHealthChecks.sh script reports no alarms set for any of the etcd pods. If an alarm similar to is reported, then wait a few minutes for the alarm to clear and try the ncnHealthChecks.sh script again.
         ```json
         {"level":"warn","ts":"2021-08-11T15:43:36.486Z","caller":"clientv3/retry_interceptor.go:62","msg":"retrying of unary invoker failed","target":"endpoint://client-4d8f7712-2c91-4096-bbbe-fe2853cd6959/127.0.0.1:2379","attempt":0,"error":"rpc error: code = DeadlineExceeded desc = context deadline exceeded"}
@@ -435,9 +435,8 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
         ```
 
         Remove the following files on every worker node to resolve the failure:
-
-        - /var/lib/cni/networks/macvlan-slurmctld-nmn-conf
-        - /var/lib/cni/networks/macvlan-slurmdbd-nmn-conf
+          - /var/lib/cni/networks/macvlan-slurmctld-nmn-conf
+          - /var/lib/cni/networks/macvlan-slurmdbd-nmn-conf
 
     11. Ensure that BGP sessions are reset so that all BGP peering sessions with the spine switches are in an ESTABLISHED state.
 
