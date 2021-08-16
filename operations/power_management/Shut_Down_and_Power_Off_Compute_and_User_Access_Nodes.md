@@ -6,7 +6,7 @@ Shut down and power off compute and user access nodes \(UANs\). This procedure p
 
 ### Prerequisites
 
-An authentication token is required to access the API gateway and to use the `sat` command. See the [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md) and "SAT Authentication" in the SAT repository for more information.
+The `cray` and `sat` commands must be initialized and authenticated with valid credentials for Keycloak. If these have not been prepared, then see [Configure the Cray Command Line Interface (cray CLI)](../configure_cray_cli.md) and refer to "SAT Authentication" in the System Admin Toolkit (SAT) product documentation.
 
 ### Procedure
 
