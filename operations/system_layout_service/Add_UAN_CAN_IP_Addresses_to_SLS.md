@@ -30,16 +30,28 @@ This procedure requires administrative privileges.
     This subsection is located under the CAN Bootstrap DHCP Subnet section. The IP address reservations array needs to be added in the following JSON format:
 
     ```json
-           {
-             "Aliases": [
-               "uan10000-can"
-             ],
-             "IPAddress": "10.103.13.222",
-             "Name": "uan10000"
-           }
+          {
+            "Comment": "x3000c0s23b0n0",
+            "IPAddress": "10.103.2.20",
+            "Name": "uan01"
+          },
     ```
 
-    `-can` needs to be added to the hostname for the Aliases value, and the hostname belongs in the Name value.
+    If multiple alias are required, the JSON format would be:
+
+    ```json
+          {
+            "Aliases": [
+              "uan01-can",
+              "uan01-slurm"
+            ],
+            "Comment": "x3000c0s23b0n0",
+            "IPAddress": "10.103.2.20",
+            "Name": "uan01"
+          },
+    ```
+
+    IMPORTANT: There must be an alias or name defined in a format that matches the hostname of the UAN. This is required by the CFS play uan_interfaces that configures the CAN interface on UANs. If the CAN is not being configured for a particular UAN, then this requirement is not needed.
 
 3.  Upload the updated CAN.json file to SLS.
 
@@ -56,18 +68,19 @@ This procedure requires administrative privileges.
     For example:
 
     ```bash
-    ncn-m001# nslookup uan10000-can 10.92.100.225
-    Server:     10.92.100.225
-    Address:    10.92.100.225#53
+    ncn-m001:~ # nslookup uan01.can
+    Server:	10.92.100.225
+    Address:	10.92.100.225#53
     
-    Name:   uan10000-can
-    Address: 10.103.13.222
+    Name:	uan01.can
+    Address: 10.103.2.24
     
-    ncn-m001# nslookup uan10000.can 10.92.100.225
-    Server:     10.92.100.225
-    Address:    10.92.100.225#53
-    
-    Name:   uan10000.can
-    Address: 10.103.13.222
+    ncn-m001:~ # nslookup uan01-can.can
+    Server:	10.92.100.225
+    Address:	10.92.100.225#53
+
+    Name:	uan01-can.can
+    Address: 10.103.2.24
     ```
 
+    As stated above, the UAN play uan_interfaces will attempt to nslookup the hostname of the node with with ".can" appended. Make sure this alias resolves if the CAN is going to be configured on that particular UAN. In certain upgrade scenarios, the expected alias may not have been added by default.
