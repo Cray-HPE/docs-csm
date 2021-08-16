@@ -509,14 +509,14 @@ Run the HMS smoke tests.
 ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resources.sh
 ```
 
-Examine the output. If one or more failures occur, investigate the cause of each failure. See the [interpreting_hms_health_check_results](https://stash.us.cray.com/projects/CSM/repos/docs-csm/browse/troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
+Examine the output. If one or more failures occur, investigate the cause of each failure. See the [interpreting_hms_health_check_results](../troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
 
 Otherwise, run the HMS functional tests.
 ```
 ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-resources.sh
 ```
 
-Examine the output. If one or more failures occur, investigate the cause of each failure. See the [interpreting_hms_health_check_results](https://stash.us.cray.com/projects/CSM/repos/docs-csm/browse/troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
+Examine the output. If one or more failures occur, investigate the cause of each failure. See the [interpreting_hms_health_check_results](../troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
 
 <a name="hms-smd-discovery-validation"></a>
 ### 2.2 Hardware State Manager Discovery Validation
@@ -914,12 +914,13 @@ The following procedures run on separate nodes of the system. They are, therefor
 <a name="uas-uai-validate-install"></a>
 #### 5.2.1 Validate the Basic UAS Installation
 
-This section requires commands to be run on the LiveCD node, and the user must be initialized and authorized for the CLI as described above.
+This section requires commands to be run on a booted NCN, and the user must be initialized and authorized for the CLI as described above.
+> If the cray CLI was initialized on the LiveCD PIT node, then the following commands will also work on the PIT node.
 
 1. Basic UAS installation is validated using the following:
    1. 
       ```bash
-      pit# cray uas mgr-info list
+      ncn# cray uas mgr-info list
       ```
 
       Expected output looks similar to the following:
@@ -931,7 +932,7 @@ This section requires commands to be run on the LiveCD node, and the user must b
       In this example output, it shows that UAS is installed and running the `1.11.5` version.
    1.
       ```bash
-      pit# cray uas list
+      ncn# cray uas list
       ```
       
       Expected output looks similar to the following:
@@ -942,7 +943,7 @@ This section requires commands to be run on the LiveCD node, and the user must b
      This example output shows that there are no currently running UAIs. It is possible, if someone else has been using the UAS, that there could be UAIs in the list. That is acceptable too from a validation standpoint.
 1. Verify that the pre-made UAI images are registered with UAS
    ```bash
-   pit# cray uas images list
+   ncn# cray uas images list
    ```
    
    Expected output looks similar to the following:
@@ -1183,7 +1184,7 @@ Various packages install volumes in the UAS configuration. All of those volumes 
 2. Investigate the problem using the pod name from the previous step.
 
    ```bash
-   ncn# kubectl describe -n user <pod-name>
+   ncn# kubectl describe pod -n user <pod-name>
    ```
 
    If volumes are missing they will show up in the `Events:` section of the output. Other problems may show up there as well. The names of the missing volumes or other issues should indicate what needs to be fixed to make the UAI run.
