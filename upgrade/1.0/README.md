@@ -369,89 +369,13 @@ NOTE: 	The nae-upload script automatically detects 8325’s and only applies the
 #### How to run the install script: 
 
 **Step 1:** 
-
-> ncn-m001”:~ # ./docs-csm/upgrade/1.0/scripts/aruba/nae_upload.py
-
-**step 2:**
-
-> Type in your switch password and the script will upload and enable the NAE script. 
-
-### Stage 5. - Workaround for known mac-learning issue with 8325. 
-
-
-#### Issue description
-
-> **Aruba CR:**          90598
->
-> **Affected platform:** 8325
->
->**Symptom:**           MAC learning stops.
->
->**Scenario:**          Under extremely rare DMA stress conditions, anL2 learning thread may timeout and exit preventing future MAC learning.
->
->**Workaround:**        Reboot the switch or monitor the L2 thread and restart it with an NAE script
->
->**Fixed in:**	       10.06.0130, 10.7.0010 and above. 
->
->[Aruba release notes](https://asp.arubanetworks.com/downloads;products=Aruba%20Switches;productSeries=Aruba%208325%20Switch%20Series) 
-
-#### To fix the issue without upgrading software:
-
-	You can run a NAE script on the 8325 platform switches to resolve mac learning issue.
-
-#### The file locations in doc-csm
-
-	- The NAE script (L2X-Watchdog-creates-bash-script.py) is located at: ../docs-csm/upgrade/1.0/scripts/aruba
-	- Automatic NAE install script (nae_upload.py) is located at: ../docs-csm/upgrade/1.0/scripts/aruba
-
-### Automated install of NAE script 
-
-#### Prerequisites: 
-
-1. The nae-upload.py script relies on /etc/hosts file to pull IP addresses of the switch. Without this information the script won’t run.
-2. You have 8325 in your setup that is running software version below 10.06.0130. 
-3. Script assumes you  are using default username "admin"  for the switch and it will prompt you for password. 
-
-NOTE: 	The nae-upload script automatically detects 8325’s and only applies the fix to this platform.
-
-#### How to run the install script: 
-
-**Step 1:** 
-
-> ncn-m001”:~ # ./docs-csm/upgrade/1.0/scripts/aruba/nae_upload.py
-
-**step 2:**
-
-> Type in your switch password and the script will upload and enable the NAE script. 
-
-## Troubleshooting and Recovering from Errors During or After Upgrade
-
-### Rerun a step/script
-
-When running upgrade scripts, each script record what has been done successfully on a node. This `state` file is stored at `/ect/cray/upgrade/csm/{CSM_VERSION}/{NAME_OF_NODE}/state`. If a rerun is required, you will need to remove the recorded steps from this file.
-
-Here is an example of state file of `ncn-m001`:
-
-```bash
-ncn-m001:~ # cat /etc/cray/upgrade/csm/{CSM_VERSION}/ncn-m001/state
-[2021-07-22 20:05:27] UNTAR_CSM_TARBALL_FILE
-[2021-07-22 20:05:30] INSTALL_CSI
-[2021-07-22 20:05:30] INSTALL_WAR_DOC
-[2021-07-22 20:13:15] SETUP_NEXUS
-[2021-07-22 20:13:16] UPGRADE_BSS <=== Remove this line if you want to rerun this step
-[2021-07-22 20:16:30] CHECK_CLOUD_INIT_PREREQ
-[2021-07-22 20:19:17] APPLY_POD_PRIORITY
-[2021-07-22 20:19:38] UPDATE_BSS_CLOUD_INIT_RECORDS
-[2021-07-22 20:19:38] UPDATE_CRAY_DHCP_KEA_TRAFFIC_POLICY
-[2021-07-22 20:21:03] UPLOAD_NEW_NCN_IMAGE
-[2021-07-22 20:21:03] EXPORT_GLOBAL_ENV
-[2021-07-22 20:50:36] PREFLIGHT_CHECK
-[2021-07-22 20:50:38] UNINSTALL_CONMAN
-[2021-07-22 20:58:39] INSTALL_NEW_CONSOLE
+```
+ncn-m002:~ # /usr/share/doc/csm/upgrade/1.0/scripts/aruba/nae_upload.py
 ```
 
-* See the inline comment above on how to rerun a single step
-* If you need to rerun the whole upgrade of a node, you can just delete the state file 
+**step 2:**
+
+> Type in your switch password and the script will upload and enable the NAE script. 
 
 ### General Kubernetes Commands for Troubleshooting
 
