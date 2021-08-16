@@ -147,11 +147,11 @@ Example hmn_connections.json row representing an application node with SourceNam
     ```yaml
     ---
     # Additional application node prefixes to match in the hmn_connections.json file
-    prefix_hsm_subroles:
-      login: UAN
-      lnet: LNETRouter
-      gateway: Gateway
-      vn: Visualization
+    prefixes:
+      - gateway
+      - login
+      - lnet
+      - vn
     
     # Additional HSM SubRoles
     prefix_hsm_subroles:
