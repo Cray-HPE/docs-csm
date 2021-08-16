@@ -13,6 +13,27 @@
 # NCN node is rebooted.
 #
 
+function get_token() {
+  cnt=0
+  TOKEN=""
+  endpoint="https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token"
+  client_secret=$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d)
+  while [ "$TOKEN" == "" ]; do
+    cnt=$((cnt+1))
+    TOKEN=$(curl -k -s -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=$client_secret $endpoint)
+    if [[ "$TOKEN" == *"error"* ]]; then
+      TOKEN=""
+      if [ "$cnt" -eq 5 ]; then
+        break
+      fi
+    else
+      TOKEN=$(echo $TOKEN | jq -r '.access_token')
+      break
+    fi
+  done
+  echo $TOKEN
+}
+
 echo "             +++++ Get NCN Xnames +++++"
 echo "=== Can be executed on any worker or master NCN node. ==="
 hostName=$(hostname)
@@ -48,7 +69,7 @@ echo "=== NCN Master nodes: ${mNcnNodes}==="
 echo "=== NCN Worker nodes: ${wNcnNodes}==="
 echo "=== NCN Storage nodes: $sNcnNodes ==="
 # Get token:
-export TOKEN=$(curl -k -s -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+export TOKEN=$(get_token)
 if [[ -z $TOKEN ]]
 then
     echo "Failed to get token, skipping metal.no-wipe checks. "
