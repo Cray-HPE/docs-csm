@@ -624,12 +624,6 @@ If one or more checks failed:
         1
         ```
 
-```bash
-ncn# /usr/local/bin/cmsdev test -q all
-```
-
-The final line of output will state `SUCCESS` or `FAILURE`. In the case of success, it will exit with return code 0. Otherwise it will exit with non-0 return code.
-
 Additional test execution details can be found in `/opt/cray/tests/cmsdev.log`.
 
 <a name="booting-csm-barebones-image"></a>
