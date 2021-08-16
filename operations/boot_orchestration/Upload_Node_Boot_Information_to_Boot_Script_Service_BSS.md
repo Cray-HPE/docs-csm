@@ -3,10 +3,10 @@
 
 The following information must be uploaded to BSS as a prerequisite to booting a node via iPXE:
 
--   the location of an initrd image in the artifact repository
--   the location of a kernel image in the artifact repository
--   kernel boot parameters
--   which node\(s\) are associated with that information, using either host name or NID
+-   The location of an initrd image in the artifact repository
+-   The location of a kernel image in the artifact repository
+-   Kernel boot parameters
+-   The node(s) associated with that information, using either host name or NID
 
 BSS manages the iPXE boot scripts that coordinate the boot process for nodes, and it enables basic association of boot scripts with nodes. The boot scripts supply a booting node with a pointer to the necessary images \(kernel and initrd\) and a set of boot-time parameters.
 
@@ -27,10 +27,11 @@ Because the parameters that must be specified in the PUT command are lengthy, th
     -   `INITRD` = the download URL of the initrd image artifact that was uploaded to S3, which is in the s3://s3\_BUCKET/S3\_OBJECT\_KEY/initrd format.
     -   `PARAMS` = the boot kernel parameters.
 
-        **Important:** The PARAMS line must always include the substring `crashkernel=360M`. This enables node dumps, which are needed to troubleshoot node crashes.
+        **IMPORTANT:** The PARAMS line must always include the substring `crashkernel=360M`. This enables node dumps, which are needed to troubleshoot node crashes.
 
     -   `NIDS` = a list of node IDs of the nodes to be booted.
     -   `HOSTS` = a list of strings identifying by host name the nodes to be booted.
+    
     The following script is generic. A script with specific values is below this one.
 
     ```
@@ -88,29 +89,29 @@ Because the parameters that must be specified in the PUT command are lengthy, th
 
 4.  Confirm that the information has been uploaded to BSS.
 
-    If nodes identified by host name:
+    - If nodes identified by host name:
 
-    ```bash
-    localhost# cray bss bootparameters list --hosts HOST_NAME
-    ```
+        ```bash
+        localhost# cray bss bootparameters list --hosts HOST_NAME
+        ```
 
-    For example:
+        For example:
 
-    ```bash
-    localhost# cray bss bootparameters list --hosts Default
-    ```
+        ```bash
+        localhost# cray bss bootparameters list --hosts Default
+        ```
 
-    If nodes identified by NID:
+    - If nodes identified by NID:
 
-    ```bash
-    localhost# cray bss bootparameters list --nids NODE_ID
-    ```
+        ```bash
+        localhost# cray bss bootparameters list --nids NODE_ID
+        ```
 
-    For example:
+        For example:
 
-    ```bash
-    localhost# cray bss bootparameters list --nids 1
-    ```
+        ```bash
+        localhost# cray bss bootparameters list --nids 1
+        ```
 
 5.  View entire contents of BSS, if desired.
 

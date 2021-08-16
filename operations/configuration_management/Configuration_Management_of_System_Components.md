@@ -1,6 +1,6 @@
 ## Configuration Management of System Components
 
-The configuration of individual system components is managed with the cray cfs components command. The Configuration Framework Service \(CFS\) contains a database of the configuration state of available hardware known to the Hardware State Manager \(HSM\). When new nodes are added to the HSM database, a CFS Hardware Sync Agent enters the component into the CFS database with a null state of configuration.
+The configuration of individual system components is managed with the `cray cfs components` command. The Configuration Framework Service \(CFS\) contains a database of the configuration state of available hardware known to the Hardware State Manager \(HSM\). When new nodes are added to the HSM database, a CFS Hardware Sync Agent enters the component into the CFS database with a null state of configuration.
 
 Administrators are able to set a desired CFS configuration for each component, and the CFS Batcher ensures the desired configuration state and the current configuration state match.
 
@@ -19,7 +19,7 @@ There are several situations that will cause automatic configuration:
 
 ### View Component Configuration
 
-Configuration status of a given component \(using the xname\) is available through the cray cfs components describe command. The following fields are provided to determine the status and state of the component:
+Configuration status of a given component \(using the xname\) is available through the `cray cfs components describe` command. The following fields are provided to determine the status and state of the component:
 
 -   **configurationStatus**
 
@@ -51,7 +51,7 @@ Configuration status of a given component \(using the xname\) is available throu
     The list of configuration layers that have been applied to the component from the desiredConfig.
 
 
-To view the configuration state of a given component, use the describe command for a given xname:
+To view the configuration state of a given component, use the `describe` command for a given xname:
 
 ```bash
 ncn# cray cfs components describe XNAME --format json
@@ -119,13 +119,13 @@ If a playbook exits early because of the Ansible any\_errors\_fatal setting, CFS
 
 ### Force Component Reconfiguration
 
-To force a component which has a specific desiredConfig to a different configuration, use the \`update\` subcommand to change the configuration:
+To force a component which has a specific desiredConfig to a different configuration, use the `update` subcommand to change the configuration:
 
 ```bash
 # cray cfs components update XNAME --desired-config new-config
 ```
 
-**Important:** Ensure that the new configuration has been created with the cray cfs configurations update new-config command before assigning the configuration to any components.
+**IMPORTANT:** Ensure that the new configuration has been created with the `cray cfs configurations update new-config` command before assigning the configuration to any components.
 
 To force a component to retry its configuration again after it failed, change the errorCount to less than the retryPolicy, or raise the retryPolicy. If the errorCount has not reached the retry limit, CFS will automatically keep attempting the configuration and no action is required.
 
@@ -135,14 +135,14 @@ To force a component to retry its configuration again after it failed, change th
 
 ### Disable Component Configuration
 
-To disable CFS configuration of a component, use the --enabled option:
+To disable CFS configuration of a component, use the `--enabled` option:
 
-**Warning:** When a node reboots and the state-reporter reports in to CFS, it will automatically enable configuration. The following command only disables configuration until a node reboots.
+**WARNING:** When a node reboots and the state-reporter reports in to CFS, it will automatically enable configuration. The following command only disables configuration until a node reboots.
 
 ```bash
 # cray cfs components update XNAME --enabled false
 ```
 
-Use --enabled true to re-enable the component.
+Use `--enabled true` to re-enable the component.
 
 

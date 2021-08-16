@@ -66,7 +66,7 @@ The following are the CFS global options:
     See [Configuration Management of System Components](Configuration_Management_of_System_Components.md) for more information.
 
 
-The default values for all CFS global options can be modified with the cray cfs options update command.
+The default values for all CFS global options can be modified with the `cray cfs options update` command.
 
 
 

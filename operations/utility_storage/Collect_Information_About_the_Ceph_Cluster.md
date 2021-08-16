@@ -6,13 +6,13 @@ As a reference, the Ceph commands below are run from a ceph-mon node. Certain co
 
 ## Ceph Log and File Locations
 
-- Ceph configurations are located under /etc/ceph/ceph.conf.
+- Ceph configurations are located under /etc/ceph/ceph.conf
 - Ceph data structure and bootstrap is located under /var/lib/ceph/<fsid>/
-- Ceph logs are now accessible by a couple of different methods.
-  - utilizing cephadm ls to retrieve the systemd_unit on the node for the process, then utilize journalctl to dump the logs
-  - ceph log last [<num:int>] [debug|info|sec|warn|error] [*|cluster|audit|cephadm]
-    - note that that this will dump general cluster logs
-  - cephadm logs [-h] [--fsid FSID] --name <systemd_unit>
+- Ceph logs are now accessible by a couple of different methods
+  - Utilizing `cephadm ls` to retrieve the systemd_unit on the node for the process, then utilize `journalctl` to dump the logs
+  - `ceph log last [<num:int>] [debug|info|sec|warn|error] [*|cluster|audit|cephadm]`
+    - Note that that this will dump general cluster logs
+  - `cephadm logs [-h] [--fsid FSID] --name <systemd_unit>`
 
 ## Check the Status of Ceph
 

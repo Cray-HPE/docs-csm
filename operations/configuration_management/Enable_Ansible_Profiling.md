@@ -1,6 +1,6 @@
 ## Enable Ansible Profiling
 
-Ansible tasks and playbooks can be profiled in order to determine execution times and single out poor performance in runtime. The default Configuration Framework Service \(CFS\) ansible.cfg in the cfs-default-ansible-cfg ConfigMap does not enable these profiling tools. However, should profiling be desired, the default Ansible configuration file can be easily modified to enable them.
+Ansible tasks and playbooks can be profiled in order to determine execution times and single out poor performance in runtime. The default Configuration Framework Service \(CFS\) ansible.cfg in the cfs-default-ansible-cfg ConfigMap does not enable these profiling tools. If profiling tools are desired, modify the default Ansible configuration file to enable them.
 
 ### Procedure
 

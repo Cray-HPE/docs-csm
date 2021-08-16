@@ -9,7 +9,7 @@ The CFS-Batcher schedules CFS sessions according to the following rules:
     -   A new batch is created if no partial batches match the desired state, and all similar batches are full.
 
 -   Batches are scheduled as CFS sessions when the batch is full or the batch window time has been exceeded.
-    -   The timer for the batch window is started when the first component is added, and is never reset. Nodes should never wait more than the window period between being ready for configuration and being scheduled in a CFS session
+    -   The timer for the batch window is started when the first component is added, and is never reset. Nodes should never wait more than the window period between being ready for configuration and being scheduled in a CFS session.
 
 -   CFS cannot guarantee that jobs for similar batches will start at the same time, even if all CFS sessions are created at the same time. This variability is due to the nature of Kubernetes scheduling.
     -   Checking the start time for the CFS session is more accurate than checking the pod start time when determining when a batch was scheduled.
@@ -37,7 +37,7 @@ batcherCheckInterval = 10
 defaultBatcherRetryPolicy = 3
 ```
 
-See [CFS Global Options](CFS_Global_Options.md) for more information. Use the cray cfs options update command to change these values as needed.
+See [CFS Global Options](CFS_Global_Options.md) for more information. Use the `cray cfs options update` command to change these values as needed.
 
 Review the following information about CFS Batcher options before changing the defaults. Setting these to non-optimal values may affect system performance. The optimal values will depend on system size and the specifics of the configuration layers that will be applied in the sessions created by CFS Batcher.
 
@@ -47,7 +47,7 @@ Review the following information about CFS Batcher options before changing the d
 
     The default value is 25 components per session.
 
-    **Warning:** Increasing this value will result in fewer batcher-created sessions, but will also require more resources for Ansible Execution Environment \(AEE\) containers to do the configuration.
+    **WARNING:** Increasing this value will result in fewer batcher-created sessions, but will also require more resources for Ansible Execution Environment \(AEE\) containers to do the configuration.
 
 
 -   **batchWindow**
@@ -56,7 +56,7 @@ Review the following information about CFS Batcher options before changing the d
 
     The default value is 60 seconds.
 
-    **Warning:** Lower values will cause CFS Batcher to be more responsive to creating sessions, but values too low may result in degraded performance of both the CFS APIs as well as the overall system.
+    **WARNING:** Lower values will cause CFS Batcher to be more responsive to creating sessions, but values too low may result in degraded performance of both the CFS APIs as well as the overall system.
 
 
 -   **batcherCheckInterval**
@@ -65,7 +65,7 @@ Review the following information about CFS Batcher options before changing the d
 
     The default value is 10 seconds.
 
-    **Warning:** Lower values will cause CFS Batcher to be more responsive to creating sessions, but values too low may result in degraded performance of the CFS APIs on larger systems.
+    **WARNING:** Lower values will cause CFS Batcher to be more responsive to creating sessions, but values too low may result in degraded performance of the CFS APIs on larger systems.
 
 
 -   **defaultBatcherRetryPolicy**
@@ -77,19 +77,19 @@ Review the following information about CFS Batcher options before changing the d
 
 ### List CFS Batcher Sessions
 
-The CFS Batcher prepends all CFS session names it creates with `batcher-`. Sessions that have be created by CFS Batcher are found by using the following command with the --name-contains option:
+The CFS Batcher prepends all CFS session names it creates with `batcher-`. Sessions that have be created by CFS Batcher are found by using the following command with the `--name-contains` option:
 
 ```bash
 # cray cfs sessions list --name-contains batcher-
 ```
 
-To list the batcher sessions that are currently running, filter with the cray cfs sessions list command options:
+To list the batcher sessions that are currently running, filter with the `cray cfs sessions list` command options:
 
 ```bash
 # cray cfs sessions list --name-contains batcher- --status running
 ```
 
-Use the cray cfs sessions list --help command output for all filtering options, including session age, tags, status, and success.
+Use the `cray cfs sessions list --help` command output for all filtering options, including session age, tags, status, and success.
 
 ### Map CFS Batcher Sessions to BOS Sessions
 

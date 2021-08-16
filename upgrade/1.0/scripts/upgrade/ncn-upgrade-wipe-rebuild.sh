@@ -12,7 +12,7 @@ upgrade_ncn=$1
 
 echo " ****** DATA LOSS ON ${upgrade_ncn} - FRESH OS INSTALL UPON REBOOT ******"
 echo " ****** BACKUP DATA ON ${upgrade_ncn} TO USB OR OTHER SAFE LOCATION ******"
-echo " ****** DATA MANAGED BY K8S/CEPH WILL BE BACKED UP/RESTORED AUTOMATATICALLY ******"
+echo " ****** DATA MANAGED BY K8S/CEPH WILL BE BACKED UP/RESTORED AUTOMATICALLY ******"
 read -p "Read and act on above steps. Press Enter key to continue ..."
 # Record this state locally instead of using is_state_recorded(),
 # because it does not hurt to re-do the ssh keys, and it is the
@@ -215,7 +215,7 @@ if [[ $state_recorded == "0" ]]; then
         printf "%c" "."
         sleep 20
     done
-    # Reestore set -e
+    # Restore set -e
     set -e
     printf "\n%s\n"  "$upgrade_ncn finished cloud-init"
 

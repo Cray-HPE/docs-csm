@@ -162,7 +162,7 @@ This procedure requires administrative privileges.
     cray-tftp-shared-pvc Bound pvc-315d08b0-4d00-11ea-ad9d-b42e993b7096 5Gi RWX ceph-cephfs-external 29m
     ```
 
-    Optional: Use the command below to delete the associated PVC.
+    *Optional:* Use the command below to delete the associated PVC.
 
     ```bash
     ncn-m001# kubectl -n services delete pvc PVC_NAME

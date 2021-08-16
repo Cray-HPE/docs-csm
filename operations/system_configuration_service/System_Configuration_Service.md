@@ -6,7 +6,7 @@ The following are the parameters that most commonly must be set:
 
 -   SSH keys
 
-    **Important:** If the scsd tool is used to update the SSHConsoleKey value outside of ConMan, it will disrupt the ConMan connection to the console and collection of console logs. Refer to [ConMan](../conman/ConMan.md)
+    **IMPORTANT:** If the scsd tool is used to update the SSHConsoleKey value outside of ConMan, it will disrupt the ConMan connection to the console and collection of console logs. Refer to [ConMan](../conman/ConMan.md) for more information.
 
 -   NTP server
 -   Syslog server

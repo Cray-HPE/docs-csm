@@ -29,12 +29,12 @@ These services must be healthy in Kubernetes before the reboot of the LiveCD can
 
 Required Platform Services:
 
+   * Utility Storage (Ceph)
    * cray-bss
    * cray-dhcp-kea
    * cray-dns-unbound
    * cray-ipxe
    * cray-sls
-   * cray-s3
    * cray-tftp
 
 <a name="notice-of-danger"></a>

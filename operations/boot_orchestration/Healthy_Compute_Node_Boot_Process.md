@@ -1,7 +1,7 @@
 
 ## Healthy Compute Node Boot Process
 
-In order to investigate node boot-related issues, it is important to understand the flow of a healthy boot process and the associated components. This section outlines the normal flow of components that play a role in booting compute nodes, including DHCP, BSS and TPTP.
+In order to investigate node boot-related issues, it is important to understand the flow of a healthy boot process and the associated components. This section outlines the normal flow of components that play a role in booting compute nodes, including DHCP, BSS, and TPTP.
 
 ### DHCP
 
@@ -41,7 +41,7 @@ The last two steps repeat until the file transfer is complete. The last block fr
 
 A healthy transaction with the Boot Script Service \(BSS\) looks similar to the following:
 
-```screen
+```bash
 ncn-m001# cray bss bootscript list --mac a4:bf:01:3e:c0:a2
 #!ipxe 
 kernel --name kernel http://rgw.local:8080/boot-images/29c2cc23-a9d6-4e9a-ab1a-b5fa9270c975/kernel?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=5RN45WD0L8KY8W4317WP%2F20200326%2Fdefault%2Fs3%2Faws4_request&X-Amz-Date=20200326T185958Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=43f5b0c5909ee51dabc564d2b72401983ff8fd03cc6fc309b04cb16e67f1989d initrd=initrd console=ttyS0,115200 bad_page=panic crashkernel=360M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell k8s_gw=api-gw-service-nmn.local quiet turbo_boost_limit=999 root=craycps-s3:s3://boot-images/29c2cc23-a9d6-4e9a-ab1a-b5fa9270c975/rootfs:8c274aecef9e1668a8a44e8cfc2b24b5-165:dvs:api-gw-service-nmn.local:300:eth0 xname=x3000c0s17b4n0 nid=4 || goto boot_retry 

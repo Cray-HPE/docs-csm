@@ -46,7 +46,7 @@ upgrade_ntp_timezone_metadata() {
   # jq -r '.["b8:59:9f:fe:49:f1"]["user-data"]["ntp"]' ntp.json
   for k in $(jq -r 'to_entries[] | "\(.key)"' data.json)
   do
-    # if it's not the global key, it's one of the host records we need to manipulate
+    # if it is not the global key, it's one of the host records we need to manipulate
     if ! [[ "$k" == "Global" ]]; then
       # shellcheck disable=SC2089
       ntp_query=".[\"$k\"][\"user-data\"][\"ntp\"]"
@@ -91,7 +91,7 @@ patch_in_new_metadata() {
   system_config="$prep_dir"/system_config.yaml
 
   # we need the three seed files and the system_config to generate the metadata
-  # this also ensures we're in the right place to run config init without any arguments
+  # this also ensures we are in the right place to run config init without any arguments
   if [[ -f "$ncn_metadata" ]] \
       && [[ -f "$switch_metadata" ]] \
       && [[ -f "$hmn_connections" ]] \

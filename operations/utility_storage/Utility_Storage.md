@@ -13,7 +13,7 @@ Ceph is the utility storage platform that is used to enable pods to store persis
 
 ## Table of Contents
 
-- [Running Ceph commands in 1.5](cephadm-reference.md)
+- [Cephadm Reference Material](Cephadm_Reference_Material.md) 
 - [Collect Information about the Ceph Cluster](Collect_Information_About_the_Ceph_Cluster.md)  
 - [Ceph Storage Types](Ceph_Storage_Types.md)
 - [Manage Ceph Services](Manage_Ceph_Services.md)
@@ -22,7 +22,8 @@ Ceph is the utility storage platform that is used to enable pods to store persis
 - [Shrink Ceph OSDs](Shrink_Ceph_OSDs.md)  
 - [Ceph Health States](Ceph_Health_States.md)  
 - [Dump Ceph Crash Data](Dump_Ceph_Crash_Data.md)  
-- [Identify Ceph Latency Issues](Identify_Ceph_Latency_Issues.md)  
+- [Identify Ceph Latency Issues](Identify_Ceph_Latency_Issues.md)
+- [Restore Nexus Data After Data Corruption](Restore_Corrupt_Nexus.md)  
 - [Troubleshoot Failure to Get Ceph Health](Troubleshoot_Failure_to_Get_Ceph_Health.md)  
 - [Troubleshoot a Down OSD](Troubleshoot_a_Down_OSD.md)  
 - [Troubleshoot Ceph OSDs Reporting Full](Troubleshoot_Ceph_OSDs_Reporting_Full.md)  
