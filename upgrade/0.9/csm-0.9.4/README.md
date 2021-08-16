@@ -408,6 +408,20 @@ should resolve itself once the workload manager product is installed.
    > ```
    >
    > This error can be safely ignored.
+   >
+   > The following error may occur for air-gapped systems that do not have connectivity to the internet:
+   > ```bash
+   > Refreshing service 'Public_Cloud_Module_15_SP2_x86_64'.
+   > Problem retrieving the repository index file for service 'Public_Cloud_Module_15_SP2_x86_64':
+   > Download (curl) error for 'https://scc.suse.com/access/services/1973/repo/repoindex.xml?cookies=0&credentials=Public_Cloud_Module_15_SP2_x86_64':
+   > Error code: Connection failed
+   > Error message: Failed to connect to scc.suse.com port 443: Connection timed out
+   > ```
+   >
+   > If this error is encountered, move files out of the following directory (for each storage node) and re-run the install-node-exporter-storage.sh script:
+   > ```bash
+   > /etc/zypp/services.d
+   > ```
 
 <a name="restore-vcs-content"></a>
 ## Restore VCS Content
