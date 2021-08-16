@@ -5,6 +5,7 @@
 set -e
 BASEDIR=$(dirname $0)
 . ${BASEDIR}/upgrade-state.sh
+. ${BASEDIR}/ncn-upgrade-common.sh $(hostname)
 trap 'err_report' ERR
 
 while [[ $# -gt 0 ]]
@@ -58,22 +59,22 @@ if [[ $(hostname) == "ncn-m001" ]]; then
       [[ "$(chronyc tracking | awk '/Reference ID/ {print $5}' | tr -d '()')" == ncn-m001 ]]; then
         # Get the upstream NTP server from cloud-init metadata, trying a few different sources before failing
         upstream_ntp_server=$(craysys metadata get upstream_ntp_server)
-        # check to make sure we're not re-creating the bug by setting m001 to use itself as an upstream
+        # check to make sure we are not re-creating the bug by setting m001 to use itself as an upstream
         if [[ "$upstream_ntp_server" == "ncn-m001" ]]; then
-          # if a pool is set, and we didn't find an upstream server, just use the pool
+          # if a pool is set, and we did not find an upstream server, just use the pool
           grep "^\(pool\).*" /etc/chrony.d/cray.conf >/dev/null
 
           if [[ $? -eq 0 ]] ; then
             sed -i "/^\(server ncn-m001\).*/d" /etc/chrony.d/cray.conf
           # otherwise error
           else
-            echo "Upsteam server cannot be $upstream_ntp_server"
+            echo "Upstream server cannot be $upstream_ntp_server"
             exit 1
           fi
         else
           # Swap in the "real" NTP server
           sed -i "s/^\(server ncn-m001\).*/server $upstream_ntp_server iburst trust/" /etc/chrony.d/cray.conf
-          # add a new config that will step the clock if it's less that 1s of drift, otherwise, it will slew it
+          # add a new config that will step the clock if it is less that 1s of drift, otherwise, it will slew it
           # this applies on startups of the system from a reboot only
           sed -i "/^\(logchange 1.0\)\$/a initstepslew 1 $upstream_ntp_server" /etc/chrony.d/cray.conf
           # Apply the change to use the new upstream server
@@ -229,7 +230,6 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
         record=$(jq '."cloud-init"."meta-data".host_records['$i']' cloud-init-global.json)
         if [[ $record =~ "packages.local" ]] || [[ $record =~ "registry.local" ]]; then
                 echo "packages.local and registry.local already in BSS cloud-init host_records"
-                exit 0
         fi
     done
 
@@ -272,10 +272,10 @@ state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     artdir=./${CSM_RELEASE}/images
-    # for both the kubernetes and storage images,
+    # for both the Kubernetes and storage images,
     for d in kubernetes storage-ceph
     do
-      # begin the perilious process of unsquashing the image, modifying it, and re-creating the artifacts
+      # begin the perilous process of unsquashing the image, modifying it, and re-creating the artifacts
       pushd "$artdir/$d" || exit 1
         # get the original file names for naming new artifacts
         # shellcheck disable=SC2061
@@ -307,9 +307,9 @@ kernel_version_full=$(rpm -qa | grep kernel-default | grep -v devel | tail -n 1 
 kernel_version=$(ls -1tr /boot/vmlinuz-* | tail -n 1 | cut -d '-' -f2,3,4)
 sed -i 's/version_full=.*/version_full='"$kernel_version_full"'/g' srv/cray/scripts/common/create-kis-artifacts.sh
 sed -i 's/kernel_version=.*/kernel_version='"$kernel_version"'/g' srv/cray/scripts/common/create-kis-artifacts.sh
-# set the local stratum lower so it isn't selected over ncn-m001 in most cases
+# set the local stratum lower so it is not selected over ncn-m001 in most cases
 sed -i 's/^\(  echo "local stratum 3 orphan" >>"$CHRONY_CONF"$\)/  echo "local stratum 10 orphan" >>"$CHRONY_CONF"/' srv/cray/scripts/metal/ntp-upgrade-config.sh
-# if drift > 1s, step the clock on reboot, otherwise, slew it.  Add this line after the logchange line in the script
+# if drift > 1s, step the clock on reboot, otherwise, slew it. Add this line after the logchange line in the script
 sed -i '/^\(  echo "logchange 1.0" >>"$CHRONY_CONF"$\)/a \ \ echo "initstepslew 1 $UPSTREAM_NTP_SERVER" >>"$CHRONY_CONF"' srv/cray/scripts/metal/ntp-upgrade-config.sh
 # remove the unreachable default ntp pools
 rm -f etc/chrony.d/pool.conf
@@ -324,7 +324,7 @@ EOF
         # We may have more than one kernel, so mv them all over
         mv squashfs-root/squashfs/*.kernel .
         mv squashfs-root/squashfs/*.xz "${initrd_name}"
-        # initrd also needs it's permissions adjusted
+        # initrd also needs its permissions adjusted
         chmod 644 "${initrd_name}"
         mv squashfs-root/squashfs/*.squashfs "${squashfs_name}"
         # cleanup by removing the unsquashed image

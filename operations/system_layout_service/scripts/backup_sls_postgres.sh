@@ -54,7 +54,7 @@ secrets=(
 )
 for secret in ${secrets[@]}; do
     filename="${secret}.yaml"
-    echo "Saving kubernetes secret ${secret}"
+    echo "Saving Kubernetes secret ${secret}"
     kubectl -n services get secret $secret -o yaml > "${filename}"
 done
 
@@ -72,7 +72,7 @@ done
 for secret in ${secrets[@]}; do
     filename="${secret}.yaml"
 
-    echo "Adding kubernetes secret ${secret} to secret manifest"
+    echo "Adding Kubernetes secret ${secret} to secret manifest"
     echo '---' >> "${BACKUP_NAME}.manifest"
     cat "${filename}" >> "${BACKUP_NAME}.manifest"
 done

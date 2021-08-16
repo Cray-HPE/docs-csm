@@ -49,18 +49,18 @@ Perform a manual backup of the contents of the SLS Postgres database. This backu
     The SLS postgres leader is cray-sls-postgres-0
     Using pg_dumpall to dump the contents of the SLS database...
     PSQL dump is available at /root/cray-sls-postgres-backup_2021-07-07_16-39-44/cray-sls-postgres-backup_2021-07-07_16-39-44.psql
-    Saving kubernetes secret service-account.cray-sls-postgres.credentials
-    Saving kubernetes secret slsuser.cray-sls-postgres.credentials
-    Saving kubernetes secret postgres.cray-sls-postgres.credentials
-    Saving kubernetes secret standby.cray-sls-postgres.credentials
+    Saving Kubernetes secret service-account.cray-sls-postgres.credentials
+    Saving Kubernetes secret slsuser.cray-sls-postgres.credentials
+    Saving Kubernetes secret postgres.cray-sls-postgres.credentials
+    Saving Kubernetes secret standby.cray-sls-postgres.credentials
     Removing extra fields from service-account.cray-sls-postgres.credentials.yaml
     Removing extra fields from slsuser.cray-sls-postgres.credentials.yaml
     Removing extra fields from postgres.cray-sls-postgres.credentials.yaml
     Removing extra fields from standby.cray-sls-postgres.credentials.yaml
-    Adding kubernetes secret service-account.cray-sls-postgres.credentials to secret manifest
-    Adding kubernetes secret slsuser.cray-sls-postgres.credentials to secret manifest
-    Adding kubernetes secret postgres.cray-sls-postgres.credentials to secret manifest
-    Adding kubernetes secret standby.cray-sls-postgres.credentials to secret manifest
+    Adding Kubernetes secret service-account.cray-sls-postgres.credentials to secret manifest
+    Adding Kubernetes secret slsuser.cray-sls-postgres.credentials to secret manifest
+    Adding Kubernetes secret postgres.cray-sls-postgres.credentials to secret manifest
+    Adding Kubernetes secret standby.cray-sls-postgres.credentials to secret manifest
     Secret manifest is located at /root/cray-sls-postgres-backup_2021-07-07_16-39-44/cray-sls-postgres-backup_2021-07-07_16-39-44.manifest
     Performing SLS dumpstate...
     SLS dumpstate is available at /root/cray-sls-postgres-backup_2021-07-07_16-39-44/sls_dump.json

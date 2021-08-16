@@ -456,7 +456,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 
 ### Update Non-Compute Node (NCN) BIOS and BMC Firmware
 
-Gigabyte and HPE non-compute nodes \(NCNs\) firmware can be updated with FAS. This section includes templates for JSON files that can be used to update firmware with the cray fas actions create command.
+Gigabyte and HPE non-compute nodes \(NCNs\) firmware can be updated with FAS. This section includes templates for JSON files that can be used to update firmware with the `cray fas actions create` command.
 
 After creating the JSON file for the device being upgraded, use the following command to run the FAS job:
 
@@ -877,7 +877,7 @@ Correct an issue where the model of the liquid-cooled compute node BIOS is the i
 #### Prerequisites
 -   The system is running HPE Cray EX release v1.4 or higher.
 -   The system has completed the Cray System Management \(CSM\) installation.
--   A firmware upgrade has been done following "Update Liquid-Cooled Compute Node BIOS Firmware".
+-   A firmware upgrade has been done following [Update Liquid-Cooled Compute Node BIOS Firmware](#cn-bios).
     -   The result of the upgrade is that the `NodeX.BIOS` has failed as `noSolution` and the `stateHelper` field for the operation states: `"No Image Available"`.
     -   The BIOS in question is running a version less than or equal to `1.2.5` as reported by Redfish or described by the `noSolution` operation in FAS.
 -   The hardware model reported by Redfish is `wnc-rome`, which is now designated as `HPE CRAY EX425`.
@@ -922,80 +922,80 @@ Correct an issue where the model of the liquid-cooled compute node BIOS is the i
 
 #### Procedure
 
-1.  Search for a FAS image record with `cray` as the manufacturer, `Node1.BIOS` as the target, and `HPE CRAY EX425` as the model.
+1. Search for a FAS image record with `cray` as the manufacturer, `Node1.BIOS` as the target, and `HPE CRAY EX425` as the model.
 
-  ```bash
-  ncn# cray fas images list --format json | jq '.images[] | select(.manufacturer=="cray") \
-  | select(.target=="Node1.BIOS") | select(any(.models[]; contains("EX425")))'
-  {
-      "imageID": "e23f5465-ed29-4b18-9389-f8cf0580ca60",
-      "createTime": "2021-03-04T00:04:05Z",
-      "deviceType": "nodeBMC",
-      "manufacturer": "cray",
-      "models": [
-        "HPE CRAY EX425"
-      ],
-      "softwareIds": [
-        "bios.ex425.."
-      ],
-      "target": "Node1.BIOS",
-      "tags": [
-        "default"
-      ],
-      "firmwareVersion": "ex425.bios-1.4.3",
-      "semanticFirmwareVersion": "1.4.3",
-      "pollingSpeedSeconds": 30,
-      "s3URL": "s3:/fw-update/2227040f7c7d11eb9fa00e2f2e08fd5d/ex425.bios-1.4.3.tar.gz"
-    }
-    ```
-
-  Take note of the returned imageID value to use in the next step.
-
-2.  Create a JSON file to override the existing image with the corrected values.
-
-  **IMPORTANT:** The `imageID` must be changed to match the identified image ID in the previous step.
-
-  ```bash
-  {
-     "stateComponentFilter":{
-        "deviceTypes":[
-           "nodeBMC"
-        ]
-     },
-     "inventoryHardwareFilter":{
-        "manufacturer":"cray"
-     },
-     "targetFilter":{
-        "targets":[
-           "Node0.BIOS",
-           "Node1.BIOS"
-        ]
-     },
-     "imageFilter":{
-        "imageID":"e23f5465-ed29-4b18-9389-f8cf0580ca60",
-        "overrideImage":true
-     },
-     "command":{
-        "version":"latest",
-        "tag":"default",
-        "overrideDryrun":true,
-        "restoreNotPossibleOverride":true,
-        "timeLimit":1000,
-        "description":" upgrade of Node BIOS"
+   ```bash
+   ncn# cray fas images list --format json | jq '.images[] | select(.manufacturer=="cray") \
+   | select(.target=="Node1.BIOS") | select(any(.models[]; contains("EX425")))'
+   {
+       "imageID": "e23f5465-ed29-4b18-9389-f8cf0580ca60",
+       "createTime": "2021-03-04T00:04:05Z",
+       "deviceType": "nodeBMC",
+       "manufacturer": "cray",
+       "models": [
+         "HPE CRAY EX425"
+       ],
+       "softwareIds": [
+         "bios.ex425.."
+       ],
+       "target": "Node1.BIOS",
+       "tags": [
+         "default"
+       ],
+       "firmwareVersion": "ex425.bios-1.4.3",
+       "semanticFirmwareVersion": "1.4.3",
+       "pollingSpeedSeconds": 30,
+       "s3URL": "s3:/fw-update/2227040f7c7d11eb9fa00e2f2e08fd5d/ex425.bios-1.4.3.tar.gz"
      }
-  }
-  ```
+   ```
 
-3.  Run a firmware upgrade using the updated parameters defined in the new JSON file.
+     Take note of the returned imageID value to use in the next step.
 
-  ```bash
-  ncn# cray fas actions create UPDATED_COMMAND.json
-  ```
+2. Create a JSON file to override the existing image with the corrected values.
 
-4.  Get a high-level summary of the job to verify the changes corrected the issue.
+   **IMPORTANT:** The `imageID` must be changed to match the identified image ID in the previous step.
 
-  Use the returned actionID from the `cray fas actions create` command.
+   ```json
+   {
+      "stateComponentFilter":{
+         "deviceTypes":[
+            "nodeBMC"
+         ]
+      },
+      "inventoryHardwareFilter":{
+         "manufacturer":"cray"
+      },
+      "targetFilter":{
+         "targets":[
+            "Node0.BIOS",
+            "Node1.BIOS"
+         ]
+      },
+      "imageFilter":{
+         "imageID":"e23f5465-ed29-4b18-9389-f8cf0580ca60",
+         "overrideImage":true
+      },
+      "command":{
+         "version":"latest",
+         "tag":"default",
+         "overrideDryrun":true,
+         "restoreNotPossibleOverride":true,
+         "timeLimit":1000,
+         "description":" upgrade of Node BIOS"
+      }
+   }
+   ```
 
-  ```bash
-  ncn# cray fas actions describe {actionID}
-  ```
+3. Run a firmware upgrade using the updated parameters defined in the new JSON file.
+
+   ```bash
+   ncn# cray fas actions create UPDATED_COMMAND.json
+   ```
+
+4. Get a high-level summary of the job to verify the changes corrected the issue.
+
+   Use the returned actionID from the `cray fas actions create` command.
+   ```bash
+   ncn# cray fas actions create UPDATED_COMMAND.json
+   ```
+

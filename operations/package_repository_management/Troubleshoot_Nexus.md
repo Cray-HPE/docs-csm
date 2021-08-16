@@ -2,7 +2,7 @@
 
 General Nexus Troubleshooting Topics
 - [lookup registry.local: no such host](#error-registry-local-no-such-host)
-- [lookup registry.local: Temporary failure in name resolutio](#error-registry-local-no-such-host)
+- [lookup registry.local: Temporary failure in name resolution](#error-registry-local-no-such-host)
 - [initiating layer upload... in registry.local](#error-initiating-layer-upload)
 - [not ready: https://packages.local](#error-not-ready)
 
@@ -20,7 +20,7 @@ time="2021-02-23T19:55:54Z" level=fatal msg="Error copying tag \"dir:/image/graf
 Or a similar error:
 
 ```
-time="2021-03-04T22:45:07Z" level=fatal msg="Error copying ref \"dir:/image/cray/cray-ims-load-artifacts:1.0.4\": Error trying to reuse blob sha256:1ec886c351fa4c330217411b0095ccc933090aa2cd7ae7dcd33bb14b9f1fd217 at destination: Head \"https://registry.local/v2/cray/cray-ims-load-artifacts/blobs/sha256:1ec886c351fa4c330217411b0095ccc933090aa2cd7ae7dcd33bb14b9f1fd217\": dial tcp: lookup registry.local: Temporary failure in name resolution"
+time="2021-03-04T22:45:07Z" level=fatal msg="Error copying ref \"dir:/image/cray/cray-ims-load-artifacts:1.0.4\": Error trying to reuse blob sha256:1ec886c351fa4c330217411b0095ccc933090aa2cd7ae7dcd33bb14b9f1fd217 at destination: Head \"https://registry.local/v2/cray/cray-ims-load-artifacts/blobs/sha256:1ec886c351fa4c330217411b0095ccc933090aa2cd7ae7dcd33bb14b9f1fd217\": dial tcp: lookup registry.local: Temporary failure in name resolutionn"
 + return
 ```
 
@@ -54,12 +54,12 @@ likely indicates that a Nexus setup utility was unable to connect to Nexus
 via the `packages.local` name. Because the install does not attempt to connect
 to `packages.local` until Nexus has been successfully deployed, the error
 does not usually indicate something is actually wrong with Nexus. Instead, it
-is most commonly a network issue with name resolution (i.e., DNS), IP
+is most commonly a network issue with name resolutionn (i.e., DNS), IP
 routes from the PIT node, switch misconfiguration, or Istio ingress.
 
 Verify that packages.local resolves to **ONLY** the load balancer IP address for the
 istio-ingressgateway service in the istio-system namespace, typically
-10.92.100.71. If name resolution returns addresses on other networks (such as
+10.92.100.71. If name resolutionn returns addresses on other networks (such as
 HMN) this must be corrected. Prior to DNS/DHCP hand-off to Unbound, these
 settings are controlled by dnsmasq. Unbound settings are based on SLS
 settings in sls_input_file.json and must be updated via the Unbound manager.

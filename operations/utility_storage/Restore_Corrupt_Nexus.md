@@ -1,6 +1,6 @@
 # Restore Nexus Data After Data Corruption
 
-In rare cases, if a Ceph upgrade is not completed successfully and has issues, the eventual Ceph health can end up with a damaged mds (cephfs) daemon.  Ceph reports this as follows running the `ceph -s` command:
+In rare cases, if a Ceph upgrade is not completed successfully and has issues, the eventual Ceph health can end up with a damaged mds (cephfs) daemon. Ceph reports this as follows running the `ceph -s` command:
 
 ```bash
 ncn-s002:~ # ceph -s
@@ -20,7 +20,7 @@ The commands in this procedure should be run from a master NCN (unless otherwise
 
 1. Determine where the originally installed Nexus helm chart and manifest exists.
 
-   During normal installs, the initial artifacts (docker images and helm charts) are available on `ncn-m001` in `/mnt/pitdata` after it has been rebooted out of `PIT` mode.  The administrator may need to re-mount this volume (first step below):
+   During normal installs, the initial artifacts (docker images and helm charts) are available on `ncn-m001` in `/mnt/pitdata` after it has been rebooted out of `PIT` mode. The administrator may need to re-mount this volume (first step below):
 
    1. Re-mount the volume
       ```bash
@@ -72,7 +72,7 @@ The commands in this procedure should be run from a master NCN (unless otherwise
    ncn-m001# /mnt/pitdata/csm-0.9.4/lib/setup-nexus.sh
    ```
 
-1. Re-populate Nexus with `1.0` artifacts. This step is also necessary if the mds/cephfs corruption occurred when upgrading from `0.9.x` to `1.0`.  Nexus must be populated with both versions of the artifacts in order to support both old/new docker images during upgrade.
+1. Re-populate Nexus with `1.0` artifacts. This step is also necessary if the mds/cephfs corruption occurred when upgrading from `0.9.x` to `1.0`. Nexus must be populated with both versions of the artifacts in order to support both old/new docker images during upgrade.
 
    Locate the Nexus setup script, this is typically in `/root/csm-1.0.*` on `ncn-m001`:
 
@@ -89,12 +89,12 @@ The commands in this procedure should be run from a master NCN (unless otherwise
 
 1. Re-populate Nexus with any add-on products that had been installed on this system.
 
-   If any additional products were installed on this system after initial install, locate the install documentation for those products and re-run the appropriate portion of their install script(s) to load those artifacts back into Nexus.  For example, if SLES repositories have been added to Nexus prior to this content restore, refer to the install documentation contained in that distribution's tar file for instructions on how to again load that content into Nexus.
+   If any additional products were installed on this system after initial install, locate the install documentation for those products and re-run the appropriate portion of their install script(s) to load those artifacts back into Nexus. For example, if SLES repositories have been added to Nexus prior to this content restore, refer to the install documentation contained in that distribution's tar file for instructions on how to again load that content into Nexus.
 
-1. Scale up any deployments/statefulsets that may have been scaled down during upgrade (if applicable).  These commands should be run from `ncn-s001`.
+1. Scale up any deployments/statefulsets that may have been scaled down during upgrade (if applicable). These commands should be run from `ncn-s001`.
 
    Source the `k8s-scale-utils.sh` script in order to define the `scale_up_cephfs_clients` function:
-   ```bash
+   ```bashc
    ncn-m001# source /usr/share/doc/csm/upgrade/1.0/scripts/ceph/lib/k8s-scale-utils.sh
    ```
 

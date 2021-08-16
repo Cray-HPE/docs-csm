@@ -18,19 +18,10 @@ upgrade that node.
 
 ### Stage 0. - Prerequisites and Preflight Checks
 
-> NOTE: CSM-0.9.4 is the version of CSM required in order to upgrade to CSM-1.0.0 (available with Shasta v1.5).
+> NOTE: CSM-0.9.4 or CSM-0.9.5 is the version of CSM required in order to upgrade to CSM-1.0.0 (available with Shasta v1.5).
 
 > NOTE: Installed CSM versions may be listed from the product catalog using the following command. This will sort a semantic version without a hyphenated suffix after the same semantic version with a hyphenated suffix, e.g. 1.0.0 > 1.0.0-beta.19. 
 >
-> ```bash
-> ncn-m001# kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' | yq r -j - | jq -r 'keys[]' | sed '/-/!{s/$/_/}' | sort -V | sed 's/_$//'
-> ```
->
-> NOTE: The latest installed CSM version may be listed from the product catalog using the following command. This will sort a semantic version without a hyphenated suffix after the same semantic version with a hyphenated suffix, e.g. 1.0.0 > 1.0.0-beta.19. 
->
-> ```bash
-> ncn-m001# kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' | yq r -j - | jq -r 'keys[]' | sed '/-/!{s/$/_/}' | sort -V | sed 's/_$// | tail -n 1'
-> ```
 
 The following command can be used to check the CSM version on the system:
 
@@ -38,7 +29,7 @@ The following command can be used to check the CSM version on the system:
 ncn# kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm'
 ```
 
-This check will also be conducted in the 'prerequisites.sh' script listed below and will fail if the system is not running CSM-0.9.4.
+This check will also be conducted in the 'prerequisites.sh' script listed below and will fail if the system is not running CSM-0.9.4 or CSM-0.9.5.
 
 #### Stage 0.1. - Install latest docs RPM
 
@@ -134,7 +125,7 @@ ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-ceph-initia
 
 #### Stage 1.2
 
-**`IMPORTANT:`** We scale down the conman deployements during stage 1.2 (this stage), so all console sessions will be down for portion of the upgrade
+**`IMPORTANT:`** We scale down the conman deployments during stage 1.2 (this stage), so all console sessions will be down for this portion of the upgrade
 
 **`IMPORTANT`** If this has be run previously, then check point files may need to be deleted.
 
@@ -153,7 +144,7 @@ Directory location = /etc/cray/ceph/_upgraded
 /etc/cray/ceph/rgws_upgraded
 ```
 
-**`NOTE:`** You can delete all these files and rerun or you can just delete any files from your last step. You may end up with checkpoint files if the upgrade was exited out of by the user.  But if you know you exited out of OSDs and it wasn't a clean exit, then you would only need remove `osd_upgraded`, `mds_upgraded` and `rgw_upgraded`.
+**`NOTE:`** You can delete all these files and rerun or you can just delete any files from your last step. You may end up with checkpoint files if the upgrade was exited out of by the user. But if you know you exited out of OSDs and it was not a clean exit, then you would only need remove `osd_upgraded`, `mds_upgraded` and `rgw_upgraded`.
 
 1. Start the Ceph upgrade
 
@@ -191,7 +182,7 @@ Directory location = /etc/cray/ceph/_upgraded
     csm-config-import-1.0.0-beta.46-5t7kx                          0/3     Completed          0          4d
     ```
 
-**`NOTE:`** if conman is not running please see [establising conman console connections](operations/../../../operations/conman/Establish_a_Serial_Connection_to_NCNs.md)
+**`NOTE:`** if conman is not running please see [establishing conman console connections](operations/../../../operations/conman/Establish_a_Serial_Connection_to_NCNs.md)
 
 ### Stage 2. Ceph image upgrade
 
@@ -378,89 +369,13 @@ NOTE: 	The nae-upload script automatically detects 8325’s and only applies the
 #### How to run the install script: 
 
 **Step 1:** 
-
-> ncn-m001”:~ # ./docs-csm/upgrade/1.0/scripts/aruba/nae_upload.py
-
-**step 2:**
-
-> Type in your switch password and the script will upload and enable the NAE script. 
-
-### Stage 5. - Workaround for known mac-learning issue with 8325. 
-
-
-#### Issue description
-
-> **Aruba CR:**          90598
->
-> **Affected platform:** 8325
->
->**Symptom:**           MAC learning stops.
->
->**Scenario:**          Under extremely rare DMA stress conditions, anL2 learning thread may timeout and exit preventing future MAC learning.
->
->**Workaround:**        Reboot the switch or monitor the L2 thread and restart it with an NAE script
->
->**Fixed in:**	       10.06.0130, 10.7.0010 and above. 
->
->[Aruba release notes](https://asp.arubanetworks.com/downloads;products=Aruba%20Switches;productSeries=Aruba%208325%20Switch%20Series) 
-
-#### To fix the issue without upgrading software:
-
-	You can run a NAE script on the 8325 platform switches to resolve mac learning issue.
-
-#### The file locations in doc-csm
-
-	- The NAE script (L2X-Watchdog-creates-bash-script.py) is located at: ../docs-csm/upgrade/1.0/scripts/aruba
-	- Automatic NAE install script (nae_upload.py) is located at: ../docs-csm/upgrade/1.0/scripts/aruba
-
-### Automated install of NAE script 
-
-#### Prerequisites: 
-
-1. The nae-upload.py script relies on /etc/hosts file to pull IP addresses of the switch. Without this information the script won’t run.
-2. You have 8325 in your setup that is running software version below 10.06.0130. 
-3. Script assumes you  are using default username "admin"  for the switch and it will prompt you for password. 
-
-NOTE: 	The nae-upload script automatically detects 8325’s and only applies the fix to this platform.
-
-#### How to run the install script: 
-
-**Step 1:** 
-
-> ncn-m001”:~ # ./docs-csm/upgrade/1.0/scripts/aruba/nae_upload.py
-
-**step 2:**
-
-> Type in your switch password and the script will upload and enable the NAE script. 
-
-## Troubleshooting and Recovering from Errors During or After Upgrade
-
-### Rerun a step/script
-
-When running upgrade scripts, each script record what has been done successfully on a node. This `state` file is stored at `/ect/cray/upgrade/csm/{CSM_VERSION}/{NAME_OF_NODE}/state`. If a rerun is required, you will need to remove the recorded steps from this file.
-
-Here is an example of state file of `ncn-m001`:
-
-```bash
-ncn-m001:~ # cat /etc/cray/upgrade/csm/{CSM_VERSION}/ncn-m001/state
-[2021-07-22 20:05:27] UNTAR_CSM_TARBALL_FILE
-[2021-07-22 20:05:30] INSTALL_CSI
-[2021-07-22 20:05:30] INSTALL_WAR_DOC
-[2021-07-22 20:13:15] SETUP_NEXUS
-[2021-07-22 20:13:16] UPGRADE_BSS <=== Remove this line if you want to rerun this step
-[2021-07-22 20:16:30] CHECK_CLOUD_INIT_PREREQ
-[2021-07-22 20:19:17] APPLY_POD_PRIORITY
-[2021-07-22 20:19:38] UPDATE_BSS_CLOUD_INIT_RECORDS
-[2021-07-22 20:19:38] UPDATE_CRAY_DHCP_KEA_TRAFFIC_POLICY
-[2021-07-22 20:21:03] UPLOAD_NEW_NCN_IMAGE
-[2021-07-22 20:21:03] EXPORT_GLOBAL_ENV
-[2021-07-22 20:50:36] PREFLIGHT_CHECK
-[2021-07-22 20:50:38] UNINSTALL_CONMAN
-[2021-07-22 20:58:39] INSTALL_NEW_CONSOLE
+```
+ncn-m002:~ # /usr/share/doc/csm/upgrade/1.0/scripts/aruba/nae_upload.py
 ```
 
-* See the inline comment above on how to rerun a single step
-* If you need to rerun the whole upgrade of a node, you can just delete the state file 
+**step 2:**
+
+> Type in your switch password and the script will upload and enable the NAE script. 
 
 ### General Kubernetes Commands for Troubleshooting
 

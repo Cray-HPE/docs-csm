@@ -6,6 +6,11 @@ These nodes have an additional procedure before they can be booted.
 ### Topics:
    1. [Configure HPE Apollo 6500 XL645d Gen10 Plus Compute Nodes](#configure-hpe-apollo-6500-x645d-gen10-plus-compute-nodes)
 
+### Prerequisites
+
+The time for Gigabyte compute nodes is synced with the rest of the system.
+See [Update the Gigabyte Server BIOS Time](../operations/node_management/Update_the_Gigabyte_Server_BIOS_Time.md).
+
 ## Details
 
 <a name="configure-hpe-apollo-6500-x645d-gen10-plus-compute-nodes"></a>

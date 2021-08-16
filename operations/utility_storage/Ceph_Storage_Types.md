@@ -1,6 +1,6 @@
 # Ceph Storage Types
 
-As a reference, the below ceph and rbd commands are run from a master node or ncn-s001/2/3. Certain commands will work on different systems. For example, the rbd command can be used on the worker nodes if specifying the proper key.
+As a reference, the following `ceph` and `rbd` commands are run from a master node or ncn-s001/2/3. Certain commands will work on different systems. For example, the `rbd` command can be used on the worker nodes if specifying the proper key.
 
 ## Ceph Block \(rbd\)
 
@@ -159,7 +159,7 @@ ncn-m001# radosgw-admin user info --uid TEST_USER
 }
 ```
 
-The radosgw-admin bucket command is used to remove or view buckets.
+The `radosgw-admin bucket` command is used to remove or view buckets.
 
 To list the buckets:
 
