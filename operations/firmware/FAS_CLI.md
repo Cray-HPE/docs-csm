@@ -710,7 +710,7 @@ To load an RPM or ZIP into FAS on a system, copy the RPM or ZIP file to ncn-m001
 FAS will return a loaderRunID.
 Use the loaderRunID to check the results of the loader run.
 Run the following command (RPM is this case is firmware.rpm):
-**NOTE:** If firmware is not in the current directory, you will need to add the path to the filename.
+**NOTE:** If firmware is not in the current directory, add the path to the filename.
 ```bash
 ncn-m001# cray fas loader create --file firmware.rpm
 
@@ -720,7 +720,8 @@ See [Load Firmware from RPM or ZIP file in FAS Admin Procedures](./FAS_Admin_Pro
 
 ##### Display Results of Loader Run
 
-Using the loaderRunID returned from the loader upload command, run the following command to get the output from the upload *(Note the `--format json`, this makes it easier to read)*:
+Using the loaderRunID returned from the loader upload command, run the following command to get the output from the upload. The `--format json` parameter makes it easier to read.
+
 **NOTE:** `dd37dd45-84ec-4bd6-b3c9-7af480048966` is the loaderRunID from previous run command.
 
 ```bash
@@ -754,7 +755,8 @@ ncn-m001# cray fas loader describe dd37dd45-84ec-4bd6-b3c9-7af480048966 --format
 }
 ```
 A successful run will end with `*** Number of Updates: x ***`.
-**NOTE:** The FAS loader will not overwrite image records already in FAS. Number of Updates will be the number of new images found in the RPM. If the number is 0, all images were already in FAS.
+
+**NOTE:** The FAS loader will not overwrite image records already in FAS. `Number of Updates` will be the number of new images found in the RPM. If the number is 0, all images were already in FAS.
 
 ##### Delete Loader Run Data
 
@@ -764,5 +766,6 @@ To delete the output from a loader run and remove it from the loader run list:
 ```bash
 ncn-m001# cray fas loader delete dd37dd45-84ec-4bd6-b3c9-7af480048966
 ```
-The delete command does not return anything if successful
+The delete command does not return anything if successful.
+
 **NOTE:** The loader delete command does not delete any images from FAS, it only deletes the loader run saved status and removes the ID from the loader run list.

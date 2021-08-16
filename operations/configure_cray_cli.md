@@ -9,6 +9,8 @@ a user and how to authorize that user.
 
 The `cray` CLI only needs to be initialized once per user on a node.
 
+## Procedure
+
 1. Unset the CRAY_CREDENTIALS environment variable, if previously set.
 
    Some of the installation procedures leading up to this point use the CLI with a Kubernetes managed service
@@ -63,7 +65,7 @@ The `cray` CLI only needs to be initialized once per user on a node.
 
 ## Troubleshooting
 
-***NOTE:***  While resolving these issues is beyond the scope of this section, more information about what is failing can be found by adding `-vvvvv` to the `cray init ...` commands.
+**NOTE:**  While resolving these issues is beyond the scope of this section, more information about what is failing can be found by adding `-vvvvv` to the `cray init ...` commands.
 
    If initialization fails in the above step, there are several common causes:
 

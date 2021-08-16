@@ -85,5 +85,5 @@ Resource requests and limits tell Kubernetes how much memory and CPU a given UAI
 
 The smaller configuration items control things like whether the UAI can talk to compute nodes over the high-speed network (needed for workload management), whether the UAI presents a public facing or private facing IP address for SSH, Kubernetes scheduling priority and others.
 
-All of the above can be customized on a given set of UAIs by defining a UAI class. UAI classes are templates used to create UAIs, and provide access to fine grained configuration and selection of image, volumes and resource specification.  While an end-user UAI can be created by simply specifying its UAI image and the user's public key, to make more precisely constructed UAIs a UAI class must be used.
+All of the above can be customized on a given set of UAIs by defining a UAI class. UAI classes are templates used to create UAIs, and provide access to fine grained configuration and selection of image, volumes and resource specification. While an end-user UAI can be created by simply specifying its UAI image and the user's public key, to make more precisely constructed UAIs a UAI class must be used.
 

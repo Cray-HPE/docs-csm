@@ -209,7 +209,7 @@ Before rebooting NCNs:
 
 1. Reboot each of the NCN worker nodes \(one at a time\).
 
-    **NOTE:** You are doing a single worker at a time, so pleae keep track of what ncn-w0xx you are on for these steps.
+    **NOTE:** You are doing a single worker at a time, so please keep track of what ncn-w0xx you are on for these steps.
 
     1. Establish a console session to the NCN worker node you are rebooting.
 
@@ -229,19 +229,19 @@ Before rebooting NCNs:
        ncn-m# kubectl drain --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
        ```
 
-       You may run into pods that can't be gracefully evicted due to Pod Disruption Budgets (PDB), for example:
+       You may run into pods that cannot be gracefully evicted due to Pod Disruption Budgets (PDB), for example:
 
        ```bash
        ncn-m# error when evicting pod "<pod>" (will retry after 5s): Cannot evict pod as it would violate the pod's disruption budget.
        ```
 
-       In this case, there are some options.  First, if the service is scaleable, you can increase the scale to start up another pod on another node, and then the drain will be able to delete it.  However, it will probably be necessary to force the deletion of the pod:
+       In this case, there are some options. First, if the service is scalable, you can increase the scale to start up another pod on another node, and then the drain will be able to delete it. However, it will probably be necessary to force the deletion of the pod:
 
        ```bash
        ncn-m# kubectl delete pod [-n <namespace>] --force --grace-period=0 <pod>
        ```
 
-       This will delete the offending pod, and Kubernetes should schedule a replacement on another node.  You can then rerun the kubectl drain command, and it should report that the node is drained
+       This will delete the offending pod, and Kubernetes should schedule a replacement on another node. You can then rerun the kubectl drain command, and it should report that the node is drained
 
        ```bash
        ncn-m# kubectl drain --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
@@ -280,10 +280,10 @@ Before rebooting NCNs:
         Check the cfs state of the worker
 
         ```bash
-        ncn-m# cray cfs compontents describe <xname of node being rebooted>
+        ncn-m# cray cfs components describe <xname of node being rebooted>
         ```
 
-        The `configurationStatus` should be `configured` when successful.  If in a failed state, refer to the pod logs for `cray-cfs` to determine why the configuration may not have completed. 
+        The `configurationStatus` should be `configured` when successful. If in a failed state, refer to the pod logs for `cray-cfs` to determine why the configuration may not have completed. 
 
     1. Uncordon the node
 

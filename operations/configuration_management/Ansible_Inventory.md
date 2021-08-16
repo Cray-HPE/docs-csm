@@ -23,7 +23,7 @@ ncn# cray hsm groups list --format json | jq .[].label
 
 These groups can be referenced in Ansible plays or when creating a CFS session directly.
 
-Hardware roles and sub-roles are available as \[Role\] and \[Role\]\_\[Subrole\] Ansible host groups. For instance, if targeting just the nodes with the "Application" role, the host group name is Application. If targeting just the sub-role "UAN", which is a sub-role of the "Application" role, the host group name provided by CFS is Application\_UAN.
+Hardware roles and sub-roles are available as \[Role\] and \[Role\]\_\[Subrole\] Ansible host groups. For instance, if targeting just the nodes with the "Application" role, the host group name is Application. If targeting just the sub-role "UAN", which is a sub-role of the "Application" role, the host group name provided by CFS is Application\_UAN. See [HSM Roles and Subroles](../hardware_state_manager/HSM_Roles_and_Subroles.md) for more information.
 
 Consult the `cray-hms-base-config` Kubernetes ConfigMap in the services namespace for a listing of the available roles and sub-roles on the system.
 

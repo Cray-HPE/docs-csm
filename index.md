@@ -62,7 +62,7 @@ The chapters with topics which need to be done as part of an ordered procedure a
    1. [Redeploy PIT Node](install/index.md#redeploy_pit_node)
    1. [Configure Administrative Access](install/index.md#configure_administrative_access)
    1. [Validate CSM Health](operations/validate_csm_health.md)
-   1. [Configure Prometheus Alert Notifications](intall/index.md#configure_prometheus_alert_notifications)
+   1. [Configure Prometheus Alert Notifications](install/index.md#configure_prometheus_alert_notifications)
    1. [Update Firmware with FAS](operations/firmware/Update_Firmware_with_FAS.md)
    1. [Prepare Compute Nodes](install/index.md#prepare_compute_nodes)
    1. [Next Topic](install/index.md#next_topic)

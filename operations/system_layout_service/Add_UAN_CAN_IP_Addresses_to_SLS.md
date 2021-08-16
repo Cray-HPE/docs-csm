@@ -10,7 +10,6 @@ This procedure requires administrative privileges.
 
 ### Procedure
 
-
 1.  Retrieve the SLS data for the CAN.
 
     ```bash

@@ -2,6 +2,8 @@
 
 The Firmware Action Service (FAS) provides an interface for managing firmware versions of Redfish-enabled hardware in the system. FAS interacts with the Hardware State Managers (HSM), device data, and image data in order to update firmware.
 
+Reset Gigabyte node BMC to factory defaults if having problems with ipmitool, using Redfish, or when flashing procedures fail. See [Set Gigabyte Node BMC to Factory Defaults](../../install/set_gigabyte_node_bmc_to_factory_defaults.md).
+
 FAS images contain the following information that is needed for a hardware device to update firmware versions:
 
 * Hardware-specific information: Contains the allowed device states and how to reboot a device if necessary.
@@ -119,7 +121,7 @@ After identifying which hardware is in the system, start with the top most item 
 
 ### FAS Admin Procedures
 
-There are several use cases for using the FAS to update firmware on the system. These use cases are intended to be run by system administrators with a good understanding of firmware. Under no circumstances should non-admin users attempt to use FAS or perform a firmware update.
+There are several use cases for using the FAS to update firmware on the system. These use cases are intended to be run by system administrators with a good understanding of firmware. Under no circumstances should non-administrator users attempt to use FAS or perform a firmware update.
 
 -   Perform a firmware update: Update the firmware of an xname's target to the latest, earliest, or an explicit version.
 -   Determine what hardware can be updated by performing a dry-run: The easiest was to determine what can be updated is to perform a dry-run of the update.
@@ -151,13 +153,13 @@ FAS will create operations based on the configureation sent through the `actions
 FAS operations will have one of the following states:
 - initial - Operation just created.
 - configured - The operation is configured, but nothing has been started.
-- blocked - Only one operation can be preformed on a node at a time.  If more than one update is required for a xname, operations will be blocked.  This will have a message of "blocked by sibling".
+- blocked - Only one operation can be preformed on a node at a time. If more than one update is required for a xname, operations will be blocked. This will have a message of "blocked by sibling".
 - inProgress - Update is in progress, but not completed.
 - verifying - Waiting for update to complete.
 - failed - An update was attempted, but could FAS is unable to tell that the update successed in the time allowed.
 - noOperation - Firmware is at the correct version according to the images loaded into FAS.
 - noSolution - FAS does not have a sutable image for an update.
-- aborted - the operation was aborted before it could determn if it was successful.  If aborted after the update command was sent to the node, the node may still have updated.
+- aborted - The operation was aborted before it could determine if it was successful. If aborted after the update command was sent to the node, the node may still have updated.
 
 <a name="firmware-images"></a>
 

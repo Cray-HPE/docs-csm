@@ -446,6 +446,6 @@ A similar flow can be used to update the volume size for `cray-sls-postgres`, `g
 
 To make changes that will not persist across installs or upgrades, see the following references. These procedures will also help to verify and eliminate any issues in the short term. As other resource customizations are needed, contact support to request the feature.
 
-* Reference [Determine if Pods are Hitting Resource Limits](kubernetes/Determine_if_Pods_are_Hitting_Resource_Limits.md)
-* Reference [Increase Pod Resource Limits](kubernetes/Increase_Pod_Resource_Limits.md)
+* Reference [Determine if Pods are Hitting Resource Limits](../kubernetes/Determine_if_Pods_are_Hitting_Resource_Limits.md)
+* Reference [Increase Pod Resource Limits](../kubernetes/Increase_Pod_Resource_Limits.md)
 

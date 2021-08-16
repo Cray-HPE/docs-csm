@@ -8,7 +8,6 @@ Capture the metadata for the unhealthy node before bringing down the node. The p
 
 This procedure requires administrative privileges.
 
-
 ### Collect Information Before Powering Down the Node
 
 1.  Check the Persistent Volume Claims \(PVC\) that have been created on the system.
@@ -180,7 +179,6 @@ This procedure requires administrative privileges.
         ```bash
         ncn-w001# kubectl describe pod POD_NAME
         ```
-
 
 The node that encountered issues should now be returned to a healthy state.
 
