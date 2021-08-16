@@ -13,38 +13,7 @@ The Kubernetes cluster on master nodes is being rebuilt.
 
 ### Procedure
 
-1.  Retrieve the S3 credentials for the Etcd-Backup user.
-
-    The following command must be run from a storage node.
-
-    ```bash
-    ncn# radosgw-admin user info --uid Etcd-Backup | jq -r '.keys'
-    [
-      {
-        "user": "Etcd-Backup",
-        "access_key": "<value>",
-        "secret_key": "<value>"
-      }
-    ]
-    ```
-
-    Note the returned `access_key` and `secret_key` values.
-
-2.  Configure the S3 client credentials.
-
-    The first NCN master node in a deployment contains a couple of helper scripts related to backup and restore. Use the values from the previous step to update the credentials.json file in the /opt/cray/platform/utils/s3 directory.
-
-    ```bash
-    ncn# cd /opt/cray/platform-utils/s3
-    ncn# vim credentials.json
-    {
-        "access_key": "<value>",
-        "secret_key": "<value>",
-        "endpoint_url": "http://rgw-vip"
-    }
-    ```
-
-3.  Select a snapshot to restore a backup.
+1.  Select a snapshot to restore a backup.
 
     The following command lists the available backups. It must be run from the /opt/cray/platform-utils/s3 directory.
 
@@ -60,7 +29,7 @@ The Kubernetes cluster on master nodes is being rebuilt.
 
     Note the file name for the desired snapshot/backup.
 
-4.  Download the snapshot and copy it to all NCN master nodes.
+1.  Download the snapshot and copy it to all NCN master nodes.
 
     1.  Retrieve the backup from S3 and uncompress it.
 
@@ -83,7 +52,7 @@ The Kubernetes cluster on master nodes is being rebuilt.
         ncn# scp /tmp/etcd-dump.bin ncn-m003:/tmp
         ```
 
-5.  Prepare to restore the member directory for `ncn-m001`.
+1.  Prepare to restore the member directory for `ncn-m001`.
 
     1.  Log in as root to `ncn-m001`.
 
@@ -123,7 +92,7 @@ The Kubernetes cluster on master nodes is being rebuilt.
           snapshot restore /tmp/etcd-dump.bin
         ```
 
-6.  Prepare to restore the member directory for `ncn-m002`.
+1.  Prepare to restore the member directory for `ncn-m002`.
 
     1.  Log in as root to `ncn-m002`.
 
@@ -163,7 +132,7 @@ The Kubernetes cluster on master nodes is being rebuilt.
         snapshot restore /tmp/etcd-dump.bin
         ```
 
-7.  Prepare to restore the member directory for `ncn-m003`.
+1.  Prepare to restore the member directory for `ncn-m003`.
 
     1.  Log in as root to `ncn-m003`.
 
@@ -203,7 +172,7 @@ The Kubernetes cluster on master nodes is being rebuilt.
         snapshot restore /tmp/etcd-dump.bin
         ```
 
-8.  Stop the current running cluster.
+1.  Stop the current running cluster.
 
     If the cluster is currently running, run the following command on all three master nodes \(`ncn-m001`, `ncn-m002`, `ncn-m003`\).
 
@@ -225,7 +194,7 @@ The Kubernetes cluster on master nodes is being rebuilt.
         ncn-m003# systemctl stop etcd
         ```
 
-9.  Start the restored cluster on each master node.
+1.  Start the restored cluster on each master node.
 
     Run the following commands on all three master nodes \(`ncn-m001`, `ncn-m002`, `ncn-m003`\) to start the restored cluster.
 
@@ -253,7 +222,7 @@ The Kubernetes cluster on master nodes is being rebuilt.
         ncn-m003# systemctl start etcd
         ```
 
-10. Confirm the membership of the cluster.
+1. Confirm the membership of the cluster.
 
     ```bash
     ncn-m001# ETCDCTL_API=3 etcdctl --cacert /etc/kubernetes/pki/etcd/ca.crt \
