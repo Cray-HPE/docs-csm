@@ -103,7 +103,13 @@ For example:
 ```
 Errors reported previous to the lock status, such as **ERROR: get_cluster** can be ignored.
 
-See see the **About Postgres** section in the HPE Cray EX Administration Guide S-8001 for further information.
+If any of the postgres clusters are exhibiting the following symptoms, then follow then "Troubleshoot Postgres Databases with the Patroni Tool" procedure in the HPE Cray EX System Administration Guide S-8001:
+   * The cluster has no leader.
+   * The number of cluster members is not correct. There should be three cluster members (with the exception of sma-postgres-cluster where there should be only two cluster members).
+   * Cluster members are found to be in a non 'running' state (such as 'start failed').
+   * Cluster members are found to have lag or lag is 'unknown'.
+
+See see the **About Postgres** section in the HPE Cray EX System Administration Guide S-8001 for further information.
 
 <a name="pet-clock-skew"></a>
 ### Clock Skew
@@ -439,52 +445,79 @@ ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-
 ```
 1. Examine the output for errors or failures.
 
-**Note**: The HMS functional tests include a check for unexpected flags that may be set in Hardware State Manager (HSM) for the BMCs on the system. There is a known issue [SDEVICE-3319](https://connect.us.cray.com/jira/browse/SDEVICE-3319) that can cause Warning flags to be set erroneously in HSM for Mountain BMCs and result in test failures. If _test_smd_components_ncn-functional_remote-functional.tavern.yaml_ fails during the HMS functional test run with error messages about Warning flags being set on one or more BMCs:
+#### Known issues
+1.  The HMS functional tests include a check for unexpected flags that may be set in Hardware State Manager (HSM) for the BMCs on the system. There is a known issue [SDEVICE-3319](https://connect.us.cray.com/jira/browse/SDEVICE-3319) that can cause Warning flags to be set erroneously in HSM for Mountain BMCs and result in test failures. If _test_smd_components_ncn-functional_remote-functional.tavern.yaml_ fails during the HMS functional test run with error messages about Warning flags being set on one or more BMCs:
 
-```bash
-=================================== FAILURES ===================================
-_ /opt/cray/tests/ncn-functional/hms/hms-smd/test_smd_components_ncn-functional_remote-functional.tavern.yaml::Ensure that we can conduct a query for all Node BMCs in the Component collection _
+   ```bash
+   =================================== FAILURES ===================================
+   _ /opt/cray/tests/ncn-functional/hms/hms-smd/test_smd_components_ncn-functional_remote-functional.tavern.yaml::Ensure that we can conduct a query for all Node BMCs in the Component collection _
 
-Errors:
-E   tavern.util.exceptions.TestFailError: Test 'Verify the expected response fields for all NodeBMCs' failed:
-    - Error calling validate function '<function validate_pykwalify at 0x7f44666179d0>':
-        Traceback (most recent call last):
-          File "/usr/lib/python3.8/site-packages/tavern/schemas/files.py", line 106, in verify_generic
-            verifier.validate()
-          File "/usr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
-            raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
-        pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
-         - Enum 'Warning' does not exist. Path: '/Components/9/Flag'.
-         - Enum 'Warning' does not exist. Path: '/Components/10/Flag'.
-         - Enum 'Warning' does not exist. Path: '/Components/11/Flag'.
-         - Enum 'Warning' does not exist. Path: '/Components/12/Flag'.
-         - Enum 'Warning' does not exist. Path: '/Components/13/Flag'.
-         - Enum 'Warning' does not exist. Path: '/Components/14/Flag'.: Path: '/'>
-```
+   Errors:
+   E   tavern.util.exceptions.TestFailError: Test 'Verify the expected response fields for all NodeBMCs' failed:
+      - Error calling validate function '<function validate_pykwalify at 0x7f44666179d0>':
+         Traceback (most recent call last):
+            File "/usr/lib/python3.8/site-packages/tavern/schemas/files.py", line 106, in verify_generic
+               verifier.validate()
+            File "/usr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
+               raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
+         pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
+            - Enum 'Warning' does not exist. Path: '/Components/9/Flag'.
+            - Enum 'Warning' does not exist. Path: '/Components/10/Flag'.
+            - Enum 'Warning' does not exist. Path: '/Components/11/Flag'.
+            - Enum 'Warning' does not exist. Path: '/Components/12/Flag'.
+            - Enum 'Warning' does not exist. Path: '/Components/13/Flag'.
+            - Enum 'Warning' does not exist. Path: '/Components/14/Flag'.: Path: '/'>
+   ```
 
-* Retrieve the xnames of all Mountain BMCs with Warning flags set in HSM:
+   * Retrieve the xnames of all Mountain BMCs with Warning flags set in HSM:
 
-```bash
-ncn# curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v1/State/Components?Type=NodeBMC\&Class=Mountain\&Flag=Warning | jq '.Components[] | { ID: .ID, Flag: .Flag, Class: .Class }' -c | sort -V | jq -c
-{"ID":"x5000c1s0b0","Flag":"Warning","Class":"Mountain"}
-{"ID":"x5000c1s0b1","Flag":"Warning","Class":"Mountain"}
-{"ID":"x5000c1s1b0","Flag":"Warning","Class":"Mountain"}
-{"ID":"x5000c1s1b1","Flag":"Warning","Class":"Mountain"}
-{"ID":"x5000c1s2b0","Flag":"Warning","Class":"Mountain"}
-{"ID":"x5000c1s2b1","Flag":"Warning","Class":"Mountain"}
-```
+   ```bash
+   ncn# curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v1/State/Components?Type=NodeBMC\&Class=Mountain\&Flag=Warning | jq '.Components[] | { ID: .ID, Flag: .Flag, Class: .Class }' -c | sort -V | jq -c
+   {"ID":"x5000c1s0b0","Flag":"Warning","Class":"Mountain"}
+   {"ID":"x5000c1s0b1","Flag":"Warning","Class":"Mountain"}
+   {"ID":"x5000c1s1b0","Flag":"Warning","Class":"Mountain"}
+   {"ID":"x5000c1s1b1","Flag":"Warning","Class":"Mountain"}
+   {"ID":"x5000c1s2b0","Flag":"Warning","Class":"Mountain"}
+   {"ID":"x5000c1s2b1","Flag":"Warning","Class":"Mountain"}
+   ```
 
-* For each Mountain BMC xname, check its Redfish BMC Manager status:
+   * For each Mountain BMC xname, check its Redfish BMC Manager status:
 
-```bash
-ncn# curl -s -k -u root:${BMC_PASSWORD} https://x5000c1s0b0/redfish/v1/Managers/BMC | jq '.Status'
-{
-  "Health": "OK",
-  "State": "Online"
-}
-```
+   ```bash
+   ncn# curl -s -k -u root:${BMC_PASSWORD} https://x5000c1s0b0/redfish/v1/Managers/BMC | jq '.Status'
+   {
+   "Health": "OK",
+   "State": "Online"
+   }
+   ```
 
-* Test failures and HSM Warning flags for Mountain BMCs with the Redfish BMC Manager status shown above can be safely ignored.
+   * Test failures and HSM Warning flags for Mountain BMCs with the Redfish BMC Manager status shown above can be safely ignored.
+
+2. The following HMS functional tests may fail because of locked components in HSM:
+
+  1. `test_bss_bootscript_ncn-functional_remote-functional.tavern.yaml`
+  2. `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
+
+   ```bash
+         Traceback (most recent call last):
+            File "/usr/lib/python3.8/site-packages/tavern/schemas/files.py", line 106, in verify_generic
+               verifier.validate()
+            File "/usr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
+               raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
+         pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
+            - Key 'Locked' was not defined. Path: '/Components/0'.
+            - Key 'Locked' was not defined. Path: '/Components/5'.
+            - Key 'Locked' was not defined. Path: '/Components/6'.
+            - Key 'Locked' was not defined. Path: '/Components/7'.
+            - Key 'Locked' was not defined. Path: '/Components/8'.
+            - Key 'Locked' was not defined. Path: '/Components/9'.
+            - Key 'Locked' was not defined. Path: '/Components/10'.
+            - Key 'Locked' was not defined. Path: '/Components/11'.
+            - Key 'Locked' was not defined. Path: '/Components/12'.: Path: '/'>
+   ```
+   
+   Failures of these tests because of locked components as shown above can be safely
+   ignored.
 
 <a name="cms-validation-utility"></a>
 ## Cray Management Services Validation Utility
@@ -923,12 +956,13 @@ The following procedures run on separate nodes of the Shasta system. They are, t
 <a name="uas-uai-validate-install"></a>
 #### Validate the Basic UAS Installation
 
-Make sure you are running on the LiveCD node and have initialized and authorized yourself in the CLI as described above.
+Make sure you are running on a booted NCN node and have initialized and authorized yourself in the CLI as described above.
+   > If the cray CLI was initialized on the LiveCD PIT node, the following commds will also work on the PIT node.
 
 1. Basic UAS installation is validated using the following:
    1. 
       ```bash
-      pit# cray uas mgr-info list
+      ncn# cray uas mgr-info list
       ```
 
       Expected output looks similar to the following:
@@ -940,7 +974,7 @@ Make sure you are running on the LiveCD node and have initialized and authorized
       In this example output, it shows that UAS is installed and running the `1.11.5` version.
    1.
       ```bash
-      pit# cray uas list
+      ncn# cray uas list
       ```
       
       Expected output looks similar to the following:
@@ -951,7 +985,7 @@ Make sure you are running on the LiveCD node and have initialized and authorized
      This example output shows that there are no currently running UAIs. It is possible, if someone else has been using the UAS, that there could be UAIs in the list. That is acceptable too from a validation standpoint.
 1. Verify that the pre-made UAI images are registered with UAS
    ```bash
-   pit# cray uas images list
+   ncn# cray uas images list
    ```
    
    Expected output looks similar to the following:
@@ -1182,7 +1216,7 @@ ncn# kubectl get po -n user | grep <uai-name>
 to locate the pod, and then use
 
 ```bash
-ncn# kubectl describe -n user <pod-name>
+ncn# kubectl describe pod -n user <pod-name>
 ```
 
 to investigate the problem. If volumes are missing they will show up in the `Events:` section of the output. Other problems may show up there as well. The names of the missing volumes or other issues should indicate what needs to be fixed to make the UAI run.
