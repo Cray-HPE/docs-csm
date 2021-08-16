@@ -413,9 +413,9 @@ data so run them only when indicated. Instructions are in the `README` files.
 1. Run `ip a` to show our VLANs, verify they all have IP addresses.
     
     ```bash
-    ncn-m001# ip a show vlan002
-    ncn-m001# ip a show vlan004
-    ncn-m001# ip a show vlan007
+    ncn-m001# ip a show bond0.nmn0
+    ncn-m001# ip a show bond0.hmn0
+    ncn-m001# ip a show bond0.can0
     ```
     
 1. Run `ip r` to show our default route is via the CAN/vlan007.

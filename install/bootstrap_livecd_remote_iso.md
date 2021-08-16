@@ -429,21 +429,12 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       ```
 
 1. Copy the interface config files generated earlier by `csi config init`
-   into `/etc/sysconfig/network/` with the first option **or** use the provided scripts in the second option below.
-
-   * Option 1: Copy PIT files.
+   into `/etc/sysconfig/network/`.
 
       ```bash
       pit# cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/pit-files/* /etc/sysconfig/network/
       pit# wicked ifreload all
       pit# systemctl restart wickedd-nanny && sleep 5
-      ```
-   * Option 2: Set up dnsmasq by hand.
-
-      ```bash
-      pit# /root/bin/csi-setup-vlan002.sh $nmn_cidr
-      pit# /root/bin/csi-setup-vlan004.sh $hmn_cidr
-      pit# /root/bin/csi-setup-vlan007.sh $can_cidr
       ```
 
 1. Check that IP addresses are set for each interface and investigate any failures.
@@ -451,7 +442,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
     1. Check IP addresses, do not run tests if these are missing and instead start triage.
 
        ```bash
-       pit# wicked show bond0 vlan002 vlan004 vlan007
+       pit# wicked show bond0 bond0.nmn0 bond0.hmn0 bond0.can0
        bond0           up
        link:     #7, state up, mtu 1500
        type:     bond, mode ieee802-3ad, hwaddr b8:59:9f:fe:49:d4
@@ -459,25 +450,25 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
        leases:   ipv4 static granted
        addr:     ipv4 10.1.1.2/16 [static]
 
-       vlan002         up
+       bond0.nmn0      up
        link:     #8, state up, mtu 1500
        type:     vlan bond0[2], hwaddr b8:59:9f:fe:49:d4
-       config:   compat:suse:/etc/sysconfig/network/ifcfg-vlan002
+       config:   compat:suse:/etc/sysconfig/network/ifcfg-bond0.nmn0
        leases:   ipv4 static granted
        addr:     ipv4 10.252.1.4/17 [static]
        route:    ipv4 10.92.100.0/24 via 10.252.0.1 proto boot
 
-       vlan007         up
+       bond0.can0      up
        link:     #9, state up, mtu 1500
        type:     vlan bond0[7], hwaddr b8:59:9f:fe:49:d4
-       config:   compat:suse:/etc/sysconfig/network/ifcfg-vlan007
+       config:   compat:suse:/etc/sysconfig/network/ifcfg-bond0.can0
        leases:   ipv4 static granted
        addr:     ipv4 10.102.9.5/24 [static]
  
-       vlan004         up
+       bond0.hmn0      up
        link:     #10, state up, mtu 1500
        type:     vlan bond0[4], hwaddr b8:59:9f:fe:49:d4
-       config:   compat:suse:/etc/sysconfig/network/ifcfg-vlan004
+       config:   compat:suse:/etc/sysconfig/network/ifcfg-bond0.hmn0
        leases:   ipv4 static granted
        addr:     ipv4 10.254.1.4/17 [static]
        ```

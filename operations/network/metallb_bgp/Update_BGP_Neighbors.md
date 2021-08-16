@@ -9,7 +9,7 @@ You will not have BGP peers until CSM ```install.sh``` has run. This is where Me
 - Are my Neighbors stuck in IDLE?
   - Running `clear ip bgp all` on the Mellanox and `clear bgp *` on the Arubas will restart the BGP process. This process may need to be done when a system is reinstalled or when a worker node is rebuilt.
   - If you cannot get the neighbors out of IDLE, make sure that passive neighbors are configured. This is in the automated scripts and shown in the example below. Passive neighbors should only be configured on NCN neighbors not the switch to switch neighbors (Aruba Only)
-- The BGP neighbors will be the worker NCN IP addresses on the NMN (node management network) (VLAN002). If your system is using HPE/Aruba, one of the neighbors will be the other spine switch.
+- The BGP neighbors will be the worker NCN IP addresses on the NMN (node management network) (bond0.nmn0). If your system is using HPE/Aruba, one of the neighbors will be the other spine switch.
 
 ## Generate MetalLB configmap
 - Depending on the network architecture of your system you may need to peer with switches other than the spines. CSI has a BGP peers argument that accepts 'aggregation' as an option, if no option is defined it will default to the spines as being the MetalLB peers. 

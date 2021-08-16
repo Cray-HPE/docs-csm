@@ -106,30 +106,30 @@ sorted by safest to touch relative to keeping an SSH connection up.
          addr:     ipv6 fe80::ba59:9fff:fef9:1c8e/64 scope link
          route:    ipv6 fe80::/64 type unicast table main scope universe protocol kernel priority 256
 
-   vlan002         device-unconfigured
+   bond0.nmn0      device-unconfigured
          link:     #7, state up, mtu 9000
          type:     vlan bond0[2], hwaddr b8:59:9f:f9:1c:8e
          config:   none
-         addr:     ipv4 10.252.2.2/17 brd 10.252.2.2 scope universe label vlan002
+         addr:     ipv4 10.252.2.2/17 brd 10.252.2.2 scope universe label bond0.nmn0
          addr:     ipv6 fe80::ba59:9fff:fef9:1c8e/64 scope link
-         route:    ipv4 0.0.0.0/0 via 10.252.1.1 dev vlan002 type unicast table main scope universe protocol boot
+         route:    ipv4 0.0.0.0/0 via 10.252.1.1 dev bond0.nmn0 type unicast table main scope universe protocol boot
          route:    ipv4 10.252.0.0/17 type unicast table main scope link protocol kernel pref-src 10.252.2.2
          route:    ipv6 fe80::/64 type unicast table main scope universe protocol kernel priority 256
 
-   vlan004         device-unconfigured
+   bond0.hmn0      device-unconfigured
          link:     #8, state up, mtu 9000
          type:     vlan bond0[4], hwaddr b8:59:9f:f9:1c:8e
          config:   none
-         addr:     ipv4 10.254.2.2/17 brd 10.254.2.2 scope universe label vlan004
+         addr:     ipv4 10.254.2.2/17 brd 10.254.2.2 scope universe label bond0.hmn0
          addr:     ipv6 fe80::ba59:9fff:fef9:1c8e/64 scope link
          route:    ipv4 10.254.0.0/17 type unicast table main scope link protocol kernel pref-src 10.254.2.2
          route:    ipv6 fe80::/64 type unicast table main scope universe protocol kernel priority 256
 
-   vlan007         device-unconfigured
+   bond0.can0      device-unconfigured
          link:     #9, state up, mtu 9000
          type:     vlan bond0[7], hwaddr b8:59:9f:f9:1c:8e
          config:   none
-         addr:     ipv4 10.102.9.12/24 brd 10.102.9.12 scope universe label vlan007
+         addr:     ipv4 10.102.9.12/24 brd 10.102.9.12 scope universe label bond0.can0
          addr:     ipv6 fe80::ba59:9fff:fef9:1c8e/64 scope link
          route:    ipv4 10.102.9.0/24 type unicast table main scope link protocol kernel pref-src 10.102.9.12
          route:    ipv6 fe80::/64 type unicast table main scope universe protocol kernel priority 256
