@@ -36,7 +36,7 @@ function is_state_recorded () {
         echo "upgrade ncn is not specified"
         exit 1
     fi
-    state_recorded=$(cat /etc/cray/upgrade/csm/$CSM_RELEASE/$upgrade_ncn/state | grep "${state_name}" | wc -l)
+    state_recorded=$(cat /etc/cray/upgrade/csm/$CSM_RELEASE/$upgrade_ncn/state 2>/dev/null | grep "${state_name}" | wc -l)
     if [[ ${state_recorded} != 0 ]]; then
         echo "1"
     else

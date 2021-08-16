@@ -164,7 +164,7 @@ fi
 
 state_name="SETUP_NEXUS"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" ]]; then
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     ./${CSM_RELEASE}/lib/setup-nexus.sh
     record_state ${state_name} $(hostname)
@@ -174,7 +174,7 @@ fi
 
 state_name="UPGRADE_BSS"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" ]]; then
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     helm -n services upgrade cray-hms-bss ./${CSM_RELEASE}/helm/cray-hms-bss-*.tgz
     record_state ${state_name} $(hostname)
@@ -184,7 +184,7 @@ fi
 
 state_name="CHECK_CLOUD_INIT_PREREQ"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" ]]; then
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     echo "Ensuring cloud-init is healthy"
     set +e
@@ -202,7 +202,7 @@ fi
 
 state_name="APPLY_POD_PRIORITY"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" ]]; then
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     . ${BASEDIR}/add_pod_priority.sh
     record_state ${state_name} $(hostname)
@@ -212,7 +212,7 @@ fi
 
 state_name="UPDATE_BSS_CLOUD_INIT_RECORDS"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" ]]; then
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "${state_name} ..."
 
     # get bss cloud-init data with host_records
@@ -255,7 +255,7 @@ fi
 
 state_name="UPDATE_CRAY_DHCP_KEA_TRAFFIC_POLICY"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" ]]; then
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "${state_name} ..."
     kubectl -n services patch service cray-dhcp-kea-tcp-hmn --type merge -p '{"spec":{"externalTrafficPolicy":"Local"}}'
     kubectl -n services patch service cray-dhcp-kea-tcp-nmn --type merge -p '{"spec":{"externalTrafficPolicy":"Local"}}'
@@ -269,7 +269,7 @@ fi
 
 state_name="MODIFYING_NEW_NCN_IMAGE"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ $state_recorded == "0" ]]; then
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     artdir=./${CSM_RELEASE}/images
     # for both the kubernetes and storage images,
@@ -424,7 +424,7 @@ fi
 
 state_name="UNINSTALL_CONMAN"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" ]]; then
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     numOfDeployments=$(helm list -n services | grep cray-conman | wc -l)
     if [[ $numOfDeployments -ne 0 ]]; then
@@ -438,7 +438,7 @@ fi
 
 state_name="INSTALL_NEW_CONSOLE"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" ]]; then
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     numOfDeployments=$(helm list -n services | grep cray-console | wc -l)
     if [[ $numOfDeployments -eq 0 ]]; then
@@ -454,10 +454,25 @@ fi
 
 state_name="PRECACHE_NEXUS_IMAGES"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" ]]; then
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
     pdsh -b -S -w $(grep -oP 'ncn-w\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'for image in sonatype/nexus3:3.25.0 dtr.dev.cray.com/cray/proxyv2:1.6.13-cray1 dtr.dev.cray.com/baseos/busybox:1 docker.io/sonatype/nexus3:3.25.0 dtr.dev.cray.com/cray/cray-nexus-setup:0.3.2; do crictl pull $image; done'
+
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
+state_name="UPDATE_SSH_KEYS"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m002" ]]; then
+    echo "====> ${state_name} ..."
+    . ${BASEDIR}/ncn-upgrade-common.sh ${upgrade_ncn}
+    for i in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ' ')
+    do
+        ssh_keygen_keyscan $i
+    done
 
     record_state ${state_name} $(hostname)
 else

@@ -204,16 +204,19 @@ if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     sleep 60
     # wait for cloud-init
-    if [[ $ssh_keys_done == "0" ]]; then
-        ssh_keygen_keyscan "${upgrade_ncn}"
-        ssh_keys_done=1
-    fi
+    # ssh commands are expected to fail for a while, so we temporarily disable set -e
+    set +e
     printf "%s" "waiting for cloud-init: $upgrade_ncn ..."
-    while ! ssh $upgrade_ncn -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null 'cat /var/log/messages | grep "Cloud-init" | grep "finished"' &> /dev/null
-    do
+    while true ; do
+        if ssh_keygen_keyscan "${upgrade_ncn}" &> /dev/null ; then
+            ssh_keys_done=1
+            ssh "${upgrade_ncn}" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null 'grep Cloud-init /var/log/messages | grep -q finished' &> /dev/null && break
+        fi
         printf "%c" "."
         sleep 20
     done
+    # Reestore set -e
+    set -e
     printf "\n%s\n"  "$upgrade_ncn finished cloud-init"
 
     record_state "${state_name}" ${upgrade_ncn}

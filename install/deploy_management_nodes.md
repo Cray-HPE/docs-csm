@@ -190,19 +190,11 @@ The management nodes are expected to have certain minimum firmware installed for
 firmware. Where possible, the firmware should be updated prior to install. Some firmware can be updated
 during or after the installation, but it is better to meet the minimum NCN firmware requirement before starting.
 
-1. Check these BIOS settings on management nodes.
+1. (optional) Check these BIOS settings on management nodes [NCN BIOS](../background/ncn_bios.md).
 
-   For setting each one, please refer to the vendor manuals for the system's inventory.
+    > This is _optional_, the BIOS settings (or lack thereof) do not prevent deployment. The NCN Installation will work with the CMOS' default BIOS. There may be settings that facilitate the speed of deployment, but they may be tuned at a later time.
 
-   > **`NOTE`** The table below declares desired settings; unlisted settings should remain at vendor-default. This table may be expanded as new settings are adjusted.
-
-   | Common Name | Common Value | Memo | Menu Location
-   | --- | --- | --- | --- |
-   | Intel® Hyper-Threading (e.g. HT) | `Enabled` | Enables two-threads per physical core. | Within the Processor or the PCH Menu.
-   | Intel® Virtualization Technology (e.g. VT-x, VT) and AMD Virtualization Technology (e.g. AMD-V)| `Enabled` | Enables Virtual Machine extensions. | Within the Processor or the PCH Menu.
-   | PXE Retry Count | 1 or 2 (default: 1) | Attempts done on a single boot-menu option (note: 2 should be set for systems with unsolved network congestion). | Within the Networking Menu, and then under Network Boot.
-
-   > **`NOTE`** **PCIe** options can be found in [PCIe : Setting Expected Values](switch_pxe_boot_from_onboard_nic_to_pcie.md#setting-expected-values).
+    > **`NOTE`** The BIOS tuning will be automated, further reducing this step. 
 
 1. Check for minimum NCN firmware versions and update them as needed,
    The firmware on the management nodes should be checked for compliance with the minimum version required
@@ -255,9 +247,9 @@ The configuration workflow described here is intended to help understand the exp
 
 1. Change the default root password and SSH keys
    > If you want to avoid using the default install root password and SSH keys for the NCNs, follow the
-   > NCN image customization steps in [Change NCN Image Root Password and SSH Keys](../operations/change_ncn_image_root_password_and_ssh_keys.md)
+   > NCN image customization steps in [Change NCN Image Root Password and SSH Keys](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md)
 
-   This step is **strongly encouraged** for external/site deployments.
+   This step is **strongly encouraged** for all systems.
 
 1. Create boot directories for any NCN in DNS:
     > This will create folders for each host in `/var/www`, allowing each host to have their own unique set of artifacts; kernel, initrd, SquashFS, and `script.ipxe` bootscript.
