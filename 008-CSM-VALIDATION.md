@@ -957,7 +957,7 @@ The following procedures run on separate nodes of the Shasta system. They are, t
 #### Validate the Basic UAS Installation
 
 Make sure you are running on a booted NCN node and have initialized and authorized yourself in the CLI as described above.
-   > If the cray CLI was initialized on the LiveCD PIT node, the following commds will also work on the PIT node.
+   > If the cray CLI was initialized on the LiveCD PIT node, then following commands will also work on the PIT node.
 
 1. Basic UAS installation is validated using the following:
    1. 
