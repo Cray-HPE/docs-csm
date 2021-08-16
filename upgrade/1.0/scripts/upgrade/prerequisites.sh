@@ -230,7 +230,6 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
         record=$(jq '."cloud-init"."meta-data".host_records['$i']' cloud-init-global.json)
         if [[ $record =~ "packages.local" ]] || [[ $record =~ "registry.local" ]]; then
                 echo "packages.local and registry.local already in BSS cloud-init host_records"
-                exit 0
         fi
     done
 
