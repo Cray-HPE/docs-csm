@@ -20,8 +20,10 @@ pipeline {
         stage("Prepare") {
             steps {
                 script {
-                    runLibraryScript("addRpmMetaData.sh", env.SPEC_FILE)
-                    sh "make prepare"
+                    withCredentials([gitUsernamePassword(credentialsId: 'jenkins-algol60-cray-hpe-github-integration')]) {
+                        runLibraryScript("addRpmMetaData.sh", env.SPEC_FILE)
+                        sh "make prepare"
+                    }
                 }
             }
         }
@@ -29,7 +31,9 @@ pipeline {
         stage("Build RPM") {
             steps {
                 script {
-                    sh "make rpm"
+                    withCredentials([gitUsernamePassword(credentialsId: 'jenkins-algol60-cray-hpe-github-integration')]) {
+                        sh "make rpm"
+                    }
                 }
             }
         }
