@@ -20,7 +20,7 @@ Swap an HPE Cray EX liquid-cooled compute blade from System A to System B.
 
 ### System A Procedure 
 
-1. Use WLM drain running jobs from the affected nodes on the blade.
+1. Use WLM to drain running jobs from the affected nodes on the blade.
    
 2. Use Boot Orchestration Services (BOS) to shut down the affected nodes on the donor blade (in this example, x9000c3s0). Specify the appropriate xname and BOS template for the node type in the following command. 
 
@@ -147,7 +147,7 @@ The hardware management network MAC and IP addresses are assigned algorithmicall
 
 ### System B Procedure
 
-11. Use WLM remove jobs from the affected nodes on the blade.
+11. Use WLM to drain jobs from the affected nodes on the blade.
 
 12. Use BOS to shut down the affected nodes on the blade (in this example, x1005c3s0). 
 
@@ -282,7 +282,7 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 
     Use the value of `access_token` to make API requests.
 
-26. Add the MAC and IP addresses for Ethernet interfaces to the HSM. For Windom blades.
+26. Add the MAC and IP addresses for Ethernet interfaces to the HSM.
 
     `ComponentID: "x1005c3s0b0n0"`
     `MACAddress: "00:40:a6:83:63:99"`
@@ -346,30 +346,29 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 
     ```bash
     ncn-m001# cray hsm inventory redfishEndpoints describe XNAME --format json
-    	{
-    		"ID": "x1005c3s0b0",
-    		"Type": "NodeBMC",
-    		"Hostname": "x1005c3s0b0",
-    		"Domain": "",
-    		"FQDN": "x1005c3s0b0",
-    		"Enabled": true,
-    		"UUID": "e005cc6e-debf-0010-e803-b42e99be1a2d",
-    		"User": "root",
-    		"Password": "",
-    		"MACAddr": "0040a6836399",
-    		"RediscoverOnUpdate": true,
-    		"DiscoveryInfo": {
-    			"LastDiscoveryAttempt": "2021-01-29T16:15:37.643327Z",
-    			"LastDiscoveryStatus": "DiscoverOK",
-    			"RedfishVersion": "1.7.0"
-    		}
+    {
+    	"ID": "x1005c3s0b0",
+    	"Type": "NodeBMC",
+    	"Hostname": "x1005c3s0b0",
+    	"Domain": "",
+    	"FQDN": "x1005c3s0b0",
+    	"Enabled": true,
+    	"User": "root",
+    	"Password": "",
+    	"MACAddr": "02:03:E8:00:31:00",
+    	"RediscoverOnUpdate": true,
+    	"DiscoveryInfo": {
+    		"LastDiscoveryAttempt": "2021-06-10T18:01:59.920850Z",
+    		"LastDiscoveryStatus": "DiscoverOK",
+    		"RedfishVersion": "1.2.0"
     	}
+    }
     ```
     - When `LastDiscoveryStatus` displays as `DiscoverOK`, the node BMC has been successfully discovered.
     - If the last discovery state is `DiscoveryStarted` then the BMC is currently being inventoried by HSM.
     - If the last discovery state is `HTTPsGetFailed` or `ChildVerificationFailed`, then an error has
       occurred during the discovery process.
-
+    
 33. Optional: To force rediscovery of the components in the chassis (the example shows cabinet 1005, chassis 3).
 
     ```bash
@@ -421,6 +420,7 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 37. Use boot orchestration to power on and boot the nodes. Specify the appropriate BOS template for the node type.
 
     ```bash
+    ncn-m001# COS-VERSION=cos-2.0.30-slurm-healthy-compute
     ncn-m001# cray bos session create --template-uuid COS-VERSION --operation reboot --limit x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
     ```
 
