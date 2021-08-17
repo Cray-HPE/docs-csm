@@ -14,7 +14,7 @@ Swap an HPE Cray EX liquid-cooled compute blade from System A to System B.
 - Both systems must have the Slingshot fabric configured with the desired topology for both blades
 - The SLS has the desired HSN configuration
 - The blade that is removed from the System A is installed in the empty slot left by the blade removed from System B and visa-versa.
-- Each blade must have the coolant drained and and filled to minimize cross-contamination of cooling systems. 
+- Each blade must have the coolant drained and filled to minimize cross-contamination of cooling systems. 
   - Review procedures in *HPE Cray EX Coolant Service Procedures H-6199* 
   - Review the *HPE Cray EX Hand Pump User Guide H-6200*
 
@@ -153,7 +153,7 @@ The hardware management network MAC and IP addresses are assigned algorithmicall
 
     ```bash
     ncn-m001# COS-VERSION=cos-2.0.30-slurm-healthy-compute
-    ncn-m001# cray bos session create --template-uuid COS-VERSION --operation shutdown --limit x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
+    ncn-m001# cray bos session create --template-uuid $COS-VERSION --operation shutdown --limit x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
     ```
 
 #### Disable the Redfish endpoints for the nodes
@@ -233,7 +233,7 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
     ]
     ```
 
-20. Record the the following values for each node in the blade.
+20. Record the following values for each node in the blade.
     `ComponentID: "x1005c3s0b0n0"`
     `MACAddress: "00:40:a6:83:63:99"`
     `IPAddress: "10.10.0.123"`  
@@ -322,7 +322,7 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 
 #### Enable Discovery
 
-30. Verify the the hms-discovery cronjob is not suspended in k8s (`ACTIVE` = `1` and `SUSPEND` = `False`). 
+30. Verify the hms-discovery cronjob is not suspended in k8s (`ACTIVE` = `1` and `SUSPEND` = `False`). 
 
     ```bash
     ncn-m001# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
@@ -421,7 +421,7 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 
     ```bash
     ncn-m001# COS-VERSION=cos-2.0.30-slurm-healthy-compute
-    ncn-m001# cray bos session create --template-uuid COS-VERSION --operation reboot --limit x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
+    ncn-m001# cray bos session create --template-uuid $COS-VERSION --operation reboot --limit x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
     ```
 
 #### Check Firmware
@@ -465,9 +465,10 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
 
 #### Bring up the Blade in System A
 
-8. Drain the coolant from the blade removed from system B and fill with fresh coolant to minimize cross-contamination of cooling systems. 
-   - Review fill station procedures in *HPE Cray EX Coolant Service Procedures H-6199*. If using the hand pump, review procedures in the *HPE Cray EX Hand Pump User Guide H-6200* (https://internal.support.hpe.com/).
-9. Install the blade from System B into System A.  
-   - Review the *Remove a Compute Blade Using the Lift* procedure in *HPE Cray EX Hardware Replacement Procedures H-6173* for detailed instructions for replacing liquid-cooled blades (https://internal.support.hpe.com/).
+42. Drain the coolant from the blade removed from system B and fill with fresh coolant to minimize cross-contamination of cooling systems. 
+    - Review fill station procedures in *HPE Cray EX Coolant Service Procedures H-6199*. If using the hand pump, review procedures in the *HPE Cray EX Hand Pump User Guide H-6200* (https://internal.support.hpe.com/).
 
-42. Repeat steps 25 through 41 to power on the nodes in System A.
+43. Install the blade from System B into System A.  
+    - Review the *Remove a Compute Blade Using the Lift* procedure in *HPE Cray EX Hardware Replacement Procedures H-6173* for detailed instructions for replacing liquid-cooled blades (https://internal.support.hpe.com/).
+
+44. Repeat steps 25 through 41 to power on the nodes in System A.
