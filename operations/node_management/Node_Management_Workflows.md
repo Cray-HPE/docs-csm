@@ -111,7 +111,7 @@ Mentioned in this workflow:
 
 2.  **Administrator physically removes the compute nodes**
 
-    The Administrator physically removes the compute nodes and powers them off.
+    The Administrator powers off and physically removes the compute nodes.
 
     The following steps \(3-9\) occur automatically as different APIs interact with each other.
 
@@ -152,7 +152,7 @@ Mentioned in this workflow:
 ### Replace Nodes
 
 - [Replace a Compute Blade](Replace_a_Compute_Blade.md) 
-
+- [Swap a Compute Blade with a Different System](Swap_a_Compute_Blade_with_a_Different_System.md)
 
 
 <a name="move-nodes"></a>

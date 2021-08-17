@@ -26,7 +26,7 @@ Swap an HPE Cray EX liquid-cooled compute blade from System A to System B.
 
    ```bash
    ncn-m001# COS-VERSION=cos-2.0.30-slurm-healthy-compute
-   ncn-m001# cray bos session create --template-uuid COS-VERSION --operation shutdown --limit x9000c3s0b0n0,x9000c3s0b0n1,x9000c3s0b1n0,x9000c3s0b1n1
+   ncn-m001# cray bos session create --template-uuid $COS-VERSION --operation shutdown --limit x9000c3s0b0n0,x9000c3s0b0n1,x9000c3s0b1n0,x9000c3s0b1n1
    ```
 #### Disable the Redfish endpoints for the nodes
 
@@ -110,9 +110,11 @@ The hardware management network MAC and IP addresses are assigned algorithmicall
    
    1. Record the following values:
    
+      ```bash
       `ComponentID: "x9000c3s0b0n0"`
       `MACAddress: "00:40:a6:83:63:39"`
       `IPAddress: "10.100.0.10"`
+      ```
    
    2. Repeat the command to record the ComponentID, MAC, and IP addresses the other nodes in the blade.
    
@@ -129,9 +131,9 @@ The hardware management network MAC and IP addresses are assigned algorithmicall
       ncn-m001# cray hsm inventory ethernetInterfaces delete COMPONENT_ID
       ...
       ```
-   
-   4. Delete the Redfish endpoints for each node.
 
+   4. Delete the Redfish endpoints for each node.
+   
       ```bash
       ncn-m001# cray hsm inventory redfishEndpoints delete x9000c3s0b0
       ncn-m001# cray hsm inventory redfishEndpoints delete x9000c3s0b1
@@ -233,11 +235,14 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
     ]
     ```
 
-20. Record the following values for each node in the blade.
+20. Record the following `Node Maintenance Network` values for each node in the blade.
+    
+    ```bash
     `ComponentID: "x1005c3s0b0n0"`
     `MACAddress: "00:40:a6:83:63:99"`
-    `IPAddress: "10.10.0.123"`  
-
+    `IPAddress: "10.10.0.123"`
+    ```
+    
 21. Delete the node NIC MAC and IP addresses from the HSM Ethernet interfaces table for each node.
 
     ```bash
@@ -282,13 +287,13 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 
     Use the value of `access_token` to make API requests.
 
-26. Add the MAC and IP addresses for Ethernet interfaces to the HSM.
+26. Add the MAC and IP addresses for `Node Maintenance Network` interfaces to the HSM.
 
+    ```bash
     `ComponentID: "x1005c3s0b0n0"`
     `MACAddress: "00:40:a6:83:63:99"`
     `IPAddress: "10.10.0.123"`  
-
-    The xname values that should change are the cabinet, chassis, and slot (xXcCsS). The BMC and node values should not be changed (bBnN). 
+    ```
 
     ```bash
     ncn-m001# MAC=MAC_ADDRESS
@@ -304,7 +309,7 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
           }'
     ```
 
-27. Repeat the preceding command for each node MAC and IP address in the blade.
+27. Repeat the preceding command for each `Node Maintenance Network` MAC and IP address in the blade.
 
 #### Enable the Slot and Power on the Slot
 
@@ -428,7 +433,7 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 
 38. Verify that the correct firmware versions for node BIOS, node controller (nC), NIC mezzanine card (NMC), GPUs, and so on.
 
-39. If necessary, update the firmware. Review the Firmware Action Service (FAS).
+39. If necessary, update the firmware. Review the [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md) and [Update Firmware with FAS](../firmware/Update_Firmware_with_FAS.md) procedure.
 
     ```bash
     ncn-m001# cray fas actions create CUSTOM_DEVICE_PARAMETERS.json
