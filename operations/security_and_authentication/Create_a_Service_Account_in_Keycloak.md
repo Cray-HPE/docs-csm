@@ -18,7 +18,7 @@ Follow the steps in only one of the following sections depending on if it is pre
 
 3. Click the **Create** button at the top-right of the Clients table.
 
-   ![](../../img/operations/Add_Client_in_Keycloak.png "Add Client in Keycloak")
+   ![Add Client in Keycloak](../../img/operations/Add_Client_in_Keycloak.png)
 
    1.  Enter a Client ID for the new client.
 
@@ -30,7 +30,7 @@ Follow the steps in only one of the following sections depending on if it is pre
 
    Once the client is created, a new screen is displayed with more details for the client.
 
-   ![](../../img/operations/Keycloak_Client_Details.png "Keycloak Client Details")
+   ![Keycloak Client Details](../../img/operations/Keycloak_Client_Details.png)
 
    1.  Change the Access type to confidential.
 
@@ -44,7 +44,7 @@ Follow the steps in only one of the following sections depending on if it is pre
 
 5. Assign a role to the client for authorization.
 
-   ![](../../img/operations/Keycloak_Admin-role_Mapper.png "Keycloak Admin-role Mapper")
+   ![Keycloak Admin-role Mapper](../../img/operations/Keycloak_Admin-role_Mapper.png)
 
    1.  Switch to the **Mappers** tab for the new client.
 

@@ -21,7 +21,8 @@ The following is a high-level overview of the boot sequence for compute nodes:
     -   A string containing the kernel parameters.
 7.  The node attempts to download `kernel` and `initrd` boot artifacts. If successful, it will boot using these and the kernel parameters. Otherwise, it will retry to download these boot artifacts indefinitely.
 
-![](../../img/operations/Boot_Flow.png "Node Boot Flow")
+![Node Boot Flow](../../img/operations/Boot_Flow.png)
 
 There may be times when certain issues may be encountered during the compute node boot up process. In order to resolve these issues, it is important to understand the underlying cause, symptoms, and stage at which the issue has occurred. The exact process and tools required to resolve the issue depends on this information.
+
 
