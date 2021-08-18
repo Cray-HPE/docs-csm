@@ -3,6 +3,7 @@
 # Copyright 2021 Hewlett Packard Enterprise Development LP
 #
 
+mkdir -p /etc/cray/upgrade/csm/$CSM_RELEASE
 
 function record_state () {
     state_name=$1
