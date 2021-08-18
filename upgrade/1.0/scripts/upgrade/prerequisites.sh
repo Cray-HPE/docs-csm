@@ -40,48 +40,7 @@ if [[ -z ${CSM_RELEASE} ]]; then
     exit 1
 fi
 
-# Apply WAR for CASMINST-2689, just in case
-if [[ $(hostname) == "ncn-m001" ]]; then
-  echo "Opening and refreshing fallback artifacts on the NCNs.."
 
-
-  # Copy it to the other NCNs
-  for i in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ' ');
-  do
-    scp -r ${BASEDIR}/CASMINST-2689.sh $i:/tmp/CASMINST-2689.sh
-  done
-
-  # Run the workaround on all the NCNs
-  pdsh -b -S -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') '/tmp/CASMINST-2689.sh'
-
-  # Check if ncn-m001 is using itself for an upstream server
-  if [[ "$(awk '/^server/ {print $2}' /etc/chrony.d/cray.conf)" == ncn-m001 ]] ||
-      [[ "$(chronyc tracking | awk '/Reference ID/ {print $5}' | tr -d '()')" == ncn-m001 ]]; then
-        # Get the upstream NTP server from cloud-init metadata, trying a few different sources before failing
-        upstream_ntp_server=$(craysys metadata get upstream_ntp_server)
-        # check to make sure we are not re-creating the bug by setting m001 to use itself as an upstream
-        if [[ "$upstream_ntp_server" == "ncn-m001" ]]; then
-          # if a pool is set, and we did not find an upstream server, just use the pool
-          grep "^\(pool\).*" /etc/chrony.d/cray.conf >/dev/null
-
-          if [[ $? -eq 0 ]] ; then
-            sed -i "/^\(server ncn-m001\).*/d" /etc/chrony.d/cray.conf
-          # otherwise error
-          else
-            echo "Upstream server cannot be $upstream_ntp_server"
-            exit 1
-          fi
-        else
-          # Swap in the "real" NTP server
-          sed -i "s/^\(server ncn-m001\).*/server $upstream_ntp_server iburst trust/" /etc/chrony.d/cray.conf
-          # add a new config that will step the clock if it is less that 1s of drift, otherwise, it will slew it
-          # this applies on startups of the system from a reboot only
-          sed -i "/^\(logchange 1.0\)\$/a initstepslew 1 $upstream_ntp_server" /etc/chrony.d/cray.conf
-          # Apply the change to use the new upstream server
-          # systemctl restart chronyd
-        fi
-  fi
-fi
 
 if [[ -z ${TARBALL_FILE} ]]; then
     # Download tarball from internet
@@ -127,6 +86,48 @@ if [[ $state_recorded == "0" ]]; then
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
+fi
+
+# Apply WAR for CASMINST-2689, just in case
+if [[ $(hostname) == "ncn-m001" ]]; then
+  echo "Opening and refreshing fallback artifacts on the NCNs.."
+
+
+  # Copy it to the other NCNs
+  for i in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ' ');
+  do
+    ssh_keygen_keyscan "${i}"
+    scp -r ${BASEDIR}/CASMINST-2689.sh $i:/tmp/CASMINST-2689.sh
+    ssh $i -t '/tmp/CASMINST-2689.sh'
+  done
+
+  # Check if ncn-m001 is using itself for an upstream server
+  if [[ "$(awk '/^server/ {print $2}' /etc/chrony.d/cray.conf)" == ncn-m001 ]] ||
+      [[ "$(chronyc tracking | awk '/Reference ID/ {print $5}' | tr -d '()')" == ncn-m001 ]]; then
+        # Get the upstream NTP server from cloud-init metadata, trying a few different sources before failing
+        upstream_ntp_server=$(craysys metadata get upstream_ntp_server)
+        # check to make sure we are not re-creating the bug by setting m001 to use itself as an upstream
+        if [[ "$upstream_ntp_server" == "ncn-m001" ]]; then
+          # if a pool is set, and we did not find an upstream server, just use the pool
+          grep "^\(pool\).*" /etc/chrony.d/cray.conf >/dev/null
+
+          if [[ $? -eq 0 ]] ; then
+            sed -i "/^\(server ncn-m001\).*/d" /etc/chrony.d/cray.conf
+          # otherwise error
+          else
+            echo "Upstream server cannot be $upstream_ntp_server"
+            exit 1
+          fi
+        else
+          # Swap in the "real" NTP server
+          sed -i "s/^\(server ncn-m001\).*/server $upstream_ntp_server iburst trust/" /etc/chrony.d/cray.conf
+          # add a new config that will step the clock if it is less that 1s of drift, otherwise, it will slew it
+          # this applies on startups of the system from a reboot only
+          sed -i "/^\(logchange 1.0\)\$/a initstepslew 1 $upstream_ntp_server" /etc/chrony.d/cray.conf
+          # Apply the change to use the new upstream server
+          # systemctl restart chronyd
+        fi
+  fi
 fi
 
 state_name="INSTALL_CSI"
@@ -402,7 +403,7 @@ if [[ $state_recorded == "0" ]]; then
       exit 1
     fi
 
-    rpm --force -Uvh $(find $CSM_RELEASE/rpm/cray/csm/sle-15sp2/noarch/ -name \*csm-testing\* | sort | tail -1)
+    rpm --force -Uvh $(find $CSM_RELEASE/rpm/cray/csm/ -name \*csm-testing\*.rpm | sort -V | tail -1)
     GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-preflight-tests.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
 
     record_state ${state_name} $(hostname)
