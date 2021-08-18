@@ -62,7 +62,7 @@ The VLAN information is located in the network YAML files. Below are examples.
 1. The leaf switches will have VLAN interfaces in NMN and the HMN networks.
 
    ```
-   sif-ncn-m001-pit:/var/www/ephemeral/prep/sif/networks # cat NMN.yaml
+   pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN.yaml
    SNIPPET
      - ip_address: 10.252.0.4
        name: sw-leaf-001
@@ -75,7 +75,7 @@ The VLAN information is located in the network YAML files. Below are examples.
      gateway: 10.252.0.1
    ```
    ```
-   sif-ncn-m001-pit:/var/www/ephemeral/prep/sif/networks # cat HMN.yaml
+   pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/HMN.yaml
    SNIPPET
      - ip_address: 10.254.0.4
        name: sw-leaf-001
