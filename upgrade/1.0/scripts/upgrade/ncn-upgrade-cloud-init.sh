@@ -118,7 +118,7 @@ patch_in_new_metadata() {
   fi
 
   if eval mount | grep '\/mnt\/pitdata' >/dev/null; then
-    umount /mnt/pitdata/
+    umount -l /mnt/pitdata/ || true
   fi
 }
 
