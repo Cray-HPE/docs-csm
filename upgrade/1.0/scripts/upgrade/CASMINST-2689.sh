@@ -65,8 +65,11 @@ get_artifact_from_s3() {
 	mount_bootraid
 
 	if ! eval check_cray_init_status >/dev/null 2>&1; then
-		echo -n "\nPlease run 'cray init'"
-		exit 1
+		echo "******************************************"
+		echo "******************************************"
+		echo "**** Initialize CRAY cli ****"
+		cray init --no-auth --overwrite --hostname https://api-gw-service-nmn.local
+		cray auth login
 	fi
 
 	if [[ "$(basename ${artifact})" == *kernel* ]]; then
