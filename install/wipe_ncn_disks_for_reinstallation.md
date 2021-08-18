@@ -92,7 +92,39 @@ See [Basic Wipe](#basic-wipe) section for expected output from the wipefs comman
 This section is preferred method for all nodes. A full wipe includes deleting the Ceph volumes (where applicable), stopping the
 RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
-**IMPORTANT:** Step 1 is to wipe the Ceph OSD drives. ***Steps 2, 3, 4, and 5 are for all node types.***
+**IMPORTANT:** Step 2 is to wipe the Ceph OSD drives. ***Steps 1, 3, 4, and 5 are for all node types.***
+
+1. Reset Kubernetes on each master and worker node
+
+   ***NOTE:*** Our recommended order is to do this on the workers then the master nodes
+
+   1. For each worker node, log in and run:
+
+       ```bash
+       ncn-m/w# kubeadm reset --force
+       ```
+
+   1. Verify that no containers are running in containerd
+
+       ```bash
+       ncn-m/w # crictl ps
+       CONTAINER           IMAGE               CREATED              STATE               NAME                                                ATTEMPT             POD ID
+       66a78adf6b4c2       18b6035f5a9ce       About a minute ago   Running             spire-bundle                                        1212                6d89f7dee8ab6
+       7680e4050386d       c8344c866fa55       24 hours ago         Running             speaker                                             0                   5460d2bffb4d7
+       b6467c907f063       8e6730a2b718c       3 days ago           Running             request-ncn-join-token                              0                   a3a9ca9e1ca78
+       e8ce2d1a8379f       64d4c06dc3fb4       3 days ago           Running             istio-proxy                                         0                   6d89f7dee8ab6
+       c3d4811fc3cd0       0215a709bdd9b       3 days ago           Running             weave-npc                                    0                   f5e25c12e617e
+      ```
+
+   1. Stop any running cotainers from the output of our `crictl ps` command
+
+      ***NOTE:*** There should be no containers.
+
+      ```bash
+      ncn-m/w #crictl stop <container id from the CONTAINER column>
+      ```
+
+   This will stop kubelet, underlying containers, and remove the contents of `/var/lib/kubelet`
 
 1. Delete CEPH Volumes ***on Utility Storage Nodes ONLY***
 
@@ -112,40 +144,75 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
             ncn-s# cephadm rm-cluster --fsid $(cephadm ls|jq -r '.[0].fsid') --force
             ```
 
-   2. Make sure the OSDs (if any) are not running.
+    1. Make sure the OSDs (if any) are not running.
+
+       * ***1.4 or earlier***
 
         ```bash
         ncn-s# ps -ef|grep ceph-osd
         ```
-        
-        Examine the output. There should be no running ceph-osd processes.
 
-   3. Remove the VGs.
+       * ***1.5 or later***
+
+       ```bash
+       ncn-s# podman ps
+       ```
+
+        Examine the output. There should be no running ceph-osd processes or containers.
+
+    1. Remove the VGs.
 
         ```bash
         ncn-s# ls -1 /dev/sd* /dev/disk/by-label/*
         ncn-s# vgremove -f --select 'vg_name=~ceph*'
         ```
 
-2. Unmount volumes
+1. Unmount volumes
 
    > **`NOTE`** Some of the following umount commands may fail or have warnings depending on the state of the NCN. Failures in this section can be ignored and will not inhibit the wipe process.
+   >
+   > **`NOTE:`** There is an edge case where the overlay may keep you from unounting the drive.  If this is a rebuild you ignore this or go here.
 
    1. Storage nodes
-      ```bash
-      ncn-s# umount -v /var/lib/ceph /var/lib/containers /etc/ceph
-      ```
-   2. Master nodes
-      ```bash
-      ncn-m# umount -v /var/lib/etcd /var/lib/sdu
-      ```
-   3. Worker nodes
+
+       ```bash
+       ncn-s# umount -vf /var/lib/ceph /var/lib/containers /etc/ceph
+       ```
+
+   1. Master nodes
+
+       ```bash
+       ncn-m# umount -v /var/lib/etcd /var/lib/sdu
+       ```
+
+   1. Worker nodes
+
       ```bash
       ncn-w# umount -v /var/lib/containerd /var/lib/kubelet /var/lib/sdu
       ```
-3. Remove auxiliary LVMs
+
+   Troubleshooting Unmount on a Storage node
+
+   1. If the umount command is responding with `target is busy` then try the following
+
+      ```bash
+      ncn-s:~ # mount | grep "containers"
+
+      /dev/mapper/metalvg0-CONTAIN on /var/lib/containers type xfs (rw,noatime,swalloc,attr2,largeio,inode64,allocsize|
+      32k,noquota)
+      /dev/mapper/metalvg0-CONTAIN on /var/lib/containers/storage/overlay type xfs (rw,noatime,swalloc,attr2,largeio,i|
+      bufs=8,logbsize=32k,noquota)
+      
+      ncn-s001:~ # umount -v /var/lib/containers/storage/overlay                                                   
+      umount: /var/lib/containers/storage/overlay unmounted
+      
+      ncn-s001:~ # umount -v /var/lib/containers                                                                    
+      umount: /var/lib/containers unmounted
+
+1. Remove auxiliary LVMs
 
    1. Stop sdu container if necessary
+
       ```bash
       ncn# podman ps
       CONTAINER ID  IMAGE                                                      COMMAND               CREATED      STATUS          PORTS   NAMES
@@ -159,7 +226,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
       7741d50966259410298bb4c3210e6665cdbd57a82e34e467d239f519ae3f17d4
       ```
 
-   2. Remove metal LVM
+   1. Remove metal LVM
 
       ```bash
       ncn# vgremove -f --select 'vg_name=~metal*'
@@ -167,12 +234,13 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
       > **`NOTE`** Optionally you can run the `pvs` command and if any drives are still listed, you can remove them with `pvremove`, but this is rarely needed. Also, if the above command fails or returns a warning about the filesystem being in use, you should ignore the error and proceed to the next step, as this will not inhibit the wipe process.
 
-4. Stop the RAIDs.
+1. Stop the RAIDs.
 
    ```bash
    ncn# for md in /dev/md/*; do mdadm -S $md || echo nope ; done
    ```
-5. Wipe the disks and RAIDs.
+
+1. Wipe the disks and RAIDs.
 
    ```bash
    ncn# sgdisk --zap-all /dev/sd* 
@@ -182,3 +250,4 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
    **Note**: On worker nodes, it is a known issue that the sgdisk command sometimes encounters a hard hang. If you see no output from the command for 90 seconds, close the terminal session to the worker node, open a new terminal session to it, and complete the disk wipe procedure by running the above wipefs command.
 
    See [Basic Wipe](#basic-wipe) section for expected output from the wipefs command.
+
