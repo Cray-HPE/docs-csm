@@ -65,6 +65,12 @@ making a backup of them, in case they need to be examined at a later time.
    pit# mv /var/www/ephemeral/prep/${SYSTEM_NAME} /var/www/ephemeral/prep/${SYSTEM_NAME}.oldBMC
    ```
 
+1. Copy over the `system_config.yaml` file from the first attempt at generating the system configuration files. 
+   
+   ```bash
+   pit# cp /var/www/ephemeral/prep/${SYSTEM_NAME}.oldBMC/system_config.yaml /var/www/ephemeral/prep/
+   ```
+
 1. Generate system configuration again.
 
    The needed files should be in the current directory.
@@ -222,7 +228,17 @@ so several earlier steps need to be repeated.
    Every row should have uniquely different MAC addresses from the other rows.
 
    ```bash
-   pit# grep -v "de:ad:be:ef:00:00" ncn_metadata.csv
+   pit# grep "de:ad:be:ef:00:00" ncn_metadata.csv
+   ```
+
+   Expected output looks similar to the following, that is, no lines that still have "de:ad:be:ef:00:00":
+   
+   ```bash
+   
+   ```
+
+   Display the file and confirm the contents are unique between the different rows.
+   ```bash
    pit# cat ncn_metadata.csv
    ```
 
@@ -242,13 +258,13 @@ making a backup of them, in case they need to be examined at a later time.
    pit# mv /var/www/ephemeral/prep/${SYSTEM_NAME} /var/www/ephemeral/prep/${SYSTEM_NAME}.oldNCN
    ```
 
-1. Generate system configuration again.
-
-   Copy over the `system_config.yaml` file from first attempt at generating the system configuration files. 
+1. Copy over the `system_config.yaml` file from the second attempt at generating the system configuration files. 
    
    ```bash
    pit# cp /var/www/ephemeral/prep/${SYSTEM_NAME}.oldNCN/system_config.yaml /var/www/ephemeral/prep/
    ```
+
+1. Generate system configuration again.
 
    Check for the expected files that should exist be in the current directory.
   
