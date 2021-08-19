@@ -34,7 +34,7 @@ will have Aggregation switches.
    1. [Configure Aruba Aggregation Switch](configure_aruba_aggregation_switch.md) (if present)
    1. [Configure Aruba CDU Switch](configure_aruba_cdu_switch.md) (if present)
    1. [Configure Aruba Leaf Switch](configure_aruba_leaf_switch.md)
-   1. [Update Management Network Firmware](../operations/update_management_network_firmware.md)
+   1. [Update Management Network Firmware](../operations/network/management_network/Update_Management_Network_Firmware.md)
    1. [Workaround for known mac-learning issue with 8325.](8325_mac_learning_hotfix.md)
 
 <a name="dell_and_mellanox_switch_configuration"></a>
@@ -50,12 +50,12 @@ On a typical system, the Mellanox switches are Spine switches and the Dell switc
    1. [Configure Dell Aggregation Switch](configure_dell_aggregation_switch.md) (if present)
    1. [Configure Dell CDU Switch](configure_dell_cdu_switch.md) (if present)
    1. [Configure Dell Leaf Switch](configure_dell_leaf_switch.md)
-   1. [Update Management Network Firmware](../operations/update_management_network_firmware.md)
+   1. [Update Management Network Firmware](../operations/network/management_network/Update_Management_Network_Firmware.md)
 
 <a name="next-topic"></a>
 # Next Topic
 
    After completing this procedure the next step is to deploy the other management nodes using the PIT node and the management network switches configured in this procedure.
 
-   * See [Deploy Management Nodes](index.md#deploy_management_nodes)
+   * See [Deploy Management Nodes](index.md#collect_mac_addresses_for_ncns)
 
