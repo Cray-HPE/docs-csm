@@ -44,8 +44,8 @@ Spine and aggregation switches use the format `xXcChHsS`. Leaf switches use `xXc
 
 #### Reference Diagram for Subsequent Sections
 
-    ![Reference diagram of a cabinet with side-by-side switches in SHCD](../img/shcd-rack-example.png)
-    > Diagram of a cabinet with side-by-side switches in SHCD.
+   ![Reference diagram of a cabinet with side-by-side switches in SHCD](../img/shcd-rack-example.png)
+   > Diagram of a cabinet with side-by-side switches in SHCD.
 
 #### Directions
 
