@@ -62,7 +62,7 @@ The VLAN information is located in the network YAML files. Below are examples.
 1. The leaf switches will have VLAN interfaces in NMN and the HMN networks.
 
    ```
-   sif-ncn-m001-pit:/var/www/ephemeral/prep/sif/networks # cat NMN.yaml
+   pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN.yaml
    SNIPPET
      - ip_address: 10.252.0.4
        name: sw-leaf-001
@@ -75,7 +75,7 @@ The VLAN information is located in the network YAML files. Below are examples.
      gateway: 10.252.0.1
    ```
    ```
-   sif-ncn-m001-pit:/var/www/ephemeral/prep/sif/networks # cat HMN.yaml
+   pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/HMN.yaml
    SNIPPET
      - ip_address: 10.254.0.4
        name: sw-leaf-001
@@ -211,7 +211,7 @@ The IP addresses used here will be the first three worker nodes on the NMN netwo
 1. Get current NTP configuration.
 
    ```
-   sw-cdu-001# show running-configuration | grep ntp
+   sw-leaf-001# show running-configuration | grep ntp
    ntp server 10.252.1.12
    ntp server 10.252.1.13
    ntp server 10.252.1.14 prefer
@@ -220,10 +220,10 @@ The IP addresses used here will be the first three worker nodes on the NMN netwo
 1. Delete any current NTP configuration.
 
    ```
-   sw-cdu-001# configure terminal
-   sw-cdu-001(config)# no ntp server 10.252.1.12
-   sw-cdu-001(config)# no ntp server 10.252.1.13
-   sw-cdu-001(config)# no ntp server 10.252.1.14
+   sw-leaf-001# configure terminal
+   sw-leaf-001(config)# no ntp server 10.252.1.12
+   sw-leaf-001(config)# no ntp server 10.252.1.13
+   sw-leaf-001(config)# no ntp server 10.252.1.14
    ```
 
 1. Add new NTP server configuration.
@@ -238,7 +238,7 @@ The IP addresses used here will be the first three worker nodes on the NMN netwo
 1. Verify NTP status.
 
    ```
-   sw-cdu-001# show ntp associations
+   sw-leaf-001# show ntp associations
         remote           refid      st t when poll reach   delay   offset  jitter
    ==============================================================================
    *10.252.1.10     10.252.1.4       4 u   52   64    3    0.420   -0.262   0.023
@@ -302,7 +302,7 @@ sw-leaf01(conf-if-eth1/1/51-1/1/52)# end
 Disable iSCSI in the configuration.
 
    ```
-   sw-cdu-001 & sw-cdu-002 (config)#
+   sw-leaf-001 & sw-leaf-002 (config)#
    no iscsi enable
    ```
 
