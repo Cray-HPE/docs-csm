@@ -154,12 +154,12 @@ To view counts of operations, what state they are in, the overall state of the a
       "parameters": {
         "stateComponentFilter": {
           "deviceTypes": [
-            "routerBMC"
+            "nodeBMC"
           ]
         },
         "command": {
           "dryrun": false,
-          "description": "upgrade of routerBMCs for cray",
+          "description": "upgrade of nodeBMCs for cray",
           "tag": "default",
           "restoreNotPossibleOverride": true,
           "timeLimit": 1000,
@@ -181,7 +181,7 @@ To view counts of operations, what state they are in, the overall state of the a
       "state": "completed",
       "command": {
         "dryrun": false,
-        "description": "upgrade of routerBMCs for cray",
+        "description": "upgrade of nodeBMCs for cray",
         "tag": "default",
         "restoreNotPossibleOverride": true,
         "timeLimit": 1000,
@@ -486,12 +486,12 @@ Given the nature of the `model` field and its likelihood to not be standardized,
       "parameters": {
         "stateComponentFilter": {
           "deviceTypes": [
-            "routerBMC"
+            "nodeBMC"
           ]
         },
         "command": {
           "dryrun": false,
-          "description": "upgrade of routerBMCs for cray",
+          "description": "upgrade of nodeBMCs for cray",
           "tag": "default",
           "restoreNotPossibleOverride": true,
           "timeLimit": 1000,
@@ -513,7 +513,7 @@ Given the nature of the `model` field and its likelihood to not be standardized,
       "state": "completed",
       "command": {
         "dryrun": false,
-        "description": "upgrade of routerBMCs for cray",
+        "description": "upgrade of nodeBMCs for cray",
         "tag": "default",
         "restoreNotPossibleOverride": true,
         "timeLimit": 1000,

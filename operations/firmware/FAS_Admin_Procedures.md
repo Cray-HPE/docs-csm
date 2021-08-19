@@ -293,12 +293,12 @@ This procedure includes information on how check the firmware versions for the e
              "parameters": {
                "stateComponentFilter": {
                  "deviceTypes": [
-                   "routerBMC"
+                   "nodeBMC"
                  ]
                },
                "command": {
                  "dryrun": false,
-                 "description": "upgrade of routerBMCs for cray",
+                 "description": "upgrade of nodeBMCs for cray",
                  "tag": "default",
                  "restoreNotPossibleOverride": true,
                  "timeLimit": 1000,
@@ -320,7 +320,7 @@ This procedure includes information on how check the firmware versions for the e
              "state": "completed",
              "command": {
                "dryrun": false,
-               "description": "upgrade of routerBMCs for cray",
+               "description": "upgrade of nodeBMCs for cray",
                "tag": "default",
                "restoreNotPossibleOverride": true,
                "timeLimit": 1000,
@@ -532,7 +532,7 @@ This procedure will read a single local RPM (or ZIP) file and upload firmware im
     ```bash
     ncn-m001# cray fas loader describe *loaderRunID* --format json
     ```
-    
+
     **NOTE:** `*loadRunID*` is the ID from step #2 above in that case "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce".
     Use the `--format json` to make it easier to read.
 

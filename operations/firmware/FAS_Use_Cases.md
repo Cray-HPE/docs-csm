@@ -2,92 +2,28 @@
 
 Use the Firmware Action Service (FAS) to update the firmware on supported hardware devices. Each procedure includes the prerequisites and example recipes required to update the firmware.
 
-1. [Update Liquid-Cooled Node or Switch Firmware](#liquidcooled)
+1. [Update Liquid-Cooled Node](#liquidcooled)
 2. [Update Chassis Management Module (CMM) Firmware](#cmm)
 3. [Update NCN BIOS and BMC Firmware with FAS](#ncn-bios-bmc)
 4. [Update Liquid-Cooled Compute Node BIOS Firmware](#cn-bios)
 5. [Compute Node BIOS Workaround for HPE CRAY EX425](#cn-workaround)
 
+*NOTE* to update Switch Controllers \(sC\) or RouterBMC refer to the Rosetta Documentation
 ---
 
 <a name="liquidcooled"></a>
 
-### Update Liquid-Cooled Node or Switch Firmware
+### Update Liquid-Cooled Nodes
 
-Update a liquid-cooled node controller \(nC\) or switch controller \(sC\) firmware using FAS. This procedure uses the dry-run feature to verify that the update will be successful before initiating the actual update.
-
-The examples in this procedure show how to update the node controller firmware. To update the chassis BMC or switch BMC, change the `nodeBMC` value in the JSON file to `chassisBMC` or `routerBMC`.
+Update a liquid-cooled node controller \(nC\) firmware using FAS. This procedure uses the dry-run feature to verify that the update will be successful before initiating the actual update.
 
 This procedure updates the following hardware:
 -   Node controller \(nC\) firmware
--   Switch controller \(sC\) and fabric ASIC firmware
--   Chassis Management Module \(CMM\) controller \(cC\) firmware
 
 #### Prerequisites
 -   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
--   The compute nodes must be powered off before upgrading the BMC image for a nodeBMC. BMC firmware with FPGA updates require the nodes to be off. If the nodes are not off when the update command is issued, the update will get deferred until the next power cycle of the BMC, which may be a long period of time.
 
 #### Example Recipes
-
-**Manufacturer: Cray | Device Type: RouterBMC | Target: BMC**
-
-The BMC on the RouterBMC for a Cray includes the ASIC.  
-
-```json
-{
-"inventoryHardwareFilter": {
-    "manufacturer": "cray"
-    },
-"stateComponentFilter": {
-    "deviceTypes": [
-      "routerBMC"
-    ]
-},
-"targetFilter": {
-    "targets": [
-      "BMC"
-    ]
-  },
-"command": {
-    "version": "latest",
-    "tag": "default",
-    "overrideDryrun": false,
-    "restoreNotPossibleOverride": true,
-    "timeLimit": 1000,
-    "description": "Dryrun upgrade of Columbia and/or Colorado router BMC"
-  }
-}
-```
-
-**Manufacturer: Cray | Device Type: ChassisBMC | Target: BMC**
-
-**IMPORTANT**: Before updating a CMM, make sure all slot and rectifier power is off.
-
-```json
-{
-"inventoryHardwareFilter": {
-    "manufacturer": "cray"
-    },
-"stateComponentFilter": {
-    "deviceTypes": [
-      "chassisBMC"
-    ]
-},
-"targetFilter": {
-    "targets": [
-      "BMC"
-    ]
-  },
-"command": {
-    "version": "latest",
-    "tag": "default",
-    "overrideDryrun": false,
-    "restoreNotPossibleOverride": true,
-    "timeLimit": 1000,
-    "description": "Dryrun upgrade of Cray Chassis Controllers"
-  }
-}
-```
 
 **Manufacturer: Cray | Device Type: NodeBMC | Target: BMC**
 
@@ -998,4 +934,3 @@ Correct an issue where the model of the liquid-cooled compute node BIOS is the i
    ```bash
    ncn# cray fas actions create UPDATED_COMMAND.json
    ```
-
