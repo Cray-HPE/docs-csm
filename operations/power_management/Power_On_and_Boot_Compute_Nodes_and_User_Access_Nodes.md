@@ -68,13 +68,11 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 
 5.  Use the Job ID strings to monitor the progress of the boot job.
 
-    **Tip:** The commands needed to monitor the progress of the job are provided in the output of the `sat bootsys shutdown` command.
+    **Tip:** The commands needed to monitor the progress of the job are provided in the output of the `sat bootsys boot` command.
 
     ```bash
     ncn-m001# kubectl -n services logs -c boa -f --selector job-name=boa-caa15959-2402-4190-9243-150d568942f6
     ```
-
-    The BOS shutdown session may or may not power off compute nodes depending on the session template being used.
 
 6.  In another shell window, use a similar command to monitor the UAN session.
 
