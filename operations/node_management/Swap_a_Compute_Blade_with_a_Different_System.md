@@ -14,8 +14,33 @@ Swap an HPE Cray EX liquid-cooled compute blade from System A to System B.
 ### Prerequisites
 
 - Both systems must have the Slingshot fabric configured with the desired topology for both blades
+
 - The SLS has the desired HSN configuration
+
 - The blade that is removed from the System A is installed in the empty slot left by the blade removed from System B and visa-versa.
+
+- Check the status of the high-speed network (HSN) and record the status before the procedure.
+
+- Review the following commands to capture the required values from the HSM ethernetInterfaces table and write the values to a file. The file then can be used to automate subsequent commands. For example:
+
+  ```bash
+  ncn-m001# cray hsm inventory ethernetInterfaces list --format json | jq -c 'map(select(.ComponentID|test("x9000c3s0."))) | map(select(.Description == "Node Maintenance Network")) | .[] | {ID: .ID,xname: .ComponentID, MAC: .MACAddress, IP: .IPAddresses}' > blade_systemA.json
+  
+  ncn-m001# cat blade_systemA.json
+  {"ID":"0040a6836339","xname":"x9000c3s0b0n0","MAC":"00:40:a6:83:63:39","IP":[{"IPAddress":"10.100.0.10"}]}
+  {"ID":"0040a683633a","xname":"x9000c3s0b0n1","MAC":"00:40:a6:83:63:3a","IP":[{"IPAddress":"10.100.0.98"}]}
+  {"ID":"0040a68362e2","xname":"x9000c3s0b1n0","MAC":"00:40:a6:83:62:e2","IP":[{"IPAddress":"10.100.0.123"}]}
+  {"ID":"0040a68362e3","xname":"x9000c3s0b1n1","MAC":"00:40:a6:83:62:e3","IP":[{"IPAddress":"10.100.0.122"}]}
+  
+  ncn-m001# cat blade_systemA.json | jq -r '.ID'
+  0040a6836339
+  0040a683633a
+  0040a68362e2
+  0040a68362e3
+  ```
+
+  
+
 - Each blade must have the coolant drained and filled to minimize cross-contamination of cooling systems. 
   - Review procedures in *HPE Cray EX Coolant Service Procedures H-6199* 
   - Review the *HPE Cray EX Hand Pump User Guide H-6200*
@@ -90,7 +115,8 @@ Swap an HPE Cray EX liquid-cooled compute blade from System A to System B.
 The hardware management network MAC and IP addresses are assigned algorithmically and *must not be deleted* from the HSM.
 
 7. Query HSM to determine the ComponentID, MAC, and IP addresses for each node in the blade. 
-
+   The prerequisites show an example of how to gather HSM values and store them to a file.
+   
    ```bash
    ncn-m001# cray hsm inventory ethernetInterfaces list --component-id x9000c3s0b0n0 --format json
    [
@@ -110,7 +136,7 @@ The hardware management network MAC and IP addresses are assigned algorithmicall
    ]
    ```
    
-   1. Record the following values:
+   1. Record the following values or store them in a file for the blade in System A:
    
       ```bash
       `ComponentID: "x9000c3s0b0n0"`
@@ -120,12 +146,6 @@ The hardware management network MAC and IP addresses are assigned algorithmicall
    
    2. Repeat the command to record the ComponentID, MAC, and IP addresses for the `Node Maintenance Network`  the other nodes in the blade.
    
-      ```bash
-      ncn-m001# cray hsm inventory ethernetInterfaces list --component-id x9000c3s0b0n1 --format json
-      ncn-m001# cray hsm inventory ethernetInterfaces list --component-id x9000c3s0b1n0 --format json
-      ncn-m001# cray hsm inventory ethernetInterfaces list --component-id x9000c3s0b1n1 --format json
-      ```
-   
    3. Delete the NMN MAC and IP addresses each node in the blade from the HSM. *Do not delete the MAC and IP addresses for the node BMC*.
    
       ```bash
@@ -133,7 +153,7 @@ The hardware management network MAC and IP addresses are assigned algorithmicall
       ```
       
    4. Repeat the preceding command for each node in the blade.
-
+   
    5. Delete the Redfish endpoints for each node.
    
       ```bash
@@ -216,7 +236,7 @@ The hardware management network MAC and IP addresses are assigned algorithmicall
 
 The hardware management network NIC MAC addresses for liquid-cooled blades are assigned algorithmically and *must not be deleted* from the HSM.
 
-19. Query HSM to determine the ComponentID, MAC, and IP addresses associated with the blade in System B.  
+19. Query HSM to determine the ComponentID, MAC, and IP addresses associated with the blade in System B.   The prerequisites show an example of how to gather HSM values and store them to a file.
 
     ```bash
     ncn-m001# cray hsm inventory ethernetInterfaces list --component-id XNAME --format json
@@ -288,10 +308,32 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
     
     ncn-m001# TOKEN=access_token
     ```
+    
+    Use the value of `access_token` to make API requests.
+    
+27. To prevent from Kea from automatically adding  MAC entries to the HSM ethernetInterfaces table, use the following commands.
 
-Use the value of `access_token` to make API requests.
+     Kea automatically adds entries to the HSM ethernetInterfaces table when DHCP lease is provided (about every 5 minutes).
 
-27. Add the MAC and IP addresses for `Node Maintenance Network` interfaces to the HSM.
+    1. Create an `eth_interfaces` file that contains the interface IDs for the `Node Maintenance Network`.
+
+       ```bash
+       ncn-m001# cat eth_interfaces
+       0040a6836339
+       0040a683633a
+       0040a68362e2
+       0040a68362e3
+       ```
+
+    2. Run  the following commands in succession to remove the interfaces from the HSM.
+       Deleting cray-dhcp-kea pod will prevent the interfaces from being re-created in the HSM. 
+
+       ```bash
+       ncn-m001# kubectl delete -n services pod cray-dhcp-kea-6456f6bc5c-77sb4
+       ncn-m001# for ETH in $(cat eth_interfaces); do cray hsm inventory ethernetInterfaces delete $ETH --format json ; done
+       ```
+
+28. Add the MAC and IP addresses for `Node Maintenance Network` interfaces to the HSM. The ComponentID and IPAddress should be the values recorded from System B, and the MACAddress should be the value recorded from the blade in System A.
 
     ```bash
     `ComponentID: "x1005c3s0b0n0"`
@@ -300,7 +342,7 @@ Use the value of `access_token` to make API requests.
     ```
 
     ```bash
-    ncn-m001# MAC=MAC_ADDRESS
+    ncn-m001# MAC=SYSTEMA_MAC_ADDRESS
     ncn-m001# IP_ADDRESS=SYSTEMB_IP_ADDRESS
     ncn-m001# XNAME=SYSTEMB_XNAME
     ```
@@ -313,25 +355,25 @@ Use the value of `access_token` to make API requests.
           }'
     ```
 
-28. Repeat the preceding command for each node in the blade.
+29. Repeat the preceding command for each node in the blade.
 
 #### Enable the Slot and Power on the Slot
 
-29. Enable slot 0 in chassis 3, cabinet 1005.
+30. Enable the slot. Example shows slot 0, in chassis 3, cabinet 1005.
 
     ```bash
     ncn-m001# cray hsm state components enabled update --enabled true x1005c3s0
     ```
 
-30. Power on slot 0 in chassis 3 of cabinet 1005.
+31. Power on slot, Example shows slot 0, in chassis 3, of cabinet 1005.
 
     ```bash
-    ncn-m001# cray capmc xname_on create --xnames x1005c3s0 --recursive true --format json
+    ncn-m001# cray capmc xname_on create --xnames x1005c3s0 --recursive true
     ```
 
 #### Enable Discovery
 
-31. Verify the hms-discovery cronjob is not suspended in k8s (`ACTIVE` = `1` and `SUSPEND` = `False`). 
+32. Verify the hms-discovery cronjob is not suspended in k8s (`ACTIVE` = `1` and `SUSPEND` = `False`). 
 
     ```bash
     ncn-m001# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
@@ -340,18 +382,21 @@ Use the value of `access_token` to make API requests.
     NAME             SCHEDULE        SUSPEND     ACTIVE   LAST SCHEDULE    AGE
     hms-discovery    */3 * * * *     False         1       41s             33d
     
-    ncn-m001# kubectl -n services logs hms-discovery-1600117560-5w95d hms-discovery | grep 
-    "Mountain discovery finished" | jq '.discoveredXnames'
+    ncn-m001# kubectl -n services logs hms-discovery-1600117560-5w95d hms-discovery | grep "Mountain discovery finished" | jq '.discoveredXnames'
     [
     "x1005c3s0b0"
     ]
     ```
 
-32. Wait for 3-5 minutes for the blade to power on and the node controllers  (BMCs) to be discovered.
+33. Wait for 3 minutes for the blade to power on and the node controllers  (BMCs) to be discovered.
+
+    ```
+    ncn-m001# sleep 180
+    ```
 
 #### Verify discovery has completed
 
-33. To verify the BMC(s) have been discovered by the HSM, run this command for each BMC in the blade.
+34. To verify the BMC(s) have been discovered by the HSM, run this command for each BMC in the blade.
 
     ```bash
     ncn-m001# cray hsm inventory redfishEndpoints describe XNAME --format json
@@ -379,13 +424,13 @@ Use the value of `access_token` to make API requests.
 - If the last discovery state is `HTTPsGetFailed` or `ChildVerificationFailed`, then an error has
   occurred during the discovery process.
 
-34. Optional: To force rediscovery of the components in the chassis (the example shows cabinet 1005, chassis 3).
+35. Optional: To force rediscovery of the components in the chassis (the example shows cabinet 1005, chassis 3).
 
     ```bash
     ncn-m001# cray hsm inventory discover create --xnames x1005c3
     ```
 
-35. Optional: Verify that discovery has completed (`LastDiscoveryStatus` = "`DiscoverOK`").
+36. Optional: Verify that discovery has completed (`LastDiscoveryStatus` = "`DiscoverOK`").
 
     ```bash
     ncn-m001# cray hsm inventory redfishEndpoints describe x1005c3
@@ -406,7 +451,7 @@ Use the value of `access_token` to make API requests.
     LastDiscoveryStatus = "DiscoverOK"
     ```
 
-36. Enable each node individually in the HSM database.
+37. Enable each node individually in the HSM database.
 
     ```bash
     ncn-m001# cray hsm state components enabled update --enabled true x1005c3s0b0n0
@@ -415,7 +460,7 @@ Use the value of `access_token` to make API requests.
     ncn-m001# cray hsm state components enabled update --enabled true x1005c3s0b1n1
     ```
 
-37. Verify that the nodes are enabled in the HSM. This command must be run for each node in the blade.
+38. Verify that the nodes are enabled in the HSM. This command must be run for each node in the blade.
 
     ```bash
     ncn-m001# cray hsm state components describe x1005c3s0b0n0
@@ -427,7 +472,7 @@ Use the value of `access_token` to make API requests.
 
 #### Power on and boot the nodes
 
-38. Use boot orchestration to power on and boot the nodes. Specify the appropriate BOS template for the node type.
+39. Use boot orchestration to power on and boot the nodes. Specify the appropriate BOS template for the node type.
 
     ```bash
     ncn-m001# BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
@@ -436,9 +481,9 @@ Use the value of `access_token` to make API requests.
 
 #### Check Firmware
 
-39. Verify that the correct firmware versions for node BIOS, node controller (nC), NIC mezzanine card (NMC), GPUs, and so on.
+40. Verify that the correct firmware versions for node BIOS, node controller (nC), NIC mezzanine card (NMC), GPUs, and so on.
 
-40. If necessary, update the firmware. Review the [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md) and [Update Firmware with FAS](../firmware/Update_Firmware_with_FAS.md) procedure.
+41. If necessary, update the firmware. Review the [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md) and [Update Firmware with FAS](../firmware/Update_Firmware_with_FAS.md) procedure.
 
     ```bash
     ncn-m001# cray fas actions create CUSTOM_DEVICE_PARAMETERS.json
@@ -448,7 +493,7 @@ Use the value of `access_token` to make API requests.
 
 There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their waiter, and at least one cray-cps-cm-pm pod.  Usually there are two cray-cps-cm-pm pods, one on ncn-w002 and one on ncn-w003 and other worker nodes
 
-41. Check the cray-cps pods on worker nodes and verify they are Running.
+42. Check the cray-cps pods on worker nodes and verify they are Running.
 
     ```bash
     # kubectl get pods -Ao wide | grep cps
@@ -461,7 +506,11 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
     services   cray-cps-wait-for-etcd-jb95m 0/1  Completed       
     ```
 
-42. SSH to each worker node running CPS/DVS, and run  `dmesg -T` and ensure that there are no recurring `“DVS: merge_one” `messages as shown.  These messages indicate that DVS is still detecting IP address change for one of the client nodes.
+43. SSH to each worker node running CPS/DVS, and run  `dmesg -T`  to ensure that there are no recurring `“DVS: merge_one” ` messages as shown.  These messages indicate that DVS is still detecting IP address change for one of the client nodes.
+
+    ```bash
+    ncn-m001# dmesg -T | grep "DVS: merge_one"
+    ```
 
     ```
     [Tue Jul 21 13:09:54 2020] DVS: merge_one#351: New node map entry does not match the existing entry
@@ -471,9 +520,9 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
     [Tue Jul 21 13:09:54 2020] DVS: merge_one#358:   Ignoring.
     ```
 
-43. Make sure CFS finished successfully. Review *HPE_Cray EX DVS Administration Guide 1.4.1 S-8004*.
+44. Make sure the Configuration Framework Service (CFS) finished successfully. Review *HPE Cray EX DVS Administration Guide 1.4.1 S-8004*.
 
-44. SSH to the node and check each DVS mount.
+45. SSH to the node and check each DVS mount.
 
     ```bash
     nid001133:~ # mount | grep dvs | head -1
@@ -485,24 +534,18 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
 
 #### Check the HSN for the affected nodes
 
-45. Switch to the fabric manager pod.
+46. Determine the pod name for the Slingshot fabric manager pod and check the status of the fabric.
 
     ```bash
-    ncn-m001# container=$(kubectl get pods --all-namespaces | grep slingshot | awk '{print $2}') 
-    
-    ncn-m001# kubectl exec -it -n services $container -- bash
-    
-    slingshot-fabric-manager# fmn_status
+    ncn-m001# kubectl exec -it -n services $(kubectl get pods --all-namespaces |grep slingshot | awk '{print $2}') -- fmn_status
     ```
 
 #### Bring up the Blade in System A
 
-46. Drain the coolant from the blade removed from system B and fill with fresh coolant to minimize cross-contamination of cooling systems. 
+47. Drain the coolant from the blade removed from system B and fill with fresh coolant to minimize cross-contamination of cooling systems. 
+    - Review fill station procedures in *HPE Cray EX Coolant Service Procedures H-6199*. If using the hand pump, review procedures in the *HPE Cray EX Hand Pump User Guide H-6200* (https://internal.support.hpe.com/).
 
-- Review fill station procedures in *HPE Cray EX Coolant Service Procedures H-6199*. If using the hand pump, review procedures in the *HPE Cray EX Hand Pump User Guide H-6200* (https://internal.support.hpe.com/).
+48. Install the blade from System B into System A.  
+    - Review the *Remove a Compute Blade Using the Lift* procedure in *HPE Cray EX Hardware Replacement Procedures H-6173* for detailed instructions for replacing liquid-cooled blades (https://internal.support.hpe.com/).
 
-47. Install the blade from System B into System A.  
-
-- Review the *Remove a Compute Blade Using the Lift* procedure in *HPE Cray EX Hardware Replacement Procedures H-6173* for detailed instructions for replacing liquid-cooled blades (https://internal.support.hpe.com/).
-
-48. Repeat steps 26 through 45 to power on the nodes in System A.
+49. Repeat steps 26 through 46 to power on the nodes in System A.
