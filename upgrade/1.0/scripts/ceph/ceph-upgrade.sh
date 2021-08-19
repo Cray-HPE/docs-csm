@@ -42,6 +42,29 @@ if [ ! -d "/etc/cray/ceph" ]; then
  mkdir /etc/cray/ceph
 fi
 
+function retry_enable_service() {
+  host=$1
+  service=$2
+  echo "Retrying to enabling service $service on $host"
+  rc=1
+  local cnt=0
+  until [ "$rc" -eq 0 ]; do
+    cnt=$((cnt+1))
+    if [ "$cnt" -eq 5 ]; then
+      echo "ERROR: Unable to enable $service on $host, halting upgrade until this is repaired."
+      exit 1
+    fi
+    output=$(ssh "$host" "systemctl enable $service")
+    rc=$?
+    if [ "$rc" -eq 0 ]; then
+      break
+    else
+      echo "Sleeping 5 seconds before re-trying to enable $service on $host"
+      sleep 5
+    fi
+  done
+}
+
 for node in $(seq 1 "$num_storage_nodes"); do
  nodename=$(printf "ncn-s%03d" "$node")
  ssh-keyscan -H "$nodename" >> ~/.ssh/known_hosts
@@ -183,8 +206,22 @@ echo "Scaling up cephfs clients"
 scale_up_cephfs_clients
 
 echo "Enabling all Ceph services to start on boot"
-for host in $(ceph node ls| jq -r '.osd|keys[]')
-  do
-    echo "Enabling services on host: $host"
-    ssh "$host" 'for service in $(cephadm ls |jq -r .[].systemd_unit|grep $(ceph status -f json-pretty |jq -r .fsid));do echo "Enabling service $service on ncn-s002"; systemctl enable $service;done'
+for host in $(ceph node ls| jq -r '.osd|keys[]'); do
+  echo "Enabling services on host: $host"
+  ssh "$host" 'for service in $(cephadm ls |jq -r .[].systemd_unit|grep $(ceph status -f json-pretty |jq -r .fsid));do echo "Enabling service $service on $(hostname)"; systemctl enable $service; done'
+  echo "Verifying services on host: $host"
+  output=$(ssh "$host" 'for service in $(cephadm ls |jq -r .[].systemd_unit|grep $(ceph status -f json-pretty |jq -r .fsid));do echo $service; systemctl is-enabled $service; done')
+  cnt=0
+  client_array=( $output )
+  array_length=${#client_array[@]}
+  while [[ "$cnt" -lt "$array_length" ]]; do
+    service="${client_array[$cnt]}"
+    cnt=$((cnt+1))
+    status="${client_array[$cnt]}"
+    cnt=$((cnt+1))
+    echo "${service}: $status"
+    if [ "$status" == "disabled" ]; then
+      retry_enable_service $host $service
+    fi
   done
+done
