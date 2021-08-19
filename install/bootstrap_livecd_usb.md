@@ -721,6 +721,18 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    pit# systemctl start conman
    ```
 
+1. Set shell environment variables.
+
+   The CSM_RELEASE and CSM_PATH variables will be used later.
+
+   ```bash
+   pit# cd /var/www/ephemeral
+   pit# export CSM_RELEASE=csm-x.y.z
+   pit# echo $CSM_RELEASE
+   pit# export CSM_PATH=$(pwd)/${CSM_RELEASE}
+   pit# echo $CSM_PATH
+   ```
+
 1. Install Goss Tests and Server
 
    The following assumes the CSM_PATH environment variable is set to the path of the unpacked CSM release.
