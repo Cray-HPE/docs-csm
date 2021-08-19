@@ -156,13 +156,13 @@ See [Create Switch Metadata CSV](create_switch_metadata_csv.md) for instructions
 
 The process to install for the first time must collect the information needed to create these files.
 
-1. Collect data for `application_node_config.yaml`
-
-   See [Create Application Node YAML](create_application_node_config_yaml.md) for instructions about creating this file.
-
 1. Collect data for `cabinets.yaml`
 
    See [Create Cabinets YAML](create_cabinets_yaml.md) for instructions about creating this file.
+
+1. Collect data for `application_node_config.yaml`
+
+   See [Create Application Node YAML](create_application_node_config_yaml.md) for instructions about creating this file.
 
 1. Collect data for `ncn_metadata.csv`
 
