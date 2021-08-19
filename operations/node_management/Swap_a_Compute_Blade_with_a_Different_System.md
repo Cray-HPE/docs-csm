@@ -8,8 +8,6 @@ Swap an HPE Cray EX liquid-cooled compute blade from System A to System B.
   - System B - Cray EX cabinet x1005 with a defective EX425 blade (Windom dual-injection) in chassis 3, slot 0 
 - Substitute the correct xnames or other parameters in the command examples that follow. 
 - All the nodes in the blade must be specified using a comma separated list. For example, EX425 compute blades include two node cards, each with two logical nodes (4 nodes). 
-- Blade A x1000c5s5
-- Blade B x1000c7s7
 
 ### Prerequisites
 
