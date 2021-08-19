@@ -149,6 +149,10 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
                                                       bond0-mac0        bond0-mac0        bond0-mac1
     ```
 
+    ```bash
+    pit# vi ncn_metadata.csv
+    ```
+
 10. If the `script.ipxe` file was renamed in the first step of this procedure, then restore it to its original location.
     
     ```bash
