@@ -73,7 +73,7 @@ If you are here with an unconfigured switch, mileage may vary.
    Fill in the Bootstrap MAC, Bond0 MAC0, and Bond0 MAC1 columns with a dummy value, such as `de:ad:be:ef:00:00`,
    as a marker that the correct value is not in this file yet.
 
-   > Tip: Mind the index for each group of nodes (3, 2, 1.... ; not 1, 2, 3). If storage nodes are ncn-s001 x3000c0s7b0n0, ncn-s002 x3000c0s8b0n0, ncn-s003 x3000c0s9b0n0, then their portion of the file would be ordered x3000c0s9b0n0, x3000c0s8b0n0, x3000c0s7b0n0.
+   **IMPORTANT:** Mind the index for each group of nodes (3, 2, 1.... ; not 1, 2, 3). If storage nodes are ncn-s001 x3000c0s7b0n0, ncn-s002 x3000c0s8b0n0, ncn-s003 x3000c0s9b0n0, then their portion of the file would be ordered x3000c0s9b0n0, x3000c0s8b0n0, x3000c0s7b0n0.
 
 
    ```
