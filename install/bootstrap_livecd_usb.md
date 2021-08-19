@@ -83,18 +83,18 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    App. Version   : 1.5.18
     ```
 
+1. Configure zypper with the `embedded` repository from the CSM release.
+
+   ```bash
+   linux# zypper ar -fG "${CSM_PATH}/rpm/embedded" "${CSM_RELEASE}-embedded"
+   ```
+
 1. Install podman or docker to support container tools required to generated
    sealed secrets.
 
    Podman RPMs are included in the `embedded` repository in the CSM release and
    may be installed in your pre-LiveCD environment using `zypper` as follows:
 
-   * Add the `embedded` repository (if necessary):
-
-     ```bash
-     linux# zypper ar -fG "${CSM_PATH}/rpm/embedded" "${CSM_RELEASE}-embedded"
-     ```
-     
    * Install `podman` and `podman-cni-config` packages:
 
      ```bash
@@ -113,12 +113,6 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    lsscsi RPMs are included in the `embedded` repository in the CSM release and
    may be installed in your pre-LiveCD environment using `zypper` as follows:
 
-   * Add the `embedded` repository (if necessary):
-
-     ```bash
-     linux# zypper ar -fG "${CSM_PATH}/rpm/embedded" "${CSM_RELEASE}-embedded"
-     ```
-     
    * Install `lsscsi` package:
 
      ```bash
@@ -139,12 +133,6 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    Git RPMs are included in the `embedded` repository in the CSM release and
    may be installed in your pre-LiveCD environment using `zypper` as follows:
    
-   * Add the `embedded` repository (if necessary):
-
-     ```bash
-     linux# zypper ar -fG "${CSM_PATH}/rpm/embedded" "${CSM_RELEASE}-embedded"
-     ```
-     
    * Install `git` package:
 
      ```bash
