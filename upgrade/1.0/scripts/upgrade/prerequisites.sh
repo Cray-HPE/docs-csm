@@ -7,6 +7,8 @@ BASEDIR=$(dirname $0)
 . ${BASEDIR}/upgrade-state.sh
 . ${BASEDIR}/ncn-upgrade-common.sh $(hostname)
 trap 'err_report' ERR
+# array for paths to unmount after chrooting images
+declare -a UNMOUNTS=()
 
 while [[ $# -gt 0 ]]
 do
@@ -358,8 +360,16 @@ srv/cray/scripts/common/create-kis-artifacts.sh
 # set -e back
 sed -i 's/^#set -e$/set -e/' srv/cray/scripts/common/create-kis-artifacts.sh
 EOF
-        # unmount the chroot
-        umount -l "$(mount | grep "$CSM_RELEASE" | awk '$3 ~ /squashfs$/ {print $3}')"
+        # find the path of the mounted chroot
+        squash_path="$(mount | grep "$CSM_RELEASE" | awk '$3 ~ /squashfs-root$/ {print $3}')"
+        # if a mount is found, attempt to unmount it, but it's not critical if we can't
+        if [[ -n "$squash_path" ]]; then
+            # alert the user so they can umount it later
+            # Unmounting during this automation proved problematic, so cleanup can be done manually at the end of pre-req
+            echo "Please unmount $squash_path after this script is complete"
+            UNMOUNTS+=("$squash_path")
+        fi
+
         # Move the newly-generated artifacts into place
         # We may have more than one kernel, so mv them all over
         mv squashfs-root/squashfs/*.kernel .
@@ -368,7 +378,7 @@ EOF
         chmod 644 "${initrd_name}"
         mv squashfs-root/squashfs/*.squashfs "${squashfs_name}"
         # cleanup by removing the unsquashed image
-        rm -rf squashfs-root/
+        #rm -rf squashfs-root/
       # pop out of the dir
       popd || exit 1
     done
@@ -518,6 +528,14 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m002" ]]; then
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
+fi
+
+# Alert the user of action to take for cleanup
+if [[ ${#UNMOUNTS[@]} -ne 0 ]]; then
+    for m in "${UNMOUNTS[@]}"
+    do
+        echo "Please umount -l $m"
+    done
 fi
 
 ok_report
