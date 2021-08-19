@@ -80,7 +80,9 @@ state_name="UNTAR_CSM_TARBALL_FILE"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    tar -xzf ${TARBALL_FILE}
+    mkdir -p /etc/cray/upgrade/csm/${CSM_RELEASE}/tarball
+    tar -xzf ${TARBALL_FILE} -C /etc/cray/upgrade/csm/${CSM_RELEASE}/tarball
+    CSM_ARTI_DIR=/etc/cray/upgrade/csm/${CSM_RELEASE}/tarball/${CSM_RELEASE}
     rm -rf ${TARBALL_FILE}
 
     record_state ${state_name} $(hostname)
@@ -134,7 +136,7 @@ state_name="INSTALL_CSI"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    rpm --force -Uvh ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
+    rpm --force -Uvh ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
 
     record_state ${state_name} $(hostname)
 else
@@ -145,7 +147,7 @@ state_name="INSTALL_WAR_DOC"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    rpm --force -Uvh ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/noarch/csm-install-workarounds-*.noarch.rpm
+    rpm --force -Uvh ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/noarch/csm-install-workarounds-*.noarch.rpm
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
@@ -158,7 +160,7 @@ if [[ $state_recorded == "0" ]]; then
     if [[ ! -f docs-csm-install-latest.noarch.rpm ]]; then
         echo "Please make sure 'docs-csm-install-latest.noarch.rpm' exists under: $(pwd)"
     fi
-    cp docs-csm-install-latest.noarch.rpm ${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/noarch/
+    cp docs-csm-install-latest.noarch.rpm ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/noarch/
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
@@ -168,7 +170,7 @@ state_name="SETUP_NEXUS"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
-    ./${CSM_RELEASE}/lib/setup-nexus.sh
+    ${CSM_ARTI_DIR}/lib/setup-nexus.sh
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
@@ -178,7 +180,7 @@ state_name="UPGRADE_BSS"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
-    helm -n services upgrade cray-hms-bss ./${CSM_RELEASE}/helm/cray-hms-bss-*.tgz
+    helm -n services upgrade cray-hms-bss ${CSM_ARTI_DIR}/helm/cray-hms-bss-*.tgz
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
@@ -272,7 +274,7 @@ state_name="MODIFYING_NEW_NCN_IMAGE"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
-    artdir=./${CSM_RELEASE}/images
+    artdir=${CSM_ARTI_DIR}/images
     # for both the Kubernetes and storage images,
     for d in kubernetes storage-ceph
     do
@@ -343,7 +345,7 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     temp_file=$(mktemp)
-    artdir=./${CSM_RELEASE}/images
+    artdir=${CSM_ARTI_DIR}/images
     csi handoff ncn-images \
           --kubeconfig /etc/kubernetes/admin.conf \
           --k8s-kernel-path $artdir/kubernetes/*.kernel \
@@ -381,7 +383,8 @@ if [[ $state_recorded == "0" ]]; then
     echo "export CEPH_VERSION=${CEPH_VERSION}" >> /etc/cray/upgrade/csm/myenv
     echo "export KUBERNETES_VERSION=${KUBERNETES_VERSION}" >> /etc/cray/upgrade/csm/myenv
     echo "export CSM_RELEASE=${CSM_RELEASE}" >> /etc/cray/upgrade/csm/myenv
-    echo "export DOC_RPM_NEXUS_URL=https://packages.local/repository/csm-sle-15sp2/$(ls ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/noarch/docs-csm-install-latest.noarch.rpm | awk -F'/sle-15sp2/' '{print $2}')" >> /etc/cray/upgrade/csm/myenv
+    echo "export CSM_ARTI_DIR=${CSM_ARTI_DIR}" >> /etc/cray/upgrade/csm/myenv
+    echo "export DOC_RPM_NEXUS_URL=https://packages.local/repository/csm-sle-15sp2/$(ls ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/noarch/docs-csm-install-latest.noarch.rpm | awk -F'/sle-15sp2/' '{print $2}')" >> /etc/cray/upgrade/csm/myenv
 
     record_state ${state_name} $(hostname)
 else
@@ -443,9 +446,9 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     numOfDeployments=$(helm list -n services | grep cray-console | wc -l)
     if [[ $numOfDeployments -eq 0 ]]; then
-        helm -n services upgrade --install --wait cray-console-operator ./${CSM_RELEASE}/helm/cray-console-operator-*.tgz
-        helm -n services upgrade --install --wait cray-console-node ./${CSM_RELEASE}/helm/cray-console-node-*.tgz
-        helm -n services upgrade --install --wait cray-console-data ./${CSM_RELEASE}/helm/cray-console-data-*.tgz
+        helm -n services upgrade --install --wait cray-console-operator ${CSM_ARTI_DIR}/helm/cray-console-operator-*.tgz
+        helm -n services upgrade --install --wait cray-console-node ${CSM_ARTI_DIR}/helm/cray-console-node-*.tgz
+        helm -n services upgrade --install --wait cray-console-data ${CSM_ARTI_DIR}/helm/cray-console-data-*.tgz
     fi
 
     record_state ${state_name} $(hostname)

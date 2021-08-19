@@ -42,7 +42,7 @@ if [[ $state_recorded == "0" ]]; then
     set +e
     n=0
     csm_upgraded=0
-    pushd ${CSM_RELEASE}
+    pushd ${CSM_ARTI_DIR}
     until [ "$n" -ge 3 ]
     do
         ./upgrade.sh
