@@ -77,8 +77,8 @@ section sets the expected environment variables to appropriate values.
    installed.
 
    ```bash
-   ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
-   ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
+   ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/csm-1.1/docs-csm-install/docs-csm-install-latest.noarch.rpm
+   ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/csm-1.1/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
    ```
 
 1. Set `CSM_SCRIPTDIR` to the scripts directory included in the docs-csm RPM
