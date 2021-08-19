@@ -794,13 +794,25 @@ type = "GET"
 
 See [Manage Node Consoles](conman/Manage_Node_Consoles.md) for information on how to connect to the node's console.
 
-The boot will fail, but should reach the dracut stage. If the dracut stage is reached, the boot
-can be considered successful and shows that the necessary CSM services needed to boot a node are
-up and available. The boot is considered successful if the console output has something similar
-to the following near its end:
+The boot will fail, but should reach the dracut stage. If the dracut stage is reached, this test
+can be considered successful. This shows that the CSM services needed to boot a node are available and working properly.
+
+More specifically, this test is considered successful if the console output has something similar to the following
+somewhere within the final 20 lines of its output:
 ```
 [    7.876909] dracut: FATAL: Don't know how to handle 'root=craycps-s3:s3://boot-images/e3ba09d7-e3c2-4b80-9d86-0ee2c48c2214/rootfs:c77c0097bb6d488a5d1e4a2503969ac0-27:dvs:api-gw-service-nmn.local:300:nmn0'
 [    7.898169] dracut: Refusing to continue
+```
+
+**NOTE**: As long as the preceding text is found near the end of the console output, the test is considered successful. It is normal
+(and **not** indicative of a test failure) to see something similar to the following at the very end of the console output:
+```
+         Starting Dracut Emergency Shell...
+[   11.591948] device-mapper: uevent: version 1.0.3
+[   11.596657] device-mapper: ioctl: 4.40.0-ioctl (2019-01-18) initialised: dm-devel@redhat.com
+Warning: dracut: FATAL: Don't know how to handle
+Press Enter for maintenance
+(or press Control-D to continue):
 ```
 
 <a name="uas-uai-tests"></a>
