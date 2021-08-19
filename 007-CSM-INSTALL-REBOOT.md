@@ -375,12 +375,11 @@ all been run by the administrator before starting this stage.
     
 1. Follow the procedure defined in [Accessing CSI from a USB or RemoteISO](#accessing-csi-from-a-usb-or-remoteiso).
     
-1. Restore and verify the site link. It will be necessary to restore the `ifcfg-lan0` file, and both the `ifroute-lan0` and `ifroute-vlan002` file from either manual backup take in step 6 or re-mount the USB and copy it from the prep directory to `/etc/sysconfig/network/`.
+1. Restore and verify the site link. It will be necessary to restore the `ifcfg-lan0` and `ifroute-vlan002` files from either the manual backup taken in step 6 or remount the USB and copy it from the prep directory to `/etc/sysconfig/network/`.
     
     ```bash
     ncn-m001# export SYSTEM_NAME=eniac
     ncn-m001# cp /mnt/pitdata/prep/${SYSTEM_NAME}/pit-files/ifcfg-lan0 /etc/sysconfig/network/
-    ncn-m001# cp /mnt/pitdata/prep/${SYSTEM_NAME}/pit-files/ifroute-lan0 /etc/sysconfig/network/
     ncn-m001# cp /mnt/pitdata/prep/${SYSTEM_NAME}/pit-files/ifroute-vlan002 /etc/sysconfig/network/
     ncn-m001# wicked ifreload lan0
     ```
@@ -529,7 +528,7 @@ be accessed by any LiveCD ISO file if not the one used for the original installa
 
 After all the NCNs have been installed, it is imperative to disable the automated wiping of disks so subsequent boots
 do not destroy any data unintentionally. First follow the procedure [above](#accessing-usb-partitions-after-reboot)
-to re-mount the assets and then get a new token:
+to remount the assets and then get a new token:
 
 ```bash
 ncn-m001# export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
