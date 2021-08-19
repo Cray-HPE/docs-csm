@@ -7,14 +7,14 @@ Depending on the size of the Shasta system the spine switches will serve differe
 Requirements:
     - One connection between the switches is used for the ISL (Inter switch link).
 
-Here is an example snippet from a spine switch on the SHCD.
+Here is an example snippet about a spine switch from the SHCD.
 
 
-The ISL ports is port 32 on both spine switches.
+The ISL ports are port 32 on both spine switches.
 
-   | Source | Source Label Info | Destination Label Info | Destination | Description | Notes
-   | --- | --- | ---| --- | --- | --- |
-   | sw-100g01 | x3105u40-j32 | x3105u41-j32 | sw-100g02 | 100g-1m-DAC | |
+| Source | Source Label Info | Destination Label Info | Destination | Description |
+| --- | --- | --- | --- | --- |
+| sw-100g01 | x3105u40-j32 | x3105u41-j32 | sw-100g02 | 100g-1m-DAC |
 
 It is assumed that you have connectivity to the switch.
 
@@ -24,8 +24,9 @@ It is assumed that you have connectivity to the switch.
 The VLAN information is located in the network YAML files. Below are examples.
 
 1. The spine switches will have VLAN interfaces in NMN, HMN, and CAN networks.
+
    ```
-   sif-ncn-m001-pit:/var/www/ephemeral/prep/sif/networks # cat NMN.yaml
+   pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN.yaml
    SNIPPET
      - ip_address: 10.252.0.2
        name: sw-spine-001
@@ -41,8 +42,9 @@ The VLAN information is located in the network YAML files. Below are examples.
      comment: ""
      gateway: 10.252.0.1
    ```
+
    ```
-   sif-ncn-m001-pit:/var/www/ephemeral/prep/sif/networks # cat HMN.yaml
+   pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/HMN.yaml
    SNIPPET
      - ip_address: 10.254.0.2
        name: sw-spine-001
@@ -58,8 +60,9 @@ The VLAN information is located in the network YAML files. Below are examples.
      comment: ""
      gateway: 10.254.0.1
    ```
+
    ```
-   sif-ncn-m001-pit:/var/www/ephemeral/prep/sif/networks # cat CAN.yaml
+   pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/CAN.yaml
    SNIPPET
      - ip_address: 10.102.11.2
        name: can-switch-1
@@ -88,11 +91,12 @@ The VLAN information is located in the network YAML files. Below are examples.
 MAGP setup for Mellanox spine switches, this should be set for every VLAN interface (1,2,4,7,10)
 https://community.mellanox.com/s/article/howto-configure-magp-on-mellanox-switches
 
-```
+1. Enable MAGP protocol.
+
+   ```
    sw-spine-001 & sw-spine-002 (config)#
    protocol magp
-```
-
+   ```
 
 ## Configure DHCP
 
@@ -126,16 +130,16 @@ IP-Helpers will reside on VLANs 1,2,4, and 7.
    interface vlan 2 ip ospf area 0.0.0.2
    interface vlan 4 ip ospf area 0.0.0.4
    interface vlan 2 ip ospf priority 254
-   interface vlan 4 ip ospf priority 200
+   interface vlan 4 ip ospf priority 254
    ```
 
 1. NMN VLAN config
+
    ```
    sw-spine-001(config)# 
          vlan 2
          interface vlan 2
          interface vlan 2 ip address 10.252.0.2/17 primary
-         no interface vlan 2 ip icmp redirect
          interface vlan 2 ipv4 port access-group nmn-hmn
          interface vlan 2 ip ospf area 0.0.0.2
          interface vlan 2 ip ospf priority 254
@@ -156,7 +160,9 @@ IP-Helpers will reside on VLANs 1,2,4, and 7.
          interface vlan 2 magp 2 ip virtual-router address 10.252.0.1
          interface vlan 2 magp 2 ip virtual-router mac-address 00:00:5E:00:01:02
    ```
+
 1. HMN VLAN config
+
    ```
    sw-spine-001(config)#
          vlan 4
@@ -164,7 +170,7 @@ IP-Helpers will reside on VLANs 1,2,4, and 7.
          interface vlan 4 ip address 10.254.0.2/17 primary
          interface vlan 4 ipv4 port access-group nmn-hmn
          interface vlan 4 ip ospf area 0.0.0.4
-         interface vlan 4 ip ospf priority 200
+         interface vlan 4 ip ospf priority 254
          interface vlan 4 ip dhcp relay instance 4 downstream
          interface vlan 4 magp 4
          interface vlan 4 magp 4 ip virtual-router address 10.254.0.1
@@ -175,18 +181,22 @@ IP-Helpers will reside on VLANs 1,2,4, and 7.
          interface vlan 4
          interface vlan 4 ip address 10.254.0.3/17 primary
          interface vlan 4 ipv4 port access-group nmn-hmn
+         interface vlan 4 ip ospf area 0.0.0.4
+         interface vlan 4 ip ospf priority 254
          interface vlan 4 ip dhcp relay instance 4 downstream
          interface vlan 4 magp 4
          interface vlan 4 magp 4 ip virtual-router address 10.254.0.1
          interface vlan 4 magp 4 ip virtual-router mac-address 00:00:5E:00:01:04
        exit
    ```
+
 1. CAN VLAN config
+
    ```
    sw-spine-001(config)#
          vlan 7
          interface vlan 7 ip address 10.101.8.2/24 primary
-         interface vlan 2 ip dhcp relay instance 2 downstream
+         interface vlan 7 ip dhcp relay instance 2 downstream
          interface vlan 7 magp 7
          interface vlan 7 magp 7 ip virtual-router address 10.101.8.1
          interface vlan 7 magp 7 ip virtual-router mac-address 00:00:5E:00:01:07
@@ -194,7 +204,7 @@ IP-Helpers will reside on VLANs 1,2,4, and 7.
    sw-spine-002(config)#
          vlan 7
          interface vlan 7 ip address 10.101.8.3/24 primary
-         interface vlan 2 ip dhcp relay instance 2 downstream
+         interface vlan 7 ip dhcp relay instance 2 downstream
          interface vlan 7 magp 7
          interface vlan 7 magp 7 ip virtual-router address 10.101.8.1
          interface vlan 7 magp 7 ip virtual-router mac-address 00:00:5E:00:01:07
@@ -281,11 +291,13 @@ Once you create the MLAG you need to add ports to it.
 ```
 
 Configuration with Recommended MLAG-VIP cable.
+
 - This is recommended by Mellanox but not required.
 - Its purpose is to prevent "split brain" which is where both spines think they are the active gateway.
 - It requires an RJ45 cable between the mgmt0 ports on both switches.
 - https://community.mellanox.com/s/article/how-to-configure-mlag-on-mellanox-switches#jive_content_id_MLAG_VIP
 
+Notice that the SYSTEM_NAME should be used instead of "eniac" as part of the name for mlag-vip.
 #### Spine01
 
 ```
@@ -293,8 +305,8 @@ no interface mgmt0 dhcp
    interface mgmt0 ip address 192.168.255.241 /29
 no mlag shutdown
    mlag system-mac 00:00:5E:00:01:5D
-mlag-vip rocket-mlag-domain ip 192.168.255.242 /29 force
-   ```
+mlag-vip eniac-mlag-domain ip 192.168.255.242 /29 force
+```
 
 #### Spine02
 
@@ -303,14 +315,15 @@ no interface mgmt0 dhcp
    interface mgmt0 ip address 192.168.255.243 /29
 no mlag shutdown
    mlag system-mac 00:00:5E:00:01:5D    
-mlag-vip rocket-mlag-domain ip 192.168.255.242 /29 force
+mlag-vip eniac-mlag-domain ip 192.168.255.242 /29 force
 ```
 
 Verifying mlag-vip
+
 ```
-sw-spine-001 [rocket-mlag-domain: master] # show mlag-vip
+sw-spine-001 [eniac-mlag-domain: master] # show mlag-vip
 MLAG-VIP:
- MLAG group name: rocket-mlag-domain 
+ MLAG group name: eniac-mlag-domain 
  MLAG VIP address: 192.168.255.242/29
  Active nodes: 2
  
@@ -518,6 +531,8 @@ The IP addresses used here will be the first three worker nodes on the NMN netwo
 
 ## Save configuration
 
+   1. Save the changes made during this configuration session.
+
    ```
    sw-spine-001(config)# exit
    sw-spine-001# write memory
@@ -525,6 +540,8 @@ The IP addresses used here will be the first three worker nodes on the NMN netwo
 
 
 ## Show Running Configuration
+
+   1. Show the current configuration
 
    ```
    sw-spine-001# show running-config

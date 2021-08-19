@@ -47,7 +47,7 @@ The VLAN information is located in the network YAML files. Below are examples.
 1. The CDU switches will have VLAN interfaces in NMN, HMN, NMN_MTN, HMN_MTN networks.
 
    ```
-   sif-ncn-m001-pit:/var/www/ephemeral/prep/sif/networks # cat NMN.yaml
+   pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN.yaml
    SNIPPET
      - ip_address: 10.252.0.5
        name: sw-cdu-001
@@ -64,7 +64,8 @@ The VLAN information is located in the network YAML files. Below are examples.
      gateway: 10.252.0.1
    ```
    ```
-   sif-ncn-m001-pit:/var/www/ephemeral/prep/sif/networks # cat HMN.yaml
+   pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/HMN.yaml
+
    SNIPPET
      - ip_address: 10.254.0.5
        name: sw-cdu-001
@@ -81,7 +82,8 @@ The VLAN information is located in the network YAML files. Below are examples.
      gateway: 10.254.0.1
    ```
    ```
-   sif-ncn-m001-pit:/var/www/ephemeral/prep/sif/networks # cat NMN_MTN.yaml
+   pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN_MTN.yaml
+
    full_name: Mountain Node Management Network
    cidr: 10.100.0.0/17
    subnets:
@@ -106,7 +108,8 @@ The VLAN information is located in the network YAML files. Below are examples.
    name: NMN_MTN
    ```
    ```
-   sif-ncn-m001-pit:/var/www/ephemeral/prep/sif/networks # cat HMN_MTN.yaml
+   pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/HMN_MTN.yaml
+
    full_name: Mountain Hardware Management Network
    cidr: 10.104.0.0/17
    subnets:

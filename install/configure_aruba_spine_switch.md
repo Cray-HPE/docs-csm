@@ -118,7 +118,7 @@ The VLAN information is located in the network YAML files. Below are examples.
 1. The spine switches will have VLAN interfaces in NMN, HMN, and CAN networks.
 
    ```
-   sif-ncn-m001-pit:/var/www/ephemeral/prep/sif/networks # cat NMN.yaml
+   pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN.yaml
    SNIPPET
      - ip_address: 10.252.0.2
        name: sw-spine-001
@@ -135,7 +135,7 @@ The VLAN information is located in the network YAML files. Below are examples.
      gateway: 10.252.0.1
    ```
    ```
-   sif-ncn-m001-pit:/var/www/ephemeral/prep/sif/networks # cat HMN.yaml
+   pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/HMN.yaml
    SNIPPET
      - ip_address: 10.254.0.2
        name: sw-spine-001
@@ -152,7 +152,7 @@ The VLAN information is located in the network YAML files. Below are examples.
      gateway: 10.254.0.1
    ```
    ```
-   sif-ncn-m001-pit:/var/www/ephemeral/prep/sif/networks # cat CAN.yaml
+   pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/CAN.yaml
    SNIPPET
      - ip_address: 10.102.11.2
        name: can-switch-1
