@@ -13,21 +13,22 @@ All firmware will be located at `/var/www/fw/network` on the LiveCD. It should c
 ``` 
 ncn-m001-pit:/var/www/network/firmware # ls -lh
 total 2.7G
--rw-r--r-- 1 root root 614M Jan 15 18:57 ArubaOS-CX_6400-6300_10_05_0040.stable.swi
--rw-r--r-- 1 root root 368M Jan 15 19:09 ArubaOS-CX_8320_10_05_0040.stable.swi
--rw-r--r-- 1 root root 406M Jan 15 18:59 ArubaOS-CX_8325_10_05_0040.stable.swi
--rw-r--r-- 1 root root 729M Aug 26 17:11 onyx-X86_64-3.9.1014.stable.img
--rw-r--r-- 1 root root 577M Oct 28 11:45 OS10_Enterprise_10.5.1.4.stable.tar
+-rw-rw-r--+ 1 root root 658353828 Jan  7  2021 ArubaOS-CX_6400-6300_10_06_0010.stable.swi
+-rw-rw-r--+ 1 root root 384156519 May  3 22:18 ArubaOS-CX_8320_10_06_0110.stable.swi
+-rw-rw-r--+ 1 root root 444610797 Jan  7  2021 ArubaOS-CX_8325_10_06_0010.stable.swi
+-rw-rw-r--+ 1 root root 431371873 Apr 30 20:55 ArubaOS-CX_8360_10_06_0110.stable.swi
+-rw-rw-r--+ 1 root root 763636433 Aug 26  2020 onyx-X86_64-3.9.1014.stable.img
+-rw-rw-r--+ 1 root root 604119040 Oct 28  2020 OS10_Enterprise_10.5.1.4.stable.tar
 ```
 
 ## Switch Firmware
 
 | Vendor | Model | Version |
 | --- | --- | --- |
-| Aruba | 6300 | ArubaOS-CX_6400-6300_10.06.0120 |
-| Aruba | 8320 | ArubaOS-CX_8320_10.06.0120 |
-| Aruba | 8325 | ArubaOS-CX_8325_10.06.0120 |
-| Aruba | 8360 | ArubaOS-CX_8360_10.06.0120|
+| Aruba | 6300 | ArubaOS-CX_6400-6300_10.06.0010 |
+| Aruba | 8320 | ArubaOS-CX_8320_10.06.0010 or ArubaOS-CX_8320_10.06.0110 |
+| Aruba | 8325 | ArubaOS-CX_8325_10.06.0010 |
+| Aruba | 8360 | ArubaOS-CX_8360_10.06.0010 or ArubaOS-CX_8360_10.06.0110 |
 | Dell | S3048-ON | 10.5.1.4 |
 | Dell | S4148F-ON | 10.5.1.4 |
 | Dell | S4148T-ON | 10.5.1.4 |
