@@ -4,12 +4,54 @@ Use an existing backup of a healthy etcd cluster to restore an unhealthy cluster
 
 The commands in this procedure can be run on any master node \(`ncn-mXXX`\) or worker node \(`ncn-wXXX`\) on the system.
 
+---
+**NOTE**
+
+Etcd Clusters can be restored using the automation script or the manual procedure below. The automation script follows the same steps as the manual procedure. 
+If the automation script fails to get the date from backups, follow the manual procedure. 
+
+---
+
 ### Prerequisites
 
 A backup of a healthy etcd cluster has been created.
 
+### Restore with Automation Script
 
-### Procedure
+The automated script will restore the cluster from the most recent backup if it finds a backup created within the last 7 days. 
+If it does not discover a backup within the last 7 days, it will ask the user if they would like to rebuild the cluster.
+
+```
+ncn-w001 # cd /opt/cray/platform-utils/etcd_restore_rebuild_util
+
+# rebuild/restore a single cluster
+ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util # ./etcd_restore_rebuild.sh -s cray-bos-etcd
+
+# rebuild/restore multiple clusters
+ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util # ./etcd_restore_rebuild.sh -m cray-bos-etcd,cray-uas-mgr-etcd
+
+# rebuild/restore all clusters
+ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util # ./etcd_restore_rebuild.sh -a
+```
+
+An example using the automation script is below.
+```
+ncn-m001:/opt/cray/platform-utils/etcd_restore_rebuild_util # ./etcd_restore_rebuild.sh -s cray-externaldns-etcd
+The following etcd clusters will be restored/rebuilt:
+cray-externaldns-etcd
+You will be accepting responsibility for any missing data if there is a restore/rebuild over a running etcd k/v. HPE assumes no responsibility.
+Proceed restoring/rebuilding? (yes/no)
+yes
+Proceeding: restoring/rebuilding etcd clusters.
+
+ ----- Restoring from cray-externaldns/etcd.backup_v8362_2021-08-18-20:00:09
+etcdrestore.etcd.database.coreos.com/cray-externaldns-etcd created
+- 3/3  Running
+Successfully restored cray-externaldns-etcd
+etcdrestore.etcd.database.coreos.com "cray-externaldns-etcd" deleted
+```
+
+### Restore with Manual Procedure
 
 1.  List the backups for the desired etcd cluster.
 
@@ -62,7 +104,6 @@ A backup of a healthy etcd cluster has been created.
         ncn-w001# kubectl -n services delete etcdrestore.etcd.database.coreos.com/cray-bos-etcd
         etcdrestore.etcd.database.coreos.com "cray-bos-etcd" deleted
         ```
-
 
 
 
