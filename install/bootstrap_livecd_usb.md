@@ -288,7 +288,7 @@ Pull these files into the current working directory:
 
    After gathering the files into this working directory, generate your configurations:
 
-1. If doing a reinstall and have the `system_config.yaml` parameter file avail available, then generate the system configuration reusing this parameter file (see [avoiding parameters](../background/cray_site_init_files.md#save-file--avoiding-parameters)).
+1. If doing a reinstall and have the `system_config.yaml` parameter file available, then generate the system configuration reusing this parameter file (see [avoiding parameters](../background/cray_site_init_files.md#save-file--avoiding-parameters)).
 
    If not doing a reinstall of Shasta software, then the `system_config.yaml` file will not be available, so skip the rest of this step.
 
