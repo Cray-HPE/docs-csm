@@ -9,5 +9,8 @@ function pre_pull_ceph_images () {
   for host in $(ceph node ls| jq -r '.osd|keys[]'); do
     echo "Pre-pulling $IMAGE image on $host"
     ssh "$host" "cephadm --image $IMAGE pull"
+    echo "Verify the image on present on $host"
+    ssh "$host" "podman image inspect $IMAGE > /dev/null 2>&1 && echo -e 'Image $IMAGE is present on $host'|| echo 'Image is missing exiting script'; exit 1"
+    echo -e "\n"
   done
 }

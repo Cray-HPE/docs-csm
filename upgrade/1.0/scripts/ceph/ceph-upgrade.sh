@@ -19,6 +19,12 @@ export upgrade_rgws_file="/etc/cray/ceph/rgws_upgraded"
 export registry="${1:-registry.local}"
 num_storage_nodes=$(craysys metadata get num-storage-nodes)
 
+if [[ $? != 0 ]]
+then
+  echo "Cloud init data not present.  Exiting upgrade.."
+  exit 1
+fi
+
 . ./lib/ceph-health.sh
 . ./lib/mark_step_complete.sh
 . ./lib/k8s-scale-utils.sh
@@ -74,6 +80,11 @@ for node in $(seq 1 "$num_storage_nodes"); do
  nodename=$(printf "ncn-s%03d.nmn" "$node")
  ssh-keyscan -H "$nodename" >> ~/.ssh/known_hosts
 done
+
+if [ ! -f "$upgrade_mons_file" ] && [ -f "$convert_rgw_file" ]; then
+  rm $pre_pull_images_file
+  rm $upgrade_mons_file
+fi
 
 if [ -f "$pre_pull_images_file" ]; then
   echo "Images have already been pre-pulled"
