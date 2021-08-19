@@ -301,15 +301,15 @@ Use the value of `access_token` to make API requests.
 
     ```bash
     ncn-m001# MAC=MAC_ADDRESS
-    ncn-m001# SYSTEMB_IP_ADDRESS=SYS_B_IP_ADDRESS
-    ncn-m001# SYSTEMB_XNAME=SYS_B_XNAME
+    ncn-m001# IP_ADDRESS=SYSTEMB_IP_ADDRESS
+    ncn-m001# XNAME=SYSTEMB_XNAME
     ```
 
     ```bash
     ncn-m001# curl -H "Authorization: Bearer ${TOKEN}" -L -X POST 'https://api_gw_service.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces' -H 'Content-Type: application/json' --data-raw '{
             "MACAddress": "$MAC",
-            "IPAddress": "$SYSTEMB_IP_ADDRESS",
-            "ComponentID": "$SYSTEMB_XNAME"
+            "IPAddress": "$IP_ADDRESS",
+            "ComponentID": "$XNAME"
           }'
     ```
 
@@ -430,8 +430,8 @@ Use the value of `access_token` to make API requests.
 38. Use boot orchestration to power on and boot the nodes. Specify the appropriate BOS template for the node type.
 
     ```bash
-    ncn-m001# COS-VERSION=cos-2.0.30-slurm-healthy-compute
-    ncn-m001# cray bos session create --template-uuid $COS-VERSION --operation reboot --limit x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
+    ncn-m001# BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
+    ncn-m001# cray bos session create --template-uuid $BOS_TEMPLATE --operation reboot --limit x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
     ```
 
 #### Check Firmware
@@ -461,9 +461,31 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
     services   cray-cps-wait-for-etcd-jb95m 0/1  Completed       
     ```
 
+42. SSH to each worker node running CPS/DVS, and run  `dmesg -T` and ensure that there are no recurring `“DVS: merge_one” `messages as shown.  These messages indicate that DVS is still detecting IP address change for one of the client nodes.
+
+    ```
+    [Tue Jul 21 13:09:54 2020] DVS: merge_one#351: New node map entry does not match the existing entry
+    [Tue Jul 21 13:09:54 2020] DVS: merge_one#353:   nid: 8 -> 8
+    [Tue Jul 21 13:09:54 2020] DVS: merge_one#355:   name: 'x3000c0s19b1n0' -> 'x3000c0s19b1n0'
+    [Tue Jul 21 13:09:54 2020] DVS: merge_one#357:   address: '10.252.0.26@tcp99' -> '10.252.0.33@tcp99'
+    [Tue Jul 21 13:09:54 2020] DVS: merge_one#358:   Ignoring.
+    ```
+
+43. Make sure CFS finished successfully. Review *HPE_Cray EX DVS Administration Guide 1.4.1 S-8004*.
+
+44. SSH to the node and check each DVS mount.
+
+    ```bash
+    nid001133:~ # mount | grep dvs | head -1
+    /var/lib/cps-local/0dbb42538e05485de6f433a28c19e200 on /var/opt/cray/gpu/nvidia-squashfs-21.3 type dvs (ro,relatime,blksize=524288,statsfile=/sys/kernel/debug/dvs/mounts/1/stats,attrcache_timeout=14400,cache,nodatasync,noclosesync,retry,failover,userenv,noclusterfs,killprocess,noatomic,nodeferopens,no_distribute_create_ops,no_ro_cache,loadbalance,maxnodes=1,nnodes=6,nomagic,hash_on_nid,hash=modulo,nodefile=/sys/kernel/debug/dvs/mounts/1/nodenames,nodename=x3000c0s6b0n0:x3000c0s5b0n0:x3000c0s4b0n0:x3000c0s9b0n0:x3000c0s8b0n0:x3000c0s7b0n0)
+    
+    nid001133:~ # ls /var/opt/cray/gpu/nvidia-squashfs-21.3
+    rootfs
+    ```
+
 #### Check the HSN for the affected nodes
 
-42. Switch to the fabric manager pod.
+45. Switch to the fabric manager pod.
 
     ```bash
     ncn-m001# container=$(kubectl get pods --all-namespaces | grep slingshot | awk '{print $2}') 
@@ -475,10 +497,12 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
 
 #### Bring up the Blade in System A
 
-43. Drain the coolant from the blade removed from system B and fill with fresh coolant to minimize cross-contamination of cooling systems. 
-    - Review fill station procedures in *HPE Cray EX Coolant Service Procedures H-6199*. If using the hand pump, review procedures in the *HPE Cray EX Hand Pump User Guide H-6200* (https://internal.support.hpe.com/).
+46. Drain the coolant from the blade removed from system B and fill with fresh coolant to minimize cross-contamination of cooling systems. 
 
-44. Install the blade from System B into System A.  
-    - Review the *Remove a Compute Blade Using the Lift* procedure in *HPE Cray EX Hardware Replacement Procedures H-6173* for detailed instructions for replacing liquid-cooled blades (https://internal.support.hpe.com/).
+- Review fill station procedures in *HPE Cray EX Coolant Service Procedures H-6199*. If using the hand pump, review procedures in the *HPE Cray EX Hand Pump User Guide H-6200* (https://internal.support.hpe.com/).
 
-45. Repeat steps 26 through 42 to power on the nodes in System A.
+47. Install the blade from System B into System A.  
+
+- Review the *Remove a Compute Blade Using the Lift* procedure in *HPE Cray EX Hardware Replacement Procedures H-6173* for detailed instructions for replacing liquid-cooled blades (https://internal.support.hpe.com/).
+
+48. Repeat steps 26 through 45 to power on the nodes in System A.
