@@ -428,21 +428,25 @@ The configuration workflow described here is intended to help understand the exp
 <a name="check-for-unused-drives-on-utility-storage-nodes"></a>
 #### 3.3 Check for Unused Drives on Utility Storage Nodes
 
-> **`IMPORTANT:`** Do the following if NCNs are Gigabyte hardware.
-> **`IMPORTANT:`** the cephadm may output this warning "WARNING: The same type, major and minor should not be used for multiple devices.". You can ignore this warning. 
+> **`IMPORTANT:`** Do the following if NCNs are Gigabyte hardware.  It is optional, but suggested for HPE ncns.
+> 
+> **`IMPORTANT:`** the cephadm may output this warning "WARNING: The same type, major and minor should not be used for multiple devices.". You can ignore this warning.
 
 ##### Option 1
 
-  If you have OSDs on each node (`ceph osd tree` can show this) then you have all your nodes in Ceph. That means you can utilize the orchestrator to look for the devices.
+  If you have OSDs on each node (`ceph osd tree` can show this) then you have all your nodes in Ceph. That means you can utilize the orchestrator to look for the devices.  
+  
+  **NOTE:** `ceph osd tree` can be run from ncn-m00(1/2/3) or ncn-s00(1/2/3).
 
-1. Get the number of osds in the cluster
+1. Get the number of osds in the cluster.
 
     ```bash
-    ncn-s001# ceph -f json-pretty osd stat |jq .num_osds
+    ncn-s00(1/2/3)# ceph -f json-pretty osd stat |jq .num_osds
     24
     ```
 
-2. Compare your number of OSDs to the output below. 
+1. Compare your number of OSDs to your output which should resemble the example below.  The number of drives will depend on the server hardware.
+
    > **NOTE:**  If your Ceph cluster is large and has a lot of nodes, you can specify a node after the below command to limit the results.
 
     ```bash
@@ -478,22 +482,22 @@ The configuration workflow described here is intended to help understand the exp
 
     **IMPORTANT:** Prior to zapping any device please ensure it is not being used.
 
-3. Check to see if the number of devices is less than the number of listed drives or your output from step 1.
+1. Check to see if the number of devices is less than the number of listed drives or your output from step 1.
 
    ```bash
-    ncn-s001# ceph orch device ls|grep dev|wc -l
+    ncn-s00(1/2/3)# ceph orch device ls|grep dev|wc -l
     24
     ```
 
     If the numbers are equal, then you may need to fail your ceph-mgr daemon to get a fresh inventory.
 
     ```bash
-    ncn-s001# ceph mgr fail $(ceph mgr dump | jq -r .active_name)
+    ncn-s00(1/2/3)# ceph mgr fail $(ceph mgr dump | jq -r .active_name)
     ```
 
     Give it a minute then re-check `ceph orch device ls` to see if the drives are still showing as available. If so, then proceed to the next step.
 
-4. `ssh` to the host and look at `lsblk` output and check against the device from the above `ceph orch device ls`
+1. `ssh` to the host and look at `lsblk` output and check against the device from the above `ceph orch device ls`
 
     ```bash
     ncn-s001# lsblk
@@ -513,7 +517,7 @@ The configuration workflow described here is intended to help understand the exp
 
 **`IMPORTANT:`** the cephadm may output this warning "WARNING: The same type, major and minor should not be used for multiple devices.". You can ignore this warning. 
 
-1. Log into **each** ncn-s node and check for unused drives
+1. Log into **each** ncn-s node and check for unused drives.
 
     ```bash
     ncn-s# cephadm shell -- ceph-volume inventory
