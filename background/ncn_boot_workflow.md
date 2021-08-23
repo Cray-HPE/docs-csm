@@ -71,6 +71,10 @@ done
 <a name="setting-order"></a>
 #### Setting Order
 
+Setting the boot order with efibootmgr will ensure that the desired network interfaces and disks are in the proper order for booting. The commands and output vary by the vendor and the function of the node.
+
+> **`NOTE`** The four digit hex numbers shown in the examples below may be different, even between nodes of the same function and vendor. The first two efibootmgr commands will display the correct hex numbers for the third efibootmgr command to use in setting the proper boot order.
+
 1. Create our boot-bios-selector file(s) based on the manufacturer:
 
    > <a name="gigabyte-technology"></a>
@@ -85,6 +89,8 @@ done
    > ncn-m# efibootmgr | grep cray | tee /tmp/bbs2
    > Boot0000* cray (sda1)
    > Boot0002* cray (sdb1)
+   > ncn-m# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -t '*' ',' | tr -d '\n' | sed 's/,$//') | grep -i bootorder
+   > BootOrder: 0007,0009,0000,0002
    > ```
    >
    > ##### Storage
@@ -96,6 +102,8 @@ done
    > ncn-s# efibootmgr | grep cray | tee /tmp/bbs2
    > Boot0000* cray (sda1)
    > Boot0002* cray (sdb1)
+   > ncn-s# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -t '*' ',' | tr -d '\n' | sed 's/,$//') | grep -i bootorder
+   > BootOrder: 0007,0009,0000,0002
    > ```
    >
    > ##### Workers
@@ -111,6 +119,8 @@ done
    > ncn-w# efibootmgr | grep cray | tee /tmp/bbs2
    > Boot0000* cray (sda1)
    > Boot0002* cray (sdb1)
+   > ncn-w# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -t '*' ',' | tr -d '\n' | sed 's/,$//') | grep -i bootorder
+   > BootOrder: 0009,0007,000B,0000,0002
    > ```
    >
    > <a name="hewlett-packard-enterprise"></a>
@@ -126,6 +136,8 @@ done
    > ncn-m# efibootmgr | grep cray | tee /tmp/bbs2
    > Boot0021* cray (sdb1)
    > Boot0022* cray (sdc1)
+   > ncn-m# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -t '*' ',' | tr -d '\n' | sed 's/,$//') | grep -i bootorder
+   > BootOrder: 0014,0018,0021,0022
    > ```
    > 
    > ##### Storage
@@ -137,6 +149,8 @@ done
    > ncn-s# efibootmgr | grep cray | tee /tmp/bbs2
    > Boot0002* cray (sdg1)
    > Boot0020* cray (sdh1)
+   > ncn-s# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -t '*' ',' | tr -d '\n' | sed 's/,$//') | grep -i bootorder
+   > BootOrder: 001C,001D,0002,0020
    > ```
    > 
    > ##### Workers
@@ -148,6 +162,8 @@ done
    > ncn-w# efibootmgr | grep cray | tee /tmp/bbs2
    > Boot0017* cray (sdb1)
    > Boot0018* cray (sdc1)
+   > ncn-w# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -t '*' ',' | tr -d '\n' | sed 's/,$//') | grep -i bootorder
+   > BootOrder: 0012,0017,0018
    > ```
    > 
    > <a name="intel-corporation"></a>
@@ -161,6 +177,8 @@ done
    > ncn-m# efibootmgr | grep -i 'cray' | tee /tmp/bbs2
    > Boot0011* cray (sda1)
    > Boot0012* cray (sdb1)
+   > ncn-m# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -t '*' ',' | tr -d '\n' | sed 's/,$//') | grep -i bootorder
+   > BootOrder: 000E,0014,0011,0012
    >```
    > ##### Storage
    > ```bash
@@ -170,6 +188,8 @@ done
    > ncn-s# efibootmgr | grep -i 'cray' | tee /tmp/bbs2
    > Boot0014* cray (sda1)
    > Boot0015* cray (sdb1)
+   > ncn-s# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -t '*' ',' | tr -d '\n' | sed 's/,$//') | grep -i bootorder
+   > BootOrder: 000E,0012,0014,0015
    > ```
    > ##### Workers
    >
@@ -180,17 +200,11 @@ done
    > ncn-w# efibootmgr | grep -i 'cray' | tee /tmp/bbs2
    > Boot0010* cray (sda1)
    > Boot0011* cray (sdb1)
+   > ncn-w# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -t '*' ',' | tr -d '\n' | sed 's/,$//') | grep -i bootorder
+   > BootOrder: 0008,000C,0010,0011
    > ```
 
-
-1. Set Order (works universally; every vendor, every Shasta ncn-type):
-
-> ```bash
-> ncn# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -t '*' ',' | tr -d '\n' | sed 's/,$//') | grep -i bootorder
-> BootOrder: 000E,0014,0011,0012
-> ```
-
-After following the two steps on a given NCN, that NCN will now use the desired Shasta boot order.
+After following the steps above on a given NCN, that NCN will now use the desired Shasta boot order.
 
 <a name="trimming_boot_order"></a>
 #### Trimming Boot Order
