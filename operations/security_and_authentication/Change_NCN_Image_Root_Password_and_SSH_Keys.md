@@ -12,11 +12,11 @@ The Kubernetes image is used by the master and worker nodes.
 
 1. Open the image.
 
-   The Kubernetes image will be of the form "kubernetes-0.0.53.squashfs" in /var/www/ephemeral/data/k8s.
+   The Kubernetes image will be of the form "kubernetes-0.1.69.squashfs" in /var/www/ephemeral/data/k8s, but the version number may be different.
 
    ```bash
    pit# cd /var/www/ephemeral/data/k8s
-   pit# unsquashfs kubernetes-0.0.53.squashfs
+   pit# unsquashfs kubernetes-0.1.69.squashfs
    ```
 
 1. Change into the image root
@@ -93,11 +93,11 @@ The Ceph image is used by the utility storage nodes.
 
 1. Open the image.
 
-   The Ceph image will be of the form "ceph-0.0.44.squashfs" in /var/www/ephemeral/data/ceph.
+   The Ceph image will be of the form "storage-ceph-0.1.69.squashfs" in /var/www/ephemeral/data/ceph, but the version number may be different.
 
    ```bash
    pit# cd /var/www/ephemeral/data/ceph
-   pit# unsquashfs ceph-0.0.44.squashfs
+   pit# unsquashfs storage-ceph-0.1.69.squashfs
    ```
 
 1. Change into the image root
