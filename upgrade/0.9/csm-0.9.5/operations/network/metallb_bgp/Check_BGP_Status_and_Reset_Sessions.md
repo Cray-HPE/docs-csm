@@ -31,7 +31,7 @@ data:
     - name: customer-access
 ```
 
-The switch IPs are the `peer-address` values. 
+The switch IP addresses are the `peer-address` values. 
 
 #### MELLANOX
 
