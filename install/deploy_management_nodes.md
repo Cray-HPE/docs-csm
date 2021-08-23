@@ -627,18 +627,50 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 
 1. If the neighbor IP addresses do not match the worker NCN IP addresses, use the helper script for your switch type to configure the BGP peers.
 
-   This command will list the available helper scripts.
-   ```bash
-   pit# ls -1 /usr/bin/*peer*py
-   ```
+   1. This command will list the available helper scripts.
+      ```bash
+      pit# ls -1 /usr/bin/*peer*py
+      ```
 
-   Expected output looks similar to the following:
+      Expected output looks similar to the following:
 
-   ```
-   /usr/bin/aruba_set_bgp_peers.py
-   /usr/bin/mellanox_set_bgp_peers.py
-   ```
+      ```
+      /usr/bin/aruba_set_bgp_peers.py
+      /usr/bin/mellanox_set_bgp_peers.py
+      ```
 
+   1. Run the BGP helper script for your switch type.
+
+      The BGP helper script requires three parameters: IP of switch 1, IP of Switch 2, Path to CSI generated network files.
+
+      - The IP addresses used should be Node Management Network IP addresses (NMN). These IP addresses will be used for the BGP Router-ID.
+      - The path to the CSI generated network files must include CAN.yaml', 'HMN.yaml', 'HMNLB.yaml', 'NMNLB.yaml', and 'NMN.yaml. The path must include the SYSTEM_NAME.
+
+      For Aruba:
+
+      The IP addresses in this example should be replaced by the IP addresses of the switches.
+
+      ```bash
+      pit# /usr/bin/mellanox_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/
+      ```
+
+      For Mellanox:
+
+      The IP addresses in this example should be replaced by the IP addresses of the switches.
+
+      ```bash
+      pit# /usr/bin/mellanox_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/
+      ```
+
+   1. Check the status of the BGP peering sessions.
+      - Aruba: `show bgp ipv4 unicast summary`
+      - Mellanox: `show ip bgp summary`
+
+      You should see a neighbor for each of the workers NCN IP addresses found above.   If it is an Aruba switch, you will also see a neighbor for the other switch of the pair that are peering.
+
+      At this point the peering sessions with the worker IP addresses should be in IDLE, CONNECT, or ACTIVE state and not ESTABLISHED state. This is because the MetalLB speaker pods have not been deployed yet.
+ 
+      You should see that the MsgRcvd and MsgSent columns for the worker IP addresses are 0.
 
 <a name="configure-and-trim-uefi-entries"></a>
 #### 4.3 Configure and Trim UEFI Entries
