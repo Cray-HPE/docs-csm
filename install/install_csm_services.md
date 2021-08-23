@@ -166,17 +166,7 @@ This is expected and can safely be ignored.
 <a name="deploy-csm-applications-and-services"></a>
 ### 4. Deploy CSM Applications and Services
 
-***IMPORTANT:*** If you have to re-run install.sh to re-deploy failed ceph-csi provisioners you must make sure to delete the jobs that have not completed. These are left there for investigation on failure. They are automatically removed on a successful deployment.
-
-```bash
-pit# kubectl get jobs
-NAME                   COMPLETIONS   DURATION   AGE
-cray-ceph-csi-cephfs   0/1                      3m35s
-cray-ceph-csi-rbd      0/1                      8m36s
-```
-> If these jobs exist then `kubectl delete job <jobname>`
-
-Run `install.sh` to deploy CSM applications services:
+Run `install.sh` to deploy CSM applications services. This command may take 25 minutes or more to run.
 
 > **`NOTE`** `install.sh` requires various system configuration which are
 > expected to be found in the locations used in proceeding documentation;
@@ -217,11 +207,21 @@ In the event that `install.sh` does not complete successfully, consult the
 [known issues](#known-issues) below to resolve potential problems and then try
 running `install.sh` again.
 
+***IMPORTANT:*** If you have to re-run install.sh to re-deploy failed ceph-csi provisioners you must make sure to delete the jobs that have not completed. These are left there for investigation on failure. They are automatically removed on a successful deployment.
+
+```bash
+pit# kubectl get jobs
+NAME                   COMPLETIONS   DURATION   AGE
+cray-ceph-csi-cephfs   0/1                      3m35s
+cray-ceph-csi-rbd      0/1                      8m36s
+```
+> If these jobs exist then `kubectl delete job <jobname>` before running install.sh again.
+
 <a name="setup-nexus"></a>
 ### 5. Setup Nexus
 
 Run `./lib/setup-nexus.sh` to configure Nexus and upload CSM RPM repositories,
-container images, and Helm charts:
+container images, and Helm charts. This command may take 20 minutes or more to run.
 
 ```bash
 pit# ./lib/setup-nexus.sh
