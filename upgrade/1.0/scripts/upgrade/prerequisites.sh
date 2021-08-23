@@ -85,6 +85,7 @@ if [[ $state_recorded == "0" ]]; then
     mkdir -p /etc/cray/upgrade/csm/${CSM_RELEASE}/tarball
     tar -xzf ${TARBALL_FILE} -C /etc/cray/upgrade/csm/${CSM_RELEASE}/tarball
     CSM_ARTI_DIR=/etc/cray/upgrade/csm/${CSM_RELEASE}/tarball/${CSM_RELEASE}
+    echo "export CSM_ARTI_DIR=/etc/cray/upgrade/csm/${CSM_RELEASE}/tarball/${CSM_RELEASE}" >> /etc/cray/upgrade/csm/myenv
     rm -rf ${TARBALL_FILE}
 
     record_state ${state_name} $(hostname)
@@ -135,41 +136,54 @@ if [[ $(hostname) == "ncn-m001" ]]; then
 fi
 
 
-echo "Verifying that cloud-init data is cached"
+state_name="CHECK_CLOUD_INIT_PREREQ"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    echo "Ensuring cloud-init is healthy"
+    set +e
+    # K8s nodes
+    for host in $(kubectl get nodes -o json |jq -r '.items[].metadata.name')
+    do
+        echo "Node: $host"
+        (( counter=0 ))
+        ssh_keygen_keyscan $host
+        until ssh $host test -f /run/cloud-init/instance-data.json
+        do
+            ssh $host cloud-init init 2>&1 >/dev/null
+            (( counter++ ))
+            sleep 10
+            if [[ $counter > 5 ]]
+            then
+            echo "Cloud init data is missing and cannot be recreated.  Existing upgrade.."
+            fi
+        done
+    done
 
-# K8s nodes
-for host in $(kubectl get nodes -o json |jq -r '.items[].metadata.name')
-do
-  echo "Node: $host"
-  (( counter=0 ))
-  until ssh $host test -f /run/cloud-init/instance-data.json
-  do
-    ssh $host cloud-init init 2>&1 >/dev/null
-    (( counter++ ))
-    sleep 10
-    if [[ $counter > 5 ]]
-    then
-      echo "Cloud init data is missing and cannot be recreated.  Existing upgrade.."
-    fi
-   done
-done
 
-## Ceph nodes
-for host in $(ceph node ls|jq -r '.osd|keys[]')
-do
-  echo "Node: $host"
-  (( counter=0 ))
-  until ssh $host test -f /run/cloud-init/instance-data.json
-  do
-   ssh $host cloud-init init 2>&1 >/dev/null
-    (( counter++ ))
-    sleep 10
-    if [[ $counter > 5 ]]
-    then
-      echo "Cloud init data is missing and cannot be recreated.  Existing upgrade.."
-    fi
-   done
-done
+    ## Ceph nodes
+    for host in $(ceph node ls|jq -r '.osd|keys[]')
+    do
+    echo "Node: $host"
+    (( counter=0 ))
+    ssh_keygen_keyscan $host
+    until ssh $host test -f /run/cloud-init/instance-data.json
+    do
+        ssh $host cloud-init init 2>&1 >/dev/null
+        (( counter++ ))
+        sleep 10
+        if [[ $counter > 5 ]]
+        then
+            echo "Cloud init data is missing and cannot be recreated.  Existing upgrade.."
+        fi
+    done
+    done
+
+    set -e
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
 
 state_name="INSTALL_CSI"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
@@ -220,24 +234,6 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     helm -n services upgrade cray-hms-bss ${CSM_ARTI_DIR}/helm/cray-hms-bss-*.tgz
-    record_state ${state_name} $(hostname)
-else
-    echo "====> ${state_name} has been completed"
-fi
-
-state_name="CHECK_CLOUD_INIT_PREREQ"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
-    echo "Ensuring cloud-init is healthy"
-    set +e
-    cloud-init query -a > /dev/null 2>&1
-    rc=$?
-    set -e
-    if [[ "$rc" -ne 0 ]]; then
-      echo "cloud-init is not healthy -- re-running 'cloud-init init' to repair cached data"
-      cloud-init init > /dev/null 2>&1
-    fi
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
@@ -465,7 +461,7 @@ if [[ $state_recorded == "0" ]]; then
       exit 1
     fi
 
-    rpm --force -Uvh $(find $CSM_RELEASE/rpm/cray/csm/ -name \*csm-testing\*.rpm | sort -V | tail -1)
+    rpm --force -Uvh $(find $CSM_ARTI_DIR/rpm/cray/csm/ -name \*csm-testing\*.rpm | sort -V | tail -1)
     GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-preflight-tests.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
 
     record_state ${state_name} $(hostname)
