@@ -203,6 +203,7 @@ After the last storage node has been rebooted you will need to deploy node-expor
 1. Load the images into podman.
 
     ```bash
+    ncn-s# export num_storage_nodes=$(craysys metadata get num-storage-nodes)
     ncn-s# for node in $(seq 1 $num_storage_nodes); do
       nodename=$(printf "ncn-s%03d" $node)
       ssh "$nodename" /srv/cray/scripts/common/pre-load-images.sh
