@@ -252,7 +252,7 @@ This procedure includes information on how check the firmware versions for the e
 		In the example below, there are two operations in the `succeeded` state, indicating there is an available firmware version that FAS can use to update firmware.
 
      	```bash
-       ncn-m001# cray fas actions status describe actionID
+       ncn-m001# cray fas actions status list actionID
        blockedBy = []
        state = "completed"
        actionID = "0a305f36-6d89-4cf8-b4a1-b9f199afaf3b" startTime = "2020-06-23 15:43:42.939100799 +0000 UTC"
