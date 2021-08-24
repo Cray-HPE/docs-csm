@@ -27,6 +27,10 @@ This procedure updates the following hardware:
 
 **Manufacturer: Cray | Device Type: NodeBMC | Target: BMC**
 
+The compute nodes must be powered off before upgrading the BMC image for a nodeBMC.
+BMC firmware with FPGA updates require the nodes to be off.
+If the nodes are not off when the update command is issued, the update will get deferred until the next power cycle of the BMC, which may be a long period of time.
+
 ```json
 {
 "stateComponentFilter": {
