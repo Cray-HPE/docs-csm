@@ -8,7 +8,6 @@
 - BGP passive neighbors (Aruba and Mellanox)
 
 Some of these changes are applied as hotfixes and patches for 1.4, they may have already been applied.
-It is assumed that the 
 
 #### CMM Static Lag configuration
 For systems with mountain cabinets ONLY.
