@@ -116,7 +116,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
        c3d4811fc3cd0       0215a709bdd9b       3 days ago           Running             weave-npc                                    0                   f5e25c12e617e
       ```
 
-   1. Stop any running cotainers from the output of our `crictl ps` command
+   1. Stop any running containers from the output of our `crictl ps` command
 
       ***NOTE:*** There should be no containers.
 
@@ -171,7 +171,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
    > **`NOTE`** Some of the following umount commands may fail or have warnings depending on the state of the NCN. Failures in this section can be ignored and will not inhibit the wipe process.
    >
-   > **`NOTE:`** There is an edge case where the overlay may keep you from unounting the drive.  If this is a rebuild you ignore this or go here.
+   > **`NOTE:`** There is an edge case where the overlay may keep you from unmounting the drive. If this is a rebuild you ignore this or go here.
 
    1. Storage nodes
 

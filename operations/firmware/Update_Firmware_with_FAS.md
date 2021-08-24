@@ -149,16 +149,16 @@ The dynamic portion of the life cycle is where the action is executed to complet
 ### Firmware Operations
 
 Operations are individual tasks in a FAS action.
-FAS will create operations based on the configureation sent through the `actions create` command.
+FAS will create operations based on the configuration sent through the `actions create` command.
 FAS operations will have one of the following states:
 - initial - Operation just created.
 - configured - The operation is configured, but nothing has been started.
-- blocked - Only one operation can be preformed on a node at a time. If more than one update is required for a xname, operations will be blocked. This will have a message of "blocked by sibling".
+- blocked - Only one operation can be performed on a node at a time. If more than one update is required for a xname, operations will be blocked. This will have a message of "blocked by sibling".
 - inProgress - Update is in progress, but not completed.
 - verifying - Waiting for update to complete.
-- failed - An update was attempted, but could FAS is unable to tell that the update successed in the time allowed.
+- failed - An update was attempted, but could FAS is unable to tell that the update succeeded in the time allowed.
 - noOperation - Firmware is at the correct version according to the images loaded into FAS.
-- noSolution - FAS does not have a sutable image for an update.
+- noSolution - FAS does not have a suitable image for an update.
 - aborted - The operation was aborted before it could determine if it was successful. If aborted after the update command was sent to the node, the node may still have updated.
 
 <a name="firmware-images"></a>

@@ -11,7 +11,7 @@ FAS is a runtime service deployed in Kubernetes. Fresh installs use FAS for upgr
 compute node and application node firmware. See [Update Firmware with Firmware Action Service (FAS)](../operations/firmware/Update_Firmware_with_FAS.md)
 for more information.
 
-Reset Gibabyte nodes to factory defaults to resolve problems with ipmitool, Redfish, or when BMC flash procecedures fail. See [Set Gigabyte Node BMC to Factory Defaults](set_gigabyte_node_bmc_to_factory_defaults.md).
+Reset Gigabyte nodes to factory defaults to resolve problems with `ipmitool`, Redfish, or when BMC flash procedures fail. See [Set Gigabyte Node BMC to Factory Defaults](set_gigabyte_node_bmc_to_factory_defaults.md).
 
 ### Topics 
    1. [Prepare BIOS and Firmware Content for Installation](#prepare-bios-and-firmware-for-installation)

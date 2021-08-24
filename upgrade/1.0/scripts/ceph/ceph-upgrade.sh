@@ -21,7 +21,7 @@ num_storage_nodes=$(craysys metadata get num-storage-nodes)
 
 if [[ $? != 0 ]]
 then
-  echo "Cloud init data not present.  Exiting upgrade.."
+  echo "Cloud init data not present. Exiting upgrade.."
   exit 1
 fi
 

@@ -285,7 +285,7 @@ This procedure includes information on how check the firmware versions for the e
 
     2. View the details of an action to get more information on each operation in the FAS action.
 
-		In the example below, there is an operation for an xname in the failed state, indicating there is something that FAS could do, but it likely would fail. A common cause for an operation failing is because the firmware image file is missing.
+		In the example below, there is an operation for an xname in the failed state, indicating there is something that FAS could do, but it likely would fail. A common cause for an operation failing is due to a missing firmware image file.
 
        ```bash
        ncn-m001# cray fas actions describe actionID --format json
