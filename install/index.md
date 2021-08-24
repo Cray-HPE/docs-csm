@@ -3,12 +3,12 @@
 Installation of the CSM product stream has many steps in multiple procedures which should be done in a
 specific order. Information about the HPE Cray EX system and the site is used to prepare the configuration
 payload. The initial node used to bootstrap the installation process is called the PIT node because the
-Pre-Install Toolkit is installed there. Once the management network switches have been configured, the other
+Pre-Install Toolkit (PIT) is installed there. Once the management network switches have been configured, the other
 management nodes can be deployed with an operating system and the software to create a Kubernetes cluster
 utilizing Ceph storage. The CSM services provide essential software infrastructure including the API gateway
 and many micro-services with REST APIs for managing the system. Once administrative access has been configured,
-the installation of CSM software and nodes can be validated with health checks before doing operational tasks
-like the check and update of firmware on system components or the preparation of compute nodes.
+the installation of CSM software can be validated with health checks before doing operational tasks
+like the checking and updating of firmware on system components or the preparation of compute nodes. 
 Once the CSM installation has completed, other product streams for the HPE Cray EX system can be installed.
 
 ### Topics:
@@ -33,7 +33,7 @@ Once the CSM installation has completed, other product streams for the HPE Cray 
 
 The topics in this chapter need to be done as part of an ordered procedure so are shown here with numbered topics.
 
-**Note**: If problems are encountered during the installation, some of the topics do have their own troubleshooting
+**Note**: If problems are encountered during the installation, some topics have their own troubleshooting
 sections, but there is also a general troubleshooting topic.
 
 ## Details
@@ -74,15 +74,14 @@ sections, but there is also a general troubleshooting topic.
 
       See [Prepare Management Nodes](prepare_management_nodes.md)
    <a name="bootstrap_pit_node"></a>
-
-   1. Bootstrap PIT Node
-
-      The Pre-Install Toolkit (PIT) node needs to be bootstrapped from the LiveCD. There are two media available
-      to bootstrap the PIT node--the RemoteISO or a bootable USB device. The recommended media is the RemoteISO,
-      because it does not require any physical media to prepare. However, remotely mounting an ISO on a BMC does not
-      work smoothly for nodes from all vendors. It is recommended to try the RemoteISO first.
-
-      Use one of these procedures to bootstrap the PIT node from the LiveCD.
+   
+   1. Bootstrap PIT Node  
+   The Pre-Install Toolkit (PIT) node needs to be bootstrapped from the LiveCD. There are two media available
+   to bootstrap the PIT node--the RemoteISO or a bootable USB device. The recommended media is the RemoteISO
+   because it does not require any physical media to prepare. However, remotely mounting an ISO on a BMC does not
+   work smoothly for nodes from all vendors. It is recommended to try the RemoteISO first.  
+   
+      Use one of these procedures to bootstrap the PIT node from the LiveCD.  
       * [Bootstrap Pit Node from LiveCD Remote ISO](bootstrap_livecd_remote_iso.md) (recommended)
          * **Gigabyte BMCs** should not use the RemoteISO method.
          * **Intel BMCs** should not use the RemoteISO method.
@@ -104,12 +103,11 @@ sections, but there is also a general troubleshooting topic.
       [Collect MAC Addresses for NCNs](#collect_mac_addresses_for_ncns)
    <a name="collect_mac_addresses_for_ncns"></a>
 
-   1. Collect MAC Addresses for NCNs
-
-      Now that the PIT node has been booted with the LiveCD and the management network switches have been configured,
-      the actual MAC address for the management nodes can be collected. This process will include repetition of some
-      of the steps done up to this point because `csi config init` will need to be run with the proper
-      MAC addresses.
+   1. Collect MAC Addresses for NCNs  
+   Now that the PIT node has been booted with the LiveCD and the management network switches have been configured,
+   the actual MAC addresses for the management nodes can be collected. This process will include repetition of some
+   of the steps done up to this point because `csi config init` will need to be run with the proper
+   MAC addresses.
 
       See [Collect MAC Addresses for NCNs](collect_mac_addresses_for_ncns.md)
 
@@ -122,23 +120,21 @@ sections, but there is also a general troubleshooting topic.
       this topic could be skipped and instead move to [Deploy Management Nodes](#deploy_management_nodes).
    <a name="deploy_management_nodes"></a>
 
-   1. Deploy Management Nodes
-
-      Now that the PIT node has been booted with the LiveCD and the management network switches have been configured,
-      the other management nodes can be deployed. This procedure will boot all of the management nodes, initialize
-      Ceph storage on the storage nodes and start the Kubernetes cluster on all of the worker nodes and the master nodes,
-      except for the PIT node. The PIT node will join Kubernetes after it is rebooted later in
-      [Redeploy PIT Node](#redeploy_pit_node).
-
-      See [Deploy Management Nodes](deploy_management_nodes.md)
+   1. Deploy Management Nodes  
+   Now that the PIT node has been booted with the LiveCD and the management network switches have been configured,
+   the other management nodes can be deployed. This procedure will boot all of the management nodes, initialize
+   Ceph storage on the storage nodes, and start the Kubernetes cluster on all of the worker nodes and the master nodes,
+   except for the PIT node. The PIT node will join Kubernetes after it is rebooted later in 
+   [Redeploy PIT Node](#redeploy_pit_node).  
+   
+      See [Deploy Management Nodes](deploy_management_nodes.md)  
    <a name="install_csm_services"></a>
-
-   1. Install CSM Services
-
-      Now that deployment of management nodes is complete with initialized Ceph storage and a running Kubernetes
-      cluster on all worker and master nodes, except the PIT node, the CSM services can be installed. The Nexus
-      repository will be populated with artifacts, containerized CSM services will be installed, and a few other configuration steps.
-
+ 
+   1. Install CSM Services  
+   Now that deployment of management nodes is complete with initialized Ceph storage and a running Kubernetes
+   cluster on all worker and master nodes, except the PIT node, the CSM services can be installed. The Nexus
+   repository will be populated with artifacts; containerized CSM services will be installed; and a few other configuration steps taken.  
+   
       See [Install CSM Services](install_csm_services.md)
    <a name="validate_csm_health_before_pit_redeploy"></a>
 
@@ -152,15 +148,15 @@ sections, but there is also a general troubleshooting topic.
       After installing all of the CSM services, wait at least 15 minutes to let the various Kubernetes
       resources get initialized and started before trying to validate CSM health. Because there are a number
       of dependencies between them, some services are not expected to work immediately after the install
-      script completes. Some of the time waiting can be spent preparing the `cray` CLI.
-
-      **Note**: If doing the CSM validation at this point, some of the tests which use the 'cray' CLI may fail
-      until these two procedures have been done. These tests, such as Hardware State Manager Discovery Validation,
-      Booting the CSM Barebones Image on compute nodes, or the UAS/UAI Tests can be skipped until after the PIT
-      node has been redeployed.
-
-      To enable the 'cray' CLI, these two procedures could be done now.
-
+      script completes. Some of the time waiting can be spent preparing the `cray` CLI.  
+      
+      **Note**: If doing the CSM validation at this point, some of the tests which use the 'cray' CLI will fail
+      until these two procedures have been done. These tests, such as Hardware State Manager Discovery Validation, 
+      Booting the CSM Barebones Image on compute nodes, or the UAS/UAI Tests can be skipped until after the PIT 
+      node has been redeployed.  
+   
+      To enable the 'cray' CLI, these two procedures could be done now.  
+      
       * Optional [Configure Keycloak Account](configure_administrative_access.md#configure_keycloak_account)
       * Optional [Configure the Cray Command Line Interface (cray CLI)](configure_administrative_access.md#configure_cray_cli)
 

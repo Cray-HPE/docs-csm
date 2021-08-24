@@ -22,8 +22,8 @@ for an HPE Cray EX system.
    nodes with the Ceph storage.
 
    System services on these nodes are provided as containerized micro-services packaged for deployment
-   as helm charts. These services are orchestrated by Kubernetes to be scheduled on Kubernetes worker
-   nodes with horizontal scaling to increase or decrease the number of instances of some services as
+   via Helm charts. Kubernetes orchestrates these services and schedules them on Kubernetes worker
+   nodes with horizontal scaling. Horizontal scales increases or decreases the number of services instances
    demand for them varies, such as when booting many compute nodes or application nodes.
 
    There is much more information available in the [CSM Overview](csm_overview.md) about the hardware,

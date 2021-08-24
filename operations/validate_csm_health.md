@@ -100,7 +100,7 @@ The ncnHealthChecks script reports the following health information:
 
 Execute the ncnHealthChecks script and analyze the output of each individual check.
 
-**IMPORTANT:** When the PIT node is booted the NCN node metal.no-wipe status is not available and is correctly reported as 'unavailable'. Once ncn-m001 has been booted the NCN metal.no-wipe status is expected to be reported as metal.no-wipe=1.
+**IMPORTANT:** When the PIT node is booted, the NCN node metal.no-wipe status is not available and is correctly reported as 'unavailable'. Once ncn-m001 has been booted, the NCN metal.no-wipe status is expected to be reported as metal.no-wipe=1.
 
 **IMPORTANT:** Only when ncn-m001 has been booted, if the output of the ncnHealthChecks.sh script shows that there are nodes that do not have the metal.no-wipe=1 status, then do the following:
 
@@ -108,7 +108,7 @@ Execute the ncnHealthChecks script and analyze the output of each individual che
 ncn# csi handoff bss-update-param --set metal.no-wipe=1 --limit <SERVER_XNAME>
 ```
 
-**IMPORTANT:** If the output of pod statuses indicates that there are pods in the `Evicted` state, it may be due to the /root file system being filled up on the Kubernetes node in question. Kubernetes will begin evicting pods once the root file system space is at 85% until it is back under 80%. This may commonly happen on ncn-m001 as it is a location that install and doc files may be downloaded to. It may be necessary to clean-up space in the /root directory if this is the root cause of pod evictions. The following commands can be used to determine if analysis of files under /root is needed to free-up space.
+**IMPORTANT:** If the output of pod statuses indicates that there are pods in the `Evicted` state, it may be due to the /root file system being filled up on the Kubernetes node in question. Kubernetes will begin evicting pods once the root file system space is at 85% until it is back under 80%. This may commonly happen on ncn-m001 as it is a location that install and doc files may be downloaded to. It may be necessary to clean up space in the /root directory if this is the root cause of pod evictions. The following commands can be used to determine if analysis of files under /root is needed to free-up space.
 
 ```bash
 ncn# df -h /root
@@ -355,7 +355,7 @@ On an Aruba switch, the prompt may include `sw-spine` or `sw-agg`.
 <a name="net-kea"></a>
 ### 1.4 Verify that KEA has active DHCP leases
 
-Verify that KEA has active DHCP leases. Right after an fresh install of CSM, it is important to verify that KEA is currently handing out DHCP leases on the system. The following commands can be ran on any of the master nodes or worker nodes.
+Verify that KEA has active DHCP leases. Right after an fresh install of CSM, it is important to verify that KEA is currently handing out DHCP leases on the system. The following commands can be run on any of the master nodes or worker nodes.
 
 Get an API Token:
 ```bash
@@ -376,7 +376,7 @@ If there is an non-zero amount of DHCP leases for air-cooled hardware returned, 
 <a name="net-extdns"></a>
 ### 1.5 Verify ability to resolve external DNS
 
-If unbound is configured to resolve outside hostnames, then the following check should be performed. If this has not been done, then this check may be skipped.
+If unbound is configured to resolve outside hostnames, then the following check should be performed. If unbond is not configured to resolve outside hostnames, then this check may be skipped. 
 
 Run the following on one of the master or worker nodes (not the PIT node):
 
@@ -674,7 +674,7 @@ the Cray OS (COS) product, or similar, be used.
 **NOTES**
 
 * The CSM Barebones image included with the release will not successfully complete
-the beyond the dracut stage of the boot process. However, if the dracut stage is reached the
+beyond the dracut stage of the boot process. However, if the dracut stage is reached, the
 boot can be considered successful and shows that the necessary CSM services needed to
 boot a node are up and available.
    * This inability to boot the barebones image fully will be resolved in future releases of the

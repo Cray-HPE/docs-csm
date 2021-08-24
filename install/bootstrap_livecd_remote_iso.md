@@ -30,8 +30,8 @@ The LiveCD Remote ISO has known compatibility issues for nodes from certain vend
 ### 2. Attaching and Booting the LiveCD with the BMC
 
 > **Warning:** If this is a re-installation on a system that still has a USB device from a prior
-> installation then that USB device must be wiped before continuing. Failing to wipe the USB, if present, may result in confusion.
-> If the USB is booted still then it can wipe itself using the [basic wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe). If it is not booted, please do so and wipe it _or_ disable the USB ports in the BIOS (not available for all vendors).
+> installation, then that USB device must be wiped before continuing. Failing to wipe the USB, if present, may result in confusion.
+> If the USB is still booted, then it can wipe itself using the [basic wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe). If it is not booted, please do so and wipe it _or_ disable the USB ports in the BIOS (not available for all vendors).
 
 Obtain and attach the LiveCD cray-pre-install-toolkit ISO file to the BMC. Depending on the vendor of the node,
 the instructions for attaching to the BMC will differ.
@@ -109,7 +109,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    1. Setup Variables.
 
       ```bash
-      # The IPv4 Address for the nodes external interface(s); this will be provided if not already by the site's network administrator or network authority.
+      # The IPv4 Address for the nodes external interface(s); this will be provided, if not already by the site's network administrator or network authority.
       pit# site_ip=172.30.XXX.YYY/20
       pit# site_gw=172.30.48.1
       pit# site_dns=172.30.84.40
@@ -126,7 +126,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       pit# /root/bin/csi-setup-lan0.sh $site_ip $site_gw $site_dns $site_nics
       ```
 
-   1. (recommended) print `lan0`, and if it has an IP address then exit console and log in again using SSH. The
+   1. (recommended) print `lan0`, and if it has an IP address, then exit console and log in again using SSH. The
       SSH connection will provide larger window sizes and better bufferhandling (screen wrapping).
 
       ```bash
@@ -237,7 +237,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
 1. Download and install/upgrade the workaround and documentation RPMs.
 
-   If this machine does not have direct Internet access these RPMs will need to be externally downloaded and then copied to the system.
+   If this machine does not have direct Internet access, these RPMs will need to be externally downloaded and then copied to the system.
 
    **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hotfixes
    were downloaded to a system using the instructions in [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds). Use that set of RPMs rather than downloading again.
@@ -265,14 +265,14 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    - `ncn_metadata.csv`
    - `switch_metadata.csv`
    - `system_config.yaml` (see below)
-
-   > The optional `application_node_config.yaml` file may be provided for further defining of settings relating to how application nodes will appear in HSM for roles and subroles. See [Create Application Node YAML](create_application_node_config_yaml.md)
-
+   
+   > The optional `application_node_config.yaml` file may be provided to further assign application nodes to roles and subroles in the HSM. See [Create Application Node YAML](create_application_node_config_yaml.md)
+   
    > The optional `cabinets.yaml` file allows cabinet naming and numbering as well as some VLAN overrides. See [Create Cabinets YAML](create_cabinets_yaml.md).
-
-   > The `system_config.yaml` is required for a reinstall, because it was created during a previous install. For a first time install, the information in it can be provided as command line arguments to `csi config init`.
-
-
+   
+   > The `system_config.yaml` is required for a reinstall because it was created during a previous install. For a first time install, the information in it can be provided as command line arguments to `csi config init`.
+   
+   
    1. Change into the preparation directory.
 
       ```bash
@@ -281,9 +281,9 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       ```
 
       After gathering the files into this working directory, generate your configurations.
-
-   1. If doing a reinstall and have the `system_config.yaml` parameter file avail available, then generate the system configuration reusing this parameter file (see [avoiding parameters](../background/cray_site_init_files.md#save-file--avoiding-parameters)).
-
+   
+   1. If doing a reinstall and have the `system_config.yaml` parameter file available, then generate the system configuration reusing this parameter file (see [avoiding parameters](../background/cray_site_init_files.md#save-file--avoiding-parameters)).
+   
       If not doing a reinstall of Shasta software, then the `system_config.yaml` file will not be available, so skip the rest of this step.
 
       1. Check for the configuration files. The needed files should be in the current directory.

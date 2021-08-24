@@ -26,7 +26,7 @@ installation-centric artifacts such as:
 *   Cluster-wide network configuration settings required by Helm Charts
     deployed by product stream Loftsman Manifests
 *   [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets)
-*   Sealed Secret Generate Blocks -- an form of plain-text input that renders
+*   Sealed Secret Generate Blocks -- a form of plain-text input that renders
     to a Sealed Secret
 *   Helm Chart value overrides that are merged into Loftsman Manifests by
     product stream installers
@@ -592,7 +592,7 @@ baseline configuration during initial system installation.
 <a name="push-to-a-remote-repository"></a>
 #### 5.1 Push to a Remote Repository
 
-It is **strongly recommended** to that the site-init repository be maintained
+It is **strongly recommended** that the site-init repository be maintained
 off-cluster. Add a remote repository and push the baseline configuration on
 `master` branch to a corresponding remote branch.
 

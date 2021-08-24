@@ -1,8 +1,7 @@
 # Redeploy PIT Node
 
 The following procedure contains information for rebooting and deploying the management node that is currently
-hosting the LiveCD. The following steps detail how an administrator through loading hand-off data and rebooting
-the node. This assists with remote-console setup to aid in observing the reboot. At the end of this procedure, the
+hosting the LiveCD. This assists with remote-console setup to aid in observing the reboot. At the end of this procedure, the
 LiveCD will no longer be active. The node it was using will join the Kubernetes cluster as the final of three master
 nodes forming a quorum.
 
@@ -48,9 +47,10 @@ Required Platform Services:
 > - Rebooting a remoteISO will dump all running changes on the PIT node; USBs are accessible after the install
 >
 > - The NCN **will never wipe a USB device** during installation
->
-> - Learning the CAN IP addresses of the other NCNs will be a benefit if troubleshooting is required
->
+
+> 
+> - Prior to shutting down the PIT, learning the CAN IP addresses of the other NCNs will be a benefit if troubleshooting is required 
+> 
 > This procedure entails deactivating the LiveCD, meaning the LiveCD and all of its resources will be
 > **unavailable**.
 
@@ -85,6 +85,21 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
       ```
 1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `livecd-pre-reboot` breakpoint.
 
+1. Check for workarounds in the `/opt/cray/csm/workarounds/livecd-pre-reboot` directory. If there are any
+workarounds in that directory, run those when the workaround instructs. Timing is critical to ensure properly loaded
+data, so run them only when indicated. Instructions are in the `README` files.
+    
+    ```bash
+    # Example
+    pit# ls /opt/cray/csm/workarounds/livecd-pre-reboot
+    ```
+    
+    If there is a workaround here, the output looks similar to the following:
+
+    ```
+    CASMINST-435
+    ```
+    
 1. Upload SLS file.
     > Note the system name environment variable `SYSTEM_NAME` must be set
 
@@ -249,7 +264,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     If the reboot successfully deploys the LiveCD, this terminal can be exited.
 
     > **POINT OF NO RETURN** The next step will wipe the underlying nodes disks clean, it will ignore USB devices. RemoteISOs are at risk here, even though a backup has been
-    > performed of the PIT node we cannot simply boot back to the same state.
+    > performed of the PIT node, we cannot simply boot back to the same state.
     > This is the last step before rebooting the node.
 
 1. **`IN-PLACE WORKAROUND`** This is a workaround until the auto-wipe feature ceases preventing the creation of the 3rd disk (CASMINST-169. This step is safe to do even after auto-wipe is fixed.
@@ -293,8 +308,8 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
         /dev/sdc: 2 bytes were erased at offset 0x000001fe (PMBR): 55 aa
         ```
 
-        If there was any wiping done, output should appear similar to the snippet above. If this is re-ran, there may be no output or an ignorable error.
-
+        If there was any wiping done, output should appear similar to the snippet above. If this is re-run, there may be no output or an ignorable error.
+    
 1. If you wish to preserve your conman console logs for the other NCNs, this is your last chance to do so. They will be lost after rebooting. They are located in `/var/log/conman` on the PIT node.
 
 1. Quit the typescript session with the `exit` command and copy the file (`csm-livecd-reboot.<date>.txt`) to a location on another server for reference later.
@@ -303,8 +318,8 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     pit# exit
     ```
 
-1. Optionally, setup conman or serial console if not already on one from any laptop or other system with network connectivity to the cluster.
-
+1. Optionally, setup conman or serial console, if not already on, from any laptop or other system with network connectivity to the cluster.
+    
     ```bash
     external# script -a boot.livecd.$(date +%Y-%m-%d).txt
     external# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
@@ -359,9 +374,9 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     ```
 
 1. Run `kubectl get nodes` to see the full Kubernetes cluster.
-
-    > **`NOTE`** If the new node fails to join the cluster after running other cloud-init items please refer to the `handoff`
-
+    
+    > **`NOTE`** If the new node fails to join the cluster after running other cloud-init items, please refer to the `handoff`
+    
     ```bash
     ncn-m001# kubectl get nodes
     ```
@@ -427,7 +442,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 
 1. Install the latest documentation and workaround packages. This will require external access.
 
-   If this machine does not have direct Internet access these RPMs will need to be externally downloaded and then copied to the system.
+   If this machine does not have direct Internet access, these RPMs will need to be externally downloaded and then copied to the system.
 
    **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hotfixes
    were downloaded to a system using the instructions in [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds). Use that set of RPMs rather than downloading again.

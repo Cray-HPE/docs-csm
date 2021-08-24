@@ -1,7 +1,7 @@
 # Collect MAC Addresses for NCNs
 
 Now that the PIT node has been booted with the LiveCD and the management network switches have been configured,
-the actual MAC address for the management nodes can be collected. This process will include repetition of some
+the actual MAC addresses for the management nodes can be collected. This process will include repetition of some 
 of the steps done up to this point because `csi config init` will need to be run with the proper
 MAC addresses and some services will need to be restarted.
 
@@ -33,7 +33,7 @@ See [Collecting BMC MAC Addresses](collecting_bmc_mac_addresses.md).
 <a name="restart_services_after_bmc_mac_addresses_collected"></a>
 ### 2. Restart Services after BMC MAC Addresses Collected
 
-The previous step updated `ncn_metadata.csv` with the BMC MAC Addresses so several earlier steps need to be repeated.
+The previous step updated `ncn_metadata.csv` with the BMC MAC Addresses, so several earlier steps need to be repeated.
 
 1. Change into the preparation directory.
 
@@ -132,7 +132,7 @@ making a backup of them, in case they need to be examined at a later time.
 
 1. Check that IP addresses are set for each interface and investigate any failures.
 
-    1. Check IP addresses, do not run tests if these are missing and instead start triage.
+    1. Check IP addresses. Do not run tests if these are missing and instead start triaging the issue.
 
        ```bash
        pit# wicked show bond0 vlan002 vlan004 vlan007
@@ -166,7 +166,7 @@ making a backup of them, in case they need to be examined at a later time.
        addr:     ipv4 10.254.1.4/17 [static]
        ```
 
-    1. Run tests, inspect failures.
+    1. Run tests; inspect failures.
 
        ```bash
        pit# csi pit validate --network
@@ -244,7 +244,7 @@ so several earlier steps need to be repeated.
    pit# cat ncn_metadata.csv
    ```
 
-1. Remove the incorrectly generated configs. Before deleting the incorrectly generated configs consider
+1. Remove the incorrectly generated configs. Before deleting the incorrectly generated configs, consider
 making a backup of them, in case they need to be examined at a later time.
 
    > **`WARNING`** Ensure that the `SYSTEM_NAME` environment variable is correctly set.
@@ -325,7 +325,7 @@ making a backup of them, in case they need to be examined at a later time.
 
 1. Check that IP addresses are set for each interface and investigate any failures.
 
-    1. Check IP addresses, do not run tests if these are missing and instead start triage.
+    1. Check IP addresses. Do not run tests if these are missing and instead start triaging the issue.
 
        ```bash
        pit# wicked show bond0 vlan002 vlan004 vlan007
@@ -359,7 +359,7 @@ making a backup of them, in case they need to be examined at a later time.
        addr:     ipv4 10.254.1.4/17 [static]
        ```
 
-    1. Run tests, inspect failures.
+    1. Run tests; inspect failures.
 
        ```bash
        pit# csi pit validate --network
