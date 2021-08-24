@@ -25,6 +25,12 @@ This procedure will install CSM applications and services into the CSM Kubernete
 <a name="initialize-bootstrap-registry"></a>
 ### 1. Initialize Bootstrap Registry
 
+> **`NOTE`** The bootstrap registry runs in a default Nexus configuration,
+> which is started and populated in this section. It only exists during initial
+> CSM install on the PIT node in order to bootstrap CSM services. Once CSM
+> install is completed and the PIT node is rebooted as an NCN, the bootstrap
+> Nexus no longer exists.
+
 1.  Verify that Nexus is running:
 
     ```bash
@@ -61,6 +67,11 @@ This procedure will install CSM applications and services into the CSM Kubernete
     pit# podman run --rm --network host -v /var/www/ephemeral/${CSM_RELEASE}/docker/dtr.dev.cray.com:/images:ro quay.io/skopeo/stable sync \
     --scoped --src dir --dest docker --dest-tls-verify=false --dest-creds admin:admin123 /images localhost:5000
     ```
+
+    > **`NOTE`** As the bootstrap Nexus uses the default configuration, the
+    > above command uses the default admin credentials (`admin` user with
+    > password `admin123`) in order to upload to the bootstrap registry, which
+    > is listening on localhost:5000.
 
 
 <a name="create-site-init-secret"></a>
