@@ -111,6 +111,10 @@ Perform these steps to update `customizations.yaml`:
 
 2. The script also runs the goss tests on the initial stable node (typically `ncn-m001`) where the latest version of CSM has been installed. Make sure the goss test pass before continue.
 
+#### Stage 0.4. - Backup VCS Data
+
+To prevent any possibility of losing configuration data, backup the VCS data and store it in a safe location.  See [Version_Control_Service_VCS.md](../../operations/configuration_management/Version_Control_Service_VCS.md#backup-and-restore-data) for these procedures.
+
 ### Stage 1.  Ceph upgrade from Nautilus (14.2.x) to Octopus (15.2.x)
 
 #### Stage 1.1
