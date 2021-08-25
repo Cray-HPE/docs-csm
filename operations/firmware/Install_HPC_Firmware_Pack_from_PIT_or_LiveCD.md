@@ -23,13 +23,14 @@ Copyright 2021 Hewlett Packard Enterprise Development LP
 Documenation for each firmware unit is alongside the firmware in the overall package. 
 This documentation material should be used for manually installing firmware when not using FAS on HPE Cray EX. It it sourced from Morpheus at each update of that particular firmware unit.
 
-├── HPE_XL675d-Gen10Plus                                               <----- Hardware type this firmware is for
-│ ├── A47_2.40_02_23_2021.fwpkg                                       <----- File used for manual installation
-│ ├── DOC                                                             <----- Documentation
+```bash
+├── HPE_XL675d-Gen10Plus                                           <----- Hardware type this firmware is for
+│ ├── A47_2.40_02_23_2021.fwpkg                                    <----- File used for manual installation
+│ ├── DOC                                                          <----- Documentation
 │ │ ├── HPCM-Firmware-Flash_v2021.03.04.pdf
 │ │ ├── INSTALL.txt
 │ │ └── README.txt
-│ └── FAS-BIOS-HPE_XL675d-Gen10Plus-2.40-1-sles15sp1.x86_64.rpm.      <----- rpm used by FAS for update
+│ └── FAS-BIOS-HPE_XL675d-Gen10Plus-2.40-1-sles15sp1.x86_64.rpm.   <----- rpm used by FAS for update
 
 ├── GB_SVR_1264UP_C17_C21
 │ ├── DOC
@@ -40,5 +41,4 @@ This documentation material should be used for manually installing firmware when
 │ │ ├── Relnotes_MZ32-AR0-YF_C17_Rome.pdf
 │ │ └── Relnotes_MZ32-AR0-YF_Naples.pdf
 │ └── sh-svr-1264up-bios-21.00.00-20210325025941_8df4708.x86_64.rpm
-
-
+```
