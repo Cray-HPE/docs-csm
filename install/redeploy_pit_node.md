@@ -493,7 +493,6 @@ data so run them only when indicated. Instructions are in the `README` files.
 1. Obtain access to CSI
 
     ```bash
-    ncn-m001# export CSM_RELEASE=csm-x.y.z
     ncn-m001# mkdir -pv /mnt/livecd /mnt/rootfs /mnt/sqfs
     ncn-m001# mount -v /metal/bootstrap/cray-pre-install-toolkit-*.iso /mnt/livecd/
     ncn-m001# mount -v /mnt/livecd/LiveOS/squashfs.img /mnt/sqfs/
