@@ -114,9 +114,7 @@ if [[ $(hostname) == "ncn-m001" ]]; then
         # check to make sure we are not re-creating the bug by setting m001 to use itself as an upstream
         if [[ "$upstream_ntp_server" == "ncn-m001" ]]; then
           # if a pool is set, and we did not find an upstream server, just use the pool
-          grep "^\(pool\).*" /etc/chrony.d/cray.conf >/dev/null
-
-          if [[ $? -eq 0 ]] ; then
+          if grep "^\(pool\).*" /etc/chrony.d/cray.conf >/dev/null ; then
             sed -i "/^\(server ncn-m001\).*/d" /etc/chrony.d/cray.conf
           # otherwise error
           else
@@ -130,8 +128,8 @@ if [[ $(hostname) == "ncn-m001" ]]; then
           # this applies on startups of the system from a reboot only
           sed -i "/^\(logchange 1.0\)\$/a initstepslew 1 $upstream_ntp_server" /etc/chrony.d/cray.conf
           # Apply the change to use the new upstream server
-          # systemctl restart chronyd
         fi
+        systemctl restart chronyd
   fi
 fi
 
