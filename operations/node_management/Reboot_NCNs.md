@@ -50,7 +50,7 @@ The `kubectl` command is installed.
         ncn-m001# ./ncnPostgresHealthChecks.sh
         ```
 
-        **`NOTE`**: If the ncnHealthChecks script output indicates any `kube-multus-ds-` pods are in a `Termininating` state, that can indicate a previous restart of these pods did not complete.  In this case, it is safe to force delete these pods in order to let them properly restart by executing the `kubectl delete po -n kube-system kube-multus-ds.. --force` command.  After executing this command, re-running the ncnHealthChecks script should indicate a new pod is in a `Running` state.
+        **`NOTE`**: If the ncnHealthChecks script output indicates any `kube-multus-ds-` pods are in a `Terminating` state, that can indicate a previous restart of these pods did not complete. In this case, it is safe to force delete these pods in order to let them properly restart by executing the `kubectl delete po -n kube-system kube-multus-ds.. --force` command. After executing this command, re-running the ncnHealthChecks script should indicate a new pod is in a `Running` state.
 
     1. Check the status of the Kubernetes nodes.
 
@@ -231,7 +231,7 @@ Before rebooting NCNs:
        ncn-m# kubectl drain --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
        ```
 
-       You may run into pods that cannot be gracefully evicted due to Pod Disruption Budgets (PDB), for example:
+       You may run into pods that cannot be gracefully evicted because of Pod Disruption Budgets (PDB), for example:
 
        ```bash
        ncn-m# error when evicting pod "<pod>" (will retry after 5s): Cannot evict pod as it would violate the pod's disruption budget.

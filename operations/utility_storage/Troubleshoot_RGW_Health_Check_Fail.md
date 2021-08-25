@@ -55,7 +55,7 @@ ncn-m001# GOSS_BASE=/opt/cray/tests/install/ncn /opt/cray/tests/install/ncn/scri
         ```bash
         ncn-s# ceph -s | grep rgw
         ```
-        If the `ceph-rgw` daemon is not running on 3 storage nodes, restart the deamon and watch it come up within a few seconds.
+        If the `ceph-rgw` daemon is not running on 3 storage nodes, restart the daemon and watch it come up within a few seconds.
 
         ```bash
         ncn-s# ceph orch ps | grep rgw           #use this to wach the daemon start

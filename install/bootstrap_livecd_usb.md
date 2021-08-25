@@ -283,7 +283,7 @@ Some files are needed for generating the configuration payload. See these topics
 
    If not doing a reinstall of Shasta software, then the `system_config.yaml` file will not be available, so skip the rest of this step.
 
-   1. Check for the configuration files.  The needed files should be in the current directory.
+   1. Check for the configuration files. The needed files should be in the current directory.
 
       ```bash
       linux# ls -1
@@ -320,7 +320,7 @@ Some files are needed for generating the configuration payload. See these topics
 
    If doing a first time install, this step is required. If you did the previous step as part of a reinstall, skip this.
 
-   1. Check for the configuration files.  The needed files should be in the current directory.
+   1. Check for the configuration files. The needed files should be in the current directory.
 
       ```bash
       linux# ls -1

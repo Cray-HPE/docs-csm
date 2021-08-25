@@ -428,7 +428,7 @@ The configuration workflow described here is intended to help understand the exp
 <a name="check-for-unused-drives-on-utility-storage-nodes"></a>
 #### 3.3 Check for Unused Drives on Utility Storage Nodes
 
-> **`IMPORTANT:`** Do the following if NCNs are Gigabyte hardware.  It is optional, but suggested for HPE ncns.
+> **`IMPORTANT:`** Do the following if NCNs are Gigabyte hardware. It is optional, but suggested for HPE ncns.
 > 
 > **`IMPORTANT:`** the cephadm may output this warning "WARNING: The same type, major and minor should not be used for multiple devices.". You can ignore this warning.
 
@@ -445,7 +445,7 @@ The configuration workflow described here is intended to help understand the exp
     24
     ```
 
-1. Compare your number of OSDs to your output which should resemble the example below.  The number of drives will depend on the server hardware.
+1. Compare your number of OSDs to your output which should resemble the example below. The number of drives will depend on the server hardware.
 
    > **NOTE:**  If your Ceph cluster is large and has a lot of nodes, you can specify a node after the below command to limit the results.
 
@@ -623,9 +623,9 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
    - Aruba: `show bgp ipv4 unicast summary`
    - Mellanox: `show ip bgp summary`
 
-   You should see a neighbor for each of the workers NCN IP addresses found above.   If it is an Aruba switch, you will also see a neighbor for the other switch of the pair that are peering.
+   You should see a neighbor for each of the workers NCN IP addresses found above. If it is an Aruba switch, you will also see a neighbor for the other switch of the pair that are peering.
 
-   At this point the peering sessions with the worker IP addresses should be in IDLE, CONNECT, or ACTIVE state and not ESTABLISHED state. This is because the MetalLB speaker pods have not been deployed yet.
+   At this point the peering sessions with the worker IP addresses should be in IDLE, CONNECT, or ACTIVE state and not ESTABLISHED state. This is ddue to the MetalLB speaker pods not being deployed yet.
  
    You should see that the MsgRcvd and MsgSent columns for the worker IP addresses are 0.
 
@@ -670,9 +670,9 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
       - Aruba: `show bgp ipv4 unicast summary`
       - Mellanox: `show ip bgp summary`
 
-      You should see a neighbor for each of the workers NCN IP addresses found above.   If it is an Aruba switch, you will also see a neighbor for the other switch of the pair that are peering.
+      You should see a neighbor for each of the workers NCN IP addresses found above. If it is an Aruba switch, you will also see a neighbor for the other switch of the pair that are peering.
 
-      At this point the peering sessions with the worker IP addresses should be in IDLE, CONNECT, or ACTIVE state and not ESTABLISHED state. This is because the MetalLB speaker pods have not been deployed yet.
+      At this point the peering sessions with the worker IP addresses should be in IDLE, CONNECT, or ACTIVE state and not ESTABLISHED state. This is ddue to the MetalLB speaker pods not being deployed yet.
  
       You should see that the MsgRcvd and MsgSent columns for the worker IP addresses are 0.
 

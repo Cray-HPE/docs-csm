@@ -94,7 +94,7 @@ The commands in this procedure should be run from a master NCN (unless otherwise
 1. Scale up any deployments/statefulsets that may have been scaled down during upgrade (if applicable). These commands should be run from `ncn-s001`.
 
    Source the `k8s-scale-utils.sh` script in order to define the `scale_up_cephfs_clients` function:
-   ```bashc
+   ```bash
    ncn-m001# source /usr/share/doc/csm/upgrade/1.0/scripts/ceph/lib/k8s-scale-utils.sh
    ```
 

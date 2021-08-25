@@ -51,7 +51,7 @@ ncn-m001# /opt/cray/csm/scripts/node_management/make_node_groups --help
 getopt: unrecognized option '--help'
 usage: make_node_groups [-m][-s][-u][w][-A][-R][-N]
 Where:
-  -m - creates a node group for managment master nodes
+  -m - creates a node group for management master nodes
 
   -s - creates a node group for management storage nodes
 
