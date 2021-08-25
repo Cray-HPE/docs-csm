@@ -83,22 +83,8 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
       script -af csm-livecd-reboot.$(date +%Y-%m-%d).txt
       export PS1='\u@\H \D{%Y-%m-%d} \t \w # ' 
       ```
+1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `livecd-pre-reboot` breakpoint.
 
-1. Check for workarounds in the `/opt/cray/csm/workarounds/livecd-pre-reboot` directory. If there are any
-workarounds in that directory, run those when the workaround instructs. Timing is critical to ensure properly loaded
-data so run them only when indicated. Instructions are in the `README` files.
-    
-    ```bash
-    # Example
-    pit# ls /opt/cray/csm/workarounds/livecd-pre-reboot
-    ```
-    
-    If there is a workaround here, the output looks similar to the following:
-
-    ```
-    CASMINST-435
-    ```
-    
 1. Upload SLS file.
     > Note the system name environment variable `SYSTEM_NAME` must be set
     
@@ -452,21 +438,8 @@ data so run them only when indicated. Instructions are in the `README` files.
    ncn-m001# rpm -Uvh csm-install-workarounds-latest.noarch.rpm
    ```
 
-1. Now check for workarounds in the `/opt/cray/csm/workarounds/livecd-post-reboot` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
-    
-    **Note:** The following command assumes that the data partition of the USB device has been remounted at /mnt/pitdata
-    
-    ```bash
-    # Example
-    ncn-m001# ls /opt/cray/csm/workarounds/livecd-post-reboot
-    ```
-    
-    If there are workarounds here, the output looks similar to the following:
-    
-    ```
-    CASMINST-1309  CASMINST-1570
-    ```
-    
+1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `livecd-post-reboot` breakpoint.
+
 1. Now exit the typescript and relocate the backup over to `ncn-m001`, thus removing the need to track `ncn-m002` as yet-another bootstrapping agent. This is required to facilitate reinstallations, because it pulls the preparation data back over to the documented area (`ncn-m001`).
 
     ```bash

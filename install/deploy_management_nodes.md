@@ -83,14 +83,7 @@ Preparation of the environment must be done before attempting to deploy the mana
 
 _There will be post-boot workarounds as well._
 
-1. Check for workarounds in the `/opt/cray/csm/workarounds/before-ncn-boot` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
-
-   If there is a workaround here, the output will look similar to the following.
-
-   ```bash
-   pit# ls /opt/cray/csm/workarounds/before-ncn-boot
-   CASMINST-980
-   ```
+Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `before-ncn-boot` breakpoint.
 
 <a name="ensure-time-is-accurate-before-deploying-ncns"></a>
 #### 1.3 Ensure Time Is Accurate Before Deploying NCNs
@@ -345,14 +338,6 @@ The configuration workflow described here is intended to help understand the exp
 
     **`NOTE`**: If the nodes have PXE boot issues (e.g. getting PXE errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
 
-    **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to Linux with no hostname) see the CSM workarounds for fixes around mutual symptoms. If there is a workaround here, the output will look similar to the following.
-
-      > ```bash
-      > pit# ls /opt/cray/csm/workarounds/after-ncn-boot
-      > ```
-      > CASMINST-1093
-      > ```
-
 1. Wait for storage nodes before booting Kubernetes master nodes and worker nodes.
 
    **`NOTE`**: Once all storage nodes are up and the message `...sleeping 5 seconds until /etc/kubernetes/admin.conf` appears on `ncn-s001`'s console, it is safe to proceed with booting the **Kubernetes master nodes and worker nodes**
@@ -391,13 +376,6 @@ The configuration workflow described here is intended to help understand the exp
     **`NOTE`**: If the nodes have PXE boot issues (e.g. getting PXE errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
 
     **`NOTE`**: If one of the master nodes seems hung waiting for the storage nodes to create a secret, check the storage node consoles for error messages. If any are found, consult [CEPH CSI Troubleshooting](ceph_csi_troubleshooting.md)
-
-    **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to Linux with no hostname) see the CSM workarounds for fixes around mutual symptoms. If there is a workaround here, the output will look similar to the following.
-
-    > ```bash
-    > pit# ls /opt/cray/csm/workarounds/after-ncn-boot
-    > CASMINST-1093
-    > ```
 
 1. Refer to [timing of deployments](#timing-of-deployments). It should not take more than 60 minutes for the `kubectl get nodes` command to return output indicating that all the master nodes and worker nodes aside from the PIT node booted from the LiveCD are `Ready`:
 
@@ -562,13 +540,7 @@ More information can be found at [the cephadm reference page](../operations/util
 <a name="apply-ncn-post-boot-workarounds"></a>
 #### 3.4 Apply NCN Post-Boot Workarounds
 
-Check for workarounds in the `/opt/cray/csm/workarounds/after-ncn-boot` directory. If there are any workarounds in that directory, run those now. Instructions are in the `README` files.
-
-If there is a workaround here, the output looks similar to the following:
-```
-pit# ls /opt/cray/csm/workarounds/after-ncn-boot
-CASMINST-12345
-```
+Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `after-ncn-boot` breakpoint.
 
 <a name="configure_after_management_node_deployment"></a>
 ### 4. Configure after Management Node Deployment
