@@ -19,7 +19,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 - Check the status of the high-speed network (HSN) and record the status before the procedure.
 
-- Review the following command examples. The command can be used to capture the required values from the HSM `ethernetInterfaces` table and write the values to a file. The file then can be used to automate subsequent commands in this procedure.
+- Review the following command examples. The commands can be used to capture the required values from the HSM `ethernetInterfaces` table and write the values to a file. The file then can be used to automate subsequent commands in this procedure.
 
   ```bash
   ncn-m001# cray hsm inventory ethernetInterfaces list --format json | jq -c 'map(select(.ComponentID|("x9000c3s0."))) | map(select(.Description == "Node Maintenance Network")) | .[] | {ID: .ID,xname: .ComponentID, MAC: .MACAddress, IP: .IPAddresses}' > blade_source.json
