@@ -39,15 +39,15 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
   
 
-- Each blade must have the coolant drained and filled to minimize cross-contamination of cooling systems. 
+- Blades that are moved between systems must have the coolant drained and filled to minimize cross-contamination of cooling systems. 
   - Review procedures in *HPE Cray EX Coolant Service Procedures H-6199* 
   - Review the *HPE Cray EX Hand Pump User Guide H-6200*
 
-### Prepare the Source System Blade for Removal
+### Prepare the source system blade for removal
 
 1. Using the work load manager (WLM), drain running jobs from the affected nodes on the blade. Refer to the vendor documentation for the WLM for more information.
    
-2. Use Boot Orchestration Services (BOS) to shut down the affected nodes on the source blade (in this example, x9000c3s0). Specify the appropriate xname and BOS template for the node type in the following command. 
+2. Use Boot Orchestration Services (BOS) to shut down the affected nodes in the source blade (in this example, x9000c3s0). Specify the appropriate xname and BOS template for the node type in the following command. 
 
    ```bash
    ncn-m001# BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
@@ -74,7 +74,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
    ncn-m001# curl -k -u root:PASSWORD -X POST -H \
    'Content-Type: application/json' -d '{"ResetType":"StatefulReset"}' \ https://x9000c3s0b1/redfish/v1/Managers/BMC/Actions/Manager.Reset
    ```
-
+   Use Ctrl-C to return to the prompt if command does not return.
 #### Power off the chassis slot
 
 5. Suspend the hms-discovery cron job.
@@ -168,11 +168,11 @@ The hardware management network MAC and IP addresses are assigned algorithmicall
    - Review *HPE Cray EX Coolant Service Procedures H-6199*. If using the hand pump, review procedures in the *HPE Cray EX Hand Pump User Guide H-6200* (https://internal.support.hpe.com/).
 10. Install the blade from the source system in a storage rack.  
 
-### Prepare the Blade in the Destination System for Removal
+### Prepare the Blade in the destination system for removal
 
 11. Use WLM to drain jobs from the affected nodes on the blade.
 
-12. Use BOS to shut down the affected nodes on the blade (in this example, x1005c3s0). 
+12. Use BOS to shut down the affected nodes in the destination blade (in this example, x1005c3s0). 
 
     ```bash
     ncn-m001# BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
@@ -235,7 +235,7 @@ The hardware management network MAC and IP addresses are assigned algorithmicall
 
 The hardware management network NIC MAC addresses for liquid-cooled blades are assigned algorithmically and *must not be deleted* from the HSM.
 
-19. Query HSM to determine the ComponentID, MAC, and IP addresses associated with the blade in the destination system.   The prerequisites show an example of how to gather HSM values and store them to a file.
+19. Query HSM to determine the ComponentID, MAC, and IP addresses associated with nodes in the destination blade.  The prerequisites show an example of how to gather HSM values and store them to a file.
 
     ```bash
     ncn-m001# cray hsm inventory ethernetInterfaces list --component-id XNAME --format json
@@ -264,7 +264,7 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
     `IPAddress: "10.10.0.123"`
     ```
     
-21. Delete the node NIC MAC and IP addresses from the HSM Ethernet interfaces table for each node.
+21. Delete the node NIC MAC and IP addresses from the HSM `ethernetInterfaces` table for each node.
 
     ```bash
     ncn-m001# cray hsm inventory ethernetInterfaces delete 0040a6836399
@@ -285,7 +285,7 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 
 25. Install the blade from the source system into the destination system.
 
-#### Bring up the Blade in the Destination System
+#### Bring up the blade in the destination system
 
 26. Obtain an authentication token to access the API gateway. In the example below, replace `myuser`, `mypass`, and `shasta` in the cURL command with site-specific values. Note the value of `access_token`. Review [Retrieve an Authentication Token](../security_and_authentication/Retrieve_an_Authentication_Token.md) for more information.
 
@@ -310,9 +310,7 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
     
     Use the value of `access_token` to make API requests.
     
-27. To prevent from Kea from automatically adding  MAC entries to the HSM `ethernetInterfaces` table, use the following commands.
-
-    Kea automatically adds entries to the HSM `ethernetInterfaces` table when DHCP lease is provided (about every 5 minutes).
+27. Kea automatically adds entries to the HSM `ethernetInterfaces` table when DHCP lease is provided (about every 5 minutes). To prevent from Kea from automatically adding  MAC entries to the HSM `ethernetInterfaces` table, use the following commands:
 
     1. Create an `eth_interfaces` file that contains the interface IDs for the `Node Maintenance Network` entries for the destination system. (When repeating this procedure for the source system, use the interface IDS for the source system.)
 
@@ -323,16 +321,18 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
        0040a68362e2
        0040a68362e3
        ```
-
-    2. Run  the following commands in succession to remove the interfaces from the HSM.
+    
+    2. Run  the following commands in succession to remove the interfaces.
        Deleting cray-dhcp-kea pod prevents the interfaces from being re-created in the HSM. 
-
+    
        ```bash
-       ncn-m001# kubectl delete -n services pod cray-dhcp-kea-6456f6bc5c-77sb4
+       ncn-m001# kubectl get pods -Ao wide | grep kea 
+       
+       ncn-m001# kubectl delete -n services pod CRAY_DHCP_KEA_PODNAME
        ncn-m001# for ETH in $(cat eth_interfaces); do cray hsm inventory ethernetInterfaces delete $ETH --format json ; done
        ```
-
-28. Add the MAC and IP addresses for `Node Maintenance Network` interfaces to the HSM. The ComponentID and IPAddress must be the values recorded from the destination system, and the MACAddress must be the value recorded from the blade in the source system. 
+    
+28. Add the MAC and IP addresses for `Node Maintenance Network` interfaces to the HSM. The ComponentID and IPAddress must be the values recorded from the destination blade and the MACAddress must be the value recorded from the source blade. 
 
     ```bash
     `ComponentID: "x1005c3s0b0n0"`
@@ -354,6 +354,8 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
           }'
     ```
 
+    **Note:**  Kea may must be restarted when the curl command is issued.
+
     When repeating this procedure for the source system, ComponentID and IPAddress must be the values recorded from the source system, and the MACAddress must be the value recorded from the blade in the destination system. 
 
     ```bash
@@ -361,7 +363,12 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
     ncn-m001# IP_ADDRESS=SOURCESYS_IP_ADDRESS
     ncn-m001# XNAME=SOURCESYS_XNAME
     ```
-
+      To change a curl command, use a PATCH request, for example:
+    
+       ```bash
+    ncn-m001# curl -k -H "Authorization: Bearer $TOKEN" -L -X PATCH 'https://api_gw_service.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces/0040a68350a4' -H 'Content-Type: application/json'  --data-raw '{"MACAddress":"xx:xx:xx:xx:xx:xx","IPAddress":"10.100.0.xxx","ComponentID":"XNAME"}' 
+       ```
+    
 29. Repeat the preceding command for each node in the blade.
 
 #### Enable and power on the chassis slot
@@ -389,6 +396,8 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
     NAME             SCHEDULE        SUSPEND     ACTIVE   LAST SCHEDULE    AGE
     hms-discovery    */3 * * * *     False         1       41s             33d
     
+    ncn-m001# kubectl get pods -Ao wide | grep hms-discovery 
+    
     ncn-m001# kubectl -n services logs hms-discovery-1600117560-5w95d hms-discovery | grep "Mountain discovery finished" | jq '.discoveredXnames'
     [
     "x1005c3s0b0"
@@ -397,9 +406,9 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 
 33. Wait for 3 minutes for the blade to power on and the node controllers (BMCs) to be discovered.
 
-    ```
-    ncn-m001# sleep 180
-    ```
+       ```bash
+        ncn-m001# sleep 180
+       ```
 
 #### Verify discovery has completed
 
