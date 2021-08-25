@@ -232,16 +232,7 @@ The SHASTA-CFG structure and other configuration files will be prepared, then `c
 <a name="before-configuration-payload-workarounds"></a>
 #### 3.1 Before Configuration Payload Workarounds
 
-Check for workarounds in the `/opt/cray/csm/workarounds/before-configuration-payload` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
-
-  ```bash
-  linux# ls /opt/cray/csm/workarounds/before-configuration-payload
-  ```
-
-  If there is a workaround here, the output looks similar to the following:
-  ```
-  CASMINST-999
-  ```
+Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `before-configuration-payload` breakpoint.
 
 <a name="generate-installation-files"></a>
 #### 3.2 Generate Installation Files
@@ -416,22 +407,12 @@ Some files are needed for generating the configuration payload. See these topics
 <a name="csi-workarounds"></a>
 #### 3.3 CSI Workarounds
 
-Check for workarounds in the `/opt/cray/csm/workarounds/csi-config` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
-
-  ```bash
-  linux# ls /opt/cray/csm/workarounds/csi-config
-  ```
-
-  If there is a workaround here, the output looks similar to the following:
-  ```
-  CASMINST-999
-  ```
+Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `csi-config` breakpoint.
 
 <a name="prepare_site_init"></a>
 #### 3.4 Prepare Site Init
 
 Follow the procedures to [Prepare Site Init](prepare_site_init.md) directory for your system.
-
 
 <a name="prepopulate-livecd-daemons-configuration-and-ncn-artifacts"></a>
 ### 4. Prepopulate LiveCD Daemons Configuration and NCN Artifacts
@@ -690,17 +671,8 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
 1. First login workarounds
 
-   Check for workarounds in the `/opt/cray/csm/workarounds/first-livecd-login` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
+   Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `first-livecd-login` breakpoint.
 
-   ```bash
-   pit# ls /opt/cray/csm/workarounds/first-livecd-login
-   ```
-
-   If there is a workaround here, the output looks similar to the following:
-
-   ```
-   CASMINST-999
-   ```
 1. Start services
 
    ```bash

@@ -145,8 +145,6 @@ Before rebooting NCNs:
 
 * Ensure pre-reboot checks have been completed, including checking the `metal.no-wipe` setting for each NCN. Do not proceed if any of the NCN `metal.no-wipe` settings are zero.
 
-* Apply any workaround located in `/opt/cray/csm/workarounds/` if instructed.
-
 #### Utility Storage Nodes (Ceph)
 
 1. Reboot each of the NCN storage nodes \(one at a time\).

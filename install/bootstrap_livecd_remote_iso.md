@@ -416,17 +416,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
       Continue with the next step to apply the csi-config workarounds.
 
-1. Check for workarounds in the `/opt/cray/csm/workarounds/csi-config` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
-
-      ```bash
-      linux# ls /opt/cray/csm/workarounds/csi-config
-      ```
-
-   If there is a workaround here, the output looks similar to the following:
-
-      ```
-      CASMINST-999
-      ```
+1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `csi-config` breakpoint.
 
 1. Copy the interface config files generated earlier by `csi config init`
    into `/etc/sysconfig/network/` with the first option **or** use the provided scripts in the second option below.
