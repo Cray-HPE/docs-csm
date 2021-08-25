@@ -14,6 +14,7 @@ Procedures:
 - [Run Validation Checks (Pre-Upgrade)](#run-validation-checks-pre-upgrade)
 - [Update customizations.yaml](#update-customizations)
 - [Setup Nexus](#setup-nexus)
+- [Update NCN BIOS Configuration](#update-ncn-bios-configuration)
 - [Upgrade Services](#upgrade-services)
 - [Run Validation Checks (Post-Upgrade)](#run-validation-checks-post-upgrade)
 - [Verify CSM Version in Product Catalog](#verify-version)
@@ -193,6 +194,49 @@ documentation to resolve potential problems and then try running
 `setup-nexus.sh` again. Note that subsequent runs of `setup-nexus.sh` may
 report `FAIL` when uploading duplicate assets. This is ok as long as
 `setup-nexus.sh` outputs `setup-nexus.sh: OK` and exits with status code `0`.
+
+
+<a name="update-ncn-bios-configuration"></a>
+## Update NCN BIOS Configuration
+
+1. Install the `ilorest` RPM package:
+
+    * Internet Connected
+
+        ```bash
+        ncn-m001# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/ilorest/ilorest-latest.noarch.rpm
+        ncn-m001# rpm -Uvh ilorest-latest.noarch.rpm
+        ```
+
+    * Air Gapped
+
+        ```bash
+        ncn-m001# rpm -Uvh ${CSM_DISTDIR}/rpm/cray/csm/sle-15sp2/ilorest-*.noarch.rpm
+        ```
+
+1. Get the BIOS Baseline script from the 1.0 tarball.
+
+    - Make the script accessible:
+
+        ```bash
+        ncn-m001# mkdir -pv /mnt/livecd /mnt/rootfs /mnt/sqfs /mnt/pitdata \
+        mount -L PITDATA /mnt/pitdata
+        mount ${CSM_DISTDIR}/cray-pre-install-toolkit-*.iso /mnt/livecd/
+        mount /mnt/livecd/LiveOS/squashfs.img /mnt/sqfs/
+        mount /mnt/sqfs/LiveOS/rootfs.img /mnt/rootfs/
+        ```
+
+    - Run the script; this will target every BMC known in the emergency-fallback records inside of `/etc/hosts`:
+
+        ```bash
+        ncn-m001# /mnt/rootfs/root/bin/bios-baseline.sh
+        ```
+
+1. (optionally) uninstall `ilorest` to conform the NCN to the rest with respect to package inventory (`ilorest` is installed on the LiveCD, but not on the NCNs by default).
+
+    ```bash
+    ncn-m001# rpm -e ilorest
+    ```
 
 <a name="upgrade-services"></a>
 ## Upgrade Services
