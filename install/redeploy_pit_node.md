@@ -25,7 +25,7 @@ Topics:
 <a name="required-services"></a>
 ### 1. Required Services
 
-These services must be healthy in Kubernetes before the reboot of the LiveCD can take place.
+These services must be healthy before the reboot of the LiveCD can take place. If the health checks executed in the previous installation step completed successfully ([Validate CSM Health](../operations/validate_csm_health.md)), the following services will be healthy and ready for reboot of the LiveCD:
 
 Required Platform Services:
 

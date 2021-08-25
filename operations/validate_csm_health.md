@@ -521,14 +521,14 @@ Examine the output. If one or more failures occur, investigate the cause of each
 <a name="hms-smd-discovery-validation"></a>
 ### 2.2 Hardware State Manager Discovery Validation
 
+> **NOTE**: The Cray CLI is required to complete this task. If needed, see the [Initialize and Authorize the CLI](#uas-uai-init-cli) section.
+
 By this point in the installation process, the Hardware State Manager (HSM) should 
 have done its discovery of the system.
 
 The foundational information for this discovery is from the System Layout Service (SLS). Thus, a
 comparison needs to be done to see that what is specified in SLS (focusing on 
 BMC components and Redfish endpoints) are present in HSM.
-
-The Cray CLI is required to complete this task. If needed, see the [Initialize and Authorize the CLI](#uas-uai-init-cli) section.
 
 Execute the `hsm_discovery_verify.sh` script on a Kubernetes master or worker NCN:
 ```
