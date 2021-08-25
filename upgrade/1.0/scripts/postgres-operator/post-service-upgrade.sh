@@ -27,6 +27,10 @@ function post_install_resize ()
     fi
 }
     
+# restart postgres operator
+kubectl delete pod  -l app.kubernetes.io/name=postgres-operator -n services
+while [ $(kubectl get pods -l app.kubernetes.io/name=postgres-operator -n services | grep -v NAME | grep -c "Running") != 1 ] ; do echo "  waiting for pods to restart"; sleep 2; done
+    
 
 # The new PGRESIZE must match that deployed in the helm chart.  
 # Do not change the below values unless the associated chart values are also changed.
