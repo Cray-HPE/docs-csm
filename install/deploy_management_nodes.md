@@ -406,7 +406,7 @@ The configuration workflow described here is intended to help understand the exp
 <a name="check-for-unused-drives-on-utility-storage-nodes"></a>
 #### 3.3 Check for Unused Drives on Utility Storage Nodes
 
-> **`IMPORTANT:`** Do the following if NCNs are Gigabyte hardware. It is optional, but suggested for HPE ncns.
+> **`IMPORTANT:`** Do the following if NCNs are Gigabyte hardware. It is suggested (but optional) for HPE NCNs.
 > 
 > **`IMPORTANT:`** the cephadm may output this warning "WARNING: The same type, major and minor should not be used for multiple devices.". You can ignore this warning.
 
@@ -597,7 +597,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 
    You should see a neighbor for each of the workers NCN IP addresses found above. If it is an Aruba switch, you will also see a neighbor for the other switch of the pair that are peering.
 
-   At this point the peering sessions with the worker IP addresses should be in IDLE, CONNECT, or ACTIVE state and not ESTABLISHED state. This is ddue to the MetalLB speaker pods not being deployed yet.
+   At this point the peering sessions with the worker IP addresses should be in `IDLE`, `CONNECT`, or `ACTIVE` state and not `ESTABLISHED` state. This is due to the MetalLB speaker pods not being deployed yet.
  
    You should see that the MsgRcvd and MsgSent columns for the worker IP addresses are 0.
 
@@ -644,7 +644,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 
       You should see a neighbor for each of the workers NCN IP addresses found above. If it is an Aruba switch, you will also see a neighbor for the other switch of the pair that are peering.
 
-      At this point the peering sessions with the worker IP addresses should be in IDLE, CONNECT, or ACTIVE state and not ESTABLISHED state. This is ddue to the MetalLB speaker pods not being deployed yet.
+      At this point the peering sessions with the worker IP addresses should be in `IDLE`, `CONNECT`, or `ACTIVE` state and not `ESTABLISHED` state. This is due to the MetalLB speaker pods not being deployed yet.
  
       You should see that the MsgRcvd and MsgSent columns for the worker IP addresses are 0.
 
@@ -744,9 +744,9 @@ Observe the output of the checks and note any failures, then remediate them.
    ```bash
    ncn# weave --local status connections | grep failed
    ```
-   If you see messages like **IP allocation was seeded by different peers** then weave looks to have split-brained. At this point it is necessary to wipe the ncns and start the PXE boot again:
+   If you see messages like **IP allocation was seeded by different peers** then weave looks to have split-brained. At this point it is necessary to wipe the NCNs and start the PXE boot again:
 
-   1. Wipe the ncns using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md).
+   1. Wipe the NCNs using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md).
    1. Return to the 'Boot the **Storage Nodes**' step of [Deploy Management Nodes](#deploy_management_nodes) section above.
 
 
