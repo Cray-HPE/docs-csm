@@ -19,3 +19,6 @@ In the CSM 0.9.3 release, v1 of the HSM API has begun its deprecation process in
 * [Roles and Subroles](HSM_Roles_and_Subroles.md)
 * [Add an NCN to the HSM Database](Add_an_NCN_to_the_HSM_Database.md)
 * [Add a Switch to the HSM Database](Add_a_Switch_to_the_HSM_Database.md)
+* [Create a Backup of the HSM Postgres Database](Create_a_Backup_of_the_HSM_Postgres_Database.md)
+* [Restore HSM Postgres from a Backup](Restore_HSM_Postgres_from_Backup.md)
+* [Restore HSM Postgres without a Backup](Restore_HSM_Postgres_without_a_Backup.md)
