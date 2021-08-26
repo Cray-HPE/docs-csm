@@ -60,6 +60,7 @@ For more description of these settings and the default values, see [Default IP A
 | --install-ncn-bond-members p1p1,p10p1 | NICs on each management node to become bond0 |
 | --application-node-config-yaml application_node_config.yaml | Name of `application_node_config.yaml` |
 | --cabinets-yaml cabinets.yaml | Name of `cabinets.yaml` |
+| --bgp-peers aggregation | Override the default BGP peers, using aggregation switches instead of spines |
 
    * This is a long list of options. It can be helpful to create a Bash script file to call the `csi` command with all of these options, and then edit that file to adjust the values for the particular system being installed.
    * The `bootstrap-ncn-bmc-user` and `bootstrap-ncn-bmc-pass` must match what is used for the BMC account and its password for the management nodes.
