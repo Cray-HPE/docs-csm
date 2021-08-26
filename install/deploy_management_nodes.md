@@ -765,7 +765,7 @@ Observe the output of the checks and note any failures, then remediate them.
    ```bash
    kubectl get nodes
    ```
-   If one or more nodes are not in `Ready` state, the following command can be run to get additional information:
+   If one or more nodes are not in the `Ready` state, the following command can be run to get additional information:
    ```bash
    kubectl describe node <node-name>  #for example, ncn-m001
    ```
@@ -781,7 +781,7 @@ Observe the output of the checks and note any failures, then remediate them.
    ```bash
    kubectl get pods -n kube-system | grep etcd
    ```
-   This should return no pods outside of the kube-etcdbackup pod..
+   This should return no pods outside of the `kube-etcdbackup` pod.
 
    3. Verify that all the pods in the kube-system namespace are running
 
