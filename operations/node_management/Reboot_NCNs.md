@@ -7,16 +7,16 @@ The following is a high-level overview of the non-compute node \(NCN\) reboot wo
   - Check the `metal.no-wipe` settings for all NCNs
   - Run all platform health checks, including checks on the Border Gateway Protocol \(BGP\) peering sessions
 - Run the rolling NCN reboot procedure:
-  - Loop through reboots on storage NCNs, worker NCNs, and master NCNs, where each boot consists of the following workflow:
-         - Establish console session with NCN to reboot
-         - Execute a power off/on sequence to the NCN to allow it to boot up to completion
+  - Loop through reboots on storage nodes, worker nodes, and master nodes, where each boot consists of the following workflow:
+         - Establish console session with node to reboot
+         - Execute a Linux graceful shutdown or power off/on sequence to the node to allow it to boot up to completion
          - Execute NCN/platform health checks and do not go on to reboot the next NCN until health has been ensured on the most recently rebooted NCN
-         -   Disconnect console session with the NCN that was rebooted
+         -   Disconnect console session with the node that was rebooted
 - Re-run all platform health checks, including checks on BGP peering sessions
 
-The time duration for this procedure \(if health checks are being executed in between each boot, as recommended\) could take between two to four hours for a system with approximately nine NCNs.
+The time duration for this procedure \(if health checks are being executed in between each boot, as recommended\) could take between two to four hours for a system with nine management nodes.
 
-This same procedure can be used to reboot a single NCN node as outlined above. Be sure to carry out the NCN pre-reboot checks and procedures before and after rebooting the node. Execute the rolling NCN reboot procedure steps for the particular node type being rebooted.
+This same procedure can be used to reboot a single management node as outlined above. Be sure to carry out the NCN pre-reboot checks and procedures before and after rebooting the node. Execute the rolling NCN reboot procedure steps for the particular node type being rebooted.
 
 ## Prerequisites
 
@@ -40,14 +40,13 @@ The `kubectl` command is installed.
 
     Refer to the "Platform Health Checks" section in [Validate CSM Health](../validate_csm_health.md) for an overview of the health checks.
 
-    1. Run the platform health scripts from a master or worker NCN.
+    1. Run the platform health scripts from a master or worker node.
 
         The output of the following scripts will need to be referenced in the remaining sub-steps.
 
         ```bash
-        ncn-m001# cd /opt/cray/platform-utils
-        ncn-m001# ./ncnHealthChecks.sh
-        ncn-m001# ./ncnPostgresHealthChecks.sh
+        ncn-m001# /opt/cray/platform-utils/ncnHealthChecks.sh
+        ncn-m001# /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
         ```
 
         **`NOTE`**: If the ncnHealthChecks script output indicates any `kube-multus-ds-` pods are in a `Terminating` state, that can indicate a previous restart of these pods did not complete. In this case, it is safe to force delete these pods in order to let them properly restart by executing the `kubectl delete po -n kube-system kube-multus-ds.. --force` command. After executing this command, re-running the ncnHealthChecks script should indicate a new pod is in a `Running` state.
@@ -60,7 +59,7 @@ The `kubectl` command is installed.
         ncn-m001# kubectl get nodes
         ```
 
-        **Troubleshooting:** If the NCN that was rebooted is in a Not Ready state, run the following command to get more information.
+        **Troubleshooting:** If the node that was rebooted is in a Not Ready state, run the following command to get more information.
 
         ```bash
         ncn-m001# kubectl describe node NCN_HOSTNAME
@@ -74,7 +73,7 @@ The `kubectl` command is installed.
         ncn-m001# cat /etc/cni/net.d/00-multus.conf
         ```
 
-        Verify the worker or master NCN is now in a Ready state:
+        Verify the worker or master node is now in a Ready state:
 
         ```bash
         ncn-m001# kubectl get nodes
@@ -88,11 +87,11 @@ The `kubectl` command is installed.
         ncn-m001# kubectl get pods -o wide -A | grep -Ev 'Running|Completed'
         ```
 
-        It is important to pay attention to that list, but it is equally important to note what pods are in that list before and after NCN reboots to determine if the reboot caused any new issues.
+        It is important to pay attention to that list, but it is equally important to note what pods are in that list before and after node reboots to determine if the reboot caused any new issues.
 
         There are pods that may normally be in an Error, Not Ready, or Init state, and this may not indicate any problems caused by the NCN reboots. Error states can indicate that a job pod ran and ended in an Error. That means that there may be a problem with that job, but does not necessarily indicate that there is an overall health issue with the system. The key takeaway \(for health purposes\) is understanding the statuses of pods prior to doing an action like rebooting all of the NCNs. Comparing the pod statuses in between each NCN reboot will give a sense of what is new or different with respect to health.
 
-    1. Verify Ceph health (the command mentioned below can be run on any master or storage NCN).
+    1. Verify Ceph health (the command mentioned below can be run on any master or storage node).
 
         This output is included in the /opt/cray/platform-utils/ncnHealthChecks.sh script
 
@@ -102,7 +101,7 @@ The `kubectl` command is installed.
         ncn-m001# watch -n 10 'ceph -s'
         ```
 
-        This window can be kept up throughout the reboot process to ensure Ceph remains healthy and to watch if Ceph goes into a WARN state when rebooting storage NCNs.
+        This window can be kept up throughout the reboot process to ensure Ceph remains healthy and to watch if Ceph goes into a WARN state when rebooting storage node.
 
     1. Check the status of the `slurmctld` and `slurmdbd` pods to determine if they are starting:
 
@@ -135,7 +134,7 @@ The `kubectl` command is installed.
 
     1. Check that the BGP peering sessions are established.
 
-        This check will need to be run after all worker NCNs have been rebooted. Ensure that the checks have been run to check BGP peering sessions on the spine switches \(instructions will vary for Aruba and Mellanox switches\)
+        This check will need to be run after all worker node have been rebooted. Ensure that the checks have been run to check BGP peering sessions on the spine switches \(instructions will vary for Aruba and Mellanox switches\)
 
         If there are BGP Peering sessions that are not ESTABLISHED on either switch, refer to [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
 
@@ -147,17 +146,17 @@ Before rebooting NCNs:
 
 #### Utility Storage Nodes (Ceph)
 
-1. Reboot each of the NCN storage nodes \(one at a time\).
+1. Reboot each of the storage nodes \(one at a time\).
 
-    1. Establish a console session to each NCN storage node.
+    1. Establish a console session to each storage node.
 
         Use the [Establish a Serial Connection to NCNs](../conman/Establish_a_Serial_Connection_to_NCNs.md) procedure referenced in step 4.
 
-    2. reboot the selected NCN
+    2. Reboot the selected node.
 
-        1. ```bash
-            ncn-s# shutdown -r now
-           ```
+        ```bash
+         ncn-s# shutdown -r now
+        ```
 
         **`IMPORTANT:`** If the node does not shut down after 5 minutes, then proceed with the power reset below
 
@@ -178,7 +177,34 @@ Before rebooting NCNs:
             ```
 
         Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
-    3. Watch on the console until the NCN has successfully booted and the login prompt is reached.
+    3. Watch on the console until the node has successfully booted and the login prompt is reached.
+
+    1. Retrieve the `XNAME` for the node being rebooted.
+
+       This xname is available on the node being rebooted in the following file:
+
+       ```bash
+       ncn# ssh NODE cat /etc/cray/xname
+       ```
+
+    1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
+
+       The following command will indicate if a CFS job is currently in progress for this node. Replace the `XNAME` value in the following command with the xname of the node being rebooted.
+
+       ```bash
+       ncn# cray cfs components describe XNAME --format json
+       {
+         "configurationStatus": "configured",
+         "desiredConfig": "ncn-personalization-full",
+         "enabled": true,
+         "errorCount": 0,
+         "id": "x3000c0s7b0n0",
+         "retryPolicy": 3,
+       ```
+
+       If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node.  If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+
+       If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 
     4. Run the platform health checks from the [Validate CSM Health](../validate_csm_health.md) procedure.
 
@@ -207,17 +233,17 @@ Before rebooting NCNs:
 
 #### NCN Worker Nodes
 
-1. Reboot each of the NCN worker nodes \(one at a time\).
+1. Reboot each of the worker nodes \(one at a time\).
 
     **NOTE:** You are doing a single worker at a time, so please keep track of what ncn-w0xx you are on for these steps.
 
-    1. Establish a console session to the NCN worker node you are rebooting.
+    1. Establish a console session to the worker node you are rebooting.
 
         **`IMPORTANT:`** If the ConMan console pod is on the node being rebooted you will need to re-establish your session after the Cordon/Drain in step 2
 
         See [Establish a Serial Connection to NCNs](../conman/Establish_a_Serial_Connection_to_NCNs.md) for more information.
 
-    1. Failover any postgres leader that is running on the NCN worker node you are rebooting.
+    1. Failover any postgres leader that is running on the worker node you are rebooting.
 
        ````bash
        ncn-m# /usr/share/doc/csm/upgrade/1.0/scripts/k8s/failover-leader.sh <node to be rebooted>
@@ -247,11 +273,11 @@ Before rebooting NCNs:
        ncn-m# kubectl drain --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
        ```
 
-    1. Reboot the selected NCN
+    1. Reboot the selected node.
 
-        1. ```bash
-            ncn-w# shutdown -r now
-           ```
+        ```bash
+         ncn-w# shutdown -r now
+        ```
 
         **`IMPORTANT:`** If the node does not shut down after 5 minutes, then proceed with the power reset below
 
@@ -273,17 +299,34 @@ Before rebooting NCNs:
 
         Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
 
-    1. Watch on the console until the NCN has successfully booted and the login prompt is reached.
+    1. Watch on the console until the node has successfully booted and the login prompt is reached.
 
-    1. Confirm NCN personalization has completed
+    1. Retrieve the `XNAME` for the node being rebooted.
 
-        Check the cfs state of the worker
+       This xname is available on the node being rebooted in the following file:
 
-        ```bash
-        ncn-m# cray cfs components describe <xname of node being rebooted>
-        ```
+       ```bash
+       ncn# ssh NODE cat /etc/cray/xname
+       ```
 
-        The `configurationStatus` should be `configured` when successful. If in a failed state, refer to the pod logs for `cray-cfs` to determine why the configuration may not have completed. 
+    1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
+
+       The following command will indicate if a CFS job is currently in progress for this node. Replace the `XNAME` value in the following command with the xname of the node being rebooted.
+
+       ```bash
+       ncn# cray cfs components describe XNAME --format json
+       {
+         "configurationStatus": "configured",
+         "desiredConfig": "ncn-personalization-full",
+         "enabled": true,
+         "errorCount": 0,
+         "id": "x3000c0s7b0n0",
+         "retryPolicy": 3,
+       ```
+
+       If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node.  If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+
+       If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 
     1. Uncordon the node
 
@@ -291,7 +334,7 @@ Before rebooting NCNs:
        ncn-m# kubectl uncordon <node you just rebooted>
        ```
 
-    1. Verify pods are running on the rebooted NCN
+    1. Verify pods are running on the rebooted node.
 
         Within a minute or two, the following command should begin to show pods in a `Running` state (replace NCN in the command below with the name of the worker node):
 
@@ -309,27 +352,25 @@ Before rebooting NCNs:
 
     1. Repeat all of the sub-steps above for the remaining worker nodes, going from the highest to lowest number until all worker nodes have successfully rebooted.
 
-    1. Ensure that BGP sessions are reset so that all BGP peering sessions with the spine switches are in an ESTABLISHED state.
+1. Ensure that BGP sessions are reset so that all BGP peering sessions with the spine switches are in an ESTABLISHED state.
 
-        See [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
+   See [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
 
 #### NCN Master Nodes
 
-1. Reboot each of the NCN \(one at a time\).
+1. Reboot each of the master nodes \(one at a time\) starting with ncn-m003 then ncn-m001.  There are special instructions for ncn-m001 below since its console connection is not managed by conman.
 
-    1. Establish a console session to the NCN master node you are rebooting.
+    1. Establish a console session to the master node you are rebooting.
 
         See step [Establish a Serial Connection to NCNs](../conman/Establish_a_Serial_Connection_to_NCNs.md) for more information.
 
-    2. Reboot the selected NCN.
+    2. Reboot the selected node.
 
-        1. ```bash
-            ncn-m001# shutdown -r now
-           ```
+        ```bash
+         ncn-m001# shutdown -r now
+        ```
 
         **`IMPORTANT:`** If the node does not shut down after 5 minutes, then proceed with the power reset below
-
-        To power off the node:
 
         To power off the node:
 
@@ -349,7 +390,34 @@ Before rebooting NCNs:
 
         Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
 
-    3. Watch on the console until the NCN has successfully booted and the login prompt is reached.
+    3. Watch on the console until the node has successfully booted and the login prompt is reached.
+
+    1. Retrieve the `XNAME` for the node being rebooted.
+
+       This xname is available on the node being rebooted in the following file:
+
+       ```bash
+       ncn# ssh NODE cat /etc/cray/xname
+       ```
+
+    1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
+
+       The following command will indicate if a CFS job is currently in progress for this node. Replace the `XNAME` value in the following command with the xname of the node being rebooted.
+
+       ```bash
+       ncn# cray cfs components describe XNAME --format json
+       {
+         "configurationStatus": "configured",
+         "desiredConfig": "ncn-personalization-full",
+         "enabled": true,
+         "errorCount": 0,
+         "id": "x3000c0s7b0n0",
+         "retryPolicy": 3,
+       ```
+
+       If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node.  If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+
+       If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 
     4. Run the platform health checks in [Validate CSM Health](../validate_csm_health.md).
 
@@ -389,7 +457,34 @@ Before rebooting NCNs:
 
         Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
 
-    4. Watch on the console until the NCN has successfully booted and the login prompt is reached.
+    4. Watch on the console until the node has successfully booted and the login prompt is reached.
+
+    1. Retrieve the `XNAME` for the node being rebooted.
+
+       This xname is available on the node being rebooted in the following file:
+
+       ```bash
+       ncn# ssh NODE cat /etc/cray/xname
+       ```
+
+    1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
+
+       The following command will indicate if a CFS job is currently in progress for this node. Replace the `XNAME` value in the following command with the xname of the node being rebooted.
+
+       ```bash
+       ncn# cray cfs components describe XNAME --format json
+       {
+         "configurationStatus": "configured",
+         "desiredConfig": "ncn-personalization-full",
+         "enabled": true,
+         "errorCount": 0,
+         "id": "x3000c0s7b0n0",
+         "retryPolicy": 3,
+       ```
+
+       If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node.  If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+
+       If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 
     5. Run the platform health checks in [Validate CSM Health](../validate_csm_health.md).
 

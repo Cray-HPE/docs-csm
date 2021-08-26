@@ -20,7 +20,7 @@ This procedure requires administrative privileges.
     | jq -r '.access_token')
     
     ncn-m001# curl -s -k -H "Authorization: Bearer ${TOKEN}" \
-    https://api_gw_service.local/apis/sls/v1/networks/CAN|jq > CAN.json
+    https://api-gw-service-nmn.local/apis/sls/v1/networks/CAN|jq > CAN.json
     
     ncn-m001# cp CAN.json CAN.json.bak
     ```
@@ -58,7 +58,7 @@ This procedure requires administrative privileges.
     ```bash
     ncn-m001# curl -s -k -H "Authorization: Bearer ${TOKEN}" --header \
     "Content-Type: application/json" --request PUT --data @CAN.json \
-    https://api_gw_service.local/apis/sls/v1/networks/CAN
+    https://api-gw-service-nmn.local/apis/sls/v1/networks/CAN
     ```
 
 4.  Verify that DNS records were created.
