@@ -535,7 +535,9 @@ Execute the `hsm_discovery_verify.sh` script on a Kubernetes master or worker NC
 ncn# /opt/cray/csm/scripts/hms_verification/hsm_discovery_verify.sh
 ```
 
-The output will ideally appear as follows, if it does not look like the following see [2.2.1 Interpreting results](#hms-smd-discovery-validation-interpreting-results) and [2.2.2 Known Issues](#hms-smd-discovery-validation-known-issues).
+The output will ideally appear as follows, if there are mismatches these will be displayed in the appropriate section of
+the output. Refer to [2.2.1 Interpreting results](#hms-smd-discovery-validation-interpreting-results) and 
+[2.2.2 Known Issues](#hms-smd-discovery-validation-known-issues) below to troubleshoot any mismatched BMCs.
 ```bash
 ncn# /opt/cray/csm/scripts/hms_verification/hsm_discovery_verify.sh
 
@@ -552,24 +554,57 @@ ALL OK
 ALL OK
 ```
 
-If there are mismatches, these will be displayed in the appropriate section of
-the output.
-
 <a name="hms-smd-discovery-validation-interpreting-results"></a>
 #### 2.2.1 Interpreting results
 
-For each of the BMCs that show up in the mismatch list use the following notes to determine if that BMC can be safely ignored, or if there is a legitimate issue with the BMC. 
-* The BMC of 'ncn-m001' will not typically be present in HSM component data, as it is typically connected to the site network instead of the HMN network.
+Both sections `BMCs in SLS not in HSM components` and `BMCs in SLS not in HSM Redfish Endpoints` have the same format for mistmatches between SLS and HSM. Each row starts with the xname of the BMC. If the BMC does not have an assoicated `MgmtSwitchConnector` in SLS, then `# No mgmt port association` will be displayed alongside the BMC xname. 
+> MgmtSwitchConnectors in SLS are used to represent the switch port on a leaf switch that an the BMC of an air cooled device is connected to.
+
+```bash
+=============== BMCs in SLS not in HSM components ===============
+x3000c0s1b0  # No mgmt port association
+```
+
+For each of the BMCs that show up in the mismatch list use the following notes to determine if the issue with the BMC can be safely ignored, or if there is a legitimate issue with the BMC. 
+* The node BMC of 'ncn-m001' will not typically be present in HSM component data, as it is typically connected to the site network instead of the HMN network.
    > The following can be used to determine the friendly name of the Node that the NodeBMC controls: 
    > ```bash
    > ncn# cray sls search hardware list --parent <NODE_BMC_XNAME> --format json | \
    >   jq '.[] | { Xname: .Xname, Aliases: .ExtraProperties.Aliases }' -c
    > ```
+
+   Example mismatch for the BMC of ncn-m001:
+   ```bash
+   =============== BMCs in SLS not in HSM components ===============
+   x3000c0s1b0  # No mgmt port association
+   ```
+
 * Chassis Management Controllers (CMC) may show up as not being present in HSM. CMCs for Intel server blades can be ignored. Gigabyte server blade CMCs not found in HSM is not normal and should be investigated. If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored.
    > CMCs have xnames in the form of `xXc0sSb999`, where `X` is the cabinet and `S` is the rack U of the compute node chassis.
+
+   Example mismatch for a CMC an Intel server blade:
+   ```bash
+   =============== BMCs in SLS not in HSM components ===============
+   x3000c0s10b999  # No mgmt port association
+
+   =============== BMCs in SLS not in HSM Redfish Endpoints ===============
+   x3000c0s10b999  # No mgmt port association
+   ```
+
 * HPE PDUs are not supported at this time and will likely show up as not being found in HSM. They can be ignored.
    > Cabinet PDU Controllers have xnames in the form of `xXmM`, where `X` is the cabinet and `M` is the ordinal of the Cabinet PDU Controller.
+
+   Example mistmatch for HPE PDU:
+   ```bash
+   =============== BMCs in SLS not in HSM components ===============
+   x3000m0
+
+   =============== BMCs in SLS not in HSM Redfish Endpoints ===============
+   x3000m0
+   ```
+
 * BMCs having no association with a management switch port will be annotated as such, and should be investigated. Exceptions to this are in Mountain or Hill configurations where Mountain BMCs will show this condition on SLS/HSM mismatches, which is normal.
+
 * In Hill configurations SLS assumes BMCs in chassis 1 and 3 are fully populated (32 Node BMCs), and in Mountain configurations SLS assumes all BMCs are fully populated (128 Node BMCs). Any non-populated BMCs will have no HSM data and will show up in the mismatch list.
 
 <a name="hms-smd-discovery-validation-known-issues"></a>
