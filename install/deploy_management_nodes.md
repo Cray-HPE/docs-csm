@@ -753,9 +753,6 @@ Observe the output of the checks and note any failures, then remediate them.
 <a name="optional-validation"></a>
 #### 5.2 Optional Validation
 
-   These tests are for sanity checking. These exist as software reaches maturity, or as tests are worked
-   and added into the installation repertoire.
-
    All validation should be taken care of by the CSI validate commands. The following checks can be
    done for sanity-checking:
 
@@ -763,9 +760,31 @@ Observe the output of the checks and note any failures, then remediate them.
    new tests.**
 
    1. Verify all nodes have joined the cluster
-   1. Verify etcd is running outside Kubernetes on master nodes
-   1. Verify that all the pods in the kube-system namespace are running
-   2. Verify that the ceph-csi requirements are in place [Ceph CSI Troubleshooting](ceph_csi_troubleshooting.md)
+
+   Check that the status of kubernetes nodes is `Ready`.
+   ```bash
+   kubectl get nodes
+   ```
+   If one or more nodes are not in the `Ready` state, the following command can be run to get additional information:
+   ```bash
+   kubectl describe node <node-name>  #for example, ncn-m001
+   ```
+
+   2. Verify etcd is running outside Kubernetes on master nodes
+
+   On each kubernetes master node, check the status of the etcd service and ensure it is Active/Running:
+   ```bash
+   systemctl status etcd.service
+   ```
+
+   3. Verify that all the pods in the kube-system namespace are running
+
+   Check that pods listed are in the `Running` or `Completed` state.
+   ```bash
+   kubectl get pods -o wide -n kube-system
+   ```
+
+   4. Verify that the ceph-csi requirements are in place [Ceph CSI Troubleshooting](ceph_csi_troubleshooting.md)
 
 # Important Checkpoint
 
