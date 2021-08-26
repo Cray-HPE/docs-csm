@@ -551,7 +551,7 @@ This section applies to all node types. The examples in this section assume the 
 
 1. Watch the console for the node being rebuilt.
 
-   Login to a second session to use it to watch the console using the instructions in the following document: [Log in to a Node Using ConMan](../conman/Log_in_to_a_Node_Using_ConMan.md). The first session will be needed to run the commands in the following steps.
+   Login to a second session to use it to watch the console using the instructions in the following document: [Log in to a Node Using ConMan](../conman/Log_in_to_a_Node_Using_ConMan.md). The first session will be needed to run the commands in the following Rebuild Node steps.
 
 <a name="rebuild_node"></a>
 
@@ -580,49 +580,58 @@ This section applies to master and worker nodes. Skip this section if rebuilding
 
 1. Set the PXE boot option and power cycle the node.
 
-    1. Set the BMC variable to the hostname of the BMC of the node being rebuilt.
+   1. Set the BMC variable to the hostname of the BMC of the node being rebuilt.
 
-       ```bash
-       ncn# export BMC=<NCN name>-mgmt
-       ```
+      ```bash
+      ncn# export BMC=<NCN name>-mgmt
+      ```
 
-       For example, if you are rebuilding ncn-w003, this would be `ncn-w003-mgmt`.
+      For example, if you are rebuilding ncn-w003, this would be `ncn-w003-mgmt`.
 
-    1. Export the root password of the BMC.
+   1. Export the root password of the BMC.
 
-       ```bash
-       ncn# export IPMI_PASSWORD=changeme
-       ```
+      ```bash
+      ncn# export IPMI_PASSWORD=changeme
+      ```
 
-    1. Set the PXE/efiboot option.
+   1. Set the PXE/efiboot option.
 
-       ```bash
-       ncn# ipmitool -I lanplus -U root -E -H $BMC chassis bootdev pxe options=efiboot
-       ```
+      ```bash
+      ncn# ipmitool -I lanplus -U root -E -H $BMC chassis bootdev pxe options=efiboot
+      ```
 
-    1. Power off the server.
+   1. Power off the node.
 
-       ```bash
-       ncn# ipmitool -I lanplus -U root -E -H $BMC chassis power off
-       ```
+      ```bash
+      ncn# ipmitool -I lanplus -U root -E -H $BMC chassis power off
+      ```
 
-    1. Verify that the server is off.
+   1. Verify that the node is off.
 
-       Wait a couple seconds after powering off the server before running the following command.
 
-       ```bash
-       ncn# ipmitool -I lanplus -U root -E -H $BMC chassis power status
-       ```
+      ```bash
+      ncn# ipmitool -I lanplus -U root -E -H $BMC chassis power status
+      ```
 
-    1. Power on the server.
+      Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
 
-       ```bash
-       ncn# ipmitool -I lanplus -U root -E -H $BMC chassis power on
-       ```
+   1. Power on the node.
+
+      ```bash
+      ncn# ipmitool -I lanplus -U root -E -H $BMC chassis power on
+      ```
+
+   1. Verify that the node is on.
+
+      Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
+
+      ```bash
+      ncn# ipmitool -I lanplus -U root -E -H $BMC chassis power status
+      ```
 
 1. Observe the boot.
 
-    After a bit, the server should begin to boot. This can be viewed from the ConMan console window. Eventually, there will be a `NBP file...` message in the console output which indicates that the PXE boot has begun the TFTP download of the ipxe program. Later messages will appear as the Linux kernel loads and then the scripts in the initrd begin to run, including cloud-init.  Wait until the login prompt (including the hostname of this node) appears and cloud-init displays messages that it has finished. Then exit the ConMan console \(**&** then **.**\), and then use `ssh` to log in to the node to complete the remaining validation steps.
+    After a bit, the node should begin to boot. This can be viewed from the ConMan console window. Eventually, there will be a `NBP file...` message in the console output which indicates that the PXE boot has begun the TFTP download of the ipxe program. Later messages will appear as the Linux kernel loads and then the scripts in the initrd begin to run, including cloud-init.  Wait until the login prompt (including the hostname of this node) appears and cloud-init displays messages that it has finished. Then exit the ConMan console \(**&** then **.**\), and then use `ssh` to log in to the node to complete the remaining validation steps.
 
     **Troubleshooting:** If the `NBP file...` output never appears, or something else goes wrong, go back to the steps for modifying XNAME.json file (see the step to [inspect and modify the JSON file](#inspect)) and make sure these instructions were completed correctly.
 
@@ -930,6 +939,7 @@ Skip this section if a master or storage node was rebuilt. The examples in this 
       ```
 
       If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node.  If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+      If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 
    1. Redeploy the cray-cps-cm-pm pod.
 
@@ -1032,6 +1042,7 @@ Skip this section if a worker or storage node was rebuilt. The examples in this 
       ```
 
       If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node.  If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+      If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 
    1. Collect data about the system management platform health \(can be run from a master or worker NCN\).
 
@@ -1130,6 +1141,8 @@ Skip this section if a master or worker node was rebuilt.
       ```
 
       If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node.  If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+
+      If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 
    1. Collect data about the system management platform health \(can be run from a master or worker NCN\).
 
