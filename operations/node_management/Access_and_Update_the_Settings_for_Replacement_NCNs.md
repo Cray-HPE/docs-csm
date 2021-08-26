@@ -147,5 +147,6 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
     16                   true    false      false      NO ACCESS
     ```
 
+7.  Verify the time is set correctly in the BIOS
 
-
+    Please refer to the "Ensure the current time is set in BIOS for all management NCNs" section in `install/deploy_management_nodes.md`
