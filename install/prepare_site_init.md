@@ -14,9 +14,6 @@ default install procedures.
       1. [Push to a Remote Repository](#push-to-a-remote-repository)
    1. [Patch cloud-init with the CA](#patch-cloud-init-with-the-ca)
    1. [Customer-Specific Customizations](#customer-specific-customizations)
-   1. [Appendix](#appendix)
-      1. [Tracked Sealed Secrets](#tracked-sealed-secrets)
-      1. [Decrypting Sealed Secrets for Review](#decrypting-sealed-secrets-for-review)
 
 ## Details
 
@@ -98,8 +95,8 @@ with system-specific customizations.
 
     Replace the `Password` references with values appropriate for your system. See 
     Edit `customizations.yaml`, replacing the `Password` references with values appropriate for your system. See 
-    [Decrypting Sealed Secrets for Review](#decrypting-sealed-secrets-for-review) if you need to examine 
-    credentials from prior installs.
+    the `Decrypting Sealed Secrets for Review` section of [Sealed Secrets Procedures](../operations/kubernetes/Sealed_Secrets_Procedures.md)
+    if you need to examine credentials from prior installs.
     
 1. Review the changes that you made:
     
@@ -642,58 +639,3 @@ applying a customer-specific customization used in a prior version, be sure the
 change still makes sense. It is common for options to change as new features are
 introduced and bugs are fixed.
 
-
-----
-
-
-<a name="appendix"></a>
-### 8. Appendix
-
-
-<a name="tracked-sealed-secrets"></a>
-### 8.1 Tracked Sealed Secrets
-
-Tracked sealed secrets are regenerated every time secrets are seeded (see the
-use of `utils/secrets-seed-customizations.sh` above). View currently tracked
-sealed secrets via:
-
-```bash
-linux# yq read /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets
-```
-
-Expected output looks similar to:
-
-```
-- cray_reds_credentials
-- cray_meds_credentials
-- cray_hms_rts_credentials
-```
-
-In order to prevent tracked sealed secrets from being regenerated, they **MUST
-BE REMOVED** from the `spec.kubernetes.tracked_sealed_secrets` list in
-`/mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml` prior to [seeding](#generate-sealed-secrets).
-To retain the REDS/MEDS/RTS credentials, run:
-
-```bash
-linux# yq delete -i /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_reds_credentials
-linux# yq delete -i /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_meds_credentials
-linux# yq delete -i /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_hms_rts_credentials
-```
-
-<a name="decrypting-sealed-secrets-for-review"></a>
-### 8.2 Decrypting Sealed Secrets for Review
-
-For administrators that would like to decrypt and review previously encrypted
-sealed secrets, you can use the `secrets-decrypt.sh` utility in SHASTA-CFG.
-
-Syntax: `secret-decrypt.sh SEALED-SECRET-NAME SEALED-SECRET-PRIVATE-KEY CUSTOMIZATIONS-YAML`
-
-```bash
-linux:/mnt/pitdata/prep/site-init# ./utils/secrets-decrypt.sh cray_meds_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_redfish_defaults | sed -e 's/"//g' | base64 -d; echo
-```
-
-Expected output looks similar to:
-
-```
-{"Username": "root", "Password": "..."}
-```
