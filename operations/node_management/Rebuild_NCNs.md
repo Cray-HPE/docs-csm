@@ -90,7 +90,7 @@ Skip this section if rebuilding a master or storage node. The examples in this s
       "retryPolicy": 3,
     ```
 
-    If the state is `pending`, wait for the job finish before rebooting this node. If the state is `failed`, this means the failed CFS job state preceded this worker rebuild, and that can be addressed independent of rebuilding this worker.  If the state is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+    If the configurationStatus is `pending`, wait for the job finish before rebooting this node. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus preceded this worker rebuild, and that can be addressed independent of rebuilding this worker.  If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
 
 1. Drain the node to clear any pods running on the node.
 
@@ -155,7 +155,7 @@ Skip this section if rebuilding a worker or storage node. The examples in this s
      "retryPolicy": 3,
    ```
 
-   If the state is `pending`, wait for the job finish before rebooting this node. If the state is `failed`, this means the failed CFS job state preceded this worker rebuild, and that can be addressed independent of rebuilding this worker.  If the state is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+   If the configurationStatus is `pending`, wait for the job finish before rebooting this node. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus preceded this worker rebuild, and that can be addressed independent of rebuilding this worker.  If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
 
 1. Determine if the master node being rebuilt is the first master node.
 
@@ -294,7 +294,7 @@ Skip this section if rebuilding a master or worker node. The examples in this se
       "retryPolicy": 3,
     ```
 
-    If the state is `pending`, wait for the job finish before rebooting this node. If the state is `failed`, this means the failed CFS job state preceded this worker rebuild, and that can be addressed independent of rebuilding this worker.  If the state is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+    If the configurationStatus is `pending`, wait for the job finish before rebooting this node. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus preceded this worker rebuild, and that can be addressed independent of rebuilding this worker.  If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
 
 1. Check the status of Ceph.
 
@@ -871,55 +871,80 @@ Validate the worker node rebuilt successfully.
 
 Skip this section if a master or storage node was rebuilt. The examples in this section assume the worker node with a hostname of `NODE` and component name of `XNAME` was rebuilt.
 
- 1. Verify the new node is in the cluster.
+   1. Verify the new node is in the cluster.
 
-    Run the following command from any master or worker node that is already in the cluster. It is helpful to run this command several times to watch for the newly rebuilt node to join the cluster. This should occur within 10 to 20 minutes.
+      Run the following command from any master or worker node that is already in the cluster. It is helpful to run this command several times to watch for the newly rebuilt node to join the cluster. This should occur within 10 to 20 minutes.
 
-    ```bash
-    ncn-m# kubectl get nodes
-    NAME       STATUS   ROLES    AGE    VERSION
-    ncn-m001   Ready    master   113m   v1.18.6
-    ncn-m002   Ready    master   113m   v1.18.6
-    ncn-m003   Ready    master   112m   v1.18.6
-    ncn-w001   Ready    <none>   112m   v1.18.6
-    ncn-w002   Ready    <none>   112m   v1.18.6
-    ncn-w003   Ready    <none>   112m   v1.18.6
-    ```
+      ```bash
+      ncn-m# kubectl get nodes
+      NAME       STATUS   ROLES    AGE    VERSION
+      ncn-m001   Ready    master   113m   v1.18.6
+      ncn-m002   Ready    master   113m   v1.18.6
+      ncn-m003   Ready    master   112m   v1.18.6
+      ncn-w001   Ready    <none>   112m   v1.18.6
+      ncn-w002   Ready    <none>   112m   v1.18.6
+      ncn-w003   Ready    <none>   112m   v1.18.6
+      ```
 
- 1. Confirm /var/lib/containerd is on overlay.
+   1. Confirm /var/lib/containerd is on overlay.
 
-    ```bash
-    ncn-m001# df -h /var/lib/containerd
-    Filesystem            Size  Used Avail Use% Mounted on
-    containerd_overlayfs  378G  245G  133G  65% /var/lib/containerd
-    ```
+      ```bash
+      ncn-m001# df -h /var/lib/containerd
+      Filesystem            Size  Used Avail Use% Mounted on
+      containerd_overlayfs  378G  245G  133G  65% /var/lib/containerd
+      ```
 
-    After several minutes of the node joining the cluster, pods should be in a `Running` state for the worker node.
+      After several minutes of the node joining the cluster, pods should be in a `Running` state for the worker node.
 
- 1. Confirm the pods are beginning to get scheduled and reach a Running state on the worker node.
+   1. Confirm the pods are beginning to get scheduled and reach a Running state on the worker node.
 
-    ```bash
-    ncn-m001# kubectl get po -A -o wide | grep ncn-w002
-    ```
+      ```bash
+      ncn-m001# kubectl get po -A -o wide | grep ncn-w002
+      ```
 
- 1. Confirm BGP is healthy.
+   1. Confirm BGP is healthy.
 
-    Follow the steps in the [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md) to verify and fix BGP if needed.
+      Follow the steps in the [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md) to verify and fix BGP if needed.
 
- 1. Redeploy the cray-cps-cm-pm pod.
+   1. Retrieve the `XNAME` for the node being rebuilt.
 
-    This step is only required if the `cray-cps-cm-pm` pod was running on the node before it was rebuilt.
-    > The Content Projection Service (CPS) is part of the COS product so if this worker node is being rebuilt before the COS product has been installed, CPS will not be installed yet.
+      This xname is available on the node being rebuilt in the following file:
 
-    ```bash
-    ncn-m001# cray cps deployment update --nodes "ncn-w001,ncn-w002"
-    ```
+      ```bash
+      NODE# cat /etc/cray/xname
+      ```
 
- 1. Collect data about the system management platform health \(can be run from a master or worker NCN\).
+   1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
 
-    ```bash
-    ncn-m001# sh /opt/cray/platform-utils/ncnHealthChecks.sh
-    ncn-m001# sh /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
+      The following command will indicate if a CFS job is currently in progress for this node. Replace the `XNAME` value in the following command with the xname of the node being rebuilt.
+
+      ```bash
+      ncn# cray cfs components describe XNAME --format json
+      {
+        "configurationStatus": "configured",
+        "desiredConfig": "ncn-personalization-full",
+        "enabled": true,
+        "errorCount": 0,
+        "id": "x3000c0s7b0n0",
+        "retryPolicy": 3,
+      ```
+
+      If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node.  If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+
+   1. Redeploy the cray-cps-cm-pm pod.
+
+      This step is only required if the `cray-cps-cm-pm` pod was running on the node before it was rebuilt.
+      > The Content Projection Service (CPS) is part of the COS product so if this worker node is being rebuilt before the COS product has been installed, CPS will not be installed yet.
+
+      ```bash
+      ncn-m001# cray cps deployment update --nodes "ncn-w001,ncn-w002"
+      ```
+
+   1. Collect data about the system management platform health \(can be run from a master or worker NCN\).
+
+      ```bash
+      ncn-m001# sh /opt/cray/platform-utils/ncnHealthChecks.sh
+      ncn-m001# sh /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
     ```
 
 <a name="validate_master_node"></a>
@@ -930,65 +955,90 @@ Validate the master node rebuilt successfully.
 
 Skip this section if a worker or storage node was rebuilt. The examples in this section assume the master node with a hostname of `NODE` and component name of `XNAME` was rebuilt.
 
- 1. Add the newly-rebuilt node to the etcd cluster.
+   1. Add the newly-rebuilt node to the etcd cluster.
 
-    Manually add the node to the cluster from a healthy/existing master node. The IP and hostname of the rebuilt node is needed for the following command. Replace the NCN-M\_HOSTNAME and IP\_ADDRESS address values. Use the IP address you noted in an earlier step from the `etcdctl` command.
+      Manually add the node to the cluster from a healthy/existing master node. The IP and hostname of the rebuilt node is needed for the following command. Replace the NCN-M\_HOSTNAME and IP\_ADDRESS address values. Use the IP address you noted in an earlier step from the `etcdctl` command.
 
-    ```bash
-    ncn# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/ca.crt \
-            --key=/etc/kubernetes/pki/etcd/ca.key --endpoints=localhost:2379 member add NCN-M_HOSTNAME \
-            --peer-urls=https://IP_ADDRESS:2380
-    ```
+      ```bash
+      ncn# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/ca.crt \
+              --key=/etc/kubernetes/pki/etcd/ca.key --endpoints=localhost:2379 member add NCN-M_HOSTNAME \
+              --peer-urls=https://IP_ADDRESS:2380
+      ```
 
-    Once the new node is up, use `ssh` to log in to it, reconfigure the etcd service, and restart the cloud init:
+      Once the new node is up, use `ssh` to log in to it, reconfigure the etcd service, and restart the cloud init:
 
-    ```bash
-    ncn# ssh NODE
-    NODE# systemctl stop etcd.service; sed -i 's/new/existing/' \
-            /etc/systemd/system/etcd.service /srv/cray/resources/common/etcd/etcd.service; \
-            systemctl daemon-reload ; rm -rf /var/lib/etcd/member; \
-            systemctl start etcd.service; /srv/cray/scripts/common/kubernetes-cloudinit.sh
-    ```
+      ```bash
+      ncn# ssh NODE
+      NODE# systemctl stop etcd.service; sed -i 's/new/existing/' \
+              /etc/systemd/system/etcd.service /srv/cray/resources/common/etcd/etcd.service; \
+              systemctl daemon-reload ; rm -rf /var/lib/etcd/member; \
+              systemctl start etcd.service; /srv/cray/scripts/common/kubernetes-cloudinit.sh
+      ```
 
- 1. Verify the new node is in the cluster.
+   1. Verify the new node is in the cluster.
 
-    Run the following command from any master or worker node that is already in the cluster. It is helpful to run this command several times to watch for the newly rebuilt node to join the cluster. This should occur within 10 to 20 minutes.
+      Run the following command from any master or worker node that is already in the cluster. It is helpful to run this command several times to watch for the newly rebuilt node to join the cluster. This should occur within 10 to 20 minutes.
 
-    ```bash
-    ncn-m001# kubectl get nodes
-    NAME       STATUS   ROLES    AGE    VERSION
-    ncn-m001   Ready    master   113m   v1.18.6
-    ncn-m002   Ready    master   113m   v1.18.6
-    ncn-m003   Ready    master   112m   v1.18.6
-    ncn-w001   Ready    <none>   112m   v1.18.6
-    ncn-w002   Ready    <none>   112m   v1.18.6
-    ncn-w003   Ready    <none>   112m   v1.18.6
-    ```
+      ```bash
+      ncn-m001# kubectl get nodes
+      NAME       STATUS   ROLES    AGE    VERSION
+      ncn-m001   Ready    master   113m   v1.18.6
+      ncn-m002   Ready    master   113m   v1.18.6
+      ncn-m003   Ready    master   112m   v1.18.6
+      ncn-w001   Ready    <none>   112m   v1.18.6
+      ncn-w002   Ready    <none>   112m   v1.18.6
+      ncn-w003   Ready    <none>   112m   v1.18.6
+      ```
 
-     1. Confirm the `sdc` disk has the correct lvm.
+   1. Confirm the `sdc` disk has the correct lvm.
 
-         ```bash
-         ncn-m001# lsblk | grep -A2 ^sdc
-         sdc                   8:32   0 447.1G  0 disk
-          └─ETCDLVM           254:0    0 447.1G  0 crypt
-            └─etcdvg0-ETCDK8S 254:1    0    32G  0 lvm   /run/lib-etcd
-         ```
+       ```bash
+       ncn-m001# lsblk | grep -A2 ^sdc
+       sdc                   8:32   0 447.1G  0 disk
+        └─ETCDLVM           254:0    0 447.1G  0 crypt
+          └─etcdvg0-ETCDK8S 254:1    0    32G  0 lvm   /run/lib-etcd
+       ```
 
- 1. Confirm etcd is running and shows the node as a member once again.
+   1. Confirm etcd is running and shows the node as a member once again.
 
-     The newly built master node should be in the returned list.
+       The newly built master node should be in the returned list.
 
-     ```bash
-     ncn-m001# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/ca.crt \
-                 --key=/etc/kubernetes/pki/etcd/ca.key --endpoints=localhost:2379 member list
-     ```
+       ```bash
+       ncn-m001# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/ca.crt \
+                   --key=/etc/kubernetes/pki/etcd/ca.key --endpoints=localhost:2379 member list
+       ```
 
-     1. Collect data about the system management platform health \(can be run from a master or worker NCN\).
+   1. Retrieve the `XNAME` for the node being rebuilt.
 
-         ```bash
-         ncn-m001# sh /opt/cray/platform-utils/ncnHealthChecks.sh
-         ncn-m001# sh /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
-         ```
+      This xname is available on the node being rebuilt in the following file:
+
+      ```bash
+      NODE# cat /etc/cray/xname
+      ```
+
+   1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
+
+      The following command will indicate if a CFS job is currently in progress for this node. Replace the `XNAME` value in the following command with the xname of the node being rebuilt.
+
+      ```bash
+      ncn# cray cfs components describe XNAME --format json
+      {
+        "configurationStatus": "configured",
+        "desiredConfig": "ncn-personalization-full",
+        "enabled": true,
+        "errorCount": 0,
+        "id": "x3000c0s7b0n0",
+        "retryPolicy": 3,
+      ```
+
+      If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node.  If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+
+   1. Collect data about the system management platform health \(can be run from a master or worker NCN\).
+
+        ```bash
+        ncn-m001# sh /opt/cray/platform-utils/ncnHealthChecks.sh
+        ncn-m001# sh /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
+        ```
 
 <a name="validate_storage_node"></a>
 
@@ -998,68 +1048,93 @@ Validate the storage node rebuilt successfully.
 
 Skip this section if a master or worker node was rebuilt.
 
- 1. Verify there are 3 mons, 3 mds, 3 mgr processes, and rgw.s
+   1. Verify there are 3 mons, 3 mds, 3 mgr processes, and rgw.s
 
-     ```bash
-     ncn-m001# ceph -s
-       cluster:
-         id:     22d01fcd-a75b-4bfc-b286-2ed8645be2b5
-         health: HEALTH_OK
-     
-       services:
-         mon: 3 daemons, quorum ncn-s001,ncn-s002,ncn-s003 (age 4m)
-         mgr: ncn-s001(active, since 19h), standbys: ncn-s002, ncn-s003
-         mds: cephfs:1 {0=ncn-s001=up:active} 2 up:standby
-         osd: 12 osds: 12 up (since 2m), 12 in (since 2m)
-         rgw: 3 daemons active (ncn-s001.rgw0, ncn-s002.rgw0, ncn-s003.rgw0)
-     
-       task status:
-         scrub status:
-             mds.ncn-s001: idle
-     
-       data:
-         pools:   10 pools, 480 pgs
-         objects: 926 objects, 31 KiB
-         usage:   12 GiB used, 21 TiB / 21 TiB avail
-         pgs:     480 active+clean
-     ```
-
- 1. Verify the OSDs are back in the cluster.
-
-     ```bash
-     ncn-m001# ceph osd tree
-     ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
-     -1       20.95917 root default
-     -3        6.98639     host ncn-s001
-      2   ssd  1.74660         osd.2         up  1.00000 1.00000
-      5   ssd  1.74660         osd.5         up  1.00000 1.00000
-      8   ssd  1.74660         osd.8         up  1.00000 1.00000
-     11   ssd  1.74660         osd.11        up  1.00000 1.00000
-     -7        6.98639     host ncn-s002
-      0   ssd  1.74660         osd.0         up  1.00000 1.00000
-      4   ssd  1.74660         osd.4         up  1.00000 1.00000
-      7   ssd  1.74660         osd.7         up  1.00000 1.00000
-     10   ssd  1.74660         osd.10        up  1.00000 1.00000
-     -5        6.98639     host ncn-s003
-      1   ssd  1.74660         osd.1         up  1.00000 1.00000
-      3   ssd  1.74660         osd.3         up  1.00000 1.00000
-      6   ssd  1.74660         osd.6         up  1.00000 1.00000
-      9   ssd  1.74660         osd.9         up  1.00000 1.00000
-     ```
-
- 1. Verify the radosgw and haproxy are correct.
-
-     There will be an output \(without an error\) returned if radosgw and haproxy are correct.
+      ```bash
+      ncn-m001# ceph -s
+        cluster:
+          id:     22d01fcd-a75b-4bfc-b286-2ed8645be2b5
+          health: HEALTH_OK
  
-     ```bash
-     ncn# curl -k https://rgw-vip.nmn
-     <?xml version="1.0" encoding="UTF-8"?><ListAllMyBucketsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/ "><Owner><ID>anonymous</ID><DisplayName></DisplayName></Owner><Buckets></Buckets></ListAllMyBucketsResult
-     ```
+        services:
+          mon: 3 daemons, quorum ncn-s001,ncn-s002,ncn-s003 (age 4m)
+          mgr: ncn-s001(active, since 19h), standbys: ncn-s002, ncn-s003
+          mds: cephfs:1 {0=ncn-s001=up:active} 2 up:standby
+          osd: 12 osds: 12 up (since 2m), 12 in (since 2m)
+          rgw: 3 daemons active (ncn-s001.rgw0, ncn-s002.rgw0, ncn-s003.rgw0)
+ 
+        task status:
+          scrub status:
+              mds.ncn-s001: idle
+  
+        data:
+          pools:   10 pools, 480 pgs
+          objects: 926 objects, 31 KiB
+          usage:   12 GiB used, 21 TiB / 21 TiB avail
+          pgs:     480 active+clean
+        ```
 
- 1. Collect data about the system management platform health \(can be run from a master or worker NCN\).
+   1. Verify the OSDs are back in the cluster.
 
-     ```bash
-     ncn-m001# sh /opt/cray/platform-utils/ncnHealthChecks.sh
-     ncn-m001# sh /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
-     ```
+      ```bash
+      ncn-m001# ceph osd tree
+      ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
+      -1       20.95917 root default
+      -3        6.98639     host ncn-s001
+       2   ssd  1.74660         osd.2         up  1.00000 1.00000
+       5   ssd  1.74660         osd.5         up  1.00000 1.00000
+       8   ssd  1.74660         osd.8         up  1.00000 1.00000
+      11   ssd  1.74660         osd.11        up  1.00000 1.00000
+      -7        6.98639     host ncn-s002
+       0   ssd  1.74660         osd.0         up  1.00000 1.00000
+       4   ssd  1.74660         osd.4         up  1.00000 1.00000
+       7   ssd  1.74660         osd.7         up  1.00000 1.00000
+      10   ssd  1.74660         osd.10        up  1.00000 1.00000
+      -5        6.98639     host ncn-s003
+       1   ssd  1.74660         osd.1         up  1.00000 1.00000
+       3   ssd  1.74660         osd.3         up  1.00000 1.00000
+       6   ssd  1.74660         osd.6         up  1.00000 1.00000
+       9   ssd  1.74660         osd.9         up  1.00000 1.00000
+      ```
+
+   1. Verify the radosgw and haproxy are correct.
+
+      There will be an output \(without an error\) returned if radosgw and haproxy are correct.
+ 
+      ```bash
+      ncn# curl -k https://rgw-vip.nmn
+      <?xml version="1.0" encoding="UTF-8"?><ListAllMyBucketsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/ "><Owner><ID>anonymous</ID><DisplayName></DisplayName></Owner><Buckets></Buckets></ListAllMyBucketsResult
+      ```
+
+   1. Retrieve the `XNAME` for the node being rebuilt.
+
+      This xname is available on the node being rebuilt in the following file:
+
+      ```bash
+      NODE# cat /etc/cray/xname
+      ```
+
+   1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
+
+      The following command will indicate if a CFS job is currently in progress for this node. Replace the `XNAME` value in the following command with the xname of the node being rebuilt.
+
+      ```bash
+      ncn# cray cfs components describe XNAME --format json
+      {
+        "configurationStatus": "configured",
+        "desiredConfig": "ncn-personalization-full",
+        "enabled": true,
+        "errorCount": 0,
+        "id": "x3000c0s7b0n0",
+        "retryPolicy": 3,
+      ```
+
+      If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node.  If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+
+   1. Collect data about the system management platform health \(can be run from a master or worker NCN\).
+
+       ```bash
+       ncn-m001# sh /opt/cray/platform-utils/ncnHealthChecks.sh
+       ncn-m001# sh /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
+       ```
 
