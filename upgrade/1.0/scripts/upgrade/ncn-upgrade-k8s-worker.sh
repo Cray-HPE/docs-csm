@@ -79,8 +79,9 @@ if [[ $state_recorded == "0" ]]; then
         c_num_of_members=$(echo $c_cluster_details | jq '.members | length' )
         c_num_of_leader=$(echo $c_cluster_details | jq '.members[] | .role' | grep "leader" | wc -l)
         c_max_lag=$(echo $c_cluster_details | jq '[.members[] | .lag] | max')
+        c_unknown_lag=$(echo $c_cluster_details | jq '[.members[] | .lag]' | grep "unknown" | wc -l)
 
-        # check number of memebers
+        # check number of members
         if [[ $c_name == "sma-postgres-cluster" ]]; then
             if [[ $c_num_of_members -ne 2 ]]; then
                 echo "--- ERROR --- $c cluster only has $c_num_of_members/2 cluster members"
@@ -95,12 +96,17 @@ if [[ $state_recorded == "0" ]]; then
 
         #check number of leader
         if [[ $c_num_of_leader -ne 1 ]]; then
-            echo "--- ERROR --- $c cluster doesn't hava leader"
+            echo "--- ERROR --- $c cluster doesn't hava a leader"
             exit 1
         fi
         #check number of lag
         if [[ $c_max_lag -gt 0 ]]; then
             echo "--- ERROR --- $c cluster has lag: $c_max_lag"
+            exit 1
+        fi
+        #check lag:unknown
+        if [[ $c_unknown_lag -gt 0 ]]; then
+            echo "--- ERROR --- $c cluster has lag: unknown"
             exit 1
         fi
     done
