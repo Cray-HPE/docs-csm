@@ -10,18 +10,18 @@ This document provides troubleshooting information for services and functionalit
 
 <a name="known-issues"></a>
 
-### Known Issues
+## Known Issues
 Listing of known issues and procedures to workaround them in this CSM release.
 
 <a name="known-issues-hardware-discovery"></a>
 
-#### Hardware Discovery
+### Hardware Discovery
 Known issues related to hardware discovery in a system.
  * [Air cooled hardware is not getting properly discovered with Aruba leaf switches](known_issues/discovery_aruba_snmp_issue.md)
  * [HMS Discovery job not creating RedfishEndpoints in Hardware State Manager](known_issues/discovery_job_not_creating_redfish_endpoints.md)
 
 <a name="initrd-not-found"></a>
-#### ``error: file  `/boot/grub2/../initrd.img.xz' not found.Press any key to continue...``
+### ``error: file  `/boot/grub2/../initrd.img.xz' not found.Press any key to continue...``
 
 This is a problem that is fixed in CSM 1.0+, but if your system was upgraded from CSM 0.9.x you may run into this. Below is the full error seen when attempting to boot:
 
@@ -46,21 +46,33 @@ error: file `/boot/grub2/../initrd.img.xz' not found.Press any key to continue..
 [    2.690969] ---[ end Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0) ]---
 ```
 
-##### Fix
+#### Fix
 
-Run these commands to fix the issue:
+Follow these steps on any NCN to fix the issue:
 
-```bash
-git clone -b release/0.9 ssh://git@stash.us.cray.com:7999/csm/csm-install-workarounds.git
-csm-install-workarounds/workarounds/livecd-post-reboot/CASMINST-2689/CASMINST-2689.sh
-for i in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ' ');
-do
-  scp -r csm-install-workarounds/workarounds/livecd-post-reboot/CASMINST-2689/ $i:/opt/cray/csm/workarounds/livecd-post-reboot/
-done
-pdsh -b -S -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') '/opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689/CASMINST-2689.sh'
-```
+   1. Run the `CASMINST-2689.sh` script from the `CASMINST-2689` workaround at the `livecd-post-reboot` breakpoint.
+   
+      Follow the usual [workaround instructions](../update_product_stream/index.md#apply-workarounds) **with the following exceptions**:
+         * Use the latest Shasta 1.4 install workaround RPM, **not** the Shasta 1.5 install workaround RPM
+         * For the  `livecd-post-reboot` breakpoint, ignore any workarounds other than `CASMINST-2689`
+         * Do not follow the workaround `README.md` instructions -- only run the `CASMINST-2689.sh` script in the `CASMINST-2689` subdirectory
 
-###### Validate
+   1. Run these commands:
+
+      ```bash
+      ncn# for i in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ' '); do
+         scp -r csm-install-workarounds/workarounds/livecd-post-reboot/CASMINST-2689/ $i:/opt/cray/csm/workarounds/livecd-post-reboot/
+      done
+      ncn# pdsh -b -S -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') '/opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689/CASMINST-2689.sh'
+      ```
+
+   1. Remove the Shasta 1.4 install workaround RPM from the NCN.
+   
+      ```bash
+      ncn# rpm -e csm-install-workarounds
+      ```
+
+##### Validate
 
 Running the script again will produce this output:
 

@@ -99,17 +99,7 @@ making a backup of them, in case they need to be examined at a later time.
 
    A new directory matching your `--system-name` argument will now exist in your working directory.
 
-1. Check for workarounds in the `/opt/cray/csm/workarounds/csi-config` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
-
-   ```bash
-   pit# ls /opt/cray/csm/workarounds/csi-config
-   ```
-
-   If there is a workaround here, the output looks similar to the following:
-
-   ```
-   CASMINST-999
-   ```
+1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `csi-config` breakpoint.
 
 1. Copy the interface config files generated earlier by `csi config init` into `/etc/sysconfig/network/`.
 
@@ -177,16 +167,7 @@ making a backup of them, in case they need to be examined at a later time.
         pit# systemctl restart basecamp nexus dnsmasq conman
         ```
 
-1. Apply any NCN pre-boot workarounds. Check for workarounds in the `/opt/cray/csm/workarounds/before-ncn-boot` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective README.md files.
-
-   ```bash
-   pit# ls /opt/cray/csm/workarounds/before-ncn-boot
-   ```
-
-   If there is a workaround here, the output looks similar to the following:
-   ```
-   CASMINST-980
-   ```
+1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `before-ncn-boot` breakpoint.
 
 1. Verify that all BMCs can be pinged.
 
@@ -290,17 +271,7 @@ making a backup of them, in case they need to be examined at a later time.
 
    A new directory matching your `$SYSTEM_NAME` environment variable will now exist in your working directory.
 
-1. Check for workarounds in the `/opt/cray/csm/workarounds/csi-config` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
-
-   ```bash
-   pit# ls /opt/cray/csm/workarounds/csi-config
-   ```
-
-   If there is a workaround here, the output looks similar to the following:
-
-   ```
-   CASMINST-999
-   ```
+1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `csi-config` breakpoint.
 
 1. Copy the interface config files generated earlier by `csi config init` into `/etc/sysconfig/network/`.
 
@@ -385,17 +356,7 @@ making a backup of them, in case they need to be examined at a later time.
    pit# yq merge -xP -i /var/www/ephemeral/prep/site-init/customizations.yaml <(yq prefix -P "/var/www/ephemeral/prep/${SYSTEM_NAME}/customizations.yaml" spec)
    ```
 
-
-1. Apply any NCN pre-boot workarounds. Check for workarounds in the `/opt/cray/csm/workarounds/before-ncn-boot` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective README.md files.
-
-   ```bash
-   pit# ls /opt/cray/csm/workarounds/before-ncn-boot
-   ```
-
-   If there is a workaround here, the output looks similar to the following:
-   ```
-   CASMINST-980
-   ```
+1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `before-ncn-boot` breakpoint.
 
 <a name="next-topic"></a>
 # Next Topic

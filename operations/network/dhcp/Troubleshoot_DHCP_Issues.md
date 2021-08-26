@@ -79,7 +79,7 @@ Once a token has been generated, the DHCP lease database can be viewed. The comm
     ```bash
     ncn-w001# curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" \
     -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' \
-    https://api_gw_service.local/apis/dhcp-kea | jq
+    https://api-gw-service-nmn.local/apis/dhcp-kea | jq
     ```
 
 -   View the total amount of leases:
@@ -87,7 +87,7 @@ Once a token has been generated, the DHCP lease database can be viewed. The comm
     ```bash
     ncn-w001# curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" \
     -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' \
-    https://api_gw_service.local/apis/dhcp-kea | jq '.[].text'
+    https://api-gw-service-nmn.local/apis/dhcp-kea | jq '.[].text'
     ```
 
 -   Use an IP address to search for a hostname or MAC address:
@@ -95,7 +95,7 @@ Once a token has been generated, the DHCP lease database can be viewed. The comm
     ```bash
     ncn-w001# curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" \
     -d '{ "command": "lease4-get", "service": [ "dhcp4" ], "arguments": { "ip-address": "x.x.x.x" } }' \
-    https://api_gw_service.local/apis/dhcp-kea | jq
+    https://api-gw-service-nmn.local/apis/dhcp-kea | jq
     ```
 
 -   Use a MAC address to find a hostname or IP address:
@@ -103,7 +103,7 @@ Once a token has been generated, the DHCP lease database can be viewed. The comm
     ```bash
     ncn-w001# curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" \
     -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' \
-    https://api_gw_service.local/apis/dhcp-kea | jq '.[].arguments.leases[] | \
+    https://api-gw-service-nmn.local/apis/dhcp-kea | jq '.[].arguments.leases[] | \
     select(."hw-address"=="XX:XX:XX:XX:XX:5d")'
     ```
 
@@ -112,7 +112,7 @@ Once a token has been generated, the DHCP lease database can be viewed. The comm
     ```bash
     ncn-w001# curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" \
     -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' \
-    https://api_gw_service.local/apis/dhcp-kea | jq '.[].arguments.leases[] | \
+    https://api-gw-service-nmn.local/apis/dhcp-kea | jq '.[].arguments.leases[] | \
     select(."hostname"=="xNAME")'
     ```
 
