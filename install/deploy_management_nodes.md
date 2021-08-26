@@ -777,12 +777,6 @@ Observe the output of the checks and note any failures, then remediate them.
    systemctl status etcd.service
    ```
 
-   Check that there are no etcd pods found in the kube-system namespace:
-   ```bash
-   kubectl get pods -n kube-system | grep etcd
-   ```
-   This should return no pods outside of the `kube-etcdbackup` pod.
-
    3. Verify that all the pods in the kube-system namespace are running
 
    Check that pods listed are in the `Running` or `Completed` state.
