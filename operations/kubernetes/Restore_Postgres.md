@@ -5,6 +5,7 @@ Below are the service specific steps required to restore data to a Postgres clus
 Restore Postgres Procedures by Service:
 - [Restore Postgres for Spire](#spire)
 - [Restore Postgres for Keycloak](#keycloak)
+- [Restore Postgres for HSM (Hardware State Manager)](../hardware_state_manager/Restore_HSM_Postgres_from_Backup.md)
 
 
 <a name="spire"> </a>
