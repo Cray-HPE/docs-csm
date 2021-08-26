@@ -53,5 +53,6 @@ Reference the following procedures when working with Kubernetes on the system:
     -   [Kubernetes Log File Locations](Kubernetes_Log_File_Locations.md)
     -   [Troubleshoot Liveliness or Readiness Probe Failures](Troubleshoot_Liveliness_Readiness_Probe_Failures.md)
     -   [Troubleshoot Unresponsive kubectl Commands](Troubleshoot_Unresponsive_kubectl_Commands.md)
+    -   [Troubleshoot Kubernetes Node NotReady](Troubleshoot_Kubernetes_Node_NotReady.md)
 
 
