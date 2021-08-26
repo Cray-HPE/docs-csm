@@ -2,7 +2,7 @@
 
 Rebuild a master, worker, or storage non-compute node (NCN). Use this procedure in the event that a node has a hardware failure, or some other issue with the node has occurred that warrants rebuilding the node.
 
-The following is a high-level overview of the NCN rebiuld workflow:
+The following is a high-level overview of the NCN rebuild workflow:
 1. [Prepare Node](#prepare_nodes)
    * There is a different procedure for each type of node (worker, master, and storage).
 1. [Identify Node and Update Metadata](#identify_node_and_update_metadata)
@@ -41,7 +41,7 @@ Skip this section if rebuilding a master or storage node. The examples in this s
     If the `cray-cps-cm-pm` pod is running, there will be an extra step to redeploy this pod after the node is rebuilt.
 
     ```bash
-    NODE# cray cps deployment list --format json | grep -C1 podname
+    ncn# cray cps deployment list --format json | grep -C1 podname
         "node": "ncn-w002",
         "podname": "cray-cps-cm-pm-j7td7"
       },
@@ -72,7 +72,7 @@ Skip this section if rebuilding a master or storage node. The examples in this s
    This xname is available on the node being rebuilt in the following file:
 
    ```bash
-   NODE# cat /etc/cray/xname
+   ncn# ssh NODE cat /etc/cray/xname
    ```
 
 1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig before shutting down the node.
@@ -104,7 +104,7 @@ Skip this section if rebuilding a master or storage node. The examples in this s
 
     ```bash
     error when evicting pod "<pod>" (will retry after 5s): Cannot evict pod as it would violate the pod's disruption budget.
-       ```
+    ```
 
        In this case, there are some options. First, if the service is scalable, you can increase the scale to start up another pod on another node, and then the drain will be able to delete it. However, it will probably be necessary to force the deletion of the pod:
 
@@ -137,7 +137,7 @@ Skip this section if rebuilding a worker or storage node. The examples in this s
    This xname is available on the node being rebuilt in the following file:
 
    ```bash
-   NODE# cat /etc/cray/xname
+   ncn# ssh NODE cat /etc/cray/xname
    ```
 
 1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig before shutting down the node.
@@ -276,7 +276,7 @@ Skip this section if rebuilding a master or worker node. The examples in this se
    This xname is available on the node being rebuilt in the following file:
 
    ```bash
-   NODE# cat /etc/cray/xname
+   ncn# ssh NODE cat /etc/cray/xname
    ```
 
 1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig before shutting down the node.
@@ -454,7 +454,7 @@ This section applies to all node types. The examples in this section assume the 
    This xname is available on the node being rebuilt in the following file:
 
    ```bash
-   NODE# cat /etc/cray/xname
+   ncn# ssh NODE cat /etc/cray/xname
    ```
 
    Note the xname for use in subsequent steps.
@@ -920,7 +920,7 @@ Skip this section if a master or storage node was rebuilt. The examples in this 
       This xname is available on the node being rebuilt in the following file:
 
       ```bash
-      NODE# cat /etc/cray/xname
+      ncn# ssh NODE cat /etc/cray/xname
       ```
 
    1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
@@ -1023,7 +1023,7 @@ Skip this section if a worker or storage node was rebuilt. The examples in this 
       This xname is available on the node being rebuilt in the following file:
 
       ```bash
-      NODE# cat /etc/cray/xname
+      ncn# ssh NODE cat /etc/cray/xname
       ```
 
    1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
@@ -1122,7 +1122,7 @@ Skip this section if a master or worker node was rebuilt.
       This xname is available on the node being rebuilt in the following file:
 
       ```bash
-      NODE# cat /etc/cray/xname
+      ncn# ssh NODE cat /etc/cray/xname
       ```
 
    1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.

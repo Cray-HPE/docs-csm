@@ -185,7 +185,7 @@ Before rebooting NCNs:
        This xname is available on the node being rebooted in the following file:
 
        ```bash
-       NODE# cat /etc/cray/xname
+       ncn# ssh NODE cat /etc/cray/xname
        ```
 
     1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
@@ -307,7 +307,7 @@ Before rebooting NCNs:
        This xname is available on the node being rebooted in the following file:
 
        ```bash
-       NODE# cat /etc/cray/xname
+       ncn# ssh NODE cat /etc/cray/xname
        ```
 
     1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
@@ -398,7 +398,7 @@ Before rebooting NCNs:
        This xname is available on the node being rebooted in the following file:
 
        ```bash
-       NODE# cat /etc/cray/xname
+       ncn# ssh NODE cat /etc/cray/xname
        ```
 
     1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
@@ -465,7 +465,7 @@ Before rebooting NCNs:
        This xname is available on the node being rebooted in the following file:
 
        ```bash
-       NODE# cat /etc/cray/xname
+       ncn# ssh NODE cat /etc/cray/xname
        ```
 
     1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
