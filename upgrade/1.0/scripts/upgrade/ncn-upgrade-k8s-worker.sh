@@ -59,6 +59,58 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="ENSURE_POSTGRES_HEALTHY"
+state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    
+    if [[ ! -z $(kubectl get postgresql -A -o json | jq '.items[].status | select(.PostgresClusterStatus != "Running")') ]]; then
+        echo "--- ERROR --- not all Postgresql Clusters have a status of 'Running'"
+        exit 1
+    fi
+    postgresClusters="$(kubectl get postgresql -A | awk '/postgres/ || NR==1' | \
+                    grep -v NAME | awk '{print $1","$2}')"
+    for c in $postgresClusters
+    do
+        # NameSpace and postgres cluster name
+        c_ns="$(echo $c | awk -F, '{print $1;}')"
+        c_name="$(echo $c | awk -F, '{print $2;}')"
+        c_cluster_details=$(kubectl exec "${c_name}-1" -c postgres -it -n ${c_ns} -- curl -s http://localhost:8008/cluster)
+        c_num_of_members=$(echo $c_cluster_details | jq '.members | length' )
+        c_num_of_leader=$(echo $c_cluster_details | jq '.members[] | .role' | grep "leader" | wc -l)
+        c_max_lag=$(echo $c_cluster_details | jq '[.members[] | .lag] | max')
+
+        # check number of memebers
+        if [[ $c_name == "sma-postgres-cluster" ]]; then
+            if [[ $c_num_of_members -ne 2 ]]; then
+                echo "--- ERROR --- $c cluster only has $c_num_of_members/2 cluster members"
+                exit 1
+            fi
+        else
+            if [[ $c_num_of_members -ne 3 ]]; then
+                echo "--- ERROR --- $c cluster only has $c_num_of_members/3 cluster members"
+                exit 1
+            fi
+        fi
+
+        #check number of leader
+        if [[ $c_num_of_leader -ne 1 ]]; then
+            echo "--- ERROR --- $c cluster doesn't hava leader"
+            exit 1
+        fi
+        #check number of lag
+        if [[ $c_max_lag -gt 0 ]]; then
+            echo "--- ERROR --- $c cluster has lag: $c_max_lag"
+            exit 1
+        fi
+    done
+
+
+    record_state "${state_name}" ${upgrade_ncn}
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 ${BASEDIR}/../k8s/failover-leader.sh $upgrade_ncn
 
 drain_node $upgrade_ncn
