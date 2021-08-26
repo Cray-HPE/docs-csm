@@ -963,8 +963,8 @@ Skip this section if a master or storage node was rebuilt. The examples in this 
    1. Collect data about the system management platform health \(can be run from a master or worker NCN\).
 
       ```bash
-      ncn# sh /opt/cray/platform-utils/ncnHealthChecks.sh
-      ncn# sh /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
+      ncn# /opt/cray/platform-utils/ncnHealthChecks.sh
+      ncn# /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
       ```
 
 <a name="validate_master_node"></a>
@@ -1058,8 +1058,8 @@ Skip this section if a worker or storage node was rebuilt. The examples in this 
    1. Collect data about the system management platform health \(can be run from a master or worker NCN\).
 
         ```bash
-        ncn# sh /opt/cray/platform-utils/ncnHealthChecks.sh
-        ncn# sh /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
+        ncn# /opt/cray/platform-utils/ncnHealthChecks.sh
+        ncn# /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
         ```
 
 <a name="validate_storage_node"></a>
@@ -1158,7 +1158,7 @@ Skip this section if a master or worker node was rebuilt.
    1. Collect data about the system management platform health \(can be run from a master or worker NCN\).
 
        ```bash
-       ncn# sh /opt/cray/platform-utils/ncnHealthChecks.sh
-       ncn# sh /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
+       ncn# /opt/cray/platform-utils/ncnHealthChecks.sh
+       ncn# /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
        ```
 

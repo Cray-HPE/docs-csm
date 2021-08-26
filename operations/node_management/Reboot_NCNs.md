@@ -45,9 +45,8 @@ The `kubectl` command is installed.
         The output of the following scripts will need to be referenced in the remaining sub-steps.
 
         ```bash
-        ncn-m001# cd /opt/cray/platform-utils
-        ncn-m001# ./ncnHealthChecks.sh
-        ncn-m001# ./ncnPostgresHealthChecks.sh
+        ncn-m001# /opt/cray/platform-utils/ncnHealthChecks.sh
+        ncn-m001# /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
         ```
 
         **`NOTE`**: If the ncnHealthChecks script output indicates any `kube-multus-ds-` pods are in a `Terminating` state, that can indicate a previous restart of these pods did not complete. In this case, it is safe to force delete these pods in order to let them properly restart by executing the `kubectl delete po -n kube-system kube-multus-ds.. --force` command. After executing this command, re-running the ncnHealthChecks script should indicate a new pod is in a `Running` state.
