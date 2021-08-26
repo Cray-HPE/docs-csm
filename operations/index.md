@@ -650,6 +650,8 @@ See [Update Firmware with FAS](firmware/Update_Firmware_with_FAS.md) for a list 
   * [FAS Admin Procedures](firmware/FAS_Admin_Procedures.md)
   * [FAS Use Cases](firmware/FAS_Use_Cases.md)
   * [Upload Olympus BMC Recovery Firmware into TFTP Server](firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md)
+  * [Install HPC Firmware Pack (HFP)](firmware/Install_HPC_Firmware_Pack.md)
+  * [Install HPC Firmware Pack from PIT or LiveCD](firmware/Install_HPC_Firmware_Pack_from_PIT_or_LiveCD.md)
 
 
 <a name="user-access-service-uas"></a>
