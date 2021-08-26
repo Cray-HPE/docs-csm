@@ -7,7 +7,7 @@ Taints are controlled with the `kubectl taint nodes` command, while node labels 
 The list of existing labels can be retrieved using the following command:
 
 ```bash
-ncn# kubectl get pods --show-labels
+ncn# kubectl get nodes --show-labels
 ```
 
 To learn more, refer to [https://kubernetes.io/](https://kubernetes.io/).
