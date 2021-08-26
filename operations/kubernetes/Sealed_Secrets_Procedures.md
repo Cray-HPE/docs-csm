@@ -24,7 +24,7 @@ Expected output looks similar to:
 
 In order to prevent tracked sealed secrets from being regenerated, they **MUST
 BE REMOVED** from the `spec.kubernetes.tracked_sealed_secrets` list in
-`/mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml` prior to [seeding](#generate-sealed-secrets).
+`/mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml` prior to executing the `Generate Sealed Secrets` section of [Prepare Site Init](../../install/prepare_site_init.md).
 To retain the REDS/MEDS/RTS credentials, run:
 
 ```bash
