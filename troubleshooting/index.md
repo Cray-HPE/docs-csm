@@ -7,6 +7,12 @@ This document provides troubleshooting information for services and functionalit
     * [Hardware Discovery](#known-issues-hardware-discovery)
     * [initrd.img.xz not found](#initrd-not-found)
     * [SAT/HSM/CAPMC Component Power State Mismatch](known_issues/component_power_state_mismatch.md)
+ * Kubernetes troubleshooting
+    * [General Kubernetes Commands for Troubleshooting](./kubernetes/Kubernetes_Troubleshooting_Information.md)
+    * [Kubernetes Log File Locations](./kubernetes/Kubernetes_Log_File_Locations.md)
+    * [Troubleshoot Liveliness or Readiness Probe Failures](./kubernetes/Troubleshoot_Liveliness_Readiness_Probe_Failures.md)
+    * [Troubleshoot Unresponsive kubectl Commands](./kubernetes/Troubleshoot_Unresponsive_kubectl_Commands.md)
+    * [Troubleshoot Kubernetes Node NotReady](./kubernetes/Troubleshoot_Kubernetes_Node_NotReady.md)
 
 <a name="known-issues"></a>
 

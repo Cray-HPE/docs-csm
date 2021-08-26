@@ -380,7 +380,7 @@ ncn-m002:~ # /usr/share/doc/csm/upgrade/1.0/scripts/aruba/nae_upload.py
 
 ### General Kubernetes Commands for Troubleshooting
 
-Please see [Kubernetes_Troubleshooting_Information.md](../../operations/kubernetes/Kubernetes_Troubleshooting_Information.md).
+Please see [Kubernetes_Troubleshooting_Information.md](../../troubleshooting/kubernetes/Kubernetes_Troubleshooting_Information.md).
 
 ### Troubleshooting PXE Boot Issues
 

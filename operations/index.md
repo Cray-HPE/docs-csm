@@ -284,13 +284,6 @@ The system management components are broken down into a series of micro-services
        *   [Restore Postgres](kubernetes/Restore_Postgres.md)
        *   [Disaster Recovery for Postgres](kubernetes/Disaster_Recovery_Postgres.md)
        *   [View Postgres Information for System Databases](kubernetes/View_Postgres_Information_for_System_Databases.md)
-   *   [Kubernetes Troubleshooting Information](kubernetes/Kubernetes_Troubleshooting_Information.md)
-       *   [Kubernetes Log File Locations](kubernetes/Kubernetes_Log_File_Locations.md)
-       *   [Troubleshoot Liveliness or Readiness Probe Failures](kubernetes/Troubleshoot_Liveliness_Readiness_Probe_Failures.md)
-       *   [Troubleshoot Unresponsive kubectl Commands](kubernetes/Troubleshoot_Unresponsive_kubectl_Commands.md)
-       *   [Determine if Pods are Hitting Resource Limits](kubernetes/Determine_if_Pods_are_Hitting_Resource_Limits.md)
-       *   [Increase Pod Resource Limits](kubernetes/Increase_Pod_Resource_Limits.md)
-       *   [Increase Kafka Pod Resource Limits](kubernetes/Increase_Kafka_Pod_Resource_Limits.md)
 
 
 <a name="package-repository-management"></a>
