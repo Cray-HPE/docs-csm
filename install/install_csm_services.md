@@ -368,17 +368,7 @@ After running the `add_pod_priority.sh` script, the affected pods will be restar
 <a name="apply-after-sysmgmt-manifest-workarounds"></a>
 ### 8. Apply After Sysmgmt Manifest Workarounds
 
-Check for workarounds in the `/opt/cray/csm/workarounds/after-sysmgmt-manifest` directory within the CSM tar. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
-
-```bash
-# Example
-pit# ls /opt/cray/csm/workarounds/after-sysmgmt-manifest
-```
-
-If there is a workaround here, the output looks similar to the following:
-```
-CASMCMS-6857  CASMNET-423
-```
+Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `after-sysmgmt-manifest` breakpoint.
 
 <a name="known-issues"></a>
 ### 9. Known Issues

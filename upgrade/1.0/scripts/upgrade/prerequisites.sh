@@ -114,9 +114,7 @@ if [[ $(hostname) == "ncn-m001" ]]; then
         # check to make sure we are not re-creating the bug by setting m001 to use itself as an upstream
         if [[ "$upstream_ntp_server" == "ncn-m001" ]]; then
           # if a pool is set, and we did not find an upstream server, just use the pool
-          grep "^\(pool\).*" /etc/chrony.d/cray.conf >/dev/null
-
-          if [[ $? -eq 0 ]] ; then
+          if grep "^\(pool\).*" /etc/chrony.d/cray.conf >/dev/null ; then
             sed -i "/^\(server ncn-m001\).*/d" /etc/chrony.d/cray.conf
           # otherwise error
           else
@@ -130,8 +128,8 @@ if [[ $(hostname) == "ncn-m001" ]]; then
           # this applies on startups of the system from a reboot only
           sed -i "/^\(logchange 1.0\)\$/a initstepslew 1 $upstream_ntp_server" /etc/chrony.d/cray.conf
           # Apply the change to use the new upstream server
-          # systemctl restart chronyd
         fi
+        systemctl restart chronyd
   fi
 fi
 
@@ -155,7 +153,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
             sleep 10
             if [[ $counter > 5 ]]
             then
-            echo "Cloud init data is missing and cannot be recreated.  Existing upgrade.."
+            echo "Cloud init data is missing and cannot be recreated. Existing upgrade.."
             fi
         done
     done
@@ -174,7 +172,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
         sleep 10
         if [[ $counter > 5 ]]
         then
-            echo "Cloud init data is missing and cannot be recreated.  Existing upgrade.."
+            echo "Cloud init data is missing and cannot be recreated. Existing upgrade.."
         fi
     done
     done
@@ -358,7 +356,7 @@ sed -i 's/^#set -e$/set -e/' srv/cray/scripts/common/create-kis-artifacts.sh
 EOF
         # find the path of the mounted chroot
         squash_path="$(mount | grep "$CSM_RELEASE" | awk '$3 ~ /squashfs-root$/ {print $3}')"
-        # if a mount is found, attempt to unmount it, but it's not critical if we can't
+        # if a mount is found, attempt to unmount it, but it is not critical if we cannot
         if [[ -n "$squash_path" ]]; then
             # alert the user so they can umount it later
             # Unmounting during this automation proved problematic, so cleanup can be done manually at the end of pre-req

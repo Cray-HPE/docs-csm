@@ -10,8 +10,8 @@
 Some of these changes are applied as hotfixes and patches for 1.4, they may have already been applied.
 
 #### CMM Static Lag configuration
-
-- Verify the version of the CMM firmware, the firmware must be on version 1.4.20 in order to support static LAGs on the CDU switches.
+For systems with mountain cabinets ONLY.
+- Verify the version of the CMM firmware, the firmware must be on version 1.4.20 or greater in order to support static LAGs on the CDU switches.
 - The command below should get you all the cmm firmware for a system.
 - Update the password in the command before usage. Change ```root:password``` to the correct BMC password.
 
@@ -22,10 +22,10 @@ export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin
 Expected output
 
 ```
-"cc.1.4.20-shasta-release.arm64.2021-03-24T17:47:03+00:00.0b7eb31"
+"cc.1.4.2x-shasta-release.arm64.2021-03-24T17:47:03+00:00.0b7eb31"
 ```
 
-- If the firmware is not on 1.4.20, notify the admin and get it updated before proceeding. 
+- If the firmware is not on 1.4.20 or greater, notify the admin and get it updated before proceeding. 
 - If you cannot get the firmware version, have the admin check for you. 
 - (Aruba and Dell) If the CMMs are on the correct version, verify the LAG configuration is setup correctly.
 - These configurations can be found on the CDU switch pages under the "Configure LAG for CMMs" section.
@@ -33,9 +33,10 @@ Expected output
     - Aruba [Aruba CDU](../install/configure_aruba_cdu_switch.md)
 
 #### BGP updates
-
+- This configuration is applied to the switches running BGP, this is set during CSI configuration.  This is likely the spine switches if there are no aggregation switches on the system.
 - (ARUBA ONLY) Remove the TFTP static route entry on the switches that are BGP participating in BGP.
-
+- Log into the switches running BGP, in this example it is the spine switches. 
+- Run the following command once logged in.
 ```
 sw-spine01# show ip route 10.92.100.60
  
@@ -44,18 +45,21 @@ Displaying ipv4 routes selected for forwarding
 '[x/y]' denotes [distance/metric]
  
 10.92.100.60/32, vrf default, tag 0
-    via  10.252.1.9,  [1/0],  static
+    via  10.252.1.x,  [1/0],  static
 ```
 - If this static route still exists, remove it.
 
 ```
-sw-spine01(config)# no ip route 10.92.100.60/32 10.252.1.9
+sw-spine01(config)# no ip route 10.92.100.60/32 10.252.1.x
 ```
 
 - (ARUBA ONLY) re-run the bgp script if it is missing the TFTP prefix-list and route-maps as shown in the example below.
 - These configuration changes also noted on the [BGP](../operations/update_bgp_neighbors.md) page.
 
 Example TFTP prefix-list and route-map from running config. 
+
+To get this log into the switches that are running BGP and peering with Metallb.  And get the running config.
+
 ```
 ip prefix-list tftp seq 10 permit 10.92.100.60/32 ge 32 le 32
 !
@@ -88,7 +92,7 @@ route-map ncn-w001 permit seq 60
 - BGP script location ```/opt/cray/csm/scripts/networking/BGP```
 - Usage [BGP](../operations/update_bgp_neighbors.md)
 
-(ARUBA and MELLANOX) Verify the BGP neighbors are configured as passive. Example configuration below. 
+(ARUBA and MELLANOX) Verify the BGP neighbors are configured as passive. EXAMPLE configuration below. 
 (ARUBA) The peering between the switches is NOT configured as passive, ONLY the peerings with the worker nodes.
 
 ```

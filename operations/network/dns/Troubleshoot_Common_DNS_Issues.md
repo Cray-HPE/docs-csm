@@ -181,7 +181,7 @@ Search for a DHCP lease by checking active leases for the service:
 ```bash
 ncn-w001# curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H \
 "Content-Type: application/json" \-d '{ "command": "lease4-get-all",  "service": \
-[ "dhcp4" ] }' https://api_gw_service.local/apis/dhcp-kea |jq
+[ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea |jq
 ```
 
 For example:
@@ -189,7 +189,7 @@ For example:
 ```bash
 ncn-w001# curl -s -k -H "Authorization: Bearer ${TOKEN}" -X \
 POST -H "Content-Type: application/json" \-d '{ "command": "lease4-get-all",  "service": \
-[ "dhcp4" ] }' https://api_gw_service.local/apis/dhcp-kea \
+[ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea \
 |jq|grep x3000c0s19b4  -A 6 -B 4
 {          
 "cltt": 1597777241,          

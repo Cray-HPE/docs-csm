@@ -196,7 +196,7 @@ FAIL: smd_discovery_status_test found 4 endpoints that failed discovery, maximum
 '/opt/cray/tests/ncn-smoke/hms/hms-smd/smd_discovery_status_test_ncn-smoke.sh' exited with status code: 1
 ```
 
-The expected state of LastDiscoveryStatus is *DiscoverOK* for all endpoints with the exception of the BMC for ncn-m001 which is not normally connected to the site network and expected to be *HTTPsGetFailed*. If the test fails due to two or more endpoints not having been discovered successfully, the following additional steps can be taken to determine the cause of the failure:
+The expected state of LastDiscoveryStatus is *DiscoverOK* for all endpoints with the exception of the BMC for ncn-m001 which is not normally connected to the site network and expected to be *HTTPsGetFailed*. If the test fails because of two or more endpoints not having been discovered successfully, the following additional steps can be taken to determine the cause of the failure:
 
 ##### HTTPsGetFailed
 

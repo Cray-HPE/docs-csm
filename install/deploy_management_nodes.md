@@ -83,14 +83,7 @@ Preparation of the environment must be done before attempting to deploy the mana
 
 _There will be post-boot workarounds as well._
 
-1. Check for workarounds in the `/opt/cray/csm/workarounds/before-ncn-boot` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
-
-   If there is a workaround here, the output will look similar to the following.
-
-   ```bash
-   pit# ls /opt/cray/csm/workarounds/before-ncn-boot
-   CASMINST-980
-   ```
+Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `before-ncn-boot` breakpoint.
 
 <a name="ensure-time-is-accurate-before-deploying-ncns"></a>
 #### 1.3 Ensure Time Is Accurate Before Deploying NCNs
@@ -345,14 +338,6 @@ The configuration workflow described here is intended to help understand the exp
 
     **`NOTE`**: If the nodes have PXE boot issues (e.g. getting PXE errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
 
-    **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to Linux with no hostname) see the CSM workarounds for fixes around mutual symptoms. If there is a workaround here, the output will look similar to the following.
-
-      > ```bash
-      > pit# ls /opt/cray/csm/workarounds/after-ncn-boot
-      > ```
-      > CASMINST-1093
-      > ```
-
 1. Wait for storage nodes before booting Kubernetes master nodes and worker nodes.
 
    **`NOTE`**: Once all storage nodes are up and the message `...sleeping 5 seconds until /etc/kubernetes/admin.conf` appears on `ncn-s001`'s console, it is safe to proceed with booting the **Kubernetes master nodes and worker nodes**
@@ -392,13 +377,6 @@ The configuration workflow described here is intended to help understand the exp
 
     **`NOTE`**: If one of the master nodes seems hung waiting for the storage nodes to create a secret, check the storage node consoles for error messages. If any are found, consult [CEPH CSI Troubleshooting](ceph_csi_troubleshooting.md)
 
-    **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to Linux with no hostname) see the CSM workarounds for fixes around mutual symptoms. If there is a workaround here, the output will look similar to the following.
-
-    > ```bash
-    > pit# ls /opt/cray/csm/workarounds/after-ncn-boot
-    > CASMINST-1093
-    > ```
-
 1. Refer to [timing of deployments](#timing-of-deployments). It should not take more than 60 minutes for the `kubectl get nodes` command to return output indicating that all the master nodes and worker nodes aside from the PIT node booted from the LiveCD are `Ready`:
 
     ```bash
@@ -428,7 +406,7 @@ The configuration workflow described here is intended to help understand the exp
 <a name="check-for-unused-drives-on-utility-storage-nodes"></a>
 #### 3.3 Check for Unused Drives on Utility Storage Nodes
 
-> **`IMPORTANT:`** Do the following if NCNs are Gigabyte hardware.  It is optional, but suggested for HPE ncns.
+> **`IMPORTANT:`** Do the following if NCNs are Gigabyte hardware. It is optional, but suggested for HPE ncns.
 > 
 > **`IMPORTANT:`** the cephadm may output this warning "WARNING: The same type, major and minor should not be used for multiple devices.". You can ignore this warning.
 
@@ -445,7 +423,7 @@ The configuration workflow described here is intended to help understand the exp
     24
     ```
 
-1. Compare your number of OSDs to your output which should resemble the example below.  The number of drives will depend on the server hardware.
+1. Compare your number of OSDs to your output which should resemble the example below. The number of drives will depend on the server hardware.
 
    > **NOTE:**  If your Ceph cluster is large and has a lot of nodes, you can specify a node after the below command to limit the results.
 
@@ -562,13 +540,7 @@ More information can be found at [the cephadm reference page](../operations/util
 <a name="apply-ncn-post-boot-workarounds"></a>
 #### 3.4 Apply NCN Post-Boot Workarounds
 
-Check for workarounds in the `/opt/cray/csm/workarounds/after-ncn-boot` directory. If there are any workarounds in that directory, run those now. Instructions are in the `README` files.
-
-If there is a workaround here, the output looks similar to the following:
-```
-pit# ls /opt/cray/csm/workarounds/after-ncn-boot
-CASMINST-12345
-```
+Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `after-ncn-boot` breakpoint.
 
 <a name="configure_after_management_node_deployment"></a>
 ### 4. Configure after Management Node Deployment
@@ -623,9 +595,9 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
    - Aruba: `show bgp ipv4 unicast summary`
    - Mellanox: `show ip bgp summary`
 
-   You should see a neighbor for each of the workers NCN IP addresses found above.   If it is an Aruba switch, you will also see a neighbor for the other switch of the pair that are peering.
+   You should see a neighbor for each of the workers NCN IP addresses found above. If it is an Aruba switch, you will also see a neighbor for the other switch of the pair that are peering.
 
-   At this point the peering sessions with the worker IP addresses should be in IDLE, CONNECT, or ACTIVE state and not ESTABLISHED state. This is because the MetalLB speaker pods have not been deployed yet.
+   At this point the peering sessions with the worker IP addresses should be in IDLE, CONNECT, or ACTIVE state and not ESTABLISHED state. This is ddue to the MetalLB speaker pods not being deployed yet.
  
    You should see that the MsgRcvd and MsgSent columns for the worker IP addresses are 0.
 
@@ -670,9 +642,9 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
       - Aruba: `show bgp ipv4 unicast summary`
       - Mellanox: `show ip bgp summary`
 
-      You should see a neighbor for each of the workers NCN IP addresses found above.   If it is an Aruba switch, you will also see a neighbor for the other switch of the pair that are peering.
+      You should see a neighbor for each of the workers NCN IP addresses found above. If it is an Aruba switch, you will also see a neighbor for the other switch of the pair that are peering.
 
-      At this point the peering sessions with the worker IP addresses should be in IDLE, CONNECT, or ACTIVE state and not ESTABLISHED state. This is because the MetalLB speaker pods have not been deployed yet.
+      At this point the peering sessions with the worker IP addresses should be in IDLE, CONNECT, or ACTIVE state and not ESTABLISHED state. This is ddue to the MetalLB speaker pods not being deployed yet.
  
       You should see that the MsgRcvd and MsgSent columns for the worker IP addresses are 0.
 

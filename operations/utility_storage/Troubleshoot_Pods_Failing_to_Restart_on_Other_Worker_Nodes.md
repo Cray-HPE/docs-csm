@@ -6,7 +6,7 @@ The issue occurs when unmounting the mounts tied to the RBD devices, which cause
 
 **WARNING:** If this process is followed and there are mount points that cannot be unmounted without using the force option, then a process may still be writing to them. If mount points are forcefully unmounted, there is a high probability of data loss or corruption.
 
-## Prerequistes
+## Prerequisites
 
 This procedure requires administrative privileges.
 
