@@ -631,7 +631,16 @@ This section applies to master and worker nodes. Skip this section if rebuilding
 
 1. Observe the boot.
 
-    After a bit, the node should begin to boot. This can be viewed from the ConMan console window. Eventually, there will be a `NBP file...` message in the console output which indicates that the PXE boot has begun the TFTP download of the ipxe program. Later messages will appear as the Linux kernel loads and then the scripts in the initrd begin to run, including cloud-init.  Wait until the login prompt (including the hostname of this node) appears and cloud-init displays messages that it has finished. Then exit the ConMan console \(**&** then **.**\), and then use `ssh` to log in to the node to complete the remaining validation steps.
+    After a bit, the node should begin to boot. This can be viewed from the ConMan console window. Eventually, there will be a `NBP file...` message in the console output which indicates that the PXE boot has begun the TFTP download of the ipxe program. Later messages will appear as the Linux kernel loads and then the scripts in the initrd begin to run, including cloud-init. 
+
+   Wait until cloud-init displays messages similar to these on the console to indicate that cloud-init has finished with the module called `modules:final`.
+
+   ```
+   [  295.466827] cloud-init[9333]: Cloud-init v. 20.2-8.45.1 running 'modules:final' at Thu, 26 Aug 2021 15:23:20 +0000. Up 125.72 seconds.
+   [  295.467037] cloud-init[9333]: Cloud-init v. 20.2-8.45.1 finished at Thu, 26 Aug 2021 15:26:12 +0000. Datasource DataSourceNoCloudNet [seed=cmdline,http://10.92.100.81:8888/][dsmode=net].  Up 295.46 seconds
+   ```
+
+   Then press return on the console to ensure that the the login prompt is displayed including the correct hostname of this node. Then exit the ConMan console \(**&** then **.**\), and then use `ssh` to log in to the node to complete the remaining validation steps.
 
     **Troubleshooting:** If the `NBP file...` output never appears, or something else goes wrong, go back to the steps for modifying XNAME.json file (see the step to [inspect and modify the JSON file](#inspect)) and make sure these instructions were completed correctly.
 
@@ -895,10 +904,11 @@ Skip this section if a master or storage node was rebuilt. The examples in this 
       ncn-w003   Ready    <none>   112m   v1.18.6
       ```
 
-   1. Confirm /var/lib/containerd is on overlay.
+   1. Confirm /var/lib/containerd is on overlay on the node which was rebooted.
 
       ```bash
-      ncn-m001# df -h /var/lib/containerd
+      ncn# ssh NODE
+      NODE# df -h /var/lib/containerd
       Filesystem            Size  Used Avail Use% Mounted on
       containerd_overlayfs  378G  245G  133G  65% /var/lib/containerd
       ```
@@ -908,7 +918,7 @@ Skip this section if a master or storage node was rebuilt. The examples in this 
    1. Confirm the pods are beginning to get scheduled and reach a Running state on the worker node.
 
       ```bash
-      ncn-m001# kubectl get po -A -o wide | grep ncn-w002
+      ncn-m001# kubectl get po -A -o wide | grep NODE
       ```
 
    1. Confirm BGP is healthy.
@@ -953,9 +963,9 @@ Skip this section if a master or storage node was rebuilt. The examples in this 
    1. Collect data about the system management platform health \(can be run from a master or worker NCN\).
 
       ```bash
-      ncn-m001# sh /opt/cray/platform-utils/ncnHealthChecks.sh
-      ncn-m001# sh /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
-    ```
+      ncn# sh /opt/cray/platform-utils/ncnHealthChecks.sh
+      ncn# sh /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
+      ```
 
 <a name="validate_master_node"></a>
 
@@ -990,7 +1000,7 @@ Skip this section if a worker or storage node was rebuilt. The examples in this 
       Run the following command from any master or worker node that is already in the cluster. It is helpful to run this command several times to watch for the newly rebuilt node to join the cluster. This should occur within 10 to 20 minutes.
 
       ```bash
-      ncn-m001# kubectl get nodes
+      ncn# kubectl get nodes
       NAME       STATUS   ROLES    AGE    VERSION
       ncn-m001   Ready    master   113m   v1.18.6
       ncn-m002   Ready    master   113m   v1.18.6
@@ -1000,10 +1010,11 @@ Skip this section if a worker or storage node was rebuilt. The examples in this 
       ncn-w003   Ready    <none>   112m   v1.18.6
       ```
 
-   1. Confirm the `sdc` disk has the correct lvm.
+   1. Confirm the `sdc` disk has the correct lvm on the rebuilt node.
 
        ```bash
-       ncn-m001# lsblk | grep -A2 ^sdc
+       ncn# ssh NODE
+       NODE# lsblk | grep -A2 ^sdc
        sdc                   8:32   0 447.1G  0 disk
         └─ETCDLVM           254:0    0 447.1G  0 crypt
           └─etcdvg0-ETCDK8S 254:1    0    32G  0 lvm   /run/lib-etcd
@@ -1014,7 +1025,7 @@ Skip this section if a worker or storage node was rebuilt. The examples in this 
        The newly built master node should be in the returned list.
 
        ```bash
-       ncn-m001# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/ca.crt \
+       ncn-m# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/ca.crt \
                    --key=/etc/kubernetes/pki/etcd/ca.key --endpoints=localhost:2379 member list
        ```
 
@@ -1047,8 +1058,8 @@ Skip this section if a worker or storage node was rebuilt. The examples in this 
    1. Collect data about the system management platform health \(can be run from a master or worker NCN\).
 
         ```bash
-        ncn-m001# sh /opt/cray/platform-utils/ncnHealthChecks.sh
-        ncn-m001# sh /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
+        ncn# sh /opt/cray/platform-utils/ncnHealthChecks.sh
+        ncn# sh /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
         ```
 
 <a name="validate_storage_node"></a>
@@ -1062,7 +1073,7 @@ Skip this section if a master or worker node was rebuilt.
    1. Verify there are 3 mons, 3 mds, 3 mgr processes, and rgw.s
 
       ```bash
-      ncn-m001# ceph -s
+      ncn-m# ceph -s
         cluster:
           id:     22d01fcd-a75b-4bfc-b286-2ed8645be2b5
           health: HEALTH_OK
@@ -1088,7 +1099,7 @@ Skip this section if a master or worker node was rebuilt.
    1. Verify the OSDs are back in the cluster.
 
       ```bash
-      ncn-m001# ceph osd tree
+      ncn-m# ceph osd tree
       ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
       -1       20.95917 root default
       -3        6.98639     host ncn-s001
@@ -1147,7 +1158,7 @@ Skip this section if a master or worker node was rebuilt.
    1. Collect data about the system management platform health \(can be run from a master or worker NCN\).
 
        ```bash
-       ncn-m001# sh /opt/cray/platform-utils/ncnHealthChecks.sh
-       ncn-m001# sh /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
+       ncn# sh /opt/cray/platform-utils/ncnHealthChecks.sh
+       ncn# sh /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
        ```
 
