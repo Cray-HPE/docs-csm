@@ -33,7 +33,7 @@ Expected output
     - Aruba [Aruba CDU](../install/configure_aruba_cdu_switch.md)
 
 #### BGP updates
-- This configuration is applied to the switches running BGP, this is set during CSI configuration.  This is likely the spine switches if there are no aggregation switches on the system.
+- This configuration is applied to the switches running BGP, this is set during CSI configuration. This is likely the spine switches if there are no aggregation switches on the system.
 - (ARUBA ONLY) Remove the TFTP static route entry on the switches that are BGP participating in BGP.
 - Log into the switches running BGP, in this example it is the spine switches. 
 - Run the following command once logged in.
@@ -58,7 +58,7 @@ sw-spine01(config)# no ip route 10.92.100.60/32 10.252.1.x
 
 Example TFTP prefix-list and route-map from running config. 
 
-To get this log into the switches that are running BGP and peering with Metallb.  And get the running config.
+To get this log into the switches that are running BGP and peering with Metallb. And get the running config.
 
 ```
 ip prefix-list tftp seq 10 permit 10.92.100.60/32 ge 32 le 32
