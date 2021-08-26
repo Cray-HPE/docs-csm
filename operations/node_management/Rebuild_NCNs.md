@@ -635,14 +635,14 @@ This section applies to master and worker nodes. Skip this section if rebuilding
 
     **Troubleshooting:** If the `NBP file...` output never appears, or something else goes wrong, go back to the steps for modifying XNAME.json file (see the step to [inspect and modify the JSON file](#inspect)) and make sure these instructions were completed correctly.
 
-1. Confirm vlan004 is up with the correct IP address on the rebuilt ncn.
+1. Confirm vlan004 is up with the correct IP address on the rebuilt node.
 
-    The following examples assume the NCN/hostname is `ncn-w005`.
+    The following examples assume the NCN/hostname is `NODE`.
 
     1. Find the desired IP address.
 
         ```bash
-        NODE# dig +short ncn-w005.hmn
+        NODE# dig +short NODE.hmn
         10.254.1.16
         ```
 
@@ -660,17 +660,17 @@ This section applies to master and worker nodes. Skip this section if rebuilding
                valid_lft forever preferred_lft forever
         ```
 
-    1. Change the IP address for vlan004 if necessary.
+       1. Change the IP address for vlan004 if necessary.
 
-        ```bash
-        NODE# vim /etc/sysconfig/network/ifcfg-vlan004
-        ```
+           ```bash
+           NODE# vim /etc/sysconfig/network/ifcfg-vlan004
+           ```
 
-        Set the IPADDR line to the correct IP address with a `/17` mask.
+           Set the IPADDR line to the correct IP address with a `/17` mask.
 
-        ```bash
-        IPADDR='10.254.1.16/17'
-        ```
+           ```bash
+           IPADDR='10.254.1.16/17'
+           ```
 
     1. Restart the vlan004 network interface.
 
@@ -684,14 +684,14 @@ This section applies to master and worker nodes. Skip this section if rebuilding
         NODE# ip addr show vlan004
         ```
 
-1. Confirm that vlan007 is up with the correct IP address on the rebuilt ncn.
+1. Confirm that vlan007 is up with the correct IP address on the rebuilt node.
 
-    The following examples assume the NCN/hostname is `ncn-w005`.
+    The following examples assume the NCN/hostname is `NODE`.
 
     1. Find the desired IP address.
 
         ```bash
-        NODE# dig +short ncn-w005.can
+        NODE# dig +short NODE.can
         10.103.8.11
         ```
 
@@ -709,17 +709,17 @@ This section applies to master and worker nodes. Skip this section if rebuilding
                valid_lft forever preferred_lft forever
         ```
 
-    1. Change the IP address for vlan007 if necessary.
+       1. Change the IP address for vlan007 if necessary.
 
-        ```bash
-        NODE# vim /etc/sysconfig/network/ifcfg-vlan007
-        ```
+           ```bash
+           NODE# vim /etc/sysconfig/network/ifcfg-vlan007
+           ```
 
-        Set the IPADDR line to the correct IP address with a `/24` mask.
+           Set the IPADDR line to the correct IP address with a `/24` mask.
 
-        ```bash
-        IPADDR='10.103.8.11/24'
-        ```
+           ```bash
+           IPADDR='10.103.8.11/24'
+           ```
 
     1. Restart the vlan007 network interface.
 
