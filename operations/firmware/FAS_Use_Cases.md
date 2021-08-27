@@ -110,7 +110,7 @@ If the nodes are not off when the update command is issued, the update will get 
         Replace the actionID value with the string returned in the previous step. In this example, `"fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"` is used.
 
         ```bash
-        ncn-w001# cray fas actions describe actionID
+        ncn-w001# cray fas actions describe {actionID}
         blockedBy = []
         state = "completed"
         actionID = "fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"
@@ -181,7 +181,7 @@ If the nodes are not off when the update command is issued, the update will get 
 4.  Retrieve the operationID and verify that the update is complete.
 
     ```bash
-    ncn-w001# cray fas actions describe actionID
+    ncn-w001# cray fas actions describe {actionID}
     [operationSummary.failed]
     [[operationSummary.failed.operationKeys]]
     stateHelper = "unexpected change detected in firmware version. Expected nc.1.3.10-shasta-release.arm.2020-07-21T23:58:22+00:00.d479f59 got: nc.cronomatic-dev.arm.2019-09-24T13:20:24+00:00.9d0f8280"
@@ -196,13 +196,13 @@ If the nodes are not off when the update command is issued, the update will get 
     Check the list of nodes for the `failed` or `completed` state.
 
     ```bash
-    ncn-w001# cray fas operations describe operationID actionID
+    ncn-w001# cray fas operations describe {operationID}
     ```
 
     For example:
 
     ```bash
-    ncn-w001# cray fas operations describe "e910c6ad-db98-44fc-bdc5-90477b23386f" "bc40f10a-e50c-4178-9288-8234b336077b"
+    ncn-w001# cray fas operations describe "e910c6ad-db98-44fc-bdc5-90477b23386f"
     fromFirmwareVersion = "nc.cronomatic-dev.arm.2019-09-24T13:20:24+00:00.9d0f8280"
     fromTag = ""
     fromImageURL = ""
@@ -308,7 +308,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
         Replace the actionID value with the string returned in the previous step. In this example, `"fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"` is used.
 
         ```bash
-        ncn-m001# cray fas actions describe actionID
+        ncn-m001# cray fas actions describe {actionID}
         blockedBy = []
         state = "completed"
         actionID = "fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"
@@ -690,7 +690,7 @@ Use this procedure to update compute node BIOS firmware using FAS. There are two
         Replace the actionID value with the string returned in the previous step. In this example, `"a88d8207-8bca-4ba1-9b80-14772e5f3f34"` is used.
 
         ```bash
-        ncn-w001# cray fas actions describe actionID
+        ncn-w001# cray fas actions describe {actionID}
         blockedBy = []
         state = "completed"
         actionID = "a88d8207-8bca-4ba1-9b80-14772e5f3f34"
@@ -759,7 +759,7 @@ Use this procedure to update compute node BIOS firmware using FAS. There are two
 4.  Retrieve the operationID and verify that the update is complete.
 
     ```bash
-    ncn-w001# cray fas actions describe actionID
+    ncn-w001# cray fas actions describe {actionID}
     [[operationSummary.noOperation.operationKeys]]
     stateHelper = ""
     fromFirmwareVersion = "wnc.bios-1.2.4"
@@ -771,13 +771,13 @@ Use this procedure to update compute node BIOS firmware using FAS. There are two
 5.  View more details on an operation using the operationID from the previous step.
 
     ```bash
-    ncn-w001# cray fas operations describe operationID actionID
+    ncn-w001# cray fas operations describe {operationID}
     ```
 
     The following example shows a Windom Node Card (WNC) for a liquid-cooled AMD EPYC compute blade.
 
     ```bash
-    ncn-w001# cray fas operations describe "24ccb221-b95a-4ccc-8c56-2c81a361f824" "a88d8207-8bca-4ba1-9b80-14772e5f3f34"
+    ncn-w001# cray fas operations describe "24ccb221-b95a-4ccc-8c56-2c81a361f824"
     fromFirmwareVersion = "wnc.bios-1.2.4"
     fromTag = ""
     fromImageURL = ""

@@ -63,7 +63,7 @@ For each item in the `Hardware Precedence Order`:
 
 1. Complete a dry-run:
 
-     2. `cray fas actions create {jsonfile}`
+     1. `cray fas actions create {jsonfile}`
      2. Note the ActionID!
      3. Poll the status of the action until the action `state` is `completed`:
         1. `cray fas actions describe {actionID} --format json`
@@ -86,8 +86,8 @@ For each item in the `Hardware Precedence Order`:
 4. Update the JSON file `overrideDryrun` to `true`:
 
    1. `cray fas actions create {jsonfile}`
-     2. Note the ActionID!
-     3. Poll the status of the action until the action `state` is `completed`:
+     1. Note the ActionID!
+     2. Poll the status of the action until the action `state` is `completed`:
         1. `cray fas actions describe {actionID} --format json`
 
 5. Interpret the outcome of the live update; proceed to next type of hardware.
