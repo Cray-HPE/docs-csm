@@ -10,7 +10,7 @@
 Some of these changes are applied as hotfixes and patches for 1.4, they may have already been applied.
 
 #### CMM Static Lag configuration
-For systems with mountain cabinets ONLY.
+For systems with mountain cabinets ONLY.  Changes must 
 - Verify the version of the CMM firmware, the firmware must be on version 1.4.20 or greater in order to support static LAGs on the CDU switches.
 - The command below should get you all the cmm firmware for a system.
 - Update the password in the command before usage. Change ```root:password``` to the correct BMC password.
@@ -34,7 +34,29 @@ Expected output
 
 #### BGP updates
 - This configuration is applied to the switches running BGP, this is set during CSI configuration. This is likely the spine switches if there are no aggregation switches on the system.
-- (ARUBA ONLY) Remove the TFTP static route entry on the switches that are BGP participating in BGP.
+- To check if the switches are running BGP run the commands below, the output might not be exact but it shows that the switch is running BGP.
+
+
+Aruba
+```
+sw-spine-001# show run | include bgp
+router bgp 65533
+    bgp router-id 10.252.0.2
+```
+
+Mellanox
+```
+sw-spine-001 [standalone: master] # show run | include bgp
+   protocol bgp
+   router bgp 65533 vrf CAN
+   router bgp 65533 vrf default
+   router bgp 65533 vrf default router-id 10.252.0.2 force
+   router bgp 65533 vrf default maximum-paths ibgp 32
+   router bgp 65533 vrf CAN maximum-paths 32
+```
+##### Aruba BGP updates
+- Remove the TFTP static route entry on the switches that are BGP participating in BGP.
+- This was set during initial install to workaround an issue with tftp booting.
 - Log into the switches running BGP, in this example it is the spine switches. 
 - Run the following command once logged in.
 ```
@@ -47,20 +69,31 @@ Displaying ipv4 routes selected for forwarding
 10.92.100.60/32, vrf default, tag 0
     via  10.252.1.x,  [1/0],  static
 ```
-- If this static route still exists, remove it.
+- If you see ```via  10.252.1.x,  [1/0],  static``` then you will need to remove this route.
 
 ```
+sw-spine01# config t
 sw-spine01(config)# no ip route 10.92.100.60/32 10.252.1.x
 ```
 
-- (ARUBA ONLY) re-run the bgp script if it is missing the TFTP prefix-list and route-maps as shown in the example below.
-- These configuration changes also noted on the [BGP](../operations/update_bgp_neighbors.md) page.
+- Next step is to re-run the BGP script.
+- it is located at ```/opt/cray/csm/scripts/networking/BG/Aruba_BGP_Peers.py```
+- This is documented on this page [BGP](../operations/network/metallb_bgp/update_bgp_neighbors.md)
 
-Example TFTP prefix-list and route-map from running config. 
+##### Check Aruba BGP configuration
+- log into the switches that you ran the BGP script against and execute ```sw-spine-001# show run | begin "ip prefix-list"```
 
-To get this log into the switches that are running BGP and peering with Metallb. And get the running config.
 
+Do not copy this configuration onto your switches.
+Note: the following configuration needs to be present.
+```ip prefix-list tftp seq 10 permit 10.92.100.60/32 ge 32 le 32```
+```neighbor 10.252.1.x passive```
+The neighbors should be the NMN IP of the worker nodes.
+Here's an example output from an aruba switch with 3 worker nodes.
 ```
+ip prefix-list pl-can seq 10 permit 10.103.11.0/24 ge 24
+ip prefix-list pl-hmn seq 20 permit 10.94.100.0/24 ge 24
+ip prefix-list pl-nmn seq 30 permit 10.92.100.0/24 ge 24
 ip prefix-list tftp seq 10 permit 10.92.100.60/32 ge 32 le 32
 !
 !
@@ -80,44 +113,101 @@ route-map ncn-w001 permit seq 30
      set local-preference 1200
 route-map ncn-w001 permit seq 40
      match ip address prefix-list pl-can
-     set ip next-hop 10.103.2.13
+     set ip next-hop 10.103.11.10
 route-map ncn-w001 permit seq 50
      match ip address prefix-list pl-hmn
-     set ip next-hop 10.254.1.20
+     set ip next-hop 10.254.1.14
 route-map ncn-w001 permit seq 60
      match ip address prefix-list pl-nmn
-     set ip next-hop 10.252.1.12
-```
-
-- BGP script location ```/opt/cray/csm/scripts/networking/BGP```
-- Usage [BGP](../operations/update_bgp_neighbors.md)
-
-(ARUBA and MELLANOX) Verify the BGP neighbors are configured as passive. EXAMPLE configuration below. 
-(ARUBA) The peering between the switches is NOT configured as passive, ONLY the peerings with the worker nodes.
-
-```
+     set ip next-hop 10.252.1.9
+route-map ncn-w002 permit seq 10
+     match ip address prefix-list tftp
+     match ip next-hop 10.252.1.7
+     set local-preference 1000
+route-map ncn-w002 permit seq 20
+     match ip address prefix-list tftp
+     match ip next-hop 10.252.1.8
+     set local-preference 1100
+route-map ncn-w002 permit seq 30
+     match ip address prefix-list tftp
+     match ip next-hop 10.252.1.9
+     set local-preference 1200
+route-map ncn-w002 permit seq 40
+     match ip address prefix-list pl-can
+     set ip next-hop 10.103.11.9
+route-map ncn-w002 permit seq 50
+     match ip address prefix-list pl-hmn
+     set ip next-hop 10.254.1.12
+route-map ncn-w002 permit seq 60
+     match ip address prefix-list pl-nmn
+     set ip next-hop 10.252.1.8
+route-map ncn-w003 permit seq 10
+     match ip address prefix-list tftp
+     match ip next-hop 10.252.1.7
+     set local-preference 1000
+route-map ncn-w003 permit seq 20
+     match ip address prefix-list tftp
+     match ip next-hop 10.252.1.8
+     set local-preference 1100
+route-map ncn-w003 permit seq 30
+     match ip address prefix-list tftp
+     match ip next-hop 10.252.1.9
+     set local-preference 1200
+route-map ncn-w003 permit seq 40
+     match ip address prefix-list pl-can
+     set ip next-hop 10.103.11.8
+route-map ncn-w003 permit seq 50
+     match ip address prefix-list pl-hmn
+     set ip next-hop 10.254.1.10
+route-map ncn-w003 permit seq 60
+     match ip address prefix-list pl-nmn
+     set ip next-hop 10.252.1.7
+!
+router ospf 1
+    router-id 10.2.0.2
+    area 0.0.0.0
+router ospfv3 1
+    router-id 10.2.0.2
+    area 0.0.0.0
 router bgp 65533
     bgp router-id 10.252.0.2
     maximum-paths 8
-    distance bgp 20 70
     neighbor 10.252.0.3 remote-as 65533
     neighbor 10.252.1.7 remote-as 65533
-    neighbor 10.252.1.7 passive
     neighbor 10.252.1.8 remote-as 65533
-    neighbor 10.252.1.8 passive
     neighbor 10.252.1.9 remote-as 65533
-    neighbor 10.252.1.9 passive
     address-family ipv4 unicast
         neighbor 10.252.0.3 activate
         neighbor 10.252.1.7 activate
+        neighbor 10.252.1.7 passive
         neighbor 10.252.1.7 route-map ncn-w003 in
         neighbor 10.252.1.8 activate
+        neighbor 10.252.1.8 passive
         neighbor 10.252.1.8 route-map ncn-w002 in
         neighbor 10.252.1.9 activate
+        neighbor 10.252.1.9 passive
         neighbor 10.252.1.9 route-map ncn-w001 in
     exit-address-family
+!
 ```
+##### Mellanox BGP updates
+- The Mellanox BGP neighbors need to configured as passive.
 
+To do this, log into the switches and run the commands below.
+the neighbor will be the NMN IP of ALL the worker nodes.  You may have more than 3.
+```
+sw-spine-001 [standalone: master] > ena
+sw-spine-001 [standalone: master] # conf t
+sw-spine-001 [standalone: master] (config) # router bgp 65533 vrf default neighbor 10.252.1.7 transport connection-mode passive
+sw-spine-001 [standalone: master] (config) # router bgp 65533 vrf default neighbor 10.252.1.8 transport connection-mode passive
+sw-spine-001 [standalone: master] (config) # router bgp 65533 vrf default neighbor 10.252.1.9 transport connection-mode passive
+```
+Run the command below to verify the configuration got applied correctly.
+```
+sw-spine-001 [standalone: master] (config) # show run protocol bgp
+```
+The configuration should look similar to the following.  This is an example only.
+More BGP documentation can be found here [BGP](../operations/network/metallb_bgp/update_bgp_neighbors.md).
 ```
 ## BGP configuration
 ##
