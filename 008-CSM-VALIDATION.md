@@ -516,7 +516,7 @@ ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-
             - Key 'Locked' was not defined. Path: '/Components/12'.: Path: '/'>
    ```
    
-   Failures of these tests because of locked components as shown above can be safely ignored.
+   * Failures of these tests because of locked components as shown above can be safely ignored.
 
 3. The following HMS functional test may fail due to known issue [CASMHMS-4693](https://connect.us.cray.com/jira/browse/CASMHMS-4693) because of empty drive bays in HSM:
 
@@ -536,7 +536,7 @@ ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-
             - Cannot find required key 'PopulatedFRU'. Path: '/Nodes/0/Drives/7'.: Path: '/'>
    ```
 
-   Failures of this test because of empty drive bays as shown above can be safely ignored.
+   * Failures of this test because of empty drive bays as shown above can be safely ignored.
 
 4. The following HMS functional test may fail due to known issue [CASMHMS-4794](https://connect.us.cray.com/jira/browse/CASMHMS-4794) because of an unexpected discovery status in HSM:
 
@@ -553,7 +553,7 @@ ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-
             - Key 'Details' was not defined. Path: '/0'.: Path: '/'>
    ```
 
-   Failures of this test because of an unexpected discovery status as shown above can be safely ignored.
+   * Failures of this test because of an unexpected discovery status as shown above can be safely ignored.
 
 <a name="cms-validation-utility"></a>
 ## Cray Management Services Validation Utility
