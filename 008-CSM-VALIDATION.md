@@ -438,12 +438,12 @@ These tests should be executed as root on at least one worker NCN and one master
 ```
 ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resources.sh
 ```
-1. Examine the output for errors or failures.
-1. If no failures occur, then run the HMS functional tests. 
+* Examine the output for errors or failures.
+2. If no failures occur, then run the HMS functional tests.
 ```
 ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-resources.sh
 ```
-1. Examine the output for errors or failures.
+* Examine the output for errors or failures.
 
 #### Known issues
 1.  The HMS functional tests include a check for unexpected flags that may be set in Hardware State Manager (HSM) for the BMCs on the system. There is a known issue [SDEVICE-3319](https://connect.us.cray.com/jira/browse/SDEVICE-3319) that can cause Warning flags to be set erroneously in HSM for Mountain BMCs and result in test failures. If `test_smd_components_ncn-functional_remote-functional.tavern.yaml` fails during the HMS functional test run with error messages about Warning flags being set on one or more BMCs:
