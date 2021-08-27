@@ -435,20 +435,20 @@ These tests should be executed as root on at least one worker NCN and one master
 
 1. Run the HMS smoke tests.
 
-```bash
+```
 ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resources.sh
 ```
 1. Examine the output for errors or failures.
 1. If no failures occur, then run the HMS functional tests. 
-```bash
+```
 ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-resources.sh
 ```
 1. Examine the output for errors or failures.
 
 #### Known issues
-1.  The HMS functional tests include a check for unexpected flags that may be set in Hardware State Manager (HSM) for the BMCs on the system. There is a known issue [SDEVICE-3319](https://connect.us.cray.com/jira/browse/SDEVICE-3319) that can cause Warning flags to be set erroneously in HSM for Mountain BMCs and result in test failures. If _test_smd_components_ncn-functional_remote-functional.tavern.yaml_ fails during the HMS functional test run with error messages about Warning flags being set on one or more BMCs:
+1.  The HMS functional tests include a check for unexpected flags that may be set in Hardware State Manager (HSM) for the BMCs on the system. There is a known issue [SDEVICE-3319](https://connect.us.cray.com/jira/browse/SDEVICE-3319) that can cause Warning flags to be set erroneously in HSM for Mountain BMCs and result in test failures. If `test_smd_components_ncn-functional_remote-functional.tavern.yaml` fails during the HMS functional test run with error messages about Warning flags being set on one or more BMCs:
 
-   ```bash
+   ```
    =================================== FAILURES ===================================
    _ /opt/cray/tests/ncn-functional/hms/hms-smd/test_smd_components_ncn-functional_remote-functional.tavern.yaml::Ensure that we can conduct a query for all Node BMCs in the Component collection _
 
@@ -471,7 +471,7 @@ ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-
 
    * Retrieve the xnames of all Mountain BMCs with Warning flags set in HSM:
 
-   ```bash
+   ```
    ncn# curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v1/State/Components?Type=NodeBMC\&Class=Mountain\&Flag=Warning | jq '.Components[] | { ID: .ID, Flag: .Flag, Class: .Class }' -c | sort -V | jq -c
    {"ID":"x5000c1s0b0","Flag":"Warning","Class":"Mountain"}
    {"ID":"x5000c1s0b1","Flag":"Warning","Class":"Mountain"}
@@ -483,7 +483,7 @@ ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-
 
    * For each Mountain BMC xname, check its Redfish BMC Manager status:
 
-   ```bash
+   ```
    ncn# curl -s -k -u root:${BMC_PASSWORD} https://x5000c1s0b0/redfish/v1/Managers/BMC | jq '.Status'
    {
    "Health": "OK",
@@ -493,12 +493,12 @@ ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-
 
    * Test failures and HSM Warning flags for Mountain BMCs with the Redfish BMC Manager status shown above can be safely ignored.
 
-2. The following HMS functional tests may fail because of locked components in HSM:
+2. The following HMS functional tests may fail due to known issue [CASMHMS-4664](https://connect.us.cray.com/jira/browse/CASMHMS-4664) because of locked components in HSM:
 
-  1. `test_bss_bootscript_ncn-functional_remote-functional.tavern.yaml`
-  2. `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
+   * `test_bss_bootscript_ncn-functional_remote-functional.tavern.yaml`
+   * `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
 
-   ```bash
+   ```
          Traceback (most recent call last):
             File "/usr/lib/python3.8/site-packages/tavern/schemas/files.py", line 106, in verify_generic
                verifier.validate()
@@ -516,8 +516,44 @@ ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-
             - Key 'Locked' was not defined. Path: '/Components/12'.: Path: '/'>
    ```
    
-   Failures of these tests because of locked components as shown above can be safely
-   ignored.
+   Failures of these tests because of locked components as shown above can be safely ignored.
+
+3. The following HMS functional test may fail due to known issue [CASMHMS-4693](https://connect.us.cray.com/jira/browse/CASMHMS-4693) because of empty drive bays in HSM:
+
+   * `test_smd_hardware_ncn-functional_remote-functional.tavern.yaml`
+
+   ```
+         Traceback (most recent call last):
+            File "/usr/lib/python3.8/site-packages/tavern/schemas/files.py", line 106, in verify_generic
+               verifier.validate()
+            File "/usr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
+               raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
+         pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
+            - Cannot find required key 'PopulatedFRU'. Path: '/Nodes/0/Drives/3'.
+            - Cannot find required key 'PopulatedFRU'. Path: '/Nodes/0/Drives/4'.
+            - Cannot find required key 'PopulatedFRU'. Path: '/Nodes/0/Drives/5'.
+            - Cannot find required key 'PopulatedFRU'. Path: '/Nodes/0/Drives/6'.
+            - Cannot find required key 'PopulatedFRU'. Path: '/Nodes/0/Drives/7'.: Path: '/'>
+   ```
+
+   Failures of this test because of empty drive bays as shown above can be safely ignored.
+
+4. The following HMS functional test may fail due to known issue [CASMHMS-4794](https://connect.us.cray.com/jira/browse/CASMHMS-4794) because of an unexpected discovery status in HSM:
+
+   * `test_smd_discovery_status.tavern.yaml`
+
+   ```
+         Traceback (most recent call last):
+            File "/usr/lib/python3.8/site-packages/tavern/schemas/files.py", line 106, in verify_generic
+               verifier.validate()
+            File "/usr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
+               raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
+         pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
+            - Value 'NotStarted' does not match pattern 'Complete'. Path: '/0/Status'.
+            - Key 'Details' was not defined. Path: '/0'.: Path: '/'>
+   ```
+
+   Failures of this test because of an unexpected discovery status as shown above can be safely ignored.
 
 <a name="cms-validation-utility"></a>
 ## Cray Management Services Validation Utility
