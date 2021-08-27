@@ -11,38 +11,6 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 
 ### Manufacturer : Cray
 
-<a name="cray-device-type-routerbmc-target-bmc"></a>
-
-#### Device Type: RouterBMC | Target: BMC
-
-The BMC on the RouterBMC for a Cray includes the ASIC.  
-
-```json
-{
-"inventoryHardwareFilter": {
-    "manufacturer": "cray"
-    },
-"stateComponentFilter": {
-    "deviceTypes": [
-      "routerBMC"
-    ]
-},
-"targetFilter": {
-    "targets": [
-      "BMC"
-    ]
-  },
-"command": {
-    "version": "latest",
-    "tag": "default",
-    "overrideDryrun": false,
-    "restoreNotPossibleOverride": true,
-    "timeLimit": 1000,
-    "description": "Dryrun upgrade of Columbia and/or Colorado router BMC"
-  }
-}
-```
-
 <a name="cray-device-type-chassisbmc-target-bmc"></a>
 
 #### Device Type: ChassisBMC | Target: BMC
