@@ -208,6 +208,7 @@ Execute ncnPostgresHealthChecks script and analyze the output of each individual
 
 1. Check that all Kubernetes Postgres pods have a STATUS of Running.
     ```bash
+    ncn# kubectl get pods -A -o wide -l application=spilo
     NAMESPACE           NAME                                                              READY   STATUS             RESTARTS   AGE     IP            NODE       NOMINATED NODE   READINESS GATES
     services            cray-sls-postgres-0                                               3/3     Running            3          6d      10.38.0.102   ncn-w002   <none>           <none>
     services            cray-sls-postgres-1                                               3/3     Running            3          5d20h   10.42.0.89    ncn-w001   <none>           <none>
@@ -350,7 +351,7 @@ On an Aruba switch, the prompt may include `sw-spine` or `sw-agg`.
 
    * It may take several minutes for all sessions to become **Established**. Wait a minute or so, and then
    verify that all sessions now are reported as **Established**. If some sessions remain in an **Idle** state,
-   re-run the **clear bgp * ** command and check again.
+   re-run the **clear bgp \*** command and check again.
 
    * If after several tries one or more BGP session remains **Idle**, see [Check BGP Status and Reset Sessions](network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md)
 

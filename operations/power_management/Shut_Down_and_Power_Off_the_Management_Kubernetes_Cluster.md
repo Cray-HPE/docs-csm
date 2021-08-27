@@ -54,15 +54,13 @@ An authentication token is required to access the API gateway and to use the `sa
 
 1.  To check the health and status of the management cluster before shutdown, see the "Platform Health Checks" section in [Validate CSM Health](../validate_csm_health.md).
 
-2.  To check the status of Border Gateway Protocol \(BGP\), review [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
-
-3. Check the health and backup etcd clusters:
+2. Check the health and backup etcd clusters:
 
    a. Determine what etcd clusters must be backed up and if they are healthy. Review [Check the Health and Balance of etcd Clusters](../kubernetes/Check_the_Health_and_Balance_of_etcd_Clusters.md).
 
    b. Backup etcd clusters. See [Backups for etcd-operator Clusters](../kubernetes/Backups_for_etcd-operator_Clusters.md).
 
-4. Check the status of NCN no wipe settings. Make sure `metal.no-wipe=1`. If a management NCN is set to `metal.no-wipe==wipe`, review [Check and Set the metal.no-wipe Setting on NCNs](../node_management/Check_and_Set_the_metalno-wipe_Setting_on_NCNs.md) before proceeding.
+3. Check the status of NCN no wipe settings. Make sure `metal.no-wipe=1`. If a management NCN is set to `metal.no-wipe==wipe`, review [Check and Set the metal.no-wipe Setting on NCNs](../node_management/Check_and_Set_the_metalno-wipe_Setting_on_NCNs.md) before proceeding.
 
    ```bash
    ncn-m001# /opt/cray/platform-utils/ncnGetXnames.sh
@@ -93,7 +91,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
 **SHUT DOWN THE KUBERNETES MANAGEMENT CLUSTER**
 
-5.  Shut down platform services.
+4. Shut down platform services.
 
    ```bash
    ncn-m001# sat bootsys shutdown --stage platform-services
@@ -127,7 +125,7 @@ An authentication token is required to access the API gateway and to use the `sa
    Aborting.
    ```
 
-   In the preceding example, the commands to stop containers timed out on all the worker nodes and reported `WARNING` and `ERROR` messages. A summary of the issue displays and prompts the user to continue or stop. Respond `no` stop the shutdown. Then review the containers running on the nodes and stop them manually if necessary.
+   In the preceding example, the commands to stop containers timed out on all the worker nodes and reported `WARNING` and `ERROR` messages. A summary of the issue displays and prompts the user to continue or stop. Respond `no` stop the shutdown. Then review the containers running on the nodes.
 
    ```bash
    ncn-m001# for ncn in ncn-w00{1,2,3}; do echo "$ncn"; ssh $ncn "crictl ps"; echo; done
@@ -177,7 +175,9 @@ An authentication token is required to access the API gateway and to use the `sa
    Executing step: Check health of Ceph cluster and freeze state.
    ```
 
-8. Shut down and power off all management NCNs except ncn-m001.
+   If the process continues to report errors due to `Failed to stop containers`, iterate on the above step. Each interation should reduce the number of containers running. If necessary, containers can be manually stopped using `crictl stop CONTAINER`. If containers are stopped manually, re-run the above procedure to complete any final steps in the process.
+
+5. Shut down and power off all management NCNs except ncn-m001.
 
    ```bash
    ncn-m001# sat bootsys shutdown --stage ncn-power
@@ -207,7 +207,7 @@ An authentication token is required to access the API gateway and to use the `sa
    Are the above NCN groupings and exclusions correct? [yes,no] yes
    ```
 
-9. Use `tail` to monitor the log files in `/var/log/cray/console\_logs` for each NCN.
+6. Use `tail` to monitor the log files in `/var/log/cray/console_logs` for each NCN.
 
    Alternately attach to the screen session \(screen sessions real time, but not saved\):
 
@@ -226,13 +226,13 @@ An authentication token is required to access the API gateway and to use the `sa
    ncn-m001# screen -x 26745.SAT-console-ncn-m003-mgmt
    ```
 
-10. Use `ipmitool` to check the power off status of management nodes.
+7. Use `ipmitool` to check the power off status of management nodes.
 
     ```bash
-    ncn-m001# for h in ncn-w001 ncn-w002 ncn-w003 ncn-s001 ncn-s002 ncn-s003 ncn-m002 ncn-m003; do echo -n "$h: "; ipmitool -U root -H ${h}-mgmt -P PASSWORD -I lanplus chassis power status; done
+    ncn-m001# for ncn in ncn-m00{2,3} ncn-w00{1,2,3} ncn-s00{1,2,3}; do echo -n "$ncn: "; ipmitool -U root -H ${ncn}-mgmt -P PASSWORD -I lanplus chassis power status; done
     ```
 
-11. From a remote system, activate the serial console for ncn-m001.
+8. From a remote system, activate the serial console for ncn-m001.
 
     ```bash
     remote$ ipmitool -I lanplus -U root -P PASSWORD -H NCN-M001_BMC_HOSTNAME sol activate
@@ -241,15 +241,15 @@ An authentication token is required to access the API gateway and to use the `sa
     Password:
     ```
 
-12. From the serial console, shut down Linux.
+9. From the serial console, shut down Linux.
 
     ```bash
     ncn-m001# shutdown -h now
     ```
 
-13. Wait until the console indicates that the node has shut down.
+10. Wait until the console indicates that the node has shut down.
 
-14. From a remote system that has access to the management plane, use IPMItool to power off ncn-m001.
+11. From a remote system that has access to the management plane, use IPMItool to power off ncn-m001.
 
     ```bash
     remote$ ipmitool -I lanplus -U root -P <BMC root password> -H NCN-M001_BMC_HOSTNAME chassis power status
@@ -259,7 +259,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
     **CAUTION:** The modular coolant distribution unit \(MDCU\) in a liquid-cooled TDS cabinet typically receives power from its management cabinet PDUs. If the system includes a liquid-cooled TDS cabinet, **do not power off** the management cabinet PDUs, Powering off the MDCU will cause an emergency power off \(EPO\) of the TDS cabinet and may result in data loss or equipment damage.
 
-15. (Optional) If a liquid-cooled TDS cabinet is not receiving MCDU power from this management cabinet, power off the PDU circuit breakers or disconnect the PDUs from facility power and follow lockout/tagout procedures for the site.
+12. (Optional) If a liquid-cooled TDS cabinet is not receiving MCDU power from this management cabinet, power off the PDU circuit breakers or disconnect the PDUs from facility power and follow lockout/tagout procedures for the site.
 
 
 
