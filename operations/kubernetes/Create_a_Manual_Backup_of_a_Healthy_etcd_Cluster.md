@@ -16,14 +16,14 @@ A healthy etcd cluster is available on the system. See [Check the Health and Bal
 
 1.  Create a backup for the desired etcd cluster.
 
-    The example below is backing up the etcd cluster for the Boot Orchestration Service \(BOS\). The returned backup name highlighted in bold will be used in the next step.
+    The example below is backing up the etcd cluster for the Boot Orchestration Service \(BOS\). The returned backup name (cray-bos-etcd-cluster-manual-backup-25847) will be used in the next step.
 
     ```bash
     ncn-w001# kubectl exec -it -n operators \
     $(kubectl get pod -n operators | grep etcd-backup-restore | head -1 | awk '{print $1}') \
     -c util -- create_backup cray-bos wednesday-manual-backup
     
-    etcdbackup.etcd.database.coreos.com/**cray-bos-etcd-cluster-manual-backup-25847** created
+    etcdbackup.etcd.database.coreos.com/cray-bos-etcd-cluster-manual-backup-25847 created
     ```
 
 2.  Check the status of the backup using the name returned in the output of the previous step.

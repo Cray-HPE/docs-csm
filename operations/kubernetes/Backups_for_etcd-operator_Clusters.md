@@ -10,6 +10,7 @@ The following services are backed up \(daily, one week's worth of backups retain
 -   Boot Script Service \(BSS\)
 -   Compute Rolling Upgrade Service \(CRUS\)
 -   External DNS
+-   Firmware Action Service \(FAS\)
 
 Run the following command on any master node \(`ncn-mXXX`\) or the first worker node \(`ncn-w001`\) to list the backups for a specific project. In the example below, the backups for BSS are listed.
 
@@ -50,7 +51,11 @@ cray-crus/etcd.backup_v1_2020-02-03-20:45:48
 cray-externaldns/etcd.backup_v2_2020-01-30-20:44:55
 cray-externaldns/etcd.backup_v2_2020-02-01-20:45:48
 cray-externaldns/etcd.backup_v2_2020-02-02-20:45:48
-cray-externaldns/etcd.backup_v2_2020-02-03-20:45:48
+cray-fas/etcd.backup_v60303_2020-02-03-20:45:48
+cray-fas/etcd.backup_v63195_2020-01-30-20:44:55
+cray-fas/etcd.backup_v66092_2020-02-01-20:45:48
+cray-fas/etcd.backup_v68972_2020-02-02-20:45:48
+cray-fas/etcd.backup_v71858_2020-02-03-20:45:48
 ```
 
 The returned output includes the date and time of the latest backup for each service. If a recent backup for any service is not included, it is an indication that the service is not backed up automatically. Create a manual backup for that service by following the [Create a Manual Backup of a Healthy etcd Cluster](Create_a_Manual_Backup_of_a_Healthy_etcd_Cluster.md) procedure.
@@ -59,7 +64,6 @@ The returned output includes the date and time of the latest backup for each ser
 
 The following projects are not backed up as part of the automated solution:
 
--   Firmware Action Service \(FAS\)
 -   Heartbeat Tracking Daemon \(HBTD\)
 -   HMS Notification Fanout Daemon \(HMNFD\)
 -   River Endpoint Discovery Service \(REDS\)

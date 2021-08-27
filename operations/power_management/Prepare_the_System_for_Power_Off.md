@@ -37,11 +37,36 @@ An authentication token is required to access the API gateway and to use the `sa
 
     3.  If the Slingshot network includes edge switches, obtain the user ID and password for these switches.
 
-2.  Determine which Boot Orchestration Service \(BOS\) templates to use to shut down compute nodes and UANs. For example:
+2.  Determine which Boot Orchestration Service \(BOS\) templates to use to shut down compute nodes and UANs. You can list all the session templates using `cray bos v1 sessiontemplate list`. If you are unsure of which template is in use, you can call `sat status` to find the XNAME, then use `cray cfs components describe XNAME` to find the bos_session, and use `cray bos v1 session describe BOS_SESSION` to find the templateUuid. Then finally use `cray bos v1 sessiontemplate describe TEMPLATE_UUID` to determine the list of XNAMEs associated with a given template. For example:
 
-    Compute nodes: `slurm`
+    ```bash
+    ncn-m001# sat status | grep "Compute\|Application"
 
-    UANs: `uan-slurm`
+    | x3000c0s19b1n0 | Node | 1        | On    | OK   | True    | X86  | River | Compute     | Sling    |
+    | x3000c0s19b2n0 | Node | 2        | On    | OK   | True    | X86  | River | Compute     | Sling    |
+    | x3000c0s19b3n0 | Node | 3        | On    | OK   | True    | X86  | River | Compute     | Sling    |
+    | x3000c0s19b4n0 | Node | 4        | On    | OK   | True    | X86  | River | Compute     | Sling    |
+    | x3000c0s27b0n0 | Node | 49169248 | On    | OK   | True    | X86  | River | Application | Sling    |
+
+    ncn-m001# cray cfs components describe x3000c0s19b1n0 | grep bos_session
+    bos_session = "e98cdc5d-3f2d-4fc8-a6e4-1d301d37f52f"
+
+    ncn-m001# cray bos v1 session describe e98cdc5d-3f2d-4fc8-a6e4-1d301d37f52f | grep templateUuid
+    templateUuid = "compute-nid1-4-sessiontemplate"
+
+    ncn-m001# cray bos v1 sessiontemplate describe Nid1-4session-compute | grep node_list
+    node_list = [ "x3000c0s19b1n0", "x3000c0s19b2n0", "x3000c0s19b3n0", "x3000c0s19b4n0",]
+
+    ncn-m001# cray cfs components describe x3000c0s27b0n0 | grep bos_session
+    bos_session = "b969c25a-3811-4a61-91d5-f1c194625748"
+
+    # cray bos v1 session describe b969c25a-3811-4a61-91d5-f1c194625748 | grep templateUuid
+    templateUuid = "uan-sessiontemplate"
+    ```
+
+    Compute nodes: `compute-nid1-4-sessiontemplate`
+
+    UANs: `uan-sessiontemplate`
 
 3.  Use `sat auth` to authenticate to the API gateway within SAT.
 
@@ -50,7 +75,7 @@ An authentication token is required to access the API gateway and to use the `sa
 4.  Use sat to capture state of the system before the shutdown.
 
     ```bash
-    ncn-m001# sat bootsys shutdown --stage capture-state
+    ncn-m001# sat bootsys shutdown --stage capture-state | tee sat.capture-state
     ```
 
 5.  Optional system health checks.
@@ -73,37 +98,37 @@ An authentication token is required to access the API gateway and to use the `sa
     3.  Capture the list of disabled nodes.
 
         ```bash
-        ncn-m001# sat status --filter Enabled=false > sat.status.disabled
+        ncn-m001# sat status --filter Enabled=false | tee sat.status.disabled
         ```
 
     4.  Capture the list of nodes that are `off`.
 
         ```bash
-        ncn-m001# sat status --filter State=Off > sat.status.off
+        ncn-m001# sat status --filter State=Off | tee sat.status.off
         ```
 
     5.  Capture the state of nodes in the workload manager, for example, if the system uses Slurm.
 
         ```bash
-        ncn-m001# ssh uan01 sinfo > sinfo
+        ncn-m001# ssh uan01 sinfo | tee uan01.sinfo
         ```
 
     6.  Capture the list of down nodes in the workload manager and the reason.
 
         ```bash
-        ncn-m001# ssh nid001000-nmn sinfo --list-reasons > sinfo.reasons
+        ncn-m001# ssh nid000001-nmn sinfo --list-reasons | tee sinfo.reasons
         ```
 
     7.  Check Ceph status.
 
         ```bash
-        ncn-m001# ceph -s > ceph.status
+        ncn-m001# ceph -s | tee ceph.status
         ```
 
     8.  Check k8s pod status for all pods.
 
         ```bash
-        ncn-m001# kubectl get pods -o wide -A > k8s.pods
+        ncn-m001# kubectl get pods -o wide -A | tee k8s.pods
         ```
 
         Additional k8s status check examples :
@@ -128,7 +153,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
         ```bash
         ncn-m001# kubectl exec -it -n services slingshot-fabric-manager-5dc448779c-d8n6q \
-        -c slingshot-fabric-manager -- fmn_status --details > fabric.status
+        -c slingshot-fabric-manager -- fmn_status --details | tee fabric.status
         ```
 
     10. Check management switches to verify they are reachable \(switch host names depend on system configuration\).
@@ -136,7 +161,7 @@ An authentication token is required to access the API gateway and to use the `sa
         ```bash
         ncn-m001# for switch in sw-leaf-00{1,2}.mtl sw-spine-00{1,2}.mtl sw-cdu-00{1,2}.mtl; \
         do while true; do ping -c 1 $switch > /dev/null; if [[ $? == 0 ]]; then echo \
-        "switch $switch is up"; break; else echo "switch $switch is not yet up"; fi; sleep 5; done; done
+        "switch $switch is up"; break; else echo "switch $switch is not yet up"; fi; sleep 5; done; done | tee switches
         ```
 
     11. Check Lustre server health.
@@ -156,7 +181,7 @@ An authentication token is required to access the API gateway and to use the `sa
 6.  Check for running sessions.
 
     ```bash
-    ncn-m001# sat bootsys shutdown --stage session-checks
+    ncn-m001# sat bootsys shutdown --stage session-checks | tee sat.session-checks
     Checking for active BOS sessions.
     Found no active BOS sessions.
     Checking for active CFS sessions.
@@ -178,7 +203,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
     In version 1.4, there is no method to prevent new sessions from being created as long as the service APIs are accessible on the API gateway.
 
-8.  Follow the vendor WLM documentation to drain processes running on compute nodes.
+8.  Follow the vendor WLM documentation to drain processes running on compute nodes. For slurm see scontrol man page and for pbs see pbsnodes man page.
 
 
 

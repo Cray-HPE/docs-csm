@@ -38,7 +38,7 @@ The `cray` and `sat` commands must be initialized and authenticated with valid c
 
     **Attention:** Specify the required session templates for COS\_SESSION\_TEMPLATE and UAN\_SESSION\_TEMPLATE in the example.
 
-    An optional `--loglevel debug` can be used to provide more information as the system shuts down in this example.
+    An optional `--loglevel debug` can be used to provide more information as the system shuts down. If used, it must be added after `sat` but before `bootsys`.
 
     ```bash
     ncn-m001# sat bootsys shutdown --stage bos-operations \
