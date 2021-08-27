@@ -22,24 +22,41 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 - Review the following command examples. The commands can be used to capture the required values from the HSM `ethernetInterfaces` table and write the values to a file. The file then can be used to automate subsequent commands in this procedure.
 
   ```bash
-  ncn-m001# cray hsm inventory ethernetInterfaces list --format json | jq -c 'map(select(.ComponentID|("x9000c3s0."))) | map(select(.Description == "Node Maintenance Network")) | .[] | {ID: .ID,xname: .ComponentID, MAC: .MACAddress, IP: .IPAddresses}' > blade_source.json
+  ncn-m001:# mkdir blade_swap_scripts; cd blade_swap_scripts
+  ncn-m001:# cat blade_query.sh
   
-  ncn-m001# cat blade_source.json
-  {"ID":"0040a6836339","xname":"x9000c3s0b0n0","MAC":"00:40:a6:83:63:39","IP":[{"IPAddress":"10.100.0.10"}]}
-  {"ID":"0040a683633a","xname":"x9000c3s0b0n1","MAC":"00:40:a6:83:63:3a","IP":[{"IPAddress":"10.100.0.98"}]}
-  {"ID":"0040a68362e2","xname":"x9000c3s0b1n0","MAC":"00:40:a6:83:62:e2","IP":[{"IPAddress":"10.100.0.123"}]}
-  {"ID":"0040a68362e3","xname":"x9000c3s0b1n1","MAC":"00:40:a6:83:62:e3","IP":[{"IPAddress":"10.100.0.122"}]}
+  #!/bin/bash
+  BLADE=$1
+  OUTFILE=$2
   
-  ncn-m001# cat blade_source.json | jq -r '.ID'
-  0040a6836339
-  0040a683633a
-  0040a68362e2
-  0040a68362e3
+  BLADE_DOT=$BLADE.
+  
+  cray hsm inventory ethernetInterfaces list --format json | jq -c --arg BLADE "$BLADE_DOT" 'map(select(.ComponentID|test($BLADE))) | map(select(.Description == "Node Maintenance Network")) | .[] | {xname: .ComponentID, ID: .ID,MAC: .MACAddress, IP: .IPAddresses[0].IPAddress,Desc: .Description}' > $OUTFILE
   ```
 
-  
+  ```bash
+  ncn-m001:# ./blade_query.sh x1000c0s1 x1000c0s1.json
+  ncn-m001:# cat x1000c0s1.json
+  {"xname":"x9000c3s1b0n0","ID":"0040a6836339","MAC":"00:40:a6:83:63:39","IP":"10.100.0.10","Desc":"Node Maintenance Network"}
+  {"xname":"x9000c3s1b0n1","ID":"0040a683633a","MAC":"00:40:a6:83:63:3a","IP":"10.100.0.98","Desc":"Node Maintenance Network"}
+  {"xname":"x9000c3s1b1n0","ID":"0040a68362e2","MAC":"00:40:a6:83:62:e2","IP":"10.100.0.123","Desc":"Node Maintenance Network"}
+  {"xname":"x9000c3s1b1n1","ID":"0040a68362e3","MAC":"00:40:a6:83:62:e3","IP":"10.100.0.122","Desc":"Node Maintenance Network"}
+  ```
+
+  To delete the `ethernetInterfaces` using curl:
+
+  ```bash
+  ncn-m001:# for ID in $(cat x9000c3s1.json | jq -r '.ID'); do cray hsm inventory ethernetInterfaces delete $ID; done
+  ```
+
+  To insert `ethernetInterfaces` using curl:
+
+  ```bash
+  ncn-m001:# while read  PAYLOAD ; do curl -H "Authorization: Bearer $MY_TOKEN" -L -X POST 'https://api_gw_service.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces' -H 'Content-Type: application/json' --data-raw "$(echo $PAYLOAD | jq -c '{ComponentID: .xname,Description: .Desc,MACAddress: .MAC,IPAddress: .IP}')";sleep 5;  done < x9000c3s1.json
+  ```
 
 - Blades that are moved between systems must have the coolant drained and filled to minimize cross-contamination of cooling systems. 
+  
   - Review procedures in *HPE Cray EX Coolant Service Procedures H-6199* 
   - Review the *HPE Cray EX Hand Pump User Guide H-6200*
 
@@ -168,7 +185,7 @@ The hardware management network MAC and IP addresses are assigned algorithmicall
    - Review *HPE Cray EX Coolant Service Procedures H-6199*. If using the hand pump, review procedures in the *HPE Cray EX Hand Pump User Guide H-6200* (https://internal.support.hpe.com/).
 10. Install the blade from the source system in a storage rack.  
 
-### Prepare the Blade in the destination system for removal
+### Prepare the blade in the destination system for removal
 
 11. Use WLM to drain jobs from the affected nodes on the blade.
 
@@ -287,28 +304,14 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 
 #### Bring up the blade in the destination system
 
-26. Obtain an authentication token to access the API gateway. In the example below, replace `myuser`, `mypass`, and `shasta` in the cURL command with site-specific values. Note the value of `access_token`. Review [Retrieve an Authentication Token](../security_and_authentication/Retrieve_an_Authentication_Token.md) for more information.
+26. Obtain an authentication token to access the API gateway. In the example below, replace `myuser`, `mypass`, and `shasta` in the cURL command with site-specific values. Note the value of `access_token`. Review [Retrieve an Authentication Token](../security_and_authentication/Retrieve_an_Authentication_Token.md) for more information. The example is a script to secure a token and set it to the variable MY_TOKEN.
 
     ```bash
-    ncn-w001# curl -s \
-    -d grant_type=password \
-    -d client_id=shasta \
-    -d username=myuser \
-    -d password=mypass \
-    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | python -mjson.tool
+    ncn-m001# ncn-m001:~/blade_swap_scripts # MY_TOKEN=$(curl -s -d grant_type=password -d client_id=shasta -d username=training101 -d password=initial101 https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     
-    {
-    "access_token": "ey...IA", <<-- Note this value
-    "expires_in": 300,
-    "not-before-policy": 0,
-    "refresh_expires_in": 1800, "refresh_token": "ey...qg", "scope": "profile email",
-    "session_state": "10c7d2f7-8921-4652-ad1e-10138ec6fbc3", "token_type": "bearer"
-    }
-    
-    ncn-m001# TOKEN=access_token
+    ncn-m001:# ncn-m001:~/blade_swap_scripts # echo $MY_TOKEN
+    eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJW . . 
     ```
-    
-    Use the value of `access_token` to make API requests.
     
 27. Kea automatically adds entries to the HSM `ethernetInterfaces` table when DHCP lease is provided (about every 5 minutes). To prevent from Kea from automatically adding  MAC entries to the HSM `ethernetInterfaces` table, use the following commands:
 
@@ -495,7 +498,7 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
     ncn-m001# cray bos session create --template-uuid $BOS_TEMPLATE --operation reboot --limit x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
     ```
 
-#### Check Firmware
+#### Check firmware
 
 40. Verify that the correct firmware versions for node BIOS, node controller (nC), NIC mezzanine card (NMC), GPUs, and so on.
 
