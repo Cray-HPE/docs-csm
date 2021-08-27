@@ -27,46 +27,41 @@ snippet of MTL.yaml
 Check the configuration for ```interface vlan x```
 This configuration will be the same on BOTH Switches (except the ```ip address```).
 You will see that there is an ```active-gateway``` and ```ip helper-address``` configured.
-```
-sw-spine-002(config)# show run int vlan 1
-interface vlan1
-    vsx-sync active-gateways
-    ip address 10.1.0.3/16
-    active-gateway ip mac 12:01:00:00:01:00
-    active-gateway ip 10.1.0.1
-    ip mtu 9198
-    ip helper-address 10.92.100.222
-    exit
 
-sw-spine-002(config)# show run int vlan 2
-interface vlan2
+```
+sw-spine-001(config)# int vlan 1,2,4,7
+sw-spine-001(config-if-vlan-<1,2,4,7>)# show run current-context
+```
+Ouput
+```
+interface vlan 1
+    ip mtu 9198
+    ip address 10.1.0.2/16
+    active-gateway ip mac 12:00:00:00:6b:00
+    active-gateway ip 10.1.0.1
+    ip helper-address 10.92.100.222
+interface vlan 2
     vsx-sync active-gateways
-    ip address 10.252.0.3/17
+    ip mtu 9198
+    ip address 10.252.0.2/17
     active-gateway ip mac 12:01:00:00:01:00
     active-gateway ip 10.252.0.1
-    ip mtu 9198
     ip helper-address 10.92.100.222
-    exit
-
-sw-spine-002(config)# show run int vlan 4
-interface vlan4
+    ip ospf 1 area 0.0.0.0
+interface vlan 4
     vsx-sync active-gateways
-    ip address 10.254.0.3/17
+    ip mtu 9198
+    ip address 10.254.0.2/17
     active-gateway ip mac 12:01:00:00:01:00
     active-gateway ip 10.254.0.1
-    ip mtu 9198
     ip helper-address 10.94.100.222
-    exit
-
-sw-spine-002(config)# show run int vlan 7
-interface vlan7
-    vsx-sync active-gateways
-    ip address 10.103.13.3/24
-    active-gateway ip mac 12:01:00:00:01:00
-    active-gateway ip 10.103.13.111
+    ip ospf 1 area 0.0.0.0
+interface vlan 7
     ip mtu 9198
+    ip address 10.103.11.1/24
+    active-gateway ip mac 12:01:00:00:01:00
+    active-gateway ip 10.103.11.111
     ip helper-address 10.92.100.222
-    exit
 ```
 
 If any of this configuration is missing, you will need to update it to BOTH switches.
@@ -108,6 +103,9 @@ You can get the worker node IP address from `NMN.yaml` from CSI-generated data.
 
 ```
 sw-spine-002(config)# show ip route static
+```
+output
+```
 
 Displaying ipv4 routes selected for forwarding
 
@@ -133,6 +131,9 @@ You will see that there is ```magp``` and ```ip dhcp relay``` configured.
 
 ```
 sw-spine-001 [standalone: master] # show run int vlan 1
+```
+output
+```
 interface vlan 1
 interface vlan 1 ip address 10.1.0.2/16 primary
 interface vlan 1 ip dhcp relay instance 2 downstream
@@ -154,6 +155,9 @@ sw-spine-001 [standalone: master] (config) # interface vlan 2 ip dhcp relay inst
 You can then verify the VLAN 1 MAGP configuration.
 ```
 sw-spine-001 [standalone: master] # show magp 1
+```
+output
+```
 
 MAGP 1:
   Interface vlan: 1
@@ -166,6 +170,9 @@ Verify the DHCP relay configuration
 
 ```
 sw-spine-001 [standalone: master] (config) # show ip dhcp relay instance 2
+```
+output
+```
 
 VRF Name: default
 
@@ -190,6 +197,8 @@ Verify that the route to the TFTP server and the route for the ingress gateway a
 
 ```
 sw-spine-001 [standalone: master] # show ip route 10.92.100.60
+```
+```
 
 Flags:
   F: Failed to install in H/W
@@ -210,6 +219,8 @@ VRF Name default:
 ```
 ```
 sw-spine-001 [standalone: master] # show ip route 10.92.100.71
+```
+```
 
 Flags:
   F: Failed to install in H/W
