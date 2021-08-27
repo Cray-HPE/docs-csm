@@ -713,7 +713,7 @@ Expected output is similar to the following:
     "path": "s3://boot-images/293b1e9c-2bc4-4225-b235-147d1d611eef/manifest.json",
     "type": "s3"
   },
-  "name": "cray-shasta-csm-sles15sp1-barebones.x86_64-shasta-1.4"
+  "name": "cray-shasta-csm-sles15sp1-barebones.x86_64-shasta-PRODUCT_VERSION"
 }
 ```
 
@@ -734,7 +734,7 @@ The session template below can be copied and used as the basis for the BOS Sessi
        "compute": {
          "boot_ordinal": 2,
          "etag": "6d04c3a4546888ee740d7149eaecea68",// <== This should be set to the etag of the IMS Image
-         "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+         "kernel_parameters": "console=ttyS0,115200 crashkernel=340M ip=dhcp oops=panic pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell spire_join_token=${SPIRE_JOIN_TOKEN}",
          "network": "nmn",
          "node_roles_groups": [
            "Compute"
@@ -745,20 +745,24 @@ The session template below can be copied and used as the basis for the BOS Sessi
          "type": "s3"
        }
      },
-     "cfs": {
-       "configuration": "cos-integ-config-1.4.0"
-     },
      "enable_cfs": false,
-     "name": "shasta-1.4-csm-bare-bones-image"
+     "name": "shasta-PRODUCT_VERSION-csm-bare-bones-image"
    }
    ```
-2. Create the BOS session template using the following file as input:
+   
+   **NOTE**: The rootfs provider shown above references the `dvs` provider. DVS is not provided as part of the CSM 
+   distribution and is not expected to work until the COS product is installed and configured. As noted above, the 
+   barebones image is not expected to boot at this time. Work is being done to enable a fully functional and bootable 
+   barebones image in a future release of the CSM product. Until that work is complete, the use of the `dvs` rootfs
+   provider is suggested.
+
+3. Create the BOS session template using the following file as input:
    ```
-   ncn# cray bos sessiontemplate create --file sessiontemplate.json --name shasta-1.4-csm-bare-bones-image
+   ncn# cray bos sessiontemplate create --file sessiontemplate.json --name shasta-PRODUCT_VERSION-csm-bare-bones-image
    ```
    The expected output is:
    ```
-   /sessionTemplate/shasta-1.4-csm-bare-bones-image
+   /sessionTemplate/shasta-PRODUCT_VERSION-csm-bare-bones-image
    ```
 
 <a name="csm-node"></a>
@@ -805,14 +809,14 @@ ncn# export XNAME=x3000c0s17b2n0
 
 Create a BOS session to reboot the chosen node using the BOS session template that was created:
 ```bash
-ncn# cray bos session create --template-uuid shasta-1.4-csm-bare-bones-image --operation reboot --limit $XNAME
+ncn# cray bos session create --template-uuid shasta-PRODUCT_VERSION-csm-bare-bones-image --operation reboot --limit $XNAME
 ```
 
 Expected output looks similar to the following:
 ```
 limit = "x3000c0s17b2n0"
 operation = "reboot"
-templateUuid = "shasta-1.4-csm-bare-bones-image"
+templateUuid = "shasta-PRODUCT_VERSION-csm-bare-bones-image"
 [[links]]
 href = "/v1/session/8f2fc013-7817-4fe2-8e6f-c2136a5e3bd1"
 jobId = "boa-8f2fc013-7817-4fe2-8e6f-c2136a5e3bd1"
