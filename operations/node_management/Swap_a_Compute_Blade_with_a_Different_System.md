@@ -335,7 +335,7 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
        ncn-m001# for ETH in $(cat eth_interfaces); do cray hsm inventory ethernetInterfaces delete $ETH --format json ; done
        ```
     
-28. Add the MAC and IP addresses for `Node Maintenance Network` interfaces to the HSM. The ComponentID and IPAddress must be the values recorded from the destination blade and the MACAddress must be the value recorded from the source blade. 
+28. Add the MAC and IP addresses and also the `Node Maintenance Network` description to the interfaces. The ComponentID and IPAddress must be the values recorded from the destination blade and the MACAddress must be the value recorded from the source blade. 
 
     ```bash
     `ComponentID: "x1005c3s0b0n0"`
@@ -351,16 +351,17 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 
     ```bash
     ncn-m001# curl -H "Authorization: Bearer ${TOKEN}" -L -X POST 'https://api_gw_service.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces' -H 'Content-Type: application/json' --data-raw '{
+            "Description": "Node Maintenance Network",
             "MACAddress": "$MAC",
             "IPAddress": "$IP_ADDRESS",
             "ComponentID": "$XNAME"
           }'
     ```
-
+    
     **Note:**  Kea may must be restarted when the curl command is issued.
-
+    
     When repeating this procedure for the source system, ComponentID and IPAddress must be the values recorded from the source system, and the MACAddress must be the value recorded from the blade in the destination system. 
-
+    
     ```bash
     ncn-m001# MAC=DESTSYS_MAC_ADDRESS
     ncn-m001# IP_ADDRESS=SOURCESYS_IP_ADDRESS
@@ -446,13 +447,13 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 35. Optional: To force rediscovery of the components in the chassis (the example shows cabinet 1005, chassis 3).
 
     ```bash
-    ncn-m001# cray hsm inventory discover create --xnames x1005c3
+    ncn-m001# cray hsm inventory discover create --xnames x1005c3b0
     ```
 
 36. Optional: Verify that discovery has completed (`LastDiscoveryStatus` = "`DiscoverOK`").
 
     ```bash
-    ncn-m001# cray hsm inventory redfishEndpoints describe x1005c3
+    ncn-m001# cray hsm inventory redfishEndpoints describe x1005c3b0
     Type = "ChassisBMC"
     Domain = ""
     MACAddr = "02:03:ed:03:00:00"
