@@ -18,6 +18,12 @@ ncn# helm uninstall -n spire spire
 ncn# kubectl get pvc -n spire | grep spire-data-spire-server | awk '{print $1}' | xargs kubectl delete -n spire pvc
 ```
 
+3. Disable spire-agent on all of the kubernetes NCNs and delete the join data
+
+```bash
+ncn# for ncn in $(kubectl get nodes -o name | cut -d'/' -f2); do ssh "${ncn}" systemctl stop spire-agent; ssh "${ncn}" rm /root/spire/data/svid.key /root/spire/agent_svid.der /root/spire/bundle.der; done
+```
+
 ## Re-install spire helm chart
 
 You will need the csm release tarball, as that contains the spire helm chart.
@@ -90,3 +96,15 @@ ncn# sed -i "s|./helm|${PATH_TO_RELEASE}/helm|" manifest.yaml
 ```bash
 ncn# loftsman ship --manifest-path ${PWD}/manifest.yaml
 ```
+
+9. Verify that all spire pods have started
+
+This step may take a few minutes due to a number of pods requiring other pods to be up
+
+```bash
+ncn# kubectl get pods -n spire
+```
+
+10. Restart all compute and UANs
+
+Computes and UANs get their join token on boot from BSS. Their old SVID data is no longer valid and a reboot is required in order for them to re-join spire.
