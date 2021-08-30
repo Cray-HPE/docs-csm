@@ -60,17 +60,15 @@ After the CDU is switched on and healthy, the liquid-cooled PDU circuit breakers
    ncn-m001# cray capmc xname_on create --xnames x[1000-1003]c[0-7]r[1,3,5,7] --format json
    ```
 
-
 **POWER ON STANDARD RACK PDU CIRCUIT BREAKERS**
 
 7. Switch the standard rack compute and I/O cabinet PDU circuit breakers to ON.
 
-   This applies power to the server BMCs connects them to the management network. Compute and I/O nodes do power on and boot automatically. The Boot Orchestration Service \(BOS\) is used to bring up compute nodes and User Access Nodes \(UANs\).
+   This applies power to the server BMCs connects them to the management network. Compute and I/O nodes **do not power on and boot automatically**. The Boot Orchestration Service \(BOS\) brings up compute nodes and User Access Nodes \(UANs\).
 
    If necessary, use IPMI commands to power on individual servers as needed.
 
-8. Make sure all system management network switches and Slingshot network switches are powered on and healthy in each rack.
-
+8. Make sure all system management network switches and Slingshot network switches are powered on in each rack and there are no error LEDS or hardware failures.
 
 
 
