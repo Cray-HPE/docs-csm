@@ -141,7 +141,7 @@ If an update fails because of `"No Image available"`, it may be caused by FAS un
 3. Verify the correct image ID was found.
 
    ```bash
-   ncn-m001# cray fas images describe imageID
+   ncn-m001# cray fas images describe {imageID}
    ```
 
    **WARNING:** FAS will force a flash of the device, using incorrect firmware may make it inoperable.
@@ -252,7 +252,7 @@ This procedure includes information on how check the firmware versions for the e
 		In the example below, there are two operations in the `succeeded` state, indicating there is an available firmware version that FAS can use to update firmware.
 
      	```bash
-       ncn-m001# cray fas actions status describe actionID
+       ncn-m001# cray fas actions status list {actionID}
        blockedBy = []
        state = "completed"
        actionID = "0a305f36-6d89-4cf8-b4a1-b9f199afaf3b" startTime = "2020-06-23 15:43:42.939100799 +0000 UTC"
@@ -288,17 +288,17 @@ This procedure includes information on how check the firmware versions for the e
 		In the example below, there is an operation for an xname in the failed state, indicating there is something that FAS could do, but it likely would fail. A common cause for an operation failing is due to a missing firmware image file.
 
        ```bash
-       ncn-m001# cray fas actions describe actionID --format json
+       ncn-m001# cray fas actions describe {actionID} --format json
        {
              "parameters": {
                "stateComponentFilter": {
                  "deviceTypes": [
-                   "routerBMC"
+                   "nodeBMC"
                  ]
                },
                "command": {
                  "dryrun": false,
-                 "description": "upgrade of routerBMCs for cray",
+                 "description": "upgrade of nodeBMCs for cray",
                  "tag": "default",
                  "restoreNotPossibleOverride": true,
                  "timeLimit": 1000,
@@ -320,7 +320,7 @@ This procedure includes information on how check the firmware versions for the e
              "state": "completed",
              "command": {
                "dryrun": false,
-               "description": "upgrade of routerBMCs for cray",
+               "description": "upgrade of nodeBMCs for cray",
                "tag": "default",
                "restoreNotPossibleOverride": true,
                "timeLimit": 1000,
@@ -384,7 +384,7 @@ This procedure includes information on how check the firmware versions for the e
    In this example, there is a device that is available for a firmware upgrade because the operation being viewed is a succeeded operation.
 
    ```bash
-   ncn-m001# cray fas operations describe operationID --format json
+   ncn-m001# cray fas operations describe {operationID} --format json
        {
        "fromFirmwareVersion": "", "fromTag": "",
        "fromImageURL": "",
@@ -448,10 +448,10 @@ This procedure will read all RPMs in the Nexus repository and upload firmware im
 3. Check the results of the loader run.
 
     ```bash
-    ncn-m001# cray fas loader describe *loaderRunID* --format json
+    ncn-m001# cray fas loader describe {loaderRunID} --format json
     ```
 
-    **NOTE:** `*loadRunID*` is the ID from step #2 above in that case "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce".
+    **NOTE:** `{loadRunID}` is the ID from step #2 above in that case "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce".
     Use the `--format json` to make it easier to read.
 
     ```bash
@@ -530,10 +530,10 @@ This procedure will read a single local RPM (or ZIP) file and upload firmware im
 4. Check the results of the loader run.
 
     ```bash
-    ncn-m001# cray fas loader describe *loaderRunID* --format json
+    ncn-m001# cray fas loader describe {loaderRunID} --format json
     ```
-    
-    **NOTE:** `*loadRunID*` is the ID from step #2 above in that case "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce".
+
+    **NOTE:** `{loadRunID}` is the ID from step #2 above in that case "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce".
     Use the `--format json` to make it easier to read.
 
     ```bash

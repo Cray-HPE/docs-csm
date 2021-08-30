@@ -41,7 +41,7 @@ Follow the process outlined in [FAS CLI](FAS_CLI.md) to update the system. Use t
 
 <a name="current-capabilities"></a>
 
-### Current Capabilities 
+### Current Capabilities
 
 The following table describes the hardware items that can have their firmware updated via FAS. For more information about the upgradable targets, refer to the Firmware product stream repository.
 
@@ -63,7 +63,7 @@ For each item in the `Hardware Precedence Order`:
 
 1. Complete a dry-run:
 
-     2. `cray fas actions create {jsonfile}`
+     1. `cray fas actions create {jsonfile}`
      2. Note the ActionID!
      3. Poll the status of the action until the action `state` is `completed`:
         1. `cray fas actions describe {actionID} --format json`
@@ -74,11 +74,11 @@ For each item in the `Hardware Precedence Order`:
 
      *	`NoOp`: Nothing to do, already at version.
      *	`NoSol`: No viable image is available; this will not be updated.
-     *	`succeeded`: 
-     	*	IF `dryrun`: The operation should succeed if performed as a `live update`. `succeeded` means that FAS identified that it COULD update an xname + target with the declared strategy. 
+     *	`succeeded`:
+     	*	IF `dryrun`: The operation should succeed if performed as a `live update`. `succeeded` means that FAS identified that it COULD update an xname + target with the declared strategy.
      	*	IF `live update`: the operation succeeded, and has updated the xname + target to the identified version.
-     *	`failed`: 
-     	*	IF `dryrun`: There is something that FAS could do, but it likely would fail; most likely because the file is missing. 
+     *	`failed`:
+     	*	IF `dryrun`: There is something that FAS could do, but it likely would fail; most likely because the file is missing.
      	*	IF `live update`: the operation failed, the identified version could not be put on the xname + target.
 
 3. If `succeeded` count > 0, now perform a live update.
@@ -86,8 +86,8 @@ For each item in the `Hardware Precedence Order`:
 4. Update the JSON file `overrideDryrun` to `true`:
 
    1. `cray fas actions create {jsonfile}`
-     2. Note the ActionID!
-     3. Poll the status of the action until the action `state` is `completed`:
+     1. Note the ActionID!
+     2. Poll the status of the action until the action `state` is `completed`:
         1. `cray fas actions describe {actionID} --format json`
 
 5. Interpret the outcome of the live update; proceed to next type of hardware.
@@ -102,16 +102,17 @@ After identifying which hardware is in the system, start with the top most item 
 * This process does not communicate the SAFE way to update NCNs. If the NCNs have not been locked, or FAS is blindly used to update NCNs without following the correct process, then **THE STABILITY OF THE SYSTEM WILL BE JEOPARDIZED**.
 * Read the corresponding recipes before updating. There are sometimes ancillary actions that must be completed in order to ensure update integrity.
 
+**NOTE** to update Switch Controllers \(sC\) or RouterBMC refer to the Rosetta Documentation
+
 1. [Cray](FAS_Recipes.md#manufacturer-cray)
-   1. [RouterBMC](FAS_Recipes.md#cray-device-type-routerbmc-target-bmc)
-   2. [ChassisBMC](FAS_Recipes.md#cray-device-type-chassisbmc-target-bmc)
-   3. NodeBMC
+   1. [ChassisBMC](FAS_Recipes.md#cray-device-type-chassisbmc-target-bmc)
+   2. NodeBMC
       1. [BMC](FAS_Recipes.md#cray-device-type-nodebmc-target-bmc)
       2. [NodeBIOS](FAS_Recipes.md#cray-device-type-nodebmc-target-nodebios)
-      3. [Redstone FPGA](FAS_Recipes.md#cray-device-type-nodebmc-target-redstone-fpga) 
+      3. [Redstone FPGA](FAS_Recipes.md#cray-device-type-nodebmc-target-redstone-fpga)
 2. [Gigabyte](FAS_Recipes.md#manufacturer-gigabyte)
-   1. [BMC](FAS_Recipes.md#gb-device-type-nodebmc-target-bmc) 
-   2. [BIOS](FAS_Recipes.md#gb-device-type-nodebmc-target-bios) 
+   1. [BMC](FAS_Recipes.md#gb-device-type-nodebmc-target-bmc)
+   2. [BIOS](FAS_Recipes.md#gb-device-type-nodebmc-target-bios)
 3. [HPE](FAS_Recipes.md#manufacturer-hpe)
    1. [BMC (iLO5)](FAS_Recipes.md#hpe-device-type-nodebmc-target--aka-bmc)
    2. [BIOS (System ROM)](FAS_Recipes.md#hpe-device-type-nodebmc-target--aka-bios)
