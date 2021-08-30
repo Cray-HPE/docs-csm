@@ -1,8 +1,14 @@
 # Add Ceph OSDs
 
-Add one or more OSDs to a Ceph cluster and reset the Ceph pool quotas once they have been added.
+**`IMPORTANT:`** This document is addressing how to add an OSD when the `OSD auto-discovery` fails to add in new drives.
 
-Adding OSDs helps increase the Ceph cluster object storage.
+Check to ensure you have OSD auto-discovery enabled.
+
+```bash
+ncn-s00(1/2/3)# ceph orch ls osd
+NAME                       RUNNING  REFRESHED  AGE  PLACEMENT  IMAGE NAME                        IMAGE ID
+osd.all-available-devices      9/9  4m ago     3d   *          registry.local/ceph/ceph:v15.2.8  5553b0cb212c
+```
 
 >**NOTE:** Ceph version 15.2.x and newer will utilize the ceph orchestrator to add any available drives on the storage nodes to the OSD pool. The process below is in the event that the orchestrator did not add the available drives into the cluster
 
