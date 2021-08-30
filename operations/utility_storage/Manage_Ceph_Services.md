@@ -35,97 +35,111 @@ rgw.site1.zone1.ncn-s003.spojqa  ncn-s003  running (3d)  7m ago     3d   15.2.8 
 
 ## Ceph Monitor Service (ceph-mon)
 
-**Location:** Commands can be run on the node where the ceph-mon service is being restarted.
+**`IMPORTANT:`** All of the below ceph orch commands should be run from `ncn-s001/2/3` or `ncn-m001/2/3`.
 
 Start the ceph-mon service:
 
 ```bash
 # Please note the the mon process can have a container id appended to the end of the host name. So please make sure to use the output from above to ensure you have the correct name.
 
-ncn-s00(1/2/3)# ceph orch start mon.<hostname>
+ncn-s00(1/2/3)# ceph orch daemon start mon.<hostname>
 ```
 
 Stop the ceph-mon service:
 
 ```bash
-ncn-s00(1/2/3)# ceph orch stop mon.<hostname>
+ncn-s00(1/2/3)# ceph orch daemon stop mon.<hostname>
 ```
 
 Restart the ceph-mon service:
 
 ```bash
-ncn-s00(1/2/3)# ceph orch start mon.<hostname>
+ncn-s00(1/2/3)# ceph orch daemon restart mon.<hostname>
 ```
 
 ## Ceph OSD Service (ceph-osd)
 
-**Location:** Commands can be run on the node where the OSD resides.
-
 Start the ceph-osd service:
 
 ```bash
-ncn-s00(1/2/3)# ceph orch start osd.<number>
+ncn-s00(1/2/3)# ceph orch daemon start osd.<number>
 ```
 
 Stop the ceph-osd service:
 
 ```bash
-nncn-s00(1/2/3)# ceph orch stop osd.<number>
+nncn-s00(1/2/3)# ceph orch daemon stop osd.<number>
 ```
 
 Restart the ceph-osd service:
 
 ```bash
-ncn-s00(1/2/3)# ceph orch restart osd.<number>
+ncn-s00(1/2/3)# ceph orch daemon restart osd.<number>
 ```
 
 ## Ceph Manager Service (ceph-mgr)
 
-**Location:** Commands can be run on the node where the ceph-mgr service is being restarted.
-
 Start the ceph-mgr service:
 
 ```bash
-ncn-s00(1/2/3)# ceph orch start mgr.<hostname>
+ncn-s00(1/2/3)# ceph orch daemon start mgr.<hostname>
 ```
 
 Stop the ceph-mgr service:
 
 ```bash
-ncn-s00(1/2/3)# ceph orch stop mgr.<hostname>
+ncn-s00(1/2/3)# ceph orch daemon stop mgr.<hostname>
 ```
 
 Restart the ceph-mgr service:
 
 ```bash
-ncn-s00(1/2/3)# ceph orch restart mgr.<hostname>
+ncn-s00(1/2/3)# ceph orch daemon restart mgr.<hostname>
+```
+
+## Ceph MDS Service (cephfs)
+
+Start the ceph-mgr service:
+
+```bash
+ncn-s00(1/2/3)# ceph orch daemon start mds.cephfs.<container id from ceph orch ps output>
+```
+
+Stop the ceph-mgr service:
+
+```bash
+ncn-s00(1/2/3)# ceph orch daemon stop mds.cephfs.<container id from ceph orch ps output>
+```
+
+Restart the ceph-mgr service:
+
+```bash
+ncn-s00(1/2/3)# ceph orch daemon restart mds.cephfs.<container id from ceph orch ps output>
 ```
 
 ## Ceph Rados-Gateway Service (ceph-radosgw)
 
-**Location:** Commands can be run on the node where the rados-gateway is being restarted.
-
 Start the rados-gateway:
 
 ```bash
-ncn-s00(1/2/3)# ceph orch start rgw.site1.zone1.<container id from ceph orch ls>
+ncn-s00(1/2/3)# ceph orch daemon start rgw.site1.zone1.<container id from ceph orch ls>
 ```
 
 Stop the rados-gateway:
 
 ```bash
-ncn-s00(1/2/3)# ceph orch stop rgw.site1.zone1.<container id from ceph orch ls>
+ncn-s00(1/2/3)# ceph orch daemon stop rgw.site1.zone1.<container id from ceph orch ls>
 ```
 
 Restart the rados-gateway:
 
 ```bash
-ncn-s00(1/2/3)# ceph orch restart rgw.site1.zone1.<container id from ceph orch ls>
+ncn-s00(1/2/3)# ceph orch daemon restart rgw.site1.zone1.<container id from ceph orch ls>
 ```
 
 ## Ceph Service restart using CEPHADM
 
-**Important:** This command needs to run from the host you are going to start or stp services on.
+**Important:** This command needs to run from the host you are going to start or stop services on.
 
 - Get the service system_unit
   
