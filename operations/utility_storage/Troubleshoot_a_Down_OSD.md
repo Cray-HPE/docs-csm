@@ -13,42 +13,59 @@ This procedure requires admin privileges.
 1. Identify the down OSDs.
 
     ```bash
-    ncn-m001# ceph osd tree
+    ncn-m/s(001/2/3)# ceph osd tree down
+    ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
+    -1         62.87558  root default
+    -7         20.95853      host ncn-s002
+     1    ssd   3.49309          osd.1        down   1.00000  1.00000
+     3    ssd   3.49309          osd.3        down   1.00000  1.00000
+     7    ssd   3.49309          osd.7        down   1.00000  1.00000
+    10    ssd   3.49309          osd.10       down   1.00000  1.00000
+    13    ssd   3.49309          osd.13       down   1.00000  1.00000
+    16    ssd   3.49309          osd.16       down   1.00000  1.00000
     ```
 
-1. Check the logs for the OSD that is down.
+   Option 1
 
-    Use the OSD number for the down OSD returned in the command above.
+   1. restart the osd ustilizing ceph orch
 
     ```bash
-    ncn-m001# ceph osd find OSD_ID
+    ncn-m/s00(1/2/3)# ceph orch daemon restart osd.<number>
     ```
 
-1. Manually restart the OSD.
+   Option 2
 
-    This step must be done on the node with the reported down OSD.
+   1. Check the logs for the OSD that is down.
 
-    ```bash
-    ncn-(s001/2/3)# ceph orch restart osd.<number>
-    ```
+      Use the OSD number for the down OSD returned in the command above.
+
+      ```bash
+      ncn-m/s(001/2/3)# ceph osd find OSD_ID
+      ```
+
+   1. Manually restart the OSD.
+
+      This step `must be done on the node with the reported down OSD.`
+
+       ```bash
+       ncn-s# ceph orch daemon restart osd.<number>
+       ```
 
     **Troubleshooting:** If the service is not restarted with `ceph orch`, restart it using [Manage Ceph Services](Manage_Ceph_Services.md)
 
 1. Verify the OSDs are running again.
 
     ```bash
-    ncn-m001# ceph osd tree
-    ID CLASS WEIGHT  TYPE NAME       STATUS REWEIGHT PRI-AFF
-    -1       0.08212 root default
-    -5       0.02737     host ceph-1
-     1  kube 0.00879         osd.1       up  1.00000 1.00000 
-     4   smf 0.01859         osd.4       up  1.00000 1.00000
-    -3       0.02737     host ceph-2
-     0  kube 0.00879         osd.0       up  1.00000 1.00000
-     3   smf 0.01859         osd.3       up  1.00000 1.00000
-    -7       0.02737     host ceph-3
-     2  kube 0.00879         osd.2       up  1.00000 1.00000
-     5   smf 0.01859         osd.5       up  1.00000 1.00000
+    # ceph osd tree down
+    ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
+    -1         62.87558  root default
+    -7         20.95853      host ncn-s002
+     1    ssd   3.49309          osd.1          up   1.00000  1.00000
+     3    ssd   3.49309          osd.3          up   1.00000  1.00000
+     7    ssd   3.49309          osd.7          up   1.00000  1.00000
+    10    ssd   3.49309          osd.10         up   1.00000  1.00000
+    13    ssd   3.49309          osd.13         up   1.00000  1.00000
+    16    ssd   3.49309          osd.16         up   1.00000  1.00000
     ```
 
 If the OSD dies again, check dmesg for drive failures.

@@ -34,7 +34,7 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
 
         ```bash
         ncn-s00(1/2/3)# systemctl daemon-reload
-        ncn-s00(1/2/3)# ceph orch restart mon.<hostname>
+        ncn-s00(1/2/3)# ceph orch daemon restart mon.<hostname>
         ```
 
 1. Check the health of the Ceph cluster on one of the manager nodes.
@@ -56,14 +56,14 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
 1. Restart the ceph-mds services on all manager nodes.
 
     ```bash
-    ncn-s00(1/2/3)# ceph orch restart mds.cephfs.<container id>
+    ncn-s00(1/2/3)# ceph orch daemon restart mds.cephfs.<container id>
     ```
 
 1. Restart the ceph-mon process on all manager nodes.
 
     ```bash
     ncn-m001# systemctl daemon-reload
-    ncn-s00(1/2/3)# ceph orch restart mon.<hostname>
+    ncn-s00(1/2/3)# ceph orch daemon restart mon.<hostname>
     ```
 
 1. Monitor the cluster to ensure the ceph-mon processes are running on all manager nodes.
