@@ -2,9 +2,10 @@
 
 In the event that the Postgres cluster has failed to the point that it must be recovered and there is no dump available to restore the data, a full service specific disaster recovery is needed.
 
-Below are the service specific steps required to cleanup any existing resources, redeploy the resources and repopulate the data. 
+Below are the service specific steps required to cleanup any existing resources, redeploy the resources and repopulate the data.
 
 Disaster Recovery Procedures by Service:
+
 - [Restore HSM (Hardware State Manger) Postgres without a Backup](../hardware_state_manager/Restore_HSM_Postgres_without_a_Backup.md)
 - [Restore SLS (System Layout Service) Postgres without a Backup](../system_layout_service/Restore_SLS_Postgres_without_an_Existing_Backup.md)
 
@@ -76,3 +77,5 @@ recreated.
 
 Any other changes made to Keycloak, such as local users that have been created,
 will have to be manually re-applied.
+
+- [Restore Spire Postgres without a Backup](../spire/Restore_Spire_Postgres_without_a_Backup.md)
