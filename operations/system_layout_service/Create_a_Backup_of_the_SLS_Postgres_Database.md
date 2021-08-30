@@ -1,4 +1,4 @@
-# Restore SLS Postgres Database from Backup
+# Create a Backup of the SLS Postgres Database
 
 Perform a manual backup of the contents of the SLS Postgres database. This backup can be used to restore the contents of the SLS Postgres database at a later point in time using the [Restoring SLS Postgres cluster from backup](Restore_SLS_Postgres_Database_from_Backup.md) procedure.
 
