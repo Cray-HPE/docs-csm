@@ -39,6 +39,15 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
     Wait for the login prompt.
 
+    If the m001 node boots into the PIT (ncn-m001-pit), [Set Boot Order](../../background/ncn_boot_workflow.md) to boot from disk, shutdown the PIT node and power cycle again to boot to into ncn-m001.
+
+    ```bash
+    ncn-m001-pit:~ # shutdown -h now
+
+    remote$ ipmitool -I lanplus -U root -P PASSWORD -H NCN_M001_BMC_HOSTNAME chassis power on
+    ```
+
+
 7.  Wait for the ncn-m001 node to boot, then ping the node to check status.
 
     ```bash
@@ -80,7 +89,13 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
    workers: []
    
    Are the above NCN groupings and exclusions correct? [yes,no] yes
+
+   Powering on NCNs and waiting up to 300 seconds for them to be reachable via SSH: ncn-m002, ncn-m003
+   Waiting for condition "Hosts accessible via SSH" timed out after 300 seconds
+   ERROR: Unable to reach the following NCNs via SSH after powering them on: ncn-m003, ncn-s002.. Troubleshoot the issue and then try again.
    ```
+
+   In the preceding example, the command to ssh to some ncn nodes timed out and reported `ERROR` messages. Iterate on the above step until you see `Succeeded with boot of other management NCNs.` Each interation should get further in the process.
 
 10. Use `tail` to monitor the log files in `/var/log/cray/console_logs` for each NCN.
 
@@ -247,8 +262,43 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
     ```bash
     ncn-m001# kubectl rollout restart -n spire deployment spire-jwks
     ```
+20. Check if any pods are in CrashLoopBackOff due to errors connecting to vault. If so, restart the vault operator, the vault pods and finally the pod which is in CrashLookBackOff. For example:
 
-20. Determine whether the cfs-state-reporter service is failing to start on each manager/master and worker NCN while trying to contact CFS.
+    ```bash
+    ncn-m001# kubectl get pods -A | grep CrashLoopBackOff
+    services            cray-console-node-1                            2/3     CrashLoopBackOff   206        6d21h
+    
+    ncn-m001# kubectl -n services logs cray-console-node-1 cray-console-node | grep "connection failure" | grep vault
+    2021/08/26 16:39:28 Error: &api.ResponseError{HTTPMethod:"PUT", URL:"http://cray-vault.vault:8200/v1/auth/kubernetes/login", StatusCode:503, RawError:true, Errors:[]string{"upstream connect error or disconnect/reset before headers. reset reason: connection failure"}}
+    panic: Error: &api.ResponseError{HTTPMethod:"PUT", URL:"http://cray-vault.vault:8200/v1/auth/kubernetes/login", StatusCode:503, RawError:true, Errors:[]string{"upstream connect error or disconnect/reset before headers. reset reason: connection failure"}}
+
+    # Restart the vault-operator
+    ncn-m001# kubectl delete pods -n vault -l app.kubernetes.io/name=vault-operator
+    
+    # Wait for the operator pod to restart with 2/2 Ready and Running - for example:
+    ncn-m001#  kubectl get pods -n vault -l app.kubernetes.io/name=vault-operator
+    NAME                                  READY   STATUS    RESTARTS   AGE
+    cray-vault-operator-69b4b6887-dfn2f   2/2     Running   2          1m
+ 
+    # Restart the cray-vault pods
+    ncn-m001# kubectl rollout restart statefulset cray-vault -n vault 
+    
+    # Wait for the cray-vault pods to restart with 5/5 Ready and Running - for example:
+    ncn-m001# kubectl get pods -n vault -l app.kubernetes.io/name=vault
+    NAME           READY   STATUS    RESTARTS   AGE
+    cray-vault-0   5/5     Running   1          2m
+    cray-vault-1   5/5     Running   1          2m
+    cray-vault-2   5/5     Running   2          2m
+ 
+    # Restart cray-console-node-1
+    ncn-m001# kubectl delete pod cray-console-node-1 -n services
+    
+    # Wait for cray-console-node-1 to restart with 3/3 Ready and Running - for example:
+    ncn-m001# kubectl get pods -n services | grep  cray-console-node-1
+    cray-console-node-1                                            3/3     Running            0          2m
+    ```
+
+21. Determine whether the cfs-state-reporter service is failing to start on each manager/master and worker NCN while trying to contact CFS.
 
     ```bash
     ncn-m001# pdsh -w ncn-m00[1-3],ncn-w00[1-3] systemctl status cfs-state-reporter
@@ -289,54 +339,48 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
 **VERIFY BGP PEERING SESSIONS**
 
-**Attention:** All HSN switches and their associated HSN adapters must be up before the HSN can initialized. See [Bring Up the Slingshot Fabric](Bring_up_the_Slingshot_Fabric.md).
+22. Check the status of the Border Gateway Protocol \(BGP\). For more information, see [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
 
-1.  Check the status of the Border Gateway Protocol \(BGP\). For more information, see [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
-
-2.  Check the status and health of etcd clusters, see [Check the Health and Balance of etcd Clusters](../kubernetes/Check_the_Health_and_Balance_of_etcd_Clusters.md).
+23. Check the status and health of etcd clusters, see [Check the Health and Balance of etcd Clusters](../kubernetes/Check_the_Health_and_Balance_of_etcd_Clusters.md).
 
     
 
 **CHECK CRON JOBS**
 
-3.  Display all the k8s cron jobs.
+24. Display all the k8s cron jobs.
 
     ```bash
     ncn-m001# kubectl get cronjobs.batch -A
-    NAMESPACE     NAME                                 SCHEDULE       SUSPEND   ACTIVE   LAST SCHEDULE   AGE
-    **backups       benji-k8s-backup-backups-namespace   \*/5 \* \* \* \*    False     0        13d             39d**
-    backups       benji-k8s-cleanup                    00 05 * * *    False     0        10h             39d
-    backups       benji-k8s-enforce                    00 04 * * *    False     0        11h             39d
-    kube-system   kube-etcdbackup                      */10 * * * *   False     0        9m37s           40d
-    operators     kube-etcd-defrag                     0 0 * * *      False     0        15h             39d
-    operators     kube-etcd-periodic-backup-cron       0 * * * *      False     0        39m             39d
-    services      cray-dns-unbound-manager             */1 * * * *    False     1        97s             32d
-    services      hms-discovery                        */3 * * * *    False     1        37s             17d
-    services      hms-postgresql-pruner                */5 * * * *    False     0        4m37s           39d
-    services      sonar-jobs-watcher                   */1 * * * *    False     0        37s             2d17h
-    services      sonar-sync                           */1 * * * *    False     1        37s             2d17h
-    sma           sma-pgdb-cron                        10 4 * * *     False     0        11h             39d
+    NAMESPACE     NAME                              SCHEDULE       SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+    kube-system   kube-etcdbackup                   */10 * * * *   False     0        2d1h            29d
+    operators     kube-etcd-defrag                  0 0 * * *      False     0        18h             29d
+    operators     kube-etcd-defrag-cray-hbtd-etcd   0 */4 * * *    False     0        178m            29d
+    operators     kube-etcd-periodic-backup-cron    0 * * * *      False     0        58m             29d
+    services      cray-dns-unbound-manager          */3 * * * *    False     0        63s             18h
+    services      hms-discovery                     */3 * * * *    False     1        63s             18h
+    services      hms-postgresql-pruner             */5 * * * *    False     0        3m3s            18h
+    services      sonar-sync                        */1 * * * *    False     0        63s             18h
+    sma           sma-pgdb-cron                     10 4 * * *     False     0        14h             27d
     ```
 
     **Attention:** It is normal for the hms-discovery service to be suspended at this point if liquid-cooled cabinets have not been powered on. The hms-discovery service is un-suspended during the liquid-cooled cabinet power on procedure. Do not re-create the hms-discovery cron job at this point.
 
-4.  Check for cron jobs that have a `LAST SCHEDULE` time that is older than the `SCHEDULE` time. These cron jobs must be restarted.
+25. Check for cron jobs that have a `LAST SCHEDULE` time that is older than the `SCHEDULE` time. These cron jobs must be restarted.
 
-5.  Check the cron jobs in question for errors.
+26. Check any cron jobs in question for errors.
 
     ```bash
-    ncn-m001# kubectl describe cronjobs.batch -n backups benji-k8s-backup-backups-namespace \
-    | egrep -A 15 Events
+    ncn-m001# kubectl describe cronjobs.batch -n kube-system kube-etcdbackup | egrep -A 15 Events
     Events:
-      Type     Reason            Age                        From                Message
-      ----     ------            ----                       ----                -------
-      Warning  FailedNeedsStart  4m46s (x22771 over 2d16h)  cronjob-controller  Cannot determine if job needs to be \
-                                                                                started: too many missed start time (> 100). \
-                                                                                Set or decrease .spec.startingDeadlineSeconds \
-                                                                                or check clock skew
-    ```
+      Type     Reason            Age                      From                Message
+      ----     ------            ----                     ----                -------
+      Warning  FailedNeedsStart  4m15s (x15156 over 42h)  cronjob-controller  Cannot determine if job needs to be \
+                                                                              started: too many missed start time (> 100). \
+                                                                              Set or decrease .spec.startingDeadlineSeconds \
+                                                                              or check clock skew
+     ```
 
-6.  For any cron jobs producing errors, get the YAML representation of the cron job and edit the YAML file:
+27. For any cron jobs producing errors, get the YAML representation of the cron job and edit the YAML file:
 
     ```bash
     ncn-m001# cd ~/k8s
@@ -350,30 +394,30 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
     3.  Save the file and quit the editor.
 
-7.  Delete the cron job.
+28. Delete the cron job.
 
     ```bash
     ncn-m001# kubectl delete -f CRON_JOB_NAME-cronjob.yaml
     ```
 
-8.  Apply the cron job.
+29. Apply the cron job.
 
     ```bash
     ncn-m001# kubectl apply -f CRON_JOB_NAME-cronjob.yaml
     ```
 
-9.  Verify that the cron job has been scheduled.
+30. Verify that the cron job has been scheduled.
 
     ```bash
     ncn-m001# kubectl get cronjobs -n backups benji-k8s-backup-backups-namespace
     NAME                                 SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE
-    benji-k8s-backup-backups-namespace   */5 * * * *   False     0        92s             64d
+    kube-etcdbackup                      */10 * * * *  False     0        92s             29
     ```
 
 
 **CHECK THE HSM INVENTORY STATUS OF NCNs**
 
-10. Use the `sat` command to check for management NCNs in an Off state.
+31. Use the `sat` command to check for management NCNs in an Off state.
 
     ```bash
     ncn-m001# sat status --filter role=management
@@ -394,7 +438,7 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
     **Attention:** When the NCNs are brought back online after a power outage or planned shutdown, `sat status` may report them as being Off.
 
-11. If NCNs are listed as OFF, run a manual discovery of NCNs in the Off state.
+32. If NCNs are listed as OFF, run a manual discovery of NCNs in the Off state.
 
     ```bash
     ncn-m001# cray hsm inventory discover create --xnames x3000c0s12b0,x3000c0s20b0
@@ -402,7 +446,7 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
     URI = "/hsm/v2/Inventory/DiscoveryStatus/0"
     ```
 
-12. Check for NCN status.
+33. Check for NCN status.
 
     ```bash
     ncn-m001# sat status --filter Role=Management
@@ -419,12 +463,11 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
     | x3000c0s24b0n0 | Node | 100008 | On    | OK   | True    | X86  | River | Management | Sling    |
     | x3000c0s26b0n0 | Node | 100009 | On    | OK   | True    | X86  | River | Management | Sling    |
     +----------------+------+--------+-------+------+---------+------+-------+------------+----------+
-    
     ```
 
-13. To check the health and status of the management cluster after a power cycle, refer to the "Platform Health Checks" section in [Validate CSM Health](../validate_csm_health.md).
+34. To check the health and status of the management cluster after a power cycle, refer to the "Platform Health Checks" section in [Validate CSM Health](../validate_csm_health.md).
 
-14. If NCNs must have access to Lustre, start the Lustre file system. See [Power On the External Lustre File System](Power_On_the_External_Lustre_File_System.md).
+35. If NCNs must have access to Lustre, start the Lustre file system. See [Power On the External Lustre File System](Power_On_the_External_Lustre_File_System.md).
 
 
 
