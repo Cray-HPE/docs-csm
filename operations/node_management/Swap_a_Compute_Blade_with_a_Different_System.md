@@ -11,15 +11,15 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 ### Prerequisites
 
-- Both systems must have the Slingshot fabric configured with the desired topology for both blades
+- The Slingshot fabric must be  configured with the desired topology for both blades
 
-- The SLS has the desired HSN configuration
+- The System Layout Service (SLS) must have the desired HSN configuration
 
-- The blade that is removed from the source system is installed in the empty slot left by the blade removed from destination system and visa-versa.
+- The blade that is removed from the source system must be installed in the empty slot left by the blade removed from destination system and visa-versa.
 
-- Check the status of the high-speed network (HSN) and record the status before the procedure.
+- Check the status of the high-speed network (HSN) and record link status before the procedure.
 
-- Review the following command examples. The commands can be used to capture the required values from the HSM `ethernetInterfaces` table and write the values to a file. The file then can be used to automate subsequent commands in this procedure.
+- Review the following command examples. The commands can be used to capture the required values from the HSM `ethernetInterfaces` table and write the values to a file. The file then can be used to automate subsequent commands in this procedure, for example:
 
   ```bash
   ncn-m001:# mkdir blade_swap_scripts; cd blade_swap_scripts
@@ -43,19 +43,19 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
   {"xname":"x9000c3s1b1n1","ID":"0040a68362e3","MAC":"00:40:a6:83:62:e3","IP":"10.100.0.122","Desc":"Node Maintenance Network"}
   ```
 
-  To delete the `ethernetInterfaces` using curl:
+  To delete an`ethernetInterfaces`  entry using curl:
 
   ```bash
   ncn-m001:# for ID in $(cat x9000c3s1.json | jq -r '.ID'); do cray hsm inventory ethernetInterfaces delete $ID; done
   ```
 
-  To insert `ethernetInterfaces` using curl:
+  To insert an `ethernetInterfaces` entry using curl:
 
   ```bash
   ncn-m001:# while read  PAYLOAD ; do curl -H "Authorization: Bearer $MY_TOKEN" -L -X POST 'https://api_gw_service.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces' -H 'Content-Type: application/json' --data-raw "$(echo $PAYLOAD | jq -c '{ComponentID: .xname,Description: .Desc,MACAddress: .MAC,IPAddress: .IP}')";sleep 5;  done < x9000c3s1.json
   ```
 
-- Blades that are moved between systems must have the coolant drained and filled to minimize cross-contamination of cooling systems. 
+- The blades must have the coolant drained and filled during the swap to minimize cross-contamination of cooling systems. 
   
   - Review procedures in *HPE Cray EX Coolant Service Procedures H-6199* 
   - Review the *HPE Cray EX Hand Pump User Guide H-6200*
@@ -109,7 +109,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
       hms-discovery    */3 * * * *     True         0       117s             15d
       ```
    
-   2. Power off slot. This examples powers off slot 0, chassis 3, in cabinet 9000.
+   2. Power off the chassis slot. This examples powers off slot 0, chassis 3, in cabinet 9000.
    
    
       ```bash
@@ -118,7 +118,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 #### Disable the chassis slot
 
-6. Disable the slot. This example disables slot 0, chassis 3, in cabinet 9000.
+6. Disable the chassis slot. This example disables slot 0, chassis 3, in cabinet 9000.
 
    ```bash
    ncn-m001# cray hsm state components enabled update --enabled false x9000c3s0
@@ -183,7 +183,7 @@ The hardware management network MAC and IP addresses are assigned algorithmicall
    - Review the *Remove a Compute Blade Using the Lift* procedure in *HPE Cray EX Hardware Replacement Procedures H-6173* for detailed instructions for replacing liquid-cooled blades (https://internal.support.hpe.com/).
 9. Drain the coolant from the blade and fill with fresh coolant to minimize cross-contamination of cooling systems. 
    - Review *HPE Cray EX Coolant Service Procedures H-6199*. If using the hand pump, review procedures in the *HPE Cray EX Hand Pump User Guide H-6200* (https://internal.support.hpe.com/).
-10. Install the blade from the source system in a storage rack.  
+10. Install the blade from the source system in a storage rack or leave it on the cart.
 
 ### Prepare the blade in the destination system for removal
 
@@ -232,7 +232,7 @@ The hardware management network MAC and IP addresses are assigned algorithmicall
     hms-discovery    */3 * * * *     True         0       128s             15d
     ```
 
-17. Power off slot. This example powers off slot 0 in chassis 3 of cabinet 1005.
+17. Power off  the chassis slot. This example powers off slot 0 in chassis 3 of cabinet 1005.
 
     ```bash
     ncn-m001# cray capmc xname_off create --xnames x1005c3s0 --recursive true
@@ -240,7 +240,7 @@ The hardware management network MAC and IP addresses are assigned algorithmicall
 
 #### Disable the chassis slot
 
-18. Disable slot 0, chassis 3, in cabinet 1005.
+18. Disable the chassis slot. This example disables slot 0, chassis 3, in cabinet 1005.
 
     ```bash
     ncn-m001# cray hsm state components enabled update --enabled false x1005c3s0
@@ -307,9 +307,10 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 26. Obtain an authentication token to access the API gateway. In the example below, replace `myuser`, `mypass`, and `shasta` in the cURL command with site-specific values. Note the value of `access_token`. Review [Retrieve an Authentication Token](../security_and_authentication/Retrieve_an_Authentication_Token.md) for more information. The example is a script to secure a token and set it to the variable MY_TOKEN.
 
     ```bash
-    ncn-m001# ncn-m001:~/blade_swap_scripts # MY_TOKEN=$(curl -s -d grant_type=password -d client_id=shasta -d username=training101 -d password=initial101 https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+    ncn-m001# MY_TOKEN=$(curl -s -d grant_type=password -d client_id=shasta -d \ username=training101 -d password=initial101 \
+    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     
-    ncn-m001:# ncn-m001:~/blade_swap_scripts # echo $MY_TOKEN
+    ncn-m001:# echo $MY_TOKEN
     eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJW . . 
     ```
     
@@ -325,8 +326,8 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
        0040a68362e3
        ```
     
-    2. Run  the following commands in succession to remove the interfaces.
-       Deleting cray-dhcp-kea pod prevents the interfaces from being re-created in the HSM. 
+    2. Run the following commands in succession to remove the interfaces.
+       Delete the cray-dhcp-kea pod to prevent the interfaces from being re-created. 
     
        ```bash
        ncn-m001# kubectl get pods -Ao wide | grep kea 
@@ -370,20 +371,20 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
       To change a curl command, use a PATCH request, for example:
     
        ```bash
-    ncn-m001# curl -k -H "Authorization: Bearer $TOKEN" -L -X PATCH 'https://api_gw_service.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces/0040a68350a4' -H 'Content-Type: application/json'  --data-raw '{"MACAddress":"xx:xx:xx:xx:xx:xx","IPAddress":"10.100.0.xxx","ComponentID":"XNAME"}' 
+    ncn-m001# curl -k -H "Authorization: Bearer $TOKEN" -L -X PATCH \ 'https://api_gw_service.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces/0040a68350a4' -H 'Content-Type: application/json'  --data-raw '{"MACAddress":"xx:xx:xx:xx:xx:xx","IPAddress":"10.100.0.xxx","ComponentID":"XNAME"}' 
        ```
     
 29. Repeat the preceding command for each node in the blade.
 
 #### Enable and power on the chassis slot
 
-30. Enable the chassis slot (the example enables slot 0, chassis 3, in cabinet 1005).
+30. Enable the chassis slot. The example enables slot 0, chassis 3, in cabinet 1005.
 
     ```bash
     ncn-m001# cray hsm state components enabled update --enabled true x1005c3s0
     ```
 
-31. Power on slot (the example powers on slot 0, chassis 3, in cabinet 1005).
+31. Power on the chassis slot. The example powers on slot 0, chassis 3, in cabinet 1005.
 
     ```bash
     ncn-m001# cray capmc xname_on create --xnames x1005c3s0 --recursive true
@@ -397,8 +398,8 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
     ncn-m001# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
         
     ncn-m001# kubectl get cronjobs.batch -n services hms-discovery
-    NAME             SCHEDULE        SUSPEND     ACTIVE   LAST SCHEDULE    AGE
-    hms-discovery    */3 * * * *     False         1       41s             33d
+    NAME             SCHEDULE      SUSPEND   ACTIVE   LAST   SCHEDULE  AGE
+    hms-discovery    */3 * * * *   False       1      41s              33d
     
     ncn-m001# kubectl get pods -Ao wide | grep hms-discovery 
     
@@ -557,7 +558,9 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
 46. Determine the pod name for the Slingshot fabric manager pod and check the status of the fabric.
 
     ```bash
-    ncn-m001# kubectl exec -it -n services $(kubectl get pods --all-namespaces |grep slingshot | awk '{print $2}') -- fmn_status
+    ncn-m001# kubectl exec -it -n services \
+    $(kubectl get pods --all-namespaces |grep slingshot | awk '{print $2}') \
+    -- fmn_status
     ```
 
 #### Bring up the blade in the source system
