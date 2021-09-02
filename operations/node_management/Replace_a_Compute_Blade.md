@@ -1,8 +1,10 @@
-# Replace a Compute Blade
+
+
+## Replace a Compute Blade
 
 Replace an HPE Cray EX liquid-cooled compute blade.
 
-## Shutdown software and power off the blade
+### Shutdown software and power off the blade
 
 1. Temporarily disable endpoint discovery service (MEDS) for the compute nodes(s) being replaced.
    This example disables MEDS for the compute node in cabinet 1000, chassis 3, slot 0 (x1000c3s0b0). If there is more than 1 node card, in the blade specify each node card (x1000c3s0b0,x1000c3s0b1).
@@ -16,7 +18,8 @@ Replace an HPE Cray EX liquid-cooled compute blade.
 3. Use Boot Orchestration Services (BOS) to shut down the affected nodes. Specify the appropriate BOS template for the node type.
 
    ```bash
-   ncn-m001# cray bos v1 session create --template-uuid COS-VERSION --operation shutdown --limit x1000c3s0b0n0,x1000c3s0b0n1,x1000c3s0b1n0,x1000c3s0b1n1
+   ncn-m001# cray bos v1 session create --template-uuid BOS_TEMPLATE \
+   --operation shutdown --limit x1000c3s0b0n0,x1000c3s0b0n1,x1000c3s0b1n0,x1000c3s0b1n1
    ```
    
    Specify all the nodes in the blade using a comma separated list. This example shows the command to shut down an EX425 compute blade (Windom) in cabinet 1000, chassis 3, slot 5. This blade type includes two node cards, each with two logical nodes (4 processors).
@@ -32,89 +35,91 @@ Replace an HPE Cray EX liquid-cooled compute blade.
    Disabling the slot prevents hms-discovery from attempting to automatically power on slots. If the slot
    automatically powers on after using CAPMC to power the slot off, then temporarily suspend the hms-discovery cron job in k8s:
 
-   a. Suspend the hms-discovery cron job to prevent slot power on.
+   1. Suspend the hms-discovery cron job to prevent slot power on.
 
-   ```bash
-   ncn-m001# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : true }}'
-   ```
+      ```bash
+      ncn-m001# kubectl -n services patch cronjobs hms-discovery \
+      -p '{"spec" : {"suspend" : true }}'
+      ```
 
-   b. Verify that the hms-discovery cron job has stopped (ACTIVE column = 0).
+   2. Verify that the hms-discovery cron job has stopped (ACTIVE column = 0).
 
-   ```bash
-   ncn-m001# kubectl get cronjobs -n services hms-discovery
-   NAME SCHEDULE SUSPEND ACTIVE LAST SCHEDULE AGE^M
-   hms-discovery */3 * * * * True 0 117s 15d
-   ```
+      ```bash
+      ncn-m001# kubectl get cronjobs -n services hms-discovery
+      NAME SCHEDULE SUSPEND ACTIVE LAST SCHEDULE AGE^M
+      hms-discovery */3 * * * * True 0 117s 15d
+      ```
 
 5. Use CAPMC to power off slot 0 in chassis 3.
 
    ```bash
-   ncn-m001# cray capmc xname_off create --xnames x1000c3s0 --recursive true --format json
+   ncn-m001# cray capmc xname_off create --xnames x1000c3s0 \
+   --recursive true --format json
    ```
 
-## Delete the HSM entries
+### Delete the HSM entries
 
-6.  Delete the node Ethernet interface MAC addresses and the Redfish endpoint from the Hardware State
+6. Delete the node Ethernet interface MAC addresses and the Redfish endpoint from the Hardware State
    Manager (HSM).
-   
+
    **IMPORTANT**: The HSM stores the node's BMC NIC MAC addresses for the hardware management
    network and the node's Ethernet NIC MAC addresses for the node management network. The MAC
    addresses for the node NICs must be updated in the DHCP/DNS configuration when a liquid-cooled
    blade is replaced. Their entries must be deleted from the HSM Ethernet interfaces table and be rediscovered. The BMC NIC MAC addresses for liquid-cooled blades are assigned algorithmically
    and should not be deleted from the HSM.
-   
-   ​	a.  Delete the Node NIC MAC addresses from the HSM Ethernet interfaces table.
-   
-   ​		Query HSM to determine the Node NIC MAC addresses associated with the blade in cabinet 1000,
-   ​		chassis 3, slot 0, node card 0, node 0.
-   
-   ```bash
-   ncn-m001# cray hsm inventory ethernetInterfaces list --component-id x1000c3s0b0n0 --format json
-   	[
-   		{
-   			"ID": "b42e99be1a2b",
-   			"Description": "Ethernet Interface Lan1",
-   			"MACAddress": "b4:2e:99:be:1a:2b",
-   			"LastUpdate": "2021-01-27T00:07:08.658927Z",
-   			"ComponentID": "x1000c3s0b0n0",
-   			"Type": "Node",
-   			"IPAddresses": [
-   			{
-   				"IPAddress": "10.252.1.26"
-   			}
-   			]
-   		},
-   		{
-   			"ID": "b42e99be1a2c",
-   			"Description": "Ethernet Interface Lan2",
-   			"MACAddress": "b4:2e:99:be:1a:2c",
-   			"LastUpdate": "2021-01-26T22:43:10.593193Z",
-   			"ComponentID": "x1000c3s0b0n0",
-   			"Type": "Node",
-   			"IPAddresses": []
-   		}
-   	]
-   ```
-   
-   ​	b. Delete each Node NIC MAC address the Hardware State Manager (HSM) Ethernet interfaces table.
-   
-   ```bash
-   ncn-m001# cray hsm inventory ethernetInterfaces delete b42e99be1a2b
-   ncn-m001# cray hsm inventory ethernetInterfaces delete b42e99be1a2c
-   ```
-   
-   c. Delete the Redfish endpoint for the removed node.
+
+   1. Delete the Node NIC MAC addresses from the HSM Ethernet interfaces table.
+
+      Query HSM to determine the Node NIC MAC addresses associated with the blade in cabinet 1000, chassis 3, slot 0, node card 0, node 0.
+
+      ```bash
+      ncn-m001# cray hsm inventory ethernetInterfaces list \
+      --component-id x1000c3s0b0n0 --format json
+      	[
+      		{
+      			"ID": "b42e99be1a2b",
+      			"Description": "Ethernet Interface Lan1",
+      			"MACAddress": "b4:2e:99:be:1a:2b",
+      			"LastUpdate": "2021-01-27T00:07:08.658927Z",
+      			"ComponentID": "x1000c3s0b0n0",
+      			"Type": "Node",
+      			"IPAddresses": [
+      			{
+      				"IPAddress": "10.252.1.26"
+      			}
+      			]
+      		},
+      		{
+      			"ID": "b42e99be1a2c",
+      			"Description": "Ethernet Interface Lan2",
+      			"MACAddress": "b4:2e:99:be:1a:2c",
+      			"LastUpdate": "2021-01-26T22:43:10.593193Z",
+      			"ComponentID": "x1000c3s0b0n0",
+      			"Type": "Node",
+      			"IPAddresses": []
+      		}
+      	]
+      ```
+      
+      2. Delete each Node NIC MAC address the Hardware State Manager (HSM) Ethernet interfaces table.
+      
+         ```bash
+         ncn-m001# cray hsm inventory ethernetInterfaces delete b42e99be1a2b
+         ncn-m001# cray hsm inventory ethernetInterfaces delete b42e99be1a2c
+         ```
+      
+      3. Delete the Redfish endpoint for the removed node.
    
 7. Replace the blade hardware. 
 
    Review the *Remove a Compute Blade Using the Lift* procedure in *HPE Cray EX Hardware Replacement Procedures H-6173* for detailed instructions (https://internal.support.hpe.com/).
-   
+
    **CAUTION**: Always power off the chassis slot or device before removal. The best practice is to unlatch
    and unseat the device while the coolant hoses are still connected, then disconnect the coolant hoses.
    If this is not possible, disconnect the coolant hoses, then quickly unlatch/unseat the device (within 10
    seconds). Failure to do so may damage the equipment.
 
-## Power on and boot the compute nodes
+### Power on and boot the compute nodes
 
 8. Un-suspend the hms-discovery cronjob in k8s.
 
@@ -125,8 +130,7 @@ Replace an HPE Cray EX liquid-cooled compute blade.
    NAME SCHEDULE SUSPEND ACTIVE LAST SCHEDULE AGE
    hms-discovery */3 * * * * False 1 41s 33d
    
-   ncn-m001# kubectl -n services logs hms-discovery-1600117560-5w95d hms-discovery | grep 
-   "Mountain discovery finished" | jq '.discoveredXnames'
+   ncn-m001# kubectl -n services logs hms-discovery-1600117560-5w95d hms-discovery | grep "Mountain discovery finished" | jq '.discoveredXnames'
    [
    "x1000c3s0b0"
    ]
@@ -211,25 +215,25 @@ Replace an HPE Cray EX liquid-cooled compute blade.
 
 16. Verify that the correct firmware versions for node BIOS, node controller (nC), NIC mezzanine card (NMC), GPUs, and so on.
     
-17. Optional: If necessary, update the firmware. Review the Firmware Action Service (FAS).
+17. Optional: If necessary, update the firmware. Review the [Firmware Action Service (FAS)](../firmware/FAS_Admin_Procedures.md) documentation.
 
     ```bash
     ncn-m001# cray fas actions create CUSTOM_DEVICE_PARAMETERS.json
     ```
 
-18. Update the System Layout Service.
+18. Update the System Layout Service (SLS).
 
-    a. Dump the existing SLS configuration.
+    1. Dump the existing SLS configuration.
 
-    ```bash
-    ncn-m001# cray sls networks describe HSN --format=json > existingHSN.json
-    ```
+       ```bash
+       ncn-m001# cray sls networks describe HSN --format=json > existingHSN.json
+       ```
 
-    b. Copy `existingHSN.json` to a `newHSN.json`, edit `newHSN.json` with the changes, then run
+    2. Copy `existingHSN.json` to a `newHSN.json`, edit `newHSN.json` with the changes, then run
 
-    ```bash
-    ncn-m001# curl -s -k -H "Authorization: Bearer ${TOKEN}" https://API_SYSTEM/apis/sls/v1/networks/HSN -X PUT -d @newHSN.json
-    ```
+       ```bash
+       ncn-m001# curl -s -k -H "Authorization: Bearer ${TOKEN}" https://API_SYSTEM/apis/sls/v1/networks/HSN -X PUT -d @newHSN.json
+       ```
 
 19. Reload DVS on NCNs.
 
@@ -238,5 +242,10 @@ Replace an HPE Cray EX liquid-cooled compute blade.
     Specify the appropriate BOS template for the node type.
 
     ```bash
-    ncn-m001# cray bos v1 session create --template-uuid COS-VERSION --operation reboot --limit x1000c3s0b0n0,x1000c3s0b0n1,x1000c3s0b1n0,x1000c3s0b1n1
+    ncn-m001# cray bos v1 session create --template-uuid BOS_TEMPLATE --operation reboot --limit x1000c3s0b0n0,x1000c3s0b0n1,x1000c3s0b1n0,x1000c3s0b1n1
     ```
+
+
+
+
+
