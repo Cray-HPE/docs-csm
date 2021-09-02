@@ -8,7 +8,7 @@ The following is example log output from a node with hardware issues, resulting 
 
 ```bash
 ncn-m001# kubectl logs BOS_POD_ID
- 
+
 ...
 
 2020-10-03 17:47:30,053 - ERROR   - cray.boa.smd.wait_for_nodes - Number of retries: 361 exceeded allowed amount: 360; 2 nodes were not in the state: Ready

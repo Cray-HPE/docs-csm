@@ -1,7 +1,7 @@
-# Bootstrap PIT Node from LiveCD Remote ISO 
+# Bootstrap PIT Node from LiveCD Remote ISO
 
 The Pre-Install Toolkit (PIT) node needs to be bootstrapped from the LiveCD. There are two media available
-to bootstrap the PIT node--the RemoteISO or a bootable USB device. This procedure describes using the 
+to bootstrap the PIT node--the RemoteISO or a bootable USB device. This procedure describes using the
 RemoteISO. If not using the RemoteISO, see [Bootstrap PIT Node from LiveCD USB](bootstrap_livecd_usb.md)
 
 The installation process is similar to the USB based installation with adjustments to account for the
@@ -163,15 +163,15 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
     ```bash
     pit# mount -v -L PITDATA
     pit# pushd /var/www/ephemeral
-    pit/var/www/ephemeral# mkdir -v prep configs data 
+    pit/var/www/ephemeral# mkdir -v prep configs data
     ```
 
 1. Download the CSM software release to the PIT node.
 
-   **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hotfixes 
+   **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hotfixes
    were downloaded to a system using the instructions in [Update CSM Product Stream](../update_product_stream/index.md)
    Either copy from that system to the PIT node or set the ENDPOINT variable to URL and use `wget`.
-   
+
    1. Set helper variables
 
       ```bash
@@ -239,7 +239,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
    If this machine does not have direct Internet access these RPMs will need to be externally downloaded and then copied to the system.
 
-   **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hotfixes 
+   **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hotfixes
    were downloaded to a system using the instructions in [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds). Use that set of RPMs rather than downloading again.
 
    ```bash
@@ -254,10 +254,10 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 1. Generate configuration files.
 
    Some files are needed for generating the configuration payload. See these topics in [Prepare Configuration Payload](prepare_configuration_payload.md) if you have not already prepared the information for this system. At this time see [Create HMN Connections JSON](create_hmn_connections_json.md) for instructions about creating the `hmn_connections.json`.
-   
+
       * [Command Line Configuration Payload](prepare_configuration_payload.md#command_line_configuration_payload)
       * [Configuration Payload Files](prepare_configuration_payload.md#configuration_payload_files)
-   
+
    Pull these files into the current working directory.
    - `application_node_config.yaml` (optional - see below)
    - `cabinets.yaml` (optional - see below)
@@ -265,35 +265,35 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    - `ncn_metadata.csv`
    - `switch_metadata.csv`
    - `system_config.yaml` (see below)
-   
+
    > The optional `application_node_config.yaml` file may be provided for further defining of settings relating to how application nodes will appear in HSM for roles and subroles. See [Create Application Node YAML](create_application_node_config_yaml.md)
-   
+
    > The optional `cabinets.yaml` file allows cabinet naming and numbering as well as some VLAN overrides. See [Create Cabinets YAML](create_cabinets_yaml.md).
-   
+
    > The `system_config.yaml` is required for a reinstall, because it was created during a previous install. For a first time install, the information in it can be provided as command line arguments to `csi config init`.
-   
-   
+
+
    1. Change into the preparation directory.
-   
+
       ```bash
       linux# mkdir -pv /var/www/ephemeral/prep
       linux# cd /var/www/ephemeral/prep
       ```
-   
+
       After gathering the files into this working directory, generate your configurations.
-   
+
    1. If doing a reinstall and have the `system_config.yaml` parameter file avail available, then generate the system configuration reusing this parameter file (see [avoiding parameters](../background/cray_site_init_files.md#save-file--avoiding-parameters)).
-   
+
       If not doing a reinstall of Shasta software, then the `system_config.yaml` file will not be available, so skip the rest of this step.
-   
+
       The needed files should be in the current directory.
-   
+
       ```bash
       linux# ls -1
       ```
-   
+
       Expected output looks similar to the following:
-   
+
       ```
       application_node_config.yaml
       cabinets.yaml
@@ -302,35 +302,35 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       switch_metadata.csv
       system_config.yaml
       ```
-   
+
       Set an environment variable so this system name can be used in later commands.
-   
+
       ```bash
       linux# export SYSTEM_NAME=eniac
       ```
-   
+
       Generate the system configuration.
-   
+
       ```bash
       linux# csi config init
       ```
-   
+
       A new directory matching your `--system-name` argument will now exist in your working directory.
-   
+
       Skip the next step to apply the csi-config workarounds.
-   
+
    1. If doing a first time install or the `system_config.yaml` parameter file for a reinstall is not available, generate the system configuration.
-   
+
       If doing a first time install, this step is required. If you did the previous step as part of a reinstall, skip this.
-   
+
       The needed files should be in the current directory.
-   
+
       ```bash
       linux# ls -1
       ```
-   
+
       Expected output looks similar to the following:
-   
+
       ```
       application_node_config.yaml
       cabinets.yaml
@@ -338,15 +338,15 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       ncn_metadata.csv
       switch_metadata.csv
       ```
-   
+
       Set an environment variable so this system name can be used in later commands.
-   
+
       ```bash
       linux# export SYSTEM_NAME=eniac
       ```
-   
+
       Generate the system configuration. See below for an explanation of the command line parameters and some common settings.
-   
+
       ```bash
       linux# csi config init \
           --bootstrap-ncn-bmc-user root \
@@ -372,7 +372,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
           --nmn-mtn-cidr 10.100.0.0/17 \
           --bgp-peers aggregation
       ```
-   
+
       A new directory matching your `--system-name` argument will now exist in your working directory.
 
       > After generating a configuration, a visual audit of the generated files for network data should be performed.
@@ -383,7 +383,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       * The `application_node_config.yaml` file is optional, but if you have one describing the mapping between prefixes in `hmn_connections.csv` that should be mapped to HSM subroles, you need to include a command line option to have it used. See [Create Application Node YAML](create_application_node_config_yaml.md).
       * The `bootstrap-ncn-bmc-user` and `bootstrap-ncn-bmc-pass` must match what is used for the BMC account and its password for the management NCNs.
       * Set site parameters (`site-domain`, `site-ip`, `site-gw`, `site-nic`, `site-dns`) for the information which connects `ncn-m001` (the PIT node) to the site. The `site-nic` is the interface on this node connected to the site.
-      * There are other interfaces possible, but the `install-ncn-bond-members` are typically: 
+      * There are other interfaces possible, but the `install-ncn-bond-members` are typically:
          * `p1p1,p10p1` for HPE nodes
          * `p1p1,p1p2` for Gigabyte nodes
          * `p801p1,p801p2` for Intel nodes
@@ -391,7 +391,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       * The starting cabinet number for each type of cabinet (for example, `starting-mountain-cabinet`) has a default that can be overridden. See the `csi config init --help`
       * For systems that use non-sequential cabinet ID numbers, use `cabinets-yaml` to include the `cabinets.yaml` file. This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to specify explicitly the id of every cabinet in the system. If you are using a `cabinets-yaml` file, flags specified on the `csi` command-line related to cabinets will be ignored. See [Create Cabinets YAML](create_cabinets_yaml.md).
       * An override to default cabinet IPv4 subnets can be made with the `hmn-mtn-cidr` and `nmn-mtn-cidr` parameters.
-      * By default, spine switches are used as MetalLB peers.  Use `--bgp-peers aggregation` to use aggregation switches instead.
+      * By default, spine switches are used as MetalLB peers. Use `--bgp-peers aggregation` to use aggregation switches instead.
       * Several parameters (`can-gateway`, `can-cidr`, `can-static-pool`, `can-dynamic-pool`) describe the CAN (Customer Access network). The `can-gateway` is the common gateway IP address used for both spine switches and commonly referred to as the Virtual IP address for the CAN. The `can-cidr` is the IP subnet for the CAN assigned to this system. The `can-static-pool` and `can-dynamic-pool` are the MetalLB address static and dynamic pools for the CAN. The `can-external-dns` is the static IP address assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded. The `can-external-dns` IP address must be within the `can-static-pool` range.
       * Set `ntp-pool` to a reachable NTP server
 
@@ -465,7 +465,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
        config:   compat:suse:/etc/sysconfig/network/ifcfg-vlan007
        leases:   ipv4 static granted
        addr:     ipv4 10.102.9.5/24 [static]
- 
+
        vlan004         up
        link:     #10, state up, mtu 1500
        type:     vlan bond0[4], hwaddr b8:59:9f:fe:49:d4

@@ -16,17 +16,17 @@ Switches must be powered on and operating. This procedure is optional if switch 
     ncn-m001# ssh admin@sw-leaf-001
     admin@sw-leaf-001s password:
     sw-leaf-001# write memory
-    sw-leaf-001# dir config 
-    sw-leaf-001# exit 
+    sw-leaf-001# dir config
+    sw-leaf-001# exit
     ```
-    
+
     Use a for loop:
-    
+
     ```bash
     ncn-m001# for sw in sw-leaf-001 sw-leaf-002 sw-cdu-001 sw-cdu-002; \
     do ssh admin@$sw; done
     ```
-    
+
 2.  Connect to all management network Mellanox spine switches and write memory configuration.
 
     Mellanox spine switches, for example `sw-spine-001.nmn`:
@@ -34,7 +34,7 @@ Switches must be powered on and operating. This procedure is optional if switch 
     ```bash
     ncn-m001# ssh admin@sw-spine-001.nmn
     admin@sw-spine-001 password:
-    
+
     sw-spine-001# enable
     sw-spine-001# write memory
     sw-spine-001# exit
@@ -45,7 +45,7 @@ Switches must be powered on and operating. This procedure is optional if switch 
     ```bash
     ncn-m001# ssh admin@sw-spine-001.nmn
     admin@sw-spine-001 password:
-    
+
     sw-spine-001# write memory
     sw-spine-001# exit
     ```
@@ -57,7 +57,7 @@ Switches must be powered on and operating. This procedure is optional if switch 
     ```bash
     ncn-m001# ssh admin@cls01053n00
     admin@cls01053n00 password:
-    
+
     cls01053n00# ssh r0-100gb-sw01
     r0-100gb-sw01# enable
     r0-100gb-sw01# write memory

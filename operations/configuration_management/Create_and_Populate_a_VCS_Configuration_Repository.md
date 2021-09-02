@@ -43,7 +43,7 @@ Create a new repository in the VCS and populate it with content for site customi
 
     ```bash
     ncn# git rev-parse --verify HEAD
-    63ed2b8c02fb71975a05003a7ef2f84db581786b 
+    63ed2b8c02fb71975a05003a7ef2f84db581786b
     ```
 
 

@@ -16,13 +16,13 @@ do
              echo "        ceph-service-status.sh -n <node> -s <service> # checks a single service on a single node"
              echo "        ceph-service-status.sh -n <node> -a true # checks all Ceph services on a node"
              echo "        ceph-service-status.sh -A true # checks all Ceph services on all nodes in a rolling fashion"
-             echo "        ceph-service-status.sh -s <service name> # will find the where the service is running and report it's status"
+             echo "        ceph-service-status.sh -s <service name> # will find the where the service is running and report its status"
              exit 0;;
           \?) echo "usage:  ceph-service-status.sh # runs a simple ceph health check"
              echo "        ceph-service-status.sh -n <node> -s <service> # checks a single service on a single node"
              echo "        ceph-service-status.sh -n <node> -A true # checks all Ceph services on a node"
              echo "        ceph-service-status.sh -a true # checks all Ceph services on all nodes in a rolling fashion"
-             echo "        ceph-service-status.sh -s <service name> # will find the where the service is running and report it's status"
+             echo "        ceph-service-status.sh -s <service name> # will find the where the service is running and report its status"
              exit 1;;
   esac
 done

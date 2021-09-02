@@ -23,10 +23,10 @@ Identify pods that are hitting resource limits in order to increase the resource
         ncn-w001# cat detect_cpu_throttling.sh
         #!/bin/sh
         # Usage: detect_cpu_throttling.sh [pod_name_substr] (default evaluates all pods)
-        
+
         str=$1
         : ${str:=.}
-        
+
         while read ns pod node; do
           echo ""
           echo "Checking $pod"
@@ -58,17 +58,17 @@ Identify pods that are hitting resource limits in order to increase the resource
 
         ```bash
         ncn-w001# ./detect_cpu_throttling.sh externaldns
-        
+
         Checking cray-externaldns-coredns-58b5f8494-c45kh
-        
+
         Checking cray-externaldns-coredns-58b5f8494-pjvz6
-        
+
         Checking cray-externaldns-etcd-2kn7w6gnsx
-        
+
         Checking cray-externaldns-etcd-88x4drpv27
-        
+
         Checking cray-externaldns-etcd-sbnbph52vh
-        
+
         Checking cray-externaldns-external-dns-5bb8765896-w87wb
         *** CPU throttling: ***
         nr_periods 1127304
@@ -82,17 +82,17 @@ Identify pods that are hitting resource limits in order to increase the resource
 
         ```bash
         ncn-w001# ./detect_cpu_throttling.sh
-        
+
         Checking benji-k8s-fsfreeze-9zlfk
-        
+
         Checking benji-k8s-fsfreeze-fgqmd
-        
+
         Checking benji-k8s-fsfreeze-qgbcp
-        
+
         Checking benji-k8s-maint-796b444bfc-qcrhx
-        
+
         Checking benji-k8s-postgresql-0
-        
+
         Checking benji-k8s-pushgateway-777fd86545-qrmbr
         .
         .

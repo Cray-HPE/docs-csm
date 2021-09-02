@@ -1,7 +1,7 @@
 # Restart Network Services and Interfaces on NCNs
 
 Interfaces within the network stack can be reloaded or reset to fix wedged interfaces.
-The NCNs have network device names set during first boot. The names vary based on the 
+The NCNs have network device names set during first boot. The names vary based on the
 available hardware. For more information, see [NCN Networking](../background/ncn_networking.md).
 Any process covered on this page will be covered by the installer.
 
@@ -23,7 +23,7 @@ The use cases for resetting services:
 <a name="restart_network_services_and_interfaces"></a>
 ### Restart Network Services
 
-There are a few daemons that make up the SUSE network stack. The following are  
+There are a few daemons that make up the SUSE network stack. The following are
 sorted by safest to touch relative to keeping an SSH connection up.
 
 1. `wickedd.service`: The daemons handling each interface. Resetting this clears stale configuration.

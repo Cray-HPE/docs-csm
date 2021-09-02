@@ -2,7 +2,7 @@
 
 View the existing Vault backups on the system and use a completed backup to perform a restore operation.
 
-**CAUTION:** A restore operation should only be performed in extreme situations. Performing a restore from a backup may cause secrets stored in Vault to change to an earlier state or get out of sync. 
+**CAUTION:** A restore operation should only be performed in extreme situations. Performing a restore from a backup may cause secrets stored in Vault to change to an earlier state or get out of sync.
 
 * Velero is used to perform a nightly backup of Vault. The backup includes Kubernetes object state, in addition to pod volume data for the vault statefulset. For more information on Velero, refer to the [https://velero.io/](https://velero.io/) external documentation.
 
@@ -24,7 +24,7 @@ View the existing Vault backups on the system and use a completed backup to perf
     NAME                 STATUS    CREATED                         SCHEDULE    BACKUP TTL   LAST BACKUP   SELECTOR
     vault-daily-backup   Enabled   2021-01-26 14:14:04 +0000 UTC   0 2 * * *   0s           19h ago       vault_cr=cray-vault
     ```
-    
+
 2. View the completed backups.
 
     ```bash
@@ -50,41 +50,41 @@ View the existing Vault backups on the system and use a completed backup to perf
     Annotations:  velero.io/source-cluster-k8s-gitversion=v1.18.6
                   velero.io/source-cluster-k8s-major-version=1
                   velero.io/source-cluster-k8s-minor-version=18
-    
+
     Phase:  Completed
-    
+
     Errors:    0
     Warnings:  0
-    
+
     Namespaces:
       Included:  vault
       Excluded:  <none>
-    
+
     Resources:
       Included:        pv, pvc, secret, sealedsecret, vault, configmap, deployment, service, statefulset, pod, ingress, replicaset
       Excluded:        <none>
       Cluster-scoped:  included
-    
+
     Label selector:  vault_cr=cray-vault
-    
+
     Storage Location:  default
-    
+
     Velero-Native Snapshot PVs:  auto
-    
+
     TTL:  720h0m0s
-    
+
     Hooks:  <none>
-    
+
     Backup Format Version:  1.1.0
-    
+
     Started:    2021-02-17 02:00:38 +0000 UTC
     Completed:  2021-02-17 02:00:52 +0000 UTC
-    
+
     Expiration:  2021-03-19 02:00:38 +0000 UTC
-    
+
     Total items to be backed up:  21
     Items backed up:              21
-    
+
     Resource List:
       apps/v1/Deployment:
         - vault/cray-vault-configurer
@@ -116,9 +116,9 @@ View the existing Vault backups on the system and use a completed backup to perf
         - vault/cray-vault-1
         - vault/cray-vault-2
         - vault/cray-vault-configurer
-    
+
     Velero-Native Snapshots: <none included>
-    
+
     Restic Backups:
       Completed:
         vault/cray-vault-0: vault-raft
@@ -142,41 +142,41 @@ View the existing Vault backups on the system and use a completed backup to perf
     Annotations:  velero.io/source-cluster-k8s-gitversion=v1.18.6
                   velero.io/source-cluster-k8s-major-version=1
                   velero.io/source-cluster-k8s-minor-version=18
-    
+
     Phase:  Completed
-    
+
     Errors:    0
     Warnings:  0
-    
+
     Namespaces:
       Included:  vault
       Excluded:  <none>
-    
+
     Resources:
       Included:        pv, pvc, secret, sealedsecret, vault, configmap, deployment, service, statefulset, pod, ingress, replicaset
       Excluded:        <none>
       Cluster-scoped:  included
-    
+
     Label selector:  vault_cr=cray-vault
-    
+
     Storage Location:  default
-    
+
     Velero-Native Snapshot PVs:  auto
-    
+
     TTL:  720h0m0s
-    
+
     Hooks:  <none>
-    
+
     Backup Format Version:  1.1.0
-    
+
     Started:    2021-02-17 02:00:38 +0000 UTC
     Completed:  2021-02-17 02:00:52 +0000 UTC
-    
+
     Expiration:  2021-03-19 02:00:38 +0000 UTC
-    
+
     Total items to be backed up:  21
     Items backed up:              21
-    
+
     Resource List:
       apps/v1/Deployment:
         - vault/cray-vault-configurer
@@ -208,9 +208,9 @@ View the existing Vault backups on the system and use a completed backup to perf
         - vault/cray-vault-1
         - vault/cray-vault-2
         - vault/cray-vault-configurer
-    
+
     Velero-Native Snapshots: <none included>
-    
+
     Restic Backups:
       Completed:
         vault/cray-vault-0: vault-raft

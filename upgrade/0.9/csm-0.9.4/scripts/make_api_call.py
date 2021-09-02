@@ -76,7 +76,7 @@ if method in { "patch", "post" }:
     # whether or not this is Gigabyte
     if -1 < vendor.find("GIGA") < vendor.find("BYTE"):
         # Adding this header based on this comment in the shell script:
-        # GIGABYTE seems to need If-Match headers. For now, just accept * all because we do not 
+        # GIGABYTE seems to need If-Match headers. For now, just accept * all because we do not
         # know yet what they are looking for
         headers["If-Match"] = "*"
 

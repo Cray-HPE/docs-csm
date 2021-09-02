@@ -18,7 +18,7 @@ User = "root"
 Password = ""
 Type = "NodeBMC"
 ID = "x3000c0s15b0"
-    
+
 [DiscoveryInfo]
 LastDiscoveryAttempt = "2019-11-18T21:34:29.990441Z"
 RedfishVersion = "1.1.0"
@@ -28,7 +28,7 @@ LastDiscoveryStatus = "HTTPsGetFailed"
 ### Prerequisites
 
 -   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
-  
+
 ### Procedure
 
 1.  Restart the HSM inventory process.
@@ -51,7 +51,7 @@ LastDiscoveryStatus = "HTTPsGetFailed"
     Password = ""
     Type = "NodeBMC"
     ID = "x3000c0s15b0"
-    
+
     [DiscoveryInfo]
     LastDiscoveryAttempt = "2019-11-18T21:34:29.990441Z"
     RedfishVersion = "1.1.0"

@@ -23,7 +23,7 @@ At least one UAI is running.
     uai_img = "registry.local/cray/cray-uas-sles15sp1-slurm:latest"
     uai_age = "2m"
     uai_name = "uai-uastest-f488eef6"
-    
+
     [[results]]
     username = "uastest"
     uai_host = "ncn-w001"
@@ -31,8 +31,8 @@ At least one UAI is running.
     uai_connect_string = "ssh uastest@203.0.113.0 -p 31833 -i ~/.ssh/id_rsa"
     uai_img = "registry.local/cray/cray-uas-sles15sp1-slurm:latest"
     uai_age = "11m"
-    uai_name = "uai-uastest-391da133" 
-    
+    uai_name = "uai-uastest-391da133"
+
     [[results]]
     username = "uasuser"
     uai_host = "ncn-w001"
@@ -66,7 +66,7 @@ At least one UAI is running.
     uai_img = "registry.local/cray/cray-uas-sles15sp1-slurm:latest"
     uai_age = "2m"
     uai_name = "uai-uastest-f488eef6"
-    
+
     [[results]]
     username = "uastest"
     uai_host = "ncn-w001"
@@ -74,8 +74,8 @@ At least one UAI is running.
     uai_connect_string = "ssh uastest@203.0.113.0 -p 31833 -i ~/.ssh/id_rsa"
     uai_img = "registry.local/cray/cray-uas-sles15sp1-slurm:latest"
     uai_age = "11m"
-    uai_name = "uai-uastest-391da133" 
-    
+    uai_name = "uai-uastest-391da133"
+
     [[results]]
     username = "uasuser"
     uai_host = "ncn-w001"

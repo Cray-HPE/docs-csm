@@ -42,7 +42,7 @@ The Cray EX User Access Node \(UAN\) recipe currently requires the Slingshot Dia
         ncn-m001# cray ims recipes list --format json | jq '.[] | select(.name | contains("uan"))'
         {
           "created": "2021-02-17T15:19:48.549383+00:00",
-          "id": "4a5d1178-80ad-4151-af1b-bbe1480958d1", 
+          "id": "4a5d1178-80ad-4151-af1b-bbe1480958d1",
           "link": {
             "etag": "3c3b292364f7739da966c9cdae096964",
             "path": "s3://ims/recipes/4a5d1178-80ad-4151-af1b-bbe1480958d1/recipe.tar.gz",

@@ -23,7 +23,7 @@ ServerAliveCountMax 720
 ncn-w001 # cray auth login --username USER --password WRONGPASSWORD
 Usage: cray auth login [OPTIONS]
 Try "cray auth login --help" for help.
- 
+
 Error: Invalid Credentials
 ```
 
@@ -133,7 +133,7 @@ $ ssh user@203.0.113.0 -i ~/.ssh/id_rsa
 \____//_/ |_|/_/  |_|/_/   \____//_/  |_|/___/
 
 [user@uai-user-be3a6770-6876c88676-2p2lk ~]$ xeyes
-Error: Can't open display: 
+Error: Can't open display:
 ```
 
 To resolve this issue, pass the -X option with the ssh command as show below:
@@ -148,7 +148,7 @@ $ ssh UAI_USERNAME@UAI_IP_ADDRESS -i ~/.ssh/id_rsa -X
 /usr/bin/xauth:  file /home/users/user/.Xauthority does not exist
 
 [user@uai-user-be3a6770-6876c88676-2p2lk ~]$ echo $DISPLAY
-203.0.113.0 
+203.0.113.0
 ```
 
 The warning stating "Xauthority does not exist" will disappear with subsequent logins.
@@ -184,7 +184,7 @@ ncn-w001# kubectl delete all -n user -l app=UAI-NAME
 Delete all objects for a single user:
 
 ```bash
-ncn-w001# kubectl delete all -n user -l user=USERNAME 
+ncn-w001# kubectl delete all -n user -l user=USERNAME
 ```
 
 ### Hard limits on UAI Creation

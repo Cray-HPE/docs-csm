@@ -41,7 +41,7 @@ root          54       1  0 22:56 ?        00:00:00 su vers -c /usr/sbin/sshd -e
 vers          55      54  0 22:56 ?        00:00:00 /usr/sbin/sshd -e -f /etc/uas/ssh/sshd_config -D
 root          90       0  0 22:58 pts/0    00:00:00 /bin/sh
 root          97      90  0 22:58 pts/0    00:00:00 ps -afe
-sh-4.4# 
+sh-4.4#
 ```
 
 The procedure is to find the name of the UAI in question, use that with `kubectl` to find the pod containing that UAI, use the pod name and the `user` namespace to set up the `kubectl exec` specifying the UAI name as the container to `exec` into and specifying `/bin/sh` as the command to run. From there, the administrator can look around inside the UAI as needed.

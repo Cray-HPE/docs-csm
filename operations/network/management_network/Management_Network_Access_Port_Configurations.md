@@ -40,24 +40,24 @@ This is for the Apollo XL645d only.
 iLO BMC port:
 ```
 sw-leaf-001(config)#
-    interface 1/1/46 
-    no shutdown 
+    interface 1/1/46
+    no shutdown
     no routing
     vlan trunk native 1
     vlan trunk allowed 4
     spanning-tree bpdu-guard
     spanning-tree port-type admin-edge
-    exit 
+    exit
 ```
 NMN port from OCP card:
 ```
-interface 1/1/14 
-    no shutdown 
+interface 1/1/14
+    no shutdown
     no routing
     vlan access 2
     spanning-tree bpdu-guard
     spanning-tree port-type admin-edge
-    exit 
+    exit
 ```
 
 ## UAN Port Configuration
@@ -264,7 +264,7 @@ interface lag 4 multi-chassis
 
 - This requires updated CMM firmware (version 1.4.20).
 - A static LAG will be configured on the CDU switches.
-- The CDU switches have two cables (10Gb RJ45) connecting to each CMM. 
+- The CDU switches have two cables (10Gb RJ45) connecting to each CMM.
 - This configuration offers increased throughput and redundancy.
 
 ## Aruba

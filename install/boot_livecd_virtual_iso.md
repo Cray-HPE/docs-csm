@@ -1,4 +1,4 @@
-# Boot LiveCD Virtual ISO 
+# Boot LiveCD Virtual ISO
 
 This page will walk-through booting the LiveCD `.iso` file directly onto a BMC.
 
@@ -14,7 +14,7 @@ This page will walk-through booting the LiveCD `.iso` file directly onto a BMC.
 
 ## Details
 
-<a name="requirements"></a>   
+<a name="requirements"></a>
 ### Requirements
 
 A Cray Pre-Install Toolkit ISO is required for this process. This ISO can be obtained from:
@@ -25,7 +25,7 @@ A Cray Pre-Install Toolkit ISO is required for this process. This ISO can be obt
 <a name="bmcs-virtual-mounts"></a>
 ### BMCs' Virtual Mounts
 
-Most BMCs offer a **Web Interface** for controlling the node and for providing access to its BIOS and firmware. 
+Most BMCs offer a **Web Interface** for controlling the node and for providing access to its BIOS and firmware.
 
 Refer to the following pages based on your node vendor for help mounting an ISO image:
 
@@ -54,7 +54,7 @@ HPE iLO BMCs allow for booting directly from an HTTP-accessible ISO location.
 
 Gigabyte BMCs allow for booting over HTTP.
 
-**Note:** Because of problems in the Gigabyte firmware, do not try to boot over NFS or CIFS. 
+**Note:** Because of problems in the Gigabyte firmware, do not try to boot over NFS or CIFS.
 
 Go to the BMC settings and setup the remote ISO for your protocol and node.
 

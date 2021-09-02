@@ -44,7 +44,7 @@ ncn# PATH_TO_RELEASE=/root/csm-1.0.0
 ncn# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
 ```
 
-3. Get the current cached sysmgnt manifest.
+3. Get the current cached sysmgmt manifest.
 
 ```bash
 ncn# kubectl get cm -n loftsman loftsman-sysmgmt  -o jsonpath='{.data.manifest\.yaml}' -o sysmgmt.yaml

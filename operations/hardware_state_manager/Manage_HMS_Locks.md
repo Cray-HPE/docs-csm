@@ -12,7 +12,7 @@ The following shows how to interpret the output:
 
 * Locked: Shows if the xname has been locked with the `cray hsm locks lock create` command.
 * Reserved: Shows if the xname has been locked for a time-boxed event. Only service can reserve xnames; administrators are not able to reserve xnames.
-* ReservationDisable: Shows if the ability to reserved an xname has been changed by an EPO or admin command. 
+* ReservationDisable: Shows if the ability to reserved an xname has been changed by an EPO or admin command.
 
 ```bash
 ncn-m001# cray hsm locks status create --component-ids x1003c5s2b1n1
@@ -29,7 +29,7 @@ ReservationDisabled = false
 
 Disabling a lock prevents a service from being able to make a reservation on it, and it releases/ends any current reservations. Even though SMD removes the reservation when disabling a lock, it does not mean that the Firmware Action Service (FAS) is aware that it has lost the reservation. Additionally, if CAPMC has a reservation that is cancelled, disabled, or broken, it will do nothing to the existing CAPMC operation. There are no checks by CAPMC to make sure things are still reserved at any time during a power operation.
 
-This is a way to stop new operations from happening, not a way to prevent currently executing operations. 
+This is a way to stop new operations from happening, not a way to prevent currently executing operations.
 
 
 ```bash

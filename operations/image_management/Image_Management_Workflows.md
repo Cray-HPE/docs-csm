@@ -2,7 +2,7 @@
 
 Overview of how to create an image and how to customize and image.
 
-The following workflows are intended to be high-level overviews of image management tasks. These workflows depict how services interact with each other during image management and help to provide a quicker and deeper understanding of how the system functions. 
+The following workflows are intended to be high-level overviews of image management tasks. These workflows depict how services interact with each other during image management and help to provide a quicker and deeper understanding of how the system functions.
 
 The workflows in this section include:
 

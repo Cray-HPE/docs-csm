@@ -12,7 +12,7 @@ upgrade_ncn=$1
 . ${BASEDIR}/ncn-upgrade-common.sh ${upgrade_ncn}
 
 cat <<EOF
-NOTE: 
+NOTE:
     In upgrade/1.0/resource_material/k8s/worker-reference.md
     step 1 and 2 are not automated
 EOF
@@ -22,7 +22,7 @@ state_name="ENSURE_NEXUS_CAN_START_ON_ANY_NODE"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    
+
     workers="$(kubectl get node --selector='!node-role.kubernetes.io/master' -o name | sed -e 's,^node/,,' | paste -sd,)"
     export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
     yq r ${CSM_ARTI_DIR}/manifests/platform.yaml 'spec.charts(name==cray-precache-images).values.cacheImages[*]' | while read image; do echo >&2 "+ caching $image"; pdsh -w "$workers" "crictl pull $image"; done
@@ -32,14 +32,14 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-# Ensure that the previously rebuilt worker node (if applicable) has started any etcd pods (if necessary). 
-# We do not want to begin rebuilding the next worker node until etcd pods have reached quorum. 
+# Ensure that the previously rebuilt worker node (if applicable) has started any etcd pods (if necessary).
+# We do not want to begin rebuilding the next worker node until etcd pods have reached quorum.
 state_name="ENSURE_ETCD_PODS_RUNNING"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    
-    while [[ "$(kubectl get po -A -l 'app=etcd' | grep -v "Running"| wc -l)" != "1" ]]; do 
+
+    while [[ "$(kubectl get po -A -l 'app=etcd' | grep -v "Running"| wc -l)" != "1" ]]; do
         echo "Some etcd pods are not in running state, wait for 5s ..."
         kubectl get po -A -l 'app=etcd' | grep -v "Running"
         sleep 5
@@ -47,7 +47,7 @@ if [[ $state_recorded == "0" ]]; then
 
     etcdClusters=$(kubectl get Etcdclusters -n services | grep "cray-"|awk '{print $1}')
     for cluster in $etcdClusters
-    do 
+    do
         numOfPods=$(kubectl get pods -A -l 'app=etcd'| grep $cluster | grep "Running" | wc -l)
         if [[ $numOfPods -ne 3 ]];then
             echo "ERROR - Etcd cluster: $cluster should have 3 pods running but only $numOfPods are running"
@@ -63,7 +63,7 @@ state_name="ENSURE_POSTGRES_HEALTHY"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    
+
     if [[ ! -z $(kubectl get postgresql -A -o json | jq '.items[].status | select(.PostgresClusterStatus != "Running")') ]]; then
         echo "--- ERROR --- not all Postgresql Clusters have a status of 'Running'"
         exit 1
@@ -96,7 +96,7 @@ if [[ $state_recorded == "0" ]]; then
 
         #check number of leader
         if [[ $c_num_of_leader -ne 1 ]]; then
-            echo "--- ERROR --- $c cluster doesn't hava a leader"
+            echo "--- ERROR --- $c cluster does not have a leader"
             exit 1
         fi
         #check number of lag

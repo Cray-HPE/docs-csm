@@ -26,7 +26,7 @@ Currently, only `smf` includes a quota.
       CLASS     SIZE       AVAIL      USED        RAW USED     %RAW USED
       ssd       21 TiB     21 TiB     122 GiB      134 GiB          0.62
       TOTAL     **21 TiB**     21 TiB     122 GiB      134 GiB          0.62
-    
+
     POOLS:
       POOL                           ID     STORED      OBJECTS     USED        %USED     MAX AVAIL     QUOTA OBJECTS     QUOTA BYTES     DIRTY       USED COMPR     UNDER COMPR
       cephfs_data                     1     1.0 MiB          74     6.2 MiB         0       6.6 TiB     N/A               N/A                  74            0 B             0 B
@@ -84,7 +84,7 @@ Currently, only `smf` includes a quota.
       CLASS     SIZE       AVAIL      USED        RAW USED     %RAW USED
       ssd       21 TiB     21 TiB     122 GiB      134 GiB          0.62
       TOTAL     **21 TiB**     21 TiB     122 GiB      134 GiB          0.62
-    
+
     POOLS:
       POOL                           ID     STORED      OBJECTS     USED        %USED     MAX AVAIL     QUOTA OBJECTS     QUOTA BYTES     DIRTY       USED COMPR     UNDER COMPR
       cephfs_data                     1     1.0 MiB          74     6.2 MiB         0       6.6 TiB     N/A               N/A                  74            0 B             0 B

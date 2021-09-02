@@ -7,12 +7,12 @@ Refer to [Broker Mode UAI Management](Broker_Mode_UAI_Management.md) for more in
 
 ### Prerequisites
 
-This procedure requires administrative privileges. 
+This procedure requires administrative privileges.
 
 ### Procedure
 
 1. Create a UAI manually.
-    
+
     Use a command of the following form:
 
     ```

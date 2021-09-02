@@ -143,10 +143,10 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         - name: Get Mountain NMN Services Network info from SLS
           local_action:
             module: uri
-              url: http://cray-sls/v1/search/networks?name=NMN_MTN 
+              url: http://cray-sls/v1/search/networks?name=NMN_MTN
             method: GET
           register: sls_mnmn_svcs
-          ignore_errors: yes 
+          ignore_errors: yes
         ```
 
     2.  Stage and commit the network name change
@@ -173,9 +173,9 @@ This guide only details how to apply UAN-specific configuration to the UAN image
 
     ```bash
     ncn-m001# git rev-parse --verify HEAD
-    
+
     ecece54b1eb65d484444c4a5ca0b244b329f4667
-    
+
     ncn-m001# cd ..
     ```
 
@@ -300,8 +300,8 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         chroot-ncn-m001# rpm -e cray-network-config
         chroot-ncn-m001# rpm -e slingshot-network-config-full
         chroot-ncn-m001# rpm -e slingshot-network-config
-        chroot-ncn-m001# rpm -iv slingshot-network-config-full-1.1.7-20210318093253_83fab52-sles15sp1.x86_64.rpm \ 
-        slingshot-network-config-1.1.7-20210318093253_83fab52-sles15sp1.x86_64.rpm \ 
+        chroot-ncn-m001# rpm -iv slingshot-network-config-full-1.1.7-20210318093253_83fab52-sles15sp1.x86_64.rpm \
+        slingshot-network-config-1.1.7-20210318093253_83fab52-sles15sp1.x86_64.rpm \
         cray-network-config-1.1.7-20210318094806_b409053-sles15sp1.x86_64.rpm
         ```
 
@@ -333,7 +333,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         total 8.0K
         drwxr-xr-x 3 root root   49 Feb 25 17:50 ./
         drwxr-xr-x 8 root root 4.0K Feb 25 17:52 ../
-        drwxr-xr-x 6 root root 4.0K Mar 17 19:49 4.12.14-197.78_9.1.58-cray_shasta_c/  
+        drwxr-xr-x 6 root root 4.0K Mar 17 19:49 4.12.14-197.78_9.1.58-cray_shasta_c/
         ```
 
     11. Resquash the new image directory.
@@ -342,7 +342,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         ncn-m001# mksquashfs UAN-1.4.0-day-zero UAN-1.4.0-day-zero.squashfs
         Parallel mksquashfs: Using 64 processors
         Creating 4.0 filesystem on UAN-1.4.0-day-zero.squashfs, block size 131072.
-        ...  
+        ...
         ```
 
     12. Create a new IMS image registration and save the id field in an environment variable.
@@ -352,7 +352,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         name = "UAN-1.4.0-day-zero"
         created = "2021-03-17T20:23:05.576754+00:00"
         id = "ac31e971-f990-4b5f-821d-c0c18daefb6e"
-        ncn-m001# export NEW_IMAGE_ID=ac31e971-f990-4b5f-821d-c0c18daefb6e  
+        ncn-m001# export NEW_IMAGE_ID=ac31e971-f990-4b5f-821d-c0c18daefb6e
         ```
 
     13. Upload the new image, initrd, and kernel to S3 using the id from the previous step.
@@ -361,17 +361,17 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         ncn-m001# cray artifacts create boot-images ${NEW_IMAGE_ID}/rootfs \
         UAN-1.4.0-day-zero.squashfs
         artifact = "ac31e971-f990-4b5f-821d-c0c18daefb6e/UAN-1.4.0-day-zero.rootfs"
-        Key = "ac31e971-f990-4b5f-821d-c0c18daefb6e/UAN-1.4.0-day-zero.rootfs" 
-        
+        Key = "ac31e971-f990-4b5f-821d-c0c18daefb6e/UAN-1.4.0-day-zero.rootfs"
+
         ncn-m001# cray artifacts create boot-images ${NEW_IMAGE_ID}/initrd \
         initrd
         artifact = "ac31e971-f990-4b5f-821d-c0c18daefb6e/UAN-1.4.0-day-zero.initrd"
-        Key = "ac31e971-f990-4b5f-821d-c0c18daefb6e/UAN-1.4.0-day-zero.initrd" 
-        
+        Key = "ac31e971-f990-4b5f-821d-c0c18daefb6e/UAN-1.4.0-day-zero.initrd"
+
         ncn-m001# cray artifacts create boot-images ${NEW_IMAGE_ID}/kernel \
         vmlinuz
         artifact = "ac31e971-f990-4b5f-821d-c0c18daefb6e/UAN-1.4.0-day-zero.kernel"
-        Key = "ac31e971-f990-4b5f-821d-c0c18daefb6e/UAN-1.4.0-day-zero.kernel" 
+        Key = "ac31e971-f990-4b5f-821d-c0c18daefb6e/UAN-1.4.0-day-zero.kernel"
         ```
 
     14. Obtain the md5sum of the squashfs image, initrd, and kernel.
@@ -460,7 +460,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         ncn-m001# cray artifacts create boot-images \
         ${NEW_IMAGE_ID}/manifest.json uan-manifest.json
         artifact = "ac31e971-f990-4b5f-821d-c0c18daefb6e/manifest.json"
-        Key = "ac31e971-f990-4b5f-821d-c0c18daefb6e/manifest.json"  
+        Key = "ac31e971-f990-4b5f-821d-c0c18daefb6e/manifest.json"
         ```
 
     22. Update the IMS image to use the new uan-manifest.json file.
@@ -472,11 +472,11 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         created = "2021-03-17T20:23:05.576754+00:00"
         id = "ac31e971-f990-4b5f-821d-c0c18daefb6e"
         name = "UAN-1.4.0-day-zero"
-         
+
         [link]
         etag = "6d04c3a4546888ee740d7149eaecea68"
         path = "s3://boot-images/ac31e971-f990-4b5f-821d-c0c18daefb6e/manifest.json"
-        type = "s3"  
+        type = "s3"
         ```
 
 17. Create a CFS session to perform preboot image customization of the UAN image.

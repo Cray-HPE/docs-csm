@@ -31,7 +31,7 @@ The user performing this procedure needs to have access permission to the cray-c
 
     ```
     ncn-m001# kubectl exec -it -n services $NODEPOD -- /bin/bash
-    cray-console-node-1:/ # 
+    cray-console-node-1:/ #
     ```
 
 5. Use the node's ID to connect to the node's SOL via ConMan.

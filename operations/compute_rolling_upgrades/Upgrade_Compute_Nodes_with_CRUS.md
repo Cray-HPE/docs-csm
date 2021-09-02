@@ -4,7 +4,7 @@ Upgrade a set of compute nodes with the Compute Rolling Upgrade Service \(CRUS\)
 
 ### Prerequisites
 
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system. 
+-   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 -   A Boot Orchestration Service \(BOS\) session template describing the desired states of the nodes being upgraded must exist.
 
 ### Procedure

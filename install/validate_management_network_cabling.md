@@ -5,7 +5,7 @@ This page is designed to be a guide on how all nodes in a Shasta system are wire
 The Shasta Cabling Diagram (SHCD) for this system describes how the cables connect the nodes to the management network switches
 and the connections between the different types of management network switches.
 Having SHCD data which matches how the physical system is cabled will be needed later when preparing the `hmn_connections.json`
-file from the SHCD as part of [Prepare Configuration Payload](index.md#prepare_configuration_payload) procedure and later when 
+file from the SHCD as part of [Prepare Configuration Payload](index.md#prepare_configuration_payload) procedure and later when
 doing the [Configure Management Network Switches](index.md#configure_management_network) procedure.
 
 - Open the SHCD
@@ -19,7 +19,7 @@ doing the [Configure Management Network Switches](index.md#configure_management_
      The physical cable connecting source to destination should be labelled with `source label info` and `destination label info`.
 
      See [Component Names (xnames)](../operations/Component_Names_xnames.md).
-     
+
 
       | Source | Source Label Info | Destination Label Info | Destination |
       | --- | --- | ---| --- |
@@ -48,14 +48,14 @@ doing the [Configure Management Network Switches](index.md#configure_management_
       | uan03 | x3000u031s1-j1 | x3000u24L-j14 | sw-25g01 |
       | uan03 | x3000u031s1-j2 | x3000u24R-j14 | sw-25g02 |
 
-    - Based on the vendor of the nodes and the name in the first column we can determine how it is supposed to be cabled. 
+    - Based on the vendor of the nodes and the name in the first column we can determine how it is supposed to be cabled.
     - We can use ```mn01``` as an example. This is a master node, and in the ```device diagrams``` tab it is identified as an HPE DL325 node.
     - Once you have those two pieces of information you can use the [Cable Management Network Servers](cable_management_network_servers.md) for all nodes listed on the SHCD.
     - UANs and Application Nodes
     - Worker nodes
     - Master nodes
     - Storage nodes
-    
+
 ## Checklist
 
 | Hardware Type | Step      | Complete?     |

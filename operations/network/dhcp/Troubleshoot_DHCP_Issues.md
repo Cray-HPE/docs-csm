@@ -230,11 +230,11 @@ Flags:
   p: partial programming in H/W
 VRF Name default:
   ------------------------------------------------------------------------------------------------------
-  Destination       Mask              Flag     Gateway           Interface        Source     AD/M      
+  Destination       Mask              Flag     Gateway           Interface        Source     AD/M
   ------------------------------------------------------------------------------------------------------
-  default           0.0.0.0           c        10.102.255.9      eth1/16          static     1/1       
-  10.92.100.222     255.255.255.255   c        10.252.0.4        vlan2            bgp        200/0     
-                                      c        10.252.0.5        vlan2            bgp        200/0   
+  default           0.0.0.0           c        10.102.255.9      eth1/16          static     1/1
+  10.92.100.222     255.255.255.255   c        10.252.0.4        vlan2            bgp        200/0
+                                      c        10.252.0.5        vlan2            bgp        200/0
                                       c        10.252.0.6        vlan2            bgp        200/0
 ```
 

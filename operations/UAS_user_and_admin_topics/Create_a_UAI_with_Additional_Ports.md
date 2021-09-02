@@ -35,11 +35,11 @@ Only ports 80, 443, and 8888 can be exposed. Attempting to open any other ports 
     uai_connect_string =  "ssh user@203.0.113.0 -i ~/.ssh/id\_rsa"
     uai_img = "registry.local/cray/cray-uas-sles15sp1-slurm:latest"
     uai_name = "uai-user-be3a6770"
-       
+
     [uai_portmap]
     443 = 30173
     80 = 32190
-    8888 = 32469 
+    8888 = 32469
     ```
 
 3.  Log in to the UAI with the connection string.

@@ -77,7 +77,7 @@ This procedure requires administrative privileges.
     kind: ConfigMap
     metadata:
       annotations:
-    
+
           kubectl.kubernetes.io/last-applied-configuration: |
             {"apiVersion":"v1","data":{"config":"address-pools:\n- name: node-management\n protocol: layer2\n addresses:\n - 10.92.100.0/24\n- name: hardware-management\n protocol: layer2\n addresses:\n - 10.94.100.0/24\n- name: high-speed\n protocol: layer2\n addresses:\n - 169.0.100.16/28\n"},"kind":"ConfigMap","metadata":{"annotations":{},"name":"config","namespace":"metallb-system"}}
     creationTimestamp: "2020-01-09T20:33:25Z"

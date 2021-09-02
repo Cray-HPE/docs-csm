@@ -177,7 +177,7 @@ This section provides guidance for handling specific HMS Health Check failures t
 
 #### smd_discovery_status_test_ncn-smoke.sh
 
-This test verifies that the system hardware has been discovered successfully. 
+This test verifies that the system hardware has been discovered successfully.
 
 The following is an example of a failed test execution:
 

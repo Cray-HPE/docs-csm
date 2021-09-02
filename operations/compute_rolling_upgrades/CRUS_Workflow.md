@@ -76,7 +76,7 @@ Mentioned in this workflow:
     -   operation: reboot
     -   templateUuid: upgrade*template*id
     -   limit: upgrading\_label
-  
+
 9.  **CRUS retrieves the BOA job details from BOS**
 
     CRUS retrieves the BOS session to get the BOA job name. CRUS waits for the BOA job to finish.

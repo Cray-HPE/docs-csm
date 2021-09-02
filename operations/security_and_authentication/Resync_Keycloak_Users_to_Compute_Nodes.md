@@ -13,7 +13,7 @@ Use this procedure to quickly synchronize changes made in Keycloak to the comput
     ```bash
     ncn-w001# kubectl get job -n services -l app.kubernetes.io/name=cray-keycloak-users-localize \
     -ojson | jq '.items[0]' > keycloak-users-localize-job.json
-    
+
     ncn-w001# cat keycloak-users-localize-job.json | jq 'del(.spec.selector)' | \
     jq 'del(.spec.template.metadata.labels)' | kubectl replace --force -f -
     job.batch "keycloak-users-localize-1" deleted

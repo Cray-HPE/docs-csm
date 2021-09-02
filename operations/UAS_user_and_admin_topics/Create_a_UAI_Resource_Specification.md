@@ -7,7 +7,7 @@ Add a resource specification to UAS. Once added, a resource specification can be
 
 Install and initialize the `cray` administrative CLI.
 
-### Procedure 
+### Procedure
 
 1. Add a resource specification.
 

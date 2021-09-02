@@ -26,7 +26,7 @@ function upgrade_mds () {
   ceph fs status
 
   date=$(date +%m%d%y.%H%M)
- 
+
   echo "Backing up the Ceph MDS Journal"
   for mds_node in $(ceph mds metadata -f json-pretty|jq -r '.[].name'|cut -d . -f 2)
   do
@@ -59,10 +59,10 @@ function upgrade_mds () {
   ceph fs set cephfs standby_count_wanted 2
   ceph fs set cephfs allow_standby_replay true
   wait_for_health_ok
-  
+
   fsmap_in=$(ceph status -f json-pretty |jq '.fsmap.in')
   fsmap_up=$(ceph status -f json-pretty |jq '.fsmap.up')
-  
+
   echo "Checking to see if mds file system is healthy"
   if [[ $fsmap_in -ne $fsmap_up ]]; then
     repair_cephfs

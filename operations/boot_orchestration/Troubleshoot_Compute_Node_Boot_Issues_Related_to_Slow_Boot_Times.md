@@ -26,16 +26,16 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
         ```bash
         ncn-m001# kubectl logs -n services -f -c boa BOA_JOB_ID
         2019-11-12 02:14:27,771 - DEBUG   - cray.boa - BOA starting
-         
+
         2019-11-12 02:14:28,786 - DEBUG   - cray.boa - Boot Agent Image: acad2b43-dff5-483d-a392-8b1b1f91a60c Nodes: x5000c1s1b1n0, x3000c0s35b2n0, x5000c1s3b1n1, x3000c0s35b3n0, x5000c1s0b1n0, x5000c1s3b0n1, x5000c1s2b0n0, x5000c1s3b1n0, x5000c1s1b1n1, x5000c1s2b0n1, x3000c0s35b1n0, x5000c1s3b0n0, x5000c1s0b1n1, x5000c1s1b0n0, x5000c1s2b1n0, x5000c1s1b0n1, x5000c1s2b1n1 created.
         2019-11-12 02:14:29,118 - INFO    - cray.boa - Boot Session: 88df3fc3-6697-41cc-9f63-7076d78a9110
-         
+
         2019-11-12 02:14:29,505 - DEBUG   - cray.boa.logutil - cray.boa.agent.reboot called with  args: (Boot Agent Image: acad2b43-dff5-483d-a392-8b1b1f91a60c Nodes: x5000c1s1b1n0, x3000c0s35b2n0, x5000c1s3b1n1, x3000c0s35b3n0, x5000c1s0b1n0, x5000c1s3b0n1, x5000c1s2b0n0, x5000c1s3b1n0, x5000c1s1b1n1, x5000c1s2b0n1, x3000c0s35b1n0, x5000c1s3b0n0, x5000c1s0b1n1, x5000c1s1b0n0, x5000c1s2b1n0, x5000c1s1b0n1, x5000c1s2b1n1,)
         2019-11-12 02:14:29,505 - INFO    - cray.boa.agent - Rebooting the Session: 88df3fc3-6697-41cc-9f63-7076d78a9110 Set: computes
-         
+
         2019-11-12 02:15:15,898 - DEBUG   - cray.boa.logutil - cray.boa.dbclient.db_write_session called with  args: (<etcd3.client.Etcd3Client object at 0x7f822db68dd8>, '88df3fc3-6697-41cc-9f63-7076d78a9110', 'computes', 'status', 'boot_capmc_finished')
         2019-11-12 02:15:15,898 - DEBUG   - cray.boa.dbclient - Key: /session/88df3fc3-6697-41cc-9f63-7076d78a9110/computes/status/ Value: boot_capmc_finished
-        2019-11-12 02:15:15,938 - INFO    - cray.boa.smd.wait_for_nodes - 
+        2019-11-12 02:15:15,938 - INFO    - cray.boa.smd.wait_for_nodes -
         Standby: 17 entries
         2019-11-12 02:15:15,938 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
         2019-11-12 02:15:20,979 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
@@ -76,14 +76,14 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
         2019-11-12 02:18:17,501 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
         2019-11-12 02:18:22,544 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
         2019-11-12 02:18:27,586 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:18:32,629 - INFO    - cray.boa.smd.wait_for_nodes - 
+        2019-11-12 02:18:32,629 - INFO    - cray.boa.smd.wait_for_nodes -
         Ready: [x3000c0s35b1n0]
         Standby: 16 entries
         2019-11-12 02:18:32,629 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 16 nodes to be in state: Ready
-        2019-11-12 02:18:37,673 - INFO    - cray.boa.smd.wait_for_nodes - 
-        
+        2019-11-12 02:18:37,673 - INFO    - cray.boa.smd.wait_for_nodes -
+
         ...
-        
+
         ```
 
 2.  View the CFS logs related to the boot job.
@@ -106,7 +106,7 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
         ncn-customization-ncn-w002-uai-hosts-unload    cfs-095cce88-1925-4625-a611-ae19d9976a60   complete   false       https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git   master                                              cray-ncn-customization-unload.yml   4d6h
         ncn-customization-ncn-w003-uai-hosts-load      cfs-6b3fdebd-ab2b-4751-b29f-436ff2893569   complete   false       https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git   master                                              cray-ncn-customization-load.yml     4d6h
         ncn-customization-ncn-w003-uai-hosts-unload    cfs-d94ebbe6-6b61-4f78-9dc4-fd24576d32dd   complete   false       https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git   master                                              cray-ncn-customization-unload.yml   4d6h
-        
+
         ```
 
         If multiple BOA jobs exist, describe the CFS sessions and look at the configuration, as well as which components are included. It is unlikely, but a single session may contain components from multiple separate BOS sessions if they both request the same configuration for different components at around the same time.
@@ -137,52 +137,52 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
         date: Thu, 16 Apr 2020 09:20:15 GMT
         server: envoy
         transfer-encoding: chunked
-        
+
         Sidecar available
          [WARNING]: Ignoring invalid path provided to plugin path: '/opt/cray/crayctl/files'
         is not a directory
-        
+
         PLAY [Compute] *****************************************************************
-        
+
         TASK [rsyslog : Add rsyslog.d config] ******************************************
         changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
-        
+
         TASK [localtime : Create /etc/localtime symlink] *******************************
         changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
-        
+
         TASK [ntp : Install stock /etc/chrony.conf] ************************************
         changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
-        
+
         TASK [cle-hosts-cf : create temporary workarea] ********************************
         changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
-        
+
         TASK [cle-hosts-cf : copy /etc/hosts from NCN host OS into compute image] ******
         changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
-        
+
         TASK [cle-hosts-cf : copy /etc/hosts into place] *******************************
         changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
-        
+
         TASK [cle-hosts-cf : remove temporary workarea] ********************************
         changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
-        
+
         TASK [limits : Ensure our file limits are set] *********************************
         changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
-        
+
         TASK [shadow : Change root password in /etc/shadow] ****************************
         changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
-        
+
         TASK [kdump : Install stock /etc/sysconfig/kdump] ******************************
         changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
-        
+
         TASK [kdump : copy kdump initrd script] ****************************************
         changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
-        
+
         TASK [kdump : create kdump initrd] *********************************************
         changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
-        
+
         TASK [kdump : remove kdump initrd script] **************************************
         changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
-        
+
         ...
         ```
 

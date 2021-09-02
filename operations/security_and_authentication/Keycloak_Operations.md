@@ -67,7 +67,7 @@ A service may need to access Keycloak to perform various tasks. These typical us
       restartPolicy: Never
     EOF
     ```
-    
+
     ```bash
     ncn# kubectl logs -n services kc-admin-example
     fetch http://dl-cdn.alpinelinux.org/alpine/v3.8/main/x86_64/APKINDEX.tar.gz

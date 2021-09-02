@@ -4,7 +4,7 @@ Use the System Configuration Service \(SCSD\) tool to create TLS certificates an
 
 ### Prerequisites
 
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system. 
+-   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 
 ### Limitations
 

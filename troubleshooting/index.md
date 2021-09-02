@@ -57,7 +57,7 @@ error: file `/boot/grub2/../initrd.img.xz' not found.Press any key to continue..
 Follow these steps on any NCN to fix the issue:
 
    1. Run the `CASMINST-2689.sh` script from the `CASMINST-2689` workaround at the `livecd-post-reboot` breakpoint.
-   
+
       Follow the usual [workaround instructions](../update_product_stream/index.md#apply-workarounds) **with the following exceptions**:
          * Use the latest Shasta 1.4 install workaround RPM, **not** the Shasta 1.5 install workaround RPM
          * For the  `livecd-post-reboot` breakpoint, ignore any workarounds other than `CASMINST-2689`
@@ -73,7 +73,7 @@ Follow these steps on any NCN to fix the issue:
       ```
 
    1. Remove the Shasta 1.4 install workaround RPM from the NCN.
-   
+
       ```bash
       ncn# rpm -e csm-install-workarounds
       ```

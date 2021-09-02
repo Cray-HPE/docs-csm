@@ -30,7 +30,7 @@ UAN boot images and a BOS session template have been created. See [Create UAN Bo
      "operation": "reboot",
      "templateUuid": "uan-sessiontemplate-PRODUCT_VERSION"
     }
-    
+
     ```
 
     The first attempt to reboot the UANs will most likely fail. The UAN boot may hang and the UAN console will look similar to the following:
@@ -63,7 +63,7 @@ UAN boot images and a BOS session template have been created. See [Create UAN Bo
         ```bash
         ncn-m001# ssh uan01-nmn
         Last login: Wed Mar 17 19:10:12 2021 from 10.252.1.12
-        uan01# 
+        uan01#
         ```
 
     2.  Verify that the DVS RPM versions match what exists in the 1.4.0-p2/rpms directory.

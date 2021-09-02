@@ -2,7 +2,7 @@
 
 ## Description:
 
-This is a new Ceph service script that will check the status of ceph and then verify that status against the invidividual Ceph storage nodes.
+This is a new Ceph service script that will check the status of ceph and then verify that status against the individual Ceph storage nodes.
 
 ## Location:
 
@@ -18,9 +18,9 @@ usage:  ceph-service-status.sh # runs a simple ceph health check
         ceph-service-status.sh -s <service name> # will find the where the service is running and report its status
 ```
 
-**`Important:`** By default this output of this command will not be verbose. This is to accomodate goss testing.  For manual runs, please use the `-v true` flag.
+**`Important:`** By default this output of this command will not be verbose. This is to accommodate goss testing. For manual runs, please use the `-v true` flag.
 
-**`Important:`** If you encounter this message `parse error: Invalid numeric literal at line 1, column 5` that is indicating that the cached ssh keys in known_hosts are no longer valid.  The simple fix is `> ~/.ssh/known_hosts` and re-run the script.  It will update the keys.
+**`Important:`** If you encounter this message `parse error: Invalid numeric literal at line 1, column 5` that is indicating that the cached ssh keys in known_hosts are no longer valid. The simple fix is `> ~/.ssh/known_hosts` and re-run the script. It will update the keys.
 
 ## Examples
 
@@ -34,7 +34,7 @@ Updating ssh keys..
 Tests run: 1  Tests Passed: 1
 ```
 
-### Service Check for a Single Service on a Single Node 
+### Service Check for a Single Service on a Single Node
 
 ```bash
  # /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -n ncn-s001 -v true -s mon.ncn-s001
@@ -140,6 +140,6 @@ Tests run: 4  Tests Passed: 4
 # /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh  -v true -A true
 ```
 
-Note: The output is similar to the above output, but all services on all nodes.  We are not showing this to keep the document usable.
+Note: The output is similar to the above output, but all services on all nodes. We are not showing this to keep the document usable.
 
 **`IMPORTANT:`** You can always run this script without the verbose flag and echo the return code `echo $?`.  rc = 0 clean check, rc = 1 or greater then there was an issue and re-run with the `-v true` flag.

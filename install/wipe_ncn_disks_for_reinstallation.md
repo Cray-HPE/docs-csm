@@ -7,7 +7,7 @@ Any process covered on this page will be covered by the installer.
 
 After following these procedures an NCN can be rebooted and redeployed.
 
-Ideally the Basic Wipe is enough, and should be tried first. All type of disk wipe can be run from Linux or an initramFS/initrd emergency shell. 
+Ideally the Basic Wipe is enough, and should be tried first. All type of disk wipe can be run from Linux or an initramFS/initrd emergency shell.
 
 The following are potential use cases for wiping disks:
 
@@ -17,7 +17,7 @@ The following are potential use cases for wiping disks:
    * Doing a fresh install.
 
 
-### Topics: 
+### Topics:
    1. [Basic Wipe](#basic-wipe)
    1. [Advanced Wipe](#advanced-wipe)
    1. [Full Wipe](#full-wipe)
@@ -54,7 +54,7 @@ executed on **any management nodes** (master, worker and storage).
    /dev/sdc: 8 bytes were erased at offset 0x6fc86d5e00 (gpt): 45 46 49 20 50 41 52 54
    /dev/sdc: 2 bytes were erased at offset 0x000001fe (PMBR): 55 aa
    ```
-      
+
    Verify there are no error messages in the output.
 
    The `wipefs` command may fail if no labeled disks are found, which is an indication of a larger problem.
@@ -202,11 +202,11 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
       32k,noquota)
       /dev/mapper/metalvg0-CONTAIN on /var/lib/containers/storage/overlay type xfs (rw,noatime,swalloc,attr2,largeio,i|
       bufs=8,logbsize=32k,noquota)
-      
-      ncn-s001:~ # umount -v /var/lib/containers/storage/overlay                                                   
+
+      ncn-s001:~ # umount -v /var/lib/containers/storage/overlay
       umount: /var/lib/containers/storage/overlay unmounted
-      
-      ncn-s001:~ # umount -v /var/lib/containers                                                                    
+
+      ncn-s001:~ # umount -v /var/lib/containers
       umount: /var/lib/containers unmounted
 
 1. Remove auxiliary LVMs
@@ -243,7 +243,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 1. Wipe the disks and RAIDs.
 
    ```bash
-   ncn# sgdisk --zap-all /dev/sd* 
+   ncn# sgdisk --zap-all /dev/sd*
    ncn# wipefs --all --force /dev/sd* /dev/disk/by-label/*
    ```
 

@@ -3,11 +3,11 @@
 This guide shows the process for manually adding an alias to a UAN in SLS and ensuring that the node
 is being monitored by conman for console logs.
 
-### Prerequisites 
+### Prerequisites
 * SLS is up and running and has been populated with data.
 * Access to the API gateway `api-gw-service` (legacy: `api-gw-service-nmn.local`)
 
-## Procedure 
+## Procedure
 
 1. Authenticate with Keycloak to obtain an API token:
 

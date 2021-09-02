@@ -41,7 +41,7 @@ This procedure can be used to restore the SLS Postgres database from a previousl
     ncn# echo "$POSTGRES_SECRET_MANIFEST"
     /root/cray-sls-postgres-backup_2021-07-07_16-39-44/cray-sls-postgres-backup_2021-07-07_16-39-44.manifest
     ```
-    
+
 3. Re-run the SLS loader job:
     ```bash
     ncn# kubectl -n services get job cray-sls-init-load -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels."controller-uid")' | kubectl replace --force -f -
@@ -75,7 +75,7 @@ This procedure can be used to restore the SLS Postgres database from a previousl
     ```
     > The output above shows the database schema is at version 3.
 
-    Database schema version from the Postgres backup: 
+    Database schema version from the Postgres backup:
     ```bash
     ncn# cat "$POSTGRES_SQL_FILE" | grep "COPY public.schema_migrations" -A 2
     COPY public.schema_migrations (version, dirty) FROM stdin;
@@ -97,8 +97,8 @@ This procedure can be used to restore the SLS Postgres database from a previousl
     ```
 
 7. Verify the health of the SLS Postgres cluster by running the `ncnPostgresHealthChecks.sh` script. Follow the [ncnPostgresHealthChecks topic in Validate CSM Health document](../validate_csm_health.md#pet-ncnpostgreshealthchecks).
-    
-    
+
+
 8. Verify that the service is functional:
     ```bash
     ncn# cray sls version list
@@ -108,7 +108,7 @@ This procedure can be used to restore the SLS Postgres database from a previousl
 
     Get the number of hardware objects stored in SLS:
     ```bash
-    ncn# cray sls hardware list --format json | jq .[].Xname | wc -l 
+    ncn# cray sls hardware list --format json | jq .[].Xname | wc -l
     37
     ```
 

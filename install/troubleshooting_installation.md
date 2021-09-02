@@ -19,10 +19,10 @@ for additional information on system hardware, troubleshooting, and administrati
 ## Details
 
    <a name="reset_root_password_on_LiveCD"></a>
-   1. Reset root Password on LiveCD  
-   
-      If the root password on the LiveCD needs to be changed, then this procedure does the reset.  
-      
+   1. Reset root Password on LiveCD
+
+      If the root password on the LiveCD needs to be changed, then this procedure does the reset.
+
       See [Reset root Password on LiveCD](reset_root_password_on_LiveCD.md)
    <a name="reinstall_livecd"></a>
 
@@ -52,19 +52,19 @@ for additional information on system hardware, troubleshooting, and administrati
    <a name="restart_network_services_and_interfaces_on_ncns"></a>
 
    1. Restart Network Services and Interfaces on NCNs
-      
+
       If an NCN shows any of these problems, the network services and interfaces on that node might need to be restarted.
          * Interfaces not showing up
          * IP Addresses not applying
          * Member/children interfaces not being included
-      
+
       See [Restart Network Services and Interfaces on NCNs](restart_network_services_and_interfaces_on_ncns.md)
    <a name="utility_storage_node_installation_troubleshooting"></a>
 
    1. Utility Storage Node Installation Troubleshooting
 
       If there is a failure in the creation of Ceph storage on the utility storage nodes for one of these scenarios,
-      the Ceph storage might need to be reinitialized. 
+      the Ceph storage might need to be reinitialized.
          * Sometimes a large OSD can be created which is a concatenation of multiple devices, instead of one OSD per device
 
       See [Utility Storage Node Installation Troubleshooting](utility_storage_node_installation_troubleshooting.md)
@@ -72,7 +72,7 @@ for additional information on system hardware, troubleshooting, and administrati
 
    1. Ceph CSI Troubleshooting
 
-      If there has been a failure to initialize all Ceph CSI components on ncn-s001, then the storage node 
+      If there has been a failure to initialize all Ceph CSI components on ncn-s001, then the storage node
       cloud-init may need to be rerun.
          * Verify Ceph CSI
          * Rerun Storage Node cloud-init

@@ -64,7 +64,7 @@ For more description of these settings and the default values, see [Default IP A
 
    * This is a long list of options. It can be helpful to create a Bash script file to call the `csi` command with all of these options, and then edit that file to adjust the values for the particular system being installed.
    * The `bootstrap-ncn-bmc-user` and `bootstrap-ncn-bmc-pass` must match what is used for the BMC account and its password for the management nodes.
-   * Set site parameters (`site-domain`, `site-ip`, `site-gw`, `site-nic`, `site-dns`) for the information which connects `ncn-m001` (the PIT node) to the site. The `site-nic` is the interface on this node connected to the site.  
+   * Set site parameters (`site-domain`, `site-ip`, `site-gw`, `site-nic`, `site-dns`) for the information which connects `ncn-m001` (the PIT node) to the site. The `site-nic` is the interface on this node connected to the site.
    * There are other interfaces possible, but the `install-ncn-bond-members` are typically:
       * `p1p1,p10p1` for HPE nodes
       * `p1p1,p1p2` for Gigabyte nodes
@@ -112,7 +112,7 @@ See [Create Cabinets YAML](create_cabinets_yaml.md) for instructions about creat
 #### `application_node_config.yaml`
 
 The `application_node_config.yaml` file controls how the `csi config init` command finds and treats
-application nodes discovered in the `hmn_connections.json` file when building the SLS Input file. 
+application nodes discovered in the `hmn_connections.json` file when building the SLS Input file.
 
 Different node prefixes in the SHCD can be identified as Application nodes. Each node prefix
 can be mapped to a specific HSM sub role. These sub roles can then be used as the targets of Ansible
@@ -133,12 +133,12 @@ No action is required to create this file at this point, and will be created whe
 <a name="ncn_metadata_csv"></a>
 #### `ncn_metadata.csv`
 
-The information in the `ncn_metadata.csv` file identifies each of the management nodes, assigns the function 
+The information in the `ncn_metadata.csv` file identifies each of the management nodes, assigns the function
 as a master, worker, or storage node, and provides the MAC address information needed to identify the BMC and
 the NIC which will be used to boot the node.
 
 For each management node, the xname, role, and subrole can be extracted from the SHCD. However, the rest of the
-MAC address information needs to be collected another way. Collect as much information as possible 
+MAC address information needs to be collected another way. Collect as much information as possible
 before the PIT node is booted from the LiveCD and then get the rest later when directed. See the scenarios
 which enable partial data collection below in [First Time Install](#first_time_install).
 
@@ -147,13 +147,13 @@ See [Create NCN Metadata CSV](create_ncn_metadata_csv.md) for instructions about
 <a name="switch_metadata_csv"></a>
 #### `switch_metadata.csv`
 
-The `switch_metadata.csv` file is manually created to include information about all spine, aggregation, CDU, 
+The `switch_metadata.csv` file is manually created to include information about all spine, aggregation, CDU,
 and leaf switches in the system. None of the Slingshot switches for the HSN should be included in this file.
 
 See [Create Switch Metadata CSV](create_switch_metadata_csv.md) for instructions about creating this file.
 
 <a name="first_time_install"></a>
-### First Time Install 
+### First Time Install
 
 The process to install for the first time must collect the information needed to create these files.
 
@@ -174,34 +174,34 @@ The process to install for the first time must collect the information needed to
    See [Create Switch Metadata CSV](create_switch_metadata_csv.md) for instructions about creating this file.
 
 <a name="reinstall"></a>
-### Reinstall 
+### Reinstall
 
 The process to reinstall must have the configuration payload files available.
 
 1. Collect Payload for Reinstall
 
    1. These files from a previous install are needed to do a reinstall.
-   
+
       - `application_node_config.yaml` (if used previously)
       - `cabinets.yaml` (if used previously)
       - `hmn_connections.json`
       - `ncn_metadata.csv`
       - `switch_metadata.csv`
       - `system_config.yaml`
-   
+
       If the `system_config.yaml` is not available, then a reinstall cannot be done. Switch to the install process
       and generate any of the other files for the [Configuration Payload Files](#configuration_payload_files)
-      which are missing. 
-   
-   1. The command line options used to call `csi config init` are not needed. 
-   
+      which are missing.
+
+   1. The command line options used to call `csi config init` are not needed.
+
       When doing a reinstall, all of the command line options which had been given to `csi config init` during the
       previous installation will be found inside the `system_config.yaml` file. This simplifies the reinstall process.
-   
-      When you are ready to bootstrap the LiveCD, it will indicate when to run this command without any 
+
+      When you are ready to bootstrap the LiveCD, it will indicate when to run this command without any
       extra command line options. It will expect to find all of the above files in the current working
       directory.
-   
+
       ```bash
       linux# csi config init
       ```

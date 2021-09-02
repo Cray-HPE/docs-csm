@@ -29,12 +29,12 @@ This procedure can be used to restore the HSM Postgres database from a previousl
 1. Retrieve a previously taken HSM Postgres backup. This can be either a previously taken manual HSM backup or an automatic Postgres backup in the `postgres-backup` S3 bucket.
     - From a previous manual backup:
         1. Copy over the folder or tarball containing the Postgres back up to be restored. If it is a tarball extract it.
-        
+
         2. Set the environment variable `POSTGRES_SQL_FILE` to point toward the `.psql` file in the backup folder:
             ```bash
             ncn# export POSTGRES_SQL_FILE=/root/cray-smd-postgres-backup_2021-07-07_16-39-44/cray-smd-postgres-backup_2021-07-07_16-39-44.psql
             ```
-        
+
         3. Set the environment variable `POSTGRES_SECRET_MANIFEST` to point toward the `.manifest` file in the backup folder:
             ```bash
             ncn# export POSTGRES_SECRET_MANIFEST=/root/cray-smd-postgres-backup_2021-07-07_16-39-44/cray-smd-postgres-backup_2021-07-07_16-39-44.manifest
@@ -55,12 +55,12 @@ This procedure can be used to restore the HSM Postgres database from a previousl
             ```
         2. Download the `.psql` file for the postgres backup:
             ```bash
-            ncn# cray artifacts get postgres-backup "$POSTGRES_SQL_FILE_NAME" "$POSTGRES_SQL_FILE_NAME" 
+            ncn# cray artifacts get postgres-backup "$POSTGRES_SQL_FILE_NAME" "$POSTGRES_SQL_FILE_NAME"
             ```
 
         3. Download the `.manifest` file for the HSM backup:
             ```bash
-            ncn# cray artifacts get postgres-backup "$POSTGRES_SECRET_MANIFEST_NAME" "$POSTGRES_SECRET_MANIFEST_NAME" 
+            ncn# cray artifacts get postgres-backup "$POSTGRES_SECRET_MANIFEST_NAME" "$POSTGRES_SECRET_MANIFEST_NAME"
             ```
         4. Setup environment variables pointing to the full path of the `.psql` and `.manifest` files:
             ```bash
@@ -126,7 +126,7 @@ This procedure can be used to restore the HSM Postgres database from a previousl
     ```
     > The output above shows the database schema is at version 17.
 
-    Database schema version from the Postgres backup: 
+    Database schema version from the Postgres backup:
     ```bash
     ncn# cat "$POSTGRES_SQL_FILE" | grep "COPY public.system" -A 2
     COPY public.system (id, schema_version, dirty) FROM stdin;
@@ -185,7 +185,7 @@ This procedure can be used to restore the HSM Postgres database from a previousl
 
 10. Clear out of sync data from tables in postgres.
     The backup will have restored tables that may contain out of date information. To refresh this data, it must first be deleted.
-    
+
     Delete the entries in the EthernetInterfaces table. These will automatically get repopulated during rediscovery.
     ```bash
     ncn# kubectl exec $POSTGRES_LEADER -n services -c postgres -it -- bash -c "psql -U hmsdsuser -d hmsds -c 'DELETE FROM comp_eth_interfaces'"
@@ -201,12 +201,12 @@ This procedure can be used to restore the HSM Postgres database from a previousl
         ```bash
         ncn-w001# kubectl delete secret postgres.cray-smd-postgres.credentials service-account.cray-smd-postgres.credentials hmsdsuser.cray-smd-postgres.credentials standby.cray-smd-postgres.credentials -n ${NAMESPACE}
 
-        ncn-w001# kubectl apply -f ${POSTGRES_SECRET_MANIFEST} 
+        ncn-w001# kubectl apply -f ${POSTGRES_SECRET_MANIFEST}
         ```
 
     - Without the previous secrets from a backup
         If the Postgres secrets were not backed up, then update the secrets in Postgres.
-    
+
         Determine which Postgres member is the leader.
         ```bash
         ncn-w001# kubectl exec "${POSTGRESQL}-0" -n ${NAMESPACE} -c postgres -it -- patronictl list
@@ -228,7 +228,7 @@ This procedure can be used to restore the HSM Postgres database from a previousl
         services            service-account.cray-smd-postgres.credentials                 Opaque                                2      31m
         services            standby.cray-smd-postgres.credentials                         Opaque                                2      31m
         ```
-        For each secret above, get the username and password from Kubernetes and update the Postgres database with this information. 
+        For each secret above, get the username and password from Kubernetes and update the Postgres database with this information.
         For example (hmsdsuser.cray-smd-postgres.credentials) :
         ```bash
         ncn-w001# kubectl get secret hmsdsuser.cray-smd-postgres.credentials -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d
@@ -260,7 +260,7 @@ This procedure can be used to restore the HSM Postgres database from a previousl
 
     ncn-w001# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${CLIENT}" | grep -v NAME | wc -l) != 3 ] ; do echo "  waiting for pods to start running"; sleep 2; done
     ```
-    
+
 14. Verify that the service is functional:
     ```bash
     ncn# cray hsm service ready
@@ -270,17 +270,17 @@ This procedure can be used to restore the HSM Postgres database from a previousl
 
     Get the number of node objects stored in HSM:
     ```bash
-    ncn# cray hsm state components list --type node --format json | jq .[].ID | wc -l 
+    ncn# cray hsm state components list --type node --format json | jq .[].ID | wc -l
     1000
     ```
 
-15. Resync Component State and Inventory 
+15. Resync Component State and Inventory
     After restoring HSM's postgres from a back up, some of the transient data like component state and hardware inventory may be out of sync with reality. This involves kicking off an HSM rediscovery.
     ```bash
     ncn# endpoints=$(cray hsm inventory redfishEndpoints list --format json | jq -r '.[]|.[]|.ID')
     ncn# for e in $endpoints; do cray hsm inventory discover create --xnames ${e}; done
     ```
-    
+
     Wait for discovery to complete. Discovery is complete after there are no redfishEndpoints left in the 'DiscoveryStarted' state
     ```bash
     ncn# cray hsm inventory redfishEndpoints list --format json | grep -c "DiscoveryStarted"
