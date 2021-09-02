@@ -98,7 +98,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    * Install `podman` and `podman-cni-config` packages:
 
      ```bash
-     linux# zypper in -y podman podman-cni-config
+     linux# zypper in --repo ${CSM_RELEASE}-embedded -y podman podman-cni-config
      ```
 
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
@@ -116,7 +116,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    * Install `lsscsi` package:
 
      ```bash
-     linux# zypper in -y lsscsi
+     linux# zypper in --repo ${CSM_RELEASE}-embedded -y lsscsi
      ```
 
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
@@ -136,7 +136,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    * Install `git` package:
 
      ```bash
-     linux# zypper in -y git
+     linux# zypper in --repo ${CSM_RELEASE}-embedded -y git
      ```
 
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
@@ -193,7 +193,7 @@ which device that is.
     >   1.  Install the missing rpms
     >
     >   ```bash
-    >   linux# zypper in -y libmediacheck5 checkmedia
+    >   linux# zypper in --repo ${CSM_RELEASE}-embedded -y libmediacheck5 checkmedia
     >   linux# csi pit format $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
     >   ```
 
