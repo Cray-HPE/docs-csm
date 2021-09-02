@@ -79,9 +79,6 @@ EOF
 patch_in_new_metadata() {
   # mount the partition that should have the files we need
   mkdir -p /mnt/pitdata
-  if ! eval mount | grep '\/mnt\/pitdata' >/dev/null; then
-    mount -L PITDATA /mnt/pitdata/
-  fi
 
   prep_dir=/mnt/pitdata/prep
   # find the three seed files
@@ -89,6 +86,27 @@ patch_in_new_metadata() {
   switch_metadata="$prep_dir"/switch_metadata.csv
   hmn_connections="$prep_dir"/hmn_connections.json
   system_config="$prep_dir"/system_config.yaml
+
+  if ! eval blkid -t LABEL=PITDATA >/dev/null; then
+    if [[ -f "$ncn_metadata" ]] \
+      && [[ -f "$switch_metadata" ]] \
+      && [[ -f "$hmn_connections" ]] \
+      && [[ -f "$system_config" ]]; then
+        echo "PITDATA not found but seed files are present.  Using those to generate new metadata..."
+    else
+      echo "PITDATA not found.  Seed files needed to generate new cloud-init metadata."
+      echo "Re-create/re-populate the PITDATA partition"
+      echo "or"
+      echo "Copy seed files to /mnt/pitdata/prep"
+      exit 1
+    fi
+  else
+    echo "Mounting PITDATA..."
+      if ! eval mount | grep '\/mnt\/pitdata' >/dev/null; then
+        mount -L PITDATA /mnt/pitdata/
+      fi
+  fi
+  
 
   # we need the three seed files and the system_config to generate the metadata
   # this also ensures we are in the right place to run config init without any arguments
