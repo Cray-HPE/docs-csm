@@ -298,6 +298,7 @@ The configuration workflow described here is intended to help understand the exp
 
     > **`NOTE`**: All consoles are located at `/var/log/conman/console*`
 
+<a name="boot-the-storage-nodes"></a>
 1. Boot the **Storage Nodes**
 
     1. Boot all storage nodes except `ncn-s001`:
@@ -340,7 +341,10 @@ The configuration workflow described here is intended to help understand the exp
 
     **`NOTE`**: If the nodes have PXE boot issues (e.g. getting PXE errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
 
-1. Wait for storage nodes before booting Kubernetes master nodes and worker nodes.
+<a name="boot-master-and-worker-nodes"></a>
+1. Boot the master and worker nodes.
+
+   Wait for storage nodes before booting Kubernetes master nodes and worker nodes.
 
    **`NOTE`**: Once all storage nodes are up and the message `...sleeping 5 seconds until /etc/kubernetes/admin.conf` appears on `ncn-s001`'s console, it is safe to proceed with booting the **Kubernetes master nodes and worker nodes**
 
@@ -756,7 +760,13 @@ Observe the output of the checks and note any failures, then remediate them.
    > /dev/sdc
    > ```
    >
-   > **WARNING** If these manual tests do not report a disk device such as "/dev/sdc" as having the respective label on that node, then the node must be rebuilt using PXEboot before continuing the installation. See [Rebuild NCNs](../operations/node_management/Rebuild_NCNs.md).
+   > **WARNING** If these manual tests do not report a disk device such as "/dev/sdc" as having the respective label on that node, then the problem must be resolved before continuing to the next step.
+   > * If a **master node** has the problem then it is best to wipe and redeploy all of the management nodes before continuing the installation.
+   >   1. Wipe the each of the worker, master, and storage nodes using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe).
+   >   1. Return to the [Boot the **Storage Nodes**](#boot-the-storage-nodes) step of [Deploy Management Nodes](#deploy_management_nodes) section above.
+   > * If a **worker node** has the problem then it is best to wipe and redeploy that worker node before continuing the installation.
+   >   1. Wipe this  worker node using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe).
+   >   1. Return to the [Boot the Master and Worker Nodes**](#boot-master-and-worker-nodes) step of [Deploy Management Nodes](#deploy_management_nodes) section above.
 
 1. If your shell terminal is not echoing your input after running the above `csi pit validate` tests, then reset the terminal.
 
