@@ -43,7 +43,7 @@ ncn-m001# ceph -s
 
 The `-w` option can be used to watch the cluster.
 
-### Print the OSD
+### Print the OSD tree
 
 Check the OSD status, weight, and location.
 

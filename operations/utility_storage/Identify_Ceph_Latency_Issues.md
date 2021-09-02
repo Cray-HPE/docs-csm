@@ -71,3 +71,4 @@ Based on the output from ceph -s (using our example above) we can correlate some
 3. When reporting  slow ops for `MDS`, then it could be due to a couple of different reasons.
    1. If listed in addition to `OSDs`, then the root cause for this will typically be the `OSDs` and the process above should be used followed by restarting the `MDS` daemons
    2. If it is only listing `MDS`, then restat the MDS daemons.  IF the problem persist, then the logs will have to be investigated for the root cause.
+   3. See [Troubleshoot_Ceph_MDS_reporting_slow_requests_and_failure_on_client](Troubleshoot_Ceph_MDS_reporting_slow_requests_and_failure_on_client.md)for additional steps to help identify MDS slow ops
