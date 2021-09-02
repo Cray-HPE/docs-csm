@@ -96,15 +96,8 @@ fi
 # Apply WAR for CASMINST-2689, just in case
 if [[ $(hostname) == "ncn-m001" ]]; then
   echo "Opening and refreshing fallback artifacts on the NCNs.."
-
-
-  # Copy it to the other NCNs
-  for i in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ' ');
-  do
-    ssh_keygen_keyscan "${i}"
-    scp -r ${BASEDIR}/CASMINST-2689.sh $i:/tmp/CASMINST-2689.sh
-    ssh $i -t '/tmp/CASMINST-2689.sh'
-  done
+    
+  "${BASEDIR}"/CASMINST-2689.sh
 
   # Check if ncn-m001 is using itself for an upstream server
   if [[ "$(awk '/^server/ {print $2}' /etc/chrony.d/cray.conf)" == ncn-m001 ]] ||
