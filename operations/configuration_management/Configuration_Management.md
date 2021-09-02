@@ -4,6 +4,8 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
 
 CFS configures nodes and images via a gitops methodology. All configuration content is stored in a version control service \(VCS\), and is managed by authorized system administrators. CFS provides a scalable Ansible Execution Environment \(AEE\) for the configuration to be applied with flexible inventory and node targeting options.
 
+**WARNING:** CFS is not fully supported for storage nodes in this release.
+
 ### Use Cases
 
 CFS is available for the following use cases on systems:
