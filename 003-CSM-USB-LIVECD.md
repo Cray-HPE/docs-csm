@@ -102,7 +102,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
      
    * Install `podman` and `podman-cni-config` packages:
      ```bash
-     linux# zypper in -y podman podman-cni-config
+     linux# zypper in --repo ${CSM_RELEASE}-embedded -y podman podman-cni-config
      ```
 
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
@@ -120,7 +120,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
      
    * Install `lsscsi` package:
      ```bash
-     linux# zypper in -y lsscsi
+     linux# zypper in --repo ${CSM_RELEASE}-embedded -y lsscsi
      ```
 
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
@@ -140,7 +140,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
      
    * Install `git` package:
      ```bash
-     linux# zypper in -y git
+     linux# zypper in --repo ${CSM_RELEASE}-embedded -y git
      ```
 
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
