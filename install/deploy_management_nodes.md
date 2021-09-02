@@ -297,7 +297,6 @@ The configuration workflow described here is intended to help understand the exp
     > **`IMPORTANT`** This is the administrators _last chance_ to run [NCN pre-boot workarounds](#apply-ncn-pre-boot-workarounds) (the `before-ncn-boot` breakpoint).
 
     > **`NOTE`**: All consoles are located at `/var/log/conman/console*`
-
 <a name="boot-the-storage-nodes"></a>
 1. Boot the **Storage Nodes**
 
@@ -340,7 +339,6 @@ The configuration workflow described here is intended to help understand the exp
     **`NOTE`**: Watch the storage node consoles carefully for error messages. If any are seen, consult [Ceph-CSI Troubleshooting](ceph_csi_troubleshooting.md)
 
     **`NOTE`**: If the nodes have PXE boot issues (e.g. getting PXE errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
-
 <a name="boot-master-and-worker-nodes"></a>
 1. Boot the master and worker nodes.
 
