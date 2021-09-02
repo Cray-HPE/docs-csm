@@ -2,14 +2,18 @@
 
 The following workflows are intended to be high-level overviews of node management tasks. These workflows depict how services interact with each other during node management and help to provide a quicker and deeper understanding of how the system functions.
 
-The workflows in this section include:
+The workflows and procedures in this section include:
 
   - [Add Nodes](#add-nodes)
   - [Remove Nodes](#remove-nodes)
+  - [Replace Nodes](#replace-nodes)
+  - [Move Nodes](#move-nodes)
 
 <a name="add-nodes"></a>
 
 ### Add Nodes
+
+   - [Add a Standard Rack Node](Add_a_Standard_Rack_Node.md)
 
 **Use Cases:** Administrator permanently adds select compute nodes to expand the system.
 
@@ -107,7 +111,7 @@ Mentioned in this workflow:
 
 2.  **Administrator physically removes the compute nodes**
 
-    The Administrator physically removes the compute nodes and powers them off.
+    The Administrator powers off and physically removes the compute nodes.
 
     The following steps \(3-9\) occur automatically as different APIs interact with each other.
 
@@ -143,5 +147,18 @@ Mentioned in this workflow:
 
     HSM sends the compute node state information with State as `empty` to HMNFD. HMNFD fans out this notification to the subscribing compute nodes.
 
+<a name="replace-nodes"></a>
 
+### Replace Nodes
+
+- [Replace a Compute Blade](Replace_a_Compute_Blade.md) 
+- [Swap a Compute Blade with a Different System](Swap_a_Compute_Blade_with_a_Different_System.md)
+
+
+<a name="move-nodes"></a>
+
+### Move Nodes
+
+- [Move a Standard Rack Node](Move_a_Standard_Rack_Node.md) 
+- [Move a Standard Rack Node \(Same HSN Ports\)](Move_a_Standard_Rack_Node_SameRack_SameHSNPorts.md)
 
