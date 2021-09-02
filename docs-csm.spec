@@ -1,5 +1,5 @@
 # Copyright 2020 Cray Inc. All Rights Reserved.
-Name: docs-csm-install
+Name: docs-csm
 License: MIT License
 Summary: Documentation for CRAY-HPE HPCaaS Installation and Upgrades
 BuildArchitectures: noarch
