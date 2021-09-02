@@ -214,7 +214,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
    ```bash
    pit:/var/www/ephemeral# rpm -Uvh --force $(find ./${CSM_RELEASE}/rpm/cray/csm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
-   pit:/var/www/ephemeral# rpm -Uvh --force $(find ./${CSM_RELEASE}/rpm/cray/csm/ -name "goss-servers*.rpm" | sort -V | tail 1)
+   pit:/var/www/ephemeral# rpm -Uvh --force $(find ./${CSM_RELEASE}/rpm/cray/csm/ -name "goss-servers*.rpm" | sort -V | tail -1)
    pit:/var/www/ephemeral# rpm -Uvh --force $(find ./${CSM_RELEASE}/rpm/cray/csm/ -name "csm-testing*.rpm" | sort -V | tail -1)
    ```
 
