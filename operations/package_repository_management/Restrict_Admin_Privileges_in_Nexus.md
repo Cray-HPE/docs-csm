@@ -23,7 +23,7 @@ The system is fully installed.
     ```
 
 2.  Patch the `nexus` VirtualService resource in the nexus namespace to remove the `X-WEBAUTH-USER` request header when the `authority` matches `packages.local` or `registry.local`.
-    
+
     Replace SYSTEM_DOMAIN_NAME in the following command before running it.
 
     ```bash

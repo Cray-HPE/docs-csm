@@ -13,7 +13,7 @@ for more information.
 
 Reset Gigabyte nodes to factory defaults to resolve problems with `ipmitool`, Redfish, or when BMC flash procedures fail. See [Set Gigabyte Node BMC to Factory Defaults](set_gigabyte_node_bmc_to_factory_defaults.md).
 
-### Topics 
+### Topics
    1. [Prepare BIOS and Firmware Content for Installation](#prepare-bios-and-firmware-for-installation)
    2. [Check BIOS and Hardware](#check-bios-and-hardware)
       1. [Upgrade HPE (iLO) Firmware](#upgrade-hpe-ilo-firmware)
@@ -34,9 +34,9 @@ Reset Gigabyte nodes to factory defaults to resolve problems with `ipmitool`, Re
 > **`CUSTOMER NOTE`** If there is doubt that the tar contains the latest, the customer should check [CrayPort][1] for newer firmware.
 
 1. Prepare the inventory. The RPMs providing firmware need to be installed:
-    
+
     > When setting the CSM_PATH variable, set it to where your expanded CSM release tarball is located.
-    
+
    ```bash
    pit# export CSM_RELEASE=x.y.z
    pit# export CSM_PATH=/var/www/ephemeral/${CSM_RELEASE}
@@ -206,11 +206,11 @@ Reset Gigabyte nodes to factory defaults to resolve problems with `ipmitool`, Re
    | UAN | Gigabyte | MZ92-FS0 | BIOS | 20.03.00 | `NO` |`http://pit/fw/river/gb/sh-svr-5264-gpu-bios/bios/RBU/image.RBU`
    | UAN | Gigabyte | MZ92-FS0 | BMC | 12.84.09 | `NO` |`http://pit/fw/river/gb/sh-svr-5264-gpu-bios/bmc/fw/128409.bin`
    | | | | | | |
-   | NCN | HPE | `A42` ProLiant DL385 Gen10 Plus | BIOS | 10/30/2020 1.38 | `NO` | `http://pit/fw/river/hpe/A42_1.38_10_30_2020.signed.flash` | 
-   | NCN | HPE | `A43` ProLiant DL325 Gen10 Plus | BIOS | 10/30/2020 1.38 | `NO` | `http://pit/fw/river/hpe/A43_1.38_10_30_2020.signed.flash` | 
+   | NCN | HPE | `A42` ProLiant DL385 Gen10 Plus | BIOS | 10/30/2020 1.38 | `NO` | `http://pit/fw/river/hpe/A42_1.38_10_30_2020.signed.flash` |
+   | NCN | HPE | `A43` ProLiant DL325 Gen10 Plus | BIOS | 10/30/2020 1.38 | `NO` | `http://pit/fw/river/hpe/A43_1.38_10_30_2020.signed.flash` |
    | NCN | HPE | iLO5 | BMC | 2.44 | `NO` |`http://pit/fw/river/hpe/ilo5_244.bin` |
    | | | | | | |
-   | CN | CRAY | EX235n | BIOS | ex235n.bios-1.0.3 | `NO` | `http://pit/fw/mountain/cray/ex235n.bios-1.0.3.tar.gz` | 
+   | CN | CRAY | EX235n | BIOS | ex235n.bios-1.0.3 | `NO` | `http://pit/fw/mountain/cray/ex235n.bios-1.0.3.tar.gz` |
    | CN | CRAY | EX425 | BIOS | ex425.bios-1.4.3 | `NO` | `http://pit/fw/mountain/cray/ex425.bios-1.4.3.tar.gz` |
 
 3. For each server that is **lower** than the items above (except for any downgrade exceptions), run through
@@ -385,7 +385,7 @@ Find more information for each vendor below:
 - [Upgrade Mellanox PCIe card](#upgrade-mellanox-pcie-card)
 
 | Vendor | Model | PSID | Version | Downgrade (Y/n)? | LiveCD Location |
-| :--- | :--- | --- | ---: | :---: | :--- | 
+| :--- | :--- | --- | ---: | :---: | :--- |
 | Marvell | QL41232HQCU-HC |   | 08.50.78 | `NO` | `unavailable`
 | Mellanox | MCX416A-BCA* | `CRAY000000001` | 12.28.2006 | `NO` | `http://pit/fw/pcie/images/CRAY000000001.bin`
 | Mellanox | MCX515A-CCA* | `MT_0000000011` and `MT_0000000591` | 16.28.2006 | `NO` | `http://pit/fw/pcie/images/MT_0000000011.bin`

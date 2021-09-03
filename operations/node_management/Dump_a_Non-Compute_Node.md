@@ -26,7 +26,7 @@ A non-compute node \(NCN\) has crashed or an admin has triggered a node crash.
 
     ```bash
     ncn-m001# sdu --scenario triage --start_time DATE_OR_TIME_STRING --end_time DATE_OR_TIME_STRING \
-    --plugin ncn.gather.nodes --plugin ncn.gather.kernel.dumps 
+    --plugin ncn.gather.nodes --plugin ncn.gather.kernel.dumps
     ```
 
     Refer to the [https://documentation.suse.com/](https://documentation.suse.com/) for more information on memory dumps or crash dumps.

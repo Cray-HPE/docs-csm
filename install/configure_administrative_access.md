@@ -1,5 +1,5 @@
 # Configure Administrative Access
-  
+
 There are several operations which configure administrative access to different parts of the system.
 Ensuring that the `cray` CLI can be used by administrative credentials enables use of many management
 services via commands. The management nodes can be locked from accidental manipulation by the
@@ -7,7 +7,7 @@ services via commands. The management nodes can be locked from accidental manipu
 management nodes. The `cray scsd` command can change the SSH keys, NTP server, syslog server, and
 BMC/controller passwords.
 
-### Topics: 
+### Topics:
 
    1. [Configure Keycloak Account](#configure_keycloak_account)
    1. [Configure the Cray Command Line Interface (cray CLI)](#configure_cray_cli)
@@ -30,17 +30,17 @@ BMC/controller passwords.
       such as LDAP. Having an account in keycloak with administrative credentials enables the use of many
       management services via the `cray` command.
 
-      See [Configure Keycloak Account](../operations/CSM_product_management/Configure_Keycloak_Account.md)  
+      See [Configure Keycloak Account](../operations/CSM_product_management/Configure_Keycloak_Account.md)
    <a name="configure_cray_cli"></a>
    1. Configure the Cray Command Line Interface (cray CLI)
 
       The `cray` command line interface (CLI) is a framework created to integrate all of the system management REST
       APIs into easily usable commands.
-   
+
       Later procedures in the installation workflow use the `cray` command to interact with multiple services.
       The `cray` CLI configuration needs to be initialized for the Linux account and the keycloak user credentials
       used in initialization running the procedure needs to be authorized for administrative actions.
-   
+
       See [Configure the Cray Command Line Interface (cray CLI)](../operations/configure_cray_cli.md)
    <a name="lock_management_nodes"></a>
    1. Lock Management Nodes
@@ -49,27 +49,27 @@ BMC/controller passwords.
       update their firmware or CAPMC to power off or do a power reset. Doing any of these by accident will take down a
       management node. If the management node is a Kubernetes master or worker node, this can have serious negative effects
       on system operation.
-   
+
       If a single node is taken down by mistake, it is possible that things will recover. However, if all management
       nodes are taken down, or all Kubernetes worker nodes are taken down by mistake, the system is dead and has to be
       completely restarted.
-   
+
       Lock the management nodes **now**!
-   
+
       See [Lock and Unlock Nodes](../operations/hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
    <a name="configure_with_scsd"></a>
    1. Configure BMC and Controller Parameters with SCSD
 
-      The System Configuration Service (SCSD) allows administrators to set various BMC and controller parameters for 
+      The System Configuration Service (SCSD) allows administrators to set various BMC and controller parameters for
       components in liquid-cooled cabinets. At this point in the install, SCSD should be used to set the
       SSH key in the node controllers (BMCs) to enable troubleshooting. If any of the nodes fail to power
       down or power up as part of the compute node booting process, it may be necessary to look at the logs
       on the BMC for node power down or node power up.
-   
+
       Note: If there are no liquid-cooled cabinets present in the HPE Cray EX system, then this procedure can be skipped.
-   
+
       See [Configure BMC and Controller Parameters with SCSD](../operations/system_configuration_service/Configure_BMC_and_Controller_Parameters_with_scsd.md)
-   <a name="manage_a_configuration_with_CFS"></a>   
+   <a name="manage_a_configuration_with_CFS"></a>
    1. Manage a Configuration with CFS
 
       The Configuration Framework Service (CFS) is used to apply post-boot configuration to all types of nodes.
@@ -80,13 +80,13 @@ BMC/controller passwords.
       of software.
 
       See [Manage a Configuration with CFS](../operations/CSM_product_management/Manage_a_Configuration_with_CFS.md)
-   <a name="cray_upload_recovery_images"></a>   
+   <a name="cray_upload_recovery_images"></a>
    1. Upload Olympus BMC Recovery Firmware into TFTP server
 
-      The Olympus hardware (NodeBMCs, ChassisBMCs, RouterBMCs) needs to have recovery firmware loaded to the cray-tftp server in case the BMC loses its firmware. The BMCs are configured to load a recovery firmware from a TFTP server. This procedure does not modify any BMC firmware, but only stages the firmware on the TFTP server for download in the event it is needed.  
-   
+      The Olympus hardware (NodeBMCs, ChassisBMCs, RouterBMCs) needs to have recovery firmware loaded to the cray-tftp server in case the BMC loses its firmware. The BMCs are configured to load a recovery firmware from a TFTP server. This procedure does not modify any BMC firmware, but only stages the firmware on the TFTP server for download in the event it is needed.
+
       See [Load Olympus BMC Recovery Firmware into TFTP server](../operations/firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md)
-            
+
    <a name="next-topic"></a>
    1. Next Topic
 

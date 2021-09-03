@@ -81,13 +81,13 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
    - ncn-w001
    - ncn-w002
    - ncn-w003
-   
+
    The following Non-compute Nodes (NCNs) will be excluded from this operation:
    managers:
    - ncn-m001
    storage: []
    workers: []
-   
+
    Are the above NCN groupings and exclusions correct? [yes,no] yes
 
    Powering on NCNs and waiting up to 300 seconds for them to be reachable via SSH: ncn-m002, ncn-m003
@@ -95,7 +95,7 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
    ERROR: Unable to reach the following NCNs via SSH after powering them on: ncn-m003, ncn-s002.. Troubleshoot the issue and then try again.
    ```
 
-   In the preceding example, the command to ssh to some ncn nodes timed out and reported `ERROR` messages. Iterate on the above step until you see `Succeeded with boot of other management NCNs.` Each interation should get further in the process.
+   In the preceding example, the command to ssh to some ncn nodes timed out and reported `ERROR` messages. Iterate on the above step until you see `Succeeded with boot of other management NCNs.` Each iteration should get further in the process.
 
 10. Use `tail` to monitor the log files in `/var/log/cray/console_logs` for each NCN.
 
@@ -112,13 +112,13 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
     26552.SAT-console-ncn-w003-mgmt (Detached)
     26514.SAT-console-ncn-w002-mgmt (Detached)
     26444.SAT-console-ncn-w001-mgmt (Detached)
-    
+
     ncn-m001# screen -x 26745.SAT-console-ncn-m003-mgmt
     ```
 **VERIFY ACCESS TO LUSTRE FILE SYSTEM**
 
 11. Verify that the Lustre file system is available from the management cluster.
-    
+
 
 **START KUBERNETES \(k8s\)**
 
@@ -184,24 +184,24 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
     ```bash
     ncn-m001# ceph df
     RAW STORAGE:
-        CLASS     SIZE       AVAIL      USED        RAW USED     %RAW USED 
-        ssd       63 TiB     60 TiB     2.8 TiB      2.8 TiB          4.45 
-        TOTAL     63 TiB     60 TiB     2.8 TiB      2.8 TiB          4.45 
-     
+        CLASS     SIZE       AVAIL      USED        RAW USED     %RAW USED
+        ssd       63 TiB     60 TiB     2.8 TiB      2.8 TiB          4.45
+        TOTAL     63 TiB     60 TiB     2.8 TiB      2.8 TiB          4.45
+
     POOLS:
-        POOL                           ID     STORED      OBJECTS     USED        %USED     MAX AVAIL 
-        cephfs_data                     1      40 MiB         382     124 MiB         0        18 TiB 
-        cephfs_metadata                 2     262 MiB         117     787 MiB         0        18 TiB 
-        .rgw.root                       3     3.5 KiB           8     384 KiB         0        18 TiB 
-        default.rgw.buckets.data        4      71 GiB      27.07k     212 GiB      0.38        18 TiB 
-        default.rgw.control             5         0 B           8         0 B         0        18 TiB 
-        default.rgw.buckets.index       6     7.7 MiB          13     7.7 MiB         0        18 TiB 
-        default.rgw.meta                7      21 KiB         111     4.2 MiB         0        18 TiB 
-        default.rgw.log                 8         0 B         207         0 B         0        18 TiB 
-        kube                            9      67 GiB      26.57k     197 GiB      0.35        18 TiB 
-        smf                            10     806 GiB     271.69k     2.4 TiB      4.12        18 TiB 
-        default.rgw.buckets.non-ec     11         0 B           0         0 B         0        18 TiB 
-    
+        POOL                           ID     STORED      OBJECTS     USED        %USED     MAX AVAIL
+        cephfs_data                     1      40 MiB         382     124 MiB         0        18 TiB
+        cephfs_metadata                 2     262 MiB         117     787 MiB         0        18 TiB
+        .rgw.root                       3     3.5 KiB           8     384 KiB         0        18 TiB
+        default.rgw.buckets.data        4      71 GiB      27.07k     212 GiB      0.38        18 TiB
+        default.rgw.control             5         0 B           8         0 B         0        18 TiB
+        default.rgw.buckets.index       6     7.7 MiB          13     7.7 MiB         0        18 TiB
+        default.rgw.meta                7      21 KiB         111     4.2 MiB         0        18 TiB
+        default.rgw.log                 8         0 B         207         0 B         0        18 TiB
+        kube                            9      67 GiB      26.57k     197 GiB      0.35        18 TiB
+        smf                            10     806 GiB     271.69k     2.4 TiB      4.12        18 TiB
+        default.rgw.buckets.non-ec     11         0 B           0         0 B         0        18 TiB
+
     ```
 
 15. If `%USED` for any pool approaches 80% used, resolve the space issue.
@@ -234,20 +234,20 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
     Events:
       Type     Reason                  Age                    From               Message
       ----     ------                  ----                   ----               -------
-      Warning  FailedCreatePodSandBox  29m                    kubelet, ncn-w001  Failed to create pod 
-    sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox 
-    "314ca4285d0706ec3d76a9e953e412d4b0712da4d0cb8138162b53d807d07491": Multus: Err in tearing down failed 
+      Warning  FailedCreatePodSandBox  29m                    kubelet, ncn-w001  Failed to create pod
+    sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox
+    "314ca4285d0706ec3d76a9e953e412d4b0712da4d0cb8138162b53d807d07491": Multus: Err in tearing down failed
     plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for range 0: no IP addresses available in range set: 10.252.2.4-10.252.2.4
-      Warning  FailedCreatePodSandBox  29m                    kubelet, ncn-w001  Failed to create pod 
-    sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox 
+      Warning  FailedCreatePodSandBox  29m                    kubelet, ncn-w001  Failed to create pod
+    sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox
     ...
     ```
-    
+
     If the preceding error is displayed, then remove all files in the following directories on all worker nodes:
-    
+
     -   /var/lib/cni/networks/macvlan-slurmctld-nmn-conf
     -   /var/lib/cni/networks/macvlan-slurmdbd-nmn-conf
-    
+
 18. Check that spire pods have started.
 
     ```bash
@@ -262,37 +262,37 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
     ```bash
     ncn-m001# kubectl rollout restart -n spire deployment spire-jwks
     ```
-20. Check if any pods are in CrashLoopBackOff due to errors connecting to vault. If so, restart the vault operator, the vault pods and finally the pod which is in CrashLookBackOff. For example:
+20. Check if any pods are in CrashLoopBackOff due to errors connecting to vault. If so, restart the vault operator, the vault pods and finally the pod which is in CrashLoopBackOff. For example:
 
     ```bash
     ncn-m001# kubectl get pods -A | grep CrashLoopBackOff
     services            cray-console-node-1                            2/3     CrashLoopBackOff   206        6d21h
-    
+
     ncn-m001# kubectl -n services logs cray-console-node-1 cray-console-node | grep "connection failure" | grep vault
     2021/08/26 16:39:28 Error: &api.ResponseError{HTTPMethod:"PUT", URL:"http://cray-vault.vault:8200/v1/auth/kubernetes/login", StatusCode:503, RawError:true, Errors:[]string{"upstream connect error or disconnect/reset before headers. reset reason: connection failure"}}
     panic: Error: &api.ResponseError{HTTPMethod:"PUT", URL:"http://cray-vault.vault:8200/v1/auth/kubernetes/login", StatusCode:503, RawError:true, Errors:[]string{"upstream connect error or disconnect/reset before headers. reset reason: connection failure"}}
 
     # Restart the vault-operator
     ncn-m001# kubectl delete pods -n vault -l app.kubernetes.io/name=vault-operator
-    
+
     # Wait for the operator pod to restart with 2/2 Ready and Running - for example:
     ncn-m001#  kubectl get pods -n vault -l app.kubernetes.io/name=vault-operator
     NAME                                  READY   STATUS    RESTARTS   AGE
     cray-vault-operator-69b4b6887-dfn2f   2/2     Running   2          1m
- 
+
     # Restart the cray-vault pods
-    ncn-m001# kubectl rollout restart statefulset cray-vault -n vault 
-    
+    ncn-m001# kubectl rollout restart statefulset cray-vault -n vault
+
     # Wait for the cray-vault pods to restart with 5/5 Ready and Running - for example:
     ncn-m001# kubectl get pods -n vault -l app.kubernetes.io/name=vault
     NAME           READY   STATUS    RESTARTS   AGE
     cray-vault-0   5/5     Running   1          2m
     cray-vault-1   5/5     Running   1          2m
     cray-vault-2   5/5     Running   2          2m
- 
+
     # Restart cray-console-node-1
     ncn-m001# kubectl delete pod cray-console-node-1 -n services
-    
+
     # Wait for cray-console-node-1 to restart with 3/3 Ready and Running - for example:
     ncn-m001# kubectl get pods -n services | grep  cray-console-node-1
     cray-console-node-1                                            3/3     Running            0          2m
@@ -335,7 +335,7 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
         ncn-m001# pdsh -w ncn-m00[1-3],ncn-w00[1-3] systemctl status cfs-state-reporter
         ```
 
-    
+
 
 **VERIFY BGP PEERING SESSIONS**
 
@@ -343,7 +343,7 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
 23. Check the status and health of etcd clusters, see [Check the Health and Balance of etcd Clusters](../kubernetes/Check_the_Health_and_Balance_of_etcd_Clusters.md).
 
-    
+
 
 **CHECK CRON JOBS**
 
@@ -385,7 +385,7 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
     ```bash
     ncn-m001# cd ~/k8s
     ncn-m001# kubectl get cronjobs.batch -n NAMESPACE CRON_JOB_NAME -o yaml > CRON_JOB_NAME-cronjob.yaml
-    ncn-m001# vi CRON_JOB_NAME-cronjob.yaml 
+    ncn-m001# vi CRON_JOB_NAME-cronjob.yaml
     ```
 
     1.  Delete all lines that contain `uid:`.
@@ -433,7 +433,7 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
     | x3000c0s22b0n0 | Node | 100007   | On    | OK      | True    | X86  | River | Management  | Sling    |
     | x3000c0s24b0n0 | Node | 100008   | On    | OK      | True    | X86  | River | Management  | Sling    |
     | x3000c0s26b0n0 | Node | 100009   | On    | OK      | True    | X86  | River | Management  | Sling    |
-    
+
     ```
 
     **Attention:** When the NCNs are brought back online after a power outage or planned shutdown, `sat status` may report them as being Off.

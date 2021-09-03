@@ -41,16 +41,16 @@ function pre_install_resize ()
       # Scale POSTGRESQL cluster to 1 to prepare for resize
       kubectl patch postgresql "${POSTGRESQL}" -n "${NAMESPACE}" --type='json' -p='[{"op" : "replace", "path":"/spec/numberOfInstances", "value" : 1}]'
       while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n "${NAMESPACE}" | grep -v NAME | wc -l) != 1 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
-    
+
       # Delete the pvcs from the non running postgres pods
       kubectl delete pvc "${PGDATA}-1" "${PGDATA}-2" -n "${NAMESPACE}"
-    
+
       # Resize the remaining postgres pvc
       kubectl patch -p '{"spec": {"resources": {"requests": {"storage": "'${PGRESIZE}'"}}}}' "pvc/${PGDATA}-0" -n "${NAMESPACE}"
-    
+
       # Wait for the pvc to resize
       while [ -z '$(kubectl describe pvc "{PGDATA}-0" -n "${NAMESPACE}" | grep FileSystemResizeSuccessful' ] ; do echo "  waiting for pvc to resize"; sleep 2; done
-    
+
       echo "Completed"
     else
       echo "Completed - ${POSTGRESQL} cluster ${PGDATA} PVCs is already at or above ${PGRESIZE}"

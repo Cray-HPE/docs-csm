@@ -90,7 +90,7 @@ Skip this section if rebuilding a master or storage node. The examples in this s
       "retryPolicy": 3,
     ```
 
-    If the configurationStatus is `pending`, wait for the job finish before rebooting this node. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus preceded this worker rebuild, and that can be addressed independent of rebuilding this worker.  If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+    If the configurationStatus is `pending`, wait for the job finish before rebooting this node. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus preceded this worker rebuild, and that can be addressed independent of rebuilding this worker. If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
 
 1. Drain the node to clear any pods running on the node.
 
@@ -155,7 +155,7 @@ Skip this section if rebuilding a worker or storage node. The examples in this s
      "retryPolicy": 3,
    ```
 
-   If the configurationStatus is `pending`, wait for the job finish before rebooting this node. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus preceded this worker rebuild, and that can be addressed independent of rebuilding this worker.  If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+   If the configurationStatus is `pending`, wait for the job finish before rebooting this node. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus preceded this worker rebuild, and that can be addressed independent of rebuilding this worker. If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
 
 1. Determine if the master node being rebuilt is the first master node.
 
@@ -202,7 +202,7 @@ Skip this section if rebuilding a worker or storage node. The examples in this s
 
       ```bash
       #!/bin/bash
-    
+
       source /srv/cray/scripts/metal/lib.sh
       export KUBERNETES_VERSION="v$(cat /etc/cray/kubernetes/version)"
       echo $(kubeadm init phase upload-certs --upload-certs 2>&1 | tail -1) > /etc/cray/kubernetes/certificate-key
@@ -211,21 +211,21 @@ Skip this section if rebuilding a worker or storage node. The examples in this s
       export PODS_CIDR=$(craysys metadata get kubernetes-pods-cidr)
       export SERVICES_CIDR=$(craysys metadata get kubernetes-services-cidr)
       envsubst < /srv/cray/resources/common/kubeadm.yaml > /etc/cray/kubernetes/kubeadm.yaml
-         
+
       kubeadm token create --print-join-command > /etc/cray/kubernetes/join-command 2>/dev/null
       echo "$(cat /etc/cray/kubernetes/join-command) --control-plane --certificate-key $(cat /etc/cray/kubernetes/certificate-key)" > /etc/cray/kubernetes/join-command-control-plane
-         
+
       mkdir -p /srv/cray/scripts/kubernetes
       cat > /srv/cray/scripts/kubernetes/token-certs-refresh.sh <<'EOF'
       #!/bin/bash
-         
+
       if [[ "$1" != "skip-upload-certs" ]]; then
         kubeadm init phase upload-certs --upload-certs --config /etc/cray/kubernetes/kubeadm.yaml
       fi
       kubeadm token create --print-join-command > /etc/cray/kubernetes/join-command 2>/dev/null
       echo "$(cat /etc/cray/kubernetes/join-command) --control-plane --certificate-key $(cat /etc/cray/kubernetes/certificate-key)" \
         > /etc/cray/kubernetes/join-command-control-plane
-         
+
       EOF
       chmod +x /srv/cray/scripts/kubernetes/token-certs-refresh.sh
       /srv/cray/scripts/kubernetes/token-certs-refresh.sh skip-upload-certs
@@ -233,7 +233,7 @@ Skip this section if rebuilding a worker or storage node. The examples in this s
       ```
 
    1. Find the member ID of the master node being removed.
- 
+
       ```bash
       ncn# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt \
           --cert=/etc/kubernetes/pki/etcd/ca.crt  \
@@ -242,9 +242,9 @@ Skip this section if rebuilding a worker or storage node. The examples in this s
 
    1. Find the line with the name of the master being removed. The member ID is the alphanumeric string in the first field of that line. The IP address is in the URL in the fourth field in the line. Note the member ID and IP address for use in subsequent steps.
    1. Remove the master node from the etcd cluster backing Kubernetes.
- 
+
       Replace the MEMBER_ID value with the value returned in the previous sub-step.
- 
+
       ```bash
       ncn# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt \
           --cert=/etc/kubernetes/pki/etcd/ca.crt --key=/etc/kubernetes/pki/etcd/ca.key \
@@ -252,12 +252,12 @@ Skip this section if rebuilding a worker or storage node. The examples in this s
       ```
    <a name="stop-etcd"></a>
 1. Stop the etcd service on the master node being removed.
- 
+
    ```bash
    NODE# systemctl stop etcd.service
    ```
- 
-1. Remove the node from the Kubernetes cluster.  This command should not be run on the node being deleted.
+
+1. Remove the node from the Kubernetes cluster. This command should not be run on the node being deleted.
 
    ```bash
    ncn# kubectl delete node NODE
@@ -294,7 +294,7 @@ Skip this section if rebuilding a master or worker node. The examples in this se
       "retryPolicy": 3,
     ```
 
-    If the configurationStatus is `pending`, wait for the job finish before rebooting this node. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus preceded this worker rebuild, and that can be addressed independent of rebuilding this worker.  If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+    If the configurationStatus is `pending`, wait for the job finish before rebooting this node. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus preceded this worker rebuild, and that can be addressed independent of rebuilding this worker. If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
 
 1. Check the status of Ceph.
 
@@ -332,18 +332,18 @@ Skip this section if rebuilding a master or worker node. The examples in this se
                 1 host (8 osds) down
                 Degraded data redundancy: 923/2768 objects degraded (33.345%), 94 pgs degraded
                 1/3 mons down, quorum ncn-s001,ncn-s002
-     
+
       services:
         mon: 3 daemons, quorum ncn-s001,ncn-s002 (age 43s), out of quorum: ncn-s003
         mgr: ncn-s001(active, since 18h), standbys: ncn-s002
         mds: cephfs:1 {0=ncn-s001=up:active} 1 up:standby
         osd: 16 osds: 8 up (since 34s), 12 in (since 34m)
         rgw: 2 daemons active (ncn-s001.rgw0, ncn-s002.rgw0)
-     
+
       task status:
         scrub status:
             mds.ncn-s001: idle
-     
+
       data:
         pools:   10 pools, 480 pgs
         objects: 923 objects, 29 KiB
@@ -371,7 +371,7 @@ Skip this section if rebuilding a master or worker node. The examples in this se
     0: [v2:10.252.1.9:3300/0,v1:10.252.1.9:6789/0] mon.ncn-s001
     1: [v2:10.252.1.10:3300/0,v1:10.252.1.10:6789/0] mon.ncn-s002
     2: [v2:10.252.1.11:3300/0,v1:10.252.1.11:6789/0] mon.ncn-s003
-    
+
     ```
 
     Remove the out of quorum node from the mon map. Replace the NODE value with the name of the known down ceph-mon node.
@@ -390,18 +390,18 @@ Skip this section if rebuilding a master or worker node. The examples in this se
         id:     22d01fcd-a75b-4bfc-b286-2ed8645be2b5
         health: HEALTH_WARN
                 Degraded data redundancy: 588/2771 objects degraded (21.220%), 60 pgs degraded, 268 pgs undersized
-     
+
       services:
         mon: 2 daemons, quorum ncn-s001,ncn-s002 (age 4m)
         mgr: ncn-s001(active, since 18h), standbys: ncn-s002
         mds: cephfs:1 {0=ncn-s001=up:active} 1 up:standby
         osd: 12 osds: 8 up (since 9m), 8 in (since 42m); 148 remapped pgs
         rgw: 2 daemons active (ncn-s001.rgw0, ncn-s002.rgw0)
-     
+
       task status:
         scrub status:
             mds.ncn-s001: idle
-     
+
       data:
         pools:   10 pools, 480 pgs
         objects: 924 objects, 30 KiB
@@ -466,7 +466,7 @@ This section applies to all node types. The examples in this section assume the 
    ```bash
    ncn# cray bss bootparameters list --name XNAME --format=json > XNAME.json
    ```
-   
+
 <a name="inspect"></a>
 1. Inspect and modify the JSON file.
    1. Remove the outer array brackets.
@@ -572,7 +572,7 @@ This section applies to master and worker nodes. Skip this section if rebuilding
 
     This can be done from the ConMan console window.
 
-    **Warning:** This is the point of no return. Once the disks are wiped,the node must be rebuilt. 
+    **Warning:** This is the point of no return. Once the disks are wiped,the node must be rebuilt.
 
     ```
     NODE# wipefs --all --force /dev/sd* /dev/disk/by-label/*
@@ -631,7 +631,7 @@ This section applies to master and worker nodes. Skip this section if rebuilding
 
 1. Observe the boot.
 
-    After a bit, the node should begin to boot. This can be viewed from the ConMan console window. Eventually, there will be a `NBP file...` message in the console output which indicates that the PXE boot has begun the TFTP download of the ipxe program. Later messages will appear as the Linux kernel loads and then the scripts in the initrd begin to run, including cloud-init. 
+    After a bit, the node should begin to boot. This can be viewed from the ConMan console window. Eventually, there will be a `NBP file...` message in the console output which indicates that the PXE boot has begun the TFTP download of the ipxe program. Later messages will appear as the Linux kernel loads and then the scripts in the initrd begin to run, including cloud-init.
 
    Wait until cloud-init displays messages similar to these on the console to indicate that cloud-init has finished with the module called `modules:final`.
 
@@ -806,15 +806,15 @@ This section applies to storage nodes. Skip this section if rebuilding a master 
         ```bash
         [all]
         ncn-s[001:LASTNODE].nmn
-         
+
         [ceph_all]
         ncn-s[001:LASTNODE].nmn
-         
+
         to:
-          
+
         [all]
         ncn-s[001:003].nmn
-         
+
         [ceph_all]
         ncn-s[001:003].nmn
         ```
@@ -837,7 +837,7 @@ This section applies to storage nodes. Skip this section if rebuilding a master 
     ncn-s001# ansible-playbook /etc/ansible/ceph-ansible/site.yml
     ```
 
-1. Open another SSH session to a storage node that is not currently being rebuilt, and then monitor the build. 
+1. Open another SSH session to a storage node that is not currently being rebuilt, and then monitor the build.
 
     ```bash
     ncn-s002# watch ceph -s
@@ -948,7 +948,7 @@ Skip this section if a master or storage node was rebuilt. The examples in this 
         "retryPolicy": 3,
       ```
 
-      If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node.  If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+      If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node. If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
       If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 
    1. Redeploy the cray-cps-cm-pm pod.
@@ -1052,7 +1052,7 @@ Skip this section if a worker or storage node was rebuilt. The examples in this 
         "retryPolicy": 3,
       ```
 
-      If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node.  If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+      If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node. If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
       If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 
    1. Collect data about the system management platform health \(can be run from a master or worker NCN\).
@@ -1077,18 +1077,18 @@ Skip this section if a master or worker node was rebuilt.
         cluster:
           id:     22d01fcd-a75b-4bfc-b286-2ed8645be2b5
           health: HEALTH_OK
- 
+
         services:
           mon: 3 daemons, quorum ncn-s001,ncn-s002,ncn-s003 (age 4m)
           mgr: ncn-s001(active, since 19h), standbys: ncn-s002, ncn-s003
           mds: cephfs:1 {0=ncn-s001=up:active} 2 up:standby
           osd: 12 osds: 12 up (since 2m), 12 in (since 2m)
           rgw: 3 daemons active (ncn-s001.rgw0, ncn-s002.rgw0, ncn-s003.rgw0)
- 
+
         task status:
           scrub status:
               mds.ncn-s001: idle
-  
+
         data:
           pools:   10 pools, 480 pgs
           objects: 926 objects, 31 KiB
@@ -1122,7 +1122,7 @@ Skip this section if a master or worker node was rebuilt.
    1. Verify the radosgw and haproxy are correct.
 
       There will be an output \(without an error\) returned if radosgw and haproxy are correct.
- 
+
       ```bash
       ncn# curl -k https://rgw-vip.nmn
       <?xml version="1.0" encoding="UTF-8"?><ListAllMyBucketsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/ "><Owner><ID>anonymous</ID><DisplayName></DisplayName></Owner><Buckets></Buckets></ListAllMyBucketsResult
@@ -1151,7 +1151,7 @@ Skip this section if a master or worker node was rebuilt.
         "retryPolicy": 3,
       ```
 
-      If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node.  If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+      If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node. If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
 
       If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 

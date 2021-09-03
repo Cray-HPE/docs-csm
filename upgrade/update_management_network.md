@@ -10,7 +10,7 @@
 Some of these changes are applied as hotfixes and patches for 1.4, they may have already been applied.
 
 #### CMM Static Lag configuration
-For systems with mountain cabinets ONLY.  Changes must 
+For systems with mountain cabinets ONLY. Changes must
 - Verify the version of the CMM firmware, the firmware must be on version 1.4.20 or greater in order to support static LAGs on the CDU switches.
 - The command below should get you all the cmm firmware for a system.
 - Update the password in the command before usage. Change ```root:password``` to the correct BMC password.
@@ -25,8 +25,8 @@ Expected output
 "cc.1.4.2x-shasta-release.arm64.2021-03-24T17:47:03+00:00.0b7eb31"
 ```
 
-- If the firmware is not on 1.4.20 or greater, notify the admin and get it updated before proceeding. 
-- If you cannot get the firmware version, have the admin check for you. 
+- If the firmware is not on 1.4.20 or greater, notify the admin and get it updated before proceeding.
+- If you cannot get the firmware version, have the admin check for you.
 - (Aruba and Dell) If the CMMs are on the correct version, verify the LAG configuration is setup correctly.
 - These configurations can be found on the CDU switch pages under the "Configure LAG for CMMs" section.
     - Dell [Dell CDU](../install/configure_dell_cdu_switch.md)
@@ -57,15 +57,15 @@ sw-spine-001 [standalone: master] # show run | include bgp
 ##### Aruba BGP updates
 - Remove the TFTP static route entry on the switches that are BGP participating in BGP.
 - This was set during initial install to workaround an issue with tftp booting.
-- Log into the switches running BGP, in this example it is the spine switches. 
+- Log into the switches running BGP, in this example it is the spine switches.
 - Run the following command once logged in.
 ```
 sw-spine01# show ip route 10.92.100.60
- 
+
 Displaying ipv4 routes selected for forwarding
- 
+
 '[x/y]' denotes [distance/metric]
- 
+
 10.92.100.60/32, vrf default, tag 0
     via  10.252.1.x,  [1/0],  static
 ```
@@ -194,7 +194,7 @@ router bgp 65533
 - The Mellanox BGP neighbors need to configured as passive.
 
 To do this, log into the switches and run the commands below.
-the neighbor will be the NMN IP of ALL the worker nodes.  You may have more than 3.
+the neighbor will be the NMN IP of ALL the worker nodes. You may have more than 3.
 ```
 sw-spine-001 [standalone: master] > ena
 sw-spine-001 [standalone: master] # conf t
@@ -206,7 +206,7 @@ Run the command below to verify the configuration got applied correctly.
 ```
 sw-spine-001 [standalone: master] (config) # show run protocol bgp
 ```
-The configuration should look similar to the following.  This is an example only.
+The configuration should look similar to the following. This is an example only.
 More BGP documentation can be found here [BGP](../operations/network/metallb_bgp/update_bgp_neighbors.md).
 ```
 ## BGP configuration

@@ -46,13 +46,13 @@ View the address pool configurations in the MetalLB ConfigMap after localization
 The CAN configuration is set in the `csi config init` input:
 
 ```bash
-linux# csi config init 
+linux# csi config init
 .
 .
 .
-     --can-cidr 10.102.5.0/26 
-     --can-gateway 10.102.5.27 
-     --can-static-pool 10.102.5.28/30 
+     --can-cidr 10.102.5.0/26
+     --can-gateway 10.102.5.27
+     --can-static-pool 10.102.5.28/30
      --can-dynamic-pool 10.102.5.32/27
 .
 .

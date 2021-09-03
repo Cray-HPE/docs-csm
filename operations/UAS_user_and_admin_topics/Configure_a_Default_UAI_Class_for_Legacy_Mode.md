@@ -95,7 +95,7 @@ image_id = "ff86596e-9699-46e8-9d49-9cb20203df8c"
 imagename = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
 ```
 
-### Example Default UAI Class with Slurm Support 
+### Example Default UAI Class with Slurm Support
 
 The following is an example of a default UAI class configured for Slurm support if Slurm has been installed on the host system:
 

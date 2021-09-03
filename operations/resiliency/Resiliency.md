@@ -2,7 +2,7 @@
 
 HPE Cray EX systems are designed so that system management services \(SMS\) are fully resilient and that there is no single point of failure.
 
-### Table of Contents 
+### Table of Contents
 
 Refer to the following sections for more information on how the system is resilient.
 

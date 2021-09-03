@@ -3,7 +3,7 @@
 This page describes the purpose of the ACLs and how they are configured.
 
 ## Requirements
-- Access to the switches 
+- Access to the switches
 
 ## Aruba Configuration
 
@@ -11,17 +11,17 @@ These ACLs are designed to block traffic from the Node Management Network (NMN) 
 
 These need to be set where the Layer3 interface is located, this will most likely be a VSX pair of switches. These ACLs are required on both switches in the pair.
 
-1. Create the access list. 
+1. Create the access list.
 
     ```bash
     access-list ip nmn-hmn
-        10 deny any 10.252.0.0/255.255.128.0 10.254.0.0/255.255.128.0 
+        10 deny any 10.252.0.0/255.255.128.0 10.254.0.0/255.255.128.0
         20 deny any 10.252.0.0/255.255.128.0 10.104.0.0/255.252.0.0
-        30 deny any 10.254.0.0/255.255.128.0 10.252.0.0/255.255.128.0 
+        30 deny any 10.254.0.0/255.255.128.0 10.252.0.0/255.255.128.0
         40 deny any 10.254.0.0/255.255.128.0 10.100.0.0/255.252.0.0
-        50 deny any 10.100.0.0/255.252.0.0 10.254.0.0/255.255.128.0 
+        50 deny any 10.100.0.0/255.252.0.0 10.254.0.0/255.255.128.0
         60 deny any 10.100.0.0/255.252.0.0 10.104.0.0/255.252.0.0
-        70 deny any 10.104.0.0/255.252.0.0 10.252.0.0/255.255.128.0 
+        70 deny any 10.104.0.0/255.252.0.0 10.252.0.0/255.255.128.0
         80 deny any 10.104.0.0/255.252.0.0 10.100.0.0/255.252.0.0
         90 permit any any any
     ```

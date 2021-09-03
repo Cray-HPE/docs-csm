@@ -30,8 +30,8 @@ software, but provides background which might be helpful for troubleshooting an 
    * [`switch_metadata.csv`](../install/prepare_configuration_payload.md#switch_metadata_csv)
 
    In addition, after running `csi` with those pre-config files, `csi` creates an output `system_config.yaml`
-   file which can be passed to `csi` when reinstalling this software release. 
-   
+   file which can be passed to `csi` when reinstalling this software release.
+
    See [Cray Site Init Files](cray_site_init_files.md) for more information about these files.
 
 <a name="certificate_authority"></a>

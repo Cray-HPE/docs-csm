@@ -12,7 +12,7 @@ Restore Postgres Procedures by Service:
 <a name="spire"> </a>
 ### Restore Postgres for Spire
 
-In the event that the spire Postgres cluster is in a state that the cluster must be rebuilt and the data restored, the following procedures are recommended. This assumes that a dump of the database exists. 
+In the event that the spire Postgres cluster is in a state that the cluster must be rebuilt and the data restored, the following procedures are recommended. This assumes that a dump of the database exists.
 
 1. Copy the database dump to an accessible location.
 
@@ -76,7 +76,7 @@ In the event that the spire Postgres cluster is in a state that the cluster must
     ```
 
 2. Scale the spire service to 0.
-    
+
     ```bash
     ncn-w001# CLIENT=spire-server
     ncn-w001# NAMESPACE=spire
@@ -134,7 +134,7 @@ In the event that the spire Postgres cluster is in a state that the cluster must
 
     Based off the four `spire-postgres` secrets, collect the password for each Postgres username: `postgres`, `service_account`, `spire`, and `standby`. Then `kubectl exec` into the Postgres pod and update the password for each user. For example:
 
-    ```bash 
+    ```bash
     ncn-w001# for secret in postgres.spire-postgres.credentials service-account.spire-postgres.credentials spire.spire-postgres.credentials standby.spire-postgres.credentials; do echo -n "secret ${secret} username & password: "; echo -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
 
     secret postgres.spire-postgres.credentials username & password: postgres ABCXYZ
@@ -156,7 +156,7 @@ In the event that the spire Postgres cluster is in a state that the cluster must
     ALTER ROLE
     postgres=#
     ```
-  
+
   - Re-create secrets in Kubernetes.
 
     If the Postgres secrets were auto-backed up, then re-create the secrets in Kubernetes.
@@ -168,11 +168,11 @@ In the event that the spire Postgres cluster is in a state that the cluster must
 
     ncn-w001# kubectl delete secret postgres.spire-postgres.credentials service-account.spire-postgres.credentials spire.spire-postgres.credentials standby.spire-postgres.credentials -n ${NAMESPACE}
 
-    ncn-w001# kubectl apply -f ${MANIFEST} 
+    ncn-w001# kubectl apply -f ${MANIFEST}
     ```
 
 8. Restart the Postgres cluster.
-     
+
     ```bash
     ncn-w001# kubectl delete pod -n ${NAMESPACE} "${POSTGRESQL}-0"
 
@@ -215,7 +215,7 @@ In the event that the spire Postgres cluster is in a state that the cluster must
 <a name="keycloak"> </a>
 ### Restore Postgres for Keycloak
 
-In the event that the keycloak Postgres cluster is in a state that the cluster must be rebuilt and the data restored, the following procedures are recommended. This assumes that a dump of the database exists. 
+In the event that the keycloak Postgres cluster is in a state that the cluster must be rebuilt and the data restored, the following procedures are recommended. This assumes that a dump of the database exists.
 
 1. Copy the database dump to an accessible location.
 
@@ -279,7 +279,7 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
     ```
 
 2. Scale the keycloak service to 0.
-    
+
     ```bash
     ncn-w001# CLIENT=cray-keycloak
     ncn-w001# NAMESPACE=services
@@ -337,7 +337,7 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
 
     Based off the three `keycloak-postgres` secrets, collect the password for each Postgres username: `postgres`, `service_account`, and `standby`. Then `kubectl exec` into the Postgres pod and update the password for each user. For example:
 
-    ```bash 
+    ```bash
     ncn-w001# for secret in postgres.keycloak-postgres.credentials service-account.keycloak-postgres.credentials standby.keycloak-postgres.credentials; do echo -n "secret ${secret} username & password: "; echo -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
 
     secret postgres.keycloak-postgres.credentials username & password: postgres ABCXYZ
@@ -356,7 +356,7 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
     ALTER ROLE
     postgres=#
     ```
-  
+
   - Re-create secrets in Kubernetes.
 
     If the Postgres secrets were automatically backed up, then re-create the secrets in Kubernetes.
@@ -368,11 +368,11 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
 
     ncn-w001# kubectl delete secret postgres.keycloak-postgres.credentials service-account.keycloak-postgres.credentials standby.keycloak-postgres.credentials -n ${NAMESPACE}
 
-    ncn-w001# kubectl apply -f ${MANIFEST} 
+    ncn-w001# kubectl apply -f ${MANIFEST}
     ```
 
 8. Restart the Postgres cluster.
-     
+
     ```bash
     ncn-w001# kubectl delete pod -n ${NAMESPACE} "${POSTGRESQL}-0"
 
@@ -410,7 +410,7 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
     ````
 
 11. Re-run the `keycloak-setup` and `keycloak-users-localize` jobs, and restart Keycloak gatekeeper.
-    
+
   - Run the `keycloak-setup` job to restore the Kubernetes client secrets:
 
     ```bash
@@ -418,7 +418,7 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
     ncn-w001# cat keycloak-setup.json | jq '.items[0]' | jq 'del(.metadata.creationTimestamp)' | jq 'del(.metadata.managedFields)' | jq 'del(.metadata.resourceVersion)' | jq 'del(.metadata.selfLink)' | jq 'del(.metadata.uid)' | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels)' | jq 'del(.status)' | kubectl replace --force -f -
     ````
 
-    Check the status of the `keycloak-setup` job. If the `COMPLETIONS` value is not `1/1`, wait a few seconds and run the command again until the `COMPLETIONS` value is `1/1`. 
+    Check the status of the `keycloak-setup` job. If the `COMPLETIONS` value is not `1/1`, wait a few seconds and run the command again until the `COMPLETIONS` value is `1/1`.
 
     ```bash
     ncn-w001# kubectl get jobs -n ${NAMESPACE} -l app.kubernetes.io/instance=cray-keycloak
@@ -428,13 +428,13 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
     ````
 
   - Run the `keycloak-users-localize` job to restore the users and groups in S3 and the Kubernetes configmap:
-    
+
     ```bash
     ncn-w001# kubectl get job -n ${NAMESPACE} -l app.kubernetes.io/instance=cray-keycloak-users-localize -o json > cray-keycloak-users-localize.json
     ncn-w001# cat cray-keycloak-users-localize.json | jq '.items[0]' | jq 'del(.metadata.creationTimestamp)' | jq 'del(.metadata.managedFields)' | jq 'del(.metadata.resourceVersion)' | jq 'del(.metadata.selfLink)' | jq 'del(.metadata.uid)' | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels)' | jq 'del(.status)' | kubectl replace --force -f -`
     ````
 
-    Check the status of the `cray-keycloak-users-localize` job. If the `COMPLETIONS` value is not `1/1`, wait a few seconds and run the command again until the `COMPLETIONS` value is `1/1`. 
+    Check the status of the `cray-keycloak-users-localize` job. If the `COMPLETIONS` value is not `1/1`, wait a few seconds and run the command again until the `COMPLETIONS` value is `1/1`.
 
     ```bash
     ncn-w001# kubectl get jobs -n ${NAMESPACE} -l app.kubernetes.io/instance=cray-keycloak-users-localize
@@ -442,7 +442,7 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
     NAME                        COMPLETIONS   DURATION   AGE
     keycloak-users-localize-2   1/1           45s        49s
     ````
-    
+
   - Restart Keycloak gatekeeper:
 
     ```bash

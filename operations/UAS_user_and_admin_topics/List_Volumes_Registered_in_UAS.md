@@ -19,7 +19,7 @@ Install and initialize the `cray` administrative CLI.
         mount_path = "/lus"
         volume_id = "2b23a260-e064-4f3e-bee5-3da8e3664f29"
         volumename = "lustre"
-        
+
         [results.volume_description.host_path]
         path = "/lus"
         type = "DirectoryOrCreate"
@@ -27,28 +27,28 @@ Install and initialize the `cray` administrative CLI.
         mount_path = "/etc/slurm"
         volume_id = "53ea3f18-b202-455f-a8ec-79f9463aeb7b"
         volumename = "slurm-config"
-        
+
         [results.volume_description.config_map]
         name = "slurm-map"
         [[results]]
         mount_path = "/root/slurm_config/munge"
         volume_id = "656aed94-fb5a-4b94-bcb7-19607bd8670f"
         volumename = "munge-key"
-        
+
         [results.volume_description.secret]
         secret_name = "munge-secret"
         [[results]]
         mount_path = "/etc/pbs"
         volume_id = "7ee2bbe9-6428-43c8-b626-0d2316f3aff8"
         volumename = "pbs-config"
-        
+
         [results.volume_description.config_map]
         name = "pbs-config"
         [[results]]
         mount_path = "/opt/forge_license"
         volume_id = "99e705a2-9bde-48cf-934d-ae721403d8fa"
         volumename = "optforgelicense"
-        
+
         [results.volume_description.host_path]
         path = "/opt/forge_license"
         type = "DirectoryOrCreate"
@@ -56,7 +56,7 @@ Install and initialize the `cray` administrative CLI.
         mount_path = "/opt/forge"
         volume_id = "de224953-f5de-42f4-9d18-638855799dba"
         volumename = "opt-forge"
-        
+
         [results.volume_description.host_path]
         path = "/opt/forge"
         type = "DirectoryOrCreate"
@@ -64,7 +64,7 @@ Install and initialize the `cray` administrative CLI.
         mount_path = "/etc/localtime"
         volume_id = "ef4be476-79c4-4b76-a9ba-e6dccf2a16db"
         volumename = "timezone"
-        
+
         [results.volume_description.host_path]
         path = "/etc/localtime"
         type = "FileOrCreate"

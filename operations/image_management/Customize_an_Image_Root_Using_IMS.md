@@ -9,7 +9,7 @@ The Image Management Service \(IMS\) customization workflow sets up a temporary 
     -   `cray-nexus`, the Nexus repository manager service
 -   `kubectl` is installed locally and configured to point at the SMS Kubernetes cluster.
 -   An IMS created image root archive or a pre-built image root SquashFS archive is available to customize.
--   The NCN Certificate Authority \(CA\) public key has been properly installed into the CA cache for this system. 
+-   The NCN Certificate Authority \(CA\) public key has been properly installed into the CA cache for this system.
 -   A token providing Simple Storage Service \(S3\) credentials has been generated.
 -   When customizing an image using IMS Image Customization, once chrooted into the image root \(if using a \`jailed\` environment\), the image will only have access to whatever configuration the image already contains. In order to talk to services, including Nexus RPM repositories, the image root must first be configured with DNS and other settings. A base level of customization is provided by the default Ansible plays used by the Configuration Framework Service \(CFS\) to enable DNS resolution.
 
@@ -57,7 +57,7 @@ The Image Management Service \(IMS\) customization workflow sets up a temporary 
     ```bash
     ncn# cray ims public-keys create --name "username public key" --public-key ~/.ssh/id_rsa.pub
     public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCl50gK4l9uupxC2KHxMpTNxPTJbnwEdWy1jst5W5LqJx9fdTrc9uNJ33HAq+WIOhPVGbLm2N4GX1WTUQ4+wVOSmmBBJnlu/l5rmO9lEGT6U8lKG8dA9c7qhguGHy7M7WBgdW/gWA16gwE/u8Qc2fycFERRKmFucL/Er9wA0/Qvz7/U59yO+HOtk5hvEz/AUkvaaoY0IVBfdNBCl59CIdZHxDzgXlXzd9PAlrXZNO8jDD3jyFAOvMMRG7py78zj2NUngvsWYoBcV3FcREZJU529uJ0Au8Vn9DRADyB4QQS2o+fa6hG9i2SzfY8L6vAVvSE7A2ILAsVruw1Zeiec2IWt"
-    id = "a252ff6f-c087-4093-a305-122b41824a3e" 
+    id = "a252ff6f-c087-4093-a305-122b41824a3e"
     name = "username public key"
     created = "2018-11-21T17:19:07.830000+00:00"
     ```
@@ -90,7 +90,7 @@ The Image Management Service \(IMS\) customization workflow sets up a temporary 
 
     ```bash
     ncn# cray ims images create --name $IMS_ROOTFS_FILENAME
-    
+
     created = "2018-12-04T17:25:52.482514+00:00"
     id = "4e78488d-4d92-4675-9d83-97adfc17cb19"
     name = "sles_15_image.squashfs"
@@ -228,9 +228,9 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     --link-type s3 \
     --link-path s3://boot-images/$IMS_IMAGE_ID/manifest.json
     created = "2018-12-04T17:25:52.482514+00:00"
-    id = "4e78488d-4d92-4675-9d83-97adfc17cb19" 
+    id = "4e78488d-4d92-4675-9d83-97adfc17cb19"
     name = "sles_15_image.squashfs"
-    
+
     [link]
     type = "s3"
     path = "s3://boot-images/4e78488d-4d92-4675-9d83-97adfc17cb19/manifest.json"
@@ -251,7 +251,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     created = "2018-12-04T17:25:52.482514+00:00"
     id = "4e78488d-4d92-4675-9d83-97adfc17cb19"
     name = "sles_15_image.squashfs"
-    
+
     [results.link]
     type = "s3"
     path = "/4e78488d-4d92-4675-9d83-97adfc17cb19/sles_15_image.squashfs"
@@ -298,8 +298,8 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
        build_env_size = 10
        job_type = "customize"
        kubernetes_service = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-service"
-       kubernetes_job = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-customize" 
-       id = "ad5163d2-398d-4e93-94f0-2f439f114fe7" 
+       kubernetes_job = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-customize"
+       id = "ad5163d2-398d-4e93-94f0-2f439f114fe7"
        image_root_archive_name = "MY_CUSTOMIZED_IMAGE"
        initrd_file_name = "initrd"
        created = "2018-11-21T18:22:53.409405+00:00"
@@ -310,13 +310,13 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
        status = "pending"
        jail = false
        name = "customize"
-          
+
        [ssh_containers.connection_info."cluster.local"]
        host = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-service.ims.svc.cluster.local"
        port = 22
        [ssh_containers.connection_info.customer_access]
-       host = "ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.shasta.cray.com" 
-       port = 22 
+       host = "ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.shasta.cray.com"
+       port = 22
        ```
 
    2.  Create variables for the IMS job ID, Kubernetes job ID, and the SSH connection values in the returned data.
@@ -374,7 +374,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
    ```bash
    ncn# cray ims jobs describe $IMS_JOB_ID
-   status = "waiting_on_user" 
+   status = "waiting_on_user"
    enable_debug = false
    kernel_file_name = "vmlinuz"
    artifact_id = "4e78488d-4d92-4675-9d83-97adfc17cb19"
@@ -393,7 +393,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
    status = "pending"
    jail = false
    name = "customize"
-   
+
    [ssh_containers.connection_info."cluster.local"]
    host = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-service.ims.svc.cluster.local"
    port = 22
@@ -422,7 +422,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
         -   [Customize an Image Root to Install Singularity](Customize_an_Image_Root_to_Install_Singularity.md)
         -   "Customize an Image Root to Install Compute Kubernetes" in the Cray Operating System (COS) product stream documentation.
-      
+
         After changes have been made, run the touch command on the `complete` file. The location of the complete file depends on whether or not the SSH job shell was created using the `--ssh-containers-jail True` parameter. See the table below for more information.
 
         |--ssh-containers-jail|Command used to create the complete file|
@@ -468,22 +468,22 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
         ```bash
         ---
         # The playbook creates a new database test and populates data in the database to test the sharding.
-        
+
         - hosts: all
         remote_user: root
         tasks:
-        
+
         - name: Look at the image root
         command: "ls -l /mnt/image/image-root"
-        
+
         - name: chroot and run dracut
         command: "chroot /mnt/image/image-root dracut --force --kver 4.4.143-94.47-default"
-        
+
         - name: example copying file with owner and permissions
         copy:
         src: sample_playbook.yml
         dest: /mnt/image/image-root/tmp
-        
+
         - name: Exit the build container
         copy:
         src: nothing_file
@@ -500,8 +500,8 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
    ```bash
    ncn# kubectl -n ims logs -f $POD -c buildenv-sidecar
-   + python -m ims_python_helper image upload_artifacts sles15_barebones_image 7de80ccc-1e7d-43a9-a6e4-02cad10bb60b 
-   -v -r /mnt/image/sles15_barebones_image.sqsh -k /mnt/image/image-root/boot/vmlinuz 
+   + python -m ims_python_helper image upload_artifacts sles15_barebones_image 7de80ccc-1e7d-43a9-a6e4-02cad10bb60b
+   -v -r /mnt/image/sles15_barebones_image.sqsh -k /mnt/image/image-root/boot/vmlinuz
    -i /mnt/image/image-root/boot/initrd
    {
        "ims_image_artifacts": [
@@ -591,7 +591,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
    id = "ad5163d2-398d-4e93-94f0-2f439f114fe7"
    image_root_archive_name = "my_customized_image"
    initrd_file_name = "initrd"
-   resultant_image_id = "d88521c3-b339-43bc-afda-afdfda126388" 
+   resultant_image_id = "d88521c3-b339-43bc-afda-afdfda126388"
    created = "2018-11-21T18:22:53.409405+00:00"
    kubernetes_namespace = "ims"
    public_key_id = "a252ff6f-c087-4093-a305-122b41824a3e"
@@ -611,7 +611,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
    created = "2018-12-04T17:25:52.482514+00:00"
    id = "d88521c3-b339-43bc-afda-afdfda126388"
    name = "my_customized_image.squashfs"
-   
+
    [link]
    type = "s3"
    path = "/d88521c3-b339-43bc-afda-afdfda126388/my_customized_image.squashfs"

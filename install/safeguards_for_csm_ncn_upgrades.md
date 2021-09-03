@@ -36,7 +36,7 @@ This page covers safe-guards for preventing destructive behaviors on management 
    ```bash
    # set wipe-ceph-osds=no
    pit# sed -i 's/wipe-ceph-osds": "yes"/wipe-ceph-osds": "no"/g' /var/www/ephemeral/configs/data.json
-   
+
    # set wipe-ceph-osds=yes
    pit# sed -i 's/wipe-ceph-osds": "no"/wipe-ceph-osds": "yes"/g' /var/www/ephemeral/configs/data.json
    ```

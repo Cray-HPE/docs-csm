@@ -10,7 +10,7 @@ Access to the switches from the LiveCD/ncn-m001.
 
 All firmware will be located at `/var/www/fw/network` on the LiveCD. It should contain the following files:
 
-``` 
+```
 ncn-m001-pit:/var/www/network/firmware # ls -lh
 total 2.7G
 -rw-rw-r--+ 1 root root 658353828 Jan  7  2021 ArubaOS-CX_6400-6300_10_06_0010.stable.swi
@@ -48,15 +48,15 @@ For example: 10.06.0120
 - 0120	= CPE release (bug fixes)
 
 
-It is considered to be a best practice to keep all Aruba CX platform devices running the same software version.  
+It is considered to be a best practice to keep all Aruba CX platform devices running the same software version.
 
-Aruba CX devices two software image banks, which means sw images can be pre-staged to the device without booting to the new image. 
+Aruba CX devices two software image banks, which means sw images can be pre-staged to the device without booting to the new image.
 
 If upgrading to a new major branch, in Aruba identified by the second integer in the software image number.
 
-When upgrading past a major software release, for example, from 10.6 to 10.8 (and skipping 10.7), issue the `allow-unsafe-upgrades` command to allow any low level firmware/driver upgrades to complete. If going from the 10.6 branch to 10.7 branch, this step can be skipped as the low level firmware/driver upgrade would be automatically completed. 
+When upgrading past a major software release, for example, from 10.6 to 10.8 (and skipping 10.7), issue the `allow-unsafe-upgrades` command to allow any low level firmware/driver upgrades to complete. If going from the 10.6 branch to 10.7 branch, this step can be skipped as the low level firmware/driver upgrade would be automatically completed.
 
-``` 
+```
 sw-leaf-001# config
 sw-leaf-001(config)# allow-unsafe-updates 30
 ```
@@ -75,7 +75,7 @@ Continue (y/n)? y
 Unsafe updates      : allowed (less than 30 minute(s) remaining)
 ```
 
-VSX software upgrade command can automatically upgrade both of the peers in VSX topology by staging upgrade and automatically doing traffic shifting between peers to minimize impact to network. The following examples include the option for standalone and vsx-pair upgrade. 
+VSX software upgrade command can automatically upgrade both of the peers in VSX topology by staging upgrade and automatically doing traffic shifting between peers to minimize impact to network. The following examples include the option for standalone and vsx-pair upgrade.
 
 ## Aruba Firmware Update - Standalone
 
@@ -95,10 +95,10 @@ sw-leaf-001# show image
 ---------------------------------------------------------------------------
 ArubaOS-CX Primary Image
 ---------------------------------------------------------------------------
-Version : FL.10.06.0010                 
-Size    : 643 MB                        
-Date    : 2020-12-14 10:06:34 PST       
-SHA-256 : 78dc27c5e521e92560a182ca44dc04b60d222b9609129c93c1e329940e1e11f9 
+Version : FL.10.06.0010
+Size    : 643 MB
+Date    : 2020-12-14 10:06:34 PST
+SHA-256 : 78dc27c5e521e92560a182ca44dc04b60d222b9609129c93c1e329940e1e11f9
 ```
 After the firmware is uploaded, boot the switch to the correct image.
 
@@ -114,26 +114,26 @@ sw-leaf-001# show version
 ArubaOS-CX
 (c) Copyright 2017-2020 Hewlett Packard Enterprise Development LP
 -----------------------------------------------------------------------------
-Version      : FL.10.06.0010                                                 
-Build Date   : 2020-09-29 07:44:16 PDT                                       
-Build ID     : ArubaOS-CX:FL.10.06.0010:3cbfcce60961:202009291304            
-Build SHA    : 3cbfcce609617b0cf84a6b941a2b36c43dfeb2cb                      
-Active Image : primary                       
+Version      : FL.10.06.0010
+Build Date   : 2020-09-29 07:44:16 PDT
+Build ID     : ArubaOS-CX:FL.10.06.0010:3cbfcce60961:202009291304
+Build SHA    : 3cbfcce609617b0cf84a6b941a2b36c43dfeb2cb
+Active Image : primary
 
-Service OS Version : FL.01.07.0002                 
+Service OS Version : FL.01.07.0002
 BIOS Version       : FL.01.0002
 ```
 ## Aruba Firmware Update - VSX Software Upgrade
 
 1. SSH into the Primary VSX member of the VSX-pair to upgrade.
 
-     Example: the IP ```10.252.1.12``` used is the LiveCD. 
+     Example: the IP ```10.252.1.12``` used is the LiveCD.
 
 2. Upload the firmware.
 
    ```
    sw-leaf-001# copy sftp://root@10.252.1.12//var/www/ephemeral/data/network_images/ArubaOS-CX_6400-6300_10_06_0120.stable.swi primary
-   
+
    sw-leaf-001# write mem
    Copying configuration: [Success]
    ```
@@ -145,15 +145,15 @@ BIOS Version       : FL.01.0002
    ---------------------------------------------------------------------------
    ArubaOS-CX Primary Image
    ---------------------------------------------------------------------------
-   Version : FL.10.06.0120                 
-   Size    : 643 MB                        
-   Date    : 2021-03-14 10:06:34 PST       
-   SHA-256 : 78dc27c5e521e92560a182ca44dc04b60d222b9609129c93c1e329940e1e11f9 
+   Version : FL.10.06.0120
+   Size    : 643 MB
+   Date    : 2021-03-14 10:06:34 PST
+   SHA-256 : 78dc27c5e521e92560a182ca44dc04b60d222b9609129c93c1e329940e1e11f9
    ```
 
-4. After the firmware is uploaded, boot the switch to the correct image. 
+4. After the firmware is uploaded, boot the switch to the correct image.
 
-Example: the IP address ```10.252.1.12``` used is the liveCD. 
+Example: the IP address ```10.252.1.12``` used is the liveCD.
 ```
 sw-leaf-001# copy sftp://root@10.252.1.12//var/www/ephemeral/data/network_images/ArubaOS-CX_6400-6300_10_06_0120.stable.swi primary
 
@@ -167,16 +167,16 @@ sw-leaf-001# show image
 ---------------------------------------------------------------------------
 ArubaOS-CX Primary Image
 ---------------------------------------------------------------------------
-Version : FL.10.06.0120                 
-Size    : 643 MB                        
-Date    : 2021-03-14 10:06:34 PST       
-SHA-256 : 78dc27c5e521e92560a182ca44dc04b60d222b9609129c93c1e329940e1e11f9 
+Version : FL.10.06.0120
+Size    : 643 MB
+Date    : 2021-03-14 10:06:34 PST
+SHA-256 : 78dc27c5e521e92560a182ca44dc04b60d222b9609129c93c1e329940e1e11f9
 ```
-After the firmware is uploaded, boot the switch to the correct image. When upgrading a VSX pair, use the VSX upgrade command to automatically upgrade both pairs. 
+After the firmware is uploaded, boot the switch to the correct image. When upgrading a VSX pair, use the VSX upgrade command to automatically upgrade both pairs.
 ```
 sw-leaf-001# vsx update-software boot-bank primary
 ```
-This will trigger the upgrade process on the VSX pair and it will start the dialogue explaining what will happen next, i.e. if any firmware/driver upgrades are needed (i.e. the unit would reboot twice if this was the case) and it will show you on the screen the current status of the upgrade process. in VSX upgrade process the secondary VSX member will always boot first. 
+This will trigger the upgrade process on the VSX pair and it will start the dialogue explaining what will happen next, i.e. if any firmware/driver upgrades are needed (i.e. the unit would reboot twice if this was the case) and it will show you on the screen the current status of the upgrade process. in VSX upgrade process the secondary VSX member will always boot first.
 
 ## Mellanox Firmware Update
 
@@ -191,7 +191,7 @@ This will trigger the upgrade process on the VSX pair and it will start the dial
 3. Install the image.
 
    ```
-   sw-spine-001 [standalone: master] # image install onyx-X86_64-3.9.1014.stable.img 
+   sw-spine-001 [standalone: master] # image install onyx-X86_64-3.9.1014.stable.img
    ```
 
 4. Select the image to boot next.
@@ -203,25 +203,25 @@ This will trigger the upgrade process on the VSX pair and it will start the dial
 5. Write memory and reload.
 
    ```
-   sw-spine-001 [standalone: master] # write memory 
+   sw-spine-001 [standalone: master] # write memory
    sw-spine-001 [standalone: master] # reload
    ```
 
 6. Once the switch is available, verify the image is installed.
 
    ```
-   sw-spine-001 [standalone: master] # show images 
-   
+   sw-spine-001 [standalone: master] # show images
+
    Installed images:
    Partition 1:
      version: X86_64 3.9.0300 2020-02-26 19:25:24 x86_64
-   
+
    Partition 2:
      version: X86_64 3.9.1014 2020-08-05 18:06:58 x86_64
-   
+
    Last boot partition: 2
    Next boot partition: 1
-   
+
    Images available to be installed:
    1:
      Image  : onyx-X86_64-3.9.1014.stable.img
@@ -258,14 +258,14 @@ This will trigger the upgrade process on the VSX pair and it will start the dial
 4. Reboot after the image is uploaded.
 
    ```
-   sw-leaf-001# write memory 
+   sw-leaf-001# write memory
    sw-leaf-001# reload
    ```
 
 5. Once the switch is available, verify the image is installed.
 
    ```
-   sw-leaf-001# show version 
+   sw-leaf-001# show version
    Dell EMC Networking OS10 Enterprise
    Copyright (c) 1999-2020 by Dell Inc. All Rights Reserved.
    OS Version: 10.5.1.4

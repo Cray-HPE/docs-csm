@@ -17,9 +17,9 @@ There are several starting points for modifying compute images. An admin can sta
     ```bash
     ncn# cray bss bootparameters list --nids 1
     [[results]]
-    params = "console=ttyS0,115200 bad_page=panic crashkernel=360M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt 
-    ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y 
-    rd.neednet=1 rd.retry=10 rd.shell k8s_gw=api-gw-service-nmn.local quiet turbo_boost_limit=999 
+    params = "console=ttyS0,115200 bad_page=panic crashkernel=360M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt
+    ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y
+    rd.neednet=1 rd.retry=10 rd.shell k8s_gw=api-gw-service-nmn.local quiet turbo_boost_limit=999
     root=craycps-s3:s3://boot-images/**6ca24366-9bc7-4a35-8c2a-5d0bc287ae64**/rootfs:b5ad8d47bd5d33b1fcb72a85ea70b74d-165:dvs:api-gw-service-nmn.local:300:eth0"
     initrd = "s3://boot-images/6ca24366-9bc7-4a35-8c2a-5d0bc287ae64/initrd"
     hosts = [ "x3000c0s19b1n0",]
@@ -38,9 +38,9 @@ There are several starting points for modifying compute images. An admin can sta
     ncn# cray ims images list | grep -C 3 $ROOTFS
     [[results]]
     created = "2019-11-22T17:05:19.717337+00:00"
-    id = "6ca24366-9bc7-4a35-8c2a-5d0bc287ae64" 
+    id = "6ca24366-9bc7-4a35-8c2a-5d0bc287ae64"
     name = "cle_default_rootfs_cfs_0ade0002-0d49-11ea-a1ed-a4bf0135a8ee"
-    
+
     [results.link]
     type = "s3"
     path = "/6ca24366-9bc7-4a35-8c2a-5d0bc287ae64/cle_default_rootfs_cfs_0ade0002-0d49-11ea-a1ed-a4bf0135a8ee"
@@ -59,9 +59,9 @@ There are several starting points for modifying compute images. An admin can sta
     ncn# cray ims images describe $IMS_IMAGE_ID
     [[results]]
     created = "2019-11-22T17:05:19.717337+00:00"
-    id = "6ca24366-9bc7-4a35-8c2a-5d0bc287ae64" 
+    id = "6ca24366-9bc7-4a35-8c2a-5d0bc287ae64"
     name = "cle_default_rootfs_cfs_0ade0002-0d49-11ea-a1ed-a4bf0135a8ee"
-    
+
     [results.link]
     type = "s3"
     path = "/6ca24366-9bc7-4a35-8c2a-5d0bc287ae64/cle_default_rootfs_cfs_0ade0002-0d49-11ea-a1ed-a4bf0135a8ee"
@@ -107,7 +107,7 @@ There are several starting points for modifying compute images. An admin can sta
     u8Qc2fycFERRKmFucL/Er9wA0/Qvz7/U59yO+HOtk5hvEz/
     AUkvaaoY0IVBfdNBCl59CIdZHxDzgXlXzd9PAlrXZNO8jDD3jyFAOvMMRG7py78zj2NUngvsWYoBcV3FcREZJU529uJ0Au8Vn9DRA
     DyB4QQS2o+fa6hG9i2SzfY8L6vAVvSE7A2ILAsVruw1Zeiec2IWt"
-    id = "d599f45a-53c3-4071-a603-96e864fc43cc" 
+    id = "d599f45a-53c3-4071-a603-96e864fc43cc"
     name = "username public key"
     created = "2018-11-21T17:19:07.830000+00:00"
     ```
@@ -138,8 +138,8 @@ There are several starting points for modifying compute images. An admin can sta
     build_env_size = 20
     job_type = "customize"
     kubernetes_service = "cray-ims-0e633134-41dc-48eb-a6a4-a2535cb1a36c-service"
-    kubernetes_job = "cray-ims-0e633134-41dc-48eb-a6a4-a2535cb1a36c-customize" 
-    id = "0e633134-41dc-48eb-a6a4-a2535cb1a36c" 
+    kubernetes_job = "cray-ims-0e633134-41dc-48eb-a6a4-a2535cb1a36c-customize"
+    id = "0e633134-41dc-48eb-a6a4-a2535cb1a36c"
     image_root_archive_name = "singularity_image"
     initrd_file_name = "initrd"
     created = "2019-12-14T23:40:55.765702+00:00"
@@ -178,7 +178,7 @@ There are several starting points for modifying compute images. An admin can sta
 
     ```bash
     ncn# cray ims jobs describe $IMS_JOB_ID
-    status = "waiting_on_user" 
+    status = "waiting_on_user"
     enable_debug = false
     kernel_file_name = "vmlinuz"
     artifact_id = "84783ec6-03d3-4ac1-8631-b448f9e6275b"
@@ -193,7 +193,7 @@ There are several starting points for modifying compute images. An admin can sta
     kubernetes_namespace = "default"
     public_key_id = "4d428348-a200-4f6c-bee4-1b0e6a6bd7e5"
     kubernetes_configmap = "cray-ims-e68cc04a-8717-4d5d-98dd-4e8117bc9b85-configmap"
-    resultant_image_id = "db326952-759e-4ed6-be39-cf6be4371365" 
+    resultant_image_id = "db326952-759e-4ed6-be39-cf6be4371365"
     [[ssh_containers]]
     status = "pending"
     host = "mgmt-plane-nmn.local"
@@ -238,7 +238,7 @@ There are several starting points for modifying compute images. An admin can sta
     :/ # zypper search -s singularity
     Loading repository data...
     Reading installed packages...
-     
+
     S | Name                  | Type    | Version | Arch   | Repository
     --+-----------------------+---------+---------+--------+-------------------
       | singularity           | package | 3.5.3-1 | x86_64 | cray-sles15-sp1-cn
@@ -252,13 +252,13 @@ There are several starting points for modifying compute images. An admin can sta
     Loading repository data...
     Reading installed packages...
     Resolving package dependencies...
-     
+
     The following 3 NEW packages are going to be installed:
       liblzo2-2 singularity squashfs
-     
+
     The following 3 packages have no support information from their vendor:
       liblzo2-2 singularity squashfs
-     
+
     3 new packages to install.
     Overall download size: 20.9 MiB. Already cached: 0 B. After the operation, additional 97.6 MiB will be used.
     Continue? [y/n/v/...? shows all options] (y): y
@@ -268,12 +268,12 @@ There are several starting points for modifying compute images. An admin can sta
     Retrieving: squashfs-4.3-1.29.x86_64.rpm ....................................................................................................[done]
     Retrieving package singularity-3.5.3-1.x86_64                                                                 (3/3),  20.7 MiB ( 97.1 MiB unpacked)
     Retrieving: singularity-3.5.3-1.x86_64.rpm ..................................................................................................[done]
-     
+
     Checking for file conflicts: ................................................................................................................[done]
     (1/3) Installing: liblzo2-2-2.10-2.22.x86_64 ................................................................................................[done]
     (2/3) Installing: squashfs-4.3-1.29.x86_64 ..................................................................................................[done]
     (3/3) Installing: singularity-3.5.3-1.x86_64 ................................................................................................[done]
-    
+
     ```
 
 13. Finish the install and exit the image customization environment.
@@ -296,15 +296,15 @@ There are several starting points for modifying compute images. An admin can sta
     -   The job SSH container will close any active SSH connections
     -   The `buildenv-sidecar` container will compresses the image root
     -   The customized artifacts will be uploaded to S3 and associated with a new IMS image record
-  
+
 14. Ensure that any artifacts are properly uploaded to S3 and associated with IMS.
 
     If the $POD variable was not defined when creating the image customization job, use the Kubernetes pod name from the job description.
 
     ```bash
     ncn# kubectl -n ims logs -f $POD -c buildenv-sidecar
-    + python -m ims_python_helper image upload_artifacts singularity_image 7de80ccc-1e7d-43a9-a6e4-02cad10bb60b 
-    -v -r /mnt/image/singularity_image.sqsh -k /mnt/image/image-root/boot/vmlinuz 
+    + python -m ims_python_helper image upload_artifacts singularity_image 7de80ccc-1e7d-43a9-a6e4-02cad10bb60b
+    -v -r /mnt/image/singularity_image.sqsh -k /mnt/image/image-root/boot/vmlinuz
     -i /mnt/image/image-root/boot/initrd
     {
         "ims_image_artifacts": [
@@ -360,7 +360,7 @@ There are several starting points for modifying compute images. An admin can sta
             "build_env_size": 10,
             "created": "2018-11-21T18:22:53.409405+00:00",
             "enable_debug": false,
-            "id": "ad5163d2-398d-4e93-94f0-2f439f114fe7", 
+            "id": "ad5163d2-398d-4e93-94f0-2f439f114fe7",
             "image_root_archive_name": "singularity_image",
             "initrd_file_name": "initrd",
             "job_type": "customize",
@@ -400,7 +400,7 @@ There are several starting points for modifying compute images. An admin can sta
     id = "ad5163d2-398d-4e93-94f0-2f439f114fe7"
     image_root_archive_name = "singularity_image"
     initrd_file_name = "initrd"
-    resultant_image_id = "d88521c3-b339-43bc-afda-afdfda126388" 
+    resultant_image_id = "d88521c3-b339-43bc-afda-afdfda126388"
     created = "2018-11-21T18:22:53.409405+00:00"
     kubernetes_namespace = "ims"
     public_key_id = "a252ff6f-c087-4093-a305-122b41824a3e"
@@ -420,7 +420,7 @@ There are several starting points for modifying compute images. An admin can sta
     created = "2018-12-04T17:25:52.482514+00:00"
     id = "d88521c3-b339-43bc-afda-afdfda126388"
     name = "singularity_image.squashfs"
-    
+
     [link]
     type = "s3"
     path = "/d88521c3-b339-43bc-afda-afdfda126388/singularity_image.squashfs"
@@ -441,7 +441,7 @@ There are several starting points for modifying compute images. An admin can sta
     job_type = "customize"
     kubernetes_service = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-service"
     kubernetes_job = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-customize"
-    id = "ad5163d2-398d-4e93-94f0-2f439f114fe7" 
+    id = "ad5163d2-398d-4e93-94f0-2f439f114fe7"
     image_root_archive_name = "singularity_image"
     initrd_file_name = "initrd"
     resultant_image_id = "d88521c3-b339-43bc-afda-afdfda126388"

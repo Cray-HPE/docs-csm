@@ -21,7 +21,7 @@ The `kubectl` command is not responsive on a node.
         Processes in the D state are blocked on I/O and are not an issue unless they remain blocked indefinitely. Use the command below to see which pids remain stuck in this state.
 
         ```bash
-        ncn-w001# ps aux |grep [k]worker|grep -e " D"| awk '{ print $2 }' 
+        ncn-w001# ps aux |grep [k]worker|grep -e " D"| awk '{ print $2 }'
         ```
 
     2.  Show the stack for all kworkers in the D state.
@@ -30,7 +30,7 @@ The `kubectl` command is not responsive on a node.
 
         ```bash
         ncn-w001# for i in `ps aux | grep [k]worker | grep -e " D" |\
-         awk '{print $2}'` ; do cat /proc/$i/stack; echo; done 
+         awk '{print $2}'` ; do cat /proc/$i/stack; echo; done
         ```
 
 2. Check to see what the load is on the worker node and gather data for any pids consuming a lot of CPU.
@@ -44,7 +44,7 @@ The `kubectl` command is not responsive on a node.
         %Cpu(s):  4.3 us,  2.5 sy,  0.0 ni, 93.0 id,  0.0 wa,  0.0 hi,  0.3 si,  0.0 st
         MiB Mem : 257510.5+total, 69119.86+free, 89578.68+used, 98812.04+buff/cache
         MiB Swap:    0.000 total,    0.000 free,    0.000 used. 173468.1+avail Mem
-        
+
             PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
            6105 root      20   0  193436 182772   2300 S 60.00 0.069  13485:54 lldpad
           49574 root      20   0 14.299g 495212  60896 S 47.54 0.188  31582:58 kubelet
@@ -57,7 +57,7 @@ The `kubectl` command is not responsive on a node.
           81539 root      20   0  300276 161372  26036 S 5.902 0.061   4145:40 mixs
           89619 root      20   0 4731796 498600  24144 S 5.902 0.189   2898:54 envoy
           85600 root      20   0 2292564 123596  23248 S 4.590 0.047   2211:58 envoy
-        
+
         ...
         ```
 
@@ -74,7 +74,7 @@ The `kubectl` command is not responsive on a node.
         +   11.17%    11.17%  kubelet           [.] 0x0000000000038d3c
         +    9.77%     9.77%  [kernel]          [k] select_task_rq_fair
         +    9.77%     9.77%  [kernel]          [k] cpuacct_charge
-        
+
         ...
         ```
 
@@ -100,7 +100,7 @@ The `kubectl` command is not responsive on a node.
     <nil>"
     2020-07-19T07:20:06.587325+00:00 ncn-w001 containerd[43098]: time="2020-07-19T07:20:06.587133372Z" level=error msg="collecting metrics for bf1d562e060ba56254f5f5ea4634ef4ae189abb462c875e322c3973b83c4c85d" error="ttrpc: closed: unknown"
     2020-07-19T07:20:14.450624+00:00 ncn-w001 containerd[43098]: time="2020-07-19T07:20:14.450547541Z" level=info msg="Exec process \"ceb384f1897d742134e7d2c9da5a62650ed1274f0ee4c5a17fa9cac1a24b6dc4\" exits with exit code 0 and error
-    
+
     ...
     ```
 

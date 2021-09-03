@@ -65,7 +65,7 @@ Send an HTTP `GET` request to /service/rest/v1/status to check the operating sta
 
 ```bash
 # curl -sSi https://packages.local/service/rest/v1/status
-HTTP/2 200 
+HTTP/2 200
 date: Sat, 06 Mar 202117:27:56 GMT
 server: istio-envoy
 x-content-type-options: nosniff
@@ -77,7 +77,7 @@ Before attempting to write to Nexus, it is recommended to check that Nexus is wr
 
 ```bash
 # curl -sSi https://packages.local/service/rest/v1/status/writable
-HTTP/2 200 
+HTTP/2 200
 date: Sat, 06 Mar 202117:28:34 GMT
 server: istio-envoy
 x-content-type-options: nosniff
@@ -345,7 +345,7 @@ For example, if the `yum hosted` repository `test` is currently online and it ne
 # curl -sS https://packages.local/service/rest/beta/repositories \
 | jq '.[] | select(.name == "test") | .online = false' | curl -sSi -X PUT \
 'https://packages.local/service/rest/beta/repositories/yum/hosted/test' -H "Content-Type: application/json" -d @-
-HTTP/2 204 
+HTTP/2 204
 date: Sat, 06 Mar 202117:55:57 GMT
 server: istio-envoy
 x-content-type-options: nosniff

@@ -8,20 +8,20 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
 ### Procedure
 
 1. Retrieve the signing key required to validate the RPMs.
-   
+
     Use either the CrayPort or Kubernetes Secret method to find the signing key.
-    
+
     * **CrayPort**:
-    
+
     1. Find the signing key.
         ```bash
        ncn-m001# curl LINK_TO_KEY_IN_CRAYPORT
        ```
-  
+
     * **Kubernetes Secret**:
-    
+
     1. Find the key and write it to a file.
-       
+
         ```bash
         ncn-m001# kubectl -n services get secrets hpe-signing-key -o jsonpath='{.data.gpg-pubkey}' | base64 -d | tee hpe-signing-key.asc
         -----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -64,7 +64,7 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
 1. Verify that HPE is the issuer of the signed packages.
 
    Replace the *PATH-TO-KEY* value in the following command with the path to the signing key.
-   
+
    ```bash
    ncn-m001# rpm -qpi PATH-TO-KEY/hpe-signing-key.asc
    Name        : gpg-pubkey
@@ -85,7 +85,7 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
    Description :
    -----BEGIN PGP PUBLIC KEY BLOCK-----
    Version: rpm-4.11.3 (NSS-3)
-   
+
    mQENBFZp0YMBCADNNhdrR/K7jk6iFh/D/ExEumPSdriJwDUlHY70bkEUChLyRACI
    QfLEmh0dGoUfFu2Uk8M/RgeGPayJUeO3jeJw/y7JJHvZENJwYjquZKTOza7GLXf6
    HyCRanHrEeXeyRffhJlXLf6GvCqYVl9nSvxwSX9raotqMznLY5E1JXIqtfHLrVhJ
@@ -126,7 +126,7 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
     ```bash
     ncn-m001# rpm --import hpe-singing-key.asc
     ```
-   
+
 1. Search for the signed packages using the version number from the previous step.
 
     ```bash
@@ -135,8 +135,8 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
 
 1. Validate the signature on an RPM.
 
-    The RPM in this example is *csm-install-workarounds-0.1.11-20210504151148_bf748be.src.rpm*. 
-   
+    The RPM in this example is *csm-install-workarounds-0.1.11-20210504151148_bf748be.src.rpm*.
+
     ```bash
     ncn-m001# rpm -Kvv csm-install-workarounds-0.1.11-20210504151148_bf748be.src.rpm
     D: loading keyring from pubkeys in /var/lib/rpm/pubkeys/*.key

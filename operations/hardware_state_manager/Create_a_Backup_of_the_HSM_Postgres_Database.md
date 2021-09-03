@@ -30,7 +30,7 @@ Perform a manual backup of the contents of the HSM Postgres database. This backu
     ```bash
     ncn# BACKUP_LOCATION="/root"
     ncn# export BACKUP_NAME="cray-smd-postgres-backup_`date '+%Y-%m-%d_%H-%M-%S'`"
-    ncn# export BACKUP_FOLDER="${BACKUP_LOCATION}/${BACKUP_NAME}" 
+    ncn# export BACKUP_FOLDER="${BACKUP_LOCATION}/${BACKUP_NAME}"
     ncn# mkdir -p "$BACKUP_FOLDER"
     ```
 
@@ -64,7 +64,7 @@ Perform a manual backup of the contents of the HSM Postgres database. This backu
     Secret manifest is located at /root/cray-smd-postgres-backup_2021-07-07_16-39-44/cray-smd-postgres-backup_2021-07-07_16-39-44.manifest
     HSM Postgres backup is available at: /root/cray-smd-postgres-backup_2021-07-07_16-39-44
     ```
-    
+
 3. Copy the backup folder off of the cluster, and store it in a secure location.
 
     The `BACKUP_FOLDER` environment variable is the name of the folder to backup.

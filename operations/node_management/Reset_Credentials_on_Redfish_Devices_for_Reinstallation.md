@@ -38,7 +38,7 @@ Administrative privileges are required.
                 "Xname": "x0c0s1b0",
                 "StatusCode": 200,
                 "StatusMsg": "OK"
-            },   
+            },
         ]
     }
     ```

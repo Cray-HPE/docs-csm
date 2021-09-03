@@ -28,12 +28,12 @@ if [[ -z "${POSTGRES_SQL_FILE}" ]]; then
 fi
 
 if [[ ! -f "$POSTGRES_SQL_FILE" ]]; then
-    echo "POSTGRES_SQL_FILE is not a file: $POSTGRES_SQL_FILE " 
+    echo "POSTGRES_SQL_FILE is not a file: $POSTGRES_SQL_FILE "
     exit 1
 fi
 
 if [[ ! $POSTGRES_SQL_FILE =~ \.psql$ ]]; then
-    echo "POSTGRES_SQL_FILE does not end with .psql: $POSTGRES_SQL_FILE " 
+    echo "POSTGRES_SQL_FILE does not end with .psql: $POSTGRES_SQL_FILE "
     exit 1
 fi
 
@@ -43,12 +43,12 @@ if [[ -z "${POSTGRES_SECRET_MANIFEST}" ]]; then
 fi
 
 if [[ ! -f "$POSTGRES_SECRET_MANIFEST" ]]; then
-    echo "POSTGRES_SECRET_MANIFEST is not a file: $POSTGRES_SECRET_MANIFEST " 
+    echo "POSTGRES_SECRET_MANIFEST is not a file: $POSTGRES_SECRET_MANIFEST "
     exit 1
 fi
 
 if [[ ! $POSTGRES_SECRET_MANIFEST =~ \.manifest$ ]]; then
-    echo "POSTGRES_SECRET_MANIFEST does not end with .manifest: $POSTGRES_SECRET_MANIFEST " 
+    echo "POSTGRES_SECRET_MANIFEST does not end with .manifest: $POSTGRES_SECRET_MANIFEST "
     exit 1
 fi
 
@@ -81,8 +81,8 @@ echo "The SLS postgres leader is $POSTGRES_LEADER"
 echo "Temporally revoking connections to the sls and service_db databases"
 echo "REVOKE CONNECT ON DATABASE sls FROM public;
 REVOKE CONNECT ON DATABASE service_db FROM public;
-SELECT pid, pg_terminate_backend(pid) 
-    FROM pg_stat_activity 
+SELECT pid, pg_terminate_backend(pid)
+    FROM pg_stat_activity
     WHERE (datname = 'sls' or datname = 'service_db')  AND pid <> pg_backend_pid();
 DROP DATABASE sls;
 DROP DATABASE service_db;

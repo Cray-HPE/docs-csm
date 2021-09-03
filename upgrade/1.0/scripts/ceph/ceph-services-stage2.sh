@@ -9,7 +9,7 @@ systemctl enable apparmor.service
 systemctl restart apparmor.service
 
 echo "Reconfiguring haproxy"
-/srv/cray/scripts/metal/generate_haproxy_cfg.sh > /etc/haproxy/haproxy.cfg 
+/srv/cray/scripts/metal/generate_haproxy_cfg.sh > /etc/haproxy/haproxy.cfg
 systemctl enable haproxy.service
 systemctl restart haproxy.service
 

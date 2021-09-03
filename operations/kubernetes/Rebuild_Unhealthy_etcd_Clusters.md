@@ -37,11 +37,11 @@ The following examples use the `cray-bos` etcd cluster, but these steps must be 
     ```screen
     creationTimestamp: "2019-11-26T16:54:23Z"
     generation: 1
-    
+
     resourceVersion: "5340297"
     selfLink: /apis/extensions/v1beta1/namespaces/services/deployments/cray-bos
     uid: 65f4912e-106d-11ea-88b0-b42e993e060a
-    
+
     status:
       availableReplicas: 1
       conditions:

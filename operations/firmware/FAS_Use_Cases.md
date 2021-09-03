@@ -60,7 +60,7 @@ If the nodes are not off when the update command is issued, the update will get 
 
 **Manufacturer: Cray | Device Type: NodeBMC | Target: Redstone FPGA**
 
-**IMPORTANT**: The Nodes themselves must be powered **on** in order to update the firmware of the Redstone FPGA on the nodes.  
+**IMPORTANT**: The Nodes themselves must be powered **on** in order to update the firmware of the Redstone FPGA on the nodes.
 
 ```json
 {

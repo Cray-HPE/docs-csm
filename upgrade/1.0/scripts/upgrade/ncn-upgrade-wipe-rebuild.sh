@@ -23,7 +23,7 @@ state_name="CSI_HANDOFF_BSS_UPDATE_PARAM"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    if [[ $upgrade_ncn == ncn-s* ]];then 
+    if [[ $upgrade_ncn == ncn-s* ]];then
         csi handoff bss-update-param \
         --set metal.server=http://rgw-vip.nmn/ncn-images/ceph/${CEPH_VERSION} \
         --set rd.live.squashimg=filesystem.squashfs \
@@ -31,7 +31,7 @@ if [[ $state_recorded == "0" ]]; then
         --kernel s3://ncn-images/ceph/${CEPH_VERSION}/kernel \
         --initrd s3://ncn-images/ceph/${CEPH_VERSION}/initrd \
         --limit $UPGRADE_XNAME
-     else 
+     else
         csi handoff bss-update-param \
         --set metal.server=http://rgw-vip.nmn/ncn-images/k8s/${KUBERNETES_VERSION} \
         --set rd.live.squashimg=filesystem.squashfs \
@@ -41,6 +41,7 @@ if [[ $state_recorded == "0" ]]; then
         --limit $UPGRADE_XNAME
      fi
 
+<<<<<<< HEAD
     record_state "${state_name}" ${upgrade_ncn}
 else
     echo "====> ${state_name} has been completed"
@@ -53,6 +54,8 @@ if [[ $state_recorded == "0" ]]; then
 
     ./create-bss-etcd-backup.sh $upgrade_ncn
 
+=======
+>>>>>>> e2bccf80e3789ab2f1a495252bff38c8a51a3c44
     record_state "${state_name}" ${upgrade_ncn}
 else
     echo "====> ${state_name} has been completed"
@@ -82,7 +85,7 @@ EOF
     vgremove -f --select 'vg_name=~metal*' || true
     pvremove /dev/md124 || true
     wipefs --all --force /dev/sd* /dev/disk/by-label/* || true
-    sgdisk --zap-all /dev/sd* 
+    sgdisk --zap-all /dev/sd*
 EOF
     else
     cat <<'EOF' > wipe_disk.sh
@@ -105,13 +108,13 @@ EOF
       pvremove /dev/md124 || true
     fi
     wipefs --all --force /dev/sd* /dev/disk/by-label/* || true
-    sgdisk --zap-all /dev/sd* 
+    sgdisk --zap-all /dev/sd*
 EOF
     fi
     chmod +x wipe_disk.sh
     scp wipe_disk.sh $upgrade_ncn:/tmp/wipe_disk.sh
     ssh $upgrade_ncn '/tmp/wipe_disk.sh'
-    
+
     record_state "${state_name}" ${upgrade_ncn}
 else
     echo "====> ${state_name} has been completed"
@@ -230,7 +233,7 @@ if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
 
     csi handoff bss-update-param --set metal.no-wipe=1 --limit $UPGRADE_XNAME
-    
+
     record_state "${state_name}" ${upgrade_ncn}
 else
     echo "====> ${state_name} has been completed"
@@ -253,7 +256,7 @@ if [[ ${upgrade_ncn} == "ncn-m001" ]]; then
     state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
     if [[ $state_recorded == "0" ]]; then
         echo "====> ${state_name} ..."
-      
+
         if [[ $ssh_keys_done == "0" ]]; then
             ssh_keygen_keyscan "${upgrade_ncn}"
             ssh_keys_done=1
@@ -277,7 +280,7 @@ if [[ ${upgrade_ncn} != ncn-s* ]]; then
             ssh_keys_done=1
         fi
         ssh ${UPGRADE_NCN} 'cray init --no-auth --overwrite --hostname https://api-gw-service-nmn.local'
-      
+
         record_state "${state_name}" ${upgrade_ncn}
     else
         echo "====> ${state_name} has been completed"
@@ -289,7 +292,7 @@ if [[ ${upgrade_ncn} != ncn-s* ]]; then
     state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
     if [[ $state_recorded == "0" ]]; then
         echo "====> ${state_name} ..."
-      
+
         if [[ $ssh_keys_done == "0" ]]; then
             ssh_keygen_keyscan "${upgrade_ncn}"
             ssh_keys_done=1
@@ -302,7 +305,7 @@ if [[ ${upgrade_ncn} != ncn-s* ]]; then
         fi
 
         ssh $upgrade_ncn '/srv/cray/scripts/metal/ntp-upgrade-config.sh'
-      
+
         record_state "${state_name}" ${upgrade_ncn}
     else
         echo "====> ${state_name} has been completed"

@@ -12,7 +12,7 @@ You will not have BGP peers until CSM ```install.sh``` has run. This is where Me
 - The BGP neighbors will be the worker NCN IP addresses on the NMN (node management network) (bond0.nmn0). If your system is using HPE/Aruba, one of the neighbors will be the other spine switch.
 
 ## Generate MetalLB configmap
-- Depending on the network architecture of your system you may need to peer with switches other than the spines. CSI has a BGP peers argument that accepts 'aggregation' as an option, if no option is defined it will default to the spines as being the MetalLB peers. 
+- Depending on the network architecture of your system you may need to peer with switches other than the spines. CSI has a BGP peers argument that accepts 'aggregation' as an option, if no option is defined it will default to the spines as being the MetalLB peers.
 
 CSI cli arguments with ```--bgp-peers aggregation```
 ```
@@ -57,20 +57,20 @@ sw-spine-001# show bgp ipv4 unicast summary
 VRF : default
 BGP Summary
 -----------
- Local AS               : 65533        BGP Router Identifier  : 10.252.0.1     
- Peers                  : 4            Log Neighbor Changes   : No             
- Cfg. Hold Time         : 180          Cfg. Keep Alive        : 60             
+ Local AS               : 65533        BGP Router Identifier  : 10.252.0.1
+ Peers                  : 4            Log Neighbor Changes   : No
+ Cfg. Hold Time         : 180          Cfg. Keep Alive        : 60
 
  Neighbor        Remote-AS MsgRcvd MsgSent   Up/Down Time State        AdminStatus
- 10.252.0.3      65533       31457   31474   00m:02w:04d  Established   Up         
- 10.252.2.8      65533       54730   62906   00m:02w:04d  Established   Up         
- 10.252.2.9      65533       54732   62927   00m:02w:04d  Established   Up         
- 10.252.2.18     65533       54732   62911   00m:02w:04d  Established   Up 
+ 10.252.0.3      65533       31457   31474   00m:02w:04d  Established   Up
+ 10.252.2.8      65533       54730   62906   00m:02w:04d  Established   Up
+ 10.252.2.9      65533       54732   62927   00m:02w:04d  Established   Up
+ 10.252.2.18     65533       54732   62911   00m:02w:04d  Established   Up
  ```
 On the Mellanox switches, first you must run the switch commands listed in the Automated section above. The output of the `show ip bgp summary` command should look like the following if the MetalLB speaker pods are running. If it is early in the install process and the CSM services have not been deployed yet, you may see the neighbors in IDLE, ACTIVE, or CONNECT state.
- 
+
 ```
-sw-spine-001 [standalone: master] # show ip bgp summary 
+sw-spine-001 [standalone: master] # show ip bgp summary
 
 VRF name                  : default
 BGP router identifier     : 10.252.0.1
@@ -82,7 +82,7 @@ IPV6 Prefixes             : 0
 L2VPN EVPN Prefixes       : 0
 
 ------------------------------------------------------------------------------------------------------------------
-Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   Up/Down       State/PfxRcd        
+Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   Up/Down       State/PfxRcd
 ------------------------------------------------------------------------------------------------------------------
 10.252.0.7        4    65533        37421     42948     308       0      0      12:23:16:07   ESTABLISHED/53
 10.252.0.8        4    65533        37421     42920     308       0      0      12:23:16:07   ESTABLISHED/51
@@ -117,7 +117,7 @@ Aruba delete commands.
 ```
 sw-spine-001# configure terminal
 
-sw-spine-001(config)# no router  bgp 65533                          
+sw-spine-001(config)# no router  bgp 65533
 This will delete all BGP configurations on this device.
 Continue (y/n)? y
 
@@ -222,7 +222,7 @@ router bgp 65533
 ```
 Mellanox delete commands.
 ```
-sw-spine-001 [standalone: master] # 
+sw-spine-001 [standalone: master] #
 sw-spine-001 [standalone: master] # conf t
 sw-spine-001 [standalone: master] (config) # no router bgp 65533
 sw-spine-001 [standalone: master] (config) # no route-map ncn-w001
@@ -251,7 +251,7 @@ Mellanox configuration example.
    route-map rm-ncn-w003 permit 20 set ip next-hop 10.254.0.9
    route-map rm-ncn-w003 permit 30 match ip address pl-can
    route-map rm-ncn-w003 permit 30 set ip next-hop 10.103.8.9
-   
+
 ##
 ## BGP configuration
 ##
@@ -271,11 +271,11 @@ Mellanox configuration example.
 ```
 
 - Once the IP addresses are updated for the route-maps and BGP neighbors you may need to restart the BGP process on the switches, you do this by running `clear ip bgp all` on the Mellanox and `clear bgp *` on the Arubas. (This may need to be done multiple times for all the peers to come up)
-- When worker nodes are reinstalled, the BGP process will need to be restarted. 
+- When worker nodes are reinstalled, the BGP process will need to be restarted.
 - If the BGP peers are still not coming up you should check the metallb.yaml config file for errors. The MetalLB config file should point to the NMN IP addresses of the switches configured.
 
 metallb.yaml configuration example.
-- The peer-address should be the IP address of the switch that you are doing BGP peering with.  
+- The peer-address should be the IP address of the switch that you are doing BGP peering with.
 ```
 ---
 apiVersion: v1

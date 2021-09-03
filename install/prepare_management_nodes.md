@@ -1,6 +1,6 @@
 # Prepare Management Nodes
 
-Some preparation of the management nodes might be needed before starting an install or reinstall.  
+Some preparation of the management nodes might be needed before starting an install or reinstall.
 
 For either scenario, the BMC and BIOS firmware should be checked and may need to be updated on the node which will become the PIT node. If necessary, [Set Gigabyte Node BMC to Factory Defaults](set_gigabyte_node_bmc_to_factory_defaults.md).
 
@@ -71,9 +71,9 @@ Later in the installation process the HPC Firmware Pack will be installed on the
 
       Runtime DHCP services interfere with the LiveCD's bootstrap nature to provide DHCP leases to BMCs. To remove
       edge-cases, disable the run-time cray-dhcp-kea pod.
-   
+
       Scale the deployment from either the LiveCD or any Kubernetes node
-   
+
       ```bash
       ncn# kubectl scale -n services --replicas=0 deployment cray-dhcp-kea
       ```
@@ -114,13 +114,13 @@ Later in the installation process the HPC Firmware Pack will be installed on the
       ```
 1. Set the BMCs on the management nodes to DHCP.
    > **`NOTE`** During the install of the management nodes their BMCs get set to static IP addresses. The installation expects the that these BMCs are set back to DHCP before proceeding.
-   
+
    * Set the lan variable.
       If you have Intel nodes set it to 3.
       ```bash
       ncn# export lan=3
       ```
-   
+
       Otherwise set it to 1.
       ```bash
       ncn# export lan=1
@@ -147,7 +147,7 @@ Later in the installation process the HPC Firmware Pack will be installed on the
          ipmitool -U $username -I lanplus -H $h -E lan print $lan | grep Source
       done
       ```
-      > If an error similar to the following occurs, it means that the BMC is no longer reachable by its IP. 
+      > If an error similar to the following occurs, it means that the BMC is no longer reachable by its IP.
       > ```
       > 10.254.1.5: Error: Unable to establish IPMI v2 / RMCP+ session
       > ```
@@ -183,7 +183,7 @@ Later in the installation process the HPC Firmware Pack will be installed on the
          ipmitool -U $username -I lanplus -H $h -E lan print $lan | grep Source
       done
       ```
-      > If an error similar to the following occurs, it means that the BMC is no longer reachable by its IP. 
+      > If an error similar to the following occurs, it means that the BMC is no longer reachable by its IP.
       > ```
       > ncn-w001-mgmt: Error: Unable to establish IPMI v2 / RMCP+ session
       > ```
@@ -202,7 +202,7 @@ Later in the installation process the HPC Firmware Pack will be installed on the
 <a name="wipe_usb_device_on_pit_node"></a>
 ### Wipe USB Device on PIT Node
 
-   If intending to boot the PIT node from the Remote ISO and there is a USB device which was previously used with LiveCD data, it should be wiped to avoid having two devices with disk labels claiming to be the LiveCD. 
+   If intending to boot the PIT node from the Remote ISO and there is a USB device which was previously used with LiveCD data, it should be wiped to avoid having two devices with disk labels claiming to be the LiveCD.
 
    Or the USB device could be removed from the PIT node.
 
@@ -212,7 +212,7 @@ Later in the installation process the HPC Firmware Pack will be installed on the
         ```
 
 <a name="power_off_pit_node"></a>
-### Power Off PIT Node 
+### Power Off PIT Node
 
 > **`Skip this step if`** you are planning to use this node as a staging area to create the USB LiveCD.
 

@@ -6,7 +6,7 @@ The following is an example of group members:
 
 ```screen
 {
-    "ids" : [    
+    "ids" : [
         "x0c0s0b0n0","x0c0s0b0n1","x0c0s0b1n0"
     ]
 }

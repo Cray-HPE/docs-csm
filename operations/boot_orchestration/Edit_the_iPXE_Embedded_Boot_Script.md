@@ -11,8 +11,8 @@ This procedure requires administrative privileges.
 
 1.  Edit the ConfigMap using one of the following options.
 
-    **NOTE:** Save a backup of the ConfigMap before making any changes. 
-    
+    **NOTE:** Save a backup of the ConfigMap before making any changes.
+
     The following is an example of creating a backup:
 
     ```bash
@@ -31,7 +31,7 @@ This procedure requires administrative privileges.
     chain --timeout 10000 https://api-gw-service-nmn.local/apis/bss/boot/v1/bootscript?mac=${net2/mac} || echo Failed to retrieve next chain from Boot Script Service over net2 (https://api-gw-service-nmn.local/apis/bss/boot/v1/bootscript?mac=${net2/mac} && goto net2_stop
     :net2_stop
     ifclose net2 || echo No routes to drop.
-    
+
     :net0
     dhcp net0 || goto net0_stop
     echo net0 IPv4 lease: ${ip} mac: ${net0/mac}

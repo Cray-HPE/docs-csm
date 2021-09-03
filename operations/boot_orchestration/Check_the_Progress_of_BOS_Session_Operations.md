@@ -103,10 +103,10 @@ For example:
         "artifacts": [],
         "session": {
             "completionTime": "2019-12-19T16:05:11+00:00",
-            "job": "cfs-85e3e48f-6795-4570-b379-347b05b39dbe", <<-- Kubernetes CFS job ID 
+            "job": "cfs-85e3e48f-6795-4570-b379-347b05b39dbe", <<-- Kubernetes CFS job ID
             "startTime": "2019-12-19T15:55:37+00:00",
             "status": "complete",
-            "succeeded": "true"        
+            "succeeded": "true"
         },
         "targets": {
             "failed": 0,
