@@ -115,25 +115,27 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 
     1. Set variables
 
-        **IMPORTANT**: The variables you set depend on whether or not you followed the steps in
-        [Configure NCN Images to Use Local Timezone](../operations/configure_ntp_on_ncns.md#configure_ncn_images_to_use_local_timezone). The
-        two paths forward are listed below:
+        **IMPORTANT**: The variables you set depend on whether or not you customized the default NCN images. The most
+        common procedures that involve customizing the images are 
+        [Configuring NCN Images to Use Local Timezone](../operations/configure_ntp_on_ncns.md#configure_ncn_images_to_use_local_timezone) and 
+        [Changing NCN Image Root Password and SSH Keys](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md). 
+        The two paths forward are listed below:
 
-        * If you customized the timezones, set the following variables:
-
-            ```bash
-            pit# export artdir=/var/www/ephemeral/data
-            pit# export k8sdir=$artdir/k8s
-            pit# export cephdir=$artdir/ceph
-            ```
-
-        * If you did **not** customize the timezones, set the following variables (this is the default path):
+        * If you did **not** customize the NCN images, set the following variables (this is the default path):
 
             ```bash
             pit# export CSM_RELEASE=csm-x.y.z
             pit# export artdir=/var/www/ephemeral/${CSM_RELEASE}/images
             pit# export k8sdir=$artdir/kubernetes
             pit# export cephdir=$artdir/storage-ceph
+            ```
+
+        * If you customized the NCN images, set the following variables:
+
+            ```bash
+            pit# export artdir=/var/www/ephemeral/data
+            pit# export k8sdir=$artdir/k8s
+            pit# export cephdir=$artdir/ceph
             ```
 
     1. After setting the variables above per your situation, run:
@@ -307,10 +309,10 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     external# script -a boot.livecd.$(date +%Y-%m-%d).txt
     external# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
     external# SYSTEM_NAME=eniac
-    external# username=root
-    external# IPMI_PASSWORD=changeme
-    external# ipmitool -I lanplus -U $username -E -H ${SYSTEM_NAME}-ncn-m001-mgmt chassis power status
-    external# ipmitool -I lanplus -U $username -E -H ${SYSTEM_NAME}-ncn-m001-mgmt sol activate
+    external# USERNAME=root
+    external# export IPMI_PASSWORD=changeme
+    external# ipmitool -I lanplus -U $USERNAME -E -H ${SYSTEM_NAME}-ncn-m001-mgmt chassis power status
+    external# ipmitool -I lanplus -U $USERNAME -E -H ${SYSTEM_NAME}-ncn-m001-mgmt sol activate
     ```
 
 <a name="reboot"></a>
@@ -342,11 +344,12 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 
     ```bash
     external# ssh root@10.102.11.13
-      ncn-m002# pushd /metal/bootstrap/prep/admin
-      ncn-m002# script -af csm-verify.$(date +%Y-%m-%d).txt
-      ncn-m002# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
-      ncn-m002# ssh ncn-m001
-      ```
+
+    ncn-m002# pushd /metal/bootstrap/prep/admin
+    ncn-m002# script -af csm-verify.$(date +%Y-%m-%d).txt
+    ncn-m002# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+    ncn-m002# ssh ncn-m001
+    ```
 
 1. If the pre-NCN deployment password change method was **not** used, then the root password on `ncn-m001` needs to be changed now.
    Run `passwd` on ncn-m001 and complete the prompts.
