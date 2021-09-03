@@ -349,6 +349,8 @@ sed -i 's/^\(  echo "local stratum 3 orphan" >>"$CHRONY_CONF"$\)/  echo "local s
 sed -i '/^\(  echo "logchange 1.0" >>"$CHRONY_CONF"$\)/a \ \ echo "initstepslew 1 $UPSTREAM_NTP_SERVER" >>"$CHRONY_CONF"' srv/cray/scripts/metal/ntp-upgrade-config.sh
 # remove the unreachable default ntp pools
 rm -f etc/chrony.d/pool.conf
+# silence some of the noise mksquashfs creates
+sed -i 's/^mksquashfs.*/& 1>\/dev\/null/' srv/cray/scripts/common/create-kis-artifacts.sh
 # Create the new artifacts
 srv/cray/scripts/common/create-kis-artifacts.sh
 # set -e back
