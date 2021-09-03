@@ -18,7 +18,7 @@ Refer to [https://www.keycloak.org/docs/latest/server\_admin/index.html\#\_offli
     -   Replace the my-test-client value in the command below with the ID of the target client
     -   The scope option should be set to offline\_access
     -   The $CLIENT\_SECRET variable is set
-  
+
     ```bash
     ncn-w001# curl -s -d grant_type=client_credentials -d client_id=my-test-client \
     -d client_secret=$CLIENT_SECRET -d scope=offline_access \

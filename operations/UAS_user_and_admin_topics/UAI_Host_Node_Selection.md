@@ -16,7 +16,7 @@ UAI host node identification is an exclusive activity, not an inclusive one, so 
   ncn-w003   Ready    <none>   23d   v1.18.6
   ```
 
-  In this example, there are three nodes known by Kubernetes that are not running as Kubernetes master nodes. These are all potential UAI host nodes. 
+  In this example, there are three nodes known by Kubernetes that are not running as Kubernetes master nodes. These are all potential UAI host nodes.
 
 1. Identify the nodes that are excluded from eligibility as UAI host nodes.
 
@@ -30,7 +30,7 @@ UAI host node identification is an exclusive activity, not an inclusive one, so 
 
   Of the non-master nodes, there is one node that is configured to reject UAIs, `ncn-w001`. So, `ncn-w002` and `ncn-w003` are UAI host nodes.
 
-### Specify UAI Host Nodes 
+### Specify UAI Host Nodes
 
 UAI host nodes are determined by tainting the nodes against UAIs. For example:
 
@@ -40,9 +40,9 @@ ncn-m001-pit# kubectl label node ncn-w001 uas=False --overwrite
 
 Please note here that setting `uas=True` or any variant of that, while potentially useful for local book keeping purposes, does NOT transform the node into a UAS host node. With that setting the node will be a UAS node because the value of the `uas` flag is not in the list `False`, `false` or `FALSE`, but unless the node previously had one of the false values, it was a UAI node all along. Perhaps more to the point, removing the `uas` label from a node labeled `uas=True` does not take the node out of the list of UAI host nodes. The only way to make a non-master Kubernetes node not be a UAS host node is to explicitly set the label to `False`, `false` or `FALSE`.
 
-### Maintain an HSM Group for UAI Host Nodes 
+### Maintain an HSM Group for UAI Host Nodes
 
-When it comes to customizing non-compute node (NCN) contents for UAIs, it is useful to have a Hardware State Manager (HSM) node group containing the NCNs that are UAI hosts nodes. The `hpe-csm-scripts` package provides a script called `make_node_groups` that is useful for this purpose. This script is normally installed as `/opt/cray/csm/scripts/node_management/make_node_groups`. It can create and update node groups for management master nodes, storage nodes, management worker nodes, and UAI host nodes. 
+When it comes to customizing non-compute node (NCN) contents for UAIs, it is useful to have a Hardware State Manager (HSM) node group containing the NCNs that are UAI hosts nodes. The `hpe-csm-scripts` package provides a script called `make_node_groups` that is useful for this purpose. This script is normally installed as `/opt/cray/csm/scripts/node_management/make_node_groups`. It can create and update node groups for management master nodes, storage nodes, management worker nodes, and UAI host nodes.
 
 The following summarizes its use:
 

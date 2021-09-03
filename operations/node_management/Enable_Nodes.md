@@ -6,7 +6,7 @@ Enabling nodes that are available provides an accurate system configuration and 
 
 ### Prerequisites
 
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system. 
+-   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 
 ### Procedure
 
@@ -21,7 +21,7 @@ Enabling nodes that are available provides an accurate system configuration and 
     ```bash
     ncn-m001# cray hsm state components describe XNAME
     Type = "Node"
-    Enabled = true 
+    Enabled = true
     State = "On"
     NID = 1003
     Flag = "OK"

@@ -10,12 +10,12 @@ function set_vars() {
     echo "\$USERNAME \$IPMI_PASSWORD must be set"
     exit 1
   fi
-  
+
   # Find my current directory
   mydir=$(dirname ${BASH_SOURCE[0]})
   # Set the path to our Python API-call helper script
   make_api_call_py=${mydir}/make_api_call.py
-  
+
   if [[ -z $BMC ]]; then
     VENDOR="$(ipmitool fru | awk '/Board Mfg/ && !/Date/ {print $4}')"
   else
@@ -353,7 +353,7 @@ function reset_bmc_manager() {
     : $((secs--))
 
   done
-  
+
   local total
   total=0
   while ! ping -c 2 $BMC > /dev/null 2>&1 && [ $total -lt 30 ]; do

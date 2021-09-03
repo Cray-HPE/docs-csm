@@ -47,7 +47,7 @@ do
         members="$(kubectl get pod -n $c_ns -l "cluster-name=$c_name,application=spilo" \
                            -o custom-columns=NAME:.metadata.name --no-headers)"
         numMembers=$(echo "$members" | wc -l)
-        
+
         # Determine patroni version - remove carriage return without line feed.
         # Set a delay of 10 seconds for use with timeout command:
         Delay=10
@@ -55,8 +55,8 @@ do
         do
             patronictlVersion=$(timeout -k 4 --preserve-status --foreground $Delay \
 kubectl exec -it -n $c_ns -c postgres $member_i -- patronictl version | \
-awk '{ sub("\r", "", $3); print $3 }'; ) 
-            
+awk '{ sub("\r", "", $3); print $3 }'; )
+
             # Check response in case command hung or timed out.
             # If no response, check the next cluster member:
             if [[ -n $patronictlVersion ]]
@@ -66,13 +66,13 @@ awk '{ sub("\r", "", $3); print $3 }'; )
                 continue
             fi
         done
-        
+
 	patronictlCmd=""
 	case $patronictlVersion in
             "1.6.4" )
                 patronictlCmd="\$(timeout -k 4 --preserve-status --foreground \
 $Delay kubectl -n $c_ns exec \$m -- patronictl list 2>/dev/null | awk ' \$8 == \
- \"Leader\" && \$10 == \"running\" {print \$4}')"	    
+ \"Leader\" && \$10 == \"running\" {print \$4}')"
                 ;;
             "1.6.5" )
                 patronictlCmd="\$(timeout -k 4 --preserve-status --foreground \
@@ -89,7 +89,7 @@ the $c_name postgres clusters in the $c_ns namespace."
                 continue
                 ;;
         esac
-        
+
 	# Find the leader:
         podDescribe=" non-leader"
         for m in $members
@@ -118,20 +118,20 @@ $numMembers pods ****** ==="
             # Have a leader:
             echo "=== Looking at patronictl list info for the $c_name cluster \
 with leader pod: $leader ==="
-            
+
             other="$(echo $members | xargs -n 1 | grep -v $leader)"
-            
+
             echo; echo "--- patronictl, version $patronictlVersion, list for $c_ns \
 leader pod $leader ---"
             kubectl -n $c_ns exec $leader -- patronictl list 2>/dev/null
             kubectl get pods -A -o wide | grep "NAME\|$c_name"
-            
+
             echo; echo "--- Logs for $c_ns \"Leader Pod\" $leader ---"
             kubectl logs -n $c_ns $leader postgres | \
                 awk '{$1="";$2=""; print $line}' | egrep "INFO|ERROR" \
                 | egrep -v "NewConnection|bootstrapping" | sort -u
         fi
-        
+
         for o in $other
         do
             echo; echo "--- Logs for $c_ns$podDescribe pod $o ---"

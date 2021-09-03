@@ -46,27 +46,27 @@ ncn-m001# cray bos sessiontemplate create --file INPUT_FILE --name NEW_TEMPLATE_
 The following is an example of an input file:
 
 ```bash
- { 
-  "cfs_url": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git", 
-  "enable_cfs": true, 
-  "name": "cle-1.2.0", 
-  "boot_sets": { 
+ {
+  "cfs_url": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
+  "enable_cfs": true,
+  "name": "cle-1.2.0",
+  "boot_sets": {
     "boot_set1": {
-      "network": "nmn", 
-      "boot_ordinal": 1, 
+      "network": "nmn",
+      "boot_ordinal": 1,
       "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=360M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell k8s_gw=api-gwservice-nmn.local quiet turbo_boost_limit=999",
-      "rootfs_provider": "cpss3", 
-      "node_list": [ 
-        "x3000c0s19b1n0" 
-      ], 
-      "etag": "90b2466ae8081c9a604fd6121f4c08b7", 
-      "path": "s3://boot-images/06901f40-f2a6-4a64-bc26-772a5cc9d321/manifest.json", 
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:eth0", 
-      "type": "s3" 
-      } 
-    }, 
-  "partition": "", 
-  "cfs_branch": "master" 
+      "rootfs_provider": "cpss3",
+      "node_list": [
+        "x3000c0s19b1n0"
+      ],
+      "etag": "90b2466ae8081c9a604fd6121f4c08b7",
+      "path": "s3://boot-images/06901f40-f2a6-4a64-bc26-772a5cc9d321/manifest.json",
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:eth0",
+      "type": "s3"
+      }
+    },
+  "partition": "",
+  "cfs_branch": "master"
   }
 ```
 
@@ -82,7 +82,7 @@ ADMIN_SECRET=$(kubectl get secrets admin-client-auth -ojsonpath='{.data.client-s
 TOKEN=$(curl -s -d grant_type=client_credentials \
     -d client_id=admin-client \
     -d client_secret=$ADMIN_SECRET \
-    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | 
+    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token |
     python -c 'import sys, json; print json.load(sys.stdin)["access_token"]')
 
 kernel_parameters="console=ttyS0,115200 bad_page=panic crashkernel=360M hugepagelist=2m-2g \
@@ -91,21 +91,21 @@ numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.
 rd.neednet=1 rd.retry=10 rd.shell k8s_gw=api-gw-service-nmn.local quiet turbo_boost_limit=999"
 
 body='{
-    "name": "cle-1.2.0", 
-    "boot_sets": { 
+    "name": "cle-1.2.0",
+    "boot_sets": {
         "boot_set1": {
-            "boot_ordinal": 1, 
-            "path": "s3://boot-images/06901f40-f2a6-4a64-bc26-772a5cc9d321/manifest.json", 
-            "type": "s3", 
-            "etag": "90b2466ae8081c9a604fd6121f4c08b7", 
-            "node_list": ["x3000c0s19b1n0"], 
-            "rootfs_provider": "cpss3", 
-            "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:eth0", 
-            "kernel_parameters": "'"$kernel_parameters"'", 
-            "network": "nmn" }}, 
-    "cfs_branch": "master", 
-    "cfs_url": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git", 
-    "enable_cfs": true, 
+            "boot_ordinal": 1,
+            "path": "s3://boot-images/06901f40-f2a6-4a64-bc26-772a5cc9d321/manifest.json",
+            "type": "s3",
+            "etag": "90b2466ae8081c9a604fd6121f4c08b7",
+            "node_list": ["x3000c0s19b1n0"],
+            "rootfs_provider": "cpss3",
+            "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:eth0",
+            "kernel_parameters": "'"$kernel_parameters"'",
+            "network": "nmn" }},
+    "cfs_branch": "master",
+    "cfs_url": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
+    "enable_cfs": true,
     "partition": "" }'
 
 curl -i -X POST -s https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate \

@@ -1,6 +1,6 @@
 # Cable Management Network Servers
 
-This topic describes nodes in the air-cooled cabinet with diagrams and pictures showing where to find the 
+This topic describes nodes in the air-cooled cabinet with diagrams and pictures showing where to find the
 ports on the nodes and how to cable the nodes to the management network switches.
 
 * [HPE Hardware](#hpe-hardware)
@@ -24,7 +24,7 @@ ports on the nodes and how to cable the nodes to the management network switches
 <a name="hpe_dl385"></a>
 ### HPE DL385
 ![Diagram of Rear View of HPE ProLiant DL385 Gen10 Plus](../img/network/DL385-back.png)
-* The OCP Slot is noted (number 7) in the image above.  
+* The OCP Slot is noted (number 7) in the image above.
   * This is the bottom middle slot to the left of the VGA port.
   * Ports are numbered left-to-right: the far left port is port 1.
 * The PCIe Slot 1 is on the top left side of the image above (under number 1).
@@ -111,7 +111,7 @@ For systems that include 4 aggregation switches the cabling will look like the f
 
 ![Diagram of HPE Storage Node Cabling for Large System](../img/network/HPE_Storage_large.png)
 
-#### SHCD Example with four aggregation switches. 
+#### SHCD Example with four aggregation switches.
 |hostname|Source          |Destination   |Destination |
 |--------|----------------|--------------|------------|
 | sn01	 | x3000u10ocp-j2 | x3000u36-j5	 | sw-25g04   |

@@ -30,7 +30,7 @@ The following is an example payload file that was used to generate the output in
 To retrieve information from the targets:
 
 ```
-ncn-m001# cray scsd bmc dumpcfg create PAYLOAD_FILE --format json 
+ncn-m001# cray scsd bmc dumpcfg create PAYLOAD_FILE --format json
 {
     "Targets": [
     {
@@ -209,7 +209,7 @@ The following is an example payload file that was used to generate the output in
             "ProtocolEnabled": true
         },
         "SSHKey": "xxxxyyyyzzzz",
-        "SSHConsoleKey": "aaaabbbbcccc",    
+        "SSHConsoleKey": "aaaabbbbcccc",
         "BootOrder": ["Boot0","Boot1","Boot2","Boot3"]
     }
 }

@@ -142,7 +142,7 @@ ncn-s00(1/2/3)# ceph orch daemon restart rgw.site1.zone1.<container id from ceph
 **Important:** This command needs to run from the host you are going to start or stop services on.
 
 - Get the service system_unit
-  
+
 ```bash
 ncn-s# cephadm ls
     {
@@ -164,7 +164,7 @@ ncn-s# cephadm ls
 ```
 
 - restart the service
-  
+
 ```bash
 ncn-s# systemctl restart ceph-01a0d9d2-ea7f-43dc-af25-acdfa5242a48@mgr.ncn-s001
 ```
@@ -187,11 +187,11 @@ ncn-m001# ceph mgr MODULE_NAME disable MODULE
 
 ## Scale Ceph services
 
-  We can use the ability to deploy/scale/reconfigure/redeploy Ceph processes down and back up to restart the services.  
+  We can use the ability to deploy/scale/reconfigure/redeploy Ceph processes down and back up to restart the services.
 
   **IMPORTANT:** When scaling the Ceph manager daemon (mgr.hostname.<containerid>), you need to keep in mind that you need to have a running manager daemon as it is what is controlling the orchestration processes.
 
-  **IMPORTANT:** You cannot scale osd.all-available-devices, this is the process to auto-discover available OSDs.  
+  **IMPORTANT:** You cannot scale osd.all-available-devices, this is the process to auto-discover available OSDs.
 
   **IMPORTANT:** You cannot scale the crash service; this is the equivalent of a Kubernetes daemon set and runs on all nodes to collect crash data.
 
@@ -213,7 +213,7 @@ ncn-m001# ceph mgr MODULE_NAME disable MODULE
 
      ```
 
-     - Oprionaly you can limit the results.  
+     - Optionally you can limit the results.
        ceph orch [<service_type>] [<service_name>] [--export] [plain|json|json-pretty|yaml] [--refresh]
 
        ```bash

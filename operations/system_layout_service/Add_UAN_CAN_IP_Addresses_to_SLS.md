@@ -18,10 +18,10 @@ This procedure requires administrative privileges.
     -o jsonpath='{.data.client-secret}' | base64 -d` \
     https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \
     | jq -r '.access_token')
-    
+
     ncn-m001# curl -s -k -H "Authorization: Bearer ${TOKEN}" \
     https://api-gw-service-nmn.local/apis/sls/v1/networks/CAN|jq > CAN.json
-    
+
     ncn-m001# cp CAN.json CAN.json.bak
     ```
 
@@ -71,10 +71,10 @@ This procedure requires administrative privileges.
     ncn-m001:~ # nslookup uan01.can
     Server:	10.92.100.225
     Address:	10.92.100.225#53
-    
+
     Name:	uan01.can
     Address: 10.103.2.24
-    
+
     ncn-m001:~ # nslookup uan01-can.can
     Server:	10.92.100.225
     Address:	10.92.100.225#53

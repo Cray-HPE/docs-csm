@@ -16,7 +16,7 @@ When customizing an image via IMS image customization, once chrooted into the im
 The Nexus Repository Manager service provides local RPM repositories for use when building or customizing an image. The Kiwi image descriptions should reference these repositories as needed. In order to include the custom-repo repository in an IMS Kiwi-NG recipe, the repository source path should be modified to the URI for a repository instance hosted by Nexus.
 
 ```screen
-<repository type="rpm-md" alias="custom-repo" imageinclude="true"> 
+<repository type="rpm-md" alias="custom-repo" imageinclude="true">
 <source path="https://packages.local/repository/REPO_NAME" />
 </repository>
 ```

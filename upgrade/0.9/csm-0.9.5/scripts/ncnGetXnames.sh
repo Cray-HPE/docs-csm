@@ -43,7 +43,7 @@ sshOptions="-q -o StrictHostKeyChecking=no"
 
 # Get master nodes:
 mNcnNodes=$(kubectl get nodes --selector='node-role.kubernetes.io/master' \
-                    --no-headers=true | awk '{print $1}' | tr "\n", " ") 
+                    --no-headers=true | awk '{print $1}' | tr "\n", " ")
 
 # Get worker nodes:
 wNcnNodes=$(kubectl get node --selector='!node-role.kubernetes.io/master' \
@@ -73,7 +73,7 @@ export TOKEN=$(get_token)
 if [[ -z $TOKEN ]]
 then
     echo "Failed to get token, skipping metal.no-wipe checks. "
-fi    
+fi
 date;
 for ncn_i in $ncnNodes
 do

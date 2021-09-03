@@ -23,7 +23,7 @@ An NCN worker node has a full disk.
                ├─3248 docker-containerd --config /var/run/docker/containerd/contain>
                ├─5557 /usr/bin/docker-proxy -proto tcp -host-ip 0.0.0.0 -host-port >
                └─5576 docker-containerd-shim -namespace moby -workdir /var/lib/dock>
-    
+
     ...
     ```
 

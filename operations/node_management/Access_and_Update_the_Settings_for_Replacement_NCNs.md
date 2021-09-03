@@ -20,7 +20,7 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
     ```
 
 2.  Connect to the BMC with the default login credentials. Contact service for the default credentials.
-   
+
     ```bash
     # ipmitool -I lanplus -U <default user> -P <default password> -H NCN_NODE-mgmt power status
     Chassis Power is on

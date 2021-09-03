@@ -43,7 +43,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
     ```bash
     pit# curl -sSif http://localhost:8081/service/rest/v1/status/writable
     ```
-   
+
     Expected output looks similar to the following:
 
     ```
@@ -87,7 +87,7 @@ installation or upgrade. Create the `site-init` secret to contain
 ```bash
 pit# kubectl create secret -n loftsman generic site-init --from-file=/var/www/ephemeral/prep/site-init/customizations.yaml
 ```
-   
+
 Expected output looks similar to the following:
 
 ```
@@ -108,7 +108,7 @@ secret/site-init created
 >    ```bash
 >    pit# kubectl delete secret -n loftsman site-init
 >    ```
->    
+>
 >    Expected output looks similar to the following:
 >
 >    ```
@@ -120,7 +120,7 @@ secret/site-init created
 >    ```bash
 >    pit# kubectl create secret -n loftsman generic site-init --from-file=/var/www/ephemeral/prep/site-init/customizations.yaml
 >    ```
->    
+>
 >    Expected output looks similar to the following:
 >
 >    ```
@@ -132,21 +132,21 @@ secret/site-init created
 > `customizations.yaml` in the `site-init` Git repository, which may no longer
 > be mounted on any cluster node, and then delete and recreate the `site-init`
 > secret as shown below.
-> 
+>
 > To **read** `customizations.yaml` from the `site-init` secret:
-> 
+>
 > ```bash
 > ncn# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
 > ```
-> 
+>
 > To **delete** the `site-init` secret:
-> 
+>
 > ```bash
 > ncn# kubectl -n loftsman delete secret site-init
 > ```
-> 
+>
 > To **recreate** the `site-init` secret:
-> 
+>
 > ```bash
 > ncn# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
 > ```
@@ -165,7 +165,7 @@ An error similar to the following may occur when deploying the key:
 
 ```
 Error from server (NotFound): secrets "sealed-secrets-key" not found
- 
+
 W0304 17:21:42.749101   29066 helpers.go:535] --dry-run is deprecated and can be replaced with --dry-run=client.
 secret/sealed-secrets-key created
 Restarting sealed-secrets to pick up new keys
@@ -270,7 +270,7 @@ On success, each management NCN will be output, e.g.:
 pit# ./lib/list-ncns.sh
 + Getting admin-client-auth secret
 + Obtaining access token
-+ Querying SLS 
++ Querying SLS
 ncn-m001
 ncn-m002
 ncn-m003
@@ -303,34 +303,34 @@ for each management NCN, e.g.,:
 pit# ./lib/set-ncns-to-unbound.sh
 + Getting admin-client-auth secret
 + Obtaining access token
-+ Querying SLS 
++ Querying SLS
 + Updating ncn-m001
-Password: 
+Password:
 ncn-m001: nameserver 127.0.0.1
 ncn-m001: nameserver 10.92.100.225
 + Updating ncn-m002
-Password: 
+Password:
 ncn-m002: nameserver 10.92.100.225
 + Updating ncn-m003
-Password: 
+Password:
 ncn-m003: nameserver 10.92.100.225
 + Updating ncn-s001
-Password: 
+Password:
 ncn-s001: nameserver 10.92.100.225
 + Updating ncn-s002
-Password: 
+Password:
 ncn-s002: nameserver 10.92.100.225
 + Updating ncn-s003
-Password: 
+Password:
 ncn-s003: nameserver 10.92.100.225
 + Updating ncn-w001
-Password: 
+Password:
 ncn-w001: nameserver 10.92.100.225
 + Updating ncn-w002
-Password: 
+Password:
 ncn-w002: nameserver 10.92.100.225
 + Updating ncn-w003
-Password: 
+Password:
 ncn-w003: nameserver 10.92.100.225
 ```
 

@@ -13,7 +13,7 @@ The contents of the new LDAP server are the same as the previous LDAP server. Fo
 Follow the steps in only one of the sections below depending on if it is preferred to use the Keycloak REST API or Keycloak administration console UI.
 
 
-### Use the Keycloak Administration Console UI 
+### Use the Keycloak Administration Console UI
 
 1.  Log in to the administration console.
 
@@ -34,16 +34,16 @@ Follow the steps in only one of the sections below depending on if it is preferr
     This may take a while depending on the number of users and groups in the LDAP server.
 
     When the synchronize process completes, the pop-up will show that the update was successful. There should be minimal or no changes because the contents of the servers are the same.
-  
 
-### Use the Keycloak REST API 
+
+### Use the Keycloak REST API
 
 1.  Create a function to get a token as a Keycloak master administrator.
 
     ```bash
     MASTER_USERNAME=$(kubectl get secret -n services keycloak-master-admin-auth -ojsonpath='{.data.user}' | base64 -d)
     MASTER_PASSWORD=$(kubectl get secret -n services keycloak-master-admin-auth -ojsonpath='{.data.password}' | base64 -d)
-    
+
     function get_master_token {
       curl -ks -d client_id=admin-cli -d username=$MASTER_USERNAME -d password=$MASTER_PASSWORD -d grant_type=password https://api-gw-service-nmn.local/keycloak/realms/master/protocol/openid-connect/token | python -c "import sys.json; print json.load(sys.stdin)['access_token']"
     }
@@ -66,7 +66,7 @@ Follow the steps in only one of the sections below depending on if it is preferr
     ncn-w001# curl -s -H "Authorization: Bearer $(get_master_token)" \
     https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/components/$COMPONENT_ID \
     | jq . > keycloak_ldap.json
-    
+
     {
       "id": "57817383-e4a0-4717-905a-ea343c2b5722",
       "name": "shasta-user-federation-ldap",

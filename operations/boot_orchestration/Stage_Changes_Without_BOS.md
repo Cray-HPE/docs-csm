@@ -17,13 +17,13 @@ For information on staging boot artifacts, see the section [Upload Node Boot Inf
 1. Either set the new desired configuration, or update the existing configuration.
 
     If an entirely new configuration is being used, or if no configuration was previously set for a component, update the configuration name with the following:
-    
+
     ```bash
     ncn-m001# cray cfs components update <xname> --configuration-name <configuration_name>
     ```
 
     If all nodes that share a configuration are being staged with an update, updating the shared configuration will stage the change for all relevant nodes. Be aware that if this step is taken and not all nodes that use the configuration are disabled in CFS, the configuration will automatically and immediately apply to all enabled nodes that are using it.
-    
+
     ```bash
     ncn-m001# cray cfs configurations update <configuration_name> --file <file_path>
     ```

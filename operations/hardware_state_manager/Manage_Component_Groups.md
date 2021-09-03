@@ -24,7 +24,7 @@ The following is an example group that contains the optional fields tags and exc
 }
 ```
 
-**Troubleshooting:** If the Cray CLI has not been initialized, the CLI commands will not work. 
+**Troubleshooting:** If the Cray CLI has not been initialized, the CLI commands will not work.
 
 ### Create a New Group
 

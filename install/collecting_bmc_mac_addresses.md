@@ -22,7 +22,7 @@ If you are here with an unconfigured switch, mileage may vary.
     pit# ssh admin@10.252.0.4
 
     # SSH over HARDWARE MANAGEMENT
-    pit# ssh admin@10.254.0.4  
+    pit# ssh admin@10.254.0.4
 
     # or.. serial (device name will vary).
     pit# minicom -b 115200 -D /dev/tty.USB1
@@ -66,9 +66,9 @@ If you are here with an unconfigured switch, mileage may vary.
     sw-leaf-001# show mac-address-table
 
     ```
-1. In the output from the previous `show mac address-table` command, information will be available for all management NCNs which do not have an external connection for their BMC, such as ncn-m001.  
+1. In the output from the previous `show mac address-table` command, information will be available for all management NCNs which do not have an external connection for their BMC, such as ncn-m001.
 
-   All of the management NCNs should be present in the ncn_metadata.csv file.  
+   All of the management NCNs should be present in the ncn_metadata.csv file.
 
    Fill in the Bootstrap MAC, Bond0 MAC0, and Bond0 MAC1 columns with a dummy value, such as `de:ad:be:ef:00:00`,
    as a marker that the correct value is not in this file yet.
@@ -84,9 +84,9 @@ If you are here with an unconfigured switch, mileage may vary.
                                      ^^^^^^^^^^^^^^^^^
     ```
 
-   The column heading must match that shown above for `csi` to parse it correctly. 
+   The column heading must match that shown above for `csi` to parse it correctly.
 
-1. Collect the BMC MAC address information for the PIT node. 
+1. Collect the BMC MAC address information for the PIT node.
    The PIT node BMC is not connected to the switch like the other management nodes.
 
    ```bash
@@ -107,7 +107,7 @@ If you are here with an unconfigured switch, mileage may vary.
 1. At this point the `ncn_metadata.csv` file should should have a row for every management node in the SHCD,
    although there may be dummy entries for some MAC addresses.
 
-   Sample file showing storage nodes 3,2,1, then worker nodes 3,2,1, then master nodes 3,2,1 with valid BMC 
+   Sample file showing storage nodes 3,2,1, then worker nodes 3,2,1, then master nodes 3,2,1 with valid BMC
    MAC addresses, but dummy values `de:ad:be:ef:00:00` for the Bootstrap MAC, Bond0 MAC0, and Bond0 MAC1.
 
    ```

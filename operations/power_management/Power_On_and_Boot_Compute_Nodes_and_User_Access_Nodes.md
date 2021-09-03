@@ -32,7 +32,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
     . . .
     name = "uan-slurm"
     description = "Template for booting UANs with Slurm"
-    
+
     ```
 
 3.  To display more information about a session template, for example `cos-2.0.0`, use the `describe` option.
@@ -52,16 +52,16 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
     --bos-templates COS_SESSION_TEMPLATE,UAN_SESSION_TEMPLATE
     Started boot operation on BOS session templates: cos-2.0.x, uan.
     Waiting up to 900 seconds for sessions to complete.
-     
+
     Waiting for BOA k8s job with id boa-a1a697fc-e040-4707-8a44-a6aef9e4d6ea to complete. Session template: uan.
-    To monitor the progress of this job, run the following command in a separate window:    
+    To monitor the progress of this job, run the following command in a separate window:
         'kubectl -n services logs -c boa -f --selector job-name=boa-a1a697fc-e040-4707-8a44-a6aef9e4d6ea'
-     
+
     Waiting for BOA k8s job with id boa-79584ffe-104c-4766-b584-06c5a3a60996 to complete. Session template: cos-2.0.0.
     To monitor the progress of this job, run the following command in a separate window:
         'kubectl -n services logs -c boa -f --selector job-name=boa-79584ffe-104c-4766-b584-06c5a3a60996'
     . . .
-    All BOS sessions completed.  
+    All BOS sessions completed.
     ```
 
     Note the returned job Id for each session, for example: `"boa-caa15959-2402-4190-9243-150d568942f6"`.
@@ -94,7 +94,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
     | x1000c0s0b1n0  | Node | 1003     | Ready | OK   | True    | X86  | Mountain | Compute     | Sling    |
     | x1000c0s0b1n1  | Node | 1004     | Ready | OK   | True    | X86  | Mountain | Compute     | Sling    |
     | x1000c0s1b0n0  | Node | 1005     | Ready | OK   | True    | X86  | Mountain | Compute     | Sling    |
-    . . .  
+    . . .
     ```
 
 9. Make nodes available to customers and refer to [Validate CSM Health](../validate_csm_health.md) to check system health and status.

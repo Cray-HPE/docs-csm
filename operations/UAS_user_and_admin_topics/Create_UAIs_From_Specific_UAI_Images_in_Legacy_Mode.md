@@ -7,7 +7,7 @@ A user can create a UAI from a specific UAI image (assuming no default UAI class
 user> cray uas create --publickey <path> --imagename <image-name>
 ```
 
-`<image-name>` is the name shown above in the list of UAI images. 
+`<image-name>` is the name shown above in the list of UAI images.
 
 For example:
 

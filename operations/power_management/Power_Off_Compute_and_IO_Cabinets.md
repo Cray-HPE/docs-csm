@@ -80,11 +80,11 @@ When the PDU breakers are switched to OFF, the Chassis Management Modules \(CMMs
     ```bash
     ncn-m001# cray capmc get_xname_status create --xnames x300[1-3]c0s[1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35]b[1-4]n0 --format json
     ```
-    
+
     The `get_xname_status` command requires that the list of components be explicitly listed. In this example, the system includes only 2U servers and there are no state manager entries for even-numbered U-positions \(slots\), which would return an error.
-    
+
     The command does not filter nonexistent component names \(xnames\) and displays an error when invalid component names are specified. Use `--filter` `show_all` option to filter all the output:
-    
+
     ```bash
     ncn-m001# cray capmc get_xname_status create --filter show_all
     {
@@ -124,13 +124,13 @@ When the PDU breakers are switched to OFF, the Chassis Management Modules \(CMMs
     ```bash
     ncn-m001# cray capmc xname_off create --xnames x300[1-3]c0s[1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35]b[1-4]n0
     ```
-    
+
 10. Check the status of the CAPMC power off command.
 
     ```bash
     ncn-m001# cray capmc get_xname_status create --xnames x300[1-3]c0s[1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35]b[1-4]n0 --format json
     ```
-    
+
 11. Set each cabinet PDU circuit breaker to off.
 
     A slotted screw driver may be required to open PDU circuit breakers.

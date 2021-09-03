@@ -39,10 +39,10 @@ It is assumed that you have connectivity to the switch and have done the [Config
    This will require a unique IP address on both switches. The IP address is in its own VRF so this address will not be reachable from anywhere besides the spine pair.
 
    ```
-   sw-spine-001(config)# 
+   sw-spine-001(config)#
        int 1/1/27
-       no shutdown 
-       vrf attach keepalive   
+       no shutdown
+       vrf attach keepalive
        description VSX keepalive
        ip address 192.168.255.0/31
 
@@ -59,7 +59,7 @@ It is assumed that you have connectivity to the switch and have done the [Config
    ```
    sw-spine-001 & sw-spine-002 (config)#
        interface lag 256
-       no shutdown 
+       no shutdown
        description ISL link
        no routing
        vlan trunk native 1 tag
@@ -79,7 +79,7 @@ It is assumed that you have connectivity to the switch and have done the [Config
 1. Create the VSX instance and setup the keepalive link.
 
    ```
-   sw-spine-001(config)# 
+   sw-spine-001(config)#
        no ip icmp redirect
        vsx
        system-mac 02:01:00:00:01:00
@@ -103,7 +103,7 @@ It is assumed that you have connectivity to the switch and have done the [Config
 1. At this point you should have an Established VSX session
 
    ```
-   sw-spine-001 # show vsx brief 
+   sw-spine-001 # show vsx brief
    ISL State                              : In-Sync
    Device State                           : Sync-Primary
    Keepalive State                        : Keepalive-Established
@@ -179,7 +179,7 @@ The VLAN information is located in the network YAML files. Below are examples.
 1. NMN VLAN config
 
    ```
-   sw-spine-001(config)# 
+   sw-spine-001(config)#
        vlan 2
        interface vlan2
        vsx-sync active-gateways
@@ -190,7 +190,7 @@ The VLAN information is located in the network YAML files. Below are examples.
        ip helper-address 10.92.100.222
        exit
 
-   sw-spine-002(config)# 
+   sw-spine-002(config)#
        vlan 2
        interface vlan2
        vsx-sync active-gateways
@@ -215,7 +215,7 @@ The VLAN information is located in the network YAML files. Below are examples.
        ip helper-address 10.94.100.222
        exit
 
-   sw-spine-002(config)# 
+   sw-spine-002(config)#
        vlan 4
        interface vlan4
        vsx-sync active-gateways
@@ -285,13 +285,13 @@ These ACLs are designed to block traffic from the node management network to and
    ```
    sw-spine-001 & sw-spine-002 (config)#
        access-list ip nmn-hmn
-       10 deny any 10.252.0.0/255.255.128.0 10.254.0.0/255.255.128.0 
+       10 deny any 10.252.0.0/255.255.128.0 10.254.0.0/255.255.128.0
        20 deny any 10.252.0.0/255.255.128.0 10.104.0.0/255.252.0.0
-       30 deny any 10.254.0.0/255.255.128.0 10.252.0.0/255.255.128.0 
+       30 deny any 10.254.0.0/255.255.128.0 10.252.0.0/255.255.128.0
        40 deny any 10.254.0.0/255.255.128.0 10.100.0.0/255.252.0.0
-       50 deny any 10.100.0.0/255.252.0.0 10.254.0.0/255.255.128.0 
+       50 deny any 10.100.0.0/255.252.0.0 10.254.0.0/255.255.128.0
        60 deny any 10.100.0.0/255.252.0.0 10.104.0.0/255.252.0.0
-       70 deny any 10.104.0.0/255.252.0.0 10.252.0.0/255.255.128.0 
+       70 deny any 10.104.0.0/255.252.0.0 10.252.0.0/255.255.128.0
        80 deny any 10.104.0.0/255.252.0.0 10.100.0.0/255.252.0.0
        90 permit any any any
    ```
@@ -325,7 +325,7 @@ These ACLs are designed to block traffic from the node management network to and
 
 1. OSPF is a dynamic routing protocol used to exchange routes.
 	   It provides reachability from the MTN networks to NMN/Kubernetes networks.
-   The router-id used here is the NMN IP address. (VLAN 2 IP) 
+   The router-id used here is the NMN IP address. (VLAN 2 IP)
 
    ```
    sw-spine-001 & sw-spine-002 (config)#
@@ -352,7 +352,7 @@ These ACLs are designed to block traffic from the node management network to and
 
 ## Configure DNS
 
-1. This will point to the unbound DNS server. 
+1. This will point to the unbound DNS server.
 
    ```
    sw-spine-001 & sw-spine-002 (config)#
@@ -364,7 +364,7 @@ These ACLs are designed to block traffic from the node management network to and
 - These are ports that are connected to NCNs.
 
 1. Worker and master node configuration
-   Refer to [Cable Management Network Servers](cable_management_network_servers.md) for cabling specs. 
+   Refer to [Cable Management Network Servers](cable_management_network_servers.md) for cabling specs.
 
    ```
    sw-spine-001 & sw-spine-002 (config)#

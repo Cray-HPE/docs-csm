@@ -73,7 +73,7 @@ This troubleshooting procedure is only applicable for Air Cooled NodeBMCs and Ro
     Error: Missing argument 'XNAME'.
     ```
 
-5. If the BMC has a MAC Address with a component ID and does not have a RedfishEndpoint in HSM, then proceed to the next section. 
+5. If the BMC has a MAC Address with a component ID and does not have a RedfishEndpoint in HSM, then proceed to the next section.
 
 ## Solution
 1. Delete the MAC address associated with the BMC from HSM.
@@ -94,7 +94,7 @@ This troubleshooting procedure is only applicable for Air Cooled NodeBMCs and Ro
     IPAddress = "10.254.1.27"
     ```
 
-2. Wait for the hms-discovery cronjob to run again and run to completion after the MAC was deleted. 
+2. Wait for the hms-discovery cronjob to run again and run to completion after the MAC was deleted.
     ```bash
     ncn# kubectl -n services get pods -l app=hms-discovery
     NAME                             READY   STATUS      RESTARTS   AGE

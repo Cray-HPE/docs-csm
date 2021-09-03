@@ -5,7 +5,7 @@ Modify a Configuration Framework Service \(CFS\) configuration by specifying the
 ### Prerequisites
 
 -   A CFS configuration has been created.
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system. 
+-   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 
 ### Procedure
 

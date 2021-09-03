@@ -2,7 +2,7 @@
 
 This page describes how Aruba aggregation switches are configured.
 
-Management nodes and Application nodes will be plugged into aggregation switches. 
+Management nodes and Application nodes will be plugged into aggregation switches.
 
 Switch Models used:
 JL635A Aruba 8325-48Y8C
@@ -35,10 +35,10 @@ It is assumed that you have connectivity to the switch and have done the [Config
    This will require a unique IP address on both switches. The IP address is in its own VRF so this address will not be reachable from anywhere besides the aggregation pair.
 
    ```
-   sw-agg-001(config)# 
+   sw-agg-001(config)#
        int 1/1/48
-       no shutdown 
-       vrf attach keepalive   
+       no shutdown
+       vrf attach keepalive
        description VSX keepalive
        ip address 192.168.255.0/31
 
@@ -55,7 +55,7 @@ It is assumed that you have connectivity to the switch and have done the [Config
    ```
    sw-agg-001 & sw-agg-002 (config)#
        interface lag 99
-       no shutdown 
+       no shutdown
        description ISL link
        no routing
        vlan trunk native 1 tag
@@ -76,7 +76,7 @@ It is assumed that you have connectivity to the switch and have done the [Config
 1. Create the VSX instance and setup the keepalive link.
 
    ```
-   sw-agg-001(config)# 
+   sw-agg-001(config)#
        no ip icmp redirect
        vsx
        system-mac 02:01:00:00:01:00
@@ -85,7 +85,7 @@ It is assumed that you have connectivity to the switch and have done the [Config
        keepalive peer 192.168.255.1 source 192.168.255.0 vrf keepalive
        linkup-delay-timer 600
        vsx-sync vsx-global
-   
+
    sw-agg-002(config)#
        no ip icmp redirect
        vsx
@@ -99,7 +99,7 @@ It is assumed that you have connectivity to the switch and have done the [Config
    ```
 1. At this point you should have an `Established` VSX session
    ```
-   sw-agg-001 # show vsx brief 
+   sw-agg-001 # show vsx brief
    ISL State                              : In-Sync
    Device State                           : Sync-Primary
    Keepalive State                        : Keepalive-Established
@@ -154,10 +154,10 @@ The VLAN information is located in the network YAML files. Below are examples.
    | --- | --- | ---| --- |
    | 2 | 10.252.0.4/17| 10.252.0.5/17 | River Node Management
    | 4 | 10.254.0.4/17| 10.254.0.5/17 | River Hardware Management
-   
+
 1. NMN VLAN config
    ```
-   sw-agg-001(config)# 
+   sw-agg-001(config)#
        vlan 2
        interface vlan2
        vsx-sync active-gateways
@@ -165,7 +165,7 @@ The VLAN information is located in the network YAML files. Below are examples.
        ip mtu 9198
        exit
 
-   sw-agg-002(config)# 
+   sw-agg-002(config)#
        vlan 2
        interface vlan2
        ip address 10.252.0.4/17
@@ -182,7 +182,7 @@ The VLAN information is located in the network YAML files. Below are examples.
        ip mtu 9198
        exit
 
-   sw-agg-002(config)# 
+   sw-agg-002(config)#
        vlan 4
        interface vlan4
        vsx-sync active-gateways
@@ -228,13 +228,13 @@ One port is shutdown.
    ```
    sw-agg-001 & sw-agg-002 (config)#
        access-list ip nmn-hmn
-       10 deny any 10.252.0.0/255.255.128.0 10.254.0.0/255.255.128.0 
+       10 deny any 10.252.0.0/255.255.128.0 10.254.0.0/255.255.128.0
        20 deny any 10.252.0.0/255.255.128.0 10.104.0.0/255.252.0.0
-       30 deny any 10.254.0.0/255.255.128.0 10.252.0.0/255.255.128.0 
+       30 deny any 10.254.0.0/255.255.128.0 10.252.0.0/255.255.128.0
        40 deny any 10.254.0.0/255.255.128.0 10.100.0.0/255.252.0.0
-       50 deny any 10.100.0.0/255.252.0.0 10.254.0.0/255.255.128.0 
+       50 deny any 10.100.0.0/255.252.0.0 10.254.0.0/255.255.128.0
        60 deny any 10.100.0.0/255.252.0.0 10.104.0.0/255.252.0.0
-       70 deny any 10.104.0.0/255.252.0.0 10.252.0.0/255.255.128.0 
+       70 deny any 10.104.0.0/255.252.0.0 10.252.0.0/255.255.128.0
        80 deny any 10.104.0.0/255.252.0.0 10.100.0.0/255.252.0.0
        90 permit any any any
    ```
@@ -272,7 +272,7 @@ One port is shutdown.
 
 1. OSPF is a dynamic routing protocol used to exchange routes.
    It provides reachability from the MTN networks to NMN/Kubernetes networks.
-   The router-id used here is the NMN IP address. (VLAN 2 IP) 
+   The router-id used here is the NMN IP address. (VLAN 2 IP)
 
    ```
    sw-agg-001 & sw-agg-002 (config)#
@@ -298,7 +298,7 @@ One port is shutdown.
 
 ## Configure DNS
 
-1. This will point to the unbound DNS server. 
+1. This will point to the unbound DNS server.
 
    ```
    sw-agg-001 & sw-agg-002 (config)#

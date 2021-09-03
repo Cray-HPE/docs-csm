@@ -43,7 +43,7 @@ This is an example of the p2p configuration on the spine switches. The IP addres
       exit
   ```
 
-There must then be two routes on the customer's switch directing traffic for the `customer_access_network` subnet to the endpoint on the spine switch.   
+There must then be two routes on the customer's switch directing traffic for the `customer_access_network` subnet to the endpoint on the spine switch.
 
 The following is an example of the route configuration on the customer switch.
 These addresses/subnets are generated from CSI and can be found in ```CAN.yaml```.
@@ -92,7 +92,7 @@ The spine switch must also have the `customer_access_gateway` IP address assigne
 
 - Aruba:
 
-  ``` 
+  ```
   sw-spine-002(config)# int vlan 7
   sw-spine-002(config-if-vlan)# ip address 10.102.11.3/24
   ```
@@ -117,6 +117,6 @@ ECDSA key fingerprint is SHA256:jnMGZnMcdPQ9QleyJADbI9AQAvo4DfGz0SOYbe3lraI.
 Are you sure you want to continue connecting (yes/no)? yes
 Warning: Permanently added '10.101.8.6' (ECDSA) to the list of known hosts.
 Password:
- 
+
 ncn-w001#
 ```

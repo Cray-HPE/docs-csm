@@ -12,7 +12,7 @@ Setup a re-install of LiveCD on a node using the previous configuration.
     pit# cp -pv /etc/hosts ./
     pit# popd
     pit# umount -v /var/www/ephemeral
-    ``` 
+    ```
 
 1. Unplug the USB device.
 
@@ -44,9 +44,9 @@ next step.
     mylinuxpc> mount -v /dev/disk/by-label/PITDATA /mnt
     mylinuxpc> tar -xzvf $(ls -ltR *.tar.gz | head -n 1)
     mylinuxpc> ls -R /mnt
-    ``` 
+    ```
 
-   The tarball should have extracted everything into the install-data partition. 
+   The tarball should have extracted everything into the install-data partition.
 
 1. Retrieve the SquashFS artifacts.
    The artifacts can be retrieved at the following locations:

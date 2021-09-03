@@ -28,7 +28,7 @@ The generated S3 credentials will expire after one hour.
             "SessionToken": "qbwVvv6w1ec/NwI0VzzOXuzFVczjdVICcij0s7kmqKvyZ59RrHJWjLKvmUhGeBATMtkEK72s+qL7Tdn06tPMCQr04MEOpyeUOLmfFyKN3Awm0/7Rlx7rKVaOejpeYaRzO2kWDu3llrpZOONSMPYfck6KjAfvqg/ZJPGEJ5Mzb9YfeSCBq0ghj3G51o9V4DhjjL0YoA/XARMnN0NTHav+OIUHBkXcxZIfT+ti9bSjmz6ExKsJj8zPLvGMK2TIo/Xp"
           }
         }
-        
+
         ```
 
 2.  Retrieve temporary S3 credentials with Python \(`s3creds.py`\).
@@ -37,17 +37,17 @@ The generated S3 credentials will expire after one hour.
     # /usr/bin/env python3
     # s3creds.py - Generate a temporary s3 token from the Cray Simple Token Service
     import os
-    
+
     import oauthlib.oauth2
     import requests_oauthlib
-    
+
     realm = 'shasta'
     client_id = 'shasta'
     username = 'testuser'  # Provide a user here
     password = os.environ.get('TESTUSER_PASSWORD')  # Obtain the password from the env, or elsewhere
     token_url = 'https://api-gw-service-nmn.local/keycloak/realms/%s/protocol/openid-connect/token' % realm
     sts_url = 'https://api-gw-service-nmn.local/apis/sts/token'
-    
+
     # Create an OAuth2Session and request a token
     oauth_client = oauthlib.oauth2.LegacyApplicationClient(client_id=client_id)
     session = requests_oauthlib.OAuth2Session(
@@ -62,7 +62,7 @@ The generated S3 credentials will expire after one hour.
         username=username,
         password=password
     )
-    
+
     # Retrieve S3 credentials from STS
     sts_response = session.put(sts_url)
     sts_response.raise_for_status()

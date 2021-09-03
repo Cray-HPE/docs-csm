@@ -36,8 +36,8 @@ A backup of a healthy etcd cluster has been created.
     ncn-w001# kubectl exec -it -n operators \
     $(kubectl get pod -n operators | grep etcd-backup-restore | head -1 | awk '{print $1}') \
     -c util -- restore_from_backup cray-bos etcd.backup_v277935_2020-03-30-23:52:54
-    
-    
+
+
     etcdrestore.etcd.database.coreos.com/cray-bos-etcd created
     ```
 

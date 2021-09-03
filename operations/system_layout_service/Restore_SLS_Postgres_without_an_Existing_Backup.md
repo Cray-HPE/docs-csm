@@ -17,13 +17,13 @@ This procedure is intended to repopulate SLS in the event when no Postgres backu
 
 ## Procedure
 
-1. Retrieve the initial `sls_input_file.json` that was used to initially install the system with from `sls` S3 bucket. 
+1. Retrieve the initial `sls_input_file.json` that was used to initially install the system with from `sls` S3 bucket.
     ```bash
     ncn# cray artifacts get sls sls_input_file.json sls_input_file.json
     ```
 
 2. Perform a SLS load state operation to replace the contents of SLS with the data from the `sls_input_file.json` file.
-    
+
     Get an API Token:
     ```bash
     ncn# export TOKEN=$(curl -s -S -d grant_type=client_credentials \
@@ -41,7 +41,7 @@ This procedure is intended to repopulate SLS in the event when no Postgres backu
 3. Any previously made customizations made to SLS will need to be applied again. This includes any SLS API operations that modified the state of SLS.
     - The HSN network in SLS will be missing HSN subnet data, this data will need to be repopulated again using the "Set up DNS for HSN IP addresses" procedure in the *Slingshot Operations Guide*.
 
-    - Any hardware that was added or moved in the system using one of the following procedures will need to be performed again. 
+    - Any hardware that was added or moved in the system using one of the following procedures will need to be performed again.
         - [Add a Standard Rack Node](../node_management/Add_a_Standard_Rack_Node.md)
         - [Move a Standard Rack Node Same Rack/Same HSN Ports](../node_management/Move_a_Standard_Rack_Node_SameRack_SameHSNPorts.md)
         - [Move a Standard Rack Node](../node_management/Move_a_Standard_Rack_Node.md)

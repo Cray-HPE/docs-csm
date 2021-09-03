@@ -93,7 +93,7 @@ one of the nodes to facilitate the CSM software upgrade.
 
 ### Cray System Management (CSM)
 
-Cray System Management (CSM) refers to the product stream which provides the infrastructure to 
+Cray System Management (CSM) refers to the product stream which provides the infrastructure to
 manage a Cray EX system using Kubernetes to manage the containerized workload of layered
 micro-services with well-defined REST APIs which provide the ability to discover and control the
 hardware platform, manage configuration of the system, configure the network, boot nodes, gather
@@ -162,7 +162,7 @@ The management nodes are one grouping of NCNs. The management nodes include the 
 with hostnames of the form of ncn-mXXX, the worker nodes with hostnames of the form ncn-wXXX,
 and utility storage nodes, with hostnames of the form ncn-sXXX, where the XXX is a three
 digit number starting with zero padding. The utility storage nodes provide Ceph storage for use
-by the management nodes. The master nodes provide Kubernetes master functions and have the 
+by the management nodes. The master nodes provide Kubernetes master functions and have the
 etcd cluster which provides a datastore for Kubernetes. The worker nodes provide Kubernetes
 worker functions where most of the containerized workload is scheduled by Kubernetes.
 

@@ -110,7 +110,7 @@ Use the following API path to list all accounts:
 
 ```bash
 GET /redfish/v1/AccountService/Accounts
- 
+
     {
         "@odata.context": "/redfish/v1/$metadata#ManagerAccountCollection.ManagerAccountCollection",
         "@odata.etag": "W/\"1559675674\"",
@@ -135,7 +135,7 @@ Use the following API path to list a single account:
 
 ```bash
 GET /redfish/v1/AccountService/Accounts/1
- 
+
     {
         "@odata.context": "/redfish/v1/$metadata#ManagerAccount.ManagerAccount(*)",
         "@odata.etag": "W/"1559675272"",
@@ -162,7 +162,7 @@ If an account is successfully created, then the account information data structu
 
 ```bash
 POST /redfish/v1/AccountService/Accounts
- 
+
     Content-Type: application/json
     {
         "Name": "Test Account",
@@ -172,7 +172,7 @@ POST /redfish/v1/AccountService/Accounts
         "Locked": false,
         "Enabled": true
     }
- 
+
     Response:
     {
         "@odata.context": "/redfish/v1/$metadataAccountService/Members/Accounts",
@@ -230,12 +230,12 @@ For SSH access, the system controllers have the following default credentials:
     -   Username: root
     -   Password: <your password>
 
-Contact HPE Cray service in order to obtain the default passwords. 
+Contact HPE Cray service in order to obtain the default passwords.
 
 Passwords for nC, cC, and sC controllers are all managed with the following process. The cfgsh tool is a configuration shell that can be used interactively or scripted. Interactively, it may be used as follows after logging in as root via `ssh`:
 
 ```bash
-x0c1# config 
+x0c1# config
 x0c1(conf)# CURRENT_PASSWORD root NEW_PASSWORD
 x0c1(conf)# exit
 x0c1# copy running-config startup-config

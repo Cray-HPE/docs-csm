@@ -29,7 +29,7 @@ Install and initialize the `cray` administrative CLI.
     uai_name = "uai-vers-715fa89d"
     uai_status = "Running: Ready"
     username = "vers"
-    
+
     [uai_portmap]
     ```
 

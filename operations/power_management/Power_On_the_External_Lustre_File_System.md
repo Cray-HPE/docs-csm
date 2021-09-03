@@ -82,14 +82,14 @@ Power up storage nodes in the following sequence:
 
     ```bash
     [n000]# cscli power_manage -n cls01234n[02-03] --power-on
-    
+
     ```
 
 10. Power on the OSS nodes and, if present, the ADU nodes.
 
     ```bash
     [n000]# cscli power_manage -n oss_adu_nodes --power-on
-    
+
     ```
 
 11. Check the status of the nodes.

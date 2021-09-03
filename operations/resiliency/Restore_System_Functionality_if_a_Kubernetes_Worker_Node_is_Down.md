@@ -107,7 +107,7 @@ This procedure requires administrative privileges.
     ncn-m003   Ready    master   27d   v1.18.2   10.252.0.12   <none>        SUSE Linux Enterprise Server 15 SP1   4.12.14-197.45-default   containerd://1.3.3
     ncn-w001   Ready    <none>   27d   v1.18.2   10.252.0.4    <none>        SUSE Linux Enterprise Server 15 SP1   4.12.14-197.45-default   containerd://1.3.3
     ncn-w002   Ready    <none>   27d   v1.18.2   10.252.0.5    <none>        SUSE Linux Enterprise Server 15 SP1   4.12.14-197.45-default   containerd://1.3.3
-    ncn-w003   Ready    <none>   27d   v1.18.2   10.252.0.6    <none>        SUSE Linux Enterprise Server 15 SP1   4.12.14-197.45-default   containerd://1.3.3  
+    ncn-w003   Ready    <none>   27d   v1.18.2   10.252.0.6    <none>        SUSE Linux Enterprise Server 15 SP1   4.12.14-197.45-default   containerd://1.3.3
     ```
 
 ### Collect Information After Powering Down the Node
@@ -132,7 +132,7 @@ This procedure requires administrative privileges.
 
         -   Check for any pods that are still running on the node that was brought down, and if there are still some, make sure those are expected
         -   View the status for all pods before looking for any new error states
-        
+
         ```bash
         ncn-w001# kubectl get pods -A -o wide
         ```

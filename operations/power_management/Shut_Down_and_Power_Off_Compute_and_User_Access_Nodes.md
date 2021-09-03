@@ -25,7 +25,7 @@ The `cray` and `sat` commands must be initialized and authenticated with valid c
     . . .
     name = "uan-slurm"
     description = "Template for booting UANs with Slurm"
-    
+
     ```
 
 2.  To display more information about a session template, for example `cos-2.0.x`, use the `describe` option.
@@ -45,16 +45,16 @@ The `cray` and `sat` commands must be initialized and authenticated with valid c
     --bos-templates COS_SESSION_TEMPLATE,UAN_SESSION_TEMPLATE
     Started boot operation on BOS session templates: cos-2.0.x, uan.
     Waiting up to 600 seconds for sessions to complete.
-     
+
     Waiting for BOA k8s job with id boa-a1a697fc-e040-4707-8a44-a6aef9e4d6ea to complete. Session template: uan.
-    To monitor the progress of this job, run the following command in a separate window:    
+    To monitor the progress of this job, run the following command in a separate window:
         'kubectl -n services logs -c boa -f --selector job-name=boa-a1a697fc-e040-4707-8a44-a6aef9e4d6ea'
-     
+
     Waiting for BOA k8s job with id boa-79584ffe-104c-4766-b584-06c5a3a60996 to complete. Session template: cos-2.0.0.
     To monitor the progress of this job, run the following command in a separate window:
         'kubectl -n services logs -c boa -f --selector job-name=boa-79584ffe-104c-4766-b584-06c5a3a60996'
     . . .
-    All BOS sessions completed. 
+    All BOS sessions completed.
     ```
 
 4.  Use the Job ID strings \(for example, the cos-2.0.0 session, boa-79584ffe-104c-4766- b584-06c5a3a60996\) from the previous command to monitor the progress of the boot of the compute nodes.
@@ -75,7 +75,7 @@ The `cray` and `sat` commands must be initialized and authenticated with valid c
     2020-08-21 17:27:02,681 - INFO    - cray.boa.connection - Reattempting GET request for 'http://cray-cfs-api/apis/cfs/sessions'
     2020-08-21 17:27:03,003 - INFO    - cray.boa.connection - Reattempting GET request for 'http://cray-cfs-api/apis/cfs/sessions'
     2020-08-21 17:27:03,645 - INFO    - cray.boa.connection - Reattempting GET request for 'http://cray-cfs-api/apis/cfs/sessions'
-    
+
     ```
 
     The BOS shutdown session may or may not power off compute nodes depending on the session template being used.
@@ -105,7 +105,7 @@ The `cray` and `sat` commands must be initialized and authenticated with valid c
     | x1000c0s1b1n1  | Node | 1008     | Off   | OK   | True    | X86  | Mountain | Compute     | Sling    |
     | x1000c1s0b0n0  | Node | 1033     | Off   | OK   | True    | X86  | Mountain | Compute     | Sling    |
     | x1000c1s0b0n1  | Node | 1034     | Off   | OK   | True    | X86  | Mountain | Compute     | Sling    |
-    | x1000c1s0b1n0  | Node | 1035     | Off   | OK   | True    | X86  | Mountain | Compute     | Sling    | 
+    | x1000c1s0b1n0  | Node | 1035     | Off   | OK   | True    | X86  | Mountain | Compute     | Sling    |
     . . .
     ```
 

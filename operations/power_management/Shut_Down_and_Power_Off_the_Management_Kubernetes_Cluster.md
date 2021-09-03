@@ -38,7 +38,7 @@ An authentication token is required to access the API gateway and to use the `sa
   The authenticity of host 'ncn-m001 (10.252.1.4)' can't be established.
   ECDSA key fingerprint is SHA256:Mh43bU2iYDkOnQuI7Y067nV7no4btIE/OuYeHLh+n/4.
   Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-  
+
   Warning: Permanently added 'ncn-m001,10.252.1.4' (ECDSA) to the list of known hosts.
   Last login: Thu Jul 22 16:38:58 2021 from 172.25.66.163
   ncn-m001#
@@ -46,7 +46,7 @@ An authentication token is required to access the API gateway and to use the `sa
   Connection to ncn-m001 closed
   ```
 
-  
+
 
 ### Procedure
 
@@ -98,7 +98,7 @@ An authentication token is required to access the API gateway and to use the `sa
    The following Non-compute Nodes (NCNs) will be included in this operation:
    managers:
    - ncn-m001
-   storage: 
+   storage:
    - ncn-s001
    - ncn-s002
    - ncn-s003
@@ -106,9 +106,9 @@ An authentication token is required to access the API gateway and to use the `sa
    - ncn-w001
    - ncn-w002
    - ncn-w003
-    
+
    Are the above NCN groupings correct? [yes,no] yes
-   
+
    Executing step: Create etcd snapshot on all Kubernetes manager NCNs.
    Executing step: Stop etcd on all Kubernetes manager NCNs.
    Executing step: Stop and disable kubelet on all Kubernetes NCNs.
@@ -133,11 +133,11 @@ An authentication token is required to access the API gateway and to use the `sa
    CONTAINER         IMAGE             CREATED           STATE         NAME              ATTEMPT         POD ID
    032d69162ad24     302d9780da639     54 minutes ago    Running       cray-dhcp-kea     0               e4d1c01818a5a
    7ab8021279164     2ad3f16035f1f     3 hours ago       Running       log-forwarding    0               a5e89a366f5a3
-    
+
    ncn-w002
    CONTAINER         IMAGE             CREATED           STATE         NAME              ATTEMPT         POD ID
    1ca9d9fb81829     de444b360808f     4 hours ago       Running       cray-uas-mgr      0               902287a6d0393
-    
+
    ncn-w003
    CONTAINER         IMAGE             CREATED           STATE         NAME              ATTEMPT         POD ID
    ```
@@ -157,9 +157,9 @@ An authentication token is required to access the API gateway and to use the `sa
    - ncn-w001
    - ncn-w002
    - ncn-w003
-    
+
    Are the above NCN groupings correct? [yes,no] yes
-   
+
    Executing step: Create etcd snapshot on all Kubernetes manager NCNs.
    WARNING: Failed to create etcd snapshot on ncn-m001: The etcd service is not active on ncn-m001 so a snapshot cannot be created.
    WARNING: Failed to create etcd snapshot on ncn-m002: The etcd service is not active on ncn-m002 so a snapshot cannot be created.
@@ -175,7 +175,7 @@ An authentication token is required to access the API gateway and to use the `sa
    Executing step: Check health of Ceph cluster and freeze state.
    ```
 
-   If the process continues to report errors due to `Failed to stop containers`, iterate on the above step. Each interation should reduce the number of containers running. If necessary, containers can be manually stopped using `crictl stop CONTAINER`. If containers are stopped manually, re-run the above procedure to complete any final steps in the process.
+   If the process continues to report errors due to `Failed to stop containers`, iterate on the above step. Each iteration should reduce the number of containers running. If necessary, containers can be manually stopped using `crictl stop CONTAINER`. If containers are stopped manually, re-run the above procedure to complete any final steps in the process.
 
 5. Shut down and power off all management NCNs except ncn-m001.
 
@@ -197,13 +197,13 @@ An authentication token is required to access the API gateway and to use the `sa
    - ncn-w001
    - ncn-w002
    - ncn-w003
-   
+
    The following Non-compute Nodes (NCNs) will be excluded from this operation:
    managers:
    - ncn-m001
    storage: []
    workers: []
-   
+
    Are the above NCN groupings and exclusions correct? [yes,no] yes
    ```
 
@@ -222,7 +222,7 @@ An authentication token is required to access the API gateway and to use the `sa
    26552.SAT-console-ncn-w003-mgmt (Detached)
    26514.SAT-console-ncn-w002-mgmt (Detached)
    26444.SAT-console-ncn-w001-mgmt (Detached)
-   
+
    ncn-m001# screen -x 26745.SAT-console-ncn-m003-mgmt
    ```
 
@@ -236,7 +236,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
     ```bash
     remote$ ipmitool -I lanplus -U root -P PASSWORD -H NCN-M001_BMC_HOSTNAME sol activate
-    
+
     ncn-m001 login: root
     Password:
     ```

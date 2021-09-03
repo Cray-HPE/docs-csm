@@ -19,7 +19,7 @@ This procedure requires administrative privileges.
     ```bash
     ncn-m001# kubectl -n services edit configmaps cray-capmc-configuration
     ```
-    
+
 2.  Uncomment the \# BlockRole = \["Management"\] value in the \[PowerControls.Off\], \[PowerControls.On\], and \[PowerControls.ForceRestart\] sections.
 
 3.  Save and quit the configmap.

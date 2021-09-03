@@ -81,9 +81,9 @@ A Boot Orchestration Service \(BOS\) session was run and compute nodes are faili
                - name: S3_PROTOCOL
                  value: "{{ S3_PROTOCOL }}"
                - name: S3_GATEWAY
-                 value: "{{ S3_GATEWAY }}" 
+                 value: "{{ S3_GATEWAY }}"
                **- name: "NODE_STATE_CHECK_NUMBER_OF_RETRIES"
-                 value: "360"** 
+                 value: "360"**
     ```
 
 2.  Restart BOA.

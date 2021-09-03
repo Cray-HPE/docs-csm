@@ -21,7 +21,7 @@ Disabling nodes that are not configured correctly allows the system to successfu
     ```bash
     ncn-m001# cray hsm state components describe XNAME
     Type = "Node"
-    Enabled = false 
+    Enabled = false
     State = "On"
     NID = 1003
     Flag = "OK"
@@ -29,7 +29,7 @@ Disabling nodes that are not configured correctly allows the system to successfu
     NetType = "Sling"
     Arch = "X86"
     ID = "x5000c1s0b1n1"
-    
+
     ```
 
 

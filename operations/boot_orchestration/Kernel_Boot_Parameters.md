@@ -5,7 +5,7 @@ The Image Management Service (IMS) extracts kernel boot parameters from the /boo
 
 There are two benefits to having kernel boot parameters extracted from the image. First, these parameters can be tightly coupled to the image. Second, these parameters do not need to be specified in the BOS session template, making the template shorter, cleaner, and less error prone.
 
-The kernel boot parameters obtained from the image can be overridden by specifying the same parameters in the BOS session template. BOS supplies these parameters to the kernel in a deliberate order that causes the parameters obtained from the image to be overridden by those obtained from the session template.  
+The kernel boot parameters obtained from the image can be overridden by specifying the same parameters in the BOS session template. BOS supplies these parameters to the kernel in a deliberate order that causes the parameters obtained from the image to be overridden by those obtained from the session template.
 
 The following is a simplified kernel boot parameter ordering:
 
@@ -13,7 +13,7 @@ The following is a simplified kernel boot parameter ordering:
 <Image parameters> <Session template parameters>
 ```
 
-If there are competing values, the ones earlier in the boot string are superseded by the ones appearing later in the string. 
+If there are competing values, the ones earlier in the boot string are superseded by the ones appearing later in the string.
 
 The actual contents of the boot parameters are not as simple as previously described. For completeness, the following is the entire kernel boot parameter ordering:
 

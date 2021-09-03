@@ -11,7 +11,7 @@ The following are examples of when to run health checks:
 
 The areas should be tested in the order they are listed on this page. Errors in an earlier check may cause errors in later checks because of dependencies.
 
-## Topics: 
+## Topics:
 
 - [Validate CSM Health](#validate-csm-health)
   - [Topics:](#topics)
@@ -41,7 +41,7 @@ The areas should be tested in the order they are listed on this page. Errors in 
     - [4.2 Create a BOS Session Template for the CSM Barebones Image](#csm-bos-session-template)
     - [4.3 Find an available compute node](#csm-node)
     - [4.4 Reboot the node using a BOS session template](#csm-reboot)
-    - [4.6 Connect to the node's console and watch the boot](#csm-watch-boot)
+    - [4.5 Connect to the node's console and watch the boot](#csm-watch-boot)
   - [5. UAS / UAI Tests](#uas-uai-tests)
     - [5.1 Initialize and Authorize the CLI](#uas-uai-init-cli)
       - [5.1.1 Stop Using the CRAY_CREDENTIALS Service Account Token](#uas-uai-init-cli-stop)
@@ -104,7 +104,7 @@ The ncnHealthChecks script reports the following health information:
 * NCN worker node pod counts
 * Pods yet to reach the running state
 
-Execute the ncnHealthChecks script and analyze the output of each individual check. 
+Execute the ncnHealthChecks script and analyze the output of each individual check.
 
 **IMPORTANT:** When the PIT node is booted the NCN node metal.no-wipe status is not available and is correctly reported as 'unavailable'. Once ncn-m001 has been booted the NCN metal.no-wipe status is expected to be reported as metal.no-wipe=1.
 
@@ -135,7 +135,7 @@ ncn# du -ah -B 1024M /root | sort -n -r | head -n 10
 are installed. In particular, this will be the case if executing this as part of the validation after completing the [Install CSM Services](../install/install_csm_services.md).
 If in doubt, validate the CRUS service using the [CMS Validation Tool](#sms-health-checks). If the CRUS check passes using that tool, do not worry about the `cray-crus-` pod state.
 
-Additionally, hmn-discovery and unbound manager cronjob pods may be in a 'NotReady' state. This is expected as these pods are periodically started and transition to the completed state. 
+Additionally, hmn-discovery and unbound manager cronjob pods may be in a 'NotReady' state. This is expected as these pods are periodically started and transition to the completed state.
 
 <a name="pet-ncnpostgreshealthchecks"></a>
 ### 1.2 ncnPostgresHealthChecks
@@ -197,7 +197,7 @@ Execute ncnPostgresHealthChecks script and analyze the output of each individual
             INFO: running post_bootstrap
             INFO: trying to bootstrap a new cluster
          ```
-         Errors reported prior to the lock status, such as **ERROR: get_cluster** or **ERROR: ObjectCache.run ProtocolError('Connection broken: IncompleteRead(0 bytes read)', IncompleteRead(0 bytes read))** can be ignored.  
+         Errors reported prior to the lock status, such as **ERROR: get_cluster** or **ERROR: ObjectCache.run ProtocolError('Connection broken: IncompleteRead(0 bytes read)', IncompleteRead(0 bytes read))** can be ignored.
          If there is no Leader, refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#leader).
 
       - Verify the State of each cluster member is 'running'.
@@ -224,7 +224,7 @@ Execute ncnPostgresHealthChecks script and analyze the output of each individual
 
 <a name="pet-bgp"></a>
 ### 1.3 BGP Peering Status and Reset
-Verify that Border Gateway Protocol (BGP) peering sessions are established for each worker node on the system. 
+Verify that Border Gateway Protocol (BGP) peering sessions are established for each worker node on the system.
 
 Check the Border Gateway Protocol (BGP) status on the Aruba or Mellanox switches.
 Verify that all sessions are in an **Established** state. If the state of any
@@ -262,7 +262,7 @@ ncn-m001# ssh admin@10.252.0.2
 * On an Aruba switch, `Please register your products now at: https://asp.arubanetworks.com` may be displayed after logging in to the switch with `ssh`. In this case, proceed to the [Aruba steps](#pet-bgp-aruba).
 
 <a name="pet-bgp-mellanox"></a>
-#### 1.3.1 Mellanox Switch 
+#### 1.3.1 Mellanox Switch
 
 1. Enable:
    ```
@@ -273,7 +273,7 @@ ncn-m001# ssh admin@10.252.0.2
    ```
    sw-spine-001# show protocols | include bgp
    ```
-   
+
    Expected output looks similar to the following:
    ```
    bgp:                    enabled
@@ -382,7 +382,7 @@ If there is an non-zero amount of DHCP leases for air-cooled hardware returned, 
 <a name="net-extdns"></a>
 ### 1.5 Verify ability to resolve external DNS
 
-If unbound is configured to resolve outside hostnames, then the following check should be performed. If this has not been done, then this check may be skipped. 
+If unbound is configured to resolve outside hostnames, then the following check should be performed. If this has not been done, then this check may be skipped.
 
 Run the following on one of the master or worker nodes (not the PIT node):
 
@@ -407,7 +407,7 @@ Verify that the command has exit code 0, reports no errors, and resolves the add
 <a name="net-spire"></a>
 ### 1.6 Verify Spire Agent is Running on Kubernetes NCNs
 
-Execute the following command on all Kubernetes NCNs (excluding the PIT):
+Execute the following command on all Kubernetes NCNs (i.e. all worker nodes and master nodes, excluding the PIT):
 
 ```bash
 ncn# goss -g /opt/cray/tests/install/ncn/tests/goss-spire-agent-service-running.yaml validate
@@ -482,7 +482,7 @@ pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
 <a name="optional-check-of-system-management-monitoring-tools"></a>
 ### 1.9 Optional Check of System Management Monitoring Tools
 
-If all designated prerequisites are met, the availability of system management health services may optionally be validated by accessing the URLs listed in [Access System Management Health Services](system_management_health/Access_System_Management_Health_Services.md).  
+If all designated prerequisites are met, the availability of system management health services may optionally be validated by accessing the URLs listed in [Access System Management Health Services](system_management_health/Access_System_Management_Health_Services.md).
 It is very important to check the `Prerequisites` section of this document.
 
 If one or more of the the URLs listed in the procedure are inaccessible, it does not necessarily mean that system is not healthy. It may simply mean that not all of the prerequisites have been met to allow access to the system management health tools via URL.
@@ -524,11 +524,11 @@ Examine the output. If one or more failures occur, investigate the cause of each
 
 > **NOTE**: The Cray CLI is required to complete this task. If needed, see the [Initialize and Authorize the CLI](#uas-uai-init-cli) section.
 
-By this point in the installation process, the Hardware State Manager (HSM) should 
+By this point in the installation process, the Hardware State Manager (HSM) should
 have done its discovery of the system.
 
 The foundational information for this discovery is from the System Layout Service (SLS). Thus, a
-comparison needs to be done to see that what is specified in SLS (focusing on 
+comparison needs to be done to see that what is specified in SLS (focusing on
 BMC components and Redfish endpoints) are present in HSM.
 
 Execute the `hsm_discovery_verify.sh` script on a Kubernetes master or worker NCN:
@@ -537,28 +537,28 @@ ncn# /opt/cray/csm/scripts/hms_verification/hsm_discovery_verify.sh
 ```
 
 The output will ideally appear as follows, if there are mismatches these will be displayed in the appropriate section of
-the output. Refer to [2.2.1 Interpreting results](#hms-smd-discovery-validation-interpreting-results) and 
+the output. Refer to [2.2.1 Interpreting results](#hms-smd-discovery-validation-interpreting-results) and
 [2.2.2 Known Issues](#hms-smd-discovery-validation-known-issues) below to troubleshoot any mismatched BMCs.
 ```bash
 ncn# /opt/cray/csm/scripts/hms_verification/hsm_discovery_verify.sh
 
 Fetching SLS Components...
- 
+
 Fetching HSM Components...
- 
+
 Fetching HSM Redfish endpoints...
- 
+
 =============== BMCs in SLS not in HSM components ===============
 ALL OK
- 
-=============== BMCs in SLS not in HSM Redfish Endpoints =============== 
+
+=============== BMCs in SLS not in HSM Redfish Endpoints ===============
 ALL OK
 ```
 
 <a name="hms-smd-discovery-validation-interpreting-results"></a>
 #### 2.2.1 Interpreting results
 
-Both sections `BMCs in SLS not in HSM components` and `BMCs in SLS not in HSM Redfish Endpoints` have the same format for mistmatches between SLS and HSM. Each row starts with the xname of the BMC. If the BMC does not have an assoicated `MgmtSwitchConnector` in SLS, then `# No mgmt port association` will be displayed alongside the BMC xname. 
+Both sections `BMCs in SLS not in HSM components` and `BMCs in SLS not in HSM Redfish Endpoints` have the same format for mismatches between SLS and HSM. Each row starts with the xname of the BMC. If the BMC does not have an associated `MgmtSwitchConnector` in SLS, then `# No mgmt port association` will be displayed alongside the BMC xname.
 > MgmtSwitchConnectors in SLS are used to represent the switch port on a leaf switch that an the BMC of an air cooled device is connected to.
 
 ```bash
@@ -566,9 +566,9 @@ Both sections `BMCs in SLS not in HSM components` and `BMCs in SLS not in HSM Re
 x3000c0s1b0  # No mgmt port association
 ```
 
-For each of the BMCs that show up in the mismatch list use the following notes to determine if the issue with the BMC can be safely ignored, or if there is a legitimate issue with the BMC. 
+For each of the BMCs that show up in the mismatch list use the following notes to determine if the issue with the BMC can be safely ignored, or if there is a legitimate issue with the BMC.
 * The node BMC of 'ncn-m001' will not typically be present in HSM component data, as it is typically connected to the site network instead of the HMN network.
-   > The following can be used to determine the friendly name of the Node that the NodeBMC controls: 
+   > The following can be used to determine the friendly name of the Node that the NodeBMC controls:
    > ```bash
    > ncn# cray sls search hardware list --parent <NODE_BMC_XNAME> --format json | \
    >   jq '.[] | { Xname: .Xname, Aliases: .ExtraProperties.Aliases }' -c
@@ -595,7 +595,7 @@ For each of the BMCs that show up in the mismatch list use the following notes t
 * HPE PDUs are not supported at this time and will likely show up as not being found in HSM. They can be ignored.
    > Cabinet PDU Controllers have xnames in the form of `xXmM`, where `X` is the cabinet and `M` is the ordinal of the Cabinet PDU Controller.
 
-   Example mistmatch for HPE PDU:
+   Example mismatch for HPE PDU:
    ```bash
    =============== BMCs in SLS not in HSM components ===============
    x3000m0
@@ -627,7 +627,7 @@ The Software Management Services health checks are run using `/usr/local/bin/cms
 <a name="sms-checks"></a>
 ### 3.1 SMS Test Execution
 
-The following test can be run on any Kubernetes node (**not** `ncn-m001` if it is still the PIT node).
+The following test can be run on any Kubernetes node (any master or worker node, but **not** the PIT node).
 
 ```bash
 ncn# /usr/local/bin/cmsdev test -q all
@@ -697,7 +697,7 @@ Cray OS (COS) product stream is also installed on to the system.
 <a name="locate-csm-barebones-image-in-ims"></a>
 ### 4.1 Locate CSM Barebones Image in IMS
 
-Locate the CSM Barebones image and note the path to the image's manifest.json in S3.
+Locate the CSM Barebones image and note the `etag` and `path` fields in the output.
 
 ```bash
 ncn# cray ims images list --format json | jq '.[] | select(.name | contains("barebones"))'
@@ -733,13 +733,13 @@ The session template below can be copied and used as the basis for the BOS Sessi
      "boot_sets": {
        "compute": {
          "boot_ordinal": 2,
-         "etag": "6d04c3a4546888ee740d7149eaecea68",// <== This should be set to the etag of the IMS Image
+         "etag": "etag_value_from_cray_ims_command",
          "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
          "network": "nmn",
          "node_roles_groups": [
            "Compute"
          ],
-         "path": "s3://boot-images/293b1e9c-2bc4-4225-b235-147d1d611eef/manifest.json",// <== Make sure this path matches the IMS Image Path
+         "path": "path_value_from_cray_ims_command",
          "rootfs_provider": "cpss3",
          "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
          "type": "s3"
@@ -751,7 +751,10 @@ The session template below can be copied and used as the basis for the BOS Sessi
      "enable_cfs": false,
      "name": "shasta-1.4-csm-bare-bones-image"
    }
-   ```
+
+   **NOTE**: Be sure to replace the values of the `etag` and `path` fields with the ones you noted earlier in the `cray ims images list` command.
+
+   
 2. Create the BOS session template using the following file as input:
    ```
    ncn# cray bos sessiontemplate create --file sessiontemplate.json --name shasta-1.4-csm-bare-bones-image
@@ -826,11 +829,11 @@ type = "GET"
 ```
 
 <a name="csm-watch-boot"></a>
-### 4.6 Connect to the node's console and watch the boot
+### 4.5 Connect to the node's console and watch the boot
 
 See [Manage Node Consoles](conman/Manage_Node_Consoles.md) for information on how to connect to the node's console.
 
-The boot will fail, but should reach the dracut stage. If the dracut stage is reached, this test
+The boot may take up to 10 or 15 minutes. It will fail, but should reach the dracut stage. If the dracut stage is reached, this test
 can be considered successful. This shows that the CSM services needed to boot a node are available and working properly.
 
 More specifically, this test is considered successful if the console output has something similar to the following
@@ -904,7 +907,7 @@ ncn# cray config describe
       username = "vers"
       ```
       This means the CLI is initialized and logged in as `vers`.
-         * If the user is not logged in as `vers`, authorize the user with their username and password in the next section.  
+         * If the user is not logged in as `vers`, authorize the user with their username and password in the next section.
          * If logged in as `vers`, proceed to the validation procedure on that node.
    * The `cray config describe` output may instead look like this:
       ```
@@ -966,7 +969,7 @@ This section requires commands to be run on a booted NCN, and the user must be i
 > If the cray CLI was initialized on the LiveCD PIT node, then the following commands will also work on the PIT node.
 
 1. Basic UAS installation is validated using the following:
-   1. 
+   1.
       ```bash
       ncn# cray uas mgr-info list
       ```
@@ -976,13 +979,13 @@ This section requires commands to be run on a booted NCN, and the user must be i
       service_name = "cray-uas-mgr"
       version = "1.11.5"
       ```
-      
+
       In this example output, it shows that UAS is installed and running the `1.11.5` version.
    1.
       ```bash
       ncn# cray uas list
       ```
-      
+
       Expected output looks similar to the following:
       ```
       results = []
@@ -993,7 +996,7 @@ This section requires commands to be run on a booted NCN, and the user must be i
    ```bash
    ncn# cray uas images list
    ```
-   
+
    Expected output looks similar to the following:
    ```
    default_image = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
@@ -1021,7 +1024,7 @@ The examples in this procedure are run on `ncn-w003`.
    ```bash
    ncn-w003# cray uas create --publickey ~/.ssh/id_rsa.pub
    ```
-   
+
    Expected output looks similar to the following:
    ```
    uai_connect_string = "ssh vers@10.16.234.10"
@@ -1036,7 +1039,7 @@ The examples in this procedure are run on `ncn-w003`.
    [uai_portmap]
    ```
 
-   This has created the UAI and the UAI is currently in the process of initializing and running.  
+   This has created the UAI and the UAI is currently in the process of initializing and running.
 2. Set `UAINAME` to the value of the `uai_name` field in the previous command output (`uai-vers-a00fb46b` in our example):
    ```bash
    ncn-w003# export UAINAME=uai-vers-a00fb46b
@@ -1045,7 +1048,7 @@ The examples in this procedure are run on `ncn-w003`.
    ```bash
    ncn-w003# cray uas list
    ```
-   
+
    Expected output looks similar to the following:
    ```
    [[results]]
@@ -1064,13 +1067,13 @@ The examples in this procedure are run on `ncn-w003`.
 4. The UAI is ready for use. Log into it with the command in the `uai_connect_string` field in the previous command output:
    ```bash
    ncn-w003# ssh vers@10.16.234.10
-   vers@uai-vers-a00fb46b-6889b666db-4dfvn:~> 
+   vers@uai-vers-a00fb46b-6889b666db-4dfvn:~>
    ```
 5. Run a command on the UAI:
    ```bash
    vers@uai-vers-a00fb46b-6889b666db-4dfvn:~> ps -afe
    ```
-   
+
    Expected output looks similar to the following:
    ```
    UID          PID    PPID  C STIME TTY          TIME CMD
@@ -1083,16 +1086,16 @@ The examples in this procedure are run on `ncn-w003`.
    vers          68      67  0 18:51 pts/0    00:00:00 -bash
    vers         120      68  0 18:52 pts/0    00:00:00 ps -afe
    ```
-6. Log out from the UAI   
+6. Log out from the UAI
    ```bash
    vers@uai-vers-a00fb46b-6889b666db-4dfvn:~> exit
-   ncn-w003# 
+   ncn-w003#
    ```
 7. Clean up the UAI.
    ```bash
    ncn-w003# cray uas delete --uai-list $UAINAME
    ```
-   
+
    Expected output looks similar to the following:
    ```
    results = [ "Successfully deleted uai-vers-a00fb46b",]
@@ -1110,7 +1113,7 @@ The following subsections include common failure modes seen with UAS / UAI opera
 
 An error will be returned when running CLI commands if the user is not logged in as a valid Keycloak user or is accidentally using the `CRAY_CREDENTIALS` environment variable. This variable is set regardless of the user credentials being used.
 
-For example: 
+For example:
 ```bash
 ncn# cray uas list
 ```
@@ -1130,7 +1133,7 @@ Fix this by logging in as a real user (someone with actual Linux credentials) an
 
 When running CLI commands, a Keycloak error may be returned.
 
-For example: 
+For example:
 ```bash
 ncn# cray uas list
 ```
@@ -1143,7 +1146,7 @@ Try 'cray uas list --help' for help.
 Error: Internal Server Error: An error was encountered while accessing Keycloak
 ```
 
-If the wrong hostname was used to reach the API gateway, re-run the CLI initialization steps above and try again to check that. There may also be a problem with the Istio service mesh inside of the system. Troubleshooting this is beyond the scope of this section, but there may be useful information in the UAS pod logs in Kubernetes. There are generally two UAS pods, so the user may need to look at logs from both to find the specific failure. The logs tend to have a very large number of `GET` events listed as part of the liveness checking.  
+If the wrong hostname was used to reach the API gateway, re-run the CLI initialization steps above and try again to check that. There may also be a problem with the Istio service mesh inside of the system. Troubleshooting this is beyond the scope of this section, but there may be useful information in the UAS pod logs in Kubernetes. There are generally two UAS pods, so the user may need to look at logs from both to find the specific failure. The logs tend to have a very large number of `GET` events listed as part of the liveness checking.
 
 The following shows an example of looking at UAS logs effectively (this example shows only one UAS manager, normally there would be two):
 
@@ -1164,7 +1167,7 @@ The following shows an example of looking at UAS logs effectively (this example 
    ```bash
    ncn# kubectl logs -n services $PODNAME cray-uas-mgr | grep -v 'GET ' | tail -25
    ```
-   
+
    Example output:
    ```
    2021-02-08 15:32:41,211 - uas_mgr - INFO - getting deployment uai-vers-87a0ff6e in namespace user

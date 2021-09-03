@@ -57,7 +57,7 @@ It also requires that the **CSM_SCRIPTDIR variable was previously defined** as p
     Refer to the "Platform Health Checks" section in [Validate CSM Health](../../../../../008-CSM-VALIDATION.md#platform-health-checks) for an overview of the health checks.
 
     Please note that though the CSM validation document references running the the HealthCheck scripts from /opt/cray/platform-utils, more recent versions of those scripts are referenced in the instructions below. Please ensure they are run from the location referenced below.
-  
+
     1.  Run the platform health scripts from ncn-m001:
 
         The output of the following scripts will need to be referenced in the remaining sub-steps.
@@ -125,13 +125,13 @@ It also requires that the **CSM_SCRIPTDIR variable was previously defined** as p
         Events:
           Type     Reason                  Age                    From               Message
           ----     ------                  ----                   ----               -------
-          Warning  FailedCreatePodSandBox  29m                    kubelet, ncn-w001  Failed to create pod 
-        sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox 
-        "314ca4285d0706ec3d76a9e953e412d4b0712da4d0cb8138162b53d807d07491": Multus: Err in tearing down failed 
-        plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for range 0: no IP addresses 
+          Warning  FailedCreatePodSandBox  29m                    kubelet, ncn-w001  Failed to create pod
+        sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox
+        "314ca4285d0706ec3d76a9e953e412d4b0712da4d0cb8138162b53d807d07491": Multus: Err in tearing down failed
+        plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for range 0: no IP addresses
         available in range set: 10.252.2.4-10.252.2.4
-          Warning  FailedCreatePodSandBox  29m                    kubelet, ncn-w001  Failed to create pod 
-        sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox 
+          Warning  FailedCreatePodSandBox  29m                    kubelet, ncn-w001  Failed to create pod
+        sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox
         ...
         ```
 
@@ -210,28 +210,28 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
 4.  Watch on the console until the NCN has successfully booted and the login prompt is reached.
 
     > If the NCN fails to PXE boot, then it may be necessary to force the NCN to boot from disk.
-    > 
+    >
     > Power off the NCN:
-    > 
+    >
     > ```bash
     > ncn-m001# hostname=<ncn being rebooted> # Example value: ncn-s003
     > ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power off
     > ncn-m001# sleep 10
     > ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power status
     > ```
-    > 
-    > Set the boot device for the next boot to disk: 
-    > 
+    >
+    > Set the boot device for the next boot to disk:
+    >
     > ```bash
     > ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus chassis bootdev disk
     > ```
-    > 
+    >
     > Power on the NCN:
-    > 
+    >
     > ```bash
     > ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power on
     > ```
-    > 
+    >
     > Continue to watch the console as the NCN boots.
 
 5.  Login to the storage NCN and ensure that the hostname matches what was being reported before the reboot.
@@ -240,7 +240,7 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
     ncn-s# hostname
     ```
 
-    If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot. 
+    If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot.
     The following command will need to be run on the cli for the NCN that has just been rebooted (and is incorrect).
 
     ```bash
@@ -264,7 +264,7 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
 
 8.  Repeat all of the sub-steps above for the remaining storage nodes, going from the highest to lowest number until all storage nodes have successfully rebooted.
 
-    **Important:** Ensure `ceph -s` shows that Ceph is healthy (`HEALTH_OK`) **BEFORE MOVING ON** to reboot the next storage node. Once Ceph has recovered the downed mon, 
+    **Important:** Ensure `ceph -s` shows that Ceph is healthy (`HEALTH_OK`) **BEFORE MOVING ON** to reboot the next storage node. Once Ceph has recovered the downed mon,
     it may take a several minutes for Ceph to resolve clock skew.
 
 #### NCN Worker Nodes
@@ -291,7 +291,7 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
         error when evicting pod "cray-dns-unbound-7bb85f9b5b-fjs95": global timeout reached: 5m0s
         error when evicting pod "cray-dns-unbound-7bb85f9b5b-kc72b": global timeout reached: 5m0s
         ```
-    
+
     3.  Establish a console session to the NCN worker node you are rebooting.
 
         1. Use the `${CSM_SCRIPTDIR}/ncnGetXnames.sh` script to get the xnames for each of the NCNs.
@@ -318,7 +318,7 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
             ```
 
         **NOTE:** Exiting the connection to the console can be achieved with the `&.` command.
-    
+
     4.  Check and take note of the hostname of the worker NCN by running the following command on the NCN which will be rebooted.
 
         ```bash
@@ -355,28 +355,28 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
     6.  Watch on the console until the NCN has successfully booted and the login prompt is reached.
 
         > If the NCN fails to PXE boot, then it may be necessary to force the NCN to boot from disk.
-        > 
+        >
         > Power off the NCN:
-        > 
+        >
         > ```bash
         > ncn-m001# hostname=<ncn being rebooted> # Example value: ncn-w003
         > ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power off
         > ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power status
         > ```
-        > 
-        > Set the boot device for the next boot to disk: 
-        > 
+        >
+        > Set the boot device for the next boot to disk:
+        >
         > ```bash
         > ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus chassis bootdev disk
         > ```
-        > 
+        >
         > Power on the NCN:
-        > 
+        >
         > ```bash
         > ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power on
         > ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power status
         > ```
-        > 
+        >
         > Continue to watch the console as the NCN boots.
 
     7.  Login to the worker NCN and ensure that the hostname matches what was being reported before the reboot.
@@ -384,7 +384,7 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
         ```bash
         ncn-w# hostname
         ```
-        If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot.  
+        If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot.
         The following command will need to be run on the cli for the NCN that has just been rebooted (and is incorrect).
 
         ```bash
@@ -410,13 +410,13 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
         ncn-m001# "${CSM_SCRIPTDIR}/ncnHealthChecks.sh"
         ncn-m001# "${CSM_SCRIPTDIR}/ncnPostgresHealthChecks.sh"
         ```
-    
+
         Verify that the `Check if any "alarms" are set for any of the Etcd Clusters in the Services Namespace.` check from the ncnHealthChecks.sh script reports no alarms set for any of the etcd pods. If an alarm similar to is reported, then wait a few minutes for the alarm to clear and try the ncnHealthChecks.sh script again.
         ```json
         {"level":"warn","ts":"2021-08-11T15:43:36.486Z","caller":"clientv3/retry_interceptor.go:62","msg":"retrying of unary invoker failed","target":"endpoint://client-4d8f7712-2c91-4096-bbbe-fe2853cd6959/127.0.0.1:2379","attempt":0,"error":"rpc error: code = DeadlineExceeded desc = context deadline exceeded"}
         ```
 
-        Verify that the `Check the Health of the Etcd Clusters in the Services Namespace` check from the ncnHealthChecks.sh script returns a healthy report for all members of each etcd cluster. 
+        Verify that the `Check the Health of the Etcd Clusters in the Services Namespace` check from the ncnHealthChecks.sh script returns a healthy report for all members of each etcd cluster.
 
         If pods are reported as Terminating, Init, or Pending when checking the status of the Kubernetes pods, wait for all pods to recover before proceeding.
 
@@ -502,28 +502,28 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
     4.  Watch on the console until the NCN has successfully booted and the login prompt is reached.
 
         > If the NCN fails to PXE boot, then it may be necessary to force the NCN to boot from disk.
-        > 
+        >
         > Power off the NCN:
-        > 
+        >
         > ```bash
         > ncn-m001# hostname=<ncn being rebooted> # Example value: ncn-m003
         > ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power off
         > ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power status
         > ```
-        > 
-        > Set the boot device for the next boot to disk: 
-        > 
+        >
+        > Set the boot device for the next boot to disk:
+        >
         > ```bash
         > ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus chassis bootdev disk
         > ```
-        > 
+        >
         > Power on the NCN:
-        > 
+        >
         > ```bash
         > ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power on
         > ncn-m001# ipmitool -U root -P PASSWORD -H ${hostname}-mgmt -I lanplus power status
         > ```
-        > 
+        >
         > Continue to watch the console as the NCN boots.
 
     5.  Login to the master NCN and ensure that the hostname matches what was being reported before the reboot.
@@ -532,7 +532,7 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
         ncn-m# hostname
         ```
 
-        If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot. 
+        If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot.
         The following command will need to be run on the cli for the NCN that has just been rebooted (and is incorrect).
 
         ```bash
@@ -569,14 +569,14 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
         ```
 
         Expected output looks similar to the following:
-    
+
         ```
         inet 10.102.11.13/24 brd 10.102.11.255 scope global vlan007
         inet6 fe80::1602:ecff:fed9:7820/64 scope link
         ```
-        
+
         Now login from another machine to verify that IP is usable:
-        
+
         ```bash
         external# ssh root@10.102.11.13
         ncn-m002#
@@ -624,28 +624,28 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
     5.  Watch on the console until the NCN has successfully booted and the login prompt is reached.
 
         > If the NCN fails to PXE boot, then it may be necessary to force the NCN to boot from disk.
-        > 
+        >
         > Power off the NCN:
-        > 
+        >
         > ```bash
         > external# SYSTEM_NAME=eniac
         > external# ipmitool -U root -P PASSWORD -H ${SYSTEM_NAME}-ncn-m001-mgmt -I lanplus power off
         > external# ipmitool -U root -P PASSWORD -H ${SYSTEM_NAME}-ncn-m001-mgmt -I lanplus power status
         > ```
-        > 
-        > Set the boot device for the next boot to disk: 
-        > 
+        >
+        > Set the boot device for the next boot to disk:
+        >
         > ```bash
         > external# ipmitool -U root -P PASSWORD -H ${SYSTEM_NAME}-ncn-m001-mgmt -I lanpluschassis bootdev disk
         > ```
-        > 
+        >
         > Power on the NCN:
-        > 
+        >
         > ```bash
         > external# ipmitool -U root -P PASSWORD -H ${SYSTEM_NAME}-ncn-m001-mgmt -I lanplus power on
         > external# ipmitool -U root -P PASSWORD -H ${SYSTEM_NAME}-ncn-m001-mgmt -I lanplus power status
         > ```
-        > 
+        >
         > Continue to watch the console as the NCN boots.
 
     6.  Login to `ncn-m001` and ensure that the hostname matches what was being reported before the reboot.
@@ -653,7 +653,7 @@ Reboot each of the NCN storage nodes **one at a time** going from the highest to
         ```bash
         ncn-m001# hostname
         ```
-        If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot.  
+        If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot.
         The following command will need to be run on the cli for the NCN that has just been rebooted (and is incorrect).
 
         ```bash

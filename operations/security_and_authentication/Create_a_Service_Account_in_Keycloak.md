@@ -63,7 +63,7 @@ Follow the steps in only one of the following sections depending on if it is pre
    6.  Click the **Save** button.
 
 
-#### Use the Keycloak REST API 
+#### Use the Keycloak REST API
 
 1.  Create the get\_master\_token function to get a token as a Keycloak master administrator.
 
@@ -75,7 +75,7 @@ Follow the steps in only one of the following sections depending on if it is pre
     curl -ks -d client_id=admin-cli -d username=$MASTER_USERNAME -d password=$MASTER_PASSWORD -d grant_type=password https://api-gw-service-nmn.local/keycloak/realms/master/protocol/openid-connect/token | python -c "import sys,json; print json.load(sys.stdin)['access_token']"
   }
   ```
-  
+
 2. Create the client doing a POST call for a JSON object.
 
    The `clientId` should be changed to the name for the new service account.

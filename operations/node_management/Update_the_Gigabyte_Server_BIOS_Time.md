@@ -12,7 +12,7 @@ If the console log indicates the time between the rest of the system and the com
     ![Compute Node Post Call](../../img/operations/CN_POST_Call.png)
 
 2. Update the "System Date" field to match the time on the system.
-   
+
    The "System Date" field is located under the "Main" tab in the navigation bar.
 
    ![Compute Node Setup Menu](../../img/operations/CN_Setup_Menu.png)

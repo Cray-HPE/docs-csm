@@ -14,7 +14,7 @@ This procedure requires the Kibana service to be up and running on a non-compute
     ncn-m001# kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations.yaml}' \
     | base64 -d | grep "external:"
           external: SHASTA_EXTERNAL_DOMAIN.com
-    
+
     ```
 
 2.  Navigate to the following URL in a web browser:
@@ -29,13 +29,13 @@ This procedure requires the Kibana service to be up and running on a non-compute
     |**the error `Kibana did not load properly. Check the server output for more information.`**|Clear browser cookies for https://sma-kibana.SHASTA\_EXTERNAL\_DOMAIN.com|
     |**The Kibana dashboard \(see example below\)**|Proceed to next step|
 
-    When the Kibana dashboard loads, the web UI displays the Discover page by default. Note that even without entering a search pattern, an index pattern shows entries ordered in time. 
-    
+    When the Kibana dashboard loads, the web UI displays the Discover page by default. Note that even without entering a search pattern, an index pattern shows entries ordered in time.
+
     ![Kibana Discover Dashboard](../../img/operations/Kibana_Discover_Dashboard.png)
 
 3.  Select the Shasta index for the type of logs desired from the drop-down list to search that data source.
 
-    ![Kibana Clusterstor Logs](../../img/operations/Kibana_Clusterstor_Logs-Dropdown.png)
+    ![Kibana ClusterStor Logs](../../img/operations/Kibana_Clusterstor_Logs-Dropdown.png)
 
 4.  Identify the xname for individual consoles to search for specific logs.
 
@@ -54,8 +54,8 @@ This procedure requires the Kibana service to be up and running on a non-compute
 
     Using a time range for these searches is important to limit the scope and number of records returned, as well as limiting the time required to perform the search.
 
-    The default time range is 15 minutes. 
-    
+    The default time range is 15 minutes.
+
     ![Kibana Results Time Period](../../img/operations/Kibana_Results_Time_Period.png)
 
 

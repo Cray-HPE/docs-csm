@@ -1,7 +1,7 @@
 ## Change Passwords and Credentials
 
 There are many passwords and credentials used in different contexts to manage the system. These
-can be changed as needed. Their initial settings are documented, so it is recommended to change 
+can be changed as needed. Their initial settings are documented, so it is recommended to change
 them during or soon after a CSM software installation.
 
 See these topics for more information.

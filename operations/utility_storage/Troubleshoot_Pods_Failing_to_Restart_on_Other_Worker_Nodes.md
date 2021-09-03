@@ -34,7 +34,7 @@ This procedure requires administrative privileges.
       ----     ------              ----  ----                     -------
       Normal   Scheduled           23s   default-scheduler        Successfully assigned services/cray-ims-6578bf7874-twwp7 to ncn-w002
       Warning  FailedAttachVolume  23s   attachdetach-controller  Multi-Attach error for volume "**pvc-6ac68e32-de91-4e21-ac9f-c743b3ecb776**" Volume is already exclusively attached to one node and can't be attached to another
-    
+
     ```
 
     In this example, pvc-6ac68e32-de91-4e21-ac9f-c743b3ecb776 is the PVC information required for the next step.
@@ -95,7 +95,7 @@ This procedure requires administrative privileges.
         ```bash
         ncn-m001# grep IP_ADDRESS /etc/hosts
         10.252.0.4      ncn-w001.local ncn-w001 ncn-w001-nmn.local x3000c0s7b0n0 ncn-w001-nmn sms01-nmn.local sms04-nmn sms.local sms-nmn sms-nmn.local mgmt-plane-cmn mgmt-plane-cmn.local mgmt-plane-nmn.local bis.local bis time-nmn time-nmn.local #-label-10.252.0.4
-        
+
         ```
 
 1. SSH to the host name returned in the previous step.

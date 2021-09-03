@@ -121,7 +121,7 @@ IP-Helpers will reside on VLANs 1,2,4, and 7.
 
 1. OSPF is a dynamic routing protocol used to exchange routes.
    It provides reachability from the MTN networks to NMN/Kubernetes networks.
-   The router-id used here is the NMN IP address. (VLAN 2 IP) 
+   The router-id used here is the NMN IP address. (VLAN 2 IP)
 
    ```
    sw-spine-001 & sw-spine-002 (config)#
@@ -136,7 +136,7 @@ IP-Helpers will reside on VLANs 1,2,4, and 7.
 1. NMN VLAN config
 
    ```
-   sw-spine-001(config)# 
+   sw-spine-001(config)#
          vlan 2
          interface vlan 2
          interface vlan 2 ip address 10.252.0.2/17 primary
@@ -148,7 +148,7 @@ IP-Helpers will reside on VLANs 1,2,4, and 7.
          interface vlan 2 magp 2 ip virtual-router address 10.252.0.1
          interface vlan 2 magp 2 ip virtual-router mac-address 00:00:5E:00:01:02
 
-   sw-spine-002(config)# 
+   sw-spine-002(config)#
          vlan 2
          interface vlan 2
          interface vlan 2 ip address 10.252.0.3/17 primary
@@ -176,7 +176,7 @@ IP-Helpers will reside on VLANs 1,2,4, and 7.
          interface vlan 4 magp 4 ip virtual-router address 10.254.0.1
          interface vlan 4 magp 4 ip virtual-router mac-address 00:00:5E:00:01:04
 
-   sw-spine-002(config)# 
+   sw-spine-002(config)#
          vlan 4
          interface vlan 4
          interface vlan 4 ip address 10.254.0.3/17 primary
@@ -212,7 +212,7 @@ IP-Helpers will reside on VLANs 1,2,4, and 7.
 
 ## Configure MLAG
 
-These two ports are cabled between the mellanox switches. 
+These two ports are cabled between the mellanox switches.
 #### Spine01
 
 ```
@@ -314,7 +314,7 @@ mlag-vip eniac-mlag-domain ip 192.168.255.242 /29 force
 no interface mgmt0 dhcp
    interface mgmt0 ip address 192.168.255.243 /29
 no mlag shutdown
-   mlag system-mac 00:00:5E:00:01:5D    
+   mlag system-mac 00:00:5E:00:01:5D
 mlag-vip eniac-mlag-domain ip 192.168.255.242 /29 force
 ```
 
@@ -323,10 +323,10 @@ Verifying mlag-vip
 ```
 sw-spine-001 [eniac-mlag-domain: master] # show mlag-vip
 MLAG-VIP:
- MLAG group name: eniac-mlag-domain 
+ MLAG group name: eniac-mlag-domain
  MLAG VIP address: 192.168.255.242/29
  Active nodes: 2
- 
+
 ----------------------------------------------------------------------------------
 Hostname                                 VIP-State            IP Address
 ----------------------------------------------------------------------------------
@@ -370,7 +370,7 @@ These ACLs are designed to block traffic from the node management network to and
 Spanning tree will need to be applied to each MAGP pair. Spine01 will have a lower priority making it the root bridge.
 Spanning tree configuration has not changed from 1.3 to 1.5.
 
-1. The following config is applied to Mellanox spine switches. This is an example of a switch to switch connection. 
+1. The following config is applied to Mellanox spine switches. This is an example of a switch to switch connection.
 
    ```
    sw-spine-001 & sw-spine-002 (config)#
@@ -478,7 +478,7 @@ The IP addresses used here will be the first three worker nodes on the NMN netwo
 
 ## Configure DNS
 
-1. This will point to the unbound DNS server. 
+1. This will point to the unbound DNS server.
 
    ```
    sw-spine-001 & sw-spine-002 (config)#

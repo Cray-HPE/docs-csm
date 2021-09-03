@@ -37,7 +37,7 @@ This procedure is intended to repopulate HSM in the event when no Postgres backu
 
     Get the number of node objects stored in HSM:
     ```bash
-    ncn# cray hsm state components list --type node --format json | jq .[].ID | wc -l 
+    ncn# cray hsm state components list --type node --format json | jq .[].ID | wc -l
     0
     ```
 
@@ -49,7 +49,7 @@ This procedure is intended to repopulate HSM in the event when no Postgres backu
     ncn# kubectl scale deployment cray-reds -n services --replicas=0
     ncn# kubectl scale deployment cray-reds -n services --replicas=1
     ```
-    
+
     Wait for the RedfishEndpoints table to get repopulated and discovery to complete.
     ```bash
     ncn# cray hsm inventory RedfishEndpoints list --format json | jq .[].ID | wc -l
