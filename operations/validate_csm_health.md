@@ -41,7 +41,7 @@ The areas should be tested in the order they are listed on this page. Errors in 
     - [4.2 Create a BOS Session Template for the CSM Barebones Image](#csm-bos-session-template)
     - [4.3 Find an available compute node](#csm-node)
     - [4.4 Reboot the node using a BOS session template](#csm-reboot)
-    - [4.6 Connect to the node's console and watch the boot](#csm-watch-boot)
+    - [4.5 Connect to the node's console and watch the boot](#csm-watch-boot)
   - [5. UAS / UAI Tests](#uas-uai-tests)
     - [5.1 Initialize and Authorize the CLI](#uas-uai-init-cli)
       - [5.1.1 Stop Using the CRAY_CREDENTIALS Service Account Token](#uas-uai-init-cli-stop)
@@ -627,7 +627,7 @@ The Software Management Services health checks are run using `/usr/local/bin/cms
 <a name="sms-checks"></a>
 ### 3.1 SMS Test Execution
 
-The following test can be run on any Kubernetes node (**not** `ncn-m001` if it is still the PIT node).
+The following test can be run on any Kubernetes node (any master or worker node, but **not** the PIT node).
 
 ```bash
 ncn# /usr/local/bin/cmsdev test -q all
@@ -826,7 +826,7 @@ type = "GET"
 ```
 
 <a name="csm-watch-boot"></a>
-### 4.6 Connect to the node's console and watch the boot
+### 4.5 Connect to the node's console and watch the boot
 
 See [Manage Node Consoles](conman/Manage_Node_Consoles.md) for information on how to connect to the node's console.
 
