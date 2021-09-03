@@ -697,7 +697,7 @@ Cray OS (COS) product stream is also installed on to the system.
 <a name="locate-csm-barebones-image-in-ims"></a>
 ### 4.1 Locate CSM Barebones Image in IMS
 
-Locate the CSM Barebones image and note the path to the image's manifest.json in S3.
+Locate the CSM Barebones image and note the `etag` and `path` fields in the output.
 
 ```bash
 ncn# cray ims images list --format json | jq '.[] | select(.name | contains("barebones"))'
@@ -733,13 +733,13 @@ The session template below can be copied and used as the basis for the BOS Sessi
      "boot_sets": {
        "compute": {
          "boot_ordinal": 2,
-         "etag": "6d04c3a4546888ee740d7149eaecea68",// <== This should be set to the etag of the IMS Image
+         "etag": "etag_value_from_cray_ims_command",
          "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
          "network": "nmn",
          "node_roles_groups": [
            "Compute"
          ],
-         "path": "s3://boot-images/293b1e9c-2bc4-4225-b235-147d1d611eef/manifest.json",// <== Make sure this path matches the IMS Image Path
+         "path": "path_value_from_cray_ims_command",
          "rootfs_provider": "cpss3",
          "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
          "type": "s3"
@@ -751,7 +751,10 @@ The session template below can be copied and used as the basis for the BOS Sessi
      "enable_cfs": false,
      "name": "shasta-1.4-csm-bare-bones-image"
    }
-   ```
+
+   **NOTE**: Be sure to replace the values of the `etag` and `path` fields with the ones you noted earlier in the `cray ims images list` command.
+
+   
 2. Create the BOS session template using the following file as input:
    ```
    ncn# cray bos sessiontemplate create --file sessiontemplate.json --name shasta-1.4-csm-bare-bones-image
@@ -830,7 +833,7 @@ type = "GET"
 
 See [Manage Node Consoles](conman/Manage_Node_Consoles.md) for information on how to connect to the node's console.
 
-The boot will fail, but should reach the dracut stage. If the dracut stage is reached, this test
+The boot may take up to 10 or 15 minutes. It will fail, but should reach the dracut stage. If the dracut stage is reached, this test
 can be considered successful. This shows that the CSM services needed to boot a node are available and working properly.
 
 More specifically, this test is considered successful if the console output has something similar to the following
