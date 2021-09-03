@@ -244,7 +244,7 @@ Multiple product configuration layers may be created later to apply multiple cha
    }
    EOF
    ncn-m001# sed -i -e "s:@RELEASE@:$RELEASE:g" \
-   -e "s:@COMMIT@:$COMMIT@:g" csm-config-$RELEASE.json
+   -e "s:@COMMIT@:$COMMIT:g" csm-config-$RELEASE.json
    ```
 
 1. If this is a first time install and only the CSM software product has been installed, then this file can become

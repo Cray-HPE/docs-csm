@@ -90,7 +90,7 @@ The ncnHealthChecks script reports the following health information:
 * Health of etcd clusters
 * Number of pods on each worker node for each etcd cluster
 * Alarms set for any of the Etcd clusters
-* Health of Etcd cluster’s database
+* Health of Etcd cluster's database
 * List of automated etcd backups for the Boot Orchestration Service (BOS), Boot Script Service (BSS), Compute Rolling Upgrade Service (CRUS), and Domain Name Service (DNS), and Firmware Action Service (FAS) clusters
 * NCN node uptimes
 * NCN master and worker node resource consumption

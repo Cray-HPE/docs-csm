@@ -361,11 +361,11 @@ ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/csm-service-upgrade.sh
 
 #### Prerequisites:
 
-1. The nae-upload.py script relies on /etc/hosts file to pull IP addresses of the switch. Without this information the script won’t run.
+1. The nae-upload.py script relies on /etc/hosts file to pull IP addresses of the switch. Without this information the script will not run.
 2. You have 8325 in your setup that is running software version below 10.06.0130.
 3. Script assumes you  are using default username "admin"  for the switch and it will prompt you for password.
 
-NOTE: 	The nae-upload script automatically detects 8325’s and only applies the fix to this platform.
+NOTE: 	The nae-upload script automatically detects 8325's and only applies the fix to this platform.
 
 #### How to run the install script:
 

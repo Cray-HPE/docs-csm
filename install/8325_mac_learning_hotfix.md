@@ -23,42 +23,42 @@
 
 ## Important information:
 
-    - This NAE script creates a bash script in /tmp and runs every 60s.
+    - This NAE script creates a bash script in `/tmp` and runs every 60s.
     - The script writes file to a storage every 60s (NAE alert file)
     - There are no controls over alert status.
     - Event log is created when a problem is detected
-
-    “BCML2X has quit unexpectedly, attempting to restart...”
-
-    - You can also grep the error from /var/log/messages
-    - REST-API URI = /rest/v10.04/logs/event?SYSLOG_IDENTIFIER=root&since=yesterday
-    - Delete agent & script after upgrading to 10.06.0130+
+        * `BCML2X has quit unexpectedly, attempting to restart...`
+    - You can also grep the error from `/var/log/messages`
+    - REST API URI is `/rest/v10.04/logs/event?SYSLOG_IDENTIFIER=root&since=yesterday`
+    - Delete agent and script after upgrading to 10.06.0130+
     - Monitor eMMC health if you plan on running for a long time
     - show system resource | include utiliz
 
 ## The file locations in doc-csm
 
-    - The NAE script (L2X-Watchdog-creates-bash-script.py) is located at: ../docs-csm/upgrade/1.0/scripts/aruba
-    - Automatic NAE install script (nae_upload.py) is located at: ../docs-csm/upgrade/1.0/scripts/aruba
+    - The NAE script is located at: [../docs-csm/upgrade/1.0/scripts/aruba/L2X-Watchdog-creates-bash-script.py](../docs-csm/upgrade/1.0/scripts/aruba/L2X-Watchdog-creates-bash-script.py)
+    - Automatic NAE install script is located at: [../docs-csm/upgrade/1.0/scripts/aruba/nae_upload.py](../docs-csm/upgrade/1.0/scripts/aruba/nae_upload.py)
 
 
 ## Automated install of NAE script
 
 ### Prerequisites:
 
-1. The nae-upload.py script relies on /etc/hosts file to pull IP addresses of the switch. Without this information the script won’t run.
+1. The `nae-upload.py` script relies on `/etc/hosts` file to pull IP addresses of the switch. Without this information the script will not run.
 2. You have 8325 in your setup that is running software version below 10.06.0130.
-3. Script assumes you  are using default username "admin"  for the switch and it will prompt you for password.
+3. Script assumes you are using default username `admin` for the switch and it will prompt you for the password.
 
-NOTE:     The nae-upload script automatically detects 8325’s and only applies the fix to this platform.
+NOTE: The `nae-upload.py` script automatically detects 8325s and only applies the fix to this platform.
 
 ### How to run the install script:
 
 **Step 1:**
 
-> ncn-m001”:~ # ./docs-csm/upgrade/1.0/scripts/aruba/nae_upload.py
+> ```bash
+> ncn-m001# ./docs-csm/upgrade/1.0/scripts/aruba/nae_upload.py
+> ```
 
-**step 2:**
+**Step 2:**
 
 > Type in your switch password and the script will upload and enable the NAE script.
 
@@ -92,7 +92,8 @@ NOTE:     The nae-upload script automatically detects 8325’s and only applies 
 
 Incorrect password:
 
-> ncn-m001:~ # ./nae_upload.py
+> ```bash
+> ncn-m001# ./nae_upload.py
 > Switch login password:
 > Traceback (most recent call last):
 > File "./nae_upload.py", line 57, in <module>
@@ -104,12 +105,14 @@ Incorrect password:
 > File "/usr/lib64/python3.6/site-packages/simplejson/decoder.py", line 373, in decode
 > raise JSONDecodeError("Extra data", s, end, len(s))
 > simplejson.errors.JSONDecodeError: Extra data: line 1 column 5 - line 1 column 27 (char 4 - 26)
+> ```
 
 Script has already been loaded:
 
-> ncn-m001:~ # ./nae_upload.py
+> ```bash
+> ncn-m001# ./nae_upload.py
 > Switch login password:
 > L2X-Watchdog NAE script is already installed on sw-spine-001.
 > L2X-Watchdog NAE script is already installed on sw-spine-002.
-
+> ```
 
