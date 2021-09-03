@@ -15,7 +15,7 @@ Hewlett Packard Enterprise recommends that the configurations for both CNs and N
 commit IDs. This requirement ensures that the configurations remain compatible. This compatibility is necessary for
 services like DVS which require low-level compatibility between CNs and NCNs.
 
-Software product streams which include configuration content to be applied to the management nodes 
+Software product streams which include configuration content to be applied to the management nodes
 may include those which configure management functionality, such as COS, SMA, and CSM,
 or optional functionality to enable user productivity with UAI, such as PE, Analytics, and file system
 mounts like Lustre or SpectrumScale.
@@ -51,7 +51,7 @@ For more detailed information see these topics in [Configuration Management](../
 ### CSM Configuration Layer
 
 This procedure describes how to create the optional CSM configuration layer to implement passwordless SSH when applied to the
-management nodes with NCN Personalization.  
+management nodes with NCN Personalization.
 
 #### Passwordless SSH
 
@@ -77,7 +77,7 @@ generated private or public key for these environments, the images must be recon
 `site.yml` needs to be reconfigured to allow for pushing subsequent updated public keys. Existing public keys
 injected into the authorized keys file are not automatically removed during reconfiguration.
 
-##### CSM keys in Vault 
+##### CSM keys in Vault
 
 Passwordless SSH Keys are generated using vault under the CSM key. The private half of the key is published as
 a Kubernetes secret:
@@ -115,10 +115,10 @@ product environment to create and apply individual changes to NCNs.
 
 Local site security requirements may preclude use of passwordless SSH access between products or
 environments, so the private key is not applied anywhere by default. Users are advised to use the CSM product
-configuration repository (as uploaded during install to gitea) to apply these changes to NCNs. 
+configuration repository (as uploaded during install to gitea) to apply these changes to NCNs.
 
 Applying changes to NCN environments allows basic passwordless SSH to function for the lifetime of the affected
-file system. 
+file system.
 
 The public key is injected as a trusted source as an authorized_key for managed environments automatically,
 even if the private half is never used. If this is not desirable, the role `trust-csm-public-keys` can be
@@ -181,7 +181,7 @@ It may be necessary to create or update a CFS configuration entry to apply chang
 Typically, this needs to be done for newly installed HPE Cray EX product releases.
 
 The following example creates a new CFS configuration with a single product configuration layer (csm-1.5.8).
-Multiple product configuration layers may be created later to apply multiple changes to a node at one time. 
+Multiple product configuration layers may be created later to apply multiple changes to a node at one time.
 
 1. Get the import_branch for CSM from the cray-product-catalog.
 
@@ -224,7 +224,7 @@ Multiple product configuration layers may be created later to apply multiple cha
      grep refs/heads/cray/csm/${RELEASE} | awk '{print $1}')
    Username for 'https://api-gw-service-nmn.local': crayvcs
    Password for 'https://crayvcs@api-gw-service-nmn.local': 
-   ncn# echo $COMMIT
+   ncn-m001# echo $COMMIT
    43ecfa8236bed625b54325ebb70916f55884b3a4
    ```
 
@@ -248,7 +248,7 @@ Multiple product configuration layers may be created later to apply multiple cha
 
 1. If this is a first time install and only the CSM software product has been installed, then this file can become
    the original `ncn-personalization.json` file to which other software products can be added as they are installed.
-   
+
    ```bash
    ncn# cp -p csm-config-$RELEASE.json ncn-personalization.json
    ```
@@ -433,7 +433,7 @@ procedure.
    > When running the above step, the CFS session may fail. The TrustedUserCAKeys may not exist. Run
    > `systemctl restart cfs-state-reporter` on all NCNs which will automatically add the
    > TrustedUserCAKeys entry to /etc/ssh/sshd_config.
-   > 
+   >
    > ```bash
    > ncn# systemctl restart cfs-state-reporter
    > ```

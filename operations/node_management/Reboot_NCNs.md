@@ -117,13 +117,13 @@ The `kubectl` command is installed.
         Events:
           Type     Reason                  Age                    From               Message
           ----     ------                  ----                   ----               -------
-          Warning  FailedCreatePodSandBox  29m                    kubelet, ncn-w001  Failed to create pod 
-        sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox 
-        "314ca4285d0706ec3d76a9e953e412d4b0712da4d0cb8138162b53d807d07491": Multus: Err in tearing down failed 
-        plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for range 0: no IP addresses 
+          Warning  FailedCreatePodSandBox  29m                    kubelet, ncn-w001  Failed to create pod
+        sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox
+        "314ca4285d0706ec3d76a9e953e412d4b0712da4d0cb8138162b53d807d07491": Multus: Err in tearing down failed
+        plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for range 0: no IP addresses
         available in range set: 10.252.2.4-10.252.2.4
-          Warning  FailedCreatePodSandBox  29m                    kubelet, ncn-w001  Failed to create pod 
-        sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox 
+          Warning  FailedCreatePodSandBox  29m                    kubelet, ncn-w001  Failed to create pod
+        sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox
         ...
         ```
 
@@ -202,7 +202,7 @@ Before rebooting NCNs:
          "retryPolicy": 3,
        ```
 
-       If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node.  If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+       If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node. If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
 
        If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 
@@ -324,7 +324,7 @@ Before rebooting NCNs:
          "retryPolicy": 3,
        ```
 
-       If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node.  If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+       If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node. If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
 
        If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 
@@ -415,7 +415,7 @@ Before rebooting NCNs:
          "retryPolicy": 3,
        ```
 
-       If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node.  If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+       If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node. If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
 
        If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 
@@ -482,7 +482,7 @@ Before rebooting NCNs:
          "retryPolicy": 3,
        ```
 
-       If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node.  If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+       If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node. If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
 
        If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 

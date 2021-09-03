@@ -402,11 +402,11 @@ script `/opt/cray/csm/scripts/networking/BGP/Aruba_BGP_Peers.py`.
    > **`Note`**: To view the current static routes setup on the switch run the following
    > ```bash
    > sw-spine01# show ip route static
-   > 
+   >
    > Displaying ipv4 routes selected for forwarding
-   > 
+   >
    > '[x/y]' denotes [distance/metric]
-   > 
+   >
    > 0.0.0.0/0, vrf default
    > 	via  10.103.15.161,  [1/0],  static
    > 10.92.100.60/32, vrf default

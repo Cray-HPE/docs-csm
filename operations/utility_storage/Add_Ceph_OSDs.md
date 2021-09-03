@@ -33,20 +33,20 @@ This procedure requires administrative privileges and will require at least two 
       cluster:
         id: 5b359a58-e6f7-4f0c-98b8-f528f620896a
         health: HEALTH_OK
-    
+
       services:
         mon: 3 daemons, quorum ncn-s001,ncn-s002,ncn-s003 (age 20h)
         mgr: ncn-s003(active, since 9d), standbys: ncn-s001, ncn-s002
         mds: cephfs:1 {0=ncn-s002=up:active} 2 up:standby
         osd: 18 osds: 18 up (since 20h), 18 in (since 9d)
         rgw: 3 daemons active (ncn-s001.rgw0, ncn-s002.rgw0, ncn-s003.rgw0)
-    
+
       data:
         pools:   11 pools, 220 pgs
         objects: 826.23k objects, 944 GiB
         usage:   2.0 TiB used, 61 TiB / 63 TiB avail
         pgs:     220 active+clean
-    
+
       io:
         client:   1.7 KiB/s rd, 12 MiB/s wr, 1 op/s rd, 1.32k op/s wr
     ```
@@ -59,7 +59,7 @@ This procedure requires administrative privileges and will require at least two 
     ```
 
 1. In the second window, list your available drives on the node(s) where the OSDs are missing
-  
+
    ```bash
    # Our example is utilizing ncn-s001 so make sure you are on the correct host for your situation
 

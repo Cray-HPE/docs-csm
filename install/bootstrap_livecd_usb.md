@@ -1,7 +1,7 @@
 # Bootstrap PIT Node from LiveCD USB
 
 The Pre-Install Toolkit (PIT) node needs to be bootstrapped from the LiveCD. There are two media available
-to bootstrap the PIT node--the RemoteISO or a bootable USB device. This procedure describes using the USB 
+to bootstrap the PIT node--the RemoteISO or a bootable USB device. This procedure describes using the USB
 device. If not using the USB device, see [Bootstrap Pit Node from LiveCD Remote ISO](bootstrap_livecd_remote_iso.md).
 
 There are 5 overall steps that provide a bootable USB with SSH enabled, capable of installing Shasta v1.5 (or higher).
@@ -37,10 +37,10 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 
 1. The CSM software release should be downloaded and expanded for use.
 
-   **Important:** To ensure that the CSM release plus any patches, workarounds, or hotfixes are included 
+   **Important:** To ensure that the CSM release plus any patches, workarounds, or hotfixes are included
    follow the instructions in [Update CSM Product Stream](../update_product_stream/index.md)
 
-   The rest of this procedure will use the CSM_RELEASE variable and expect to have the 
+   The rest of this procedure will use the CSM_RELEASE variable and expect to have the
    contents of the CSM software release tarball plus any patches, workarounds, or hotfixes.
 
    ```bash
@@ -59,10 +59,10 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    linux# rpm -Uvh --force ${CSM_PATH}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
    ```
 
-1. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet 
+1. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet
    access these RPMs will need to be externally downloaded and then copied to this machine.
 
-   **Important:** To ensure that the latest workarounds and documentation updates are available, 
+   **Important:** To ensure that the latest workarounds and documentation updates are available,
    see [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds)
 
 1. Show the version of CSI installed.
@@ -70,7 +70,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    ```bash
    linux# csi version
    ```
-   
+
    Expected output looks similar to the following:
 
    ```
@@ -132,7 +132,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 
    Git RPMs are included in the `embedded` repository in the CSM release and
    may be installed in your pre-LiveCD environment using `zypper` as follows:
-   
+
    * Install `git` package:
 
      ```bash
@@ -159,14 +159,14 @@ which device that is.
     ```bash
     linux# lsscsi
     ```
-    
+
     Expected output looks similar to the following:
     ```
     [6:0:0:0]    disk    ATA      SAMSUNG MZ7LH480 404Q  /dev/sda
     [7:0:0:0]    disk    ATA      SAMSUNG MZ7LH480 404Q  /dev/sdb
     [8:0:0:0]    disk    ATA      SAMSUNG MZ7LH480 404Q  /dev/sdc
     [14:0:0:0]   disk    SanDisk  Extreme SSD      1012  /dev/sdd
-    [14:0:0:1]   enclosu SanDisk  SES Device       1012  -      
+    [14:0:0:1]   enclosu SanDisk  SES Device       1012  -
     ```
 
     In the above example, we can see our internal disks as the `ATA` devices and our USB as the `disk` or `enclosu` device. Because the `SanDisk` fits the profile we are looking for, we are going to use `/dev/sdd` as our disk.
@@ -279,7 +279,7 @@ Some files are needed for generating the configuration payload. See these topics
       ```bash
       linux# ls -1
       ```
-    
+
       Expected output looks similar to the following:
 
       ```
@@ -316,7 +316,7 @@ Some files are needed for generating the configuration payload. See these topics
       ```bash
       linux# ls -1
       ```
-    
+
       Expected output looks similar to the following:
 
       ```
@@ -371,7 +371,7 @@ Some files are needed for generating the configuration payload. See these topics
       * The `application_node_config.yaml` file is optional, but if you have one describing the mapping between prefixes in `hmn_connections.csv` that should be mapped to HSM subroles, you need to include a command line option to have it used. See [Create Application Node YAML](create_application_node_config_yaml.md).
       * The `bootstrap-ncn-bmc-user` and `bootstrap-ncn-bmc-pass` must match what is used for the BMC account and its password for the management NCNs.
       * Set site parameters (`site-domain`, `site-ip`, `site-gw`, `site-nic`, `site-dns`) for the information which connects `ncn-m001` (the PIT node) to the site. The `site-nic` is the interface on this node connected to the site.
-      * There are other interfaces possible, but the `install-ncn-bond-members` are typically: 
+      * There are other interfaces possible, but the `install-ncn-bond-members` are typically:
          * `p1p1,p10p1` for HPE nodes
          * `p1p1,p1p2` for Gigabyte nodes
          * `p801p1,p801p2` for Intel nodes
@@ -379,7 +379,7 @@ Some files are needed for generating the configuration payload. See these topics
       * The starting cabinet number for each type of cabinet (for example, `starting-mountain-cabinet`) has a default that can be overridden. See the `csi config init --help`
       * For systems that use non-sequential cabinet ID numbers, use `cabinets-yaml` to include the `cabinets.yaml` file. This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to specify explicitly the id of every cabinet in the system. If you are using a `cabinets-yaml` file, flags specified on the `csi` command-line related to cabinets will be ignored. See [Create Cabinets YAML](create_cabinets_yaml.md).
       * An override to default cabinet IPv4 subnets can be made with the `hmn-mtn-cidr` and `nmn-mtn-cidr` parameters.
-      * By default, spine switches are used as MetalLB peers.  Use `--bgp-peers aggregation` to use aggregation switches instead.
+      * By default, spine switches are used as MetalLB peers. Use `--bgp-peers aggregation` to use aggregation switches instead.
       * Several parameters (`can-gateway`, `can-cidr`, `can-static-pool`, `can-dynamic-pool`) describe the CAN (Customer Access network). The `can-gateway` is the common gateway IP address used for both spine switches and commonly referred to as the Virtual IP address for the CAN. The `can-cidr` is the IP subnet for the CAN assigned to this system. The `can-static-pool` and `can-dynamic-pool` are the MetalLB address static and dynamic pools for the CAN. The `can-external-dns` is the static IP address assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded. The `can-external-dns` IP address must be within the `can-static-pool` range.
       * Set `ntp-pool` to a reachable NTP server
 
@@ -435,7 +435,7 @@ This will enable SSH, and other services when the LiveCD starts.
     ```bash
     linux# csi pit populate cow /mnt/cow/ ${SYSTEM_NAME}/
     ```
-   
+
     Expected output looks similar to the following:
 
     ```
@@ -466,7 +466,7 @@ This will enable SSH, and other services when the LiveCD starts.
 1. Unmount the Overlay, we are done with it
 
     ```bash
-    linux# umount -v /mnt/cow    
+    linux# umount -v /mnt/cow
     ```
 
 1. Make directories needed for basecamp (cloud-init) and the squashFS images
@@ -480,7 +480,7 @@ This will enable SSH, and other services when the LiveCD starts.
     ```bash
     linux# csi pit populate pitdata ${SYSTEM_NAME} /mnt/pitdata/configs -b
     ```
-    
+
     Expected output looks similar to the following:
 
     ```
@@ -502,7 +502,7 @@ This will enable SSH, and other services when the LiveCD starts.
     ```bash
     linux# csi pit populate pitdata "${CSM_PATH}/images/kubernetes/" /mnt/pitdata/data/k8s/ -kiK
     ```
-    
+
     Expected output looks similar to the following:
 
     ```
@@ -516,7 +516,7 @@ This will enable SSH, and other services when the LiveCD starts.
     ```bash
     linux# csi pit populate pitdata "${CSM_PATH}/images/storage-ceph/" /mnt/pitdata/data/ceph/ -kiC
     ```
-    
+
     Expected output looks similar to the following:
 
     ```
@@ -592,7 +592,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    ```
    pit login: root
    ```
-    
+
    Expected output looks similar to the following:
 
    ```
@@ -640,8 +640,8 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    pit# script -af /var/www/ephemeral/prep/logs/booted-csm-livecd.$(date +%Y-%m-%d).txt
    pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
-   
-1. Download and install/upgrade the workaround and documentation RPMs. 
+
+1. Download and install/upgrade the workaround and documentation RPMs.
 
    If this machine does not have direct Internet access these RPMs will need to be externally downloaded and then copied to the system.
 
@@ -662,7 +662,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    ```bash
    pit# cat /etc/pit-release
    ```
-    
+
    Expected output looks similar to the following:
 
    ```
@@ -721,7 +721,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    c7638b573b93  dtr.dev.cray.com/cray/metal-basecamp:1.1.0-1de4aa6                        5 minutes ago  Up 5 minutes ago          basecamp
    ```
 
-1. Follow directions in the output from the 'csi pit validate' commands for failed validations before continuing. 
+1. Follow directions in the output from the 'csi pit validate' commands for failed validations before continuing.
 
 <a name="next-topic"></a>
 # Next Topic

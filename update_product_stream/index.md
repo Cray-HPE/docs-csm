@@ -30,7 +30,7 @@ None.
 ### Procedure
 
    1. Download the CSM software release tarball for the HPE Cray EX system to a Linux system.
- 
+
       ```bash
       linux# export ENDPOINT=URL_SERVER_Hosting_tarball
       linux# export CSM_RELEASE=csm-x.y.z
@@ -170,45 +170,45 @@ None.
 
 #### Prerequisites
 
-   * The [latest workaround RPM](#workarounds) is installed. 
+   * The [latest workaround RPM](#workarounds) is installed.
    * The name of the workaround breakpoint (e.g. `before-configuration-payload` or `after-sysmgmt-manifest`) is known.
 
 ### Procedure
 
    1. Change to the directory containing the workarounds to be applied at this breakpoint.
-   
+
       ```bash
       linux# pushd /opt/cray/csm/workarounds/<put-actual-breakpoint-name-here>
       ```
-   
+
    1. List all subdirectories of this directory.
-   
+
       ```bash
       linux# find -maxdepth 1 -type d ! -name . | cut -c3-
       ```
-   
+
       If there is nothing listed, there are no workarounds to be applied at this breakpoint, and you can skip the next step.
-   
+
    1. For each subdirectory which is listed, apply the workaround described within it.
-   
+
       Perform the following steps for each subdirectory which was listed in the previous step.
 
       1. Change directory into the subdirectory.
-      
+
          ```bash
          linux# pushd <put-subdirectory-name-here>
          ```
-      
+
       1. View the `README.md` file in this directory, and carefully follow its instructions.
-     
+
       1. Return to the main directory for workarounds for this breakpoint.
-      
+
          ```bash
          linux# popd
          ```
-   
+
    1. The procedure is complete. Return to your original directory.
-   
+
       ```bash
       linux# popd
       ```
@@ -222,13 +222,13 @@ None.
 System installer
 
 #### Objective
-Collect all available Field Notices about Hotfixes which should be applied to this CSM software release. 
+Collect all available Field Notices about Hotfixes which should be applied to this CSM software release.
 
 #### Limitations
 None.
 
 ### Procedure
 
-Check with HPE Cray service for any Field Notices about Hotfixes which should be applied to this CSM software release. 
+Check with HPE Cray service for any Field Notices about Hotfixes which should be applied to this CSM software release.
 
 

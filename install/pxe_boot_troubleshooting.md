@@ -12,7 +12,7 @@ To successfully PXE boot nodes, the following is required.
 - The virtual-IP/VSX/MAGP IP address must be configured on VLAN 1,2,4,7.
 - There must be a static route pointing to the TFTP server (Aruba Only).
 - ncn-m001 needs an active gateway on VLAN1 this can be identified from MTL.yaml generated from CSI.
-- ncn-m001 needs an IP helper-address on VLAN1 pointing to 10.92.100.222. 
+- ncn-m001 needs an IP helper-address on VLAN1 pointing to 10.92.100.222.
 
 snippet of MTL.yaml
 ```
@@ -246,7 +246,7 @@ If these routes are missing please see [Update BGP Neighbors](../operations/upda
 If your configuration looks good, and you are still not able to PXE boot there are some other things to try.
 
 ### Restart BSS
-If while watching an NCN boot attempt you see the following output on the console during PXE 
+If while watching an NCN boot attempt you see the following output on the console during PXE
 (specifically the 404 error at the bottom):
 
 ```text

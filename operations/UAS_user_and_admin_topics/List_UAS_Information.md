@@ -14,7 +14,7 @@ version = "0.11.3"
 ### List Available UAS Images with `cray uas images list`
 
 ```bash
-ncn-w001# cray uas images list 
+ncn-w001# cray uas images list
 default_image = "registry.local/cray/cray-uas-sles15sp1-slurm:latest"
 image_list = [ "registry.local/cray/cray-uas-sles15sp1-slurm:latest", "registry.local/cray/cray-uas-sles15sp1:latest",]
 ```

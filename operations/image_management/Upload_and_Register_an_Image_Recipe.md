@@ -3,11 +3,11 @@
 Download and expand recipe archives from S3 and IMS. Modify and upload a recipe archive, and then register that recipe archive with IMS.
 
 ### Prerequisites
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system. 
+-   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 -   System management services \(SMS\) are running in a Kubernetes cluster on non-compute nodes \(NCN\) and include the following deployment:
     -   `cray-ims`, the Image Management Service \(IMS\)
 -   The NCN Certificate Authority \(CA\) public key has been properly installed into the CA cache for this system.
--   A token providing Simple Storage Service \(S3\) credentials has been generated. 
+-   A token providing Simple Storage Service \(S3\) credentials has been generated.
 
 ### Limitations
 
@@ -27,7 +27,7 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     id = "76ef564d-47d5-415a-bcef-d6022a416c3c"
     name = "cray-sles15-barebones"
     created = "2020-02-05T19:24:22.621448+00:00"
-    
+
     [results.link]
     path = "s3://ims/recipes/76ef564d-47d5-415a-bcef-d6022a416c3c/cray-sles15-barebones.tgz"
     etag = "28f3d78c8cceca2083d7d3090d96bbb7"
@@ -92,7 +92,7 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     ncn-m001# cray ims recipes create --name "My Recipe" \
     --recipe-type kiwi-ng --linux-distribution sles15
     created = "2018-12-04T17:25:52.482514+00:00"
-    id = "2233c82a-5081-4f67-bec4-4b59a60017a6" 
+    id = "2233c82a-5081-4f67-bec4-4b59a60017a6"
     linux_distribution = "sles15"
     name = "my_recipe.tgz"
     recipe_type = "kiwi-ng"
@@ -118,13 +118,13 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     ncn-m001# cray ims recipes update $IMS_RECIPE_ID \
     --link-type s3 \
     --link-path s3://ims/recipes/$IMS_RECIPE_ID/$ARTIFACT_FILE
-    
+
     id = "2233c82a-5081-4f67-bec4-4b59a60017a6"
     recipe_type = "kiwi-ng"
     linux_distribution = "sles15"
     name = "my_recipe.tgz"
     created = "2020-02-05T19:24:22.621448+00:00"
-    
+
     [link]
     path = "s3://ims/recipes/2233c82a-5081-4f67-bec4-4b59a60017a6/my_recipe.tgz"
     etag = ""

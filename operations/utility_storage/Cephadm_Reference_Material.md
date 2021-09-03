@@ -33,7 +33,7 @@ ncn-s# cephadm ceph-volume
 Optionally, this can be done by invoking a `cephadm` shell by appending a `ceph` command to the `cephadm` command.
 
 ```bash
-ncn-s# cephadm shell -- ceph-volume  
+ncn-s# cephadm shell -- ceph-volume
 ```
 
 ### Use `ceph orch`
@@ -41,7 +41,7 @@ ncn-s# cephadm shell -- ceph-volume
 Optionally, the following command will allow users to specify a single node name to just list that nodes drives.
 
 ```
-ncn-s00[123]# ceph orch device ls 
+ncn-s00[123]# ceph orch device ls
 ```
 
 ```

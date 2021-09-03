@@ -51,13 +51,13 @@ Configure an email alert notification for all Prometheus Postgres replication al
       - match:
           alertname: Watchdog
         receiver: "null"
-      - match: 
+      - match:
           alertname: PostgresqlReplicationLagSMA
         receiver:  email-alert
       - match:
           alertname: PostgresqlReplicationLagServices
         receiver:  email-alert
-      - match: 
+      - match:
           alertname: PostgresqlFollowerReplicationLagSMA
         receiver:  email-alert
       - match:

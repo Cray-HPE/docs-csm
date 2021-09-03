@@ -45,7 +45,7 @@ if [[ ${upgrade_ncn} == "ncn-m001" ]]; then
    state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
    if [[ $state_recorded == "0" ]]; then
       echo "====> ${state_name} ..."
-      
+
       scp root@ncn-m001:/etc/sysconfig/network/ifcfg-lan0 .
       record_state "${state_name}" ${upgrade_ncn}
    else
@@ -55,7 +55,7 @@ fi
 
 first_master_hostname=`curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global | \
      jq -r '.[] | ."cloud-init"."meta-data"."first-master-hostname"'`
-if [[ ${first_master_hostname} == ${upgrade_ncn} ]]; then   
+if [[ ${first_master_hostname} == ${upgrade_ncn} ]]; then
    state_name="RECONFIGURE_FIRST_MASTER"
    state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
    if [[ $state_recorded == "0" ]]; then
@@ -75,7 +75,7 @@ if [[ ${first_master_hostname} == ${upgrade_ncn} ]]; then
             echo "Promote: ${promotingMaster} to be FIRST_MASTER"
             break;
         fi
-      done  
+      done
 
       if [[ ${promotingMaster} == "none" ]];then
         echo "No master nodes has healthy cloud-init metadata, fail upgrade. You may try to upgrade another master node first. If that still fails, we do not have any master nodes that can be promoted."
@@ -135,7 +135,7 @@ if [[ $state_recorded == "0" ]]; then
       --key=/etc/kubernetes/pki/etcd/ca.key \
       --endpoints=localhost:2379 \
       member add $upgrade_ncn --peer-urls=https://$UPGRADE_IP_NMN:2380
-    
+
     record_state "${state_name}" ${upgrade_ncn}
 else
     echo "====> ${state_name} has been completed"

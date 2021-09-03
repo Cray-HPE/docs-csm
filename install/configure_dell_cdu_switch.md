@@ -136,22 +136,22 @@ The VLAN information is located in the network YAML files. Below are examples.
 
    Note: CSI does not yet generate IP addresses for the CDU switches on VLANs HMN_MTN and NMN_MTN.
    - The first CDU switch in the pair will always have an IP address ending in .2 on the HMN_MTN and NMN_MTN networks.
-   - The second CDU switch in the pair will always have an IP address ending in .3 on the HMN_MTN and NMN_MTN networks.  
-   - Both CDU MTN VLAN IP addresses will be at the beginning of the subnet. 
+   - The second CDU switch in the pair will always have an IP address ending in .3 on the HMN_MTN and NMN_MTN networks.
+   - Both CDU MTN VLAN IP addresses will be at the beginning of the subnet.
    - The gateway will always end in .1 and will be at the beginning of the subnet.
    - Every Mountain Cabinet will get its own HMN and NMN VLAN.
 
 1. Below is an example of CDU switch IP addressing based on the network .yaml files from above.
 
    | VLAN | CDU1 | CDU2	| Purpose |
-   | --- | --- | ---| --- | 
+   | --- | --- | ---| --- |
    | 2 | 10.252.0.5/17| 10.252.0.6/17 | River Node Management
    | 4 | 10.254.0.5/17| 10.254.0.6/17 | River Hardware Management
    | 2000 | 10.100.0.2/22| 10.100.0.3/22 | Mountain Node Management
    | 3000 | 10.104.0.2/22| 10.104.0.3/22 | Mountain Hardware Management
 
-   If the system has additional Mountain Cabinets the VLANs will look like this. 
-   This is an example of a system with 3 cabinets. 
+   If the system has additional Mountain Cabinets the VLANs will look like this.
+   This is an example of a system with 3 cabinets.
 
    | VLAN | CDU1 | CDU2	| Purpose |
    | --- | --- | ---| --- |
@@ -167,7 +167,7 @@ The CECs will be on the HMN VLAN of that cabinet.
 
 ![Example of CDU connections to CMM in SHCD](../img/network/CDU-CMM-SHCD.png)
 
-1. Once you have all this information you can now configure the VLANs on the switches. 
+1. Once you have all this information you can now configure the VLANs on the switches.
 
    NMN MTN VLAN config
 
@@ -268,7 +268,7 @@ These ACLs are designed to block traffic from the node management network to and
 ## Configure Spanning-tree
 
 Spanning tree is used to protect the network against layer2 loops.
-Dell switches should have these settings for spanning-tree using bpduguard and not bpdufilter.  
+Dell switches should have these settings for spanning-tree using bpduguard and not bpdufilter.
 
 1. Enable spanning tree for these VLANs.
 

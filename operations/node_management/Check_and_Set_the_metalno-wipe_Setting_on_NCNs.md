@@ -23,21 +23,21 @@ This procedure requires administrative privileges.
     ```bash
     ncn-m001# ./ncnGetXnames.sh
     ncn-m001: x3000c0s1b0n0 - metal.no-wipe=1
-     
+
     ncn-m002: x3000c0s2b0n0 - metal.no-wipe=1
-     
+
     ncn-m003: x3000c0s3b0n0 - metal.no-wipe=1
-     
+
     ncn-w001: x3000c0s4b0n0 - metal.no-wipe=1
-     
+
     ncn-w002: x3000c0s5b0n0 - metal.no-wipe=1
-     
+
     ncn-w003: x3000c0s6b0n0 - metal.no-wipe=1
-     
+
     ncn-s001: x3000c0s7b0n0 - metal.no-wipe=1
-     
+
     ncn-s002: x3000c0s8b0n0 - metal.no-wipe=1
-     
+
     ncn-s003: x3000c0s9b0n0 - metal.no-wipe=1
     ```
 
@@ -67,21 +67,21 @@ This procedure requires administrative privileges.
         ```bash
         ncn-m001# ./ncnGetXnames.sh
         ncn-m001: x3000c0s1b0n0 - metal.no-wipe=1
-         
+
         ncn-m002: x3000c0s2b0n0 - metal.no-wipe=1
-         
+
         ncn-m003: x3000c0s3b0n0 - metal.no-wipe=1
-         
+
         ncn-w001: x3000c0s4b0n0 - metal.no-wipe=1
-         
+
         ncn-w002: x3000c0s5b0n0 - metal.no-wipe=1
-         
+
         ncn-w003: x3000c0s6b0n0 - metal.no-wipe=1
-         
+
         ncn-s001: x3000c0s7b0n0 - metal.no-wipe=1
-         
+
         ncn-s002: x3000c0s8b0n0 - metal.no-wipe=1
-         
+
         ncn-s003: x3000c0s9b0n0 - metal.no-wipe=1
         ```
 

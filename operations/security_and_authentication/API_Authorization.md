@@ -63,23 +63,23 @@ The following is a list of available personas and the supported REST API endpoin
     {"method": "GET",  "path": `^/apis/cfs/.*$`},
     {"method": "HEAD",  "path": `^/apis/cfs/.*$`},
     {"method": "PATCH",  "path": `^/apis/cfs/.*$`},
-     
+
     {"method": "GET",  "path": `^/apis/v2/cps/.*$`},
     {"method": "HEAD",  "path": `^/apis/v2/cps/.*$`},
     {"method": "POST",  "path": `^/apis/v2/cps/.*$`},
-     
+
     {"method": "GET",  "path": `^/apis/hbtd/.*$`},
     {"method": "HEAD",  "path": `^/apis/hbtd/.*$`},
     {"method": "POST",  "path": `^/apis/hbtd/.*$`},
-     
+
     {"method": "GET",  "path": `^/apis/v2/nmd/.*$`},
     {"method": "HEAD",  "path": `^/apis/v2/nmd/.*$`},
     {"method": "POST",  "path": `^/apis/v2/nmd/.*$`},
     {"method": "PUT",  "path": `^/apis/v2/nmd/.*$`},
-     
+
     {"method": "GET",  "path": `^/apis/smd/.*$`},
     {"method": "HEAD",  "path": `^/apis/smd/.*$`},
-     
+
     {"method": "GET",  "path": `^/apis/hmnfd/.*$`},
     {"method": "HEAD",  "path": `^/apis/hmnfd/.*$`},
     {"method": "PATCH",  "path": `^/apis/hmnfd/.*$`},

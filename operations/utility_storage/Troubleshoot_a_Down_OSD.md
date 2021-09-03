@@ -27,7 +27,7 @@ This procedure requires admin privileges.
 
    Option 1
 
-   1. restart the osd ustilizing ceph orch
+   1. Restart the OSD utilizing `ceph orch`
 
     ```bash
     ncn-m/s00(1/2/3)# ceph orch daemon restart osd.<number>

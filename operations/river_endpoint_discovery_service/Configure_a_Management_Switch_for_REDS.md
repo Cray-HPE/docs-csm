@@ -82,7 +82,7 @@ If a new switch has been added to this system, contact the customer account repr
     ```bash
     sw-smn1# write memory
     !
-    
+
     sw-smn1#
     ```
 
@@ -94,7 +94,7 @@ If a new switch has been added to this system, contact the customer account repr
     sw-smn1# quit
     Session terminated for user admin on line vty 0 ( xxx.xxx.xxx.xx )
     Connection to 10.4.255.254 closed.
-    ncn-m001# 
+    ncn-m001#
     ```
 
 

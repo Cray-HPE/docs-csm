@@ -71,8 +71,8 @@ ncn# kubectl attach POD_NAME -i
 Use the deployment command to scale a deployment up or down, as shown in the following examples:
 
 ```bash
-ncn# kubectl scale deployment APPLICATION_NAME --replicas=0 
-ncn# kubectl scale deployment APPLICATION_NAME --replicas=3 
+ncn# kubectl scale deployment APPLICATION_NAME --replicas=0
+ncn# kubectl scale deployment APPLICATION_NAME --replicas=3
 ```
 
 ### Remove a Deployment with the Manifest and Reapply the Deployment

@@ -1,4 +1,4 @@
-# Hotfix to workaround known mac-learning issue with 8325. 
+# Hotfix to workaround known mac-learning issue with 8325.
 
 
 ## Issue description
@@ -13,9 +13,9 @@
 >
 >**Workaround:**        Reboot the switch or monitor the L2 thread and restart it with an NAE script
 >
->**Fixed in:**           10.06.0130, 10.7.0010 and above. 
+>**Fixed in:**           10.06.0130, 10.7.0010 and above.
 >
->[Aruba release notes](https://asp.arubanetworks.com/downloads;products=Aruba%20Switches;productSeries=Aruba%208325%20Switch%20Series) 
+>[Aruba release notes](https://asp.arubanetworks.com/downloads;products=Aruba%20Switches;productSeries=Aruba%208325%20Switch%20Series)
 
 ## To fix the issue without upgrading software:
 
@@ -27,7 +27,7 @@
     - The script writes file to a storage every 60s (NAE alert file)
     - There are no controls over alert status.
     - Event log is created when a problem is detected
-    
+
     “BCML2X has quit unexpectedly, attempting to restart...”
 
     - You can also grep the error from /var/log/messages
@@ -42,55 +42,55 @@
     - Automatic NAE install script (nae_upload.py) is located at: ../docs-csm/upgrade/1.0/scripts/aruba
 
 
-## Automated install of NAE script 
+## Automated install of NAE script
 
-### Prerequisites: 
+### Prerequisites:
 
 1. The nae-upload.py script relies on /etc/hosts file to pull IP addresses of the switch. Without this information the script won’t run.
-2. You have 8325 in your setup that is running software version below 10.06.0130. 
-3. Script assumes you  are using default username "admin"  for the switch and it will prompt you for password. 
+2. You have 8325 in your setup that is running software version below 10.06.0130.
+3. Script assumes you  are using default username "admin"  for the switch and it will prompt you for password.
 
 NOTE:     The nae-upload script automatically detects 8325’s and only applies the fix to this platform.
 
-### How to run the install script: 
+### How to run the install script:
 
-**Step 1:** 
+**Step 1:**
 
 > ncn-m001”:~ # ./docs-csm/upgrade/1.0/scripts/aruba/nae_upload.py
 
 **step 2:**
 
-> Type in your switch password and the script will upload and enable the NAE script. 
+> Type in your switch password and the script will upload and enable the NAE script.
 
 ### Manually Install of NAE script:
- 
+
 **Step 1:**
- 
+
     To get started, login to an AOS-CX device via the Web User Interface, and click on the Analytics section on the left, then click on the Scripts button on the top middle section.
 
-**Step 2:** 
+**Step 2:**
 
-    On the Scripts page: 
+    On the Scripts page:
 
     Install the script from your PC to your AOS-CX device by clicking the Upload button on the scripts page and navigating to the file location on your PC.
 
 **Step 3:**
- 
+
     After you have the script on the AOS-CX device, you now need to create an agent. On the Scripts page, you can click the Create Agent button and a Create Agent popup box will appear.
 
     Give the Agent a name (no spaces).
 
     NOTE: You can leave all other default values and click Create.
 
-**Step 4:** 
+**Step 4:**
 
-    Navigate you to the Agents page, where you can click on the name of the Agent you made to confirm it is running and no errors are generated. 
+    Navigate you to the Agents page, where you can click on the name of the Agent you made to confirm it is running and no errors are generated.
 
-    The Network Analytics Engine will monitor the switch and automatically fix the mac learning issue. 
+    The Network Analytics Engine will monitor the switch and automatically fix the mac learning issue.
 
-### Troubleshooting and known error messages: 
+### Troubleshooting and known error messages:
 
-Incorrect password: 
+Incorrect password:
 
 > ncn-m001:~ # ./nae_upload.py
 > Switch login password:
@@ -105,7 +105,7 @@ Incorrect password:
 > raise JSONDecodeError("Extra data", s, end, len(s))
 > simplejson.errors.JSONDecodeError: Extra data: line 1 column 5 - line 1 column 27 (char 4 - 26)
 
-Script has already been loaded: 
+Script has already been loaded:
 
 > ncn-m001:~ # ./nae_upload.py
 > Switch login password:

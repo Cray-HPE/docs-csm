@@ -39,7 +39,7 @@ To resolve this issue, run `cray auth login` to refresh the access token.
 # cray uas create --publickey ~/.ssh/id_rsa.pub
 Usage: cray uas create [OPTIONS]
 Try "cray uas create --help" for help.
- 
+
 Error: Bad Request: Token not valid for UAS. Attributes missing: ['name', 'uidNumber', 'preferred_username', 'gidNumber', 'loginShell', 'homeDirectory']
 ```
 
@@ -52,15 +52,15 @@ To resolve this issue, make sure the `cray` command is configured to use one of 
             "key": "https://mgmt-plane-cmn.local/keycloak/realms/shasta",
 # cray config describe | grep hostname
     "hostname": "https://172.30.51.127:30443" <---- 172.30.51.127:30443 will not work
- 
- 
+
+
 # Change to "https://api-gw-service-nmn.local"
 cray init --hostname "https://api-gw-service-nmn.local"
 Overwrite configuration file at: /root/.config/cray/configurations/default ? [y/N]: y
 Username: user
 Password:
 Success!
- 
+
 Initialization complete.
 ```
 
@@ -70,7 +70,7 @@ Initialization complete.
 # cray auth login --username <user> --password <wrongpassword>
 Usage: cray auth login [OPTIONS]
 Try "cray auth login --help" for help.
- 
+
 Error: Invalid Credentials
 ```
 
@@ -88,7 +88,7 @@ The `cray uas describe <user>` is no longer a valid command.
 # cray uas describe <user>
 Usage: cray uas [OPTIONS] COMMAND [ARGS]...
 Try "cray uas --help" for help.
- 
+
 Error: No such command "describe".
 ```
 
@@ -102,7 +102,7 @@ uai_host = ""
 uai_status = "Running: Ready"
 uai_connect_string = ""
 uai_img = ""
-uai_age = "11m" 
+uai_age = "11m"
 uai_name = ""
 ```
 

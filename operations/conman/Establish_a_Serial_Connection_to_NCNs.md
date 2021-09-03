@@ -27,44 +27,44 @@ The user performing this procedure needs to have access permission to the cray-c
     ```
 
 3. **Optional:** Move the cray-console-node pod.
-   
+
     The pod can be proactively moved to a different worker if a power or reboot operation is going to be performed on the node where the pod is running.
 
     1. Prevent new pods from being scheduled on the NCN worker node currently running ConMan.
 
         Replace the NCN_HOSTNAME value before running the command. An example NCN_HOSTNAME is ncn-w002.
-        
+
         ```
         ncn-m001# kubectl cordon NCN_HOSTNAME
         ```
-      
+
     2. Delete the pod.
-       
+
         When the pod comes back up, it will be on a different NCN worker node.
-        
+
         ```
         ncn-m001# kubectl -n services delete $NODEPOD
         ```
-    
+
     3. Wait for pod to terminate and come back up again.
 
         It may take several minutes even after the pod is running for the console connections to be re-established. In the mean time, there is a small chance that the console connection will be moved to a different cray-console-node pod.
-    
+
     4. Check which cray-console-node pod the NCN is connected to.
-      
+
         ```
         ncn-m001# NODEPOD=$(kubectl -n services exec $CONPOD -c cray-console-operator -- sh -c '/app/get-node XNAME' \
         | jq .podname | sed 's/"//g')
         ncn-m001# echo $NODEPOD
         ```
-        
+
         If the result is 'cray-console-node-' the console connection has not been re-established so wait and try again until a valid pod name is returned.
 
 
 4. Establish a serial console session (from ncn-m001) with the desired NCN.
-   
+
     Exec into the correct cray-console-node pod.
-    
+
     ```
     ncn-m001# kubectl -n services exec -it $NODEPOD -- /bin/bash
     cray-console-node-1:/ #
@@ -72,11 +72,11 @@ The user performing this procedure needs to have access permission to the cray-c
 
 
 5. Establish a console session for the desired NCN.
-   
+
     ```
     cray-console-node-1:/ # conman -j XNAME
     <ConMan> Connection to console [XNAME] opened.
-   
+
     nid000009 login:
     ```
 

@@ -19,7 +19,7 @@ After the CDU is switched on and healthy, the liquid-cooled PDU circuit breakers
 
 2. If the system does not have Cray EX liquid-cooled cabinets, proceed to step 7.
 
-   
+
 **POWER ON CRAY EX LIQUID-COOLED CABINET CIRCUIT BREAKERS**
 
 3. Power on the CDU for the cabinet cooling group.
@@ -60,7 +60,7 @@ After the CDU is switched on and healthy, the liquid-cooled PDU circuit breakers
    ncn-m001# cray capmc xname_on create --xnames x[1000-1003]c[0-7]r[1,3,5,7] --format json
    ```
 
-   
+
 **POWER ON STANDARD RACK PDU CIRCUIT BREAKERS**
 
 7. Switch the standard rack compute and I/O cabinet PDU circuit breakers to ON.

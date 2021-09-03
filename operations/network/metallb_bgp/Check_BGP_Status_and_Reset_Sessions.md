@@ -27,7 +27,7 @@ This procedure requires administrative privileges.
         ```bash
         sw-spine-001 [standalone: master] > enable
         sw-spine-001 [standalone: master] # show ip bgp summary
-         
+
         VRF name                  : default
         BGP router identifier     : 10.252.0.2
         local AS number           : 65533
@@ -36,7 +36,7 @@ This procedure requires administrative privileges.
         IPV4 Prefixes             : 68
         IPV6 Prefixes             : 0
         L2VPN EVPN Prefixes       : 0
-         
+
         ------------------------------------------------------------------------------------------------------------------
         Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   Up/Down       State/PfxRcd
         ------------------------------------------------------------------------------------------------------------------
@@ -82,7 +82,7 @@ This procedure requires administrative privileges.
         ```bash
         sw-spine-001 [standalone: master] > enable
         sw-spine-001 [standalone: master] # show ip bgp summary
-        
+
         VRF name                  : default
         BGP router identifier     : 10.252.0.2
         local AS number           : 65533
@@ -91,7 +91,7 @@ This procedure requires administrative privileges.
         IPV4 Prefixes             : 68
         IPV6 Prefixes             : 0
         L2VPN EVPN Prefixes       : 0
-         
+
         ------------------------------------------------------------------------------------------------------------------
         Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   Up/Down       State/PfxRcd
         ------------------------------------------------------------------------------------------------------------------
@@ -129,7 +129,7 @@ This procedure requires administrative privileges.
          Peers                  : 4            Log Neighbor Changes   : No
          Cfg. Hold Time         : 180          Cfg. Keep Alive        : 60
          Confederation Id       : 0
-         
+
          Neighbor        Remote-AS MsgRcvd MsgSent   Up/Down Time State        AdminStatus
          10.252.0.3      65533       19704   19708   00m:01w:00d  Established   Up
          10.252.1.10     65533       34455   39416   00m:01w:04d  Established   Up
@@ -170,7 +170,7 @@ This procedure requires administrative privileges.
          Peers                  : 4            Log Neighbor Changes   : No
          Cfg. Hold Time         : 180          Cfg. Keep Alive        : 60
          Confederation Id       : 0
-         
+
          Neighbor        Remote-AS MsgRcvd MsgSent   Up/Down Time State        AdminStatus
          10.252.0.3      65533       19704   19708   00m:01w:00d  Established   Up
          10.252.1.10     65533       34455   39416   00m:01w:04d  Established   Up

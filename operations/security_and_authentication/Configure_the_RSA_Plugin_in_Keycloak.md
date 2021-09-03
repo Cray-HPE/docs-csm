@@ -50,11 +50,11 @@ Access to the Keycloak UI is needed.
         | RSA Verify Endpoint                   | `/mfa/v1_1/authn/initialize`                                 |
         | Keycloak Client ID                    | The authentication agent. For example, `rsa.mycompany.com`. The value is from **Access** \> **Authentication Agents** \> **Manage Existing in the RSA Console**. |
         | RSA Authentication Manager Client Key | The key for the RSA API.                                     |
-        
+
     8. Set the **Shared username** if applicable.
-    
+
        If the usernames are the same in Keycloak and RSA, then this can be set to ON. This means the browser flow will not ask for the username for the RSA validation.
-    
+
     9. Click **Save**.
 
 5.  Return to the **Flows** tab on the Authentication page.

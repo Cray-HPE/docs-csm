@@ -187,7 +187,7 @@ during or after the installation, but it is better to meet the minimum NCN firmw
 
     > This is _optional_, the BIOS settings (or lack thereof) do not prevent deployment. The NCN Installation will work with the CMOS' default BIOS. There may be settings that facilitate the speed of deployment, but they may be tuned at a later time.
 
-    > **`NOTE`** The BIOS tuning will be automated, further reducing this step. 
+    > **`NOTE`** The BIOS tuning will be automated, further reducing this step.
 
 1. Check for minimum NCN firmware versions and update them as needed,
    The firmware on the management nodes should be checked for compliance with the minimum version required
@@ -230,7 +230,7 @@ The configuration workflow described here is intended to help understand the exp
     - The third master node `ncn-m003` boots and waits for `ncn-m002` to create the `/etc/cray/kubernetes/join-command-control-plane` so it can join Kubernetes
     - The second master node `ncn-m002` boots, runs the kubernetes-cloudinit.sh which will create /etc/kubernetes/admin.conf and /etc/cray/kubernetes/join-command-control-plan, then waits for the storage node to create etcd-backup-s3-credentials
 1. Once `ncn-s001` notices that `ncn-m002` has created /etc/kubernetes/admin.conf, then `ncn-s001` waits for any worker node to become available.
-1. Once each worker node notices that `ncn-m002` has created /etc/cray/kubernetes/join-command-control-plan, then it will join the Kubernetes cluster.  
+1. Once each worker node notices that `ncn-m002` has created /etc/cray/kubernetes/join-command-control-plan, then it will join the Kubernetes cluster.
     - Now `ncn-s001` should notice this from any one of the worker nodes and move forward with creation of ConfigMaps and running the post-Ceph playbooks (s3, OSD pools, quotas, etc.)
 1. Once `ncn-s001` creates etcd-backup-s3-credentials during the benji-backups role which is one of the last roles after Ceph has been set up, then `ncn-m001` notices this and moves forward
 
@@ -294,34 +294,36 @@ The configuration workflow described here is intended to help understand the exp
     ncn-w003-mgmt
     ```
 
-    > **`IMPORTANT`** This is the administrators _last chance_ to run [NCN pre-boot workarounds](#apply-ncn-pre-boot-workarounds).
+    > **`IMPORTANT`** This is the administrators _last chance_ to run [NCN pre-boot workarounds](#apply-ncn-pre-boot-workarounds) (the `before-ncn-boot` breakpoint).
 
     > **`NOTE`**: All consoles are located at `/var/log/conman/console*`
 
 1. Boot the **Storage Nodes**
 
     1. Boot all storage nodes except `ncn-s001`:
-    
+
         ```bash
         pit# grep -oP $stoken /etc/dnsmasq.d/statics.conf | grep -v "ncn-s001-" | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power on
         ```
-    
+
     1. Wait approximately 1 minute.
-    
+
     1. Boot `ncn-s001`:
-    
+
         ```bash
         pit# ipmitool -I lanplus -U $USERNAME -E -H ncn-s001-mgmt power on
         ```
 
 1. Wait. Observe the installation through `ncn-s001-mgmt`'s console:
 
-    Print the console name
+    Print the console name:
+
     ```bash
     pit# conman -q | grep s001
     ```
 
     Expected output looks similar to the following:
+
     ```
     ncn-s001-mgmt
     ```
@@ -356,7 +358,8 @@ The configuration workflow described here is intended to help understand the exp
 
 1.  Wait. Observe the installation through `ncn-m002-mgmt`'s console:
 
-    Print the console name
+    Print the console name:
+
     ```bash
     pit# conman -q | grep m002
     ```
@@ -407,19 +410,17 @@ The configuration workflow described here is intended to help understand the exp
 #### 3.3 Check for Unused Drives on Utility Storage Nodes
 
 > **`IMPORTANT:`** Do the following if NCNs are Gigabyte hardware. It is suggested (but optional) for HPE NCNs.
-> 
+>
 > **`IMPORTANT:`** the cephadm may output this warning "WARNING: The same type, major and minor should not be used for multiple devices.". You can ignore this warning.
 
 ##### Option 1
 
-  If you have OSDs on each node (`ceph osd tree` can show this) then you have all your nodes in Ceph. That means you can utilize the orchestrator to look for the devices.  
-  
-  **NOTE:** `ceph osd tree` can be run from ncn-m00(1/2/3) or ncn-s00(1/2/3).
+  If you have OSDs on each node (`ceph osd tree` can be run from any master or storage node to show this) then you have all your nodes in Ceph. That means you can utilize the orchestrator to look for the devices.
 
 1. Get the number of osds in the cluster.
 
     ```bash
-    ncn-s00(1/2/3)# ceph -f json-pretty osd stat |jq .num_osds
+    ncn-s# ceph -f json-pretty osd stat |jq .num_osds
     24
     ```
 
@@ -428,32 +429,32 @@ The configuration workflow described here is intended to help understand the exp
    > **NOTE:**  If your Ceph cluster is large and has a lot of nodes, you can specify a node after the below command to limit the results.
 
     ```bash
-     ncn-s001:~ # ceph orch device ls
-     Hostname  Path      Type  Serial              Size   Health   Ident  Fault  Available
-     ncn-s001  /dev/sda  ssd   PHYF015500M71P9DGN  1920G  Unknown  N/A    N/A    No
-     ncn-s001  /dev/sdb  ssd   PHYF016500TZ1P9DGN  1920G  Unknown  N/A    N/A    No
-     ncn-s001  /dev/sdc  ssd   PHYF016402EB1P9DGN  1920G  Unknown  N/A    N/A    No
-     ncn-s001  /dev/sdd  ssd   PHYF016504831P9DGN  1920G  Unknown  N/A    N/A    No
-     ncn-s001  /dev/sde  ssd   PHYF016500TV1P9DGN  1920G  Unknown  N/A    N/A    No
-     ncn-s001  /dev/sdf  ssd   PHYF016501131P9DGN  1920G  Unknown  N/A    N/A    No
-     ncn-s001  /dev/sdi  ssd   PHYF016500YB1P9DGN  1920G  Unknown  N/A    N/A    No
-     ncn-s001  /dev/sdj  ssd   PHYF016500WN1P9DGN  1920G  Unknown  N/A    N/A    No
-     ncn-s002  /dev/sda  ssd   PHYF0155006W1P9DGN  1920G  Unknown  N/A    N/A    No
-     ncn-s002  /dev/sdb  ssd   PHYF0155006Z1P9DGN  1920G  Unknown  N/A    N/A    No
-     ncn-s002  /dev/sdc  ssd   PHYF015500L61P9DGN  1920G  Unknown  N/A    N/A    No
-     ncn-s002  /dev/sdd  ssd   PHYF015502631P9DGN  1920G  Unknown  N/A    N/A    No
-     ncn-s002  /dev/sde  ssd   PHYF0153000G1P9DGN  1920G  Unknown  N/A    N/A    No
-     ncn-s002  /dev/sdf  ssd   PHYF016401T41P9DGN  1920G  Unknown  N/A    N/A    No
-     ncn-s002  /dev/sdi  ssd   PHYF016504C21P9DGN  1920G  Unknown  N/A    N/A    No
-     ncn-s002  /dev/sdj  ssd   PHYF015500GQ1P9DGN  1920G  Unknown  N/A    N/A    No
-     ncn-s003  /dev/sda  ssd   PHYF016402FP1P9DGN  1920G  Unknown  N/A    N/A    No
-     ncn-s003  /dev/sdb  ssd   PHYF016401TE1P9DGN  1920G  Unknown  N/A    N/A    No
-     ncn-s003  /dev/sdc  ssd   PHYF015500N51P9DGN  1920G  Unknown  N/A    N/A    No
-     ncn-s003  /dev/sdd  ssd   PHYF0165010Z1P9DGN  1920G  Unknown  N/A    N/A    No
-     ncn-s003  /dev/sde  ssd   PHYF016500YR1P9DGN  1920G  Unknown  N/A    N/A    No
-     ncn-s003  /dev/sdf  ssd   PHYF016500X01P9DGN  1920G  Unknown  N/A    N/A    No
-     ncn-s003  /dev/sdi  ssd   PHYF0165011H1P9DGN  1920G  Unknown  N/A    N/A    No
-     ncn-s003  /dev/sdj  ssd   PHYF016500TQ1P9DGN  1920G  Unknown  N/A    N/A    No
+    ncn-s# ceph orch device ls
+    Hostname  Path      Type  Serial              Size   Health   Ident  Fault  Available
+    ncn-s001  /dev/sda  ssd   PHYF015500M71P9DGN  1920G  Unknown  N/A    N/A    No
+    ncn-s001  /dev/sdb  ssd   PHYF016500TZ1P9DGN  1920G  Unknown  N/A    N/A    No
+    ncn-s001  /dev/sdc  ssd   PHYF016402EB1P9DGN  1920G  Unknown  N/A    N/A    No
+    ncn-s001  /dev/sdd  ssd   PHYF016504831P9DGN  1920G  Unknown  N/A    N/A    No
+    ncn-s001  /dev/sde  ssd   PHYF016500TV1P9DGN  1920G  Unknown  N/A    N/A    No
+    ncn-s001  /dev/sdf  ssd   PHYF016501131P9DGN  1920G  Unknown  N/A    N/A    No
+    ncn-s001  /dev/sdi  ssd   PHYF016500YB1P9DGN  1920G  Unknown  N/A    N/A    No
+    ncn-s001  /dev/sdj  ssd   PHYF016500WN1P9DGN  1920G  Unknown  N/A    N/A    No
+    ncn-s002  /dev/sda  ssd   PHYF0155006W1P9DGN  1920G  Unknown  N/A    N/A    No
+    ncn-s002  /dev/sdb  ssd   PHYF0155006Z1P9DGN  1920G  Unknown  N/A    N/A    No
+    ncn-s002  /dev/sdc  ssd   PHYF015500L61P9DGN  1920G  Unknown  N/A    N/A    No
+    ncn-s002  /dev/sdd  ssd   PHYF015502631P9DGN  1920G  Unknown  N/A    N/A    No
+    ncn-s002  /dev/sde  ssd   PHYF0153000G1P9DGN  1920G  Unknown  N/A    N/A    No
+    ncn-s002  /dev/sdf  ssd   PHYF016401T41P9DGN  1920G  Unknown  N/A    N/A    No
+    ncn-s002  /dev/sdi  ssd   PHYF016504C21P9DGN  1920G  Unknown  N/A    N/A    No
+    ncn-s002  /dev/sdj  ssd   PHYF015500GQ1P9DGN  1920G  Unknown  N/A    N/A    No
+    ncn-s003  /dev/sda  ssd   PHYF016402FP1P9DGN  1920G  Unknown  N/A    N/A    No
+    ncn-s003  /dev/sdb  ssd   PHYF016401TE1P9DGN  1920G  Unknown  N/A    N/A    No
+    ncn-s003  /dev/sdc  ssd   PHYF015500N51P9DGN  1920G  Unknown  N/A    N/A    No
+    ncn-s003  /dev/sdd  ssd   PHYF0165010Z1P9DGN  1920G  Unknown  N/A    N/A    No
+    ncn-s003  /dev/sde  ssd   PHYF016500YR1P9DGN  1920G  Unknown  N/A    N/A    No
+    ncn-s003  /dev/sdf  ssd   PHYF016500X01P9DGN  1920G  Unknown  N/A    N/A    No
+    ncn-s003  /dev/sdi  ssd   PHYF0165011H1P9DGN  1920G  Unknown  N/A    N/A    No
+    ncn-s003  /dev/sdj  ssd   PHYF016500TQ1P9DGN  1920G  Unknown  N/A    N/A    No
     ```
 
     If you have devices that are "Available = Yes" and they are not being automatically added you may have to zap that device.
@@ -463,22 +464,22 @@ The configuration workflow described here is intended to help understand the exp
 1. Check to see if the number of devices is less than the number of listed drives or your output from step 1.
 
    ```bash
-    ncn-s00(1/2/3)# ceph orch device ls|grep dev|wc -l
+    ncn-s# ceph orch device ls|grep dev|wc -l
     24
     ```
 
-    If the numbers are equal, then you may need to fail your ceph-mgr daemon to get a fresh inventory.
+    If the numbers are equal, then you may need to fail your `ceph-mgr` daemon to get a fresh inventory.
 
     ```bash
-    ncn-s00(1/2/3)# ceph mgr fail $(ceph mgr dump | jq -r .active_name)
+    ncn-s# ceph mgr fail $(ceph mgr dump | jq -r .active_name)
     ```
 
-    Give it a minute then re-check `ceph orch device ls` to see if the drives are still showing as available. If so, then proceed to the next step.
+    Give it 5 minutes then re-check `ceph orch device ls` to see if the drives are still showing as available. If so, then proceed to the next step.
 
 1. `ssh` to the host and look at `lsblk` output and check against the device from the above `ceph orch device ls`
 
     ```bash
-    ncn-s001# lsblk
+    ncn-s# lsblk
     NAME                                                                                                 MAJ:MIN RM   SIZE RO TYPE   MOUNTPOINT
     loop0                                                                                                   7:0    0   4.2G  1 loop  / run/    rootfsbase
     loop1                                                                                                  7:1    0    30G  0 loop
@@ -493,18 +494,18 @@ The configuration workflow described here is intended to help understand the exp
 
 ##### Option 2
 
-**`IMPORTANT:`** the cephadm may output this warning "WARNING: The same type, major and minor should not be used for multiple devices.". You can ignore this warning. 
-
 1. Log into **each** ncn-s node and check for unused drives.
 
     ```bash
     ncn-s# cephadm shell -- ceph-volume inventory
     ```
 
-    The field "available" would be true if Ceph sees the drive as empty and can
+    **`IMPORTANT:`** The `cephadm` command may output this warning `WARNING: The same type, major and minor should not be used for multiple devices.`. You can ignore this warning.
+
+    The field `available` would be `True` if Ceph sees the drive as empty and can
     be used, e.g.:
 
-    ```bash
+    ```
     Device Path               Size         rotates available Model name
     /dev/sda                  447.13 GB    False   False     SAMSUNG MZ7LH480
     /dev/sdb                  447.13 GB    False   False     SAMSUNG MZ7LH480
@@ -524,18 +525,18 @@ The configuration workflow described here is intended to help understand the exp
 
 1. Wipe the drive ONLY after you have confirmed the drive is not being used by the current Ceph cluster via options 1, 2, or both.
 
-    > The following example wipes drive /dev/sdc on ncn-s002. You should replace these values with the appropriate ones for your situation.
+    > The following example wipes drive `/dev/sdc` on `ncn-s002`. You should replace these values with the appropriate ones for your situation.
     ```bash
     ncn-s# ceph orch device zap ncn-s002 /dev/sdc --force
     ```
 
-1. Add unused drives
+1. Add unused drives.
 
     ```bash
     ncn-s# cephadm shell -- ceph-volume lvm create --data /dev/sd<drive to add> --bluestore
     ```
 
-More information can be found at [the cephadm reference page](../operations/utility_storage/cephadm-reference.md).
+More information can be found at [the `cephadm` reference page](../operations/utility_storage/cephadm-reference.md).
 
 <a name="apply-ncn-post-boot-workarounds"></a>
 #### 3.4 Apply NCN Post-Boot Workarounds
@@ -574,32 +575,39 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
    pit# export SYSTEM_NAME=eniac
    ```
 
+1. Determine the IP address of the worker NCNs.
+
+   ```bash
+   pit# grep -B1 "name: ncn-w" /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN.yaml
+   ```
+
 1. Determine the IP addresses for the switches that are peering.
 
    ```bash
    pit# grep peer-address /var/www/ephemeral/prep/${SYSTEM_NAME}/metallb.yaml
    ```
 
-1. Determine the IP address of the worker NCNs.
+1. Do the following steps for each of the switch IP addresses that you found in the previous step:
 
-   ```bash
-   pit# grep -B1 "name: ncn-w" /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN.yaml
-   ```
- 
-1. Clear the BGP peering sessions by running the following commands on BOTH of the switches found above. You should see either "arubanetworks" or "Mellanox" in the first output you see when you log in to the switch.
-   - Aruba: `clear bgp *`
-   - Mellanox: `clear ip bgp all`
-     - Make sure to run `enable` when you first log in to the Mellanox switch.
+    1. Log in to the switch as the `admin` user:
 
-1. Check the status of the BGP peering sessions.
-   - Aruba: `show bgp ipv4 unicast summary`
-   - Mellanox: `show ip bgp summary`
+        ```bash
+        pit# ssh admin@<switch_ip_address>
+        ```
 
-   You should see a neighbor for each of the workers NCN IP addresses found above. If it is an Aruba switch, you will also see a neighbor for the other switch of the pair that are peering.
+    1. Clear the BGP peering sessions by running the following commands. You should see either "arubanetworks" or "Mellanox" in the first output you see when you log in to the switch.
+        - Aruba: `clear bgp *`
+        - Mellanox: First run `enable`, then run `clear ip bgp all`
 
-   At this point the peering sessions with the worker IP addresses should be in `IDLE`, `CONNECT`, or `ACTIVE` state and not `ESTABLISHED` state. This is due to the MetalLB speaker pods not being deployed yet.
- 
-   You should see that the MsgRcvd and MsgSent columns for the worker IP addresses are 0.
+1. Check the status of the BGP peering sessions by running the following commands **on each switch**:
+    - Aruba: `show bgp ipv4 unicast summary`
+    - Mellanox: `show ip bgp summary`
+
+    You should see a neighbor for each of the workers NCN IP addresses found in an earlier step. If it is an Aruba switch, you will also see a neighbor for the other switch of the pair that are peering.
+
+   At this point the peering sessions with the worker IP addresses should be in `IDLE`, `CONNECT`, or `ACTIVE` state (not `ESTABLISHED`). This is due to the MetalLB speaker pods not being deployed yet.
+
+   You should see that the `MsgRcvd` and `MsgSent` columns for the worker IP addresses are 0.
 
 1. If the neighbor IP addresses do not match the worker NCN IP addresses, use the helper script for your switch type to configure the BGP peers.
 
@@ -620,7 +628,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
       The BGP helper script requires three parameters: IP of switch 1, IP of Switch 2, Path to CSI generated network files.
 
       - The IP addresses used should be Node Management Network IP addresses (NMN). These IP addresses will be used for the BGP Router-ID.
-      - The path to the CSI generated network files must include CAN.yaml', 'HMN.yaml', 'HMNLB.yaml', 'NMNLB.yaml', and 'NMN.yaml. The path must include the SYSTEM_NAME.
+      - The path to the CSI generated network files must include `CAN.yaml`, `HMN.yaml`, `HMNLB.yaml`, `NMNLB.yaml`, and `NMN.yaml`. The path must include the SYSTEM_NAME.
 
       For Aruba:
 
@@ -638,22 +646,22 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
       pit# /usr/bin/mellanox_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/
       ```
 
-   1. Check the status of the BGP peering sessions.
+   1. Check the status of the BGP peering sessions **on each switch**.
       - Aruba: `show bgp ipv4 unicast summary`
       - Mellanox: `show ip bgp summary`
 
       You should see a neighbor for each of the workers NCN IP addresses found above. If it is an Aruba switch, you will also see a neighbor for the other switch of the pair that are peering.
 
-      At this point the peering sessions with the worker IP addresses should be in `IDLE`, `CONNECT`, or `ACTIVE` state and not `ESTABLISHED` state. This is due to the MetalLB speaker pods not being deployed yet.
- 
-      You should see that the MsgRcvd and MsgSent columns for the worker IP addresses are 0.
+      At this point the peering sessions with the worker IP addresses should be in `IDLE`, `CONNECT`, or `ACTIVE` state (not `ESTABLISHED`). This is due to the MetalLB speaker pods not being deployed yet.
+
+      You should see that the `MsgRcvd` and `MsgSent` columns for the worker IP addresses are 0.
 
 <a name="configure-and-trim-uefi-entries"></a>
 #### 4.3 Configure and Trim UEFI Entries
 
 > **`IMPORTANT`** *The Boot-Order is set by cloud-init, however the current setting is still iterating. This manual step is required until further notice.*
 
-1. Do the following two steps outlined in [Set Boot Order](../background/ncn_boot_workflow.md#set-boot-order)
+1. Do the following two steps outlined in [Set Boot Order](../background/ncn_boot_workflow.md#set-boot-order) **for all NCNs and the PIT node**.
 
    1. [Setting Order](../background/ncn_boot_workflow.md#setting-order)
    1. [Trimming Boot Order](../background/ncn_boot_workflow.md#trimming_boot_order)
@@ -683,13 +691,13 @@ Observe the output of the checks and note any failures, then remediate them.
 1. Check Ceph
 
    ```bash
-   pit# csi pit validate --ceph | tee csi-pit-validate-ceph.log 
+   pit# csi pit validate --ceph | tee csi-pit-validate-ceph.log
    ```
-   
+
    **`Note`**: Throughout the output there are multiple lines of test totals; be sure to check all of them and not just the final one.
    > The following will extract the test totals:
    > ```bash
-   > grep "Total" csi-pit-validate-ceph.log
+   > pit# grep "Total" csi-pit-validate-ceph.log
    > ```
    >
    > Example output for a system with 3 storage nodes:
@@ -710,7 +718,7 @@ Observe the output of the checks and note any failures, then remediate them.
    **`Note`**: Throughout the output there are multiple lines of test totals; be sure to check all of them and not just the final one.
    > The following will extract the test totals:
    > ```bash
-   > grep "Total" csi-pit-validate-k8s.log
+   > pit# grep "Total" csi-pit-validate-k8s.log
    > ```
    >
    > Example output for a system with 5 Kubernetes nodes:
@@ -724,13 +732,16 @@ Observe the output of the checks and note any failures, then remediate them.
 
    > **`WARNING`** if test failures for "/dev/sdc" are observed they should be discarded for a manual test:
    >
+   > master nodes:
    > ```bash
-   > # master nodes:
-   > ncn# blkid -L ETCDLVM
-   > # worker nodes:
-   > ncn# blkid -L CONLIB
-   > ncn# blkid -L CONRUN
-   > ncn# blkid -L K8SLET
+   > ncn-m# blkid -L ETCDLVM
+   > ```
+   >
+   > worker nodes:
+   > ```bash
+   > ncn-w# blkid -L CONLIB
+   > ncn-w# blkid -L CONRUN
+   > ncn-w# blkid -L K8SLET
    > ```
    >
    > The test should be looking for the ephemeral disk, that disk is sometimes `/dev/sdc`. The name of the disk is a more accurate test, and is not prone to the random path change.
@@ -744,7 +755,7 @@ Observe the output of the checks and note any failures, then remediate them.
    ```bash
    ncn# weave --local status connections | grep failed
    ```
-   If you see messages like **IP allocation was seeded by different peers** then weave looks to have split-brained. At this point it is necessary to wipe the NCNs and start the PXE boot again:
+   If you see messages like `IP allocation was seeded by different peers` then weave looks to have split-brained. At this point it is necessary to wipe the NCNs and start the PXE boot again:
 
    1. Wipe the NCNs using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md).
    1. Return to the 'Boot the **Storage Nodes**' step of [Deploy Management Nodes](#deploy_management_nodes) section above.
@@ -763,32 +774,32 @@ Observe the output of the checks and note any failures, then remediate them.
 
    Check that the status of kubernetes nodes is `Ready`.
    ```bash
-   kubectl get nodes
+   ncn# kubectl get nodes
    ```
    If one or more nodes are not in the `Ready` state, the following command can be run to get additional information:
    ```bash
-   kubectl describe node <node-name>  #for example, ncn-m001
+   ncn# kubectl describe node <node-name>  #for example, ncn-m001
    ```
 
    2. Verify etcd is running outside Kubernetes on master nodes
 
    On each kubernetes master node, check the status of the etcd service and ensure it is Active/Running:
    ```bash
-   systemctl status etcd.service
+   ncn-m# systemctl status etcd.service
    ```
 
    3. Verify that all the pods in the kube-system namespace are running
 
    Check that pods listed are in the `Running` or `Completed` state.
    ```bash
-   kubectl get pods -o wide -n kube-system
+   ncn# kubectl get pods -o wide -n kube-system
    ```
 
    4. Verify that the ceph-csi requirements are in place [Ceph CSI Troubleshooting](ceph_csi_troubleshooting.md)
 
 # Important Checkpoint
 
-> Before you move on, this is the last point where you will be able to rebuild nodes without having to rebuild the PIT node. So take time to double check either the cluster or the validation test results**
+> Before you move on, this is the last point where you will be able to rebuild nodes without having to rebuild the PIT node. So take time to double check both the cluster and the validation test results
 
 <a name="next-topic"></a>
 # Next Topic

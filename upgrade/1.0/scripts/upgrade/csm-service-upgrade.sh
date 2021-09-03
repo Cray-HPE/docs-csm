@@ -25,7 +25,7 @@ state_name="PRE_CSM_UPGRADE_RESIZE"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    
+
     /usr/share/doc/csm/upgrade/1.0/scripts/postgres-operator/pre-service-upgrade.sh
 
     record_state ${state_name} $(hostname)
@@ -37,8 +37,8 @@ state_name="CSM_SERVICE_UPGRADE"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    
-    # try csm service upgrade (3 times) 
+
+    # try csm service upgrade (3 times)
     set +e
     n=0
     csm_upgraded=0
@@ -50,7 +50,7 @@ if [[ $state_recorded == "0" ]]; then
             csm_upgraded=1
             break
         else
-            n=$((n+1)) 
+            n=$((n+1))
         fi
     done
     popd +0
@@ -69,9 +69,9 @@ state_name="POST_CSM_UPGRADE_RESIZE"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    
+
     /usr/share/doc/csm/upgrade/1.0/scripts/postgres-operator/post-service-upgrade.sh
-    
+
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"

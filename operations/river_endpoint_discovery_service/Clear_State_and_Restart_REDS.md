@@ -4,7 +4,7 @@ Many solutions to common River Endpoint Discovery Service \(REDS\) errors requir
 
 ### Prerequisites
 
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system. 
+-   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 
 ### Procedure
 

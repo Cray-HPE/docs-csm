@@ -57,13 +57,13 @@ If there are more than 27 IP addresses needed for NCNs, UANs, and switches, and/
 The following variables are defined in the `csi config init` input. This example uses values for the /26 layout described above. The `can-gateway` value should be an IP address at the end of the range for NCNs, UANs, and switches. For example, the IP address would be 10.102.5.27 using the figure shown above.
 
 ```screen
-linux# csi config init 
+linux# csi config init
 .
 .
 .
-     --can-cidr 10.102.5.0/26 
-     --can-gateway  10.102.5.27 
-     --can-static-pool 10.102.5.28/30 
+     --can-cidr 10.102.5.0/26
+     --can-gateway  10.102.5.27
+     --can-static-pool 10.102.5.28/30
      --can-dynamic-pool 10.102.5.32/27
      --can-external-dns 10.102.5.29
      --system-name testsystem

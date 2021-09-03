@@ -15,9 +15,9 @@ for Markdown tools will provide a long list of these tools. Some of the tools ar
 at displaying the images and allowing you to follow the navigational links.
 
 The exploration of the CSM documentation begins with the Table of Contents in
-the [Cray System Management Installation Guide](index.md) which introduces 
+the [Cray System Management Installation Guide](index.md) which introduces
 topics related to CSM software installation, upgrade, and operational use. Notice that the
-previous sentence had a link to the index.md file for the Cray System Management Installation Guide. 
+previous sentence had a link to the index.md file for the Cray System Management Installation Guide.
 If the link does not work, then a better Markdown viewer is needed.
 
 Within this README.md file, these topics are described.
@@ -59,7 +59,7 @@ review serves to keep core contributors in alignment while maintaining coherency
 the documentation.
 
 <a name="releases"></a>
-### Releases 
+### Releases
 
 This guide follows a basic release model for enabling amendments and maintenance across releases.
 

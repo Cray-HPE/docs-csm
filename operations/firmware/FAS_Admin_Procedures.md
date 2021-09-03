@@ -346,7 +346,7 @@ This procedure includes information on how check the firmware versions for the e
                "initial": {
                  "OperationsKeys": []
                },
-               "failed": {   
+               "failed": {
                  "OperationsKeys": [
                    {
                      "stateHelper": "unexpected change detected in firmware version. Expected sc.1.4.35-prod- master.arm64.2020-06-26T08:36:42+00:00.0c2bb02 got: sc.1.3.307-prod-master.arm64.2020-06-13T00:28:26+00:00.f91edff",

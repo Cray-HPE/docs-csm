@@ -4,7 +4,7 @@
    this pod once the worker is rebuilt. In the example below nodes ncn-w001, ncn-w002, and ncn-w003 have the pod.
 
    > NOTE: If the command below does not return any pod names, proceed to step 2.
-   
+
    > NOTE: A 404 error is expected if the COS product is not installed on the system. In this case, proceed to step 2.
 
    > NOTE: If `cray` is not initialized, please check [Initialize the CLI Configuration](https://stash.us.cray.com/projects/CSM/repos/docs-csm/browse/operations/validate_csm_health.md#uas-uai-init-cli-init)

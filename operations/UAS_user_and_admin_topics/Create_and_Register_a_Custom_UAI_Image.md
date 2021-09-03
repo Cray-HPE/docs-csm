@@ -88,9 +88,9 @@ The default end-user UAI is not suitable for use with the Cray PE. The generic i
     uai_name = "uai-vers-32079250"
     uai_status = "Pending"
     username = "vers"
-    
+
     [uai_portmap]
-    
+
     ncn# scp vers@10.26.23.123:/usr/bin/uai-ssh.sh ./usr/bin/uai-ssh.sh
     The authenticity of host '10.26.23.123 (10.26.23.123)' can't be established.
     ECDSA key fingerprint is SHA256:voQUCKDG4C9FGkmUcHZVrYJBXVKVYqcJ4kmTpe4tvOA.

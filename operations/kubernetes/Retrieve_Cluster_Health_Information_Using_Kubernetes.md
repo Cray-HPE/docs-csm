@@ -38,7 +38,7 @@ kvstore-3-5b658b9bd9-n9dgt              1/1       Running   1          11d
 
 ### Retrieve Information about Individual Pods
 
-```bash 
+```bash
 ncn# kubectl describe pod POD_NAME -n NAMESPACE_NAME
 ```
 

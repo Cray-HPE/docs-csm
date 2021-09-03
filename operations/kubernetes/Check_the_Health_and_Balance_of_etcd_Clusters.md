@@ -20,7 +20,7 @@ This procedure requires root privileges.
     ncn-w001# for pod in $(kubectl get pods -l app=etcd -n services \
     -o jsonpath='{.items[*].metadata.name}'); do echo "### ${pod} ###"; \
     kubectl -n services exec ${pod} -- /bin/sh -c "ETCDCTL_API=3 etcdctl endpoint health"; done
-     
+
     ### cray-bos-etcd-6nkn6dzhv7 ###
     127.0.0.1:2379 is healthy: successfully committed proposal: took = 1.670457ms
     ### cray-bos-etcd-6xtp2gqs64 ###
@@ -87,44 +87,44 @@ This procedure requires root privileges.
     ncn-w001# kubectl get pod -n services -o wide | head -n 1; for cluster in \
     $(kubectl get etcdclusters.etcd.database.coreos.com -n services | grep -v NAME | \
     awk '{print $1}'); do kubectl get pod -n services -o wide | grep $cluster; echo ""; done
-    
+
     NAME                                    READY   STATUS    RESTARTS AGE   IP            NODE       NOMINATED NODE  READINESS GATE
     cray-bos-etcd-7gl9dccmrq                1/1     Running   0        8d    10.40.0.88    ncn-w003   <none>          <none>
     cray-bos-etcd-g65fjhhlbg                1/1     Running   0        8d    10.42.0.36    ncn-w002   <none>          <none>
     cray-bos-etcd-lbsppj5kt7                1/1     Running   0        20h   10.47.0.98    ncn-w001   <none>          <none>
-    
+
     cray-bss-etcd-dbhxvz824w                1/1     Running   0        8d    10.42.0.45    ncn-w002   <none>          <none>
     cray-bss-etcd-hzpbrcn2pb                1/1     Running   0        20h   10.47.0.99    ncn-w001   <none>          <none>
     cray-bss-etcd-kpc64v64wd                1/1     Running   0        8d    10.40.0.43    ncn-w003   <none>          <none>
-    
+
     cray-cps-etcd-8ndvn4dlx4                1/1     Running   0        20h   10.47.0.100   ncn-w001   <none>          <none>
     cray-cps-etcd-gvlql48gwk                1/1     Running   0        8d    10.40.0.89    ncn-w003   <none>          <none>
     cray-cps-etcd-wsvhmp4f7p                1/1     Running   0        8d    10.42.0.64    ncn-w002   <none>          <none>
-    
+
     cray-crus-etcd-2wvb2bpczb               1/1     Running   0        20h   10.47.0.117   ncn-w001   <none>          <none>
     cray-crus-etcd-fhbcvknghh               1/1     Running   0        8d    10.42.0.34    ncn-w002   <none>          <none>
     cray-crus-etcd-nrxqzftrzr               1/1     Running   0        8d    10.40.0.45    ncn-w003   <none>          <none>
-    
+
     cray-externaldns-etcd-7skqmr825d        1/1     Running   0        20h   10.47.0.119   ncn-w001   <none>          <none>
     cray-externaldns-etcd-gm2s7nkjgl        1/1     Running   0        8d    10.42.0.13    ncn-w002   <none>          <none>
     cray-externaldns-etcd-ttnchdrwjl        1/1     Running   0        8d    10.40.0.22    ncn-w003   <none>          <none>
-    
+
     cray-fas-etcd-29qcrd8qdt                1/1     Running   0        20h   10.47.0.102   ncn-w001   <none>          <none>
     cray-fas-etcd-987c87m4mv                1/1     Running   0        8d    10.40.0.66    ncn-w003   <none>          <none>
     cray-fas-etcd-9fxbzkzrsv                1/1     Running   0        8d    10.42.0.43    ncn-w002   <none>          <none>
-    
+
     cray-hbtd-etcd-2sf24nw5zs               1/1     Running   0        8d    10.40.0.78    ncn-w003   <none>          <none>
     cray-hbtd-etcd-5r6mgvjct8               1/1     Running   0        20h   10.47.0.105   ncn-w001   <none>          <none>
     cray-hbtd-etcd-t78x5wqkjt               1/1     Running   0        8d    10.42.0.51    ncn-w002   <none>          <none>
-    
+
     cray-hmnfd-etcd-99j5zt5ln6              1/1     Running   0        8d    10.40.0.74    ncn-w003   <none>          <none>
     cray-hmnfd-etcd-h9gnvvs7rs              1/1     Running   0        8d    10.42.0.39    ncn-w002   <none>          <none>
     cray-hmnfd-etcd-lj72f8xjkv              1/1     Running   0        20h   10.47.0.103   ncn-w001   <none>          <none>
-    
+
     cray-reds-etcd-97wr66d4pj               1/1     Running   0        20h   10.47.0.129   ncn-w001   <none>          <none>
     cray-reds-etcd-kmggscpzrf               1/1     Running   0        8d    10.40.0.64    ncn-w003   <none>          <none>
     cray-reds-etcd-zcwrhm884l               1/1     Running   0        8d    10.42.0.53    ncn-w002   <none>          <none>
-    
+
     cray-uas-mgr-etcd-7gmh92t2hx            1/1     Running   0        20h   10.47.0.94    ncn-w001   <none>          <none>
     cray-uas-mgr-etcd-7m4qmtgp6t            1/1     Running   0        8d    10.42.0.67    ncn-w002   <none>          <none>
     cray-uas-mgr-etcd-pldlkpr48w            1/1     Running   0        8d    10.40.0.94    ncn-w003   <none>          <none>
@@ -148,7 +148,7 @@ This procedure requires root privileges.
                           ETCDCTL_API=3 etcdctl get foo" 2>&1)
             echo $dbc | awk '{ if ( $1=="OK" && $2=="foo" && \
                                $3=="fooCheck" && $4=="1" && $5=="" ) print \
-            "PASS:  " PRINT $0; 
+            "PASS:  " PRINT $0;
             else \
             print "FAILED DATABASE CHECK - EXPECTED: OK foo fooCheck 1 \
             GOT: " PRINT $0 }'
@@ -243,7 +243,7 @@ This procedure requires root privileges.
                           ETCDCTL_API=3 etcdctl get foo" 2>&1)
             echo $dbc | awk '{ if ( $1=="OK" && $2=="foo" && \
                                $3=="fooCheck" && $4=="1" && $5=="" ) print \
-            "PASS:  " PRINT $0; 
+            "PASS:  " PRINT $0;
             else \
             print "FAILED DATABASE CHECK - EXPECTED: OK foo fooCheck 1 \
             GOT: " PRINT $0 }'

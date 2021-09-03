@@ -22,7 +22,7 @@ Manifest = {
     'Version': '1.0',
     'TargetSoftwareVersion': '10.04',
     'Author': 'Aruba Networks - CEE Team'
-    
+
 }
 
 class Policy(NAE):
@@ -41,7 +41,7 @@ class Policy(NAE):
     def writeScript (self):
         self.variables['configured'] = '1'
         # The following ActionShell will do the following:
-        # 1. create a temporary file for 
+        # 1. create a temporary file for
         # 2. install a bash script to the switch which used
         #    for creating the watchdog for BCML2X
         ActionShell(

@@ -11,7 +11,7 @@ The primary way to customize the broker UAI image is by defining volumes and con
 
 ### Customize the Broker UAI Entrypoint Script
 
-The broker UAI entrypoint script runs once every time the broker UAI starts. It resides at `/app/broker/entrypoint.sh` in the broker UAI image. The entrypoint script is the only file in that directory, so it can be overridden by creating a Kubernetes ConfigMap in the `uas` namespace containing the modified script and creating a volume using that ConfigMap with a mount point of `/app/broker`. There is critical content in the entrypoint script that should not be modified. 
+The broker UAI entrypoint script runs once every time the broker UAI starts. It resides at `/app/broker/entrypoint.sh` in the broker UAI image. The entrypoint script is the only file in that directory, so it can be overridden by creating a Kubernetes ConfigMap in the `uas` namespace containing the modified script and creating a volume using that ConfigMap with a mount point of `/app/broker`. There is critical content in the entrypoint script that should not be modified.
 
 The following shows the contents of an unmodified script:
 
@@ -271,7 +271,7 @@ EOF
 
 ncn-m001-pit# kubectl create configmap -n uas broker-sshd-conf --from-file sshd_config --from-file banner
 
-ncn-m001-pit# cray uas admin config volumes create --mount-path /etc/switchboard --volume-description '{"config_map": {"name": "broker-sshd-conf", "default_mode": 384}}' --volumename broker-sshd-config 
+ncn-m001-pit# cray uas admin config volumes create --mount-path /etc/switchboard --volume-description '{"config_map": {"name": "broker-sshd-conf", "default_mode": 384}}' --volumename broker-sshd-config
 mount_path = "/etc/switchboard"
 volume_id = "d5058121-c1b6-4360-824d-3c712371f042"
 volumename = "broker-sshd-config"
@@ -364,7 +364,7 @@ To connect to the broker to log in:
 vers> ssh vers@10.103.13.162
 Here is a banner that will be displayed before login to SSH
 on Broker UAIs
-Password: 
+Password:
 ```
 
 

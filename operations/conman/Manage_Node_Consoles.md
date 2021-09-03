@@ -15,7 +15,7 @@ See [ConMan](ConMan.md) for other procedures related to remote consoles and node
 ### Procedure
 
 This procedure can be run from any member of the Kubernetes cluster to verify node consoles are being managed
-by ConMan and to connect to a console. 
+by ConMan and to connect to a console.
 
 **Note:** this procedure has changed since the CSM 0.9 release.
 
@@ -62,7 +62,7 @@ by ConMan and to connect to a console.
     ```bash
     cray-console-node# conman -j <xname>
     ```
-    
+
     > The console session can be exited by entering `&.`
 
 1. Repeat the previous steps to verify that cray-conman is now managing all nodes that are included in HSM.

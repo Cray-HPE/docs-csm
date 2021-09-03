@@ -20,7 +20,7 @@ upgrade that node.
 
 > NOTE: CSM-0.9.4 or CSM-0.9.5 is the version of CSM required in order to upgrade to CSM-1.0.0 (available with Shasta v1.5).
 
-> NOTE: Installed CSM versions may be listed from the product catalog using the following command. This will sort a semantic version without a hyphenated suffix after the same semantic version with a hyphenated suffix, e.g. 1.0.0 > 1.0.0-beta.19. 
+> NOTE: Installed CSM versions may be listed from the product catalog using the following command. This will sort a semantic version without a hyphenated suffix after the same semantic version with a hyphenated suffix, e.g. 1.0.0 > 1.0.0-beta.19.
 >
 
 The following command can be used to check the CSM version on the system:
@@ -154,11 +154,11 @@ Directory location = /etc/cray/ceph/_upgraded
 
    `**`IMPORTANT NOTES`**
 
-   > * At this point your Ceph commands will still be working.  
-   > * You have a new way of executing Ceph commands in addition to the traditional way.  
+   > * At this point your Ceph commands will still be working.
+   > * You have a new way of executing Ceph commands in addition to the traditional way.
    >   * Please see [cephadm-reference.md](resource_material/storage/cephadm-reference.md) for more information.
    > * Both methods are dependent on the master nodes and storage nodes 001/2/3 have a ceph.client.admin.keyring and/or a ceph.conf file    (cephadm will not require the ceph.conf).
-   > * When you continue with Stage 2, you may have issues running your Ceph commands.  
+   > * When you continue with Stage 2, you may have issues running your Ceph commands.
    >   * If you are experiencing this, please double check that you restored your /etc/ceph directory from your tar backup.
    > * Any deployments that are backed by a cephfs PVC will be unavailable during this stage of the upgrade. These deployments will be    scaled down and back up automatically. This includes **(but can vary by deployment)**: `nexus`, `cray-ipxe`, `cray-tftp`, `cray-ims`,    `cray-console-operator`, and `cray-cfs-api-db`. To view the complete list for the system being upgraded, run the following script to list    them:
     >>
@@ -186,7 +186,7 @@ Directory location = /etc/cray/ceph/_upgraded
 
 ### Stage 2. Ceph image upgrade
 
-For each storage node in the cluster, start by following the steps: 
+For each storage node in the cluster, start by following the steps:
 
 ```bash
 ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-ceph-nodes.sh ncn-s001
@@ -228,12 +228,12 @@ After the last storage node has been rebooted you will need to deploy node-expor
      node-exporter.ncn-s001  ncn-s001  running (57m)  3m ago     67m  0.18.1   docker.io/prom/node-exporter:v0.18.1             e5a616e4b9cf       3465eade21da
      node-exporter.ncn-s002  ncn-s002  running (57m)  3m ago     67m  0.18.1   registry.local/prometheus/node-exporter:v0.18.1  e5a616e4b9cf       7ed9b6cc9991
      node-exporter.ncn-s003  ncn-s003  running (57m)  3m ago     67m  0.18.1   registry.local/prometheus/node-exporter:v0.18.1  e5a616e4b9cf       1078d9e555e4
-     
+
      ncn-s00(1/2/3)# ceph orch ps --daemon_type alertmanager
      NAME                   HOST      STATUS         REFRESHED  AGE  VERSION  IMAGE NAME                                      IMAGE ID           CONTAINER ID
      alertmanager.ncn-s001  ncn-s001  running (66m)  3m ago     68m  0.20.0   registry.local/prometheus/alertmanager:v0.20.0  0881eb8f169f       775aa53f938f
      ```
-  
+
   **IMPORTANT:** There should be a node-exporter container per ceph node and a single alertmanager container for the cluster.
 
 ### Stage 3. Kubernetes Upgrade from 1.18.6 to 1.19.9
@@ -261,7 +261,7 @@ ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-worker.
 
 > NOTE: Run the script once each for all worker nodes. Follow output of above script carefully. The script will pause for manual interaction
 
-> NOTE: It is expected that some pods may be in bad state during a worker node upgrade. This is due to a temporary lack of computing resources during a worker upgrade. Once the worker node has been upgraded and rejoined cluster, those pods will be up and running again. All critical services have more than one replica so if one pod is down, the service is still available. 
+> NOTE: It is expected that some pods may be in bad state during a worker node upgrade. This is due to a temporary lack of computing resources during a worker upgrade. Once the worker node has been upgraded and rejoined cluster, those pods will be up and running again. All critical services have more than one replica so if one pod is down, the service is still available.
 
 #### Stage 3.3
 
@@ -329,7 +329,7 @@ ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/csm-service-upgrade.sh
 
 **`IMPORTANT`:** This script will re-try up to three times if failures are encountered -- but if the script seems to hang for thirty minutes or longer without progressing, the administrator should interrupt the script (CTRL-C) and re-run it.
 
-### Stage 5. - Workaround for known mac-learning issue with 8325. 
+### Stage 5. - Workaround for known mac-learning issue with 8325.
 
 
 #### Issue description
@@ -344,9 +344,9 @@ ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/csm-service-upgrade.sh
 >
 >**Workaround:**        Reboot the switch or monitor the L2 thread and restart it with an NAE script
 >
->**Fixed in:**	       10.06.0130, 10.7.0010 and above. 
+>**Fixed in:**	       10.06.0130, 10.7.0010 and above.
 >
->[Aruba release notes](https://asp.arubanetworks.com/downloads;products=Aruba%20Switches;productSeries=Aruba%208325%20Switch%20Series) 
+>[Aruba release notes](https://asp.arubanetworks.com/downloads;products=Aruba%20Switches;productSeries=Aruba%208325%20Switch%20Series)
 
 #### To fix the issue without upgrading software:
 
@@ -357,26 +357,26 @@ ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/csm-service-upgrade.sh
 	- The NAE script (L2X-Watchdog-creates-bash-script.py) is located at: ../docs-csm/upgrade/1.0/scripts/aruba
 	- Automatic NAE install script (nae_upload.py) is located at: ../docs-csm/upgrade/1.0/scripts/aruba
 
-### Automated install of NAE script 
+### Automated install of NAE script
 
-#### Prerequisites: 
+#### Prerequisites:
 
 1. The nae-upload.py script relies on /etc/hosts file to pull IP addresses of the switch. Without this information the script won’t run.
-2. You have 8325 in your setup that is running software version below 10.06.0130. 
-3. Script assumes you  are using default username "admin"  for the switch and it will prompt you for password. 
+2. You have 8325 in your setup that is running software version below 10.06.0130.
+3. Script assumes you  are using default username "admin"  for the switch and it will prompt you for password.
 
 NOTE: 	The nae-upload script automatically detects 8325’s and only applies the fix to this platform.
 
-#### How to run the install script: 
+#### How to run the install script:
 
-**Step 1:** 
+**Step 1:**
 ```
 ncn-m002:~ # /usr/share/doc/csm/upgrade/1.0/scripts/aruba/nae_upload.py
 ```
 
 **step 2:**
 
-> Type in your switch password and the script will upload and enable the NAE script. 
+> Type in your switch password and the script will upload and enable the NAE script.
 
 ### General Kubernetes Commands for Troubleshooting
 
@@ -384,7 +384,7 @@ Please see [Kubernetes_Troubleshooting_Information.md](../../troubleshooting/kub
 
 ### Troubleshooting PXE Boot Issues
 
-If execution of the upgrade procedures results in NCNs that have errors booting, please refer to these troubleshooting procedures: 
+If execution of the upgrade procedures results in NCNs that have errors booting, please refer to these troubleshooting procedures:
 [PXE Booting Runbook](../../troubleshooting/pxe_runbook.md)
 
 ### Troubleshooting NTP
@@ -437,4 +437,4 @@ ncn-m001:~ # cat /etc/cray/upgrade/csm/{CSM_VERSION}/ncn-m001/state
 ```
 
 * See the inline comment above on how to rerun a single step
-* If you need to rerun the whole upgrade of a node, you can just delete the state file 
+* If you need to rerun the whole upgrade of a node, you can just delete the state file

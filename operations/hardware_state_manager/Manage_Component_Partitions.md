@@ -21,7 +21,7 @@ The following is an example partition that contains the optional tags field:
 }
 ```
 
-**Troubleshooting:** If the Cray CLI has not been initialized, the CLI commands will not work. 
+**Troubleshooting:** If the Cray CLI has not been initialized, the CLI commands will not work.
 
 ### Create a New Partition
 
@@ -40,7 +40,7 @@ Create a new partition with a pre-set members list:
 ```screen
 ncn-m# cray hsm partitions create --name PARTITION_NAME \
 --description DESCRIPTION OF PARTITION_NAME \
---members-ids MEMBER_ID,MEMBER_ID,MEMBER_ID,MEMBER_ID 
+--members-ids MEMBER_ID,MEMBER_ID,MEMBER_ID,MEMBER_ID
 ```
 
 Create a new partition:

@@ -21,7 +21,7 @@ Complete a CRUS session that did not successfully upgrade all of the intended co
     ncn# cray hsm groups describe FAILED_NODES_GROUP
     label = "failed-nodes"
     description = ""
-    
+
     [members]
     ids = [ "x0c0s28b0n0",]
     ```

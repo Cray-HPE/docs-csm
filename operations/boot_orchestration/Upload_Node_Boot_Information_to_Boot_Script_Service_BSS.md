@@ -12,7 +12,7 @@ BSS manages the iPXE boot scripts that coordinate the boot process for nodes, an
 
 ### Prerequisites
 
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system. 
+-   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 -   Boot Script Service \(BSS\) is running in containers on a non-compute node \(NCN\).
 -   An initrd image and kernel image for one or more nodes have been uploaded to the artifact repository \(see [Manage Artifacts with the Cray CLI](../artifact_management/Manage_Artifacts_with_the_Cray_CLI.md)\).
 
@@ -31,14 +31,14 @@ Because the parameters that must be specified in the PUT command are lengthy, th
 
     -   `NIDS` = a list of node IDs of the nodes to be booted.
     -   `HOSTS` = a list of strings identifying by host name the nodes to be booted.
-    
+
     The following script is generic. A script with specific values is below this one.
 
     ```
     #!/bin/bash
     NCN=api-gw-service-nmn.local
-    KERNEL=s3://S3_BUCKET/S3_OBJECT_KEY/initrd 
-    INITRD=s3://S3_BUCKET/S3_OBJECT_KEY/kernel 
+    KERNEL=s3://S3_BUCKET/S3_OBJECT_KEY/initrd
+    INITRD=s3://S3_BUCKET/S3_OBJECT_KEY/kernel
     PARAMS="STRING_WITH_BOOT_PARAMETERS crashkernel=360M"
     #
     # By NID

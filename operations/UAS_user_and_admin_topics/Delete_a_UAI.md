@@ -19,7 +19,7 @@ Currently, the user must SSH to the system as `root`.
 
     ```bash
     ncn-w001# cray uas list
-    
+
     username = "user"
     uai_host = "ncn-w001"
     uai_status = "Running: Ready"
@@ -27,7 +27,7 @@ Currently, the user must SSH to the system as `root`.
     uai_img = "registry.local/cray/cray-uas-sles15sp1-slurm:latest"
     uai_age = "0m"
     uai_name = "uai-user-be3a6770"
-    
+
     username = "user"
     uai_host = "ncn-s001"
     uai_status = "Running: Ready"

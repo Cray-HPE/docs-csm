@@ -19,7 +19,7 @@ Verify that the ceph-csi requirements are in place
       ```bash
       ncn-s001# ceph -s
       ```
-      If it returns a connection error then assume Ceph is not installed. See [Rerun Storage Node cloud-init](#rerun_storage_node_cloud-init).  
+      If it returns a connection error then assume Ceph is not installed. See [Rerun Storage Node cloud-init](#rerun_storage_node_cloud-init).
    1. Verify all post-Ceph-install tasks have run
 
       Log in to ncn-s001 and check /etc/cray/ceph for completed task files (ceph_k8s_initialized & csi_initialized).
@@ -45,7 +45,7 @@ Verify that the ceph-csi requirements are in place
       kube-csi-sc        1      3h50m
       sma-csi-sc         1      3h50m
       sts-rados-config   1      4h
-      
+
       ncn# kubectl get secrets | grep csi
       csi-cephfs-secret             Opaque                                4      3h51m
       csi-kube-secret               Opaque                                2      3h51m
@@ -100,4 +100,4 @@ Verify that the ceph-csi requirements are in place
 
        * If your output is like above then that means that all the steps ran.
            - You can also locate file in /etc/cray/ceph that are created as each step completes.
-       * If the script failed out then you will have more output for the tasks that are being run. 
+       * If the script failed out then you will have more output for the tasks that are being run.

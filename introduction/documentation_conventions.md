@@ -153,8 +153,8 @@ Enter "setup" mode for the switch make and model, for example:
 remote# ssh admin@sw-leaf-001
 sw-leaf-001>  enable
 sw-leaf-001#  configure terminal
-sw-leaf-001(conf)# 
+sw-leaf-001(conf)#
 ```
 
-Refer to the switch vendor OEM documentation for more information about configuring a specific switch. 
+Refer to the switch vendor OEM documentation for more information about configuring a specific switch.
 

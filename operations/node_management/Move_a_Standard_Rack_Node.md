@@ -39,15 +39,15 @@ Update the location-based xname for a standard rack node within the system.
         ```bash
         ncn-m001# cray sls hardware describe x3000c0w31j31 --format json
           {
-            "TypeString": "MgmtSwitchConnector", 
-            "Parent": "x3000c0w31", 
-            "Type": "comptype_mgmt_switch_connector", 
-            "Xname": "x3000c0w31j31", 
-            "Class": "River", 
+            "TypeString": "MgmtSwitchConnector",
+            "Parent": "x3000c0w31",
+            "Type": "comptype_mgmt_switch_connector",
+            "Xname": "x3000c0w31j31",
+            "Class": "River",
             "ExtraProperties": {
               "NodeNics": [
                 "x3000c0s24b0"
-              ], 
+              ],
               "VendorName": "ethernet1/1/31"
             }
           }
@@ -89,7 +89,7 @@ Update the location-based xname for a standard rack node within the system.
     ncn-m001# cray hsm inventory redfishEndpoints delete $OLDENDPOINT
     message = "deleted 1 entry"
     code = 0
-    
+
     ncn-m001# for ID in $(cray hsm inventory ethernetInterfaces list \
     --format json | jq -r ".[] | select(.ComponentID==\"$OLDENDPOINT\").ID"); \
     do cray hsm inventory ethernetInterfaces delete $ID; done

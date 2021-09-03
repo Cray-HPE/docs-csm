@@ -21,8 +21,8 @@ In the current arrangement, all three services are located on a non-compute node
     ncn-m001# kubectl get pods -n services -o wide|grep -E "NAME|kea"
     NAME                                 READY   STATUS      RESTARTS   AGE     IP            NODE       NOMINATED NODE   READINESS GATES
     cray-dhcp-kea-6b78789fc4-lzmff       3/3     Running     0          5d12h   10.42.0.30    ncn-w002   <none>           <none>
-    
-    
+
+
     ncn-m001# kubectl logs -n services DHCP_KEA_POD_ID -c CONTAINER
     DHCPDISCOVER from a4:bf:01:23:1a:f4 via vlan100
     ICMP Echo reply while lease 10.100.160.199 valid.

@@ -2,7 +2,7 @@
 
 This page describes how Dell aggregation switches are configured.
 
-Management nodes and Application nodes will be plugged into aggregation switches. 
+Management nodes and Application nodes will be plugged into aggregation switches.
 
 They run in a high availability pair and use VLT to provide redundancy.
 
@@ -71,11 +71,11 @@ The VLAN information is located in the network YAML files. Below are examples.
    | --- | --- | ---| --- |
    | 2 | 10.252.0.4/17| 10.252.0.5/17 | River Node Management
    | 4 | 10.254.0.4/17| 10.254.0.5/17 | River Hardware Management
-   
+
 1. NMN VLAN config
 
    ```
-   sw-agg-001(config)# 
+   sw-agg-001(config)#
        vlan 2
        interface vlan2
        vsx-sync active-gateways
@@ -83,7 +83,7 @@ The VLAN information is located in the network YAML files. Below are examples.
        ip mtu 9198
        exit
 
-   sw-agg-002(config)# 
+   sw-agg-002(config)#
        vlan 2
        interface vlan2
        ip address 10.252.0.4/17
@@ -101,7 +101,7 @@ The VLAN information is located in the network YAML files. Below are examples.
        ip mtu 9198
        exit
 
-   sw-agg-002(config)# 
+   sw-agg-002(config)#
        vlan 4
        interface vlan4
        vsx-sync active-gateways
@@ -167,7 +167,7 @@ These ACLs are designed to block traffic from the node management network to and
 
 1. OSPF is a dynamic routing protocol used to exchange routes.
    It provides reachability from the MTN networks to NMN/Kubernetes networks.
-   The router-id used here is the NMN IP address. (VLAN 2 IP) 
+   The router-id used here is the NMN IP address. (VLAN 2 IP)
 
    ```
    sw-agg-001 & sw-agg-002 (config)#
@@ -225,7 +225,7 @@ The IP addresses used here will be the first three worker nodes on the NMN netwo
 
 ## Configure DNS
 
-1. This will point to the unbound DNS server. 
+1. This will point to the unbound DNS server.
 
    ```
    sw-agg-001 & sw-agg-002 (config)#

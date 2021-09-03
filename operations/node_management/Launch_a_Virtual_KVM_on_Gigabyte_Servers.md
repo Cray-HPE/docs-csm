@@ -36,7 +36,7 @@ This procedure shows how to launch a virtual KVM to connect to Gigabyte server. 
         -   H5Viewer is compatible with most browsers.
         -   JViewer is an option when HTML5 is not available.
         -   Serial Over LAN should be used as a last resort option.
-    
+
     The virtual KVM is ready to use. There is now a virtual KVM session connected to the server that enables control via the web similar to standing directly in front of the physical KVM.
 
     **Troubleshooting:** If the interface appears to lock up while working in the BMC menus \(often encountered when creating virtual drives\), it may be necessary to reset the server using **Power Control** \> **Power Reset**.
