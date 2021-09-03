@@ -8,7 +8,7 @@ FAS uses five primary filters for `actions` and `snapshots` to determine what op
 	* `inventoryHardwareFilter`
 	* ` imageFilter`
 * Command Filters - Determine `how` the operations will be executed. The following command filters are available:
-	* `command` 	
+	* `command`
 
 
 All filters are logically connected with `AND` logic. Only the `stateComponentFilter`, `targetFilter`, and `inventoryHardwareFilter` are used for snapshots.
@@ -17,7 +17,7 @@ All filters are logically connected with `AND` logic. Only the `stateComponentFi
 
 ### Selection Filters
 
-#### `stateComponentFilter` 
+#### `stateComponentFilter`
 The state component filter allows users to select hardware to update. Hardware can be selected individually with xnames, or in groups by leveraging the Hardware State Manager (HSM) groups and partitions features.
 
 ##### Parameters
@@ -29,7 +29,7 @@ The state component filter allows users to select hardware to update. Hardware c
 
 ---
 
-#### `inventoryHardwareFilter` 
+#### `inventoryHardwareFilter`
 
 The inventory hardware filter takes place after the state component filter has been applied. It will remove any devices that do not conform to the identified manufacturer or models determined by querying the Redfish endpoint.
 
@@ -50,18 +50,18 @@ For example, if a user specifies an image that only applies to gigabyte, nodeBMC
 
 ##### Parameters
 
-* `imageID` - The ID of the image to force onto the system. 
+* `imageID` - The ID of the image to force onto the system.
 * `overrideImage` - If this is combined with `imageID`; it will FORCE the selected image onto all hardware identified, even if it is not applicable. **WARNING:** This may cause undesirable outcomes, but most hardware will prevent a bad image from being loaded.
 
 ---
 
-#### `targetFilter` 
+#### `targetFilter`
 
 The target filter selects targets that match against the list. For example, if the user specifies only the BIOS target, FAS will include only operations that explicitly have BIOS as a target. A Redfish device has potentially many targets (members). Targets for FAS are case sensitive and must match Redfish.
 
 ##### Parameters
 
-* `targets` - The actual 'members' that will be upgraded. Examples include, but are not limited to the following: 
+* `targets` - The actual 'members' that will be upgraded. Examples include, but are not limited to the following:
   * BIOS
   * BMC
   * NIC
@@ -87,7 +87,7 @@ These filters are then applied; and then `command` parameter applies settings fo
 - `tag` - Usually `default` because the default image is the most useful one to use. This parameter can usually be ignored.
 - `overrideDryrun` - This determines if this is a LIVE UPDATE or a DRY-RUN. If doing an override; then it will provide a live update.
 - `restoreNotPossibleOverride` - This determines if an update (live or dry-run) will be attempted if a restore cannot be performed. Typically there is not enough firmware to be able to do a rollback, which means if the system is an UPDATE away from a particular version, it cannot go back to a previous version. It is most likely that this value will ALWAYS need to be set `true`.
-- `overwriteSameImage` - This will cause a firmware update to be performed EVEN if the device is already at the identified, selected version.  
+- `overwriteSameImage` - This will cause a firmware update to be performed EVEN if the device is already at the identified, selected version.
 - `timeLimit` - This is the amount of time in seconds that any operation should be allowed to execute. Most `cray` hardware can be completed in approximately 1000 seconds or less; but the `gigabyte` hardware will commonly take 1,500 seconds or greater. Setting the value to 2000 is recommended as a stop gap to prevent the operation from never ending, should something get stuck.
 - `description`- A human-friendly description that should be set to give useful information about the firmware operation.
 

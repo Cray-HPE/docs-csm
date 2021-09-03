@@ -8,8 +8,8 @@ These procedures are intended for trained technicians and support personnel only
     ```screen
     ncn-m001# function get_token () {
     ADMIN_SECRET=$(kubectl get secrets admin-client-auth -ojsonpath='{.data.client-secret}' | base64 -d)
-    curl -s -d grant_type=client_credentials -d client_id=admin-client -d client_secret=$ADMIN_SECRET 
-    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token 
+    curl -s -d grant_type=client_credentials -d client_id=admin-client -d client_secret=$ADMIN_SECRET
+    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token
     | python -c 'import sys, json; print json.load(sys.stdin)["access_token"]'
     }
     ```
@@ -133,7 +133,7 @@ For this procedure, a new object must be created in the SLS and modifications wi
     ```screen
     ncn-m001# cray hsm state components describe x3000c0s27b0n0
     Type = "Node"
-    Enabled = **true** 
+    Enabled = **true**
     State = "Off"
     . . .
     ```
@@ -196,7 +196,7 @@ For this procedure, a new object must be created in the SLS and modifications wi
     Password = ""
     IPAddress = "10.104.0.76"
     ID = "x3000c0b0"
-    
+
     [DiscoveryInfo]
     LastDiscoveryAttempt = "2020-09-03T19:03:47.989621Z"
     RedfishVersion = "1.2.0"

@@ -17,7 +17,7 @@ for host in $(ceph node ls| jq -r '.mon|keys[]')
    if [ "$counter" -gt 120 ]
    then
    break
-   fi 
+   fi
   done
   echo "Confirming the MON daemon is bootstrapped by cephadm"
   export verify_mon=$(cephadm ls|jq '.[]|select(.name=="mon.ncn-s001")|.name')

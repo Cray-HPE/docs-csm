@@ -34,7 +34,7 @@ This procedure requires administrative privileges.
         IPV4 Prefixes             : 51
         IPV6 Prefixes             : 0
         L2VPN EVPN Prefixes       : 0
-         
+
         ------------------------------------------------------------------------------------------------------------------
         Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   Up/Down       State/PfxRcd
         ------------------------------------------------------------------------------------------------------------------
@@ -48,14 +48,14 @@ This procedure requires administrative privileges.
         ```bash
         sw-spine-001# show ip route bgp
         Flags:
-         
+
           F: Failed to install in H/W
           B: BFD protected (static route)
           i: BFD session initializing (static route)
           x: protecting BFD session failed (static route)
           c: consistent hashing
           p: partial programming in H/W
-         
+
         VRF Name default:
           ------------------------------------------------------------------------------------------------------
           Destination       Mask              Flag     Gateway           Interface        Source     AD/M
@@ -110,7 +110,7 @@ This procedure requires administrative privileges.
                                               c        10.102.3.6        vlan7            bgp        200/0
           10.102.3.131      255.255.255.255   c        10.102.3.4        vlan7            bgp        200/0
                                               c        10.102.3.5        vlan7            bgp        200/0
-                                              c        10.102.3.6        vlan7            bgp        200/0 
+                                              c        10.102.3.6        vlan7            bgp        200/0
         ```
 
         If the expected routes are not present, check the route-map or prefix-list configuration on the spine switch.
@@ -128,7 +128,7 @@ This procedure requires administrative privileges.
          Peers                  : 4            Log Neighbor Changes   : No
          Cfg. Hold Time         : 180          Cfg. Keep Alive        : 60
          Confederation Id       : 0
-         
+
          Neighbor        Remote-AS MsgRcvd MsgSent   Up/Down Time State        AdminStatus
          10.252.0.3      65533       1041    1037    15h:00m:52s  Established   Up
          10.252.1.7      65533       1752    2003    14h:29m:26s  Established   Up

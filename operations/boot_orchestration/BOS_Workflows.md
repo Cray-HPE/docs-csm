@@ -66,7 +66,7 @@ Mentioned in this workflow:
     -   Configure – Reconfigure the nodes using the Configuration Framework Service \(CFS\)
     -   Reboot – Gracefully power down nodes that are on and then power them back up
     -   Shutdown – Gracefully power down nodes that are on
-    
+
     ```screen
     # cray bos session create \
     --template-uuid SESSIONTEMPLATE_NAME \
@@ -152,7 +152,7 @@ Mentioned in this workflow:
     -   Configure – Reconfigure the nodes using the Configuration Framework Service \(CFS\)
     -   Reboot – Gracefully power down nodes that are on and then power them back up
     -   Shutdown – Gracefully power down nodes that are on
-    
+
     ```screen
     # cray bos session create \
     --template-uuid SESSIONTEMPLATE_NAME \
@@ -214,7 +214,7 @@ Mentioned in this workflow:
     -   Configure – Reconfigure the nodes using the Configuration Framework Service \(CFS\)
     -   Reboot – Gracefully power down nodes that are on and then power them back up
     -   Shutdown – Gracefully power down nodes that are on
-    
+
     ```screen
     # cray bos session create \
     --template-uuid SESSIONTEMPLATE_NAME \

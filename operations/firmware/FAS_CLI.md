@@ -448,7 +448,7 @@ Given the nature of the `model` field and its likelihood to not be standardized,
 1.  List the existing firmware images to find the imageID of the desired firmware image.
 
     ```
-    ncn-m001# cray fas images list                         
+    ncn-m001# cray fas images list
     ```
 
 2. Describe the image file using the imageID.

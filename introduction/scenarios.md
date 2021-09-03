@@ -1,6 +1,6 @@
 # Scenarios for Shasta v1.5
 
-There are multiple scenarios for installing CSM software which are described in this documentation 
+There are multiple scenarios for installing CSM software which are described in this documentation
 with many supporting procedures.
 
 - Scenarios for Shasta v1.5
@@ -11,7 +11,7 @@ with many supporting procedures.
 <a name="installation"></a>
 ## Installation
 
-There are two ways to install the CSM software. There are some differences between a first time install 
+There are two ways to install the CSM software. There are some differences between a first time install
 which must create the initial configuration payload and configure the management network switches,
 whereas a reinstall can reuse a previous configuration payload and skip the configuration of management
 network switches. The first time install will check and then may update firmware for various components

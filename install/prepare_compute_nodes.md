@@ -15,7 +15,7 @@ See [Update the Gigabyte Server BIOS Time](../operations/node_management/Update_
 
 <a name="configure-hpe-apollo-6500-x645d-gen10-plus-compute-nodes"></a>
 ### 1. Configure HPE Apollo 6500 XL645d Gen10 Plus Compute Nodes
-  
+
 The HPE Apollo 6500 XL645d Gen10 Plus compute node uses a NIC/shared iLO network port. The NIC is
 also referred to as the Embedded LOM (LAN On Motherboard) and is available to the booted OS. This
 shared port is plugged into a port on the TOR Ethernet switch designated for the
@@ -89,12 +89,12 @@ This procedure needs to be done for each of the HPE Apollo 6500 XL645d nodes to 
    1. ssh to the switch and log in with standard admin credentials. Refer to
         /etc/hosts for exact hostname.
    1. Verify the MAC on the port.
-   
+
       Example using port number 46.
 
       ```
       sw-leaf01# show mac-address-table | include 1/1/46
-      94:40:c9:38:08:c7    4        dynamic                   1/1/46     
+      94:40:c9:38:08:c7    4        dynamic                   1/1/46
       ```
 
       Make sure MAC address returned for that port matches the MAC address
@@ -116,8 +116,8 @@ This procedure needs to be done for each of the HPE Apollo 6500 XL645d nodes to 
       sw-leaf01(config-if)# exit
       sw-leaf01(config)# exit
       sw-leaf01# show running-config interface 1/1/46
-      interface 1/1/46 
-          no shutdown 
+      interface 1/1/46
+          no shutdown
           mtu 9198
           description dl645d
           no routing

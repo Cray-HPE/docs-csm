@@ -1,6 +1,6 @@
 ## Recipes
 
-The following example JSON files are useful to reference when updating specific hardware components. In all of these examples, the `overrrideDryrun` field will be set to `false`; set them to `true` to perform a live update.
+The following example JSON files are useful to reference when updating specific hardware components. In all of these examples, the `overrideDryrun` field will be set to `false`; set them to `true` to perform a live update.
 
 When updating an entire system, walk down the device hierarchy component type by component type, starting first with 'Routers' (switches), proceeding to Chassis, and then finally to Nodes. While this is not strictly necessary, it does help eliminate confusion.
 

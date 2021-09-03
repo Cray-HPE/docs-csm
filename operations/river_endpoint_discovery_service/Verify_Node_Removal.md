@@ -2,9 +2,9 @@
 
 Use this procedure to verify that a node has been successfully removed from the system.
 
-### Prerequisites 
+### Prerequisites
 
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system. 
+-   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 -   This procedure requires the xname of the removed node to be known.
 
 ### Limitations
@@ -32,7 +32,7 @@ The REDS mapping file is not automatically updated when the system is changed. I
         Password = ""
         Type = "NodeBMC"
         ID = "x3000c0s19b4"
-         
+
         [RedfishEndpoints.DiscoveryInfo]
         LastDiscoveryAttempt = "2020-04-03T12:37:48.833692Z"
         RedfishVersion = "1.1.0"
@@ -57,7 +57,7 @@ The REDS mapping file is not automatically updated when the system is changed. I
         Password = ""
         Type = "NodeBMC"
         ID = "x3000c0s19b4"
-         
+
         [RedfishEndpoints.DiscoveryInfo]
         LastDiscoveryAttempt = "2020-04-03T12:37:48.833692Z"
         RedfishVersion = "1.1.0"

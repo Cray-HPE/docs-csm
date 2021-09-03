@@ -124,7 +124,7 @@ else
   echo "Upgrading Ceph mons"
   upgrade_ceph_mons
   ## Check if everything was converted
-  ## FIXME - ceph orch is not available yet.  
+  ## FIXME - ceph orch is not available yet.
   #echo "Validating ceph-mon has been converted"
   #ceph -f json-pretty orch ps|jq -r '.[]|select(.daemon_type|test("mon"))|.hostname'
   #ceph -f json-pretty orch ps|jq -r '.[]|select(.hostname|test("ncn-s001"))|.daemon_type'

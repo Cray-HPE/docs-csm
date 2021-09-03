@@ -62,7 +62,7 @@ for secret in ${secrets[@]}; do
     filename="${secret}.yaml"
 
     echo "Removing extra fields from ${filename}"
-    yq d -i "${filename}" metadata.managedFields 
+    yq d -i "${filename}" metadata.managedFields
     yq d -i "${filename}" metadata.creationTimestamp
     yq d -i "${filename}" metadata.resourceVersion
     yq d -i "${filename}" metadata.selfLink

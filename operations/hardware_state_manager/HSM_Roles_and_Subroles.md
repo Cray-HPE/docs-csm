@@ -41,7 +41,7 @@ The _UAN_, _LNETRouter_, _Visualization_, _Gateway_, and _UserDefined_ subroles 
 
 ### Add Custom Roles and Subroles
 
-Custom roles and subroles can also be created and added to the HSM. New roles or subroles can be added anytime after SMD has been deployed. 
+Custom roles and subroles can also be created and added to the HSM. New roles or subroles can be added anytime after SMD has been deployed.
 
 To add new roles/subroles, add them to the cray-hms-base-config configmap under data->hms_config.json.HMSExtendedDefinitions.(Sub)Role:
 

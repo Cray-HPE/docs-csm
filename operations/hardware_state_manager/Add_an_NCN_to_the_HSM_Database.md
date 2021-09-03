@@ -6,7 +6,7 @@ The examples in this procedure use `ncn-w0003-nmn` as the Customer Access Node \
 
 ### Prerequisites
 
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system. 
+-   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 -   The initial software installation is complete.
 -   Keycloak authentication is complete.
 
@@ -37,10 +37,10 @@ The examples in this procedure use `ncn-w0003-nmn` as the Customer Access Node \
    The get\_token script adds the authorization required by the HTTPS security token. -H options tell the REST API to accept the data as JSON and that the information is for a JSON-enabled application.
 
    ```bash
-   ncn-m001# curl -X POST -k https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components \ 
+   ncn-m001# curl -X POST -k https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components \
    -H "Authorization: Bearer $(get_token)" -H "accept: application/json" -H \
    "Content-Type: application/json" -d \
-   '{"Components":[{"ID":"x3000c0s24b0","State":"On","NetType":"Sling","Arch":"X86","Role":"Management"}]}' 
+   '{"Components":[{"ID":"x3000c0s24b0","State":"On","NetType":"Sling","Arch":"X86","Role":"Management"}]}'
    ```
 
 3.  List HSM state components and verify information is correct.

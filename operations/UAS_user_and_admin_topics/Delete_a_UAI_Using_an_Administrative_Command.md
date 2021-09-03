@@ -20,7 +20,7 @@ Install and initialize the `cray` administrative CLI.
     -   `--owner USERNAME`: delete all UAIs owned by the named user
     -   `--class-id CLASS_ID`: delete all UAIs of the specified UAI class
     -   `--uai-list LIST_OF_UAI_NAMES`: delete all the listed UAIs
-    
+
     The following example deletes two UAIs by name:
 
     ```bash

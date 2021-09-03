@@ -2,7 +2,7 @@
 
 This page describes administrative knowledge around the pre-config files to `csi` or the output files from `csi`.
 
-> Information for collecting certain files starts in [Configuration Payload](../install/prepare_configuration_payload.md) 
+> Information for collecting certain files starts in [Configuration Payload](../install/prepare_configuration_payload.md)
 
    * [`application_node_config.yaml`](../install/prepare_configuration_payload.md#application_node_config_yaml)
    * [`cabinets.yaml`](../install/prepare_configuration_payload.md#cabinets_yaml)
@@ -10,8 +10,8 @@ This page describes administrative knowledge around the pre-config files to `csi
    * [`ncn_metadata.csv`](../install/prepare_configuration_payload.md#ncn_metadata_csv)
    * [`switch_metadata.csv`](../install/prepare_configuration_payload.md#switch_metadata_csv)
 
-### Topics: 
-  
+### Topics:
+
    * [Save-File / Avoiding Parameters](#save-file--avoiding-parameters)
 
 ## Details

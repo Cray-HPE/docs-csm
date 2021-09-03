@@ -1,15 +1,15 @@
-# Collect MAC Addresses for NCNs  
+# Collect MAC Addresses for NCNs
 
 Now that the PIT node has been booted with the LiveCD and the management network switches have been configured,
-the actual MAC address for the management nodes can be collected. This process will include repetition of some 
+the actual MAC address for the management nodes can be collected. This process will include repetition of some
 of the steps done up to this point because `csi config init` will need to be run with the proper
 MAC addresses and some services will need to be restarted.
 
-**Note**: If a reinstall of this software release is being done on this system and the `ncn_metadata.csv` 
+**Note**: If a reinstall of this software release is being done on this system and the `ncn_metadata.csv`
 file already had valid MAC addresses for both BMC and node interfaces before `csi config init` was run, then
 this topic could be skipped and instead move to [Deploy Management Nodes](index.md#deploy_management_nodes).
 
-**Note**: If a first time install of this software release is being done on this system and the `ncn_metadata.csv` 
+**Note**: If a first time install of this software release is being done on this system and the `ncn_metadata.csv`
 file already had valid MAC addresses for both BMC and node interfaces before `csi config init` was run, then this
 topic could be skipped and instead move to [Deploy Management Nodes](index.md#deploy_management_nodes).
 
@@ -26,7 +26,7 @@ topic could be skipped and instead move to [Deploy Management Nodes](index.md#de
 <a name="collect_the_bmc_mac_addresses"></a>
 ### 1. Collect the BMC MAC addresses
 
-The BMC MAC address can be collected from the switches using knowledge about the cabling of the NMN from the SHCD. 
+The BMC MAC address can be collected from the switches using knowledge about the cabling of the NMN from the SHCD.
 
 See [Collecting BMC MAC Addresses](collecting_bmc_mac_addresses.md).
 
@@ -59,14 +59,14 @@ making a backup of them, in case they need to be examined at a later time.
    pit# echo $SYSTEM_NAME
    ```
 
-   Rename the old directory. 
+   Rename the old directory.
 
    ```bash
    pit# mv /var/www/ephemeral/prep/${SYSTEM_NAME} /var/www/ephemeral/prep/${SYSTEM_NAME}.oldBMC
    ```
 
-1. Copy over the `system_config.yaml` file from the first attempt at generating the system configuration files. 
-   
+1. Copy over the `system_config.yaml` file from the first attempt at generating the system configuration files.
+
    ```bash
    pit# cp /var/www/ephemeral/prep/${SYSTEM_NAME}.oldBMC/system_config.yaml /var/www/ephemeral/prep/
    ```
@@ -74,13 +74,13 @@ making a backup of them, in case they need to be examined at a later time.
 1. Generate system configuration again.
 
    The needed files should be in the current directory.
-  
+
    ```bash
    pit# ls -1
    ```
-  
+
    Expected output looks similar to the following:
-  
+
    ```
    application_node_config.yaml
    cabinets.yaml
@@ -174,7 +174,7 @@ making a backup of them, in case they need to be examined at a later time.
    **Note:** It may take about 10 minutes from when dnsmasq is restarted to when the BMCs pick up new DHCP leases.
 
    This step will check all management nodes except `ncn-m001-mgmt` because that has an external connection and could
-   not be booted by itself as the PIT node. 
+   not be booted by itself as the PIT node.
 
    ```bash
    pit# export mtoken='ncn-m(?!001)\w+-mgmt'
@@ -213,9 +213,9 @@ so several earlier steps need to be repeated.
    ```
 
    Expected output looks similar to the following, that is, no lines that still have "de:ad:be:ef:00:00":
-   
+
    ```bash
-   
+
    ```
 
    Display the file and confirm the contents are unique between the different rows.
@@ -233,14 +233,14 @@ making a backup of them, in case they need to be examined at a later time.
    pit# echo $SYSTEM_NAME
    ```
 
-   Rename the old directory. 
+   Rename the old directory.
 
    ```bash
    pit# mv /var/www/ephemeral/prep/${SYSTEM_NAME} /var/www/ephemeral/prep/${SYSTEM_NAME}.oldNCN
    ```
 
-1. Copy over the `system_config.yaml` file from the second attempt at generating the system configuration files. 
-   
+1. Copy over the `system_config.yaml` file from the second attempt at generating the system configuration files.
+
    ```bash
    pit# cp /var/www/ephemeral/prep/${SYSTEM_NAME}.oldNCN/system_config.yaml /var/www/ephemeral/prep/
    ```
@@ -248,13 +248,13 @@ making a backup of them, in case they need to be examined at a later time.
 1. Generate system configuration again.
 
    Check for the expected files that should exist be in the current directory.
-  
+
    ```bash
    pit# ls -1
    ```
-  
+
    Expected output looks similar to the following:
-  
+
    ```
    application_node_config.yaml
    cabinets.yaml
@@ -264,7 +264,7 @@ making a backup of them, in case they need to be examined at a later time.
    system_config.yaml
    ```
 
-   Regenerate the system configuration. The `system_config.yaml` file contains all of the options that where used to generate the initial system configuration, and can be used in place of specifying CLI flags to CSI.  
+   Regenerate the system configuration. The `system_config.yaml` file contains all of the options that where used to generate the initial system configuration, and can be used in place of specifying CLI flags to CSI.
    ```bash
    pit# csi config init
    ```
@@ -350,7 +350,7 @@ making a backup of them, in case they need to be examined at a later time.
 
 1. Ensure system-specific settings generated by CSI are merged into `customizations.yaml`:
    > The `yq` tool used in the following procedures is available under `/var/www/ephemeral/prep/site-init/utils/bin` once the SHASTA-CFG repo has been cloned.
-   
+
    ```bash
    pit# alias yq="/var/www/ephemeral/prep/site-init/utils/bin/$(uname | awk '{print tolower($0)}')/yq"
    pit# yq merge -xP -i /var/www/ephemeral/prep/site-init/customizations.yaml <(yq prefix -P "/var/www/ephemeral/prep/${SYSTEM_NAME}/customizations.yaml" spec)

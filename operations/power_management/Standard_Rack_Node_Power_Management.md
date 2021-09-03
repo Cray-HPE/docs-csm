@@ -92,7 +92,7 @@ Set the node power limit to 600 Watts:
 ```bash
 # curl -k -u $login:$pass -H "Content-Type: application/json" \
 -X POST https://$BMC_IP/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger \
---data '{"PowerLimitTrigger": "Deactivate"}' 
+--data '{"PowerLimitTrigger": "Deactivate"}'
 ```
 
 

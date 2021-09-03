@@ -39,9 +39,9 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
     ```bash
     ncn-m001# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : true }}'
     ```
-    
+
     **CAUTION:** Do not power the system on until it is safe to do so. Determine why the EPO event occurred before clearing the EPO state.
-    
+
 5.  **If it is safe to power on the hardware**, clear all chassis in the EPO state in the cooling group.
 
     All chassis in cabinets 1000-1003 are forced off in this example. Power off all chassis in a cooling group simultaneously, or the EPO condition may persist.
@@ -65,16 +65,16 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
     ```screen
     ncn-m001# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
     ```
-    
+
     About 5 minutes after hms-discovery restarts, the service will power on the chassis enclosures, switches, and compute blades. If components are not being powered back on, then power them on manually.
-    
+
     ```bash
     ncn-m001# cray capmc xname_on create \
     --xnames x[1000-1003]c[0-7]r[0-7],x[1000-1003]c[0-7]s[0-7] --prereq true --continue true
     e = 0
     err_msg = ""
     ```
-    
+
 7.  After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
 
     See [Power On and Boot Compute and User Access Nodes](Power_On_and_Boot_Compute_Nodes_and_User_Access_Nodes.md).

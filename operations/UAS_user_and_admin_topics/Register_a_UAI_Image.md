@@ -11,7 +11,7 @@ Register a UAI image with UAS. Registration tells UAS where to locate the image 
 ### Procedure
 
 1. Register a UAI image with UAS.
-    
+
     The following is the minimum required CLI command form:
 
     ```

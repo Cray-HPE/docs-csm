@@ -49,7 +49,7 @@ Deleting an IMS public-key, recipe, or image record performs the following actio
 
 #### Prerequisites
 
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system. 
+-   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 -   System management services \(SMS\) are running in a Kubernetes cluster on non-compute nodes \(NCN\) and include the following deployments:
     -   `cray-ims`, the Image Management Service \(IMS\)
     -   `cray-nexus`, the Nexus repository manager service
@@ -70,7 +70,7 @@ Deleting an IMS public-key, recipe, or image record performs the following actio
         created = "2018-12-04T17:25:52.482514+00:00"
         id = "4e78488d-4d92-4675-9d83-97adfc17cb19" <<-- Note this ID
         name = "sles_15_image.squashfs"
-        
+
         [results.link]
         type = "s3"
         path = "/4e78488d-4d92-4675-9d83-97adfc17cb19/sles_15_image.squashfs"
@@ -100,7 +100,7 @@ Deleting an IMS public-key, recipe, or image record performs the following actio
         deleted = "2020-11-03T09:57:31.746521+00:00"  <<-- Date the record was deleted
         id = "4e78488d-4d92-4675-9d83-97adfc17cb19"
         name = "sles_15_image.squashfs"
-        
+
         [results.link]
         type = "s3"
         path = "/deleted/4e78488d-4d92-4675-9d83-97adfc17cb19/sles_15_image.squashfs" <<-- S3 path to linked artifact was renamed
@@ -120,11 +120,11 @@ Deleting an IMS public-key, recipe, or image record performs the following actio
         ncn# cray ims deleted images list
         ...
         [[results]]
-        created = "2018-12-04T17:25:52.482514+00:00" 
-        deleted = "2020-11-03T09:57:31.746521+00:00" 
+        created = "2018-12-04T17:25:52.482514+00:00"
+        deleted = "2020-11-03T09:57:31.746521+00:00"
         id = "4e78488d-4d92-4675-9d83-97adfc17cb19" <<-- Note this ID
         name = "sles_15_image.squashfs"
-        
+
         [results.link]
         type = "s3"
         path = "/deleted/4e78488d-4d92-4675-9d83-97adfc17cb19/sles_15_image.squashfs"
@@ -150,7 +150,7 @@ Recovering a deleted IMS public-key, recipe, or image record uses the following 
 
 #### Prerequisites
 
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system. 
+-   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 -   System management services \(SMS\) are running in a Kubernetes cluster on non-compute nodes \(NCN\) and include the following deployments:
     -   `cray-ims`, the Image Management Service \(IMS\)
     -   `cray-nexus`, the Nexus repository manager service
@@ -170,7 +170,7 @@ The steps in this procedure assume that a deleted image is being recovered. The 
     deleted = "2020-11-03T09:57:31.746521+00:00"
     id = "4e78488d-4d92-4675-9d83-97adfc17cb19" <<-- Note this ID
     name = "sles_15_image.squashfs"
-    
+
     [results.link]
     type = "s3"
     path = "/deleted/4e78488d-4d92-4675-9d83-97adfc17cb19/sles_15_image.squashfs"
@@ -199,7 +199,7 @@ The steps in this procedure assume that a deleted image is being recovered. The 
     created = "2018-12-04T17:25:52.482514+00:00"
     id = "4e78488d-4d92-4675-9d83-97adfc17cb19"
     name = "sles_15_image.squashfs"
-    
+
     [results.link]
     type = "s3"
     path = "/4e78488d-4d92-4675-9d83-97adfc17cb19/sles_15_image.squashfs"  <<-- The restored artifact path

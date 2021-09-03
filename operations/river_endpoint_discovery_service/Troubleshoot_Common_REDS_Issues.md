@@ -96,7 +96,7 @@ This procedure does not cover the list of all possible issues that can be encoun
                 There must be some other problem. Proceed to the next step.
 
             -   If that line is not present in the log, then there may be an issue with the artifact repository and/or BSS.
-        
+
         4.  Observe the boot process of a node to determine whether the node is able to pull the images. Attach a monitor to the video port on the node and watch it boot. If it does not boot to a Linux login prompt, determine whether the network is up and working correctly \(for example, run ip a s on a non-compute node \(NCN\), or try pinging switches from an NCN\).
             -   If the network is not up and working correctly, troubleshoot the network.
             -   If the network is up and working correctly, then there must be some other problem. Contact the Cray customer account representative for this site.

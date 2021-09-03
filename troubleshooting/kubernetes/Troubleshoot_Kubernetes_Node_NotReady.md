@@ -23,11 +23,11 @@ The `kubectl get nodes` command returns a NotReady state for a master or worker 
 
 ### Recovery Steps
 
-1.  Ensure the node doesn't have an intentional `NoSchedule` taint.
+1.  Ensure the node does not have an intentional `NoSchedule` taint.
 
     See [About Kubernetes Taints and Labels](../../operations/kubernetes/About_Kubernetes_Taints_and_Labels.md) for more information about tainting and untainting a node.
 
-    If the node in question isn't intentionally tainted causing the `NotReady` state, proceed to the next step and attempt to restart kubelet.
+    If the node in question is not intentionally tainted causing the `NotReady` state, proceed to the next step and attempt to restart kubelet.
 
 1.  Restart the kubelet.
 

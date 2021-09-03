@@ -1,6 +1,6 @@
 # NCN Networking
 
-Non-compute nodes and compute nodes have different network interfaces used for booting, this topic focuses on 
+Non-compute nodes and compute nodes have different network interfaces used for booting, this topic focuses on
 the network interfaces for management nodes.
 
 ### Topics:
@@ -76,11 +76,11 @@ lspci | grep c6:00.0
 ```
 
 The Device and Vendor IDs are used in iPXE for bootstrapping the nodes, this allows generators to
-swap IDs out for certain systems until smarter logic can be added to cloud-init. 
+swap IDs out for certain systems until smarter logic can be added to cloud-init.
 
 The following table includes popular vendor and device IDs.
 
-> The bolded numbers are the defaults that live in metal-ipxe's boot script.
+> The bolded numbers are the defaults that live in `metal-ipxe`'s boot script.
 
 | Vendor | Model | Device ID | Vendor ID |
 | :---- | :---- | :-----: | :---------: |

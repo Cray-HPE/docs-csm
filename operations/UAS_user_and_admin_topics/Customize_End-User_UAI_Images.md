@@ -21,7 +21,7 @@ A custom end-user UAI image can be any container image set up with the end-user 
     ```
 
 1. Query BOS for a sessiontemplate ID.
-    
+
     Identify the Sessiontemplate name to use. A full list may be found with the following command:
 
     ```
@@ -47,7 +47,7 @@ A custom end-user UAI image can be any container image set up with the end-user 
     name: wlm-sessiontemplate-0.1.0
     ```
 
-    Alternatively, collect the sessiontemplate name used when performing the installation/configuration procedure in the Cray Operating System (COS) documentation repository. Near the end of that procedure, the step to create a BOS session to boot the compute nodes should contain the name. 
+    Alternatively, collect the sessiontemplate name used when performing the installation/configuration procedure in the Cray Operating System (COS) documentation repository. Near the end of that procedure, the step to create a BOS session to boot the compute nodes should contain the name.
 
     ```
     ncn-w001# SESSION_NAME=wlm-sessiontemplate-0.1.0
@@ -63,7 +63,7 @@ A custom end-user UAI image can be any container image set up with the end-user 
     ncn-w001# cray artifacts get boot-images $SESSION_ID/rootfs rootfs.squashfs
     ```
 
-1. Mount the SquashFS and create a tarball. 
+1. Mount the SquashFS and create a tarball.
 
     1. Create a directory to mount the SquashFS:
 
@@ -81,8 +81,8 @@ A custom end-user UAI image can be any container image set up with the end-user 
         ncn-w001# (cd `pwd`/mount; tar --xattrs --xattrs-include='*' --exclude="99-slingshot-network.conf" -cf "../$SESSION_ID.tar" .) > /dev/null
         ```
 
-        This may take several minutes. Notice that this does not create a compressed tarball. Using an uncompressed format makes it possible to add files if needed once the tarball is made. It also makes the procedure run just a bit more quickly. If warnings related to xattr are displayed, continue with the procedure as the resulting tarball should still result in a functioning UAI container image. 
-    
+        This may take several minutes. Notice that this does not create a compressed tarball. Using an uncompressed format makes it possible to add files if needed once the tarball is made. It also makes the procedure run just a bit more quickly. If warnings related to xattr are displayed, continue with the procedure as the resulting tarball should still result in a functioning UAI container image.
+
     1. Check that the tarball contains './usr/bin/uai-ssh.sh'.
 
         ```
@@ -119,7 +119,7 @@ A custom end-user UAI image can be any container image set up with the end-user 
         ncn-w001# tar rvf 0c0d4081-2e8b-433f-b6f7-e1ef0b907be3.tar ./usr/bin/uai-ssh.sh
         ```
 
-1. Create and push the container image. 
+1. Create and push the container image.
 
     Create a container image using podman or docker and push it to the site container registry. Any container-specific modifications may also be done here with a Dockerfile. The ENTRYPOINT layer must be /usr/bin/uai-ssh.sh as that starts SSHD for the user in the UAI container started by UAS.
 
@@ -137,7 +137,7 @@ A custom end-user UAI image can be any container image set up with the end-user 
     ncn-w001# cray uas admin config images create --imagename $UAI_IMAGE_NAME
     ```
 
-1. Cleanup the mount directory and tarball. 
+1. Cleanup the mount directory and tarball.
 
     ```
     ncn-w001# umount -v mount; rmdir -v mount
@@ -150,4 +150,4 @@ A custom end-user UAI image can be any container image set up with the end-user 
     ncn-w001# rm -fv ./usr/bin/uai-ssh.sh && rmdir ./usr/bin ./usr
     ```
 
-    
+

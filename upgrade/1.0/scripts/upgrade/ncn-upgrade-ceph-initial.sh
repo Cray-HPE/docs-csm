@@ -32,7 +32,7 @@ state_name="CEPH_PARTITIONS"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    
+
     ssh $upgrade_ncn "rpm --force -Uvh ${DOC_RPM_NEXUS_URL}"
     ssh $upgrade_ncn '/usr/share/doc/csm/upgrade/1.0/scripts/ceph/ceph-partitions-stage1.sh'
 
@@ -42,7 +42,7 @@ else
 fi
 
 cat <<EOF
-NOTE: 
+NOTE:
   Wait until ceph health is OK:
 
   Every 2.0s: ceph -s                                    ncn-m001: Mon Apr 12 21:09:51 2021

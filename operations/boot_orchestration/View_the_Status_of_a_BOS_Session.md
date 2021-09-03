@@ -91,7 +91,7 @@ To display the status for the session:
 ncn-m001# cray bos session status list SESSION_ID -–format json
 {
   "boot_sets": [
-    "computes" 
+    "computes"
   ],
   "id": "f4eebe51-a217-46d0-8733-b9499a092042",
   "links": [
@@ -141,7 +141,7 @@ ncn-m001# cray bos session status describe BOOT_SET_NAME SESSION_ID --format jso
 {
   "phases": [
     {
-      "name": "shutdown", 
+      "name": "shutdown",
       "categories": [
         {
           "name": "not_started",

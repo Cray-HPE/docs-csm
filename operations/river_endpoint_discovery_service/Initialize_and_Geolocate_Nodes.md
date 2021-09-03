@@ -6,7 +6,7 @@ This procedure is performed automatically during installation of the system's so
 
 ### Prerequisites
 
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system. 
+-   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 -   Management network switches have been configured for the River Endpoint Discovery Service \(REDS\). See [Configure a Management Switch for REDS](Configure_a_Management_Switch_for_REDS.md).
 -   Check the REDS pod's state by executing the following command to ensure that it is in the `Running` state.
 

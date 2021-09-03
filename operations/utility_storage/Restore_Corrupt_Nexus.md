@@ -37,7 +37,7 @@ The commands in this procedure should be run from a master NCN (unless otherwise
       ncn-m001# ls /mnt/pitdata/csm-0.9.4/manifests/nexus.yaml
       /mnt/pitdata/csm-0.9.4/manifests/nexus.yaml <-- this is the manifest to use
       ```
-      >**NOTE:** Do not proceed with further steps until these two files are located, as they are necessary to re-install the helm chart after deletion. 
+      >**NOTE:** Do not proceed with further steps until these two files are located, as they are necessary to re-install the helm chart after deletion.
 
 1. Uninstall the Nexus helm chart.
 

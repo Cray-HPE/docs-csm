@@ -14,7 +14,7 @@ The Recovery Workflow:
 
 ### Attempt to Recover to a Running Database
 
-A running database is needed to be able to dump the current data. 
+A running database is needed to be able to dump the current data.
 
 The following example is based on `cray-smd-postgres`.
 
@@ -45,14 +45,14 @@ Filesystem      Size  Used Avail Use% Mounted on
 If the database is down and the disk is full because of replication issues, there are two ways to attempt to get back to a running database: either delete files or resize the Postgres PVCs until the database is able to start running again.
 
 <a name="option1"></a>
-#### Option 1 : Clear logs and/or WAL files 
+#### Option 1 : Clear logs and/or WAL files
 
 The following example is based on `cray-smd-postgres`.
 
-1. Clear files from /home/postgres/pgdata/pgroot/pg_log/ until the database is running again and you can successfully connect. For example, if the disk space is at 100%, exec into that pod, copy the logs off (optional) and then clear the logs to recover some disk space.  
+1. Clear files from /home/postgres/pgdata/pgroot/pg_log/ until the database is running again and you can successfully connect. For example, if the disk space is at 100%, exec into that pod, copy the logs off (optional) and then clear the logs to recover some disk space.
 ```
 ncn-w001# kubectl cp "${POSTGRESQL}-1":/home/postgres/pgdata/pgroot/pg_log /tmp -c postgres -n ${NAMESPACE}
-ncn-w001# kubectl exec "${POSTGRESQL}-1" -n ${NAMESPACE} -c postgres -it -- bash 
+ncn-w001# kubectl exec "${POSTGRESQL}-1" -n ${NAMESPACE} -c postgres -it -- bash
 root@cray-smd-postgres-1:/home/postgres# for i in {0..7}; do > /home/postgres/pgdata/pgroot/pg_log/postgresql-$i.csv; done
 ```
 2. Restart the Postgres cluster and postgres-operator.
@@ -69,10 +69,10 @@ Type "help" for help.
 
 postgres=#   <----- success!!  Type \q
 ```
-4. If the database is still not running, delete files from /home/postgres/pgdata/pgroot/data/pg\_wal/. 
+4. If the database is still not running, delete files from /home/postgres/pgdata/pgroot/data/pg\_wal/.
 CAUTION: This method could result in unintended consequences for the Postgres database and long service downtime; do not use unless there is a known [Disaster Recovery for Postgres](Disaster_Recovery_Postgres.md) procedure for repopulating the Postgres cluster.
 ```
-ncn-w001# kubectl exec "${POSTGRESQL}-1" -n ${NAMESPACE} -c postgres -it -- bash 
+ncn-w001# kubectl exec "${POSTGRESQL}-1" -n ${NAMESPACE} -c postgres -it -- bash
 root@cray-smd-postgres-1:/home/postgres# rm pgdata/pgroot/data/pg_wal/0*
 
 ```
@@ -146,7 +146,7 @@ ncn-w001# while [ -z '$(kubectl describe pvc "${PGDATA}-0" -n ${NAMESPACE} | gre
 ```
 
 7. Update the postgresql resource spec.volume.size to $PGRESIZE.
-``` 
+```
 ncn-w001# kubectl get "postgresql/${POSTGRESQL}" -n ${NAMESPACE} -o json | jq '.spec.volume = {"size": "'${PGRESIZE}'"}' | kubectl apply -f -
 postgresql.acid.zalan.do/cray-smd-postgres configured
 ```
@@ -320,7 +320,7 @@ services            postgres.cray-smd-postgres.credentials                      
 services            service-account.cray-smd-postgres.credentials                 Opaque                                2      31m
 services            standby.cray-smd-postgres.credentials                         Opaque                                2      31m
 ```
-For each secret above, get the username and password from Kubernetes and update the Postgres database with this information. 
+For each secret above, get the username and password from Kubernetes and update the Postgres database with this information.
 For example (hmsdsuser.cray-smd-postgres.credentials) :
 ```
 ncn-w001# kubectl get secret hmsdsuser.cray-smd-postgres.credentials -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d

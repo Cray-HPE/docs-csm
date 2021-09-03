@@ -26,8 +26,8 @@ This procedure can be used to access the interface to manage Keycloak users. Use
 
     ```screen
     This Connection Is Not Private
-     
-    This website may be impersonating "hostname" to steal your personal or financial information. 
+
+    This website may be impersonating "hostname" to steal your personal or financial information.
     You should go back to the previous page.
     ```
 

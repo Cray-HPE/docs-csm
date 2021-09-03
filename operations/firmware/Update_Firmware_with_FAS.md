@@ -26,7 +26,7 @@ FAS images contain the following information that is needed for a hardware devic
 ### Prerequisites
 
 1. CSM software has been installed, firmware has been loaded into FAS as part of the HPC Firmware Pack (HFP) install, HSM is running, and nodes have been discovered.
-2. All management nodes have been locked.  
+2. All management nodes have been locked.
 3. Identify the type and manufacturers of hardware in the system. If Gigabyte nodes are not in use on the system, do not update them!
 
 <a name="warning"></a>

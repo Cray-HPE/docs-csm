@@ -36,7 +36,7 @@ Edit the following section as desired \(save and close by hitting the **ESC** ke
 
 ```screen
   node_labels: |2-
- 
+
     - ncn-m001:no_external_access=False
     - ncn-m002:no_external_access=True
     - ncn-m003:no_external_access=True

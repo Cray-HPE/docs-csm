@@ -102,7 +102,7 @@ A etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unheal
 The etcd cluster for external DNS maintains an ephemeral cache for CoreDNS. There is no reason to back it up. If it is having any issues, delete it and recreate it.
 
 1.  Save the external DNS configuration.
-   
+
 2.  Edit the end of each .yaml file to remove the .status, .metadata.uid, .metadata.selfLink, .metadata.resourceVersion, .metadata.generation, and .metadata.creationTimestamp.
 
     For example:
@@ -174,7 +174,7 @@ Data is repopulated in BSS when the REDS init job is run.
     ncn-w001# kubectl apply -n services -f cray-reds-init.json
     ```
 
-### REDS  
+### REDS
 
 1.  Restart REDS.
 
@@ -191,7 +191,7 @@ Data is repopulated in BSS when the REDS init job is run.
     ncn-w001# kubectl -n services delete pods --selector='app.kubernetes.io/name=cray-meds'
     ```
 
-### FAS   
+### FAS
 
 1.  Run the `cray-fas-loader` Kubernetes job.
 

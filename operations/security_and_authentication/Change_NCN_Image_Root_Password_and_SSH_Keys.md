@@ -1,7 +1,7 @@
 ## Change NCN Image Root Password and SSH Keys
 
 Customize the NCN image by changing the root password or adding different ssh keys for the root account.
-This procedure shows this process being done on the PIT node during a first time installation of the CSM 
+This procedure shows this process being done on the PIT node during a first time installation of the CSM
 software.
 
 This process should be done for the "Kubernetes" image used by master and worker nodes and then repeated for the "ceph" image used by the utility storage nodes.
@@ -82,7 +82,7 @@ The Kubernetes image is used by the master and worker nodes.
 
    ```bash
    pit# cd
-   pit# set-sqfs-links.sh   
+   pit# set-sqfs-links.sh
    ```
 
 The Kubernetes image will have the new password for the next boot.
@@ -163,7 +163,7 @@ The Ceph image is used by the utility storage nodes.
 
    ```bash
    pit# cd
-   pit# set-sqfs-links.sh   
+   pit# set-sqfs-links.sh
    ```
 
 The Ceph image will have the new password for the next boot.

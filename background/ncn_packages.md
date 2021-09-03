@@ -8,7 +8,7 @@ command on one of the storage, worker, or master nodes.
 
 The Kubernetes image is used to boot the master nodes and worker nodes.
 
-### Collection 
+### Collection
 
 ```bash
 ncn-w002# zypper --disable-repositories se --installed-only | grep i+ | tr -d '|' | awk '{print $2}'

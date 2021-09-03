@@ -21,7 +21,7 @@ state_name="CEPH_NODES_SET_NO_WIPE"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    
+
     csi handoff bss-update-cloud-init --set meta-data.wipe-ceph-osds=no --limit Global
 
     record_state "${state_name}" ${upgrade_ncn}
@@ -34,7 +34,7 @@ if [[ ${upgrade_ncn} == "ncn-s001" ]]; then
    state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
    if [[ $state_recorded == "0" ]]; then
       echo "====> ${state_name} ..."
-      
+
       VERBOSE=1 csi handoff bss-update-cloud-init --set user-data.runcmd=[\"/srv/cray/scripts/metal/install-bootloader.sh\",\"/srv/cray/scripts/metal/set-host-records.sh\",\"/srv/cray/scripts/metal/set-dhcp-to-static.sh\",\"/srv/cray/scripts/metal/set-dns-config.sh\",\"/srv/cray/scripts/metal/ntp-upgrade-config.sh\",\"/srv/cray/scripts/metal/set-bmc-bbs.sh\",\"/srv/cray/scripts/metal/disable-cloud-init.sh\",\"/srv/cray/scripts/common/update_ca_certs.py\",\"/srv/cray/scripts/metal/install-rpms.sh\"] --limit $UPGRADE_XNAME
 
       record_state "${state_name}" ${upgrade_ncn}
@@ -47,7 +47,7 @@ state_name="BACKUP_CEPH_DATA"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    
+
     if [[ $ssh_keys_done == "0" ]]; then
         ssh_keygen_keyscan "${upgrade_ncn}"
         ssh_keys_done=1
@@ -110,7 +110,7 @@ if [[ $state_recorded == "0" ]]; then
     ceph orch daemon redeploy mon.${upgrade_ncn}
     sleep 20
     for s in $(ceph orch ps | grep ${upgrade_ncn} | awk '{print $1}'); do  ceph orch daemon start $s; done
-    
+
     record_state "${state_name}" ${upgrade_ncn}
 else
     echo "====> ${state_name} has been completed"

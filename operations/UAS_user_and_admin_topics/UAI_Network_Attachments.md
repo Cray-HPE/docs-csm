@@ -1,7 +1,7 @@
 
 ## UAI Network Attachments
 
-The UAI network attachment configuration flows from the CRAY Site Initializer (CSI) localization data through `customizations.yaml` into the UAS Helm chart and, ultimately, into Kubernetes in the form of a "network-attachment-definition". 
+The UAI network attachment configuration flows from the CRAY Site Initializer (CSI) localization data through `customizations.yaml` into the UAS Helm chart and, ultimately, into Kubernetes in the form of a "network-attachment-definition".
 
 This section describes the data at each of those stages to show how the final network attachment gets created.
 
@@ -25,11 +25,11 @@ When CSI runs, it produces the following data structure in the `spec` section of
 spec:
 
   ...
-  
+
   wlm:
-  
+
     ...
-    
+
     macvlansetup:
       nmn_subnet: 10.252.2.0/23
       nmn_supernet: 10.252.0.0/17
@@ -64,9 +64,9 @@ These values, in turn, feed into the following translation to UAS Helm chart set
           uai_macvlan_routes: '{{ wlm.macvlansetup.routes }}'
 ```
 
-### UAS Helm Chart 
+### UAS Helm Chart
 
-The inputs in the previous section tell the UAS Helm chart how to install the network attachment for UAIs. While the actual template used for this is more complex, the following is a simplified view of the template used to generate the network attachment. 
+The inputs in the previous section tell the UAS Helm chart how to install the network attachment for UAIs. While the actual template used for this is more complex, the following is a simplified view of the template used to generate the network attachment.
 
 If reading this document from the UAS source code, the real template in the Helm chart is located there.
 
@@ -102,7 +102,7 @@ The `range` templating in the `routes` section expands the routes from `customiz
 
 ### UAI Network Attachment in Kubernetes
 
-All of this produces a network attachment definition in Kubernetes called `macvlan-uas-nmn-conf` which is used by UAS.  
+All of this produces a network attachment definition in Kubernetes called `macvlan-uas-nmn-conf` which is used by UAS.
 
 The following contents would result from the above data:
 

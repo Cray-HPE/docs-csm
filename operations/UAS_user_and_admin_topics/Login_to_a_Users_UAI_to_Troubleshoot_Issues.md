@@ -33,7 +33,7 @@ This procedure does not work if the pod is in either "Error" or "Terminating" st
 
     ```bash
     ncn-m001# kubectl get pods -n user -l app=USERS_UAI_NAME
-    
+
     NAME                                 READY   STATUS    RESTARTS   AGE
     **
     uai-uastest-0abd2928-575fcf8cf7-ftgxw**   1/1     Running   0          89m

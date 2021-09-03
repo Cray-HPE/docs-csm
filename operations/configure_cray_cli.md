@@ -1,6 +1,6 @@
 # Configure the Cray Command Line Interface (`cray` CLI)
 
-The `cray` command line interface (CLI) is a framework created to integrate all of the system management REST APIs into easily usable commands. 
+The `cray` command line interface (CLI) is a framework created to integrate all of the system management REST APIs into easily usable commands.
 
 Later procedures in the installation workflow use the `cray` CLI to interact with multiple services.
 The `cray` CLI configuration needs to be initialized for the Linux account, and the Keycloak user running
@@ -15,7 +15,7 @@ The `cray` CLI only needs to be initialized once per user on a node.
 
    Some of the installation procedures leading up to this point use the CLI with a Kubernetes managed service
    account that is normally used for internal operations. There is a procedure for extracting the OAUTH token for
-   this service account and assigning it to the `CRAY_CREDENTIALS` environment variable to permit simple CLI operations.  
+   this service account and assigning it to the `CRAY_CREDENTIALS` environment variable to permit simple CLI operations.
 
    ```bash
    ncn# unset CRAY_CREDENTIALS
@@ -25,12 +25,12 @@ The `cray` CLI only needs to be initialized once per user on a node.
 
    The `cray` CLI needs to know what host to use to obtain authorization and what user is requesting authorization
    so it can obtain an OAUTH token to talk to the API Gateway. This is accomplished by initializing the CLI
-   configuration. In this example, the 'vers' username and its password are used. 
+   configuration. In this example, the 'vers' username and its password are used.
 
    If LDAP configuration was enabled, then use a valid account in LDAP instead of the example account 'vers'.
 
-   If LDAP configuration was not enabled, or is not working, then a Keycloak local account could be created. 
-   See [Configure Keycloak Account](CSM_product_management/Configure_Keycloak_Account.md) to create this local account in Keycloak 
+   If LDAP configuration was not enabled, or is not working, then a Keycloak local account could be created.
+   See [Configure Keycloak Account](CSM_product_management/Configure_Keycloak_Account.md) to create this local account in Keycloak
    and then use it instead of the example account 'vers'.
 
    ```bash
@@ -53,7 +53,7 @@ The `cray` CLI only needs to be initialized once per user on a node.
     ncn# cray artifacts buckets list -vvv
     ```
 
-    Expected output, if an error occurs see the troubleshooting section below in this topic. 
+    Expected output, if an error occurs see the troubleshooting section below in this topic.
     ```
     Loaded token: /root/.config/cray/tokens/api_gw_service_nmn_local.vers
     REQUEST: PUT to https://api-gw-service-nmn.local/apis/sts/token
@@ -100,7 +100,7 @@ The `cray` CLI only needs to be initialized once per user on a node.
 
    1.  SSH to ncn-s001/2/3.
    1.  Restart the Ceph radosgw process.
-   
+
        ***The expected output will be similar to the following, but it will vary based on the number of nodes running radosgw.***
 
        ```bash
@@ -127,16 +127,16 @@ The `cray` CLI only needs to be initialized once per user on a node.
        # Get active ceph-mgr
        ncn-s00(1/2/3)#ceph mgr dump | jq -r .active_name
        ncn-s002.zozbqp
-       
+
        # Fail the active ceph-mgr
        ncn-s00(1/2/3)# ceph mgr fail $(ceph mgr dump | jq -r .active_name)
-       
+
        #Confirm ceph-mgr has moved to a different ceph-mgr container
        ncn-s00(1/2/3)# ceph mgr dump | jq -r .active_name
        ncn-s001.qucrpr
        ```
 
    1.  Verify that the processes restarted using the command from step 3.
-    
-        At this point the processes should restart. If they do not, it is possible that steps 2 and 3 will need to be done again.  
+
+        At this point the processes should restart. If they do not, it is possible that steps 2 and 3 will need to be done again.
 

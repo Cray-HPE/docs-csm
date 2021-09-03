@@ -21,20 +21,20 @@ The commands in this procedure need to be run on a ceph-mon node.
         health: HEALTH_ERR
               1 full osd(s)
               13 pool(s) full
-      
+
       services:
         mon: 3 daemons, quorum ncn-s001,ncn-s002,ncn-s003 (age 20h)
         mgr: ncn-s003(active, since 9d), standbys: ncn-s001, ncn-s002
         mds: cephfs:1 {0=ncn-s002=up:active} 2 up:standby
         osd: 18 osds: 18 up (since 20h), 18 in (since 9d)
         rgw: 3 daemons active (ncn-s001.rgw0, ncn-s002.rgw0, ncn-s003.rgw0)
-    
+
       data:
         pools:   13 pools, 288 pgs
         objects: 2.98M objects, 11 TiB
         usage:   32 TiB used, 24 TiB / 56 TiB avail
         pgs:     288 active+clean
-     
+
       io:
         client:   379 KiB/s rd, 2.2 KiB/s wr, 13 op/s rd, 1 op/s wr
     ```
@@ -58,7 +58,7 @@ The commands in this procedure need to be run on a ceph-mon node.
        CLASS    SIZE       AVAIL      USED       RAW USED     %RAW USED
        ssd      56 TiB     24 TiB     32 TiB       32 TiB         57.15
        TOTAL    56 TiB     24 TiB     32 TiB       32 TiB         57.15
-     
+
     POOLS:
        POOL                           ID     STORED      OBJECTS     USED        %USED     MAX AVAIL
        cephfs_data                     1      39 MiB         387     121 MiB      0.10        39 GiB
@@ -90,7 +90,7 @@ The commands in this procedure need to be run on a ceph-mon node.
      7   ssd 3.49219  1.00000 3.5 TiB 1.5 TiB 1.5 TiB 1012 KiB 2.9 GiB 2.0 TiB 43.03 0.75  39     up
      8   ssd 3.49219  1.00000 3.5 TiB 1.7 TiB 1.7 TiB  194 KiB 4.0 GiB 1.8 TiB 47.96 0.84  47     up
      0   ssd 3.49219  1.00000 3.5 TiB 2.8 TiB 2.8 TiB  485 KiB 5.2 GiB 696 GiB 80.53 1.41  75     up
-     **9   ssd 3.49219  1.00000 3.5 TiB 3.3 TiB 3.3 TiB  642 KiB 6.1 GiB 173 GiB 95.17 1.67  67     up** 
+     **9   ssd 3.49219  1.00000 3.5 TiB 3.3 TiB 3.3 TiB  642 KiB 6.1 GiB 173 GiB 95.17 1.67  67     up**
     10   ssd 3.49219  1.00000 3.5 TiB 1.7 TiB 1.7 TiB  6.7 MiB 3.1 GiB 1.8 TiB 47.74 0.84  68     up
     11   ssd 3.49219  1.00000 3.5 TiB 2.8 TiB 2.8 TiB  1.1 MiB 5.4 GiB 675 GiB 81.14 1.42  78     up
      2   ssd 3.49219  1.00000 3.5 TiB 2.2 TiB 2.2 TiB   27 KiB 4.0 GiB 1.3 TiB 62.14 1.09  40     up

@@ -35,7 +35,7 @@ When a session is launched, the items below are created:
       "operation": "boot",
       "stop_time": null
     }
-    
+
     ```
 
 2.  Find the ConfigMap for the BOA job.
@@ -51,7 +51,7 @@ When a session is launched, the items below are created:
         **Name:      e786def5-37a6-40db-b36b-6b67ebe174ee**
         Optional:  false
     ```
-    
+
 3.  Delete the ConfigMap.
 
     ```bash

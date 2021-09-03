@@ -50,7 +50,7 @@ New admin and user accounts are authenticated with Keycloak. Authenticated accou
     -   homeDirectory
     -   loginShell
     -   uidNumber
-  
+
 10. Click on the **Role Mappings** tab to grant the user authority.
 
     1.  Click the **Client Roles** button.

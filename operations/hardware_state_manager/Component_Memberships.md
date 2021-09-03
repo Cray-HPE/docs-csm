@@ -13,12 +13,12 @@ The following is an example membership:
         "grp1",
         "red",
         "my_nodes"
-    ],    
+    ],
     "partitionName" : "partition2"
 }
 ```
 
-**Troubleshooting:** If the Cray CLI has not been initialized, the CLI commands will not work. 
+**Troubleshooting:** If the Cray CLI has not been initialized, the CLI commands will not work.
 
 ### Retrieve Group and Partition Memberships
 

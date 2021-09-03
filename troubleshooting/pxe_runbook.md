@@ -10,7 +10,7 @@ This guide runs through the most common issues and shows the user what is needed
 	2.3. [Verify route to TFTP](#verify-route-to-tftp)<br>
 	2.4. [Test TFTP traffic (Aruba Only)](#test-tftp-traffic)<br>
 	2.5. [Check DHCP lease is getting allocated](#check-dhcp-lease)<br>
-	2.6. [Verify the DHCP traffic on the Workers](#verify-the-dhcp-traffic)<br>	
+	2.6. [Verify the DHCP traffic on the Workers](#verify-the-dhcp-traffic)<br>
     2.7. [Verify the switches are forwarding DHCP traffic.](#verify-the-switches)<br>
 3. [Computes/UANs/Application Nodes](#computes-uans-applications-nodes)<br>
 
@@ -151,7 +151,7 @@ BGP Summary
  Peers                  : 4            Log Neighbor Changes   : No
  Cfg. Hold Time         : 180          Cfg. Keep Alive        : 60
  Confederation Id       : 0
- 
+
  Neighbor        Remote-AS MsgRcvd MsgSent   Up/Down Time State        AdminStatus
  10.252.0.2      65533       45052   45044   02m:02w:02d  Established   Up
  10.252.1.7      65533       78389   90090   02m:02w:02d  Established   Up
@@ -162,7 +162,7 @@ BGP Summary
 ```
 
 sw-spine-001 [standalone: master] # show ip bgp summary
- 
+
 VRF name                  : default
 BGP router identifier     : 10.252.0.2
 local AS number           : 65533
@@ -171,9 +171,9 @@ Main routing table version: 39
 IPV4 Prefixes             : 18
 IPV6 Prefixes             : 0
 L2VPN EVPN Prefixes       : 0
- 
+
 ------------------------------------------------------------------------------------------------------------------
-Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   Up/Down       State/PfxRcd       
+Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   Up/Down       State/PfxRcd
 ------------------------------------------------------------------------------------------------------------------
 10.252.1.7        4    65533        18018     20690     39        0      0      6:05:54:02    ESTABLISHED/6
 10.252.1.8        4    65533        18014     20694     39        0      0      6:05:54:03    ESTABLISHED/6
@@ -190,11 +190,11 @@ ECMP hashing and TFTP traffic.
 
 ```bash
 sw-spine-002# show ip route 10.92.100.60
- 
+
 Displaying ipv4 routes selected for forwarding
- 
+
 '[x/y]' denotes [distance/metric]
- 
+
 10.92.100.60/32, vrf default, tag 0
     via  10.252.1.9,  [70/0],  bgp
 ```
@@ -315,10 +315,10 @@ worker. We believe this has something to do with conntrack.
 iPXE> dhcp
 Configuring (net0 98:03:9b:a8:60:88).................. No configuration methods succeeded (http://ipxe.org/040ee186)
 Configuring (net1 b4:2e:99:be:1a:37)...... ok
- 
+
 iPXE> show dns
 net1.dhcp/dns:ipv4 = 10.92.100.225
- 
+
 iPXE> nslookup address api-gw-service-nmn.local
 iPXE> echo ${address}
 10.92.100.71
