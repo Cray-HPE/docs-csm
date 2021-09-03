@@ -297,7 +297,7 @@ The configuration workflow described here is intended to help understand the exp
     > **`IMPORTANT`** This is the administrators _last chance_ to run [NCN pre-boot workarounds](#apply-ncn-pre-boot-workarounds) (the `before-ncn-boot` breakpoint).
 
     > **`NOTE`**: All consoles are located at `/var/log/conman/console*`
-
+<a name="boot-the-storage-nodes"></a>
 1. Boot the **Storage Nodes**
 
     1. Boot all storage nodes except `ncn-s001`:
@@ -339,8 +339,10 @@ The configuration workflow described here is intended to help understand the exp
     **`NOTE`**: Watch the storage node consoles carefully for error messages. If any are seen, consult [Ceph-CSI Troubleshooting](ceph_csi_troubleshooting.md)
 
     **`NOTE`**: If the nodes have PXE boot issues (e.g. getting PXE errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
+<a name="boot-master-and-worker-nodes"></a>
+1. Boot the master and worker nodes.
 
-1. Wait for storage nodes before booting Kubernetes master nodes and worker nodes.
+   Wait for storage nodes before booting Kubernetes master nodes and worker nodes.
 
    **`NOTE`**: Once all storage nodes are up and the message `...sleeping 5 seconds until /etc/kubernetes/admin.conf` appears on `ncn-s001`'s console, it is safe to proceed with booting the **Kubernetes master nodes and worker nodes**
 
@@ -684,69 +686,91 @@ Do all of the validation steps. The optional validation steps are manual steps w
 <a name="validation"></a>
 #### 5.1 Validation
 
-The following commands will run a series of remote tests on the other nodes to validate they are healthy and configured correctly.
+The following `csi pit validate` commands will run a series of remote tests on the other nodes to validate they are healthy and configured correctly.
 
 Observe the output of the checks and note any failures, then remediate them.
 
-1. Check Ceph
+1. Check the storage nodes.
+
+   **`Note`**: Throughout the output of the `csi pit validate` command there will be a test total for each node where the tests run. Be sure to check all of them and not just the final one.
 
    ```bash
    pit# csi pit validate --ceph | tee csi-pit-validate-ceph.log
    ```
+   
+   Once that command has finished, the following will extract the test totals reported for each node:
+   ```bash
+   pit# grep "Total" csi-pit-validate-ceph.log
+   ```
+   
+   Example output for a system with 3 storage nodes:
+   ```
+   Total Tests: 7, Total Passed: 7, Total Failed: 0, Total Execution Time: 1.4226 seconds
+   Total Tests: 7, Total Passed: 7, Total Failed: 0, Total Execution Time: 1.4077 seconds
+   Total Tests: 7, Total Passed: 7, Total Failed: 0, Total Execution Time: 1.4246 seconds
+   ```
 
-   **`Note`**: Throughout the output there are multiple lines of test totals; be sure to check all of them and not just the final one.
-   > The following will extract the test totals:
-   > ```bash
-   > pit# grep "Total" csi-pit-validate-ceph.log
-   > ```
-   >
-   > Example output for a system with 3 storage nodes:
-   > ```
-   > Total Tests: 7, Total Passed: 7, Total Failed: 0, Total Execution Time: 1.4226 seconds
-   > Total Tests: 7, Total Passed: 7, Total Failed: 0, Total Execution Time: 1.4077 seconds
-   > Total Tests: 7, Total Passed: 7, Total Failed: 0, Total Execution Time: 1.4246 seconds
-   > ```
+   If these total lines report any failed tests, look through the full output of the test to see which node had the failed test and what the details are for that test.
 
    **`Note`**: Please see [Utility Storage](../operations/utility_storage/Utility_Storage.md) to help resolve any failed tests.
 
-1. Check Kubernetes
+1. Check the master and worker nodes.
+
+   **`Note`**: Throughout the output of the `csi pit validate` command there will be a test total for each node where the tests run. Be sure to check all of them and not just the final one.
 
    ```bash
    pit# csi pit validate --k8s | tee csi-pit-validate-k8s.log
    ```
 
-   **`Note`**: Throughout the output there are multiple lines of test totals; be sure to check all of them and not just the final one.
-   > The following will extract the test totals:
-   > ```bash
-   > pit# grep "Total" csi-pit-validate-k8s.log
-   > ```
-   >
-   > Example output for a system with 5 Kubernetes nodes:
-   > ```
-   > Total Tests: 16, Total Passed: 16, Total Failed: 0, Total Execution Time: 0.3072 seconds
-   > Total Tests: 16, Total Passed: 16, Total Failed: 0, Total Execution Time: 0.2727 seconds
-   > Total Tests: 12, Total Passed: 12, Total Failed: 0, Total Execution Time: 0.2841 seconds
-   > Total Tests: 12, Total Passed: 12, Total Failed: 0, Total Execution Time: 0.3622 seconds
-   > Total Tests: 12, Total Passed: 12, Total Failed: 0, Total Execution Time: 0.2353 seconds
-   > ```
+   Once that command has finished, the following will extract the test totals reported for each node:
+   ```bash
+   pit# grep "Total" csi-pit-validate-k8s.log
+   ```
+   
+   Example output for a system with 5 master and worker nodes (other than the PIT node):
+   ```
+   Total Tests: 16, Total Passed: 16, Total Failed: 0, Total Execution Time: 0.3072 seconds
+   Total Tests: 16, Total Passed: 16, Total Failed: 0, Total Execution Time: 0.2727 seconds
+   Total Tests: 12, Total Passed: 12, Total Failed: 0, Total Execution Time: 0.2841 seconds
+   Total Tests: 12, Total Passed: 12, Total Failed: 0, Total Execution Time: 0.3622 seconds
+   Total Tests: 12, Total Passed: 12, Total Failed: 0, Total Execution Time: 0.2353 seconds
+   ```
 
-   > **`WARNING`** if test failures for "/dev/sdc" are observed they should be discarded for a manual test:
+   If these total lines report any failed tests, look through the full output of the test to see which node had the failed test and what the details are for that test.
+
+   > **`WARNING`** If there are failures for tests with names like "Worker Node CONLIB FS Label", then these manual tests should be run on the node which reported the failure. The master nodes have a test looking for ETCDLVM label. The worker nodes have tests looking for the CONLIB, CONRUN, and K8SLET labels. 
    >
-   > master nodes:
+   > Master nodes:
+   >
    > ```bash
    > ncn-m# blkid -L ETCDLVM
+   > /dev/sdc
    > ```
    >
-   > worker nodes:
+   > Worker nodes:
+   >
    > ```bash
    > ncn-w# blkid -L CONLIB
+   > /dev/sdc
    > ncn-w# blkid -L CONRUN
+   > /dev/sdc
    > ncn-w# blkid -L K8SLET
+   > /dev/sdc
    > ```
    >
-   > The test should be looking for the ephemeral disk, that disk is sometimes `/dev/sdc`. The name of the disk is a more accurate test, and is not prone to the random path change.
+   > **WARNING** If these manual tests do not report a disk device such as "/dev/sdc" as having the respective label on that node, then the problem must be resolved before continuing to the next step.
+   > * If a **master node** has the problem then it is best to wipe and redeploy all of the management nodes before continuing the installation.
+   >   1. Wipe the each of the worker and master nodes (except ncn-m001 since it is the PIT node) using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe) and then wipe each of the stoage nodes using the 'Full Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#full-wipe).
+   >   1. Return to the [Boot the **Storage Nodes**](#boot-the-storage-nodes) step of [Deploy Management Nodes](#deploy_management_nodes) section above.
+   > * If a **worker node** has the problem then it is best to wipe and redeploy that worker node before continuing the installation.
+   >   1. Wipe this  worker node using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe).
+   >   1. Return to the [Boot the Master and Worker Nodes**](#boot-master-and-worker-nodes) step of [Deploy Management Nodes](#deploy_management_nodes) section above.
 
-   > Note: If your shell terminal is not echoing your input after running this, type "reset" and press enter to recover.
+1. If your shell terminal is not echoing your input after running the above `csi pit validate` tests, then reset the terminal.
+
+   ```bash
+   pit# reset
+   ```
 
 1. Ensure that weave has not split-brained
 
