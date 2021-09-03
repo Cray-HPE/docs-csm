@@ -34,60 +34,60 @@ A default configuration of Access Control Lists \(ACL\) is also set when the sys
 
 ```screen
 Mountain NMN to HMN
- 
+
 Ipv4 access-list
 deny-mtn-nmn-to-hmn bind point rif
- 
+
 Ipv4 access-list
 deny-mtn-nmn-to-hmn seq-number 10 deny ip 10.100.0.0 mask 255.252.0.0
 10.104.0.0 mask 255.252.0.0
- 
+
 Ipv4 access-list
 deny-mtn-nmn-to-hmn seq-number 20 deny ip 10.100.0.0 mask 255.252.0.0
 10.254.0.0 mask 255.255.128.0
- 
+
 Ipv4 access-list
 deny-mtn-nmn-to-hmn seq-number 30 permit ip any any
- 
+
 Interface vlan 2000
 ipv4 port access-group deny-mtn-nmn-to-hmn
- 
+
 Interface vlan 2001
 ipv4 port access-group deny-mtn-nmn-to-hmn
- 
+
 Interface vlan 2002
 ipv4 port access-group deny-mtn-nmn-to-hmn
- 
+
 Interface vlan 2003
 ipv4 port access-group deny-mtn-nmn-to-hmn
- 
- 
+
+
 
 Mountain HMN to NMN
- 
+
 Ipv4 access-list
 deny-mtn-hmn-to-nmn bind point rif
- 
+
 Ipv4 access-list
 deny-mtn-hmn-to-nmn seq number 10 deny 10.104.0.0 mask 255.252.0.0 10.100.0.0
 mask 255.252.0.0
- 
+
 Ipv4 access-list
 deny-mtn-hmn-to-nmn seq number 20 deny 10.104.0.0 mask 255.252.0.0 10.252.0.0
 mask 255.255.128.0
- 
+
 Ipv4 access-list
 deny-mtn-hmn-to-nmn seq number 30 permit ip any any
- 
+
 Interface vlan 3000
 ipv4 port access-group deny-mtn-hmn-to-nmn
- 
+
 Interface vlan 3001
 ipv4 port access-group deny-mtn-hmn-to-nmn
- 
+
 Interface vlan 3002
 ipv4 port access-group deny-mtn-hmn-to-nmn
- 
+
 Interface vlan 3003
 ipv4 port access-group deny-mtn-hmn-to-nmn
 ```

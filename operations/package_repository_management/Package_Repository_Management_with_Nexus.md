@@ -81,13 +81,13 @@ The following is an example for containerd:
 
 ```bash
 ncn# ctr image pull registry.local/baseos/alpine:3.12.0
-registry.local/baseos/alpine:3.12.0:                                              resolved       |++++++++++++++++++++++++++++++++++++++| 
-manifest-sha256:e25f4e287fad9c0ee0a47af590e999f9ff1f043fb636a9dc7a61af6d13fc40ca: done           |++++++++++++++++++++++++++++++++++++++| 
-layer-sha256:3ab6766f6281be4c2349e2122bab3b4d1ba1b524236b85fce0784453e759b516:    done           |++++++++++++++++++++++++++++++++++++++| 
-layer-sha256:df20fa9351a15782c64e6dddb2d4a6f50bf6d3688060a34c4014b0d9a752eb4c:    done           |++++++++++++++++++++++++++++++++++++++| 
-layer-sha256:62694d7552ccd2338f8a4d775bef09ea56f6d2bcfdfafb9e2a4e0241f360fca5:    done           |++++++++++++++++++++++++++++++++++++++| 
-config-sha256:5779738096ecb47dd7192d44ceef7032110edd38204f66c9ca4e35fca952975c:   done           |++++++++++++++++++++++++++++++++++++++| 
-elapsed: 0.2 s                                                                    total:   0.0 B (0.0 B/s)                                         
+registry.local/baseos/alpine:3.12.0:                                              resolved       |++++++++++++++++++++++++++++++++++++++|
+manifest-sha256:e25f4e287fad9c0ee0a47af590e999f9ff1f043fb636a9dc7a61af6d13fc40ca: done           |++++++++++++++++++++++++++++++++++++++|
+layer-sha256:3ab6766f6281be4c2349e2122bab3b4d1ba1b524236b85fce0784453e759b516:    done           |++++++++++++++++++++++++++++++++++++++|
+layer-sha256:df20fa9351a15782c64e6dddb2d4a6f50bf6d3688060a34c4014b0d9a752eb4c:    done           |++++++++++++++++++++++++++++++++++++++|
+layer-sha256:62694d7552ccd2338f8a4d775bef09ea56f6d2bcfdfafb9e2a4e0241f360fca5:    done           |++++++++++++++++++++++++++++++++++++++|
+config-sha256:5779738096ecb47dd7192d44ceef7032110edd38204f66c9ca4e35fca952975c:   done           |++++++++++++++++++++++++++++++++++++++|
+elapsed: 0.2 s                                                                    total:   0.0 B (0.0 B/s)
 unpacking linux/amd64 sha256:e25f4e287fad9c0ee0a47af590e999f9ff1f043fb636a9dc7a61af6d13fc40ca...
 done
 ```
@@ -101,7 +101,7 @@ Getting image source signatures
 Copying blob df20fa9351a1 [--------------------------------------] 0.0b / 0.0b
 Copying blob 3ab6766f6281 [--------------------------------------] 0.0b / 0.0b
 Copying blob 62694d7552cc [--------------------------------------] 0.0b / 0.0b
-Copying config 5779738096 done  
+Copying config 5779738096 done
 Writing manifest to image destination
 Storing signatures
 5779738096ecb47dd7192d44ceef7032110edd38204f66c9ca4e35fca952975c

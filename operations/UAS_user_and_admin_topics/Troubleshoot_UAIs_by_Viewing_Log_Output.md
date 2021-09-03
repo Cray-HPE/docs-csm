@@ -4,7 +4,7 @@
 Sometimes a UAI will come up and run but will not work correctly. It is possible to see errors reported by elements of the UAI entrypoint script using the `kubectl logs` command. First find the UAI of interest. This starts by identifying the UAI name using the CLI:
 
 ```
-ncn-m001-pit# cray uas admin uais list 
+ncn-m001-pit# cray uas admin uais list
 [[results]]
 uai_age = "4h30m"
 uai_connect_string = "ssh broker@10.103.13.162"
@@ -58,7 +58,7 @@ Checking for munge.key
 Setting up munge.key
 Check for pbs.conf
 Generating ssh keys and sshd_config
-ssh-keygen: generating new host keys: RSA DSA ECDSA ED25519 
+ssh-keygen: generating new host keys: RSA DSA ECDSA ED25519
 ...
 ```
 
@@ -69,7 +69,7 @@ ncn-m001-pit# kubectl logs -n uas uai-broker-2e6ce6b7-68d78c6c95-s28dh uai-broke
 /bin/bash: warning: setlocale: LC_ALL: cannot change locale (C.UTF-8)
 Configure PAM to use sssd...
 Generating broker host keys...
-ssh-keygen: generating new host keys: RSA DSA ECDSA ED25519 
+ssh-keygen: generating new host keys: RSA DSA ECDSA ED25519
 Checking for UAI_CREATION_CLASS...
 Starting sshd...
 Starting sssd...

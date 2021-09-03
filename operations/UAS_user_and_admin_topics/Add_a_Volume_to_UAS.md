@@ -21,7 +21,7 @@ Install and initialize the `cray` administrative CLI.
 To create a volume, follow this procedure.
 
 1.  Use the `cray` CLI to create the volume, specifying volumename, mount\_path, and volume\_description.
-   
+
     Note difference between the UAS name for the volume type and the Kubernetes name for that type. Kubernetes uses `camelCase` for its type names, while UAS uses `lower_case_with_underscores`.
 
     ```
@@ -39,5 +39,5 @@ To create a volume, follow this procedure.
 1.  Perform [List Volumes Registered in UAS](List_Volumes_Registered_in_UAS.md) to verify that the new volume is configured.
 
     The new volume appears in the output of the `cray uas admin config volumes list` command.
-    
+
 

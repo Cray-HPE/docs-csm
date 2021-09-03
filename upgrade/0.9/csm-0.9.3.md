@@ -124,7 +124,7 @@ Update the `coredns` and `kube-multus` resources.
     ```bash
     ncn-m001# ./lib/0.9.3/coredns-bump-resources.sh
     ```
-    
+
     Expected output looks similar to:
     ```
     Applying new resource limits to coredns pods
@@ -141,7 +141,7 @@ Update the `coredns` and `kube-multus` resources.
     ```bash
     ncn-m001# ./lib/0.9.3/multus-bump-resources.sh
     ```
-    
+
     Expected output looks similar to:
     ```
     Applying new resource limits to kube-multus pods
@@ -153,7 +153,7 @@ Update the `coredns` and `kube-multus` resources.
     ncn-m001# watch "kubectl get pods -n kube-system -l app=multus"
     ```
 
-On success, the `coredns` and `kube-multus` pods should restart with a status of `Running`.  
+On success, the `coredns` and `kube-multus` pods should restart with a status of `Running`.
 If any `kube-multus` pods remain in `Terminating` status, force delete them so that the
 daemonset can restart them successfully.
 ```bash
@@ -170,13 +170,13 @@ ncn-m001# pdsh -w $(./lib/list-ncns.sh | grep ncn-w | paste -sd,) "echo kernel.p
 ## Deploy Manifests
 
 1. Before deploying the manifests, the `cray-product-catalog` role in Kubernetes needs to be updated.
-    
+
     a. Display the role before changing it:
-        
+
         ```bash
         ncn-m001# kubectl get role -n services cray-product-catalog -o json| jq '.rules[0]'
         ```
-    
+
         Expected output looks like:
         ```
         {
@@ -194,25 +194,25 @@ ncn-m001# pdsh -w $(./lib/list-ncns.sh | grep ncn-w | paste -sd,) "echo kernel.p
           ]
         }
         ```
-    
+
     b. Patch the role:
-        
+
         ```bash
         ncn-m001# kubectl patch role -n services cray-product-catalog --patch \
                     '{"rules": [{"apiGroups": [""],"resources": ["configmaps"],"verbs": ["create","get","list","update","patch","delete"]}]}'
         ```
-        
+
         On success, expected output looks like:
         ```
         role.rbac.authorization.k8s.io/cray-product-catalog patched
         ```
-        
+
     c. Display the role after the patch:
-        
+
         ```bash
         ncn-m001# kubectl get role -n services cray-product-catalog -o json| jq '.rules[0]'
         ```
-        
+
         Expected output looks like:
         ```
         {
@@ -256,7 +256,7 @@ ncn-m001# pdsh -w $(./lib/list-ncns.sh | grep ncn-w | paste -sd,) "echo kernel.p
            namespace: services
         ```
 
-	b. run kubectl apply -f on cray-unbound-coredns-psp.yaml 
+	b. run kubectl apply -f on cray-unbound-coredns-psp.yaml
 
        ```bash
        ncn-m001# kubectl apply -f cray-unbound-coredns-psp.yaml
@@ -278,7 +278,7 @@ ncn-m001# pdsh -w $(./lib/list-ncns.sh | grep ncn-w | paste -sd,) "echo kernel.p
         subjects:
         - kind: ServiceAccount
           name: cray-rts-vault-watcher
-          namespace: services 
+          namespace: services
         ```
 
     2. Run kubectl apply -f on cray-hms-rts-init-psp.yaml:
@@ -433,7 +433,7 @@ interface port-channel1
 interface ethernet1/1/1
  description CMM_CAB_1000
  no shutdown
- channel-group 1 mode on 
+ channel-group 1 mode on
  no switchport
  mtu 9216
  flowcontrol receive on

@@ -57,13 +57,13 @@ Use this procedure as a general guide to power off an external ClusterStor syste
 
     ```bash
     [n000]# ssh NODENAME crm_mon -r1 | grep fsys
-    cls01234n006_md0-fsys (ocf::heartbeat:XYMNTR): Stopped          
-    cls01234n006_md1-fsys (ocf::heartbeat:XYMNTR): Stopped          
-    cls01234n006_md2-fsys (ocf::heartbeat:XYMNTR): Stopped          
-    cls01234n006_md3-fsys (ocf::heartbeat:XYMNTR): Stopped          
-    cls01234n006_md4-fsys (ocf::heartbeat:XYMNTR): Stopped          
-    cls01234n006_md5-fsys (ocf::heartbeat:XYMNTR): Stopped          
-    cls01234n006_md6-fsys (ocf::heartbeat:XYMNTR): Stopped          
+    cls01234n006_md0-fsys (ocf::heartbeat:XYMNTR): Stopped
+    cls01234n006_md1-fsys (ocf::heartbeat:XYMNTR): Stopped
+    cls01234n006_md2-fsys (ocf::heartbeat:XYMNTR): Stopped
+    cls01234n006_md3-fsys (ocf::heartbeat:XYMNTR): Stopped
+    cls01234n006_md4-fsys (ocf::heartbeat:XYMNTR): Stopped
+    cls01234n006_md5-fsys (ocf::heartbeat:XYMNTR): Stopped
+    cls01234n006_md6-fsys (ocf::heartbeat:XYMNTR): Stopped
     cls01234n006_md7-fsys (ocf::heartbeat:XYMNTR): Stopped
     ```
 
@@ -71,7 +71,7 @@ Use this procedure as a general guide to power off an external ClusterStor syste
 
     ```bash
     MGS# ssh MGS_NODE
-    
+
     ```
 
 8.  To determine if Resource Group md65-group is stopped, use the `crm_mon` utility to monitor the status of the MGS and MDS nodes.
@@ -88,7 +88,7 @@ Use this procedure as a general guide to power off an external ClusterStor syste
 
     ```bash
     [MGS]# stop_xyraid nodename_md65-group
-    
+
     [MGS]# crm\_mon -1r | grep fsys
     cls01234n003_md66-fsys (ocf::heartbeat:XYMNTR): Stopped
     cls01234n003_md65-fsys (ocf::heartbeat:XYMNTR): Stopped

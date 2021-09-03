@@ -38,7 +38,7 @@ ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
 13   ssd  3.49309         osd.13      down  1.00000 1.00000
 15   ssd  3.49309         osd.15      down  1.00000 1.00000
 -7       27.94519     host ncn-s003                            <--- node where the issue exists
- 2   ssd 27.94519         osd.2       down  1.00000 1.00000    <--- the problematic VG  
+ 2   ssd 27.94519         osd.2       down  1.00000 1.00000    <--- the problematic VG
 
 ```
 
@@ -71,7 +71,7 @@ ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
        ```
 
    3. Run the cloud init script.
-   
+
        ```bash
        ncn-s001# /srv/cray/scripts/common/storage-ceph-cloudinit.sh
        ```

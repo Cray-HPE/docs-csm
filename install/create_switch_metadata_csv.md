@@ -28,7 +28,7 @@ The above file would lead to this pairing between component name and hostname:
 | sw-cdu-001 | d0w1 |
 | sw-cdu-002 | d0w2 |
 
-The hostname's are automatically generated in ascending order by switch type. 
+The hostname's are automatically generated in ascending order by switch type.
 
 The Brand name of the management switches can be determined from one of two places. The Device Diagrams or River Device Diagrams tab of the SHCD has pictures and diagrams of the components of the system including the management network switches. This will have a long name which shows the part number and the vendor name. The Rack Layout or River Rack Layout tab shows the part number in the context of its location within the cabinet.
 

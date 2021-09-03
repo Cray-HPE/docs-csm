@@ -7,7 +7,7 @@ The CSM installation prepares and deploys a distributed system across a group of
 
 System services on these nodes are provided as containerized micro-services packaged for deployment as helm charts. These services are orchestrated by Kubernetes to be scheduled on Kubernetes worker nodes with horizontal scaling to increase or decrease the number of instances of some services as demand for them varies, such as when booting many compute nodes or application nodes.
 
-### Topics: 
+### Topics:
    1. [System Nodes and Networks](#system_nodes_and_networks)
    1. [Default IP Address Ranges](#default_ip_address_ranges)
    1. [Resilience of System Management Services](#resilience_of_system_management_services)
@@ -57,7 +57,7 @@ Management Unit (MMU), and Scalable Storage Unit (SSU))
       * UANs
       * ClusterStor controller data interfaces of all ClusterStor components (SMU, MMU, and SSU)
 
-During initial installation, several of those networks are created with default IP address ranges. See 
+During initial installation, several of those networks are created with default IP address ranges. See
 [Default IP Address Ranges](#default_ip_address_ranges)
 
 The network management system (NMS) data model and REST API enable customer sites to construct their own
@@ -85,17 +85,17 @@ The following table shows the default IP address ranges
 
 | Network | IP Address Range |
 | --- | --- |
-| Kubernetes service network | 10.16.0.0/12 | 
-| Kubernetes pod network | 10.32.0.0/12 | 
-| Install Network (MTL) | 10.1.0.0/16 | 
-| Node Management Network (NMN) | 10.252.0.0/17 | 
-| High Speed Network (HSN) | 10.253.0.0/16 | 
-| Hardware Management Network (HMN) 10.254.0.0/17 | 
+| Kubernetes service network | 10.16.0.0/12 |
+| Kubernetes pod network | 10.32.0.0/12 |
+| Install Network (MTL) | 10.1.0.0/16 |
+| Node Management Network (NMN) | 10.252.0.0/17 |
+| High Speed Network (HSN) | 10.253.0.0/16 |
+| Hardware Management Network (HMN) 10.254.0.0/17 |
 | Mountain NMN Allocate a /22 from this range per liquid cooled cabinet: * cabinet 1 * cabinet 2 * cabinet 3 * ...  | 10.100.0.0/17 Example IP address in the allocated ranges: * 10.100.0.0/22 * 10.100.4.0/22 * 10.100.8.0/22 * ... |
 | Mountain HMN Allocate a /22 from this range per liquid cooled cabinet: * cabinet 1 * cabinet 2 * cabinet 3 * ... | 10.104.0.0/17 Example IP address in the allocated ranges: * 10.104.0.0/22 * 10.104.4.0/22 * 10.104.8.0/22 * ... |
-| River NMN | 10.106.0.0/17 | 
-| River HMN | 10.107.0.0/17 | 
-| Load Balanced NMN | | 
+| River NMN | 10.106.0.0/17 |
+| River HMN | 10.107.0.0/17 |
+| Load Balanced NMN | |
 
 The above values could be modified prior to install if there is a need to ensure that there are no conflicts with
 customer resources, such as LDAP or license servers. If a customer has more than one HPE Cray EX system,

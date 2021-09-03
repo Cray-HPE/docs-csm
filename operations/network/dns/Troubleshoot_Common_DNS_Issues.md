@@ -40,15 +40,15 @@ ncn-w001# dig HOSTNAME @10.92.100.225
 ;; Got answer:
 ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 57196
 ;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
- 
+
 ;; OPT PSEUDOSECTION:
 ; EDNS: version: 0, flags:; udp: 4096
 ;; QUESTION SECTION:
 ;x3000c0r41b0.                  IN      A
- 
+
 ;; ANSWER SECTION:
 x3000c0r41b0.           3600    IN      A       10.254.127.200
- 
+
 ;; Query time: 0 msec
 ;; SERVER: 10.92.100.225#53(10.92.100.225)
 ;; WHEN: Fri Jul 17 18:49:48 UTC 2020
@@ -101,7 +101,7 @@ To view the DNS Helper logs:
 ncn-w001# kubectl logs -n services pod/$(kubectl get -n services pods | \
 grep unbound | tail -n 1 | cut -f 1 -d ' ') -c manager | tail -n4
   uid: bc1e8b7f-39e2-49e5-b586-2028953d2940
- 
+
 Comparing new and existing DNS records.
     No differences found. Skipping DNS update
 ```
@@ -148,11 +148,11 @@ Flags:
   p: partial programming in H/W
 VRF Name default:
   ------------------------------------------------------------------------------------------------------
-  Destination       Mask              Flag     Gateway           Interface        Source     AD/M      
+  Destination       Mask              Flag     Gateway           Interface        Source     AD/M
   ------------------------------------------------------------------------------------------------------
-  default           0.0.0.0           c        10.102.255.9      eth1/16          static     1/1       
-  10.92.100.222     255.255.255.255   c        10.252.0.4        vlan2            bgp        200/0     
-                                      c        10.252.0.5        vlan2            bgp        200/0   
+  default           0.0.0.0           c        10.102.255.9      eth1/16          static     1/1
+  10.92.100.222     255.255.255.255   c        10.252.0.4        vlan2            bgp        200/0
+                                      c        10.252.0.5        vlan2            bgp        200/0
                                       c        10.252.0.6        vlan2            bgp        200/0
 ```
 
@@ -191,16 +191,16 @@ ncn-w001# curl -s -k -H "Authorization: Bearer ${TOKEN}" -X \
 POST -H "Content-Type: application/json" \-d '{ "command": "lease4-get-all",  "service": \
 [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea \
 |jq|grep x3000c0s19b4  -A 6 -B 4
-{          
-"cltt": 1597777241,          
-"fqdn-fwd": true,          
-"fqdn-rev": true,          
-"hostname": "x3000c0s19b4",          
-"hw-address": "a4:bf:01:3e:d2:94",          
-"ip-address": "10.254.127.205",          
-"state": 0,          
-"subnet-id": 1,          
-"valid-lft": 300        
+{
+"cltt": 1597777241,
+"fqdn-fwd": true,
+"fqdn-rev": true,
+"hostname": "x3000c0s19b4",
+"hw-address": "a4:bf:01:3e:d2:94",
+"ip-address": "10.254.127.205",
+"state": 0,
+"subnet-id": 1,
+"valid-lft": 300
 }
 ```
 

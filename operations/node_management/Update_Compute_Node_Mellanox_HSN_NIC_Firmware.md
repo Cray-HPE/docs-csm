@@ -31,20 +31,20 @@ See [Update Firmware with FAS](../firmware/Update_Firmware_with_FAS.md) for info
     ```bash
     nid000001:~ # ls /opt/cray/cray-shasta-mlnx-firmware/1.0.5/share/firmware/*
     apply_mlnx_configs  generate_mlnx_configs  update_mlnx_firmware
-    
+
     nid000001:~ # ls /opt/cray/cray-shasta-mlnx-firmware/1.0.5/share/firmware/
     CRAY000000001/ MT_0000000011/ images/
-    
+
     nid000001:~ # ls /opt/cray/cray-shasta-mlnx-firmware/1.0.5/share/firmware/
     CRAY000000001/ MT_0000000011/ images/
-    
+
     nid000001:~ # ls /opt/cray/cray-shasta-mlnx-firmware/1.0.5/share/firmware/*
     /opt/cray/cray-shasta-mlnx-firmware/1.0.5/share/firmware/CRAY000000001:
     config.xml  fw-ConnectX5-rel-16_26_4012-Cray_Timms_mezz_100G_1P-UEFI-14.19.17-FlexBoot-3.5.805.bin
-     
+
     /opt/cray/cray-shasta-mlnx-firmware/1.0.5/share/firmware/MT_0000000011:
     config.xml  fw-ConnectX5-rel-16_26_4012-MCX515A-CCA_Ax-UEFI-14.19.17-FlexBoot-3.5.805.bin
-     
+
     /opt/cray/cray-shasta-mlnx-firmware/1.0.5/share/firmware/images:
     CRAY000000001.bin  MT_0000000011.bin
     ```

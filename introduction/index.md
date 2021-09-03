@@ -1,7 +1,7 @@
 # Introduction to CSM Installation
 
 This document provides an introduction to the Cray System Management (CSM) installation documentation
-for an HPE Cray EX system. 
+for an HPE Cray EX system.
 
 ### Topics:
    * [CSM Overview](#csm_overview)
@@ -48,7 +48,7 @@ See [Scenarios for Shasta v1.5](scenarios.md)
 <a name="product-stream-updates"></a>
 ## CSM Product Stream Updates
 
-   The software included in the CSM product stream is released in more than one way. The initial product release may be augmented with late-breaking workarounds and documentation updates or hotfixes after the release. 
+   The software included in the CSM product stream is released in more than one way. The initial product release may be augmented with late-breaking workarounds and documentation updates or hotfixes after the release.
 
    See [CSM Product Stream Updates](../update_product_stream/index.md)
 
@@ -65,7 +65,7 @@ See [Scenarios for Shasta v1.5](scenarios.md)
 ## Differences from Previous Release
 
    Significant changes from the previous release of CSM are described.
-  
+
    * New Features
    * Deprecating Features
    * Deprecated Features
@@ -79,7 +79,7 @@ See [Differences from Previous Release](differences.md)
    Several conventions have been used in the preparation of this documentation.
 
    * File Formats
-   * Typographic Conventions 
+   * Typographic Conventions
    * Command Prompt Conventions which indicate the context for user, host, directory, chroot environment, or container environment
 
 See [Documentation Conventions](documentation_conventions.md)

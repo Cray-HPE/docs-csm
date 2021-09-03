@@ -4,7 +4,7 @@ Use the System Configuration Service \(SCSD\) to set the BMCs credentials to uni
 
 ### Prerequisites
 
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system. 
+-   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 
 ### Procedure
 

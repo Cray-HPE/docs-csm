@@ -22,7 +22,7 @@ While it would be possible to make the configuration available as files volume m
 
 This example, uses Kubernetes secrets and assumes that the broker UAIs run in the `uas` Kubernetes namespace. If a different namespace is used, the creation of the ConfigMaps is different but the contents are the same. Using a namespace other than `uas` for broker UAIs is not recommended and is beyond the scope of this document.
 
-1. Configure LDAP and determine which files need to be changed in the broker UAI and what their contents should be. 
+1. Configure LDAP and determine which files need to be changed in the broker UAI and what their contents should be.
 
     In this example, the file is `/etc/sssd/sssd.conf` and its contents are (the contents have been sanitized, substitute appropriate contents in their place):
 
@@ -30,14 +30,14 @@ This example, uses Kubernetes secrets and assumes that the broker UAIs run in th
     [sssd]
       config_file_version = 2
       services = nss, pam
-      domains = My_DC 
-   
+      domains = My_DC
+
     [nss]
       filter_users = root
       filter_groups = root
-   
+
     [pam]
-   
+
     [domain/My_DC]
       ldap_search_base=dc=datacenter,dc=mydomain,dc=com
       ldap_uri=ldap://10.1.1.5,ldap://10.1.2.5
@@ -45,27 +45,27 @@ This example, uses Kubernetes secrets and assumes that the broker UAIs run in th
       ldap_tls_reqcert = allow
       ldap_schema = rfc2307
       cache_credentials = True
-      entry_cache_timeout = 60 
-      enumerate = False 
+      entry_cache_timeout = 60
+      enumerate = False
     ```
 
 2. Add the content from the previous step to a secret.
 
      1. Create a file with the appropriate content.
 
-        ``` 
+        ```
         ncn-m001-pit# cat <<EOF > sssd.conf
         [sssd]
         config_file_version = 2
         services = nss, pam
         domains = My_DC
-        
+
         [nss]
         filter_users = root
         filter_groups = root
-        
+
         [pam]
-        
+
         [domain/My_DC]
         ldap_search_base=dc=datacenter,dc=mydomain,dc=com
         ldap_uri=ldap://10.1.1.5,ldap://10.1.2.5
@@ -80,17 +80,17 @@ This example, uses Kubernetes secrets and assumes that the broker UAIs run in th
 
      2. Make a secret from the file.
 
-        ``` 
+        ```
         ncn-m001-pit# kubectl create secret generic -n uas broker-sssd-conf --from-file=sssd.conf
 
   3. Make a volume for the secret in the UAS configuration.
 
-     ``` 
-     ncn-m001-pit# cray uas admin config volumes create --mount-path /etc/sssd --volume-description '{"secret": {"secret_name": "broker-sssd-conf", "default_mode": 384}}' --volumename broker-sssd-config 
+     ```
+     ncn-m001-pit# cray uas admin config volumes create --mount-path /etc/sssd --volume-description '{"secret": {"secret_name": "broker-sssd-conf", "default_mode": 384}}' --volumename broker-sssd-config
      mount_path = "/etc/sssd"
      volume_id = "4dc6691e-e7d9-4af3-acde-fc6d308dd7b4"
      volumename = "broker-sssd-config"
-     
+
      [volume_description.secret]
      default_mode = 384
      secret_name = "broker-sssd-conf"
@@ -111,17 +111,17 @@ This example, uses Kubernetes secrets and assumes that the broker UAIs run in th
    default = false
    image_id = "c5dcb261-5271-49b3-9347-afe7f3e31941"
    imagename = "dtr.dev.cray.com/cray/cray-uai-broker:latest"
-   
+
    [[results]]
    default = false
    image_id = "c5f6377a-dfc0-41da-89c9-6c88c8a2cda8"
    imagename = "dtr.dev.cray.com/cray/cray-uas-sles15:latest"
-   
+
    [[results]]
    default = true
    image_id = "ff86596e-9699-46e8-9d49-9cb20203df8c"
    imagename = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
-   
+
    ncn-m001-pit# cray uas admin config volumes list | grep -e volume_id -e volumename
    volume_id = "4dc6691e-e7d9-4af3-acde-fc6d308dd7b4"
    volumename = "broker-sssd-config"
@@ -133,7 +133,7 @@ This example, uses Kubernetes secrets and assumes that the broker UAIs run in th
    volumename = "lustre"
    volume_id = "ea97325c-2b1d-418a-b3b5-3f6488f4a9e2"
    volumename = "slurm-config"
-   
+
    ncn-m001-pit# cray uas admin config classes list | grep -e class_id -e comment
    class_id = "a623a04a-8ff0-425e-94cc-4409bdd49d9c"
    comment = "UAI User Class"
@@ -142,7 +142,7 @@ This example, uses Kubernetes secrets and assumes that the broker UAIs run in th
 
 5. Create the broker UAI class with the content retrieved in the previous step.
 
-   ``` 
+   ```
    ncn-m001-pit# cray uas admin config classes create --image-id c5dcb261-5271-49b3-9347-afe7f3e31941 --volume-list '4dc6691e-e7d9-4af3-acde-fc6d308dd7b4,55a02475-5770-4a77-b621-f92c5082475c,9fff2d24-77d9-467f-869a-235ddcd37ad7' --uai-compute-network no --public-ip yes --comment "UAI broker class" --uai-creation-class a623a04a-8ff0-425e-94cc-4409bdd49d9c --namespace uas
    class_id = "74970cdc-9f94-4d51-8f20-96326212b468"
    comment = "UAI broker class"
@@ -157,7 +157,7 @@ This example, uses Kubernetes secrets and assumes that the broker UAIs run in th
    mount_path = "/etc/sssd"
    volume_id = "4dc6691e-e7d9-4af3-acde-fc6d308dd7b4"
    volumename = "broker-sssd-config"
-   
+
    [volume_mounts.volume_description.secret]
    default_mode = 384
    secret_name = "broker-sssd-conf"
@@ -165,7 +165,7 @@ This example, uses Kubernetes secrets and assumes that the broker UAIs run in th
    mount_path = "/etc/localtime"
    volume_id = "55a02475-5770-4a77-b621-f92c5082475c"
    volumename = "timezone"
-   
+
    [volume_mounts.volume_description.host_path]
    path = "/etc/localtime"
    type = "FileOrCreate"
@@ -173,11 +173,11 @@ This example, uses Kubernetes secrets and assumes that the broker UAIs run in th
    mount_path = "/lus"
    volume_id = "9fff2d24-77d9-467f-869a-235ddcd37ad7"
    volumename = "lustre"
-   
+
    [volume_mounts.volume_description.host_path]
    path = "/lus"
    type = "DirectoryOrCreate"
-   
+
    [uai_image]
    default = false
    image_id = "c5dcb261-5271-49b3-9347-afe7f3e31941"

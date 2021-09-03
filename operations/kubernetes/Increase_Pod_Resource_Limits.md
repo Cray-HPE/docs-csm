@@ -18,9 +18,9 @@ Return Kubernetes pods to a healthy state with resources available.
     ```bash
     ncn-w001# kubectl get po -n services POD_ID -o yaml
     ...
-    
+
     **(look for this section)**
-    
+
         resources:
           limits:
             cpu: "2"
@@ -50,7 +50,7 @@ Return Kubernetes pods to a healthy state with resources available.
 
         ```bash
         ncn-w001# kubectl describe pod -n services POD_ID
-        
+
         .
         .
         .

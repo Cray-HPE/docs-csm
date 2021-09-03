@@ -70,10 +70,10 @@ The admin must be authenticated to the Cray CLI before proceeding.
    Check the output to verify all hardware has been set with the correct keys. Passwordless SSH to the root
    user should now function as expected.
 
-1. Test access to a node controller in the liquid-cooled cabinet.  
+1. Test access to a node controller in the liquid-cooled cabinet.
 
    SSH into the node controller for the host xname. For example, if the host xname is x1000c1s0b0n0, the
-   node controller xname would be x1000c1s0b0. 
+   node controller xname would be x1000c1s0b0.
 
    If the node controller is not powered up, this SSH attempt will fail.
 

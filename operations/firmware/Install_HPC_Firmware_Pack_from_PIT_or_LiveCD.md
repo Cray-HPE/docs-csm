@@ -20,7 +20,7 @@ Copyright 2021 Hewlett Packard Enterprise Development LP
 
 ### Documentation for Each Firmware Unit
 
-Documenation for each firmware unit is alongside the firmware in the overall package. 
+Documentation for each firmware unit is alongside the firmware in the overall package.
 This documentation material should be used for manually installing firmware when not using FAS on HPE Cray EX. It it sourced from Morpheus at each update of that particular firmware unit.
 
 ```bash

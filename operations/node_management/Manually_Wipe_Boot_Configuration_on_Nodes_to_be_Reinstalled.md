@@ -51,13 +51,13 @@ This procedure is necessary for preparing any NCNs that need to have software re
 
         -   **Java exception**: If a Java exception occurs when trying to connect via SOL, see [Change Java Security Settings](Change_Java_Security_Settings.md).
         -   **Unable to access BMC**: If unable to access the node's BMC, and ConMan is being used, ConMan may be blocking that access. See [Troubleshoot ConMan Blocking Access to a Node BMC](../conman/Troubleshoot_ConMan_Blocking_Access_to_a_Node_BMC.md).
-    
-    -   Physical KVM: 
-        
+
+    -   Physical KVM:
+
         Press **Prnt Scrn** to bring up the main menu, then use the arrow keys to move to the desired NCN \(ports 02–04\) and press **Enter**. The login screen for that NCN will appear. \(For photos and details, see [Use the Physical KVM](Use_the_Physical_KVM.md).\)
-    
-    -   Virtual KVM: 
-        
+
+    -   Virtual KVM:
+
         Log in to the BMC web console and launch the iKVM Viewer. \(For details, see [Launch a Virtual KVM on Intel Servers](Launch_a_Virtual_KVM_on_Intel_Servers.md).\)
 
 5.  When logged in to the NCN \(`ncn-w002` in the example\), wipe it using the following commands.

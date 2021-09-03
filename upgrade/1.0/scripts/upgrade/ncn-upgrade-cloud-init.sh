@@ -46,7 +46,7 @@ upgrade_ntp_timezone_metadata() {
   # jq -r '.["b8:59:9f:fe:49:f1"]["user-data"]["ntp"]' ntp.json
   for k in $(jq -r 'to_entries[] | "\(.key)"' data.json)
   do
-    # if it is not the global key, it's one of the host records we need to manipulate
+    # if it is not the global key, it is one of the host records we need to manipulate
     if ! [[ "$k" == "Global" ]]; then
       # shellcheck disable=SC2089
       ntp_query=".[\"$k\"][\"user-data\"][\"ntp\"]"

@@ -30,11 +30,11 @@ The desired settings for the HMN will be similar to the following:
 10.1.0.9        sw-cdu-002
 ```
 
-The system in this example needs to do the renames in the following order: 
+The system in this example needs to do the renames in the following order:
   1. CDU switches: 8 to 9, and 7 to 8
   2. Leaf switches: 4 to 7, and 2 to 6
   3. Aggregation switches: 6 to 5, and 5 to 4
-  4. Spine switches: 3 to 3, and 1 to 2 
+  4. Spine switches: 3 to 3, and 1 to 2
 
 These have IP address changes and name changes because there are now three digits instead of two for the switch hostname.
 
@@ -79,7 +79,7 @@ These have IP address changes and name changes because there are now three digit
    Excerpt from HMN.yaml:
 
    ```
-   pit# vi HMN.yaml  
+   pit# vi HMN.yaml
      ip_reservations:
      - ip_address: 10.254.0.2
        name: sw-spine-001
@@ -110,7 +110,7 @@ These have IP address changes and name changes because there are now three digit
    Excerpt from MTL.yaml:
 
    ```
-   pit# vi MTL.yaml 
+   pit# vi MTL.yaml
      ip_reservations:
      - ip_address: 10.1.0.2
        name: sw-spine-001
@@ -138,7 +138,7 @@ These have IP address changes and name changes because there are now three digit
        aliases: []
    ```
 
-   Excerpt from CAN.yaml: 
+   Excerpt from CAN.yaml:
 
    The following example includes two spine switches. Systems running a previous release would have had these as ending in .1 and in .3. Note these switches are not named "spine" or "agg" because the SHCD may specify differing exit points, but with either option the IPv4 address is specified.
 
@@ -399,7 +399,7 @@ These have IP address changes and name changes because there are now three digit
    sw-spine-001 [standalone: master] (config interface vlan 4) # no ip address
    sw-spine-001 [standalone: master] (config interface vlan 4) # ip address 10.254.0.2/17 primary
    sw-spine-001 [standalone: master] (config interface vlan 4) # exit
-   sw-spine-001 [standalone: master] (config) # interface vlan 7 
+   sw-spine-001 [standalone: master] (config) # interface vlan 7
    sw-spine-001 [standalone: master] (config interface vlan 7) # no ip address
    sw-spine-001 [standalone: master] (config interface vlan 7) # ip address 10.103.8.2/24 primary
    sw-spine-001 [standalone: master] (config interface vlan 7) # exit

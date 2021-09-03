@@ -19,7 +19,7 @@ There are several S3 buckets available that can be used to upload and download f
 
 ```screen
 ncn# cray artifacts buckets list
-results = [ "alc", "badger", "benji-backups", "boot-images", "etcd-backup", "fw-update", "ims", "nmd", "sds", "ssm", "vbis", "wlm",] 
+results = [ "alc", "badger", "benji-backups", "boot-images", "etcd-backup", "fw-update", "ims", "nmd", "sds", "ssm", "vbis", "wlm",]
 ```
 
 ### Create and Upload Artifacts

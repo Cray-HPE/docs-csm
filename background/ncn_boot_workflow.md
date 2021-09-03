@@ -23,7 +23,7 @@ Non-compute nodes boot two ways:
 There are two different methods for determining whether a management node is booted using disk or
 PXE. The method to use will vary depending on the system environment.
 
-1. Check kernel parameters. 
+1. Check kernel parameters.
 
    ```bash
    ncn# cat /proc/cmdline
@@ -126,7 +126,7 @@ Setting the boot order with efibootmgr will ensure that the desired network inte
    > <a name="hewlett-packard-enterprise"></a>
    > #### Hewlett-Packard Enterprise
    >
-   > 
+   >
    > ##### Masters
    >
    > ```bash
@@ -139,7 +139,7 @@ Setting the boot order with efibootmgr will ensure that the desired network inte
    > ncn-m# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -t '*' ',' | tr -d '\n' | sed 's/,$//') | grep -i bootorder
    > BootOrder: 0014,0018,0021,0022
    > ```
-   > 
+   >
    > ##### Storage
    >
    > ```bash
@@ -152,7 +152,7 @@ Setting the boot order with efibootmgr will ensure that the desired network inte
    > ncn-s# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -t '*' ',' | tr -d '\n' | sed 's/,$//') | grep -i bootorder
    > BootOrder: 001C,001D,0002,0020
    > ```
-   > 
+   >
    > ##### Workers
    >
    > ```bash
@@ -165,7 +165,7 @@ Setting the boot order with efibootmgr will ensure that the desired network inte
    > ncn-w# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -t '*' ',' | tr -d '\n' | sed 's/,$//') | grep -i bootorder
    > BootOrder: 0012,0017,0018
    > ```
-   > 
+   >
    > <a name="intel-corporation"></a>
    > #### Intel Corporation
    >
@@ -315,7 +315,7 @@ Reset the BIOS. Refer to vendor documentation for resetting the BIOS or attempt 
 > ```
 
 1. Reset BIOS with ipmitool
- 
+
    ```bash
    ncn# ipmitool chassis bootdev none options=clear-cmos
    ```

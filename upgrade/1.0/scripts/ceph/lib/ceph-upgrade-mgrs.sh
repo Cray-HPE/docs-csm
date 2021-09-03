@@ -21,7 +21,7 @@ for host in $(ceph node ls| jq -r '.mgr|keys[]')
  sleep 20
  echo "Setting the Ceph orchestrator backend to cephadm"
  ceph orch set backend cephadm
- 
+
  echo "Verify Ceph orchestrator's backend is cephadm"
  while [[ $avail != "true" ]] && [[ $backend != "cephadm" ]]
  do

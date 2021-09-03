@@ -23,7 +23,7 @@ ncn-m001# ceph -s
   cluster:
   id:     5f3b4031-d6c0-4118-94c0-bffd90b534eb
   health: HEALTH_OK  <<-- WARN/ERROR/CRITICAL are other states
- 
+
   services:
     mon: 3 daemons, quorum ncn-s001,ncn-s002,ncn-s003 (age 20h) <<-- Should have quorum and ideally an odd number of mon nodes
     mgr: ncn-s003(active, since 9d), standbys: ncn-s001, ncn-s002 <<-- The watchdog for the cluster
@@ -85,7 +85,7 @@ RAW STORAGE:
     kube      27 GiB     15 GiB     9.2 GiB       12 GiB         45.25
     smf       57 GiB     30 GiB      24 GiB       27 GiB         48.09
     TOTAL     84 GiB     44 GiB      34 GiB       40 GiB         47.18
- 
+
 POOLS:
     POOL                           ID     STORED      OBJECTS     USED        %USED     MAX AVAIL
     cephfs_data                     1         0 B           0         0 B         0        13 GiB

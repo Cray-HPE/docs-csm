@@ -112,33 +112,33 @@ Another option when compute nodes are booted is to download their rootfs into RA
     {
         ADMIN_SECRET=$(kubectl get secrets admin-client-auth -ojsonpath='{.data.client-secret}' | base64 -d)
         curl -s -d grant_type=client_credentials -d client_id=admin-client -d client_secret=$ADMIN_SECRET \
-          https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | 
+          https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token |
           python3 -c 'import sys, json; print(json.load(sys.stdin)["access_token"])'
     }
-     
+
     body='
     {
-      "name": "st1", 
-      "boot_sets": { 
+      "name": "st1",
+      "boot_sets": {
         "boot_set1": {
-          "boot_ordinal": 1, 
-          "type": "s3", 
-          "etag": "foo", 
-          "path": "s3://boot-images/ef97d3c4-6f10-4d58-b4aa-7b70fcaf41ba/manifest.json",  
-          "node_roles_groups": ["Compute"], 
-          "node_list": [""], 
-          "rootfs_provider": "cps", 
+          "boot_ordinal": 1,
+          "type": "s3",
+          "etag": "foo",
+          "path": "s3://boot-images/ef97d3c4-6f10-4d58-b4aa-7b70fcaf41ba/manifest.json",
+          "node_roles_groups": ["Compute"],
+          "node_list": [""],
+          "rootfs_provider": "cps",
           "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:eth0",
           "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=360M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell k8s_gw=api-gw-service-nmn.local quiet turbo_boost_limit=999",
           "network": "nmn"
         }
-      }, 
-      "cfs_branch": "master", 
+      },
+      "cfs_branch": "master",
       "cfs_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
-      "enable_cfs": true, 
+      "enable_cfs": true,
       "partition": ""
     }'
-     
+
     curl -i -X POST -s https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate \
       -H "Authorization: Bearer $(get_token)" \
       -H "Content-Type: application/json" \

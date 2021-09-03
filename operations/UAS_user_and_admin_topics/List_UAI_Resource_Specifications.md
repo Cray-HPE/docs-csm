@@ -28,7 +28,7 @@ The `cray` administrative CLI must be installed and initialized.
     resource_id = "eff9e1f2-3560-4ece-a9ce-8093e05e032d"
     ```
 
-    The following are the configurable parts of a resource specification: 
+    The following are the configurable parts of a resource specification:
     * `limit` - A JSON string describing a Kubernetes resource limit
     * `request` - A JSON string describing a Kubernetes resource request
     * `comment` - An optional free form string containing any information an administrator might find useful about the resource specification

@@ -232,7 +232,7 @@ Install and initialize the `cray` administrative CLI.
   * The `opt_ports` field is an empty list of TCP port numbers that will be opened on the external IP address of the UAI when it runs. This controls whether services other than SSH can be run and reached publicly on the UAI. The `priority_class_name` `"uai_priority"` is the default <a href="https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass">Kubernetes priority class</a> of UAIs. If it were a different class, it would affect both Kubernetes default resource limit / request assignments and Kubernetes scheduling priority for the UAI.
   * The `public_ip` field is a flag that indicates whether the UAI should be given an external IP address LoadBalancer service so that clients outside the Kubernetes cluster can reach it, or only be given a Kubernetes Cluster-IP address. For the most part, this controls whether the UAI is reachable by SSH from external clients, but it also controls whether the ports in `opt_ports` are reachable as well.
   * The `resource_config` field is not set, but could be set to a resource specification to override namespace defaults on Kubernetes resource requests / limits.
-  * The `uai_compute_network` flag indicates whether this UAI uses the macvlan mechanism to gain access to the Shasta compute node network. This needs to be `true` to support workload management. 
+  * The `uai_compute_network` flag indicates whether this UAI uses the macvlan mechanism to gain access to the Shasta compute node network. This needs to be `true` to support workload management.
   * The `uai_creation_class` field is used by [broker UAIs](#main-uaimanagement-brokermode-brokerclasses) to tell the broker what kind of UAI to create when automatically generating a UAI.
 
   After all these individual items, we see the UAI Image to be used to create UAIs of this class:
@@ -294,5 +294,5 @@ Install and initialize the `cray` administrative CLI.
    ```
 
    The timezone is taken from the host node by importing `/etc/localtime` to the UAI. Access is given to the Lustre file system mounted on the host node as `/lus` and mounting that within the UAI at the same path.Then, two pieces of Slurm configuration, the munge key and the slurm configuration file, are taken from Kubernetes and mounted as files at `/root/slurm_config/munge` and `/etc/slurm` respectively.
-   
+
 See [About UAI Classes](About_UAI_Classes.md) and [Elements of a UAI](Elements_of_a_UAI.md) for more details on the output.

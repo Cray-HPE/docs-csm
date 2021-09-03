@@ -339,13 +339,13 @@ The system is installed.
                         f5:4b
                     Exponent: 65537 (0x10001)
             X509v3 extensions:
-                X509v3 Basic Constraints: 
+                X509v3 Basic Constraints:
                     CA:FALSE
-                X509v3 Subject Key Identifier: 
+                X509v3 Subject Key Identifier:
                     2B:2C:75:24:55:37:7E:EE:D5:8B:EB:75:FC:6B:6C:7E:50:B3:40:E2
-                X509v3 Authority Key Identifier: 
+                X509v3 Authority Key Identifier:
                     keyid:E2:A3:D6:77:B9:BB:98:55:D6:15:00:2A:A7:6F:AA:E0:56:82:CE:D0
-                X509v3 Subject Alternative Name: 
+                X509v3 Subject Alternative Name:
                     DNS:ncn-m001.local, DNS:ncn-m002.local, DNS:ncn-m003.local, DNS:istio-ingressgateway.istio-system.svc.cluster.local, DNS:*.SYSTEM_DOMAIN_NAME, DNS:mgmt-plane-cmn.local, DNS:api-gw-service-nmn.local
         Signature Algorithm: sha256WithRSAEncryption
              0c:e9:a5:9b:58:2f:b3:c8:4c:c8:20:4b:0f:7d:07:f0:4a:7b:

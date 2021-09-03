@@ -1,4 +1,4 @@
-## Boot Orchestration 
+## Boot Orchestration
 
 The Boot Orchestration Service \(BOS\) is responsible for booting, configuring, and shutting down collections of nodes. This is accomplished using BOS components, such as boot orchestration session templates and sessions, as well as launching a Boot Orchestration Agent \(BOA\) that fulfills boot requests.
 

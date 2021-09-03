@@ -8,7 +8,7 @@ General Postgres Troubleshooting Topics
 - [Is a Cluster Member missing?](#missing)
 - [Is the Postgres Leader missing?](#leader)
 
-## The patronictl Tool 
+## The patronictl Tool
 
 The patronictl tool is used to call a REST API that interacts with Postgres databases. It handles a variety of tasks, such as listing cluster members and the replication status, configuring and restarting databases, and more.
 
@@ -137,7 +137,7 @@ Are you sure you want to reinitialize members keycloak-postgres-0? [y/N]: y
 Failed: reinitialize for member keycloak-postgres-0, status code=503, (restarting after failure already in progress)
 Do you want to cancel it and reinitialize anyway? [y/N]: y
 Success: reinitialize for member keycloak-postgres-0
- 
+
 root@keycloak-postgres-1:/home/postgres# patronictl reinit keycloak-postgres keycloak-postgres-2
 Are you sure you want to reinitialize members keycloak-postgres-2? [y/N]: y
 Failed: reinitialize for member keycloak-postgres-2, status code=503, (restarting after failure already in progress)
@@ -194,20 +194,20 @@ spire       spire-postgres               spire               11        3      20
 ncn-w001# kubectl get pods -l app.kubernetes.io/name=postgres-operator -n services
 NAME                                      READY   STATUS    RESTARTS   AGE
 cray-postgres-operator-6fffc48b4c-mqz7z   2/2     Running   0          5h26m
- 
+
 ncn-w001# kubectl logs cray-postgres-operator-6fffc48b4c-mqz7z -n services -c postgres-operator | grep -i sync | grep -i msg
 ```
 
 #### Case 1 : msg="could not sync cluster: could not sync persistent volumes: could not sync volumes: could not resize EBS volumes: some persistent volumes are not compatible with existing resizing providers"
 
-This generally means that the postgresql resource was updated to change the volume size from the Postgres operator's perspective, but the additional step to resize the actual PVCs was not done so the operator and the Postgres cluster are not able to sync the resize change. The cluster is still healthy, but to complete the resize of the underlying Postgres PVCs, additional steps are needed. 
+This generally means that the postgresql resource was updated to change the volume size from the Postgres operator's perspective, but the additional step to resize the actual PVCs was not done so the operator and the Postgres cluster are not able to sync the resize change. The cluster is still healthy, but to complete the resize of the underlying Postgres PVCs, additional steps are needed.
 
-The example below assumes that `cray-smd-postgres` is in `SyncFailed` and the volume size was recently increased to `100Gi` (possibly by editing the volume size of postgresql `cray-smd-postgres` resource), but the `pgdata-cray-smd-postgres` PVC's storage capacity was not updated at align with the change. To confirm this is the case: 
+The example below assumes that `cray-smd-postgres` is in `SyncFailed` and the volume size was recently increased to `100Gi` (possibly by editing the volume size of postgresql `cray-smd-postgres` resource), but the `pgdata-cray-smd-postgres` PVC's storage capacity was not updated to align with the change. To confirm this is the case:
 
 ```bash
 ncn-w001# kubectl get postgresql cray-smd-postgres -n services -o jsonpath="{.spec.volume.size}"
 100Gi
- 
+
 ncn-w001# kubectl get pvc -n services -l application=spilo,cluster-name=cray-smd-postgres
 NAME                         STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS           AGE
 pgdata-cray-smd-postgres-0   Bound    pvc-020cf339-e372-46ae-bc37-de2b55320e88   30Gi       RWO            k8s-block-replicated   70m
@@ -223,29 +223,29 @@ function resize-postgresql-pvc
     PGDATA=$2
     NAMESPACE=$3
     PGRESIZE=$4
-     
+
     # Check for required arguments
     if [ $# -ne 4 ]; then
         echo "Illegal number of parameters"
         exit 2
     fi
- 
+
     ## Check PGRESIZE matches current postgresql volume size
     postgresql_volume_size=$(kubectl get postgresql "${POSTGRESQL}" -n "${NAMESPACE}" -o jsonpath="{.spec.volume.size}")
     if [ "${postgresql_volume_size}" != "${PGRESIZE}" ]; then
          echo "Invalid resize ${PGRESIZE}, expected ${postgresql_volume_size}"
          exit 2
     fi
-     
+
     ## Scale the postgres cluster to 1 member
     kubectl patch postgresql "${POSTGRESQL}" -n "${NAMESPACE}" --type='json' -p='[{"op" : "replace", "path":"/spec/numberOfInstances", "value" : 1}]'
     while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n "${NAMESPACE}" | grep -v NAME | wc -l) != 1 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
- 
+
     ## Delete the inactive PVCs, resize the active PVC and wait for the resize to complete
     kubectl delete pvc "${PGDATA}-1" "${PGDATA}-2" -n "${NAMESPACE}"
     kubectl patch -p '{"spec": {"resources": {"requests": {"storage": "'${PGRESIZE}'"}}}}' "pvc/${PGDATA}-0" -n "${NAMESPACE}"
     while [ -z '$(kubectl describe pvc "{PGDATA}-0" -n "${NAMESPACE}" | grep FileSystemResizeSuccessful' ] ; do echo "  waiting for PVC to resize"; sleep 2; done
- 
+
     ## Scale the postgres cluster back to 3 members
     kubectl patch postgresql "${POSTGRESQL}" -n "${NAMESPACE}" --type='json' -p='[{"op" : "replace", "path":"/spec/numberOfInstances", "value" : 3}]'
     while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n "${NAMESPACE}" | grep -v NAME | grep -c "Running") != 3 ] ; do echo "  waiting for pods to restart"; sleep 2; done
@@ -263,7 +263,7 @@ This generally means that some state in the Postgres operator is out of sync wit
 
 ```bash
 ncn-w001# kubectl delete pod -l app.kubernetes.io/name=postgres-operator -n services
- 
+
 ## Wait for the `postgres-operator` to restart
 ncn-w001# kubectl get pods -l app.kubernetes.io/name=postgres-operator -n services
 NAME                                      READY   STATUS    RESTARTS   AGE
@@ -276,16 +276,16 @@ If the database connection has been down for a long period of time and the `Sync
 ncn-w001# CLIENT=gitea-vcs
 ncn-w001# POSTGRESQL=gitea-vcs-postgres
 ncn-w001# NAMESPACE=services
- 
+
 ## Scale the service to 0
 ncn-w001# kubectl scale deployment ${CLIENT} -n ${NAMESPACE} --replicas=0
- 
+
 ## Restart the Postgres cluster and the postgres-operator
 ncn-w001# kubectl delete pod "${POSTGRESQL}-0" "${POSTGRESQL}-1" "${POSTGRESQL}-2" -n ${NAMESPACE}
 ncn-w001# kubectl delete pods -n services -lapp.kubernetes.io/name=postgres-operator
 ncn-w001# while [ $(kubectl get postgresql ${POSTGRESQL} -n ${NAMESPACE} -o json | jq -r '.status.PostgresClusterStatus') != "Running" ]; do echo "waiting for ${POSTGRESQL} to start running"; sleep 2; done
- 
- 
+
+
 ## Scale the service back to 1 (for different services this may be to 3)
 ncn-w001# kubectl scale deployment ${CLIENT} -n ${NAMESPACE} --replicas=1
 ```
@@ -298,23 +298,23 @@ This generally means that the password for the given user is not the same as tha
 ncn-w001# CLIENT=cray-smd
 ncn-w001# POSTGRESQL=cray-smd-postgres
 ncn-w001# NAMESPACE=services
- 
+
 ## Scale the service to 0
 ncn-w001# kubectl scale deployment ${CLIENT} -n ${NAMESPACE} --replicas=0
 ncn-w001# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${CLIENT}" | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
- 
+
 ## Determine what secrets are associated with the postgresql credentials
 ncn-w001# kubectl get secrets -n ${NAMESPACE} | grep "${POSTGRESQL}.credentials"
 services            hmsdsuser.cray-smd-postgres.credentials                       Opaque                                2      31m
 services            postgres.cray-smd-postgres.credentials                        Opaque                                2      31m
 services            service-account.cray-smd-postgres.credentials                 Opaque                                2      31m
 services            standby.cray-smd-postgres.credentials                         Opaque                                2      31m
- 
- 
+
+
 ## Gather the decoded username and password for the user that is failing to authenticate - for example postgres.cray-smd-postgres.credentials :
 ncn-w001# kubectl get secret postgres.cray-smd-postgres.credentials -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d
 postgres
- 
+
 ncn-w001# kubectl get secret postgres.cray-smd-postgres.credentials -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d
 ABCXYZ
 
@@ -328,21 +328,21 @@ ncn-w001# kubectl exec "${POSTGRESQL}-0" -n ${NAMESPACE} -c postgres -it -- patr
 | cray-smd-postgres | cray-smd-postgres-2 | 10.36.0.44 |        | running |    |         0 |
 +-------------------+---------------------+------------+--------+---------+----+-----------+
 ncn-w001# POSTGRES_LEADER=cray-smd-postgres-0
- 
+
 ncn-w001# kubectl exec ${POSTGRES_LEADER} -n ${NAMESPACE} -c postgres -it -- bash
 root@cray-smd-postgres-0:/home/postgres# /usr/bin/psql postgres postgres
 postgres=# ALTER USER postgres WITH PASSWORD 'ABCXYZ';
 ALTER ROLE
 postgres=#
- 
+
 ## Restart the postgresql cluster
 ncn-w001# kubectl delete pod "${POSTGRESQL}-0" "${POSTGRESQL}-1" "${POSTGRESQL}-2" -n ${NAMESPACE}
- 
+
 ncn-w001# while [ $(kubectl get postgresql ${POSTGRESQL} -n ${NAMESPACE} -o json | jq -r '.status.PostgresClusterStatus') != "Running" ]; do echo "waiting for ${POSTGRESQL} to start running"; sleep 2; done
- 
+
 ## Scale the service back to 3
 ncn-w001# kubectl scale deployment ${CLIENT} -n ${NAMESPACE} --replicas=3
- 
+
 ncn-w001# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${CLIENT}" | grep -v NAME | wc -l) != 3 ] ; do echo "  waiting for pods to start running"; sleep 2; done
 ```
 
@@ -353,11 +353,11 @@ Most services expect to maintain a Postgres cluster consisting of three pods for
 
 ### Determine if a cluster member is missing
 
-For a given Postgres cluster, check how many pods are running.  
+For a given Postgres cluster, check how many pods are running.
 ```bash
 ncn-w001# POSTGRESQL=keycloak-postgres
 ncn-w001# NAMESPACE=services
-ncn-w001# kubectl get pods -A -l "application=spilo,cluster-name=${POSTGRESQL}" 
+ncn-w001# kubectl get pods -A -l "application=spilo,cluster-name=${POSTGRESQL}"
 ```
 
 ### Recover from a missing member
@@ -391,7 +391,7 @@ ncn-w001# kubectl logs "${POSTGRESQL}-0" -c postgres -n ${NAMESPACE}
 <a name="leader"></a>
 ## Is the Postgres Leader missing?
 
-If a Postgres cluster no longer has a leader, the database will need to be recovered. 
+If a Postgres cluster no longer has a leader, the database will need to be recovered.
 
 ### Determine if the Postgres Leader is missing
 ```bash
@@ -408,5 +408,5 @@ ncn-w001# kubectl exec ${POSTGRESQL} -n ${NAMESPACE} -c postgres -- patronictl l
 ```
 ### Recover from a missing Postgres Leader
 
-See the [Recover from Postgres WAL Event](Recover_from_Postgres_WAL_Event.md) procedure. 
+See the [Recover from Postgres WAL Event](Recover_from_Postgres_WAL_Event.md) procedure.
 

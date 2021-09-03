@@ -24,20 +24,20 @@ This procedure requires admin privileges.
        id:     b6d509e6-772e-4785-a421-e4a138b1780c
        health: HEALTH_WARN
                clock skew detected on mon.ncn-m002, mon.ncn-m003
-    
+
     services:
        mon: 3 daemons, quorum ncn-s001,ncn-s002,ncn-s003 (age 20h)
        mgr: ncn-s003(active, since 9d), standbys: ncn-s001, ncn-s002
        mds: cephfs:1 {0=ncn-s002=up:active} 2 up:standby
        osd: 18 osds: 18 up (since 20h), 18 in (since 9d)
        rgw: 3 daemons active (ncn-s001.rgw0, ncn-s002.rgw0, ncn-s003.rgw0)
-     
+
     data:
        pools:   10 pools, 224 pgs
        objects: 19.41k objects, 59 GiB
        usage:   167 GiB used, 274 GiB / 441 GiB avail
        pgs:     224 active+clean
-     
+
     io:
        client:   919 KiB/s wr, 0 op/s rd, 16 op/s wr
     ```
@@ -77,16 +77,16 @@ This procedure requires admin privileges.
     ncn-m001# ceph -s
     cluster:
       id:     5f3b4031-d6c0-4118-94c0-bffd90b534eb
-      health: HEALTH_OK   
-    
+      health: HEALTH_OK
+
     services:
       mon: 3 daemons, quorum ncn-s001,ncn-s002,ncn-s003 (age 20h)
       mgr: ncn-s003(active, since 9d), standbys: ncn-s001, ncn-s002
       mds: cephfs:1 {0=ncn-s002=up:active} 2 up:standby
       osd: 18 osds: 18 up (since 20h), 18 in (since 9d)
       rgw: 3 daemons active (ncn-s001.rgw0, ncn-s002.rgw0, ncn-s003.rgw0)
-    
-    data: 
+
+    data:
       pools:   11 pools, 240 pgs
       objects: 3.12k objects, 11 GiB
       usage:   45 GiB used, 39 GiB / 84 GiB avail

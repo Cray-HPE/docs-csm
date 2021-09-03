@@ -8,7 +8,7 @@ Create an image root from an IMS recipe.
 -   System management services \(SMS\) are running in a Kubernetes cluster on non-compute nodes \(NCN\) and include the following deployments:
     -   `cray-ims`, the Image Management Service \(IMS\)
     -   `cray-nexus`, the Nexus repository manager service
--   The NCN Certificate Authority \(CA\) public key has been properly installed into the CA cache for this system. 
+-   The NCN Certificate Authority \(CA\) public key has been properly installed into the CA cache for this system.
 -   `kubectl` is installed locally and configured to point at the SMS Kubernetes cluster.
 -   A Kiwi image recipe uploaded as a gzipped tar file and registered with IMS. See [Upload and Register an Image Recipe](Upload_and_Register_an_Image_Recipe.md).
 -   A token providing Simple Storage Service \(S3\) credentials has been generated.
@@ -31,7 +31,7 @@ The commands in this procedure must be run as the `root` user in this release.
     ...
     [[results]]
     public_key = "ssh-rsa AAAAB3NzaC1yc2EA ... AsVruw1Zeiec2IWt"
-    id = "a252ff6f-c087-4093-a305-122b41824a3e" 
+    id = "a252ff6f-c087-4093-a305-122b41824a3e"
     name = "username public key"
     created = "2018-11-21T17:19:07.830000+00:00"
     ...
@@ -54,7 +54,7 @@ The commands in this procedure must be run as the `root` user in this release.
     ```bash
     ncn# cray ims public-keys create --name "username public key" --public-key ~/.ssh/id\_rsa.pub
     public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCl50gK4l9uupxC2KHxMpTNxPTJbnwEdWy1jst5W5LqJx9fdTrc9uNJ33HAq+WIOhPVGbLm2N4GX1WTUQ4+wVOSmmBBJnlu/l5rmO9lEGT6U8lKG8dA9c7qhguGHy7M7WBgdW/gWA16gwE/u8Qc2fycFERRKmFucL/Er9wA0/Qvz7/U59yO+HOtk5hvEz/AUkvaaoY0IVBfdNBCl59CIdZHxDzgXlXzd9PAlrXZNO8jDD3jyFAOvMMRG7py78zj2NUngvsWYoBcV3FcREZJU529uJ0Au8Vn9DRADyB4QQS2o+fa6hG9i2SzfY8L6vAVvSE7A2ILAsVruw1Zeiec2IWt"
-    id = "a252ff6f-c087-4093-a305-122b41824a3e" 
+    id = "a252ff6f-c087-4093-a305-122b41824a3e"
     name = "username public key"
     created = "2018-11-21T17:19:07.830000+00:00"
     ```
@@ -76,7 +76,7 @@ The commands in this procedure must be run as the `root` user in this release.
     id = "2233c82a-5081-4f67-bec4-4b59a60017a6"
     name = "my_recipe.tgz"
     created = "2020-02-05T19:24:22.621448+00:00"
-    
+
     [results.link]
     path = "s3://ims/recipes/2233c82a-5081-4f67-bec4-4b59a60017a6/my_recipe.tgz"
     etag = "28f3d78c8cceca2083d7d3090d96bbb7"
@@ -117,8 +117,8 @@ The commands in this procedure must be run as the `root` user in this release.
     build_env_size = 10
     job_type = "create"
     kubernetes_service = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-service"
-    kubernetes_job = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-create" 
-    id = "ad5163d2-398d-4e93-94f0-2f439f114fe7" 
+    kubernetes_job = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-create"
+    id = "ad5163d2-398d-4e93-94f0-2f439f114fe7"
     image_root_archive_name = "cray-sles15-barebones"
     initrd_file_name = "initrd"
     created = "2018-11-21T18:22:53.409405+00:00"
@@ -139,9 +139,9 @@ The commands in this procedure must be run as the `root` user in this release.
     ncn# kubectl -n ims describe job $IMS_KUBERNETES_JOB
     Name: ims-myimage-create
     Namespace: default
-    
+
     ...
-    
+
     Events:
     Type Reason Age From Message
     ---- ------ ---- ---- -------
@@ -288,7 +288,7 @@ The commands in this procedure must be run as the `root` user in this release.
 
     -   If the Kiwi-NG build completed successfully, the image root, kernel, and initrd artifacts are uploaded to the artifact repository.
     -   If the Kiwi-NG build failed to complete successfully, an optional SSH Debug shell is enabled so the image build can be debugged.
-    
+
     ```bash
     ncn# kubectl -n ims logs -f $POD -c buildenv-sidecar
     Not running user shell for successful create action
@@ -305,7 +305,7 @@ The commands in this procedure must be run as the `root` user in this release.
     Parallel mksquashfs: Using 4 processors
     Creating 4.0 filesystem on /mnt/image/sles15_barebones_image.sqsh, block size 131072.
     [===========================================================\] 26886/26886 100%
-    
+
     Exportable Squashfs 4.0 filesystem, gzip compressed, data block size 131072
     	compressed data, compressed metadata, compressed fragments, compressed xattrs
     ...
@@ -404,7 +404,7 @@ The commands in this procedure must be run as the `root` user in this release.
     job_type = "create"
     kubernetes_service = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-service"
     kubernetes_job = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-create"
-    id = "ad5163d2-398d-4e93-94f0-2f439f114fe7" 
+    id = "ad5163d2-398d-4e93-94f0-2f439f114fe7"
     image_root_archive_name = "my_customized_image"
     initrd_file_name = "initrd"
     created = "2018-11-21T18:22:53.409405+00:00"
@@ -415,7 +415,7 @@ The commands in this procedure must be run as the `root` user in this release.
     status = "pending"
     jail = false
     name = "debug"
-    
+
     [ssh_containers.connection_info."cluster.local"]
     host = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-service.ims.svc.cluster.local"
     port = 22
@@ -507,14 +507,14 @@ The commands in this procedure must be run as the `root` user in this release.
     created = "2018-12-17T22:59:43.264129+00:00"
     id = "d88521c3-b339-43bc-afda-afdfda126388"
     name = "sles15_barebones_image"
-    
+
     [link]
     path = "s3://boot-images/d88521c3-b339-43bc-afda-afdfda126388/manifest.json"
     etag = "180883770442235de747e9d69855f269"
     type = "s3"
     ```
 
-### Clean Up the Create Environment 
+### Clean Up the Create Environment
 
 12. Delete the IMS job record using the `IMS_JOB_ID`.
 

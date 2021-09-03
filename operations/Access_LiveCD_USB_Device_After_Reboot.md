@@ -48,12 +48,12 @@ After deploying the LiveCD's NCN, the LiveCD USB itself is unharmed and availabl
     drwxr-xr-x  2 root root        4096 Jan 28 16:07 /mnt/pitdata/static
     ```
 
-1. Unmount the USB device to avoid corruption. 
-   
+1. Unmount the USB device to avoid corruption.
+
    The corruption risk is low, but varies if large data use was done to or on the USB.
 
     ```bash
     ncn-m001# umount -v /mnt/cow /mnt/pitdata
     ```
 
-1. Remove the USB device after it has been unmounted. 
+1. Remove the USB device after it has been unmounted.

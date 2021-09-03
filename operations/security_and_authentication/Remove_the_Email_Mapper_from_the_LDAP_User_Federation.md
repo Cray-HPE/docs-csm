@@ -11,7 +11,7 @@ If there are duplicate email addresses for LDAP users, it can cause Keycloak to 
     ```bash
     MASTER_USERNAME=$(kubectl get secret -n services keycloak-master-admin-auth -ojsonpath='{.data.user}' | base64 -d)
     MASTER_PASSWORD=$(kubectl get secret -n services keycloak-master-admin-auth -ojsonpath='{.data.password}' | base64 -d)
-    
+
     function get_master_token {
       curl -ks -d client_id=admin-cli -d username=$MASTER_USERNAME -d password=$MASTER_PASSWORD -d grant_type=password https://api-gw-service-nmn.local/keycloak/realms/master/protocol/openid-connect/token | python -c "import sys.json; print json.load(sys.stdin)['access_token']"
     }
@@ -45,7 +45,7 @@ If there are duplicate email addresses for LDAP users, it can cause Keycloak to 
     ncn-w001# EMAIL_COMPONENT_ID=$(curl -s -H "Authorization: Bearer $(get_master_token)" \
     "https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/components?name=email&parent=$FEDERATION_ID" \
     | jq .[0].id -r)
-    
+
     ncn-w001# echo $EMAIL_COMPONENT_ID
     ba3cfe20-c2ed-4c92-aac0-3b6fc865989c
     ```
@@ -62,7 +62,7 @@ If there are duplicate email addresses for LDAP users, it can cause Keycloak to 
     For more information on accessing the Keycloak UI, see [Access the Keycloak User Management UI](Access_the_Keycloak_User_Management_UI.md).
 
     The email row shown in the image below should no longer be present.
-    
+
     ![LDAP User Federation Mappers](../../img/operations/LDAP_User_Federation_Mappers.PNG)
 
 7.  Click the **Synchronize all users** button in the **Settings** tab for the LDAP user federation.

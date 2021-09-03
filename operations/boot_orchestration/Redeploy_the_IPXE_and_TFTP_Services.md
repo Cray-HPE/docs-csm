@@ -38,20 +38,20 @@ This procedure requires administrative privileges.
             id:     bac74735-d804-49f3-b920-cd615b18316b
             health: HEALTH_WARN
                     1 filesystem is degraded
-         
+
           services:
             mon: 3 daemons, quorum ncn-m001,ncn-m002,ncn-m003 (age 13d)
             mgr: ncn-m001(active, since 24h), standbys: ncn-m002, ncn-m003
             mds: cephfs:1/1 {0=ncn-m002=up:reconnect} 2 up:standby
             osd: 60 osds: 60 up (since 4d), 60 in (since 4d)
             rgw: 5 daemons active (ncn-s001.rgw0, ncn-s002.rgw0, ncn-s003.rgw0, ncn-s004.rgw0, ncn-s005.rgw0)
-         
+
           data:
             pools:   13 pools, 1664 pgs
             objects: 2.47M objects, 9.3 TiB
             usage:   26 TiB used, 78 TiB / 105 TiB avail
             pgs:     1664 active+clean
-         
+
           io:
             client:   990 MiB/s rd, 111 MiB/s wr, 2.76k op/s rd, 1.03k op/s wr
         ```
@@ -244,7 +244,7 @@ This procedure requires administrative privileges.
         # ls -l
         total 1919
         -rw-r--r--    1 root     root        980768 May 15 16:49 debug.efi
-        -rw-r--r--    1 root     root        983776 May 15 16:50 ipxe.efi 
+        -rw-r--r--    1 root     root        983776 May 15 16:50 ipxe.efi
         ```
 
 

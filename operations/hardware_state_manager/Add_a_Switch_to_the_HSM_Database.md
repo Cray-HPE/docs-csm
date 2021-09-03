@@ -4,7 +4,7 @@ Manually add a switch to the Hardware State Manager \(HSM\) database. Switches n
 
 ### Prerequisites
 
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system. 
+-   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 
 
 ### Procedure
@@ -42,7 +42,7 @@ Manually add a switch to the Hardware State Manager \(HSM\) database. Switches n
     Password = ""
     Type = "RouterBMC"
     ID = "x3000c0r41b0"
-     
+
     [RedfishEndpoints.DiscoveryInfo]
     LastDiscoveryAttempt = "2020-02-05T18:41:08.823059Z"
     RedfishVersion = "1.2.0"

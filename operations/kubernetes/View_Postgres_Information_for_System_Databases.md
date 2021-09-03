@@ -16,23 +16,23 @@ This procedure requires administrative privileges.
     ncn-w001# kubectl -n services exec -it cray-smd-postgres-0 -- bash
     Defaulting container name to postgres.
     Use 'kubectl describe pod/cray-smd-postgres-0 -n services' to see all of the containers in this pod.
-    
+
      ____        _ _
     / ___| _ __ (_) | ___
     \___ \| '_ \| | |/ _ \
      ___) | |_) | | | (_) |
     |____/| .__/|_|_|\___/
           |_|
-    
+
     This container is managed by runit, when stopping/starting services use sv
-    
+
     Examples:
-    
+
     sv stop cron
     sv restart patroni
-    
+
     Current status: (sv status /etc/service/*)
-    
+
     run: /etc/service/cron: (pid 26) 487273s
     run: /etc/service/patroni: (pid 24) 487273s
     run: /etc/service/pgqd: (pid 25) 487273s
@@ -44,7 +44,7 @@ This procedure requires administrative privileges.
     root@cray-smd-postgres-0:/home/postgres# psql -U postgres
     psql (12.2 (Ubuntu 12.2-1.pgdg18.04+1), server 11.7 (Ubuntu 11.7-1.pgdg18.04+1))
     Type "help" for help.
-    
+
     postgres=#
     ```
 

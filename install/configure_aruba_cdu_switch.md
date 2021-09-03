@@ -16,13 +16,13 @@ Requirements:
 
 Here are example snippets from a CDU switch in the SHCD.
 
-The uplinks are port 51 and 52 on both CDU switches. These go to sw-100g01 and sw-100g2 which are spine 1 and 2. 
+The uplinks are port 51 and 52 on both CDU switches. These go to sw-100g01 and sw-100g2 which are spine 1 and 2.
 
 The ISL are ports 49 and 50 on both CDU switches.
 
 The Keepalive is port 48.
 
-   Note: These are examples only, your installation and cabling may vary. 
+   Note: These are examples only, your installation and cabling may vary.
    This information is on the 25G_10G tab of the SHCD spreadsheet.
 
 | Source | Source Label Info | Destination Label Info | Destination | Description | Notes
@@ -51,15 +51,15 @@ It is assumed that you have connectivity to the switch and have done the [Config
    This will require a unique IP address on both switches. The IP address is in its own VRF so this address will not be reachable from anywhere besides the CDU pair.
 
    ```
-   sw-cdu-001(config)# 
+   sw-cdu-001(config)#
        int 1/1/48
-       no shutdown 
+       no shutdown
        mtu 9198
-       vrf attach keepalive   
+       vrf attach keepalive
        description VSX keepalive
        ip address 192.168.255.0/31
 
-   sw-cdu-002(config)# 
+   sw-cdu-002(config)#
        int 1/1/48
        no shutdown
        mtu 9198
@@ -72,7 +72,7 @@ It is assumed that you have connectivity to the switch and have done the [Config
   ```
   sw-cdu-001 & sw-cdu-002 (config)#
       interface lag 99
-      no shutdown 
+      no shutdown
       description ISL link
       no routing
       vlan trunk native 1 tag
@@ -92,7 +92,7 @@ It is assumed that you have connectivity to the switch and have done the [Config
 1. Create the VSX instance and setup the keepalive link.
 
    ```
-   SW-CDU-001(config)# 
+   SW-CDU-001(config)#
        no ip icmp redirect
        vsx
        system-mac 02:01:00:00:01:00
@@ -117,7 +117,7 @@ It is assumed that you have connectivity to the switch and have done the [Config
 1. At this point you should have an Established VSX session
 
    ```
-   SW-CDU-001 # show vsx brief 
+   SW-CDU-001 # show vsx brief
    ISL State                              : In-Sync
    Device State                           : Sync-Primary
    Keepalive State                        : Keepalive-Established
@@ -246,8 +246,8 @@ The VLAN information is located in the network YAML files. Below are examples.
 
    Note: CSI does not yet generate IP addresses for the CDU switches on VLANs HMN_MTN and NMN_MTN.
    - The first CDU switch in the pair will always have an IP address ending in .2 on the HMN_MTN and NMN_MTN networks.
-   - The second CDU switch in the pair will always have an IP address ending in .3 on the HMN_MTN and NMN_MTN networks.  
-   - Both CDU MTN VLAN IP addresses will be at the beginning of the subnet. 
+   - The second CDU switch in the pair will always have an IP address ending in .3 on the HMN_MTN and NMN_MTN networks.
+   - Both CDU MTN VLAN IP addresses will be at the beginning of the subnet.
    - The gateway will always end in .1 and will be at the beginning of the subnet.
    - Every Mountain Cabinet will get its own HMN and NMN VLAN.
 
@@ -260,8 +260,8 @@ The VLAN information is located in the network YAML files. Below are examples.
    | 2000 | 10.100.0.2/22| 10.100.0.3/22 | Mountain Node Management
    | 3000 | 10.104.0.2/22| 10.104.0.3/22 | Mountain Hardware Management
 
-   If the system has additional Mountain Cabinets the VLANs will look like this. 
-   This is an example of a system with 3 cabinets. 
+   If the system has additional Mountain Cabinets the VLANs will look like this.
+   This is an example of a system with 3 cabinets.
 
    | VLAN | CDU1 | CDU2	| Purpose |
    | --- | --- | ---| --- |
@@ -277,19 +277,19 @@ The CECs will be on the HMN VLAN of that cabinet.
 
    ![Example CDU Connections to CMM in SHCD](../img/network/CDU-CMM-SHCD.png)
 
-1. Once you have all this information you can now configure the VLANs on the switches. 
+1. Once you have all this information you can now configure the VLANs on the switches.
 
    NMN VLAN config
 
    ```
-   sw-cdu-001(config)# 
+   sw-cdu-001(config)#
        vlan 2
        interface vlan2
        ip address 10.252.0.5/17
        ip mtu 9198
        exit
 
-   sw-cdu-002(config)# 
+   sw-cdu-002(config)#
        vlan 2
        interface vlan2
        ip address 10.252.0.6/17
@@ -299,14 +299,14 @@ The CECs will be on the HMN VLAN of that cabinet.
    HMN VLAN config
 
    ```
-   sw-cdu-001(config)# 
+   sw-cdu-001(config)#
        vlan 4
        interface vlan4
        ip address 10.254.0.5/17
        ip mtu 9198
        exit
 
-   sw-cdu-002(config)# 
+   sw-cdu-002(config)#
        vlan 4
        interface vlan4
        ip address 10.254.0.6/17
@@ -376,13 +376,13 @@ These ACLs are designed to block traffic from the node management network to and
    ```
    sw-cdu-001 & sw-cdu-002 (config)#
        access-list ip nmn-hmn
-       10 deny any 10.252.0.0/255.255.128.0 10.254.0.0/255.255.128.0 
+       10 deny any 10.252.0.0/255.255.128.0 10.254.0.0/255.255.128.0
        20 deny any 10.252.0.0/255.255.128.0 10.104.0.0/255.252.0.0
-       30 deny any 10.254.0.0/255.255.128.0 10.252.0.0/255.255.128.0 
+       30 deny any 10.254.0.0/255.255.128.0 10.252.0.0/255.255.128.0
        40 deny any 10.254.0.0/255.255.128.0 10.100.0.0/255.252.0.0
-       50 deny any 10.100.0.0/255.252.0.0 10.254.0.0/255.255.128.0 
+       50 deny any 10.100.0.0/255.252.0.0 10.254.0.0/255.255.128.0
        60 deny any 10.100.0.0/255.252.0.0 10.104.0.0/255.252.0.0
-       70 deny any 10.104.0.0/255.252.0.0 10.252.0.0/255.255.128.0 
+       70 deny any 10.104.0.0/255.252.0.0 10.252.0.0/255.255.128.0
        80 deny any 10.104.0.0/255.252.0.0 10.100.0.0/255.252.0.0
        90 permit any any any
    ```
@@ -448,7 +448,7 @@ Control plane ACL
 
 1. OSPF is a dynamic routing protocol used to exchange routes.
    It provides reachability from the MTN networks to NMN/Kubernetes networks.
-   The router-id used here is the NMN IP address. (VLAN 2 IP) 
+   The router-id used here is the NMN IP address. (VLAN 2 IP)
 
    ```
    sw-cdu-001 & sw-cdu-002 (config)#
@@ -480,7 +480,7 @@ Control plane ACL
 
 ## Configure DNS
 
-1. This will point to the unbound DNS server. 
+1. This will point to the unbound DNS server.
 
    ```
    sw-cdu-001 & sw-cdu-002 (config)#
