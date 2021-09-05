@@ -321,6 +321,7 @@ all been run by the administrator before starting this stage.
         ```
     1. Copy the network config files.
         ```bash
+        ncn-m001# cp -pv /mnt/cow/rw/etc/sysconfig/network/ifroute-vlan* /etc/sysconfig/network/
         ncn-m001# cp -pv /mnt/cow/rw/etc/sysconfig/network/ifcfg-lan0 /etc/sysconfig/network/
         ```
     1. Run the `set-dhcp-to-static.sh` script
