@@ -349,9 +349,31 @@ For the worker node in the cluster, do all of the following steps for one worker
 1. If the node was part of the CPS deployment, as identified by the `cray cps deployment list` command above,
    this step should be run **after** the completion of the other upgrade steps.
 
-   ```bash
-   ncn# cray cps deployment update --nodes $CPS_NODE
-    ```
+   1. Update CPS to deploy to this node.
+
+      ```bash
+      ncn# cray cps deployment update --nodes $CPS_NODE
+          ```
+
+   1. Check that the node is ready to provide CPS functionality to clients.
+
+      ```bash
+      ncn# cray cps deployment list --nodes $CPS_NODE |grep -E "podname|state ="
+      podname = "cray-cps-cm-pm-lcntf"
+      state = "running"
+      state = "running"
+      state = "running"
+      state = "running"
+      ```
+
+      The podname should be assigned and states should all show "running". 
+
+   1. Check that the pod has been assigned to this rebuilt node.
+
+      ```bash
+      ncn# kubectl get pod -A -o wide|grep cray-cps-cm-pm|grep $CPS_NODE
+      services            cray-cps-cm-pm-lcntf                                              4/4     Running            0          3d16h   10.36.0.51    ncn-w002   <none>           <none>
+      ```
 
 1. Repeat the above steps for the next worker node, until all worker nodes have been upgraded.
 
