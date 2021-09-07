@@ -500,7 +500,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 
  > **`NOTE`** If your system is Gigabyte or Intel hardware, skip this section.
 
-Perform the following steps on every NCN **except m001**.
+Perform the following steps on every NCN **except ncn-m001**.
 
 1. Set environment variables. Make sure to set the appropriate value for the `IPMI_PASSWORD` variable.
 
