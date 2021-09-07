@@ -53,7 +53,7 @@ The default end-user UAI is not suitable for use with the Cray PE. The generic i
 
     ```bash
     ncn# mkdir mount
-    ncn# mount -o loop,rdonly rootfs.squashfs \`pwd\`/mount
+    ncn# mount -o loop,ro rootfs.squashfs \`pwd\`/mount
     ```
 
 4.  Create a tarball of the SquashFS file system.
