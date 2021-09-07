@@ -7,7 +7,7 @@ If the console log indicates the time between the rest of the system and the com
 
 ### Procedure
 
-1. Enter the “Del” key during the POST call.
+1. Enter the "Del" key during the POST call.
 
     ![Compute Node Post Call](../../img/operations/CN_POST_Call.png)
 
