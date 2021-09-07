@@ -89,7 +89,7 @@ Follow the [workaround instructions](../update_product_stream/index.md#apply-wor
 #### 1.3 Ensure Time Is Accurate Before Deploying NCNs
 
 **NOTE**: If you wish to use a timezone other than UTC, instead of step 1 below, follow
-[this procedure for setting a local timezone](../operations/configure_ntp_on_ncns.md#set-a-local-timezone), then
+[this procedure for setting a local timezone](../operations/node_management/Configure_NTP_on_NCNs.md#set-a-local-timezone), then
 proceed to step 2.
 
 1. Ensure that the PIT node has the current and correct time.
@@ -538,7 +538,7 @@ The configuration workflow described here is intended to help understand the exp
     ncn-s# cephadm shell -- ceph-volume lvm create --data /dev/sd<drive to add> --bluestore
     ```
 
-More information can be found at [the `cephadm` reference page](../operations/utility_storage/cephadm-reference.md).
+More information can be found at [the `cephadm` reference page](../operations/utility_storage/Cephadm_Reference_Material.md).
 
 <a name="apply-ncn-post-boot-workarounds"></a>
 #### 3.4 Apply NCN Post-Boot Workarounds
@@ -569,7 +569,7 @@ The LiveCD needs to authenticate with the cluster to facilitate the rest of the 
 <a name="bgp-routing"></a>
 #### 4.2 BGP Routing
 
-After the NCNs are booted, the BGP peers will need to be checked and updated if the neighbor IP addresses are incorrect on the switches. Follow the steps below and see [Check and Update BGP Neighbors](../operations/update_bgp_neighbors.md) for more details on the BGP configuration.
+After the NCNs are booted, the BGP peers will need to be checked and updated if the neighbor IP addresses are incorrect on the switches. Follow the steps below and see [Update BGP Neighbors](../operations/network/metallb_bgp/Update_BGP_Neighbors.md) for more details on the BGP configuration.
 
 1. Make sure the SYSTEM_NAME variable is set to name of your system.
 

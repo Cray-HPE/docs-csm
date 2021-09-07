@@ -22,7 +22,7 @@ Because the parameters that must be specified in the PUT command are lengthy, th
 
 1.  Create a bash script to enter the following boot information into BSS in preparation for booting one or more nodes identified by NID or host name.
 
-    -   `NCN` = the host name of a non-compute node \(NCN\) that is a Kubernetes master node. This procedure uses `api-gw-service-nmn.local`, the API service name on the Node Management Network \(NMN\). For more information, see [Access to System Management Services](Access_to_System_Management_Services.md#).
+    -   `NCN` = the host name of a non-compute node \(NCN\) that is a Kubernetes master node. This procedure uses `api-gw-service-nmn.local`, the API service name on the Node Management Network \(NMN\). For more information, see [Access to System Management Services](../network/Access_to_System_Management_Services.md).
     -   `KERNEL` = the download URL of the kernel image artifact that was uploaded to S3, which is in the s3://s3\_BUCKET/S3\_OBJECT\_KEY/kernel format.
     -   `INITRD` = the download URL of the initrd image artifact that was uploaded to S3, which is in the s3://s3\_BUCKET/S3\_OBJECT\_KEY/initrd format.
     -   `PARAMS` = the boot kernel parameters.
