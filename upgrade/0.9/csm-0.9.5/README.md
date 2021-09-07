@@ -67,7 +67,7 @@ Procedures:
    > When installing or upgrading CSI the following error may appear, it can be safely
    > ignored.
    > ```
-   > rm: cannot remove ‘/usr/bin/sic’: No such file or directory
+   > rm: cannot remove '/usr/bin/sic': No such file or directory
    > ```
 
 6. Download and install/upgrade the _latest_ documentation RPM. If this machine does not have direct internet access
