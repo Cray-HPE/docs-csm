@@ -760,7 +760,7 @@ Observe the output of the checks and note any failures, then remediate them.
    >
    > **WARNING** If these manual tests do not report a disk device such as "/dev/sdc" as having the respective label on that node, then the problem must be resolved before continuing to the next step.
    > * If a **master node** has the problem then it is best to wipe and redeploy all of the management nodes before continuing the installation.
-   >   1. Wipe the each of the worker and master nodes (except ncn-m001 since it is the PIT node) using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe) and then wipe each of the stoage nodes using the 'Full Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#full-wipe).
+   >   1. Wipe the each of the worker and master nodes (except `ncn-m001` because it is the PIT node) using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe) and then wipe each of the storage nodes using the 'Full Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#full-wipe).
    >   1. Return to the [Boot the **Storage Nodes**](#boot-the-storage-nodes) step of [Deploy Management Nodes](#deploy_management_nodes) section above.
    > * If a **worker node** has the problem then it is best to wipe and redeploy that worker node before continuing the installation.
    >   1. Wipe this  worker node using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe).
