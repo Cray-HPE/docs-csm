@@ -560,7 +560,7 @@ Both sections `BMCs in SLS not in HSM components` and `BMCs in SLS not in HSM Re
 x3000c0s1b0  # No mgmt port association
 ```
 
-For each of the BMCs that show up in the mismatch list use the following notes to determine if the issue with the BMC can be safely ignored, or if there is a legitimate issue with the BMC.
+__For each__ of the BMCs that show up in either of mismatch lists use the following notes to determine if the issue with the BMC can be safely ignored, or if there is a legitimate issue with the BMC.
 * The node BMC of 'ncn-m001' will not typically be present in HSM component data, as it is typically connected to the site network instead of the HMN network.
    > The following can be used to determine the friendly name of the Node that the NodeBMC controls:
    > ```bash
@@ -602,9 +602,14 @@ For each of the BMCs that show up in the mismatch list use the following notes t
 
 * In Hill configurations SLS assumes BMCs in chassis 1 and 3 are fully populated (32 Node BMCs), and in Mountain configurations SLS assumes all BMCs are fully populated (128 Node BMCs). Any non-populated BMCs will have no HSM data and will show up in the mismatch list.
 
+If it was determined that the mistmatch can not be ignored, then proceed onto the the [2.2.2 Known Issues](#hms-smd-discovery-validation-known-issues) below to troubleshoot any mismatched BMCs.
+
 <a name="hms-smd-discovery-validation-known-issues"></a>
 #### 2.2.2 Known Issues
-A listing of known hardware discovery issues and workarounds can be found here in the [CSM Troubleshooting Information](../troubleshooting/index.md#known-issues-hardware-discovery) chapter.
+
+Known issues that may prevent hardware from getting discovered by Hardware State Manager:
+* [Air cooled hardware is not getting properly discovered with Aruba leaf switches](../troubleshooting/known_issues/discovery_aruba_snmp_issue.md)
+* [HMS Discovery job not creating RedfishEndpoints in Hardware State Manager](../troubleshooting/known_issues/discovery_job_not_creating_redfish_endpoints.md)
 
 <a name="sms-health-checks"></a>
 ## 3 Software Management Services Health Checks
@@ -796,6 +801,8 @@ NetType = "Sling"
 Arch = "X86"
 Class = "River"
 ```
+
+> If it is noticed that compute nodes are missing from Hardware State Manager, refer to [2.2.2 Known Issues](#hms-smd-discovery-validation-known-issues) to troubleshoot any Node BMCs that have not been discovered.
 
 Choose a node from those listed and set `XNAME` to its ID. In this example, `x3000c0s17b2n0`:
 ```bash
