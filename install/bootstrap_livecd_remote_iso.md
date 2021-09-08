@@ -456,8 +456,8 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
        config:   compat:suse:/etc/sysconfig/network/ifcfg-bond0.can0
        leases:   ipv4 static granted
        addr:     ipv4 10.102.9.5/24 [static]
-
-       vlan004         up
+ 
+       bond0.hmn0      up
        link:     #10, state up, mtu 1500
        type:     vlan bond0[4], hwaddr b8:59:9f:fe:49:d4
        config:   compat:suse:/etc/sysconfig/network/ifcfg-bond0.hmn0

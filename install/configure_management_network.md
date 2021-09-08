@@ -7,7 +7,7 @@ The configuration steps are different for these switch vendors. The switch confi
 
 It is assumed that the administrator configuring the Management Network has a basic understanding of networking protocols (STP, VLAN, OSPF, LAG/MLAG) and knows how to configure network equipment. It is also assumed that they understand and know how to read an SHCD file.
 
-Before configuring/reconfiguring any switches make sure to get the current running config and save that incase you need to revert the config.
+Before configuring/reconfiguring any switches make sure to get the current running config and save that in case you need to revert the config.
 
 save the output of.
 ```

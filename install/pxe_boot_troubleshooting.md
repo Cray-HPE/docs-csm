@@ -239,7 +239,7 @@ VRF Name default:
                                       c        10.252.0.6        vlan2            bgp        200/0
                                       c        10.252.0.7        vlan2            bgp        200/0
 ```
-If these routes are missing please see [Update BGP Neighbors](../operations/update_bgp_neighbors.md).
+If these routes are missing please see [Update BGP Neighbors](../operations/network/metallb_bgp/Update_BGP_Neighbors.md).
 
 ## Next steps
 

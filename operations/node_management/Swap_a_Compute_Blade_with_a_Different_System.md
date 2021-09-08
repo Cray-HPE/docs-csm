@@ -586,7 +586,7 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
     services   cray-cps-wait-for-etcd-jb95m 0/1  Completed       
     ```
 
-43. SSH to each worker node running CPS/DVS, and run  `dmesg -T`  to ensure that there are no recurring `“DVS: merge_one” ` error messages as shown.  The error messages indicate that DVS is detecting an IP address change for one of the client nodes.
+43. SSH to each worker node running CPS/DVS, and run  `dmesg -T`  to ensure that there are no recurring `"DVS: merge_one" ` error messages as shown.  The error messages indicate that DVS is detecting an IP address change for one of the client nodes.
 
     ```bash
     ncn-m001# dmesg -T | grep "DVS: merge_one"

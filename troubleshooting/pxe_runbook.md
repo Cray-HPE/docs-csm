@@ -4,7 +4,7 @@ PXE booting is a key component of a working Shasta system. There are a lot of di
 This guide runs through the most common issues and shows the user what is needed in order to have a successful PXE boot.
 
 1. [NCNs on install](#ncns-on-install)<br>
-2. [M001 on reboot or NCN boot](#m001-on-reboot)<br>
+2. [ncn-m001 on reboot or NCN boot](#ncn-m001-on-reboot)<br>
 	2.1. [Verify DHCP packets can be forwarded from the workers to the MTL network (VLAN1)](#Verify-DHCP-packets)<br>
 	2.2. [Verify BGP](#verify-bgp)<br>
 	2.3. [Verify route to TFTP](#verify-route-to-tftp)<br>
@@ -92,11 +92,11 @@ ip mtu 9198
 ip helper-address 10.92.100.
 exit
 ```
-* You should be able to ping the MTL router from m001.
+* You should be able to ping the MTL router from ncn-m001.
 
-<a name="m001-on-reboot"></a>
+<a name="ncn-m001-on-reboot"></a>
 
-## 2. M001 on reboot or NCN boot
+## 2. ncn-m001 on reboot or NCN boot
 
 
 * Common Error messages.

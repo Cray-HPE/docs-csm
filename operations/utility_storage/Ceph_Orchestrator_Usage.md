@@ -34,7 +34,7 @@ ncn-s# ceph -W cephadm --watch-debug
 
 ## Usage Examples
 
-This section will provide some indepth usage with examples of the more commonly used `ceph orch` sub commands.
+This section will provide some in-depth usage with examples of the more commonly used `ceph orch` subcommands.
 
 List Service Deployments
 
@@ -55,7 +55,7 @@ rgw.site1.zone1                3/3  6m ago     4h   ncn-s001;ncn-s002;ncn-s003;c
 
 **`FILTERS:`** You can apply filters by adding `--service_type <service type>` or `--service_name <service name>`.
 
-**`Refernce Key`**
+**`Reference Key`**
 
 1. PLACEMENT - Represents a service deployed on all nodes. Otherwise the listed placement is where it is expected to be deployed.
 2. NAME - The deployment name.  this is a generalized name to reference the deployment.  This is being noted as additional subcommands the name is more specific to the actual deployed daemon.
@@ -119,7 +119,7 @@ ncn-s00(1/2/3):~ # ceph orch apply alertmanager --placement="2 ncn-s001 ncn-s002
 Scheduled alertmanager update...
 ```
 
-**`Refernce Key`**
+**`Reference Key`**
 
 1. PLACEMENT - This will show the nodes and the count.  if you only specify `--placement="2"` then it will automatically pick where to put it.
 
@@ -153,7 +153,7 @@ ncn-s003  /dev/vdc  hdd   4797e919-667e-4376-b   107G  Unknown  N/A    N/A    No
 ncn-s003  /dev/vdd  hdd   3b2c090d-37a0-403b-a   107G  Unknown  N/A    N/A    No
 ```
 
-**`IMPORTANT:`** If you use the `--wide` it will give the reasons a drive is not Available.  The `DOES NOT` mean something is wrong.  IF Ceph already has te drive provisioned, then you may see reasons simliar 
+**`IMPORTANT:`** If you use the `--wide`, it will give the reasons a drive is not `Available.`. This **DOES NOT** mean something is wrong. If Ceph already has the drive provisioned, then you may see similar reasons 
 
 ## General Use
 
@@ -235,7 +235,7 @@ Start RGW daemon(s)
 ceph orch daemon add rgw <realm_name> <zone_name> [<subcluster>] [<port:int>] [--ssl] [<placement>]     
 ```
 
-Redeploy a daemon (with a specifc image)
+Redeploy a daemon (with a specific image)
 
 ```bash
 ceph orch daemon redeploy <name> [<image>]                                            

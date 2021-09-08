@@ -192,7 +192,7 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 #### Device Type: NodeBMC | Target: `System ROM` aka BIOS
 
 **IMPORTANT:**
-* If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored. For NCNs **other than m001** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script. Use the `-h` option to get a list of command line options required to restore the NTP and DNS values.
+* If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored. For NCNs **other than ncn-m001** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script. Use the `-h` option to get a list of command line options required to restore the NTP and DNS values.
 See [Configure DNS and NTP on Each BMC](../../install/redeploy_pit_node.md#configure-dns-and-ntp-on-each-bmc")
 * Node should be powered on for System ROM update and will need to be rebooted to use the updated BIOS.
 

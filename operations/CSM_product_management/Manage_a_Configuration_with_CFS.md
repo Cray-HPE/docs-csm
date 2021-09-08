@@ -242,7 +242,7 @@ Multiple product configuration layers may be created later to apply multiple cha
       ]
    }
    EOF
-   ncn# sed -i -e "s:@RELEASE@:$RELEASE:g" \
+   ncn-m001# sed -i -e "s:@RELEASE@:$RELEASE:g" \
    -e "s:@COMMIT@:$COMMIT@:g" csm-config-$RELEASE.json
    ```
 
