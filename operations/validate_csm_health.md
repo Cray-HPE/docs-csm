@@ -602,7 +602,7 @@ __For each__ of the BMCs that show up in either of mismatch lists use the follow
 
 * In Hill configurations SLS assumes BMCs in chassis 1 and 3 are fully populated (32 Node BMCs), and in Mountain configurations SLS assumes all BMCs are fully populated (128 Node BMCs). Any non-populated BMCs will have no HSM data and will show up in the mismatch list.
 
-If it was determined that the mistmatch can not be ignored, then proceed onto the the [2.2.2 Known Issues](#hms-smd-discovery-validation-known-issues) below to troubleshoot any mismatched BMCs.
+If it was determined that the mismatch can not be ignored, then proceed onto the the [2.2.2 Known Issues](#hms-smd-discovery-validation-known-issues) below to troubleshoot any mismatched BMCs.
 
 <a name="hms-smd-discovery-validation-known-issues"></a>
 #### 2.2.2 Known Issues
