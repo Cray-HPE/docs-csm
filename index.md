@@ -26,8 +26,6 @@ scripts, revision control with git, configuration management with Ansible, YAML,
 
 ## Table of Contents
 
-The chapters with topics which need to be done as part of an ordered procedure are shown here with numbered topics.
-
 1. [Introduction to CSM Installation](introduction/index.md)
 
    This chapter provides an introduction to using the CSM software to manage the HPE Cray EX system which
