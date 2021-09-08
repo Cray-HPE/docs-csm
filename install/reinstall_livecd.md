@@ -33,7 +33,7 @@ Guide S-8000.
 The new tar.gz file can be stored anywhere, and can be used to reinitialize the LiveCD.
 
 1. The new tar.gz file you made can be stored anywhere, and can be used to reinit the liveCD. Follow
-the directions in [bootstrap_livecd_usb.md](bootstrap_livecd_usb.md) and then return here and move onto the
+the directions in [Bootstrap PIT Node from LiveCD USB](bootstrap_livecd_usb.md) and then return here and move onto the
 next step.
 
 1. Delete the existing content on the USB device and create a new LiveCD on that same USB device.

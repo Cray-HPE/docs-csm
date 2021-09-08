@@ -295,4 +295,4 @@ Install and initialize the `cray` administrative CLI.
 
    The timezone is taken from the host node by importing `/etc/localtime` to the UAI. Access is given to the Lustre file system mounted on the host node as `/lus` and mounting that within the UAI at the same path.Then, two pieces of Slurm configuration, the munge key and the slurm configuration file, are taken from Kubernetes and mounted as files at `/root/slurm_config/munge` and `/etc/slurm` respectively.
 
-See [About UAI Classes](About_UAI_Classes.md) and [Elements of a UAI](Elements_of_a_UAI.md) for more details on the output.
+See [UAI Classes](UAI_Classes.md) and [Elements of a UAI](Elements_of_a_UAI.md) for more details on the output.

@@ -78,7 +78,7 @@ sw-spine01(config)# no ip route 10.92.100.60/32 10.252.1.x
 
 - Next step is to re-run the BGP script.
 - it is located at ```/opt/cray/csm/scripts/networking/BG/Aruba_BGP_Peers.py```
-- This is documented on this page [BGP](../operations/network/metallb_bgp/update_bgp_neighbors.md)
+- This is documented on this page [Updae BGP Neighbors](../operations/network/metallb_bgp/Update_BGP_Neighbors.md)
 
 ##### Check Aruba BGP configuration
 - log into the switches that you ran the BGP script against and execute ```sw-spine-001# show run | begin "ip prefix-list"```
@@ -207,7 +207,7 @@ Run the command below to verify the configuration got applied correctly.
 sw-spine-001 [standalone: master] (config) # show run protocol bgp
 ```
 The configuration should look similar to the following. This is an example only.
-More BGP documentation can be found here [BGP](../operations/network/metallb_bgp/update_bgp_neighbors.md).
+More BGP documentation can be found here [Update BGP Neighbors](../operations/network/metallb_bgp/Update_BGP_Neighbors.md).
 ```
 ## BGP configuration
 ##
