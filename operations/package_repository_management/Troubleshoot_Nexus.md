@@ -72,7 +72,7 @@ vlan002`. If pings are successful, try checking the status of Nexus by
 running `curl -sS https://packages.local/service/rest/v1/status/writable`. If
 the connection times out, it indicates there is a more complex connection
 issue. Verify switches are configured properly and BGP peering is operating
-correctly, see [Update BGP Neighbors](../operations/update_bgp_neighbors.md) for more information. Lastly,
+correctly, see [Update BGP Neighbors](../operations/network/metallb_bgp/Update_BGP_Neighbors.md) for more information. Lastly,
 check Istio and OPA logs to see if connections to packages.local are not
 reaching Nexus, perhaps because of an authorization issue.
 

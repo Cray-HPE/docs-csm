@@ -25,7 +25,7 @@ Topics:
 <a name="required-services"></a>
 ### 1. Required Services
 
-These services must be healthy before the reboot of the LiveCD can take place. If the health checks executed in the previous installation step completed successfully ([Validate CSM Health](../operations/validate_csm_health.md)), the following services will be healthy and ready for reboot of the LiveCD:
+These services must be healthy before the reboot of the LiveCD can take place. If the health checks executed in the previous installation step completed successfully \([Validate CSM Health](../operations/validate_csm_health.md)\), the following services will be healthy and ready for reboot of the LiveCD:
 
 Required Platform Services:
 
@@ -117,7 +117,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 
         **IMPORTANT**: The variables you set depend on whether or not you customized the default NCN images. The most
         common procedures that involve customizing the images are 
-        [Configuring NCN Images to Use Local Timezone](../operations/configure_ntp_on_ncns.md#configure_ncn_images_to_use_local_timezone) and 
+        [Configuring NCN Images to Use Local Timezone](../operations/node_management/Configure_NTP_on_NCNs.md#configure_ncn_images_to_use_local_timezone) and 
         [Changing NCN Image Root Password and SSH Keys](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md). 
         The two paths forward are listed below:
 
