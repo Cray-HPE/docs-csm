@@ -55,7 +55,7 @@ On a typical system, the Mellanox switches are Spine switches and the Dell switc
 <a name="next-topic"></a>
 # Next Topic
 
-   After completing this procedure the next step is to deploy the other management nodes using the PIT node and the management network switches configured in this procedure.
+   After completing this procedure the next step is to collect MAC Addresses for the management nodes using the PIT node and the management network switches configured in this procedure.
 
-   * See [Deploy Management Nodes](index.md#collect_mac_addresses_for_ncns)
+   * See [Collect Mac Addresses](index.md#collect_mac_addresses_for_ncns)
 
