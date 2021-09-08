@@ -153,7 +153,9 @@ customization and node personalization for CFS targets.
 
 To replace the private key half:
 ```bash
-ncn# kubectl get secret -n services csm-private-key -o json | jq --arg value "$(cat ~/.ssh/id_rsa |base64)" '.data["value"]=$value' | | kubectl apply -f -
+ncn-m001# kubectl get secret -n services csm-private-key -o json | \
+    jq --arg value "$(cat ~/.ssh/id_rsa |base64)" \
+    '.data["value"]=$value' | kubectl apply -f -
 ```
 
 In this example, `~/.ssh/id_rsa` is a local file containing a private key in a format specified by the admin.
