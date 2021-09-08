@@ -73,7 +73,7 @@ Downstream managed product environments, such as compute nodes and User Access N
 configuration references to the `trust-csm-ssh-keys` role by default. During image customization of the images for those nodes,
 public portions of these keys are added to the environments exactly once. If an admin changes the automatically
 generated private or public key for these environments, the images must be reconfigured, or the product
-site.yaml needs to be reconfigured to allow for pushing subsequent updated public keys. Existing public keys
+site.yml needs to be reconfigured to allow for pushing subsequent updated public keys. Existing public keys
 injected into the authorized keys file are not automatically removed during reconfiguration.
 
 ##### CSM keys in Vault
@@ -121,7 +121,7 @@ file system.
 
 The public key is injected as a trusted source as an authorized_key for managed environments automatically,
 even if the private half is never used. If this is not desirable, the role `trust-csm-public-keys` can be
-removed from the `site.yaml` top level play for the compute nodes (COS product) or UANs (UAN product).
+removed from the `site.yml` top level play for the compute nodes (COS product) or UANs (UAN product).
 
 Under no circumstances should the `passwordless-ssh` Ansible role be run against an image that is to be
 registered into IMS/S3 during image customization. Doing so would allow access to private credentials
@@ -237,7 +237,7 @@ Multiple product configuration layers may be created later to apply multiple cha
          {
             "name": "csm-@RELEASE@",
             "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
-            "playbook": "site.yaml",
+            "playbook": "site.yml",
             "commit": "@COMMIT@"
          }
       ]
@@ -308,7 +308,7 @@ Multiple product configuration layers may be created later to apply multiple cha
          {
             "name": "csm-1.5.8",
             "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
-            "playbook": "site.yaml",
+            "playbook": "site.yml",
             "commit": "755820ea8a999121c7191519309eaedc17b4e3d4"
          },
          {
@@ -365,7 +365,7 @@ Multiple product configuration layers may be created later to apply multiple cha
          {
             "name": "csm-1.5.8",
             "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
-            "playbook": "site.yaml",
+            "playbook": "site.yml",
             "commit": "755820ea8a999121c7191519309eaedc17b4e3d4"
          },
          {
