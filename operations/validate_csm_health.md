@@ -516,8 +516,6 @@ Examine the output. If one or more failures occur, investigate the cause of each
 <a name="hms-smd-discovery-validation"></a>
 ### 2.2 Hardware State Manager Discovery Validation
 
-> **NOTE**: The Cray CLI must be configured in order to complete this task. See [Configure the Cray Command Line Interface](configure_cray_cli.md) for details on how to do this.
-
 By this point in the installation process, the Hardware State Manager (HSM) should
 have done its discovery of the system.
 
@@ -525,86 +523,109 @@ The foundational information for this discovery is from the System Layout Servic
 comparison needs to be done to see that what is specified in SLS (focusing on
 BMC components and Redfish endpoints) are present in HSM.
 
-Execute the `hsm_discovery_verify.sh` script on a Kubernetes master or worker NCN:
+Execute the `verify_hsm_discovery.py` script on a Kubernetes master or worker NCN:
 ```
-ncn# /opt/cray/csm/scripts/hms_verification/hsm_discovery_verify.sh
+ncn# /opt/cray/csm/scripts/hms_verification/verify_hsm_discovery.py
 ```
 
 The output will ideally appear as follows, if there are mismatches these will be displayed in the appropriate section of
 the output. Refer to [2.2.1 Interpreting results](#hms-smd-discovery-validation-interpreting-results) and
 [2.2.2 Known Issues](#hms-smd-discovery-validation-known-issues) below to troubleshoot any mismatched BMCs.
 ```bash
-ncn# /opt/cray/csm/scripts/hms_verification/hsm_discovery_verify.sh
+ncn# /opt/cray/csm/scripts/hms_verification/verify_hsm_discovery.py
 
-Fetching SLS Components...
+HSM Cabinet Summary
+===================
+x1000 (Mountain)
+  Discovered Nodes:          50
+  Discovered Node BMCs:      25
+  Discovered Router BMCs:    32
+  Discovered Chassis BMCs:    8
+x3000 (River)
+  Discovered Nodes:          23 (12 Mgmt, 7 Application, 4 Compute)
+  Discovered Node BMCs:      24
+  Discovered Router BMCs:     2
+  Discovered Cab PDU Ctlrs:   0
 
-Fetching HSM Components...
+River Cabinet Checks
+====================
+x3000
+  Nodes: PASS
+  NodeBMCs: PASS
+  RouterBMCs: PASS
+  ChassisBMCs: PASS
+  CabinetPDUControllers: PASS
 
-Fetching HSM Redfish endpoints...
+Mountain/Hill Cabinet Checks
+============================
+x1000 (Mountain)
+  ChassisBMCs: PASS
+  Nodes: PASS
+  NodeBMCs: PASS
+  RouterBMCs: PASS
 
-=============== BMCs in SLS not in HSM components ===============
-ALL OK
-
-=============== BMCs in SLS not in HSM Redfish Endpoints ===============
-ALL OK
 ```
+
+The script will have an exit code of 0 if there are no failures.  If there is
+any FAIL information displayed, the script will exit with a non-zero exit
+code.  Failure information interpretation is described in the next section.
 
 <a name="hms-smd-discovery-validation-interpreting-results"></a>
 #### 2.2.1 Interpreting results
 
-Both sections `BMCs in SLS not in HSM components` and `BMCs in SLS not in HSM Redfish Endpoints` have the same format for mismatches between SLS and HSM. Each row starts with the xname of the BMC. If the BMC does not have an associated `MgmtSwitchConnector` in SLS, then `# No mgmt port association` will be displayed alongside the BMC xname.
-> MgmtSwitchConnectors in SLS are used to represent the switch port on a leaf switch that an the BMC of an air cooled device is connected to.
+The Cabinet Checks output is divided into three sections:
 
-```bash
-=============== BMCs in SLS not in HSM components ===============
-x3000c0s1b0  # No mgmt port association
-```
+* Summary information for for each cabinet
+* Detail information for for River cabinets
+* Detail information for Mountain/Hill cabinets.
 
-__For each__ of the BMCs that show up in either of mismatch lists use the following notes to determine if the issue with the BMC can be safely ignored, or if there is a legitimate issue with the BMC.
+In the River section, any hardware found in SLS and not discovered by HSM is
+considered a failure, with the exception of PDU controllers, which is a
+warning.  Also, the BMC of one of the management NCNs (typically 'ncn-m001')
+will not be connected to the HSM HW network and thus will show up as being not
+discovered and/or not having any mgmt network connection.  This is treated as
+a warning.
+
+In the Mountain section, the only thing considered a failure are Chassis BMCs
+that are not discovered in HSM.   All other items (nodes, node BMCs and router
+BMCs) which are not discovered are considered warnings.
+
+Any failures need to be investigated by the admin for rectification.  Any
+warnings should also be examined by the admin to insure they are accurate and
+expected.
+
+For each of the BMCs that show up as not being present in HSM components or
+Redfish Endpoints use the following notes to determine if the issue with the
+BMC can be safely ignored, or if there is a legitimate issue with the BMC.
+
 * The node BMC of 'ncn-m001' will not typically be present in HSM component data, as it is typically connected to the site network instead of the HMN network.
-   > The following can be used to determine the friendly name of the Node that the NodeBMC controls:
-   > ```bash
-   > ncn# cray sls search hardware list --parent <NODE_BMC_XNAME> --format json | \
-   >   jq '.[] | { Xname: .Xname, Aliases: .ExtraProperties.Aliases }' -c
-   > ```
-
-   Example mismatch for the BMC of ncn-m001:
-   ```bash
-   =============== BMCs in SLS not in HSM components ===============
-   x3000c0s1b0  # No mgmt port association
-   ```
 
 * Chassis Management Controllers (CMC) may show up as not being present in HSM. CMCs for Intel server blades can be ignored. Gigabyte server blade CMCs not found in HSM is not normal and should be investigated. If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored.
    > CMCs have xnames in the form of `xXc0sSb999`, where `X` is the cabinet and `S` is the rack U of the compute node chassis.
 
    Example mismatch for a CMC an Intel server blade:
-   ```bash
-   =============== BMCs in SLS not in HSM components ===============
-   x3000c0s10b999  # No mgmt port association
-
-   =============== BMCs in SLS not in HSM Redfish Endpoints ===============
-   x3000c0s10b999  # No mgmt port association
-   ```
+```bash
+...
+  ChassisBMCs/CMCs: FAIL
+    - x3000c0s10b999 - Not found in HSM Components; Not found in HSM Redfish Endpoints; No mgmt port connection.
+...
+```
 
 * HPE PDUs are not supported at this time and will likely show up as not being found in HSM. They can be ignored.
    > Cabinet PDU Controllers have xnames in the form of `xXmM`, where `X` is the cabinet and `M` is the ordinal of the Cabinet PDU Controller.
 
-   Example mismatch for HPE PDU:
-   ```bash
-   =============== BMCs in SLS not in HSM components ===============
-   x3000m0
-
-   =============== BMCs in SLS not in HSM Redfish Endpoints ===============
-   x3000m0
-   ```
+   Example mistmatch for HPE PDU:
+```bash
+...
+  CabinetPDUControllers: WARNING
+    - x3000m0 - Not found in HSM Components ; Not found in HSM Redfish Endpoints
+...
+```
 
 * BMCs having no association with a management switch port will be annotated as such, and should be investigated. Exceptions to this are in Mountain or Hill configurations where Mountain BMCs will show this condition on SLS/HSM mismatches, which is normal.
 
 * In Hill configurations SLS assumes BMCs in chassis 1 and 3 are fully populated (32 Node BMCs), and in Mountain configurations SLS assumes all BMCs are fully populated (128 Node BMCs). Any non-populated BMCs will have no HSM data and will show up in the mismatch list.
 
-If it was determined that the mistmatch can not be ignored, then proceed onto the the [2.2.2 Known Issues](#hms-smd-discovery-validation-known-issues) below to troubleshoot any mismatched BMCs.
-
-<a name="hms-smd-discovery-validation-known-issues"></a>
 #### 2.2.2 Known Issues
 
 Known issues that may prevent hardware from getting discovered by Hardware State Manager:
@@ -754,7 +775,7 @@ The session template below can be copied and used as the basis for the BOS Sessi
 
    **NOTE**: Be sure to replace the values of the `etag` and `path` fields with the ones you noted earlier in the `cray ims images list` command.
 
-   
+
 2. Create the BOS session template using the following file as input:
    ```
    ncn# cray bos sessiontemplate create --file sessiontemplate.json --name shasta-1.4-csm-bare-bones-image
