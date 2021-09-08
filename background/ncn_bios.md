@@ -15,4 +15,4 @@ This page denotes BIOS settings that are desirable for non-compute nodes.
 | PXE Timeout | 5 Seconds (or less, never more) | The time that the PXE ROM will wait for a DHCP handshake to complete before moving on to the next boot device. | If DHCP is working nominally, then the DHCP handshake should not take longer than 5 seconds. This timeout could be increased where networking faults cannot be reconciled, but ideally this should be tuned to 3 or 2 seconds. |
 | Continuous Boot | `Disabled` | Whether boot-group (e.g. all network devices, or all disk devices) should continuously retry. This prevents fall-through to the fallback disks. | We want deterministic nodes in Shasta, if the boot fails the first tier we want the node to try the next tier of boot mediums before failing at a shell or menu for intervention. |
 
-> **`NOTE`** **PCIe** options can be found in [PCIe : Setting Expected Values](switch_pxe_boot_from_onboard_nic_to_pcie.md#setting-expected-values).
+> **`NOTE`** **PCIe** options can be found in [PCIe : Setting Expected Values](../install/switch_pxe_boot_from_onboard_nic_to_pcie.md#setting-expected-values).

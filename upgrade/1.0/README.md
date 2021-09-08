@@ -156,7 +156,7 @@ Directory location = /etc/cray/ceph/_upgraded
 
    > * At this point your Ceph commands will still be working.
    > * You have a new way of executing Ceph commands in addition to the traditional way.
-   >   * Please see [cephadm-reference.md](resource_material/storage/cephadm-reference.md) for more information.
+   >   * Please see [Cephadm Reference Material](../../operations/utility_storage/Cephadm_Reference_Material.md) for more information.
    > * Both methods are dependent on the master nodes and storage nodes 001/2/3 have a ceph.client.admin.keyring and/or a ceph.conf file    (cephadm will not require the ceph.conf).
    > * When you continue with Stage 2, you may have issues running your Ceph commands.
    >   * If you are experiencing this, please double check that you restored your /etc/ceph directory from your tar backup.
@@ -494,7 +494,7 @@ ncn-m002:~ # /usr/share/doc/csm/upgrade/1.0/scripts/aruba/nae_upload.py
 
 ### General Kubernetes Commands for Troubleshooting
 
-Please see [Kubernetes_Troubleshooting_Information.md](../../troubleshooting/kubernetes/Kubernetes_Troubleshooting_Information.md).
+Please see [Kubernetes_Troubleshooting_Information](../../troubleshooting/kubernetes/Kubernetes_Troubleshooting_Information.md).
 
 ### Troubleshooting PXE Boot Issues
 
@@ -504,27 +504,27 @@ If execution of the upgrade procedures results in NCNs that have errors booting,
 ### Troubleshooting NTP
 
 During execution of the upgrade procedure, if it is noted that there is clock skew on one or more NCNs, the following procedure can be used to troubleshoot NTP config or to sync time:
-[configure_ntp_on_ncns.md](../../operations/configure_ntp_on_ncns.md)
+[Configure NTP on NCNs](../../operations/node_management/Configure_NTP_on_NCNs.md)
 
 ### Bare-Metal Etcd Recovery
 
 If in the upgrade process of the master nodes, it is found that the bare-metal etcd cluster (that houses values for the Kubernetes cluster) has a failure,
 it may be necessary to restore that cluster from back-up. Please see
-[Restore_Bare-Metal_etcd_Clusters_from_an_S3_Snapshot.md](../../operations/kubernetes/Restore_Bare-Metal_etcd_Clusters_from_an_S3_Snapshot.md) for that procedure.
+[Restore Bare-Metal etcd Clusters from an S3 Snapshot](../../operations/kubernetes/Restore_Bare-Metal_etcd_Clusters_from_an_S3_Snapshot.md) for that procedure.
 
 ### Back-ups for Etcd-Operator Clusters
 
 After upgrading, if health checks indicate that etcd pods are not in a healthy/running state, recovery procedures may be needed. Please see
-[Backups_for_etcd-operator_Clusters.md](../../operations/kubernetes/Backups_for_etcd-operator_Clusters.md) for these procedures.
+[Backups for etcd-operator Clusters](../../operations/kubernetes/Backups_for_etcd-operator_Clusters.md) for these procedures.
 
 ### Recovering from Postgres Dbase Issues
 
 After upgrading, if health checks indicate the Postgres pods are not in a healthy/running state, recovery procedures may be needed.
-Please see [Troubleshoot_Postgres_Database.md](../../operations/kubernetes/Troubleshoot_Postgres_Database.md) for troubleshooting and recovery procedures.
+Please see [Troubleshoot Postgres Database](../../operations/kubernetes/Troubleshoot_Postgres_Database.md) for troubleshooting and recovery procedures.
 
 ### Troubleshooting Spire Pods Not Staring on NCNs
 
-Please see [Troubleshoot_SPIRE_Failing_to_Start_on_NCNs.md](../../operations/security_and_authentication/Troubleshoot_SPIRE_Failing_to_Start_on_NCNs.md).
+Please see [Troubleshoot SPIRE Failing to Start on NCNs](../../operations/security_and_authentication/Troubleshoot_SPIRE_Failing_to_Start_on_NCNs.md).
 `
 ### Rerun a step/script
 
