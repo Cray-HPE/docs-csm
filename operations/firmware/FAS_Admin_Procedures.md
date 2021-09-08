@@ -1,12 +1,16 @@
 ## FAS Admin Procedures
 
+<a name="fas-admin-procedures"></a>
+
 Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmware.
+
+<a name="topics"></a>
 
 ### Topics
 
 - [FAS Admin Procedures](#fas-admin-procedures)
   - [Topics](#topics)
-  - [Warning for Non-Compute Nodes (NCNs)</a>](#warning-for-non-compute-nodes-ncnsa)
+  - [Warning for Non-Compute Nodes (NCNs)</a>](#warning-for-non-compute-nodes-ncns)
   - [Ignore Nodes within FAS](#ignore-nodes-within-fas)
     - [Procedure](#procedure)
   - [Override an Image for an Update](#override-an-image-for-an-update)
@@ -18,7 +22,7 @@ Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmwa
 
 ---
 
-<a name="warning"></a>
+<a name="warning-for-non-compute-nodes-ncns"></a>
 
 ### Warning for Non-Compute Nodes (NCNs)</a>
 
@@ -26,13 +30,15 @@ Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmwa
 
 ---
 
-<a name="ignore"></a>
+<a name="ignore-nodes-within-fas"></a>
 
 ### Ignore Nodes within FAS
 
 The default configuration of FAS no longer ignores `management` nodes, which prevents FAS from firmware updating the NCNs. To reconfigure the FAS deployment to exclude non-compute nodes (NCNs) and ensure they cannot have their firmware upgraded, the `NODE_BLACKLIST` value must be manually enabled
 
 Nodes can also be locked with the Hardware State Manager (HSM) API. Refer to [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information.
+
+<a name="procedure"></a>
 
 #### Procedure
 
@@ -54,11 +60,13 @@ Nodes can also be locked with the Hardware State Manager (HSM) API. Refer to [Lo
 
 ---
 
-<a name="overrideImage"></a>
+<a name="override-an-image-for-an-update"></a>
 
 ### Override an Image for an Update
 
 If an update fails because of `"No Image available"`, it may be caused by FAS unable to match the data on the node to find an image in the image list.
+
+<a name="procedure-1"></A>
 
 ### Procedure
 
@@ -150,7 +158,7 @@ Re-run the FAS actions command using the updated json file. **It is strongly rec
 
 ---
 
-<a name="dryrun"></a>
+<a name="check-for-new-firmware-versions-with-a-dry-run"></a>
 
 ### Check for New Firmware Versions with a Dry-Run
 
@@ -161,6 +169,8 @@ Use the Firmware Action Service \(FAS\) dry-run feature to determine what firmwa
 It is likely that when performing a firmware update, that the current version of firmware will not be available. This means that after successfully upgrading, the firmware cannot be downgraded.
 
 This procedure includes information on how check the firmware versions for the entire system, as well as how to target specific manufacturers, xnames, and targets.
+
+<a name="procedure-2"></a>
 
 #### Procedure
 
@@ -417,7 +427,7 @@ Update the firmware on any devices indicating a new version is needed.
 
 ---
 
-<a name="loadNexus"></a>
+<a name="load-firmware-from-nexus"></a>
 
 ### Load Firmware from Nexus
 
@@ -496,7 +506,7 @@ This procedure will read all RPMs in the Nexus repository and upload firmware im
 
 ---
 
-<a name="loadRPM"></a>
+<a name="load-firmware-from-rpm-or-zip-file"></a>
 
 ### Load Firmware from RPM or ZIP file
 
