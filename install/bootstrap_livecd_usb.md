@@ -305,7 +305,27 @@ Some files are needed for generating the configuration payload. See these topics
 
       A new directory matching your `--system-name` argument will now exist in your working directory.
 
-   1. Skip the next step to continue with the [CSI Workarounds](#csi-workarounds)
+      These warnings from `csi config init` for issues in `hmn_connections.json` can be ignored.
+      * The node with the external connection (`ncn-m001`) will have a warning similar to this because its BMC is connected to the site and not the HMN like the other management NCNs. It can be ignored.
+
+         ```
+         "Couldn't find switch port for NCN: x3000c0s1b0"
+         ```
+
+      * An unexpected component may have this message. If this component is an application node with an unusual prefix, it should be added to the `application_node_config.yaml` file. Then rerun `csi config init`. See the procedure to [Create Application Node Config YAML](create_application_node_config_yaml.md)
+
+         ```json
+         {"level":"warn","ts":1610405168.8705149,"msg":"Found unknown source prefix! If this is expected to be an Application node, please update application_node_config.yaml","row":
+         {"Source":"gateway01","SourceRack":"x3000","SourceLocation":"u33","DestinationRack":"x3002","DestinationLocation":"u48","DestinationPort":"j29"}}
+         ```
+
+      * If a cooling door is found in `hmn_connections.json`, there may be a message like the following. It can be safely ignored.
+
+         ```json
+         {"level":"warn","ts":1612552159.2962296,"msg":"Cooling door found, but xname does not yet exist for cooling doors!","row":
+         {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
+
+   1. Skip the next step and continue with the [CSI Workarounds](#csi-workarounds).
 
 1. If doing a first time install or the `system_config.yaml` parameter file for a reinstall is not available, generate the system configuration.
 
