@@ -10,19 +10,19 @@ Copyright 2021 Hewlett Packard Enterprise Development LP
 
 2. The firmware tarball must be untarred and the ./install.sh script run to get the contents uploaded to Nexus.
 
-**NOTE:** The ``ncn-m001`` hostname is used as a generic placeholder for the node where these steps are run.
+**NOTE:** The ``ncn`` hostname is used as a generic placeholder for the node where these steps are run.
 
 ### Procedure
 
 ```bash
-ncn-m001# cd [path to location of tarballs]/os
-ncn-m001# ls -lh
+ncn# cd [path to location of tarballs]/os
+ncn# ls -lh
 total 58G
 -rw-r--r-- 1 root root 894M Feb 6 17:25 firmware-0.0.0.tar.gz
 
-ncn-m001# tar -zxf firmware-0.0.0.tar.gz
-ncn-m001# cd firmware-0.0.0
-ncn-m001# ./install.sh
+ncn# tar -zxf firmware-0.0.0.tar.gz
+ncn# cd firmware-0.0.0
+ncn# ./install.sh
 Install firmware-0.0.0
 Load install tools
 Configure Nexus
@@ -39,4 +39,3 @@ OK firmware-0.0.0-0
 ```
 
 **NOTE:** The FAS Loader job will run automatically. It takes approximately 2-4 minutes to run. Use the FAS CLI to view what is available.
-

@@ -1,5 +1,5 @@
 # Copyright 2021 Hewlett Packard Enterprise Development LP
-Name: docs-csm-install
+Name: docs-csm
 License: MIT License
 Summary: Documentation for Cray System Management (CSM) Installation and Upgrade
 BuildArchitectures: noarch
