@@ -276,13 +276,13 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
     1.  Disable the `hms-discovery` Kubernetes cronjob:
 
         ```bash
-        ncn-m001# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : true }}'
+        ncn# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : true }}'
         ```
 
     2.  Power off all the components; for example, in chassis 0-7, cabinets 1000-1003.
 
         ```bash
-        ncn-m001# cray capmc xname_off create --xnames x[1000-1003]c[0-7] --recursive true --continue true
+        ncn# cray capmc xname_off create --xnames x[1000-1003]c[0-7] --recursive true --continue true
         ```
 
         This command powers off all the node cards, then all the compute blades, then all the Slingshot switch ASICS, then all the Slingshot switch enclosures, and finally all chassis enclosures in cabinets 1000-1003.
@@ -298,7 +298,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
         The `overrideDryrun = false` value indicates that the command will do a dry-run.
 
         ```bash
-        ncn-m001# cray fas actions create chassisBMC.json
+        ncn# cray fas actions create chassisBMC.json
         overrideDryrun = false
         actionID = "fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"
         ```
@@ -308,7 +308,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
         Replace the actionID value with the string returned in the previous step. In this example, `"fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"` is used.
 
         ```bash
-        ncn-m001# cray fas actions describe {actionID}
+        ncn# cray fas actions describe {actionID}
         blockedBy = []
         state = "completed"
         actionID = "fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"
@@ -367,7 +367,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
         The returned `overrideDryrun = true` indicates that an actual firmware update job was created. A new `actionID` will also be returned.
 
         ```bash
-        ncn-m001# cray fas actions create chassisBMC.json
+        ncn# cray fas actions create chassisBMC.json
         overrideDryrun = true
         actionID = "bc40f10a-e50c-4178-9288-8234b336077b"
         ```
@@ -377,13 +377,13 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 5.  Restart the `hms-discovery` cronjob.
 
     ```bash
-    ncn-m001 # kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
+    ncn# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
     ```
 
     The `hms-discovery` cronjob will run within 5 minutes of being unsuspended and start powering on the chassis enclosures, switches, and compute blades. If components are not being powered back on, then power them on manually:
 
     ```bash
-    ncn-m001 # cray capmc xname_on create --xnames x[1000-1003]c[0-7]r[0-7],x[1000-1003]c[0-7]s[0-7] --prereq true --continue true
+    ncn# cray capmc xname_on create --xnames x[1000-1003]c[0-7]r[0-7],x[1000-1003]c[0-7]s[0-7] --prereq true --continue true
     ```
 
     The `--prereq` option ensures all required components are powered on first. The `--continue` option allows the command to complete in systems without fully populated hardware.

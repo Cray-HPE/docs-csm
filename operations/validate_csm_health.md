@@ -602,7 +602,7 @@ __For each__ of the BMCs that show up in either of mismatch lists use the follow
 
 * In Hill configurations SLS assumes BMCs in chassis 1 and 3 are fully populated (32 Node BMCs), and in Mountain configurations SLS assumes all BMCs are fully populated (128 Node BMCs). Any non-populated BMCs will have no HSM data and will show up in the mismatch list.
 
-If it was determined that the mistmatch can not be ignored, then proceed onto the the [2.2.2 Known Issues](#hms-smd-discovery-validation-known-issues) below to troubleshoot any mismatched BMCs.
+If it was determined that the mismatch can not be ignored, then proceed onto the the [2.2.2 Known Issues](#hms-smd-discovery-validation-known-issues) below to troubleshoot any mismatched BMCs.
 
 <a name="hms-smd-discovery-validation-known-issues"></a>
 #### 2.2.2 Known Issues
@@ -833,13 +833,15 @@ type = "GET"
 <a name="csm-watch-boot"></a>
 ### 4.5 Connect to the node's console and watch the boot
 
-See [Manage Node Consoles](conman/Manage_Node_Consoles.md) for information on how to connect to the node's console.
+See [Manage Node Consoles](conman/Manage_Node_Consoles.md) for information on how to connect to the node's console (and for
+instructions on how to close it later).
 
-The boot may take up to 10 or 15 minutes. It will fail, but should reach the dracut stage. If the dracut stage is reached, this test
-can be considered successful. This shows that the CSM services needed to boot a node are available and working properly.
+The boot may take up to 10 or 15 minutes. The image being booted does not support a complete boot, so the node will not
+boot fully into an operating system. This test is merely to verify that the CSM services needed to boot a node are available and
+working properly.
 
-More specifically, this test is considered successful if the console output has something similar to the following
-somewhere within the final 20 lines of its output:
+This boot test is considered successful if the boot reaches the dracut stage. You know this has happened if the console output has
+something similar to the following somewhere within the final 20 lines of its output:
 ```
 [    7.876909] dracut: FATAL: Don't know how to handle 'root=craycps-s3:s3://boot-images/e3ba09d7-e3c2-4b80-9d86-0ee2c48c2214/rootfs:c77c0097bb6d488a5d1e4a2503969ac0-27:dvs:api-gw-service-nmn.local:300:nmn0'
 [    7.898169] dracut: Refusing to continue
@@ -855,6 +857,8 @@ Warning: dracut: FATAL: Don't know how to handle
 Press Enter for maintenance
 (or press Control-D to continue):
 ```
+
+After the node has reached this point, close the console session. The test is complete.
 
 <a name="uas-uai-tests"></a>
 ## 5. UAS / UAI Tests
