@@ -7,7 +7,7 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 ### Prerequisites
 
 * All management rack PDUs are connected to facility power and facility power is ON.
-* An authentication token is required to access the API gateway and to use the `sat` command. See the [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md) and "SAT Authentication" in the SAT repository for more information.
+* An authentication token is required to access the API gateway and to use the `sat` command. See the [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md) and "SAT Authentication" in the Shasta Admin Toolkit product documentation.
 
 ### Procedure
 
@@ -45,7 +45,7 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
     ```bash
     ncn-m001-pit:~ # shutdown -h now
-
+    
     remote$ ipmitool -I lanplus -U $USERNAME -E -H NCN_M001_BMC_HOSTNAME chassis power on
     ```
 
@@ -97,7 +97,7 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
    ERROR: Unable to reach the following NCNs via SSH after powering them on: ncn-m003, ncn-s002.. Troubleshoot the issue and then try again.
    ```
 
-   In the preceding example, the command to ssh to some ncn nodes timed out and reported `ERROR` messages. Iterate on the above step until you see `Succeeded with boot of other management NCNs.` Each iteration should get further in the process.
+   In the preceding example, the SSH command to the NCN nodes timed out and reported `ERROR` messages. Iterate on the above step until you see `Succeeded with boot of other management NCNs.` Each iteration should get further in the process.
 
 10. Use `tail` to monitor the log files in `/var/log/cray/console_logs` for each NCN.
 
@@ -142,7 +142,7 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
     - ncn-w001
     - ncn-w002
     - ncn-w003
-
+    
     Are the above NCN groupings correct? [yes,no] yes
     ```
 
@@ -380,7 +380,7 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
                                                                               started: too many missed start time (> 100). \
                                                                               Set or decrease .spec.startingDeadlineSeconds \
                                                                               or check clock skew
-     ```
+    ```
 
 27. For any cron jobs producing errors, get the YAML representation of the cron job and edit the YAML file:
 
