@@ -229,13 +229,15 @@ An authentication token is required to access the API gateway and to use the `sa
 7. Use `ipmitool` to check the power off status of management nodes.
 
     ```bash
-    ncn-m001# for ncn in ncn-m00{2,3} ncn-w00{1,2,3} ncn-s00{1,2,3}; do echo -n "$ncn: "; ipmitool -U root -H ${ncn}-mgmt -P PASSWORD -I lanplus chassis power status; done
+    ncn-m001# export USERNAME=root
+    ncn-m001# export IPMI_PASSWORD=changeme
+    ncn-m001# for ncn in ncn-m00{2,3} ncn-w00{1,2,3} ncn-s00{1,2,3}; do echo -n "$ncn: "; ipmitool -U $USERNAME -H ${ncn}-mgmt -E -I lanplus chassis power status; done
     ```
 
 8. From a remote system, activate the serial console for ncn-m001.
 
     ```bash
-    remote$ ipmitool -I lanplus -U root -P PASSWORD -H NCN-M001_BMC_HOSTNAME sol activate
+    remote$ ipmitool -I lanplus -U $USERNAME -E -H NCN-M001_BMC_HOSTNAME sol activate
 
     ncn-m001 login: root
     Password:
@@ -252,9 +254,9 @@ An authentication token is required to access the API gateway and to use the `sa
 11. From a remote system that has access to the management plane, use IPMItool to power off ncn-m001.
 
     ```bash
-    remote$ ipmitool -I lanplus -U root -P <BMC root password> -H NCN-M001_BMC_HOSTNAME chassis power status
-    remote$ ipmitool -I lanplus -U root -P <BMC root password> -H NCN-M001_BMC_HOSTNAME chassis power off
-    remote$ ipmitool -I lanplus -U root -P <BMC root password> -H NCN-M001_BMC_HOSTNAME chassis power status
+    remote$ ipmitool -I lanplus -U $USERNAME -E -H NCN-M001_BMC_HOSTNAME chassis power status
+    remote$ ipmitool -I lanplus -U $USERNAME -E -H NCN-M001_BMC_HOSTNAME chassis power off
+    remote$ ipmitool -I lanplus -U $USERNAME -E -H NCN-M001_BMC_HOSTNAME chassis power status
     ```
 
     **CAUTION:** The modular coolant distribution unit \(MDCU\) in a liquid-cooled TDS cabinet typically receives power from its management cabinet PDUs. If the system includes a liquid-cooled TDS cabinet, **do not power off** the management cabinet PDUs, Powering off the MDCU will cause an emergency power off \(EPO\) of the TDS cabinet and may result in data loss or equipment damage.

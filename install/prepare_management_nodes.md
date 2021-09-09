@@ -100,17 +100,27 @@ Later in the installation process the HPC Firmware Pack will be installed on the
    * Shut down from **LiveCD** (`pit`)
 
       ```bash
-      pit# export username=root
+      pit# export USERNAME=root
       pit# export IPMI_PASSWORD=changeme
-      pit# conman -q | grep mgmt | grep -v m001 | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
+      pit# conman -q | grep mgmt | grep -v m001 | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
+      ```
+
+      Check the power status to confirm the nodes have powered off.
+      ```bash
+      pit# conman -q | grep mgmt | grep -v m001 | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power status
       ```
 
    * Shut down from **ncn-m001**
 
       ```bash
-      ncn-m001# export username=root
+      ncn-m001# export USERNAME=root
       ncn-m001# export IPMI_PASSWORD=changeme
-      ncn-m001# grep ncn /etc/hosts | grep mgmt | grep -v m001 | sort -u | awk '{print $2}' | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
+      ncn-m001# grep ncn /etc/hosts | grep mgmt | grep -v m001 | sort -u | awk '{print $2}' | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
+      ```
+
+      Check the power status to confirm the nodes have powered off.
+      ```bash
+      ncn-m001# grep ncn /etc/hosts | grep mgmt | grep -v m001 | sort -u | awk '{print $2}' | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power status
       ```
 1. Set the BMCs on the management nodes to DHCP.
    > **`NOTE`** During the install of the management nodes their BMCs get set to static IP addresses. The installation expects the that these BMCs are set back to DHCP before proceeding.
@@ -118,24 +128,24 @@ Later in the installation process the HPC Firmware Pack will be installed on the
    * Set the lan variable.
       If you have Intel nodes set it to 3.
       ```bash
-      ncn# export lan=3
+      ncn# export LAN=3
       ```
 
       Otherwise set it to 1.
       ```bash
-      ncn# export lan=1
+      ncn# export LAN=1
       ```
 
    * from the **LiveCD** (`pit`):
       > **`NOTE`** This step uses the old statics.conf on the system in case CSI changes IP addresses:
 
       ```bash
-      pit# export username=root
+      pit# export USERNAME=root
       pit# export IPMI_PASSWORD=changeme
       pit# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
       do
          echo "Setting $h to DHCP"
-         ipmitool -U $username -I lanplus -H $h -E lan set $lan ipsrc dhcp
+         ipmitool -U $USERNAME -I lanplus -H $h -E lan set $LAN ipsrc dhcp
       done
       ```
 
@@ -144,7 +154,7 @@ Later in the installation process the HPC Firmware Pack will be installed on the
       pit# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
       do
          printf "$h: "
-         ipmitool -U $username -I lanplus -H $h -E lan print $lan | grep Source
+         ipmitool -U $USERNAME -I lanplus -H $h -E lan print $lan | grep Source
       done
       ```
       > If an error similar to the following occurs, it means that the BMC is no longer reachable by its IP.
@@ -158,7 +168,7 @@ Later in the installation process the HPC Firmware Pack will be installed on the
       pit# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
       do
          printf "$h: "
-         ipmitool -U $username -I lanplus -H $h -E mc reset cold
+         ipmitool -U $USERNAME -I lanplus -H $h -E mc reset cold
       done
       ```
 
@@ -166,12 +176,12 @@ Later in the installation process the HPC Firmware Pack will be installed on the
       > **`NOTE`** This step uses to the `/etc/hosts` file on ncn-m001 to determine the IP addresses of the BMCs:
 
       ```bash
-      ncn-m001# export username=root
+      ncn-m001# export USERNAME=root
       ncn-m001# export IPMI_PASSWORD=changeme
       ncn-m001# for h in $( grep ncn /etc/hosts | grep mgmt | grep -v m001 | awk '{print $2}' )
       do
          echo "Setting $h to DHCP"
-         ipmitool -U $username -I lanplus -H $h -E lan set $lan ipsrc dhcp
+         ipmitool -U $USERNAME -I lanplus -H $h -E lan set $lan ipsrc dhcp
       done
       ```
 
@@ -180,7 +190,7 @@ Later in the installation process the HPC Firmware Pack will be installed on the
       ncn-m001# for h in $( grep ncn /etc/hosts | grep mgmt | grep -v m001 | awk '{print $2}' )
       do
          printf "$h: "
-         ipmitool -U $username -I lanplus -H $h -E lan print $lan | grep Source
+         ipmitool -U $USERNAME -I lanplus -H $h -E lan print $lan | grep Source
       done
       ```
       > If an error similar to the following occurs, it means that the BMC is no longer reachable by its IP.
@@ -194,7 +204,7 @@ Later in the installation process the HPC Firmware Pack will be installed on the
       ncn-m001# for h in $( grep ncn /etc/hosts | grep mgmt | grep -v m001 | awk '{print $2}' )
       do
          printf "$h: "
-         ipmitool -U $username -I lanplus -H $h -E mc reset cold
+         ipmitool -U $USERNAME -I lanplus -H $h -E mc reset cold
       done
       ```
 

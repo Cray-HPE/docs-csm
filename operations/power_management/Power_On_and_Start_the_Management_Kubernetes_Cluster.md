@@ -28,13 +28,15 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 5.  Activate the serial console window to ncn-m001.
 
     ```bash
-    remote$ ipmitool -I lanplus -U root -P PASSWORD -H NCN_M001_BMC_HOSTNAME sol activate
+    remote$ export USERNAME=root
+    remote$ export IPMI_PASSWORD=changeme
+    remote$ ipmitool -I lanplus -U $USERNAME -E -H NCN_M001_BMC_HOSTNAME sol activate
     ```
 
 6.  In a separate window, power on the master node 1 \(ncn-m001\) chassis using IPMI tool.
 
     ```bash
-    remote$ ipmitool -I lanplus -U root -P PASSWORD -H NCN_M001_BMC_HOSTNAME chassis power on
+    remote$ ipmitool -I lanplus -U $USERNAME -E -H NCN_M001_BMC_HOSTNAME chassis power on
     ```
 
     Wait for the login prompt.
@@ -44,7 +46,7 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
     ```bash
     ncn-m001-pit:~ # shutdown -h now
 
-    remote$ ipmitool -I lanplus -U root -P PASSWORD -H NCN_M001_BMC_HOSTNAME chassis power on
+    remote$ ipmitool -I lanplus -U $USERNAME -E -H NCN_M001_BMC_HOSTNAME chassis power on
     ```
 
 

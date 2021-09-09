@@ -90,7 +90,9 @@ This procedure requires administrative privileges.
         The BMC username and password must be known for this command to work.
 
         ```
-        ncn-m001# ipmitool -H XNAME -U USER -P PASSWORD -I lanplus sol deactivate
+        ncn-m001# export USERNAME=root
+        ncn-m001# export IPMI_PASSWORD=changeme
+        ncn-m001# ipmitool -H XNAME -U $USERNAME -E -I lanplus sol deactivate
         ```
 
     4. Retry conman to verify the connection has been reestablished.
