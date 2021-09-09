@@ -45,18 +45,22 @@ PXE. The method to use will vary depending on the system environment.
 If you are reinstalling a system, the BMCs for the NCNs may be set to static. We check `/var/lib/misc/dnsmasq.leases` for setting up the symlinks for the artifacts each node needs to boot. So if your BMCs are set to static, those artifacts will not get setup correctly. You can set them back to DHCP by using a command such as:
 
 ```bash
+ncn# export USERNAME=root
+ncn# export IPMI_PASSWORD=changeme
 ncn# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
 do
-ipmitool -U username -I lanplus -H $h -P password lan set 1 ipsrc dhcp
+ipmitool -U $USERNAME -I lanplus -H $h -E lan set 1 ipsrc dhcp
 done
 ```
 
 Some BMCs need a cold reset in order to pick up this change fully:
 
 ```bash
+ncn# export USERNAME=root
+ncn# export IPMI_PASSWORD=changeme
 ncn# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
 do
-ipmitool -U username -I lanplus -H $h -P password mc reset cold
+ipmitool -U $USERNAME -I lanplus -H $h -E mc reset cold
 done
 ```
 
@@ -309,9 +313,9 @@ Reset the BIOS. Refer to vendor documentation for resetting the BIOS or attempt 
 
 > **`NOTE`** When using `ipmitool` against a machine remotely, it requires more arguments:
 > ```bash
-> linux# username=root
+> linux# USERNAME=root
 > linux# IPMI_PASSWORD=CHANGEME
-> linux# ipmitool -I lanplus -U $username -E -H <bmc-hostname>
+> linux# ipmitool -I lanplus -U $USERNAME -E -H <bmc-hostname>
 > ```
 
 1. Reset BIOS with ipmitool

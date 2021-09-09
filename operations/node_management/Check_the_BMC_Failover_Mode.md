@@ -11,8 +11,9 @@ If Gigabyte BMC failover mode is not disabled, some BMCs may receive incorrect I
     For example:
 
     ```bash
-    ncn-m001# ipmitool -I lanplus -U root -P <BMC root password> \
-    -H 172.30.52.247 raw 0x0c 0x02 0x01 210 0 0
+    ncn-m001# export USERNAME=root
+    ncn-m001# export IPMI_PASSWORD=changeme
+    ncn-m001# ipmitool -I lanplus -U $USERNAME -E -H 172.30.52.247 raw 0x0c 0x02 0x01 210 0 0
     11 00 00
     ```
 

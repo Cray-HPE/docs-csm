@@ -57,7 +57,9 @@ Even with the polling recommendations above, it is still possible for the BMCs t
 To restart the BMCs:
 
 ```bash
-ncn-m001# ipmitool -H BMC_HOSTNAME -U root -P PASSWORD -I lanplus mc reset cold
+ncn-m001# export USERNAME=root
+ncn-m001# export IPMI_PASSWORD=changeme
+ncn-m001# ipmitool -H BMC_HOSTNAME -U $USERNAME -E -I lanplus mc reset cold
 ```
 
 If the reset does not recover the BMCs, shut down the nodes, unplug the servers and plug them back in. Use the following steps:
@@ -67,7 +69,7 @@ If the reset does not recover the BMCs, shut down the nodes, unplug the servers 
     For each server with a BMC in a bad state:
 
     ```bash
-    ncn-m001# ipmitool -H BMC_HOSTNAME -U root -P PASSWORD -I lanplus chassis power soft
+    ncn-m001# ipmitool -H BMC_HOSTNAME -U $USERNAME -E -I lanplus chassis power soft
     ```
 
     Wait 30 seconds after shutting down the nodes before proceeding.
