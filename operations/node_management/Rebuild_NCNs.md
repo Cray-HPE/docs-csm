@@ -780,6 +780,195 @@ This section applies to master and worker nodes. Skip this section if rebuilding
 
 This section applies to storage nodes. Skip this section if rebuilding a master or worker node. All commands in this section must be run on any storage node that is already in the cluster and is not being rebuilt \(unless otherwise indicated\).
 
+1. Wipe the disks on the node being rebuilt.
+
+   This can be done from the ConMan console window.
+
+   1. Delete CEPH Volumes
+
+      ```bash
+      NODE# systemctl stop ceph-osd.target
+      ```
+
+   1. Make sure the OSDs (if any) are not running after running the first command.
+
+      ```bash
+      NODE# ls -1 /dev/sd* /dev/disk/by-label/*
+      NODE# vgremove -f --select 'vg_name=~ceph*'
+      ```
+
+1. Wipe the disks and RAIDs.
+
+   **Warning:** This is the point of no return. Once the disks are wiped,the node must be rebuilt.
+
+   ```
+   NODE# wipefs --all --force /dev/sd* /dev/disk/by-label/*
+   ```
+
+1. Set the PXE boot option and power cycle the node.
+
+   1. Set the BMC variable to the hostname of the BMC of the node being rebuilt.
+
+      ```bash
+      ncn# export BMC=<NCN name>-mgmt
+      ```
+
+      For example, if you are rebuilding ncn-s003, this would be `ncn-s003-mgmt`.
+
+   1. Export the root password of the BMC.
+
+      ```bash
+      ncn# export IPMI_PASSWORD=changeme
+      ```
+
+   1. Set the PXE/efiboot option.
+
+      ```bash
+      ncn# ipmitool -I lanplus -U root -E -H $BMC chassis bootdev pxe options=efiboot
+      ```
+
+   1. Power off the node.
+
+      ```bash
+      ncn# ipmitool -I lanplus -U root -E -H $BMC chassis power off
+      ```
+
+   1. Verify that the node is off.
+
+
+      ```bash
+      ncn# ipmitool -I lanplus -U root -E -H $BMC chassis power status
+      ```
+
+      Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
+
+   1. Power on the node.
+
+      ```bash
+      ncn# ipmitool -I lanplus -U root -E -H $BMC chassis power on
+      ```
+
+   1. Verify that the node is on.
+
+      Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
+
+      ```bash
+      ncn# ipmitool -I lanplus -U root -E -H $BMC chassis power status
+      ```
+
+1. Observe the boot.
+
+    After a bit, the node should begin to boot. This can be viewed from the ConMan console window. Eventually, there will be a `NBP file...` message in the console output which indicates that the PXE boot has begun the TFTP download of the ipxe program. Later messages will appear as the Linux kernel loads and then the scripts in the initrd begin to run, including cloud-init.
+
+   Wait until cloud-init displays messages similar to these on the console to indicate that cloud-init has finished with the module called `modules:final`.
+
+   ```
+   [  295.466827] cloud-init[9333]: Cloud-init v. 20.2-8.45.1 running 'modules:final' at Thu, 26 Aug 2021 15:23:20 +0000. Up 125.72 seconds.
+   [  295.467037] cloud-init[9333]: Cloud-init v. 20.2-8.45.1 finished at Thu, 26 Aug 2021 15:26:12 +0000. Datasource DataSourceNoCloudNet [seed=cmdline,http://10.92.100.81:8888/][dsmode=net].  Up 295.46 seconds
+   ```
+
+   Then press return on the console to ensure that the the login prompt is displayed including the correct hostname of this node. Then exit the ConMan console \(**&** then **.**\), and then use `ssh` to log in to the node to complete the remaining validation steps.
+
+    **Troubleshooting:** If the `NBP file...` output never appears, or something else goes wrong, go back to the steps for modifying XNAME.json file (see the step to [inspect and modify the JSON file](#inspect)) and make sure these instructions were completed correctly.
+
+1. Confirm vlan004 is up with the correct IP address on the rebuilt node.
+
+    The following examples assume the NCN/hostname is `NODE`.
+
+    1. Find the desired IP address.
+
+        ```bash
+        NODE# dig +short NODE.hmn
+        10.254.1.16
+        ```
+
+    1. Confirm the output from the dig command matches the interface.
+
+        If the IP addresses match, proceed to the next step. If they do not match, continue with the following sub-steps.
+
+        ```bash
+        NODE# ip addr show vlan004
+        14: vlan004@bond0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+            link/ether b8:59:9f:2b:2f:9e brd ff:ff:ff:ff:ff:ff
+            inet 10.254.1.16/17 brd 10.254.127.255 scope global vlan004
+               valid_lft forever preferred_lft forever
+            inet6 fe80::ba59:9fff:fe2b:2f9e/64 scope link
+               valid_lft forever preferred_lft forever
+        ```
+
+       1. Change the IP address for vlan004 if necessary.
+
+           ```bash
+           NODE# vim /etc/sysconfig/network/ifcfg-vlan004
+           ```
+
+           Set the IPADDR line to the correct IP address with a `/17` mask.
+
+           ```bash
+           IPADDR='10.254.1.16/17'
+           ```
+
+    1. Restart the vlan004 network interface.
+
+        ```bash
+        NODE# wicked ifreload vlan004
+        ```
+
+    1. Confirm the output from the dig command matches the interface.
+
+        ```bash
+        NODE# ip addr show vlan004
+        ```
+
+1. Confirm that vlan007 is up with the correct IP address on the rebuilt node.
+
+    The following examples assume the NCN/hostname is `NODE`.
+
+    1. Find the desired IP address.
+
+        ```bash
+        NODE# dig +short NODE.can
+        10.103.8.11
+        ```
+
+    1. Confirm the output from the dig command matches the interface.
+
+        If the IP addresses match, proceed to the next step. If they do not match, continue with the following sub-steps.
+
+        ```bash
+        NODE# ip addr show vlan007
+        15: vlan007@bond0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+            link/ether b8:59:9f:2b:2f:9e brd ff:ff:ff:ff:ff:ff
+            inet 10.103.8.11/24 brd 10.103.8.255 scope global vlan007
+               valid_lft forever preferred_lft forever
+            inet6 fe80::ba59:9fff:fe2b:2f9e/64 scope link
+               valid_lft forever preferred_lft forever
+        ```
+
+       1. Change the IP address for vlan007 if necessary.
+
+           ```bash
+           NODE# vim /etc/sysconfig/network/ifcfg-vlan007
+           ```
+
+           Set the IPADDR line to the correct IP address with a `/24` mask.
+
+           ```bash
+           IPADDR='10.103.8.11/24'
+           ```
+
+    1. Restart the vlan007 network interface.
+
+        ```bash
+        NODE# wicked ifreload vlan007
+        ```
+
+    1. Confirm the output from the dig command matches the interface.
+
+        ```bash
+        NODE# ip addr show vlan007
+        ```
+
 1. Use `ssh` to log in to the node where Ansible will run.
 
     -   If rebuilding `ncn-s001`, log in to either `ncn-s002` or `ncn-s003`.
