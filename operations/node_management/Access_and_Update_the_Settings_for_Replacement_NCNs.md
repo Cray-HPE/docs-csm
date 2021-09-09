@@ -15,14 +15,18 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
 1.  Determine if ipmitool access is configured for root on the BMC.
 
     ```bash
-    # ipmitool -I lanplus -U root -P <BMC root password> -H NCN_NODE-mgmt power status
+    ncn# export USERNAME=root   
+    ncn# export IPMI_PASSWORD=changeme   
+    ncn# ipmitool -I lanplus -U $USERNAME -E -H NCN_NODE-mgmt power status
     Error: Unable to establish IPMI v2 / RMCP+ session
     ```
 
 2.  Connect to the BMC with the default login credentials. Contact service for the default credentials.
 
     ```bash
-    # ipmitool -I lanplus -U <default user> -P <default password> -H NCN_NODE-mgmt power status
+    ncn# export USERNAME=defaultuser
+    ncn# export IPMI_PASSWORD=defaultpassword
+    ncn# ipmitool -I lanplus -U $USERNAME -E -H NCN_NODE-mgmt power status
     Chassis Power is on
     ```
 
@@ -33,7 +37,7 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
     3.  Use the factory reset command to regain access to the BMC login credentials.
 
         ```bash
-        # ipmitool raw 0x32 0x66
+        ncn# ipmitool raw 0x32 0x66
         ```
 
 3.  Determine if the root user is configured.
@@ -41,7 +45,7 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
     In the example below, the root user does not exist yet.
 
     ```bash
-    # ipmitool -I lanplus -U <default user> -P <default password> -H NCN_NODE-mgmt user list 1
+    ncn# ipmitool -I lanplus -U $USERNAME -E -H NCN_NODE-mgmt user list 1
     ID  Name	 Callin  Link Auth  IPMI Msg   Channel Priv Limit
     1               false   false      true       ADMINISTRATOR
     2   admin       false   false      true       ADMINISTRATOR
@@ -66,43 +70,43 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
     1.  Enable the creation of new credentials.
 
         ```bash
-        # ipmitool -I lanplus -U <default user> -P <default password> -H NCN_NODE-mgmt user enable 4
+        ncn# ipmitool -I lanplus -U $USERNAME -E -H NCN_NODE-mgmt user enable 4
         ```
 
     2.  Set the new username to root.
 
         ```bash
-        # ipmitool -I lanplus -U <default user> -P <default password> -H NCN_NODE-mgmt user set name 4 root
+        ncn# ipmitool -I lanplus -U $USERNAME -E -H NCN_NODE-mgmt user set name 4 root
         ```
 
     3.  Set the new password.
 
         ```bash
-        # ipmitool -I lanplus -U <default user> -P <default password> -H NCN_NODE-mgmt user set password 4 <BMC root password>
+        ncn# ipmitool -I lanplus -U $USERNAME -E -H NCN_NODE-mgmt user set password 4 <BMC root password>
         ```
 
     4.  Grant user privileges to the new credentials.
 
         ```bash
-        # ipmitool -I lanplus -U <default user> -P <default password> -H NCN_NODE-mgmt user priv 4 4 1
+        ncn# ipmitool -I lanplus -U $USERNAME -E -H NCN_NODE-mgmt user priv 4 4 1
         ```
 
     5.  Enable messaging for the identified slot and set the privilege level for that slot when it is accessed over LAN.
 
         ```bash
-        # ipmitool -I lanplus -U <default user> -P <default password> -H NCN_NODE-mgmt channel setaccess 1 4 callin=on ipmi=on link=on
+        ncn# ipmitool -I lanplus -U $USERNAME -E -H NCN_NODE-mgmt channel setaccess 1 4 callin=on ipmi=on link=on
         ```
 
     6.  Enable access to the serial over LAN \(SOL\) payload.
 
         ```bash
-        # ipmitool -I lanplus -U <default user> -P <default password> -H NCN_NODE-mgmt sol payload enable 1 4
+        ncn# ipmitool -I lanplus -U $USERNAME -E -H NCN_NODE-mgmt sol payload enable 1 4
         ```
 
 5.  Verify the root credentials have been configured.
 
     ```bash
-    # ipmitool -I lanplus -U <default user> -P <default password> -H NCN_NODE-mgmt user list 1
+    ncn# ipmitool -I lanplus -U $USERNAME -E -H NCN_NODE-mgmt user list 1
     ID  Name	     Callin  Link Auth	IPMI Msg   Channel Priv Limit
     1                    false   false      true       ADMINISTRATOR
     2   admin            false   false      true       ADMINISTRATOR
@@ -127,7 +131,7 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
     The new credentials work if the command succeeds and generates output similar to the example below.
 
     ```bash
-    # ipmitool -I lanplus -U root -P <BMC root password> -H NCN_NODE-mgmt user list 1
+    ncn# ipmitool -I lanplus -U root -E -H NCN_NODE-mgmt user list 1
     ID  Name	     Callin  Link Auth	IPMI Msg   Channel Priv Limit
     1                    false   false      true       ADMINISTRATOR
     2   admin            false   false      true       ADMINISTRATOR

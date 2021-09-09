@@ -93,14 +93,16 @@ There are two tools that can be used to access a BMC's console via SOL:
     Use the following command to access a node's SOL via ipmitool:
 
     ```bash
-    ncn-m001# ipmitool -I lanplus -U root -P compute_node_BMC_password \
+    ncn-m001# export USERNAME=root
+    ncn-m001# export IPMI_PASSWORD=changeme
+    ncn-m001# ipmitool -I lanplus -U $USERNAME -E \
     -H node_management_network_IP_address_of_node sol activate
     ```
 
     Example:
 
     ```bash
-    ncn-m001# ipmitool -I lanplus -U root -P password -H  10.100.165.2 sol activate
+    ncn-m001# ipmitool -I lanplus -U $USERNAME -E -H  10.100.165.2 sol activate
     ```
 
 -   ConMan - The ConMan tool is used to collect logs from nodes. It is also used to attach to the node's SOL console. For more information, refer to [ConMan](../conman/ConMan.md) and [Access Compute Node Logs](../conman/Access_Compute_Node_Logs.md).

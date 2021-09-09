@@ -91,13 +91,13 @@ If you are here with an unconfigured switch, mileage may vary.
 
    ```bash
    linux# export SYSTEM_NAME=eniac
-   linux# export username=root
-   linux# export password=changeme
-   linux# ipmitool -I lanplus -U $username -P $password -H ${SYSTEM_NAME}-ncn-m001-mgmt lan print | grep "MAC Address"
+   linux# export USERNAME=root
+   linux# export IPMI_PASSWORD=changeme
+   linux# ipmitool -I lanplus -U $USERNAME -E -H ${SYSTEM_NAME}-ncn-m001-mgmt lan print | grep "MAC Address"
    MAC Address             : a4:bf:01:37:87:32
    ```
 
-   > **Note:** an Intel node would need to use `ipmitool -I lanplus -U $username -P $password -H ${SYSTEM_NAME}-ncn-m001-mgmt lan print` instead of the above command..
+   > **Note:** an Intel node would need to use `ipmitool -I lanplus -U $USERNAME -E -H ${SYSTEM_NAME}-ncn-m001-mgmt lan print` instead of the above command..
 
    Add this information for ncn-m001 to the `ncn_metadata.csv` file. There should be ncn-m003, then ncn-m002, and this new entry for ncn-m001 as the last line in the file.
    ```

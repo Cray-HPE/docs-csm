@@ -15,7 +15,7 @@ This procedure requires administrative privileges.
     1.  View the PVCs in all namespaces.
 
         ```bash
-        ncn-w001# kubectl get pvc –A
+        ncn# kubectl get pvc –A
         NAMESPACE         NAME                                                                                                 STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS           AGE
         jhub              claim-user                                                                                           Bound    pvc-3cf34569-4db4-11ea-b8e1-a4bf01581d70   10Gi       RWO            ceph-rbd-external      14d
         jhub              claim-users                                                                                          Bound    pvc-18b7155a-4dba-11ea-bf78-a4bf01684f9e   10Gi       RWO            ceph-rbd-external      14d
@@ -28,14 +28,14 @@ This procedure requires administrative privileges.
     2.  Get a list of PVCs for a particular pod.
 
         ```bash
-        ncn-w001# kubectl get pod POD_NAME -o \
+        ncn# kubectl get pod POD_NAME -o \
         jsonpath='{.spec.volumes[*].persistentVolumeClaim.claimName}{"\n"}'
         ```
 
 2.  Verify the time is synced across all NCNs.
 
     ```bash
-    ncn-w001# pdsh -w ncn-s00[1-3],ncn-m00[1-3],ncn-w00[1-3] date
+    ncn# pdsh -w ncn-s00[1-3],ncn-m00[1-3],ncn-w00[1-3] date
     ncn-m001: Thu Feb 27 08:41:11 CST 2020
     ncn-s002: Thu Feb 27 08:41:11 CST 2020
     ncn-s003: Thu Feb 27 08:41:11 CST 2020
@@ -52,7 +52,7 @@ This procedure requires administrative privileges.
     The example below is displaying all of the pods running on `ncn-w001`.
 
     ```bash
-    ncn-w001# kubectl get pods -A -o wide | grep NODE_NAME
+    ncn# kubectl get pods -A -o wide | grep NODE_NAME
     default        cray-dhcp-7b5c6496c6-76rst                                       1/1   Running      0  5d14h  10.252.1.1  ncn-w001   <none>  <none>
     default        kube-keepalived-vip-mgmt-plane-nmn-local-vxldv                   1/1   Running      1  25d    10.252.1.1   ncn-w001  <none>  <none>
     ims            cray-ims-57b4f98b-bc0d-422e-8891-808ab69bf158-create-nbd5c       0/2   Init:Error   0  6d21h  10.40.1.36   ncn-w001  <none>  <none>
@@ -71,7 +71,7 @@ This procedure requires administrative privileges.
     To view the pods in an unhealthy state:
 
     ```bash
-    ncn-w001# kubectl get pods -A -o wide | grep -v -e Completed -e Running
+    ncn# kubectl get pods -A -o wide | grep -v -e Completed -e Running
     NAMESPACE   NAME                                                   READY   STATUS  RESTARTS   AGE     IP            NODE       NOMINATED NODE   READINESS GATES
     backups     benji-k8s-backup-backups-namespace-1594161300-gk72h    0/1     Error   0          5d20h   10.45.0.109   ncn-w001   <none>           <none>
     backups     benji-k8s-backup-backups-namespace-1594161600-kqprj    0/1     Error   0          5d20h   10.45.0.126   ncn-w001   <none>           <none>
@@ -100,7 +100,7 @@ This procedure requires administrative privileges.
 4.  View the status of the node before taking it down.
 
     ```bash
-    ncn-w001# kubectl get nodes -o wide
+    ncn# kubectl get nodes -o wide
     NAME       STATUS   ROLES    AGE   VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                              KERNEL-VERSION           CONTAINER-RUNTIME
     ncn-m001   Ready    master   27d   v1.18.2   10.252.0.10   <none>        SUSE Linux Enterprise Server 15 SP1   4.12.14-197.45-default   containerd://1.3.3
     ncn-m002   Ready    master   27d   v1.18.2   10.252.0.11   <none>        SUSE Linux Enterprise Server 15 SP1   4.12.14-197.45-default   containerd://1.3.3
@@ -115,13 +115,15 @@ This procedure requires administrative privileges.
 1.  Shut down the node.
 
     ```bash
-    localhost# ipmitool -H BMC_IP_ADDRESS -v -I lanplus -U USERNAME -P PASSWORD chassis power off
+    ncn# export USERNAME=root
+    ncn# export IPMI_PASSWORD=changeme
+    ncn# ipmitool -H BMC_IP_ADDRESS -v -I lanplus -U $USERNAME -E chassis power off
     ```
 
 2. View the node status after the node is taken down.
 
     ```bash
-    ncn-w001# kubectl get nodes
+    ncn# kubectl get nodes
     ```
 
 3.  View the pods on the system to see if their states have changed.
@@ -134,19 +136,19 @@ This procedure requires administrative privileges.
         -   View the status for all pods before looking for any new error states
 
         ```bash
-        ncn-w001# kubectl get pods -A -o wide
+        ncn# kubectl get pods -A -o wide
         ```
 
     2.  Take note of any pods that are in a `Pending` state.
 
         ```bash
-        ncn-w001# kubectl get pods -A -o wide | grep Pending
+        ncn# kubectl get pods -A -o wide | grep Pending
         ```
 
     3.  Capture the details for any pod that is in an unexpected state.
 
         ```bash
-        ncn-w001# kubectl describe pod POD_NAME
+        ncn# kubectl describe pod POD_NAME
         ```
 
 
@@ -155,7 +157,9 @@ This procedure requires administrative privileges.
 1.  Power the node back on.
 
     ```bash
-    localhost# ipmitool -H BMC_IP_ADDRESS -v -I lanplus -U USERNAME -P PASSWORD chassis power on
+    ncn# export USERNAME=root
+    ncn# export IPMI_PASSWORD=changeme
+    ncn# ipmitool -H BMC_IP_ADDRESS -v -I lanplus -U $USERNAME -E chassis power on
     ```
 
 2. Record the status of the pods again.
@@ -165,19 +169,19 @@ This procedure requires administrative privileges.
     1.  View all the pods on the system.
 
         ```bash
-        ncn-w001# kubectl get pods --all-namespaces -o wide
+        ncn# kubectl get pods --all-namespaces -o wide
         ```
 
     2.  Take note of any pods that are in a `Pending` or `Error` state.
 
         ```bash
-        ncn-w001# kubectl get pods -A -o wide | grep -e 'Pending|Error'
+        ncn# kubectl get pods -A -o wide | grep -e 'Pending|Error'
         ```
 
     3.  Capture the details for any pod that is in an unexpected state.
 
         ```bash
-        ncn-w001# kubectl describe pod POD_NAME
+        ncn# kubectl describe pod POD_NAME
         ```
 
 The node that encountered issues should now be returned to a healthy state.
