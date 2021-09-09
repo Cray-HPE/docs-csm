@@ -77,7 +77,7 @@ section sets the expected environment variables to appropriate values.
    installed.
 
    ```bash
-   ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/csm-1.1/docs-csm-install/docs-csm-install-latest.noarch.rpm
+   ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/csm-1.1/docs-csm/docs-csm-latest.noarch.rpm
    ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/csm-1.1/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
    ```
 
