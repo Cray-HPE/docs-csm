@@ -40,15 +40,15 @@ shipped on their liveCD.
 This will report the version of your installed docs:
 
 ```bash
-sles# rpm -q docs-csm-install
+sles# rpm -q docs-csm
 ```
 
-To install the latest docs-csm-install RPM after installation:
+To install the latest docs-csm RPM after installation:
 
 ```bash
 sles# zypper ar -cf --gpgcheck-allow-unsigned https://packages.local/repository/csm-sle-15sp2 csm-sle-15sp2
 sles# zypper ref csm-sle-15sp2
-sles# zypper in -y --from csm-sle-15sp2 docs-csm-install
+sles# zypper in -y --from csm-sle-15sp2 docs-csm
 ```
 
 <a name="review-and-contribution"></a>
@@ -101,14 +101,14 @@ review.
 
 ### Discussions
 
-See the Cray /HPE Slack [#docs-csm-install][1] (not public; external access may be available for
+See the Cray /HPE Slack [#docs-csm][1] (not public; external access may be available for
 various partners and customers).
 
 <a name="original-authors--reviewers"></a>
 
 ##### Original Authors / Reviewers
 
-This document can be discussed in [#docs-csm-install][1].
+This document can be discussed in [#docs-csm][1].
 
 These folks are main contributors or reviewers, none of which are the owners of this repository. Any
 email should include the list, otherwise ping the slack channel.
@@ -120,7 +120,7 @@ email should include the list, otherwise ping the slack channel.
 - METAL: [Russell Bunch](mailto:doomslayer@hpe.com)
 - CMS: [Mitch Harding](mailto:mitchell.harding@hpe.com)
 
-[1]: https://cray.slack.com/messages/docs-csm-install
+[1]: https://cray.slack.com/messages/docs-csm
 
 [2]: https://semver.org/
 

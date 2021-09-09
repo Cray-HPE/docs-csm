@@ -57,7 +57,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
     > It is okay if this command reports that one or more of the packages are not installed.
 
     ```bash
-    linux# rpm -e cray-site-init csm-install-workarounds docs-csm-install
+    linux# rpm -e cray-site-init csm-install-workarounds docs-csm
     ```
 
 5. Install the CSI RPM.
@@ -69,7 +69,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    access these RPMs will need to be externally downloaded and then copied to be installed.
 
    ```bash
-   linux# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm-install/docs-csm-install-latest.noarch.rpm
+   linux# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm/docs-csm-latest.noarch.rpm
    linux# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
    ```
 
@@ -570,7 +570,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    Retype new password:<------- retype new password
    Welcome to the CRAY Prenstall Toolkit (LiveOS)
 
-   Offline CSM documentation can be found at /usr/share/doc/metal (version: rpm -q docs-csm-install)
+   Offline CSM documentation can be found at /usr/share/doc/metal (version: rpm -q docs-csm)
    ```
 
    > **`NOTE`** If this password is forgotten, it can be reset by mounting the USB stick on another computer. See [LiveCD Troubleshooting](058-LIVECD-TROUBLESHOOTING.md#root-password) for information on clearing the password.
@@ -601,7 +601,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 4. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet 
    access these RPMs will need to be externally downloaded and then copied to be installed.
    ```bash
-   pit# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm-install/docs-csm-install-latest.noarch.rpm
+   pit# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm/docs-csm-latest.noarch.rpm
    pit# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
    ```
 

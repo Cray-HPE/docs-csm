@@ -74,10 +74,10 @@ Procedures:
    these RPMs will need to be externally downloaded and then copied to be installed.
 
    ```bash
-   ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm-install/docs-csm-install-latest.noarch.rpm
+   ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm/docs-csm-latest.noarch.rpm
    ```
 
-7. Set `CSM_SCRIPTDIR` to the scripts directory included in the docs-csm-install RPM for the CSM 0.9.5 patch:
+7. Set `CSM_SCRIPTDIR` to the scripts directory included in the docs-csm RPM for the CSM 0.9.5 patch:
 
    ```bash
    ncn-m001# export CSM_SCRIPTDIR=/usr/share/doc/metal/upgrade/0.9/csm-0.9.5/scripts
