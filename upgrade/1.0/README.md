@@ -38,14 +38,14 @@ This check will also be conducted in the 'prerequisites.sh' script listed below 
     * Internet Connected
 
         ```bash
-        ncn-m001# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
-        ncn-m001# rpm -Uvh docs-csm-install-latest.noarch.rpm
+        ncn-m001# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm/docs-csm-latest.noarch.rpm
+        ncn-m001# rpm -Uvh docs-csm-latest.noarch.rpm
         ```
 
     * Air Gapped
 
         ```bash
-        ncn-m001# rpm -Uvh [PATH_TO_docs-csm-install-*.noarch.rpm]
+        ncn-m001# rpm -Uvh [PATH_TO_docs-csm-*.noarch.rpm]
         ```
 
 #### Stage 0.2. - Update `customizations.yaml`
@@ -387,8 +387,8 @@ For ncn-m001, use ncn-m002 as the stable NCN:
 Install document RPM package:
 
 ```bash
-ncn-m002# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
-ncn-m002# rpm -Uvh docs-csm-install-latest.noarch.rpm
+ncn-m002# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm/docs-csm-latest.noarch.rpm
+ncn-m002# rpm -Uvh docs-csm-latest.noarch.rpm
 ```
 
 Run:
@@ -404,7 +404,7 @@ ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-
 Install document RPM package:
 
 ```bash
-ncn-m002# rpm -Uvh [PATH_TO_docs-csm-install-*.noarch.rpm]
+ncn-m002# rpm -Uvh [PATH_TO_docs-csm-*.noarch.rpm]
 ```
 
 Run:

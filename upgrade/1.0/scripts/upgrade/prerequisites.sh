@@ -208,10 +208,10 @@ state_name="UPDATE_DOC_RPM"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    if [[ ! -f docs-csm-install-latest.noarch.rpm ]]; then
-        echo "Please make sure 'docs-csm-install-latest.noarch.rpm' exists under: $(pwd)"
+    if [[ ! -f docs-csm-latest.noarch.rpm ]]; then
+        echo "Please make sure 'docs-csm-latest.noarch.rpm' exists under: $(pwd)"
     fi
-    cp docs-csm-install-latest.noarch.rpm ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/noarch/
+    cp docs-csm-latest.noarch.rpm ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/noarch/
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
@@ -415,7 +415,7 @@ if [[ $state_recorded == "0" ]]; then
     echo "export KUBERNETES_VERSION=${KUBERNETES_VERSION}" >> /etc/cray/upgrade/csm/myenv
     echo "export CSM_RELEASE=${CSM_RELEASE}" >> /etc/cray/upgrade/csm/myenv
     echo "export CSM_ARTI_DIR=${CSM_ARTI_DIR}" >> /etc/cray/upgrade/csm/myenv
-    echo "export DOC_RPM_NEXUS_URL=https://packages.local/repository/csm-sle-15sp2/$(ls ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/noarch/docs-csm-install-latest.noarch.rpm | awk -F'/sle-15sp2/' '{print $2}')" >> /etc/cray/upgrade/csm/myenv
+    echo "export DOC_RPM_NEXUS_URL=https://packages.local/repository/csm-sle-15sp2/$(ls ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/noarch/docs-csm-latest.noarch.rpm | awk -F'/sle-15sp2/' '{print $2}')" >> /etc/cray/upgrade/csm/myenv
 
     record_state ${state_name} $(hostname)
 else
