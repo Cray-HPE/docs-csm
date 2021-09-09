@@ -2,9 +2,9 @@
 
 The software included in the CSM product stream is released in more than one way. The initial product release may be augmented with patches, late-breaking workarounds and documentation updates, or hotfixes after the release.
 
-The CSM documentation is included within the CSM product release tarball inside the docs-csm-install RPM.
+The CSM documentation is included within the CSM product release tarball inside the docs-csm RPM.
 After it has been installed, the documentation will be available at `/usr/share/doc/csm` as installed by
-the docs-csm-install RPM.
+the docs-csm RPM.
 
 ### Topics:
    * [Download and Extract CSM Product Release](#download-and-extract)
@@ -138,7 +138,7 @@ Acquire the late-breaking CSM workarounds and documentation update RPMs. These f
 This command will report the version of your installed documentation.
 
 ```bash
-ncn# rpm -q docs-csm-install
+ncn# rpm -q docs-csm
 ```
 
 
@@ -150,31 +150,31 @@ None.
 1. Check the version of the currently installed CSM documentation.
 
    ```bash
-   ncn# rpm -q docs-csm-install
+   ncn# rpm -q docs-csm
    ```
 
 1. Download and upgrade the latest workaround and documentation RPMs.
 
    ```bash
-   linux# rpm -Uvh --force https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
+   linux# rpm -Uvh --force https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm/docs-csm-latest.noarch.rpm
    linux# rpm -Uvh --force https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
    ```
 
    If this machine does not have direct Internet access these RPMs will need to be externally downloaded and then copied to the system. This example copies them to ncn-m001.
 
    ```bash
-   linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
+   linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm/docs-csm-latest.noarch.rpm
    linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
-   linux# scp -p docs-csm-install-*rpm csm-install-workarounds-*rpm ncn-m001:/root
+   linux# scp -p docs-csm-*rpm csm-install-workarounds-*rpm ncn-m001:/root
    linux# ssh ncn-m001
-   ncn-m001# rpm -Uvh --force docs-csm-install-latest.noarch.rpm
+   ncn-m001# rpm -Uvh --force docs-csm-latest.noarch.rpm
    ncn-m001# rpm -Uvh --force csm-install-workarounds-latest.noarch.rpm
    ```
 
 1. Check the version of the newly installed documentation.
 
    ```bash
-   ncn# rpm -q docs-csm-install
+   ncn# rpm -q docs-csm
    ```
 
 <a name="apply-workarounds"></a>
