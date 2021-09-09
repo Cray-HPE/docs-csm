@@ -579,15 +579,15 @@ See the [set boot order](../background/ncn_boot_workflow.md#set-boot-order) page
 
    ```bash
    external# export SYSTEM_NAME=eniac
-   external# export username=root
-   external# export password=changeme
-   external# ipmitool -I lanplus -U $username -P $password -H ${SYSTEM_NAME}-ncn-m001-mgmt chassis power status
+   external# export USERNAME=root
+   external# export IPMI_PASSWORD=changeme
+   external# ipmitool -I lanplus -U $USERNAME -E -H ${SYSTEM_NAME}-ncn-m001-mgmt chassis power status
    ```
 
    Connect to the IPMI console.
 
    ```bash
-   external# ipmitool -I lanplus -U $username -P $password -H ${SYSTEM_NAME}-ncn-m001-mgmt sol activate
+   external# ipmitool -I lanplus -U $USERNAME -E -H ${SYSTEM_NAME}-ncn-m001-mgmt sol activate
    ncn-m001#
    ```
 
