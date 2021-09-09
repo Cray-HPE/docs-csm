@@ -433,11 +433,11 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
    were downloaded to a system using the instructions in [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds). Use that set of RPMs rather than downloading again.
 
    ```bash
-   linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
+   linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm/docs-csm-latest.noarch.rpm
    linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
-   linux# scp -p docs-csm-install-*rpm csm-install-workarounds-*rpm ncn-m001:/root
+   linux# scp -p docs-csm-*rpm csm-install-workarounds-*rpm ncn-m001:/root
    linux# ssh ncn-m001
-   ncn-m001# rpm -Uvh docs-csm-install-latest.noarch.rpm
+   ncn-m001# rpm -Uvh docs-csm-latest.noarch.rpm
    ncn-m001# rpm -Uvh csm-install-workarounds-latest.noarch.rpm
    ```
 
