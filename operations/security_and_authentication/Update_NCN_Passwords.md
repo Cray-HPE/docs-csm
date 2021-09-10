@@ -1,9 +1,12 @@
 ## Update NCN Passwords
 
 Change the passwords for non-compute nodes (NCNs) on the system using the
-`rotate-pw-mgmt-nodes.yml` Ansible playbook provided by CSM.
+`rotate-pw-mgmt-nodes.yml` Ansible playbook provided by CSM or by running
+the CSM `site.yml` playbook.
 
-The NCNs deploy with a default password, which are changed during the system install. See [Change NCN Image Root Password and SSH Keys](Change_NCN_Image_Root_Password_and_SSH_Keys.md) for more information.
+The NCNs deploy with a default password, which are changed during the system
+install. See [Change NCN Image Root Password and SSH Keys](change_ncn_image_root_password_and_ssh_keys.md)
+for more information.
 
 It is a recommended best practice for system security to change the root
 password after the install is complete.
@@ -74,7 +77,7 @@ personalization.
    ```
 
 1. Create a CFS configuration session to apply the password update.
-   
+
    ```bash
    ncn# cray cfs sessions create --name ncn-password-update-`date +%Y%m%d%H%M%S` --configuration-name ncn-password-update
    ```
