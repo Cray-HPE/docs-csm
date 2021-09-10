@@ -17,7 +17,7 @@ whereas a reinstall can reuse a previous configuration payload and skip the conf
 network switches. The first time install will check and then may update firmware for various components
 whereas the reinstall will check and indicate that no firmware update is required. There are two different
 ways to use the LiveCD, either from a RemoteISO or a USB device, which are described in [Bootstrap PIT Node](../install/index.md#bootstrap_pit_node).
-There are a few places where a comment will be made in a procedure for how one of the scenarios needs to do something different.
+There are a few places where a comment will be made in a procedure for how one of the scenarios needs to do something differently.
 
    * First time Install
       1. [Prepare Configuration Payload](../install/index.md#prepare_configuration_payload) creates the initial configuration payload.
@@ -48,7 +48,7 @@ been fully installed and configured. Refer to the _HPE Cray EX Installation and 
 for other product streams to be installed and configured after CSM.
 
 See [Install CSM](../install/index.md) for the details on the installation process for either a first time install
-or a reinstall..
+or a reinstall.
 
 <a name="upgrade"></a>
 ## Upgrade
@@ -63,7 +63,7 @@ or a reinstall..
 <a name="migration"></a>
 ## Migration
 
-There is no direct migration from Shasta v1.3.x releases to Shasta v1.5. However there is a supported path.
+There is no direct migration from Shasta v1.3.x releases to Shasta v1.5. However, there is a supported path.
 
   * Migration from v1.3.x to v1.4.0
 

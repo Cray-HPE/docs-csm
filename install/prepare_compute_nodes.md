@@ -23,10 +23,10 @@ Hardware Management Network (HMN) causing the NIC to get an IP address assigned
 to it from the wrong pool. To prevent this from happening, the iLO VLAN tag
 needs to be configured for VLAN 4 and the switch port the NIC/shared iLO is
 plugged into needs to be configured to allow only VLAN 4 traffic. This prevents
-the NIC from communicating over the switch and it will no longer DHCP an IP
+the NIC from communicating over the switch, and it will no longer DHCP an IP
 address.
 
-This procedure needs to be done for each of the HPE Apollo 6500 XL645d nodes to be managed by CSM software.
+This procedure needs to be done for each HPE Apollo 6500 XL645d node managed by CSM software.
 
 1. Gather Information
 

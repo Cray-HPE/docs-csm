@@ -5,8 +5,8 @@ you will have the MAC addresses needed for the Bootstrap MAC, Bond0 MAC0, and Bo
 
 The Bootstrap MAC address will be used for identification of this node during the early part of the PXE boot process before the bonded interface can be established.
 The Bond0 MAC0 and Bond0 MAC1 are the MAC addresses for the physical interfaces that your node will use for the various VLANs.
-The Bond0 MAC0 and Bond0 MAC1 should be on the different network cards to establish redundancy for a failed network card.
-On the other hand, if the node has only a single network card, then MAC1 and MAC0 will still produce a valid configuration if they do reside on the same physical card.
+The Bond0 MAC0 and Bond0 MAC1 should be on different network cards to establish redundancy in case either network card fails.
+On the other hand, if the node only has a single network card, then MAC1 and MAC0 will still produce a valid configuration if they reside on the same physical card.
 
 #### Sections
 
@@ -18,13 +18,13 @@ On the other hand, if the node has only a single network card, then MAC1 and MAC
 
 The easy way to do this leverages the NIC-dump provided by the metal-ipxe package. This page will walk-through
 booting NCNs and collecting their MACs from the conman console logs.
-> The alternative is to use serial cables (or SSH) to collect the MACs from the switch ARP tables, this can become exponentially difficult for large systems.
+> The alternative is to use serial cables (or SSH) to collect the MACs from the switch ARP tables, which can become exponentially difficult for large systems.
 > If this is the only way, please proceed to the bottom of this page.
 
 <a name="procedure-ipxe-consoles"></a>
 ## Procedure: iPXE Consoles
 
-This procedure is faster for those with the LiveCD (CRAY Pre-Install Toolkit) it can be used to quickly
+This procedure is faster for those with the LiveCD (CRAY Pre-Install Toolkit). It can be used to quickly
 boot-check nodes to dump network device information without an operating system. This works by accessing the PCI Configuration Space.
 
 <a name="requirements"></a>
@@ -72,7 +72,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     pit# sleep 10
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power on
     ```
-4. Now wait for the nodes to netboot. You can follow them with `conman -j ncn-*id*-mgmt` (use `conman -q` to see ). This takes less than 3 minutes, speed depends on how quickly your nodes POST.
+4. Now wait for the nodes to netboot. You can follow them with `conman -j ncn-*id*-mgmt` (use `conman -q` to see the list of nodes). This takes less than 3 minutes, speed depends on how quickly your nodes POST.
 5. Print off what has been found in the console logs, this snippet will omit duplicates from multiple boot attempts:
     ```bash
     pit# for file in /var/log/conman/*; do
@@ -101,7 +101,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
             grep -Eoh '(net[0-9] MAC .*)' $file | sort -u | grep PCI | grep -Ev "$did" && echo -----
         done
         ```
-7. Examine the output from `grep` to identify the MAC address that make up Bond0 for each management NCN, use the lowest value MAC address per PCIe card.
+7. Examine the output from `grep` to identify the MAC address that make up Bond0 for each management NCN. Use the lowest value MAC address per PCIe card.
 
     > example: 1 PCIe card with 2 ports for a total of 2 ports per node.\
 
@@ -127,7 +127,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     -----
     ```
 
-    The above output identified MAC0 and MAC1 of the bond as 94:40:c9:5f:b5:df and 14:02:ec:da:b9:99 respectively.
+    The above output identified MAC0 and MAC1 of the bond as 94:40:c9:5f:b5:df and 14:02:ec:da:b9:98 respectively.
 
 8. Collect the NCN MAC address for the PIT node. This information will be used to populate the MAC addresses for ncn-m001.
 
@@ -140,7 +140,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
 9. Update `ncn_metadata.csv` with the collected MAC addresses for Bond0 from all of the management NCNs.
     > Tip: Mind the index (3, 2, 1.... ; not 1, 2, 3)
 
-    For each NCN update the corresponding row in `ncn_metadata` with the values for Bond0 MAC0 and Bond0 MAC1. The Bootstrap MAC should have the same value as the Bond0 MAC0.
+    For each NCN, update the corresponding row in `ncn_metadata` with the values for Bond0 MAC0 and Bond0 MAC1. The Bootstrap MAC should have the same value as the Bond0 MAC0.
 
     ```
     Xname,Role,Subrole,BMC MAC,Bootstrap MAC,Bond0 MAC0,Bond0 MAC1
@@ -179,7 +179,8 @@ is quicker.
 
 If you have an incorrect `ncn_metadata.csv` file, you will be unable to deploy the NCNs. This section details a recovery procedure in case that happens.
 
-1. Remove the incorrectly generated configurations. Before deleting the incorrectly generated configurations, consider making a backup of them. In case they need to be examined at a later time.
+1. Remove the incorrectly generated configurations. Before deleting the incorrectly generated configurations, consider making a backup of them, in case, they need to be examined at a later time. 
+
 
     > **`WARNING`** Ensure that the `SYSTEM_NAME` environment variable is correctly set. If `SYSTEM_NAME` is
     > not set the command below could potentially remove the entire prep directory.

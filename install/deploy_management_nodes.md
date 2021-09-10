@@ -14,7 +14,7 @@ will join Kubernetes after it is rebooted later in
 ### Timing of Deployments
 
 The timing of each set of boots varies based on hardware. Nodes from some manufacturers will
-POST faster than others or vary based on BIOS setting. After powering a set of nodes on,
+POST faster than others or vary based on BIOS setting. After powering on a set of nodes,
 an administrator can expect a healthy boot session to take about 60 minutes depending on
 the number of storage and worker nodes.
 
@@ -149,8 +149,8 @@ proceed to step 2.
 
       > For HPE NCNs the above process will boot the nodes to their BIOS, but the menu is unavailable through conman as the node is booted into a graphical BIOS menu.
       >
-      > To access the serial version of the BIOS setup. Perform the ipmitool steps above to boot the node. Then in conman press `ESC+9` key combination to when you
-      > see the following messages in the console, this will open you to a menu that can be used to enter the BIOS via conman.
+      > To access the serial version of the BIOS setup. Perform the ipmitool steps above to boot the node. Then in conman press `ESC+9` key combination when you
+      > see the following messages in the console. This will open a menu you use to enter the BIOS via conman.
       >
       > ```
       > For access via BIOS Serial Console:
@@ -189,8 +189,7 @@ during or after the installation, but it is better to meet the minimum NCN firmw
 
     > **`NOTE`** The BIOS tuning will be automated, further reducing this step.
 
-1. Check for minimum NCN firmware versions and update them as needed,
-   The firmware on the management nodes should be checked for compliance with the minimum version required
+1. The firmware on the management nodes should be checked for compliance with the minimum required version
    and updated, if necessary, at this point.
 
    See [Update NCN Firmware](update_ncn_firmware.md).
@@ -208,8 +207,8 @@ during or after the installation, but it is better to meet the minimum NCN firmw
 <a name="deploy_management_nodes"></a>
 ### 3. Deploy Management Nodes
 
-Deployment of the nodes starts with booting the storage nodes first, then the master nodes and worker nodes together.
-After the operating system boots on each node there are some configuration actions which take place. Watching the
+Deployment of the nodes starts with booting the storage nodes first. Then, the master nodes and worker nodes should be booted together.
+After the operating system boots on each node, there are some configuration actions which take place. Watching the
 console or the console log for certain nodes can help to understand what happens and when. When the process is complete
 for all nodes, the Ceph storage will have been initialized and the Kubernetes cluster will be created ready for a workload.
 
@@ -228,11 +227,11 @@ The configuration workflow described here is intended to help understand the exp
 1. Boot master nodes (`ncn-m002` and `ncn-m003`) and all worker nodes at the same time
     - The worker nodes will boot and wait for `ncn-m002` to create the `/etc/cray/kubernetes/join-command-control-plane` so they can join Kubernetes
     - The third master node `ncn-m003` boots and waits for `ncn-m002` to create the `/etc/cray/kubernetes/join-command-control-plane` so it can join Kubernetes
-    - The second master node `ncn-m002` boots, runs the kubernetes-cloudinit.sh which will create /etc/kubernetes/admin.conf and /etc/cray/kubernetes/join-command-control-plan, then waits for the storage node to create etcd-backup-s3-credentials
+    - The second master node `ncn-m002` boots, runs the kubernetes-cloudinit.sh which will create /etc/kubernetes/admin.conf and /etc/cray/kubernetes/join-command-control-plane, then waits for the storage node to create etcd-backup-s3-credentials
 1. Once `ncn-s001` notices that `ncn-m002` has created /etc/kubernetes/admin.conf, then `ncn-s001` waits for any worker node to become available.
-1. Once each worker node notices that `ncn-m002` has created /etc/cray/kubernetes/join-command-control-plan, then it will join the Kubernetes cluster.
+1. Once each worker node notices that `ncn-m002` has created /etc/cray/kubernetes/join-command-control-plane, then it will join the Kubernetes cluster.  
     - Now `ncn-s001` should notice this from any one of the worker nodes and move forward with creation of ConfigMaps and running the post-Ceph playbooks (s3, OSD pools, quotas, etc.)
-1. Once `ncn-s001` creates etcd-backup-s3-credentials during the benji-backups role which is one of the last roles after Ceph has been set up, then `ncn-m001` notices this and moves forward
+1. Once `ncn-s001` creates etcd-backup-s3-credentials during the benji-backups role, which is one of the last roles after Ceph has been set up, then `ncn-m001` notices this and moves forward.
 
 
 <a name="deploy"></a>
@@ -265,8 +264,8 @@ The configuration workflow described here is intended to help understand the exp
     > Note: some BMCs will "flake" and ignore the boot order setting by `ipmitool`. As a fallback, cloud-init will
     > correct the boot order after NCNs complete their first boot. The first boot may need manual effort to set the boot order over the conman console. The NCN boot order is further explained in [NCN Boot Workflow](../background/ncn_boot_workflow.md).
 
-1. Validate that the LiveCD is ready for installing NCNs
-    Observe the output of the checks and note any failures, then remediate them.
+1. Validate that the LiveCD is ready for installing NCNs.
+   > Observe the output of the checks and note any failures, then remediate them.
 
     ```bash
     pit# csi pit validate --livecd-preflight
@@ -338,11 +337,17 @@ The configuration workflow described here is intended to help understand the exp
 
     **`NOTE`**: Watch the storage node consoles carefully for error messages. If any are seen, consult [Ceph-CSI Troubleshooting](ceph_csi_troubleshooting.md)
 
-    **`NOTE`**: If the nodes have PXE boot issues (e.g. getting PXE errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
-<a name="boot-master-and-worker-nodes"></a>
-1. Boot the master and worker nodes.
+    **`NOTE`**: If the nodes have PXE boot issues (e.g. getting PXE errors, not pulling the ipxe.efi binary), see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
 
-   Wait for storage nodes before booting Kubernetes master nodes and worker nodes.
+    **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to Linux with no hostname), see the CSM workarounds for fixes around mutual symptoms. If there is a workaround here, the output will look similar to the following.
+
+      > ```bash
+      > pit# ls /opt/cray/csm/workarounds/after-ncn-boot
+      > ```
+      > CASMINST-1093
+      > ```
+
+1. Wait for storage nodes before booting Kubernetes master nodes and worker nodes.
 
    **`NOTE`**: Once all storage nodes are up and the message `...sleeping 5 seconds until /etc/kubernetes/admin.conf` appears on `ncn-s001`'s console, it is safe to proceed with booting the **Kubernetes master nodes and worker nodes**
 
@@ -382,7 +387,14 @@ The configuration workflow described here is intended to help understand the exp
 
     **`NOTE`**: If one of the master nodes seems hung waiting for the storage nodes to create a secret, check the storage node consoles for error messages. If any are found, consult [CEPH CSI Troubleshooting](ceph_csi_troubleshooting.md)
 
-1. Refer to [timing of deployments](#timing-of-deployments). It should not take more than 60 minutes for the `kubectl get nodes` command to return output indicating that all the master nodes and worker nodes aside from the PIT node booted from the LiveCD are `Ready`:
+    **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to Linux with no hostname) see the CSM workarounds for fixes around mutual symptoms. If there is a workaround here, the output will look similar to the following.
+
+    > ```bash
+    > pit# ls /opt/cray/csm/workarounds/after-ncn-boot
+    > CASMINST-1093
+    > ```
+
+1. Refer to [timing of deployments](#timing-of-deployments). It should take no more than 60 minutes for the `kubectl get nodes` command to return output indicating that all the master nodes and worker nodes aside from the PIT node booted from the LiveCD are `Ready`:
 
     ```bash
     pit# ssh ncn-m002
@@ -411,13 +423,12 @@ The configuration workflow described here is intended to help understand the exp
 <a name="check-for-unused-drives-on-utility-storage-nodes"></a>
 #### 3.3 Check for Unused Drives on Utility Storage Nodes
 
-> **`IMPORTANT:`** Do the following if NCNs are Gigabyte hardware. It is suggested (but optional) for HPE NCNs.
->
-> **`IMPORTANT:`** the cephadm may output this warning "WARNING: The same type, major and minor should not be used for multiple devices.". You can ignore this warning.
+ > **`IMPORTANT:`** Do the following if NCNs are Gigabyte hardware.
+ > **`IMPORTANT:`** the cephadm may output this warning "WARNING: The same type, major and minor should not be used for multiple devices.". You can ignore this warning. 
 
 ##### Option 1
 
-  If you have OSDs on each node (`ceph osd tree` can be run from any master or storage node to show this) then you have all your nodes in Ceph. That means you can utilize the orchestrator to look for the devices.
+  If you have OSDs on each node (`ceph osd tree` can show this), then you have all your nodes in Ceph. That means you can utilize the orchestrator to look for the devices.
 
 1. Get the number of osds in the cluster.
 
@@ -426,9 +437,8 @@ The configuration workflow described here is intended to help understand the exp
     24
     ```
 
-1. Compare your number of OSDs to your output which should resemble the example below. The number of drives will depend on the server hardware.
-
-   > **NOTE:**  If your Ceph cluster is large and has a lot of nodes, you can specify a node after the below command to limit the results.
+2. Compare your number of OSDs to the output below. 
+   > **NOTE:**  If your Ceph cluster is large and has a lot of nodes, you can specify a node after the following command to limit the results.
 
     ```bash
     ncn-s# ceph orch device ls
@@ -459,7 +469,7 @@ The configuration workflow described here is intended to help understand the exp
     ncn-s003  /dev/sdj  ssd   PHYF016500TQ1P9DGN  1920G  Unknown  N/A    N/A    No
     ```
 
-    If you have devices that are "Available = Yes" and they are not being automatically added you may have to zap that device.
+    If you have devices that are "Available = Yes" and they are not being automatically added, you may have to zap that device.
 
     **IMPORTANT:** Prior to zapping any device please ensure it is not being used.
 
@@ -558,7 +568,7 @@ The LiveCD needs to authenticate with the cluster to facilitate the rest of the 
 
 1. Copy the Kubernetes config to the LiveCD to be able to use `kubectl` as cluster administrator.
 
-   > This will always be whatever node is the `first-master-hostname` in your `/var/www/ephemeral/configs/data.json | jq` file. If you are provisioning your HPE Cray EX system from `ncn-m001` then you can expect to fetch these from `ncn-m002`.
+   > This will always be whatever node is the `first-master-hostname` in your `/var/www/ephemeral/configs/data.json | jq` file. If you are provisioning your HPE Cray EX system from `ncn-m001`, then you can expect to fetch these from `ncn-m002`.
 
    ```bash
    pit# mkdir -v ~/.kube
@@ -569,7 +579,7 @@ The LiveCD needs to authenticate with the cluster to facilitate the rest of the 
 <a name="bgp-routing"></a>
 #### 4.2 BGP Routing
 
-After the NCNs are booted, the BGP peers will need to be checked and updated if the neighbor IP addresses are incorrect on the switches. Follow the steps below and see [Update BGP Neighbors](../operations/network/metallb_bgp/Update_BGP_Neighbors.md) for more details on the BGP configuration.
+After the NCNs are booted, the BGP peers will need to be checked and updated if the neighbor IP addresses are incorrect on the switches. Follow the steps below and see [Check and Update BGP Neighbors](../operations/network/metallb_bgp/Update_BGP_Neighbors.md) for more details on the BGP configuration.
 
 1. Make sure the SYSTEM_NAME variable is set to name of your system.
 
@@ -597,9 +607,14 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
         pit# ssh admin@<switch_ip_address>
         ```
 
+
     1. Clear the BGP peering sessions by running the following commands. You should see either "arubanetworks" or "Mellanox" in the first output you see when you log in to the switch.
         - Aruba: `clear bgp *`
         - Mellanox: First run `enable`, then run `clear ip bgp all`
+
+   At this point the peering sessions with the worker IP addresses should be in IDLE, CONNECT, or ACTIVE state but not ESTABLISHED state. This is because the MetalLB speaker pods have not been deployed yet.
+ 
+   You should see that the MsgRcvd and MsgSent columns for the worker IP addresses are 0.
 
 1. Check the status of the BGP peering sessions by running the following commands **on each switch**:
     - Aruba: `show bgp ipv4 unicast summary`
@@ -696,7 +711,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 <a name="configure-and-trim-uefi-entries"></a>
 #### 4.3 Configure and Trim UEFI Entries
 
-> **`IMPORTANT`** *The Boot-Order is set by cloud-init, however the current setting is still iterating. This manual step is required until further notice.*
+> **`IMPORTANT`** *The Boot-Order is set by cloud-init; however, the current setting is still iterating. This manual step is required until further notice.*
 
 1. Do the following two steps outlined in [Set Boot Order](../background/ncn_boot_workflow.md#set-boot-order) **for all NCNs and the PIT node**.
 
@@ -793,6 +808,7 @@ Observe the output of the checks and note any failures, then remediate them.
    > /dev/sdc
    > ```
    >
+
    > **WARNING** If these manual tests do not report a disk device such as "/dev/sdc" (this letter will vary and is unimportant) as having the respective label on that node, then the problem must be resolved before continuing to the next step.
    > * If a **master node** has the problem then it is best to wipe and redeploy all of the management nodes before continuing the installation.
    >   1. Wipe the each of the worker and master nodes (except `ncn-m001` because it is the PIT node) using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe) and then wipe each of the storage nodes using the 'Full Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#full-wipe).
@@ -807,14 +823,14 @@ Observe the output of the checks and note any failures, then remediate them.
    pit# reset
    ```
 
-1. Ensure that weave has not split-brained
+1. Ensure that weave has not become split-brained.
 
    Run the following command on each member of the Kubernetes cluster (master nodes and worker nodes) to ensure that weave is operating as a single cluster:
 
    ```bash
    ncn# weave --local status connections | grep failed
    ```
-   If you see messages like `IP allocation was seeded by different peers` then weave looks to have split-brained. At this point it is necessary to wipe the NCNs and start the PXE boot again:
+   If you see messages like **IP allocation was seeded by different peers**, then weave looks to have become split-brained. At this point, it is necessary to wipe the NCNs and start the PXE boot again:
 
    1. Wipe the NCNs using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md).
    1. Return to the 'Boot the **Storage Nodes**' step of [Deploy Management Nodes](#deploy_management_nodes) section above.

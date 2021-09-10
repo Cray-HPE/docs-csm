@@ -5,10 +5,10 @@ can be passed to the `csi` (Cray Site Init) program during the CSM installation 
 
 Information gathered from a site survey is needed to feed into the CSM installation process, such as system name, system size, site network information for the CAN, site DNS configuration, site NTP configuration, network information for the node used to bootstrap the installation. More detailed component level information about the system hardware is encapsulated in the SHCD (Shasta Cabling Diagram), which is a spreadsheet prepared by HPE Cray Manufacturing to assemble the components of the system and connect appropriately labeled cables.
 
-How the configuration payload is prepared depends on whether this is a first time install of CSM
+How the configuration payload is prepared depends on whether this is a first time installation of CSM
 software on this system or the CSM software is being reinstalled. The reinstall scenario has the
-advantage of being able to use the configuration payload from a previous first time install of CSM
-and an extra configuration file which that generated.
+advantage of being able to use the configuration payload from the previous CSM installation
+and an extra configuration file which that installation generated.
 
 
 ### Topics:
@@ -128,7 +128,7 @@ The `hmn_connections.json` file is extracted from the HMN tab of the SHCD spread
 includes the `hms-shcd-parser` container which can be used on the PIT node booted from the LiveCD (RemoteISO
 or USB device) or a Linux system to do this extraction. Although some information in these files can be populated from site survey information, the SHCD prepared by HPE Cray Manufacturing is the best source of data for hmn_connections.json.
 
-No action is required to create this file at this point, and will be created when the PIT node is bootstrapped.
+No action is required to create this file at this point, and it will be created when the PIT node is bootstrapped.
 
 <a name="ncn_metadata_csv"></a>
 #### `ncn_metadata.csv`

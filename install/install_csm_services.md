@@ -177,6 +177,7 @@ This is expected and can safely be ignored.
 <a name="deploy-csm-applications-and-services"></a>
 ### 4. Deploy CSM Applications and Services
 
+
 Run `install.sh` to deploy CSM applications services. This command may take 25 minutes or more to run.
 
 > **`NOTE`** `install.sh` requires various system configuration which are
@@ -192,7 +193,7 @@ Run `install.sh` to deploy CSM applications services. This command may take 25 m
 > pit# echo $SYSTEM_NAME
 > pit# echo $CSM_RELEASE
 > ```
-> If they are not set perform the following:
+> If they are not set, perform the following:
 >
 > ```bash
 > pit# export SYSTEM_NAME=eniac
@@ -340,7 +341,7 @@ ncn-w003: nameserver 10.92.100.225
 <a name="apply-pod-priorities"></a>
 ### 7. Apply Pod Priorities
 
-Run the `add_pod_priority.sh` script to create and apply a pod priority class to services critical to CSM. This will give these services a higher priority than others to ensure they get scheduled by Kubernetes in the event that resources limited on smaller deployments.
+Run the `add_pod_priority.sh` script to create and apply a pod priority class to services critical to CSM. This will give these services a higher priority than others to ensure they get scheduled by Kubernetes in the event that resources are limited on smaller deployments.
 
 ```bash
 pit# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/add_pod_priority.sh

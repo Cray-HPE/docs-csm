@@ -29,7 +29,7 @@ PXE. The method to use will vary depending on the system environment.
    ncn# cat /proc/cmdline
    ```
 
-   If it starts with `kernel` then the node network booted. If it starts with `BOOT_IMAGE=(` then it disk booted.
+   If it starts with `kernel`, then the node network booted. If it starts with `BOOT_IMAGE=(`, then it disk booted.
 
 1. Check output from `efibootmgr`.
 
@@ -37,7 +37,36 @@ PXE. The method to use will vary depending on the system environment.
    ncn# efibootmgr
    ```
 
-   The `BootCurrent` value should be matched to the list beneath to see if it lines up with a networking option or a `cray sd*)` option for disk boots.
+   The `BootCurrent` value should be matched to the list beneath it to see if it lines up with a networking option or a `cray sd*)` option for disk boots.
+
+   ```bash
+   ncn# efibootmgr
+   BootCurrent: 0016    <---- BootCurrent
+   Timeout: 2 seconds
+   BootOrder: 0000,0011,0013,0014,0015,0016,0017,0005,0007,0018,0019,001A,001B,001C,001D,001E,001F,0020,0021,0012
+   Boot0000* cray (sda1)
+   Boot0001* UEFI: Built-in EFI Shell
+   Boot0005* UEFI: PXE IP4 Mellanox Network Adapter - B8:59:9F:1D:D8:4E
+   Boot0007* UEFI: PXE IP4 Mellanox Network Adapter - B8:59:9F:1D:D8:4F
+   Boot0010* UEFI: AMI Virtual CDROM0 1.00
+   Boot0011* cray (sdb1)
+   Boot0012* UEFI: Built-in EFI Shell
+   Boot0013* UEFI OS
+   Boot0014* UEFI OS
+   Boot0015* UEFI: AMI Virtual CDROM0 1.00
+   Boot0016* UEFI: SanDisk     <--- Matches here
+   Boot0017* UEFI: SanDisk, Partition 2
+   Boot0018* UEFI: HTTP IP4 Intel(R) I350 Gigabit Network Connection
+   Boot0019* UEFI: PXE IP4 Intel(R) I350 Gigabit Network Connection
+   Boot001A* UEFI: HTTP IP4 Mellanox Network Adapter - B8:59:9F:1D:D8:4E
+   Boot001B* UEFI: HTTP IP4 Mellanox Network Adapter - B8:59:9F:1D:D8:4F
+   Boot001C* UEFI: HTTP IP4 Intel(R) I350 Gigabit Network Connection
+   Boot001D* UEFI: PXE IP4 Intel(R) I350 Gigabit Network Connection
+   Boot001E* UEFI: PXE IP6 Intel(R) I350 Gigabit Network Connection
+   Boot001F* UEFI: PXE IP6 Intel(R) I350 Gigabit Network Connection
+   Boot0020* UEFI: PXE IP6 Mellanox Network Adapter - B8:59:9F:1D:D8:4E
+   Boot0021* UEFI: PXE IP6 Mellanox Network Adapter - B8:59:9F:1D:D8:4F
+   ```
 
 <a name="set-bmcs-to-dhcp"></a>
 ### Set BMCs to DHCP

@@ -23,7 +23,7 @@ The `cray` CLI only needs to be initialized once per user on a node.
 
 1. Initialize the `cray` CLI for the root account.
 
-   The `cray` CLI needs to know what host to use to obtain authorization and what user is requesting authorization
+   The `cray` CLI needs to know what host to use to obtain authorization and what user is requesting authorization,
    so it can obtain an OAUTH token to talk to the API Gateway. This is accomplished by initializing the CLI
    configuration. In this example, the 'vers' username and its password are used.
 

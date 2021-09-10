@@ -9,7 +9,7 @@ It is assumed that the administrator configuring the Management Network has a ba
 
 Before configuring/reconfiguring any switches make sure to get the current running config and save that in case you need to revert the config.
 
-save the output of.
+Save the output:
 ```
 show run
 ```
