@@ -123,6 +123,8 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     
   "${BASEDIR}"/CASMINST-2689.sh
 
+  # only fix ntp if we're coming from 0.9
+  if [[ "$CSM1_EXISTS" == "false" ]]; then
   # Check if ncn-m001 is using itself for an upstream server
   if [[ "$(awk '/^server/ {print $2}' /etc/chrony.d/cray.conf)" == ncn-m001 ]] ||
       [[ "$(chronyc tracking | awk '/Reference ID/ {print $5}' | tr -d '()')" == ncn-m001 ]]; then
@@ -147,6 +149,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
           # Apply the change to use the new upstream server
         fi
         systemctl restart chronyd
+  fi
   fi
   record_state ${state_name} $(hostname)
 else
@@ -324,6 +327,9 @@ else
     echo "${state_name} has been completed"
 fi
 
+# only the modify the image if we are coming from 0.9.x
+if [[ "$CSM1_EXISTS" == "false" ]]; then
+
 state_name="MODIFYING_NEW_NCN_IMAGE"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
@@ -398,10 +404,12 @@ EOF
         #rm -rf squashfs-root/
       # pop out of the dir
       popd || exit 1
+      
     done
     record_state ${state_name} "$(hostname)"
 else
     echo "====> ${state_name} has been completed"
+fi
 fi
 
 state_name="UPLOAD_NEW_NCN_IMAGE"

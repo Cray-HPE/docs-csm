@@ -276,8 +276,11 @@ if [[ ${upgrade_ncn} != ncn-s* ]]; then
             echo "cloud-init on $upgrade_ncn is not healthy -- re-running 'cloud-init init' to repair cached data"
             ssh $upgrade_ncn 'cloud-init init > /dev/null 2>&1'
         fi
-
-        ssh $upgrade_ncn '/srv/cray/scripts/metal/ntp-upgrade-config.sh'
+        
+        # only tinker with ntp if we are coming from 0.9.x
+        if [[ "$CSM1_EXISTS" == "false" ]]; then
+          ssh $upgrade_ncn '/srv/cray/scripts/metal/ntp-upgrade-config.sh'
+        fi
 
         record_state "${state_name}" ${upgrade_ncn}
     else
