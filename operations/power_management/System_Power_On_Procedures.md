@@ -45,9 +45,9 @@ Always use the cabinet power-on sequence for the customer site.
 The management cabinet is the first part of the system that must be powered on and booted. Management network and Slingshot fabric switches power on and boot when cabinet power is applied. After cabinets are powered on, wait at least 10 minutes for systems to initialize.
 
 -   To power on all liquid-cooled cabinet CDUs and cabinet PDUs, see [Power On Compute and IO Cabinets](Power_On_Compute_and_IO_Cabinets.md).
--   To power on all remaining system cabinet CDUs and PDUs, see [Power On Compute and IO Cabinets](Power_On_Compute_and_IO_Cabinets.md).
+-   To power on all remaining system cabinet CDUs and PDUs.
 
-After all the system cabinets are powered on, be sure that all management network and Slingshot network switches are powered on and healthy.
+After all the system cabinets are powered on, be sure that all management network and Slingshot network switches are powered on and there are no error LEDS or hardware failures.
 
 ### Power on and Boot the Kubernetes Management Cluster
 
