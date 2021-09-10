@@ -21,11 +21,8 @@ linux# ~/src/mtl/cray-site-init/bin/csi config init --bootstrap-ncn-bmc-user roo
 ```
 
 ## Automated Process
-There is an automated script to update the BGP configuration on both the Mellanox and Aruba switches. This script is installed into the `$PATH` by the `metal-net-scripts` package.
-The scripts are named `mellanox_set_bgp_peers.py` and `aruba_set_bgp_peers.py`
-These scripts pull in data from CSI generated `.yaml` files. The files required are ```CAN.yaml, HMN.yaml, HMNLB.yaml, NMNLB.yaml, NMN.yaml```, these exist in the `networks/` subdirectory of the generated configurations.
-
-In order for these scripts to work the following commands will need to be present on the switches.
+For Mellanox there is a script ```./mellanox_set_bgp_peers.py``` and for Aruba there is CANU (Cray Automated Network Utility)
+In order for these scripts to work the following commands will need to be applied on the switches.
 
 Aruba
 ```
@@ -37,16 +34,27 @@ sw-spine-001 [standalone: master] > enable
 sw-spine-001 [standalone: master] # configure terminal
 sw-spine-001 [standalone: master] (config) # json-gw enable
 ```
-Script Usage
-```
-USAGE: - <Spine01/Agg01> <Spine02/Agg02> <Path to CSI generated network files>
+   1. Run the BGP helper script if you have mellanox switches.
 
-       - The IP addresses used should be Node Management Network IP addresses (NMN), these IP addresses will be what is used for the BGP Router-ID.
+      The BGP helper script requires three parameters: IP of switch 1, IP of Switch 2, Path to CSI generated network files.
 
-       - The path must include CAN.yaml', 'HMN.yaml', 'HMNLB.yaml', 'NMNLB.yaml', 'NMN.yaml
+      - The IP addresses used should be Node Management Network IP addresses (NMN). These IP addresses will be used for the BGP Router-ID.
+      - The path to the CSI generated network files must include `CAN.yaml`, `HMN.yaml`, `HMNLB.yaml`, `NMNLB.yaml`, and `NMN.yaml`. The path must include the $SYSTEM_NAME.
 
-Example: ./aruba_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/eniac/networks
-```
+      For Mellanox:
+
+      The IP addresses in this example should be replaced by the IP addresses of the switches.
+
+      ```bash
+      pit# /usr/bin/mellanox_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/```
+   1. Run CANU if you have Aruba switches.
+     
+      CANU requires three paramters: IP of switch 1, IP of switch 2, Path to the directory containing the file ```sls_input_file.json```
+
+      The IP addresses in this example should be replaced by the IP addresses of the switches.
+
+      ```bash
+      pit# canu -s 1.5 config bgp --ips 10.252.0.2,10.252.0.3 --csi-folder /var/www/ephemeral/prep/${SYSTEM_NAME}/```
 After this script is run you will need to verify the configuration and verify the BGP peers are ```ESTABLISHED```. If it is early in the install process and the CSM services have not been deployed yet, there will not be speakers to peer with so the peering sessions may not be ```ESTABLISHED``` yet.
 
 ## Manual Process
