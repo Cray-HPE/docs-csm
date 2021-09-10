@@ -3,14 +3,14 @@
 This document and the procedure contained within it is for the purposes of communicating the kind of testing done by the internal Cray System Management team to ensure a basic level of system resiliency.  It is assumed that some procedures are already known by admins and thus does not go into great detail or attempt to encompass every command necessary for execution.  It is intended to be higher level guidance (with some command examples) to inform internal users and customers about our process.
 
 ## High Level Procedure Summary:
-[Preparation for Resiliency Testing](#preparation)
-[Establish System Health Before Beginning](#establish-system-health)
-[Monitoring for Changes](#monitoring-for-changes)
-[Launch a Non-Interactive Batch Job](#launch-batch-job)
-[Shut Down an NCN](#shut-down-ncn)
-[Conduct Testing](#conduct-testing)
-[Power On the Downed NCN](#power-on-ncn)
-[Execute Post-Boot Health Checks](#post-boot-health-check)
+* [Preparation for Resiliency Testing](#preparation)
+* [Establish System Health Before Beginning](#establish-system-health)
+* [Monitoring for Changes](#monitoring-for-changes)
+* [Launch a Non-Interactive Batch Job](#launch-batch-job)
+* [Shut Down an NCN](#shut-down-ncn)
+* [Conduct Testing](#conduct-testing)
+* [Power On the Downed NCN](#power-on-ncn)
+* [Execute Post-Boot Health Checks](#post-boot-health-check)
 
 <a name="preparation"></a>
 ### Preparation for Resiliency Testing
@@ -179,7 +179,7 @@ The purpose of this procedure is to launch a non-interactive, long-running batch
 * Log onto target node and execute `/sbin/shutdown -h 0`
    * Note in target node's console output the timestamp of the power off
    * Once the target node is reported as being powered off, verify that the node's power status with the impitool is reported as off
-      ```bash
+   ```bash
    ncn# ipmitool -I lanplus -U root -P <password> -H <ncn-node-name> chassis power status
    ```
    * Note that at times in the past, an `ipmitool` command has been used to simply yank the power to an NCN.  There have been times where this resulted in a longer recovery procedure under Shasta 1.5 (mostly due to issues with getting nodes physically booted up again), so the preference has been to simply use the shutdown command.
