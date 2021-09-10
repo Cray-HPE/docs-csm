@@ -611,42 +611,41 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 
    You should see that the `MsgRcvd` and `MsgSent` columns for the worker IP addresses are 0.
 
-1. If the neighbor IP addresses do not match the worker NCN IP addresses, use the helper script for your switch type to configure the BGP peers.
+1. If the neighbor IP addresses do not match the worker NCN IP addresses, use the helper script for Mellanox and CANU (Cray Automated Network Utility) for Aruba.
 
    1. This command will list the available helper scripts.
       ```bash
-      pit# ls -1 /usr/bin/*peer*py
+      pit# ls -1 /usr/bin/*mellanox_set_bgp_peer*py
       ```
 
       Expected output looks similar to the following:
 
       ```
-      /usr/bin/aruba_set_bgp_peers.py
       /usr/bin/mellanox_set_bgp_peers.py
       ```
 
-   1. Run the BGP helper script for your switch type.
+   1. Run the BGP helper script if you have mellanox switches.
 
       The BGP helper script requires three parameters: IP of switch 1, IP of Switch 2, Path to CSI generated network files.
 
       - The IP addresses used should be Node Management Network IP addresses (NMN). These IP addresses will be used for the BGP Router-ID.
       - The path to the CSI generated network files must include `CAN.yaml`, `HMN.yaml`, `HMNLB.yaml`, `NMNLB.yaml`, and `NMN.yaml`. The path must include the SYSTEM_NAME.
 
-      For Aruba:
-
-      The IP addresses in this example should be replaced by the IP addresses of the switches.
-
-      ```bash
-      pit# /usr/bin/aruba_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/
-      ```
-
       For Mellanox:
 
       The IP addresses in this example should be replaced by the IP addresses of the switches.
 
       ```bash
-      pit# /usr/bin/mellanox_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/
-      ```
+      pit# /usr/bin/mellanox_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/```
+
+   1. Run CANU if you have Aruba switches.
+     
+      CANU requires three paramters: IP of switch 1, IP of switch 2, Path to directory containing the file ```sls_input_file.json```
+
+      The IP addresses in this example should be replaced by the IP addresses of the switches.
+
+      ```bash
+      pit# canu -s 1.5 config bgp --ips 10.252.0.2,10.252.0.3 --csi-folder /var/www/ephemeral/prep/${SYSTEM_NAME}/```
 
    1. Check the status of the BGP peering sessions **on each switch**.
       - Aruba: `show bgp ipv4 unicast summary`
@@ -657,6 +656,42 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
       At this point the peering sessions with the worker IP addresses should be in `IDLE`, `CONNECT`, or `ACTIVE` state (not `ESTABLISHED`). This is due to the MetalLB speaker pods not being deployed yet.
 
       You should see that the `MsgRcvd` and `MsgSent` columns for the worker IP addresses are 0.
+   1. Check the BGP config ***on each switch*** to verify that the NCN neighbors are configured as passive.
+      - Aruba: ```show run bgp``` The passive neighbor configuration is required. ```neighbor 10.252.1.7 passive``` 
+      EXAMPLE ONLY
+
+        ```
+        sw-spine-001# show run bgp
+        router bgp 65533
+        bgp router-id 10.252.0.2
+        maximum-paths 8
+        distance bgp 20 70
+        neighbor 10.252.0.3 remote-as 65533
+        neighbor 10.252.1.7 remote-as 65533
+        neighbor 10.252.1.7 passive
+        neighbor 10.252.1.8 remote-as 65533
+        neighbor 10.252.1.8 passive
+        neighbor 10.252.1.9 remote-as 65533
+        neighbor 10.252.1.9 passive
+        ```
+      - Mellanox: ```show run protocol bgp``` The passive neighbor configuration is required. ```router bgp 65533 vrf default neighbor 10.252.1.7 transport connection-mode passive``` 
+      EXAMPLE ONLY
+
+        ```
+        protocol bgp
+        router bgp 65533 vrf default
+        router bgp 65533 vrf default router-id 10.252.0.2 force
+        router bgp 65533 vrf default maximum-paths ibgp 32
+        router bgp 65533 vrf default neighbor 10.252.1.7 remote-as 65533
+        router bgp 65533 vrf default neighbor 10.252.1.7 route-map ncn-w003
+        router bgp 65533 vrf default neighbor 10.252.1.8 remote-as 65533
+        router bgp 65533 vrf default neighbor 10.252.1.8 route-map ncn-w002
+        router bgp 65533 vrf default neighbor 10.252.1.9 remote-as 65533
+        router bgp 65533 vrf default neighbor 10.252.1.9 route-map ncn-w001
+        router bgp 65533 vrf default neighbor 10.252.1.7 transport connection-mode passive
+        router bgp 65533 vrf default neighbor 10.252.1.8 transport connection-mode passive
+        router bgp 65533 vrf default neighbor 10.252.1.9 transport connection-mode passive
+        ```
 
 <a name="configure-and-trim-uefi-entries"></a>
 #### 4.3 Configure and Trim UEFI Entries
