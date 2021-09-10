@@ -1,11 +1,10 @@
 # CSM Overview
 
-This CSM Overview describes the Cray System Management ecosystem with the hardware, software, network,
- and access to these services and components.
+This CSM Overview describes the Cray System Management ecosystem with its hardware, software, and network. It describes how to access these services and components.
 
 The CSM installation prepares and deploys a distributed system across a group of management nodes organized into a Kubernetes cluster which uses Ceph for utility storage. These nodes perform their function as Kubernetes master nodes, Kubernetes worker nodes, or utility storage nodes with the Ceph storage.
 
-System services on these nodes are provided as containerized micro-services packaged for deployment as helm charts. These services are orchestrated by Kubernetes to be scheduled on Kubernetes worker nodes with horizontal scaling to increase or decrease the number of instances of some services as demand for them varies, such as when booting many compute nodes or application nodes.
+System services on these nodes are provided as containerized micro-services packaged for deployment via Helm charts. Kubernetes orchestrates these services and schedules them on Kubernetes worker nodes with horizontal scaling. Horizontal scales increases or decreases the number of services instances demand for them varies, such as when booting many compute nodes or application nodes.
 
 ### Topics:
    1. [System Nodes and Networks](#system_nodes_and_networks)
@@ -20,10 +19,10 @@ System services on these nodes are provided as containerized micro-services pack
 
 The HPE Cray EX system has two types of nodes:
 
-* Compute Nodes, where high performance computing applications are run, have hostnames in the form of
+* **Compute Nodes**, where high performance computing applications are run, have hostnames in the form of
 nidXXXXXX, that is, "nid" followed by six digits. These six digits will be padded with zeroes at the beginning.
 All other nodes provide supporting functions to these compute nodes.
-* Non-Compute Nodes (NCNs), which carry out system functions and come in many types:
+* **Non-Compute Nodes (NCNs)**, which carry out system functions and come in many types:
    * Management nodes in a Kubernetes cluster which host system services.
       * Kubernetes master nodes, with names in the form of ncn-mXXX. Every system has three or more master nodes.
       * Kubernetes worker nodes, with names in the form of ncn-wXXX. Every system has three or more worker nodes.
@@ -85,12 +84,12 @@ The following table shows the default IP address ranges
 
 | Network | IP Address Range |
 | --- | --- |
-| Kubernetes service network | 10.16.0.0/12 |
-| Kubernetes pod network | 10.32.0.0/12 |
-| Install Network (MTL) | 10.1.0.0/16 |
-| Node Management Network (NMN) | 10.252.0.0/17 |
-| High Speed Network (HSN) | 10.253.0.0/16 |
-| Hardware Management Network (HMN) 10.254.0.0/17 |
+| Kubernetes service network | 10.16.0.0/12 | 
+| Kubernetes pod network | 10.32.0.0/12 | 
+| Install Network (MTL) | 10.1.0.0/16 | 
+| Node Management Network (NMN) | 10.252.0.0/17 | 
+| High Speed Network (HSN) | 10.253.0.0/16 | 
+| Hardware Management Network (HMN) | 10.254.0.0/17 | 
 | Mountain NMN Allocate a /22 from this range per liquid cooled cabinet: * cabinet 1 * cabinet 2 * cabinet 3 * ...  | 10.100.0.0/17 Example IP address in the allocated ranges: * 10.100.0.0/22 * 10.100.4.0/22 * 10.100.8.0/22 * ... |
 | Mountain HMN Allocate a /22 from this range per liquid cooled cabinet: * cabinet 1 * cabinet 2 * cabinet 3 * ... | 10.104.0.0/17 Example IP address in the allocated ranges: * 10.104.0.0/22 * 10.104.4.0/22 * 10.104.8.0/22 * ... |
 | River NMN | 10.106.0.0/17 |
@@ -101,8 +100,8 @@ The above values could be modified prior to install if there is a need to ensure
 customer resources, such as LDAP or license servers. If a customer has more than one HPE Cray EX system,
 these values can be safely reused across them all.
 Contact customer support for this site if it is required to change the IP address range for Kubernetes services or
-pods; for example, if the IP addresses within those ranges must be used for something else. The cluster must be
-fully reinstalled if either of those ranges are changed.
+pods; for example, if the IP addresses within those ranges must be used for something else. **The cluster must be
+fully reinstalled if either of those ranges are changed.**
 
 There are several network values and other pieces of system information that are unique to the customer system.
    * IP addresses and the network(s) for ncn-m001 and the BMC on ncn-m001.

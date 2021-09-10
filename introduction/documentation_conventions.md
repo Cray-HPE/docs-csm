@@ -15,14 +15,14 @@ a richer experience will come from using a tool which can render the Markdown to
 sizes, the use of bold and italics formatting, inclusion of diagrams and screen shots as image files,
 and to follow navigational links within a topic file and to other files.
 
-There are many tools which can render the Markdown format to get these advantages. Any Internet search
+There are many tools which render the Markdown format and provide these advantages. Any Internet search
 for Markdown tools will provide a long list of these tools. Some of the tools are better than others
 at displaying the images and allowing you to follow the navigational links.
 
 <a name="file-formats"></a>
 ## File Formats
 
-Some of the installation instructions require updating files in JSON, YAML, or TOML format. These files should be updated with care because some file formats do not accept tab characters for indentation of lines. Only space characters are supported. Refer to online documentation to learn more about the syntax of JSON, YAML, and TOML files.
+Some of the installation instructions require updating files in JSON, YAML, or TOML format. These files should be updated with care because some file formats do not accept tab characters for indentation of lines. Only space characters are supported. Refer to online documentation to learn more about the syntax of JSON, YAML, and TOML files. YAML does not support tab characters. The JSON *convention* is to use four spaces rather than a tab character.
 
 <a name="typographic-conventions"></a>
 ## Typographic Conventions
@@ -46,7 +46,7 @@ The host name in a command prompt indicates where the command must be run. The a
 The following list contains abbreviations for nodes used below
 
 * CN - compute Node
-* NCN - Non Compute Node
+* NCN - Non-Compute Node
 * AN - Application Node (special type of NCN)
 * UAN - User Access Node (special type of AN)
 * PIT - Pre-Install Toolkit (initial node used as the inception node during software installation booted from the LiveCD)
@@ -67,7 +67,7 @@ The following list contains abbreviations for nodes used below
 | user@uan> | Run the command as any non-root user on any UAN. |
 | cn# | Run the command as root on any CN. Note that a CN will have a hostname of the form nid124356, that is "nid" and a six digit, zero padded number. |
 | hostname# | Run the command as root on the specified hostname. |
-| user@hostname> | Run the command as any non-root user son the specified hostname. |
+| user@hostname> | Run the command as any non-root user on the specified hostname. |
 
 #### Command prompt inside chroot
 
@@ -94,11 +94,12 @@ pod#
 
 #### Command prompt inside image customization session
 
-If using SSH during an image customization session, the prompt
-changes to indicate that it is inside the image customization
-environment (pod). This example uses $PORT and $HOST as
+If using SSH to access the image customization environment (pod)
+during an image customization session, the prompt
+changes to indicate that it is inside this environment.
+This example uses $PORT and $HOST as
 environment variables with specific settings. When using chroot in
-this context the prompt will be different than the above chroot
+this context, the prompt will be different than the above chroot
 example.
 
 ```bash
@@ -112,7 +113,7 @@ root@POD# chroot /mnt/image/image-root
 Example prompts do not include the directory path, because long
 paths can reduce the clarity of examples. Most of the time, the
 command can be executed from any directory. When it matters
-which directory the command is invoked within, the cd command
+which directory the command is invoked within, the **cd** command
 is used to change into the directory, and the directory is referenced
 with a period (.) to indicate the current directory
 

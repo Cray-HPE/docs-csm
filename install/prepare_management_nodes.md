@@ -85,7 +85,7 @@ Later in the installation process the HPC Firmware Pack will be installed on the
 
    If any of the management nodes are booted with Linux, then they have previous installations data on them which should be wiped.
 
-   >**REQUIRED** If the above is true, then For each management node, **excluding** ncn-m001, log in and do a full wipe of the of the node.
+   >**REQUIRED** If the above is true, then for each management node, **excluding** ncn-m001, log in and do a full wipe of the of the node.
    >
    > See [full wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#full-wipe)
 
@@ -123,20 +123,20 @@ Later in the installation process the HPC Firmware Pack will be installed on the
       ncn-m001# grep ncn /etc/hosts | grep mgmt | grep -v m001 | sort -u | awk '{print $2}' | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power status
       ```
 1. Set the BMCs on the management nodes to DHCP.
-   > **`NOTE`** During the install of the management nodes their BMCs get set to static IP addresses. The installation expects the that these BMCs are set back to DHCP before proceeding.
-
+   > **`NOTE`** During the install of the management nodes their BMCs get set to static IP addresses. The installation expects these BMCs to be set back to DHCP before proceeding.
+   
    * Set the lan variable.
-      If you have Intel nodes set it to 3.
+      If you have Intel nodes, set it to 3.
       ```bash
       ncn# export LAN=3
       ```
+      Otherwise, set it to 1.
 
-      Otherwise set it to 1.
       ```bash
       ncn# export LAN=1
       ```
 
-   * from the **LiveCD** (`pit`):
+   * From the **LiveCD** (`pit`):
       > **`NOTE`** This step uses the old statics.conf on the system in case CSI changes IP addresses:
 
       ```bash
@@ -162,7 +162,7 @@ Later in the installation process the HPC Firmware Pack will be installed on the
       > 10.254.1.5: Error: Unable to establish IPMI v2 / RMCP+ session
       > ```
 
-      The timing of this change can vary based on the hardware, so if the IP address of any BMC can still be reached after running the above commands then run the following. A BMC is considered reachable if it can still be pinged by its IP address or hostname (such as `ncn-w001-mgmt`).
+      The timing of this change can vary based on the hardware, so if the IP address of any BMC can still be reached after running the above commands, then run the following. A BMC is considered reachable if it can still be pinged by its IP address or hostname (such as `ncn-w001-mgmt`).
 
       ```bash
       pit# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
@@ -214,7 +214,7 @@ Later in the installation process the HPC Firmware Pack will be installed on the
 
    If intending to boot the PIT node from the Remote ISO and there is a USB device which was previously used with LiveCD data, it should be wiped to avoid having two devices with disk labels claiming to be the LiveCD.
 
-   Or the USB device could be removed from the PIT node.
+   Alternately, the USB device could be removed from the PIT node.
 
    1.  Wipe USB storage on **ncn-m001**
         ```bash

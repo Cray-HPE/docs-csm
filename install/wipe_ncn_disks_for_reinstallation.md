@@ -7,7 +7,7 @@ Any process covered on this page will be covered by the installer.
 
 After following these procedures an NCN can be rebooted and redeployed.
 
-Ideally the Basic Wipe is enough, and should be tried first. All type of disk wipe can be run from Linux or an initramFS/initrd emergency shell.
+Ideally the Basic Wipe is enough, and should be tried first. All types of disk wipe can be run from Linux or an initramFS/initrd emergency shell. 
 
 The following are potential use cases for wiping disks:
 
@@ -62,7 +62,7 @@ executed on **any management nodes** (master, worker and storage).
 <a name="advanced-wipe"></a>
 ### 2. Advanced Wipe
 
-This section is specific to utility storage nodes. An advanced wipe includes deleting the Ceph volumes, and then
+This section is specific to utility storage nodes. An advanced wipe includes deleting the Ceph volumes and then
 wiping the disks and RAIDs.
 
 1. Delete CEPH Volumes
@@ -89,7 +89,7 @@ See [Basic Wipe](#basic-wipe) section for expected output from the wipefs comman
 <a name="full-wipe"></a>
 ### 3. Full-Wipe
 
-This section is preferred method for all nodes. A full wipe includes deleting the Ceph volumes (where applicable), stopping the
+This section is the preferred method for all nodes. A full wipe includes deleting the Ceph volumes (where applicable), stopping the
 RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
 **IMPORTANT:** Step 2 is to wipe the Ceph OSD drives. ***Steps 1, 3, 4, and 5 are for all node types.***
