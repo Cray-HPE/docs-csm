@@ -10,7 +10,7 @@ pipeline {
         timestamps()
     }
 
-    environment 
+    environment {
         IS_STABLE = getBuildIsStable()
         BUILD_METADATA = getRpmRevision(isStable: env.IS_STABLE)
         GIT_REPO_NAME = getRepoName()
