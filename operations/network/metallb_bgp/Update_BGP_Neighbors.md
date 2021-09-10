@@ -39,23 +39,22 @@ sw-spine-001 [standalone: master] (config) # json-gw enable
       The BGP helper script requires three parameters: IP of switch 1, IP of Switch 2, Path to CSI generated network files.
 
       - The IP addresses used should be Node Management Network IP addresses (NMN). These IP addresses will be used for the BGP Router-ID.
-      - The path to the CSI generated network files must include `CAN.yaml`, `HMN.yaml`, `HMNLB.yaml`, `NMNLB.yaml`, and `NMN.yaml`. The path must include the SYSTEM_NAME.
+      - The path to the CSI generated network files must include `CAN.yaml`, `HMN.yaml`, `HMNLB.yaml`, `NMNLB.yaml`, and `NMN.yaml`. The path must include the $SYSTEM_NAME.
 
       For Mellanox:
 
       The IP addresses in this example should be replaced by the IP addresses of the switches.
 
       ```bash
-      pit# /usr/bin/mellanox_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/
-
+      pit# /usr/bin/mellanox_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/```
    1. Run CANU if you have Aruba switches.
      
-      CANU requires three paramters: IP of switch 1, IP of switch 2, Path to ```sls_input_file.json```
+      CANU requires three paramters: IP of switch 1, IP of switch 2, Path to the directory containing the file ```sls_input_file.json```
 
       The IP addresses in this example should be replaced by the IP addresses of the switches.
 
       ```bash
-      pit# canu -s 1.5 config bgp --ips 10.252.0.2,10.252.0.3 --csi-folder /var/www/ephemeral/prep/{SYSTEM_NAME}/
+      pit# canu -s 1.5 config bgp --ips 10.252.0.2,10.252.0.3 --csi-folder /var/www/ephemeral/prep/${SYSTEM_NAME}/```
 After this script is run you will need to verify the configuration and verify the BGP peers are ```ESTABLISHED```. If it is early in the install process and the CSM services have not been deployed yet, there will not be speakers to peer with so the peering sessions may not be ```ESTABLISHED``` yet.
 
 ## Manual Process

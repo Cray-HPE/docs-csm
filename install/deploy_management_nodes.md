@@ -636,16 +636,16 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
       The IP addresses in this example should be replaced by the IP addresses of the switches.
 
       ```bash
-      pit# /usr/bin/mellanox_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/
+      pit# /usr/bin/mellanox_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/```
 
    1. Run CANU if you have Aruba switches.
      
-      CANU requires three paramters: IP of switch 1, IP of switch 2, Path to ```sls_input_file.json```
+      CANU requires three paramters: IP of switch 1, IP of switch 2, Path to directory containing the file ```sls_input_file.json```
 
       The IP addresses in this example should be replaced by the IP addresses of the switches.
 
       ```bash
-      pit# canu -s 1.5 config bgp --ips 10.252.0.2,10.252.0.3 --csi-folder /var/www/ephemeral/prep/{SYSTEM_NAME}/
+      pit# canu -s 1.5 config bgp --ips 10.252.0.2,10.252.0.3 --csi-folder /var/www/ephemeral/prep/${SYSTEM_NAME}/```
 
    1. Check the status of the BGP peering sessions **on each switch**.
       - Aruba: `show bgp ipv4 unicast summary`
