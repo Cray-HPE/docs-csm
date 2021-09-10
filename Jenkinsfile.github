@@ -1,40 +1,49 @@
 @Library('csm-shared-library') _
 
-def isStable = env.TAG_NAME != null || env.BRANCH_NAME == 'main' ? true : false
 pipeline {
-  agent {
-    label "metal-gcp-builder"
-  }
-
-  options {
-    buildDiscarder(logRotator(numToKeepStr: "10"))
-    timestamps()
-  }
-
-  environment {
-    IS_STABLE = getBuildIsStable()
-    BUILD_METADATA = getRpmRevision(isStable: isStable)
-    GIT_REPO_NAME = getRepoName()
-  }
-
-  stages {
-    stage('Prepare') {
-      steps {
-        sh "make prepare"
-      }
+    agent {
+        label "metal-gcp-builder"
     }
 
-    stage('Build: RPM') {
-      steps {
-        sh "make rpm"
-      }
+    options {
+        buildDiscarder(logRotator(numToKeepStr: "10"))
+        timestamps()
     }
 
-    stage('Publish') {
-      steps {
-        script {
-          publishCsmRpms(component: env.GIT_REPO_NAME, pattern: "dist/rpmbuild/RPMS/noarch/*.rpm", arch: "noarch", isStable: isStable)
-          publishCsmRpms(component: env.GIT_REPO_NAME, pattern: "dist/rpmbuild/SRPMS/*.rpm", arch: "src", isStable: isStable)
+    environment 
+        SPEC_FILE = "docs-csm.spec"
+        IS_STABLE = getBuildIsStable()
+        BUILD_METADATA = getRpmRevision(isStable: env.IS_STABLE)
+        GIT_REPO_NAME = getRepoName()
+     }
+
+    stages {
+        stage("Prepare") {
+            steps {
+                script {
+                    withCredentials([gitUsernamePassword(credentialsId: 'jenkins-algol60-cray-hpe-github-integration')]) {
+                        runLibraryScript("addRpmMetaData.sh", env.SPEC_FILE)
+                        sh "make prepare"
+                    }
+                }
+            }
+        }
+
+      stage("Build RPM") {
+          steps {
+              script {
+                  withCredentials([gitUsernamePassword(credentialsId: 'jenkins-algol60-cray-hpe-github-integration')]) {
+                      sh "make rpm"
+                    }
+                }
+            }
+        }
+
+      stage('Publish') {
+          steps {
+            script {
+              publishCsmRpms(component: env.GIT_REPO_NAME, pattern: "dist/rpmbuild/RPMS/noarch/*.rpm", arch: "noarch", isStable: env.IS_STABLE)
+              publishCsmRpms(component: env.GIT_REPO_NAME, pattern: "dist/rpmbuild/SRPMS/*.rpm", arch: "src", isStable: env.IS_STABLE)
         }
       }
     }

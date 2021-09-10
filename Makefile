@@ -8,6 +8,8 @@ SOURCE_NAME ?= ${NAME}
 BUILD_DIR ?= $(PWD)/dist/rpmbuild
 SOURCE_PATH := ${BUILD_DIR}/SOURCES/${SOURCE_NAME}-${VERSION}.tar.bz2
 
+all: prepare rpm
+
 rpm: prepare rpm_package_source rpm_build_source rpm_build
 
 prepare:
