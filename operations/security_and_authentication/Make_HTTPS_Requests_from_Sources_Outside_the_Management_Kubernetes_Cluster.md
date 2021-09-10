@@ -25,13 +25,13 @@ This procedure assumes that it is being carried out on a Mac OS X system.
 
 2.  Use **Finder** to locate the .crt file.
 
-    ![](../../img/operations/Keychain_Access_Utility.png "Keychain Access")
+    ![Keychain Access](../../img/operations/Keychain_Access_Utility.png)
 
 3.  Double-click the .crt file to add it to the system keychain.
 
     The .crt file might still not be trusted, therefore, start up the **Keychain Access** utility to mark it as trusted for SSL.
 
-    ![](../../img/operations/CA_Certificate_Settings.png "CA Certificate Settings")
+    ![CA Certificate Settings](../../img/operations/CA_Certificate_Settings.png)
 
 4.  Double-click the untrusted certificate.
 

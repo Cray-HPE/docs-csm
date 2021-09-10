@@ -14,7 +14,7 @@ console.38:2018-09-08 04:55:00 [   25.768872] ixgbe 0000:18:00.1: The EEPROM
 
 The following figure shows that the EEPROM checksum errors lead to a `dracut-initqueue` timeout, and eventually cause the node to drop into the `dracut` emergency shell.
 
-![](../../img/operations/EEPROM_Error_Dropping_to_Dracut_Emergency_Shell.png "EEPROM Error Dropping to Dracut Emergency Shell")
+![EEPROM Error Dropping to Dracut Emergency Shell](../../img/operations/EEPROM_Error_Dropping_to_Dracut_Emergency_Shell.png)
 
 ### Problem Detection
 

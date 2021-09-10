@@ -7,7 +7,7 @@ If the TFTP request is able to access the TFTP service pod but is unable to find
 
 The following image, which is tcpdump data from within the TFTP pod, shows what happens when the TFTP request cannot find a route back to the node that sent the request. The node IP address is `10.32.0.1`, which is the IP address of the Kubernetes weave network. It is forwarding the node's TFTP to this pod. The server IP address is `10.32.0.13`.
 
-![](../../img/operations/TFTP_without_a_Route_Back_to_the_Node.png "TFTP Without a Route Back to the Node")
+![TFTP Without a Route Back to the Node](../../img/operations/TFTP_without_a_Route_Back_to_the_Node.png)
 
 1.  Line 1: The read request from the node arrives.
 2.  Line 2: The TFTP server attempts to acknowledge the read request.
