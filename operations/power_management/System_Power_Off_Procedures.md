@@ -37,6 +37,10 @@ To power off standard rack and liquid-cooled cabinet PDUs, see [Power Off Comput
 
 Shut down the management Kubernetes cluster, see [Shut Down and Power Off the Management Kubernetes Cluster](Shut_Down_and_Power_Off_the_Management_Kubernetes_Cluster.md).
 
+### Power Off the External Lustre File System
+
+Power off the external Lustre file system (ClusterStor), see [Power Off the External Lustre File System](Power_Off_the External_Lustre_File_System.md).
+
 ### Lockout Tagout Facility Power
 
 If facility power must be removed from a single cabinet or cabinet group for maintenance, follow proper lockout-tagout procedures for the site.
