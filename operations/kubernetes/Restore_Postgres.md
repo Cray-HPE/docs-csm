@@ -7,6 +7,7 @@ Restore Postgres Procedures by Service:
 - [Restore Postgres for Keycloak](#keycloak)
 - [Restore Postgres for HSM (Hardware State Manager)](../hardware_state_manager/Restore_HSM_Postgres_from_Backup.md)
 - [Restore Postgres for SLS (System Layout Service)](../system_layout_service/Restore_SLS_Postgres_Database_from_Backup.md)
+- [Restore Postgres for VCS](#vcs)
 
 
 <a name="spire"> </a>
@@ -455,4 +456,194 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
     ncn-w001:# curl -s -k -d grant_type=password -d client_id=shasta -d username=<username> -d password=<password> https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token
 
     {"access_token":"....
+    ```
+
+<a name="vcs"> </a>
+
+### Restore Postgres for VCS
+
+In the event that the VCS Postgres cluster is in a state that the cluster must be rebuilt and the data restored, the following procedures are recommended. This assumes that a dump of the database exists, as well as a backup of the VCS PVC.
+
+1. Copy the database dump to an accessible location.
+
+    - If a manual dump of the database was taken, check that the dump file exists in a location off the Postgres cluster. It will be needed in the steps below.
+
+    - If the database is being automatically backed up, then the most recent version of the dump and the secrets should exist in the `postgres-backup` S3 bucket. These will be needed in the steps below. List the files in the `postgres-backup` S3 bucket and if the files exist, download the dump and secrets out of the S3 bucket. The python3 scripts below can be used to help list and download the files. Note that the .psql file contains the database dump and the .manifest file contains the secrets. The `aws_access_key_id` and `aws_secret_access_key` will need to be set based on the `postgres-backup-s3-credentials` secret.
+
+    ```bash
+    ncn-w001# export S3_ACCESS_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.access_key}' | base64 --decode`
+
+    ncn-w001# export S3_SECRET_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.secret_key}' | base64 --decode`
+    ```
+
+    list.py:
+
+    ```python
+    import io
+    import boto3
+    import os
+
+    # postgres-backup-s3-credentials are needed to list keys in the postgres-backup bucket
+
+    s3_access_key = os.environ['S3_ACCESS_KEY']
+    s3_secret_key = os.environ['S3_SECRET_KEY']
+
+    s3 = boto3.resource(
+        's3',
+        endpoint_url='http://rgw-vip.nmn',
+        aws_access_key_id=s3_access_key,
+        aws_secret_access_key=s3_secret_key,
+        verify=False)
+
+	backup_bucket = s3.Bucket('postgres-backup')
+	for file in backup_bucket.objects.filter(Prefix='vcs-postgres'):
+   	    print(file.key)
+    ````
+
+    download.py:
+
+    Update the script for the specific .manifest and .psql files you wish to download from S3.
+
+    ```python
+    import boto3
+    import os
+
+    # postgres-backup-s3-credentials are needed to download from postgres-backup bucket
+
+    s3_access_key = os.environ['S3_ACCESS_KEY']
+    s3_secret_key = os.environ['S3_SECRET_KEY']
+
+    s3_client = boto3.client(
+        's3',
+        endpoint_url='http://rgw-vip.nmn',
+        aws_access_key_id=s3_access_key,
+        aws_secret_access_key=s3_secret_key,
+        verify=False)
+
+    response = s3_client.download_file('postgres-backup', 'vcs-postgres-2021-07-21T19:03:18.manifest', 'vcs-postgres-2021-07-21T19:03:18.manifest')
+    response = s3_client.download_file('postgres-backup', 'vcs-postgres-2021-07-21T19:03:18.psql', 'vcs-postgres-2021-07-21T19:03:18.psql')
+    ```
+
+2. Scale the VCS service to 0.
+    
+    ```bash
+    ncn-w001# SERVICE=gitea-vcs
+    ncn-w001# SERVICELABEL=vcs
+    ncn-w001# NAMESPACE=services
+    ncn-w001# POSTGRESQL=gitea-vcs-postgres
+
+    ncn-w001# kubectl scale deployment ${SERVICE} -n ${NAMESPACE} --replicas=0
+
+    # Wait for the pods to terminate
+    ncn-w001# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${SERVICELABEL}" | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
+    ```
+
+3. Delete the VCS Postgres cluster.
+
+    ```bash
+    ncn-w001# kubectl get postgresql ${POSTGRESQL} -n ${NAMESPACE} -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels."controller-uid")' | jq 'del(.status)' > postgres-cr.json
+
+    ncn-w001# kubectl delete -f postgres-cr.json
+
+    # Wait for the pods to terminate
+    ncn-w001# while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
+    ```
+
+4. Create a new single instance vcs Postgres cluster.
+
+    ```bash
+    ncn-w001# cp postgres-cr.json postgres-orig-cr.json
+    ncn-w001# jq '.spec.numberOfInstances = 1' postgres-orig-cr.json > postgres-cr.json
+    ncn-w001# kubectl create -f postgres-cr.json
+
+    # Wait for the pod and Postgres cluster to start running
+    ncn-w001# while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 1 ] ; do echo "  waiting for pod to start running"; sleep 2; done
+
+    ncn-w001# while [ $(kubectl get postgresql "${POSTGRESQL}" -n "${NAMESPACE}" -o json | jq -r '.status.PostgresClusterStatus') != "Running" ] ; do echo "  waiting for postgresql to start running"; sleep 2; done
+    ```
+
+5. Copy the database dump file to the Postgres member.
+
+    ```bash
+    ncn-w001# DUMPFILE=gitea-vcs-postgres-2021-07-21T19:03:18.sql
+
+    ncn-w001# kubectl cp ./${DUMPFILE} "${SERVICE}-0":/home/postgres/${DUMPFILE} -c postgres -n services
+    ```
+
+6. Restore the data.
+
+    ```bash
+    ncn-w001# kubectl exec "${SERVICE}-0" -c postgres -n services -it -- psql -U postgres < ${DUMPFILE}
+    ```
+
+7. Either update or re-create the `gitea-vcs-postgres` secrets.
+
+  - Update the secrets in Postgres.
+
+    If a manual dump was done, and the secrets were not saved, then the secrets in the newly created Postgres cluster will need to be updated.
+
+    Based off the three `gitea-vcs-postgres` secrets, collect the password for each Postgres username: `postgres`, `service_account`, and `standby`. Then `kubectl exec` into the Postgres pod and update the password for each user. For example:
+
+    ```bash 
+    ncn-w001# for secret in postgres.gitea-vcs-postgres.credentials service-account.gitea-vcs-postgres.credentials gitea.gitea-vcs-postgres.credentials standby.gitea-vcs-postgres.credentials; do echo -n "secret ${secret} username & password: "; echo -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
+
+    secret postgres.gitea-vcs-postgres.credentials username & password: postgres ABCXYZ
+    secret service-account.gitea-vcs-postgres.credentials username & password: service_account ABC123
+    secret gitea.gitea-vcs-postgres.credentials username & password: gitea XYZ123
+    secret standby.gitea-vcs-postgres.credentials username & password: standby 123456
+    ```
+
+    ```bash
+    ncn-w001# kubectl exec "${POSTGRESQL}-0" -n ${NAMESPACE} -c postgres -it -- bash
+    root@gitea-vcs-postgres-0:/home/postgres# /usr/bin/psql postgres postgres
+    postgres=# ALTER USER postgres WITH PASSWORD 'ABCXYZ';
+    ALTER ROLE
+    postgres=# ALTER USER service-account WITH PASSWORD 'ABC123';
+    ALTER ROLE
+    postgres=#ALTER USER gitea WITH PASSWORD 'XYZ123';
+    ALTER ROLE
+    postgres=#ALTER USER standby WITH PASSWORD '123456';
+    ALTER ROLE
+    postgres=#
+    ```
+  
+  - Re-create secrets in Kubernetes.
+
+    If the Postgres secrets were auto-backed up, then re-create the secrets in Kubernetes.
+
+    Delete and re-create the four `gitea-vcs-postgres` secrets using the manifest that was copied from S3 in step 1 above.
+
+    ```bash
+    ncn-w001# MANIFEST=gitea-vcs-postgres-2021-07-21T19:03:18.manifest
+
+    ncn-w001# kubectl delete secret postgres.gitea-vcs-postgres.credentials service-account.gitea-vcs-postgres.credentials standby.gitea-vcs-postgres.credentials -n services
+
+    ncn-w001# kubectl apply -f ${MANIFEST} 
+    ```
+
+8. Restart the Postgres cluster.
+     
+    ```bash
+    ncn-w001# kubectl delete pod -n ${NAMESPACE} "${POSTGRESQL}-0"
+
+    # Wait for the postgresql pod to start
+    ncn-w001# while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 1 ] ; do echo "  waiting for pods to start running"; sleep 2; done
+    ```
+
+9. Scale the Postgres cluster back to 3 instances.
+
+    ```bash
+    ncn-w001# kubectl patch postgresql "${POSTGRESQL}" -n "${NAMESPACE}" --type='json' -p='[{"op" : "replace", "path":"/spec/numberOfInstances", "value" : 3}]'
+
+    # Wait for the postgresql cluster to start running
+    ncn-w001# while [ $(kubectl get postgresql "${POSTGRESQL}" -n "${NAMESPACE}" -o json | jq -r '.status.PostgresClusterStatus') != "Running" ] ; do echo "  waiting for postgresql to start running"; sleep 2; done
+    ```
+
+10. Scale the gitea service back up.
+
+    ```bash
+    ncn-w001# kubectl scale deployment ${SERVICE} -n ${NAMESPACE} --replicas=3
+
+    # Wait for the gitea pods to start
+    ncn-w001# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${SERVICELABEL}" | grep -v NAME | wc -l) != 3 ] ; do echo "  waiting for pods to start"; sleep 2; done
     ```
