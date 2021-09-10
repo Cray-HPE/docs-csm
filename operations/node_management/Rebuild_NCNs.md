@@ -232,26 +232,25 @@ Skip this section if rebuilding a worker or storage node. The examples in this s
       echo "0 */1 * * * root /srv/cray/scripts/kubernetes/token-certs-refresh.sh >> /var/log/cray/cron.log 2>&1" > /etc/cron.d/cray-k8s-token-certs-refresh
       ```
 
-   1. Find the member ID of the master node being removed.
+1. Find the line with the name of the master being removed. The member ID is the alphanumeric string in the first field of that line. The IP address is in the URL in the fourth field in the line. Note the member ID and IP address for use in subsequent steps.
 
-      ```bash
-      ncn# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt \
-          --cert=/etc/kubernetes/pki/etcd/ca.crt  \
-          --key=/etc/kubernetes/pki/etcd/ca.key --endpoints=localhost:2379 member list
-      ```
+   ```bash
+   ncn# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+       --cert=/etc/kubernetes/pki/etcd/ca.crt  \
+       --key=/etc/kubernetes/pki/etcd/ca.key --endpoints=localhost:2379 member list
+   ```
 
-   1. Find the line with the name of the master being removed. The member ID is the alphanumeric string in the first field of that line. The IP address is in the URL in the fourth field in the line. Note the member ID and IP address for use in subsequent steps.
-   1. Remove the master node from the etcd cluster backing Kubernetes.
+1. Remove the master node from the etcd cluster backing Kubernetes.
 
-      Replace the MEMBER_ID value with the value returned in the previous sub-step.
+   Replace the `MEMBER_ID` value with the value returned in the previous sub-step.
 
-      ```bash
-      ncn# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt \
-          --cert=/etc/kubernetes/pki/etcd/ca.crt --key=/etc/kubernetes/pki/etcd/ca.key \
-          --endpoints=localhost:2379 member remove <MEMBER_ID>
-      ```
+   ```bash
+   ncn# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+       --cert=/etc/kubernetes/pki/etcd/ca.crt --key=/etc/kubernetes/pki/etcd/ca.key \
+       --endpoints=localhost:2379 member remove <MEMBER_ID>
+   ```
    <a name="stop-etcd"></a>
-1. Stop the etcd service on the master node being removed.
+1. Stop the etcd service **on the master node being removed**.
 
    ```bash
    NODE# systemctl stop etcd.service
@@ -261,6 +260,14 @@ Skip this section if rebuilding a worker or storage node. The examples in this s
 
    ```bash
    ncn# kubectl delete node NODE
+   ```
+   
+1. Add the node back into the etcd cluster so when it reboots it can rejoin. The IP and hostname of the rebuilt node is needed for the following command. Replace the `NCN-M_HOSTNAME` and `IP_ADDRESS` address values. Use the IP address you noted in an earlier step from the `etcdctl` command.
+
+   ```bash
+   ncn# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/ca.crt \
+           --key=/etc/kubernetes/pki/etcd/ca.key --endpoints=localhost:2379 member add NCN-M_HOSTNAME \
+           --peer-urls=https://IP_ADDRESS:2380
    ```
 
 <a name="prepare-storage-node"></a>
@@ -575,7 +582,8 @@ This section applies to master and worker nodes. Skip this section if rebuilding
     **Warning:** This is the point of no return. Once the disks are wiped,the node must be rebuilt.
 
     ```
-    NODE# wipefs --all --force /dev/sd* /dev/disk/by-label/*
+    NODE# mdisks=$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(sata|nvme|sas)' | sort -h | awk '{print "/dev/" $2}')
+    NODE# wipefs --all --force $mdisks
     ```
 
 1. Set the PXE boot option and power cycle the node.
@@ -607,8 +615,7 @@ This section applies to master and worker nodes. Skip this section if rebuilding
       ```
 
    1. Verify that the node is off.
-
-
+   
       ```bash
       ncn# ipmitool -I lanplus -U root -E -H $BMC chassis power status
       ```
@@ -640,9 +647,18 @@ This section applies to master and worker nodes. Skip this section if rebuilding
    [  295.467037] cloud-init[9333]: Cloud-init v. 20.2-8.45.1 finished at Thu, 26 Aug 2021 15:26:12 +0000. Datasource DataSourceNoCloudNet [seed=cmdline,http://10.92.100.81:8888/][dsmode=net].  Up 295.46 seconds
    ```
 
-   Then press return on the console to ensure that the the login prompt is displayed including the correct hostname of this node. Then exit the ConMan console \(**&** then **.**\), and then use `ssh` to log in to the node to complete the remaining validation steps.
+   Then press return on the console to ensure that the the login prompt is displayed including the correct hostname of this node. Then exit the ConMan console (**&** then **.**), and then use `ssh` to log in to the node to complete the remaining validation steps.
 
     **Troubleshooting:** If the `NBP file...` output never appears, or something else goes wrong, go back to the steps for modifying XNAME.json file (see the step to [inspect and modify the JSON file](#inspect)) and make sure these instructions were completed correctly.
+
+   **Master nodes only** if cloud-init did not complete the newly-rebuilt node will need to have its etcd service definition manually updated. Reconfigure the etcd service, and restart the cloud init on the newly rebuilt master:
+
+   ```bash
+   NODE# systemctl stop etcd.service; sed -i 's/new/existing/' \
+           /etc/systemd/system/etcd.service /srv/cray/resources/common/etcd/etcd.service; \
+           systemctl daemon-reload ; rm -rf /var/lib/etcd/member; \
+           systemctl start etcd.service; /srv/cray/scripts/common/kubernetes-cloudinit.sh
+   ```
 
 1. Confirm vlan004 is up with the correct IP address on the rebuilt node.
 
@@ -1163,26 +1179,6 @@ Skip this section if a master or storage node was rebuilt. The examples in this 
 Validate the master node rebuilt successfully.
 
 Skip this section if a worker or storage node was rebuilt. The examples in this section assume the master node with a hostname of `NODE` and component name of `XNAME` was rebuilt.
-
-   1. Add the newly-rebuilt node to the etcd cluster.
-
-      Manually add the node to the cluster from a healthy/existing master node. The IP and hostname of the rebuilt node is needed for the following command. Replace the NCN-M\_HOSTNAME and IP\_ADDRESS address values. Use the IP address you noted in an earlier step from the `etcdctl` command.
-
-      ```bash
-      ncn# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/ca.crt \
-              --key=/etc/kubernetes/pki/etcd/ca.key --endpoints=localhost:2379 member add NCN-M_HOSTNAME \
-              --peer-urls=https://IP_ADDRESS:2380
-      ```
-
-      Once the new node is up, use `ssh` to log in to it, reconfigure the etcd service, and restart the cloud init:
-
-      ```bash
-      ncn# ssh NODE
-      NODE# systemctl stop etcd.service; sed -i 's/new/existing/' \
-              /etc/systemd/system/etcd.service /srv/cray/resources/common/etcd/etcd.service; \
-              systemctl daemon-reload ; rm -rf /var/lib/etcd/member; \
-              systemctl start etcd.service; /srv/cray/scripts/common/kubernetes-cloudinit.sh
-      ```
 
    1. Verify the new node is in the cluster.
 
