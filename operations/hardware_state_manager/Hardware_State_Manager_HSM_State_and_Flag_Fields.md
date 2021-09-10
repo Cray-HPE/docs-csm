@@ -4,57 +4,57 @@ HSM manages important information for hardware components in the system. Adminis
 
 The following describes what causes State and Flag changes for all HSM components:
 
--   Initial State/Flag is set upon discovery. This is generally `Off/OK` or `On/OK`. BMCs go to `Ready/OK` instead of `On/OK`.
--   A component in the `Populated` state after discovery has an unknown power state. If one is expected for nodes, BMCs, or another component, this is likely due to a firmware issue.
--   Flags can be set to `Warning` or `Alert` if the component's `Status.Health` reads as `Warning` or `Critical` via Redfish during discovery.
--   State for all components associated with a BMC is set to `Empty` if that BMC is removed from the network.
--   State change events from components are consumed by HSM via subscriptions to Redfish events. These are subscribed to and placed on the Kafka bus by `hmcollector` for HSM's consumption. HSM will update component state based on the information in the Redfish events.
+- Initial State/Flag is set upon discovery. This is generally `Off/OK` or `On/OK`. BMCs go to `Ready/OK` instead of `On/OK`.
+- A component in the `Populated` state after discovery has an unknown power state. If one is expected for nodes, BMCs, or another component, this is likely due to a firmware issue.
+- Flags can be set to `Warning` or `Alert` if the component's `Status.Health` reads as `Warning` or `Critical` via Redfish during discovery.
+- State for all components associated with a BMC is set to `Empty` if that BMC is removed from the network.
+- State change events from components are consumed by HSM via subscriptions to Redfish events. These are subscribed to and placed on the Kafka bus by `hmcollector` for HSM's consumption. HSM will update component state based on the information in the Redfish events.
 
 The following describes what causes State and Flag changes for nodes only:
 
--   Heartbeat Tracking Daemon \(HBTD\) updates the state of nodes based on heartbeats it receives from nodes.
--   HBTD sets the node to `Ready/OK` when it starts heartbeats.
--   HBTD sets the node to `Ready/Warning` after a few missed heartbeats.
--   HBTD sets the node to `Standby` after many missed heartbeats and the node is presumed dead.
+- Heartbeat Tracking Daemon \(HBTD\) updates the state of nodes based on heartbeats it receives from nodes.
+- HBTD sets the node to `Ready/OK` when it starts heartbeats.
+- HBTD sets the node to `Ready/Warning` after a few missed heartbeats.
+- HBTD sets the node to `Standby` after many missed heartbeats and the node is presumed dead.
 
 State descriptions:
 
--   **`Empty`**
+- **`Empty`**
 
     The location is not populated with a component.
 
--   **`Populated`**
+- **`Populated`**
 
     Present \(not empty\), but no further track can or is being done.
 
--   **`Off`**
+- **`Off`**
 
     Present but powered off.
 
--   **`On`**
+- **`On`**
 
     Powered on. If no heartbeat mechanism is available, its software state may be unknown.
 
--   **`Standby`**
+- **`Standby`**
 
     No longer `Ready` and presumed dead. It typically means the heartbeat has been lost \(w/ alert\).
 
--   **`Ready`**
+- **`Ready`**
 
     Both `On` and `Ready` to provide its expected services. For example, used for jobs.
 
 
 Flag descriptions:
 
--   **`OK`**
+- **`OK`**
 
     Component is OK.
 
--   **`Warning`**
+- **`Warning`**
 
     There is a non-critical error. Generally coupled with a `Ready` state.
 
--   **`Alert`**
+- **`Alert`**
 
     There is a critical error. Generally coupled with a `Standby` state. Otherwise, reported via Redfish.
 
