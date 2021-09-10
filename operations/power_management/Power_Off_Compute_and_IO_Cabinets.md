@@ -61,21 +61,21 @@ When the PDU breakers are switched to OFF, the Chassis Management Modules \(CMMs
 
     The AC OK LED on each PSU will remain amber for about 30 seconds \(AC lost\) until the system de-energizes, then extinguish.
 
-    ![](../../img/operations/Liquid_Cooled_Cabinet_PDU.svg "Liquid-Cooled Cabinet PDU")
+    ![Liquid-cooled Cabinet PDU](../../img/operations/Liquid_Cooled_Cabinet_PDU.svg)
 
     **Note:** If the TDS cabinet rack-mounted coolant distribution unit \(MCDU\) is receiving power from the PDUs in the management cabinet, the MCDU may stay on after the TDS cabinet PDU circuit breakers are set to OFF. This is expected.
 
-    ![](../../img/operations/Liquid_Cooled_TDS_Cabinet_PDU.svg "Liquid Cooled TDS Cabinet PDU")
+    ![Liquid-cooled TDS Cabinet PDU](../../img/operations/Liquid_Cooled_TDS_Cabinet_PDU.svg)
 
     **CAUTION:** Do not power off the CDU if it is actively cooling other equipment.
 
 8.  If other systems are **not** being cooled by the floor-standing CDU, open the CDU rear door to access the control panel and set the circuit breakers to OFF.
 
-    ![](../../img/operations/CDU_Circuit_Breakers.png "CDU Circuit Breakers")
+    ![CDU Circuit Breakers](../../img/operations/CDU_Circuit_Breakers.png)
 
 **POWER OFF STANDARD RACK PDU CIRCUIT BREAKERS**
 
-9. Check the power status before shutdown, this example shows nodes in cabinets 3001-3003.
+1. Check the power status before shutdown, this example shows nodes in cabinets 3001-3003.
 
     ```bash
     ncn-m001# cray capmc get_xname_status create --xnames x300[1-3]c0s[1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35]b[1-4]n0 --format json
@@ -115,7 +115,7 @@ When the PDU breakers are switched to OFF, the Chassis Management Modules \(CMMs
     ```
 
 
-10. Use CAPMC to power off **non-management** nodes HPE Cray standard racks.
+2.  Use CAPMC to power off **non-management** nodes HPE Cray standard racks.
 
     CAUTION: **Do not power off the management cabinet**. Verify the components names \(xnames\) specified in the following command line do not accidentally power off management cabinets.
 
@@ -125,17 +125,17 @@ When the PDU breakers are switched to OFF, the Chassis Management Modules \(CMMs
     ncn-m001# cray capmc xname_off create --xnames x300[1-3]c0s[1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35]b[1-4]n0
     ```
 
-10. Check the status of the CAPMC power off command.
+3.  Check the status of the CAPMC power off command.
 
     ```bash
     ncn-m001# cray capmc get_xname_status create --xnames x300[1-3]c0s[1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35]b[1-4]n0 --format json
     ```
 
-11. Set each cabinet PDU circuit breaker to off.
+4.  Set each cabinet PDU circuit breaker to off.
 
     A slotted screw driver may be required to open PDU circuit breakers.
 
-12. To power off Motivair liquid-cooled chilled doors and CDU, locate the power off switch on the CDU control panel and set it to OFF as shown in step 8.
+5.  To power off Motivair liquid-cooled chilled doors and CDU, locate the power off switch on the CDU control panel and set it to OFF as shown in step 8.
 
     Refer to vendor documentation for the chilled-door cooling system for power control procedures when chilled doors are installed on standard racks.
 

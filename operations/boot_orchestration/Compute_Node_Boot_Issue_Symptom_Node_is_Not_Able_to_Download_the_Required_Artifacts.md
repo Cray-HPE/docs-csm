@@ -7,7 +7,7 @@ If either or both of the `kernel` or the `initrd` boot artifacts are missing fro
 
 The node's console or log will display lines beginning with, ''`Could not start download`''. Refer to the image below for an example of this error message.
 
-![](../../img/operations/BSS_Missing_an_Artifact.png "BSS Missing an Artifact")
+![BSS Missing Artifact](../../img/operations/BSS_Missing_an_Artifact.png)
 
 ### Problem Detection
 

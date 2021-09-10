@@ -28,15 +28,15 @@ After the CDU is switched on and healthy, the liquid-cooled PDU circuit breakers
 
    2.  Set the control panel circuit breakers to ON.
 
-   ![](../../img/operations/CDU_Circuit_Breakers.png "CDU Circuit Breakers")
+   ![CDU Circuit Breakersj](../../img/operations/CDU_Circuit_Breakers.png)
 
 4. Set the PDU circuit breakers to on in each Cray EX cabinet.
 
-   ![](../../img/operations/Liquid_Cooled_Cabinet_PDU.svg "Liquid Cooled Cabinet PDU")
+   ![Liquid-cooled Cabinet PDU](../../img/operations/Liquid_Cooled_Cabinet_PDU.svg)
 
 5. Verify the status LEDs on the PSU are OK.
 
-   ![](../../img/operations/PSU_Status.svg "PSU Status")
+   ![PSU Status LEDs](../../img/operations/PSU_Status.svg)
 
 6. Use the System Admin Toolkit \(`sat`\) to power on liquid-cooled cabinets chassis and slots.
 
