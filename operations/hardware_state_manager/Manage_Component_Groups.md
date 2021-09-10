@@ -4,7 +4,7 @@ The creation, deletion, and modification of groups is enabled by the Hardware St
 
 The following is an example group that contains the optional fields tags and exclusiveGroup:
 
-```screen
+```bash
 {
         "label" : "blue",
         "description" : "blue node group",
@@ -34,7 +34,7 @@ The members list may be set initially with the full list of member IDs, or can b
 
 Create a new non-exclusive group with an empty members list and two optional tags:
 
-```screen
+```bash
 ncn-m# cray hsm groups create --label GROUP_LABEL \
 --tags TAG1,TAG2 \
 --description DESCRIPTION_OF_GROUP_LABEL
@@ -42,7 +42,7 @@ ncn-m# cray hsm groups create --label GROUP_LABEL \
 
 Create a new group with a pre-set members list, which is part of an exclusive group:
 
-```screen
+```bash
 ncn-m# cray hsm groups create --label GROUP_LABEL \
 --description DESCRIPTION_OF_GROUP_LABEL \
 --exclusive-group EXCLUSIVE_GROUP_LABEL \
@@ -51,19 +51,19 @@ ncn-m# cray hsm groups create --label GROUP_LABEL \
 
 Create a new group:
 
-```screen
+```bash
 ncn-m# cray hsm groups create -v --label GROUP_LABEL
 ```
 
 Add a description of the group:
 
-```screen
+```bash
 ncn-m# cray hsm groups update test_group --description "Description of group"
 ```
 
 Add a new component to a group:
 
-```screen
+```bash
 ncn-m# cray hsm groups members create --id XNAME GROUP_LABEL
 ```
 
@@ -73,7 +73,7 @@ Retrieve the complete group object to learn more about a group. This is also sub
 
 Retrieve all fields for a group, including the members list:
 
-```screen
+```bash
 ncn-m# cray hsm groups describe GROUP_LABEL
 ```
 
@@ -83,7 +83,7 @@ Entire groups can be removed. The group label is deleted and removed from all me
 
 Delete a group with the following command:
 
-```screen
+```bash
 ncn-m# cray hsm groups delete GROUP_LABEL
 ```
 
