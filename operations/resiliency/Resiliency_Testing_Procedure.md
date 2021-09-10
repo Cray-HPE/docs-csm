@@ -1,6 +1,6 @@
 # Resiliency Testing Procedure
 
-This document and the procedure contained within it is for the purposes of communicating the kind of testing done by the internal Cray System Management team to ensure a basic level of system resiliency.  It is assumed that some procedures are already known by admins and thus does not go into great detail or attempt to encompass every command necessary for execution.  It is intended to be higher level guidance (with some command examples) to inform internal users and customers about our process.
+This document and the procedure contained within it is for the purposes of communicating the kind of testing done by the internal Cray System Management team to ensure a basic level of system resiliency in the event of the loss of a single NCN.  It is assumed that some procedures are already known by admins and thus does not go into great detail or attempt to encompass every command necessary for execution.  It is intended to be higher level guidance (with some command examples) to inform internal users and customers about our process.
 
 ## High Level Procedure Summary:
 * [Preparation for Resiliency Testing](#preparation)
