@@ -254,6 +254,12 @@ The configuration workflow described here is intended to help understand the exp
     - **kubernetes-worker nodes** with more than 2 small disks need to make adjustments to [prevent bare-metal etcd creation](../background/ncn_mounts_and_file_systems.md#worker-nodes-with-etcd)
     - A brief overview of what is expected is here, in [disk plan of record / baseline](../background/ncn_mounts_and_file_systems.md#plan-of-record--baseline)
 
+1. Run the BIOS Baseline script to apply a configs to BMCs. The script will apply helper configs to facilitate more deterministic network booting on any NCN port. The script depends on 
+
+    ```bash
+    pit# /root/bin/bios-baseline.sh
+    ```
+
 1. Set each node to always UEFI Network Boot, and ensure they are powered off
 
     ```bash
@@ -261,8 +267,7 @@ The configuration workflow described here is intended to help understand the exp
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
     ```
 
-    > Note: some BMCs will "flake" and ignore the boot order setting by `ipmitool`. As a fallback, cloud-init will
-    > correct the boot order after NCNs complete their first boot. The first boot may need manual effort to set the boot order over the conman console. The NCN boot order is further explained in [NCN Boot Workflow](../background/ncn_boot_workflow.md).
+    > **`NOTE`**:The NCN boot order is further explained in [NCN Boot Workflow](../background/ncn_boot_workflow.md).
 
 1. Validate that the LiveCD is ready for installing NCNs.
    > Observe the output of the checks and note any failures, then remediate them.
