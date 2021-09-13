@@ -25,6 +25,11 @@ then
   exit 1
 fi
 
+if ceph orch ps >  /dev/null 2>&1; then
+  echo "Ceph as already been upgrade"
+  exit 1
+fi
+
 . ./lib/ceph-health.sh
 . ./lib/mark_step_complete.sh
 . ./lib/k8s-scale-utils.sh
@@ -39,6 +44,9 @@ fi
 . ./lib/update_container_images.sh
 . ./lib/ceph-upgrade-mdss.sh
 . ./lib/ceph-upgrade-rgws.sh
+. ./lib/update_bss_storage
+
+update_bss_storage
 
 if [ ! -d "/etc/cray" ]; then
   mkdir /etc/cray
