@@ -1,49 +1,86 @@
+
+
 ## Add LDAP User Federation
 
 Add LDAP user federation using the Keycloak localization tool.
+
 
 ### Prerequisites
 
 LDAP user federation is not currently configured in Keycloak. For example, if it was not configured in Keycloak when the system was initially installed or the LDAP user federation was removed.
 
+
 ### Procedure
 
-1.  Update the LDAP settings in the customizations.yaml file.
+1. Prepare the work area.
+
+   If the customizations.yaml file is managed in an external Git repository (as recommended), then clone a local working tree. Replace the `<URL>` value in the following command before running it.
+
+   ```
+   ncn-m001# git clone <URL> /root/site-init
+   ncn-m001# cd /root/site-init
+   ```
+
+   If there is not a backup of site-init, perform the following steps to create a new one using the values stored in the Kubernetes cluster.
+
+   1. Create a new site-init directory using from the CSM tarball.
+
+      ```bash
+      ncn-m001# cp -r ${CSM_DISTDIR}/shasta-cfg /root/site-init
+      ncn-m001# cd /root/site-init
+      ```
+  
+   1. Extract customizations.yaml from the site-init secret.
+
+      ```bash
+      ncn-m001# kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
+      ```
+
+   1. Extract the certificate and key used to create the sealed secrets.
+
+      ```bash
+      ncn-m001# mkdir certs
+      ncn-m001# kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.crt}' | base64 -d - > certs/sealed_secrets.crt
+      ncn-m001# kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.key}' | base64 -d - > certs/sealed_secrets.key
+      ```
+
+  > **NOTE:** All subsequent steps of this procedure should be performed within the `/root/site-init` directory created in this step.
+
+2.  Update the LDAP settings in the customizations.yaml file.
 
     The LDAP server CA certificate goes into SealedSecret. Refer to the "Generate Sealed Secrets" header in the [Prepare Site Init](../../install/prepare_site_init.md) procedure for instructions on how to do that.
 
-    1.  Update the customizations.yaml file.
+    LDAP connection information is stored in the keycloak-users-localize Secret in the services namespace. In the customizations.yaml file, set the values for the keycloak\_users\_localize keys in the spec.kubernetes.sealed\_secrets field:
 
-        LDAP connection information is stored in the keycloak-users-localize Secret in the services namespace. In the customizations.yaml file, set the values for the keycloak\_users\_localize keys in the spec.kubernetes.sealed\_secrets field:
+    -   The ldap\_connection\_url key is required and is set to an LDAP URL.
+    -   The ldap\_bind\_dn and ldap\_bind\_credentials keys are optional.
+    -   If the LDAP server allows anonymous searches of users and groups, then these keys must not be set.
+    -   If the LDAP server requires authentication. then the bind DN and credentials are set in these keys respectively.
+    
+    For example:
 
-        -   The ldap\_connection\_url key is required and is set to an LDAP URL.
-        -   The ldap\_bind\_dn and ldap\_bind\_credentials keys are optional.
-        -   If the LDAP server allows anonymous searches of users and groups, then these keys must not be set.
-        -   If the LDAP server requires authentication. then the bind DN and credentials are set in these keys respectively.
-        For example:
+    ```bash
+      keycloak_users_localize:
+              generate:
+                name: keycloak-users-localize
+                data:
+                 - type: static
+                   args:
+                     name: ldap_connection_url
+                     value: "ldaps://my_ldap.my_org.test"
+                - type: static
+                   args:
+                     name: ldap_bind_dn
+                     value: "cn=my_admin"
+                 - type: static
+                   args:
+                     name: ldap_bind_credentials
+                     value: "my_ldap_admin_password"
+    ```
 
-        ```bash
-        keycloak_users_localize:
-                generate:
-                  name: keycloak-users-localize
-                  data:
-                  - type: static
-                    args:
-                      name: ldap_connection_url
-                      value: "ldaps://my_ldap.my_org.test"
-                  - type: static
-                    args:
-                      name: ldap_bind_dn
-                      value: "cn=my_admin"
-                  - type: static
-                    args:
-                      name: ldap_bind_credentials
-                      value: "my_ldap_admin_password"
-        ```
+    Other LDAP configuration settings are set in the spec.kubernetes.services.cray-keycloak-users-localize field in the customizations.yaml file. The fields are as follows:
 
-        Other LDAP configuration settings are set in the spec.kubernetes.services.cray-keycloak-users-localize field in the customizations.yaml file. The fields are as follows:
-
-        ```bash
+    ```bash
         (
         Notes for the following table: format is
 
@@ -207,20 +244,20 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         * ldapRoleMapperClientId: If ldapRoleMapperUseRealmRolesMapping is false then this is the client ID to apply the roles to.
           - default: shasta
           - type: string
-        ```
+      ```
 
-    2.  Encrypt the static values in the customizations.yaml file after making changes.
+3. Encrypt the static values in the customizations.yaml file after making changes.
 
-        ```bash
-        ncn-w001# utils/secrets-seed-customizations.sh customizations.yaml
-        ```
+   The following command must be run within the site-init directory.
 
-2.  Resubmit the Kubernetes Job that runs the Keycloak localization tool.
+   ```bash
+   ncn-m001# ./utils/secrets-seed-customizations.sh customizations.yaml
+   ```
 
-    1.  Re-apply the cray-keycloak-users-localize Helm chart.
+4.  Resubmit the Kubernetes Job that runs the Keycloak localization tool.
 
-        Re-apply the cray-keycloak-users-localize Helm chart with the updated customizations.yaml file.
-
+    1.  Re-apply the cray-keycloak-users-localize Helm chart with the updated customizations.yaml file.
+   
         ```bash
         ncn-w001# kubectl get job -n services -l app.kubernetes.io/name=cray-keycloak-users-localize \
         -ojson | jq '.items[0]' > keycloak-users-localize-job.json 
@@ -242,7 +279,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
     3.  Check the pod's logs.
 
-        Replace the KEYCLOAK\_POD\_NAME value with the pod name from the previous step.
+        Replace the `KEYCLOAK_POD_NAME` value with the pod name from the previous step.
 
         ```bash
         ncn-w001# kubectl logs -n services KEYCLOAK_POD_NAME keycloak-localize
@@ -250,7 +287,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         2020-07-20 18:26:15,774 - INFO    - keycloak_localize - keycloak-localize complete
         ```
 
-3.  Sync the users and groups from Keycloak to the compute nodes.
+5.  Sync the users and groups from Keycloak to the compute nodes.
 
     1.  Get the crayvcs password for pushing the changes.
 
@@ -267,7 +304,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         ncn-w001# git checkout integration
         ```
 
-    3.  Create the group\_vars/Compute/keycloak.yaml file.
+    3.  Create the group_vars/Compute/keycloak.yaml file.
 
         The file should contain the following values:
 
@@ -284,7 +321,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         ncn-w001# git push origin integration
         ```
 
-    5.  Do a reboot with the Boot Orchestration Service \(BOS\).
+    5.  Do a reboot with the Boot Orchestration Service (BOS).
 
         ```bash
         ncn-w001# cray bos session create --template-uuid BOS_TEMPLATE --operation reboot
