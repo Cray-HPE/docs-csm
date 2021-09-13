@@ -1,29 +1,63 @@
-## Domain Name Service (DNS)
+# Domain Name Service (DNS) Overview
 
-The central DNS infrastructure provides the structural networking hierarchy and datastore for the system. All DNS requests are managed by resolvers, not by the central DNS infrastructure. Resolvers provide the following within DNS:
+## DNS Architecture
 
--   Security by scoping requests from clients.
+This diagram shows how the various components of the DNS infrastructure interact.
 
-    For example, disallowing cross-network DNS lookups.
+![DNS Architecture](../../../img/operations/dns.svg)
 
--   Load reduction on the central DNS infrastructure:
-    -   Caching requests and handling scoping requests.
-    -   Providing request recursion where necessary.
+## DNS Components
 
-The Data Helper Tools are used to update records, and takes in changes from the following sources:
+The DNS infrastructure is comprised of a number of components.
 
--   Hardware State Manager \(HSM\): Uses the System Layout Service \(SLS\) and the State Manager Daemon \(SMD\) to create a system-of-record for all machine hardware resources. The tooling creates and updates DNS records upon system install or during hardware changes.
--   Kubernetes: DNS records are created and updated dynamically.
+### Unbound (cray-dns-unbound)
 
-The following figure shows a high-level overview of the various components used in the DNS infrastructure.
+Unbound is a caching DNS resolver which is also used as the primary DNS server.
 
-![DNS Architecture](../../../img/operations/DNS_architecture.PNG)
+The DNS records served by Unbound include system component xnames, node hostnames, and service names and these records are read from the cray-dns-unbound ConfigMap which is populated by cray-dns-unbound-manager.
 
-### Table of Contents
+The DNS server functionality will be migrated to PowerDNS in a future release leaving Unbound acting purely as a caching DNS resolver.
 
-* [Manage the DNS Unbound Resolver](Manage_the_DNS_Unbound_Resolver.md)
-* [Enable ncsd on UANs](Enable_ncsd_on_UANs.md)
-* [Troubleshoot Common DNS Issues](Troubleshoot_Common_DNS_Issues.md)
-* [Troubleshoot DNS Configuration Issues](Troubleshoot_DNS_Configuration_Issues.md)
+Unbound also forwards queries to PowerDNS or the site DNS server if the query cannot be answered by local data.
 
+### Unbound Manager (cray-dns-unbound-manager)
 
+The cray-dns-unbound-manager cron job runs every three minutes and queries the System Layout Service, the Hardware State Manager, and the Kea DHCP server for new or changed hardware components and creates DNS records for these components in the cray-dns-unbound ConfigMap.
+
+This job also initiates a rolling restart of Unbound if the cray-dns-unbound ConfigMap was modified.
+
+### Kubernetes DNS (coredns)
+
+Kubernetes creates DNS records for services and pods. A CoreDNS server running in the kube-system namespace is used for this purpose.
+
+The CoreDNS service is also configured to forward DNS requests to Unbound in order to allow pods to resolve system hardware components and other services. This configuration is performed by the cray-dns-unbound-coredns job which is invoked whenever the cray-dns-unbound Helm chart is deployed or upgraded.
+
+See the [Kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/) for more information.
+
+### ExternalDNS (cray-externaldns-external-dns)
+
+ExternalDNS creates DNS records for services that are intended to be accessible via the Customer Access Network (CAN). For example grafana.wasp.dev.cray.com.
+
+Kubernetes Services annotated with `external-dns.alpha.kubernetes.io/hostname` have DNS records created.
+
+Starting with CSM version 1.1 these DNS records are created in the PowerDNS server. Earlier versions of CSM used a dedicated CoreDNS server for ExternalDNS.
+
+> Only DNS A records are created as ExternalDNS currently does not support the creation of the PTR records required for reverse lookup.
+
+### PowerDNS (cray-dns-powerdns)
+
+PowerDNS is an authoritative DNS server which over the next few CSM releases will replace Unbound sa the primary DNS server within a CSM system.
+
+PowerDNS is able to respond to queries for services accessible via the CAN. records are externally accessible via the LoadBalancer IP address specified for the CSI `--can-external-dns` option.
+
+As with earlier CSM releases it is possible to delegate to PowerDNS to resolve CAN services and it is also possible to configure zone transfer to sync the DNS records from PowerDNS to Site DNS.
+
+### PowerDNS Manager (cray-powerdns-manager)
+
+The PowerDNS Manager serves a similar purpose to the Unbound Manager. It runs in the background and periodically queries the System Layout Service, the Hardware State Manager, and the Kea DHCP server for new or changed hardware components and creates DNS records for these components in PowerDNS.
+
+The PowerDNS Manager also configures the PowerDNS server for zone transfer and DNSSEC if required.
+
+### Site DNS
+
+This term is used to refer the external DNS server specified the CSI `--site-dns` option. 
