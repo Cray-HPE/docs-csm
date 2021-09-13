@@ -221,6 +221,16 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
         Re-apply the cray-keycloak-users-localize Helm chart with the updated customizations.yaml file.
 
+        ```bash
+        ncn-w001# kubectl get job -n services -l app.kubernetes.io/name=cray-keycloak-users-localize \
+        -ojson | jq '.items[0]' > keycloak-users-localize-job.json 
+        
+        ncn-w001# cat keycloak-users-localize-job.json | jq 'del(.spec.selector)' | \
+        jq 'del(.spec.template.metadata.labels)' | kubectl replace --force -f -
+        job.batch "keycloak-users-localize-1" deleted     
+        job.batch/keycloak-users-localize-1 replaced
+        ```
+
     2.  Watch the pod to check the status of the job.
 
         The pod will go through the normal Kubernetes states. It will stay in a Running state for a while, and then it will go to Completed.
