@@ -9,6 +9,10 @@ trap 'err_report' ERR
 
 upgrade_ncn="ncn-s001"
 
+. ../ceph/lib/update_bss_metadata.sh
+
+update_bss_storage
+
 . ${BASEDIR}/ncn-upgrade-common.sh ${upgrade_ncn}
 
 state_name="INSTALL_DOC_ON_STORAGE"
