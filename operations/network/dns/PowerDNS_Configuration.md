@@ -1,5 +1,6 @@
 # PowerDNS Configuration
 
+<a name="external-dns"></a>
 ## External DNS
 
 PowerDNS replaces the CoreDNS server that earlier versions of CSM used to provide External DNS services.
@@ -30,6 +31,7 @@ The administrator would then delegate queries to `wasp.dev.cray.com` to `ins1.wa
 
 The specifics of how to configure to configuring DNS forwarding is dependent on the DNS server in use, please consult the documentation provided by the DNS server vendor for more information.
 
+<a name="zone-transfer"></a>
 ## Authoritative Zone Transfer
 
 In addition to responding to external DNS queries, PowerDNS can support replication of domain information to secondary servers via AXFR (Authoritative Zone Transfer) queries.
@@ -123,12 +125,12 @@ zone "8.101.10.in-addr.arpa" {
 
 `allow-notify` should contain the CAN IP addresses of all Kubernetes worker nodes.
 
-### DNS Security Extensions and zone transfer
+<a name="dnssec"></a>
+## DNS Security Extensions and zone transfer
 
-#### Zone signing
+### Zone signing
 
 The CSM implementation of PowerDNS supports the DNS Security Extensions (DNSSEC) and the signing of zones with a user-supplied zone signing key.
-
 
 If DNSSEC is to be used for zone transfer then the `dnssec` SealedSecret in `customizations.yaml` should be updated to include a base64 encoded version of the private key portion of the desired zone signing key.
 
@@ -155,6 +157,8 @@ IDIwMjEwODE3MDgxOTAyCg==
 
 Populate the generate block in `customizations.yaml` with the encoded key.
 
+> **`IMPORTANT`** the name of the key in SealedSecret **must** match the name of the zone being secured, in the below example the zone name is `wasp.dev.cray.com`. If multiple zones are to be secured each zone should have its own entry even if the same key is used.
+
 ```
 spec:
   kubernetes:
@@ -173,7 +177,7 @@ spec:
                   IDIwMjEwODE3MDgxOTAyCg==
 ```
 
-#### Transaction signatures
+### Transaction signatures
 
 Transaction signatures (TSIG) provide a secure communication channel between a primary and secondary DNS server
 
@@ -206,4 +210,21 @@ spec:
 
 > **`IMPORTANT`** The key used for TSIG **must** have `.tsig` in the name and unlike the zone signing key it should not be base64 encoded.
 
+#### Example configuration for BIND
 
+An example configuration demonstrating how to extend the previous BIND configuration example and add the TSIG key.
+
+```
+key "wasp-key" {
+	algorithm hmac-sha256;
+	secret "dnFC5euKixIKXAr6sZhI7kVQbQCXoDG5R5eHSYZiBxY=";
+};
+# Primary server IP address (i.e., PowerDNS CAN ip)
+server 10.101.8.113 {
+	keys {
+		wasp-key;
+	};
+};
+```
+
+For other DNS servers please consult the documentation provided by the DNS server vendor.
