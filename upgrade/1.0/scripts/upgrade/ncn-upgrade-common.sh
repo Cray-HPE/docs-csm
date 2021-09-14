@@ -44,6 +44,8 @@ function drain_node() {
 function ssh_keygen_keyscan() {
     local upgrade_ncn ncn_ip known_hosts
     known_hosts="/root/.ssh/known_hosts"
+    rm -rf /root/.ssh/known_hosts || true
+    touch /root/.ssh/known_hosts
     upgrade_ncn="$1"
     ncn_ip=$(host ${upgrade_ncn} | awk '{ print $NF }')
     [ -n "${ncn_ip}" ]
