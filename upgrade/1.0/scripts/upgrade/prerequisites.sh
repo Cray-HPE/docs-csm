@@ -97,7 +97,6 @@ state_name="UPDATE_SSH_KEYS"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    rm -rf /root/.ssh/known_hosts || true
     . ${BASEDIR}/ncn-upgrade-common.sh ${upgrade_ncn}
     for i in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ' ')
     do
