@@ -44,9 +44,6 @@ fi
 . ./lib/update_container_images.sh
 . ./lib/ceph-upgrade-mdss.sh
 . ./lib/ceph-upgrade-rgws.sh
-. ./lib/update_bss_storage
-
-update_bss_storage
 
 if [ ! -d "/etc/cray" ]; then
   mkdir /etc/cray
