@@ -361,7 +361,7 @@ Skip this section if rebuilding a master or worker node. The examples in this se
                  17  active+clean
     ```
 
- 1. If the node is a ceph-mon node, remove it from the mon map.
+1. If the node is a ceph-mon node, remove it from the mon map.
 
     Skip this step if the node is not a ceph-mon node.
 
@@ -421,11 +421,11 @@ Skip this section if rebuilding a master or worker node. The examples in this se
                  60  active+undersized+degraded
     ```
 
- 1. Remove Ceph OSDs.
+1. Remove Ceph OSDs.
 
     The `ceph osd tree` capture indicated that there are down OSDs on `ncn-s003`.
 
-    ```
+    ```bash
     -5        6.98639     host ncn-s003
      1   ssd  1.74660         osd.1       down        0 1.00000
      3   ssd  1.74660         osd.3       down        0 1.00000
@@ -448,6 +448,12 @@ Skip this section if rebuilding a master or worker node. The examples in this se
     purged osd.6
     destroyed osd.9
     purged osd.9
+    ```
+
+1. Remove the node from the crush map.
+
+    ```bash
+    # ceph osd crush rm <hostname>
     ```
 
 #### 2. Identify Nodes and Update Metadata
