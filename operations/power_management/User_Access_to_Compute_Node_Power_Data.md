@@ -2,9 +2,9 @@
 
 ## User Access to Compute Node Power Data
 
-Shasta Liquid Cooled AMD EPYC compute node power management data available to users.
+HPE Cray EX liquid-cooled compute node power management data access for users.
 
-Shasta Liquid Cooled compute blade power management counters \(pm\_counters\) enable users access to energy usage over time for billing and job profiling.
+HPE Cray EX liquid-cooled compute node power management counters \(pm\_counters\) enable users access to energy usage over time for billing and job profiling.
 
 The blade-level and node-level accumulated energy telemetry is point-in-time power data. Blade accumulated energy data is collected out-of-band and is made available via workload managers. Users have access to the data in-band at the node-level via a special `sysfs` files in `/sys/cray/pm\_counters` on the node.
 
