@@ -45,113 +45,44 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       ```
 
   > **NOTE:** All subsequent steps of this procedure should be performed within the `/root/site-init` directory created in this step.
-
-2. Generate Sealed Secrets.
    
-   Secrets are stored in `customizations.yaml` as `SealedSecret` resources 
-   (encrypted secrets), which are deployed by specific charts and decrypted by the
-   Sealed Secrets operator. But first, those Secrets must be seeded generated and
-   encrypted.
+2. Update the LDAP settings in the customizations.yaml file.
 
-   The LDAP server CA certificate goes into SealedSecret.
+   LDAP connection information is stored in the keycloak-users-localize Secret in the services namespace. 
+   In the customizations.yaml file, set the values for the keycloak_users_localize keys in the spec.kubernetes.sealed_secrets field:
 
-   1. Load the `zeromq` container image required by Sealed Secret Generators:
-
-      > **NOTE:** A properly configured Docker or Podman environment is required.
-
-      ```bash
-      linux# /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh dtr.dev.cray.com/zeromq/zeromq:v4.0.5
-      ```
-
-   2. Re-encrypt existing secrets:
-
-      ```bash
-      linux# /mnt/pitdata/prep/site-init/utils/secrets-reencrypt.sh /mnt/pitdata/prep/site-init/customizations.yaml \
-      /mnt/pitdata/prep/site-init/certs/sealed_secrets.key /mnt/pitdata/prep/site-init/certs/sealed_secrets.crt
-      ```
-
-   3. Generate secrets:
-
-      ```bash
-      linux# /mnt/pitdata/prep/site-init/utils/secrets-seed-customizations.sh \
-      /mnt/pitdata/prep/site-init/customizations.yaml
-      ```
-
-      Expected output looks similar to:
-
-      ```bash
-      Creating Sealed Secret keycloak-certs
-      Generating type static_b64...
-      Creating Sealed Secret keycloak-master-admin-auth
-      Generating type static...
-      Generating type static...
-      Generating type randstr...
-      Generating type static...
-      Creating Sealed Secret cray_reds_credentials
-      Generating type static...
-      Generating type static...
-      Creating Sealed Secret cray_meds_credentials
-      Generating type static...
-      Creating Sealed Secret cray_hms_rts_credentials
-      Generating type static...
-      Generating type static...
-      Creating Sealed Secret vcs-user-credentials
-      Generating type randstr...
-      Generating type static...
-      Creating Sealed Secret generated-platform-ca-1
-      Generating type platform_ca...
-      Creating Sealed Secret pals-config
-      Generating type zmq_curve...
-      Generating type zmq_curve...
-      Creating Sealed Secret munge-secret
-      Generating type randstr...
-      Creating Sealed Secret slurmdb-secret
-      Generating type static...
-      Generating type static...
-      Generating type randstr...
-      Generating type randstr...
-      Creating Sealed Secret keycloak-users-localize
-      Generating type static...
-      ```
-   
-3.   Update the LDAP settings in the customizations.yaml file.
-
-    LDAP connection information is stored in the keycloak-users-localize Secret in the services namespace. 
-    In the customizations.yaml file, set the values for the keycloak_users_localize keys in the spec.kubernetes.sealed_secrets field:
-
-    -   The ldap_connection_url key is required and is set to an LDAP URL.
-    -   The ldap_bind_dn and ldap_bind_credentials keys are optional.
-    -   If the LDAP server allows anonymous searches of users and groups, then these keys must not be set.
-    -   If the LDAP server requires authentication. then the bind DN and credentials are set in these keys respectively.
+   -   The ldap_connection_url key is required and is set to an LDAP URL.
+   -   The ldap_bind_dn and ldap_bind_credentials keys are optional.
+   -   If the LDAP server requires authentication. then the bind DN and credentials are set in these keys respectively.
     
-    For example:
+   For example:
 
-    ```bash
-    keycloak_users_localize:
-             generate:
-              name: keycloak-users-localize
-              data:
-               - type: static
-                  args:
-                    name: ldap_connection_url
-                    value: "ldaps://my_ldap.my_org.test"
-               - type: static
-                  args:
-                    name: ldap_bind_dn
-                    value: "cn=my_admin"
-                - type: static
-                  args:
-                    name: ldap_bind_credentials
-                    value: "my_ldap_admin_password"
-    ```
+   ```bash
+   keycloak_users_localize:
+            generate:
+            name: keycloak-users-localize
+             data:
+              - type: static
+                 args:
+                   name: ldap_connection_url
+                   value: "ldaps://my_ldap.my_org.test"
+              - type: static
+                 args:
+                   name: ldap_bind_dn
+                   value: "cn=my_admin"
+              - type: static
+                 args:
+                   name: ldap_bind_credentials
+                  value: "my_ldap_admin_password"
+   ```
 
-    Other LDAP configuration settings are set in the spec.kubernetes.services.cray-keycloak-users-localize field in the customizations.yaml file. 
+   Other LDAP configuration settings are set in the spec.kubernetes.services.cray-keycloak-users-localize field in the customizations.yaml file. 
     
-    The fields are as follows:
+   The fields are as follows:
 
-    ```bash
-    (
-    Notes for the following table: format is
+   ```
+   (
+   Notes for the following table: format is
 
     * <cray-keycloak-users-localize chart option name> : <description>
       - default: <the default value if not overridden in customizations.yaml
@@ -313,8 +244,32 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
     * ldapRoleMapperClientId: If ldapRoleMapperUseRealmRolesMapping is false then this is the client ID to apply the roles to.
         - default: shasta
         - type: string
-    ```
+   ```
 
+4. Prepare to generate Sealed Secrets.
+   
+   Secrets are stored in customizations.yaml as `SealedSecret` resources 
+   (encrypted secrets), which are deployed by specific charts and decrypted by the
+   Sealed Secrets operator. But first, those Secrets must be seeded generated and
+   encrypted.
+
+   The LDAP server CA certificate goes into SealedSecret.
+
+   1. Load the `zeromq` container image required by Sealed Secret Generators.
+
+      > **NOTE:** A properly configured Docker or Podman environment is required.
+
+      ```bash
+      ncn-m001# /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh dtr.dev.cray.com/zeromq/zeromq:v4.0.5
+      ```
+
+   2. Re-encrypt the existing secrets:
+
+      ```bash
+      ncn-m001# /mnt/pitdata/prep/site-init/utils/secrets-reencrypt.sh customizations.yaml \
+      /mnt/pitdata/prep/site-init/certs/sealed_secrets.key /mnt/pitdata/prep/site-init/certs/sealed_secrets.crt
+      ```
+      
 4. Encrypt the static values in the customizations.yaml file after making changes.
 
    The following command must be run within the site-init directory.
@@ -323,7 +278,44 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    ncn-m001# ./utils/secrets-seed-customizations.sh customizations.yaml
    ```
 
-5.  Resubmit the Kubernetes Job that runs the Keycloak localization tool.
+   Expected output looks similar to:
+
+      ```bash
+      Creating Sealed Secret keycloak-certs
+      Generating type static_b64...
+      Creating Sealed Secret keycloak-master-admin-auth
+      Generating type static...
+      Generating type static...
+      Generating type randstr...
+      Generating type static...
+      Creating Sealed Secret cray_reds_credentials
+      Generating type static...
+      Generating type static...
+      Creating Sealed Secret cray_meds_credentials
+      Generating type static...
+      Creating Sealed Secret cray_hms_rts_credentials
+      Generating type static...
+      Generating type static...
+      Creating Sealed Secret vcs-user-credentials
+      Generating type randstr...
+      Generating type static...
+      Creating Sealed Secret generated-platform-ca-1
+      Generating type platform_ca...
+      Creating Sealed Secret pals-config
+      Generating type zmq_curve...
+      Generating type zmq_curve...
+      Creating Sealed Secret munge-secret
+      Generating type randstr...
+      Creating Sealed Secret slurmdb-secret
+      Generating type static...
+      Generating type static...
+      Generating type randstr...
+      Generating type randstr...
+      Creating Sealed Secret keycloak-users-localize
+      Generating type static...
+      ```
+
+5. Resubmit the Kubernetes Job that runs the Keycloak localization tool.
 
     1.  Re-apply the cray-keycloak-users-localize Helm chart with the updated customizations.yaml file.
    
@@ -337,7 +329,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         job.batch/keycloak-users-localize-1 replaced
         ```
 
-    2.  Watch the pod to check the status of the job.
+    2. Watch the pod to check the status of the job.
 
         The pod will go through the normal Kubernetes states. It will stay in a Running state for a while, and then it will go to Completed.
 
@@ -346,7 +338,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         keycloak-users-localize-1-sk2hn                                0/2     Completed   0          2m35s
         ```
 
-    3.  Check the pod's logs.
+    3. Check the pod's logs.
 
         Replace the `KEYCLOAK_POD_NAME` value with the pod name from the previous step.
 
@@ -356,16 +348,16 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         2020-07-20 18:26:15,774 - INFO    - keycloak_localize - keycloak-localize complete
         ```
 
-6.  Sync the users and groups from Keycloak to the compute nodes.
+6. Sync the users and groups from Keycloak to the compute nodes.
 
-    1.  Get the crayvcs password for pushing the changes.
+    1. Get the crayvcs password for pushing the changes.
 
         ```bash
         ncn-m001# kubectl get secret -n services vcs-user-credentials \
         --template={{.data.vcs_password}} | base64 --decode
         ```
 
-    2.  Checkout content from the cos-config-management VCS repository.
+    2. Checkout content from the cos-config-management VCS repository.
 
         ```bash
         ncn-m001# git clone https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git
@@ -373,7 +365,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         ncn-m001# git checkout integration
         ```
 
-    3.  Create the group_vars/Compute/keycloak.yaml file.
+    3. Create the group_vars/Compute/keycloak.yaml file.
 
         The file should contain the following values:
 
@@ -382,7 +374,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         keycloak_config_computes: True
         ```
 
-    4.  Push the changes to VCS with the crayvcs username.
+    4. Push the changes to VCS with the crayvcs username.
 
         ```bash
         ncn-m001# git add group_vars/Compute/keycloak.yaml
@@ -390,7 +382,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         ncn-m001# git push origin integration
         ```
 
-    5.  Do a reboot with the Boot Orchestration Service (BOS).
+    5. Do a reboot with the Boot Orchestration Service (BOS).
 
         ```bash
         ncn-m001# cray bos session create --template-uuid BOS_TEMPLATE --operation reboot
