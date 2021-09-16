@@ -106,7 +106,7 @@ patch_in_new_metadata() {
         mount -L PITDATA /mnt/pitdata/
       fi
   fi
-  
+
 
   # we need the three seed files and the system_config to generate the metadata
   # this also ensures we are in the right place to run config init without any arguments
