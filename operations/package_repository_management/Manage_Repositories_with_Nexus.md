@@ -53,7 +53,7 @@ function paginate() {
     local url="$1"
     local token
     { token="$(curl -sSk "$url" | tee /dev/fd/3 | jq -r '.continuationToken // null')"; } 3>&1
-    until [[ "$token"=="null" ]]; do
+    until [[ "$token" == "null" ]]; do
         { token="$(curl -sSk "$url&continuationToken=${token}" | tee /dev/fd/3 | jq -r '.continuationToken // null')"; } 3>&1
     done
 }
