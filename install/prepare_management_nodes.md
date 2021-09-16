@@ -154,7 +154,7 @@ Later in the installation process the HPC Firmware Pack will be installed on the
       pit# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
       do
          printf "$h: "
-         ipmitool -U $USERNAME -I lanplus -H $h -E lan print $lan | grep Source
+         ipmitool -U $USERNAME -I lanplus -H $h -E lan print $LAN | grep Source
       done
       ```
       > If an error similar to the following occurs, it means that the BMC is no longer reachable by its IP.
@@ -181,7 +181,7 @@ Later in the installation process the HPC Firmware Pack will be installed on the
       ncn-m001# for h in $( grep ncn /etc/hosts | grep mgmt | grep -v m001 | awk '{print $2}' )
       do
          echo "Setting $h to DHCP"
-         ipmitool -U $USERNAME -I lanplus -H $h -E lan set $lan ipsrc dhcp
+         ipmitool -U $USERNAME -I lanplus -H $h -E lan set $LAN ipsrc dhcp
       done
       ```
 
@@ -190,7 +190,7 @@ Later in the installation process the HPC Firmware Pack will be installed on the
       ncn-m001# for h in $( grep ncn /etc/hosts | grep mgmt | grep -v m001 | awk '{print $2}' )
       do
          printf "$h: "
-         ipmitool -U $USERNAME -I lanplus -H $h -E lan print $lan | grep Source
+         ipmitool -U $USERNAME -I lanplus -H $h -E lan print $LAN | grep Source
       done
       ```
       > If an error similar to the following occurs, it means that the BMC is no longer reachable by its IP.
