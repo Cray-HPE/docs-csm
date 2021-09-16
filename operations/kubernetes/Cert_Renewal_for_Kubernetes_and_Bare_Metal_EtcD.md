@@ -2,17 +2,17 @@
 
 ## Scope
 
-As part of the installation, Kubernetes generates certificates for the required subcomponents.  This Document will help walk thru the process of renewing the certificates.
+As part of the installation, Kubernetes generates certificates for the required subcomponents. This Document will help walk thru the process of renewing the certificates.
 
-**`IMPORTANT:`** Depending on the version of Kubernetes, the command may or may not reside under the alpha category.  Use `kubectl certs --help` and `kubectl alpha certs --help` to determine this.  The overall command syntax should be the same and this is just whether or not the command structure will require `alpha` in it.
+**`IMPORTANT:`** Depending on the version of Kubernetes, the command may or may not reside under the alpha category. Use `kubectl certs --help` and `kubectl alpha certs --help` to determine this. The overall command syntax should be the same and this is just whether or not the command structure will require `alpha` in it.
 
 **`IMPORTANT:`** When you pick your master node to renew the certs on, then that is the node that will be referenced in this document as `ncn-m`.
 
-**`IMPORTANT:`** This document is based of a base hardware configuration of 3 masters and 3 workers (We are leaving off utility storage since they are not running kubernetes).  Please make sure to update any commands that run on multiple nodes accordingly.  
+**`IMPORTANT:`** This document is based of a base hardware configuration of 3 masters and 3 workers (We are leaving off utility storage since they are not running kubernetes). Please make sure to update any commands that run on multiple nodes accordingly.  
 
 ## File locations
 
-**`IMPORTANT:`** Master nodes will have certificates for both Kubernetes services and the Kubernetes client.  Workers will only have the certificates for the Kubernetes client.
+**`IMPORTANT:`** Master nodes will have certificates for both Kubernetes services and the Kubernetes client. Workers will only have the certificates for the Kubernetes client.
 
 Services (master nodes):
 
@@ -96,7 +96,7 @@ Check the expiration of the certificates.
 
    Worker Nodes:
 
-   **`IMPORTANT:`** The range of nodes below should reflect the size of the environment.  This should run on every worker node.
+   **`IMPORTANT:`** The range of nodes below should reflect the size of the environment. This should run on every worker node.
 
    ```bash
     ncn-m# pdsh -w ncn-w00[1-3] tar cvf /root/cert_backup.tar /var/lib/kubelet/pki/
@@ -202,9 +202,9 @@ Check the expiration of the certificates.
 
       This means we can ignore the fact that our `ca.crt/key, front-proxy-ca.crt/key were not updated.`
 
-1. Check the expiration of the certificates files that do not have a current date and are of the `.crt` or `.pem` format.  See [File Locations](#file-locations) for the list of files.
+1. Check the expiration of the certificates files that do not have a current date and are of the `.crt` or `.pem` format. See [File Locations](#file-locations) for the list of files.
 
-   ***This task is for each master node and below is just a single example of checking one certificate. The below example cheecks each certificate in [File Locations](#file-locations).***
+   ***This task is for each master node and below is just a single example of checking one certificate. The below example checks each certificate in [File Locations](#file-locations).***
 
    ```bash
    for i in $(ls /etc/kubernetes/pki/*.crt;ls /etc/kubernetes/pki/etcd/*.crt;ls /var/lib/kubelet/pki/*.crt;ls /var/lib/kubelet/pki/*.pem);do echo ${i}; openssl x509 -enddate -noout -in ${i};done
@@ -238,7 +238,7 @@ Check the expiration of the certificates.
    ```
 
    **`IMPORTANT:`** DO NOT forget to verify certificates in /etc/kubernetes/pki/etcd.
-   - As noted in our above output only non-etcd only certificates were updated.  Please note `apiserver-etcd-client.crt` is a Kubernetes api cert not an etcd only cert.
+   - As noted in our above output only non-etcd only certificates were updated. Please note `apiserver-etcd-client.crt` is a Kubernetes api cert not an etcd only cert.
 
 1. Update etcd certificates (if needed).
 
@@ -285,7 +285,7 @@ Check the expiration of the certificates.
 
 3. Distribute the client certificate to the rest of the cluster.
 
-   `NOTE:` You may have errors copying files.  The target may or may not exist depending on the version of Shasta.
+   `NOTE:` You may have errors copying files. The target may or may not exist depending on the version of Shasta.
   
    - You `DO NOT` need to copy this to the master node where you are performing this work.
    - Shasta 1.3 and earlier copy to all master nodes and ncn-w001.
@@ -293,7 +293,7 @@ Check the expiration of the certificates.
 
    If you attempt to copy to workers nodes other than `ncn-w001` in a Shasta 1.3 or earlier system you will see this error `pdcp@ncn-m001: ncn-w003: fatal: /root/.kube/: Is a directory` and this is expected and can be ignored.
 
-   Client acces:
+   Client access:
 
    **`NOTE:`** Please update the below command with the appropriate amount of worker nodes.
 
@@ -353,7 +353,7 @@ Check the expiration of the certificates.
    ncn-m# for node in $(kubectl get nodes -o json|jq -r '.items[].metadata.name'); do kubeadm alpha kubeconfig user    --org system:nodes --client-name system:node:$node --apiserver-advertise-address 10.252.120.2    --apiserver-bind-port 6442 > /root/$node.kubelet.conf; done
    ```
 
-   This will generate a new kublet.conf file in the /root/ directory.  There should be a new file per node running kubernetes.
+   This will generate a new kubelet.conf file in the /root/ directory. There should be a new file per node running kubernetes.
 
 1. Fix any files that may need it.
    1. in /etc/kubernetes/kubelet.conf you may need to change the following:
@@ -391,7 +391,7 @@ Check the expiration of the certificates.
    - name: default-auth
    ```
 
-1. Copy each file to the corresponding node shown in the filename.  Below this is shown as `<target node>`
+1. Copy each file to the corresponding node shown in the filename. Below this is shown as `<target node>`
    1. scp `<target node>`.kubelet.conf `<target node>`:/etc/kubernetes/$node.kubelet.conf
 
 1. Log into each node one at a time and do the following.
