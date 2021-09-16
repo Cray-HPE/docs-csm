@@ -370,7 +370,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
     7. Reapply the cray-keycloak-users-localize chart based on the CSM_RELEASE.
 
         ```bash
-        ncn-m001# loftsman ship --manifest-path ./cray-keycloak-users-localize-manifest.yaml \
+        ncn-m001# loftsman ship --manifest-path ./deploy.yaml \
         --charts-path /mnt/pitdata/csm-${CSM_RELEASE}/helm
         ```
 
