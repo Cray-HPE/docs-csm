@@ -11,6 +11,8 @@ upgrade_ncn=$1
 
 . ${BASEDIR}/ncn-upgrade-common.sh ${upgrade_ncn}
 
+ssh_keygen_keyscan $1
+
 # Back up local files and directories used by System Admin Toolkit (SAT)
 state_name="BACKUP_SAT_LOCAL_FILES"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})

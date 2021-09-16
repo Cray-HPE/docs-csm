@@ -257,130 +257,15 @@ ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-master.
 
 #### Stage 3.2
 
-For the worker node in the cluster, do all of the following steps for one worker node and then repeat for the next worker node.
+For each worker node in the cluster, also follow the steps:
 
-1. Determine the xname for the worker node being upgraded.  This example uses ncn-w002.
-   
-   ```bash
-   ncn# export NODE=ncn-w002
-   ncn# echo $NODE
-   ncn-w002
-   ncn# export UPGRADE_XNAME=$(ssh $NODE cat /etc/cray/xname)
-   ncn# echo $UPGRADE_XNAME
-   x3000c0s9b0n0
-   ncn# unset CPS_NODE
-   ```
+```bash
+ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-worker.sh ncn-w002
+```
 
-1. Determine if the worker node being rebuilt is running a `cray-cps-cm-pm` pod by using the `cray cps deployment list` command.
-   If so, there is a final step to redeploy this pod once the worker node is rebuilt. In the example below CPS has been deployed
-   to nodes ncn-w001, ncn-w002, and ncn-w003.
+> NOTE: Run the script once each for all worker nodes. Follow output of above script carefully. The script will pause for manual interaction.
 
-   > NOTE: If the command below does not return any pod names, proceed to the next step to check the CFS status for the node and not any of the substeps here.
-
-   > NOTE: A 404 error is expected if the COS product is not installed on the system. In this case, proceed to the next step to check the CFS status for the node.
-
-   > NOTE: If the `cray` command is not initialized, please see [Initialize the CLI Configuration](../../operations/configure_cray_cli.md)
-
-
-   ```text
-   ncn# cray cps deployment list --format json | jq '.[] | [.node,.podname]'
-   [
-     "ncn-w003",
-     "cray-cps-cm-pm-9tdg5"
-   ]
-   [
-     "ncn-w001",
-     "cray-cps-cm-pm-fsd8w"
-   ]
-   [
-     "ncn-w002",
-     "cray-cps-cm-pm-sg954"
-   ]
-   ```
-
-   1. If the worker node being rebuilt is one of the nodes from the output of the `cray cps deployment list` command, determine the xname for the worker node and set CPS_NODE. This example uses ncn-w002.
-
-      > NOTE: Only set this CPS_NODE variable if the worker node being rebuilt is one of the worker nodes currently hosting a cray-cps-cm-pm pod.
-
-      ```bash
-      ncn# export CPS_NODE=$NODE
-      ncn# echo $CPS_NODE
-      ncn-w002
-      ```
-
-1. Confirm the CFS `configurationStatus` before shutting down the node. If the state is `pending`,
-   the administrator may want to tail the logs of the CFS pod running on that node to watch the CFS job finish
-   before rebooting this node. If the state is `failed` for this node, then it is unrelated to the upgrade process, and 
-   can be addressed independent of rebuilding this worker node.
-
-   ```bash
-   ncn# cray cfs components describe $UPGRADE_XNAME --format json
-   {
-     "configurationStatus": "configured",
-     "desiredConfig": "ncn-personalization-full",
-     "enabled": true,
-     "errorCount": 0,
-     "id": "x3000c0s9b0n0",
-     "retryPolicy": 3,
-    ```
-
-1. Run `ncn-upgrade-k8s-worker.sh`.
-
-   ```bash
-   ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-worker.sh ncn-w002
-   ```
-
-   > NOTE: Follow output of above script carefully. The script will pause for manual interaction.
-
-   > NOTE: It is expected that some pods may be in a bad state during a worker node upgrade. This is due to a temporary lack of computing resources during a worker node upgrade. Once the worker node has been upgraded and rejoined the Kubernetes cluster, those pods will be up and running again. All critical services have more than one replica so if one pod is down, the service is still available.
-
-1. Confirm the CFS `configurationStatus` after rebuilding the node. If the state is `pending`,
-   the administrator may want to tail the logs of the CFS pod running on that node to watch the CFS job finish.
-   
-   > **IMPORTANT** The NCN personalization (CFS configuration) for a worker node which has been rebuilt should be complete before continuing in this process. If the state is `failed` for this node, it should be be addressed now.
-
-   ```text
-   ncn# cray cfs components describe $UPGRADE_XNAME --format json
-   {
-     "configurationStatus": "configured",
-     "desiredConfig": "ncn-personalization-full",
-     "enabled": true,
-     "errorCount": 0,
-     "id": "x3000c0s9b0n0",
-     "retryPolicy": 3,
-    ```
-
-1. If the node was part of the CPS deployment, as identified by the `cray cps deployment list` command above,
-   this step should be run **after** the completion of the other upgrade steps.
-
-   1. Update CPS to deploy to this node.
-
-      ```bash
-      ncn# cray cps deployment update --nodes $CPS_NODE
-          ```
-
-   1. Check that the node is ready to provide CPS functionality to clients.
-
-      ```bash
-      ncn# cray cps deployment list --nodes $CPS_NODE |grep -E "podname|state ="
-      podname = "cray-cps-cm-pm-lcntf"
-      state = "running"
-      state = "running"
-      state = "running"
-      state = "running"
-      ```
-
-      The podname should be assigned and states should all show "running". 
-
-   1. Check that the pod has been assigned to this rebuilt node.
-
-      ```bash
-      ncn# kubectl get pod -A -o wide|grep cray-cps-cm-pm|grep $CPS_NODE
-      services            cray-cps-cm-pm-lcntf                                              4/4     Running            0          3d16h   10.36.0.51    ncn-w002   <none>           <none>
-      ```
-
-1. Repeat the above steps for the next worker node, until all worker nodes have been upgraded.
-
+> NOTE: It is expected that some pods may be in bad state during a worker node upgrade. This is due to a temporary lack of computing resources during a worker upgrade. Once the worker node has been upgraded and rejoined cluster, those pods will be up and running again. All critical services have more than one replica so if one pod is down, the service is still available.
 #### Stage 3.3
 
 For ncn-m001, use ncn-m002 as the stable NCN:

@@ -513,6 +513,10 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+# Take cps deployment snapshot
+cps_deployment_snapshot=$(cray cps deployment list --format json | jq -r '.[] | .node' || true)
+echo $cps_deployment_snapshot > /etc/cray/upgrade/csm/${CSM_RELEASE}/cp.deployment.snapshot
+
 # Alert the user of action to take for cleanup
 if [[ ${#UNMOUNTS[@]} -ne 0 ]]; then
     for m in "${UNMOUNTS[@]}"
