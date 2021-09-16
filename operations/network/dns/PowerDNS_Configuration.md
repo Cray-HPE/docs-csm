@@ -228,5 +228,3 @@ server 10.101.8.113 {
 ```
 
 For other DNS servers please consult the documentation provided by the DNS server vendor.
-
-#### Restric
