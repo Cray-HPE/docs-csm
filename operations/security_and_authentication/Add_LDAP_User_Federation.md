@@ -329,13 +329,13 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         ncn-m001# cat << EOF > ./cray-keycloak-users-localize-manifest.yaml
         apiVersion: manifests/v1beta1
         metadata:
-        name: reapply-cray-keycloak-users-localize
+          name: reapply-cray-keycloak-users-localize
         spec:
-        charts:
-        - name: cray-keycloak-users-localize
+          charts:
+            - name: cray-keycloak-users-localize
             namespace: services
             values:
-            imagesHost: dtr.dev.cray.com
+              imagesHost: dtr.dev.cray.com
             version: 0.12.2
         EOF
         ```
@@ -361,14 +361,20 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         ncn-m001# helm del cray-keycloak-users-localize -n services
         ```
 
-    6. Reapply the cray-keycloak-users-localize chart based on the CSM_RELEASE.
+    6. Populate the deployment manifest with data from the customizations.yaml file.
+
+        ```bash
+        ncn-m001# manifestgen -i cray-keycloak-users-localize-manifest.yaml -c customizations.yaml -o deploy.yaml
+        ```
+   
+    7. Reapply the cray-keycloak-users-localize chart based on the CSM_RELEASE.
 
         ```bash
         ncn-m001# loftsman ship --manifest-path ./cray-keycloak-users-localize-manifest.yaml \
         --charts-path /mnt/pitdata/csm-${CSM_RELEASE}/helm
         ```
 
-    7. Watch the pod to check the status of the job.
+    8. Watch the pod to check the status of the job.
 
         The pod will go through the normal Kubernetes states. It will stay in a Running state for a while, and then it will go to Completed.
 
@@ -377,7 +383,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         keycloak-users-localize-1-sk2hn                                0/2     Completed   0          2m35s
         ```
 
-    8. Check the pod's logs.
+    9.  Check the pod's logs.
 
         Replace the `KEYCLOAK_POD_NAME` value with the pod name from the previous step.
 
@@ -440,7 +446,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         }
         ```
 
-    1. Reboot with the Boot Orchestration Service (BOS).
+    6. Reboot with the Boot Orchestration Service (BOS).
 
         ```bash
         ncn-m001# cray bos session create --template-uuid BOS_TEMPLATE --operation reboot
