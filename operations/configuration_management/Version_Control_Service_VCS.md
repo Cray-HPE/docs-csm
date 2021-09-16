@@ -76,7 +76,7 @@ https://vcs.SHASTA_CLUSTER_DNS_NAME/vcs/org/cray/teams
 
 ### Backup and Restore Data
 
-Data for gitea is stored in two places.  Git content is stored directly in a PVC, while structural data, such as gitea users and the list and attributes of repos, is stored in a Postres database.  Because of this, both sources must be backed up and restored together.
+Data for gitea is stored in two places. Git content is stored directly in a PVC, while structural data, such as gitea users and the list and attributes of repos, is stored in a Postres database. Because of this, both sources must be backed up and restored together.
 
 #### Backup Postgres Data
 
@@ -147,9 +147,9 @@ kubectl -n services rollout restart deployment gitea-vcs
 
 #### Alternative Backup/Restore Strategy
 
-An alternative to the separate backups of the postgres and pvc data is to backup the git data.  This has the advantage that only one backup is needed and that the git backups can be imported into any git server, not just gitea, but has the disadvantage that some information about the gitea deployment is lost (such as user/org information) and may need to be recreated manually if the VCS deployment is lost.
+An alternative to the separate backups of the postgres and pvc data is to backup the git data. This has the advantage that only one backup is needed and that the git backups can be imported into any git server, not just gitea, but has the disadvantage that some information about the gitea deployment is lost (such as user/org information) and may need to be recreated manually if the VCS deployment is lost.
 
-The following scripts create/use a `vcs-content` directory that contains all git data.  This should be copied to a safe location after export, and moved back to the system before import.
+The following scripts create/use a `vcs-content` directory that contains all git data. This should be copied to a safe location after export, and moved back to the system before import.
 
 Export:
 
@@ -191,7 +191,7 @@ do
 done
 ```
 
-Prior to import, the repo structure may need to be recreated if it has not already been by an install. (Adjust the repo list as necessary if any additional are present.  Repo settings such as public/private will also need to be manually set if this is used.)
+Prior to import, the repo structure may need to be recreated if it has not already been by an install. (Adjust the repo list as necessary if any additional are present. Repo settings such as public/private will also need to be manually set if this is used.)
 
 ```
 VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)

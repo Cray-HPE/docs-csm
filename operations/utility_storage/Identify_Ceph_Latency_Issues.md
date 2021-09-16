@@ -58,11 +58,11 @@ This procedure requires admin privileges.
 
 Based on the output from ceph -s (using our example above) we can correlate some information to help determine our bottleneck.
 
-1. When reporting slow ops for `OSDs`, then it is good to find out if those osds are on the same node or different nodes.
+1. When reporting slow ops for OSDs, then it is good to find out if those OSDs are on the same node or different nodes.
     1. If on the same node, then you will want to look at networking or other hardware related issues on that node.
-    2. if the osds are on different nodes, then networking issues should be investigated
+    2. If the osds are on different nodes, then networking issues should be investigated
        1. As an initial step, restart the OSDs, if the slow ops go away and do not return, then we can investigate the logs for possible software bugs or memory issues.
-       2. if the slow ops come right back, then there is an issue with replication between the 2 osds which tends to be network related.
+       2. If the slow ops come right back, then there is an issue with replication between the 2 OSDs which tends to be network related.
 
 2. When reporting slow ops for `MONs`, then it is typically an issue with the process.
    1. The most common cause here is either an abrupt clock skew or a hung mon/mgr process.

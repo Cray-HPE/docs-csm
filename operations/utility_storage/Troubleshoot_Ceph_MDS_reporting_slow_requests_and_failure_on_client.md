@@ -2,9 +2,9 @@
 
 Before doing any steps on this page, please make sure you looked at [Identify_Ceph_Latency_Issues](Identify_Ceph_Latency_Issues.md)
 
-**`IMPORTANT:`** This will be a mix of commands that need to be run on the host(s) running the MDS daemon(s) and other commands that can be run from any of the ceph-mon nodes.  
+**`IMPORTANT:`** This will be a mix of commands that need to be run on the host(s) running the MDS daemon(s) and other commands that can be run from any of the ceph-mon nodes.
 
-**`NOTICE:`** These steps are based off upstream documentation.  This can be viewed here.  https://docs.ceph.com/en/octopus/cephfs/troubleshooting/. 
+**`NOTICE:`** These steps are based off upstream documentation.  This can be viewed here.  https://docs.ceph.com/en/octopus/cephfs/troubleshooting/.
 
 > Please ensure you are on the correct version of documentation for the cluster you are running.
 
@@ -45,13 +45,13 @@ Procedure:
    }
    ```
 
-   **NOTE:**  The example above is about how to run the command.  Recreating the exact scenario to provide a full example is not easily done.  This will be updated when the information is available. 
+   **NOTE:**  The example above is about how to run the command.  Recreating the exact scenario to provide a full example is not easily done.  This will be updated when the information is available.
 
 General Steps from upstream:
 
-1. Identify the stuck commands and examine why they are stuck. 
-   1. Usually the last "event" will have been an attempt to gather locks, or sending the operation off to the MDS log. 
-   2. If it is waiting on the OSDs, fix them. 
+1. Identify the stuck commands and examine why they are stuck.
+   1. Usually the last "event" will have been an attempt to gather locks, or sending the operation off to the MDS log.
+   2. If it is waiting on the OSDs, fix them.
    3. If operations are stuck on a specific inode, you probably have a client holding caps which prevent others from using it, either because the client is trying to flush out dirty data or because you have encountered a bug in CephFS' distributed file lock code (the file "capabilities" ["caps"] system).
       1. If it is a result of a bug in the capabilities code, restarting the MDS is likely to resolve the problem.
    4. If there are no slow requests reported on the MDS, and it is not reporting that clients are misbehaving, either the client has a problem or its requests are not reaching the MDS.
