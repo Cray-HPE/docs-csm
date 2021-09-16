@@ -31,6 +31,8 @@ The most noteworthy changes since the previous release are described here.
    * HSM now has a v2 REST API
    * PowerDNS authoriative DNS server
       * Introduces the cray-dns-powerdns, cray-dns-powerdns-postgres, and cray-powerdns-manager pods
+      * Supports zone transfer to external DNS servers via AXFR query and DNSSEC
+      * Please refer to the [DNS overview](../operations/network/dns/DNS.md) and [PowerDNS Configuration Guide](../operations/network/dns/PowerDNS_Configuration.md) for further information.
 
 <a name="deprecating_features"></a>
 ### Deprecating Features
