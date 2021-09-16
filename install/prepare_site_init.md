@@ -442,6 +442,14 @@ with system-specific customizations.
       ```
       > **`IMPORTANT`** **Do not** remove the `domain_name` entry, it is required for Unbound to forward requests to PowerDNS correctly.
 
+1. Configure PowerDNS zone transfer and DNSSEC (optional)
+
+   * If zone transfer is to be configured review `customizations.yaml` and ensure the `primary_server`, `secondary_servers`, and `notify_zones` values are set correctly.
+
+   * If DNSSEC is to be used then add the desired keys into the `dnssec` SealedSecret.
+
+   Please see the [PowerDNS Configuration Guide](../operations/network/dns/PowerDNS_Configuration.md) for more information.
+
 1.  Review `customizations.yaml` in the `site-init` directory and replace remaining `~FIXME~` values with
     appropriate settings.
 
