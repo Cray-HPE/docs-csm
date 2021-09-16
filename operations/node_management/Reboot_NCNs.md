@@ -247,9 +247,9 @@ Before rebooting NCNs:
 
     1. Failover any postgres leader that is running on the worker node you are rebooting.
 
-       ````bash
+       ```bash
        ncn-m# /usr/share/doc/csm/upgrade/1.0/scripts/k8s/failover-leader.sh <node to be rebooted>
-       ````
+       ```
 
     1. Cordon and Drain the node
 

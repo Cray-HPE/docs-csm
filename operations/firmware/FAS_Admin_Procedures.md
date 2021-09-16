@@ -124,7 +124,7 @@ If an update fails because of `"No Image available"`, it may be caused by FAS un
 
    Example actions JSON file with imageFilter added:
 
-   ``` json
+   ```json
        {
          "stateComponentFilter": {
            "deviceTypes":["nodeBMC"]
@@ -292,7 +292,7 @@ This procedure includes information on how check the firmware versions for the e
     noOperation = 6
     noSolution = 0
     aborted = 0
-    unknown = 0           
+    unknown = 0
     ```
 
        The action is still in progress if the state field is not completed or aborted.
