@@ -1,28 +1,35 @@
-# CSM 0.9.6 Patch
+# CSM 0.9.6 Patch Installation Instructions
 
-This procedure covers applying a new version of the `cray-dns-unbound` Helm chart to enable this setting in the configmap:
+## Content
+1. Non-Deterministic Unbound DNS Results Patch
 
-```text
-rrset-roundrobin: no
-```
+   This procedure covers applying a new version of the `cray-dns-unbound` Helm chart to enable this setting in the configmap:
 
-Unbound back in April 2020 [changed](https://github.com/NLnetLabs/unbound/blob/master/doc/Changelog) the default of this setting to be `yes` which had the effect of randomizing the records returned from it if more than one entry corresponded (as would be the case for PTR records, for example):
+   ```text
+   rrset-roundrobin: no
+   ```
 
-```text
-21 April 2020: George
-	- Change default value for 'rrset-roundrobin' to yes.
-	- Fix tests for new rrset-roundrobin default.
-```
+   Unbound back in April 2020 [changed](https://github.com/NLnetLabs/unbound/blob/master/doc/Changelog) the default of this setting to be `yes` which had the effect of randomizing the records returned from it if more than one entry corresponded (as woudl be the case for PTR records, for example):
 
-Some software is especially sensitive to this and thus requires this setting to be `no`.
+   ```text
+   21 April 2020: George
+   	- Change default value for 'rrset-roundrobin' to yes.
+   	- Fix tests for new rrset-roundrobin default.
+   ```
 
-Procedures:
+   Some software is especially sensitive to this and thus requires this setting to be `no`.
+1. Update the cray-sysmgmt-health helm chart to address multiple alerts
+1. Install/Update node_exporter on storage nodes
+1. Update cray-hms-hmnfd helm chart to include timestamp fix
+
+# Procedures
 
 - [Preparation](#preparation)
 - [Setup Nexus](#setup-nexus)
+- [Update NCNs](#update-ncns)
 - [Upgrade Services](#upgrade-services)
 - [Rollout Deployment Restart](#rollout-deployment-restart)
-- [Verify CSM Version in Product Catalog](#verify-version)
+- [Verification](#verification)
 - [Exit Typescript](#exit-typescript)
 
 <a name="preparation"></a>
@@ -99,6 +106,23 @@ documentation to resolve potential problems and then try running
 report `FAIL` when uploading duplicate assets. This is ok as long as
 `setup-nexus.sh` outputs `setup-nexus.sh: OK` and exits with status code `0`.
 
+<a name="update-ncns"></a>
+## Update NCNs
+
+1. Set `CSM_SCRIPTDIR` to the scripts directory included in the docs-csm RPM
+   for the CSM 0.9.6 upgrade:
+
+   ```bash
+   ncn-m001# CSM_SCRIPTDIR=/usr/share/doc/metal/upgrade/0.9/csm-0.9.6/scripts
+   ```
+
+2. Execute the following script from the scripts directory determined in the previous step to update master and storage nodes:
+
+   ```bash
+   ncn-m001# cd "$CSM_SCRIPTDIR"
+   ncn-m001# ./update-ncns.sh
+   ```
+
 <a name="upgrade-services"></a>
 ## Upgrade Services
 
@@ -131,8 +155,10 @@ Waiting for deployment "cray-dns-unbound" rollout to finish: 1 old replicas are 
 deployment "cray-dns-unbound" successfully rolled out
 ```
 
-<a name="verify-version"></a>
-## Verify CSM Version in Product Catalog
+<a name="verification"></a>
+## Verification
+
+### Verify CSM Version in Product Catalog:
 
 1. Verify the CSM version has been updated in the product catalog. Verify that the
    following command includes version `0.9.6`:
@@ -151,6 +177,140 @@ deployment "cray-dns-unbound" successfully rolled out
    ```bash
    ncn-m001# kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r  - '"0.9.6".configuration.import_date'
    ```
+### Verify cray-sysmgmt-health changes:
+
+1. Confirm node-exporter is running on each storage node. This command can be run from a master node.  Validate that the result contains `go_goroutines` (replace ncn-s001 below with each storage node):
+
+   ```bash
+   curl -s http://ncn-s001:9100/metrics |grep go_goroutines|grep -v "#"
+   go_goroutines 8
+   ```
+
+1. Confirm manifests were updated on each master node (repeat on each master node):
+
+   ```bash
+   ncn-m# grep bind /etc/kubernetes/manifests/*
+   kube-controller-manager.yaml:    - --bind-address=0.0.0.0
+   kube-scheduler.yaml:    - --bind-address=0.0.0.0
+   ```
+
+1. Confirm updated sysmgmt-health chart was deployed.  This command can be executed on a master node -- confirm the `cray-sysmgmt-health-0.12.6` chart version:
+
+   ```bash
+   ncn-m# helm ls -n sysmgmt-health
+   NAME               	NAMESPACE     	REVISION	UPDATED                               	STATUS  	CHART                     	APP VERSION
+   cray-sysmgmt-health	sysmgmt-health	2       	2021-09-10 16:45:12.00113666 +0000 UTC	deployed	cray-sysmgmt-health-0.12.6      8.15.4
+   ```
+
+1. Confirm updates to BSS for cloud-init runcmd
+
+   **`IMPORTANT:`** Ensure you replace `XNAME` with the correct xname in the below examples (executing the `/opt/cray/platform-utils/getXnames.sh` script on a master node will display xnames):
+
+   Example for a master node -- this should be checked for each master node.  Validate the three `sed` commands are returned in the output.
+
+   ```bash
+   ncn-m# cray bss bootparameters list --name XNAME --format=json | jq '.[]|."cloud-init"."user-data"'
+   {
+     "hostname": "ncn-m001",
+     "local_hostname": "ncn-m001",
+     "mac0": {
+       "gateway": "10.252.0.1",
+       "ip": "",
+       "mask": "10.252.2.0/23"
+     },
+     "runcmd": [
+       "/srv/cray/scripts/metal/install-bootloader.sh",
+       "/srv/cray/scripts/metal/set-host-records.sh",
+       "/srv/cray/scripts/metal/set-dhcp-to-static.sh",
+       "/srv/cray/scripts/metal/set-dns-config.sh",
+       "/srv/cray/scripts/metal/set-ntp-config.sh",
+       "/srv/cray/scripts/metal/set-bmc-bbs.sh",
+       "/srv/cray/scripts/metal/disable-cloud-init.sh",
+       "/srv/cray/scripts/common/update_ca_certs.py",
+       "/srv/cray/scripts/common/kubernetes-cloudinit.sh",
+       "sed -i 's/--bind-address=127.0.0.1/--bind-address=0.0.0.0/' /etc/kubernetes/manifests/kube-controller-manager.yaml",
+       "sed -i '/--port=0/d' /etc/kubernetes/manifests/kube-scheduler.yaml",
+       "sed -i 's/--bind-address=127.0.0.1/--bind-address=0.0.0.0/' /etc/kubernetes/manifests/kube-scheduler.yaml"
+     ]
+   }
+   ```
+
+   Example for a storage node -- this should be checked for each storage node.  Validate the `zypper` command is returned in the output.
+
+   ```bash
+   ncn-m001:~ # cray bss bootparameters list --name XNAME --format=json | jq '.[]|."cloud-init"."user-data"'
+   {
+     "hostname": "ncn-s001",
+     "local_hostname": "ncn-s001",
+     "mac0": {
+       "gateway": "10.252.0.1",
+       "ip": "",
+       "mask": "10.252.2.0/23"
+     },
+     "runcmd": [
+       "/srv/cray/scripts/metal/install-bootloader.sh",
+       "/srv/cray/scripts/metal/set-host-records.sh",
+       "/srv/cray/scripts/metal/set-dhcp-to-static.sh",
+       "/srv/cray/scripts/metal/set-dns-config.sh",
+       "/srv/cray/scripts/metal/set-ntp-config.sh",
+       "/srv/cray/scripts/metal/set-bmc-bbs.sh",
+       "/srv/cray/scripts/metal/disable-cloud-init.sh",
+       "/srv/cray/scripts/common/update_ca_certs.py",
+       "zypper --no-gpg-checks in -y https://packages.local/repository/casmrel-755/cray-node-exporter-1.2.2.1-1.x86_64.rpm"
+     ]
+   }
+   ```
+
+### Verify HMNFD timestamp fix:
+
+Once the patch is installed the missing timestamp fix can be validated by taking the following steps:
+
+1. Find an instance of a cluster-kafka pod:
+
+```
+   kubectl -n sma get pods | grep kafka
+   cluster-kafka-0               2/2     Running     1          30d
+   cluster-kafka-1               2/2     Running     1          26d
+   cluster-kafka-2               2/2     Running     0          73d
+```
+
+2. Exec into one of those pods:
+
+```
+   kubectl -n sma exec -it <pod_id> /bin/bash
+```
+
+3. cd to the 'bin' directory in the kafka pod.
+
+4. Execute the following command in the kafka pod to run a kafka consumer app:
+
+```
+   ./kafka-console-consumer.sh --bootstrap-server=localhost:9092 --topic=cray-hmsstatechange-notifications
+```
+
+5. Find a compute node that is booted on the system:
+
+```
+   sat status | grep Compute | grep Ready
+   ...
+   | x1003c7s7b1n1  | Node | 2023     | Ready   | OK   | True    | X86  | Mountain | Compute     | Sling    |
+```
+
+NOTE: All examples below will use the node seen in the above example.
+
+6. Send an SCN to HMNFD for that node indicating that it is in the Ready state.  Note that this won't affect anything since the node is already Ready.
+
+```
+   TOKEN=`curl -k -s -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=\`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d\` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token'`
+
+   curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -d '{"Components":["x1003c7s7b1n1"],"State":"Ready"}' https://api_gw_service.local/apis/hmnfd/hmi/v1/scn
+```
+
+7. In the kafka-console-consumer.sh window there should be an SCN sent by HMNFD, which should include a Timestamp field:
+
+```
+   {"Components":["x1003c7s7b1n1"],"Flag":"OK","State":"Ready","Timestamp":"2021-09-13T13:00:00"}
+```
 
 <a name="exit-typescript"></a>
 ## Exit Typescript
