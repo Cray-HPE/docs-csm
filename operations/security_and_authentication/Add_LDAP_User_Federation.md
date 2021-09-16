@@ -315,21 +315,60 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       Generating type static...
       ```
 
-5. Resubmit the Kubernetes Job that runs the Keycloak localization tool.
+5. Re-apply the cray-keycloak-users-localize Helm chart with the updated customizations.yaml file.
 
-    1.  Re-apply the cray-keycloak-users-localize Helm chart with the updated customizations.yaml file.
-   
+    1.  Determine the cray-keycloak-users-localize chart version that is currently deployed.
+
         ```bash
-        ncn-m001# kubectl get job -n services -l app.kubernetes.io/name=cray-keycloak-users-localize \
-        -ojson | jq '.items[0]' > keycloak-users-localize-job.json 
-        
-        ncn-m001# cat keycloak-users-localize-job.json | jq 'del(.spec.selector)' | \
-        jq 'del(.spec.template.metadata.labels)' | kubectl replace --force -f -
-        job.batch "keycloak-users-localize-1" deleted     
-        job.batch/keycloak-users-localize-1 replaced
+        ncn-m001# helm ls -A -a | grep cray-keycloak-users-localize
         ```
 
-    2. Watch the pod to check the status of the job.
+    2.  Create a manifest file that will be used to reapply the same chart version.
+
+        ```bash
+        ncn-m001# cat << EOF > ./cray-keycloak-users-localize-manifest.yaml
+        apiVersion: manifests/v1beta1
+        metadata:
+        name: reapply-cray-keycloak-users-localize
+        spec:
+        charts:
+        - name: cray-keycloak-users-localize
+            namespace: services
+            values:
+            imagesHost: dtr.dev.cray.com
+            version: 0.12.2
+        EOF
+        ```
+
+    3. Determine the CSM_RELEASE version that is currently running and set an environment variable.
+
+        For example:
+
+        ```bash
+        ncn-m001# CSM_RELEASE=1.10.54
+        ```
+
+    4. Mount the PITDATA so that helm charts are available for the re-install (it might already be mounted).
+
+        ```bash
+        ncn-m001# mkdir -pv /mnt/pitdata
+        ncn-m001# mount -L PITDATA /mnt/pitdata
+        ```
+
+    5. Uninstall the current cray-keycloak-users-localize chart.
+
+        ```bash
+        ncn-m001# helm del cray-keycloak-users-localize -n services
+        ```
+
+    6. Reapply the cray-keycloak-users-localize chart based on the CSM_RELEASE.
+
+        ```bash
+        ncn-m001# loftsman ship --manifest-path ./cray-keycloak-users-localize-manifest.yaml \
+        --charts-path /mnt/pitdata/csm-${CSM_RELEASE}/helm
+        ```
+
+    7. Watch the pod to check the status of the job.
 
         The pod will go through the normal Kubernetes states. It will stay in a Running state for a while, and then it will go to Completed.
 
@@ -338,7 +377,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         keycloak-users-localize-1-sk2hn                                0/2     Completed   0          2m35s
         ```
 
-    3. Check the pod's logs.
+    8. Check the pod's logs.
 
         Replace the `KEYCLOAK_POD_NAME` value with the pod name from the previous step.
 
@@ -381,8 +420,27 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         ncn-m001# git commit -m "Configure keycloak on computes"
         ncn-m001# git push origin integration
         ```
+    
+    5. Update the Configuration Framework Service (CFS) configuration.
 
-    5. Do a reboot with the Boot Orchestration Service (BOS).
+        ```bash
+        ncn-m001# cray cfs configurations update configurations-example \
+        --file ./configurations-example.json --format json
+        {
+          "lastUpdated": "2021-07-28T03:26:30:37Z",
+          "layers": [
+             {
+              "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/example-repo.git",
+              "commit": "<git commit id>",
+              "name": "configurations-layer-example-1",
+              "playbook": "site.yml"
+             }
+           ],
+           "name": "configurations-example"
+        }
+        ```
+
+    1. Reboot with the Boot Orchestration Service (BOS).
 
         ```bash
         ncn-m001# cray bos session create --template-uuid BOS_TEMPLATE --operation reboot
