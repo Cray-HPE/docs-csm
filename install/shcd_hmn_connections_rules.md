@@ -962,7 +962,7 @@ Management switch in slot 12 of cabinet 3000, its management port is connected t
 
 ### HMN Connections
 The HMN connections representation for the SHCD table row above.
-```JSON
+```json
 {"Source":"sw-25g01","SourceRack":"x3000","SourceLocation":"u12","DestinationRack":"x3000","DestinationLocation":"u14","DestinationPort":"j41"}
 ```
 

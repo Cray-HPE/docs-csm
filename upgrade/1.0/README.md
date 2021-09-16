@@ -260,7 +260,7 @@ ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-master.
 For the worker node in the cluster, do all of the following steps for one worker node and then repeat for the next worker node.
 
 1. Determine the xname for the worker node being upgraded.  This example uses ncn-w002.
-   
+
    ```bash
    ncn# export NODE=ncn-w002
    ncn# echo $NODE
@@ -310,7 +310,7 @@ For the worker node in the cluster, do all of the following steps for one worker
 
 1. Confirm the CFS `configurationStatus` before shutting down the node. If the state is `pending`,
    the administrator may want to tail the logs of the CFS pod running on that node to watch the CFS job finish
-   before rebooting this node. If the state is `failed` for this node, then it is unrelated to the upgrade process, and 
+   before rebooting this node. If the state is `failed` for this node, then it is unrelated to the upgrade process, and
    can be addressed independent of rebuilding this worker node.
 
    ```bash
@@ -336,7 +336,7 @@ For the worker node in the cluster, do all of the following steps for one worker
 
 1. Confirm the CFS `configurationStatus` after rebuilding the node. If the state is `pending`,
    the administrator may want to tail the logs of the CFS pod running on that node to watch the CFS job finish.
-   
+
    > **IMPORTANT** The NCN personalization (CFS configuration) for a worker node which has been rebuilt should be complete before continuing in this process. If the state is `failed` for this node, it should be be addressed now.
 
    ```text
@@ -370,7 +370,7 @@ For the worker node in the cluster, do all of the following steps for one worker
       state = "running"
       ```
 
-      The podname should be assigned and states should all show "running". 
+      The podname should be assigned and states should all show "running".
 
    1. Check that the pod has been assigned to this rebuilt node.
 

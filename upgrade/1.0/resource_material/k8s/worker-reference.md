@@ -26,7 +26,7 @@
     ]
     ```
 
-   If the node being rebuilt is in the output from the `cray cps deployment list` command above, then the `cray cps deployment update` command should be run **after** the node has been upgraded and is back online.  
+   If the node being rebuilt is in the output from the `cray cps deployment list` command above, then the `cray cps deployment update` command should be run **after** the node has been upgraded and is back online.
 
    > Do not run this command now. It is part of the manual instructions for upgrading a worker node. This example uses ncn-w002.
 
