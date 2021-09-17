@@ -774,14 +774,15 @@ The session template below can be copied and used as the basis for the BOS Sessi
    }
    ```
 
+   **NOTE**: Be sure to replace the values of the `etag` and `path` fields with the ones you noted earlier in the `cray ims images list` command.
+
    **NOTE**: The rootfs provider shown above references the `dvs` provider. DVS is not provided as part of the CSM 
    distribution and is not expected to work until the COS product is installed and configured. As noted above, the 
    barebones image is not expected to boot at this time. Work is being done to enable a fully functional and bootable 
    barebones image in a future release of the CSM product. Until that work is complete, the use of the `dvs` rootfs
    provider is suggested.
 
-   **NOTE**: Be sure to replace the values of the `etag` and `path` fields with the ones you noted earlier in the `cray ims images list` command.
-
+from Redeploy Pit Node section)
 2. Create the BOS session template using the following file as input:
    ```
    ncn# cray bos sessiontemplate create --file sessiontemplate.json --name shasta-PRODUCT_VERSION-csm-bare-bones-image
