@@ -6,7 +6,7 @@ This procedure covers applying a new version of the `cray-dns-unbound` Helm char
 rrset-roundrobin: no
 ```
 
-Unbound back in April 2020 [changed](https://github.com/NLnetLabs/unbound/blob/master/doc/Changelog) the default of this setting to be `yes` which had the effect of randomizing the records returned from it if more than one entry corresponded (as woudl be the case for PTR records, for example):
+Unbound back in April 2020 [changed](https://github.com/NLnetLabs/unbound/blob/master/doc/Changelog) the default of this setting to be `yes` which had the effect of randomizing the records returned from it if more than one entry corresponded (as would be the case for PTR records, for example):
 
 ```text
 21 April 2020: George
