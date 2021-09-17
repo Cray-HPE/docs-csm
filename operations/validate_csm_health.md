@@ -430,7 +430,7 @@ Known failures and how to recover:
 <a name="net-vault"></a>
 ### 1.7 Verify the Vault Cluster is Healthy
 
-Execute the following commands on ```ncn-m002```:
+Execute the following commands on `ncn-m002`:
 
 ```bash
 ncn-m002# goss -g /opt/cray/tests/install/ncn/tests/goss-k8s-vault-cluster-health.yaml validate
@@ -470,7 +470,7 @@ pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
 * K8S Test: Kubernetes Query BSS Cloud-init for ca-certs
   - May fail immediately after platform install. Should pass after the TrustedCerts Operator has updated BSS (Global cloud-init meta) with CA certificates.
 * K8S Test: Kubernetes Velero No Failed Backups
-  - Because of a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (for example, vault). It may be necessary to use the ```velero``` command to delete backups from a Kubernetes node to clear this situation.
+  - Because of a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (for example, vault). It may be necessary to use the `velero` command to delete backups from a Kubernetes node to clear this situation.
 
 
 <a name="optional-check-of-system-management-monitoring-tools"></a>
@@ -754,7 +754,7 @@ The session template below can be copied and used as the basis for the BOS Sessi
 
    **NOTE**: Be sure to replace the values of the `etag` and `path` fields with the ones you noted earlier in the `cray ims images list` command.
 
-   
+
 2. Create the BOS session template using the following file as input:
    ```
    ncn# cray bos sessiontemplate create --file sessiontemplate.json --name shasta-1.4-csm-bare-bones-image

@@ -5,7 +5,7 @@ set -o pipefail
 SCRIPT_DIR=$(dirname "$0")
 
 if ! eval pdsh -b -S -w "$(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u | tr -t '\n' ',')" 'cat /etc/cray/xname' > /dev/null 2>&1; then
-	echo "One or more NCN is not ready for this script.  They must all be booted to an OS and accessible on the network"
+	echo "One or more NCN is not ready for this script. They must all be booted to an OS and accessible on the network"
 fi
 
 # Get all the xnames so we can query bss for their boot asset paths from a single node (usually the node this script is ran from)
@@ -41,7 +41,7 @@ if ! eval check_cray_init_status >/dev/null 2>&1; then
 	echo -n "\nPlease run 'cray init'"
 	exit 1
 else
-	# for each ncn, we need the path to it's assets in s3
+	# for each ncn, we need the path to its assets in s3
 	for i in "${ncn_to_xname_dict[@]}" ; do
 		# the ncn is before the colon, the xname is after
 		ncn="${i%%:*}"
