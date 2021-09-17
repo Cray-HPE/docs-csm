@@ -404,39 +404,92 @@ with system-specific customizations.
         ldapSearchBase: dc=dcldap,dc=dit
         ```
 
-1.  If you need to resolve outside hostnames, you will need to configure
-    forwarding in the cray-dns-unbound service. For example, if you are using a
-    hostname and not an IP address for the upstream LDAP server in step 4 above, you
-    will need to be able to resolve that hostname.
+1.  Configure the Unbound DNS resolver.
 
-    Default configuration:
+  If a valid DNS server was defined using the CSI `--site-dns` option then no further action is required and the default configuration will suffice.
 
-    ```
-    cray-dns-unbound:
+  Default configuration:
+
+  ```
+  cray-dns-unbound:
       domain_name: '{{ network.dns.external }}'
       forwardZones:
         - name: "."
           forwardIps:
             - "{{ network.netstaticips.system_to_site_lookups }}"
-    ```
-    Remove the `forwardZones` configuration for the `cray-dns-unbound` service:
-
-    ```bash
-    linux# yq delete -i /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-dns-unbound.forwardZones
-    ```
-
-    Review the `cray-dns-unbound` values.
-
-    ```bash
-    linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-dns-unbound
-    ```
-
-    Expected output is:
+  ```
     
-    ```
-	domain_name: '{{ network.dns.external }}'
-    ```
-Do not remove the `domain_name` entry.
+   If there is no requirement to resolve external hostnames or no upstream DNS server
+    then remove the DNS forwarding configuration from the `cray-dns-unbound` service. 
+
+ 
+   1. Remove the `forwardZones` configuration for the `cray-dns-unbound` service:
+
+      ```bash
+      linux# yq delete -i /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-dns-unbound.forwardZones
+      ```
+
+    1. Review the `cray-dns-unbound` values.
+
+      ```bash
+      linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-dns-unbound
+      ```
+
+      Expected output is:
+
+      ```
+	  domain_name: '{{ network.dns.external }}'
+      ```
+      > **`IMPORTANT`** **Do not** remove the `domain_name` entry, it is required for Unbound to forward requests to PowerDNS correctly.
+
+1. Configure PowerDNS zone transfer and DNSSEC (optional)
+
+   * If zone transfer is to be configured review `customizations.yaml` and ensure the `primary_server`, `secondary_servers`, and `notify_zones` values are set correctly.
+
+   * If DNSSEC is to be used then add the desired keys into the `dnssec` SealedSecret.
+
+   Please see the [PowerDNS Configuration Guide](../operations/network/dns/PowerDNS_Configuration.md) for more information.
+
+1.  Review `customizations.yaml` in the `site-init` directory and replace remaining `~FIXME~` values with
+    appropriate settings.
+
+    1. Create backup copy of `customizations.yaml`:
+
+        ```bash
+        linux# cp -v /mnt/pitdata/prep/site-init/customizations.yaml /mnt/pitdata/prep/site-init/customizations.yaml-prefixme
+        ```
+
+    1. Edit `customizations.yaml`
+        For the following `~FIXME~` values, use the example provided and just remove the `~FIXME~ e.g.`
+
+        ```
+           sma-rsyslog-aggregator:
+             cray-service:
+               service:
+                 loadBalancerIP: ~FIXME~ e.g. 10.92.100.72
+             rsyslogAggregatorHmn:
+               service:
+                 loadBalancerIP: ~FIXME~ e.g. 10.94.100.2
+
+           sma-rsyslog-aggregator-udp:
+             cray-service:
+               service:
+                 loadBalancerIP: ~FIXME~ e.g. 10.92.100.75
+             rsyslogAggregatorUdpHmn:
+               service:
+                 loadBalancerIP: ~FIXME~ e.g. 10.94.100.3
+        ```
+
+    1. Review your changes:
+        ```bash
+        linux# diff /mnt/pitdata/prep/site-init/customizations.yaml /mnt/pitdata/prep/site-init/customizations.yaml-prefixme
+        ```
+
+    1. Verify that no `FIXME` strings remain in the file:
+        ```bash
+        linux# grep FIXME /mnt/pitdata/prep/site-init/customizations.yaml
+        ```
+
 
 <a name="generate-sealed-secrets"></a>
 ### 4. Generate Sealed Secrets
