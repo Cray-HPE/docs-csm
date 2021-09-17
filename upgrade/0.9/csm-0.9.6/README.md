@@ -1,4 +1,4 @@
-# Non-Deterministic Unbound DNS Results Patch
+# CSM 0.9.6 Patch
 
 This procedure covers applying a new version of the `cray-dns-unbound` Helm chart to enable this setting in the configmap:
 
