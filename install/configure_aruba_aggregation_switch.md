@@ -1,3 +1,4 @@
+
 # Configure Aruba Aggregation Switch
 
 This page describes how Aruba aggregation switches are configured.
@@ -9,9 +10,10 @@ JL635A Aruba 8325-48Y8C
 
 They run in a high availability pair and use VSX to provide redundancy.
 
-Requirements:
-   - Three connections between the switches, two of these are used for the ISL (Inter switch link) and one used for the keepalive.
-   - The ISL uses 100GB ports and the keepalive will be a 25 GB port.
+## Prerequisites
+
+- Three connections between the switches, two of these are used for the ISL (Inter switch link) and one used for the keepalive.
+- The ISL uses 100GB ports and the keepalive will be a 25 GB port.
 
 Here is an example snippet from an aggregation switch on the 25G_10G tab of the SHCD spreadsheet.
 
