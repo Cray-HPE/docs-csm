@@ -334,19 +334,44 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
        ncn-m001# kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' > platform.yaml
        ```
 
-    2. Populate the platform manifest with data from the customizations.yaml file.
+    2. Remove all charts from the platform.yaml except for cray-keycloak.
+   
+       Edit the platform.yaml file and delete all sections starting with `-name: <chart_name>`, except for the cray-keycloak section.
+
+       Then, change the name of the manifest being deployed from platform to cray-keycloak:
+      
+       ```bash
+       ncn-m001:# sed -i 's/name: platform/name: cray-keycloak/' platform.yaml
+       ```
+
+    3. Populate the platform manifest with data from the customizations.yaml file.
        
        ```bash
        ncn-m001# manifestgen -i platform.yaml -c customizations.yaml -o new-platform.yaml
        ```
 
-    3. Re-apply the platform manifest with the updated cray-keycloak chart.
+    4. Re-apply the platform manifest with the updated cray-keycloak chart.
    
        ```bash
        ncn-m001# loftsman ship --manifest-path ./new-platform.yaml --charts-repo https://packages.local/repository/charts
        ```
 
-    4. Wait for the Keycloak pods to restart before moving on to the next step. 
+    5. Wait for the keycloak-certs secret to reflect the new `cert.jks`.
+       
+       Run the following command until there is a non-empty value in the secret (this can take a minute or two):
+       
+       ```bash
+       ncn-m001# kubectl get secret -n services keycloak-certs -o yaml | grep certs.jks
+         certs.jks: <REDACTED>
+       ```
+
+    6. Restart the `cray-keycloak-[123]` pods.
+
+       ```bash
+       ncn-m001# kubectl rollout restart statefulset -n services cray-keycloak
+       ```
+
+    7. Wait for the Keycloak pods to restart before moving on to the next step.
        
        Once the `cray-keycloak-[123]` pods have restarted, proceed to the next step.
 
