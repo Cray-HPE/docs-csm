@@ -257,7 +257,14 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    Sealed Secrets operator. But first, those Secrets must be seeded generated and
    encrypted.
 
-   1. Load the `zeromq` container image required by Sealed Secret Generators.
+   1. Mount the PITDATA so that helm charts are available for the re-install (it might already be mounted).
+
+      ```bash
+      ncn-m001# mkdir -pv /mnt/pitdata
+      ncn-m001# mount -L PITDATA /mnt/pitdata
+      ```
+   
+   2. Load the `zeromq` container image required by Sealed Secret Generators.
 
       > **NOTE:** A properly configured Docker or Podman environment is required.
 
@@ -265,7 +272,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       ncn-m001# /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh dtr.dev.cray.com/zeromq/zeromq:v4.0.5
       ```
 
-   2. Re-encrypt the existing secrets:
+   3. Re-encrypt the existing secrets:
 
       ```bash
       ncn-m001# /mnt/pitdata/prep/site-init/utils/secrets-reencrypt.sh customizations.yaml \
@@ -350,33 +357,26 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         ncn-m001# CSM_RELEASE=1.10.54
         ```
 
-    4. Mount the PITDATA so that helm charts are available for the re-install (it might already be mounted).
-
-        ```bash
-        ncn-m001# mkdir -pv /mnt/pitdata
-        ncn-m001# mount -L PITDATA /mnt/pitdata
-        ```
-
-    5. Uninstall the current cray-keycloak-users-localize chart.
+    4. Uninstall the current cray-keycloak-users-localize chart.
 
         ```bash
         ncn-m001# helm del cray-keycloak-users-localize -n services
         ```
 
-    6. Populate the deployment manifest with data from the customizations.yaml file.
+    5. Populate the deployment manifest with data from the customizations.yaml file.
 
         ```bash
         ncn-m001# manifestgen -i cray-keycloak-users-localize-manifest.yaml -c customizations.yaml -o deploy.yaml
         ```
    
-    7. Reapply the cray-keycloak-users-localize chart based on the CSM_RELEASE.
+    6. Reapply the cray-keycloak-users-localize chart based on the CSM_RELEASE.
 
         ```bash
         ncn-m001# loftsman ship --manifest-path ./deploy.yaml \
         --charts-repo https://packages.local/repository/charts
         ```
 
-    8. Watch the pod to check the status of the job.
+    7. Watch the pod to check the status of the job.
 
         The pod will go through the normal Kubernetes states. It will stay in a Running state for a while, and then it will go to Completed.
 
@@ -385,7 +385,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         keycloak-users-localize-1-sk2hn                                0/2     Completed   0          2m35s
         ```
 
-    9.  Check the pod's logs.
+    8.  Check the pod's logs.
 
         Replace the `KEYCLOAK_POD_NAME` value with the pod name from the previous step.
 
