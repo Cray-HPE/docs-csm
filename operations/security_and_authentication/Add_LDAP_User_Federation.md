@@ -348,7 +348,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
     4. Wait for the Keycloak pods to restart before moving on to the next step. 
        
-       Once the 'cray-keycloak-[123]' pods have restarted, proceed to the next step.
+       Once the `cray-keycloak-[123]` pods have restarted, proceed to the next step.
 
        ```bash
        ncn-m001# kubectl get po -n services | grep cray-keycloak
@@ -490,9 +490,9 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       https://auth.<system_name>/keycloak.
       ```
 
-   3. Click on the 'Users' tab in the navigation pane on the left.
+   3. Click on the "Users" tab in the navigation pane on the left.
 
-   4. Click on the 'View all users' button and verify the LDAP users appear in the table.
+   4. Click on the "View all users" button and verify the LDAP users appear in the table.
 
    5. Verify a token can be retrieved from Keycloak using an LDAP user/password.
 
@@ -527,13 +527,13 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       }
       ```
 
-   6. Validate that the access_token looks correct.
+   6. Validate that the `access_token` looks correct.
 
-      Copy the access_token from the previous step and open a browser window.
-      Naviagate to http://jwt.io, and paste the token in the 'Encoded' field.
+      Copy the `access_token` from the previous step and open a browser window.
+      Naviagate to http://jwt.io, and paste the token in the "Encoded" field.
 
-      Verify the 'preferred_username' is the expected LDAP user and the
-      role is 'admin' (or other role based on the user).
+      Verify the `preferred_username` is the expected LDAP user and the
+      role is `admin` (or other role based on the user).
   
 
 
