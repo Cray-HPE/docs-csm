@@ -555,7 +555,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    6. Validate that the `access_token` looks correct.
 
       Copy the `access_token` from the previous step and open a browser window.
-      Naviagate to http://jwt.io, and paste the token in the "Encoded" field.
+      Navigate to http://jwt.io, and paste the token in the "Encoded" field.
 
       Verify the `preferred_username` is the expected LDAP user and the
       role is `admin` (or other role based on the user).
