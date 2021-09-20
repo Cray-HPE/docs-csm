@@ -48,7 +48,26 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    
 2. Update the LDAP settings in the customizations.yaml file.
 
-   1. Modify the customizations.yaml file to put the LDAP server CA certificate into the SealedSecret.
+   1. Add the encrypted version of the LDAP CA certificate in the `certs.jks` section of customizations.yaml.
+
+      ```bash
+          sealed_secrets:
+            cray-keycloak:
+              apiVersion: bitnami.com/v1alpha1
+              kind: SealedSecret
+              metadata:
+                annotations:
+            
+       sealedsecrets.bitnami.com/cluster-wide: "true"
+          creationTimestamp: null
+          name: keycloak-certs
+         spec:
+          encryptedData:
+            certs.jks: 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
+          template:
+            metadata:
+              annotations:
+      ```
    
    2. Update the LDAP settings.
   
