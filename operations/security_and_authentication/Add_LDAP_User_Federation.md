@@ -256,7 +256,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    
    Secrets are stored in customizations.yaml as `SealedSecret` resources 
    (encrypted secrets), which are deployed by specific charts and decrypted by the
-   Sealed Secrets operator. But first, those Secrets must be seeded generated and
+   Sealed Secrets operator. But first, those Secrets must be seeded, generated, and
    encrypted.
 
    1. Mount the PITDATA so that helm charts are available for the re-install (it might already be mounted).
@@ -509,10 +509,10 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    
    2. Login to the Keycloak UI using the `admin` user and the password obtained in the previous step.
       
-      The Keycloak UI URL is typically similar to the folloinwg:
+      The Keycloak UI URL is typically similar to the following:
       
       ```
-      https://auth.<system_name>/keycloak.
+      https://auth.<system_name>/keycloak
       ```
 
    3. Click on the "Users" tab in the navigation pane on the left.
