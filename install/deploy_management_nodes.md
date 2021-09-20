@@ -611,8 +611,14 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 
       ```bash
       pit# canu -s 1.5 config bgp --ips 10.252.0.2,10.252.0.3 --csi-folder /var/www/ephemeral/prep/${SYSTEM_NAME}/```
+   1. Do the following steps for each of the switch IP addresses that you found in the previous step:
 
-   1. Check the status of the BGP peering sessions **on each switch**.
+      Log in to the switch as the `admin` user:
+      
+        ```bash
+        pit# ssh admin@<switch_ip_address>
+        ```   
+      1. Check the status of the BGP peering sessions **on each switch**.
       - Aruba: `show bgp ipv4 unicast summary`
       - Mellanox: `show ip bgp summary`
 
@@ -621,7 +627,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
       At this point the peering sessions with the worker IP addresses should be in `IDLE`, `CONNECT`, or `ACTIVE` state (not `ESTABLISHED`). This is due to the MetalLB speaker pods not being deployed yet.
 
       You should see that the `MsgRcvd` and `MsgSent` columns for the worker IP addresses are 0.
-   1. Check the BGP config ***on each switch*** to verify that the NCN neighbors are configured as passive.
+      1. Check the BGP config ***on each switch*** to verify that the NCN neighbors are configured as passive.
       - Aruba: ```show run bgp``` The passive neighbor configuration is required. ```neighbor 10.252.1.7 passive``` 
       EXAMPLE ONLY
 
