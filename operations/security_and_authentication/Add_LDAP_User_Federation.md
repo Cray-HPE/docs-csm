@@ -48,7 +48,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    
 2. Update the LDAP settings in the customizations.yaml file.
 
-   1. Modify the customizations.yaml file to put the LDAP server CA certificate goes into the SealedSecret.
+   1. Modify the customizations.yaml file to put the LDAP server CA certificate into the SealedSecret.
    
    2. Update the LDAP settings.
   
