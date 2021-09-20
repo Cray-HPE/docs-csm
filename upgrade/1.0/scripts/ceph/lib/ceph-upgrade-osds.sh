@@ -31,7 +31,7 @@ for host in $(ceph node ls| jq -r '.osd|keys[]')
            sleep 30
 	   if [[ $counter > 10 ]]
 	   then
-	     echo "OSD status should have been active by now, failing the mgr process and restarting the osd"
+	     echo "OSD status should have been active by now, failing the mgr process and restarting the OSD"
              ceph mgr fail $(ceph mgr dump | jq -r .active_name)
 	     echo "Sleep 30 seconds to allow the new mgr process to start"
              echo "Restarting OSD $osd"

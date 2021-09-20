@@ -93,8 +93,25 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="UPDATE_SSH_KEYS"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    . ${BASEDIR}/ncn-upgrade-common.sh ${upgrade_ncn}
+    for i in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ' ')
+    do
+        ssh_keygen_keyscan $i
+    done
+
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 # Apply WAR for CASMINST-2689, just in case
-if [[ $(hostname) == "ncn-m001" ]]; then
+state_name="APPLY_CASMINST-2689"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
   echo "Opening and refreshing fallback artifacts on the NCNs.."
     
   "${BASEDIR}"/CASMINST-2689.sh
@@ -124,6 +141,9 @@ if [[ $(hostname) == "ncn-m001" ]]; then
         fi
         systemctl restart chronyd
   fi
+  record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
 fi
 
 
@@ -180,7 +200,7 @@ state_name="INSTALL_CSI"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    rpm --force -Uvh ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
+    rpm --force -Uvh $(find ${CSM_ARTI_DIR}/rpm/cray/csm/ -name "cray-site-init*.rpm") 
 
     record_state ${state_name} $(hostname)
 else
@@ -191,7 +211,8 @@ state_name="INSTALL_WAR_DOC"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    rpm --force -Uvh ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/noarch/csm-install-workarounds-*.noarch.rpm
+
+    rpm --force -Uvh $(find ${CSM_ARTI_DIR}/rpm/cray/csm/ -name "csm-install-workarounds-*.rpm") 
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
@@ -204,7 +225,7 @@ if [[ $state_recorded == "0" ]]; then
     if [[ ! -f docs-csm-latest.noarch.rpm ]]; then
         echo "Please make sure 'docs-csm-latest.noarch.rpm' exists under: $(pwd)"
     fi
-    cp docs-csm-latest.noarch.rpm ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/noarch/
+    cp docs-csm-latest.noarch.rpm ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
@@ -408,7 +429,7 @@ if [[ $state_recorded == "0" ]]; then
     echo "export KUBERNETES_VERSION=${KUBERNETES_VERSION}" >> /etc/cray/upgrade/csm/myenv
     echo "export CSM_RELEASE=${CSM_RELEASE}" >> /etc/cray/upgrade/csm/myenv
     echo "export CSM_ARTI_DIR=${CSM_ARTI_DIR}" >> /etc/cray/upgrade/csm/myenv
-    echo "export DOC_RPM_NEXUS_URL=https://packages.local/repository/csm-sle-15sp2/$(ls ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/noarch/docs-csm-latest.noarch.rpm | awk -F'/sle-15sp2/' '{print $2}')" >> /etc/cray/upgrade/csm/myenv
+    echo "export DOC_RPM_NEXUS_URL=https://packages.local/repository/csm-sle-15sp2/docs-csm-latest.noarch.rpm" >> /etc/cray/upgrade/csm/myenv
 
     record_state ${state_name} $(hostname)
 else
@@ -492,20 +513,9 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-state_name="UPDATE_SSH_KEYS"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" && $(hostname) == "ncn-m002" ]]; then
-    echo "====> ${state_name} ..."
-    . ${BASEDIR}/ncn-upgrade-common.sh ${upgrade_ncn}
-    for i in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ' ')
-    do
-        ssh_keygen_keyscan $i
-    done
-
-    record_state ${state_name} $(hostname)
-else
-    echo "====> ${state_name} has been completed"
-fi
+# Take cps deployment snapshot
+cps_deployment_snapshot=$(cray cps deployment list --format json | jq -r '.[] | .node' || true)
+echo $cps_deployment_snapshot > /etc/cray/upgrade/csm/${CSM_RELEASE}/cp.deployment.snapshot
 
 # Alert the user of action to take for cleanup
 if [[ ${#UNMOUNTS[@]} -ne 0 ]]; then
