@@ -361,41 +361,31 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         spec:
           charts:
             - name: cray-keycloak-users-localize
-            namespace: services
-            values:
-              imagesHost: dtr.dev.cray.com
-            version: 0.12.2
+              namespace: services
+              version: 0.12.2
         EOF
         ```
 
-    3. Determine the CSM_RELEASE version that is currently running and set an environment variable.
-
-        For example:
-
-        ```bash
-        ncn-m001# CSM_RELEASE=1.10.54
-        ```
-
-    4. Uninstall the current cray-keycloak-users-localize chart.
+    3. Uninstall the current cray-keycloak-users-localize chart.
 
         ```bash
         ncn-m001# helm del cray-keycloak-users-localize -n services
         ```
 
-    5. Populate the deployment manifest with data from the customizations.yaml file.
+    4. Populate the deployment manifest with data from the customizations.yaml file.
 
         ```bash
         ncn-m001# manifestgen -i cray-keycloak-users-localize-manifest.yaml -c customizations.yaml -o deploy.yaml
         ```
    
-    6. Reapply the cray-keycloak-users-localize chart based on the CSM_RELEASE.
+    5. Reapply the cray-keycloak-users-localize chart.
 
         ```bash
         ncn-m001# loftsman ship --manifest-path ./deploy.yaml \
         --charts-repo https://packages.local/repository/charts
         ```
 
-    7. Watch the pod to check the status of the job.
+    6. Watch the pod to check the status of the job.
 
         The pod will go through the normal Kubernetes states. It will stay in a Running state for a while, and then it will go to Completed.
 
@@ -404,7 +394,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         keycloak-users-localize-1-sk2hn                                0/2     Completed   0          2m35s
         ```
 
-    8.  Check the pod's logs.
+    7.  Check the pod's logs.
 
         Replace the `KEYCLOAK_POD_NAME` value with the pod name from the previous step.
 
