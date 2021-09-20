@@ -50,7 +50,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
    1. (Optional) Add the LDAP CA certificate in the certs.jks section of customizations.yaml.
 
-      Follow step 8 under the "Create Baseline System Customizations" header in the [Prepare Site Init](../../install/prepare_site_init.md) procedure.
+      Follow step 8 under the "Create Baseline System Customizations" header in the [Setup Site-Init From SHASTA-CFG](../../067-SHASTA-CFG.md) procedure.
    
    2. Update the LDAP settings.
   
