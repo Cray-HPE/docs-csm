@@ -410,6 +410,7 @@ if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     temp_file=$(mktemp)
     artdir=${CSM_ARTI_DIR}/images
+    set -o pipefail
     csi handoff ncn-images \
           --kubeconfig /etc/kubernetes/admin.conf \
           --k8s-kernel-path $artdir/kubernetes/*.kernel \
@@ -418,6 +419,7 @@ if [[ $state_recorded == "0" ]]; then
           --ceph-kernel-path $artdir/storage-ceph/*.kernel \
           --ceph-initrd-path $artdir/storage-ceph/initrd*.xz \
           --ceph-squashfs-path $artdir/storage-ceph/storage-ceph*.squashfs | tee $temp_file
+    set +o pipefail
 
     KUBERNETES_VERSION=`cat $temp_file | grep "export KUBERNETES_VERSION=" | awk -F'=' '{print $2}'`
     CEPH_VERSION=`cat $temp_file | grep "export CEPH_VERSION=" | awk -F'=' '{print $2}'`
