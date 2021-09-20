@@ -42,8 +42,6 @@ if [[ -z ${CSM_RELEASE} ]]; then
     exit 1
 fi
 
-
-
 if [[ -z ${TARBALL_FILE} ]]; then
     # Download tarball from internet
 
@@ -65,6 +63,12 @@ if [[ -z ${TARBALL_FILE} ]]; then
     state_name="GET_CSM_TARBALL_FILE"
     state_recorded=$(is_state_recorded "${state_name}" $(hostname))
     if [[ $state_recorded == "0" ]]; then
+        # Since we are getting a new tarball
+        # this has to be a new upgrade
+        # clean up myenv 
+        # this is block/breaking 1.0 to 1.0 upgrade
+        rm -rf /etc/cray/upgrade/csm/myenv || true
+        touch /etc/cray/upgrade/csm/myenv
         echo "====> ${state_name} ..."
         wget ${ENDPOINT}/${CSM_RELEASE}.tar.gz
         # set TARBALL_FILE to newly downloaded file
@@ -98,6 +102,8 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     . ${BASEDIR}/ncn-upgrade-common.sh ${upgrade_ncn}
+    rm -rf /root/.ssh/known_hosts || true
+    touch /root/.ssh/known_hosts
     for i in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ' ')
     do
         ssh_keygen_keyscan $i
@@ -112,6 +118,7 @@ fi
 state_name="APPLY_CASMINST-2689"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+  echo "====> ${state_name} ..."
   echo "Opening and refreshing fallback artifacts on the NCNs.."
     
   "${BASEDIR}"/CASMINST-2689.sh
@@ -406,10 +413,10 @@ if [[ $state_recorded == "0" ]]; then
     csi handoff ncn-images \
           --kubeconfig /etc/kubernetes/admin.conf \
           --k8s-kernel-path $artdir/kubernetes/*.kernel \
-          --k8s-initrd-path $artdir/kubernetes/initrd.img*.xz \
+          --k8s-initrd-path $artdir/kubernetes/initrd*.xz \
           --k8s-squashfs-path $artdir/kubernetes/kubernetes*.squashfs \
           --ceph-kernel-path $artdir/storage-ceph/*.kernel \
-          --ceph-initrd-path $artdir/storage-ceph/initrd.img*.xz \
+          --ceph-initrd-path $artdir/storage-ceph/initrd*.xz \
           --ceph-squashfs-path $artdir/storage-ceph/storage-ceph*.squashfs | tee $temp_file
 
     KUBERNETES_VERSION=`cat $temp_file | grep "export KUBERNETES_VERSION=" | awk -F'=' '{print $2}'`
