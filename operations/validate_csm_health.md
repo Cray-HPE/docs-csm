@@ -376,7 +376,7 @@ If there is an non-zero amount of DHCP leases for air-cooled hardware returned, 
 <a name="net-extdns"></a>
 ### 1.5 Verify ability to resolve external DNS
 
-If unbound is configured to resolve outside hostnames, then the following check should be performed. If unbond is not configured to resolve outside hostnames, then this check may be skipped. 
+If unbound is configured to resolve outside hostnames, then the following check should be performed. If unbound is not configured to resolve outside hostnames, then this check may be skipped.
 
 Run the following on one of the master or worker nodes (not the PIT node):
 
@@ -401,7 +401,7 @@ Verify that the command has exit code 0, reports no errors, and resolves the add
 <a name="net-spire"></a>
 ### 1.6 Verify Spire Agent is Running on Kubernetes NCNs
 
-Execute the following command on all Kubernetes NCNs (i.e. all worker nodes and master nodes, excluding the PIT):
+Execute the following command on all Kubernetes NCNs (all worker nodes and master nodes), excluding the PIT node (booted from the LiveCD):
 
 ```bash
 ncn# goss -g /opt/cray/tests/install/ncn/tests/goss-spire-agent-service-running.yaml validate
@@ -411,7 +411,7 @@ Known failures and how to recover:
 
 * K8S Test: Verify spire-agent is enabled and running
 
-  - The `spire-agent` service may fail to start on Kubernetes NCNs, logging errors (via journalctl) similar to "join token does not exist or has already been used" or the last logs containing multiple lines of "systemd[1]: spire-agent.service: Start request repeated too quickly.". Deleting the `request-ncn-join-token` daemonset pod running on the node may clear the issue. Even though the `spire-agent` systemctl service on the Kubernetes node should eventually restart cleanly, the user may have to log in to the impacted nodes and restart the service. The following recovery procedure can be run from any Kubernetes node in the cluster.
+  - The `spire-agent` service may fail to start on Kubernetes NCNs (all worker nodes and master nodes), logging errors (via journalctl) similar to "join token does not exist or has already been used" or the last logs containing multiple lines of "systemd[1]: spire-agent.service: Start request repeated too quickly.". Deleting the `request-ncn-join-token` daemonset pod running on the node may clear the issue. Even though the `spire-agent` systemctl service on the Kubernetes node should eventually restart cleanly, the user may have to log in to the impacted nodes and restart the service. The following recovery procedure can be run from any Kubernetes node in the cluster.
      1. Set `NODE` to the NCN which is experiencing the issue. In this example, `ncn-w002`.
         ```bash
           ncn# export NODE=ncn-w002
