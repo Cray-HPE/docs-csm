@@ -56,7 +56,24 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
       Use the ${CSM_DISTDIR} value instead of "/mnt/pitdata/${CSM_RELEASE}" whenever it is referenced in step 8.
 
-      Return to this procedure before running the command to inject and encrypt certs.jks.b64 into the customizations.yaml file in step 8.
+      Return to this procedure before running the command to inject and encrypt certs.jks.b64 into the customizations.yaml file in step 8. The following command should be used instead:
+
+      ```bash
+      linux# cat <<EOF | yq w - 'data."certs.jks"' "$(<certs.jks.b64)" | \
+      yq r -j - | /root/site-init/utils/secrets-encrypt.sh | \
+      yq w -f - -i /root/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray-keycloak'
+      {
+        "kind": "Secret",
+        "apiVersion": "v1",
+        "metadata": {
+          "name": "keycloak-certs",
+          "namespace": "services",
+          "creationTimestamp": null
+        },
+        "data": {}
+      }
+      EOF
+      ```
    
    2. Update the LDAP settings.
   
