@@ -48,26 +48,9 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    
 2. Update the LDAP settings in the customizations.yaml file.
 
-   1. Add the encrypted version of the LDAP CA certificate in the `certs.jks` section of customizations.yaml.
+   1. (Optional) Add the LDAP CA certificate in the certs.jks section of customizations.yaml.
 
-      ```bash
-          sealed_secrets:
-            cray-keycloak:
-              apiVersion: bitnami.com/v1alpha1
-              kind: SealedSecret
-              metadata:
-                annotations:
-            
-       sealedsecrets.bitnami.com/cluster-wide: "true"
-          creationTimestamp: null
-          name: keycloak-certs
-         spec:
-          encryptedData:
-            certs.jks: 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
-          template:
-            metadata:
-              annotations:
-      ```
+      Follow step 8 under the "Create Baseline System Customizations" header in the [Prepare Site Init](../../install/prepare_site_init.md) procedure.
    
    2. Update the LDAP settings.
   
@@ -83,20 +66,20 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       ```bash
       keycloak_users_localize:
                 generate:
-                name: keycloak-users-localize
-                data:
-                  - type: static
-                    args:
-                      name: ldap_connection_url
-                      value: "ldaps://my_ldap.my_org.test"
-                  - type: static
-                    args:
-                      name: ldap_bind_dn
-                      value: "cn=my_admin"
-                  - type: static
-                    args:
-                      name: ldap_bind_credentials
-                      value: "my_ldap_admin_password"
+                  name: keycloak-users-localize
+                  data:
+                    - type: static
+                      args:
+                        name: ldap_connection_url
+                        value: "ldaps://my_ldap.my_org.test"
+                    - type: static
+                      args:
+                        name: ldap_bind_dn
+                        value: "cn=my_admin"
+                    - type: static
+                      args:
+                        name: ldap_bind_credentials
+                        value: "my_ldap_admin_password"
       ```
 
       Other LDAP configuration settings are set in the spec.kubernetes.services.cray-keycloak-users-localize field in the customizations.yaml file. 
@@ -343,7 +326,35 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       Generating type static...
       ```
 
-5. Re-apply the cray-keycloak-users-localize Helm chart with the updated customizations.yaml file.
+5. Re-apply the cray-keycloak Helm chart with the updated customizations.yaml file.
+   
+    1. Retrieve the current platform.yaml manifest.
+       
+       ```bash
+       ncn-m001# kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' > platform.yaml
+       ```
+
+    2. Populate the platform manifest with data from the customizations.yaml file.
+       
+       ```bash
+       ncn-m001# manifestgen -i platform.yaml -c customizations.yaml -o new-platform.yaml
+       ```
+
+    3. Re-apply the platform manifest with the updated cray-keycloak chart.
+   
+       ```bash
+       ncn-m001# loftsman ship --manifest-path ./new-platform.yaml --charts-repo https://packages.local/repository/charts
+       ```
+
+    4. Wait for the Keycloak pods to restart before moving on to the next step. 
+       
+       Once the 'cray-keycloak-[123]' pods have restarted, proceed to the next step.
+
+       ```bash
+       ncn-m001# kubectl get po -n services | grep cray-keycloak
+       ```
+
+6. Re-apply the cray-keycloak-users-localize Helm chart with the updated customizations.yaml file.
 
     1.  Determine the cray-keycloak-users-localize chart version that is currently deployed.
 
@@ -404,7 +415,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         2020-07-20 18:26:15,774 - INFO    - keycloak_localize - keycloak-localize complete
         ```
 
-6. Sync the users and groups from Keycloak to the compute nodes.
+7. Sync the users and groups from Keycloak to the compute nodes.
 
     1. Get the crayvcs password for pushing the changes.
 
@@ -463,6 +474,66 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         ncn-m001# cray bos session create --template-uuid BOS_TEMPLATE --operation reboot
         ```
 
+8. Validate that LDAP integration was added successfully.
+   
+   1. Retrieve the admin password for Keycloak.
 
+      ```bash
+      ncn-m001: # kubectl get secrets -n services keycloak-master-admin-auth -ojsonpath='{.data.password}' | base64 -d
+      ```
+   
+   2. Login to the Keycloak UI using the `admin` user and the password obtained in the previous step.
+      
+      The Keycloak UI URL is typically similar to the folloinwg:
+      
+      ```
+      https://auth.<system_name>/keycloak.
+      ```
+
+   3. Click on the 'Users' tab in the navigation pane on the left.
+
+   4. Click on the 'View all users' button and verify the LDAP users appear in the table.
+
+   5. Verify a token can be retrieved from Keycloak using an LDAP user/password.
+
+      In the example below, replace myuser, mypass, and shasta in the cURL command with
+      site-specific values. The shasta client is created during the SMS install process.
+
+      In the following example, the `python -mjson.tool` is not required; it is simply used to
+      format the output for readability.
+
+      ```bash
+      ncn-w001# curl -s \
+        -d grant_type=password \
+        -d client_id=shasta \
+        -d username=myuser \
+        -d password=mypass \
+        https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token |
+        python -mjson.tool
+      ```
+
+      Expected output:
+
+      ```bash
+      {
+          "access_token": "ey...IA", <<-- NOTE this value, used in the following step
+          "expires_in": 300,
+          "not-before-policy": 0,
+          "refresh_expires_in": 1800,
+          "refresh_token": "ey...qg",
+          "scope": "profile email",
+          "session_state": "10c7d2f7-8921-4652-ad1e-10138ec6fbc3",
+          "token_type": "bearer"
+      }
+      ```
+
+   6. Validate that the access_token looks correct.
+
+      Copy the access_token from the previous step and open a browser window.
+      Naviagate to http://jwt.io, and paste the token in the 'Encoded' field.
+
+      Verify the 'preferred_username' is the expected LDAP user and the
+      role is 'admin' (or other role based on the user).
+  
 
 
