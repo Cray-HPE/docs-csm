@@ -54,7 +54,26 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
       Follow step 8 under the "Create Baseline System Customizations" header in the [Setup Site-Init From SHASTA-CFG](../../067-SHASTA-CFG.md) procedure.
 
-      Return to this procedure before running the command to inject and encrypt certs.jks.b64 into the customizations.yaml file in step 8.
+      Use the ${CSM_DISTDIR} value instead of "/mnt/pitdata/${CSM_RELEASE}" whenever it is referenced in step 8.
+
+      Return to this procedure before running the command to inject and encrypt certs.jks.b64 into the customizations.yaml file in step 8. The following command should be used instead:
+
+      ```bash
+      linux# cat <<EOF | yq w - 'data."certs.jks"' "$(<certs.jks.b64)" | \
+      yq r -j - | /root/site-init/utils/secrets-encrypt.sh | \
+      yq w -f - -i /root/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray-keycloak'
+      {
+        "kind": "Secret",
+        "apiVersion": "v1",
+        "metadata": {
+          "name": "keycloak-certs",
+          "namespace": "services",
+          "creationTimestamp": null
+        },
+        "data": {}
+      }
+      EOF
+      ```
    
    2. Update the LDAP settings.
   
@@ -262,15 +281,8 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    (encrypted secrets), which are deployed by specific charts and decrypted by the
    Sealed Secrets operator. But first, those Secrets must be seeded, generated, and
    encrypted.
-
-   1. Mount the PITDATA so that helm charts are available for the re-install (it might already be mounted).
-
-      ```bash
-      ncn-m001# mkdir -pv /mnt/pitdata
-      ncn-m001# mount -L PITDATA /mnt/pitdata
-      ```
    
-   2. Load the `zeromq` container image required by Sealed Secret Generators.
+   1. Load the `zeromq` container image required by Sealed Secret Generators.
 
       > **NOTE:** A properly configured Docker or Podman environment is required.
 
@@ -278,11 +290,10 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       ncn-m001# ${CSM_DISTDIR}/hack/load-container-image.sh dtr.dev.cray.com/zeromq/zeromq:v4.0.5
       ```
 
-   3. Re-encrypt the existing secrets:
+   2. Re-encrypt the existing secrets:
 
       ```bash
-      ncn-m001# ./utils/secrets-reencrypt.sh customizations.yaml \
-      /mnt/pitdata/prep/site-init/certs/sealed_secrets.key /mnt/pitdata/prep/site-init/certs/sealed_secrets.crt
+      ncn-m001# ./utils/secrets-reencrypt.sh customizations.yaml ./certs/sealed_secrets.key ./certs/sealed_secrets.crt
       ```
       
 4. Encrypt the static values in the customizations.yaml file after making changes.
