@@ -179,16 +179,11 @@ done
 
 2. Set Order (works universally; every vendor, every Shasta ncn-type):
 > ```bash
-> ncn# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | tr -t '\n' ',' | sed 's/,$//') | grep -i bootorder
+> ncn# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -t '*' ',' | tr -d '\n' | sed 's/,$//') | grep -i bootorder
 > BootOrder: 000E,0014,0011,0012
 > ```
 
-3. Mark Active (works universally; every vendor, every Shasta ncn-type):
-> ```bash
-> ncn# cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | xargs -r -t -i efibootmgr -b {} -a
-> ```
-
-After following these steps on a given NCN, that NCN will now use the desired Shasta boot order. Note that if USB Boot Priority (or similar) is enabled in BIOS, this can override the boot order set here.
+After following the twp-steps on a given NCN, that NCN will now use the desired Shasta boot order.
 
 <a name="trimming"></a>
 ### Trimming
