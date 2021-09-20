@@ -571,6 +571,24 @@ The LiveCD needs to authenticate with the cluster to facilitate the rest of the 
 
 After the NCNs are booted, the BGP peers will need to be checked and updated if the neighbor IP addresses are incorrect on the switches. Follow the steps below and see [Update BGP Neighbors](../operations/network/metallb_bgp/Update_BGP_Neighbors.md) for more details on the BGP configuration.
 
+   1. Make sure the SYSTEM_NAME variable is set to name of your system.
+
+      ```bash
+      pit# export SYSTEM_NAME=eniac
+      ```
+
+   1. Determine the IP address of the worker NCNs.
+
+      ```bash
+      pit# grep -B1 "name: ncn-w" /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN.yaml
+      ```
+
+   1. Determine the IP addresses for the switches that are peering.
+
+      ```bash
+      pit# grep peer-address /var/www/ephemeral/prep/${SYSTEM_NAME}/metallb.yaml
+      ```
+
    1. Run the BGP helper script if you have mellanox switches.
 
       The BGP helper script requires three parameters: the IP address of switch 1, the IP addresss of switch 2, and the path to the to CSI generated network files.
