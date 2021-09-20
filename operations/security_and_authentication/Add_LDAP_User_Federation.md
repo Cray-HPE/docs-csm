@@ -25,18 +25,20 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
    1. Create a new site-init directory using from the CSM tarball.
 
+      Determine the location of the initial install tarball and set ${CSM_DISTDIR} accordingly.
+
       ```bash
       ncn-m001# cp -r ${CSM_DISTDIR}/shasta-cfg /root/site-init
       ncn-m001# cd /root/site-init
       ```
   
-   1. Extract customizations.yaml from the site-init secret.
+   2. Extract customizations.yaml from the site-init secret.
 
       ```bash
       ncn-m001# kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
       ```
 
-   1. Extract the certificate and key used to create the sealed secrets.
+   3. Extract the certificate and key used to create the sealed secrets.
 
       ```bash
       ncn-m001# mkdir certs
@@ -48,9 +50,11 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    
 2. Update the LDAP settings in the customizations.yaml file.
 
-   1. (Optional) Add the LDAP CA certificate in the certs.jks section of customizations.yaml.
+   1. (Optional) Add the LDAP CA certificate in the certs.jks.b64 section of customizations.yaml.
 
       Follow step 8 under the "Create Baseline System Customizations" header in the [Setup Site-Init From SHASTA-CFG](../../067-SHASTA-CFG.md) procedure.
+
+      Return to this procedure before running the command to inject and encrypt certs.jks.b64 into the customizations.yaml file in step 8.
    
    2. Update the LDAP settings.
   
@@ -271,13 +275,13 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       > **NOTE:** A properly configured Docker or Podman environment is required.
 
       ```bash
-      ncn-m001# /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh dtr.dev.cray.com/zeromq/zeromq:v4.0.5
+      ncn-m001# ${CSM_DISTDIR}/hack/load-container-image.sh dtr.dev.cray.com/zeromq/zeromq:v4.0.5
       ```
 
    3. Re-encrypt the existing secrets:
 
       ```bash
-      ncn-m001# /mnt/pitdata/prep/site-init/utils/secrets-reencrypt.sh customizations.yaml \
+      ncn-m001# ./utils/secrets-reencrypt.sh customizations.yaml \
       /mnt/pitdata/prep/site-init/certs/sealed_secrets.key /mnt/pitdata/prep/site-init/certs/sealed_secrets.crt
       ```
       
@@ -361,11 +365,11 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
        Run the following command until there is a non-empty value in the secret (this can take a minute or two):
        
        ```bash
-       ncn-m001# kubectl get secret -n services keycloak-certs -o yaml | grep certs.jks
-         certs.jks: <REDACTED>
+       ncn-m001# kubectl get secret -n services keycloak-certs -o yaml | grep certs.jks.b64
+         certs.jks.b64: <REDACTED>
        ```
 
-    6. Restart the `cray-keycloak-[123]` pods.
+    6. Restart the `cray-keycloak-[012]` pods.
 
        ```bash
        ncn-m001# kubectl rollout restart statefulset -n services cray-keycloak
@@ -373,7 +377,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
     7. Wait for the Keycloak pods to restart before moving on to the next step.
        
-       Once the `cray-keycloak-[123]` pods have restarted, proceed to the next step.
+       Once the `cray-keycloak-[012]` pods have restarted, proceed to the next step.
 
        ```bash
        ncn-m001# kubectl get po -n services | grep cray-keycloak
