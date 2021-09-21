@@ -50,44 +50,15 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
 2. Repopulate the keycloak_users_localize and cray-keycloak Sealed Secrets in the customizations.yaml file with the desired configuration.
 
-   1. Check to see if the `generate:` sections of the Sealed Secrets have been populated with encrypted Sealed Secrets already:
-      
-      ```bash
-      ncn-m001# yq read ./customizations.yaml spec.kubernetes.sealed_secrets.keycloak_users_localize
-      apiVersion: bitnami.com/v1alpha1
-      kind: SealedSecret
-      metadata:
-        annotations:
-          sealedsecrets.bitnami.com/cluster-wide: "true"
-        creationTimestamp: null
-        name: keycloak-users-localize
-      spec:
-        encryptedData:
-          ldap_connection_url: AgAmdO19GaLs3Yr9apnJ/JDuQS+6yMC+LlZrPO8g+9UvF2+0X1TifH/bPb0Dw4VMN/2MURx/vvwJE2DTz9yajuW3YJEdwD4o6z/OZ/qLDxu2u+HZSwRnWLWK6ROTBGMP7r0zOdQIDoeeAZw03+d4/UmiBlTlJhl+DJzcS8VbfJV+neNcZ0p5zcM7skqI5NL4teNItHoeuITC2QQ+TRQc/XOrkj3JxvrzFEtEstJz8fXOUXBOwakhRRzUZl9aAYcT6raK3mPQDg14AkM4JVCeku+h6O4OOoOIygC8FzfrXy+LWE93UZjw/0ZM+c6bqOLd7odGto5EylLaV7HS9V8trUPfKExBbYqoRzm+IU9eG3k8Gr7ijT9hRhr1wiV73DFy5NnNB0uAjFClnPXbqntbnSScLxHgFqrnitKM19RzcuHFaZ0Hq0S0VPO8az8BL7jiCkhlxqT0WN6I5RerHPt0PocikKJ/S58a2dc8uGwMgyAPCcJwNXnh7qoA3pgL72kD292ReCYUz6XR51XQAaW1S5O/OaI3VKCCHZAw+qCgW3tCraL3mjzuTYSQQQsDFicxcgQZVz26S/9ATW+3g8btOZlsJ8aA9zpSGAf+uo2N/OKDCmU60fxFTvddcYDlWZ9ZXM1q9lnDTzz1T+QMCZ/f+c2El4CgNvrKJvLueduuagGNfrYoVgGoQ76e/WVi866d1a0=
-        template:
-          metadata:
-            annotations:
-              sealedsecrets.bitnami.com/cluster-wide: "true"
-            creationTimestamp: null
-            name: keycloak-users-localize
-      generate:
-        data: {}
-      ```
+   Update the LDAP settings with the desired configuration. LDAP connection information 
+   is stored in the keycloak-users-localize Secret in the services
+   namespace in the customizations.yaml file.
 
-      Proceed to the next sub-step to remove the existing keycloak_users_localize 
-      and cray-keycloak Sealed Secrets from customizations.yaml, and then add 
-      the `generate:` sections back in, populated with the desired configuration.
-
-   2. Update the LDAP settings with the desired configuration.
+   -   The ldap_connection_url key is required and is set to an LDAP URL.
+   -   The ldap_bind_dn and ldap_bind_credentials keys are optional.
+   -   If the LDAP server requires authentication. then the bind DN and credentials are set in these keys respectively.
       
-      LDAP connection information is stored in the keycloak-users-localize Secret in the services
-      namespace in the customizations.yaml file.
-
-      -   The ldap_connection_url key is required and is set to an LDAP URL.
-      -   The ldap_bind_dn and ldap_bind_credentials keys are optional.
-      -   If the LDAP server requires authentication. then the bind DN and credentials are set in these keys respectively.
-      
-      For example:
+   For example:
 
       ```bash
             cray-keycloak:
@@ -117,9 +88,9 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
                         value: "my_ldap_admin_password"
       ```
 
-      Other LDAP configuration settings are set in the spec.kubernetes.services.cray-keycloak-users-localize field in the customizations.yaml file. 
+     Other LDAP configuration settings are set in the spec.kubernetes.services.cray-keycloak-users-localize field in the customizations.yaml file. 
         
-      The fields are as follows:
+     The fields are as follows:
 
       ```
       (
@@ -368,7 +339,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
                 awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' > cacert.pem
         ```
 
-    5. Verify the issuer's certificate was properly extracted and saved in `cacert.pem`.
+    1. Verify the issuer's certificate was properly extracted and saved in `cacert.pem`.
 
         ```bash
         ncn-m001# cat cacert.pem
@@ -402,7 +373,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         -----END CERTIFICATE-----
         ```
 
-    6. Create `certs.jks`.
+    2. Create `certs.jks`.
 
         ```bash
         ncn-m001# podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool -importcert \
@@ -410,13 +381,13 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         -storepass password -noprompt
         ```
 
-    7. Create `certs.jks.b64` by base-64 encoding `certs.jks`.
+    3. Create `certs.jks.b64` by base-64 encoding `certs.jks`.
 
         ```bash
         ncn-m001# base64 certs.jks > certs.jks.b64
         ```
 
-    8.  Inject and encrypt `certs.jks.b64` into `customizations.yaml`.
+    4.  Inject and encrypt `certs.jks.b64` into `customizations.yaml`.
 
         ```bash
         ncn-m001# cat <<EOF | yq w - 'data."certs.jks"' "$(<certs.jks.b64)" | \
@@ -835,7 +806,5 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
        Verify the `preferred_username` is the expected LDAP user and the
        role is `admin` (or other role based on the user).
   
-
-
 
 
