@@ -50,29 +50,63 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    
 2. Update the LDAP settings in the customizations.yaml file.
 
-   1. (Optional) Add the LDAP CA certificate in the certs.jks.b64 section of customizations.yaml.
-
-      Follow step 8 under the "Create Baseline System Customizations" header in the [Prepare Site Init](../../install/prepare_site_init.md) procedure. 
-
-      Use the ${CSM_DISTDIR} value instead of "/mnt/pitdata/${CSM_RELEASE}" whenever it is referenced in step 8.
-
-      Return to this procedure before running the command to inject and encrypt certs.jks.b64 into the customizations.yaml file in step 8. The following command should be used instead:
+   1. (Optional) Repopulate the keycloak_users_localize and cray-keycloak Sealed Secrets in the customizations.yaml file with the desired configuration.
+      
+      Check to see if the `generate:` sections of the Sealed Secrets have been populated with encrypted Sealed Secrets already:
 
       ```bash
-      linux# cat <<EOF | yq w - 'data."certs.jks"' "$(<certs.jks.b64)" | \
-      yq r -j - | /root/site-init/utils/secrets-encrypt.sh | \
-      yq w -f - -i /root/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray-keycloak'
-      {
-        "kind": "Secret",
-        "apiVersion": "v1",
-        "metadata": {
-          "name": "keycloak-certs",
-          "namespace": "services",
-          "creationTimestamp": null
-        },
-        "data": {}
-      }
-      EOF
+      ncn-m001# yq write -i ./customizations.yaml 'spec.kubernetes.sealed_secrets.keycloak_users_localize.generate.data.(args.name==ldap_connection_url).args.value' "ldap://$LDAP"
+      ncn-m001# yq read ./customizations.yaml spec.kubernetes.sealed_secrets.keycloak_users_localize
+      apiVersion: bitnami.com/v1alpha1
+      kind: SealedSecret
+      metadata:
+        annotations:
+          sealedsecrets.bitnami.com/cluster-wide: "true"
+        creationTimestamp: null
+        name: keycloak-users-localize
+      spec:
+        encryptedData:
+          ldap_connection_url: AgAmdO19GaLs3Yr9apnJ/JDuQS+6yMC+LlZrPO8g+9UvF2+0X1TifH/bPb0Dw4VMN/2MURx/vvwJE2DTz9yajuW3YJEdwD4o6z/OZ/qLDxu2u+HZSwRnWLWK6ROTBGMP7r0zOdQIDoeeAZw03+d4/UmiBlTlJhl+DJzcS8VbfJV+neNcZ0p5zcM7skqI5NL4teNItHoeuITC2QQ+TRQc/XOrkj3JxvrzFEtEstJz8fXOUXBOwakhRRzUZl9aAYcT6raK3mPQDg14AkM4JVCeku+h6O4OOoOIygC8FzfrXy+LWE93UZjw/0ZM+c6bqOLd7odGto5EylLaV7HS9V8trUPfKExBbYqoRzm+IU9eG3k8Gr7ijT9hRhr1wiV73DFy5NnNB0uAjFClnPXbqntbnSScLxHgFqrnitKM19RzcuHFaZ0Hq0S0VPO8az8BL7jiCkhlxqT0WN6I5RerHPt0PocikKJ/S58a2dc8uGwMgyAPCcJwNXnh7qoA3pgL72kD292ReCYUz6XR51XQAaW1S5O/OaI3VKCCHZAw+qCgW3tCraL3mjzuTYSQQQsDFicxcgQZVz26S/9ATW+3g8btOZlsJ8aA9zpSGAf+uo2N/OKDCmU60fxFTvddcYDlWZ9ZXM1q9lnDTzz1T+QMCZ/f+c2El4CgNvrKJvLueduuagGNfrYoVgGoQ76e/WVi866d1a0=
+        template:
+          metadata:
+            annotations:
+              sealedsecrets.bitnami.com/cluster-wide: "true"
+            creationTimestamp: null
+            name: keycloak-users-localize
+      generate:
+        data: {}
+      ```
+
+      Remove the existing keycloak_users_localize and cray-keycloak Sealed Secrets from customizations.yaml, and then add the `generate:` sections back in, populated with the desired configuration.
+
+      For example:
+
+      ```bash
+            cray-keycloak:
+                generate:
+                  name: keycloak-certs
+                  data:
+                    - type: static_b64
+                      args:
+                        name: certs.jks
+                        value: /u3+7QAAAAIAAAAA5yXvSDt11bGXyBA9M2iy0/5i1Tg=
+        
+            keycloak_users_localize:
+                generate:
+                  name: keycloak-users-localize
+                  data:
+                    - type: static
+                      args:
+                        name: ldap_connection_url
+                        value: "ldaps://my_ldap.my_org.test"
+                    - type: static
+                      args:
+                        name: ldap_bind_dn
+                        value: "cn=my_admin"
+                    - type: static
+                      args:
+                        name: ldap_bind_credentials
+                        value: "my_ldap_admin_password"
       ```
    
    2. Update the LDAP settings.
@@ -290,6 +324,13 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       ncn-m001# ${CSM_DISTDIR}/hack/load-container-image.sh dtr.dev.cray.com/zeromq/zeromq:v4.0.5
       ```
 
+      To verify the load worked:
+
+      ```bash
+      ncn-m001# podman images | grep zeromq
+      dtr.dev.cray.com/zeromq/zeromq         v4.0.5             1648d2dfc45f  6 years ago    462 MB
+      ```
+
    2. Re-encrypt the existing secrets:
 
       ```bash
@@ -341,7 +382,14 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       Generating type static...
       ```
 
-5. Re-apply the cray-keycloak Helm chart with the updated customizations.yaml file.
+5. Decrypt the Sealed Secret to verify it was generated correctly.
+   
+   ```bash
+   ncn-m001# ./utils/secrets-decrypt.sh keycloak_users_localize | jq -r '.data.ldap_connection_url' | base64 --decode
+   ldaps://my_ldap.my_org.test
+   ```
+
+6. Re-apply the cray-keycloak Helm chart with the updated customizations.yaml file.
    
     1. Retrieve the current platform.yaml manifest.
        
@@ -394,7 +442,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
        ncn-m001# kubectl get po -n services | grep cray-keycloak
        ```
 
-6. Re-apply the cray-keycloak-users-localize Helm chart with the updated customizations.yaml file.
+7. Re-apply the cray-keycloak-users-localize Helm chart with the updated customizations.yaml file.
 
     1.  Determine the cray-keycloak-users-localize chart version that is currently deployed.
 
@@ -455,7 +503,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         2020-07-20 18:26:15,774 - INFO    - keycloak_localize - keycloak-localize complete
         ```
 
-7. Sync the users and groups from Keycloak to the compute nodes.
+8. Sync the users and groups from Keycloak to the compute nodes.
 
     1. Get the crayvcs password for pushing the changes.
 
@@ -514,7 +562,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         ncn-m001# cray bos session create --template-uuid BOS_TEMPLATE --operation reboot
         ```
 
-8. Validate that LDAP integration was added successfully.
+9.  Validate that LDAP integration was added successfully.
    
    1. Retrieve the admin password for Keycloak.
 
