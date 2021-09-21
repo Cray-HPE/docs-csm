@@ -775,66 +775,66 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         ncn-m001# cray bos session create --template-uuid BOS_TEMPLATE --operation reboot
         ```
 
-10.  Validate that LDAP integration was added successfully.
+10. Validate that LDAP integration was added successfully.
    
-   1. Retrieve the admin password for Keycloak.
+    1. Retrieve the admin password for Keycloak.
 
-      ```bash
-      ncn-m001: # kubectl get secrets -n services keycloak-master-admin-auth -ojsonpath='{.data.password}' | base64 -d
-      ```
+       ```bash
+       ncn-m001: # kubectl get secrets -n services keycloak-master-admin-auth -ojsonpath='{.data.password}' | base64 -d
+       ```
    
-   2. Login to the Keycloak UI using the `admin` user and the password obtained in the previous step.
+    2. Login to the Keycloak UI using the `admin` user and the password obtained in the previous step.
       
-      The Keycloak UI URL is typically similar to the following:
+       The Keycloak UI URL is typically similar to the following:
       
-      ```
-      https://auth.<system_name>/keycloak
-      ```
+       ```
+       https://auth.<system_name>/keycloak
+       ```
 
-   3. Click on the "Users" tab in the navigation pane on the left.
+    3. Click on the "Users" tab in the navigation pane on the left.
 
-   4. Click on the "View all users" button and verify the LDAP users appear in the table.
+    4. Click on the "View all users" button and verify the LDAP users appear in the table.
 
-   5. Verify a token can be retrieved from Keycloak using an LDAP user/password.
+    5. Verify a token can be retrieved from Keycloak using an LDAP user/password.
 
-      In the example below, replace myuser, mypass, and shasta in the cURL command with
-      site-specific values. The shasta client is created during the SMS install process.
+       In the example below, replace myuser, mypass, and shasta in the cURL command with
+       site-specific values. The shasta client is created during the SMS install process.
 
-      In the following example, the `python -mjson.tool` is not required; it is simply used to
-      format the output for readability.
+       In the following example, the `python -mjson.tool` is not required; it is simply used to
+       format the output for readability.
 
-      ```bash
-      ncn-w001# curl -s \
-        -d grant_type=password \
-        -d client_id=shasta \
-        -d username=myuser \
-        -d password=mypass \
-        https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token |
-        python -mjson.tool
-      ```
+       ```bash
+       ncn-w001# curl -s \
+         -d grant_type=password \
+         -d client_id=shasta \
+         -d username=myuser \
+         -d password=mypass \
+         https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token |
+         python -mjson.tool
+       ```
 
-      Expected output:
+       Expected output:
 
-      ```bash
-      {
-          "access_token": "ey...IA", <<-- NOTE this value, used in the following step
-          "expires_in": 300,
-          "not-before-policy": 0,
-          "refresh_expires_in": 1800,
-          "refresh_token": "ey...qg",
-          "scope": "profile email",
-          "session_state": "10c7d2f7-8921-4652-ad1e-10138ec6fbc3",
-          "token_type": "bearer"
-      }
-      ```
+       ```bash
+       {
+           "access_token": "ey...IA", <<-- NOTE this value, used in the following step
+           "expires_in": 300,
+           "not-before-policy": 0,
+           "refresh_expires_in": 1800,
+           "refresh_token": "ey...qg",
+           "scope": "profile email",
+           "session_state": "10c7d2f7-8921-4652-ad1e-10138ec6fbc3",
+           "token_type": "bearer"
+       }
+       ```
 
-   6. Validate that the `access_token` looks correct.
+    6. Validate that the `access_token` looks correct.
 
-      Copy the `access_token` from the previous step and open a browser window.
-      Navigate to http://jwt.io, and paste the token in the "Encoded" field.
+       Copy the `access_token` from the previous step and open a browser window.
+       Navigate to http://jwt.io, and paste the token in the "Encoded" field.
 
-      Verify the `preferred_username` is the expected LDAP user and the
-      role is `admin` (or other role based on the user).
+       Verify the `preferred_username` is the expected LDAP user and the
+       role is `admin` (or other role based on the user).
   
 
 
