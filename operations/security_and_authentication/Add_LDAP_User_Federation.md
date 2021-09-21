@@ -47,15 +47,162 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       ```
 
   > **NOTE:** All subsequent steps of this procedure should be performed within the `/root/site-init` directory created in this step.
-   
-2. Update the LDAP settings in the customizations.yaml file.
 
-   1. (Optional) Repopulate the keycloak_users_localize and cray-keycloak Sealed Secrets in the customizations.yaml file with the desired configuration.
+2. (Optional) Add the LDAP CA certificate in the certs.jks section of customizations.yaml.
+   
+   If LDAP requires TLS (recommended), update the `cray-keycloak` Sealed 
+   Secret value by supplying a base64 encoded Java KeyStore (JKS) that
+   contains the CA certificate that signed the LDAP server's host key. The
+   password for the JKS file must be `password`.
+   
+   Administrators may use the `keytool` command from the `openjdk:11-jre-slim` container image
+   packaged with CSM to create a JKS file that includes a PEM-encoded
+   CA certificate to verify the LDAP host(s).
+
+   1. Load the `openjdk` container image.
+
+        > **NOTE:** Requires a properly configured Docker or Podman environment.
+
+        ```bash
+        ncn-m001# ${CSM_DISTDIR}/hack/load-container-image.sh dtr.dev.cray.com/library/openjdk:11-jre-slim
+        ```
+
+   2. Create (or update) `cert.jks` with the PEM-encoded CA certificate for an LDAP host.
+
+        > **IMPORTANT:** Replace `<ca-cert.pem>` and `<alias>` before running the command.
+
+        ```bash
+        ncn-m001# podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool \
+        -importcert -trustcacerts -file /data/<ca-cert.pem> -alias <alias> -keystore /data/certs.jks \
+        -storepass password -noprompt
+        ```
+   
+   3. Set variables for the LDAP server.
+
+        In the following example, the LDAP server has the hostname `dcldap2.us.cray.com` and is using the port 636.
+
+        ```bash
+        ncn-m001# export LDAP=dcldap2.us.cray.com
+        ncn-m001# export PORT=636
+        ```
+
+   4. Get the issuer certificate for the LDAP server at port 636. Use `openssl s_client` to connect
+      and show the certificate chain returned by the LDAP host.
+
+        ```bash
+        ncn-m001# openssl s_client -showcerts -connect $LDAP:${PORT} </dev/null
+        ```
+
+        Either manually extract (cut/paste) the issuer's
+        certificate into `cacert.pem`, or try the following commands to
+        create it automatically.
+
+        > **NOTE:** The following commands were verified using OpenSSL
+        > version 1.1.1d and use the `-nameopt RFC2253` option to ensure
+        > consistent formatting of distinguished names (DNs).
+        > Unfortunately, older versions of OpenSSL may not support
+        > `-nameopt` on the `s_client` command or may use a different
+        > default format. As a result, mileage may vary; however,
+        > administrators should be able to extract the issuer certificate manually
+        > from the output of the above `openssl s_client` example if the
+        > following commands are unsuccessful.
+
+        Observe the issuer's DN. 
+        
+        For example:
+
+        ```bash
+        ncn-m001# openssl s_client -showcerts -nameopt RFC2253 -connect $LDAP:${PORT} </dev/null 2>/dev/null | grep issuer= | sed -e 's/^issuer=//'
+
+        emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC/MCS,O=HPE,ST=WI,C=US
+        ```
+
+        Then, extract the issuer's certificate using the `awk` command:
+
+        > **NOTE:** The issuer DN is properly escaped as part of the
+        > `awk` pattern below. If the value being used is
+        > different, be sure to escape it properly!
+
+        ```bash
+        ncn-m001# openssl s_client -showcerts -nameopt RFC2253 -connect $LDAP:${PORT} </dev/null 2>/dev/null | \
+                awk '/s:emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC\/MCS,O=HPE,ST=WI,C=US/,/END CERTIFICATE/' | \
+                awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' > cacert.pem
+        ```
+
+    5. Verify the issuer's certificate was properly extracted and saved in `cacert.pem`.
+
+        ```bash
+        ncn-m001# cat cacert.pem
+        ```
+
+        Expected output looks similar to the following:
+
+        ```
+        -----BEGIN CERTIFICATE-----
+        MIIDvTCCAqWgAwIBAgIUYxrG/PrMcmIzDuJ+U1Gh8hpsU8cwDQYJKoZIhvcNAQEL
+        BQAwbjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAldJMQwwCgYDVQQKDANIUEUxEDAO
+        BgNVBAsMB0hQQy9NQ1MxFDASBgNVBAMMC0RhdGEgQ2VudGVyMRwwGgYJKoZIhvcN
+        AQkBFg1kY29wc0BocGUuY29tMB4XDTIwMTEyNDIwMzM0MVoXDTMwMTEyMjIwMzM0
+        MVowbjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAldJMQwwCgYDVQQKDANIUEUxEDAO
+        BgNVBAsMB0hQQy9NQ1MxFDASBgNVBAMMC0RhdGEgQ2VudGVyMRwwGgYJKoZIhvcN
+        AQkBFg1kY29wc0BocGUuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+        AQEAuBIZkKitHHVQHymtaQt4D8ZhG4qNJ0cTsLhODPMtVtBjPZp59e+PWzbc9Rj5
+        +wfjLGteK6/fNJsJctWlS/ar4jw/xBIPMk5pg0dnkMT2s7lkSCmyd9Uib7u6y6E8
+        yeGoGcb7I+4ZI+E3FQV7zPact6b17xmajNyKrzhBGEjYucYJUL5iTgZ6a7HOZU2O
+        aQSXe7ctiHBxe7p7RhHCuKRrqJnxoohakloKwgHHzDLFQzX/5ADp1hdJcduWpaXY
+        RMBu6b1mhmwo5vmc+fDnfUpl5/X4i109r9VN7JC7DQ5+JX8u9SHDGLggBWkrhpvl
+        bNXMVCnwnSFfb/rnmGO7rdJSpwIDAQABo1MwUTAdBgNVHQ4EFgQUVg3VYExUAdn2
+        WE3e8Xc8HONy/+4wHwYDVR0jBBgwFoAUVg3VYExUAdn2WE3e8Xc8HONy/+4wDwYD
+        VR0TAQH/BAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAWLDQLB6rrmK+gwUY+4B7
+        0USbQK0JkLWuc0tCfjTxNQTzFb75PeH+GH21QsjUI8VC6QOAAJ4uzIEV85VpOQPp
+        qjz+LI/Ej1xXfz5ostZQu9rCMnPtVu7JT0B+NV7HvgqidTfa2M2dw9yUYS2surZO
+        8S0Dq3Bi6IEhtGU3T8ZpbAmAp+nNsaJWdUNjD4ECO5rAkyA/Vu+WyMz6F3ZDBmRr
+        ipWM1B16vx8rSpQpygY+FNX4e1RqslKhoyuzXfUGzyXux5yhs/ufOaqORCw3rJIx
+        v4sTWGsSBLXDsFM3lBgljSAHfmDuKdO+Qv7EqGzCRMpgSciZihnbQoRrPZkOHUxr
+        NA==
+        -----END CERTIFICATE-----
+        ```
+
+    6. Create `certs.jks`.
+
+        ```bash
+        ncn-m001# podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool -importcert \
+        -trustcacerts -file /data/cacert.pem -alias cray-data-center-ca -keystore /data/certs.jks \
+        -storepass password -noprompt
+        ```
+
+    7. Create `certs.jks.b64` by base-64 encoding `certs.jks`.
+
+        ```bash
+        ncn-m001# base64 certs.jks > certs.jks.b64
+        ```
+
+    8.  Inject and encrypt `certs.jks.b64` into `customizations.yaml`.
+
+        ```bash
+        ncn-m001# cat <<EOF | yq w - 'data."certs.jks"' "$(<certs.jks.b64)" | \
+        yq r -j - | /root/site-init/utils/secrets-encrypt.sh | \
+        yq w -f - -i /root/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray-keycloak'
+        {
+            "kind": "Secret",
+            "apiVersion": "v1",
+            "metadata": {
+            "name": "keycloak-certs",
+            "namespace": "services",
+            "creationTimestamp": null
+            },
+            "data": {}
+        }
+        EOF
+        ```
+
+3. Update additional LDAP settings in the customizations.yaml file.
+
+   1. Repopulate the keycloak_users_localize and cray-keycloak Sealed Secrets in the customizations.yaml file with the desired configuration.
       
       Check to see if the `generate:` sections of the Sealed Secrets have been populated with encrypted Sealed Secrets already:
 
       ```bash
-      ncn-m001# yq write -i ./customizations.yaml 'spec.kubernetes.sealed_secrets.keycloak_users_localize.generate.data.(args.name==ldap_connection_url).args.value' "ldap://$LDAP"
       ncn-m001# yq read ./customizations.yaml spec.kubernetes.sealed_secrets.keycloak_users_localize
       apiVersion: bitnami.com/v1alpha1
       kind: SealedSecret
@@ -77,7 +224,8 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         data: {}
       ```
 
-      Remove the existing keycloak_users_localize and cray-keycloak Sealed Secrets from customizations.yaml, and then add the `generate:` sections back in, populated with the desired configuration.
+      If these sections were populated during the install, remove the existing keycloak_users_localize
+      and cray-keycloak Sealed Secrets from customizations.yaml, and then add the `generate:` sections back in, populated with the desired configuration.
 
       For example:
 
@@ -112,7 +260,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    2. Update the LDAP settings.
   
       LDAP connection information is stored in the keycloak-users-localize Secret in the services namespace. 
-      In the customizations.yaml file, set the values for the keycloak_users_localize keys in the spec.kubernetes.sealed_secrets field:
+      In the customizations.yaml file.
 
       -   The ldap_connection_url key is required and is set to an LDAP URL.
       -   The ldap_bind_dn and ldap_bind_credentials keys are optional.
@@ -309,7 +457,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
             - type: string
       ```
 
-3. Prepare to generate Sealed Secrets.
+4. Prepare to generate Sealed Secrets.
    
    Secrets are stored in customizations.yaml as `SealedSecret` resources 
    (encrypted secrets), which are deployed by specific charts and decrypted by the
@@ -324,20 +472,106 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       ncn-m001# ${CSM_DISTDIR}/hack/load-container-image.sh dtr.dev.cray.com/zeromq/zeromq:v4.0.5
       ```
 
-      To verify the load worked:
+      Expected output looks similar to the following:
+
+      ```bash
+      + command -v podman
+      + for conf in graphRoot graphDriverName runRoot
+      ++ echo graphRoot
+      ++ tr '[:upper:]' '[:lower:]'
+      + conf_lc=graphroot
+      ++ podman info -f json
+      ++ jq -r .store.graphRoot
+      + conf_val=/var/lib/containers/storage
+      + '[' /var/lib/containers/storage == null ']'
+      + declare graphroot=/var/lib/containers/storage
+      + for conf in graphRoot graphDriverName runRoot
+      ++ echo graphDriverName
+      ++ tr '[:upper:]' '[:lower:]'
+      + conf_lc=graphdrivername
+      ++ podman info -f json
+      ++ jq -r .store.graphDriverName
+      + conf_val=vfs
+      + '[' vfs == null ']'
+      + declare graphdrivername=vfs
+      + for conf in graphRoot graphDriverName runRoot
+      ++ echo runRoot
+      ++ tr '[:upper:]' '[:lower:]'
+      + conf_lc=runroot
+      ++ podman info -f json
+      ++ jq -r .store.runRoot
+      + conf_val=/var/run/containers/storage
+      + '[' /var/run/containers/storage == null ']'
+      + declare runroot=/var/run/containers/storage
+      ++ realpath /var/lib/containers/storage
+      + graphroot=/var/lib/containers/storage
+      ++ realpath /var/run/containers/storage
+      + runroot=/run/containers/storage
+      + mounts='-v /var/lib/containers/storage:/var/lib/containers/storage'
+      + transport=containers-storage
+      + run_opts='--rm --network none --privileged --ulimit=host'
+      + skopeo_dest='containers-storage:[vfs@/var/lib/containers/storage+/run/containers/storage]dtr.dev.cray.com/zeromq/zeromq:v4.0.5'
+      ++ dirname ./hack/load-container-image.sh
+      + ROOTDIR=./hack/..
+      + source ./hack/../lib/install.sh
+      ++ : https://packages.local
+      ++ : registry.local
+      ++ : ./hack/..
+      ++ [[ no == \y\e\s ]]
+      ++ requires find podman realpath
+      ++ [[ 3 -gt 0 ]]
+      ++ command -v find
+      ++ shift
+      ++ [[ 2 -gt 0 ]]
+      ++ command -v podman
+      ++ shift
+      ++ [[ 1 -gt 0 ]]
+      ++ command -v realpath
+      ++ shift
+      ++ [[ 0 -gt 0 ]]
+      ++ vendor_images=()
+      ++ load-vendor-image ./hack/../vendor/skopeo.tar
+      ++ set -o pipefail
+      ++ podman load -q -i ./hack/../vendor/skopeo.tar
+      ++ sed -e 's/^.*: //'
+      + SKOPEO_IMAGE=docker.io/library/skopeo:csm-1.0.0-beta.76
+      ++ realpath ./hack/../docker
+      + podman run --rm --network none --privileged --ulimit=host -v /var/lib/containers/storage:/var/lib/containers/storage -v /mnt/pitdata/csm-1.0.0-beta.76/docker:/image:ro docker.io/library/skopeo:csm-1.0.0-beta.76 copy dir:/image/dtr.dev.cray.com/zeromq/zeromq:v4.0.5 'containers-storage:[vfs@/var/lib/containers/storage+/run/containers/storage]dtr.dev.cray.com/zeromq/zeromq:v4.0.5'
+      Getting image source signatures
+      Copying blob sha256:a3ed95caeb02ffe68cdd9fd84406680ae93d633cb16422d00e8a7c22955b46d4
+      Copying blob sha256:3ce16febdf7832163becc8fe98757c0a7149617b8cda952459b2a1227f7eda21
+      Copying blob sha256:392d00c08b0fe0c235ef1718d7272970f6d384fc0859d927951adbaee868a06a
+      Copying blob sha256:c62605fa7f3e9b00d940258c4705a51750965de5ed5f2f6528645b50cfd6e31a
+      Copying blob sha256:2bddd7683cba11ada1f657f7f8a2557b638582a2b39ebd2696e6dc43cae08ba7
+      Copying blob sha256:404ed4835f8dfa88e541a546951e76e024c5566e0202367cd659761311b8c864
+      Copying blob sha256:a3ed95caeb02ffe68cdd9fd84406680ae93d633cb16422d00e8a7c22955b46d4
+      Copying blob sha256:a3ed95caeb02ffe68cdd9fd84406680ae93d633cb16422d00e8a7c22955b46d4
+      Copying blob sha256:9ed53610e4ed4d4d58f0c9119c019809bc3b51c90b494fa6440ac27115293b33
+      Copying blob sha256:ab88839926fbac86516f78ab0687febd1dd9882b9f56cc8ea2d1c4c1f31024c0
+      Copying blob sha256:cdf2fc9fdc1935aae9386bffa518fb6ba366ca9f1bbf9603b5b78f50841cec39
+      Copying blob sha256:f9520ccb0f8364dd282cb916f8f8e1a1d508547539cd39750b0585a41e642c3c
+      Copying blob sha256:8bc0759c6bf76ffb0fea353dcc02d92ad805aa79758f9357bd40fbc492cbab1b
+      Copying blob sha256:e132f5c26e132cfb044ee1209526c2e54ed8569e580562c3dd371059abbc3e32
+      Copying blob sha256:d1d7f70258fff8ddb78e13a78f2285f8b9fead38eb287d7779ee9ee70de22972
+      Copying config sha256:1648d2dfc45f081dde3e9bead9864c54d136be929ec1e272bb144e9034505574
+      Writing manifest to image destination
+      Storing signatures
+      ```
+    
+   2. Verify the load worked.
 
       ```bash
       ncn-m001# podman images | grep zeromq
-      dtr.dev.cray.com/zeromq/zeromq         v4.0.5             1648d2dfc45f  6 years ago    462 MB
+      dtr.dev.cray.com/zeromq/zeromq         v4.0.5           1648d2dfc45f  6 years ago    462 MB
       ```
 
-   2. Re-encrypt the existing secrets:
+   3. Re-encrypt the existing secrets.
 
       ```bash
       ncn-m001# ./utils/secrets-reencrypt.sh customizations.yaml ./certs/sealed_secrets.key ./certs/sealed_secrets.crt
       ```
       
-4. Encrypt the static values in the customizations.yaml file after making changes.
+5. Encrypt the static values in the customizations.yaml file after making changes.
 
    The following command must be run within the site-init directory.
 
@@ -382,14 +616,14 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       Generating type static...
       ```
 
-5. Decrypt the Sealed Secret to verify it was generated correctly.
+6. Decrypt the Sealed Secret to verify it was generated correctly.
    
    ```bash
    ncn-m001# ./utils/secrets-decrypt.sh keycloak_users_localize | jq -r '.data.ldap_connection_url' | base64 --decode
    ldaps://my_ldap.my_org.test
    ```
 
-6. Re-apply the cray-keycloak Helm chart with the updated customizations.yaml file.
+7. Re-apply the cray-keycloak Helm chart with the updated customizations.yaml file.
    
     1. Retrieve the current platform.yaml manifest.
        
@@ -442,7 +676,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
        ncn-m001# kubectl get po -n services | grep cray-keycloak
        ```
 
-7. Re-apply the cray-keycloak-users-localize Helm chart with the updated customizations.yaml file.
+8. Re-apply the cray-keycloak-users-localize Helm chart with the updated customizations.yaml file.
 
     1.  Determine the cray-keycloak-users-localize chart version that is currently deployed.
 
@@ -503,7 +737,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         2020-07-20 18:26:15,774 - INFO    - keycloak_localize - keycloak-localize complete
         ```
 
-8. Sync the users and groups from Keycloak to the compute nodes.
+9. Sync the users and groups from Keycloak to the compute nodes.
 
     1. Get the crayvcs password for pushing the changes.
 
@@ -562,7 +796,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         ncn-m001# cray bos session create --template-uuid BOS_TEMPLATE --operation reboot
         ```
 
-9.  Validate that LDAP integration was added successfully.
+10. Validate that LDAP integration was added successfully.
    
    1. Retrieve the admin password for Keycloak.
 
