@@ -14,7 +14,7 @@ pipeline {
         IS_STABLE = getBuildIsStable()
         BUILD_METADATA = getRpmRevision(isStable: env.IS_STABLE)
         GIT_REPO_NAME = getRepoName()
-        RELEASE_BRANCH_VERSION = getReleaseBranchVersion("release/csm-1.0")
+        RELEASE_BRANCH_VERSION = getReleaseBranchVersion()
     }
     
     stages {
@@ -29,7 +29,7 @@ pipeline {
             }
         }
 
-      /*
+      
       stage("Build RPM") {
           steps {
               script {
@@ -43,10 +43,14 @@ pipeline {
       stage('Publish') {
           steps {
             script {
-              publishCsmRpms(component: env.GIT_REPO_NAME, pattern: "dist/rpmbuild/RPMS/noarch/*.rpm", arch: "noarch", isStable: env.IS_STABLE)
-              publishCsmRpms(component: env.GIT_REPO_NAME, pattern: "dist/rpmbuild/SRPMS/*.rpm", arch: "src", isStable: env.IS_STABLE)
+              if(env.RELEASE_BRANCH_VERSION){
+                 env.RELEASE_BRANCH_VERSION = "/" + env.RELEASE_BRANCH_VERSION 
+              }
+              publishCsmRpms(component: env.GIT_REPO_NAME + env.RELEASE_BRANCH_VERSION, pattern: "dist/rpmbuild/RPMS/noarch/*.rpm", arch: "noarch", isStable: env.IS_STABLE)
+              publishCsmRpms(component: env.GIT_REPO_NAME + env.RELEASE_BRANCH_VERSION, pattern: "dist/rpmbuild/SRPMS/*.rpm", arch: "src", isStable: env.IS_STABLE)
         }
-      
-      */
+
       }
     }
+  }
+}
