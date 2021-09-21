@@ -1,4 +1,4 @@
-@Library('csm-shared-library@CASMINST-3106') _
+@Library('csm-shared-library') _
 
 pipeline {
     agent {
