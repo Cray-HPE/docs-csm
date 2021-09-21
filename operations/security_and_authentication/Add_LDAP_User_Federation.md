@@ -48,155 +48,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
   > **NOTE:** All subsequent steps of this procedure should be performed within the `/root/site-init` directory created in this step.
 
-2. (Optional) Add the LDAP CA certificate in the certs.jks section of customizations.yaml.
-   
-   If LDAP requires TLS (recommended), update the `cray-keycloak` Sealed 
-   Secret value by supplying a base64 encoded Java KeyStore (JKS) that
-   contains the CA certificate that signed the LDAP server's host key. The
-   password for the JKS file must be `password`.
-   
-   Administrators may use the `keytool` command from the `openjdk:11-jre-slim` container image
-   packaged with CSM to create a JKS file that includes a PEM-encoded
-   CA certificate to verify the LDAP host(s).
-
-   1. Load the `openjdk` container image.
-
-        > **NOTE:** Requires a properly configured Docker or Podman environment.
-
-        ```bash
-        ncn-m001# ${CSM_DISTDIR}/hack/load-container-image.sh dtr.dev.cray.com/library/openjdk:11-jre-slim
-        ```
-
-   2. Create (or update) `cert.jks` with the PEM-encoded CA certificate for an LDAP host.
-
-        > **IMPORTANT:** Replace `<ca-cert.pem>` and `<alias>` before running the command.
-
-        ```bash
-        ncn-m001# podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool \
-        -importcert -trustcacerts -file /data/<ca-cert.pem> -alias <alias> -keystore /data/certs.jks \
-        -storepass password -noprompt
-        ```
-   
-   3. Set variables for the LDAP server.
-
-        In the following example, the LDAP server has the hostname `dcldap2.us.cray.com` and is using the port 636.
-
-        ```bash
-        ncn-m001# export LDAP=dcldap2.us.cray.com
-        ncn-m001# export PORT=636
-        ```
-
-   4. Get the issuer certificate for the LDAP server at port 636. Use `openssl s_client` to connect
-      and show the certificate chain returned by the LDAP host.
-
-        ```bash
-        ncn-m001# openssl s_client -showcerts -connect $LDAP:${PORT} </dev/null
-        ```
-
-        Either manually extract (cut/paste) the issuer's
-        certificate into `cacert.pem`, or try the following commands to
-        create it automatically.
-
-        > **NOTE:** The following commands were verified using OpenSSL
-        > version 1.1.1d and use the `-nameopt RFC2253` option to ensure
-        > consistent formatting of distinguished names (DNs).
-        > Unfortunately, older versions of OpenSSL may not support
-        > `-nameopt` on the `s_client` command or may use a different
-        > default format. As a result, mileage may vary; however,
-        > administrators should be able to extract the issuer certificate manually
-        > from the output of the above `openssl s_client` example if the
-        > following commands are unsuccessful.
-
-        Observe the issuer's DN. 
-        
-        For example:
-
-        ```bash
-        ncn-m001# openssl s_client -showcerts -nameopt RFC2253 -connect $LDAP:${PORT} </dev/null 2>/dev/null | grep issuer= | sed -e 's/^issuer=//'
-
-        emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC/MCS,O=HPE,ST=WI,C=US
-        ```
-
-        Then, extract the issuer's certificate using the `awk` command:
-
-        > **NOTE:** The issuer DN is properly escaped as part of the
-        > `awk` pattern below. If the value being used is
-        > different, be sure to escape it properly!
-
-        ```bash
-        ncn-m001# openssl s_client -showcerts -nameopt RFC2253 -connect $LDAP:${PORT} </dev/null 2>/dev/null | \
-                awk '/s:emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC\/MCS,O=HPE,ST=WI,C=US/,/END CERTIFICATE/' | \
-                awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' > cacert.pem
-        ```
-
-    5. Verify the issuer's certificate was properly extracted and saved in `cacert.pem`.
-
-        ```bash
-        ncn-m001# cat cacert.pem
-        ```
-
-        Expected output looks similar to the following:
-
-        ```
-        -----BEGIN CERTIFICATE-----
-        MIIDvTCCAqWgAwIBAgIUYxrG/PrMcmIzDuJ+U1Gh8hpsU8cwDQYJKoZIhvcNAQEL
-        BQAwbjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAldJMQwwCgYDVQQKDANIUEUxEDAO
-        BgNVBAsMB0hQQy9NQ1MxFDASBgNVBAMMC0RhdGEgQ2VudGVyMRwwGgYJKoZIhvcN
-        AQkBFg1kY29wc0BocGUuY29tMB4XDTIwMTEyNDIwMzM0MVoXDTMwMTEyMjIwMzM0
-        MVowbjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAldJMQwwCgYDVQQKDANIUEUxEDAO
-        BgNVBAsMB0hQQy9NQ1MxFDASBgNVBAMMC0RhdGEgQ2VudGVyMRwwGgYJKoZIhvcN
-        AQkBFg1kY29wc0BocGUuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-        AQEAuBIZkKitHHVQHymtaQt4D8ZhG4qNJ0cTsLhODPMtVtBjPZp59e+PWzbc9Rj5
-        +wfjLGteK6/fNJsJctWlS/ar4jw/xBIPMk5pg0dnkMT2s7lkSCmyd9Uib7u6y6E8
-        yeGoGcb7I+4ZI+E3FQV7zPact6b17xmajNyKrzhBGEjYucYJUL5iTgZ6a7HOZU2O
-        aQSXe7ctiHBxe7p7RhHCuKRrqJnxoohakloKwgHHzDLFQzX/5ADp1hdJcduWpaXY
-        RMBu6b1mhmwo5vmc+fDnfUpl5/X4i109r9VN7JC7DQ5+JX8u9SHDGLggBWkrhpvl
-        bNXMVCnwnSFfb/rnmGO7rdJSpwIDAQABo1MwUTAdBgNVHQ4EFgQUVg3VYExUAdn2
-        WE3e8Xc8HONy/+4wHwYDVR0jBBgwFoAUVg3VYExUAdn2WE3e8Xc8HONy/+4wDwYD
-        VR0TAQH/BAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAWLDQLB6rrmK+gwUY+4B7
-        0USbQK0JkLWuc0tCfjTxNQTzFb75PeH+GH21QsjUI8VC6QOAAJ4uzIEV85VpOQPp
-        qjz+LI/Ej1xXfz5ostZQu9rCMnPtVu7JT0B+NV7HvgqidTfa2M2dw9yUYS2surZO
-        8S0Dq3Bi6IEhtGU3T8ZpbAmAp+nNsaJWdUNjD4ECO5rAkyA/Vu+WyMz6F3ZDBmRr
-        ipWM1B16vx8rSpQpygY+FNX4e1RqslKhoyuzXfUGzyXux5yhs/ufOaqORCw3rJIx
-        v4sTWGsSBLXDsFM3lBgljSAHfmDuKdO+Qv7EqGzCRMpgSciZihnbQoRrPZkOHUxr
-        NA==
-        -----END CERTIFICATE-----
-        ```
-
-    6. Create `certs.jks`.
-
-        ```bash
-        ncn-m001# podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool -importcert \
-        -trustcacerts -file /data/cacert.pem -alias cray-data-center-ca -keystore /data/certs.jks \
-        -storepass password -noprompt
-        ```
-
-    7. Create `certs.jks.b64` by base-64 encoding `certs.jks`.
-
-        ```bash
-        ncn-m001# base64 certs.jks > certs.jks.b64
-        ```
-
-    8.  Inject and encrypt `certs.jks.b64` into `customizations.yaml`.
-
-        ```bash
-        ncn-m001# cat <<EOF | yq w - 'data."certs.jks"' "$(<certs.jks.b64)" | \
-        yq r -j - | /root/site-init/utils/secrets-encrypt.sh | \
-        yq w -f - -i /root/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray-keycloak'
-        {
-            "kind": "Secret",
-            "apiVersion": "v1",
-            "metadata": {
-            "name": "keycloak-certs",
-            "namespace": "services",
-            "creationTimestamp": null
-            },
-            "data": {}
-        }
-        EOF
-        ```
-
-3. Repopulate the keycloak_users_localize and cray-keycloak Sealed Secrets in the customizations.yaml file with the desired configuration.
+2. Repopulate the keycloak_users_localize and cray-keycloak Sealed Secrets in the customizations.yaml file with the desired configuration.
 
    1. Check to see if the `generate:` sections of the Sealed Secrets have been populated with encrypted Sealed Secrets already:
       
@@ -435,6 +287,154 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
             - default: shasta
             - type: string
       ```
+
+3. (Optional) Add the LDAP CA certificate in the certs.jks section of customizations.yaml.
+   
+   If LDAP requires TLS (recommended), update the `cray-keycloak` Sealed 
+   Secret value by supplying a base64 encoded Java KeyStore (JKS) that
+   contains the CA certificate that signed the LDAP server's host key. The
+   password for the JKS file must be `password`.
+   
+   Administrators may use the `keytool` command from the `openjdk:11-jre-slim` container image
+   packaged with CSM to create a JKS file that includes a PEM-encoded
+   CA certificate to verify the LDAP host(s).
+
+   1. Load the `openjdk` container image.
+
+        > **NOTE:** Requires a properly configured Docker or Podman environment.
+
+        ```bash
+        ncn-m001# ${CSM_DISTDIR}/hack/load-container-image.sh dtr.dev.cray.com/library/openjdk:11-jre-slim
+        ```
+
+   2. Create (or update) `cert.jks` with the PEM-encoded CA certificate for an LDAP host.
+
+        > **IMPORTANT:** Replace `<ca-cert.pem>` and `<alias>` before running the command.
+
+        ```bash
+        ncn-m001# podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool \
+        -importcert -trustcacerts -file /data/<ca-cert.pem> -alias <alias> -keystore /data/certs.jks \
+        -storepass password -noprompt
+        ```
+   
+   3. Set variables for the LDAP server.
+
+        In the following example, the LDAP server has the hostname `dcldap2.us.cray.com` and is using the port 636.
+
+        ```bash
+        ncn-m001# export LDAP=dcldap2.us.cray.com
+        ncn-m001# export PORT=636
+        ```
+
+   4. Get the issuer certificate for the LDAP server at port 636. Use `openssl s_client` to connect
+      and show the certificate chain returned by the LDAP host.
+
+        ```bash
+        ncn-m001# openssl s_client -showcerts -connect $LDAP:${PORT} </dev/null
+        ```
+
+        Either manually extract (cut/paste) the issuer's
+        certificate into `cacert.pem`, or try the following commands to
+        create it automatically.
+
+        > **NOTE:** The following commands were verified using OpenSSL
+        > version 1.1.1d and use the `-nameopt RFC2253` option to ensure
+        > consistent formatting of distinguished names (DNs).
+        > Unfortunately, older versions of OpenSSL may not support
+        > `-nameopt` on the `s_client` command or may use a different
+        > default format. As a result, mileage may vary; however,
+        > administrators should be able to extract the issuer certificate manually
+        > from the output of the above `openssl s_client` example if the
+        > following commands are unsuccessful.
+
+        Observe the issuer's DN. 
+        
+        For example:
+
+        ```bash
+        ncn-m001# openssl s_client -showcerts -nameopt RFC2253 -connect $LDAP:${PORT} </dev/null 2>/dev/null | grep issuer= | sed -e 's/^issuer=//'
+
+        emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC/MCS,O=HPE,ST=WI,C=US
+        ```
+
+        Then, extract the issuer's certificate using the `awk` command:
+
+        > **NOTE:** The issuer DN is properly escaped as part of the
+        > `awk` pattern below. If the value being used is
+        > different, be sure to escape it properly!
+
+        ```bash
+        ncn-m001# openssl s_client -showcerts -nameopt RFC2253 -connect $LDAP:${PORT} </dev/null 2>/dev/null | \
+                awk '/s:emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC\/MCS,O=HPE,ST=WI,C=US/,/END CERTIFICATE/' | \
+                awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' > cacert.pem
+        ```
+
+    5. Verify the issuer's certificate was properly extracted and saved in `cacert.pem`.
+
+        ```bash
+        ncn-m001# cat cacert.pem
+        ```
+
+        Expected output looks similar to the following:
+
+        ```
+        -----BEGIN CERTIFICATE-----
+        MIIDvTCCAqWgAwIBAgIUYxrG/PrMcmIzDuJ+U1Gh8hpsU8cwDQYJKoZIhvcNAQEL
+        BQAwbjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAldJMQwwCgYDVQQKDANIUEUxEDAO
+        BgNVBAsMB0hQQy9NQ1MxFDASBgNVBAMMC0RhdGEgQ2VudGVyMRwwGgYJKoZIhvcN
+        AQkBFg1kY29wc0BocGUuY29tMB4XDTIwMTEyNDIwMzM0MVoXDTMwMTEyMjIwMzM0
+        MVowbjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAldJMQwwCgYDVQQKDANIUEUxEDAO
+        BgNVBAsMB0hQQy9NQ1MxFDASBgNVBAMMC0RhdGEgQ2VudGVyMRwwGgYJKoZIhvcN
+        AQkBFg1kY29wc0BocGUuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+        AQEAuBIZkKitHHVQHymtaQt4D8ZhG4qNJ0cTsLhODPMtVtBjPZp59e+PWzbc9Rj5
+        +wfjLGteK6/fNJsJctWlS/ar4jw/xBIPMk5pg0dnkMT2s7lkSCmyd9Uib7u6y6E8
+        yeGoGcb7I+4ZI+E3FQV7zPact6b17xmajNyKrzhBGEjYucYJUL5iTgZ6a7HOZU2O
+        aQSXe7ctiHBxe7p7RhHCuKRrqJnxoohakloKwgHHzDLFQzX/5ADp1hdJcduWpaXY
+        RMBu6b1mhmwo5vmc+fDnfUpl5/X4i109r9VN7JC7DQ5+JX8u9SHDGLggBWkrhpvl
+        bNXMVCnwnSFfb/rnmGO7rdJSpwIDAQABo1MwUTAdBgNVHQ4EFgQUVg3VYExUAdn2
+        WE3e8Xc8HONy/+4wHwYDVR0jBBgwFoAUVg3VYExUAdn2WE3e8Xc8HONy/+4wDwYD
+        VR0TAQH/BAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAWLDQLB6rrmK+gwUY+4B7
+        0USbQK0JkLWuc0tCfjTxNQTzFb75PeH+GH21QsjUI8VC6QOAAJ4uzIEV85VpOQPp
+        qjz+LI/Ej1xXfz5ostZQu9rCMnPtVu7JT0B+NV7HvgqidTfa2M2dw9yUYS2surZO
+        8S0Dq3Bi6IEhtGU3T8ZpbAmAp+nNsaJWdUNjD4ECO5rAkyA/Vu+WyMz6F3ZDBmRr
+        ipWM1B16vx8rSpQpygY+FNX4e1RqslKhoyuzXfUGzyXux5yhs/ufOaqORCw3rJIx
+        v4sTWGsSBLXDsFM3lBgljSAHfmDuKdO+Qv7EqGzCRMpgSciZihnbQoRrPZkOHUxr
+        NA==
+        -----END CERTIFICATE-----
+        ```
+
+    6. Create `certs.jks`.
+
+        ```bash
+        ncn-m001# podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool -importcert \
+        -trustcacerts -file /data/cacert.pem -alias cray-data-center-ca -keystore /data/certs.jks \
+        -storepass password -noprompt
+        ```
+
+    7. Create `certs.jks.b64` by base-64 encoding `certs.jks`.
+
+        ```bash
+        ncn-m001# base64 certs.jks > certs.jks.b64
+        ```
+
+    8.  Inject and encrypt `certs.jks.b64` into `customizations.yaml`.
+
+        ```bash
+        ncn-m001# cat <<EOF | yq w - 'data."certs.jks"' "$(<certs.jks.b64)" | \
+        yq r -j - | /root/site-init/utils/secrets-encrypt.sh | \
+        yq w -f - -i /root/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray-keycloak'
+        {
+            "kind": "Secret",
+            "apiVersion": "v1",
+            "metadata": {
+            "name": "keycloak-certs",
+            "namespace": "services",
+            "creationTimestamp": null
+            },
+            "data": {}
+        }
+        EOF
+        ```
 
 4. Prepare to generate Sealed Secrets.
    
@@ -775,7 +775,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         ncn-m001# cray bos session create --template-uuid BOS_TEMPLATE --operation reboot
         ```
 
-10. Validate that LDAP integration was added successfully.
+10.  Validate that LDAP integration was added successfully.
    
    1. Retrieve the admin password for Keycloak.
 
