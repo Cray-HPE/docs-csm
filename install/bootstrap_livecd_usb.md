@@ -29,8 +29,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 1. Set up the Typescript directory as well as the initial typescript. This directory will be returned to for every typescript in the entire CSM installation.
 
    ```bash
-   linux# mkdir -p /var/www/ephemeral/prep/admin
-   linux# pushd !$
+   linux# cd ~
    linux# script -af csm-install-usb.$(date +%Y-%m-%d).txt
    linux# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
@@ -39,6 +38,8 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 
    **Important:** To ensure that the CSM release plus any patches, workarounds, or hotfixes are included
    follow the instructions in [Update CSM Product Stream](../update_product_stream/index.md)
+
+   **Important:** Download to a location that has sufficient space for both the tarball and the expanded tarball.
 
    The rest of this procedure will use the CSM_RELEASE variable and expect to have the
    contents of the CSM software release tarball plus any patches, workarounds, or hotfixes.
@@ -56,7 +57,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 1. Install/upgrade the CSI RPM
 
    ```bash
-   linux# rpm -Uvh --force ${CSM_PATH}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
+   linux# rpm -Uvh --force $(find ${CSM_PATH}/rpm/cray/csm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
    ```
 
 1. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet
@@ -545,13 +546,19 @@ This will enable SSH, and other services when the LiveCD starts.
     storage-ceph-0.0.5.squashfs-----------------------> /mnt/pitdata/data/ceph/...OK
     ```
 
+1. Quit the typescript session with the `exit` command and copy the file (csm-install-usb.<date>.txt) to the data partition on the USB drive.
+
+    ```bash
+    linux# mkdir -pv /mnt/pitdata/prep/logs
+    linux# exit
+    linux# cp ~/csm-install-usb.*.txt /mnt/pitdata/prep/logs
+    ```
+
 1. Unmount the data partition:
 
     ```bash
     linux# cd; umount -v /mnt/pitdata
     ```
-
-1. Quit the typescript session with the `exit` command and copy the file (csm-install-usb.<date>.txt) to a location on another server for reference later.
 
 Now the USB device may be reattached to the management node, or if it was made on the management node then it can now
 reboot into the LiveCD.
