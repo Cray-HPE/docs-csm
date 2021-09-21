@@ -450,25 +450,14 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
 
-    REQUIRED_PATCH_NUM=4
-    versions=$(kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm')
-    patch_versions=$(echo "${versions}" | grep ^0.9)
-
-    if [ "$patch_versions" == "" ]; then
-      echo "Required CSM patch 0.9.5 has not been applied to this system"
-      exit 1
-    fi
-
-    highest_patch_num=0
-    for patch_version in $patch_versions; do
-      patch_num=$(echo $patch_version | sed 's/://' | awk -F '.' '{print $3}' | awk -F '-' '{print $1}')
-      if [[ "$patch_num" -gt "$highest_patch_num" ]]; then
-        highest_patch_num=$patch_num
-      fi
-    done
-
-    if [[ "$highest_patch_num" -lt "$REQUIRED_PATCH_NUM" ]]; then
-      echo "Required CSM patch 0.9.4 or above has not been applied to this system"
+    # get all installed csm version into a file
+    kubectl get cm -n services cray-product-catalog -o json | jq  -r '.data.csm' | yq r -  -d '*' -j | jq -r 'keys[]' > /tmp/csm_versions
+    # sort -V: version sort
+    highest_version=$(sort -V /tmp/csm_versions | tail -1)
+    minimum_version="0.9.5"
+    # compare sorted versions with unsorted so we know if our highest is greater than minimum
+    if [[ $(printf "$minimum_version\n$highest_version") != $(printf "$minimum_version\n$highest_version" | sort -V) ]]; then
+      echo "Required CSM patch $minimum_version or above has not been applied to this system"
       exit 1
     fi
 
