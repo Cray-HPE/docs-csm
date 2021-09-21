@@ -44,7 +44,7 @@ Setting up SSH keys enables administrators to view recent console messages and i
     {
        "Force":false,
        "Targets":
-    $(cray hsm inventory redfishEndpoints list --format=json | jq '[.RedfishEndpoints[] | .ID]' | sed 's/^/   /'),
+    $(cray hsm state components list --class mountain --type nodebmc --format json | jq '[.Components[] | select((.State == "On") or (.State == "Ready")) | .ID]')
        "Params":{
           "SSHKey":"$(echo $SCSD_SSH_KEY)",
           "SSHConsoleKey":"$(echo $SCSD_SSH_CONSOLE_KEY)"
