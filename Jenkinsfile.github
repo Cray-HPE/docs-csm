@@ -44,12 +44,12 @@ pipeline {
           steps {
             script {
                 if(env.RELEASE_BRANCH_VERSION){
-                    env.RELEASE_BRANCH_VERSION = "/" + env.RELEASE_BRANCH_VERSION 
+                    RELEASE_FOLDER = "/" + env.RELEASE_BRANCH_VERSION 
                 } else {
-                    env.RELEASE_BRANCH_VERSION = ""
+                    RELEASE_FOLDER = ""
                 }
-                publishCsmRpms(component: env.GIT_REPO_NAME + env.RELEASE_BRANCH_VERSION, pattern: "dist/rpmbuild/RPMS/noarch/*.rpm", arch: "noarch", isStable: env.IS_STABLE)
-                publishCsmRpms(component: env.GIT_REPO_NAME + env.RELEASE_BRANCH_VERSION, pattern: "dist/rpmbuild/SRPMS/*.rpm", arch: "src", isStable: env.IS_STABLE)
+                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/RPMS/noarch/*.rpm", arch: "noarch", isStable: env.IS_STABLE)
+                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/SRPMS/*.rpm", arch: "src", isStable: env.IS_STABLE)
             }
         }
     }
