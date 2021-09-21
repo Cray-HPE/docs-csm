@@ -1,4 +1,4 @@
-@Library('csm-shared-library') _
+@Library('csm-shared-library@CASMINST-3106') _
 
 pipeline {
     agent {
@@ -14,8 +14,10 @@ pipeline {
         IS_STABLE = getBuildIsStable()
         BUILD_METADATA = getRpmRevision(isStable: env.IS_STABLE)
         GIT_REPO_NAME = getRepoName()
+        RELEASE_BRANCH_VERSION = getReleaseBranchVersion("release/csm-1.0")
      }
-
+     echo env.RELEASE_BRANCH_VERSION
+    /*
     stages {
         stage("Prepare") {
             steps {
@@ -46,5 +48,6 @@ pipeline {
         }
       }
     }
+    */
   }
 }
