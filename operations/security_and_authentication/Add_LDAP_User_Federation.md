@@ -74,10 +74,9 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         data: {}
       ```
 
-      If these sections were populated during the install, proceed to the next sub-step to 
-      remove the existing keycloak_users_localize and cray-keycloak Sealed Secrets
-      from customizations.yaml, and then add the `generate:` sections back in, 
-      populated with the desired configuration.
+      Proceed to the next sub-step to remove the existing keycloak_users_localize 
+      and cray-keycloak Sealed Secrets from customizations.yaml, and then add 
+      the `generate:` sections back in, populated with the desired configuration.
 
    2. Update the LDAP settings with the desired configuration.
       
