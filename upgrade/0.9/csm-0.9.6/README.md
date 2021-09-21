@@ -25,6 +25,7 @@
 # Procedures
 
 - [Preparation](#preparation)
+- [Apply cray-hms-hmcollector scale changes](#apply-cray-hms-hmcollector-scale-changes)
 - [Setup Nexus](#setup-nexus)
 - [Update NCNs](#update-ncns)
 - [Upgrade Services](#upgrade-services)
@@ -75,7 +76,135 @@
    ```bash
    ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm/docs-csm-latest.noarch.rpm
    ```
-   
+
+<a name="apply-cray-hms-hmcollector-scale-changes"></a> 
+## Apply cray-hms-hmcollector scale changes
+
+If no scaling changes are desired to be made against the `cray-hms-hmcollector` deployment or if they have have not been previously applied, then this section can be skipped and proceed onto the [Setup Nexus](#setup-nexus) section. 
+
+Before [upgrading services](#upgrade-services), `customizations.yaml` in the `site-init` secret in the `loftsman` namespace must be updated to apply or re-apply any manual scaling changes made to the `cray-hms-hmcollector` deployment. 
+
+
+1. If the [`site-init` repository is available as a remote
+   repository](../../../067-SHASTA-CFG.md#push-to-a-remote-repository) then clone
+   it on the host orchestrating the upgrade:
+
+   ```bash
+   ncn-m001# git clone "$SITE_INIT_REPO_URL" site-init
+   ```
+
+   Otherwise, create a new `site-init` working tree:
+
+   ```bash
+   ncn-m001# git init site-init
+   ```
+
+1. Download `customizations.yaml`:
+
+   ```bash
+   ncn-m001# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > site-init/customizations.yaml
+   ```
+
+1. Review, add, and commit `customizations.yaml` to the local `site-init`
+   repository as appropriate.
+
+   > **`NOTE:`** If `site-init` was cloned from a remote repository in step 1,
+   > there may not be any differences and hence nothing to commit. This is
+   > okay. If there are differences between what is in the repository and what
+   > was stored in the `site-init`, then it suggests settings were improperly
+   > changed at some point. If that is the case then be cautious, _there may be
+   > dragons ahead_.
+
+   ```bash
+   ncn-m001# cd site-init
+   ncn-m001# git diff
+   ncn-m001# git add customizations.yaml
+   ncn-m001# git commit -m 'Add customizations.yaml from site-init secret'
+   ```
+
+1. Update `customizations.yaml` with the existing `cray-hms-hmcollector` resource limits and requests settings:
+
+   Persist resource requests and limits from the cray-hms-hmcollector deployment:
+   ```bash
+   ncn-m001# kubectl -n services get deployments cray-hms-hmcollector \
+      -o jsonpath='{.spec.template.spec.containers[].resources}' | yq r -P - | \
+      yq w -f - -i ./customizations.yaml spec.kubernetes.services.cray-hms-hmcollector.resources
+   ```
+
+   Persist annotations manually added to `cray-hms-hmcollector` deployment:
+   ```bash
+   ncn-m001# kubectl -n services get deployments cray-hms-hmcollector \
+      -o jsonpath='{.spec.template.metadata.annotations}' | \
+      yq d -P - '"traffic.sidecar.istio.io/excludeOutboundPorts"' | \
+      yq w -f - -i ./customizations.yaml spec.kubernetes.services.cray-hms-hmcollector.podAnnotations
+   ```
+
+   View the updated overrides added to `customizations.yaml`. If the value overrides look different to the sample output below then the resource limits and requests have been manually modified in the past.
+   ```bash
+   ncn-m001# yq r ./customizations.yaml spec.kubernetes.services.cray-hms-hmcollector
+   hmcollector_external_ip: '{{ network.netstaticips.hmn_api_gw }}'
+   resources:
+   limits:
+      cpu: "4"
+      memory: 5Gi
+   requests:
+      cpu: 500m
+      memory: 256Mi
+   podAnnotations: {}
+   ```
+
+1. If desired adjust the resource limits and requests for the `cray-hms-hmcollector`. Otherwise this step can be skipped.
+
+   Edit `customizations.yaml` and the value overrides for the `cray-hms-hmcollector` Helm chart are defined at `spec.kubernetes.services.cray-hms-hmcollector`
+
+   Adjust the resource limits and requests for the `cray-hms-hmcollector` deployment in `customizations.yaml`:
+   ```yaml
+         cray-hms-hmcollector:
+            hmcollector_external_ip: '{{ network.netstaticips.hmn_api_gw }}'
+            resources:
+               limits:
+                  cpu: "4"
+                  memory: 5Gi
+               requests:
+                  cpu: 500m
+                  memory: 256Mi
+   ```
+
+   To specify a non-default memory limit for the Istio proxy used by the `cray-hms-hmcollector` to pod annotation `sidecar.istio.io/proxyMemoryLimit` can added under `podAnnotations`. By default the Istio proxy memory limit is `1Gi`.
+   ```yaml
+         cray-hms-hmcollector:
+            podAnnotations:
+               sidecar.istio.io/proxyMemoryLimit: 5Gi
+   ```
+
+1. Review the changes to `customizations.yaml` and verify [baseline system
+   customizations](../../../067-SHASTA-CFG.md#create-baseline-system-customizations)
+   and any customer-specific settings are correct.
+
+   ```
+   ncn-m001# git diff
+   ```
+
+1. Add and commit `customizations.yaml` if there are any changes:
+
+   ```
+   ncn-m001# git add customizations.yaml
+   ncn-m001# git commit -m "Update customizations.yaml consistent with CSM $CSM_RELEASE_VERSION"
+   ```
+
+1. Update `site-init` sealed secret in `loftsman` namespace:
+
+   ```bash
+   ncn-m001# kubectl delete secret -n loftsman site-init
+   ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ```
+
+1. Push to the remote repository as appropriate:
+
+   ```bash
+   ncn-m001# git push
+   ```
+
 <a name="setup-nexus"></a>
 ## Setup Nexus
 
