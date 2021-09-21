@@ -17,7 +17,6 @@ pipeline {
         RELEASE_BRANCH_VERSION = getReleaseBranchVersion("release/csm-1.0")
      }
      echo env.RELEASE_BRANCH_VERSION
-    /*
     stages {
         stage("Prepare") {
             steps {
@@ -30,6 +29,7 @@ pipeline {
             }
         }
 
+      /*
       stage("Build RPM") {
           steps {
               script {
@@ -47,7 +47,7 @@ pipeline {
               publishCsmRpms(component: env.GIT_REPO_NAME, pattern: "dist/rpmbuild/SRPMS/*.rpm", arch: "src", isStable: env.IS_STABLE)
         }
       }
+      */
     }
   }
-  */
 }
