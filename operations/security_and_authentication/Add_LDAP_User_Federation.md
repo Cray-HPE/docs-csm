@@ -51,8 +51,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 2. Repopulate the keycloak_users_localize and cray-keycloak Sealed Secrets in the customizations.yaml file with the desired configuration.
 
    Update the LDAP settings with the desired configuration. LDAP connection information 
-   is stored in the keycloak-users-localize Secret in the services
-   namespace in the customizations.yaml file.
+   is stored in the keycloak-users-localize Secret in the customizations.yaml file.
 
    -   The ldap_connection_url key is required and is set to an LDAP URL.
    -   The ldap_bind_dn and ldap_bind_credentials keys are optional.
