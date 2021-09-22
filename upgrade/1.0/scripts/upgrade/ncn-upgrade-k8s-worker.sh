@@ -11,7 +11,7 @@ upgrade_ncn=$1
 
 . ${BASEDIR}/ncn-upgrade-common.sh ${upgrade_ncn}
 
-ssh_keygen_keyscan $1
+ssh_keygen_keyscan $1 || true # oror true to unblock rerun
 
 cfs_config_status=$(cray cfs components describe $UPGRADE_XNAME --format json | jq -r '.configurationStatus')
 echo "CFS configuration status: ${cfs_config_status}"
@@ -127,7 +127,43 @@ ${BASEDIR}/../k8s/failover-leader.sh $upgrade_ncn
 
 drain_node $upgrade_ncn
 
+state_name="BACKUP_CREDENTIAL_SSH_KEYS"
+state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+
+    if [[ $ssh_keys_done == "0" ]]; then
+        ssh_keygen_keyscan "${upgrade_ncn}"
+        ssh_keys_done=1
+    fi
+    scp ${upgrade_ncn}:/root/.ssh/id_rsa /etc/cray/upgrade/csm/$CSM_RELEASE/$upgrade_ncn
+    scp ${upgrade_ncn}:/root/.ssh/authorized_keys /etc/cray/upgrade/csm/$CSM_RELEASE/$upgrade_ncn
+    scp ${upgrade_ncn}:/etc/shadow /etc/cray/upgrade/csm/$CSM_RELEASE/$upgrade_ncn
+
+    record_state "${state_name}" ${upgrade_ncn}
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 ${BASEDIR}/ncn-upgrade-wipe-rebuild.sh $upgrade_ncn
+
+state_name="RESTORE_CREDENTIAL_SSH_KEYS"
+state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+
+    if [[ $ssh_keys_done == "0" ]]; then
+        ssh_keygen_keyscan "${upgrade_ncn}"
+        ssh_keys_done=1
+    fi
+    scp /etc/cray/upgrade/csm/$CSM_RELEASE/$upgrade_ncn/id_rsa ${upgrade_ncn}:/root/.ssh/id_rsa 
+    scp /etc/cray/upgrade/csm/$CSM_RELEASE/$upgrade_ncn/authorized_keys ${upgrade_ncn}:/root/.ssh/authorized_keys
+    scp /etc/cray/upgrade/csm/$CSM_RELEASE/$upgrade_ncn/shadow ${upgrade_ncn}:/etc/shadow 
+
+    record_state "${state_name}" ${upgrade_ncn}
+else
+    echo "====> ${state_name} has been completed"
+fi
 
 cfs_config_status=$(cray cfs components describe $UPGRADE_XNAME --format json | jq -r '.configurationStatus')
 echo "CFS configuration status: ${cfs_config_status}"
