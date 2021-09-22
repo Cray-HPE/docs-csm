@@ -8,6 +8,7 @@ This will show up in the `fw-loader` job logs with the following message: `CRITI
 You may first notice the issue if firmware is not present in the FAS image list (`cray fas images list`) after running the FAS loader or if a firmware update reports `failed to find file, trying again soon`
 
 To view the FAS loader logs:
+*(The system only keeps pods available for a short amount time, if the command returns no pods, rerun the FAS loader with the procedure below.)*
 
 >Get the fas loader pod name:
 
@@ -39,7 +40,7 @@ Change `cray-fas-loader-1` to the loader job name returned from the last command
 >    ncn# kubectl -n services get job cray-fas-loader-1 -o json | jq 'del(.spec.selector)' \
 >    | jq 'del(.spec.template.metadata.labels."controller-uid")' \
 >    | kubectl replace --force -f -
-
+>
 >    job.batch "cray-fas-loader-1" deleted
 >    job.batch/cray-fas-loader-1 replaced
 >```
