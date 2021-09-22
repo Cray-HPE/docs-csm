@@ -43,6 +43,8 @@ See the HPC Firmware Pack product stream for required minimum levels and procedu
 
 Later in the installation process the HPC Firmware Pack will be installed on the PIT node and added to the Nexus repository so that it can be used in conjunction with the Firmware Action Services (FAS) to update firmware on other components.
 
+See [Update NCN Firmware](update_ncn_firmware.md)
+
 <a name="quiesce_compute_and_application_nodes"></a>
 ### Quiesce compute nodes and application nodes.
 
@@ -237,4 +239,3 @@ ncn-m001# poweroff
    After completing this procedure the next step is to bootstrap the PIT node.
 
    * See [Bootstrap PIT Node](index.md#bootstrap_pit_node)
-

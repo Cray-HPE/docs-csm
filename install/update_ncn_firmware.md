@@ -35,6 +35,8 @@ Reset Gigabyte nodes to factory defaults to resolve problems with `ipmitool`, Re
 
 1. Prepare the inventory. The RPMs providing firmware need to be installed:
 
+    >**NOTE:** the firmware package that was included in the CSM tarball was removed in CSM 1.0 beta 69 - This step will not be needed after that release.
+
     > When setting the CSM_PATH variable, set it to where your expanded CSM release tarball is located.
 
    ```bash
