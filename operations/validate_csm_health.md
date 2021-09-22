@@ -29,8 +29,9 @@ The areas should be tested in the order they are listed on this page. Errors in 
       - [1.8.1 Known Test Issues](#autogoss-issues)
     - [1.9 OPTIONAL Check of System Management Monitoring Tools](#optional-check-of-system-management-monitoring-tools)
   - [2. Hardware Management Services Health Checks](#hms-health-checks)
-    - [2.1 HMS Test Execution](#hms-test-execution)
-    - [2.2 Hardware State Manager Discovery Validation](#hms-smd-discovery-validation)
+    - [2.1 HMS CT Test Execution](#hms-test-execution)
+    - [2.2 Aruba Switch SNMP Fixup](#hms-aruba-fixup)
+    - [2.3 Hardware State Manager Discovery Validation](#hms-smd-discovery-validation)
       - [2.2.1 Interpreting results](#hms-smd-discovery-validation-interpreting-results)
       - [2.2.2 Known Issues](#hms-smd-discovery-validation-known-issues)
   - [3 Software Management Services Health Checks](#sms-health-checks)
@@ -495,11 +496,23 @@ Information to assist with troubleshooting some of the components mentioned in t
 Execute the HMS smoke and functional tests after the CSM install to confirm that the Hardware Management Services are running and operational.
 
 <a name="hms-test-execution"></a>
-### 2.1 HMS Test Execution
+### 2.1 HMS CT Test Execution
 
 These tests should be executed as root on at least one worker NCN and one master NCN (but **not** ncn-m001 if it is still the PIT node).
 
-Run the HMS smoke tests.
+Run the HMS CT smoke tests.  This is done by running the `run_hms_ct_tests.sh` script:
+
+```
+ncn# /opt/cray/csm/scripts/hms_verification/run_hms_ct_tests.sh
+```
+
+The return value of the script is 0 if all CT tests ran successfully, non-zero
+if not.
+
+#### Running CT Tests Manually
+
+To run the tests manually:
+
 ```
 ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resources.sh
 ```
@@ -507,14 +520,26 @@ ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resou
 Examine the output. If one or more failures occur, investigate the cause of each failure. See the [interpreting_hms_health_check_results](../troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
 
 Otherwise, run the HMS functional tests.
+
 ```
 ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-resources.sh
 ```
 
 Examine the output. If one or more failures occur, investigate the cause of each failure. See the [interpreting_hms_health_check_results](../troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
 
+<a name="hms-aruba-fixup"></a>
+### 2.2 Aruba Switch SNMP Fixup
+
+Systems with Aruba leaf switches sometimes have issues with a known SNMP bug
+which prevents HSM discovery from discovering all HW.  At this stage of the
+installation process, a script can be run to detect if this issue is 
+currently affecting the system, and if so, correct it.
+
+Refer to [Air cooled hardware is not getting properly discovered with Aruba leaf switches](../troubleshooting/known_issues/discovery_aruba_snmp_issue.md) for 
+details.
+
 <a name="hms-smd-discovery-validation"></a>
-### 2.2 Hardware State Manager Discovery Validation
+### 2.3 Hardware State Manager Discovery Validation
 
 By this point in the installation process, the Hardware State Manager (HSM) should
 have done its discovery of the system.
@@ -523,7 +548,8 @@ The foundational information for this discovery is from the System Layout Servic
 comparison needs to be done to see that what is specified in SLS (focusing on
 BMC components and Redfish endpoints) are present in HSM.
 
-Execute the `verify_hsm_discovery.py` script on a Kubernetes master or worker NCN:
+To perform this comparison execute the `verify_hsm_discovery.py` script on a Kubernetes master or worker NCN.  The result is pass/fail (returns 0 or non-zero):
+
 ```
 ncn# /opt/cray/csm/scripts/hms_verification/verify_hsm_discovery.py
 ```
@@ -775,9 +801,9 @@ The session template below can be copied and used as the basis for the BOS Sessi
      "enable_cfs": false,
      "name": "shasta-1.4-csm-bare-bones-image"
    }
-   ```
 
    **NOTE**: Be sure to replace the values of the `etag` and `path` fields with the ones you noted earlier in the `cray ims images list` command.
+
 
 2. Create the BOS session template using the following file as input:
    ```
