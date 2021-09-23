@@ -24,6 +24,7 @@ The following administrative topics can be found in this guide:
   - [System Layout Service (SLS)](#system-layout-service-sls)
   - [System Configuration Service](#system-configuration-service)
   - [Hardware State Manager (HSM)](#hardware-state-manager-hsm)
+  - [Hardware Management (HM) Collector](#hm-collector)
   - [Node Management](#node-management)
   - [River Endpoint Discovery Service (REDS)](#river-endpoint-discovery-service-reds)
   - [Network](#network)
@@ -477,6 +478,13 @@ Use the Hardware State Manager \(HSM\) to monitor and interrogate hardware compo
   * [Restore HSM Postgres from a Backup](hardware_state_manager/Restore_HSM_Postgres_from_Backup.md)
   * [Restore HSM Postgres without a Backup](hardware_state_manager/Restore_HSM_Postgres_without_a_Backup.md)
 
+<a name=""></a>
+
+## Hardware Management (HM) Collector
+
+The Hardware Management (HM) Collector is used to collect telemetry and Redfish events from hardware in the system. 
+
+ * [Adjust HM Collector resource limits and requests](hmcollector/adjust_hmcollector_resource_limits_requests.md)
 
 <a name="node-management"></a>
 
