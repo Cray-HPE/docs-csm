@@ -28,7 +28,7 @@ This procedure requires that the `kubectl` command is installed.
 It also requires that the **CSM_SCRIPTDIR variable is defined**. Set this variable and verify that it is set. Note that if execution of this procedure is on-and-off or if multiple command windows are used, in cases where the `CSM_SCRIPTDIR` variable is referenced, it may be necessary to return to this step to ensure that the variable is defined.
 
 ```bash
-ncn-m001# export CSM_SCRIPTDIR=/usr/share/doc/metal/operations/scripts
+ncn-m001# export CSM_SCRIPTDIR=/usr/share/doc/metal/scripts
 ncn-m001# echo $CSM_SCRIPTDIR
 ```
 
@@ -692,7 +692,7 @@ ep toward the top of this procedure.
     8. Set `CSM_SCRIPTDIR` to the scripts directory included in the docs-csm RPM and check that it is set:
 
         ```bash
-        ncn-m001# export CSM_SCRIPTDIR=/usr/share/doc/metal/operations/scripts
+        ncn-m001# export CSM_SCRIPTDIR=/usr/share/doc/metal/scripts
         ncn-m001# echo $CSM_SCRIPTDIR
         ```
 

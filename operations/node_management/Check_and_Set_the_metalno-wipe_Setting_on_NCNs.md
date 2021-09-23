@@ -8,7 +8,12 @@ Run the `ncnGetXnames.sh`script to view the `metal.no-wipe` settings for each NC
 
 This procedure requires administrative privileges.
 
-It also requires that the CSM_SCRIPTDIR variable was previously defined as part of the execution of the steps in the csm-0.9.5 upgrade README. You can verify that it is set by running `echo $CSM_SCRIPTDIR` on the ncn-m001 cli. If that returns nothing, re-execute the setting of that variable from the csm-0.9.5 [README](../../README.md) file.
+It also requires that the **CSM_SCRIPTDIR variable is defined**. Set this variable and verify that it is set.
+
+```bash
+ncn-m001# export CSM_SCRIPTDIR=/usr/share/doc/metal/scripts
+ncn-m001# echo $CSM_SCRIPTDIR
+```
 
 ### Procedure
 
