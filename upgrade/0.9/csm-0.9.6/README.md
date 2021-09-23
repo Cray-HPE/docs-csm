@@ -21,6 +21,7 @@
 1. Update the cray-sysmgmt-health helm chart to address multiple alerts
 1. Install/Update node_exporter on storage nodes
 1. Update cray-hms-hmnfd helm chart to include timestamp fix
+1. Update the cray-hms-hmcollector helm chart to include fix to prevent crashing, also its resource limits and requests can be overridden via `customizations.yaml`.
 
 # Procedures
 
