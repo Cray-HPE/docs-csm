@@ -13,10 +13,10 @@ Some of these changes are applied as hotfixes and patches for 1.4, they may have
 For systems with mountain cabinets ONLY. Changes must
 - Verify the version of the CMM firmware, the firmware must be on version 1.4.20 or greater in order to support static LAGs on the CDU switches.
 - The command below should get you all the cmm firmware for a system.
-- Update the password in the command before usage. Change ```root:password``` to the correct BMC password.
+- Update the password in the command before usage. Change `root:password` to the correct BMC password.
 
-```
-export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token'); cmms=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?type=comptype_chassis_bmc" | jq -r '.[] | .Xname'); for cmm in ${cmms}; do echo ${cmm}; curl -sk -u root:password https://${cmm}/redfish/v1/UpdateService/FirmwareInventory/BMC | jq .Version; done
+```bash
+ncn# export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token'); cmms=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?type=comptype_chassis_bmc" | jq -r '.[] | .Xname'); for cmm in ${cmms}; do echo ${cmm}; curl -sk -u root:password https://${cmm}/redfish/v1/UpdateService/FirmwareInventory/BMC | jq .Version; done
 ```
 
 Expected output
@@ -69,7 +69,7 @@ Displaying ipv4 routes selected for forwarding
 10.92.100.60/32, vrf default, tag 0
     via  10.252.1.x,  [1/0],  static
 ```
-- If you see ```via  10.252.1.x,  [1/0],  static``` then you will need to remove this route.
+- If you see `via  10.252.1.x,  [1/0],  static` then you will need to remove this route.
 
 ```
 sw-spine01# config t
@@ -77,17 +77,17 @@ sw-spine01(config)# no ip route 10.92.100.60/32 10.252.1.x
 ```
 
 - Next step is to re-run the BGP script.
-- it is located at ```/opt/cray/csm/scripts/networking/BG/Aruba_BGP_Peers.py```
+- It is located at `/opt/cray/csm/scripts/networking/BG/Aruba_BGP_Peers.py`
 - This is documented on this page [Updae BGP Neighbors](../operations/network/metallb_bgp/Update_BGP_Neighbors.md)
 
 ##### Check Aruba BGP configuration
-- log into the switches that you ran the BGP script against and execute ```sw-spine-001# show run | begin "ip prefix-list"```
+- Log into the switches that you ran the BGP script against and execute `sw-spine-001# show run | begin "ip prefix-list"`
 
 
 Do not copy this configuration onto your switches.
 Note: the following configuration needs to be present.
-```ip prefix-list tftp seq 10 permit 10.92.100.60/32 ge 32 le 32```
-```neighbor 10.252.1.x passive```
+`ip prefix-list tftp seq 10 permit 10.92.100.60/32 ge 32 le 32`
+`neighbor 10.252.1.x passive`
 The neighbors should be the NMN IP of the worker nodes.
 Here's an example output from an aruba switch with 3 worker nodes.
 ```
