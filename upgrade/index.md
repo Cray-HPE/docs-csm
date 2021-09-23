@@ -23,11 +23,13 @@ sections, but there is also a general troubleshooting topic.
 ## Details
 
 <a name="prepare_for_upgrade"></a>
+
 1. Prepare for Upgrade
 
-   See [Prepare for Upgrade](prepare_for_upgrade.md)
+    See [Prepare for Upgrade](prepare_for_upgrade.md)
 
    <a name="update_management_network"></a>
+
 1. Update Management Network
 
    There are new features and functions with Shasta v1.5. Some of these changes were available as patches and hotfixes
@@ -40,52 +42,51 @@ sections, but there is also a general troubleshooting topic.
    See [Update Management Network](update_management_network.md)
 
    <a name="upgrade_management_nodes_csm_services"></a>
+
 1. Upgrade Management Nodes and CSM Services
 
-   The upgrade of CSM software will do a controlled, rolling reboot of all management nodes before updating the CSM services.
-   * Prerequisites and Preflight Checks
-   * Stage 1. Ceph upgrade from Nautilus (14.2.x) to Octopus (15.2.x)
-   * Stage 2. Ceph image upgrade
-   * Stage 3. Kubernetes Upgrade from 1.18.6 to 1.19.9
-   * Stage 4. CSM Service Upgrades
+    The upgrade of CSM software will do a controlled, rolling reboot of all management nodes before updating the CSM services.
 
-   See [Upgrade Management Nodes and CSM Services](1.0/README.md)
+    The upgrade is a guided process Starting with [Upgrade Management Nodes and CSM Services](1.0/README.md)
 
-   <a name="validate_csm_health"></a>
+    <a name="validate_csm_health"></a>
+
 1. Validate CSM Health
 
-   > **`IMPORTANT:`** Wait at least 15 minutes after
-   > [`upgrade.sh`](1.0/README.md#deploy-manifests) in stage 4 completes to let the various Kubernetes
-   > resources get initialized and started.
+     > **`IMPORTANT:`** Wait at least 15 minutes after
+     > [`upgrade.sh`](1.0/README.md#deploy-manifests) in stage 4 completes to let the various Kubernetes
+     > resources get initialized and started.
+  
+     Run the following validation checks to ensure that everything is still working
+     properly after the upgrade:
+  
+     > **`IMPORTANT:`** If your site does not use UAIs, skip UAS and UAI validation. If you do use
+     > UAIs, there are products that configure UAS like Cray Analytics and Cray Programming Environment that
+     > must be working correctly with UAIs and should be validated and corrected (the procedures for this are
+     > beyond the scope of this document) prior to validating UAS and UAI. Failures in UAI creation that result
+     > from incorrect or incomplete installation of these products will generally take the form of UAIs stuck in
+     > waiting state trying to set up volume mounts.
+  
+     1. [Platform Health Checks](../operations/validate_csm_health.md#platform-health-checks)
+     2. [Hardware Management Services Health Checks](../operations/validate_csm_health.md#hms-health-checks)
+     3. [Software Management Services Validation Utility](../operations/validate_csm_health.md#sms-health-checks)
+     4. [Validate UAS and UAI Functionality](../operations/validate_csm_health.md#uas-uai-validate)
+  
+     Booting the barebones image on the compute nodes should be skipped if the compute nodes have been running
+     application workload during the the CSM upgrade.
+  
+     See [Validate CSM Health](../operations/validate_csm_health.md)
+  
+     <a name="update_firmware_with_fas"></a>
 
-   Run the following validation checks to ensure that everything is still working
-   properly after the upgrade:
-
-   > **`IMPORTANT:`** If your site does not use UAIs, skip UAS and UAI validation. If you do use
-   > UAIs, there are products that configure UAS like Cray Analytics and Cray Programming Environment that
-   > must be working correctly with UAIs and should be validated and corrected (the procedures for this are
-   > beyond the scope of this document) prior to validating UAS and UAI. Failures in UAI creation that result
-   > from incorrect or incomplete installation of these products will generally take the form of UAIs stuck in
-   > waiting state trying to set up volume mounts.
-
-   1. [Platform Health Checks](../operations/validate_csm_health.md#platform-health-checks)
-   1. [Hardware Management Services Health Checks](../operations/validate_csm_health.md#hms-health-checks)
-   1. [Software Management Services Validation Utility](../operations/validate_csm_health.md#sms-health-checks)
-   1. [Validate UAS and UAI Functionality](../operations/validate_csm_health.md#uas-uai-validate)
-
-   Booting the barebones image on the compute nodes should be skipped if the compute nodes have been running
-   application workload during the the CSM upgrade.
-
-   See [Validate CSM Health](../operations/validate_csm_health.md)
-
-   <a name="update_firmware_with_fas"></a>
 1. Update Firmware with FAS
 
-   See [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md)
+    See [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md)
 
-   <a name="next_topic"></a>
+    <a name="next_topic"></a>
+
 1. Next Topic
 
-   After completion of the firmware update with FAS, the CSM product stream has been fully upgraded and
-   configured. Refer to the _HPE Cray EX Installation and Configuration Guide 1.5 S-8000_ for other product streams
-   to be upgraded and configured after CSM.
+    After completion of the firmware update with FAS, the CSM product stream has been fully upgraded and
+    configured. Refer to the _HPE Cray EX Installation and Configuration Guide 1.5 S-8000_ for other product streams
+    to be upgraded and configured after CSM.
