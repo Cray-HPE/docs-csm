@@ -747,25 +747,18 @@ Observe the output of the checks and note any failures, then remediate them.
 
 1. Check the storage nodes.
 
-   **`Note`**: Throughout the output of the `csi pit validate` command there will be a test total for each node where the tests run. Be sure to check all of them and not just the final one.
-
    ```bash
    pit# csi pit validate --ceph | tee csi-pit-validate-ceph.log
    ```
 
-   Once that command has finished, the following will extract the test totals reported for each node:
-   ```bash
-   pit# grep "Total" csi-pit-validate-ceph.log
-   ```
+   Once that command has finished, check the last line of output to see the results of the tests.
 
-   Example output for a system with 3 storage nodes:
+   Example last line of output:
    ```
    Total Tests: 7, Total Passed: 7, Total Failed: 0, Total Execution Time: 1.4226 seconds
-   Total Tests: 7, Total Passed: 7, Total Failed: 0, Total Execution Time: 1.4077 seconds
-   Total Tests: 7, Total Passed: 7, Total Failed: 0, Total Execution Time: 1.4246 seconds
    ```
 
-   If these total lines report any failed tests, look through the full output of the test to see which node had the failed test and what the details are for that test.
+   If the test total line reports any failed tests, look through the full output of the test in csi-pit-validate-ceph.log to see which node had the failed test and what the details are for that test.
 
    **`Note`**: Please see [Utility Storage](../operations/utility_storage/Utility_Storage.md) to help resolve any failed tests.
 
