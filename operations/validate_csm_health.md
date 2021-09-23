@@ -32,8 +32,8 @@ The areas should be tested in the order they are listed on this page. Errors in 
     - [2.1 HMS CT Test Execution](#hms-test-execution)
     - [2.2 Aruba Switch SNMP Fixup](#hms-aruba-fixup)
     - [2.3 Hardware State Manager Discovery Validation](#hms-smd-discovery-validation)
-      - [2.2.1 Interpreting results](#hms-smd-discovery-validation-interpreting-results)
-      - [2.2.2 Known Issues](#hms-smd-discovery-validation-known-issues)
+      - [2.3.1 Interpreting results](#hms-smd-discovery-validation-interpreting-results)
+      - [2.3.2 Known Issues](#hms-smd-discovery-validation-known-issues)
   - [3 Software Management Services Health Checks](#sms-health-checks)
     - [3.1 SMS Test Execution](#sms-checks)
     - [3.2 Interpreting cmsdev Results](#cmsdev-results)
@@ -555,8 +555,8 @@ ncn# /opt/cray/csm/scripts/hms_verification/verify_hsm_discovery.py
 ```
 
 The output will ideally appear as follows, if there are mismatches these will be displayed in the appropriate section of
-the output. Refer to [2.2.1 Interpreting results](#hms-smd-discovery-validation-interpreting-results) and
-[2.2.2 Known Issues](#hms-smd-discovery-validation-known-issues) below to troubleshoot any mismatched BMCs.
+the output. Refer to [2.3.1 Interpreting results](#hms-smd-discovery-validation-interpreting-results) and
+[2.3.2 Known Issues](#hms-smd-discovery-validation-known-issues) below to troubleshoot any mismatched BMCs.
 ```bash
 ncn# /opt/cray/csm/scripts/hms_verification/verify_hsm_discovery.py
 
@@ -597,7 +597,7 @@ any FAIL information displayed, the script will exit with a non-zero exit
 code.  Failure information interpretation is described in the next section.
 
 <a name="hms-smd-discovery-validation-interpreting-results"></a>
-#### 2.2.1 Interpreting results
+#### 2.3.1 Interpreting results
 
 The Cabinet Checks output is divided into three sections:
 
@@ -652,10 +652,10 @@ BMC can be safely ignored, or if there is a legitimate issue with the BMC.
 
 * In Hill configurations SLS assumes BMCs in chassis 1 and 3 are fully populated (32 Node BMCs), and in Mountain configurations SLS assumes all BMCs are fully populated (128 Node BMCs). Any non-populated BMCs will have no HSM data and will show up in the mismatch list.
 
-If it was determined that the mismatch can not be ignored, then proceed onto the the [2.2.2 Known Issues](#hms-smd-discovery-validation-known-issues) below to troubleshoot any mismatched BMCs.
+If it was determined that the mismatch can not be ignored, then proceed onto the the [2.3.2 Known Issues](#hms-smd-discovery-validation-known-issues) below to troubleshoot any mismatched BMCs.
 
 <a name="hms-smd-discovery-validation-known-issues"></a>
-#### 2.2.2 Known Issues
+#### 2.3.2 Known Issues
 
 Known issues that may prevent hardware from getting discovered by Hardware State Manager:
 * [Air cooled hardware is not getting properly discovered with Aruba leaf switches](../troubleshooting/known_issues/discovery_aruba_snmp_issue.md)
@@ -763,7 +763,7 @@ Expected output is similar to the following:
     "path": "s3://boot-images/293b1e9c-2bc4-4225-b235-147d1d611eef/manifest.json",
     "type": "s3"
   },
-  "name": "cray-shasta-csm-sles15sp1-barebones.x86_64-shasta-1.4"
+  "name": "cray-shasta-csm-sles15sp1-barebones.x86_64-shasta-PRODUCT_VERSION"
 }
 ```
 
@@ -795,23 +795,26 @@ The session template below can be copied and used as the basis for the BOS Sessi
          "type": "s3"
        }
      },
-     "cfs": {
-       "configuration": "cos-integ-config-1.4.0"
-     },
      "enable_cfs": false,
-     "name": "shasta-1.4-csm-bare-bones-image"
+     "name": "shasta-PRODUCT_VERSION-csm-bare-bones-image"
    }
+   ```
+
+   **NOTE**: The rootfs provider shown above references the `dvs` provider. DVS is not provided as part of the CSM 
+   distribution and is not expected to work until the COS product is installed and configured. As noted above, the 
+   barebones image is not expected to boot at this time. Work is being done to enable a fully functional and bootable 
+   barebones image in a future release of the CSM product. Until that work is complete, the use of the `dvs` rootfs
+   provider is suggested.
 
    **NOTE**: Be sure to replace the values of the `etag` and `path` fields with the ones you noted earlier in the `cray ims images list` command.
 
-
 2. Create the BOS session template using the following file as input:
    ```
-   ncn# cray bos sessiontemplate create --file sessiontemplate.json --name shasta-1.4-csm-bare-bones-image
+   ncn# cray bos sessiontemplate create --file sessiontemplate.json --name shasta-PRODUCT_VERSION-csm-bare-bones-image
    ```
    The expected output is:
    ```
-   /sessionTemplate/shasta-1.4-csm-bare-bones-image
+   /sessionTemplate/shasta-PRODUCT_VERSION-csm-bare-bones-image
    ```
 
 <a name="csm-node"></a>
@@ -848,7 +851,7 @@ Arch = "X86"
 Class = "River"
 ```
 
-> If it is noticed that compute nodes are missing from Hardware State Manager, refer to [2.2.2 Known Issues](#hms-smd-discovery-validation-known-issues) to troubleshoot any Node BMCs that have not been discovered.
+> If it is noticed that compute nodes are missing from Hardware State Manager, refer to [2.3.2 Known Issues](#hms-smd-discovery-validation-known-issues) to troubleshoot any Node BMCs that have not been discovered.
 
 Choose a node from those listed and set `XNAME` to its ID. In this example, `x3000c0s17b2n0`:
 ```bash
@@ -860,14 +863,14 @@ ncn# export XNAME=x3000c0s17b2n0
 
 Create a BOS session to reboot the chosen node using the BOS session template that was created:
 ```bash
-ncn# cray bos session create --template-uuid shasta-1.4-csm-bare-bones-image --operation reboot --limit $XNAME
+ncn# cray bos session create --template-uuid shasta-PRODUCT_VERSION-csm-bare-bones-image --operation reboot --limit $XNAME
 ```
 
 Expected output looks similar to the following:
 ```
 limit = "x3000c0s17b2n0"
 operation = "reboot"
-templateUuid = "shasta-1.4-csm-bare-bones-image"
+templateUuid = "shasta-PRODUCT_VERSION-csm-bare-bones-image"
 [[links]]
 href = "/v1/session/8f2fc013-7817-4fe2-8e6f-c2136a5e3bd1"
 jobId = "boa-8f2fc013-7817-4fe2-8e6f-c2136a5e3bd1"
