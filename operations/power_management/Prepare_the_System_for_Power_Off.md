@@ -8,7 +8,7 @@ The `sat bootsys shutdown` and `sat bootsys boot` commands are used to shut down
 
 ### Prerequisites
 
-An authentication token is required to access the API gateway and to use the `sat` command. See the [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md) and "SAT Authentication" in the Shasta Admin Toolkit (SAT) product documentation.
+An authentication token is required to access the API gateway and to use the `sat` command. See the [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md) and "SAT Authentication" in the System Admin Toolkit (SAT) product documentation.
 
 ### Procedure
 
@@ -70,7 +70,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
 3.  Use `sat auth` to authenticate to the API gateway within SAT.
 
-    See [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md), [Authenticate an Account with the Command Line](../security_and_authentication/Authenticate_an_Account_with_the_Command_Line.md), and "SAT Authentication" in the Shasta Admin Toolkit (SAT) product documentation.
+    See [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md), [Authenticate an Account with the Command Line](../security_and_authentication/Authenticate_an_Account_with_the_Command_Line.md), and "SAT Authentication" in the System Admin Toolkit (SAT) product documentation.
 
 4.  Use sat to capture state of the system before the shutdown.
 
