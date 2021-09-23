@@ -47,7 +47,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
 <a name="mac-collection"></a>
 #### MAC Collection
 
-1. (optional) Shim the boot so nodes bail after dumping their network devices.
+1. (Optional) Shim the boot so nodes bail after dumping their network devices.
    
    Removing the iPXE script will prevent network booting. Be aware that the nodes may disk boot.
 
