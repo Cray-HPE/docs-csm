@@ -21,10 +21,12 @@
 1. Update the cray-sysmgmt-health helm chart to address multiple alerts
 1. Install/Update node_exporter on storage nodes
 1. Update cray-hms-hmnfd helm chart to include timestamp fix
+1. Update the cray-hms-hmcollector helm chart to include fix to prevent crashing, also its resource limits and requests can be overridden via `customizations.yaml`.
 
 # Procedures
 
 - [Preparation](#preparation)
+- [Apply cray-hms-hmcollector scale changes](#apply-cray-hms-hmcollector-scale-changes)
 - [Setup Nexus](#setup-nexus)
 - [Update NCNs](#update-ncns)
 - [Upgrade Services](#upgrade-services)
@@ -75,7 +77,14 @@
    ```bash
    ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm/docs-csm-latest.noarch.rpm
    ```
-   
+
+<a name="apply-cray-hms-hmcollector-scale-changes"></a> 
+## Apply cray-hms-hmcollector scale changes
+
+If no scaling changes are desired to be made against the cray-hms-hmcollector deployment or if they have have not been previously applied, then this section can be skipped and proceed onto the [Setup Nexus](#setup-nexus) section. 
+
+Before [upgrading services](#upgrade-services), `customizations.yaml` in the `site-init` secret in the `loftsman` namespace must be updated to apply or re-apply any manual scaling changes made to the cray-hms-hmcollector deployment. Follow the [Adjust HM Collector resource limits and requests](../../../operations/hmcollector/adjust_hmcollector_resource_limits_requests.md) procedure for information about tuning and updating the resource limits used by the cray-hms-hmcollector deployment. The section `Redeploy cray-hms-hmcollector with new resource limits and request` of the referenced procedure can be skipped, as the `upgrade.sh` script will re-deploy the collector with the new resource limit changes.
+
 <a name="setup-nexus"></a>
 ## Setup Nexus
 
