@@ -26,8 +26,8 @@ then
 fi
 
 if ceph orch ps >  /dev/null 2>&1; then
-  echo "Ceph as already been upgrade"
-  exit 1
+  echo "Ceph as already been upgraded"
+  exit 0
 fi
 
 . ./lib/ceph-health.sh

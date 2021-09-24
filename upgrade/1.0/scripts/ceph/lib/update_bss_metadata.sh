@@ -12,14 +12,11 @@ function update_bss_storage() {
       sed -i '/cray-node-exporter-1.2.2/d' /tmp/$xName
     fi
     if ! grep -q pre-load-images.sh /tmp/$xName; then
-      sed -i '/"\/srv\/cray\/scripts\/common\/update_ca_certs.py"/a \        "\/srv\/cray\/scripts\/common\/pre-load-images.sh"' /tmp/$xName
+      sed -i '/"\/srv\/cray\/scripts\/common\/update_ca_certs.py"/a \        "\/srv\/cray\/scripts\/common\/pre-load-images.sh",' /tmp/$xName
     fi
     if [[ "$storage_node" =~ "ncn-s001" ]]
     then
       sed -i '/storage-ceph-cloudinit.sh/d' /tmp/$xName
-      if grep -q pre-load-images.sh\", /tmp/$xName; then
-        sed -i 's/pre-load-images.sh\",/pre-load-images.sh\"/' /tmp/$xName
-      fi
     fi
     echo "putting config"
     curl -i -s -k -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" "https://api_gw_service.local/apis/bss/boot/v1/bootparameters" -X PUT -d @/tmp/$xName

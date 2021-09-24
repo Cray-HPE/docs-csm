@@ -89,6 +89,7 @@ if [[ $state_recorded == "0" ]]; then
     fi
     scp ./${upgrade_ncn}-ceph.tgz $upgrade_ncn:/
     ssh ${upgrade_ncn} 'cd /; tar -xvf ./$(hostname)-ceph.tgz; rm /$(hostname)-ceph.tgz'
+    ssh ${upgrade_ncn} '/srv/cray/scripts/common/pre-load-images.sh'
 
     record_state "${state_name}" ${upgrade_ncn}
 else
