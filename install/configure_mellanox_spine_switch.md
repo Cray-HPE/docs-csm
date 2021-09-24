@@ -27,7 +27,7 @@ The VLAN information is located in the network YAML files. The following are exa
    
    Example NMN.yaml:
 
-   ```
+   ```bash
    pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN.yaml
    SNIPPET
      - ip_address: 10.252.0.2
@@ -47,7 +47,7 @@ The VLAN information is located in the network YAML files. The following are exa
 
    Example HMN.yaml:
 
-   ```
+   ```bash
    pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/HMN.yaml
    SNIPPET
      - ip_address: 10.254.0.2
@@ -67,7 +67,7 @@ The VLAN information is located in the network YAML files. The following are exa
 
    Example CAN.yaml:
 
-   ```
+   ```bash
    pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/CAN.yaml
    SNIPPET
      - ip_address: 10.102.11.2
@@ -129,7 +129,7 @@ IP-Helpers will reside on VLANs 1,2,4, and 7.
 
 OSPF is a dynamic routing protocol used to exchange routes.
 It provides reachability from the MTN networks to NMN/Kubernetes networks.
-The router-id used here is the NMN IP address. (VLAN 2 IP)
+The router-id used here is the NMN IP address (VLAN 2 IP).
 
 1. Configure OSPF.
    
@@ -316,7 +316,7 @@ Configuration with Recommended MLAG-VIP cable.
 - It requires an RJ45 cable between the mgmt0 ports on both switches.
 - https://community.mellanox.com/s/article/how-to-configure-mlag-on-mellanox-switches#jive_content_id_MLAG_VIP
 
-Notice that the SYSTEM_NAME should be used instead of "system" as part of the name for mlag-vip.
+**NOTE:** Replace the SYSTEM_NAME value that is part of the mlag-vip name in the following examples with the actual name of the system.
 
 
 #### Spine01
@@ -326,7 +326,7 @@ no interface mgmt0 dhcp
    interface mgmt0 ip address 192.168.255.241 /29
 no mlag shutdown
    mlag system-mac 00:00:5E:00:01:5D
-mlag-vip system-mlag-domain ip 192.168.255.242 /29 force
+mlag-vip SYSTEM_NAME-mlag-domain ip 192.168.255.242 /29 force
 ```
 
 #### Spine02
@@ -336,15 +336,15 @@ no interface mgmt0 dhcp
    interface mgmt0 ip address 192.168.255.243 /29
 no mlag shutdown
    mlag system-mac 00:00:5E:00:01:5D
-mlag-vip system-mlag-domain ip 192.168.255.242 /29 force
+mlag-vip SYSTEM_NAME-mlag-domain ip 192.168.255.242 /29 force
 ```
 
 Verify the mlag-vip:
 
 ```bash
-sw-spine-001 [system-mlag-domain: master] # show mlag-vip
+sw-spine-001 [SYSTEM_NAME-mlag-domain: master] # show mlag-vip
 MLAG-VIP:
- MLAG group name: system-mlag-domain
+ MLAG group name: SYSTEM_NAME-mlag-domain
  MLAG VIP address: 192.168.255.242/29
  Active nodes: 2
 
@@ -552,7 +552,6 @@ The IP addresses used here will be the first three worker nodes on the NMN netwo
      vlan4       N/A               downstream
    ```
 
-   ```
 
 ## Save Configuration
 
