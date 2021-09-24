@@ -157,7 +157,7 @@ These ACLs are designed to block traffic from the NMN to and from the HMN.
        apply access-list ip nmn-hmn out
    ```
 
-## Configure Spanning-tree
+## Configure Spanning-Tree
 
 The following configuration is applied to Aruba leaf/Aggregation switches.
 
@@ -240,7 +240,7 @@ These can be found in the NMN.yaml file.
        spanning-tree port-type admin-edge
    ```
 
-## Configure Apollo Server port
+## Configure Apollo Server Port
 
 1. Configure iLO BMC port.
 
@@ -267,7 +267,7 @@ These can be found in the NMN.yaml file.
        exit
    ```
 
-## Save configuration
+## Save Configuration
 
 To save the configuration:
 

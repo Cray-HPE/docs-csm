@@ -146,7 +146,7 @@ The base configuration is running OSPFv3 over IPv6 on VLAN 1, so the switches ca
 
 10. Connect to the neighbors via the IPv6 loopback that was set earlier.
 
-   ```bash
-   sw-25g03# ssh admin@fd01::1
-   ```
+    ```bash
+    sw-25g03# ssh admin@fd01::1
+    ```
 

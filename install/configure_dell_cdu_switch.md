@@ -280,7 +280,7 @@ These ACLs are designed to block traffic from the NMN to and from the HMN.
    ip access-group nmn-hmn out
    ```
 
-## Configure Spanning-tree
+## Configure Spanning-Tree
 
 Spanning-tree is used to protect the network against layer2 loops.
 Dell switches should have these settings for spanning-tree using bpduguard and not bpdufilter.
@@ -400,7 +400,7 @@ The IP addresses used are the first three worker nodes on the NMN network. These
    snmp-server view cray-reds-view 1.3.6.1.2 included
    ```
 
-## Downlink port configuration
+## Downlink Port Configuration
 
 
 ## Configure Flow Control
@@ -441,7 +441,7 @@ The IP addresses used are the first three worker nodes on the NMN network. These
    flowcontrol transmit on
    ```
 
-## CEC port configuration.
+## CEC Port Configuration
 
 The VLAN used here is generated from CSI. It is the HMN_MTN VLAN that is assigned to that cabinet.
 
@@ -466,7 +466,7 @@ Disable iSCSI in the configuration.
    no iscsi enable
    ```
 
-## Save configuration
+## Save Configuration
 
 To save the configuration:
 

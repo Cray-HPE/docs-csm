@@ -330,7 +330,7 @@ These ACLs are designed to block traffic from the node management network to and
    ```
 
 
-## Configure Spanning-tree
+## Configure Spanning-Tree
 
 1. Apply the following configuration to Aruba spine switches.
 
@@ -388,7 +388,7 @@ The router-id used here is the NMN IP address. (VLAN 2 IP)
    ```
 
 
-## Configure Edge port
+## Configure Edge pPort
 
 Edge ports are connected to non-compute nodes (NCNs).
 

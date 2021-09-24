@@ -118,10 +118,12 @@ They run in a high availability pair and use VSX to provide redundancy.
 ## Configure VLAN
 
 **Cray Site Init (CSI) generates the IP addresses used by the system, below are samples only.**
-The VLAN information is located in the network YAML files. Below are examples.
+The VLAN information is located in the network YAML files. The following are examples.
 
 1. Check that the aggregation switches have VLAN interfaces in the Node Management Network (NMN) and Hardware Management Network (HMN).
    
+   Example NMN.yaml:
+
    ```bash
    pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN.yaml
    SNIPPET
@@ -139,6 +141,8 @@ The VLAN information is located in the network YAML files. Below are examples.
      comment: ""
      gateway: 10.252.0.1
    ```
+   
+   Example HMN.yaml:
 
    ```bash
    pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/HMN.yaml
@@ -274,7 +278,7 @@ One port is shutdown.
        apply access-list ip nmn-hmn out
    ```
 
-## Configure Spanning-tree
+## Configure Spanning-Tree
 
 The following configuration is applied to Aruba aggregation switches:
 

@@ -163,7 +163,7 @@ These ACLs are designed to block traffic from the NMN to and from the HMN.
    ip access-group nmn-hmn out
    ```
 
-## Configure Spanning-tree
+## Configure Spanning-Tree
 
 1. Apply the following configuration to the Dell aggregation switches.
 
