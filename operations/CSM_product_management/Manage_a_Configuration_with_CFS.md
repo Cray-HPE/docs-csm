@@ -159,7 +159,7 @@ customization and node personalization for CFS targets.
 
 To replace the private key half:
 ```bash
-ncn# kubectl get secret -n services csm-private-key -o json | jq --arg value "$(cat ~/.ssh/id_rsa | base64)" '.data["value"]=$value' | | kubectl apply -f -
+ncn# kubectl get secret -n services csm-private-key -o json | jq --arg value "$(cat ~/.ssh/id_rsa | base64)" '.data["value"]=$value' | kubectl apply -f -
 ```
 
 In this example, `~/.ssh/id_rsa` is a local file containing a private key in a format specified by the admin.
@@ -249,7 +249,7 @@ Multiple product configuration layers may be created later to apply multiple cha
    }
    EOF
    ncn# sed -i -e "s:@RELEASE@:$RELEASE:g" \
-   -e "s:@COMMIT@:$COMMIT@:g" csm-config-$RELEASE.json
+   -e "s:@COMMIT@:$COMMIT:g" csm-config-$RELEASE.json
    ```
 
 1. If this is a first time install and only the CSM software product has been installed, then this file can become
