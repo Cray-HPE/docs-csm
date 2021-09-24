@@ -216,6 +216,7 @@ sw-spine-001 [standalone: master] (config) # router bgp 65533 vrf default neighb
 sw-spine-001 [standalone: master] (config) # router bgp 65533 vrf default neighbor 10.252.1.11 transport connection-mode passive
 sw-spine-001 [standalone: master] (config) # router bgp 65533 vrf default neighbor 10.252.1.12 transport connection-mode passive
 ```
+
 Run the command below to verify the configuration got applied correctly.
 
 ```bash
@@ -251,3 +252,5 @@ If the configuration does not look like the example above check the [Update BGP 
 #### Apollo Server configuration
 
 If the system has Apollo servers, the configuration can be found [here](../operations/configure_mgmt_net_ports.md) under the section "Apollo Server port config".
+
+[Return to main upgrade page](../index.md)

@@ -14,15 +14,6 @@ After the last storage node has been rebooted you will need to deploy node-expor
 **NOTE:** This process will need to run on a node running ceph-mon, which in most cases will be ncn-s00(1/2/3)
 **NOTE:** You may need to reset the root password for each node after it is rebooted
 
-1. Load the images into podman.
-
-    ```bash
-    ncn-s# export num_storage_nodes=$(craysys metadata get num-storage-nodes)
-    ncn-s# for node in $(seq 1 $num_storage_nodes); do
-      nodename=$(printf "ncn-s%03d" $node)
-      ssh "$nodename" /srv/cray/scripts/common/pre-load-images.sh
-    done
-    ```
 
 1. Deploy node-exporter and alertmanager
 
@@ -34,7 +25,7 @@ After the last storage node has been rebooted you will need to deploy node-expor
     Scheduled alertmanager update...
     ```
 
-1. Verify node-exporter and alertmanager are running
+2. Verify node-exporter and alertmanager are running
 
     ```bash
     ncn-s00(1/2/3)# ceph orch ps --daemon_type node-exporter
@@ -49,5 +40,12 @@ After the last storage node has been rebooted you will need to deploy node-expor
      ```
 
   **IMPORTANT:** There should be a node-exporter container per ceph node and a single alertmanager container for the cluster.
+
+1. Update BSS to ensure the ceph images are loaded if a node is rebuilt.
+
+    ```bash
+    . /usr/share/doc/csm/upgrade/1.0/scripts/ceph/lib/update_bss_metadata.sh
+    update_bss_storage
+    ```
 
   Once `Stage 2` is completed and all the ceph node have been rebooted into the new image, then please proceed to [Stage 3](Stage_3.md)

@@ -39,13 +39,15 @@ ncn-m002# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs
 ncn-m002# rpm -Uvh docs-csm-latest.noarch.rpm
 ```
 
+Download and untar the CSM tarball:
+
 Run:
 
 ```bash
 ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --endpoint [ENDPOINT]
 ```
 
-**NOTE** ENDPOINT is optional for internal use. It is pointing to internal arti by default
+**NOTE** ENDPOINT is optional for internal use. It is pointing to internal arti by default.
 
 `Option 2` - Air Gapped Environment
 
@@ -55,13 +57,15 @@ Install document RPM package:
 ncn-m002# rpm -Uvh [PATH_TO_docs-csm-*.noarch.rpm]
 ```
 
+Untar the CSM tarball:
+
 Run:
 
 ```bash
 ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --tarball-file [PATH_TO_CSM_TARBALL_FILE]
 ```
 
-> NOTE: Follow output of above script carefully. The script will pause for manual interaction
+> NOTE: Follow output of above script carefully. The script will pause for manual interaction.
 
 ## Upgrade ncn-m001
 
@@ -81,14 +85,5 @@ ncn-m002# pdsh -b -S -w $(grep -oP 'ncn-m\d+' /etc/hosts | sort -u |  tr -t '\n'
 > **`NOTE`**: kubelet has been upgraded already so you can ignore the warning to upgrade kubelet
 
 <a name="deploy-manifests"></a>
-### Stage 4. - CSM Service Upgrades
-
-Run `csm-service-upgrade.sh` to deploy upgraded CSM applications and services:
-
-```bash
-ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/csm-service-upgrade.sh
-```
-
-**`IMPORTANT`:** This script will re-try up to three times if failures are encountered -- but if the script seems to hang for thirty minutes or longer without progressing, the administrator should interrupt the script (CTRL-C) and re-run it.
 
 Once `Stage 3` is completed and all kubernetes nodes have been rebooted into the new image then please proceed to [Stage 4](Stage_4.md)

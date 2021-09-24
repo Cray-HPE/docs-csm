@@ -1,11 +1,11 @@
 # Stage 0 - Prerequisites and Preflight Checks
 
-> NOTE: CSM-0.9.4 or CSM-0.9.5 is the version of CSM required in order to upgrade to CSM-1.0.0 (available with Shasta v1.5).
+> **NOTE:** CSM-0.9.4 or CSM-0.9.5 is the version of CSM required in order to upgrade to CSM-1.0.0 (available with Shasta v1.5).
 >
-> NOTE: Installed CSM versions may be listed from the product catalog using the following command. This will sort a semantic version without a hyphenated suffix after the same semantic version with a hyphenated suffix, e.g. 1.0.0 > 1.0.0-beta.19.
+> **NOTE:** Installed CSM versions may be listed from the product catalog using the following command. This will sort a semantic version without a hyphenated suffix after the same semantic version with a hyphenated suffix, e.g. 1.0.0 > 1.0.0-beta.19.
 >
 
-The following command can be used to check the CSM version on the system:
+Use the following command can be used to check the CSM version on the system:
 
 ```bash
 ncn# kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm'
@@ -57,8 +57,9 @@ Perform these steps to update `customizations.yaml`:
    ```
 
 4. If using an external Git repository for managing customizations ([as recommended](../../install/prepare_site_init.md#version-control-site-init-files)),
-   clone a local working tree and commit appropriate changes to `customizations.yaml`,
-   e.g.:
+   clone a local working tree and commit appropriate changes to `customizations.yaml`.
+   
+   For Example:
 
    ```bash
    ncn-m001# git clone <URL> site-init
@@ -85,7 +86,7 @@ Perform these steps to update `customizations.yaml`:
         ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --endpoint [ENDPOINT]
         ```
 
-        **NOTE** ENDPOINT is optional for internal use. It is pointing to internal arti by default
+        **NOTE** ENDPOINT is optional for internal use. It is pointing to internal arti by default.
 
     * Air Gapped
 
