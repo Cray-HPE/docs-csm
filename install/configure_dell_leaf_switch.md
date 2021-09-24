@@ -166,7 +166,7 @@ These ACLs are designed to block traffic from the node management network to and
    ip access-group nmn-hmn out
    ```
 
-## Configure Spanning-tree
+## Configure Spanning-Tree
 
 Spanning-tree is used to protect the network against layer2 loops.
 Dell switches should have these settings for spanning-tree using bpduguard and not bpdufilter.

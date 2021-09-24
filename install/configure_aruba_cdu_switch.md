@@ -72,16 +72,16 @@ The Keepalive is port 48.
 
 1. Create the ISL lag on both switches.
 
-  ```bash
-  sw-cdu-001 & sw-cdu-002 (config)#
-      interface lag 99
-      no shutdown
-      description ISL link
-      no routing
-      vlan trunk native 1 tag
-      vlan trunk allowed all
-      lacp mode active
-  ```
+   ```bash
+   sw-cdu-001 & sw-cdu-002 (config)#
+       interface lag 99
+       no shutdown
+       description ISL link
+       no routing
+       vlan trunk native 1 tag
+       vlan trunk allowed all
+       lacp mode active
+   ```
 
 1. Add the ISL ports to the LAG.
 
@@ -429,7 +429,7 @@ ACLs are designed to block traffic from the NMN to and from the HMN.
        apply access-list ip nmn-hmn out
    ```
 
-## Configure Spanning-tree
+## Configure Spanning-Tree
 
 1. Apply the following configuration to the Aruba CDU switches.
    
