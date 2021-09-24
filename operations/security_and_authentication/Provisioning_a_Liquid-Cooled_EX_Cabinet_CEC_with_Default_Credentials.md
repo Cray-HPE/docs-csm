@@ -26,7 +26,7 @@ This procedure provisions a Glibc compatible SHA-512 administrative password has
    
    
    
-   ![](CEC_Front_Panel.svg)
+   ![](../../img/CEC_Front_Panel.svg)
    
 2. On an Apple Mac or Linux laptop, start the "terminal" program and use Netcat `'nc'` to connect to CEC command shell. Specify the CEC IPv6 link local address shown on the CEC front panel display.
 
@@ -96,7 +96,7 @@ This procedure provisions a Glibc compatible SHA-512 administrative password has
    The CMMs can also be reset from the front panel controls:
 
 
-   ![Front Panel Controls](./CEC_Display_Controls_CEC_Actions.svg)
+   ![Front Panel Controls](../../img//CEC_Display_Controls_CEC_Actions.svg)
 
 
 
