@@ -28,7 +28,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       Determine the location of the initial install tarball and set ${CSM_DISTDIR} accordingly.
 
       ```bash
-      ncn-m001# cp -r ${CSM_DISTDIR}/shasta-cfg /root/site-init
+      ncn-m001# cp -r ${CSM_DISTDIR}/shasta-cfg/* /root/site-init
       ncn-m001# cd /root/site-init
       ```
   
@@ -41,7 +41,6 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    3. Extract the certificate and key used to create the sealed secrets.
 
       ```bash
-      ncn-m001# mkdir certs
       ncn-m001# kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.crt}' | base64 -d - > certs/sealed_secrets.crt
       ncn-m001# kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.key}' | base64 -d - > certs/sealed_secrets.key
       ```
@@ -86,6 +85,9 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
                         name: ldap_bind_credentials
                         value: "my_ldap_admin_password"
       ```
+     
+     The example above puts an empty certs.jks in the cray-keycloak Sealed Secret.
+     The next step will generate certs.jks.
 
      Other LDAP configuration settings are set in the spec.kubernetes.services.cray-keycloak-users-localize field in the customizations.yaml file. 
         
@@ -276,6 +278,16 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         ncn-m001# ${CSM_DISTDIR}/hack/load-container-image.sh dtr.dev.cray.com/library/openjdk:11-jre-slim
         ```
 
+        **Troubleshooting:** If the output shows the skopeo.tar file cannot be found, ensure that the $CSM_DISTDIR directory looks correct, and contains the `dtr.dev.cray.com` directory that includes the originally installed docker images.
+
+        The following is an example of the skopeo.tar file not being found:
+
+        ```bash
+        ++ podman load -q -i ./hack/../vendor/skopeo.tar
+        ++ sed -e 's/^.*: //'
+        + SKOPEO_IMAGE=
+        ```
+
    2. Create (or update) `cert.jks` with the PEM-encoded CA certificate for an LDAP host.
 
         > **IMPORTANT:** Replace `<ca-cert.pem>` and `<alias>` before running the command.
@@ -412,112 +424,9 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    Sealed Secrets operator. But first, those Secrets must be seeded, generated, and
    encrypted.
    
-   1. Load the `zeromq` container image required by Sealed Secret Generators.
-
-      > **NOTE:** A properly configured Docker or Podman environment is required.
-
-      ```bash
-      ncn-m001# ${CSM_DISTDIR}/hack/load-container-image.sh dtr.dev.cray.com/zeromq/zeromq:v4.0.5
-      ```
-
-      Expected output looks similar to the following:
-
-      ```bash
-      + command -v podman
-      + for conf in graphRoot graphDriverName runRoot
-      ++ echo graphRoot
-      ++ tr '[:upper:]' '[:lower:]'
-      + conf_lc=graphroot
-      ++ podman info -f json
-      ++ jq -r .store.graphRoot
-      + conf_val=/var/lib/containers/storage
-      + '[' /var/lib/containers/storage == null ']'
-      + declare graphroot=/var/lib/containers/storage
-      + for conf in graphRoot graphDriverName runRoot
-      ++ echo graphDriverName
-      ++ tr '[:upper:]' '[:lower:]'
-      + conf_lc=graphdrivername
-      ++ podman info -f json
-      ++ jq -r .store.graphDriverName
-      + conf_val=vfs
-      + '[' vfs == null ']'
-      + declare graphdrivername=vfs
-      + for conf in graphRoot graphDriverName runRoot
-      ++ echo runRoot
-      ++ tr '[:upper:]' '[:lower:]'
-      + conf_lc=runroot
-      ++ podman info -f json
-      ++ jq -r .store.runRoot
-      + conf_val=/var/run/containers/storage
-      + '[' /var/run/containers/storage == null ']'
-      + declare runroot=/var/run/containers/storage
-      ++ realpath /var/lib/containers/storage
-      + graphroot=/var/lib/containers/storage
-      ++ realpath /var/run/containers/storage
-      + runroot=/run/containers/storage
-      + mounts='-v /var/lib/containers/storage:/var/lib/containers/storage'
-      + transport=containers-storage
-      + run_opts='--rm --network none --privileged --ulimit=host'
-      + skopeo_dest='containers-storage:[vfs@/var/lib/containers/storage+/run/containers/storage]dtr.dev.cray.com/zeromq/zeromq:v4.0.5'
-      ++ dirname ./hack/load-container-image.sh
-      + ROOTDIR=./hack/..
-      + source ./hack/../lib/install.sh
-      ++ : https://packages.local
-      ++ : registry.local
-      ++ : ./hack/..
-      ++ [[ no == \y\e\s ]]
-      ++ requires find podman realpath
-      ++ [[ 3 -gt 0 ]]
-      ++ command -v find
-      ++ shift
-      ++ [[ 2 -gt 0 ]]
-      ++ command -v podman
-      ++ shift
-      ++ [[ 1 -gt 0 ]]
-      ++ command -v realpath
-      ++ shift
-      ++ [[ 0 -gt 0 ]]
-      ++ vendor_images=()
-      ++ load-vendor-image ./hack/../vendor/skopeo.tar
-      ++ set -o pipefail
-      ++ podman load -q -i ./hack/../vendor/skopeo.tar
-      ++ sed -e 's/^.*: //'
-      + SKOPEO_IMAGE=docker.io/library/skopeo:csm-1.0.0-beta.76
-      ++ realpath ./hack/../docker
-      + podman run --rm --network none --privileged --ulimit=host -v /var/lib/containers/storage:/var/lib/containers/storage -v /mnt/pitdata/csm-1.0.0-beta.76/docker:/image:ro docker.io/library/skopeo:csm-1.0.0-beta.76 copy dir:/image/dtr.dev.cray.com/zeromq/zeromq:v4.0.5 'containers-storage:[vfs@/var/lib/containers/storage+/run/containers/storage]dtr.dev.cray.com/zeromq/zeromq:v4.0.5'
-      Getting image source signatures
-      Copying blob sha256:a3ed95caeb02ffe68cdd9fd84406680ae93d633cb16422d00e8a7c22955b46d4
-      Copying blob sha256:3ce16febdf7832163becc8fe98757c0a7149617b8cda952459b2a1227f7eda21
-      Copying blob sha256:392d00c08b0fe0c235ef1718d7272970f6d384fc0859d927951adbaee868a06a
-      Copying blob sha256:c62605fa7f3e9b00d940258c4705a51750965de5ed5f2f6528645b50cfd6e31a
-      Copying blob sha256:2bddd7683cba11ada1f657f7f8a2557b638582a2b39ebd2696e6dc43cae08ba7
-      Copying blob sha256:404ed4835f8dfa88e541a546951e76e024c5566e0202367cd659761311b8c864
-      Copying blob sha256:a3ed95caeb02ffe68cdd9fd84406680ae93d633cb16422d00e8a7c22955b46d4
-      Copying blob sha256:a3ed95caeb02ffe68cdd9fd84406680ae93d633cb16422d00e8a7c22955b46d4
-      Copying blob sha256:9ed53610e4ed4d4d58f0c9119c019809bc3b51c90b494fa6440ac27115293b33
-      Copying blob sha256:ab88839926fbac86516f78ab0687febd1dd9882b9f56cc8ea2d1c4c1f31024c0
-      Copying blob sha256:cdf2fc9fdc1935aae9386bffa518fb6ba366ca9f1bbf9603b5b78f50841cec39
-      Copying blob sha256:f9520ccb0f8364dd282cb916f8f8e1a1d508547539cd39750b0585a41e642c3c
-      Copying blob sha256:8bc0759c6bf76ffb0fea353dcc02d92ad805aa79758f9357bd40fbc492cbab1b
-      Copying blob sha256:e132f5c26e132cfb044ee1209526c2e54ed8569e580562c3dd371059abbc3e32
-      Copying blob sha256:d1d7f70258fff8ddb78e13a78f2285f8b9fead38eb287d7779ee9ee70de22972
-      Copying config sha256:1648d2dfc45f081dde3e9bead9864c54d136be929ec1e272bb144e9034505574
-      Writing manifest to image destination
-      Storing signatures
-      ```
-    
-   2. Verify the load worked.
-
-      ```bash
-      ncn-m001# podman images | grep zeromq
-      dtr.dev.cray.com/zeromq/zeromq         v4.0.5           1648d2dfc45f  6 years ago    462 MB
-      ```
-
-   3. Re-encrypt the existing secrets.
-
-      ```bash
-      ncn-m001# ./utils/secrets-reencrypt.sh customizations.yaml ./certs/sealed_secrets.key ./certs/sealed_secrets.crt
-      ```
+   ```bash
+   ncn-m001# ./utils/secrets-reencrypt.sh customizations.yaml ./certs/sealed_secrets.key ./certs/sealed_secrets.crt
+   ```
       
 5. Encrypt the static values in the customizations.yaml file after making changes.
 
@@ -629,7 +538,8 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
     1.  Determine the cray-keycloak-users-localize chart version that is currently deployed.
 
         ```bash
-        ncn-m001# helm ls -A -a | grep cray-keycloak-users-localize
+        ncn-m001# helm ls -A -a | grep cray-keycloak-users-localize | awk '{print $(NF-1)}'
+        cray-keycloak-users-localize-1.5.6
         ```
 
     2.  Create a manifest file that will be used to reapply the same chart version.
@@ -643,7 +553,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
           charts:
             - name: cray-keycloak-users-localize
               namespace: services
-              version: 0.12.2
+              version: 1.5.6
         EOF
         ```
 
@@ -805,5 +715,6 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
        Verify the `preferred_username` is the expected LDAP user and the
        role is `admin` (or other role based on the user).
   
+
 
 
