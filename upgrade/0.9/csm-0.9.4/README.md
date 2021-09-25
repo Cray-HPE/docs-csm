@@ -14,6 +14,7 @@ Procedures:
 - [Run Validation Checks (Pre-Upgrade)](#run-validation-checks-pre-upgrade)
 - [Update /etc/hosts on Workers](#update-hosts-on-workers)
 - [Check For Manually Created Unbound PSP](#check-unbound-psp)
+- [Remove zypper RIS services repositories](rm-zypper-services)
 - [Setup Nexus](#setup-nexus)
 - [Backup VCS Content](#backup-vcs-content)
 - [Upgrade Services](#upgrade-services)
@@ -157,6 +158,14 @@ Check for manually created unbound-psp and delete the psp. Helm will manage the 
    ```bash
    ncn-m001# ${CSM_SCRIPTDIR}/check-unbound-psp.sh
    ```
+<a name="rm-zypper-services"></a>
+## Remove zypper RIS services repositories
+Run `lib/remove-service-repos.sh` to remove repositories that are external to the system.
+
+```bash
+ncn-m001# ${CSM_SCRIPTDIR}/remove-service-repos.sh
+```
+
 <a name="setup-nexus"></a>
 ## Setup Nexus
 

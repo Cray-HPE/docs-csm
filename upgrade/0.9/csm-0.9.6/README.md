@@ -125,7 +125,7 @@ report `FAIL` when uploading duplicate assets. This is ok as long as
    ncn-m001# CSM_SCRIPTDIR=/usr/share/doc/metal/upgrade/0.9/csm-0.9.6/scripts
    ```
 
-2. Execute the following script from the scripts directory determined in the previous step to update master and storage nodes:
+2. Execute the following script from the scripts directory determined in the previous step to update NCN.
 
    ```bash
    ncn-m001# cd "$CSM_SCRIPTDIR"

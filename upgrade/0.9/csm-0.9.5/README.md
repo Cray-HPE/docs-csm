@@ -14,6 +14,7 @@ Procedures:
 
 - [Preparation](#preparation)
 - [Run Validation Checks (Pre-Upgrade)](#run-validation-checks-pre-upgrade)
+- [Remove zypper RIS services repositories](rm-zypper-services)
 - [Run CVE Patch Script](#run-cve-patch)
 - [Reboot NCNs](#reboot-ncns)
 - [Validate NCNs Running Patched Kernel](#validate-new-kernel)
@@ -90,6 +91,14 @@ It is important to first verify a healthy starting state. To do this, run the
 [CSM validation checks](../../../008-CSM-VALIDATION.md). If any problems are
 found, correct them and verify the appropriate validation checks before
 proceeding.
+
+<a name="rm-zypper-services"></a>
+## Remove zypper RIS services repositories
+Run `lib/remove-service-repos.sh` to remove repositories that are external to the system.
+
+```bash
+ncn-m001# ${CSM_SCRIPTDIR}/remove-service-repos.sh
+```
 
 <a name="run-cve-patch"></a>
 ## Run CVE Patch Script
