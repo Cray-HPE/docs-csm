@@ -61,30 +61,30 @@ doing the [Configure Management Network Switches](index.md#configure_management_
 | Hardware Type | Step      | Complete?     |
 | ----------- | ----------- | ------------- |
 | UAN/Application Node         |             |               |
-|             | Open the SHCD from the system |             |
-|             | Go to the `Device Diagrams` tab, take note of the type of hardware on the system        |          |
+|             | Open the SHCD from the system. |             |
+|             | Go to the `Device Diagrams` tab, take note of the type of hardware on the system.        |          |
 |             | Depending on the hardware, open either the **25G_10G** tab or the **40G_10G** tab. |        |
-|             | Locate the nodes prefixed with `uan` or another prefix for application node |        |
-|             | Based on the vendor of the node and the name in the first column we can determine how it is supposed to be cabled.  |         |
-|             | Check cabling against the [Cable Management Network Servers](cable_management_network_servers.md) If it is cabled incorrectly, contact the team in charge of cabling and request a change.             |               |
+|             | Locate the nodes prefixed with `uan` or another prefix for application node. |        |
+|             | Based on the vendor of the node and the name in the first column, determine how it is supposed to be cabled.  |         |
+|             | Check cabling against the [Cable Management Network Servers](cable_management_network_servers.md). If it is cabled incorrectly, contact the team in charge of cabling and request a change.             |               |
 | NCN-Master         |             |               |
-|             | Open the SHCD from the system |             |
-|             | Go to the `Device Diagrams` tab, take note of the type of hardware on the system        |          |
+|             | Open the SHCD from the system. |             |
+|             | Go to the `Device Diagrams` tab, take note of the type of hardware on the system.        |          |
 |             | Depending on the hardware, open either the **25G_10G** tab or the **40G_10G** tab. |        |
 |             | Locate the nodes named `mnxx` |        |
-|             | Based on the vendor of the node and the name in the first column we can determine how it is supposed to be cabled.  |         |
-|             | Check cabling against the [Cable Management Network Servers](cable_management_network_servers.md) If it is cabled incorrectly, contact the team in charge of cabling and request a change.             |               |
+|             | Based on the vendor of the node and the name in the first column, determine how it is supposed to be cabled.  |         |
+|             | Check cabling against the [Cable Management Network Servers](cable_management_network_servers.md). If it is cabled incorrectly, contact the team in charge of cabling and request a change.             |               |
 | NCN-Worker         |             |               |
-|             | Open the SHCD from the system |             |
-|             | Go to the `Device Diagrams` tab, take note of the type of hardware on the system        |          |
+|             | Open the SHCD from the system. |             |
+|             | Go to the `Device Diagrams` tab, take note of the type of hardware on the system.        |          |
 |             | Depending on the hardware, open either the **25G_10G** tab or the **40G_10G** tab. |        |
-|             | Locate the nodes named `wnxx` |        |
-|             | Based on the vendor of the node and the name in the first column we can determine how it is supposed to be cabled.  |         |
+|             | Locate the nodes named `wnxx`. |        |
+|             | Based on the vendor of the node and the name in the first column, determine how it is supposed to be cabled.  |         |
 |             | Check cabling against the [Cable Management Network Servers](cable_management_network_servers.md) If it is cabled incorrectly, contact the team in charge of cabling and request a change.             |               |
 | NCN-Storage         |             |               |
-|             | Open the SHCD from the system |             |
-|             | Go to the `Device Diagrams` tab, take note of the type of hardware on the system        |          |
+|             | Open the SHCD from the system. |             |
+|             | Go to the `Device Diagrams` tab, take note of the type of hardware on the system.        |          |
 |             | Depending on the hardware, open either the **25G_10G** tab or the **40G_10G** tab. |        |
-|             | Locate the nodes named `snxx` |        |
-|             | Based on the vendor of the node and the name in the first column we can determine how it is supposed to be cabled.  |         |
-|             | Check cabling against the [Cable Management Network Servers](cable_management_network_servers.md) If it is cabled incorrectly, contact the team in charge of cabling and request a change.             |               |
+|             | Locate the nodes named `snxx`. |        |
+|             | Based on the vendor of the node and the name in the first column, determine how it is supposed to be cabled.  |         |
+|             | Check cabling against the [Cable Management Network Servers](cable_management_network_servers.md). If it is cabled incorrectly, contact the team in charge of cabling and request a change.             |               |
