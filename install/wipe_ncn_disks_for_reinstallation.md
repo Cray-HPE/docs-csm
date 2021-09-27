@@ -173,19 +173,19 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
    
    > **NOTE:** There is an edge case where the overlay may keep you from unmounting the drive. If this is a rebuild you ignore this or go here.
 
-   1. Storage nodes
+   1. Storage nodes:
 
        ```bash
        ncn-s# umount -vf /var/lib/ceph /var/lib/containers /etc/ceph
        ```
 
-   1. Master nodes
+   1. Master nodes:
 
        ```bash
        ncn-m# umount -v /var/lib/etcd /var/lib/sdu
        ```
 
-   1. Worker nodes
+   1. Worker nodes:
 
       ```bash
       ncn-w# umount -v /var/lib/containerd /var/lib/kubelet /var/lib/sdu
@@ -193,7 +193,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
    **Troubleshooting:** Unmount on a Storage node:
 
-   1. If the `umount` command is responding with `target is busy`, try the following:
+   If the `umount` command is responding with `target is busy`, try the following:
 
       ```bash
       ncn-s:~ # mount | grep "containers"
@@ -232,7 +232,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
       ncn# vgremove -f --select 'vg_name=~metal*'
       ```
 
-      > **NOTE** Optionally, run the `pvs` command. If any drives are still listed, remove them with `pvremove`, but this is rarely needed. Also, if the above command fails or returns a warning about the filesystem being in use, ignore the error and proceed to the next step, as this will not inhibit the wipe process.
+      > **NOTE:** Optionally, run the `pvs` command. If any drives are still listed, remove them with `pvremove`, but this is rarely needed. Also, if the above command fails or returns a warning about the filesystem being in use, ignore the error and proceed to the next step, as this will not inhibit the wipe process.
 
 1. Stop the RAIDs.
 
@@ -247,7 +247,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
    ncn# wipefs --all --force /dev/sd* /dev/disk/by-label/*
    ```
 
-   **NOTE:** On worker nodes, it is a known issue that the sgdisk command sometimes encounters a hard hang. If you see no output from the command for 90 seconds, close the terminal session to the worker node, open a new terminal session to it, and complete the disk wipe procedure by running the above `wipefs` command.
+   **NOTE:** On worker nodes, it is a known issue that the `sgdisk` command sometimes encounters a hard hang. If there is no output from the command for 90 seconds, close the terminal session to the worker node, open a new terminal session to it, and complete the disk wipe procedure by running the above `wipefs` command.
 
    See [Basic Wipe](#basic-wipe) section for expected output from the `wipefs` command.
 
