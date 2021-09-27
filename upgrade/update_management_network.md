@@ -198,16 +198,18 @@ the neighbor will be the NMN IP of ALL the worker nodes. You may have more than 
 ```
 sw-spine-001 [standalone: master] > ena
 sw-spine-001 [standalone: master] # conf t
-sw-spine-001 [standalone: master] (config) # router bgp 65533 vrf default neighbor 10.252.1.7 transport connection-mode passive
-sw-spine-001 [standalone: master] (config) # router bgp 65533 vrf default neighbor 10.252.1.8 transport connection-mode passive
-sw-spine-001 [standalone: master] (config) # router bgp 65533 vrf default neighbor 10.252.1.9 transport connection-mode passive
+sw-spine-001 [standalone: master] (config) # router bgp 65533 vrf default neighbor 10.252.1.10 transport connection-mode passive
+sw-spine-001 [standalone: master] (config) # router bgp 65533 vrf default neighbor 10.252.1.11 transport connection-mode passive
+sw-spine-001 [standalone: master] (config) # router bgp 65533 vrf default neighbor 10.252.1.12 transport connection-mode passive
 ```
-Run the command below to verify the configuration got applied correctly.
+Run the command below to show the output of the BGP configuration.
 ```
 sw-spine-001 [standalone: master] (config) # show run protocol bgp
 ```
 The configuration should look similar to the following. This is an example only.
 More BGP documentation can be found here [Update BGP Neighbors](../operations/network/metallb_bgp/Update_BGP_Neighbors.md).
+
+The neighbors should be the ALL of the NCN-Workers and their NMN address, they will not peer over any other network.
 ```
 ## BGP configuration
 ##
@@ -221,17 +223,12 @@ More BGP documentation can be found here [Update BGP Neighbors](../operations/ne
    router bgp 65533 vrf default neighbor 10.252.1.11 route-map ncn-w002
    router bgp 65533 vrf default neighbor 10.252.1.12 remote-as 65533
    router bgp 65533 vrf default neighbor 10.252.1.12 route-map ncn-w003
-   router bgp 65533 vrf default neighbor 10.252.1.13 remote-as 65533
-   router bgp 65533 vrf default neighbor 10.252.1.13 route-map ncn-w004
-   router bgp 65533 vrf default neighbor 10.252.1.14 remote-as 65533
-   router bgp 65533 vrf default neighbor 10.252.1.14 route-map ncn-w005
    router bgp 65533 vrf default neighbor 10.252.1.10 transport connection-mode passive
    router bgp 65533 vrf default neighbor 10.252.1.11 transport connection-mode passive
    router bgp 65533 vrf default neighbor 10.252.1.12 transport connection-mode passive
-   router bgp 65533 vrf default neighbor 10.252.1.13 transport connection-mode passive
-   router bgp 65533 vrf default neighbor 10.252.1.14 transport connection-mode passive
-```
 
+```
+If the configuration does not look like the example above check the [Update BGP Neighbors](../operations/network/metallb_bgp/Update_BGP_Neighbors.md) docs.
 #### Apollo Server configuration
 
 If the system has Apollo servers, the configuration can be found [here](../operations/configure_mgmt_net_ports.md) under the section "Apollo Server port config".
