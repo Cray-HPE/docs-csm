@@ -4,13 +4,16 @@ This page will walk-through booting the LiveCD `.iso` file directly onto a BMC.
 
 ### Topics:
 
-* [Requirements](#requirements)
-* [BMCs' Virtual Mounts](#bmcs-virtual-mounts)
-  * [HPE iLO BMCs](#hpe-ilo-bmcs)
-  * [Gigabyte BMCs](#gigabyte-bmcs)
-* [Configuring](#configuring)
-   * [Backing up the Overlay COW FS](#backing-up-the-overlay-cow-fs)
-   * [Restoring from an Overlay COW FS Backup](#restoring-from-an-overlay-cow-fs-backup)
+- [Boot LiveCD Virtual ISO](#boot-livecd-virtual-iso)
+    - [Topics:](#topics)
+  - [Details](#details)
+    - [Requirements](#requirements)
+    - [BMCs' Virtual Mounts](#bmcs-virtual-mounts)
+      - [HPE iLO BMCs](#hpe-ilo-bmcs)
+      - [Gigabyte BMCs](#gigabyte-bmcs)
+    - [Configuring](#configuring)
+      - [Backing up the Overlay COW FS](#backing-up-the-overlay-cow-fs)
+      - [Restoring from an Overlay COW FS Backup](#restoring-from-an-overlay-cow-fs-backup)
 
 ## Details
 
@@ -54,7 +57,7 @@ HPE iLO BMCs allow for booting directly from an HTTP-accessible ISO location.
 
 Gigabyte BMCs allow for booting over HTTP.
 
-**Note:** Because of problems in the Gigabyte firmware, do not try to boot over NFS or CIFS.
+> **NOTE:** Because of problems in the Gigabyte firmware, do not try to boot over NFS or CIFS.
 
 Go to the BMC settings and setup the remote ISO for your protocol and node.
 
@@ -68,7 +71,7 @@ Enable `Remote Media Support` and `Mount CD/DVD` and then fill in the server IP 
 
 ![Screen Shot of Gigabyte BMC General Settings](../img/bmc-virtual-media-settings-gigabyte.png)
 
-> **`NOTE`** The Gigabyte URL appears to not allow certain characters and has a limit on path length. You may need to move or rename the ISO to a location with a smaller file name.
+> **NOTE:** The Gigabyte URL appears to not allow certain characters and has a limit on path length. You may need to move or rename the ISO to a location with a smaller file name.
 
 Next navigate to `Image Redirection` -> `Remote Images` and click on the `Start` button to start the Virtual ISO mount.
 
@@ -81,15 +84,22 @@ Finally, reboot the node and select the `Virtual CDROM` option from the manual b
 <a name="configuring"></a>
 ### Configuring
 
-* [Configuring](#configuring)
-   * [Backing up the Overlay COW FS](#backing-up-the-overlay-cow-fs)
-   * [Restoring from an Overlay COW FS Backup](#restoring-from-an-overlay-cow-fs-backup)
+- [Boot LiveCD Virtual ISO](#boot-livecd-virtual-iso)
+    - [Topics:](#topics)
+  - [Details](#details)
+    - [Requirements](#requirements)
+    - [BMCs' Virtual Mounts](#bmcs-virtual-mounts)
+      - [HPE iLO BMCs](#hpe-ilo-bmcs)
+      - [Gigabyte BMCs](#gigabyte-bmcs)
+    - [Configuring](#configuring)
+      - [Backing up the Overlay COW FS](#backing-up-the-overlay-cow-fs)
+      - [Restoring from an Overlay COW FS Backup](#restoring-from-an-overlay-cow-fs-backup)
 
 The ISO boots with no password, requiring one be set on first login.
 Continue the bootstrap process by setting the root password
 following the procedure [First Login](bootstrap_livecd_remote_iso.md#first-login).
 
-> **`NOTE`** The root OS `/` directory is writable without persistence. This means that restarting the machine will result in all changes being lost. Before restarting, consider following [Backing up the Overlay COW FS](#backing-up-the-overlay-cow-fs) and the accompanying [Restoring from an Overlay COW FS Backup](#restoring-from-an-overlay-cow-fs-backup) section.
+> **NOTE:** The root OS `/` directory is writable without persistence. This means that restarting the machine will result in all changes being lost. Before restarting, consider following [Backing up the Overlay COW FS](#backing-up-the-overlay-cow-fs) and the accompanying [Restoring from an Overlay COW FS Backup](#restoring-from-an-overlay-cow-fs-backup) section.
 
 <a name="backing-up-the-overlay-cow-fs"></a>
 #### Backing up the Overlay COW FS
@@ -107,7 +117,7 @@ scp /run/overlay.tar.gz <somelocation>
 <a name="restoring-from-an-overlay-cow-fs-backup"></a>
 #### Restoring from an Overlay COW FS Backup
 
-Restore a backed up tar file from the previous command with
+Restore a backed up tar file from the previous command:
 
 ```bash
 scp <somelocation> /run/overlay.tar.gz
