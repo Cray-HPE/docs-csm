@@ -23,9 +23,9 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
    If there is not a backup of site-init, perform the following steps to create a new one using the values stored in the Kubernetes cluster.
 
-   1. Create a new site-init directory using from the CSM tarball.
+   1. Create a new site-init directory using an unpacked CSM tarball.
 
-      Determine the location of the initial install tarball and set ${CSM_DISTDIR} accordingly.
+      Determine the location of the initial unpacked install tarball and set ${CSM_DISTDIR} accordingly.
 
       ```bash
       ncn-m001# cp -r ${CSM_DISTDIR}/shasta-cfg/* /root/site-init
@@ -515,8 +515,8 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
        Run the following command until there is a non-empty value in the secret (this can take a minute or two):
        
        ```bash
-       ncn-m001# kubectl get secret -n services keycloak-certs -o yaml | grep certs.jks.b64
-         certs.jks.b64: <REDACTED>
+       ncn-m001# kubectl get secret -n services keycloak-certs -o yaml | grep certs.jks
+        certs.jks: <REDACTED>
        ```
 
     6. Restart the `cray-keycloak-[012]` pods.
