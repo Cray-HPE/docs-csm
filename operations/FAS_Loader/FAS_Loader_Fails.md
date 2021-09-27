@@ -3,14 +3,17 @@
 **NOTE:** this procedure is only for csm-0.9.x releases.
 
 The FAS loader may fail due to issues with the `repomd.xml` file in Nexus.
-This will show up in the `fw-loader` job logs with the following message: `CRITICAL: Failed to get repomd.xml from repo`
 
-You may first notice the issue if firmware is not present in the FAS image list (`cray fas images list`) after running the FAS loader or if a firmware update reports `failed to find file, trying again soon`
+This will be indicated by the following message: `CRITICAL: Failed to get repomd.xml from repo` in the `fas-loader` job.
 
-To view the FAS loader logs:
-*(The system only keeps pods available for a short amount time, if the command returns no pods, rerun the FAS loader with the procedure below.)*
+Indications that the `fas-loader` job has failed include:
+* Expected firmware is not present in the FAS image list (`cray fas images list`) after the FAS loader has been run.
+* FAS reports `failed to find file, trying again soon` while running an update action.
 
->Get the fas loader pod name:
+To view the FAS Loader logs:
+*(The system only keeps completed job pods available for a short amount time, if the command returns no pods, rerun the FAS loader with the procedure below.)*
+
+>Get the fas-loader pod name:
 
 >```bash
 >    ncn# kubectl get pods -n services | awk 'NR == 1 || /fas-loader/'
@@ -18,13 +21,15 @@ To view the FAS loader logs:
 >    cray-fas-loader-1-pnn6c 2/2 Running 2 9m38s
 >```
 
->Check the logs dumped on screen using this command:
+>Check the logs using the pod name returned:
 
 >```bash
 >    ncn# kubectl logs -n services cray-fas-loader-1-pnn6c -c cray-fas-loader
 >```
 
-If you need to rerun the FAS loader use the following commands:
+>Check for `CRITICAL: Failed to get repomd.xml from repo` message in the logs.
+
+To rerun the FAS Loader:
 
 >Retrieve the job name. In the following example, the returned job name is cray-fas-loader-1, which is the job to rerun in this scenario.
 
@@ -34,7 +39,7 @@ If you need to rerun the FAS loader use the following commands:
 >```
 
 >Rerun the cray-fas-loader job. Note, after "-f" there is a "-".
-Change `cray-fas-loader-1` to the loader job name returned from the last command
+Change `cray-fas-loader-1` to the loader job name returned from the last command.
 
 >```bash
 >    ncn# kubectl -n services get job cray-fas-loader-1 -o json | jq 'del(.spec.selector)' \
@@ -53,15 +58,31 @@ Change `cray-fas-loader-1` to the loader job name returned from the last command
 >    cray-fas-loader-1         1/1        7m35s     7m35s
 >```
 
->Check the logs using the command above.
+>Check the logs:
 
-### Solution:
+>Get the fas-loader pod name:
 
-To correct the `repomd.xml` file issue, you will need to delete the `shasta-firmware-0.9.3` repo from nexus and rerun the install script.
+>```bash
+>    ncn# kubectl get pods -n services | awk 'NR == 1 || /fas-loader/'
+>    NAME                      READY   STATUS      RESTARTS    AGE
+>    cray-fas-loader-1-pnn6c 2/2 Running 2 9m38s
+>```
+
+>Check the logs using the pod name returned:
+
+>```bash
+>    ncn# kubectl logs -n services cray-fas-loader-1-pnn6c -c cray-fas-loader
+>```
+
+>Check for `CRITICAL: Failed to get repomd.xml from repo` message in the logs.
+
+### Solution
+
+To correct the `repomd.xml` file issue, you will need to delete the `shasta-firmware-0.9.3` repo from Nexus and rerun the install script.
 
 >```bash
 >  ncn# curl -sfkSL -X DELETE  https://packages.local/service/rest/beta/repositories/shasta-firmware-0.9.3
 >  ncn# ./install.sh
 >```
 
->Rerun the FAS Loader job using the commands above
+>After the install script is completed, rerun the FAS Loader job using the commands above, checking the logs any errors.
