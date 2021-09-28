@@ -9,6 +9,29 @@ trap 'err_report' ERR
 touch /etc/cray/upgrade/csm/myenv
 . /etc/cray/upgrade/csm/myenv
 
+# make an array of all the csm versions that are installed
+IFS=$'\n' \
+  read -r -d '' \
+  -a csm_versions \
+  < <(kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' \
+    | yq r -j - \
+    | jq -r 'keys[]' \
+    | sed '/-/!{s/$/_/}' \
+    | sort -V \
+    | sed 's/_$//' \
+      && printf '\0')
+
+for i in "${csm_versions[@]}"
+do
+  if [[ "$i" == 1.* ]]; then
+    # if 1.x is already installed set the var to true and break the loop
+    export CSM1_EXISTS="true"
+    break
+  else
+    export CSM1_EXISTS="false"
+  fi
+done
+
 export UPGRADE_NCN=$1
 export STABLE_NCN=$(hostname)
 
