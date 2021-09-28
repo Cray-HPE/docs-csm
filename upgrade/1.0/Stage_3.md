@@ -84,6 +84,14 @@ ncn-m002# pdsh -b -S -w $(grep -oP 'ncn-m\d+' /etc/hosts | sort -u |  tr -t '\n'
 
 > **`NOTE`**: kubelet has been upgraded already so you can ignore the warning to upgrade kubelet
 
+## Stage 3.5
+
+Run the following command cleanup several prometheus alert configurations:
+
+```bash
+ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-clean-kube-alerts.sh
+```
+
 <a name="deploy-manifests"></a>
 
 Once `Stage 3` is completed and all kubernetes nodes have been rebooted into the new image then please proceed to [Stage 4](Stage_4.md)
