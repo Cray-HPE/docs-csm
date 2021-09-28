@@ -17,7 +17,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
 1. Optional system health checks.
 
-    1.  Use the System Dump Utility \(SDU\) to capture current state of system before the shutdown.
+    1. Use the System Dump Utility \(SDU\) to capture current state of system before the shutdown.
 
         **Important:** SDU takes about 15 minutes to run on a small system \(longer for large systems\).
 
@@ -25,13 +25,14 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
         ncn-m001# sdu --scenario triage --start_time '-4 hours' \
         --reason "saving state before powerdown/up"
         ```
-    1.  Check Ceph status.
+
+    1. Check Ceph status.
 
         ```screen
         ncn-m001# ceph -s > ceph.status
         ```
 
-    1.  Check Kubernetes pod status for all pods.
+    1. Check Kubernetes pod status for all pods.
 
         ```screen
         ncn-m001# kubectl get pods -o wide -A > k8s.pods
@@ -44,7 +45,8 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
         ncn-m001# kubectl get pods -o wide -A | egrep "ContainerCreating" > k8s.pods.CC
         ncn-m001# kubectl get pods -o wide -A | egrep -v "Run|Completed" > k8s.pods.errors
         ```
-1.  Check for running sessions.
+
+1. Check for running sessions.
 
     Ensure that these services do not have any sessions in progress: BOS, CFS, CRUS, FAS, or NMD.
     > This SAT command has `shutdown` as one of the command line options, but it will not start a shutdown process on the system.
@@ -66,7 +68,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
     If active sessions are running, either wait for them to complete or shut down/cancel/delete the session.
 
-1.  Coordinate with the site to prevent new sessions from starting in the services listed (BOS, CFS, CRUS, FAS, NMD).
+1. Coordinate with the site to prevent new sessions from starting in the services listed (BOS, CFS, CRUS, FAS, NMD).
 
     In version Shasta v1.4, there is no method to prevent new sessions from being created as long as the service APIs are accessible on the API gateway.
 
@@ -77,7 +79,9 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
    Some of the CSM health checks, such as booting the barebones image on the compute nodes, could be skipped.
 
-   See the `CSM Install Validation and Health Checks` procedures **in the CSM 0.9 documentation**. The validation procedures in the CSM 1.0 documentation are not all intended to work on CSM 0.9.
+   See the `CSM Install Validation and Health Checks` procedures **`in the CSM 0.9 documentation`**. 
+
+   **`IMPORTANT:` The validation procedures in the CSM 1.0 documentation are not all intended to work on CSM 0.9.
 
 1. Validate Lustre Health
 
@@ -87,6 +91,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
    1. SSH to the primary management node.
       For example, on system cls01234.
+
       ```screen
       remote$ ssh -l admin cls01234n000.systemname.com
       ```
@@ -152,5 +157,5 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
    After completing this procedure the next step is to update the management network.
 
-   * See [Update Management Network](index.md#update_management_network)
+   **See:** [Update Management Network](index.md#update_management_network)
 
