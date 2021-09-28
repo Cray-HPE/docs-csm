@@ -143,8 +143,14 @@ Perform these steps to update customizations.yaml:
    ```
    ncn-m001:~/site-init # ${CSM_SCRIPTDIR}/upgrade/update-customizations.sh -i customizations.yaml
    ```
-   
-   Generate the new PowerDNS API key secret
+
+1. Configure DNS zone transfer and DNSSEC (optional)
+
+   If the DNS zone transfer and DNSSEC features are required please review the [PowerDNS configuration guide](../../operations/network/dns/PowerDNS_Configuration.md) and update `customizations.yaml` with the appropriate values.
+
+1. Generate the new PowerDNS API key secret
+
+   > **Note**: This step will also generate the SealedSecrets for the DNSSEC keys if configured in the previous step.  
 
    ```
    ncn-m001:~/site-init # ./utils/secrets-seed-customizations.sh customizations.yaml

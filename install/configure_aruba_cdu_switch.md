@@ -407,7 +407,7 @@ These ACLs are designed to block traffic from the node management network to and
 ## Configure Spanning-tree
 
 1. The following config is applied to Aruba CDU switches.
-   If there are more 2xxx or 3xxx VLANs you will add them to the ```spanning-tree vlan``` list
+   If there are more 2xxx or 3xxx VLANs you will add them to the `spanning-tree vlan` list
 
    ```
    sw-cdu-001 & sw-cdu-002 (config)#

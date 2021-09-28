@@ -419,7 +419,7 @@ A similar flow can be used to update the volume size for `cray-sls-postgres`, `g
    ncn# watch "kubectl get postgresql cray-smd-postgres -n services"
    NAME                TEAM       VERSION   PODS   VOLUME   CPU-REQUEST   MEMORY-REQUEST   AGE   STATUS
    cray-smd-postgres   cray-smd   11        3      100Gi     500m          8Gi              45m  Running
-   ````
+   ```
 
 1. If the status on the above command is `SyncFailed` instead of `Running`, refer to *Case 1* in the *SyncFailed* section of [Troubleshoot Postgres Database](../kubernetes/Troubleshoot_Postgres_Database.md#syncfailed). At this point the Postgres cluster is healthy, but additional steps are required to complete the resize of the Postgres PVCs.
 

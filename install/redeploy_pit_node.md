@@ -131,9 +131,9 @@ data, so run them only when indicated. Instructions are in the `README` files.
     1. Set variables
 
         **IMPORTANT**: The variables you set depend on whether or not you customized the default NCN images. The most
-        common procedures that involve customizing the images are 
-        [Configuring NCN Images to Use Local Timezone](../operations/node_management/Configure_NTP_on_NCNs.md#configure_ncn_images_to_use_local_timezone) and 
-        [Changing NCN Image Root Password and SSH Keys](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md). 
+        common procedures that involve customizing the images are
+        [Configuring NCN Images to Use Local Timezone](../operations/node_management/Configure_NTP_on_NCNs.md#configure_ncn_images_to_use_local_timezone) and
+        [Changing NCN Image Root Password and SSH Keys](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md).
         The two paths forward are listed below:
 
         * If you did **not** customize the NCN images, set the following variables (this is the default path):
@@ -502,7 +502,7 @@ data, so run them only when indicated. Instructions are in the `README` files.
     https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
-1.  **`IN-PLACE WORKAROUND`** Set the wipe safeguard to allow safe net-reboots. **This will set the safeguard on all NCNs**. This is fixed by MTL
+1.  **`IN-PLACE WORKAROUND`** Set the wipe safeguard to allow safe net-reboots. **This will set the safeguard on all NCNs**.
 
     ```bash
     ncn-m001# /tmp/csi handoff bss-update-param --set metal.no-wipe=1

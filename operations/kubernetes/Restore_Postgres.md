@@ -408,7 +408,7 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
     cray-keycloak-0   2/2     Running   0          35s
     cray-keycloak-1   2/2     Running   0          35s
     cray-keycloak-2   2/2     Running   0          35s
-    ````
+    ```
 
 11. Re-run the `keycloak-setup` and `keycloak-users-localize` jobs, and restart Keycloak gatekeeper.
 
@@ -417,7 +417,7 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
     ```bash
     ncn-w001# kubectl get job -n ${NAMESPACE} -l app.kubernetes.io/instance=cray-keycloak -o json > keycloak-setup.json
     ncn-w001# cat keycloak-setup.json | jq '.items[0]' | jq 'del(.metadata.creationTimestamp)' | jq 'del(.metadata.managedFields)' | jq 'del(.metadata.resourceVersion)' | jq 'del(.metadata.selfLink)' | jq 'del(.metadata.uid)' | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels)' | jq 'del(.status)' | kubectl replace --force -f -
-    ````
+    ```
 
     Check the status of the `keycloak-setup` job. If the `COMPLETIONS` value is not `1/1`, wait a few seconds and run the command again until the `COMPLETIONS` value is `1/1`.
 
@@ -426,14 +426,14 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
 
     NAME               COMPLETIONS   DURATION   AGE
     keycloak-setup-2   1/1           59s        91s
-    ````
+    ```
 
   - Run the `keycloak-users-localize` job to restore the users and groups in S3 and the Kubernetes configmap:
 
     ```bash
     ncn-w001# kubectl get job -n ${NAMESPACE} -l app.kubernetes.io/instance=cray-keycloak-users-localize -o json > cray-keycloak-users-localize.json
     ncn-w001# cat cray-keycloak-users-localize.json | jq '.items[0]' | jq 'del(.metadata.creationTimestamp)' | jq 'del(.metadata.managedFields)' | jq 'del(.metadata.resourceVersion)' | jq 'del(.metadata.selfLink)' | jq 'del(.metadata.uid)' | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels)' | jq 'del(.status)' | kubectl replace --force -f -`
-    ````
+    ```
 
     Check the status of the `cray-keycloak-users-localize` job. If the `COMPLETIONS` value is not `1/1`, wait a few seconds and run the command again until the `COMPLETIONS` value is `1/1`.
 
@@ -442,13 +442,13 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
 
     NAME                        COMPLETIONS   DURATION   AGE
     keycloak-users-localize-2   1/1           45s        49s
-    ````
+    ```
 
   - Restart Keycloak gatekeeper:
 
     ```bash
     ncn-w001# kubectl rollout restart -n ${NAMESPACE} deployment/cray-keycloak-gatekeeper-ingress
-    ````
+    ```
 
 12. Verify the service is working. The following should return an access_token for an existing user. Replace the <username> and <password> as appropriate.
 
