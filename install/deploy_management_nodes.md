@@ -435,7 +435,7 @@ The configuration workflow described here is intended to help understand the exp
 
   If you have OSDs on each node (`ceph osd tree` can show this), then you have all your nodes in Ceph. That means you can utilize the orchestrator to look for the devices.
 
-1. Get the number of osds in the cluster.
+1. Get the number of OSDs in the cluster.
 
     ```bash
     ncn-s# ceph -f json-pretty osd stat |jq .num_osds
@@ -646,7 +646,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 
    1. Run the BGP helper script if you have mellanox switches.
 
-      The BGP helper script requires three parameters: IP of switch 1, IP of Switch 2, Path to CSI generated network files.
+      The BGP helper script requires three parameters: the IP address of switch 1, the IP addresss of switch 2, and the path to the to CSI generated network files.
 
       - The IP addresses used should be Node Management Network IP addresses (NMN). These IP addresses will be used for the BGP Router-ID.
       - The path to the CSI generated network files must include `CAN.yaml`, `HMN.yaml`, `HMNLB.yaml`, `NMNLB.yaml`, and `NMN.yaml`. The path must include the SYSTEM_NAME.
@@ -660,7 +660,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 
    1. Run CANU if you have Aruba switches.
      
-      CANU requires three paramters: IP of switch 1, IP of switch 2, Path to directory containing the file ```sls_input_file.json```
+      CANU requires three parameters: the IP address of switch 1, the IP addresss of switch 2, and the path to the to directory containing the file ```sls_input_file.json```
 
       The IP addresses in this example should be replaced by the IP addresses of the switches.
 
@@ -747,25 +747,18 @@ Observe the output of the checks and note any failures, then remediate them.
 
 1. Check the storage nodes.
 
-   **`Note`**: Throughout the output of the `csi pit validate` command there will be a test total for each node where the tests run. Be sure to check all of them and not just the final one.
-
    ```bash
    pit# csi pit validate --ceph | tee csi-pit-validate-ceph.log
    ```
-   
-   Once that command has finished, the following will extract the test totals reported for each node:
-   ```bash
-   pit# grep "Total" csi-pit-validate-ceph.log
-   ```
-   
-   Example output for a system with 3 storage nodes:
+
+   Once that command has finished, check the last line of output to see the results of the tests.
+
+   Example last line of output:
    ```
    Total Tests: 7, Total Passed: 7, Total Failed: 0, Total Execution Time: 1.4226 seconds
-   Total Tests: 7, Total Passed: 7, Total Failed: 0, Total Execution Time: 1.4077 seconds
-   Total Tests: 7, Total Passed: 7, Total Failed: 0, Total Execution Time: 1.4246 seconds
    ```
 
-   If these total lines report any failed tests, look through the full output of the test to see which node had the failed test and what the details are for that test.
+   If the test total line reports any failed tests, look through the full output of the test in csi-pit-validate-ceph.log to see which node had the failed test and what the details are for that test.
 
    **`Note`**: Please see [Utility Storage](../operations/utility_storage/Utility_Storage.md) to help resolve any failed tests.
 
@@ -781,7 +774,7 @@ Observe the output of the checks and note any failures, then remediate them.
    ```bash
    pit# grep "Total" csi-pit-validate-k8s.log
    ```
-   
+
    Example output for a system with 5 master and worker nodes (other than the PIT node):
    ```
    Total Tests: 16, Total Passed: 16, Total Failed: 0, Total Execution Time: 0.3072 seconds
@@ -793,7 +786,7 @@ Observe the output of the checks and note any failures, then remediate them.
 
    If these total lines report any failed tests, look through the full output of the test to see which node had the failed test and what the details are for that test.
 
-   > **`WARNING`** If there are failures for tests with names like "Worker Node CONLIB FS Label", then these manual tests should be run on the node which reported the failure. The master nodes have a test looking for ETCDLVM label. The worker nodes have tests looking for the CONLIB, CONRUN, and K8SLET labels. 
+   > **`WARNING`** If there are failures for tests with names like "Worker Node CONLIB FS Label", then these manual tests should be run on the node which reported the failure. The master nodes have a test looking for ETCDLVM label. The worker nodes have tests looking for the CONLIB, CONRUN, and K8SLET labels.
    >
    > Master nodes:
    >

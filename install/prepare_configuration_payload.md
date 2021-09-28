@@ -61,6 +61,9 @@ For more description of these settings and the default values, see [Default IP A
 | --application-node-config-yaml application_node_config.yaml | Name of `application_node_config.yaml` |
 | --cabinets-yaml cabinets.yaml | Name of `cabinets.yaml` |
 | --bgp-peers aggregation | Override the default BGP peers, using aggregation switches instead of spines |
+| --primary-server-name primary | Desired name for the primary DNS server |
+| --secondary-servers "" | Comma seperated list of FQDN/IP for all DNS servers to be notified on DNS zone update |
+| --notify-zones "" | A comma separated list of DNS zones to transfer |
 
    * This is a long list of options. It can be helpful to create a Bash script file to call the `csi` command with all of these options, and then edit that file to adjust the values for the particular system being installed.
    * The `bootstrap-ncn-bmc-user` and `bootstrap-ncn-bmc-pass` must match what is used for the BMC account and its password for the management nodes.
@@ -75,6 +78,7 @@ For more description of these settings and the default values, see [Default IP A
    * Set `ntp-pool` to a reachable NTP server.
    * The `application_node_config.yaml` file is required. It is used to describe the mapping between prefixes in `hmn_connections.csv` and HSM subroles. This file also defines aliases application nodes. For details, see [Create Application Node YAML](create_application_node_config_yaml.md).
    * For systems that use non-sequential cabinet id numbers, use `cabinets-yaml` to include the `cabinets.yaml` file. This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to specify explicitly the id of every cabinet in the system. See [Create Cabinets YAML](create_cabinets_yaml.md).
+  * The PowerDNS zone transfer arguments `primary-server-name`, `secondary-servers`, and `notify-zones` are optional unless zone transfer is being configured. For more information see the [PowerDNS Configuration Guide](../operations/network/dns/PowerDNS_Configuration.md#zone-transfer)
 
 <a name="configuration_payload_files"></a>
 ### Configuration Payload Files
