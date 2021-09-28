@@ -1,0 +1,133 @@
+#
+# MIT License
+#
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: drain-worker
+  namespace: argo
+spec:
+  entrypoint: main
+  templates:
+    - name: main
+      inputs:
+        parameters:
+          - name: targetNcn
+          - name: dryRun
+          - name: imageId
+          - name: desiredCfsConfig
+      dag:
+        tasks:
+        - name: drain
+          templateRef:
+            name: kubectl-and-curl-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  kubectl get node {{inputs.parameters.targetNcn}} || res=$?
+                  # only delete a ncn that exists in cluster
+                  if [[ $res -eq 0 ]]; then
+                    csi automate ncn kubernetes --action delete-ncn --ncn {{inputs.parameters.targetNcn}} --kubeconfig mykubeconfig/admin.conf
+                  fi
+        - name: wait-for-postgres-operator
+          dependencies:
+            - drain
+          templateRef:
+            name: kubectl-and-curl-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  while true; do
+                    numOfRunningPgOperatorPod=$(kubectl get pods -n services -l app.kubernetes.io/name=postgres-operator | grep "Running" | wc -l)
+                    if [[ $numOfRunningPgOperatorPod -ne 1 ]];then
+                      echo "ERROR - Postgres Operator is not running yet"
+                      sleep 5
+                      continue
+                    else
+                      echo "Postgres Operator is running"
+                      break
+                    fi
+                  done
+        - name: wait-for-sls
+          dependencies:
+            - wait-for-postgres-operator
+          templateRef:
+            name: wait-for-sls
+            template: wait-for-sls
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: targetNcn
+                value: "{{inputs.parameters.targetNcn}}"
+        - name: update-bss
+          dependencies:
+          - wait-for-sls
+          templateRef:
+            name: kubectl-and-curl-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+                    -d client_id=admin-client \
+                    -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+                  TARGET_NCN={{inputs.parameters.targetNcn}}
+                  TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                      jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+
+                  CPS_PM_NODE=$( kubectl get node ${TARGET_NCN} -o json | jq -r '.metadata.labels."cps-pm-node"')
+                  if [ "$CPS_PM_NODE" = "True" ]; then
+                    csi handoff bss-update-param --set cps.pm-node=1 --limit $TARGET_XNAME
+                  fi
+                  echo "INFO setting metal.no-wipe=0 in BSS"
+                  csi handoff bss-update-param --delete metal.no-wipe --limit $TARGET_XNAME
+                  csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
+        - name: set-bss-image-and-cfs-config
+          dependencies:
+          - update-bss
+          templateRef:
+            name: set-bss-image-cfs-config
+            template: main
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: targetNcn
+                value: "{{inputs.parameters.targetNcn}}"
+              - name: imageId
+                value: "{{inputs.parameters.imageId}}"
+              - name: desiredCfsConfig
+                value: "{{inputs.parameters.desiredCfsConfig}}"

@@ -1,0 +1,145 @@
+#
+# MIT License
+#
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+version: 0.1.0 # IUF version
+
+stages:
+  - name: process-media
+    type: global
+    operations:
+      - name: extract-release-distributions
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+
+  - name: pre-install-check
+    type: global
+    operations:
+      - name: preflight-checks-for-services
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+
+  - name: deliver-product
+    type: product
+    operations:
+      - name: add-product-to-product-catalog
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+        required-manifest-attributes: []
+      - name: loftsman-manifest-upload
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+        required-manifest-attributes:
+          - content.loftsman
+      - name: s3-upload
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+        required-manifest-attributes:
+          - content.s3
+      - name: nexus-setup
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+        required-manifest-attributes:
+          - content.nexus_blob_stores
+          - content.nexus_repositories
+      - name: nexus-rpm-upload
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+        required-manifest-attributes:
+          - content.rpms
+      - name: nexus-docker-upload
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+        required-manifest-attributes:
+          - content.docker
+      - name: nexus-helm-upload
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+        required-manifest-attributes:
+          - content.helm
+      - name: vcs-upload
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+        required-manifest-attributes:
+          - content.vcs
+      - name: ims-upload
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+        required-manifest-attributes:
+          - content.ims
+
+  - name: update-vcs-config
+    type: product
+    process-product-variants-sequentially: true # this stage wants to make sure all products with the same name (but different versions)
+                                                #  are processed sequentially, not in parallel, to avoid operational race conditions
+    operations:
+      - name: vcs-update-working-branch
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+        required-manifest-attributes:
+          - content.vcs
+        include-default-product-in-site-params: true # this operation wants to receive site_params.products.default in supplied global_params
+
+  - name: update-cfs-config
+    type: global
+    operations:
+      - name: update-management-cfs-config
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+        include-default-product-in-site-params: true # this operation wants to receive site_params.products.default in supplied global_params
+      - name: update-managed-cfs-config
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+        include-default-product-in-site-params: true # this operation wants to receive site_params.products.default in supplied global_params
+
+  - name: deploy-product
+    type: product
+    operations:
+      - name: loftsman-manifest-deploy
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+        required-manifest-attributes:
+          - content.loftsman
+
+  - name: prepare-images
+    type: global
+    operations:
+      - name: prepare-management-images
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+        include-default-product-in-site-params: true
+      - name: prepare-managed-images
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+        include-default-product-in-site-params: true
+
+  - name: management-nodes-rollout
+    type: global
+    operations:
+      - name: management-nodes-rollout
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+
+  - name: post-install-service-check
+    type: product
+    operations:
+      - name: post-install-service-check
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+
+  - name: managed-nodes-rollout
+    type: global
+    operations:
+      - name: managed-nodes-rollout
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+
+  - name: post-install-check
+    type: product
+    operations:
+      - name: post-install-check
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+
+
+# The following are the template references to hook scripts.
+hooks:
+  master_host: master-host-hook-script

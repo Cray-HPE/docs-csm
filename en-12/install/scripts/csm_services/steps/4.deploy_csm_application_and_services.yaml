@@ -1,0 +1,146 @@
+#
+# MIT License
+#
+# (C) Copyright 2021-2022 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+kind: step
+metadata:
+  name: Deploy CSM Applications and Services
+  description: |-
+    # Deploy CSM Applications and Services
+
+    Run `install.sh` to deploy CSM applications services. This command may take 25 minutes or more to run.
+
+    ```bash
+    pit# cd /var/www/ephemeral/$CSM_RELEASE
+    pit# ./install.sh
+    ```
+
+    On success, `install.sh` will output `OK` to stderr and exit with status code
+    `0`, e.g.:
+
+    ```bash
+    pit# ./install.sh
+    ...
+    + CSM applications and services deployed
+    install.sh: OK
+    ```
+spec:
+  jobs:
+    - preCondition:
+        description: |-
+          Verify that the `SYSTEM_NAME` and `CSM_RELEASE` environment variables are set:
+        command: |-
+          [[ ! -z $SYSTEM_NAME ]] || exit 1
+          [[ ! -z $CSM_RELEASE ]] || exit 1
+        troubleshooting: |-
+          > **`NOTE`** `install.sh` requires various system configuration which are
+          > expected to be found in the locations used in proceeding documentation;
+          > however, it needs to know `SYSTEM_NAME` in order to find `metallb.yaml` and
+          > `sls_input_file.json` configuration files.
+          >
+          > Some commands will also need to have the CSM_RELEASE variable set.
+          >
+          > Verify that the `SYSTEM_NAME` and `CSM_RELEASE` environment variables are set:
+          >
+          > ```bash
+          > pit# echo $SYSTEM_NAME
+          > pit# echo $CSM_RELEASE
+          > ```
+          > If they are not set, perform the following:
+          >
+          > ```bash
+          > pit# export SYSTEM_NAME=eniac
+          > pit# export CSM_RELEASE=csm-x.y.z
+          > ```
+      action:
+        description: |-
+          Nothing
+        command: |-
+          cd /var/www/ephemeral/{{ getEnv "CSM_RELEASE" }}
+          ./install.sh
+        troubleshooting: |-
+          In the event that `install.sh` does not complete successfully, consult the
+          [known issues](#known-issues) below to resolve potential problems and then try
+          running `install.sh` again.
+
+          ***IMPORTANT:*** If you have to re-run install.sh to re-deploy failed ceph-csi provisioners you must make sure to delete the jobs that have not completed. These are left there for investigation on failure. They are automatically removed on a successful deployment.
+
+          ```bash
+          pit# kubectl get jobs
+          NAME                   COMPLETIONS   DURATION   AGE
+          cray-ceph-csi-cephfs   0/1                      3m35s
+          cray-ceph-csi-rbd      0/1                      8m36s
+          ```
+          > If these jobs exist then `kubectl delete job <jobname>` before running install.sh again.
+
+          ## install.sh known issues
+          
+          The `install.sh` script changes cluster state and should not simply be rerun
+            in the event of a failure without careful consideration of the specific
+            error. It may be possible to resume installation from the last successful
+            command executed by `install.sh`, but administrators will need to appropriately
+            modify `install.sh` to pick up where the previous run left off. (Note: The
+            `install.sh` script runs with `set -x`, so each command will be printed to
+            stderr prefixed with the expanded value of PS4, namely, `+ `.)
+            
+            * The following error may occur when running `install.sh`:
+              ```
+              + csi upload-sls-file --sls-file /var/www/ephemeral/prep/eniac/sls_input_file.json
+              2021/10/05 18:42:58 Retrieving S3 credentials ( sls-s3-credentials ) for SLS
+              2021/10/05 18:42:58 Unable to SLS S3 secret from k8s:secrets "sls-s3-credentials" not found
+              ```
+
+              1. Verify the `sls-s3-credentials` secret exists in the `default` namespace:
+                ```bash
+                pit# kubectl get secret sls-s3-credentials
+                NAME                 TYPE     DATA   AGE
+                sls-s3-credentials   Opaque   7      28d
+                ```
+
+              2. Check for running sonar-sync jobs. If there are no sonar-sync jobs, then wait for one to complete.
+                The sonar-sync cronjob is responsible for copying the `sls-s3-credentials` secret from the `default`
+                to the `services` namespaces.
+                ```bash
+                pit# kubectl -n services get pods -l cronjob-name=sonar-sync
+                NAME                          READY   STATUS      RESTARTS   AGE
+                sonar-sync-1634322840-4fckz   0/1     Completed   0          73s
+                sonar-sync-1634322900-pnvl6   1/1     Running     0          13s
+                ```
+
+              3. Verify the `sls-s3-credentials` secret now exists in the `services` namespaces.
+                ```bash
+                pit# kubectl -n services get secret sls-s3-credentials
+                NAME                 TYPE     DATA   AGE
+                sls-s3-credentials   Opaque   7      20s
+                ```
+              
+              4. Running `install.sh` again is expected to succeed.
+            
+            * Timeout on cray-sls-init-load during Install CSM Services due to Postgres cluster in SyncFailed state
+              {{ readFile "../../../operations/kubernetes/Troubleshoot_Postgres_Database.md" | indent 14 }}
+      postValidation:
+        description: |-
+          Nothing
+        command: |-
+          true
+        troubleshooting: |-
+          Nothing

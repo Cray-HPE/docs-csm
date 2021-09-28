@@ -1,0 +1,96 @@
+#
+# MIT License
+#
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: add-storage-node-to-haproxy-keepalived
+  namespace: argo
+spec:
+  entrypoint: main
+  templates:
+    - name: main
+      inputs:
+        parameters:
+          - name: dryRun
+          - name: targetNcn
+      dag:
+        tasks:
+          - name: copy-k8s-admin-config
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                    if [[ ${TARGET_NCN} =~ ncn-s00[1-3] ]]; then
+                        scp /etc/kubernetes/admin.conf ${TARGET_NCN}:/etc/kubernetes
+                        echo "Reconfiguring ceph-csi storage class config map"
+                        ssh ${TARGET_NCN} 'source /srv/cray/scripts/common/csi-configuration.sh; create_k8s_storage_class'
+                    fi
+          - name: add-storage-node-to-haproxy-keepalived
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                    ssh $TARGET_NCN \
+                      'source /srv/cray/scripts/metal/update_apparmor.sh
+                      reconfigure-apparmor; /srv/cray/scripts/metal/generate_haproxy_cfg.sh > /etc/haproxy/haproxy.cfg
+                      systemctl enable haproxy.service
+                      systemctl restart haproxy.service
+                      /srv/cray/scripts/metal/generate_keepalived_conf.sh > /etc/keepalived/keepalived.conf
+                      systemctl enable keepalived.service
+                      systemctl restart keepalived.service'
+          - name: restart-services
+            dependencies:
+              - add-storage-node-to-haproxy-keepalived
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                    echo "Enabling Ceph services to start on boot and starting if stopped"
+                    ssh $TARGET_NCN \
+                       'for service in $(cephadm ls |jq -r .[].systemd_unit|grep $(ceph status -f json-pretty |jq -r .fsid));
+                        do
+                          systemctl enable $service
+                          if [[ $(systemctl is-active $service) != "active" ]]
+                          then
+                            systemctl restart $service
+                          fi
+                        done'
