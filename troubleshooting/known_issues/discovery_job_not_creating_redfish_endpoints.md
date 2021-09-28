@@ -4,16 +4,28 @@ There is a known issue with the HMS Discovery cronjob when a BMC does not respon
 
 This troubleshooting procedure is only applicable for Air Cooled NodeBMCs and RouterBMCs.
 
-## Prerequisites
+## Automation Script
+
+Checking for and correcting this river redfish endpoint discovery issue can be done by running the `river_rf_endpoint_discovery_fixup.py` script:
+
+```
+ncn# /opt/cray/csm/scripts/hms_verification/river_rf_endpoint_discovery_fixup.py
+```
+
+The return value of the script is 0 if fixup was successful or no fixup was needed. Otherwise, a non-zero return means that manual intervention is needed to correct the issue. Continue below for manual steps.
+
+## Manual Steps
+### Prerequisites
+
 - The Cray CLI has been initialized.
 - Only applicable to an Air Cooled NodeBMC or RouterBMC.
 
-## Symptoms
+### Symptoms
 - The MAC address for the BMC in HSM has an IP and component id.
 - The BMC is pingable.
 - There is no RedfishEndpoint for the BMC in HSM.
 
-## Check for symptoms
+### Check for symptoms
 1. Setup an environment variable with to store the xname of the BMC.
     > This should be either the xname for a NodeBMC (`xXcCsSbB`) or RouterBMC (`xXcCrRbB`).
     ```bash
@@ -75,7 +87,7 @@ This troubleshooting procedure is only applicable for Air Cooled NodeBMCs and Ro
 
 5. If the BMC has a MAC Address with a component ID and does not have a RedfishEndpoint in HSM, then proceed to the next section.
 
-## Solution
+### Solution
 1. Delete the MAC address associated with the BMC from HSM.
     ```bash
     ncn# cray hsm inventory ethernetInterfaces delete $BMC_MAC
