@@ -29,6 +29,7 @@
 - [Apply cray-hms-hmcollector scale changes](#apply-cray-hms-hmcollector-scale-changes)
 - [Setup Nexus](#setup-nexus)
 - [Update NCNs](#update-ncns)
+- [Update BSS metadata](#update-bss)
 - [Upgrade Services](#upgrade-services)
 - [Rollout Deployment Restart](#rollout-deployment-restart)
 - [Verification](#verification)
@@ -130,6 +131,16 @@ report `FAIL` when uploading duplicate assets. This is ok as long as
    ```bash
    ncn-m001# cd "$CSM_SCRIPTDIR"
    ncn-m001# ./update-ncns.sh
+   ```
+
+<a name="update-bss"></a>
+## Update BSS metadata
+
+1. Execute the following script from the scripts directory determined above to update BSS metadata.
+
+   ```bash
+   ncn-m001# cd "$CSM_SCRIPTDIR"
+   ncn-m001# ./update-bss-metadata.sh
    ```
 
 <a name="upgrade-services"></a>
@@ -265,7 +276,7 @@ deployment "cray-dns-unbound" successfully rolled out
        "/srv/cray/scripts/metal/set-bmc-bbs.sh",
        "/srv/cray/scripts/metal/disable-cloud-init.sh",
        "/srv/cray/scripts/common/update_ca_certs.py",
-       "zypper --no-gpg-checks in -y https://packages.local/repository/casmrel-755/cray-node-exporter-1.2.2.1-1.x86_64.rpm"
+       "zypper --no-gpg-checks in -y https://packages.local/repository/csm-sle-15sp2/x86_64/cray-node-exporter-1.2.2.1-1.x86_64.rpm"
      ]
    }
    ```
