@@ -1,0 +1,101 @@
+#!ipxe
+
+# Vars:
+# These are PCI-SIG Device and Vendor IDs that define udev rules on-the-fly.
+# The early udev rules allow developers and users to set expectations
+# for a nodes state (e.g. interface names, and available hardware such as HSN).
+set mgmt_vid0 15b3 # Mellanox
+set mgmt_vid1 1077 # QLogic
+#set mgmt_vid2 8086 # Intel
+set hsn_did0 1017 # Mellanox CX-5
+#set hsn_did1 1015 # Mellanox CX-4
+set ignore ffff
+
+:nic_naming
+echo === DEVICE NAMING ==================================
+## This creates udev rules for our bare minimum interfaces:
+# - bond (LACP redundant bond)
+# - hsn  (high-speed)
+# - lan  (external/no-op)
+# - mgmt (untagged/default-vlan)
+# - sun  (storage vlan)
+# ALL CONFIGURATION IS HANDLED BY CLOUD-INIT
+# The values below must be set to their  defaults to allow the script to re-run on re-attempts.
+set print-nics 0
+set idx:int8 0
+set idx_hsn:int8 0
+set idx_mgmt:int8 0
+set idx_sun:int8 0
+set idx_lan:int8 0
+set notice
+set dual-bond 0
+set odd 0
+
+# main-loop
+:loop isset ${net${idx}/mac} || goto loop_done
+
+  # announce ...
+  echo net${idx} MAC ${net${idx}/mac}
+
+  # read PCI-SIG
+  set device_id ${pci/${net${idx}/busloc}.2.2}
+  set vendor_id ${pci/${net${idx}/busloc}.0.2}
+
+  # bail if signature is unreadable (ffff)
+  iseq ${device_id} ${ignore} && inc idx && goto loop ||
+
+  # set indexes for scanning name preferences
+  set mgmt_vididx:int8 0
+  set hsn_dididx:int8 0
+
+  # high-speed network interfaces
+  :hsnloop isset ${hsn_did${hsn_dididx}} || goto hsnloop_done
+    iseq ${device_id} ${hsn_did${hsn_dididx}} && goto hsn || inc hsn_dididx && goto hsnloop
+  :hsnloop_done
+
+  # mgmt and sun interfaces
+  :mgmtloop isset ${mgmt_vid${mgmt_vididx}} || goto mgmtloop_done
+    iseq ${vendor_id} ${mgmt_vid${mgmt_vididx}} && goto mgmt || inc mgmt_vididx && goto mgmtloop
+  :mgmtloop_done
+
+  # if not hsn nor mgmt/sun then classify as a lan and return to the top of loop
+  goto lan ||
+  inc idx && goto loop
+
+# High-speed connections; provide the udev rules but no configuration
+# HSN-config is handled up the stack.
+:hsn
+  echo net${idx} is hsn${idx_hsn}
+  set net-hsn-udev-params ifname=hsn${idx_hsn}:${net${idx}/mac} ip=hsn${idx_hsn}:auto6 ${net-hsn-udev-params}
+  inc idx && inc idx_hsn && goto loop
+
+# bare interfaces used for bonds or stand-alones
+:mgmt
+
+  # Logic to setup redundant PCIe connections (Port1 of PCIe1 with Port1 of PCIe2 and so on and so forth)
+  iseq mgmt0 mgmt${idx_mgmt} && set ipsrc dhcp || set ipsrc auto6
+  # Set dual-bond now that we've maybe incremented idx_mgmt to 2.
+  iseq mgmt2 mgmt${idx_mgmt} && set dual-bond 1 ||
+  iseq mgmt2 mgmt${idx_mgmt} && clear notice || set notice (or mgmt1 on single-bond servers)
+
+  # Tell the kernel which MACs get sun or mgmt names.
+  iseq ${odd} 1 && echo net${idx} is sun${idx_sun} ${notice} ||
+  iseq ${odd} 1 && inc idx_sun ||
+  iseq ${odd} 1 && iseq ${dual-bond} 0 ||
+  iseq ${odd} 0 && echo net${idx} is mgmt${idx_mgmt} ||
+  iseq ${odd} 0 && inc idx_mgmt ||
+
+  # even or odd?
+  iseq ${odd} 1 && set odd 0 || set odd 1
+
+  # return
+  inc idx && goto loop
+
+# Stub connections that should be for external or site links.
+:lan
+  echo net${idx} is lan${idx_lan}
+  inc idx && inc idx_lan && goto loop
+
+:loop_done
+
+echo MAC Address collection completed. Please power the node off now via ipmitool.

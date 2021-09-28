@@ -1,0 +1,106 @@
+#
+# MIT License
+#
+# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+kind: step
+metadata:
+  name: Setup Nexus
+  description: |-
+    # Setup Nexus
+
+    Run `./lib/setup-nexus.sh` to configure Nexus and upload CSM RPM repositories,
+    container images, and Helm charts. This command may take 20 minutes or more to run.
+
+    ```bash
+    pit# ./lib/setup-nexus.sh
+    ```
+
+    On success, `setup-nexus.sh` will output to `OK` on stderr and exit with status
+    code `0`, e.g.:
+
+    ```bash
+    pit# ./lib/setup-nexus.sh
+    ...
+    + Nexus setup complete
+    setup-nexus.sh: OK
+spec:
+  jobs:
+    - preCondition:
+        description: |-
+          Nothing
+        command: |-
+          nexus_resources_ready=0
+          counter=1
+          counter_max=10
+          sleep_time=30
+          url=packages.local
+          while [[ $nexus_resources_ready -eq 0 ]] && [[ "$counter" -le "$counter_max" ]]; do
+              nexus_check_configmap=$(kubectl -n services get cm cray-dns-unbound -o json 2>&1 | jq '.binaryData."records.json.gz"' -r 2>&1 | base64 -d 2>&1| gunzip - 2>&1|jq 2>&1|grep $url|wc -l)
+              nexus_check_dns=$(dig $url +short |wc -l)
+              nexus_check_pod=$(kubectl get pods -n nexus| grep nexus | grep -v Completed |awk {' print $3 '})
+
+              if [[ "$nexus_check_dns" -eq "1" ]] && [[ "$nexus_check_pod" == "Running" ]]; then
+                  echo "$url is in dns."
+                  echo "Nexus pod $nexus_check_pod."
+                  echo "Moving forward with Nexus setup."
+                  nexus_resources_ready=1
+              fi
+              if [[ "$nexus_check_pod" != "Running" ]]; then
+                  echo "Nexus pod not ready yet."
+                  echo "Nexus pod status is: $nexus_check_pod."
+              fi
+
+              if [[ "$nexus_check_dns" -eq "0" ]]; then
+                  echo "$url is not in DNS yet."
+                  if [ "$nexus_check_configmap" -lt "1" ]; then
+                      echo "$url is not loaded into unbound configmap yet."
+                      echo "Waiting for DNS and nexus pod to be ready. Retry in $sleep_time seconds. Try $counter out of $counter_max."
+                  fi
+              fi
+              if [[ "$counter" -eq "$counter_max" ]]; then
+                  echo "Max number of checks reached, exiting."
+                  echo "Please check the status of nexus, cray-dns-unbound and cray-sls."
+                  exit 1
+              fi
+              ((counter++))
+          done
+        troubleshooting: |-
+          Nothing
+      action:
+        description: |-
+          Nothing
+        command: |-
+          cd {{ getEnv "CSM_PATH" }}
+          ./lib/setup-nexus.sh
+        troubleshooting: |-
+          Note that subsequent runs of `setup-nexus.sh` may report `FAIL` when uploading
+          duplicate assets. This is ok as long as `setup-nexus.sh` outputs
+          `setup-nexus.sh: OK` and exits with status code `0`.
+
+          {{ readFile "../../../operations/package_repository_management/Troubleshoot_Nexus.md" | indent 10 }}
+      postValidation:
+        description: |-
+          Nothing
+        command: |-
+          true
+        troubleshooting: |-
+          Nothing

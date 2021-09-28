@@ -1,0 +1,476 @@
+#
+# MIT License
+#
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: ncn-lifecycle-rebuild-
+  labels:
+    target-ncns: "{{$length := len .TargetNcns }}{{range $index,$value := .TargetNcns }}{{$myvar := add $index 1}}{{if lt $myvar $length}}{{$value}}.{{else}}{{$value}}{{end}}{{ end }}"
+    type: rebuild
+    node-type: storage
+spec:
+  podMetadata:
+    annotations:
+      sidecar.istio.io/inject: "false"    
+  volumes:
+    - name: ssh
+      hostPath:
+        path: /root/.ssh
+        type: Directory
+    - name: host-usr-bin
+      hostPath:
+        path: /usr/bin
+        type: Directory
+    - name: podinfo
+      downwardAPI:
+        items:
+          - path: "labels"
+            fieldRef:
+              fieldPath: metadata.labels
+          - path: "annotations"
+            fieldRef:
+              fieldPath: metadata.annotations
+  # schedule workflow jobs asap
+  priorityCLassName: system-node-critical
+  # Pod GC strategy must be one of the following:
+  # * OnPodCompletion - delete pods immediately when pod is completed (including errors/failures)
+  # * OnPodSuccess - delete pods immediately when pod is successful
+  # * OnWorkflowCompletion - delete pods when workflow is completed
+  # * OnWorkflowSuccess - delete pods when workflow is successful
+  podGC:
+    strategy: OnPodCompletion
+  # allow workflow jobs running on master node
+  #   we may have a situation that all worker nodes
+  #   are marked as "being rebuilt" (cray.nls=ncn-w001)
+  tolerations:
+    - key: "node-role.kubernetes.io/master"
+      operator: "Exists"
+      effect: "NoSchedule"
+  affinity:
+    nodeAffinity:
+      # avoid putting workflow jobs onto workers that will be rebuilt
+      # this label is set onto each workers at beginning of workflow
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: cray.nls
+            operator: NotIn
+            values:
+            {{- range $index,$value := .TargetNcns }}
+            - {{$value -}}
+            {{- end }}
+      # try to use master nodes as much as possible
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 50
+          preference:
+            matchExpressions:
+            - key: node-role.kubernetes.io/master
+              operator: Exists
+  entrypoint: main
+  templates:
+    - name: main
+      dag:
+        tasks:
+          - name: install-csi
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    source /srv/cray/scripts/metal/metal-lib.sh
+                    csi_url=$(paginate "https://packages.local/service/rest/v1/components?repository=csm-sle-15sp4" \
+                      | jq -r  '.items[] | .assets[] | .downloadUrl' | grep "cray-site-init" | sort -V | tail -1)
+                    pdsh -S -w $(grep -oP 'ncn-\m\d+' /etc/hosts | sort -u | tr -t '\n' ',') "zypper install -y $csi_url" || [[ $? -eq 106 ]] # code 106 means "nothing to do, csi is installed"
+          {{- range $index,$value := .TargetNcns}}
+          - name: verify-bss-runcmd
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN={{$value}}
+                    TARGET_XNAME=$(ssh $TARGET_NCN cat /etc/cray/xname)
+                    cloud_init_script=$(cray bss bootparameters list --name ${TARGET_XNAME} --format=json|jq -r '.[]|.["cloud-init"]|.["user-data"].runcmd' | grep "storage-ceph-cloudinit.sh") || cloud_init_script=""
+                    if [[ -n $cloud_init_script ]]; then
+                      # fix BSS run command
+                      python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
+                      # verify the run command has been fixed
+                      cloud_init_script=$(cray bss bootparameters list --name ${TARGET_XNAME} --format=json|jq -r '.[]|.["cloud-init"]|.["user-data"].runcmd' | grep "storage-ceph-cloudinit.sh")
+                      if [[ -n $cloud_init_script ]]; then
+                        echo "ERROR: There was an issue removing 'storage-ceph-cloudinit.sh' from the BSS run command. Run 'python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py' to fix this manually."
+                        exit 1
+                      fi
+                    else
+                      echo "BSS run command is correct."
+                    fi
+          - name: stop-haproxy-keepalived-on-{{$value}}
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    ssh {{$value}} "systemctl stop haproxy; systemctl stop keepalived"
+          - name: enter-ceph-orch-maintenance-mode
+            dependencies:
+              - stop-haproxy-keepalived-on-{{$value}}
+              - install-csi
+              - verify-bss-runcmd
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN={{$value}}
+                    if [[ -n $(ceph health detail | grep "$TARGET_NCN is in maintenance") ]]; then
+                      echo "$TARGET_NCN is already in maintenance mode"
+                    else
+                      ceph orch host maintenance enter $TARGET_NCN --force
+                      if [[ $? -ne 0 ]]; then
+                        echo "ERROR setting maintenance mode on $TARGET_NCN"
+                        exit 1
+                      fi
+                    fi
+          - name: destroy-and-purge-osds-on-{{$value}}
+            dependencies:
+              - enter-ceph-orch-maintenance-mode
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN={{$value}}
+                    if true; then
+                      echo "WipeOSDs is 'true' so osds on $TARGET_NCN are being removed."
+                      for node in ncn-s001 ncn-s002 ncn-s003; do
+                        if [[ $node != $TARGET_NCN ]]; then
+                          ssh $node 'for osd in $(ceph osd ls-tree '"$TARGET_NCN"'); do ceph osd destroy osd.$osd --force; ceph osd purge osd.$osd --force; done'
+                          break
+                        fi
+                      done
+                    else
+                      echo "WipeOSDs is false so this step is skipped."
+                      exit 0
+                    fi
+          - name: "validate-boot-loader"
+            dependencies:
+              - enter-ceph-orch-maintenance-mode
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN={{$value}}
+                    if [[ ! -f /opt/cray/tests/install/ncn/scripts/check_bootloader.sh ]]; then 
+                      echo "Error: this file is not present /opt/cray/tests/install/ncn/scripts/check_bootloader.sh on ncn-m001."
+                      exit 1
+                    fi
+                    scp /opt/cray/tests/install/ncn/scripts/check_bootloader.sh $TARGET_NCN:/opt/cray/tests/install/ncn/scripts/check_bootloader.sh
+                    ssh $TARGET_NCN '/opt/cray/tests/install/ncn/scripts/check_bootloader.sh; rm -rf /metal/recovery/*'
+                    echo "Successfully checked bootloader on $TARGET_NCN and removed /metal/recovery."
+          # storage nodes rebuild with bss.no-wipe=0
+          - name: set-bss-no-wipe-0-{{$value}}
+            template: set-bss-no-wipe-0
+            dependencies:
+              - enter-ceph-orch-maintenance-mode
+            arguments:
+              parameters:
+              - name: targetNcn
+                value: {{$value}}
+              - name: dryRun
+                value: "{{$.DryRun}}"
+          # reboot node and wait for cloud-init before proceeding
+          - name: reboot-{{$value}}
+            dependencies: 
+              - set-bss-no-wipe-0-{{$value}}
+              - destroy-and-purge-osds-on-{{$value}}
+              - validate-boot-loader
+            template: reboot-node
+            arguments:
+              parameters:
+              - name: targetNcn
+                value: {{$value}}
+              - name: dryRun
+                value: "{{$.DryRun}}"
+          # set bss.no-wipe to 1 so that node will not be accidentally wiped
+          - name: set-bss-no-wipe-1-{{$value}}
+            template: set-bss-no-wipe-1
+            dependencies:
+              - reboot-{{$value}}
+            arguments:
+              parameters:
+              - name: targetNcn
+                value: {{$value}}
+              - name: dryRun
+                value: "{{$.DryRun}}"
+          - name: copy-ceph-pub-to-{{$value}}
+            dependencies:
+              - reboot-{{$value}}
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN={{$value}}
+                    # update ssh key to node
+                    TARGET_ip=$(host ${TARGET_NCN} | awk '{ print $NF }')
+                    ssh-keygen -R ${TARGET_NCN} -f ~/.ssh/known_hosts > /dev/null 2>&1
+                    ssh-keygen -R ${TARGET_ip} -f ~/.ssh/known_hosts > /dev/null 2>&1
+                    ssh-keyscan -H ${TARGET_NCN},${TARGET_ip} >> ~/.ssh/known_hosts
+                    # copy ceph.pub to node
+                    ceph cephadm get-pub-key > ~/ceph.pub
+                    ssh-copy-id -f -i ~/ceph.pub root@${TARGET_NCN}
+          - name: "exit-ceph-orch-maintenance-mode"
+            dependencies:
+              - copy-ceph-pub-to-{{$value}}
+              - set-bss-no-wipe-1-{{$value}}
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN={{$value}}
+                    if [[ -n $(ceph health detail | grep "$TARGET_NCN is in maintenance") ]]; then
+                      echo "$TARGET_NCN is in maintenance mode. Exiting maintence mode now."
+                      ceph orch host maintenance exit $TARGET_NCN
+                      if [[ $? -ne 0 ]]; then
+                        echo "ERROR exiting maintenance mode on $TARGET_NCN"
+                        exit 1
+                      fi
+                    else
+                      echo "$TARGET_NCN is not in maintenance mode. Nothing to do."
+                    fi
+          - name: update-ssh-keys-on-{{$value}}
+            dependencies:
+              - reboot-{{$value}}
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN={{$value}}
+                    TARGET_NCN_ip=$(host ${TARGET_NCN} | awk '{ print $NF }')
+                    # update ssh keys for rebuilt node on host and on ncn-s001/2/3
+                    ssh $TARGET_NCN "truncate --size=0 ~/.ssh/known_hosts 2>&1"
+                    for node in ncn-s001 ncn-s002 ncn-s003; do
+                      if ! host ${node}; then
+                        echo "Unable to get IP address of $node"
+                        exit 1
+                      else
+                        ncn_ip=$(host ${node} | awk '{ print $NF }')
+                      fi
+                      # add new authorized_hosts entry for the node
+                      ssh $TARGET_NCN "ssh-keyscan -H ""${node},${ncn_ip}"" >> ~/.ssh/known_hosts"
+                      
+                      if [[ "$TARGET_NCN" != "$node" ]]; then
+                        ssh $node "if [[ ! -f ~/.ssh/known_hosts ]]; then > ~/.ssh/known_hosts; fi; ssh-keygen -R $TARGET_NCN -f ~/.ssh/known_hosts > /dev/null 2>&1; ssh-keygen -R $TARGET_NCN_ip -f ~/.ssh/known_hosts > /dev/null 2>&1; ssh-keyscan -H ${TARGET_NCN},${TARGET_NCN_ip} >> ~/.ssh/known_hosts"
+                      fi
+                    done
+          - name: copy-files-to-{{$value}}
+            dependencies:
+              - update-ssh-keys-on-{{$value}}
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN={{$value}}
+                    for node in ncn-s001 ncn-s002 ncn-s003; do
+                      if [[ "$TARGET_NCN" == "$node" ]]; then
+                        continue
+                      else
+                        if [[ "$TARGET_NCN" =~ ^("ncn-s001"|"ncn-s002"|"ncn-s003")$ ]]
+                        then
+                          scp $node:/etc/ceph/\{rgw.pem,ceph.conf,ceph_conf_min,ceph.client.ro.keyring,ceph.client.admin.keyring\} ${TARGET_NCN}:/etc/ceph
+                        else
+                          scp $node:/etc/ceph/\{rgw.pem,ceph.conf,ceph_conf_min,ceph.client.ro.keyring\}  ${TARGET_NCN}:/etc/ceph/
+                        fi
+                        break
+                      fi
+                    done
+                    # copy ceph.client.ro.keyring
+                    if ! $(ceph auth get client.ro >/dev/null 2>/dev/null); then
+                      ceph-authtool -C /etc/ceph/ceph.client.ro.keyring -n client.ro --cap mon 'allow r' --cap mds 'allow r' --cap osd 'allow r' --cap mgr 'allow r' --gen-key
+                    fi
+                    if [ -f "/etc/ceph/ceph.client.ro.keyring" ]; then
+                      ceph auth import -i /etc/ceph/ceph.client.ro.keyring
+                    else
+                      ceph auth get client.ro -o /etc/ceph/ceph.client.ro.keyring
+                      ceph auth import -i /etc/ceph/ceph.client.ro.keyring
+                    fi
+                    for node in $(ceph orch host ls --format=json|jq -r '.[].hostname'); do scp /etc/ceph/ceph.client.ro.keyring $node:/etc/ceph/ceph.client.ro.keyring; done
+          - name: "zap-osds" #only if needed
+            dependencies:
+              - copy-files-to-{{$value}}
+              - exit-ceph-orch-maintenance-mode
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN={{$value}}
+                    zapOsds="{{$.ZapOsds}}"
+                    if $zapOsds; then
+                      echo "Zapping-OSDs..."
+                      for drive in $(ceph orch device ls $TARGET_NCN --format json-pretty |jq -r '.[].devices[].path'); do
+                        ceph orch device zap $TARGET_NCN $drive --force
+                      done
+                    else
+                      echo "OSDs are not being zapped."
+                      echo "OSDs only need to be zapped if unable to wipe the node prior to rebuild. For example, when a storage node unintentionally goes down and needs to be rebuilt."
+                      echo "If this is incorrect and the OSDs should be zapped, after the node rebuild completes, follow the instructions at docs-csm/operations/utility_storage/Add_Ceph_Node.md 'Zapping OSDs'."
+                    fi
+          - name: "deploy-rados-gateway"
+            dependencies:
+              - zap-osds
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    # deploy rados gateway on all storage nodes
+                    storage_nodes=$(ceph orch host ls --format json | jq -r '.[].hostname' | tr '\n' ' ')
+                    # remove space at end of string
+                    storage_nodes="${storage_nodes%?}"
+                    ceph orch apply rgw site1 zone1 --placement="${storage_nodes}" --port=8080
+                    sleep 20
+                    
+                    # ensure rgw is running on desired nodes
+                    success=false
+                    count=0
+                    while [[ $count -lt 30 ]] && ! $success; do
+                      success=true
+                      for node in $storage_nodes; do
+                        if ! ceph orch ps $node --daemon_type rgw | grep "running"; then
+                          echo "Not all rgw daemons are running yet..."
+                          sleep 30
+                          let count=${count}+1
+                          success=false
+                          break
+                        fi
+                      done
+                    done
+                    if ! $success; then
+                      echo "Error: RGW is not running on all nodes: ${storage_nodes}. Run 'ceph -s' to see if an issue is shown. It may take more time for all daemons to start running."
+                      exit 1
+                    else
+                      echo "RGW is 'running' on $storage_nodes"
+                    fi
+          - name: "add-nodes-haproxy-keepalived"
+            dependencies:
+              - deploy-rados-gateway
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    num_storage_nodes=$(ceph orch host ls | tail -1 | awk '{print $1}')
+                    pdsh -R ssh -w ncn-s00[1-${num_storage_nodes}] -S -f 2 \
+                      'source /srv/cray/scripts/metal/update_apparmor.sh
+                      reconfigure-apparmor; /srv/cray/scripts/metal/generate_haproxy_cfg.sh > /etc/haproxy/haproxy.cfg
+                      systemctl enable haproxy.service
+                      systemctl restart haproxy.service
+                      /srv/cray/scripts/metal/generate_keepalived_conf.sh > /etc/keepalived/keepalived.conf
+                      systemctl enable keepalived.service
+                      systemctl restart keepalived.service'
+          - name: post-rebuild-ceph-health-check
+            dependencies:
+              - add-nodes-haproxy-keepalived
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -v true || /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -A true -v true
+          {{- end }}
+    - name: set-bss-no-wipe-0
+      inputs:
+        {{- include "storage.common.parameters" . | indent 8 }}
+      dag:
+        {{- include "common.set-bss-no-wipe-0" . | indent 8 }}
+    - name: set-bss-no-wipe-1
+      inputs:
+        {{- include "storage.common.parameters" . | indent 8 }}
+      dag:
+        {{- include "common.set-bss-no-wipe-1" . | indent 8 }}
+    - name: reboot-node
+      inputs:
+        {{- include "storage.common.parameters" . | indent 8 }}
+      dag:
+        {{- include "common.reboot-node" . | indent 8 }}

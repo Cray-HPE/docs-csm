@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Upgrade CSM on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-12/upgrade/</link>
+    <description>Recent content in Upgrade CSM on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-12</language>
+    <lastBuildDate>Thu, 28 Mar 2024 03:05:12 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-12/upgrade/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Prepare For Upgrade</title>
+      <link>/docs-csm/en-12/upgrade/prepare_for_upgrade/</link>
+      <pubDate>Thu, 28 Mar 2024 03:05:12 +0000</pubDate>
+      <guid>/docs-csm/en-12/upgrade/prepare_for_upgrade/</guid>
+      <description>Prepare For Upgrade Before beginning an upgrade to a new version of CSM, there are a few things to do on the system first.&#xA;Reduced resiliency during upgrade [Preparation steps] Reduced resiliency during upgrade Warning: Management service resiliency is reduced during the upgrade.&#xA;Although it is expected that compute nodes and application nodes will continue to provide their services without interruption, it is important to be aware that the degree of management services resiliency is reduced during the upgrade.</description>
+    </item>
+  </channel>
+</rss>
