@@ -1,4 +1,4 @@
-# VSX: Member Power Failure
+# VSX: member power failure
 
 
 The intent here is to show case a complete member failure scenario where spine-01 switch is completely down. 

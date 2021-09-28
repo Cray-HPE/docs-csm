@@ -1,4 +1,4 @@
-# Classifier Policies 
+# Classifier policies 
 
 Classifier policies allow a network administrator to define sets of rules based on network traffic addressing or other header content and use these rules to restrict or alter the passage of traffic through the switch. 
 

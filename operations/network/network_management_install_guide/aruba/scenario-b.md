@@ -1,6 +1,6 @@
 # Scenario B: network connection via high speed network
 
-The example here covers outside connections achieved via highspeedt network. 
+The example here covers outside connections achieved via highspeed network. 
 
 ### Summary
 * Create a new VRF

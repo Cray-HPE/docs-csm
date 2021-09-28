@@ -1,4 +1,4 @@
-# Physical Interfaces 
+# Physical interfaces 
 
 Relevant Configuration 
 

@@ -1,4 +1,4 @@
-# Link Aggregation Group (LAG) 
+# Link aggregation group (LAG) 
 
 Link Aggregation allows you to assign multiple physical links to one logical link that functions as a single, higher-speed link providing dramatically increased bandwidth. 
 
@@ -7,13 +7,16 @@ Relevant Configuration
 Create and configure the LAG interface 
 
 ```
-switch(config)# interface lag LAG switch(config-lag-if)# no shutdown switch(config-lag-if)# lacp mode active 
+switch(config)# interface lag LAG 
+switch(config-lag-if)# no shutdown 
+switch(config-lag-if)# lacp mode active 
 ```
 
 Associate member links with the LAG interface switch(config)# interface IFACE
 
 ```
-switch(config-if)# no shutdown switch(config-if)# lag LAG 
+switch(config-if)# no shutdown 
+switch(config-if)# lag LAG 
 ```
 
 Show Commands to Validate Functionality 

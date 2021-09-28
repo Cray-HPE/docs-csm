@@ -1,4 +1,4 @@
-# VLAN Interface 
+# VLAN interface 
 
 The switch also supports classic L3 VLAN interfaces. 
 

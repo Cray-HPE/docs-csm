@@ -1,6 +1,6 @@
-# Port Security 
+# Port security 
 
-Port security allows user to configure each switch port with a list of unique MAC addresses; limit network access to autho- rized MAC addresses; detect, prevent, and log unauthorized access of devices on individual ports; and limit the number of MACs learned. 
+Port security allows user to configure each switch port with a list of unique MAC addresses; limit network access to authorized MAC addresses; detect, prevent, and log unauthorized access of devices on individual ports; and limit the number of MACs learned. 
 
 Intrusion detection enables a device to notify the user or shutdown the port in the case of a violation, and a timer can be configured to allow auto-recovery of ports shutdown in a violation state to come back up after the timer expires. 
 

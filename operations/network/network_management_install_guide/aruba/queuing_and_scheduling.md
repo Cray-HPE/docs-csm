@@ -1,4 +1,4 @@
-# Queuing and Scheduling 
+# Queuing and scheduling 
 
 When defining end-to-end behavior via CoS or DSCP, different priorities of traffic must be placed in different queues so the network device can service them appropriately. Separate queues allow delay- or jitter-sensitive traffic to be serviced before bulk or less time-critical traffic. 
 

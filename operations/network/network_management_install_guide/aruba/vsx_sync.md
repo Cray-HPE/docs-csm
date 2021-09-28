@@ -1,4 +1,4 @@
-# VSX Sync 
+# VSX sync 
 
 Configuration synchronization is one aspect of this VSX solution where the primary switch configuration is synced to the secondary switch. This allows for pseudo single pane of glass configuration and helps keep key configuration pieces in sync as operational changes are made. Since the solution is primarily for HA, it is expected that the vast majority of configuration policy is the same across both peers. 
 

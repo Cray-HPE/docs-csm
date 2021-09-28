@@ -1,4 +1,4 @@
-# Unidirectional Link Detection (UDLD)
+# Unidirectional link detection (UDLD)
 
 “The purpose of the UDLD protocol is to detect the presence of anomalous conditions in the Layer 2 communication channel, while relying on the mechanisms defined by the IEEE in the 802.3 standard to properly handle conditions inherent to the physical layer.” –rfc5171 
 

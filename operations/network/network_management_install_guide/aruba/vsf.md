@@ -1,4 +1,4 @@
-# Virtual Switching Framework (VSF) 6300 Only 
+# Virtual switching framework (VSF) 6300 only 
 
 Virtual Switching Framework (VSF) defines a virtual switch comprised of multiple individual physical switches, inter-connected through standard Ethernet links. These physical switches will operate with one control plane, thereby visible to the peers as a virtual switch stack. 
 Within the stack, one switch is the “Master” switch, which runs all the control plane software and manages the ASICs of all the stack members. A second switch can be configured as the “Standby” switch, which will take over as Master if the master fails. 

@@ -1,4 +1,4 @@
-# Address Resolution Protocol (ARP) 
+# Address resolution protocol (ARP) 
 
 ARP is commonly used for mapping IPv4 addresses to MAC addresses. 
 
@@ -14,17 +14,6 @@ Show Commands to Validate Functionality
 
 ```
 switch# show arp
-```
-
-Example Output 
-
-```
-switch# show arp
-IPv4 Address     MAC                Port         Physical Port    State
----------------------------------------------------------------------------
-10.10.31.2       ec:eb:b8:7a:e0:40  1/1/31       1/1/31           reachable
-10.10.32.2       ec:eb:b8:7a:a0:00  1/1/32       1/1/32           reachable
-Total Number Of ARP Entries Listed- 2.
 ```
 
 Expected Results 

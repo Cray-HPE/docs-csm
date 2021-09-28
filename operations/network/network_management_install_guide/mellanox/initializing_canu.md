@@ -15,7 +15,6 @@ Later in the install process, the _sls_input_file.json_ file is generally in `/m
 To get the switch IP addresses from CSI output, run the command:
 
 
-bash
 > $ canu -s 1.4 init --csi-folder /CSI/OUTPUT/FOLDER/ADDRESS --out output.txt
 8 IP addresses saved to output.txt
 

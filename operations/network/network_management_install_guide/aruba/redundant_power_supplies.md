@@ -1,4 +1,4 @@
-# Redundant Power Supplies 
+# Redundant power supplies 
 
 Relevant Configuration 
 

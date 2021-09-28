@@ -1,4 +1,4 @@
-# Port Mirroring 
+# Port mirroring 
 
 Port mirroring, also known as Switched Port Analyzer (SPAN), enables traffic on one or more switch interfaces to be replicated on another interface for purposes such as monitoring. 
 

@@ -1,7 +1,7 @@
 # Typical edge port configuration that you would see with BMC, PDUs etc
 
 
-The intent here is to show case very basic configuration for devices that are single homed to the network, i.e. network ILO cards etc.
+The intent here is to show case a very basic configuration for devices that are single homed to the network, i.e. network ILO cards etc.
 
 
 

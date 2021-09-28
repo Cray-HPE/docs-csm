@@ -1,5 +1,5 @@
 
-# Test TFTP traffic (Aruba Only)
+# Test TFTP traffic (Aruba only)
 
 * You can test the TFTP traffic by trying to download the ipxe.efi binary.
 * Log into the leaf switch and try to download the iPXE binary.

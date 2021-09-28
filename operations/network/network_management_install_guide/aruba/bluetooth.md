@@ -1,4 +1,4 @@
-# Bluetooth Capabilities 
+# Bluetooth capabilities 
 
 The Bluetooth feature allows Bluetooth enabled devices to connect to and manage the switch on a wireless Bluetooth Personal Area Network (PAN). The user needs a supported USB Bluetooth dongle and to enable both the USB port and Bluetooth on the switch to use this feature. Bluetooth and REST write permissions for Bluetooth clients are both enabled by default. 
 
@@ -8,7 +8,7 @@ Turn on the USB port
 
 ```
 switch# usb mount
-``
+```
 
 Enable Bluetooth 
 

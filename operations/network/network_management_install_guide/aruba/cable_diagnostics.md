@@ -1,4 +1,4 @@
-# Cable Diagnostics 
+# Cable diagnostics 
 
 In a situation where you believe you might have a bad copper cable, you can use the cable-diagnostic feature to test the cable. Note: This feature is only available on non-SFP copper ports. 
 

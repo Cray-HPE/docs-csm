@@ -1,4 +1,4 @@
-# MAC Authentication 
+# MAC authentication 
 
 MAC Authentication (MAC Auth) is a method of authenticating devices for access to the network. The default mode of authentication is RADIUS, through which clients are authenticated by an external RADIUS server. 
 

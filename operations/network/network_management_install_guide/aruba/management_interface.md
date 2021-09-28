@@ -1,4 +1,4 @@
-# Management Interface 
+# Management interface 
 
 The management interface can be used to gain remote management access to the switch. The management interface is accessible using the “mgmt” VRF and is separate from the data plane interfaces, which are in the “default” VRF. 
 
@@ -30,8 +30,10 @@ Relevant Configuration
 Enable/disable the management interface 
 
 ```
-switch(config)# interface mgmt switch(config-if-mgmt)# no shutdown
-switch(config)# interface mgmt switch(config-if-mgmt)# shutdown
+switch(config)# interface mgmt 
+switch(config-if-mgmt)# no shutdown
+switch(config)# interface mgmt 
+switch(config-if-mgmt)# shutdown
 ```
 
 To Assign an IP address to the interface 

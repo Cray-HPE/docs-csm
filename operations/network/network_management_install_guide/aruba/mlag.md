@@ -1,4 +1,4 @@
-# Multi-Chassis Link Aggregation Group (MCLAG)
+# Multi-Chassis link aggregation group (MCLAG)
 
 Multi-Chassis Link Aggregation Group (MCLAG) is a link aggregation technique where two or more links across two switches are aggregated together to form a trunk. 
 

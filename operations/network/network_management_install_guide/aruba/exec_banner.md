@@ -1,4 +1,4 @@
-# Exec Banner
+# Exec banner
 
 Exec banners are custom messages displayed to users attempting to connect to the management interfaces. Multiple lines of text can be stored using a custom delimitator to mark the end of message.
 

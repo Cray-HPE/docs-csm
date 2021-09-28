@@ -1,4 +1,4 @@
-# Network Types – Naming and segment Function
+# Network types – naming and segment Function
 
 In below you can find the overview of the different networks services defined inside of our spine and leaf architecture.
 

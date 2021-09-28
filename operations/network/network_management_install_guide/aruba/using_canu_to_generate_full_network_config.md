@@ -1,4 +1,4 @@
-# Using Canu to generate full network configuration
+# Using CANU to generate full network configuration
 
 CANU can also generate switch config for all the switches on a network.
 

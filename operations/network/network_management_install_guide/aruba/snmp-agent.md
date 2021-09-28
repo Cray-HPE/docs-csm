@@ -1,4 +1,4 @@
-# Simple Network Management Protocol (SNMP) Agent 
+# Simple network management protocol (SNMP) agent 
 
 Simple Network Management Protocol (SNMP) minimizes the number and complexity of management functions. For mon- itoring and control it is extensible to accommodate additional, possibly unanticipated aspects of network operation and management. SNMP is universal and independent of the architecture and mechanisms of particular hosts or particular gateways. SNMP server is supported either on the default or mgmt VRF. 
 

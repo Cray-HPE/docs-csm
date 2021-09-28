@@ -1,10 +1,4 @@
-Quality of Service (QoS) features allow network devices to customize how different kinds of traffic are serviced, so as to reflect each traffic type’s unique characteristics and importance to your organization: 
-
-Ensures uniform and efficient traffic-handling throughout the network, while keeping the most important traffic moving at an acceptable speed, regardless of current bandwidth usage. 
-
-Exercises control over the priority settings of inbound traffic arriving at each network device. 
-
-# Initial Prioritization 
+# Initial prioritization 
 
 For most switches, the local-priority has eight levels (0-7). Zero is the lowest priority. The allowed maximum will vary per product family. Local priority is used to determine which queue a packet will use. There are multiple options to configure the local-priority:
  

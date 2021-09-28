@@ -1,4 +1,4 @@
-# Quick start guide to Canu
+# Quick start guide to CANU
 
 ## Usage
 

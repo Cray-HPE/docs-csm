@@ -1,5 +1,5 @@
 
-# Uninstall Canu
+# Uninstall CANU
 
 Unintalling Canu can be achieved by: 
 

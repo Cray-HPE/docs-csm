@@ -1,4 +1,4 @@
-# Very large (Exascale)
+# Very large (exascale)
 
 .
 .

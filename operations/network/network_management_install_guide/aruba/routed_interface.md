@@ -1,6 +1,6 @@
-# Routed Interfaces
+# Routed interfaces
 
-For platforms: 8400 and 8320 by default all interfaces are configured as routed interfaces with support for both IPv4 and IPv6. 
+For platforms: 8400 and 83xx by default all interfaces are configured as routed interfaces with support for both IPv4 and IPv6. 
 
 For platforms: 6400 and 6300 by default all interfaces are configured as access ports on VLAN 1
 

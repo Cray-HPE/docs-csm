@@ -1,4 +1,4 @@
-# SNMP Traps 
+# SNMP traps 
 
 The SNMP agent can send trap notifications to a receiver. The receiver’s host IP address and port number can be defined along with the notification type, version, and community string. 
 

@@ -1,4 +1,4 @@
-# Virtual Local Access Networks (VLANs) 
+# Virtual local access networks (VLANs) 
 
 VLANs allow for the logical grouping of switch interfaces, enabling communication as if all connected devices were on the same isolated network. 
 
