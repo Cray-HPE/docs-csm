@@ -1,0 +1,86 @@
+@Library('csm-shared-library') _
+
+def sleVersion = '15.3'
+def major
+def minor
+def patch
+def isStable = env.TAG_NAME != null ? true : false
+if ( isStable ) {
+    (major, minor, patch) = env.TAG_NAME.tokenize('.')
+    major = major.replaceAll("^v","")
+}
+
+pipeline {
+    agent {
+        label "metal-gcp-builder"
+    }
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: "10"))
+        disableConcurrentBuilds()
+        timeout(time: 20, unit: 'MINUTES')
+        timestamps()
+    }
+
+    environment {
+        GIT_REPO_NAME = getRepoName()
+        VERSION = sh(returnStdout: true, script: "git describe --tags | tr -s '-' '~' | tr -d '^v'").trim()
+    }
+    
+    stages {
+        stage("Prepare") {
+            agent {
+                docker {
+                    image "artifactory.algol60.net/csm-docker/stable/csm-docker-sle:${sleVersion}"
+                    reuseNode true
+                }
+            }
+            steps {
+                script {
+                    withCredentials([gitUsernamePassword(credentialsId: 'jenkins-algol60-cray-hpe-github-integration')]) {
+                        runLibraryScript("addRpmMetaData.sh", "${env.GIT_REPO_NAME}.spec")
+                        sh "echo ${env.BRANCH_NAME}"
+                        sh "env"
+                        sh "make prepare"
+                    }
+                }
+            }
+        }
+
+      stage("Build RPM") {
+          agent {
+              docker {
+                  image "artifactory.algol60.net/csm-docker/stable/csm-docker-sle:${sleVersion}"
+                  reuseNode true
+              }
+          }
+          steps {
+              script {
+                  withCredentials([gitUsernamePassword(credentialsId: 'jenkins-algol60-cray-hpe-github-integration')]) {
+                      sh "make rpm"
+                    }
+                }
+            }
+        }
+
+      stage('Publish') {
+          steps {
+            script {
+                if( isStable ){
+                    RELEASE_FOLDER = "/${major}.${minor}"
+                    sh "find dist/rpmbuild/RPMS/noarch/ -name *.rpm -exec cp {} dist/rpmbuild/RPMS/noarch/${env.GIT_REPO_NAME}-latest.noarch.rpm \\;"
+                    sh "find dist/rpmbuild/SRPMS/ -name *.rpm -exec cp {}  dist/rpmbuild/SRPMS/${env.GIT_REPO_NAME}-latest.src.rpm \\;"
+                } else {
+                    RELEASE_FOLDER = ""
+                }
+                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/RPMS/noarch/*.rpm", os: 'sle-15sp2', arch: "noarch", isStable: isStable)
+                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/RPMS/noarch/*.rpm", os: 'sle-15sp3', arch: "noarch", isStable: isStable)
+                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/SRPMS/*.rpm", os: 'sle-15sp2', arch: "src", isStable: isStable)
+                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/SRPMS/*.rpm", os: 'sle-15sp3', arch: "src", isStable: isStable)
+            }
+        }
+      }
+    }
+  }
+
+

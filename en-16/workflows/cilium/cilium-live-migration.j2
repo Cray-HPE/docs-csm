@@ -1,0 +1,85 @@
+{% macro random_string(len) -%}{% for i in range(0,len) -%}{{ [0,1,2,3,4,5,6,7,8,9,"a","b","c","d","e","f"]|random }}{% endfor %}{%- endmacro -%}
+{% set uid = random_string(5) %}
+
+# Cilium Live Migration workflow 
+# generated {{ now }} by generateCiliumLiveMigration.py 
+# name: cilium-live-migration-{{ uid }} 
+#
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  annotations:
+    target-ncns:  {{ target_ncns|join('.') }}
+  name: cilium-live-migration-{{ uid }}
+spec:
+  podMetadata:
+    annotations:
+      sidecar.istio.io/inject: "false"    
+  volumes:
+    - name: ssh
+      hostPath:
+        path: /root/.ssh
+        type: Directory
+    - name: podinfo
+      downwardAPI:
+        items:
+          - path: "labels"
+            fieldRef:
+              fieldPath: metadata.labels
+          - path: "annotations"
+            fieldRef:
+              fieldPath: metadata.annotations
+  # schedule workflow jobs asap
+  priorityCLassName: system-node-critical
+  # Pod GC strategy must be one of the following:
+  # * OnPodCompletion - delete pods immediately when pod is completed (including errors/failures)
+  # * OnPodSuccess - delete pods immediately when pod is successful
+  # * OnWorkflowCompletion - delete pods when workflow is completed
+  # * OnWorkflowSuccess - delete pods when workflow is successful
+  podGC:
+    strategy: OnPodSuccess 
+  entrypoint: main
+  templates:
+    - name: main
+      dag:
+        tasks:
+          - name: cilium-deploy
+            templateRef:
+              name: deploy-cilium
+              template: main
+            arguments:
+              parameters:
+              - name: dryRun
+                value: "false"
+          {% set ns = namespace(prev_ncn="") %}   
+          {% for ncn in target_ncns %} 
+          - name: cilium-migrate-{{ ncn }}
+            dependencies:
+            {% if ns.prev_ncn == "" %}
+              - cilium-deploy
+            {% else %}
+              - cilium-migrate-{{ ns.prev_ncn }}
+            {% endif %}
+            templateRef:
+              name: migrate-cilium 
+              template: main
+            arguments:
+              parameters:
+              - name: targetNcn
+                value: {{ ncn }} 
+              - name: dryRun
+                value: "false"
+            {% set ns.prev_ncn = ncn %}
+          {% endfor %}
+          - name: post-migrate-cilium
+            dependencies:
+            {% for ncn in target_ncns %}
+              - cilium-migrate-{{ ncn }}
+            {% endfor %}
+            templateRef:
+              name: post-migrate-cilium
+              template: main
+            arguments:
+              parameters:
+              - name: dryRun
+                value: "false"
