@@ -1,0 +1,62 @@
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="4.53in" height="1.362in" viewBox="0 0 326.191 98.085">
+  <defs>
+    <symbol id="CEC_Control_Panel" data-name="CEC_Control_Panel" viewBox="0 0 233.747 68.721">
+      <path d="M0,.375H229.978s3.394.649,3.394,3.393V65.351s-.649,3-3,3H.539L.406,68.34" fill="#fafafa" stroke="#1f1f1f" stroke-miterlimit="10" stroke-width="0.75"/>
+      <g>
+        <g>
+          <path d="M22.668,16.06a2.227,2.227,0,0,0,2.387-2.387V11.735a1.875,1.875,0,0,1,2.016-1.715H155.738a2.052,2.052,0,0,0,2.095-2.095,2.015,2.015,0,0,1,2.246-2.177h24.9l.566-.01a28.392,28.392,0,1,1,0,56.783l-.813.006H159.8a2.043,2.043,0,0,1-2.086-2.086,2.366,2.366,0,0,0-2.46-2.461H26.978a1.721,1.721,0,0,1-1.952-1.952l0-2.059A1.833,1.833,0,0,0,23.15,52.1H8.227s-4.359-.856-4.359-4.359V20.7s.535-4.64,4.64-4.64h14.16Z" fill="#b0b0b0" stroke="#000" stroke-miterlimit="10" stroke-width="0.75"/>
+          <g>
+            <rect x="36.119" y="13.77" width="113.686" height="36.99" fill="#a0e5fb" stroke="#c7e5fb" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+            <g>
+              <circle cx="11.126" cy="21.424" r="2.255" fill="#75bf43" stroke="#221f1f" stroke-miterlimit="10" stroke-width="0.35"/>
+              <circle cx="11.126" cy="29.212" r="2.255" fill="#75bf43" stroke="#221f1f" stroke-miterlimit="10" stroke-width="0.35"/>
+              <circle cx="11.126" cy="37" r="2.255" fill="#75bf43" stroke="#221f1f" stroke-miterlimit="10" stroke-width="0.35"/>
+              <circle cx="11.126" cy="44.788" r="2.255" fill="#75bf43" stroke="#221f1f" stroke-miterlimit="10" stroke-width="0.35"/>
+            </g>
+          </g>
+        </g>
+        <text transform="translate(16.868 23.207)" font-size="6.963" fill="#141414" font-family="MyriadPro-Regular, Myriad Pro">1</text>
+        <text transform="translate(16.868 31.335)" font-size="6.963" fill="#141414" font-family="MyriadPro-Regular, Myriad Pro">2</text>
+        <text transform="translate(16.868 39.286)" font-size="6.963" fill="#141414" font-family="MyriadPro-Regular, Myriad Pro">3</text>
+        <text transform="translate(16.868 47.147)" font-size="6.963" fill="#141414" font-family="MyriadPro-Regular, Myriad Pro">4</text>
+        <g>
+          <g>
+            <path d="M183.567,41.392l-7.682-7.682a1.227,1.227,0,0,1,0-1.729l7.682-7.682a1.227,1.227,0,0,1,1.729,0l7.681,7.682a1.225,1.225,0,0,1,0,1.729L185.3,41.392A1.227,1.227,0,0,1,183.567,41.392Z" fill="#b9e5fb" stroke="#b9e5fb" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.25"/>
+            <polygon points="179.19 34.149 181.357 33.298 183.355 35.613 188.982 29.552 190.423 30.156 182.871 38.042 179.19 34.149" fill="#1f1f1f"/>
+          </g>
+          <g>
+            <path d="M166.87,39.881,160.5,33.509a.941.941,0,0,1,0-1.327l6.372-6.372h8.986l.268.4-5.969,5.969a.941.941,0,0,0,0,1.327l6,6-.188.375Z" fill="#b9e5fb" stroke="#b9e5fb" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.25"/>
+            <path d="M161.2,32.85l7.865-2.673a4.663,4.663,0,0,0,0,4.843Z" fill="#1f1f1f"/>
+          </g>
+          <g>
+            <path d="M201.816,25.81l6.372,6.372a.941.941,0,0,1,0,1.327l-6.372,6.372h-8.985l-.269-.4,5.969-5.969a.941.941,0,0,0,0-1.327l-6-6,.188-.376Z" fill="#b9e5fb" stroke="#b9e5fb" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.25"/>
+            <path d="M207.362,32.964,199.5,35.638a4.665,4.665,0,0,0,0-4.843Z" fill="#1f1f1f"/>
+          </g>
+          <g>
+            <path d="M191.379,50.318l-6.372,6.372a.939.939,0,0,1-1.327,0l-6.373-6.372V41.333l.4-.268,5.969,5.969a.941.941,0,0,0,1.327,0l6-6,.376.189Z" fill="#b9e5fb" stroke="#b9e5fb" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.25"/>
+            <path d="M184.41,55.679l-2.674-7.865a4.665,4.665,0,0,0,4.843,0Z" fill="#1f1f1f"/>
+          </g>
+          <g>
+            <path d="M177.307,15.373,183.68,9a.941.941,0,0,1,1.327,0l6.372,6.372v8.985l-.4.268-5.969-5.968a.939.939,0,0,0-1.327,0l-6,6-.376-.189Z" fill="#b9e5fb" stroke="#b9e5fb" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.25"/>
+            <path d="M184.339,10.074l2.673,7.865a4.663,4.663,0,0,0-4.843,0Z" fill="#1f1f1f"/>
+          </g>
+          <circle cx="165.602" cy="50.352" r="7.299" fill="#b9e5fb" stroke="#b9e5fb" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.25"/>
+          <polygon points="168.643 45.167 165.602 48.208 162.561 45.167 160.534 47.195 163.575 50.236 160.534 53.277 162.561 55.304 165.602 52.263 168.643 55.304 170.67 53.277 167.629 50.236 170.67 47.195 168.643 45.167" fill="#1f1f1f"/>
+        </g>
+      </g>
+      <polygon points="41.549 18.841 37.977 17.291 41.549 15.741 41.549 18.841" fill="#141414"/>
+      <polygon points="138.609 15.741 137.06 19.314 135.51 15.741 138.609 15.741" fill="#141414"/>
+      <polygon points="142.17 15.741 145.743 17.291 142.17 18.841 142.17 15.741" fill="#141414"/>
+    </symbol>
+  </defs>
+  <g>
+    <use width="233.747" height="68.721" transform="translate(10.574 4.635) scale(1.321)" xlink:href="#CEC_Control_Panel"/>
+    <ellipse cx="276.755" cy="48.048" rx="17.811" ry="14.071" fill="none" stroke="#ed1c24" stroke-miterlimit="10" stroke-width="2"/>
+    <text transform="translate(65.442 32.088) scale(1.422 1)" font-size="5.151" fill="#0d0d0d" stroke="#000" stroke-miterlimit="10" stroke-width="0.1" font-family="LucidaConsole, Lucida Console"><tspan xml:space="preserve">     </tspan></text>
+    <text transform="translate(87.515 32.088) scale(1.422 1.1)" font-size="5.151" fill="#0d0d0d" stroke="#000" stroke-miterlimit="10" stroke-width="0.1" font-family="LucidaConsole, Lucida Console">[ CEC ACTIONS 1]<tspan x="-15.52" y="4.683">Reset CEC</tspan><tspan x="-15.52" y="9.366">Reset CMM 3</tspan><tspan x="-15.52" y="14.049">Reset CMM 2</tspan><tspan x="-15.52" y="18.733">Reset CMM 1</tspan><tspan x="-15.52" y="23.416">Reset CMM 0</tspan><tspan x="-15.52" y="28.099">Reset Cabinet Config</tspan><tspan x="-15.52" y="32.782" xml:space="preserve">Warm restart CEC micro      </tspan></text>
+    <g>
+      <path d="M62.883,33.57l2.279,2.007-2.279,2v-.628l1.568-1.375L62.883,34.2Z" fill="#0d0d0d" stroke="#000" stroke-miterlimit="10" stroke-width="0.1"/>
+      <path d="M201.817,37.58l-2.279-2.007,2.279-2V34.2l-1.567,1.375,1.567,1.38Z" fill="#0d0d0d" stroke="#000" stroke-miterlimit="10" stroke-width="0.1"/>
+    </g>
+  </g>
+</svg>

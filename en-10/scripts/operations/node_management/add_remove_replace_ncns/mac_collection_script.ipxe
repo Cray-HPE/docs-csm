@@ -1,0 +1,49 @@
+#!ipxe
+
+# Vars:
+set mgmt_vid0 15b3
+set mgmt_vid1 1077
+set hsn_did0 1017
+set ignore ffff
+
+# Emulate real world, and boot over VLANs.
+# Note: This will also boot without VLAN, you'll be able to know by the IPs leased
+:nic_naming
+echo ====DEVICE NAMING=======================================================
+set print-nics 0
+set idx:int8 0
+set idx_hsn:int8 0
+set idx_mgmt:int8 0
+set idx_lan:int8 0
+set net-udev-params biosdevname=1
+set dual-bond 0
+## This is an early 1.4 shim for naming interfaces
+## This will move out of iPXE, now that more infrastructure (cloud-init) is ready.
+## For now this may need munging to get desired results.
+:loop isset ${net${idx}/mac} || goto loop_done
+  echo net${idx} MAC ${net${idx}/mac}
+  set vendor_id ${pci/${net${idx}/busloc}.0.2}
+  set device_id ${pci/${net${idx}/busloc}.2.2}
+  iseq ${device_id} ${ignore} && inc idx && goto loop ||
+  iseq ${device_id} ${hsn_did0} && goto hsn ||
+  iseq ${vendor_id} ${mgmt_vid0} && goto mgmt ||
+  iseq ${vendor_id} ${mgmt_vid1} && goto mgmt ||
+  goto lan ||
+  inc idx && goto loop
+
+:hsn
+  echo net${idx} is hsn${idx_hsn}
+  inc idx && inc idx_hsn && goto loop
+
+:mgmt
+  echo net${idx} is mgmt${idx_mgmt}
+  iseq mgmt2 mgmt${idx_mgmt} && set dual-bond 1 ||
+  inc idx && inc idx_mgmt && goto loop
+
+:lan
+  echo net${idx} is lan${idx_lan}
+  inc idx && inc idx_lan && goto loop
+
+:loop_done
+
+echo MAC Address collection completed. Please power the node off now via ipmitool.

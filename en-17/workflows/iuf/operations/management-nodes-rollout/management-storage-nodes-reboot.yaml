@@ -1,0 +1,361 @@
+#
+# MIT License
+#
+# (C) Copyright 2025 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: management-storage-nodes-reboot
+spec:
+  tolerations:
+    - key: "node-role.kubernetes.io/master"
+      operator: "Exists"
+      effect: "NoSchedule"
+    - key: "node-role.kubernetes.io/control-plane"
+      operator: "Exists"
+      effect: "NoSchedule"
+  entrypoint: main
+  templates:
+    - name: main
+      metrics:
+        prometheus:
+        - name: operation_counter
+          help: "Count of step execution by result status"
+          labels:
+            - key: "opname"
+              value: "management-storage-nodes-reboot"
+            - key: stage
+              value: "management-nodes-rollout"
+            - key: type
+              value: "global"
+            - key: pname
+              value: "global"
+            - key: pversion
+              value: "global"
+            - key: status
+              value: "{{status}}"
+          counter:
+            value: "1"
+      inputs:
+        parameters:
+          - name: auth_token
+          - name: global_params
+      dag:
+        tasks:
+          - name: start-operation
+            templateRef:
+              name: workflow-template-record-time-template
+              template: record-time-template
+          - name: INFO-to-read
+            dependencies:
+              - start-operation
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: mediaHost
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"
+                - name: scriptContent
+                  value: |
+                    echo "NOTICE This workflow will reboot storage nodes according to --limit-management-rollout parameter."
+          - name: verify-pre-reboot-checks
+            dependencies:
+              - INFO-to-read
+            templateRef:
+              name: ncn-reboot-common
+              template: verify-pre-reboot-checks
+            arguments:
+              parameters:
+              - name: dryRun
+                value: "{{$.DryRun}}"
+          - name: get-storage-reboot-sets
+            dependencies:
+              - verify-pre-reboot-checks
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: mediaHost
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"
+                - name: scriptContent
+                  value: |
+                    echo '{{inputs.parameters.global_params}}' > global.params.data
+
+                    limit_management_nodes=$(cat global.params.data | jq -r '.input_params.limit_management_nodes[]')
+                    reboot_set=""
+                    if [[ -n $(echo $limit_management_nodes | grep 'Management_Storage') ]]; then
+                      for storage_node in $(ceph orch host ls -f json |jq -r '.[].hostname'); do
+                        reboot_set="${reboot_set},${storage_node}"
+                      done
+                    else
+                      #reboot storage nodes specified by hostnames
+                      storage_nodes_to_reboot="${limit_management_nodes}"
+                      for storage_node in $storage_nodes_to_reboot; do
+                        reboot_set="${reboot_set},${storage_node}"
+                      done
+                    fi
+                    #remove comma from reboot set make every node a set to reboot sequentially
+                    reboot_set=$(echo "$reboot_set"|tr ',' ' ')
+                    echo $reboot_set
+          - name: process-storage-reboot-sets
+            dependencies:
+              - get-storage-reboot-sets
+            template: process-sets
+            arguments:
+              parameters:
+                - name: sets
+                  value: "{{tasks.get-storage-reboot-sets.outputs.result}}"
+          - name: reboot-storage-sets
+            dependencies:
+              - process-storage-reboot-sets
+            template: reboot-set-of-storage-nodes
+            arguments:
+              parameters:
+                - name: sets
+                  value: "{{tasks.process-storage-reboot-sets.outputs.parameters.sets}}"
+                - name: counter
+                  value: "0"
+                - name: limit
+                  value: "{{tasks.process-storage-reboot-sets.outputs.parameters.num_sets}}"
+                - name: global_params
+                  value: "{{inputs.parameters.global_params}}"
+          - name: end-operation
+            dependencies:
+              - reboot-storage-sets
+            templateRef:
+              name: workflow-template-record-time-template
+              template: record-time-template
+          - name: prom-metrics
+            dependencies:
+              - start-operation
+              - end-operation
+            template: prom-metrics
+            arguments:
+              parameters:
+              - name: opstart
+                value: "{{tasks.start-operation.outputs.result}}"
+              - name: opend
+                value: "{{tasks.end-operation.outputs.result}}"
+    - name: reboot-set-of-storage-nodes
+      inputs:
+        parameters:
+          - name: sets
+          - name: counter
+          - name: limit
+          - name: global_params
+      dag:
+        tasks:
+          - name: get-reboot-set
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+              - name: dryRun
+                value: "{{$.DryRun}}"
+              - name: mediaHost
+                value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"
+              - name: scriptContent
+                value: |
+                  sets="{{inputs.parameters.sets}}"
+                  current_count="{{inputs.parameters.counter}}"
+                  # Storage Nodes reboot sequentially. Add single node to set
+                  IFS=' ' read -ra set_array <<< "$sets"
+                  reboot_set=${set_array[$current_count]}
+                  if [[ -z $reboot_set ]]; then
+                    echo "NOTICE This step received no nodes to reboot. Exiting without rebooting any storage nodes"
+                    exit 0
+                  fi
+                  echo $reboot_set
+          - name: reboot-storage-node
+            dependencies:
+              - get-reboot-set
+            template: reboot-storage-node
+            arguments:
+              parameters:
+                - name: targetNcn
+                  value: "{{tasks.get-reboot-set.outputs.result}}"
+                - name: global_params
+                  value: "{{inputs.parameters.global_params}}"
+          - name: move-to-next-set
+            template: move-to-next-set
+            dependencies:
+              - reboot-storage-node
+            arguments:
+              parameters:
+                - name: count
+                  value: "{{inputs.parameters.counter}}"
+          - name: continue
+            dependencies:
+              - move-to-next-set
+            template: reboot-set-of-storage-nodes
+            when: "{{tasks.move-to-next-set.outputs.result}} < {{inputs.parameters.limit}}"
+            arguments:
+              parameters:
+                - name: sets
+                  value: "{{inputs.parameters.sets}}"
+                - name: counter
+                  value: "{{tasks.move-to-next-set.outputs.result}}"
+                - name: limit
+                  value: "{{inputs.parameters.limit}}"
+                - name: global_params
+                  value: "{{inputs.parameters.global_params}}"
+    - name: reboot-storage-node
+      inputs:
+        parameters:
+          - name: global_params
+          - name: targetNcn
+      dag:
+        tasks:
+          - name: reboot-node
+            templateRef:
+              name: ncn-reboot-common
+              template: reboot-ncn
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: global_params
+                  value: "{{inputs.parameters.global_params}}"
+                - name: targetNcn
+                  value: "{{inputs.parameters.targetNcn}}"
+          - name: wait-for-cloud-init
+            dependencies:
+              - reboot-node
+            templateRef:
+              name: ncn-reboot-common
+              template: wait-for-cloud-init
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: targetNcn
+                  value: "{{inputs.parameters.targetNcn}}"
+          - name: wait-for-node-health
+            templateRef:
+              name: check-ceph-health
+              template: main
+            dependencies:
+              # check health once node reboot is complete
+              - wait-for-cloud-init
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: 'false'
+          - name: wait-for-cfs
+            dependencies:
+              - wait-for-cloud-init
+            templateRef:
+              name: ncn-reboot-common
+              template: wait-for-cfs
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: targetNcn
+                  value: "{{inputs.parameters.targetNcn}}"
+          - name: platform-health-checks
+            dependencies:
+              - wait-for-cfs
+              - wait-for-node-health
+            templateRef:
+              name: ncn-reboot-common
+              template: platform-health-checks
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+    - name: process-sets
+      inputs:
+        parameters:
+          - name: sets
+      script:
+        image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
+        command: [sh]
+        source: |
+          #!/bin/sh
+          sets="{{inputs.parameters.sets}}"
+          echo $sets > /tmp/sets
+          num_sets=$(echo $sets | wc -w)
+          echo $num_sets > /tmp/num_sets
+      outputs:
+        parameters:
+          - name: sets
+            valueFrom:
+              path: "/tmp/sets"
+          - name: num_sets
+            valueFrom:
+              path: "/tmp/num_sets"
+    - name: move-to-next-set
+      inputs:
+        parameters:
+          - name: count
+      script:
+        image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
+        command: [sh]
+        source: |
+          #!/bin/sh
+          current_count="{{inputs.parameters.count}}"
+          counter=$((current_count + 1 ))
+          echo $counter
+    - name: prom-metrics
+      inputs:
+        parameters:
+        - name: opstart
+        - name: opend
+      metrics:
+        prometheus:
+          - name: operation_time
+            help: "Duration gauge by operation name in seconds"
+            labels:
+              - key: "opname"
+                value: "management-storage-nodes-reboot"
+              - key: stage
+                value: "management-nodes-rollout"
+              - key: type
+                value: "global"
+              - key: pdname
+                value: "global"
+              - key: pdversion
+                value: "global"
+              - key: "opstart"
+                value: "{{inputs.parameters.opstart}}"
+              - key: "opend"
+                value: "{{inputs.parameters.opend}}"
+            gauge:
+              value: "{{outputs.parameters.diff-time-value}}"
+      outputs:
+        parameters:
+          - name: diff-time-value
+            globalName: diff-time-value
+            valueFrom:
+              path: /tmp/diff_time.txt
+      container:
+        image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
+        command: [sh, -c]
+        args: ["DIFF_TIME=$(expr {{inputs.parameters.opend}} - {{inputs.parameters.opstart}}); echo $DIFF_TIME; echo $DIFF_TIME > /tmp/diff_time.txt"]

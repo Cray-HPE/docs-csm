@@ -1,0 +1,137 @@
+#
+# MIT License
+#
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: before-all-nodes-storage-workflow
+  namespace: argo
+spec:
+  templates:
+    - name: main
+      inputs:
+        parameters:
+          - name: dryRun
+      dag:
+        tasks:
+          - name: install-csi
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    known_hosts="/root/.ssh/known_hosts"
+                    for host_ncn in "ncn-m001" "ncn-m002" "ncn-m003"; do
+                      ncn_ip=$(host ${host_ncn} | awk '{ print $NF }')
+                      ssh-keygen -R "${ncn_ip}" -f "${known_hosts}" > /dev/null 2>&1
+                      ssh-keygen -R "${host_ncn}" -f "${known_hosts}" > /dev/null 2>&1
+                      ssh-keyscan -H "${ncn_ip},${host_ncn}" > /dev/null 2>&1 >> "${known_hosts}"
+                    done
+                    source /srv/cray/scripts/metal/metal-lib.sh
+                    csi_url=$(paginate "https://packages.local/service/rest/v1/components?repository=csm-noos" \
+                      | jq -r  '.items[] | .assets[] | .downloadUrl' | grep "cray-site-init" | sort -V | tail -1)
+                    pdsh -S -w $(grep -oP 'ncn-\m\d+' /etc/hosts | sort -u | tr -t '\n' ',') "zypper install -y $csi_url"
+          - name: upgrade-ceph-stop-docker-registries
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    echo "This will upgrade Ceph to v16.2.13 if Ceph is not already running that version. \
+                    It will then make sure Ceph monitoring daemons are running on the image in Nexus and will redeploy \
+                    them if they are running on a local image. Lastly, it will stop all local Docker registries running on storage nodes."
+
+                    export TERM=linux
+                    # setting PYTHONUNBUFFERED forces python to print output
+                    export PYTHONUNBUFFERED=1
+                    /usr/share/doc/csm/upgrade/scripts/ceph/ceph-upgrade-tool.py --version "v16.2.13"
+
+                    for node in "ncn-s001" "ncn-s002" "ncn-s003"; do
+                      success=0
+                      scp /usr/share/doc/csm/scripts/operations/ceph/redeploy_monitoring_stack_to_nexus.sh ${node}:/srv/cray/scripts/common/redeploy_monitoring_stack_to_nexus.sh
+                      ssh ${node} "/srv/cray/scripts/common/redeploy_monitoring_stack_to_nexus.sh"
+                      if [[ $? -eq 0 ]]; then
+                        scp /usr/share/doc/csm/scripts/operations/ceph/disable_local_registry.sh ${node}:/srv/cray/scripts/common/disable_local_registry.sh
+                        ssh ${node} "/srv/cray/scripts/common/disable_local_registry.sh"
+                        if [[ $? -eq 0 ]]; then
+                          success=1
+                          break
+                        fi
+                      fi
+                    done
+                    if [[ $success -eq 0 ]]; then
+                      echo "ERROR was not able to upgrade Ceph, redeploy the monitoring stack and stop the local docker registries."
+                      exit 1
+                    fi
+          - name: add-admin-label-to-ncn-s002
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    # this is necessary so that ncn-s001 can be drained
+                    echo "This will add the '_admin' label to ncn-s002 if it is not already there."
+                    label_exists=$(ceph orch host ls | grep "ncn-s002" | grep "admin") || label_exists=""
+                    if [[ -z $label_exists ]]; then
+                      ceph orch host label add ncn-s002 _admin
+                    fi
+          - name: install-smartmon-on-storage-nodes
+            dependencies:
+              - upgrade-ceph-stop-docker-registries
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    # check if smartmon is already installed.
+                    smartmon_installed=true
+                    ssh_options="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+                    for storage_node in $(ceph orch host ls -f json |jq -r '.[].hostname'); do
+                        n_inst=$(ssh ${storage_node} ${ssh_options} 'rpm -qa | grep -E "(smart-mon|smartmontools|libsmartcols)" | wc -l')
+                        if [[ $n_inst -lt 3 ]]; then
+                            smartmon_installed=false
+                            break
+                        fi
+                    done
+                    if $smartmon_installed; then
+                        echo "Smartmon packages are already installed on all storage nodes. Nothing to do."
+                    else
+                        echo "Installing smartmon on storage nodes."
+                        /usr/share/doc/csm/scripts/operations/ceph/enable-smart-mon-storage-nodes.sh
+                    fi

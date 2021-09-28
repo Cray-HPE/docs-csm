@@ -1,0 +1,219 @@
+#
+# MIT License
+#
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: loftsman-manifest-deploy
+spec:
+  entrypoint: main
+  templates:
+    - name: main
+      metrics:
+        prometheus:
+        - name: operation_counter
+          help: "Count of step execution by result status"
+          labels:
+            - key: "opname"
+              value: "loftsman-manifest-deploy"
+            - key: stage
+              value: "deploy-product"
+            - key: type
+              value: "product"
+            - key: pname
+              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
+            - key: pversion
+              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
+            - key: status
+              value: "{{status}}"
+          counter:
+            value: "1"
+      inputs:
+        parameters:
+          - name: auth_token
+          - name: global_params
+      steps:
+      - - name: start-operation
+          templateRef:
+            name: workflow-template-record-time-template
+            template: record-time-template
+      - - name: manifest-deploy
+          templateRef: 
+            name: iuf-base-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: false
+              - name: scriptContent
+                value: |
+                  #!/usr/bin/bash
+                  set +e
+                  echo '{{inputs.parameters.global_params}}' > global.params.data
+                  PRODUCT_NAME=$(cat global.params.data  | jq -r '.product_manifest.current_product.manifest.name')
+                  if [[ -z "$PRODUCT_NAME" ]]; then
+                    echo "ERROR Product name not found in the product manifest. Rerun with valid product tarball from 'process-media' stage"
+                    exit 1
+                  fi
+
+                  JSON_CONTENT=$(cat global.params.data  | jq -r '.product_manifest.current_product.manifest')
+                  LOFTSMAN_ENTRIES=$(echo "$JSON_CONTENT" | jq '.content.loftsman | length')
+                  if [[ -z "$LOFTSMAN_ENTRIES" ]]; then
+                      echo "ERROR Cannot access loftsman context for $PRODUCT. Rerun with valid product tarball from 'process-media' stage"
+                      exit 1
+                  fi
+
+                  PARENT_PATH=$(cat global.params.data  | jq -r '.stage_params."process-media".current_product.parent_directory')
+                  if [ ! -d $PARENT_PATH ]; then
+                      echo "ERROR Cannot access product directory for $PRODUCT. Rerun with valid product tarball from 'process-media' stage"
+                      exit 1
+                  fi
+
+                  PRODUCT_VERSION=$(echo "$JSON_CONTENT" | jq -r '.version')
+                  if [[ "${PRODUCT_VERSION,,}" == "null" ]] || [[ -z "$PRODUCT_VERSION" ]]; then
+                      echo "ERROR Cannot access product version for $PRODUCT. Rerun with valid product tarball from 'process-media' stage"
+                      exit 1
+                  fi
+
+                  deploy_manifest() {
+                    manifest=$1
+                    product_name=$2
+                    exit_code=0
+
+                    artifacts_get_output=$(cray artifacts get config-data argo/loftsman/${product_name}/${PRODUCT_VERSION}/manifests/"$(basename $manifest)" /tmp/"$(basename $manifest)" 2>&1)
+                    if [ $? -ne 0 ]; then
+                      artifacts_get_output=$(echo "$artifacts_get_output" | sed -e 's/^/DEBUG /')
+                      echo "ERROR Could not deploy product $product_name since artifacts argo/loftsman/${product_name}/${PRODUCT_VERSION}/manifests/"$(basename $manifest)" are not available from S3"
+                      echo -e "DEBUG <cray artifacts get config-data argo/loftsman/${product_name}/${PRODUCT_VERSION}/manifests/"$(basename $manifest)" /tmp/"$(basename $manifest)"> failed with\n\n$artifacts_get_output"
+                      exit_code=1
+                    else
+                      echo "INFO Deploying loftman manifest ${manifest}"
+                      loftsman ship --manifest-path /tmp/"$(basename $manifest)" --charts-repo https://packages.local/repository/charts 2>&1
+                      if [ $? -ne 0 ]; then
+                        echo "ERROR There was a problem deploying the loftsman manifest ${manifest}"
+                        echo -e "ERROR <loftsman ship --manifest-path /tmp/"$(basename $manifest)" --charts-repo https://packages.local/repository/charts> failed. Check argo logs."
+                        exit_code=1
+                      fi
+                    fi
+                    return $exit_code
+                  }
+
+                  err=0
+                  for (( i=0; i< $LOFTSMAN_ENTRIES; i++ )); do
+                    path_exists=true
+                    MANIFEST=$(echo "$JSON_CONTENT" | jq -r '.content.loftsman['$i'].path')
+                    MANIFEST_PATH="${PARENT_PATH}/${MANIFEST}"
+                    DEPLOY=$(echo "$JSON_CONTENT" | jq -r '.content.loftsman['$i'].deploy')
+                    IS_DIR=false
+                    if [ -d $MANIFEST_PATH ]; then
+                      IS_DIR=true
+                    elif [ -f $MANIFEST_PATH ]; then
+                      IS_DIR=false
+                    else
+                      echo "ERROR Unable to find loftsman manifest file or directory $MANIFEST_PATH. Skipped"
+                      err=1
+                      path_exists=false
+                    fi
+                    
+                    if ! $path_exists; then
+                      continue
+                    elif [[ "$DEPLOY" = "true" ]] || [[ "$DEPLOY" = "True" ]]; then
+                      if $IS_DIR; then
+                        echo "INFO Deploying loftsman manifests under $MANIFEST_PATH/"
+                        manifest_files=$(ls "${MANIFEST_PATH}"/*.yml "${MANIFEST_PATH}"/*.yaml 2>/dev/null) || true
+                        for manifest in $manifest_files; do
+                          deploy_manifest ${manifest} $PRODUCT_NAME
+                          if [[ $? -ne 0 ]]; then
+                            echo >&2 "ERROR Unable to deploy manifest $manifest for product $PRODUCT_NAME"
+                            echo >&2 "ERROR Loftsman manifest deployment failed"
+                            err=1
+                          fi
+                        done
+                      else
+                        deploy_manifest $MANIFEST_PATH $PRODUCT_NAME
+                        if [[ $? -ne 0 ]]; then
+                          echo >&2 "ERROR Unable to deploy manifest $MANIFEST_PATH for product $PRODUCT_NAME"
+                          echo >&2 "ERROR Loftsman manifest deployment failed"
+                          err=1
+                        fi
+                      fi
+                    else
+                      echo "NOTICE Not deploying argo/loftsman/${PRODUCT_NAME}/${PRODUCT_VERSION}/manifests/$(basename ${MANIFEST}) because loftsman deploy flag is not set to 'true/True' in the manifest"
+                    fi
+                  done
+
+                  exit $err
+      - - name: end-operation
+          templateRef:
+            name: workflow-template-record-time-template
+            template: record-time-template
+      - - name:  prom-metrics
+          template: prom-metrics
+          arguments:
+            parameters:
+            - name: opstart
+              value: "{{steps.start-operation.outputs.result}}"
+            - name: opend
+              value: "{{steps.end-operation.outputs.result}}"
+            - name: pdname
+              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
+            - name: pdversion
+              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
+    - name: prom-metrics
+      inputs:
+        parameters:
+        - name: opstart
+        - name: opend
+        - name: pdname
+        - name: pdversion
+      metrics:
+        prometheus:
+          - name: operation_time
+            help: "Duration gauge by operation name in seconds"
+            labels:
+              - key: opname
+                value: "loftsman-manifest-deploy"
+              - key: stage
+                value: "deploy-product"
+              - key: type
+                value: "product"
+              - key: pdname
+                value: "{{inputs.parameters.pdname}}"
+              - key: pdversion
+                value: "{{inputs.parameters.pdversion}}"
+              - key: opstart
+                value: "{{inputs.parameters.opstart}}"
+              - key: opend
+                value: "{{inputs.parameters.opend}}"
+            gauge:
+              value: "{{outputs.parameters.diff-time-value}}"
+      outputs:
+        parameters:
+          - name: diff-time-value
+            globalName: diff-time-value
+            valueFrom:
+              path: /tmp/diff_time.txt
+      container:
+        image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
+        command: [sh, -c]
+        args: ["DIFF_TIME=$(expr {{inputs.parameters.opend}} - {{inputs.parameters.opstart}}); echo $DIFF_TIME; echo $DIFF_TIME > /tmp/diff_time.txt"]
