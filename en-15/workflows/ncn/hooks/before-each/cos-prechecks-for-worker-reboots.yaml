@@ -1,0 +1,50 @@
+#
+# MIT License
+#
+# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: cray-nls.hpe.com/v1
+kind: Hook
+metadata:
+  name: cos-prechecks-for-worker-reboots
+  labels:
+    before-each: "true"
+spec:
+  scriptContent: |
+    #!/bin/sh
+    SSH_OPT="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+    SSH_OPT="${SSH_OPT} -o ConnectTimeout=10"
+    # Note: this file path cannot change without coordinated changes to the COS product stream
+    # Run the precheck_for_worker_reboots script from the new location or the old location
+    # If not found, return a message and continue
+    ssh ${SSH_OPT} ${TARGET_NCN} "\
+      if [[ -f /opt/cray/shasta/uss/bin/prechecks_for_worker_reboots ]]; then \
+          /opt/cray/shasta/uss/bin/prechecks_for_worker_reboots; \
+      elif [[ -f /opt/cray/shasta/cne/bin/prechecks_for_worker_reboots ]]; then \
+          /opt/cray/shasta/cne/bin/prechecks_for_worker_reboots; \
+      elif [[ -f /opt/cray/shasta/cos/bin/prechecks_for_worker_reboots ]]; then \
+          /opt/cray/shasta/cos/bin/prechecks_for_worker_reboots; \
+      else \
+          echo >&2 WARN prechecks_for_worker_reboots not present on ${TARGET_NCN}; \
+      fi\
+      "
+    exit $?
+  templateRefName: ssh-template
