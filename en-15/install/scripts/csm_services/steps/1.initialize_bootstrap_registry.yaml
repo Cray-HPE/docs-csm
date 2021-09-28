@@ -1,0 +1,88 @@
+#
+# MIT License
+#
+# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+kind: step
+metadata:
+  name: Initialize Bootstrap Registry
+  description: |-
+    # Initialize Bootstrap Registry
+
+    > **`NOTE`** The bootstrap registry runs in a default Nexus configuration,
+    > which is started and populated in this section. It only exists during initial
+    > CSM install on the PIT node in order to bootstrap CSM services. Once CSM
+    > install is completed and the PIT node is rebooted as an NCN, the bootstrap
+    > Nexus no longer exists.
+spec:
+  jobs:
+    - preCondition:
+        description: |-
+          1.  Verify that Nexus is running:
+          2.  Verify that Nexus is _ready_. (Any HTTP response other than `200 OK`
+          indicates Nexus is not ready.)
+        command: |-
+          systemctl is-active --quiet nexus && echo Nexus is running
+          nexus_writable=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8081/nexus/service/rest/v1/status/writable)
+          echo "Nexus writable endpoint returns: $nexus_writable"
+          [[ $nexus_writable -eq 200 ]] || exit 1
+
+        troubleshooting: |-
+          # Restart nexus service
+          `pit# systemctl start nexus`
+      action:
+        description: |-
+          3.  Load the skopeo image installed by the cray-nexus RPM
+          4.  Use `skopeo sync` to upload container images from the CSM release
+
+          > **`NOTE`** As the bootstrap Nexus uses the default configuration, the
+          > above command uses the default admin credentials (`admin` user with
+          > password `admin123`) in order to upload to the bootstrap registry, which
+          > is listening on localhost:5000.
+        command: |-
+          podman load -i /var/lib/cray/container-images/metal-nexus/skopeo-stable-latest.tar
+
+          podman run --rm --network host -v {{ getEnv "CSM_PATH" }}/docker:/images:ro \
+              quay.io/skopeo/stable sync --scoped --src dir --dest docker --dest-tls-verify=false --dest-creds admin:admin123 \
+              /images localhost:5000
+
+          # XXX For backwards compatibility with CSM 1.0, container images under
+          # XXX dtr.dev.cray.com and quay.io are also uploaded to the root of
+          # XXX registry.local. This is only necessary while charts and procedures still
+          # XXX reference dtr.dev.cray.com or quay.io/skopeo/stable:latest.
+          if [ -d "{{ getEnv "CSM_PATH" }}/docker/dtr.dev.cray.com" ]; then
+              podman run --rm --network host -v {{ getEnv "CSM_PATH" }}/docker/dtr.dev.cray.com:/images:ro \
+                  quay.io/skopeo/stable sync --scoped --src dir --dest docker --dest-tls-verify=false --dest-creds admin:admin123 \
+                  /images localhost:5000
+          fi
+          if [ -d "{{ getEnv "CSM_PATH" }}/docker/quay.io/skopeo/stable:latest" ]; then
+              podman run --rm --network host -v {{ getEnv "CSM_PATH" }}/docker/quay.io:/image:ro \
+                  quay.io/skopeo/stable copy --dest-tls-verify=false --dest-creds admin:admin123 \
+                  dir:/image/skopeo/stable:latest docker://localhost:5000/skopeo/stable:latest
+          fi
+        troubleshooting: |-
+          Nothing
+      postValidation:
+        description: |-
+          >Note: there is nothing to validate
+        command: 'echo "Skip Post Validation"'
+        troubleshooting: |-
+          # Skipped
