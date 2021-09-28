@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Add Remove Replace NCNs on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-10/scripts/operations/node_management/add_remove_replace_ncns/</link>
+    <description>Recent content in Add Remove Replace NCNs on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-10</language>
+    <lastBuildDate></lastBuildDate>
+    <atom:link href="/docs-csm/en-10/scripts/operations/node_management/add_remove_replace_ncns/index.xml" rel="self" type="application/rss+xml" />
+  </channel>
+</rss>
