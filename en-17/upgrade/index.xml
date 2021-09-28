@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Upgrade CSM on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-17/upgrade/</link>
+    <description>Recent content in Upgrade CSM on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-17</language>
+    <lastBuildDate>Sat, 05 Sep 2026 03:43:20 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-17/upgrade/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Prepare for Upgrade to Next CSM Major Version</title>
+      <link>/docs-csm/en-17/upgrade/prepare_for_upgrade_to_next_csm_major_version/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:19 +0000</pubDate>
+      <guid>/docs-csm/en-17/upgrade/prepare_for_upgrade_to_next_csm_major_version/</guid>
+      <description>Prepare for Upgrade to Next CSM Major Version Before beginning an upgrade from CSM 1.7 to CSM 1.8, there are a few things to do on the system first.&#xA;Reduced resiliency during upgrade Warning: Management service resiliency is reduced during the upgrade.&#xA;Although it is expected that compute nodes and application nodes will continue to provide their services without interruption, it is important to be aware that the degree of management services resiliency is reduced during the upgrade.</description>
+    </item>
+    <item>
+      <title>CSM 1.6 to 1.7 Upgrade Process</title>
+      <link>/docs-csm/en-17/upgrade/upgrade_management_nodes_and_csm_services/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:20 +0000</pubDate>
+      <guid>/docs-csm/en-17/upgrade/upgrade_management_nodes_and_csm_services/</guid>
+      <description>CSM 1.6 to 1.7 Upgrade Process Introduction This document guides an administrator through the upgrade of Cray Systems Management from version 1.6 to version 1.7. This procedure works for all patch versions of the source and target CSM releases.&#xA;This procedure is also the correct one to follow in the unusual situation of upgrading from a pre-release version of CSM 1.7.0 to a newer version of CSM 1.7.&#xA;When upgrading a system, follow this top-level file from top to bottom.</description>
+    </item>
+    <item>
+      <title>Upgrade Only CSM Through IUF</title>
+      <link>/docs-csm/en-17/upgrade/upgrade_only_csm_with_iuf/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:20 +0000</pubDate>
+      <guid>/docs-csm/en-17/upgrade/upgrade_only_csm_with_iuf/</guid>
+      <description>Upgrade Only CSM Through IUF This option describes how to upgrade Cray Systems Management (CSM) software on a CSM-only system using IUF.&#xA;Description The upgrade from CSM 1.6 to CSM 1.7 uses the IUF framework. The CSM upgrade steps are run automatically, either directly through IUF stages or by running a hook at the beginning or end of an IUF stage.&#xA;Upgrade procedure Read the Important Notes section of the CSM 1.</description>
+    </item>
+    <item>
+      <title>Validate CSM Health During a CSM Upgrade</title>
+      <link>/docs-csm/en-17/upgrade/validate_csm_health_during_upgrade/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:20 +0000</pubDate>
+      <guid>/docs-csm/en-17/upgrade/validate_csm_health_during_upgrade/</guid>
+      <description>Validate CSM Health During a CSM Upgrade Before performing the health validation, be sure that at least 15 minutes have elapsed since the CSM services were upgraded. This allows the various Kubernetes resources to initialize and start. Although it is not recommended, the Booting CSM barebones image test may be skipped if all compute nodes are active running application workloads. (ncn-m002#) If a typescript session is already running in the shell, then first stop it with the exit command.</description>
+    </item>
+    <item>
+      <title>Manual NCN Upgrade</title>
+      <link>/docs-csm/en-17/upgrade/manual_ncn_upgrade/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:20 +0000</pubDate>
+      <guid>/docs-csm/en-17/upgrade/manual_ncn_upgrade/</guid>
+      <description>Manual NCN Upgrade This page should NOT be used for a normal CSM upgrade.&#xA;This page provides instructions for doing a manual upgrade of NCN nodes. There is a section for upgrading worker nodes, storage nodes, and master nodes. All NCN upgrades in CSM 1.6 and later are done through IUF. This page provides instructions in case a manual NCN upgrade is needed for an unusual situation. As we have removed all of our manual CSM upgrade documentation, it is important that we have documentation describing this process in case of an emergency.</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>iSCSI SBPS (Scalable Boot Content Projection Service) on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-17/operations/iscsi_sbps/</link>
+    <description>Recent content in iSCSI SBPS (Scalable Boot Content Projection Service) on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-17</language>
+    <lastBuildDate>Sat, 05 Sep 2026 03:41:47 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-17/operations/iscsi_sbps/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Best Practices To Follow To Avoid Issues With iSCSI SBPS</title>
+      <link>/docs-csm/en-17/operations/iscsi_sbps/best_practices/</link>
+      <pubDate>Sat, 05 Sep 2026 03:41:47 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/iscsi_sbps/best_practices/</guid>
+      <description>Best Practices To Follow To Avoid Issues With iSCSI SBPS This document presents recommended best practices to avoid issues with iSCSI SBPS.&#xA;Scenario #1: As roots/PE images will be placed in s3 storage/IMS, there could be unused images which user/admin would like to delete. The following are steps to delete unused rootfs/PE images safely.&#xA;Steps to remove unused rootfs/PE images projected by iSCSI SBPS (ncn-w#) Identify the unused PE and rootfs images from targetcli ls command output from one of the iSCSI target node (worker node) and list them in a file.</description>
+    </item>
+    <item>
+      <title>Managing Selective Node Personalization</title>
+      <link>/docs-csm/en-17/operations/iscsi_sbps/managing_selective_node_personalization/</link>
+      <pubDate>Sat, 05 Sep 2026 03:41:47 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/iscsi_sbps/managing_selective_node_personalization/</guid>
+      <description>Managing Selective Node Personalization Overview Group commands Creating the group Adding a worker to the group Listing group members Removing a worker from the group Deleting the group Procedures CSM install CSM upgrade from 1.6 to 1.7 Adding or removing worker NCN Adding worker NCN when iscsi_sbps group does not exist Adding worker NCN when iscsi_sbps group exists Removing worker NCN when iscsi_sbps group does not exist Removing worker NCN when iscsi_sbps group exists After initial CSM 1.</description>
+    </item>
+    <item>
+      <title>iSCSI SBPS Metrics</title>
+      <link>/docs-csm/en-17/operations/iscsi_sbps/iscsi_sbps_metrics/</link>
+      <pubDate>Sat, 05 Sep 2026 03:41:47 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/iscsi_sbps/iscsi_sbps_metrics/</guid>
+      <description>iSCSI SBPS Metrics The information on this page assumes that Node personalization has completed successfully and that the SBPS Marshal Agent is running without errors on all iSCSI-enabled workers. See iSCSI SBPS Verification for more details.&#xA;Overview Metric sources sysfs sysfs megabytes read sysfs read IOPS saveconfig.json Retrieve iSCSI metrics Command line VictoriaMetrics web UI Grafana web UI Overview iSCSI-based boot content projection is a read-only projection. Metrics related to projection are exported to the node exporter / Prometheus.</description>
+    </item>
+    <item>
+      <title>iSCSI SBPS Verification</title>
+      <link>/docs-csm/en-17/operations/iscsi_sbps/iscsi_sbps_verification/</link>
+      <pubDate>Sat, 05 Sep 2026 03:41:47 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/iscsi_sbps/iscsi_sbps_verification/</guid>
+      <description>iSCSI SBPS Verification Introduction Automated tests Node personalization iSCSI-enabled workers SBPS Marshal Agent targetcli command multipath command DNS SRV and A records Introduction Before booting managed nodes, it is important to validate the iSCSI configuration. Most of this configuration is either done by the Configuration Framework Service (CFS) during Node personalization, or done periodically by the SBPS Marshal Agent.&#xA;Automated tests The fastest way to check the overall readiness of the iSCSI targets is to run the automated Goss health checks.</description>
+    </item>
+    <item>
+      <title>Steps To Follow After The Worker Node Rollout During CSM Upgrade</title>
+      <link>/docs-csm/en-17/operations/iscsi_sbps/iscsi_steps_post_rollout/</link>
+      <pubDate>Sat, 05 Sep 2026 03:41:47 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/iscsi_sbps/iscsi_steps_post_rollout/</guid>
+      <description>Steps To Follow After The Worker Node Rollout During CSM Upgrade This document presents the steps to perform to avoid issues with iSCSI SBPS during the CSM upgrade of worker nodes which are iSCSI target nodes.&#xA;Symptom After the worker node upgrade, I/O errors followed by flood of squashfs errors are seen in the dmesg of iSCSI client nodes (Compute and UAN nodes) due to which iSCSI client nodes became un-responsive where most of the commands failed with Bus error.</description>
+    </item>
+  </channel>
+</rss>

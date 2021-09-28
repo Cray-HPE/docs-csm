@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>iSCSI SBPS (Scalable Boot Content Projection Service) on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-16/operations/iscsi_sbps/</link>
+    <description>Recent content in iSCSI SBPS (Scalable Boot Content Projection Service) on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-16</language>
+    <lastBuildDate>Sat, 05 Sep 2026 03:41:45 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-16/operations/iscsi_sbps/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>iSCSI SBPS Metrics</title>
+      <link>/docs-csm/en-16/operations/iscsi_sbps/iscsi_sbps_metrics/</link>
+      <pubDate>Sat, 05 Sep 2026 03:41:45 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/iscsi_sbps/iscsi_sbps_metrics/</guid>
+      <description>iSCSI SBPS Metrics The information on this page assumes that Node personalization has completed successfully and that the SBPS Marshal Agent is running without errors on all iSCSI-enabled workers. See iSCSI SBPS Verification for more details.&#xA;Overview Metric sources sysfs sysfs megabytes read sysfs read IOPS saveconfig.json Retrieve iSCSI metrics Command line VictoriaMetrics web UI Grafana web UI Overview iSCSI-based boot content projection is a read-only projection. Metrics related to projection are exported to the node exporter / Prometheus.</description>
+    </item>
+    <item>
+      <title>iSCSI SBPS Verification</title>
+      <link>/docs-csm/en-16/operations/iscsi_sbps/iscsi_sbps_verification/</link>
+      <pubDate>Sat, 05 Sep 2026 03:41:45 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/iscsi_sbps/iscsi_sbps_verification/</guid>
+      <description>iSCSI SBPS Verification Introduction Automated tests Node personalization iSCSI-enabled workers SBPS Marshal Agent targetcli command multipath command DNS SRV and A records Introduction Before booting managed nodes, it is important to validate the iSCSI configuration. Most of this configuration is either done by the Configuration Framework Service (CFS) during Node personalization, or done periodically by the SBPS Marshal Agent.&#xA;Automated tests The fastest way to check the overall readiness of the iSCSI targets is to run the automated Goss health checks.</description>
+    </item>
+  </channel>
+</rss>

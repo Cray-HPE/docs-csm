@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>SAT Usage on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-17/operations/system_admin_toolkit/usage/</link>
+    <description>Recent content in SAT Usage on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-17</language>
+    <lastBuildDate>Sat, 05 Sep 2026 03:43:01 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-17/operations/system_admin_toolkit/usage/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Change the BOS Version</title>
+      <link>/docs-csm/en-17/operations/system_admin_toolkit/usage/change_bos_version/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:00 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/system_admin_toolkit/usage/change_bos_version/</guid>
+      <description>Change the BOS Version By default, SAT uses Boot Orchestration Service (BOS) version two (v2). Select the BOS version to use for individual commands with the --bos-version option. For more information on this option, see the man page for a specific command.&#xA;Another way to change the BOS version is by configuring it under the api_version setting in the bos section of the SAT configuration file. If the system is using an existing SAT configuration file from an older version of SAT, the bos section might not exist.</description>
+    </item>
+    <item>
+      <title>Change the CFS Version</title>
+      <link>/docs-csm/en-17/operations/system_admin_toolkit/usage/change_cfs_version/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:01 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/system_admin_toolkit/usage/change_cfs_version/</guid>
+      <description>Change the CFS Version SAT supports specifying the version of the Configuration Framework Service (CFS) API used by the SAT commands. By default, it uses version three (v3) of the CFS API. Select the CFS version to use for individual commands with the --cfs-version option. For more information on this option, see the man page for a specific command.&#xA;Another way to change the CFS version is by configuring it under the api_version setting in the cfs section of the SAT configuration file.</description>
+    </item>
+    <item>
+      <title>Configure API Gateway Retries in SAT</title>
+      <link>/docs-csm/en-17/operations/system_admin_toolkit/usage/configure_retries/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:01 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/system_admin_toolkit/usage/configure_retries/</guid>
+      <description>Configure API Gateway Retries in SAT The retries and backoff settings in the api_gateway section of the SAT configuration file controls how many times SAT will retry a failed request and the delay between retries. These settings can be adjusted to improve resilience in environments with intermittent network issues.&#xA;Find the SAT configuration file at ~/.config/sat/sat.toml, and look for a section like this:&#xA;[api_gateway] retries = 5 backoff = 0.2 In this example, SAT using 5 retries and 0.</description>
+    </item>
+    <item>
+      <title>SAT Bootprep</title>
+      <link>/docs-csm/en-17/operations/system_admin_toolkit/usage/sat_bootprep/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:01 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/system_admin_toolkit/usage/sat_bootprep/</guid>
+      <description>SAT Bootprep SAT provides an automated solution for creating CFS configurations, building and configuring images in IMS, and creating BOS session templates. The solution is based on a given input file that defines how those configurations, images, and session templates should be created. This automated process centers around the sat bootprep command. man page documentation for sat bootprep can be viewed similar to other SAT commands. For more information, see SAT Man Pages.</description>
+    </item>
+    <item>
+      <title>SAT and IUF</title>
+      <link>/docs-csm/en-17/operations/system_admin_toolkit/usage/sat_and_iuf/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:01 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/system_admin_toolkit/usage/sat_and_iuf/</guid>
+      <description>SAT and IUF The Install and Upgrade Framework (IUF) provides commands which install, upgrade, and deploy products on systems managed by CSM with the help of sat bootprep. Outside of IUF, it is uncommon to use sat bootprep.&#xA;For more information on IUF, see Install and Upgrade Framework. For more information on sat bootprep, see SAT Bootprep.&#xA;IUF variable substitutions As described in Variable substitutions, the sat bootprep command supports variable substitutions in the bootprep input files.</description>
+    </item>
+  </channel>
+</rss>

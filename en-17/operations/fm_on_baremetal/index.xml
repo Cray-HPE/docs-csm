@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Slingshot Fabric Manager on baremetal on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-17/operations/fm_on_baremetal/</link>
+    <description>Recent content in Slingshot Fabric Manager on baremetal on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-17</language>
+    <lastBuildDate>Sat, 05 Sep 2026 03:41:42 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-17/operations/fm_on_baremetal/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Configure FM (Fabric Manager) On Baremetal</title>
+      <link>/docs-csm/en-17/operations/fm_on_baremetal/configure_fm_on_baremetal/</link>
+      <pubDate>Sat, 05 Sep 2026 03:41:41 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/fm_on_baremetal/configure_fm_on_baremetal/</guid>
+      <description>Configure FM (Fabric Manager) On Baremetal This document describes the procedure for customizing and deploying the base FMN OS image along with provisioning storage volumes, and configuring the necessary networking to support Fabric Manager on baremetal following the CSM upgrade.&#xA;Requirements Hardware requirements - 2 bare-metal nodes with dedicated boot and data disks Software requirements - OS (SLES SP7), CSM services like CANU, HSM, SLS, BSS, CSI, CFS, Ansible playbooks for FMN Notes Fabric Manager Nodes (FMNs) can be added only after the CSM upgrade has been completed.</description>
+    </item>
+    <item>
+      <title>Redeploy Fabric Manager Nodes</title>
+      <link>/docs-csm/en-17/operations/fm_on_baremetal/redeploy_fabric_manager_nodes/</link>
+      <pubDate>Sat, 05 Sep 2026 03:41:42 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/fm_on_baremetal/redeploy_fabric_manager_nodes/</guid>
+      <description>Redeploy Fabric Manager Nodes OPTIONAL: This procedure is only applicable if Fabric Manager nodes were deployed during the CSM installation.&#xA;Although Fabric Manager Nodes (FMNs) were deployed during the CSM installation, the initial deployment would not include the final image with all necessary components. Once the other HPE Cray EX software products have been installed via the Install and Upgrade Framework (IUF), the FMNs need to be redeployed with the new customized image.</description>
+    </item>
+  </channel>
+</rss>

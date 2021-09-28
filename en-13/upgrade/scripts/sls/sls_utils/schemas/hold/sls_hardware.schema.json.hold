@@ -1,0 +1,10 @@
+{
+    "title": "SLS Hardware Schema - TODO",
+    "type": "object",
+    "properties": {
+        "Hardware": {
+            "description": "Hardware Data Subsection",
+            "type": "object"
+        }
+    }
+}

@@ -1,0 +1,193 @@
+#
+# MIT License
+#
+# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+
+
+use-api-gw-override: true
+test-networks:
+- name: nmnlb
+  gateway: services-gateway
+- name: cmn
+  gateway: services-gateway
+- name: can
+  gateway: customer-user-gateway
+- name: chn
+  gateway: customer-user-gateway
+
+reachable-networks: [ "can", "chn" ]
+
+ingress_api_services:
+- name: cray-bos
+  path: apis/bos/v1/session 
+  port: 443
+  expected-result: 200
+  namespace: services
+  gateways: ["services-gateway","customer-admin-gateway"]
+  project: CSM
+- name: cray-bss
+  path: apis/bss/boot/v1/bootparameters 
+  port: 443
+  expected-result: 200
+  namespace: services
+  gateways: ["services-gateway","customer-admin-gateway"]
+  project: CSM
+- name: cray-capmc
+  path: apis/capmc/capmc/get_node_rules
+  port: 443
+  expected-result: 200
+  namespace: services
+  gateways: ["services-gateway","customer-admin-gateway"]
+  project: CSM
+- name: cray-cfs-api
+  path: apis/cfs/v2/sessions
+  port: 443
+  expected-result: 200
+  namespace: services
+  gateways: ["services-gateway","customer-admin-gateway"]
+  project: CSM
+- name: cray-console-data
+  path: apis/consoledata/liveness
+  port: 443
+  expected-result: 204
+  namespace: services
+  gateways: ["services-gateway","customer-admin-gateway"]
+  project: CSM
+- name: cray-console-node
+  path: apis/console-node/console-node/liveness
+  expected-result: 204
+  port: 443
+  namespace: services
+  gateways: ["services-gateway","customer-admin-gateway"]
+  project: CSM
+- name: cray-console-operator
+  path: apis/console-operator/console-operator/liveness
+  port: 443
+  expected-result: 204
+  namespace: services
+  gateways: ["services-gateway","customer-admin-gateway"]
+  project: CSM
+- name: cray-cps
+  path: apis/v2/cps/contents
+  port: 443
+  expected-result: 200
+  namespace: services
+  gateways: ["services-gateway"]
+  project: Other
+- name: cray-fas
+  path: apis/fas/v1/snapshots
+  port: 443
+  expected-result: 200
+  namespace: services
+  gateways: ["services-gateway","customer-admin-gateway"]
+  project: CSM
+- name: cray-hbtd
+  path: apis/hbtd/hmi/v1/health
+  port: 443
+  expected-result: 200
+  namespace: services
+  gateways: ["services-gateway","customer-admin-gateway"]
+  project: CSM
+- name: cray-hmnfd
+  path: apis/hmnfd/hmi/v2/health
+  port: 443
+  expected-result: 200
+  namespace: services
+  gateways: ["services-gateway","customer-admin-gateway"]
+  project: CSM
+- name: cray-ims
+  path: apis/ims/images
+  port: 443
+  expected-result: 200
+  namespace: services
+  gateways: ["services-gateway","customer-admin-gateway"]
+  project: CSM
+- name: cray-powerdns-manager
+  path: apis/powerdns-manager/v1/liveness
+  port: 443
+  expected-result: 204
+  namespace: services
+  gateways: ["services-gateway","customer-admin-gateway"]
+  project: CSM
+- name: cray-reds
+  path: apis/reds/v1/liveness
+  port: 443
+  expected-result: 204
+  namespace: services
+  gateways: ["services-gateway","customer-admin-gateway"]
+  project: CSM
+- name: cray-scsd
+  path: apis/scsd/v1/health
+  port: 443
+  expected-result: 200
+  namespace: services
+  gateways: ["services-gateway","customer-admin-gateway"]
+  project: CSM
+- name: cray-sls
+  path: apis/sls/v1/health
+  port: 443
+  expected-result: 200
+  namespace: services
+  gateways: ["services-gateway","customer-admin-gateway"]
+  project: CSM
+- name: cray-smd
+  path: apis/smd/hsm/v1/service/ready
+  port: 443
+  expected-result: 200
+  namespace: services
+  gateways: ["services-gateway","customer-admin-gateway"]
+  project: CSM
+- name: cray-sts
+  path: apis/sts/healthz
+  port: 443
+  expected-result: 200
+  namespace: services
+  gateways: ["services-gateway","customer-admin-gateway"]
+  project: CSM
+- name: cray-uas-mgr
+  path: apis/uas-mgr/v1/images
+  port: 443
+  expected-result: 200
+  namespace: services
+  gateways: ["services-gateway","customer-admin-gateway"]
+  project: CSM
+- name: nmdv2-service
+  path: apis/v2/nmd/dumps
+  port: 443
+  expected-result: 200
+  namespace: services
+  gateways: ["services-gateway"]
+  project: Other
+- name: slingshot-fabric-manager
+  path: apis/fabric-manager/fabric/port-policies
+  port: 443
+  expected-result: 200
+  namespace: services
+  gateways: ["services-gateway"]
+  project: HSN
+- name: sma-telemetry
+  path: apis/sma-telemetry-api/v1/ping
+  port: 443
+  expected-result: 200
+  namespace: services
+  gateways: ["services-gateway"]
+  project: SMA

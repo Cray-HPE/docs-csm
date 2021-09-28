@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rack Resiliency (RR) on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-17/operations/rack_resiliency/</link>
+    <description>Recent content in Rack Resiliency (RR) on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-17</language>
+    <lastBuildDate>Sat, 05 Sep 2026 03:42:50 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-17/operations/rack_resiliency/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rack Resiliency ConfigMaps</title>
+      <link>/docs-csm/en-17/operations/rack_resiliency/configmaps/</link>
+      <pubDate>Sat, 05 Sep 2026 03:42:49 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/rack_resiliency/configmaps/</guid>
+      <description>Rack Resiliency ConfigMaps The Rack Resiliency Service uses two Kubernetes ConfigMaps in the rack-resiliency namespace for monitoring and tracking the status of critical services.&#xA;The two ConfigMaps are named rrs-mon-static (also referred to as the static ConfigMap) and rrs-mon-dynamic (also referred to as the dynamic ConfigMap).&#xA;Function of the ConfigMaps Static ConfigMap Stores the name and type of all the critical services to be monitored along with their namespaces. Stores the monitoring intervals for critical services.</description>
+    </item>
+    <item>
+      <title>Critical Services</title>
+      <link>/docs-csm/en-17/operations/rack_resiliency/critical_services/</link>
+      <pubDate>Sat, 05 Sep 2026 03:42:49 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/rack_resiliency/critical_services/</guid>
+      <description>Critical Services In the context of Rack Resiliency, the term &amp;ldquo;critical services&amp;rdquo; refers to those Kubernetes services which RR is monitoring and trying to make resilient. RR supports Kubernetes Deployments and StatefulSets as critical services.&#xA;HPE has prepopulated the RR critical services with the set of services necessary for the successful execution of user jobs. Note that this does not include all services that could reasonably be considered critical to the system overall.</description>
+    </item>
+    <item>
+      <title>Enabling Rack Resiliency During Install or Upgrade</title>
+      <link>/docs-csm/en-17/operations/rack_resiliency/enabling_rr_during_install_or_upgrade/</link>
+      <pubDate>Sat, 05 Sep 2026 03:42:49 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/rack_resiliency/enabling_rr_during_install_or_upgrade/</guid>
+      <description>Enabling Rack Resiliency During Install or Upgrade Overview Rack Resiliency should not be used in a production environment. For more details, see Rack Resiliency is experimental. By default, Rack Resiliency is disabled. This page documents the procedures for enabling and configuring Rack Resiliency during a CSM install or upgrade. For information on how to do this outside of an install or upgrade context, see Enabling Rack Resiliency on a Running System.</description>
+    </item>
+    <item>
+      <title>Enabling Rack Resiliency on a Running System</title>
+      <link>/docs-csm/en-17/operations/rack_resiliency/enabling_rr_on_running_system/</link>
+      <pubDate>Sat, 05 Sep 2026 03:42:49 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/rack_resiliency/enabling_rr_on_running_system/</guid>
+      <description>Enabling Rack Resiliency on a Running System Overview Rack Resiliency should not be used in a production environment. For more details, see Rack Resiliency is experimental. By default, Rack Resiliency is disabled. This page documents the procedures for enabling and configuring Rack Resiliency on a running system. For information on how to do this during an install or upgrade to CSM 1.7, see Enabling Rack Resiliency During Install or Upgrade. Rack Resiliency cannot be disabled after it has been enabled.</description>
+    </item>
+    <item>
+      <title>Kyverno Policy</title>
+      <link>/docs-csm/en-17/operations/rack_resiliency/kyverno_policy/</link>
+      <pubDate>Sat, 05 Sep 2026 03:42:49 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/rack_resiliency/kyverno_policy/</guid>
+      <description>Kyverno Policy Overview Policy details Restart critical services Upgrade from CSM 1.6 to CSM 1.7 Fresh install of CSM 1.7 Modifying critical services Add topology constraints Add label Spreading pods across zones Overview One of the key ways to ensure CSM critical services availability is that the failure of nodes or a single rack is to spread the replicas of these services across multiple zones and racks.&#xA;Some of the CSM critical services already have established the pod affinities to spread the replicas across nodes.</description>
+    </item>
+    <item>
+      <title>Manage Critical Services</title>
+      <link>/docs-csm/en-17/operations/rack_resiliency/manage_critical_services/</link>
+      <pubDate>Sat, 05 Sep 2026 03:42:49 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/rack_resiliency/manage_critical_services/</guid>
+      <description>Manage Critical Services This page contains the procedures to list, add, delete and modify the critical services:&#xA;Using Cray CLI By editing ConfigMap The ConfigMap rrs-mon-static in the rack-resiliency namespace is where RR keeps its list of critical services. The RR API/CLI commands to add services end up adding the new services to this ConfigMap. Because the RR API/CLI does not support edits or deletes, those can only be accomplished by directly editing the static ConfigMap.</description>
+    </item>
+    <item>
+      <title>Resiliency Monitoring Service (RMS)</title>
+      <link>/docs-csm/en-17/operations/rack_resiliency/resiliency_monitoring_service/</link>
+      <pubDate>Sat, 05 Sep 2026 03:42:49 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/rack_resiliency/resiliency_monitoring_service/</guid>
+      <description>Resiliency Monitoring Service (RMS) Overview Operation Control loop Monitoring events Timing ConfigMaps Log messages Overview The Resiliency Monitoring Service (RMS) is a part of the Rack Resiliency Service (RRS). RMS runs along with the RR API service inside the cray-rrs pod.&#xA;The RMS continuously monitors the health and availability of critical services, management nodes, and Ceph utility storage. The RMS uses the following components to provide its functionality:&#xA;ConfigMaps Hardware Management Notification Fanout Daemon (HMNFD) Kubernetes zones Ceph zones Operation RMS operates using two primary flows: the Control loop and the Monitoring events.</description>
+    </item>
+    <item>
+      <title>Setup of Rack Resiliency</title>
+      <link>/docs-csm/en-17/operations/rack_resiliency/setup_of_rack_resiliency/</link>
+      <pubDate>Sat, 05 Sep 2026 03:42:49 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/rack_resiliency/setup_of_rack_resiliency/</guid>
+      <description>Setup of Rack Resiliency The configuration of Rack Resiliency happens as part of Management Node Personalization. Specifically, the setup is done by the rack_resiliency_for_mgmt_nodes.yml Ansible playbook in the csm-config-management Version Control Service (VCS) repository.&#xA;If Rack Resiliency is not enabled, then this playbook will do nothing. See Enable and configure for details on how it is enabled.&#xA;Setup flows There are two setup flows &amp;ndash; one for setting up Kubernetes, and one for setting up Ceph.</description>
+    </item>
+    <item>
+      <title>Troubleshooting Rack Resiliency</title>
+      <link>/docs-csm/en-17/operations/rack_resiliency/troubleshooting/</link>
+      <pubDate>Sat, 05 Sep 2026 03:42:50 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/rack_resiliency/troubleshooting/</guid>
+      <description>Troubleshooting Rack Resiliency This page contains general Rack Resiliency troubleshooting topics.&#xA;Cray CLI Wrong critical service type Resiliency Monitoring Service (RMS) View RMS logs Interpreting RMS logs State change notification from HMNFD Node failure Rack failure Status of Ceph Critical services events Service imbalance Service status Service not found Unable to register for notification Getting details about RMS Critical services health check cray-rrs pod is in init state Rack Resiliency not enabled Zones not configured ConfigMaps not present Physical movement of nodes from one rack to another Cray CLI (ncn-mw#) The Cray CLI is used to interact with multiple components of Rack Resiliency.</description>
+    </item>
+    <item>
+      <title>Zones</title>
+      <link>/docs-csm/en-17/operations/rack_resiliency/zones/</link>
+      <pubDate>Sat, 05 Sep 2026 03:42:50 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/rack_resiliency/zones/</guid>
+      <description>Zones Overview Zone names Zone name prefix reasons Zone name prefix restrictions Kubernetes zones Viewing Kubernetes zones Ceph zones Ceph service zoning Viewing Ceph zones Managing zones Listing zones Describing a zone Overview A zone in the Rack Resiliency solution is Failure domain. Specifically, it is a representation of a Management Plane Failure Domain (MPFD). In general for CSM, a MPFD constitutes one or more racks that contain CSM management nodes.</description>
+    </item>
+    <item>
+      <title>cray-rrs Deployment</title>
+      <link>/docs-csm/en-17/operations/rack_resiliency/cray-rrs_deployment/</link>
+      <pubDate>Sat, 05 Sep 2026 03:42:50 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/rack_resiliency/cray-rrs_deployment/</guid>
+      <description>cray-rrs Deployment cray-rrs is the name of the RRS (Rack Resiliency Service) Helm chart. The chart is deployed in the rack-resiliency namespace automatically during the CSM install or upgrade process.&#xA;The chart includes:&#xA;Containers Kyverno Policy ConfigMaps Containers The service includes the following containers:&#xA;init containers: cray-rrs-check: This checks if Rack Resiliency is enabled and if zones for Kubernetes and Ceph have been provisioned. It also ensures that the rollout restart of all the critical services is successfully completed.</description>
+    </item>
+  </channel>
+</rss>

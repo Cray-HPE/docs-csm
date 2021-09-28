@@ -1,0 +1,544 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>known issues on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-16/troubleshooting/known_issues/</link>
+    <description>Recent content in known issues on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-16</language>
+    <lastBuildDate>Sat, 05 Sep 2026 03:43:15 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-16/troubleshooting/known_issues/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>BOS Log Level Change Issues</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/bos_log_level_change_issues/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:08 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/bos_log_level_change_issues/</guid>
+      <description>BOS Log Level Change Issues Summary Non-dynamic change Uninformative log level change message Summary There are a couple of issues related to changing the logging level for the Boot Orchestration Service (BOS).&#xA;Non-dynamic change Uninformative log level change message Non-dynamic change After changing the BOS logging level, the BOS API server pod logs show a message reflecting this change. However, the server does not fully pick up the change until the Kubernetes deployment of the API server is restarted.</description>
+    </item>
+    <item>
+      <title>BOS Operator Pods OOMKilled</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/bos_operator_pods_oomkilled/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:08 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/bos_operator_pods_oomkilled/</guid>
+      <description>BOS Operator Pods OOMKilled Summary Details Workaround Fix Summary On large scale systems with thousands of nodes, if the Boot Orchestration Service (BOS) has debug logging enabled, then it is possible for some BOS operator Kubernetes pods to be OOMKilled when trying to log particularly large API responses.&#xA;On large enough systems, it is possible for this to happen even without debug logging enabled.&#xA;Details The BOS logging level is one of numerous Options that an administrator may customize.</description>
+    </item>
+    <item>
+      <title>BOS Sessions Stuck Pending</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/bos_sessions_stuck_pending/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:08 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/bos_sessions_stuck_pending/</guid>
+      <description>BOS Sessions Stuck Pending Summary Symptoms Details Remediation Fix Summary If a Boot Orchestration Service (BOS) Session is created using a Session Template that indirectly refers to invalid xnames, then this can prevent the BOS session-setup operator from moving any sessions out of the pending state.&#xA;Symptoms The primary symptom is that new BOS sessions will remain in the pending state and never progress. If the cray-bos-operator-session-setup pod logs are viewed, it will repeatedly log errors, every time it tries to process sessions.</description>
+    </item>
+    <item>
+      <title>CFS Allows Some In-Use Sources To Be Deleted</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/cfs_allows_some_in-use_sources_to_be_deleted/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:08 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/cfs_allows_some_in-use_sources_to_be_deleted/</guid>
+      <description>CFS Allows Some In-Use Sources To Be Deleted This CFS issue exists in CSM 1.5.0, CSM 1.5.1, CSM 1.5.2, and CSM 1.6.0.&#xA;CFS has safeguards in place that prevent a CFS source from being deleted while it is still in use. There are three places where a source can be specified in CFS:&#xA;The Additional inventory source CFS Global Option. In the source field of a layer of a CFS configuration.</description>
+    </item>
+    <item>
+      <title>CFS Batcher Can Be Slow To See Updated CFS Options</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/cfs_batcher_can_be_slow_to_see_updated_cfs_options/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:08 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/cfs_batcher_can_be_slow_to_see_updated_cfs_options/</guid>
+      <description>CFS Batcher Can Be Slow To See Updated CFS Options The Configuration Framework Service (CFS) has an issue in which the CFS Batcher takes a long time to read updated CFS Global Option values.&#xA;Batcher only checks the CFS global option values in two cases:&#xA;When it first starts up When it scans and processes batches The batcher check interval option controls how often the batcher scans and processes batches.</description>
+    </item>
+    <item>
+      <title>CFS Batcher Creating Multiple Sessions For Same Batch</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/cfs_batcher_creating_multiple_sessions_for_same_batch/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:08 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/cfs_batcher_creating_multiple_sessions_for_same_batch/</guid>
+      <description>CFS Batcher Creating Multiple Sessions For Same Batch The Configuration Framework Service (CFS) has an issue in which the CFS Batcher creates multiple CFS sessions for the same batch of components.&#xA;This issue arises when CFS Batcher makes a request to the CFS API to create a new session, this request times out, but it ultimately succeeds (unbeknownst to CFS batcher). In this case, CFS Batcher will attempt to create a new CFS session (with a different name) for that same batch.</description>
+    </item>
+    <item>
+      <title>CFS Component State Update Does Not Preserve Layer Timestamps</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/cfs_component_state_update_does_not_preserve_layer_timestamps/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:08 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/cfs_component_state_update_does_not_preserve_layer_timestamps/</guid>
+      <description>CFS Component State Update Does Not Preserve Layer Timestamps The Configuration Framework Service (CFS) has issues in which updating the state of a CFS component updates the timestamps for layers that were not changed.&#xA;Details For this issue, it is important to understand that when patching component state in CFS, the patch data is not allowed to specify the last updated timestamps for the state layers &amp;ndash; it is a read-only field that CFS is responsible for maintaining.</description>
+    </item>
+    <item>
+      <title>CFS Component State Updates Allow Invalid Values</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/cfs_component_state_updates_allow_invalid_values/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:08 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/cfs_component_state_updates_allow_invalid_values/</guid>
+      <description>CFS Component State Updates Allow Invalid Values The Configuration Framework Service (CFS) has issues in which updating the state of a CFS component can leave the component with invalid state data. This in turn can cause problems, such as a complete failure of CFS Batcher.&#xA;Details The issue is caused by a few problems:&#xA;CFS does not enforce any required fields for configuration status layers. CFS does very little validation of values in these fields.</description>
+    </item>
+    <item>
+      <title>CFS Component With Zero-Length ID</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/cfs_component_with_zero_length_id/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:08 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/cfs_component_with_zero_length_id/</guid>
+      <description>CFS Component With Zero-Length ID It is possible in some situations for a CFS component to be created with a zero-length string for an id field (either manually by an administrator, or by the CFS Hardware Synchronization Agent). Such a component cannot be deleted using the Cray CLI or the CFS API.&#xA;In CSM 1.7, the bug that allows these CFS components to be created has been fixed, but upgrading to CSM 1.</description>
+    </item>
+    <item>
+      <title>CFS Operator Creating Multiple Jobs For Same Session</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/cfs_operator_creating_multiple_jobs_for_same_session/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:08 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/cfs_operator_creating_multiple_jobs_for_same_session/</guid>
+      <description>CFS Operator Creating Multiple Jobs For Same Session The Configuration Framework Service (CFS) has an issue in which the CFS Operator creates multiple Kubernetes jobs for the same CFS session.&#xA;When a new session is created, the CFS API server communicates this to the CFS operator over the Kafka bus. This communication is what causes the CFS operator to create a Kubernetes job for the session. This issue arises in a case where the CFS API server thinks the Kafka send failed or timed out, when it actually succeeded.</description>
+    </item>
+    <item>
+      <title>CFS Sessions Stuck Pending</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/cfs_sessions_stuck_pending/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:09 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/cfs_sessions_stuck_pending/</guid>
+      <description>CFS Sessions Stuck Pending Troubleshoot issues where Configuration Framework Service (CFS) sessions are being created but remain in the pending state, with no Kubernetes jobs or pods created.&#xA;Symptoms The signature of this issue is found in the CFS Operator logs.&#xA;(ncn-mw#) The CFS Operator logs should show that it is attempting to create sessions, but is unable to find the session records.&#xA;kubectl logs -n services -l app.kubernetes.io/instance=cray-cfs-operator If this issue is happening, then messages like the following should be in the logs:</description>
+    </item>
+    <item>
+      <title>Gigabyte BMC Missing Redfish Data</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/gigabyte_bmc_missing_redfish_data/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:09 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/gigabyte_bmc_missing_redfish_data/</guid>
+      <description>Gigabyte BMC Missing Redfish Data Follow this procedure if you notice data from Gigabyte nodes is missing from Hardware State Manager (HSM) or other CSM tools.&#xA;If data from Gigabyte nodes is missing from HSM or other CSM tools, check the Redfish endpoint on the BMC to see if the data is present.&#xA;If the data is not present in the Redfish, then a cold reset of the BMC is needed to refresh the Redfish values.</description>
+    </item>
+    <item>
+      <title>HMS Resource Leaks</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/hms_resource_leaks/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:09 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/hms_resource_leaks/</guid>
+      <description>HMS Resource Leaks Resource leaks have been discovered in several HMS services (PCS, SMD, hmcollector, and FAS). The symptoms are quite varied and are generally not detrimental to system functionality due to the resiliency provided by Kubernetes. They are more likely to present on larger systems. On this page we document the symptoms, known impacts to functionality, and include some examples of how to proactively check your system for this issue.</description>
+    </item>
+    <item>
+      <title>IMS Created Image Stores Incorrect Metadata</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/ims_created_image_stores_incorrect_metadata/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:09 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/ims_created_image_stores_incorrect_metadata/</guid>
+      <description>IMS Created Image Stores Incorrect Metadata Issue description Workaround Image has not yet been created Image was created without metadata Image was created with metadata Issue description When an IMS image is created, if a metadata key and value (also known as an image label) are specified, then the created image does not have the expected metadata.&#xA;This is the expected format after creating an image with a metadata key and value specified:</description>
+    </item>
+    <item>
+      <title>Soft Deleted IMS Image Metadata is Lost</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/ims_soft_deleted_image_metadata_is_lost/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:09 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/ims_soft_deleted_image_metadata_is_lost/</guid>
+      <description>Soft Deleted IMS Image Metadata is Lost Issue description When IMS image is deleted and becomes a &amp;ldquo;deleted image&amp;rdquo; its, metadata attribute is set to {}, regardless of its original value. This new value persists even if the image is later restored using undelete operation.&#xA;This bug is fixed in CSM 1.7.0. In earlier CSM versions, the only option is to use the provided Workaround.&#xA;For more information on deleting and restoring resources in IMS, see Delete or Recover Deleted IMS Content.</description>
+    </item>
+    <item>
+      <title>Keycloak Error &#34;Cannot read properties&#34; in Web UI</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/keycloak_error_cannot_read_properties/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:09 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/keycloak_error_cannot_read_properties/</guid>
+      <description>Keycloak Error &amp;ldquo;Cannot read properties&amp;rdquo; in Web UI There is a known error that occurs after upgrading CSM from 1.4 to CSM 1.5.0 and later. This error is shown when looking at users in Keycloak&amp;rsquo;s web UI. The error occurs due to a change in how the LDAP configuration is done in earlier versions of Keycloak. This should not occur on fresh installs. The error occurs when looking at the user lists on Keycloak Web UI, and once looking at the page leaves a error message on the page stating &amp;ldquo;Cannot read properties of undefined (reading 0)&amp;rdquo;</description>
+    </item>
+    <item>
+      <title>Nexus Fails Authentication with Keycloak Users</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/nexus_fail_authentication_with_keycloak_users/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:09 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/nexus_fail_authentication_with_keycloak_users/</guid>
+      <description>Nexus Fails Authentication with Keycloak Users There is a known issue where the Nexus chart gets created and setup before keycloak-setup has completed running. This causes an issue while attempting to log in to Nexus with a Keycloak user. This can also cause a Nexus test to fail during CSM health validation.&#xA;Fix To recover from this situation, perform the following procedure.&#xA;(ncn-mw#) Get the correct client secret for the Nexus Keycloak client.</description>
+    </item>
+    <item>
+      <title>Omitting Authentication Method In API Call Causes CFS Source Creation To Fail</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/omitting_authentication_method_in_api_call_causes_cfs_source_creation_to_fail/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:09 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/omitting_authentication_method_in_api_call_causes_cfs_source_creation_to_fail/</guid>
+      <description>Omitting Authentication Method In API Call Causes CFS Source Creation To Fail This CFS issue exists in CSM 1.5.0, CSM 1.5.1, CSM 1.5.2, and CSM 1.6.0.&#xA;When making a POST request to create a CFS source, the request will fail with an internal server error if no authentication method is specified, even though the CFS API specification lists this parameter as optional and has a default value for it.&#xA;This does not happen when using the Cray CLI to create the source, because the CLI will specify the default authentication method if the user does not specify it.</description>
+    </item>
+    <item>
+      <title>Race Conditions in BOS and CFS</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/race_conditions_in_bos_and_cfs/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:09 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/race_conditions_in_bos_and_cfs/</guid>
+      <description>Race Conditions in BOS and CFS Summary Both the Boot Orchestration Service (BOS) and Configuration Framework Service (CFS) have issues where race conditions can lead to unexpected or invalid behavior. These issues come in two varieties:&#xA;API server race conditions Operator race conditions API server race conditions The API servers for both BOS and CFS are multi-process and multi-threaded, allowing multiple requests to be handled simultaneously. In the case where these requests impact overlapping resources, problems can arise.</description>
+    </item>
+    <item>
+      <title>Boot content projection services can fail if an image does not have an etag</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/sbps_boot_fail/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:09 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/sbps_boot_fail/</guid>
+      <description>Boot content projection services can fail if an image does not have an etag Issue Description iSCSI based boot content projection which is also known as &amp;ldquo;Scalable Boot Content Projection&amp;rdquo; (SBPS) for rootfs and PE images is supported in CSM 1.6.0. SBPS fails if the rootfs image manifest to be projected doesn&amp;rsquo;t have an etag field or the etag field is present but set to NULL. Due to this problem with etags, the SBPS core service, the SBPS Marshal agent, crashes.</description>
+    </item>
+    <item>
+      <title>SLS Not Working During Node Rebuild</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/sls_not_working_during_node_rebuild/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:10 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/sls_not_working_during_node_rebuild/</guid>
+      <description>SLS Not Working During Node Rebuild During some node rebuilds (including those that happen during management node upgrades in the CSM upgrade process), the SLS Postgres database gets into a bad state, causing SLS to become unhealthy. This page outlines how to detect if this has happened and provides a remediation procedure.&#xA;Note: If encountering this during a CSM upgrade, then at this point of the upgrade process, the system has not yet upgraded the CSM services themselves.</description>
+    </item>
+    <item>
+      <title>Known Issue Skipped Ansible if no CSM root secret in Vault</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/skipped_ansible_if_no_csm_root_secret_in_vault/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:10 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/skipped_ansible_if_no_csm_root_secret_in_vault/</guid>
+      <description>Known Issue: Skipped Ansible if no CSM root secret in Vault In CSM 1.2 through CSM 1.6, the csm.ssh_keys Ansible role calls end_play if no CSM root secret is found in Vault. This causes the rest of the play to be skipped, when really only that role should be skipped.&#xA;Fix This issue is fixed and no longer exists starting in CSM 1.7.&#xA;Workarounds Set CSM root secret The easiest workaround is to set the CSM root secret in Vault.</description>
+    </item>
+    <item>
+      <title>VCS Password With Illegal Characters</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/vcs_password_with_illegal_characters/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:10 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/vcs_password_with_illegal_characters/</guid>
+      <description>VCS Password With Illegal Characters In rare cases, a new CSM install will generate a VCS administrative password that contains illegal characters.&#xA;Symptoms csm-config-import job failure cmsdev VCS subtest failure Remediation Symptoms There are two ways that this problem is discovered.&#xA;csm-config-import job failure When this problem causes a csm-config-import job to fail, the Kubernetes pod log will end with an error similar to the following.&#xA;2024-06-13 21:11:20,793 - cf-gitea-import - DEBUG - Cloning repository: csm-config-management Traceback (most recent call last): File &amp;#34;/opt/csm/cf-gitea-import/.</description>
+    </item>
+    <item>
+      <title>Known Issue admin-client-auth Not Found</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/admin_client_auth_not_found/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:10 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/admin_client_auth_not_found/</guid>
+      <description>Known Issue: admin-client-auth Not Found Running the Install CSM Services script, the following error may occur:&#xA;ERROR Step: Set Management NCNs to use Unbound --- Checking Precondition + Getting admin-client-auth secret Error from server (NotFound): secrets &amp;#34;admin-client-auth&amp;#34; not found + Obtaining access token Fix This can occur if the keycloak-users-localize pod has not completed, and that can be caused by an intermittent Istio issue. Remediate the issue with the following procedure:</description>
+    </item>
+    <item>
+      <title>Antero node NID allocation</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/antero_node_nid_allocation/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:10 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/antero_node_nid_allocation/</guid>
+      <description>Antero node NID allocation Overview Workaround List Antero blade NIDs List Antero nodes List all compute NIDs Correct the NID numbering Overview There is a known issue with Antero nodes where NIDs are not correctly allocated. When Cray Site Init (CSI) generates the System Layout Service (SLS) input file, it assumes that all blades in liquid-cooled cabinets are Windom compute blades. Even though both Antero and Windom blades have 4 nodes, they have different physical layouts.</description>
+    </item>
+    <item>
+      <title>Barebones Boot Test Failure</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/barebones_boot_test_failure/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:10 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/barebones_boot_test_failure/</guid>
+      <description>Barebones Boot Test Failure /opt/cray/tests/integration/csm/barebones_image_test returns &amp;ldquo;Failure of barebones image boot test&amp;rdquo;.&#xA;In CSM 1.6.0, the barebones boot image test fails with output similar to the following:&#xA;cray.barebones-boot-test: INFO Barebones image boot test starting cray.barebones-boot-test: INFO For complete logs look in the file /opt/cray/tests/integration/logs/csm/barebones_image_test/20250211112322.log cray.barebones-boot-test: INFO No architecture, node, or image specified; using default arch: x86 cray.barebones-boot-test: INFO Latest CSM version found in Product Catalog: 1.6.0 cray.barebones-boot-test: INFO Querying HSM to find an enabled compute node with &amp;#39;x86&amp;#39; arch cray.</description>
+    </item>
+    <item>
+      <title>Known Issue Ceph OSD latency</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/ceph_osd_latency/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:10 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/ceph_osd_latency/</guid>
+      <description>Known Issue: Ceph OSD latency On some systems, Ceph can begin to exhibit latency over time, and if this occurs it can eventually cause services like slurm and services that are backed by etcd clusters to exhibit slowness and possible timeouts. In order to determine if this is occurring, run the ceph osd perf command on a master node over a period of about ten seconds, and if an OSD consistently shows latency of above 100ms (as follows), the OSDs exhibiting this latency should be restarted:</description>
+    </item>
+    <item>
+      <title>Ceph OSD pool fails to create</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/ceph_osd_pool_fails_to_create/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:10 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/ceph_osd_pool_fails_to_create/</guid>
+      <description>Ceph OSD pool fails to create Description Cloud-init on ncn-s001 can partially fail if not enough OSDs are up when Ceph OSD pools are being created. This problem has only been observed on CSM 1.6.0 and has been fixed in CSM 1.6.1. If not enough OSDs are up when Ceph attempts to create pools, the kube and/or smf pool will not be created. Additionally, the csi-kube-secret and/or the csi-sma-secret will not exist in the default namespace.</description>
+    </item>
+    <item>
+      <title>cfs-api Pods in CLBO State During CSM Install</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/cfs-api_pods_in_clbo_state/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:10 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/cfs-api_pods_in_clbo_state/</guid>
+      <description>cfs-api Pods in CLBO State During CSM Install Issue description When installing CSM, cray-shared-kafka-kafka Kubernetes pods in the services namespace fail to come up which results in cfs-api pods in the CrashLoopBackOff state. This happens because of an issue with Zookeeper related to slow DNS. Zookeeper fails to come up if the DNS is not set up for all hosts at startup. When this happens, the cluster gets stuck with the Zookeeper pods running, but brokers not coming up.</description>
+    </item>
+    <item>
+      <title>CFS Session for Image Customization on Remote Node Status Stuck at running</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/cfs_session_status_for_image_customization_on_remote_node_stuck_at_running/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:11 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/cfs_session_status_for_image_customization_on_remote_node_stuck_at_running/</guid>
+      <description>CFS Session for Image Customization on Remote Node Status Stuck at running Issue description A CFS session for image customization job on a remote node can get stuck in the running state indefinitely. This can occur during image customization if any of the following things happen:&#xA;The remote node reboots or crashes. The IMS job container on the remote build node is killed or stopped. Error identification A symptom of this problem is the following error repeated continuously in the inventory container log in the CFS session pod.</description>
+    </item>
+    <item>
+      <title>SAT/HSM/CAPMC/PCS Component Power State Mismatch</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/component_power_state_mismatch/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:11 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/component_power_state_mismatch/</guid>
+      <description>SAT/HSM/CAPMC/PCS Component Power State Mismatch Because of various hardware or communication issues, the node state reported by SAT and HSM (Hardware State Manager) may become out of sync with the actual hardware state reported by PCS/CAPMC or Redfish. In most cases this will be noticed when trying to power on or off nodes with BOS, and will present as SAT or HSM reporting nodes are On while PCS/CAPMC reports them as Off (or vice versa).</description>
+    </item>
+    <item>
+      <title>Console SSH Key Permissions</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/console_ssh_key_permissions/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:11 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/console_ssh_key_permissions/</guid>
+      <description>Console SSH Key Permissions Issue description Sometimes the permissions of the private key file used to connect with the Mountain nodes via SSH are not set correctly. This can cause the SSH connection to the node to fail. The log file will not contain the console output and interactive sessions will fail.&#xA;Error identification The console log file will contain an error message similar to the following:&#xA;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ @ WARNING: UNPROTECTED PRIVATE KEY FILE!</description>
+    </item>
+    <item>
+      <title>cray-console-node pods in CrashLoopBackOff</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/cray-console-node_pods_in_crashloopbackoff/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:11 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/cray-console-node_pods_in_crashloopbackoff/</guid>
+      <description>cray-console-node pods in CrashLoopBackOff Issue description The cray-console-node Kubernetes pods may go into a CrashLoopBackOff state. This happens because of a permission issue with the /var/log/conman directory inside the container.&#xA;Error identification The symptom of this problem is that the cray-console-node pods will be in a CrashLoopBackOff state. The pod logs will contain messages resembling the following:&#xA;2023/02/03 16:30:37 Starting a new instance of conmand 2023/02/03 16:30:37 Starting to parse file: /var/log/conman/console.</description>
+    </item>
+    <item>
+      <title>Cray CLI 403 Forbidden Errors</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/craycli_403_forbidden_errors/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:11 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/craycli_403_forbidden_errors/</guid>
+      <description>Cray CLI 403 Forbidden Errors There is a known issue where the Keycloak configuration obtained from LDAP is incomplete causing the keycloak-users-localize job to fail to complete. This, in turn, causes 403 Forbidden errors when trying to use the cray CLI. This can also cause a Keycloak test to fail during CSM health validation.&#xA;Fix To recover from this situation, the following can be done.&#xA;Log into the Keycloak admin console.</description>
+    </item>
+    <item>
+      <title>HMS Discovery Job Not Creating RedfishEndpoints In Hardware State Manager</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/discovery_job_not_creating_redfish_endpoints/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:11 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/discovery_job_not_creating_redfish_endpoints/</guid>
+      <description>HMS Discovery Job Not Creating RedfishEndpoints In Hardware State Manager It is a known issue with the HMS Discovery cronjob that when a BMC does not respond by its IP address, the discovery job will not create a RedfishEndpoint for the BMC in Hardware State Manager (HSM). However, it does update the BMC MAC address in HSM with its component name (xname). The discovery job only creates a new RedfishEndpoints when it encounters an unknown MAC address without a component name (xname) associated with it.</description>
+    </item>
+    <item>
+      <title>Boot content projection services can fail if iscsid and multipathd services are not enabled on compute nodes and UANs</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/enable_iscsid_multipathd/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:11 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/enable_iscsid_multipathd/</guid>
+      <description>Boot content projection services can fail if iscsid and multipathd services are not enabled on compute nodes and UANs Issue Description iSCSI based boot content projection which is also known as &amp;ldquo;Scalable Boot Content Projection&amp;rdquo; (SBPS) for rootfs and PE images is supported in CSM version CSM 1.6.0 and later. On a customer system, using CSM-1.6.0 with USS-1.1.x on compute nodes/ UANs in order to support AARCH64 images, iscsid and multipathd services are not enabled by default.</description>
+    </item>
+    <item>
+      <title>Flags Set For Nodes In HSM</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/flags_set_for_nodes_in_hsm/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:11 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/flags_set_for_nodes_in_hsm/</guid>
+      <description>Flags Set For Nodes In HSM Introduction Warning Flags Alert Flags Introduction This document describes how to identify and troubleshoot issues with nodes in HSM that have flags other than OK set.&#xA;Warning flags Warning flags are set for nodes in HSM when BMCs report an unhealthy status in Redfish for some component associated with the node.&#xA;(ncn-mw#) Check for nodes with Warning flags set in HSM.&#xA;cray hsm state components list --type Node --flag Warning --format json | jq &amp;#39;.</description>
+    </item>
+    <item>
+      <title>Goss Test Fails with Connection Refused</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/goss_tests_fails_with_connection_refused/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:11 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/goss_tests_fails_with_connection_refused/</guid>
+      <description>Goss Test Fails with Connection Refused Table of contents Introduction Example Error Examining the problem Resolution Other possible causes of this error Introduction Follow this procedure when a Goss test fails with Failed to establish a new connection: [Errno 111] Connection refused.&#xA;Example Error The following is an example of this error.&#xA;ERROR: Error encountered running http://ncn-s003.hmn:8997/ncn-healthcheck-storage tests: Unexpected error attempting GET request to http://ncn-s003.hmn:8997/ncn-healthcheck-storage: ConnectionError: HTTPConnectionPool(host=&amp;#39;ncn-s003.hmn&amp;#39;, port=8997): Max retries exceeded with url: /ncn-healthcheck-storage (Caused by NewConnectionError(&amp;#39;&amp;lt;urllib3.</description>
+    </item>
+    <item>
+      <title>Helm Chart Deploy Timeouts</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/helm_chart_deploy_timeouts/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:12 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/helm_chart_deploy_timeouts/</guid>
+      <description>Helm Chart Deploy Timeouts There are times when installing CSM Services (either during fresh install or upgrade) when some helm charts may take longer than five minutes (default) to deploy. Several charts known to take longer than five minutes have been modified to allow more time, but this page can be used to manually increase this timeout if needed.&#xA;Edit the manifest used by Loftsman Locate the chart which is taking too long to deploy in the manifest (typically platform.</description>
+    </item>
+    <item>
+      <title>HPE iLO dropping event subscriptions and not properly transitioning power state in CSM software</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/hpe_systems_not_transitioning_power_state/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:12 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/hpe_systems_not_transitioning_power_state/</guid>
+      <description>HPE iLO dropping event subscriptions and not properly transitioning power state in CSM software HPE Systems impacted:&#xA;DL325 DL385 Apollo 6500 When HPE iLO systems are not properly transitioning power state in HMS/SAT this could indicate that Redfish events are not being received by the HMS HM-Collector. When this occurs, the HPE iLO receives an error back from its attempt to send events and will delete the subscription if there are enough failures.</description>
+    </item>
+    <item>
+      <title>iSCSI NMN DNS A Records Missing</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/iscsi_nmn_dns_a_records_missing/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:12 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/iscsi_nmn_dns_a_records_missing/</guid>
+      <description>iSCSI NMN DNS A Records Missing Description The Scalable Boot Projection Service (SBPS) supports iSCSI-based boot content projection for rootfs and PE images in CSM version CSM 1.6.0 and later.&#xA;In CSM 1.6, there is a bug that may cause DNS &amp;ldquo;A&amp;rdquo; records for the NMN not to be created. iSCSI SBPS projection over NMN will fail if DNS &amp;ldquo;A&amp;rdquo; (address) records for the NMN are not created. This bug is fixed in CSM 1.</description>
+    </item>
+    <item>
+      <title>IMS Image Customization Job Status Stuck at waiting on user</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/ims_image_customization_job_status_stuck_at_waiting_on_user/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:12 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/ims_image_customization_job_status_stuck_at_waiting_on_user/</guid>
+      <description>IMS Image Customization Job Status Stuck at waiting_on_user Issue description An IMS image customization job on a remote node can get stuck in the waiting_on_user state indefinitely. This can occur during image customization if any of the following things happen:&#xA;The remote node reboots or crashes. The IMS job container on the remote build node is killed or stopped. Error identification A symptom of this problem is a failure when attempting to SSH into the sshd container of the IMS image customization job.</description>
+    </item>
+    <item>
+      <title>Known Issue IMS Images Orphaned in S3</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/ims_images_orphaned_in_s3/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:12 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/ims_images_orphaned_in_s3/</guid>
+      <description>Known Issue: IMS Images Orphaned in S3 There was an issue where image files larger than 5Gb were not correctly deleted from S3 when the image was deleted through the IMS service. These artifacts are no longer referenced by IMS but are still left in the S3 boot-images bucket and need to be deleted manually.&#xA;This issue is resolved in CSM 1.6.1 and 1.7.0; additional orphaned artifacts will not be produced in these or later versions.</description>
+    </item>
+    <item>
+      <title>Known Issue IMS remote node build failure</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/ims_remote_node_image_build_failure/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:12 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/ims_remote_node_image_build_failure/</guid>
+      <description>Known Issue: IMS remote node build failure In CSM 1.6.0, there is a failure in building the IMS barebones builder image while following these steps: Create a barebones IMS builder image&#xA;When this happens, the CFS pod customizing the image may contain this error:&#xA;TASK [csm.packages : Install RPMs (SLES-based)] ******************************** fatal: [3a507f20-db8b-475a-851c-214a5acda6e4]: FAILED! =&amp;gt; { &amp;#34;changed&amp;#34;: false, &amp;#34;cmd&amp;#34;: [&amp;#34;/usr/bin/zypper&amp;#34;, &amp;#34;--quiet&amp;#34;, &amp;#34;--non-interactive&amp;#34;, &amp;#34;--xmlout&amp;#34;, &amp;#34;install&amp;#34;, &amp;#34;--type&amp;#34;, &amp;#34;package&amp;#34;, &amp;#34;--auto-agree-with-licenses&amp;#34;, &amp;#34;--no-recommends&amp;#34;, &amp;#34;--oldpackage&amp;#34;, &amp;#34;--&amp;#34;, &amp;#34;+podman&amp;#34;, &amp;#34;+cfs-debugger&amp;#34;, &amp;#34;+cfs-state-reporter&amp;#34;, &amp;#34;+cfs-trust&amp;#34;, &amp;#34;+craycli&amp;#34;, &amp;#34;+csm-auth-utils&amp;#34;, &amp;#34;+csm-node-heartbeat&amp;#34;, &amp;#34;+csm-node-identity&amp;#34;, &amp;#34;+hpe-yq&amp;#34;, &amp;#34;+spire-agent&amp;gt;=1.</description>
+    </item>
+    <item>
+      <title>Soft Deleted IMS Image Always Has arch=x86 64</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/ims_soft_deleted_image_always_assigned_arch_x86_64/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:12 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/ims_soft_deleted_image_always_assigned_arch_x86_64/</guid>
+      <description>Soft Deleted IMS Image Always Has arch=x86_64 Issue description When an IMS image is deleted and becomes a &amp;ldquo;deleted image&amp;rdquo;, its arch attribute is set to x86_64, regardless of its original value. This new value persists even if the image is later restored using an undelete operation.&#xA;This bug is fixed in CSM 1.6.1. In earlier CSM versions, the only option is to use the provided Workaround.&#xA;For more information on deleting and restoring resources in IMS, see Delete or Recover Deleted IMS Content.</description>
+    </item>
+    <item>
+      <title>Soft Deleted IMS Recipe Always Has arch=x86 64</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/ims_soft_deleted_recipe_always_assigned_arch_x86_64/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:12 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/ims_soft_deleted_recipe_always_assigned_arch_x86_64/</guid>
+      <description>Soft Deleted IMS Recipe Always Has arch=x86_64 Issue description When an IMS recipe is deleted and becomes a &amp;ldquo;deleted recipe&amp;rdquo;, its arch attribute is set to x86_64, regardless of its original value. This new value persists even if the recipe is later restored using an undelete operation.&#xA;This bug is fixed in CSM 1.7.0. In earlier CSM versions, the only option is to use the provided Workaround.&#xA;For more information on deleting and restoring resources in IMS, see Delete or Recover Deleted IMS Content.</description>
+    </item>
+    <item>
+      <title>Soft Deleted IMS Recipe Always Has require dkms=true</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/ims_soft_deleted_recipe_always_has_require_dkms_true/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:12 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/ims_soft_deleted_recipe_always_has_require_dkms_true/</guid>
+      <description>Soft Deleted IMS Recipe Always Has require_dkms=true Issue description When an IMS recipe is deleted and becomes a &amp;ldquo;deleted recipe&amp;rdquo;, its require_dkms attribute is set to true, regardless of its original value. This new value persists even if the recipe is later restored using an undelete operation.&#xA;This bug is fixed in CSM 1.7.0. In earlier CSM versions, the only option is to use the provided Workaround.&#xA;For more information on deleting and restoring resources in IMS, see Delete or Recover Deleted IMS Content.</description>
+    </item>
+    <item>
+      <title>Known Issues With NCN Health Checks</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/issues_with_ncn_health_checks/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:12 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/issues_with_ncn_health_checks/</guid>
+      <description>Known Issues With NCN Health Checks General issues Specific test issues Kubernetes Query BSS Cloud-init for ca-certs Kubernetes Velero No Failed Backups Verify spire-agent is enabled and running cfs-state-reporter service ran successfully Clock skew test failures Etcd backups missing after system power up General issues During an install of CSM, the first pass of running these tests may fail because cloud-init has not completed on the storage nodes. In the case of failure, wait for five minutes and rerun the tests.</description>
+    </item>
+    <item>
+      <title>IUF CLI reports false error that management-nodes-rollout failed</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/iuf_cli_false_error_management_rollout_failed/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:13 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/iuf_cli_false_error_management_rollout_failed/</guid>
+      <description>IUF CLI reports false error that management-nodes-rollout failed Problem description When upgrading master nodes with IUF during the CSM 1.6.0 upgrade, the IUF CLI may say that the master node upgrade failed. The specific error is: The management-nodes-rollout stage failed, but argo must run to the completion of the stage. This is a bug in the IUF CLI and it happens because while master nodes are upgrading, the IUF CLI is momentarily unable to connect to the cray-nls service.</description>
+    </item>
+    <item>
+      <title>CSM services not starting when /var/lib/containerd is full during IUF upgrade</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/iuf_management_node_rollout_disk_containerd_full/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:13 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/iuf_management_node_rollout_disk_containerd_full/</guid>
+      <description>CSM services not starting when /var/lib/containerd is full during IUF upgrade While running the IUF management-node-rollout stage for a worker node, pods on the worker node are drained and restarted on other worker nodes. If the other worker nodes have their /var/lib/containerd filesystem 100% full, the restart of the pods fail.&#xA;Issue Description As part of worker node rollout the node is drained to allow restart of the same pods on a different worker node .</description>
+    </item>
+    <item>
+      <title>Known Issue IUF Storage Node Upgrade Stuck in Loop During cleanup-live-images</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/iuf_storage_node_cleanup_live_images_loop/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:13 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/iuf_storage_node_cleanup_live_images_loop/</guid>
+      <description>Known Issue: IUF Storage Node Upgrade Stuck in Loop During cleanup-live-images During an upgrade from CSM 1.6 using IUF, the management nodes rollout may get stuck in a loop when processing storage nodes. The workflow repeatedly fails at the cleanup-live-images step with warnings about the workflow being in a failed state.&#xA;Symptoms When running the IUF management-nodes-rollout command:&#xA;iuf -a &amp;#34;${ACTIVITY_NAME}&amp;#34; -m &amp;#34;${MEDIA_DIR}&amp;#34; run -r management-nodes-rollout --limit-management-rollout ${STORAGE_CANARY} The output shows repeated failure and retry messages:</description>
+    </item>
+    <item>
+      <title>IUF Unable To Run Next Stage</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/iuf_unable_to_run_next_stage/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:13 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/iuf_unable_to_run_next_stage/</guid>
+      <description>IUF Unable To Run Next Stage Issue description During the CSM upgrade, IUF warns that multiple sessions are in progress for an activity. The next stage for the activity does not run because of this warning. This issue is seen after pre-install-check stage or management-nodes-rollout stage of the IUF run.&#xA;This issue causes the session associated with the activity to continue to be in &amp;ldquo;in progress&amp;rdquo; even after the workflow associated with the stage has successfully completed.</description>
+    </item>
+    <item>
+      <title>IUF waits for 10 minutes to get workflow status before executing</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/iuf_waits_for_ten_mins/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:13 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/iuf_waits_for_ten_mins/</guid>
+      <description>IUF waits for 10 minutes to get workflow status before executing Issue description When running IUF commands, the iuf-cli waits for 10 minutes before starting execution. During this time, it repeatedly displays a warning message: &amp;ldquo;Unable to get workflow status.&amp;rdquo;&#xA;Error identification While executing IUF commands the following warning is displayed by iuf-cli for 10 minutes .&#xA;iuf -a &amp;#34;${ACTIVITY_NAME}&amp;#34; -m &amp;#34;${MEDIA_DIR}&amp;#34; run --site-vars &amp;#34;${ADMIN_DIR}/site_vars.yaml&amp;#34; -bpcd &amp;#34;${ADMIN_DIR}&amp;#34; -r management-nodes-rollout --limit-management-rollout ncn-w003 Example output:</description>
+    </item>
+    <item>
+      <title>cray-kafka-operator chart failing to upgrade</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/kafka_chart_upgrade_failure/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:13 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/kafka_chart_upgrade_failure/</guid>
+      <description>cray-kafka-operator chart failing to upgrade Issue description If a cluster which was initially installed with CSM 1.3 or earlier, and is now getting upgraded to CSM 1.6.x from CSM 1.5.x, the upgrade of the cray-kafka-operator helm chart would fail as part of the CSM services upgrade process.&#xA;Note - This issue would not affect clusters that were freshly installed with CSM 1.4.x or CSM 1.5.x and are being upgraded to CSM 1.</description>
+    </item>
+    <item>
+      <title>Node Unable to Join Kubernetes Cluster During NCN Rebuild</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/kubeadm_join_token_missing_during_ncn_rebuild/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:13 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/kubeadm_join_token_missing_during_ncn_rebuild/</guid>
+      <description>Node Unable to Join Kubernetes Cluster During NCN Rebuild Description During NCN master node rebuild, the node may fail to join the Kubernetes cluster due to a missing or expired bootstrap token. This occurs when the token referenced in the join scripts located in /etc/cray/kubernetes is no longer present in the cluster&amp;rsquo;s token list or the cluster-info ConfigMap. The join scripts are created during initial cluster setup and may reference tokens that have since expired or been removed from the cluster.</description>
+    </item>
+    <item>
+      <title>Known issue kubectl logs -f returns no space left on device</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/kubectl_logs_no_space_left_on_device/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:13 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/kubectl_logs_no_space_left_on_device/</guid>
+      <description>Known issue: kubectl logs -f returns no space left on device On some systems, running kubectl logs -n &amp;lt;NAMESPACE&amp;gt; &amp;lt;PODNAME&amp;gt; -f returns no space left on device. This can be caused by a lower limit for the sysctl setting fs.inotify.max_user_watches (defaults to 65536) in some kernel releases. This can be fixed by increasing this setting. Note that later versions of the kernel increase this setting by default.&#xA;Fix Run the following command from a master node.</description>
+    </item>
+    <item>
+      <title>Missing binaries in aarch64 Images</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/missing_binaries_in_aarch64_images/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:13 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/missing_binaries_in_aarch64_images/</guid>
+      <description>Missing binaries in aarch64 Images Because of a bug in the QEMU emulation software, there are times that dependencies are missed for packages that are being installed on aarch64 images when run in emulation on x86_64 hardware. This will usually manifest when the image is being booted or running processes where an error about missing shared libraries is encountered.&#xA;Root cause This is due to a bug in the QEMU software when the ld search crashes while attempting to follow binary dependencies for packages being installed.</description>
+    </item>
+    <item>
+      <title>NCN Health Checks Fail With cray-spire</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/ncn_healthchecks_fail_with_cray_spire/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:14 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/ncn_healthchecks_fail_with_cray_spire/</guid>
+      <description>NCN Health Checks Fail With cray-spire In CSM 1.6.1 and 1.6.2, there is a known issue where the /opt/cray/tests/install/ncn/scripts/check_key_id_in_jwks.sh, which runs during NCN health checks, can fail. Run this command on each NCN to fix the problematic script:&#xA;sed -i -E &amp;#39;s#\.\[\]\?\.svids\[\]\?\.svid#\.\[0\]\?\.svids\[0\]\?\.svid#g&amp;#39; /opt/cray/tests/install/ncn/scripts/check_key_id_in_jwks.sh </description>
+    </item>
+    <item>
+      <title>Known Issues With NCN Resource Checks</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/ncn_resource_checks/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:14 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/ncn_resource_checks/</guid>
+      <description>Known Issues With NCN Resource Checks pods_not_running If the output of pods_not_running indicates that there are pods in the Evicted state, it may be because of the root file system being filled up on the Kubernetes node in question. Kubernetes will begin evicting pods once the root file system space is at 85% full, and will continue to evict them until it is back under 80%. This commonly happens on ncn-m001, because it is a location where install and documentation files may have been downloaded.</description>
+    </item>
+    <item>
+      <title>HPE Cray EX255a Boot Issue with Console Parameter</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/parry_peak_console_boot_errors/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:14 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/parry_peak_console_boot_errors/</guid>
+      <description>HPE Cray EX255a Boot Issue with Console Parameter Description Workaround Description HPE Cray EX255a hardware has an issue in BIOS versions 1.1.0 and earlier that causes boots to stall when configured to use the default kernel serial port ttyS0 which is provided in the compute image created during installation of CSM 1.5.2.&#xA;Workaround (ncn-mw#) Follow the steps for customizing an image to be used for booting HPE Cray EX255a hardware.</description>
+    </item>
+    <item>
+      <title>Transaction Size Limitation for PCS and CAPMC</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/pcs_and_capmc_transaction_size_limitation/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:14 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/pcs_and_capmc_transaction_size_limitation/</guid>
+      <description>Transaction Size Limitation for PCS and CAPMC The Power Control Service (PCS) and Cray Advanced Platform Monitoring and Control (CAPMC) cannot handle large requests. The maximum number of nodes in a single request is approximately 2500 nodes.&#xA;Identifying the issue When the request is too large cray power will return the following message.&#xA;Error: Internal Server Error: etcdserver: request is too large The logs for the cray-power-control pods will contain text like the following.</description>
+    </item>
+    <item>
+      <title>PostgreSQL Cluster Upgrades Failing</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/postgres_cluster_upgrade_failure/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:14 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/postgres_cluster_upgrade_failure/</guid>
+      <description>PostgreSQL Cluster Upgrades Failing Description Istio routes certain traffic through a passthrough cluster which results in a connection having an IP address of 127.0.0.6. This IP address appears in the PostgreSQL pg_stat_replication table as the client address of a database cluster member instead of the pod IP address which causes database version upgrades to fail.&#xA;See Postgres Operator Issue 1629 for more information.&#xA;Symptoms cfs-ara or other services that rely on PostgreSQL may be in a CrashLoopBackOff state with log entries pointing to a database version mismatch.</description>
+    </item>
+    <item>
+      <title>PostgreSQL Database is in Recovery</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/postgres_database_recovery/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:14 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/postgres_database_recovery/</guid>
+      <description>PostgreSQL Database is in Recovery Description There is a known issue that can occur when a Kubernetes control-plane (master) node is rebooted or rebuilt.&#xA;Rebooting a control-plan node can result in a brief interruption of service to the Kubernetes API which may cause the leader of a PostgreSQL database cluster to demote itself and force a leadership race. When this occurs a different instance may become leader of the cluster and while the Kubernetes service load balancer is correctly updated to reflect this change, the database connection to the client was never broken so the client continues to send transactions to the former leader which is now a replica and can only handle read-only queries.</description>
+    </item>
+    <item>
+      <title>PostgreSQL System ID Mismatch</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/postgres_system_id_mismatch/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:14 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/postgres_system_id_mismatch/</guid>
+      <description>PostgreSQL System ID Mismatch Description Occasionally when recovering an unhealthy PostgreSQL cluster, one or more cluster members may end up with a different database system identifier than what is expected by other cluster members. This system ID mismatch prevents the cluster from forming a proper quorum and maintaining healthy replication between nodes.&#xA;The PostgreSQL system identifier is a unique value assigned when a database cluster is initialized. When cluster members have mismatched system IDs, they cannot participate in the same logical cluster, causing replication failures and preventing proper cluster recovery.</description>
+    </item>
+    <item>
+      <title>Product Catalog Upgrade Error</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/product_catalog_upgrade_error/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:14 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/product_catalog_upgrade_error/</guid>
+      <description>Product Catalog Upgrade Error Description Workaround Description During a system upgrade it is possible to encounter the following error during the &amp;ldquo;Upgrade Services&amp;rdquo; stage while running upgrade.sh:&#xA;Error releasing chart cray-product-catalog v1.8.3: Shell error: Error: UPGRADE FAILED: pre-upgrade hooks failed: timed out waiting for the condition chart=cray-product-catalog command=ship namespace=services version=1.8.3 This can occur for any version of the product catalog, but it only occurs on systems where many product versions have been installed.</description>
+    </item>
+    <item>
+      <title>Remove User Access Service</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/remove_uas_service/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:14 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/remove_uas_service/</guid>
+      <description>Remove User Access Service Description The User Access Service for managing User Access Instances was removed in CSM 1.6.0 however it may still be running on systems upgraded from earlier CSM versions.&#xA;Symptoms The cray-uas-mgr or cray-uas-mgr-bitnami-etcd Pods may be running.&#xA;services cray-uas-mgr-bd5f6d568-7wqc2 2/2 Running 0 2d13h services cray-uas-mgr-bd5f6d568-zhx7t 2/2 Running 0 2d13h services cray-uas-mgr-bitnami-etcd-0 2/2 Running 0 2d13h services cray-uas-mgr-bitnami-etcd-1 2/2 Running 0 2d14h services cray-uas-mgr-bitnami-etcd-2 2/2 Running 0 2d13h services cray-uas-mgr-bitnami-etcd-snapshotter-29081400-5hl7p 0/2 Completed 0 40m Solution Apply workaround (ncn-mw#) Verify the cray-uas-mgr and update-uas Helm charts are installed.</description>
+    </item>
+    <item>
+      <title>Software Management Services health checks</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/sms_health_check/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:14 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/sms_health_check/</guid>
+      <description>Software Management Services health checks SMS test execution Interpreting cmsdev Results Known issues with SMS tests Cray CLI Invalid CFS component VCS subtest command failure SMS test execution This test requires that the Cray CLI is configured on nodes where the test is executed. See Cray command line interface.&#xA;This test can be run on any Kubernetes NCN (any master or worker NCN, but not the PIT node). When run on a Kubernetes master NCN, the TFTP file transfer subtest is omitted.</description>
+    </item>
+    <item>
+      <title>Spire database connection pool configuration in an air-gapped environment</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/spire_database_airgap_configuration/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:14 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/spire_database_airgap_configuration/</guid>
+      <description>Spire database connection pool configuration in an air-gapped environment Description Due to the way the resolver code works in certain versions of Alpine Linux, it may be necessary to reconfigure the spire-postgres-pooler to use the fully qualified domain name of the database in order to prevent DNS lookup errors.&#xA;Symptoms The spire-server pods are logging query_wait_timeout errors.&#xA;time=&amp;#34;2022-11-15T09:39:38Z&amp;#34; level=error msg=&amp;#34;Fatal run error&amp;#34; error=&amp;#34;datastore-sql: pq: query_wait_timeout&amp;#34; time=&amp;#34;2022-11-15T09:39:38Z&amp;#34; level=error msg=&amp;#34;Server crashed&amp;#34; error=&amp;#34;datastore-sql: pq: query_wait_timeout&amp;#34; The spire-postgres-pooler pods are logging DNS lookup failure errors.</description>
+    </item>
+    <item>
+      <title>Spire Database Cluster DNS Lookup Failure</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/spire_database_lookup_error/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:15 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/spire_database_lookup_error/</guid>
+      <description>Spire Database Cluster DNS Lookup Failure Description There is a known issue where if Unbound is configured to forward to an invalid or inaccessible site DNS server, the Spire server may be unable to resolve the hostname of its PostgreSQL cluster.&#xA;Symptoms The spire-server pods may be in a CrashLoopBackOff state.&#xA;API calls to services may fail with HTTP 503 errors.&#xA;The spire-server pods contain the following error in the logs.</description>
+    </item>
+    <item>
+      <title>Spire Server Pods stuck in Pod Initializing</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/spire_pod_initializing/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:15 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/spire_pod_initializing/</guid>
+      <description>Spire Server Pods stuck in Pod Initializing Description There is a known issue when the Spire servers are started and Spire Postgres is not ready, where the pod will get stuck in a PodInitializing state and not be able to be restarted.&#xA;Starting the Spire server when its Postgres cluster is not ready leads to the pod crashing. However due to how the Spire servers are registered when the main process crashes there is a loop that never gets killed in a side process.</description>
+    </item>
+    <item>
+      <title>Enable Spire XName Validation Error</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/spire_xname_validation_error/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:15 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/spire_xname_validation_error/</guid>
+      <description>Enable Spire XName Validation Error Description There is a known issue when the Spire servers are configured to use xname validation in CSM 1.6, where once validation is enabled, the request-ncn-join pods enter a crash loop. This only affects CSM v1.6.0, v1.6.1, and is fixed in CSM v1.6.2 and beyond.&#xA;There is a misconfiguration of the workloads configuration file that is used when xname validation is turned on. This leads to the Spire registration servers unable to give new tokens to any workload attempting to join spire.</description>
+    </item>
+    <item>
+      <title>SSL Certificate Validation Issues</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/ssl_certificate_validation_issues/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:15 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/ssl_certificate_validation_issues/</guid>
+      <description>SSL Certificate Validation Issues SSL validation fails during the installation process Error messages Solution SSL validation only fails in Python applications Error messages Solution SSL validation only fails with podman and/or pulling down Kubernetes containers Error messages Solution update-ca-certificates fails to add platform-ca to ca-bundle Error messages Solution 1 SSL validation fails during the installation process If the intermediate CA that is used to sign service certificates changes after the NCNs are brought up, then this causes the platform-ca on the NCNs to no longer be valid.</description>
+    </item>
+    <item>
+      <title>Storage node cloud-init fails with &#39;Timed out waiting for device&#39; error</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/storage_node_cloud_init_fails_with_timed_out/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:15 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/storage_node_cloud_init_fails_with_timed_out/</guid>
+      <description>Storage node cloud-init fails with &amp;lsquo;Timed out waiting for device&amp;rsquo; error Observed Error This error can be observed from a storage node&amp;rsquo;s console.&#xA;[ TIME ] Timed out waiting for device /dev/disk/by-label/CEPHETC. [DEPEND] Dependency failed for File System Check on /dev/disk/by-label/CEPHETC. [DEPEND] Dependency failed for /etc/ceph. [DEPEND] Dependency failed for Local File Systems. [DEPEND] Dependency failed for Early Kernel Boot Messages. [ TIME ] Timed out waiting for device /dev/disk/by-label/CEPHVAR. [DEPEND] Dependency failed for /var/lib/ceph.</description>
+    </item>
+    <item>
+      <title>Test Failures Due To No Discovered Compute Nodes In HSM</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/test_failures_no_discovered_computes_in_hsm/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:15 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/test_failures_no_discovered_computes_in_hsm/</guid>
+      <description>Test Failures Due To No Discovered Compute Nodes In HSM Table of contents Introduction Check For Discovered Compute Nodes Troubleshooting Introduction This document describes how to troubleshoot CSM validation test failures due to no discovered compute nodes in HSM.&#xA;Check For Discovered Compute Nodes (ncn-mw#) Confirm that there are no discovered compute nodes in HSM.&#xA;cray hsm state components list --type Node --role compute --format json Example output:&#xA;{ &amp;#34;Components&amp;#34;: [] } Troubleshooting There are several reasons why there may be no discovered compute nodes in HSM.</description>
+    </item>
+    <item>
+      <title>Known Issue Velero Version Mismatch</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/velero_version_mismatch/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:15 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/velero_version_mismatch/</guid>
+      <description>Known Issue: Velero Version Mismatch In CSM 1.3 the Velero client and server versions differ after CSM is installed. This is not known to cause any problems with backup and restore functionality, but this page will document how to correct this situation if needed.&#xA;ncn-m001:~ # velero version Client: Version: v1.5.2 Git commit: e115e5a191b1fdb5d379b62a35916115e77124a4 Server: Version: v1.6.3 Fix Run the following command on master and worker nodes to deploy the v1.</description>
+    </item>
+    <item>
+      <title>Wait for unbound or cray-dns-unbound-manager hangs</title>
+      <link>/docs-csm/en-16/troubleshooting/known_issues/wait_for_unbound_hang/</link>
+      <pubDate>Sat, 05 Sep 2026 03:43:15 +0000</pubDate>
+      <guid>/docs-csm/en-16/troubleshooting/known_issues/wait_for_unbound_hang/</guid>
+      <description>Wait_for_unbound or cray-dns-unbound-manager hangs Run the following command:&#xA;kubectl get jobs -n services | grep cray-dns-unbound-manager services cray-dns-unbound-manager-1635352560 0/1 26h 26h services cray-dns-unbound-manager-1635448680 1/1 35s 8m37s services cray-dns-unbound-manager-1635448860 1/1 51s 5m36s services cray-dns-unbound-manager-1635449040 1/1 61s 2m35s If you see one of the jobs show 0/1 for more than 10 minutes and there are other runs with 1/1. That means that job is hung. You can delete the job with:&#xA;kubectl delete jobs -n services $job_with_0/1 Alternative is copy and paste following code block:</description>
+    </item>
+  </channel>
+</rss>
