@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>iuf on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-14/operations/iuf/</link>
+    <description>Recent content in iuf on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-14</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:28 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-14/operations/iuf/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Install and Upgrade Framework</title>
+      <link>/docs-csm/en-14/operations/iuf/iuf/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:28 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/iuf/iuf/</guid>
+      <description>Install and Upgrade Framework Overview The Install and Upgrade Framework (IUF) provides a CLI and API which automates operations required to install, upgrade and deploy non-CSM product content onto an HPE Cray EX system. These products are documented in the HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052). Each product distribution includes an iuf-product-manifest.yaml file which IUF uses to determine what operations are needed to install, upgrade, and deploy the product.</description>
+    </item>
+  </channel>
+</rss>

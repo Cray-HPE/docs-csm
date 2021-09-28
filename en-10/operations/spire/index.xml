@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>spire on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-10/operations/spire/</link>
+    <description>Recent content in spire on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-10</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:38 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-10/operations/spire/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Create a Backup of the Spire Postgres Database</title>
+      <link>/docs-csm/en-10/operations/spire/create_a_backup_of_the_spire_postgres_database/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:38 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/spire/create_a_backup_of_the_spire_postgres_database/</guid>
+      <description>Create a Backup of the Spire Postgres Database Perform a manual backup of the contents of the Spire Postgres database. This backup can be used to restore the contents of the Spire Postgres database at a later point in time using the Restore Spire Postgres from Backup procedure.&#xA;Prerequisites Healthy Spire Postgres Cluster.&#xA;Use patronictl list on the Spire Postgres cluster to determine the current state of the cluster and note which member is the Leader.</description>
+    </item>
+    <item>
+      <title>Restore missing Spire metadata</title>
+      <link>/docs-csm/en-10/operations/spire/restore_missing_spire_metadata/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:38 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/spire/restore_missing_spire_metadata/</guid>
+      <description>Restore missing Spire metadata If the Boot Script Service (BSS) metadata server does contain the proper Spire metadata, then the computes will fail to boot. This is due to dracut pulling server data from the metadata during startup. To fix this issue, the spire-update-bss job needs to be rerun.&#xA;Error [ 557.513984] Apr 22 18:02:02 nid000004 dracut-initqueue[4177]: time=&amp;#34;2022-04-22T18:02:02Z&amp;#34; level=info msg=&amp;#34;SVID is not found. Starting node attestation&amp;#34; subsystem_name=attestor trust_domain_id=&amp;#34;spiffe://null&amp;#34; [ 557.514000] Apr 22 18:02:07 nid000004 dracut-initqueue[4194]: Agent is unavailable.</description>
+    </item>
+    <item>
+      <title>Restore Spire Postgres without an Existing Backup</title>
+      <link>/docs-csm/en-10/operations/spire/restore_spire_postgres_without_a_backup/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:38 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/spire/restore_spire_postgres_without_a_backup/</guid>
+      <description>Restore Spire Postgres without an Existing Backup Reinstall the Spire Helm chart in the event that spire-postgres databases cannot be restored from a backup.&#xA;Uninstall Spire Uninstall the Spire Helm chart.&#xA;ncn-mw# helm uninstall -n spire spire Wait for the pods in the spire namespace to terminate. Once that is done, remove the spire-data-server PVCs.&#xA;ncn-mw# kubectl get pvc -n spire | grep spire-data-spire-server | awk &amp;#39;{print $1}&amp;#39; | xargs kubectl delete -n spire pvc Disable spire-agent on all of the Kubernetes NCNs (all worker nodes and master nodes) and delete the join data.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Spire Failing to Start on NCNs</title>
+      <link>/docs-csm/en-10/operations/spire/troubleshoot_spire_failing_to_start_on_ncns/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:38 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/spire/troubleshoot_spire_failing_to_start_on_ncns/</guid>
+      <description>Troubleshoot Spire Failing to Start on NCNs The spire-agent service may fail to start on Kubernetes non-compute nodes (NCNs). A key indication of this failure is when logging errors occur with the journalctl command. The following are logging errors that will indicate if the spire-agent is failing to start:&#xA;The join token does not exist or has already been used message is returned The last lines of the logs contain multiple lines of systemd[1]: spire-agent.</description>
+    </item>
+    <item>
+      <title>Update Spire Intermediate CA Certificate</title>
+      <link>/docs-csm/en-10/operations/spire/update_spire_intermediate_ca_certificate/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:38 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/spire/update_spire_intermediate_ca_certificate/</guid>
+      <description>Update Spire Intermediate CA Certificate Prior to CSM 1.2.5 there is no mechanism to automatically update the spire intermediate CA certificate before it expires. This certificate expires after one year. Administrators will want to keep track of when this certificate expires and manually update the certificate before it expires.&#xA;Obtain the Expiration Date for the Spire Intermediate CA To obtain the expiration date of the Spire intermediate CA certificate, run the following command on a node that has access to kubectl (such as ncn-m001):</description>
+    </item>
+  </channel>
+</rss>

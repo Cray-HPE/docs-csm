@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>power management on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-13/operations/power_management/</link>
+    <description>Recent content in power management on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-13</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:55 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-13/operations/power_management/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Cray Advanced Platform Monitoring and Control (CAPMC)</title>
+      <link>/docs-csm/en-13/operations/power_management/cray_advanced_platform_monitoring_and_control_capmc/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:54 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/power_management/cray_advanced_platform_monitoring_and_control_capmc/</guid>
+      <description>Cray Advanced Platform Monitoring and Control (CAPMC) The Cray Advanced Platform Monitoring and Control (CAPMC) service enables direct hardware control of nodes, compute blades, router modules, and liquid-cooled chassis. CAPMC talks to BMCs via Redfish to control power, query status, and manage power capping on target components. These controls enable an administrator and third party software to more intelligently manage state and system-wide power consumption.&#xA;Administrators can use the cray CLI for power operations from any system that has HTTPS access to the System Management Services.</description>
+    </item>
+    <item>
+      <title>Ignore Nodes with CAPMC</title>
+      <link>/docs-csm/en-13/operations/power_management/ignore_nodes_with_capmc/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:54 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/power_management/ignore_nodes_with_capmc/</guid>
+      <description>Ignore Nodes with CAPMC Update the Cray Advanced Platform Monitoring and Control (CAPMC) ConfigMap to ignore non-compute nodes (NCNs) and ensure that they cannot be powered off or reset.&#xA;Modifying the CAPMC ConfigMap to ignore nodes can prevent them from accidentally being power cycled.&#xA;Nodes can also be locked with the Hardware State Manager (HSM) API. Refer to Lock and Unlock Management Nodes for more information.&#xA;Prerequisites This procedure requires administrative privileges.</description>
+    </item>
+    <item>
+      <title>Liquid-cooled Node Power Management</title>
+      <link>/docs-csm/en-13/operations/power_management/liquid_cooled_node_card_power_management/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:54 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/power_management/liquid_cooled_node_card_power_management/</guid>
+      <description>Liquid-cooled Node Power Management Liquid-cooled AMD EPYC compute blade node card power capabilities and limits.&#xA;Liquid-cooled cabinet node card power features are supported by the node controller (nC) firmware and CPU vendor. The nC exposes the power control API for each node via the node&amp;rsquo;s Redfish Control schema. Out-of-band power management data is produced and collected by the nC hardware and firmware. This data can be published to a collector using the Redfish EventService, or retrieved on-demand from the Redfish ChassisSensors resource.</description>
+    </item>
+    <item>
+      <title>Power Off Compute Cabinets</title>
+      <link>/docs-csm/en-13/operations/power_management/power_off_compute_cabinets/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:54 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/power_management/power_off_compute_cabinets/</guid>
+      <description>Power Off Compute Cabinets Power off HPE Cray EX liquid-cooled and standard racks.&#xA;Cabinet/rack types Liquid-cooled cabinets HPE Cray EX liquid-cooled cabinet CDU and PDU circuit breakers are controlled manually.&#xA;When the PDU breakers are switched to OFF, the Chassis Management Modules (CMMs) and Cabinet Environmental Controllers (CECs) are also powered off.&#xA;Warning: The cabinet 480VAC power bus bars remain energized. Facility power must be disconnected to completely remove power from the cabinet.</description>
+    </item>
+    <item>
+      <title>Power Off the External Lustre File System</title>
+      <link>/docs-csm/en-13/operations/power_management/power_off_the_external_lustre_file_system/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:54 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/power_management/power_off_the_external_lustre_file_system/</guid>
+      <description>Power Off the External Lustre File System General procedure for powering off an external ClusterStor system.&#xA;Use this procedure as a general guide to power off an external ClusterStor system. Refer to the detailed procedures in the appropriate ClusterStor administration guide:&#xA;Title Model ClusterStor E1000 Administration Guide 4.2 - S-2758 ClusterStor E1000 ClusterStor Administration Guide 3.4 - S-2756 ClusterStor L300/L300N ClusterStor Administration Guide - S-2755 Legacy ClusterStor Procedure (remote#) SSH to the primary MGMT node as admin.</description>
+    </item>
+    <item>
+      <title>Power On Compute Cabinets</title>
+      <link>/docs-csm/en-13/operations/power_management/power_on_compute_cabinets/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:55 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/power_management/power_on_compute_cabinets/</guid>
+      <description>Power On Compute Cabinets Power on liquid-cooled and standard rack cabinet PDUs.&#xA;Liquid-cooled Cabinets - HPE Cray EX liquid-cooled cabinet CDU and PDU circuit breakers are controlled manually.&#xA;After the CDU is switched on and healthy, the liquid-cooled PDU circuit breakers can be switched ON. With PDU breakers ON, the Chassis Management Modules (CMM) and Cabinet Environmental Controllers (CEC) power on and boot. These devices can then communicate with the management cluster and larger system management network.</description>
+    </item>
+    <item>
+      <title>Power On and Boot Compute and User Access Nodes</title>
+      <link>/docs-csm/en-13/operations/power_management/power_on_and_boot_compute_nodes_and_user_access_nodes/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:55 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/power_management/power_on_and_boot_compute_nodes_and_user_access_nodes/</guid>
+      <description>Power On and Boot Compute and User Access Nodes Use Boot Orchestration Service (BOS) and choose the appropriate session template to power on and boot compute and UANs.&#xA;This procedure boots all compute nodes and user access nodes (UANs) in the context of a full system power-up.&#xA;Prerequisites All compute cabinet PDUs, servers, and switches must be powered on. An authentication token is required to access the API gateway and to use the sat command.</description>
+    </item>
+    <item>
+      <title>Power On and Start the Management Kubernetes Cluster</title>
+      <link>/docs-csm/en-13/operations/power_management/power_on_and_start_the_management_kubernetes_cluster/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:55 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/power_management/power_on_and_start_the_management_kubernetes_cluster/</guid>
+      <description>Power On and Start the Management Kubernetes Cluster Power on and start management services on the HPE Cray EX management Kubernetes cluster.&#xA;Prerequisites All management rack PDUs are connected to facility power and facility power is on. An authentication token is required to access the API gateway and to use the sat command. See the &amp;ldquo;SAT Authentication&amp;rdquo; section of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (S-8031) for instructions on how to acquire a SAT authentication token.</description>
+    </item>
+    <item>
+      <title>Power On the External Lustre File System</title>
+      <link>/docs-csm/en-13/operations/power_management/power_on_the_external_lustre_file_system/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:55 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/power_management/power_on_the_external_lustre_file_system/</guid>
+      <description>Power On the External Lustre File System Use this procedure as a general guide to power on an external ClusterStor system. Refer to the detailed procedures that support each ClusterStor hardware and software release:&#xA;ClusterStor E1000 Administration Guide 4.2 - S-2758 for ClusterStor E1000 systems ClusterStor Administration Guide 3.4 - S-2756 for ClusterStor L300, L300N systems ClusterStor Administration Guide - S-2755 for Legacy ClusterStor systems Power up storage nodes in the following sequence:</description>
+    </item>
+    <item>
+      <title>Prepare the System for Power Off</title>
+      <link>/docs-csm/en-13/operations/power_management/prepare_the_system_for_power_off/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:55 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/power_management/prepare_the_system_for_power_off/</guid>
+      <description>Prepare the System for Power Off This procedure prepares the system to remove power from all system cabinets. Be sure the system is healthy and ready to be shut down and powered off.&#xA;The sat bootsys shutdown and sat bootsys boot commands are used to shut down the system.&#xA;Prerequisites An authentication token is required to access the API gateway and to use the sat command. See the &amp;ldquo;SAT Authentication&amp;rdquo; section of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (S-8031) for instructions on how to acquire a SAT authentication token.</description>
+    </item>
+    <item>
+      <title>Recover from a Liquid Cooled Cabinet EPO Event</title>
+      <link>/docs-csm/en-13/operations/power_management/recover_from_a_liquid_cooled_cabinet_epo_event/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:55 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/power_management/recover_from_a_liquid_cooled_cabinet_epo_event/</guid>
+      <description>Recover from a Liquid Cooled Cabinet EPO Event Identify an emergency power off (EPO) has occurred and restore cabinets to a healthy state.&#xA;CAUTION: Verify the reason why the EPO occurred and resolve that problem before clearing the EPO state.&#xA;If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, the compute nodes may not boot. Use CAPMC to force off all the chassis affected by the EPO event.</description>
+    </item>
+    <item>
+      <title>Save Management Network Switch Configuration Settings</title>
+      <link>/docs-csm/en-13/operations/power_management/save_management_network_switch_configurations/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:55 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/power_management/save_management_network_switch_configurations/</guid>
+      <description>Save Management Network Switch Configuration Settings Switches must be powered on and operating. This procedure is optional if switch configurations have not changed.&#xA;Optional Task: Save management network switch configurations before removing power from cabinets or the CDU. Management switch names are listed in the /etc/hosts file.&#xA;Obtain the list of switches From the command line on any NCN run:&#xA;grep &amp;#39;sw-&amp;#39; /etc/hosts Example output:&#xA;10.252.0.2 sw-spine-001 10.252.0.3 sw-spine-002 10.252.0.4 sw-leaf-001 Save switch configurations Aruba switch and HPE server systems On Aruba-based systems all management network switches will be Aruba and the following procedure.</description>
+    </item>
+    <item>
+      <title>Set the Turbo Boost Limit</title>
+      <link>/docs-csm/en-13/operations/power_management/set_the_turbo_boost_limit/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:55 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/power_management/set_the_turbo_boost_limit/</guid>
+      <description>Set the Turbo Boost Limit Turbo boost limiting is supported on the Intel® and AMD® processors. Because processors have a high degree of variability in the amount of turbo boost each processor can supply, limiting the amount of turbo boost can reduce performance variability and reduce power consumption.&#xA;Turbo boost can be limited by setting the turbo_boost_limit kernel parameter to one of these values:&#xA;0 - Disable turbo boost 999 - (default) No limit is applied.</description>
+    </item>
+    <item>
+      <title>Shut Down and Power Off Compute and User Access Nodes</title>
+      <link>/docs-csm/en-13/operations/power_management/shut_down_and_power_off_compute_and_user_access_nodes/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:55 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/power_management/shut_down_and_power_off_compute_and_user_access_nodes/</guid>
+      <description>Shut Down and Power Off Compute and User Access Nodes Shut down and power off compute and user access nodes (UANs). This procedure powers off all compute nodes in the context of an entire system shutdown.&#xA;Prerequisites The cray and sat commands must be initialized and authenticated with valid credentials for Keycloak. If these have not been prepared, then see Configure the Cray Command Line Interface (cray CLI) and refer to the &amp;ldquo;SAT Authentication&amp;rdquo; section of the HPE Cray EX System Admin Toolkit (SAT) (S-8031) product stream documentation for instructions on how to acquire a SAT authentication token.</description>
+    </item>
+    <item>
+      <title>Shut Down and Power Off the Management Kubernetes Cluster</title>
+      <link>/docs-csm/en-13/operations/power_management/shut_down_and_power_off_the_management_kubernetes_cluster/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:55 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/power_management/shut_down_and_power_off_the_management_kubernetes_cluster/</guid>
+      <description>Shut Down and Power Off the Management Kubernetes Cluster Shut down management services and power off the HPE Cray EX management Kubernetes cluster.&#xA;Overview Prerequisites Check health of the management cluster Shut down the Kubernetes management cluster Next step Overview Understand the following concepts before powering off the management non-compute nodes (NCNs) for the Kubernetes cluster and storage:&#xA;The etcd cluster provides storage for the state of the management Kubernetes cluster.</description>
+    </item>
+    <item>
+      <title>Standard Rack Node Power Management</title>
+      <link>/docs-csm/en-13/operations/power_management/standard_rack_node_power_management/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:55 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/power_management/standard_rack_node_power_management/</guid>
+      <description>Standard Rack Node Power Management HPE Cray EX standard EIA rack node power management is supported by the server vendor BMC firmware. The BMC exposes the power control API for a node through the node&amp;rsquo;s Redfish Power schema.&#xA;Out-of-band power management data is polled by a collector and published on a Kafka bus for entry into the Power Management Database (PMDB). Access to the data stored in the PMDB is available through the System Monitoring Application (SMA) Grafana instance.</description>
+    </item>
+    <item>
+      <title>System Power Off Procedures</title>
+      <link>/docs-csm/en-13/operations/power_management/system_power_off_procedures/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:55 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/power_management/system_power_off_procedures/</guid>
+      <description>System Power Off Procedures The procedures in this section detail the high-level tasks required to power off an HPE Cray EX system.&#xA;Note about Services Used During System Power Off The Cray Advanced Platform Monitoring and Control (CAPMC) service controls power to major components. CAPMC sequences the power off tasks in the correct order, but does not gracefully shut down software services. The Boot Orchestration Service (BOS) manages proper shutdown and power off tasks for compute nodes and User Access Nodes (UANs).</description>
+    </item>
+    <item>
+      <title>System Power On Procedures</title>
+      <link>/docs-csm/en-13/operations/power_management/system_power_on_procedures/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:55 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/power_management/system_power_on_procedures/</guid>
+      <description>System Power On Procedures The procedures in this section detail the high-level tasks required to power on an HPE Cray EX system.&#xA;Important: If an emergency power off (EPO) event occurred, then see Recover from a Liquid-Cooled Cabinet EPO Event for recovery procedures.&#xA;If user IDs or passwords are needed, then see step 1 of the Prepare the System for Power Off procedure.&#xA;Note about services used during system power on The Cray Advanced Platform Monitoring and Control (CAPMC) service controls power to major components.</description>
+    </item>
+    <item>
+      <title>User Access to Compute Node Power Data</title>
+      <link>/docs-csm/en-13/operations/power_management/user_access_to_compute_node_power_data/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:55 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/power_management/user_access_to_compute_node_power_data/</guid>
+      <description>User Access to Compute Node Power Data Shasta Liquid Cooled AMD EPYC compute node power management data available to users.&#xA;Shasta Liquid Cooled compute blade power management counters (pm_counters) enable users access to energy usage over time for billing and job profiling.&#xA;The blade-level and node-level accumulated energy telemetry is point-in-time power data. Blade accumulated energy data is collected out-of-band and is made available via workload managers. Users have access to the data in-band at the node-level via a special sysfs files in /sys/cray/pm\_counters on the node.</description>
+    </item>
+    <item>
+      <title>Power Management</title>
+      <link>/docs-csm/en-13/operations/power_management/power_management/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:55 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/power_management/power_management/</guid>
+      <description>Power Management HPE Cray System Management (CSM) software manages and controls power out-of-band through Redfish APIs. Note that power management features are &amp;ldquo;asynchronous,&amp;rdquo; in that the client must determine whether the component status has changed after a power management API call returns.&#xA;In-band power management features are not supported in v1.4.&#xA;HPE supports Slurm as a workload manager which reports job energy usage and records it in the ITDB for system accounting purposes.</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>kubernetes on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-15/troubleshooting/kubernetes/</link>
+    <description>Recent content in kubernetes on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-15</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:39:16 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-15/troubleshooting/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Kubernetes kube-apiserver Failing</title>
+      <link>/docs-csm/en-15/troubleshooting/kubernetes/kubernetes_kube_apiserver_failing/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:15 +0000</pubDate>
+      <guid>/docs-csm/en-15/troubleshooting/kubernetes/kubernetes_kube_apiserver_failing/</guid>
+      <description>Kubernetes kube-apiserver Failing If Kubernetes encryption has been enabled via the Kubernetes Encryption Documentation and the encryption files have not been restored after a master node rebuild or upgrade, then the kube-apiserver on that node will fail. This document only outlines the fix if the kube-apiserver if it is failing due to Kubernetes encryption not being restored.&#xA;If a kube-apiserver is failing because of encryption, the error seen in the kube-apiserver pod logs can look like the error below.</description>
+    </item>
+    <item>
+      <title>Kubernetes Log File Locations</title>
+      <link>/docs-csm/en-15/troubleshooting/kubernetes/kubernetes_log_file_locations/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:16 +0000</pubDate>
+      <guid>/docs-csm/en-15/troubleshooting/kubernetes/kubernetes_log_file_locations/</guid>
+      <description>Kubernetes Log File Locations Locations of various K8s log types on the system.&#xA;Log Type Component Purpose Location Kubernetes Master API server Responsible for serving the API kubectl -n kube-system logs -l component=kube-apiserver Scheduler Responsible for making scheduling decisions kubectl -n kube-system logs -l component=kube-scheduler Controller Manages replication controllers kubectl -n kube-system logs -l component=kube-controller-manager Kubernetes Worker Kubelet Responsible for running containers on the node journalctl -xeu kubelet Kube proxy Responsible for service load balancing kubectl -n kube-system logs -l k8s-app=kube-proxy </description>
+    </item>
+    <item>
+      <title>Kubernetes Troubleshooting Information</title>
+      <link>/docs-csm/en-15/troubleshooting/kubernetes/kubernetes_troubleshooting_information/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:16 +0000</pubDate>
+      <guid>/docs-csm/en-15/troubleshooting/kubernetes/kubernetes_troubleshooting_information/</guid>
+      <description>Kubernetes Troubleshooting Information Commands for performing basic Kubernetes cluster troubleshooting.&#xA;Access pod logs Describe a node Describe a pod Open a shell on a pod Run a single command on a pod Connect to a running container Scale a deployment Remove a deployment with the manifest and reapply the deployment Delete a pod Access pod logs (ncn-mw#) Use one of the following commands to retrieve pod-related logs:&#xA;kubectl logs POD_NAME kubectl logs POD_NAME -c CONTAINER_NAME (ncn-mw#) If the pods keeps crashing, open a log for the previous instance using the following command:</description>
+    </item>
+    <item>
+      <title>Troubleshoot Kubernetes Master or Worker node in NotReady state</title>
+      <link>/docs-csm/en-15/troubleshooting/kubernetes/troubleshoot_kubernetes_node_notready/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:16 +0000</pubDate>
+      <guid>/docs-csm/en-15/troubleshooting/kubernetes/troubleshoot_kubernetes_node_notready/</guid>
+      <description>Troubleshoot Kubernetes Master or Worker node in NotReady state Use this procedure to check if a Kubernetes master or worker node is in a NotReady state.&#xA;Identify the node in question (ncn-mw#) Identify the node in NotReady state.&#xA;kubectl get nodes Example output:&#xA;NAME STATUS ROLES AGE VERSION ncn-m001 Ready control-plane,master 27h v1.20.13 ncn-m002 Ready control-plane,master 8d v1.20.13 ncn-m003 Ready control-plane,master 8d v1.20.13 ncn-w001 NotReady &amp;lt;none&amp;gt; 8d v1.20.13 ncn-w002 Ready &amp;lt;none&amp;gt; 8d v1.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Kubernetes Pods Not Starting</title>
+      <link>/docs-csm/en-15/troubleshooting/kubernetes/troubleshoot_kubernetes_pods_not_starting/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:16 +0000</pubDate>
+      <guid>/docs-csm/en-15/troubleshooting/kubernetes/troubleshoot_kubernetes_pods_not_starting/</guid>
+      <description>Troubleshoot Kubernetes Pods Not Starting Use this procedure to check if Kubernetes pods get scheduled on an NCN, but do not eventually reach the Running state.&#xA;Prerequisites The kubectl get pod command returns pods that seem to be stuck in the Init or ContainerCreating state.&#xA;Identify the node in question Run the kubectl get pod -o wide command to identify the node where the pod is not starting.&#xA;kubectl get pod -A -o wide | egrep &amp;#39;Init|ContainerCreating&amp;#39; services cray-sls-58cfdb7c46-b7dbj 0/2 Init:0/2 0 2d22h 10.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Liveliness or Readiness Probe Failures</title>
+      <link>/docs-csm/en-15/troubleshooting/kubernetes/troubleshoot_liveliness_readiness_probe_failures/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:16 +0000</pubDate>
+      <guid>/docs-csm/en-15/troubleshooting/kubernetes/troubleshoot_liveliness_readiness_probe_failures/</guid>
+      <description>Troubleshoot Liveliness or Readiness Probe Failures Identify and troubleshoot Readiness or Liveliness probes that report services as unhealthy intermittently.&#xA;This is a known issue and can be classified into two categories, connection refused and client timeout. The commands in this procedure assume the user is logged into either a master or worker non-compute node (NCN).&#xA;Troubleshoot a refused connection Refused connection - symptom Refused connection - procedure Troubleshoot a client timeout Client timeout - symptom Client timeout - procedure Next steps Troubleshoot a refused connection Refused connection - symptom (ncn-mw#) The symptom of this problem is a connection refused message in the event log.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Unresponsive kubectl Commands</title>
+      <link>/docs-csm/en-15/troubleshooting/kubernetes/troubleshoot_unresponsive_kubectl_commands/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:16 +0000</pubDate>
+      <guid>/docs-csm/en-15/troubleshooting/kubernetes/troubleshoot_unresponsive_kubectl_commands/</guid>
+      <description>Troubleshoot Unresponsive kubectl Commands Use this procedure to check if any kworkers are in an error state because of a high load. Once the error has been identified, workaround the issue by returning the high load to a normal level.&#xA;Symptoms One or more of the following issues are possible symptoms of this issue.&#xA;The kubectl command can become unresponsive because of a high load. ps aux cannot return or complete because of aspects of the /proc file system being locked.</description>
+    </item>
+  </channel>
+</rss>

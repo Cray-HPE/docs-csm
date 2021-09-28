@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Deprecated Features on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-16/introduction/deprecated_features/</link>
+    <description>Recent content in Deprecated Features on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-16</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:09 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-16/introduction/deprecated_features/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CAPMC Deprecation Notice</title>
+      <link>/docs-csm/en-16/introduction/deprecated_features/capmc_deprecation_notice/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:09 +0000</pubDate>
+      <guid>/docs-csm/en-16/introduction/deprecated_features/capmc_deprecation_notice/</guid>
+      <description>CAPMC Deprecation Notice CAPMC is deprecated, starting in CSM 1.5, and may be removed in the future. It has been replaced with the Power Control Service (PCS). Everyone is encouraged to transition to PCS as soon as possible.&#xA;See PCS API for more information about PCS API.&#xA;Here is a list of deprecated CAPMC API (CLI) endpoints:&#xA;/get_xname_status /xname_reinit /xname_on /xname_off /get_power_cap /get_power_cap_capabilities /set_power_cap /health /liveness /readiness </description>
+    </item>
+  </channel>
+</rss>

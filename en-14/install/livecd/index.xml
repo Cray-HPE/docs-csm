@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>livecd on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-14/install/livecd/</link>
+    <description>Recent content in livecd on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-14</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:08 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-14/install/livecd/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Accessing LiveCD USB Device After Reboot</title>
+      <link>/docs-csm/en-14/install/livecd/access_livecd_usb_device_after_reboot/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-14/install/livecd/access_livecd_usb_device_after_reboot/</guid>
+      <description>Accessing LiveCD USB Device After Reboot This is a procedure that only applies to the LiveCD USB device after the PIT node has been rebooted.&#xA;USB ONLY If the installation above was done from a Remote ISO.&#xA;After deploying the LiveCD&amp;rsquo;s NCN, the LiveCD USB itself is unharmed and available to an administrator.&#xA;Procedure Mount and view the USB device.&#xA;mkdir -pv /mnt/{cow,pitdata} mount -vL cow /mnt/cow mount -vL PITDATA /mnt/pitdata ls -ld /mnt/cow/rw/* Example output:</description>
+    </item>
+    <item>
+      <title>Boot LiveCD RemoteISO</title>
+      <link>/docs-csm/en-14/install/livecd/boot_livecd_remoteiso/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-14/install/livecd/boot_livecd_remoteiso/</guid>
+      <description>Boot LiveCD RemoteISO This page will guide a user on booting the LiveCD .iso file directly onto a BMC.&#xA;Topics Prerequisites BMCs&amp;rsquo; virtual mounts HPE iLO BMCs Gigabyte BMCs Configuring Backing up the overlay COW FS Restoring from an overlay COW FS backup Prerequisites A Cray Pre-Install Toolkit ISO is required for this process. This ISO can be obtained from:&#xA;The Cray Pre-Install Toolkit ISO included in a CSM release tar file.</description>
+    </item>
+    <item>
+      <title>Boot LiveCD USB</title>
+      <link>/docs-csm/en-14/install/livecd/boot_livecd_usb/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-14/install/livecd/boot_livecd_usb/</guid>
+      <description>Boot LiveCD USB These steps provide a bootable USB capable of installing this CSM release.&#xA;Topics Create the Bootable Media Boot the LiveCD Create the Bootable Media Cray Site Init will create the bootable LiveCD. Before creating the media, identify which device will be used for it.&#xA;(external) Set up the initial typescript.&#xA;SCRIPT_FILE=&amp;#34;$(pwd)/csm-install-usb.$(date +%Y-%m-%d).txt&amp;#34; script -af &amp;#34;${SCRIPT_FILE}&amp;#34; export PS1=&amp;#39;\u@\H \D{%Y-%m-%d} \t \w # &amp;#39; export OUT_DIR=$(pwd)/csm-temp (external#) Identify the USB device.</description>
+    </item>
+    <item>
+      <title>Reinstall LiveCD</title>
+      <link>/docs-csm/en-14/install/livecd/reinstall_livecd_usb/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-14/install/livecd/reinstall_livecd_usb/</guid>
+      <description>Reinstall LiveCD Setup a re-install of LiveCD on a node using the previous configuration.&#xA;(pit#) Backup to the data partition:&#xA;mkdir -pv /var/www/ephemeral/backup pushd /var/www/ephemeral/backup tar -czvf &amp;#34;dnsmasq-data-$(date &amp;#39;+%Y-%m-%d_%H-%M-%S&amp;#39;).tar.gz&amp;#34; /etc/dnsmasq.* tar -czvf &amp;#34;network-data-$(date &amp;#39;+%Y-%m-%d_%H-%M-%S&amp;#39;).tar.gz&amp;#34; /etc/sysconfig/network/* cp -pv /etc/hosts ./ popd umount -v /var/www/ephemeral Unplug the USB device.&#xA;The USB device should now contain all the information already loaded, as well as the backups of the initialized files.&#xA;(external#) Plug the device into a new machine, or make a backup on the booted NCN.</description>
+    </item>
+    <item>
+      <title>Reset root Password on a LiveCD USB</title>
+      <link>/docs-csm/en-14/install/livecd/reset_root_password_on_a_livecd_usb/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-14/install/livecd/reset_root_password_on_a_livecd_usb/</guid>
+      <description>Reset root Password on a LiveCD USB It may become desirable to clear the password on the LiveCD.&#xA;The root password is preserved within the COW partition at cow:rw/etc/shadow. This is the modified copy of the /etc/shadow file used by the operating system.&#xA;If a site/user needs to reset/clear the password for root, they can mount their USB on another machine and remove this file from the COW partition. When next booting from the USB it will reinitialize to an empty password for root, and again at next login it will require the password to be changed.</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,179 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "https://github.com/Cray-HPE/hms-sls/schemas/networks",
+    "title": "SLS Network Schema",
+    "type": "object",
+    "patternProperties": {
+        "^[A-Z]{3}_*[A-Z]{0,3}$": {
+            "type": "object",
+            "properties": {
+                "Name": {
+                    "type": "string"
+                },
+                "FullName": {
+                    "type": "string"
+                },
+                "Type": {
+                    "type": "string"
+                },
+                "IPRanges": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "pattern": "((^|\\.)((25[0-5])|(2[0-4]\\d)|(1\\d\\d)|([1-9]?\\d))){4}\\/(?:\\d|[12]\\d|3[01])$"
+                    }
+                },
+                "LastUpdated": {
+                    "type": "integer"
+                },
+                "LastUpdatedTime": {
+                    "type": "string"
+                },
+                "ExtraProperties": {
+                    "type": "object",
+                    "properties": {
+                        "Comment": {
+                            "type": "string"
+                        },
+                        "CIDR": {
+                            "type": "string",
+                            "pattern": "((^|\\.)((25[0-5])|(2[0-4]\\d)|(1\\d\\d)|([1-9]?\\d))){4}\\/(?:\\d|[12]\\d|3[01])$"
+                        },
+                        "MTU": {
+                            "type": "integer",
+                            "minimum": 1400,
+                            "maximum": 9200
+                        },
+                        "Subnets": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "Name": {
+                                        "type": "string"
+                                    },
+                                    "FullName": {
+                                        "type": "string"
+                                    },
+                                    "CIDR": {
+                                        "type": "string",
+                                        "pattern": "((^|\\.)((25[0-5])|(2[0-4]\\d)|(1\\d\\d)|([1-9]?\\d))){4}\\/(?:\\d|[12]\\d|3[01])$"
+                                    },
+                                    "Gateway": {
+                                        "type": "string",
+                                        "format": "ipv4"
+                                    },
+                                    "VlanID": {
+                                        "type": "integer",
+                                        "minimum": 0,
+                                        "maximum": 4095
+                                    },
+                                    "MetalLBPoolName": {
+                                        "type": "string"
+                                    },
+                                    "DHCPStart": {
+                                        "type": "string",
+                                        "format": "ipv4"
+                                    },
+                                    "DHCPEnd": {
+                                        "type": "string",
+                                        "format": "ipv4"
+                                    },
+                                    "ReservationStart": {
+                                        "type": "string",
+                                        "format": "ipv4"
+                                    },
+                                    "ReservationEnd": {
+                                        "type": "string",
+                                        "format": "ipv4"
+                                    },
+                                    "IPReservations": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "Name": {
+                                                    "type": "string"
+                                                },
+                                                "IPAddress": {
+                                                    "type": "string",
+                                                    "format": "ipv4"
+                                                },
+                                                "Aliases": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "Comment": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "additionalProperties": false,
+                                            "required": [
+                                                "Name",
+                                                "IPAddress"
+                                            ]
+                                        }
+                                    }
+                                },
+                                "additionalProperties": false,
+                                "required": [
+                                    "Name",
+                                    "FullName",
+                                    "CIDR",
+                                    "Gateway",
+                                    "VlanID"
+                                ]
+                            }
+                        },
+                        "VlanRange": {
+                            "type": [
+                                "array",
+                                "null"
+                            ],
+                            "items": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 4094
+                            }
+                        },
+                        "SystemDefaultRoute": {
+                            "type": "string"
+                        },
+                        "MyASN": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 65535
+                        },
+                        "PeerASN": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 65535
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "CIDR",
+                        "MTU",
+                        "Subnets",
+                        "VlanRange"
+                    ]
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "Name",
+                "FullName",
+                "IPRanges",
+                "Type",
+                "ExtraProperties"
+            ]
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "NMN",
+        "HMN"
+    ]
+}

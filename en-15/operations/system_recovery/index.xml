@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>System Recovery on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-15/operations/system_recovery/</link>
+    <description>Recent content in System Recovery on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-15</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:10 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-15/operations/system_recovery/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PBS Service Recovery</title>
+      <link>/docs-csm/en-15/operations/system_recovery/pbs_service_recovery/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:10 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/system_recovery/pbs_service_recovery/</guid>
+      <description>PBS Service Recovery The following covers restoring PBS data.&#xA;Prerequisites The system is fully installed and has transitioned off of the LiveCD. All activities required for site maintenance are complete. A backup or export of the data already exists. Service recovery for PBS To restore Portable Batch System data from a backup, see Restore PBS home directory from a backup in the HPE Portable Batch System Installation Guide: CSM on HPE Cray EX Systems (S-8055).</description>
+    </item>
+    <item>
+      <title>Slurm Service Recovery</title>
+      <link>/docs-csm/en-15/operations/system_recovery/slurm_service_recovery/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:10 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/system_recovery/slurm_service_recovery/</guid>
+      <description>Slurm Service Recovery The following covers restoring Slurm data.&#xA;Prerequisites The system is fully installed and has transitioned off of the LiveCD. All activities required for site maintenance are complete. A backup or export of the data already exists. Service recovery for Slurm To restore Slurm data from a backup, see Restore Slurm accounting database from a backup and Restore Slurm spool directory from a backup in the HPE Slurm Installation Guide: CSM on HPE Cray EX Systems (S-8058).</description>
+    </item>
+    <item>
+      <title>Beta Procedures for System Recovery</title>
+      <link>/docs-csm/en-15/operations/system_recovery/system_recovery/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:10 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/system_recovery/system_recovery/</guid>
+      <description>Beta Procedures for System Recovery The table below provides links to the recovery procedures available for critical services.&#xA;Service Recovery procedures Vault Vault Service Recovery Keycloak Keycloak Service Recovery Spire Spire Service Recovery Nexus Nexus Service Recovery Slurm Slurm Service Recovery PBS PBS Service Recovery </description>
+    </item>
+  </channel>
+</rss>

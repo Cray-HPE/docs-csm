@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Non-Compute Nodes on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-14/background/</link>
+    <description>Recent content in Non-Compute Nodes on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-14</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:03 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-14/background/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Certificate Authority</title>
+      <link>/docs-csm/en-14/background/certificate_authority/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:02 +0000</pubDate>
+      <guid>/docs-csm/en-14/background/certificate_authority/</guid>
+      <description>Certificate Authority While a system is being installed for the first time, a certificate authority (CA) is needed. This can be generated for a system, or one can be supplied from a customer intermediate CA. Outside of a new installation, there is no supported method to rotate or change the platform CA in this release.&#xA;Topics Overview Use default platform-generated CA Customize platform-generated CA Use external CA Overview At install time, a PKI certificate authority can either be generated for a system, or a customer can opt to supply their own intermediate CA.</description>
+    </item>
+    <item>
+      <title>NCN BIOS</title>
+      <link>/docs-csm/en-14/background/ncn_bios/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:02 +0000</pubDate>
+      <guid>/docs-csm/en-14/background/ncn_bios/</guid>
+      <description>NCN BIOS This page specifies the BIOS settings that are desirable for non-compute nodes (NCNs).&#xA;NOTES&#xA;Any tunables on this page are in the interest of performance and stability. If either of those facets seem to be infringed by any of the content on this page, then contact HPE Cray for support. The table below declares desired settings; unlisted settings should remain at vendor default. This table may be expanded as new settings are adjusted.</description>
+    </item>
+    <item>
+      <title>NCN Boot Workflow</title>
+      <link>/docs-csm/en-14/background/ncn_boot_workflow/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:02 +0000</pubDate>
+      <guid>/docs-csm/en-14/background/ncn_boot_workflow/</guid>
+      <description>NCN Boot Workflow This document provides information on non-compute node (NCN) boot devices and boot ordering.&#xA;Boot sources Determine the current boot order Reasons to change the boot order after CSM install Determine if NCNs booted via disk or PXE Set BMCs to DHCP Boot order overview Setting boot order Trimming boot order Example boot orders Reverting changes Locating USB device Boot sources Non-compute nodes (NCNs) can boot from two sources:</description>
+    </item>
+    <item>
+      <title>NCN Firmware</title>
+      <link>/docs-csm/en-14/background/ncn_firmware/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:02 +0000</pubDate>
+      <guid>/docs-csm/en-14/background/ncn_firmware/</guid>
+      <description>NCN Firmware This page describes the non-compute node&amp;rsquo;s (NCN) firmware; the minimum versions, and how to interrogate information from an NCN.&#xA;Minimum versions BMC interrogation Minimum versions This section outlines the minimum firmware versions for a CSM install.&#xA;NOTE Minimum firmware versions refers to versions that CSM has tested and verified to work for a CSM installation. Using older versions is not recommended, and user experience may vary.&#xA;The entries in this table may change as new features are added, bug fixes are adopted, or if/when newer Redfish® versions are required.</description>
+    </item>
+    <item>
+      <title>NCN Images</title>
+      <link>/docs-csm/en-14/background/ncn_images/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:02 +0000</pubDate>
+      <guid>/docs-csm/en-14/background/ncn_images/</guid>
+      <description>NCN Images Overview of NCN images LiveCD server Overview of NCN images The management non-compute nodes (NCNs) boot from images which are created from layers on top of a common base image. The common image is customized with a kubernetes layer for the master nodes and worker nodes. The common image is customized with a storage-ceph layer for the utility storage nodes.&#xA;When booting NCNs, an administrator will need to choose between stable (Release) and unstable (pre-release/development) images.</description>
+    </item>
+    <item>
+      <title>Kernel Dumps</title>
+      <link>/docs-csm/en-14/background/ncn_kdump/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:02 +0000</pubDate>
+      <guid>/docs-csm/en-14/background/ncn_kdump/</guid>
+      <description>Kernel Dumps What is kdump? Usage Configuration Dracut Enabling / disabling Analyzing a dump Troubleshooting kdump has hung Resetting kdump What is kdump? At a high-level, kdump is a Linux tool that takes a dump of the system memory at the time of a crash for analysis. This dump is taken on a local disk, or it can be taken on a network drive.&#xA;The dump can provide insight into the origin of the crash, such as which kernel modules were running and which may have contributed to the crash.</description>
+    </item>
+    <item>
+      <title>NCN Kernel</title>
+      <link>/docs-csm/en-14/background/ncn_kernel/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:02 +0000</pubDate>
+      <guid>/docs-csm/en-14/background/ncn_kernel/</guid>
+      <description>NCN Kernel This page provides information on the Linux kernel in the non-compute nodes (NCNs).&#xA;Locks Module blacklisting Parameters biosdevname ifname ip psi pcie_ports transparent_hugepage console iommu metal.server metal.no-wipe ds rootfallback initrd root rd.live.ram rd.writable.fsimg rd.skipfsck rd.live.squashimg rd.live.overlay rd.live.overlay.thin rd.live.overlay.overlayfs rd.luks rd.luks.crypttab rd.lvm.conf rd.lvm rd.auto rd.md rd.dm rd.neednet rd.peerdns rd.md.waitclean rd.multipath rd.md.conf rd.bootif hostname rd.net.timeout.carrier rd.net.timeout.ifup rd.net.timeout.iflink rd.net.dhcp.retry rd.net.timeout.ipv6auto rd.net.timeout.ipv6dad append nosplash quiet crashkernel log_buf_len split_lock_detect rd.retry rd.shell xname Versioning Locks The Kernel version is controlled by the kernel-default package, and this package is locked.</description>
+    </item>
+    <item>
+      <title>NCN Mounts and Filesystems</title>
+      <link>/docs-csm/en-14/background/ncn_mounts_and_filesystems/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:02 +0000</pubDate>
+      <guid>/docs-csm/en-14/background/ncn_mounts_and_filesystems/</guid>
+      <description>NCN Mounts and Filesystems The management non-compute nodes (NCNs) use drive storage for persistence and block storage. This page outlines reference information for these disks, their partition tables, and their management.&#xA;Disk layout quick-reference tables OverlayFS and persistence SQFSRAID and ROOTRAID overlays Helpful commands OverlayFS example mount command losetup command lsblk command Persistent directories Layering: Upper and lower directory Layering: Real world example OverlayFS control Reset toggles Reset on next boot Reset on every boot Re-sizing the persistent overlay Thin overlay feature metalfs Old/retired FS labels Disk layout quick-reference tables The table below represents all recognizable FS labels on any given management node, varying slightly by node role (Kubernetes master or Kubernetes worker).</description>
+    </item>
+    <item>
+      <title>NCN Networking</title>
+      <link>/docs-csm/en-14/background/ncn_networking/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:02 +0000</pubDate>
+      <guid>/docs-csm/en-14/background/ncn_networking/</guid>
+      <description>NCN Networking Non-compute nodes (NCNs) and compute nodes (CNs) have different network interfaces used for booting; this topic focuses on the network interfaces for management NCNs.&#xA;NCN network interfaces Device naming Vendor and bus ID identification NCN network interfaces The following table includes information about the different NCN network interfaces:&#xA;Name Type MTU mgmt0 Port 1 Slot 1 on the SMNET card 9000 mgmt1 Port 1 Slot 2 on the SMNET card 9000 bond0 LACP link aggregate of mgmt0 and mgmt1 9000 bond0.</description>
+    </item>
+    <item>
+      <title>NCN Operating System Releases</title>
+      <link>/docs-csm/en-14/background/ncn_operating_system_releases/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:03 +0000</pubDate>
+      <guid>/docs-csm/en-14/background/ncn_operating_system_releases/</guid>
+      <description>NCN Operating System Releases The management non-compute nodes (NCNs) define their products per image layer:&#xA;Kubernetes NCN images are always SLE_HPC (SuSE High Performance Computing) Ceph Storage NCN images are always SLE_HPC (SuSE High Performance Computing) with SES (SuSE Enterprise Storage) The sles-release RPM is uninstalled for NCNs, and instead, the sle_HPC-release RPM is installed. These both provide the same files, but differ for os-release and /etc/product.d/baseproduct.&#xA;The ses-release RPM is installed on top of the sle_HPC-release RPM in the Ceph images.</description>
+    </item>
+    <item>
+      <title>NCN Plan of Record</title>
+      <link>/docs-csm/en-14/background/ncn_plan_of_record/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:03 +0000</pubDate>
+      <guid>/docs-csm/en-14/background/ncn_plan_of_record/</guid>
+      <description>NCN Plan of Record This document outlines the hardware necessary to meet CSM&amp;rsquo;s Plan of Record (PoR). This serves as the minimum, necessary pieces required per each server in the management plane.&#xA;If the system&amp;rsquo;s NICs do not align to the PoR NICs outlined below (e.g. Onboard NICs are used instead of PCIe), then follow Customize PCIe Hardware before booting the NCN(s). If there are more disks than what is listed below in the PoR for disks, then follow Customize Disk Hardware before booting the NCN(s).</description>
+    </item>
+  </channel>
+</rss>

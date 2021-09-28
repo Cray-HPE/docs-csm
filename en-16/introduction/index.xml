@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Introduction to CSM Installation on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-16/introduction/</link>
+    <description>Recent content in Introduction to CSM Installation on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-16</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:09 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-16/introduction/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Viewing CSM documentation</title>
+      <link>/docs-csm/en-16/introduction/viewing_csm_documentation/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:09 +0000</pubDate>
+      <guid>/docs-csm/en-16/introduction/viewing_csm_documentation/</guid>
+      <description>Viewing CSM documentation The CSM documentation can be viewed in different formats both online and offline.&#xA;Online CSM documentation in HTML format The CSM documentation can be viewed online in HTML format at the following URL in a browser: Cray System Management Documentation.&#xA;Multiple versions of the documentation are available at this location, and they can be selected using a drop-down menu in the top left corner of the browser window, as shown below:</description>
+    </item>
+    <item>
+      <title>CSM Overview</title>
+      <link>/docs-csm/en-16/introduction/csm_overview/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-16/introduction/csm_overview/</guid>
+      <description>CSM Overview This CSM Overview describes the Cray System Management ecosystem with its hardware, software, and network. It describes how to access these services and components.&#xA;The CSM installation prepares and deploys a distributed system across a group of management nodes organized into a Kubernetes cluster which uses Ceph for utility storage. These nodes perform their function as Kubernetes master nodes, Kubernetes worker nodes, or utility storage nodes with the Ceph storage.</description>
+    </item>
+    <item>
+      <title>Documentation Conventions</title>
+      <link>/docs-csm/en-16/introduction/documentation_conventions/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:09 +0000</pubDate>
+      <guid>/docs-csm/en-16/introduction/documentation_conventions/</guid>
+      <description>Documentation Conventions This outlines conventions and standards that are used in this documentation.&#xA;Markdown format File formats Typographic conventions Command prompt conventions Host and user name in command prompts Node abbreviations Command prompt reference Command prompt location Command prompts inside new shells chroot example kubectl exec example Combined ssh and chroot example sat bash example Command prompts in Python virtual environments Directory path in command prompt Ability to pause and resume procedures Bad example Good example Templates Markdown format This documentation is in Markdown format.</description>
+    </item>
+  </channel>
+</rss>

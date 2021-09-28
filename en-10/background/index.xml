@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CSM Background Information on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-10/background/</link>
+    <description>Recent content in CSM Background Information on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-10</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:01 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-10/background/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Certificate Authority</title>
+      <link>/docs-csm/en-10/background/certificate_authority/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:00 +0000</pubDate>
+      <guid>/docs-csm/en-10/background/certificate_authority/</guid>
+      <description>Certificate Authority While a system is being installed for the first time, a certificate authority (CA) is needed. This can be generated for a system, or one can be supplied from a customer intermediate CA. Outside of a new installation, there is no supported method to rotate or change the platform CA in this release.&#xA;Topics Overview Use default platform-generated CA Customize platform-generated CA Use external CA Overview At install time, a PKI certificate authority can either be generated for a system, or a customer can opt to supply their own intermediate CA.</description>
+    </item>
+    <item>
+      <title>cloud-init Basecamp Configuration</title>
+      <link>/docs-csm/en-10/background/cloud-init_basecamp_configuration/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:00 +0000</pubDate>
+      <guid>/docs-csm/en-10/background/cloud-init_basecamp_configuration/</guid>
+      <description>cloud-init Basecamp Configuration Metal Basecamp is a cloud-init DataSource available on the LiveCD. Basecamp&amp;rsquo;s configuration file offers many inputs for various cloud-init scripts baked into the NCN images.&#xA;This page details what those settings are.&#xA;Basecamp Config Files Purging Basecamp CAN CEPH Certificate Authority RADOS Gateway Wiping DNS Resolution Configuration Static Fallback Kubernetes NTP Node Auditing Generally these settings are determined by the cray-site-init tool. See csi config --help for more information.</description>
+    </item>
+    <item>
+      <title>Cray Site Init Files</title>
+      <link>/docs-csm/en-10/background/cray_site_init_files/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:00 +0000</pubDate>
+      <guid>/docs-csm/en-10/background/cray_site_init_files/</guid>
+      <description>Cray Site Init Files This page describes administrative knowledge around the pre-config files to csi or the output files from csi.&#xA;Information for collecting certain files starts in Configuration Payload&#xA;application_node_config.yaml cabinets.yaml hmn_connections.json ncn_metadata.csv switch_metadata.csv Topics: Save-File / Avoiding Parameters Details Save-File / Avoiding Parameters A system_config.yaml file may be provided by the administrator that will omit the need for specifying parameters on the command line.&#xA;This file is dumped in the generated configuration after every csi config init call.</description>
+    </item>
+    <item>
+      <title>NCN BIOS</title>
+      <link>/docs-csm/en-10/background/ncn_bios/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-10/background/ncn_bios/</guid>
+      <description>NCN BIOS This page specifies the BIOS settings that are desirable for non-compute nodes (NCNs).&#xA;NOTES&#xA;Any tunables on this page are in the interest of performance and stability. If either of those facets seem to be infringed by any of the content on this page, then contact HPE Cray for support. The table below declares desired settings; unlisted settings should remain at vendor default. This table may be expanded as new settings are adjusted.</description>
+    </item>
+    <item>
+      <title>NCN Boot Workflow</title>
+      <link>/docs-csm/en-10/background/ncn_boot_workflow/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-10/background/ncn_boot_workflow/</guid>
+      <description>NCN Boot Workflow This document provides information on non-compute node (NCN) boot devices and boot ordering.&#xA;Boot sources Determine the current boot order Reasons to change the boot order after CSM install Determine if NCNs booted via disk or PXE Set BMCs to DHCP Boot order overview Setting boot order Trimming boot order Example boot orders Reverting changes Locating USB device Boot sources Non-compute nodes (NCNs) can boot from two sources:</description>
+    </item>
+    <item>
+      <title>NCN Images</title>
+      <link>/docs-csm/en-10/background/ncn_images/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-10/background/ncn_images/</guid>
+      <description>NCN Images Overview of NCN images LiveCD server Overview of NCN images The management non-compute nodes (NCNs) boot from images which are created from layers on top of a common base image. The common image is customized with a kubernetes layer for the master nodes and worker nodes. The common image is customized with a storage-ceph layer for the utility storage nodes.&#xA;When booting NCNs, an administrator will need to choose between stable (Release) and unstable (pre-release/development) images.</description>
+    </item>
+    <item>
+      <title>NCN Mounts and File Systems</title>
+      <link>/docs-csm/en-10/background/ncn_mounts_and_file_systems/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-10/background/ncn_mounts_and_file_systems/</guid>
+      <description>NCN Mounts and File Systems The management non-compute nodes (NCNs) use drive storage for persistence and block storage. This page outlines reference information for these disks, their partition tables, and their management.&#xA;What controls partitioning Plan of record / baseline Problems when above or below baseline Disk layout quick-reference tables OverlayFS and persistence SQFSRAID and ROOTRAID overlays Helpful commands OverlayFS example mount command losetup command lsblk command Persistent directories Layering: Upper and lower directory Layering: Real world example OverlayFS control Reset toggles Reset on next boot Reset on every boot Re-sizing the persistent overlay Thin overlay feature metalfs Old/retired FS labels What controls partitioning Partitioning is controlled by two aspects:</description>
+    </item>
+    <item>
+      <title>NCN Networking</title>
+      <link>/docs-csm/en-10/background/ncn_networking/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-10/background/ncn_networking/</guid>
+      <description>NCN Networking Non-compute nodes (NCNs) and compute nodes (CNs) have different network interfaces used for booting; this topic focuses on the network interfaces for management NCNs.&#xA;NCN network interfaces Device naming Vendor and bus ID identification NCN network interfaces The following table includes information about the different NCN network interfaces:&#xA;Name Type MTU mgmt0 Slot 1 on the SMNET card 9000 mgmt1 Slot 2 on the SMNET card or slot 1 on the second SMNET card 9000 bond0 LACP link aggregate of mgmt0 and mgmt1, or mgmt0 and mgmt2 on dual-bonds (when bond1 is present) 9000 bond1 LACP link aggregate of mgmt1 and mgmt3 9000 lan0 Externally facing interface 1500 lan1 Another externally facing interface, or anything (unused) 1500 hsn0 High-Speed Network interface 9000 hsnN+1 Another high-speed network interface 9000 vlan002 Virtual LAN for managing nodes 1500 vlan004 Virtual LAN for managing hardware 1500 vlan007 Virtual LAN for the Customer Access Network 1500 These interfaces can be observed on an NCN with the following command.</description>
+    </item>
+    <item>
+      <title>NCN Operating System Releases</title>
+      <link>/docs-csm/en-10/background/ncn_operating_system_releases/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-10/background/ncn_operating_system_releases/</guid>
+      <description>NCN Operating System Releases The management non-compute nodes (NCNs) define their products per image layer:&#xA;Kubernetes NCN images are always SLE_HPC (SuSE High Performance Computing) Ceph Storage NCN images are always SLE_HPC (SuSE High Performance Computing) with SES (SuSE Enterprise Storage) The sles-release RPM is uninstalled for NCNs, and instead, the sle_HPC-release RPM is installed. These both provide the same files, but differ for os-release and /etc/product.d/baseproduct.&#xA;The ses-release RPM is installed on top of the sle_HPC-release RPM in the Ceph images.</description>
+    </item>
+    <item>
+      <title>NCN Packages</title>
+      <link>/docs-csm/en-10/background/ncn_packages/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-10/background/ncn_packages/</guid>
+      <description>NCN Packages The management nodes boot from images which have many (RPM) packages installed. Lists of the packages for these images are generated on running nodes. A list of images can be collected by running a zypper command on one of the storage, worker, or master nodes.&#xA;Kubernetes Images The Kubernetes image is used to boot the master nodes and worker nodes.&#xA;Collection ncn-w002# zypper --disable-repositories se --installed-only | grep i+ | tr -d &amp;#39;|&amp;#39; | awk &amp;#39;{print $2}&amp;#39; The List SLE_HPC SLE_HPC-release acpid apparmor-profiles arptables at autoyast2 autoyast2-installation base bc bind-utils biosdevname ceph-common cfs-state-reporter cloud-init conntrack-tools cpupower crash cray-cos-release cray-cps-utils cray-dvs-kmp-default cray-dvs-service cray-heartbeat cray-lustre-client cray-lustre-client-devel cray-lustre-client-kmp-default cray-network-config cray-node-identity cray-orca cray-power-button cray-sat-podman craycli-wrapper createrepo_c dnsmasq dosfstools dracut-kiwi-live dracut-metal-mdsquash dump e2fsprogs ebtables emacs ethtool expect fping gdb genders git-core glibc gnuplot gperftools gptfdisk grub2 haproxy hpe-csm-scripts hplip ipmitool iproute2-bash-completion ipset ipvsadm irqbalance java-1_8_0-ibm java-1_8_0-ibm-plugin kdump kdumpid keepalived kernel-mft-mlnx-kmp-default kernel-source kernel-syms kexec-tools kmod-bash-completion kubeadm kubectl kubelet less libcanberra-gtk0 libecpg6 libpq5 libunwind-devel ltrace lvm2 man mariadb mariadb-tools mdadm minicom mlocate nmap numactl open-lldp patterns-base-base pdsh perf perl-MailTools perl-doc pixz podman podman-cni-config postgresql postgresql-contrib postgresql-docs postgresql-server python python-urlgrabber python3-Jinja2 python3-MarkupSafe python3-click python3-colorama python3-curses python3-ipaddr python3-lxml python3-netaddr python3-pexpect python3-pip python3-rpm python3-sip rarpd rasdaemon rsync rsyslog rzsz screen slingshot-network-config smartmontools socat spire-agent squashfs squid strace sudo sysstat systemtap tar tcpdump unixODBC usbutils vim wget wireshark xfsdump yast2-add-on yast2-bootloader yast2-country yast2-network yast2-services-manager yast2-users yum-metadata-parser zip CEPH The Ceph image is used to boot the utility storage nodes.</description>
+    </item>
+  </channel>
+</rss>

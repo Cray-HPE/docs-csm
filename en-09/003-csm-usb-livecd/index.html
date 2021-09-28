@@ -1,0 +1,4902 @@
+<!DOCTYPE html>
+<html lang="en-09" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.123.0">
+    <meta name="description" content="">
+
+
+    <link rel="icon" href="/docs-csm/images/favicon.png" type="image/png">
+
+    <title>CSM USB LiveCD - Creation and Configuration :: Cray System Management (CSM)</title>
+
+    
+    <link href="/docs-csm/css/nucleus.css?1729741357" rel="stylesheet">
+    <link href="/docs-csm/css/fontawesome-all.min.css?1729741357" rel="stylesheet">
+    <link href="/docs-csm/css/hybrid.css?1729741357" rel="stylesheet">
+    <link href="/docs-csm/css/featherlight.min.css?1729741357" rel="stylesheet">
+    <link href="/docs-csm/css/perfect-scrollbar.min.css?1729741357" rel="stylesheet">
+    <link href="/docs-csm/css/auto-complete.css?1729741357" rel="stylesheet">
+    <link href="/docs-csm/css/atom-one-dark-reasonable.css?1729741357" rel="stylesheet">
+    <link href="/docs-csm/css/theme.css?1729741357" rel="stylesheet">
+    <link href="/docs-csm/css/tabs.css?1729741357" rel="stylesheet">
+    <link href="/docs-csm/css/hugo-theme.css?1729741357" rel="stylesheet">
+    
+    <link href="/docs-csm/css/theme-blue.css?1729741357" rel="stylesheet">
+    
+    
+
+    <script src="/docs-csm/js/jquery-3.3.1.min.js?1729741357"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="/docs-csm/en-09/003-csm-usb-livecd/">
+    <nav id="sidebar" class="">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo" href='/docs-csm/en-09'>
+  Cray System Management
+</a>
+
+    </div>
+
+    
+    <section>
+      <ul>
+      
+        <li>
+          <div class="select-style padding">
+          v <select id="select-language" onchange="location = this.value;">
+          
+          
+          
+              
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+                    
+                    
+                      <option id="en-09" value="/docs-csm/en-09/003-csm-usb-livecd/" selected>0.9</option>
+                    
+                  
+              
+          
+        </select>
+        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          width="255px" height="255px" viewBox="0 0 255 255" style="enable-background:new 0 0 255 255;" xml:space="preserve">
+          <g>
+            <g id="arrow-drop-down">
+              <polygon points="0,63.75 127.5,191.25 255,63.75 		" />
+            </g>
+          </g>
+        </svg>
+        </div>
+        </li>
+      
+
+      
+      </ul>
+    </section>
+  
+
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="/docs-csm/js/lunr.min.js?1729741357"></script>
+<script type="text/javascript" src="/docs-csm/js/auto-complete.js?1729741357"></script>
+<script type="text/javascript">
+    
+        var baseurl = "\/docs-csm\/\/en-09";
+    
+</script>
+<script type="text/javascript" src="/docs-csm/js/search.js?1729741357"></script>
+
+    
+  </div>
+
+  
+
+    <div class="highlightable">
+    <ul class="topics">
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/421-mgmt-net-cabling-checklist/" title="1.4 Management network cabling checklist" class="dd-item ">
+        <a href="/docs-csm/en-09/421-mgmt-net-cabling-checklist/">
+        1.4 Management network cabling checklist
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/308-application-node-config/" title="Application Node Config" class="dd-item ">
+        <a href="/docs-csm/en-09/308-application-node-config/">
+        Application Node Config
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/310-cabinets/" title="Cabinets" class="dd-item ">
+        <a href="/docs-csm/en-09/310-cabinets/">
+        Cabinets
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/416-mgmt-net-cabling/" title="Cabling" class="dd-item ">
+        <a href="/docs-csm/en-09/416-mgmt-net-cabling/">
+        Cabling
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/066-ceph-csi/" title="CEPH CSI Verification" class="dd-item ">
+        <a href="/docs-csm/en-09/066-ceph-csi/">
+        CEPH CSI Verification
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/302-ncn-metadata-bondx/" title="Collecting NCN MAC Addresses" class="dd-item ">
+        <a href="/docs-csm/en-09/302-ncn-metadata-bondx/">
+        Collecting NCN MAC Addresses
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/301-ncn-metadata-bmc/" title="Collecting the BMC MAC Addresses" class="dd-item ">
+        <a href="/docs-csm/en-09/301-ncn-metadata-bmc/">
+        Collecting the BMC MAC Addresses
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/257-firmware-action-service-cray-windom-compute-node-bios-workaround/" title="Compute Node BIOS workaround for WNC-rome aka HPE CRAY EX425" class="dd-item ">
+        <a href="/docs-csm/en-09/257-firmware-action-service-cray-windom-compute-node-bios-workaround/">
+        Compute Node BIOS workaround for WNC-rome aka HPE CRAY EX425
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/000-info/" title="CRAY Guide Contribution" class="dd-item ">
+        <a href="/docs-csm/en-09/000-info/">
+        CRAY Guide Contribution
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/063-csi-files/" title="Cray Site Init Files" class="dd-item ">
+        <a href="/docs-csm/en-09/063-csi-files/">
+        Cray Site Init Files
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/release_notes/" title="Cray System Management (CSM) - Release Notes" class="dd-item ">
+        <a href="/docs-csm/en-09/release_notes/">
+        Cray System Management (CSM) - Release Notes
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/001-guides/" title="CSM Documentation Guide" class="dd-item ">
+        <a href="/docs-csm/en-09/001-guides/">
+        CSM Documentation Guide
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/002-csm-install/" title="CSM Install" class="dd-item ">
+        <a href="/docs-csm/en-09/002-csm-install/">
+        CSM Install
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/007-csm-install-reboot/" title="CSM Install Reboot - Final NCN Install" class="dd-item ">
+        <a href="/docs-csm/en-09/007-csm-install-reboot/">
+        CSM Install Reboot - Final NCN Install
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/008-csm-validation/" title="CSM Install Validation and Health Checks" class="dd-item ">
+        <a href="/docs-csm/en-09/008-csm-validation/">
+        CSM Install Validation and Health Checks
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/005-csm-metal-install/" title="CSM Metal Install" class="dd-item ">
+        <a href="/docs-csm/en-09/005-csm-metal-install/">
+        CSM Metal Install
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/006-csm-platform-install/" title="CSM Platform Install" class="dd-item ">
+        <a href="/docs-csm/en-09/006-csm-platform-install/">
+        CSM Platform Install
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/troubleshooting/" title="CSM Troubleshooting Information" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/troubleshooting/">
+          CSM Troubleshooting Information
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/troubleshooting/known_issues/" title="known issues" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/troubleshooting/known_issues/">
+          known issues
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/troubleshooting/known_issues/cfs_sessions_stuck_in_pending/" title="CFS Sessions are Stuck in Pending State" class="dd-item ">
+        <a href="/docs-csm/en-09/troubleshooting/known_issues/cfs_sessions_stuck_in_pending/">
+        CFS Sessions are Stuck in Pending State
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/troubleshooting/known_issues/conman_pod_kubernetes_copy_fails/" title="Copying file from the cray-conman pod fails" class="dd-item ">
+        <a href="/docs-csm/en-09/troubleshooting/known_issues/conman_pod_kubernetes_copy_fails/">
+        Copying file from the cray-conman pod fails
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/troubleshooting/known_issues/orphaned_cfs_pods/" title="Orphaned CFS Pods After Booting or Rebooting" class="dd-item ">
+        <a href="/docs-csm/en-09/troubleshooting/known_issues/orphaned_cfs_pods/">
+        Orphaned CFS Pods After Booting or Rebooting
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/003-csm-usb-livecd/" title="CSM USB LiveCD - Creation and Configuration" class="dd-item active">
+        <a href="/docs-csm/en-09/003-csm-usb-livecd/">
+        CSM USB LiveCD - Creation and Configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/051-disk-cleanslate/" title="Disk Cleanslate" class="dd-item ">
+        <a href="/docs-csm/en-09/051-disk-cleanslate/">
+        Disk Cleanslate
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/255-firmware-action-service-fas/" title="FIRMWARE ACTION SERVICE (FAS) | User Procedures" class="dd-item ">
+        <a href="/docs-csm/en-09/255-firmware-action-service-fas/">
+        FIRMWARE ACTION SERVICE (FAS) | User Procedures
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/256-firmware-action-service-fas-recipes/" title="Firmware Action Service (FAS) Administration Guide" class="dd-item ">
+        <a href="/docs-csm/en-09/256-firmware-action-service-fas-recipes/">
+        Firmware Action Service (FAS) Administration Guide
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/250-firmware/" title="Firmware Checkout" class="dd-item ">
+        <a href="/docs-csm/en-09/250-firmware/">
+        Firmware Checkout
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/010-firmware-update-with-fas/" title="Firmware Update the system with FAS" class="dd-item ">
+        <a href="/docs-csm/en-09/010-firmware-update-with-fas/">
+        Firmware Update the system with FAS
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/254-ncn-firmware-gb/" title="Gigabyte Firmware Bug" class="dd-item ">
+        <a href="/docs-csm/en-09/254-ncn-firmware-gb/">
+        Gigabyte Firmware Bug
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/304-ncn-pcie-net-boot-and-re-cable/" title="Guide  Netboot an NCN from a Spine" class="dd-item ">
+        <a href="/docs-csm/en-09/304-ncn-pcie-net-boot-and-re-cable/">
+        Guide  Netboot an NCN from a Spine
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/068-harvest-13-config/" title="HARVEST 13 CONFIG" class="dd-item ">
+        <a href="/docs-csm/en-09/068-harvest-13-config/">
+        HARVEST 13 CONFIG
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/307-hmn-connections/" title="HMN Connections File" class="dd-item ">
+        <a href="/docs-csm/en-09/307-hmn-connections/">
+        HMN Connections File
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/418-mgmt-net-ip-helper/" title="IP-Helper configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/418-mgmt-net-ip-helper/">
+        IP-Helper configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/061-livecd-metal-basecamp/" title="LiveCD - Metal Basecamp" class="dd-item ">
+        <a href="/docs-csm/en-09/061-livecd-metal-basecamp/">
+        LiveCD - Metal Basecamp
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/060-livecd-1.3-rollback/" title="LiveCD 1.3 Rollback" class="dd-item ">
+        <a href="/docs-csm/en-09/060-livecd-1.3-rollback/">
+        LiveCD 1.3 Rollback
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/059-livecd-backup/" title="LiveCD Re-Installs" class="dd-item ">
+        <a href="/docs-csm/en-09/059-livecd-backup/">
+        LiveCD Re-Installs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/058-livecd-troubleshooting/" title="LiveCD Recovery" class="dd-item ">
+        <a href="/docs-csm/en-09/058-livecd-troubleshooting/">
+        LiveCD Recovery
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/004-csm-remote-livecd/" title="LiveCD Remote ISO Install" class="dd-item ">
+        <a href="/docs-csm/en-09/004-csm-remote-livecd/">
+        LiveCD Remote ISO Install
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/062-livecd-virtual-iso-boot/" title="LiveCD Virtual ISO Boot" class="dd-item ">
+        <a href="/docs-csm/en-09/062-livecd-virtual-iso-boot/">
+        LiveCD Virtual ISO Boot
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/405-mgmt-net-port-config/" title="Management Network Access Port configurations." class="dd-item ">
+        <a href="/docs-csm/en-09/405-mgmt-net-port-config/">
+        Management Network Access Port configurations.
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/406-mgmt-net-acl-config/" title="Management Network ACL configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/406-mgmt-net-acl-config/">
+        Management Network ACL configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/402-mgmt-net-base-config/" title="Management Network Base Configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/402-mgmt-net-base-config/">
+        Management Network Base Configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/408-mgmt-net-can-config/" title="Management Network CAN setup" class="dd-item ">
+        <a href="/docs-csm/en-09/408-mgmt-net-can-config/">
+        Management Network CAN setup
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/412-mgmt-net-dell-mellanox-upgrades/" title="Management Network Dell And Mellanox Upgrades" class="dd-item ">
+        <a href="/docs-csm/en-09/412-mgmt-net-dell-mellanox-upgrades/">
+        Management Network Dell And Mellanox Upgrades
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/413-mgmt-net-example-config/" title="Management Network Example Config" class="dd-item ">
+        <a href="/docs-csm/en-09/413-mgmt-net-example-config/">
+        Management Network Example Config
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/409-mgmt-net-firmware-update/" title="Management Network Firmware Update" class="dd-item ">
+        <a href="/docs-csm/en-09/409-mgmt-net-firmware-update/">
+        Management Network Firmware Update
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/417-mgmt-net-flow-control/" title="Management Network Flow Control Settings" class="dd-item ">
+        <a href="/docs-csm/en-09/417-mgmt-net-flow-control/">
+        Management Network Flow Control Settings
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/411-mgmt-net-layer3-config/" title="Management Network Layer3 Configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/411-mgmt-net-layer3-config/">
+        Management Network Layer3 Configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/404-mgmt-net-mlag-config/" title="Management Network MLAG Configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/404-mgmt-net-mlag-config/">
+        Management Network MLAG Configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/414-mgmt-net-ntp-config/" title="Management Network NTP configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/414-mgmt-net-ntp-config/">
+        Management Network NTP configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/407-mgmt-net-snmp-config/" title="Management Network SNMP configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/407-mgmt-net-snmp-config/">
+        Management Network SNMP configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/419-mgmt-net-stp/" title="Management Network Spanning-Tree Configuration." class="dd-item ">
+        <a href="/docs-csm/en-09/419-mgmt-net-stp/">
+        Management Network Spanning-Tree Configuration.
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/415-mgmt-net-switch-rename/" title="Management Network Switch Rename" class="dd-item ">
+        <a href="/docs-csm/en-09/415-mgmt-net-switch-rename/">
+        Management Network Switch Rename
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/410-mgmt-net-uplink-config/" title="Management Network Uplink configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/410-mgmt-net-uplink-config/">
+        Management Network Uplink configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/403-mgmt-net-vlan-config/" title="Management Network VLAN Configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/403-mgmt-net-vlan-config/">
+        Management Network VLAN Configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/306-sls-add-uan-alias/" title="Manually add UAN Aliases to SLS" class="dd-item ">
+        <a href="/docs-csm/en-09/306-sls-add-uan-alias/">
+        Manually add UAN Aliases to SLS
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/309-move-site-connections/" title="Move Site Connections" class="dd-item ">
+        <a href="/docs-csm/en-09/309-move-site-connections/">
+        Move Site Connections
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/200-ncn-bios-pref/" title="NCN BIOS Preferences" class="dd-item ">
+        <a href="/docs-csm/en-09/200-ncn-bios-pref/">
+        NCN BIOS Preferences
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/101-ncn-booting/" title="NCN Booting" class="dd-item ">
+        <a href="/docs-csm/en-09/101-ncn-booting/">
+        NCN Booting
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/107-ncn-devel/" title="NCN Development" class="dd-item ">
+        <a href="/docs-csm/en-09/107-ncn-devel/">
+        NCN Development
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/253-ncn-hw-swap/" title="NCN Hardware Swaps" class="dd-item ">
+        <a href="/docs-csm/en-09/253-ncn-hw-swap/">
+        NCN Hardware Swaps
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/110-ncn-image-customization/" title="NCN Image Customization" class="dd-item ">
+        <a href="/docs-csm/en-09/110-ncn-image-customization/">
+        NCN Image Customization
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/303-ncn-metadata-usb-serial/" title="NCN Metadata over USB-Serial Cable" class="dd-item ">
+        <a href="/docs-csm/en-09/303-ncn-metadata-usb-serial/">
+        NCN Metadata over USB-Serial Cable
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/106-ncn-sles/" title="NCN Operating System Release" class="dd-item ">
+        <a href="/docs-csm/en-09/106-ncn-sles/">
+        NCN Operating System Release
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/105-ncn-packages/" title="NCN Packages" class="dd-item ">
+        <a href="/docs-csm/en-09/105-ncn-packages/">
+        NCN Packages
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/104-ncn-partitioning/" title="NCN Partitions" class="dd-item ">
+        <a href="/docs-csm/en-09/104-ncn-partitioning/">
+        NCN Partitions
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/009-ncn-locking/" title="NCN/Management Node Locking" class="dd-item ">
+        <a href="/docs-csm/en-09/009-ncn-locking/">
+        NCN/Management Node Locking
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/251-firmware-network/" title="Network Firmware" class="dd-item ">
+        <a href="/docs-csm/en-09/251-firmware-network/">
+        Network Firmware
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/052-network-stack/" title="Network Stack (Software and Hardware)" class="dd-item ">
+        <a href="/docs-csm/en-09/052-network-stack/">
+        Network Stack (Software and Hardware)
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/103-ncn-networking/" title="Networking" class="dd-item ">
+        <a href="/docs-csm/en-09/103-ncn-networking/">
+        Networking
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/252-firmware-ncn/" title="Node Firmware" class="dd-item ">
+        <a href="/docs-csm/en-09/252-firmware-ncn/">
+        Node Firmware
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/100-ncn-images/" title="Non-Compute Node Images" class="dd-item ">
+        <a href="/docs-csm/en-09/100-ncn-images/">
+        Non-Compute Node Images
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/108-ncn-ntp/" title="NTP On NCNs" class="dd-item ">
+        <a href="/docs-csm/en-09/108-ncn-ntp/">
+        NTP On NCNs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/" title="operations" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/">
+          operations
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/boot_orchestration/" title="boot orchestration" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/boot_orchestration/">
+          boot orchestration
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/boot_orchestration/stage_changes_without_bos/" title="Stage Changes Without BOS" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/boot_orchestration/stage_changes_without_bos/">
+        Stage Changes Without BOS
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/boot_orchestration/upload_node_boot_information_to_boot_script_service_bss/" title="Upload Node Boot Information to Boot Script Service (BSS)" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/boot_orchestration/upload_node_boot_information_to_boot_script_service_bss/">
+        Upload Node Boot Information to Boot Script Service (BSS)
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/configuration_management/" title="configuration management" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/configuration_management/">
+          configuration management
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/configuration_management/configuration_layers/" title="Configuration Layers" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/configuration_management/configuration_layers/">
+        Configuration Layers
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/csm_product_management/" title="CSM product management" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/csm_product_management/">
+          CSM product management
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/csm_product_management/apply_security_hardening/" title="Security Hardening" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/csm_product_management/apply_security_hardening/">
+        Security Hardening
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/csm_product_management/change_passwords_and_credentials/" title="Change Passwords and Credentials" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/csm_product_management/change_passwords_and_credentials/">
+        Change Passwords and Credentials
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/kubernetes/" title="kubernetes" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/kubernetes/">
+          kubernetes
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/kubernetes/cert_renewal_for_kubernetes_and_bare_metal_etcd/" title="Kubernetes and Bare Metal EtcD Certificate Renewal" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/kubernetes/cert_renewal_for_kubernetes_and_bare_metal_etcd/">
+        Kubernetes and Bare Metal EtcD Certificate Renewal
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/network/" title="network" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/network/">
+          network
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/network/metallb_bgp/" title="metallb bgp" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/network/metallb_bgp/">
+          metallb bgp
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/" title="Check BGP Status and Reset Sessions" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/">
+        Check BGP Status and Reset Sessions
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/system_management_health/" title="system management health" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/system_management_health/">
+          system management health
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/system_management_health/troubleshoot_prometheus_alerts/" title="Troubleshoot Prometheus Alerts" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/system_management_health/troubleshoot_prometheus_alerts/">
+        Troubleshoot Prometheus Alerts
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/fas_loader/" title="FAS Loader" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/fas_loader/">
+          FAS Loader
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/fas_loader/fas_loader_fails/" title="TROUBLESHOOTING FAS LOADER FAILS" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/fas_loader/fas_loader_fails/">
+        TROUBLESHOOTING FAS LOADER FAILS
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/hmcollector/" title="hmcollector" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/hmcollector/">
+          hmcollector
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/hmcollector/adjust_hmcollector_resource_limits_requests/" title="Adjust HM Collector resource limits and requests" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/hmcollector/adjust_hmcollector_resource_limits_requests/">
+        Adjust HM Collector resource limits and requests
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/" title="security and authentication" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/security_and_authentication/">
+          security and authentication
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/add_ldap_user_federation/" title="Add LDAP User Federation" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/add_ldap_user_federation/">
+        Add LDAP User Federation
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_air-cooled_node_bmc_credentials/" title="Change Air-Cooled Node BMC Credentials" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_air-cooled_node_bmc_credentials/">
+        Change Air-Cooled Node BMC Credentials
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_credentials_on_servertech_pdus/" title="Change Credentials on ServerTech PDUs" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_credentials_on_servertech_pdus/">
+        Change Credentials on ServerTech PDUs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_ex_cabinet_global_default_password/" title="Change Cray EX Cabinet Global Default Password" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_ex_cabinet_global_default_password/">
+        Change Cray EX Cabinet Global Default Password
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys/" title="Change NCN Image Root Password and SSH Keys" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys/">
+        Change NCN Image Root Password and SSH Keys
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys_on_pit_node/" title="Change NCN Image Root Password and SSH Keys on PIT Node" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys_on_pit_node/">
+        Change NCN Image Root Password and SSH Keys on PIT Node
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_smnp_credentials_on_leaf_switches/" title="Change SMNP Credentials on Leaf Switches" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_smnp_credentials_on_leaf_switches/">
+        Change SMNP Credentials on Leaf Switches
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_the_keycloak_admin_password/" title="Change the Keycloak Admin Password" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_the_keycloak_admin_password/">
+        Change the Keycloak Admin Password
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/provisioning_a_liquid-cooled_ex_cabinet_cec_with_default_credentials/" title="Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/provisioning_a_liquid-cooled_ex_cabinet_cec_with_default_credentials/">
+        Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/restrict_access_to_ncn_images_s3_bucket/" title="Restrict Network Access to the ncn-images S3 Bucket" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/restrict_access_to_ncn_images_s3_bucket/">
+        Restrict Network Access to the ncn-images S3 Bucket
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/update_default_air-cooled_bmc_and_leaf_switch_snmp_credentials/" title="Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/update_default_air-cooled_bmc_and_leaf_switch_snmp_credentials/">
+        Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/update_default_servertech_pdu_credentials_used_by_the_redfish_translation_service/" title="Update Default ServerTech PDU Credentials used by the Redfish Translation Service (RTS)" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/update_default_servertech_pdu_credentials_used_by_the_redfish_translation_service/">
+        Update Default ServerTech PDU Credentials used by the Redfish Translation Service (RTS)
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/update_ncn_passwords/" title="Update NCN Passwords" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/update_ncn_passwords/">
+        Update NCN Passwords
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/updating_the_liquid-cooled_ex_cabinet_default_credentials_after_a_cec_password_change/" title="Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/updating_the_liquid-cooled_ex_cabinet_default_credentials_after_a_cec_password_change/">
+        Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/node_management/" title="node management" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/node_management/">
+          node management
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/node_management/adding_a_liquid-cooled_blade_to_a_system/" title="Adding a Liquid-cooled blade to a System" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/node_management/adding_a_liquid-cooled_blade_to_a_system/">
+        Adding a Liquid-cooled blade to a System
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/" title="Check and Set the metal.no-wipe Setting on NCNs" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/">
+        Check and Set the metal.no-wipe Setting on NCNs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/node_management/enable_kdump/" title="Enable Kdump" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/node_management/enable_kdump/">
+        Enable Kdump
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/node_management/reboot_ncns/" title="Reboot NCNs" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/node_management/reboot_ncns/">
+        Reboot NCNs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/node_management/removing_a_liquid-cooled_blade_from_a_system/" title="Removing a Liquid-cooled blade from a System" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/node_management/removing_a_liquid-cooled_blade_from_a_system/">
+        Removing a Liquid-cooled blade from a System
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/055-certificate-authority/" title="Overview" class="dd-item ">
+        <a href="/docs-csm/en-09/055-certificate-authority/">
+        Overview
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/401-management-network-install/" title="Overview" class="dd-item ">
+        <a href="/docs-csm/en-09/401-management-network-install/">
+        Overview
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/420-mgmt-net-pxe-tshoot/" title="PXE boot Troubleshooting" class="dd-item ">
+        <a href="/docs-csm/en-09/420-mgmt-net-pxe-tshoot/">
+        PXE boot Troubleshooting
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/065-csm-safeguards/" title="Safeguards" class="dd-item ">
+        <a href="/docs-csm/en-09/065-csm-safeguards/">
+        Safeguards
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/300-service-guides/" title="Service Guides" class="dd-item ">
+        <a href="/docs-csm/en-09/300-service-guides/">
+        Service Guides
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/067-shasta-cfg/" title="Setup Site-Init From SHASTA-CFG" class="dd-item ">
+        <a href="/docs-csm/en-09/067-shasta-cfg/">
+        Setup Site-Init From SHASTA-CFG
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/305-switch-metadata/" title="Switch Metadata" class="dd-item ">
+        <a href="/docs-csm/en-09/305-switch-metadata/">
+        Switch Metadata
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/500-uas-uai-admin-and-user-guide/" title="The Shasta User Access Service" class="dd-item ">
+        <a href="/docs-csm/en-09/500-uas-uai-admin-and-user-guide/">
+        The Shasta User Access Service
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/" title="upgrade" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/">
+          upgrade
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/" title="CSM 0.9 Patch Release Upgrade Procedures" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/">
+          CSM 0.9 Patch Release Upgrade Procedures
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.6/" title="CSM 0.9.6 Patch Installation Instructions" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.6/">
+          CSM 0.9.6 Patch Installation Instructions
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.4/" title="CSM 0.9.4 Patch Upgrade Guide" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.4/">
+          CSM 0.9.4 Patch Upgrade Guide
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/" title="CVE-2021-22555 CVE-2021-33909" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/">
+          CVE-2021-22555 CVE-2021-33909
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/" title="operations" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/">
+          operations
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/" title="network" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/">
+          network
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/metallb_bgp/" title="metallb bgp" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/metallb_bgp/">
+          metallb bgp
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/" title="Check BGP Status and Reset Sessions" class="dd-item ">
+        <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/">
+        Check BGP Status and Reset Sessions
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/" title="node management" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/">
+          node management
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/" title="Check and Set the metal.no-wipe Setting on NCNs" class="dd-item ">
+        <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/">
+        Check and Set the metal.no-wipe Setting on NCNs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/reboot_ncns/" title="Reboot NCNs" class="dd-item ">
+        <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/reboot_ncns/">
+        Reboot NCNs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.2/" title="CSM 0.9.2 Patch Upgrade Guide" class="dd-item ">
+        <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.2/">
+        CSM 0.9.2 Patch Upgrade Guide
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.3/" title="CSM 0.9.3 Patch Upgrade Guide" class="dd-item ">
+        <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.3/">
+        CSM 0.9.3 Patch Upgrade Guide
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/069-upgrade-workarounds-rpm/" title="Upgrade CSM Install Workarounds RPM" class="dd-item ">
+        <a href="/docs-csm/en-09/069-upgrade-workarounds-rpm/">
+        Upgrade CSM Install Workarounds RPM
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/070-usp-install-workarounds/" title="Utility Storage Installation Troubleshooting" class="dd-item ">
+        <a href="/docs-csm/en-09/070-usp-install-workarounds/">
+        Utility Storage Installation Troubleshooting
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/400-switch-bgp-neighbors/" title="Verify and Update BGP neighbors" class="dd-item ">
+        <a href="/docs-csm/en-09/400-switch-bgp-neighbors/">
+        Verify and Update BGP neighbors
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+    </ul>
+
+    
+    
+
+    
+    <section id="footer">
+      
+    </section>
+  </div>
+</nav>
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            <a href='/docs-csm/en-09/'>CRAY System Management - Guides and References</a> > CSM USB LiveCD - Creation and Configuration
+          
+        
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#download-and-expand-the-csm-release">Download and Expand the CSM Release</a></li>
+    <li><a href="#create-the-bootable-media">Create the Bootable Media</a></li>
+    <li><a href="#configuration-payload">Configuration Payload</a>
+      <ul>
+        <li><a href="#before-configuration-payload-workarounds">Before Configuration Payload Workarounds</a></li>
+        <li><a href="#generate-installation-files">Generate Installation Files</a></li>
+        <li><a href="#csi-workarounds">CSI Workarounds</a></li>
+        <li><a href="#shasta-cfg">SHASTA-CFG</a></li>
+      </ul>
+    </li>
+    <li><a href="#pre-populate-livecd-daemons-configuration-and-ncn-artifacts">Pre-Populate LiveCD Daemons Configuration and NCN Artifacts</a></li>
+    <li><a href="#boot-the-livecd">Boot the LiveCD</a>
+      <ul>
+        <li><a href="#first-login">First Login</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+            </h1>
+          
+
+        
+
+
+<h1 id="csm-usb-livecd---creation-and-configuration">CSM USB LiveCD - Creation and Configuration</h1>
+<p>This page will guide an administrator through creating a USB stick from either their Shasta v1.3 ncn-m001 node or their own laptop or desktop.</p>
+<p>There are 5 overall steps that provide a bootable USB with SSH enabled, capable of installing Shasta v1.4 (or higher).</p>
+<ul>
+<li><a href="/docs-csm/en-09/#download-and-expand-the-csm-release">Download and Expand the CSM Release</a></li>
+<li><a href="/docs-csm/en-09/#create-the-bootable-media">Create the Bootable Media</a></li>
+<li><a href="/docs-csm/en-09/#configuration-payload">Configuration Payload</a>
+<ul>
+<li><a href="/docs-csm/en-09/#before-configuration-payload-workarounds">Before Configuration Payload Workarounds</a></li>
+<li><a href="/docs-csm/en-09/#generate-installation-files">Generate Installation Files</a></li>
+<li><a href="/docs-csm/en-09/#csi-workarounds">CSI Workarounds</a></li>
+<li><a href="/docs-csm/en-09/#shasta-cfg">SHASTA-CFG</a></li>
+</ul>
+</li>
+<li><a href="/docs-csm/en-09/#pre-populate-livecd-daemons-configuration-and-ncn-artifacts">Pre-Populate LiveCD Daemons Configuration and NCN Artifacts</a></li>
+<li><a href="/docs-csm/en-09/#boot-the-livecd">Boot the LiveCD</a>
+<ul>
+<li><a href="/docs-csm/en-09/#first-login">First Login</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="download-and-expand-the-csm-release">Download and Expand the CSM Release</h2>
+<p>Fetch the base installation CSM tarball and extract it, installing the contained CSI tool.</p>
+<ol>
+<li>Start a typescript to capture the commands and output from this installation.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# script -af csm-usb-livecd.<span style="color:#66d9ef">$(</span>date +%Y-%m-%d<span style="color:#66d9ef">)</span>.txt
+</span></span><span style="display:flex;"><span>linux# export PS1<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;\u@\H \D{%Y-%m-%d} \t \w # &#39;</span>
+</span></span></code></pre></div></li>
+</ol>
+<blockquote>
+<p><strong><code>INTERNAL USE</code></strong> The <code>ENDPOINT</code> URL below are for internal use. Customers do not need to download any additional
+artifacts, the CSM tarball is included along with the Shasta release.</p>
+</blockquote>
+<ol start="2">
+<li>
+<p>If necessary, download the CSM software release to the Linux host which will be preparing the LiveCD.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# cd ~
+</span></span><span style="display:flex;"><span>linux# export ENDPOINT<span style="color:#f92672">=</span>https://arti.dev.cray.com/artifactory/shasta-distribution-stable-local/csm/
+</span></span><span style="display:flex;"><span>linux# export CSM_RELEASE<span style="color:#f92672">=</span>csm-x.y.z
+</span></span><span style="display:flex;"><span>linux# wget <span style="color:#e6db74">${</span>ENDPOINT<span style="color:#e6db74">}</span>/<span style="color:#e6db74">${</span>CSM_RELEASE<span style="color:#e6db74">}</span>.tar.gz
+</span></span></code></pre></div></li>
+<li>
+<p>Expand the CSM software release:</p>
+<blockquote>
+<p><strong><code>IMPORTANT</code></strong> Before proceeding, refer to the &ldquo;CSM Patch Assembly&rdquo; section of the Shasta Install Guide
+to apply any needed patch content for CSM. It is critical to perform these steps to ensure that the correct
+CSM release artifacts are deployed.</p>
+<p><strong><code>WARNING</code></strong> Ensure that the <code>CSM_RELEASE</code> environment variable is set to the version of the patched CSM release tarball.
+Applying the &ldquo;CSM Patch Assembly&rdquo; procedure will result in a different CSM version when compared to
+the pre-patched CSM release tarball.</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# tar -zxvf <span style="color:#e6db74">${</span>CSM_RELEASE<span style="color:#e6db74">}</span>.tar.gz
+</span></span><span style="display:flex;"><span>linux# export CSM_PATH<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>pwd<span style="color:#66d9ef">)</span>/<span style="color:#e6db74">${</span>CSM_RELEASE<span style="color:#e6db74">}</span>
+</span></span><span style="display:flex;"><span>linux# ls -l <span style="color:#e6db74">${</span>CSM_PATH<span style="color:#e6db74">}</span>
+</span></span></code></pre></div><p>The ISO and other files are now available in the extracted CSM tar.</p>
+</li>
+<li>
+<p>Remove any previously-installed versions of CSI, the CSM install documentation, and the CSM install workarounds.</p>
+<blockquote>
+<p>It is okay if this command reports that one or more of the packages are not installed.</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# rpm -ev cray-site-init csm-install-workarounds docs-csm
+</span></span></code></pre></div></li>
+<li>
+<p>Install the CSI RPM.</p>
+<p>Make sure the <code>CSM_PATH</code> variable is set to the directory of your expanded CSM tarball.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# rpm -Uvh --force <span style="color:#e6db74">${</span>CSM_PATH<span style="color:#e6db74">}</span>/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
+</span></span></code></pre></div></li>
+<li>
+<p>Download and install the workaround and documentation RPMs. If this machine does not have direct internet
+access these RPMs will need to be externally downloaded and then copied to be installed.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm/docs-csm-latest.noarch.rpm
+</span></span><span style="display:flex;"><span>linux# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
+</span></span></code></pre></div></li>
+<li>
+<p>Show the version of CSI installed.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# csi version
+</span></span></code></pre></div><p>Expected output looks similar to the following:</p>
+<pre tabindex="0"><code>CRAY-Site-Init build signature...
+Build Commit   : b3ed3046a460d804eb545d21a362b3a5c7d517a3-release-shasta-1.4
+Build Time     : 2021-02-04T21:05:32Z
+Go Version     : go1.14.9
+Git Version    : b3ed3046a460d804eb545d21a362b3a5c7d517a3
+Platform       : linux/amd64
+App. Version   : 1.5.18
+</code></pre></li>
+<li>
+<p>Install podman or docker to support container tools required to generated
+sealed secrets.</p>
+<p>Podman RPMs are included in the <code>embedded</code> repository in the CSM release and
+may be installed in your pre-LiveCD environment using <code>zypper</code> as follows:</p>
+<ul>
+<li>
+<p>Add the <code>embedded</code> repository (if necessary):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# zypper ar -fG <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CSM_PATH<span style="color:#e6db74">}</span><span style="color:#e6db74">/rpm/embedded&#34;</span> <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CSM_RELEASE<span style="color:#e6db74">}</span><span style="color:#e6db74">-embedded&#34;</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Install <code>podman</code> and <code>podman-cni-config</code> packages:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# zypper in --repo <span style="color:#e6db74">${</span>CSM_RELEASE<span style="color:#e6db74">}</span>-embedded -y podman podman-cni-config
+</span></span></code></pre></div></li>
+</ul>
+<p>Or you may use <code>rpm -Uvh</code> to install RPMs (and their dependencies) manually
+from the <code>${CSM_PATH}/rpm/embedded</code> directory.</p>
+</li>
+<li>
+<p>Install lsscsi to view attached storage devices.</p>
+<p>lsscsi RPMs are included in the <code>embedded</code> repository in the CSM release and
+may be installed in your pre-LiveCD environment using <code>zypper</code> as follows:</p>
+<ul>
+<li>
+<p>Add the <code>embedded</code> repository (if necessary):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# zypper ar -fG <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CSM_PATH<span style="color:#e6db74">}</span><span style="color:#e6db74">/rpm/embedded&#34;</span> <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CSM_RELEASE<span style="color:#e6db74">}</span><span style="color:#e6db74">-embedded&#34;</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Install <code>lsscsi</code> package:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# zypper in --repo <span style="color:#e6db74">${</span>CSM_RELEASE<span style="color:#e6db74">}</span>-embedded -y lsscsi
+</span></span></code></pre></div></li>
+</ul>
+<p>Or you may use <code>rpm -Uvh</code> to install RPMs (and their dependencies) manually
+from the <code>${CSM_PATH}/rpm/embedded</code> directory.</p>
+</li>
+<li>
+<p>Although not strictly required, the procedures for setting up the
+<code>site-init</code> directory recommend persisting <code>site-init</code> files in a Git
+repository.</p>
+</li>
+</ol>
+<p>Git RPMs are included in the <code>embedded</code> repository in the CSM release and
+may be installed in your pre-LiveCD environment using <code>zypper</code> as follows:</p>
+<ul>
+<li>
+<p>Add the <code>embedded</code> repository (if necessary):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# zypper ar -fG <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CSM_PATH<span style="color:#e6db74">}</span><span style="color:#e6db74">/rpm/embedded&#34;</span> <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CSM_RELEASE<span style="color:#e6db74">}</span><span style="color:#e6db74">-embedded&#34;</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Install <code>git</code> package:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# zypper in --repo <span style="color:#e6db74">${</span>CSM_RELEASE<span style="color:#e6db74">}</span>-embedded -y git
+</span></span></code></pre></div></li>
+</ul>
+<p>Or you may use <code>rpm -Uvh</code> to install RPMs (and their dependencies) manually
+from the <code>${CSM_PATH}/rpm/embedded</code> directory.</p>
+<h2 id="create-the-bootable-media">Create the Bootable Media</h2>
+<p>Cray Site Init will create the bootable LiveCD. Before creating the media, we need to identify
+which device that is.</p>
+<ol>
+<li>
+<p>Identify the USB device.</p>
+<p>This example shows the USB device is /dev/sdd on the host.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# lsscsi
+</span></span></code></pre></div><p>Expected output looks similar to the following:</p>
+<pre tabindex="0"><code>[6:0:0:0]    disk    ATA      SAMSUNG MZ7LH480 404Q  /dev/sda
+[7:0:0:0]    disk    ATA      SAMSUNG MZ7LH480 404Q  /dev/sdb
+[8:0:0:0]    disk    ATA      SAMSUNG MZ7LH480 404Q  /dev/sdc
+[14:0:0:0]   disk    SanDisk  Extreme SSD      1012  /dev/sdd
+[14:0:0:1]   enclosu SanDisk  SES Device       1012  -
+</code></pre><p>In the above example, we can see our internal disks as the <code>ATA</code> devices and our USB as the <code>disk</code> or <code>enclosu</code> device. Since the <code>SanDisk</code> fits the profile we are looking for, we are going to use <code>/dev/sdd</code> as our disk.</p>
+<p>Set a variable with your disk to avoid mistakes:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# export USB<span style="color:#f92672">=</span>/dev/sd&lt;disk_letter&gt;
+</span></span></code></pre></div></li>
+<li>
+<p>Format the USB device</p>
+<p>On Linux using the CSI application:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# csi pit format $USB <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CSM_PATH<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>/cray-pre-install-toolkit-*.iso <span style="color:#ae81ff">50000</span>
+</span></span></code></pre></div><p>On MacOS using the bash script:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>macos# ./cray-site-init/write-livecd.sh $USB <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CSM_PATH<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>/cray-pre-install-toolkit-*.iso <span style="color:#ae81ff">50000</span>
+</span></span></code></pre></div><blockquote>
+<p>NOTE: At this point the USB stick is usable in any server with an x86_64 architecture based CPU. The remaining steps help add the installation data and enable SSH on boot.</p>
+</blockquote>
+</li>
+<li>
+<p>Mount the configuration and persistent data partition:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# mkdir -pv /mnt/<span style="color:#f92672">{</span>cow,pitdata<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>linux# mount -vL cow /mnt/cow <span style="color:#f92672">&amp;&amp;</span> mount -vL PITDATA /mnt/pitdata
+</span></span></code></pre></div></li>
+<li>
+<p>Copy and extract the tarball (compressed) into the USB:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# cp -rv <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CSM_PATH<span style="color:#e6db74">}</span><span style="color:#e6db74">.tar.gz&#34;</span> /mnt/pitdata/
+</span></span><span style="display:flex;"><span>linux# tar -zxvf <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CSM_PATH<span style="color:#e6db74">}</span><span style="color:#e6db74">.tar.gz&#34;</span> -C /mnt/pitdata/
+</span></span></code></pre></div></li>
+</ol>
+<p>The USB stick is now bootable and contains our artifacts. This may be useful for internal or quick usage. Administrators seeking a Shasta installation must continue onto the <a href="/docs-csm/en-09/#configuration-payload">configuration payload</a>.</p>
+<h2 id="configuration-payload">Configuration Payload</h2>
+<p>The SHASTA-CFG structure and other configuration files will be prepared, then csi will generate system-unique configuration payload used for the rest of the CSM installation on the USB stick.</p>
+<ul>
+<li><a href="/docs-csm/en-09/#before-configuration-payload-workarounds">Before Configuration Payload Workarounds</a></li>
+<li><a href="/docs-csm/en-09/#generate-installation-files">Generate Installation Files</a></li>
+<li><a href="/docs-csm/en-09/#csi-workarounds">CSI Workarounds</a></li>
+<li><a href="/docs-csm/en-09/#shasta-cfg">SHASTA-CFG</a></li>
+</ul>
+<h3 id="before-configuration-payload-workarounds">Before Configuration Payload Workarounds</h3>
+<p>Check for workarounds in the <code>/opt/cray/csm/workarounds/before-configuration-payload</code> directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective <code>README.md</code> files.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Example</span>
+</span></span><span style="display:flex;"><span>linux# ls /opt/cray/csm/workarounds/before-configuration-payload
+</span></span></code></pre></div><p>If there is a workaround here, the output looks similar to the following:</p>
+<pre tabindex="0"><code>CASMINST-999
+</code></pre><h3 id="generate-installation-files">Generate Installation Files</h3>
+<p>Some files are needed for generating the configuration payload. New systems will need to create these files before continuing. Systems upgrading from Shasta v1.3 should prepare by <a href="/docs-csm/en-09/068-harvest-13-config/">gathering data from the existing system</a>.</p>
+<blockquote>
+<p>Note: The USB stick is usable at this time, but without SSH enabled as well as core services. This means the stick could be used to boot the system now, and a user can return to this step at another time.</p>
+</blockquote>
+<p>Pull these files into the current working directory:</p>
+<ul>
+<li><code>application_node_config.yaml</code> (optional - see below)</li>
+<li><code>cabinets.yaml</code> (optional - see below)</li>
+<li><code>hmn_connections.json</code></li>
+<li><code>ncn_metadata.csv</code></li>
+<li><code>switch_metadata.csv</code></li>
+<li><code>system_config.yaml</code> (see below)</li>
+</ul>
+<blockquote>
+<p>The optional <code>application_node_config.yaml</code> file may be provided for further defining of settings relating to how application nodes will appear in HSM for roles and subroles. See the CSI usage for more information.</p>
+</blockquote>
+<blockquote>
+<p>The optional <code>cabinets.yaml</code> file allows cabinet naming and numbering as well as some networking overrides (e.g. VLAN) which will allow systems on Shasta v1.3 to minimize changes to the existing system while migrating to Shasta v1.4. More information on this file can be found <a href="/docs-csm/en-09/310-cabinets/">here</a>.</p>
+</blockquote>
+<p>After gathering the files into the working directory, generate your configs:</p>
+<ol>
+<li>
+<p>Change into the preparation directory:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# mkdir -pv /mnt/pitdata/prep
+</span></span><span style="display:flex;"><span>linux# cd /mnt/pitdata/prep
+</span></span></code></pre></div></li>
+<li>
+<p>Generate the system configuration reusing a parameter file (see <a href="/docs-csm/en-09/063-csi-files/#save-file--avoiding-parameters">avoiding parameters</a>) <strong>or skip this step</strong>.</p>
+<p>If moving from a Shasta v1.3 system, the system_config.yaml file will not be available, so skip this step and continue with step 3.</p>
+<p>The needed files should be in the current directory.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# ls -1
+</span></span></code></pre></div><p>Expected output looks similar to the following:</p>
+<pre tabindex="0"><code>application_node_config.yaml
+cabinets.yaml
+hmn_connections.json
+ncn_metadata.csv
+switch_metadata.csv
+system_config.yaml
+</code></pre><p>Generate the system configuration.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# csi config init
+</span></span></code></pre></div><p>A new directory matching your <code>--system-name</code> argument will now exist in your working directory.</p>
+<p>Set an environment variable so this system name can be used in later commands.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# export SYSTEM_NAME<span style="color:#f92672">=</span>eniac
+</span></span></code></pre></div><p>Skip step 3 and continue with the CSI Workarounds</p>
+</li>
+<li>
+<p>Generate the system configuration when a pre-existing parameter file is unavailable:</p>
+<p>If moving from a Shasta v1.3 system, this step is required. If you did step 2 above, skip this step.</p>
+<p>The needed files should be in the current directory. The application_node_config.yaml file is optional.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# ls -1
+</span></span></code></pre></div><p>Expected output looks similar to the following:</p>
+<pre tabindex="0"><code>application_node_config.yaml
+hmn_connections.json
+ncn_metadata.csv
+shasta_system_configs
+switch_metadata.csv
+</code></pre><p>Set an environment variable so this system name can be used in later commands.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# export SYSTEM_NAME<span style="color:#f92672">=</span>eniac
+</span></span></code></pre></div><p>Generate the system configuration. See below for an explanation of the command line parameters and some common settings.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# csi config init <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --bootstrap-ncn-bmc-user root <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --bootstrap-ncn-bmc-pass changeme <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --system-name <span style="color:#e6db74">${</span>SYSTEM_NAME<span style="color:#e6db74">}</span>  <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --mountain-cabinets <span style="color:#ae81ff">4</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --starting-mountain-cabinet <span style="color:#ae81ff">1000</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --hill-cabinets <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --river-cabinets <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --can-cidr 10.103.11.0/24 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --can-external-dns 10.103.11.113 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --can-gateway 10.103.11.1 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --can-static-pool 10.103.11.112/28 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --can-dynamic-pool 10.103.11.128/25 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --nmn-cidr 10.252.0.0/17 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --hmn-cidr 10.254.0.0/17 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --ntp-pool time.nist.gov <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --site-domain dev.cray.com <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --site-ip 172.30.53.79/20 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --site-gw 172.30.48.1 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --site-nic p1p2 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --site-dns 172.30.84.40 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --install-ncn-bond-members p1p1,p10p1 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --application-node-config-yaml application_node_config.yaml <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --cabinets-yaml cabinets.yaml <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --hmn-mtn-cidr 10.104.0.0/17 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --nmn-mtn-cidr 10.100.0.0/17
+</span></span></code></pre></div><p>A new directory matching your <code>--system-name</code> argument will now exist in your working directory.</p>
+<blockquote>
+<p>After generating a configuration, particularly when upgrading from Shasta v1.3 a visual audit of the generated files for network data should be performed. Specifically, the <systemname>/networks/HMN_MTN.yaml and <systemname>/networks/NMN_MTN.yaml files should be viewed to ensure that cabinet names, subnets and VLANs have been preserved for an upgrade to Shasta v1.4. Failure of these parameters to match will likely mean a re-installation or reprogramming of CDU switches and CMM VLANs.</p>
+</blockquote>
+<p>Run the command &ldquo;csi config init &ndash;help&rdquo; to get more information about the parameters mentioned in the example command above and others which are available.</p>
+<p>Notes about parameters to &ldquo;csi config init&rdquo;:</p>
+<ul>
+<li>The application_node_config.yaml file is optional, but if you have one describing the mapping between prefixes in hmn_connections.csv that should be mapped to HSM subroles, you need to include a command line option to have it used.</li>
+<li>The bootstrap-ncn-bmc-user and bootstrap-ncn-bmc-pass must match what is used for the BMC account and its password for the management NCNs.</li>
+<li>Set site parameters (site-domain, site-ip, site-gw, site-nic, site-dns) for the information which connects the ncn-m001 (PIT) node to the site. The site-nic is the interface on this node connected to the site. If coming from Shasta v1.3, the information for all of these site parameters was collected.</li>
+<li>There are other interfaces possible, but the install-ncn-bond-members are typically: p1p1,p10p1 for HPE nodes; p1p1,p1p2 for Gigabyte nodes; and p801p1,p801p2 for Intel nodes. If coming from Shasta v1.3, this information was collected for ncn-m001.</li>
+<li>Set the three cabinet parameters (mountain-cabinets, hill-cabinets, and river-cabinets) to the number of each cabinet which are part of this system.</li>
+<li>The starting cabinet number for each type of cabinet (for example, starting-mountain-cabinet) has a default that can be overridden. See the &ldquo;csi config init &ndash;help&rdquo;</li>
+<li>For systems that use non-sequential cabinet id numbers, use cabinets-yaml to include the cabinets.yaml file. This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to explicitly specify the id of every cabinet in the system. This process is described <a href="/docs-csm/en-09/310-cabinets/">here</a>.</li>
+<li>An override to default cabinet IPv4 subnets can be made with the hmn-mtn-cidr and nmn-mtn-cidr parameters. These are also used to maintain existing configuration in a Shasta v1.3 system.</li>
+<li>Several parameters (can-gateway, can-cidr, can-static-pool, can-dynamic-pool) describe the CAN (Customer Access network). The can-gateway is the common gateway IP used for both spine switches and commonly referred to as the Virtual IP for the CAN. The can-cidr is the IP subnet for the CAN assigned to this system. The can-static-pool and can-dynamic-pool are the MetalLB address static and dynamic pools for the CAN. The can-external-dns is the static IP assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded. The can-external-dns IP must be within the can-static-pool range.</li>
+<li>Set ntp-pool to a reachable NTP server</li>
+</ul>
+<p>These warnings from &ldquo;csi config init&rdquo; for issues in hmn_connections.json can be ignored.</p>
+<ul>
+<li>The node with the external connection (ncn-m001) will have a warning similar to this because its BMC is connected to the site and not the HMN like the other management NCNs. It can be ignored.
+<pre tabindex="0"><code>&#34;Couldn&#39;t find switch port for NCN: x3000c0s1b0&#34;
+</code></pre></li>
+<li>An unexpected component may have this message. If this component is an application node with an unusual prefix, it should be added to the application_node_config.yaml file and then rerun &ldquo;csi config init&rdquo;. See the procedure to <a href="/docs-csm/en-09/308-application-node-config/">create the application_node_config.yaml</a>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{<span style="color:#f92672">&#34;level&#34;</span>:<span style="color:#e6db74">&#34;warn&#34;</span>,<span style="color:#f92672">&#34;ts&#34;</span>:<span style="color:#ae81ff">1610405168.8705149</span>,<span style="color:#f92672">&#34;msg&#34;</span>:<span style="color:#e6db74">&#34;Found unknown source prefix! If this is expected to be an Application node, please update application_node_config.yaml&#34;</span>,<span style="color:#f92672">&#34;row&#34;</span>:
+</span></span><span style="display:flex;"><span>{<span style="color:#f92672">&#34;Source&#34;</span>:<span style="color:#e6db74">&#34;gateway01&#34;</span>,<span style="color:#f92672">&#34;SourceRack&#34;</span>:<span style="color:#e6db74">&#34;x3000&#34;</span>,<span style="color:#f92672">&#34;SourceLocation&#34;</span>:<span style="color:#e6db74">&#34;u33&#34;</span>,<span style="color:#f92672">&#34;DestinationRack&#34;</span>:<span style="color:#e6db74">&#34;x3002&#34;</span>,<span style="color:#f92672">&#34;DestinationLocation&#34;</span>:<span style="color:#e6db74">&#34;u48&#34;</span>,<span style="color:#f92672">&#34;DestinationPort&#34;</span>:<span style="color:#e6db74">&#34;j29&#34;</span>}}
+</span></span></code></pre></div></li>
+<li>If a cooling door is found in hmn_connections.json, there may be a message like the following. It can be safely ignored.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{<span style="color:#f92672">&#34;level&#34;</span>:<span style="color:#e6db74">&#34;warn&#34;</span>,<span style="color:#f92672">&#34;ts&#34;</span>:<span style="color:#ae81ff">1612552159.2962296</span>,<span style="color:#f92672">&#34;msg&#34;</span>:<span style="color:#e6db74">&#34;Cooling door found, but xname does not yet exist for cooling doors!&#34;</span>,<span style="color:#f92672">&#34;row&#34;</span>:
+</span></span><span style="display:flex;"><span>{<span style="color:#f92672">&#34;Source&#34;</span>:<span style="color:#e6db74">&#34;x3000door-Motiv&#34;</span>,<span style="color:#f92672">&#34;SourceRack&#34;</span>:<span style="color:#e6db74">&#34;x3000&#34;</span>,<span style="color:#f92672">&#34;SourceLocation&#34;</span>:<span style="color:#e6db74">&#34; &#34;</span>,<span style="color:#f92672">&#34;DestinationRack&#34;</span>:<span style="color:#e6db74">&#34;x3000&#34;</span>,<span style="color:#f92672">&#34;DestinationLocation&#34;</span>:<span style="color:#e6db74">&#34;u36&#34;</span>,<span style="color:#f92672">&#34;DestinationPort&#34;</span>:<span style="color:#e6db74">&#34;j27&#34;</span>}}
+</span></span></code></pre></div></li>
+</ul>
+<p>Continue with the CSI Workarounds</p>
+</li>
+</ol>
+<h3 id="csi-workarounds">CSI Workarounds</h3>
+<p>Check for workarounds in the <code>/opt/cray/csm/workarounds/csi-config</code> directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective <code>README.md</code> files.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Example</span>
+</span></span><span style="display:flex;"><span>linux# ls /opt/cray/csm/workarounds/csi-config
+</span></span></code></pre></div><p>If there is a workaround here, the output looks similar to the following:</p>
+<pre tabindex="0"><code>CASMINST-999
+</code></pre><h3 id="shasta-cfg">SHASTA-CFG</h3>
+<p>Now execute <a href="/docs-csm/en-09/067-shasta-cfg/">the procedures in 067-SHASTA-CFG.md</a> to prepare the <code>site-init</code> directory for your system. <strong>Do not skip this step.</strong></p>
+<h2 id="pre-populate-livecd-daemons-configuration-and-ncn-artifacts">Pre-Populate LiveCD Daemons Configuration and NCN Artifacts</h2>
+<p>Now that the configuration is generated, we can populate the LiveCD with the generated files.</p>
+<p>This will enable SSH, and other services when the LiveCD starts.</p>
+<ol>
+<li>
+<p>Set system name and enter prep directory</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# export SYSTEM_NAME<span style="color:#f92672">=</span>eniac
+</span></span><span style="display:flex;"><span>linux# cd /mnt/pitdata/prep
+</span></span></code></pre></div></li>
+<li>
+<p>Use CSI to populate the LiveCD, provide both the mount point and the CSI generated config dir.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# csi pit populate cow /mnt/cow/ <span style="color:#e6db74">${</span>SYSTEM_NAME<span style="color:#e6db74">}</span>/
+</span></span></code></pre></div><p>Expected output looks similar to the following:</p>
+<pre tabindex="0"><code>config------------------------&gt; /mnt/cow/rw/etc/sysconfig/network/config...OK
+ifcfg-bond0-------------------&gt; /mnt/cow/rw/etc/sysconfig/network/ifcfg-bond0...OK
+ifcfg-lan0--------------------&gt; /mnt/cow/rw/etc/sysconfig/network/ifcfg-lan0...OK
+ifcfg-vlan002-----------------&gt; /mnt/cow/rw/etc/sysconfig/network/ifcfg-vlan002...OK
+ifcfg-vlan004-----------------&gt; /mnt/cow/rw/etc/sysconfig/network/ifcfg-vlan004...OK
+ifcfg-vlan007-----------------&gt; /mnt/cow/rw/etc/sysconfig/network/ifcfg-vlan007...OK
+ifroute-lan0------------------&gt; /mnt/cow/rw/etc/sysconfig/network/ifroute-lan0...OK
+ifroute-vlan002---------------&gt; /mnt/cow/rw/etc/sysconfig/network/ifroute-vlan002...OK
+CAN.conf----------------------&gt; /mnt/cow/rw/etc/dnsmasq.d/CAN.conf...OK
+HMN.conf----------------------&gt; /mnt/cow/rw/etc/dnsmasq.d/HMN.conf...OK
+NMN.conf----------------------&gt; /mnt/cow/rw/etc/dnsmasq.d/NMN.conf...OK
+mtl.conf----------------------&gt; /mnt/cow/rw/etc/dnsmasq.d/mtl.conf...OK
+statics.conf------------------&gt; /mnt/cow/rw/etc/dnsmasq.d/statics.conf...OK
+conman.conf-------------------&gt; /mnt/cow/rw/etc/conman.conf...OK
+</code></pre></li>
+<li>
+<p>Optionally set the hostname, print it into the hostname file.</p>
+<blockquote>
+<p>Do not confuse other admins and name the LiveCD &ldquo;ncn-m001&rdquo;, please append the &ldquo;-pit&rdquo; suffix
+which will indicate that the node is booted from the LiveCD.</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# echo <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>SYSTEM_NAME<span style="color:#e6db74">}</span><span style="color:#e6db74">-ncn-m001-pit&#34;</span> &gt;/mnt/cow/rw/etc/hostname
+</span></span></code></pre></div></li>
+<li>
+<p>Unmount the Overlay, we are done with it</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# umount /mnt/cow
+</span></span></code></pre></div></li>
+<li>
+<p>Make directories needed for basecamp (cloud-init) and the squashFS images</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# mkdir -pv /mnt/pitdata/configs/
+</span></span><span style="display:flex;"><span>linux# mkdir -pv /mnt/pitdata/data/<span style="color:#f92672">{</span>k8s,ceph<span style="color:#f92672">}</span>/
+</span></span></code></pre></div></li>
+<li>
+<p>Copy basecamp data</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# csi pit populate pitdata <span style="color:#e6db74">${</span>SYSTEM_NAME<span style="color:#e6db74">}</span> /mnt/pitdata/configs -b
+</span></span></code></pre></div><p>Expected output looks similar to the following:</p>
+<pre tabindex="0"><code>data.json---------------------&gt; /mnt/pitdata/configs/data.json...OK
+</code></pre></li>
+<li>
+<p>Update CA Cert on the copied <code>data.json</code> file. Provide the path to the <code>data.json</code>, the path to
+our <code>customizations.yaml</code>, and finally the <code>sealed_secrets.key</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# csi patch ca <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>--cloud-init-seed-file /mnt/pitdata/configs/data.json <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>--customizations-file /mnt/pitdata/prep/site-init/customizations.yaml <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>--sealed-secret-key-file /mnt/pitdata/prep/site-init/certs/sealed_secrets.key
+</span></span></code></pre></div></li>
+<li>
+<p>Copy k8s artifacts:</p>
+<p>Make sure the <code>CSM_PATH</code> variable is set to the directory of your expanded CSM tarball.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# csi pit populate pitdata <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CSM_PATH<span style="color:#e6db74">}</span><span style="color:#e6db74">/images/kubernetes/&#34;</span> /mnt/pitdata/data/k8s/ -kiK
+</span></span></code></pre></div><p>Expected output looks similar to the following:</p>
+<pre tabindex="0"><code>5.3.18-24.37-default-0.0.6.kernel-----------------&gt; /mnt/pitdata/data/k8s/...OK
+initrd.img-0.0.6.xz-------------------------------&gt; /mnt/pitdata/data/k8s/...OK
+kubernetes-0.0.6.squashfs-------------------------&gt; /mnt/pitdata/data/k8s/...OK
+</code></pre></li>
+<li>
+<p>Copy ceph/storage artifacts:</p>
+<p>Make sure the <code>CSM_PATH</code> variable is set to the directory of your expanded CSM tarball.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# csi pit populate pitdata <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CSM_PATH<span style="color:#e6db74">}</span><span style="color:#e6db74">/images/storage-ceph/&#34;</span> /mnt/pitdata/data/ceph/ -kiC
+</span></span></code></pre></div><p>Expected output looks similar to the following:</p>
+<pre tabindex="0"><code>5.3.18-24.37-default-0.0.5.kernel-----------------&gt; /mnt/pitdata/data/ceph/...OK
+initrd.img-0.0.5.xz-------------------------------&gt; /mnt/pitdata/data/ceph/...OK
+storage-ceph-0.0.5.squashfs-----------------------&gt; /mnt/pitdata/data/ceph/...OK
+</code></pre></li>
+<li>
+<p>Unmount the data partition:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>linux# cd; umount /mnt/pitdata
+</span></span></code></pre></div></li>
+<li>
+<p>Quit the typescript session with the <code>exit</code> command and copy the file (csm-usb-livecd.<date>.txt) to a location on another server for reference later.</p>
+</li>
+</ol>
+<p>Now the USB stick may be reattached to the CRAY, or if it was made on the CRAY then its server can now
+reboot into the LiveCD.</p>
+<h2 id="boot-the-livecd">Boot the LiveCD</h2>
+<p>Some systems will boot the USB stick automatically if no other OS exists (bare-metal). Otherwise the
+administrator may need to use the BIOS Boot Selection menu to choose the USB stick.</p>
+<p>If an administrator is rebooting a node into the LiveCD, vs booting a bare-metal or wiped node, then <code>efibootmgr</code> will deterministically set the boot order. See the <a href="/docs-csm/en-09/101-ncn-booting/#set-boot-order">set boot order</a> page for more information on this topic..</p>
+<blockquote>
+<p>UEFI booting must be enabled to find the USB sticks EFI bootloader.</p>
+</blockquote>
+<ol>
+<li>
+<p>Start a typescript on an external system, such as a laptop or Linux system, to record this section of activities done on the console of ncn-m001 via IPMI.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>external# script -a boot.livecd.<span style="color:#66d9ef">$(</span>date +%Y-%m-%d<span style="color:#66d9ef">)</span>.txt
+</span></span><span style="display:flex;"><span>external# export PS1<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;\u@\H \D{%Y-%m-%d} \t \w # &#39;</span>
+</span></span></code></pre></div></li>
+</ol>
+<p>Confirm that the IPMI credentials work for the BMC by checking the power status.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>external# export SYSTEM_NAME<span style="color:#f92672">=</span>eniac
+</span></span><span style="display:flex;"><span>external# export username<span style="color:#f92672">=</span>root
+</span></span><span style="display:flex;"><span>external# export password<span style="color:#f92672">=</span>changeme
+</span></span><span style="display:flex;"><span>external# ipmitool -I lanplus -U $username -P $password -H <span style="color:#e6db74">${</span>SYSTEM_NAME<span style="color:#e6db74">}</span>-ncn-m001-mgmt chassis power status
+</span></span></code></pre></div><p>Connect to the IPMI console.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>external# ipmitool -I lanplus -U $username -P $password -H <span style="color:#e6db74">${</span>SYSTEM_NAME<span style="color:#e6db74">}</span>-ncn-m001-mgmt sol activate
+</span></span><span style="display:flex;"><span>ncn-m001#
+</span></span></code></pre></div><ol start="2">
+<li>
+<p>Reboot</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# reboot
+</span></span></code></pre></div></li>
+</ol>
+<p>Watch the shutdown and boot from the ipmitool session to the console terminal.</p>
+<blockquote>
+<p><strong>An integrity check</strong> runs before Linux starts by default, it can be skipped by selecting &ldquo;OK&rdquo; in its prompt.</p>
+</blockquote>
+<h3 id="first-login">First Login</h3>
+<p>On first login (over SSH or at local console) the LiveCD will prompt the administrator to change the password.</p>
+<ol>
+<li>
+<p><strong>The initial password is empty</strong>; set the username of <code>root</code> and press <code>return</code> twice:</p>
+<pre tabindex="0"><code>pit login: root
+</code></pre><p>Expected output looks similar to the following:</p>
+<pre tabindex="0"><code>Password:           &lt;-------just press Enter here for a blank password
+You are required to change your password immediately (administrator enforced)
+Changing password for root.
+Current password:   &lt;------- press Enter here, again, for a blank password
+New password:       &lt;------- type new password
+Retype new password:&lt;------- retype new password
+Welcome to the CRAY Prenstall Toolkit (LiveOS)
+
+Offline CSM documentation can be found at /usr/share/doc/metal (version: rpm -q docs-csm)
+</code></pre><blockquote>
+<p><strong><code>NOTE</code></strong> If this password is forgotten, it can be reset by mounting the USB stick on another computer. See <a href="/docs-csm/en-09/058-livecd-troubleshooting/#root-password">LiveCD Troubleshooting</a> for information on clearing the password.</p>
+</blockquote>
+</li>
+<li>
+<p>Disconnect from IPMI console.</p>
+<p>Once the network is up so that SSH to the node works, disconnect from the IPMI console.</p>
+<p>You can disconnect from the IPMI console by using the &ldquo;~.&rdquo;, that is, the tilde character followed by a period character.</p>
+<p>Login via <code>ssh</code> to the node as root.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>external# ssh root@<span style="color:#e6db74">${</span>SYSTEM_NAME<span style="color:#e6db74">}</span>-ncn-m001
+</span></span><span style="display:flex;"><span>pit#
+</span></span></code></pre></div><p>Note: The hostname should be similar to eniac-ncn-m001-pit when booted from the LiveCD, but it will be shown as &ldquo;pit#&rdquo; in the command prompts from this point onward.</p>
+</li>
+<li>
+<p>Start a typescript to record this section of activities done on ncn-m001 while booted from the LiveCD.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pit# script -af booted-csm-livecd.<span style="color:#66d9ef">$(</span>date +%Y-%m-%d<span style="color:#66d9ef">)</span>.txt
+</span></span><span style="display:flex;"><span>pit# export PS1<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;\u@\H \D{%Y-%m-%d} \t \w # &#39;</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet
+access these RPMs will need to be externally downloaded and then copied to be installed.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pit# rpm -Uvh --force https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm/docs-csm-latest.noarch.rpm
+</span></span><span style="display:flex;"><span>pit# rpm -Uvh --force https://storage.googleapis.com/csm-release-public/shasta-1.4/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
+</span></span></code></pre></div></li>
+<li>
+<p>Check the pit-release version.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pit# cat /etc/pit-release
+</span></span></code></pre></div><p>Expected output looks similar to the following:</p>
+<pre tabindex="0"><code>VERSION=1.2.2
+TIMESTAMP=20210121044136
+HASH=75e6c4a
+</code></pre></li>
+<li>
+<p>Mount the data partition</p>
+<blockquote>
+<p>The data partition is set to <code>fsopt=noauto</code> to facilitate LiveCDs over virtual-ISO mount. USB installations need to mount this manually.</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pit# mount -L PITDATA
+</span></span></code></pre></div></li>
+<li>
+<p>First login workarounds</p>
+<p>Check for workarounds in the <code>/opt/cray/csm/workarounds/first-livecd-login</code> directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective <code>README.md</code> files.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Example</span>
+</span></span><span style="display:flex;"><span>pit# ls /opt/cray/csm/workarounds/first-livecd-login
+</span></span></code></pre></div><p>If there is a workaround here, the output looks similar to the following:</p>
+<pre tabindex="0"><code>CASMINST-999
+</code></pre></li>
+<li>
+<p>Start services</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pit# systemctl start nexus
+</span></span><span style="display:flex;"><span>pit# systemctl start basecamp
+</span></span><span style="display:flex;"><span>pit# systemctl start conman
+</span></span></code></pre></div></li>
+<li>
+<p>Verify the system:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pit# csi pit validate --network
+</span></span><span style="display:flex;"><span>pit# csi pit validate --services
+</span></span></code></pre></div><blockquote>
+<ul>
+<li>If dnsmasq is dead, restart it with <code>systemctl restart dnsmasq</code>.</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>In addition, the final output from validating the services should have information about the nexus and basecamp containers/images similar this example.</p>
+</blockquote>
+<pre tabindex="0"><code>CONTAINER ID  IMAGE                                               COMMAND               CREATED        STATUS            PORTS   NAMES
+ff7c22c6c6cb  dtr.dev.cray.com/sonatype/nexus3:3.25.0             sh -c ${SONATYPE_...  3 minutes ago  Up 3 minutes ago          nexus
+c7638b573b93  dtr.dev.cray.com/cray/metal-basecamp:1.1.0-1de4aa6                        5 minutes ago  Up 5 minutes ago          basecamp
+</code></pre></li>
+<li>
+<p>Follow the output&rsquo;s directions for failed validations before moving on.</p>
+</li>
+<li>
+<p>If this is a Shasta v1.3.x migration scenario, then the Dell and Mellanox switches can be reconfigured now with their new names, new IP addresses, and new configuration for v1.4.</p>
+</li>
+</ol>
+<p>See <a href="/docs-csm/en-09/412-mgmt-net-dell-mellanox-upgrades/">Management Network Dell And Mellanox Upgrades</a>.</p>
+<p>After successfully validating the LiveCD USB environment, the administrator may start the <a href="/docs-csm/en-09/005-csm-metal-install/">CSM Metal Install</a>.</p>
+
+
+<footer class="footline">
+	
+</footer>
+
+        
+        </div>
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+
+        
+
+
+	 
+	 
+    </div>
+
+    </section>
+
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/docs-csm/js/clipboard.min.js?1729741357"></script>
+    <script src="/docs-csm/js/perfect-scrollbar.min.js?1729741357"></script>
+    <script src="/docs-csm/js/perfect-scrollbar.jquery.min.js?1729741357"></script>
+    <script src="/docs-csm/js/jquery.sticky.js?1729741357"></script>
+    <script src="/docs-csm/js/featherlight.min.js?1729741357"></script>
+    <script src="/docs-csm/js/highlight.pack.js?1729741357"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/docs-csm/js/modernizr.custom-3.6.0.js?1729741357"></script>
+    <script src="/docs-csm/js/learn.js?1729741357"></script>
+    <script src="/docs-csm/js/hugo-learn.js?1729741357"></script>
+    
+        
+            <script src="/docs-csm/mermaid/mermaid.js?1729741357"></script>
+        
+        <script>
+            mermaid.initialize({ startOnLoad: true });
+        </script>
+    
+    
+
+  </body>
+</html>
+

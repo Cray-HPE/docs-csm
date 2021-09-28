@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>artifact management on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-14/operations/artifact_management/</link>
+    <description>Recent content in artifact management on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-14</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:17 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-14/operations/artifact_management/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Artifact Management</title>
+      <link>/docs-csm/en-14/operations/artifact_management/artifact_management/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:17 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/artifact_management/artifact_management/</guid>
+      <description>Artifact Management The Ceph Object Gateway Simple Storage Service (S3) API is used for artifact management. The RESTful API that Ceph provides via the gateway is compatible with the basic data access model of the Amazon S3 API. See the https://docs.ceph.com/en/pacific/radosgw/s3/ for more information about compatibility. The object gateway is also referred to as the RADOS gateway or simply RGW.&#xA;S3 is an object storage service that provides high-level performance, scalability, security, and data availability.</description>
+    </item>
+    <item>
+      <title>Generate Temporary S3 Credentials</title>
+      <link>/docs-csm/en-14/operations/artifact_management/generate_temporary_s3_credentials/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:17 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/artifact_management/generate_temporary_s3_credentials/</guid>
+      <description>Generate Temporary S3 Credentials Cray provides a simple token service (STS) via the API gateway for administrators to generate temporary Simple Storage Service (S3) credentials for use with S3 buckets. Temporary S3 credentials are generated using either cURL or Python.&#xA;The generated S3 credentials will expire after one hour.&#xA;Retrieve temporary S3 credentials with cURL Retrieve temporary S3 credentials with Python Retrieve temporary S3 credentials with cURL Obtain a JWT token.</description>
+    </item>
+    <item>
+      <title>Manage Artifacts with the Cray CLI</title>
+      <link>/docs-csm/en-14/operations/artifact_management/manage_artifacts_with_the_cray_cli/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:17 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/artifact_management/manage_artifacts_with_the_cray_cli/</guid>
+      <description>Manage Artifacts with the Cray CLI The artifacts (objects) available for use on the system are created and managed with the Cray CLI. The cray artifacts command provides the ability to manage any given artifact. The Cray CLI automatically authenticates users and provides Simple Storage Service (S3) credentials.&#xA;Authenticate with the CLI View S3 buckets List artifacts Retrieve artifact details Create and upload artifacts Download artifacts Delete artifacts Authenticate with the CLI (ncn#) All operations with the cray artifacts command assume that the user has already been authenticated.</description>
+    </item>
+    <item>
+      <title>Use S3 Libraries and Clients</title>
+      <link>/docs-csm/en-14/operations/artifact_management/use_s3_libraries_and_clients/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:17 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/artifact_management/use_s3_libraries_and_clients/</guid>
+      <description>Use S3 Libraries and Clients Several command line clients and language-specific libraries are available in addition to the Simple Storage Service (S3) RESTful API. Developers and system administrators can interact with artifacts in the S3 object store with these tools.&#xA;To learn more, refer to the following links:&#xA;S3 Python client S3 Go client Amazon Web Services (AWS) S3 CLI documentation </description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>SAT Configuration on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-16/operations/system_admin_toolkit/configuration/</link>
+    <description>Recent content in SAT Configuration on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-16</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:39:02 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-16/operations/system_admin_toolkit/configuration/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Authenticate SAT Commands</title>
+      <link>/docs-csm/en-16/operations/system_admin_toolkit/configuration/authenticate_sat_commands/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:01 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_admin_toolkit/configuration/authenticate_sat_commands/</guid>
+      <description>Authenticate SAT Commands To run SAT commands on the Kubernetes control plane (ncn-m) nodes, first set up authentication to the API gateway. For more information on which SAT commands require authentication to the API Gateway, see SAT Command Overview.&#xA;For more general information on API gateway authentication, see System Security and Authentication.&#xA;The admin account used to authenticate with sat auth must be enabled in Keycloak and must have its assigned role set to admin.</description>
+    </item>
+    <item>
+      <title>Configure Multi-tenancy (Optional)</title>
+      <link>/docs-csm/en-16/operations/system_admin_toolkit/configuration/configure_multi-tenancy_optional/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:01 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_admin_toolkit/configuration/configure_multi-tenancy_optional/</guid>
+      <description>Configure Multi-tenancy (Optional) SAT supports supplying tenant information to CSM services in order to allow tenant admins to use SAT within their tenant. By default, the tenant name is not set, and SAT will not send any tenant information with its requests to CSM services. Configure the tenant name either in the SAT configuration file or on the command line.&#xA;Configure the Tenant Name in the SAT Configuration File Set the tenant name in the SAT configuration file using the api_gateway.</description>
+    </item>
+    <item>
+      <title>Generate SAT S3 Credentials</title>
+      <link>/docs-csm/en-16/operations/system_admin_toolkit/configuration/generate_sat_s3_credentials/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:01 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_admin_toolkit/configuration/generate_sat_s3_credentials/</guid>
+      <description>Generate SAT S3 Credentials Generate S3 credentials and write them to a local file so the SAT user can access S3 storage. In order to use the SAT S3 bucket, the System Administrator must generate the S3 access key and secret keys and write them to a local file. This must be done on every Kubernetes control plane node where SAT commands are run.&#xA;SAT uses S3 storage for several purposes, most importantly to store the site-specific information set with sat setrev (see Set System Revision Information).</description>
+    </item>
+    <item>
+      <title>Set System Revision Information</title>
+      <link>/docs-csm/en-16/operations/system_admin_toolkit/configuration/set_system_revision_information/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:02 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_admin_toolkit/configuration/set_system_revision_information/</guid>
+      <description>Set System Revision Information HPE service representatives use system revision information data to identify systems in support cases.&#xA;Prerequisites SAT authentication has been set up. See Authenticate SAT Commands. S3 credentials have been generated. See Generate SAT S3 Credentials. Procedure (ncn-m001#) Set System Revision Information.&#xA;Run sat setrev and follow the prompts to set the following site-specific values:&#xA;Serial number System name System type System description Product number Company name Site name Country code System install date Tip: For &amp;ldquo;System type&amp;rdquo;, a system with any liquid-cooled components should be considered a liquid-cooled system.</description>
+    </item>
+  </channel>
+</rss>

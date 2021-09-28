@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>conman on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-14/operations/conman/</link>
+    <description>Recent content in conman on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-14</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:25 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-14/operations/conman/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Access Compute Node Logs</title>
+      <link>/docs-csm/en-14/operations/conman/access_compute_node_logs/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/conman/access_compute_node_logs/</guid>
+      <description>Access Compute Node Logs This procedure shows how the ConMan utility can be used to retrieve compute node logs.&#xA;Prerequisites The user performing this procedure needs to have access permission to the cray-console-operator pod.&#xA;Limitations Encryption of compute node logs is not enabled, so the passwords may be passed in clear text.&#xA;Procedure NOTE this procedure has changed since the CSM 0.9 release.&#xA;Log on to a Kubernetes master or worker node.</description>
+    </item>
+    <item>
+      <title>Access Console Log Data Via the System Monitoring Framework (SMF)</title>
+      <link>/docs-csm/en-14/operations/conman/access_console_log_data_via_the_system_monitoring_framework_smf/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/conman/access_console_log_data_via_the_system_monitoring_framework_smf/</guid>
+      <description>Access Console Log Data Via the System Monitoring Framework (SMF) Console log data is collected by SMF and can be queried through the Kibana UI or Elasticsearch. Each line of the console logs are an individual record in the SMF database.&#xA;Prerequisites System domain name Procedure Prerequisites This procedure requires the Kibana service to be up and running on a non-compute node (NCN).&#xA;System domain name The SYSTEM_DOMAIN_NAME value found in some of the URLs on this page is expected to be the system&amp;rsquo;s fully qualified domain name (FQDN).</description>
+    </item>
+    <item>
+      <title>Complete Reset of the Console Services</title>
+      <link>/docs-csm/en-14/operations/conman/complete_reset_of_the_console_services/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/conman/complete_reset_of_the_console_services/</guid>
+      <description>Complete Reset of the Console Services At times the easiest way to get console services back up and running is to do a complete reset of the services. There is no persistent state so there is no backup/restore operation needed.&#xA;NOTE The console connections to all nodes will be disrupted for the duration of this procedure. Any active console sessions will be terminated and no console logging will occur. The existing console log files will be retained, but there will be a gap in the log file coverage.</description>
+    </item>
+    <item>
+      <title>ConMan</title>
+      <link>/docs-csm/en-14/operations/conman/conman/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/conman/conman/</guid>
+      <description>ConMan ConMan is a tool used for connecting to remote consoles and collecting console logs. These node logs can then be used for various administrative purposes, such as troubleshooting node boot issues.&#xA;ConMan runs on the system as a containerized service. It runs in a set of Docker containers within Kubernetes pods named cray-console-operator and cray-console-node. Node console logs are stored locally within the cray-console-node pods in the /var/log/conman/ directory, as well as being collected by the System Monitoring Framework (SMF).</description>
+    </item>
+    <item>
+      <title>Configure Log Rotation</title>
+      <link>/docs-csm/en-14/operations/conman/configure_log_rotation/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/conman/configure_log_rotation/</guid>
+      <description>Configure Log Rotation In order to prevent the console logs from filling the PVC volume they are stored on they are periodically rotated. This can keep a number of older sections of the log file as well as the current log file on the volume. Different size systems have different requirements based on the number of nodes, the amount of text being written to the individual log files, the size of the PVC they are being stored on, and the history that needs to be kept in the form of the log files.</description>
+    </item>
+    <item>
+      <title>Console Services Troubleshooting Guide</title>
+      <link>/docs-csm/en-14/operations/conman/console_services_troubleshooting_guide/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/conman/console_services_troubleshooting_guide/</guid>
+      <description>Console Services Troubleshooting Guide There are many things that can prevent the ConMan service from successfully connecting to a single node console or can cause problems with the entire deployment. This is a guide on how to look at all aspects of the service to determine what the current problem is.&#xA;Prerequisites Check the states of the console pods Find the cray-console-node pod for a specific node Investigate service problem Investigate Postgres deployment Check the capacity of the PVC Prerequisites (ncn-mw#) The user performing these procedures needs to have access permission to the cray-console-operator and cray-console-node pods.</description>
+    </item>
+    <item>
+      <title>Disable ConMan After the System Software Installation</title>
+      <link>/docs-csm/en-14/operations/conman/disable_conman_after_system_software_installation/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/conman/disable_conman_after_system_software_installation/</guid>
+      <description>Disable ConMan After the System Software Installation The ConMan utility is enabled by default. The first procedure provides instructions for disabling it after the system software has been installed, and the second procedure provides instructions on how to later re-enable it.&#xA;Prerequisites This procedure requires administrative privileges.&#xA;Disable Procedure NOTE this procedure has changed since the CSM 0.9 release.&#xA;Log on to a Kubernetes master or worker node.&#xA;(ncn-mw#) Scale the cray-console-operator pods to 0 replicas.</description>
+    </item>
+    <item>
+      <title>Establish a Serial Connection to NCNs</title>
+      <link>/docs-csm/en-14/operations/conman/establish_a_serial_connection_to_ncns/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/conman/establish_a_serial_connection_to_ncns/</guid>
+      <description>Establish a Serial Connection to NCNs The ConMan pod can be used to establish a serial console connection with each non-compute node (NCN) in the system.&#xA;In the scenario of a power down or reboot of an NCN worker, one must first determine if any cray-console pods are running on that NCN. It is important to move cray-console pods to other worker nodes before rebooting or powering off a worker node to minimize disruption in console logging.</description>
+    </item>
+    <item>
+      <title>Log in to a Node Using ConMan</title>
+      <link>/docs-csm/en-14/operations/conman/log_in_to_a_node_using_conman/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/conman/log_in_to_a_node_using_conman/</guid>
+      <description>Log in to a Node Using ConMan This procedure shows how to connect to the node&amp;rsquo;s Serial Over LAN (SOL) via ConMan.&#xA;Prerequisites The user performing this procedure needs to have access permission to the cray-console-operator and cray-console-node pods.&#xA;Procedure NOTE this procedure has changed since the CSM 0.9 release.&#xA;Log on to a Kubernetes master or worker node.&#xA;(ncn-mw#) Find the cray-console-operator pod.&#xA;OP_POD=$(kubectl get pods -n services -o wide|grep cray-console-operator|awk &amp;#39;{print $1}&amp;#39;); echo $OP_POD Example output:</description>
+    </item>
+    <item>
+      <title>Manage Node Consoles</title>
+      <link>/docs-csm/en-14/operations/conman/manage_node_consoles/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/conman/manage_node_consoles/</guid>
+      <description>Manage Node Consoles ConMan is used for connecting to remote consoles and collecting console logs. These node logs can then be used for various administrative purposes, such as troubleshooting node boot issues.&#xA;ConMan runs on the system in a set of containers within Kubernetes pods named cray-console-operator and cray-console-node.&#xA;The cray-console-operator and cray-console-node pods determine which nodes they should monitor by checking with the Hardware State Manager (HSM) service. They do this once when they starts.</description>
+    </item>
+    <item>
+      <title>Troubleshoot ConMan Asking for Password on SSH Connection</title>
+      <link>/docs-csm/en-14/operations/conman/troubleshoot_conman_asking_for_password_on_ssh_connection/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/conman/troubleshoot_conman_asking_for_password_on_ssh_connection/</guid>
+      <description>Troubleshoot ConMan Asking for Password on SSH Connection If ConMan starts to ask for a password when there is an SSH connection to the node on liquid-cooled hardware, that usually indicates there is a problem with the SSH key that was established on the node BMC. The key may have been replaced or overwritten on the hardware.&#xA;Use this procedure to renew or reinstall the SSH key on the BMCs.</description>
+    </item>
+    <item>
+      <title>Troubleshoot ConMan Blocking Access to a Node BMC</title>
+      <link>/docs-csm/en-14/operations/conman/troubleshoot_conman_blocking_access_to_a_node_bmc/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/conman/troubleshoot_conman_blocking_access_to_a_node_bmc/</guid>
+      <description>Troubleshoot ConMan Blocking Access to a Node BMC Disable ConMan if it is blocking access to a node by other means. ConMan runs on the system as a containerized service, and it is enabled by default. However, the use of ConMan to connect to a node blocks access to that node by other Serial over LAN (SOL) utilities or by a virtual KVM.&#xA;For information about how ConMan works, see ConMan.</description>
+    </item>
+    <item>
+      <title>Troubleshoot ConMan Failing to Connect to a Console</title>
+      <link>/docs-csm/en-14/operations/conman/troubleshoot_conman_failing_to_connect_to_a_console/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:25 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/conman/troubleshoot_conman_failing_to_connect_to_a_console/</guid>
+      <description>Troubleshoot ConMan Failing to Connect to a Console There are many reasons that ConMan may not be able to connect to a specific console. This procedure outlines several things to check that may impact the connectivity with a console.&#xA;Prerequisites This procedure requires administrative privileges.&#xA;Procedure (ncn-mw#) Find the cray-console-operator pod.&#xA;OP_POD=$(kubectl get pods -n services -o wide|grep cray-console-operator|awk &amp;#39;{print $1}&amp;#39;) echo ${OP_POD} Example output:&#xA;cray-console-operator-6cf89ff566-kfnjr (ncn-mw#) Set the XNAME variable to the component name (xname) of the node whose console is of interest.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Console Node Pod Stuck in Terminating State</title>
+      <link>/docs-csm/en-14/operations/conman/troubleshoot_conman_node_pod_stuck_terminating/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:25 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/conman/troubleshoot_conman_node_pod_stuck_terminating/</guid>
+      <description>Troubleshoot Console Node Pod Stuck in Terminating State When a worker node goes down unexpectedly, a cray-console-node pod running on that worker may get stuck in a Terminating state that prevents it moving to a healthy worker. This can leave consoles unmonitored and not available for interactive access.&#xA;Prerequisite Determine if this is a scenario where the cray-console-node pod is stuck in Terminating because of the failure of the worker node it is running on, or for some other reason.</description>
+    </item>
+  </channel>
+</rss>

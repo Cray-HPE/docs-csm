@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>FAS Loader on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-09/operations/fas_loader/</link>
+    <description>Recent content in FAS Loader on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-09</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:07 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-09/operations/fas_loader/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>TROUBLESHOOTING FAS LOADER FAILS</title>
+      <link>/docs-csm/en-09/operations/fas_loader/fas_loader_fails/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:07 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/fas_loader/fas_loader_fails/</guid>
+      <description>TROUBLESHOOTING FAS LOADER FAILS NOTE: this procedure is only for csm-0.9.x releases.&#xA;The FAS loader may fail due to issues with the repomd.xml file in Nexus.&#xA;This will be indicated by the following message: CRITICAL: Failed to get repomd.xml from repo in the fas-loader job.&#xA;Indications that the fas-loader job has failed include:&#xA;Expected firmware is not present in the FAS image list (cray fas images list) after the FAS loader has been run.</description>
+    </item>
+  </channel>
+</rss>

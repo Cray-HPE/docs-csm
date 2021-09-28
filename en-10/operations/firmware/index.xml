@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>firmware on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-10/operations/firmware/</link>
+    <description>Recent content in firmware on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-10</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:21 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-10/operations/firmware/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>FAS Admin Procedures</title>
+      <link>/docs-csm/en-10/operations/firmware/fas_admin_procedures/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:20 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/firmware/fas_admin_procedures/</guid>
+      <description>FAS Admin Procedures Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmware.&#xA;Topics Warning for non-compute nodes (NCNs) Ignore management nodes within FAS Override an image for an update Check for new firmware versions with a dry-run Load firmware from Nexus Load firmware from RPM or ZIP file Warning for non-compute nodes (NCNs) NCNs and their BMCs should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS.</description>
+    </item>
+    <item>
+      <title>FAS CLI</title>
+      <link>/docs-csm/en-10/operations/firmware/fas_cli/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:20 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/firmware/fas_cli/</guid>
+      <description>FAS CLI This section describes the basic capabilities of the Firmware Action Service (FAS) CLI commands. These commands can be used to manage firmware for system hardware supported by FAS. Refer to the prerequisites section before proceeding to any of the sections for the supported operations.&#xA;The following CLI operations are described:&#xA;Prerequisites Actions Execute an action Procedure Abort an action Procedure Describe an action Interpreting output Procedure Get high level summary Get details of action Get details of operation Snapshots Create a snapshot Procedure List snapshots Procedure View snapshots Procedure Update a firmware image Procedure FAS loader commands Loader status Load firmware from Nexus Load individual RPM or ZIP into FAS Display results of loader run Delete loader run data Prerequisites The Cray command line interface (CLI) tool is initialized and configured on the system.</description>
+    </item>
+    <item>
+      <title>FAS Filters</title>
+      <link>/docs-csm/en-10/operations/firmware/fas_filters/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:20 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/firmware/fas_filters/</guid>
+      <description>FAS Filters FAS uses five primary filters for actions and snapshots to determine what operations to create. The filters are listed below:&#xA;Selection Filters - Determine what operations will be created. The following selection filters are available: stateComponentFilter targetFilter inventoryHardwareFilter imageFilter Command Filters - Determine how the operations will be executed. The following command filters are available: command All filters are logically connected with AND logic. Only the stateComponentFilter, targetFilter, and inventoryHardwareFilter are used for snapshots.</description>
+    </item>
+    <item>
+      <title>FAS Recipes</title>
+      <link>/docs-csm/en-10/operations/firmware/fas_recipes/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:20 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/firmware/fas_recipes/</guid>
+      <description>FAS Recipes NOTE: This is a collection of various FAS recipes for performing updates. For step by step directions and commands, see FAS Use Cases.&#xA;The following example JSON files are useful to reference when updating specific hardware components. In all of these examples, the overrideDryrun field will be set to false; set them to true to perform a live update.&#xA;When updating an entire system, walk down the device hierarchy component type by component type, starting first with routers (switches), proceeding to chassis, and then finally to nodes.</description>
+    </item>
+    <item>
+      <title>FAS Use Cases</title>
+      <link>/docs-csm/en-10/operations/firmware/fas_use_cases/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:21 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/firmware/fas_use_cases/</guid>
+      <description>FAS Use Cases Use the Firmware Action Service (FAS) to update the firmware on supported hardware devices. Each procedure includes the prerequisites and example recipes required to update the firmware.&#xA;When updating an entire system, walk down the device hierarchy component type by component type, starting first with Routers (switches), proceeding to Chassis, and then finally to Nodes. While this is not strictly necessary, it does help eliminate confusion.&#xA;Refer to FAS Filters for more information on the content used in the example JSON files.</description>
+    </item>
+    <item>
+      <title>Update Firmware with FAS</title>
+      <link>/docs-csm/en-10/operations/firmware/update_firmware_with_fas/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:21 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/firmware/update_firmware_with_fas/</guid>
+      <description>Update Firmware with FAS The Firmware Action Service (FAS) provides an interface for managing firmware versions of Redfish-enabled hardware in the system. FAS interacts with the Hardware State Managers (HSM), device data, and image data in order to update firmware.&#xA;Reset Gigabyte node BMC to factory defaults if having problems with ipmitool, using Redfish, or when flashing procedures fail. See Set Gigabyte Node BMC to Factory Defaults.&#xA;FAS images contain the following information that is needed for a hardware device to update firmware versions:</description>
+    </item>
+    <item>
+      <title>Updating BMC Firmware and BIOS for ncn-m001</title>
+      <link>/docs-csm/en-10/operations/firmware/updating_firmware_m001/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:21 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/firmware/updating_firmware_m001/</guid>
+      <description>Updating BMC Firmware and BIOS for ncn-m001 Retrieve the model name and firmware image required to update an HPE or Gigabyte ncn-m001 node.&#xA;NOTE&#xA;On HPE nodes, the BMC firmware is iLO 5 and BIOS is System ROM. The commands in the procedure must be run on ncn-m001. This procedure should only be used if FAS is not available, such as during initial CSM install. Prerequisites Find the model name Get the firmware images Flash the firmware Flash Gigabyte ncn-m001 Flash HPE ncn-m001 Prerequisites WARNING: This procedure should not be performed during a CSM install while ncn-m001 is booted as the PIT node using a remote ISO image.</description>
+    </item>
+    <item>
+      <title>Upload BMC Recovery Firmware into TFTP Server</title>
+      <link>/docs-csm/en-10/operations/firmware/upload_olympus_bmc_recovery_firmware_into_tftp_server/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:21 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/firmware/upload_olympus_bmc_recovery_firmware_into_tftp_server/</guid>
+      <description>Upload BMC Recovery Firmware into TFTP Server cray-upload-recovery-images is a utility for uploading the BMC recovery files for ChassisBMCs, NodeBMCs, and RouterBMCs to be served by the cray-tftp service. The tool uses the cray CLI (fas, artifacts) and cray-tftp to download the S3 recovery images (as remembered by FAS), then upload them into the PVC that is used by cray-tftp. cray-upload-recovery-images should be run on every system.&#xA;Prerequisites Cray System Management (CSM) software is installed.</description>
+    </item>
+  </channel>
+</rss>

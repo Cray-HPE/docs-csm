@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>image management on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-15/operations/image_management/</link>
+    <description>Recent content in image management on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-15</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:27 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-15/operations/image_management/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Build a New UAN Image Using the Default Recipe</title>
+      <link>/docs-csm/en-15/operations/image_management/build_a_new_uan_image_using_the_default_recipe/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:26 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/image_management/build_a_new_uan_image_using_the_default_recipe/</guid>
+      <description>Build a New UAN Image Using the Default Recipe Build or rebuild the User Access Node (UAN) image using either the default UAN image or image recipe. Both of these are supplied by the UAN product stream installer.&#xA;Prerequisites Overview Remove Slingshot Diagnostics RPM From Default UAN Recipe Build the UAN Image Automatically Using IMS Build the UAN Image By Customizing It Manually Prerequisites Both the Cray Operation System (COS) and UAN product streams must be installed.</description>
+    </item>
+    <item>
+      <title>Build an Image Using IMS REST Service</title>
+      <link>/docs-csm/en-15/operations/image_management/build_an_image_using_ims_rest_service/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:26 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/image_management/build_an_image_using_ims_rest_service/</guid>
+      <description>Build an Image Using IMS REST Service Create an image root from an IMS recipe.&#xA;Prerequisites The Cray command line interface (CLI) tool is initialized and configured on the system. System management services (SMS) are running in a Kubernetes cluster on non-compute nodes (NCN) and include the following deployments: cray-ims, the Image Management Service (IMS) cray-nexus, the Nexus repository manager service The NCN Certificate Authority (CA) public key has been properly installed into the CA cache for this system.</description>
+    </item>
+    <item>
+      <title>Configure IMS to Use DKMS</title>
+      <link>/docs-csm/en-15/operations/image_management/configure_ims_to_use_dkms/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:26 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/image_management/configure_ims_to_use_dkms/</guid>
+      <description>Configure IMS to Use DKMS Background Some images require the building and installation of kernel drivers using the Dynamic Kernel Module Support (DKMS) tool. This allows kernel modules to be built for the specific kernel used in the image. The DKMS tool requires access to the running kernel that is not usually allowed by the Image Management Service (IMS). In order to safely allow the expanded access, the IMS configuration must be modified to enable the feature.</description>
+    </item>
+    <item>
+      <title>Configure IMS to Validate RPMs</title>
+      <link>/docs-csm/en-15/operations/image_management/configure_ims_to_validate_rpms/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:26 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/image_management/configure_ims_to_validate_rpms/</guid>
+      <description>Configure IMS to Validate RPMs Configuring the Image Management Service (IMS) to validate the GPG signatures of RPMs during IMS Build operations involves the following two steps:&#xA;Create and update IMS to use a new Kiwi-NG Image with the Signing Keys embedded.&#xA;NOTE The default IMS Kiwi-NG Image is already configured with the signing keys needed to validate HPE and SuSE RPMs and repositories.&#xA;Update IMS Recipes to require GPG verification of RPMs, repositories, or both.</description>
+    </item>
+    <item>
+      <title>Configure a Remote Build Node</title>
+      <link>/docs-csm/en-15/operations/image_management/configure_a_remote_build_node/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:26 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/image_management/configure_a_remote_build_node/</guid>
+      <description>Configure a Remote Build Node Configure or create an IMS remote build node for use for image builds.&#xA;Prerequisites Overview Configuring a remote build node Use an existing compute node Create a barebones IMS builder image Adding storage to a remote build node Adding and removing an HSM lock Adding remote build nodes to IMS Removing remote build nodes from IMS Listing remote build nodes in IMS Prerequisites Available compute node CSM 1.</description>
+    </item>
+    <item>
+      <title>Convert TGZ Archives to SquashFS Images</title>
+      <link>/docs-csm/en-15/operations/image_management/convert_tgz_archives_to_squashfs_images/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/image_management/convert_tgz_archives_to_squashfs_images/</guid>
+      <description>Convert TGZ Archives to SquashFS Images If customizing a pre-built image root archive compressed as a .txz or other non-SquashFS format, convert the image root to SquashFS and upload the SquashFS archive to S3.&#xA;The steps in this section only apply if the image root is not in SquashFS format.&#xA;Prerequisites There is a pre-built image that is not currently in SquashFS format.&#xA;Procedure This procedure can be run on any master or worker NCN.</description>
+    </item>
+    <item>
+      <title>Create UAN Boot Images</title>
+      <link>/docs-csm/en-15/operations/image_management/create_uan_boot_images/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/image_management/create_uan_boot_images/</guid>
+      <description>Create UAN Boot Images Update configuration management Git repository to match the installed version of the User Access Node (UAN) product. Then use that updated configuration to create UAN boot images and a Boot Orchestration Service (BOS) session template.&#xA;This is the overall workflow for preparing UAN images for booting UANs:&#xA;Clone the UAN configuration Git repository and create a branch based on the branch imported by the UAN installation. Update the configuration content and push the changes to the newly created branch.</description>
+    </item>
+    <item>
+      <title>Customize an Image Root Using IMS</title>
+      <link>/docs-csm/en-15/operations/image_management/customize_an_image_root_using_ims/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/image_management/customize_an_image_root_using_ims/</guid>
+      <description>Customize an Image Root Using IMS The Image Management Service (IMS) customization workflow sets up a temporary image customization environment within a Kubernetes pod and mounts the image to be customized in that environment. A system administrator then makes the desired changes to the image root within the customization environment.&#xA;Afterwards, the IMS customization workflow automatically copies the NCN CA public key to /etc/cray/ca/certificate_authority.crt within the image root being customized, in order to enable secure communications between NCNs and client nodes.</description>
+    </item>
+    <item>
+      <title>Delete or Recover Deleted IMS Content</title>
+      <link>/docs-csm/en-15/operations/image_management/delete_or_recover_deleted_ims_content/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/image_management/delete_or_recover_deleted_ims_content/</guid>
+      <description>Delete or Recover Deleted IMS Content The Image Management System (IMS) manages user supplied SSH public Keys, customizable image recipes, images, and IMS jobs that are used to build or customize images. In previous versions of IMS, deleting an IMS public key, recipe, or image resulted in that item being permanently deleted. Additionally, IMS recipes and images store linked artifacts in the Simple Storage Service (S3) datastore. These artifacts are referenced by the IMS recipe and image records.</description>
+    </item>
+    <item>
+      <title>Exporting and Importing IMS Data</title>
+      <link>/docs-csm/en-15/operations/image_management/exporting_and_importing_ims_data/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/image_management/exporting_and_importing_ims_data/</guid>
+      <description>Exporting and Importing IMS Data IMS public keys, images, and recipes, including associated artifacts stored in Ceph Simple Storage Service (S3), can be exported and imported using an automated script.&#xA;Prerequisites Export Import Prerequisites Ensure that the Cray CLI (cray) is authenticated and configured to talk to system management services. See Configure the Cray CLI. The latest CSM documentation RPM must be installed on the node where the procedure is being performed.</description>
+    </item>
+    <item>
+      <title>Image Management</title>
+      <link>/docs-csm/en-15/operations/image_management/image_management/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/image_management/image_management/</guid>
+      <description>Image Management The Image Management Service (IMS) uses the open source Kiwi-NG tool to build image roots from compressed Kiwi image descriptions. These compressed Kiwi image descriptions are referred to as &amp;ldquo;recipes.&amp;rdquo; Kiwi-NG builds images based on a variety of different Linux distributions, specifically SUSE, RHEL, and their derivatives. Kiwi image descriptions must follow the Kiwi development schema. More information about the development schema and the Kiwi-NG tool can be found in the documentation: https://doc.</description>
+    </item>
+    <item>
+      <title>Image Management Workflows</title>
+      <link>/docs-csm/en-15/operations/image_management/image_management_workflows/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/image_management/image_management_workflows/</guid>
+      <description>Image Management Workflows Overview of how to create an image and how to customize and image.&#xA;The following workflows are intended to be high-level overviews of image management tasks. These workflows depict how services interact with each other during image management and help to provide a quicker and deeper understanding of how the system functions.&#xA;The workflows in this section include:&#xA;Create a new image Customize an image Create a new image Use Case: The system administrator creates an image root from a customized recipe.</description>
+    </item>
+    <item>
+      <title>Import an External Image to IMS</title>
+      <link>/docs-csm/en-15/operations/image_management/import_external_image_to_ims/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/image_management/import_external_image_to_ims/</guid>
+      <description>Import an External Image to IMS The Image Management Service (IMS) is typically used to build images from IMS recipes and customize Images that are already known to IMS. However, it is sometimes the case that an image is built using a mechanism other than by IMS and needs to be added to IMS. In these cases, the following procedure can be used to add this external image to IMS and upload the image&amp;rsquo;s artifacts to the Simple Storage Service (S3).</description>
+    </item>
+    <item>
+      <title>Import an NCN Image to IMS</title>
+      <link>/docs-csm/en-15/operations/image_management/import_ncn_image_to_ims/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/image_management/import_ncn_image_to_ims/</guid>
+      <description>Import an NCN Image to IMS This page documents an automated tool which takes a set of Non-Compute Node (NCN) kernel, initrd, and SquashFS artifact files, uploads them into the Simple Storage Service (S3), and registers them as an image in the Image Management Service (IMS).&#xA;For the more general (and more manual) procedure for how to register images in IMS, see Import an External Image to IMS. In addition to providing a more detailed explanation of the various subtasks being carried out, that procedure also covers such variations as:</description>
+    </item>
+    <item>
+      <title>Troubleshoot Issues with Large Images</title>
+      <link>/docs-csm/en-15/operations/image_management/troubleshoot_large_image/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/image_management/troubleshoot_large_image/</guid>
+      <description>Troubleshoot Issues with Large Images The default configuration values that IMS has are based on the assumption of a resulting image of 15 Gb or smaller. If the images being worked with are larger, then there are a couple of different failures that can happen, but these failures can be resolved by changes to the IMS configuration settings.&#xA;These settings require a balancing act based on the size of the images being produced and the size of the system and what resources are available.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Remote Build Node</title>
+      <link>/docs-csm/en-15/operations/image_management/troubleshoot_remote_build_node/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/image_management/troubleshoot_remote_build_node/</guid>
+      <description>Troubleshoot Remote Build Node Remote builds work by creating and running containerized jobs via Podman on a remote node. There are times that problems crop up with running these remote jobs.&#xA;Prerequisites Jobs fail to launch on remote nodes Clean up orphaned jobs Jobs fail due to lack of resources on the remote node Prerequisites Administrative access to a master or worker node on the K8S cluster Administrative access to the remote build node Jobs fail to launch on remote nodes Verify that the remote node is defined in IMS.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Interactions with zypper</title>
+      <link>/docs-csm/en-15/operations/image_management/troubleshoot_zypper_interaction/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/image_management/troubleshoot_zypper_interaction/</guid>
+      <description>Troubleshoot Interactions with zypper There are some common problems while interacting with the zypper install utility that can be easily resolved.&#xA;Prerequisites This page requires interactive access to the image being worked with.&#xA;Error: &amp;ldquo;Cannot read input: bad stream or EOF&amp;rdquo; If the image being customized was not saved out correctly, /dev/tty1 may not have been set up correctly. That will result in an error similar to the following when attempting to install packages using zypper:</description>
+    </item>
+    <item>
+      <title>Upload and Register an Image Recipe</title>
+      <link>/docs-csm/en-15/operations/image_management/upload_and_register_an_image_recipe/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/image_management/upload_and_register_an_image_recipe/</guid>
+      <description>Upload and Register an Image Recipe Download and expand recipe archives from S3 and IMS. Modify and upload a recipe archive, and then register that recipe archive with IMS.&#xA;Prerequisites Limitations Register recipe with IMS Templating IMS recipes Enable templating in recipe archive file Add template key/value pairs to IMS recipe record Build an image from an IMS templated recipe Prerequisites The Cray command line interface (CLI) tool is initialized and configured on the system.</description>
+    </item>
+    <item>
+      <title>Working With aarch64 Images</title>
+      <link>/docs-csm/en-15/operations/image_management/working_with_aarch64_images/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/image_management/working_with_aarch64_images/</guid>
+      <description>Working With aarch64 Images Systems may have aarch64 (arm64) compute nodes present, but the Kubernetes nodes are always going to be running x86 hardware. This presents a challenge in creating and modifying compute images through IMS running on the Kubernetes cluster. To solve this, aarch64 hardware is emulated using Kata VMs and QEMU emulation software.&#xA;Kata and QEMU emulation QEMU QEMU is a generic open source emulator. qemu-user-static is inserted via binfmt_misc into the kernel as a translator.</description>
+    </item>
+  </channel>
+</rss>

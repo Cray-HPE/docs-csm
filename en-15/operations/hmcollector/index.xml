@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>hmcollector on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-15/operations/hmcollector/</link>
+    <description>Recent content in hmcollector on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-15</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:26 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-15/operations/hmcollector/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Adjust HM Collector Ingress Replicas and Resource Limits</title>
+      <link>/docs-csm/en-15/operations/hmcollector/adjust_hmcollector_resource_limits_requests/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:26 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/hmcollector/adjust_hmcollector_resource_limits_requests/</guid>
+      <description>Adjust HM Collector Ingress Replicas and Resource Limits Inspect current resource usage Inspect pods for OOMKilled events How to adjust replicas and limits Inspect current resource usage (ncn-mw#) View resource usage of the containers in the cray-hms-hmcollector-ingress pods:&#xA;kubectl -n services top pod -l app.kubernetes.io/name=cray-hms-hmcollector-ingress --containers Example output:&#xA;POD NAME CPU(cores) MEMORY(bytes) cray-hms-hmcollector-ingress-554bb46784-dvjzq cray-hms-hmcollector-ingress 7m 99Mi cray-hms-hmcollector-ingress-554bb46784-dvjzq istio-proxy 5m 132Mi cray-hms-hmcollector-ingress-554bb46784-hctwm cray-hms-hmcollector-ingress 4m 82Mi cray-hms-hmcollector-ingress-554bb46784-hctwm istio-proxy 4m 120Mi cray-hms-hmcollector-ingress-554bb46784-zdhwc cray-hms-hmcollector-ingress 5m 97Mi cray-hms-hmcollector-ingress-554bb46784-zdhwc istio-proxy 4m 133Mi The default replica count for the cray-hms-hmcollector-ingress deployment is 3.</description>
+    </item>
+  </channel>
+</rss>

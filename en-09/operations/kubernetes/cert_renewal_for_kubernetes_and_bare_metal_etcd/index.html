@@ -1,0 +1,5026 @@
+<!DOCTYPE html>
+<html lang="en-09" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.123.0">
+    <meta name="description" content="">
+
+
+    <link rel="icon" href="/docs-csm/images/favicon.png" type="image/png">
+
+    <title>Kubernetes and Bare Metal EtcD Certificate Renewal :: Cray System Management (CSM)</title>
+
+    
+    <link href="/docs-csm/css/nucleus.css?1729741358" rel="stylesheet">
+    <link href="/docs-csm/css/fontawesome-all.min.css?1729741358" rel="stylesheet">
+    <link href="/docs-csm/css/hybrid.css?1729741358" rel="stylesheet">
+    <link href="/docs-csm/css/featherlight.min.css?1729741358" rel="stylesheet">
+    <link href="/docs-csm/css/perfect-scrollbar.min.css?1729741358" rel="stylesheet">
+    <link href="/docs-csm/css/auto-complete.css?1729741358" rel="stylesheet">
+    <link href="/docs-csm/css/atom-one-dark-reasonable.css?1729741358" rel="stylesheet">
+    <link href="/docs-csm/css/theme.css?1729741358" rel="stylesheet">
+    <link href="/docs-csm/css/tabs.css?1729741358" rel="stylesheet">
+    <link href="/docs-csm/css/hugo-theme.css?1729741358" rel="stylesheet">
+    
+    <link href="/docs-csm/css/theme-blue.css?1729741358" rel="stylesheet">
+    
+    
+
+    <script src="/docs-csm/js/jquery-3.3.1.min.js?1729741358"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="/docs-csm/en-09/operations/kubernetes/cert_renewal_for_kubernetes_and_bare_metal_etcd/">
+    <nav id="sidebar" class="">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo" href='/docs-csm/en-09'>
+  Cray System Management
+</a>
+
+    </div>
+
+    
+    <section>
+      <ul>
+      
+        <li>
+          <div class="select-style padding">
+          v <select id="select-language" onchange="location = this.value;">
+          
+          
+          
+              
+              
+                  
+                    
+                    
+                      <option id="en-16" value="/docs-csm/en-16/operations/kubernetes/cert_renewal_for_kubernetes_and_bare_metal_etcd/">1.6</option>
+                    
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+          
+              
+              
+                  
+              
+                  
+                    
+                    
+                      <option id="en-15" value="/docs-csm/en-15/operations/kubernetes/cert_renewal_for_kubernetes_and_bare_metal_etcd/">1.5</option>
+                    
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+          
+              
+              
+                  
+              
+                  
+              
+                  
+                    
+                    
+                      <option id="en-14" value="/docs-csm/en-14/operations/kubernetes/cert_renewal_for_kubernetes_and_bare_metal_etcd/">1.4</option>
+                    
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+          
+              
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+                    
+                    
+                      <option id="en-13" value="/docs-csm/en-13/operations/kubernetes/cert_renewal_for_kubernetes_and_bare_metal_etcd/">1.3</option>
+                    
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+          
+              
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+                    
+                    
+                      <option id="en-12" value="/docs-csm/en-12/operations/kubernetes/cert_renewal_for_kubernetes_and_bare_metal_etcd/">1.2</option>
+                    
+                  
+              
+                  
+              
+                  
+              
+          
+              
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+                    
+                    
+                      <option id="en-10" value="/docs-csm/en-10/operations/kubernetes/cert_renewal_for_kubernetes_and_bare_metal_etcd/">1.0</option>
+                    
+                  
+              
+                  
+              
+          
+              
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+                    
+                    
+                      <option id="en-09" value="/docs-csm/en-09/operations/kubernetes/cert_renewal_for_kubernetes_and_bare_metal_etcd/" selected>0.9</option>
+                    
+                  
+              
+          
+        </select>
+        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          width="255px" height="255px" viewBox="0 0 255 255" style="enable-background:new 0 0 255 255;" xml:space="preserve">
+          <g>
+            <g id="arrow-drop-down">
+              <polygon points="0,63.75 127.5,191.25 255,63.75 		" />
+            </g>
+          </g>
+        </svg>
+        </div>
+        </li>
+      
+
+      
+      </ul>
+    </section>
+  
+
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="/docs-csm/js/lunr.min.js?1729741358"></script>
+<script type="text/javascript" src="/docs-csm/js/auto-complete.js?1729741358"></script>
+<script type="text/javascript">
+    
+        var baseurl = "\/docs-csm\/\/en-09";
+    
+</script>
+<script type="text/javascript" src="/docs-csm/js/search.js?1729741358"></script>
+
+    
+  </div>
+
+  
+
+    <div class="highlightable">
+    <ul class="topics">
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/421-mgmt-net-cabling-checklist/" title="1.4 Management network cabling checklist" class="dd-item ">
+        <a href="/docs-csm/en-09/421-mgmt-net-cabling-checklist/">
+        1.4 Management network cabling checklist
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/308-application-node-config/" title="Application Node Config" class="dd-item ">
+        <a href="/docs-csm/en-09/308-application-node-config/">
+        Application Node Config
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/310-cabinets/" title="Cabinets" class="dd-item ">
+        <a href="/docs-csm/en-09/310-cabinets/">
+        Cabinets
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/416-mgmt-net-cabling/" title="Cabling" class="dd-item ">
+        <a href="/docs-csm/en-09/416-mgmt-net-cabling/">
+        Cabling
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/066-ceph-csi/" title="CEPH CSI Verification" class="dd-item ">
+        <a href="/docs-csm/en-09/066-ceph-csi/">
+        CEPH CSI Verification
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/302-ncn-metadata-bondx/" title="Collecting NCN MAC Addresses" class="dd-item ">
+        <a href="/docs-csm/en-09/302-ncn-metadata-bondx/">
+        Collecting NCN MAC Addresses
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/301-ncn-metadata-bmc/" title="Collecting the BMC MAC Addresses" class="dd-item ">
+        <a href="/docs-csm/en-09/301-ncn-metadata-bmc/">
+        Collecting the BMC MAC Addresses
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/257-firmware-action-service-cray-windom-compute-node-bios-workaround/" title="Compute Node BIOS workaround for WNC-rome aka HPE CRAY EX425" class="dd-item ">
+        <a href="/docs-csm/en-09/257-firmware-action-service-cray-windom-compute-node-bios-workaround/">
+        Compute Node BIOS workaround for WNC-rome aka HPE CRAY EX425
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/000-info/" title="CRAY Guide Contribution" class="dd-item ">
+        <a href="/docs-csm/en-09/000-info/">
+        CRAY Guide Contribution
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/063-csi-files/" title="Cray Site Init Files" class="dd-item ">
+        <a href="/docs-csm/en-09/063-csi-files/">
+        Cray Site Init Files
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/release_notes/" title="Cray System Management (CSM) - Release Notes" class="dd-item ">
+        <a href="/docs-csm/en-09/release_notes/">
+        Cray System Management (CSM) - Release Notes
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/001-guides/" title="CSM Documentation Guide" class="dd-item ">
+        <a href="/docs-csm/en-09/001-guides/">
+        CSM Documentation Guide
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/002-csm-install/" title="CSM Install" class="dd-item ">
+        <a href="/docs-csm/en-09/002-csm-install/">
+        CSM Install
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/007-csm-install-reboot/" title="CSM Install Reboot - Final NCN Install" class="dd-item ">
+        <a href="/docs-csm/en-09/007-csm-install-reboot/">
+        CSM Install Reboot - Final NCN Install
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/008-csm-validation/" title="CSM Install Validation and Health Checks" class="dd-item ">
+        <a href="/docs-csm/en-09/008-csm-validation/">
+        CSM Install Validation and Health Checks
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/005-csm-metal-install/" title="CSM Metal Install" class="dd-item ">
+        <a href="/docs-csm/en-09/005-csm-metal-install/">
+        CSM Metal Install
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/006-csm-platform-install/" title="CSM Platform Install" class="dd-item ">
+        <a href="/docs-csm/en-09/006-csm-platform-install/">
+        CSM Platform Install
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/troubleshooting/" title="CSM Troubleshooting Information" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/troubleshooting/">
+          CSM Troubleshooting Information
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/troubleshooting/known_issues/" title="known issues" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/troubleshooting/known_issues/">
+          known issues
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/troubleshooting/known_issues/cfs_sessions_stuck_in_pending/" title="CFS Sessions are Stuck in Pending State" class="dd-item ">
+        <a href="/docs-csm/en-09/troubleshooting/known_issues/cfs_sessions_stuck_in_pending/">
+        CFS Sessions are Stuck in Pending State
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/troubleshooting/known_issues/conman_pod_kubernetes_copy_fails/" title="Copying file from the cray-conman pod fails" class="dd-item ">
+        <a href="/docs-csm/en-09/troubleshooting/known_issues/conman_pod_kubernetes_copy_fails/">
+        Copying file from the cray-conman pod fails
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/troubleshooting/known_issues/orphaned_cfs_pods/" title="Orphaned CFS Pods After Booting or Rebooting" class="dd-item ">
+        <a href="/docs-csm/en-09/troubleshooting/known_issues/orphaned_cfs_pods/">
+        Orphaned CFS Pods After Booting or Rebooting
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/003-csm-usb-livecd/" title="CSM USB LiveCD - Creation and Configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/003-csm-usb-livecd/">
+        CSM USB LiveCD - Creation and Configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/051-disk-cleanslate/" title="Disk Cleanslate" class="dd-item ">
+        <a href="/docs-csm/en-09/051-disk-cleanslate/">
+        Disk Cleanslate
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/255-firmware-action-service-fas/" title="FIRMWARE ACTION SERVICE (FAS) | User Procedures" class="dd-item ">
+        <a href="/docs-csm/en-09/255-firmware-action-service-fas/">
+        FIRMWARE ACTION SERVICE (FAS) | User Procedures
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/256-firmware-action-service-fas-recipes/" title="Firmware Action Service (FAS) Administration Guide" class="dd-item ">
+        <a href="/docs-csm/en-09/256-firmware-action-service-fas-recipes/">
+        Firmware Action Service (FAS) Administration Guide
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/250-firmware/" title="Firmware Checkout" class="dd-item ">
+        <a href="/docs-csm/en-09/250-firmware/">
+        Firmware Checkout
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/010-firmware-update-with-fas/" title="Firmware Update the system with FAS" class="dd-item ">
+        <a href="/docs-csm/en-09/010-firmware-update-with-fas/">
+        Firmware Update the system with FAS
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/254-ncn-firmware-gb/" title="Gigabyte Firmware Bug" class="dd-item ">
+        <a href="/docs-csm/en-09/254-ncn-firmware-gb/">
+        Gigabyte Firmware Bug
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/304-ncn-pcie-net-boot-and-re-cable/" title="Guide  Netboot an NCN from a Spine" class="dd-item ">
+        <a href="/docs-csm/en-09/304-ncn-pcie-net-boot-and-re-cable/">
+        Guide  Netboot an NCN from a Spine
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/068-harvest-13-config/" title="HARVEST 13 CONFIG" class="dd-item ">
+        <a href="/docs-csm/en-09/068-harvest-13-config/">
+        HARVEST 13 CONFIG
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/307-hmn-connections/" title="HMN Connections File" class="dd-item ">
+        <a href="/docs-csm/en-09/307-hmn-connections/">
+        HMN Connections File
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/418-mgmt-net-ip-helper/" title="IP-Helper configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/418-mgmt-net-ip-helper/">
+        IP-Helper configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/061-livecd-metal-basecamp/" title="LiveCD - Metal Basecamp" class="dd-item ">
+        <a href="/docs-csm/en-09/061-livecd-metal-basecamp/">
+        LiveCD - Metal Basecamp
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/060-livecd-1.3-rollback/" title="LiveCD 1.3 Rollback" class="dd-item ">
+        <a href="/docs-csm/en-09/060-livecd-1.3-rollback/">
+        LiveCD 1.3 Rollback
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/059-livecd-backup/" title="LiveCD Re-Installs" class="dd-item ">
+        <a href="/docs-csm/en-09/059-livecd-backup/">
+        LiveCD Re-Installs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/058-livecd-troubleshooting/" title="LiveCD Recovery" class="dd-item ">
+        <a href="/docs-csm/en-09/058-livecd-troubleshooting/">
+        LiveCD Recovery
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/004-csm-remote-livecd/" title="LiveCD Remote ISO Install" class="dd-item ">
+        <a href="/docs-csm/en-09/004-csm-remote-livecd/">
+        LiveCD Remote ISO Install
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/062-livecd-virtual-iso-boot/" title="LiveCD Virtual ISO Boot" class="dd-item ">
+        <a href="/docs-csm/en-09/062-livecd-virtual-iso-boot/">
+        LiveCD Virtual ISO Boot
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/405-mgmt-net-port-config/" title="Management Network Access Port configurations." class="dd-item ">
+        <a href="/docs-csm/en-09/405-mgmt-net-port-config/">
+        Management Network Access Port configurations.
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/406-mgmt-net-acl-config/" title="Management Network ACL configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/406-mgmt-net-acl-config/">
+        Management Network ACL configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/402-mgmt-net-base-config/" title="Management Network Base Configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/402-mgmt-net-base-config/">
+        Management Network Base Configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/408-mgmt-net-can-config/" title="Management Network CAN setup" class="dd-item ">
+        <a href="/docs-csm/en-09/408-mgmt-net-can-config/">
+        Management Network CAN setup
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/412-mgmt-net-dell-mellanox-upgrades/" title="Management Network Dell And Mellanox Upgrades" class="dd-item ">
+        <a href="/docs-csm/en-09/412-mgmt-net-dell-mellanox-upgrades/">
+        Management Network Dell And Mellanox Upgrades
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/413-mgmt-net-example-config/" title="Management Network Example Config" class="dd-item ">
+        <a href="/docs-csm/en-09/413-mgmt-net-example-config/">
+        Management Network Example Config
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/409-mgmt-net-firmware-update/" title="Management Network Firmware Update" class="dd-item ">
+        <a href="/docs-csm/en-09/409-mgmt-net-firmware-update/">
+        Management Network Firmware Update
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/417-mgmt-net-flow-control/" title="Management Network Flow Control Settings" class="dd-item ">
+        <a href="/docs-csm/en-09/417-mgmt-net-flow-control/">
+        Management Network Flow Control Settings
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/411-mgmt-net-layer3-config/" title="Management Network Layer3 Configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/411-mgmt-net-layer3-config/">
+        Management Network Layer3 Configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/404-mgmt-net-mlag-config/" title="Management Network MLAG Configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/404-mgmt-net-mlag-config/">
+        Management Network MLAG Configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/414-mgmt-net-ntp-config/" title="Management Network NTP configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/414-mgmt-net-ntp-config/">
+        Management Network NTP configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/407-mgmt-net-snmp-config/" title="Management Network SNMP configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/407-mgmt-net-snmp-config/">
+        Management Network SNMP configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/419-mgmt-net-stp/" title="Management Network Spanning-Tree Configuration." class="dd-item ">
+        <a href="/docs-csm/en-09/419-mgmt-net-stp/">
+        Management Network Spanning-Tree Configuration.
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/415-mgmt-net-switch-rename/" title="Management Network Switch Rename" class="dd-item ">
+        <a href="/docs-csm/en-09/415-mgmt-net-switch-rename/">
+        Management Network Switch Rename
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/410-mgmt-net-uplink-config/" title="Management Network Uplink configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/410-mgmt-net-uplink-config/">
+        Management Network Uplink configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/403-mgmt-net-vlan-config/" title="Management Network VLAN Configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/403-mgmt-net-vlan-config/">
+        Management Network VLAN Configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/306-sls-add-uan-alias/" title="Manually add UAN Aliases to SLS" class="dd-item ">
+        <a href="/docs-csm/en-09/306-sls-add-uan-alias/">
+        Manually add UAN Aliases to SLS
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/309-move-site-connections/" title="Move Site Connections" class="dd-item ">
+        <a href="/docs-csm/en-09/309-move-site-connections/">
+        Move Site Connections
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/200-ncn-bios-pref/" title="NCN BIOS Preferences" class="dd-item ">
+        <a href="/docs-csm/en-09/200-ncn-bios-pref/">
+        NCN BIOS Preferences
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/101-ncn-booting/" title="NCN Booting" class="dd-item ">
+        <a href="/docs-csm/en-09/101-ncn-booting/">
+        NCN Booting
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/107-ncn-devel/" title="NCN Development" class="dd-item ">
+        <a href="/docs-csm/en-09/107-ncn-devel/">
+        NCN Development
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/253-ncn-hw-swap/" title="NCN Hardware Swaps" class="dd-item ">
+        <a href="/docs-csm/en-09/253-ncn-hw-swap/">
+        NCN Hardware Swaps
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/110-ncn-image-customization/" title="NCN Image Customization" class="dd-item ">
+        <a href="/docs-csm/en-09/110-ncn-image-customization/">
+        NCN Image Customization
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/303-ncn-metadata-usb-serial/" title="NCN Metadata over USB-Serial Cable" class="dd-item ">
+        <a href="/docs-csm/en-09/303-ncn-metadata-usb-serial/">
+        NCN Metadata over USB-Serial Cable
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/106-ncn-sles/" title="NCN Operating System Release" class="dd-item ">
+        <a href="/docs-csm/en-09/106-ncn-sles/">
+        NCN Operating System Release
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/105-ncn-packages/" title="NCN Packages" class="dd-item ">
+        <a href="/docs-csm/en-09/105-ncn-packages/">
+        NCN Packages
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/104-ncn-partitioning/" title="NCN Partitions" class="dd-item ">
+        <a href="/docs-csm/en-09/104-ncn-partitioning/">
+        NCN Partitions
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/009-ncn-locking/" title="NCN/Management Node Locking" class="dd-item ">
+        <a href="/docs-csm/en-09/009-ncn-locking/">
+        NCN/Management Node Locking
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/251-firmware-network/" title="Network Firmware" class="dd-item ">
+        <a href="/docs-csm/en-09/251-firmware-network/">
+        Network Firmware
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/052-network-stack/" title="Network Stack (Software and Hardware)" class="dd-item ">
+        <a href="/docs-csm/en-09/052-network-stack/">
+        Network Stack (Software and Hardware)
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/103-ncn-networking/" title="Networking" class="dd-item ">
+        <a href="/docs-csm/en-09/103-ncn-networking/">
+        Networking
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/252-firmware-ncn/" title="Node Firmware" class="dd-item ">
+        <a href="/docs-csm/en-09/252-firmware-ncn/">
+        Node Firmware
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/100-ncn-images/" title="Non-Compute Node Images" class="dd-item ">
+        <a href="/docs-csm/en-09/100-ncn-images/">
+        Non-Compute Node Images
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/108-ncn-ntp/" title="NTP On NCNs" class="dd-item ">
+        <a href="/docs-csm/en-09/108-ncn-ntp/">
+        NTP On NCNs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/" title="operations" class="dd-item
+        parent
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/">
+          operations
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/boot_orchestration/" title="boot orchestration" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/boot_orchestration/">
+          boot orchestration
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/boot_orchestration/stage_changes_without_bos/" title="Stage Changes Without BOS" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/boot_orchestration/stage_changes_without_bos/">
+        Stage Changes Without BOS
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/boot_orchestration/upload_node_boot_information_to_boot_script_service_bss/" title="Upload Node Boot Information to Boot Script Service (BSS)" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/boot_orchestration/upload_node_boot_information_to_boot_script_service_bss/">
+        Upload Node Boot Information to Boot Script Service (BSS)
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/configuration_management/" title="configuration management" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/configuration_management/">
+          configuration management
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/configuration_management/configuration_layers/" title="Configuration Layers" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/configuration_management/configuration_layers/">
+        Configuration Layers
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/csm_product_management/" title="CSM product management" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/csm_product_management/">
+          CSM product management
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/csm_product_management/apply_security_hardening/" title="Security Hardening" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/csm_product_management/apply_security_hardening/">
+        Security Hardening
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/csm_product_management/change_passwords_and_credentials/" title="Change Passwords and Credentials" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/csm_product_management/change_passwords_and_credentials/">
+        Change Passwords and Credentials
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/kubernetes/" title="kubernetes" class="dd-item
+        parent
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/kubernetes/">
+          kubernetes
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/kubernetes/cert_renewal_for_kubernetes_and_bare_metal_etcd/" title="Kubernetes and Bare Metal EtcD Certificate Renewal" class="dd-item active">
+        <a href="/docs-csm/en-09/operations/kubernetes/cert_renewal_for_kubernetes_and_bare_metal_etcd/">
+        Kubernetes and Bare Metal EtcD Certificate Renewal
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/network/" title="network" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/network/">
+          network
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/network/metallb_bgp/" title="metallb bgp" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/network/metallb_bgp/">
+          metallb bgp
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/" title="Check BGP Status and Reset Sessions" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/">
+        Check BGP Status and Reset Sessions
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/system_management_health/" title="system management health" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/system_management_health/">
+          system management health
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/system_management_health/troubleshoot_prometheus_alerts/" title="Troubleshoot Prometheus Alerts" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/system_management_health/troubleshoot_prometheus_alerts/">
+        Troubleshoot Prometheus Alerts
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/fas_loader/" title="FAS Loader" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/fas_loader/">
+          FAS Loader
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/fas_loader/fas_loader_fails/" title="TROUBLESHOOTING FAS LOADER FAILS" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/fas_loader/fas_loader_fails/">
+        TROUBLESHOOTING FAS LOADER FAILS
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/hmcollector/" title="hmcollector" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/hmcollector/">
+          hmcollector
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/hmcollector/adjust_hmcollector_resource_limits_requests/" title="Adjust HM Collector resource limits and requests" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/hmcollector/adjust_hmcollector_resource_limits_requests/">
+        Adjust HM Collector resource limits and requests
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/" title="security and authentication" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/security_and_authentication/">
+          security and authentication
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/add_ldap_user_federation/" title="Add LDAP User Federation" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/add_ldap_user_federation/">
+        Add LDAP User Federation
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_air-cooled_node_bmc_credentials/" title="Change Air-Cooled Node BMC Credentials" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_air-cooled_node_bmc_credentials/">
+        Change Air-Cooled Node BMC Credentials
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_credentials_on_servertech_pdus/" title="Change Credentials on ServerTech PDUs" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_credentials_on_servertech_pdus/">
+        Change Credentials on ServerTech PDUs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_ex_cabinet_global_default_password/" title="Change Cray EX Cabinet Global Default Password" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_ex_cabinet_global_default_password/">
+        Change Cray EX Cabinet Global Default Password
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys/" title="Change NCN Image Root Password and SSH Keys" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys/">
+        Change NCN Image Root Password and SSH Keys
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys_on_pit_node/" title="Change NCN Image Root Password and SSH Keys on PIT Node" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys_on_pit_node/">
+        Change NCN Image Root Password and SSH Keys on PIT Node
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_smnp_credentials_on_leaf_switches/" title="Change SMNP Credentials on Leaf Switches" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_smnp_credentials_on_leaf_switches/">
+        Change SMNP Credentials on Leaf Switches
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_the_keycloak_admin_password/" title="Change the Keycloak Admin Password" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_the_keycloak_admin_password/">
+        Change the Keycloak Admin Password
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/provisioning_a_liquid-cooled_ex_cabinet_cec_with_default_credentials/" title="Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/provisioning_a_liquid-cooled_ex_cabinet_cec_with_default_credentials/">
+        Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/restrict_access_to_ncn_images_s3_bucket/" title="Restrict Network Access to the ncn-images S3 Bucket" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/restrict_access_to_ncn_images_s3_bucket/">
+        Restrict Network Access to the ncn-images S3 Bucket
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/update_default_air-cooled_bmc_and_leaf_switch_snmp_credentials/" title="Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/update_default_air-cooled_bmc_and_leaf_switch_snmp_credentials/">
+        Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/update_default_servertech_pdu_credentials_used_by_the_redfish_translation_service/" title="Update Default ServerTech PDU Credentials used by the Redfish Translation Service (RTS)" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/update_default_servertech_pdu_credentials_used_by_the_redfish_translation_service/">
+        Update Default ServerTech PDU Credentials used by the Redfish Translation Service (RTS)
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/update_ncn_passwords/" title="Update NCN Passwords" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/update_ncn_passwords/">
+        Update NCN Passwords
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/updating_the_liquid-cooled_ex_cabinet_default_credentials_after_a_cec_password_change/" title="Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/updating_the_liquid-cooled_ex_cabinet_default_credentials_after_a_cec_password_change/">
+        Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/node_management/" title="node management" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/node_management/">
+          node management
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/node_management/adding_a_liquid-cooled_blade_to_a_system/" title="Adding a Liquid-cooled blade to a System" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/node_management/adding_a_liquid-cooled_blade_to_a_system/">
+        Adding a Liquid-cooled blade to a System
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/" title="Check and Set the metal.no-wipe Setting on NCNs" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/">
+        Check and Set the metal.no-wipe Setting on NCNs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/node_management/enable_kdump/" title="Enable Kdump" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/node_management/enable_kdump/">
+        Enable Kdump
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/node_management/reboot_ncns/" title="Reboot NCNs" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/node_management/reboot_ncns/">
+        Reboot NCNs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/node_management/removing_a_liquid-cooled_blade_from_a_system/" title="Removing a Liquid-cooled blade from a System" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/node_management/removing_a_liquid-cooled_blade_from_a_system/">
+        Removing a Liquid-cooled blade from a System
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/055-certificate-authority/" title="Overview" class="dd-item ">
+        <a href="/docs-csm/en-09/055-certificate-authority/">
+        Overview
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/401-management-network-install/" title="Overview" class="dd-item ">
+        <a href="/docs-csm/en-09/401-management-network-install/">
+        Overview
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/420-mgmt-net-pxe-tshoot/" title="PXE boot Troubleshooting" class="dd-item ">
+        <a href="/docs-csm/en-09/420-mgmt-net-pxe-tshoot/">
+        PXE boot Troubleshooting
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/065-csm-safeguards/" title="Safeguards" class="dd-item ">
+        <a href="/docs-csm/en-09/065-csm-safeguards/">
+        Safeguards
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/300-service-guides/" title="Service Guides" class="dd-item ">
+        <a href="/docs-csm/en-09/300-service-guides/">
+        Service Guides
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/067-shasta-cfg/" title="Setup Site-Init From SHASTA-CFG" class="dd-item ">
+        <a href="/docs-csm/en-09/067-shasta-cfg/">
+        Setup Site-Init From SHASTA-CFG
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/305-switch-metadata/" title="Switch Metadata" class="dd-item ">
+        <a href="/docs-csm/en-09/305-switch-metadata/">
+        Switch Metadata
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/500-uas-uai-admin-and-user-guide/" title="The Shasta User Access Service" class="dd-item ">
+        <a href="/docs-csm/en-09/500-uas-uai-admin-and-user-guide/">
+        The Shasta User Access Service
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/" title="upgrade" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/">
+          upgrade
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/" title="CSM 0.9 Patch Release Upgrade Procedures" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/">
+          CSM 0.9 Patch Release Upgrade Procedures
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.6/" title="CSM 0.9.6 Patch Installation Instructions" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.6/">
+          CSM 0.9.6 Patch Installation Instructions
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.4/" title="CSM 0.9.4 Patch Upgrade Guide" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.4/">
+          CSM 0.9.4 Patch Upgrade Guide
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/" title="CVE-2021-22555 CVE-2021-33909" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/">
+          CVE-2021-22555 CVE-2021-33909
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/" title="operations" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/">
+          operations
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/" title="network" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/">
+          network
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/metallb_bgp/" title="metallb bgp" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/metallb_bgp/">
+          metallb bgp
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/" title="Check BGP Status and Reset Sessions" class="dd-item ">
+        <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/">
+        Check BGP Status and Reset Sessions
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/" title="node management" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/">
+          node management
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/" title="Check and Set the metal.no-wipe Setting on NCNs" class="dd-item ">
+        <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/">
+        Check and Set the metal.no-wipe Setting on NCNs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/reboot_ncns/" title="Reboot NCNs" class="dd-item ">
+        <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/reboot_ncns/">
+        Reboot NCNs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.2/" title="CSM 0.9.2 Patch Upgrade Guide" class="dd-item ">
+        <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.2/">
+        CSM 0.9.2 Patch Upgrade Guide
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.3/" title="CSM 0.9.3 Patch Upgrade Guide" class="dd-item ">
+        <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.3/">
+        CSM 0.9.3 Patch Upgrade Guide
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/069-upgrade-workarounds-rpm/" title="Upgrade CSM Install Workarounds RPM" class="dd-item ">
+        <a href="/docs-csm/en-09/069-upgrade-workarounds-rpm/">
+        Upgrade CSM Install Workarounds RPM
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/070-usp-install-workarounds/" title="Utility Storage Installation Troubleshooting" class="dd-item ">
+        <a href="/docs-csm/en-09/070-usp-install-workarounds/">
+        Utility Storage Installation Troubleshooting
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/400-switch-bgp-neighbors/" title="Verify and Update BGP neighbors" class="dd-item ">
+        <a href="/docs-csm/en-09/400-switch-bgp-neighbors/">
+        Verify and Update BGP neighbors
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+    </ul>
+
+    
+    
+
+    
+    <section id="footer">
+      
+    </section>
+  </div>
+</nav>
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/docs-csm/en-09/'>CRAY System Management - Guides and References</a> > <a href='/docs-csm/en-09/operations/'>operations</a> > <a href='/docs-csm/en-09/operations/kubernetes/'>kubernetes</a> > Kubernetes and Bare Metal EtcD Certificate Renewal
+          
+        
+          
+        
+          
+        
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#scope">Scope</a></li>
+    <li><a href="#file-locations">File Locations</a></li>
+    <li><a href="#check-certificates">Check Certificates</a></li>
+    <li><a href="#backup-existing-certificates">Backup Existing Certificates</a></li>
+    <li><a href="#renew-all-certificates">Renew All Certificates</a>
+      <ul>
+        <li><a href="#on-each-master-node">On each master node</a></li>
+        <li><a href="#on-master-and-worker-nodes">On master and worker nodes</a></li>
+        <li><a href="#regenerating-kubelet-pem-certificates">Regenerating kubelet .pem certificates</a></li>
+      </ul>
+    </li>
+    <li><a href="#renew-etcd-certificate">Renew Etcd Certificate</a></li>
+    <li><a href="#update-client-secrets">Update Client Secrets</a></li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+            </h1>
+          
+
+        
+
+
+<h1 id="kubernetes-and-bare-metal-etcd-certificate-renewal">Kubernetes and Bare Metal EtcD Certificate Renewal</h1>
+<h2 id="scope">Scope</h2>
+<p>As part of the installation, Kubernetes generates certificates for the required subcomponents. This document will help walk through the process of renewing the certificates.</p>
+<p><strong><code>IMPORTANT:</code></strong> Depending on the version of Kubernetes, the command may or may not reside under the alpha category. Use <code>kubectl certs --help</code> and <code>kubectl alpha certs --help</code> to determine this. The overall command syntax should be the same and this is just whether or not the command structure will require <code>alpha</code> in it.</p>
+<p><strong><code>IMPORTANT:</code></strong> When you pick your master node to renew the certificatess on, that is the node that will be referenced in this document as <code>ncn-m</code>.</p>
+<p><strong><code>IMPORTANT:</code></strong> This document is based off a base hardware configuration of 3 masters and 3 workers (We are leaving off utility storage since they are not running Kubernetes). Please make sure to update any commands that run on multiple nodes accordingly.</p>
+<p>Procedures for Certificate Renewal:</p>
+<ul>
+<li><a href="/docs-csm/en-09/#file-locations">File Locations</a></li>
+<li><a href="/docs-csm/en-09/#check-certificates">Check Certificates</a></li>
+<li><a href="/docs-csm/en-09/#backup-existing-certificates">Backup Existing Certificates</a></li>
+<li><a href="/docs-csm/en-09/#renew-all-certificates">Renew All Certificates</a></li>
+<li><a href="/docs-csm/en-09/#renew-etcd-certificate">Renew Etcd Certificate</a></li>
+<li><a href="/docs-csm/en-09/#update-client-secrets">Update Client Secrets</a></li>
+</ul>
+<h2 id="file-locations">File Locations</h2>
+<p><strong><code>IMPORTANT:</code></strong> Master nodes will have certificates for both Kubernetes services and the Kubernetes client. Workers will only have the certificates for the Kubernetes client.</p>
+<p>Services (master nodes):</p>
+<pre tabindex="0"><code>/etc/kubernetes/pki/apiserver.crt
+/etc/kubernetes/pki/apiserver-etcd-client.crt
+/etc/kubernetes/pki/apiserver-etcd-client.key
+/etc/kubernetes/pki/apiserver.key
+/etc/kubernetes/pki/apiserver-kubelet-client.crt
+/etc/kubernetes/pki/apiserver-kubelet-client.key
+/etc/kubernetes/pki/ca.crt
+/etc/kubernetes/pki/ca.key
+/etc/kubernetes/pki/front-proxy-ca.crt
+/etc/kubernetes/pki/front-proxy-ca.key
+/etc/kubernetes/pki/front-proxy-client.crt
+/etc/kubernetes/pki/front-proxy-client.key
+/etc/kubernetes/pki/sa.key
+/etc/kubernetes/pki/sa.pub
+/etc/kubernetes/pki/etcd/ca.crt
+/etc/kubernetes/pki/etcd/ca.key
+/etc/kubernetes/pki/etcd/healthcheck-client.crt
+/etc/kubernetes/pki/etcd/healthcheck-client.key
+/etc/kubernetes/pki/etcd/peer.crt
+/etc/kubernetes/pki/etcd/peer.key
+/etc/kubernetes/pki/etcd/server.crt
+/etc/kubernetes/pki/etcd/server.key
+</code></pre><p>Client (master and worker nodes):</p>
+<pre tabindex="0"><code>/var/lib/kubelet/pki/kubelet-client-2021-09-07-17-06-36.pem
+/var/lib/kubelet/pki/kubelet-client-current.pem
+/var/lib/kubelet/pki/kubelet.crt
+/var/lib/kubelet/pki/kubelet.key
+</code></pre><h2 id="check-certificates">Check Certificates</h2>
+<p>Check the expiration of the certificates.</p>
+<ol>
+<li>
+<p>Log into a master node and run the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m# kubeadm alpha certs check-expiration --config /etc/kubernetes/kubeadmcfg.yaml
+</span></span><span style="display:flex;"><span>WARNING: kubeadm cannot validate component configs <span style="color:#66d9ef">for</span> API groups <span style="color:#f92672">[</span>kubelet.config.k8s.io kubeproxy.config.k8s.io<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>CERTIFICATE                EXPIRES                  RESIDUAL TIME   CERTIFICATE AUTHORITY   EXTERNALLY MANAGED
+</span></span><span style="display:flex;"><span>admin.conf                 Sep 24, <span style="color:#ae81ff">2021</span> 15:21 UTC   14d                                     no
+</span></span><span style="display:flex;"><span>apiserver                  Sep 24, <span style="color:#ae81ff">2021</span> 15:21 UTC   14d             ca                      no
+</span></span><span style="display:flex;"><span>apiserver-etcd-client      Sep 24, <span style="color:#ae81ff">2021</span> 15:20 UTC   14d             ca                      no
+</span></span><span style="display:flex;"><span>apiserver-kubelet-client   Sep 24, <span style="color:#ae81ff">2021</span> 15:21 UTC   14d             ca                      no
+</span></span><span style="display:flex;"><span>controller-manager.conf    Sep 24, <span style="color:#ae81ff">2021</span> 15:21 UTC   14d                                     no
+</span></span><span style="display:flex;"><span>etcd-healthcheck-client    Sep 24, <span style="color:#ae81ff">2021</span> 15:19 UTC   14d             etcd-ca                 no
+</span></span><span style="display:flex;"><span>etcd-peer                  Sep 24, <span style="color:#ae81ff">2021</span> 15:19 UTC   14d             etcd-ca                 no
+</span></span><span style="display:flex;"><span>etcd-server                Sep 24, <span style="color:#ae81ff">2021</span> 15:19 UTC   14d             etcd-ca                 no
+</span></span><span style="display:flex;"><span>front-proxy-client         Sep 24, <span style="color:#ae81ff">2021</span> 15:21 UTC   14d             front-proxy-ca          no
+</span></span><span style="display:flex;"><span>scheduler.conf             Sep 24, <span style="color:#ae81ff">2021</span> 15:21 UTC   14d                                     no
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>CERTIFICATE AUTHORITY   EXPIRES                  RESIDUAL TIME   EXTERNALLY MANAGED
+</span></span><span style="display:flex;"><span>ca                      Sep 02, <span style="color:#ae81ff">2030</span> 15:21 UTC   8y              no
+</span></span><span style="display:flex;"><span>etcd-ca                 Sep 02, <span style="color:#ae81ff">2030</span> 15:19 UTC   8y              no
+</span></span><span style="display:flex;"><span>front-proxy-ca          Sep 02, <span style="color:#ae81ff">2030</span> 15:21 UTC   8y              no
+</span></span></code></pre></div></li>
+</ol>
+<h2 id="backup-existing-certificates">Backup Existing Certificates</h2>
+<ol>
+<li>
+<p>Backup existing certificates.</p>
+<p>Master Nodes:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m# pdsh -w ncn-m00<span style="color:#f92672">[</span>1-3<span style="color:#f92672">]</span> tar cvf /root/cert_backup.tar /etc/kubernetes/pki/ /var/lib/kubelet/pki/
+</span></span><span style="display:flex;"><span>ncn-m001: tar: Removing leading / from member names
+</span></span><span style="display:flex;"><span>ncn-m001: /etc/kubernetes/pki/
+</span></span><span style="display:flex;"><span>ncn-m001: /etc/kubernetes/pki/front-proxy-client.key
+</span></span><span style="display:flex;"><span>ncn-m001: tar: Removing leading / from hard link targets
+</span></span><span style="display:flex;"><span>ncn-m001: /etc/kubernetes/pki/apiserver-etcd-client.key
+</span></span><span style="display:flex;"><span>ncn-m001: /etc/kubernetes/pki/sa.key
+</span></span><span style="display:flex;"><span>.
+</span></span><span style="display:flex;"><span>.
+</span></span><span style="display:flex;"><span>..  shortened output
+</span></span></code></pre></div><p>Worker Nodes:</p>
+<p><strong><code>IMPORTANT:</code></strong> The range of nodes below should reflect the size of the environment. This should run on every worker node.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m# pdsh -w ncn-w00<span style="color:#f92672">[</span>1-3<span style="color:#f92672">]</span> tar cvf /root/cert_backup.tar /var/lib/kubelet/pki/
+</span></span><span style="display:flex;"><span>ncn-w003: tar: Removing leading / from member names
+</span></span><span style="display:flex;"><span>ncn-w003: /var/lib/kubelet/pki/
+</span></span><span style="display:flex;"><span>ncn-w003: /var/lib/kubelet/pki/kubelet.key
+</span></span><span style="display:flex;"><span>ncn-w003: /var/lib/kubelet/pki/kubelet-client-2021-09-07-17-06-36.pem
+</span></span><span style="display:flex;"><span>ncn-w003: /var/lib/kubelet/pki/kubelet.crt
+</span></span><span style="display:flex;"><span>.
+</span></span><span style="display:flex;"><span>.
+</span></span><span style="display:flex;"><span>..  shortened output
+</span></span></code></pre></div></li>
+</ol>
+<h2 id="renew-all-certificates">Renew All Certificates</h2>
+<h3 id="on-each-master-node">On each master node</h3>
+<ol>
+<li>
+<p>Renew the Certificates.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m# kubeadm alpha certs renew all --config /etc/kubernetes/kubeadmcfg.yaml
+</span></span><span style="display:flex;"><span>WARNING: kubeadm cannot validate component configs <span style="color:#66d9ef">for</span> API groups <span style="color:#f92672">[</span>kubelet.config.k8s.io kubeproxy.config.k8s.io<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>certificate embedded in the kubeconfig file <span style="color:#66d9ef">for</span> the admin to use and <span style="color:#66d9ef">for</span> kubeadm itself renewed
+</span></span><span style="display:flex;"><span>certificate <span style="color:#66d9ef">for</span> serving the Kubernetes API renewed
+</span></span><span style="display:flex;"><span>certificate the apiserver uses to access etcd renewed
+</span></span><span style="display:flex;"><span>certificate <span style="color:#66d9ef">for</span> the API server to connect to kubelet renewed
+</span></span><span style="display:flex;"><span>certificate embedded in the kubeconfig file <span style="color:#66d9ef">for</span> the controller manager to use renewed
+</span></span><span style="display:flex;"><span>certificate <span style="color:#66d9ef">for</span> liveness probes to healthcheck etcd renewed
+</span></span><span style="display:flex;"><span>certificate <span style="color:#66d9ef">for</span> etcd nodes to communicate with each other renewed
+</span></span><span style="display:flex;"><span>certificate <span style="color:#66d9ef">for</span> serving etcd renewed
+</span></span><span style="display:flex;"><span>certificate <span style="color:#66d9ef">for</span> the front proxy client renewed
+</span></span><span style="display:flex;"><span>certificate embedded in the kubeconfig file <span style="color:#66d9ef">for</span> the scheduler manager to use renewed
+</span></span></code></pre></div></li>
+<li>
+<p>Check the new expiration.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m# kubeadm alpha certs check-expiration --config /etc/kubernetes/kubeadmcfg.yaml
+</span></span><span style="display:flex;"><span>WARNING: kubeadm cannot validate component configs <span style="color:#66d9ef">for</span> API groups <span style="color:#f92672">[</span>kubelet.config.k8s.io kubeproxy.config.k8s.io<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>CERTIFICATE                EXPIRES                  RESIDUAL TIME   CERTIFICATE AUTHORITY   EXTERNALLY MANAGED
+</span></span><span style="display:flex;"><span>admin.conf                 Sep 22, <span style="color:#ae81ff">2022</span> 17:13 UTC   364d                                    no
+</span></span><span style="display:flex;"><span>apiserver                  Sep 22, <span style="color:#ae81ff">2022</span> 17:13 UTC   364d            ca                      no
+</span></span><span style="display:flex;"><span>apiserver-etcd-client      Sep 22, <span style="color:#ae81ff">2022</span> 17:13 UTC   364d            etcd-ca                 no
+</span></span><span style="display:flex;"><span>apiserver-kubelet-client   Sep 22, <span style="color:#ae81ff">2022</span> 17:13 UTC   364d            ca                      no
+</span></span><span style="display:flex;"><span>controller-manager.conf    Sep 22, <span style="color:#ae81ff">2022</span> 17:13 UTC   364d                                    no
+</span></span><span style="display:flex;"><span>etcd-healthcheck-client    Sep 22, <span style="color:#ae81ff">2022</span> 17:13 UTC   364d            etcd-ca                 no
+</span></span><span style="display:flex;"><span>etcd-peer                  Sep 22, <span style="color:#ae81ff">2022</span> 17:13 UTC   364d            etcd-ca                 no
+</span></span><span style="display:flex;"><span>etcd-server                Sep 22, <span style="color:#ae81ff">2022</span> 17:13 UTC   364d            etcd-ca                 no
+</span></span><span style="display:flex;"><span>front-proxy-client         Sep 22, <span style="color:#ae81ff">2022</span> 17:13 UTC   364d            front-proxy-ca          no
+</span></span><span style="display:flex;"><span>scheduler.conf             Sep 22, <span style="color:#ae81ff">2022</span> 17:13 UTC   364d                                    no
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>CERTIFICATE AUTHORITY   EXPIRES                  RESIDUAL TIME   EXTERNALLY MANAGED
+</span></span><span style="display:flex;"><span>ca                      Sep 02, <span style="color:#ae81ff">2030</span> 15:21 UTC   8y              no
+</span></span><span style="display:flex;"><span>etcd-ca                 Sep 02, <span style="color:#ae81ff">2030</span> 15:19 UTC   8y              no
+</span></span><span style="display:flex;"><span>front-proxy-ca          Sep 02, <span style="color:#ae81ff">2030</span> 15:21 UTC   8y              no
+</span></span></code></pre></div></li>
+<li>
+<p>This command may have only updated some certificates.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m# ncn-m001:~ <span style="color:#75715e"># ls -l /etc/kubernetes/pki</span>
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">1249</span> Sep <span style="color:#ae81ff">22</span> 17:13 apiserver.crt
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">1090</span> Sep <span style="color:#ae81ff">22</span> 17:13 apiserver-etcd-client.crt
+</span></span><span style="display:flex;"><span>-rw------- <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">1675</span> Sep <span style="color:#ae81ff">22</span> 17:13 apiserver-etcd-client.key
+</span></span><span style="display:flex;"><span>-rw------- <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">1679</span> Sep <span style="color:#ae81ff">22</span> 17:13 apiserver.key
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">1099</span> Sep <span style="color:#ae81ff">22</span> 17:13 apiserver-kubelet-client.crt
+</span></span><span style="display:flex;"><span>-rw------- <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">1679</span> Sep <span style="color:#ae81ff">22</span> 17:13 apiserver-kubelet-client.key
+</span></span><span style="display:flex;"><span>-rw------- <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">1025</span> Sep <span style="color:#ae81ff">21</span> 20:50 ca.crt
+</span></span><span style="display:flex;"><span>-rw------- <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">1679</span> Sep <span style="color:#ae81ff">21</span> 20:50 ca.key
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">2</span> root root  <span style="color:#ae81ff">162</span> Sep <span style="color:#ae81ff">21</span> 20:50 etcd
+</span></span><span style="display:flex;"><span>-rw------- <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">1038</span> Sep <span style="color:#ae81ff">21</span> 20:50 front-proxy-ca.crt
+</span></span><span style="display:flex;"><span>-rw------- <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">1679</span> Sep <span style="color:#ae81ff">21</span> 20:50 front-proxy-ca.key
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">1058</span> Sep <span style="color:#ae81ff">22</span> 17:13 front-proxy-client.crt
+</span></span><span style="display:flex;"><span>-rw------- <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">1675</span> Sep <span style="color:#ae81ff">22</span> 17:13 front-proxy-client.key
+</span></span><span style="display:flex;"><span>-rw------- <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">1675</span> Sep <span style="color:#ae81ff">21</span> 20:50 sa.key
+</span></span><span style="display:flex;"><span>-rw------- <span style="color:#ae81ff">1</span> root root  <span style="color:#ae81ff">451</span> Sep <span style="color:#ae81ff">21</span> 20:50 sa.pub
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ncn-m# ls -l /etc/kubernetes/pki/etcd
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">1017</span> Sep <span style="color:#ae81ff">21</span> 20:50 ca.crt
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">1675</span> Sep <span style="color:#ae81ff">21</span> 20:50 ca.key
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">1094</span> Sep <span style="color:#ae81ff">22</span> 17:13 healthcheck-client.crt
+</span></span><span style="display:flex;"><span>-rw------- <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">1679</span> Sep <span style="color:#ae81ff">22</span> 17:13 healthcheck-client.key
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">1139</span> Sep <span style="color:#ae81ff">22</span> 17:13 peer.crt
+</span></span><span style="display:flex;"><span>-rw------- <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">1679</span> Sep <span style="color:#ae81ff">22</span> 17:13 peer.key
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">1139</span> Sep <span style="color:#ae81ff">22</span> 17:13 server.crt
+</span></span><span style="display:flex;"><span>-rw------- <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">1675</span> Sep <span style="color:#ae81ff">22</span> 17:13 server.key
+</span></span></code></pre></div><p>As we can see not all the certificate files were updated.</p>
+<p><code>IMPORTANT:</code> Some certificates were not updated because they have a distant expiration time and did not need to be updated. <em><strong>This is expected.</strong></em></p>
+<p>Certificates most likely to not be updated due to a distant expiration:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>CERTIFICATE AUTHORITY   EXPIRES                  RESIDUAL TIME   EXTERNALLY MANAGED
+</span></span><span style="display:flex;"><span>ca                      Sep 02, <span style="color:#ae81ff">2030</span> 15:21 UTC   8y              no
+</span></span><span style="display:flex;"><span>etcd-ca                 Sep 02, <span style="color:#ae81ff">2030</span> 15:19 UTC   8y              no
+</span></span><span style="display:flex;"><span>front-proxy-ca          Sep 02, <span style="color:#ae81ff">2030</span> 15:21 UTC   8y              no
+</span></span></code></pre></div><p>This means we can ignore the fact that our <code>ca.crt/key, front-proxy-ca.crt/key, and etcd ca.crt/key were not updated.</code></p>
+</li>
+<li>
+<p>Check the expiration of the certificates files that do not have a current date and are of the <code>.crt</code> or <code>.pem</code> format. See <a href="/docs-csm/en-09/#file-locations">File Locations</a> for the list of files.</p>
+<p><em><strong>This task is for each master node and below example checks each certificate in <a href="/docs-csm/en-09/#file-locations">File Locations</a>.</strong></em></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i in <span style="color:#66d9ef">$(</span>ls /etc/kubernetes/pki/*.crt;ls /etc/kubernetes/pki/etcd/*.crt;ls /var/lib/kubelet/pki/*.crt;ls /var/lib/kubelet/pki/*.pem<span style="color:#66d9ef">)</span>;<span style="color:#66d9ef">do</span> echo <span style="color:#e6db74">${</span>i<span style="color:#e6db74">}</span>; openssl x509 -enddate -noout -in <span style="color:#e6db74">${</span>i<span style="color:#e6db74">}</span>;<span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/etc/kubernetes/pki/apiserver.crt
+</span></span><span style="display:flex;"><span>notAfter<span style="color:#f92672">=</span>Sep <span style="color:#ae81ff">22</span> 17:13:28 <span style="color:#ae81ff">2022</span> GMT
+</span></span><span style="display:flex;"><span>/etc/kubernetes/pki/apiserver-etcd-client.crt
+</span></span><span style="display:flex;"><span>notAfter<span style="color:#f92672">=</span>Sep <span style="color:#ae81ff">22</span> 17:13:28 <span style="color:#ae81ff">2022</span> GMT
+</span></span><span style="display:flex;"><span>/etc/kubernetes/pki/apiserver-kubelet-client.crt
+</span></span><span style="display:flex;"><span>notAfter<span style="color:#f92672">=</span>Sep <span style="color:#ae81ff">22</span> 17:13:28 <span style="color:#ae81ff">2022</span> GMT
+</span></span><span style="display:flex;"><span>/etc/kubernetes/pki/ca.crt
+</span></span><span style="display:flex;"><span>notAfter<span style="color:#f92672">=</span>Sep  <span style="color:#ae81ff">4</span> 09:31:10 <span style="color:#ae81ff">2031</span> GMT
+</span></span><span style="display:flex;"><span>/etc/kubernetes/pki/front-proxy-ca.crt
+</span></span><span style="display:flex;"><span>notAfter<span style="color:#f92672">=</span>Sep  <span style="color:#ae81ff">4</span> 09:31:11 <span style="color:#ae81ff">2031</span> GMT
+</span></span><span style="display:flex;"><span>/etc/kubernetes/pki/front-proxy-client.crt
+</span></span><span style="display:flex;"><span>notAfter<span style="color:#f92672">=</span>Sep <span style="color:#ae81ff">22</span> 17:13:29 <span style="color:#ae81ff">2022</span> GMT
+</span></span><span style="display:flex;"><span>/etc/kubernetes/pki/etcd/ca.crt
+</span></span><span style="display:flex;"><span>notAfter<span style="color:#f92672">=</span>Sep  <span style="color:#ae81ff">4</span> 09:30:28 <span style="color:#ae81ff">2031</span> GMT
+</span></span><span style="display:flex;"><span>/etc/kubernetes/pki/etcd/healthcheck-client.crt
+</span></span><span style="display:flex;"><span>notAfter<span style="color:#f92672">=</span>Sep <span style="color:#ae81ff">22</span> 17:13:29 <span style="color:#ae81ff">2022</span> GMT
+</span></span><span style="display:flex;"><span>/etc/kubernetes/pki/etcd/peer.crt
+</span></span><span style="display:flex;"><span>notAfter<span style="color:#f92672">=</span>Sep <span style="color:#ae81ff">22</span> 17:13:29 <span style="color:#ae81ff">2022</span> GMT
+</span></span><span style="display:flex;"><span>/etc/kubernetes/pki/etcd/server.crt
+</span></span><span style="display:flex;"><span>notAfter<span style="color:#f92672">=</span>Sep <span style="color:#ae81ff">22</span> 17:13:29 <span style="color:#ae81ff">2022</span> GMT
+</span></span><span style="display:flex;"><span>/var/lib/kubelet/pki/kubelet.crt
+</span></span><span style="display:flex;"><span>notAfter<span style="color:#f92672">=</span>Sep <span style="color:#ae81ff">21</span> 19:50:16 <span style="color:#ae81ff">2022</span> GMT
+</span></span><span style="display:flex;"><span>/var/lib/kubelet/pki/kubelet-client-2021-09-07-17-06-36.pem
+</span></span><span style="display:flex;"><span>notAfter<span style="color:#f92672">=</span>Sep  <span style="color:#ae81ff">4</span> 17:01:38 <span style="color:#ae81ff">2022</span> GMT
+</span></span><span style="display:flex;"><span>/var/lib/kubelet/pki/kubelet-client-current.pem
+</span></span><span style="display:flex;"><span>notAfter<span style="color:#f92672">=</span>Sep  <span style="color:#ae81ff">4</span> 17:01:38 <span style="color:#ae81ff">2022</span> GMT
+</span></span></code></pre></div><p><strong><code>IMPORTANT:</code></strong> DO NOT forget to verify certificates in /etc/kubernetes/pki/etcd.</p>
+<ul>
+<li>As noted in our above output all certificates including those for etcd were updated. Please note <code>apiserver-etcd-client.crt</code> is critical as it is the cert that allows the Kubernetes API server to talk to the bare-metal etcd cluster.
+Also the <code>/var/lib/kubelet/pki/</code> certificates will be updated in the Kubernetes client section that follows.</li>
+</ul>
+</li>
+<li>
+<p>Restart etcd.</p>
+<p>Once the steps to renew the needed certs have been completed on all the master nodes, then log into each master node one at a time and do:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m# systemctl restart etcd.service
+</span></span></code></pre></div></li>
+</ol>
+<h3 id="on-master-and-worker-nodes">On master and worker nodes</h3>
+<ol>
+<li>
+<p>Restart kubelet.</p>
+<p>On each Kubernetes node do:</p>
+<p><strong><code>IMPORTANT:</code></strong> The below example will need to be adjusted to reflect the correct amount of master and worker nodes in your environment.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m# pdsh -w ncn-m00<span style="color:#f92672">[</span>1-3<span style="color:#f92672">]</span> -w ncn-w00<span style="color:#f92672">[</span>1-3<span style="color:#f92672">]</span> systemctl restart kubelet.service
+</span></span></code></pre></div></li>
+<li>
+<p>Fix kubectl command access.</p>
+<p><code>NOTE:</code> Only if your certificates have expired will the following command respond with Unauthorized. In any case, the new client certificates will need to be distributed in the following steps.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m# kubectl get nodes
+</span></span><span style="display:flex;"><span>error: You must be logged in to the server <span style="color:#f92672">(</span>Unauthorized<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>ncn-m# cp /etc/kubernetes/admin.conf /root/.kube/config
+</span></span><span style="display:flex;"><span>ncn-m#  <span style="color:#75715e"># kubectl get nodes</span>
+</span></span><span style="display:flex;"><span>NAME       STATUS   ROLES    AGE    VERSION
+</span></span><span style="display:flex;"><span>ncn-m001   Ready    master   370d   v1.18.6
+</span></span><span style="display:flex;"><span>ncn-m002   Ready    master   370d   v1.18.6
+</span></span><span style="display:flex;"><span>ncn-m003   Ready    master   370d   v1.18.6
+</span></span><span style="display:flex;"><span>ncn-w001   Ready    &lt;none&gt;   370d   v1.18.6
+</span></span><span style="display:flex;"><span>ncn-w002   Ready    &lt;none&gt;   370d   v1.18.6
+</span></span><span style="display:flex;"><span>ncn-w003   Ready    &lt;none&gt;   370d   v1.18.6
+</span></span></code></pre></div></li>
+<li>
+<p>Distribute the client certificate to the rest of the cluster.</p>
+<p><code>NOTE:</code> You may have errors copying files. The target may or may not exist depending on the version of Shasta.</p>
+<ul>
+<li>You <code>DO NOT</code> need to copy this to the master node where you are performing this work.</li>
+<li>Shasta v1.3 and earlier copy /root/.kube/config to all master nodes and ncn-w001.</li>
+<li>Shasta v1.4 and later copy <code>/etc/kubernetes/admin.conf</code> to all master and worker nodes.</li>
+</ul>
+<p>If you attempt to copy to workers nodes other than <code>ncn-w001</code> in a Shasta v1.3 or earlier system you will see this error <code>pdcp@ncn-m001: ncn-w003: fatal: /root/.kube/: Is a directory</code> and this is expected and can be ignored.</p>
+<p>Client access:</p>
+<p><strong><code>NOTE:</code></strong> Please update the below command with the appropriate amount of worker nodes.</p>
+<p>For Shasta v1.4 and later :</p>
+<pre tabindex="0"><code>ncn-m# pdcp -w ncn-m00[2-3] -w ncn-w00[1-3] /etc/kubernetes/admin.conf /etc/kubernetes/
+</code></pre><p>For Shasta v1.3 and earlier :</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m# pdcp -w ncn-m00<span style="color:#f92672">[</span>2-3<span style="color:#f92672">]</span> -w ncn-w001 /root/.kube/config /root/.kube/
+</span></span></code></pre></div></li>
+</ol>
+<h3 id="regenerating-kubelet-pem-certificates">Regenerating kubelet .pem certificates</h3>
+<ol>
+<li>
+<p>Backup certificates for <code>kubelet</code> on each master and worker node:</p>
+<p><strong><code>IMPORTANT:</code></strong> The below example will need to be adjusted to reflect the correct amount of master and worker nodes in your environment.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m# pdsh -w ncn-m00<span style="color:#f92672">[</span>1-3<span style="color:#f92672">]</span> -w ncn-w00<span style="color:#f92672">[</span>1-3<span style="color:#f92672">]</span> tar cvf /root/kubelet_certs.tar /etc/kubernetes/kubelet.conf /var/lib/kubelet/pki/
+</span></span></code></pre></div></li>
+<li>
+<p>On the master node where you updated the other certificates do:</p>
+<p>Get your current <code>apiserver-advertise-address</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn# kubectl config view|grep server
+</span></span><span style="display:flex;"><span> server: https://10.252.120.2:6442
+</span></span></code></pre></div><p>Using the IP address from the above output do:</p>
+<ul>
+<li>The <code>apiserver-advertise-address</code> may vary, so make sure you are not copy and pasting without verifying.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m# <span style="color:#66d9ef">for</span> node in <span style="color:#66d9ef">$(</span>kubectl get nodes -o json|jq -r <span style="color:#e6db74">&#39;.items[].metadata.name&#39;</span><span style="color:#66d9ef">)</span>; <span style="color:#66d9ef">do</span> kubeadm alpha kubeconfig user --org system:nodes --client-name system:node:$node --apiserver-advertise-address 10.252.120.2 --apiserver-bind-port <span style="color:#ae81ff">6442</span> &gt; /root/$node.kubelet.conf; <span style="color:#66d9ef">done</span>
+</span></span></code></pre></div><p>This will generate a new <code>kubelet.conf</code> file in the <code>/root/</code> directory. There should be a new file per node running Kubernetes.</p>
+</li>
+<li>
+<p>Copy each file to the corresponding node shown in the filename.</p>
+<p><strong><code>NOTE:</code></strong> Please update the below command with the appropriate amount of master and worker nodes.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m# <span style="color:#66d9ef">for</span> node in ncn-m00<span style="color:#f92672">{</span>1..3<span style="color:#f92672">}</span> ncn-w00<span style="color:#f92672">{</span>1..3<span style="color:#f92672">}</span>; <span style="color:#66d9ef">do</span> scp /root/$node.kubelet.conf $node:/etc/kubernetes/; <span style="color:#66d9ef">done</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Log into each node one at a time and do the following.</p>
+<ol>
+<li>systemctl stop kubelet.service</li>
+<li>rm /etc/kubernetes/kubelet.conf</li>
+<li>rm /var/lib/kubelet/pki/*</li>
+<li>cp /etc/kubernetes/<code>&lt;node&gt;</code>.kubelet.conf /etc/kubernetes/kubelet.conf</li>
+<li>systemctl start kubelet.service</li>
+<li>kubeadm init phase kubelet-finalize all &ndash;cert-dir /var/lib/kubelet/pki/</li>
+</ol>
+</li>
+<li>
+<p>Check the expiration of the kubectl certificates files. See <a href="/docs-csm/en-09/#file-locations">File Locations</a> for the list of files.</p>
+<p><em><strong>This task is for each master and worker node. The example checks each kubelet certificate in <a href="/docs-csm/en-09/#file-locations">File Locations</a>.</strong></em></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i in <span style="color:#66d9ef">$(</span>ls /var/lib/kubelet/pki/*.crt;ls /var/lib/kubelet/pki/*.pem<span style="color:#66d9ef">)</span>;<span style="color:#66d9ef">do</span> echo <span style="color:#e6db74">${</span>i<span style="color:#e6db74">}</span>; openssl x509 -enddate -noout -in <span style="color:#e6db74">${</span>i<span style="color:#e6db74">}</span>;<span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/var/lib/kubelet/pki/kubelet.crt
+</span></span><span style="display:flex;"><span>notAfter<span style="color:#f92672">=</span>Sep <span style="color:#ae81ff">22</span> 17:37:30 <span style="color:#ae81ff">2022</span> GMT
+</span></span><span style="display:flex;"><span>/var/lib/kubelet/pki/kubelet-client-2021-09-22-18-37-30.pem
+</span></span><span style="display:flex;"><span>notAfter<span style="color:#f92672">=</span>Sep <span style="color:#ae81ff">22</span> 18:32:30 <span style="color:#ae81ff">2022</span> GMT
+</span></span><span style="display:flex;"><span>/var/lib/kubelet/pki/kubelet-client-current.pem
+</span></span><span style="display:flex;"><span>notAfter<span style="color:#f92672">=</span>Sep <span style="color:#ae81ff">22</span> 18:32:30 <span style="color:#ae81ff">2022</span> GMT
+</span></span></code></pre></div></li>
+<li>
+<p>Perform a rolling reboot of master nodes.</p>
+<p>For Shasta v1.4 and later :</p>
+<ol>
+<li>Follow the <a href="/docs-csm/en-09/operations/node_management/reboot_ncns/">Reboot_NCNs</a> process.</li>
+</ol>
+<p>For Shasta v1.3 and earlier :</p>
+<ol>
+<li>
+<p>Follow the <a href="https://github.com/Cray-HPE/docs-csm/blob/release/0.9/operations/node_management/Reboot_NCNs.md">Reboot_NCNs</a> process.</p>
+<p><strong>NOTES:</strong></p>
+<ul>
+<li>ncn-w001 is the externally connected node. On Shasta v1.4 and later, ncn-m001 is the externally connected node.</li>
+<li>The ncnGetXnames.sh script is not available; The xname can be found in the file <code>/etc/cray/xname</code> on the specific node.</li>
+</ul>
+</li>
+</ol>
+<p><strong>IMPORTANT:</strong> Please ensure you are verifying pods are running on the master node that was rebooted before proceeding to the next node.</p>
+</li>
+<li>
+<p>Perform a rolling reboot of worker nodes.</p>
+<p>For Shasta v1.4 and later :</p>
+<ol>
+<li>Follow the <a href="/docs-csm/en-09/operations/node_management/reboot_ncns/">Reboot_NCNs</a> process.</li>
+</ol>
+<p>For Shasta v1.3 and earlier :</p>
+<ol>
+<li>
+<p>Before rebooting any worker node, scale nexus replicas to 0.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m# kubectl scale deployment nexus -n nexus --replicas<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Follow the <a href="https://github.com/Cray-HPE/docs-csm/blob/release/0.9/operations/node_management/Reboot_NCNs.md">Reboot_NCNs</a> process.</p>
+<p><strong>NOTES:</strong></p>
+<ul>
+<li>
+<p>ncn-w001 is the externally connected node. On Shasta v1.4 and later, ncn-m001 is the externally connected node.</p>
+</li>
+<li>
+<p>The failover-leader.sh, ncnGetXnames.sh and add_pod_priority.sh scripts are not available or required when rebooting worker nodes.</p>
+</li>
+<li>
+<p>After draining a worker, force delete any pod that fails to terminate due to <code>Cannot evict pod as it would violate the pod's disruption budget</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m# kubectl delete pod &lt;pod-name&gt; -n &lt;namespace&gt; --force
+</span></span></code></pre></div></li>
+<li>
+<p>Reference the Shasta v1.3 Admin Guide for any steps related to checking system health.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>After rebooting all the worker nodes, scale nexus replicas back to 1 and verify nexus is running.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m# kubectl scale deployment nexus -n nexus --replicas<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> ncn-m# kubectl get pods -n nexus | grep nexus
+</span></span><span style="display:flex;"><span> nexus-868d7b8466-gjnps       2/2     Running   <span style="color:#ae81ff">0</span>          5m
+</span></span></code></pre></div></li>
+</ol>
+</li>
+<li>
+<p>For Shasta v1.3 and earlier, restart the sonar cronjobs and verify vault etcd is healthy.</p>
+<ol>
+<li>
+<p>Restart the sonar cronjobs.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m# kubectl -n services get cronjob sonar-jobs-watcher -o json | jq <span style="color:#e6db74">&#39;del(.spec.selector)&#39;</span> | jq <span style="color:#e6db74">&#39;del(.spec.template.metadata.labels.&#34;controller-uid&#34;)&#39;</span> | jq <span style="color:#e6db74">&#39;del(.status)&#39;</span> | kubectl replace --force -f -
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ncn-m# kubectl -n services get cronjob sonar-sync -o json | jq <span style="color:#e6db74">&#39;del(.spec.selector)&#39;</span> | jq <span style="color:#e6db74">&#39;del(.spec.template.metadata.labels.&#34;controller-uid&#34;)&#39;</span> | jq <span style="color:#e6db74">&#39;del(.status)&#39;</span> | kubectl replace --force -f -
+</span></span></code></pre></div></li>
+<li>
+<p>After at least a minute, verify that the cronjobs have been scheduled.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m# <span style="color:#75715e"># kubectl get cronjobs -n services sonar-jobs-watcher</span>
+</span></span><span style="display:flex;"><span>NAME                 SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+</span></span><span style="display:flex;"><span>sonar-jobs-watcher   */1 * * * *   False     <span style="color:#ae81ff">1</span>        23s             5m10s
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ncn-m# kubectl get cronjobs -n services sonar-sync
+</span></span><span style="display:flex;"><span>NAME         SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+</span></span><span style="display:flex;"><span>sonar-sync   */1 * * * *   False     <span style="color:#ae81ff">1</span>        32s             5m15s
+</span></span></code></pre></div></li>
+<li>
+<p>Check the health of vault etcd.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m# <span style="color:#66d9ef">for</span> pod in <span style="color:#66d9ef">$(</span>kubectl get pods -l app<span style="color:#f92672">=</span>etcd -n vault -o jsonpath<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;{.items[*].metadata.name}&#39;</span><span style="color:#66d9ef">)</span>; <span style="color:#66d9ef">do</span> echo <span style="color:#e6db74">&#34;### </span><span style="color:#e6db74">${</span>pod<span style="color:#e6db74">}</span><span style="color:#e6db74"> ###&#34;</span>; kubectl -n vault exec $pod  -- /bin/sh -c <span style="color:#e6db74">&#34;ETCDCTL_API=3 etcdctl --cacert /etc/etcdtls/operator/etcd-tls/etcd-client-ca.crt --cert /etc/etcdtls/operator/etcd-tls/etcd-client.crt --key /etc/etcdtls/operator/etcd-tls/etcd-client.key --endpoints https://localhost:2379 endpoint health&#34;</span>; <span style="color:#66d9ef">done</span>
+</span></span></code></pre></div></li>
+<li>
+<p>If the above health of vault etcd reports any pods as <code>unhealthy</code>, backup the secret, delete the secret. The operator will create a new secret.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m# kubectl get secret -n vault cray-vault-etcd-tls -o yaml &gt; /root/vault_sec.yaml
+</span></span><span style="display:flex;"><span>ncn-m# kubectl delete secret -n vault cray-vault-etcd-tls
+</span></span></code></pre></div></li>
+<li>
+<p>Once the new secret has been created and the cray-vault-etcd pods are running, verify the health of vault etcd.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m# kubectl get secret -n vault cray-vault-etcd-tls
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>NAME                  TYPE     DATA   AGE
+</span></span><span style="display:flex;"><span>cray-vault-etcd-tls   Opaque   <span style="color:#ae81ff">9</span>      5m
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ncn-m# kubectl get pods -l app<span style="color:#f92672">=</span>etcd -n vault
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>NAME                         READY   STATUS    RESTARTS   AGE
+</span></span><span style="display:flex;"><span>cray-vault-etcd-stzjf6dqd5   1/1     Running   <span style="color:#ae81ff">0</span>          10m
+</span></span><span style="display:flex;"><span>cray-vault-etcd-ws59fgssxt   1/1     Running   <span style="color:#ae81ff">0</span>          10m
+</span></span><span style="display:flex;"><span>cray-vault-etcd-xmvfxz48vs   1/1     Running   <span style="color:#ae81ff">0</span>          10m
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ncn-m# <span style="color:#66d9ef">for</span> pod in <span style="color:#66d9ef">$(</span>kubectl get pods -l app<span style="color:#f92672">=</span>etcd -n vault -o jsonpath<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;{.items[*].metadata.name}&#39;</span><span style="color:#66d9ef">)</span>; <span style="color:#66d9ef">do</span> echo <span style="color:#e6db74">&#34;### </span><span style="color:#e6db74">${</span>pod<span style="color:#e6db74">}</span><span style="color:#e6db74"> ###&#34;</span>; kubectl -n vault exec $pod  -- /bin/sh -c <span style="color:#e6db74">&#34;ETCDCTL_API=3 etcdctl --cacert /etc/etcdtls/operator/etcd-tls/etcd-client-ca.crt --cert /etc/etcdtls/operator/etcd-tls/etcd-client.crt --key /etc/etcdtls/operator/etcd-tls/etcd-client.key --endpoints https://localhost:2379 endpoint health&#34;</span>; <span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">### cray-vault-etcd-stzjf6dqd5 ###</span>
+</span></span><span style="display:flex;"><span>https://localhost:2379 is healthy: successfully committed proposal: took <span style="color:#f92672">=</span> 19.999618ms
+</span></span><span style="display:flex;"><span><span style="color:#75715e">### cray-vault-etcd-ws59fgssxt ###</span>
+</span></span><span style="display:flex;"><span>https://localhost:2379 is healthy: successfully committed proposal: took <span style="color:#f92672">=</span> 19.597736ms
+</span></span><span style="display:flex;"><span><span style="color:#75715e">### cray-vault-etcd-xmvfxz48vs ###</span>
+</span></span><span style="display:flex;"><span>https://localhost:2379 is healthy: successfully committed proposal: took <span style="color:#f92672">=</span> 19.81056ms
+</span></span></code></pre></div><p><strong>NOTE:</strong></p>
+<p>Vault etcd errors such as <code>tls: bad certificate.&quot; Reconnecting</code> can be ignored.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m# kubectl logs -l app<span style="color:#f92672">=</span>etcd -n vault  | grep <span style="color:#e6db74">&#34;bad certificate\&#34;. Reconnecting&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>WARNING: 2021/09/24 17:35:11 grpc: addrConn.createTransport failed to connect to <span style="color:#f92672">{</span>0.0.0.0:2379 <span style="color:#ae81ff">0</span>  &lt;nil&gt;<span style="color:#f92672">}</span>. Err :connection error: desc <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;transport: authentication handshake failed: remote error: tls: bad certificate&#34;</span>. Reconnecting...
+</span></span></code></pre></div></li>
+</ol>
+</li>
+</ol>
+<h2 id="renew-etcd-certificate">Renew Etcd Certificate</h2>
+<p>If <a href="/docs-csm/en-09/#check-certificates">Check Certificates</a> indicates that only the <code>apiserver-etcd-client</code> need to be renewed, then the following can be used to renew just that one certificate.
+The full <a href="/docs-csm/en-09/#renew-all-certificates">Renew All Certificates</a> procedure will also renew this certificate.</p>
+<p>Run the following steps on each master node.</p>
+<ol>
+<li>
+<p>Renew the Etcd certificate.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubeadm alpha certs renew apiserver-etcd-client --config /etc/kubernetes/kubeadmcfg.yaml
+</span></span><span style="display:flex;"><span>systemctl restart etcd.service
+</span></span><span style="display:flex;"><span>systemctl restart kubelet.service
+</span></span></code></pre></div></li>
+</ol>
+<h2 id="update-client-secrets">Update Client Secrets</h2>
+<p>The client secrets can be updated independently from the Kubernetes certs.</p>
+<p>Run the following steps from a master node.</p>
+<ol>
+<li>
+<p>Update the client certificate for <code>kube-etcdbackup</code>.</p>
+<ol>
+<li>
+<p>Update the <code>kube-etcdbackup-etcd</code> secret.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl --namespace<span style="color:#f92672">=</span>kube-system create secret generic kube-etcdbackup-etcd <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>               --from-file<span style="color:#f92672">=</span>/etc/kubernetes/pki/etcd/ca.crt <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>               --from-file<span style="color:#f92672">=</span>tls.crt<span style="color:#f92672">=</span>/etc/kubernetes/pki/etcd/server.crt <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>               --from-file<span style="color:#f92672">=</span>tls.key<span style="color:#f92672">=</span>/etc/kubernetes/pki/etcd/server.key <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>               --save-config --dry-run<span style="color:#f92672">=</span>client -o yaml | kubectl apply -f -
+</span></span></code></pre></div></li>
+<li>
+<p>Check the certificate&rsquo;s expiration date to verify that the certificate is not expired.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl get secret -n kube-system kube-etcdbackup-etcd -o json | jq -r <span style="color:#e6db74">&#39;.data.&#34;tls.crt&#34; | @base64d&#39;</span> | openssl x509 -noout -enddate
+</span></span></code></pre></div><p>Example output:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>notAfter=May  4 22:37:16 2023 GMT
+</span></span></code></pre></div></li>
+<li>
+<p>Check that the next <code>kube-etcdbackup</code> cronjob <code>Completed</code>. This cronjob runs every 10 minutes.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl get pod -l app.kubernetes.io/instance<span style="color:#f92672">=</span>cray-baremetal-etcd-backup -n kube-system
+</span></span></code></pre></div><p>Example output:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>NAME                               READY   STATUS      RESTARTS   AGE
+</span></span><span style="display:flex;"><span>kube-etcdbackup-1652201400-czh5p   0/1     Completed   0          107s
+</span></span></code></pre></div></li>
+</ol>
+</li>
+<li>
+<p>Update the client certificate for <code>etcd-client</code>.</p>
+<ol>
+<li>
+<p>Update the <code>etcd-client-cert</code> secret.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl --namespace<span style="color:#f92672">=</span>sysmgmt-health create secret generic etcd-client-cert <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>               --from-file<span style="color:#f92672">=</span>etcd-client<span style="color:#f92672">=</span>/etc/kubernetes/pki/apiserver-etcd-client.crt <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>               --from-file<span style="color:#f92672">=</span>etcd-client-key<span style="color:#f92672">=</span>/etc/kubernetes/pki/apiserver-etcd-client.key <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>               --from-file<span style="color:#f92672">=</span>etcd-ca<span style="color:#f92672">=</span>/etc/kubernetes/pki/etcd/ca.crt <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>               --save-config --dry-run<span style="color:#f92672">=</span>client -o yaml | kubectl apply -f -
+</span></span></code></pre></div></li>
+<li>
+<p>Check the certificates&rsquo; expiration dates to verify that none of the certificate are expired.</p>
+<ol>
+<li>
+<p>Check the <code>etcd-ca</code> expiration date.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl get secret -n sysmgmt-health etcd-client-cert -o json | jq -r <span style="color:#e6db74">&#39;.data.&#34;etcd-ca&#34; | @base64d&#39;</span> | openssl x509 -noout -enddate
+</span></span></code></pre></div><p>Example output:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>notAfter=May  1 18:20:23 2032 GMT
+</span></span></code></pre></div></li>
+<li>
+<p>Check the <code>etcd-client</code> expiration date.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl get secret -n sysmgmt-health etcd-client-cert -o json | jq -r <span style="color:#e6db74">&#39;.data.&#34;etcd-client&#34; | @base64d&#39;</span> | openssl x509 -noout -enddate
+</span></span></code></pre></div><p>Example output:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>notAfter=May  4 18:20:24 2023 GMT
+</span></span></code></pre></div></li>
+</ol>
+</li>
+<li>
+<p>Restart Prometheus.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl rollout restart -n sysmgmt-health statefulSet/prometheus-cray-sysmgmt-health-promet-prometheus
+</span></span><span style="display:flex;"><span>kubectl rollout status -n sysmgmt-health statefulSet/prometheus-cray-sysmgmt-health-promet-prometheus
+</span></span></code></pre></div><p>Example output:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Waiting for 1 pods to be ready...
+</span></span><span style="display:flex;"><span>statefulset rolling update complete ...
+</span></span></code></pre></div></li>
+<li>
+<p>Check for any <code>tls</code> errors from the active Prometheus targets. No errors are expected.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>PROM_IP<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>kubectl get services -n sysmgmt-health cray-sysmgmt-health-promet-prometheus -o json | jq -r <span style="color:#e6db74">&#39;.spec.clusterIP&#39;</span><span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>curl -s http://<span style="color:#e6db74">${</span>PROM_IP<span style="color:#e6db74">}</span>:9090/api/v1/targets | jq -r <span style="color:#e6db74">&#39;.data.activeTargets[] | select(.&#34;scrapePool&#34; == &#34;sysmgmt-health/cray-sysmgmt-health-promet-kube-etcd/0&#34;)&#39;</span> | grep lastError | sort -u
+</span></span></code></pre></div><p>Example output:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>  &#34;lastError&#34;: &#34;&#34;,
+</span></span></code></pre></div></li>
+</ol>
+</li>
+</ol>
+
+
+<footer class="footline">
+	
+</footer>
+
+        
+        </div>
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+
+        
+
+
+	 
+	 
+    </div>
+
+    </section>
+
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/docs-csm/js/clipboard.min.js?1729741358"></script>
+    <script src="/docs-csm/js/perfect-scrollbar.min.js?1729741358"></script>
+    <script src="/docs-csm/js/perfect-scrollbar.jquery.min.js?1729741358"></script>
+    <script src="/docs-csm/js/jquery.sticky.js?1729741358"></script>
+    <script src="/docs-csm/js/featherlight.min.js?1729741358"></script>
+    <script src="/docs-csm/js/highlight.pack.js?1729741358"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/docs-csm/js/modernizr.custom-3.6.0.js?1729741358"></script>
+    <script src="/docs-csm/js/learn.js?1729741358"></script>
+    <script src="/docs-csm/js/hugo-learn.js?1729741358"></script>
+    
+        
+            <script src="/docs-csm/mermaid/mermaid.js?1729741358"></script>
+        
+        <script>
+            mermaid.initialize({ startOnLoad: true });
+        </script>
+    
+    
+
+  </body>
+</html>
+

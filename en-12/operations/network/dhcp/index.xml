@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>dhcp on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-12/operations/network/dhcp/</link>
+    <description>Recent content in dhcp on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-12</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:26 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-12/operations/network/dhcp/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>DHCP</title>
+      <link>/docs-csm/en-12/operations/network/dhcp/dhcp/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:25 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/network/dhcp/dhcp/</guid>
+      <description>DHCP The Dynamic Host Configuration Protocol (DHCP) service on the HPE Cray EX system uses the Internet Systems Consortium (ISC) Kea tool. Kea provides more robust management capabilities for DHCP servers.&#xA;For more information: https://www.isc.org/kea/.&#xA;The following improvements to the DHCP service are included:&#xA;API access to manage DHCP Scalable pod that uses MetalLB instead of host networking Options for updates to HPE Cray EX management system IP addresses DHCP Helper Workflow The DHCP-Helper uses the following workflow:</description>
+    </item>
+    <item>
+      <title>Troubleshoot DHCP Issues</title>
+      <link>/docs-csm/en-12/operations/network/dhcp/troubleshoot_dhcp_issues/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:26 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/network/dhcp/troubleshoot_dhcp_issues/</guid>
+      <description>Troubleshoot DHCP Issues There are several things to check for when troubleshooting issues with Dynamic Host Configuration Protocol (DHCP) servers.&#xA;Incorrect DHCP IP addresses One of the most common issues is when the DHCP IP addresses are not matching in the Domain Name Service (DNS).&#xA;Check to make sure cray-dhcp is not running in Kubernetes:&#xA;ncn-mw# kubectl get pods -A | grep cray-dhcp Example output:&#xA;services cray-dhcp-5f8c8767db-hg6ch 1/1 Running 0 35d If the cray-dhcp pod is running, use the following command to shut down the pod:</description>
+    </item>
+  </channel>
+</rss>

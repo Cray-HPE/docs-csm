@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>iscsi sbps on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-16/operations/iscsi_sbps/</link>
+    <description>Recent content in iscsi sbps on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-16</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:22 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-16/operations/iscsi_sbps/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>iSCSI SBPS (Scalable Boot Content Projection Service)</title>
+      <link>/docs-csm/en-16/operations/iscsi_sbps/iscsi_sbps/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:22 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/iscsi_sbps/iscsi_sbps/</guid>
+      <description>iSCSI SBPS (Scalable Boot Content Projection Service) Introduction iSCSI SBPS solution details Steps to achieve SBPS Steps to switch from DVS to iSCSI Glossary Introduction iSCSI based boot content projection solution named Scalable Boot Content Projection Service (SBPS) is an alternate boot content projection solution and planning to replace current DVS (Cray Data Virtualization Service) to project boot content like rootfs and programming environment (PE) images. SBPS is aimed to offer better reliability, availability, security, ease and speed of deployment and ease of management than DVS.</description>
+    </item>
+  </channel>
+</rss>

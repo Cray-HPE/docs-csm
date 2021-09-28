@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cray System Management Install on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-16/install/</link>
+    <description>Recent content in Cray System Management Install on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-16</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:08 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-16/install/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SHCD HMN Tab/HMN Connections Rules</title>
+      <link>/docs-csm/en-16/install/shcd_hmn_connections_rules/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-16/install/shcd_hmn_connections_rules/</guid>
+      <description>SHCD HMN Tab/HMN Connections Rules Introduction Chassis selection Compute node Dense four-node chassis - Gigabyte or Intel chassis Single-node chassis - Apollo 6500 XL675D Dual-node chassis - Apollo 6500 XL645D Chassis Management Controller (CMC) Management node Master Worker Storage Application node Single-node chassis Building component names (xnames) for nodes in a single application node chassis Dual-node chassis Building component names (xnames) for nodes in a dual application node chassis Columbia Slingshot switch PDU cabinet controller Cooling door Management switches Introduction The HMN tab of the SHCD describes the air-cooled hardware present in the system and how these devices are connected to the Hardware Management Network (HMN).</description>
+    </item>
+    <item>
+      <title>Create System Configuration Using Cluster Discovery Service</title>
+      <link>/docs-csm/en-16/install/create_system_configuration_using_cluster_discovery_service/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-16/install/create_system_configuration_using_cluster_discovery_service/</guid>
+      <description>Create System Configuration Using Cluster Discovery Service This stage walks the user through creating the configuration payload for the system using Cluster Discovery Service (CDS) to generate seed files and paddle file.&#xA;Run the following steps before starting any of the system configuration procedures.&#xA;(pit#) Create the prep and cds directory.&#xA;mkdir -pv &amp;#34;${PITDATA}/prep/cds&amp;#34; (pit#) Change into the cds directory.&#xA;cd &amp;#34;${PITDATA}/prep/cds&amp;#34; (pit#) Set CVT_PATH variable.&#xA;CVT_PATH=/opt/src/cluster-config-verification-tool/ Topics Customize system_config.yaml Configure the management network Configure auto-discovery Configure dnsmasq Verify and reset the BMCs Verify the discover status Collect and compare the inventory data Generate seed files and paddle file Stop discovery Run CSI Prepare Site Init Initialize the LiveCD Next topic 1.</description>
+    </item>
+    <item>
+      <title>Ceph CSI Troubleshooting</title>
+      <link>/docs-csm/en-16/install/troubleshooting_ceph_csi/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-16/install/troubleshooting_ceph_csi/</guid>
+      <description>Ceph CSI Troubleshooting If there has been a failure to initialize all Ceph CSI components on ncn-s001, then the storage node cloud-init may need to be rerun.&#xA;Topics Verify Ceph CSI Rerun storage node cloud-init 1. Verify Ceph CSI Verify that the ceph-csi requirements are in place.&#xA;(ncn-s001#) Log in to ncn-s001 and run the following command.&#xA;ceph -s If it returns a connection error, then assume Ceph is not installed.</description>
+    </item>
+    <item>
+      <title>Create System Configuration Using SHCD</title>
+      <link>/docs-csm/en-16/install/create_system_configuration_using_shcd/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-16/install/create_system_configuration_using_shcd/</guid>
+      <description>Create System Configuration Using SHCD This stage walks the user through creating the configuration payload for the system.&#xA;Run the following steps before starting any of the system configuration procedures.&#xA;(pit#) Make the prep directory.&#xA;mkdir -pv &amp;#34;${PITDATA}/prep&amp;#34; (pit#) Change into the prep directory.&#xA;cd &amp;#34;${PITDATA}/prep&amp;#34; Topics Validate SHCD Generate topology files Customize system_config.yaml Run CSI Prepare Site Init Initialize the LiveCD Next topic 1. Validate SHCD (pit#) Download the SHCD to the prep directory.</description>
+    </item>
+    <item>
+      <title>Troubleshooting Installation Problems</title>
+      <link>/docs-csm/en-16/install/troubleshooting_installation/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-16/install/troubleshooting_installation/</guid>
+      <description>Troubleshooting Installation Problems The installation of the Cray System Management (CSM) product requires knowledge of the various nodes and switches for the HPE Cray EX system. The procedures in this section should be referenced during the CSM install for additional information on system hardware, troubleshooting, and administrative tasks related to CSM.&#xA;Topics Reset root password on a LiveCD USB PXE boot troubleshooting Restart network services and interfaces on NCNs Utility storage node installation troubleshooting Ceph CSI troubleshooting Postgres troubleshooting Reset root password on a LiveCD USB If the root password on the LiveCD needs to be changed, then see Reset root Password on a LiveCD USB.</description>
+    </item>
+    <item>
+      <title>PXE Boot Troubleshooting</title>
+      <link>/docs-csm/en-16/install/troubleshooting_pxe_boot/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-16/install/troubleshooting_pxe_boot/</guid>
+      <description>PXE Boot Troubleshooting This page is designed to cover various issues that arise when trying to PXE boot nodes in an HPE Cray EX system.&#xA;PXE Boot Troubleshooting Configuration required for PXE booting Switch configuration Aruba configuration Mellanox configuration Next steps Kernel panic when unpacking initrd Node iPXE retries and NIC order Restart BSS Restart Kea Missing BSS data In order for PXE booting to work successfully, the management network switches need to be configured correctly.</description>
+    </item>
+    <item>
+      <title>Collect MAC Addresses for NCNs</title>
+      <link>/docs-csm/en-16/install/collect_mac_addresses_for_ncns/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-16/install/collect_mac_addresses_for_ncns/</guid>
+      <description>Collect MAC Addresses for NCNs Topics Set up networking Collect MAC addresses 1. Set up networking This assumes that the HMN is not setup on the PIT node; these steps cater to bare-metal and configured switches.&#xA;(pit#) Change into the preparation directory.&#xA;NOTE If PITDATA is not defined, then see Set reusable environment variables.&#xA;cd ${PITDATA}/prep (pit#) Confirm that the ncn_metadata.csv file in this directory has the new information.&#xA;NOTE If the file is missing, then generate the file by following Generate topology files after the other steps in Create system configuration.</description>
+    </item>
+    <item>
+      <title>Troubleshooting Unused Drives on Storage Nodes</title>
+      <link>/docs-csm/en-16/install/troubleshooting_unused_drives_on_storage_nodes/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-16/install/troubleshooting_unused_drives_on_storage_nodes/</guid>
+      <description>Troubleshooting Unused Drives on Storage Nodes NOTE: This page is only applicable to storage NCNs on Gigabyte or HPE hardware.&#xA;Utility storage nodes (also known as storage NCNs) are expected to have a particular number of OSDs based on the type of NCN hardware. This page describes how to validate that the storage NCNs have the expected number of OSDs, and provides remediation steps if this is not the case.</description>
+    </item>
+    <item>
+      <title>Collecting the BMC MAC Addresses</title>
+      <link>/docs-csm/en-16/install/collecting_bmc_mac_addresses/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-16/install/collecting_bmc_mac_addresses/</guid>
+      <description>Collecting the BMC MAC Addresses This guide will detail how to collect BMC MAC addresses from an HPE Cray EX system with configured switches. The BMC MAC address is the exclusive, dedicated LAN for the onboard BMC.&#xA;Prerequisites There is a configured switch with SSH access or unconfigured with COM access (Serial Over LAN/DB-9). A file is available to record the collected BMC information. Procedure (pit#) Start a session on the leaf-bmc switch, either using SSH or a USB serial cable.</description>
+    </item>
+    <item>
+      <title>Utility Storage Installation Troubleshooting</title>
+      <link>/docs-csm/en-16/install/troubleshooting_utility_storage_node_installation/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-16/install/troubleshooting_utility_storage_node_installation/</guid>
+      <description>Utility Storage Installation Troubleshooting Topics ncn-s001 console is stuck &amp;lsquo;Sleeping for five seconds waiting Ceph to be healthy&amp;hellip;&amp;rsquo; Ceph install failed Details ncn-s001 console is stuck &amp;lsquo;Sleeping for five seconds waiting Ceph to be healthy&amp;hellip;&amp;rsquo; NOTES: It can be appropriate for ncn-s001 to wait with this message for a while. To check if Ceph OSDs are still coming up, run ceph -s and check the number of OSDs. After a couple minutes, run ceph -s again and see if there are more OSDs.</description>
+    </item>
+    <item>
+      <title>Pre-Installation</title>
+      <link>/docs-csm/en-16/install/pre-installation/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:07 +0000</pubDate>
+      <guid>/docs-csm/en-16/install/pre-installation/</guid>
+      <description>Pre-Installation The page walks a user through setting up the Cray LiveCD with the intention of installing Cray System Management (CSM).&#xA;Boot installation environment Prepare installation environment server Boot the LiveCD First log in Prepare the data partition Set reusable environment variables Exit the console and log in with SSH Download and extract the CSM tarball Create system configuration Import the CSM Tarball Validate the LiveCD Next topic 1. Boot installation environment This section walks the user through booting and connecting to the LiveCD.</description>
+    </item>
+    <item>
+      <title>Collecting NCN MAC Addresses</title>
+      <link>/docs-csm/en-16/install/collecting_ncn_mac_addresses/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-16/install/collecting_ncn_mac_addresses/</guid>
+      <description>Collecting NCN MAC Addresses This procedure details how to collect the NCN MAC addresses from an HPE Cray EX system. The MAC addresses needed for the Bootstrap MAC, Bond0 MAC0, and Bond0 MAC1 columns in ncn_metadata.csv will be collected. This data will feed into the cloud-init metadata.&#xA;The Bootstrap MAC address will be used for identification of this node during the early part of the PXE boot process, before the bonded interface can be established.</description>
+    </item>
+    <item>
+      <title>Prepare Compute Nodes</title>
+      <link>/docs-csm/en-16/install/prepare_compute_nodes/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:07 +0000</pubDate>
+      <guid>/docs-csm/en-16/install/prepare_compute_nodes/</guid>
+      <description>Prepare Compute Nodes Configure HPE Apollo 6500 XL645d Gen10 Plus compute nodes Gather information Configure iLO Configure switch port Cleanup Kea Cleanup HSM Update BIOS time Next topic Configure HPE Apollo 6500 XL645d Gen10 Plus compute nodes The HPE Apollo 6500 XL645d Gen10 Plus compute node uses a NIC/shared iLO network port. The NIC is also referred to as the Embedded LOM (LAN On Motherboard) and is available to the booted OS.</description>
+    </item>
+    <item>
+      <title>Configure Administrative Access</title>
+      <link>/docs-csm/en-16/install/configure_administrative_access/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-16/install/configure_administrative_access/</guid>
+      <description>Configure Administrative Access There are several operations which configure administrative access to different parts of the system. Ensuring that the cray CLI can be used with administrative credentials enables use of many management services via commands. Authentication of the sat CLI allows the use of additional administrative commands. The management nodes can be locked from accidental manipulation by the cray power and cray fas commands when the intent is to work on the entire system except the management nodes.</description>
+    </item>
+    <item>
+      <title>Prepare site init</title>
+      <link>/docs-csm/en-16/install/prepare_site_init/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-16/install/prepare_site_init/</guid>
+      <description>Prepare site init These procedures guide administrators through setting up the site-init directory which contains important customizations for various products.&#xA;Background Create and Initialize site-init Directory Create Baseline System Customizations Setup LDAP configuration Customize DNS Configuration Configure Prometheus SNMP Exporter Encrypt secrets Customer-Specific Customizations 1. Background The shasta-cfg directory included in the CSM release tarball includes relatively static, installation-centric artifacts, such as:&#xA;Cluster-wide network configuration settings required by Helm charts deployed by product stream Loftsman manifests Sealed Secrets Sealed Secret Generate Blocks &amp;ndash; a form of plain-text input that renders to a Sealed Secret Helm chart value overrides that are merged into Loftsman manifests by product stream installers 2.</description>
+    </item>
+    <item>
+      <title>Configure Management Network</title>
+      <link>/docs-csm/en-16/install/configure_management_network/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-16/install/configure_management_network/</guid>
+      <description>Configure Management Network HPE Cray EX systems can have network switches in many roles: spine switches, leaf switches, leaf-bmc switches, and Coolant Distribution Unit (CDU) switches. Newer systems have HPE Aruba switches, while older systems have Dell and Mellanox switches. Switch IP addresses are generated by Cray Site Init (CSI).&#xA;Documentation for the Management Network can be found in the HPE Cray EX Management Network Installation and Configuration Guide.&#xA;The configuration for these switches will be generated from the CSM Automatic Network Utility (CANU).</description>
+    </item>
+    <item>
+      <title>Re-Installation</title>
+      <link>/docs-csm/en-16/install/re-installation/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-16/install/re-installation/</guid>
+      <description>Re-Installation This page details steps to take prior to starting new installation, these pages assume that all the NCNs have been deployed (e.g. there is no more PIT node).&#xA;Topics Quiesce compute and application nodes Disable DHCP service Set IPMI credentials Power off booted nodes Set node BMCs to DHCP Power off the PIT node Configure DNS Check disk space Quiesce application and compute nodes NOTE Skip this section if compute nodes and application nodes are not booted.</description>
+    </item>
+    <item>
+      <title>Create Application Node Config YAML</title>
+      <link>/docs-csm/en-16/install/create_application_node_config_yaml/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-16/install/create_application_node_config_yaml/</guid>
+      <description>Create Application Node Config YAML This topic provides directions on constructing the application_node_config.yaml file. This file controls how the csi config init command finds and treats application nodes discovered in the hmn_connections.json file when generating configuration files for the system.&#xA;Prerequisites Background Directions Prerequisites The application_node_config.yaml file can be constructed from information from one of the following sources:&#xA;The SHCD Excel spreadsheet for the system The hmn_connections.json file generated from the system&amp;rsquo;s SHCD Background SHCD and hmn_connections.</description>
+    </item>
+    <item>
+      <title>Create Cabinets YAML</title>
+      <link>/docs-csm/en-16/install/create_cabinets_yaml/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-16/install/create_cabinets_yaml/</guid>
+      <description>Create Cabinets YAML This page provides directions on constructing the optional cabinets.yaml file. This file lists cabinet IDs for any systems with non-contiguous cabinet ID numbers and controls how the csi config init command treats cabinet IDs.&#xA;The following example file is manually created and follows this format. Each type of cabinet can have several fields:&#xA;total_number of cabinets of this type. starting_id for this cabinet type, and a list of the IDs.</description>
+    </item>
+    <item>
+      <title>Create HMN Connections JSON File</title>
+      <link>/docs-csm/en-16/install/create_hmn_connections_json/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-16/install/create_hmn_connections_json/</guid>
+      <description>Create HMN Connections JSON File Use this procedure to generate the hmn_connections.json from the system&amp;rsquo;s SHCD Excel document. This process is typically needed when generating the hmn_connections.json file for a new system, or regenerating it when a system&amp;rsquo;s SHCD file is changed (specifically the HMN tab). The hms-shcd-parser tool can be used to generate the hmn_connections.json file.&#xA;The SHCD/HMN Connections Rules document explains the expected naming conventions and rules for the HMN tab of the SHCD file, and for the hmn_connections.</description>
+    </item>
+    <item>
+      <title>Create NCN Metadata CSV</title>
+      <link>/docs-csm/en-16/install/create_ncn_metadata_csv/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-16/install/create_ncn_metadata_csv/</guid>
+      <description>Create NCN Metadata CSV The information in the ncn_metadata.csv file identifies each of the management nodes, assigns the function as a master, worker, or storage node, and provides the MAC address information needed to identify the BMC and the NIC which will be used to boot the node.&#xA;Some of the data in the ncn_metadata.csv can be found in the SHCD in the HMN tab. However, the hardest data to collect is the MAC addresses for the node&amp;rsquo;s BMC, the node&amp;rsquo;s bootable network interface, and the pair of network interfaces which will become the bonded interface bond0.</description>
+    </item>
+    <item>
+      <title>Create Switch Metadata CSV</title>
+      <link>/docs-csm/en-16/install/create_switch_metadata_csv/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:07 +0000</pubDate>
+      <guid>/docs-csm/en-16/install/create_switch_metadata_csv/</guid>
+      <description>Create Switch Metadata CSV This page provides directions on constructing the switch_metadata.csv file.&#xA;Prerequisites The SHCD file for the system.&#xA;Check the description for component names while mapping names between the SHCD and the switch_metadata.csv file. See Component Names (xnames).&#xA;Overview This file is manually created to include information about all spine, LeafBMC, CDU, and leaf switches in the system. None of the Slingshot switches for the HSN should be included in this file.</description>
+    </item>
+    <item>
+      <title>CSM Services Install Fails Because of Missing Secret</title>
+      <link>/docs-csm/en-16/install/csm_installation_failure/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:07 +0000</pubDate>
+      <guid>/docs-csm/en-16/install/csm_installation_failure/</guid>
+      <description>CSM Services Install Fails Because of Missing Secret When running the install script in the Install CSM Services procedure, it may fail due to a timing-related issue. This page documents how to determine if this problem was the cause of an install script failure, and the appropriate remediation steps to take if it is encountered.&#xA;How to determine if an install hit this issue Verify that the installation script output contains an error about a missing secret.</description>
+    </item>
+    <item>
+      <title>Deploy Final NCN</title>
+      <link>/docs-csm/en-16/install/deploy_final_non-compute_node/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:07 +0000</pubDate>
+      <guid>/docs-csm/en-16/install/deploy_final_non-compute_node/</guid>
+      <description>Deploy Final NCN The following procedure contains information for rebooting and deploying the management node that is currently hosting the LiveCD. At the end of this procedure, the LiveCD will no longer be active. The node it was using will join the Kubernetes cluster as the final of three master nodes, forming a quorum.&#xA;IMPORTANT: While the node is rebooting, it will only be available through Serial-Over-LAN (SOL) and local terminals.</description>
+    </item>
+    <item>
+      <title>Deploy Management Nodes</title>
+      <link>/docs-csm/en-16/install/deploy_non-compute_nodes/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:07 +0000</pubDate>
+      <guid>/docs-csm/en-16/install/deploy_non-compute_nodes/</guid>
+      <description>Deploy Management Nodes The following procedure deploys Linux and Kubernetes software to the management NCNs. Deployment of the nodes starts with booting the storage nodes, followed by the master nodes and worker nodes together.&#xA;After the operating system boots on each node, there are some configuration actions which take place. Watching the console or the console log for certain nodes can help to understand what happens and when. When the process completes for all nodes, the Ceph storage is initialized and the Kubernetes cluster is created and ready for a workload.</description>
+    </item>
+    <item>
+      <title>Install CSM Services</title>
+      <link>/docs-csm/en-16/install/install_csm_services/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:07 +0000</pubDate>
+      <guid>/docs-csm/en-16/install/install_csm_services/</guid>
+      <description>Install CSM Services This procedure will install CSM applications and services into the CSM Kubernetes cluster.&#xA;NOTE Check the information in Known issues before starting this procedure to be warned about possible problems.&#xA;Install CSM services Create base BSS global boot parameters Wait for everything to settle Next topic Known issues Deploy CSM Applications and Services known issues Setup Nexus known issues 1. Install CSM services NOTE: During this step, only on systems with only four worker nodes (typically Testing and Development Systems (TDS)), the customizations.</description>
+    </item>
+  </channel>
+</rss>

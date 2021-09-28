@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>upgrade on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-12/upgrade/1.2/scripts/upgrade/</link>
+    <description>Recent content in upgrade on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-12</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:39:04 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-12/upgrade/1.2/scripts/upgrade/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Upgrade Automation</title>
+      <link>/docs-csm/en-12/upgrade/1.2/scripts/upgrade/upgrade_automation/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:04 +0000</pubDate>
+      <guid>/docs-csm/en-12/upgrade/1.2/scripts/upgrade/upgrade_automation/</guid>
+      <description>Upgrade Automation This document describes how we automate upgrade process. In a nutshell, an upgrade is:&#xA;Upload new artifacts into a running system Rebuild each NCN with the newly uploaded images Deploy new charts after all NCNs are upgraded. Prerequisites Everything we need before upgrading an NCN.&#xA;NOTE:&#xA;The prerequisites.sh script is required to run on both ncn-m001 and ncn-m002. If an action is only needed to run once, developers must add logic to avoid running this action both times the script is executed.</description>
+    </item>
+  </channel>
+</rss>

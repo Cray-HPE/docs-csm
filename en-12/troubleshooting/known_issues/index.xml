@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>known issues on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-12/troubleshooting/known_issues/</link>
+    <description>Recent content in known issues on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-12</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:39:01 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-12/troubleshooting/known_issues/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Gigabyte BMC Missing Redfish Data</title>
+      <link>/docs-csm/en-12/troubleshooting/known_issues/gigabyte_bmc_missing_redfish_data/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:00 +0000</pubDate>
+      <guid>/docs-csm/en-12/troubleshooting/known_issues/gigabyte_bmc_missing_redfish_data/</guid>
+      <description>Gigabyte BMC Missing Redfish Data Follow this procedure if you notice data from Gigabyte nodes is missing from Hardware State Manager (HSM) or other CSM tools.&#xA;If data from Gigabyte nodes is missing from HSM or other CSM tools, check the Redfish endpoint on the BMC to see if the data is present.&#xA;If the data is not present in the Redfish, then a cold reset of the BMC is needed to refresh the Redfish values.</description>
+    </item>
+    <item>
+      <title>Hang Listing BOS Sessions</title>
+      <link>/docs-csm/en-12/troubleshooting/known_issues/hang_listing_bos_sessions/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:00 +0000</pubDate>
+      <guid>/docs-csm/en-12/troubleshooting/known_issues/hang_listing_bos_sessions/</guid>
+      <description>Hang Listing BOS Sessions Overview Symptoms Remedy Prevention Overview BOS v1 loses the ability to list its sessions after too many of them exist in its database. This has only been observed happening when the total number of sessions in the database is well over 1000.&#xA;Symptoms When this situation occurs, attempts to list BOS sessions using the API or CLI will hang. This may also be noticed when performing the Validate CSM Health procedure &amp;ndash; the cmsdev test tool will exhibit the same hang when it tries to query BOS for a session list.</description>
+    </item>
+    <item>
+      <title>Multiple Console Node Pods on the Same Worker</title>
+      <link>/docs-csm/en-12/troubleshooting/known_issues/multiple_console_node_pods_on_the_same_worker/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:00 +0000</pubDate>
+      <guid>/docs-csm/en-12/troubleshooting/known_issues/multiple_console_node_pods_on_the_same_worker/</guid>
+      <description>Multiple Console Node Pods on the Same Worker In versions before CSM v1.3.0, there is no anti-affinity specified for the cray-console-node pods. This leads to the possibility of several pods running on the same worker node. This can be inconvenient during worker reboot operations and can reduce service reliability.&#xA;Manually edit deployment Pod scheduling behavior Manually edit deployment This procedure implements anti-affinity Kubernetes scheduling in versions prior to CSM v1.3.0 by manually editing the cray-console-node deployment.</description>
+    </item>
+    <item>
+      <title>Nexus Fails Authentication with Keycloak Users</title>
+      <link>/docs-csm/en-12/troubleshooting/known_issues/nexus_fail_authentication_with_keycloak_users/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:00 +0000</pubDate>
+      <guid>/docs-csm/en-12/troubleshooting/known_issues/nexus_fail_authentication_with_keycloak_users/</guid>
+      <description>Nexus Fails Authentication with Keycloak Users There is a known issue where the Nexus chart gets created and setup before keycloak-setup has completed running. This causes an issue while attempting to log in to Nexus with a Keycloak user. This can also cause a Nexus test to fail during CSM health validation.&#xA;Fix To recover from this situation, perform the following procedure.&#xA;Get the correct client secret for the Nexus Keycloak client.</description>
+    </item>
+    <item>
+      <title>SLS Not Working During Node Rebuild</title>
+      <link>/docs-csm/en-12/troubleshooting/known_issues/sls_not_working_during_node_rebuild/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:00 +0000</pubDate>
+      <guid>/docs-csm/en-12/troubleshooting/known_issues/sls_not_working_during_node_rebuild/</guid>
+      <description>SLS Not Working During Node Rebuild During some node rebuilds (including those that happen during Stage 1 and Stage 2 of the CSM upgrade process), the SLS Postgres database gets into a bad state, causing SLS to become unhealthy. This page outlines how to detect if this has happened and provides a remediation procedure.&#xA;Note: If encountering this during a CSM upgrade, then at this point of the upgrade process, the system has not yet upgraded the CSM services themselves.</description>
+    </item>
+    <item>
+      <title>Known Issue admin-client-auth Not Found</title>
+      <link>/docs-csm/en-12/troubleshooting/known_issues/admin_client_auth_not_found/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:00 +0000</pubDate>
+      <guid>/docs-csm/en-12/troubleshooting/known_issues/admin_client_auth_not_found/</guid>
+      <description>Known Issue: admin-client-auth Not Found Running the Install CSM Services script, the following error may occur:&#xA;ERROR Step: Set Management NCNs to use Unbound --- Checking Precondition + Getting admin-client-auth secret Error from server (NotFound): secrets &amp;#34;admin-client-auth&amp;#34; not found + Obtaining access token Fix This can occur if the keycloak-users-localize pod has not completed, and that can be caused by an intermittent Istio issue. Remediate the issue with the following procedure:</description>
+    </item>
+    <item>
+      <title>SAT/HSM/CAPMC Component Power State Mismatch</title>
+      <link>/docs-csm/en-12/troubleshooting/known_issues/component_power_state_mismatch/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:00 +0000</pubDate>
+      <guid>/docs-csm/en-12/troubleshooting/known_issues/component_power_state_mismatch/</guid>
+      <description>SAT/HSM/CAPMC Component Power State Mismatch Because of various hardware or communication issues, the node state reported by SAT and HSM (Hardware State Manager) may become out of sync with the actual hardware state reported by CAPMC or Redfish. In most cases this will be noticed when trying to power on or off nodes with BOS/BOA, and will present as SAT or HSM reporting nodes are On while CAPMC reports them as Off (or vice versa).</description>
+    </item>
+    <item>
+      <title>Cray CLI 403 Forbidden Errors</title>
+      <link>/docs-csm/en-12/troubleshooting/known_issues/craycli_403_forbidden_errors/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:00 +0000</pubDate>
+      <guid>/docs-csm/en-12/troubleshooting/known_issues/craycli_403_forbidden_errors/</guid>
+      <description>Cray CLI 403 Forbidden Errors There is a known issue where the Keycloak configuration obtained from LDAP is incomplete causing the keycloak-users-localize job to fail to complete. This, in turn, causes 403 Forbidden errors when trying to use the cray CLI. This can also cause a Keycloak test to fail during CSM health validation.&#xA;Fix To recover from this situation, the following can be done.&#xA;Log into the Keycloak admin console.</description>
+    </item>
+    <item>
+      <title>HMS Discovery Job Not Creating RedfishEndpoints In Hardware State Manager</title>
+      <link>/docs-csm/en-12/troubleshooting/known_issues/discovery_job_not_creating_redfish_endpoints/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:00 +0000</pubDate>
+      <guid>/docs-csm/en-12/troubleshooting/known_issues/discovery_job_not_creating_redfish_endpoints/</guid>
+      <description>HMS Discovery Job Not Creating RedfishEndpoints In Hardware State Manager It is a known issue with the HMS Discovery cronjob that when a BMC does not respond by its IP address, the discovery job will not create a RedfishEndpoint for the BMC in Hardware State Manager (HSM). However, it does update the BMC MAC address in HSM with its component name (xname). The discovery job only creates a new RedfishEndpoints when it encounters an unknown MAC address without a component name (xname) associated with it.</description>
+    </item>
+    <item>
+      <title>Etcd Cluster Backup Fails Due to Timeout</title>
+      <link>/docs-csm/en-12/troubleshooting/known_issues/etcd_cluster_backup_timeout/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:00 +0000</pubDate>
+      <guid>/docs-csm/en-12/troubleshooting/known_issues/etcd_cluster_backup_timeout/</guid>
+      <description>Etcd Cluster Backup Fails Due to Timeout Description There is a known issue where an Etcd cluster backup will fails if it takes longer than 1 minute to complete.&#xA;Symptoms An Etcd cluster backup was not created in the last 24 hours. The etcdbackup status contains MultipartUpload: upload multipart failed. Check for recent Etcd cluster backups listed in the etcd-backup S3 bucket. ncn-mw# /opt/cray/platform-utils/s3/list-objects.py --bucket-name etcd-backup | grep -v bare-metal Example output:</description>
+    </item>
+    <item>
+      <title>Known Issue Logging into the Gitea web UI requires logging in twice</title>
+      <link>/docs-csm/en-12/troubleshooting/known_issues/gitea_web_ui_requires_two_logins/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:00 +0000</pubDate>
+      <guid>/docs-csm/en-12/troubleshooting/known_issues/gitea_web_ui_requires_two_logins/</guid>
+      <description>Known Issue: Logging into the Gitea web UI requires logging in twice When using the Gitea web UI, users are redirected to a keycloak login. The redirect is expected; however, the expectation is that logging in on this page should log users into Gitea. Unfortunately, that does not happen. Instead users are being redirected back to Gitea and have to login again through the Gitea web page using the existing git credentials.</description>
+    </item>
+    <item>
+      <title>HPE iLO dropping event subscriptions and not properly transitioning power state in CSM software</title>
+      <link>/docs-csm/en-12/troubleshooting/known_issues/hpe_systems_not_transitioning_power_state/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:00 +0000</pubDate>
+      <guid>/docs-csm/en-12/troubleshooting/known_issues/hpe_systems_not_transitioning_power_state/</guid>
+      <description>HPE iLO dropping event subscriptions and not properly transitioning power state in CSM software HPE Systems impacted:&#xA;DL325 DL385 Apollo 6500 When HPE iLO systems are not properly transitioning power state in HMS/SAT this could indicate that Redfish events are not being received by the HMS HM-Collector. When this occurs, the HPE iLO receives an error back from its attempt to send events and will delete the subscription if there are enough failures.</description>
+    </item>
+    <item>
+      <title>Known Issue initrd.img.xz Not Found</title>
+      <link>/docs-csm/en-12/troubleshooting/known_issues/initrd.img.zx_not_found/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:00 +0000</pubDate>
+      <guid>/docs-csm/en-12/troubleshooting/known_issues/initrd.img.zx_not_found/</guid>
+      <description>Known Issue: initrd.img.xz Not Found This is a problem that is fixed in CSM 1.0 and later, but if your system was upgraded from CSM 0.9 you may run into this. Below is the full error seen when attempting to boot:&#xA;Loading Linux ... Loading initial ramdisk ... error: file `/boot/grub2/../initrd.img.xz&amp;#39; not found. Press any key to continue... [ 2.528752] Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0) [ 2.</description>
+    </item>
+    <item>
+      <title>Kafka Failure after CSM 1.2 Upgrade</title>
+      <link>/docs-csm/en-12/troubleshooting/known_issues/kafka_upgrade_failure/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:01 +0000</pubDate>
+      <guid>/docs-csm/en-12/troubleshooting/known_issues/kafka_upgrade_failure/</guid>
+      <description>Kafka Failure after CSM 1.2 Upgrade Occasionally the cray-shared-kafka-kafka pods will be restarted before the cray-shared-kafka-zookeeper pods are ready. If this happens then the shared kafka cluster will start to fail.&#xA;Error Messages cray-shared-kafka-kafka-# pods 2022-05-20 19:43:02,242 INFO Socket connection established to localhost/127.0.0.1:2181, initiating session (org.apache.zookeeper.ClientCnxn) [main-SendThread(localhost:2181)] 2022-05-20 19:43:02,245 WARN Session 0x1001ec4c0730001 for server localhost/127.0.0.1:2181, unexpected error, closing socket connection and attempting reconnect (org.apache.zookeeper.ClientCnxn) [main-SendThread(localhost:2181)] java.io.IOException: Connection reset by peer cray-shared-kafka-zookeeper-# pods 2022.</description>
+    </item>
+    <item>
+      <title>Kubernetes Master or Worker node&#39;s root filesystem is out of space</title>
+      <link>/docs-csm/en-12/troubleshooting/known_issues/kubernetes_node_rootfs_out_of_space/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:01 +0000</pubDate>
+      <guid>/docs-csm/en-12/troubleshooting/known_issues/kubernetes_node_rootfs_out_of_space/</guid>
+      <description>Kubernetes Master or Worker node&amp;rsquo;s root filesystem is out of space Description There is a known bug in Kubernetes 1.19.9 where movement of a pod with an attached volume may not complete in time and cause the kubelet service to stream error messages to the /var/log/messages log file. If this goes unchecked, it will fill up the root file system.&#xA;Fix Log into the node that has space issues.&#xA;Verify that you have a large messages file in /var/log/.</description>
+    </item>
+    <item>
+      <title>Mellanox lacp-individual Limitations</title>
+      <link>/docs-csm/en-12/troubleshooting/known_issues/mellanox_lacp_individual/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:01 +0000</pubDate>
+      <guid>/docs-csm/en-12/troubleshooting/known_issues/mellanox_lacp_individual/</guid>
+      <description>Mellanox lacp-individual Limitations Description In some failover/maintenance scenarios, administrators may want to shut down one port of the bond on an NCN. Because of the way Mellanox handles lacp-individual mode, the ports need to be shut down from the switch instead of the NCN.&#xA;Fix Shut down the port on the switch instead of the NCN.</description>
+    </item>
+    <item>
+      <title>Common Platform CA Issues</title>
+      <link>/docs-csm/en-12/troubleshooting/known_issues/platform_ca_issues/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:01 +0000</pubDate>
+      <guid>/docs-csm/en-12/troubleshooting/known_issues/platform_ca_issues/</guid>
+      <description>Common Platform CA Issues 1 NCN platform CA certificate does not match certificate in BSS During install, if the beginning steps are re-run after the NCNs are booted, then platform-ca files on those NCNs will no longer match the server&amp;rsquo;s CA certificate. This can be detected with a Goss test.&#xA;1.1 Error messages (Caused by SSLError(SSLError(1, &amp;#39;[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:852)&amp;#39;),)) curl: (60) SSL certificate problem: self signed certificate in certificate chain More details here: https://curl.</description>
+    </item>
+    <item>
+      <title>Spire database connection pool configuration in an air-gapped environment</title>
+      <link>/docs-csm/en-12/troubleshooting/known_issues/spire_database_airgap_configuration/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:01 +0000</pubDate>
+      <guid>/docs-csm/en-12/troubleshooting/known_issues/spire_database_airgap_configuration/</guid>
+      <description>Spire database connection pool configuration in an air-gapped environment Description Due to the way the resolver code works in certain versions of Alpine Linux, it may be necessary to reconfigure the spire-postgres-pooler to use the fully qualified domain name of the database in order to prevent DNS lookup errors.&#xA;Symptoms The spire-server pods are logging query_wait_timeout errors.&#xA;time=&amp;#34;2022-11-15T09:39:38Z&amp;#34; level=error msg=&amp;#34;Fatal run error&amp;#34; error=&amp;#34;datastore-sql: pq: query_wait_timeout&amp;#34; time=&amp;#34;2022-11-15T09:39:38Z&amp;#34; level=error msg=&amp;#34;Server crashed&amp;#34; error=&amp;#34;datastore-sql: pq: query_wait_timeout&amp;#34; The spire-postgres-pooler pods are logging DNS lookup failure errors.</description>
+    </item>
+    <item>
+      <title>Spire Database Cluster DNS Lookup Failure</title>
+      <link>/docs-csm/en-12/troubleshooting/known_issues/spire_database_lookup_error/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:01 +0000</pubDate>
+      <guid>/docs-csm/en-12/troubleshooting/known_issues/spire_database_lookup_error/</guid>
+      <description>Spire Database Cluster DNS Lookup Failure Description There is a known issue where if Unbound is configured to forward to an invalid or inaccessible site DNS server, the Spire server may be unable to resolve the hostname of its PostgreSQL cluster.&#xA;Symptoms The spire-server pods may be in a CrashLoopBackOff state.&#xA;API calls to services may fail with HTTP 503 errors.&#xA;The spire-server pods contain the following error in the logs.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>/docs-csm/en-12/troubleshooting/known_issues/wait_for_unbound_hang/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:01 +0000</pubDate>
+      <guid>/docs-csm/en-12/troubleshooting/known_issues/wait_for_unbound_hang/</guid>
+      <description>#Wait_for_unbound or cray-dns-unbound-manager hangs&#xA;Run the following command:&#xA;kubectl get jobs -n services | grep cray-dns-unbound-manager services cray-dns-unbound-manager-1635352560 0/1 26h 26h services cray-dns-unbound-manager-1635448680 1/1 35s 8m37s services cray-dns-unbound-manager-1635448860 1/1 51s 5m36s services cray-dns-unbound-manager-1635449040 1/1 61s 2m35s If you see one of the jobs show 0/1 for more than 10 minutes and there are other runs with 1/1. That means that job is hung. You can delete the job with:&#xA;kubectl delete jobs -n services $job_with_0/1 Alternative is copy and paste following code block:</description>
+    </item>
+  </channel>
+</rss>

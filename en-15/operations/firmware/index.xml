@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>firmware on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-15/operations/firmware/</link>
+    <description>Recent content in firmware on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-15</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:25 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-15/operations/firmware/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>FASUpdate Script</title>
+      <link>/docs-csm/en-15/operations/firmware/fasupdate_script/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/firmware/fasupdate_script/</guid>
+      <description>FASUpdate Script The FASUpdate Script automates several steps for updating firmware using one of the standard default FAS action recipes.&#xA;The script will use an action recipe and monitor the update until all nodes have completed. While waiting for the update to complete, a summary will periodically be outputted.&#xA;To update the firmware, first create an authentication token. On most systems, this is created with the following command (ncn-mw#)&#xA;Stopping the FASUpdate Script does not stop the underling action from stopping.</description>
+    </item>
+    <item>
+      <title>FAS Admin Procedures</title>
+      <link>/docs-csm/en-15/operations/firmware/fas_admin_procedures/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/firmware/fas_admin_procedures/</guid>
+      <description>FAS Admin Procedures Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmware.&#xA;NEW: The FASUpdate.py script can be used to perform default updates to firmware and BIOS.&#xA;Topics Warning for non-compute nodes (NCNs) Declarative vs imperative FAS updates Exclude nodes from an update Ignore management nodes within FAS Override an image for an update Check for new firmware versions with a dry-run Load firmware from Nexus Load firmware from RPM or ZIP file Warning for non-compute nodes (NCNs) NCNs and their BMCs must be locked with the HSM locking API to ensure they are not unintentionally updated by FAS.</description>
+    </item>
+    <item>
+      <title>FAS CLI</title>
+      <link>/docs-csm/en-15/operations/firmware/fas_cli/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/firmware/fas_cli/</guid>
+      <description>FAS CLI NEW: The FASUpdate.py script can be used to perform default updates to firmware and BIOS.&#xA;This section describes the basic capabilities of the Firmware Action Service (FAS) CLI commands. These commands can be used to manage firmware for system hardware supported by FAS. Refer to the prerequisites section before proceeding to any of the sections for the supported operations.&#xA;NOTE: When using FAS, the xname refers to the BMC, not the node.</description>
+    </item>
+    <item>
+      <title>Cleaning up FAS Database</title>
+      <link>/docs-csm/en-15/operations/firmware/fas_dbcleanup/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/firmware/fas_dbcleanup/</guid>
+      <description>Cleaning up FAS Database FAS stores actions along with all of its operations and snapshots in the database. To clean these actions and snapshots use the following scripts.&#xA;Prerequisites Cray CLI installed and configured.&#xA;FASrmActions.sh Removes FAS actions from database greater than number of days ago.&#xA;/usr/share/doc/csm/scripts/operations/firmware/FASrmActions.sh num_of_days [-y] Parameters:&#xA;num_of_days - the number of days to keep actions (all actions older will be deleted) (required) -y - optional parameter - adding the -y will skip the confirmation prompt Example - This will remove actions &amp;gt; 50 days ago: (ncn-mw#)</description>
+    </item>
+    <item>
+      <title>FAS Filters</title>
+      <link>/docs-csm/en-15/operations/firmware/fas_filters/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/firmware/fas_filters/</guid>
+      <description>FAS Filters FAS uses five primary filters for actions and snapshots to determine what operations to create. The filters are listed below:&#xA;Selection Filters - Determine what operations will be created. The following selection filters are available: stateComponentFilter targetFilter inventoryHardwareFilter imageFilter Command Filters - Determine how the operations will be executed. The following command filters are available: command All filters are logically connected with AND logic. Only the stateComponentFilter, targetFilter, and inventoryHardwareFilter are used for snapshots.</description>
+    </item>
+    <item>
+      <title>Backup and Restoring FAS Images</title>
+      <link>/docs-csm/en-15/operations/firmware/fas_images_backup_restore/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/firmware/fas_images_backup_restore/</guid>
+      <description>Backup and Restoring FAS Images This procedure will backup all the images currently in FAS to allow for a restore.&#xA;To backup the images, first create an authentication token. On most systems, this is created with the following command (ncn-mw#)&#xA;export TOKEN=$(curl -s -S -d grant_type=client_credentials \ -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth \ -o jsonpath=&amp;#39;{.data.client-secret}&amp;#39; | base64 -d` \ https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \ | jq -r &amp;#39;.access_token&amp;#39;) Set the name of the Image Backup Directory (ncn-mw#)</description>
+    </item>
+    <item>
+      <title>Updating Foxconn Paradise Nodes with FAS</title>
+      <link>/docs-csm/en-15/operations/firmware/fas_paradise/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/firmware/fas_paradise/</guid>
+      <description>Updating Foxconn Paradise Nodes with FAS Use the Firmware Action Service (FAS) to update the firmware on Foxconn Paradise devices. Each procedure includes the prerequisites and example recipes required to update the firmware.&#xA;NOTE: Any node that is locked remains in the state inProgress with the stateHelper message of &amp;quot;failed to lock&amp;quot; until the action times out, or the lock is released. If the action is timed out, these nodes report as failed with the stateHelper message of &amp;quot;time expired; could not complete update&amp;quot;.</description>
+    </item>
+    <item>
+      <title>FAS Recipes</title>
+      <link>/docs-csm/en-15/operations/firmware/fas_recipes/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/firmware/fas_recipes/</guid>
+      <description>FAS Recipes NEW: The FASUpdate.py script can be used to perform default updates to firmware and BIOS.&#xA;NOTE This is a collection of various FAS recipes for performing updates. For step by step directions and commands, see FAS Use Cases.&#xA;The following example JSON files are useful to reference when updating specific hardware components. In all of these examples, the overrideDryrun field will be set to false; set them to true to perform a live update.</description>
+    </item>
+    <item>
+      <title>Update iLO 5 firmware above v2.78</title>
+      <link>/docs-csm/en-15/operations/firmware/fas_update_ilo5_2.78/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/firmware/fas_update_ilo5_2.78/</guid>
+      <description>Update iLO 5 firmware above v2.78 This procedure is only required if the current version if iLO 5 is below v2.78.&#xA;iLO 5 versions above v2.78 are larger than 32MB in size. iLO 5 versions prior to v2.78 will only accept 32MB size binary files. iLO 5 v2.78 removed this restriction. To upgrade to a version after v2.78, iLO 5 must first be update to v2.78.&#xA;Find Image Id for iLO 5 version 2.</description>
+    </item>
+    <item>
+      <title>FAS Recipes and Procedures</title>
+      <link>/docs-csm/en-15/operations/firmware/fas_use_cases/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/firmware/fas_use_cases/</guid>
+      <description>FAS Recipes and Procedures Use the Firmware Action Service (FAS) to update the firmware on supported hardware devices. Each procedure includes the prerequisites and example recipes required to update the firmware.&#xA;When updating an entire system, walk down the device hierarchy component type by component type, starting first with routers (switches), proceeding to chassis, and then finally to nodes. While this is not strictly necessary, it does help eliminate confusion.</description>
+    </item>
+    <item>
+      <title>Firmware Upgrade using SPP on HPE ProLiant Servers</title>
+      <link>/docs-csm/en-15/operations/firmware/firmware_upgrade_using_spp_on_hpe_proliant_servers/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/firmware/firmware_upgrade_using_spp_on_hpe_proliant_servers/</guid>
+      <description>Firmware Upgrade using SPP on HPE ProLiant Servers Download SPP image Deploying individual firmware components Get the individual firmware component from SPP ISO image Steps to deploy individual components Deploy SPP ISO image as a whole Prerequisites Deploying the ISO image using the local method Deploying the ISO image using the remote method Notes High level Production systems Download SPP image Link to download site.&#xA;Naming convention example: 2023.04.00.00 is the ISO image released in 4th Month of 2023 Download the latest version or the specific required version.</description>
+    </item>
+    <item>
+      <title>Update Firmware with FAS</title>
+      <link>/docs-csm/en-15/operations/firmware/update_firmware_with_fas/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/firmware/update_firmware_with_fas/</guid>
+      <description>Update Firmware with FAS If FAS has not yet been installed, firmware for NCNs can be updated manually without FAS. See Updating Firmware without FAS.&#xA;The Firmware Action Service (FAS) provides an interface for managing firmware versions of Redfish-enabled hardware in the system. FAS interacts with the Hardware State Managers (HSM), device data, and image data in order to update firmware.&#xA;Gigabyte nodes that are having issues with ipmitool, Redfish, or flashing firmware may need to be reset to factory defaults.</description>
+    </item>
+    <item>
+      <title>Updating BMC Firmware and BIOS for ncn-m001</title>
+      <link>/docs-csm/en-15/operations/firmware/updating_firmware_m001/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/firmware/updating_firmware_m001/</guid>
+      <description>Updating BMC Firmware and BIOS for ncn-m001 Retrieve the model name and firmware image required to update an HPE or Gigabyte ncn-m001 node.&#xA;NOTE&#xA;On HPE nodes, the BMC firmware is iLO 5 or iLO 6 and BIOS is System ROM. The commands in the procedure must be run on ncn-m001. Prerequisites Find the model name Get the firmware images Flash the firmware Flash Gigabyte ncn-m001 Flash HPE ncn-m001 Prerequisites WARNING: This procedure should not be performed during a CSM install while ncn-m001 is booted as the PIT node using a remote ISO image.</description>
+    </item>
+    <item>
+      <title>Updating BMC Firmware and BIOS for NCNs without FAS</title>
+      <link>/docs-csm/en-15/operations/firmware/updating_firmware_without_fas/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:25 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/firmware/updating_firmware_without_fas/</guid>
+      <description>Updating BMC Firmware and BIOS for NCNs without FAS NOTE&#xA;On HPE nodes, the BMC firmware is iLO 5 or iLO 6 and BIOS is System ROM. The commands in the procedure must be run on ncn-m001. This procedure should only be used if FAS is not available, such as during initial CSM install. In order to update the firmware or BIOS for ncn-m001 itself, see Updating BMC Firmware and BIOS for ncn-m001.</description>
+    </item>
+    <item>
+      <title>Upload BMC Recovery Firmware into TFTP Server</title>
+      <link>/docs-csm/en-15/operations/firmware/upload_olympus_bmc_recovery_firmware_into_tftp_server/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:25 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/firmware/upload_olympus_bmc_recovery_firmware_into_tftp_server/</guid>
+      <description>Upload BMC Recovery Firmware into TFTP Server cray-upload-recovery-images is a utility for uploading the BMC recovery files for ChassisBMCs, NodeBMCs, and RouterBMCs to be served by the cray-tftp service. The tool uses the cray CLI (fas, artifacts) and cray-tftp to download the S3 recovery images (as remembered by FAS), then upload them into the PVC that is used by cray-tftp. cray-upload-recovery-images should be run on every system.&#xA;CSM v1.5 Issue In CSM 1.</description>
+    </item>
+  </channel>
+</rss>

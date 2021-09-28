@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>cani on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-16/operations/cani/</link>
+    <description>Recent content in cani on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-16</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:15 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-16/operations/cani/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Add A Blade To A Cabinet In SLS Using CANI</title>
+      <link>/docs-csm/en-16/operations/cani/add_a_blade_to_a_cabinet_in_sls/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:15 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/cani/add_a_blade_to_a_cabinet_in_sls/</guid>
+      <description>Add A Blade To A Cabinet In SLS Using CANI (ncn#|external#) Begin by initializing a session, which will import data from SLS and create metadata in SLS&amp;rsquo; ExtraProperties field allowing the process to continue.&#xA;cani alpha session init csm \ --csm-keycloak-username username \ --csm-keycloak-password password \ --csm-api-host api-gw-service-nmn.local # initialize a session by importing SLS data to cani Note: SLS data may be unstable if cani has never been run against it, in which case cani will not continue.</description>
+    </item>
+    <item>
+      <title>Add A Cabinet To SLS using CANI</title>
+      <link>/docs-csm/en-16/operations/cani/add_a_cabinet_to_sls/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:15 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/cani/add_a_cabinet_to_sls/</guid>
+      <description>Add A Cabinet To SLS using CANI (ncn#|external#) Begin by initializing a session, which will import data from SLS and create metadata in SLS&amp;rsquo; ExtraProperties field allowing the process to continue.&#xA;cani alpha session init csm \ --csm-keycloak-username username \ --csm-keycloak-password password \ --csm-api-host api-gw-service-nmn.local # initialize a session by importing SLS data to cani Note: SLS data may be unstable if cani has never been run against it, in which case cani will not continue.</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,5454 @@
+<!DOCTYPE html>
+<html lang="en-09" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.123.0">
+    <meta name="description" content="">
+
+
+    <link rel="icon" href="/docs-csm/images/favicon.png" type="image/png">
+
+    <title>CSM Install Validation and Health Checks :: Cray System Management (CSM)</title>
+
+    
+    <link href="/docs-csm/css/nucleus.css?1729741357" rel="stylesheet">
+    <link href="/docs-csm/css/fontawesome-all.min.css?1729741357" rel="stylesheet">
+    <link href="/docs-csm/css/hybrid.css?1729741357" rel="stylesheet">
+    <link href="/docs-csm/css/featherlight.min.css?1729741357" rel="stylesheet">
+    <link href="/docs-csm/css/perfect-scrollbar.min.css?1729741357" rel="stylesheet">
+    <link href="/docs-csm/css/auto-complete.css?1729741357" rel="stylesheet">
+    <link href="/docs-csm/css/atom-one-dark-reasonable.css?1729741357" rel="stylesheet">
+    <link href="/docs-csm/css/theme.css?1729741357" rel="stylesheet">
+    <link href="/docs-csm/css/tabs.css?1729741357" rel="stylesheet">
+    <link href="/docs-csm/css/hugo-theme.css?1729741357" rel="stylesheet">
+    
+    <link href="/docs-csm/css/theme-blue.css?1729741357" rel="stylesheet">
+    
+    
+
+    <script src="/docs-csm/js/jquery-3.3.1.min.js?1729741357"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="/docs-csm/en-09/008-csm-validation/">
+    <nav id="sidebar" class="">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo" href='/docs-csm/en-09'>
+  Cray System Management
+</a>
+
+    </div>
+
+    
+    <section>
+      <ul>
+      
+        <li>
+          <div class="select-style padding">
+          v <select id="select-language" onchange="location = this.value;">
+          
+          
+          
+              
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+                    
+                    
+                      <option id="en-09" value="/docs-csm/en-09/008-csm-validation/" selected>0.9</option>
+                    
+                  
+              
+          
+        </select>
+        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          width="255px" height="255px" viewBox="0 0 255 255" style="enable-background:new 0 0 255 255;" xml:space="preserve">
+          <g>
+            <g id="arrow-drop-down">
+              <polygon points="0,63.75 127.5,191.25 255,63.75 		" />
+            </g>
+          </g>
+        </svg>
+        </div>
+        </li>
+      
+
+      
+      </ul>
+    </section>
+  
+
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="/docs-csm/js/lunr.min.js?1729741357"></script>
+<script type="text/javascript" src="/docs-csm/js/auto-complete.js?1729741357"></script>
+<script type="text/javascript">
+    
+        var baseurl = "\/docs-csm\/\/en-09";
+    
+</script>
+<script type="text/javascript" src="/docs-csm/js/search.js?1729741357"></script>
+
+    
+  </div>
+
+  
+
+    <div class="highlightable">
+    <ul class="topics">
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/421-mgmt-net-cabling-checklist/" title="1.4 Management network cabling checklist" class="dd-item ">
+        <a href="/docs-csm/en-09/421-mgmt-net-cabling-checklist/">
+        1.4 Management network cabling checklist
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/308-application-node-config/" title="Application Node Config" class="dd-item ">
+        <a href="/docs-csm/en-09/308-application-node-config/">
+        Application Node Config
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/310-cabinets/" title="Cabinets" class="dd-item ">
+        <a href="/docs-csm/en-09/310-cabinets/">
+        Cabinets
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/416-mgmt-net-cabling/" title="Cabling" class="dd-item ">
+        <a href="/docs-csm/en-09/416-mgmt-net-cabling/">
+        Cabling
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/066-ceph-csi/" title="CEPH CSI Verification" class="dd-item ">
+        <a href="/docs-csm/en-09/066-ceph-csi/">
+        CEPH CSI Verification
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/302-ncn-metadata-bondx/" title="Collecting NCN MAC Addresses" class="dd-item ">
+        <a href="/docs-csm/en-09/302-ncn-metadata-bondx/">
+        Collecting NCN MAC Addresses
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/301-ncn-metadata-bmc/" title="Collecting the BMC MAC Addresses" class="dd-item ">
+        <a href="/docs-csm/en-09/301-ncn-metadata-bmc/">
+        Collecting the BMC MAC Addresses
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/257-firmware-action-service-cray-windom-compute-node-bios-workaround/" title="Compute Node BIOS workaround for WNC-rome aka HPE CRAY EX425" class="dd-item ">
+        <a href="/docs-csm/en-09/257-firmware-action-service-cray-windom-compute-node-bios-workaround/">
+        Compute Node BIOS workaround for WNC-rome aka HPE CRAY EX425
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/000-info/" title="CRAY Guide Contribution" class="dd-item ">
+        <a href="/docs-csm/en-09/000-info/">
+        CRAY Guide Contribution
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/063-csi-files/" title="Cray Site Init Files" class="dd-item ">
+        <a href="/docs-csm/en-09/063-csi-files/">
+        Cray Site Init Files
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/release_notes/" title="Cray System Management (CSM) - Release Notes" class="dd-item ">
+        <a href="/docs-csm/en-09/release_notes/">
+        Cray System Management (CSM) - Release Notes
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/001-guides/" title="CSM Documentation Guide" class="dd-item ">
+        <a href="/docs-csm/en-09/001-guides/">
+        CSM Documentation Guide
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/002-csm-install/" title="CSM Install" class="dd-item ">
+        <a href="/docs-csm/en-09/002-csm-install/">
+        CSM Install
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/007-csm-install-reboot/" title="CSM Install Reboot - Final NCN Install" class="dd-item ">
+        <a href="/docs-csm/en-09/007-csm-install-reboot/">
+        CSM Install Reboot - Final NCN Install
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/008-csm-validation/" title="CSM Install Validation and Health Checks" class="dd-item active">
+        <a href="/docs-csm/en-09/008-csm-validation/">
+        CSM Install Validation and Health Checks
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/005-csm-metal-install/" title="CSM Metal Install" class="dd-item ">
+        <a href="/docs-csm/en-09/005-csm-metal-install/">
+        CSM Metal Install
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/006-csm-platform-install/" title="CSM Platform Install" class="dd-item ">
+        <a href="/docs-csm/en-09/006-csm-platform-install/">
+        CSM Platform Install
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/troubleshooting/" title="CSM Troubleshooting Information" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/troubleshooting/">
+          CSM Troubleshooting Information
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/troubleshooting/known_issues/" title="known issues" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/troubleshooting/known_issues/">
+          known issues
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/troubleshooting/known_issues/cfs_sessions_stuck_in_pending/" title="CFS Sessions are Stuck in Pending State" class="dd-item ">
+        <a href="/docs-csm/en-09/troubleshooting/known_issues/cfs_sessions_stuck_in_pending/">
+        CFS Sessions are Stuck in Pending State
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/troubleshooting/known_issues/conman_pod_kubernetes_copy_fails/" title="Copying file from the cray-conman pod fails" class="dd-item ">
+        <a href="/docs-csm/en-09/troubleshooting/known_issues/conman_pod_kubernetes_copy_fails/">
+        Copying file from the cray-conman pod fails
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/troubleshooting/known_issues/orphaned_cfs_pods/" title="Orphaned CFS Pods After Booting or Rebooting" class="dd-item ">
+        <a href="/docs-csm/en-09/troubleshooting/known_issues/orphaned_cfs_pods/">
+        Orphaned CFS Pods After Booting or Rebooting
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/003-csm-usb-livecd/" title="CSM USB LiveCD - Creation and Configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/003-csm-usb-livecd/">
+        CSM USB LiveCD - Creation and Configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/051-disk-cleanslate/" title="Disk Cleanslate" class="dd-item ">
+        <a href="/docs-csm/en-09/051-disk-cleanslate/">
+        Disk Cleanslate
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/255-firmware-action-service-fas/" title="FIRMWARE ACTION SERVICE (FAS) | User Procedures" class="dd-item ">
+        <a href="/docs-csm/en-09/255-firmware-action-service-fas/">
+        FIRMWARE ACTION SERVICE (FAS) | User Procedures
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/256-firmware-action-service-fas-recipes/" title="Firmware Action Service (FAS) Administration Guide" class="dd-item ">
+        <a href="/docs-csm/en-09/256-firmware-action-service-fas-recipes/">
+        Firmware Action Service (FAS) Administration Guide
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/250-firmware/" title="Firmware Checkout" class="dd-item ">
+        <a href="/docs-csm/en-09/250-firmware/">
+        Firmware Checkout
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/010-firmware-update-with-fas/" title="Firmware Update the system with FAS" class="dd-item ">
+        <a href="/docs-csm/en-09/010-firmware-update-with-fas/">
+        Firmware Update the system with FAS
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/254-ncn-firmware-gb/" title="Gigabyte Firmware Bug" class="dd-item ">
+        <a href="/docs-csm/en-09/254-ncn-firmware-gb/">
+        Gigabyte Firmware Bug
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/304-ncn-pcie-net-boot-and-re-cable/" title="Guide  Netboot an NCN from a Spine" class="dd-item ">
+        <a href="/docs-csm/en-09/304-ncn-pcie-net-boot-and-re-cable/">
+        Guide  Netboot an NCN from a Spine
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/068-harvest-13-config/" title="HARVEST 13 CONFIG" class="dd-item ">
+        <a href="/docs-csm/en-09/068-harvest-13-config/">
+        HARVEST 13 CONFIG
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/307-hmn-connections/" title="HMN Connections File" class="dd-item ">
+        <a href="/docs-csm/en-09/307-hmn-connections/">
+        HMN Connections File
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/418-mgmt-net-ip-helper/" title="IP-Helper configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/418-mgmt-net-ip-helper/">
+        IP-Helper configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/061-livecd-metal-basecamp/" title="LiveCD - Metal Basecamp" class="dd-item ">
+        <a href="/docs-csm/en-09/061-livecd-metal-basecamp/">
+        LiveCD - Metal Basecamp
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/060-livecd-1.3-rollback/" title="LiveCD 1.3 Rollback" class="dd-item ">
+        <a href="/docs-csm/en-09/060-livecd-1.3-rollback/">
+        LiveCD 1.3 Rollback
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/059-livecd-backup/" title="LiveCD Re-Installs" class="dd-item ">
+        <a href="/docs-csm/en-09/059-livecd-backup/">
+        LiveCD Re-Installs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/058-livecd-troubleshooting/" title="LiveCD Recovery" class="dd-item ">
+        <a href="/docs-csm/en-09/058-livecd-troubleshooting/">
+        LiveCD Recovery
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/004-csm-remote-livecd/" title="LiveCD Remote ISO Install" class="dd-item ">
+        <a href="/docs-csm/en-09/004-csm-remote-livecd/">
+        LiveCD Remote ISO Install
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/062-livecd-virtual-iso-boot/" title="LiveCD Virtual ISO Boot" class="dd-item ">
+        <a href="/docs-csm/en-09/062-livecd-virtual-iso-boot/">
+        LiveCD Virtual ISO Boot
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/405-mgmt-net-port-config/" title="Management Network Access Port configurations." class="dd-item ">
+        <a href="/docs-csm/en-09/405-mgmt-net-port-config/">
+        Management Network Access Port configurations.
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/406-mgmt-net-acl-config/" title="Management Network ACL configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/406-mgmt-net-acl-config/">
+        Management Network ACL configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/402-mgmt-net-base-config/" title="Management Network Base Configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/402-mgmt-net-base-config/">
+        Management Network Base Configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/408-mgmt-net-can-config/" title="Management Network CAN setup" class="dd-item ">
+        <a href="/docs-csm/en-09/408-mgmt-net-can-config/">
+        Management Network CAN setup
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/412-mgmt-net-dell-mellanox-upgrades/" title="Management Network Dell And Mellanox Upgrades" class="dd-item ">
+        <a href="/docs-csm/en-09/412-mgmt-net-dell-mellanox-upgrades/">
+        Management Network Dell And Mellanox Upgrades
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/413-mgmt-net-example-config/" title="Management Network Example Config" class="dd-item ">
+        <a href="/docs-csm/en-09/413-mgmt-net-example-config/">
+        Management Network Example Config
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/409-mgmt-net-firmware-update/" title="Management Network Firmware Update" class="dd-item ">
+        <a href="/docs-csm/en-09/409-mgmt-net-firmware-update/">
+        Management Network Firmware Update
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/417-mgmt-net-flow-control/" title="Management Network Flow Control Settings" class="dd-item ">
+        <a href="/docs-csm/en-09/417-mgmt-net-flow-control/">
+        Management Network Flow Control Settings
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/411-mgmt-net-layer3-config/" title="Management Network Layer3 Configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/411-mgmt-net-layer3-config/">
+        Management Network Layer3 Configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/404-mgmt-net-mlag-config/" title="Management Network MLAG Configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/404-mgmt-net-mlag-config/">
+        Management Network MLAG Configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/414-mgmt-net-ntp-config/" title="Management Network NTP configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/414-mgmt-net-ntp-config/">
+        Management Network NTP configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/407-mgmt-net-snmp-config/" title="Management Network SNMP configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/407-mgmt-net-snmp-config/">
+        Management Network SNMP configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/419-mgmt-net-stp/" title="Management Network Spanning-Tree Configuration." class="dd-item ">
+        <a href="/docs-csm/en-09/419-mgmt-net-stp/">
+        Management Network Spanning-Tree Configuration.
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/415-mgmt-net-switch-rename/" title="Management Network Switch Rename" class="dd-item ">
+        <a href="/docs-csm/en-09/415-mgmt-net-switch-rename/">
+        Management Network Switch Rename
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/410-mgmt-net-uplink-config/" title="Management Network Uplink configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/410-mgmt-net-uplink-config/">
+        Management Network Uplink configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/403-mgmt-net-vlan-config/" title="Management Network VLAN Configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/403-mgmt-net-vlan-config/">
+        Management Network VLAN Configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/306-sls-add-uan-alias/" title="Manually add UAN Aliases to SLS" class="dd-item ">
+        <a href="/docs-csm/en-09/306-sls-add-uan-alias/">
+        Manually add UAN Aliases to SLS
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/309-move-site-connections/" title="Move Site Connections" class="dd-item ">
+        <a href="/docs-csm/en-09/309-move-site-connections/">
+        Move Site Connections
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/200-ncn-bios-pref/" title="NCN BIOS Preferences" class="dd-item ">
+        <a href="/docs-csm/en-09/200-ncn-bios-pref/">
+        NCN BIOS Preferences
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/101-ncn-booting/" title="NCN Booting" class="dd-item ">
+        <a href="/docs-csm/en-09/101-ncn-booting/">
+        NCN Booting
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/107-ncn-devel/" title="NCN Development" class="dd-item ">
+        <a href="/docs-csm/en-09/107-ncn-devel/">
+        NCN Development
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/253-ncn-hw-swap/" title="NCN Hardware Swaps" class="dd-item ">
+        <a href="/docs-csm/en-09/253-ncn-hw-swap/">
+        NCN Hardware Swaps
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/110-ncn-image-customization/" title="NCN Image Customization" class="dd-item ">
+        <a href="/docs-csm/en-09/110-ncn-image-customization/">
+        NCN Image Customization
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/303-ncn-metadata-usb-serial/" title="NCN Metadata over USB-Serial Cable" class="dd-item ">
+        <a href="/docs-csm/en-09/303-ncn-metadata-usb-serial/">
+        NCN Metadata over USB-Serial Cable
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/106-ncn-sles/" title="NCN Operating System Release" class="dd-item ">
+        <a href="/docs-csm/en-09/106-ncn-sles/">
+        NCN Operating System Release
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/105-ncn-packages/" title="NCN Packages" class="dd-item ">
+        <a href="/docs-csm/en-09/105-ncn-packages/">
+        NCN Packages
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/104-ncn-partitioning/" title="NCN Partitions" class="dd-item ">
+        <a href="/docs-csm/en-09/104-ncn-partitioning/">
+        NCN Partitions
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/009-ncn-locking/" title="NCN/Management Node Locking" class="dd-item ">
+        <a href="/docs-csm/en-09/009-ncn-locking/">
+        NCN/Management Node Locking
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/251-firmware-network/" title="Network Firmware" class="dd-item ">
+        <a href="/docs-csm/en-09/251-firmware-network/">
+        Network Firmware
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/052-network-stack/" title="Network Stack (Software and Hardware)" class="dd-item ">
+        <a href="/docs-csm/en-09/052-network-stack/">
+        Network Stack (Software and Hardware)
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/103-ncn-networking/" title="Networking" class="dd-item ">
+        <a href="/docs-csm/en-09/103-ncn-networking/">
+        Networking
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/252-firmware-ncn/" title="Node Firmware" class="dd-item ">
+        <a href="/docs-csm/en-09/252-firmware-ncn/">
+        Node Firmware
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/100-ncn-images/" title="Non-Compute Node Images" class="dd-item ">
+        <a href="/docs-csm/en-09/100-ncn-images/">
+        Non-Compute Node Images
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/108-ncn-ntp/" title="NTP On NCNs" class="dd-item ">
+        <a href="/docs-csm/en-09/108-ncn-ntp/">
+        NTP On NCNs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/" title="operations" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/">
+          operations
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/boot_orchestration/" title="boot orchestration" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/boot_orchestration/">
+          boot orchestration
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/boot_orchestration/stage_changes_without_bos/" title="Stage Changes Without BOS" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/boot_orchestration/stage_changes_without_bos/">
+        Stage Changes Without BOS
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/boot_orchestration/upload_node_boot_information_to_boot_script_service_bss/" title="Upload Node Boot Information to Boot Script Service (BSS)" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/boot_orchestration/upload_node_boot_information_to_boot_script_service_bss/">
+        Upload Node Boot Information to Boot Script Service (BSS)
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/configuration_management/" title="configuration management" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/configuration_management/">
+          configuration management
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/configuration_management/configuration_layers/" title="Configuration Layers" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/configuration_management/configuration_layers/">
+        Configuration Layers
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/csm_product_management/" title="CSM product management" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/csm_product_management/">
+          CSM product management
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/csm_product_management/apply_security_hardening/" title="Security Hardening" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/csm_product_management/apply_security_hardening/">
+        Security Hardening
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/csm_product_management/change_passwords_and_credentials/" title="Change Passwords and Credentials" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/csm_product_management/change_passwords_and_credentials/">
+        Change Passwords and Credentials
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/kubernetes/" title="kubernetes" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/kubernetes/">
+          kubernetes
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/kubernetes/cert_renewal_for_kubernetes_and_bare_metal_etcd/" title="Kubernetes and Bare Metal EtcD Certificate Renewal" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/kubernetes/cert_renewal_for_kubernetes_and_bare_metal_etcd/">
+        Kubernetes and Bare Metal EtcD Certificate Renewal
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/network/" title="network" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/network/">
+          network
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/network/metallb_bgp/" title="metallb bgp" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/network/metallb_bgp/">
+          metallb bgp
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/" title="Check BGP Status and Reset Sessions" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/">
+        Check BGP Status and Reset Sessions
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/system_management_health/" title="system management health" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/system_management_health/">
+          system management health
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/system_management_health/troubleshoot_prometheus_alerts/" title="Troubleshoot Prometheus Alerts" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/system_management_health/troubleshoot_prometheus_alerts/">
+        Troubleshoot Prometheus Alerts
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/fas_loader/" title="FAS Loader" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/fas_loader/">
+          FAS Loader
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/fas_loader/fas_loader_fails/" title="TROUBLESHOOTING FAS LOADER FAILS" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/fas_loader/fas_loader_fails/">
+        TROUBLESHOOTING FAS LOADER FAILS
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/hmcollector/" title="hmcollector" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/hmcollector/">
+          hmcollector
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/hmcollector/adjust_hmcollector_resource_limits_requests/" title="Adjust HM Collector resource limits and requests" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/hmcollector/adjust_hmcollector_resource_limits_requests/">
+        Adjust HM Collector resource limits and requests
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/" title="security and authentication" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/security_and_authentication/">
+          security and authentication
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/add_ldap_user_federation/" title="Add LDAP User Federation" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/add_ldap_user_federation/">
+        Add LDAP User Federation
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_air-cooled_node_bmc_credentials/" title="Change Air-Cooled Node BMC Credentials" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_air-cooled_node_bmc_credentials/">
+        Change Air-Cooled Node BMC Credentials
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_credentials_on_servertech_pdus/" title="Change Credentials on ServerTech PDUs" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_credentials_on_servertech_pdus/">
+        Change Credentials on ServerTech PDUs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_ex_cabinet_global_default_password/" title="Change Cray EX Cabinet Global Default Password" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_ex_cabinet_global_default_password/">
+        Change Cray EX Cabinet Global Default Password
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys/" title="Change NCN Image Root Password and SSH Keys" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys/">
+        Change NCN Image Root Password and SSH Keys
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys_on_pit_node/" title="Change NCN Image Root Password and SSH Keys on PIT Node" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys_on_pit_node/">
+        Change NCN Image Root Password and SSH Keys on PIT Node
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_smnp_credentials_on_leaf_switches/" title="Change SMNP Credentials on Leaf Switches" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_smnp_credentials_on_leaf_switches/">
+        Change SMNP Credentials on Leaf Switches
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_the_keycloak_admin_password/" title="Change the Keycloak Admin Password" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_the_keycloak_admin_password/">
+        Change the Keycloak Admin Password
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/provisioning_a_liquid-cooled_ex_cabinet_cec_with_default_credentials/" title="Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/provisioning_a_liquid-cooled_ex_cabinet_cec_with_default_credentials/">
+        Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/restrict_access_to_ncn_images_s3_bucket/" title="Restrict Network Access to the ncn-images S3 Bucket" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/restrict_access_to_ncn_images_s3_bucket/">
+        Restrict Network Access to the ncn-images S3 Bucket
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/update_default_air-cooled_bmc_and_leaf_switch_snmp_credentials/" title="Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/update_default_air-cooled_bmc_and_leaf_switch_snmp_credentials/">
+        Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/update_default_servertech_pdu_credentials_used_by_the_redfish_translation_service/" title="Update Default ServerTech PDU Credentials used by the Redfish Translation Service (RTS)" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/update_default_servertech_pdu_credentials_used_by_the_redfish_translation_service/">
+        Update Default ServerTech PDU Credentials used by the Redfish Translation Service (RTS)
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/update_ncn_passwords/" title="Update NCN Passwords" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/update_ncn_passwords/">
+        Update NCN Passwords
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/updating_the_liquid-cooled_ex_cabinet_default_credentials_after_a_cec_password_change/" title="Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/updating_the_liquid-cooled_ex_cabinet_default_credentials_after_a_cec_password_change/">
+        Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/node_management/" title="node management" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/node_management/">
+          node management
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/node_management/adding_a_liquid-cooled_blade_to_a_system/" title="Adding a Liquid-cooled blade to a System" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/node_management/adding_a_liquid-cooled_blade_to_a_system/">
+        Adding a Liquid-cooled blade to a System
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/" title="Check and Set the metal.no-wipe Setting on NCNs" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/">
+        Check and Set the metal.no-wipe Setting on NCNs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/node_management/enable_kdump/" title="Enable Kdump" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/node_management/enable_kdump/">
+        Enable Kdump
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/node_management/reboot_ncns/" title="Reboot NCNs" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/node_management/reboot_ncns/">
+        Reboot NCNs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/node_management/removing_a_liquid-cooled_blade_from_a_system/" title="Removing a Liquid-cooled blade from a System" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/node_management/removing_a_liquid-cooled_blade_from_a_system/">
+        Removing a Liquid-cooled blade from a System
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/055-certificate-authority/" title="Overview" class="dd-item ">
+        <a href="/docs-csm/en-09/055-certificate-authority/">
+        Overview
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/401-management-network-install/" title="Overview" class="dd-item ">
+        <a href="/docs-csm/en-09/401-management-network-install/">
+        Overview
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/420-mgmt-net-pxe-tshoot/" title="PXE boot Troubleshooting" class="dd-item ">
+        <a href="/docs-csm/en-09/420-mgmt-net-pxe-tshoot/">
+        PXE boot Troubleshooting
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/065-csm-safeguards/" title="Safeguards" class="dd-item ">
+        <a href="/docs-csm/en-09/065-csm-safeguards/">
+        Safeguards
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/300-service-guides/" title="Service Guides" class="dd-item ">
+        <a href="/docs-csm/en-09/300-service-guides/">
+        Service Guides
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/067-shasta-cfg/" title="Setup Site-Init From SHASTA-CFG" class="dd-item ">
+        <a href="/docs-csm/en-09/067-shasta-cfg/">
+        Setup Site-Init From SHASTA-CFG
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/305-switch-metadata/" title="Switch Metadata" class="dd-item ">
+        <a href="/docs-csm/en-09/305-switch-metadata/">
+        Switch Metadata
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/500-uas-uai-admin-and-user-guide/" title="The Shasta User Access Service" class="dd-item ">
+        <a href="/docs-csm/en-09/500-uas-uai-admin-and-user-guide/">
+        The Shasta User Access Service
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/" title="upgrade" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/">
+          upgrade
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/" title="CSM 0.9 Patch Release Upgrade Procedures" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/">
+          CSM 0.9 Patch Release Upgrade Procedures
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.6/" title="CSM 0.9.6 Patch Installation Instructions" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.6/">
+          CSM 0.9.6 Patch Installation Instructions
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.4/" title="CSM 0.9.4 Patch Upgrade Guide" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.4/">
+          CSM 0.9.4 Patch Upgrade Guide
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/" title="CVE-2021-22555 CVE-2021-33909" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/">
+          CVE-2021-22555 CVE-2021-33909
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/" title="operations" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/">
+          operations
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/" title="network" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/">
+          network
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/metallb_bgp/" title="metallb bgp" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/metallb_bgp/">
+          metallb bgp
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/" title="Check BGP Status and Reset Sessions" class="dd-item ">
+        <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/">
+        Check BGP Status and Reset Sessions
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/" title="node management" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/">
+          node management
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/" title="Check and Set the metal.no-wipe Setting on NCNs" class="dd-item ">
+        <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/">
+        Check and Set the metal.no-wipe Setting on NCNs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/reboot_ncns/" title="Reboot NCNs" class="dd-item ">
+        <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/reboot_ncns/">
+        Reboot NCNs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.2/" title="CSM 0.9.2 Patch Upgrade Guide" class="dd-item ">
+        <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.2/">
+        CSM 0.9.2 Patch Upgrade Guide
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.3/" title="CSM 0.9.3 Patch Upgrade Guide" class="dd-item ">
+        <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.3/">
+        CSM 0.9.3 Patch Upgrade Guide
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/069-upgrade-workarounds-rpm/" title="Upgrade CSM Install Workarounds RPM" class="dd-item ">
+        <a href="/docs-csm/en-09/069-upgrade-workarounds-rpm/">
+        Upgrade CSM Install Workarounds RPM
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/070-usp-install-workarounds/" title="Utility Storage Installation Troubleshooting" class="dd-item ">
+        <a href="/docs-csm/en-09/070-usp-install-workarounds/">
+        Utility Storage Installation Troubleshooting
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/400-switch-bgp-neighbors/" title="Verify and Update BGP neighbors" class="dd-item ">
+        <a href="/docs-csm/en-09/400-switch-bgp-neighbors/">
+        Verify and Update BGP neighbors
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+    </ul>
+
+    
+    
+
+    
+    <section id="footer">
+      
+    </section>
+  </div>
+</nav>
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            <a href='/docs-csm/en-09/'>CRAY System Management - Guides and References</a> > CSM Install Validation and Health Checks
+          
+        
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#platform-health-checks">Platform Health Checks</a>
+      <ul>
+        <li><a href="#pet-ncnhealthchecks">ncnHealthChecks</a></li>
+        <li><a href="#pet-ncnpostgreshealthchecks">ncnPostgresHealthChecks</a></li>
+        <li><a href="#pet-clock-skew">Clock Skew</a></li>
+        <li><a href="#pet-bgp">BGP Peering Status and Reset</a></li>
+      </ul>
+    </li>
+    <li><a href="#network-health-checks">Network Health Checks</a>
+      <ul>
+        <li><a href="#net-kea">Verify that KEA has active DHCP leases</a></li>
+        <li><a href="#net-extdns">Verify ability to resolve external DNS</a></li>
+        <li><a href="#net-spire">Verify Spire Agent is Running on Kubernetes NCNs</a></li>
+        <li><a href="#net-vault">Verify the Vault Cluster is Healthy</a></li>
+      </ul>
+    </li>
+    <li><a href="#automated-goss-testing">Automated Goss Testing</a>
+      <ul>
+        <li><a href="#autogoss-issues">Known Test Issues</a></li>
+      </ul>
+    </li>
+    <li><a href="#hms-tests">Hardware Management Services Tests</a>
+      <ul>
+        <li><a href="#hms-exec">Test Execution</a></li>
+      </ul>
+    </li>
+    <li><a href="#cms-validation-utility">Cray Management Services Validation Utility</a>
+      <ul>
+        <li><a href="#cms-usage">Usage</a></li>
+        <li><a href="#cms-checks">Checks To Run</a></li>
+      </ul>
+    </li>
+    <li><a href="#booting-csm-barebones-image">Booting CSM Barebones Image</a>
+      <ul>
+        <li><a href="#csm-ims">Locate the CSM Barebones Image in IMS</a></li>
+        <li><a href="#csm-bst">Create a BOS Session Template for the CSM Barebones Image</a></li>
+        <li><a href="#csm-node">Find an available compute node</a></li>
+        <li><a href="#csm-reboot">Reboot the node using your BOS session template</a></li>
+        <li><a href="#csm-consoles">Verify console connections</a></li>
+        <li><a href="#csm-watch">Connect to the node&rsquo;s console and watch the boot</a></li>
+      </ul>
+    </li>
+    <li><a href="#uas-uai-tests">UAS / UAI Tests</a>
+      <ul>
+        <li><a href="#uas-uai-init-cli">Initialize and Authorize the CLI</a></li>
+        <li><a href="#uas-uai-validate">Validate UAS and UAI Functionality</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+            </h1>
+          
+
+        
+
+
+<h1 id="csm-install-validation-and-health-checks">CSM Install Validation and Health Checks</h1>
+<p>This page lists available CSM install and health checks that can be executed to validate the CSM install.</p>
+<ol>
+<li><a href="/docs-csm/en-09/#platform-health-checks">Platform Health Checks</a>
+<ol>
+<li><a href="/docs-csm/en-09/#pet-ncnhealthchecks">ncnHealthChecks</a></li>
+<li><a href="/docs-csm/en-09/#pet-ncnpostgreshealthchecks">ncnPostgresHealthChecks</a></li>
+<li><a href="/docs-csm/en-09/#pet-clock-skew">Clock Skew</a></li>
+<li><a href="/docs-csm/en-09/#pet-bgp">BGP Peering Status and Reset</a></li>
+</ol>
+</li>
+<li><a href="/docs-csm/en-09/#network-health-checks">Network Health Checks</a>
+<ol>
+<li><a href="/docs-csm/en-09/#net-kea">KEA / DHCP</a></li>
+<li><a href="/docs-csm/en-09/#net-extdns">External DNS</a></li>
+<li><a href="/docs-csm/en-09/#net-spire">Spire Agent</a></li>
+<li><a href="/docs-csm/en-09/#net-vault">Vault Cluster</a></li>
+</ol>
+</li>
+<li><a href="/docs-csm/en-09/#automated-goss-testing">Automated Goss Testing</a></li>
+<li><a href="/docs-csm/en-09/#hms-tests">Hardware Management Services Tests</a></li>
+<li><a href="/docs-csm/en-09/#cms-validation-utility">Cray Management Services Validation Utility</a></li>
+<li><a href="/docs-csm/en-09/#booting-csm-barebones-image">Booting CSM Barebones Image</a></li>
+<li><a href="/docs-csm/en-09/#uas-uai-tests">UAS/UAI Tests</a></li>
+</ol>
+<p>Examples of when you may wish to run them are:</p>
+<ul>
+<li>after <code>install.sh</code> completes (<strong>not before</strong>)</li>
+<li>before and after NCN reboots</li>
+<li>after the system is brought back up</li>
+<li>any time there is unexpected behavior observed</li>
+<li>in order to provide relevant information to support tickets</li>
+</ul>
+<p>The areas should be tested in the order they are listed on this page. Errors in an earlier check may cause errors in later checks due to dependencies.</p>
+<h2 id="platform-health-checks">Platform Health Checks</h2>
+<p>These scripts do not verify results. The script output includes analysis needed to determine pass/fail for each check. All platform health checks are expected to pass.</p>
+<p>Platform health check scripts can be run:</p>
+<ul>
+<li>after <code>install.sh</code> has completed successfully (<strong>not before</strong>)</li>
+<li>before and after an NCN reboots</li>
+<li>after the system or a single node goes down unexpectedly</li>
+<li>after the system is gracefully shut down and brought up</li>
+<li>any time there is unexpected behavior on the system, in order to get a baseline of data for CSM services and components. This can provide relevant information to include in support tickets that are opened</li>
+</ul>
+<p>Platform health check scripts can be found and run on any worker or master node from any directory.</p>
+<h3 id="pet-ncnhealthchecks">ncnHealthChecks</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-mw# /opt/cray/platform-utils/ncnHealthChecks.sh
+</span></span></code></pre></div><p>The <code>ncnHealthChecks.sh</code> script reports the following health information:</p>
+<ul>
+<li>Kubernetes status for master and worker NCNs</li>
+<li>Ceph health status</li>
+<li>Health of <code>etcd</code> clusters</li>
+<li>Number of pods on each worker node for each <code>etcd</code> cluster</li>
+<li>List of automated <code>etcd</code> backups for the Boot Orchestration Service (BOS), Boot Script Service (BSS), Compute Rolling Upgrade Service (CRUS), and Domain Name Service (DNS)</li>
+<li>Management node uptimes</li>
+<li>Pods yet to reach the running state. <strong>Any pods reported here should be investigated</strong>, other than the exceptions listed in the notes below</li>
+</ul>
+<p>Execute the <code>ncnHealthChecks.sh</code> script and analyze the output of each individual check.</p>
+<p><strong>Notes</strong>:</p>
+<ul>
+<li>
+<p>The <code>cray-crus-</code> pod is expected to be in the Init state until slurm and munge
+are installed. In particular, this will be the case if you are executing this as part of the validation after completing the <a href="/docs-csm/en-09/006-csm-platform-install/">CSM Platform Install</a>.
+If in doubt, you can validate the CRUS service using the <a href="/docs-csm/en-09/#cms-validation-utility">CMS Validation Tool</a>. If the CRUS check passes using that tool, you do not need to worry
+about the <code>cray-crus-</code> pod state.</p>
+</li>
+<li>
+<p>If the script output indicates any <code>kube-multus-ds-</code> pods are in a <code>Terminating</code> state, that can indicate a previous restart of these pods did not complete. In this case, it is safe to force delete these pods in order to let them properly restart by executing the <code>kubectl delete po -n kube-system kube-multus-ds.. --force</code> command. After executing this command, re-running the ncnHealthChecks script should indicate a new pod is in a <code>Running</code> state.</p>
+</li>
+</ul>
+<h3 id="pet-ncnpostgreshealthchecks">ncnPostgresHealthChecks</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-mw# /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
+</span></span></code></pre></div><p>For each postgres cluster, the <code>ncnPostgresHealthChecks.sh</code> script determines the leader pod and then reports the status of all postgres pods in the cluster.</p>
+<p>Execute the <code>ncnPostgresHealthChecks.sh</code> script. Verify the leader for each cluster and status of cluster members.</p>
+<p>For a particular postgres cluster, the expected output is similar to the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>--- patronictl, version 1.6.5, list for services leader pod cray-sls-postgres-0 ---
+</span></span><span style="display:flex;"><span>+ Cluster: cray-sls-postgres (6938772644984361037) ---+----+-----------+
+</span></span><span style="display:flex;"><span>|        Member       |    Host    |  Role  |  State  | TL | Lag in MB |
+</span></span><span style="display:flex;"><span>+---------------------+------------+--------+---------+----+-----------+
+</span></span><span style="display:flex;"><span>| cray-sls-postgres-0 | 10.47.0.35 | Leader | running |  1 |           |
+</span></span><span style="display:flex;"><span>| cray-sls-postgres-1 | 10.36.0.33 |        | running |  1 |         0 |
+</span></span><span style="display:flex;"><span>| cray-sls-postgres-2 | 10.44.0.42 |        | running |  1 |         0 |
+</span></span><span style="display:flex;"><span>+---------------------+------------+--------+---------+----+-----------+
+</span></span></code></pre></div><p>Check the leader pod&rsquo;s log output for its status as the leader. Such as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>i am the leader with the lock
+</span></span></code></pre></div><p>For example:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>--- Logs for services Leader Pod cray-sls-postgres-0 ---
+</span></span><span style="display:flex;"><span>  ERROR: get_cluster
+</span></span><span style="display:flex;"><span>  INFO: establishing a new patroni connection to the postgres cluster
+</span></span><span style="display:flex;"><span>  INFO: initialized a new cluster
+</span></span><span style="display:flex;"><span>  INFO: Lock owner: cray-sls-postgres-0; I am cray-sls-postgres-0
+</span></span><span style="display:flex;"><span>  INFO: Lock owner: None; I am cray-sls-postgres-0
+</span></span><span style="display:flex;"><span>  INFO: no action. i am the leader with the lock
+</span></span><span style="display:flex;"><span>  INFO: No PostgreSQL configuration items changed, nothing to reload.
+</span></span><span style="display:flex;"><span>  INFO: postmaster pid=87
+</span></span><span style="display:flex;"><span>  INFO: running post_bootstrap
+</span></span><span style="display:flex;"><span>  INFO: trying to bootstrap a new cluster
+</span></span></code></pre></div><p>Errors reported previous to the lock status, such as <strong>ERROR: get_cluster</strong> can be ignored.</p>
+<p>If any of the postgres clusters are exhibiting the following symptoms, then follow then &ldquo;Troubleshoot Postgres Databases with the Patroni Tool&rdquo; procedure in the HPE Cray EX System Administration Guide S-8001:</p>
+<ul>
+<li>The cluster has no leader.</li>
+<li>The number of cluster members is not correct. There should be three cluster members (with the exception of <code>sma-postgres-cluster</code> where there should be only two cluster members).</li>
+<li>Cluster members are found to be in a non <code>running</code> state (such as <code>start failed</code>).</li>
+<li>Cluster members are found to have lag or lag is <code>unknown</code>.</li>
+</ul>
+<p>See see the <strong>About Postgres</strong> section in the HPE Cray EX System Administration Guide S-8001 for further information.</p>
+<h3 id="pet-clock-skew">Clock Skew</h3>
+<p>Verify that NCNs clocks are synced (these commands should be run on <code>ncn-m001</code> unless otherwise noted).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# pdsh -b -S -w <span style="color:#e6db74">&#34;</span><span style="color:#66d9ef">$(</span>grep -oP <span style="color:#e6db74">&#39;ncn-\w\d+&#39;</span> /etc/hosts | sort -u |  tr -t <span style="color:#e6db74">&#39;\n&#39;</span> <span style="color:#e6db74">&#39;,&#39;</span><span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span> <span style="color:#e6db74">&#39;date&#39;</span>
+</span></span></code></pre></div><p>If there is skew (output from the above command shows different times across the NCNs), the system may be suffering from a bug where <code>ncn-m001</code> uses itself as its own upstream NTP server. The following will check if this is the case:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# grep server /etc/chrony.d/cray.conf
+</span></span></code></pre></div><p>If the output from the above command returns <code>ncn-m001</code>, correct the server in the command below (the example below assumes <code>time.nist.gov</code> is the correct server; substitute the appropriate NTP server for your environment, if it is different):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# upstream_ntp_server<span style="color:#f92672">=</span>time.nist.gov
+</span></span><span style="display:flex;"><span>ncn-m001# sed -i <span style="color:#e6db74">&#34;s/^\(server ncn-m001\).*/server </span>$upstream_ntp_server<span style="color:#e6db74"> iburst trust/&#34;</span> /etc/chrony.d/cray.conf
+</span></span></code></pre></div><p>Restart <code>chronyd</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# systemctl restart chronyd
+</span></span></code></pre></div><p>Check skew again</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# pdsh -b -S -w <span style="color:#e6db74">&#34;</span><span style="color:#66d9ef">$(</span>grep -oP <span style="color:#e6db74">&#39;ncn-\w\d+&#39;</span> /etc/hosts | sort -u |  tr -t <span style="color:#e6db74">&#39;\n&#39;</span> <span style="color:#e6db74">&#39;,&#39;</span><span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span> <span style="color:#e6db74">&#39;date&#39;</span>
+</span></span></code></pre></div><p>If the skew is large (more than a few seconds) it is usually recommended to allow the nodes to come back in sync gradually. However, you can opt to force them to sync by running this on the affected nodes:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn# chronyc burst 4/4 ; sleep <span style="color:#ae81ff">15</span>
+</span></span><span style="display:flex;"><span>ncn# chronyc makestep
+</span></span></code></pre></div><p>After clocks have been synced, it may be necessary to restart Ceph services. Check Ceph health:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# ceph -s
+</span></span></code></pre></div><p>If the output from the above command notes a storage node has clock skew, restart the following services on the storage node mentioned in the output:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-s# systemctl restart ceph-mon@<span style="color:#66d9ef">$(</span>hostname<span style="color:#66d9ef">)</span> <span style="color:#f92672">&amp;&amp;</span> systemctl restart ceph-mgr@<span style="color:#66d9ef">$(</span>hostname<span style="color:#66d9ef">)</span> <span style="color:#f92672">&amp;&amp;</span> systemctl restart ceph-mds@<span style="color:#66d9ef">$(</span>hostname<span style="color:#66d9ef">)</span>
+</span></span></code></pre></div><h3 id="pet-bgp">BGP Peering Status and Reset</h3>
+<p>Verify that Border Gateway Protocol (BGP) peering sessions are established for each worker node on the system.</p>
+<p>Check the Border Gateway Protocol (BGP) status on the Aruba/Mellanox switches.
+Verify that all sessions are in an <code>Established</code> state. If the state of any
+session in the table is <code>Idle</code>, reset the BGP sessions.</p>
+<p>On an NCN, determine the IP addresses of switches:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn# kubectl get cm config -n metallb-system -o yaml | head -12
+</span></span></code></pre></div><p>Expected output looks similar to the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">v1</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">data</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">config</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    peers:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    - peer-address: 10.252.0.2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      peer-asn: 65533
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      my-asn: 65533
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    - peer-address: 10.252.0.3
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      peer-asn: 65533
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      my-asn: 65533
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    address-pools:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    - name: customer-access</span>    
+</span></span></code></pre></div><p>Using the first peer-address (<code>10.252.0.2</code> here), ssh as <code>admin</code> to the first switch and note in the returned output if a Mellanox or Aruba switch is indicated.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn# ssh admin@10.252.0.2
+</span></span></code></pre></div><ul>
+<li>On a Mellanox switch, you may see <code>Mellanox Onyx Switch Management</code> or <code>Mellanox Switch</code> after logging in to the switch with <code>ssh</code>. In this case, proceed to the <a href="/docs-csm/en-09/#pet-bgp-mellanox">Mellanox steps</a>.</li>
+<li>On an Aruba switch, you may see <code>Please register your products now at: https://asp.arubanetworks.com</code> after logging in to the switch with <code>ssh</code>. In this case, proceed to the <a href="/docs-csm/en-09/#pet-bgp-aruba">Aruba steps</a>.</li>
+</ul>
+<h4 id="pet-bgp-mellanox">Mellanox Switch</h4>
+<ol>
+<li>
+<p>Enable:</p>
+<pre tabindex="0"><code>sw-spine-001# enable
+</code></pre></li>
+<li>
+<p>Verify BGP is enabled:</p>
+<pre tabindex="0"><code>sw-spine-001# show protocols | include bgp
+</code></pre><p>Expected output looks similar to the following:</p>
+<pre tabindex="0"><code>bgp:                    enabled
+</code></pre></li>
+<li>
+<p>Check peering status:</p>
+<pre tabindex="0"><code>sw-spine-001# show ip bgp summary
+</code></pre><p>Expected output looks similar to the following:</p>
+<pre tabindex="0"><code>VRF name                  : default
+BGP router identifier     : 10.252.0.2
+local AS number           : 65533
+BGP table version         : 3
+Main routing table version: 3
+IPV4 Prefixes             : 59
+IPV6 Prefixes             : 0
+L2VPN EVPN Prefixes       : 0
+
+------------------------------------------------------------------------------------------------------------------
+Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   Up/Down       State/PfxRcd
+------------------------------------------------------------------------------------------------------------------
+10.252.1.10       4    65533        2945      3365      3         0      0      1:00:21:33    ESTABLISHED/20
+10.252.1.11       4    65533        2942      3356      3         0      0      1:00:20:49    ESTABLISHED/19
+10.252.1.12       4    65533        2945      3363      3         0      0      1:00:21:33    ESTABLISHED/20
+</code></pre></li>
+<li>
+<p>If one or more BGP session is reported in an <code>Idle</code> state, reset BGP to re-establish the sessions:</p>
+<pre tabindex="0"><code>sw-spine-001# clear ip bgp all
+</code></pre><ul>
+<li>
+<p>It may take several minutes for all sessions to become <code>Established</code>. Wait a minute, or so, and then verify that all sessions now are all reported as <code>Established</code>. If some sessions remain in an <code>Idle</code> state, re-run the <code>clear ip bgp all</code> command and check again.</p>
+</li>
+<li>
+<p>If after several tries (around 10 attempts) one or more BGP session remains <code>Idle</code>, see Check BGP Status and Reset Sessions, in the HPE Cray EX Administration Guide S-8001.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Repeat the above <strong>Mellanox</strong> procedure using the second peer-address (<code>10.252.0.3</code> here)</p>
+</li>
+</ol>
+<h4 id="pet-bgp-aruba">Aruba Switch</h4>
+<p>On an Aruba switch, the prompt may include <code>sw-spine</code> or <code>sw-agg</code>.</p>
+<ol>
+<li>
+<p>Check BGP peering status</p>
+<pre tabindex="0"><code>sw-agg01# show bgp ipv4 unicast summary
+</code></pre><p>Expected output looks similar to the following:</p>
+<pre tabindex="0"><code>VRF : default
+BGP Summary
+-----------
+ Local AS               : 65533        BGP Router Identifier  : 10.252.0.4
+ Peers                  : 7            Log Neighbor Changes   : No
+ Cfg. Hold Time         : 180          Cfg. Keep Alive        : 60
+ Confederation Id       : 0
+
+ Neighbor        Remote-AS MsgRcvd MsgSent   Up/Down Time State        AdminStatus
+ 10.252.0.5      65533       19579   19588   20h:40m:30s  Established   Up
+ 10.252.1.7      65533       34137   39074   20h:41m:53s  Established   Up
+ 10.252.1.8      65533       34134   39036   20h:36m:44s  Established   Up
+ 10.252.1.9      65533       34104   39072   00m:01w:04d  Established   Up
+ 10.252.1.10     65533       34105   39029   00m:01w:04d  Established   Up
+ 10.252.1.11     65533       34099   39042   00m:01w:04d  Established   Up
+ 10.252.1.12     65533       34101   39012   00m:01w:04d  Established   Up
+</code></pre></li>
+<li>
+<p>If one or more BGP session is reported in a <code>Idle</code> state, reset BGP to re-establish the sessions:</p>
+<pre tabindex="0"><code>sw-agg01# clear bgp *
+</code></pre><ul>
+<li>
+<p>It may take several minutes for all sessions to become <code>Established</code>. Wait a minute or so, and then
+verify that all sessions now are reported as <code>Established</code>. If some sessions remain in an <code>Idle</code> state,
+re-run the <code>clear bgp *</code> command and check again.</p>
+</li>
+<li>
+<p>If after several tries one or more BGP session remains <code>Idle</code>, see Check BGP Status and Reset Sessions, in the HPE Cray EX Administration Guide S-8001.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Repeat the above <strong>Aruba</strong> procedure using the second peer-address (<code>10.252.0.5</code> in this example)</p>
+</li>
+</ol>
+<h2 id="network-health-checks">Network Health Checks</h2>
+<h3 id="net-kea">Verify that KEA has active DHCP leases</h3>
+<p>Verify that KEA has active DHCP leases. Right after an fresh install of CSM it is important to verify that KEA is currently handing out DHCP leases on the system. The following commands can be run on any of the master or worker nodes.</p>
+<p>Get an API Token:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-mw# export TOKEN<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>curl -s -S -d grant_type<span style="color:#f92672">=</span>client_credentials <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>                 -d client_id<span style="color:#f92672">=</span>admin-client <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>                 -d client_secret<span style="color:#f92672">=</span><span style="color:#e6db74">`</span>kubectl get secrets admin-client-auth <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>                 -o jsonpath<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;{.data.client-secret}&#39;</span> | base64 -d<span style="color:#e6db74">`</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>                          https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r <span style="color:#e6db74">&#39;.access_token&#39;</span><span style="color:#66d9ef">)</span>
+</span></span></code></pre></div><p>Retrieve all the Leases currently in KEA:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-mw# curl -H <span style="color:#e6db74">&#34;Authorization: Bearer </span><span style="color:#e6db74">${</span>TOKEN<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> -X POST -H <span style="color:#e6db74">&#34;Content-Type: application/json&#34;</span> -d <span style="color:#e6db74">&#39;{ &#34;command&#34;: &#34;lease4-get-all&#34;, &#34;service&#34;: [ &#34;dhcp4&#34; ] }&#39;</span> https://api_gw_service.local/apis/dhcp-kea | jq
+</span></span></code></pre></div><p>If there is an non-zero amount of DHCP leases for river hardware returned that is a good indication that KEA is working.</p>
+<h3 id="net-extdns">Verify ability to resolve external DNS</h3>
+<p>If you have configured unbound to resolve outside hostnames, then the following check should be performed. If you have not done this, then this check may be skipped.</p>
+<p>Run the following on one of the master or worker nodes (not the PIT node):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn# nslookup cray.com ; echo <span style="color:#e6db74">&#34;Exit code is </span>$?<span style="color:#e6db74">&#34;</span>
+</span></span></code></pre></div><p>Expected output looks similar to the following:</p>
+<pre tabindex="0"><code>Server:         10.92.100.225
+Address:        10.92.100.225#53
+
+Non-authoritative answer:
+Name:   cray.com
+Address: 52.36.131.229
+
+Exit code is 0
+</code></pre><p>Verify that the command has exit code 0, reports no errors, and resolves the address.</p>
+<h3 id="net-spire">Verify Spire Agent is Running on Kubernetes NCNs</h3>
+<p>Execute the following command on all Kubernetes NCNs (i.e. all master and worker nodes) <strong>excluding the PIT</strong>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-mw# goss -g /opt/cray/tests/install/ncn/tests/goss-spire-agent-service-running.yaml validate
+</span></span></code></pre></div><h4 id="known-issue-verify-spire-agent-is-enabled-and-running">Known Issue: Verify <code>spire-agent</code> is enabled and running</h4>
+<p>The <code>spire-agent</code> service may fail to start on Kubernetes NCNs. You can see symptoms of this in its logs using <code>journalctl</code>. It may log errors similar to <code>join token does not exist or has already been used</code>, or the last logs may contain multiple lines of <code>systemd[1]: spire-agent.service: Start request repeated too quickly.</code>.</p>
+<p>Deleting the <code>request-ncn-join-token</code> daemonset pod running on the node may clear the issue. While the <code>spire-agent</code> <code>systemctl</code> service on the Kubernetes node should eventually restart cleanly, you may have to login to the impacted nodes and restart the service. The following recovery procedure can be run from any Kubernetes node in the cluster.</p>
+<ol>
+<li>
+<p>Set <code>NODE</code> to the NCN which is experiencing the issue. In this example, <code>ncn-w002</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-mw# NODE<span style="color:#f92672">=</span>ncn-w002
+</span></span></code></pre></div></li>
+<li>
+<p>Define the following function</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-mw# <span style="color:#66d9ef">function</span> renewncnjoin<span style="color:#f92672">()</span> <span style="color:#f92672">{</span> 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> pod in <span style="color:#66d9ef">$(</span>kubectl get pods -n spire |grep request-ncn-join-token | awk <span style="color:#e6db74">&#39;{print $1}&#39;</span><span style="color:#66d9ef">)</span>; <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> kubectl describe -n spire pods $pod | grep -q <span style="color:#e6db74">&#34;Node:.*</span>$1<span style="color:#e6db74">&#34;</span>; <span style="color:#66d9ef">then</span> 
+</span></span><span style="display:flex;"><span>            echo <span style="color:#e6db74">&#34;Restarting </span>$pod<span style="color:#e6db74"> running on </span>$1<span style="color:#e6db74">&#34;</span>; kubectl delete -n spire pod <span style="color:#e6db74">&#34;</span>$pod<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">done</span> <span style="color:#f92672">}</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Run the function as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-mw# renewncnjoin $NODE
+</span></span></code></pre></div></li>
+<li>
+<p>Repeat the original goss test on the affected NCN to verify that it passes.</p>
+</li>
+<li>
+<p><strong>If the test still fails</strong>, it may be a case where the <code>spire-agent</code> service failed after an NCN was powered off for too long and its tokens expired. <strong>If this applies to the affected NCN</strong>, you may try the following:</p>
+<ol>
+<li>
+<p>Run the following command <strong>on the affected NCN</strong>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-mw# rm -v /root/spire/agent_svid.der /root/spire/bundle.der /root/spire/data/svid.key
+</span></span></code></pre></div></li>
+<li>
+<p>Perform steps 1-4 again.</p>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="net-vault">Verify the Vault Cluster is Healthy</h3>
+<p>Execute the following commands on <code>ncn-m002</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m002# goss -g /opt/cray/tests/install/ncn/tests/goss-k8s-vault-cluster-health.yaml validate
+</span></span></code></pre></div><p>Check the output to verify no failures are reported:</p>
+<pre tabindex="0"><code>Count: 2, Failed: 0, Skipped: 0
+</code></pre><h2 id="automated-goss-testing">Automated Goss Testing</h2>
+<p><strong>NOTE:</strong> The tests in this section <strong>must be run on the PIT node.</strong> Do not run them from any other node. If you have already redeployed your PIT node to <code>ncn-m001</code>, skip this section.</p>
+<p>There are multiple <a href="https://github.com/aelsabbahy/goss">Goss</a> test suites available that cover a variety of sub-systems.</p>
+<p>You can execute the general NCN test suite via:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pit# /opt/cray/tests/install/ncn/automated/ncn-run-time-checks
+</span></span></code></pre></div><p>And the Kubernetes test suite via:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
+</span></span></code></pre></div><h3 id="autogoss-issues">Known Test Issues</h3>
+<ul>
+<li>These tests can only reliably be executed from the PIT node. Should be addressed in a future release.</li>
+<li>K8S Test: Kubernetes Query BSS Cloud-init for ca-certs
+<ul>
+<li>May fail immediately after platform install. Should pass after the TrustedCerts Operator has updated BSS (Global cloud-init meta) with CA certificates.</li>
+</ul>
+</li>
+<li>K8S Test: Kubernetes Velero No Failed Backups
+<ul>
+<li>Due to a <a href="https://github.com/vmware-tanzu/velero/issues/1980">known issue</a> with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (for example, vault). It may be necessary to use the <code>velero</code> command to delete backups from a Kubernetes node to clear this situation.</li>
+</ul>
+</li>
+<li>K8S Test: sdc Drive Test
+<ul>
+<li>There is a known test issue that can produce false failures of this test.</li>
+<li>If it fails, perform the <a href="/docs-csm/en-09/005-csm-metal-install/#manual-lvm-check-procedure">Manual LVM Check Procedure</a>.</li>
+</ul>
+</li>
+</ul>
+<h2 id="hms-tests">Hardware Management Services Tests</h2>
+<p>Execute the HMS smoke and functional tests after the CSM install to confirm that the HMS services are running and operational.</p>
+<h3 id="hms-exec">Test Execution</h3>
+<p>These tests should be executed as root on any worker or master NCN (but <strong>not</strong> the PIT node).</p>
+<ol>
+<li>
+<p>Run the HMS smoke tests.</p>
+<pre tabindex="0"><code>ncn-mw# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resources.sh
+</code></pre><p>The final lines of output should indicate if there were any test failures. If that is the case, the full output should be examined.</p>
+</li>
+<li>
+<p>If no failures occur, then run the HMS functional tests.</p>
+<pre tabindex="0"><code>ncn-mw# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-resources.sh
+</code></pre><p>The final lines of output should indicate if there were any test failures. If that is the case, the full output should be examined.</p>
+</li>
+</ol>
+<h4 id="hms-known-issues">Known Issues: HMS Functional Tests</h4>
+<ul>
+<li><a href="/docs-csm/en-09/#hms-known-issue-mountain-bmcs-warning-flags">Erroneous HSM Warning Flags on Mountain BMCs (SDEVICE-3319)</a></li>
+<li><a href="/docs-csm/en-09/#hms-known-issue-locked-components">Locked HSM Components (CASMHMS-4664)</a></li>
+<li><a href="/docs-csm/en-09/#hms-known-issue-empty-drive-bays">Empty Drive Bays in HSM (CASMHMS-4693)</a></li>
+<li><a href="/docs-csm/en-09/#hms-unexpected-discovery-status">Unexpected HSM Discovery Status (CASMHMS-4794)</a></li>
+<li><a href="/docs-csm/en-09/#hms-previously-captured-fas-snapshots">Previously Captured FAS Snapshots (CASMHMS-5065)</a></li>
+<li><a href="/docs-csm/en-09/#hms-bmcs-set-to-on-state-in-hsm">BMCs Set to &ldquo;On&rdquo; State in HSM (CASMHMS-5239)</a></li>
+</ul>
+<h5 id="hms-known-issue-mountain-bmcs-warning-flags">Erroneous HSM Warning Flags on Mountain BMCs (SDEVICE-3319)</h5>
+<p>The HMS functional tests include a check for unexpected flags that may be set in Hardware State Manager (HSM) for the BMCs on the system. There is a known issue <a href="https://connect.us.cray.com/jira/browse/SDEVICE-3319">SDEVICE-3319</a> that can cause Warning flags to be set erroneously in HSM for Mountain BMCs and result in test failures.</p>
+<p>The following HMS functional test may fail due to this issue:</p>
+<ul>
+<li><code>test_smd_components_ncn-functional_remote-functional.tavern.yaml</code></li>
+</ul>
+<p>The symptom of this issue is the test fails with error messages about Warning flags being set on one or more BMCs. It may look similar to the following in the test output:</p>
+<pre tabindex="0"><code>=================================== FAILURES ===================================
+_ /opt/cray/tests/ncn-functional/hms/hms-smd/test_smd_components_ncn-functional_remote-functional.tavern.yaml::Ensure that we can conduct a query for all Node BMCs in the Component collection _
+
+Errors:
+E   tavern.util.exceptions.TestFailError: Test &#39;Verify the expected response fields for all NodeBMCs&#39; failed:
+   - Error calling validate function &#39;&lt;function validate_pykwalify at 0x7f44666179d0&gt;&#39;:
+      Traceback (most recent call last):
+         File &#34;/usr/lib/python3.8/site-packages/tavern/schemas/files.py&#34;, line 106, in verify_generic
+            verifier.validate()
+         File &#34;/usr/lib/python3.8/site-packages/pykwalify/core.py&#34;, line 166, in validate
+            raise SchemaError(u&#34;Schema validation failed:\n - {error_msg}.&#34;.format(
+      pykwalify.errors.SchemaError: &lt;SchemaError: error code 2: Schema validation failed:
+         - Enum &#39;Warning&#39; does not exist. Path: &#39;/Components/9/Flag&#39;.
+         - Enum &#39;Warning&#39; does not exist. Path: &#39;/Components/10/Flag&#39;.
+         - Enum &#39;Warning&#39; does not exist. Path: &#39;/Components/11/Flag&#39;.
+         - Enum &#39;Warning&#39; does not exist. Path: &#39;/Components/12/Flag&#39;.
+         - Enum &#39;Warning&#39; does not exist. Path: &#39;/Components/13/Flag&#39;.
+         - Enum &#39;Warning&#39; does not exist. Path: &#39;/Components/14/Flag&#39;.: Path: &#39;/&#39;&gt;
+</code></pre><p>If you see this, perform the following steps:</p>
+<ol>
+<li>
+<p>Retrieve the xnames of all Mountain BMCs with Warning flags set in HSM:</p>
+<pre tabindex="0"><code>ncn-mw# curl -s -k -H &#34;Authorization: Bearer ${TOKEN}&#34; https://api-gw-service-nmn.local/apis/smd/hsm/v1/State/Components?Type=NodeBMC\&amp;Class=Mountain\&amp;Flag=Warning | jq &#39;.Components[] | { ID: .ID, Flag: .Flag, Class: .Class }&#39; -c | sort -V | jq -c
+{&#34;ID&#34;:&#34;x5000c1s0b0&#34;,&#34;Flag&#34;:&#34;Warning&#34;,&#34;Class&#34;:&#34;Mountain&#34;}
+{&#34;ID&#34;:&#34;x5000c1s0b1&#34;,&#34;Flag&#34;:&#34;Warning&#34;,&#34;Class&#34;:&#34;Mountain&#34;}
+{&#34;ID&#34;:&#34;x5000c1s1b0&#34;,&#34;Flag&#34;:&#34;Warning&#34;,&#34;Class&#34;:&#34;Mountain&#34;}
+{&#34;ID&#34;:&#34;x5000c1s1b1&#34;,&#34;Flag&#34;:&#34;Warning&#34;,&#34;Class&#34;:&#34;Mountain&#34;}
+{&#34;ID&#34;:&#34;x5000c1s2b0&#34;,&#34;Flag&#34;:&#34;Warning&#34;,&#34;Class&#34;:&#34;Mountain&#34;}
+{&#34;ID&#34;:&#34;x5000c1s2b1&#34;,&#34;Flag&#34;:&#34;Warning&#34;,&#34;Class&#34;:&#34;Mountain&#34;}
+</code></pre></li>
+<li>
+<p>For each Mountain BMC xname, check its Redfish BMC Manager status:</p>
+<pre tabindex="0"><code>ncn-mw# curl -s -k -u root:${BMC_PASSWORD} https://x5000c1s0b0/redfish/v1/Managers/BMC | jq &#39;.Status&#39;
+{
+&#34;Health&#34;: &#34;OK&#34;,
+&#34;State&#34;: &#34;Online&#34;
+}
+</code></pre></li>
+</ol>
+<p>Test failures and HSM Warning flags for Mountain BMCs with the Redfish BMC Manager status shown above can be safely ignored.</p>
+<h5 id="hms-known-issue-locked-components">Locked HSM Components (CASMHMS-4664)</h5>
+<p>The following HMS functional tests may fail due to known issue <a href="https://connect.us.cray.com/jira/browse/CASMHMS-4664">CASMHMS-4664</a> because of locked components in HSM:</p>
+<ul>
+<li><code>test_bss_bootscript_ncn-functional_remote-functional.tavern.yaml</code></li>
+<li><code>test_smd_components_ncn-functional_remote-functional.tavern.yaml</code></li>
+</ul>
+<p>The symptom of this issue looks similar to:</p>
+<pre tabindex="0"><code>      Traceback (most recent call last):
+         File &#34;/usr/lib/python3.8/site-packages/tavern/schemas/files.py&#34;, line 106, in verify_generic
+            verifier.validate()
+         File &#34;/usr/lib/python3.8/site-packages/pykwalify/core.py&#34;, line 166, in validate
+            raise SchemaError(u&#34;Schema validation failed:\n - {error_msg}.&#34;.format(
+      pykwalify.errors.SchemaError: &lt;SchemaError: error code 2: Schema validation failed:
+         - Key &#39;Locked&#39; was not defined. Path: &#39;/Components/0&#39;.
+         - Key &#39;Locked&#39; was not defined. Path: &#39;/Components/5&#39;.
+         - Key &#39;Locked&#39; was not defined. Path: &#39;/Components/6&#39;.
+         - Key &#39;Locked&#39; was not defined. Path: &#39;/Components/7&#39;.
+         - Key &#39;Locked&#39; was not defined. Path: &#39;/Components/8&#39;.
+         - Key &#39;Locked&#39; was not defined. Path: &#39;/Components/9&#39;.
+         - Key &#39;Locked&#39; was not defined. Path: &#39;/Components/10&#39;.
+         - Key &#39;Locked&#39; was not defined. Path: &#39;/Components/11&#39;.
+         - Key &#39;Locked&#39; was not defined. Path: &#39;/Components/12&#39;.: Path: &#39;/&#39;&gt;
+</code></pre><p>Failures of these tests because of locked components as shown above can be safely ignored.</p>
+<h5 id="hms-known-issue-empty-drive-bays">Empty Drive Bays in HSM (CASMHMS-4693)</h5>
+<p>The following HMS functional test may fail due to known issue <a href="https://connect.us.cray.com/jira/browse/CASMHMS-4693">CASMHMS-4693</a> because of empty drive bays in HSM:</p>
+<ul>
+<li><code>test_smd_hardware_ncn-functional_remote-functional.tavern.yaml</code></li>
+</ul>
+<p>This issue looks similar to the following in the test output:</p>
+<pre tabindex="0"><code>      Traceback (most recent call last):
+         File &#34;/usr/lib/python3.8/site-packages/tavern/schemas/files.py&#34;, line 106, in verify_generic
+            verifier.validate()
+         File &#34;/usr/lib/python3.8/site-packages/pykwalify/core.py&#34;, line 166, in validate
+            raise SchemaError(u&#34;Schema validation failed:\n - {error_msg}.&#34;.format(
+      pykwalify.errors.SchemaError: &lt;SchemaError: error code 2: Schema validation failed:
+         - Cannot find required key &#39;PopulatedFRU&#39;. Path: &#39;/Nodes/0/Drives/3&#39;.
+         - Cannot find required key &#39;PopulatedFRU&#39;. Path: &#39;/Nodes/0/Drives/4&#39;.
+         - Cannot find required key &#39;PopulatedFRU&#39;. Path: &#39;/Nodes/0/Drives/5&#39;.
+         - Cannot find required key &#39;PopulatedFRU&#39;. Path: &#39;/Nodes/0/Drives/6&#39;.
+         - Cannot find required key &#39;PopulatedFRU&#39;. Path: &#39;/Nodes/0/Drives/7&#39;.: Path: &#39;/&#39;&gt;
+</code></pre><p>Failures of this test because of empty drive bays as shown above can be safely ignored.</p>
+<h5 id="hms-unexpected-discovery-status">Unexpected HSM Discovery Status (CASMHMS-4794)</h5>
+<p>The following HMS functional test may fail due to known issue <a href="https://connect.us.cray.com/jira/browse/CASMHMS-4794">CASMHMS-4794</a> because of an unexpected discovery status in HSM:</p>
+<ul>
+<li><code>test_smd_discovery_status_ncn-functional_remote-functional.tavern.yaml</code></li>
+</ul>
+<p>This issue looks similar to the following in the test output:</p>
+<pre tabindex="0"><code>      Traceback (most recent call last):
+         File &#34;/usr/lib/python3.8/site-packages/tavern/schemas/files.py&#34;, line 106, in verify_generic
+            verifier.validate()
+         File &#34;/usr/lib/python3.8/site-packages/pykwalify/core.py&#34;, line 166, in validate
+            raise SchemaError(u&#34;Schema validation failed:\n - {error_msg}.&#34;.format(
+      pykwalify.errors.SchemaError: &lt;SchemaError: error code 2: Schema validation failed:
+         - Value &#39;NotStarted&#39; does not match pattern &#39;Complete&#39;. Path: &#39;/0/Status&#39;.
+         - Key &#39;Details&#39; was not defined. Path: &#39;/0&#39;.: Path: &#39;/&#39;&gt;
+</code></pre><p>Failures of this test because of an unexpected discovery status as shown above can be safely ignored.</p>
+<h5 id="hms-previously-captured-fas-snapshots">Previously Captured FAS Snapshots (CASMHMS-5065)</h5>
+<p>The following HMS functional test may fail due to known issue <a href="https://connect.us.cray.com/jira/browse/CASMHMS-5065">CASMHMS-5065</a> because of FAS snapshots that may have been previously captured on the system:</p>
+<ul>
+<li><code>test_fas_snapshots_ncn-functional_remote-functional.tavern.yaml</code></li>
+</ul>
+<pre tabindex="0"><code>ERROR    tavern.schemas.files:files.py:108 Error validating {&#39;snapshots&#39;: [{&#39;name&#39;: &#39;fasTestSnapshot&#39;, &#39;captureTime&#39;: &#39;2021-10-25 21:29:00.139366661 +0000 UTC&#39;, &#39;ready&#39;: True, &#39;relatedActions&#39;: [], &#39;uniqueDeviceCount&#39;: 68}, {&#39;name&#39;: &#39;testSnap&#39;, &#39;captureTime&#39;: &#39;2021-05-04 17:16:33.050058886 +0000 UTC&#39;, &#39;ready&#39;: True, &#39;relatedActions&#39;: [], &#39;uniqueDeviceCount&#39;: 68}, {&#39;name&#39;: &#39;testSnap2&#39;, &#39;captureTime&#39;: &#39;2021-05-04 17:20:33.132276731 +0000 UTC&#39;, &#39;ready&#39;: True, &#39;relatedActions&#39;: [], &#39;uniqueDeviceCount&#39;: 68}, {&#39;name&#39;: &#39;x1000c5s5&#39;, &#39;captureTime&#39;: &#39;2021-08-16 20:09:20.641734739 +0000 UTC&#39;, &#39;expirationTime&#39;: &#39;2021-12-31 02:35:54 +0000 UTC&#39;, &#39;ready&#39;: True, &#39;relatedActions&#39;: [], &#39;uniqueDeviceCount&#39;: 2}, {&#39;name&#39;: &#39;x3000c0s20b4n0&#39;, &#39;captureTime&#39;: &#39;2021-07-23 04:26:43.456013148 +0000 UTC&#39;, &#39;expirationTime&#39;: &#39;2021-10-31 02:35:54 +0000 UTC&#39;, &#39;ready&#39;: True, &#39;relatedActions&#39;: [], &#39;uniqueDeviceCount&#39;: 0}]}
+</code></pre><p>Failures of this test caused by snapshots other than &lsquo;fasTestSnapshot&rsquo; can be safely ignored.</p>
+<h5 id="hms-bmcs-set-to-on-state-in-hsm">BMCs Set to &ldquo;On&rdquo; State in HSM (CASMHMS-5239)</h5>
+<p>The following HMS functional test may fail due to known issue <a href="https://connect.us.cray.com/jira/browse/CASMHMS-5239">CASMHMS-5239</a> because of CMMs setting BMC states to &ldquo;On&rdquo; instead of &ldquo;Ready&rdquo; in HSM:</p>
+<ul>
+<li><code>test_smd_components_ncn-functional_remote-functional.tavern.yaml</code></li>
+</ul>
+<p>This issue looks similar to the following in the test output:</p>
+<pre tabindex="0"><code>      Traceback (most recent call last):
+            verifier.validate()
+         File &#34;/usr/lib/python3.8/site-packages/pykwalify/core.py&#34;, line 166, in validate
+            raise SchemaError(u&#34;Schema validation failed:\n - {error_msg}.&#34;.format(
+      pykwalify.errors.SchemaError: &lt;SchemaError: error code 2: Schema validation failed:
+         - Enum &#39;On&#39; does not exist. Path: &#39;/Components/9/State&#39;.
+         - Enum &#39;On&#39; does not exist. Path: &#39;/Components/10/State&#39;.: Path: &#39;/&#39;&gt;
+</code></pre><p>Failures of this test caused by BMCs in the &ldquo;On&rdquo; state can be safely ignored.</p>
+<h2 id="cms-validation-utility">Cray Management Services Validation Utility</h2>
+<ol>
+<li><a href="/docs-csm/en-09/#cms-usage">Usage</a></li>
+<li><a href="/docs-csm/en-09/#cms-results">Interpreting Results</a></li>
+<li><a href="/docs-csm/en-09/#cms-checks">Checks To Run</a></li>
+</ol>
+<h3 id="cms-usage">Usage</h3>
+<p><code>/usr/local/bin/cmsdev test [-q | -v] &lt;shortcut&gt;</code></p>
+<ul>
+<li>The shortcut determines which component will be tested. See the table in the next section for the list of shortcuts.</li>
+<li>The tool logs to /opt/cray/tests/cmsdev.log</li>
+<li>The -q (quiet) and -v (verbose) flags can be used to decrease or increase the amount of information sent to the screen.
+<ul>
+<li>The same amount of data is written to the log file in either case.</li>
+</ul>
+</li>
+</ul>
+<h4 id="cms-results">Interpreting Results</h4>
+<ul>
+<li>If a test passes:
+<ul>
+<li>The last line of output from the tool reports SUCCESS</li>
+<li>The return code is 0.</li>
+</ul>
+</li>
+<li>If a test fails:
+<ul>
+<li>The last line of output from the tool reports FAILURE</li>
+<li>The return code is non-0.</li>
+</ul>
+</li>
+<li>Unless the test was run in verbose mode, the log file will contain additional information about the execution.</li>
+</ul>
+<h3 id="cms-checks">Checks To Run</h3>
+<p>You should run a check for each of the following services after an install. These should be executed as root on any worker or master NCN (but <strong>not</strong> the PIT node).</p>
+<table>
+<thead>
+<tr>
+<th>Services</th>
+<th>Shortcut</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BOS (Boot Orchestration Service)</td>
+<td>bos</td>
+</tr>
+<tr>
+<td>CFS (Configuration Framework Service)</td>
+<td>cfs</td>
+</tr>
+<tr>
+<td>ConMan (Console Manager)</td>
+<td>conman</td>
+</tr>
+<tr>
+<td>CRUS (Compute Rolling Upgrade Service)</td>
+<td>crus</td>
+</tr>
+<tr>
+<td>IMS (Image Management Service)</td>
+<td>ims</td>
+</tr>
+<tr>
+<td>iPXE, TFTP (Trivial File Transfer Protocol)</td>
+<td>ipxe*</td>
+</tr>
+<tr>
+<td>VCS (Version Control Service)</td>
+<td>vcs</td>
+</tr>
+</tbody>
+</table>
+<p>* The ipxe shortcut runs a check of both the iPXE service and the TFTP service.</p>
+<p>The following is a convenient way to run all of the tests and see if they passed:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-mw# <span style="color:#66d9ef">for</span> S in bos cfs conman crus ims ipxe vcs ; <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    LOG<span style="color:#f92672">=</span>/root/cmsdev-$S-<span style="color:#66d9ef">$(</span>date +<span style="color:#e6db74">&#34;%Y%m%d_%H%M%S&#34;</span><span style="color:#66d9ef">)</span>.log
+</span></span><span style="display:flex;"><span>    echo -n <span style="color:#e6db74">&#34;</span><span style="color:#66d9ef">$(</span>date<span style="color:#66d9ef">)</span><span style="color:#e6db74"> Starting </span>$S<span style="color:#e6db74"> check ... &#34;</span>
+</span></span><span style="display:flex;"><span>    START<span style="color:#f92672">=</span>$SECONDS
+</span></span><span style="display:flex;"><span>    /usr/local/bin/cmsdev test -v $S &gt; $LOG 2&gt;&amp;<span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    rc<span style="color:#f92672">=</span>$?
+</span></span><span style="display:flex;"><span>    let DURATION<span style="color:#f92672">=</span>SECONDS-START
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> $rc -eq <span style="color:#ae81ff">0</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#e6db74">&#34;PASSED (duration: </span>$DURATION<span style="color:#e6db74"> seconds)&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#e6db74">&#34;FAILED (duration: </span>$DURATION<span style="color:#e6db74"> seconds)&#34;</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#e6db74">&#34; # See </span>$LOG<span style="color:#e6db74"> for details&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span></code></pre></div><h2 id="booting-csm-barebones-image">Booting CSM Barebones Image</h2>
+<p>Included with the Cray System Management (CSM) release is a pre-built node image that can be used
+to validate that core CSM services are available and responding as expected. The CSM barebones
+image contains only the minimal set of RPMs and configuration required to boot an image and is not
+suitable for production usage. To run production work loads, it is suggested that an image from
+the Cray OS (COS) product, or similar, be used.</p>
+<hr>
+<p><strong>NOTES</strong></p>
+<ul>
+<li>The CSM Barebones image included with the Shasta 1.4 release will not successfully complete
+the beyond the dracut stage of the boot process. However, if the dracut stage is reached the
+boot can be considered successful and shows that the necessary CSM services needed to
+boot a node are up and available.
+<ul>
+<li>This inability to fully boot the barebones image will be resolved in future releases of the
+CSM product.</li>
+</ul>
+</li>
+<li>In addition to the CSM Barebones image, the Shasta 1.4 release also includes an IMS Recipe that
+can be used to build the CSM Barebones image. However, the CSM Barebones recipe currently requires
+RPMs that are not installed with the CSM product. The CSM Barebones recipe can be built after the
+Cray OS (COS) product stream is also installed on to the system.
+<ul>
+<li>In future releases of the CSM product, work will be undertaken to resolve these dependency issues.</li>
+</ul>
+</li>
+<li>You will need to use the CLI in order to complete these tasks. If needed, see the
+<a href="/docs-csm/en-09/#uas-uai-init-cli">Initialize and Authorize the CLI</a> section.</li>
+</ul>
+<hr>
+<ol>
+<li><a href="/docs-csm/en-09/#csm-ims">Locate Image in IMS</a></li>
+<li><a href="/docs-csm/en-09/#csm-bst">Create BOS Session Template</a></li>
+<li><a href="/docs-csm/en-09/#csm-node">Find Compute Node</a></li>
+<li><a href="/docs-csm/en-09/#csm-reboot">Reboot Node</a></li>
+<li><a href="/docs-csm/en-09/#csm-consoles">Verify Consoles</a></li>
+<li><a href="/docs-csm/en-09/#csm-watch">Watch Boot on Console</a></li>
+</ol>
+<h3 id="csm-ims">Locate the CSM Barebones Image in IMS</h3>
+<p>Locate the CSM Barebones image and note the path to the image&rsquo;s manifest.json in S3.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn# cray ims images list --format json | jq <span style="color:#e6db74">&#39;.[] | select(.name | contains(&#34;barebones&#34;))&#39;</span>
+</span></span></code></pre></div><p>Expected output is similar to the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;created&#34;</span>: <span style="color:#e6db74">&#34;2021-01-14T03:15:55.146962+00:00&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;293b1e9c-2bc4-4225-b235-147d1d611eef&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;link&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;etag&#34;</span>: <span style="color:#e6db74">&#34;6d04c3a4546888ee740d7149eaecea68&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;path&#34;</span>: <span style="color:#e6db74">&#34;s3://boot-images/293b1e9c-2bc4-4225-b235-147d1d611eef/manifest.json&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;s3&#34;</span>
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;cray-shasta-csm-sles15sp1-barebones.x86_64-shasta-1.4&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="csm-bst">Create a BOS Session Template for the CSM Barebones Image</h3>
+<p>The session template below can be copied and used as the basis for the BOS Session Template. As noted below, make sure the S3 path for the manifest matches the S3 path shown in the Image Management Service (IMS).</p>
+<ol>
+<li>
+<p>Create <code>sessiontemplate.json</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn# vi sessiontemplate.json
+</span></span></code></pre></div><p>The session template should contain the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;boot_sets&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;compute&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;boot_ordinal&#34;</span>: <span style="color:#ae81ff">2</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;etag&#34;</span>: <span style="color:#e6db74">&#34;etag_value_from_cray_ims_command&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;kernel_parameters&#34;</span>: <span style="color:#e6db74">&#34;console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;network&#34;</span>: <span style="color:#e6db74">&#34;nmn&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;node_roles_groups&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;Compute&#34;</span>
+</span></span><span style="display:flex;"><span>      ],
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;path&#34;</span>: <span style="color:#e6db74">&#34;path_value_from_cray_ims_command&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;rootfs_provider&#34;</span>: <span style="color:#e6db74">&#34;cpss3&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;rootfs_provider_passthrough&#34;</span>: <span style="color:#e6db74">&#34;dvs:api-gw-service-nmn.local:300:nmn0&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;s3&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;cfs&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;configuration&#34;</span>: <span style="color:#e6db74">&#34;cos-integ-config-1.4.0&#34;</span>
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;enable_cfs&#34;</span>: <span style="color:#66d9ef">false</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;shasta-1.4-csm-bare-bones-image&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><strong>NOTE</strong>: Be sure to replace the values of the <code>etag</code> and <code>path</code> fields with the ones you noted earlier in the <code>cray ims images list</code> command.</p>
+</li>
+<li>
+<p>Create the BOS session template using this file as input:</p>
+<pre tabindex="0"><code>ncn# cray bos sessiontemplate create --file sessiontemplate.json --name shasta-1.4-csm-bare-bones-image
+</code></pre><p>The expected output is:</p>
+<pre tabindex="0"><code>/sessionTemplate/shasta-1.4-csm-bare-bones-image
+</code></pre></li>
+</ol>
+<h3 id="csm-node">Find an available compute node</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn# cray hsm state components list --role Compute --enabled true
+</span></span></code></pre></div><p>Example output:</p>
+<pre tabindex="0"><code>[[Components]]
+ID = &#34;x3000c0s17b1n0&#34;
+Type = &#34;Node&#34;
+State = &#34;On&#34;
+Flag = &#34;OK&#34;
+Enabled = true
+Role = &#34;Compute&#34;
+NID = 1
+NetType = &#34;Sling&#34;
+Arch = &#34;X86&#34;
+Class = &#34;River&#34;
+
+[[Components]]
+ID = &#34;x3000c0s17b2n0&#34;
+Type = &#34;Node&#34;
+State = &#34;On&#34;
+Flag = &#34;OK&#34;
+Enabled = true
+Role = &#34;Compute&#34;
+NID = 2
+NetType = &#34;Sling&#34;
+Arch = &#34;X86&#34;
+Class = &#34;River&#34;
+</code></pre><p>Choose a node from those listed and set <code>XNAME</code> to its ID. In this example, <code>x3000c0s17b2n0</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn# export XNAME<span style="color:#f92672">=</span>x3000c0s17b2n0
+</span></span></code></pre></div><h3 id="csm-reboot">Reboot the node using your BOS session template</h3>
+<p>Create a BOS session to reboot the chosen node using the BOS session template that you created:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn# cray bos session create --template-uuid shasta-1.4-csm-bare-bones-image --operation reboot --limit $XNAME
+</span></span></code></pre></div><p>Expected output looks similar to the following:</p>
+<pre tabindex="0"><code>limit = &#34;x3000c0s17b2n0&#34;
+operation = &#34;reboot&#34;
+templateUuid = &#34;shasta-1.4-csm-bare-bones-image&#34;
+[[links]]
+href = &#34;/v1/session/8f2fc013-7817-4fe2-8e6f-c2136a5e3bd1&#34;
+jobId = &#34;boa-8f2fc013-7817-4fe2-8e6f-c2136a5e3bd1&#34;
+rel = &#34;session&#34;
+type = &#34;GET&#34;
+
+[[links]]
+href = &#34;/v1/session/8f2fc013-7817-4fe2-8e6f-c2136a5e3bd1/status&#34;
+rel = &#34;status&#34;
+type = &#34;GET&#34;
+</code></pre><h3 id="csm-consoles">Verify console connections</h3>
+<p>Sometimes the compute nodes and UAN are not up yet when <code>cray-conman</code> is initialized, and consequently will
+not be monitored. This is a good time to verify that all nodes are being monitored for console logging
+and re-initialize <code>cray-conman</code> if needed.</p>
+<p>This procedure can be run from any member of the Kubernetes cluster.</p>
+<ol>
+<li>
+<p>Identify the <code>cray-conman</code> pod:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn# kubectl get pods -n services | grep <span style="color:#e6db74">&#34;^cray-conman-&#34;</span>
+</span></span></code></pre></div><p>Expected output looks similar to the following:</p>
+<pre tabindex="0"><code>cray-conman-b69748645-qtfxj                                     3/3     Running           0          16m
+</code></pre></li>
+<li>
+<p>Set the <code>PODNAME</code> variable accordingly:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn# export PODNAME<span style="color:#f92672">=</span>cray-conman-b69748645-qtfxj
+</span></span></code></pre></div></li>
+<li>
+<p>Log into the <code>cray-conman</code> container in this pod:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn# kubectl exec -n services -it $PODNAME -c cray-conman -- bash
+</span></span><span style="display:flex;"><span>cray-conman#
+</span></span></code></pre></div></li>
+<li>
+<p>Check the existing list of nodes being monitored.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cray-conman# conman -q
+</span></span></code></pre></div><p>Output looks similar to the following:</p>
+<pre tabindex="0"><code>x9000c0s1b0n0
+x9000c0s20b0n0
+x9000c0s22b0n0
+x9000c0s24b0n0
+x9000c0s27b1n0
+x9000c0s27b2n0
+x9000c0s27b3n0
+</code></pre></li>
+<li>
+<p>If any compute nodes or UANs are not included in this list, the
+conman process can be re-initialized by killing the conmand process.</p>
+<ol>
+<li>
+<p>Identify the command process</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cray-conman# ps -ax | grep conmand | grep -v grep
+</span></span></code></pre></div><p>Output will look similar to:</p>
+<pre tabindex="0"><code>13 ?        Sl     0:45 conmand -F -v -c /etc/conman.conf
+</code></pre></li>
+<li>
+<p>Set CONPID to the process ID from the previous command output:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cray-conman# export CONPID<span style="color:#f92672">=</span><span style="color:#ae81ff">13</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Kill the process:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cray-conman# kill $CONPID
+</span></span></code></pre></div></li>
+</ol>
+</li>
+</ol>
+<p>This will regenerate the conman configuration file and restart the conmand process. Repeat the
+previous steps to verify that it now includes all nodes that are included in state manager.</p>
+<h3 id="csm-watch">Connect to the node&rsquo;s console and watch the boot</h3>
+<p>Run conman from inside the conman pod to access the console. The boot will fail, but should reach the dracut stage. If the dracut stage is reached, the boot
+can be considered successful and shows that the necessary CSM services needed to boot a node are
+up and available.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cray-conman-b69748645-qtfxj:/ <span style="color:#75715e"># conman -j x9000c1s7b0n1</span>
+</span></span></code></pre></div><p>The boot is considered successful if the console output ends with something similar to the following:</p>
+<pre tabindex="0"><code>[    7.876909] dracut: FATAL: Don&#39;t know how to handle &#39;root=craycps-s3:s3://boot-images/e3ba09d7-e3c2-4b80-9d86-0ee2c48c2214/rootfs:c77c0097bb6d488a5d1e4a2503969ac0-27:dvs:api-gw-service-nmn.local:300:nmn0&#39;
+[    7.898169] dracut: Refusing to continue
+[    7.952291] systemd-shutdow: 13 output lines suppressed due to ratelimiting
+[    7.959842] systemd-shutdown[1]: Sending SIGTERM to remaining processes...
+[    7.975211] systemd-journald[1022]: Received SIGTERM from PID 1 (systemd-shutdow).
+[    7.982625] systemd-shutdown[1]: Sending SIGKILL to remaining processes...
+[    7.999281] systemd-shutdown[1]: Unmounting file systems.
+[    8.006767] systemd-shutdown[1]: Remounting &#39;/&#39; read-only with options &#39;&#39;.
+[    8.013552] systemd-shutdown[1]: Remounting &#39;/&#39; read-only with options &#39;&#39;.
+[    8.019715] systemd-shutdown[1]: All filesystems unmounted.
+[    8.024697] systemd-shutdown[1]: Deactivating swaps.
+[    8.029496] systemd-shutdown[1]: All swaps deactivated.
+[    8.036504] systemd-shutdown[1]: Detaching loop devices.
+[    8.043612] systemd-shutdown[1]: All loop devices detached.
+[    8.059239] reboot: System halted
+</code></pre><h2 id="uas-uai-tests">UAS / UAI Tests</h2>
+<ol>
+<li><a href="/docs-csm/en-09/#uas-uai-init-cli">Initialize and Authorize CLI</a>
+<ol>
+<li><a href="/docs-csm/en-09/#uas-uai-init-cli-stop">Stop Using CRAY_CREDENTIALS</a></li>
+<li><a href="/docs-csm/en-09/#uas-uai-init-cli-init">Initialize</a></li>
+<li><a href="/docs-csm/en-09/#uas-uai-init-cli-auth">Authorize</a></li>
+<li><a href="/docs-csm/en-09/#uas-uai-init-cli-debug">Troubleshooting</a></li>
+</ol>
+</li>
+<li><a href="/docs-csm/en-09/#uas-uai-validate">Validate UAS and UAI</a>
+<ol>
+<li><a href="/docs-csm/en-09/#uas-uai-validate-install">Validate Basic UAS Installation</a></li>
+<li><a href="/docs-csm/en-09/#uas-uai-validate-create">Validate UAI Creation</a></li>
+<li><a href="/docs-csm/en-09/#uas-uai-validate-debug">Troubleshooting</a>
+<ol>
+<li><a href="/docs-csm/en-09/#uas-uai-validate-debug-auth">Authorization Issues</a></li>
+<li><a href="/docs-csm/en-09/#uas-uai-validate-debug-keycloak">Keycloak Issues</a></li>
+<li><a href="/docs-csm/en-09/#uas-uai-validate-debug-registry">Registry Issues</a></li>
+<li><a href="/docs-csm/en-09/#uas-uai-validate-debug-container">Missing Volumes and Other Container Startup Issues</a></li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="uas-uai-init-cli">Initialize and Authorize the CLI</h3>
+<p>The procedures below use the CLI as an authorized user and run on two separate node types. The first part runs on the LiveCD node while the second part runs on a non-LiveCD Kubernetes master or worker node. When using the CLI on either node, the CLI configuration needs to be initialized and the user running the procedure needs to be authorized. This section describes how to initialize the CLI for use by a user and authorize the CLI as a user to run the procedures on any given node. The procedures will need to be repeated in both stages of the validation procedure.</p>
+<h4 id="uas-uai-init-cli-stop">Stop Using the CRAY_CREDENTIALS Service Account Token</h4>
+<p>Installation procedures leading up to production mode on Shasta use the CLI with a Kubernetes managed service account normally used for internal operations. There is a procedure for extracting the OAUTH token for this service account and assigning it to the <code>CRAY_CREDENTIALS</code> environment variable to permit simple CLI operations. The UAS / UAI validation procedure runs as a post-installation procedure and requires an actual user with Linux credentials, not this service account. Prior to running any of the steps below you must unset the <code>CRAY_CREDENTIALS</code> environment variable:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn# unset CRAY_CREDENTIALS
+</span></span></code></pre></div><h4 id="uas-uai-init-cli-init">Initialize the CLI Configuration</h4>
+<p>The CLI needs to know what host to use to obtain authorization and what user is requesting authorization so it can obtain an OAUTH token to talk to the API Gateway. This is accomplished by initializing the CLI configuration. In this example, I am using the <code>vers</code> username. In practice, <code>vers</code> and the response to the <code>password: </code> prompt should be replaced with the username and password of the administrator running the validation procedure.</p>
+<p>To check whether the CLI needs initialization, run:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn# cray config describe
+</span></span></code></pre></div><ul>
+<li>
+<p>The <code>cray config describe</code> output may look similar to this:</p>
+<pre tabindex="0"><code># cray config describe
+Your active configuration is: default
+[core]
+hostname = &#34;https://api-gw-service-nmn.local&#34;
+
+[auth.login]
+username = &#34;vers&#34;
+</code></pre><p>This means the CLI is initialized and logged in as <code>vers</code>.
+* If you are not <code>vers</code> you will want to authorize yourself using your username and password in the next section.
+* If you are <code>vers</code> you are ready to move on to the validation procedure on that node.</p>
+</li>
+<li>
+<p>The <code>cray config describe</code> output may instead look like this:</p>
+<pre tabindex="0"><code>Usage: cray config describe [OPTIONS]
+
+Error: No configuration exists. Run `cray init`
+</code></pre><p>This means the CLI needs to be initialized. To do so, run the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn# cray init
+</span></span></code></pre></div><p>When prompted, remember to substitute your username instead of &lsquo;vers&rsquo;.
+Expected output (including your typed input) should look similar to the following:</p>
+<pre tabindex="0"><code>Cray Hostname: api-gw-service-nmn.local
+Username: vers
+Password:
+Success!
+
+Initialization complete.
+</code></pre></li>
+</ul>
+<h4 id="uas-uai-init-cli-auth">Authorize the CLI for Your User</h4>
+<p>If, when you check for an initialized CLI you find it is initialized but authorized for a user different from you, you will want to authorize the CLI for your self. Do this with the following (remembering to substitute your username and password for <code>vers</code>):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn# cray auth login
+</span></span></code></pre></div><p>Verify that the output of the command reports success. You are now authorized to use the CLI.</p>
+<h4 id="uas-uai-init-cli-debug">Troubleshooting</h4>
+<p>If initialization or authorization fails in one of the above steps, there are several common causes:</p>
+<ul>
+<li>DNS failure looking up <code>api-gw-service-nmn.local</code> may be preventing the CLI from reaching the API Gateway and Keycloak for authorization</li>
+<li>Network connectivity issues with the NMN may be preventing the CLI from reaching the API Gateway and Keycloak for authorization</li>
+<li>Certificate mismatch or trust issues may be preventing a secure connection to the API Gateway</li>
+<li>Istio failures may be preventing traffic from reaching Keycloak</li>
+<li>Keycloak may not yet be set up to authorize you as a user</li>
+</ul>
+<p>While resolving these issues is beyond the scope of this section, you may get clues to what is failing by adding <code>-vvvvv</code> to the <code>cray auth...</code> or <code>cray init ...</code> commands.</p>
+<h3 id="uas-uai-validate">Validate UAS and UAI Functionality</h3>
+<p>The following procedures run on separate nodes of the Shasta system. They are, therefore, separated into separate sub-sections.</p>
+<h4 id="uas-uai-validate-install">Validate the Basic UAS Installation</h4>
+<p>Make sure you are running on a booted NCN node and have initialized and authorized yourself in the CLI as described above.</p>
+<blockquote>
+<p>If the cray CLI was initialized on the LiveCD PIT node, then following commands will also work on the PIT node.</p>
+</blockquote>
+<ol>
+<li>
+<p>Basic UAS installation is validated using the following:
+1.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn# cray uas mgr-info list
+</span></span></code></pre></div><p>Expected output looks similar to the following:</p>
+<pre tabindex="0"><code>service_name = &#34;cray-uas-mgr&#34;
+version = &#34;1.11.5&#34;
+</code></pre><p>In this example output, it shows that UAS is installed and running the <code>1.11.5</code> version.
+1.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn# cray uas list
+</span></span></code></pre></div><p>Expected output looks similar to the following:</p>
+<pre tabindex="0"><code>results = []
+</code></pre><p>This example output shows that there are no currently running UAIs. It is possible, if someone else has been using the UAS, that there could be UAIs in the list. That is acceptable too from a validation standpoint.</p>
+</li>
+<li>
+<p>Verify that the pre-made UAI images are registered with UAS</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn# cray uas images list
+</span></span></code></pre></div><p>Expected output looks similar to the following:</p>
+<pre tabindex="0"><code>default_image = &#34;dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest&#34;
+image_list = [ &#34;dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest&#34;,]
+</code></pre><p>This example output shows that the pre-made end-user UAI image (<code>cray/cray-uai-sles15sp1:latest</code>) is registered with UAS. This does not necessarily mean this image is installed in the container image registry, but it is configured for use. If other UAI images have been created and registered, they may also show up here &ndash; that is acceptable.</p>
+</li>
+</ol>
+<h4 id="uas-uai-validate-create">Validate UAI Creation</h4>
+<p>This procedure must run on a master or worker node (and not <code>ncn-w001</code>) on the Shasta system (or from an external host, but the procedure for that is not covered here). It requires that the CLI be initialized and authorized as you.</p>
+<p>In this procedure, we will show the steps being run on <code>ncn-w003</code></p>
+<ol>
+<li>
+<p>Verify that you can create a UAI:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-w003# cray uas create --publickey ~/.ssh/id_rsa.pub
+</span></span></code></pre></div><p>Expected output looks similar to the following:</p>
+<pre tabindex="0"><code>uai_connect_string = &#34;ssh vers@10.16.234.10&#34;
+uai_host = &#34;ncn-w001&#34;
+uai_img = &#34;registry.local/cray/cray-uai-sles15sp1:latest&#34;
+uai_ip = &#34;10.16.234.10&#34;
+uai_msg = &#34;&#34;
+uai_name = &#34;uai-vers-a00fb46b&#34;
+uai_status = &#34;Pending&#34;
+username = &#34;vers&#34;
+
+[uai_portmap]
+</code></pre><p>This has created the UAI and the UAI is currently in the process of initializing and running.</p>
+</li>
+<li>
+<p>Set <code>UAINAME</code> to the value of the <code>uai_name</code> field in the previous command output (<code>uai-vers-a00fb46b</code> in our example):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-w003# export UAINAME<span style="color:#f92672">=</span>uai-vers-a00fb46b
+</span></span></code></pre></div></li>
+<li>
+<p>Check the current status of the UAI:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-w003# cray uas list
+</span></span></code></pre></div><p>Expected output looks similar to the following:</p>
+<pre tabindex="0"><code>[[results]]
+uai_age = &#34;0m&#34;
+uai_connect_string = &#34;ssh vers@10.16.234.10&#34;
+uai_host = &#34;ncn-w001&#34;
+uai_img = &#34;registry.local/cray/cray-uai-sles15sp1:latest&#34;
+uai_ip = &#34;10.16.234.10&#34;
+uai_msg = &#34;&#34;
+uai_name = &#34;uai-vers-a00fb46b&#34;
+uai_status = &#34;Running: Ready&#34;
+username = &#34;vers&#34;
+</code></pre><p>If the <code>uai_status</code> field is <code>Running: Ready</code>, proceed to the next step. Otherwise, wait and repeat this command until that is the case. It normally should not take more than a minute or two.</p>
+</li>
+<li>
+<p>The UAI is ready for use. You can then log into it using the command in the <code>uai_connect_string</code> field in the previous command output:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-w003# ssh vers@10.16.234.10
+</span></span><span style="display:flex;"><span>vers@uai-vers-a00fb46b-6889b666db-4dfvn:~&gt;
+</span></span></code></pre></div></li>
+<li>
+<p>Run a command on the UAI:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>vers@uai-vers-a00fb46b-6889b666db-4dfvn:~&gt; ps -afe
+</span></span></code></pre></div><p>Expected output looks similar to the following:</p>
+<pre tabindex="0"><code>UID          PID    PPID  C STIME TTY          TIME CMD
+root           1       0  0 18:51 ?        00:00:00 /bin/bash /usr/bin/uai-ssh.sh
+munge         36       1  0 18:51 ?        00:00:00 /usr/sbin/munged
+root          54       1  0 18:51 ?        00:00:00 su vers -c /usr/sbin/sshd -e -f /etc/uas/ssh/sshd_config -D
+vers          55      54  0 18:51 ?        00:00:00 /usr/sbin/sshd -e -f /etc/uas/ssh/sshd_config -D
+vers          62      55  0 18:51 ?        00:00:00 sshd: vers [priv]
+vers          67      62  0 18:51 ?        00:00:00 sshd: vers@pts/0
+vers          68      67  0 18:51 pts/0    00:00:00 -bash
+vers         120      68  0 18:52 pts/0    00:00:00 ps -afe
+</code></pre></li>
+<li>
+<p>Log out from the UAI</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>vers@uai-vers-a00fb46b-6889b666db-4dfvn:~&gt; exit
+</span></span><span style="display:flex;"><span>ncn-w003#
+</span></span></code></pre></div></li>
+<li>
+<p>Clean up the UAI.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-w003# cray uas delete --uai-list $UAINAME
+</span></span></code></pre></div><p>Expected output looks similar to the following:</p>
+<pre tabindex="0"><code>results = [ &#34;Successfully deleted uai-vers-a00fb46b&#34;,]
+</code></pre></li>
+</ol>
+<p>If you got this far with similar results, then the basic functionality of the UAS and UAI is working.</p>
+<h4 id="uas-uai-validate-debug">Troubleshooting</h4>
+<p>Here are some common failure modes seen with UAS / UAI operations and how to resolve them.</p>
+<h5 id="uas-uai-validate-debug-auth">Authorization Issues</h5>
+<p>If you are not logged in as a valid Keycloak user or are accidentally using the <code>CRAY_CREDENTIALS</code> environment variable (i.e. the variable is set regardless of whether you are logged in as you), you will see an error when running CLI commands.</p>
+<p>For example:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn# cray uas list
+</span></span></code></pre></div><p>The symptom of this problem is output similar to the following:</p>
+<pre tabindex="0"><code>Usage: cray uas list [OPTIONS]
+Try &#39;cray uas list --help&#39; for help.
+
+Error: Bad Request: Token not valid for UAS. Attributes missing: [&#39;gidNumber&#39;, &#39;loginShell&#39;, &#39;homeDirectory&#39;, &#39;uidNumber&#39;, &#39;name&#39;]
+</code></pre><p>Fix this by logging in as a real user (someone with actual Linux credentials) and making sure that <code>CRAY_CREDENTIALS</code> is unset.</p>
+<h5 id="uas-uai-validate-debug-keycloak">UAS Cannot Access Keycloak</h5>
+<p>When running CLI commands, you may get a Keycloak error.</p>
+<p>For example:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn# cray uas list
+</span></span></code></pre></div><p>The symptom of this problem is output similar to the following:</p>
+<pre tabindex="0"><code>Usage: cray uas list [OPTIONS]
+Try &#39;cray uas list --help&#39; for help.
+
+Error: Internal Server Error: An error was encountered while accessing Keycloak
+</code></pre><p>You may be using the wrong hostname to reach the API gateway, re-run the CLI initialization steps above and try again to check that. There may also be a problem with the Istio service mesh inside of your Shasta system. Troubleshooting this is beyond the scope of this section, but you may find more useful information by looking at the UAS pod logs in Kubernetes. There are, generally, two UAS pods, so you may need to look at logs from both to find the specific failure. The logs tend to have a very large number of <code>GET</code> events listed as part of the liveness checking.</p>
+<p>The following shows an example of looking at UAS logs effectively (this example shows only one UAS manager, normally there would be two):</p>
+<ol>
+<li>
+<p>Determine the pod name of the uas-mgr pod</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn# kubectl get po -n services | grep <span style="color:#e6db74">&#34;^cray-uas-mgr&#34;</span> | grep -v etcd
+</span></span></code></pre></div><p>Expected output looks similar to:</p>
+<pre tabindex="0"><code>cray-uas-mgr-6bbd584ccb-zg8vx                                    2/2     Running            0          12d
+</code></pre></li>
+<li>
+<p>Set PODNAME to the name of the manager pod whose logs you wish to view.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn# export PODNAME<span style="color:#f92672">=</span>cray-uas-mgr-6bbd584ccb-zg8vx
+</span></span></code></pre></div></li>
+<li>
+<p>View its last 25 log entries of the cray-uas-mgr container in that pod, excluding <code>GET</code> events:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn# kubectl logs -n services $PODNAME cray-uas-mgr | grep -v <span style="color:#e6db74">&#39;GET &#39;</span> | tail -25
+</span></span></code></pre></div><p>Example output:</p>
+<pre tabindex="0"><code>2021-02-08 15:32:41,211 - uas_mgr - INFO - getting deployment uai-vers-87a0ff6e in namespace user
+2021-02-08 15:32:41,225 - uas_mgr - INFO - creating deployment uai-vers-87a0ff6e in namespace user
+2021-02-08 15:32:41,241 - uas_mgr - INFO - creating the UAI service uai-vers-87a0ff6e-ssh
+2021-02-08 15:32:41,241 - uas_mgr - INFO - getting service uai-vers-87a0ff6e-ssh in namespace user
+2021-02-08 15:32:41,252 - uas_mgr - INFO - creating service uai-vers-87a0ff6e-ssh in namespace user
+2021-02-08 15:32:41,267 - uas_mgr - INFO - getting pod info uai-vers-87a0ff6e
+2021-02-08 15:32:41,360 - uas_mgr - INFO - No start time provided from pod
+2021-02-08 15:32:41,361 - uas_mgr - INFO - getting service info for uai-vers-87a0ff6e-ssh in namespace user
+127.0.0.1 - - [08/Feb/2021 15:32:41] &#34;POST /v1/uas?imagename=registry.local%2Fcray%2Fno-image-registered%3Alatest HTTP/1.1&#34; 200 -
+2021-02-08 15:32:54,455 - uas_auth - INFO - UasAuth lookup complete for user vers
+2021-02-08 15:32:54,455 - uas_mgr - INFO - UAS request for: vers
+2021-02-08 15:32:54,455 - uas_mgr - INFO - listing deployments matching: host None, labels uas=managed,user=vers
+2021-02-08 15:32:54,484 - uas_mgr - INFO - getting pod info uai-vers-87a0ff6e
+2021-02-08 15:32:54,596 - uas_mgr - INFO - getting service info for uai-vers-87a0ff6e-ssh in namespace user
+2021-02-08 15:40:25,053 - uas_auth - INFO - UasAuth lookup complete for user vers
+2021-02-08 15:40:25,054 - uas_mgr - INFO - UAS request for: vers
+2021-02-08 15:40:25,054 - uas_mgr - INFO - listing deployments matching: host None, labels uas=managed,user=vers
+2021-02-08 15:40:25,085 - uas_mgr - INFO - getting pod info uai-vers-87a0ff6e
+2021-02-08 15:40:25,212 - uas_mgr - INFO - getting service info for uai-vers-87a0ff6e-ssh in namespace user
+2021-02-08 15:40:51,210 - uas_auth - INFO - UasAuth lookup complete for user vers
+2021-02-08 15:40:51,210 - uas_mgr - INFO - UAS request for: vers
+2021-02-08 15:40:51,210 - uas_mgr - INFO - listing deployments matching: host None, labels uas=managed,user=vers
+2021-02-08 15:40:51,261 - uas_mgr - INFO - deleting service uai-vers-87a0ff6e-ssh in namespace user
+2021-02-08 15:40:51,291 - uas_mgr - INFO - delete deployment uai-vers-87a0ff6e in namespace user
+127.0.0.1 - - [08/Feb/2021 15:40:51] &#34;DELETE /v1/uas?uai_list=uai-vers-87a0ff6e HTTP/1.1&#34; 200 -
+</code></pre></li>
+</ol>
+<h5 id="uas-uai-validate-debug-registry">UAI Images not in Registry</h5>
+<p>When listing or describing your UAI, you may notice an error in the <code>uai_msg</code> field. For example:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn# cray uas list
+</span></span></code></pre></div><p>You may see something similar to the following output:</p>
+<pre tabindex="0"><code>[[results]]
+uai_age = &#34;0m&#34;
+uai_connect_string = &#34;ssh vers@10.103.13.172&#34;
+uai_host = &#34;ncn-w001&#34;
+uai_img = &#34;registry.local/cray/cray-uai-sles15sp1:latest&#34;
+uai_ip = &#34;10.103.13.172&#34;
+uai_msg = &#34;ErrImagePull&#34;
+uai_name = &#34;uai-vers-87a0ff6e&#34;
+uai_status = &#34;Waiting&#34;
+username = &#34;vers&#34;
+</code></pre><p>This means the pre-made end-user UAI image is not in your local registry (or whatever registry it is being pulled from; see the <code>uai_img</code> value for details). To correct this, locate and push/import the image to the registry.</p>
+<h5 id="uas-uai-validate-debug-container">Missing Volumes and other Container Startup Issues</h5>
+<p>Various packages install volumes in the UAS configuration. All of those volumes must also have the underlying resources available, sometimes on the host node where the UAI is running sometimes from with Kubernetes. If your UAI gets stuck with a <code>ContainerCreating</code> <code>uai_msg</code> field for an extended time, this is a likely cause. UAIs run in the <code>user</code> Kubernetes namespace, and are pods that can be examined using <code>kubectl describe</code>. Use</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn# kubectl get po -n user | grep &lt;uai-name&gt;
+</span></span></code></pre></div><p>to locate the pod, and then use</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn# kubectl describe pod -n user &lt;pod-name&gt;
+</span></span></code></pre></div><p>to investigate the problem. If volumes are missing they will show up in the <code>Events:</code> section of the output. Other problems may show up there as well. The names of the missing volumes or other issues should indicate what needs to be fixed to make the UAI run.</p>
+
+
+<footer class="footline">
+	
+</footer>
+
+        
+        </div>
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+
+        
+
+
+	 
+	 
+    </div>
+
+    </section>
+
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/docs-csm/js/clipboard.min.js?1729741357"></script>
+    <script src="/docs-csm/js/perfect-scrollbar.min.js?1729741357"></script>
+    <script src="/docs-csm/js/perfect-scrollbar.jquery.min.js?1729741357"></script>
+    <script src="/docs-csm/js/jquery.sticky.js?1729741357"></script>
+    <script src="/docs-csm/js/featherlight.min.js?1729741357"></script>
+    <script src="/docs-csm/js/highlight.pack.js?1729741357"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/docs-csm/js/modernizr.custom-3.6.0.js?1729741357"></script>
+    <script src="/docs-csm/js/learn.js?1729741357"></script>
+    <script src="/docs-csm/js/hugo-learn.js?1729741357"></script>
+    
+        
+            <script src="/docs-csm/mermaid/mermaid.js?1729741357"></script>
+        
+        <script>
+            mermaid.initialize({ startOnLoad: true });
+        </script>
+    
+    
+
+  </body>
+</html>
+

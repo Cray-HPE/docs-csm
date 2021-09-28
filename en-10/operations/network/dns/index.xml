@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>dns on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-10/operations/network/dns/</link>
+    <description>Recent content in dns on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-10</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:26 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-10/operations/network/dns/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Domain Name Service (DNS)</title>
+      <link>/docs-csm/en-10/operations/network/dns/dns/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:26 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/dns/dns/</guid>
+      <description>Domain Name Service (DNS) The central DNS infrastructure provides the structural networking hierarchy and datastore for the system. All DNS requests are managed by resolvers, not by the central DNS infrastructure. Resolvers provide the following within DNS:&#xA;Security by scoping requests from clients.&#xA;For example, disallowing cross-network DNS lookups.&#xA;Load reduction on the central DNS infrastructure:&#xA;Caching requests and handling scoping requests. Providing request recursion where necessary. The Data Helper Tools are used to update records, and takes in changes from the following sources:</description>
+    </item>
+    <item>
+      <title>Enable ncsd on UANs</title>
+      <link>/docs-csm/en-10/operations/network/dns/enable_ncsd_on_uans/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:26 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/dns/enable_ncsd_on_uans/</guid>
+      <description>Enable ncsd on UANs Configure User Access Nodes (UANs) to start the ncsd service at boot time.&#xA;The nscd service is not currently enabled by default and systemd does not start it at boot time. There are two ways to start nscd on UAN nodes: manually starting the service or enabling the service in the UAN image. While restarting nscd manually has to be performed each time the UAN is rebooted, enabling nscd in the image only has to be done once.</description>
+    </item>
+    <item>
+      <title>Manage the DNS Unbound Resolver</title>
+      <link>/docs-csm/en-10/operations/network/dns/manage_the_dns_unbound_resolver/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:26 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/dns/manage_the_dns_unbound_resolver/</guid>
+      <description>Manage the DNS Unbound Resolver The unbound DNS instance is used to resolve names for the physical equipment on the management networks within the system, such as NCNs, UANs, switches, and compute nodes. This instance is accessible only within the HPE Cray EX system.&#xA;Check the status of the cray-dns-unbound pods Unbound logs View manager (DNS Helper) logs Restart Unbound Clear bad data in the Unbound ConfigMap Check the status of the cray-dns-unbound pods Check the status of the pods:</description>
+    </item>
+    <item>
+      <title>Troubleshoot Common DNS Issues</title>
+      <link>/docs-csm/en-10/operations/network/dns/troubleshoot_common_dns_issues/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:26 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/dns/troubleshoot_common_dns_issues/</guid>
+      <description>Troubleshoot Common DNS Issues The Domain Name Service (DNS) is part of an integrated infrastructure set designed to provide dynamic host discovery, addressing, and naming. There are several different place to look for troubleshooting as DNS interacts with Dynamic Host Configuration Protocol (DHCP), the Hardware Management Service (HMS), the System Layout Service (SLS), and the State Manager Daemon (SMD).&#xA;The information below describes what to check when experiencing issues with DNS.</description>
+    </item>
+  </channel>
+</rss>

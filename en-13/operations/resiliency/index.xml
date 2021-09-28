@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>resiliency on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-13/operations/resiliency/</link>
+    <description>Recent content in resiliency on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-13</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:56 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-13/operations/resiliency/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Recreate StatefulSet Pods on Another Node</title>
+      <link>/docs-csm/en-13/operations/resiliency/recreate_statefulset_pods_on_another_node/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:56 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/resiliency/recreate_statefulset_pods_on_another_node/</guid>
+      <description>Recreate StatefulSet Pods on Another Node Some pods are members of StatefulSets, meaning that there is a very specific number of them, each likely running on a different node. Similar to DaemonSets, these pods will never be recreated on another node as long as they are sitting in a Terminating state.&#xA;Warning: This procedure should only be done for pods that are known to no longer be running. Corruption may occur if the worker node is still running when deleting the deleting the StatefulSet pod in a Terminating state.</description>
+    </item>
+    <item>
+      <title>Resilience of System Management Services</title>
+      <link>/docs-csm/en-13/operations/resiliency/resilience_of_system_management_services/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:56 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/resiliency/resilience_of_system_management_services/</guid>
+      <description>Resilience of System Management Services HPE Cray EX systems are designed so that system management services (SMS) are fully resilient and that there is no single point of failure. The design of the system allows for resiliency in the following ways:&#xA;Three non-compute nodes (NCNs) are configured as Kubernetes master nodes. When one master goes down, operations (such as jobs running across compute nodes) are expected to continue. At least three utility storage nodes provide persistent storage for the services running on the Kubernetes management nodes.</description>
+    </item>
+    <item>
+      <title>Resiliency</title>
+      <link>/docs-csm/en-13/operations/resiliency/resiliency/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:56 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/resiliency/resiliency/</guid>
+      <description>Resiliency HPE Cray EX systems are designed so that system management services (SMS) are fully resilient and that there is no single point of failure.</description>
+    </item>
+    <item>
+      <title>Resiliency Testing Procedure</title>
+      <link>/docs-csm/en-13/operations/resiliency/resiliency_testing_procedure/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:56 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/resiliency/resiliency_testing_procedure/</guid>
+      <description>Resiliency Testing Procedure This document and the procedures contained within it are for the purposes of communicating the kind of testing done by the internal Cray System Management (CSM) team to ensure a basic level of system resiliency in the event of the loss of a single non-compute node (NCN).&#xA;It is assumed that some procedures are already known by admins and thus does not go into great detail or attempt to encompass every command necessary for execution.</description>
+    </item>
+    <item>
+      <title>Restore System Functionality if a Kubernetes Worker Node is Down</title>
+      <link>/docs-csm/en-13/operations/resiliency/restore_system_functionality_if_a_kubernetes_worker_node_is_down/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:56 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/resiliency/restore_system_functionality_if_a_kubernetes_worker_node_is_down/</guid>
+      <description>Restore System Functionality if a Kubernetes Worker Node is Down Services running on Kubernetes worker nodes can be properly restored if downtime occurs. Use this procedure to ensure that if a Kubernetes worker node is lost or restored after being down, then certain features the node was providing can also be restored or recovered on another node.&#xA;Capture the metadata for the unhealthy node before bringing down the node. The pods will successfully terminate when the node goes down, which should resolve most pods in an error state.</description>
+    </item>
+  </channel>
+</rss>

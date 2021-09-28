@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>kubernetes on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-10/operations/kubernetes/</link>
+    <description>Recent content in kubernetes on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-10</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:25 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-10/operations/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>About Kubernetes Taints and Labels</title>
+      <link>/docs-csm/en-10/operations/kubernetes/about_kubernetes_taints_and_labels/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:23 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/about_kubernetes_taints_and_labels/</guid>
+      <description>About Kubernetes Taints and Labels Kubernetes labels control node affinity, which is the property of pods that attracts them to a set of nodes. On the other hand, Kubernetes taints enable a node to repel a set of pods. In addition, pods can have tolerances for taints to allow them to run on nodes with certain taints.&#xA;Taints are controlled with the kubectl taint nodes command, while node labels for various nodes can be customized with a configmap that contains the desired values.</description>
+    </item>
+    <item>
+      <title>About Postgres</title>
+      <link>/docs-csm/en-10/operations/kubernetes/about_postgres/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:23 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/about_postgres/</guid>
+      <description>About Postgres The system uses PostgreSQL (known as Postgres) as a database solution. Postgres databases use SQL language to store and manage databases on the system.&#xA;To learn more about Postgres, see https://www.postgresql.org/docs/.&#xA;The Patroni tool can be used to manage and maintain information in a Postgres database. It handles tasks such as listing cluster members and the replication status, configuring and restarting databases, and more. For more information about this tool, refer to Troubleshoot Postgres Database.</description>
+    </item>
+    <item>
+      <title>About etcd</title>
+      <link>/docs-csm/en-10/operations/kubernetes/about_etcd/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:23 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/about_etcd/</guid>
+      <description>About etcd The system uses etcd for storing all of its cluster data. It is an open source database that is excellent for maintaining the state of Kubernetes. Failures in the etcd cluster at the heart of Kubernetes will cause a failure of Kubernetes. To mitigate this risk, the system is deployed with etcd on dedicated disks and with a specific configuration to optimize Kubernetes workloads. The system also provides additional etcd cluster(s) as necessary to help maintain an operational state of services.</description>
+    </item>
+    <item>
+      <title>About kubectl</title>
+      <link>/docs-csm/en-10/operations/kubernetes/about_kubectl/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:23 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/about_kubectl/</guid>
+      <description>About kubectl kubectl is a CLI that can be used to run commands against a Kubernetes cluster. The format of the kubectl command is shown below:&#xA;ncn# kubectl COMMAND RESOURCE_TYPE RESOURCE_NAME FLAGS An example of using kubectl to retrieve information about a pod is shown below:&#xA;ncn# kubectl get pod POD_NAME1 POD_NAME2 kubectl is installed by default on the non-compute node (NCN) image. To learn more about kubectl, refer to https://kubernetes.</description>
+    </item>
+    <item>
+      <title>Backups for etcd-operator Clusters</title>
+      <link>/docs-csm/en-10/operations/kubernetes/backups_for_etcd-operator_clusters/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:23 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/backups_for_etcd-operator_clusters/</guid>
+      <description>Backups for etcd-operator Clusters Backups are periodically created for etcd clusters. These backups are stored in the Ceph Rados Gateway (S3). Not all services are backed up automatically. Services that are not backed up automatically will need to be manually rediscovered if the cluster is unhealthy.&#xA;Clusters with automated backups Clusters without automated backups Clusters with automated backups The following services are backed up daily (one week of backups retained) as part of the automated solution:</description>
+    </item>
+    <item>
+      <title>Kubernetes and Bare Metal EtcD Certificate Renewal</title>
+      <link>/docs-csm/en-10/operations/kubernetes/cert_renewal_for_kubernetes_and_bare_metal_etcd/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:23 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/cert_renewal_for_kubernetes_and_bare_metal_etcd/</guid>
+      <description>Kubernetes and Bare Metal EtcD Certificate Renewal As part of the installation, Kubernetes generates certificates for the required subcomponents. This document will help walk through the process of renewing the certificates.&#xA;IMPORTANT:&#xA;Depending on the version of Kubernetes, the command may or may not reside under the alpha category. Use kubectl certs --help and kubectl alpha certs --help to determine this. The overall command syntax is the same; the only difference is whether or not the command structure includes alpha.</description>
+    </item>
+    <item>
+      <title>Check for and Clear etcd Cluster Alarms</title>
+      <link>/docs-csm/en-10/operations/kubernetes/check_for_and_clear_etcd_cluster_alarms/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:23 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/check_for_and_clear_etcd_cluster_alarms/</guid>
+      <description>Check for and Clear etcd Cluster Alarms Check for any etcd cluster alarms and clear them as needed. An etcd cluster alarm must be manually cleared.&#xA;For example, a cluster&amp;rsquo;s database NOSPACE alarm is set when database storage space is no longer available. A subsequent defrag may free up database storage space, but writes to the database will continue to fail while the NOSPACE alarm is set.&#xA;Prerequisites This procedure requires root privileges.</description>
+    </item>
+    <item>
+      <title>Check the Health and Balance of etcd Clusters</title>
+      <link>/docs-csm/en-10/operations/kubernetes/check_the_health_and_balance_of_etcd_clusters/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:23 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/check_the_health_and_balance_of_etcd_clusters/</guid>
+      <description>Check the Health and Balance of etcd Clusters Check to see if all of the etcd clusters have healthy pods, are balanced, and have a healthy cluster database. There needs to be the same number of pods running on each worker node for the etcd clusters to be balanced. If the number of pods is not the same for each worker node, the cluster is not balanced.&#xA;Any clusters that do not have healthy pods will need to be rebuilt.</description>
+    </item>
+    <item>
+      <title>Clear Space in an etcd Cluster Database</title>
+      <link>/docs-csm/en-10/operations/kubernetes/clear_space_in_an_etcd_cluster_database/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:23 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/clear_space_in_an_etcd_cluster_database/</guid>
+      <description>Clear Space in an etcd Cluster Database Use this procedure to clear the etcd cluster NOSPACE alarm. Once it is set it will remain set. If needed, defrag the database cluster before clearing the NOSPACE alarm.&#xA;Defragging the database cluster and clearing the etcd cluster NOSPACE alarm will free up database space.&#xA;Prerequisites This procedure requires root privileges. The etcd clusters are in a healthy state. Procedure Clear up space when the etcd database space has exceeded and has been defragged, but the NOSPACE alarm remains set.</description>
+    </item>
+    <item>
+      <title>Configure kubectl Credentials to Access the Kubernetes APIs</title>
+      <link>/docs-csm/en-10/operations/kubernetes/configure_kubectl_credentials_to_access_the_kubernetes_apis/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:23 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/configure_kubectl_credentials_to_access_the_kubernetes_apis/</guid>
+      <description>Configure kubectl Credentials to Access the Kubernetes APIs The credentials for kubectl are located in the admin configuration file on all non-compute node (NCN) master and worker nodes. They can be found at /etc/kubernetes/admin.conf for the root user. Use kubectl to access the Kubernetes cluster from a device outside the cluster.&#xA;For more information, refer to the Kubernetes home page.&#xA;Prerequisites This procedure requires administrative privileges and assumes that the device being used has:</description>
+    </item>
+    <item>
+      <title>containerd</title>
+      <link>/docs-csm/en-10/operations/kubernetes/containerd/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/containerd/</guid>
+      <description>containerd containerd is a container runtime (systemd service) that runs on the host. It is used to run containers on the Kubernetes platform.&#xA;/var/lib/containerd filling up containerd slow startup after reboot Restarting containerd on a worker NCN /var/lib/containerd filling up In older versions of containerd, there are cases where the /var/lib/containerd directory fills up. In the event that this occurs, the following steps can be used to remediate the issue.</description>
+    </item>
+    <item>
+      <title>Create a Manual Backup of a Healthy etcd Cluster</title>
+      <link>/docs-csm/en-10/operations/kubernetes/create_a_manual_backup_of_a_healthy_etcd_cluster/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/create_a_manual_backup_of_a_healthy_etcd_cluster/</guid>
+      <description>Create a Manual Backup of a Healthy etcd Cluster Manually create a backup of a healthy etcd cluster and check to see if the backup was created successfully.&#xA;Backups of healthy etcd clusters can be used to restore the cluster if it becomes unhealthy at any point.&#xA;The commands in this procedure can be run on any master node (ncn-mXXX) or worker node (ncn-wXXX) on the system.&#xA;Prerequisites A healthy etcd cluster is available on the system.</description>
+    </item>
+    <item>
+      <title>Kubernetes CronJobs</title>
+      <link>/docs-csm/en-10/operations/kubernetes/cronjobs/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/cronjobs/</guid>
+      <description>Kubernetes CronJobs Kubernetes CronJobs create Kubernetes jobs on a repeating schedule, specified in traditional cron syntax.&#xA;CronJobs Not Scheduled In some cases, CronJobs can fail to get scheduled (such as the cray-dns-unbound-manager job) if a previously run job did not finish properly. In order to alleviate this condition, CSM deploys a traditional CronJob on one of the master NCNs to perform cleanup such that jobs continue to get rescheduled.&#xA;In the event jobs aren&amp;rsquo;t running, ensure the CronJob is specified properly using the following steps.</description>
+    </item>
+    <item>
+      <title>Determine if Pods are Hitting Resource Limits</title>
+      <link>/docs-csm/en-10/operations/kubernetes/determine_if_pods_are_hitting_resource_limits/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/determine_if_pods_are_hitting_resource_limits/</guid>
+      <description>Determine if Pods are Hitting Resource Limits Determine if a pod is being CPU throttled or hitting its memory limits (OOMKilled). Use a script to determine if any pods are being CPU throttled, and check the Kubernetes events to see if any pods are hitting a memory limit.&#xA;IMPORTANT: The presence of CPU throttling does not always indicate a problem, but if a service is being slow or experiencing latency issues, this procedure can be used to evaluate if it is not performing well as a result of CPU throttling.</description>
+    </item>
+    <item>
+      <title>Disaster Recovery for Postgres</title>
+      <link>/docs-csm/en-10/operations/kubernetes/disaster_recovery_postgres/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/disaster_recovery_postgres/</guid>
+      <description>Disaster Recovery for Postgres In the event that the Postgres cluster has failed to the point that it must be recovered and there is no dump available to restore the data, a full service specific disaster recovery is needed.&#xA;Below are the service specific steps required to cleanup any existing resources, redeploy the resources, and repopulate the data.&#xA;Disaster recovery procedures by service:&#xA;Restore HSM (Hardware State Manger) Postgres without a Backup Restore SLS (System Layout Service) Postgres without a Backup Restore Spire Postgres without a Backup Restore Keycloak Postgres without a backup Restore console Postgres Restore Keycloak Postgres without a backup The following procedures are required to rebuild the automatically populated contents of Keycloak&amp;rsquo;s PostgreSQL database if the database has been lost and recreated.</description>
+    </item>
+    <item>
+      <title>Increase Kafka Pod Resource Limits</title>
+      <link>/docs-csm/en-10/operations/kubernetes/increase_kafka_pod_resource_limits/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/increase_kafka_pod_resource_limits/</guid>
+      <description>Increase Kafka Pod Resource Limits For larger scale systems, the Kafka resource limits may need to be increased. See Increase Pod Resource Limits for details on how to increase limits.&#xA;Increase Kafka Resource Limits Example&#xA;For a 1500 compute node system, increasing the cpu count to 6 and memory limits to 128G should be adequate.</description>
+    </item>
+    <item>
+      <title>Increase Pod Resource Limits</title>
+      <link>/docs-csm/en-10/operations/kubernetes/increase_pod_resource_limits/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/increase_pod_resource_limits/</guid>
+      <description>Increase Pod Resource Limits Increase the appropriate resource limits for pods after determining if a pod is being CPU throttled or OOMKilled.&#xA;Return Kubernetes pods to a healthy state with resources available.&#xA;Prerequisites The names of the pods hitting their resource limits are known. See Determine if Pods are Hitting Resource Limits. Procedure Determine the current limits of a pod.&#xA;ncn-w001# kubectl get po -n services POD_ID -o yaml Look for the following section returned in the output:</description>
+    </item>
+    <item>
+      <title>Kubernetes</title>
+      <link>/docs-csm/en-10/operations/kubernetes/kubernetes/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/kubernetes/</guid>
+      <description>Kubernetes The system management components are broken down into a series of micro-services. Each service is independently deployable, fine-grained, and uses lightweight protocols. As a result, the system&amp;rsquo;s micro-services are modular, resilient, and can be updated independently. Services within this architecture communicate via REST APIs.&#xA;About Kubernetes Kubernetes is a portable and extensible platform for managing containerized workloads and services. Kubernetes serves as a micro-services platform on the system that facilitates application deployment, scaling, and management.</description>
+    </item>
+    <item>
+      <title>Kubernetes Networking</title>
+      <link>/docs-csm/en-10/operations/kubernetes/kubernetes_networking/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/kubernetes_networking/</guid>
+      <description>Kubernetes Networking Every Kubernetes pod has an IP address in the pod network that is reachable within the cluster. The system uses the weave-net plugin for inter-node communication.&#xA;Access services from outside the cluster All services with a REST API must be accessed from outside the cluster using the Istio Ingress Gateway. This gateway can be accessed using a URL in the following format:&#xA;https://api.SYSTEM-NAME_DOMAIN-NAME The API requests then get routed to the appropriate node running that service.</description>
+    </item>
+    <item>
+      <title>Kubernetes Storage</title>
+      <link>/docs-csm/en-10/operations/kubernetes/kubernetes_storage/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/kubernetes_storage/</guid>
+      <description>Kubernetes Storage Data belonging to micro-services in the management cluster is managed through persistent storage, which provides reliable and resilient data protection for containers running in the Kubernetes cluster.&#xA;The backing storage for this service is currently provided by JBOD disks that are spread across several nodes of the management cluster. These node disks are managed by Ceph, and are exposed to containers in the form of persistent volumes.</description>
+    </item>
+    <item>
+      <title>Pod Resource Limits</title>
+      <link>/docs-csm/en-10/operations/kubernetes/pod_resource_limits/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/pod_resource_limits/</guid>
+      <description>Pod Resource Limits Kubernetes uses resource requests and Quality of Service (QoS) for scheduling pods. Resource requests can be provided explicitly for pods and containers, whereas pod QoS is implicit, based on the resource requests and limits of the containers in the pod. There are three types of QoS:&#xA;Guaranteed: All containers in a pod have explicit memory and CPU resource requests and limits. For each resource, the limit equals the request.</description>
+    </item>
+    <item>
+      <title>Rebalance Healthy etcd Clusters</title>
+      <link>/docs-csm/en-10/operations/kubernetes/rebalance_healthy_etcd_clusters/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/rebalance_healthy_etcd_clusters/</guid>
+      <description>Rebalance Healthy etcd Clusters Rebalance the etcd clusters. The clusters need to be in a healthy state, and there needs to be the same number of pods running on each worker node for the etcd clusters to be balanced.&#xA;Restoring the balance of etcd clusters will help with the storage of Kubernetes cluster data.&#xA;Prerequisites etcd clusters are in a healthy state. etcd clusters do not have the same number of pods on each worker node.</description>
+    </item>
+    <item>
+      <title>Rebuild Unhealthy etcd Clusters</title>
+      <link>/docs-csm/en-10/operations/kubernetes/rebuild_unhealthy_etcd_clusters/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/rebuild_unhealthy_etcd_clusters/</guid>
+      <description>Rebuild Unhealthy etcd Clusters Rebuild any cluster that does not have healthy pods by deleting and redeploying unhealthy pods. This procedure includes examples for rebuilding etcd clusters in the services namespace. This procedure must be used for each unhealthy cluster, and not just those used in the following examples.&#xA;This process also applies when etcd is not visible when running the kubectl get pods command.&#xA;The commands in this procedure can be run on any Kubernetes master or worker node on the system.</description>
+    </item>
+    <item>
+      <title>Recover from Postgres WAL Event</title>
+      <link>/docs-csm/en-10/operations/kubernetes/recover_from_postgres_wal_event/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/recover_from_postgres_wal_event/</guid>
+      <description>Recover from Postgres WAL Event A WAL event can occur because of lag, network communication, or bandwidth issues. This can cause the PVC hosted by Ceph and mounted inside the container on /home/postgres/pgdata to fill and the database to stop running. If no database dump exists, then the disk space issue needs to be fixed so that a dump can be taken. Then the dump can be restored to a newly created postgresql cluster.</description>
+    </item>
+    <item>
+      <title>Repopulate Data in etcd Clusters When Rebuilding Them</title>
+      <link>/docs-csm/en-10/operations/kubernetes/repopulate_data_in_etcd_clusters_when_rebuilding_them/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:25 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/repopulate_data_in_etcd_clusters_when_rebuilding_them/</guid>
+      <description>Repopulate Data in etcd Clusters When Rebuilding Them When an etcd cluster is not healthy, it needs to be rebuilt. During that process, the pods that rely on etcd clusters lose data. That data needs to be repopulated in order for the cluster to go back to a healthy state.&#xA;Applicable services Prerequisites Procedures BOS BSS CPS CRUS External DNS FAS HMNFD MEDS REDS Applicable services The following services need their data repopulated in the etcd cluster:</description>
+    </item>
+    <item>
+      <title>Report the Endpoint Status for etcd Clusters</title>
+      <link>/docs-csm/en-10/operations/kubernetes/report_the_endpoint_status_for_etcd_clusters/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:25 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/report_the_endpoint_status_for_etcd_clusters/</guid>
+      <description>Report the Endpoint Status for etcd Clusters Report etcd cluster end point status. The report includes a cluster&amp;rsquo;s endpoint, database size, and leader status.&#xA;This procedure provides the ability to view the etcd cluster endpoint status.&#xA;Prerequisites This procedure requires root privileges. The etcd clusters are in a healthy state. Procedure Report the endpoint status for all etcd clusters in a namespace.&#xA;The following example is for the services namespace.</description>
+    </item>
+    <item>
+      <title>Restore Bare-Metal etcd Clusters from an S3 Snapshot</title>
+      <link>/docs-csm/en-10/operations/kubernetes/restore_bare-metal_etcd_clusters_from_an_s3_snapshot/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:25 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/restore_bare-metal_etcd_clusters_from_an_s3_snapshot/</guid>
+      <description>Restore Bare-Metal etcd Clusters from an S3 Snapshot The etcd cluster that serves Kubernetes on master nodes is backed up every 10 minutes. These backups are pushed to Ceph Rados Gateway (S3).&#xA;Restoring the etcd cluster from backup is only meant to be used in a catastrophic scenario, whereby the Kubernetes cluster and master nodes are being rebuilt. This procedure shows how to restore the bare-metal etcd cluster from an Simple Storage Service (S3) snapshot.</description>
+    </item>
+    <item>
+      <title>Restore Postgres</title>
+      <link>/docs-csm/en-10/operations/kubernetes/restore_postgres/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:25 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/restore_postgres/</guid>
+      <description>Restore Postgres Below are the service-specific steps required to restore data to a Postgres cluster.&#xA;Restore Postgres procedures by service:&#xA;Restore Postgres for Spire Restore from backup Restore without backup Restore Postgres for Keycloak Restore Postgres for VCS Restore Postgres for Capsules Capsules Warehouse Server Capsules Dispatch Server Restore Postgres for HSM Restore from backup Restore without backup Restore Postgres for SLS Restore from backup Restore without backup Restore Postgres for Spire In the event that the Spire Postgres cluster must be rebuilt and the data restored, then the following procedures are recommended.</description>
+    </item>
+    <item>
+      <title>Restore an etcd Cluster from a Backup</title>
+      <link>/docs-csm/en-10/operations/kubernetes/restore_an_etcd_cluster_from_a_backup/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:25 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/restore_an_etcd_cluster_from_a_backup/</guid>
+      <description>Restore an etcd Cluster from a Backup Use an existing backup of a healthy etcd cluster to restore an unhealthy cluster to a healthy state.&#xA;The commands in this procedure can be run on any master or worker node on the system.&#xA;Prerequisites A backup of a healthy etcd cluster has been created.&#xA;Procedure List the backups for the desired etcd cluster.&#xA;The example below uses the Boot Orchestration Service (BOS).</description>
+    </item>
+    <item>
+      <title>Retrieve Cluster Health Information Using Kubernetes</title>
+      <link>/docs-csm/en-10/operations/kubernetes/retrieve_cluster_health_information_using_kubernetes/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:25 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/retrieve_cluster_health_information_using_kubernetes/</guid>
+      <description>Retrieve Cluster Health Information Using Kubernetes The kubectl CLI commands can be used to retrieve information about the Kubernetes cluster components.&#xA;Nodes Retrieve node status ncn# kubectl get nodes Example output:&#xA;ncn-m001 Ready master 19d v1.14.3 ncn-m002 Ready master 19d v1.14.3 ncn-m003 Ready master 19d v1.14.3 ncn-w001 Ready &amp;lt;none&amp;gt; 19d v1.14.3 ncn-w002 Ready &amp;lt;none&amp;gt; 19d v1.14.3 ncn-w003 Ready &amp;lt;none&amp;gt; 19d v1.14.3 Pods Retrieve information about individual pods ncn# kubectl describe pod POD_NAME -n NAMESPACE_NAME Retrieve a list of all pods ncn# kubectl get pods -A Retrieve a list of healthy pods ncn# kubectl get pods -A | grep -E &amp;#39;Completed|Running&amp;#39; Retrieve a list of unhealthy pods Option 1: List all pods that are not reported as Completed or Running.</description>
+    </item>
+    <item>
+      <title>TDS Lower CPU Requests</title>
+      <link>/docs-csm/en-10/operations/kubernetes/tds_lower_cpu_requests/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:25 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/tds_lower_cpu_requests/</guid>
+      <description>TDS Lower CPU Requests Systems with only three worker nodes (typically Test and Development Systems (TDS)) will encounter pod scheduling issues when worker nodes are taken out of the Kubernetes cluster to be upgraded.&#xA;For systems with only three worker nodes, execute the following script to reduce the CPU request for some services with high CPU requests, in order to allow critical upgrade-related services to be successfully scheduled on only two worker nodes:</description>
+    </item>
+    <item>
+      <title>Troubleshoot Intermittent HTTP 503 Code Failures</title>
+      <link>/docs-csm/en-10/operations/kubernetes/troubleshoot_intermittent_503s/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:25 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/troubleshoot_intermittent_503s/</guid>
+      <description>Troubleshoot Intermittent HTTP 503 Code Failures There are cases where API calls or cray command invocations will fail (sometimes intermittently) with an HTTP 503 error code. In the event that this occurs, attempt to remediate the issue by taking the following actions, according to specific error codes found in the pod or Envoy container log.&#xA;The Envoy container is typically named istio-proxy, and it runs as a sidecar for pods that are part of the Istio mesh.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Postgres Database</title>
+      <link>/docs-csm/en-10/operations/kubernetes/troubleshoot_postgres_database/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:25 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/troubleshoot_postgres_database/</guid>
+      <description>Troubleshoot Postgres Database This page contains general Postgres troubleshooting topics.&#xA;The patronictl tool Database unavailable Database disk full Replication lagging Postgres status SyncFailed Cluster member missing Postgres leader missing The patronictl tool The patronictl tool is used to call a REST API that interacts with Postgres databases. It handles a variety of tasks, such as listing cluster members and the replication status, configuring and restarting databases, and more.&#xA;The tool is installed in the database containers:</description>
+    </item>
+    <item>
+      <title>View Postgres Information for System Databases</title>
+      <link>/docs-csm/en-10/operations/kubernetes/view_postgres_information_for_system_databases/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:25 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/kubernetes/view_postgres_information_for_system_databases/</guid>
+      <description>View Postgres Information for System Databases Postgres uses SQL language to store and manage databases on the system. This procedure describes how to view and obtain helpful information about system databases, as well as the types of data being stored.&#xA;Prerequisites This procedure requires administrative privileges.&#xA;Procedure Log in to the Postgres container.&#xA;ncn-mw# kubectl -n services exec -it cray-smd-postgres-0 -- bash Example output:&#xA;Defaulting container name to postgres. Use &amp;#39;kubectl describe pod/cray-smd-postgres-0 -n services&amp;#39; to see all of the containers in this pod.</description>
+    </item>
+  </channel>
+</rss>

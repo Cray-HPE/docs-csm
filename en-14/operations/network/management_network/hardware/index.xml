@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>hardware on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-14/operations/network/management_network/hardware/</link>
+    <description>Recent content in hardware on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-14</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:47 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-14/operations/network/management_network/hardware/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>EX2500 Installation and Cabling</title>
+      <link>/docs-csm/en-14/operations/network/management_network/hardware/ex2500/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:47 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/network/management_network/hardware/ex2500/</guid>
+      <description>EX2500 Installation and Cabling This document helps network administrators and support personnel connect EX2500 cabinets to the Cray EX management network.&#xA;HPE Cray EX2500 Quick Summary A single rack can accommodate up to 24 compute blade slots within 3 compute chassis.&#xA;One rack supports the following&#xA;Up to 3 compute chassis Up to 3 power shelves with 4 rectifiers per shelf - 12 total 15kw rectifiers per rack. (Note: 1 rectifier per shelf is used for redundancy) 3 PDUs (1 per power shelf) 3 power input whips (3-phase) Maximum of 24 compute blades Maximum of 24 HPE Slingshot switch blades Up to 2 in-rack Coolant distribution units for a max of 141KVA cooling capacity How does EX2500 connect to Shasta management network Typically EX2500 cabinet connects in Shasta management network to the CDU switches (sw-cdu-00x).</description>
+    </item>
+  </channel>
+</rss>

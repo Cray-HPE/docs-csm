@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>hpe pdu on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-16/operations/hpe_pdu/</link>
+    <description>Recent content in hpe pdu on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-16</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:21 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-16/operations/hpe_pdu/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HPE PDU Admin Procedures</title>
+      <link>/docs-csm/en-16/operations/hpe_pdu/hpe_pdu_admin_procedures/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:21 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/hpe_pdu/hpe_pdu_admin_procedures/</guid>
+      <description>HPE PDU Admin Procedures The following procedures are used to manage the HPE Power Distribution Unit (PDU):&#xA;Verify PDU vendor Connect to HPE PDU web interface HPE PDU initial set-up Update HPE PDU firmware Change HPE PDU user passwords Discover HPE PDU after upgrading CSM IMPORTANT: Because of the polling method used to process sensor data from the HPE PDU, telemetry data may take up to six minutes to refresh; this includes the outlet status reported by the Hardware State Manager (HSM).</description>
+    </item>
+  </channel>
+</rss>

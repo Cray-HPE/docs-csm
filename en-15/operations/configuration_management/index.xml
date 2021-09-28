@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>configuration management on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-15/operations/configuration_management/</link>
+    <description>Recent content in configuration management on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-15</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:23 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-15/operations/configuration_management/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Accessing sat bootprep Files</title>
+      <link>/docs-csm/en-15/operations/configuration_management/accessing_sat_bootprep_files/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:20 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/accessing_sat_bootprep_files/</guid>
+      <description>Accessing sat bootprep Files When performing an upgrade, NCN image customization and node personalization must be performed with the NCN worker node image to ensure the appropriate CFS layers are applied. This step involves configuring CFS to use the default sat bootprep files from the hpc-csm-software-recipe repository and rebuilding the NCN worker nodes so they boot the newly customized image.&#xA;The following procedure describes how to access the CFS configuration. This procedure is used for both image customization and node personalization of NCNs.</description>
+    </item>
+    <item>
+      <title>Adding Additional Inventory</title>
+      <link>/docs-csm/en-15/operations/configuration_management/adding_additional_inventory/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:20 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/adding_additional_inventory/</guid>
+      <description>Adding Additional Inventory Many configuration layers may be present in a single configuration for larger systems that configure multiple Cray products. When common values for each of these layers need to be customized, it can be tedious to override values in each of the respective repositories. The CFS additional_inventory_url option allows for static inventory files to be automatically added to the hosts directory of the Ansible Execution Environment (AEE). This allows the additional Ansible inventory information to be available to all configuration layers in a session.</description>
+    </item>
+    <item>
+      <title>Ansible Execution Environments</title>
+      <link>/docs-csm/en-15/operations/configuration_management/ansible_execution_environments/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:20 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/ansible_execution_environments/</guid>
+      <description>Ansible Execution Environments Configuration Framework Service (CFS) sessions are comprised of a single Kubernetes pod with several containers. The inventory and git-clone containers run first, and a teardown container runs last (if the session is running an image customization).&#xA;The container that runs the Ansible code cloned from the Git repositories in the configuration layers is the Ansible Execution Environment (AEE). The AEE is provided as a SLES-based docker image, which includes Ansible version 2.</description>
+    </item>
+    <item>
+      <title>Ansible Log Collection</title>
+      <link>/docs-csm/en-15/operations/configuration_management/ansible_log_collection/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:20 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/ansible_log_collection/</guid>
+      <description>Ansible Log Collection ARA Records Ansible (ARA) Accessing the UI Disabling ARA ARA Records Ansible (ARA) The Ansible logs from all Configuration Framework Service (CFS) sessions are recorded using ARA Records Ansible (ARA), which provides an Ansible friendly way to view the logs for CFS. ARA is an open-source log collector, API, and UI, specifically for collecting and parsing Ansible logs. For more on ARA in general, see the ARA home page.</description>
+    </item>
+    <item>
+      <title>Automatic Configuration Management</title>
+      <link>/docs-csm/en-15/operations/configuration_management/automatic_configuration_management/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:20 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/automatic_configuration_management/</guid>
+      <description>Automatic Configuration Management In addition to creating individual configuration sessions, the Configuration Framework Service (CFS) can also automatically configure any registered system components. The CFS-Batcher periodically examines the configuration state of registered components and schedules CFS sessions against those that have not been configured to their desired state. The frequency of scheduling, the maximum number of components to schedule in the same CFS session, and the expiration time for scheduling less than full sessions are configurable.</description>
+    </item>
+    <item>
+      <title>Automatic Session Deletion with session ttl</title>
+      <link>/docs-csm/en-15/operations/configuration_management/automatic_session_deletion_with_session_ttl/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:20 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/automatic_session_deletion_with_session_ttl/</guid>
+      <description>Automatic Session Deletion with session_ttl By default, the Configuration Framework Service (CFS) will delete completed CFS sessions whose start date was more than seven days prior. Kubernetes jobs associated with these sessions will also be deleted as part of this process. This is done to ensure that CFS sessions do not accumulate and eventually adversely affect the performance of the Kubernetes cluster.&#xA;For larger systems or systems that do frequent reboots of nodes that are configured with CFS sessions, this setting may need to be reduced.</description>
+    </item>
+    <item>
+      <title>CFS Commands Cheat Sheet</title>
+      <link>/docs-csm/en-15/operations/configuration_management/cfs_commands_cheat_sheet/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:20 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/cfs_commands_cheat_sheet/</guid>
+      <description>CFS Commands Cheat Sheet This page is a quick reference for common CFS commands in the Cray CLI.&#xA;To find the API versions of any commands listed, add -vvv to the end of the CLI command, and the CLI will print the underlying call to the API in the output. For more information about the CFS API, see Configuration Framework Service.&#xA;Managing configurations Managing components Managing sessions Debugging Managing configurations (ncn-mw#) Create or update a configuration:</description>
+    </item>
+    <item>
+      <title>CFS Components</title>
+      <link>/docs-csm/en-15/operations/configuration_management/cfs_components/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:20 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/cfs_components/</guid>
+      <description>CFS Components The Configuration Framework Service (CFS) contains a database of the configuration state of available hardware known to the Hardware State Manager (HSM). When new nodes are added to the HSM database, the CFS-Hardware-Sync-Agent enters the component into the CFS database with an empty state of configuration.&#xA;Administrators are able to set a desired CFS configuration for each component, and the CFS-Batcher ensures the desired configuration state and the current configuration state match.</description>
+    </item>
+    <item>
+      <title>CFS Configurations</title>
+      <link>/docs-csm/en-15/operations/configuration_management/cfs_configurations/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:20 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/cfs_configurations/</guid>
+      <description>CFS Configurations The Configuration Framework Service (CFS) uses configurations to allow users to define the Ansible content that CFS should run when configuring a target. Configurations consists of one or more layers which define a Git repository clone URL, a Git commit id, and the path in the repository to an Ansible playbook to execute. Layers can also contain an optional name, and an optional Git branch, which is converted into a Git commit id when the configuration is uploaded to CFS.</description>
+    </item>
+    <item>
+      <title>CFS Flow</title>
+      <link>/docs-csm/en-15/operations/configuration_management/cfs_flow_diagrams/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:20 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/cfs_flow_diagrams/</guid>
+      <description>CFS Flow Single session flow Automated session flow Single session flow This section covers the components and actions taken when a user or service creates a session using the CFS sessions endpoint.&#xA;A user creates a CFS configuration. A user creates a CFS session, causing a session record to be created. When a session record is created, the CFS-API also posts an event to a Kafka queue. The CFS-Operator is always monitoring the Kafka queue, and handles events as they come in.</description>
+    </item>
+    <item>
+      <title>CFS Global Options</title>
+      <link>/docs-csm/en-15/operations/configuration_management/cfs_global_options/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:21 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/cfs_global_options/</guid>
+      <description>CFS Global Options The Configuration Framework Service (CFS) provides a global service options endpoint for modifying the base configuration of the service itself.&#xA;View the options with the following command:&#xA;cray cfs v3 options list --format json Example output:&#xA;{ &amp;#34;additional_inventory_url&amp;#34;: &amp;#34;&amp;#34;, &amp;#34;batch_size&amp;#34;: 25, &amp;#34;batch_window&amp;#34;: 60, &amp;#34;batcher_check_interval&amp;#34;: 10, &amp;#34;batcher_disable&amp;#34;: false, &amp;#34;batcher_max_backoff&amp;#34;: 3600, &amp;#34;batcher_pending_timeout&amp;#34;: 300, &amp;#34;debug_wait_time&amp;#34;: 3600, &amp;#34;default_ansible_config&amp;#34;: &amp;#34;cfs-default-ansible-cfg&amp;#34;, &amp;#34;default_batcher_retry_policy&amp;#34;: 3, &amp;#34;default_page_size&amp;#34;: 1000, &amp;#34;default_playbook&amp;#34;: &amp;#34;site.yml&amp;#34;, &amp;#34;hardware_sync_interval&amp;#34;: 10, &amp;#34;include_ara_links&amp;#34;: true, &amp;#34;logging_level&amp;#34;: &amp;#34;INFO&amp;#34;, &amp;#34;session_ttl&amp;#34;: &amp;#34;7d&amp;#34; } The default values for all CFS global options can be modified with the cray cfs options update command.</description>
+    </item>
+    <item>
+      <title>CFS Key Management and Permission Denied Errors</title>
+      <link>/docs-csm/en-15/operations/configuration_management/cfs_key_management/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:21 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/cfs_key_management/</guid>
+      <description>CFS Key Management and Permission Denied Errors The Configuration Framework Service (CFS) manages its own keys separate from keys for communication between CFS and the components or images that it is configuring. These are separate from the keys used by users and should not need to be managed.&#xA;Permission denied errors If Ansible is unable to connect with its target and fails with an Unreachable - Permission denied error, the first place to check is the cfs-state-reporter on the target node.</description>
+    </item>
+    <item>
+      <title>CFS Session Inventory</title>
+      <link>/docs-csm/en-15/operations/configuration_management/cfs_session_inventory/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:21 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/cfs_session_inventory/</guid>
+      <description>CFS Session Inventory The Configuration Framework Service (CFS) provides several options for targeting nodes or boot images for configuration by Ansible. The contents of the Ansible inventory determine which nodes are available for configuration in each CFS session and how default configuration values can be customized. For more information on what it means to define an inventory, see Specifying Hosts and Groups.&#xA;The following are the inventory options provided by CFS:</description>
+    </item>
+    <item>
+      <title>CFS Sessions</title>
+      <link>/docs-csm/en-15/operations/configuration_management/cfs_sessions/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:21 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/cfs_sessions/</guid>
+      <description>CFS Sessions Configuration Framework Service (CFS) sessions apply a configuration, including any number of layers, to a target or set of targets, which can be live nodes or images mounted by IMS.&#xA;A session clones down Ansible content, creates an Ansible inventory (whether dynamic, static, or image customization), launches an Ansible Execution Environment (AEE), and reports the session status to the CFS API. When configuring an image, the CFS session also calls Image Management Service (IMS) to start a configuration job and tears down the IMS job after configuration is complete.</description>
+    </item>
+    <item>
+      <title>CFS Sources</title>
+      <link>/docs-csm/en-15/operations/configuration_management/cfs_sources/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:21 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/cfs_sources/</guid>
+      <description>CFS Sources The Configuration Framework Service (CFS) allows users to define optional sources. Sources contain all the information needed to clone information from a repo, and can be used when the repo does not share the default credentials or CA certificate as VCS. The username and password for cloning a repo can be specified in source, and CFS will store them in a vault secret, only recording the secret name in the source record.</description>
+    </item>
+    <item>
+      <title>Change the Ansible Verbosity</title>
+      <link>/docs-csm/en-15/operations/configuration_management/change_the_ansible_verbosity/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:21 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/change_the_ansible_verbosity/</guid>
+      <description>Change the Ansible Verbosity When debugging, it can be useful to view the Ansible logs with greater verbosity than the default. CFS sessions are able to set the Ansible verbosity from the command line when the session is created. The verbosity will apply to all configuration layers in the session.&#xA;Specify an integer using the --ansible-verbosity option, where 1 = -v, 2 = -vv. Valid values range from 0 (default) to 4.</description>
+    </item>
+    <item>
+      <title>Configuration Management</title>
+      <link>/docs-csm/en-15/operations/configuration_management/configuration_management/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:21 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/configuration_management/</guid>
+      <description>Configuration Management The Configuration Framework Service (CFS) is available on systems for remote execution and configuration management of nodes and boot images. This includes nodes available in the Hardware State Manager (HSM) inventory (compute, management, and application nodes), and boot images hosted by the Image Management Service (IMS).&#xA;CFS configures nodes and images via a gitops methodology. All configuration content is stored in a version control service (VCS), and is managed by authorized system administrators.</description>
+    </item>
+    <item>
+      <title>Configure Ansible</title>
+      <link>/docs-csm/en-15/operations/configuration_management/configure_ansible/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:21 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/configure_ansible/</guid>
+      <description>Configure Ansible The Configuration Framework Service (CFS) allows users to configure Ansible in the Ansible Execution Environment (AEE). The default Ansible configuration file is accessible through the cfs-default-ansible-cfg Kubernetes ConfigMap in the services namespace. Administrators can either update the existing ConfigMap, or create separate ConfigMaps to allow easy switching between Ansible configurations.&#xA;See the Ansible Configuration external documentation for more information about what values can be set.&#xA;WARNING: Much of the configuration in this file is required by CFS to function properly.</description>
+    </item>
+    <item>
+      <title>Create a Node Personalization CFS Session</title>
+      <link>/docs-csm/en-15/operations/configuration_management/create_a_node_personalization_cfs_session/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:21 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/create_a_node_personalization_cfs_session/</guid>
+      <description>Create a Node Personalization CFS Session Node Personalization is an configuration done by the Configuration Framework Service (CFS) that targets live nodes. By default, CFS will automatically generate the Ansible inventory using CFS&amp;rsquo; dynamic inventory. The inventory will include all nodes on the system, placed into groups according to their Role, Subrole and any Groups in HSM. Other inventory options are also available that will give the user more direct control over the Ansible inventory.</description>
+    </item>
+    <item>
+      <title>Create an Image Customization CFS Session</title>
+      <link>/docs-csm/en-15/operations/configuration_management/create_an_image_customization_cfs_session/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:21 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/create_an_image_customization_cfs_session/</guid>
+      <description>Create an Image Customization CFS Session A configuration session that is meant to customize image roots tracked by the Image Management Service (IMS) can be created using the --target-definition image option. This option will instruct the Configuration Framework Service (CFS) to prepare the image IDs specified and assign them to the groups specified in Ansible inventory. IMS will then provide SSH connection information to each image root that CFS will configure with Ansible.</description>
+    </item>
+    <item>
+      <title>Create and Populate a VCS Configuration Repository</title>
+      <link>/docs-csm/en-15/operations/configuration_management/create_and_populate_a_vcs_configuration_repository/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:21 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/create_and_populate_a_vcs_configuration_repository/</guid>
+      <description>Create and Populate a VCS Configuration Repository Create a new repository in the VCS and populate it with content for site customizations in a custom Configuration Framework Service (CFS) configuration layer.&#xA;Prerequisites The Version Control Service (VCS) login credentials for the crayvcs user are set up. See VCS Administrative User in Version Control Service (VCS) for more information. Procedure (ncn-mw#) Create the empty repository in VCS.&#xA;Replace the CRAYVCS_PASSWORD value in the following command before running it.</description>
+    </item>
+    <item>
+      <title>Customize Configuration Values</title>
+      <link>/docs-csm/en-15/operations/configuration_management/customize_configuration_values/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:21 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/customize_configuration_values/</guid>
+      <description>Customize Configuration Values In general, most systems will require some customization from the default values provided by HPE Cray products. As stated in the previous section, these changes cannot be made on the pristine product branches that are imported during product installation and upgrades. Changes can only be made in Git branches that are based on the pristine branches.&#xA;Changing or overriding default values should be done in accordance with Ansible best practices (see the external Ansible best practices guide) and variable precedence (see the external Ansible variable guide) in mind.</description>
+    </item>
+    <item>
+      <title>Differences Between the V2 and V3 CFS APIs</title>
+      <link>/docs-csm/en-15/operations/configuration_management/differences_between_the_v2_and_v3_cfs_apis/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:21 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/differences_between_the_v2_and_v3_cfs_apis/</guid>
+      <description>Differences Between the V2 and V3 CFS APIs The v3 CFS API contains a number of differences and improvements over the previous v2 API. For convenience all changes are listed here.&#xA;The v3 API supports paging through records for components, sessions and configurations. See Paging CFS Records for more information. The v3 API uses snake_case rather than camelCase for all parameters in queries and responses. This brings the API inline with other CSM APIs.</description>
+    </item>
+    <item>
+      <title>Enable Ansible Profiling</title>
+      <link>/docs-csm/en-15/operations/configuration_management/enable_ansible_profiling/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:21 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/enable_ansible_profiling/</guid>
+      <description>Enable Ansible Profiling Ansible tasks and playbooks can be profiled in order to single out poor performance in runtime. Profiling execution times is the most common use-case because this can directly affect boot times. The default Configuration Framework Service (CFS) ansible.cfg in the cfs-default-ansible-cfg ConfigMap does not enable this profiling by default, but does include information on the necessary Ansible callbacks.&#xA;Alternatively, if editing the default ansible.cfg file is not desired, then a new Ansible configuration with profiling enabled can be created and used by CFS.</description>
+    </item>
+    <item>
+      <title>Exporting and Importing CFS Data</title>
+      <link>/docs-csm/en-15/operations/configuration_management/exporting_and_importing_cfs_data/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:21 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/exporting_and_importing_cfs_data/</guid>
+      <description>Exporting and Importing CFS Data Prerequisites Export Import Prerequisites Ensure that the cray command line interface (CLI) is authenticated and configured to talk to system management services. See Configure the Cray CLI. The latest CSM documentation RPM must be installed on the node where the procedure is being performed. See Check for latest documentation. If importing both CFS and VCS data, the VCS import should be done before the CFS import.</description>
+    </item>
+    <item>
+      <title>Git Operations</title>
+      <link>/docs-csm/en-15/operations/configuration_management/git_operations/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:21 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/git_operations/</guid>
+      <description>Git Operations Use the git command to manage repository content in the Version Control Service (VCS).&#xA;Once a repository is cloned, the git command line tool is available to interact with a repository from VCS. The git command is used for making commits, creating new branches, and pushing new branches, tags, and commits to the remote repository stored in VCS.&#xA;When pushing changes to the VCS server using the crayvcs user, input the password retrieved from the Kubernetes secret as the credentials.</description>
+    </item>
+    <item>
+      <title>Management Node Image Customization</title>
+      <link>/docs-csm/en-15/operations/configuration_management/management_node_image_customization/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:22 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/management_node_image_customization/</guid>
+      <description>Management Node Image Customization This page describes the procedure to customize a management node image using the Configuration Framework Service (CFS) and the Image Management Service (IMS). The procedure has options for configuring Kubernetes master or worker nodes or Ceph storage nodes.&#xA;When performing an upgrade of CSM and/or additional HPE Cray EX software products, this procedure is not followed end-to-end, but certain portions of the procedure are referenced. When performing an install or upgrade, be sure to follow the appropriate procedures in Cray System Management Install or Upgrade CSM.</description>
+    </item>
+    <item>
+      <title>Management Node Personalization</title>
+      <link>/docs-csm/en-15/operations/configuration_management/management_node_personalization/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:22 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/management_node_personalization/</guid>
+      <description>Management Node Personalization Introduction Re-run node personalization on management nodes Re-run node personalization on a specific management node Introduction Management node personalization refers to the process of CFS applying a configuration to a management node after it is booted.&#xA;The same CFS configuration is used for post-boot personalization of master, storage, and worker management nodes. However, some individual parts of that configuration will only be applied to appropriate node types.</description>
+    </item>
+    <item>
+      <title>Paging CFS Records</title>
+      <link>/docs-csm/en-15/operations/configuration_management/paging_cfs_records/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:22 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/paging_cfs_records/</guid>
+      <description>Paging CFS Records NOTE: Paging is only available using the v3 CFS API. The v2 API will only return an error is the response size is too large.&#xA;For all CFS records that can be listed out (configurations, sessions and templates) CFS lists only a limited number of records at a time. This helps reduce the memory requirements for both the CFS API and for the client, especially on systems with large numbers of components.</description>
+    </item>
+    <item>
+      <title>Set Limits for a Configuration Session</title>
+      <link>/docs-csm/en-15/operations/configuration_management/set_limits_for_a_configuration_session/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:22 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/set_limits_for_a_configuration_session/</guid>
+      <description>Set Limits for a Configuration Session The configuration layers and session hosts can be limited when running a Configuration Framework Service (CFS) session.&#xA;Limit CFS session hosts Subsets of nodes can be targeted in the inventory when running CFS sessions, which is useful specifically when running a session with dynamic inventory. Use the CFS --ansible-limit option when creating a session to apply the limits. The option directly corresponds to the --limit option offered by ansible-playbook, and can be used to specify hosts, groups, or combinations of them with patterns.</description>
+    </item>
+    <item>
+      <title>Specifying Hosts and Groups</title>
+      <link>/docs-csm/en-15/operations/configuration_management/specifying_hosts_and_groups/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:22 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/specifying_hosts_and_groups/</guid>
+      <description>Specifying Hosts and Groups When using the Configuration Framework Service (CFS), there are many steps where users may need to specify the hosts that CFS should configure. This can be done by specifying individual hosts, or groups of hosts. There are several places where a user may need to provide this information, particularly groups, and depending on where this information is provided, the behavior can change greatly.&#xA;Inventories CFS has multiple options for generating inventories, but regardless of which option is used, the information is then converted into an Ansible inventory/hosts file.</description>
+    </item>
+    <item>
+      <title>Target Ansible Tasks for Image Customization</title>
+      <link>/docs-csm/en-15/operations/configuration_management/target_ansible_tasks_for_image_customization/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:22 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/target_ansible_tasks_for_image_customization/</guid>
+      <description>Target Ansible Tasks for Image Customization The Configuration Framework Service (CFS) enables Ansible playbooks to run against both running nodes (node personalization) and images prior to boot(image customization). See Configuration Management Use Cases for more information about image customization and when it should be used.&#xA;Using the cfs_image host group During image customization, CFS will automatically add all image customization hosts into a special cfs_image host group in Ansible inventory. Plays intended for image customization can then target this group in addition to any other provided host groups.</description>
+    </item>
+    <item>
+      <title>Track the Status of a Session</title>
+      <link>/docs-csm/en-15/operations/configuration_management/track_the_status_of_a_session/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:22 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/track_the_status_of_a_session/</guid>
+      <description>Track the Status of a Session A configuration session can be a long-running process, and depends on many system factors, as well as the number of configuration layers and Ansible tasks that are run in each layer. The Configuration Framework Service (CFS) provides the session status through the session metadata to allow for tracking progress and session state.&#xA;Prerequisites View session status Troubleshooting Prerequisites A configuration session exists in CFS. The Cray CLI must be configured on the node where the commands are being run.</description>
+    </item>
+    <item>
+      <title>Troubleshoot CFS Issues</title>
+      <link>/docs-csm/en-15/operations/configuration_management/troubleshoot_cfs_issues/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:22 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/troubleshoot_cfs_issues/</guid>
+      <description>Troubleshoot CFS Issues Due to CFS&amp;rsquo; nature as a framework that runs arbitrary Ansible content, there are any number of issues that can arise when attempting to configure a system. Many of the issues are transient, especially on larger systems or when a long configuration is applied. Because of this, CFS automatically retries configuration in many cases and a single failing session is often not an issue. However, when a component is marked as failed or a number of sessions are failing there are two ways to approach debugging.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Failed CFS Sessions</title>
+      <link>/docs-csm/en-15/operations/configuration_management/troubleshoot_cfs_session_failed/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:22 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/troubleshoot_cfs_session_failed/</guid>
+      <description>Troubleshoot Failed CFS Sessions View the Kubernetes logs for a Configuration Framework Service (CFS) pod in an error state to determine whether the error resulted from the CFS infrastructure or from an Ansible play that was run by a specific configuration layer in a CFS session.&#xA;Use this procedure to obtain important triage information for Ansible plays being called by CFS.&#xA;Prerequisites A failed configuration session exists in CFS. Procedure (ncn-mw#) Find the CFS pod that is in an error state.</description>
+    </item>
+    <item>
+      <title>Troubleshoot CFS Session Failing to Complete</title>
+      <link>/docs-csm/en-15/operations/configuration_management/troubleshoot_cfs_session_failing_to_complete/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:22 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/troubleshoot_cfs_session_failing_to_complete/</guid>
+      <description>Troubleshoot CFS Session Failing to Complete Troubleshoot issues where Ansible hangs.&#xA;Prerequisites A CFS session or pod is failing to complete, and the Ansible logs are not showing progress or completion.&#xA;Check for filesystem issues Hung sessions are usually a result of filesystem issues, such as problems with DVS, on the nodes that CFS is attempting to configure. An issue on even one of the nodes that a session is attempting to configure can cause the whole session to hang (unless Ansible is specifically configured to use a free rather than linear strategy).</description>
+    </item>
+    <item>
+      <title>Troubleshoot CFS Sessions Failing to Start</title>
+      <link>/docs-csm/en-15/operations/configuration_management/troubleshoot_cfs_sessions_failing_to_start/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:22 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/troubleshoot_cfs_sessions_failing_to_start/</guid>
+      <description>Troubleshoot CFS Sessions Failing to Start Troubleshoot issues where Configuration Framework Service (CFS) sessions are being created, but the pods are never created and never run.&#xA;Prerequisites CFS-batcher is creating automatic sessions, but pods are not starting for those sessions. There are a number of communication reasons this could be happening, so check the cfs-batcher and cfs-operator logs for these signatures.&#xA;CFS-batcher logs should show that it is creating sessions, but giving up waiting for those sessions to start:</description>
+    </item>
+    <item>
+      <title>Update a CFS Configuration</title>
+      <link>/docs-csm/en-15/operations/configuration_management/update_a_cfs_configuration/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:22 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/update_a_cfs_configuration/</guid>
+      <description>Update a CFS Configuration Modify a Configuration Framework Service (CFS) configuration by specifying the JSON of the configuration and its layers. Use the cray cfs v3 configurations update command, similar to creating a configuration.&#xA;Prerequisites A CFS configuration has been created. The Cray command line interface (CLI) tool is initialized and configured on the system. See Configure the Cray CLI. Procedure (ncn-mw#) Add and/or remove the configuration layers from an existing JSON configuration file.</description>
+    </item>
+    <item>
+      <title>Update the Privacy Settings for Gitea Configuration Content Repositories</title>
+      <link>/docs-csm/en-15/operations/configuration_management/update_the_privacy_settings_for_gitea_configuration_content_repositories/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:22 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/update_the_privacy_settings_for_gitea_configuration_content_repositories/</guid>
+      <description>Update the Privacy Settings for Gitea Configuration Content Repositories Change the visibility of Gitea configuration content repositories from public to private. All Cray-provided repositories are created as private by default.&#xA;Prerequisites Know the system&amp;rsquo;s external fully qualified domain name, referred to on this page as SYSTEM_DOMAIN_NAME. See System domain name for more information. Procedure Log in to the Version Control Service (VCS) as the crayvcs user.&#xA;Use the following URL to access the VCS web interface: https://vcs.</description>
+    </item>
+    <item>
+      <title>VCS Branching Strategy</title>
+      <link>/docs-csm/en-15/operations/configuration_management/vcs_branching_strategy/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:22 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/vcs_branching_strategy/</guid>
+      <description>VCS Branching Strategy Individual products import configuration content (Ansible plays, roles, and more) into a repository in the Version Control Service (VCS) through their installation process. Typically, this repository exists in the cray organization in VCS and its name has the format [product name]-config-management.&#xA;The import branch of the product is considered &amp;ldquo;pristine content&amp;rdquo; and is added to VCS in a read-only branch. This step is taken to ensure the future updates of the product&amp;rsquo;s configuration content can be based on a clean branch, and that upgrades can proceed without merging issues.</description>
+    </item>
+    <item>
+      <title>Version Control Service (VCS)</title>
+      <link>/docs-csm/en-15/operations/configuration_management/version_control_service_vcs/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:22 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/version_control_service_vcs/</guid>
+      <description>Version Control Service (VCS) VCS overview Cloning a VCS repository VCS administrative user Change VCS administrative user password Access the cray Gitea organization Backup and restore data Automated backup and restore Automated backup Automated restore Manual backup and restore Manually backup Postgres data Manually backup PVC data Manually restore Postgres data Manually restore PVC data Alternative backup/restore strategy Alternative export method Alternative import method VCS overview The Version Control Service (VCS) includes a web interface for repository management, pull requests, and a visual view of all repositories and organizations.</description>
+    </item>
+    <item>
+      <title>View Configuration Session Logs</title>
+      <link>/docs-csm/en-15/operations/configuration_management/view_configuration_session_logs/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:23 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/view_configuration_session_logs/</guid>
+      <description>View Configuration Session Logs Ansible logs are recorded with ARA and are accessible through the ARA UI. See Ansible Log Collection for more information.&#xA;Logs for the other steps of a session are available via the kubectl log command for each container of a Configuration Framework Service (CFS) session. Refer to CFS Sessions for more info about these containers.&#xA;(ncn-mw#) Find the name of the Kubernetes pod that is running the CFS session:</description>
+    </item>
+    <item>
+      <title>Write Ansible Code for CFS</title>
+      <link>/docs-csm/en-15/operations/configuration_management/write_ansible_code_for_cfs/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:23 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/configuration_management/write_ansible_code_for_cfs/</guid>
+      <description>Write Ansible Code for CFS HPE Cray provides Ansible plays and roles for software products deemed necessary for the system to function. Customers are free to write their own Ansible plays and roles to augment what HPE Cray provides or implement new features. Basic knowledge of Ansible is needed to write plays and roles. The information below includes recommendations and best practices for writing and running Ansible code on the system successfully with the Configuration Framework Service (CFS).</description>
+    </item>
+  </channel>
+</rss>

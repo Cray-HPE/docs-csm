@@ -1,0 +1,160 @@
+#
+# MIT License
+#
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: shutdown-services
+  namespace: argo
+spec:
+  templates:
+    - name: storage-node-full-wipe-services
+      inputs:
+        parameters:
+          - name: targetNcn
+          - name: dryRun
+      dag:
+        tasks:
+          - name: main
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                    cat << 'EOF' > "${basedir}/standdown.sh"
+                    #!/bin/bash
+                    set -ou pipefail
+                    function wait_on_dev {
+                        local dev=$1
+                        local count=${2:-0}
+                        while lsof | grep -q "${dev}" ; do
+                            [[ ${count} == 10 ]] && echo >&2 "Waited for ${count} seconds to no avail." && return 1
+                            echo "Waiting on ${dev} usage to reach 0"
+                            count=$((count + 1))
+                            sleep 1
+                        done
+                        echo "Nothing is using ${dev}"
+                    }
+                    echo 'Removing metalvg since storage nodes do not rebuild with metal.no-wipe=0'
+                    systemctl stop ceph.target
+                    systemctl stop registry.container.service
+                    wait_on_dev /etc/ceph
+                    wait_on_dev /var/lib/ceph
+                    wait_on_dev /var/lib/containers
+                    umount /etc/ceph /var/lib/ceph /var/lib/containers || true
+                    sleep 10
+                    vgremove -f --select 'lvname=~CEPH*' || true
+                    vgremove -f --select 'lvname=~CONTAIN' || true
+                    vgremove -f --select 'vgname=~metalvg*' || true
+                    wipefs --all --force /dev/mapper/metalvg*
+                    echo 'Disabling the bootloader by removing it'
+                    rm -rf /metal/recovery/*
+                    echo 'Deactivating disk boot entries to force netbooting for rebuilding ... '
+                    to_delete="$(efibootmgr | grep -P '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*')"
+                    if [ "${to_delete}" ]; then
+                        for item in ${to_delete}; do
+                            efibootmgr # print before
+                            efibootmgr -b ${item} -B
+                            efibootmgr # print after
+                        done
+                    fi
+                    echo 'Setting next boot to PXE ... '
+                    ipmitool chassis bootdev pxe options=efiboot
+                    EOF
+                    if [[ -f ${basedir}/standdown.sh ]]; then
+                        chmod +x "${basedir}/standdown.sh"
+                        scp "${basedir}/standdown.sh" "${TARGET_NCN}:/tmp/standdown.sh"
+                        ssh "${TARGET_NCN}" '/tmp/standdown.sh'
+                    else
+                        echo >&2 "${TARGET_NCN} has nothing to standdown! This is not expected."
+                        exit 1
+                    fi
+    - name: storage-node-upgrade-or-no-wipe-services
+      inputs:
+        parameters:
+          - name: targetNcn
+          - name: dryRun
+      dag:
+        tasks:
+          - name: main
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                    cat << 'EOF' > "${basedir}/standdown.sh"
+                    #!/bin/bash
+                    set -ou pipefail
+                    function wait_on_dev {
+                        local dev=$1
+                        local count=${2:-0}
+                        while lsof | grep -q "${dev}" ; do
+                            [[ ${count} == 10 ]] && echo >&2 "Waited for ${count} seconds to no avail." && return 1
+                            echo "Waiting on ${dev} usage to reach 0"
+                            count=$((count + 1))
+                            sleep 1
+                        done
+                        echo "Nothing is using ${dev}"
+                    }
+                    echo 'Removing metalvg since storage nodes do not rebuild with metal.no-wipe=0'
+                    systemctl stop ceph.target
+                    systemctl stop registry.container.service
+                    wait_on_dev /etc/ceph
+                    wait_on_dev /var/lib/ceph
+                    wait_on_dev /var/lib/containers
+                    umount /etc/ceph /var/lib/ceph /var/lib/containers || true
+                    sleep 10
+                    vgremove -f --select 'vgname=~metalvg*' || true
+                    wipefs --all --force /dev/mapper/metalvg*
+                    echo 'Disabling the bootloader by removing it'
+                    rm -rf /metal/recovery/*
+                    echo 'Deactivating disk boot entries to force netbooting for rebuilding ... '
+                    to_delete="$(efibootmgr | grep -P '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*')"
+                    if [ "${to_delete}" ]; then
+                        for item in ${to_delete}; do
+                            efibootmgr # print before
+                            efibootmgr -b ${item} -B
+                            efibootmgr # print after
+                        done
+                    fi
+                    echo 'Setting next boot to PXE ... '
+                    ipmitool chassis bootdev pxe options=efiboot
+                    EOF
+                    if [[ -f ${basedir}/standdown.sh ]]; then
+                        chmod +x "${basedir}/standdown.sh"
+                        scp "${basedir}/standdown.sh" "${TARGET_NCN}:/tmp/standdown.sh"
+                        ssh "${TARGET_NCN}" '/tmp/standdown.sh'
+                    else
+                        echo >&2 "${TARGET_NCN} has nothing to standdown! This is not expected."
+                        exit 1
+                    fi

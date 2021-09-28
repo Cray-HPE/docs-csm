@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CSM Troubleshooting Information on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-15/troubleshooting/</link>
+    <description>Recent content in CSM Troubleshooting Information on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-15</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:39:16 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-15/troubleshooting/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Manual SSH Key Setting Process</title>
+      <link>/docs-csm/en-15/troubleshooting/bmc_ssh_key_manual_fixup/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:13 +0000</pubDate>
+      <guid>/docs-csm/en-15/troubleshooting/bmc_ssh_key_manual_fixup/</guid>
+      <description>Manual SSH Key Setting Process If for whatever reason this script fails, SSH keys can be set manually using the following process:&#xA;Save the public SSH key for the root user.&#xA;export SCSD_SSH_KEY=$(cat /root/.ssh/id_rsa.pub | sed &amp;#39;s/[[:space:]]*$//&amp;#39;) If a different SSH key is to be used (for example from conman) set the SCSD_SSH_KEY environment variable to that key value.&#xA;Generate a System Configuration Service configuration via the scsd tool. The admin must be authenticated to the Cray CLI before proceeding.</description>
+    </item>
+    <item>
+      <title>Troubleshoot the CMS Barebones Image Boot Test</title>
+      <link>/docs-csm/en-15/troubleshooting/cms_barebones_image_boot/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:13 +0000</pubDate>
+      <guid>/docs-csm/en-15/troubleshooting/cms_barebones_image_boot/</guid>
+      <description>Troubleshoot the CMS Barebones Image Boot Test The CSM barebones image boot test verifies that the CSM services needed to boot a node are available and working properly. This test is very important to run, particularly during the CSM install prior to rebooting the PIT node, because it validates all of the services required for nodes to PXE boot from the cluster.&#xA;This page gives some information about the CSM barebones image, describes how the barebonesImageTest script works, explains how to interpret the results of the script, and provides a procedure to manually perform the test, if needed.</description>
+    </item>
+    <item>
+      <title>DHCP Troubleshooting</title>
+      <link>/docs-csm/en-15/troubleshooting/dhcp_runbook/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:13 +0000</pubDate>
+      <guid>/docs-csm/en-15/troubleshooting/dhcp_runbook/</guid>
+      <description>DHCP Troubleshooting Get an API token 1 Confirm the status of the cray-dhcp-kea services Check cray-dchp-kea pods Check cray-dhcp-kea service endpoints Verify that cray-dhcp-kea configuration is valid Review cray-dhcp-kea running configuration Verify that cray-dhcp-kea has active DHCP leases Check dhcp-helper.py output Check cray-dhcp-kea logs 2 Troubleshooting DHCP for a specific node Check current DHCP leases Check the Hardware State Manager System Layout Service State Manager Daemon Duplicate IP address Numerous DHCP decline messages during node boot 3 Network troubleshooting Check BGP/MetalLB Mellanox spine switches Aruba spine switches tcpdump Dell/Leaf CDU switches Get an API token (ncn-mw#) Some of the commands in these procedures require an API token to be acquired and stored in the TOKEN environment variable.</description>
+    </item>
+    <item>
+      <title>DNS Troubleshooting</title>
+      <link>/docs-csm/en-15/troubleshooting/dns_runbook/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:13 +0000</pubDate>
+      <guid>/docs-csm/en-15/troubleshooting/dns_runbook/</guid>
+      <description>DNS Troubleshooting Check the status of the cray-dns-unbound pods/services Check cray-dns-unbound pods Check cray-dnspunbound-coredns job Check cray-dns-unbound-manager cronjob Verify DNS records are being generated Check host resolver configuration Check /etc/resolv.conf Check cray-dns-unbound forwarding information is correct and accessible Checking hostname in DNS Lookup hostname by querying DNS Lookup hostname in Unbound ConfigMap Reset cray-dns-unbound ConfigMap Check cray-dns-unbound logs Check cray-dns-unbound-manager logs Further troubleshooting Check the status of the cray-dns-unbound pods/services Check cray-dns-unbound pods (ncn-mw#) On any Kubernetes NCN, run:</description>
+    </item>
+    <item>
+      <title>Running HMS CT Tests Manually</title>
+      <link>/docs-csm/en-15/troubleshooting/hms_ct_manual_run/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:13 +0000</pubDate>
+      <guid>/docs-csm/en-15/troubleshooting/hms_ct_manual_run/</guid>
+      <description>Running HMS CT Tests Manually Use the following commands to run the HMS CT tests manually. These are the same tests that run as part of the CSM health validation procedures.&#xA;Note: The information in this documentation generally, and on this page in particular, differs based on the version of CSM installed on the system. If viewing this documentation online, be sure that the CSM version of this documentation matches the CSM version on the system.</description>
+    </item>
+    <item>
+      <title>Incrementally Configuring Images</title>
+      <link>/docs-csm/en-15/troubleshooting/incrementally_configuring_images/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:13 +0000</pubDate>
+      <guid>/docs-csm/en-15/troubleshooting/incrementally_configuring_images/</guid>
+      <description>Incrementally Configuring Images When the Install and Upgrade Framework (IUF) or System Admin Toolkit (SAT) bootprep are failing to configure an image, this procedure can be used to incrementally configure an image. This avoids re-running the build and configuration steps that have succeeded, which would occur if IUF or SAT bootprep were re-run.&#xA;The following example assumes the user is creating a compute node image, but can be adapted for other image types.</description>
+    </item>
+    <item>
+      <title>PXE Booting Runbook</title>
+      <link>/docs-csm/en-15/troubleshooting/pxe_runbook/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:16 +0000</pubDate>
+      <guid>/docs-csm/en-15/troubleshooting/pxe_runbook/</guid>
+      <description>PXE Booting Runbook PXE booting is a key component of a working Shasta system. There are a lot of different components involved, which increases the complexity. This guide runs through the most common issues and shows what is needed in order to have a successful PXE boot.&#xA;NCNs on install ncn-m001 on reboot or NCN boot Verify DHCP packets can be forwarded from the workers to the MTL network (VLAN1) Verify BGP Verify route to TFTP Test TFTP traffic (Aruba Only) Check DHCP lease is getting allocated Verify the DHCP traffic on the Workers Verify the switches are forwarding DHCP traffic.</description>
+    </item>
+    <item>
+      <title>Interpreting HMS Health Check Results</title>
+      <link>/docs-csm/en-15/troubleshooting/interpreting_hms_health_check_results/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:13 +0000</pubDate>
+      <guid>/docs-csm/en-15/troubleshooting/interpreting_hms_health_check_results/</guid>
+      <description>Interpreting HMS Health Check Results Interpreting HMS Health Check Results Introduction Prerequisites Overview Execution Test all HMS services Test specific HMS service Example output Failure analysis Smoke test failure Functional test failure Tavern output Additional troubleshooting run_hms_ct_tests.sh cray-hms-smd-test-functional test_components.tavern.yaml and test_hardware.tavern.yaml test_components.tavern.yaml cray-hms-firmware-action-test-functional test_actions.tavern.yaml cray-power-control-test-functional test_power-status.tavern.yaml hsm_discovery_status_test.sh HTTPsGetFailed ChildVerificationFailed DiscoveryStarted Install blocking vs. Non-blocking failures Introduction This document describes how to interpret the results of the HMS Health Check scripts and techniques for troubleshooting when failures occur.</description>
+    </item>
+  </channel>
+</rss>

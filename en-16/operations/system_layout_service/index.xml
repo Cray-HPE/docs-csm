@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>system layout service on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-16/operations/system_layout_service/</link>
+    <description>Recent content in system layout service on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-16</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:39:03 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-16/operations/system_layout_service/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Add Liquid-Cooled Cabinets to SLS</title>
+      <link>/docs-csm/en-16/operations/system_layout_service/add_liquid-cooled_cabinets_to_sls/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:02 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_layout_service/add_liquid-cooled_cabinets_to_sls/</guid>
+      <description>Add Liquid-Cooled Cabinets to SLS This procedure adds one or more liquid-cooled cabinets and associated CDU management switches to SLS.&#xA;NOTES&#xA;This procedure is intended to be used in conjunction with the top level Add additional Liquid-Cooled Cabinets to a System procedure. This procedure will only add the liquid-cooled hardware present in an EX2500 cabinet with a single liquid-cooled chassis and a single air-cooled chassis. An alternative to this procedure can be found here: Add A Cabinet To SLS Using CANI.</description>
+    </item>
+    <item>
+      <title>Add UAN CAN IP Addresses to SLS</title>
+      <link>/docs-csm/en-16/operations/system_layout_service/add_uan_can_ip_addresses_to_sls/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:02 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_layout_service/add_uan_can_ip_addresses_to_sls/</guid>
+      <description>Add UAN CAN IP Addresses to SLS Add the Customer Access Network (CAN) IP addresses for User Access Nodes (UANs) to the IP address reservations in the System Layout Service (SLS). Adding these IP addresses will propagate the data needed for the Domain Name Service (DNS).&#xA;For more information on CAN IP addresses, refer to the Customer Accessible Networks.&#xA;Prerequisites This procedure requires administrative privileges.&#xA;Procedure Retrieve the SLS data for the CAN.</description>
+    </item>
+    <item>
+      <title>Add an alias to a service</title>
+      <link>/docs-csm/en-16/operations/system_layout_service/add_an_alias_to_a_service/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:02 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_layout_service/add_an_alias_to_a_service/</guid>
+      <description>Add an alias to a service Add an alias for an existing service to the IP address reservations in the System Layout Service (SLS). Adding these IP addresses will propagate the data needed for the Domain Name Service (DNS).&#xA;Prerequisites This procedure requires administrative privileges.&#xA;Procedure This example will add an alias to the pbs_service in the Node Management Network (NMN).&#xA;(ncn-mw#) Get an API token.&#xA;TOKEN=$(curl -s -k -S -d grant_type=client_credentials \ -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth \ -o jsonpath=&amp;#39;{.</description>
+    </item>
+    <item>
+      <title>Create a Backup of the SLS Postgres Database</title>
+      <link>/docs-csm/en-16/operations/system_layout_service/create_a_backup_of_the_sls_postgres_database/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:02 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_layout_service/create_a_backup_of_the_sls_postgres_database/</guid>
+      <description>Create a Backup of the SLS Postgres Database Perform a manual backup of the contents of the SLS Postgres database. This backup can be used to restore the contents of the SLS Postgres database at a later point in time using the Restoring SLS Postgres cluster from backup procedure.&#xA;Prerequisites Healthy SLS Postgres Cluster. Use patronictl list on the SLS Postgres cluster to determine the current state of the cluster, and a healthy cluster will look similar to the following:</description>
+    </item>
+    <item>
+      <title>Dump SLS Information</title>
+      <link>/docs-csm/en-16/operations/system_layout_service/dump_sls_information/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_layout_service/dump_sls_information/</guid>
+      <description>Dump SLS Information Perform a dump of the System Layout Service (SLS) database.&#xA;This procedure will create the file sls_dump.json in the current directory.&#xA;This procedure preserves the information stored in SLS when backing up or reinstalling the system.&#xA;Prerequisites The Cray Command Line Interface is configured. See Configure the Cray CLI. This procedure requires administrative privileges. Procedure (ncn-mw#) Perform the SLS dump. The SLS dump will be stored in the sls_dump.</description>
+    </item>
+    <item>
+      <title>Load SLS Database with Dump File</title>
+      <link>/docs-csm/en-16/operations/system_layout_service/load_sls_database_with_dump_file/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_layout_service/load_sls_database_with_dump_file/</guid>
+      <description>Load SLS Database with Dump File Load the contents of the SLS dump file to restore SLS to the state of the system at the time of the dump. This will upload and overwrite the current SLS database with the contents of the SLS dump file.&#xA;Use this procedure to restore SLS data after a system re-install.&#xA;Prerequisites The System Layout Service (SLS) database has been dumped. See Dump SLS Information for more information.</description>
+    </item>
+    <item>
+      <title>Restore SLS Postgres Database from Backup</title>
+      <link>/docs-csm/en-16/operations/system_layout_service/restore_sls_postgres_database_from_backup/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_layout_service/restore_sls_postgres_database_from_backup/</guid>
+      <description>Restore SLS Postgres Database from Backup This procedure can be used to restore the SLS Postgres database from a previously taken backup. This can be a manual backup created by the Create a Backup of the SLS Postgres Database procedure, or an automatic backup created by the cray-sls-postgresql-db-backup Kubernetes cronjob.&#xA;Prerequisites Healthy Postgres Cluster.&#xA;Use patronictl list on the SLS Postgres cluster to determine the current state of the cluster, and a healthy cluster will look similar to the following:</description>
+    </item>
+    <item>
+      <title>Restore SLS Postgres without an Existing Backup</title>
+      <link>/docs-csm/en-16/operations/system_layout_service/restore_sls_postgres_without_an_existing_backup/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_layout_service/restore_sls_postgres_without_an_existing_backup/</guid>
+      <description>Restore SLS Postgres without an Existing Backup This procedure is intended to repopulate SLS in the event when no Postgres backup exists.&#xA;Prerequisite Healthy SLS Service.&#xA;Verify all 3 SLS replicas are up and running:&#xA;kubectl -n services get pods -l cluster-name=cray-sls-postgres Expected output should look similar to the following:&#xA;NAME READY STATUS RESTARTS AGE cray-sls-postgres-0 3/3 Running 0 18d cray-sls-postgres-1 3/3 Running 0 18d cray-sls-postgres-2 3/3 Running 0 18d Procedure Retrieve the initial sls_input_file.</description>
+    </item>
+    <item>
+      <title>System Layout Service (SLS)</title>
+      <link>/docs-csm/en-16/operations/system_layout_service/system_layout_service_sls/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_layout_service/system_layout_service_sls/</guid>
+      <description>System Layout Service (SLS) The System Layout Service (SLS) holds information about the system design, such as the physical locations of network hardware, compute nodes, and cabinets. It also stores information about the network, such as which port on which switch should be connected to each compute node.&#xA;SLS stores a generalized abstraction of the system that other services can access. The Hardware State Manager (HSM) keeps track of information for hardware state or identifiers.</description>
+    </item>
+    <item>
+      <title>Update SLS with UAN Aliases</title>
+      <link>/docs-csm/en-16/operations/system_layout_service/update_sls_with_uan_aliases/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_layout_service/update_sls_with_uan_aliases/</guid>
+      <description>Update SLS with UAN Aliases This guide shows the process for manually adding an alias to a UAN in SLS and ensuring that the node is being monitored by conman for console logs.&#xA;Prerequisites SLS is up and running and has been populated with data. Access to the API gateway api-gw-service (legacy: api-gw-service-nmn.local) Procedure Authenticate with Keycloak to obtain an API token:&#xA;export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \ -d client_id=admin-client \ -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath=&amp;#39;{.</description>
+    </item>
+  </channel>
+</rss>

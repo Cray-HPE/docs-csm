@@ -1,0 +1,136 @@
+#
+# MIT License
+#
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: deploy-cilium 
+  namespace: argo
+spec:
+  entrypoint: main
+  templates:
+    - name: main
+      inputs:
+        parameters:
+          - name: dryRun
+      dag:
+        tasks:
+        - name: "validate-cilium-content"
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  if [ ! -r /srv/cray/resources/common/cilium-cli-helm-values-migration.yaml ]; then
+                    echo "Cilium content not found"
+                    exit 1
+                  else
+                    echo "Found Cilium content"
+                  fi
+        - name: "install-cilium-migration-chart"
+          dependencies:
+            - validate-cilium-content
+          templateRef:
+            name: ssh-template 
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  install=0
+                  helm -n kube-system status cilium || install=1
+                  if [ $install -ne 0 ]; then
+                    echo "Installing Cilium as secondary CNI"
+                    source /srv/cray/resources/common/vars.sh
+                    export CILIUM_OPERATOR_REPLICAS=$(craysys metadata get cilium-operator-replicas)
+                    export CILIUM_MIGRATION_TUNNEL_PORT=8473
+                    export CILIUM_MIGRATION_POD_CIDR=10.48.0.0/16
+                    envsubst < /srv/cray/resources/common/cilium-cli-helm-values-migration.yaml > /etc/cray/kubernetes/cilium-cli-helm-values.yaml
+                    helm install -f /etc/cray/kubernetes/cilium-cli-helm-values.yaml cilium /srv/cray/resources/common/cilium-${CILIUM_CNI_VERSION} --namespace kube-system
+                    kubectl wait deployment -n kube-system cilium-operator --for condition=Available=True --timeout=30s
+                    kubectl wait pods -n kube-system -l k8s-app=cilium --for condition=Ready --timeout=90s
+                  else
+                    echo "Cilium chart already installed"
+                  fi
+        - name: "create-cilium-node-config"
+          dependencies:
+            - install-cilium-migration-chart
+          templateRef:
+            name: ssh-template 
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  kubectl apply --server-side -f /srv/cray/resources/common/cilium-node-config.yaml
+        - name: "wait-for-cilium-status"
+          dependencies:
+            - install-cilium-migration-chart 
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  echo "Waiting for cilium to start up"
+                  cilium status --wait
+        - name: "stash-network-policies"
+          dependencies:
+            - wait-for-cilium-status
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  kubectl get netpol -A
+                  rm -f /tmp/netpol.yaml
+                  for i in $(kubectl get netpol -A --no-headers | awk '{print $1}' | sort -u );do
+                    echo "--- namespace ${i} ---"
+                    # Not stashing network policies for cray-shared-kafka because they get recreated by the operator
+                    for j in $(kubectl -n ${i} get netpol --no-headers | grep -v cray-shared-kafka-network-policy | awk '{print $1}');do
+                      echo "Saving off network policy ${j}"
+                      echo "---" >> /tmp/netpol.yaml
+                      kubectl -n ${i} get netpol ${j} -o yaml >> /tmp/netpol.yaml
+                      echo "Removing network policy ${j}"
+                      kubectl -n ${i} delete netpol ${j}
+                    done
+                  done
+                  if [ -r /tmp/netpol.yaml ]; then
+                    kubectl -n argo create configmap stash-netpol --from-file=/tmp/netpol.yaml
+                  fi
+                  kubectl get netpol -A

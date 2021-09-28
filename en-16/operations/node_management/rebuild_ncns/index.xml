@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rebuild NCNs on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-16/operations/node_management/rebuild_ncns/</link>
+    <description>Recent content in Rebuild NCNs on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-16</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:51 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-16/operations/node_management/rebuild_ncns/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Final Validation Steps</title>
+      <link>/docs-csm/en-16/operations/node_management/rebuild_ncns/final_validation_steps/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:51 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/node_management/rebuild_ncns/final_validation_steps/</guid>
+      <description>Final Validation Steps Use this procedure to finish validating the success of rebuilt NCNs.&#xA;Procedure Confirm what the Configuration Framework Service (CFS) configuration_status is for the desired_config after rebooting the node.&#xA;NOTE The following command will indicate if a CFS job is currently in progress for this node.&#xA;IMPORTANT: The following command assumes that the variables from the prerequisites section have been set.&#xA;cray cfs v3 components describe &amp;#34;${XNAME}&amp;#34; --format json | jq .</description>
+    </item>
+    <item>
+      <title>Identify Nodes and Update Metadata</title>
+      <link>/docs-csm/en-16/operations/node_management/rebuild_ncns/identify_nodes_and_update_metadata/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:51 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/node_management/rebuild_ncns/identify_nodes_and_update_metadata/</guid>
+      <description>Identify Nodes and Update Metadata Use the following procedure to inspect and modify the Boot Script Service (BSS) boot parameters JSON file.&#xA;This section applies to all node types. The commands in this section assume the variables from the prerequisites section have been set.&#xA;Procedure (ncn-m001#) The following steps can all be done on ncn-m001.&#xA;Generate the BSS boot parameters JSON file.&#xA;Run the following commands from a node that has cray CLI initialized:</description>
+    </item>
+    <item>
+      <title>Post Rebuild Storage Node Validation</title>
+      <link>/docs-csm/en-16/operations/node_management/rebuild_ncns/post_rebuild_storage_node_validation/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:51 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/node_management/rebuild_ncns/post_rebuild_storage_node_validation/</guid>
+      <description>Post Rebuild Storage Node Validation Validate the storage node rebuilt successfully.&#xA;Skip this section if a master or worker node was rebuilt.&#xA;Procedure Verify there are 3 mons, 3 mds, 3 mgr processes, and rgws.&#xA;ceph -s Example output:&#xA;cluster: id: 4c9e9d74-a208-11ed-b008-98039bb427f6 health: HEALTH_OK services: mon: 3 daemons, quorum ncn-s001,ncn-s002,ncn-s003 (age 19m) mgr: ncn-s002.mgvtbe(active, since 18m), standbys: ncn-s001.gvuyjf, ncn-s003.ndzqsk mds: 1/1 daemons up, 1 standby, 1 hot standby osd: 18 osds: 18 up (since 17m), 18 in (since 18m) rgw: 3 daemons active (3 hosts, 1 zones) data: volumes: 1/1 healthy pools: 13 pools, 553 pgs objects: 38.</description>
+    </item>
+    <item>
+      <title>Power Cycle and Rebuild Nodes</title>
+      <link>/docs-csm/en-16/operations/node_management/rebuild_ncns/power_cycle_and_rebuild_nodes/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:51 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/node_management/rebuild_ncns/power_cycle_and_rebuild_nodes/</guid>
+      <description>Power Cycle and Rebuild Nodes This section applies to all node types. The commands in this section assume the variables from the prerequisites section have been set.&#xA;Procedure Open and watch the console for the node being rebuilt.&#xA;Log in to a second session to use it to watch the console using the instructions at the link below:&#xA;Open this link in a new tab or page Log in to a Node Using ConMan</description>
+    </item>
+    <item>
+      <title>Prepare Storage Nodes</title>
+      <link>/docs-csm/en-16/operations/node_management/rebuild_ncns/prepare_storage_nodes/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:51 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/node_management/rebuild_ncns/prepare_storage_nodes/</guid>
+      <description>Prepare Storage Nodes Prepare a storage node before rebuilding it.&#xA;IMPORTANT: All of the output examples may not reflect the cluster status where this operation is being performed. For example, if this is a rebuild in place, then Ceph components will not be reporting down, in contrast to a failed node rebuild.&#xA;Prerequisites Procedure Next step Prerequisites Ensure that the latest CSM documentation RPM is installed on ncn-m001.&#xA;See Check for Latest Documentation.</description>
+    </item>
+    <item>
+      <title>Re-Add a Storage Node to Ceph</title>
+      <link>/docs-csm/en-16/operations/node_management/rebuild_ncns/re-add_storage_node_to_ceph/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:51 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/node_management/rebuild_ncns/re-add_storage_node_to_ceph/</guid>
+      <description>Re-Add a Storage Node to Ceph Use the following procedure to re-add a Ceph node to the Ceph cluster.&#xA;NOTE This operation can be done to add more than one node at the same time.&#xA;Run the Ceph Join Script Watch ceph -s and run the ceph_join_cluster.sh script.&#xA;In a separate window, log into one of the first three storage nodes (ncn-s001, ncn-s002, or ncn-s003) and execute the following:&#xA;watch ceph -s (ncn-m001#) On the node being rebuilt, execute the ceph_join_cluster.</description>
+    </item>
+    <item>
+      <title>Rebuild NCNs</title>
+      <link>/docs-csm/en-16/operations/node_management/rebuild_ncns/rebuild_ncns/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:51 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/node_management/rebuild_ncns/rebuild_ncns/</guid>
+      <description>Rebuild NCNs Rebuild a master, worker, or storage non-compute node (NCN). Use this procedure in the event that a node has a hardware failure, or some other issue with the node has occurred that warrants rebuilding the node.&#xA;Prerequisites Procedure Validation Prerequisites The system is fully installed and has transitioned off of the LiveCD.&#xA;(ncn#) Variables set with the name of the node being rebuilt and its component name (xname) are required.</description>
+    </item>
+    <item>
+      <title>Validate Boot Loader</title>
+      <link>/docs-csm/en-16/operations/node_management/rebuild_ncns/validate_boot_loader/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:51 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/node_management/rebuild_ncns/validate_boot_loader/</guid>
+      <description>Validate Boot Loader Perform the following steps on ncn-m001.&#xA;(ncn-m001#) Run the script to ensure the local BOOTRAID has a valid kernel, initrd, and grub.cfg.&#xA;pdsh -b -w $(grep -oP &amp;#39;ncn-\w\d+&amp;#39; /etc/hosts | sort -u | tr -t &amp;#39;\n&amp;#39; &amp;#39;,&amp;#39;) &amp;#39; /opt/cray/tests/install/ncn/scripts/check_bootloader.sh &amp;#39; If the script fails because of &amp;lsquo;Host key verification&amp;rsquo; failures, then follow the documentation to Apply root SSH keys to NCNs.&#xA;Next Step If executing this procedure as part of an NCN rebuild, return to the main Rebuild NCNs page and proceed with the next step.</description>
+    </item>
+  </channel>
+</rss>

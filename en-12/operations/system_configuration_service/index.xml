@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>system configuration service on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-12/operations/system_configuration_service/</link>
+    <description>Recent content in system configuration service on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-12</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:54 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-12/operations/system_configuration_service/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Configure BMC and Controller Parameters with SCSD</title>
+      <link>/docs-csm/en-12/operations/system_configuration_service/configure_bmc_and_controller_parameters_with_scsd/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:54 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/system_configuration_service/configure_bmc_and_controller_parameters_with_scsd/</guid>
+      <description>Configure BMC and Controller Parameters with SCSD The System Configuration Service (SCSD) allows administrators to set various BMC and controller parameters for components in liquid-cooled cabinets. These parameters are typically set during discovery, but this tool enables parameters to be set before or after discovery. The operations to change these parameters are available in the cray CLI under the scsd command.&#xA;The parameters which can be set are:&#xA;SSH key NTP server Syslog server BMC/Controller passwords SSH console key IMPORTANT: If the scsd tool is used to update the SSHConsoleKey value outside of ConMan, it will disrupt the ConMan connection to the console and collection of console logs.</description>
+    </item>
+    <item>
+      <title>Manage Parameters with the scsd Service</title>
+      <link>/docs-csm/en-12/operations/system_configuration_service/manage_parameters_with_the_scsd_service/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:54 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/system_configuration_service/manage_parameters_with_the_scsd_service/</guid>
+      <description>Manage Parameters with the scsd Service The System Configuration Service commands below enable administrators to set various BMC and controller parameters. These parameters are controlled with the scsd command in the Cray CLI.&#xA;Retrieve Current Information from Targets Get the network protocol parameters (NTP/syslog server, SSH keys) and boot order for the targets in the payload. All fields are only applicable to Liquid Cooled controllers. Attempts to set them for Air Cooled BMCs will be ignored, and retrieving them for Air Cooled BMCs will return empty strings.</description>
+    </item>
+    <item>
+      <title>Set BMC Credentials</title>
+      <link>/docs-csm/en-12/operations/system_configuration_service/set_bmc_credentials/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:54 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/system_configuration_service/set_bmc_credentials/</guid>
+      <description>Set BMC Credentials Use the System Configuration Service (SCSD) to set the BMCs credentials to unique values, or set them all to the same value. Redfish BMCs get installed into the system with default credentials. Once the machine is shipped, the Redfish credentials must be changed on all BMCs. This is done using System Configuration Service (SCSD) through the Cray CLI.&#xA;Important: If the credentials for other devices need to be changed, refer to the following device-specific credential changing procedures:</description>
+    </item>
+    <item>
+      <title>System Configuration Service</title>
+      <link>/docs-csm/en-12/operations/system_configuration_service/system_configuration_service/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:54 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/system_configuration_service/system_configuration_service/</guid>
+      <description>System Configuration Service The System Configuration Service (SCSD) allows administrators to set various BMC and controller parameters. These parameters are typically set during discovery, but this tool enables parameters to be set before or after discovery. The operations to change these parameters are available in the Cray CLI under the scsd command.&#xA;The following are the parameters that most commonly must be set:&#xA;SSH keys IMPORTANT: If the scsd tool is used to update the SSHConsoleKey value outside of ConMan, it will disrupt the ConMan connection to the console and collection of console logs.</description>
+    </item>
+  </channel>
+</rss>

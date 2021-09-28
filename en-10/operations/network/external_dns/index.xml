@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>external dns on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-10/operations/network/external_dns/</link>
+    <description>Recent content in external dns on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-10</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:27 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-10/operations/network/external_dns/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Add NCNs and UANs to External DNS</title>
+      <link>/docs-csm/en-10/operations/network/external_dns/add_ncns_and_uans_to_external_dns/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:26 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/external_dns/add_ncns_and_uans_to_external_dns/</guid>
+      <description>Add NCNs and UANs to External DNS Edit the cray-externaldns-coredns ConfigMap to associate names with the Customer Access Network (CAN) IP addresses for non-compute nodes (NCNs) and User Access Nodes (UANs) in external DNS.&#xA;The cray-externaldns-coredns file contains the configuration files for external DNS&amp;rsquo; CoreDNS instance.&#xA;Prerequisites This procedure requires administrative privileges.&#xA;Procedure View the existing cray-externaldns-coredns ConfigMap.&#xA;ncn-w001# kubectl -n services get configmap cray-externaldns-coredns -o jsonpath=&amp;#39;{.data}&amp;#39; map[Corefile:.:53 { errors health log ready kubernetes cluster.</description>
+    </item>
+    <item>
+      <title>External DNS</title>
+      <link>/docs-csm/en-10/operations/network/external_dns/external_dns/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:26 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/external_dns/external_dns/</guid>
+      <description>External DNS External DNS, along with the Customer Access Network (CAN), Border Gateway Protocol (BGP), and MetalLB, makes it simpler to access the HPE Cray EX API and system management services. Services are accessible directly from a laptop without needing to tunnel into a non-compute node (NCN) or override /etc/hosts settings. Some services may require a JSON Web Token (JWT) to access them, while others may require Keycloak to login using a DC LDAP password.</description>
+    </item>
+    <item>
+      <title>External DNS Failing to Discover Services Workaround</title>
+      <link>/docs-csm/en-10/operations/network/external_dns/external_dns_failing_to_discover_services_workaround/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:26 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/external_dns/external_dns_failing_to_discover_services_workaround/</guid>
+      <description>External DNS Failing to Discover Services Workaround Many external DNS issues can be worked around by directly connecting to the desired backend service. This can circumvent authentication and authorization protections, but it may be necessary to access specific services when mitigating critical issues.&#xA;Istio&amp;rsquo;s ingress gateway uses Gateway and VirtualService objects to configure how traffic is routed to backend services. Currently, there is only one gateway supporting the Customer Access Network (CAN), which is services/services-gateway.</description>
+    </item>
+    <item>
+      <title>External DNS csi config init Input Values</title>
+      <link>/docs-csm/en-10/operations/network/external_dns/external_dns_csi_config_init_input_values/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/external_dns/external_dns_csi_config_init_input_values/</guid>
+      <description>External DNS csi config init Input Values External DNS requires the system-name, site-domain, and can-external-dns values that are defined with the csi config init command. These values are used to customize the External DNS configuration during installation.&#xA;The system-name and site-domain Values The system-name and site-domain values specified as part of the csi config init are used together in the system-name.site-domain format, creating the external domain for external hostnames for services accessible from the Customer Access Network (CAN).</description>
+    </item>
+    <item>
+      <title>Ingress Routing</title>
+      <link>/docs-csm/en-10/operations/network/external_dns/ingress_routing/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/external_dns/ingress_routing/</guid>
+      <description>Ingress Routing Ingress routing to services via Istio&amp;rsquo;s ingress gateway is configured by VirtualService custom resource definitions (CRD). When using external hostnames, there needs to be a VirtualService CRD that matches the external hostname to the desired destination.&#xA;For example, the configuration below controls the ingress routing for prometheus.SYSTEM_DOMAIN_NAME:&#xA;ncn-w001# kubectl get vs -n sysmgmt-health cray-sysmgmt-health-prometheus NAME GATEWAYS HOSTS AGE cray-sysmgmt-health-prometheus [services/services-gateway] [prometheus.SYSTEM_DOMAIN_NAME] 22h ncn-w001# kubectl get vs -n sysmgmt-health cray-sysmgmt-health-prometheus -o yaml apiVersion: networking.</description>
+    </item>
+    <item>
+      <title>Troubleshoot DNS Configuration Issues</title>
+      <link>/docs-csm/en-10/operations/network/external_dns/troubleshoot_dns_configuration_issues/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/external_dns/troubleshoot_dns_configuration_issues/</guid>
+      <description>Troubleshoot DNS Configuration Issues Troubleshoot issues when DNS is not properly configured to delegate name resolution to the core DNS instance on a specific cluster. Although the CAN IP address may still be routable using the IP address directly, it may not work because Istio&amp;rsquo;s ingress gateway depends on the hostname (or SNI) to route traffic. For command line tools like cURL, using the &amp;ndash;resolve option to force correct resolution can be used to work around this issue.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Connectivity to Services with External IP addresses</title>
+      <link>/docs-csm/en-10/operations/network/external_dns/troubleshoot_systems_not_provisioned_with_external_ip_addresses/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/external_dns/troubleshoot_systems_not_provisioned_with_external_ip_addresses/</guid>
+      <description>Troubleshoot Connectivity to Services with External IP addresses Systems that do not support CAN will not have services provisioned with external IP addresses on CAN. Kubernetes will report a &amp;lt;pending&amp;gt; status for the external IP address of the service experiencing connectivity issues.&#xA;If SSH access to a non-compute node (NCN) is available, it is possible to override resolution of external hostnames and forward local ports into the cluster for the cluster IP address of the corresponding service.</description>
+    </item>
+    <item>
+      <title>Update the can-external-dns Value Post-Installation</title>
+      <link>/docs-csm/en-10/operations/network/external_dns/update_the_can-external-dns_value_post-installation/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/external_dns/update_the_can-external-dns_value_post-installation/</guid>
+      <description>Update the can-external-dns Value Post-Installation By default, the services/cray-externaldns-coredns-tcp and services/cray-externaldns-coredns-udp services both share the same Customer Access Network (CAN) external IP as defined by the can-external-dns value. This value is specified during the csi config init input.&#xA;It is expected to be in the static range reserved in MetalLB&amp;rsquo;s can-dynamic-pool subnet. Theoretically, this is the only CAN IP address that must be known external to the system so IT DNS can delegate the system-name.</description>
+    </item>
+  </channel>
+</rss>

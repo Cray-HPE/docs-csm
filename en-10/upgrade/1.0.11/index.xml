@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CSM 1.0.11 CVE Patch/Upgrade Procedure on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-10/upgrade/1.0.11/</link>
+    <description>Recent content in CSM 1.0.11 CVE Patch/Upgrade Procedure on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-10</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:46 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-10/upgrade/1.0.11/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Relevant Troubleshooting Links for Upgrade-Related Issues</title>
+      <link>/docs-csm/en-10/upgrade/1.0.11/upgrade_troubleshooting/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:46 +0000</pubDate>
+      <guid>/docs-csm/en-10/upgrade/1.0.11/upgrade_troubleshooting/</guid>
+      <description>Relevant Troubleshooting Links for Upgrade-Related Issues General Kubernetes Commands for Troubleshooting Please see Kubernetes_Troubleshooting_Information.&#xA;Troubleshooting PXE Boot Issues If execution of the upgrade procedures results in NCNs that have errors booting, please refer to these troubleshooting procedures: PXE Booting Runbook&#xA;Troubleshooting NTP During execution of the upgrade procedure, if it is noted that there is clock skew on one or more NCNs, the following procedure can be used to troubleshoot NTP config or to sync time: Configure NTP on NCNs</description>
+    </item>
+    <item>
+      <title>Stage 0 - Prerequisites and Preflight Checks</title>
+      <link>/docs-csm/en-10/upgrade/1.0.11/stage_0_prerequisites/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:46 +0000</pubDate>
+      <guid>/docs-csm/en-10/upgrade/1.0.11/stage_0_prerequisites/</guid>
+      <description>Stage 0 - Prerequisites and Preflight Checks NOTE: CSM-1.0.1 or later is required in order to upgrade to CSM-1.0.11.&#xA;The following command can be used to check the CSM version on the system:&#xA;ncn# kubectl get cm -n services cray-product-catalog -o json | jq -r &amp;#39;.data.csm&amp;#39; This check will also be conducted in the &amp;lsquo;prerequisites.sh&amp;rsquo; script listed below and will fail if the system is not running CSM-1.0.1 or CSM-1.0.10.</description>
+    </item>
+    <item>
+      <title>Stage 1 - Ceph Image Upgrade</title>
+      <link>/docs-csm/en-10/upgrade/1.0.11/stage_1/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:46 +0000</pubDate>
+      <guid>/docs-csm/en-10/upgrade/1.0.11/stage_1/</guid>
+      <description>Stage 1 - Ceph Image Upgrade Procedure IMPORTANT:&#xA;Reminder: Before running any upgrade scripts, be sure the Cray CLI output format is reset to default by running the following command:&#xA;ncn# unset CRAY_FORMAT In order for nodes to properly PXE boot, Border Gateway Protocol (BGP) must be healthy. Before proceeding, check the status of BGP as described in the Check BGP Status and Reset Sessions procedure.&#xA;Run ncn-upgrade-ceph-nodes.sh for ncn-s001. Follow output of the script carefully.</description>
+    </item>
+    <item>
+      <title>Stage 2 - Kubernetes Node Image Upgrade</title>
+      <link>/docs-csm/en-10/upgrade/1.0.11/stage_2/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:46 +0000</pubDate>
+      <guid>/docs-csm/en-10/upgrade/1.0.11/stage_2/</guid>
+      <description>Stage 2 - Kubernetes Node Image Upgrade NOTE: During the CSM-1.0.1 install the LiveCD containing the initial install files for this system should have been unmounted from the master node when rebooting into the Kubernetes cluster. The scripts run in this section will also attempt to unmount/eject it if found to ensure the USB stick does not get erased.&#xA;IMPORTANT:&#xA;Reminder: Before running any upgrade scripts, be sure the Cray CLI output format is reset to default by running the following command:</description>
+    </item>
+    <item>
+      <title>Stage 3 - CSM Service Upgrades</title>
+      <link>/docs-csm/en-10/upgrade/1.0.11/stage_3/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:46 +0000</pubDate>
+      <guid>/docs-csm/en-10/upgrade/1.0.11/stage_3/</guid>
+      <description>Stage 3 - CSM Service Upgrades IMPORTANT:&#xA;Reminder: Before running any upgrade scripts, be sure the Cray CLI output format is reset to default by running the following command:&#xA;ncn# unset CRAY_FORMAT Update Loftsman to version 1.2 if not present:&#xA;ncn-m# [[ $(loftsman --version | grep 1.2) ]] || zypper --no-gpg-checks --plus-repo=https://packages.local/repository/csm-sle-15sp2 in -y loftsman Run csm-service-upgrade.sh to deploy upgraded CSM applications and services:&#xA;ncn-m# /usr/share/doc/csm/upgrade/1.0.11/scripts/upgrade/csm-service-upgrade.sh Once Stage 3 is completed, proceed to Stage 4</description>
+    </item>
+    <item>
+      <title>Stage 4 - Rollout DNS Unbound Deployment Restart</title>
+      <link>/docs-csm/en-10/upgrade/1.0.11/stage_4/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:46 +0000</pubDate>
+      <guid>/docs-csm/en-10/upgrade/1.0.11/stage_4/</guid>
+      <description>Stage 4 - Rollout DNS Unbound Deployment Restart NOTE:&#xA;This stage is only necessary if CSM v1.0.10 has not yet been installed (i.e. upgrading from v1.0.1 directly to v1.0.11).&#xA;Instruct Kubernetes to gracefully restart the Unbound pods:&#xA;ncn-m001:~ # kubectl -n services rollout restart deployment cray-dns-unbound deployment.apps/cray-dns-unbound restarted ncn-m001:~ # kubectl -n services rollout status deployment cray-dns-unbound Waiting for deployment &amp;#34;cray-dns-unbound&amp;#34; rollout to finish: 0 out of 3 new replicas have been updated.</description>
+    </item>
+    <item>
+      <title>Stage 5 - Verification</title>
+      <link>/docs-csm/en-10/upgrade/1.0.11/stage_5/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:46 +0000</pubDate>
+      <guid>/docs-csm/en-10/upgrade/1.0.11/stage_5/</guid>
+      <description>Stage 5 - Verification Verify that the following command includes the new CSM version (1.0.11):&#xA;ncn-m001# kubectl get cm cray-product-catalog -n services -o jsonpath=&amp;#39;{.data.csm}&amp;#39; | yq r -j - | jq -r &amp;#39;to_entries[] | .key&amp;#39; | sort -V 1.0.1 1.0.10 1.0.11 Verify that fix for CVE-2022-0185 (Linux kernel buffer overflow/container escape) is in place:&#xA;ncn-m001:~ # pdsh -w $(grep -oP &amp;#39;ncn-\w\d+&amp;#39; /etc/hosts | sort -u | tr -t &amp;#39;\n&amp;#39; &amp;#39;,&amp;#39;) &amp;#34;uname -a&amp;#34; ncn-m001: Linux ncn-m002 5.</description>
+    </item>
+  </channel>
+</rss>

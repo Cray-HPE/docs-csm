@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>security and authentication on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-15/operations/security_and_authentication/</link>
+    <description>Recent content in security and authentication on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-15</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:39:05 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-15/operations/security_and_authentication/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>API Authorization</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/api_authorization/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:01 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/api_authorization/</guid>
+      <description>API Authorization Authorization for REST API calls is only done at the API gateway. This is facilitated through policy checks to the Open Policy Agent (OPA). Every REST API call into the system is sent to the OPA to make an authorization decision. The decision is based on the authenticated JSON Web Token (JWT) passed into the request.&#xA;This page lists the available personas and the supported REST API endpoints for each.</description>
+    </item>
+    <item>
+      <title>Access the Keycloak User Management UI</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/access_the_keycloak_user_management_ui/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:02 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/access_the_keycloak_user_management_ui/</guid>
+      <description>Access the Keycloak User Management UI This procedure can be used to access the interface to manage Keycloak users. Users can be added with this interface. See Create Internal User Accounts in the Keycloak Shasta Realm.&#xA;Prerequisites This procedure uses SYSTEM_DOMAIN_NAME as an example for the DNS name of the non-compute node (NCN). Replace this name with the actual NCN&amp;rsquo;s DNS name while executing this procedure.&#xA;This procedure assumes that the password for the Keycloak admin account is known.</description>
+    </item>
+    <item>
+      <title>Add LDAP User Federation</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/add_ldap_user_federation/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:02 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/add_ldap_user_federation/</guid>
+      <description>Add LDAP User Federation Add LDAP user federation using the Keycloak localization tool.&#xA;Prerequisites System domain name Procedure Prerequisites LDAP user federation is not currently configured in Keycloak. For example, if it was not configured in Keycloak when the system was initially installed or the LDAP user federation was removed.&#xA;System domain name The SYSTEM_DOMAIN_NAME value found in some of the URLs on this page is expected to be the system&amp;rsquo;s fully qualified domain name (FQDN).</description>
+    </item>
+    <item>
+      <title>Add Root Service Account for Gigabyte Controllers</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/add_root_service_account_for_gigabyte_controllers/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:02 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/add_root_service_account_for_gigabyte_controllers/</guid>
+      <description>Add Root Service Account for Gigabyte Controllers By default, Gigabyte BMC and CMC controllers have the admin service account configured. In order to discover this type of hardware, the root service account needs to be configured.&#xA;Prerequisites The BMC is accessible over the network via hostname or IP address. Procedure (ncn#) Retrieve the root user password for this BMC.&#xA;If configuring a BMC already present in the system, then retrieve the device-specific root user password from Vault.</description>
+    </item>
+    <item>
+      <title>Audit Logs</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/audit_logs/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:02 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/audit_logs/</guid>
+      <description>Audit Logs Overview Audit logs are used to monitor the system and search for suspicious behavior. Host and Kubernetes API audit logging can be enabled to produce extra audit logs for analysis. Enabling audit logging is optional. If enabled it generates some load and data on the non-compute nodes (NCNs).&#xA;By default, host and Kubernetes API audit logging are not enabled. It is not required for both to be enabled or disabled at the same time.</description>
+    </item>
+    <item>
+      <title>Authenticate an Account with the Command Line</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/authenticate_an_account_with_the_command_line/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:02 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/authenticate_an_account_with_the_command_line/</guid>
+      <description>Authenticate an Account with the Command Line Retrieve a token to authenticate to the Cray CLI using the command line. If the Cray CLI is needed before localization occurs and Keycloak is setup, an administrator can use this procedure to authenticate to the Cray CLI.&#xA;Procedure (ncn-mw#) Retrieve the Kubernetes secret to be used for authentication.&#xA;ADMIN_SECRET=$(kubectl get secrets admin-client-auth -ojsonpath=&amp;#39;{.data.client-secret}&amp;#39; | base64 -d) (ncn-mw#) Create the setup-token.json file and modify it to be readable only by root.</description>
+    </item>
+    <item>
+      <title>Backup and Restore Vault Clusters</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/backup_and_restore_vault_clusters/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:02 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/backup_and_restore_vault_clusters/</guid>
+      <description>Backup and Restore Vault Clusters View the existing Vault backups on the system and use a completed backup to perform a restore operation.&#xA;Velero is used to perform a nightly backup of Vault. The backup includes Kubernetes object state, in addition to pod volume data for the Vault statefulset. For more information on Velero, refer to the external Velero documentation.&#xA;CAUTION: A restore operation should only be performed in extreme situations.</description>
+    </item>
+    <item>
+      <title>Certificate Types</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/certificate_types/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:02 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/certificate_types/</guid>
+      <description>Certificate Types The system software installation process creates an X.509 Certificate Authority (CA) on the primary non-compute node (NCN) and uses the CA to create an NCN host X.509 certificate. This host certificate is used during the installation process to configure the API gateway for TLS so that communications to the gateway can use HTTPS.&#xA;Clients should use HTTPS to talk to services behind the API gateway and need to ensure that the NCN CA certificate is known by the client software when making requests.</description>
+    </item>
+    <item>
+      <title>Change Air-Cooled Node BMC Credentials Using SAT</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/change_air-cooled_node_bmc_credentials/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:02 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/change_air-cooled_node_bmc_credentials/</guid>
+      <description>Change Air-Cooled Node BMC Credentials Using SAT This procedure describes how to use the System Admin Toolkit&amp;rsquo;s (SAT) sat bmccreds command to set a global credential for all BMCs on air-cooled nodes.&#xA;For more information including alternate methods of using sat bmccreds, see: Set BMC Credentials Using SAT, or the sat-bmccreds(8) man page by running sat-man bmccreds.&#xA;Limitations All air-cooled and liquid-cooled BMCs share the same global credentials. The air-cooled Slingshot switch controllers (Router BMCs) must have the same credentials as the liquid-cooled Slingshot switch controllers.</description>
+    </item>
+    <item>
+      <title>Change Credentials on ServerTech PDUs</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/change_credentials_on_servertech_pdus/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:02 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/change_credentials_on_servertech_pdus/</guid>
+      <description>Change Credentials on ServerTech PDUs This procedure changes password used by the admn user on ServerTech PDUs. Either a single PDU can be updated to a new credential, or all ServerTech PDUs in the system can be updated to the same global credentials.&#xA;NOTES:&#xA;This procedure does not update the default credentials that RTS uses for new ServerTech PDUs added to a system. To change the default credentials, see Update default ServerTech PDU Credentials used by the Redfish Translation Service.</description>
+    </item>
+    <item>
+      <title>Change Cray EX Liquid-Cooled Cabinet Global Default Password</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/change_ex_liquid-cooled_cabinet_global_default_password/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:02 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/change_ex_liquid-cooled_cabinet_global_default_password/</guid>
+      <description>Change Cray EX Liquid-Cooled Cabinet Global Default Password This procedure changes the global default root credential on HPE Cray EX liquid-cooled cabinet embedded controllers (BMCs). The chassis management module (CMM) controller (cC), node controller (nC), and Slingshot switch controller (sC) are generically referred to as &amp;ldquo;BMCs&amp;rdquo; in these procedures.&#xA;Prerequisites The Cray command line interface (CLI) tool is initialized and configured on the system. See Configure the Cray Command Line Interface (cray CLI) for more information.</description>
+    </item>
+    <item>
+      <title>Change the Keycloak Token Lifetime</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/change_keycloak_token_lifetime/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:02 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/change_keycloak_token_lifetime/</guid>
+      <description>Change the Keycloak Token Lifetime This document outlines how to change the Keycloak default token lifetime or the token lifetime for a specific client.&#xA;Note: The default value for these settings is 365 days.&#xA;Procedure Log in to Keycloak with the default admin credentials.&#xA;Retrieve the admin user&amp;rsquo;s password for Keycloak.&#xA;kubectl get secrets -n services keycloak-master-admin-auth -ojsonpath=&amp;#39;{.data.password}&amp;#39; | base64 -d Log in to the Keycloak UI using the admin user and the password obtained in the previous step.</description>
+    </item>
+    <item>
+      <title>Set NCN Image Root Password, SSH Keys, and Timezone</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:02 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys/</guid>
+      <description>Set NCN Image Root Password, SSH Keys, and Timezone This page outlines procedures to modify the following things for Non-Compute Nodes (NCNs):&#xA;root user password root user SSH keys Timezone All of the commands in this procedure are intended to be run on a single master or worker node.&#xA;Prerequisites Changing root password and SSH keys Changing timezone Prerequisites This procedure can only be done after the PIT node is rebuilt to become a normal master node.</description>
+    </item>
+    <item>
+      <title>Set NCN Image Root Password, SSH Keys, and Timezone on PIT Node</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys_on_pit_node/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:02 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys_on_pit_node/</guid>
+      <description>Set NCN Image Root Password, SSH Keys, and Timezone on PIT Node NOTE: This procedure is required during initial CSM installs before management nodes are first deployed.&#xA;Modify the NCN images by setting the root user password and adding SSH keys for the root user account. If desired, also change the timezone for the NCNs.&#xA;This page describes this procedure being performed on the PIT node during a first time installation of the CSM software.</description>
+    </item>
+    <item>
+      <title>Change Root Passwords for Compute Nodes</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/change_root_passwords_for_compute_nodes/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:02 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/change_root_passwords_for_compute_nodes/</guid>
+      <description>Change Root Passwords for Compute Nodes Update the root password on the system for compute nodes.&#xA;Changing the root password at least once is a recommended best practice for system security.&#xA;Prerequisites The initial root password for compute nodes is not set. Use this procedure to initially set or later change the password.&#xA;Procedure (ncn-mw#) Get an encrypted value for the new password.&#xA;Use the passwd command to update the password and get the encrypted hash of the new password.</description>
+    </item>
+    <item>
+      <title>Change the Keycloak Admin Password</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/change_the_keycloak_admin_password/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:02 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/change_the_keycloak_admin_password/</guid>
+      <description>Change the Keycloak Admin Password Update the default password for the admin Keycloak account using the Keycloak user interface (UI). After updating the password in Keycloak, encrypt it on the system and verify that the change was made successfully.&#xA;System domain name Procedure System domain name The SYSTEM_DOMAIN_NAME value found in some of the URLs on this page is expected to be the system&amp;rsquo;s fully qualified domain name (FQDN).&#xA;(ncn-mw#) The FQDN can be found by running the following command on any Kubernetes NCN.</description>
+    </item>
+    <item>
+      <title>Change the LDAP Server IP Address for Existing LDAP Server Content</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/change_the_ldap_server_ip_address_for_existing_ldap_server_content/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:02 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/change_the_ldap_server_ip_address_for_existing_ldap_server_content/</guid>
+      <description>Change the LDAP Server IP Address for Existing LDAP Server Content The IP address that Keycloak is using for the LDAP server can be changed. In the case where the new LDAP server has the same contents as the previous LDAP server, edit the LDAP user federation to switch Keycloak to use the new LDAP server.&#xA;Refer to Change the LDAP Server IP Address for New LDAP Server Content if the LDAP server is being replaced by a different LDAP server that has different content.</description>
+    </item>
+    <item>
+      <title>Change the LDAP Server IP Address for New LDAP Server Content</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/change_the_ldap_server_ip_address_for_new_ldap_server_content/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/change_the_ldap_server_ip_address_for_new_ldap_server_content/</guid>
+      <description>Change the LDAP Server IP Address for New LDAP Server Content Delete the old LDAP user federation and create a new one. This procedure should only be done if the LDAP server is being replaced by a different LDAP server that has different contents.&#xA;Refer to Change the LDAP Server IP Address for Existing LDAP Server Content if the new LDAP server content matches the previous LDAP server content.&#xA;Prerequisites The LDAP server is being replaced by a different LDAP server that has different contents.</description>
+    </item>
+    <item>
+      <title>Configure Keycloak for LDAP/AD authentication</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/configure_keycloak_for_ldapad_authentication/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/configure_keycloak_for_ldapad_authentication/</guid>
+      <description>Configure Keycloak for LDAP/AD authentication Keycloak enables users to be in an LDAP or Active Directory (AD) server. This allows users to get their tokens using their regular username and password, and use those tokens to perform operations on the system&amp;rsquo;s REST API.&#xA;Configuring Keycloak can be done using the admin GUI or through Keycloak&amp;rsquo;s web API.&#xA;For more information on setting up LDAP federation, see the Keycloak administrative documentation in a section titled https://www.</description>
+    </item>
+    <item>
+      <title>Configure root user on HPE iLO BMCs</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/configure_root_user_on_hpe_ilo_bmcs/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/configure_root_user_on_hpe_ilo_bmcs/</guid>
+      <description>Configure root user on HPE iLO BMCs By default, HPE BMC controllers have the Administrator user account. In order to discover this type of hardware, the root service account needs to be configured.&#xA;This procedure is applicable in the following situations:&#xA;The root password is known and does not match the destination system default air-cooled BMC credentials. For example, a node has been moved between systems and each system has different default global credentials.</description>
+    </item>
+    <item>
+      <title>Configure the RSA Plugin in Keycloak</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/configure_the_rsa_plugin_in_keycloak/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/configure_the_rsa_plugin_in_keycloak/</guid>
+      <description>Configure the RSA Plugin in Keycloak Use Keycloak to configure a plugin that enables RSA token authentication.&#xA;Prerequisites Procedure Verification Prerequisites Access to the Keycloak UI is needed.&#xA;Procedure Verify the Shasta domain is being used.&#xA;This is indicated in the dropdown in the upper left of the UI.&#xA;Click on Authentication under the Configure header of the navigation area on the left side of the page.&#xA;Click on the Flows tab.</description>
+    </item>
+    <item>
+      <title>Create Internal Groups in the Keycloak Shasta Realm</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/create_internal_groups_in_the_keycloak_shasta_realm/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/create_internal_groups_in_the_keycloak_shasta_realm/</guid>
+      <description>Create Internal Groups in the Keycloak Shasta Realm Manually create a group in the Keycloak Shasta realm. New groups can be created with the Keycloak UI. In CSM, Keycloak groups must have the cn and gidNumber attributes, otherwise the keycloak-users-localize tool will fail to export the groups.&#xA;New Keycloak groups can be used to group users for authentication.&#xA;Prerequisites This procedure assumes that the password for the Keycloak admin account is known.</description>
+    </item>
+    <item>
+      <title>Create Internal User Accounts in the Keycloak Shasta Realm</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/create_internal_user_accounts_in_the_keycloak_shasta_realm/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/create_internal_user_accounts_in_the_keycloak_shasta_realm/</guid>
+      <description>Create Internal User Accounts in the Keycloak Shasta Realm The following manual procedure can be used to create a user in the Keycloak Shasta realm. New accounts can be created with the Keycloak UI.&#xA;New administrator and user accounts are authenticated with Keycloak. Authenticated accounts are needed to use the Cray CLI.&#xA;Prerequisites This procedure assumes that the password for the Keycloak admin account is known. The Keycloak password is set during the software installation process.</description>
+    </item>
+    <item>
+      <title>Create a Backup of the Keycloak Postgres Database</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/create_a_backup_of_the_keycloak_postgres_database/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/create_a_backup_of_the_keycloak_postgres_database/</guid>
+      <description>Create a Backup of the Keycloak Postgres Database Perform a manual backup of the contents of the Keycloak Postgres database. This backup can be used to restore the contents of the Keycloak Postgres database at a later point in time using the Restore Keycloak Postgres from Backup procedure.&#xA;Prerequisites Healthy Keycloak Postgres Cluster.&#xA;Use patronictl list on the Keycloak Postgres cluster to determine the current state of the cluster and note which member is the Leader.</description>
+    </item>
+    <item>
+      <title>Create a Service Account in Keycloak</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/create_a_service_account_in_keycloak/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/create_a_service_account_in_keycloak/</guid>
+      <description>Create a Service Account in Keycloak Set up a Keycloak service account using the Keycloak administration console or the Keycloak REST API. A service account can be used to get a long-lived token that is used by automation tools.&#xA;In Keycloak, service accounts are associated with a client. See Service Accounts for more information from the Keycloak documentation.&#xA;Procedure Follow the steps in only one of the following sections, depending on if it is preferred to use the Keycloak REST API or the Keycloak administration console UI.</description>
+    </item>
+    <item>
+      <title>Default Keycloak Realms, Accounts, and Clients</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/default_keycloak_realms_accounts_and_clients/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/default_keycloak_realms_accounts_and_clients/</guid>
+      <description>Default Keycloak Realms, Accounts, and Clients This page details the default Keycloak realms, accounts, and clients that are created when the system software is installed.&#xA;Default realms Default accounts Default clients Private clients Public clients Default realms Master Shasta Default accounts Username: admin&#xA;(ncn-mw#) The password can be obtained with the following command:&#xA;kubectl get secret -n services keycloak-master-admin-auth --template={{.data.password}} | base64 --decode The password for the admin account can be changed.</description>
+    </item>
+    <item>
+      <title>Delete Internal User Accounts in the Keycloak Shasta Realm</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/delete_internal_user_accounts_from_the_keycloak_shasta_realm/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/delete_internal_user_accounts_from_the_keycloak_shasta_realm/</guid>
+      <description>Delete Internal User Accounts in the Keycloak Shasta Realm Manually delete a user account in the Keycloak Shasta realm. User accounts are maintained via the Keycloak user management UI.&#xA;Removing an account from Keycloak is a good way to revoke admin or user privileges.&#xA;Prerequisites This procedure assumes that the password for the Keycloak admin account is known. The Keycloak password is set during the software installation process.&#xA;(ncn-mw#) The password can be obtained with the following command:</description>
+    </item>
+    <item>
+      <title>Get a Long-Lived Token for a Service Account</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/get_a_long-lived_token_for_a_service_account/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/get_a_long-lived_token_for_a_service_account/</guid>
+      <description>Get a Long-Lived Token for a Service Account Set up a long-lived offline token for a service account using the Keycloak REST API. Keycloak implements the OpenID Connect protocol, so this is a standard procedure for any OpenID Connect server.&#xA;Refer to Offline Access in the official Keycloak documentation for more information.&#xA;Prerequisites A client or service account has been created. See Create a Service Account in Keycloak. The CLIENT_SECRET variable has been set up.</description>
+    </item>
+    <item>
+      <title>HashiCorp Vault</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/hashicorp_vault/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/hashicorp_vault/</guid>
+      <description>HashiCorp Vault Overview Storage model Unseal keys Administrative access Kubernetes service account access Check the status of Vault clusters Overview A deployment of HashiCorp Vault, managed via the Bitnami Bank-vaults operator, stores private and public Certificate Authority (CA) material, and serves APIs through a PKI engine instance. This instance also serves as a general secrets engine for the system.&#xA;(ncn-mw#) Kubernetes service account authorization is utilized to authenticate access to Vault.</description>
+    </item>
+    <item>
+      <title>Keycloak Operations</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/keycloak_operations/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/keycloak_operations/</guid>
+      <description>Keycloak Operations A service may need to access Keycloak to perform various tasks. These typical uses for a service to access Keycloak include creating a new service account, creating a new user, etc. These operations require Keycloak administrative access. As part of the System Management Services (SMS) installation process, Keycloak is initialized with a Master realm. An administrative client and user are created within this realm. The system installation process adds the information needed for the Keycloak administrator&amp;rsquo;s authentication into a Kubernetes secret that can be accessed by any pod.</description>
+    </item>
+    <item>
+      <title>Keycloak Service Recovery</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/keycloak_service_recovery/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/keycloak_service_recovery/</guid>
+      <description>Keycloak Service Recovery The following covers redeploying the Keycloak service and restoring the data.&#xA;Prerequisites The system is fully installed and has transitioned off of the LiveCD. All activities required for site maintenance are complete. A backup or export of the data already exists. The latest CSM documentation has been installed on the master nodes. See Check for Latest Documentation. The Cray CLI is configured on the node where the procedure is being performed.</description>
+    </item>
+    <item>
+      <title>Keycloak User Localization</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/keycloak_user_localization/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:04 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/keycloak_user_localization/</guid>
+      <description>Keycloak User Localization Verification procedure Verify that the Keycloak users localize job has completed as expected.&#xA;This section can be skipped if user localization is not required.&#xA;After an upgrade, it is possible that all expected Keycloak users were not localized. The procedure below helps determine whether or not this has happened, and provides remediation steps if they are needed.&#xA;Check to see if the Keycloak users localize job has completed.</description>
+    </item>
+    <item>
+      <title>Keycloak User Management with kcadm.sh</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/keycloak_user_management_with_kcadm/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:04 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/keycloak_user_management_with_kcadm/</guid>
+      <description>Keycloak User Management with kcadm.sh Overview The Cray CLI requires a valid Keycloak JWT token. If the token is not present it must be obtained by supplying valid user credentials at the time of CLI initialization. During the installation or upgrade of a Shasta system, the Keycloak user LDAP federation state or credentials may not be known, or the external LDAP system for which the user may have been federated may not be available.</description>
+    </item>
+    <item>
+      <title>Make HTTPS Requests from Sources Outside the Management Kubernetes Cluster</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/make_https_requests_from_sources_outside_the_management_kubernetes_cluster/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:04 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/make_https_requests_from_sources_outside_the_management_kubernetes_cluster/</guid>
+      <description>Make HTTPS Requests from Sources Outside the Management Kubernetes Cluster Clients lying outside the system&amp;rsquo;s management cluster need to trust the Certificate Authority (CA) certificate or host certificate in order to make requests to a non-compute node (NCN). Getting the client system to trust the CA certificate depends on the operating system.&#xA;This procedure shows an example of how to have a client trust the system&amp;rsquo;s CA certificate on a Mac OS X system.</description>
+    </item>
+    <item>
+      <title>Manage Sealed Secrets</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/manage_sealed_secrets/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:04 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/manage_sealed_secrets/</guid>
+      <description>Manage Sealed Secrets Sealed secrets are essential for managing sensitive information on the system. The following procedures for managing sealed secrets are included in this section:&#xA;Generate Sealed Secrets Post-Install Prevent Regeneration of Tracked Sealed Secrets View Tracked Sealed Secrets Decrypt Sealed Secrets for Review Fix an Incorrect Value in a Sealed Secret In the following sections, the term &amp;ldquo;tracked sealed secrets&amp;rdquo; is used to describe any existing secrets stored in spec.</description>
+    </item>
+    <item>
+      <title>Manage System Passwords</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/manage_system_passwords/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:04 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/manage_system_passwords/</guid>
+      <description>Manage System Passwords Many system services require login credentials to gain access to them. The information below is a comprehensive list of system passwords and how to change them.&#xA;Contact HPE Cray service in order to obtain the default usernames and passwords for any of these components or services.&#xA;Keycloak Default Keycloak admin user login credentials:&#xA;Username: admin&#xA;The password can be obtained with the following command:&#xA;kubectl get secret -n services keycloak-master-admin-auth \ --template={{.</description>
+    </item>
+    <item>
+      <title>PKI Certificate Authority (CA)</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/pki_certificate_authority_ca/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:04 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/pki_certificate_authority_ca/</guid>
+      <description>PKI Certificate Authority (CA) An instance of HashiCorp Vault, deployed via the Bitnami Bank-vaults operator, stores private and public Certificate Authority (CA) material, and serves APIs through a Public Key Infrastructure (PKI) engine instance.&#xA;CA material is injected as a start-up secret into Vault through a SealedSecret that translates into a Kubernetes Secret.&#xA;CA Certificate Distribution Trusted CA certificates are distributed via two channels:&#xA;Cloud-init metadata Kubernetes ConfigMaps Kubernetes-native workloads generally leverage ConfigMap-based distribution.</description>
+    </item>
+    <item>
+      <title>PKI Services</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/pki_services/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:04 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/pki_services/</guid>
+      <description>PKI Services The services in this section are integral parts of the Public Key Infrastructure (PKI) implementation.&#xA;HashiCorp Vault Jetstack Cert-manager TrustedCerts Operator HashiCorp Vault A deployment of HashiCorp Vault, managed via the Bitnami Bank-vaults operator, stores private and public Certificate Authority (CA) material, and serves APIs through a PKI engine instance. This instance also serves as a general secrets engine for the system.&#xA;(ncn-mw#) Kubernetes service account authorization is utilized to authenticate access to Vault.</description>
+    </item>
+    <item>
+      <title>Preserve Username Capitalization for Users Exported from Keycloak</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/preserve_username_capitalization_for_users_exported_from_keycloak/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:04 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/preserve_username_capitalization_for_users_exported_from_keycloak/</guid>
+      <description>Preserve Username Capitalization for Users Exported from Keycloak Keycloak converts all characters in a username to lowercase when users are exported. Use this procedure to update the keycloak-users-localize tool with a configuration option that enables administrators to preserve the username letter case when users are exported from Keycloak.&#xA;The LDAP server that provides password resolution and user account federation supports mixed case usernames. If the usernames are changed to lowercase when exported from Keycloak, it can cause issues.</description>
+    </item>
+    <item>
+      <title>Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/provisioning_a_liquid-cooled_ex_cabinet_cec_with_default_credentials/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:04 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/provisioning_a_liquid-cooled_ex_cabinet_cec_with_default_credentials/</guid>
+      <description>Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials This procedure provisions a Glibc compatible SHA-512 administrative password hash to a cabinet environmental controller (CEC). This password becomes the Redfish default global credential to access the CMM controllers and node controllers (BMCs).&#xA;This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC default credentials must be changed using the procedures in the Slingshot product documentation. Refer to &amp;ldquo;Change Rosetta Login and Redfish API Credentials&amp;rdquo; in the Slingshot Operations Guide (&amp;gt; 1.</description>
+    </item>
+    <item>
+      <title>Public Key Infrastructure (PKI)</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/public_key_infrastructure_pki/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:04 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/public_key_infrastructure_pki/</guid>
+      <description>Public Key Infrastructure (PKI) Public Key Infrastructure (PKI) represents the algorithms, infrastructure, policies, and processes required to leverage applied public key cryptography methods for operational security use cases. The Rivest-Shamir-Adleman (RSA) and Elliptic-curve (ECC) are some example algorithm systems.&#xA;The use of PKI for the system is in the Transport Layer Security (TLS) protocol, which is the successor of the now deprecated Secure Sockets Layer (SSL). This is where trusted chains of Certificate Authorities (CAs) are used to authenticate the identity of servers and sometimes clients (for example, mutual TLS) for relying parties.</description>
+    </item>
+    <item>
+      <title>Recovering from Mismatched BMC Credentials</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/recovering_from_mismatched_bmc_credentials/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:04 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/recovering_from_mismatched_bmc_credentials/</guid>
+      <description>Recovering from Mismatched BMC Credentials Use this procedure to recover from the situation when new or replacement hardware has root credentials that do not match the system&amp;rsquo;s current default root user credentials.&#xA;This type of problem can occur in the following scenarios:&#xA;The site has customized the default root credentials using either the Updating the Liquid-Cooled EX Cabinet CEC with Default Credentials after a CEC Password Change or Update Default Air-Cooled BMC and Leaf-BMC Switch SNMP Credentials procedures.</description>
+    </item>
+    <item>
+      <title>Remove Internal Groups from the Keycloak Shasta Realm</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/remove_internal_groups_from_the_keycloak_shasta_realm/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:04 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/remove_internal_groups_from_the_keycloak_shasta_realm/</guid>
+      <description>Remove Internal Groups from the Keycloak Shasta Realm Remove a group in the Keycloak Shasta realm. Unused Keycloak groups can be removed.&#xA;Prerequisites This procedure assumes that the password for the Keycloak admin account is known. The Keycloak password is set during the software installation process.&#xA;(ncn-mw#) The password can be obtained using the following command:&#xA;kubectl get secret -n services keycloak-master-admin-auth --template={{.data.password}} | base64 --decode Procedure Open the Keycloak user management interface.</description>
+    </item>
+    <item>
+      <title>Remove the Email Mapper from the LDAP User Federation</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/remove_the_email_mapper_from_the_ldap_user_federation/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:04 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/remove_the_email_mapper_from_the_ldap_user_federation/</guid>
+      <description>Remove the Email Mapper from the LDAP User Federation The email mapper is automatically added to the LDAP user federation in Keycloak, but it can be removed. The system does not use the user&amp;rsquo;s email for anything, so this function can be removed.&#xA;If there are duplicate email addresses for LDAP users, it can cause Keycloak to have issues syncing with LDAP. Removing the email mapper will fix this problem.</description>
+    </item>
+    <item>
+      <title>Remove the LDAP User Federation from Keycloak</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/remove_the_ldap_user_federation_from_keycloak/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:04 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/remove_the_ldap_user_federation_from_keycloak/</guid>
+      <description>Remove the LDAP User Federation from Keycloak Use the Keycloak UI or Keycloak REST API to remove the LDAP user federation from Keycloak.&#xA;Removing user federation is useful if the LDAP server was decommissioned or if the administrator would like to make changes to the Keycloak configuration using the Keycloak user localization tool.&#xA;Prerequisites LDAP user federation is currently configured in Keycloak.&#xA;Procedure Follow the steps in only one of the sections below:</description>
+    </item>
+    <item>
+      <title>Re-Sync Keycloak Users to Compute Nodes</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/resync_keycloak_users_to_compute_nodes/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:04 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/resync_keycloak_users_to_compute_nodes/</guid>
+      <description>Re-Sync Keycloak Users to Compute Nodes Resubmit the keycloak-users-localize job and run keycloak-group-sync.sh and keycloak-passwd-sync.sh to synchronize the users and groups from Keycloak to the compute nodes. This procedure alters the /etc/passwd and /etc/group files used on compute nodes.&#xA;Use this procedure to quickly synchronize changes made in Keycloak to the compute nodes.&#xA;Prerequisites The Slurm or PBS product must be installed.&#xA;Procedure (ncn-mw#) Resubmit the keycloak-users-localize job.&#xA;The output might appear slightly different than in the example below.</description>
+    </item>
+    <item>
+      <title>Retrieve an Authentication Token</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/retrieve_an_authentication_token/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:05 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/retrieve_an_authentication_token/</guid>
+      <description>Retrieve an Authentication Token Retrieve a token for authenticating to one of the API gateways, for the shasta realm.&#xA;The following are important properties of authentication tokens:&#xA;Keycloak access tokens remain valid for 365 days. Secrets do not expire; they are persistent in Keycloak. Tokens and secrets can be revoked at any time by an administrator. The API gateways use OAuth2 for authentication. A token is required to authenticate with one of the gateways.</description>
+    </item>
+    <item>
+      <title>Retrieve the Client Secret for Service Accounts</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/retrieve_the_client_secret_for_service_accounts/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:05 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/retrieve_the_client_secret_for_service_accounts/</guid>
+      <description>Retrieve the Client Secret for Service Accounts Get the client secret that is generated by Keycloak when the client or service account was created. The secret can be regenerated any time with an administrative action.&#xA;A client secret is needed to make requests using a new client or service account.&#xA;Prerequisites Procedure Use the Keycloak administration console UI Use the Keycloak REST API Prerequisites A client or service account has been created.</description>
+    </item>
+    <item>
+      <title>Update NCN User SSH Keys</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/ssh_keys/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:05 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/ssh_keys/</guid>
+      <description>Update NCN User SSH Keys Change the SSH keys for users on non-compute nodes (NCNs) on the system using the rotate-ssh-keys-mgmt-nodes.yml Ansible playbook provided by CSM or through NCN node personalization (site.yml).&#xA;The NCNs deploy with SSH keys for the root user that are changed during the system install. See Change NCN Image Root Password and SSH Keys for more information on changing the default keys during install. It is a recommended best practice for system security to change the SSH keys after the install is complete on a schedule.</description>
+    </item>
+    <item>
+      <title>System Security and Authentication</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/system_security_and_authentication/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:05 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/system_security_and_authentication/</guid>
+      <description>System Security and Authentication The system uses a number of mechanisms to ensure the security and authentication of internal and external requests.&#xA;API gateway service Keycloak JSON Web Tokens (JWTs) Security infrastructure Istio ingress gateway API gateway service The Cray API gateway service provides a common access gateway for all of the systems management REST APIs. Authentication is provided by an Identity and Access Management (IAM) service that integrates with Istio.</description>
+    </item>
+    <item>
+      <title>Transport Layer Security (TLS) for Ingress Services</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/transport_layer_security_for_ingress_services/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:05 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/transport_layer_security_for_ingress_services/</guid>
+      <description>Transport Layer Security (TLS) for Ingress Services The Istio Secure Gateway and Keycloak Gatekeeper services utilize Cert-manager for their Transport Layer Security (TLS) certificate and private key. Certificate custom resource definitions are deployed as part of Helm Charts for these services.&#xA;To view properties of the Istio Secure Gateway certificate:&#xA;kubectl describe certificate -n istio-system ingress-gateway-cert To view the properties of the Keycloak Gatekeeper certificate:&#xA;kubectl describe certificate -n services keycloak-gatekeeper An outstanding bug in the Keycloak Gatekeeper service prevents it from updating its TLS certificate and key material upon Cert-manager renewal.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Common Vault Cluster Issues</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/troubleshoot_common_vault_cluster_issues/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:05 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/troubleshoot_common_vault_cluster_issues/</guid>
+      <description>Troubleshoot Common Vault Cluster Issues Search for underlying issues causing unhealthy Vault clusters. Check the Vault statefulset and various pod logs to determine what is impacting the health of the Vault.&#xA;Procedure (ncn-mw#) View the Vault statefulset.&#xA;kubectl -n vault get statefulset --show-labels Example output:&#xA;NAME READY AGE LABELS cray-vault 3/3 8d app.kubernetes.io/name=vault,vault_cr=cray-vault (ncn-mw#) Check the pod logs for the bank-vaults container for Vault statefulset pods.&#xA;kubectl logs -n vault cray-vault-0 --tail=-1 --prefix -c bank-vaults kubectl logs -n vault cray-vault-1 --tail=-1 --prefix -c bank-vaults kubectl logs -n vault cray-vault-0 --tail=-1 --prefix -c bank-vaults (ncn-mw#) Check the Vault container logs within the pod.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Kyverno configuration manually</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/troubleshoot_kyverno_configuration_manually/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:05 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/troubleshoot_kyverno_configuration_manually/</guid>
+      <description>Troubleshoot Kyverno configuration manually Check Kyverno pods (ncn-mw#) Run the following script to verify that the expected Kyverno pods are running:&#xA;/opt/cray/tests/install/livecd/scripts/k8s_kyverno_pods_running.sh -p Check Kyverno policy report (ncn-mw#) Run the following script in order to check the Kyverno policy report for any failures, warnings, errors, and skipped policies:&#xA;/opt/cray/tests/install/livecd/scripts/k8s_kyverno_polr_list.sh -p More information See Kyverno.</description>
+    </item>
+    <item>
+      <title>Update Default Air-Cooled BMC and Leaf-BMC Switch SNMP Credentials</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/update_default_air-cooled_bmc_and_leaf_bmc_switch_snmp_credentials/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:05 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/update_default_air-cooled_bmc_and_leaf_bmc_switch_snmp_credentials/</guid>
+      <description>Update Default Air-Cooled BMC and Leaf-BMC Switch SNMP Credentials This procedure updates the default credentials used when new air-cooled hardware is discovered for the first time. This includes the default Redfish credentials used for new air-cooled NodeBMCs and Slingshot switch BMCs (RouterBMCs), and SNMP credentials for new management leaf-BMC switches.&#xA;IMPORTANT After this procedure is completed, all future air-cooled hardware added to the system will be assumed to be configured with the new global default credential.</description>
+    </item>
+    <item>
+      <title>Update Default ServerTech PDU Credentials used by the Redfish Translation Service (RTS)</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/update_default_servertech_pdu_credentials_used_by_the_redfish_translation_service/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:05 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/update_default_servertech_pdu_credentials_used_by_the_redfish_translation_service/</guid>
+      <description>Update Default ServerTech PDU Credentials used by the Redfish Translation Service (RTS) This procedure updates the default credentials used by the Redfish Translation Service (RTS) for when new ServerTech PDUs or management network switches are discovered in a system.&#xA;The Redfish Translation Service provides a Redfish interface that the Hardware State Manager (HSM) and Power Control Service (PCS) or Cray Advanced Platform Monitoring and Control (CAPMC) services can use interact with ServerTech PDUs and management network switches which do not natively support Redfish.</description>
+    </item>
+    <item>
+      <title>Set NCN User Passwords</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/update_ncn_passwords/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:05 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/update_ncn_passwords/</guid>
+      <description>Set NCN User Passwords The management node images do not contain a default root password or default SSH keys.&#xA;Use one of these methods to change or set the root password in the image.&#xA;If the PIT node is booted, see Change NCN Image Root Password and SSH Keys on PIT Node for more information.&#xA;If the PIT node is not booted, see Change NCN Image Root Password and SSH Keys for more information.</description>
+    </item>
+    <item>
+      <title>Updating the Liquid-Cooled EX Cabinet CEC with Default Credentials after a CEC Password Change</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/updating_the_liquid-cooled_ex_cabinet_default_credentials_after_a_cec_password_change/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:05 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/updating_the_liquid-cooled_ex_cabinet_default_credentials_after_a_cec_password_change/</guid>
+      <description>Updating the Liquid-Cooled EX Cabinet CEC with Default Credentials after a CEC Password Change This procedure changes the credential for liquid-cooled EX cabinet chassis controllers and node controller (BMCs) used by CSM services after the CECs have been set to a new global default credential.&#xA;NOTE This procedure does not provision Slingshot switch BMCs (RouterBMCs). Slingshot switch BMC default credentials must be changed using the procedures in the Slingshot product documentation.</description>
+    </item>
+    <item>
+      <title>Vault Service Recovery</title>
+      <link>/docs-csm/en-15/operations/security_and_authentication/vault_service_recovery/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:05 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/security_and_authentication/vault_service_recovery/</guid>
+      <description>Vault Service Recovery The following covers redeploying the Vault service and restoring the data.&#xA;Prerequisites The system is fully installed and has transitioned off of the LiveCD. All activities required for site maintenance are complete. A backup or export of the data already exists. The latest CSM documentation has been installed on the master nodes. See Check for Latest Documentation. Service recovery for Vault (ncn-mw#) Verify that a backup of the Vault data exists.</description>
+    </item>
+  </channel>
+</rss>

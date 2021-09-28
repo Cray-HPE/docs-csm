@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cray System Management (CSM) Administration Guide on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-10/operations/</link>
+    <description>Recent content in Cray System Management (CSM) Administration Guide on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-10</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:41 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-10/operations/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Accessing LiveCD USB Device After Reboot</title>
+      <link>/docs-csm/en-10/operations/access_livecd_usb_device_after_reboot/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:07 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/access_livecd_usb_device_after_reboot/</guid>
+      <description>Accessing LiveCD USB Device After Reboot This is a procedure that only applies to the LiveCD USB device after the PIT node has been rebooted.&#xA;USB ONLY If the installation above was done from a Remote ISO.&#xA;After deploying the LiveCD&amp;rsquo;s NCN, the LiveCD USB itself is unharmed and available to an administrator.&#xA;Procedure Mount and view the USB device.&#xA;ncn-m001# mkdir -pv /mnt/{cow,pitdata} ncn-m001# mount -vL cow /mnt/cow ncn-m001# mount -vL PITDATA /mnt/pitdata ncn-m001# ls -ld /mnt/cow/rw/* Example output:</description>
+    </item>
+    <item>
+      <title>Component Names (xnames)</title>
+      <link>/docs-csm/en-10/operations/component_names_xnames/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/component_names_xnames/</guid>
+      <description>Component Names (xnames) Component names (xnames) identify the geolocation for hardware components in the HPE Cray EX system. Every component is uniquely identified by these component names. Some, like the system cabinet number or the CDU number, can be changed by site needs. There is no geolocation encoded within the cabinet number, such as an X-Y coordinate system to relate to the floor layout of the cabinets. Other component names refer to the location within a cabinet and go down to the port on a card or switch or the socket holding a processor or a memory DIMM location.</description>
+    </item>
+    <item>
+      <title>Validate CSM Health</title>
+      <link>/docs-csm/en-10/operations/validate_csm_health/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:41 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/validate_csm_health/</guid>
+      <description>Validate CSM Health Anytime after the installation of the CSM services, the health of the management nodes and all CSM services can be validated.&#xA;The following are examples of when to run health checks:&#xA;After CSM install.sh completes Before and after NCN reboots After the system is brought back up Any time there is unexpected behavior observed In order to provide relevant information to create support tickets The areas should be tested in the order they are listed on this page.</description>
+    </item>
+    <item>
+      <title>Configure the Cray Command Line Interface (cray CLI)</title>
+      <link>/docs-csm/en-10/operations/configure_cray_cli/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:20 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/configure_cray_cli/</guid>
+      <description>Configure the Cray Command Line Interface (cray CLI) The cray command line interface (CLI) is a framework created to integrate all of the system management REST APIs into easily usable commands.&#xA;Procedures in the CSM installation workflow use the cray CLI to interact with multiple services. The cray CLI configuration needs to be initialized for the Linux account, and the Keycloak user running the procedure needs to be authorized. This section describes how to initialize the cray CLI for use by a user and how to authorize that user.</description>
+    </item>
+  </channel>
+</rss>

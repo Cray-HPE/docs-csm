@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>About SAT on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-16/operations/system_admin_toolkit/about_sat/</link>
+    <description>Recent content in About SAT on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-16</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:39:01 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-16/operations/system_admin_toolkit/about_sat/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Introduction to SAT</title>
+      <link>/docs-csm/en-16/operations/system_admin_toolkit/about_sat/introduction_to_sat/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:01 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_admin_toolkit/about_sat/introduction_to_sat/</guid>
+      <description>Introduction to SAT About System Admin Toolkit (SAT) The System Admin Toolkit (SAT) is designed to assist administrators with common tasks, such as troubleshooting and querying information about the HPE Cray EX System and its components, system boot and shutdown, and replacing hardware components.&#xA;SAT Command Line Utility The System Admin Toolkit (SAT) provides a command-line utility called sat that can be run from Kubernetes control plane nodes (ncn-m nodes). The sat command-line utility is organized into multiple subcommands that perform different administrative tasks.</description>
+    </item>
+    <item>
+      <title>SAT Command Overview</title>
+      <link>/docs-csm/en-16/operations/system_admin_toolkit/about_sat/sat_command_overview/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:01 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_admin_toolkit/about_sat/sat_command_overview/</guid>
+      <description>SAT Command Overview The SAT command-line utility, sat, is organized into multiple subcommands that perform different administrative tasks. For example, sat status provides a summary of the status of the components in the system while sat bootprep provides a way to create CFS configurations, IMS images, and session templates to prepare for booting the system. Most sat subcommands depend on services or components from other products in the HPE Cray EX software stack.</description>
+    </item>
+    <item>
+      <title>SAT Dependencies</title>
+      <link>/docs-csm/en-16/operations/system_admin_toolkit/about_sat/sat_dependencies/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:01 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_admin_toolkit/about_sat/sat_dependencies/</guid>
+      <description>SAT Dependencies Most sat subcommands depend on services or components from CSM or from other products in the HPE Cray EX software stack. The following list shows these dependencies for each subcommand. Each service or component is listed under the product it belongs to.&#xA;sat auth CSM dependencies:&#xA;Keycloak sat bmccreds CSM dependencies:&#xA;System Configuration Service (SCSD) sat bootprep CSM dependencies:&#xA;Boot Orchestration Service (BOS) Configuration Framework Service (CFS) Image Management Service (IMS) Version Control Service (VCS) Kubernetes Simple Storage Service (S3) sat bootsys CSM dependencies:</description>
+    </item>
+    <item>
+      <title>SAT in CSM</title>
+      <link>/docs-csm/en-16/operations/system_admin_toolkit/about_sat/sat_in_csm/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:01 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_admin_toolkit/about_sat/sat_in_csm/</guid>
+      <description>SAT in CSM In CSM 1.3 and newer, the sat command is available on the Kubernetes NCNs without installing the SAT product stream.&#xA;Starting in CSM 1.6.0, SAT is fully included in CSM. There is no longer a separate SAT product stream to install. SAT 2.6 releases, which accompanied CSM 1.5, are the last releases of SAT as a separate product.&#xA;Differences from old SAT Product Stream There are several notable differences between the separate 2.</description>
+    </item>
+  </channel>
+</rss>

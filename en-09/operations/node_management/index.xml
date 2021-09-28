@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>node management on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-09/operations/node_management/</link>
+    <description>Recent content in node management on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-09</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:08 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-09/operations/node_management/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Adding a Liquid-cooled blade to a System</title>
+      <link>/docs-csm/en-09/operations/node_management/adding_a_liquid-cooled_blade_to_a_system/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/node_management/adding_a_liquid-cooled_blade_to_a_system/</guid>
+      <description>Adding a Liquid-cooled blade to a System This procedure will add a liquid-cooled blades from a HPE Cray EX system.&#xA;Perquisites The Cray command line interface (CLI) tool is initialized and configured on the system.&#xA;Knowledge of whether DVS is operating over the Node Management Network (NMN) or the High Speed Network (HSN).&#xA;Blade is being added to a existing liquid-cooled cabinet in the system.&#xA;The Slingshot fabric must be configured with the desired topology for desired state of the blades in the system.</description>
+    </item>
+    <item>
+      <title>Check and Set the metal.no-wipe Setting on NCNs</title>
+      <link>/docs-csm/en-09/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/</guid>
+      <description>Check and Set the metal.no-wipe Setting on NCNs Configure the metal.no-wipe setting on non-compute nodes (NCNs) to preserve data on the nodes before doing an NCN reboot.&#xA;Run the ncnGetXnames.shscript to view the metal.no-wipe settings for each NCN. The xname and metal.no-wipe settings are also dumped out when executing the ncnHealthChecks.sh script.&#xA;Prerequisites This procedure requires administrative privileges.&#xA;It also requires that the CSM_SCRIPTDIR variable is defined. Set this variable and verify that it is set.</description>
+    </item>
+    <item>
+      <title>Enable Kdump</title>
+      <link>/docs-csm/en-09/operations/node_management/enable_kdump/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/node_management/enable_kdump/</guid>
+      <description>Enable Kdump CSM 0.9.x does not have kdump enabled by default. It is necessary to run the workaround script on each NCN when rebuilding them.&#xA;ncn-m001# /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-3341/CASMINST-3341.sh </description>
+    </item>
+    <item>
+      <title>Reboot NCNs</title>
+      <link>/docs-csm/en-09/operations/node_management/reboot_ncns/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/node_management/reboot_ncns/</guid>
+      <description>Reboot NCNs The following is a high-level overview of the non-compute node (NCN) reboot workflow:&#xA;Run the NCN pre-reboot checks and procedures: Ensure ncn-m001 is not running in &amp;ldquo;LiveCD&amp;rdquo; or install mode Check the metal.no-wipe settings for all NCNs Enable pod priorities Run all platform health checks, including checks on the Border Gateway Protocol (BGP) peering sessions Run the rolling NCN reboot procedure: Loop through reboots on storage NCNs, worker NCNs, and master NCNs, where each boot consists of the following workflow: - Establish console session with NCN to reboot Check the hostname of the NCN to be rebooted Execute a power off/on sequence to the NCN to allow it to boot up to completion Check the hosthame of the NCN after reboot and reset it if it is not correct Execute NCN/platform health checks and do not go on to reboot the next NCN until health has been ensured on the most recently rebooted NCN Disconnect console session with the NCN that was rebooted Re-run all platform health checks, including checks on BGP peering sessions The time duration for this procedure (if health checks are being executed in between each boot, as recommended) could take between two to four hours for a system with approximately nine NCNs.</description>
+    </item>
+    <item>
+      <title>Removing a Liquid-cooled blade from a System</title>
+      <link>/docs-csm/en-09/operations/node_management/removing_a_liquid-cooled_blade_from_a_system/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/node_management/removing_a_liquid-cooled_blade_from_a_system/</guid>
+      <description>Removing a Liquid-cooled blade from a System This procedure will remove a liquid-cooled blades from a HPE Cray EX system.&#xA;Perquisites The Cray command line interface (CLI) tool is initialized and configured on the system.&#xA;Knowledge of whether DVS is operating over the Node Management Network (NMN) or the High Speed Network (HSN).&#xA;The Slingshot fabric must be configured with the desired topology for desired state of the blades in the system.</description>
+    </item>
+  </channel>
+</rss>

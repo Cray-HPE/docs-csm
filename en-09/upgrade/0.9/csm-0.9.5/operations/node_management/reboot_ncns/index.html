@@ -1,0 +1,4895 @@
+<!DOCTYPE html>
+<html lang="en-09" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.123.0">
+    <meta name="description" content="">
+
+
+    <link rel="icon" href="/docs-csm/images/favicon.png" type="image/png">
+
+    <title>Reboot NCNs :: Cray System Management (CSM)</title>
+
+    
+    <link href="/docs-csm/css/nucleus.css?1729741358" rel="stylesheet">
+    <link href="/docs-csm/css/fontawesome-all.min.css?1729741358" rel="stylesheet">
+    <link href="/docs-csm/css/hybrid.css?1729741358" rel="stylesheet">
+    <link href="/docs-csm/css/featherlight.min.css?1729741358" rel="stylesheet">
+    <link href="/docs-csm/css/perfect-scrollbar.min.css?1729741358" rel="stylesheet">
+    <link href="/docs-csm/css/auto-complete.css?1729741358" rel="stylesheet">
+    <link href="/docs-csm/css/atom-one-dark-reasonable.css?1729741358" rel="stylesheet">
+    <link href="/docs-csm/css/theme.css?1729741358" rel="stylesheet">
+    <link href="/docs-csm/css/tabs.css?1729741358" rel="stylesheet">
+    <link href="/docs-csm/css/hugo-theme.css?1729741358" rel="stylesheet">
+    
+    <link href="/docs-csm/css/theme-blue.css?1729741358" rel="stylesheet">
+    
+    
+
+    <script src="/docs-csm/js/jquery-3.3.1.min.js?1729741358"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/reboot_ncns/">
+    <nav id="sidebar" class="">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo" href='/docs-csm/en-09'>
+  Cray System Management
+</a>
+
+    </div>
+
+    
+    <section>
+      <ul>
+      
+        <li>
+          <div class="select-style padding">
+          v <select id="select-language" onchange="location = this.value;">
+          
+          
+          
+              
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+                    
+                    
+                      <option id="en-09" value="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/reboot_ncns/" selected>0.9</option>
+                    
+                  
+              
+          
+        </select>
+        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          width="255px" height="255px" viewBox="0 0 255 255" style="enable-background:new 0 0 255 255;" xml:space="preserve">
+          <g>
+            <g id="arrow-drop-down">
+              <polygon points="0,63.75 127.5,191.25 255,63.75 		" />
+            </g>
+          </g>
+        </svg>
+        </div>
+        </li>
+      
+
+      
+      </ul>
+    </section>
+  
+
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="/docs-csm/js/lunr.min.js?1729741358"></script>
+<script type="text/javascript" src="/docs-csm/js/auto-complete.js?1729741358"></script>
+<script type="text/javascript">
+    
+        var baseurl = "\/docs-csm\/\/en-09";
+    
+</script>
+<script type="text/javascript" src="/docs-csm/js/search.js?1729741358"></script>
+
+    
+  </div>
+
+  
+
+    <div class="highlightable">
+    <ul class="topics">
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/421-mgmt-net-cabling-checklist/" title="1.4 Management network cabling checklist" class="dd-item ">
+        <a href="/docs-csm/en-09/421-mgmt-net-cabling-checklist/">
+        1.4 Management network cabling checklist
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/308-application-node-config/" title="Application Node Config" class="dd-item ">
+        <a href="/docs-csm/en-09/308-application-node-config/">
+        Application Node Config
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/310-cabinets/" title="Cabinets" class="dd-item ">
+        <a href="/docs-csm/en-09/310-cabinets/">
+        Cabinets
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/416-mgmt-net-cabling/" title="Cabling" class="dd-item ">
+        <a href="/docs-csm/en-09/416-mgmt-net-cabling/">
+        Cabling
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/066-ceph-csi/" title="CEPH CSI Verification" class="dd-item ">
+        <a href="/docs-csm/en-09/066-ceph-csi/">
+        CEPH CSI Verification
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/302-ncn-metadata-bondx/" title="Collecting NCN MAC Addresses" class="dd-item ">
+        <a href="/docs-csm/en-09/302-ncn-metadata-bondx/">
+        Collecting NCN MAC Addresses
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/301-ncn-metadata-bmc/" title="Collecting the BMC MAC Addresses" class="dd-item ">
+        <a href="/docs-csm/en-09/301-ncn-metadata-bmc/">
+        Collecting the BMC MAC Addresses
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/257-firmware-action-service-cray-windom-compute-node-bios-workaround/" title="Compute Node BIOS workaround for WNC-rome aka HPE CRAY EX425" class="dd-item ">
+        <a href="/docs-csm/en-09/257-firmware-action-service-cray-windom-compute-node-bios-workaround/">
+        Compute Node BIOS workaround for WNC-rome aka HPE CRAY EX425
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/000-info/" title="CRAY Guide Contribution" class="dd-item ">
+        <a href="/docs-csm/en-09/000-info/">
+        CRAY Guide Contribution
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/063-csi-files/" title="Cray Site Init Files" class="dd-item ">
+        <a href="/docs-csm/en-09/063-csi-files/">
+        Cray Site Init Files
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/release_notes/" title="Cray System Management (CSM) - Release Notes" class="dd-item ">
+        <a href="/docs-csm/en-09/release_notes/">
+        Cray System Management (CSM) - Release Notes
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/001-guides/" title="CSM Documentation Guide" class="dd-item ">
+        <a href="/docs-csm/en-09/001-guides/">
+        CSM Documentation Guide
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/002-csm-install/" title="CSM Install" class="dd-item ">
+        <a href="/docs-csm/en-09/002-csm-install/">
+        CSM Install
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/007-csm-install-reboot/" title="CSM Install Reboot - Final NCN Install" class="dd-item ">
+        <a href="/docs-csm/en-09/007-csm-install-reboot/">
+        CSM Install Reboot - Final NCN Install
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/008-csm-validation/" title="CSM Install Validation and Health Checks" class="dd-item ">
+        <a href="/docs-csm/en-09/008-csm-validation/">
+        CSM Install Validation and Health Checks
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/005-csm-metal-install/" title="CSM Metal Install" class="dd-item ">
+        <a href="/docs-csm/en-09/005-csm-metal-install/">
+        CSM Metal Install
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/006-csm-platform-install/" title="CSM Platform Install" class="dd-item ">
+        <a href="/docs-csm/en-09/006-csm-platform-install/">
+        CSM Platform Install
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/troubleshooting/" title="CSM Troubleshooting Information" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/troubleshooting/">
+          CSM Troubleshooting Information
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/troubleshooting/known_issues/" title="known issues" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/troubleshooting/known_issues/">
+          known issues
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/troubleshooting/known_issues/cfs_sessions_stuck_in_pending/" title="CFS Sessions are Stuck in Pending State" class="dd-item ">
+        <a href="/docs-csm/en-09/troubleshooting/known_issues/cfs_sessions_stuck_in_pending/">
+        CFS Sessions are Stuck in Pending State
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/troubleshooting/known_issues/conman_pod_kubernetes_copy_fails/" title="Copying file from the cray-conman pod fails" class="dd-item ">
+        <a href="/docs-csm/en-09/troubleshooting/known_issues/conman_pod_kubernetes_copy_fails/">
+        Copying file from the cray-conman pod fails
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/troubleshooting/known_issues/orphaned_cfs_pods/" title="Orphaned CFS Pods After Booting or Rebooting" class="dd-item ">
+        <a href="/docs-csm/en-09/troubleshooting/known_issues/orphaned_cfs_pods/">
+        Orphaned CFS Pods After Booting or Rebooting
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/003-csm-usb-livecd/" title="CSM USB LiveCD - Creation and Configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/003-csm-usb-livecd/">
+        CSM USB LiveCD - Creation and Configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/051-disk-cleanslate/" title="Disk Cleanslate" class="dd-item ">
+        <a href="/docs-csm/en-09/051-disk-cleanslate/">
+        Disk Cleanslate
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/255-firmware-action-service-fas/" title="FIRMWARE ACTION SERVICE (FAS) | User Procedures" class="dd-item ">
+        <a href="/docs-csm/en-09/255-firmware-action-service-fas/">
+        FIRMWARE ACTION SERVICE (FAS) | User Procedures
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/256-firmware-action-service-fas-recipes/" title="Firmware Action Service (FAS) Administration Guide" class="dd-item ">
+        <a href="/docs-csm/en-09/256-firmware-action-service-fas-recipes/">
+        Firmware Action Service (FAS) Administration Guide
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/250-firmware/" title="Firmware Checkout" class="dd-item ">
+        <a href="/docs-csm/en-09/250-firmware/">
+        Firmware Checkout
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/010-firmware-update-with-fas/" title="Firmware Update the system with FAS" class="dd-item ">
+        <a href="/docs-csm/en-09/010-firmware-update-with-fas/">
+        Firmware Update the system with FAS
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/254-ncn-firmware-gb/" title="Gigabyte Firmware Bug" class="dd-item ">
+        <a href="/docs-csm/en-09/254-ncn-firmware-gb/">
+        Gigabyte Firmware Bug
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/304-ncn-pcie-net-boot-and-re-cable/" title="Guide  Netboot an NCN from a Spine" class="dd-item ">
+        <a href="/docs-csm/en-09/304-ncn-pcie-net-boot-and-re-cable/">
+        Guide  Netboot an NCN from a Spine
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/068-harvest-13-config/" title="HARVEST 13 CONFIG" class="dd-item ">
+        <a href="/docs-csm/en-09/068-harvest-13-config/">
+        HARVEST 13 CONFIG
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/307-hmn-connections/" title="HMN Connections File" class="dd-item ">
+        <a href="/docs-csm/en-09/307-hmn-connections/">
+        HMN Connections File
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/418-mgmt-net-ip-helper/" title="IP-Helper configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/418-mgmt-net-ip-helper/">
+        IP-Helper configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/061-livecd-metal-basecamp/" title="LiveCD - Metal Basecamp" class="dd-item ">
+        <a href="/docs-csm/en-09/061-livecd-metal-basecamp/">
+        LiveCD - Metal Basecamp
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/060-livecd-1.3-rollback/" title="LiveCD 1.3 Rollback" class="dd-item ">
+        <a href="/docs-csm/en-09/060-livecd-1.3-rollback/">
+        LiveCD 1.3 Rollback
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/059-livecd-backup/" title="LiveCD Re-Installs" class="dd-item ">
+        <a href="/docs-csm/en-09/059-livecd-backup/">
+        LiveCD Re-Installs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/058-livecd-troubleshooting/" title="LiveCD Recovery" class="dd-item ">
+        <a href="/docs-csm/en-09/058-livecd-troubleshooting/">
+        LiveCD Recovery
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/004-csm-remote-livecd/" title="LiveCD Remote ISO Install" class="dd-item ">
+        <a href="/docs-csm/en-09/004-csm-remote-livecd/">
+        LiveCD Remote ISO Install
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/062-livecd-virtual-iso-boot/" title="LiveCD Virtual ISO Boot" class="dd-item ">
+        <a href="/docs-csm/en-09/062-livecd-virtual-iso-boot/">
+        LiveCD Virtual ISO Boot
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/405-mgmt-net-port-config/" title="Management Network Access Port configurations." class="dd-item ">
+        <a href="/docs-csm/en-09/405-mgmt-net-port-config/">
+        Management Network Access Port configurations.
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/406-mgmt-net-acl-config/" title="Management Network ACL configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/406-mgmt-net-acl-config/">
+        Management Network ACL configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/402-mgmt-net-base-config/" title="Management Network Base Configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/402-mgmt-net-base-config/">
+        Management Network Base Configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/408-mgmt-net-can-config/" title="Management Network CAN setup" class="dd-item ">
+        <a href="/docs-csm/en-09/408-mgmt-net-can-config/">
+        Management Network CAN setup
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/412-mgmt-net-dell-mellanox-upgrades/" title="Management Network Dell And Mellanox Upgrades" class="dd-item ">
+        <a href="/docs-csm/en-09/412-mgmt-net-dell-mellanox-upgrades/">
+        Management Network Dell And Mellanox Upgrades
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/413-mgmt-net-example-config/" title="Management Network Example Config" class="dd-item ">
+        <a href="/docs-csm/en-09/413-mgmt-net-example-config/">
+        Management Network Example Config
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/409-mgmt-net-firmware-update/" title="Management Network Firmware Update" class="dd-item ">
+        <a href="/docs-csm/en-09/409-mgmt-net-firmware-update/">
+        Management Network Firmware Update
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/417-mgmt-net-flow-control/" title="Management Network Flow Control Settings" class="dd-item ">
+        <a href="/docs-csm/en-09/417-mgmt-net-flow-control/">
+        Management Network Flow Control Settings
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/411-mgmt-net-layer3-config/" title="Management Network Layer3 Configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/411-mgmt-net-layer3-config/">
+        Management Network Layer3 Configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/404-mgmt-net-mlag-config/" title="Management Network MLAG Configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/404-mgmt-net-mlag-config/">
+        Management Network MLAG Configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/414-mgmt-net-ntp-config/" title="Management Network NTP configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/414-mgmt-net-ntp-config/">
+        Management Network NTP configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/407-mgmt-net-snmp-config/" title="Management Network SNMP configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/407-mgmt-net-snmp-config/">
+        Management Network SNMP configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/419-mgmt-net-stp/" title="Management Network Spanning-Tree Configuration." class="dd-item ">
+        <a href="/docs-csm/en-09/419-mgmt-net-stp/">
+        Management Network Spanning-Tree Configuration.
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/415-mgmt-net-switch-rename/" title="Management Network Switch Rename" class="dd-item ">
+        <a href="/docs-csm/en-09/415-mgmt-net-switch-rename/">
+        Management Network Switch Rename
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/410-mgmt-net-uplink-config/" title="Management Network Uplink configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/410-mgmt-net-uplink-config/">
+        Management Network Uplink configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/403-mgmt-net-vlan-config/" title="Management Network VLAN Configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/403-mgmt-net-vlan-config/">
+        Management Network VLAN Configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/306-sls-add-uan-alias/" title="Manually add UAN Aliases to SLS" class="dd-item ">
+        <a href="/docs-csm/en-09/306-sls-add-uan-alias/">
+        Manually add UAN Aliases to SLS
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/309-move-site-connections/" title="Move Site Connections" class="dd-item ">
+        <a href="/docs-csm/en-09/309-move-site-connections/">
+        Move Site Connections
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/200-ncn-bios-pref/" title="NCN BIOS Preferences" class="dd-item ">
+        <a href="/docs-csm/en-09/200-ncn-bios-pref/">
+        NCN BIOS Preferences
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/101-ncn-booting/" title="NCN Booting" class="dd-item ">
+        <a href="/docs-csm/en-09/101-ncn-booting/">
+        NCN Booting
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/107-ncn-devel/" title="NCN Development" class="dd-item ">
+        <a href="/docs-csm/en-09/107-ncn-devel/">
+        NCN Development
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/253-ncn-hw-swap/" title="NCN Hardware Swaps" class="dd-item ">
+        <a href="/docs-csm/en-09/253-ncn-hw-swap/">
+        NCN Hardware Swaps
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/110-ncn-image-customization/" title="NCN Image Customization" class="dd-item ">
+        <a href="/docs-csm/en-09/110-ncn-image-customization/">
+        NCN Image Customization
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/303-ncn-metadata-usb-serial/" title="NCN Metadata over USB-Serial Cable" class="dd-item ">
+        <a href="/docs-csm/en-09/303-ncn-metadata-usb-serial/">
+        NCN Metadata over USB-Serial Cable
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/106-ncn-sles/" title="NCN Operating System Release" class="dd-item ">
+        <a href="/docs-csm/en-09/106-ncn-sles/">
+        NCN Operating System Release
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/105-ncn-packages/" title="NCN Packages" class="dd-item ">
+        <a href="/docs-csm/en-09/105-ncn-packages/">
+        NCN Packages
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/104-ncn-partitioning/" title="NCN Partitions" class="dd-item ">
+        <a href="/docs-csm/en-09/104-ncn-partitioning/">
+        NCN Partitions
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/009-ncn-locking/" title="NCN/Management Node Locking" class="dd-item ">
+        <a href="/docs-csm/en-09/009-ncn-locking/">
+        NCN/Management Node Locking
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/251-firmware-network/" title="Network Firmware" class="dd-item ">
+        <a href="/docs-csm/en-09/251-firmware-network/">
+        Network Firmware
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/052-network-stack/" title="Network Stack (Software and Hardware)" class="dd-item ">
+        <a href="/docs-csm/en-09/052-network-stack/">
+        Network Stack (Software and Hardware)
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/103-ncn-networking/" title="Networking" class="dd-item ">
+        <a href="/docs-csm/en-09/103-ncn-networking/">
+        Networking
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/252-firmware-ncn/" title="Node Firmware" class="dd-item ">
+        <a href="/docs-csm/en-09/252-firmware-ncn/">
+        Node Firmware
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/100-ncn-images/" title="Non-Compute Node Images" class="dd-item ">
+        <a href="/docs-csm/en-09/100-ncn-images/">
+        Non-Compute Node Images
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/108-ncn-ntp/" title="NTP On NCNs" class="dd-item ">
+        <a href="/docs-csm/en-09/108-ncn-ntp/">
+        NTP On NCNs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/" title="operations" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/">
+          operations
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/boot_orchestration/" title="boot orchestration" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/boot_orchestration/">
+          boot orchestration
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/boot_orchestration/stage_changes_without_bos/" title="Stage Changes Without BOS" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/boot_orchestration/stage_changes_without_bos/">
+        Stage Changes Without BOS
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/boot_orchestration/upload_node_boot_information_to_boot_script_service_bss/" title="Upload Node Boot Information to Boot Script Service (BSS)" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/boot_orchestration/upload_node_boot_information_to_boot_script_service_bss/">
+        Upload Node Boot Information to Boot Script Service (BSS)
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/configuration_management/" title="configuration management" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/configuration_management/">
+          configuration management
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/configuration_management/configuration_layers/" title="Configuration Layers" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/configuration_management/configuration_layers/">
+        Configuration Layers
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/csm_product_management/" title="CSM product management" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/csm_product_management/">
+          CSM product management
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/csm_product_management/apply_security_hardening/" title="Security Hardening" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/csm_product_management/apply_security_hardening/">
+        Security Hardening
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/csm_product_management/change_passwords_and_credentials/" title="Change Passwords and Credentials" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/csm_product_management/change_passwords_and_credentials/">
+        Change Passwords and Credentials
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/kubernetes/" title="kubernetes" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/kubernetes/">
+          kubernetes
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/kubernetes/cert_renewal_for_kubernetes_and_bare_metal_etcd/" title="Kubernetes and Bare Metal EtcD Certificate Renewal" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/kubernetes/cert_renewal_for_kubernetes_and_bare_metal_etcd/">
+        Kubernetes and Bare Metal EtcD Certificate Renewal
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/network/" title="network" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/network/">
+          network
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/network/metallb_bgp/" title="metallb bgp" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/network/metallb_bgp/">
+          metallb bgp
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/" title="Check BGP Status and Reset Sessions" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/">
+        Check BGP Status and Reset Sessions
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/system_management_health/" title="system management health" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/system_management_health/">
+          system management health
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/system_management_health/troubleshoot_prometheus_alerts/" title="Troubleshoot Prometheus Alerts" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/system_management_health/troubleshoot_prometheus_alerts/">
+        Troubleshoot Prometheus Alerts
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/fas_loader/" title="FAS Loader" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/fas_loader/">
+          FAS Loader
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/fas_loader/fas_loader_fails/" title="TROUBLESHOOTING FAS LOADER FAILS" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/fas_loader/fas_loader_fails/">
+        TROUBLESHOOTING FAS LOADER FAILS
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/hmcollector/" title="hmcollector" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/hmcollector/">
+          hmcollector
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/hmcollector/adjust_hmcollector_resource_limits_requests/" title="Adjust HM Collector resource limits and requests" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/hmcollector/adjust_hmcollector_resource_limits_requests/">
+        Adjust HM Collector resource limits and requests
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/" title="security and authentication" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/security_and_authentication/">
+          security and authentication
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/add_ldap_user_federation/" title="Add LDAP User Federation" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/add_ldap_user_federation/">
+        Add LDAP User Federation
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_air-cooled_node_bmc_credentials/" title="Change Air-Cooled Node BMC Credentials" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_air-cooled_node_bmc_credentials/">
+        Change Air-Cooled Node BMC Credentials
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_credentials_on_servertech_pdus/" title="Change Credentials on ServerTech PDUs" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_credentials_on_servertech_pdus/">
+        Change Credentials on ServerTech PDUs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_ex_cabinet_global_default_password/" title="Change Cray EX Cabinet Global Default Password" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_ex_cabinet_global_default_password/">
+        Change Cray EX Cabinet Global Default Password
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys/" title="Change NCN Image Root Password and SSH Keys" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys/">
+        Change NCN Image Root Password and SSH Keys
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys_on_pit_node/" title="Change NCN Image Root Password and SSH Keys on PIT Node" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys_on_pit_node/">
+        Change NCN Image Root Password and SSH Keys on PIT Node
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_smnp_credentials_on_leaf_switches/" title="Change SMNP Credentials on Leaf Switches" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_smnp_credentials_on_leaf_switches/">
+        Change SMNP Credentials on Leaf Switches
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_the_keycloak_admin_password/" title="Change the Keycloak Admin Password" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_the_keycloak_admin_password/">
+        Change the Keycloak Admin Password
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/provisioning_a_liquid-cooled_ex_cabinet_cec_with_default_credentials/" title="Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/provisioning_a_liquid-cooled_ex_cabinet_cec_with_default_credentials/">
+        Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/restrict_access_to_ncn_images_s3_bucket/" title="Restrict Network Access to the ncn-images S3 Bucket" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/restrict_access_to_ncn_images_s3_bucket/">
+        Restrict Network Access to the ncn-images S3 Bucket
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/update_default_air-cooled_bmc_and_leaf_switch_snmp_credentials/" title="Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/update_default_air-cooled_bmc_and_leaf_switch_snmp_credentials/">
+        Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/update_default_servertech_pdu_credentials_used_by_the_redfish_translation_service/" title="Update Default ServerTech PDU Credentials used by the Redfish Translation Service (RTS)" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/update_default_servertech_pdu_credentials_used_by_the_redfish_translation_service/">
+        Update Default ServerTech PDU Credentials used by the Redfish Translation Service (RTS)
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/update_ncn_passwords/" title="Update NCN Passwords" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/update_ncn_passwords/">
+        Update NCN Passwords
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/updating_the_liquid-cooled_ex_cabinet_default_credentials_after_a_cec_password_change/" title="Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/updating_the_liquid-cooled_ex_cabinet_default_credentials_after_a_cec_password_change/">
+        Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/node_management/" title="node management" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/node_management/">
+          node management
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/node_management/adding_a_liquid-cooled_blade_to_a_system/" title="Adding a Liquid-cooled blade to a System" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/node_management/adding_a_liquid-cooled_blade_to_a_system/">
+        Adding a Liquid-cooled blade to a System
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/" title="Check and Set the metal.no-wipe Setting on NCNs" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/">
+        Check and Set the metal.no-wipe Setting on NCNs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/node_management/enable_kdump/" title="Enable Kdump" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/node_management/enable_kdump/">
+        Enable Kdump
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/node_management/reboot_ncns/" title="Reboot NCNs" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/node_management/reboot_ncns/">
+        Reboot NCNs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/node_management/removing_a_liquid-cooled_blade_from_a_system/" title="Removing a Liquid-cooled blade from a System" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/node_management/removing_a_liquid-cooled_blade_from_a_system/">
+        Removing a Liquid-cooled blade from a System
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/055-certificate-authority/" title="Overview" class="dd-item ">
+        <a href="/docs-csm/en-09/055-certificate-authority/">
+        Overview
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/401-management-network-install/" title="Overview" class="dd-item ">
+        <a href="/docs-csm/en-09/401-management-network-install/">
+        Overview
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/420-mgmt-net-pxe-tshoot/" title="PXE boot Troubleshooting" class="dd-item ">
+        <a href="/docs-csm/en-09/420-mgmt-net-pxe-tshoot/">
+        PXE boot Troubleshooting
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/065-csm-safeguards/" title="Safeguards" class="dd-item ">
+        <a href="/docs-csm/en-09/065-csm-safeguards/">
+        Safeguards
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/300-service-guides/" title="Service Guides" class="dd-item ">
+        <a href="/docs-csm/en-09/300-service-guides/">
+        Service Guides
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/067-shasta-cfg/" title="Setup Site-Init From SHASTA-CFG" class="dd-item ">
+        <a href="/docs-csm/en-09/067-shasta-cfg/">
+        Setup Site-Init From SHASTA-CFG
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/305-switch-metadata/" title="Switch Metadata" class="dd-item ">
+        <a href="/docs-csm/en-09/305-switch-metadata/">
+        Switch Metadata
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/500-uas-uai-admin-and-user-guide/" title="The Shasta User Access Service" class="dd-item ">
+        <a href="/docs-csm/en-09/500-uas-uai-admin-and-user-guide/">
+        The Shasta User Access Service
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/" title="upgrade" class="dd-item
+        parent
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/">
+          upgrade
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/" title="CSM 0.9 Patch Release Upgrade Procedures" class="dd-item
+        parent
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/">
+          CSM 0.9 Patch Release Upgrade Procedures
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.6/" title="CSM 0.9.6 Patch Installation Instructions" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.6/">
+          CSM 0.9.6 Patch Installation Instructions
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.4/" title="CSM 0.9.4 Patch Upgrade Guide" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.4/">
+          CSM 0.9.4 Patch Upgrade Guide
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/" title="CVE-2021-22555 CVE-2021-33909" class="dd-item
+        parent
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/">
+          CVE-2021-22555 CVE-2021-33909
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/" title="operations" class="dd-item
+        parent
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/">
+          operations
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/" title="network" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/">
+          network
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/metallb_bgp/" title="metallb bgp" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/metallb_bgp/">
+          metallb bgp
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/" title="Check BGP Status and Reset Sessions" class="dd-item ">
+        <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/">
+        Check BGP Status and Reset Sessions
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/" title="node management" class="dd-item
+        parent
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/">
+          node management
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/" title="Check and Set the metal.no-wipe Setting on NCNs" class="dd-item ">
+        <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/">
+        Check and Set the metal.no-wipe Setting on NCNs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/reboot_ncns/" title="Reboot NCNs" class="dd-item active">
+        <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/reboot_ncns/">
+        Reboot NCNs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.2/" title="CSM 0.9.2 Patch Upgrade Guide" class="dd-item ">
+        <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.2/">
+        CSM 0.9.2 Patch Upgrade Guide
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.3/" title="CSM 0.9.3 Patch Upgrade Guide" class="dd-item ">
+        <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.3/">
+        CSM 0.9.3 Patch Upgrade Guide
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/069-upgrade-workarounds-rpm/" title="Upgrade CSM Install Workarounds RPM" class="dd-item ">
+        <a href="/docs-csm/en-09/069-upgrade-workarounds-rpm/">
+        Upgrade CSM Install Workarounds RPM
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/070-usp-install-workarounds/" title="Utility Storage Installation Troubleshooting" class="dd-item ">
+        <a href="/docs-csm/en-09/070-usp-install-workarounds/">
+        Utility Storage Installation Troubleshooting
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/400-switch-bgp-neighbors/" title="Verify and Update BGP neighbors" class="dd-item ">
+        <a href="/docs-csm/en-09/400-switch-bgp-neighbors/">
+        Verify and Update BGP neighbors
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+    </ul>
+
+    
+    
+
+    
+    <section id="footer">
+      
+    </section>
+  </div>
+</nav>
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/docs-csm/en-09/'>CRAY System Management - Guides and References</a> > <a href='/docs-csm/en-09/upgrade/'>upgrade</a> > <a href='/docs-csm/en-09/upgrade/0.9/'>CSM 0.9 Patch Release Upgrade Procedures</a> > <a href='/docs-csm/en-09/upgrade/0.9/csm-0.9.5/'>CVE-2021-22555 CVE-2021-33909</a> > <a href='/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/'>operations</a> > <a href='/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/'>node management</a> > Reboot NCNs
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#prerequisites">Prerequisites</a></li>
+    <li><a href="#procedure">Procedure</a>
+      <ul>
+        <li><a href="#ncn-pre-reboot-health-checks">NCN Pre-Reboot Health Checks</a></li>
+        <li><a href="#ncn-rolling-reboot">NCN Rolling Reboot</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+            </h1>
+          
+
+        
+
+
+<h1 id="reboot-ncns">Reboot NCNs</h1>
+<p>The following is a high-level overview of the non-compute node (NCN) reboot workflow:</p>
+<ul>
+<li>Run the NCN pre-reboot checks and procedures:
+<ul>
+<li>Ensure <code>ncn-m001</code> is not running in &ldquo;LiveCD&rdquo; or install mode</li>
+<li>Check the <code>metal.no-wipe</code> settings for all NCNs</li>
+<li>Enable pod priorities</li>
+<li>Run all platform health checks, including checks on the Border Gateway Protocol (BGP) peering sessions</li>
+</ul>
+</li>
+<li>Run the rolling NCN reboot procedure:
+<ul>
+<li>Loop through reboots on storage NCNs, worker NCNs, and master NCNs, where each boot consists of the following workflow:
+- Establish console session with NCN to reboot
+<ul>
+<li>Check the hostname of the NCN to be rebooted
+<ul>
+<li>Execute a power off/on sequence to the NCN to allow it to boot up to completion</li>
+</ul>
+</li>
+<li>Check the hosthame of the NCN after reboot and reset it if it is not correct
+<ul>
+<li>Execute NCN/platform health checks and do not go on to reboot the next NCN until health has been ensured on the most recently  rebooted NCN</li>
+<li>Disconnect console session with the NCN that was rebooted</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Re-run all platform health checks, including checks on BGP peering sessions</li>
+</ul>
+<p>The time duration for this procedure (if health checks are being executed in between each boot, as recommended) could take between two to four hours for a system with approximately nine NCNs.</p>
+<p>This same procedure can be used to reboot a single NCN node as outlined above. Be sure to carry out the NCN pre-reboot checks and procedures before and after rebooting the node. Execute the rolling NCN reboot procedure steps for the particular node type being rebooted.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>This procedure requires that the <code>kubectl</code> command is installed.</p>
+<p>It also requires that the <strong>CSM_SCRIPTDIR variable was previously defined</strong> as part of the execution of the steps in the csm-0.9.5 upgrade README. You can verify that it is set by running <code>echo $CSM_SCRIPTDIR</code> on the ncn-m001 cli. If that returns nothing, re-execute the setting of that variable from the <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/">csm-0.9.5 README</a> file.</p>
+<h2 id="procedure">Procedure</h2>
+<h3 id="ncn-pre-reboot-health-checks">NCN Pre-Reboot Health Checks</h3>
+<ol>
+<li>
+<p>Ensure that <code>ncn-m001</code> is not running in &ldquo;LiveCD&rdquo; mode.</p>
+<p>This mode should only be in effect during the initial product install. If the word &ldquo;pit&rdquo; is NOT in the hostname of <code>ncn-m001</code>, then it is not in the &ldquo;LiveCD&rdquo; mode.</p>
+<p>If &ldquo;pit&rdquo; is in the hostname of <code>ncn-m001</code>, the system is not in normal operational mode and rebooting <code>ncn-m001</code> may have unexpected results. This procedure assumes that the node is not running in the &ldquo;LiveCD&rdquo; mode that occurs during product install.</p>
+</li>
+<li>
+<p>Check and set the <code>metal.no-wipe</code> setting on NCNs to ensure data on the node is preserved when rebooting.</p>
+<p>Refer to <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/">Check and Set the metal.no-wipe Setting on NCNs</a>.</p>
+</li>
+<li>
+<p>Run the following script to enable a Kubernetes scheduling pod priority class for a set of critical pods.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CSM_SCRIPTDIR<span style="color:#e6db74">}</span><span style="color:#e6db74">/add_pod_priority.sh&#34;</span>
+</span></span></code></pre></div><p>After the <code>add_pod_priority.sh</code> script completes, wait five minutes for the changes to take effect.</p>
+<pre tabindex="0"><code>ncn-m001# sleep 5m
+</code></pre></li>
+<li>
+<p>Run the platform health checks and analyze the results.</p>
+<p>Refer to the &ldquo;Platform Health Checks&rdquo; section in <a href="/docs-csm/en-09/008-csm-validation/#platform-health-checks">Validate CSM Health</a> for an overview of the health checks.</p>
+<p>Please note that though the CSM validation document references running the the HealthCheck scripts from /opt/cray/platform-utils, more recent versions of those scripts are referenced in the instructions below. Please ensure they are run from the location referenced below.</p>
+<ol>
+<li>
+<p>Run the platform health scripts from ncn-m001:</p>
+<p>The output of the following scripts will need to be referenced in the remaining sub-steps.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CSM_SCRIPTDIR<span style="color:#e6db74">}</span><span style="color:#e6db74">/ncnHealthChecks.sh&#34;</span>
+</span></span><span style="display:flex;"><span>ncn-m001# <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CSM_SCRIPTDIR<span style="color:#e6db74">}</span><span style="color:#e6db74">/ncnPostgresHealthChecks.sh&#34;</span>
+</span></span></code></pre></div><p><strong><code>NOTE</code></strong>: If the ncnHealthChecks script output indicates any <code>kube-multus-ds-</code> pods are in a <code>Terminating</code> state, that can indicate a previous restart of these pods did not complete. In this case, it is safe to force delete these pods in order to let them properly restart by executing the <code>kubectl delete po -n kube-system kube-multus-ds.. --force</code> command. After executing this command, re-running the ncnHealthChecks script should indicate a new pod is in a <code>Running</code> state.</p>
+</li>
+<li>
+<p>Check the status of the Kubernetes nodes.</p>
+<p>Ensure all Kubernetes nodes are in the Ready state.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# kubectl get nodes
+</span></span></code></pre></div><p><strong>Troubleshooting:</strong> If the NCN that was rebooted is in a Not Ready state, run the following command to get more information.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# kubectl describe node NCN_HOSTNAME
+</span></span></code></pre></div><p>Verify the worker or master NCN is now in a Ready state:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# kubectl get nodes
+</span></span></code></pre></div></li>
+<li>
+<p>Check the status of the Kubernetes pods.</p>
+<p>The bottom of the output returned after running the <code>${CSM_SCRIPTDIR}/ncnHealthChecks.sh</code> script will show a list of pods that may be in a bad state. The following command can also be used to look for any pods that are not in a Running or Completed state:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# kubectl get pods -o wide -A | grep -Ev <span style="color:#e6db74">&#39;Running|Completed&#39;</span>
+</span></span></code></pre></div><p>It is important to pay attention to that list, but it is equally important to note what pods are in that list before and after NCN reboots to determine if the reboot caused any new issues.</p>
+<p>There are pods that may normally be in an Error, Not Ready, or Init state, and this may not indicate any problems caused by the NCN reboots. Error states can indicate that a job pod ran and ended in an Error. That means that there may be a problem with that job, but does not necessarily indicate that there is an overall health issue with the system. The key takeaway (for health purposes) is understanding the statuses of pods prior to doing an action like rebooting all of the NCNs. Comparing the pod statuses in between each NCN reboot will give a sense of what is new or different with respect to health.</p>
+</li>
+<li>
+<p>Monitor Ceph health continuously.</p>
+<p>In a separate cli session, run the following command during NCN reboots:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# watch -n <span style="color:#ae81ff">10</span> <span style="color:#e6db74">&#39;ceph -s&#39;</span>
+</span></span></code></pre></div><p>This window can be kept up throughout the reboot process to ensure Ceph remains healthy and to watch if Ceph goes into a WARN state when rebooting storage NCNs. It will be necessary to run it from an ssh session to an NCN that is not the one being rebooted.</p>
+</li>
+<li>
+<p>Check the status of the <code>slurmctld</code> and <code>slurmdbd</code> pods to determine if they are starting:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# kubectl describe pod -n user -lapp<span style="color:#f92672">=</span>slurmctld
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# kubectl describe pod -n user -lapp<span style="color:#f92672">=</span>slurmdbd
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>Events:
+</span></span><span style="display:flex;"><span>  Type     Reason                  Age                    From               Message
+</span></span><span style="display:flex;"><span>  ----     ------                  ----                   ----               -------
+</span></span><span style="display:flex;"><span>  Warning  FailedCreatePodSandBox  29m                    kubelet, ncn-w001  Failed to create pod
+</span></span><span style="display:flex;"><span>sandbox: rpc error: code <span style="color:#f92672">=</span> Unknown desc <span style="color:#f92672">=</span> failed to setup network <span style="color:#66d9ef">for</span> sandbox
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;314ca4285d0706ec3d76a9e953e412d4b0712da4d0cb8138162b53d807d07491&#34;</span>: Multus: Err in tearing down failed
+</span></span><span style="display:flex;"><span>plugins: Multus: error in invoke Delegate add - <span style="color:#e6db74">&#34;macvlan&#34;</span>: failed to allocate <span style="color:#66d9ef">for</span> range 0: no IP addresses
+</span></span><span style="display:flex;"><span>available in range set: 10.252.2.4-10.252.2.4
+</span></span><span style="display:flex;"><span>  Warning  FailedCreatePodSandBox  29m                    kubelet, ncn-w001  Failed to create pod
+</span></span><span style="display:flex;"><span>sandbox: rpc error: code <span style="color:#f92672">=</span> Unknown desc <span style="color:#f92672">=</span> failed to setup network <span style="color:#66d9ef">for</span> sandbox
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><p>If the preceding error is displayed, then remove all files in the following directories on all worker nodes:</p>
+<ul>
+<li>/var/lib/cni/networks/macvlan-slurmctld-nmn-conf</li>
+<li>/var/lib/cni/networks/macvlan-slurmdbd-nmn-conf</li>
+</ul>
+</li>
+<li>
+<p>Check that the BGP peering sessions are established by using <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/">Check BGP Status and Reset Sessions</a>.</p>
+<p>This check will need to be run now and after all worker NCNs have been rebooted. Ensure that the checks have been run to check BGP peering sessions on the BGP peer switches (instructions will vary for Aruba and Mellanox switches).</p>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="ncn-rolling-reboot">NCN Rolling Reboot</h3>
+<p>Before rebooting NCNs:</p>
+<ul>
+<li>Ensure pre-reboot checks have been completed, including checking the <code>metal.no-wipe</code> setting for each NCN. <strong>Do not proceed</strong> if any of the NCN <code>metal.no-wipe</code> settings are zero.</li>
+</ul>
+<h4 id="utility-storage-nodes-ceph">Utility Storage Nodes (Ceph)</h4>
+<p>Reboot each of the NCN storage nodes <strong>one at a time</strong> going from the highest to the lowest number.</p>
+<p><strong>NOTE:</strong> You are doing a single storage node at a time, so please keep track of what ncn-s0xx you are on for these steps.</p>
+<ol>
+<li>
+<p>Establish a console session to the NCN storage node that is going to be rebooted.</p>
+<ol>
+<li>Use the <code>${CSM_SCRIPTDIR}/ncnGetXnames.sh</code> script to get the xnames for each of the NCNs.</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CSM_SCRIPTDIR<span style="color:#e6db74">}</span><span style="color:#e6db74">/ncnGetXnames.sh&#34;</span>
+</span></span></code></pre></div><ol start="2">
+<li>Use cray-conman to observe each node as it boots:</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# export CONMAN_POD<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>kubectl -n services get pods -l app.kubernetes.io/name<span style="color:#f92672">=</span>cray-conman -o json | jq -r .items<span style="color:#f92672">[]</span>.metadata.name<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>ncn-m001# kubectl exec -it -n services $CONMAN_POD cray-conman -- /bin/bash
+</span></span><span style="display:flex;"><span>cray-conman# conman -q
+</span></span><span style="display:flex;"><span>cray-conman# conman -j XNAME
+</span></span></code></pre></div><p><strong>NOTE:</strong> Exiting the connection to the console can be achieved with the <code>&amp;.</code> command.</p>
+</li>
+<li>
+<p>Check and take note of the hostname of the storage NCN by running the following command on the NCN which will be rebooted.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-s# hostname
+</span></span></code></pre></div></li>
+<li>
+<p>Reboot the selected NCN (run this command on the NCN which needs to be rebooted).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-s# shutdown -r now
+</span></span></code></pre></div><p><strong><code>IMPORTANT:</code></strong> If the node does not shutdown after 5 mins, then proceed with the power reset below</p>
+<p>To power off the node:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# hostname<span style="color:#f92672">=</span>&lt;ncn being rebooted&gt; <span style="color:#75715e"># Example value: ncn-s003</span>
+</span></span><span style="display:flex;"><span>ncn-m001# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>hostname<span style="color:#e6db74">}</span>-mgmt -I lanplus power off
+</span></span><span style="display:flex;"><span>ncn-m001# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>hostname<span style="color:#e6db74">}</span>-mgmt -I lanplus power status
+</span></span></code></pre></div><p>Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.</p>
+<p>To power back on the node:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>hostname<span style="color:#e6db74">}</span>-mgmt -I lanplus power on
+</span></span><span style="display:flex;"><span>ncn-m001# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>hostname<span style="color:#e6db74">}</span>-mgmt -I lanplus power status
+</span></span></code></pre></div><p>Ensure the power is reporting as on. This may take 5-10 seconds for this to update.</p>
+</li>
+<li>
+<p>Watch on the console until the NCN has successfully booted and the login prompt is reached.</p>
+<blockquote>
+<p>If the NCN fails to PXE boot, then it may be necessary to force the NCN to boot from disk.</p>
+<p>Power off the NCN:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# hostname<span style="color:#f92672">=</span>&lt;ncn being rebooted&gt; <span style="color:#75715e"># Example value: ncn-s003</span>
+</span></span><span style="display:flex;"><span>ncn-m001# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>hostname<span style="color:#e6db74">}</span>-mgmt -I lanplus power off
+</span></span><span style="display:flex;"><span>ncn-m001# sleep <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>ncn-m001# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>hostname<span style="color:#e6db74">}</span>-mgmt -I lanplus power status
+</span></span></code></pre></div><p>Set the boot device for the next boot to disk:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>hostname<span style="color:#e6db74">}</span>-mgmt -I lanplus chassis bootdev disk
+</span></span></code></pre></div><p>Power on the NCN:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>hostname<span style="color:#e6db74">}</span>-mgmt -I lanplus power on
+</span></span></code></pre></div><p>Continue to watch the console as the NCN boots.</p>
+</blockquote>
+</li>
+<li>
+<p>Login to the storage NCN and ensure that the hostname matches what was being reported before the reboot.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-s# hostname
+</span></span></code></pre></div><p>If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot.
+The following command will need to be run on the cli for the NCN that has just been rebooted (and is incorrect).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-s# hostnamectl set-hostname $hostname
+</span></span></code></pre></div><p>where <code>$hostname</code> is the original hostname from before reboot</p>
+<p>Follow the procedure outlined above to <code>Reboot the selected NCN</code> again and verify the hostname is correctly set, afterward.</p>
+</li>
+<li>
+<p>Disconnect from the console.</p>
+</li>
+<li>
+<p>Run the platform health checks from the <a href="/docs-csm/en-09/008-csm-validation/#platform-health-checks">Validate CSM Health</a> procedure.</p>
+<p>Recall that updated copies of the two HealthCheck scripts referenced in the <code>Platform Health Checks</code> can be run from here:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CSM_SCRIPTDIR<span style="color:#e6db74">}</span><span style="color:#e6db74">/ncnHealthChecks.sh&#34;</span>
+</span></span><span style="display:flex;"><span>ncn-m001# <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CSM_SCRIPTDIR<span style="color:#e6db74">}</span><span style="color:#e6db74">/ncnPostgresHealthChecks.sh&#34;</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Repeat all of the sub-steps above for the remaining storage nodes, going from the highest to lowest number until all storage nodes have successfully rebooted.</p>
+<p><strong>Important:</strong> Ensure <code>ceph -s</code> shows that Ceph is healthy (<code>HEALTH_OK</code>) <strong>BEFORE MOVING ON</strong> to reboot the next storage node. Once Ceph has recovered the downed mon,
+it may take a several minutes for Ceph to resolve clock skew.</p>
+</li>
+</ol>
+<h4 id="ncn-worker-nodes">NCN Worker Nodes</h4>
+<ol>
+<li>
+<p>Reboot each of the NCN worker nodes <strong>one at a time</strong> going from the highest to the lowest number.</p>
+<p><strong>NOTE:</strong> You are doing a single worker at a time, so please keep track of what ncn-w0xx you are on for these steps.</p>
+<ol>
+<li>
+<p>Failover any postgres leader that is running on the NCN worker node you are rebooting.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CSM_SCRIPTDIR<span style="color:#e6db74">}</span><span style="color:#e6db74">/failover-leader.sh&#34;</span> &lt;node to be rebooted&gt;
+</span></span></code></pre></div></li>
+<li>
+<p>Cordon and Drain the node.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# kubectl drain --timeout<span style="color:#f92672">=</span>300s --ignore-daemonsets<span style="color:#f92672">=</span>true --delete-local-data<span style="color:#f92672">=</span>true &lt;node to be rebooted&gt;
+</span></span></code></pre></div><p>If the command above exits with similar output to the following, then the drain command ran successfully amd you can proceed to the next step.</p>
+<pre tabindex="0"><code>error: unable to drain node &#34;ncn-w003&#34;, aborting command...
+
+There are pending nodes to be drained:
+ncn-w003
+error when evicting pod &#34;cray-dns-unbound-7bb85f9b5b-fjs95&#34;: global timeout reached: 5m0s
+error when evicting pod &#34;cray-dns-unbound-7bb85f9b5b-kc72b&#34;: global timeout reached: 5m0s
+</code></pre></li>
+<li>
+<p>Establish a console session to the NCN worker node you are rebooting.</p>
+<ol>
+<li>
+<p>Use the <code>${CSM_SCRIPTDIR}/ncnGetXnames.sh</code> script to get the xnames for each of the NCNs.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CSM_SCRIPTDIR<span style="color:#e6db74">}</span><span style="color:#e6db74">/ncnGetXnames.sh&#34;</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Wait for the cray-conman pod to become healthy before continue:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# kubectl -n services get pods -l app.kubernetes.io/name<span style="color:#f92672">=</span>cray-conman
+</span></span><span style="display:flex;"><span>NAME                           READY   STATUS    RESTARTS   AGE
+</span></span><span style="display:flex;"><span>cray-conman-7f956fc9bc-npf7d   3/3     Running   <span style="color:#ae81ff">0</span>          5d13h
+</span></span></code></pre></div></li>
+<li>
+<p>Use cray-conman to observe each node as it boots:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# export CONMAN_POD<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>kubectl -n services get pods -l app.kubernetes.io/name<span style="color:#f92672">=</span>cray-conman -o json | jq -r .items<span style="color:#f92672">[]</span>.metadata.name<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>ncn-m001# kubectl exec -it -n services $CONMAN_POD cray-conman -- /bin/bash
+</span></span><span style="display:flex;"><span>cray-conman# conman -q
+</span></span><span style="display:flex;"><span>cray-conman# conman -j XNAME
+</span></span></code></pre></div></li>
+</ol>
+<p><strong>NOTE:</strong> Exiting the connection to the console can be achieved with the <code>&amp;.</code> command.</p>
+</li>
+<li>
+<p>Check and take note of the hostname of the worker NCN by running the following command on the NCN which will be rebooted.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-w# hostname
+</span></span></code></pre></div></li>
+<li>
+<p>Reboot the selected NCN (run this command on the NCN which needs to be rebooted).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-w# shutdown -r now
+</span></span></code></pre></div><p><strong><code>IMPORTANT:</code></strong> If the node does not shutdown after 5 mins, then proceed with the power reset below</p>
+<p>To power off the node:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# hostname<span style="color:#f92672">=</span>&lt;ncn being rebooted&gt; <span style="color:#75715e"># Example value: ncn-w003</span>
+</span></span><span style="display:flex;"><span>ncn-m001# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>hostname<span style="color:#e6db74">}</span>-mgmt -I lanplus power off
+</span></span><span style="display:flex;"><span>ncn-m001# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>hostname<span style="color:#e6db74">}</span>-mgmt -I lanplus power status
+</span></span></code></pre></div><p>Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.</p>
+<p>To power back on the node:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>hostname<span style="color:#e6db74">}</span>-mgmt -I lanplus power on
+</span></span><span style="display:flex;"><span>ncn-m001# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>hostname<span style="color:#e6db74">}</span>-mgmt -I lanplus power status
+</span></span></code></pre></div><p>Ensure the power is reporting as on. This may take 5-10 seconds for this to update.</p>
+</li>
+<li>
+<p>Watch on the console until the NCN has successfully booted and the login prompt is reached.</p>
+<blockquote>
+<p>If the NCN fails to PXE boot, then it may be necessary to force the NCN to boot from disk.</p>
+<p>Power off the NCN:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# hostname<span style="color:#f92672">=</span>&lt;ncn being rebooted&gt; <span style="color:#75715e"># Example value: ncn-w003</span>
+</span></span><span style="display:flex;"><span>ncn-m001# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>hostname<span style="color:#e6db74">}</span>-mgmt -I lanplus power off
+</span></span><span style="display:flex;"><span>ncn-m001# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>hostname<span style="color:#e6db74">}</span>-mgmt -I lanplus power status
+</span></span></code></pre></div><p>Set the boot device for the next boot to disk:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>hostname<span style="color:#e6db74">}</span>-mgmt -I lanplus chassis bootdev disk
+</span></span></code></pre></div><p>Power on the NCN:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>hostname<span style="color:#e6db74">}</span>-mgmt -I lanplus power on
+</span></span><span style="display:flex;"><span>ncn-m001# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>hostname<span style="color:#e6db74">}</span>-mgmt -I lanplus power status
+</span></span></code></pre></div><p>Continue to watch the console as the NCN boots.</p>
+</blockquote>
+</li>
+<li>
+<p>Login to the worker NCN and ensure that the hostname matches what was being reported before the reboot.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-w# hostname
+</span></span></code></pre></div><p>If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot.
+The following command will need to be run on the cli for the NCN that has just been rebooted (and is incorrect).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-w# hostnamectl set-hostname $hostname
+</span></span></code></pre></div><p>where <code>$hostname</code> is the original hostname from before reboot</p>
+<p>Follow the procedure outlined above to <code>Reboot the selected NCN</code> again and verify the hostname is correctly set, afterward.</p>
+</li>
+<li>
+<p>Disconnect from the console.</p>
+</li>
+<li>
+<p>Uncordon the node</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m# kubectl uncordon &lt;node you just rebooted&gt;
+</span></span></code></pre></div></li>
+<li>
+<p>Run the platform health checks from the <a href="/docs-csm/en-09/008-csm-validation/#platform-health-checks">Validate CSM Health</a> procedure. The <code>BGP Peering Status and Reset</code> procedure can be skipped, as a different procedure in step 12 will be used to verify the BGP peering status.</p>
+<p>Recall that updated copies of the two HealthCheck scripts referenced in the <code>Platform Health Checks</code> can be run from here:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CSM_SCRIPTDIR<span style="color:#e6db74">}</span><span style="color:#e6db74">/ncnHealthChecks.sh&#34;</span>
+</span></span><span style="display:flex;"><span>ncn-m001# <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CSM_SCRIPTDIR<span style="color:#e6db74">}</span><span style="color:#e6db74">/ncnPostgresHealthChecks.sh&#34;</span>
+</span></span></code></pre></div><p>Verify that the <code>Check if any &quot;alarms&quot; are set for any of the Etcd Clusters in the Services Namespace.</code> check from the ncnHealthChecks.sh script reports no alarms set for any of the etcd pods. If an alarm similar to is reported, then wait a few minutes for the alarm to clear and try the ncnHealthChecks.sh script again.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{<span style="color:#f92672">&#34;level&#34;</span>:<span style="color:#e6db74">&#34;warn&#34;</span>,<span style="color:#f92672">&#34;ts&#34;</span>:<span style="color:#e6db74">&#34;2021-08-11T15:43:36.486Z&#34;</span>,<span style="color:#f92672">&#34;caller&#34;</span>:<span style="color:#e6db74">&#34;clientv3/retry_interceptor.go:62&#34;</span>,<span style="color:#f92672">&#34;msg&#34;</span>:<span style="color:#e6db74">&#34;retrying of unary invoker failed&#34;</span>,<span style="color:#f92672">&#34;target&#34;</span>:<span style="color:#e6db74">&#34;endpoint://client-4d8f7712-2c91-4096-bbbe-fe2853cd6959/127.0.0.1:2379&#34;</span>,<span style="color:#f92672">&#34;attempt&#34;</span>:<span style="color:#ae81ff">0</span>,<span style="color:#f92672">&#34;error&#34;</span>:<span style="color:#e6db74">&#34;rpc error: code = DeadlineExceeded desc = context deadline exceeded&#34;</span>}
+</span></span></code></pre></div><p>Verify that the <code>Check the Health of the Etcd Clusters in the Services Namespace</code> check from the ncnHealthChecks.sh script returns a healthy report for all members of each etcd cluster.</p>
+<p>If pods are reported as Terminating, Init, or Pending when checking the status of the Kubernetes pods, wait for all pods to recover before proceeding.</p>
+<p><strong>Troubleshooting:</strong> If the slurmctld and slurmdbd pods do not start after powering back up the node, check for the following error:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# kubectl describe pod -n user -lapp<span style="color:#f92672">=</span>slurmctld
+</span></span><span style="display:flex;"><span>Warning  FailedCreatePodSandBox  27m              kubelet, ncn-w001  Failed to create pod sandbox: rpc error: code <span style="color:#f92672">=</span> Unknown desc <span style="color:#f92672">=</span> failed to setup network <span style="color:#66d9ef">for</span> sandbox <span style="color:#e6db74">&#34;82c575cc978db00643b1bf84a4773c064c08dcb93dbd9741ba2e581bc7c5d545&#34;</span>: Multus: Err in tearing down failed plugins: Multus: error in invoke Delegate add - <span style="color:#e6db74">&#34;macvlan&#34;</span>: failed to allocate <span style="color:#66d9ef">for</span> range 0: no IP addresses available in range set: 10.252.2.4-10.252.2.4
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# kubectl describe pod -n user -lapp<span style="color:#f92672">=</span>slurmdbd
+</span></span><span style="display:flex;"><span>Warning  FailedCreatePodSandBox  29m                    kubelet, ncn-w001  Failed to create pod sandbox: rpc error: code <span style="color:#f92672">=</span> Unknown desc <span style="color:#f92672">=</span> failed to setup network <span style="color:#66d9ef">for</span> sandbox <span style="color:#e6db74">&#34;314ca4285d0706ec3d76a9e953e412d4b0712da4d0cb8138162b53d807d07491&#34;</span>: Multus: Err in tearing down failed plugins: Multus: error in invoke Delegate add - <span style="color:#e6db74">&#34;macvlan&#34;</span>: failed to allocate <span style="color:#66d9ef">for</span> range 0: no IP addresses available in range set: 10.252.2.4-10.252.2.4
+</span></span></code></pre></div><p>Remove the following files on every worker node to resolve the failure:</p>
+<ul>
+<li>/var/lib/cni/networks/macvlan-slurmctld-nmn-conf</li>
+<li>/var/lib/cni/networks/macvlan-slurmdbd-nmn-conf</li>
+</ul>
+</li>
+<li>
+<p>Ensure that BGP sessions are reset so that all BGP peering sessions with the spine switches are in an ESTABLISHED state.</p>
+<p>See <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/">Check BGP Status and Reset Sessions</a>.</p>
+</li>
+<li>
+<p>Repeat all of the sub-steps above for the remaining worker nodes, going from the highest to lowest number until all worker nodes have successfully rebooted.</p>
+</li>
+</ol>
+</li>
+</ol>
+<h4 id="ncn-master-nodes">NCN Master Nodes</h4>
+<ol>
+<li>
+<p>Reboot each of the NCN master nodes <strong>one at a time</strong> <strong>except for ncn-m001</strong> going from the highest to the lowest number.</p>
+<p><strong>NOTE:</strong> You are doing a single master node at a time, so please keep track of what ncn-s0xx you are on for these steps.</p>
+<ol>
+<li>
+<p>Establish a console session to the NCN storage node that is going to be rebooted.</p>
+<ol>
+<li>
+<p>Use the <code>${CSM_SCRIPTDIR}/ncnGetXnames.sh</code> script to get the xnames for each of the NCNs.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CSM_SCRIPTDIR<span style="color:#e6db74">}</span><span style="color:#e6db74">/ncnGetXnames.sh&#34;</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Use cray-conman to observe each node as it boots:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# export CONMAN_POD<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>kubectl -n services get pods -l app.kubernetes.io/name<span style="color:#f92672">=</span>cray-conman -o json | jq -r .items<span style="color:#f92672">[]</span>.metadata.name<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>ncn-m001# kubectl exec -it -n services $CONMAN_POD cray-conman -- /bin/bash
+</span></span><span style="display:flex;"><span>cray-conman# conman -q
+</span></span><span style="display:flex;"><span>cray-conman# conman -j XNAME
+</span></span></code></pre></div><p><strong>NOTE:</strong> Exiting the connection to the console can be achieved with the <code>&amp;.</code> command.</p>
+</li>
+</ol>
+</li>
+<li>
+<p>Check and take note of the hostname of the master NCN by running the command on the NCN that will be rebooted.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m# hostname
+</span></span></code></pre></div></li>
+<li>
+<p>Reboot the selected NCN (run this command on the NCN which needs to be rebooted).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m# shutdown -r now
+</span></span></code></pre></div><p><strong><code>IMPORTANT:</code></strong> If the node does not shutdown after 5 mins, then proceed with the power reset below</p>
+<p>To power off the node:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# hostname<span style="color:#f92672">=</span>&lt;ncn being rebooted&gt; <span style="color:#75715e"># Example value: ncn-m003</span>
+</span></span><span style="display:flex;"><span>ncn-m001# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>hostname<span style="color:#e6db74">}</span>-mgmt -I lanplus power off
+</span></span><span style="display:flex;"><span>ncn-m001# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>hostname<span style="color:#e6db74">}</span>-mgmt -I lanplus power status
+</span></span></code></pre></div><p>Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.</p>
+<p>To power back on the node:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>hostname<span style="color:#e6db74">}</span>-mgmt -I lanplus power on
+</span></span><span style="display:flex;"><span>ncn-m001# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>hostname<span style="color:#e6db74">}</span>-mgmt -I lanplus power status
+</span></span></code></pre></div><p>Ensure the power is reporting as on. This may take 5-10 seconds for this to update.</p>
+</li>
+<li>
+<p>Watch on the console until the NCN has successfully booted and the login prompt is reached.</p>
+<blockquote>
+<p>If the NCN fails to PXE boot, then it may be necessary to force the NCN to boot from disk.</p>
+<p>Power off the NCN:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# hostname<span style="color:#f92672">=</span>&lt;ncn being rebooted&gt; <span style="color:#75715e"># Example value: ncn-m003</span>
+</span></span><span style="display:flex;"><span>ncn-m001# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>hostname<span style="color:#e6db74">}</span>-mgmt -I lanplus power off
+</span></span><span style="display:flex;"><span>ncn-m001# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>hostname<span style="color:#e6db74">}</span>-mgmt -I lanplus power status
+</span></span></code></pre></div><p>Set the boot device for the next boot to disk:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>hostname<span style="color:#e6db74">}</span>-mgmt -I lanplus chassis bootdev disk
+</span></span></code></pre></div><p>Power on the NCN:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>hostname<span style="color:#e6db74">}</span>-mgmt -I lanplus power on
+</span></span><span style="display:flex;"><span>ncn-m001# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>hostname<span style="color:#e6db74">}</span>-mgmt -I lanplus power status
+</span></span></code></pre></div><p>Continue to watch the console as the NCN boots.</p>
+</blockquote>
+</li>
+<li>
+<p>Login to the master NCN and ensure that the hostname matches what was being reported before the reboot.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m# hostname
+</span></span></code></pre></div><p>If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot.
+The following command will need to be run on the cli for the NCN that has just been rebooted (and is incorrect).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m# hostnamectl set-hostname $hostname
+</span></span></code></pre></div><p>where <code>$hostname</code> is the original hostname from before reboot</p>
+<p>Follow the procedure outlined above to <code>Reboot the selected NCN</code> again and verify the hostname is correctly set, afterward.</p>
+</li>
+<li>
+<p>Disconnect from the console.</p>
+</li>
+<li>
+<p>Run the platform health checks from the <a href="/docs-csm/en-09/008-csm-validation/#platform-health-checks">Validate CSM Health</a> procedure. The <code>BGP Peering Status and Reset</code> procedure can be skipped, as a different procedure in step 8 will be used to verify the BGP peering status.</p>
+<p>Recall that updated copies of the two HealthCheck scripts referenced in the <code>Platform Health Checks</code> can be run from here:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CSM_SCRIPTDIR<span style="color:#e6db74">}</span><span style="color:#e6db74">/ncnHealthChecks.sh&#34;</span>
+</span></span><span style="display:flex;"><span>ncn-m001# <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CSM_SCRIPTDIR<span style="color:#e6db74">}</span><span style="color:#e6db74">/ncnPostgresHealthChecks.sh&#34;</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Ensure that BGP sessions are reset so that all BGP peering sessions with the spine switches are in an ESTABLISHED state.</p>
+<p>See <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/">Check BGP Status and Reset Sessions</a>.</p>
+</li>
+<li>
+<p>Repeat all of the sub-steps above for the remaining master nodes (excluding <code>ncn-m001</code>), going from the highest to lowest number until all master nodes have successfully rebooted.</p>
+</li>
+</ol>
+</li>
+<li>
+<p>Reboot <code>ncn-m001</code>.</p>
+<ol>
+<li>
+<p>Determine the CAN IP address for one of the other NCNs in the system to establish an SSH session with that NCN.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# ssh ncn-m002
+</span></span><span style="display:flex;"><span>ncn-m002# ip a show vlan007 | grep inet
+</span></span></code></pre></div><p>Expected output looks similar to the following:</p>
+<pre tabindex="0"><code>inet 10.102.11.13/24 brd 10.102.11.255 scope global vlan007
+inet6 fe80::1602:ecff:fed9:7820/64 scope link
+</code></pre><p>Now login from another machine to verify that IP is usable:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>external# ssh root@10.102.11.13
+</span></span><span style="display:flex;"><span>ncn-m002#
+</span></span></code></pre></div></li>
+<li>
+<p>Establish a console session to <code>ncn-m001</code> from a remote system, as the BMC of <code>ncn-m001</code> is the NCN that has an externally facing IP address.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>external# SYSTEM_NAME<span style="color:#f92672">=</span>eniac
+</span></span><span style="display:flex;"><span>external# ipmitool -I lanplus -U root -P PASSWORD -H <span style="color:#e6db74">${</span>SYSTEM_NAME<span style="color:#e6db74">}</span>-ncn-m001-mgmt sol activate
+</span></span></code></pre></div></li>
+<li>
+<p>Check and take note of the hostname of the ncn-m001 NCN by running this command on it:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# hostname
+</span></span></code></pre></div></li>
+<li>
+<p>Reboot <code>ncn-m001</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# shutdown -r now
+</span></span></code></pre></div><p><strong><code>IMPORTANT:</code></strong> If the node does not shutdown after 5 mins, then proceed with the power reset below</p>
+<p>To power off the node:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>external# SYSTEM_NAME<span style="color:#f92672">=</span>eniac
+</span></span><span style="display:flex;"><span>external# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>SYSTEM_NAME<span style="color:#e6db74">}</span>-ncn-m001-mgmt -I lanplus power off
+</span></span><span style="display:flex;"><span>external# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>SYSTEM_NAME<span style="color:#e6db74">}</span>-ncn-m001-mgmt -I lanplus power status
+</span></span></code></pre></div><p>Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.</p>
+<p>To power back on the node:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>external# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>SYSTEM_NAME<span style="color:#e6db74">}</span>-ncn-m001-mgmt -I lanplus power on
+</span></span><span style="display:flex;"><span>external# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>SYSTEM_NAME<span style="color:#e6db74">}</span>-ncn-m001-mgmt -I lanplus power status
+</span></span></code></pre></div><p>Ensure the power is reporting as on. This may take 5-10 seconds for this to update.</p>
+</li>
+<li>
+<p>Watch on the console until the NCN has successfully booted and the login prompt is reached.</p>
+<blockquote>
+<p>If the NCN fails to PXE boot, then it may be necessary to force the NCN to boot from disk.</p>
+<p>Power off the NCN:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>external# SYSTEM_NAME<span style="color:#f92672">=</span>eniac
+</span></span><span style="display:flex;"><span>external# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>SYSTEM_NAME<span style="color:#e6db74">}</span>-ncn-m001-mgmt -I lanplus power off
+</span></span><span style="display:flex;"><span>external# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>SYSTEM_NAME<span style="color:#e6db74">}</span>-ncn-m001-mgmt -I lanplus power status
+</span></span></code></pre></div><p>Set the boot device for the next boot to disk:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>external# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>SYSTEM_NAME<span style="color:#e6db74">}</span>-ncn-m001-mgmt -I lanpluschassis bootdev disk
+</span></span></code></pre></div><p>Power on the NCN:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>external# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>SYSTEM_NAME<span style="color:#e6db74">}</span>-ncn-m001-mgmt -I lanplus power on
+</span></span><span style="display:flex;"><span>external# ipmitool -U root -P PASSWORD -H <span style="color:#e6db74">${</span>SYSTEM_NAME<span style="color:#e6db74">}</span>-ncn-m001-mgmt -I lanplus power status
+</span></span></code></pre></div><p>Continue to watch the console as the NCN boots.</p>
+</blockquote>
+</li>
+<li>
+<p>Login to <code>ncn-m001</code> and ensure that the hostname matches what was being reported before the reboot.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# hostname
+</span></span></code></pre></div><p>If the hostname after reboot does not match the hostname from before the reboot, the hostname will need to be reset followed by another reboot.
+The following command will need to be run on the cli for the NCN that has just been rebooted (and is incorrect).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# hostname<span style="color:#f92672">=</span>ncn-m001
+</span></span><span style="display:flex;"><span>ncn-m001# hostnamectl set-hostname $hostname
+</span></span></code></pre></div><p>where <code>$hostname</code> is the original hostname from before reboot</p>
+<p>Follow the procedure outlined above to <code>Power cycle the node</code> again and verify the hostname is correctly set, afterward.</p>
+</li>
+<li>
+<p>Disconnect from the console.</p>
+</li>
+<li>
+<p>Set <code>CSM_SCRIPTDIR</code> to the scripts directory included in the docs-csm RPM for the CSM 0.9.5 patch:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# export CSM_SCRIPTDIR<span style="color:#f92672">=</span>/usr/share/doc/metal/upgrade/0.9/csm-0.9.5/scripts
+</span></span></code></pre></div></li>
+<li>
+<p>Run the platform health checks from the <a href="/docs-csm/en-09/008-csm-validation/#platform-health-checks">Validate CSM Health</a> procedure. The <code>BGP Peering Status and Reset</code> procedure can be skipped, as a different procedure in the next step step 10 will be used to verify the BGP peering status.</p>
+<p>Recall that updated copies of the two HealthCheck scripts referenced in the <code>Platform Health Checks</code> can be run from here:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CSM_SCRIPTDIR<span style="color:#e6db74">}</span><span style="color:#e6db74">/ncnHealthChecks.sh&#34;</span>
+</span></span><span style="display:flex;"><span>ncn-m001# <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CSM_SCRIPTDIR<span style="color:#e6db74">}</span><span style="color:#e6db74">/ncnPostgresHealthChecks.sh&#34;</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Ensure that BGP sessions are reset so that all BGP peering sessions with the spine switches are in an ESTABLISHED state.</p>
+<p>See <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/">Check BGP Status and Reset Sessions</a>.</p>
+</li>
+</ol>
+</li>
+</ol>
+
+
+<footer class="footline">
+	
+</footer>
+
+        
+        </div>
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+
+        
+
+
+	 
+	 
+    </div>
+
+    </section>
+
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/docs-csm/js/clipboard.min.js?1729741358"></script>
+    <script src="/docs-csm/js/perfect-scrollbar.min.js?1729741358"></script>
+    <script src="/docs-csm/js/perfect-scrollbar.jquery.min.js?1729741358"></script>
+    <script src="/docs-csm/js/jquery.sticky.js?1729741358"></script>
+    <script src="/docs-csm/js/featherlight.min.js?1729741358"></script>
+    <script src="/docs-csm/js/highlight.pack.js?1729741358"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/docs-csm/js/modernizr.custom-3.6.0.js?1729741358"></script>
+    <script src="/docs-csm/js/learn.js?1729741358"></script>
+    <script src="/docs-csm/js/hugo-learn.js?1729741358"></script>
+    
+        
+            <script src="/docs-csm/mermaid/mermaid.js?1729741358"></script>
+        
+        <script>
+            mermaid.initialize({ startOnLoad: true });
+        </script>
+    
+    
+
+  </body>
+</html>
+

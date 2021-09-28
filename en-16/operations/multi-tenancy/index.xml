@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>multi-tenancy on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-16/operations/multi-tenancy/</link>
+    <description>Recent content in multi-tenancy on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-16</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:28 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-16/operations/multi-tenancy/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Cray HNC Manager</title>
+      <link>/docs-csm/en-16/operations/multi-tenancy/crayhncmanager/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/multi-tenancy/crayhncmanager/</guid>
+      <description>Cray HNC Manager Overview Terminology Tenant naming requirements kubectl HNS plugin Resource propagation Overview The Hierarchical Namespace Controller (HNC) is deployed as part of the multi-tenancy solution for namespace management and object propagation. This controller is deployed in CSM with the cray-hnc-manager Helm chart. This HNC controller is only managing the following namespaces related to multi-tenancy:&#xA;multi-tenancy slurm-operator tapms-operator tenants Any namespaces created for a given tenant (prefixed with vcluster-* by default) Generally, operations for managing tenants do not require interacting explicitly with the HNC controller, aside from the initial configuration.</description>
+    </item>
+    <item>
+      <title>Creating a Tenant</title>
+      <link>/docs-csm/en-16/operations/multi-tenancy/create_a_tenant/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/multi-tenancy/create_a_tenant/</guid>
+      <description>Creating a Tenant Overview TAPMS CRD Apply the TAPMS CR slurm operator CRD Apply the slurm operator CR Overview This page provides information about how to create a tenant. This procedure involves creating a Custom Resource Definition (CRD) and then applying the Custom Resource (CR), for both tapms and the slurm operator.&#xA;TAPMS CRD Tenant provisioning is handled in a declarative fashion, by creating a CR with the specification for the tenant.</description>
+    </item>
+    <item>
+      <title>Example Workflow</title>
+      <link>/docs-csm/en-16/operations/multi-tenancy/exampleworkflow/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/multi-tenancy/exampleworkflow/</guid>
+      <description>Example Workflow Overview Configuration Tenant Configuration Tenant Names Tenant API version SlurmCluster Configuration SlurmCluster Names SlurmCluster IP Addresses SlurmCluster API version SlurmCluster Configurable Values SlurmCluster Version Numbers SlurmCluster Slurm configuration SlurmCluster Slingshot VNI Allocation SlurmCluster Partitions and Nodes SlurmCluster Secrets (for nonroot users) USS Configuration Updates Step-by-Step Guide Create and apply tenant configuration file Create and apply the SlurmCluster configuration file Edit and apply Slurm configuration file Edit Slurm configuration file sssd.</description>
+    </item>
+    <item>
+      <title>Global Tenant Hooks</title>
+      <link>/docs-csm/en-16/operations/multi-tenancy/globaltenanthooks/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/multi-tenancy/globaltenanthooks/</guid>
+      <description>Global Tenant Hooks Overview Creating a global tenant hook CRD Apply the global tenant hook CR Overview Global Tenant Hooks behave in a similar manner to hooks defined in the tenant definition, but apply to all tenants. This is useful for cases where administrators want to be alerted to all tenant events regardless of the tenant definition.&#xA;Create a Global Hook CRD Creating a global tenant hook involves creating a Custom Resource Definition (CRD) and then applying the Custom Resource (CR).</description>
+    </item>
+    <item>
+      <title>Modifying a Tenant</title>
+      <link>/docs-csm/en-16/operations/multi-tenancy/modify_a_tenant/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/multi-tenancy/modify_a_tenant/</guid>
+      <description>Modifying a Tenant Overview Modify the existing TAPMS CR Apply the modified TAPMS CR Modify the slurm operator CR Apply the slurm operator CR Modify the Slurm configuration Update component records in BOS Overview This page provides information about how to modify a tenant. Modifications that are supported are limited to:&#xA;Updating the list of component names (xnames) assigned to this tenant. Adding/deleting childNamespaces. Modify the existing TAPMS CR An example of a change to add a component name (xname) to a tenant:</description>
+    </item>
+    <item>
+      <title>Multi-Tenancy Support</title>
+      <link>/docs-csm/en-16/operations/multi-tenancy/overview/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/multi-tenancy/overview/</guid>
+      <description>Multi-Tenancy Support Disclaimer Components Hierarchical Namespace Controller (HNC) Tenant and Partition Management System (TAPMS) Slurm operator Vault integration Global tenant hooks Getting started Create a tenant Modify a tenant Remove a tenant Tenant administrator configuration Example Workflow Disclaimer IMPORTANT This feature is in alpha, collectively denoted by the API versioning strategy associated with TAPMS and other operators represented herein. Users should expect breaking changes in the API across CSM releases as the feature set gains operational exposure and enhancements are introduced, ultimately leading to more stable API version series (for example, beta, and then stable).</description>
+    </item>
+    <item>
+      <title>Removing a Tenant</title>
+      <link>/docs-csm/en-16/operations/multi-tenancy/remove_a_tenant/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:28 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/multi-tenancy/remove_a_tenant/</guid>
+      <description>Removing a Tenant Overview Remove the Slurm operator Custom Resource (CR) Delete the tenant&amp;rsquo;s Custom Resource (CR) Overview This page provides describes how an infrastructure administrator (not a tenant administrator) can remove a tenant when appropriate.&#xA;IMPORTANT Removing a tenant is a permanent operation and cannot be reverted. Removing a tenant will remove all tenant-related namespaces from Kubernetes, along with any Kubernetes resources in those namespaces.&#xA;Remove the Slurm operator Custom Resource (CR) (ncn-mw#) To remove a Slurm tenant instance, delete the custom resource with kubectl:</description>
+    </item>
+    <item>
+      <title>Slurm Operator</title>
+      <link>/docs-csm/en-16/operations/multi-tenancy/slurmoperator/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:28 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/multi-tenancy/slurmoperator/</guid>
+      <description>Slurm Operator Overview Troubleshooting Overview The Slurm operator can be used to deploy Slurm within a tenant, so each tenant can have a separate instance of Slurm. The Slurm operator is distributed as part of USS, and is installed if uss.deploy_slurm is enabled in site_vars.yaml during IUF installation.&#xA;Troubleshooting (ncn-mw#) The following commands can provide information to assist in troubleshooting.&#xA;Check the Slurm operator logs.&#xA;kubectl logs -n slurm-operator --timestamps --tail=-1 -c slurm-operator -lapp=slurm-operator Check the status of a Slurm custom resource.</description>
+    </item>
+    <item>
+      <title>TAPMS (Tenant and Partition Management System) Overview</title>
+      <link>/docs-csm/en-16/operations/multi-tenancy/tapms/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:28 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/multi-tenancy/tapms/</guid>
+      <description>TAPMS (Tenant and Partition Management System) Overview TAPMS (Tenant and Partition Management System) Overview Overview Tenant schema Reconcile operations Tenant states Webhook payload Overview tapms is the primary Kubernetes operator through which tenant creation and management is handled. This operator interacts with several other services in the CSM software stack to provision the necessary components for a given tenant. This document gives an overview of its functionality.&#xA;Tenant schema See the Tenant Custom Resource Definition for the full schema.</description>
+    </item>
+    <item>
+      <title>Tenant Administrator Configuration</title>
+      <link>/docs-csm/en-16/operations/multi-tenancy/tenantadminconfig/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:28 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/multi-tenancy/tenantadminconfig/</guid>
+      <description>Tenant Administrator Configuration Overview Cray CLI integration Kubernetes OIDC API integration Tenant-specific Keycloak groups Roles and Rolebindings Retrieve an OIDC token Using kubelogin Overview This page describes how to configure a user as a Tenant Administrator, allowing that person to perform administrative functions on one or more tenants, without giving them the same permissions an Infrastructure Administrator would have.&#xA;Cray CLI integration When using the cray CLI for various operations specific to tenant-owned resources (Compute/Application Nodes), the CLI should be scoped to the appropriate tenant when cray init is executed.</description>
+    </item>
+    <item>
+      <title>Multi-Tenancy Vault Overview</title>
+      <link>/docs-csm/en-16/operations/multi-tenancy/vault/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:28 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/multi-tenancy/vault/</guid>
+      <description>Multi-Tenancy Vault Overview Overview Transit Engine Creation Transit Engine Modifications Transit Engine Removal Overview When a tenant is created or modified, the TAPMS operator can optionally create a tenant-specific Cray Vault transit engine for the purpose of data encryption/decryption as required. In addition to enabling the transit engine, the tenant administrator can optionally define the encryption key algorithm and name. See the TAPMS Overview for details on the schema and links to the CRD which also documents any default values.</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,154 @@
+#
+# MIT License
+#
+# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: prepare-managed-images
+spec:
+  entrypoint: main
+  templates:
+    ### Main Steps ###
+    - name: main
+      metrics:
+        prometheus:
+        - name: operation_counter
+          help: "Count of step execution by result status"
+          labels:
+            - key: "opname"
+              value: "prepare-managed-images"
+            - key: stage
+              value: "prepare-images"
+            - key: type
+              value: "global"
+            - key: pname
+              value: "global"
+            - key: pversion
+              value: "global"
+            - key: status
+              value: "{{status}}"
+          counter:
+            value: "1"
+      inputs:
+        parameters:
+          - name: auth_token
+          - name: global_params
+      steps:
+        - - name: start-operation
+            templateRef:
+              name: workflow-template-record-time-template
+              template: record-time-template
+        - - name: sat-bootprep-run
+            templateRef:
+              name: sat-general-template
+              template: sat-wrapper
+            arguments:
+              parameters:
+                - name: auth_token
+                  value: "{{inputs.parameters.auth_token}}"
+                - name: media_dir
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_dir')}}"
+                - name: script_content
+                  value: |
+                    MEDIA_DIR="{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_dir')}}"
+                    BOOTPREP_FILE_PATH="{{=jsonpath(inputs.parameters.global_params, '$.input_params.bootprep_config_managed')}}"
+                    if [[ -z "$BOOTPREP_FILE_PATH" ]]; then
+                      echo "INFO Cannot access bootprep config file (Input parameter '-bc' not provided). Skipping the 'prepare-managed-images' operation" 1>&2
+                      exit 0
+                    else
+                      echo "INFO Using bootprep file $BOOTPREP_FILE_PATH for preparing images on managed nodes" 1>&2
+                    fi
+
+                    VARS_FILE_PATH=$(mktemp)
+                    cat > $VARS_FILE_PATH <<- 'EOF'
+                      {{=toJson(jsonpath(inputs.parameters.global_params, '$.site_params.products'))}}
+                    EOF
+                    sat bootprep run \
+                      --limit images --limit session_templates \
+                      --overwrite-images --overwrite-templates \
+                      --vars-file "$VARS_FILE_PATH" \
+                      --format json \
+                      --bos-version v2 \
+                      $MEDIA_DIR/$BOOTPREP_FILE_PATH
+                    rc=$?
+                    if [ $rc -ne 0 ]; then
+                      echo "ERROR Bootprep for managed nodes failed. Please refer to the operations > configuration_management > Accessing_Sat_Bootprep_Files section of the CSM documentation and then re-run the 'prepare-images' stage" 1>&2
+                      echo -e "ERROR <sat bootprep run --limit images --limit session_templates --overwrite-images --overwrite-templates --vars-file "$VARS_FILE_PATH" --format json --bos-version v2 $MEDIA_DIR/$BOOTPREP_FILE_PATH> failed" 1>&2
+                      exit $rc
+                    fi
+        - - name: end-operation
+            templateRef:
+              name: workflow-template-record-time-template
+              template: record-time-template
+
+        - - name:  prom-metrics
+            template: prom-metrics
+            arguments:
+              parameters:
+              - name: opstart
+                value: "{{steps.start-operation.outputs.result}}"
+              - name: opend
+                value: "{{steps.end-operation.outputs.result}}"
+              - name: pdname
+                value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
+              - name: pdversion
+                value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
+
+    - name: prom-metrics
+      inputs:
+        parameters:
+        - name: opstart
+        - name: opend
+        - name: pdname
+        - name: pdversion
+      metrics:
+        prometheus:
+          - name: operation_time
+            help: "Duration gauge by operation name in seconds"
+            labels:
+              - key: opname
+                value: "prepare-managed-images"
+              - key: stage
+                value: "prepare-images"
+              - key: type
+                value: "global"
+              - key: pdname
+                value: "global"
+              - key: pdversion
+                value: "global"
+              - key: opstart
+                value: "{{inputs.parameters.opstart}}"
+              - key: opend
+                value: "{{inputs.parameters.opend}}"
+            gauge:
+              value: "{{outputs.parameters.diff-time-value}}"
+      outputs:
+        parameters:
+          - name: diff-time-value
+            globalName: diff-time-value
+            valueFrom:
+              path: /tmp/diff_time.txt
+      container:
+        image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
+        command: [sh, -c]
+        args: ["DIFF_TIME=$(expr {{inputs.parameters.opend}} - {{inputs.parameters.opstart}}); echo $DIFF_TIME; echo $DIFF_TIME > /tmp/diff_time.txt"] 

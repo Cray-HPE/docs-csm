@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>System Admin Toolkit (SAT) on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-16/operations/system_admin_toolkit/</link>
+    <description>Recent content in System Admin Toolkit (SAT) on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-16</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:39:01 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-16/operations/system_admin_toolkit/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SAT Uninstall and Downgrade</title>
+      <link>/docs-csm/en-16/operations/system_admin_toolkit/sat_uninstall_and_downgrade/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:01 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_admin_toolkit/sat_uninstall_and_downgrade/</guid>
+      <description>SAT Uninstall and Downgrade Uninstall: Remove a Version of SAT This procedure can be used to uninstall a version of SAT installed as a separate product stream. This is an optional procedure. Its main benefits are that it will free up a small amount of space in Nexus, and it may reduce confusion by removing additional outdated SAT versions from the cray-product-catalog Kubernetes ConfigMap.&#xA;This procedure cannot be used to uninstall the version of SAT included in the CSM release.</description>
+    </item>
+    <item>
+      <title>SAT on an External System</title>
+      <link>/docs-csm/en-16/operations/system_admin_toolkit/sat_on_an_external_system/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:01 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_admin_toolkit/sat_on_an_external_system/</guid>
+      <description>SAT on an External System The sat command-line utility can optionally be installed and configured on an external system to interact with CSM over the CAN.&#xA;Limitations Most sat commands work by accessing APIs which are reachable via the CAN. However, certain sat commands depend on host-based functionality on the management NCNs and will not work from an external system. This includes the following:&#xA;The platform-services and ncn-power stages of sat bootsys The local host information displayed by the --local option of sat showrev Installing the sat CLI on an external system is not an officially supported configuration.</description>
+    </item>
+  </channel>
+</rss>

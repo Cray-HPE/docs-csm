@@ -1,0 +1,148 @@
+#
+# MIT License
+#
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: migrate-cilium 
+  namespace: argo
+spec:
+  entrypoint: main
+  templates:
+    - name: main
+      inputs:
+        parameters:
+          - name: targetNcn
+          - name: dryRun
+      dag:
+        tasks:
+        - name: cordon 
+          templateRef:
+            name: kubectl-and-curl-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  kubectl get node {{inputs.parameters.targetNcn}} || res=$?
+                  # only delete a ncn that exists in cluster
+                  if [[ $res -eq 0 ]]; then
+                    kubectl cordon {{inputs.parameters.targetNcn}}
+                  fi
+        - name: drain
+          dependencies:
+            - cordon 
+          templateRef:
+            name: kubectl-and-curl-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  kubectl get node {{inputs.parameters.targetNcn}} || res=$?
+                  # only delete a ncn that exists in cluster
+                  if [[ $res -eq 0 ]]; then
+                    echo "draining {{inputs.parameters.targetNcn}}"
+                    kubectl drain --ignore-daemonsets --delete-emptydir-data {{inputs.parameters.targetNcn}}
+                  fi
+        - name: promote-cilium 
+          dependencies:
+            - drain
+          templateRef:
+            name: kubectl-and-curl-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  echo "promoting cilium on {{inputs.parameters.targetNcn}}"
+                  export NODE={{inputs.parameters.targetNcn}}
+                  kubectl label node $NODE --overwrite "io.cilium.migration/cilium-default=true"
+                  kubectl -n kube-system delete pod --field-selector spec.nodeName=$NODE -l k8s-app=cilium
+                  kubectl -n kube-system rollout status ds/cilium -w
+        - name: restart-daemonsets 
+          dependencies:
+            - promote-cilium 
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  echo "restarting daemonsets on {{inputs.parameters.targetNcn}}"
+                  NODE={{inputs.parameters.targetNcn}}
+                  kubectl get node ${NODE} >/dev/null 2>&1 || { echo "Error: Invalid node name ${NODE}"; exit 1; }
+
+                  while read -r ns pod; do
+                    echo "Restarting pod $pod"
+                    kubectl -n $ns delete pod $pod
+                  done < <(kubectl get pods -A -o json | jq -j --arg n "$NODE" '.items[] | select (.spec.nodeName==$n) | select(.spec.hostNetwork!=true) |.metadata.namespace, " ", .metadata.name, "\n"')
+        - name: uncordon 
+          dependencies:
+            - restart-daemonsets 
+          templateRef:
+            name: kubectl-and-curl-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  kubectl uncordon {{inputs.parameters.targetNcn}}
+        - name: wait-for-pods 
+          dependencies:
+            - uncordon 
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  echo "waiting for pods to start" 
+                  cilium status --wait
+                  sleep 60
+        - name: validate 
+          dependencies:
+          - wait-for-pods 
+          templateRef:
+              name: post-cilium-migrate-healthcheck
+              template: main
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: targetNcn
+                value: "{{inputs.parameters.targetNcn}}" 

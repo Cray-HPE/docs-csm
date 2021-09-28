@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>workflows on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-16/operations/iuf/workflows/</link>
+    <description>Recent content in workflows on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-16</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:25 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-16/operations/iuf/workflows/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Backup</title>
+      <link>/docs-csm/en-16/operations/iuf/workflows/backup/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/iuf/workflows/backup/</guid>
+      <description>Backup This section describes procedures that back up critical state in case it becomes necessary to fall back to previous configurations and software.&#xA;1. Backup 1.1 Slingshot Fabric Manager 2. Next steps 1. Backup 1.1 Slingshot Fabric Manager Create a backup of the HPE Slingshot Fabric Manager prior to proceeding with the workflow. Refer to the &amp;ldquo;Create a backup of a Fabric Manager configuration&amp;rdquo; section in the HPE Slingshot Installation Guide for CSM for details on how to perform this operation.</description>
+    </item>
+    <item>
+      <title>Configuration</title>
+      <link>/docs-csm/en-16/operations/iuf/workflows/configuration/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/iuf/workflows/configuration/</guid>
+      <description>Configuration This section ensures product configuration has been defined, customized, and is available for later steps in the workflow.&#xA;This workflow uses ${ADMIN_DIR} to retain files that define site preferences for IUF. ${ADMIN_DIR} is defined separately from ${ACTIVITY_DIR} and ${MEDIA_DIR} based on the assumption that the files in ${ADMIN_DIR} will be used when performing future IUF operations unrelated to this workflow.&#xA;NOTE The following steps assume ${ADMIN_DIR} is empty. If this is not the case, i.</description>
+    </item>
+    <item>
+      <title>Configuration of the Slingshot Fabric Manager</title>
+      <link>/docs-csm/en-16/operations/iuf/workflows/configuration_of_sfm/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/iuf/workflows/configuration_of_sfm/</guid>
+      <description>Configuration of the Slingshot Fabric Manager This section configures the Slingshot Fabric Manager.&#xA;1. Manual configuration of the Slingshot Fabric Manager 2. Next steps 1. Manual configuration of the Slingshot Fabric Manager Instructions to configure the HPE Slingshot Fabric Manager are provided in the &amp;ldquo;Install HPE Slingshot Fabric Manager software&amp;rdquo; section of the HPE Slingshot Installation Guide for CSM.&#xA;For systems with Slingshot NICs, also follow the instructions in the &amp;ldquo;Installing 200Gbps NIC host software&amp;rdquo; section of the HPE Slingshot Installation Guide for CSM.</description>
+    </item>
+    <item>
+      <title>Deploy product</title>
+      <link>/docs-csm/en-16/operations/iuf/workflows/deploy_product/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/iuf/workflows/deploy_product/</guid>
+      <description>Deploy product Execute the IUF deploy-product stage Upgrade Kubernetes Next steps 1. Execute the IUF deploy-product stage The &amp;ldquo;Install and Upgrade Framework&amp;rdquo; section of each individual product&amp;rsquo;s installation document may contain special actions that need to be performed outside of IUF for a stage. The &amp;ldquo;IUF Stage Documentation Per Product&amp;rdquo; section of the HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052) provides a table that summarizes which product documents contain information or actions for the deploy-product stage.</description>
+    </item>
+    <item>
+      <title>Image preparation</title>
+      <link>/docs-csm/en-16/operations/iuf/workflows/image_preparation/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/iuf/workflows/image_preparation/</guid>
+      <description>Image preparation This section creates CFS configurations and bootable images that will be used by later steps in the workflow.&#xA;Before proceeding, ensure any site customizations to product content stored in VCS have been made per Perform manual product configuration operations to ensure CFS configurations and images are created with the correct content and configuration values.&#xA;1. Execute the IUF update-cfs-config and prepare-images stages 2. Manually prepare additional images 2.1 ARM images 3.</description>
+    </item>
+    <item>
+      <title>Install or upgrade additional products with IUF</title>
+      <link>/docs-csm/en-16/operations/iuf/workflows/install_or_upgrade_additional_products_with_iuf/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/iuf/workflows/install_or_upgrade_additional_products_with_iuf/</guid>
+      <description>Install or upgrade additional products with IUF This procedure is used to accomplish either of the following:&#xA;Initial installation of additional HPE Cray EX software products on an HPE Cray EX system on which CSM is already installed. Upgrade of additional HPE Cray EX software products when CSM itself is not being upgraded. This procedure is not used to perform an upgrade of CSM and additional HPE Cray EX software products.</description>
+    </item>
+    <item>
+      <title>Managed rollout</title>
+      <link>/docs-csm/en-16/operations/iuf/workflows/managed_rollout/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/iuf/workflows/managed_rollout/</guid>
+      <description>Managed rollout This section updates the software running on managed compute and application (UAN, etc.) nodes.&#xA;1. Update managed host firmware (FAS) 2. Execute the IUF managed-nodes-rollout stage 2.1 LNet router nodes and gateway nodes 2.2 Compute nodes 2.3 Application nodes 3. Update managed host Slingshot NIC firmware 4. Execute the IUF post-install-check stage 5. Next steps 1. Update managed host firmware (FAS) Refer to Update Firmware with FAS for details on how to upgrade the firmware on managed nodes.</description>
+    </item>
+    <item>
+      <title>Management rollout</title>
+      <link>/docs-csm/en-16/operations/iuf/workflows/management_rollout/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/iuf/workflows/management_rollout/</guid>
+      <description>Management rollout This section updates the software running on management NCNs.&#xA;1. Perform Slingshot switch firmware updates 2. Update management host firmware (FAS) 3. Execute the IUF management-nodes-rollout stage 3.1 management-nodes-rollout with CSM upgrade 3.2 management-nodes-rollout without CSM upgrade 3.3 NCN worker nodes 4. Update management host Slingshot NIC firmware 5. Next steps 1. Perform Slingshot switch firmware updates NOTE This subsection is optional and can be skipped if upgrading only CSM through IUF.</description>
+    </item>
+    <item>
+      <title>Prepare for the install or upgrade</title>
+      <link>/docs-csm/en-16/operations/iuf/workflows/preparation/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/iuf/workflows/preparation/</guid>
+      <description>Prepare for the install or upgrade This section defines environment variables and directory content that is used throughout the workflow.&#xA;1. Prepare for the install or upgrade 2. Use of iuf activity 3. Save system state before upgrade 4. Next steps 1. Prepare for the install or upgrade Create timestamped media, activity, and administrator directories on ncn-m001.&#xA;The following environment variables are used throughout the workflow:&#xA;Name Recommended Value Description ${ACTIVITY_NAME} Use a short descriptor for the activity String identifier for the IUF activity and the iuf -a argument for all iuf commands ${MEDIA_DIR} /etc/cray/upgrade/csm/media/&amp;quot;${ACTIVITY_NAME}&amp;quot; Directory containing product distribution files ${ACTIVITY_DIR} /etc/cray/upgrade/csm/iuf/&amp;quot;${ACTIVITY_NAME}&amp;quot; Directory containing IUF activity logs and state ${ADMIN_DIR} /etc/cray/upgrade/csm/admin Directory containing files that define default values and site preferences for IUF, e.</description>
+    </item>
+    <item>
+      <title>Product delivery</title>
+      <link>/docs-csm/en-16/operations/iuf/workflows/product_delivery/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/iuf/workflows/product_delivery/</guid>
+      <description>Product delivery This section ensures the product content is loaded onto the system and available for later steps in the workflow.&#xA;Execute the IUF process-media and pre-install-check stages Update customizations.yaml Execute the IUF deliver-product stage Perform manual product delivery operations Next steps 1. Execute the IUF process-media and pre-install-check stages The &amp;ldquo;Install and Upgrade Framework&amp;rdquo; section of each individual product&amp;rsquo;s installation document may contain special actions that need to be performed outside of IUF for a stage.</description>
+    </item>
+    <item>
+      <title>Upgrade CSM and additional products</title>
+      <link>/docs-csm/en-16/operations/iuf/workflows/upgrade_csm_and_additional_products/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/iuf/workflows/upgrade_csm_and_additional_products/</guid>
+      <description>Upgrade CSM and additional products This procedure is used when performing an upgrade of Cray System Management (CSM) along with additional HPE Cray EX software products at the same time. This procedure would be used when upgrading from one HPC CSM Software Recipe release to another.&#xA;This procedure is not used to perform an initial install or upgrade of HPE Cray EX software products when CSM itself is not being upgraded.</description>
+    </item>
+    <item>
+      <title>Upgrade CSM and additional products with IUF</title>
+      <link>/docs-csm/en-16/operations/iuf/workflows/upgrade_csm_iuf_additional_products_with_iuf/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/iuf/workflows/upgrade_csm_iuf_additional_products_with_iuf/</guid>
+      <description>Upgrade CSM and additional products with IUF Note: From CSM 1.6, CSM supports upgrade through IUF. All CSM-specific steps mentioned in Upgrade CSM manually and additional products with IUF are now part of CSM Upgrade with IUF.&#xA;All stages of iuf are executed in this option. All of the new product software provided in the recipe release is deployed and all management NCNs and managed compute nodes and application nodes are rebooted to new images and Configuration Framework Service (CFS) configurations.</description>
+    </item>
+    <item>
+      <title>Upgrade CSM manually and additional products with IUF</title>
+      <link>/docs-csm/en-16/operations/iuf/workflows/upgrade_csm_manual_and_additional_products_with_iuf/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:25 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/iuf/workflows/upgrade_csm_manual_and_additional_products_with_iuf/</guid>
+      <description>Upgrade CSM manually and additional products with IUF All stages of iuf are executed in this procedure. All of the new product software provided in the recipe release is deployed and all management NCNs and managed compute nodes and application nodes are rebooted to new images and Configuration Framework Service (CFS) configurations. Manual operations are documented for procedures that are not currently managed by IUF.&#xA;The upgrade workflow comprises the following procedures.</description>
+    </item>
+    <item>
+      <title>Validate deployment</title>
+      <link>/docs-csm/en-16/operations/iuf/workflows/validate_deployment/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:25 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/iuf/workflows/validate_deployment/</guid>
+      <description>Validate deployment 1. Execute the IUF post-install-service-check stage 2. Next steps 1. Execute the IUF post-install-service-check stage The &amp;ldquo;Install and Upgrade Framework&amp;rdquo; section of each individual product&amp;rsquo;s installation document may contain special actions that need to be performed outside of IUF for a stage. The &amp;ldquo;IUF Stage Documentation Per Product&amp;rdquo; section of the HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052) provides a table that summarizes which product documents contain information or actions for the post-install-service-check stage.</description>
+    </item>
+  </channel>
+</rss>

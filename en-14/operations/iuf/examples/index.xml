@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>examples on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-14/operations/iuf/examples/</link>
+    <description>Recent content in examples on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-14</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:29 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-14/operations/iuf/examples/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>iuf abort Examples</title>
+      <link>/docs-csm/en-14/operations/iuf/examples/iuf_abort/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:28 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/iuf/examples/iuf_abort/</guid>
+      <description>iuf abort Examples (ncn-m001#) Abort activity admin-230126, allowing the current stage to complete.&#xA;iuf -a admin-230126 abort (ncn-m001#) Abort activity admin-230126 immediately, terminating all in progress operations.&#xA;iuf -a admin-230126 abort -f </description>
+    </item>
+    <item>
+      <title>iuf activity Examples</title>
+      <link>/docs-csm/en-14/operations/iuf/examples/iuf_activity/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:28 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/iuf/examples/iuf_activity/</guid>
+      <description>iuf activity Examples (ncn-m001#) Display activity admin-230126.&#xA;iuf -a admin-230126 activity Example output:&#xA;+-----------------------------------------------------------------------------------------------------------------------------------+ | Activity: admin-230126 | +---------------------+---------------+--------------------------------------------+-----------+----------+-------------------------+ | Start | Category | Argo Workflow | Status | Duration | Comment | +---------------------+---------------+--------------------------------------------+-----------+----------+-------------------------+ | 2023-01-27t00:04:05 | in_progress | admin-230126-ebjx3-process-media-cq89t | Succeeded | 0:01:22 | Run process-media | | 2023-01-27t00:05:27 | in_progress | admin-230126-cu8ei-pre-install-check-qllzx | Succeeded | 0:00:58 | Run pre-install-check | | 2023-01-27t00:06:25 | in_progress | admin-230126-cu8ei-deliver-product-qd5hr | Succeeded | 0:10:20 | Run deliver-product | | 2023-01-27t00:16:45 | waiting_admin | None | n/a | 0:41:15 | None | | 2023-01-27t00:58:00 | paused | None | n/a | 1:02:00 | went home to sleep | | 2023-01-27t02:00:00 | paused | None | n/a | 15:05:58 | still sleeping | | 2023-01-27t17:05:58 | blocked | None | n/a | 1:57:54 | waiting for new package | | 2023-01-27t19:03:52 | in_progress | admin-230126-7iz3n-process-media-f622g | Succeeded | 0:01:23 | Run process-media | | 2023-01-27t19:05:15 | waiting_admin | None | n/a | 0:00:00 | None | +---------------------+---------------+--------------------------------------------+-----------+----------+-------------------------+ Summary: Start time: 2023-01-27t00:04:03 End time: 2023-01-27t19:05:15 in_progress: 0:14:03 waiting_admin: 0:41:15 paused: 16:07:58 debug: 0:00:00 blocked: 1:57:54 Total time: 19:01:10 (ncn-m001#) Create a new debug entry and comment for activity admin-230126.</description>
+    </item>
+    <item>
+      <title>iuf list-activities Examples</title>
+      <link>/docs-csm/en-14/operations/iuf/examples/iuf_list_activities/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:28 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/iuf/examples/iuf_list_activities/</guid>
+      <description>iuf list-activities Examples (ncn-m001#) List all activities present on the system.&#xA;iuf list-activities Example output:&#xA;cos-upgrade-230301 fullstack-install-230217 fullstack-upgrade-230222 shs-upgrade-230311 </description>
+    </item>
+    <item>
+      <title>iuf list-stages Examples</title>
+      <link>/docs-csm/en-14/operations/iuf/examples/iuf_list_stages/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:28 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/iuf/examples/iuf_list_stages/</guid>
+      <description>iuf list-stages Examples (ncn-m001#) List the stages for activity admin-230126 along with their status and duration values.&#xA;iuf -a admin-230126 list-stages Example output:&#xA;+----------------------------+---------------------------------------------------------------------------------------+-----------+----------+ | Stage | Description | Status | Duration | +----------------------------+---------------------------------------------------------------------------------------+-----------+----------+ | process-media | Inventory and extract products in the media directory for use in subsequent stages | Succeeded | 0:01:21 | | pre-install-check | Perform pre-install readiness checks | Succeeded | 0:01:13 | | deliver-product | Upload product content onto the system | Succeeded | 0:09:56 | | update-vcs-config | Merge working branches and perform automated VCS configuration | Succeeded | 0:01:12 | | update-cfs-config | Update CFS configuration utilizing sat bootprep | N/A | N/A | | prepare-images | Build and configure management node and/or managed node images utilizing sat bootprep | N/A | N/A | | management-nodes-rollout | Rolling rebuild of management nodes | N/A | N/A | | deploy-product | Deploy services to system | N/A | N/A | | post-install-service-check | Perform post-install checks of deployed product services | N/A | N/A | | managed-nodes-rollout | Rolling reboot of managed nodes | N/A | N/A | | post-install-check | Perform post-install checks | N/A | N/A | +----------------------------+---------------------------------------------------------------------------------------+-----------+----------+ Stage Summary activity: admin-230126 command line: iuf -a admin-230126 -m /etc/cray/upgrade/csm/media/admin-230126 run --site-vars /etc/cray/upgrade/csm/admin/site_vars.</description>
+    </item>
+    <item>
+      <title>iuf restart Examples</title>
+      <link>/docs-csm/en-14/operations/iuf/examples/iuf_restart/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:28 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/iuf/examples/iuf_restart/</guid>
+      <description>iuf restart Examples (ncn-m001#) Begin executing stages process-media through deliver-product for activity admin-230126.&#xA;iuf -a admin-230126 run -b process-media -e deliver-product (ncn-m001#) Forcefully abort activity admin-230126 while it is still executing, causing the current stage to fail immediately.&#xA;iuf -a admin-230126 abort -f (ncn-m001#) Restart activity admin-230126 to re-execute all failed or previously unexecuted steps in all stages of the IUF session specified earlier via iuf run.&#xA;iuf -a admin-230126 restart (ncn-m001#) Begin executing stages process-media through deliver-product for activity admin-230126.</description>
+    </item>
+    <item>
+      <title>iuf resume Examples</title>
+      <link>/docs-csm/en-14/operations/iuf/examples/iuf_resume/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:28 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/iuf/examples/iuf_resume/</guid>
+      <description>iuf resume Examples (ncn-m001#) Begin executing stages process-media through deliver-product for activity admin-230126.&#xA;iuf -a admin-230126 run -b process-media -e deliver-product (ncn-m001#) Forcefully abort activity admin-230126 while it is still executing, causing the current stage to fail immediately.&#xA;iuf -a admin-230126 abort -f (ncn-m001#) Resume activity admin-230126 to re-execute any failed or aborted steps in the most recent stage of the IUF session specified earlier via iuf run and then execute any remaining steps that were not run prior the execution of iuf abort.</description>
+    </item>
+    <item>
+      <title>iuf run Examples</title>
+      <link>/docs-csm/en-14/operations/iuf/examples/iuf_run/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:29 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/iuf/examples/iuf_run/</guid>
+      <description>iuf run Examples NOTE Due to the large number of arguments available for iuf run invocations, these examples only include often used key arguments.&#xA;(ncn-m001#) Execute stages process-media through deliver-product for activity admin-230126.&#xA;iuf -a admin-230126 run -b process-media -e deliver-product (ncn-m001#) Execute stages process-media through deliver-product for activity admin-230126 but skip the pre-install-check stage.&#xA;iuf -a admin-230126 run -b process-media -e deliver-product -s pre-install-check (ncn-m001#) Execute the update-vcs-config stage for activity admin-230126 using recipe variables .</description>
+    </item>
+  </channel>
+</rss>

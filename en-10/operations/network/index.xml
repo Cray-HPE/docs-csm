@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>network on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-10/operations/network/</link>
+    <description>Recent content in network on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-10</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:25 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-10/operations/network/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Access to System Management Services</title>
+      <link>/docs-csm/en-10/operations/network/access_to_system_management_services/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:25 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/access_to_system_management_services/</guid>
+      <description>Access to System Management Services The standard configuration for System Management Services (SMS) is the containerized REST micro-service with a public API. All of the micro-services provide an HTTP interface and are collectively exposed through a single gateway URL. The API gateway for the system is available at a well known URL based on the domain name of the system. It acts as a single HTTPS endpoint for terminating Transport Layer Security (TLS) using the configured certificate authority.</description>
+    </item>
+    <item>
+      <title>Connect to the HPE Cray EX Environment</title>
+      <link>/docs-csm/en-10/operations/network/connect_to_the_hpe_cray_ex_environment/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:25 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/connect_to_the_hpe_cray_ex_environment/</guid>
+      <description>Connect to the HPE Cray EX Environment The HPE Cray EX Management Network (SMNet) has multiple separate physical and logical links that are used to segregate traffic.&#xA;The diagram below shows the available connections from within the SMNet, as well as the connections to the customer network:&#xA;There are multiple ways to connect to the HPE Cray EX environment. The various methods are described in the following table:&#xA;Role Description Administrative External customer network connection to the worker node&amp;rsquo;s hardware management and administrative port Application node access External customer network connection to an Application Node Customer Access Network (CAN) Customer connection to the CAN gateway to access the HPE Cray EX CAN There are also several ways to physically connect to the nodes on the system.</description>
+    </item>
+    <item>
+      <title>Default IP Address Ranges</title>
+      <link>/docs-csm/en-10/operations/network/default_ip_address_ranges/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:25 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/default_ip_address_ranges/</guid>
+      <description>Default IP Address Ranges The initial installation of the system creates default networks with default settings and with no external exposure. These IP address default ranges ensure that no nodes in the system attempt to use the same IP address as a Kubernetes service or pod, which would result in undefined behavior that is extremely difficult to reproduce or debug.&#xA;The following table shows the default IP address ranges:&#xA;Network IP Address Range Kubernetes service network 10.</description>
+    </item>
+    <item>
+      <title>Network</title>
+      <link>/docs-csm/en-10/operations/network/network/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:25 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/network/</guid>
+      <description>Network There are several different networks supported by the HPE Cray EX system. This page outlines the available internal and external networks, as well as the devices that connect to each network.&#xA;External networks Customer network (data center) System networks Hardware Management Network (HMN) Node Management Network (NMN) ClusterStor Management Network High Speed Network (HSN) IP address ranges Access Control Lists (ACLs) External networks Customer network (data center) The following devices are connected to this network:</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>preinstall on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-12/operations/preinstall/</link>
+    <description>Recent content in preinstall on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-12</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:49 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-12/operations/preinstall/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Fresh Install Setting NodeBMC and RouterBMC Redfish Credentials</title>
+      <link>/docs-csm/en-12/operations/preinstall/change_river_bmc_credentials/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:49 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/preinstall/change_river_bmc_credentials/</guid>
+      <description>Fresh Install: Setting NodeBMC and RouterBMC Redfish Credentials These steps are performed before the installation of Shasta System Management or HPCM management software stacks. The goal is to set the BMC Redfish credentials to values that the management software will be expecting so that all software systems work smoothly with the Redfish hardware.&#xA;Prerequisites Before doing these operations, the following is assumed:&#xA;There is a workstation or laptop which can access all target BMCs.</description>
+    </item>
+    <item>
+      <title>Change Credentials on ServerTech PDUs</title>
+      <link>/docs-csm/en-12/operations/preinstall/change_servertech_pdu_credentials/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:49 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/preinstall/change_servertech_pdu_credentials/</guid>
+      <description>Change Credentials on ServerTech PDUs This procedure changes password used by the admn user on ServerTech PDUs. This procedure should be used to update all ServerTech PDUs in the system to the same global credentials.&#xA;NOTE: This procedure only updates the default credentials on the ServerTech PDU hardware. No credentials are set in any management software.&#xA;Prerequisites The ServerTech PDUs must be accessible via a workstation or laptop. Workstation or laptop has the curl command installed.</description>
+    </item>
+    <item>
+      <title>Pre-Install Steps</title>
+      <link>/docs-csm/en-12/operations/preinstall/preinstall/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:49 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/preinstall/preinstall/</guid>
+      <description>Pre-Install Steps This section provides information on what needs to be done before an initial install of CSM.&#xA;Air-Cooled BMC Credentials It is necessary to set the default credentials of all air-cooled BMCs so that CSM Hardware Management can interact with Redfish.&#xA;This procedure is outlined in Change Air-Cooled BMC Credentials.&#xA;Liquid-Cooled BMC Credentials As with air-cooled BMCs, liquid-cooled BMCs also need their credentials changed.&#xA;This procedure is outlined in Change Liquid-Cooled BMC Credentials.</description>
+    </item>
+  </channel>
+</rss>

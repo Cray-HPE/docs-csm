@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>system management health on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-10/operations/system_management_health/</link>
+    <description>Recent content in system management health on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-10</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:40 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-10/operations/system_management_health/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Access System Management Health Services</title>
+      <link>/docs-csm/en-10/operations/system_management_health/access_system_management_health_services/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:39 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/system_management_health/access_system_management_health_services/</guid>
+      <description>Access System Management Health Services All System Management Health services are exposed outside the cluster through the Keycloak gatekeeper and Istio&amp;rsquo;s ingress gateway to enforce the authentication and authorization policies. The URLs to access these services are available on any system with CAN, BGP, MetalLB, and external DNS properly configured. This page provides administrators with the URLs on the system needed to set up the System Management Health services and access their components, via the Grafana and Kiali applications.</description>
+    </item>
+    <item>
+      <title>Configure Prometheus Email Alert Notifications</title>
+      <link>/docs-csm/en-10/operations/system_management_health/configure_prometheus_email_alert_notifications/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:39 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/system_management_health/configure_prometheus_email_alert_notifications/</guid>
+      <description>Configure Prometheus Email Alert Notifications Configure an email alert notification for all Prometheus Postgres replication alerts: PostgresReplicationLagSMA, PostgresReplicationServices, PostgresqlFollowerReplicationLagSMA, and PostgresqlFollowerReplicationLagServices.&#xA;System domain name The SYSTEM_DOMAIN_NAME value found in some of the URLs on this page is expected to be the system&amp;rsquo;s fully qualified domain name (FQDN).&#xA;The FQDN can be found by running the following command on any Kubernetes NCN.&#xA;ncn-mw# kubectl get secret site-init -n loftsman -o jsonpath=&amp;#39;{.data.customizations\.yaml}&amp;#39; | base64 -d | yq r - spec.</description>
+    </item>
+    <item>
+      <title>Grafana Dashboards by Component</title>
+      <link>/docs-csm/en-10/operations/system_management_health/grafana_dashboards_by_component/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:39 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/system_management_health/grafana_dashboards_by_component/</guid>
+      <description>Grafana Dashboards by Component This document show the dashboards that are available for each component in Grafana.&#xA;A Grafana dashboard is a powerful open source analytical and visualization tool that consists of multiple individual panels arranged in a grid. The panels interact with configured data sources, including the following:&#xA;AWS CloudWatch Prometheus Ceph Cluster Host Overview Details MDS Performance OSD Overview Device Details Pool Overview Details RBD Overview RGW Overview Instance Details CoreDNS CoreDNS ETCD Main Clusters Istio Mesh Performance Pilot Service Workload Kea DHCP Kubernetes API server Compute Resources Compute Resources / Cluster Compute Resources / Namespace (Pods) Compute Resources / Namespace (Workloads) Compute Resources / Node (Pods) Compute Resources / Pod Compute Resources / Workload Controller Manager kubelet Networking Networking / Cluster Networking / Namespace (Pods) Networking / Namespace (Workload) Networking / Pod Networking / Workload Persistent Volumes Proxy Scheduler StatefulSets Nodes Exporter Full Main Postgres PostgreSQL Statistics Prometheus Prometheus Use Method Cluster Node </description>
+    </item>
+    <item>
+      <title>System Management Health</title>
+      <link>/docs-csm/en-10/operations/system_management_health/system_management_health/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:39 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/system_management_health/system_management_health/</guid>
+      <description>System Management Health The primary goal of the System Management Health service is to enable system administrators to assess the health of their system. Operators need to quickly and efficiently troubleshoot system issues as they occur and be confident that a lack of issues indicates the system is operating normally. This service currently runs as a Helm chart on the system&amp;rsquo;s management Kubernetes cluster and monitors the health status of core system components, triggering alerts as potential issues are observed.</description>
+    </item>
+    <item>
+      <title>System Management Health Checks and Alerts</title>
+      <link>/docs-csm/en-10/operations/system_management_health/system_management_health_checks_and_alerts/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:39 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/system_management_health/system_management_health_checks_and_alerts/</guid>
+      <description>System Management Health Checks and Alerts A health check corresponds to a Prometheus query against metrics aggregated to the Prometheus instance. Core platform components like Kubernetes and Istio collect service-related metrics by default, which enables the System Management Health service to implement generic service health checks without custom instrumentation. Health checks are intended to be coarse-grained and comprehensive, as opposed to fine-grained and exhaustive. Health checks related to infrastructure adhere to the Utilization Saturation Errors (USE) method whereas services follow the Rate Errors Duration (RED) method.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Prometheus Alerts</title>
+      <link>/docs-csm/en-10/operations/system_management_health/troubleshoot_prometheus_alerts/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:40 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/system_management_health/troubleshoot_prometheus_alerts/</guid>
+      <description>Troubleshoot Prometheus Alerts CephMgrIsAbsent and CephMgrIsMissingReplicas CephNetworkPacketsDropped) CPUThrottlingHigh KubePodNotReady PostgresqlFollowerReplicationLagSMA PostgresqlHighRollbackRate PostgresqlInactiveReplicationSlot PostgresqlNotEnoughConnections CephMgrIsAbsent and CephMgrIsMissingReplicas If the CephMgrIsAbsent and/or CephMgrIsMissingReplicas alerts fire, use the following steps to ensure the prometheus module has been enabled for Ceph. The following steps should be executed on ncn-s001:&#xA;ncn-s001# ceph mgr module ls | jq &amp;#39;.enabled_modules&amp;#39; Example output:&#xA;[ &amp;#34;cephadm&amp;#34;, &amp;#34;iostat&amp;#34;, &amp;#34;restful&amp;#34; ] If prometheus is missing from the output, enable with the following command:</description>
+    </item>
+  </channel>
+</rss>

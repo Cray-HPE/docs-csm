@@ -1,0 +1,5030 @@
+<!DOCTYPE html>
+<html lang="en-09" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.123.0">
+    <meta name="description" content="">
+
+
+    <link rel="icon" href="/docs-csm/images/favicon.png" type="image/png">
+
+    <title>Restrict Network Access to the ncn-images S3 Bucket :: Cray System Management (CSM)</title>
+
+    
+    <link href="/docs-csm/css/nucleus.css?1729741358" rel="stylesheet">
+    <link href="/docs-csm/css/fontawesome-all.min.css?1729741358" rel="stylesheet">
+    <link href="/docs-csm/css/hybrid.css?1729741358" rel="stylesheet">
+    <link href="/docs-csm/css/featherlight.min.css?1729741358" rel="stylesheet">
+    <link href="/docs-csm/css/perfect-scrollbar.min.css?1729741358" rel="stylesheet">
+    <link href="/docs-csm/css/auto-complete.css?1729741358" rel="stylesheet">
+    <link href="/docs-csm/css/atom-one-dark-reasonable.css?1729741358" rel="stylesheet">
+    <link href="/docs-csm/css/theme.css?1729741358" rel="stylesheet">
+    <link href="/docs-csm/css/tabs.css?1729741358" rel="stylesheet">
+    <link href="/docs-csm/css/hugo-theme.css?1729741358" rel="stylesheet">
+    
+    <link href="/docs-csm/css/theme-blue.css?1729741358" rel="stylesheet">
+    
+    
+
+    <script src="/docs-csm/js/jquery-3.3.1.min.js?1729741358"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="/docs-csm/en-09/operations/security_and_authentication/restrict_access_to_ncn_images_s3_bucket/">
+    <nav id="sidebar" class="">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo" href='/docs-csm/en-09'>
+  Cray System Management
+</a>
+
+    </div>
+
+    
+    <section>
+      <ul>
+      
+        <li>
+          <div class="select-style padding">
+          v <select id="select-language" onchange="location = this.value;">
+          
+          
+          
+              
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+                    
+                    
+                      <option id="en-12" value="/docs-csm/en-12/operations/security_and_authentication/restrict_access_to_ncn_images_s3_bucket/">1.2</option>
+                    
+                  
+              
+                  
+              
+                  
+              
+          
+              
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+                    
+                    
+                      <option id="en-10" value="/docs-csm/en-10/operations/security_and_authentication/restrict_access_to_ncn_images_s3_bucket/">1.0</option>
+                    
+                  
+              
+                  
+              
+          
+              
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+              
+                  
+                    
+                    
+                      <option id="en-09" value="/docs-csm/en-09/operations/security_and_authentication/restrict_access_to_ncn_images_s3_bucket/" selected>0.9</option>
+                    
+                  
+              
+          
+        </select>
+        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          width="255px" height="255px" viewBox="0 0 255 255" style="enable-background:new 0 0 255 255;" xml:space="preserve">
+          <g>
+            <g id="arrow-drop-down">
+              <polygon points="0,63.75 127.5,191.25 255,63.75 		" />
+            </g>
+          </g>
+        </svg>
+        </div>
+        </li>
+      
+
+      
+      </ul>
+    </section>
+  
+
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="/docs-csm/js/lunr.min.js?1729741358"></script>
+<script type="text/javascript" src="/docs-csm/js/auto-complete.js?1729741358"></script>
+<script type="text/javascript">
+    
+        var baseurl = "\/docs-csm\/\/en-09";
+    
+</script>
+<script type="text/javascript" src="/docs-csm/js/search.js?1729741358"></script>
+
+    
+  </div>
+
+  
+
+    <div class="highlightable">
+    <ul class="topics">
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/421-mgmt-net-cabling-checklist/" title="1.4 Management network cabling checklist" class="dd-item ">
+        <a href="/docs-csm/en-09/421-mgmt-net-cabling-checklist/">
+        1.4 Management network cabling checklist
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/308-application-node-config/" title="Application Node Config" class="dd-item ">
+        <a href="/docs-csm/en-09/308-application-node-config/">
+        Application Node Config
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/310-cabinets/" title="Cabinets" class="dd-item ">
+        <a href="/docs-csm/en-09/310-cabinets/">
+        Cabinets
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/416-mgmt-net-cabling/" title="Cabling" class="dd-item ">
+        <a href="/docs-csm/en-09/416-mgmt-net-cabling/">
+        Cabling
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/066-ceph-csi/" title="CEPH CSI Verification" class="dd-item ">
+        <a href="/docs-csm/en-09/066-ceph-csi/">
+        CEPH CSI Verification
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/302-ncn-metadata-bondx/" title="Collecting NCN MAC Addresses" class="dd-item ">
+        <a href="/docs-csm/en-09/302-ncn-metadata-bondx/">
+        Collecting NCN MAC Addresses
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/301-ncn-metadata-bmc/" title="Collecting the BMC MAC Addresses" class="dd-item ">
+        <a href="/docs-csm/en-09/301-ncn-metadata-bmc/">
+        Collecting the BMC MAC Addresses
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/257-firmware-action-service-cray-windom-compute-node-bios-workaround/" title="Compute Node BIOS workaround for WNC-rome aka HPE CRAY EX425" class="dd-item ">
+        <a href="/docs-csm/en-09/257-firmware-action-service-cray-windom-compute-node-bios-workaround/">
+        Compute Node BIOS workaround for WNC-rome aka HPE CRAY EX425
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/000-info/" title="CRAY Guide Contribution" class="dd-item ">
+        <a href="/docs-csm/en-09/000-info/">
+        CRAY Guide Contribution
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/063-csi-files/" title="Cray Site Init Files" class="dd-item ">
+        <a href="/docs-csm/en-09/063-csi-files/">
+        Cray Site Init Files
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/release_notes/" title="Cray System Management (CSM) - Release Notes" class="dd-item ">
+        <a href="/docs-csm/en-09/release_notes/">
+        Cray System Management (CSM) - Release Notes
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/001-guides/" title="CSM Documentation Guide" class="dd-item ">
+        <a href="/docs-csm/en-09/001-guides/">
+        CSM Documentation Guide
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/002-csm-install/" title="CSM Install" class="dd-item ">
+        <a href="/docs-csm/en-09/002-csm-install/">
+        CSM Install
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/007-csm-install-reboot/" title="CSM Install Reboot - Final NCN Install" class="dd-item ">
+        <a href="/docs-csm/en-09/007-csm-install-reboot/">
+        CSM Install Reboot - Final NCN Install
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/008-csm-validation/" title="CSM Install Validation and Health Checks" class="dd-item ">
+        <a href="/docs-csm/en-09/008-csm-validation/">
+        CSM Install Validation and Health Checks
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/005-csm-metal-install/" title="CSM Metal Install" class="dd-item ">
+        <a href="/docs-csm/en-09/005-csm-metal-install/">
+        CSM Metal Install
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/006-csm-platform-install/" title="CSM Platform Install" class="dd-item ">
+        <a href="/docs-csm/en-09/006-csm-platform-install/">
+        CSM Platform Install
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/troubleshooting/" title="CSM Troubleshooting Information" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/troubleshooting/">
+          CSM Troubleshooting Information
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/troubleshooting/known_issues/" title="known issues" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/troubleshooting/known_issues/">
+          known issues
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/troubleshooting/known_issues/cfs_sessions_stuck_in_pending/" title="CFS Sessions are Stuck in Pending State" class="dd-item ">
+        <a href="/docs-csm/en-09/troubleshooting/known_issues/cfs_sessions_stuck_in_pending/">
+        CFS Sessions are Stuck in Pending State
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/troubleshooting/known_issues/conman_pod_kubernetes_copy_fails/" title="Copying file from the cray-conman pod fails" class="dd-item ">
+        <a href="/docs-csm/en-09/troubleshooting/known_issues/conman_pod_kubernetes_copy_fails/">
+        Copying file from the cray-conman pod fails
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/troubleshooting/known_issues/orphaned_cfs_pods/" title="Orphaned CFS Pods After Booting or Rebooting" class="dd-item ">
+        <a href="/docs-csm/en-09/troubleshooting/known_issues/orphaned_cfs_pods/">
+        Orphaned CFS Pods After Booting or Rebooting
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/003-csm-usb-livecd/" title="CSM USB LiveCD - Creation and Configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/003-csm-usb-livecd/">
+        CSM USB LiveCD - Creation and Configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/051-disk-cleanslate/" title="Disk Cleanslate" class="dd-item ">
+        <a href="/docs-csm/en-09/051-disk-cleanslate/">
+        Disk Cleanslate
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/255-firmware-action-service-fas/" title="FIRMWARE ACTION SERVICE (FAS) | User Procedures" class="dd-item ">
+        <a href="/docs-csm/en-09/255-firmware-action-service-fas/">
+        FIRMWARE ACTION SERVICE (FAS) | User Procedures
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/256-firmware-action-service-fas-recipes/" title="Firmware Action Service (FAS) Administration Guide" class="dd-item ">
+        <a href="/docs-csm/en-09/256-firmware-action-service-fas-recipes/">
+        Firmware Action Service (FAS) Administration Guide
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/250-firmware/" title="Firmware Checkout" class="dd-item ">
+        <a href="/docs-csm/en-09/250-firmware/">
+        Firmware Checkout
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/010-firmware-update-with-fas/" title="Firmware Update the system with FAS" class="dd-item ">
+        <a href="/docs-csm/en-09/010-firmware-update-with-fas/">
+        Firmware Update the system with FAS
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/254-ncn-firmware-gb/" title="Gigabyte Firmware Bug" class="dd-item ">
+        <a href="/docs-csm/en-09/254-ncn-firmware-gb/">
+        Gigabyte Firmware Bug
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/304-ncn-pcie-net-boot-and-re-cable/" title="Guide  Netboot an NCN from a Spine" class="dd-item ">
+        <a href="/docs-csm/en-09/304-ncn-pcie-net-boot-and-re-cable/">
+        Guide  Netboot an NCN from a Spine
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/068-harvest-13-config/" title="HARVEST 13 CONFIG" class="dd-item ">
+        <a href="/docs-csm/en-09/068-harvest-13-config/">
+        HARVEST 13 CONFIG
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/307-hmn-connections/" title="HMN Connections File" class="dd-item ">
+        <a href="/docs-csm/en-09/307-hmn-connections/">
+        HMN Connections File
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/418-mgmt-net-ip-helper/" title="IP-Helper configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/418-mgmt-net-ip-helper/">
+        IP-Helper configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/061-livecd-metal-basecamp/" title="LiveCD - Metal Basecamp" class="dd-item ">
+        <a href="/docs-csm/en-09/061-livecd-metal-basecamp/">
+        LiveCD - Metal Basecamp
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/060-livecd-1.3-rollback/" title="LiveCD 1.3 Rollback" class="dd-item ">
+        <a href="/docs-csm/en-09/060-livecd-1.3-rollback/">
+        LiveCD 1.3 Rollback
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/059-livecd-backup/" title="LiveCD Re-Installs" class="dd-item ">
+        <a href="/docs-csm/en-09/059-livecd-backup/">
+        LiveCD Re-Installs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/058-livecd-troubleshooting/" title="LiveCD Recovery" class="dd-item ">
+        <a href="/docs-csm/en-09/058-livecd-troubleshooting/">
+        LiveCD Recovery
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/004-csm-remote-livecd/" title="LiveCD Remote ISO Install" class="dd-item ">
+        <a href="/docs-csm/en-09/004-csm-remote-livecd/">
+        LiveCD Remote ISO Install
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/062-livecd-virtual-iso-boot/" title="LiveCD Virtual ISO Boot" class="dd-item ">
+        <a href="/docs-csm/en-09/062-livecd-virtual-iso-boot/">
+        LiveCD Virtual ISO Boot
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/405-mgmt-net-port-config/" title="Management Network Access Port configurations." class="dd-item ">
+        <a href="/docs-csm/en-09/405-mgmt-net-port-config/">
+        Management Network Access Port configurations.
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/406-mgmt-net-acl-config/" title="Management Network ACL configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/406-mgmt-net-acl-config/">
+        Management Network ACL configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/402-mgmt-net-base-config/" title="Management Network Base Configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/402-mgmt-net-base-config/">
+        Management Network Base Configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/408-mgmt-net-can-config/" title="Management Network CAN setup" class="dd-item ">
+        <a href="/docs-csm/en-09/408-mgmt-net-can-config/">
+        Management Network CAN setup
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/412-mgmt-net-dell-mellanox-upgrades/" title="Management Network Dell And Mellanox Upgrades" class="dd-item ">
+        <a href="/docs-csm/en-09/412-mgmt-net-dell-mellanox-upgrades/">
+        Management Network Dell And Mellanox Upgrades
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/413-mgmt-net-example-config/" title="Management Network Example Config" class="dd-item ">
+        <a href="/docs-csm/en-09/413-mgmt-net-example-config/">
+        Management Network Example Config
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/409-mgmt-net-firmware-update/" title="Management Network Firmware Update" class="dd-item ">
+        <a href="/docs-csm/en-09/409-mgmt-net-firmware-update/">
+        Management Network Firmware Update
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/417-mgmt-net-flow-control/" title="Management Network Flow Control Settings" class="dd-item ">
+        <a href="/docs-csm/en-09/417-mgmt-net-flow-control/">
+        Management Network Flow Control Settings
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/411-mgmt-net-layer3-config/" title="Management Network Layer3 Configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/411-mgmt-net-layer3-config/">
+        Management Network Layer3 Configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/404-mgmt-net-mlag-config/" title="Management Network MLAG Configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/404-mgmt-net-mlag-config/">
+        Management Network MLAG Configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/414-mgmt-net-ntp-config/" title="Management Network NTP configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/414-mgmt-net-ntp-config/">
+        Management Network NTP configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/407-mgmt-net-snmp-config/" title="Management Network SNMP configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/407-mgmt-net-snmp-config/">
+        Management Network SNMP configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/419-mgmt-net-stp/" title="Management Network Spanning-Tree Configuration." class="dd-item ">
+        <a href="/docs-csm/en-09/419-mgmt-net-stp/">
+        Management Network Spanning-Tree Configuration.
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/415-mgmt-net-switch-rename/" title="Management Network Switch Rename" class="dd-item ">
+        <a href="/docs-csm/en-09/415-mgmt-net-switch-rename/">
+        Management Network Switch Rename
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/410-mgmt-net-uplink-config/" title="Management Network Uplink configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/410-mgmt-net-uplink-config/">
+        Management Network Uplink configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/403-mgmt-net-vlan-config/" title="Management Network VLAN Configuration" class="dd-item ">
+        <a href="/docs-csm/en-09/403-mgmt-net-vlan-config/">
+        Management Network VLAN Configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/306-sls-add-uan-alias/" title="Manually add UAN Aliases to SLS" class="dd-item ">
+        <a href="/docs-csm/en-09/306-sls-add-uan-alias/">
+        Manually add UAN Aliases to SLS
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/309-move-site-connections/" title="Move Site Connections" class="dd-item ">
+        <a href="/docs-csm/en-09/309-move-site-connections/">
+        Move Site Connections
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/200-ncn-bios-pref/" title="NCN BIOS Preferences" class="dd-item ">
+        <a href="/docs-csm/en-09/200-ncn-bios-pref/">
+        NCN BIOS Preferences
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/101-ncn-booting/" title="NCN Booting" class="dd-item ">
+        <a href="/docs-csm/en-09/101-ncn-booting/">
+        NCN Booting
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/107-ncn-devel/" title="NCN Development" class="dd-item ">
+        <a href="/docs-csm/en-09/107-ncn-devel/">
+        NCN Development
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/253-ncn-hw-swap/" title="NCN Hardware Swaps" class="dd-item ">
+        <a href="/docs-csm/en-09/253-ncn-hw-swap/">
+        NCN Hardware Swaps
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/110-ncn-image-customization/" title="NCN Image Customization" class="dd-item ">
+        <a href="/docs-csm/en-09/110-ncn-image-customization/">
+        NCN Image Customization
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/303-ncn-metadata-usb-serial/" title="NCN Metadata over USB-Serial Cable" class="dd-item ">
+        <a href="/docs-csm/en-09/303-ncn-metadata-usb-serial/">
+        NCN Metadata over USB-Serial Cable
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/106-ncn-sles/" title="NCN Operating System Release" class="dd-item ">
+        <a href="/docs-csm/en-09/106-ncn-sles/">
+        NCN Operating System Release
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/105-ncn-packages/" title="NCN Packages" class="dd-item ">
+        <a href="/docs-csm/en-09/105-ncn-packages/">
+        NCN Packages
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/104-ncn-partitioning/" title="NCN Partitions" class="dd-item ">
+        <a href="/docs-csm/en-09/104-ncn-partitioning/">
+        NCN Partitions
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/009-ncn-locking/" title="NCN/Management Node Locking" class="dd-item ">
+        <a href="/docs-csm/en-09/009-ncn-locking/">
+        NCN/Management Node Locking
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/251-firmware-network/" title="Network Firmware" class="dd-item ">
+        <a href="/docs-csm/en-09/251-firmware-network/">
+        Network Firmware
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/052-network-stack/" title="Network Stack (Software and Hardware)" class="dd-item ">
+        <a href="/docs-csm/en-09/052-network-stack/">
+        Network Stack (Software and Hardware)
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/103-ncn-networking/" title="Networking" class="dd-item ">
+        <a href="/docs-csm/en-09/103-ncn-networking/">
+        Networking
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/252-firmware-ncn/" title="Node Firmware" class="dd-item ">
+        <a href="/docs-csm/en-09/252-firmware-ncn/">
+        Node Firmware
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/100-ncn-images/" title="Non-Compute Node Images" class="dd-item ">
+        <a href="/docs-csm/en-09/100-ncn-images/">
+        Non-Compute Node Images
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/108-ncn-ntp/" title="NTP On NCNs" class="dd-item ">
+        <a href="/docs-csm/en-09/108-ncn-ntp/">
+        NTP On NCNs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/" title="operations" class="dd-item
+        parent
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/">
+          operations
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/boot_orchestration/" title="boot orchestration" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/boot_orchestration/">
+          boot orchestration
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/boot_orchestration/stage_changes_without_bos/" title="Stage Changes Without BOS" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/boot_orchestration/stage_changes_without_bos/">
+        Stage Changes Without BOS
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/boot_orchestration/upload_node_boot_information_to_boot_script_service_bss/" title="Upload Node Boot Information to Boot Script Service (BSS)" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/boot_orchestration/upload_node_boot_information_to_boot_script_service_bss/">
+        Upload Node Boot Information to Boot Script Service (BSS)
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/configuration_management/" title="configuration management" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/configuration_management/">
+          configuration management
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/configuration_management/configuration_layers/" title="Configuration Layers" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/configuration_management/configuration_layers/">
+        Configuration Layers
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/csm_product_management/" title="CSM product management" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/csm_product_management/">
+          CSM product management
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/csm_product_management/apply_security_hardening/" title="Security Hardening" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/csm_product_management/apply_security_hardening/">
+        Security Hardening
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/csm_product_management/change_passwords_and_credentials/" title="Change Passwords and Credentials" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/csm_product_management/change_passwords_and_credentials/">
+        Change Passwords and Credentials
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/kubernetes/" title="kubernetes" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/kubernetes/">
+          kubernetes
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/kubernetes/cert_renewal_for_kubernetes_and_bare_metal_etcd/" title="Kubernetes and Bare Metal EtcD Certificate Renewal" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/kubernetes/cert_renewal_for_kubernetes_and_bare_metal_etcd/">
+        Kubernetes and Bare Metal EtcD Certificate Renewal
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/network/" title="network" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/network/">
+          network
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/network/metallb_bgp/" title="metallb bgp" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/network/metallb_bgp/">
+          metallb bgp
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/" title="Check BGP Status and Reset Sessions" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/">
+        Check BGP Status and Reset Sessions
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/system_management_health/" title="system management health" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/system_management_health/">
+          system management health
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/system_management_health/troubleshoot_prometheus_alerts/" title="Troubleshoot Prometheus Alerts" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/system_management_health/troubleshoot_prometheus_alerts/">
+        Troubleshoot Prometheus Alerts
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/fas_loader/" title="FAS Loader" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/fas_loader/">
+          FAS Loader
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/fas_loader/fas_loader_fails/" title="TROUBLESHOOTING FAS LOADER FAILS" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/fas_loader/fas_loader_fails/">
+        TROUBLESHOOTING FAS LOADER FAILS
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/hmcollector/" title="hmcollector" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/hmcollector/">
+          hmcollector
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/hmcollector/adjust_hmcollector_resource_limits_requests/" title="Adjust HM Collector resource limits and requests" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/hmcollector/adjust_hmcollector_resource_limits_requests/">
+        Adjust HM Collector resource limits and requests
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/" title="security and authentication" class="dd-item
+        parent
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/security_and_authentication/">
+          security and authentication
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/add_ldap_user_federation/" title="Add LDAP User Federation" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/add_ldap_user_federation/">
+        Add LDAP User Federation
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_air-cooled_node_bmc_credentials/" title="Change Air-Cooled Node BMC Credentials" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_air-cooled_node_bmc_credentials/">
+        Change Air-Cooled Node BMC Credentials
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_credentials_on_servertech_pdus/" title="Change Credentials on ServerTech PDUs" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_credentials_on_servertech_pdus/">
+        Change Credentials on ServerTech PDUs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_ex_cabinet_global_default_password/" title="Change Cray EX Cabinet Global Default Password" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_ex_cabinet_global_default_password/">
+        Change Cray EX Cabinet Global Default Password
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys/" title="Change NCN Image Root Password and SSH Keys" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys/">
+        Change NCN Image Root Password and SSH Keys
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys_on_pit_node/" title="Change NCN Image Root Password and SSH Keys on PIT Node" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys_on_pit_node/">
+        Change NCN Image Root Password and SSH Keys on PIT Node
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_smnp_credentials_on_leaf_switches/" title="Change SMNP Credentials on Leaf Switches" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_smnp_credentials_on_leaf_switches/">
+        Change SMNP Credentials on Leaf Switches
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/change_the_keycloak_admin_password/" title="Change the Keycloak Admin Password" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/change_the_keycloak_admin_password/">
+        Change the Keycloak Admin Password
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/provisioning_a_liquid-cooled_ex_cabinet_cec_with_default_credentials/" title="Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/provisioning_a_liquid-cooled_ex_cabinet_cec_with_default_credentials/">
+        Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/restrict_access_to_ncn_images_s3_bucket/" title="Restrict Network Access to the ncn-images S3 Bucket" class="dd-item active">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/restrict_access_to_ncn_images_s3_bucket/">
+        Restrict Network Access to the ncn-images S3 Bucket
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/update_default_air-cooled_bmc_and_leaf_switch_snmp_credentials/" title="Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/update_default_air-cooled_bmc_and_leaf_switch_snmp_credentials/">
+        Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/update_default_servertech_pdu_credentials_used_by_the_redfish_translation_service/" title="Update Default ServerTech PDU Credentials used by the Redfish Translation Service (RTS)" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/update_default_servertech_pdu_credentials_used_by_the_redfish_translation_service/">
+        Update Default ServerTech PDU Credentials used by the Redfish Translation Service (RTS)
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/update_ncn_passwords/" title="Update NCN Passwords" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/update_ncn_passwords/">
+        Update NCN Passwords
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/security_and_authentication/updating_the_liquid-cooled_ex_cabinet_default_credentials_after_a_cec_password_change/" title="Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/security_and_authentication/updating_the_liquid-cooled_ex_cabinet_default_credentials_after_a_cec_password_change/">
+        Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/operations/node_management/" title="node management" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/operations/node_management/">
+          node management
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/node_management/adding_a_liquid-cooled_blade_to_a_system/" title="Adding a Liquid-cooled blade to a System" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/node_management/adding_a_liquid-cooled_blade_to_a_system/">
+        Adding a Liquid-cooled blade to a System
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/" title="Check and Set the metal.no-wipe Setting on NCNs" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/">
+        Check and Set the metal.no-wipe Setting on NCNs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/node_management/enable_kdump/" title="Enable Kdump" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/node_management/enable_kdump/">
+        Enable Kdump
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/node_management/reboot_ncns/" title="Reboot NCNs" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/node_management/reboot_ncns/">
+        Reboot NCNs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/operations/node_management/removing_a_liquid-cooled_blade_from_a_system/" title="Removing a Liquid-cooled blade from a System" class="dd-item ">
+        <a href="/docs-csm/en-09/operations/node_management/removing_a_liquid-cooled_blade_from_a_system/">
+        Removing a Liquid-cooled blade from a System
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/055-certificate-authority/" title="Overview" class="dd-item ">
+        <a href="/docs-csm/en-09/055-certificate-authority/">
+        Overview
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/401-management-network-install/" title="Overview" class="dd-item ">
+        <a href="/docs-csm/en-09/401-management-network-install/">
+        Overview
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/420-mgmt-net-pxe-tshoot/" title="PXE boot Troubleshooting" class="dd-item ">
+        <a href="/docs-csm/en-09/420-mgmt-net-pxe-tshoot/">
+        PXE boot Troubleshooting
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/065-csm-safeguards/" title="Safeguards" class="dd-item ">
+        <a href="/docs-csm/en-09/065-csm-safeguards/">
+        Safeguards
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/300-service-guides/" title="Service Guides" class="dd-item ">
+        <a href="/docs-csm/en-09/300-service-guides/">
+        Service Guides
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/067-shasta-cfg/" title="Setup Site-Init From SHASTA-CFG" class="dd-item ">
+        <a href="/docs-csm/en-09/067-shasta-cfg/">
+        Setup Site-Init From SHASTA-CFG
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/305-switch-metadata/" title="Switch Metadata" class="dd-item ">
+        <a href="/docs-csm/en-09/305-switch-metadata/">
+        Switch Metadata
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/500-uas-uai-admin-and-user-guide/" title="The Shasta User Access Service" class="dd-item ">
+        <a href="/docs-csm/en-09/500-uas-uai-admin-and-user-guide/">
+        The Shasta User Access Service
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/" title="upgrade" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/">
+          upgrade
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/" title="CSM 0.9 Patch Release Upgrade Procedures" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/">
+          CSM 0.9 Patch Release Upgrade Procedures
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.6/" title="CSM 0.9.6 Patch Installation Instructions" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.6/">
+          CSM 0.9.6 Patch Installation Instructions
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.4/" title="CSM 0.9.4 Patch Upgrade Guide" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.4/">
+          CSM 0.9.4 Patch Upgrade Guide
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/" title="CVE-2021-22555 CVE-2021-33909" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/">
+          CVE-2021-22555 CVE-2021-33909
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/" title="operations" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/">
+          operations
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/" title="network" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/">
+          network
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/metallb_bgp/" title="metallb bgp" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/metallb_bgp/">
+          metallb bgp
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/" title="Check BGP Status and Reset Sessions" class="dd-item ">
+        <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/">
+        Check BGP Status and Reset Sessions
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/" title="node management" class="dd-item
+        
+        
+        
+        ">
+      <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/">
+          node management
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/" title="Check and Set the metal.no-wipe Setting on NCNs" class="dd-item ">
+        <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/">
+        Check and Set the metal.no-wipe Setting on NCNs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/reboot_ncns/" title="Reboot NCNs" class="dd-item ">
+        <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/reboot_ncns/">
+        Reboot NCNs
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.2/" title="CSM 0.9.2 Patch Upgrade Guide" class="dd-item ">
+        <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.2/">
+        CSM 0.9.2 Patch Upgrade Guide
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/upgrade/0.9/csm-0.9.3/" title="CSM 0.9.3 Patch Upgrade Guide" class="dd-item ">
+        <a href="/docs-csm/en-09/upgrade/0.9/csm-0.9.3/">
+        CSM 0.9.3 Patch Upgrade Guide
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/069-upgrade-workarounds-rpm/" title="Upgrade CSM Install Workarounds RPM" class="dd-item ">
+        <a href="/docs-csm/en-09/069-upgrade-workarounds-rpm/">
+        Upgrade CSM Install Workarounds RPM
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/070-usp-install-workarounds/" title="Utility Storage Installation Troubleshooting" class="dd-item ">
+        <a href="/docs-csm/en-09/070-usp-install-workarounds/">
+        Utility Storage Installation Troubleshooting
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+      
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/docs-csm/en-09/400-switch-bgp-neighbors/" title="Verify and Update BGP neighbors" class="dd-item ">
+        <a href="/docs-csm/en-09/400-switch-bgp-neighbors/">
+        Verify and Update BGP neighbors
+        
+        </a>
+    </li>
+     
+  
+ 
+
+      
+    </ul>
+
+    
+    
+
+    
+    <section id="footer">
+      
+    </section>
+  </div>
+</nav>
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/docs-csm/en-09/'>CRAY System Management - Guides and References</a> > <a href='/docs-csm/en-09/operations/'>operations</a> > <a href='/docs-csm/en-09/operations/security_and_authentication/'>security and authentication</a> > Restrict Network Access to the ncn-images S3 Bucket
+          
+        
+          
+        
+          
+        
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#limitations">Limitations</a></li>
+    <li><a href="#prerequisites-and-scope">Prerequisites and scope</a></li>
+    <li><a href="#procedure">Procedure</a></li>
+    <li><a href="#troubleshooting">Troubleshooting</a></li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+            </h1>
+          
+
+        
+
+
+<h1 id="restrict-network-access-to-the-ncn-images-s3-bucket">Restrict Network Access to the <code>ncn-images</code> S3 Bucket</h1>
+<p>The configuration documented in this procedure is intended to prevent user-facing dedicated nodes (UANs, Compute Nodes) from retrieving NCN image content from Ceph S3 services, as running on storage nodes.</p>
+<p>Specifically, the controls enacted via this procedure should do the following:</p>
+<ol>
+<li>Block HAProxy access to the <code>ncn-images</code> bucket if the client is not an NCN (NMN) or PXE booting from the MTL network. This via a HAProxy ACL on the storage servers.</li>
+<li>Enable access logging for HAProxy.</li>
+<li>Block Rados GW network access (port 8080) if the client is not an NCN (NMN) or originating from the HMN network. This via <code>iptables</code> rules on the storage servers.</li>
+</ol>
+<h2 id="limitations">Limitations</h2>
+<p>This is not designed to prevent UAIs (if in use) from retrieving NCN image content.</p>
+<p>If a storage node is rebuilt, this procedure (for the rebuilt node) will need to be applied after the rebuild. The same is true if NCNs are added or removed from the system as it will change source IP ranges for clients.</p>
+<h2 id="prerequisites-and-scope">Prerequisites and scope</h2>
+<p>Procedure should be executed after install or upgrade is otherwise complete, but prior to opening the system for user access.</p>
+<p>Unless otherwise noted, the procedure should be run from <code>ncn-m001</code> (not PIT).</p>
+<p>This procedure was back-ported from CSM 1.0 and was tested on a CSM 0.9.5 system.</p>
+<h2 id="procedure">Procedure</h2>
+<ol>
+<li>
+<p>Test connectivity before applying the ACL.</p>
+<p>Save the following script to a file (for example, <code>con_test.sh</code>).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>SNCNS<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span><span style="color:#66d9ef">$(</span>grep <span style="color:#e6db74">&#39;ncn-s.*\.nmn&#39;</span> /etc/hosts | awk <span style="color:#e6db74">&#39;{print $NF;}&#39;</span> | xargs<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>SCSNS_NMN<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span><span style="color:#66d9ef">$(</span>echo $SNCNS | xargs -n <span style="color:#ae81ff">1</span> | sed -e <span style="color:#e6db74">&#39;s/$/.nmn/g&#39;</span><span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>SCSNS_HMN<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span><span style="color:#66d9ef">$(</span>echo $SNCNS | xargs -n <span style="color:#ae81ff">1</span> | sed -e <span style="color:#e6db74">&#39;s/$/.hmn/g&#39;</span><span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>SCSNS_CAN<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span><span style="color:#66d9ef">$(</span>echo $SNCNS | xargs -n <span style="color:#ae81ff">1</span> | sed -e <span style="color:#e6db74">&#39;s/$/.can/g&#39;</span><span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>RADOS_HTTP_PORT<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;8080&#34;</span>
+</span></span><span style="display:flex;"><span>HAPROXY_HTTP_PORT<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;80&#34;</span>
+</span></span><span style="display:flex;"><span>HAPROXY_HTTPSPORT<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;443&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PASS<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;PASS&#34;</span>
+</span></span><span style="display:flex;"><span>FAIL<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;FAIL&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> rados_test
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>NODES<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$1<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>MSG<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$2<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>TTYPE<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$3<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;[i] </span>$MSG<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> n in $NODES
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    echo -n <span style="color:#e6db74">&#34;  RADOS </span>$n<span style="color:#e6db74">: &#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> <span style="color:#e6db74">&#34;</span>$TTYPE<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;CONN_FAIL&#34;</span> <span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>        curl -sI --connect-timeout <span style="color:#ae81ff">2</span> http://<span style="color:#e6db74">${</span>n<span style="color:#e6db74">}</span>:<span style="color:#e6db74">${</span>RADOS_HTTP_PORT<span style="color:#e6db74">}</span>/ &amp;&gt; /dev/null
+</span></span><span style="display:flex;"><span>        rc<span style="color:#f92672">=</span>$?
+</span></span><span style="display:flex;"><span>        rc_pass<span style="color:#f92672">=</span><span style="color:#ae81ff">28</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>        curl -I --connect-timeout <span style="color:#ae81ff">2</span> http://<span style="color:#e6db74">${</span>n<span style="color:#e6db74">}</span>:<span style="color:#e6db74">${</span>RADOS_HTTP_PORT<span style="color:#e6db74">}</span>/ 2&gt;/dev/null | grep -q <span style="color:#e6db74">&#34;200 OK&#34;</span>
+</span></span><span style="display:flex;"><span>        rc<span style="color:#f92672">=</span>$?
+</span></span><span style="display:flex;"><span>        rc_pass<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> $rc -eq $rc_pass <span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>        echo $PASS
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>        echo $FAIL
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> haproxy_test
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>NODES<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$1<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>MSG<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$2<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;[i] </span>$MSG<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> n in $NODES
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    echo -n <span style="color:#e6db74">&#34;  HAPROXY (CEPH) HTTP </span>$n<span style="color:#e6db74">: &#34;</span>
+</span></span><span style="display:flex;"><span>    curl -I --connect-timeout <span style="color:#ae81ff">2</span> http://<span style="color:#e6db74">${</span>n<span style="color:#e6db74">}</span>:<span style="color:#e6db74">${</span>HAPROXY_HTTP_PORT<span style="color:#e6db74">}</span>/ncn-images/ 2&gt;/dev/null | grep -q <span style="color:#e6db74">&#34;x-amz-request-id&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> $? -eq <span style="color:#ae81ff">0</span> <span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>        echo $PASS
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>        echo $FAIL
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    echo -n <span style="color:#e6db74">&#34;  HAPROXY (CEPH) HTTPS </span>$n<span style="color:#e6db74">: &#34;</span>
+</span></span><span style="display:flex;"><span>    curl -kI --connect-timeout <span style="color:#ae81ff">2</span> https://<span style="color:#e6db74">${</span>n<span style="color:#e6db74">}</span>:<span style="color:#e6db74">${</span>HAPROXY_HTTPS_PORT<span style="color:#e6db74">}</span>/ncn-images/ 2&gt;/dev/null | grep -q <span style="color:#e6db74">&#34;x-amz-request-id&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> $? -eq <span style="color:#ae81ff">0</span> <span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>        echo $PASS
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>        echo $FAIL
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>rados_test <span style="color:#e6db74">&#34;</span>$SCSNS_NMN<span style="color:#e6db74">&#34;</span> <span style="color:#e6db74">&#34;MGMT RADOS over NMN&#34;</span>
+</span></span><span style="display:flex;"><span>rados_test <span style="color:#e6db74">&#34;</span>$SCSNS_HMN<span style="color:#e6db74">&#34;</span> <span style="color:#e6db74">&#34;MGMT RADOS over HMN&#34;</span>
+</span></span><span style="display:flex;"><span>rados_test <span style="color:#e6db74">&#34;</span>$SCSNS_CAN<span style="color:#e6db74">&#34;</span> <span style="color:#e6db74">&#34;MGMT RADOS over CAN&#34;</span> <span style="color:#e6db74">&#34;CONN_FAIL&#34;</span>
+</span></span><span style="display:flex;"><span>haproxy_test <span style="color:#e6db74">&#34;</span>$SCSNS_NMN<span style="color:#e6db74">&#34;</span> <span style="color:#e6db74">&#34;MGMT HAProxy over NMN&#34;</span>
+</span></span></code></pre></div><p>Execute the script, if the ACLs have not been applied, results similar to the following will be returned (failures are expected):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> MGMT RADOS over NMN
+</span></span><span style="display:flex;"><span>RADOS ncn-s003.nmn: PASS
+</span></span><span style="display:flex;"><span>RADOS ncn-s002.nmn: PASS
+</span></span><span style="display:flex;"><span>RADOS ncn-s001.nmn: PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> MGMT RADOS over HMN
+</span></span><span style="display:flex;"><span>RADOS ncn-s003.hmn: PASS
+</span></span><span style="display:flex;"><span>RADOS ncn-s002.hmn: PASS
+</span></span><span style="display:flex;"><span>RADOS ncn-s001.hmn: PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> MGMT RADOS over CAN
+</span></span><span style="display:flex;"><span>RADOS ncn-s003.can: FAIL
+</span></span><span style="display:flex;"><span>RADOS ncn-s002.can: FAIL
+</span></span><span style="display:flex;"><span>RADOS ncn-s001.can: FAIL
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> MGMT HAProxy over NMN
+</span></span><span style="display:flex;"><span>HAPROXY <span style="color:#f92672">(</span>CEPH<span style="color:#f92672">)</span> HTTP ncn-s003.nmn: PASS
+</span></span><span style="display:flex;"><span>HAPROXY <span style="color:#f92672">(</span>CEPH<span style="color:#f92672">)</span> HTTPS ncn-s003.nmn: PASS
+</span></span><span style="display:flex;"><span>HAPROXY <span style="color:#f92672">(</span>CEPH<span style="color:#f92672">)</span> HTTP ncn-s002.nmn: PASS
+</span></span><span style="display:flex;"><span>HAPROXY <span style="color:#f92672">(</span>CEPH<span style="color:#f92672">)</span> HTTPS ncn-s002.nmn: PASS
+</span></span><span style="display:flex;"><span>HAPROXY <span style="color:#f92672">(</span>CEPH<span style="color:#f92672">)</span> HTTP ncn-s001.nmn: PASS
+</span></span><span style="display:flex;"><span>HAPROXY <span style="color:#f92672">(</span>CEPH<span style="color:#f92672">)</span> HTTPS ncn-s001.nmn: PASS
+</span></span></code></pre></div></li>
+<li>
+<p>Build an IP address list of NCNs on the NMN.</p>
+<p>Cross-check to verify the count seems appropriate for the system in use.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# grep <span style="color:#e6db74">&#39;ncn-[mws].*.nmn&#39;</span> /etc/hosts | awk <span style="color:#e6db74">&#39;{print $1;}&#39;</span> | sed -e <span style="color:#e6db74">&#39;s/\./ /g&#39;</span> | sort -nk <span style="color:#ae81ff">4</span> | sed -e <span style="color:#e6db74">&#39;s/ /\./g&#39;</span> | tee allowed_ncns.lst
+</span></span><span style="display:flex;"><span>10.252.1.4
+</span></span><span style="display:flex;"><span>10.252.1.5
+</span></span><span style="display:flex;"><span>10.252.1.6
+</span></span><span style="display:flex;"><span>10.252.1.7
+</span></span><span style="display:flex;"><span>10.252.1.8
+</span></span><span style="display:flex;"><span>10.252.1.9
+</span></span><span style="display:flex;"><span>10.252.1.10
+</span></span><span style="display:flex;"><span>10.252.1.11
+</span></span><span style="display:flex;"><span>10.252.1.12
+</span></span><span style="display:flex;"><span>10.252.1.13
+</span></span><span style="display:flex;"><span>10.252.1.14
+</span></span></code></pre></div></li>
+<li>
+<p>Add the MTL subnet (needed for network boots of NCNs).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# echo <span style="color:#e6db74">&#39;10.1.0.0/16&#39;</span> &gt;&gt; allowed_ncns.lst
+</span></span></code></pre></div></li>
+<li>
+<p>Verify the <code>allowed_ncns.lst</code> contains contain NMN addresses for all management NCNs nodes and the MTL subnet (10.1.0.0/16).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# cat allowed_ncns.lst 
+</span></span><span style="display:flex;"><span>10.252.1.4
+</span></span><span style="display:flex;"><span>10.252.1.5
+</span></span><span style="display:flex;"><span>10.252.1.6
+</span></span><span style="display:flex;"><span>10.252.1.7
+</span></span><span style="display:flex;"><span>10.252.1.8
+</span></span><span style="display:flex;"><span>10.252.1.9
+</span></span><span style="display:flex;"><span>10.252.1.10
+</span></span><span style="display:flex;"><span>10.252.1.11
+</span></span><span style="display:flex;"><span>10.252.1.12
+</span></span><span style="display:flex;"><span>10.252.1.13
+</span></span><span style="display:flex;"><span>10.252.1.14
+</span></span><span style="display:flex;"><span>10.1.0.0/16
+</span></span></code></pre></div></li>
+<li>
+<p>Confirm HAProxy configurations are identical across storage nodes.</p>
+<p>Adjust the <code>-w</code> predicate to represent the full set of storage nodes for the system. Applies to this step and subsequent steps.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# pdsh -w ncn-s00<span style="color:#f92672">[</span>1-4<span style="color:#f92672">]</span> <span style="color:#e6db74">&#34;cat /etc/haproxy/haproxy.cfg&#34;</span> | dshbak -c
+</span></span><span style="display:flex;"><span>----------------
+</span></span><span style="display:flex;"><span>ncn-s<span style="color:#f92672">[</span>001-004<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>----------------
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Please do not change this file directly since it is managed by Ansible and will be overwritten</span>
+</span></span><span style="display:flex;"><span>global
+</span></span><span style="display:flex;"><span>   log         127.0.0.1 local2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   chroot      /var/lib/haproxy
+</span></span><span style="display:flex;"><span>   pidfile     /var/run/haproxy.pid
+</span></span><span style="display:flex;"><span>   maxconn     <span style="color:#ae81ff">8000</span>
+</span></span><span style="display:flex;"><span>   user        haproxy
+</span></span><span style="display:flex;"><span>   group       haproxy
+</span></span><span style="display:flex;"><span>   daemon
+</span></span><span style="display:flex;"><span>   stats socket /var/lib/haproxy/stats
+</span></span><span style="display:flex;"><span>   tune.ssl.default-dh-param <span style="color:#ae81ff">4096</span>
+</span></span><span style="display:flex;"><span>   ssl-default-bind-ciphers EECDH+AESGCM:EDH+AESGCM
+</span></span><span style="display:flex;"><span>   ssl-default-bind-options no-sslv3 no-tlsv10 no-tlsv11 no-tls-tickets
+</span></span><span style="display:flex;"><span>defaults
+</span></span><span style="display:flex;"><span>   mode                    http
+</span></span><span style="display:flex;"><span>   log                     global
+</span></span><span style="display:flex;"><span>   option                  httplog
+</span></span><span style="display:flex;"><span>   option                  dontlognull
+</span></span><span style="display:flex;"><span>   option http-server-close
+</span></span><span style="display:flex;"><span>   option forwardfor       except 127.0.0.0/8
+</span></span><span style="display:flex;"><span>   option                  redispatch
+</span></span><span style="display:flex;"><span>   retries                 <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>   timeout http-request    10s
+</span></span><span style="display:flex;"><span>   timeout queue           1m
+</span></span><span style="display:flex;"><span>   timeout connect         10s
+</span></span><span style="display:flex;"><span>   timeout client          1m
+</span></span><span style="display:flex;"><span>   timeout server          1m
+</span></span><span style="display:flex;"><span>   timeout http-keep-alive 10s
+</span></span><span style="display:flex;"><span>   timeout check           10s
+</span></span><span style="display:flex;"><span>   maxconn                 <span style="color:#ae81ff">8000</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>frontend http-rgw-frontend
+</span></span><span style="display:flex;"><span>   bind *:80
+</span></span><span style="display:flex;"><span>   default_backend rgw-backend
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>frontend https-rgw-frontend
+</span></span><span style="display:flex;"><span>   bind *:443 ssl crt /etc/ceph/rgw.pem
+</span></span><span style="display:flex;"><span>   default_backend rgw-backend
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>backend rgw-backend
+</span></span><span style="display:flex;"><span>   option forwardfor
+</span></span><span style="display:flex;"><span>   balance static-rr
+</span></span><span style="display:flex;"><span>   option httpchk GET /
+</span></span><span style="display:flex;"><span>      server server-ncn-s001-rgw0 10.252.1.7:8080 check weight <span style="color:#ae81ff">100</span>
+</span></span><span style="display:flex;"><span>      server server-ncn-s002-rgw0 10.252.1.6:8080 check weight <span style="color:#ae81ff">100</span>
+</span></span><span style="display:flex;"><span>      server server-ncn-s003-rgw0 10.252.1.5:8080 check weight <span style="color:#ae81ff">100</span>
+</span></span><span style="display:flex;"><span>      server server-ncn-s004-rgw0 10.252.1.4:8080 check weight <span style="color:#ae81ff">100</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Create a backup of <code>haproxy.cfg</code> files on storage nodes.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# pdsh -w ncn-s00<span style="color:#f92672">[</span>1-4<span style="color:#f92672">]</span> <span style="color:#e6db74">&#34;cp /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg-dist&#34;</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Grab a copy of <code>haproxy.cfg</code> to modify from a storage node, preserving permissions.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# scp -p ncn-s001:/etc/haproxy/haproxy.cfg . 
+</span></span><span style="display:flex;"><span>haproxy.cfg
+</span></span></code></pre></div></li>
+<li>
+<p>Edit the <code>haproxy.cfg</code>, adding in the following ACLs and log directives to each front-end (a diff shown to illustrate changes necessary).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# diff -Naur haproxy.cfg-dist haproxy.cfg
+</span></span><span style="display:flex;"><span>--- haproxy.cfg-dist 2022-06-30 18:20:55.000000000 +0000
+</span></span><span style="display:flex;"><span>+++ haproxy.cfg   2022-07-07 16:56:40.000000000 +0000
+</span></span><span style="display:flex;"><span>@@ -1,6 +1,6 @@
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Please do not change this file directly since it is managed by Ansible and will be overwritten</span>
+</span></span><span style="display:flex;"><span>global
+</span></span><span style="display:flex;"><span>-    log         127.0.0.1 local2
+</span></span><span style="display:flex;"><span>+    log         127.0.0.1:514 local0 info
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   chroot      /var/lib/haproxy
+</span></span><span style="display:flex;"><span>   pidfile     /var/run/haproxy.pid
+</span></span><span style="display:flex;"><span>@@ -31,12 +31,22 @@
+</span></span><span style="display:flex;"><span>   maxconn                 <span style="color:#ae81ff">8000</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>frontend http-rgw-frontend
+</span></span><span style="display:flex;"><span>+    log global
+</span></span><span style="display:flex;"><span>+    option httplog
+</span></span><span style="display:flex;"><span>   bind *:80
+</span></span><span style="display:flex;"><span>   default_backend rgw-backend
+</span></span><span style="display:flex;"><span>+    acl allow_ncns src -n -f /etc/haproxy/allowed_ncns.lst
+</span></span><span style="display:flex;"><span>+    acl restrict_ncn_images path_beg /ncn-images
+</span></span><span style="display:flex;"><span>+    http-request deny <span style="color:#66d9ef">if</span> restrict_ncn_images !allow_ncns 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>frontend https-rgw-frontend
+</span></span><span style="display:flex;"><span>+    log global
+</span></span><span style="display:flex;"><span>+    option httplog
+</span></span><span style="display:flex;"><span>   bind *:443 ssl crt /etc/ceph/rgw.pem
+</span></span><span style="display:flex;"><span>   default_backend rgw-backend
+</span></span><span style="display:flex;"><span>+    acl allow_ncns src -n -f /etc/haproxy/allowed_ncns.lst
+</span></span><span style="display:flex;"><span>+    acl restrict_ncn_images path_beg /ncn-images
+</span></span><span style="display:flex;"><span>+    http-request deny <span style="color:#66d9ef">if</span> restrict_ncn_images !allow_ncns 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>backend rgw-backend
+</span></span><span style="display:flex;"><span>   option forwardfor
+</span></span></code></pre></div></li>
+<li>
+<p>Create a new <code>rsyslog</code> configuration for HAProxy to have it listen to UDP 514 on the local host.</p>
+<p>With the log directive additions to HAProxy, and allowing a local host UDP 514 socket, access logging should work properly. Set permissions to 640 on the file.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# cat haproxy.conf 
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Collect log with UDP</span>
+</span></span><span style="display:flex;"><span>$ModLoad imudp
+</span></span><span style="display:flex;"><span>$UDPServerAddress 127.0.0.1
+</span></span><span style="display:flex;"><span>$UDPServerRun <span style="color:#ae81ff">514</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ncn-m001# chmod <span style="color:#ae81ff">0640</span> haproxy.conf 
+</span></span></code></pre></div></li>
+<li>
+<p>Make sure HAProxy is running on storage nodes.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# pdsh -w ncn-s00<span style="color:#f92672">[</span>1-4<span style="color:#f92672">]</span> <span style="color:#e6db74">&#34;systemctl status haproxy&#34;</span> | grep <span style="color:#e6db74">&#34;Active&#34;</span>
+</span></span><span style="display:flex;"><span>ncn-s001:      Active: active <span style="color:#f92672">(</span>running<span style="color:#f92672">)</span> since Thu 2022-07-07 17:38:49 UTC; 54min ago
+</span></span><span style="display:flex;"><span>ncn-s003:      Active: active <span style="color:#f92672">(</span>running<span style="color:#f92672">)</span> since Thu 2022-07-07 17:38:49 UTC; 54min ago
+</span></span><span style="display:flex;"><span>ncn-s002:      Active: active <span style="color:#f92672">(</span>running<span style="color:#f92672">)</span> since Thu 2022-07-07 17:38:49 UTC; 54min ago
+</span></span><span style="display:flex;"><span>ncn-s004:      Active: active <span style="color:#f92672">(</span>running<span style="color:#f92672">)</span> since Thu 2022-07-07 17:38:49 UTC; 54min ago
+</span></span></code></pre></div></li>
+<li>
+<p>Determine where the HAProxy VIP currently resides (for awareness in the event debug is necessary).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# host rgw-vip
+</span></span><span style="display:flex;"><span>rgw-vip.nmn has address 10.252.1.3
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ncn-m001# host rgw-vip.nmn
+</span></span><span style="display:flex;"><span>rgw-vip.nmn has address 10.252.1.3
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ncn-m001# host 10.252.1.3
+</span></span><span style="display:flex;"><span>3.1.252.10.in-addr.arpa domain name pointer rgw-vip.
+</span></span><span style="display:flex;"><span>3.1.252.10.in-addr.arpa domain name pointer rgw-vip.local.
+</span></span><span style="display:flex;"><span>3.1.252.10.in-addr.arpa domain name pointer rgw-vip.local.local.
+</span></span><span style="display:flex;"><span>3.1.252.10.in-addr.arpa domain name pointer rgw-vip.nmn.
+</span></span><span style="display:flex;"><span>3.1.252.10.in-addr.arpa domain name pointer rgw-vip.nmn.local.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ncn-m001# ssh rgw-vip <span style="color:#e6db74">&#39;hostname&#39;</span>
+</span></span><span style="display:flex;"><span>ncn-s001
+</span></span></code></pre></div></li>
+<li>
+<p>Propagate the <code>rsyslog</code> configuration out to all storage nodes.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# pdcp -w ncn-s00<span style="color:#f92672">[</span>1-4<span style="color:#f92672">]</span> haproxy.conf /etc/rsyslog.d/
+</span></span></code></pre></div></li>
+<li>
+<p>Propagate the HAProxy configuration out to all storage nodes.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# pdcp -w ncn-s00<span style="color:#f92672">[</span>1-4<span style="color:#f92672">]</span> haproxy.cfg allowed_ncns.lst /etc/haproxy/
+</span></span></code></pre></div></li>
+<li>
+<p>Verify the configurations are identical across storage nodes.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# pdsh -w ncn-s00<span style="color:#f92672">[</span>1-4<span style="color:#f92672">]</span> <span style="color:#e6db74">&#34;cat /etc/haproxy/haproxy.cfg&#34;</span> | dshbak -c
+</span></span><span style="display:flex;"><span>----------------
+</span></span><span style="display:flex;"><span>ncn-s<span style="color:#f92672">[</span>001-004<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>----------------
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Please do not change this file directly since it is managed by Ansible and will be overwritten</span>
+</span></span><span style="display:flex;"><span>global
+</span></span><span style="display:flex;"><span>   log         127.0.0.1 local2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   chroot      /var/lib/haproxy
+</span></span><span style="display:flex;"><span>   pidfile     /var/run/haproxy.pid
+</span></span><span style="display:flex;"><span>   maxconn     <span style="color:#ae81ff">8000</span>
+</span></span><span style="display:flex;"><span>   user        haproxy
+</span></span><span style="display:flex;"><span>   group       haproxy
+</span></span><span style="display:flex;"><span>   daemon
+</span></span><span style="display:flex;"><span>   stats socket /var/lib/haproxy/stats
+</span></span><span style="display:flex;"><span>   tune.ssl.default-dh-param <span style="color:#ae81ff">4096</span>
+</span></span><span style="display:flex;"><span>   ssl-default-bind-ciphers EECDH+AESGCM:EDH+AESGCM
+</span></span><span style="display:flex;"><span>   ssl-default-bind-options no-sslv3 no-tlsv10 no-tlsv11 no-tls-tickets
+</span></span><span style="display:flex;"><span>defaults
+</span></span><span style="display:flex;"><span>   mode                    http
+</span></span><span style="display:flex;"><span>   log                     global
+</span></span><span style="display:flex;"><span>   option                  httplog
+</span></span><span style="display:flex;"><span>   option                  dontlognull
+</span></span><span style="display:flex;"><span>   option http-server-close
+</span></span><span style="display:flex;"><span>   option forwardfor       except 127.0.0.0/8
+</span></span><span style="display:flex;"><span>   option                  redispatch
+</span></span><span style="display:flex;"><span>   retries                 <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>   timeout http-request    10s
+</span></span><span style="display:flex;"><span>   timeout queue           1m
+</span></span><span style="display:flex;"><span>   timeout connect         10s
+</span></span><span style="display:flex;"><span>   timeout client          1m
+</span></span><span style="display:flex;"><span>   timeout server          1m
+</span></span><span style="display:flex;"><span>   timeout http-keep-alive 10s
+</span></span><span style="display:flex;"><span>   timeout check           10s
+</span></span><span style="display:flex;"><span>   maxconn                 <span style="color:#ae81ff">8000</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>frontend http-rgw-frontend
+</span></span><span style="display:flex;"><span>   bind *:80
+</span></span><span style="display:flex;"><span>   default_backend rgw-backend
+</span></span><span style="display:flex;"><span>   acl allow_ncns src -n -f /etc/haproxy/allowed_ncns.lst
+</span></span><span style="display:flex;"><span>   acl restrict_ncn_images path_beg /ncn-images
+</span></span><span style="display:flex;"><span>   http-request deny <span style="color:#66d9ef">if</span> restrict_ncn_images !allow_ncns 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>frontend https-rgw-frontend
+</span></span><span style="display:flex;"><span>   bind *:443 ssl crt /etc/ceph/rgw.pem
+</span></span><span style="display:flex;"><span>   default_backend rgw-backend
+</span></span><span style="display:flex;"><span>   acl allow_ncns src -n -f /etc/haproxy/allowed_ncns.lst
+</span></span><span style="display:flex;"><span>   acl restrict_ncn_images path_beg /ncn-images
+</span></span><span style="display:flex;"><span>   http-request deny <span style="color:#66d9ef">if</span> restrict_ncn_images !allow_ncns 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>backend rgw-backend
+</span></span><span style="display:flex;"><span>   option forwardfor
+</span></span><span style="display:flex;"><span>   balance static-rr
+</span></span><span style="display:flex;"><span>   option httpchk GET /
+</span></span><span style="display:flex;"><span>      server server-ncn-s001-rgw0 10.252.1.7:8080 check weight <span style="color:#ae81ff">100</span>
+</span></span><span style="display:flex;"><span>      server server-ncn-s002-rgw0 10.252.1.6:8080 check weight <span style="color:#ae81ff">100</span>
+</span></span><span style="display:flex;"><span>      server server-ncn-s003-rgw0 10.252.1.5:8080 check weight <span style="color:#ae81ff">100</span>
+</span></span><span style="display:flex;"><span>      server server-ncn-s004-rgw0 10.252.1.4:8080 check weight <span style="color:#ae81ff">100</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Restart <code>rsyslog</code> across all storage nodes.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# pdsh -w ncn-s00<span style="color:#f92672">[</span>1-4<span style="color:#f92672">]</span> <span style="color:#e6db74">&#34;systemctl restart rsyslog&#34;</span>
+</span></span><span style="display:flex;"><span>ncn-m001# pdsh -w ncn-s00<span style="color:#f92672">[</span>1-4<span style="color:#f92672">]</span> <span style="color:#e6db74">&#34;systemctl status rsyslog&#34;</span> | grep Active
+</span></span><span style="display:flex;"><span>ncn-s001:      Active: active <span style="color:#f92672">(</span>running<span style="color:#f92672">)</span> since Thu 2022-07-07 13:50:39 UTC; 7s ago
+</span></span><span style="display:flex;"><span>ncn-s002:      Active: active <span style="color:#f92672">(</span>running<span style="color:#f92672">)</span> since Thu 2022-07-07 13:50:39 UTC; 7s ago
+</span></span><span style="display:flex;"><span>ncn-s003:      Active: active <span style="color:#f92672">(</span>running<span style="color:#f92672">)</span> since Thu 2022-07-07 13:50:39 UTC; 7s ago
+</span></span><span style="display:flex;"><span>ncn-s004:      Active: active <span style="color:#f92672">(</span>running<span style="color:#f92672">)</span> since Thu 2022-07-07 13:50:39 UTC; 7s ago
+</span></span></code></pre></div></li>
+<li>
+<p>Restart HAProxy across all storage nodes.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# pdsh -w ncn-s00<span style="color:#f92672">[</span>1-4<span style="color:#f92672">]</span> <span style="color:#e6db74">&#34;systemctl restart haproxy&#34;</span>
+</span></span><span style="display:flex;"><span>ncn-m001# pdsh -w ncn-s00<span style="color:#f92672">[</span>1-4<span style="color:#f92672">]</span> <span style="color:#e6db74">&#34;systemctl status haproxy&#34;</span> | grep Active
+</span></span><span style="display:flex;"><span>ncn-s001:      Active: active <span style="color:#f92672">(</span>running<span style="color:#f92672">)</span> since Thu 2022-07-07 13:50:39 UTC; 7s ago
+</span></span><span style="display:flex;"><span>ncn-s002:      Active: active <span style="color:#f92672">(</span>running<span style="color:#f92672">)</span> since Thu 2022-07-07 13:50:39 UTC; 7s ago
+</span></span><span style="display:flex;"><span>ncn-s003:      Active: active <span style="color:#f92672">(</span>running<span style="color:#f92672">)</span> since Thu 2022-07-07 13:50:39 UTC; 7s ago
+</span></span><span style="display:flex;"><span>ncn-s004:      Active: active <span style="color:#f92672">(</span>running<span style="color:#f92672">)</span> since Thu 2022-07-07 13:50:39 UTC; 7s ago
+</span></span></code></pre></div></li>
+<li>
+<p>Apply server-side <code>iptables</code> rules to storage nodes.</p>
+<p>This is needed to prevent direct access to the Ceph Rados GW Service (not through HAProxy).</p>
+<p>The process is written to support change on individual nodes, but could be scripted after analysis of the running firewall rule set (notably with respect to local modifications, if they exist).</p>
+<p>This process must be completed on each storage node (steps 18 - 21).</p>
+</li>
+<li>
+<p>Document where Rados GW is running (port wise). It should be the same across all storage nodes.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-s001# ss -tnpl | grep rados
+</span></span><span style="display:flex;"><span>LISTEN    <span style="color:#ae81ff">0</span>         <span style="color:#ae81ff">128</span>                0.0.0.0:8080             0.0.0.0:*        users:<span style="color:#f92672">((</span><span style="color:#e6db74">&#34;radosgw&#34;</span>,pid<span style="color:#f92672">=</span>25018,fd<span style="color:#f92672">=</span>77<span style="color:#f92672">))</span>                                            
+</span></span><span style="display:flex;"><span>LISTEN    <span style="color:#ae81ff">0</span>         <span style="color:#ae81ff">128</span>                   <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:8080                <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:*        users:<span style="color:#f92672">((</span><span style="color:#e6db74">&#34;radosgw&#34;</span>,pid<span style="color:#f92672">=</span>25018,fd<span style="color:#f92672">=</span>78<span style="color:#f92672">))</span>  
+</span></span></code></pre></div></li>
+<li>
+<p>List existing <code>iptables</code> rules.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-s001# iptables -L -nx -v
+</span></span><span style="display:flex;"><span>Chain INPUT <span style="color:#f92672">(</span>policy ACCEPT <span style="color:#ae81ff">399480930</span> packets, <span style="color:#ae81ff">1051007801113</span> bytes<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>   pkts      bytes target     prot opt in     out     source               destination         
+</span></span><span style="display:flex;"><span>      <span style="color:#ae81ff">0</span>        <span style="color:#ae81ff">0</span> DROP       tcp  --  *      *       0.0.0.0/0            10.102.4.135         tcp dpt:22
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Chain FORWARD <span style="color:#f92672">(</span>policy ACCEPT <span style="color:#ae81ff">0</span> packets, <span style="color:#ae81ff">0</span> bytes<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>   pkts      bytes target     prot opt in     out     source               destination         
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Chain OUTPUT <span style="color:#f92672">(</span>policy ACCEPT <span style="color:#ae81ff">400599807</span> packets, <span style="color:#ae81ff">1035420933926</span> bytes<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>   pkts      bytes target     prot opt in     out     source               destination    
+</span></span></code></pre></div></li>
+<li>
+<p>Run the following to add <code>iptables</code> rules for control.</p>
+<p>The range should include all NMN NCN IP addresses generated for the HAProxy ACL step.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>iptables -A INPUT -i vlan004 -p tcp --dport <span style="color:#ae81ff">8080</span> -j ACCEPT
+</span></span><span style="display:flex;"><span>iptables -A INPUT -i lo -p tcp --dport <span style="color:#ae81ff">8080</span> -j ACCEPT
+</span></span><span style="display:flex;"><span>iptables -A INPUT -p tcp --dport <span style="color:#ae81ff">8080</span> -m iprange --src-range 10.252.1.4-10.252.1.12 -j ACCEPT
+</span></span><span style="display:flex;"><span>iptables -A INPUT -p tcp --dport <span style="color:#ae81ff">8080</span> -j LOG --log-prefix <span style="color:#e6db74">&#34;RADOSGW-DROP&#34;</span>
+</span></span><span style="display:flex;"><span>iptables -A INPUT -p tcp --dport <span style="color:#ae81ff">8080</span> -j DROP
+</span></span></code></pre></div></li>
+<li>
+<p>List <code>iptables</code> rules again, verify rules are in place.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-s001# iptables -L -nx -v
+</span></span><span style="display:flex;"><span>Chain INPUT <span style="color:#f92672">(</span>policy ACCEPT <span style="color:#ae81ff">22144</span> packets, <span style="color:#ae81ff">28721015</span> bytes<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>   pkts      bytes target     prot opt in     out     source               destination         
+</span></span><span style="display:flex;"><span>      <span style="color:#ae81ff">0</span>        <span style="color:#ae81ff">0</span> DROP       tcp  --  *      *       0.0.0.0/0            10.102.4.135         tcp dpt:22
+</span></span><span style="display:flex;"><span>      <span style="color:#ae81ff">0</span>        <span style="color:#ae81ff">0</span> ACCEPT     tcp  --  vlan004 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:8080
+</span></span><span style="display:flex;"><span>      <span style="color:#ae81ff">85</span>     <span style="color:#ae81ff">4862</span> ACCEPT     tcp  --  lo     *       0.0.0.0/0            0.0.0.0/0            tcp dpt:8080
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">276</span>    <span style="color:#ae81ff">15438</span> ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:8080 source IP range 10.252.1.4-10.252.1.12
+</span></span><span style="display:flex;"><span>      <span style="color:#ae81ff">0</span>        <span style="color:#ae81ff">0</span> LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:8080 LOG flags <span style="color:#ae81ff">0</span> level <span style="color:#ae81ff">4</span> prefix <span style="color:#e6db74">&#34;RADOSGW-DROP&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ae81ff">0</span>        <span style="color:#ae81ff">0</span> DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:8080
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Chain FORWARD <span style="color:#f92672">(</span>policy ACCEPT <span style="color:#ae81ff">0</span> packets, <span style="color:#ae81ff">0</span> bytes<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>   pkts      bytes target     prot opt in     out     source               destination         
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Chain OUTPUT <span style="color:#f92672">(</span>policy ACCEPT <span style="color:#ae81ff">22099</span> packets, <span style="color:#ae81ff">30141111</span> bytes<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>   pkts      bytes target     prot opt in     out     source               destination   
+</span></span></code></pre></div></li>
+<li>
+<p>Test connectivity after applying the ACL.</p>
+<p>Re-run the connectivity test. While the results will be similar, they should all now be passing:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# bash ./con_test.sh 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> MGMT RADOS over NMN
+</span></span><span style="display:flex;"><span>RADOS ncn-s001.nmn: PASS
+</span></span><span style="display:flex;"><span>RADOS ncn-s002.nmn: PASS
+</span></span><span style="display:flex;"><span>RADOS ncn-s003.nmn: PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> MGMT RADOS over HMN
+</span></span><span style="display:flex;"><span>RADOS ncn-s001.hmn: PASS
+</span></span><span style="display:flex;"><span>RADOS ncn-s002.hmn: PASS
+</span></span><span style="display:flex;"><span>RADOS ncn-s003.hmn: PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> MGMT RADOS over CAN
+</span></span><span style="display:flex;"><span>RADOS ncn-s001.can: PASS
+</span></span><span style="display:flex;"><span>RADOS ncn-s002.can: PASS
+</span></span><span style="display:flex;"><span>RADOS ncn-s003.can: PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> MGMT HAProxy over NMN
+</span></span><span style="display:flex;"><span>HAPROXY <span style="color:#f92672">(</span>CEPH<span style="color:#f92672">)</span> HTTP ncn-s001.nmn: PASS
+</span></span><span style="display:flex;"><span>HAPROXY <span style="color:#f92672">(</span>CEPH<span style="color:#f92672">)</span> HTTPS ncn-s001.nmn: PASS
+</span></span><span style="display:flex;"><span>HAPROXY <span style="color:#f92672">(</span>CEPH<span style="color:#f92672">)</span> HTTP ncn-s002.nmn: PASS
+</span></span><span style="display:flex;"><span>HAPROXY <span style="color:#f92672">(</span>CEPH<span style="color:#f92672">)</span> HTTPS ncn-s002.nmn: PASS
+</span></span><span style="display:flex;"><span>HAPROXY <span style="color:#f92672">(</span>CEPH<span style="color:#f92672">)</span> HTTP ncn-s003.nmn: PASS
+</span></span><span style="display:flex;"><span>HAPROXY <span style="color:#f92672">(</span>CEPH<span style="color:#f92672">)</span> HTTPS ncn-s003.nmn: PASS
+</span></span></code></pre></div></li>
+<li>
+<p>Validate no connection can be made to HAProxy for <code>ncn-images</code> or Ceph RADOS GW (at all) from compute nodes and UANs.</p>
+<p>Use <code>rgw-vip</code> as it will resolve to one of the storage nodes.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>nid000002# host rgw-vip
+</span></span><span style="display:flex;"><span>rgw-vip has address 10.252.1.3
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>nid000002# curl http://rgw-vip/ncn-images/
+</span></span><span style="display:flex;"><span>&lt;html&gt;&lt;body&gt;&lt;h1&gt;403 Forbidden&lt;/h1&gt;
+</span></span><span style="display:flex;"><span>Request forbidden by administrative rules.
+</span></span><span style="display:flex;"><span>&lt;/body&gt;&lt;/html&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>nid000002# curl -k https://rgw-vip/ncn-images/
+</span></span><span style="display:flex;"><span>&lt;html&gt;&lt;body&gt;&lt;h1&gt;403 Forbidden&lt;/h1&gt;
+</span></span><span style="display:flex;"><span>Request forbidden by administrative rules.
+</span></span><span style="display:flex;"><span>&lt;/body&gt;&lt;/html&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>nid000002# curl --connect-timeout <span style="color:#ae81ff">2</span> rgw-vip:8080
+</span></span><span style="display:flex;"><span>curl: <span style="color:#f92672">(</span>28<span style="color:#f92672">)</span> Connection timed out after <span style="color:#ae81ff">2001</span> milliseconds
+</span></span></code></pre></div><p>Look for a 403 response in the HAProxy logs:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# pdsh -N -w ncn-s00<span style="color:#f92672">[</span>1-4<span style="color:#f92672">]</span> <span style="color:#e6db74">&#34;cd /var/log &amp;&amp; zgrep -h -i -E &#39;haproxy.*frontend&#39; messages || exit 0&#34;</span> | grep <span style="color:#e6db74">&#34;ncn-images&#34;</span>
+</span></span><span style="display:flex;"><span>2022-07-13T13:57:08+00:00 xxx-ncn-s001.local haproxy<span style="color:#f92672">[</span>43591<span style="color:#f92672">]</span>: 10.252.1.13:50238 <span style="color:#f92672">[</span>13/Jul/2022:13:57:08.363<span style="color:#f92672">]</span> http-rgw-frontend http-rgw-frontend/&lt;NOSRV&gt; 0/-1/-1/-1/0 <span style="color:#ae81ff">403</span> <span style="color:#ae81ff">212</span> - - PR-- 1/1/0/0/0 0/0 <span style="color:#e6db74">&#34;GET /ncn-images/ HTTP/1.1&#34;</span>
+</span></span><span style="display:flex;"><span>2022-07-13T14:01:11+00:00 xxx-ncn-s001.local haproxy<span style="color:#f92672">[</span>43591<span style="color:#f92672">]</span>: 10.252.1.13:50240 <span style="color:#f92672">[</span>13/Jul/2022:14:01:11.038<span style="color:#f92672">]</span> http-rgw-frontend http-rgw-frontend/&lt;NOSRV&gt; 0/-1/-1/-1/0 <span style="color:#ae81ff">403</span> <span style="color:#ae81ff">212</span> - - PR-- 1/1/0/0/0 0/0 <span style="color:#e6db74">&#34;GET /ncn-images/ HTTP/1.1&#34;</span>
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><p>In the firewall logs, the Ceph RADOS GW traffic will be dropped on the storage node. For example:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# pdsh -N -w ncn-s00<span style="color:#f92672">[</span>1-4<span style="color:#f92672">]</span> <span style="color:#e6db74">&#34;grep RADOSGW /var/log/firewall&#34;</span>
+</span></span><span style="display:flex;"><span>2022-07-13T14:02:03.418750+00:00 xxx-ncn-s001 kernel: <span style="color:#f92672">[</span>4397628.546654<span style="color:#f92672">]</span> RADOSGW-DROPIN<span style="color:#f92672">=</span>vlan002 OUT<span style="color:#f92672">=</span> MAC<span style="color:#f92672">=</span>b8:59:9f:f9:1d:22:a4:bf:01:3f:6f:91:08:00 SRC<span style="color:#f92672">=</span>10.252.1.13 DST<span style="color:#f92672">=</span>10.252.1.3 LEN<span style="color:#f92672">=</span><span style="color:#ae81ff">52</span> TOS<span style="color:#f92672">=</span>0x00 PREC<span style="color:#f92672">=</span>0x00 TTL<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span> ID<span style="color:#f92672">=</span><span style="color:#ae81ff">9727</span> DF PROTO<span style="color:#f92672">=</span>TCP SPT<span style="color:#f92672">=</span><span style="color:#ae81ff">59278</span> DPT<span style="color:#f92672">=</span><span style="color:#ae81ff">8080</span> WINDOW<span style="color:#f92672">=</span><span style="color:#ae81ff">42340</span> RES<span style="color:#f92672">=</span>0x00 SYN URGP<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> 
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><p>For further validation, the following script can be saved to a UAN or compute node with a storage node count as an input.</p>
+<p>This will test cross-network select access that should not be possible based on a correctly configured switch ACL posture, as well.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>nid000002# cat user_con_test.sh 
+</span></span><span style="display:flex;"><span>CURL_O<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;--connect-timeout 2 -f&#34;</span>
+</span></span><span style="display:flex;"><span>NODE_COUNT<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$1<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> curl_rept
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>   echo -n <span style="color:#e6db74">&#34;[i] </span>$1<span style="color:#e6db74"> -&gt; &#34;</span>
+</span></span><span style="display:flex;"><span>   $1 &amp;&gt; /dev/null
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> $? -ne <span style="color:#ae81ff">0</span> <span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>      echo <span style="color:#e6db74">&#34;PASS&#34;</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>      echo <span style="color:#e6db74">&#34;FAIL&#34;</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> n in <span style="color:#e6db74">`</span>seq <span style="color:#ae81ff">1</span> $NODE_COUNT<span style="color:#e6db74">`</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">for</span> t in nmn can hmn
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>      curl_rept <span style="color:#e6db74">&#34;curl </span>$CURL_O<span style="color:#e6db74"> ncn-s00</span><span style="color:#e6db74">${</span>n<span style="color:#e6db74">}</span><span style="color:#e6db74">.</span><span style="color:#e6db74">${</span>t<span style="color:#e6db74">}</span><span style="color:#e6db74">:8080&#34;</span> <span style="color:#75715e"># ceph rados</span>
+</span></span><span style="display:flex;"><span>      curl_rept <span style="color:#e6db74">&#34;curl </span>$CURL_O<span style="color:#e6db74"> http://ncn-s00</span><span style="color:#e6db74">${</span>n<span style="color:#e6db74">}</span><span style="color:#e6db74">.</span><span style="color:#e6db74">${</span>t<span style="color:#e6db74">}</span><span style="color:#e6db74">/ncn-images/&#34;</span> <span style="color:#75715e"># ncn images, http</span>
+</span></span><span style="display:flex;"><span>      curl_rept <span style="color:#e6db74">&#34;curl </span>$CURL_O<span style="color:#e6db74"> -k  https://ncn-s00</span><span style="color:#e6db74">${</span>n<span style="color:#e6db74">}</span><span style="color:#e6db74">.</span><span style="color:#e6db74">${</span>t<span style="color:#e6db74">}</span><span style="color:#e6db74">/ncn-images/&#34;</span> <span style="color:#75715e"># ncn images, https</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>nid000002# bash ./user_con_test.sh <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f ncn-s001.nmn:8080 -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f http://ncn-s001.nmn/ncn-images/ -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f -k https://ncn-s001.nmn/ncn-images/ -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f ncn-s001.can:8080 -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f http://ncn-s001.can/ncn-images/ -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f -k https://ncn-s001.can/ncn-images/ -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f ncn-s001.hmn:8080 -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f http://ncn-s001.hmn/ncn-images/ -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f -k https://ncn-s001.hmn/ncn-images/ -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f ncn-s002.nmn:8080 -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f http://ncn-s002.nmn/ncn-images/ -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f -k https://ncn-s002.nmn/ncn-images/ -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f ncn-s002.can:8080 -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f http://ncn-s002.can/ncn-images/ -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f -k https://ncn-s002.can/ncn-images/ -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f ncn-s002.hmn:8080 -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f http://ncn-s002.hmn/ncn-images/ -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f -k https://ncn-s002.hmn/ncn-images/ -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f ncn-s003.nmn:8080 -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f http://ncn-s003.nmn/ncn-images/ -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f -k https://ncn-s003.nmn/ncn-images/ -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f ncn-s003.can:8080 -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f http://ncn-s003.can/ncn-images/ -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f -k https://ncn-s003.can/ncn-images/ -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f ncn-s003.hmn:8080 -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f http://ncn-s003.hmn/ncn-images/ -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f -k https://ncn-s003.hmn/ncn-images/ -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f ncn-s004.nmn:8080 -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f http://ncn-s004.nmn/ncn-images/ -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f -k https://ncn-s004.nmn/ncn-images/ -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f ncn-s004.can:8080 -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f http://ncn-s004.can/ncn-images/ -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f -k https://ncn-s004.can/ncn-images/ -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f ncn-s004.hmn:8080 -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f http://ncn-s004.hmn/ncn-images/ -&gt; PASS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> curl --connect-timeout <span style="color:#ae81ff">2</span> -f -k https://ncn-s004.hmn/ncn-images/ -&gt; PASS
+</span></span></code></pre></div></li>
+<li>
+<p>Save the <code>iptables</code> rule set on all storage nodes and make it persistent across reboots.</p>
+<p>Create a directory to hold the <code>iptables</code> configuration.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# pdsh -w ncn-s00<span style="color:#f92672">[</span>1-4<span style="color:#f92672">]</span> <span style="color:#e6db74">&#34;mkdir --mode=750 /etc/iptables&#34;</span>
+</span></span></code></pre></div><p>Create a one-shot systemd service to load iptables on system boot.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# cat <span style="color:#e6db74">&lt;&lt; EOF &gt; metal-iptables.service
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[Unit]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Description=Loads Metal iptables config
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">After=local-fs.target network.service
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[Service]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Type=oneshot
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">ExecStart=/usr/sbin/iptables-restore /etc/iptables/metal.conf
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Restart=no
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">RemainAfterExit=no
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[Install]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">WantedBy=multi-user.target
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ncn-m001# chmod <span style="color:#ae81ff">640</span> metal-iptables.service
+</span></span></code></pre></div><p>Distribute the one-shot systemd service to the storage nodes.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# pdcp -w ncn-s00<span style="color:#f92672">[</span>1-4<span style="color:#f92672">]</span> metal-iptables.service /usr/lib/systemd/system
+</span></span></code></pre></div><p>Enable the service.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# pdsh -w ncn-s00<span style="color:#f92672">[</span>1-4<span style="color:#f92672">]</span> <span style="color:#e6db74">&#34;systemctl enable metal-iptables.service&#34;</span>
+</span></span></code></pre></div><p>Use <code>iptables-save</code> to commit running rules to the persistent configuration.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# pdsh -w ncn-s00<span style="color:#f92672">[</span>1-4<span style="color:#f92672">]</span> <span style="color:#e6db74">&#34;iptables-save -f /etc/iptables/metal.conf&#34;</span>
+</span></span></code></pre></div><p>Execute the one-shot systemd service.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# pdsh -w ncn-s00<span style="color:#f92672">[</span>1-4<span style="color:#f92672">]</span> <span style="color:#e6db74">&#34;systemctl start metal-iptables.service&#34;</span>
+</span></span></code></pre></div><p>Verify the rule set is consistent across nodes.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# pdsh -w ncn-s00<span style="color:#f92672">[</span>1-4<span style="color:#f92672">]</span> <span style="color:#e6db74">&#34;cat /etc/iptables/metal.conf&#34;</span> | grep <span style="color:#e6db74">&#34;8080&#34;</span> | dshbak -c
+</span></span><span style="display:flex;"><span>----------------
+</span></span><span style="display:flex;"><span>ncn-s<span style="color:#f92672">[</span>001-004<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>----------------
+</span></span><span style="display:flex;"><span>-A INPUT -i vlan004 -p tcp -m tcp --dport <span style="color:#ae81ff">8080</span> -j ACCEPT
+</span></span><span style="display:flex;"><span>-A INPUT -i lo -p tcp -m tcp --dport <span style="color:#ae81ff">8080</span> -j ACCEPT
+</span></span><span style="display:flex;"><span>-A INPUT -p tcp -m tcp --dport <span style="color:#ae81ff">8080</span> -m iprange --src-range 10.252.1.4-10.252.1.14 -j ACCEPT
+</span></span><span style="display:flex;"><span>-A INPUT -p tcp -m tcp --dport <span style="color:#ae81ff">8080</span> -j LOG --log-prefix RADOSGW-DROP
+</span></span><span style="display:flex;"><span>-A INPUT -p tcp -m tcp --dport <span style="color:#ae81ff">8080</span> -j DROP
+</span></span></code></pre></div></li>
+</ol>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p><strong>NOTE</strong>: If SMA log forwarders are not yet running, then it might be necessary to temporarily disable the <code>/etc/rsyslog.d/01-cray-rsyslog.conf</code> rule (for logs to flow to the local nodes without delay).
+Restart <code>rsyslog</code> if this action is required.</p>
+<p>Look for RADOSGW drops in <code>/var/log/firewall</code> on storage nodes, note that the connectivity test will attempt access on the CAN.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# pdsh -N -w ncn-s00<span style="color:#f92672">[</span>1-4<span style="color:#f92672">]</span> <span style="color:#e6db74">&#34;grep RADOSGW /var/log/firewall&#34;</span> | grep vlan007 | head -3
+</span></span><span style="display:flex;"><span>2022-08-01T21:22:01.049443+00:00 ncn-s003 kernel: <span style="color:#f92672">[</span>13242021.397679<span style="color:#f92672">]</span> RADOSGW-DROPIN<span style="color:#f92672">=</span>vlan007 OUT<span style="color:#f92672">=</span> MAC<span style="color:#f92672">=</span>14:02:ec:d9:79:d0:94:40:c9:5f:9a:84:08:00 SRC<span style="color:#f92672">=</span>10.103.13.13 DST<span style="color:#f92672">=</span>10.103.13.5 LEN<span style="color:#f92672">=</span><span style="color:#ae81ff">60</span> TOS<span style="color:#f92672">=</span>0x00 PREC<span style="color:#f92672">=</span>0x00 TTL<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span> ID<span style="color:#f92672">=</span><span style="color:#ae81ff">35159</span> DF PROTO<span style="color:#f92672">=</span>TCP SPT<span style="color:#f92672">=</span><span style="color:#ae81ff">60482</span> DPT<span style="color:#f92672">=</span><span style="color:#ae81ff">8080</span> WINDOW<span style="color:#f92672">=</span><span style="color:#ae81ff">42340</span> RES<span style="color:#f92672">=</span>0x00 SYN URGP<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> 
+</span></span><span style="display:flex;"><span>2022-08-01T21:22:05.061945+00:00 ncn-s001 kernel: <span style="color:#f92672">[</span>13248180.144514<span style="color:#f92672">]</span> RADOSGW-DROPIN<span style="color:#f92672">=</span>vlan007 OUT<span style="color:#f92672">=</span> MAC<span style="color:#f92672">=</span>14:02:ec:da:bc:68:94:40:c9:5f:9a:84:08:00 SRC<span style="color:#f92672">=</span>10.103.13.13 DST<span style="color:#f92672">=</span>10.103.13.7 LEN<span style="color:#f92672">=</span><span style="color:#ae81ff">60</span> TOS<span style="color:#f92672">=</span>0x00 PREC<span style="color:#f92672">=</span>0x00 TTL<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span> ID<span style="color:#f92672">=</span><span style="color:#ae81ff">10604</span> DF PROTO<span style="color:#f92672">=</span>TCP SPT<span style="color:#f92672">=</span><span style="color:#ae81ff">43034</span> DPT<span style="color:#f92672">=</span><span style="color:#ae81ff">8080</span> WINDOW<span style="color:#f92672">=</span><span style="color:#ae81ff">42340</span> RES<span style="color:#f92672">=</span>0x00 SYN URGP<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> 
+</span></span><span style="display:flex;"><span>2022-08-01T21:22:02.047541+00:00 ncn-s003 kernel: <span style="color:#f92672">[</span>13242022.399499<span style="color:#f92672">]</span> RADOSGW-DROPIN<span style="color:#f92672">=</span>vlan007 OUT<span style="color:#f92672">=</span> MAC<span style="color:#f92672">=</span>14:02:ec:d9:79:d0:94:40:c9:5f:9a:84:08:00 SRC<span style="color:#f92672">=</span>10.103.13.13 DST<span style="color:#f92672">=</span>10.103.13.5 LEN<span style="color:#f92672">=</span><span style="color:#ae81ff">60</span> TOS<span style="color:#f92672">=</span>0x00 PREC<span style="color:#f92672">=</span>0x00 TTL<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span> ID<span style="color:#f92672">=</span><span style="color:#ae81ff">35160</span> DF PROTO<span style="color:#f92672">=</span>TCP SPT<span style="color:#f92672">=</span><span style="color:#ae81ff">60482</span> DPT<span style="color:#f92672">=</span><span style="color:#ae81ff">8080</span> WINDOW<span style="color:#f92672">=</span><span style="color:#ae81ff">42340</span> RES<span style="color:#f92672">=</span>0x00 SYN URGP<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> 
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><p>Look for HAProxy access logs in <code>/var/log/messages</code> on storage nodes that have HTTP 403 responses (or other responses depending upon context).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncn-m001# pdsh -N -w ncn-s00<span style="color:#f92672">[</span>1-3<span style="color:#f92672">]</span> <span style="color:#e6db74">&#34;cd /var/log &amp;&amp; zgrep -h &#39;haproxy.*frontend&#39; messages || exit 0&#34;</span> | grep <span style="color:#e6db74">&#34; 403 &#34;</span> | sort -k <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>2022-08-01T21:36:28+00:00 localhost haproxy<span style="color:#f92672">[</span>20903<span style="color:#f92672">]</span>: 10.252.1.20:37248 <span style="color:#f92672">[</span>01/Aug/2022:21:36:28.679<span style="color:#f92672">]</span> http-rgw-frontend http-rgw-frontend/&lt;NOSRV&gt; 0/-1/-1/-1/0 <span style="color:#ae81ff">403</span> <span style="color:#ae81ff">212</span> - - PR-- 1/1/0/0/0 0/0 <span style="color:#e6db74">&#34;GET /ncn-images/ HTTP/1.1&#34;</span>
+</span></span><span style="display:flex;"><span>2022-08-01T21:36:57+00:00 localhost haproxy<span style="color:#f92672">[</span>20903<span style="color:#f92672">]</span>: 10.252.1.20:53358 <span style="color:#f92672">[</span>01/Aug/2022:21:36:57.898<span style="color:#f92672">]</span> https-rgw-frontend~ https-rgw-frontend/&lt;NOSRV&gt; 0/-1/-1/-1/0 <span style="color:#ae81ff">403</span> <span style="color:#ae81ff">212</span> - - PR-- 1/1/0/0/0 0/0 <span style="color:#e6db74">&#34;GET /ncn-images/ HTTP/1.1&#34;</span>
+</span></span><span style="display:flex;"><span>2022-08-01T21:39:35+00:00 localhost haproxy<span style="color:#f92672">[</span>20903<span style="color:#f92672">]</span>: 10.252.1.20:40400 <span style="color:#f92672">[</span>01/Aug/2022:21:39:35.141<span style="color:#f92672">]</span> https-rgw-frontend~ https-rgw-frontend/&lt;NOSRV&gt; 1/-1/-1/-1/1 <span style="color:#ae81ff">403</span> <span style="color:#ae81ff">212</span> - - PR-- 1/1/0/0/0 0/0 <span style="color:#e6db74">&#34;GET /ncn-images/ HTTP/1.1&#34;</span>
+</span></span><span style="display:flex;"><span>2022-08-01T21:39:35+00:00 localhost haproxy<span style="color:#f92672">[</span>20903<span style="color:#f92672">]</span>: 10.252.1.20:57530 <span style="color:#f92672">[</span>01/Aug/2022:21:39:35.134<span style="color:#f92672">]</span> http-rgw-frontend http-rgw-frontend/&lt;NOSRV&gt; 0/-1/-1/-1/0 <span style="color:#ae81ff">403</span> <span style="color:#ae81ff">212</span> - - PR-- 1/1/0/0/0 0/0 <span style="color:#e6db74">&#34;GET /ncn-images/ HTTP/1.1&#34;</span>
+</span></span><span style="display:flex;"><span>2022-08-01T21:39:37+00:00 localhost haproxy<span style="color:#f92672">[</span>20903<span style="color:#f92672">]</span>: 10.252.1.20:34828 <span style="color:#f92672">[</span>01/Aug/2022:21:39:37.152<span style="color:#f92672">]</span> http-rgw-frontend http-rgw-frontend/&lt;NOSRV&gt; 0/-1/-1/-1/0 <span style="color:#ae81ff">403</span> <span style="color:#ae81ff">212</span> - - PR-- 1/1/0/0/0 0/0 <span style="color:#e6db74">&#34;GET /ncn-images/ HTTP/1.1&#34;</span>
+</span></span><span style="display:flex;"><span>2022-08-01T21:39:37+00:00 localhost haproxy<span style="color:#f92672">[</span>20903<span style="color:#f92672">]</span>: 10.252.1.20:57896 <span style="color:#f92672">[</span>01/Aug/2022:21:39:37.159<span style="color:#f92672">]</span> https-rgw-frontend~ https-rgw-frontend/&lt;NOSRV&gt; 0/-1/-1/-1/0 <span style="color:#ae81ff">403</span> <span style="color:#ae81ff">212</span> - - PR-- 1/1/0/0/0 0/0 <span style="color:#e6db74">&#34;GET /ncn-images/ HTTP/1.1&#34;</span>
+</span></span></code></pre></div>
+
+<footer class="footline">
+	
+</footer>
+
+        
+        </div>
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+
+        
+
+
+	 
+	 
+    </div>
+
+    </section>
+
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/docs-csm/js/clipboard.min.js?1729741358"></script>
+    <script src="/docs-csm/js/perfect-scrollbar.min.js?1729741358"></script>
+    <script src="/docs-csm/js/perfect-scrollbar.jquery.min.js?1729741358"></script>
+    <script src="/docs-csm/js/jquery.sticky.js?1729741358"></script>
+    <script src="/docs-csm/js/featherlight.min.js?1729741358"></script>
+    <script src="/docs-csm/js/highlight.pack.js?1729741358"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/docs-csm/js/modernizr.custom-3.6.0.js?1729741358"></script>
+    <script src="/docs-csm/js/learn.js?1729741358"></script>
+    <script src="/docs-csm/js/hugo-learn.js?1729741358"></script>
+    
+        
+            <script src="/docs-csm/mermaid/mermaid.js?1729741358"></script>
+        
+        <script>
+            mermaid.initialize({ startOnLoad: true });
+        </script>
+    
+    
+
+  </body>
+</html>
+

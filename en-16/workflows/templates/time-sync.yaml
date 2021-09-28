@@ -1,0 +1,105 @@
+#
+# MIT License
+#
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: time-sync
+  namespace: argo
+spec:
+  templates:
+    - name: force-time-sync
+      inputs:
+        parameters:
+          - name: targetNcn
+          - name: dryRun
+      dag:
+        tasks:
+          - name: main
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                    in_sync=$(ssh "${TARGET_NCN}" timedatectl | awk /synchronized:/'{print $NF}')
+                    if [[ "$in_sync" == "no" ]]; then
+                        ssh "$TARGET_NCN" chronyc makestep
+                        sleep 5
+                        in_sync=$(ssh "${TARGET_NCN}" timedatectl | awk /synchronized:/'{print $NF}')
+                        # wait up to 90s for the node to be in sync
+                        while [[ $loop_idx -lt 18 && "$in_sync" == "no" ]]; do
+                            sleep 5
+                            in_sync=$(ssh "${TARGET_NCN}" timedatectl | awk /synchronized:/'{print $NF}')
+                            loop_idx=$(( loop_idx+1 ))
+                        done
+                        if [[ "$in_sync" == "no" ]]; then
+                            echo "ERROR failed to time sync $TARGET_NCN"
+                            exit 1
+                        fi
+                    fi
+    - name: force-time-sync-and-restart-chrony
+      inputs:
+        parameters:
+          - name: targetNcn
+          - name: dryRun
+      dag:
+        tasks:
+          - name: main
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                    TOKEN=$(curl -s -S -d grant_type=client_credentials \
+                        -d client_id=admin-client \
+                        -d client_secret="$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d)" \
+                        https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+                    ssh "$target_ncn" "TOKEN=$TOKEN /srv/cray/scripts/common/chrony/csm_ntp.py"
+                    loop_idx=0
+                    in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
+                    if [[ "$in_sync" == "no" ]]; then
+                        ssh "$target_ncn" chronyc makestep
+                        sleep 5
+                        in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
+                        # wait up to 90s for the node to be in sync
+                        while [[ $loop_idx -lt 18 && "$in_sync" == "no" ]]; do
+                            sleep 5
+                            in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
+                            loop_idx=$(( loop_idx+1 ))
+                        done
+                        if [[ "$in_sync" == "no" ]]; then
+                            echo "ERROR failed to time sync $TARGET_NCN"
+                            exit 1
+                        fi
+                        # else wait until the end of the script to fail
+                    fi

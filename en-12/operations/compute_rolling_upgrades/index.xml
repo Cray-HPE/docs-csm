@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>compute rolling upgrades on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-12/operations/compute_rolling_upgrades/</link>
+    <description>Recent content in compute rolling upgrades on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-12</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:16 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-12/operations/compute_rolling_upgrades/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CRUS Workflow</title>
+      <link>/docs-csm/en-12/operations/compute_rolling_upgrades/crus_workflow/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:16 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/compute_rolling_upgrades/crus_workflow/</guid>
+      <description>CRUS Workflow Note: CRUS is deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0. It will be replaced with BOS V2, which will provide similar functionality. See Deprecated features.&#xA;The following workflow is intended to be a high-level overview of how to upgrade compute nodes. This workflow depicts how services interact with each other during the compute node upgrade process, and helps to provide a quicker and deeper understanding of how the system functions.</description>
+    </item>
+    <item>
+      <title>Compute Rolling Upgrades</title>
+      <link>/docs-csm/en-12/operations/compute_rolling_upgrades/compute_rolling_upgrades/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:16 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/compute_rolling_upgrades/compute_rolling_upgrades/</guid>
+      <description>Compute Rolling Upgrades Note: CRUS is deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0. It will be replaced with BOS V2, which will provide similar functionality. See Deprecated features.&#xA;The Compute Rolling Upgrade Service (CRUS) upgrades sets of compute nodes without requiring an entire set of nodes to be out of service at once. CRUS manages the workload management status of nodes, handling each of the following steps required to upgrade compute nodes:</description>
+    </item>
+    <item>
+      <title>Troubleshoot Nodes Failing to Upgrade in a CRUS Session</title>
+      <link>/docs-csm/en-12/operations/compute_rolling_upgrades/troubleshoot_nodes_failing_to_upgrade_in_a_crus_session/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:16 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/compute_rolling_upgrades/troubleshoot_nodes_failing_to_upgrade_in_a_crus_session/</guid>
+      <description>Troubleshoot Nodes Failing to Upgrade in a CRUS Session Note: CRUS is deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0. It will be replaced with BOS V2, which will provide similar functionality. See Deprecated features.&#xA;Troubleshoot compute nodes failing to upgrade during a Compute Rolling Upgrade Service (CRUS) session and rerun the session on the failed nodes.&#xA;When nodes are marked as failed they are added to the failed node group associated with the upgrade session, and the nodes are marked as down in the workload manager (WLM).</description>
+    </item>
+    <item>
+      <title>Troubleshoot a Failed CRUS Session Because of Bad Parameters</title>
+      <link>/docs-csm/en-12/operations/compute_rolling_upgrades/troubleshoot_a_failed_crus_session_due_to_bad_parameters/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:16 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/compute_rolling_upgrades/troubleshoot_a_failed_crus_session_due_to_bad_parameters/</guid>
+      <description>Troubleshoot a Failed CRUS Session Because of Bad Parameters Note: CRUS is deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0. It will be replaced with BOS V2, which will provide similar functionality. See Deprecated features.&#xA;A CRUS session must be deleted and recreated if it does not start or complete because of parameters having incorrect values.&#xA;The following are examples of incorrect parameters:&#xA;Choosing the wrong Boot Orchestration Service (BOS) session template.</description>
+    </item>
+    <item>
+      <title>Troubleshoot a Failed CRUS Session Because of Unmet Conditions</title>
+      <link>/docs-csm/en-12/operations/compute_rolling_upgrades/troubleshoot_a_failed_crus_session_due_to_unmet_conditions/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:16 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/compute_rolling_upgrades/troubleshoot_a_failed_crus_session_due_to_unmet_conditions/</guid>
+      <description>Troubleshoot a Failed CRUS Session Because of Unmet Conditions Note: CRUS is deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0. It will be replaced with BOS V2, which will provide similar functionality. See Deprecated features.&#xA;If a CRUS session has any unmet conditions, adding or fixing them will cause the session to continue from wherever it got stuck. Updating other parts of the system to meet the required conditions of a CRUS session will unblock the upgrade session.</description>
+    </item>
+    <item>
+      <title>Upgrade Compute Nodes with CRUS</title>
+      <link>/docs-csm/en-12/operations/compute_rolling_upgrades/upgrade_compute_nodes_with_crus/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:16 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/compute_rolling_upgrades/upgrade_compute_nodes_with_crus/</guid>
+      <description>Upgrade Compute Nodes with CRUS Note: CRUS is deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0. It will be replaced with BOS V2, which will provide similar functionality. See Deprecated features.&#xA;Upgrade a set of compute nodes with the Compute Rolling Upgrade Service (CRUS). Manage the workload management status of nodes and quiesce each node before taking the node out of service and upgrading it. Then reboot it into the upgraded state and return it to service within the workload manager (WLM).</description>
+    </item>
+  </channel>
+</rss>

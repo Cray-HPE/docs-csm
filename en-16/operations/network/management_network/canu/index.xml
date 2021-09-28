@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CSM Automatic Network Utility on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-16/operations/network/management_network/canu/</link>
+    <description>Recent content in CSM Automatic Network Utility on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-16</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:39 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-16/operations/network/management_network/canu/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CANU Installation</title>
+      <link>/docs-csm/en-16/operations/network/management_network/canu/canu_installation/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:38 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/network/management_network/canu/canu_installation/</guid>
+      <description>CANU Installation Prerequisites In order to run CANU, both python3 and pip3 must be installed.&#xA;Installation Install pip3, if it is not already installed.&#xA;pip3 install --editable Install the development build of CANU.&#xA;python3 setup.py develop --user Back to Index</description>
+    </item>
+    <item>
+      <title>Troubleshoot CANU Validation Errors</title>
+      <link>/docs-csm/en-16/operations/network/management_network/canu/canu_validation_error/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:38 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/network/management_network/canu/canu_validation_error/</guid>
+      <description>Troubleshoot CANU Validation Errors Typical CANU validation errors and how to fix them.&#xA;Example 1 validate_shcd - CRITICAL: A port number must be specified. Please correct the SHCD for HMN:V36 with an empty value SOLUTION: Blank cell. Minimally the Source or Destination and Port needs to be specified.&#xA;Example 2 Tab PDU not found in ./HPE System Hela CCD.revA27.xlsx Available tabs: [&amp;#39;Config. Summary&amp;#39;, &amp;#39;HPE Cables&amp;#39;, &amp;#39;RiverRackLayout &amp;#39;, &amp;#39;Arista&amp;#39;, &amp;#39;River Device Diagrams&amp;#39;, &amp;#39;HPE Devices&amp;#39;, &amp;#39;SCT pt_pt&amp;#39;, &amp;#39;yaml&amp;#39;, &amp;#39;Mountain-TDS-Management&amp;#39;, &amp;#39;MTN Rack Layout&amp;#39;, &amp;#39;10G_25G_40G_100G&amp;#39;, &amp;#39;NMN&amp;#39;, &amp;#39;HMN&amp;#39;, &amp;#39;PDU &amp;#39;] SOLUTION: PDU has an extra space in the tab name.</description>
+    </item>
+    <item>
+      <title>Use CANU to Verify, Generate, or Compare Switch Configurations</title>
+      <link>/docs-csm/en-16/operations/network/management_network/canu/canu_verify_generate_compare_switch_configuration/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:38 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/network/management_network/canu/canu_verify_generate_compare_switch_configuration/</guid>
+      <description>Use CANU to Verify, Generate, or Compare Switch Configurations Common CANU Arguments SHCD-Related Arguments CSI and SLS API Input to CANU CSI Input SLS API Input Check Single Switch Firmware Check Firmware of Multiple Switches JSON Output Check Single Switch Cabling Check Cabling of Multiple Switches Validate SHCD Validate Cabling Validate SHCD and Cabling Validate BGP Configuration Creation For BGP Generate Switch Configurations Common CANU Arguments The following CANU flags are used for multiple different actions.</description>
+    </item>
+    <item>
+      <title>Generate Switch Configs Including Custom Configurations</title>
+      <link>/docs-csm/en-16/operations/network/management_network/canu/custom_config/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:38 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/network/management_network/canu/custom_config/</guid>
+      <description>Generate Switch Configs Including Custom Configurations Pass in a switch config file that CANU will inject into the generated config. A use case would be to add custom site connections. This config file will overwrite previously generate config.&#xA;The custom-config file type is YAML and a single file can be used for multiple switches. You will need to specify the switch name and what config inject. The custom-config feature is using the hierarchical configuration library, documentation can be found here.</description>
+    </item>
+    <item>
+      <title>Initializing CANU</title>
+      <link>/docs-csm/en-16/operations/network/management_network/canu/initializing_canu/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:38 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/network/management_network/canu/initializing_canu/</guid>
+      <description>Initializing CANU Initialize the CSM Automatic Network Utility (CANU) in order to help create the switch configurations. CANU can automatically parse CSI output or the Shasta System Layout Service (SLS) API for switch IPv4 addresses. Using the SLS API is only possible after the CSM install has been completed at least to the point where CSM Services have been deployed. Prior to that, parsing CSI output is the only option.</description>
+    </item>
+    <item>
+      <title>Introduction to CANU</title>
+      <link>/docs-csm/en-16/operations/network/management_network/canu/introduction_to_canu/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:38 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/network/management_network/canu/introduction_to_canu/</guid>
+      <description>Introduction to CANU The CSM Automatic Network Utility (CANU) guides administrators through the installation of new Shasta networks. CANU helps ensure that the installation follows best practices and helps administrators set up a supported configuration.&#xA;The following are some of the tasks that CANU can perform:&#xA;Check if the management switches on a Shasta network meet the firmware version requirements Check the cabling status of the management switches on a Shasta network using LLDP.</description>
+    </item>
+    <item>
+      <title>Quick start guide to CANU</title>
+      <link>/docs-csm/en-16/operations/network/management_network/canu/quick_start_guide_to_canu/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:38 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/network/management_network/canu/quick_start_guide_to_canu/</guid>
+      <description>Quick start guide to CANU [Usage] Validate a fresh system using CSI and CANU Preparation Check network firmware Check network cabling Validate BGP status Validate cabling Validation using the system&amp;rsquo;s SHCD Validate the SHCD Validate the SHCD against network cabling Generate switch configuration for the network Usage To run, type canu. It should run and display help.&#xA;To see a list of commands and arguments, just append --help.&#xA;When running CANU, the Shasta version is required; it can be specified with either -s or --shasta.</description>
+    </item>
+    <item>
+      <title>Uninstall CANU</title>
+      <link>/docs-csm/en-16/operations/network/management_network/canu/uninstall_canu/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:38 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/network/management_network/canu/uninstall_canu/</guid>
+      <description>Uninstall CANU Uninstalling CANU can be achieved by:&#xA;pip3 uninstall canu </description>
+    </item>
+    <item>
+      <title>Update CANU From CSM Release Tarball</title>
+      <link>/docs-csm/en-16/operations/network/management_network/canu/update_canu_from_csm_tarball/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:38 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/network/management_network/canu/update_canu_from_csm_tarball/</guid>
+      <description>Update CANU From CSM Release Tarball If doing a CSM install or upgrade, the release tarball contains a CANU RPM. It can be extracted and installed using the following steps.&#xA;Procedure Display the current CANU version.&#xA;canu --version Set the TARBALL variable to the path and filename of the CSM release tarball:&#xA;TARBALL=/your/path/here/csm-version.tar.gz Extract the CANU RPM from the tarball:&#xA;tar -xzvf &amp;#34;$TARBALL&amp;#34; --wildcards &amp;#34;*/canu*.rpm&amp;#34; Output should look similar to the following:</description>
+    </item>
+    <item>
+      <title>Use CANU to Generate Full Network Configuration</title>
+      <link>/docs-csm/en-16/operations/network/management_network/canu/using_canu_to_generate_full_network_config/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:39 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/network/management_network/canu/using_canu_to_generate_full_network_config/</guid>
+      <description>Use CANU to Generate Full Network Configuration CANU can also generate switch configurations for all the switches on a network.&#xA;In order to generate network configurations, a valid SHCD must be passed in and system variables must be read in from either CSI output or the SLS API.&#xA;The instructions are exactly the same as the above except there will not be a hostname and a folder must be specified for configuration output using the --folder FOLDERNAME flag.</description>
+    </item>
+  </channel>
+</rss>

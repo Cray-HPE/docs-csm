@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CSM 1.4.4 Patch Installation Instructions on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-14/upgrade/1.4.4/</link>
+    <description>Recent content in CSM 1.4.4 Patch Installation Instructions on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-14</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:39:16 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-14/upgrade/1.4.4/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CSM Only Upgrade</title>
+      <link>/docs-csm/en-14/upgrade/1.4.4/csm-only/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:16 +0000</pubDate>
+      <guid>/docs-csm/en-14/upgrade/1.4.4/csm-only/</guid>
+      <description>CSM Only Upgrade This page provides guidance for systems with exclusively CSM installed that are performing an upgrade from a CSM v1.4.X release to the CSM v1.4.4 release.&#xA;The v1.4.4 upgrade page will refer to this page during Update NCN images.&#xA;If other products are installed on the system, return to Update NCN images and choose option 1.&#xA;Requirements CSM_RELEASE is set in the shell environment on ncn-m001. See Preparation for details on how it should be set.</description>
+    </item>
+  </channel>
+</rss>

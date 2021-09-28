@@ -1,0 +1,249 @@
+#
+# MIT License
+#
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: ncn-lifecycle-rebuild-
+  labels:
+    target-ncns: "{{$length := len .TargetNcns }}{{range $index,$value := .TargetNcns }}{{$myvar := add $index 1}}{{if lt $myvar $length}}{{$value}}.{{else}}{{$value}}{{end}}{{ end }}"
+    type: rebuild
+    node-type: storage
+spec:
+  podMetadata:
+    annotations:
+      sidecar.istio.io/inject: "false"    
+  volumes:
+    - name: ssh
+      hostPath:
+        path: /root/.ssh
+        type: Directory
+    - name: host-usr-bin
+      hostPath:
+        path: /usr/bin
+        type: Directory
+    - name: podinfo
+      downwardAPI:
+        items:
+          - path: "labels"
+            fieldRef:
+              fieldPath: metadata.labels
+          - path: "annotations"
+            fieldRef:
+              fieldPath: metadata.annotations
+  # schedule workflow jobs asap
+  priorityCLassName: system-node-critical
+  # Pod GC strategy must be one of the following:
+  # * OnPodCompletion - delete pods immediately when pod is completed (including errors/failures)
+  # * OnPodSuccess - delete pods immediately when pod is successful
+  # * OnWorkflowCompletion - delete pods when workflow is completed
+  # * OnWorkflowSuccess - delete pods when workflow is successful
+  podGC:
+    strategy: OnPodCompletion
+  # allow workflow jobs running on master node
+  #   we may have a situation that all worker nodes
+  #   are marked as "being rebuilt" (cray.nls=ncn-w001)
+  tolerations:
+    - key: "node-role.kubernetes.io/master"
+      operator: "Exists"
+      effect: "NoSchedule"
+    - key: "node-role.kubernetes.io/control-plane"
+      operator: "Exists"
+      effect: "NoSchedule"
+  affinity:
+    nodeAffinity:
+      # avoid putting workflow jobs onto workers that will be rebuilt
+      # this label is set onto each workers at beginning of workflow
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: cray.nls
+            operator: NotIn
+            values:
+            {{- range $index,$value := .TargetNcns }}
+            - {{$value -}}
+            {{- end }}
+      # try to use master nodes as much as possible
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 50
+          preference:
+            matchExpressions:
+            - key: node-role.kubernetes.io/control-plane
+              operator: Exists
+  entrypoint: main
+  templates:
+    - name: main
+      dag:
+        tasks:
+          - name: before-all
+            templateRef:
+              name: before-all-nodes-storage-workflow
+              template: main
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"  
+          {{- range $index,$value := .TargetNcns}}
+          - name: before-each-{{$value}}
+            templateRef:
+              name: before-each-node-storage-workflow
+              template: main
+            dependencies: 
+              - before-all
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: targetNcn
+                  value: "{{$value}}"
+          - name: set-bss-no-wipe-to-0-{{$value}}
+            templateRef:
+              name: set-no-wipe
+              template: set-bss-no-wipe-0
+            dependencies: 
+              - before-all
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"  
+                - name: targetNcn
+                  value: "{{$value}}"
+          - name: drain-{{$value}}
+            templateRef:
+              name: storage-node-drain
+              template: main
+            dependencies: 
+              - before-all
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"  
+                - name: targetNcn
+                  value: "{{$value}}"
+          - name: shutdown-services-{{$value}}
+            templateRef:
+              name: shutdown-services
+              template: storage-node-full-wipe-services
+            dependencies: 
+              - drain-{{$value}}
+              - before-each-{{$value}}
+              - set-bss-no-wipe-to-0-{{$value}}
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"  
+                - name: targetNcn
+                  value: "{{$value}}"
+          - name: reboot-{{$value}}
+            templateRef:
+              name: reboot
+              template: main
+            dependencies: 
+              - shutdown-services-{{$value}}
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"  
+                - name: targetNcn
+                  value: {{$value}}
+          - name: add-{{$value}}-to-ceph
+            templateRef:
+              name: add-storage-node-to-ceph
+              template: main
+            dependencies: 
+              - reboot-{{$value}}
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"  
+                - name: targetNcn
+                  value: "{{$value}}"
+                - name: workflowType
+                  value: "{{$.WorkflowType}}"
+          - name: check-ceph-health-{{$value}}
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            dependencies:
+              # check health once node upgrade is complete
+              - add-{{$value}}-to-ceph
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"  
+                - name: scriptContent
+                  value: |
+                    /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -v true
+                    /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -n {{$value}} -a true -v true
+          {{- end }}
+          - name: after-rebuild
+            templateRef:
+              name: post-rebuild
+              template: main
+            dependencies:
+              # wait for health check of last storage node complete
+              - check-ceph-health-{{ with $length := len $.TargetNcns }}{{ index $.TargetNcns (add $length -1) }}{{end}}
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"  
+                - name: scriptContent
+                  value: |
+                    grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'truncate --size=0 ~/.ssh/known_hosts'
+                    grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | xargs -t -i ssh-keyscan -H \{\} >> /root/.ssh/known_hosts'
+          - name: update-bss
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            dependencies:
+              - check-ceph-health-{{ with $length := len $.TargetNcns }}{{ index $.TargetNcns (add $length -1) }}{{end}}
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"  
+                - name: scriptContent
+                  value: |
+                    . /usr/share/doc/csm/upgrade/scripts/ceph/lib/update_bss_metadata.sh
+                    RESULT=$(update_bss_storage)
+                    # check that result contains success!
+                    if [[ $RESULT != *"Success!"* ]]
+                    then
+                      echo "BSS metadata was not successfully updated. Output:"
+                      echo "$RESULT"
+                      exit 7
+                    fi
+          {{- range $index,$value := .TargetNcns}}
+          - name: run-storage-goss-tests
+            dependencies:
+              - after-rebuild
+            templateRef:
+              name: storage-goss-tests
+              template: main
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"  
+                - name: targetNcn
+                  value: "{{$value}}"
+          {{ end }}
+

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>package repository management on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-12/operations/package_repository_management/</link>
+    <description>Recent content in package repository management on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-12</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:48 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-12/operations/package_repository_management/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Manage Repositories with Nexus</title>
+      <link>/docs-csm/en-12/operations/package_repository_management/manage_repositories_with_nexus/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:47 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/package_repository_management/manage_repositories_with_nexus/</guid>
+      <description>Manage Repositories with Nexus This section describes how to connect to Nexus with the Web UI, as well as how to access the REST API from non-compute nodes (NCNs) or compute nodes to manage repositories.&#xA;System domain name Access Nexus with the web UI Use Keycloak to create and manage accounts Use the local Nexus admin account Access Nexus with the REST API Pagination Check the status of Nexus List repositories List assets Create a repository Update a repository Delete a repository Create a blob store Delete a blob store Authenticate to access the Rest API System domain name The SYSTEM_DOMAIN_NAME value found in some of the URLs on this page is expected to be the system&amp;rsquo;s fully qualified domain name (FQDN).</description>
+    </item>
+    <item>
+      <title>Nexus Configuration</title>
+      <link>/docs-csm/en-12/operations/package_repository_management/nexus_configuration/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:47 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/package_repository_management/nexus_configuration/</guid>
+      <description>Nexus Configuration Expect each product to create and use its own File type blob store. For example, the Cray System Management (CSM) product uses csm.&#xA;The default blob store is also available, but Cray products are discouraged from using it.&#xA;Repositories CSM creates the registry (format docker) and charts (format helm) repositories for managing container images and Helm charts across all Cray products. However, each product&amp;rsquo;s release may contain a number of RPM repositories that are added to Nexus.</description>
+    </item>
+    <item>
+      <title>Nexus Deployment</title>
+      <link>/docs-csm/en-12/operations/package_repository_management/nexus_deployment/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:47 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/package_repository_management/nexus_deployment/</guid>
+      <description>Nexus Deployment Nexus is deployed with the cray-nexus chart to the nexus namespace as part of the Cray System Management (CSM) release. Nexus is deployed after critical platform services are up and running. Product installers configure and populate Nexus blob stores and repositories using the cray-nexus-setup container image. As a result, there is no singular product that provides all Nexus repositories or assets; instead, individual products must be installed. However, CSM configures the charts Helm repository and the registry Docker repository, which all products may use.</description>
+    </item>
+    <item>
+      <title>Nexus Export and Restore</title>
+      <link>/docs-csm/en-12/operations/package_repository_management/nexus_export_and_restore/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:47 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/package_repository_management/nexus_export_and_restore/</guid>
+      <description>Nexus Export and Restore The current process for ensuring the safety of the nexus-data PVC is a one time, space intensive, manual process, and is only recommended to be done while Nexus is in a known good state. An export is recommended to be done before an upgrade, in order to enable the ability to roll back. Taking an export can also be used to improve Nexus resiliency by allowing easy fixes for data corruption.</description>
+    </item>
+    <item>
+      <title>Nexus Space Cleanup</title>
+      <link>/docs-csm/en-12/operations/package_repository_management/nexus_space_cleanup/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:47 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/package_repository_management/nexus_space_cleanup/</guid>
+      <description>Nexus Space Cleanup Nexus stores all data in a Kubernetes Persistent Volume Claim (PVC) called nexus-data. If this PVC fills up, then it will enter a read-only state. This read-only state causes issues for Nexus as well as all the services that rely on Nexus. There is no automatic cleanup of old data from Nexus.&#xA;During the install of any CSM version, a large amount data is added to Nexus. If there has not been a manual cleanup of old files in Nexus, then there is likely to be insufficient space for the next version of CSM to be installed.</description>
+    </item>
+    <item>
+      <title>Package Repository Management</title>
+      <link>/docs-csm/en-12/operations/package_repository_management/package_repository_management/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:47 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/package_repository_management/package_repository_management/</guid>
+      <description>Package Repository Management Repositories are added to systems to extend the system functionality beyond what is initially delivered. The Sonatype Nexus Repository Manager is the primary method for repository management. Nexus hosts the Yum, Docker, raw, and Helm repositories for software and firmware content.&#xA;Refer to the following for more information about Nexus:&#xA;The official Sonatype documentation Manage Repositories with Nexus </description>
+    </item>
+    <item>
+      <title>Package Repository Management with Nexus</title>
+      <link>/docs-csm/en-12/operations/package_repository_management/package_repository_management_with_nexus/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:48 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/package_repository_management/package_repository_management_with_nexus/</guid>
+      <description>Package Repository Management with Nexus Overview of RPM repositories and container registry in Nexus.&#xA;RPM repositories Container registry Adding images Registry mirror configuration Pull example using CRI Pull example using containerd Pull example using Podman RPM repositories Repositories are available at https://packages.local/repository/REPO_NAME. For example, to configure the csm-sle-15sp2 repository on a non-compute node (NCN):&#xA;ncn# zypper addrepo -fG https://packages.local/repository/csm-sle-15sp2 csm-sle-15sp2 Example output:&#xA;Adding repository &amp;#39;csm-sle-15sp2&amp;#39; .................................................................................................[done] Warning: GPG checking is disabled in configuration of repository &amp;#39;csm-sle-15sp2&amp;#39;.</description>
+    </item>
+    <item>
+      <title>Repair Yum Repository Metadata</title>
+      <link>/docs-csm/en-12/operations/package_repository_management/repair_yum_repository_metadata/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:48 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/package_repository_management/repair_yum_repository_metadata/</guid>
+      <description>Repair Yum Repository Metadata Nexus may have trouble generating or regenerating repository metadata (for example, repodata/repomd.xml), especially for larger repositories. Configure the Repair - Rebuild Yum repository metadata (repodata) task in Nexus to create the metadata if the standard generation fails. This is not typically needed, so it is considered to be a repair task.&#xA;The example in this procedure is for creating a repair task to rebuild Yum metadata for the mirror-1.</description>
+    </item>
+    <item>
+      <title>Restrict Admin Privileges in Nexus</title>
+      <link>/docs-csm/en-12/operations/package_repository_management/restrict_admin_privileges_in_nexus/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:48 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/package_repository_management/restrict_admin_privileges_in_nexus/</guid>
+      <description>Restrict Admin Privileges in Nexus Prior to making the system available to users, change the ingress settings to disable connections to packages.local and registry.local from automatically gaining administrative privileges.&#xA;Connections to packages.local and registry.local automatically login clients as the admin user. Administrative privileges enable any user to make anonymous writes to Nexus, which means unauthenticated users can perform arbitrary actions on Nexus itself through the REST API, as well as in repositories by uploading or deleting assets.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Nexus</title>
+      <link>/docs-csm/en-12/operations/package_repository_management/troubleshoot_nexus/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:48 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/package_repository_management/troubleshoot_nexus/</guid>
+      <description>Troubleshoot Nexus This page contains general Nexus troubleshooting topics.&#xA;lookup registry.local: no such host Error initiating layer upload &amp;hellip; in registry.local error: not ready: https://packages.local Unable to log in with Keycloak accounts lookup registry.local: no such host The following error may occur when running ./lib/setup-nexus.sh:&#xA;time=&amp;#34;2021-02-23T19:55:54Z&amp;#34; level=fatal msg=&amp;#34;Error copying tag \&amp;#34;dir:/image/grafana/grafana:7.0.3\&amp;#34;: Error writing blob: Head \&amp;#34;https://registry.local/v2/grafana/grafana/blobs/sha256:cf254eb90de2dc62aa7cce9737ad7e143c679f5486c46b742a1b55b168a736d3\&amp;#34;: dial tcp: lookup registry.local: no such host&amp;#34; + return Or a similar error:&#xA;time=&amp;#34;2021-03-04T22:45:07Z&amp;#34; level=fatal msg=&amp;#34;Error copying ref \&amp;#34;dir:/image/cray/cray-ims-load-artifacts:1.</description>
+    </item>
+  </channel>
+</rss>

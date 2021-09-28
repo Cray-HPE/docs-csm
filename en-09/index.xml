@@ -1,0 +1,824 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CRAY System Management - Guides and References on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-09/</link>
+    <description>Recent content in CRAY System Management - Guides and References on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-09</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:11 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-09/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Check and Set the metal.no-wipe Setting on NCNs</title>
+      <link>/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:11 +0000</pubDate>
+      <guid>/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/</guid>
+      <description>Check and Set the metal.no-wipe Setting on NCNs Configure the metal.no-wipe setting on non-compute nodes (NCNs) to preserve data on the nodes before doing an NCN reboot.&#xA;Run the ncnGetXnames.shscript to view the metal.no-wipe settings for each NCN. The xname and metal.no-wipe settings are also dumped out when executing the ncnHealthChecks.sh script.&#xA;Prerequisites This procedure requires administrative privileges.&#xA;It also requires that the CSM_SCRIPTDIR variable was previously defined as part of the execution of the steps in the csm-0.</description>
+    </item>
+    <item>
+      <title>CFS Sessions are Stuck in Pending State</title>
+      <link>/docs-csm/en-09/troubleshooting/known_issues/cfs_sessions_stuck_in_pending/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:10 +0000</pubDate>
+      <guid>/docs-csm/en-09/troubleshooting/known_issues/cfs_sessions_stuck_in_pending/</guid>
+      <description>CFS Sessions are Stuck in Pending State In rare cases it is possible that a CFS session can be stuck in a pending state. Sessions should only enter the pending state briefly, for no more than a few seconds while the corresponding Kubernetes job is being scheduled. If any sessions are in this state for more than a minute, they can safely be deleted. If the sessions were created automatically and retires are enabled, the sessions should be recreated automatically.</description>
+    </item>
+    <item>
+      <title>Check BGP Status and Reset Sessions</title>
+      <link>/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:10 +0000</pubDate>
+      <guid>/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/</guid>
+      <description>Check BGP Status and Reset Sessions Check the Border Gateway Protocol (BGP) status on the Aruba and Mellanox switches and verify that all sessions are in an Established state. If the state of any session in the table is Idle, the BGP sessions needs to be reset.&#xA;Prerequisites This procedure requires administrative privileges.&#xA;Procedure The following procedures will require knowing a list of switches that are BGP peers to connect to.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Prometheus Alerts</title>
+      <link>/docs-csm/en-09/operations/system_management_health/troubleshoot_prometheus_alerts/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:09 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/system_management_health/troubleshoot_prometheus_alerts/</guid>
+      <description>Troubleshoot Prometheus Alerts General Prometheus Alert Troubleshooting Topics&#xA;PostgresqlFollowerReplicationLagSMA PostgresqlHighRollbackRate PostgresqlInactiveReplicationSlot PostgresqlNotEnoughConnections CPUThrottlingHigh PostgresqlFollowerReplicationLagSMA Alerts for PostgresqlFollowerReplicationLagSMA on sma-postgres-cluster pods with slot_name=&amp;ldquo;permanent_physical_1&amp;rdquo; can be ignored. This slot_name is disabled and will be removed in a future release.&#xA;PostgresqlHighRollbackRate Alerts for PostgresqlHighRollbackRate on spire-postgres pods can be ignored. This is caused by an idle session that requires a timeout. This will be fixed in a future release.&#xA;PostgresqlInactiveReplicationSlot Alerts for PostgresqlInactiveReplicationSlot on sma-postgres-cluster pods with slot_name=&amp;ldquo;permanent_physical_1&amp;rdquo; can be ignored.</description>
+    </item>
+    <item>
+      <title>Add LDAP User Federation</title>
+      <link>/docs-csm/en-09/operations/security_and_authentication/add_ldap_user_federation/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/security_and_authentication/add_ldap_user_federation/</guid>
+      <description>Add LDAP User Federation Add LDAP user federation using the Keycloak localization tool.&#xA;Prerequisites LDAP user federation is not currently configured in Keycloak. For example, if it was not configured in Keycloak when the system was initially installed or the LDAP user federation was removed.&#xA;Procedure Prepare to customize the customizations.yaml file.&#xA;If the customizations.yaml file is managed in an external Git repository (as recommended), then clone a local working tree.</description>
+    </item>
+    <item>
+      <title>Adding a Liquid-cooled blade to a System</title>
+      <link>/docs-csm/en-09/operations/node_management/adding_a_liquid-cooled_blade_to_a_system/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/node_management/adding_a_liquid-cooled_blade_to_a_system/</guid>
+      <description>Adding a Liquid-cooled blade to a System This procedure will add a liquid-cooled blades from a HPE Cray EX system.&#xA;Perquisites The Cray command line interface (CLI) tool is initialized and configured on the system.&#xA;Knowledge of whether DVS is operating over the Node Management Network (NMN) or the High Speed Network (HSN).&#xA;Blade is being added to a existing liquid-cooled cabinet in the system.&#xA;The Slingshot fabric must be configured with the desired topology for desired state of the blades in the system.</description>
+    </item>
+    <item>
+      <title>Adjust HM Collector resource limits and requests</title>
+      <link>/docs-csm/en-09/operations/hmcollector/adjust_hmcollector_resource_limits_requests/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/hmcollector/adjust_hmcollector_resource_limits_requests/</guid>
+      <description>Adjust HM Collector resource limits and requests Resource Limit Tuning Guidance Customize cray-hms-hmcollector resource limits and requests in customizations.yaml Redeploy cray-hms-hmcollector with new resource limits and requests Resource Limit Tuning Guidance Inspect current resource usage in the cray-hms-hmcollector pod View resource usage of the containers in the cray-hms-hmcollector pod:&#xA;ncn-m001# kubectl -n services top pod -l app.kubernetes.io/name=cray-hms-hmcollector --containers POD NAME CPU(cores) MEMORY(bytes) cray-hms-hmcollector-7c5b797c5c-zxt67 istio-proxy 187m 275Mi cray-hms-hmcollector-7c5b797c5c-zxt67 cray-hms-hmcollector 4398m 296Mi The default resource limits for the cray-hms-hmcollector container are:</description>
+    </item>
+    <item>
+      <title>Check BGP Status and Reset Sessions</title>
+      <link>/docs-csm/en-09/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/</guid>
+      <description>Check BGP Status and Reset Sessions Check the Border Gateway Protocol (BGP) status on the Aruba and Mellanox switches and verify that all sessions are in an Established state. If the state of any session in the table is Idle, the BGP sessions needs to be reset.&#xA;Prerequisites This procedure requires administrative privileges.&#xA;Procedure The following procedures will require knowing a list of switches that are BGP peers to connect to.</description>
+    </item>
+    <item>
+      <title>Kubernetes and Bare Metal EtcD Certificate Renewal</title>
+      <link>/docs-csm/en-09/operations/kubernetes/cert_renewal_for_kubernetes_and_bare_metal_etcd/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/kubernetes/cert_renewal_for_kubernetes_and_bare_metal_etcd/</guid>
+      <description>Kubernetes and Bare Metal EtcD Certificate Renewal Scope As part of the installation, Kubernetes generates certificates for the required subcomponents. This document will help walk through the process of renewing the certificates.&#xA;IMPORTANT: Depending on the version of Kubernetes, the command may or may not reside under the alpha category. Use kubectl certs --help and kubectl alpha certs --help to determine this. The overall command syntax should be the same and this is just whether or not the command structure will require alpha in it.</description>
+    </item>
+    <item>
+      <title>Configuration Layers</title>
+      <link>/docs-csm/en-09/operations/configuration_management/configuration_layers/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:07 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/configuration_management/configuration_layers/</guid>
+      <description>Configuration Layers The Configuration Framework Service (CFS) uses configuration layers to specify the location of configuration content that will be applied. Configurations may include one or more layers. Each layer is defined by a Git repository clone URL, a Git commit, a name (optional), and the path in the repository to an Ansible playbook to execute.&#xA;Configurations with a single layer are useful when testing out a new configuration on targets, or when configuring system components with one product at a time.</description>
+    </item>
+    <item>
+      <title>Security Hardening</title>
+      <link>/docs-csm/en-09/operations/csm_product_management/apply_security_hardening/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:07 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/csm_product_management/apply_security_hardening/</guid>
+      <description>Security Hardening This is an overarching guide to further harden the security posture of a Cray System Management (CSM) system.&#xA;If a subset of the steps in this procedure were completed as a consequence of an install, upgrade, or other guidance, then it is safe to skip that subset following a review.&#xA;Prerequisites None.&#xA;Procedure Change passwords and credentials.&#xA;Perform procedure(s) in Change Passwords and Credentials.&#xA;Restrict access to ncn-images S3 Bucket.</description>
+    </item>
+    <item>
+      <title>Stage Changes Without BOS</title>
+      <link>/docs-csm/en-09/operations/boot_orchestration/stage_changes_without_bos/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:07 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/boot_orchestration/stage_changes_without_bos/</guid>
+      <description>Stage Changes Without BOS Sometimes there is a need to stages changes to take place on a reboot, without immediately rebooting a node. When this is called for, users can bypass BOS, and set boot artifacts or configuration that will only take place when a node is later booted, whether that occurs manually, or triggered by a task manager.&#xA;Stage Boot Artifacts For information on staging boot artifacts, see the section Upload Node Boot Information to Boot Script Service (BSS).</description>
+    </item>
+    <item>
+      <title>TROUBLESHOOTING FAS LOADER FAILS</title>
+      <link>/docs-csm/en-09/operations/fas_loader/fas_loader_fails/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:07 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/fas_loader/fas_loader_fails/</guid>
+      <description>TROUBLESHOOTING FAS LOADER FAILS NOTE: this procedure is only for csm-0.9.x releases.&#xA;The FAS loader may fail due to issues with the repomd.xml file in Nexus.&#xA;This will be indicated by the following message: CRITICAL: Failed to get repomd.xml from repo in the fas-loader job.&#xA;Indications that the fas-loader job has failed include:&#xA;Expected firmware is not present in the FAS image list (cray fas images list) after the FAS loader has been run.</description>
+    </item>
+    <item>
+      <title>CRAY Guide Contribution</title>
+      <link>/docs-csm/en-09/000-info/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:00 +0000</pubDate>
+      <guid>/docs-csm/en-09/000-info/</guid>
+      <description>CRAY Guide Contribution The documentation included here describes how to install the CSM software and various supporting administrative procedures. See Guides for the different scenarios to which this documentation can apply for installation.&#xA;The rest of this page describes the conventions used in the documentation:&#xA;[Page naming or indexing] (#page-indexing) conventions [Annotations] (#annotations) for how we identify sections of the documentation that do not apply to all systems [Command Prompt Conventions] (#command-prompt-conventions) which describe the context for user, host, directory, chroot environment, or container environment Page Indexing / Naming The page name can be anything.</description>
+    </item>
+    <item>
+      <title>Reboot NCNs</title>
+      <link>/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/reboot_ncns/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:11 +0000</pubDate>
+      <guid>/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/reboot_ncns/</guid>
+      <description>Reboot NCNs The following is a high-level overview of the non-compute node (NCN) reboot workflow:&#xA;Run the NCN pre-reboot checks and procedures: Ensure ncn-m001 is not running in &amp;ldquo;LiveCD&amp;rdquo; or install mode Check the metal.no-wipe settings for all NCNs Enable pod priorities Run all platform health checks, including checks on the Border Gateway Protocol (BGP) peering sessions Run the rolling NCN reboot procedure: Loop through reboots on storage NCNs, worker NCNs, and master NCNs, where each boot consists of the following workflow: - Establish console session with NCN to reboot Check the hostname of the NCN to be rebooted Execute a power off/on sequence to the NCN to allow it to boot up to completion Check the hosthame of the NCN after reboot and reset it if it is not correct Execute NCN/platform health checks and do not go on to reboot the next NCN until health has been ensured on the most recently rebooted NCN Disconnect console session with the NCN that was rebooted Re-run all platform health checks, including checks on BGP peering sessions The time duration for this procedure (if health checks are being executed in between each boot, as recommended) could take between two to four hours for a system with approximately nine NCNs.</description>
+    </item>
+    <item>
+      <title>Copying file from the cray-conman pod fails</title>
+      <link>/docs-csm/en-09/troubleshooting/known_issues/conman_pod_kubernetes_copy_fails/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:10 +0000</pubDate>
+      <guid>/docs-csm/en-09/troubleshooting/known_issues/conman_pod_kubernetes_copy_fails/</guid>
+      <description>Copying file from the cray-conman pod fails The &amp;rsquo;tar&amp;rsquo; command is not installed in the pod image, so the usual kubernetes command to copy files from the cray-conman pod fails:&#xA;$ kubectl -n services cp cray-conman-92a6cb7d2a:/var/log/conman/console.x3000c1s2b0n1 console.x3000c1s2b0n1 Defaulting container name to cray-conman. error: Internal error occurred: error executing command in container: failed to exec in container: failed to start exec &amp;#34;e5054fd1452d04993a1e200435416168476621b8a44b8019a45a225fcb5c36f7&amp;#34;: OCI runtime exec failed: exec failed: container_linux.go:349: starting container process caused &amp;#34;exec: \&amp;#34;tar\&amp;#34;: executable file not found in $PATH&amp;#34;: unknown The files may still be copied by executing the &amp;lsquo;cat&amp;rsquo; command instead and redirecting the output to a file:</description>
+    </item>
+    <item>
+      <title>CSM 0.9.2 Patch Upgrade Guide</title>
+      <link>/docs-csm/en-09/upgrade/0.9/csm-0.9.2/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:10 +0000</pubDate>
+      <guid>/docs-csm/en-09/upgrade/0.9/csm-0.9.2/</guid>
+      <description>Copyright 2021 Hewlett Packard Enterprise Development LP&#xA;CSM 0.9.2 Patch Upgrade Guide This guide contains procedures for upgrading systems running CSM 0.9.0 to CSM 0.9.2. It is intended for system installers, system administrators, and network administrators. It assumes some familiarity with standard Linux and associated tooling.&#xA;NOTE: CSM 0.9.1 was not officially released so these procedures start with CSM 0.9.0.&#xA;See CHANGELOG.md in the root of a CSM release distribution for a summary of changes in each CSM release.</description>
+    </item>
+    <item>
+      <title>Change Air-Cooled Node BMC Credentials</title>
+      <link>/docs-csm/en-09/operations/security_and_authentication/change_air-cooled_node_bmc_credentials/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/security_and_authentication/change_air-cooled_node_bmc_credentials/</guid>
+      <description>Change Air-Cooled Node BMC Credentials This procedure will use the System Configuration Service (SCSD) to change all air-cooled Node BMCs in the system to the same global credential.&#xA;Limitations All air-cooled and liquid-cooled BMCs share the same global credentials. The air-cooled Slingshot switch controllers (Router BMCs) must have the same credentials as the liquid-cooled Slingshot switch controllers.&#xA;Prerequisites The Cray command line interface (CLI) tool is initialized and configured on the system.</description>
+    </item>
+    <item>
+      <title>Check and Set the metal.no-wipe Setting on NCNs</title>
+      <link>/docs-csm/en-09/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/</guid>
+      <description>Check and Set the metal.no-wipe Setting on NCNs Configure the metal.no-wipe setting on non-compute nodes (NCNs) to preserve data on the nodes before doing an NCN reboot.&#xA;Run the ncnGetXnames.shscript to view the metal.no-wipe settings for each NCN. The xname and metal.no-wipe settings are also dumped out when executing the ncnHealthChecks.sh script.&#xA;Prerequisites This procedure requires administrative privileges.&#xA;It also requires that the CSM_SCRIPTDIR variable is defined. Set this variable and verify that it is set.</description>
+    </item>
+    <item>
+      <title>Change Passwords and Credentials</title>
+      <link>/docs-csm/en-09/operations/csm_product_management/change_passwords_and_credentials/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:07 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/csm_product_management/change_passwords_and_credentials/</guid>
+      <description>Change Passwords and Credentials This is an overarching procedure to change all credentials managed by Cray System Management (CSM) in HPE Cray EX system to new values.&#xA;There are many passwords and credentials used in different contexts to manage the system. These can be changed as needed. Their initial settings are documented, so it is recommended to change them during or soon after a CSM software installation.&#xA;Procedure 1. Change Hardware Credentials Perform procedures in Change Cray EX Cabinet Global Default Password.</description>
+    </item>
+    <item>
+      <title>Upload Node Boot Information to Boot Script Service (BSS)</title>
+      <link>/docs-csm/en-09/operations/boot_orchestration/upload_node_boot_information_to_boot_script_service_bss/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:07 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/boot_orchestration/upload_node_boot_information_to_boot_script_service_bss/</guid>
+      <description>Upload Node Boot Information to Boot Script Service (BSS) The following information must be uploaded to BSS as a prerequisite to booting a node via iPXE:&#xA;The location of an initrd image in the artifact repository The location of a kernel image in the artifact repository Kernel boot parameters The node(s) associated with that information, using either host name or NID BSS manages the iPXE boot scripts that coordinate the boot process for nodes, and it enables basic association of boot scripts with nodes.</description>
+    </item>
+    <item>
+      <title>CSM Documentation Guide</title>
+      <link>/docs-csm/en-09/001-guides/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:00 +0000</pubDate>
+      <guid>/docs-csm/en-09/001-guides/</guid>
+      <description>CSM Documentation Guide The installation of CSM software has three scenarios which are described in this documentation with many supporting procedures. Here is an overview of the workflow through the documentation to support these scenarios.&#xA;[CSM Install] (002-CSM-INSTALL.md)&#xA;Installation prerequisites&#xA;Satisfy the prerequisites for one of these three installation scenarios&#xA;Migration from a Shasta v1.3.x system. How to collect information from a v1.3.x system to be used during the v1.4 installation, quiescing v1.</description>
+    </item>
+    <item>
+      <title>CSM 0.9.3 Patch Upgrade Guide</title>
+      <link>/docs-csm/en-09/upgrade/0.9/csm-0.9.3/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:10 +0000</pubDate>
+      <guid>/docs-csm/en-09/upgrade/0.9/csm-0.9.3/</guid>
+      <description>Copyright 2021 Hewlett Packard Enterprise Development LP&#xA;CSM 0.9.3 Patch Upgrade Guide This guide contains procedures for upgrading systems running CSM 0.9.2 to CSM 0.9.3. It is intended for system installers, system administrators, and network administrators. It assumes some familiarity with standard Linux and associated tooling.&#xA;See CHANGELOG.md in the root of a CSM release distribution for a summary of changes in each CSM release.&#xA;Procedures:&#xA;Preparation Run Validation Checks (Pre-Upgrade) Setup Nexus Update Resources Increase Max pty on Workers Deploy Manifests Upgrade NCN Packages Enable PodSecurityPolicy Apply iSCSI Security Fix Configure LAG for CMMs Run Validation Checks (Post-Upgrade) Exit Typescript Preparation For convenience, these procedures make use of environment variables.</description>
+    </item>
+    <item>
+      <title>Orphaned CFS Pods After Booting or Rebooting</title>
+      <link>/docs-csm/en-09/troubleshooting/known_issues/orphaned_cfs_pods/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:10 +0000</pubDate>
+      <guid>/docs-csm/en-09/troubleshooting/known_issues/orphaned_cfs_pods/</guid>
+      <description>Orphaned CFS Pods After Booting or Rebooting After a boot or reboot a few CFS Pods may continue running even after they&amp;rsquo;ve finished and never go away. The state of these Pod is that the only container still running in the Pod is istio-proxy and the Pod doesn&amp;rsquo;t have a metadata.ownerReference.&#xA;If kubectl get pods -n services | grep cfs is run after a boot or reboot, the orphaned CFS Pods look like this:</description>
+    </item>
+    <item>
+      <title>Change Credentials on ServerTech PDUs</title>
+      <link>/docs-csm/en-09/operations/security_and_authentication/change_credentials_on_servertech_pdus/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/security_and_authentication/change_credentials_on_servertech_pdus/</guid>
+      <description>Change Credentials on ServerTech PDUs This procedure changes password used by the admn user on ServerTech PDUs. Either a single PDU can be updated to a new credential, or update all ServerTech PDUs in the system to the same global credentials.&#xA;NOTE: This procedure does not update the default credentials that RTS uses for new ServerTech PDUs added to a system. To change the default credentials, follow the Update default ServerTech PDU Credentials used by the Redfish Translation Service procedure.</description>
+    </item>
+    <item>
+      <title>Enable Kdump</title>
+      <link>/docs-csm/en-09/operations/node_management/enable_kdump/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/node_management/enable_kdump/</guid>
+      <description>Enable Kdump CSM 0.9.x does not have kdump enabled by default. It is necessary to run the workaround script on each NCN when rebuilding them.&#xA;ncn-m001# /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-3341/CASMINST-3341.sh </description>
+    </item>
+    <item>
+      <title>CSM Install</title>
+      <link>/docs-csm/en-09/002-csm-install/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:00 +0000</pubDate>
+      <guid>/docs-csm/en-09/002-csm-install/</guid>
+      <description>CSM Install This page will prepare you for a CSM install using the LiveCD in different scenarios.&#xA;Install Prerequisites&#xA;Starting an Installation&#xA;Boot the LiveCD Install Prerequisites The prerequisites for each install scenario are defined here. All prerequisites must be met before commencing an installation.&#xA;After finishing any of these prerequisite guides, an administrator may move to Starting an Installation.&#xA;Available Installation Paths Prerequisites for Shasta v1.4 Installations on Shasta v1.</description>
+    </item>
+    <item>
+      <title>Change Cray EX Cabinet Global Default Password</title>
+      <link>/docs-csm/en-09/operations/security_and_authentication/change_ex_cabinet_global_default_password/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/security_and_authentication/change_ex_cabinet_global_default_password/</guid>
+      <description>Change Cray EX Cabinet Global Default Password This procedure changes the global default credential on HPE Cray EX liquid-cooled cabinet embedded controllers (BMCs). The chassis management module (CMM) controller (cC), node controller (nC), and Slingshot switch controller (sC) are generically referred to as &amp;ldquo;BMCs&amp;rdquo; in these procedures.&#xA;Prerequisites HPE Cray EX 1.4.2 software is installed and operating. The Cray command line interface (CLI) tool is initialized and configured on the system.</description>
+    </item>
+    <item>
+      <title>Reboot NCNs</title>
+      <link>/docs-csm/en-09/operations/node_management/reboot_ncns/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/node_management/reboot_ncns/</guid>
+      <description>Reboot NCNs The following is a high-level overview of the non-compute node (NCN) reboot workflow:&#xA;Run the NCN pre-reboot checks and procedures: Ensure ncn-m001 is not running in &amp;ldquo;LiveCD&amp;rdquo; or install mode Check the metal.no-wipe settings for all NCNs Enable pod priorities Run all platform health checks, including checks on the Border Gateway Protocol (BGP) peering sessions Run the rolling NCN reboot procedure: Loop through reboots on storage NCNs, worker NCNs, and master NCNs, where each boot consists of the following workflow: - Establish console session with NCN to reboot Check the hostname of the NCN to be rebooted Execute a power off/on sequence to the NCN to allow it to boot up to completion Check the hosthame of the NCN after reboot and reset it if it is not correct Execute NCN/platform health checks and do not go on to reboot the next NCN until health has been ensured on the most recently rebooted NCN Disconnect console session with the NCN that was rebooted Re-run all platform health checks, including checks on BGP peering sessions The time duration for this procedure (if health checks are being executed in between each boot, as recommended) could take between two to four hours for a system with approximately nine NCNs.</description>
+    </item>
+    <item>
+      <title>CSM USB LiveCD - Creation and Configuration</title>
+      <link>/docs-csm/en-09/003-csm-usb-livecd/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:00 +0000</pubDate>
+      <guid>/docs-csm/en-09/003-csm-usb-livecd/</guid>
+      <description>CSM USB LiveCD - Creation and Configuration This page will guide an administrator through creating a USB stick from either their Shasta v1.3 ncn-m001 node or their own laptop or desktop.&#xA;There are 5 overall steps that provide a bootable USB with SSH enabled, capable of installing Shasta v1.4 (or higher).&#xA;Download and Expand the CSM Release Create the Bootable Media Configuration Payload Before Configuration Payload Workarounds Generate Installation Files CSI Workarounds SHASTA-CFG Pre-Populate LiveCD Daemons Configuration and NCN Artifacts Boot the LiveCD First Login Download and Expand the CSM Release Fetch the base installation CSM tarball and extract it, installing the contained CSI tool.</description>
+    </item>
+    <item>
+      <title>Change NCN Image Root Password and SSH Keys</title>
+      <link>/docs-csm/en-09/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:09 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys/</guid>
+      <description>Change NCN Image Root Password and SSH Keys The default SSH keys in the NCN image must be removed. The default password for the root user must be changed. Customize the NCN images by changing the root password or adding different SSH keys for the root account. This procedure shows this process being done any time after the first time installation of the CSM software has been completed and the PIT node is booted as a regular master node.</description>
+    </item>
+    <item>
+      <title>Removing a Liquid-cooled blade from a System</title>
+      <link>/docs-csm/en-09/operations/node_management/removing_a_liquid-cooled_blade_from_a_system/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/node_management/removing_a_liquid-cooled_blade_from_a_system/</guid>
+      <description>Removing a Liquid-cooled blade from a System This procedure will remove a liquid-cooled blades from a HPE Cray EX system.&#xA;Perquisites The Cray command line interface (CLI) tool is initialized and configured on the system.&#xA;Knowledge of whether DVS is operating over the Node Management Network (NMN) or the High Speed Network (HSN).&#xA;The Slingshot fabric must be configured with the desired topology for desired state of the blades in the system.</description>
+    </item>
+    <item>
+      <title>LiveCD Remote ISO Install</title>
+      <link>/docs-csm/en-09/004-csm-remote-livecd/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:00 +0000</pubDate>
+      <guid>/docs-csm/en-09/004-csm-remote-livecd/</guid>
+      <description>LiveCD Remote ISO Install This page will assist you with configuring and activating your booted LiveCD through a remote KVM.&#xA;LiveCD Setup LiveCD Interfaces Setup the Site-Link Connection(s) Setup Internal Connections Download and Install the Workaround and Documentation RPMs Customization Hostname SHASTA-CFG Cray Site Init CA Certificate Validate the LiveCD platform. LiveCD Services Configure NTP Validate the LiveCD Services Verify Outside Name Resolution Attaching the ISO to the node varies by the vendor:</description>
+    </item>
+    <item>
+      <title>Change NCN Image Root Password and SSH Keys on PIT Node</title>
+      <link>/docs-csm/en-09/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys_on_pit_node/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:09 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys_on_pit_node/</guid>
+      <description>Change NCN Image Root Password and SSH Keys on PIT Node The default SSH keys in the NCN image must be removed. The default password for the root user must be changed. Customize the NCN images by changing the root password and adding different SSH keys for the root account. This procedure shows this process being done on the PIT node during a first time installation of the CSM software.</description>
+    </item>
+    <item>
+      <title>CSM Metal Install</title>
+      <link>/docs-csm/en-09/005-csm-metal-install/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-09/005-csm-metal-install/</guid>
+      <description>CSM Metal Install WARNING: Gigabyte NCNs running firmware version C20 can become unusable when Shasta 1.4 is installed. This is a result of a bug in the Gigabyte firmware that ships with Shasta 1.4. This bug has not been observed in firmware version C17.&#xA;A key symptom of this bug is that the NCN will not PXE boot and will instead fall through to the boot menu, despite being configure to PXE boot.</description>
+    </item>
+    <item>
+      <title>Change SMNP Credentials on Leaf Switches</title>
+      <link>/docs-csm/en-09/operations/security_and_authentication/change_smnp_credentials_on_leaf_switches/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:09 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/security_and_authentication/change_smnp_credentials_on_leaf_switches/</guid>
+      <description>Change SMNP Credentials on Leaf Switches This procedure changes the SNMP credentials on management leaf switches in the system. Either a single leaf switch can be updated to use new SNMP credentials, or update all leaf switches in the system to use the same global SNMP credentials.&#xA;NOTE: This procedure will not update the default SNMP credentials used when new leaf switches are added to the system. To update the default SNMP credentials for new hardware, follow the Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials procedure.</description>
+    </item>
+    <item>
+      <title>CSM Platform Install</title>
+      <link>/docs-csm/en-09/006-csm-platform-install/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-09/006-csm-platform-install/</guid>
+      <description>CSM Platform Install This page will go over how to install CSM applications and services (i.e., into the CSM Kubernetes cluster).&#xA;Initialize Bootstrap Registry&#xA;Create Site-Init Secret&#xA;Deploy Sealed Secret Decryption Key&#xA;Deploy CSM Applications and Services&#xA;Setup Nexus Set NCNs to use Unbound Initialize cray CLI Apply After Sysmgmt Manifest Workarounds Add Compute Cabinet Routing to NCNs Validate CSM Install&#xA;Reboot from the LiveCD to NCN&#xA;Known Issues&#xA;error: timed out waiting for the condition on jobs/cray-sls-init-load Error: not ready: https://packages.</description>
+    </item>
+    <item>
+      <title>Change the Keycloak Admin Password</title>
+      <link>/docs-csm/en-09/operations/security_and_authentication/change_the_keycloak_admin_password/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:09 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/security_and_authentication/change_the_keycloak_admin_password/</guid>
+      <description>Change the Keycloak Admin Password Update the default password for the admin Keycloak account using the Keycloak user interface (UI). After updating the password in Keycloak, encrypt it on the system and verify that the change was made successfully.&#xA;This procedure uses SYSTEM_DOMAIN_NAME as an example for the DNS name of the non-compute node (NCN). Replace this name with the actual NCN&amp;rsquo;s DNS name while executing this procedure.&#xA;Procedure Log in to Keycloak with the default admin credentials.</description>
+    </item>
+    <item>
+      <title>CSM Install Reboot - Final NCN Install</title>
+      <link>/docs-csm/en-09/007-csm-install-reboot/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-09/007-csm-install-reboot/</guid>
+      <description>CSM Install Reboot - Final NCN Install This page describes rebooting and deploying the non-compute node that is currently hosting the LiveCD.&#xA;Required Services Notice of Danger LiveCD Pre-Reboot Workarounds Hand-Off Start Hand-Off Reboot Accessing USB Partitions After Reboot Accessing CSI from a USB or RemoteISO Enable NCN Disk Wiping Safeguard Required Services These services must be healthy in Kubernetes before the reboot of the LiveCD can take place.&#xA;Required Platform Services:</description>
+    </item>
+    <item>
+      <title>Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials</title>
+      <link>/docs-csm/en-09/operations/security_and_authentication/provisioning_a_liquid-cooled_ex_cabinet_cec_with_default_credentials/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:09 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/security_and_authentication/provisioning_a_liquid-cooled_ex_cabinet_cec_with_default_credentials/</guid>
+      <description>Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials This procedure provisions a Glibc compatible SHA-512 administrative password hash to a cabinet environmental controller (CEC). This password becomes the Redfish default global credential to access the CMM controllers and node controllers (BMCs).&#xA;This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC default credentials must be changed using the procedures in the Slingshot product documentation. To update Slingshot switch BMCs, refer to &amp;ldquo;Change Rosetta Login and Redfish API Credentials&amp;rdquo; in the Slingshot Operations Guide (&amp;gt;1.</description>
+    </item>
+    <item>
+      <title>CSM Install Validation and Health Checks</title>
+      <link>/docs-csm/en-09/008-csm-validation/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-09/008-csm-validation/</guid>
+      <description>CSM Install Validation and Health Checks This page lists available CSM install and health checks that can be executed to validate the CSM install.&#xA;Platform Health Checks ncnHealthChecks ncnPostgresHealthChecks Clock Skew BGP Peering Status and Reset Network Health Checks KEA / DHCP External DNS Spire Agent Vault Cluster Automated Goss Testing Hardware Management Services Tests Cray Management Services Validation Utility Booting CSM Barebones Image UAS/UAI Tests Examples of when you may wish to run them are:</description>
+    </item>
+    <item>
+      <title>Restrict Network Access to the ncn-images S3 Bucket</title>
+      <link>/docs-csm/en-09/operations/security_and_authentication/restrict_access_to_ncn_images_s3_bucket/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:09 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/security_and_authentication/restrict_access_to_ncn_images_s3_bucket/</guid>
+      <description>Restrict Network Access to the ncn-images S3 Bucket The configuration documented in this procedure is intended to prevent user-facing dedicated nodes (UANs, Compute Nodes) from retrieving NCN image content from Ceph S3 services, as running on storage nodes.&#xA;Specifically, the controls enacted via this procedure should do the following:&#xA;Block HAProxy access to the ncn-images bucket if the client is not an NCN (NMN) or PXE booting from the MTL network.</description>
+    </item>
+    <item>
+      <title>NCN/Management Node Locking</title>
+      <link>/docs-csm/en-09/009-ncn-locking/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-09/009-ncn-locking/</guid>
+      <description>NCN/Management Node Locking * [Why?](#why) * [When To Lock Management NCNs](#when-to-lock-management-ncns) * [When To Unlock Management NCNs](#when-to-unlock-management-ncns) * [Locked Behavior](#locked-behavior) * [START -&amp;gt; How To Lock Management NCNs](#how-to-lock-management-ncns) * [How To Unlock Management NCNs](#how-to-unlock-management-ncns) * [Next Steps](#next-steps) Why? In Shasta 1.4 NCN black listing is turned off by default for CAPMC and FAS. Also, please note that Management NCNs are NOT locked by default either.&#xA;Thus it is up to the administrator to properly lock NCNs to prevent things from accidentally being done to them, namely:</description>
+    </item>
+    <item>
+      <title>Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials</title>
+      <link>/docs-csm/en-09/operations/security_and_authentication/update_default_air-cooled_bmc_and_leaf_switch_snmp_credentials/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:09 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/security_and_authentication/update_default_air-cooled_bmc_and_leaf_switch_snmp_credentials/</guid>
+      <description>Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials This procedure updates the default credentials used when new air-cooled hardware is discovered for the first time. This includes the default Redfish credentials used for new air-cooled NodeBMCs and Slingshot switch BMCs (RouterBMCs), and SNMP credentials for new management leaf switches.&#xA;Important: After this procedure is completed going forward all future air-cooled hardware added to the system will be assumed to be already configured with the new global default credential when getting added to the system.</description>
+    </item>
+    <item>
+      <title>Firmware Update the system with FAS</title>
+      <link>/docs-csm/en-09/010-firmware-update-with-fas/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-09/010-firmware-update-with-fas/</guid>
+      <description>Firmware Update the system with FAS Prerequisites Current Capabilities as of Shasta Release v1.4 Order Of Operations Hardware Precedence Order Next steps Prerequisites 001-008 have been completed; CSM has been installed and HSM is running with discovered nodes. Firmware has been loaded into FAS as part of the CSM install 009 has been applied and the NCNs are locked. Identify the type and manufacturers of hardware in your system. If you do not have Gigabyte nodes, do not update them!</description>
+    </item>
+    <item>
+      <title>Update Default ServerTech PDU Credentials used by the Redfish Translation Service (RTS)</title>
+      <link>/docs-csm/en-09/operations/security_and_authentication/update_default_servertech_pdu_credentials_used_by_the_redfish_translation_service/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:09 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/security_and_authentication/update_default_servertech_pdu_credentials_used_by_the_redfish_translation_service/</guid>
+      <description>Update Default ServerTech PDU Credentials used by the Redfish Translation Service (RTS) This procedure updates the default credentials used by the Redfish Translation Service (RTS) for when new ServerTech PDUs are discovered in a system.&#xA;The Redfish Translation Service provides a Redfish interface that the Hardware State Manager (HSM) and Cray Advanced Platform Monitoring and Control (CAPMC) services can use interact with ServerTech PDUs which do not natively support Redfish.</description>
+    </item>
+    <item>
+      <title>Disk Cleanslate</title>
+      <link>/docs-csm/en-09/051-disk-cleanslate/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-09/051-disk-cleanslate/</guid>
+      <description>Disk Cleanslate Use Cases Basic Wipe Advanced Wipe Full Wipe This page will detail how disks are wiped and workarounds for wedged disks.&#xA;Any process covered on this page will be covered by the installer.&#xA;Everything in this guide should be considered DESTRUCTIVE.&#xA;After following these procedures an NCN can be rebooted and redeployed.&#xA;Use Cases Ideally the Basic Wipe is enough, and should be tried first. All of these procedures may be ran from Linux or an initramFS/initrd emergency shell.</description>
+    </item>
+    <item>
+      <title>Update NCN Passwords</title>
+      <link>/docs-csm/en-09/operations/security_and_authentication/update_ncn_passwords/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:09 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/security_and_authentication/update_ncn_passwords/</guid>
+      <description>Update NCN Passwords The management nodes deploy with a default password in the image, so it is a recommended best practice for system security to change the root password in the image so that it is not the documented default password. In addition to the root password in the image, NCN personalization should be used to change the password as part of post-boot CFS. The password in the image should be used when console access is desired during the network boot of a management node that is being rebuilt, but this password should be different than the one stored in Vault that is applied by CFS during post-boot NCN personalization to change the on-disk password.</description>
+    </item>
+    <item>
+      <title>Network Stack (Software and Hardware)</title>
+      <link>/docs-csm/en-09/052-network-stack/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-09/052-network-stack/</guid>
+      <description>Network Stack (Software and Hardware) This page will detail how to reload/reset interfaces within the network stack to fix wedged interfaces.&#xA;Any process covered on this page will be covered by the installer.&#xA;Network Interfaces The NCNs have network device names set during first boot. The names vary based on the available hardware. For more information, see NCN Networking.&#xA;Network Stack There are a few daemons that makeup the SUSE network stack:</description>
+    </item>
+    <item>
+      <title>Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change</title>
+      <link>/docs-csm/en-09/operations/security_and_authentication/updating_the_liquid-cooled_ex_cabinet_default_credentials_after_a_cec_password_change/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:09 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/security_and_authentication/updating_the_liquid-cooled_ex_cabinet_default_credentials_after_a_cec_password_change/</guid>
+      <description>Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change This procedure changes the credential for liquid-cooled EX cabinet chassis controllers and node controller (BMCs) used by CSM services after the CECs have been set to a new global default credential.&#xA;NOTE: This procedure does not provision Slingshot switch BMCs (RouterBMCs). Slingshot switch BMC default credentials must be changed using the procedures in the Slingshot product documentation. To update Slingshot switch BMCs, refer to &amp;ldquo;Change Rosetta Login and Redfish API Credentials&amp;rdquo; in the Slingshot Operations Guide (&amp;gt;1.</description>
+    </item>
+    <item>
+      <title>Overview</title>
+      <link>/docs-csm/en-09/055-certificate-authority/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-09/055-certificate-authority/</guid>
+      <description>Overview At install time, a PKI certificate authority (CA) can either be generated for a system, or a customer can opt to supply their own (intermediate) CA.&#xA;Outside of a new installation, there is currently no supported method to rotate (change) the platform CA. The ability to rotate CAs is anticipated as part of a future release.&#xA;Sealed Secrets, part of shasta-cfg, are used by the installation process to inject CA material in an encrypted form.</description>
+    </item>
+    <item>
+      <title>LiveCD Recovery</title>
+      <link>/docs-csm/en-09/058-livecd-troubleshooting/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-09/058-livecd-troubleshooting/</guid>
+      <description>LiveCD Recovery This page will contain sections for recovering the LiveCD.&#xA;Root Password Root Password It may become desirable to clear the password on the LiveCD.&#xA;The root password is preserved within the COW partition at cow:rw/etc/shadow. This is the modified copy of the /etc/shadow file used by the operating system.&#xA;If a site/user needs to reset/clear the password for root, they can mount their USB on another machine and remove this file from the COW partition.</description>
+    </item>
+    <item>
+      <title>LiveCD Re-Installs</title>
+      <link>/docs-csm/en-09/059-livecd-backup/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-09/059-livecd-backup/</guid>
+      <description>LiveCD Re-Installs This page will go over how to setup a re-install on a node.&#xA;Backup to the data partition:&#xA;pit# mkdir -pv /var/www/ephemeral/backup pit# pushd /var/www/ephemeral/backup pit# tar -czvf &amp;#34;dnsmasq-data-$(date &amp;#39;+%Y-%m-%d_%H-%M-%S&amp;#39;).tar.gz&amp;#34; /etc/dnsmasq.* pit# tar -czvf &amp;#34;network-data-$(date &amp;#39;+%Y-%m-%d_%H-%M-%S&amp;#39;).tar.gz&amp;#34; /etc/sysconfig/network/* pit# cp -pv /etc/hosts ./ pit# popd pit# umount /var/www/ephemeral Now the USB stick can be unplugged, it contains all the information we already loaded plus backups of initialized files.&#xA;Plug the stick into a new machine, or make a backup on the booted NCN.</description>
+    </item>
+    <item>
+      <title>LiveCD 1.3 Rollback</title>
+      <link>/docs-csm/en-09/060-livecd-1.3-rollback/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-09/060-livecd-1.3-rollback/</guid>
+      <description>LiveCD 1.3 Rollback Reboot into the BIOS and change the boot order so the USB drive is not first Run ansible-playbook /opt/cray/crayctl/ansible_framework/main/enable-dns-conflict-hosts.yml -l ncn-w001 once you are booted back into the 1.3 install systemctl start dhcpd for i in ncn-{m,s}00{1..3}-mgmt ncn-w00{2..3}-mgmt; do echo &amp;quot;------$i--------&amp;quot;; ipmitool -I lanplus -U $username -P $password -H $i chassis power on; done systemctl stop dhcpd &amp;amp;&amp;amp; ansible-playbook /opt/cray/crayctl/ansible_framework/main/disable-dns-conflict-hosts.yml -l ncn-w001 Wait a bit ansible ncn* -m ping until all nodes are up Get a quick overview of how things look: kubectl get nodes kubectl get pods -A | grep Running | wc -l kubectl get pods -A | grep Completed | wc -l kubectl get pods -A | grep Crash | wc -l kubectl get pods -A | grep Image | wc -l ansible ncn-m* -m command -a &amp;#39;ceph health&amp;#39; Fixing Ceph and Kubernetes If things are not quite working, you can try starting these services back up on the affected nodes.</description>
+    </item>
+    <item>
+      <title>LiveCD - Metal Basecamp</title>
+      <link>/docs-csm/en-09/061-livecd-metal-basecamp/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-09/061-livecd-metal-basecamp/</guid>
+      <description>LiveCD - Metal Basecamp Metal Basecamp is a cloud-init DataSource available on the LiveCD. Basecamp&amp;rsquo;s configuration file offers many inputs for various cloud-init scripts baked into the NCN images.&#xA;This page details what those settings are.&#xA;Basecamp Config Files Purging Basecamp CAN CEPH Certificate Authority RADOS Gateway Wiping DNS * Resolution Configuration * Static Fallback Kubernetes NTP Node Auditing Generally these settings are determined by the cray-site-init tool. See csi config --help for more information.</description>
+    </item>
+    <item>
+      <title>LiveCD Virtual ISO Boot</title>
+      <link>/docs-csm/en-09/062-livecd-virtual-iso-boot/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:02 +0000</pubDate>
+      <guid>/docs-csm/en-09/062-livecd-virtual-iso-boot/</guid>
+      <description>LiveCD Virtual ISO Boot This page will walk-through booting the LiveCD .iso file directly onto a BMC.&#xA;Requirements BMCs&amp;rsquo; Virtual Mounts HPE iLO BMCs Gigabyte BMCs Intel BMCs Configuring Backing up the Overlay COW FS Restoring from an Overlay COW FS Backup Requirements A Cray Pre-Install Toolkit ISO is required for this process. This ISO can be obtained from:&#xA;The Cray Pre-Install Toolkit ISO included in a CSM release tar file.</description>
+    </item>
+    <item>
+      <title>Cray Site Init Files</title>
+      <link>/docs-csm/en-09/063-csi-files/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:02 +0000</pubDate>
+      <guid>/docs-csm/en-09/063-csi-files/</guid>
+      <description>Cray Site Init Files This page describes administrative knowledge around CSI&amp;rsquo;s files.&#xA;Detailed information for collecting certain files starts in Service Guides&#xA;Save-File / Avoiding Parameters CSI hmn_connections.json Notes Save-File / Avoiding Parameters A system_config.yaml file may be provided by the administrator that will omit the need for specifying parameters on the command line.&#xA;This file is dumped in the generated configs after every csi config init call, the new dumped file serves as a fingerprint for re-generated the same configs.</description>
+    </item>
+    <item>
+      <title>Safeguards</title>
+      <link>/docs-csm/en-09/065-csm-safeguards/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:02 +0000</pubDate>
+      <guid>/docs-csm/en-09/065-csm-safeguards/</guid>
+      <description>Safeguards This page covers safe-guards for preventing destructive behaviors on NCNs.&#xA;If you are upgrading you should run through these safe-guards on a by-case basis:&#xA;Whether or not CEPH should be preserved. Whether or not the RAIDs should be protected. Safeguard CEPH OSDs Edit /var/www/ephemeral/configs/data.json and align the following options:&#xA;{ .. // Disables Ceph wipe: &amp;#34;wipe-ceph-osds&amp;#34;: &amp;#34;no&amp;#34; .. } { .. // Restores default behavior: &amp;#34;wipe-ceph-osds&amp;#34;: &amp;#34;yes&amp;#34; .. } pit# vi /var/www/ephemeral/configs/data.</description>
+    </item>
+    <item>
+      <title>CEPH CSI Verification</title>
+      <link>/docs-csm/en-09/066-ceph-csi/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:02 +0000</pubDate>
+      <guid>/docs-csm/en-09/066-ceph-csi/</guid>
+      <description>CEPH CSI Verification Verify that the ceph-csi requirements are in place&#xA;Verify all post-Ceph install tasks have run Log in to ncn-s001 and check /etc/cray/ceph for completed task files.&#xA;ncn-s001# ls /etc/cray/ceph/ ceph_k8s_initialized csi_initialized installed kubernetes_nodes.txt tuned Check to see if k8s ceph-csi prerequisites have been created You can run this from any storage, manager, or worker node.&#xA;pit# kubectl get cm NAME DATA AGE ceph-csi-config 1 3h50m cephfs-csi-sc 1 3h50m kube-csi-sc 1 3h50m sma-csi-sc 1 3h50m sts-rados-config 1 4h pit# kubectl get secrets | grep csi csi-cephfs-secret Opaque 4 3h51m csi-kube-secret Opaque 2 3h51m csi-sma-secret Opaque 2 3h51m Check your results against the above examples.</description>
+    </item>
+    <item>
+      <title>Setup Site-Init From SHASTA-CFG</title>
+      <link>/docs-csm/en-09/067-shasta-cfg/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:02 +0000</pubDate>
+      <guid>/docs-csm/en-09/067-shasta-cfg/</guid>
+      <description>Setup Site-Init From SHASTA-CFG These procedures guide administrators through setting up the site-init directory which contains important customizations for various products. The appendix is informational only; it does not include any default install procedures.&#xA;Background Create and Initialize Site-Init Directory Create Baseline System Customizations Generate Sealed Secrets Version Control Site-Init Files Push to a Remote Repository Customer-Specific Customizations Appendix Tracked Sealed Secrets Decrypting Sealed Secrets for Review Background The shasta-cfg directory included in CSM includes relatively static, installation-centric artifacts such as:</description>
+    </item>
+    <item>
+      <title>HARVEST 13 CONFIG</title>
+      <link>/docs-csm/en-09/068-harvest-13-config/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:02 +0000</pubDate>
+      <guid>/docs-csm/en-09/068-harvest-13-config/</guid>
+      <description>HARVEST 13 CONFIG This procedure provides advice for information to collect from a healthy Shasta v1.3 system.&#xA;Collect data needed to prepare Shasta v1.4 installation pre-config files Save operational information about which components are disabled and why Save site customizations to use as a guide for customizing a Shasta v1.4 system Although some configuration data can be saved from a Shasta v1.3 system, there are new configuration files needed for Shasta v1.</description>
+    </item>
+    <item>
+      <title>Upgrade CSM Install Workarounds RPM</title>
+      <link>/docs-csm/en-09/069-upgrade-workarounds-rpm/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:02 +0000</pubDate>
+      <guid>/docs-csm/en-09/069-upgrade-workarounds-rpm/</guid>
+      <description>Upgrade CSM Install Workarounds RPM Workarounds for CSM are built and can be distributed separately from the main CSM release. This allows for future alternations of workarounds without having to re-release all of CSM. If this happens, it is necessary to upgrade the RPM from the originally installed version to the newly distributed one to receive the latest workarounds.&#xA;The process for doing this is quite simple:&#xA;Download or copy the RPM to ncn-m001.</description>
+    </item>
+    <item>
+      <title>Utility Storage Installation Troubleshooting</title>
+      <link>/docs-csm/en-09/070-usp-install-workarounds/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:02 +0000</pubDate>
+      <guid>/docs-csm/en-09/070-usp-install-workarounds/</guid>
+      <description>Utility Storage Installation Troubleshooting Occasionally we observe an installation failure during the ceph install. We will break these up into scenarios. Please match your scenario prior to executing any workarounds&#xA;Scenario 1 IMPORTANT (FOR NODE INSTALLS/REINSTALLS ONLY): If your Ceph install failed please check the following&#xA;ncn-s# ceph osd tree ID CLASS WEIGHT TYPE NAME STATUS REWEIGHT PRI-AFF -1 83.83459 root default -5 27.94470 host ncn-s001 0 ssd 3.49309 osd.0 up 1.</description>
+    </item>
+    <item>
+      <title>Non-Compute Node Images</title>
+      <link>/docs-csm/en-09/100-ncn-images/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:02 +0000</pubDate>
+      <guid>/docs-csm/en-09/100-ncn-images/</guid>
+      <description>Non-Compute Node Images There are several flavors of NCN images, each share a common base image. When booting NCNs an admin or user will need to choose between stable (Release) and unstable (pre-release/dev) images.&#xA;For details on how these images behave and inherit from the base and common images, see [node-image-docs][1].&#xA;In short, each application image (i.e. Kubernetes and storage-ceph) inherit from the non-compute-common layer. Operationally these are all that matter; the common layer, Kubernetes layer, Ceph layer, and any other new application images.</description>
+    </item>
+    <item>
+      <title>NCN Booting</title>
+      <link>/docs-csm/en-09/101-ncn-booting/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:02 +0000</pubDate>
+      <guid>/docs-csm/en-09/101-ncn-booting/</guid>
+      <description>NCN Booting Non-compute nodes boot two ways:&#xA;Network/PXE booting Disk Booting Table of Contents:&#xA;How can I tell if I booted via disk or pxe? Set BMCs to DHCP Boot Order Setting Order Trimming Examples Reverting Changes Locating a USB Stick How can I tell if I booted via disk or pxe? Two ways, one may be easier depending on your env.&#xA;cat /proc/cmdline if it starts with kernel then the node network booted.</description>
+    </item>
+    <item>
+      <title>Networking</title>
+      <link>/docs-csm/en-09/103-ncn-networking/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:02 +0000</pubDate>
+      <guid>/docs-csm/en-09/103-ncn-networking/</guid>
+      <description>Networking Non-computes and computes have different network interfaces, this page will talk about non-computes but in the context of a metal stack.&#xA;Name Type MTU mgmt0 Slot 1 on the SMNET card. 9000 mgmt1 Slot 2 on the SMNET card, or slot 1 on the 2nd SMNET card. 9000 bond0 LACP Link Agg. of mgmt0 and mgmt1, or mgmt0 and mgmt2 on dual-bonds (when bond1 is present). 9000 bond1 LACP Link Agg.</description>
+    </item>
+    <item>
+      <title>NCN Partitions</title>
+      <link>/docs-csm/en-09/104-ncn-partitioning/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:02 +0000</pubDate>
+      <guid>/docs-csm/en-09/104-ncn-partitioning/</guid>
+      <description>NCN Partitions Shasta non-compute nodes use drive storage for persistence and block storage. This page outlines reference information for these disks, their partition tables, and their management.&#xA;NCN Partitions What Controls Partitioning? Plan of Record / Baseline Problems When Above/Below Baseline Worker Nodes with ETCD Disable Luks Expand the RAID Disk Layout Quick-Reference Tables OverlayFS and Persistence Persistent Directories OverlayFS Example Layering - Upperdir and Lowerdir(s) Layering Real World Example OverlayFS Control Reset Toggles Reset On Next Boot Reset on Every Boot Re-sizing the Persistent Overlay Thin Overlay Feature SystemD MetalFS Old/Retired FS-Labels What Controls Partitioning?</description>
+    </item>
+    <item>
+      <title>NCN Packages</title>
+      <link>/docs-csm/en-09/105-ncn-packages/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:02 +0000</pubDate>
+      <guid>/docs-csm/en-09/105-ncn-packages/</guid>
+      <description>NCN Packages These are defined elsewhere, but this list updates for quick-reference. These lists are generated on running nodes, but to account for drift there are collection commands listed for each image.&#xA;Kubernetes Images Collection ncn-w002# zypper --disable-repositories se --installed-only | grep i+ | tr -d &amp;#39;|&amp;#39; | awk &amp;#39;{print $2}&amp;#39; The List SLE_HPC SLE_HPC-release acpid apparmor-profiles arptables at autoyast2 autoyast2-installation base bc bind-utils biosdevname ceph-common cfs-state-reporter cloud-init conntrack-tools cpupower crash cray-cos-release cray-cps-utils cray-dvs-kmp-default cray-dvs-service cray-heartbeat cray-lustre-client cray-lustre-client-devel cray-lustre-client-kmp-default cray-network-config cray-node-identity cray-orca cray-power-button cray-sat-podman craycli-wrapper createrepo_c dnsmasq dosfstools dracut-kiwi-live dracut-metal-mdsquash dump e2fsprogs ebtables emacs ethtool expect fping gdb genders git-core glibc gnuplot gperftools gptfdisk grub2 haproxy hpe-csm-scripts hplip ipmitool iproute2-bash-completion ipset ipvsadm irqbalance java-1_8_0-ibm java-1_8_0-ibm-plugin kdump kdumpid keepalived kernel-mft-mlnx-kmp-default kernel-source kernel-syms kexec-tools kmod-bash-completion kubeadm kubectl kubelet less libcanberra-gtk0 libecpg6 libpq5 libunwind-devel ltrace lvm2 man mariadb mariadb-tools mdadm minicom mlocate nmap numactl open-lldp patterns-base-base pdsh perf perl-MailTools perl-doc pixz podman podman-cni-config postgresql postgresql-contrib postgresql-docs postgresql-server python python-urlgrabber python3-Jinja2 python3-MarkupSafe python3-click python3-colorama python3-curses python3-ipaddr python3-lxml python3-netaddr python3-pexpect python3-pip python3-rpm python3-sip rarpd rasdaemon rsync rsyslog rzsz screen slingshot-network-config smartmontools socat spire-agent squashfs squid strace sudo sysstat systemtap tar tcpdump unixODBC usbutils vim wget wireshark xfsdump yast2-add-on yast2-bootloader yast2-country yast2-network yast2-services-manager yast2-users yum-metadata-parser zip CEPH Collection ncn-s002# zypper --disable-repositories se --installed-only | grep i+ | tr -d &amp;#39;|&amp;#39; | awk &amp;#39;{print $2}&amp;#39; The List SLE_HPC SLE_HPC-release acpid apparmor-profiles arptables at autoyast2 autoyast2-installation base bc bind-utils biosdevname ceph-mds ceph-mgr ceph-mon ceph-osd ceph-radosgw cfs-state-reporter cloud-init cpupower crash cray-cos-release cray-dvs-kmp-default cray-dvs-service cray-heartbeat cray-lustre-client cray-lustre-client-devel cray-lustre-client-kmp-default cray-network-config cray-node-identity cray-power-button craycli-wrapper createrepo_c dnsmasq dosfstools dracut-kiwi-live dracut-metal-mdsquash dump e2fsprogs ebtables emacs ethtool expect fping gdb genders git-core glibc gnuplot gperftools gptfdisk grub2 haproxy hpe-csm-scripts hplip ipmitool iproute2-bash-completion ipset irqbalance java-1_8_0-ibm java-1_8_0-ibm-plugin kdump kdumpid keepalived kernel-mft-mlnx-kmp-default kernel-source kernel-syms kexec-tools kmod-bash-completion kubectl less libcanberra-gtk0 libecpg6 libpq5 libunwind-devel ltrace lvm2 man mariadb mariadb-tools mdadm minicom mlocate netcat-openbsd nmap numactl open-lldp patterns-base-base pdsh perf perl-MailTools perl-doc pixz podman podman-cni-config postgresql postgresql-contrib postgresql-docs postgresql-server python python-urlgrabber python3-Jinja2 python3-MarkupSafe python3-boto3 python3-click python3-colorama python3-curses python3-ipaddr python3-lxml python3-netaddr python3-pexpect python3-pip python3-rpm python3-sip rarpd rasdaemon rsync rsyslog rzsz screen slingshot-network-config smartmontools socat spire-agent squashfs squid strace sudo sysstat systemtap tar tcpdump unixODBC usbutils vim wget wireshark xfsdump yast2-add-on yast2-bootloader yast2-country yast2-network yast2-services-manager yast2-users yum-metadata-parser zip </description>
+    </item>
+    <item>
+      <title>NCN Operating System Release</title>
+      <link>/docs-csm/en-09/106-ncn-sles/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:03 +0000</pubDate>
+      <guid>/docs-csm/en-09/106-ncn-sles/</guid>
+      <description>NCN Operating System Release The NCNs define their products per image layer:&#xA;VSHASTA All images are SLES (SuSE Linux Enterprise Server) METAL Metal SquashFS are always SLE_HPC (SuSE High Performance Computing) Metal CEPH Storage Images are always SLE_HPC (SuSE High Performance Computing) with SES (SuSE Enterprise Storage) Release RPM Details The sles-release RPM is uninstalled for Metal, instead the sle_HPC-release RPM is installed. These both provide the same files, but differ for os-release and /etc/product.</description>
+    </item>
+    <item>
+      <title>NCN Development</title>
+      <link>/docs-csm/en-09/107-ncn-devel/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:03 +0000</pubDate>
+      <guid>/docs-csm/en-09/107-ncn-devel/</guid>
+      <description>NCN Development This page will help you if you are trying to test new images on a metal system. Here you can find a basic flow for iterative boots.&#xA;We assume you are internally developing; these scripts are for internal use only.&#xA;Get your Image ID&#xA;-k for Kubernetes, -s for storage/ceph&#xA;pit# /root/bin/get-sqfs.sh -k 9683117-1609280754169 pit# /root/bin/get-sqfs.sh -s c46624e-1609524120402 Set your Image IDs&#xA;This finds the newest pair, so it will find the last downloaded set (i.</description>
+    </item>
+    <item>
+      <title>NTP On NCNs</title>
+      <link>/docs-csm/en-09/108-ncn-ntp/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:03 +0000</pubDate>
+      <guid>/docs-csm/en-09/108-ncn-ntp/</guid>
+      <description>NTP On NCNs Internal use only See this epic for details: MTL-1182.&#xA;The NCNs serve NTP at stratum 3 and all NCNs peer with each other. Currently, the LiveCD does is not running NTP, but the other nodes are when they are booted.&#xA;NTP is currently allowed on the NMN and HMN networks.&#xA;The NTP peers are set in data.json, which is normally created during an initial install. It is possible to edit this file at a later point, restart basecamp, and then reboot the nodes to apply the change.</description>
+    </item>
+    <item>
+      <title>NCN Image Customization</title>
+      <link>/docs-csm/en-09/110-ncn-image-customization/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:03 +0000</pubDate>
+      <guid>/docs-csm/en-09/110-ncn-image-customization/</guid>
+      <description>NCN Image Customization The LiveCD is equipped for &amp;ldquo;re-squashing&amp;rdquo; an SquashFS images.&#xA;Boot Customization Set the Default Password Image Layer Pipeline Boot Customization Set the Default Password Customize the NCN images by changing the root password or adding different SSH keys for the root account.&#xA;This process should be done for the &amp;ldquo;Kubernetes&amp;rdquo; image used by master and worker nodes and then repeated for the Ceph image used by the utility storage nodes.</description>
+    </item>
+    <item>
+      <title>NCN BIOS Preferences</title>
+      <link>/docs-csm/en-09/200-ncn-bios-pref/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:03 +0000</pubDate>
+      <guid>/docs-csm/en-09/200-ncn-bios-pref/</guid>
+      <description>NCN BIOS Preferences This page goes over desired NCN BIOS settings specifications.&#xA;For setting each one, please refer to the vendor manuals for the systems inventory.&#xA;Spec. NOTE The table below declares desired settings; unlisted settings should remain at vendor-default. This table may be expanded as new settings are adjusted.&#xA;Common Name Common Value Memo Menu Location Intel® Hyper-Threading (e.g. HT) Enabled Enables two-threads per physical core. Within the Processor or the PCH Menu.</description>
+    </item>
+    <item>
+      <title>Firmware Checkout</title>
+      <link>/docs-csm/en-09/250-firmware/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:03 +0000</pubDate>
+      <guid>/docs-csm/en-09/250-firmware/</guid>
+      <description>Firmware Checkout This page will guide an administrator on 3 things:&#xA;Checking Firmware Status Applying Firmware over the GUI (optionally) Applying firmware via Redfish Information below is sorted based on device type; complete each when directed to by the prerequisite page. On the other hand, if an administrator is using this guide ad-hoc then they must complete each of the listed guides in order.&#xA;(required) Management Network Firmware Guide (required) NCN Firmware Guide for Bootstrap Guides for Runtime The following guide(s) can be done when the CRAY is operational (in runtime).</description>
+    </item>
+    <item>
+      <title>Network Firmware</title>
+      <link>/docs-csm/en-09/251-firmware-network/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:03 +0000</pubDate>
+      <guid>/docs-csm/en-09/251-firmware-network/</guid>
+      <description>Network Firmware This firmware is updated manually, and needs to be checked prior to an install.&#xA;IMPORTANT NOTE systems with multi-chassis link-aggregations must meet this pages minimum specifications for optimal deployment.&#xA;Management Network Switches AIRGAP NOTE: This firmware is available off the LiveCD (http://pit/fw/network/), see more endpoints here.&#xA;Vendor Model Version Aruba 6300 ArubaOS-CX_6400-6300_10.06.0010 Aruba 8320 ArubaOS-CX_8320_10.06.0010 Aruba 8325 ArubaOS-CX_8325_10.06.0010 Aruba 8360 ArubaOS-CX_8360.06.0010 Dell S3048-ON 10.5.1.4 Dell S4148F-ON 10.5.1.4 Dell S4148T-ON 10.</description>
+    </item>
+    <item>
+      <title>Node Firmware</title>
+      <link>/docs-csm/en-09/252-firmware-ncn/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:03 +0000</pubDate>
+      <guid>/docs-csm/en-09/252-firmware-ncn/</guid>
+      <description>Node Firmware This page will walk an administrator through NCN BIOS and firmware checkout.&#xA;To complete firmware checkout, proceed through the below sections:&#xA;Confirm BIOS and Firmware Inventory Identifying BIOS and Hardware Gigabyte Upgrades HPE (iLO) Upgrades Pre-Reqs GUI Redfish Component Firmware Checkout Marvell Upgrades Mellanox Upgrades Enable Tools Check Current Firmware Optional Online Update Confirm BIOS and Firmware Inventory CUSTOMER NOTE If there is doubt that the tar contains latest, the customer should check CrayPort for newer firmware.</description>
+    </item>
+    <item>
+      <title>NCN Hardware Swaps</title>
+      <link>/docs-csm/en-09/253-ncn-hw-swap/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:03 +0000</pubDate>
+      <guid>/docs-csm/en-09/253-ncn-hw-swap/</guid>
+      <description>NCN Hardware Swaps This page will detail cases for various hardware changes.&#xA;Node Components Nodes Rebooting Servers CEPH Kubernetes Safely Removing Nodes from Runtime Rebuilding CEPH NCNs Quorum Rebuilding K8s NCNs Master nodes Worker nodes Enable Kdump Node Components Malfunctioning or disabled hardware may need to be removed, or upgrades may want to be installed.&#xA;For either case, certain hardware requires that the node be shutdown prior to operations.&#xA;Component Server Off Rebuild Required cpu Yes No ram Yes No OS disks No No 1 Ephemeral disks No Yes gpu Yes No nic Yes Yes NOTE: These instructions only apply prior to booting off the LiveCD &amp;ndash; once that step is complete refer to the &amp;ldquo;Rebuild NCNs&amp;rdquo; section in the HPE Cray EX Hardware Management Administration Guide S-8015.</description>
+    </item>
+    <item>
+      <title>Gigabyte Firmware Bug</title>
+      <link>/docs-csm/en-09/254-ncn-firmware-gb/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:03 +0000</pubDate>
+      <guid>/docs-csm/en-09/254-ncn-firmware-gb/</guid>
+      <description>Gigabyte Firmware Bug Due to a bug in the Gigabyte firmware, the Shasta 1.4 install may negatively impact Gigabyte motherboards when attempting to boot using bonded Mellanox network cards. The result is a board that is unusable until a CMOS clear is physically done via a jumper on the board itself.&#xA;A patched firmware release is expected to be available for a future release of Shasta. It is recommended that Gigabyte users wait for this new firmware before attempting an installation of Shasta 1.</description>
+    </item>
+    <item>
+      <title>FIRMWARE ACTION SERVICE (FAS) | User Procedures</title>
+      <link>/docs-csm/en-09/255-firmware-action-service-fas/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:03 +0000</pubDate>
+      <guid>/docs-csm/en-09/255-firmware-action-service-fas/</guid>
+      <description>FIRMWARE ACTION SERVICE (FAS) | User Procedures Prerequisites The Cray command line interface (CLI) tool is initialized and configured on the system. See &amp;ldquo;Configure the Cray Command Line Interface (CLI)&amp;rdquo; in the HPE Cray EX System Administration Guide S-8001 for more information.&#xA;IMPORTANT It may be necessary to explicitly set the power state of certain devices before performing a given firmware update. Refer to ()[] in order to understand the process for setting power state and controlling relevant settings.</description>
+    </item>
+    <item>
+      <title>Firmware Action Service (FAS) Administration Guide</title>
+      <link>/docs-csm/en-09/256-firmware-action-service-fas-recipes/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:03 +0000</pubDate>
+      <guid>/docs-csm/en-09/256-firmware-action-service-fas-recipes/</guid>
+      <description>Firmware Action Service (FAS) Administration Guide Recipes Manufacturer : Cray Device Type : RouterBMC | Target : BMC Device Type : ChassisBMC | Target: BMC Device Type : NodeBMC | Target : BMC Device Type : NodeBMC | Target : NodeBIOS Device Type : NodeBMC | Target : Redstone FPGA Manufacturer : HPE Device Type : NodeBMC | Target : iLO 5 aka BMC Device Type : NodeBMC | Target : System ROM aka BIOS Manufacturer : Gigabyte Device Type : NodeBMC | Target : BMC Device Type : NodeBMC | Target : BIOS Special Note: updating NCNs FAS Filters for actions and snapshots FAS uses five primary filters to determine what operations to create.</description>
+    </item>
+    <item>
+      <title>Compute Node BIOS workaround for WNC-rome aka HPE CRAY EX425</title>
+      <link>/docs-csm/en-09/257-firmware-action-service-cray-windom-compute-node-bios-workaround/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:03 +0000</pubDate>
+      <guid>/docs-csm/en-09/257-firmware-action-service-cray-windom-compute-node-bios-workaround/</guid>
+      <description>Compute Node BIOS workaround for WNC-rome aka HPE CRAY EX425 Problem Identification The following conditions must be true in order to qualify for this problem:&#xA;The system running Shasta v1.4&#xA;The system has completed CSM installation&#xA;an upgrade via FAS of Cray - Node1.BIOS/Node0.BIOS has been completed following the recipes in 256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md&#xA;The result of the upgrade is that the NodeX.BIOS has failed as noSolution and the stateHelper field for the operation states: &amp;quot;No Image Available&amp;quot;</description>
+    </item>
+    <item>
+      <title>Service Guides</title>
+      <link>/docs-csm/en-09/300-service-guides/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:03 +0000</pubDate>
+      <guid>/docs-csm/en-09/300-service-guides/</guid>
+      <description>Service Guides This guide centers around constructing bootstrap-files and contains various pre-install operations.&#xA;The remainder of this page provides important nomenclature, notes, and environment help.&#xA;Pre-Spring 2020 CRAY System Upgrade Notice Systems built before Sprint 2020 originally used onboard NICs for netbooting. The new topologies for Shasta cease using the onboard NICs. If your system is running Shasta v1.3, then it likely is using onboard NICs.&#xA;It is recommended to cease using these for Shasta v1.</description>
+    </item>
+    <item>
+      <title>Collecting the BMC MAC Addresses</title>
+      <link>/docs-csm/en-09/301-ncn-metadata-bmc/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:04 +0000</pubDate>
+      <guid>/docs-csm/en-09/301-ncn-metadata-bmc/</guid>
+      <description>Collecting the BMC MAC Addresses This guide will detail how to collect BMC MAC Addresses from a Shasta system with configured switches. The BMC MAC Address is the exclusive, dedicated LAN for the onboard BMC.&#xA;If you are here with an unconfigured switch, mileage may vary.&#xA;Requirements Configured switch with SSH access or unconfigured with COM access (serial-over-lan/DB-9) Another file to record the collected BMC information. Procedure Establish an SSH or serial connection to the leaf switch.</description>
+    </item>
+    <item>
+      <title>Collecting NCN MAC Addresses</title>
+      <link>/docs-csm/en-09/302-ncn-metadata-bondx/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:04 +0000</pubDate>
+      <guid>/docs-csm/en-09/302-ncn-metadata-bondx/</guid>
+      <description>Collecting NCN MAC Addresses This procedure will detail how to collect the NCN MAC addresses from a Shasta system. After completing this procedure, you will have the MAC addresses needed for the Bootstrap MAC, Bond0 MAC0, and Bond0 MAC1 columns in ncn_metadata.csv.&#xA;The Bootstrap Mac address will be used for identification of this node during the early part of the PXE boot process before the bonded interface can be established. The Bond0 MAC0 and Bond0 MAC1 are the MAC addresses for the physical interfaces that your node will use for the various VLANs.</description>
+    </item>
+    <item>
+      <title>NCN Metadata over USB-Serial Cable</title>
+      <link>/docs-csm/en-09/303-ncn-metadata-usb-serial/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:04 +0000</pubDate>
+      <guid>/docs-csm/en-09/303-ncn-metadata-usb-serial/</guid>
+      <description>NCN Metadata over USB-Serial Cable In the event that network plumbing is lacking, down, or unconfigured for procuring devices then it is recommended to use the Serial/COM ports on the spine and leaf switches.&#xA;This guide will instruct the user on procuring MAC addresses for the NCNs metadata files with the serial console.&#xA;Mileage may vary, as some obstacles such as BAUDRATE and terminal usage vary per manufacturer.&#xA;Common Manufacturers (click any for links to support/document portals)</description>
+    </item>
+    <item>
+      <title>Guide  Netboot an NCN from a Spine</title>
+      <link>/docs-csm/en-09/304-ncn-pcie-net-boot-and-re-cable/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:04 +0000</pubDate>
+      <guid>/docs-csm/en-09/304-ncn-pcie-net-boot-and-re-cable/</guid>
+      <description>Guide : Netboot an NCN from a Spine This page details how to migrate NCNs from depending on their onboard NICs for PXE booting, and booting over the spine switches.&#xA;Enabling UEFI PXE Mode Mellanox Print current UEFI and SR-IOV State Setting Expected Values High-Speed Network Obtaining Mellanox Tools QLogic FastLinq Kernel Modules Disabling/Removing On-Board Connections This applies to Newer systems (Spring 2020 or newer) where onboard NICs are still used.</description>
+    </item>
+    <item>
+      <title>Switch Metadata</title>
+      <link>/docs-csm/en-09/305-switch-metadata/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:04 +0000</pubDate>
+      <guid>/docs-csm/en-09/305-switch-metadata/</guid>
+      <description>Switch Metadata This page provides directions on constructing the switch_metadata.csv file.&#xA;This file is manually created to include information about all spine, leaf, CDU, and aggregation switches in the system. The file follows this format in ascending order for the switches of each type:&#xA;Switch Xname,Type,Brand d0w1,CDU,Dell d0w2,CDU,Dell x3000c0w38,Leaf,Dell x3000c0w36,Leaf,Dell x3000c0h33s1,Spine,Mellanox x3000c0h34s1,Spine,Mellanox The above file would lead to this pairing between component name and hostname:&#xA;hostname component name sw-spine-001 x3000c0h33s1 sw-spine-002 x3000c0h34s1 sw-leaf-001 x3000c0w38 sw-leaf-002 x3000c0w36 sw-cdu-001 d0w1 sw-cdu-002 d0w2 Requirements For this you will need:</description>
+    </item>
+    <item>
+      <title>Manually add UAN Aliases to SLS</title>
+      <link>/docs-csm/en-09/306-sls-add-uan-alias/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:04 +0000</pubDate>
+      <guid>/docs-csm/en-09/306-sls-add-uan-alias/</guid>
+      <description>Manually add UAN Aliases to SLS Prerequisites SLS is up and running and has been populated with data. Access to the API gateway api-gw-service (legacy: api-gw-service-nmn.local) About this task This guide shows the process for manually adding aliases to UAN nodes in SLS. Steps 3 and 4 of this guide can be repeated for each UAN alias that needs to be added in SLS. This guide is intended to be run on any k8s node that has access to the API gateway api-gw-service (current/legacy: api-gw-service-nmn.</description>
+    </item>
+    <item>
+      <title>HMN Connections File</title>
+      <link>/docs-csm/en-09/307-hmn-connections/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:04 +0000</pubDate>
+      <guid>/docs-csm/en-09/307-hmn-connections/</guid>
+      <description>HMN Connections File About this task This guide shows the process for generating the hmn_connections.json from the system&amp;rsquo;s SHCD Excel document. This process is typically needed when generating the hmn_connections.json file for a new system, or regenerating it when system&amp;rsquo;s SHCD is changed (specifically the HMN tab). The hms-shcd-parser tool can be used to generate the hmn_connections.json file.&#xA;Each system has its own directory in the repository. If this is a new system that does not yet have the hmn_connections.</description>
+    </item>
+    <item>
+      <title>Application Node Config</title>
+      <link>/docs-csm/en-09/308-application-node-config/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:04 +0000</pubDate>
+      <guid>/docs-csm/en-09/308-application-node-config/</guid>
+      <description>Application Node Config This page provides directions on constructing the application_node_config.yaml file. This file controls how the csi config init command finds and treats applications nodes discovered the hmn_connections.json file when building the SLS Input file.&#xA;The following hmn_connections.json file contains 4 application nodes. When the csi config init command is used without a application_node_config.yaml file, only the application node uan01 will be included the generated SLS input file. The other 3 application nodes will be ignored as they have unknown prefixes and will not be present in the SLS Input file.</description>
+    </item>
+    <item>
+      <title>Move Site Connections</title>
+      <link>/docs-csm/en-09/309-move-site-connections/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:04 +0000</pubDate>
+      <guid>/docs-csm/en-09/309-move-site-connections/</guid>
+      <description>Move Site Connections In 1.4, the site connections that were previously connection to ncn-w001 will be moved to ncn-m001. This page will go over the process to make that change.&#xA;Note: In Shasta v1.4, any number of master nodes may have external connections, before Shasta v1.4 this was strictly ncn-w001.&#xA;Make request to DCHW to move the BMC/Host Connections and attach a USB storage device to ncn-m001.&#xA;Make sure ncn-w001 is up and accessible via the NMN from ncn-m001.</description>
+    </item>
+    <item>
+      <title>Cabinets</title>
+      <link>/docs-csm/en-09/310-cabinets/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:04 +0000</pubDate>
+      <guid>/docs-csm/en-09/310-cabinets/</guid>
+      <description>Cabinets This page provides directions on constructing the optional &amp;ldquo;cabinets.yaml&amp;rdquo; file. This file lists cabinet ids for any systems with non-contiguous cabinet id numbers and controls how the &amp;ldquo;csi config init&amp;rdquo; command treats cabinet ids.&#xA;The cabinets.yaml file is particularly important for upgrades from Shasta v1.3 systems as it allows the preservation of cabinet names and network VLANs. An audit of the existing system will be required to gather the data needed to populate cabinets.</description>
+    </item>
+    <item>
+      <title>Verify and Update BGP neighbors</title>
+      <link>/docs-csm/en-09/400-switch-bgp-neighbors/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:04 +0000</pubDate>
+      <guid>/docs-csm/en-09/400-switch-bgp-neighbors/</guid>
+      <description>Verify and Update BGP neighbors This page will detail how to manually configure and verify BGP neighbors on the management switches.&#xA;You will not have BGP peers until install.sh is ran. This is where MetalLB is deployed. How do I check the status of the BGP neighbors? Log into the spine switches and run show bgp ipv4 unicast summary for Aruba/HPE switches and show ip bgp summary for Mellanox. Are my Neighbors stuck in IDLE?</description>
+    </item>
+    <item>
+      <title>Overview</title>
+      <link>/docs-csm/en-09/401-management-network-install/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:04 +0000</pubDate>
+      <guid>/docs-csm/en-09/401-management-network-install/</guid>
+      <description>Overview New for Shasta v1.4 Networking Dell and Mellanox Changes for Shasta v1.3 to v1.4 Upgrades HPE Aruba Installation and Configuration Early Installation Access Master Node 1 (ncn-m001) and its iLO should already be completed (003-CSM-USB-LIVECD.md) Install Baseline Switch Configuration Update Firmware Configure all switches via IPv6 connection from ncn-m001 Layer 2 configuration: VLAN. MLAG and VSX pairs. iLO/BMC, CMM and Gateway Node port configuration. Switch uplink ports - ISL Layer 3 configuration: L3 interfaces.</description>
+    </item>
+    <item>
+      <title>Management Network Base Configuration</title>
+      <link>/docs-csm/en-09/402-mgmt-net-base-config/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:05 +0000</pubDate>
+      <guid>/docs-csm/en-09/402-mgmt-net-base-config/</guid>
+      <description>Management Network Base Configuration This page provides instructions on how to setup the base network configuration of the Shasta Management network.&#xA;With the base config applied you will be able to access all Management switches and apply the remaining configuration.&#xA;Requirements Console access to all of the switches SHCD available Configuration Once you have console access to the switches you can begin by applying the base config. The purpose of this configuration is to have an IPv6 underlay that allows us to always be able to access the management switches.</description>
+    </item>
+    <item>
+      <title>Management Network VLAN Configuration</title>
+      <link>/docs-csm/en-09/403-mgmt-net-vlan-config/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:05 +0000</pubDate>
+      <guid>/docs-csm/en-09/403-mgmt-net-vlan-config/</guid>
+      <description>Management Network VLAN Configuration Requirements Access to all of the switches SHCD available Aruba Configuration At this point we should have access to the switches. We will start by adding all the VLANS required by the Shasta system. Cray Site Init (CSI) generates the IPs used by the system, below are samples only. Some switches will NOT need the CAN(VLAN7), most of the time this IP is only located on the Spine for external connectivity.</description>
+    </item>
+    <item>
+      <title>Management Network MLAG Configuration</title>
+      <link>/docs-csm/en-09/404-mgmt-net-mlag-config/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:05 +0000</pubDate>
+      <guid>/docs-csm/en-09/404-mgmt-net-mlag-config/</guid>
+      <description>Management Network MLAG Configuration This page describes how to setup a bonded configuration from the Non-Compute nodes (NCN) to the management network.&#xA;Requirements Console Access to the switches participating in MLAG configuration. Two switches running the same firmware version. Three cables connected between the switches, two for the Inter Switch Link (ISL) and one for the Keepalive. Aruba Configuration Create the keepalive vrf on both switches. The following configuration will need to be done on both switches participating in VSX/MLAG, if there is a unique configuration it will be called out.</description>
+    </item>
+    <item>
+      <title>Management Network Access Port configurations.</title>
+      <link>/docs-csm/en-09/405-mgmt-net-port-config/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:05 +0000</pubDate>
+      <guid>/docs-csm/en-09/405-mgmt-net-port-config/</guid>
+      <description>Management Network Access Port configurations. Requirements Access to switches SHCD Configuration This configuration describes the edge port configuration, you will find these in the NMN/HMN/Mountain-TDS Management Tab of the SHCD. Typically these are ports that are connected to iLOs (BMCs), gateway nodes, or compute nodes/CMM switches. sw-leaf-001(config)# interface 1/1/28 sw-leaf-001(config)# no shutdown sw-leaf-001(config)# mtu 9198 sw-leaf-001(config)# description HMN sw-leaf-001(config)# no routing sw-leaf-001(config)# vlan access 4 This configuration describes the ports that go to the Node Management Network (NMN/VLAN2).</description>
+    </item>
+    <item>
+      <title>Management Network ACL configuration</title>
+      <link>/docs-csm/en-09/406-mgmt-net-acl-config/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:05 +0000</pubDate>
+      <guid>/docs-csm/en-09/406-mgmt-net-acl-config/</guid>
+      <description>Management Network ACL configuration This page describes the purpose of the ACLs and how they are configured&#xA;Requirements Access to the switches Aruba Configuration These ACLs are designed to block traffic from the node management network to and from the hardware management network. These need to be set where the Layer3 interface is located, this will most likely be a VSX pair of switches. These ACLs are required on both switches in the pair.</description>
+    </item>
+    <item>
+      <title>Management Network SNMP configuration</title>
+      <link>/docs-csm/en-09/407-mgmt-net-snmp-config/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:05 +0000</pubDate>
+      <guid>/docs-csm/en-09/407-mgmt-net-snmp-config/</guid>
+      <description>Management Network SNMP configuration Requirements Access to switches&#xA;This configuration is required for hardware discovery of the Shasta system. It needs to be applied on all switches that are connected to BMCs&#xA;Aruba Configuration snmp-server vrf default snmpv3 user testuser auth md5 auth-pass plaintext testpass1 priv des priv-pass plaintext testpass2 Dell Configuration snmp-server group cray-reds-group 3 noauth read cray-reds-view snmp-server user testuser cray-reds-group 3 auth md5 testpass1 priv des testpass2 snmp-server view cray-reds-view 1.</description>
+    </item>
+    <item>
+      <title>Management Network CAN setup</title>
+      <link>/docs-csm/en-09/408-mgmt-net-can-config/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:05 +0000</pubDate>
+      <guid>/docs-csm/en-09/408-mgmt-net-can-config/</guid>
+      <description>Management Network CAN setup Access from the customer site to the system over shared networks is known as the Customer Access Network (CAN)&#xA;Requirements Access to switches&#xA;SHCD&#xA;Configuration To access the Shasta nodes and services from the customer network, there is minimal configuration needed on the spine switch and the customer switch connected upstream from the spine switch to allow the customer_access_network subnet to be routed to the Shasta system.</description>
+    </item>
+    <item>
+      <title>Management Network Firmware Update</title>
+      <link>/docs-csm/en-09/409-mgmt-net-firmware-update/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:05 +0000</pubDate>
+      <guid>/docs-csm/en-09/409-mgmt-net-firmware-update/</guid>
+      <description>Management Network Firmware Update This page describes how to update firmware on the Management network switches.&#xA;Requirements Access to the switches from the liveCD/M001&#xA;Configuration All firmware will be located at /var/www/fw/network on the LiveCD It should contain the following files. ncn-m001-pit:/var/www/network/firmware # ls -lh total 2.7G -rw-r--r-- 1 root root 614M Jan 15 18:57 ArubaOS-CX_6400-6300_10_05_0040.stable.swi -rw-r--r-- 1 root root 368M Jan 15 19:09 ArubaOS-CX_8320_10_05_0040.stable.swi -rw-r--r-- 1 root root 406M Jan 15 18:59 ArubaOS-CX_8325_10_05_0040.</description>
+    </item>
+    <item>
+      <title>Management Network Uplink configuration</title>
+      <link>/docs-csm/en-09/410-mgmt-net-uplink-config/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:05 +0000</pubDate>
+      <guid>/docs-csm/en-09/410-mgmt-net-uplink-config/</guid>
+      <description>Management Network Uplink configuration This page describes how to configure switch to switch connections or uplinks between switches.&#xA;Requirements Console access Aruba VSX configured on a pair of switches. Configuration The configuration below shows how to configure a Multi-chassis LAG on a pair of VSX switches. These connections will go to other network switches.&#xA;VSX Pair configuration Create the multi-chassis LAG on the first switch.&#xA;sw-24g03(config)# interface lag 100 multi-chassis sw-24g03(config-lag-if)# no shutdown sw-24g03(config-lag-if)# no routing sw-24g03(config-lag-if)# vlan trunk native 1 sw-24g03(config-lag-if)# vlan trunk allowed all sw-24g03(config-lag-if)# lacp mode active Create the multi-chassis LAG on the second switch.</description>
+    </item>
+    <item>
+      <title>Management Network Layer3 Configuration</title>
+      <link>/docs-csm/en-09/411-mgmt-net-layer3-config/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:05 +0000</pubDate>
+      <guid>/docs-csm/en-09/411-mgmt-net-layer3-config/</guid>
+      <description>Management Network Layer3 Configuration This page describes how to configure layer 3 routing for Hill and Mountain cabinets.&#xA;Mountain cabinets have their own &amp;ldquo;CDU&amp;rdquo; Switches.&#xA;Hill cabinets are connected to the leaf switches.&#xA;Requirements Access to all of the switches SHCD available Aruba Configuration At this point you should be able to ping the CDU switches on their VLAN 2 and VLAN 4 interfaces. We will need to setup routing so the compute nodes can communicate with k8s.</description>
+    </item>
+    <item>
+      <title>Management Network Dell And Mellanox Upgrades</title>
+      <link>/docs-csm/en-09/412-mgmt-net-dell-mellanox-upgrades/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:05 +0000</pubDate>
+      <guid>/docs-csm/en-09/412-mgmt-net-dell-mellanox-upgrades/</guid>
+      <description>Management Network Dell And Mellanox Upgrades The Dell and Mellanox switches have some changes which are needed when moving from Shasta v1.3 to Shasta v1.4. This page is a guide to walk through the steps of upgrading a network to 1.4.&#xA;1. Firmware Upgrade With Shasta v1.4 we are using the following firmware, FIRMWARE&#xA;2. IP Address and Hostname Changes CSI will generate the IPs for the switches on a Shasta v1.</description>
+    </item>
+    <item>
+      <title>Management Network Example Config</title>
+      <link>/docs-csm/en-09/413-mgmt-net-example-config/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:05 +0000</pubDate>
+      <guid>/docs-csm/en-09/413-mgmt-net-example-config/</guid>
+      <description>Management Network Example Config The following example configs are from a TDS system with one Hill cabinet.&#xA;This network architecture include two Aruba 8325s that are configured as VSX/MC-LAG pair, one Aruba 6300, and two Aruba 8360s for the CDU switches.&#xA;First 8325&#xA;sw-spine-001# show run Current configuration: ! !Version ArubaOS-CX GL.10.05.0020 !export-password: default hostname sw-spine-001 allow-unsupported-transceiver user admin group administrators password ciphertext AQBapa no ip icmp redirect debug bgp all vrf keepalive ntp server 10.</description>
+    </item>
+    <item>
+      <title>Management Network NTP configuration</title>
+      <link>/docs-csm/en-09/414-mgmt-net-ntp-config/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:05 +0000</pubDate>
+      <guid>/docs-csm/en-09/414-mgmt-net-ntp-config/</guid>
+      <description>Management Network NTP configuration This page describes how NTP is setup and configured on the management network switches.&#xA;Requirements Access to switches CSI NMN.yaml file Configuration Our NTP servers will be the first 3 worker nodes. You can find these IPs from the CSI generated NMN.yaml file.&#xA;Aruba Get current NTP configuration.&#xA;sw-spine-001(config)# show run | include ntp ntp server 10.252.1.7 ntp server 10.252.1.8 ntp server 10.252.1.9 ntp enable Delete current NTP configuration.</description>
+    </item>
+    <item>
+      <title>Management Network Switch Rename</title>
+      <link>/docs-csm/en-09/415-mgmt-net-switch-rename/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-09/415-mgmt-net-switch-rename/</guid>
+      <description>Management Network Switch Rename Any system moving from Shasta v1.3 to Shasta v1.4 software needs to adjust the hostnames and IP addresses for all switches to match the new standard. There is now a virtual IP ending in .1 which is used by spine switches. In Shasta v1.3, the first spine switch used the .1 address. In Shasta v1.4, the ordering of the switches has changed with spine switches being grouped first.</description>
+    </item>
+    <item>
+      <title>Cabling</title>
+      <link>/docs-csm/en-09/416-mgmt-net-cabling/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-09/416-mgmt-net-cabling/</guid>
+      <description>Cabling HPE Hardware Gigabyte/Intel Hardware HPE Hardware HPE DL385 The OCP Slot is noted (number 7) in the image above. This is the bottom middle slot to the left of the VGA port. Ports are numbered left-to-right: the far left port is port 1. The PCIe Slot 1 is on the top left side of the image above (under number 1). Ports are numbered left-to-right: the far left port is port 1.</description>
+    </item>
+    <item>
+      <title>Management Network Flow Control Settings</title>
+      <link>/docs-csm/en-09/417-mgmt-net-flow-control/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-09/417-mgmt-net-flow-control/</guid>
+      <description>Management Network Flow Control Settings This page is designed to go over all the flow control settings for Dell/Mellanox systems. These changes were introduced in 1.3.2. These changes are required for Shasta 1.4.&#xA;Leaf Switch Node Connections For the node connections to a leaf switch, we want the transmit flowcontrol disabled, and receive flowcontrol enabled. The following commands will accomplish this.&#xA;NOTE: If you have a TDS system involving a Hill cabinet, make sure to confirm that no CMM nor CEC components are connected to any leaf switches in your system.</description>
+    </item>
+    <item>
+      <title>IP-Helper configuration</title>
+      <link>/docs-csm/en-09/418-mgmt-net-ip-helper/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-09/418-mgmt-net-ip-helper/</guid>
+      <description>IP-Helper configuration This page will describe how to setup IP-Helpers on Aruba, Dell, and Mellanox switches.&#xA;If you are migrating from a 1.3.2 system, the IP-helpers are being moved to the switches that are doing the Layer3 Routing. For most systems this will be moving the helper from the leaf to the spine.&#xA;IP-Helpers will reside on VLANs 1,2,4,7,2xxx, and 3xxx.&#xA;Aruba Configuration On both switches participating in VSX we will need to add configuration to the VLAN interfaces.</description>
+    </item>
+    <item>
+      <title>Management Network Spanning-Tree Configuration.</title>
+      <link>/docs-csm/en-09/419-mgmt-net-stp/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-09/419-mgmt-net-stp/</guid>
+      <description>Management Network Spanning-Tree Configuration. Spanning tree is used to protect the network against layer2 loops.&#xA;It is not recommended to add/adjust these settings while a system is running.&#xA;Aruba Configuration The following configuration is applied to each of the Spine VSX pairs, this config is identical.&#xA;spanning-tree mode rpvst spanning-tree spanning-tree priority 7 spanning-tree vlan 1,2,4,7,10 Verify that each VSX pair is the root bridge for all VLANs configured on that switch.</description>
+    </item>
+    <item>
+      <title>PXE boot Troubleshooting</title>
+      <link>/docs-csm/en-09/420-mgmt-net-pxe-tshoot/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-09/420-mgmt-net-pxe-tshoot/</guid>
+      <description>PXE boot Troubleshooting This page is designed to cover various issues that arise when trying to pxe boot nodes in a Shasta system.&#xA;In order for PXE booting to successfully work, the MGMT switches need to be configured correctly.&#xA;Configuration required for PXE booting To successfully pxe boot nodes, the following is required.&#xA;The IP helper-address must be configured on VLAN 1,2,4,7. This will be where the layer 3 gateway exists (spine or agg) The virtual-IP/VSX/MAGP IP must be configured on VLAN 1,2,4,7.</description>
+    </item>
+    <item>
+      <title>1.4 Management network cabling checklist</title>
+      <link>/docs-csm/en-09/421-mgmt-net-cabling-checklist/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-09/421-mgmt-net-cabling-checklist/</guid>
+      <description>1.4 Management network cabling checklist This page is designed to be a guide on how all nodes in a Shasta system are wired to the management network.&#xA;Prerequisites System SHCD PoR Cabling Documentation MGMT-NET-CABLING Steps Open the SHCD&#xA;Go to the Device Diagrams Tab.&#xA;There you will see what type of hardware is on the system. Take note of the hardware. go to the 25G_10G or 40G_10G tab, this will depend on the SHCD.</description>
+    </item>
+    <item>
+      <title>The Shasta User Access Service</title>
+      <link>/docs-csm/en-09/500-uas-uai-admin-and-user-guide/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-09/500-uas-uai-admin-and-user-guide/</guid>
+      <description>The Shasta User Access Service The Shasta User Access Service Concepts End-User UAIs Special Purpose UAIs Elements of a UAI UAI Host Nodes UAI Network Attachments (macvlans) UAI Host Node Selection Identifying UAI Host Nodes Specifying UAI Host Nodes Maintaining an HSM Group for UAI Host Nodes UAI Network Attachments CSI Localization Data Contents of customizations.yaml UAS Helm Chart UAI Network Attachment in Kubernetes UAS Configuration to Support UAI Creation UAI Images Listing Registered UAI Images Registering UAI Images Examining a UAI Image Registration Updating a UAI Image Registration Deleting a UAI Image Registration Volumes Listing UAS Volumes Adding a UAS Volume Examining a UAS Volume Updating a UAS Volume Deleting a UAS Volume Resource Specifications Listing Resource Specifications Adding a Resource Specification Examining a Resource Specification Updating a Resource Specification Deleting a Resource Specification UAI Classes Listing UAI Classes Adding a UAI Class Examining a UAI Class Updating a UAI Class Deleting a UAI Class UAI Management Administrative Management of UAIs Listing UAIs Creating UAIs Examining UAIs Deleting UAIs Legacy Mode UAI Management Configuring A Default UAI Class for Legacy Mode Example Minimal Default UAI Class Example Default UAI Class with Slurm Support Creating and Using Default UAIs in Legacy Mode Listing Available UAI Images in Legacy Mode Creating UAIs From Specific UAI Images in Legacy Mode The UAI Broker Based Mode Configuring End-User UAI Classes for Broker Mode Configuring a Broker UAI class An Example of Volumes to Connect broker UAIs to LDAP Starting a Broker UAI Logging In Through a Broker UAI UAI Images The Provided Broker UAI Image Customizing the Broker UAI Image Customizing the Broker UAI Entrypoint Script Customizing the Broker UAI SSH Configuration The Provided End-User UAI Image Custom End-User UAI Images Building a Custom End-User UAI Image Query BOS for a sessiontemplate ID Download a Compute Node squashfs Mount the squashfs and Create a tarball Create and Push the Container Image Register the New Container Image With UAS Cleanup the Mount Directory and tarball Troubleshooting Getting Log Output from UAS Getting Log Output from UAIs Stale Brokered UAIs Stuck UAIs Duplicate Mount Paths in a UAI Missing or Incorrect UAI Images Administrative Access to UAIs for Diagnosis Common Mistakes to Check for When Making a Custom End-User UAI Image Concepts The User Access Service (UAS) is responsible for managing User Access Instances (UAIs) and their associated configuration.</description>
+    </item>
+    <item>
+      <title>Cray System Management (CSM) - Release Notes</title>
+      <link>/docs-csm/en-09/release_notes/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-09/release_notes/</guid>
+      <description>Cray System Management (CSM) - Release Notes What’s new Bug Fixes Known Issues Cfs_session_stuck_in_pending: Under some circumstances Configuration Framework Service (CFS) sessions can get stuck in a pending state, never completing and potentially blocking other sessions. This addresses cleaning up those sessions. Conman_pod_kubernetes_copy_fails: The kubernetes copy file command fails when attempting to copy log files from the cray-conman pod. After a boot or reboot a few CFS Pods may continue running even after they&amp;rsquo;ve finished and never go away.</description>
+    </item>
+  </channel>
+</rss>

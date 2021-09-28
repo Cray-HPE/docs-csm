@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CSM 0.9 Patch Release Upgrade Procedures on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-09/upgrade/0.9/</link>
+    <description>Recent content in CSM 0.9 Patch Release Upgrade Procedures on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-09</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:10 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-09/upgrade/0.9/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CSM 0.9.2 Patch Upgrade Guide</title>
+      <link>/docs-csm/en-09/upgrade/0.9/csm-0.9.2/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:10 +0000</pubDate>
+      <guid>/docs-csm/en-09/upgrade/0.9/csm-0.9.2/</guid>
+      <description>Copyright 2021 Hewlett Packard Enterprise Development LP&#xA;CSM 0.9.2 Patch Upgrade Guide This guide contains procedures for upgrading systems running CSM 0.9.0 to CSM 0.9.2. It is intended for system installers, system administrators, and network administrators. It assumes some familiarity with standard Linux and associated tooling.&#xA;NOTE: CSM 0.9.1 was not officially released so these procedures start with CSM 0.9.0.&#xA;See CHANGELOG.md in the root of a CSM release distribution for a summary of changes in each CSM release.</description>
+    </item>
+    <item>
+      <title>CSM 0.9.3 Patch Upgrade Guide</title>
+      <link>/docs-csm/en-09/upgrade/0.9/csm-0.9.3/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:10 +0000</pubDate>
+      <guid>/docs-csm/en-09/upgrade/0.9/csm-0.9.3/</guid>
+      <description>Copyright 2021 Hewlett Packard Enterprise Development LP&#xA;CSM 0.9.3 Patch Upgrade Guide This guide contains procedures for upgrading systems running CSM 0.9.2 to CSM 0.9.3. It is intended for system installers, system administrators, and network administrators. It assumes some familiarity with standard Linux and associated tooling.&#xA;See CHANGELOG.md in the root of a CSM release distribution for a summary of changes in each CSM release.&#xA;Procedures:&#xA;Preparation Run Validation Checks (Pre-Upgrade) Setup Nexus Update Resources Increase Max pty on Workers Deploy Manifests Upgrade NCN Packages Enable PodSecurityPolicy Apply iSCSI Security Fix Configure LAG for CMMs Run Validation Checks (Post-Upgrade) Exit Typescript Preparation For convenience, these procedures make use of environment variables.</description>
+    </item>
+  </channel>
+</rss>

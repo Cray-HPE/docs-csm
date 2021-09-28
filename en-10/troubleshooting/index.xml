@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CSM Troubleshooting Information on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-10/troubleshooting/</link>
+    <description>Recent content in CSM Troubleshooting Information on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-10</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:44 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-10/troubleshooting/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Interpreting HMS Health Check Results</title>
+      <link>/docs-csm/en-10/troubleshooting/interpreting_hms_health_check_results/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:42 +0000</pubDate>
+      <guid>/docs-csm/en-10/troubleshooting/interpreting_hms_health_check_results/</guid>
+      <description>Interpreting HMS Health Check Results Table of contents Introduction HMS smoke tests HMS functional tests Additional troubleshooting smd_discovery_status_test_ncn-smoke.sh HTTPsGetFailed ChildVerificationFailed DiscoveryStarted Install blocking vs. Non-blocking failures Known issues Warning flags incorrectly set in HSM for Mountain BMCs BMCs set to On state in HSM ComponentEndpoints of Redfish subtype AuxiliaryController in HSM Custom Roles and SubRoles for Components in HSM Introduction This document describes how to interpret the results of the HMS health check scripts and techniques for troubleshooting when failures occur.</description>
+    </item>
+    <item>
+      <title>PXE Booting Runbook</title>
+      <link>/docs-csm/en-10/troubleshooting/pxe_runbook/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:44 +0000</pubDate>
+      <guid>/docs-csm/en-10/troubleshooting/pxe_runbook/</guid>
+      <description>PXE Booting Runbook PXE booting is a key component of a working Shasta system. There are a lot of different components involved, which increases the complexity. This guide runs through the most common issues and shows what is needed in order to have a successful PXE boot.&#xA;NCNs on install ncn-m001 on reboot or NCN boot 2.1. Verify DHCP packets can be forwarded from the workers to the MTL network (VLAN1) 2.</description>
+    </item>
+  </channel>
+</rss>

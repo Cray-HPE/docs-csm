@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>k8s on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-15/upgrade/resource_material/k8s/</link>
+    <description>Recent content in k8s on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-15</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:39:17 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-15/upgrade/resource_material/k8s/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Worker-Specific Manual Steps</title>
+      <link>/docs-csm/en-15/upgrade/resource_material/k8s/worker-reference/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:17 +0000</pubDate>
+      <guid>/docs-csm/en-15/upgrade/resource_material/k8s/worker-reference/</guid>
+      <description>Worker-Specific Manual Steps Confirm the CFS configuration_status for all worker nodes before shutting down this worker node.&#xA;(ncn#) If the following command reports that the state is pending, then the administrator should tail the logs of the CFS pod running on that node in order to watch the job finish before rebooting this node. If the state is failed for this node, then this indicates that the failed CFS job state preceded this worker rebuild, and that it can be addressed independent of rebuilding this worker.</description>
+    </item>
+  </channel>
+</rss>

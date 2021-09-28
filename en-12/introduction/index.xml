@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Introduction to CSM Installation on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-12/introduction/</link>
+    <description>Recent content in Introduction to CSM Installation on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-12</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:06 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-12/introduction/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CAPMC Deprecation Notice many CAPMC v1 features are being partially deprecated</title>
+      <link>/docs-csm/en-12/introduction/capmc_deprecation/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-12/introduction/capmc_deprecation/</guid>
+      <description>CAPMC Deprecation Notice: many CAPMC v1 features are being partially deprecated Deprecated Features in CSM 1.0 Many CAPMC v1 REST API and CLI features are being deprecated as part of CSM version 1.0; Full removal of the following deprecated CAPMC features will happen in CSM version 1.3. Further development of CAPMC service or CLI has stopped. CAPMC has entered end-of-life but will still be generally available. CAPMC is going to be replaced with the Power Control Service (PCS) in a future release.</description>
+    </item>
+    <item>
+      <title>CSM Overview</title>
+      <link>/docs-csm/en-12/introduction/csm_overview/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-12/introduction/csm_overview/</guid>
+      <description>CSM Overview This CSM Overview describes the Cray System Management ecosystem with its hardware, software, and network. It describes how to access these services and components.&#xA;The CSM installation prepares and deploys a distributed system across a group of management nodes organized into a Kubernetes cluster which uses Ceph for utility storage. These nodes perform their function as Kubernetes master nodes, Kubernetes worker nodes, or utility storage nodes with the Ceph storage.</description>
+    </item>
+    <item>
+      <title>Differences from Previous Release</title>
+      <link>/docs-csm/en-12/introduction/differences/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-12/introduction/differences/</guid>
+      <description>Differences from Previous Release The most noteworthy changes since the previous release are described here.&#xA;New features Deprecated features Removed features Other changes New features The following features are new in this release:&#xA;Scaling improvements for larger systems to the following services: BOS CAPMC FAS New hardware supported in this release: Compute nodes Milan-Based Grizzly Peak with A100 40 GB GPU Milan-Based Windom Liquid Cooled System Rome-Based HPE Apollo 6500 XL675d Gen10+ with A100 40 GB GPU Rome-Based HPE Apollo 6500 XL645d Gen10+ with A100 40 GB GPU User Access Nodes (UANs) Milan-Based HPE DL 385(v2) Gen10+ Rome-Based HPE DL 385(v1) Gen10 Node consoles are now managed by cray-console-node which is based on ConMan HSM now has a v2 REST API NCN user password and SSH key management is available for both root and non-root users via NCN personalization.</description>
+    </item>
+    <item>
+      <title>Documentation Conventions</title>
+      <link>/docs-csm/en-12/introduction/documentation_conventions/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-12/introduction/documentation_conventions/</guid>
+      <description>Documentation Conventions Several conventions have been used in the preparation of this documentation.&#xA;Markdown Format File Formats Typographic Conventions Command Prompt Conventions which describe the context for user, host, directory, chroot environment, or container environment Markdown Format This documentation is in Markdown format. Although much of it can be viewed with any text editor, a richer experience will come from using a tool which can render the Markdown to show different font sizes, the use of bold and italics formatting, inclusion of diagrams and screen shots as image files, and to follow navigational links within a topic file and to other files.</description>
+    </item>
+    <item>
+      <title>Scenarios for Shasta v1.5</title>
+      <link>/docs-csm/en-12/introduction/scenarios/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-12/introduction/scenarios/</guid>
+      <description>Scenarios for Shasta v1.5 There are multiple scenarios for installing CSM software which are described in this documentation with many supporting procedures.&#xA;Scenarios for Shasta v1.5 Installation Upgrade Migration Installation There are two ways to install the CSM software. There are some differences between a first time install which must create the initial configuration payload and configure the management network switches, whereas a reinstall can reuse a previous configuration payload and skip the configuration of management network switches.</description>
+    </item>
+  </channel>
+</rss>

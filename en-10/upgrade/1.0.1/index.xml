@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CSM 0.9.4 or later to 1.0.1 Upgrade Process on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-10/upgrade/1.0.1/</link>
+    <description>Recent content in CSM 0.9.4 or later to 1.0.1 Upgrade Process on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-10</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:45 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-10/upgrade/1.0.1/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Stage 0 - Prerequisites and Preflight Checks</title>
+      <link>/docs-csm/en-10/upgrade/1.0.1/stage_0_prerequisites/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:44 +0000</pubDate>
+      <guid>/docs-csm/en-10/upgrade/1.0.1/stage_0_prerequisites/</guid>
+      <description>Stage 0 - Prerequisites and Preflight Checks NOTE: CSM-0.9.4 or later CSM 0.9.x is required in order to upgrade to CSM-1.0.1 (available with Shasta v1.5).&#xA;NOTE: Installed CSM versions may be listed from the product catalog using the following command. This will sort a semantic version without a hyphenated suffix after the same semantic version with a hyphenated suffix, e.g. 1.0.0 &amp;gt; 1.0.0-beta.19.&#xA;Use the following command can be used to check the CSM version on the system:</description>
+    </item>
+    <item>
+      <title>Stage 1 - Ceph upgrade from Nautilus (14.2.x) to Octopus (15.2.x)</title>
+      <link>/docs-csm/en-10/upgrade/1.0.1/stage_1/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:44 +0000</pubDate>
+      <guid>/docs-csm/en-10/upgrade/1.0.1/stage_1/</guid>
+      <description>Stage 1 - Ceph upgrade from Nautilus (14.2.x) to Octopus (15.2.x) IMPORTANT:&#xA;Reminder: Before running any upgrade scripts, be sure the Cray CLI output format is reset to default by running the following command:&#xA;ncn# unset CRAY_FORMAT Stage 1.1 Run ncn-upgrade-ceph-initial.sh for ncn-s001. Follow output of the script carefully. The script will pause for manual interaction.&#xA;ncn-m001# /usr/share/doc/csm/upgrade/1.0.1/scripts/upgrade/ncn-upgrade-ceph-initial.sh ncn-s001 Repeat the previous step for each other storage node, one at a time.</description>
+    </item>
+    <item>
+      <title>Stage 2 - Ceph image upgrade</title>
+      <link>/docs-csm/en-10/upgrade/1.0.1/stage_2/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:44 +0000</pubDate>
+      <guid>/docs-csm/en-10/upgrade/1.0.1/stage_2/</guid>
+      <description>Stage 2 - Ceph image upgrade IMPORTANT:&#xA;Reminder: Before running any upgrade scripts, be sure the Cray CLI output format is reset to default by running the following command:&#xA;ncn# unset CRAY_FORMAT In order for nodes to properly PXE boot, Border Gateway Protocol (BGP) must be healthy. Before proceeding, check the status of BGP as described in the Check BGP Status and Reset Sessions procedure.&#xA;Run ncn-upgrade-ceph-nodes.sh for ncn-s001. Follow output of the script carefully.</description>
+    </item>
+    <item>
+      <title>Stage 3 - Kubernetes Upgrade from 1.18.6 to 1.19.9</title>
+      <link>/docs-csm/en-10/upgrade/1.0.1/stage_3/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:44 +0000</pubDate>
+      <guid>/docs-csm/en-10/upgrade/1.0.1/stage_3/</guid>
+      <description>Stage 3 - Kubernetes Upgrade from 1.18.6 to 1.19.9 NOTE: During the CSM-0.9 install the LiveCD containing the initial install files for this system should have been unmounted from the master node when rebooting into the Kubernetes cluster. The scripts run in this section will also attempt to unmount/eject it if found to ensure the USB stick does not get erased.&#xA;IMPORTANT:&#xA;Reminder: Before running any upgrade scripts, be sure the Cray CLI output format is reset to default by running the following command:</description>
+    </item>
+    <item>
+      <title>Stage 4 - CSM Service Upgrades</title>
+      <link>/docs-csm/en-10/upgrade/1.0.1/stage_4/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:44 +0000</pubDate>
+      <guid>/docs-csm/en-10/upgrade/1.0.1/stage_4/</guid>
+      <description>Stage 4 - CSM Service Upgrades IMPORTANT:&#xA;Reminder: Before running any upgrade scripts, be sure the Cray CLI output format is reset to default by running the following command:&#xA;ncn# unset CRAY_FORMAT Run csm-service-upgrade.sh to deploy upgraded CSM applications and services:&#xA;ncn-m002# /usr/share/doc/csm/upgrade/1.0.1/scripts/upgrade/csm-service-upgrade.sh Once Stage 4 service upgrade is complete, proceed to Stage 5</description>
+    </item>
+    <item>
+      <title>Stage 5 - Workaround for MAC-learning issue with Aruba 8325 switches</title>
+      <link>/docs-csm/en-10/upgrade/1.0.1/stage_5/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:45 +0000</pubDate>
+      <guid>/docs-csm/en-10/upgrade/1.0.1/stage_5/</guid>
+      <description>Stage 5 - Workaround for MAC-learning issue with Aruba 8325 switches Issue description:&#xA;Aruba CR: 90598&#xA;Affected platform: Aruba 8325 switches&#xA;Symptom: MAC learning stops&#xA;Scenario: Under extremely rare DMA stress conditions, an L2 learning thread may timeout and exit, preventing future MAC learning&#xA;Workaround: Reboot the switch or monitor the L2 thread and restart it with an NAE script&#xA;Fixed in: 10.06.0130, 10.7.0010, and above&#xA;Aruba release notes&#xA;Overview NOTE: If you do not have Aruba 8325 switches in your system, skip this stage and return to main upgrade page.</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,252 @@
+#
+# MIT License
+#
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: management-m001-rollout
+spec:
+  tolerations:
+    - key: "node-role.kubernetes.io/master"
+      operator: "Exists"
+      effect: "NoSchedule"
+    - key: "node-role.kubernetes.io/control-plane"
+      operator: "Exists"
+      effect: "NoSchedule"
+  nodeSelector:
+    kubernetes.io/hostname: ncn-m002
+  entrypoint: main
+  templates:
+    - name: main
+      metrics:
+        prometheus:
+        - name: operation_counter
+          help: "Count of step execution by result status"
+          labels:
+            - key: "opname"
+              value: "management-m001-rollout"
+            - key: stage
+              value: "management-nodes-rollout"
+            - key: type
+              value: "global"
+            - key: pname
+              value: "global"
+            - key: pversion
+              value: "global"
+            - key: status
+              value: "{{status}}"
+          counter:
+            value: "1"
+      inputs:
+        parameters:
+          - name: auth_token
+          - name: global_params
+      dag:
+        tasks:
+          - name: start-operation
+            templateRef:
+              name: workflow-template-record-time-template
+              template: record-time-template
+          - name: INFO-to-read
+            dependencies:
+              - start-operation
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: mediaHost
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"
+                - name: scriptContent
+                  value: |
+                    echo "NOTICE This workflow will rollout ncn-m001 upgrade."
+          - name: verify-master-images-and-configuration
+            dependencies:
+              - INFO-to-read
+            templateRef:
+              name: verify-ncn-images-and-configs
+              template: main
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: global_params
+                  value: "{{inputs.parameters.global_params}}"
+                - name: nodeType
+                  value: "Master"
+          - name: backup-m001
+            dependencies:
+              - verify-master-images-and-configuration
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: mediaHost
+                  value: 'ncn-m001'
+                - name: scriptContent
+                  value: |
+                    BACKUP_TARFILE="csm_upgrade.pre_m001_reboot_artifacts.$(date +%Y%m%d_%H%M%S).tgz"
+                    ls -d \
+                        /root/apply_csm_configuration.* \
+                        /root/csm_upgrade.* \
+                        /root/output.log 2>/dev/null |
+                    sed 's_^/__' |
+                    xargs tar -C / -czvf "/root/${BACKUP_TARFILE}"
+                    cray artifacts create config-data "${BACKUP_TARFILE}" "/root/${BACKUP_TARFILE}"
+                    # Check for cray artifact create command result
+                    prepare_images_output=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
+                    CFS_CONFIG_NAME=$(echo $prepare_images_output | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].configuration' | tr -d '"')
+                    IMAGE_ID=$(echo $prepare_images_output | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].final_image_id' | tr -d '"')
+                    XNAME=$(cat /etc/cray/xname)
+                    # Check for the XNAME variable
+                    echo "DEBUG Setting CFS config $config on ncn-m001 ($XNAME)"
+                    /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
+                    --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames "${XNAME}" --no-enable --no-clear-err
+
+                    IMS_RESULTANT_IMAGE_ID=${IMAGE_ID}
+                    METAL_SERVER=$(cray bss bootparameters list --hosts "${XNAME}" --format json | jq '.[] |."params"' \
+                       | awk -F 'metal.server=' '{print $2}' \
+                       | awk -F ' ' '{print $1}')
+                    echo "${METAL_SERVER}"
+
+                    S3_ARTIFACT_PATH="boot-images/${IMS_RESULTANT_IMAGE_ID}"
+                    echo "${S3_ARTIFACT_PATH}"
+                    NEW_METAL_SERVER="s3://${S3_ARTIFACT_PATH}/rootfs"
+                    echo "${NEW_METAL_SERVER}"
+                    PARAMS=$(cray bss bootparameters list --hosts "${XNAME}" --format json | jq '.[] |."params"' | \
+                    sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" | \
+                    tr -d \")
+                    echo "${PARAMS}"
+
+                    cray bss bootparameters update --hosts "${XNAME}" \
+                        --kernel "s3://${S3_ARTIFACT_PATH}/kernel" \
+                        --initrd "s3://${S3_ARTIFACT_PATH}/initrd" \
+                        --params "${PARAMS}"
+          - name: upgrade-m001
+            dependencies:
+              - backup-m001
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: mediaHost
+                  value: 'ncn-m002'
+                - name: scriptContent
+                  value: |
+                    # Cray CLI authentication
+                    # initialize craycli
+                    API_GW="https://api-gw-service-nmn.local"
+                    ADMIN_SECRET=$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d)
+                    curl -k -s -d grant_type=client_credentials \
+                               -d client_id=admin-client \
+                               -d client_secret=$ADMIN_SECRET https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token > /tmp/setup-token.json
+                    export CRAY_CREDENTIALS=/tmp/setup-token.json
+                    cray init --hostname $API_GW --no-auth --overwrite > /dev/null
+
+                    source /etc/cray/upgrade/csm/myenv
+                    scp ncn-m001:/root/csm_upgrade.pre_m001_reboot_artifacts.*.tgz /root
+                    if [[ "$?" -ne 0 ]]; then
+                        echo "ERROR Copying of CSM upgrade artifacts from ncn-m001 has failed "
+                        exit 1
+                    fi
+                    zypper --plus-repo="${CSM_ARTI_DIR}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)" --no-gpg-checks install -y cray-site-init
+                    scp ncn-m001:/root/*.noarch.rpm /root/
+                    if [[ "$?" -ne 0 ]]; then
+                        echo "ERROR Copying of *.noarch.rpm RPM's from ncn-m001 has failed "
+                        exit 1
+                    fi
+                    if [ -f /root/docs-csm-latest.noarch.rpm ]; then
+                        rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
+                    else
+                        echo "ERROR docs-csm-latest.noarch.rpm RPM doesn't exists under /root directory"
+                        exit 1
+                    fi
+                    if [ -f  /root/libcsm-latest.noarch.rpm ]; then
+                        rpm -Uvh --force /root/libcsm-latest.noarch.rpm
+                    else
+                        echo "ERROR libcsm-latest.noarch.rpm RPM doesn't exists under /root directory"
+                        exit 1
+                    fi
+                    /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
+
+          - name: end-operation
+            dependencies:
+              - upgrade-m001
+            templateRef:
+              name: workflow-template-record-time-template
+              template: record-time-template
+          - name: prom-metrics
+            dependencies:
+              - start-operation
+              - end-operation
+            template: prom-metrics
+            arguments:
+              parameters:
+              - name: opstart
+                value: "{{tasks.start-operation.outputs.result}}"
+              - name: opend
+                value: "{{tasks.end-operation.outputs.result}}"
+    - name: prom-metrics
+      inputs:
+        parameters:
+        - name: opstart
+        - name: opend
+      metrics:
+        prometheus:
+          - name: operation_time
+            help: "Duration gauge by operation name in seconds"
+            labels:
+              - key: "opname"
+                value: "management-m001-rollout"
+              - key: stage
+                value: "management-nodes-rollout"
+              - key: type
+                value: "global"
+              - key: pdname
+                value: "global"
+              - key: pdversion
+                value: "global"
+              - key: "opstart"
+                value: "{{inputs.parameters.opstart}}"
+              - key: "opend"
+                value: "{{inputs.parameters.opend}}"
+            gauge:
+              value: "{{outputs.parameters.diff-time-value}}"
+      outputs:
+        parameters:
+          - name: diff-time-value
+            globalName: diff-time-value
+            valueFrom:
+              path: /tmp/diff_time.txt
+      container:
+        image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
+        command: [sh, -c]
+        args: ["DIFF_TIME=$(expr {{inputs.parameters.opend}} - {{inputs.parameters.opstart}}); echo $DIFF_TIME; echo $DIFF_TIME > /tmp/diff_time.txt"]

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Upgrade CSM on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-10/upgrade/</link>
+    <description>Recent content in Upgrade CSM on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-10</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:47 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-10/upgrade/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Update Management Network From 1.4 To 1.5</title>
+      <link>/docs-csm/en-10/upgrade/update_management_network/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:47 +0000</pubDate>
+      <guid>/docs-csm/en-10/upgrade/update_management_network/</guid>
+      <description>Update Management Network From 1.4 To 1.5 IMPORTANT: These procedures only need to be followed if upgrading from CSM 0.9 (Shasta 1.4). If upgrading from CSM 1.0.1 (Shasta 1.5), these procedures should already have been done.&#xA;New Features and Functions for v1.5 Accessing Network Switches Finding Switch Hostnames and IP Addresses Reminders CMM Static Lag Configuration BGP Aruba Mellanox Apollo Server Configuration 1. New Features and Functions for v1.5 Static Lags from the CDU switches to the CMMs (Aruba and Dell).</description>
+    </item>
+    <item>
+      <title>Prepare For Upgrade</title>
+      <link>/docs-csm/en-10/upgrade/prepare_for_upgrade/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:47 +0000</pubDate>
+      <guid>/docs-csm/en-10/upgrade/prepare_for_upgrade/</guid>
+      <description>Prepare For Upgrade Before beginning an upgrade to a new version of CSM, there are a few things to do on the system first.&#xA;Gracefully shutdown workloads affected by CSM upgrade.&#xA;Warning: Although it is expected that compute nodes and application nodes will continue to provide their services without interruption when the management nodes and services are being upgraded by CSM, it is important to be aware of the possibility of interruption of running jobs.</description>
+    </item>
+  </channel>
+</rss>

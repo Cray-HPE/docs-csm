@@ -1,0 +1,318 @@
+#
+# MIT License
+#
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: nexus-setup
+  namespace: argo
+spec:
+  entrypoint: main
+  templates:
+### Main Steps ###
+  - name: main
+    metrics:
+        prometheus:
+        - name: operation_counter
+          help: "Count of step execution by result status"
+          labels:
+            - key: "opname"
+              value: "nexus-setup"
+            - key: stage
+              value: "deliver-product"
+            - key: type
+              value: "product"
+            - key: pname
+              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
+            - key: pversion
+              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
+            - key: status
+              value: "{{status}}"
+          counter:
+            value: "1"
+    inputs:
+      parameters:
+        - name: auth_token
+        - name: global_params
+    steps:
+    - - name: start-operation
+        templateRef:
+          name: workflow-template-record-time-template
+          template: record-time-template
+    - - name: nexus-get-prerequisites
+        template: nexus-get-prerequisites-template
+        arguments:
+          parameters:
+          - name: global_params
+            value: "{{inputs.parameters.global_params}}"
+    - - name: nexus-setup
+        template: nexus-setup-template
+        hooks:
+          exit:
+            template: cleanup-template
+            arguments:
+              parameters:
+              - name: nexus_admin_credential_secret_name
+                value: "{{steps.nexus-get-prerequisites.outputs.parameters.secret_name}}"
+        arguments:
+          parameters:
+          - name: nexus_setup_image
+            value: artifactory.algol60.net/csm-docker/stable/cray-nexus-setup:0.10.1
+          - name: nexus_admin_credential_secret_name
+            value: "{{steps.nexus-get-prerequisites.outputs.parameters.secret_name}}"
+          - name: content
+            value: "{{steps.nexus-get-prerequisites.outputs.parameters.current_product_manifest}}"
+          - name: product_directory
+            value: "{{steps.nexus-get-prerequisites.outputs.parameters.product_directory}}"
+    - - name: nexus-setup-update-product-catalog
+        templateRef:
+          name: update-product-catalog-template
+          template: catalog-update
+        arguments:
+          parameters:
+            - name: product-name
+              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
+            - name: product-version
+              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
+            - name: yaml-content
+              value: "{{steps.nexus-setup.outputs.parameters.nexus_setup_results}}"
+    - - name: end-operation
+        templateRef:
+          name: workflow-template-record-time-template
+          template: record-time-template
+    - - name:  prom-metrics
+        template: prom-metrics
+        arguments:
+          parameters:
+          - name: opstart
+            value: "{{steps.start-operation.outputs.result}}"
+          - name: opend
+            value: "{{steps.end-operation.outputs.result}}"
+          - name: pdname
+            value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
+          - name: pdversion
+            value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
+
+  - name: prom-metrics
+    inputs:
+      parameters:
+      - name: opstart
+      - name: opend
+      - name: pdname
+      - name: pdversion
+    metrics:
+      prometheus:
+        - name: operation_time
+          help: "Duration gauge by operation name in seconds"
+          labels:
+            - key: opname
+              value: "nexus-setup"
+            - key: stage
+              value: "deliver-product"
+            - key: type
+              value: "product"
+            - key: pdname
+              value: "{{inputs.parameters.pdname}}"
+            - key: pdversion
+              value: "{{inputs.parameters.pdversion}}"
+            - key: opstart
+              value: "{{inputs.parameters.opstart}}"
+            - key: opend
+              value: "{{inputs.parameters.opend}}"
+          gauge:
+            value: "{{outputs.parameters.diff-time-value}}"
+    outputs:
+      parameters:
+        - name: diff-time-value
+          globalName: diff-time-value
+          valueFrom:
+            path: /tmp/diff_time.txt
+    container:
+      image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
+      command: [sh, -c]
+      args: ["DIFF_TIME=$(expr {{inputs.parameters.opend}} - {{inputs.parameters.opstart}}); echo $DIFF_TIME; echo $DIFF_TIME > /tmp/diff_time.txt"]
+
+### Templates ###
+## nexus-get-prerequisites-template ##
+  - name: nexus-get-prerequisites-template
+    tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+    inputs:
+      parameters:
+      - name: global_params
+    outputs:
+      parameters:
+        - name: secret_name
+          valueFrom:
+            path: /tmp/secret_name
+        - name: current_product_manifest
+          valueFrom:
+            path: /tmp/current_product_manifest
+        - name: product_directory
+          valueFrom:
+            path: /tmp/product_directory
+    retryStrategy:
+        limit: "2"
+        retryPolicy: "Always"
+        backoff:
+          duration: "10s" # Must be a string. Default unit is seconds. Could also be a Duration, e.g.: "2m", "6h", "1d"
+          factor: "2"
+          maxDuration: "1m"
+    script:
+      # TBD: This is a repeated function. Can this change to a reference?
+      image: artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
+      command: [bash]
+      source: |
+        function sync_item() {
+          item_name="$1"
+          source_ns="$2"
+          destination_name="$3-$RANDOM"
+          destination_ns="$4"
+          result=$(kubectl get $item_name -n $source_ns 2>&1)
+          if [ $? -eq 0 ]; then
+            echo "DEBUG Syncing $item_name from $source_ns to $destination_ns as $destination_name"
+            kubectl get $item_name -n $source_ns -o json | \
+              jq 'del(.metadata.namespace)' | \
+              jq 'del(.metadata.creationTimestamp)' | \
+              jq 'del(.metadata.resourceVersion)' | \
+              jq 'del(.metadata.selfLink)' | \
+              jq 'del(.metadata.uid)' | \
+              jq 'del(.metadata.ownerReferences)' | \
+              jq 'del(.metadata.name)' | \
+              jq '.metadata |= . + {"name":"'$destination_name'"}' | \
+              kubectl apply -n $destination_ns -f -
+              rc=$?
+              if [ $rc -ne 0 ]; then
+                echo "ERROR Failed to create secret $destination_name in $destination_ns namespace from $item_name in $source_ns namespace"
+              fi
+              return $rc
+          else
+            echo "ERROR $item_name not found in $source_ns namespace"
+            result=$(echo "$result" | sed -e 's/^/DEBUG /')
+            echo -e "DEBUG <kubectl get $item_name -n $source_ns> failed with\n\n$result"
+            return 1
+          fi
+        }
+        err=0
+        sync_item secret/nexus-admin-credential nexus nexus-admin-credential-argo argo
+        if [ $? -ne 0 ]; then
+          err=1
+        fi
+        echo $destination_name > /tmp/secret_name
+
+        # Retrieve the content of the current product manifest as json.
+        product_name={{inputs.parameters.global_params}} | jq -r '.product_manifest.current_product.name'
+        echo "DEBUG Fetching the product manifest for $product_name"
+        cat <<EOF | jq '.product_manifest.current_product.manifest.content' > /tmp/current_product_manifest
+          {{inputs.parameters.global_params}}
+        EOF
+        if [ $? -ne 0 ]; then
+          err=1
+          echo "ERROR Failed to fetch product manifest for $product_name. Rerun with valid product tarball from 'process-media' stage"
+        fi
+
+        # Retrieve the product directory.
+        echo "DEBUG Retrieving the product directory for $product_name"
+        cat <<EOF | jq -r '.product_manifest.current_product.original_location' > /tmp/product_directory
+          {{inputs.parameters.global_params}}
+        EOF
+        if [ $? -ne 0 ]; then
+          echo "ERROR Failed to fetch product directory for $product_name. Rerun with valid product tarball from 'process-media' stage"
+          err=1
+        fi
+
+        # Exit with an error if we had any.
+        exit $err
+## nexus-setup-template ##
+  - name: nexus-setup-template
+    inputs:
+      parameters:
+      - name: nexus_setup_image
+      - name: nexus_admin_credential_secret_name
+      - name: content
+      - name: product_directory
+    tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+    outputs:
+      parameters:
+        - name: nexus_setup_results
+          valueFrom:
+            path: /results/records.yaml
+            default: "{}"
+    container:
+      image: "{{inputs.parameters.nexus_setup_image}}"
+      command: [iuf-nexus-setup]
+      args: ["--blobstores","/products/{{=jsonpath(inputs.parameters.content,'$.nexus_blob_stores.yaml_path')}}","--repositories","/products/{{=jsonpath(inputs.parameters.content,'$.nexus_repositories.yaml_path')}}"]
+      env:
+      - name: NEXUS_URL
+        value: "https://packages.local"
+      - name: NEXUS_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: "{{inputs.parameters.nexus_admin_credential_secret_name}}"
+            key: username
+      - name: NEXUS_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: "{{inputs.parameters.nexus_admin_credential_secret_name}}"
+            key: password
+      volumeMounts:
+      - name: products
+        mountPath: /products
+    # This will be an RBD mount.
+    volumes:
+    - name: products
+      hostPath:
+        path: "{{inputs.parameters.product_directory}}"
+## cleanup-template ##
+## Remove the secret created earlier.
+  - name: cleanup-template
+    inputs:
+      parameters:
+      - name: nexus_admin_credential_secret_name
+    tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+    script:
+      image: artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
+      command: [bash]
+      source: |
+        nexus_secret_name={{inputs.parameters.nexus_admin_credential_secret_name}}
+        echo "DEBUG Deleting secret $nexus_secret_name from argo workspace"
+        result=$(kubectl -n argo delete secret/$nexus_secret_name 2>&1)
+        if [ $? -ne 0 ]; then
+          result=$(echo "$result" | sed -e 's/^/DEBUG /')
+          echo "ERROR Deleting secret $nexus_secret_name failed in argo namespace"
+          echo -e "DEBUG <kubectl -n argo delete secret/$nexus_secret_name> failed with\n\n$result"
+        fi

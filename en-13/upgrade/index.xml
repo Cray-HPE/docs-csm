@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CSM 1.2.x to 1.3.x Upgrade Process on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-13/upgrade/</link>
+    <description>Recent content in CSM 1.2.x to 1.3.x Upgrade Process on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-13</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:39:11 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-13/upgrade/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Stage 0 - Prerequisites and Preflight Checks</title>
+      <link>/docs-csm/en-13/upgrade/stage_0_prerequisites/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:11 +0000</pubDate>
+      <guid>/docs-csm/en-13/upgrade/stage_0_prerequisites/</guid>
+      <description>Stage 0 - Prerequisites and Preflight Checks Reminders:&#xA;CSM 1.2.0 or higher is required in order to upgrade to CSM 1.3.0. If any problems are encountered and the procedure or command output does not provide relevant guidance, see Relevant troubleshooting links for upgrade-related issues. Stage 0 has several critical procedures which prepare the environment and verify if the environment is ready for the upgrade.&#xA;Start typescript Stage 0.1 - Prepare assets Direct download Manual copy Stage 0.</description>
+    </item>
+    <item>
+      <title>Stage 1 - Ceph image upgrade</title>
+      <link>/docs-csm/en-13/upgrade/stage_1/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:11 +0000</pubDate>
+      <guid>/docs-csm/en-13/upgrade/stage_1/</guid>
+      <description>Stage 1 - Ceph image upgrade Reminder: If any problems are encountered and the procedure or command output does not provide relevant guidance, see Relevant troubleshooting links for upgrade-related issues.&#xA;Stage 1 - Ceph image upgrade Start typescript Run Ceph Latency Repair Script Apply boot order workaround Argo workflows CSM Upgrade requirement for upgrades staying within a CSM release version Storage node image upgrade Ensure that rbd stats monitoring is enabled Stop typescript Stage completed Start typescript (ncn-m001#) If a typescript session is already running in the shell, then first stop it with the exit command.</description>
+    </item>
+    <item>
+      <title>Stage 2 - Kubernetes Upgrade</title>
+      <link>/docs-csm/en-13/upgrade/stage_2/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:11 +0000</pubDate>
+      <guid>/docs-csm/en-13/upgrade/stage_2/</guid>
+      <description>Stage 2 - Kubernetes Upgrade Reminder: If any problems are encountered and the procedure or command output does not provide relevant guidance, see Relevant troubleshooting links for upgrade-related issues.&#xA;Start typescript on ncn-m001 Stage 2.1 - Master node image upgrade Argo workflows Stage 2.2 - Worker node image upgrade Option 1 - Serial upgrade Option 2 - Parallel upgrade (Tech preview) Restrictions Example Stage 2.3 - ncn-m001 upgrade Remap rbd device from ncn-m001 to ncn-m002 Stop typescript on ncn-m001 Backup artifacts on ncn-m001 Move to ncn-m002 Start typescript on ncn-m002 Prepare ncn-m002 Upgrade ncn-m001 Stage 2.</description>
+    </item>
+    <item>
+      <title>Stage 3 - CSM Service Upgrades</title>
+      <link>/docs-csm/en-13/upgrade/stage_3/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:11 +0000</pubDate>
+      <guid>/docs-csm/en-13/upgrade/stage_3/</guid>
+      <description>Stage 3 - CSM Service Upgrades Reminder: If any problems are encountered and the procedure or command output does not provide relevant guidance, see Relevant troubleshooting links for upgrade-related issues.&#xA;Start typescript Perform upgrade Verify Keycloak users Take Etcd Manual Backup Stop typescript Stage completed Start typescript (ncn-m002#) If a typescript session is already running in the shell, then first stop it with the exit command.&#xA;(ncn-m002#) Start a typescript.</description>
+    </item>
+    <item>
+      <title>Stage 4 - Ceph Upgrade</title>
+      <link>/docs-csm/en-13/upgrade/stage_4/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:11 +0000</pubDate>
+      <guid>/docs-csm/en-13/upgrade/stage_4/</guid>
+      <description>Stage 4 - Ceph Upgrade Important: Ceph does not need to be upgraded if this is an upgrade is staying within a CSM release, e.g. CSM-1.3.0-rc1 to CSM-1.3.0-rc2. If this is an upgrade staying within a CSM release, then Ceph is already running v16.2.9. See instructions in stage completed for next steps.&#xA;Reminder: If any problems are encountered and the procedure or command output does not provide relevant guidance, then see Relevant troubleshooting links for upgrade-related issues.</description>
+    </item>
+    <item>
+      <title>CSM 1.2.0 or later to 1.3.0 Upgrade Process</title>
+      <link>/docs-csm/en-13/upgrade/upgrade_management_nodes_and_csm_services/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:11 +0000</pubDate>
+      <guid>/docs-csm/en-13/upgrade/upgrade_management_nodes_and_csm_services/</guid>
+      <description>CSM 1.2.0 or later to 1.3.0 Upgrade Process Introduction This document guides an administrator through the upgrade of Cray Systems Management from version 1.2 to version 1.3. When upgrading a system, follow this top-level file from top to bottom. The content on this top-level page is meant to be terse. For additional reference material on the upgrade processes and scripts mentioned explicitly on this page, see resource material.&#xA;Important notes Service request adjustments are needed for small systems For systems with only three worker nodes (typically Testing and Development Systems (TDS)), prior to proceeding with this upgrade, CPU limits MUST be lowered on several services in order for this upgrade to succeed.</description>
+    </item>
+    <item>
+      <title>Prepare For Upgrade</title>
+      <link>/docs-csm/en-13/upgrade/prepare_for_upgrade/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:11 +0000</pubDate>
+      <guid>/docs-csm/en-13/upgrade/prepare_for_upgrade/</guid>
+      <description>Prepare For Upgrade Before beginning an upgrade to a new version of CSM, there are a few things to do on the system first.&#xA;Reduced resiliency during upgrade&#xA;[Preparation steps]&#xA;Start typescript Ensure latest documentation installed Export Nexus data Disable encryption for upgrade if enabled Running sessions Health validation Stop typescript Preparation completed&#xA;Reduced resiliency during upgrade Warning: Management service resiliency is reduced during the upgrade.&#xA;Although it is expected that compute nodes and application nodes will continue to provide their services without interruption, it is important to be aware that the degree of management services resiliency is reduced during the upgrade.</description>
+    </item>
+  </channel>
+</rss>

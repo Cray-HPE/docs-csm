@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>dhcp on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-15/operations/network/dhcp/</link>
+    <description>Recent content in dhcp on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-15</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:35 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-15/operations/network/dhcp/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>DHCP boot file customization</title>
+      <link>/docs-csm/en-15/operations/network/dhcp/customize_boot_file/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:35 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/network/dhcp/customize_boot_file/</guid>
+      <description>DHCP boot file customization DHCP Boot file customization Background Override the boot file name Verify the node DHCP configuration has been updated Reset the boot file to the default option Background The cray-dhcp-kea service is configured to send a CPU architecture appropriate boot file based on the value received in the client system architecture field (option 93) of the incoming DHCP request. By default cray-dhcp-kea will send the following in the DHCP boot file name field (option 67) of the DHCP response.</description>
+    </item>
+    <item>
+      <title>DHCP</title>
+      <link>/docs-csm/en-15/operations/network/dhcp/dhcp/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:35 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/network/dhcp/dhcp/</guid>
+      <description>DHCP The Dynamic Host Configuration Protocol (DHCP) service on the HPE Cray EX system uses the Internet Systems Consortium (ISC) Kea tool. Kea provides more robust management capabilities for DHCP servers.&#xA;For more information: https://www.isc.org/kea/.&#xA;The following improvements to the DHCP service are included:&#xA;API access to manage DHCP Scalable pod that uses MetalLB instead of host networking Options for updates to HPE Cray EX management system IP addresses DHCP Helper Workflow The DHCP-Helper uses the following workflow:</description>
+    </item>
+    <item>
+      <title>Troubleshoot DHCP Issues</title>
+      <link>/docs-csm/en-15/operations/network/dhcp/troubleshoot_dhcp_issues/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:35 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/network/dhcp/troubleshoot_dhcp_issues/</guid>
+      <description>Troubleshoot DHCP Issues There are several things to check for when troubleshooting issues with Dynamic Host Configuration Protocol (DHCP) servers.&#xA;Verify the status of the cray-dhcp-kea pods and services (ncn-mw#) Check to see if the Kea DHCP services are running:&#xA;kubectl get services -n services | grep kea Example output:&#xA;cray-dhcp-kea-api ClusterIP 10.26.142.204 &amp;lt;none&amp;gt; 8000/TCP 5d23h cray-dhcp-kea-tcp-hmn LoadBalancer 10.24.79.120 10.94.100.222 67:32120/TCP 5d23h cray-dhcp-kea-tcp-nmn LoadBalancer 10.19.139.179 10.92.100.222 67:31652/TCP 5d23h cray-dhcp-kea-udp-hmn LoadBalancer 10.</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>node management on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-12/operations/node_management/</link>
+    <description>Recent content in node management on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-12</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:47 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-12/operations/node_management/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Access and Update Settings for Replacement NCNs</title>
+      <link>/docs-csm/en-12/operations/node_management/access_and_update_the_settings_for_replacement_ncns/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:43 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/access_and_update_the_settings_for_replacement_ncns/</guid>
+      <description>Access and Update Settings for Replacement NCNs When a new NCN is added to the system as a hardware replacement, it might use the default credentials. Contact HPE Cray service to learn what these are.&#xA;Use this procedure to verify that the default BMC credentials are set correctly after a replacement NCN is installed, cabled, and powered on.&#xA;All NCN BMCs must have credentials set up for ipmitool access.&#xA;Prerequisites A new non-compute node (NCN) has been added to the system as a hardware replacement.</description>
+    </item>
+    <item>
+      <title>Removing a Liquid-cooled blade from a System</title>
+      <link>/docs-csm/en-12/operations/node_management/removing_a_liquid-cooled_blade_from_a_system/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:46 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/removing_a_liquid-cooled_blade_from_a_system/</guid>
+      <description>Removing a Liquid-cooled blade from a System This procedure will remove a liquid-cooled blades from an HPE Cray EX system.&#xA;Perquisites The Cray command line interface (CLI) tool is initialized and configured on the system. See Configure the Cray CLI.&#xA;Knowledge of whether Data Virtualization Service (DVS) is operating over the Node Management Network (NMN) or the High Speed Network (HSN).&#xA;The Slingshot fabric must be configured with the desired topology for desired state of the blades in the system.</description>
+    </item>
+    <item>
+      <title>Replace a Compute Blade</title>
+      <link>/docs-csm/en-12/operations/node_management/replace_a_compute_blade/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:46 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/replace_a_compute_blade/</guid>
+      <description>Replace a Compute Blade Replace an HPE Cray EX liquid-cooled compute blade.&#xA;Shutdown software and power off the blade Temporarily disable endpoint discovery service (MEDS) for the compute nodes(s) being replaced. This example disables MEDS for the compute node in cabinet 1000, chassis 3, slot 0 (x1000c3s0b0). If there is more than 1 node card, in the blade specify each node card (x1000c3s0b0, x1000c3s0b1).&#xA;ncn-mw# cray hsm inventory redfishEndpoints update --enabled false x1000c3s0b0 Verify that the workload manager (WLM) is not using the affected nodes.</description>
+    </item>
+    <item>
+      <title>Reset Credentials on Redfish Devices</title>
+      <link>/docs-csm/en-12/operations/node_management/reset_credentials_on_redfish_devices_for_reinstallation/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:46 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/reset_credentials_on_redfish_devices_for_reinstallation/</guid>
+      <description>Reset Credentials on Redfish Devices Before re-installing or upgrading the system the credentials need to be changed back to their defaults for any devices that had their credentials changed post-install. This is necessary for the installation process to properly discover and communicate with these devices.&#xA;Prerequisites Administrative privileges are required.&#xA;Procedure Create an SCSD payload file with the default credentials for the Redfish devices that have been changed from the defaults.</description>
+    </item>
+    <item>
+      <title>S3FS Usage and Guidelines for Shasta</title>
+      <link>/docs-csm/en-12/operations/node_management/s3fs_usage_and_guidelines/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:46 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/s3fs_usage_and_guidelines/</guid>
+      <description>S3FS Usage and Guidelines for Shasta Introduction S3FS is being deployed as tool to provide temporary relief of space usage as well as supporting SDU/NMD services as a near-posix file system to provide a landing point for dumps.&#xA;When to Use If the need is a landing point for large files that may fill up the root volume. Short term storage of large files or rpms. When NOT to Use For long term storage of code, test images, test rpms, or tar files.</description>
+    </item>
+    <item>
+      <title>Swap a Compute Blade with a Different System</title>
+      <link>/docs-csm/en-12/operations/node_management/swap_a_compute_blade_with_a_different_system/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:46 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/swap_a_compute_blade_with_a_different_system/</guid>
+      <description>Swap a Compute Blade with a Different System Swap an HPE Cray EX liquid-cooled compute blade between two systems.&#xA;The two systems in this example are: Source system - Cray EX TDS cabinet x9000 with a healthy EX425 blade (Windom dual-injection) in chassis 3, slot 0 Destination system - Cray EX cabinet x1005 with a defective EX425 blade (Windom dual-injection) in chassis 3, slot 0 Substitute the correct component names (xnames) or other parameters in the command examples that follow.</description>
+    </item>
+    <item>
+      <title>Add TLS Certificates to BMCs</title>
+      <link>/docs-csm/en-12/operations/node_management/add_tls_certificates_to_bmcs/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:44 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/add_tls_certificates_to_bmcs/</guid>
+      <description>Add TLS Certificates to BMCs Use the System Configuration Service (SCSD) tool to create TLS certificates and store them in Vault secure storage. Once certificates are created, they are placed on to the target BMCs.&#xA;Prerequisites Limitations Generate TLS certificates Regenerate TLS certificates Prerequisites The Cray command line interface (CLI) tool is initialized and configured on the system. See Configure the Cray CLI. Limitations TLS certificates can only be set for liquid-cooled BMCs.</description>
+    </item>
+    <item>
+      <title>TLS Certificates for Redfish BMCs</title>
+      <link>/docs-csm/en-12/operations/node_management/tls_certificates_for_redfish_bmcs/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:46 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/tls_certificates_for_redfish_bmcs/</guid>
+      <description>TLS Certificates for Redfish BMCs Redfish HTTP communications are capable of using TLS certificates and Certificate Authority (CA) trust bundles to improve security. Several Hardware Management Services (HMS) have been modified to enable the HTTP transports used for Redfish communications to use a CA trust bundle.&#xA;The following services communicate with Redfish BMCs:&#xA;State Manager Daemon (SMD) Cray Advanced Platform Monitoring and Control (CAPMC) Firmware Action Service (FAS) HMS Collector River Endpoint Discovery Service (REDS) Mountain Endpoint Discovery Service (MEDS) Each Redfish BMC must have a TLS certificate in order to be useful.</description>
+    </item>
+    <item>
+      <title>Add a Standard Rack Node</title>
+      <link>/docs-csm/en-12/operations/node_management/add_a_standard_rack_node/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:44 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/add_a_standard_rack_node/</guid>
+      <description>Add a Standard Rack Node These procedures are intended for trained technicians and support personnel only. Always follow ESD precautions when handling this equipment.&#xA;The example is this procedure adds a User Access Node (UAN) or compute node to an HPE Cray standard rack system. This example adds a node to rack number 3000 at U27.&#xA;Procedures for updating the Hardware State Manager (HSM) or System Layout Service (SLS) are similar when adding additional compute nodes or User Application Nodes (UANs).</description>
+    </item>
+    <item>
+      <title>Troubleshoot Interfaces with IP Address Issues</title>
+      <link>/docs-csm/en-12/operations/node_management/troubleshoot_interfaces_with_ip_address_issues/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:46 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/troubleshoot_interfaces_with_ip_address_issues/</guid>
+      <description>Troubleshoot Interfaces with IP Address Issues Correct NCNs that are failing to assigning a static IP address or detect a duplicate IP address.&#xA;The Wicked network manager tool will fail to bring an interface up if its assigned IP address already exists in the respective LAN. This can be detected by checking for signs of duplicate IP address messages in the log.&#xA;Prerequisites An NCN has an interface that is failing to assign a static IP address or that has a duplicate IP address.</description>
+    </item>
+    <item>
+      <title>Add Additional Liquid-Cooled Cabinets to a System</title>
+      <link>/docs-csm/en-12/operations/node_management/add_additional_liquid-cooled_cabinets_to_a_system/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:44 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/add_additional_liquid-cooled_cabinets_to_a_system/</guid>
+      <description>Add Additional Liquid-Cooled Cabinets to a System This top level procedure outlines the process for adding additional liquid-cooled cabinets to a currently installed system.&#xA;Prerequisites The system&amp;rsquo;s SHCD file has been updated with the new cabinets and cabling changes. The new cabinets have been cabled to the system, and the system&amp;rsquo;s cabling has been validated to be correct. Follow the procedure Create a Backup of the SLS Postgres Database. Follow the procedure Create a Backup of the HSM Postgres Database Procedure Perform procedures in Add Liquid-Cooled Cabinets to SLS.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Issues with Redfish Endpoint Discovery</title>
+      <link>/docs-csm/en-12/operations/node_management/troubleshoot_issues_with_redfish_endpoint_discovery/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:46 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/troubleshoot_issues_with_redfish_endpoint_discovery/</guid>
+      <description>Troubleshoot Issues with Redfish Endpoint Discovery If a Redfish endpoint is in the HTTPsGetFailed status, then the endpoint does not need to be fully rediscovered. The error indicates an issue in the inventory process done by the Hardware State Manager (HSM). Restart the inventory process to fix this issue.&#xA;Update the HSM inventory to resolve issues with discovering Redfish endpoints.&#xA;Error Symptom The following is an example of the HSM error:</description>
+    </item>
+    <item>
+      <title>Adding a Liquid-cooled Blade to a System</title>
+      <link>/docs-csm/en-12/operations/node_management/adding_a_liquid-cooled_blade_to_a_system/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:44 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/adding_a_liquid-cooled_blade_to_a_system/</guid>
+      <description>Adding a Liquid-cooled Blade to a System This procedure will add a liquid-cooled blades to an HPE Cray EX system.&#xA;Prerequisites The Cray command line interface (CLI) tool) is initialized and configured on the system. See Configure the Cray CLI.&#xA;Knowledge of whether Data Virtualization Service (DVS) is operating over the Node Management Network (NMN) or the High Speed Network (HSN).&#xA;Blade is being added to an existing liquid-cooled cabinet in the system.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Loss of Console Connections and Logs on Gigabyte Nodes</title>
+      <link>/docs-csm/en-12/operations/node_management/troubleshoot_loss_of_console_connections_and_logs_on_gigabyte_nodes/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:47 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/troubleshoot_loss_of_console_connections_and_logs_on_gigabyte_nodes/</guid>
+      <description>Troubleshoot Loss of Console Connections and Logs on Gigabyte Nodes Problem Gigabyte console log information will no longer be collected. If attempting to initiate a console session through Cray console services, there will be an error reported. This error will occur every time the node is rebooted unless this workaround is applied.&#xA;Prerequisites Console log information is no longer being collected for Gigabyte nodes or ConMan is reporting an error.</description>
+    </item>
+    <item>
+      <title>Build NCN Images Locally</title>
+      <link>/docs-csm/en-12/operations/node_management/build_ncn_images_locally/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:44 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/build_ncn_images_locally/</guid>
+      <description>Build NCN Images Locally Build and test NCN images locally by using the following procedure. This procedure can be done on any x86 machine with the following prerequisites.&#xA;Necessary software The listed software below will equip a local machine or build server to build for any medium (.squashfs, .vbox, .qcow2, .iso).&#xA;media (.iso, .ovf, or .qcow2) (depending on the layer) packer qemu envsubst Media packer can intake any ISO, the sections below detail utilized base ISOs in CRAY HPCaaS.</description>
+    </item>
+    <item>
+      <title>Update Compute Node Mellanox HSN NIC Firmware</title>
+      <link>/docs-csm/en-12/operations/node_management/update_compute_node_mellanox_hsn_nic_firmware/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:47 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/update_compute_node_mellanox_hsn_nic_firmware/</guid>
+      <description>Update Compute Node Mellanox HSN NIC Firmware This procedure updates liquid-cooled or standard rack compute node NIC mezzanine cards (NMC) firmware for Slingshot 10 Mellanox ConnectX-5 NICs. The deployed RPM on compute nodes contains the scripts and firmware images required to perform the firmware and configuration updates.&#xA;Attention: The NIC firmware update is performed while the node is running the compute image (in-band). Use the CX-5 NIC firmware that is deployed with the compute node RPMs and not from some other repository.</description>
+    </item>
+    <item>
+      <title>Change Java Security Settings</title>
+      <link>/docs-csm/en-12/operations/node_management/change_java_security_settings/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:44 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/change_java_security_settings/</guid>
+      <description>Change Java Security Settings If Java will not allow a connection to an Intel node via SOL or iKVM, change Java security settings to add an exception for the node&amp;rsquo;s BMC IP address.&#xA;The Intel nodes ship with an insecure certificate, which causes an exception for Java when trying to connect via SOL or iKVM to these nodes. The workaround is to add the node&amp;rsquo;s BMC IP address to the Exception Site List in the Java Control Panel of the machine attempting to connect to the Intel node.</description>
+    </item>
+    <item>
+      <title>Update the Gigabyte Node BIOS Time</title>
+      <link>/docs-csm/en-12/operations/node_management/update_the_gigabyte_node_bios_time/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:47 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/update_the_gigabyte_node_bios_time/</guid>
+      <description>Update the Gigabyte Node BIOS Time Check and set the time for Gigabyte compute nodes.&#xA;If the console log indicates the time between the rest of the system and the compute nodes is off by several hours, then it prevents the spire-agent from getting a valid certificate, which causes the node boot to drop into the dracut emergency shell.&#xA;Procedure Retrieve the cray-console-operator pod ID.&#xA;ncn-mw# CONPOD=$(kubectl get pods -n services -o wide|grep cray-console-operator|awk &amp;#39;{print $1}&amp;#39;); echo ${CONPOD} Example output:</description>
+    </item>
+    <item>
+      <title>Change Settings for HMS Collector Polling of Air-Cooled Nodes</title>
+      <link>/docs-csm/en-12/operations/node_management/change_settings_for_hms_collector_polling_of_air_cooled_nodes/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:44 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/change_settings_for_hms_collector_polling_of_air_cooled_nodes/</guid>
+      <description>Change Settings for HMS Collector Polling of Air-Cooled Nodes The cray-hms-hmcollector service polls all air-cooled hardware to gather the necessary telemetry information for use by other services, such as the Cray Advanced Platform Monitoring and Control (CAPMC) service. This polling occurs every 10 seconds on a continual basis. Instabilities with the AMI Redfish implementation in the Gigabyte BMCs require a less significant approach when gathering power and temperature telemetry data. If the BMCs are overloaded, they can become unresponsive, return incorrect data, or encounter other errors.</description>
+    </item>
+    <item>
+      <title>Updating Cabinet Routes on Management NCNs</title>
+      <link>/docs-csm/en-12/operations/node_management/updating_cabinet_routes_on_management_ncns/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:47 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/updating_cabinet_routes_on_management_ncns/</guid>
+      <description>Updating Cabinet Routes on Management NCNs This procedure will use configuration from System Layout Service (SLS) to set up the proper routing for all air-cooled and liquid-cooled cabinets present in the system on each of the Management NCNs.&#xA;Prerequisites Passwordless SSH to all of the management NCNs is configured.&#xA;Ensure that Cray Site Init (CSI) is installed and available on ncn-m001.&#xA;ncn-m001# csi version If the csi command is not available, then install it:</description>
+    </item>
+    <item>
+      <title>Change Settings in the Bond</title>
+      <link>/docs-csm/en-12/operations/node_management/change_settings_in_the_bond/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:44 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/change_settings_in_the_bond/</guid>
+      <description>Change Settings in the Bond iPXE is used to setup udev rules for interface names and bond members. The configuration of these are dynamic on boot until node customization runs (cloud-init) and sets up the conventional /etc/sysconfig/network/ifcfg-bond0 and other neighboring files.&#xA;The initial settings of the bonds can be changed directly in the LiveCD or with the Boot Script Service (BSS). When cabling is different than normal, there is flexibility for customizing bond links.</description>
+    </item>
+    <item>
+      <title>Use the Physical KVM</title>
+      <link>/docs-csm/en-12/operations/node_management/use_the_physical_kvm/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:47 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/use_the_physical_kvm/</guid>
+      <description>Use the Physical KVM For those who prefer to stand in front of the system and use a physically connected keyboard, mouse, and monitor, Cray provides a rack-mount-extendable KVM unit installed in rack unit slot 23 (RU23) of the management cabinet. It is connected to the first non-compute node (NCN) by default.&#xA;To use it, pull it out and raise the lid.&#xA;To bring up the main menu (shown in following figure), press Prnt Scrn.</description>
+    </item>
+    <item>
+      <title>Check and Set the metal.no-wipe Setting on NCNs</title>
+      <link>/docs-csm/en-12/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:44 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/</guid>
+      <description>Check and Set the metal.no-wipe Setting on NCNs Configure the metal.no-wipe setting on non-compute nodes (NCNs) to preserve data on the nodes before doing an NCN reboot.&#xA;Run the ncnGetXnames.shscript to view the metal.no-wipe settings for each NCN. The component name (xname) and metal.no-wipe settings are also dumped out when executing the /opt/cray/platform-utils/ncnHealthChecks.sh script.&#xA;Prerequisites This procedure requires administrative privileges.&#xA;Procedure Run the ncnGetXnames.sh script.&#xA;The output will end with a listing of all of the NCNs, their component names (xnames), and what the metal.</description>
+    </item>
+    <item>
+      <title>Verify Node Removal</title>
+      <link>/docs-csm/en-12/operations/node_management/verify_node_removal/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:47 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/verify_node_removal/</guid>
+      <description>Verify Node Removal Use this procedure to verify that a node has been successfully removed from the system.&#xA;Prerequisites The Cray command line interface (CLI) tool is initialized and configured on the system. See Configure the Cray CLI. This procedure requires the component name (xname) of the removed node to be known. Procedure Ensure that the Redfish endpoint of the removed node&amp;rsquo;s BMC has been disabled.&#xA;ncn-m001# cray hsm inventory redfishEndpoints describe x3000c0s19b4 --format toml In the following example output, the Enabled field is false, indicating that the Redfish endpoint has been disabled.</description>
+    </item>
+    <item>
+      <title>Check the BMC Failover Mode</title>
+      <link>/docs-csm/en-12/operations/node_management/check_the_bmc_failover_mode/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:44 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/check_the_bmc_failover_mode/</guid>
+      <description>Check the BMC Failover Mode Gigabyte BMCs must have their failover mode disabled to prevent incorrect network assignment.&#xA;If Gigabyte BMC failover mode is not disabled, then some BMCs may receive incorrect IP addresses. Specifically, a BMC may request an IP address on the wrong subnet and be unable to re-acquire a new IP address on the correct subnet. If this occurs, administrators should ensure that the impacted BMC has its failover feature disabled.</description>
+    </item>
+    <item>
+      <title>View BIOS Logs for Liquid-Cooled Nodes</title>
+      <link>/docs-csm/en-12/operations/node_management/view_bios_logs_for_liquid_cooled_nodes/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:47 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/view_bios_logs_for_liquid_cooled_nodes/</guid>
+      <description>View BIOS Logs for Liquid-Cooled Nodes SSH to a liquid-cooled node and view the BIOS logs. The BIOS logs for liquid-cooled node controllers (nC) are stored in the /var/log/n0/current and /var/log/n1/current directories.&#xA;The BIOS logs for liquid-cooled nodes are helpful for troubleshooting boot-related issues.&#xA;Prerequisites This procedure requires administrative privileges.&#xA;Procedure Log in to the node.&#xA;SSH into the node controller for the host component name (xname). For example, if the host xname (as defined in /etc/hosts) is x5000c1s0b0n0, then the node controller would be x5000c1s0b0.</description>
+    </item>
+    <item>
+      <title>Clear Space in Root File System on Worker Nodes</title>
+      <link>/docs-csm/en-12/operations/node_management/clear_space_in_root_file_system_on_worker_nodes/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:44 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/clear_space_in_root_file_system_on_worker_nodes/</guid>
+      <description>Clear Space in Root File System on Worker Nodes The disk space on an NCN worker node can fill up if any services are consuming a large portion of the root file system on the node. This procedure shows how to safely clear some space on worker nodes to return them to an appropriate storage threshold.&#xA;Prerequisites An NCN worker node has a full disk.&#xA;Procedure Check to see if Docker is running.</description>
+    </item>
+    <item>
+      <title>Customize PCIe Hardware</title>
+      <link>/docs-csm/en-12/operations/node_management/customize_disk_hardware/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:47 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/customize_disk_hardware/</guid>
+      <description>Customize PCIe Hardware This page will assist an admin with changing the kernel parameters for NCNs that have extra disks.&#xA;NOTE: If a system&amp;rsquo;s hardware is Plan of Record (PoR), then this page is not needed.&#xA;For any procedure below, it is assumed that the extra disks are going to be utilized. If they are undesired, then the only action item to do is to yank/remove/pull the disks from the NCN.</description>
+    </item>
+    <item>
+      <title>Configuration of NCN Bonding</title>
+      <link>/docs-csm/en-12/operations/node_management/configuration_of_ncn_bonding/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:44 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/configuration_of_ncn_bonding/</guid>
+      <description>Configuration of NCN Bonding Non-compute nodes (NCNs) have network interface controllers (NICs) connected to the management network that are configured in a redundant manner via Link Aggregation Control Protocol (LACP) link aggregation. The link aggregation configuration can be modified by editing and applying various configuration files either through Ansible or the interfaces directly.&#xA;The bond configuration exists across three files on an NCN. These files may vary depending on the NCN in use:</description>
+    </item>
+    <item>
+      <title>Customize PCIe Hardware</title>
+      <link>/docs-csm/en-12/operations/node_management/customize_pcie_hardware/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:47 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/customize_pcie_hardware/</guid>
+      <description>Customize PCIe Hardware This page will assist an administrator with changing the NCN udev rules for varying PCIe hardware.&#xA;NOTE: If a system&amp;rsquo;s hardware is Plan of Record (PoR), then this page is not needed.&#xA;Procedure Identify the hardware configuration by PXE booting a node.&#xA;Prevent the network boots from completing by removing the links generated by set-sqfs-links.sh.&#xA;pit# rm /var/www/ncn-*/{initrd.img.xz,kernel,filesystem.squashfs} The NCNs will fetch the iPXE binary and then pause; this pause prevents the NCN from continuing to boot, providing an opportunity to collect information from it.</description>
+    </item>
+    <item>
+      <title>Configure NTP on NCNs</title>
+      <link>/docs-csm/en-12/operations/node_management/configure_ntp_on_ncns/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:44 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/configure_ntp_on_ncns/</guid>
+      <description>Configure NTP on NCNs The management nodes serve Network Time Protocol (NTP) at stratum 10, except for ncn-m001, which serves at stratum 8 (or lower if an upstream NTP server is set). All management nodes peer with each other.&#xA;Until an upstream NTP server is configured, the time on the NCNs may not match the current time at the site, but they will stay in sync with each other.&#xA;Topics Fix BSS metadata Fix broken configurations Fix BSS metadata If nodes are missing metadata for NTP, then the data must be generated using csi and the system&amp;rsquo;s system_config.</description>
+    </item>
+    <item>
+      <title>Disable Nodes</title>
+      <link>/docs-csm/en-12/operations/node_management/disable_nodes/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:44 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/disable_nodes/</guid>
+      <description>Disable Nodes Use the Hardware State Manager (HSM) Cray CLI commands to disable nodes on the system.&#xA;Disabling nodes that are not configured correctly allows the system to successfully boot.&#xA;Prerequisites The Cray command line interface (CLI) tool is initialized and configured on the system. See Configure the Cray CLI. Procedure Disable one or more nodes with HSM.&#xA;ncn-m001# cray hsm state components bulkEnabled update --enabled false --component-ids XNAME_LIST Verify the desired nodes are disabled.</description>
+    </item>
+    <item>
+      <title>Dump a Non-Compute Node</title>
+      <link>/docs-csm/en-12/operations/node_management/dump_a_non-compute_node/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:44 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/dump_a_non-compute_node/</guid>
+      <description>Dump a Non-Compute Node Trigger a non-compute node (NCN) memory dump and send the dump for analysis. This procedure is helpful for debugging NCN crashes.&#xA;Prerequisites An NCN has crashed or an administrator has triggered a node crash.&#xA;Procedure Force a dump on an NCN.&#xA;ncn-m001# echo c &amp;gt; /proc/sysrq-trigger Wait for the node to reboot.&#xA;The NCN dump is stored in /var/crash on the local disk after the node is rebooted.</description>
+    </item>
+    <item>
+      <title>Enable Nodes</title>
+      <link>/docs-csm/en-12/operations/node_management/enable_nodes/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:45 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/enable_nodes/</guid>
+      <description>Enable Nodes Use the Hardware State Manager (HSM) Cray CLI commands to enable nodes on the system.&#xA;Enabling nodes that are available provides an accurate system configuration and node map.&#xA;Prerequisites The Cray command line interface (CLI) tool is initialized and configured on the system. See Configure the Cray CLI. Procedure Enable one or more nodes with HSM.&#xA;ncn-m001# cray hsm state components bulkEnabled update --enabled true --component-ids XNAME_LIST Verify the desired nodes are enabled.</description>
+    </item>
+    <item>
+      <title>Enable Passwordless Connections to Liquid Cooled Node BMCs</title>
+      <link>/docs-csm/en-12/operations/node_management/enable_passwordless_connections_to_liquid_cooled_node_bmcs/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:45 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/enable_passwordless_connections_to_liquid_cooled_node_bmcs/</guid>
+      <description>Enable Passwordless Connections to Liquid Cooled Node BMCs Set the passwordless SSH keys for the root account and/or console of all liquid-cooled Baseboard Management Controllers (BMCs) on the system. This procedure will not work on BMCs for air-cooled hardware.&#xA;Warning: If administrator uses SCSD to update the SSHConsoleKey value outside of ConMan, it will disrupt the ConMan connection to the console and collection of console logs. Refer to ConMan for more information.</description>
+    </item>
+    <item>
+      <title>Find Node Type and Manufacturer</title>
+      <link>/docs-csm/en-12/operations/node_management/find_node_type_and_manufacturer/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:45 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/find_node_type_and_manufacturer/</guid>
+      <description>Find Node Type and Manufacturer There are three different vendors providing nodes for air-cooled cabinets, which are Gigabyte, Intel, and HPE. The Hardware State Manager (HSM) contains the information required to determine which type of air-cooled node is installed. The endpoint returned in the HSM command can be used to determine the manufacturer.&#xA;HPE nodes contain the /redfish/v1/Systems/1 endpoint:&#xA;ncn-m001# cray hsm inventory componentEndpoints describe XNAME --format json | jq &amp;#39;.</description>
+    </item>
+    <item>
+      <title>Launch a Virtual KVM on Gigabyte Servers</title>
+      <link>/docs-csm/en-12/operations/node_management/launch_a_virtual_kvm_on_gigabyte_nodes/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:45 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/launch_a_virtual_kvm_on_gigabyte_nodes/</guid>
+      <description>Launch a Virtual KVM on Gigabyte Servers This procedure shows how to launch a virtual KVM to connect to Gigabyte node. The virtual KVM can be launched on any host that is on the same network as the node&amp;rsquo;s BMC. This method of connecting to a node is frequently used during system installation.&#xA;Prerequisites A laptop or workstation with a browser and access to the Internet. The externally visible IP address of the node&amp;rsquo;s integrated BMC.</description>
+    </item>
+    <item>
+      <title>Launch a Virtual KVM on Intel Servers</title>
+      <link>/docs-csm/en-12/operations/node_management/launch_a_virtual_kvm_on_intel_nodes/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:45 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/launch_a_virtual_kvm_on_intel_nodes/</guid>
+      <description>Launch a Virtual KVM on Intel Servers This procedure shows how to launch a virtual KVM to connect to an Intel node. The virtual KVM can be launched on any host that is on the same network as the node&amp;rsquo;s BMC. This method of connecting to a node is frequently used during system installation.&#xA;Prerequisites A laptop or workstation with a browser and access to the Internet. The externally visible IP address of the node&amp;rsquo;s integrated BMC.</description>
+    </item>
+    <item>
+      <title>Move a Standard Rack Node</title>
+      <link>/docs-csm/en-12/operations/node_management/move_a_standard_rack_node/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:45 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/move_a_standard_rack_node/</guid>
+      <description>Move a Standard Rack Node Update the location-based component name (xname) for a standard rack node within the system.&#xA;Prerequisites An authentication token has been retrieved.&#xA;ncn# function get_token () { curl -s -S -d grant_type=client_credentials \ -d client_id=admin-client \ -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath=&amp;#39;{.data.client-secret}&amp;#39; | base64 -d` \ https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r &amp;#39;.access_token&amp;#39; } The Cray command line interface (CLI) tool is initialized and configured on the system.</description>
+    </item>
+    <item>
+      <title>Move a Standard Rack Node (Same Rack/Same HSN Ports)</title>
+      <link>/docs-csm/en-12/operations/node_management/move_a_standard_rack_node_samerack_samehsnports/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:45 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/move_a_standard_rack_node_samerack_samehsnports/</guid>
+      <description>Move a Standard Rack Node (Same Rack/Same HSN Ports) This procedure move standard rack UAN or compute node to a different location and uses the same Slingshot switch ports and management network ports.&#xA;Update the location-based component name (xname) for a standard rack node within the system.&#xA;If a node has an incorrect component name (xname) based on its physical location, then this procedure can be used to correct the component name (xname) of the node without the need to physically move the node.</description>
+    </item>
+    <item>
+      <title>Move a liquid-cooled blade within a System</title>
+      <link>/docs-csm/en-12/operations/node_management/move_a_liquid-cooled_blade_within_a_system/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:45 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/move_a_liquid-cooled_blade_within_a_system/</guid>
+      <description>Move a liquid-cooled blade within a System This top level procedure outlines common scenarios for moving blades around within an HPE Cray EX system.&#xA;Blade movement scenarios:&#xA;Scenario 1: Swap locations of two blades Scenario 2: Move blade into a populated slot Scenario 3: Move blade into an unpopulated slot Prerequisites Knowledge of whether DVS is operating over the Node Management Network (NMN) or the High Speed Network (HSN).&#xA;The Slingshot fabric must be configured with the desired topology for desired state of the blades in the system.</description>
+    </item>
+    <item>
+      <title>NCN Drive Identification</title>
+      <link>/docs-csm/en-12/operations/node_management/ncn_identify_drives_using_ledctl/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:45 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/ncn_identify_drives_using_ledctl/</guid>
+      <description>NCN Drive Identification Basic usage for the ledmon/ledctl software for drive identification using the drive LEDs.&#xA;Usage Turn on led locator beacon&#xA;ledctl locate=/dev/&amp;lt;drive&amp;gt; Turn off led locator beacon&#xA;ledctl locate_off=/dev/&amp;lt;drive&amp;gt; </description>
+    </item>
+    <item>
+      <title>Node Management</title>
+      <link>/docs-csm/en-12/operations/node_management/node_management/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:45 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/node_management/</guid>
+      <description>Node Management The HPE Cray EX systems include two node types:&#xA;Compute Nodes that run high-performance computing applications and are named nidXXXXXX. Every system must contain four or more compute nodes, starting at nid000001. Non-Compute Nodes (NCNs) that carry out system management functions as part of the management Kubernetes cluster. NCNs outside of the Kubernetes cluster function as application nodes (AN). Nine or more management NCNs host system services:&#xA;ncn-m001, ncn-m002, and ncn-m003 are Kubernetes master nodes.</description>
+    </item>
+    <item>
+      <title>Node Management Workflows</title>
+      <link>/docs-csm/en-12/operations/node_management/node_management_workflows/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:45 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/node_management_workflows/</guid>
+      <description>Node Management Workflows The following workflows are intended to be high-level overviews of node management tasks. These workflows depict how services interact with each other during node management and help to provide a quicker and deeper understanding of how the system functions.&#xA;The workflows and procedures in this section include:&#xA;Add Nodes Remove Nodes Replace Nodes Move Nodes Add Nodes Add a Standard Rack Node Use Cases: Administrator permanently adds select compute nodes to expand the system.</description>
+    </item>
+    <item>
+      <title>Reboot NCNs</title>
+      <link>/docs-csm/en-12/operations/node_management/reboot_ncns/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:45 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/node_management/reboot_ncns/</guid>
+      <description>Reboot NCNs The following is a high-level overview of the non-compute node (NCN) reboot workflow:&#xA;Run the NCN pre-reboot checks and procedures.&#xA;Ensure that ncn-m001 is not booted to the LiveCD / PIT node. Check the metal.no-wipe settings for all NCNs. Run all platform health checks, including checks on the Border Gateway Protocol (BGP) peering sessions. Validate the current boot order (or specify the boot order). Run the rolling NCN reboot procedure.</description>
+    </item>
+  </channel>
+</rss>

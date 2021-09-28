@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>firmware on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-14/operations/network/management_network/firmware/</link>
+    <description>Recent content in firmware on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-14</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:46 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-14/operations/network/management_network/firmware/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Update Management Network Firmware</title>
+      <link>/docs-csm/en-14/operations/network/management_network/firmware/update_management_network_firmware/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:46 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/network/management_network/firmware/update_management_network_firmware/</guid>
+      <description>Update Management Network Firmware This page describes how to update firmware on the management network switches. More details and other options to upgrade firmware can be found in the switch External User Guides.&#xA;Prerequisites Access to the switches. Firmware in a location that the switches can reach. Aruba firmware can be found in the HFP package provided with the HPE Cray EX release. Dell and Mellanox firmware must be downloaded from the manufacturer.</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>storage on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-13/upgrade/resource_material/storage/</link>
+    <description>Recent content in storage on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-13</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:39:11 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-13/upgrade/resource_material/storage/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CEPHADM</title>
+      <link>/docs-csm/en-13/upgrade/resource_material/storage/cephadm-reference/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:11 +0000</pubDate>
+      <guid>/docs-csm/en-13/upgrade/resource_material/storage/cephadm-reference/</guid>
+      <description>CEPHADM cephadm is a new function introduced in Ceph Octopus 15. It allows for an easier method to install and manage Ceph nodes.&#xA;Traditional Ceph commands On ncn-s001, ncn-s002, or ncn-s003:&#xA;cephadm shell The previous command creates a container and opens an interactive shell with access to run Ceph commands the traditional way.&#xA;Alternatively, execute the command as follows:&#xA;cephadm shell -- ceph -s Ceph Device Operations There are multiple ways to do Ceph device operations now.</description>
+    </item>
+  </channel>
+</rss>

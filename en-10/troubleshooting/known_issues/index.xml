@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>known issues on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-10/troubleshooting/known_issues/</link>
+    <description>Recent content in known issues on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-10</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:44 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-10/troubleshooting/known_issues/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Gigabyte BMC Missing Redfish Data</title>
+      <link>/docs-csm/en-10/troubleshooting/known_issues/gigabyte_bmc_missing_redfish_data/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:42 +0000</pubDate>
+      <guid>/docs-csm/en-10/troubleshooting/known_issues/gigabyte_bmc_missing_redfish_data/</guid>
+      <description>Gigabyte BMC Missing Redfish Data Follow this procedure if you notice data from Gigabyte nodes is missing from Hardware State Manager (HSM) or other CSM tools.&#xA;If data from Gigabyte nodes is missing from HSM or other CSM tools, check the Redfish endpoint on the BMC to see if the data is present.&#xA;If the data is not present in the Redfish, then a cold reset of the BMC is needed to refresh the Redfish values.</description>
+    </item>
+    <item>
+      <title>Hang Listing BOS Sessions</title>
+      <link>/docs-csm/en-10/troubleshooting/known_issues/hang_listing_bos_sessions/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:42 +0000</pubDate>
+      <guid>/docs-csm/en-10/troubleshooting/known_issues/hang_listing_bos_sessions/</guid>
+      <description>Hang Listing BOS Sessions Overview Symptoms Remedy Prevention Overview BOS v1 loses the ability to list its sessions after too many of them exist in its database. This has only been observed happening when the total number of sessions in the database is well over 1000.&#xA;Symptoms When this situation occurs, attempts to list BOS sessions using the API or CLI will hang. This may also be noticed when performing the Validate CSM Health procedure &amp;ndash; the cmsdev test tool will exhibit the same hang when it tries to query BOS for a session list.</description>
+    </item>
+    <item>
+      <title>Multiple Console Node Pods on the Same Worker</title>
+      <link>/docs-csm/en-10/troubleshooting/known_issues/multiple_console_node_pods_on_the_same_worker/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:42 +0000</pubDate>
+      <guid>/docs-csm/en-10/troubleshooting/known_issues/multiple_console_node_pods_on_the_same_worker/</guid>
+      <description>Multiple Console Node Pods on the Same Worker In versions before CSM v1.3.0, there is no anti-affinity specified for the cray-console-node pods. This leads to the possibility of several pods running on the same worker node. This can be inconvenient during worker reboot operations and can reduce service reliability.&#xA;Manually edit deployment Pod scheduling behavior Manually edit deployment This procedure implements anti-affinity Kubernetes scheduling in versions prior to CSM v1.3.0 by manually editing the cray-console-node deployment.</description>
+    </item>
+    <item>
+      <title>SLS Not Working During Node Rebuild</title>
+      <link>/docs-csm/en-10/troubleshooting/known_issues/sls_not_working_during_node_rebuild/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:42 +0000</pubDate>
+      <guid>/docs-csm/en-10/troubleshooting/known_issues/sls_not_working_during_node_rebuild/</guid>
+      <description>SLS Not Working During Node Rebuild During some node rebuilds, the SLS Postgres database gets into a bad state, causing SLS to become unhealthy. This page outlines how to detect if this has happened and provides a remediation procedure.&#xA;Detection This procedure can be run on any master or worker NCN (unless it is the node being rebuilt).&#xA;Get a token to use for API requests to SLS.&#xA;ncn-mw# TOKEN=$(\ set -o pipefail secret=`kubectl get secrets admin-client-auth -o jsonpath=&amp;#39;{.</description>
+    </item>
+    <item>
+      <title>CFS Sessions are Stuck in Pending State</title>
+      <link>/docs-csm/en-10/troubleshooting/known_issues/cfs_sessions_stuck_in_pending/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:43 +0000</pubDate>
+      <guid>/docs-csm/en-10/troubleshooting/known_issues/cfs_sessions_stuck_in_pending/</guid>
+      <description>CFS Sessions are Stuck in Pending State In rare cases it is possible that a CFS session can be stuck in a pending state. Sessions should only enter the pending state briefly, for no more than a few seconds while the corresponding Kubernetes job is being scheduled. If any sessions are in this state for more than a minute, they can safely be deleted. If the sessions were created automatically and retires are enabled, the sessions should be recreated automatically.</description>
+    </item>
+    <item>
+      <title>SAT/HSM/CAPMC Component Power State Mismatch</title>
+      <link>/docs-csm/en-10/troubleshooting/known_issues/component_power_state_mismatch/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:43 +0000</pubDate>
+      <guid>/docs-csm/en-10/troubleshooting/known_issues/component_power_state_mismatch/</guid>
+      <description>SAT/HSM/CAPMC Component Power State Mismatch Because of various hardware or communication issues, the node state reported by SAT and HSM (Hardware State Manager) may become out of sync with the actual hardware state reported by CAPMC or Redfish. In most cases this will be noticed when trying to power on or off nodes with BOS/BOA, and will present as SAT or HSM reporting nodes are On while CAPMC reports them as Off (or vice versa).</description>
+    </item>
+    <item>
+      <title>Console Logs Fill All Available Storage Space</title>
+      <link>/docs-csm/en-10/troubleshooting/known_issues/console_log_storage_filling/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:43 +0000</pubDate>
+      <guid>/docs-csm/en-10/troubleshooting/known_issues/console_log_storage_filling/</guid>
+      <description>Console Logs Fill All Available Storage Space The log rotation functionality of the console logging services has a bug where the files are not rotated correctly. This will lead to the logs continuing to expand until eventually all space is consumed on the storage. This can lead to issues where the log files cease to capture log output, and can sometimes lead to the cray-console-node pods failing to connect to nodes.</description>
+    </item>
+    <item>
+      <title>Cray CLI 403 Forbidden Errors</title>
+      <link>/docs-csm/en-10/troubleshooting/known_issues/craycli_403_forbidden_errors/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:43 +0000</pubDate>
+      <guid>/docs-csm/en-10/troubleshooting/known_issues/craycli_403_forbidden_errors/</guid>
+      <description>Cray CLI 403 Forbidden Errors There is a known issue where the Keycloak configuration obtained from LDAP is incomplete causing the keycloak-users-localize job to fail to complete. This causes 403 Forbidden errors when trying to use the Cray CLI. This can also cause a Keycloak test to fail during CSM health validation.&#xA;Fix To recover from this situation, the following can be done.&#xA;Log into the Keycloak admin console. See Access the Keycloak User Management UI</description>
+    </item>
+    <item>
+      <title>Air-cooled hardware is not getting properly discovered with Aruba leaf switches.</title>
+      <link>/docs-csm/en-10/troubleshooting/known_issues/discovery_aruba_snmp_issue/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:43 +0000</pubDate>
+      <guid>/docs-csm/en-10/troubleshooting/known_issues/discovery_aruba_snmp_issue/</guid>
+      <description>Air-cooled hardware is not getting properly discovered with Aruba leaf switches. Symptoms: The System has Aruba leaf switches. Air-cooled hardware is reported to not be present under State Components and Inventory Redfish Endpoints in Hardware State Manager by the hsm_discovery_verify.sh script. BMCs have IP addresses given out by DHCP, but in DNS their xname hostname does not resolve. Procedure to determine if you affected by this known issue: Determine the name of the last HSM discovery job that ran.</description>
+    </item>
+    <item>
+      <title>HMS Discovery Job Not Creating RedfishEndpoints In Hardware State Manager</title>
+      <link>/docs-csm/en-10/troubleshooting/known_issues/discovery_job_not_creating_redfish_endpoints/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:43 +0000</pubDate>
+      <guid>/docs-csm/en-10/troubleshooting/known_issues/discovery_job_not_creating_redfish_endpoints/</guid>
+      <description>HMS Discovery Job Not Creating RedfishEndpoints In Hardware State Manager It is a known issue with the HMS Discovery cronjob that when a BMC does not respond by its IP address, the discovery job will not create a RedfishEndpoint for the BMC in Hardware State Manager (HSM). However, it does update the BMC MAC address in HSM with its component name (xname). The discovery job only creates a new RedfishEndpoints when it encounters an unknown MAC address without a component name (xname) associated with it.</description>
+    </item>
+    <item>
+      <title>Gitea/VCS 401 Errors</title>
+      <link>/docs-csm/en-10/troubleshooting/known_issues/gitea_vcs_401_errors/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:43 +0000</pubDate>
+      <guid>/docs-csm/en-10/troubleshooting/known_issues/gitea_vcs_401_errors/</guid>
+      <description>Gitea/VCS 401 Errors Summary During fresh installs of csm-1.0.x, creation of the main admin user for gitea/VCS (Version Control Service) may fail. In this case, calls to the gitea/VCS API that require authentication will return 401 status codes with a message of token is required. The workaround is to manually create the admin user.&#xA;Symptoms During a fresh install, if this problem occurs, it will typically be noticed during the first run of the Validate CSM Health procedure when the SMS Health Checks are performed.</description>
+    </item>
+    <item>
+      <title>BOS/BOA Incorrect command is output to rerun a failed operation.</title>
+      <link>/docs-csm/en-10/troubleshooting/known_issues/incorrect_output_for_bos_command_rerun/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:43 +0000</pubDate>
+      <guid>/docs-csm/en-10/troubleshooting/known_issues/incorrect_output_for_bos_command_rerun/</guid>
+      <description>BOS/BOA Incorrect command is output to rerun a failed operation. When the Boot Orchestration Agent (BOA), an agent of the Boot Orchestration Service (BOS), encounters a failure, it issues a command to rerun the operation for any nodes that experienced the failure. However, the syntax of this command is faulty.&#xA;The faulty command includes squiggly braces around a comma separated list of quoted nodes. These squiggly braces, single quotes, and the spaces separating the individual nodes all need to be removed.</description>
+    </item>
+    <item>
+      <title>Incorrectly Tagged zeromq Image</title>
+      <link>/docs-csm/en-10/troubleshooting/known_issues/incorrectly_tagged_zeromq_image/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:43 +0000</pubDate>
+      <guid>/docs-csm/en-10/troubleshooting/known_issues/incorrectly_tagged_zeromq_image/</guid>
+      <description>Incorrectly Tagged zeromq Image CSM 1.0.11 shipped a version of shasta-cfg which expects the zeromq image to be tagged differently to the one shipped in the product tarball. This may result in the following error when performing the &amp;ldquo;Generate Sealed Secrets&amp;rdquo; step in prepare_site_init.md.&#xA;pit# /mnt/pitdata/prep/site-init/utils/secrets-seed-customizations.sh \ &amp;gt; /mnt/pitdata/prep/site-init/customizations.yaml Creating Sealed Secret keycloak-certs Generating type static_b64... Creating Sealed Secret keycloak-master-admin-auth Generating type static... Generating type static... Generating type randstr... Generating type static.</description>
+    </item>
+    <item>
+      <title>Known Issue initrd.img.xz Not Found</title>
+      <link>/docs-csm/en-10/troubleshooting/known_issues/initrd.img.zx_not_found/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:43 +0000</pubDate>
+      <guid>/docs-csm/en-10/troubleshooting/known_issues/initrd.img.zx_not_found/</guid>
+      <description>Known Issue: initrd.img.xz Not Found This is a problem that is fixed in CSM 1.0 and later, but if your system was upgraded from CSM 0.9 you may run into this. Below is the full error seen when attempting to boot:&#xA;Loading Linux ... Loading initial ramdisk ... error: file `/boot/grub2/../initrd.img.xz&amp;#39; not found. Press any key to continue... [ 2.528752] Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0) [ 2.</description>
+    </item>
+    <item>
+      <title>kube-multus pod is in ImagePullBackOff</title>
+      <link>/docs-csm/en-10/troubleshooting/known_issues/kube_multus_pod_in_imagepullbackoff/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:43 +0000</pubDate>
+      <guid>/docs-csm/en-10/troubleshooting/known_issues/kube_multus_pod_in_imagepullbackoff/</guid>
+      <description>kube-multus pod is in ImagePullBackOff Description There is a known problem where kube-multus pods may fail to restart due to an ImagePullBackOff error. The multus:v3.1 image will need to be re-tagged in Nexus and the kube-multus pod will need to be restarted.&#xA;Run the following command to determine if any kube-multus pods are failing due to this issue. If any pods are in ImagePullBackOff, proceed with the fix.&#xA;ncn# kubectl get pods -n kube-system -l app=multus | grep ImagePullBackOff kube-multus-ds-amd64-4wkb5 0/1 ImagePullBackOff 0 18h Fix Option 1 If you have access to the quay.</description>
+    </item>
+    <item>
+      <title>Kubernetes Master or Worker node&#39;s root filesystem is out of space</title>
+      <link>/docs-csm/en-10/troubleshooting/known_issues/kubernetes_node_rootfs_out_of_space/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:43 +0000</pubDate>
+      <guid>/docs-csm/en-10/troubleshooting/known_issues/kubernetes_node_rootfs_out_of_space/</guid>
+      <description>Kubernetes Master or Worker node&amp;rsquo;s root filesystem is out of space Description There is a known bug in Kubernetes 1.19.9 where movement of a pod with an attached volume may not complete in time and cause the kubelet service to stream error messages to the /var/log/messages log file. If this goes unchecked, it will fill up the root file system.&#xA;Fix Log into the node that has space issues.&#xA;Verify that you have a large messages file in /var/log/.</description>
+    </item>
+    <item>
+      <title>Orphaned CFS Pods After Booting or Rebooting</title>
+      <link>/docs-csm/en-10/troubleshooting/known_issues/orphaned_cfs_pods/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:43 +0000</pubDate>
+      <guid>/docs-csm/en-10/troubleshooting/known_issues/orphaned_cfs_pods/</guid>
+      <description>Orphaned CFS Pods After Booting or Rebooting After a boot or reboot, a few CFS pods may continue running even after they have finished, and never go away. The state of these pods is that the only container still running in the pod is istio-proxy and the pod does not have a metadata.ownerReference.&#xA;If kubectl get pods -n services | grep cfs is run after a boot or reboot, the orphaned CFS pods look like this:</description>
+    </item>
+    <item>
+      <title>Common Platform CA Issues</title>
+      <link>/docs-csm/en-10/troubleshooting/known_issues/platform_ca_issues/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:43 +0000</pubDate>
+      <guid>/docs-csm/en-10/troubleshooting/known_issues/platform_ca_issues/</guid>
+      <description>Common Platform CA Issues 1 NCN platform CA certificate does not match certificate in BSS During install, if the beginning steps are re-run after the NCNs are booted, then platform-ca files on those NCNs will no longer match the server&amp;rsquo;s CA certificate. This can be detected with a Goss test.&#xA;1.1 Error messages (Caused by SSLError(SSLError(1, &amp;#39;[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:852)&amp;#39;),)) curl: (60) SSL certificate problem: self signed certificate in certificate chain More details here: https://curl.</description>
+    </item>
+    <item>
+      <title>Unbound in CrashLoopBackOff After Deployment Restart</title>
+      <link>/docs-csm/en-10/troubleshooting/known_issues/unbound_clbo/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:43 +0000</pubDate>
+      <guid>/docs-csm/en-10/troubleshooting/known_issues/unbound_clbo/</guid>
+      <description>Unbound in CrashLoopBackOff After Deployment Restart There is a known race condition that can cause cray-dns-unbound to go into CLBO (CrashLoopBackOff) after running the following command: ncn# kubectl rollout restart deployment -n services cray-dns-unbound This can impact csm-1.0.10 or older. Run the following command to get cray-dns-unbound out of CLBO: ncn# kubectl patch deployment -n services cray-dns-unbound --type=&amp;#39;json&amp;#39; \ -p=&amp;#39;[{&amp;#34;op&amp;#34;: &amp;#34;replace&amp;#34;, &amp;#34;path&amp;#34;: &amp;#34;/spec/template/spec/containers/0/command&amp;#34;, &amp;#34;value&amp;#34;: [&amp;#34;sh&amp;#34;, &amp;#34;-c&amp;#34;, &amp;#34;touch /etc/unbound/records.conf;/srv/unbound/entrypoint.sh&amp;#34;]}]&amp;#39; </description>
+    </item>
+    <item>
+      <title>wait for unbound or cray-dns-unbound-manager hangs</title>
+      <link>/docs-csm/en-10/troubleshooting/known_issues/wait_for_unbound_hang/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:44 +0000</pubDate>
+      <guid>/docs-csm/en-10/troubleshooting/known_issues/wait_for_unbound_hang/</guid>
+      <description>wait_for_unbound or cray-dns-unbound-manager hangs Run the following command:&#xA;ncn# kubectl get jobs -n services | grep cray-dns-unbound-manager The output should look similar to the following:&#xA;services cray-dns-unbound-manager-1635352560 0/1 26h 26h services cray-dns-unbound-manager-1635448680 1/1 35s 8m37s services cray-dns-unbound-manager-1635448860 1/1 51s 5m36s services cray-dns-unbound-manager-1635449040 1/1 61s 2m35s If one of the jobs shows 0/1 for more than 10 minutes and there are others with 1/1, then that means the 0/1 job is hung.</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>REST API Documentation on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-15/api/</link>
+    <description>Recent content in REST API Documentation on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-15</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:02 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-15/api/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Boot Orchestration Service v2</title>
+      <link>/docs-csm/en-15/api/bos/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:00 +0000</pubDate>
+      <guid>/docs-csm/en-15/api/bos/</guid>
+      <description>Boot Orchestration Service v2 Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.&#xA;The Boot Orchestration Service (BOS) provides coordinated provisioning actions over defined hardware sets to enable boot, reboot, shutdown, configuration and staging for specified hardware subsets. These provisioning actions apply state through numerous system management APIs at the request of system administrators for managed product environments.</description>
+    </item>
+    <item>
+      <title>Boot Script Service v1</title>
+      <link>/docs-csm/en-15/api/bss/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:00 +0000</pubDate>
+      <guid>/docs-csm/en-15/api/bss/</guid>
+      <description>Boot Script Service v1 Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.&#xA;Boot Script Service (BSS) manages the iPXE boot scripts that coordinate the boot process for nodes, and enables basic association of boot scripts with nodes. When nodes initially power on, boot, or reboot, they consult BSS for their target artifacts and boot parameters.</description>
+    </item>
+    <item>
+      <title>Cray Advanced Platform Monitoring and Control (CAPMC) v3</title>
+      <link>/docs-csm/en-15/api/capmc/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-15/api/capmc/</guid>
+      <description>Cray Advanced Platform Monitoring and Control (CAPMC) v3 Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.&#xA;Deprecation Notice: many CAPMC v1 features are being partially deprecated Effective CSM 1.0 -&amp;gt; removed as part of CSM 1.3 Many CAPMC v1 REST API and CLI features are being deprecated as part of CSM version 1.0; Full removal of the deprecated CAPMC features will happen in CSM version 1.</description>
+    </item>
+    <item>
+      <title>Configuration Framework Service v1</title>
+      <link>/docs-csm/en-15/api/cfs/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-15/api/cfs/</guid>
+      <description>Configuration Framework Service v1 Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.&#xA;The Configuration Framework Service (CFS) manages the launch of Ansible Execution Environments for image customization, node personalization, and node reconfiguration. CFS manages the Ansible staging container that pulls Ansible play/role content and inventory (optional) from the git server and launches the Ansible Execution Environment.</description>
+    </item>
+    <item>
+      <title>Firmware Action Service v1</title>
+      <link>/docs-csm/en-15/api/firmware-action/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-15/api/firmware-action/</guid>
+      <description>Firmware Action Service v1 Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.&#xA;The Firmware Action Service (FAS) provides a common interface for managing the firmware versions of hardware in a system via Redfish. FAS tracks and performs actions like upgrade, downgrade, create, or restore snapshots for system firmware. FAS processes an image list, which is a JSON file containing firmware versions for each component on a node.</description>
+    </item>
+    <item>
+      <title>Heartbeat Tracker Service v1</title>
+      <link>/docs-csm/en-15/api/hbtd/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-15/api/hbtd/</guid>
+      <description>Heartbeat Tracker Service v1 Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.&#xA;The Heartbeat Tracker Service transfers basic node health, service state, and configuration information between compute nodes and the Hardware State Manager (HSM). The API tracks the heartbeats emitted by various system components. Generally, compute nodes emit heartbeats to inform the HSM that they are alive and healthy.</description>
+    </item>
+    <item>
+      <title>HMS Notification Fanout Daemon v1</title>
+      <link>/docs-csm/en-15/api/hmnfd/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-15/api/hmnfd/</guid>
+      <description>HMS Notification Fanout Daemon v1 Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.&#xA;Nodes like compute nodes or user access nodes may want to be notified when other nodes or components in the system change state. For example, in a booted system, a node may be in tight communication with other nodes in the system and need to be notified when any of those nodes go away.</description>
+    </item>
+    <item>
+      <title>Image Management Service v3</title>
+      <link>/docs-csm/en-15/api/ims/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-15/api/ims/</guid>
+      <description>Image Management Service v3 Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.&#xA;The Image Management Service (IMS) creates and customizes boot images which run on compute nodes. A boot image consists of multiple image artifacts including the root file system (rootfs), kernel, and initrd. There are optionally additional artifacts such as debug symbols, etc.</description>
+    </item>
+    <item>
+      <title>NCN Lifecycle Service v1</title>
+      <link>/docs-csm/en-15/api/nls/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-15/api/nls/</guid>
+      <description>NCN Lifecycle Service v1 Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.&#xA;Base URLs:&#xA;https://api-gw-service-nmn.local/apis Authentication HTTP Authentication, scheme: bearer NCN Lifecycle Events post__nls_v1_ncns_reboot Code samples&#xA;POST https://api-gw-service-nmn.local/apis/nls/v1/ncns/reboot HTTP/1.1 Host: api-gw-service-nmn.local Content-Type: application/json Accept: application/json # You can also use wget curl -X POST https://api-gw-service-nmn.local/apis/nls/v1/ncns/reboot \ -H &amp;#39;Content-Type: application/json&amp;#39; \ -H &amp;#39;Accept: application/json&amp;#39; \ -H &amp;#39;Authorization: Bearer {access-token}&amp;#39; import requests headers = { &amp;#39;Content-Type&amp;#39;: &amp;#39;application/json&amp;#39;, &amp;#39;Accept&amp;#39;: &amp;#39;application/json&amp;#39;, &amp;#39;Authorization&amp;#39;: &amp;#39;Bearer {access-token}&amp;#39; } r = requests.</description>
+    </item>
+    <item>
+      <title>Power Control Service (PCS) v1</title>
+      <link>/docs-csm/en-15/api/power-control/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-15/api/power-control/</guid>
+      <description>Power Control Service (PCS) v1 Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.&#xA;The Power Control Service (PCS) performs power-related operations on system components - nodes, blades, and chassis. PCS refers to system components by their xname, or system identifier.&#xA;This REST API provides the following functions:&#xA;Turn xnames on or off. Perform hard and soft reset actions.</description>
+    </item>
+    <item>
+      <title>System Configuration Service v1</title>
+      <link>/docs-csm/en-15/api/scsd/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-15/api/scsd/</guid>
+      <description>System Configuration Service v1 Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.&#xA;Commercial off-the-shelf BMCs and HPE-built controllers will need to have various parameters configured on them such as NTP server, syslog server, SSH keys, access credentials. These parameters are automatically configured when the targets like BMC and controllers are discovered. The System Configuration Service makes it possible for administrators to configure these parameters at anytime on multiple targets in a single operation.</description>
+    </item>
+    <item>
+      <title>System Layout Service v2</title>
+      <link>/docs-csm/en-15/api/sls/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-15/api/sls/</guid>
+      <description>System Layout Service v2 Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.&#xA;System Layout Service (SLS) holds information on the complete, designed system. SLS gets this information from an input file on the system. Besides information like what hardware should be present in a system, SLS also stores information about what network connections exist and what power connections exist.</description>
+    </item>
+    <item>
+      <title>Hardware State Manager API v2</title>
+      <link>/docs-csm/en-15/api/smd/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:01 +0000</pubDate>
+      <guid>/docs-csm/en-15/api/smd/</guid>
+      <description>Hardware State Manager API v2 Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.&#xA;The Hardware State Manager (HSM) inventories, monitors, and manages hardware, and tracks the logical and dynamic component states, such as roles, NIDs, and other basic metadata needed to provide most common administrative and operational functions. HSM is the single source of truth for the state of the system.</description>
+    </item>
+    <item>
+      <title>Cray STS Token Generator v1</title>
+      <link>/docs-csm/en-15/api/sts/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:02 +0000</pubDate>
+      <guid>/docs-csm/en-15/api/sts/</guid>
+      <description>Cray STS Token Generator v1 Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.&#xA;Base URLs:&#xA;https://api-gw-service-nmn.local/apis/sts Authentication HTTP Authentication, scheme: bearer Default sts.routes.put_token Code samples&#xA;PUT https://api-gw-service-nmn.local/apis/sts/token HTTP/1.1 Host: api-gw-service-nmn.local Accept: application/json # You can also use wget curl -X PUT https://api-gw-service-nmn.local/apis/sts/token \ -H &amp;#39;Accept: application/json&amp;#39; \ -H &amp;#39;Authorization: Bearer {access-token}&amp;#39; import requests headers = { &amp;#39;Accept&amp;#39;: &amp;#39;application/json&amp;#39;, &amp;#39;Authorization&amp;#39;: &amp;#39;Bearer {access-token}&amp;#39; } r = requests.</description>
+    </item>
+    <item>
+      <title>TAPMS Tenant Status API v1</title>
+      <link>/docs-csm/en-15/api/tapms-operator/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:02 +0000</pubDate>
+      <guid>/docs-csm/en-15/api/tapms-operator/</guid>
+      <description>TAPMS Tenant Status API v1 Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.&#xA;Read-Only APIs to Retrieve Tenant Status&#xA;Base URLs:&#xA;https://api-gw-service-nmn.local/apis/tapms/ Authentication HTTP Authentication, scheme: bearer Tenant and Partition Management System get__v1alpha2_tenants Code samples&#xA;GET https://api-gw-service-nmn.local/apis/tapms/v1alpha2/tenants HTTP/1.1 Host: api-gw-service-nmn.local Accept: application/json # You can also use wget curl -X GET https://api-gw-service-nmn.local/apis/tapms/v1alpha2/tenants \ -H &amp;#39;Accept: application/json&amp;#39; \ -H &amp;#39;Authorization: Bearer {access-token}&amp;#39; import requests headers = { &amp;#39;Accept&amp;#39;: &amp;#39;application/json&amp;#39;, &amp;#39;Authorization&amp;#39;: &amp;#39;Bearer {access-token}&amp;#39; } r = requests.</description>
+    </item>
+    <item>
+      <title>User Access Service v1</title>
+      <link>/docs-csm/en-15/api/uas-mgr/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:02 +0000</pubDate>
+      <guid>/docs-csm/en-15/api/uas-mgr/</guid>
+      <description>User Access Service v1 Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.&#xA;The User Access Service (UAS) creates and deletes User Access Instances (UAIs). The UAI is a containerized SSHd environment, built using a specific OS as a base, and contains libraries, commands, and utilities necessary for application development.&#xA;A user may ssh to a UAI in order to build, run, and debug applications.</description>
+    </item>
+  </channel>
+</rss>

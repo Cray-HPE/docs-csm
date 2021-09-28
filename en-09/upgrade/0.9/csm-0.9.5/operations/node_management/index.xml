@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>node management on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/</link>
+    <description>Recent content in node management on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-09</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:11 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Check and Set the metal.no-wipe Setting on NCNs</title>
+      <link>/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:11 +0000</pubDate>
+      <guid>/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/check_and_set_the_metalno-wipe_setting_on_ncns/</guid>
+      <description>Check and Set the metal.no-wipe Setting on NCNs Configure the metal.no-wipe setting on non-compute nodes (NCNs) to preserve data on the nodes before doing an NCN reboot.&#xA;Run the ncnGetXnames.shscript to view the metal.no-wipe settings for each NCN. The xname and metal.no-wipe settings are also dumped out when executing the ncnHealthChecks.sh script.&#xA;Prerequisites This procedure requires administrative privileges.&#xA;It also requires that the CSM_SCRIPTDIR variable was previously defined as part of the execution of the steps in the csm-0.</description>
+    </item>
+    <item>
+      <title>Reboot NCNs</title>
+      <link>/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/reboot_ncns/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:11 +0000</pubDate>
+      <guid>/docs-csm/en-09/upgrade/0.9/csm-0.9.5/operations/node_management/reboot_ncns/</guid>
+      <description>Reboot NCNs The following is a high-level overview of the non-compute node (NCN) reboot workflow:&#xA;Run the NCN pre-reboot checks and procedures: Ensure ncn-m001 is not running in &amp;ldquo;LiveCD&amp;rdquo; or install mode Check the metal.no-wipe settings for all NCNs Enable pod priorities Run all platform health checks, including checks on the Border Gateway Protocol (BGP) peering sessions Run the rolling NCN reboot procedure: Loop through reboots on storage NCNs, worker NCNs, and master NCNs, where each boot consists of the following workflow: - Establish console session with NCN to reboot Check the hostname of the NCN to be rebooted Execute a power off/on sequence to the NCN to allow it to boot up to completion Check the hosthame of the NCN after reboot and reset it if it is not correct Execute NCN/platform health checks and do not go on to reboot the next NCN until health has been ensured on the most recently rebooted NCN Disconnect console session with the NCN that was rebooted Re-run all platform health checks, including checks on BGP peering sessions The time duration for this procedure (if health checks are being executed in between each boot, as recommended) could take between two to four hours for a system with approximately nine NCNs.</description>
+    </item>
+  </channel>
+</rss>

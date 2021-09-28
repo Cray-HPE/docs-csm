@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>examples on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-15/operations/iuf/examples/</link>
+    <description>Recent content in examples on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-15</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:28 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-15/operations/iuf/examples/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>iuf abort Examples</title>
+      <link>/docs-csm/en-15/operations/iuf/examples/iuf_abort/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:28 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/examples/iuf_abort/</guid>
+      <description>iuf abort Examples (ncn-m001#) Abort activity admin.05-15, allowing the current stage to complete.&#xA;iuf -a admin.05-15 abort (ncn-m001#) Abort activity admin.05-15 immediately, terminating all in progress operations.&#xA;iuf -a admin.05-15 abort -f (ncn-m001#) Abort activity admin.05-15 immediately and add a comment to the activity log.&#xA;iuf -i input.yaml abort -f &amp;#34;Aborting the activity&amp;#34; </description>
+    </item>
+    <item>
+      <title>iuf activity Examples</title>
+      <link>/docs-csm/en-15/operations/iuf/examples/iuf_activity/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:28 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/examples/iuf_activity/</guid>
+      <description>iuf activity Examples (ncn-m001#) list all activities.&#xA;iuf activity Example output:&#xA;admin.05-15 alanm alt-310 alt-310-2 alt-96 analytics-1.4.21 anand-150523 atif-0331 atif-2300307 atif-230216-1109 atif-230217 atif-rc3 automate-109296 automate-109761 automate-109768 automate-109797 binguma-csm-diags binguma-csm-diags-1 binguma-csm-diags-10 binguma-csm-diags-11 [...] (ncn-m001#) Display activity admin.05-15.&#xA;iuf -a admin.05-15 activity Example output:&#xA;iuf -a admin.05-15 activity +---------------------------------------------------------------------------------------------------------------------------------------+ | Activity: admin.05-15 | +----------------------------+---------------+-------------------------------------------+-----------+----------+-----------------------+ | Start | Category | Command / Argo Workflow | Status | Duration | Comment | +----------------------------+---------------+-------------------------------------------+-----------+----------+-----------------------+ | session: admin-05-15-zjswc | | command: .</description>
+    </item>
+    <item>
+      <title>iuf list-activities Examples</title>
+      <link>/docs-csm/en-15/operations/iuf/examples/iuf_list_activities/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:28 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/examples/iuf_list_activities/</guid>
+      <description>iuf list-activities Examples (ncn-m001#) List all activities present on the system.&#xA;iuf list-activities Example output:&#xA;fullstack-install-230217 fullstack-upgrade-230222 shs-upgrade-230311 </description>
+    </item>
+    <item>
+      <title>iuf list-stages Examples</title>
+      <link>/docs-csm/en-15/operations/iuf/examples/iuf_list_stages/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:28 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/examples/iuf_list_stages/</guid>
+      <description>iuf list-stages Examples (ncn-m001#) List the stages for activity admin-230126 along with their status and duration values.&#xA;iuf -a admin-230126 list-stages Example output:&#xA;+----------------------------+---------------------------------------------------------------------------------------+-----------+----------+ | Stage | Description | Status | Duration | +----------------------------+---------------------------------------------------------------------------------------+-----------+----------+ | process-media | Inventory and extract products in the media directory for use in subsequent stages | Succeeded | 0:01:21 | | pre-install-check | Perform pre-install readiness checks | Succeeded | 0:01:13 | | deliver-product | Upload product content onto the system | Succeeded | 0:09:56 | | update-vcs-config | Merge working branches and perform automated VCS configuration | Succeeded | 0:01:12 | | update-cfs-config | Update CFS configuration utilizing sat bootprep | N/A | N/A | | prepare-images | Build and configure management node and/or managed node images utilizing sat bootprep | N/A | N/A | | management-nodes-rollout | Rolling rebuild of management nodes | N/A | N/A | | deploy-product | Deploy services to system | N/A | N/A | | post-install-service-check | Perform post-install checks of deployed product services | N/A | N/A | | managed-nodes-rollout | Rolling reboot of managed nodes | N/A | N/A | | post-install-check | Perform post-install checks | N/A | N/A | +----------------------------+---------------------------------------------------------------------------------------+-----------+----------+ Stage Summary activity: admin-230126 command line: iuf -a admin-230126 -m /etc/cray/upgrade/csm/media/admin-230126 run --site-vars /etc/cray/upgrade/csm/admin/site_vars.</description>
+    </item>
+    <item>
+      <title>iuf restart Examples</title>
+      <link>/docs-csm/en-15/operations/iuf/examples/iuf_restart/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:28 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/examples/iuf_restart/</guid>
+      <description>iuf restart Examples (ncn-m001#) Begin executing stages process-media through deliver-product for activity admin-230126.&#xA;iuf -a admin-230126 run -b process-media -e deliver-product (ncn-m001#) Forcefully abort activity admin-230126 while it is still executing, causing the current stage to fail immediately.&#xA;iuf -a admin-230126 abort -f (ncn-m001#) Restart activity admin-230126 to re-execute all failed or previously unexecuted steps in all stages of the IUF session specified earlier via iuf run.&#xA;iuf -a admin-230126 restart (ncn-m001#) Begin executing stages process-media through deliver-product for activity admin-230126.</description>
+    </item>
+    <item>
+      <title>iuf resume Examples</title>
+      <link>/docs-csm/en-15/operations/iuf/examples/iuf_resume/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:28 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/examples/iuf_resume/</guid>
+      <description>iuf resume Examples (ncn-m001#) Begin executing stages process-media through deliver-product for activity admin-230126.&#xA;iuf -a admin-230126 run -b process-media -e deliver-product (ncn-m001#) Forcefully abort activity admin-230126 while it is still executing, causing the current stage to fail immediately.&#xA;iuf -a admin-230126 abort -f (ncn-m001#) Resume activity admin-230126 to re-execute any failed or aborted steps in the most recent stage of the IUF session specified earlier via iuf run and then execute any remaining steps that were not run prior the execution of iuf abort.</description>
+    </item>
+    <item>
+      <title>iuf run Examples</title>
+      <link>/docs-csm/en-15/operations/iuf/examples/iuf_run/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:28 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/examples/iuf_run/</guid>
+      <description>iuf run Examples NOTE Due to the large number of arguments available for iuf run invocations, these examples only include often used key arguments.&#xA;(ncn-m001#) Execute stages process-media through deliver-product for activity admin-230126.&#xA;iuf -a admin-230126 run -b process-media -e deliver-product (ncn-m001#) Execute stages process-media through deliver-product for activity admin-230126 but skip the pre-install-check stage.&#xA;iuf -a admin-230126 run -b process-media -e deliver-product -s pre-install-check (ncn-m001#) Execute the update-vcs-config stage for activity admin-230126 using recipe variables .</description>
+    </item>
+    <item>
+      <title>iuf workflow Examples</title>
+      <link>/docs-csm/en-15/operations/iuf/examples/iuf_workflow/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:28 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/examples/iuf_workflow/</guid>
+      <description>iuf workflow Examples (ncn-m001#) List all workflows for a given activity&#xA;iuf -a admin.05-15 workflow Example output:&#xA;admin-05-15-5bkf6-pre-install-check-tzb74 admin-05-15-hkrtj-process-media-zxmkk admin-05-15-o0o25-pre-install-check-9rlq6 admin-05-15-a5osq-pre-install-check-ghf4s admin-05-15-a5osq-deliver-product-p7rt6 admin-05-15-a5osq-update-vcs-config-b8lc6 admin-05-15-psdlp-process-media-l8n8c admin-05-15-o0o25-update-vcs-config-m6xdg admin-05-15-sp4kz-process-media-7n92r admin-05-15-a5osq-update-cfs-config-f2kww admin-05-15-o0o25-deliver-product-7r4fb admin-05-15-zjswc-process-media-w92fb (ncn-m001#) List the details of a particular workflow&#xA;iuf -a admin.05-15 workflow admin-05-15-a5osq-deliver-product-p7rt6 Example output:&#xA;iuf -i input.yaml workflow admin-05-15-5bkf6-pre-install-check-tzb74 workflow_id: admin-05-15-5bkf6-pre-install-check-tzb74 session: admin-05-15-5bkf6 command: ./iuf -a admin.05-15 run --site-vars /etc/cray/upgrade/csm/admin/site_vars.yaml --bootprep-config-managed /etc/cray/upgrade/csm/admin/compute-and-uan-bootprep.yaml -e update-vcs-config status: Succeeded args: activity: admin.05-15 bootprep_config_managed: /etc/cray/upgrade/csm/admin/compute-and-uan-bootprep.</description>
+    </item>
+  </channel>
+</rss>

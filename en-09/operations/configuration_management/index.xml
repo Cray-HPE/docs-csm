@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>configuration management on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-09/operations/configuration_management/</link>
+    <description>Recent content in configuration management on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-09</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:07 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-09/operations/configuration_management/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Configuration Layers</title>
+      <link>/docs-csm/en-09/operations/configuration_management/configuration_layers/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:07 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/configuration_management/configuration_layers/</guid>
+      <description>Configuration Layers The Configuration Framework Service (CFS) uses configuration layers to specify the location of configuration content that will be applied. Configurations may include one or more layers. Each layer is defined by a Git repository clone URL, a Git commit, a name (optional), and the path in the repository to an Ansible playbook to execute.&#xA;Configurations with a single layer are useful when testing out a new configuration on targets, or when configuring system components with one product at a time.</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cray System Management (CSM) Administration Guide on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-16/operations/</link>
+    <description>Recent content in Cray System Management (CSM) Administration Guide on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-16</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:39:06 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-16/operations/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Create a Backup of HMS Items for reinstall</title>
+      <link>/docs-csm/en-16/operations/backup_hms/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:09 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/backup_hms/</guid>
+      <description>Create a Backup of HMS Items for reinstall Procedure (ncn-mw#) Create a directory for the contents to reside.&#xA;BACKUPDIR=hms-backup_`date &amp;#39;+%Y-%m-%d_%H-%M-%S&amp;#39;` mkdir $BACKUPDIR cd $BACKUPDIR (ncn-mw#) Create backup of HSM postgres database.&#xA;BACKUP_LOCATION=`pwd` export BACKUP_NAME=cray-smd-postgres-$BACKUPDIR export BACKUP_FOLDER=${BACKUP_LOCATION}/${BACKUP_NAME} mkdir -p &amp;#34;$BACKUP_FOLDER&amp;#34; echo $BACKUP_FOLDER /usr/share/doc/csm/operations/hardware_state_manager/scripts/backup_smd_postgres.sh (ncn-mw#) Check the output from the script that just ran, if successful make a tar file of the backup.&#xA;cd $BACKUP_FOLDER &amp;amp;&amp;amp; cd .. tar -czvf $BACKUP_NAME.tar.gz $BACKUP_NAME rm -rf $BACKUP_NAME ls -la (ncn-mw#) Create backups of locks, groups, partitions, membership, and hardware inventory.</description>
+    </item>
+    <item>
+      <title>Component Names (xnames)</title>
+      <link>/docs-csm/en-16/operations/component_names_xnames/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:10 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/component_names_xnames/</guid>
+      <description>Component Names (xnames) Component names (xnames) identify the geolocation for hardware components in the HPE Cray EX system. Every component is uniquely identified by these component names. Some, like the system cabinet number or the CDU number, can be changed by site needs. There is no geolocation encoded within the cabinet number, such as an X-Y coordinate system to relate to the floor layout of the cabinets. Other component names refer to the location within a cabinet and go down to the port on a card or switch or the socket holding a processor or a memory DIMM location.</description>
+    </item>
+    <item>
+      <title>Restore HSM</title>
+      <link>/docs-csm/en-16/operations/restore_hms/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:10 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/restore_hms/</guid>
+      <description>Restore HSM Procedure If tar file was placed in s3 from Backup copy to the system to restore.&#xA;(ncn-mw#) List objects in s3&#xA;bucket=hms aws s3api list-objects --bucket $bucket --endpoint-url http://ncn-m001.nmn:8000 (ncn-mw#) Set name of backup file (without .tar.gz). For example:&#xA;BACKUP_FILE=hms-backup_2023-06-28_11-12-24 (ncn-mw#) To retrieve files from backup disk.&#xA;file=$BACKUP_FILE.tar.gz aws s3api get-object --bucket $bucket --key $file $file --endpoint-url http://ncn-m001.nmn:8000 file=sls_input_file.json aws s3api get-object --bucket $bucket --key $file $file --endpoint-url http://ncn-m001.</description>
+    </item>
+    <item>
+      <title>Validate CSM Health</title>
+      <link>/docs-csm/en-16/operations/validate_csm_health/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:06 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/validate_csm_health/</guid>
+      <description>Validate CSM Health Anytime after the installation of the CSM services, the health of the management nodes and all CSM services can be validated.&#xA;The following are examples of when to run health checks:&#xA;After completing the Install CSM Services step of the CSM install (not before) Before and after NCN reboots After the system is brought back up Any time there is unexpected behavior observed In order to provide relevant information to create support tickets The areas should be tested in the order they are listed on this page.</description>
+    </item>
+    <item>
+      <title>Configure the Cray Command Line Interface (cray CLI)</title>
+      <link>/docs-csm/en-16/operations/configure_cray_cli/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:18 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/configure_cray_cli/</guid>
+      <description>Configure the Cray Command Line Interface (cray CLI) The cray command line interface (CLI) is a framework created to integrate all of the system management REST APIs into easily usable commands.&#xA;Later procedures in the installation workflow use the cray CLI to interact with multiple services. The cray CLI configuration needs to be initialized for the Linux account, and the Keycloak user running the procedure needs to be authorized. This section describes how to initialize the cray CLI for use by a user and how to authorize that user.</description>
+    </item>
+  </channel>
+</rss>

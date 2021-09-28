@@ -1,0 +1,206 @@
+#
+# MIT License
+#
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: extract-release-distributions
+spec:
+  tolerations:
+    - key: "node-role.kubernetes.io/master"
+      operator: "Exists"
+      effect: "NoSchedule"
+    - key: "node-role.kubernetes.io/control-plane"
+      operator: "Exists"
+      effect: "NoSchedule"
+  entrypoint: main
+  templates:
+    - name: main
+      metrics:
+        prometheus:
+          - name: operation_counter
+            help: "Count of step execution by result status"
+            labels:
+              - key: "opname"
+                value: "extract-release-distributions"
+              - key: stage
+                value: "process-media"
+              - key: type
+                value: "global"
+              - key: pname
+                value: "global"
+              - key: pversion
+                value: "global"
+              - key: status
+                value: "{{status}}"
+            counter:
+              value: "1"
+      inputs:
+        parameters:
+          - name: auth_token
+          - name: global_params
+      dag:
+        tasks:
+          - name: start-operation
+            templateRef:
+              name: workflow-template-record-time-template
+              template: record-time-template
+          - name: list-tar-files
+            dependencies:
+              - start-operation
+            inline:
+              script:
+                image: artifactory.algol60.net/csm-docker/stable/iuf:v0.1.12
+                command: [sh]
+                source: |
+                  #!/bin/sh
+                  set -x
+                  media_dir="{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_dir')}}"
+                  cd $media_dir && ls *.tar.gz | jq -R -s -c 'split("\n")[:-1]'
+                volumeMounts:
+                  - name: iuf
+                    mountPath: /etc/cray/upgrade/csm
+              volumes:
+                - name: iuf
+                  hostPath:
+                    path: /etc/cray/upgrade/csm
+                    type: Directory
+          - name: extract-tar-files
+            dependencies:
+              - list-tar-files
+            arguments:
+              parameters:
+                - name: tarfile
+                  value: "{{item}}"
+                - name: media_dir
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_dir')}}"
+            withParam: "{{tasks.list-tar-files.outputs.result}}"
+            template: extract-tar-files
+          - name: end-operation
+            dependencies:
+              - extract-tar-files
+            templateRef:
+              name: workflow-template-record-time-template
+              template: record-time-template
+          - name: prom-metrics
+            dependencies:
+              - start-operation
+              - end-operation
+            template: prom-metrics
+            arguments:
+              parameters:
+                - name: opstart
+                  value: "{{tasks.start-operation.outputs.result}}"
+                - name: opend
+                  value: "{{tasks.end-operation.outputs.result}}"
+
+
+    - name: prom-metrics
+      inputs:
+        parameters:
+          - name: opstart
+          - name: opend
+      metrics:
+        prometheus:
+          - name: operation_time
+            help: "Duration gauge by operation name in seconds"
+            labels:
+              - key: "opname"
+                value: "extract-release-distributions"
+              - key: stage
+                value: "process-media"
+              - key: type
+                value: "global"
+              - key: pdname
+                value: "global"
+              - key: pdversion
+                value: "global"
+              - key: "opstart"
+                value: "{{inputs.parameters.opstart}}"
+              - key: "opend"
+                value: "{{inputs.parameters.opend}}"
+            gauge:
+              value: "{{outputs.parameters.diff-time-value}}"
+      outputs:
+        parameters:
+          - name: diff-time-value
+            globalName: diff-time-value
+            valueFrom:
+              path: /tmp/diff_time.txt
+      container:
+        image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
+        command: [sh, -c]
+        args: ["DIFF_TIME=$(expr {{inputs.parameters.opend}} - {{inputs.parameters.opstart}}); echo $DIFF_TIME; echo $DIFF_TIME > /tmp/diff_time.txt"]
+    - name: extract-tar-files
+      inputs:
+        parameters:
+          - name: tarfile
+          - name: media_dir
+      script:
+        image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
+        command: [sh]
+        source: |
+          #!/bin/sh
+          set -x
+          media_dir={{inputs.parameters.media_dir}}
+          tar_filename={{inputs.parameters.tarfile}}
+          echo "DEBUG Inputs for extract-tar-files are - tarfile=$tar_filename, media_dir=$media_dir"
+
+          cd $media_dir
+          echo "INFO Extracting product tarball $media_dir/$tar_filename"
+          result=$(gunzip -c $tar_filename | tar -t 2>&1)
+          if [ $? -ne 0 ]; then
+            echo "ERROR Provided product tarfile $tar_filename is corrupted. Please replace with the valid product tarfile and re-run this 'process-media' stage"
+            echo "$result" | sed -e 's/^/DEBUG /'
+            exit 1
+          fi
+          dir_name=`tar -tzf $tar_filename | head -1 | cut -f1 -d"/"`
+          result=$(tar -xvzf $tar_filename 2>&1)
+          if [ $? -ne 0 ]; then
+            echo "ERROR Extracting product tarfile $tar_filename failed"
+            echo "$result" | sed -e 's/^/DEBUG /'
+            exit 1
+          fi
+          MANIFEST_FILE="${dir_name}/iuf-product-manifest.yaml"
+          if [ ! -f "$MANIFEST_FILE" ]; then
+            echo "DEBUG IUF Manifest file does not exist in the tarball - $tar_filename, ignoring"
+          fi
+          echo "DEBUG Outputs for extract-tar-files are manifest.yaml and original_location=$media_dir/$dir_name"
+          cat $MANIFEST_FILE > /tmp/manifest.yaml
+          echo $media_dir/$dir_name > /tmp/original_location
+        volumeMounts:
+          - name: iuf
+            mountPath: /etc/cray/upgrade/csm
+      outputs:
+        parameters:
+          - name: manifest
+            valueFrom:
+              path: "/tmp/manifest.yaml"
+          - name: original_location
+            valueFrom:
+              path: "/tmp/original_location"
+      volumes:
+        - name: iuf
+          hostPath:
+            path: /etc/cray/upgrade/csm
+            type: Directory

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>stages on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-15/operations/iuf/stages/</link>
+    <description>Recent content in stages on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-15</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:29 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-15/operations/iuf/stages/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>deliver-product</title>
+      <link>/docs-csm/en-15/operations/iuf/stages/deliver_product/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:28 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/stages/deliver_product/</guid>
+      <description>deliver-product The deliver-product stage delivers the content provided in the product distribution files to the system. The versioned product catalog entry for each product is updated as the new content is uploaded.&#xA;deliver-product details are explained in the following sections:&#xA;Impact Input Execution details Example Impact The deliver-product stage does not change the running state of the system as the new content has been uploaded, but not deployed.&#xA;Input The following arguments are most often used with the deliver-product stage.</description>
+    </item>
+    <item>
+      <title>deploy-product</title>
+      <link>/docs-csm/en-15/operations/iuf/stages/deploy_product/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:28 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/stages/deploy_product/</guid>
+      <description>deploy-product The deploy-product stage uses Loftsman to deploy product microservices to the system. The microservices are specified in the loftsman entry in each product&amp;rsquo;s iuf-product-manifest.yaml file within the product distribution file.&#xA;deploy-product details are explained in the following sections:&#xA;Impact Input Execution details Example Impact The deploy-product stage changes the running state of the system.&#xA;Input The following arguments are most often used with the deploy-product stage. See iuf -h and iuf run -h for additional arguments.</description>
+    </item>
+    <item>
+      <title>managed-nodes-rollout</title>
+      <link>/docs-csm/en-15/operations/iuf/stages/managed_nodes_rollout/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:28 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/stages/managed_nodes_rollout/</guid>
+      <description>managed-nodes-rollout The managed-nodes-rollout stage performs a reboot of the managed compute and application nodes in order to reboot them to a new image and configuration. The system must be configured to use BOS v2 as it is used to perform the reboot. The reboot operations use the BOS session templates created during the prepare-images stage. The -mrs stage argument is only valid for compute nodes, since application nodes are not controlled by workload manager software.</description>
+    </item>
+    <item>
+      <title>management-nodes-rollout</title>
+      <link>/docs-csm/en-15/operations/iuf/stages/management_nodes_rollout/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:28 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/stages/management_nodes_rollout/</guid>
+      <description>management-nodes-rollout The management-nodes-rollout stage performs a controlled update of management NCNs by configuring them with a new CFS configuration and/or rebuilding or upgrading them to a new image. A &amp;ldquo;rebuild&amp;rdquo; is a reboot operation that clears the persistent OverlayFS file system on that node, i.e. all data on node-local storage will be discarded. An &amp;ldquo;upgrade&amp;rdquo; is similar to a rebuild, but it intentionally does not clear all information off of NCN storage and master nodes.</description>
+    </item>
+    <item>
+      <title>post-install-check</title>
+      <link>/docs-csm/en-15/operations/iuf/stages/post_install_check/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:28 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/stages/post_install_check/</guid>
+      <description>post-install-check The post-install-check stage validates that the managed compute and application nodes deployed by the preceding managed-nodes-rollout stage are executing correctly. It primarily executes pre- and post-stage hook scripts provided by products in their iuf-product-manifest.yaml file.&#xA;post-install-check details are explained in the following sections:&#xA;Impact Input Execution details Example Impact The post-install-check stage does not change the running state of the system.&#xA;Input The following arguments are most often used with the post-install-check stage.</description>
+    </item>
+    <item>
+      <title>post-install-service-check</title>
+      <link>/docs-csm/en-15/operations/iuf/stages/post_install_service_check/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:28 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/stages/post_install_service_check/</guid>
+      <description>post-install-service-check The post-install-service-check stage validates that the microservices deployed by the preceding deploy-product stage are executing correctly. It primarily executes pre- and post-stage hook scripts provided by products in their iuf-product-manifest.yaml file.&#xA;post-install-service-check details are explained in the following sections:&#xA;Impact Input Execution details Example Impact The post-install-service-check stage does not change the running state of the system.&#xA;Input The following arguments are most often used with the post-install-service-check stage. See iuf -h and iuf run -h for additional arguments.</description>
+    </item>
+    <item>
+      <title>pre-install-check</title>
+      <link>/docs-csm/en-15/operations/iuf/stages/pre_install_check/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:29 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/stages/pre_install_check/</guid>
+      <description>pre-install-check The pre-install-check stage ensures that CSM is operating properly so that products can be installed. It verifies that S3 storage is functional, that CFS, VCS, and IMS microservices are functional, etc. Products may provide hook scripts to perform additional product-specific system checks.&#xA;pre-install-check details are explained in the following sections:&#xA;Impact Input Execution details Example Impact The pre-install-check stage does not change the running state of the system.&#xA;Input The following arguments are most often used with the pre-install-check stage.</description>
+    </item>
+    <item>
+      <title>prepare-images</title>
+      <link>/docs-csm/en-15/operations/iuf/stages/prepare_images/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:29 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/stages/prepare_images/</guid>
+      <description>prepare-images The prepare-images stage configures NCN management node images and builds and configures compute node, application node, and GPU images. It also creates new BOS session templates corresponding to the new node and image content. The prepare-images stage does not reboot nodes to the new images; however, that is done by the management-nodes-rollout and managed-nodes-rollout stages.&#xA;The product content used to create the images is defined in sat bootprep input files.</description>
+    </item>
+    <item>
+      <title>process-media</title>
+      <link>/docs-csm/en-15/operations/iuf/stages/process_media/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:29 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/stages/process_media/</guid>
+      <description>process-media The process-media stage extracts all product distribution files found in the media directory specified by the user via -m and associates it with an activity identifier provided by the -a argument. The product content is extracted into that same directory. All future stages associated with the activity will execute for all applicable products found in the media directory, and thus -m does not need to be specified for future stages.</description>
+    </item>
+    <item>
+      <title>update-cfs-config</title>
+      <link>/docs-csm/en-15/operations/iuf/stages/update_cfs_config/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:29 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/stages/update_cfs_config/</guid>
+      <description>update-cfs-config The update-cfs-config stage creates updated CFS configurations used for image customization and personalization of management NCNs and managed (compute and application) nodes. This stage only creates the CFS configurations; the prepare-images, management-nodes-rollout, and management-nodes-rollout stages executed after update-cfs-config use the CFS configurations.&#xA;The product content used to create the CFS configurations is defined in sat bootprep input files. The sat bootprep input files used can be specified by -bc, -bm, and/or -bpcd as described below.</description>
+    </item>
+    <item>
+      <title>update-vcs-config</title>
+      <link>/docs-csm/en-15/operations/iuf/stages/update_vcs_config/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:29 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/stages/update_vcs_config/</guid>
+      <description>update-vcs-config The update-vcs-config stage performs a variety of update operations for each product being installed that provides a configuration management repository in VCS. It ensures new product configuration content has been uploaded to VCS in a pristine branch and attempts to merge the new product configuration content into a corresponding customer branch.&#xA;NOTE After update-vcs-config has completed and before proceeding to additional stages, any desired site configuration customizations should be performed.</description>
+    </item>
+  </channel>
+</rss>

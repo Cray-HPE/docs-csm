@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>capmc on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-10/troubleshooting/capmc/</link>
+    <description>Recent content in capmc on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-10</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:42 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-10/troubleshooting/capmc/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Cray Advanced Platform Monitoring and Control (CAPMC) Reinit and Configuration Notice</title>
+      <link>/docs-csm/en-10/troubleshooting/capmc/capmc_reinit_and_config/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:42 +0000</pubDate>
+      <guid>/docs-csm/en-10/troubleshooting/capmc/capmc_reinit_and_config/</guid>
+      <description>Cray Advanced Platform Monitoring and Control (CAPMC) Reinit and Configuration Notice CAPMC is now capable of doing a reinit of hardware that does not support GracefulRestart or ForceRestart. This is done by powering off the target component and then powering it back on. This behavior is controlled by a setting in the CAPMC ConfigMap. Along with reinit is the ability to control other aspects of CAPMCs behavior. To do this, the CAPMC ConfigMap must be modified to include a CapmcConfiguration section.</description>
+    </item>
+  </channel>
+</rss>

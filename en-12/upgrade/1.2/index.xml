@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CSM 1.0.x to 1.2.x Upgrade Process on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-12/upgrade/1.2/</link>
+    <description>Recent content in CSM 1.0.x to 1.2.x Upgrade Process on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-12</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:39:02 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-12/upgrade/1.2/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Stage 0 - Prerequisites and Preflight Checks</title>
+      <link>/docs-csm/en-12/upgrade/1.2/stage_0_prerequisites/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:02 +0000</pubDate>
+      <guid>/docs-csm/en-12/upgrade/1.2/stage_0_prerequisites/</guid>
+      <description>Stage 0 - Prerequisites and Preflight Checks Reminders:&#xA;CSM 1.0.1 or higher is required in order to upgrade to CSM 1.2.x. If any problems are encountered and the procedure or command output does not provide relevant guidance, see Relevant troubleshooting links for upgrade-related issues. Abstract (Stage 0) Stage 0 has several critical procedures which prepares and verify if the environment is ready for upgrade. First, the latest documentation RPM is installed; it includes critical install scripts used in the upgrade procedure.</description>
+    </item>
+    <item>
+      <title>Stage 1 - Ceph image upgrade</title>
+      <link>/docs-csm/en-12/upgrade/1.2/stage_1/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:02 +0000</pubDate>
+      <guid>/docs-csm/en-12/upgrade/1.2/stage_1/</guid>
+      <description>Stage 1 - Ceph image upgrade Reminder: If any problems are encountered and the procedure or command output does not provide relevant guidance, see Relevant troubleshooting links for upgrade-related issues.&#xA;Procedure Apply a workaround for the boot order.&#xA;ncn-m001# /usr/share/doc/csm/scripts/workarounds/boot-order/run.sh Run ncn-upgrade-ceph-nodes.sh for ncn-s001. Follow output of the script carefully. The script will pause for manual interaction.&#xA;ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-ceph-nodes.sh ncn-s001 NOTE: The root password for the node may need to be reset after it is rebooted.</description>
+    </item>
+    <item>
+      <title>Stage 2 - Kubernetes Upgrade from 1.19.9 to 1.20.13</title>
+      <link>/docs-csm/en-12/upgrade/1.2/stage_2/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:02 +0000</pubDate>
+      <guid>/docs-csm/en-12/upgrade/1.2/stage_2/</guid>
+      <description>Stage 2 - Kubernetes Upgrade from 1.19.9 to 1.20.13 Reminder: If any problems are encountered and the procedure or command output does not provide relevant guidance, see Relevant troubleshooting links for upgrade-related issues.&#xA;Stage 2.1 Run ncn-upgrade-master-nodes.sh for ncn-m002.&#xA;Follow output of the script carefully. The script will pause for manual interaction.&#xA;ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m002 NOTE: The root password for the node may need to be reset after it is rebooted.</description>
+    </item>
+    <item>
+      <title>Stage 3 - CSM Service Upgrades</title>
+      <link>/docs-csm/en-12/upgrade/1.2/stage_3/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:02 +0000</pubDate>
+      <guid>/docs-csm/en-12/upgrade/1.2/stage_3/</guid>
+      <description>Stage 3 - CSM Service Upgrades Reminder: If any problems are encountered and the procedure or command output does not provide relevant guidance, see Relevant troubleshooting links for upgrade-related issues.&#xA;Prepare assets on ncn-m002 Set the CSM_RELEASE variable to the target CSM version of this upgrade.&#xA;ncn-m002# CSM_RELEASE=csm-1.2.0 Follow either the Direct download or Manual copy procedure.&#xA;If there is a URL for the CSM tar file that is accessible from ncn-m002, then the Direct download procedure may be used.</description>
+    </item>
+    <item>
+      <title>Stage 4 - Ceph Upgrade</title>
+      <link>/docs-csm/en-12/upgrade/1.2/stage_4/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:02 +0000</pubDate>
+      <guid>/docs-csm/en-12/upgrade/1.2/stage_4/</guid>
+      <description>Stage 4 - Ceph Upgrade Reminder: If any problems are encountered and the procedure or command output does not provide relevant guidance, see Relevant troubleshooting links for upgrade-related issues.&#xA;Addresses CVEs CVE-2021-3531: Swift API denial of service. CVE-2021-3524: HTTP header injects via CORS in RGW.. CVE-2021-3509: Dashboard XSS via token cookie. CVE-2021-20288: Unauthorized global_id reuse in cephx. The upgrade includes all fixes from v15.2.9 through v15.2.15. See the Ceph version index for details.</description>
+    </item>
+    <item>
+      <title>Stage 5 - Perform NCN Personalization</title>
+      <link>/docs-csm/en-12/upgrade/1.2/stage_5/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:02 +0000</pubDate>
+      <guid>/docs-csm/en-12/upgrade/1.2/stage_5/</guid>
+      <description>Stage 5 - Perform NCN Personalization Reminder: If any problems are encountered and the procedure or command output does not provide relevant guidance, see Relevant troubleshooting links for upgrade-related issues.&#xA;Procedure Set the root user password and SSH keys before running NCN personalization. The location where the password is stored in Vault has changed since previous CSM versions. See Configure the Root Password and Root SSH Keys in Vault.&#xA;If custom configuration content was merged with content from a previous CSM installation, then merge the new CSM configuration in with it in the csm-config-management Git repository.</description>
+    </item>
+    <item>
+      <title>Plan and coordinate network upgrade</title>
+      <link>/docs-csm/en-12/upgrade/1.2/plan_and_coordinate_network_upgrade/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:02 +0000</pubDate>
+      <guid>/docs-csm/en-12/upgrade/1.2/plan_and_coordinate_network_upgrade/</guid>
+      <description>Plan and coordinate network upgrade Prior to CSM 1.2, a single Customer Access Network (CAN) carried both the administrative network traffic and the user network traffic. CSM 1.2 introduces bifurcated CAN (BICAN), which is designed to separate administrative network traffic and user network traffic. With BICAN, the pre-1.2 CAN network is split into two separate networks:&#xA;Customer Management Network (CMN)&#xA;This network allows only system administrative access from the customer site.</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>boot orchestration on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-12/operations/boot_orchestration/</link>
+    <description>Recent content in boot orchestration on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-12</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:16 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-12/operations/boot_orchestration/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>BOS Workflows</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/bos_workflows/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:13 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/bos_workflows/</guid>
+      <description>BOS Workflows The following workflows present a high-level overview of common Boot Orchestration Service (BOS) operations. These workflows depict how services interact with each other when booting, configuring, or shutting down nodes. They also help provide a quicker and deeper understanding of how the system functions.&#xA;Terminology Workflows Boot and configure nodes Reconfigure nodes Power off nodes Terminology The following are mentioned in the workflows:&#xA;Boot Orchestration Service (BOS) is responsible for booting, configuring, and shutting down collections of nodes.</description>
+    </item>
+    <item>
+      <title>Compute Node Boot Issue Symptom Node Console or Logs Indicate that the Server Response has Timed Out</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/boot_issue_symptom_node_console_or_logs_indicate_that_the_server_response_has_timed_out/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:13 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/boot_issue_symptom_node_console_or_logs_indicate_that_the_server_response_has_timed_out/</guid>
+      <description>Compute Node Boot Issue Symptom: Node Console or Logs Indicate that the Server Response has Timed Out If the TFTP request is able to access the TFTP service pod but is unable to find its way back to the node, it may be because the kernel is not tracking established TFTP connections.&#xA;Symptoms Problem detection Resolution Symptoms The following image is tcpdump data from within the TFTP pod. It shows what happens when the TFTP request cannot find a route back to the node that sent the request.</description>
+    </item>
+    <item>
+      <title>Boot Issue Symptom Node HSN Interface Does Not Appear or Show Detected Links Detected</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/boot_issue_symptom_node_hsn_interface_does_not_appear_or_shows_no_link_detected/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:13 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/boot_issue_symptom_node_hsn_interface_does_not_appear_or_shows_no_link_detected/</guid>
+      <description>Boot Issue Symptom: Node HSN Interface Does Not Appear or Show Detected Links Detected A node may fail to boot if the HSN interface is experiencing issues, or if it is not able to detect any links.&#xA;Symptom The node&amp;rsquo;s HSN interface does not appear in the output of the ip addr command or the output of the ethtool interface command shows no link detected.&#xA;Resolution Reseat the node&amp;rsquo;s PCIe card.</description>
+    </item>
+    <item>
+      <title>Boot Orchestration</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/boot_orchestration/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:14 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/boot_orchestration/</guid>
+      <description>Boot Orchestration The Boot Orchestration Service (BOS) is responsible for booting, configuring, and shutting down collections of nodes. This is accomplished using BOS components, such as boot orchestration session templates and sessions, as well as launching a Boot Orchestration Agent (BOA) that fulfills boot requests.&#xA;BOS users create a BOS session template via the REST API. A session template is a collection of metadata for a group of nodes and their desired boot artifacts and configuration.</description>
+    </item>
+    <item>
+      <title>Boot UANs</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/boot_uans/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:14 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/boot_uans/</guid>
+      <description>Boot UANs Boot UANs with an image so that they are ready for user logins.&#xA;Prerequisites UAN boot images and a BOS session template have been created. See Create UAN Boot Images.&#xA;Procedure Create a BOS session to boot the UAN nodes.&#xA;ncn-mw# cray bos session create --template-uuid uan-sessiontemplate-PRODUCT_VERSION \ --operation reboot --format json | tee session.json Example output:&#xA;{ &amp;#34;links&amp;#34;: [ { &amp;#34;href&amp;#34;: &amp;#34;/v1/session/89680d0a-3a6b-4569-a1a1-e275b71fce7d&amp;#34;, &amp;#34;jobId&amp;#34;: &amp;#34;boa-89680d0a-3a6b-4569-a1a1-e275b71fce7d&amp;#34;, &amp;#34;rel&amp;#34;: &amp;#34;session&amp;#34;, &amp;#34;type&amp;#34;: &amp;#34;GET&amp;#34; }, { &amp;#34;href&amp;#34;: &amp;#34;/v1/session/89680d0a-3a6b-4569-a1a1-e275b71fce7d/status&amp;#34;, &amp;#34;rel&amp;#34;: &amp;#34;status&amp;#34;, &amp;#34;type&amp;#34;: &amp;#34;GET&amp;#34; } ], &amp;#34;operation&amp;#34;: &amp;#34;reboot&amp;#34;, &amp;#34;templateUuid&amp;#34;: &amp;#34;uan-sessiontemplate-PRODUCT_VERSION&amp;#34; } The first attempt to reboot the UANs will most likely fail.</description>
+    </item>
+    <item>
+      <title>Check the Progress of BOS Session Operations</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/check_the_progress_of_bos_session_operations/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:14 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/check_the_progress_of_bos_session_operations/</guid>
+      <description>Check the Progress of BOS Session Operations Describes how to view the logs of BOS operations with Kubernetes.&#xA;When a Boot Orchestration Service (BOS) session is created, it will return a job ID. This ID can be used to locate the Boot Orchestration Agent (BOA) Kubernetes job that executes the session. For example:&#xA;ncn-mw# cray bos session create --template-uuid SESSIONTEMPLATE_NAME --operation boot --format toml Example output:&#xA;operation = &amp;#34;boot&amp;#34; templateName = &amp;#34;SESSIONTEMPLATE_NAME&amp;#34; [[links]] href = &amp;#34;foo-c7faa704-3f98-4c91-bdfb-e377a184ab4f&amp;#34; jobId = &amp;#34;boa-a939bd32-9d27-433f-afc2-735e77ec8e58&amp;#34; rel = &amp;#34;session&amp;#34; type = &amp;#34;GET&amp;#34; All BOS Kubernetes pods operate in the services namespace.</description>
+    </item>
+    <item>
+      <title>Clean Up After a BOS/BOA Job is Completed or Cancelled</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/clean_up_after_a_bos-boa_job_is_completed_or_cancelled/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:14 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/clean_up_after_a_bos-boa_job_is_completed_or_cancelled/</guid>
+      <description>Clean Up After a BOS/BOA Job is Completed or Cancelled NOTE This section is for Boot Orchestration Service (BOS) v1 only. BOS v2 does not use Boot Orchestration Agent (BOA) jobs and does not require cleanup.&#xA;When a BOS session is created, there are a number of items created on the system. When a session is cancelled or completed, these items need to be cleaned up to ensure there is not lingering content from the session on the system.</description>
+    </item>
+    <item>
+      <title>Clean Up Logs After a BOA Kubernetes Job</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/clean_up_logs_after_a_boa_kubernetes_job/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:14 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/clean_up_logs_after_a_boa_kubernetes_job/</guid>
+      <description>Clean Up Logs After a BOA Kubernetes Job NOTE This section is for Boot Orchestration Service (BOS) v1 only. BOS v2 does not use Boot Orchestration Agent (BOA) jobs and does not require cleanup.&#xA;Delete log entries from previous boot orchestration jobs. BOS launches a BOA Kubernetes job. BOA then launches a Configuration Framework Service (CFS) session, resulting in a CFS-BOA Kubernetes job. Thus, there are two separate sets of jobs that can be removed.</description>
+    </item>
+    <item>
+      <title>Compute Node Boot Issue Symptom Duplicate Address Warnings and Declined DHCP Offers in Logs</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/compute_node_boot_issue_symptom_duplicate_address_warnings_and_declined_dhcp_offers_in_logs/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:14 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/compute_node_boot_issue_symptom_duplicate_address_warnings_and_declined_dhcp_offers_in_logs/</guid>
+      <description>Compute Node Boot Issue Symptom: Duplicate Address Warnings and Declined DHCP Offers in Logs If the DHCP and node logs show duplicate address warnings and indicate declined DHCP offers, it may be because another component owns the IP address that DHCP is trying to assign to a node. If this happens, the node will not accept the IP address and will repeatedly submit a DHCP discover request. As a result, the node and DHCP become entangled in a loop of requesting and rejecting.</description>
+    </item>
+    <item>
+      <title>Compute Node Boot Issue Symptom Message About Invalid EEPROM Checksum in Node Console or Log</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/compute_node_boot_issue_symptom_message_about_invalid_eeprom_checksum_in_node_console_or_log/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:14 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/compute_node_boot_issue_symptom_message_about_invalid_eeprom_checksum_in_node_console_or_log/</guid>
+      <description>Compute Node Boot Issue Symptom: Message About Invalid EEPROM Checksum in Node Console or Log On rare occasions, the processor hardware may lose the Serial Over Lan (SOL) connections and may need to be reseated to allow the node to successfully boot.&#xA;Symptoms This issue can be identified if the following is displayed in the node&amp;rsquo;s console or log:&#xA;console.38:2018-09-08 04:54:51 [ 16.721165] ixgbe 0000:18:00.0: The EEPROM Checksum Is Not Valid console.</description>
+    </item>
+    <item>
+      <title>Compute Node Boot Issue Symptom Node is Not Able to Download the Required Artifacts</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/compute_node_boot_issue_symptom_node_is_not_able_to_download_the_required_artifacts/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:14 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/compute_node_boot_issue_symptom_node_is_not_able_to_download_the_required_artifacts/</guid>
+      <description>Compute Node Boot Issue Symptom: Node is Not Able to Download the Required Artifacts If either or both of the kernel or the initrd boot artifacts are missing from the artifact repository, Boot Script Service (BSS), or both, the node will not be able to download the required boot artifacts and will fail to boot.&#xA;Symptoms The node&amp;rsquo;s console or log will display lines beginning with, &amp;lsquo;&amp;rsquo;Could not start download&amp;rsquo;&amp;rsquo;. Refer to the image below for an example of this error message.</description>
+    </item>
+    <item>
+      <title>Compute Node Boot Sequence</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/compute_node_boot_sequence/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:14 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/compute_node_boot_sequence/</guid>
+      <description>Compute Node Boot Sequence Provides an overview of the compute node boot process and touches upon the fact that issues can be encountered during this process.&#xA;The following is a high-level overview of the boot sequence for compute nodes:&#xA;The compute node is powered on.&#xA;The BIOS issues a DHCP discover request.&#xA;DHCP responds with the following:&#xA;next-server, which is the IP address of the TFTP server. The name of the file to download from the TFTP server.</description>
+    </item>
+    <item>
+      <title>Configure the BOS Timeout When Booting Compute Nodes</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/configure_the_bos_timeout_when_booting_nodes/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:14 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/configure_the_bos_timeout_when_booting_nodes/</guid>
+      <description>Configure the BOS Timeout When Booting Compute Nodes NOTE This section is for Boot Orchestration Service (BOS) v1 only.&#xA;Manually update the boa-job-template ConfigMap to tune the timeout and sleep intervals for the Boot Orchestration Agent (BOA). Correcting the timeout value is a good troubleshooting option for when BOS sessions hang waiting for nodes to be in a Ready state.&#xA;If the BOS timeout occurs when booting compute nodes, the system will be unable to boot via BOS.</description>
+    </item>
+    <item>
+      <title>Create a Session Template to Boot Compute Nodes with CPS</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/create_a_session_template_to_boot_compute_nodes_with_cps/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:14 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/create_a_session_template_to_boot_compute_nodes_with_cps/</guid>
+      <description>Create a Session Template to Boot Compute Nodes with CPS When compute nodes are booted, the Content Projection Service (CPS) and Data Virtualization Service (DVS) project the root file system (rootfs) over the network to the compute nodes by default.&#xA;Another option when compute nodes are booted is to download their rootfs into RAM.&#xA;This page covers the appropriate contents for a BOS session template in order to use CPS and DVS.</description>
+    </item>
+    <item>
+      <title>Edit the iPXE Embedded Boot Script</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/edit_the_ipxe_embedded_boot_script/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:14 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/edit_the_ipxe_embedded_boot_script/</guid>
+      <description>Edit the iPXE Embedded Boot Script Manually adjust the iPXE embedded boot script to change the order of network interfaces for DHCP request. Changing the order of network interfaces for DHCP requests helps improve boot time performance.&#xA;Prerequisites This procedure requires administrative privileges.&#xA;Procedure Edit the ConfigMap using one of the following options.&#xA;NOTE: Save a backup of the ConfigMap before making any changes.&#xA;The following is an example of creating a backup:</description>
+    </item>
+    <item>
+      <title>Healthy Compute Node Boot Process</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/healthy_compute_node_boot_process/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:14 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/healthy_compute_node_boot_process/</guid>
+      <description>Healthy Compute Node Boot Process In order to investigate node boot-related issues, it is important to understand the flow of a healthy boot process and the associated components. This section outlines the normal flow of components that play a role in booting compute nodes, including DHCP, BSS, and TPTP.&#xA;DHCP A healthy DHCP exchange between server and client looks like the following:&#xA;Traffic Description Sender DHCP Discover A broadcast request from the client requesting an IP address.</description>
+    </item>
+    <item>
+      <title>Kernel Boot Parameters</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/kernel_boot_parameters/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:15 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/kernel_boot_parameters/</guid>
+      <description>Kernel Boot Parameters The Image Management Service (IMS) extracts kernel boot parameters from the /boot/kernel-parameters file in the image, if that file exists, and stores them in S3. IMS already stores the other boot artifacts (kernel, initrd, and rootfs) in S3. When told to boot an image, the Boot Orchestration Service (BOS) will extract these parameters and deliver them to the Boot Script Service (BSS) so they can be used during the next boot of a node.</description>
+    </item>
+    <item>
+      <title>Limit the Scope of a BOS Session</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/limit_the_scope_of_a_bos_session/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:15 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/limit_the_scope_of_a_bos_session/</guid>
+      <description>Limit the Scope of a BOS Session The Boot Orchestration Service (BOS) supports an optional limit parameter when creating a session. This parameter can be used to further limit the nodes that BOS runs against, and is applied to all boot sets.&#xA;The limit parameter takes a comma-separated list of nodes, groups, or roles in any combination. The BOS session will be limited to run against components that match both the boot set information and one or more of the nodes, groups, or roles listed in the limit.</description>
+    </item>
+    <item>
+      <title>BOS Limitations for Gigabyte BMC Hardware</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/limitations_for_gigabyte_bmc_hardware/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:15 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/limitations_for_gigabyte_bmc_hardware/</guid>
+      <description>BOS Limitations for Gigabyte BMC Hardware NOTE This section is for Boot Orchestration Service (BOS) v1 only. BOS v2 does not use Cray Advanced Platform Monitoring and Control (CAPMC).&#xA;Special steps need to be taken when using BOS to boot, reboot, or shutdown Gigabyte hardware. Gigabyte hardware treats power off and power on requests as successful, regardless of if actually successfully completed. The power on/off requests are ignored by CAPMC if they are received within a short period of time, which is typically around 60 seconds per operation.</description>
+    </item>
+    <item>
+      <title>Log File Locations and Ports Used in Compute Node Boot Troubleshooting</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/log_file_locations_and_ports_used_in_compute_node_boot_troubleshooting/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:15 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/log_file_locations_and_ports_used_in_compute_node_boot_troubleshooting/</guid>
+      <description>Log File Locations and Ports Used in Compute Node Boot Troubleshooting This section includes the port IDs and log file locations of components associated with the node boot process.&#xA;Log File Locations The log file locations for ConMan, DHCP, and TFTP.&#xA;ConMan logs are located within the conman pod at /var/log/conman.log.&#xA;DHCP:&#xA;ncn-m001# kubectl logs DHCP_POD_ID TFTP:&#xA;ncn-m001# kubectl logs -n services TFTP_POD_ID Port IDs The following table includes the port IDs for DHCP and TFTP.</description>
+    </item>
+    <item>
+      <title>Manage a BOS Session</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/manage_a_bos_session/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:15 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/manage_a_bos_session/</guid>
+      <description>Manage a BOS Session Once there is a Boot Orchestration Service (BOS) session template created, users can perform operations on nodes, such as boot, reboot, configure, and shutdown. Managing sessions through the Cray CLI can be accomplished using the cray bos session commands.&#xA;Create a new session List all sessions Show details for a session Delete a session Create a new session Creating a new BOS session requires the following command-line options:</description>
+    </item>
+    <item>
+      <title>Manage a Session Template</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/manage_a_session_template/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:15 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/manage_a_session_template/</guid>
+      <description>Manage a Session Template A session template must be created before starting a session with the Boot Orchestration Service (BOS).&#xA;This page shows Cray CLI commands for managing BOS session templates. To find the API versions of any commands listed, add -vvv to the end of the CLI command, and the CLI will print the underlying call to the API in the output.&#xA;Session template framework Create a session template [Create with the Cray CLI](#create with-the-cray-cli) Create with a Bash script Resulting template List all session templates View a session template Delete a session template Session template framework When creating a new BOS session template, it can be helpful to start with a framework and then edit it as needed.</description>
+    </item>
+    <item>
+      <title>Node Boot Root Cause Analysis</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/node_boot_root_cause_analysis/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:15 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/node_boot_root_cause_analysis/</guid>
+      <description>Node Boot Root Cause Analysis The first step in debugging compute node boot-related issues is to determine the underlying cause, and the stage that the issue was encountered at.&#xA;The ConMan tool collects compute node logs. To learn more about ConMan, refer to ConMan.&#xA;A node&amp;rsquo;s console data can be accessed through its log file, as described in Access Compute Node Logs). This information can also be accessed by connecting to the node&amp;rsquo;s console with ipmitool.</description>
+    </item>
+    <item>
+      <title>Redeploy the iPXE and TFTP Services</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/redeploy_the_ipxe_and_tftp_services/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:15 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/redeploy_the_ipxe_and_tftp_services/</guid>
+      <description>Redeploy the iPXE and TFTP Services Redeploy the iPXE and TFTP services if a pod with a ceph-fs Process Virtualization Service (PVS) on a Kubernetes worker node is causing a HEALTH_WARN error.&#xA;Resolve issues with ceph-fs and ceph-mds by restarting the iPXE and TFTP services. The Ceph cluster will return to a healthy state after this procedure.&#xA;Prerequisites This procedure requires administrative privileges.&#xA;Procedure Find the iPXE and TFTP deployments.</description>
+    </item>
+    <item>
+      <title>BOS Session Templates</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/session_templates/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:15 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/session_templates/</guid>
+      <description>BOS Session Templates Session templates in the Boot Orchestration Service (BOS) are a reusable collection of boot, configuration, and component information. After creation they can be combined with a boot operation to create a BOS session that will apply the desired changes to the specified components. Session templates can be created via the API by providing JSON data or via the CLI by writing the JSON data to a file, which can then be referenced using the --file parameter.</description>
+    </item>
+    <item>
+      <title>BOS Sessions</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/sessions/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:15 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/sessions/</guid>
+      <description>BOS Sessions The Boot Orchestration Service (BOS) creates a session when it is asked to perform an operation on a session template. Sessions provide a way to track the status of many nodes at once as they perform the same operation with the same session template information. When creating a session, both the operation and session template are required parameters.&#xA;BOA functionality BOS v1 session limitations The v1 version of BOS supports these operations:</description>
+    </item>
+    <item>
+      <title>Stage Changes Without BOS</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/stage_changes_without_bos/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:15 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/stage_changes_without_bos/</guid>
+      <description>Stage Changes Without BOS Sometimes there is a need to stages changes to take place on a reboot, without immediately rebooting a node. When this is called for, users can bypass BOS, and set boot artifacts or configuration that will only take place when a node is later booted, whether that occurs manually, or triggered by a task manager.&#xA;Stage Boot Artifacts For information on staging boot artifacts, see the section Upload Node Boot Information to Boot Script Service (BSS).</description>
+    </item>
+    <item>
+      <title>Tools for Resolving Compute Node Boot Issues</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/tools_for_resolving_boot_issues/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:15 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/tools_for_resolving_boot_issues/</guid>
+      <description>Tools for Resolving Compute Node Boot Issues A number of tools can be used to analyze and debug issues encountered during the compute node boot process. The underlying issue and symptoms dictate the type of tool required.&#xA;nmap Use nmap to send out DHCP discover requests to test DHCP. nmap can be installed using the following command:&#xA;ncn# zypper install nmap To reach the DHCP server, the request generally needs to be sent over the Node Management network (NMN) from a non-compute node (NCN).</description>
+    </item>
+    <item>
+      <title>Troubleshoot Booting Nodes with Hardware Issues</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/troubleshoot_booting_nodes_with_hardware_issues/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:15 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/troubleshoot_booting_nodes_with_hardware_issues/</guid>
+      <description>Troubleshoot Booting Nodes with Hardware Issues NOTE This section is for Boot Orchestration Service (BOS) v1 only. Bad components will not impact the booting of other components in BOS v2.&#xA;This document explains how to identify a node with hardware issues.&#xA;If a node included in a BOS session template is having hardware issues, then it can prevent the node from powering back up correctly. The entire BOS session will fail with a timeout error waiting for the node to become ready.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Compute Node Boot Issues Related to Dynamic Host Configuration Protocol (DHCP)</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/troubleshoot_compute_node_boot_issues_related_to_dynamic_host_configuration_protocol_dhcp/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:15 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/troubleshoot_compute_node_boot_issues_related_to_dynamic_host_configuration_protocol_dhcp/</guid>
+      <description>Troubleshoot Compute Node Boot Issues Related to Dynamic Host Configuration Protocol (DHCP) DHCP issues can result in node boot failures. This procedure helps investigate and resolve such issues.&#xA;Prerequisites This procedure requires administrative privileges. Procedure Check that the DHCP service is running.&#xA;ncn-m001# kubectl get pods -A | grep kea Example output:&#xA;services cray-dhcp-kea-554698bb69-r9wwt 3/3 Running 0 13h services cray-dhcp-kea-postgres-0 2/2 Running 0 10d services cray-dhcp-kea-postgres-1 2/2 Running 0 3d18h services cray-dhcp-kea-postgres-2 2/2 Running 0 10d services cray-dhcp-kea-wait-for-postgres-3-7gqvg 0/3 Completed 0 10d Start a tcpdump session on the NCN.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Compute Node Boot Issues Related to Slow Boot Times</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/troubleshoot_compute_node_boot_issues_related_to_slow_boot_times/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:15 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/troubleshoot_compute_node_boot_issues_related_to_slow_boot_times/</guid>
+      <description>Troubleshoot Compute Node Boot Issues Related to Slow Boot Times NOTE This section is for Boot Orchestration Service (BOS) v1 only. BOS v2 does not use Cray Advanced Platform Monitoring and Control (CAPMC), nor does it have the Boot Orchestration Agent (BOA). However, the steps outlined below allow for similar debugging of slow steps within Configuration Framework Service (CFS)-initiated sessions.&#xA;Inspect BOS, BOA, and CFS job logs in order to obtain information that is critical for boot troubleshooting.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Compute Node Boot Issues Related to Trivial File Transfer Protocol (TFTP)</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/troubleshoot_compute_node_boot_issues_related_to_trivial_file_transfer_protocol_tftp/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:16 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/troubleshoot_compute_node_boot_issues_related_to_trivial_file_transfer_protocol_tftp/</guid>
+      <description>Troubleshoot Compute Node Boot Issues Related to Trivial File Transfer Protocol (TFTP) TFTP issues can result in node boot failures. Use this procedure to investigate and resolve such issues.&#xA;Prerequisites This procedure requires administrative privileges.&#xA;Limitations Encryption of compute node logs is not enabled, so the passwords may be passed in clear text.&#xA;Procedure Check that the TFTP service is running.&#xA;ncn-m001# kubectl get pods -n services -o wide | grep cray-tftp Start a tcpdump session on the NCN.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Compute Node Boot Issues Related to Unified Extensible Firmware Interface (UEFI)</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/troubleshoot_compute_node_boot_issues_related_to_unified_extensible_firmware_interface_uefi/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:16 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/troubleshoot_compute_node_boot_issues_related_to_unified_extensible_firmware_interface_uefi/</guid>
+      <description>Troubleshoot Compute Node Boot Issues Related to Unified Extensible Firmware Interface (UEFI) If a node is stuck in the UEFI shell, ConMan will be able to connect to it, but nothing else will appear in its logs. The node&amp;rsquo;s logs will look similar to the following, indicating that ConMan is updating its log hourly:&#xA;&amp;lt;ConMan&amp;gt; Console [86] log at 2018-09-07 20:00:00 CDT. &amp;lt;ConMan&amp;gt; Console [86] log at 2018-09-07 21:00:00 CDT. &amp;lt;ConMan&amp;gt; Console [86] log at 2018-09-07 22:00:00 CDT.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Compute Node Boot Issues Related to the Boot Script Service (BSS)</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/troubleshoot_compute_node_boot_issues_related_to_the_boot_script_service_bss/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:16 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/troubleshoot_compute_node_boot_issues_related_to_the_boot_script_service_bss/</guid>
+      <description>Troubleshoot Compute Node Boot Issues Related to the Boot Script Service (BSS) Boot Script Service (BSS) delivers a boot script to a node based on its MAC address. This boot script tells the node where to obtain its boot artifacts, which include:&#xA;kernel initrd In addition, the boot script also contains the kernel boot parameters. This procedure helps resolve issues related to missing boot artifacts.&#xA;Prerequisites This procedure requires administrative privileges.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Compute Node Boot Issues Using Kubernetes</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/troubleshoot_compute_node_boot_issues_using_kubernetes/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:16 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/troubleshoot_compute_node_boot_issues_using_kubernetes/</guid>
+      <description>Troubleshoot Compute Node Boot Issues Using Kubernetes A number of Kubernetes commands can be used to debug issues related to the node boot process. All of the traffic bound for the DHCP server, TFTP server, and Boot Script Service (BSS) is sent on the Node Management Network (NMN).&#xA;In the current arrangement, all three services are located on a management non-compute node (NCN). Thus, traffic must first travel through the NCN to reach these services inside their pods.</description>
+    </item>
+    <item>
+      <title>Troubleshoot UAN Boot Issues</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/troubleshoot_uan_boot_issues/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:16 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/troubleshoot_uan_boot_issues/</guid>
+      <description>Troubleshoot UAN Boot Issues Use this topic to guide troubleshooting of User Access Node (UAN) boot issues.&#xA;[UAN boot process](#uan-boot process) PXE issues initrd (dracut) issues Image boot issues UAN boot process The Boot Orchestration Service (BOS) boots UANs. BOS uses session templates to define various parameters such as:&#xA;Which nodes to boot Which image to boot Kernel parameters Whether to perform post-boot configuration of the nodes by the Configuration Framework Service (CFS); this is also referred to as Node Personalization.</description>
+    </item>
+    <item>
+      <title>Upload Node Boot Information to Boot Script Service (BSS)</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/upload_node_boot_information_to_boot_script_service_bss/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:16 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/upload_node_boot_information_to_boot_script_service_bss/</guid>
+      <description>Upload Node Boot Information to Boot Script Service (BSS) The following information must be uploaded to BSS as a prerequisite to booting a node via iPXE:&#xA;The location of an initrd image in the artifact repository The location of a kernel image in the artifact repository Kernel boot parameters The nodes associated with that information, using either host name or node ID (NID) BSS manages the iPXE boot scripts that coordinate the boot process for nodes, and it enables basic association of boot scripts with nodes.</description>
+    </item>
+    <item>
+      <title>View the Status of a BOS Session</title>
+      <link>/docs-csm/en-12/operations/boot_orchestration/view_the_status_of_a_bos_session/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:16 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/boot_orchestration/view_the_status_of_a_bos_session/</guid>
+      <description>View the Status of a BOS Session The Boot Orchestration Service (BOS) supports a status endpoint that reports the status for individual BOS sessions. The status can be retrieved for each boot set within the session, as well as the individual items within a boot set.&#xA;Metadata View the status of a v1 session View the status of a boot set View the status for an individual phase View the status for an individual category In BOS v1, the status can be retrieved for each boot set within the session, as well as the individual items within a boot set.</description>
+    </item>
+  </channel>
+</rss>

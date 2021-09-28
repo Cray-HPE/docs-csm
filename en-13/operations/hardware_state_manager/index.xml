@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>hardware state manager on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-13/operations/hardware_state_manager/</link>
+    <description>Recent content in hardware state manager on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-13</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:24 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-13/operations/hardware_state_manager/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Add a Switch to the HSM Database</title>
+      <link>/docs-csm/en-13/operations/hardware_state_manager/add_a_switch_to_the_hsm_database/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:23 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/hardware_state_manager/add_a_switch_to_the_hsm_database/</guid>
+      <description>Add a Switch to the HSM Database Manually add a switch to the Hardware State Manager (HSM) database. Switches need to be in the HSM database in order to update their firmware with the Firmware Action Service (FAS).&#xA;Prerequisites The Cray command line interface (CLI) tool is initialized and configured on the system. See Configure the Cray CLI. The component name (xname), IP address, user name, and password are known for the switch being added.</description>
+    </item>
+    <item>
+      <title>Add an NCN to the HSM Database</title>
+      <link>/docs-csm/en-13/operations/hardware_state_manager/add_an_ncn_to_the_hsm_database/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:23 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/hardware_state_manager/add_an_ncn_to_the_hsm_database/</guid>
+      <description>Add an NCN to the HSM Database This procedure details how to customize the bare-metal non-compute node (NCN) on a system and add the NCN to the Hardware State Manager (HSM) database.&#xA;The examples in this procedure use ncn-w0003-nmn as the Customer Access Node (CAN). Use the correct CAN for the system.&#xA;Prerequisites The Cray command line interface (CLI) tool is initialized and configured on the system. See Configure the Cray CLI.</description>
+    </item>
+    <item>
+      <title>Component Group Members</title>
+      <link>/docs-csm/en-13/operations/hardware_state_manager/component_group_members/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:23 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/hardware_state_manager/component_group_members/</guid>
+      <description>Component Group Members The members object in the group definition has additional actions available for managing the members after the group has been created.&#xA;The following is an example of group members:&#xA;{ &amp;#34;ids&amp;#34; : [ &amp;#34;x0c0s0b0n0&amp;#34;,&amp;#34;x0c0s0b0n1&amp;#34;,&amp;#34;x0c0s0b1n0&amp;#34; ] } Retrieve Group Members Retrieve just the members array for a group:&#xA;cray hsm groups members list GROUP_LABEL Retrieve only the members of a group that are also in a specific partition:</description>
+    </item>
+    <item>
+      <title>Component Groups and Partitions</title>
+      <link>/docs-csm/en-13/operations/hardware_state_manager/component_groups_and_partitions/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:23 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/hardware_state_manager/component_groups_and_partitions/</guid>
+      <description>Component Groups and Partitions The Hardware State Manager (HSM) provides the group and partition services. Both are means of grouping (also known as labeling) system components that are tracked by HSM. Components include the nodes, blades, controllers, and more on a system.&#xA;There is no limit to the number of members a group or partition contains. The only limitation is that all members must be actual members of the system. The HSM needs to know that the components exist.</description>
+    </item>
+    <item>
+      <title>Component Memberships</title>
+      <link>/docs-csm/en-13/operations/hardware_state_manager/component_memberships/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:23 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/hardware_state_manager/component_memberships/</guid>
+      <description>Component Memberships Memberships are a read-only resource that is generated automatically by changes to groups and partitions. Each component in /hsm/v2/State/Components is represented. Filter options are available to prune the list, or a specific component name (xname) can be given. All groups and the partition (if any) of each component are listed.&#xA;At this point in time, only information about node components is needed. The --type node filter option is used in the commands below to retrieve information about node memberships only.</description>
+    </item>
+    <item>
+      <title>Component Partition Members</title>
+      <link>/docs-csm/en-13/operations/hardware_state_manager/component_partition_members/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:23 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/hardware_state_manager/component_partition_members/</guid>
+      <description>Component Partition Members The members object in the partition definition has additional actions available for managing the members after the partition has been created.&#xA;The following is an example of partition members:&#xA;{ &amp;#34;ids&amp;#34; : [ &amp;#34;x0c0s0b0n0&amp;#34;,&amp;#34;x0c0s0b0n1&amp;#34;,&amp;#34;x0c0s0b1n0&amp;#34;,&amp;#34;x0c0s0b1n1&amp;#34; ] } Retrieve Partition Members Retrieving members of a partition is very similar to how group members are retrieved and modified. No filtering options are available in partitions. However, there are partition and group filtering parameters for the /hsm/v2/State/Components and /hsm/v2/memberships collections, with both essentially working the same way.</description>
+    </item>
+    <item>
+      <title>Create a Backup of the HSM Postgres Database</title>
+      <link>/docs-csm/en-13/operations/hardware_state_manager/create_a_backup_of_the_hsm_postgres_database/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:23 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/hardware_state_manager/create_a_backup_of_the_hsm_postgres_database/</guid>
+      <description>Create a Backup of the HSM Postgres Database Perform a manual backup of the contents of the Hardware State Manager (HSM) Postgres database. This backup can be used to restore the contents of the HSM Postgres database at a later point in time using the Restore HSM Postgres from Backup procedure.&#xA;Prerequisites Healthy HSM Postgres Cluster.&#xA;Use patronictl list on the HSM Postgres cluster to determine the current state of the cluster, and a healthy cluster will look similar to the following:</description>
+    </item>
+    <item>
+      <title>HSM Roles and Subroles</title>
+      <link>/docs-csm/en-13/operations/hardware_state_manager/hsm_roles_and_subroles/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:23 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/hardware_state_manager/hsm_roles_and_subroles/</guid>
+      <description>HSM Roles and Subroles The Hardware State Manager (HSM) contains several pre-defined roles and subroles that can be assigned to components and used to target specific hardware devices.&#xA;Roles and subroles assignments come from the System Layout Service (SLS) and are applied by HSM when a node is discovered.&#xA;HSM roles HSM subroles Add custom roles and subroles HSM roles The following is a list of all pre-defined roles:&#xA;Management Compute Application Service System Storage The Management role refers to NCNs and will generally have the Master, Worker, or Storage subrole assigned.</description>
+    </item>
+    <item>
+      <title>Hardware Management Services (HMS) Locking API</title>
+      <link>/docs-csm/en-13/operations/hardware_state_manager/hardware_management_services_hms_locking_api/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:23 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/hardware_state_manager/hardware_management_services_hms_locking_api/</guid>
+      <description>Hardware Management Services (HMS) Locking API The locking feature is a part of the Hardware State Manager (HSM) API. The locking API enables administrators to lock components on the system. Locking components ensures other system actors, such as administrators or running services, cannot perform a firmware update with the Firmware Action Service (FAS) or a power state change with the Cray Advanced Platform Monitoring and Control (CAPMC). Locks only constrain FAS and CAPMC from each other and help ensure that a firmware update action will not be interfered with by a request to power off the device through CAPMC.</description>
+    </item>
+    <item>
+      <title>Hardware State Manager (HSM)</title>
+      <link>/docs-csm/en-13/operations/hardware_state_manager/hardware_state_manager/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:23 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/hardware_state_manager/hardware_state_manager/</guid>
+      <description>Hardware State Manager (HSM) The Hardware State Manager (HSM) monitors and interrogates hardware components in the HPE Cray EX system, tracking hardware state and inventory information, and making it available via REST queries and message bus events when changes occur.&#xA;In the CSM 0.9.3 release, v1 of the HSM API has begun its deprecation process in favor of the new HSM v2 API. Refer to the HSM API documentation for more information on the changes.</description>
+    </item>
+    <item>
+      <title>Hardware State Manager (HSM) State and Flag Fields</title>
+      <link>/docs-csm/en-13/operations/hardware_state_manager/hardware_state_manager_hsm_state_and_flag_fields/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:23 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/hardware_state_manager/hardware_state_manager_hsm_state_and_flag_fields/</guid>
+      <description>Hardware State Manager (HSM) State and Flag Fields HSM manages important information for hardware components in the system. Administrators can use the data returned by HSM to learn about the state of the system. To do so, it is critical that the State and Flag fields are understood, and the next steps to take are known when viewing output returned by HSM commands. It is also beneficial to understand what services can cause State or Flag changes in HSM.</description>
+    </item>
+    <item>
+      <title>Lock and Unlock Management Nodes</title>
+      <link>/docs-csm/en-13/operations/hardware_state_manager/lock_and_unlock_management_nodes/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:23 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/hardware_state_manager/lock_and_unlock_management_nodes/</guid>
+      <description>Lock and Unlock Management Nodes The ability to ignore non-compute nodes (NCNs) is turned off by default. Management nodes, NCNs, and their BMCs are also not locked by default. The administrator must lock the NCNs and their BMCs to prevent unwanted actions from affecting these nodes.&#xA;This section only covers using locks with the Hardware State Manager (HSM). For more information on ignoring nodes, refer to the following sections:&#xA;Firmware Action Service (FAS): See Ignore Node within FAS.</description>
+    </item>
+    <item>
+      <title>Manage Component Groups</title>
+      <link>/docs-csm/en-13/operations/hardware_state_manager/manage_component_groups/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:23 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/hardware_state_manager/manage_component_groups/</guid>
+      <description>Manage Component Groups The creation, deletion, and modification of groups is enabled by the Hardware State Manager (HSM) APIs.&#xA;Example group Prerequisites Create and modify a group Create a group Modify a group Retrieve a group Delete a group Example group The following is an example group that contains the optional fields tags and exclusiveGroup:&#xA;{ &amp;#34;label&amp;#34; : &amp;#34;blue&amp;#34;, &amp;#34;description&amp;#34; : &amp;#34;blue node group&amp;#34;, &amp;#34;tags&amp;#34; : [ &amp;#34;tag1&amp;#34;, &amp;#34;tag2&amp;#34; ], &amp;#34;members&amp;#34; : { &amp;#34;ids&amp;#34; : [ &amp;#34;x0c0s0b0n0&amp;#34;, &amp;#34;x0c0s0b0n1&amp;#34;, &amp;#34;x0c0s0b1n0&amp;#34;, &amp;#34;x0c0s0b1n1&amp;#34; ] }, &amp;#34;exclusiveGroup&amp;#34; : &amp;#34;colors&amp;#34; } Prerequisites The commands on this page will not work unless the Cray CLI has been initialized on the node where the commands are being run.</description>
+    </item>
+    <item>
+      <title>Manage Component Partitions</title>
+      <link>/docs-csm/en-13/operations/hardware_state_manager/manage_component_partitions/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/hardware_state_manager/manage_component_partitions/</guid>
+      <description>Manage Component Partitions The creation, deletion, and modification of partitions is enabled by the Hardware State Manager (HSM) APIs.&#xA;The following is an example partition that contains the optional tags field:&#xA;{ &amp;#34;name&amp;#34; : &amp;#34;partition 1&amp;#34;, &amp;#34;description&amp;#34; : &amp;#34;partition 1&amp;#34;, &amp;#34;tags&amp;#34; : [ &amp;#34;tag2&amp;#34; ], &amp;#34;members&amp;#34; : { &amp;#34;ids&amp;#34; : [ &amp;#34;x0c0s0b0n0&amp;#34;, &amp;#34;x0c0s0b0n1&amp;#34;, &amp;#34;x0c0s0b1n0&amp;#34; ] }, } Troubleshooting: If the Cray CLI has not been initialized, the CLI commands will not work.</description>
+    </item>
+    <item>
+      <title>Manage HMS Locks</title>
+      <link>/docs-csm/en-13/operations/hardware_state_manager/manage_hms_locks/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/hardware_state_manager/manage_hms_locks/</guid>
+      <description>Manage HMS Locks This section describes how to check the status of a lock, disable reservations, and repair reservations. The disable and repair operations only affect the ability to make reservations on hardware devices.&#xA;Some of the common scenarios an admin might encounter when working with the Hardware State Manager (HSM) Locking API are also described.&#xA;Check Lock Status Use the following command to verify if a component name (xname) is locked or not.</description>
+    </item>
+    <item>
+      <title>Restore Hardware State Manager (HSM) Postgres Database from Backup</title>
+      <link>/docs-csm/en-13/operations/hardware_state_manager/restore_hsm_postgres_from_backup/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/hardware_state_manager/restore_hsm_postgres_from_backup/</guid>
+      <description>Restore Hardware State Manager (HSM) Postgres Database from Backup This procedure can be used to restore the HSM Postgres database from a previously taken backup. This can be a manual backup created by the Create a Backup of the HSM Postgres Database procedure, or an automatic backup created by the cray-smd-postgresql-db-backup Kubernetes cronjob.&#xA;Prerequisites Healthy System Layout Service (SLS). Recovered first if also affected.&#xA;(ncn#) Healthy HSM Postgres Cluster.&#xA;Use patronictl list on the HSM Postgres cluster to determine the current state of the cluster, and a healthy cluster will look similar to the following:</description>
+    </item>
+    <item>
+      <title>Restore Hardware State Manager (HSM) Postgres without an Existing Backup</title>
+      <link>/docs-csm/en-13/operations/hardware_state_manager/restore_hsm_postgres_without_a_backup/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/hardware_state_manager/restore_hsm_postgres_without_a_backup/</guid>
+      <description>Restore Hardware State Manager (HSM) Postgres without an Existing Backup This procedure is intended to repopulate HSM in the event when no Postgres backup exists.&#xA;Prerequisite Healthy System Layout Service (SLS). Recovered first if also affected.&#xA;Healthy HSM service.&#xA;Verify all 3 HSM Postgres replicas are up and running:&#xA;kubectl -n services get pods -l cluster-name=cray-smd-postgres Example output:&#xA;NAME READY STATUS RESTARTS AGE cray-smd-postgres-0 3/3 Running 0 18d cray-smd-postgres-1 3/3 Running 0 18d cray-smd-postgres-2 3/3 Running 0 18d Procedure Re-run the HSM loader job.</description>
+    </item>
+    <item>
+      <title>Set BMC Management Roles</title>
+      <link>/docs-csm/en-13/operations/hardware_state_manager/set_bmc_management_role/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:24 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/hardware_state_manager/set_bmc_management_role/</guid>
+      <description>Set BMC Management Roles The ability to ignore non-compute nodes (NCNs) is turned off by default. Management nodes and NCNs are also not locked by default. The administrator must lock the NCNs and their BMCs to prevent unwanted actions from affecting these nodes. To more easily identify the BMCs that are associated with the management nodes, they need to be marked with the Management role in the Hardware State Manager (HSM), just like their associated nodes.</description>
+    </item>
+  </channel>
+</rss>

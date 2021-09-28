@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CSM 1.5.2 Patch Installation Instructions on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-15/upgrade/1.5.2/</link>
+    <description>Recent content in CSM 1.5.2 Patch Installation Instructions on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-15</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:39:16 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-15/upgrade/1.5.2/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CSM Only Upgrade</title>
+      <link>/docs-csm/en-15/upgrade/1.5.2/csm-only/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:16 +0000</pubDate>
+      <guid>/docs-csm/en-15/upgrade/1.5.2/csm-only/</guid>
+      <description>CSM Only Upgrade Requirements Steps This page provides guidance for systems with exclusively CSM installed that are performing an upgrade from a CSM v1.5.X release to the CSM v1.5.2 release.&#xA;The v1.5.2 upgrade page will refer to this page during Update NCN images.&#xA;If other products are installed on the system, return to Update NCN images and choose option 1.&#xA;Requirements CSM_RELEASE_VERSION is set in the shell environment on ncn-m001. See Preparation for details on how it should be set.</description>
+    </item>
+    <item>
+      <title>CSM Only Upgrade on a System with Other Products</title>
+      <link>/docs-csm/en-15/upgrade/1.5.2/csm-with-other-products/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:16 +0000</pubDate>
+      <guid>/docs-csm/en-15/upgrade/1.5.2/csm-with-other-products/</guid>
+      <description>CSM Only Upgrade on a System with Other Products Requirements Overview Steps Using sat bootprep with IUF generated input files Return to CSM 1.5.2 patch This page provides guidance for systems with products installed that are performing an upgrade from a CSM v1.5.X release to the CSM v1.5.2 release.&#xA;The v1.5.2 upgrade page will refer to this page during Update NCN images.&#xA;If exclusively CSM is installed on the system, return to Update NCN images and choose option 2.</description>
+    </item>
+    <item>
+      <title>Upgrade NCNs during CSM 1.5.2 Patch</title>
+      <link>/docs-csm/en-15/upgrade/1.5.2/upgrade_ncn_images/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:16 +0000</pubDate>
+      <guid>/docs-csm/en-15/upgrade/1.5.2/upgrade_ncn_images/</guid>
+      <description>Upgrade NCNs during CSM 1.5.2 Patch Overview Steps Return to CSM 1.5.2 patch This page provides guidance for systems that are performing an upgrade from a CSM v1.5.X release to the CSM v1.5.2 release.&#xA;The v1.5.2 upgrade page will refer to this page during NCN Upgrade.&#xA;Overview The following steps upgrade NCNs into the node images created during the Update NCN images step of the patch procedure. The node upgrades will not change the state of the node.</description>
+    </item>
+  </channel>
+</rss>

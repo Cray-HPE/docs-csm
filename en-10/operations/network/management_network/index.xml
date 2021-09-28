@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>management network on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-10/operations/network/management_network/</link>
+    <description>Recent content in management network on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-10</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:27 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-10/operations/network/management_network/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Management Network ACL Configuration</title>
+      <link>/docs-csm/en-10/operations/network/management_network/management_network_acl_configuration/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/management_network/management_network_acl_configuration/</guid>
+      <description>Management Network ACL Configuration This page describes the purpose of the ACLs and how they are configured.&#xA;Requirements Access to the switches Aruba Configuration These ACLs are designed to block traffic from the Node Management Network (NMN) to and from the Hardware Management Network (HMN).&#xA;These need to be set where the Layer3 interface is located, this will most likely be a VSX pair of switches. These ACLs are required on both switches in the pair.</description>
+    </item>
+    <item>
+      <title>Management Network Access Port Configurations</title>
+      <link>/docs-csm/en-10/operations/network/management_network/management_network_access_port_configurations/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/management_network/management_network_access_port_configurations/</guid>
+      <description>Management Network Access Port Configurations Requirements Access to switches SHCD Configuration This configuration describes the edge port configuration. This configuration is in the NMN/HMN/Mountain-TDS Management Tab of the SHCD.&#xA;Typically, these are ports that are connected to iLOs (BMCs), gateway nodes, or compute nodes/CMM switches.&#xA;sw-leaf-001(config)# interface 1/1/35 no shutdown no routing vlan access 4 spanning-tree bpdu-guard spanning-tree port-type admin-edge This configuration describes the ports that go to the Node Management Network (NMN/VLAN2).</description>
+    </item>
+    <item>
+      <title>Management Network CAN Setup</title>
+      <link>/docs-csm/en-10/operations/network/management_network/management_network_can_setup/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/management_network/management_network_can_setup/</guid>
+      <description>Management Network CAN Setup Access from the customer site to the system over shared networks is known as the Customer Access Network (CAN).&#xA;Requirements Access to switches SHCD Configuration The CAN configuration is highly dependent on customer requirements and may not meet the specifications below.&#xA;To access the HPE Cray EX nodes and services from the customer network, there is minimal configuration needed on the spine switch and the customer switch connected upstream from the spine switch to allow the customer_access_network subnet to be routed to the HPE Cray EX system.</description>
+    </item>
+    <item>
+      <title>Management Network Flow Control Settings</title>
+      <link>/docs-csm/en-10/operations/network/management_network/management_network_flow_control_settings/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/management_network/management_network_flow_control_settings/</guid>
+      <description>Management Network Flow Control Settings This page is designed to go over all the flow control settings for Dell/Mellanox systems.&#xA;Leaf Switch Node Connections For the node connections to a leaf switch, disable the transmit flowcontrol and enable receive flowcontrol with the following commands:&#xA;NOTE: If using a TDS system involving a Hill cabinet, make sure to confirm that no CMM nor CEC components are connected to any leaf switches in your system.</description>
+    </item>
+    <item>
+      <title>Management Network Switch Rename</title>
+      <link>/docs-csm/en-10/operations/network/management_network/management_network_switch_rename/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/management_network/management_network_switch_rename/</guid>
+      <description>Management Network Switch Rename Any system moving from Shasta v1.3 to Shasta v1.4 software needs to adjust the hostnames and IP addresses for all switches to match the new standard. There is now a virtual IP address ending in .1 which is used by spine switches. In Shasta v1.3, the first spine switch used the .1 address. In Shasta v1.4, the ordering of the switches has changed with spine switches being grouped first.</description>
+    </item>
+    <item>
+      <title>Update Management Network Firmware</title>
+      <link>/docs-csm/en-10/operations/network/management_network/update_management_network_firmware/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:27 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/management_network/update_management_network_firmware/</guid>
+      <description>Update Management Network Firmware This page describes how to update firmware on the management network switches.&#xA;Requirements Access to the switches from the LiveCD/ncn-m001.&#xA;Configuration All firmware can be found in the HFP package provided with the Shasta release.&#xA;Switch Firmware Vendor Model Version Aruba 6300 ArubaOS-CX_6400-6300_10.06.0010 Aruba 8320 ArubaOS-CX_8320_10.06.0010 or ArubaOS-CX_8320_10.06.0110 Aruba 8325 ArubaOS-CX_8325_10.06.0010 Aruba 8360 ArubaOS-CX_8360_10.06.0010 or ArubaOS-CX_8360_10.06.0110 Dell S3048-ON 10.5.1.4 Dell S4148F-ON 10.5.1.4 Dell S4148T-ON 10.5.1.4 Mellanox MSN2100 3.</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Power Control Service on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-14/operations/power_management/power_control_service/</link>
+    <description>Recent content in Power Control Service on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-14</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:39:00 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-14/operations/power_management/power_control_service/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Node Card Power Management</title>
+      <link>/docs-csm/en-14/operations/power_management/power_control_service/node_card_power_management/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:00 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/power_management/power_control_service/node_card_power_management/</guid>
+      <description>Node Card Power Management Node power management is supported by the server vendor BMC firmware. The BMC exposes the power control API for a node through the node&amp;rsquo;s Redfish Power schema.&#xA;Out-of-band power management data is polled by a collector and published on a Kafka bus for entry into the Power Management Database (PMDB). Access to the data stored in the PMDB is available through the System Monitoring Application (SMA) Grafana instance.</description>
+    </item>
+    <item>
+      <title>Power Control Service (PCS)</title>
+      <link>/docs-csm/en-14/operations/power_management/power_control_service/power_control_service_pcs/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:00 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/power_management/power_control_service/power_control_service_pcs/</guid>
+      <description>Power Control Service (PCS) The Power Control Service (PCS) enables direct hardware control of nodes, compute blades, router modules, liquid cooled chassis, and management network switches. PCS talks to BMCs via Redfish to control power, query status, and manage power capping on target components. These controls enable an administrator and 3rd party software to more intelligently manage state and system-wide power consumption.&#xA;Administrators can use the cray CLI for power operations from any system that has HTTPS access to the System Management Services.</description>
+    </item>
+    <item>
+      <title>Power Off Compute Cabinets</title>
+      <link>/docs-csm/en-14/operations/power_management/power_control_service/power_off_compute_cabinets/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:00 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/power_management/power_control_service/power_off_compute_cabinets/</guid>
+      <description>Power Off Compute Cabinets Power off HPE Cray EX liquid-cooled and standard racks.&#xA;Cabinet/rack types Liquid-cooled cabinets HPE Cray EX liquid-cooled cabinet CDU and PDU circuit breakers are controlled manually.&#xA;When the PDU breakers are switched to OFF, the Chassis Management Modules (CMMs) and Cabinet Environmental Controllers (CECs) are also powered off.&#xA;Warning: The cabinet 480VAC power bus bars remain energized. Facility power must be disconnected to completely remove power from the cabinet.</description>
+    </item>
+    <item>
+      <title>Power On Compute Cabinets</title>
+      <link>/docs-csm/en-14/operations/power_management/power_control_service/power_on_compute_cabinets/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:00 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/power_management/power_control_service/power_on_compute_cabinets/</guid>
+      <description>Power On Compute Cabinets Power on liquid-cooled and standard rack cabinet PDUs.&#xA;Liquid-cooled Cabinets - HPE Cray EX liquid-cooled cabinet CDU and PDU circuit breakers are controlled manually.&#xA;After the CDU is switched on and healthy, the liquid-cooled PDU circuit breakers can be switched ON. With PDU breakers ON, the Chassis Management Modules (CMM) and Cabinet Environmental Controllers (CEC) power on and boot. These devices can then communicate with the management cluster and larger system management network.</description>
+    </item>
+    <item>
+      <title>Recover from a Liquid Cooled Cabinet EPO Event</title>
+      <link>/docs-csm/en-14/operations/power_management/power_control_service/recover_from_a_liquid_cooled_cabinet_epo_event/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:00 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/power_management/power_control_service/recover_from_a_liquid_cooled_cabinet_epo_event/</guid>
+      <description>Recover from a Liquid Cooled Cabinet EPO Event Identify an emergency power off (EPO) has occurred and restore cabinets to a healthy state.&#xA;CAUTION: Verify the reason why the EPO occurred and resolve that problem before clearing the EPO state.&#xA;If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, the compute nodes may not boot. Use PCS to force off all the chassis affected by the EPO event.</description>
+    </item>
+  </channel>
+</rss>

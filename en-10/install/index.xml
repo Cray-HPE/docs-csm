@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Install CSM on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-10/install/</link>
+    <description>Recent content in Install CSM on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-10</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:07 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-10/install/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Set Gigabyte Node BMC to Factory Defaults</title>
+      <link>/docs-csm/en-10/install/set_gigabyte_node_bmc_to_factory_defaults/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/set_gigabyte_node_bmc_to_factory_defaults/</guid>
+      <description>Set Gigabyte Node BMC to Factory Defaults There are cases when a Gigabyte node BMC must be reset to its factory default settings. This page describes when this reset is appropriate, and how to use management scripts and text files to do the reset.&#xA;Set the BMC to the factory default settings in the following cases:&#xA;There are problems using the ipmitool command and Redfish does not respond. There are problems using the ipmitool command and Redfish is running.</description>
+    </item>
+    <item>
+      <title>Hotfix to workaround known mac-learning issue with 8325</title>
+      <link>/docs-csm/en-10/install/8325_mac_learning_hotfix/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:03 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/8325_mac_learning_hotfix/</guid>
+      <description>Hotfix to workaround known mac-learning issue with 8325 Issue description Aruba CR: 90598&#xA;Affected platform: 8325&#xA;Symptom: MAC learning stops.&#xA;Scenario: Under extremely rare DMA stress conditions, anL2 learning thread may timeout and exit preventing future MAC learning.&#xA;Workaround: Reboot the switch or monitor the L2 thread and restart it with an NAE script.&#xA;Fixed in: 10.06.0130, 10.7.0010 and above.&#xA;Aruba release notes&#xA;To fix the issue without upgrading software You can run a NAE script on the 8325 platform switches to resolve mac learning issue.</description>
+    </item>
+    <item>
+      <title>SHCD HMN Tab/HMN Connections Rules</title>
+      <link>/docs-csm/en-10/install/shcd_hmn_connections_rules/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/shcd_hmn_connections_rules/</guid>
+      <description>SHCD HMN Tab/HMN Connections Rules Introduction Compute node Dense four node chassis - Gigabyte or Intel chassis Single node chassis - Apollo 6500 XL675D Dual node chassis - Apollo 6500 XL645D Chassis Management Controller (CMC) Management node Master Worker Storage Application node Single node chassis Building component names (xnames) for nodes in a single application node chassis Dual node chassis Building component names (xnames) for nodes in a dual application node chassis Columbia Slingshot switch PDU cabinet controller Cooling door Management switches Introduction The HMN tab of the SHCD describes the air-cooled hardware present in the system and how these devices are connected to the Hardware Management Network (HMN).</description>
+    </item>
+    <item>
+      <title>Aruba SNMP Known Issue</title>
+      <link>/docs-csm/en-10/install/aruba_snmp_known_issue_10_06_0010/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:03 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/aruba_snmp_known_issue_10_06_0010/</guid>
+      <description>Aruba SNMP Known Issue Affected Devices 8320/8325/8360 Aruba CX&#xA;Aruba Defect CR 153440&#xA;Aruba Public Documentation/Images Aruba support portal:&#xA;https://asp.arubanetworks.com/&#xA;Aruba 8325 release notes 10.06.0120:&#xA;https://www.arubanetworks.com/techdocs/AOS-CX/10.06/RN/5200-8179.pdf&#xA;Aruba 8360 release notes 10.06.0120:&#xA;https://www.arubanetworks.com/techdocs/AOS-CX/10.06/RN/5200-8180.pdf&#xA;Where the Issue May Occur During Install During initial network discovery of Nodes, SNMP may not accurately report MAC-address from Aruba Leaf/Spine switches. This will lead to a situation where not all connected devices are discovered as expected. Further troubleshooting would show that the SNMP walk output would not match &amp;lsquo;show mac-address-table&amp;rsquo; command output from the switch.</description>
+    </item>
+    <item>
+      <title>Switch PXE Boot from Onboard NIC to PCIe</title>
+      <link>/docs-csm/en-10/install/switch_pxe_boot_from_onboard_nic_to_pcie/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:07 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/switch_pxe_boot_from_onboard_nic_to_pcie/</guid>
+      <description>Switch PXE Boot from Onboard NIC to PCIe This section details how to migrate NCNs from using their onboard NICs for PXE booting to booting over the PCIe cards.&#xA;Switch PXE Boot from Onboard NIC to PCIe Enabling UEFI PXE Mode Mellanox Print Current UEFI and SR-IOV State Setting Expected Values High-Speed Network Obtaining Mellanox Tools QLogic FastLinq Kernel Modules Disabling or Removing On-Board Connections This applies to Newer systems (Spring 2020 or newer) where onboard NICs are still used.</description>
+    </item>
+    <item>
+      <title>Boot LiveCD Virtual ISO</title>
+      <link>/docs-csm/en-10/install/boot_livecd_virtual_iso/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:03 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/boot_livecd_virtual_iso/</guid>
+      <description>Boot LiveCD Virtual ISO This page will walk-through booting the LiveCD .iso file directly onto a BMC.&#xA;Topics: Boot LiveCD Virtual ISO Topics: Details Prerequisites BMCs&amp;rsquo; Virtual Mounts HPE iLO BMCs Gigabyte BMCs Configure Backing up the Overlay COW FS Restoring from an Overlay COW FS Backup Details Prerequisites A Cray Pre-Install Toolkit ISO is required for this process. This ISO can be obtained from:&#xA;The Cray Pre-Install Toolkit ISO included in a CSM release tar file.</description>
+    </item>
+    <item>
+      <title>Troubleshooting Installation Problems</title>
+      <link>/docs-csm/en-10/install/troubleshooting_installation/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:07 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/troubleshooting_installation/</guid>
+      <description>Troubleshooting Installation Problems The installation of the Cray System Management (CSM) product requires knowledge of the various nodes and switches for the HPE Cray EX system. The procedures in this section should be referenced during the CSM install for additional information on system hardware, troubleshooting, and administrative tasks related to CSM.&#xA;Topics: Reset root Password on LiveCD Reinstall LiveCD PXE Boot Troubleshooting Wipe NCN Disks for Reinstallation Restart Network Services and Interfaces on NCNs Utility Storage Node Installation Troubleshooting Ceph CSI Troubleshooting Safeguards for CSM NCN Upgrades Details Reset root Password on LiveCD</description>
+    </item>
+    <item>
+      <title>Bootstrap PIT Node from LiveCD Remote ISO</title>
+      <link>/docs-csm/en-10/install/bootstrap_livecd_remote_iso/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:03 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/bootstrap_livecd_remote_iso/</guid>
+      <description>Bootstrap PIT Node from LiveCD Remote ISO The Pre-Install Toolkit (PIT) node needs to be bootstrapped from the LiveCD. There are two media available to bootstrap the PIT node&amp;ndash;the RemoteISO or a bootable USB device. This procedure describes using the RemoteISO. If not using the RemoteISO, see Bootstrap PIT Node from LiveCD USB&#xA;The installation process is similar to the USB based installation with adjustments to account for the lack of removable storage.</description>
+    </item>
+    <item>
+      <title>Utility Storage Installation Troubleshooting</title>
+      <link>/docs-csm/en-10/install/utility_storage_node_installation_troubleshooting/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:07 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/utility_storage_node_installation_troubleshooting/</guid>
+      <description>Utility Storage Installation Troubleshooting If there is a failure in the creation of Ceph storage on the utility storage nodes for one of these scenarios, the Ceph storage might need to be reinitialized.&#xA;Topics Scenario 1 (Shasta v1.4 only) Scenario 2 (Shasta v1.5 only) Details Scenario 1 (Shasta 1.4 only) IMPORTANT (FOR NODE INSTALLS/REINSTALLS ONLY): If the Ceph install failed, check the following:&#xA;ncn-s# ceph osd tree ID CLASS WEIGHT TYPE NAME STATUS REWEIGHT PRI-AFF -1 83.</description>
+    </item>
+    <item>
+      <title>Bootstrap PIT Node from LiveCD USB</title>
+      <link>/docs-csm/en-10/install/bootstrap_livecd_usb/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:04 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/bootstrap_livecd_usb/</guid>
+      <description>Bootstrap PIT Node from LiveCD USB The Pre-Install Toolkit (PIT) node needs to be bootstrapped from the LiveCD. There are two media available to bootstrap the PIT node: the RemoteISO or a bootable USB device. This procedure describes using the USB device. If not using the USB device, see Bootstrap Pit Node from LiveCD Remote ISO.&#xA;There are 5 overall steps that provide a bootable USB with SSH enabled, capable of installing Shasta v1.</description>
+    </item>
+    <item>
+      <title>Validate Management Network Cabling</title>
+      <link>/docs-csm/en-10/install/validate_management_network_cabling/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:07 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/validate_management_network_cabling/</guid>
+      <description>Validate Management Network Cabling This page is designed to be a guide on how all nodes in a Shasta system are wired to the management network.&#xA;The Shasta Cabling Diagram (SHCD) for this system describes how the cables connect the nodes to the management network switches and the connections between the different types of management network switches. Having SHCD data which matches how the physical system is cabled will be needed later when preparing the hmn_connections.</description>
+    </item>
+    <item>
+      <title>Cable Management Network Servers</title>
+      <link>/docs-csm/en-10/install/cable_management_network_servers/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:04 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/cable_management_network_servers/</guid>
+      <description>Cable Management Network Servers This topic describes nodes in the air-cooled cabinet with diagrams and pictures showing where to find the ports on the nodes and how to cable the nodes to the management network switches.&#xA;HPE Hardware HPE DL385 HPE DL325 HPE Worker Node Cabling HPE Master Node Cabling HPE Storage Node Cabling HPE UAN Cabling HPE Apollo 6500 XL645D HPE Apollo 6500 XL675D Gigabyte/Intel Hardware Worker Node Cabling Master Node Cabling Storage Node Cabling UAN Cabling HPE Hardware HPE DL385 The OCP Slot is noted (number 7) in the image above.</description>
+    </item>
+    <item>
+      <title>Wipe NCN Disks for Reinstallation</title>
+      <link>/docs-csm/en-10/install/wipe_ncn_disks_for_reinstallation/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:07 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/wipe_ncn_disks_for_reinstallation/</guid>
+      <description>Wipe NCN Disks for Reinstallation This page details how to wipe NCN disks.&#xA;Everything in this section should be considered DESTRUCTIVE.&#xA;After following these procedures, an NCN can be rebooted and redeployed.&#xA;All types of disk wipe can be run from Linux or from an initramFS/initrd emergency shell.&#xA;The following are potential use cases for wiping disks:&#xA;Adding a node that is not bare. Adopting new disks that are not bare.</description>
+    </item>
+    <item>
+      <title>Ceph CSI Troubleshooting</title>
+      <link>/docs-csm/en-10/install/ceph_csi_troubleshooting/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:04 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/ceph_csi_troubleshooting/</guid>
+      <description>Ceph CSI Troubleshooting If there has been a failure to initialize all Ceph CSI components on ncn-s001, then the storage node cloud-init may need to be rerun.&#xA;Topics: Verify Ceph CSI Rerun Storage Node cloud-init Details 1. Verify Ceph CSI Verify that the ceph-csi requirements are in place&#xA;Log in to ncn-s00 and run this command&#xA;ncn-s001# ceph -s If it returns a connection error then assume Ceph is not installed.</description>
+    </item>
+    <item>
+      <title>Clear Gigabyte CMOS</title>
+      <link>/docs-csm/en-10/install/clear_gigabyte_cmos/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:04 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/clear_gigabyte_cmos/</guid>
+      <description>Clear Gigabyte CMOS Because of a bug in the Gigabyte firmware, the Shasta 1.5 install may negatively impact Gigabyte motherboards when attempting to boot using bonded Mellanox network cards. The result is a board that is unusable until a CMOS clear is physically done via a jumper on the board itself.&#xA;A patched firmware release (newer than C20 BIOS) is expected to be available for a future release of Shasta. It is recommended that Gigabyte users wait for this new firmware before attempting an installation of Shasta 1.</description>
+    </item>
+    <item>
+      <title>Collect MAC Addresses for NCNs</title>
+      <link>/docs-csm/en-10/install/collect_mac_addresses_for_ncns/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:04 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/collect_mac_addresses_for_ncns/</guid>
+      <description>Collect MAC Addresses for NCNs Now that the PIT node has been booted with the LiveCD and the management network switches have been configured, the actual MAC address for the management nodes can be collected. This process will include repetition of some of the steps done up to this point because csi config init will need to be run with the proper MAC addresses and some services will need to be restarted.</description>
+    </item>
+    <item>
+      <title>Collecting the BMC MAC Addresses</title>
+      <link>/docs-csm/en-10/install/collecting_bmc_mac_addresses/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:04 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/collecting_bmc_mac_addresses/</guid>
+      <description>Collecting the BMC MAC Addresses This guide will detail how to collect BMC MAC addresses from an HPE Cray EX system with configured switches. The BMC MAC address is the exclusive, dedicated LAN for the onboard BMC.&#xA;Results may vary if an unconfigured switch is being used.&#xA;Prerequisites There is a configured switch with SSH access or unconfigured with COM access (Serial Over LAN/DB-9). A file is available to record the collected BMC information.</description>
+    </item>
+    <item>
+      <title>Collecting NCN MAC Addresses</title>
+      <link>/docs-csm/en-10/install/collecting_ncn_mac_addresses/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:04 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/collecting_ncn_mac_addresses/</guid>
+      <description>Collecting NCN MAC Addresses This procedure details how to collect the NCN MAC addresses from an HPE Cray EX system. The MAC addresses needed for the Bootstrap MAC, Bond0 MAC0, and Bond0 MAC1 columns in ncn_metadata.csv will be collected. This data will feed into the cloud-init metadata.&#xA;The Bootstrap MAC address will be used for identification of this node during the early part of the PXE boot process, before the bonded interface can be established.</description>
+    </item>
+    <item>
+      <title>Configure Administrative Access</title>
+      <link>/docs-csm/en-10/install/configure_administrative_access/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:04 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/configure_administrative_access/</guid>
+      <description>Configure Administrative Access There are several operations which configure administrative access to different parts of the system. Ensuring that the cray CLI can be used with administrative credentials enables use of many management services via commands. The management nodes can be locked from accidental manipulation by the cray capmc and cray fas commands when the intent is to work on the entire system except the management nodes. The cray scsd command can change the SSH keys, NTP server, syslog server, and BMC/controller passwords.</description>
+    </item>
+    <item>
+      <title>Configure Aruba Aggregation Switch</title>
+      <link>/docs-csm/en-10/install/configure_aruba_aggregation_switch/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:04 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/configure_aruba_aggregation_switch/</guid>
+      <description>Configure Aruba Aggregation Switch This page describes how Aruba aggregation switches are configured.&#xA;Management nodes and Application nodes will be plugged into aggregation switches.&#xA;Switch models used: JL635A Aruba 8325-48Y8C&#xA;They run in a high availability pair and use VSX to provide redundancy.&#xA;Prerequisites Three connections between the switches, two of these are used for the Inter switch link (ISL), and one used for the keepalive.&#xA;The ISL uses 100GB ports and the keepalive will be a 25 GB port.</description>
+    </item>
+    <item>
+      <title>Configure Aruba CDU Switch</title>
+      <link>/docs-csm/en-10/install/configure_aruba_cdu_switch/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:04 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/configure_aruba_cdu_switch/</guid>
+      <description>Configure Aruba CDU Switch This page describes how Aruba CDU switches are configured.&#xA;CDU switches are located in liquid-cooled cabinets and provide connectivity to MTN (Mountain) components. CDU switches act as leaf switches in the architecture. Aruba JL720A 8360-48XT4 is the model used. They run in a high availability pair and use VSX to provide redundancy.&#xA;Prerequisites There are two uplinks from each CDU switch to the upstream switch. This is normally a spine switch.</description>
+    </item>
+    <item>
+      <title>Configure Aruba Leaf Switch</title>
+      <link>/docs-csm/en-10/install/configure_aruba_leaf_switch/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:04 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/configure_aruba_leaf_switch/</guid>
+      <description>Configure Aruba Leaf Switch This page describes how Aruba leaf switches are configured.&#xA;Leaf switches are located in air-cooled cabinets and provide connectivity to components in those cabinets. Aruba JL762A 6300M 48G 4SFP56 is the model used.&#xA;Prerequisites Connectivity to the switch is established. The Configure Aruba Management Network Base procedure has been run. There are two uplinks from the switch to the upstream switch; this is can be an aggregation switch or a spine switch.</description>
+    </item>
+    <item>
+      <title>Configure Aruba Management Network Base</title>
+      <link>/docs-csm/en-10/install/configure_aruba_management_network_base/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:04 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/configure_aruba_management_network_base/</guid>
+      <description>Configure Aruba Management Network Base This page provides instructions on how to setup the base network configuration of the Shasta Management network.&#xA;After applying the base configuration, all management switches will be accessible to apply the remaining configuration.&#xA;Prerequisites Console access to all of the switches SHCD available Configuration The base configuration can be applied once console access to the switches has been established. The purpose of this configuration is to have an IPv6 underlay that provides access to the management switches.</description>
+    </item>
+    <item>
+      <title>Configure Aruba Spine Switch</title>
+      <link>/docs-csm/en-10/install/configure_aruba_spine_switch/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:04 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/configure_aruba_spine_switch/</guid>
+      <description>Configure Aruba Spine Switch This page describes how Aruba spine switches are configured.&#xA;Depending on the size of the HPE Cray EX system, the spine switches will serve different purposes. On TDS systems, the NCNs will plug directly into the spine switches. On larger systems with aggregation switches, the spine switches will provide connection between the aggregation switches.&#xA;Switch models used: JL635A Aruba 8325-48Y8C and JL636A Aruba 8325-32C&#xA;They run in a high availability pair and use VSX to provide redundancy.</description>
+    </item>
+    <item>
+      <title>Configure Dell Aggregation Switch</title>
+      <link>/docs-csm/en-10/install/configure_dell_aggregation_switch/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:04 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/configure_dell_aggregation_switch/</guid>
+      <description>Configure Dell Aggregation Switch This page describes how Dell aggregation switches are configured.&#xA;Management nodes and Application nodes will be plugged into aggregation switches.&#xA;They run in a high availability pair and use VLT to provide redundancy.&#xA;Prerequisites Three connections between the switches, two of these are used for the Inter switch link (ISL), and one used for the keepalive.&#xA;Connectivity to the switch is established.&#xA;The ISL uses 100GB ports and the keepalive will be a 25 GB port.</description>
+    </item>
+    <item>
+      <title>Configure Dell CDU switch</title>
+      <link>/docs-csm/en-10/install/configure_dell_cdu_switch/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:05 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/configure_dell_cdu_switch/</guid>
+      <description>Configure Dell CDU switch This page describes how Dell CDU switches are configured.&#xA;CDU switches are located in liquid-cooled cabinets and provide connectivity to MTN (Mountain) components. CDU switches act as leaf switches in the architecture. They run in a high availability pair and use VLT to provide redundancy.&#xA;Prerequisites Two uplinks from each CDU switch to the upstream switch, this is normally a spine switch. Connectivity to the switch is established.</description>
+    </item>
+    <item>
+      <title>Configure Dell Leaf Switch</title>
+      <link>/docs-csm/en-10/install/configure_dell_leaf_switch/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:05 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/configure_dell_leaf_switch/</guid>
+      <description>Configure Dell Leaf Switch This page describes how Dell leaf switches are configured.&#xA;Leaf switches are located in air-cooled cabinets and provide connectivity to components in those cabinets.&#xA;Prerequisites Connectivity to the switch is established. There are two uplinks from the switch to the upstream switch; this is can be an aggregation switch or a spine switch. Here are example snippets from a leaf switch in the SHCD.&#xA;Source Source Label Info Destination Label Info Destination Description sw-smn01 x3000u40-j49 x3105u38-j47 sw-25g01 25g-15m-LC-LC sw-smn01 x3000u40-j50 x3105u39-j47 sw-25g02 25g-15m-LC-LC The uplinks are port 49 and 50 on the leaf.</description>
+    </item>
+    <item>
+      <title>Configure Management Network Switches</title>
+      <link>/docs-csm/en-10/install/configure_management_network/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:05 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/configure_management_network/</guid>
+      <description>Configure Management Network Switches HPE Cray EX systems can have network switches in many roles: spine switches, leaf switches, aggregation switches, and CDU switches. Newer systems have HPE Aruba switches, while older systems have Dell and Mellanox switches. Switch IP addresses are generated by Cray Site Init (CSI).&#xA;The configuration steps are different for these switch vendors. The switch configuration procedures for HPE Aruba will be grouped separately from the switch configuration procedures for other vendors.</description>
+    </item>
+    <item>
+      <title>Configure Mellanox Spine Switch</title>
+      <link>/docs-csm/en-10/install/configure_mellanox_spine_switch/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:05 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/configure_mellanox_spine_switch/</guid>
+      <description>Configure Mellanox Spine Switch This page describes how Mellanox spine switches are configured.&#xA;Depending on the size of the HPE Cray EX system, the spine switches will serve different purposes. On TDS systems, the NCNs will plug directly into the spine switches. On larger systems with aggregation switches, the spine switches will provide connection between the aggregation switches.&#xA;Prerequisites One connection between the switches is used for the Inter switch link (ISL).</description>
+    </item>
+    <item>
+      <title>Connect to Switch over USB-Serial Cable</title>
+      <link>/docs-csm/en-10/install/connect_to_switch_over_usb_serial_cable/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:05 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/connect_to_switch_over_usb_serial_cable/</guid>
+      <description>Connect to Switch over USB-Serial Cable In the event that network plumbing is lacking, down, or unconfigured for procuring devices, then it is recommended to use the Serial/COM ports on the spine and leaf switches.&#xA;This guide will instruct the user on procuring MAC addresses for the NCNs metadata files with the serial console.&#xA;Mileage may vary, as some obstacles such as BAUDRATE and terminal usage vary per manufacturer.&#xA;Common Manufacturers Refer to the external support/documentation portals for more information:</description>
+    </item>
+    <item>
+      <title>Create Application Node Config YAML</title>
+      <link>/docs-csm/en-10/install/create_application_node_config_yaml/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:05 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/create_application_node_config_yaml/</guid>
+      <description>Create Application Node Config YAML This topic provides directions on constructing the application_node_config.yaml file. This file controls how the csi config init command finds and treats application nodes discovered in the hmn_connections.json file when generating configuration files for the system.&#xA;Prerequisites Background Directions Prerequisites The application_node_config.yaml file can be constructed from information from one of the following sources:&#xA;The SHCD Excel spreadsheet for the system The hmn_connections.json file generated from the system&amp;rsquo;s SHCD Background SHCD and hmn_connections.</description>
+    </item>
+    <item>
+      <title>Create Cabinets YAML</title>
+      <link>/docs-csm/en-10/install/create_cabinets_yaml/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:05 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/create_cabinets_yaml/</guid>
+      <description>Create Cabinets YAML This page provides directions on constructing the cabinets.yaml file. This file lists cabinet IDs for any systems with non-contiguous cabinet ID numbers, as well as VLAN overrides, and controls how the csi config init command treats cabinet IDs.&#xA;The following example file is manually created and follows this format. Each &amp;ldquo;type&amp;rdquo; of cabinet can have several fields: total_number of cabinets of this type, starting_id for this cabinet type, and a list of the IDs.</description>
+    </item>
+    <item>
+      <title>Create HMN Connections JSON File</title>
+      <link>/docs-csm/en-10/install/create_hmn_connections_json/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:05 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/create_hmn_connections_json/</guid>
+      <description>Create HMN Connections JSON File Use this procedure to generate the hmn_connections.json from the system&amp;rsquo;s SHCD Excel document. This process is typically needed when generating the hmn_connections.json file for a new system, or regenerating it when a system&amp;rsquo;s SHCD file is changed (specifically the HMN tab). The hms-shcd-parser tool can be used to generate the hmn_connections.json file.&#xA;The SHCD/HMN Connections Rules document explains the expected naming conventions and rules for the HMN tab of the SHCD file, and for the hmn_connections.</description>
+    </item>
+    <item>
+      <title>Create NCN Metadata CSV</title>
+      <link>/docs-csm/en-10/install/create_ncn_metadata_csv/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:05 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/create_ncn_metadata_csv/</guid>
+      <description>Create NCN Metadata CSV The information in the ncn_metadata.csv file identifies each of the management nodes, assigns the function as a master, worker, or storage node, and provides the MAC address information needed to identify the BMC and the NIC which will be used to boot the node.&#xA;Some of the data in the ncn_metadata.csv can be found in the SHCD in the HMN tab. However, the hardest data to collect is the MAC addresses for the node&amp;rsquo;s BMC, the node&amp;rsquo;s bootable network interface, and the pair of network interfaces which will become the bonded interface bond0.</description>
+    </item>
+    <item>
+      <title>Create Switch Metadata CSV</title>
+      <link>/docs-csm/en-10/install/create_switch_metadata_csv/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:05 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/create_switch_metadata_csv/</guid>
+      <description>Create Switch Metadata CSV This page provides directions on constructing the switch_metadata.csv file.&#xA;Prerequisites The SHCD file for the system.&#xA;Check the description for component names while mapping names between the SHCD and the switch_metadata.csv file. See Component Names (xnames).&#xA;Overview This file is manually created to include information about all spine, leaf, CDU, and aggregation switches in the system. None of the Slingshot switches for the HSN should be included in this file.</description>
+    </item>
+    <item>
+      <title>Deploy Management Nodes</title>
+      <link>/docs-csm/en-10/install/deploy_management_nodes/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:05 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/deploy_management_nodes/</guid>
+      <description>Deploy Management Nodes The following procedure deploys Linux and Kubernetes software to the management NCNs. Deployment of the nodes starts with booting the storage nodes followed by the master nodes and worker nodes together.&#xA;After the operating system boots on each node, there are some configuration actions which take place. Watching the console or the console log for certain nodes can help to understand what happens and when. When the process completes for all nodes, the Ceph storage is initialized and the Kubernetes cluster is created and ready for a workload.</description>
+    </item>
+    <item>
+      <title>Install CSM Services</title>
+      <link>/docs-csm/en-10/install/install_csm_services/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:05 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/install_csm_services/</guid>
+      <description>Install CSM Services This procedure will install CSM applications and services into the CSM Kubernetes cluster.&#xA;NOTE: Check the information in Known issues before starting this procedure to be warned about possible problems.&#xA;Initialize bootstrap registry Create Site-Init secret Deploy sealed secret decryption key Deploy CSM applications and services Setup Nexus Set management NCNs to use Unbound Apply pod priorities Apply After Sysmgmt Manifest workarounds Wait for everything to settle Next topic Known issues install.</description>
+    </item>
+    <item>
+      <title>Prepare Compute Nodes</title>
+      <link>/docs-csm/en-10/install/prepare_compute_nodes/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/prepare_compute_nodes/</guid>
+      <description>Prepare Compute Nodes Configure HPE Apollo 6500 XL645d Gen10 Plus Compute Nodes Gather information Configure the iLO to use VLAN 4 Configure the switch port for the iLO to use VLAN 4 Clear bad MAC and IP address out of KEA Clear bad ID out of HSM Update the BIOS Time on Gigabyte Compute Nodes Next topic Configure HPE Apollo 6500 XL645d Gen10 Plus Compute Nodes The HPE Apollo 6500 XL645d Gen10 Plus compute node uses a NIC/shared iLO network port.</description>
+    </item>
+    <item>
+      <title>Prepare Configuration Payload</title>
+      <link>/docs-csm/en-10/install/prepare_configuration_payload/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/prepare_configuration_payload/</guid>
+      <description>Prepare Configuration Payload The configuration payload consists of the information which must be known about the HPE Cray EX system so it can be passed to the csi (Cray Site Init) program during the CSM installation process.&#xA;Information gathered from a site survey is needed to feed into the CSM installation process, such as system name, system size, site network information for the CAN, site DNS configuration, site NTP configuration, network information for the node used to bootstrap the installation.</description>
+    </item>
+    <item>
+      <title>Prepare Management Nodes</title>
+      <link>/docs-csm/en-10/install/prepare_management_nodes/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/prepare_management_nodes/</guid>
+      <description>Prepare Management Nodes The procedures described on this page must be completed before any node is booted with the Cray Pre-Install Toolkit (PIT), which is performed in a later document. When the PIT node is referenced during these procedures, it means the node that will be booted as the PIT node.&#xA;Quiesce compute and application nodes Disable DHCP service Wipe disks on booted nodes Set IPMI credentials Power off booted nodes Set node BMCs to DHCP Wipe USB device on PIT node Power off PIT node Quiesce compute nodes and application nodes Skip this section if compute nodes and application nodes are not booted.</description>
+    </item>
+    <item>
+      <title>Prepare Site Init</title>
+      <link>/docs-csm/en-10/install/prepare_site_init/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/prepare_site_init/</guid>
+      <description>Prepare Site Init These procedures guide administrators through setting up the site-init directory which contains important customizations for various products.&#xA;Note: There are two media available to bootstrap the PIT node&amp;ndash;the RemoteISO or a bootable USB device. Both of those can use this procedure. The only difference in this procedure is that the RemoteISO method will execute these commands on the PIT node with command prompt pit# while the USB method could be done on any Linux system with the command prompt linux#.</description>
+    </item>
+    <item>
+      <title>PXE Boot Troubleshooting</title>
+      <link>/docs-csm/en-10/install/pxe_boot_troubleshooting/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/pxe_boot_troubleshooting/</guid>
+      <description>PXE Boot Troubleshooting This page is designed to cover various issues that arise when trying to PXE boot nodes in an HPE Cray EX system.&#xA;Configuration required for PXE booting Switch configuration Aruba configuration Mellanox configuration Next steps Restart BSS Restart Kea Missing BSS data In order for PXE booting to work successfully, the management network switches need to be configured correctly.&#xA;Configuration required for PXE booting To successfully PXE boot nodes, the following is required:</description>
+    </item>
+    <item>
+      <title>Redeploy PIT Node</title>
+      <link>/docs-csm/en-10/install/redeploy_pit_node/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/redeploy_pit_node/</guid>
+      <description>Redeploy PIT Node The following procedure contains information for rebooting and deploying the management node that is currently hosting the LiveCD. At the end of this procedure, the LiveCD will no longer be active. The node it was using will join the Kubernetes cluster as the final of three master nodes, forming a quorum.&#xA;IMPORTANT: While the node is rebooting, it will only be available through Serial-Over-LAN (SOL) and local terminals.</description>
+    </item>
+    <item>
+      <title>Reinstall LiveCD</title>
+      <link>/docs-csm/en-10/install/reinstall_livecd/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/reinstall_livecd/</guid>
+      <description>Reinstall LiveCD Setup a re-install of LiveCD on a node using the previous configuration.&#xA;Backup to the data partition:&#xA;pit# mkdir -pv /var/www/ephemeral/backup pit# pushd /var/www/ephemeral/backup pit# tar -czvf &amp;#34;dnsmasq-data-$(date &amp;#39;+%Y-%m-%d_%H-%M-%S&amp;#39;).tar.gz&amp;#34; /etc/dnsmasq.* pit# tar -czvf &amp;#34;network-data-$(date &amp;#39;+%Y-%m-%d_%H-%M-%S&amp;#39;).tar.gz&amp;#34; /etc/sysconfig/network/* pit# cp -pv /etc/hosts ./ pit# popd pit# umount -v /var/www/ephemeral Unplug the USB device.&#xA;The USB device should now contain all the information already loaded, as well as the backups of the initialized files.</description>
+    </item>
+    <item>
+      <title>Reset root Password on LiveCD</title>
+      <link>/docs-csm/en-10/install/reset_root_password_on_livecd/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/reset_root_password_on_livecd/</guid>
+      <description>Reset root Password on LiveCD It may become desirable to clear the password on the LiveCD.&#xA;The root password is preserved within the COW partition at cow:rw/etc/shadow. This is the modified copy of the /etc/shadow file used by the operating system.&#xA;If a site/user needs to reset/clear the password for root, they can mount their USB on another machine and remove this file from the COW partition. When next booting from the USB, it will reinitialize to an empty password for root, and again at next login, it will require the password to be changed.</description>
+    </item>
+    <item>
+      <title>Restart Network Services and Interfaces on NCNs</title>
+      <link>/docs-csm/en-10/install/restart_network_services_and_interfaces_on_ncns/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/restart_network_services_and_interfaces_on_ncns/</guid>
+      <description>Restart Network Services and Interfaces on NCNs Interfaces within the network stack can be reloaded or reset to fix wedged interfaces. The NCNs have network device names set during first boot. The names vary based on the available hardware. For more information, see NCN Networking. Any process covered on this page will be covered by the installer.&#xA;The use cases for resetting services:&#xA;Interfaces not showing up IP Addresses not applying Member/children interfaces not being included Topics Restart Network Services and Interfaces))) Command Reference Check interface status (up/down/broken) Show routing and status for all devices Print real devices (ignore no-device) Show the currently enabled network service (Wicked or Network Manager) Restart Network Services There are a few daemons that make up the SUSE network stack.</description>
+    </item>
+    <item>
+      <title>Safeguards for CSM</title>
+      <link>/docs-csm/en-10/install/safeguards_for_csm_ncn_upgrades/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:06 +0000</pubDate>
+      <guid>/docs-csm/en-10/install/safeguards_for_csm_ncn_upgrades/</guid>
+      <description>Safeguards for CSM This page covers safe-guards for preventing destructive behaviors on management nodes.&#xA;If you are reinstalling or upgrading you should run through these safe-guards on a by-case basis:&#xA;Whether or not CEPH should be preserved. Whether or not the RAIDs should be protected. Safeguard CEPH OSDs Edit /var/www/ephemeral/configs/data.json and align the following options:&#xA;{ .. // Disables Ceph wipe: &amp;#34;wipe-ceph-osds&amp;#34;: &amp;#34;no&amp;#34; .. } { .. // Restores default behavior: &amp;#34;wipe-ceph-osds&amp;#34;: &amp;#34;yes&amp;#34; .</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>system management health on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-16/operations/system_management_health/</link>
+    <description>Recent content in system management health on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-16</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:39:04 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-16/operations/system_management_health/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Access System Management Health Services</title>
+      <link>/docs-csm/en-16/operations/system_management_health/access_system_management_health_services/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_management_health/access_system_management_health_services/</guid>
+      <description>Access System Management Health Services All System Management Health services are exposed outside the cluster through the OAuth2 Proxy and Istio&amp;rsquo;s ingress gateway to enforce the authentication and authorization policies. The URLs to access these services are available on any system with CMN, BGP, MetalLB, and external DNS properly configured.&#xA;Prerequisites System domain name System Management Health service links VictoriaMetrics VMAlert Alertmanager Grafana Kiali Prerequisites Access to the System Management Health web UIs is through Istio&amp;rsquo;s ingress gateway and requires clients (browsers) to set the appropriate HTTP Host header to route traffic to the desired service.</description>
+    </item>
+    <item>
+      <title>Configure Prometheus Email Alert Notifications</title>
+      <link>/docs-csm/en-16/operations/system_management_health/configure_prometheus_email_alert_notifications/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_management_health/configure_prometheus_email_alert_notifications/</guid>
+      <description>Configure Prometheus Email Alert Notifications Configure an email alert notification for all Prometheus Postgres replication alerts: PostgresReplicationLagSMA, PostgresReplicationServices, PostgresqlFollowerReplicationLagSMA, and PostgresqlFollowerReplicationLagServices.&#xA;System domain name The SYSTEM_DOMAIN_NAME value found in some of the URLs on this page is expected to be the system&amp;rsquo;s fully qualified domain name (FQDN).&#xA;(ncn-mw#) The FQDN can be found by running the following command on any Kubernetes NCN.&#xA;kubectl get secret site-init -n loftsman -o jsonpath=&amp;#39;{.data.customizations\.yaml}&amp;#39; | base64 -d | yq r - spec.</description>
+    </item>
+    <item>
+      <title>Retrieve SMART data from ClusterStor E1000 nodes via Redfish Exporter</title>
+      <link>/docs-csm/en-16/operations/system_management_health/e1000_smart_data_configuration/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_management_health/e1000_smart_data_configuration/</guid>
+      <description>Retrieve SMART data from ClusterStor E1000 nodes via Redfish Exporter This is a VictoriaMetrics Exporter for extracting metrics from a server using the Redfish API. The hostname of the server has to be passed as target parameter in the http call.&#xA;All these steps need to be followed after installing or upgrading CSM services.&#xA;Configure domain name for ClusterStor management node NOTE: The following steps need to be performed on the ClusterStor E1000 node.</description>
+    </item>
+    <item>
+      <title>Grafana Dashboards by Component</title>
+      <link>/docs-csm/en-16/operations/system_management_health/grafana_dashboards_by_component/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_management_health/grafana_dashboards_by_component/</guid>
+      <description>Grafana Dashboards by Component This document show the dashboards that are available for each component in Grafana.&#xA;A Grafana dashboard is a powerful open source analytical and visualization tool that consists of multiple individual panels arranged in a grid. The panels interact with configured data sources, including the following:&#xA;AWS CloudWatch VictoriaMetrics NOTE: For known issues around some of the Grafana dashboards, see Troubleshoot Grafana Dashboards.&#xA;Ceph Cluster Host Overview Details MDS Performance OSD Overview Device Details Pool Overview Details RBD Overview RGW Overview Instance Details CoreDNS CoreDNS ETCD Main Clusters Goss tests Product test results Suite test results Test results Node-wise test results Istio Mesh Performance Pilot Service Workload IUF Product Stage Operation Kafka Health Check System Throughput In/Out Replication Thread utilization Zookeeper ISR Shrinks / Expands Logs size Producer Performance Consumer Performance Fetch Follower Performance Connections Request rate Message Conversion Kea DHCP Kubernetes API server Compute Resources Compute Resources / Cluster Compute Resources / Namespace (Pods) Compute Resources / Namespace (Workloads) Compute Resources / Node (Pods) Compute Resources / Pod Compute Resources / Workload Controller Manager kubelet Networking Networking / Cluster Networking / Namespace (Pods) Networking / Namespace (Workload) Networking / Pod Networking / Workload Persistent Volumes Proxy Scheduler StatefulSets Nodes Exporter Full Main Postgres PostgreSQL Statistics Prometheus Prometheus Use Method Cluster Node Zookeeper Health Check System Request Latency </description>
+    </item>
+    <item>
+      <title>grok-exporter pod status showing as ContainerStatusUnknown Error</title>
+      <link>/docs-csm/en-16/operations/system_management_health/grok-exporter_error/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_management_health/grok-exporter_error/</guid>
+      <description>grok-exporter pod status showing as ContainerStatusUnknown Error Symptom On CSM upgrade, the grok-exporter pod log has errors similar to the following:&#xA;The node was low on resource: ephemeral-storage. Container grok-exporter was using 127200Ki, which exceeds its request of 0. Solution This Kafka service does not exist, because the System Monitoring Application (SMA) has not been installed yet. This causes the above errors for retry to be logged. VictoriaMetrics can operate without SMA Kafka and it will periodically retry the connection to Kafka.</description>
+    </item>
+    <item>
+      <title>prometheus-kafka-adapter errors during installation</title>
+      <link>/docs-csm/en-16/operations/system_management_health/prometheus_kafka_error/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_management_health/prometheus_kafka_error/</guid>
+      <description>prometheus-kafka-adapter errors during installation Symptom On a fresh install of CSM, the Prometheus log has errors similar to the following:&#xA;ts=2022-12-05T13:35:53.495Z caller=dedupe.go:112 component=remote level=warn remote_name=2eb187 url=http://prometheus-kafka-adapter.sma.svc.cluster.local:80/receive msg=&amp;#34;Failed to send batch, retrying&amp;#34; err=&amp;#34;Post \&amp;#34;http://prometheus-kafka-adapter.sma.svc.cluster.local:80/receive\&amp;#34;: dial tcp: lookup prometheus-kafka-adapter.sma.svc.cluster.local on 10.16.0.10:53: no such host&amp;#34; Explanation This Kafka service does not exist, because the System Monitoring Application (SMA) has not been installed yet. This causes the above errors for retry to be logged. Prometheus can operate without SMA Kafka and it will periodically retry the connection to Kafka.</description>
+    </item>
+    <item>
+      <title>Remove Kiali</title>
+      <link>/docs-csm/en-16/operations/system_management_health/remove_kiali/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_management_health/remove_kiali/</guid>
+      <description>Remove Kiali If not planning to use Kiali, then Kiali may be removed for CVE (Common Vulnerabilities and Exposures) remediation. NOTE: The removal will not persist after a CSM upgrade, so the removal procedure must be rerun after CSM upgrades.&#xA;Procedure This procedure can be performed on any master node.&#xA;Delete kiali and kiali-operator deployments.&#xA;kubectl delete deployment kiali -n istio-system kubectl delete deployment cray-kiali-kiali-operator -n operators Uninstall cray-kiali chart.</description>
+    </item>
+    <item>
+      <title>System Management Health</title>
+      <link>/docs-csm/en-16/operations/system_management_health/system_management_health/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_management_health/system_management_health/</guid>
+      <description>System Management Health The primary goal of the System Management Health service is to enable system administrators to assess the health of their system. Operators need to quickly and efficiently troubleshoot system issues as they occur and be confident that a lack of issues indicates the system is operating normally. This service currently runs as a Helm chart on the system&amp;rsquo;s management Kubernetes cluster and monitors the health status of core system components, triggering alerts as potential issues are observed.</description>
+    </item>
+    <item>
+      <title>System Management Health Checks and Alerts</title>
+      <link>/docs-csm/en-16/operations/system_management_health/system_management_health_checks_and_alerts/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_management_health/system_management_health_checks_and_alerts/</guid>
+      <description>System Management Health Checks and Alerts A health check corresponds to a VMalert query against metrics aggregated to the VMalert instance. Core platform components like Kubernetes and Istio collect service-related metrics by default, which enables the System Management Health service to implement generic service health checks without custom instrumentation. Health checks are intended to be coarse-grained and comprehensive, as opposed to fine-grained and exhaustive. Health checks related to infrastructure adhere to the Utilization Saturation Errors (USE) method whereas services follow the Rate Errors Duration (RED) method.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Grafana Dashboard</title>
+      <link>/docs-csm/en-16/operations/system_management_health/troubleshoot_grafana_dashboard/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_management_health/troubleshoot_grafana_dashboard/</guid>
+      <description>Troubleshoot Grafana Dashboard General Grafana dashboard troubleshooting topics&#xA;Ceph - OSD Overview Dashboard Ceph - RBD Overview Dashboard Ceph - RGW Instance Detail Dashboard Ceph - RGW Overview Dashboard Ceph - OSD Overview Dashboard: 3 panels not found This means that the cray-sysmgmt-health pie chart plugin is not installed. If the system is not airgapped, then it can be installed by commenting out or removing the plugins property in customizations.yaml. This will be fixed in a future release.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Prometheus Alerts</title>
+      <link>/docs-csm/en-16/operations/system_management_health/troubleshoot_prometheus_alerts/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:04 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_management_health/troubleshoot_prometheus_alerts/</guid>
+      <description>Troubleshoot Prometheus Alerts CephMgrIsAbsent and CephMgrIsMissingReplicas CephNetworkPacketsDropped CPUThrottlingHigh PostgresqlFollowerReplicationLagSMA PostgresqlHighRollbackRate PostgresqlInactiveReplicationSlot PostgresqlNotEnoughConnections TargetDown CephMgrIsAbsent and CephMgrIsMissingReplicas If the CephMgrIsAbsent and/or CephMgrIsMissingReplicas alerts fire, use the following steps to ensure the prometheus module has been enabled for Ceph. The following steps should be executed on ncn-s001:&#xA;ceph mgr module ls | jq &amp;#39;.enabled_modules&amp;#39; Example output:&#xA;[ &amp;#34;cephadm&amp;#34;, &amp;#34;iostat&amp;#34;, &amp;#34;restful&amp;#34; ] If prometheus is missing from the output, enable with the following command:</description>
+    </item>
+    <item>
+      <title>UAN NODE Exporter</title>
+      <link>/docs-csm/en-16/operations/system_management_health/uan_node_exporter_configs/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:04 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_management_health/uan_node_exporter_configs/</guid>
+      <description>UAN NODE Exporter The Prometheus UAN NODE Exporter service, service monitor and endpoints are deployed to scrape SMARTMON data by the cray-sysmgmt-health chart in the sysmgmt-health namespace as part of the Cray System Management (CSM) release.&#xA;Configuration In order to provide data to the Grafana SMART dashboards, the UAN NODE Exporter must be configured with a list of UAN NMN IP Address to scrape metrics from.&#xA;Pre-install CSM NOTE All variables used within this page depend on the /etc/environment setup done in Pre-installation.</description>
+    </item>
+    <item>
+      <title>VictoriaMetrics</title>
+      <link>/docs-csm/en-16/operations/system_management_health/victoriametrics/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:04 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_management_health/victoriametrics/</guid>
+      <description>VictoriaMetrics VictoriaMetrics is a fast, cost-effective, and scalable time series database. It can be used as a long-term remote storage for Prometheus.&#xA;It is recommended to use the single-node version instead of the cluster version for ingestion rates lower than a million data points per second. The single-node version scales perfectly with the number of CPU cores, RAM, and available storage space.&#xA;Prominent features Supports all the features of the single-node version.</description>
+    </item>
+  </channel>
+</rss>

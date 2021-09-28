@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>bare metal on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-14/operations/bare_metal/</link>
+    <description>Recent content in bare metal on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-14</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:17 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-14/operations/bare_metal/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Bare-Metal Steps</title>
+      <link>/docs-csm/en-14/operations/bare_metal/bare-metal/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:17 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/bare_metal/bare-metal/</guid>
+      <description>Bare-Metal Steps This section provides information on what needs to be done before an initial install of CSM.&#xA;Air-Cooled BMC Credentials It is necessary to set the default credentials of all air-cooled BMCs so that CSM Hardware Management can interact with Redfish.&#xA;This procedure is outlined in Change Air-Cooled BMC Credentials.&#xA;Liquid-Cooled BMC Credentials As with air-cooled BMCs, liquid-cooled BMCs also need their credentials changed.&#xA;This procedure is outlined in Change Liquid-Cooled BMC Credentials.</description>
+    </item>
+    <item>
+      <title>Fresh Install Setting NodeBMC and RouterBMC Redfish Credentials</title>
+      <link>/docs-csm/en-14/operations/bare_metal/change_river_bmc_credentials/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:17 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/bare_metal/change_river_bmc_credentials/</guid>
+      <description>Fresh Install: Setting NodeBMC and RouterBMC Redfish Credentials These steps are performed before the installation of Shasta System Management or HPCM management software stacks. The goal is to set the BMC Redfish credentials to values that the management software will be expecting so that all software systems work smoothly with the Redfish hardware.&#xA;Prerequisites Before doing these operations, the following is assumed:&#xA;There is a workstation or laptop which can access all target BMCs.</description>
+    </item>
+  </channel>
+</rss>

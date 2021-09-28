@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Deprecated Features on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-13/introduction/deprecated_features/</link>
+    <description>Recent content in Deprecated Features on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-13</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:07 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-13/introduction/deprecated_features/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CAPMC Deprecation Notice</title>
+      <link>/docs-csm/en-13/introduction/deprecated_features/capmc_deprecation_notice/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:07 +0000</pubDate>
+      <guid>/docs-csm/en-13/introduction/deprecated_features/capmc_deprecation_notice/</guid>
+      <description>CAPMC Deprecation Notice Many CAPMC v1 REST API and CLI features are being deprecated as of CSM version 1.0. Full removal of the following deprecated CAPMC features will happen in a future CSM release. Further development of CAPMC service and CLI has stopped. CAPMC has entered end-of-life but will still be generally available. CAPMC is going to be replaced with the Power Control Service (PCS) in a future release. The current API/CLI portfolio for CAPMC is being pruned to better align with the future direction of PCS.</description>
+    </item>
+  </channel>
+</rss>

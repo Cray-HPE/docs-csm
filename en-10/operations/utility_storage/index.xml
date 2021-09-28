@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>utility storage on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-10/operations/utility_storage/</link>
+    <description>Recent content in utility storage on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-10</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:41 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-10/operations/utility_storage/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Adding a Ceph Node to the Ceph Cluster</title>
+      <link>/docs-csm/en-10/operations/utility_storage/add_ceph_node/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:40 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/utility_storage/add_ceph_node/</guid>
+      <description>Adding a Ceph Node to the Ceph Cluster NOTE: This operation can be done to add more than one node at the same time.&#xA;Add Join Script Copy join script from ncn-m001 to the storage node that was rebuilt or added.&#xA;Run this command on the storage node that was rebuilt or added.&#xA;ncn-s# mkdir -pv /usr/share/doc/csm/scripts &amp;amp;&amp;amp; scp -p ncn-m001:/usr/share/doc/csm/scripts/join_ceph_cluster.sh /usr/share/doc/csm/scripts Start monitoring the Ceph health alongside the main procedure.</description>
+    </item>
+    <item>
+      <title>Add Ceph OSDs</title>
+      <link>/docs-csm/en-10/operations/utility_storage/add_ceph_osds/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:40 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/utility_storage/add_ceph_osds/</guid>
+      <description>Add Ceph OSDs IMPORTANT: This document is addressing how to add an OSD when the OSD auto-discovery fails to add in new drives.&#xA;Check to ensure you have OSD auto-discovery enabled.&#xA;ncn-s00(1/2/3)# ceph orch ls osd NAME RUNNING REFRESHED AGE PLACEMENT IMAGE NAME IMAGE ID osd.all-available-devices 9/9 4m ago 3d * registry.local/ceph/ceph:v15.2.8 5553b0cb212c NOTE: Ceph version 15.2.x and newer will utilize the ceph orchestrator to add any available drives on the storage nodes to the OSD pool.</description>
+    </item>
+    <item>
+      <title>Adjust Ceph Pool Quotas</title>
+      <link>/docs-csm/en-10/operations/utility_storage/adjust_ceph_pool_quotas/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:40 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/utility_storage/adjust_ceph_pool_quotas/</guid>
+      <description>Adjust Ceph Pool Quotas Ceph pools are used for storing data. Use this procedure to set the Ceph pool quotas to determine the wanted number of bytes per pool. The smf Ceph pool now has replication factor of two.&#xA;Resolve Ceph health issues caused by a pool reaching its quota.&#xA;Prerequisites This procedure requires administrative privileges.&#xA;Limitations Currently, only smf includes a quota.&#xA;Procedure Log in as root on ncn-m001.</description>
+    </item>
+    <item>
+      <title>Ceph Daemon Memory Profiling</title>
+      <link>/docs-csm/en-10/operations/utility_storage/ceph_daemon_memory_profiling/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:40 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/utility_storage/ceph_daemon_memory_profiling/</guid>
+      <description>Ceph Daemon Memory Profiling Use Case: This page is meant as an instructional guide to provide information back to HPECray to assist in tuning and troubleshooting exercises.&#xA;Procedure:&#xA;NOTE: For this example we are going to use a ceph-mon process on ncn-s001&#xA;Identify the process and location of the daemon to profile.&#xA;ncn-s00(1/2/3)# ceph orch ps --daemon_type mon NAME HOST STATUS REFRESHED AGE VERSION IMAGE NAME IMAGE ID CONTAINER ID mon.</description>
+    </item>
+    <item>
+      <title>Ceph Health States</title>
+      <link>/docs-csm/en-10/operations/utility_storage/ceph_health_states/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:40 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/utility_storage/ceph_health_states/</guid>
+      <description>Ceph Health States Ceph reports several different health states depending on the condition of a cluster. These health states can provide a lot of information about the current functionality of the Ceph cluster, what troubleshooting steps needs to be taken, and if a support ticket needs to be filed.&#xA;The health of a Ceph cluster can be viewed with the following command:&#xA;ncn-m001# ceph -s cluster: id: 5f3b4031-d6c0-4118-94c0-bffd90b534eb health: HEALTH_OK &amp;lt;&amp;lt;-- Health state .</description>
+    </item>
+    <item>
+      <title>Ceph Orchestrator General Usage and Tips</title>
+      <link>/docs-csm/en-10/operations/utility_storage/ceph_orchestrator_usage/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:40 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/utility_storage/ceph_orchestrator_usage/</guid>
+      <description>Ceph Orchestrator General Usage and Tips Description &amp;ldquo;Is a module that provides a command line interface (CLI) to orchestrator modules (ceph-mgr modules which interface with external orchestration services).&amp;rdquo; - source (https://docs.ceph.com/en/latest/mgr/orchestrator/)&#xA;This provides a nice centralized interface for the management of the ceph cluster. This includes:&#xA;Single command upgrades, assuming all images are in place. Reduces the need to be on the physical server to address a large number of ceph service restarts or configuration changes Better integration with the Ceph Dashboard (Coming soon) Ability to write custom orchestration modules Troubleshooting Ceph Orchestrator Watching cephadm Log Messages This is useful when making changes via the orchestrator like add/remove/scale services or upgrades.</description>
+    </item>
+    <item>
+      <title>Ceph Service Check Script Usage</title>
+      <link>/docs-csm/en-10/operations/utility_storage/ceph_service_check_script_usage/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:40 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/utility_storage/ceph_service_check_script_usage/</guid>
+      <description>Ceph Service Check Script Usage Description: This is a new Ceph service script that will check the status of Ceph and then verify that status against the individual Ceph storage nodes.&#xA;Location: /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh&#xA;Usage: usage: ceph-service-status.sh # runs a simple Ceph health check ceph-service-status.sh -n &amp;lt;node&amp;gt; -s &amp;lt;service&amp;gt; # checks a single service on a single node ceph-service-status.sh -n &amp;lt;node&amp;gt; -a true # checks all Ceph services on a node ceph-service-status.</description>
+    </item>
+    <item>
+      <title>Ceph Storage Types</title>
+      <link>/docs-csm/en-10/operations/utility_storage/ceph_storage_types/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:40 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/utility_storage/ceph_storage_types/</guid>
+      <description>Ceph Storage Types As a reference, the following ceph and rbd commands are run from a master node or ncn-s001/2/3. Certain commands will work on different systems. For example, the rbd command can be used on the worker nodes if specifying the proper key.&#xA;Ceph Block (rbd) List block devices in a specific pool:&#xA;ncn-m001# rbd -p POOL_NAME ls -l NAME SIZE PARENT FMT PROT LOCK kube_vol 4 GiB 2 Create a block device:</description>
+    </item>
+    <item>
+      <title>Cephadm Reference Material</title>
+      <link>/docs-csm/en-10/operations/utility_storage/cephadm_reference_material/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:40 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/utility_storage/cephadm_reference_material/</guid>
+      <description>Cephadm Reference Material cephadm is a new function introduced in Ceph Octopus 15. It allows for an easier method to install and manage Ceph nodes.&#xA;The following sections include common examples:&#xA;Invoke Shells to Run Traditional Ceph Commands On ncn-s001/2/3:&#xA;ncn-s00[123]# cephadm shell # creates a container with access to run ceph commands the traditional way Optionally, execute the following command:&#xA;ncn-s00[123]# cephadm shell -- ceph -s Ceph-Volume There are multiple ways to do Ceph device operations now.</description>
+    </item>
+    <item>
+      <title>Collect Information about the Ceph Cluster</title>
+      <link>/docs-csm/en-10/operations/utility_storage/collect_information_about_the_ceph_cluster/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:40 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/utility_storage/collect_information_about_the_ceph_cluster/</guid>
+      <description>Collect Information about the Ceph Cluster These general commands for Ceph are helpful for obtaining information pertinent to troubleshooting issues.&#xA;As a reference, the Ceph commands below are run from a ceph-mon node. Certain commands will work on different systems. For example, the rbd command can be used on the worker nodes if specifying the proper key.&#xA;Ceph Log and File Locations Ceph configurations are located under /etc/ceph/ceph.conf Ceph data structure and bootstrap is located under /var/lib/ceph// Ceph logs are now accessible by a couple of different methods Utilizing cephadm ls to retrieve the systemd_unit on the node for the process, then utilize journalctl to dump the logs ceph log last [&amp;lt;num:int&amp;gt;] [debug|info|sec|warn|error] [*|cluster|audit|cephadm] Note that that this will dump general cluster logs cephadm logs [-h] [--fsid FSID] --name &amp;lt;systemd_unit&amp;gt; Check the Status of Ceph Print the status of the Ceph cluster with the following command:</description>
+    </item>
+    <item>
+      <title>Dump Ceph Crash Data</title>
+      <link>/docs-csm/en-10/operations/utility_storage/dump_ceph_crash_data/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:40 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/utility_storage/dump_ceph_crash_data/</guid>
+      <description>Dump Ceph Crash Data Ceph includes an option to dump crash data. Retrieve this data to get more information on a Ceph cluster that has crashed.&#xA;Prerequisites Ceph is reporting the cluster [WRN] overall HEALTH_WARN 1 daemons have recently crashed error in the output of the ceph -s or ceph health detail commands.&#xA;Procedure Get the Ceph crash listing and the corresponding IDs.&#xA;ncn-m001# ceph crash ls ID ENTITY NEW 2021-02-02_13:45:18.</description>
+    </item>
+    <item>
+      <title>Identify Ceph Latency Issues</title>
+      <link>/docs-csm/en-10/operations/utility_storage/identify_ceph_latency_issues/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:40 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/utility_storage/identify_ceph_latency_issues/</guid>
+      <description>Identify Ceph Latency Issues Examine the output of the ceph -s command to get context for potential issues causing latency.&#xA;Troubleshoot the underlying causes for the ceph -s command reporting slow PGs.&#xA;Prerequisites This procedure requires admin privileges.&#xA;Procedure View the status of Ceph.&#xA;ncn-m001# ceph -s cluster: id: 73084634-9534-434f-a28b-1d6f39cf1d3d health: HEALTH_WARN 1 filesystem is degraded 1 MDSs report slow metadata IOs Reduced data availability: 15 pgs inactive, 15 pgs peering 46 slow ops, oldest one blocked for 1395 sec, daemons [osd,2,osd,5,mon,ceph-1,mon,ceph-2,mon,ceph-3] have slow ops.</description>
+    </item>
+    <item>
+      <title>Manage Ceph Services</title>
+      <link>/docs-csm/en-10/operations/utility_storage/manage_ceph_services/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:40 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/utility_storage/manage_ceph_services/</guid>
+      <description>Manage Ceph Services The following commands are required to start, stop, or restart Ceph services. Restarting Ceph services is helpful for troubleshoot issues with the utility storage platform.&#xA;List Ceph services ncn-s00(1/2/3)# ceph orch ps NAME HOST STATUS REFRESHED AGE VERSION IMAGE NAME IMAGE ID CONTAINER ID mds.cephfs.ncn-s001.zwptsg ncn-s001 running (3d) 7m ago 3d 15.2.8 registry.local/ceph/ceph:v15.2.8 5553b0cb212c bb08bcb2f034 mds.cephfs.ncn-s002.qyvoyv ncn-s002 running (3d) 7m ago 3d 15.2.8 registry.local/ceph/ceph:v15.2.8 5553b0cb212c 32c3ff10be42 mds.cephfs.ncn-s003.vvsuvy ncn-s003 running (3d) 7m ago 3d 15.</description>
+    </item>
+    <item>
+      <title>Shrink the Ceph Cluster</title>
+      <link>/docs-csm/en-10/operations/utility_storage/remove_ceph_node/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:40 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/utility_storage/remove_ceph_node/</guid>
+      <description>Shrink the Ceph Cluster This procedure describes how to remove a Ceph node from the Ceph cluster. Once the node is removed, the cluster is also rebalanced to account for the changes. Use this procedure to reduce the size of a cluster.&#xA;Prerequisites This procedure requires administrative privileges. 3 SSH sessions. 1 to monitor the cluster. 1 to perform cluster wide actions from a ceph-mon node. 1 to perform node only actions on the node being removed.</description>
+    </item>
+    <item>
+      <title>Restore Nexus Data After Data Corruption</title>
+      <link>/docs-csm/en-10/operations/utility_storage/restore_corrupt_nexus/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:41 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/utility_storage/restore_corrupt_nexus/</guid>
+      <description>Restore Nexus Data After Data Corruption In rare cases, if a Ceph upgrade is not completed successfully and has issues, the eventual Ceph health can end up with a damaged mds (cephfs) daemon. Ceph reports this as follows running the ceph -s command:&#xA;ncn-s002:~ # ceph -s cluster: id: 7ed70f4c-852e-494a-b9e7-5f722af6d6e7 health: HEALTH_ERR 1 filesystem is degraded 1 filesystem is offline 1 mds daemon damaged When Ceph is in this state, Nexus will likely not operate properly and can be recovered using the following procedure.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Ceph-Mon Processes Stopping and Exceeding Max Restarts</title>
+      <link>/docs-csm/en-10/operations/utility_storage/troubleshoot_ceph-mon_processes_stopping_and_exceeding_max_restarts/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:41 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/utility_storage/troubleshoot_ceph-mon_processes_stopping_and_exceeding_max_restarts/</guid>
+      <description>Troubleshoot Ceph-Mon Processes Stopping and Exceeding Max Restarts Troubleshoot an issue where all of the ceph-mon processes stop and exceed their maximum amount of attempts at restarting. This bug corrupts the health of the Ceph cluster.&#xA;Return the Ceph cluster to a healthy state by resolving issues with ceph-mon processes.&#xA;Prerequisites This procedure requires admin privileges.&#xA;Procedure See Collect Information about the Ceph Cluster for more information on how to interpret the output of the Ceph commands used in this procedure.</description>
+    </item>
+    <item>
+      <title>Troubleshooting Ceph MDS slow ops</title>
+      <link>/docs-csm/en-10/operations/utility_storage/troubleshoot_ceph_mds_reporting_slow_requests_and_failure_on_client/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:41 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/utility_storage/troubleshoot_ceph_mds_reporting_slow_requests_and_failure_on_client/</guid>
+      <description>Troubleshooting Ceph MDS slow ops Before doing any steps on this page, please make sure you looked at Identify_Ceph_Latency_Issues&#xA;IMPORTANT: This will be a mix of commands that need to be run on the host(s) running the MDS daemon(s) and other commands that can be run from any of the ceph-mon nodes.&#xA;NOTICE: These steps are based off upstream documentation. This can be viewed here. https://docs.ceph.com/en/octopus/cephfs/troubleshooting/.&#xA;Please ensure you are on the correct version of documentation for the cluster you are running.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Ceph OSDs Reporting Full</title>
+      <link>/docs-csm/en-10/operations/utility_storage/troubleshoot_ceph_osds_reporting_full/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:41 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/utility_storage/troubleshoot_ceph_osds_reporting_full/</guid>
+      <description>Troubleshoot Ceph OSDs Reporting Full Use this procedure to examine the Ceph cluster and troubleshoot issues where Ceph runs out of space and the Kubernetes cluster cannot write data. The OSDs need to be reweighed to move data from the drive and get it back under the warning threshold.&#xA;When a single OSD for a pool fills up, the pool will go into read-only mode to protect the data. This can occur if the data distribution is unbalanced or if more storage nodes are needed.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Ceph services not starting after a server crash</title>
+      <link>/docs-csm/en-10/operations/utility_storage/troubleshoot_ceph_services_not_starting/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:41 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/utility_storage/troubleshoot_ceph_services_not_starting/</guid>
+      <description>Troubleshoot Ceph services not starting after a server crash Issue There is a known issue where the Ceph container images will not start after a power failure or server component failure that causes the server to crash and not boot back up&#xA;There will be a message like this in the journalctl logs for the ceph services on the machine that crashed&#xA;ceph daemons will not start due to: Error: readlink /var/lib/containers/storage/overlay/l/CXMD7IEI4LUKBJKX5BPVGZLY3Y: no such file or directory</description>
+    </item>
+    <item>
+      <title>Troubleshoot Failure to Get Ceph Health</title>
+      <link>/docs-csm/en-10/operations/utility_storage/troubleshoot_failure_to_get_ceph_health/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:41 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/utility_storage/troubleshoot_failure_to_get_ceph_health/</guid>
+      <description>Troubleshoot Failure to Get Ceph Health Inspect Ceph commands that are failing by looking into the Ceph monitor logs (ceph-mon). For example, the monitoring logs can help determine any issues causing the ceph -s command to hang.&#xA;Troubleshoot Ceph commands failing to run and determine how to make them operational again. These commands need to be operational to obtain critical information about the Ceph cluster on the system.&#xA;Prerequisites This procedure requires admin privileges.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Insufficient Standby MDS Daemons Available</title>
+      <link>/docs-csm/en-10/operations/utility_storage/troubleshoot_insufficient_standby_mds_daemons_available/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:41 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/utility_storage/troubleshoot_insufficient_standby_mds_daemons_available/</guid>
+      <description>Troubleshoot Insufficient Standby MDS Daemons Available Procedure Log into a node running ceph-mon. Typically this will be ncn-s001/2/3.&#xA;Check the ceph health.&#xA;ceph health detail Example Output:&#xA;HEALTH_WARN insufficient standby MDS daemons available [WRN] MDS_INSUFFICIENT_STANDBY: insufficient standby MDS daemons available have 0; want 1 more This output explicitly states that you need at least 1 more to clear the alert.&#xA;Determine which MDS daemons are down.&#xA;ceph orch ps --daemon_type mds Example Output:</description>
+    </item>
+    <item>
+      <title>Troubleshoot Large Object Map Objects in Ceph Health</title>
+      <link>/docs-csm/en-10/operations/utility_storage/troubleshoot_large_object_map_objects_in_ceph_health/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:41 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/utility_storage/troubleshoot_large_object_map_objects_in_ceph_health/</guid>
+      <description>Troubleshoot Large Object Map Objects in Ceph Health Troubleshoot an issue where Ceph reports a HEALTH_WARN of 1 large omap objects. Adjust the omap object key threshold or number of placement groups (PG) to resolve this issue.&#xA;Prerequisites Ceph health is reporting a HEALTH_WARN for large Object Map (omap) objects.&#xA;ncn-m001# ceph -s cluster: id: 464f8ee0-667d-49ac-a82b-43ba8d377f81 health: HEALTH_WARN 1 large omap objects clock skew detected on mon.ncn-m002, mon.ncn-m003 services: mon: 3 daemons, quorum ncn-s001,ncn-s002,ncn-s003 (age 20h) mgr: ncn-s003(active, since 9d), standbys: ncn-s001, ncn-s002 mds: cephfs:1 {0=ncn-s002=up:active} 2 up:standby osd: 18 osds: 18 up (since 20h), 18 in (since 9d) rgw: 3 daemons active (ncn-s001.</description>
+    </item>
+    <item>
+      <title>Troubleshoot Pods Failing to Restart on Other Worker Nodes</title>
+      <link>/docs-csm/en-10/operations/utility_storage/troubleshoot_pods_multi-attach_error/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:41 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/utility_storage/troubleshoot_pods_multi-attach_error/</guid>
+      <description>Troubleshoot Pods Failing to Restart on Other Worker Nodes Troubleshoot an issue where pods cannot restart on another worker node because of the &amp;ldquo;Volume is already exclusively attached to one node and can&amp;rsquo;t be attached to another&amp;rdquo; error. Kubernetes does not currently support &amp;ldquo;readwritemany&amp;rdquo; access mode for Rados Block Device (RBD) devices, which causes an issue where devices fail to unmap correctly.&#xA;The issue occurs when unmounting the mounts tied to the RBD devices, which causes the rbd-task (watcher) to not stop for the RBD device.</description>
+    </item>
+    <item>
+      <title>Troubleshoot if RGW Health Check Fails</title>
+      <link>/docs-csm/en-10/operations/utility_storage/troubleshoot_rgw_health_check_fail/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:41 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/utility_storage/troubleshoot_rgw_health_check_fail/</guid>
+      <description>Troubleshoot if RGW Health Check Fails Use this procedure to determine why the rgw health check failed and what needs to be fixed.&#xA;Procedure In the goss test output, look at the value of x in Expected \&amp;lt; int \&amp;gt;: x (possible values are 1, 2, 3, 4, 5). Based on the value, navigate to the corresponding numbered item below for troubleshooting this issue.&#xA;Optional: Manually run the rgw health check script to see descriptive output.</description>
+    </item>
+    <item>
+      <title>Troubleshoot System Clock Skew</title>
+      <link>/docs-csm/en-10/operations/utility_storage/troubleshoot_system_clock_skew/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:41 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/utility_storage/troubleshoot_system_clock_skew/</guid>
+      <description>Troubleshoot System Clock Skew Resynchronize system clocks after Ceph reports a clock skew.&#xA;Systems use chronyd to synchronize their system clocks. If systems are not able to communicate, then the clocks can drift, causing clock skew. Another reason for this issue would be an individual manually changing the clocks or a task that may change the clocks and require a series of steps (time adjustments) to resynchronize.&#xA;Major time jumps where the clock is set back in time will require a full restart of all Ceph services.</description>
+    </item>
+    <item>
+      <title>Troubleshoot a Down OSD</title>
+      <link>/docs-csm/en-10/operations/utility_storage/troubleshoot_a_down_osd/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:41 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/utility_storage/troubleshoot_a_down_osd/</guid>
+      <description>Troubleshoot a Down OSD Identify down OSDs and manually bring them back up.&#xA;Troubleshoot the Ceph health detail reporting down OSDs. Ensuring that OSDs are operational and data is balanced across them will help remove the likelihood of hotspots being created.&#xA;Prerequisites This procedure requires admin privileges.&#xA;Procedure Identify the down OSDs.&#xA;ncn-m/s(001/2/3)# ceph osd tree down ID CLASS WEIGHT TYPE NAME STATUS REWEIGHT PRI-AFF -1 62.87558 root default -7 20.</description>
+    </item>
+    <item>
+      <title>Troubleshoot an Unresponsive Rados-Gateway (radosgw) S3 Endpoint</title>
+      <link>/docs-csm/en-10/operations/utility_storage/troubleshoot_an_unresponsive_s3_endpoint/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:41 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/utility_storage/troubleshoot_an_unresponsive_s3_endpoint/</guid>
+      <description>Troubleshoot an Unresponsive Rados-Gateway (radosgw) S3 Endpoint Issue 1: Rados-Gateway/s3 endpoint is not accessible ncn# response=$(curl --write-out &amp;#39;%{http_code}&amp;#39; --silent --output /dev/null http://rgw-vip)|echo &amp;#34;Curl Response Code: $response&amp;#34; Curl Response Code: 200 Expected Responses: 2xx, 3xx&#xA;Procedure: Check the individual endpoints.&#xA;ncn# num_storage_nodes=$(craysys metadata get num_storage_nodes);for node_num in $(seq 1 &amp;#34;$num_storage_nodes&amp;#34;); do nodename=$(printf &amp;#34;ncn-s%03d&amp;#34; &amp;#34;$node_num&amp;#34;); response=$(curl --write-out &amp;#39;%{http_code}&amp;#39; --silent --output /dev/null http://$nodename:8080); echo &amp;#34;Curl Response Code for ncn-s00$endpoint: $response&amp;#34;; done Curl Response Code for ncn-s003: 200 Curl Response Code for ncn-s003: 200 Curl Response Code for ncn-s003: 200 Troubleshooting: If an error occurs with the above script, then echo $num_storage_nodes.</description>
+    </item>
+    <item>
+      <title>Utility Storage</title>
+      <link>/docs-csm/en-10/operations/utility_storage/utility_storage/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:41 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/utility_storage/utility_storage/</guid>
+      <description>Utility Storage Utility storage is designed to support Kubernetes and the System Management Services (SMS) it orchestrates. Utility storage is a cost-effective solution for storing the large amounts of telemetry and log data collected.&#xA;Ceph is the utility storage platform that is used to enable pods to store persistent data. It is deployed to provide block, object, and file storage to the management services running on Kubernetes, as well as for telemetry data coming from the compute nodes.</description>
+    </item>
+  </channel>
+</rss>

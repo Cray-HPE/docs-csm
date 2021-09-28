@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>sls on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-12/upgrade/1.2/scripts/sls/</link>
+    <description>Recent content in sls on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-12</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:39:03 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-12/upgrade/1.2/scripts/sls/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SLS Updates Expert mode</title>
+      <link>/docs-csm/en-12/upgrade/1.2/scripts/sls/expert_mode/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-12/upgrade/1.2/scripts/sls/expert_mode/</guid>
+      <description>SLS Updates Expert mode The 1.2 SLS Upgrader aims to make the upgrade of SLS from pre-CMS 1.2 to CSM 1.2 as seamless as possible. However, certain system constraints and subnet sizes quickly necessitate overriding standard input.&#xA;Key takeaways When to use expert mode Minimal input review Forcing preservation of some existing values Expert mode: Overriding defaults and forced guiding of upgrades Expert mode: Prerequisites Expert mode: Process Expert mode: Example Key takeaways Expert mode requires both an iterative (offline) process and command line override values.</description>
+    </item>
+    <item>
+      <title>Upgrade SLS Offline from CSM 1.0.x to CSM 1.2</title>
+      <link>/docs-csm/en-12/upgrade/1.2/scripts/sls/readme.sls_upgrade/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-12/upgrade/1.2/scripts/sls/readme.sls_upgrade/</guid>
+      <description>Upgrade SLS Offline from CSM 1.0.x to CSM 1.2 Abstract Prior to updating SLS, at a minimum, answers to the following questions must be known:&#xA;Will user traffic (non-administrative) come in via the CAN or CHN, or is the site air-gapped?&#xA;By default when upgrading to CSM 1.2, non-administrative user traffic is migrated from the CAN to the CHN while minimizing changes. If instead it is desired that the non-administrative user traffic continue to come in via the CAN, or if the site is air-gapped, then this must be explicitly specified during the SLS update.</description>
+    </item>
+    <item>
+      <title>sls updater.py Technical Details</title>
+      <link>/docs-csm/en-12/upgrade/1.2/scripts/sls/sls_updater.py_technical_details/</link>
+      <pubDate>Thu, 24 Oct 2024 03:39:03 +0000</pubDate>
+      <guid>/docs-csm/en-12/upgrade/1.2/scripts/sls/sls_updater.py_technical_details/</guid>
+      <description>sls_updater.py Technical Details No action needed. Informational purposes only.&#xA;Actions and order This migration is performed offline for data security. The running SLS file is first dumped, then the migration script is run and a new, migrated output file is created.&#xA;Migrate switch naming (in order): leaf to leaf-bmc, and agg to leaf. Remove api-gateway entries from HMLB subnets for CSM 1.2 security. Remove kubeapi-vip reservations for all networks except NMN.</description>
+    </item>
+  </channel>
+</rss>

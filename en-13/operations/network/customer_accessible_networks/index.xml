@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>customer accessible networks on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-13/operations/network/customer_accessible_networks/</link>
+    <description>Recent content in customer accessible networks on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-13</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:29 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-13/operations/network/customer_accessible_networks/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Using the CMN for the CHN BGP control plane</title>
+      <link>/docs-csm/en-13/operations/network/customer_accessible_networks/chn_bgp_control_plane_over_cmn/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:29 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/network/customer_accessible_networks/chn_bgp_control_plane_over_cmn/</guid>
+      <description>Using the CMN for the CHN BGP control plane Summary In a typical CHN configuration BGP peering is done over the CHN. This means that the BGP control plane packets are sent over the High speed network on the CHN. In some cases, administrators may want to use the CMN as the BGP control plane.&#xA;The following example shows how to move the BGP control plane from the CHN to the CMN.</description>
+    </item>
+    <item>
+      <title>Connect to the CMN and CAN</title>
+      <link>/docs-csm/en-13/operations/network/customer_accessible_networks/connect_to_the_cmn_can/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:29 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/network/customer_accessible_networks/connect_to_the_cmn_can/</guid>
+      <description>Connect to the CMN and CAN How to connect to the CMN and CAN physically and via layer 3.&#xA;There are multiple ways to connect to the Customer Management Network (CMN) and Customer Access Network (CAN), both physically and via a layer 3 connection.&#xA;Physical Connection to the CMN and CAN The physical connection to the CMN and CAN is made via the load balancer or the spine switches. The uplink connection from the system to the customer network is achieved by using the highest numbered port(s).</description>
+    </item>
+    <item>
+      <title>Customer Accessible Networks</title>
+      <link>/docs-csm/en-13/operations/network/customer_accessible_networks/customer_accessible_networks/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:29 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/network/customer_accessible_networks/customer_accessible_networks/</guid>
+      <description>Customer Accessible Networks There are generally two networks accessible by devices outside of the CSM cluster. One network is for administrators managing the cluster and one is for users accessing user services provided by the cluster.&#xA;Customer Management Network The Customer Management Network (CMN) provides access from outside the customer network to administrative services and non-compute nodes (NCNs). This allows for the following:&#xA;Administrator clients outside of the system: Log in to NCNs.</description>
+    </item>
+    <item>
+      <title>CAN/CMN with Dual-Spine Configuration</title>
+      <link>/docs-csm/en-13/operations/network/customer_accessible_networks/dual_spine_configuration/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:29 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/network/customer_accessible_networks/dual_spine_configuration/</guid>
+      <description>CAN/CMN with Dual-Spine Configuration The Customer Access Network (CAN) and Customer Management Network (CMN) needs to be connected to both spines in a dual-spine configuration so that each spine can access the outside network. However, the NCNs should only have one default gateway. Therefore, the multi-active gateway protocol (MAGP) on the Mellanox spines can be used to create a virtual router gateway IP address that can direct to either of the spines, depending on the state of the spines.</description>
+    </item>
+    <item>
+      <title>Externally Exposed Services</title>
+      <link>/docs-csm/en-13/operations/network/customer_accessible_networks/externally_exposed_services/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:29 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/network/customer_accessible_networks/externally_exposed_services/</guid>
+      <description>Externally Exposed Services The following services are exposed on one or more of the external networks (CMN, CAN, and CHN). Each of these services requires an IP address in the relevant subnets so they are reachable on that network. This IP address is allocated by the MetalLB component.&#xA;Services under Istio Ingress Gateway and OAuth2 Proxy Ingress share an ingress, so they all use the IP allocated to the Ingress.</description>
+    </item>
+    <item>
+      <title>Troubleshoot CMN issues</title>
+      <link>/docs-csm/en-13/operations/network/customer_accessible_networks/troubleshoot_cmn_issues/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:29 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/network/customer_accessible_networks/troubleshoot_cmn_issues/</guid>
+      <description>Troubleshoot CMN issues Various connection points to check when using the CMN and how to fix any issues that arise.&#xA;The most frequent issue with the Customer Management Network (CMN) is trouble accessing IP addresses outside of the HPE Cray EX system from a node or pod inside the system.&#xA;The best way to resolve this issue is to try to ping an outside IP address from one of the NCNs other than ncn-m001, which has a direct connection that it can use instead of the Customer Management Network (CMN).</description>
+    </item>
+    <item>
+      <title>BI-CAN Aruba/Arista Configuration</title>
+      <link>/docs-csm/en-13/operations/network/customer_accessible_networks/bi-can_arista_aruba_config/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:29 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/network/customer_accessible_networks/bi-can_arista_aruba_config/</guid>
+      <description>BI-CAN Aruba/Arista Configuration This is an example configuration of how to connect two Aruba spine switches to two Arista switches. This example is from a running system utilizing the bifurcated CAN feature.&#xA;Summary:&#xA;Two Aruba 8325 switches running in a VSX cluster. Two Arista 7060CX2-32S switches running MLAG. The Arista switches are connected to the Slingshot/HSN network via static MLAG. The Aruba Spine switches are connected to the Arista switches with point-to-point OSPF links.</description>
+    </item>
+    <item>
+      <title>MetalLB Peering with Arista Edge Router</title>
+      <link>/docs-csm/en-13/operations/network/customer_accessible_networks/bi-can_arista_metallb_peering/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:29 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/network/customer_accessible_networks/bi-can_arista_metallb_peering/</guid>
+      <description>MetalLB Peering with Arista Edge Router This is an example configuration of how to connect a pair of Arista switches to MetalLB running inside of Kubernetes.&#xA;Prerequisites Pair of Arista switches already connected to the high-speed network. Updated System Layout Service (SLS) file that has the CHN network configured. Example Configuration Below is a snippet from an upgraded SLS.&#xA;&amp;#34;CHN&amp;#34;: { &amp;#34;Name&amp;#34;: &amp;#34;CHN&amp;#34;, &amp;#34;FullName&amp;#34;: &amp;#34;Customer High-Speed Network&amp;#34;, &amp;#34;IPRanges&amp;#34;: [ &amp;#34;10.103.9.0/25&amp;#34; ], &amp;#34;Type&amp;#34;: &amp;#34;ethernet&amp;#34;, &amp;#34;LastUpdated&amp;#34;: 1646843463, &amp;#34;LastUpdatedTime&amp;#34;: &amp;#34;2022-03-09 16:31:03.</description>
+    </item>
+  </channel>
+</rss>

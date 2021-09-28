@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>security and authentication on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-09/operations/security_and_authentication/</link>
+    <description>Recent content in security and authentication on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-09</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:09 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-09/operations/security_and_authentication/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Add LDAP User Federation</title>
+      <link>/docs-csm/en-09/operations/security_and_authentication/add_ldap_user_federation/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/security_and_authentication/add_ldap_user_federation/</guid>
+      <description>Add LDAP User Federation Add LDAP user federation using the Keycloak localization tool.&#xA;Prerequisites LDAP user federation is not currently configured in Keycloak. For example, if it was not configured in Keycloak when the system was initially installed or the LDAP user federation was removed.&#xA;Procedure Prepare to customize the customizations.yaml file.&#xA;If the customizations.yaml file is managed in an external Git repository (as recommended), then clone a local working tree.</description>
+    </item>
+    <item>
+      <title>Change Air-Cooled Node BMC Credentials</title>
+      <link>/docs-csm/en-09/operations/security_and_authentication/change_air-cooled_node_bmc_credentials/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/security_and_authentication/change_air-cooled_node_bmc_credentials/</guid>
+      <description>Change Air-Cooled Node BMC Credentials This procedure will use the System Configuration Service (SCSD) to change all air-cooled Node BMCs in the system to the same global credential.&#xA;Limitations All air-cooled and liquid-cooled BMCs share the same global credentials. The air-cooled Slingshot switch controllers (Router BMCs) must have the same credentials as the liquid-cooled Slingshot switch controllers.&#xA;Prerequisites The Cray command line interface (CLI) tool is initialized and configured on the system.</description>
+    </item>
+    <item>
+      <title>Change Credentials on ServerTech PDUs</title>
+      <link>/docs-csm/en-09/operations/security_and_authentication/change_credentials_on_servertech_pdus/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/security_and_authentication/change_credentials_on_servertech_pdus/</guid>
+      <description>Change Credentials on ServerTech PDUs This procedure changes password used by the admn user on ServerTech PDUs. Either a single PDU can be updated to a new credential, or update all ServerTech PDUs in the system to the same global credentials.&#xA;NOTE: This procedure does not update the default credentials that RTS uses for new ServerTech PDUs added to a system. To change the default credentials, follow the Update default ServerTech PDU Credentials used by the Redfish Translation Service procedure.</description>
+    </item>
+    <item>
+      <title>Change Cray EX Cabinet Global Default Password</title>
+      <link>/docs-csm/en-09/operations/security_and_authentication/change_ex_cabinet_global_default_password/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:08 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/security_and_authentication/change_ex_cabinet_global_default_password/</guid>
+      <description>Change Cray EX Cabinet Global Default Password This procedure changes the global default credential on HPE Cray EX liquid-cooled cabinet embedded controllers (BMCs). The chassis management module (CMM) controller (cC), node controller (nC), and Slingshot switch controller (sC) are generically referred to as &amp;ldquo;BMCs&amp;rdquo; in these procedures.&#xA;Prerequisites HPE Cray EX 1.4.2 software is installed and operating. The Cray command line interface (CLI) tool is initialized and configured on the system.</description>
+    </item>
+    <item>
+      <title>Change NCN Image Root Password and SSH Keys</title>
+      <link>/docs-csm/en-09/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:09 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys/</guid>
+      <description>Change NCN Image Root Password and SSH Keys The default SSH keys in the NCN image must be removed. The default password for the root user must be changed. Customize the NCN images by changing the root password or adding different SSH keys for the root account. This procedure shows this process being done any time after the first time installation of the CSM software has been completed and the PIT node is booted as a regular master node.</description>
+    </item>
+    <item>
+      <title>Change NCN Image Root Password and SSH Keys on PIT Node</title>
+      <link>/docs-csm/en-09/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys_on_pit_node/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:09 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/security_and_authentication/change_ncn_image_root_password_and_ssh_keys_on_pit_node/</guid>
+      <description>Change NCN Image Root Password and SSH Keys on PIT Node The default SSH keys in the NCN image must be removed. The default password for the root user must be changed. Customize the NCN images by changing the root password and adding different SSH keys for the root account. This procedure shows this process being done on the PIT node during a first time installation of the CSM software.</description>
+    </item>
+    <item>
+      <title>Change SMNP Credentials on Leaf Switches</title>
+      <link>/docs-csm/en-09/operations/security_and_authentication/change_smnp_credentials_on_leaf_switches/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:09 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/security_and_authentication/change_smnp_credentials_on_leaf_switches/</guid>
+      <description>Change SMNP Credentials on Leaf Switches This procedure changes the SNMP credentials on management leaf switches in the system. Either a single leaf switch can be updated to use new SNMP credentials, or update all leaf switches in the system to use the same global SNMP credentials.&#xA;NOTE: This procedure will not update the default SNMP credentials used when new leaf switches are added to the system. To update the default SNMP credentials for new hardware, follow the Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials procedure.</description>
+    </item>
+    <item>
+      <title>Change the Keycloak Admin Password</title>
+      <link>/docs-csm/en-09/operations/security_and_authentication/change_the_keycloak_admin_password/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:09 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/security_and_authentication/change_the_keycloak_admin_password/</guid>
+      <description>Change the Keycloak Admin Password Update the default password for the admin Keycloak account using the Keycloak user interface (UI). After updating the password in Keycloak, encrypt it on the system and verify that the change was made successfully.&#xA;This procedure uses SYSTEM_DOMAIN_NAME as an example for the DNS name of the non-compute node (NCN). Replace this name with the actual NCN&amp;rsquo;s DNS name while executing this procedure.&#xA;Procedure Log in to Keycloak with the default admin credentials.</description>
+    </item>
+    <item>
+      <title>Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials</title>
+      <link>/docs-csm/en-09/operations/security_and_authentication/provisioning_a_liquid-cooled_ex_cabinet_cec_with_default_credentials/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:09 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/security_and_authentication/provisioning_a_liquid-cooled_ex_cabinet_cec_with_default_credentials/</guid>
+      <description>Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials This procedure provisions a Glibc compatible SHA-512 administrative password hash to a cabinet environmental controller (CEC). This password becomes the Redfish default global credential to access the CMM controllers and node controllers (BMCs).&#xA;This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC default credentials must be changed using the procedures in the Slingshot product documentation. To update Slingshot switch BMCs, refer to &amp;ldquo;Change Rosetta Login and Redfish API Credentials&amp;rdquo; in the Slingshot Operations Guide (&amp;gt;1.</description>
+    </item>
+    <item>
+      <title>Restrict Network Access to the ncn-images S3 Bucket</title>
+      <link>/docs-csm/en-09/operations/security_and_authentication/restrict_access_to_ncn_images_s3_bucket/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:09 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/security_and_authentication/restrict_access_to_ncn_images_s3_bucket/</guid>
+      <description>Restrict Network Access to the ncn-images S3 Bucket The configuration documented in this procedure is intended to prevent user-facing dedicated nodes (UANs, Compute Nodes) from retrieving NCN image content from Ceph S3 services, as running on storage nodes.&#xA;Specifically, the controls enacted via this procedure should do the following:&#xA;Block HAProxy access to the ncn-images bucket if the client is not an NCN (NMN) or PXE booting from the MTL network.</description>
+    </item>
+    <item>
+      <title>Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials</title>
+      <link>/docs-csm/en-09/operations/security_and_authentication/update_default_air-cooled_bmc_and_leaf_switch_snmp_credentials/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:09 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/security_and_authentication/update_default_air-cooled_bmc_and_leaf_switch_snmp_credentials/</guid>
+      <description>Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials This procedure updates the default credentials used when new air-cooled hardware is discovered for the first time. This includes the default Redfish credentials used for new air-cooled NodeBMCs and Slingshot switch BMCs (RouterBMCs), and SNMP credentials for new management leaf switches.&#xA;Important: After this procedure is completed going forward all future air-cooled hardware added to the system will be assumed to be already configured with the new global default credential when getting added to the system.</description>
+    </item>
+    <item>
+      <title>Update Default ServerTech PDU Credentials used by the Redfish Translation Service (RTS)</title>
+      <link>/docs-csm/en-09/operations/security_and_authentication/update_default_servertech_pdu_credentials_used_by_the_redfish_translation_service/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:09 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/security_and_authentication/update_default_servertech_pdu_credentials_used_by_the_redfish_translation_service/</guid>
+      <description>Update Default ServerTech PDU Credentials used by the Redfish Translation Service (RTS) This procedure updates the default credentials used by the Redfish Translation Service (RTS) for when new ServerTech PDUs are discovered in a system.&#xA;The Redfish Translation Service provides a Redfish interface that the Hardware State Manager (HSM) and Cray Advanced Platform Monitoring and Control (CAPMC) services can use interact with ServerTech PDUs which do not natively support Redfish.</description>
+    </item>
+    <item>
+      <title>Update NCN Passwords</title>
+      <link>/docs-csm/en-09/operations/security_and_authentication/update_ncn_passwords/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:09 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/security_and_authentication/update_ncn_passwords/</guid>
+      <description>Update NCN Passwords The management nodes deploy with a default password in the image, so it is a recommended best practice for system security to change the root password in the image so that it is not the documented default password. In addition to the root password in the image, NCN personalization should be used to change the password as part of post-boot CFS. The password in the image should be used when console access is desired during the network boot of a management node that is being rebuilt, but this password should be different than the one stored in Vault that is applied by CFS during post-boot NCN personalization to change the on-disk password.</description>
+    </item>
+    <item>
+      <title>Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change</title>
+      <link>/docs-csm/en-09/operations/security_and_authentication/updating_the_liquid-cooled_ex_cabinet_default_credentials_after_a_cec_password_change/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:09 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/security_and_authentication/updating_the_liquid-cooled_ex_cabinet_default_credentials_after_a_cec_password_change/</guid>
+      <description>Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change This procedure changes the credential for liquid-cooled EX cabinet chassis controllers and node controller (BMCs) used by CSM services after the CECs have been set to a new global default credential.&#xA;NOTE: This procedure does not provision Slingshot switch BMCs (RouterBMCs). Slingshot switch BMC default credentials must be changed using the procedures in the Slingshot product documentation. To update Slingshot switch BMCs, refer to &amp;ldquo;Change Rosetta Login and Redfish API Credentials&amp;rdquo; in the Slingshot Operations Guide (&amp;gt;1.</description>
+    </item>
+  </channel>
+</rss>

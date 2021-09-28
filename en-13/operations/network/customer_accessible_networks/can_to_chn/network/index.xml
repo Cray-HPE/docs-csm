@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>network on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-13/operations/network/customer_accessible_networks/can_to_chn/network/</link>
+    <description>Recent content in network on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-13</language>
+    <lastBuildDate>Thu, 24 Oct 2024 03:38:29 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-13/operations/network/customer_accessible_networks/can_to_chn/network/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Enabling Customer High Speed Network Routing</title>
+      <link>/docs-csm/en-13/operations/network/customer_accessible_networks/can_to_chn/network/chn_enable/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:29 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/network/customer_accessible_networks/can_to_chn/network/chn_enable/</guid>
+      <description>Enabling Customer High Speed Network Routing Process overview and warnings Prerequisites Backup phase Preparation Create system backups Update phase Disable CFS for UAN Update SLS Update customizations Update CSM service endpoint data (MetalLB) Migrate phase Migrate NCN workers Migrate CSM services (MetalLB) Migrate UAN Minimizing UAN downtime Enable CFS for UAN Notify UAN users Migrate UAI Migrate computes (optional) Add compute IP addresses to CHN SLS data Upload migrated SLS file to SLS service Enable CFS layer Cleanup phase Remove CAN from SLS Remove CAN from customizations Remove CAN from BSS Remove CAN from CSM services Remove CAN interfaces from NCNs Remove CAN names from NCN hosts files Update the management network Testing Process overview and warnings IMPORTANT This procedure is quite involved and the complexities should be completely understood before beginning.</description>
+    </item>
+    <item>
+      <title>Management Network Upgrade CSM 1.2 to 1.3</title>
+      <link>/docs-csm/en-13/operations/network/customer_accessible_networks/can_to_chn/network/network_upgrade_1.2_to_1.3/</link>
+      <pubDate>Thu, 24 Oct 2024 03:38:29 +0000</pubDate>
+      <guid>/docs-csm/en-13/operations/network/customer_accessible_networks/can_to_chn/network/network_upgrade_1.2_to_1.3/</guid>
+      <description>Management Network Upgrade CSM 1.2 to 1.3 Management network changelog When to perform switch upgrades Prerequisites Upgrade CANU to the latest version Backup running switch configurations Retrieve SLS data Generate CSM 1.3 switch configurations Discover CSM 1.2 to CSM 1.3 configuration changes Test the network prior to update Apply and save the new switch configurations Test the network after update Management network changelog CSM 1.3 includes full support for the Bifurcated CAN feature, specifically deployment of user traffic on the high speed network (CHN).</description>
+    </item>
+  </channel>
+</rss>
