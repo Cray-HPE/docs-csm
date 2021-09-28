@@ -364,16 +364,5 @@ Check the expiration of the certificates.
 
 7. Perform a rolling reboot of worker nodes.
 
-   1. Before rebooting any worker node, scale nexus replicas to 0.
-        
-   ```bash
-   ncn-m# kubectl scale deployment nexus -n nexus --replicas=0
-   ```
+   1. Follow the [Reboot_NCNs](../node_management/Reboot_NCNs.md) process.
 
-   2. Follow the [Reboot_NCNs](../node_management/Reboot_NCNs.md) process.
-
-   3. After rebooting all the worker nodes, scale nexus replicas back to 1.
-        
-   ```bash
-   ncn-m# kubectl scale deployment nexus -n nexus --replicas=1
-   ```
