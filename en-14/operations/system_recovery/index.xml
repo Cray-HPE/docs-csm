@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>System Recovery on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-14/operations/system_recovery/</link>
+    <description>Recent content in System Recovery on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-14</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:08:55 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-14/operations/system_recovery/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PBS Service Recovery</title>
+      <link>/docs-csm/en-14/operations/system_recovery/pbs_service_recovery/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:55 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/system_recovery/pbs_service_recovery/</guid>
+      <description>&lt;h1 id=&#34;pbs-service-recovery&#34;&gt;PBS Service Recovery&lt;/h1&gt;&#xA;&lt;p&gt;The following covers restoring PBS data.&lt;/p&gt;&#xA;&lt;h2 id=&#34;prerequisites&#34;&gt;Prerequisites&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;The system is fully installed and has transitioned off of the LiveCD.&lt;/li&gt;&#xA;&lt;li&gt;All activities required for site maintenance are complete.&lt;/li&gt;&#xA;&lt;li&gt;A backup or export of the data already exists.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;service-recovery-for-pbs&#34;&gt;Service recovery for PBS&lt;/h2&gt;&#xA;&lt;p&gt;To restore PBS Professional data from backup, follow section&#xA;&lt;em&gt;10.7.7 Restore PBS home directory from backup&lt;/em&gt; in the&#xA;&lt;strong&gt;HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX Systems (S-8003)&lt;/strong&gt;.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Slurm Service Recovery</title>
+      <link>/docs-csm/en-14/operations/system_recovery/slurm_service_recovery/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:55 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/system_recovery/slurm_service_recovery/</guid>
+      <description>&lt;h1 id=&#34;slurm-service-recovery&#34;&gt;Slurm Service Recovery&lt;/h1&gt;&#xA;&lt;p&gt;The following covers restoring Slurm data.&lt;/p&gt;&#xA;&lt;h2 id=&#34;prerequisites&#34;&gt;Prerequisites&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;The system is fully installed and has transitioned off of the LiveCD.&lt;/li&gt;&#xA;&lt;li&gt;All activities required for site maintenance are complete.&lt;/li&gt;&#xA;&lt;li&gt;A backup or export of the data already exists.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;service-recovery-for-slurm&#34;&gt;Service recovery for Slurm&lt;/h2&gt;&#xA;&lt;p&gt;To restore Slurm data from backup, follow sections&#xA;&lt;em&gt;10.3.11 Restore Slurm Accounting Database from Backup&lt;/em&gt; and&#xA;&lt;em&gt;10.3.13 Restore Slurm Spool Directory from Backup&lt;/em&gt; in the&#xA;&lt;strong&gt;HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX Systems (S-8003)&lt;/strong&gt;.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Beta Procedures for System Recovery</title>
+      <link>/docs-csm/en-14/operations/system_recovery/system_recovery/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:55 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/system_recovery/system_recovery/</guid>
+      <description>&lt;h1 id=&#34;beta-procedures-for-system-recovery&#34;&gt;Beta Procedures for System Recovery&lt;/h1&gt;&#xA;&lt;p&gt;The table below provides links to the recovery procedures available for critical services.&lt;/p&gt;&#xA;&lt;table&gt;&#xA;  &lt;thead&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;th style=&#34;text-align: left&#34;&gt;Service&lt;/th&gt;&#xA;          &lt;th style=&#34;text-align: left&#34;&gt;Recovery procedures&lt;/th&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/thead&gt;&#xA;  &lt;tbody&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td style=&#34;text-align: left&#34;&gt;Vault&lt;/td&gt;&#xA;          &lt;td style=&#34;text-align: left&#34;&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-14/operations/security_and_authentication/vault_service_recovery/&#34;&gt;Vault Service Recovery&lt;/a&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td style=&#34;text-align: left&#34;&gt;Keycloak&lt;/td&gt;&#xA;          &lt;td style=&#34;text-align: left&#34;&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-14/operations/security_and_authentication/keycloak_service_recovery/&#34;&gt;Keycloak Service Recovery&lt;/a&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td style=&#34;text-align: left&#34;&gt;Spire&lt;/td&gt;&#xA;          &lt;td style=&#34;text-align: left&#34;&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-14/operations/spire/spire_service_recovery/&#34;&gt;Spire Service Recovery&lt;/a&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td style=&#34;text-align: left&#34;&gt;Nexus&lt;/td&gt;&#xA;          &lt;td style=&#34;text-align: left&#34;&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-14/operations/package_repository_management/nexus_service_recovery/&#34;&gt;Nexus Service Recovery&lt;/a&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td style=&#34;text-align: left&#34;&gt;Slurm&lt;/td&gt;&#xA;          &lt;td style=&#34;text-align: left&#34;&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-14/operations/system_recovery/slurm_service_recovery/&#34;&gt;Slurm Service Recovery&lt;/a&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td style=&#34;text-align: left&#34;&gt;PBS&lt;/td&gt;&#xA;          &lt;td style=&#34;text-align: left&#34;&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-14/operations/system_recovery/pbs_service_recovery/&#34;&gt;PBS Service Recovery&lt;/a&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/tbody&gt;&#xA;&lt;/table&gt;</description>
+    </item>
+  </channel>
+</rss>

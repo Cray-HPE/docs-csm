@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CSM 1.4.4 Patch Installation Instructions on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-14/upgrade/1.4.4/</link>
+    <description>Recent content in CSM 1.4.4 Patch Installation Instructions on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-14</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:09:58 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-14/upgrade/1.4.4/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CSM Only Upgrade</title>
+      <link>/docs-csm/en-14/upgrade/1.4.4/csm-only/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:58 +0000</pubDate>
+      <guid>/docs-csm/en-14/upgrade/1.4.4/csm-only/</guid>
+      <description>&lt;h1 id=&#34;csm-only-upgrade&#34;&gt;CSM Only Upgrade&lt;/h1&gt;&#xA;&lt;p&gt;This page provides guidance for systems with exclusively CSM installed that are performing an upgrade from a CSM v1.4.X release to the CSM v1.4.4 release.&lt;/p&gt;&#xA;&lt;p&gt;The &lt;a href=&#34;/docs-csm/docs-csm/en-14/upgrade/1.4.4/&#34;&gt;v1.4.4 upgrade page&lt;/a&gt; will refer to this page&#xA;during &lt;a href=&#34;/docs-csm/docs-csm/en-14/upgrade/1.4.4/#update-ncn-images&#34;&gt;Update NCN images&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;If other products are installed on the system, return to &lt;a href=&#34;/docs-csm/docs-csm/en-14/upgrade/1.4.4/#update-ncn-images&#34;&gt;Update NCN images&lt;/a&gt; and&#xA;choose option 1.&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;h2 id=&#34;requirements&#34;&gt;Requirements&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;code&gt;CSM_RELEASE&lt;/code&gt; is set in the shell environment on &lt;code&gt;ncn-m001&lt;/code&gt;. See &lt;a href=&#34;/docs-csm/docs-csm/en-14/upgrade/1.4.4/#preparation&#34;&gt;Preparation&lt;/a&gt; for details on how it should be set.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;steps&#34;&gt;Steps&lt;/h2&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;(&lt;code&gt;ncn-m001#&lt;/code&gt;) Generate a new &lt;a href=&#34;/docs-csm/docs-csm/en-14/glossary/#configuration-framework-service-cfs&#34;&gt;CFS&lt;/a&gt; configuration for the management nodes.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

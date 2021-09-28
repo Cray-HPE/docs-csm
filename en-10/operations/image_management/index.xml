@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>image management on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-10/operations/image_management/</link>
+    <description>Recent content in image management on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-10</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:09:06 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-10/operations/image_management/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Build a New UAN Image Using the Default Recipe</title>
+      <link>/docs-csm/en-10/operations/image_management/build_a_new_uan_image_using_the_default_recipe/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:06 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/image_management/build_a_new_uan_image_using_the_default_recipe/</guid>
+      <description>&lt;h1 id=&#34;build-a-new-uan-image-using-the-default-recipe&#34;&gt;Build a New UAN Image Using the Default Recipe&lt;/h1&gt;&#xA;&lt;p&gt;Build or rebuild the User Access Node (UAN) image using either the default UAN image or image recipe. Both of these are supplied by the UAN&#xA;product stream installer.&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-10/operations/image_management/build_a_new_uan_image_using_the_default_recipe/#prerequisites&#34;&gt;Prerequisites&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-10/operations/image_management/build_a_new_uan_image_using_the_default_recipe/#overview&#34;&gt;Overview&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-10/operations/image_management/build_a_new_uan_image_using_the_default_recipe/#remove_slingshot_diags_from_uan_recipe&#34;&gt;Remove Slingshot Diagnostics RPM From Default UAN Recipe&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-10/operations/image_management/build_a_new_uan_image_using_the_default_recipe/#build_uan_image_automatically&#34;&gt;Build the UAN Image Automatically Using IMS&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-10/operations/image_management/build_a_new_uan_image_using_the_default_recipe/#build_uan_image_manually&#34;&gt;Build the UAN Image By Customizing It Manually&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;prerequisites&#34;&gt;Prerequisites&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Both the Cray Operation System (COS) and UAN product streams must be installed.&lt;/li&gt;&#xA;&lt;li&gt;The Cray administrative CLI must be initialized.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;overview&#34;&gt;Overview&lt;/h2&gt;&#xA;&lt;p&gt;The Cray EX User Access Node (UAN) recipe currently requires the Slingshot Diagnostics package, which is not installed with the UAN product&#xA;itself. Therefore, the UAN recipe can only be built after either the Slingshot product is installed, or the Slingshot Diagnostics package is&#xA;removed from the recipe.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Build an Image Using IMS REST Service</title>
+      <link>/docs-csm/en-10/operations/image_management/build_an_image_using_ims_rest_service/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:06 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/image_management/build_an_image_using_ims_rest_service/</guid>
+      <description>&lt;h1 id=&#34;build-an-image-using-ims-rest-service&#34;&gt;Build an Image Using IMS REST Service&lt;/h1&gt;&#xA;&lt;p&gt;Create an image root from an IMS recipe.&lt;/p&gt;&#xA;&lt;h2 id=&#34;prerequisites&#34;&gt;Prerequisites&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;The Cray command line interface (CLI) tool is initialized and configured on the system.&lt;/p&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;System management services (SMS) are running in a Kubernetes cluster on non-compute nodes (NCN) and include the following deployments:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;code&gt;cray-ims&lt;/code&gt;, the Image Management Service (IMS)&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;cray-nexus&lt;/code&gt;, the Nexus repository manager service&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;The NCN Certificate Authority (CA) public key has been properly installed into the CA cache for this system.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Convert TGZ Archives to SquashFS Images</title>
+      <link>/docs-csm/en-10/operations/image_management/convert_tgz_archives_to_squashfs_images/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:06 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/image_management/convert_tgz_archives_to_squashfs_images/</guid>
+      <description>&lt;h1 id=&#34;convert-tgz-archives-to-squashfs-images&#34;&gt;Convert TGZ Archives to SquashFS Images&lt;/h1&gt;&#xA;&lt;p&gt;If customizing a pre-built image root archive compressed as a &lt;code&gt;.txz&lt;/code&gt; or other non-SquashFS format, convert the image root to SquashFS and upload the SquashFS archive to S3.&lt;/p&gt;&#xA;&lt;p&gt;The steps in this section only apply if the image root is not in SquashFS format.&lt;/p&gt;&#xA;&lt;h2 id=&#34;prerequisites&#34;&gt;Prerequisites&lt;/h2&gt;&#xA;&lt;p&gt;There is a pre-built image that is not currently in SquashFS format.&lt;/p&gt;&#xA;&lt;h2 id=&#34;procedure&#34;&gt;Procedure&lt;/h2&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Locate the image root to be converted to SquashFS.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Create UAN Boot Images</title>
+      <link>/docs-csm/en-10/operations/image_management/create_uan_boot_images/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:06 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/image_management/create_uan_boot_images/</guid>
+      <description>&lt;h1 id=&#34;create-uan-boot-images&#34;&gt;Create UAN Boot Images&lt;/h1&gt;&#xA;&lt;p&gt;Update configuration management Git repository to match the installed version of the UAN product. Then use that updated configuration to create UAN boot images and a BOS&#xA;session template.&lt;/p&gt;&#xA;&lt;p&gt;This is the overall workflow for preparing UAN images for booting UANs:&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;Clone the UAN configuration Git repository and create a branch based on the branch imported by the UAN installation.&lt;/li&gt;&#xA;&lt;li&gt;Update the configuration content and push the changes to the newly created branch.&lt;/li&gt;&#xA;&lt;li&gt;Create a Configuration Framework Service (CFS) configuration for the UANs, specifying the Git configuration and the UAN image to apply the configuration to. More Cray&#xA;products can also be added to the CFS configuration so that the UANs can install multiple Cray products into the UAN image at the same time.&lt;/li&gt;&#xA;&lt;li&gt;Configure the UAN image using CFS and generate a newly configured version of the UAN image.&lt;/li&gt;&#xA;&lt;li&gt;Create a Boot Orchestration Service (BOS) boot session template for the UANs. This template maps the configured image, the CFS configuration to be applied post-boot, and&#xA;the nodes which will receive the image and configuration.&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;p&gt;Once the UAN BOS session template is created, then the UANs will be ready to be booted by a BOS session.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Customize an Image Root Using IMS</title>
+      <link>/docs-csm/en-10/operations/image_management/customize_an_image_root_using_ims/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:06 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/image_management/customize_an_image_root_using_ims/</guid>
+      <description>&lt;h1 id=&#34;customize-an-image-root-using-ims&#34;&gt;Customize an Image Root Using IMS&lt;/h1&gt;&#xA;&lt;p&gt;The Image Management Service (IMS) customization workflow sets up a temporary image customization environment within a Kubernetes pod and mounts the image to be customized&#xA;in that environment. A system administrator then makes the desired changes to the image root within the customization environment.&lt;/p&gt;&#xA;&lt;p&gt;Afterwards, the IMS customization workflow automatically copies the NCN CA public key to &lt;code&gt;/etc/cray/ca/certificate_authority.crt&lt;/code&gt; within the image root being customized, in order&#xA;to enable secure communications between NCNs and client nodes. IMS then compresses the customized image root and uploads it and its associated &lt;code&gt;initrd&lt;/code&gt; image and kernel image (needed&#xA;to boot a node) to the artifact repository.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Delete or Recover Deleted IMS Content</title>
+      <link>/docs-csm/en-10/operations/image_management/delete_or_recover_deleted_ims_content/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:06 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/image_management/delete_or_recover_deleted_ims_content/</guid>
+      <description>&lt;h1 id=&#34;delete-or-recover-deleted-ims-content&#34;&gt;Delete or Recover Deleted IMS Content&lt;/h1&gt;&#xA;&lt;p&gt;The Image Management System (IMS) manages user-supplied SSH public keys, customizable image recipes, images, and IMS jobs that are used to build or customize images.&#xA;In previous versions of IMS, deleting an IMS public key, recipe, or image resulted in that item being permanently deleted. Additionally, IMS recipes and images store&#xA;linked artifacts in the Simple Storage Service (S3) datastore. These artifacts are referenced by the IMS recipe and image records. The default option when deleting&#xA;an IMS recipe and image record was to also delete these linked S3 artifacts.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Image Management</title>
+      <link>/docs-csm/en-10/operations/image_management/image_management/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:06 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/image_management/image_management/</guid>
+      <description>&lt;h1 id=&#34;image-management&#34;&gt;Image Management&lt;/h1&gt;&#xA;&lt;p&gt;The Image Management Service (IMS) uses the open source Kiwi-NG tool to build image roots from compressed Kiwi image descriptions. These compressed Kiwi image descriptions are referred to as &amp;ldquo;recipes.&amp;rdquo; Kiwi-NG builds images based on a variety of different Linux distributions, specifically SUSE, RHEL, and their derivatives. Kiwi image descriptions must follow the Kiwi development schema. More information about the development schema and the Kiwi-NG tool can be found in the documentation: &lt;a href=&#34;https://doc.opensuse.org/projects/kiwi/doc/&#34;&gt;https://doc.opensuse.org/projects/kiwi/doc/&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Image Management Workflows</title>
+      <link>/docs-csm/en-10/operations/image_management/image_management_workflows/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:06 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/image_management/image_management_workflows/</guid>
+      <description>&lt;h1 id=&#34;image-management-workflows&#34;&gt;Image Management Workflows&lt;/h1&gt;&#xA;&lt;p&gt;Overview of how to create an image and how to customize and image.&lt;/p&gt;&#xA;&lt;p&gt;The following workflows are intended to be high-level overviews of image management tasks. These workflows depict how services interact with each other during image management and help to provide a quicker and deeper&#xA;understanding of how the system functions.&lt;/p&gt;&#xA;&lt;p&gt;The workflows in this section include:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-10/operations/image_management/image_management_workflows/#create-a-new-image&#34;&gt;Create a new image&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-10/operations/image_management/image_management_workflows/#customize-an-image&#34;&gt;Customize an image&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;create-a-new-image&#34;&gt;Create a new image&lt;/h2&gt;&#xA;&lt;p&gt;&lt;strong&gt;Use Case:&lt;/strong&gt; The system administrator creates an image root from a customized recipe. The new image can be used to boot compute nodes.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Import an External Image to IMS</title>
+      <link>/docs-csm/en-10/operations/image_management/import_external_image_to_ims/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:06 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/image_management/import_external_image_to_ims/</guid>
+      <description>&lt;h1 id=&#34;import-an-external-image-to-ims&#34;&gt;Import an External Image to IMS&lt;/h1&gt;&#xA;&lt;p&gt;The Image Management Service (IMS) is typically used to build images from IMS recipes and customize Images that are already known to IMS.&#xA;However, it is sometimes the case that an image is built using a mechanism other than by IMS and needs to be added to IMS. In these cases,&#xA;the following procedure can be used to add this external image to IMS and upload the image&amp;rsquo;s artifact(s) to the Simple Storage Service (S3).&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Upload and Register an Image Recipe</title>
+      <link>/docs-csm/en-10/operations/image_management/upload_and_register_an_image_recipe/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:06 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/image_management/upload_and_register_an_image_recipe/</guid>
+      <description>&lt;h1 id=&#34;upload-and-register-an-image-recipe&#34;&gt;Upload and Register an Image Recipe&lt;/h1&gt;&#xA;&lt;p&gt;Download and expand recipe archives from S3 and IMS. Modify and upload a recipe archive, and then register that recipe archive with IMS.&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-10/operations/image_management/upload_and_register_an_image_recipe/#prerequisites&#34;&gt;Prerequisites&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-10/operations/image_management/upload_and_register_an_image_recipe/#limitations&#34;&gt;Limitations&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-10/operations/image_management/upload_and_register_an_image_recipe/#register-recipe-with-ims&#34;&gt;Register recipe with IMS&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;prerequisites&#34;&gt;Prerequisites&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;The Cray command line interface (CLI) tool is initialized and configured on the system.&lt;/li&gt;&#xA;&lt;li&gt;System management services (SMS) are running in a Kubernetes cluster on non-compute nodes (NCNs) and include the following deployment:&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;code&gt;cray-ims&lt;/code&gt;, the Image Management Service (IMS)&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;The NCN Certificate Authority (CA) public key has been properly installed into the CA cache for this system.&lt;/li&gt;&#xA;&lt;li&gt;A token providing Simple Storage Service (S3) credentials has been generated.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;limitations&#34;&gt;Limitations&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;The commands in this procedure must be run as the &lt;code&gt;root&lt;/code&gt; user.&lt;/li&gt;&#xA;&lt;li&gt;The IMS tool currently only supports Kiwi-NG recipe types.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;register-recipe-with-ims&#34;&gt;Register recipe with IMS&lt;/h2&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Locate the desired recipe to download from S3.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

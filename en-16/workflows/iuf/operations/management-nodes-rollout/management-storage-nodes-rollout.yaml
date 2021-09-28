@@ -1,0 +1,190 @@
+#
+# MIT License
+#
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: management-storage-nodes-rollout
+spec:
+  tolerations:
+    - key: "node-role.kubernetes.io/master"
+      operator: "Exists"
+      effect: "NoSchedule"
+    - key: "node-role.kubernetes.io/control-plane"
+      operator: "Exists"
+      effect: "NoSchedule"
+  entrypoint: main
+  templates:
+    - name: main
+      metrics:
+        prometheus:
+        - name: operation_counter
+          help: "Count of step execution by result status"
+          labels:
+            - key: "opname"
+              value: "management-storage-nodes-rollout"
+            - key: stage
+              value: "management-nodes-rollout"
+            - key: type
+              value: "global"
+            - key: pname
+              value: "global"
+            - key: pversion
+              value: "global"
+            - key: status
+              value: "{{status}}"
+          counter:
+            value: "1"
+      inputs:
+        parameters:
+          - name: auth_token
+          - name: global_params
+      dag:
+        tasks:
+          - name: start-operation
+            templateRef:
+              name: workflow-template-record-time-template
+              template: record-time-template
+          - name: INFO-to-read
+            dependencies:
+              - start-operation
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: mediaHost
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"                   
+                - name: scriptContent
+                  value: |
+                    echo "NOTICE This workflow will rollout storage nodes according to --limit-management-rollout parameter."
+                    echo "NOTICE This stage will start an additional Argo workflow whose name contains 'ncn-lifecycle-rebuild'. Check for this workflow in the Argo UI."
+                    echo "NOTICE Check the argo pod logs from each step in the workflow to see what the step is doing"
+          - name: verify-storage-images-and-configuration
+            dependencies:
+              - INFO-to-read
+            templateRef:
+              name: verify-ncn-images-and-configs
+              template: main
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: global_params
+                  value: "{{inputs.parameters.global_params}}"
+                - name: nodeType
+                  value: "Storage"
+          - name: storage-node-upgrade
+            dependencies:
+              - verify-storage-images-and-configuration
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: mediaHost
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"                   
+                - name: scriptContent
+                  value: |
+                    echo "INFO This stage will start a new Argo workflow with a name containing 'ncn-lifecycle-rebuild'."
+                    echo '{{inputs.parameters.global_params}}' > global.params.data
+                    prepare_images_ouput=$(cat global.params.data | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
+                    image=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Storage")) | .[].final_image_id' | tr -d '"')
+                    configuration=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Storage")) | .[].configuration' | tr -d '"')
+
+                    limit_management_nodes=$(cat global.params.data | jq -r '.input_params.limit_management_nodes[]')
+                    rebuild_set=""
+                    if [[ -n $(echo $limit_management_nodes | grep 'Management_Storage') ]]; then
+                      for storage_node in $(ceph orch host ls -f json |jq -r '.[].hostname'); do
+                        rebuild_set="${rebuild_set},${storage_node}"
+                      done
+                    else
+                      # rebuild storage nodes specified by hostnames
+                      storage_nodes_to_rebuild="${limit_management_nodes}"
+                      for storage_node in $storage_nodes_to_rebuild; do
+                        rebuild_set="${rebuild_set},${storage_node}"
+                      done
+                    fi
+                    # remove first comma from rebuild set
+                    rebuild_set=${rebuild_set#?}
+                    
+                    export TERM=linux
+                    echo "DEBUG Starting upgrade of $rebuild_set using image: $image and cfs-configuration: $configuration"
+                    /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh $rebuild_set --upgrade --image-id $image --desired-cfs-conf $configuration --labels '{"activity":"{{workflow.labels.activity}}","session":"{{workflow.labels.session}}"}'
+          - name: end-operation
+            dependencies:
+              - storage-node-upgrade
+            templateRef:
+              name: workflow-template-record-time-template
+              template: record-time-template
+          - name: prom-metrics
+            dependencies:
+              - start-operation
+              - end-operation
+            template: prom-metrics
+            arguments:
+              parameters:
+              - name: opstart
+                value: "{{tasks.start-operation.outputs.result}}"
+              - name: opend
+                value: "{{tasks.end-operation.outputs.result}}"
+    - name: prom-metrics
+      inputs:
+        parameters:
+        - name: opstart
+        - name: opend
+      metrics:
+        prometheus:
+          - name: operation_time
+            help: "Duration gauge by operation name in seconds"
+            labels:
+              - key: "opname"
+                value: "management-storage-nodes-rollout"
+              - key: stage
+                value: "management-nodes-rollout"
+              - key: type
+                value: "global"
+              - key: pdname
+                value: "global"
+              - key: pdversion
+                value: "global"
+              - key: "opstart"
+                value: "{{inputs.parameters.opstart}}"
+              - key: "opend"
+                value: "{{inputs.parameters.opend}}"
+            gauge:
+              value: "{{outputs.parameters.diff-time-value}}"
+      outputs:
+        parameters:
+          - name: diff-time-value
+            globalName: diff-time-value
+            valueFrom:
+              path: /tmp/diff_time.txt
+      container:
+        image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
+        command: [sh, -c]
+        args: ["DIFF_TIME=$(expr {{inputs.parameters.opend}} - {{inputs.parameters.opstart}}); echo $DIFF_TIME; echo $DIFF_TIME > /tmp/diff_time.txt"]

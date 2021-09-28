@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cray System Management (CSM) Administration Guide on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-10/operations/</link>
+    <description>Recent content in Cray System Management (CSM) Administration Guide on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-10</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:09:24 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-10/operations/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Accessing LiveCD USB Device After Reboot</title>
+      <link>/docs-csm/en-10/operations/access_livecd_usb_device_after_reboot/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:51 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/access_livecd_usb_device_after_reboot/</guid>
+      <description>&lt;h1 id=&#34;accessing-livecd-usb-device-after-reboot&#34;&gt;Accessing LiveCD USB Device After Reboot&lt;/h1&gt;&#xA;&lt;p&gt;This is a procedure that only applies to the LiveCD USB device after the PIT node has been rebooted.&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;&lt;strong&gt;&lt;code&gt;USB ONLY&lt;/code&gt;&lt;/strong&gt; If the installation above was done from a &lt;a href=&#34;/docs-csm/docs-csm/en-10/install/bootstrap_livecd_remote_iso/&#34;&gt;Remote ISO&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;p&gt;After deploying the LiveCD&amp;rsquo;s NCN, the LiveCD USB itself is unharmed and available to an administrator.&lt;/p&gt;&#xA;&lt;h2 id=&#34;procedure&#34;&gt;Procedure&lt;/h2&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Mount and view the USB device.&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ncn-m001# mkdir -pv /mnt/&lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;cow,pitdata&lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ncn-m001# mount -vL cow /mnt/cow&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ncn-m001# mount -vL PITDATA /mnt/pitdata&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ncn-m001# ls -ld /mnt/cow/rw/*&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Example output:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Component Names (xnames)</title>
+      <link>/docs-csm/en-10/operations/component_names_xnames/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:52 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/component_names_xnames/</guid>
+      <description>&lt;h1 id=&#34;component-names-xnames&#34;&gt;Component Names (xnames)&lt;/h1&gt;&#xA;&lt;p&gt;Component names (xnames) identify the geolocation for hardware components in the HPE Cray EX system. Every component is uniquely identified by these component names. Some, like the system cabinet number or the CDU number, can be changed by site needs. There is no geolocation encoded within the cabinet number, such as an X-Y coordinate system to relate to the floor layout of the cabinets. Other component names refer to the location within a cabinet and go down to the port on a card or switch or the socket holding a processor or a memory DIMM location.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Validate CSM Health</title>
+      <link>/docs-csm/en-10/operations/validate_csm_health/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:24 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/validate_csm_health/</guid>
+      <description>&lt;h1 id=&#34;validate-csm-health&#34;&gt;Validate CSM Health&lt;/h1&gt;&#xA;&lt;p&gt;Anytime after the installation of the CSM services, the health of the management nodes and all CSM services can be validated.&lt;/p&gt;&#xA;&lt;p&gt;The following are examples of when to run health checks:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;After CSM &lt;code&gt;install.sh&lt;/code&gt; completes&lt;/li&gt;&#xA;&lt;li&gt;Before and after NCN reboots&lt;/li&gt;&#xA;&lt;li&gt;After the system is brought back up&lt;/li&gt;&#xA;&lt;li&gt;Any time there is unexpected behavior observed&lt;/li&gt;&#xA;&lt;li&gt;In order to provide relevant information to create support tickets&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;The areas should be tested in the order they are listed on this page. Errors in an earlier check may cause errors in later checks because of dependencies.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Configure the Cray Command Line Interface (cray CLI)</title>
+      <link>/docs-csm/en-10/operations/configure_cray_cli/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:03 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/configure_cray_cli/</guid>
+      <description>&lt;h1 id=&#34;configure-the-cray-command-line-interface-cray-cli&#34;&gt;Configure the Cray Command Line Interface (&lt;code&gt;cray&lt;/code&gt; CLI)&lt;/h1&gt;&#xA;&lt;p&gt;The &lt;code&gt;cray&lt;/code&gt; command line interface (CLI) is a framework created to integrate all of the system management REST APIs into easily usable commands.&lt;/p&gt;&#xA;&lt;p&gt;Procedures in the CSM installation workflow use the &lt;code&gt;cray&lt;/code&gt; CLI to interact with multiple services.&#xA;The &lt;code&gt;cray&lt;/code&gt; CLI configuration needs to be initialized for the Linux account, and the Keycloak user running&#xA;the procedure needs to be authorized. This section describes how to initialize the &lt;code&gt;cray&lt;/code&gt; CLI for use by&#xA;a user and how to authorize that user.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

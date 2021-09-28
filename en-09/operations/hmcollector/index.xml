@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>hmcollector on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-09/operations/hmcollector/</link>
+    <description>Recent content in hmcollector on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-09</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:08:51 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-09/operations/hmcollector/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Adjust HM Collector resource limits and requests</title>
+      <link>/docs-csm/en-09/operations/hmcollector/adjust_hmcollector_resource_limits_requests/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:51 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/hmcollector/adjust_hmcollector_resource_limits_requests/</guid>
+      <description>&lt;h1 id=&#34;adjust-hm-collector-resource-limits-and-requests&#34;&gt;Adjust HM Collector resource limits and requests&lt;/h1&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-09/operations/hmcollector/adjust_hmcollector_resource_limits_requests/#resource-limit-tuning&#34;&gt;Resource Limit Tuning Guidance&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-09/operations/hmcollector/adjust_hmcollector_resource_limits_requests/#customize-resource-limits&#34;&gt;Customize cray-hms-hmcollector resource limits and requests in customizations.yaml&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-09/operations/hmcollector/adjust_hmcollector_resource_limits_requests/#redeploy-cray-hms-hmcollector&#34;&gt;Redeploy cray-hms-hmcollector with new resource limits and requests&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;resource-limit-tuning&#34;&gt;Resource Limit Tuning Guidance&lt;/h2&gt;&#xA;&lt;h3 id=&#34;inspect-current-resource-usage-in-the-cray-hms-hmcollector-pod&#34;&gt;Inspect current resource usage in the cray-hms-hmcollector pod&lt;/h3&gt;&#xA;&lt;p&gt;View resource usage of the containers in the cray-hms-hmcollector pod:&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ncn-m001# kubectl -n services top pod -l app.kubernetes.io/name&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;cray-hms-hmcollector --containers&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;POD                                     NAME                   CPU&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;cores&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;   MEMORY&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;bytes&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cray-hms-hmcollector-7c5b797c5c-zxt67   istio-proxy            187m         275Mi&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cray-hms-hmcollector-7c5b797c5c-zxt67   cray-hms-hmcollector   4398m        296Mi&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The default resource limits for the cray-hms-hmcollector container are:&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Deprecated Features on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-15/introduction/deprecated_features/</link>
+    <description>Recent content in Deprecated Features on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-15</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:08:52 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-15/introduction/deprecated_features/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CAPMC Deprecation Notice</title>
+      <link>/docs-csm/en-15/introduction/deprecated_features/capmc_deprecation_notice/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:52 +0000</pubDate>
+      <guid>/docs-csm/en-15/introduction/deprecated_features/capmc_deprecation_notice/</guid>
+      <description>&lt;h1 id=&#34;capmc-deprecation-notice&#34;&gt;CAPMC Deprecation Notice&lt;/h1&gt;&#xA;&lt;h2 id=&#34;capmc-enters-final-life-cycle-before-removal&#34;&gt;CAPMC enters final life cycle before removal&lt;/h2&gt;&#xA;&lt;p&gt;CSM 1.5 is the last release that will contain the CAPMC service. It has been&#xA;replaced by PCS. CAPMC continues to co-exist with PCS to assist in transition to&#xA;PCS. CAPMC is slated to be permanently removed from the system beginning with&#xA;CSM 1.6.&lt;/p&gt;&#xA;&lt;h3 id=&#34;deprecated-features-in-csm-15&#34;&gt;Deprecated Features in CSM 1.5&lt;/h3&gt;&#xA;&lt;p&gt;CAPMC has been end-of-life since the CSM 1.3 release. The remaining APIs and CLI commands&#xA;are officially deprecated and will be removed in the CSM 1.6 release.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

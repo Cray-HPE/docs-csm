@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CSM product management on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-09/operations/csm_product_management/</link>
+    <description>Recent content in CSM product management on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-09</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:08:51 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-09/operations/csm_product_management/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Security Hardening</title>
+      <link>/docs-csm/en-09/operations/csm_product_management/apply_security_hardening/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:51 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/csm_product_management/apply_security_hardening/</guid>
+      <description>&lt;h1 id=&#34;security-hardening&#34;&gt;Security Hardening&lt;/h1&gt;&#xA;&lt;p&gt;This is an overarching guide to further harden the security posture of a Cray System Management (CSM) system.&lt;/p&gt;&#xA;&lt;p&gt;If a subset of the steps in this procedure were completed as a consequence of an install, upgrade, or other guidance, then it is safe to skip that subset following a review.&lt;/p&gt;&#xA;&lt;h2 id=&#34;prerequisites&#34;&gt;Prerequisites&lt;/h2&gt;&#xA;&lt;p&gt;None.&lt;/p&gt;&#xA;&lt;h2 id=&#34;procedure&#34;&gt;Procedure&lt;/h2&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Change passwords and credentials.&lt;/p&gt;&#xA;&lt;p&gt;Perform procedure(s) in &lt;a href=&#34;/docs-csm/docs-csm/en-09/operations/csm_product_management/change_passwords_and_credentials/&#34;&gt;Change Passwords and Credentials&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Restrict access to &lt;code&gt;ncn-images&lt;/code&gt; S3 Bucket.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Change Passwords and Credentials</title>
+      <link>/docs-csm/en-09/operations/csm_product_management/change_passwords_and_credentials/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:51 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/csm_product_management/change_passwords_and_credentials/</guid>
+      <description>&lt;h2 id=&#34;change-passwords-and-credentials&#34;&gt;Change Passwords and Credentials&lt;/h2&gt;&#xA;&lt;p&gt;This is an overarching procedure to change all credentials managed by Cray System Management (CSM) in HPE Cray EX system to new values.&lt;/p&gt;&#xA;&lt;p&gt;There are many passwords and credentials used in different contexts to manage the system. These can be changed as needed. Their initial settings are documented, so it is recommended to change them during or soon after a CSM software installation.&lt;/p&gt;&#xA;&lt;h2 id=&#34;procedure&#34;&gt;Procedure&lt;/h2&gt;&#xA;&lt;h3 id=&#34;1-change-hardware-credentials&#34;&gt;1. Change Hardware Credentials&lt;/h3&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Perform procedures in &lt;a href=&#34;/docs-csm/docs-csm/en-09/operations/security_and_authentication/change_ex_cabinet_global_default_password/&#34;&gt;Change Cray EX Cabinet Global Default Password&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>About SAT on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-16/operations/system_admin_toolkit/about_sat/</link>
+    <description>Recent content in About SAT on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-16</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:09:44 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-16/operations/system_admin_toolkit/about_sat/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Introduction to SAT</title>
+      <link>/docs-csm/en-16/operations/system_admin_toolkit/about_sat/introduction_to_sat/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:44 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_admin_toolkit/about_sat/introduction_to_sat/</guid>
+      <description>&lt;h1 id=&#34;introduction-to-sat&#34;&gt;Introduction to SAT&lt;/h1&gt;&#xA;&lt;h2 id=&#34;about-system-admin-toolkit-sat&#34;&gt;About System Admin Toolkit (SAT)&lt;/h2&gt;&#xA;&lt;p&gt;The System Admin Toolkit (SAT) is designed to assist administrators with common tasks, such as&#xA;troubleshooting and querying information about the HPE Cray EX System and its components, system&#xA;boot and shutdown, and replacing hardware components.&lt;/p&gt;&#xA;&lt;h3 id=&#34;sat-command-line-utility&#34;&gt;SAT Command Line Utility&lt;/h3&gt;&#xA;&lt;p&gt;The System Admin Toolkit (SAT) provides a command-line utility called &lt;code&gt;sat&lt;/code&gt; that can be run from&#xA;Kubernetes control plane nodes (&lt;code&gt;ncn-m&lt;/code&gt; nodes). The &lt;code&gt;sat&lt;/code&gt; command-line utility is organized into&#xA;multiple subcommands that perform different administrative tasks. For example, &lt;code&gt;sat status&lt;/code&gt; provides&#xA;a summary of the status of the components in the system while &lt;code&gt;sat bootprep&lt;/code&gt; provides a way to&#xA;create CFS configurations, IMS images, and session templates to prepare for booting the system. For&#xA;more information on the available SAT commands, see &lt;a href=&#34;/docs-csm/docs-csm/en-16/operations/system_admin_toolkit/about_sat/sat_command_overview/&#34;&gt;SAT Command Overview&lt;/a&gt;.&#xA;Most &lt;code&gt;sat&lt;/code&gt; subcommands depend on services or components from other products in the HPE Cray EX software stack.&#xA;For more details, refer to the &lt;a href=&#34;/docs-csm/docs-csm/en-16/operations/system_admin_toolkit/about_sat/sat_dependencies/&#34;&gt;SAT Dependencies&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>SAT Command Overview</title>
+      <link>/docs-csm/en-16/operations/system_admin_toolkit/about_sat/sat_command_overview/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:44 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_admin_toolkit/about_sat/sat_command_overview/</guid>
+      <description>&lt;h1 id=&#34;sat-command-overview&#34;&gt;SAT Command Overview&lt;/h1&gt;&#xA;&lt;p&gt;The SAT command-line utility, &lt;code&gt;sat&lt;/code&gt;, is organized into multiple subcommands&#xA;that perform different administrative tasks. For example, &lt;code&gt;sat status&lt;/code&gt; provides&#xA;a summary of the status of the components in the system while &lt;code&gt;sat bootprep&lt;/code&gt;&#xA;provides a way to create CFS configurations, IMS images, and session templates&#xA;to prepare for booting the system.&#xA;Most &lt;code&gt;sat&lt;/code&gt; subcommands depend on services or components from other products in the HPE Cray EX software stack.&#xA;For more details, refer to the &lt;a href=&#34;/docs-csm/docs-csm/en-16/operations/system_admin_toolkit/about_sat/sat_dependencies/&#34;&gt;SAT Dependencies&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>SAT Dependencies</title>
+      <link>/docs-csm/en-16/operations/system_admin_toolkit/about_sat/sat_dependencies/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:44 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_admin_toolkit/about_sat/sat_dependencies/</guid>
+      <description>&lt;h1 id=&#34;sat-dependencies&#34;&gt;SAT Dependencies&lt;/h1&gt;&#xA;&lt;p&gt;Most &lt;code&gt;sat&lt;/code&gt; subcommands depend on services or components from CSM or from other&#xA;products in the HPE Cray EX software stack. The following list shows these&#xA;dependencies for each subcommand. Each service or component is listed under the&#xA;product it belongs to.&lt;/p&gt;&#xA;&lt;h2 id=&#34;sat-auth&#34;&gt;&lt;code&gt;sat auth&lt;/code&gt;&lt;/h2&gt;&#xA;&lt;p&gt;CSM dependencies:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Keycloak&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;sat-bmccreds&#34;&gt;&lt;code&gt;sat bmccreds&lt;/code&gt;&lt;/h2&gt;&#xA;&lt;p&gt;CSM dependencies:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-16/glossary/#system-configuration-service-scsd&#34;&gt;System Configuration Service (SCSD)&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;sat-bootprep&#34;&gt;&lt;code&gt;sat bootprep&lt;/code&gt;&lt;/h2&gt;&#xA;&lt;p&gt;CSM dependencies:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-16/glossary/#boot-orchestration-service-bos&#34;&gt;Boot Orchestration Service (BOS)&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-16/glossary/#configuration-framework-service-cfs&#34;&gt;Configuration Framework Service (CFS)&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-16/glossary/#image-management-service-ims&#34;&gt;Image Management Service (IMS)&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-16/glossary/#version-control-service-vcs&#34;&gt;Version Control Service (VCS)&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;Kubernetes&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-16/glossary/#simple-storage-service-s3&#34;&gt;Simple Storage Service (S3)&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;sat-bootsys&#34;&gt;&lt;code&gt;sat bootsys&lt;/code&gt;&lt;/h2&gt;&#xA;&lt;p&gt;CSM dependencies:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>SAT in CSM</title>
+      <link>/docs-csm/en-16/operations/system_admin_toolkit/about_sat/sat_in_csm/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:44 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_admin_toolkit/about_sat/sat_in_csm/</guid>
+      <description>&lt;h1 id=&#34;sat-in-csm&#34;&gt;SAT in CSM&lt;/h1&gt;&#xA;&lt;p&gt;In CSM 1.3 and newer, the &lt;code&gt;sat&lt;/code&gt; command is available on the Kubernetes NCNs without installing the&#xA;SAT product stream.&lt;/p&gt;&#xA;&lt;p&gt;Starting in CSM 1.6.0, SAT is fully included in CSM. There is no longer a separate SAT product&#xA;stream to install. SAT 2.6 releases, which accompanied CSM 1.5, are the last releases of SAT as a&#xA;separate product.&lt;/p&gt;&#xA;&lt;h2 id=&#34;differences-from-old-sat-product-stream&#34;&gt;Differences from old SAT Product Stream&lt;/h2&gt;&#xA;&lt;p&gt;There are several notable differences between the separate 2.6 releases of SAT and the release of&#xA;SAT included in CSM 1.6.0. They are described below.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

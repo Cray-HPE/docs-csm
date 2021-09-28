@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>stages on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-15/operations/iuf/stages/</link>
+    <description>Recent content in stages on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-15</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:09:12 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-15/operations/iuf/stages/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>deliver-product</title>
+      <link>/docs-csm/en-15/operations/iuf/stages/deliver_product/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:11 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/stages/deliver_product/</guid>
+      <description>&lt;h1 id=&#34;deliver-product&#34;&gt;&lt;code&gt;deliver-product&lt;/code&gt;&lt;/h1&gt;&#xA;&lt;p&gt;The &lt;code&gt;deliver-product&lt;/code&gt; stage delivers the content provided in the product distribution files to the system. The versioned product catalog entry for each product is updated as the new content is uploaded.&lt;/p&gt;&#xA;&lt;p&gt;&lt;code&gt;deliver-product&lt;/code&gt; details are explained in the following sections:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/iuf/stages/deliver_product/#impact&#34;&gt;Impact&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/iuf/stages/deliver_product/#input&#34;&gt;Input&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/iuf/stages/deliver_product/#execution-details&#34;&gt;Execution details&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/iuf/stages/deliver_product/#example&#34;&gt;Example&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;impact&#34;&gt;Impact&lt;/h2&gt;&#xA;&lt;p&gt;The &lt;code&gt;deliver-product&lt;/code&gt; stage does not change the running state of the system as the new content has been uploaded, but not deployed.&lt;/p&gt;&#xA;&lt;h2 id=&#34;input&#34;&gt;Input&lt;/h2&gt;&#xA;&lt;p&gt;The following arguments are most often used with the &lt;code&gt;deliver-product&lt;/code&gt; stage. See &lt;code&gt;iuf -h&lt;/code&gt; and &lt;code&gt;iuf run -h&lt;/code&gt; for additional arguments.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>deploy-product</title>
+      <link>/docs-csm/en-15/operations/iuf/stages/deploy_product/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:11 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/stages/deploy_product/</guid>
+      <description>&lt;h1 id=&#34;deploy-product&#34;&gt;&lt;code&gt;deploy-product&lt;/code&gt;&lt;/h1&gt;&#xA;&lt;p&gt;The &lt;code&gt;deploy-product&lt;/code&gt; stage uses Loftsman to deploy product microservices to the system. The microservices are specified in the &lt;code&gt;loftsman&lt;/code&gt; entry in each product&amp;rsquo;s &lt;code&gt;iuf-product-manifest.yaml&lt;/code&gt; file within the product distribution file.&lt;/p&gt;&#xA;&lt;p&gt;&lt;code&gt;deploy-product&lt;/code&gt; details are explained in the following sections:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/iuf/stages/deploy_product/#impact&#34;&gt;Impact&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/iuf/stages/deploy_product/#input&#34;&gt;Input&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/iuf/stages/deploy_product/#execution-details&#34;&gt;Execution details&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/iuf/stages/deploy_product/#example&#34;&gt;Example&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;impact&#34;&gt;Impact&lt;/h2&gt;&#xA;&lt;p&gt;The &lt;code&gt;deploy-product&lt;/code&gt; stage changes the running state of the system.&lt;/p&gt;&#xA;&lt;h2 id=&#34;input&#34;&gt;Input&lt;/h2&gt;&#xA;&lt;p&gt;The following arguments are most often used with the &lt;code&gt;deploy-product&lt;/code&gt; stage. See &lt;code&gt;iuf -h&lt;/code&gt; and &lt;code&gt;iuf run -h&lt;/code&gt; for additional arguments.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>managed-nodes-rollout</title>
+      <link>/docs-csm/en-15/operations/iuf/stages/managed_nodes_rollout/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:11 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/stages/managed_nodes_rollout/</guid>
+      <description>&lt;h1 id=&#34;managed-nodes-rollout&#34;&gt;&lt;code&gt;managed-nodes-rollout&lt;/code&gt;&lt;/h1&gt;&#xA;&lt;p&gt;The &lt;code&gt;managed-nodes-rollout&lt;/code&gt; stage performs a reboot of the managed compute and application nodes in order to reboot them&#xA;to a new image and configuration. The system must be configured to use BOS v2 as&#xA;it is used to perform the reboot. The reboot operations use the BOS session templates created during&#xA;the &lt;code&gt;prepare-images&lt;/code&gt; stage. The &lt;code&gt;-mrs stage&lt;/code&gt; argument is only valid for compute nodes, since application nodes are not&#xA;controlled&#xA;by workload manager software. The &lt;code&gt;-mrs reboot&lt;/code&gt; argument will reboot all compute and application nodes immediately if&#xA;the &lt;code&gt;--limit-managed-rollout&lt;/code&gt; argument is not specified.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>management-nodes-rollout</title>
+      <link>/docs-csm/en-15/operations/iuf/stages/management_nodes_rollout/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:12 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/stages/management_nodes_rollout/</guid>
+      <description>&lt;h1 id=&#34;management-nodes-rollout&#34;&gt;&lt;code&gt;management-nodes-rollout&lt;/code&gt;&lt;/h1&gt;&#xA;&lt;p&gt;The &lt;code&gt;management-nodes-rollout&lt;/code&gt; stage performs a controlled update of management NCNs by configuring them with a new CFS&#xA;configuration and/or rebuilding or upgrading them to a new image. A &amp;ldquo;rebuild&amp;rdquo; is a reboot operation that clears the&#xA;persistent OverlayFS file system on that node, i.e. all data on node-local storage will be discarded. An &amp;ldquo;upgrade&amp;rdquo; is&#xA;similar to a rebuild, but it intentionally does not clear all information off of NCN storage and master nodes. IUF will&#xA;account for the necessary minimum number of critical software instances running on the nodes to ensure&#xA;the &lt;code&gt;management-nodes-rollout&lt;/code&gt; stage operates without impacting software availability.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>post-install-check</title>
+      <link>/docs-csm/en-15/operations/iuf/stages/post_install_check/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:12 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/stages/post_install_check/</guid>
+      <description>&lt;h1 id=&#34;post-install-check&#34;&gt;&lt;code&gt;post-install-check&lt;/code&gt;&lt;/h1&gt;&#xA;&lt;p&gt;The &lt;code&gt;post-install-check&lt;/code&gt; stage validates that the managed compute and application nodes deployed by the preceding &lt;code&gt;managed-nodes-rollout&lt;/code&gt; stage are executing correctly. It primarily executes pre- and post-stage hook scripts&#xA;provided by products in their &lt;code&gt;iuf-product-manifest.yaml&lt;/code&gt; file.&lt;/p&gt;&#xA;&lt;p&gt;&lt;code&gt;post-install-check&lt;/code&gt; details are explained in the following sections:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/iuf/stages/post_install_check/#impact&#34;&gt;Impact&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/iuf/stages/post_install_check/#input&#34;&gt;Input&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/iuf/stages/post_install_check/#execution-details&#34;&gt;Execution details&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/iuf/stages/post_install_check/#example&#34;&gt;Example&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;impact&#34;&gt;Impact&lt;/h2&gt;&#xA;&lt;p&gt;The &lt;code&gt;post-install-check&lt;/code&gt; stage does not change the running state of the system.&lt;/p&gt;&#xA;&lt;h2 id=&#34;input&#34;&gt;Input&lt;/h2&gt;&#xA;&lt;p&gt;The following arguments are most often used with the &lt;code&gt;post-install-check&lt;/code&gt; stage. See &lt;code&gt;iuf -h&lt;/code&gt; and &lt;code&gt;iuf run -h&lt;/code&gt; for additional arguments.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>post-install-service-check</title>
+      <link>/docs-csm/en-15/operations/iuf/stages/post_install_service_check/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:12 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/stages/post_install_service_check/</guid>
+      <description>&lt;h1 id=&#34;post-install-service-check&#34;&gt;&lt;code&gt;post-install-service-check&lt;/code&gt;&lt;/h1&gt;&#xA;&lt;p&gt;The &lt;code&gt;post-install-service-check&lt;/code&gt; stage validates that the microservices deployed by the preceding &lt;code&gt;deploy-product&lt;/code&gt; stage are executing correctly. It primarily executes pre- and post-stage hook scripts provided by products&#xA;in their &lt;code&gt;iuf-product-manifest.yaml&lt;/code&gt; file.&lt;/p&gt;&#xA;&lt;p&gt;&lt;code&gt;post-install-service-check&lt;/code&gt; details are explained in the following sections:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/iuf/stages/post_install_service_check/#impact&#34;&gt;Impact&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/iuf/stages/post_install_service_check/#input&#34;&gt;Input&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/iuf/stages/post_install_service_check/#execution-details&#34;&gt;Execution details&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/iuf/stages/post_install_service_check/#example&#34;&gt;Example&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;impact&#34;&gt;Impact&lt;/h2&gt;&#xA;&lt;p&gt;The &lt;code&gt;post-install-service-check&lt;/code&gt; stage does not change the running state of the system.&lt;/p&gt;&#xA;&lt;h2 id=&#34;input&#34;&gt;Input&lt;/h2&gt;&#xA;&lt;p&gt;The following arguments are most often used with the &lt;code&gt;post-install-service-check&lt;/code&gt; stage. See &lt;code&gt;iuf -h&lt;/code&gt; and &lt;code&gt;iuf run -h&lt;/code&gt; for additional arguments.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>pre-install-check</title>
+      <link>/docs-csm/en-15/operations/iuf/stages/pre_install_check/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:12 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/stages/pre_install_check/</guid>
+      <description>&lt;h1 id=&#34;pre-install-check&#34;&gt;&lt;code&gt;pre-install-check&lt;/code&gt;&lt;/h1&gt;&#xA;&lt;p&gt;The &lt;code&gt;pre-install-check&lt;/code&gt; stage ensures that CSM is operating properly so that products can be installed. It verifies that S3 storage is functional, that CFS, VCS, and IMS microservices are functional, etc. Products may&#xA;provide hook scripts to perform additional product-specific system checks.&lt;/p&gt;&#xA;&lt;p&gt;&lt;code&gt;pre-install-check&lt;/code&gt; details are explained in the following sections:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/iuf/stages/pre_install_check/#impact&#34;&gt;Impact&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/iuf/stages/pre_install_check/#input&#34;&gt;Input&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/iuf/stages/pre_install_check/#execution-details&#34;&gt;Execution details&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/iuf/stages/pre_install_check/#example&#34;&gt;Example&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;impact&#34;&gt;Impact&lt;/h2&gt;&#xA;&lt;p&gt;The &lt;code&gt;pre-install-check&lt;/code&gt; stage does not change the running state of the system.&lt;/p&gt;&#xA;&lt;h2 id=&#34;input&#34;&gt;Input&lt;/h2&gt;&#xA;&lt;p&gt;The following arguments are most often used with the &lt;code&gt;pre-install-check&lt;/code&gt; stage. See &lt;code&gt;iuf -h&lt;/code&gt; and &lt;code&gt;iuf run -h&lt;/code&gt; for additional arguments.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>prepare-images</title>
+      <link>/docs-csm/en-15/operations/iuf/stages/prepare_images/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:12 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/stages/prepare_images/</guid>
+      <description>&lt;h1 id=&#34;prepare-images&#34;&gt;&lt;code&gt;prepare-images&lt;/code&gt;&lt;/h1&gt;&#xA;&lt;p&gt;The &lt;code&gt;prepare-images&lt;/code&gt; stage configures NCN management node images and builds and configures compute node, application&#xA;node, and GPU images. It also creates new BOS session templates corresponding to the new node and image content.&#xA;The &lt;code&gt;prepare-images&lt;/code&gt; stage does not reboot nodes to the new images; however, that is done by&#xA;the &lt;code&gt;management-nodes-rollout&lt;/code&gt; and &lt;code&gt;managed-nodes-rollout&lt;/code&gt; stages.&lt;/p&gt;&#xA;&lt;p&gt;The product content used to create the images is defined in &lt;code&gt;sat bootprep&lt;/code&gt; input files. The &lt;code&gt;sat bootprep&lt;/code&gt; input files&#xA;used can be specified by &lt;code&gt;-bc&lt;/code&gt;, &lt;code&gt;-bm&lt;/code&gt;, and/or &lt;code&gt;-bpcd&lt;/code&gt; as described below. Variables within the &lt;code&gt;sat bootprep&lt;/code&gt;&#xA;files can be substituted with values found in the recipe variables (&lt;code&gt;-rv&lt;/code&gt;) and/or site variables (&lt;code&gt;-sv&lt;/code&gt;) files.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>process-media</title>
+      <link>/docs-csm/en-15/operations/iuf/stages/process_media/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:12 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/stages/process_media/</guid>
+      <description>&lt;h1 id=&#34;process-media&#34;&gt;&lt;code&gt;process-media&lt;/code&gt;&lt;/h1&gt;&#xA;&lt;p&gt;The &lt;code&gt;process-media&lt;/code&gt; stage extracts all product distribution files found in the media directory specified by the user via &lt;code&gt;-m&lt;/code&gt; and associates it with an activity identifier provided by the &lt;code&gt;-a&lt;/code&gt; argument. The product&#xA;content is extracted into that same directory. All future stages associated with the activity will execute for all applicable products found in the media directory, and thus &lt;code&gt;-m&lt;/code&gt; does not need to be specified for future stages.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>update-cfs-config</title>
+      <link>/docs-csm/en-15/operations/iuf/stages/update_cfs_config/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:12 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/stages/update_cfs_config/</guid>
+      <description>&lt;h1 id=&#34;update-cfs-config&#34;&gt;&lt;code&gt;update-cfs-config&lt;/code&gt;&lt;/h1&gt;&#xA;&lt;p&gt;The &lt;code&gt;update-cfs-config&lt;/code&gt; stage creates updated CFS configurations used for image customization and personalization of management NCNs and managed (compute and application) nodes. This stage only creates the CFS configurations; the &lt;code&gt;prepare-images&lt;/code&gt;,&#xA;&lt;code&gt;management-nodes-rollout&lt;/code&gt;, and &lt;code&gt;management-nodes-rollout&lt;/code&gt; stages executed after &lt;code&gt;update-cfs-config&lt;/code&gt; use the CFS configurations.&lt;/p&gt;&#xA;&lt;p&gt;The product content used to create the CFS configurations is defined in &lt;code&gt;sat bootprep&lt;/code&gt; input files. The &lt;code&gt;sat bootprep&lt;/code&gt; input files used can be specified by &lt;code&gt;-bc&lt;/code&gt;, &lt;code&gt;-bm&lt;/code&gt;, and/or &lt;code&gt;-bpcd&lt;/code&gt; as described below. Variables within the &lt;code&gt;sat bootprep&lt;/code&gt;&#xA;files can be substituted with values found in the recipe variables (&lt;code&gt;-rv&lt;/code&gt;) and/or site variables (&lt;code&gt;-sv&lt;/code&gt;) files.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>update-vcs-config</title>
+      <link>/docs-csm/en-15/operations/iuf/stages/update_vcs_config/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:12 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/iuf/stages/update_vcs_config/</guid>
+      <description>&lt;h1 id=&#34;update-vcs-config&#34;&gt;&lt;code&gt;update-vcs-config&lt;/code&gt;&lt;/h1&gt;&#xA;&lt;p&gt;The &lt;code&gt;update-vcs-config&lt;/code&gt; stage performs a variety of update operations for each product being installed that provides a configuration management repository in VCS. It ensures new product configuration content has been uploaded to VCS in&#xA;a pristine branch and attempts to merge the new product configuration content into a corresponding customer branch.&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;&lt;code&gt;NOTE&lt;/code&gt;&lt;/strong&gt; After &lt;code&gt;update-vcs-config&lt;/code&gt; has completed and before proceeding to additional stages, any desired site configuration customizations should be performed. Refer to individual product documentation for configuration customization details.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

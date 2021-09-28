@@ -1,0 +1,180 @@
+#
+# MIT License
+#
+# (C) Copyright 2021-2022 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+kind: step
+metadata:
+  name: Set Management NCNs to use Unbound
+  description: |-
+    # Set Management NCNs to use Unbound
+
+    First, verify that SLS properly reports all management NCNs in the system:
+
+    ```bash
+    pit# ./lib/list-ncns.sh
+    ```
+
+    On success, each management NCN will be output, e.g.:
+
+    ```bash
+    pit# ./lib/list-ncns.sh
+    + Getting admin-client-auth secret
+    + Obtaining access token
+    + Querying SLS
+    ncn-m001
+    ncn-m002
+    ncn-m003
+    ncn-s001
+    ncn-s002
+    ncn-s003
+    ncn-w001
+    ncn-w002
+    ncn-w003
+    ```
+
+    If any management NCNs are missing from the output, take corrective action before
+    proceeding.
+
+    Next, run `lib/set-ncns-to-unbound.sh` to SSH to each management NCN and update
+    /etc/resolv.conf to use Unbound as the nameserver.
+
+    ```bash
+    pit# ./lib/set-ncns-to-unbound.sh
+    ```
+
+    > **`NOTE`** If passwordless SSH is not configured, the administrator will have
+    > to enter the corresponding password as the script attempts to connect to each
+    > NCN.
+
+    On success, the nameserver configuration in /etc/resolv.conf will be printed
+    for each management NCN, e.g.,:
+
+    ```bash
+    pit# ./lib/set-ncns-to-unbound.sh
+    + Getting admin-client-auth secret
+    + Obtaining access token
+    + Querying SLS
+    + Updating ncn-m001
+    Password:
+    ncn-m001: nameserver 127.0.0.1
+    ncn-m001: nameserver 10.92.100.225
+    + Updating ncn-m002
+    Password:
+    ncn-m002: nameserver 10.92.100.225
+    + Updating ncn-m003
+    Password:
+    ncn-m003: nameserver 10.92.100.225
+    + Updating ncn-s001
+    Password:
+    ncn-s001: nameserver 10.92.100.225
+    + Updating ncn-s002
+    Password:
+    ncn-s002: nameserver 10.92.100.225
+    + Updating ncn-s003
+    Password:
+    ncn-s003: nameserver 10.92.100.225
+    + Updating ncn-w001
+    Password:
+    ncn-w001: nameserver 10.92.100.225
+    + Updating ncn-w002
+    Password:
+    ncn-w002: nameserver 10.92.100.225
+    + Updating ncn-w003
+    Password:
+    ncn-w003: nameserver 10.92.100.225
+    ```
+
+    > **`NOTE`** The script connects to ncn-m001 which will be the PIT node, whose
+    > password may be different from that of the other NCNs.
+spec:
+  jobs:
+    - preCondition:
+        description: |-
+          TODO: enforce check
+          TODO: make sure passwordless ssh is enabled
+          TODO: make sure passwordless ssh to m001 is enabled
+        command: |-
+          cd {{ getEnv "CSM_PATH" }}
+          ./lib/list-ncns.sh
+        troubleshooting: |-
+          If any management NCNs are missing from the output, take corrective action before proceeding.
+          
+          {{ readFile "../../csm_installation_failure.md" | indent 10 }}
+      action:
+        description: |-
+          Next, run `lib/set-ncns-to-unbound.sh` to SSH to each management NCN and update
+          /etc/resolv.conf to use Unbound as the nameserver.
+        command: |-
+          cd {{ getEnv "CSM_PATH" }}
+          ./lib/set-ncns-to-unbound.sh
+        troubleshooting: |-
+          > **`NOTE`** If passwordless SSH is not configured, the administrator will have
+          > to enter the corresponding password as the script attempts to connect to each
+          > NCN.
+
+          On success, the nameserver configuration in /etc/resolv.conf will be printed
+          for each management NCN, e.g.,:
+
+          ```bash
+          pit# ./lib/set-ncns-to-unbound.sh
+          + Getting admin-client-auth secret
+          + Obtaining access token
+          + Querying SLS
+          + Updating ncn-m001
+          Password:
+          ncn-m001: nameserver 127.0.0.1
+          ncn-m001: nameserver 10.92.100.225
+          + Updating ncn-m002
+          Password:
+          ncn-m002: nameserver 10.92.100.225
+          + Updating ncn-m003
+          Password:
+          ncn-m003: nameserver 10.92.100.225
+          + Updating ncn-s001
+          Password:
+          ncn-s001: nameserver 10.92.100.225
+          + Updating ncn-s002
+          Password:
+          ncn-s002: nameserver 10.92.100.225
+          + Updating ncn-s003
+          Password:
+          ncn-s003: nameserver 10.92.100.225
+          + Updating ncn-w001
+          Password:
+          ncn-w001: nameserver 10.92.100.225
+          + Updating ncn-w002
+          Password:
+          ncn-w002: nameserver 10.92.100.225
+          + Updating ncn-w003
+          Password:
+          ncn-w003: nameserver 10.92.100.225
+          ```
+
+          > **`NOTE`** The script connects to ncn-m001 which will be the PIT node, whose
+          > password may be different from that of the other NCNs.
+      postValidation:
+        description: |-
+          Nothing
+        command: |-
+          true
+        troubleshooting: |-
+          Nothing

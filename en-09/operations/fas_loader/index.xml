@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>FAS Loader on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-09/operations/fas_loader/</link>
+    <description>Recent content in FAS Loader on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-09</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:08:51 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-09/operations/fas_loader/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>TROUBLESHOOTING FAS LOADER FAILS</title>
+      <link>/docs-csm/en-09/operations/fas_loader/fas_loader_fails/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:51 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/fas_loader/fas_loader_fails/</guid>
+      <description>&lt;h2 id=&#34;troubleshooting-fas-loader-fails&#34;&gt;TROUBLESHOOTING FAS LOADER FAILS&lt;/h2&gt;&#xA;&lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; this procedure is only for csm-0.9.x releases.&lt;/p&gt;&#xA;&lt;p&gt;The FAS loader may fail due to issues with the &lt;code&gt;repomd.xml&lt;/code&gt; file in Nexus.&lt;/p&gt;&#xA;&lt;p&gt;This will be indicated by the following message: &lt;code&gt;CRITICAL: Failed to get repomd.xml from repo&lt;/code&gt; in the &lt;code&gt;fas-loader&lt;/code&gt; job.&lt;/p&gt;&#xA;&lt;p&gt;Indications that the &lt;code&gt;fas-loader&lt;/code&gt; job has failed include:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Expected firmware is not present in the FAS image list (&lt;code&gt;cray fas images list&lt;/code&gt;) after the FAS loader has been run.&lt;/li&gt;&#xA;&lt;li&gt;FAS reports &lt;code&gt;failed to find file, trying again soon&lt;/code&gt; while running an update action.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;To view the FAS Loader logs:&#xA;&lt;em&gt;(The system only keeps completed job pods available for a short amount time, if the command returns no pods, rerun the FAS loader with the procedure below.)&lt;/em&gt;&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

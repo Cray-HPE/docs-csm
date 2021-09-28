@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CSM 1.2.1 Patch Installation Instructions on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-12/upgrade/1.2.1/</link>
+    <description>Recent content in CSM 1.2.1 Patch Installation Instructions on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-12</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:09:47 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-12/upgrade/1.2.1/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Upgrade and validate Switch Configurations</title>
+      <link>/docs-csm/en-12/upgrade/1.2.1/upgrade_network/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:47 +0000</pubDate>
+      <guid>/docs-csm/en-12/upgrade/1.2.1/upgrade_network/</guid>
+      <description>&lt;h1 id=&#34;upgrade-and-validate-switch-configurations&#34;&gt;Upgrade and validate Switch Configurations&lt;/h1&gt;&#xA;&lt;h2 id=&#34;prerequisites&#34;&gt;Prerequisites&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;SSH access to the switches or the running configuration file&lt;/li&gt;&#xA;&lt;li&gt;Upgrade or install latest version of CANU &lt;a href=&#34;/docs-csm/docs-csm/en-12/operations/network/management_network/canu_install_update/&#34;&gt;Install/Upgrade CANU&lt;/a&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Run &lt;code&gt;canu --version&lt;/code&gt; to see version&lt;/li&gt;&#xA;&lt;li&gt;CANU installed with version 1.6.13 or greater.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;Use the paddle file (CCJ) if available, or validate an up-to-date SHCD &lt;a href=&#34;/docs-csm/docs-csm/en-12/operations/network/management_network/validate_shcd/&#34;&gt;Validate SHCD&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;System Layout Service (SLS) input file. &lt;a href=&#34;/docs-csm/docs-csm/en-12/operations/network/management_network/collect_data/&#34;&gt;Collect Data&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;&lt;strong&gt;CAUTION:&lt;/strong&gt; All of these steps should be done using an out-of-band connection. This process is disruptive and will require downtime.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

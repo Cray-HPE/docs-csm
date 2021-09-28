@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>k8s on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-15/upgrade/resource_material/k8s/</link>
+    <description>Recent content in k8s on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-15</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:09:59 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-15/upgrade/resource_material/k8s/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Worker-Specific Manual Steps</title>
+      <link>/docs-csm/en-15/upgrade/resource_material/k8s/worker-reference/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:59 +0000</pubDate>
+      <guid>/docs-csm/en-15/upgrade/resource_material/k8s/worker-reference/</guid>
+      <description>&lt;h1 id=&#34;worker-specific-manual-steps&#34;&gt;Worker-Specific Manual Steps&lt;/h1&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Determine if the worker being rebuilt is running a &lt;code&gt;cray-cps-cm-pm&lt;/code&gt; pod.&lt;/p&gt;&#xA;&lt;p&gt;(&lt;code&gt;ncn#&lt;/code&gt;) This is determined by running the &lt;code&gt;cray cps deployment list&lt;/code&gt; command below. If so, there is a final step to redeploy this pod once the worker is rebuilt.&#xA;In the example below, nodes &lt;code&gt;ncn-w001&lt;/code&gt;, &lt;code&gt;ncn-w002&lt;/code&gt;, and &lt;code&gt;ncn-w003&lt;/code&gt; have the pod.&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;NOTES:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;If the command below does not return any pod names, then skip this step and proceed to the next step.&lt;/li&gt;&#xA;&lt;li&gt;A 404 error is expected if the COS product is not installed on the system. In this case, then skip this step and proceed to the next step.&lt;/li&gt;&#xA;&lt;li&gt;If the &lt;code&gt;cray&lt;/code&gt; command is not initialized, then see &lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/configure_cray_cli/&#34;&gt;Initialize the CLI Configuration&lt;/a&gt;.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cray cps deployment list --format json | jq &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;.[] | [.node,.podname]&amp;#39;&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Example output:&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

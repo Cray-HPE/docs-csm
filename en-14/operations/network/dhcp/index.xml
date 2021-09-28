@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>dhcp on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-14/operations/network/dhcp/</link>
+    <description>Recent content in dhcp on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-14</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:09:18 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-14/operations/network/dhcp/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>DHCP</title>
+      <link>/docs-csm/en-14/operations/network/dhcp/dhcp/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:18 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/network/dhcp/dhcp/</guid>
+      <description>&lt;h1 id=&#34;dhcp&#34;&gt;DHCP&lt;/h1&gt;&#xA;&lt;p&gt;The Dynamic Host Configuration Protocol (DHCP) service on the HPE Cray EX system uses the Internet Systems Consortium (ISC) Kea tool. Kea provides more robust management capabilities for DHCP servers.&lt;/p&gt;&#xA;&lt;p&gt;For more information: &lt;a href=&#34;https://www.isc.org/kea/&#34;&gt;&lt;code&gt;https://www.isc.org/kea/&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;p&gt;The following improvements to the DHCP service are included:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;API access to manage DHCP&lt;/li&gt;&#xA;&lt;li&gt;Scalable pod that uses MetalLB instead of host networking&lt;/li&gt;&#xA;&lt;li&gt;Options for updates to HPE Cray EX management system IP addresses&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;dhcp-helper-workflow&#34;&gt;DHCP Helper Workflow&lt;/h2&gt;&#xA;&lt;p&gt;The DHCP-Helper uses the following workflow:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Troubleshoot DHCP Issues</title>
+      <link>/docs-csm/en-14/operations/network/dhcp/troubleshoot_dhcp_issues/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:18 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/network/dhcp/troubleshoot_dhcp_issues/</guid>
+      <description>&lt;h1 id=&#34;troubleshoot-dhcp-issues&#34;&gt;Troubleshoot DHCP Issues&lt;/h1&gt;&#xA;&lt;p&gt;There are several things to check for when troubleshooting issues with Dynamic Host Configuration Protocol (DHCP) servers.&lt;/p&gt;&#xA;&lt;h2 id=&#34;incorrect-dhcp-ip-addresses&#34;&gt;Incorrect DHCP IP addresses&lt;/h2&gt;&#xA;&lt;p&gt;One of the most common issues is when the DHCP IP addresses are not matching in the Domain Name Service (DNS).&lt;/p&gt;&#xA;&lt;p&gt;(&lt;code&gt;ncn-mw#&lt;/code&gt;) Check to make sure &lt;code&gt;cray-dhcp&lt;/code&gt; is not running in Kubernetes:&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kubectl get pods -A | grep cray-dhcp&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Example output:&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;services  cray-dhcp-5f8c8767db-hg6ch       1/1     Running   0          35d&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;(&lt;code&gt;ncn-mw#&lt;/code&gt;) If the &lt;code&gt;cray-dhcp&lt;/code&gt; pod is running, use the following command to shut down the pod:&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

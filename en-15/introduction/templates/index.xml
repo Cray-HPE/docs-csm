@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>templates on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-15/introduction/templates/</link>
+    <description>Recent content in templates on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-15</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:08:53 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-15/introduction/templates/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Templates</title>
+      <link>/docs-csm/en-15/introduction/templates/disclaimers/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:53 +0000</pubDate>
+      <guid>/docs-csm/en-15/introduction/templates/disclaimers/</guid>
+      <description>&lt;h1 id=&#34;templates&#34;&gt;Templates&lt;/h1&gt;&#xA;&lt;p&gt;Copy and paste these into other markdown.&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;&lt;em&gt;&lt;strong&gt;🚨 DRAFT 🚨&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;&#xA;&lt;p&gt;This document is in development by the owners and has been labeled as a &lt;em&gt;DRAFT&lt;/em&gt;.&lt;/p&gt;&#xA;&lt;p&gt;The contents of this document are considered for advanced system users only, and may require&#xA;familiarity with Linux and/or the relevant, mentioned application(s).&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;❗Proceed with caution❗&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;/blockquote&gt;</description>
+    </item>
+  </channel>
+</rss>

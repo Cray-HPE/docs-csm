@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>artifact management on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-10/operations/artifact_management/</link>
+    <description>Recent content in artifact management on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-10</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:08:58 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-10/operations/artifact_management/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Artifact Management</title>
+      <link>/docs-csm/en-10/operations/artifact_management/artifact_management/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:57 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/artifact_management/artifact_management/</guid>
+      <description>&lt;h1 id=&#34;artifact-management&#34;&gt;Artifact Management&lt;/h1&gt;&#xA;&lt;p&gt;The Ceph Object Gateway Simple Storage Service (S3) API is used for artifact management. The RESTful API that Ceph provides via the gateway is compatible with the basic data access model of the Amazon S3 API. See the &lt;a href=&#34;https://docs.ceph.com/docs/mimic/radosgw/s3/&#34;&gt;https://docs.ceph.com/docs/mimic/radosgw/s3/&lt;/a&gt; for more information about compatibility. The object gateway is also referred to as the RADOS gateway or simply RGW.&lt;/p&gt;&#xA;&lt;p&gt;S3 is an object storage service that provides high-level performance, scalability, security, and data availability. S3 exposes a rudimentary data model, similar to a file system, where buckets (directories) store objects (files). Bucket- and object-level Access Control Lists (ACL) can be provided for flexible access authorization to artifacts stored in S3.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Generate Temporary S3 Credentials</title>
+      <link>/docs-csm/en-10/operations/artifact_management/generate_temporary_s3_credentials/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:58 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/artifact_management/generate_temporary_s3_credentials/</guid>
+      <description>&lt;h1 id=&#34;generate-temporary-s3-credentials&#34;&gt;Generate Temporary S3 Credentials&lt;/h1&gt;&#xA;&lt;p&gt;Cray provides a simple token service (STS) via the API gateway for administrators to generate temporary Simple Storage Service (S3) credentials for use with S3 buckets.&#xA;Temporary S3 credentials are generated using either cURL or Python.&lt;/p&gt;&#xA;&lt;p&gt;The generated S3 credentials will expire after one hour.&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-10/operations/artifact_management/generate_temporary_s3_credentials/#retrieve-temporary-s3-credentials-with-curl&#34;&gt;Retrieve temporary S3 credentials with cURL&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-10/operations/artifact_management/generate_temporary_s3_credentials/#retrieve-temporary-s3-credentials-with-python&#34;&gt;Retrieve temporary S3 credentials with Python&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;retrieve-temporary-s3-credentials-with-curl&#34;&gt;Retrieve temporary S3 credentials with cURL&lt;/h2&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Obtain a JWT token.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Manage Artifacts with the Cray CLI</title>
+      <link>/docs-csm/en-10/operations/artifact_management/manage_artifacts_with_the_cray_cli/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:58 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/artifact_management/manage_artifacts_with_the_cray_cli/</guid>
+      <description>&lt;h1 id=&#34;manage-artifacts-with-the-cray-cli&#34;&gt;Manage Artifacts with the Cray CLI&lt;/h1&gt;&#xA;&lt;p&gt;The artifacts (objects) available for use on the system are created and managed with the Cray CLI. The cray artifacts command provides the ability to manage any given artifact. The Cray CLI automatically authenticates users and provides Simple Storage Service (S3) credentials.&lt;/p&gt;&#xA;&lt;p&gt;All operations with the cray artifacts command assume that the user has already been authenticated. If the user has not been authenticated with the Cray CLI, run the following command and enter the appropriate credentials:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Use S3 Libraries and Clients</title>
+      <link>/docs-csm/en-10/operations/artifact_management/use_s3_libraries_and_clients/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:58 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/artifact_management/use_s3_libraries_and_clients/</guid>
+      <description>&lt;h1 id=&#34;use-s3-libraries-and-clients&#34;&gt;Use S3 Libraries and Clients&lt;/h1&gt;&#xA;&lt;p&gt;Several command line clients and language-specific libraries are available in addition to the Simple Storage Service (S3) RESTful API.&#xA;Developers and system administrators can interact with artifacts in the S3 object store with these tools.&lt;/p&gt;&#xA;&lt;p&gt;To learn more, refer to the following links:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html&#34;&gt;S3 Python client&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;https://docs.aws.amazon.com/sdk-for-go/api/service/s3/&#34;&gt;S3 Go client&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html&#34;&gt;Amazon Web Services (AWS) S3 CLI documentation&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;</description>
+    </item>
+  </channel>
+</rss>

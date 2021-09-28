@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>compute rolling upgrades on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-12/operations/compute_rolling_upgrades/</link>
+    <description>Recent content in compute rolling upgrades on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-12</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:09:01 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-12/operations/compute_rolling_upgrades/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CRUS Workflow</title>
+      <link>/docs-csm/en-12/operations/compute_rolling_upgrades/crus_workflow/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:00 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/compute_rolling_upgrades/crus_workflow/</guid>
+      <description>&lt;h1 id=&#34;crus-workflow&#34;&gt;CRUS Workflow&lt;/h1&gt;&#xA;&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; CRUS is deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0. It will be replaced with BOS V2, which will provide similar functionality. See&#xA;&lt;a href=&#34;/docs-csm/docs-csm/en-12/introduction/differences/#deprecated_features&#34;&gt;Deprecated features&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;p&gt;The following workflow is intended to be a high-level overview of how to upgrade compute nodes. This workflow depicts how services interact with each other during the compute node&#xA;upgrade process, and helps to provide a quicker and deeper understanding of how the system functions.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Compute Rolling Upgrades</title>
+      <link>/docs-csm/en-12/operations/compute_rolling_upgrades/compute_rolling_upgrades/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:00 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/compute_rolling_upgrades/compute_rolling_upgrades/</guid>
+      <description>&lt;h1 id=&#34;compute-rolling-upgrades&#34;&gt;Compute Rolling Upgrades&lt;/h1&gt;&#xA;&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; CRUS is deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0. It will be replaced with BOS V2, which will provide similar functionality. See&#xA;&lt;a href=&#34;/docs-csm/docs-csm/en-12/introduction/differences/#deprecated_features&#34;&gt;Deprecated features&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;p&gt;The Compute Rolling Upgrade Service (CRUS) upgrades sets of compute nodes without requiring an entire set of nodes to be out of service at once. CRUS manages the workload&#xA;management status of nodes, handling each of the following steps required to upgrade compute nodes:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Troubleshoot Nodes Failing to Upgrade in a CRUS Session</title>
+      <link>/docs-csm/en-12/operations/compute_rolling_upgrades/troubleshoot_nodes_failing_to_upgrade_in_a_crus_session/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:00 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/compute_rolling_upgrades/troubleshoot_nodes_failing_to_upgrade_in_a_crus_session/</guid>
+      <description>&lt;h1 id=&#34;troubleshoot-nodes-failing-to-upgrade-in-a-crus-session&#34;&gt;Troubleshoot Nodes Failing to Upgrade in a CRUS Session&lt;/h1&gt;&#xA;&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; CRUS is deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0. It will be replaced with BOS V2, which will provide similar functionality. See&#xA;&lt;a href=&#34;/docs-csm/docs-csm/en-12/introduction/differences/#deprecated_features&#34;&gt;Deprecated features&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;p&gt;Troubleshoot compute nodes failing to upgrade during a Compute Rolling Upgrade Service (CRUS) session and rerun the session on the failed nodes.&lt;/p&gt;&#xA;&lt;p&gt;When nodes are marked as failed they are added to the failed node group associated with the upgrade session, and the nodes are marked as down in the workload manager (WLM).&#xA;If the WLM supports some kind of reason string, that string contains the cause of the down status.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Troubleshoot a Failed CRUS Session Because of Bad Parameters</title>
+      <link>/docs-csm/en-12/operations/compute_rolling_upgrades/troubleshoot_a_failed_crus_session_due_to_bad_parameters/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:00 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/compute_rolling_upgrades/troubleshoot_a_failed_crus_session_due_to_bad_parameters/</guid>
+      <description>&lt;h1 id=&#34;troubleshoot-a-failed-crus-session-because-of-bad-parameters&#34;&gt;Troubleshoot a Failed CRUS Session Because of Bad Parameters&lt;/h1&gt;&#xA;&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; CRUS is deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0. It will be replaced with BOS V2, which will provide similar functionality. See&#xA;&lt;a href=&#34;/docs-csm/docs-csm/en-12/introduction/differences/#deprecated_features&#34;&gt;Deprecated features&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;p&gt;A CRUS session must be deleted and recreated if it does not start or complete because of parameters having incorrect values.&lt;/p&gt;&#xA;&lt;p&gt;The following are examples of incorrect parameters:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Choosing the wrong Boot Orchestration Service (BOS) session template.&lt;/li&gt;&#xA;&lt;li&gt;Choosing the wrong group labels.&lt;/li&gt;&#xA;&lt;li&gt;Improperly defined BOS session template. For example, specifying nodes in the template instead of using the label of the upgrading group.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;prerequisites&#34;&gt;Prerequisites&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;A Compute Rolling Upgrade Service (CRUS) session was run and failed to complete.&lt;/li&gt;&#xA;&lt;li&gt;The Cray command line interface (CLI) tool is initialized and configured on the system. See &lt;a href=&#34;/docs-csm/docs-csm/en-12/operations/configure_cray_cli/&#34;&gt;Configure the Cray Command Line Interface&lt;/a&gt;.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;procedure&#34;&gt;Procedure&lt;/h2&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Delete the failed session.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Troubleshoot a Failed CRUS Session Because of Unmet Conditions</title>
+      <link>/docs-csm/en-12/operations/compute_rolling_upgrades/troubleshoot_a_failed_crus_session_due_to_unmet_conditions/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:00 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/compute_rolling_upgrades/troubleshoot_a_failed_crus_session_due_to_unmet_conditions/</guid>
+      <description>&lt;h1 id=&#34;troubleshoot-a-failed-crus-session-because-of-unmet-conditions&#34;&gt;Troubleshoot a Failed CRUS Session Because of Unmet Conditions&lt;/h1&gt;&#xA;&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; CRUS is deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0. It will be replaced with BOS V2, which will provide similar functionality. See&#xA;&lt;a href=&#34;/docs-csm/docs-csm/en-12/introduction/differences/#deprecated_features&#34;&gt;Deprecated features&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;p&gt;If a CRUS session has any unmet conditions, adding or fixing them will cause the session to continue from wherever it got stuck. Updating other parts of the system to meet&#xA;the required conditions of a CRUS session will unblock the upgrade session.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Upgrade Compute Nodes with CRUS</title>
+      <link>/docs-csm/en-12/operations/compute_rolling_upgrades/upgrade_compute_nodes_with_crus/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:01 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/compute_rolling_upgrades/upgrade_compute_nodes_with_crus/</guid>
+      <description>&lt;h1 id=&#34;upgrade-compute-nodes-with-crus&#34;&gt;Upgrade Compute Nodes with CRUS&lt;/h1&gt;&#xA;&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; CRUS is deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0. It will be replaced with BOS V2, which will provide similar functionality. See&#xA;&lt;a href=&#34;/docs-csm/docs-csm/en-12/introduction/differences/#deprecated_features&#34;&gt;Deprecated features&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;p&gt;Upgrade a set of compute nodes with the Compute Rolling Upgrade Service (CRUS). Manage the workload management status of nodes and quiesce each node before taking the node&#xA;out of service and upgrading it. Then reboot it into the upgraded state and return it to service within the workload manager (WLM).&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

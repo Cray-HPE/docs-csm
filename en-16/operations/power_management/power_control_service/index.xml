@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Power Control Service on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-16/operations/power_management/power_control_service/</link>
+    <description>Recent content in Power Control Service on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-16</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:09:37 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-16/operations/power_management/power_control_service/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Node Card Power Management</title>
+      <link>/docs-csm/en-16/operations/power_management/power_control_service/node_card_power_management/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:37 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/power_management/power_control_service/node_card_power_management/</guid>
+      <description>&lt;h1 id=&#34;node-card-power-management&#34;&gt;Node Card Power Management&lt;/h1&gt;&#xA;&lt;p&gt;Node power management is supported by the server vendor BMC firmware. The BMC&#xA;exposes the power control API for a node through the node&amp;rsquo;s Redfish Power schema.&lt;/p&gt;&#xA;&lt;p&gt;Out-of-band power management data is polled by a collector and published on a&#xA;Kafka bus for entry into the Power Management Database (PMDB). Access to the&#xA;data stored in the PMDB is available through the System Monitoring Application&#xA;(SMA) Grafana instance.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Power Control Service (PCS)</title>
+      <link>/docs-csm/en-16/operations/power_management/power_control_service/power_control_service_pcs/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:37 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/power_management/power_control_service/power_control_service_pcs/</guid>
+      <description>&lt;h1 id=&#34;power-control-service-pcs&#34;&gt;Power Control Service (PCS)&lt;/h1&gt;&#xA;&lt;p&gt;The Power Control Service (PCS) enables direct hardware control of nodes,&#xA;compute blades, router modules, liquid cooled chassis, and management network&#xA;switches. PCS talks to BMCs via Redfish to control power, query status, and&#xA;manage power capping on target components. These controls enable an administrator&#xA;and 3rd party software to more intelligently manage state and system-wide power&#xA;consumption.&lt;/p&gt;&#xA;&lt;p&gt;Administrators can use the &lt;code&gt;cray&lt;/code&gt; CLI for power operations from any system that&#xA;has HTTPS access to the&#xA;&lt;a href=&#34;/docs-csm/docs-csm/en-16/operations/network/access_to_system_management_services/&#34;&gt;System Management Services&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Recover from a Liquid Cooled Cabinet EPO Event</title>
+      <link>/docs-csm/en-16/operations/power_management/power_control_service/recover_from_a_liquid_cooled_cabinet_epo_event/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:37 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/power_management/power_control_service/recover_from_a_liquid_cooled_cabinet_epo_event/</guid>
+      <description>&lt;h1 id=&#34;recover-from-a-liquid-cooled-cabinet-epo-event&#34;&gt;Recover from a Liquid Cooled Cabinet EPO Event&lt;/h1&gt;&#xA;&lt;p&gt;Identify an emergency power off (EPO) has occurred and restore cabinets to a healthy state.&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;CAUTION:&lt;/strong&gt; Verify the reason why the EPO occurred and resolve that problem before clearing the EPO state.&lt;/p&gt;&#xA;&lt;p&gt;If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, the compute nodes may not boot. Use PCS to force off all the chassis affected by the EPO event.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

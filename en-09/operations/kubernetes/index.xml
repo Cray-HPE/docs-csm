@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>kubernetes on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-09/operations/kubernetes/</link>
+    <description>Recent content in kubernetes on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-09</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:08:51 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-09/operations/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Kubernetes and Bare Metal EtcD Certificate Renewal</title>
+      <link>/docs-csm/en-09/operations/kubernetes/cert_renewal_for_kubernetes_and_bare_metal_etcd/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:51 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/kubernetes/cert_renewal_for_kubernetes_and_bare_metal_etcd/</guid>
+      <description>&lt;h1 id=&#34;kubernetes-and-bare-metal-etcd-certificate-renewal&#34;&gt;Kubernetes and Bare Metal EtcD Certificate Renewal&lt;/h1&gt;&#xA;&lt;h2 id=&#34;scope&#34;&gt;Scope&lt;/h2&gt;&#xA;&lt;p&gt;As part of the installation, Kubernetes generates certificates for the required subcomponents. This document will help walk through the process of renewing the certificates.&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;&lt;code&gt;IMPORTANT:&lt;/code&gt;&lt;/strong&gt; Depending on the version of Kubernetes, the command may or may not reside under the alpha category. Use &lt;code&gt;kubectl certs --help&lt;/code&gt; and &lt;code&gt;kubectl alpha certs --help&lt;/code&gt; to determine this. The overall command syntax should be the same and this is just whether or not the command structure will require &lt;code&gt;alpha&lt;/code&gt; in it.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

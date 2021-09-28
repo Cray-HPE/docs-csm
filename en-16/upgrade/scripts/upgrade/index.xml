@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>upgrade on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-16/upgrade/scripts/upgrade/</link>
+    <description>Recent content in upgrade on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-16</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:09:57 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-16/upgrade/scripts/upgrade/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Upgrade Automation</title>
+      <link>/docs-csm/en-16/upgrade/scripts/upgrade/upgrade_automation/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:57 +0000</pubDate>
+      <guid>/docs-csm/en-16/upgrade/scripts/upgrade/upgrade_automation/</guid>
+      <description>&lt;h1 id=&#34;upgrade-automation&#34;&gt;Upgrade Automation&lt;/h1&gt;&#xA;&lt;p&gt;This document describes how the CSM upgrade process is automated.&lt;/p&gt;&#xA;&lt;h2 id=&#34;overview&#34;&gt;Overview&lt;/h2&gt;&#xA;&lt;p&gt;In a nutshell, an upgrade is:&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;Upload new artifacts into a running system.&lt;/li&gt;&#xA;&lt;li&gt;Rebuild each NCN with the newly uploaded images.&lt;/li&gt;&#xA;&lt;li&gt;Deploy new charts after all NCNs are upgraded.&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;h2 id=&#34;prerequisites&#34;&gt;Prerequisites&lt;/h2&gt;&#xA;&lt;p&gt;Everything that is needed before upgrading an NCN.&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;NOTE:&lt;/p&gt;&#xA;&lt;p&gt;The &lt;code&gt;prerequisites.sh&lt;/code&gt; script is required to run on both &lt;code&gt;ncn-m001&lt;/code&gt; and &lt;code&gt;ncn-m002&lt;/code&gt; (at different points in the upgrade process). If an action is only&#xA;needed to run once, developers must add logic to avoid running this action both times the script is executed.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

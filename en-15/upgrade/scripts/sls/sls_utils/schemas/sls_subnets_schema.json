@@ -1,0 +1,88 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "https://github.com/Cray-HPE/hms-sls/schemas/Subnets",
+    "title": "SLS Subnet Schema",
+    "Subnets": {
+        "type": "array",
+        "items": {
+            "type": "object",
+            "properties": {
+                "Name": {
+                    "type": "string"
+                },
+                "FullName": {
+                    "type": "string"
+                },
+                "CIDR": {
+                    "type": "string",
+                    "pattern": "((^|\\.)((25[0-5])|(2[0-4]\\d)|(1\\d\\d)|([1-9]?\\d))){4}\\/(?:\\d|[12]\\d|3[01])$"
+                },
+                "Gateway": {
+                    "type": "string",
+                    "format": "ipv4"
+                },
+                "VlanID": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 4095
+                },
+                "MetalLBPoolName": {
+                    "type": "string"
+                },
+                "DHCPStart": {
+                    "type": "string",
+                    "format": "ipv4"
+                },
+                "DHCPEnd": {
+                    "type": "string",
+                    "format": "ipv4"
+                },
+                "ReservationStart": {
+                    "type": "string",
+                    "format": "ipv4"
+                },
+                "ReservationEnd": {
+                    "type": "string",
+                    "format": "ipv4"
+                },
+                "IPReservations": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "Name": {
+                                "type": "string"
+                            },
+                            "IPAddress": {
+                                "type": "string",
+                                "format": "ipv4"
+                            },
+                            "Aliases": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "Comment": {
+                                "type": "string"
+                            }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                            "Name",
+                            "IPAddress"
+                        ]
+                    }
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "Name",
+                "FullName",
+                "CIDR",
+                "Gateway",
+                "VlanID"
+            ]
+        }
+    }
+}

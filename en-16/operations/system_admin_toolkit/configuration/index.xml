@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>SAT Configuration on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-16/operations/system_admin_toolkit/configuration/</link>
+    <description>Recent content in SAT Configuration on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-16</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:09:44 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-16/operations/system_admin_toolkit/configuration/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Authenticate SAT Commands</title>
+      <link>/docs-csm/en-16/operations/system_admin_toolkit/configuration/authenticate_sat_commands/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:44 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_admin_toolkit/configuration/authenticate_sat_commands/</guid>
+      <description>&lt;h1 id=&#34;authenticate-sat-commands&#34;&gt;Authenticate SAT Commands&lt;/h1&gt;&#xA;&lt;p&gt;To run SAT commands on the Kubernetes control plane (&lt;code&gt;ncn-m&lt;/code&gt;) nodes, first set up authentication to&#xA;the API gateway. For more information on which SAT commands require authentication to the API&#xA;Gateway, see &lt;a href=&#34;/docs-csm/docs-csm/en-16/operations/system_admin_toolkit/about_sat/sat_command_overview/&#34;&gt;SAT Command Overview&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;p&gt;For more general information on API gateway authentication, see&#xA;&lt;a href=&#34;/docs-csm/docs-csm/en-16/operations/security_and_authentication/system_security_and_authentication/&#34;&gt;System Security and Authentication&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;p&gt;The admin account used to authenticate with &lt;code&gt;sat auth&lt;/code&gt; must be enabled in&#xA;Keycloak and must have its &lt;em&gt;assigned role&lt;/em&gt; set to &lt;em&gt;admin&lt;/em&gt;. For more information&#xA;on Keycloak accounts and changing &lt;em&gt;Role Mappings&lt;/em&gt;, refer to the following sections:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Configure Multi-tenancy (Optional)</title>
+      <link>/docs-csm/en-16/operations/system_admin_toolkit/configuration/configure_multi-tenancy_optional/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:44 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_admin_toolkit/configuration/configure_multi-tenancy_optional/</guid>
+      <description>&lt;h1 id=&#34;configure-multi-tenancy-optional&#34;&gt;Configure Multi-tenancy (Optional)&lt;/h1&gt;&#xA;&lt;p&gt;SAT supports supplying tenant information to CSM services in order to allow&#xA;tenant admins to use SAT within their tenant. By default, the tenant name is&#xA;not set, and SAT will not send any tenant information with its requests to&#xA;CSM services. Configure the tenant name either in the SAT configuration file&#xA;or on the command line.&lt;/p&gt;&#xA;&lt;h2 id=&#34;configure-the-tenant-name-in-the-sat-configuration-file&#34;&gt;Configure the Tenant Name in the SAT Configuration File&lt;/h2&gt;&#xA;&lt;p&gt;Set the tenant name in the SAT configuration file using the&#xA;&lt;code&gt;api_gateway.tenant_name&lt;/code&gt; option.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Generate SAT S3 Credentials</title>
+      <link>/docs-csm/en-16/operations/system_admin_toolkit/configuration/generate_sat_s3_credentials/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:44 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_admin_toolkit/configuration/generate_sat_s3_credentials/</guid>
+      <description>&lt;h1 id=&#34;generate-sat-s3-credentials&#34;&gt;Generate SAT S3 Credentials&lt;/h1&gt;&#xA;&lt;p&gt;Generate S3 credentials and write them to a local file so the SAT user can access S3 storage. In&#xA;order to use the SAT S3 bucket, the System Administrator must generate the S3 access key and secret&#xA;keys and write them to a local file. This must be done on every Kubernetes control plane node where&#xA;SAT commands are run.&lt;/p&gt;&#xA;&lt;p&gt;SAT uses S3 storage for several purposes, most importantly to store the site-specific information&#xA;set with &lt;code&gt;sat setrev&lt;/code&gt; (see &lt;a href=&#34;/docs-csm/docs-csm/en-16/operations/system_admin_toolkit/configuration/set_system_revision_information/&#34;&gt;Set System Revision Information&lt;/a&gt;).&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Set System Revision Information</title>
+      <link>/docs-csm/en-16/operations/system_admin_toolkit/configuration/set_system_revision_information/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:44 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_admin_toolkit/configuration/set_system_revision_information/</guid>
+      <description>&lt;h1 id=&#34;set-system-revision-information&#34;&gt;Set System Revision Information&lt;/h1&gt;&#xA;&lt;p&gt;HPE service representatives use system revision information data to identify&#xA;systems in support cases.&lt;/p&gt;&#xA;&lt;h2 id=&#34;prerequisites&#34;&gt;Prerequisites&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;SAT authentication has been set up. See &lt;a href=&#34;/docs-csm/docs-csm/en-16/operations/system_admin_toolkit/configuration/authenticate_sat_commands/&#34;&gt;Authenticate SAT Commands&lt;/a&gt;.&lt;/li&gt;&#xA;&lt;li&gt;S3 credentials have been generated. See &lt;a href=&#34;/docs-csm/docs-csm/en-16/operations/system_admin_toolkit/configuration/generate_sat_s3_credentials/&#34;&gt;Generate SAT S3 Credentials&lt;/a&gt;.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;procedure&#34;&gt;Procedure&lt;/h2&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;(&lt;code&gt;ncn-m001#&lt;/code&gt;) Set System Revision Information.&lt;/p&gt;&#xA;&lt;p&gt;Run &lt;code&gt;sat setrev&lt;/code&gt; and follow the prompts to set the following site-specific values:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Serial number&lt;/li&gt;&#xA;&lt;li&gt;System name&lt;/li&gt;&#xA;&lt;li&gt;System type&lt;/li&gt;&#xA;&lt;li&gt;System description&lt;/li&gt;&#xA;&lt;li&gt;Product number&lt;/li&gt;&#xA;&lt;li&gt;Company name&lt;/li&gt;&#xA;&lt;li&gt;Site name&lt;/li&gt;&#xA;&lt;li&gt;Country code&lt;/li&gt;&#xA;&lt;li&gt;System install date&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;&lt;strong&gt;Tip&lt;/strong&gt;: For &amp;ldquo;System type&amp;rdquo;, a system with &lt;em&gt;any&lt;/em&gt; liquid-cooled components should be&#xA;considered a liquid-cooled system. In other words, &amp;ldquo;System type&amp;rdquo; is EX-1C.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

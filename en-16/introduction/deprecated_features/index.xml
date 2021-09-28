@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Deprecated Features on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-16/introduction/deprecated_features/</link>
+    <description>Recent content in Deprecated Features on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-16</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:08:52 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-16/introduction/deprecated_features/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CAPMC Deprecation Notice</title>
+      <link>/docs-csm/en-16/introduction/deprecated_features/capmc_deprecation_notice/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:52 +0000</pubDate>
+      <guid>/docs-csm/en-16/introduction/deprecated_features/capmc_deprecation_notice/</guid>
+      <description>&lt;h1 id=&#34;capmc-deprecation-notice&#34;&gt;CAPMC Deprecation Notice&lt;/h1&gt;&#xA;&lt;p&gt;CAPMC is deprecated, starting in CSM 1.5, and may be removed in the future.&#xA;It has been replaced with the &lt;a href=&#34;/docs-csm/docs-csm/en-16/glossary/#power-control-service-pcs&#34;&gt;Power Control Service (PCS)&lt;/a&gt;.&#xA;Everyone is encouraged to transition to PCS as soon as possible.&lt;/p&gt;&#xA;&lt;p&gt;See &lt;a href=&#34;/docs-csm/docs-csm/en-16/api/power-control/&#34;&gt;PCS API&lt;/a&gt; for more information about PCS API.&lt;/p&gt;&#xA;&lt;p&gt;Here is a list of deprecated CAPMC API (CLI) endpoints:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;code&gt;/get_xname_status&lt;/code&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;/xname_reinit&lt;/code&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;/xname_on&lt;/code&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;/xname_off&lt;/code&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;/get_power_cap&lt;/code&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;/get_power_cap_capabilities&lt;/code&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;/set_power_cap&lt;/code&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;/health&lt;/code&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;/liveness&lt;/code&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;/readiness&lt;/code&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>customer access network on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-10/operations/network/customer_access_network/</link>
+    <description>Recent content in customer access network on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-10</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:09:09 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-10/operations/network/customer_access_network/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CAN with Dual-Spine Configuration</title>
+      <link>/docs-csm/en-10/operations/network/customer_access_network/can_with_dual-spine_configuration/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:09 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/customer_access_network/can_with_dual-spine_configuration/</guid>
+      <description>&lt;h1 id=&#34;can-with-dual-spine-configuration&#34;&gt;CAN with Dual-Spine Configuration&lt;/h1&gt;&#xA;&lt;p&gt;The Customer Access Network (CAN) needs to be connected to both spines in a dual-spine configuration so that each spine can access the outside network. However, the NCNs should only have one default gateway. Therefore, the multi-active gateway protocol (MAGP) on the Mellanox spines can be used to create a virtual router gateway IP address that can direct to either of the spines, depending on the state of the spines. The Virtual Switching Extension (VSX) for Aruba spines serve the same purpose.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Connect to the CAN</title>
+      <link>/docs-csm/en-10/operations/network/customer_access_network/connect_to_the_can/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:09 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/customer_access_network/connect_to_the_can/</guid>
+      <description>&lt;h1 id=&#34;connect-to-the-can&#34;&gt;Connect to the CAN&lt;/h1&gt;&#xA;&lt;p&gt;How to connect to the CAN physically and via layer 3.&lt;/p&gt;&#xA;&lt;p&gt;There are multiple ways to connect to the Customer Access Network (CAN), both physically and via a layer 3 connection.&lt;/p&gt;&#xA;&lt;h3 id=&#34;physical-connection-to-the-can&#34;&gt;Physical Connection to the CAN&lt;/h3&gt;&#xA;&lt;p&gt;The physical connection to the CAN is made via the load balancer or the spine switches. The uplink connection from the system to the customer network is achieved by using the highest numbered port(s). Customer can select a single uplink port or multiple uplink ports.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Customer Access Network</title>
+      <link>/docs-csm/en-10/operations/network/customer_access_network/customer_access_network_can/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:09 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/customer_access_network/customer_access_network_can/</guid>
+      <description>&lt;h1 id=&#34;customer-access-network&#34;&gt;Customer Access Network&lt;/h1&gt;&#xA;&lt;p&gt;The Customer Access Network (CAN) provides access from outside the customer network to services, non-compute nodes (NCNs), and User Access Nodes (UANs) in the system. This allows for the following:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Clients outside of the system:&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Log in to each of the NCNs and UANs.&lt;/li&gt;&#xA;&lt;li&gt;Access web UIs within the system (e.g. Prometheus, Grafana, and more).&lt;/li&gt;&#xA;&lt;li&gt;Access the Rest APIs within the system.&lt;/li&gt;&#xA;&lt;li&gt;Access a DNS server within the system for resolution of names for the webUI and REST API services.&lt;/li&gt;&#xA;&lt;li&gt;Run Cray CLI commands from outside the system.&lt;/li&gt;&#xA;&lt;li&gt;Access the User Access Instances (UAI).&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;NCNs and UANs to access systems outside the cluster (e.g. LDAP, license servers, and more).&lt;/li&gt;&#xA;&lt;li&gt;Services within the cluster to access systems outside the cluster.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;These nodes and services need an IP address that routes to the customer&amp;rsquo;s network in order to be accessed from outside the network.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Externally Exposed Services</title>
+      <link>/docs-csm/en-10/operations/network/customer_access_network/externally_exposed_services/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:09 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/customer_access_network/externally_exposed_services/</guid>
+      <description>&lt;h1 id=&#34;externally-exposed-services&#34;&gt;Externally Exposed Services&lt;/h1&gt;&#xA;&lt;p&gt;The following services are exposed on the Customer Access Network (CAN). Each of these services requires an IP address on the CAN subnet so they are reachable on the CAN. This IP address is allocated by the MetalLB component.&lt;/p&gt;&#xA;&lt;p&gt;Services under Istio Ingress Gateway and Keycloak Gatekeeper Ingress share an ingress, so they all use the IP allocated to the Ingress.&lt;/p&gt;&#xA;&lt;p&gt;Each service is given a DNS name that is served by the External DNS service to make them resolvable from the site network. This makes it possible to access each of these services by name rather than finding the allocated IP. The DNS name is pre-pended to the &lt;code&gt;system-name.site-domain&lt;/code&gt; specified during &lt;code&gt;csi config init&lt;/code&gt;. For example, if the system is named TestSystem, and the site is example.com, the HPE Cray EX domain would be testsystem.example.com.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Required Labels if CAN is Not Configured</title>
+      <link>/docs-csm/en-10/operations/network/customer_access_network/required_labels_if_can_is_not_configured/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:09 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/customer_access_network/required_labels_if_can_is_not_configured/</guid>
+      <description>&lt;h1 id=&#34;required-labels-if-can-is-not-configured&#34;&gt;Required Labels if CAN is Not Configured&lt;/h1&gt;&#xA;&lt;p&gt;Some services on the system are required to access services outside of the HPE Cray EX system. If the Customer Access Network (CAN) is not configured on the system, these services will need to be pinned to &lt;code&gt;ncn-m001&lt;/code&gt; because that is the only node that has external access. See &lt;a href=&#34;/docs-csm/docs-csm/en-10/operations/network/customer_access_network/customer_access_network_can/&#34;&gt;Customer Access Network (CAN)&lt;/a&gt; for more implications if CAN is not configured.&lt;/p&gt;&#xA;&lt;p&gt;The label used for scheduling these services is &lt;code&gt;no_external_access&lt;/code&gt;:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Troubleshoot CAN Issues</title>
+      <link>/docs-csm/en-10/operations/network/customer_access_network/troubleshoot_can_issues/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:09 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/customer_access_network/troubleshoot_can_issues/</guid>
+      <description>&lt;h1 id=&#34;troubleshoot-can-issues&#34;&gt;Troubleshoot CAN Issues&lt;/h1&gt;&#xA;&lt;p&gt;Various connection points to check when using the CAN and how to fix any issues that arise.&lt;/p&gt;&#xA;&lt;p&gt;The most frequent issue with the Customer Access Network (CAN) is trouble accessing IP addresses outside of the HPE Cray EX system from a node or pod inside the system.&lt;/p&gt;&#xA;&lt;p&gt;The best way to resolve this issue is to try to ping an outside IP address from one of the NCNs other than &lt;code&gt;ncn-m001&lt;/code&gt;, which has a direct connection that it can use instead of the Customer Access Network (CAN). The following are some things to check to make sure CAN is configured correctly:&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

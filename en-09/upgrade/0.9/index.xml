@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CSM 0.9 Patch Release Upgrade Procedures on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-09/upgrade/0.9/</link>
+    <description>Recent content in CSM 0.9 Patch Release Upgrade Procedures on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-09</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:08:54 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-09/upgrade/0.9/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CSM 0.9.2 Patch Upgrade Guide</title>
+      <link>/docs-csm/en-09/upgrade/0.9/csm-0.9.2/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:54 +0000</pubDate>
+      <guid>/docs-csm/en-09/upgrade/0.9/csm-0.9.2/</guid>
+      <description>&lt;p&gt;Copyright 2021 Hewlett Packard Enterprise Development LP&lt;/p&gt;&#xA;&lt;h1 id=&#34;csm-092-patch-upgrade-guide&#34;&gt;CSM 0.9.2 Patch Upgrade Guide&lt;/h1&gt;&#xA;&lt;p&gt;This guide contains procedures for upgrading systems running CSM 0.9.0 to CSM&#xA;0.9.2. It is intended for system installers, system administrators, and network&#xA;administrators. It assumes some familiarity with standard Linux and associated&#xA;tooling.&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;&lt;strong&gt;&lt;code&gt;NOTE:&lt;/code&gt;&lt;/strong&gt; CSM 0.9.1 was not officially released so these procedures start&#xA;with CSM 0.9.0.&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;p&gt;See CHANGELOG.md in the root of a CSM release distribution for a summary of&#xA;changes in each CSM release.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>CSM 0.9.3 Patch Upgrade Guide</title>
+      <link>/docs-csm/en-09/upgrade/0.9/csm-0.9.3/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:54 +0000</pubDate>
+      <guid>/docs-csm/en-09/upgrade/0.9/csm-0.9.3/</guid>
+      <description>&lt;p&gt;Copyright 2021 Hewlett Packard Enterprise Development LP&lt;/p&gt;&#xA;&lt;h1 id=&#34;csm-093-patch-upgrade-guide&#34;&gt;CSM 0.9.3 Patch Upgrade Guide&lt;/h1&gt;&#xA;&lt;p&gt;This guide contains procedures for upgrading systems running CSM 0.9.2 to CSM&#xA;0.9.3. It is intended for system installers, system administrators, and network&#xA;administrators. It assumes some familiarity with standard Linux and associated&#xA;tooling.&lt;/p&gt;&#xA;&lt;p&gt;See CHANGELOG.md in the root of a CSM release distribution for a summary of&#xA;changes in each CSM release.&lt;/p&gt;&#xA;&lt;p&gt;Procedures:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-09/upgrade/0.9/csm-0.9.3/#preparation&#34;&gt;Preparation&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-09/upgrade/0.9/csm-0.9.3/#run-validation-checks-pre-upgrade&#34;&gt;Run Validation Checks (Pre-Upgrade)&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-09/upgrade/0.9/csm-0.9.3/#setup-nexus&#34;&gt;Setup Nexus&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-09/upgrade/0.9/csm-0.9.3/#update-resources&#34;&gt;Update Resources&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-09/upgrade/0.9/csm-0.9.3/#increase-pty-max&#34;&gt;Increase Max pty on Workers&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-09/upgrade/0.9/csm-0.9.3/#deploy-manifests&#34;&gt;Deploy Manifests&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-09/upgrade/0.9/csm-0.9.3/#upgrade-ncn-packages&#34;&gt;Upgrade NCN Packages&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-09/upgrade/0.9/csm-0.9.3/#enable-psp&#34;&gt;Enable PodSecurityPolicy&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-09/upgrade/0.9/csm-0.9.3/#iscsi-security-fix&#34;&gt;Apply iSCSI Security Fix&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-09/upgrade/0.9/csm-0.9.3/#configure-lag-for-cmms&#34;&gt;Configure LAG for CMMs&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-09/upgrade/0.9/csm-0.9.3/#run-validation-checks-post-upgrade&#34;&gt;Run Validation Checks (Post-Upgrade)&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-09/upgrade/0.9/csm-0.9.3/#exit-typescript&#34;&gt;Exit Typescript&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;preparation&#34;&gt;Preparation&lt;/h2&gt;&#xA;&lt;p&gt;For convenience, these procedures make use of environment variables. This&#xA;section sets the expected environment variables to the appropriate values.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

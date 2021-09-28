@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CSM 1.5.2 Patch Installation Instructions on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-15/upgrade/1.5.2/</link>
+    <description>Recent content in CSM 1.5.2 Patch Installation Instructions on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-15</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:09:58 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-15/upgrade/1.5.2/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CSM Only Upgrade</title>
+      <link>/docs-csm/en-15/upgrade/1.5.2/csm-only/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:58 +0000</pubDate>
+      <guid>/docs-csm/en-15/upgrade/1.5.2/csm-only/</guid>
+      <description>&lt;h1 id=&#34;csm-only-upgrade&#34;&gt;CSM Only Upgrade&lt;/h1&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/upgrade/1.5.2/csm-only/#requirements&#34;&gt;Requirements&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/upgrade/1.5.2/csm-only/#steps&#34;&gt;Steps&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;This page provides guidance for systems with exclusively CSM installed that are performing an upgrade from a CSM &lt;code&gt;v1.5.X&lt;/code&gt; release to the CSM &lt;code&gt;v1.5.2&lt;/code&gt; release.&lt;/p&gt;&#xA;&lt;p&gt;The &lt;a href=&#34;/docs-csm/docs-csm/en-15/upgrade/1.5.2/&#34;&gt;&lt;code&gt;v1.5.2&lt;/code&gt; upgrade page&lt;/a&gt; will refer to this page&#xA;during &lt;a href=&#34;/docs-csm/docs-csm/en-15/upgrade/1.5.2/#update-ncn-images&#34;&gt;Update NCN images&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;If other products are installed on the system, return to &lt;a href=&#34;/docs-csm/docs-csm/en-15/upgrade/1.5.2/#update-ncn-images&#34;&gt;Update NCN images&lt;/a&gt; and&#xA;choose option 1.&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;h2 id=&#34;requirements&#34;&gt;Requirements&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;&lt;code&gt;CSM_RELEASE_VERSION&lt;/code&gt; is set in the shell environment on &lt;code&gt;ncn-m001&lt;/code&gt;. See &lt;a href=&#34;/docs-csm/docs-csm/en-15/upgrade/1.5.2/#preparation&#34;&gt;Preparation&lt;/a&gt; for details on how it should be set.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>CSM Only Upgrade on a System with Other Products</title>
+      <link>/docs-csm/en-15/upgrade/1.5.2/csm-with-other-products/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:58 +0000</pubDate>
+      <guid>/docs-csm/en-15/upgrade/1.5.2/csm-with-other-products/</guid>
+      <description>&lt;h1 id=&#34;csm-only-upgrade-on-a-system-with-other-products&#34;&gt;CSM Only Upgrade on a System with Other Products&lt;/h1&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/upgrade/1.5.2/csm-with-other-products/#requirements&#34;&gt;Requirements&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/upgrade/1.5.2/csm-with-other-products/#overview&#34;&gt;Overview&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/upgrade/1.5.2/csm-with-other-products/#steps&#34;&gt;Steps&lt;/a&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/upgrade/1.5.2/csm-with-other-products/#using-sat-bootprep-with-iuf-generated-input-files&#34;&gt;Using &lt;code&gt;sat bootprep&lt;/code&gt; with IUF generated input files&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/upgrade/1.5.2/csm-with-other-products/#return-to-csm-152-patch&#34;&gt;Return to CSM &lt;code&gt;1.5.2&lt;/code&gt; patch&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;This page provides guidance for systems with products installed that are performing an upgrade from a CSM &lt;code&gt;v1.5.X&lt;/code&gt; release to the CSM &lt;code&gt;v1.5.2&lt;/code&gt; release.&lt;/p&gt;&#xA;&lt;p&gt;The &lt;a href=&#34;/docs-csm/docs-csm/en-15/upgrade/1.5.2/&#34;&gt;&lt;code&gt;v1.5.2&lt;/code&gt; upgrade page&lt;/a&gt; will refer to this page&#xA;during &lt;a href=&#34;/docs-csm/docs-csm/en-15/upgrade/1.5.2/#update-ncn-images&#34;&gt;Update NCN images&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;If exclusively CSM is installed on the system, return to &lt;a href=&#34;/docs-csm/docs-csm/en-15/upgrade/1.5.2/#update-ncn-images&#34;&gt;Update NCN images&lt;/a&gt; and&#xA;choose option 2.&lt;/strong&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Upgrade NCNs during CSM 1.5.2 Patch</title>
+      <link>/docs-csm/en-15/upgrade/1.5.2/upgrade_ncn_images/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:58 +0000</pubDate>
+      <guid>/docs-csm/en-15/upgrade/1.5.2/upgrade_ncn_images/</guid>
+      <description>&lt;h1 id=&#34;upgrade-ncns-during-csm-152-patch&#34;&gt;Upgrade NCNs during CSM &lt;code&gt;1.5.2&lt;/code&gt; Patch&lt;/h1&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/upgrade/1.5.2/upgrade_ncn_images/#overview&#34;&gt;Overview&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/upgrade/1.5.2/upgrade_ncn_images/#steps&#34;&gt;Steps&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/upgrade/1.5.2/upgrade_ncn_images/#return-to-csm-152-patch&#34;&gt;Return to CSM &lt;code&gt;1.5.2&lt;/code&gt; patch&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;This page provides guidance for systems that are performing an upgrade from a CSM &lt;code&gt;v1.5.X&lt;/code&gt; release to the CSM &lt;code&gt;v1.5.2&lt;/code&gt; release.&lt;/p&gt;&#xA;&lt;p&gt;The &lt;a href=&#34;/docs-csm/docs-csm/en-15/upgrade/1.5.2/&#34;&gt;&lt;code&gt;v1.5.2&lt;/code&gt; upgrade page&lt;/a&gt; will refer to this page&#xA;during &lt;a href=&#34;/docs-csm/docs-csm/en-15/upgrade/1.5.2/#ncn-upgrade&#34;&gt;NCN Upgrade&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;h2 id=&#34;overview&#34;&gt;Overview&lt;/h2&gt;&#xA;&lt;p&gt;The following steps upgrade NCNs into the node images created during the &lt;a href=&#34;/docs-csm/docs-csm/en-15/upgrade/1.5.2/#update-ncn-images&#34;&gt;Update NCN images&lt;/a&gt;&#xA;step of the patch procedure. The node upgrades will not change the state of the node.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

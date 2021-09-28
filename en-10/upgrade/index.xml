@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Upgrade CSM on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-10/upgrade/</link>
+    <description>Recent content in Upgrade CSM on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-10</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:09:30 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-10/upgrade/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Update Management Network From 1.4 To 1.5</title>
+      <link>/docs-csm/en-10/upgrade/update_management_network/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:30 +0000</pubDate>
+      <guid>/docs-csm/en-10/upgrade/update_management_network/</guid>
+      <description>&lt;h1 id=&#34;update-management-network-from-14-to-15&#34;&gt;Update Management Network From 1.4 To 1.5&lt;/h1&gt;&#xA;&lt;p&gt;&lt;strong&gt;IMPORTANT&lt;/strong&gt;: These procedures only need to be followed if upgrading from CSM 0.9 (Shasta 1.4). If upgrading from CSM 1.0.1 (Shasta 1.5), these procedures should already have been done.&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-10/upgrade/update_management_network/#new-features-and-functions&#34;&gt;New Features and Functions for v1.5&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-10/upgrade/update_management_network/#accessing-network-switches&#34;&gt;Accessing Network Switches&lt;/a&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-10/upgrade/update_management_network/#finding-switch-hostnames&#34;&gt;Finding Switch Hostnames and IP Addresses&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-10/upgrade/update_management_network/#switch-reminders&#34;&gt;Reminders&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-10/upgrade/update_management_network/#cmm-static-lag-configuration&#34;&gt;CMM Static Lag Configuration&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-10/upgrade/update_management_network/#bgp-updates&#34;&gt;BGP&lt;/a&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-10/upgrade/update_management_network/#bgp-aruba&#34;&gt;Aruba&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-10/upgrade/update_management_network/#bgp-mellanox&#34;&gt;Mellanox&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-10/upgrade/update_management_network/#apollo-server-configuration&#34;&gt;Apollo Server Configuration&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;h2 id=&#34;new-features-and-functions&#34;&gt;1. New Features and Functions for v1.5&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Static Lags from the CDU switches to the CMMs (Aruba and Dell).&lt;/li&gt;&#xA;&lt;li&gt;HPE Apollo server port config, requires a trunk port to the iLO.&lt;/li&gt;&#xA;&lt;li&gt;BGP TFTP static route removal (Aruba).&lt;/li&gt;&#xA;&lt;li&gt;BGP passive neighbors (Aruba and Mellanox)&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;Some of these changes are applied as hotfixes and patches for 1.4; they may have already been applied.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Prepare For Upgrade</title>
+      <link>/docs-csm/en-10/upgrade/prepare_for_upgrade/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:30 +0000</pubDate>
+      <guid>/docs-csm/en-10/upgrade/prepare_for_upgrade/</guid>
+      <description>&lt;h1 id=&#34;prepare-for-upgrade&#34;&gt;Prepare For Upgrade&lt;/h1&gt;&#xA;&lt;p&gt;Before beginning an upgrade to a new version of CSM, there are a few things to do on the system first.&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Gracefully shutdown workloads affected by CSM upgrade.&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;Warning:&lt;/strong&gt; Although it is expected that compute nodes and application nodes will continue to provide their services&#xA;without interruption when the management nodes and services are being upgraded by CSM, it is important to&#xA;be aware of the possibility of interruption of running jobs. The management nodes will undergo a rolling upgrade&#xA;that should maintain enough nodes of each type to continue to provide services. However, while one node is being upgraded,&#xA;if another node of the same type has an unplanned fault that removes it from service, there may be a degraded system. For&#xA;example, if there are three Kubernetes master nodes and one is being upgraded, the quorum is maintained by the remaining&#xA;two nodes. If one of those two nodes has a fault before the third node completes its upgrade, then quorum would be lost.&#xA;There is a similar issue on small systems which have only three worker nodes for some services which have a data store that&#xA;is based on three copies of &lt;code&gt;etcd&lt;/code&gt; or &lt;code&gt;postgres&lt;/code&gt; because some of those pods have anti-affinity to avoid two pods of that type&#xA;being on the same worker node.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

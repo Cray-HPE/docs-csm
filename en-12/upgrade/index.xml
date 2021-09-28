@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Upgrade CSM on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-12/upgrade/</link>
+    <description>Recent content in Upgrade CSM on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-12</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:09:47 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-12/upgrade/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Prepare For Upgrade</title>
+      <link>/docs-csm/en-12/upgrade/prepare_for_upgrade/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:47 +0000</pubDate>
+      <guid>/docs-csm/en-12/upgrade/prepare_for_upgrade/</guid>
+      <description>&lt;h1 id=&#34;prepare-for-upgrade&#34;&gt;Prepare For Upgrade&lt;/h1&gt;&#xA;&lt;p&gt;Before beginning an upgrade to a new version of CSM, there are a few things to do on the system first.&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-12/upgrade/prepare_for_upgrade/#reduced-resiliency-during-upgrade&#34;&gt;Reduced resiliency during upgrade&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;[Preparation steps]&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;reduced-resiliency-during-upgrade&#34;&gt;Reduced resiliency during upgrade&lt;/h2&gt;&#xA;&lt;p&gt;&lt;strong&gt;Warning:&lt;/strong&gt; Management service resiliency is reduced during the upgrade.&lt;/p&gt;&#xA;&lt;p&gt;Although it is expected that &lt;a href=&#34;/docs-csm/docs-csm/en-12/glossary/#compute-node-cn&#34;&gt;compute nodes&lt;/a&gt; and&#xA;&lt;a href=&#34;/docs-csm/docs-csm/en-12/glossary/#application-node-an&#34;&gt;application nodes&lt;/a&gt; will continue to provide their&#xA;services without interruption, it is important to be aware that the degree of management services&#xA;resiliency is reduced during the upgrade. While one node is being upgraded, if another node of the&#xA;same type has an unplanned fault that removes it from service, then this may result in a degraded system. For&#xA;example, if there are three Kubernetes master nodes and one is being upgraded, the quorum is&#xA;maintained by the remaining two nodes. If one of those two nodes has a fault before the third node&#xA;completes its upgrade, then quorum would be lost.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

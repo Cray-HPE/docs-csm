@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>system configuration service on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-12/operations/system_configuration_service/</link>
+    <description>Recent content in system configuration service on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-12</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:09:37 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-12/operations/system_configuration_service/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Configure BMC and Controller Parameters with SCSD</title>
+      <link>/docs-csm/en-12/operations/system_configuration_service/configure_bmc_and_controller_parameters_with_scsd/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:37 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/system_configuration_service/configure_bmc_and_controller_parameters_with_scsd/</guid>
+      <description>&lt;h1 id=&#34;configure-bmc-and-controller-parameters-with-scsd&#34;&gt;Configure BMC and Controller Parameters with SCSD&lt;/h1&gt;&#xA;&lt;p&gt;The System Configuration Service (SCSD) allows administrators to set various BMC and controller parameters for&#xA;components in liquid-cooled cabinets. These parameters are typically set during discovery, but this&#xA;tool enables parameters to be set before or after discovery. The operations to change these parameters&#xA;are available in the &lt;code&gt;cray&lt;/code&gt; CLI under the &lt;code&gt;scsd&lt;/code&gt; command.&lt;/p&gt;&#xA;&lt;p&gt;The parameters which can be set are:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;SSH key&lt;/li&gt;&#xA;&lt;li&gt;NTP server&lt;/li&gt;&#xA;&lt;li&gt;Syslog server&lt;/li&gt;&#xA;&lt;li&gt;BMC/Controller passwords&lt;/li&gt;&#xA;&lt;li&gt;SSH console key&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;&lt;strong&gt;IMPORTANT&lt;/strong&gt;: If the &lt;code&gt;scsd&lt;/code&gt; tool is used to update the &lt;code&gt;SSHConsoleKey&lt;/code&gt; value outside of ConMan, it will&#xA;disrupt the ConMan connection to the console and collection of console logs. See &lt;a href=&#34;/docs-csm/docs-csm/en-12/operations/conman/conman/&#34;&gt;ConMan&lt;/a&gt;&#xA;for more information about remote consoles and collecting console logs.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Manage Parameters with the scsd Service</title>
+      <link>/docs-csm/en-12/operations/system_configuration_service/manage_parameters_with_the_scsd_service/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:37 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/system_configuration_service/manage_parameters_with_the_scsd_service/</guid>
+      <description>&lt;h1 id=&#34;manage-parameters-with-the-scsd-service&#34;&gt;Manage Parameters with the scsd Service&lt;/h1&gt;&#xA;&lt;p&gt;The System Configuration Service commands below enable administrators to set various BMC and controller parameters. These parameters are controlled with the scsd command in the Cray CLI.&lt;/p&gt;&#xA;&lt;h3 id=&#34;retrieve-current-information-from-targets&#34;&gt;Retrieve Current Information from Targets&lt;/h3&gt;&#xA;&lt;p&gt;Get the network protocol parameters (NTP/syslog server, SSH keys) and boot order for the targets in the payload. All fields are only applicable to Liquid Cooled controllers. Attempts to set them for Air Cooled BMCs will be ignored, and retrieving them for Air Cooled BMCs will return empty strings.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Set BMC Credentials</title>
+      <link>/docs-csm/en-12/operations/system_configuration_service/set_bmc_credentials/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:37 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/system_configuration_service/set_bmc_credentials/</guid>
+      <description>&lt;h1 id=&#34;set-bmc-credentials&#34;&gt;Set BMC Credentials&lt;/h1&gt;&#xA;&lt;p&gt;Use the System Configuration Service (SCSD) to set the BMCs credentials to unique values, or set them all to the same value.&#xA;Redfish BMCs get installed into the system with default credentials. Once the machine is shipped, the Redfish credentials must be&#xA;changed on all BMCs. This is done using System Configuration Service (SCSD) through the Cray CLI.&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;Important:&lt;/strong&gt; If the credentials for other devices need to be changed, refer to the following device-specific credential changing procedures:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>System Configuration Service</title>
+      <link>/docs-csm/en-12/operations/system_configuration_service/system_configuration_service/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:37 +0000</pubDate>
+      <guid>/docs-csm/en-12/operations/system_configuration_service/system_configuration_service/</guid>
+      <description>&lt;h1 id=&#34;system-configuration-service&#34;&gt;System Configuration Service&lt;/h1&gt;&#xA;&lt;p&gt;The System Configuration Service (SCSD) allows administrators to set various BMC and controller parameters.&#xA;These parameters are typically set during discovery, but this tool enables parameters to be set before or after discovery.&#xA;The operations to change these parameters are available in the Cray CLI under the &lt;code&gt;scsd&lt;/code&gt; command.&lt;/p&gt;&#xA;&lt;p&gt;The following are the parameters that most commonly must be set:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;SSH keys&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;IMPORTANT:&lt;/strong&gt; If the &lt;code&gt;scsd&lt;/code&gt; tool is used to update the &lt;code&gt;SSHConsoleKey&lt;/code&gt; value outside of ConMan, it will disrupt the&#xA;ConMan connection to the console and collection of console logs. Refer to &lt;a href=&#34;/docs-csm/docs-csm/en-12/operations/conman/conman/&#34;&gt;ConMan&lt;/a&gt; for more information.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;NTP server&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;syslog&lt;/code&gt; server&lt;/li&gt;&#xA;&lt;li&gt;BMC/controller passwords&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;The &lt;code&gt;scsd&lt;/code&gt; tool includes a REST API to facilitate operations to set parameters. It contacts the Hardware State Manager (HSM)&#xA;to verify that targets are correct and in a valid hardware state, unless the &lt;code&gt;force&lt;/code&gt; flag is specified. Once it has a list of&#xA;targets, &lt;code&gt;scsd&lt;/code&gt; performs the needed Redfish operations in parallel using TRS. Any credentials needed are retrieved from Vault.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

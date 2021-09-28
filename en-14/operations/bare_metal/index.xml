@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>bare metal on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-14/operations/bare_metal/</link>
+    <description>Recent content in bare metal on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-14</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:09:01 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-14/operations/bare_metal/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Bare-Metal Steps</title>
+      <link>/docs-csm/en-14/operations/bare_metal/bare-metal/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:01 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/bare_metal/bare-metal/</guid>
+      <description>&lt;h1 id=&#34;bare-metal-steps&#34;&gt;Bare-Metal Steps&lt;/h1&gt;&#xA;&lt;p&gt;This section provides information on what needs to be done before&#xA;an initial install of CSM.&lt;/p&gt;&#xA;&lt;h2 id=&#34;air-cooled-bmc-credentials&#34;&gt;Air-Cooled BMC Credentials&lt;/h2&gt;&#xA;&lt;p&gt;It is necessary to set the default credentials of all air-cooled BMCs so that&#xA;CSM Hardware Management can interact with Redfish.&lt;/p&gt;&#xA;&lt;p&gt;This procedure is outlined in &lt;a href=&#34;/docs-csm/docs-csm/en-14/operations/bare_metal/change_river_bmc_credentials/&#34;&gt;Change Air-Cooled BMC Credentials&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;h2 id=&#34;liquid-cooled-bmc-credentials&#34;&gt;Liquid-Cooled BMC Credentials&lt;/h2&gt;&#xA;&lt;p&gt;As with air-cooled BMCs, liquid-cooled BMCs also need their credentials changed.&lt;/p&gt;&#xA;&lt;p&gt;This procedure is outlined in &lt;a href=&#34;/docs-csm/docs-csm/en-14/operations/security_and_authentication/provisioning_a_liquid-cooled_ex_cabinet_cec_with_default_credentials/&#34;&gt;Change Liquid-Cooled BMC Credentials&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Fresh Install Setting NodeBMC and RouterBMC Redfish Credentials</title>
+      <link>/docs-csm/en-14/operations/bare_metal/change_river_bmc_credentials/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:01 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/bare_metal/change_river_bmc_credentials/</guid>
+      <description>&lt;h1 id=&#34;fresh-install-setting-nodebmc-and-routerbmc-redfish-credentials&#34;&gt;Fresh Install: Setting NodeBMC and RouterBMC Redfish Credentials&lt;/h1&gt;&#xA;&lt;p&gt;These steps are performed before the installation of Shasta System Management&#xA;or HPCM management software stacks. The goal is to set the BMC Redfish&#xA;credentials to values that the management software will be expecting so that&#xA;all software systems work smoothly with the Redfish hardware.&lt;/p&gt;&#xA;&lt;h3 id=&#34;prerequisites&#34;&gt;Prerequisites&lt;/h3&gt;&#xA;&lt;p&gt;Before doing these operations, the following is assumed:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;There is a workstation or laptop which can access all target BMCs.&lt;/li&gt;&#xA;&lt;li&gt;Workstation or laptop has the &lt;code&gt;curl&lt;/code&gt; command installed.&lt;/li&gt;&#xA;&lt;li&gt;The hostname or IP address of each BMC is known or obtainable.&lt;/li&gt;&#xA;&lt;li&gt;The default BMC password is obtainable for each target BMC.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h3 id=&#34;set-bmc-passwords-on-all-air-cooled-bmc-hardware&#34;&gt;Set BMC Passwords on All Air-Cooled BMC Hardware&lt;/h3&gt;&#xA;&lt;p&gt;This involves interaction with the BMC hardware itself.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

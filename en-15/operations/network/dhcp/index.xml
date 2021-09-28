@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>dhcp on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-15/operations/network/dhcp/</link>
+    <description>Recent content in dhcp on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-15</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:09:18 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-15/operations/network/dhcp/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>DHCP boot file customization</title>
+      <link>/docs-csm/en-15/operations/network/dhcp/customize_boot_file/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:18 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/network/dhcp/customize_boot_file/</guid>
+      <description>&lt;h1 id=&#34;dhcp-boot-file-customization&#34;&gt;DHCP boot file customization&lt;/h1&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/network/dhcp/customize_boot_file/#dhcp-boot-file-customization&#34;&gt;DHCP Boot file customization&lt;/a&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/network/dhcp/customize_boot_file/#background&#34;&gt;Background&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/network/dhcp/customize_boot_file/#override-the-boot-file-name&#34;&gt;Override the boot file name&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/network/dhcp/customize_boot_file/#verify-the-node-dhcp-configuration-has-been-updated&#34;&gt;Verify the node DHCP configuration has been updated&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/network/dhcp/customize_boot_file/#reset-the-boot-file-name-to-default&#34;&gt;Reset the boot file to the default option&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;background&#34;&gt;Background&lt;/h2&gt;&#xA;&lt;p&gt;The &lt;code&gt;cray-dhcp-kea&lt;/code&gt; service is configured to send a CPU architecture appropriate boot file based on the value received in&#xA;the client system architecture field (option 93) of the incoming DHCP request. By default &lt;code&gt;cray-dhcp-kea&lt;/code&gt; will send&#xA;the following in the DHCP boot file name field (option 67) of the DHCP response.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>DHCP</title>
+      <link>/docs-csm/en-15/operations/network/dhcp/dhcp/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:18 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/network/dhcp/dhcp/</guid>
+      <description>&lt;h1 id=&#34;dhcp&#34;&gt;DHCP&lt;/h1&gt;&#xA;&lt;p&gt;The Dynamic Host Configuration Protocol (DHCP) service on the HPE Cray EX system uses the Internet Systems Consortium (ISC) Kea tool. Kea provides more robust management capabilities for DHCP servers.&lt;/p&gt;&#xA;&lt;p&gt;For more information: &lt;a href=&#34;https://www.isc.org/kea/&#34;&gt;&lt;code&gt;https://www.isc.org/kea/&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;p&gt;The following improvements to the DHCP service are included:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;API access to manage DHCP&lt;/li&gt;&#xA;&lt;li&gt;Scalable pod that uses MetalLB instead of host networking&lt;/li&gt;&#xA;&lt;li&gt;Options for updates to HPE Cray EX management system IP addresses&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;dhcp-helper-workflow&#34;&gt;DHCP Helper Workflow&lt;/h2&gt;&#xA;&lt;p&gt;The DHCP-Helper uses the following workflow:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Troubleshoot DHCP Issues</title>
+      <link>/docs-csm/en-15/operations/network/dhcp/troubleshoot_dhcp_issues/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:18 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/network/dhcp/troubleshoot_dhcp_issues/</guid>
+      <description>&lt;h1 id=&#34;troubleshoot-dhcp-issues&#34;&gt;Troubleshoot DHCP Issues&lt;/h1&gt;&#xA;&lt;p&gt;There are several things to check for when troubleshooting issues with Dynamic Host Configuration Protocol (DHCP) servers.&lt;/p&gt;&#xA;&lt;h2 id=&#34;verify-the-status-of-the-cray-dhcp-kea-pods-and-services&#34;&gt;Verify the status of the &lt;code&gt;cray-dhcp-kea&lt;/code&gt; pods and services&lt;/h2&gt;&#xA;&lt;p&gt;(&lt;code&gt;ncn-mw#&lt;/code&gt;) Check to see if the Kea DHCP services are running:&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kubectl get services -n services | grep kea&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Example output:&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cray-dhcp-kea-api              ClusterIP     10.26.142.204  &amp;lt;none&amp;gt;         8000/TCP      5d23h&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cray-dhcp-kea-tcp-hmn          LoadBalancer  10.24.79.120   10.94.100.222  67:32120/TCP  5d23h&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cray-dhcp-kea-tcp-nmn          LoadBalancer  10.19.139.179  10.92.100.222  67:31652/TCP  5d23h&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cray-dhcp-kea-udp-hmn          LoadBalancer  10.25.203.31   10.94.100.222  67:30840/UDP  5d23h&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cray-dhcp-kea-udp-nmn          LoadBalancer  10.19.187.168  10.92.100.222  67:31904/UDP  5d23h&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If the services shown in the output above are not present, then it could be an indication that something is not working correctly.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

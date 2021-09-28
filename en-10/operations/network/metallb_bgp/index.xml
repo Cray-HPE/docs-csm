@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>metallb bgp on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-10/operations/network/metallb_bgp/</link>
+    <description>Recent content in metallb bgp on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-10</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:09:11 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-10/operations/network/metallb_bgp/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Check BGP Status and Reset Sessions</title>
+      <link>/docs-csm/en-10/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:10 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/</guid>
+      <description>&lt;h1 id=&#34;check-bgp-status-and-reset-sessions&#34;&gt;Check BGP Status and Reset Sessions&lt;/h1&gt;&#xA;&lt;p&gt;Check the Border Gateway Protocol (BGP) status on the Aruba and Mellanox switches and verify that all sessions are in an Established state.&#xA;If the state of any session in the table is Idle, then the BGP sessions must be reset.&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-10/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/#prerequisites&#34;&gt;Prerequisites&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-10/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/#procedure&#34;&gt;Procedure&lt;/a&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-10/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/#mellanox&#34;&gt;Mellanox&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-10/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/#aruba&#34;&gt;Aruba&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-10/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/#further-steps&#34;&gt;Further steps&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;prerequisites&#34;&gt;Prerequisites&lt;/h2&gt;&#xA;&lt;p&gt;This procedure requires administrative privileges.&lt;/p&gt;&#xA;&lt;h2 id=&#34;procedure&#34;&gt;Procedure&lt;/h2&gt;&#xA;&lt;p&gt;The following procedures may not resolve the problem after just one attempt. In some cases, the procedures need to be followed multiple times before the situation resolves.&#xA;If problems persist after several attempts, then proceed to the &lt;a href=&#34;/docs-csm/docs-csm/en-10/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/#further-steps&#34;&gt;Further steps&lt;/a&gt; section for additional remediation steps.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>MetalLB in BGP-Mode</title>
+      <link>/docs-csm/en-10/operations/network/metallb_bgp/metallb_in_bgp-mode/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:11 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/metallb_bgp/metallb_in_bgp-mode/</guid>
+      <description>&lt;h1 id=&#34;metallb-in-bgp-mode&#34;&gt;MetalLB in BGP-Mode&lt;/h1&gt;&#xA;&lt;p&gt;MetalLB is a component in Kubernetes that manages access to &lt;code&gt;LoadBalancer&lt;/code&gt; services from outside the Kubernetes cluster. There are &lt;code&gt;LoadBalancer&lt;/code&gt; services on the Node Management Network (NMN),&#xA;Hardware Management Network (HMN), and Customer Access Network (CAN).&lt;/p&gt;&#xA;&lt;p&gt;MetalLB can run in either &lt;code&gt;Layer2-mode&lt;/code&gt; or &lt;code&gt;BGP-mode&lt;/code&gt; for each address pool it manages. &lt;code&gt;BGP-mode&lt;/code&gt; is used for the NMN, HMN, and CAN. This enables true load balancing (&lt;code&gt;Layer2-mode&lt;/code&gt; does failover, not&#xA;load balancing) and allows for a more robust layer 3 configuration for these networks.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>MetalLB in BGP-Mode Configuration</title>
+      <link>/docs-csm/en-10/operations/network/metallb_bgp/metallb_in_bgp-mode_configuration/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:11 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/metallb_bgp/metallb_in_bgp-mode_configuration/</guid>
+      <description>&lt;h1 id=&#34;metallb-in-bgp-mode-configuration&#34;&gt;MetalLB in BGP-Mode Configuration&lt;/h1&gt;&#xA;&lt;p&gt;MetalLB in BGP-mode provides a more robust configuration for the Node Management Network (NMN), Hardware Management Network (HMN), and Customer Access Network (CAN). This configuration is generated from the &lt;code&gt;csi config init&lt;/code&gt; input values. BGP-mode is enabled by updating the protocols in these configuration files.&lt;/p&gt;&#xA;&lt;h3 id=&#34;metallb-peer-configuration&#34;&gt;MetalLB Peer Configuration&lt;/h3&gt;&#xA;&lt;p&gt;The content for metallb_bgp_peers is generated by the &lt;code&gt;csi config init&lt;/code&gt; command. In addition to the MetalLB configuration, there is configuration needed on the spine switches to set up the BGP router on these switches.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Troubleshoot BGP not Accepting Routes from MetalLB</title>
+      <link>/docs-csm/en-10/operations/network/metallb_bgp/troubleshoot_bgp_not_accepting_routes_from_metallb/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:11 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/metallb_bgp/troubleshoot_bgp_not_accepting_routes_from_metallb/</guid>
+      <description>&lt;h1 id=&#34;troubleshoot-bgp-not-accepting-routes-from-metallb&#34;&gt;Troubleshoot BGP not Accepting Routes from MetalLB&lt;/h1&gt;&#xA;&lt;p&gt;Check the number of routes that the Border Gateway Protocol (BGP) Router is accepting in the peering session. This procedure is useful if Kubernetes LoadBalancer services in the NMN, HMN, or CAN address pools are not accessible from outside the cluster.&lt;/p&gt;&#xA;&lt;p&gt;Regain access to Kubernetes LoadBalancer services from outside the cluster.&lt;/p&gt;&#xA;&lt;h3 id=&#34;prerequisites&#34;&gt;Prerequisites&lt;/h3&gt;&#xA;&lt;p&gt;This procedure requires administrative privileges.&lt;/p&gt;&#xA;&lt;h3 id=&#34;procedure&#34;&gt;Procedure&lt;/h3&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Log into the spine or aggregate switch.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Troubleshoot Services without an Allocated IP Address</title>
+      <link>/docs-csm/en-10/operations/network/metallb_bgp/troubleshoot_services_without_an_allocated_ip_address/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:11 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/metallb_bgp/troubleshoot_services_without_an_allocated_ip_address/</guid>
+      <description>&lt;h1 id=&#34;troubleshoot-services-without-an-allocated-ip-address&#34;&gt;Troubleshoot Services without an Allocated IP Address&lt;/h1&gt;&#xA;&lt;p&gt;Check if a given service has an IP address allocated for it if the Kubernetes LoadBalancer services in the NMN, HMN, or CAN address pools are not accessible from outside the cluster.&lt;/p&gt;&#xA;&lt;p&gt;Regain access to Kubernetes LoadBalancer services from outside the cluster.&lt;/p&gt;&#xA;&lt;h3 id=&#34;prerequisites&#34;&gt;Prerequisites&lt;/h3&gt;&#xA;&lt;p&gt;This procedure requires administrative privileges.&lt;/p&gt;&#xA;&lt;h3 id=&#34;procedure&#34;&gt;Procedure&lt;/h3&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Check the status of the services with the &lt;code&gt;kubectl&lt;/code&gt; command to see the External-IP of the service.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Update BGP Neighbors</title>
+      <link>/docs-csm/en-10/operations/network/metallb_bgp/update_bgp_neighbors/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:11 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/network/metallb_bgp/update_bgp_neighbors/</guid>
+      <description>&lt;h1 id=&#34;update-bgp-neighbors&#34;&gt;Update BGP Neighbors&lt;/h1&gt;&#xA;&lt;p&gt;This page will detail the manual procedure to configure and verify BGP neighbors on the management switches.&lt;/p&gt;&#xA;&lt;p&gt;You will not have BGP peers until CSM &lt;code&gt;install.sh&lt;/code&gt; has run. This is where MetalLB is deployed.&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;How do I check the status of the BGP neighbors?&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Log into the spine switches and run &lt;code&gt;show bgp ipv4 unicast summary&lt;/code&gt; for Aruba/HPE switches and &lt;code&gt;show ip bgp summary&lt;/code&gt; for Mellanox.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;Are my Neighbors stuck in IDLE?&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Running &lt;code&gt;clear ip bgp all&lt;/code&gt; on the Mellanox and &lt;code&gt;clear bgp *&lt;/code&gt; on the Arubas will restart the BGP process. This process may need to be done when a system is reinstalled or when a worker node is rebuilt.&lt;/li&gt;&#xA;&lt;li&gt;If you cannot get the neighbors out of IDLE, make sure that passive neighbors are configured. This is in the automated scripts and shown in the example below. Passive neighbors should only be configured on NCN neighbors.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;The BGP neighbors will be the worker NCN IP addresses on the NMN (node management network) (VLAN002). If your system is using HPE/Aruba, one of the neighbors will be the other spine switch.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;generate-metallb-configmap&#34;&gt;Generate MetalLB configmap&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Depending on the network architecture of your system you may need to peer with switches other than the spines. CSI has a BGP peers argument that accepts &amp;lsquo;aggregation&amp;rsquo; as an option, if no option is defined it will default to the spines as being the MetalLB peers.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;CSI CLI arguments with &lt;code&gt;--bgp-peers aggregation&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

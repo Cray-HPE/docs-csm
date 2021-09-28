@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CSM 0.9.4 or later to 1.0.1 Upgrade Process on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-10/upgrade/1.0.1/</link>
+    <description>Recent content in CSM 0.9.4 or later to 1.0.1 Upgrade Process on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-10</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:09:27 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-10/upgrade/1.0.1/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Stage 0 - Prerequisites and Preflight Checks</title>
+      <link>/docs-csm/en-10/upgrade/1.0.1/stage_0_prerequisites/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:27 +0000</pubDate>
+      <guid>/docs-csm/en-10/upgrade/1.0.1/stage_0_prerequisites/</guid>
+      <description>&lt;h1 id=&#34;stage-0---prerequisites-and-preflight-checks&#34;&gt;Stage 0 - Prerequisites and Preflight Checks&lt;/h1&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; CSM-0.9.4 or later CSM 0.9.x is required in order to upgrade to CSM-1.0.1 (available with Shasta v1.5).&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; Installed CSM versions may be listed from the product catalog using the following command. This will sort a semantic version without a hyphenated suffix after the same semantic version with a hyphenated suffix, e.g. &lt;code&gt;1.0.0&lt;/code&gt; &amp;gt; &lt;code&gt;1.0.0-beta.19&lt;/code&gt;.&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;p&gt;Use the following command can be used to check the CSM version on the system:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Stage 1 - Ceph upgrade from Nautilus (14.2.x) to Octopus (15.2.x)</title>
+      <link>/docs-csm/en-10/upgrade/1.0.1/stage_1/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:27 +0000</pubDate>
+      <guid>/docs-csm/en-10/upgrade/1.0.1/stage_1/</guid>
+      <description>&lt;h1 id=&#34;stage-1---ceph-upgrade-from-nautilus-142x-to-octopus-152x&#34;&gt;Stage 1 - Ceph upgrade from Nautilus (14.2.x) to Octopus (15.2.x)&lt;/h1&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;&lt;strong&gt;&lt;code&gt;IMPORTANT:&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;Reminder: Before running any upgrade scripts, be sure the Cray CLI output format is reset to default by running the following command:&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ncn# unset CRAY_FORMAT&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/blockquote&gt;&#xA;&lt;h2 id=&#34;stage-11&#34;&gt;Stage 1.1&lt;/h2&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Run &lt;code&gt;ncn-upgrade-ceph-initial.sh&lt;/code&gt; for &lt;code&gt;ncn-s001&lt;/code&gt;. Follow output of the script carefully. The script will pause for manual interaction.&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ncn-m001# /usr/share/doc/csm/upgrade/1.0.1/scripts/upgrade/ncn-upgrade-ceph-initial.sh ncn-s001&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Repeat the previous step for each other storage node, one at a time.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Stage 2 - Ceph image upgrade</title>
+      <link>/docs-csm/en-10/upgrade/1.0.1/stage_2/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:27 +0000</pubDate>
+      <guid>/docs-csm/en-10/upgrade/1.0.1/stage_2/</guid>
+      <description>&lt;h1 id=&#34;stage-2---ceph-image-upgrade&#34;&gt;Stage 2 - Ceph image upgrade&lt;/h1&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;&lt;strong&gt;&lt;code&gt;IMPORTANT:&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;Reminder: Before running any upgrade scripts, be sure the Cray CLI output format is reset to default by running the following command:&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ncn# unset CRAY_FORMAT&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/blockquote&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;In order for nodes to properly PXE boot, Border Gateway Protocol (BGP) must be healthy. Before proceeding, check the status of BGP as described in the &lt;a href=&#34;/docs-csm/docs-csm/en-10/operations/network/metallb_bgp/check_bgp_status_and_reset_sessions/&#34;&gt;Check BGP Status and Reset Sessions&lt;/a&gt; procedure.&lt;/p&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Run &lt;code&gt;ncn-upgrade-ceph-nodes.sh&lt;/code&gt; for &lt;code&gt;ncn-s001&lt;/code&gt;. Follow output of the script carefully. The script will pause for manual interaction.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Stage 3 - Kubernetes Upgrade from 1.18.6 to 1.19.9</title>
+      <link>/docs-csm/en-10/upgrade/1.0.1/stage_3/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:27 +0000</pubDate>
+      <guid>/docs-csm/en-10/upgrade/1.0.1/stage_3/</guid>
+      <description>&lt;h1 id=&#34;stage-3---kubernetes-upgrade-from-1186-to-1199&#34;&gt;Stage 3 - Kubernetes Upgrade from 1.18.6 to 1.19.9&lt;/h1&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;NOTE: During the CSM-0.9 install the LiveCD containing the initial install files for this system should have been unmounted from the master node when rebooting into the Kubernetes cluster. The scripts run in this section will also attempt to unmount/eject it if found to ensure the USB stick does not get erased.&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;&lt;strong&gt;&lt;code&gt;IMPORTANT:&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;Reminder: Before running any upgrade scripts, be sure the Cray CLI output format is reset to default by running the following command:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Stage 4 - CSM Service Upgrades</title>
+      <link>/docs-csm/en-10/upgrade/1.0.1/stage_4/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:27 +0000</pubDate>
+      <guid>/docs-csm/en-10/upgrade/1.0.1/stage_4/</guid>
+      <description>&lt;h1 id=&#34;stage-4---csm-service-upgrades&#34;&gt;Stage 4 - CSM Service Upgrades&lt;/h1&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;&lt;strong&gt;&lt;code&gt;IMPORTANT:&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;Reminder: Before running any upgrade scripts, be sure the Cray CLI output format is reset to default by running the following command:&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ncn# unset CRAY_FORMAT&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/blockquote&gt;&#xA;&lt;p&gt;Run &lt;code&gt;csm-service-upgrade.sh&lt;/code&gt; to deploy upgraded CSM applications and services:&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ncn-m002# /usr/share/doc/csm/upgrade/1.0.1/scripts/upgrade/csm-service-upgrade.sh&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Once &lt;code&gt;Stage 4&lt;/code&gt; service upgrade is complete, proceed to &lt;a href=&#34;/docs-csm/docs-csm/en-10/upgrade/1.0.1/stage_5/&#34;&gt;Stage 5&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Stage 5 - Workaround for MAC-learning issue with Aruba 8325 switches</title>
+      <link>/docs-csm/en-10/upgrade/1.0.1/stage_5/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:27 +0000</pubDate>
+      <guid>/docs-csm/en-10/upgrade/1.0.1/stage_5/</guid>
+      <description>&lt;h1 id=&#34;stage-5---workaround-for-mac-learning-issue-with-aruba-8325-switches&#34;&gt;Stage 5 - Workaround for MAC-learning issue with Aruba 8325 switches&lt;/h1&gt;&#xA;&lt;p&gt;Issue description:&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;&lt;strong&gt;Aruba CR:&lt;/strong&gt;          90598&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;Affected platform:&lt;/strong&gt; Aruba 8325 switches&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;Symptom:&lt;/strong&gt;           MAC learning stops&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;Scenario:&lt;/strong&gt;          Under extremely rare DMA stress conditions, an L2 learning thread may timeout and exit, preventing future MAC learning&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;Workaround:&lt;/strong&gt;        Reboot the switch or monitor the L2 thread and restart it with an NAE script&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;Fixed in:&lt;/strong&gt;        10.06.0130, 10.7.0010, and above&lt;/p&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://asp.arubanetworks.com/downloads;products=Aruba%20Switches;productSeries=Aruba%208325%20Switch%20Series&#34;&gt;Aruba release notes&lt;/a&gt;&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;h2 id=&#34;overview&#34;&gt;Overview&lt;/h2&gt;&#xA;&lt;p&gt;&lt;strong&gt;&lt;code&gt;NOTE:&lt;/code&gt;&lt;/strong&gt; If you do not have Aruba 8325 switches in your system, skip this stage and &lt;a href=&#34;/docs-csm/docs-csm/en-10/upgrade/1.0.1/&#34;&gt;return to main upgrade page&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

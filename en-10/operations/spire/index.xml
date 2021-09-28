@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>spire on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-10/operations/spire/</link>
+    <description>Recent content in spire on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-10</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:09:21 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-10/operations/spire/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Create a Backup of the Spire Postgres Database</title>
+      <link>/docs-csm/en-10/operations/spire/create_a_backup_of_the_spire_postgres_database/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:21 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/spire/create_a_backup_of_the_spire_postgres_database/</guid>
+      <description>&lt;h1 id=&#34;create-a-backup-of-the-spire-postgres-database&#34;&gt;Create a Backup of the Spire Postgres Database&lt;/h1&gt;&#xA;&lt;p&gt;Perform a manual backup of the contents of the Spire Postgres database. This backup can be used to restore the contents of the Spire Postgres database at a later point&#xA;in time using the &lt;a href=&#34;/docs-csm/docs-csm/en-10/operations/kubernetes/restore_postgres/#restore-postgres-for-spire&#34;&gt;Restore Spire Postgres from Backup&lt;/a&gt; procedure.&lt;/p&gt;&#xA;&lt;h2 id=&#34;prerequisites&#34;&gt;Prerequisites&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Healthy Spire Postgres Cluster.&lt;/p&gt;&#xA;&lt;p&gt;Use &lt;code&gt;patronictl list&lt;/code&gt; on the Spire Postgres cluster to determine the current state of the cluster and note which member is the &lt;code&gt;Leader&lt;/code&gt;. A healthy cluster will look similar to the following:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Restore missing Spire metadata</title>
+      <link>/docs-csm/en-10/operations/spire/restore_missing_spire_metadata/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:21 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/spire/restore_missing_spire_metadata/</guid>
+      <description>&lt;h1 id=&#34;restore-missing-spire-metadata&#34;&gt;Restore missing Spire metadata&lt;/h1&gt;&#xA;&lt;p&gt;If the Boot Script Service (BSS) metadata server does contain the proper Spire metadata, then the&#xA;computes will fail to boot. This is due to &lt;code&gt;dracut&lt;/code&gt; pulling server data from the&#xA;metadata during startup. To fix this issue, the &lt;code&gt;spire-update-bss&lt;/code&gt; job needs&#xA;to be rerun.&lt;/p&gt;&#xA;&lt;h2 id=&#34;error&#34;&gt;Error&lt;/h2&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[  557.513984] Apr 22 18:02:02 nid000004 dracut-initqueue[4177]: time=&amp;#34;2022-04-22T18:02:02Z&amp;#34; level=info msg=&amp;#34;SVID is not found. Starting node attestation&amp;#34; subsystem_name=attestor trust_domain_id=&amp;#34;spiffe://null&amp;#34;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[  557.514000] Apr 22 18:02:07 nid000004 dracut-initqueue[4194]: Agent is unavailable.&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[  557.514017] Apr 22 18:02:07 nid000004 dracut-initqueue[4174]: Warning: Spire-agent healthcheck failed, return code 1&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;check&#34;&gt;Check&lt;/h2&gt;&#xA;&lt;p&gt;Run the &lt;code&gt;goss-spire-bss-metadata-exist&lt;/code&gt; test.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Restore Spire Postgres without an Existing Backup</title>
+      <link>/docs-csm/en-10/operations/spire/restore_spire_postgres_without_a_backup/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:21 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/spire/restore_spire_postgres_without_a_backup/</guid>
+      <description>&lt;h1 id=&#34;restore-spire-postgres-without-an-existing-backup&#34;&gt;Restore Spire Postgres without an Existing Backup&lt;/h1&gt;&#xA;&lt;p&gt;Reinstall the Spire Helm chart in the event that &lt;code&gt;spire-postgres&lt;/code&gt; databases cannot be restored from a backup.&lt;/p&gt;&#xA;&lt;h2 id=&#34;uninstall-spire&#34;&gt;Uninstall Spire&lt;/h2&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Uninstall the Spire Helm chart.&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ncn-mw# helm uninstall -n spire spire&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Wait for the pods in the &lt;code&gt;spire&lt;/code&gt; namespace to terminate. Once that is done, remove&#xA;the &lt;code&gt;spire-data-server&lt;/code&gt; &lt;code&gt;PVCs&lt;/code&gt;.&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ncn-mw# kubectl get pvc -n spire | grep spire-data-spire-server | awk &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;{print $1}&amp;#39;&lt;/span&gt; | xargs kubectl delete -n spire pvc&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Disable &lt;code&gt;spire-agent&lt;/code&gt; on all of the Kubernetes NCNs (all worker nodes and&#xA;master nodes) and delete the join data.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Troubleshoot Spire Failing to Start on NCNs</title>
+      <link>/docs-csm/en-10/operations/spire/troubleshoot_spire_failing_to_start_on_ncns/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:21 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/spire/troubleshoot_spire_failing_to_start_on_ncns/</guid>
+      <description>&lt;h1 id=&#34;troubleshoot-spire-failing-to-start-on-ncns&#34;&gt;Troubleshoot Spire Failing to Start on NCNs&lt;/h1&gt;&#xA;&lt;p&gt;The spire-agent service may fail to start on Kubernetes non-compute nodes&#xA;(NCNs). A key indication of this failure is when logging errors occur with&#xA;the &lt;code&gt;journalctl&lt;/code&gt; command. The following are logging errors that will indicate&#xA;if the spire-agent is failing to start:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;The &lt;code&gt;join token does not exist or has already been used&lt;/code&gt; message is returned&lt;/li&gt;&#xA;&lt;li&gt;The last lines of the logs contain multiple lines of &lt;code&gt;systemd[1]: spire-agent.service: Start request repeated too quickly.&lt;/code&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;Deleting the &lt;code&gt;request-ncn-join-token&lt;/code&gt; &lt;code&gt;daemonset&lt;/code&gt; pod running on the node may&#xA;clear the issue.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Update Spire Intermediate CA Certificate</title>
+      <link>/docs-csm/en-10/operations/spire/update_spire_intermediate_ca_certificate/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:21 +0000</pubDate>
+      <guid>/docs-csm/en-10/operations/spire/update_spire_intermediate_ca_certificate/</guid>
+      <description>&lt;h1 id=&#34;update-spire-intermediate-ca-certificate&#34;&gt;Update Spire Intermediate CA Certificate&lt;/h1&gt;&#xA;&lt;p&gt;Prior to CSM 1.2.5 there is no mechanism to automatically update the spire&#xA;intermediate CA certificate before it expires. This certificate expires after&#xA;one year. Administrators will want to keep track of when this certificate&#xA;expires and manually update the certificate before it expires.&lt;/p&gt;&#xA;&lt;h2 id=&#34;obtain-the-expiration-date-for-the-spire-intermediate-ca&#34;&gt;Obtain the Expiration Date for the Spire Intermediate CA&lt;/h2&gt;&#xA;&lt;p&gt;To obtain the expiration date of the Spire intermediate CA certificate, run the&#xA;following command on a node that has access to &lt;code&gt;kubectl&lt;/code&gt; (such as &lt;code&gt;ncn-m001&lt;/code&gt;):&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

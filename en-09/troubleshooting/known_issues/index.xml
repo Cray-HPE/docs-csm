@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>known issues on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-09/troubleshooting/known_issues/</link>
+    <description>Recent content in known issues on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-09</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:08:53 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-09/troubleshooting/known_issues/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CFS Sessions are Stuck in Pending State</title>
+      <link>/docs-csm/en-09/troubleshooting/known_issues/cfs_sessions_stuck_in_pending/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:53 +0000</pubDate>
+      <guid>/docs-csm/en-09/troubleshooting/known_issues/cfs_sessions_stuck_in_pending/</guid>
+      <description>&lt;h1 id=&#34;cfs-sessions-are-stuck-in-pending-state&#34;&gt;CFS Sessions are Stuck in Pending State&lt;/h1&gt;&#xA;&lt;p&gt;In rare cases it is possible that a CFS session can be stuck in a &lt;code&gt;pending&lt;/code&gt; state. Sessions should only enter the &lt;code&gt;pending&lt;/code&gt; state briefly, for no more than a few seconds while the corresponding Kubernetes job is being scheduled. If any sessions are in this state for more than a minute, they can safely be deleted. If the sessions were created automatically and retires are enabled, the sessions should be recreated automatically.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Copying file from the cray-conman pod fails</title>
+      <link>/docs-csm/en-09/troubleshooting/known_issues/conman_pod_kubernetes_copy_fails/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:53 +0000</pubDate>
+      <guid>/docs-csm/en-09/troubleshooting/known_issues/conman_pod_kubernetes_copy_fails/</guid>
+      <description>&lt;h1 id=&#34;copying-file-from-the-cray-conman-pod-fails&#34;&gt;Copying file from the cray-conman pod fails&lt;/h1&gt;&#xA;&lt;p&gt;The &amp;rsquo;tar&amp;rsquo; command is not installed in the pod image, so the usual kubernetes command to copy files from the cray-conman pod fails:&lt;/p&gt;&#xA;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ kubectl -n services cp cray-conman-92a6cb7d2a:/var/log/conman/console.x3000c1s2b0n1 console.x3000c1s2b0n1&#xA;Defaulting container name to cray-conman.&#xA;error: Internal error occurred: error executing command in container: failed to exec in container: failed to start exec &amp;#34;e5054fd1452d04993a1e200435416168476621b8a44b8019a45a225fcb5c36f7&amp;#34;: OCI runtime exec failed: exec failed: container_linux.go:349: starting container process caused &amp;#34;exec: \&amp;#34;tar\&amp;#34;: executable file not found in $PATH&amp;#34;: unknown&#xA;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The files may still be copied by executing the &amp;lsquo;cat&amp;rsquo; command instead and redirecting the output to a file:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Orphaned CFS Pods After Booting or Rebooting</title>
+      <link>/docs-csm/en-09/troubleshooting/known_issues/orphaned_cfs_pods/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:53 +0000</pubDate>
+      <guid>/docs-csm/en-09/troubleshooting/known_issues/orphaned_cfs_pods/</guid>
+      <description>&lt;h1 id=&#34;orphaned-cfs-pods-after-booting-or-rebooting&#34;&gt;Orphaned CFS Pods After Booting or Rebooting&lt;/h1&gt;&#xA;&lt;p&gt;After a boot or reboot a few CFS Pods may continue running even after they&amp;rsquo;ve&#xA;finished and never go away.&#xA;The state of these Pod is that the only container still running in the Pod is&#xA;&lt;code&gt;istio-proxy&lt;/code&gt; and the Pod doesn&amp;rsquo;t have a &lt;code&gt;metadata.ownerReference&lt;/code&gt;.&lt;/p&gt;&#xA;&lt;p&gt;If &lt;code&gt;kubectl get pods -n services | grep cfs&lt;/code&gt; is run after a boot or reboot, the&#xA;orphaned CFS Pods look like this:&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

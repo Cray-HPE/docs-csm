@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>SAT Usage on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-16/operations/system_admin_toolkit/usage/</link>
+    <description>Recent content in SAT Usage on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-16</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:09:44 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-16/operations/system_admin_toolkit/usage/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Change the BOS Version</title>
+      <link>/docs-csm/en-16/operations/system_admin_toolkit/usage/change_bos_version/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:44 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_admin_toolkit/usage/change_bos_version/</guid>
+      <description>&lt;h1 id=&#34;change-the-bos-version&#34;&gt;Change the BOS Version&lt;/h1&gt;&#xA;&lt;p&gt;By default, SAT uses Boot Orchestration Service (BOS) version two (&lt;code&gt;v2&lt;/code&gt;).&#xA;Select the BOS version to use for individual commands with the &lt;code&gt;--bos-version&lt;/code&gt;&#xA;option. For more information on this option, refer to the man page for a specific&#xA;command.&lt;/p&gt;&#xA;&lt;p&gt;Another way to change the BOS version is by configuring it under the&#xA;&lt;code&gt;api_version&lt;/code&gt; setting in the &lt;code&gt;bos&lt;/code&gt; section of the SAT configuration file.&#xA;If the system is using an existing SAT configuration file from an older&#xA;version of SAT, the &lt;code&gt;bos&lt;/code&gt; section might not exist. In that case, add the &lt;code&gt;bos&lt;/code&gt;&#xA;section with the BOS version desired in the &lt;code&gt;api_version&lt;/code&gt; setting.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Change the CFS Version</title>
+      <link>/docs-csm/en-16/operations/system_admin_toolkit/usage/change_cfs_version/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:44 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_admin_toolkit/usage/change_cfs_version/</guid>
+      <description>&lt;h1 id=&#34;change-the-cfs-version&#34;&gt;Change the CFS Version&lt;/h1&gt;&#xA;&lt;p&gt;SAT supports specifying the version of the Configuration Framework Service (CFS)&#xA;API used by the &lt;code&gt;sat status&lt;/code&gt; command. By default, the &lt;code&gt;sat status&lt;/code&gt; command uses&#xA;version three (V3) of the CFS API. Currently, the &lt;code&gt;sat bootsys&lt;/code&gt; and &lt;code&gt;sat bootprep&lt;/code&gt; commands can only use CFS V2, but support will be added for CFS V3 in&#xA;the future.&lt;/p&gt;&#xA;&lt;p&gt;Select the CFS version to use for individual commands with the &lt;code&gt;--cfs-version&lt;/code&gt;&#xA;option. For more information on this option, refer to the man page for a specific&#xA;command.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>SAT Bootprep</title>
+      <link>/docs-csm/en-16/operations/system_admin_toolkit/usage/sat_bootprep/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:44 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_admin_toolkit/usage/sat_bootprep/</guid>
+      <description>&lt;h1 id=&#34;sat-bootprep&#34;&gt;SAT Bootprep&lt;/h1&gt;&#xA;&lt;p&gt;SAT provides an automated solution for creating CFS configurations, building&#xA;and configuring images in IMS, and creating BOS session templates. The&#xA;solution is based on a given input file that defines how those configurations,&#xA;images, and session templates should be created. This automated process centers&#xA;around the &lt;code&gt;sat bootprep&lt;/code&gt; command. &lt;code&gt;man&lt;/code&gt; page documentation for &lt;code&gt;sat bootprep&lt;/code&gt;&#xA;can be viewed similar to other SAT commands.&lt;/p&gt;&#xA;&lt;p&gt;(&lt;code&gt;ncn-m001#&lt;/code&gt;) Here is an example:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>SAT and IUF</title>
+      <link>/docs-csm/en-16/operations/system_admin_toolkit/usage/sat_and_iuf/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:44 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/system_admin_toolkit/usage/sat_and_iuf/</guid>
+      <description>&lt;h1 id=&#34;sat-and-iuf&#34;&gt;SAT and IUF&lt;/h1&gt;&#xA;&lt;p&gt;The Install and Upgrade Framework (IUF) provides commands which install, upgrade, and deploy&#xA;products on systems managed by CSM with the help of &lt;code&gt;sat bootprep&lt;/code&gt;. Outside of IUF, it is uncommon&#xA;to use &lt;code&gt;sat bootprep&lt;/code&gt;.&lt;/p&gt;&#xA;&lt;p&gt;For more information on IUF, see &lt;a href=&#34;/docs-csm/docs-csm/en-16/operations/iuf/iuf/&#34;&gt;Install and Upgrade Framework&lt;/a&gt;. For more&#xA;information on &lt;code&gt;sat bootprep&lt;/code&gt;, see &lt;a href=&#34;/docs-csm/docs-csm/en-16/operations/system_admin_toolkit/usage/sat_bootprep/&#34;&gt;SAT Bootprep&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;h2 id=&#34;variable-substitutions&#34;&gt;Variable Substitutions&lt;/h2&gt;&#xA;&lt;p&gt;Both IUF and &lt;code&gt;sat bootprep&lt;/code&gt; allow variable substitutions into the default HPC&#xA;CSM Software Recipe bootprep input files. The default variables of the HPC&#xA;CSM Software Recipe are available in a &lt;code&gt;product_vars.yaml&lt;/code&gt; file. To override&#xA;the default variables, specify any site variables in a &lt;code&gt;site_vars.yaml&lt;/code&gt; file.&#xA;Variables are sourced from the command line, any variable files directly&#xA;provided, and the HPC CSM Software Recipe files used, in that order.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

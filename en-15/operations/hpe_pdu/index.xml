@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>hpe pdu on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-15/operations/hpe_pdu/</link>
+    <description>Recent content in hpe pdu on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-15</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:09:09 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-15/operations/hpe_pdu/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HPE PDU Admin Procedures</title>
+      <link>/docs-csm/en-15/operations/hpe_pdu/hpe_pdu_admin_procedures/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:09 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/hpe_pdu/hpe_pdu_admin_procedures/</guid>
+      <description>&lt;h1 id=&#34;hpe-pdu-admin-procedures&#34;&gt;HPE PDU Admin Procedures&lt;/h1&gt;&#xA;&lt;p&gt;The following procedures are used to manage the HPE Power Distribution Unit (PDU):&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/hpe_pdu/hpe_pdu_admin_procedures/#verify-pdu-vendor&#34;&gt;Verify PDU vendor&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/hpe_pdu/hpe_pdu_admin_procedures/#connect-to-hpe-pdu-web-interface&#34;&gt;Connect to HPE PDU web interface&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/hpe_pdu/hpe_pdu_admin_procedures/#hpe-pdu-initial-set-up&#34;&gt;HPE PDU initial set-up&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/hpe_pdu/hpe_pdu_admin_procedures/#update-hpe-pdu-firmware&#34;&gt;Update HPE PDU firmware&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/hpe_pdu/hpe_pdu_admin_procedures/#change-hpe-pdu-user-passwords&#34;&gt;Change HPE PDU user passwords&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/hpe_pdu/hpe_pdu_admin_procedures/#discover-hpe-pdu-after-upgrading-csm&#34;&gt;Discover HPE PDU after upgrading CSM&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;&lt;strong&gt;IMPORTANT:&lt;/strong&gt; Because of the polling method used to process sensor data from the HPE PDU, telemetry data may take up to six minutes to refresh; this includes the outlet status reported by the Hardware State Manager (HSM).&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

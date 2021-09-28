@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>dns on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-15/operations/network/dns/</link>
+    <description>Recent content in dns on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-15</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:09:18 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-15/operations/network/dns/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Domain Name Service (DNS) Overview</title>
+      <link>/docs-csm/en-15/operations/network/dns/dns/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:18 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/network/dns/dns/</guid>
+      <description>&lt;h1 id=&#34;domain-name-service-dns-overview&#34;&gt;Domain Name Service (DNS) Overview&lt;/h1&gt;&#xA;&lt;h2 id=&#34;dns-architecture&#34;&gt;DNS Architecture&lt;/h2&gt;&#xA;&lt;p&gt;This diagram shows how the various components of the DNS infrastructure interact.&lt;/p&gt;&#xA;&lt;p&gt;&lt;img alt=&#34;DNS Architecture&#34; src=&#34;../../../../img/operations/dns.svg&#34;&gt;&lt;/p&gt;&#xA;&lt;h2 id=&#34;dns-components&#34;&gt;DNS Components&lt;/h2&gt;&#xA;&lt;p&gt;The DNS infrastructure is comprised of a number of components.&lt;/p&gt;&#xA;&lt;h3 id=&#34;unbound-cray-dns-unbound&#34;&gt;Unbound (&lt;code&gt;cray-dns-unbound&lt;/code&gt;)&lt;/h3&gt;&#xA;&lt;p&gt;Unbound is a caching DNS resolver which is also used as the primary DNS server.&lt;/p&gt;&#xA;&lt;p&gt;The DNS records served by Unbound include system component names (xnames), node hostnames,&#xA;and service names. These records are read from the &lt;code&gt;cray-dns-unbound&lt;/code&gt; ConfigMap which is populated by &lt;code&gt;cray-dns-unbound-manager&lt;/code&gt;.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Enable ncsd on UANs</title>
+      <link>/docs-csm/en-15/operations/network/dns/enable_ncsd_on_uans/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:18 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/network/dns/enable_ncsd_on_uans/</guid>
+      <description>&lt;h1 id=&#34;enable-ncsd-on-uans&#34;&gt;Enable &lt;code&gt;ncsd&lt;/code&gt; on UANs&lt;/h1&gt;&#xA;&lt;p&gt;Configure User Access Nodes (UANs) to start the &lt;code&gt;ncsd&lt;/code&gt; service at boot time.&lt;/p&gt;&#xA;&lt;p&gt;The &lt;code&gt;nscd&lt;/code&gt; service is not currently enabled by default and &lt;code&gt;systemd&lt;/code&gt; does not start it at boot time. There are two ways to start &lt;code&gt;nscd&lt;/code&gt; on UAN nodes:&#xA;manually starting the service or enabling the service in the UAN image. While restarting &lt;code&gt;nscd&lt;/code&gt; manually has to be performed each time the UAN is rebooted,&#xA;enabling &lt;code&gt;nscd&lt;/code&gt; in the image only has to be done once. Then all UANs that use the image will have &lt;code&gt;nscd&lt;/code&gt; started automatically on boot.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Manage the DNS Unbound Resolver</title>
+      <link>/docs-csm/en-15/operations/network/dns/manage_the_dns_unbound_resolver/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:18 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/network/dns/manage_the_dns_unbound_resolver/</guid>
+      <description>&lt;h1 id=&#34;manage-the-dns-unbound-resolver&#34;&gt;Manage the DNS Unbound Resolver&lt;/h1&gt;&#xA;&lt;p&gt;The unbound DNS instance is used to resolve names for the physical equipment on the management networks within the system, such as NCNs, UANs, switches, and compute nodes.&#xA;This instance is accessible only within the HPE Cray EX system.&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/network/dns/manage_the_dns_unbound_resolver/#check-the-status-of-the-cray-dns-unbound-pods&#34;&gt;Check the status of the &lt;code&gt;cray-dns-unbound&lt;/code&gt; pods&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/network/dns/manage_the_dns_unbound_resolver/#unbound-logs&#34;&gt;Unbound logs&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/network/dns/manage_the_dns_unbound_resolver/#view-manager-dns-helper-logs&#34;&gt;View manager (DNS Helper) logs&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/network/dns/manage_the_dns_unbound_resolver/#restart-unbound&#34;&gt;Restart Unbound&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/network/dns/manage_the_dns_unbound_resolver/#clear-bad-data-in-the-unbound-configmap&#34;&gt;Clear bad data in the Unbound ConfigMap&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/network/dns/manage_the_dns_unbound_resolver/#change-the-site-dns-server&#34;&gt;Change the site DNS server&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/network/dns/manage_the_dns_unbound_resolver/#increase-the-number-of-unbound-pods&#34;&gt;Increase the number of Unbound pods&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;check-the-status-of-the-cray-dns-unbound-pods&#34;&gt;Check the status of the &lt;code&gt;cray-dns-unbound&lt;/code&gt; pods&lt;/h2&gt;&#xA;&lt;p&gt;(&lt;code&gt;ncn-mw#&lt;/code&gt;) Check the status of the pods:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>PowerDNS Configuration</title>
+      <link>/docs-csm/en-15/operations/network/dns/powerdns_configuration/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:18 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/network/dns/powerdns_configuration/</guid>
+      <description>&lt;h1 id=&#34;powerdns-configuration&#34;&gt;PowerDNS Configuration&lt;/h1&gt;&#xA;&lt;h2 id=&#34;external-dns&#34;&gt;External DNS&lt;/h2&gt;&#xA;&lt;p&gt;PowerDNS replaces the CoreDNS server that earlier versions of CSM used to provide External DNS services.&lt;/p&gt;&#xA;&lt;p&gt;The &lt;code&gt;cray-dns-powerdns-can-tcp&lt;/code&gt; and &lt;code&gt;cray-dns-powerdns-can-udp&lt;/code&gt; LoadBalancer resources are configured to service external DNS requests using the IP address specified by the CSI &lt;code&gt;--cmn-external-dns&lt;/code&gt; command line argument.&lt;/p&gt;&#xA;&lt;p&gt;The CSI &lt;code&gt;--system-name&lt;/code&gt; and &lt;code&gt;--site-domain&lt;/code&gt; command line arguments are combined to form the subdomain used for External DNS.&lt;/p&gt;&#xA;&lt;h3 id=&#34;site-setup&#34;&gt;Site setup&lt;/h3&gt;&#xA;&lt;p&gt;In the following example, the IP address &lt;code&gt;10.101.8.113&lt;/code&gt; is used for External DNS and the system has the subdomain &lt;code&gt;system.dev.cray.com&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>PowerDNS Migration Guide</title>
+      <link>/docs-csm/en-15/operations/network/dns/powerdns_migration/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:18 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/network/dns/powerdns_migration/</guid>
+      <description>&lt;h1 id=&#34;powerdns-migration-guide&#34;&gt;PowerDNS Migration Guide&lt;/h1&gt;&#xA;&lt;p&gt;The migration to PowerDNS as the authoritative DNS source and the introduction of Bifurcated CAN (Customer Access Network) will result in some changes to the node and service naming conventions.&lt;/p&gt;&#xA;&lt;h2 id=&#34;dns-record-naming-changes&#34;&gt;DNS Record Naming Changes&lt;/h2&gt;&#xA;&lt;p&gt;Fully qualified domain names will be introduced for all DNS records.&lt;/p&gt;&#xA;&lt;p&gt;Canonical name: &lt;code&gt;hostname&lt;/code&gt;.&lt;code&gt;network-path&lt;/code&gt;.&lt;code&gt;system-name&lt;/code&gt;.&lt;code&gt;site-domain&lt;/code&gt;&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;code&gt;hostname&lt;/code&gt; - The hostname of the node or service&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;network-path&lt;/code&gt; - The network path used to access the node&#xA;&lt;ul&gt;&#xA;&lt;li&gt;.nmn - Node Management Network&lt;/li&gt;&#xA;&lt;li&gt;.nmnlb - Node Management Network LoadBalancers&lt;/li&gt;&#xA;&lt;li&gt;.hmn - Hardware Management Network&lt;/li&gt;&#xA;&lt;li&gt;.hmnlb - Hardware management Network LoadBalancers&lt;/li&gt;&#xA;&lt;li&gt;.hsn - High Speed Network (Slingshot)&lt;/li&gt;&#xA;&lt;li&gt;.can - Customer Access Network&lt;/li&gt;&#xA;&lt;li&gt;.chn - Customer High Speed network&lt;/li&gt;&#xA;&lt;li&gt;.cmn - Customer Management Network&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;system-name&lt;/code&gt; - The customer defined name of the system&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;site-domain&lt;/code&gt; - The top-level domain&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;It will be possible to refer to a hostname via a short name consisting of &lt;code&gt;hostname&lt;/code&gt;.&lt;code&gt;network-path&lt;/code&gt;, for example &lt;code&gt;ncn-w001.nmn&lt;/code&gt;.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Troubleshoot Common DNS Issues</title>
+      <link>/docs-csm/en-15/operations/network/dns/troubleshoot_common_dns_issues/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:18 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/network/dns/troubleshoot_common_dns_issues/</guid>
+      <description>&lt;h1 id=&#34;troubleshoot-common-dns-issues&#34;&gt;Troubleshoot Common DNS Issues&lt;/h1&gt;&#xA;&lt;p&gt;The Domain Name Service (DNS) is part of an integrated infrastructure set designed to provide dynamic host discovery, addressing, and naming.&#xA;There are several different place to look for troubleshooting as DNS interacts with Dynamic Host Configuration Protocol (DHCP), the Hardware&#xA;Management Service (HMS), the System Layout Service (SLS), and the State Manager Daemon (SMD).&lt;/p&gt;&#xA;&lt;p&gt;The information below describes what to check when experiencing issues with DNS.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Troubleshoot PowerDNS</title>
+      <link>/docs-csm/en-15/operations/network/dns/troubleshoot_powerdns/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:18 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/network/dns/troubleshoot_powerdns/</guid>
+      <description>&lt;h1 id=&#34;troubleshoot-powerdns&#34;&gt;Troubleshoot PowerDNS&lt;/h1&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/network/dns/troubleshoot_powerdns/#list-dns-zone-contents&#34;&gt;List DNS zone contents&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/network/dns/troubleshoot_powerdns/#powerdns-logging&#34;&gt;PowerDNS logging&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/network/dns/troubleshoot_powerdns/#verify-dnssec-operation&#34;&gt;Verify DNSSEC operation&lt;/a&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/network/dns/troubleshoot_powerdns/#verify-zones-are-being-signed-with-the-zone-signing-key&#34;&gt;Verify zones are being signed with the zone signing key&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/network/dns/troubleshoot_powerdns/#verify-tsig-operation&#34;&gt;Verify TSIG operation&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;list-dns-zone-contents&#34;&gt;List DNS zone contents&lt;/h2&gt;&#xA;&lt;p&gt;The PowerDNS zone database is populated with data from two sources:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;The &lt;code&gt;cray-powerdns-manager&lt;/code&gt; service creates the zones and DNS records based on data sourced from the System Layout Service (SLS).&lt;/li&gt;&#xA;&lt;li&gt;The external DNS records are populated by the &lt;code&gt;cray-externaldns-external-dns&lt;/code&gt; service using data sourced from Kubernetes annotations and virtual service definitions.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;Use the &lt;code&gt;cray-powerdns-visualizer&lt;/code&gt; command to view the zone structure that &lt;code&gt;cray-powerdns-manager&lt;/code&gt; will create.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

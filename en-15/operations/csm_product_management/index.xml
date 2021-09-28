@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CSM product management on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-15/operations/csm_product_management/</link>
+    <description>Recent content in CSM product management on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-15</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:08:54 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-15/operations/csm_product_management/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Change Passwords and Credentials</title>
+      <link>/docs-csm/en-15/operations/csm_product_management/change_passwords_and_credentials/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:53 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/csm_product_management/change_passwords_and_credentials/</guid>
+      <description>&lt;h1 id=&#34;change-passwords-and-credentials&#34;&gt;Change Passwords and Credentials&lt;/h1&gt;&#xA;&lt;p&gt;This is an overarching procedure to change all credentials managed by Cray System Management (CSM) in HPE Cray EX system to new values.&lt;/p&gt;&#xA;&lt;p&gt;There are many passwords and credentials used in different contexts to manage the system. These can be changed as needed. Their initial settings are documented, so it is recommended to change them during or soon after a CSM software installation.&lt;/p&gt;&#xA;&lt;h2 id=&#34;prerequisites&#34;&gt;Prerequisites&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Review procedures in &lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/security_and_authentication/manage_system_passwords/&#34;&gt;Manage System Passwords&lt;/a&gt;.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;procedure&#34;&gt;Procedure&lt;/h2&gt;&#xA;&lt;h3 id=&#34;1-change-hardware-credentials&#34;&gt;1. Change Hardware Credentials&lt;/h3&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Perform procedures in &lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/security_and_authentication/change_ex_liquid-cooled_cabinet_global_default_password/&#34;&gt;Change Cray EX Liquid-Cooled Cabinet Global Default Password&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Configure CSM packages with CFS</title>
+      <link>/docs-csm/en-15/operations/csm_product_management/configure_csm_packages_with_cfs/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:53 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/csm_product_management/configure_csm_packages_with_cfs/</guid>
+      <description>&lt;h1 id=&#34;configure-csm-packages-with-cfs&#34;&gt;Configure CSM packages with CFS&lt;/h1&gt;&#xA;&lt;p&gt;CSM includes a playbook that should be applied to Compute and Application node images.&#xA;The &lt;code&gt;csm_packages.yml&lt;/code&gt; playbook installs the packages for both the CFS and BOS reporters.&#xA;These packages are necessary for CFS and BOS to run, so a configuration layer containing the&#xA;playbook must be included in the image customization for any nodes that are expected to be&#xA;managed with CFS and BOS.&lt;/p&gt;&#xA;&lt;h2 id=&#34;setting-up-the-csm-configuration-layer&#34;&gt;Setting up the CSM configuration layer&lt;/h2&gt;&#xA;&lt;p&gt;To setup the compute configuration layer, first gather the following information:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Configure Keycloak Account</title>
+      <link>/docs-csm/en-15/operations/csm_product_management/configure_keycloak_account/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:53 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/csm_product_management/configure_keycloak_account/</guid>
+      <description>&lt;h1 id=&#34;configure-keycloak-account&#34;&gt;Configure Keycloak Account&lt;/h1&gt;&#xA;&lt;p&gt;Installation of CSM software includes a default account for administrative access to keycloak.&lt;/p&gt;&#xA;&lt;p&gt;Depending on choices made during the installation, there may be a federated connection to&#xA;an external Identity Provider (IdP), such as an LDAP or AD server, which enables the use&#xA;of external accounts in keycloak.&lt;/p&gt;&#xA;&lt;p&gt;However, if the external accounts are not available, then an &amp;ldquo;internal user account&amp;rdquo; could be&#xA;created in keycloak. Having a usable account in keycloak with administrative authorization&#xA;enables the use of the &lt;code&gt;cray&lt;/code&gt; CLI for many administrative commands, such as those used to&#xA;&lt;a href=&#34;/docs-csm/docs-csm/en-15/operations/validate_csm_health/&#34;&gt;Validate CSM Health&lt;/a&gt; and general operation of the management services&#xA;via the API gateway.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Configure the root password and SSH keys in Vault</title>
+      <link>/docs-csm/en-15/operations/csm_product_management/configure_the_root_password_and_ssh_keys_in_vault/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:53 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/csm_product_management/configure_the_root_password_and_ssh_keys_in_vault/</guid>
+      <description>&lt;h1 id=&#34;configure-the-root-password-and-ssh-keys-in-vault&#34;&gt;Configure the &lt;code&gt;root&lt;/code&gt; password and SSH keys in Vault&lt;/h1&gt;&#xA;&lt;p&gt;This procedure sets the &lt;code&gt;root&lt;/code&gt; user password and SSH keys on management nodes. The &lt;code&gt;root&lt;/code&gt; password&#xA;and SSH keys are set and managed in Vault, and they are applied on management nodes by the&#xA;&lt;code&gt;csm.password&lt;/code&gt; and &lt;code&gt;csm.ssh_keys&lt;/code&gt; Ansible roles provided by the CSM product.&lt;/p&gt;&#xA;&lt;p&gt;This procedure should be run during CSM installation and any later time when the &lt;code&gt;root&lt;/code&gt; password or&#xA;SSH keys need to be changed per site requirements.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Post-Install Customizations</title>
+      <link>/docs-csm/en-15/operations/csm_product_management/post_install_customizations/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:53 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/csm_product_management/post_install_customizations/</guid>
+      <description>&lt;h1 id=&#34;post-install-customizations&#34;&gt;Post-Install Customizations&lt;/h1&gt;&#xA;&lt;p&gt;Post-install customizations may be needed as systems scale.&#xA;These customizations also need to persist across future installs or upgrades.&#xA;Not all resources can be customized post-install; common scenarios are documented in the following sections.&lt;/p&gt;&#xA;&lt;p&gt;The following is a guide for determining where issues may exist, how to adjust the resources, and how to ensure the changes will persist.&#xA;Different values may be be needed for systems as they scale.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Redeploying a Chart</title>
+      <link>/docs-csm/en-15/operations/csm_product_management/redeploying_a_chart/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:53 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/csm_product_management/redeploying_a_chart/</guid>
+      <description>&lt;h1 id=&#34;redeploying-a-chart&#34;&gt;Redeploying a Chart&lt;/h1&gt;&#xA;&lt;p&gt;Administrators are able to customize many aspects of the system in order to address problems or tailor it to better suit their requirements.&#xA;Often this requires redeploying one or more Helm charts. This page outlines the procedure for doing this in CSM. Other parts of the CSM&#xA;documentation will reference this page if you are instructed to redeploy a chart. In those cases, the source page that links to this one should&#xA;specify which charts should be redeployed and what customizations (if any) should be made to them.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Remove Artifacts from Product Installations</title>
+      <link>/docs-csm/en-15/operations/csm_product_management/remove_artifacts_from_product_installations/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:53 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/csm_product_management/remove_artifacts_from_product_installations/</guid>
+      <description>&lt;h1 id=&#34;remove-artifacts-from-product-installations&#34;&gt;Remove Artifacts from Product Installations&lt;/h1&gt;&#xA;&lt;p&gt;Remove product artifacts that were imported from various Cray products. These instructions provide guidance for removing&#xA;&lt;a href=&#34;/docs-csm/docs-csm/en-15/glossary/#image-management-service-ims&#34;&gt;Image Management Service (IMS)&lt;/a&gt; images, IMS recipes, and Git repositories&#xA;present in the Cray Product Catalog from the system.&lt;/p&gt;&#xA;&lt;p&gt;The examples in this procedure show how to remove the product artifacts for the Cray System Management (CSM) product.&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;WARNING:&lt;/strong&gt; If individual Cray products have removal procedures, those instructions supersede this procedure.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Set up passwordless SSH</title>
+      <link>/docs-csm/en-15/operations/csm_product_management/set_up_passwordless_ssh/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:53 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/csm_product_management/set_up_passwordless_ssh/</guid>
+      <description>&lt;h1 id=&#34;set-up-passwordless-ssh&#34;&gt;Set up passwordless SSH&lt;/h1&gt;&#xA;&lt;p&gt;This procedure sets up passwordless SSH from management nodes to other management nodes and from&#xA;management nodes to managed nodes such as compute nodes running Cray Operating System (COS) software&#xA;and User Access Nodes (UANs). This procedure &lt;strong&gt;does not&lt;/strong&gt; configure passwordless SSH from managed&#xA;nodes to management nodes.&lt;/p&gt;&#xA;&lt;p&gt;This procedure should be run during CSM installation and any later time when the SSH keys need to be&#xA;changed per site requirements.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Validate Signed RPMs</title>
+      <link>/docs-csm/en-15/operations/csm_product_management/validate_signed_rpms/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:54 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/csm_product_management/validate_signed_rpms/</guid>
+      <description>&lt;h1 id=&#34;validate-signed-rpms&#34;&gt;Validate Signed RPMs&lt;/h1&gt;&#xA;&lt;p&gt;The HPE Cray EX system signs RPMs to provide an extra level of security. Use the following procedure to import a key from either My HPE Software Center or a Kubernetes Secret, and then use that key to validate the RPM package signatures on each node type.&lt;/p&gt;&#xA;&lt;p&gt;The RPMs will vary on compute, application, worker, master, and storage nodes. Check each node type to ensure the RPMs are correctly signed.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>k8s on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-13/upgrade/resource_material/k8s/</link>
+    <description>Recent content in k8s on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-13</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:09:53 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-13/upgrade/resource_material/k8s/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Worker-Specific Manual Steps</title>
+      <link>/docs-csm/en-13/upgrade/resource_material/k8s/worker-reference/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:53 +0000</pubDate>
+      <guid>/docs-csm/en-13/upgrade/resource_material/k8s/worker-reference/</guid>
+      <description>&lt;h1 id=&#34;worker-specific-manual-steps&#34;&gt;Worker-Specific Manual Steps&lt;/h1&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Determine if the worker being rebuilt is running a &lt;code&gt;cray-cps-cm-pm&lt;/code&gt; pod, by running the &lt;code&gt;cray cps deployment list&lt;/code&gt;&#xA;command below. If so, there is a final step to redeploy this pod once the worker is rebuilt. In the example below,&#xA;nodes &lt;code&gt;ncn-w001&lt;/code&gt;, &lt;code&gt;ncn-w002&lt;/code&gt;, and &lt;code&gt;ncn-w003&lt;/code&gt; have the pod.&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;NOTE: If the command below does not return any pod names, proceed to step 2.&#xA;NOTE: A 404 error is expected if the COS product is not installed on the system. In this case, proceed to step 2.&#xA;NOTE: If the &lt;code&gt;cray&lt;/code&gt; command is not initialized, see &lt;a href=&#34;/docs-csm/docs-csm/en-13/operations/configure_cray_cli/&#34;&gt;Initialize the CLI Configuration&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

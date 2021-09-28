@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>configuration management on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-09/operations/configuration_management/</link>
+    <description>Recent content in configuration management on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-09</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:08:51 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-09/operations/configuration_management/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Configuration Layers</title>
+      <link>/docs-csm/en-09/operations/configuration_management/configuration_layers/</link>
+      <pubDate>Tue, 15 Oct 2024 03:08:51 +0000</pubDate>
+      <guid>/docs-csm/en-09/operations/configuration_management/configuration_layers/</guid>
+      <description>&lt;h2 id=&#34;configuration-layers&#34;&gt;Configuration Layers&lt;/h2&gt;&#xA;&lt;p&gt;The Configuration Framework Service (CFS) uses configuration layers to specify the location of configuration content that will be applied. Configurations may include one or more layers. Each layer is defined by a Git repository clone URL, a Git commit, a name (optional), and the path in the repository to an Ansible playbook to execute.&lt;/p&gt;&#xA;&lt;p&gt;Configurations with a single layer are useful when testing out a new configuration on targets, or when configuring system components with one product at a time. To fully configure a node or boot image component with all of the software products required, multiple layers can be used to apply all configurations in a single CFS session. When applying layers in a session, CFS runs through the configuration layers serially in the order specified.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

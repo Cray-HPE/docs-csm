@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>external dns on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-16/operations/network/external_dns/</link>
+    <description>Recent content in external dns on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-16</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:09:14 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-16/operations/network/external_dns/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>External DNS</title>
+      <link>/docs-csm/en-16/operations/network/external_dns/external_dns/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:14 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/network/external_dns/external_dns/</guid>
+      <description>&lt;h1 id=&#34;external-dns&#34;&gt;External DNS&lt;/h1&gt;&#xA;&lt;p&gt;External DNS, along with the customer accessible networks CMN and CAN/CHN, PowerDNS, Border Gateway Protocol (BGP), and MetalLB, makes it simpler to access the HPE Cray EX API and system management services.&#xA;Services are accessible directly from a laptop without needing to tunnel into a non-compute node (NCN) or override /etc/hosts settings. Some services may require a JSON Web Token (JWT) to access them, while&#xA;others may require OAuth2 to login using a DC LDAP password.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>External DNS Failing to Discover Services Workaround</title>
+      <link>/docs-csm/en-16/operations/network/external_dns/external_dns_failing_to_discover_services_workaround/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:14 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/network/external_dns/external_dns_failing_to_discover_services_workaround/</guid>
+      <description>&lt;h1 id=&#34;external-dns-failing-to-discover-services-workaround&#34;&gt;External DNS Failing to Discover Services Workaround&lt;/h1&gt;&#xA;&lt;p&gt;Many external DNS issues can be worked around by directly connecting to the desired backend service. This can circumvent authentication and authorization protections,&#xA;but it may be necessary to access specific services when mitigating critical issues.&lt;/p&gt;&#xA;&lt;p&gt;Istio&amp;rsquo;s ingress gateway uses &lt;code&gt;Gateway&lt;/code&gt; and &lt;code&gt;VirtualService&lt;/code&gt; objects to configure how traffic is routed to backend services. Currently, there are three gateways supporting the externally&#xA;accessible services: &lt;code&gt;services-gateway&lt;/code&gt;, &lt;code&gt;customer-admin-gateway&lt;/code&gt;, and &lt;code&gt;customer-user-gateway&lt;/code&gt;. They are configured to support traffic on any host depending on the network over which the&#xA;services are accessed. It is the &lt;code&gt;VirtualService&lt;/code&gt; objects that ultimately control routing based on hostname.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>External DNS CSI Input Values</title>
+      <link>/docs-csm/en-16/operations/network/external_dns/external_dns_csi_config_init_input_values/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:14 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/network/external_dns/external_dns_csi_config_init_input_values/</guid>
+      <description>&lt;h1 id=&#34;external-dns-csi-input-values&#34;&gt;External DNS CSI Input Values&lt;/h1&gt;&#xA;&lt;p&gt;External DNS requires the &lt;code&gt;system-name&lt;/code&gt;, &lt;code&gt;site-domain&lt;/code&gt;, and &lt;code&gt;cmn-external-dns&lt;/code&gt; values that are defined with the &lt;code&gt;csi config init&lt;/code&gt; command. These values are used to customize the External DNS configuration during installation.&lt;/p&gt;&#xA;&lt;h2 id=&#34;the-system-name-and-site-domain-values&#34;&gt;The &lt;code&gt;system-name&lt;/code&gt; and &lt;code&gt;site-domain&lt;/code&gt; values&lt;/h2&gt;&#xA;&lt;p&gt;The &lt;code&gt;system-name&lt;/code&gt; and &lt;code&gt;site-domain&lt;/code&gt; values specified as part of the &lt;code&gt;csi config init&lt;/code&gt; are used together in the &lt;code&gt;system-name.site-domain&lt;/code&gt; format, creating the external domain for external hostnames for services&#xA;accessible from the Customer Management Network (CMN). Changing this value requires updating all impacted &lt;code&gt;external-dns.alpha.kubernetes.io/hostname&lt;/code&gt; annotations, &lt;code&gt;VirtualService&lt;/code&gt; and possibly &lt;code&gt;Gateway&lt;/code&gt; objects,&#xA;the CoreDNS ConfigMap, Keycloak settings for valid OAuth callback URLs, OAuth2 Proxy configuration, and generating new certificates.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Ingress Routing</title>
+      <link>/docs-csm/en-16/operations/network/external_dns/ingress_routing/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:14 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/network/external_dns/ingress_routing/</guid>
+      <description>&lt;h1 id=&#34;ingress-routing&#34;&gt;Ingress Routing&lt;/h1&gt;&#xA;&lt;p&gt;Ingress routing to services via Istio&amp;rsquo;s ingress gateway is configured by &lt;code&gt;VirtualService&lt;/code&gt; custom resource definitions (CRD). When using external hostnames, there needs to be a &lt;code&gt;VirtualService&lt;/code&gt; CRD that matches the external hostname to the desired destination.&lt;/p&gt;&#xA;&lt;p&gt;For example, the configuration below controls the ingress routing for &lt;code&gt;prometheus.cmn.SYSTEM_DOMAIN_NAME&lt;/code&gt;:&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kubectl get vs -n sysmgmt-health cray-sysmgmt-health-prometheus&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Example output:&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;NAME                             GATEWAYS                      HOSTS                              AGE&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cray-sysmgmt-health-prometheus   [services/services-gateway]   [prometheus.cmn.SYSTEM_DOMAIN_NAME]   22h&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kubectl get vs -n sysmgmt-health cray-sysmgmt-health-prometheus -o yaml&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Example output:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Troubleshoot DNS Configuration Issues</title>
+      <link>/docs-csm/en-16/operations/network/external_dns/troubleshoot_dns_configuration_issues/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:14 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/network/external_dns/troubleshoot_dns_configuration_issues/</guid>
+      <description>&lt;h1 id=&#34;troubleshoot-dns-configuration-issues&#34;&gt;Troubleshoot DNS Configuration Issues&lt;/h1&gt;&#xA;&lt;p&gt;Troubleshoot issues when DNS is not properly configured to delegate name resolution to the core DNS instance on a specific cluster.&#xA;Although the CMN/CAN/CHN IP address may still be routable using the IP address directly, it may not work because Istio&amp;rsquo;s ingress gateway&#xA;depends on the hostname (or SNI) to route traffic. For command line tools like cURL, using the &lt;code&gt;--resolve&lt;/code&gt; option to force correct&#xA;resolution can be used to work around this issue.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Troubleshoot Connectivity to Services with External IP addresses</title>
+      <link>/docs-csm/en-16/operations/network/external_dns/troubleshoot_systems_not_provisioned_with_external_ip_addresses/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:14 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/network/external_dns/troubleshoot_systems_not_provisioned_with_external_ip_addresses/</guid>
+      <description>&lt;h1 id=&#34;troubleshoot-connectivity-to-services-with-external-ip-addresses&#34;&gt;Troubleshoot Connectivity to Services with External IP addresses&lt;/h1&gt;&#xA;&lt;p&gt;Systems that do not support CMN/CAN/CHN will not have services provisioned with external IP addresses on CMN/CAN/CHN. Kubernetes will report a &lt;code&gt;&amp;lt;pending&amp;gt;&lt;/code&gt; status for the external IP address of the service experiencing connectivity issues.&lt;/p&gt;&#xA;&lt;p&gt;If SSH access to a non-compute node (NCN) is available, it is possible to override resolution of external hostnames and forward local ports into the cluster for the cluster IP address of the corresponding service.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Update the cmn-external-dns value post-installation</title>
+      <link>/docs-csm/en-16/operations/network/external_dns/update_the_cmn-external-dns_value_post-installation/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:14 +0000</pubDate>
+      <guid>/docs-csm/en-16/operations/network/external_dns/update_the_cmn-external-dns_value_post-installation/</guid>
+      <description>&lt;h1 id=&#34;update-the-cmn-external-dns-value-post-installation&#34;&gt;Update the &lt;code&gt;cmn-external-dns&lt;/code&gt; value post-installation&lt;/h1&gt;&#xA;&lt;p&gt;By default, the &lt;code&gt;services/cray-dns-powerdns-cmn-tcp&lt;/code&gt; and &lt;code&gt;services/cray-dns-powerdns-cmn-udp&lt;/code&gt; services both share the same Customer Management Network (CMN) external IP address.&#xA;This is defined by the &lt;code&gt;cmn-external-dns&lt;/code&gt; value, which is specified during the &lt;code&gt;csi config init&lt;/code&gt; input.&lt;/p&gt;&#xA;&lt;p&gt;The IP address must be in the static range reserved in MetalLB&amp;rsquo;s &lt;code&gt;cmn-static-pool&lt;/code&gt; subnet. Currently, this is the only CMN IP address that must be known external to the system,&#xA;in order for external DNS to delegate the &lt;code&gt;system-name.site-domain&lt;/code&gt; zone to &lt;code&gt;services/cray-dns-powerdns&lt;/code&gt; deployment.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

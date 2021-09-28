@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>sat on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-15/operations/sat/</link>
+    <description>Recent content in sat on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-15</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:09:44 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-15/operations/sat/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>System Admin Toolkit (SAT) in CSM</title>
+      <link>/docs-csm/en-15/operations/sat/sat_in_csm/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:44 +0000</pubDate>
+      <guid>/docs-csm/en-15/operations/sat/sat_in_csm/</guid>
+      <description>&lt;h1 id=&#34;system-admin-toolkit-sat-in-csm&#34;&gt;System Admin Toolkit (SAT) in CSM&lt;/h1&gt;&#xA;&lt;p&gt;The System Admin Toolkit (SAT) is a command-line interface that can assist administrators with common tasks, such as&#xA;troubleshooting and querying information about the HPE Cray EX System, system boot and shutdown, and replacing hardware&#xA;components. In CSM 1.3 and newer, the &lt;code&gt;sat&lt;/code&gt; command is available on the Kubernetes NCNs without installing the SAT&#xA;product stream.&lt;/p&gt;&#xA;&lt;h2 id=&#34;sat-product-stream-components&#34;&gt;SAT product stream components&lt;/h2&gt;&#xA;&lt;p&gt;It is still possible to install SAT as a separate product stream. Any version of SAT installed as a separate product&#xA;stream overrides the &lt;code&gt;sat&lt;/code&gt; command available in CSM. Installing the SAT product stream allows additional supporting&#xA;components to be added:&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

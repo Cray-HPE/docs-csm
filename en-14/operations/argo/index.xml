@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>argo on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-14/operations/argo/</link>
+    <description>Recent content in argo on Cray System Management (CSM)</description>
+    <generator>Hugo</generator>
+    <language>en-14</language>
+    <lastBuildDate>Tue, 15 Oct 2024 03:09:01 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-14/operations/argo/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Using Argo Workflows</title>
+      <link>/docs-csm/en-14/operations/argo/using_argo_workflows/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:01 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/argo/using_argo_workflows/</guid>
+      <description>&lt;h1 id=&#34;using-argo-workflows&#34;&gt;Using Argo Workflows&lt;/h1&gt;&#xA;&lt;p&gt;This page provides information on operating Argo workflows in CSM and describes how Argo workflows behave once starting.&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-14/operations/argo/using_argo_workflows/#basic-behavior&#34;&gt;Basic behavior&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-14/operations/argo/using_argo_workflows/#starting-a-new-workflow-after-a-failed-workflow&#34;&gt;Starting a new workflow after a failed workflow&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;basic-behavior&#34;&gt;Basic behavior&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Once a workflow is started, it will proceed through multiple steps in a set order. Most steps depend on previous steps and will wait for its dependencies to finish before starting.&lt;/p&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;If any step fails, by default, that step will be continuously retried until it succeeds.&#xA;There are two ways to make Argo not continuously retry a failed step.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Using the Argo UI</title>
+      <link>/docs-csm/en-14/operations/argo/using_the_argo_ui/</link>
+      <pubDate>Tue, 15 Oct 2024 03:09:01 +0000</pubDate>
+      <guid>/docs-csm/en-14/operations/argo/using_the_argo_ui/</guid>
+      <description>&lt;h1 id=&#34;using-the-argo-ui&#34;&gt;Using the Argo UI&lt;/h1&gt;&#xA;&lt;p&gt;This page provides information about using the Argo UI with CSM. The Argo UI is useful for watching the progress of an install or upgrade and debugging. The UI is read-only and will not accept write operations.&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-14/operations/argo/using_the_argo_ui/#access-the-argo-ui&#34;&gt;Access the Argo UI&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;/docs-csm/docs-csm/en-14/operations/argo/using_the_argo_ui/#view-logs&#34;&gt;View logs&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;access-the-argo-ui&#34;&gt;Access the Argo UI&lt;/h2&gt;&#xA;&lt;p&gt;The Argo UI is accessed through a URL. The URL for a system can be found by the following command.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
