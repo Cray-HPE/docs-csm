@@ -4,7 +4,7 @@ This changes the credential for liquid-cooled EX cabinet chassis controllers, no
 
 ### Prerequisites
 
-- Perform procedures in [Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials.md](Provisioning_a_Liquid-Cooled_EX_Cabinet_CEC_with_Default Credentials.md) to all CECs in the system.  
+- Perform procedures in [Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials](Provisioning_a_Liquid-Cooled_EX_Cabinet_CEC_with_Default Credentials.md) to all CECs in the system.  
 - All of the CECs must be configured to the __same__ global credential.
 
 ### Procedure
@@ -174,7 +174,7 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
     ncn-m001# CRED_PASSWORD=foobar
     ```
 
-2. The following is a convenient way to update the credentials used by CSM services for all previously discovered EX cabinet BMCs to the new global default:
+2. Update the credentials used by CSM services for all previously discovered EX cabinet BMCs to the new global default:
     ```bash
     ncn-m001# \
     REDFISH_ENDPOINTS=$(cray hsm inventory redfishEndpoints list --format json | jq .RedfishEndpoints[].ID -r | sort -V )
@@ -194,7 +194,7 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
 
     It will take some time for the above bash script to run. It will take approximately 5 minutes to update all of the credentials for a single fully populated cabinet.
 
-    > Alternatively, for each affected mountain BMC the following command be ran against it in Hardware State Manager. Replace `<BMC>` with the BMC to update the credentials for:
+    > Alternatively, use the following command on each BMC. Replace `<BMC>` with the BMC xname to update the credentials:
     > ```bash
     > ncn-m001# cray hsm inventory redfishEndpoints update <BMC> --user root --password ${CRED_PASSWORD}
     > ```
