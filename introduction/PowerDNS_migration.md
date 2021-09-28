@@ -1,6 +1,6 @@
 # PowerDNS Migration Notice
 
-The migration to PowerDNS as the authoratative DNS source and the introduction of Bifurcated CAN (Customer Access Network) will result in some changes to the node and service naming conventions.
+The migration to PowerDNS as the authoritative DNS source and the introduction of Bifurcated CAN (Customer Access Network) will result in some changes to the node and service naming conventions.
 
 ## DNS Record Naming Changes
 
