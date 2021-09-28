@@ -11,12 +11,18 @@ upgrade_ncn=$1
 
 . ${BASEDIR}/ncn-upgrade-common.sh ${upgrade_ncn}
 
-cat <<EOF
-NOTE:
-    In upgrade/1.0/resource_material/k8s/worker-reference.md
-    step 1 and 2 are not automated
+ssh_keygen_keyscan $1 || true # oror true to unblock rerun
+
+cfs_config_status=$(cray cfs components describe $UPGRADE_XNAME --format json | jq -r '.configurationStatus')
+echo "CFS configuration status: ${cfs_config_status}"
+if [[ $cfs_config_status != "configured" ]]; then
+    echo "*************************************************"
+    cat <<EOF
+If the state is pending, the administrator may want to tail the logs of the CFS pod running on that node to watch the CFS job finish before rebooting this node. If the state is failed for this node, then it is unrelated to the upgrade process, and can be addressed independent of rebuilding this worker node.
 EOF
-read -p "Read and act on above steps. Press Enter key to continue ..."
+    echo "*************************************************"
+    read -p "Read and act on above steps. Press Enter key to continue ..."
+fi
 
 state_name="ENSURE_NEXUS_CAN_START_ON_ANY_NODE"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
@@ -25,7 +31,7 @@ if [[ $state_recorded == "0" ]]; then
 
     workers="$(kubectl get node --selector='!node-role.kubernetes.io/master' -o name | sed -e 's,^node/,,' | paste -sd,)"
     export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-    yq r ${CSM_ARTI_DIR}/manifests/platform.yaml 'spec.charts(name==cray-precache-images).values.cacheImages[*]' | while read image; do echo >&2 "+ caching $image"; pdsh -w "$workers" "crictl pull $image"; done
+    kubectl get configmap -n nexus cray-precache-images -o json | jq -r '.data.images_to_cache' | while read image; do echo >&2 "+ caching $image"; pdsh -w "$workers" "crictl pull $image" 2>/dev/null; done
 
     record_state "${state_name}" ${upgrade_ncn}
 else
@@ -121,7 +127,75 @@ ${BASEDIR}/../k8s/failover-leader.sh $upgrade_ncn
 
 drain_node $upgrade_ncn
 
+state_name="BACKUP_CREDENTIAL_SSH_KEYS"
+state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+
+    if [[ $ssh_keys_done == "0" ]]; then
+        ssh_keygen_keyscan "${upgrade_ncn}"
+        ssh_keys_done=1
+    fi
+    scp ${upgrade_ncn}:/root/.ssh/id_rsa /etc/cray/upgrade/csm/$CSM_RELEASE/$upgrade_ncn
+    scp ${upgrade_ncn}:/root/.ssh/authorized_keys /etc/cray/upgrade/csm/$CSM_RELEASE/$upgrade_ncn
+    scp ${upgrade_ncn}:/etc/shadow /etc/cray/upgrade/csm/$CSM_RELEASE/$upgrade_ncn
+
+    record_state "${state_name}" ${upgrade_ncn}
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 ${BASEDIR}/ncn-upgrade-wipe-rebuild.sh $upgrade_ncn
+
+state_name="RESTORE_CREDENTIAL_SSH_KEYS"
+state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+
+    if [[ $ssh_keys_done == "0" ]]; then
+        ssh_keygen_keyscan "${upgrade_ncn}"
+        ssh_keys_done=1
+    fi
+    scp /etc/cray/upgrade/csm/$CSM_RELEASE/$upgrade_ncn/id_rsa ${upgrade_ncn}:/root/.ssh/id_rsa 
+    scp /etc/cray/upgrade/csm/$CSM_RELEASE/$upgrade_ncn/authorized_keys ${upgrade_ncn}:/root/.ssh/authorized_keys
+    scp /etc/cray/upgrade/csm/$CSM_RELEASE/$upgrade_ncn/shadow ${upgrade_ncn}:/etc/shadow 
+
+    record_state "${state_name}" ${upgrade_ncn}
+else
+    echo "====> ${state_name} has been completed"
+fi
+
+cfs_config_status=$(cray cfs components describe $UPGRADE_XNAME --format json | jq -r '.configurationStatus')
+echo "CFS configuration status: ${cfs_config_status}"
+if [[ $cfs_config_status != "configured" ]]; then
+    echo "*************************************************"
+    cat <<EOF
+Confirm the CFS configurationStatus after rebuilding the node. If the state is pending, the administrator may want to tail the logs of the CFS pod running on that node to watch the CFS job finish.
+
+IMPORTANT: 
+  The NCN personalization (CFS configuration) for a worker node which has been rebuilt should be complete before continuing in this process. If the state is failed for this node, it should be be addressed now.
+EOF
+    echo "*************************************************"
+    read -p "Read and act on above steps. Press Enter key to continue ..."
+fi
+
+### redeploy cps if required
+redeploy=$(cat /etc/cray/upgrade/csm/${CSM_RELEASE}/cp.deployment.snapshot | grep $upgrade_ncn | wc -l)
+if [[ $redeploy == "1" ]];then
+    cray cps deployment update --nodes $upgrade_ncn
+    cps_state=$(cray cps deployment list --nodes $upgrade_ncn |grep -E "state ="|grep -v "running" | wc -l)
+    if [[ $cps_state -ne 0 ]];then
+        echo "ERROR: CPS is not running on $upgrade_ncn"
+        cray cps deployment list --nodes $upgrade_ncn |grep -E "state ="
+        exit 1
+    fi
+    cps_pod_assigned=$(kubectl get pod -A -o wide|grep cray-cps-cm-pm|grep $upgrade_ncn|wc -l)
+    if [[ $cps_pod_assigned -ne 1 ]];then
+        echo "ERROR: CPS pod is not assigned to $upgrade_ncn"
+        kubectl get pod -A -o wide|grep cray-cps-cm-pm|grep $upgrade_ncn
+        exit 1
+    fi
+fi
 
 state_name="ENSURE_KEY_PODS_HAVE_STARTED"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})

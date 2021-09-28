@@ -39,5 +39,10 @@ Alerts for CPUThrottlingHigh on gatekeeper-audit can be ignored. This pod is not
 Alerts for CPUThrottlingHigh on CFS services such as cfs-batcher and cfs-trust can be ignored. Because CFS is idle most of the time these services have low CPU requests, and it is normal for CFS service resource usage to spike when it is in use.
 
 
+<a name="networkpacketsdropped"></a>
+## CephNetworkPacketsDropped
+
+The CephNetworkPacketsDropped alert doesn't necessarily indicate there are packets being dropped on an interface on a storage node. In a future release this alert will be renamed to be more generic. If this alert fires, inspect the IP address in the details of the alert to determine the node in question (can be storage, master or worker node). If the interface in question is determined to be healthy, this alert can be ignored.
+
 
 

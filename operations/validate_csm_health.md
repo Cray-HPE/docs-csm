@@ -191,7 +191,11 @@ Execute ncnPostgresHealthChecks script and analyze the output of each individual
             INFO: running post_bootstrap
             INFO: trying to bootstrap a new cluster
          ```
-         Errors reported prior to the lock status, such as **ERROR: get_cluster** or **ERROR: ObjectCache.run ProtocolError('Connection broken: IncompleteRead(0 bytes read)', IncompleteRead(0 bytes read))** can be ignored.
+         Errors reported prior to the lock status can be ignored:
+         - **ERROR: get_cluster**
+         - **ERROR: ObjectCache.run ProtocolError('Connection broken: IncompleteRead(0 bytes read)', IncompleteRead(0 bytes read))**
+         - **ERROR: failed to update leader lock** 
+         
          If there is no Leader, refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#leader).
 
       - Verify the State of each cluster member is 'running'.
@@ -751,9 +755,9 @@ The session template below can be copied and used as the basis for the BOS Sessi
      "enable_cfs": false,
      "name": "shasta-1.4-csm-bare-bones-image"
    }
+   ```
 
    **NOTE**: Be sure to replace the values of the `etag` and `path` fields with the ones you noted earlier in the `cray ims images list` command.
-
 
 2. Create the BOS session template using the following file as input:
    ```

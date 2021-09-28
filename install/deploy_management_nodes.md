@@ -571,57 +571,22 @@ The LiveCD needs to authenticate with the cluster to facilitate the rest of the 
 
 After the NCNs are booted, the BGP peers will need to be checked and updated if the neighbor IP addresses are incorrect on the switches. Follow the steps below and see [Update BGP Neighbors](../operations/network/metallb_bgp/Update_BGP_Neighbors.md) for more details on the BGP configuration.
 
-1. Make sure the SYSTEM_NAME variable is set to name of your system.
+   1. Make sure the SYSTEM_NAME variable is set to name of your system.
 
-   ```bash
-   pit# export SYSTEM_NAME=eniac
-   ```
-
-1. Determine the IP address of the worker NCNs.
-
-   ```bash
-   pit# grep -B1 "name: ncn-w" /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN.yaml
-   ```
-
-1. Determine the IP addresses for the switches that are peering.
-
-   ```bash
-   pit# grep peer-address /var/www/ephemeral/prep/${SYSTEM_NAME}/metallb.yaml
-   ```
-
-1. Do the following steps for each of the switch IP addresses that you found in the previous step:
-
-    1. Log in to the switch as the `admin` user:
-
-        ```bash
-        pit# ssh admin@<switch_ip_address>
-        ```
-
-    1. Clear the BGP peering sessions by running the following commands. You should see either "arubanetworks" or "Mellanox" in the first output you see when you log in to the switch.
-        - Aruba: `clear bgp *`
-        - Mellanox: First run `enable`, then run `clear ip bgp all`
-
-1. Check the status of the BGP peering sessions by running the following commands **on each switch**:
-    - Aruba: `show bgp ipv4 unicast summary`
-    - Mellanox: `show ip bgp summary`
-
-    You should see a neighbor for each of the workers NCN IP addresses found in an earlier step. If it is an Aruba switch, you will also see a neighbor for the other switch of the pair that are peering.
-
-   At this point the peering sessions with the worker IP addresses should be in `IDLE`, `CONNECT`, or `ACTIVE` state (not `ESTABLISHED`). This is due to the MetalLB speaker pods not being deployed yet.
-
-   You should see that the `MsgRcvd` and `MsgSent` columns for the worker IP addresses are 0.
-
-1. If the neighbor IP addresses do not match the worker NCN IP addresses, use the helper script for Mellanox and CANU (Cray Automated Network Utility) for Aruba.
-
-   1. This command will list the available helper scripts.
       ```bash
-      pit# ls -1 /usr/bin/*mellanox_set_bgp_peer*py
+      pit# export SYSTEM_NAME=eniac
       ```
 
-      Expected output looks similar to the following:
+   1. Determine the IP address of the worker NCNs.
 
+      ```bash
+      pit# grep -B1 "name: ncn-w" /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN.yaml
       ```
-      /usr/bin/mellanox_set_bgp_peers.py
+
+   1. Determine the IP addresses for the switches that are peering.
+
+      ```bash
+      pit# grep peer-address /var/www/ephemeral/prep/${SYSTEM_NAME}/metallb.yaml
       ```
 
    1. Run the BGP helper script if you have mellanox switches.
@@ -646,8 +611,14 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 
       ```bash
       pit# canu -s 1.5 config bgp --ips 10.252.0.2,10.252.0.3 --csi-folder /var/www/ephemeral/prep/${SYSTEM_NAME}/```
+   1. Do the following steps for each of the switch IP addresses that you found in the previous step:
 
-   1. Check the status of the BGP peering sessions **on each switch**.
+      Log in to the switch as the `admin` user:
+      
+        ```bash
+        pit# ssh admin@<switch_ip_address>
+        ```   
+      1. Check the status of the BGP peering sessions **on each switch**.
       - Aruba: `show bgp ipv4 unicast summary`
       - Mellanox: `show ip bgp summary`
 
@@ -656,7 +627,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
       At this point the peering sessions with the worker IP addresses should be in `IDLE`, `CONNECT`, or `ACTIVE` state (not `ESTABLISHED`). This is due to the MetalLB speaker pods not being deployed yet.
 
       You should see that the `MsgRcvd` and `MsgSent` columns for the worker IP addresses are 0.
-   1. Check the BGP config ***on each switch*** to verify that the NCN neighbors are configured as passive.
+      1. Check the BGP config ***on each switch*** to verify that the NCN neighbors are configured as passive.
       - Aruba: ```show run bgp``` The passive neighbor configuration is required. ```neighbor 10.252.1.7 passive``` 
       EXAMPLE ONLY
 
@@ -727,25 +698,18 @@ Observe the output of the checks and note any failures, then remediate them.
 
 1. Check the storage nodes.
 
-   **`Note`**: Throughout the output of the `csi pit validate` command there will be a test total for each node where the tests run. Be sure to check all of them and not just the final one.
-
    ```bash
    pit# csi pit validate --ceph | tee csi-pit-validate-ceph.log
    ```
 
-   Once that command has finished, the following will extract the test totals reported for each node:
-   ```bash
-   pit# grep "Total" csi-pit-validate-ceph.log
-   ```
+   Once that command has finished, check the last line of output to see the results of the tests.
 
-   Example output for a system with 3 storage nodes:
+   Example last line of output:
    ```
    Total Tests: 7, Total Passed: 7, Total Failed: 0, Total Execution Time: 1.4226 seconds
-   Total Tests: 7, Total Passed: 7, Total Failed: 0, Total Execution Time: 1.4077 seconds
-   Total Tests: 7, Total Passed: 7, Total Failed: 0, Total Execution Time: 1.4246 seconds
    ```
 
-   If these total lines report any failed tests, look through the full output of the test to see which node had the failed test and what the details are for that test.
+   If the test total line reports any failed tests, look through the full output of the test in csi-pit-validate-ceph.log to see which node had the failed test and what the details are for that test.
 
    **`Note`**: Please see [Utility Storage](../operations/utility_storage/Utility_Storage.md) to help resolve any failed tests.
 

@@ -12,8 +12,8 @@ The current release of CAPMC supports the following power control features:
 -   Control single components via NID or xname
 -   Control grouped components
 -   Control the entire system \(all or s0\)
--   Can specify ancestors \(--prereq\) and descendants \(--recursive\) of single component
--   Provide a --force option for immediate power off
+-   Can specify ancestors \(`--prereq`\) and descendants \(`--recursive`\) of single component
+-   Provide a `--force` option for immediate power off
 -   Power capping
 
 Power sequencing using CAPMC assumes that all cabinets and PDUs have been plugged in, breakers are on, and PDU controllers, BMCs, and other embedded controllers are on and available. CAPMC provides a default order for components to powering on, but the power sequence can be configured.
@@ -24,7 +24,7 @@ The `cray` CLI can be used from any system that has HTTPS access to [System Mana
 
 The `cray capmc` command \(see `--help`\) can be used to control power to specific components by specifying the component NID, xname, or group.
 
-### Components that Can be Controlled with CAPMC in Shasta v1.4
+### Components that Can be Controlled with CAPMC
 
 **Air Cooled Cabinets**
 
@@ -76,27 +76,27 @@ Air Cooled nodes support these power capping and monitoring API calls:
 
 **Get Node Energy**
 
-```screen
+```bash
 ncn-m001# cray capmc get\_node\_energy create --nids NID\_LIST --start-time '2020-03-04 12:00:00' \\
 --end-time '2020-03-04 12:10:00' --format json
 ```
 
 **Get Node Energy Stats**
 
-```screen
+```bash
 ncn-m001# cray capmc get\_node\_energy\_stats create --nids NID\_LIST --start-time \\
 '2020-03-04 12:00:00' --end-time '2020-03-04 12:10:00' --format json
 ```
 
 **Get Node Power Control and Limit Settings**
 
-```screen
+```bash
 ncn-m001# cray capmc get\_power\_cap create –-nids NID\_LIST --format json
 ```
 
 **Get System Power**
 
-```screen
+```bash
 ncn-m001# cray capmc get\_system\_power create --start-time \\
 '2020-03-04 12:00:00' --window-len 30 --format json
 ```
@@ -105,25 +105,25 @@ ncn-m001# cray capmc get\_system\_power create --start-time \\
 
 The supply field contains the Max limit for the node.
 
-```screen
+```bash
 ncn-m001# cray capmc get\_power\_cap\_capabilities create –-nids NID\_LIST --format json
 ```
 
 **Set Node Power Limit**
 
-```screen
+```bash
 ncn-m001# cray capmc set\_power\_cap create –-nids NID\_LIST --node 225 --format json
 ```
 
 **Remove Node Power Limit \(Set to Default\)**
 
-```screen
+```bash
 ncn-m001# cray capmc set\_power\_cap create –-nids NID\_LIST --node 0 --format json
 ```
 
 **Activate Node Power Limit**
 
-```screen
+```bash
 # curl -k -u $login:$pass -H "Content-Type: application/json" \\
 -X POST https://$BMC\_IP/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger --date
 '\{"PowerLimitTrigger": "Activate"\}'
@@ -131,44 +131,42 @@ ncn-m001# cray capmc set\_power\_cap create –-nids NID\_LIST --node 0 --format
 
 **Deactivate Node Power Limit**
 
-```screen
+```bash
 # curl -k -u $login:$pass -H "Content-Type: application/json" \\
--X POST https://$BMC\_IP/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger --data
-'\{"PowerLimitTrigger": "Deactivate"\}'
+-X POST https://$BMC\_IP/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger --data '\{"PowerLimitTrigger": "Deactivate"\}'
 ```
 
 ## Power On/Off Examples
 
 **Power Off a Cabinet**
 
-```screen
+```bash
 ncn-m001# cray capmc xname\_off create --xnames x1000 --recursive --format json
 ```
 
 **Power Off a Chassis 0 and Its Descendents**
 
-```screen
+```bash
 ncn-m001# cray capmc xname\_off create --xnames x1000c0 --recursive --format json
 ```
 
 **Power Off Node 0 in Cabinet 1000, Chassis, 0, Slot 0, Node Card 0**
 
-```screen
+```bash
 ncn-m001# cray capmc xname\_off create --xnames x1000c0s0b0n0 --format json
 ```
 
 **Emergency Power Off \(EPO\) CLI Command**
 
-```screen
+```bash
 ncn-m001#  cray capmc emergency\_power\_off –-xnames LIST\_OF\_CHASSIS --force --format json
 ```
 
 To recover or "reset" the components after a software EPO, set the chassis to a known hardware state \(off\). The cabinet\(s\) can then be powered on normally after the EPO is cleared. For a complete procedure, see [Recover from a Liquid Cooled Cabinet EPO Event](Recover_from_a_Liquid_Cooled_Cabinet_EPO_Event.md).
 
-```screen
+```bash
 ncn-m001# cray capmc xname\_off create --xnames LIST\_OF\_CHASSIS --force true
 e = 0
 err_msg = ""
 ```
-
 
