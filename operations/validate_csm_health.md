@@ -713,7 +713,7 @@ If one or more checks failed:
         1
         ```
 
-Additional test execution details can be found in `/opt/cray/tests/cmsdev.log`.
+Additional test execution details can be found in `/opt/cray/tests/cmsdev.log` on the node where the test was run.
 
 <a name="booting-csm-barebones-image"></a>
 ## 4. Booting CSM Barebones Image
