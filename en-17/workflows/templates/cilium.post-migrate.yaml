@@ -1,0 +1,195 @@
+#
+# MIT License
+#
+# (C) Copyright 2022-2023, 2025 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: post-migrate-cilium 
+  namespace: argo
+spec:
+  entrypoint: main
+  templates:
+    - name: main
+      inputs:
+        parameters:
+          - name: dryRun
+      dag:
+        tasks:
+        - name: restore-network-policies
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  if kubectl -n argo get cm stash-netpol -o jsonpath='{.data.netpol\.yaml}' > /tmp/netpol-out.yaml; then
+                    kubectl apply -f /tmp/netpol-out.yaml
+                    kubectl -n argo delete cm stash-netpol
+                  fi
+                  kubectl get netpol -A
+                  rm -f /tmp/netpol-out.yaml
+        - name: enable-strimzi-netpol-management
+          dependencies:
+            - restore-network-policies
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  echo "Enabling Strimzi Operator NetworkPolicy management"
+                  kubectl -n operators set env deployment/strimzi-cluster-operator STRIMZI_NETWORK_POLICY_GENERATION-
+                  echo "Waiting for Strimzi Operator to restart"
+                  kubectl -n operators rollout status deployment strimzi-cluster-operator
+        - name: update-multus-configmap
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  . /srv/cray/resources/common/vars.sh
+                  export MULTUS_CONF=$(cat /srv/cray/resources/common/multus/multus-cilium.conf)
+                  envsubst < /srv/cray/resources/common/multus/multus-daemonset.yml | yq4 'select(.kind=="ConfigMap")' | kubectl apply -f -
+        - name: validate-cilium-content
+          dependencies:
+            - restore-network-policies
+            - update-multus-configmap
+            - enable-strimzi-netpol-management
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  if [ ! -r /srv/cray/resources/common/cilium-cli-helm-values-migration.yaml ]; then
+                    echo "Cilium content not found"
+                    exit 1
+                  else
+                    echo "Found Cilium content"
+                  fi
+        - name: upgrade-cilium-chart 
+          dependencies:
+            - validate-cilium-content
+          templateRef:
+            name: ssh-template 
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  echo "Upgrading cilium chart"
+                  source /srv/cray/resources/common/vars.sh
+                  export CILIUM_OPERATOR_REPLICAS=$(craysys metadata get cilium-operator-replicas)
+                  export CILIUM_MIGRATION_TUNNEL_PORT=8473
+                  export CILIUM_MIGRATION_POD_CIDR=10.48.0.0/16
+                  envsubst < /srv/cray/resources/common/cilium-cli-helm-values-migration.yaml > /etc/cray/kubernetes/cilium-cli-helm-values.yaml
+                  helm upgrade -f /etc/cray/kubernetes/cilium-cli-helm-values.yaml cilium /srv/cray/resources/common/cilium-${CILIUM_CNI_VERSION} --namespace kube-system --set operator.unmanagedPodWatcher.restart=true --set cni.customConf=false --set policyEnforcementMode=default --set bpf.hostLegacyRouting=false
+                  kubectl wait deployment -n kube-system cilium-operator --for condition=Available=True --timeout=30s
+                  kubectl wait pods -n kube-system -l k8s-app=cilium --for condition=Ready --timeout=90s
+        - name: delete-cilium-node-config
+          dependencies:
+            - upgrade-cilium-chart
+          templateRef:
+            name: kubectl-and-curl-template 
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  kubectl delete -n kube-system ciliumnodeconfig cilium-default --ignore-not-found=true
+        - name: remove-weave 
+          dependencies:
+            - delete-cilium-node-config 
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  source /srv/cray/resources/common/vars.sh
+                  export PODS_CIDR=$(craysys metadata get kubernetes-pods-cidr)
+                  export WEAVE_MTU=$(craysys metadata get kubernetes-weave-mtu)
+                  envsubst < /srv/cray/resources/common/weave.yaml > /tmp/weave.yaml 
+                  kubectl delete -f /tmp/weave.yaml --ignore-not-found=true
+                  sleep 30
+        - name: update-bss-primary-cni
+          dependencies:
+            - remove-weave
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  ORIG_PARAMS=$(mktemp)
+                  NEW_PARAMS=$(mktemp)
+                  PRIMARY_CNI=cilium
+
+                  TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+                      -d client_id=admin-client \
+                      -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                      https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+
+                  curl -sH "Authorization: Bearer ${TOKEN}" -X GET -H "Content-Type: application/json" -d '{ "hosts": ["Global"] }' https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters > $ORIG_PARAMS
+                  jq ".[] | .\"cloud-init\".\"meta-data\".\"k8s-primary-cni\"=\"${PRIMARY_CNI}\"" $ORIG_PARAMS > $NEW_PARAMS
+                  curl -i -sH "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters" -X PUT -d @${NEW_PARAMS}
+
+                  rm $ORIG_PARAMS
+                  rm $NEW_PARAMS
+        - name: set-check-image-to-enforce
+          dependencies:
+            - remove-weave
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  echo "Setting Kyverno check-image policy to Enforce mode"
+                  kubectl -n kyverno patch cpol check-image --type=json -p '[{"op": "replace", "path": "/spec/validationFailureAction", "value": "Enforce"}]'

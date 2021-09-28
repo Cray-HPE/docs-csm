@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rapid Release Update (RRU) for CSM kernel CVE fixes on Cray System Management (CSM)</title>
+    <link>/docs-csm/en-17/operations/rapid_release_update/</link>
+    <description>Recent content in Rapid Release Update (RRU) for CSM kernel CVE fixes on Cray System Management (CSM)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-17</language>
+    <lastBuildDate>Sat, 14 Nov 2026 03:36:03 +0000</lastBuildDate>
+    <atom:link href="/docs-csm/en-17/operations/rapid_release_update/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Release Notes - Rapid-Update-sle15-sp6-170-26.07.01</title>
+      <link>/docs-csm/en-17/operations/rapid_release_update/rru_26.07.01_170_releasenotes/</link>
+      <pubDate>Sat, 14 Nov 2026 03:36:02 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/rapid_release_update/rru_26.07.01_170_releasenotes/</guid>
+      <description>Release Notes - Rapid-Update-sle15-sp6-170-26.07.01 This document guides an administrator through the deploy of Rapid Release Update on CSM-1.7.0.&#xA;This page documents the changes introduced by this RRU, compared to the previous RRU version.&#xA;Kernel Version CVE fixes Deploy steps Kernel Version 6.4.0-150600.23.125.1&#xA;CVEs Fixes CVEs fixed which have NVD score &amp;gt; 9.&#xA;CVE-2026-46242 - Linux Kernel eventpoll ep_remove Use-After-Free CVE-2026-43499 - Linux Kernel rtmutex remove_waiter() Use-After-Free CVE-2026-53362 - Linux Kernel IPv6 Paged Allocation Heap Overflow CVE-2026-52943 - Linux Kernel skbuff pskb_carve Zerocopy Use-After-Free CVE-2026-46331 - Linux Kernel net/sched pedit Partial COW Out-of-Bounds Write CVE-2026-43074 - Linux Kernel eventpoll struct eventpoll Use-After-Free CVE-2026-46266 - Linux Kernel RAW Socket IPPROTO_RAW ICMP Route Cache Poisoning CVE-2026-53359 - Linux Kernel KVM x86 Shadow Paging Role Confusion Use-After-Free Deploy Steps See Rapid Release Update (RRU) for CSM kernel CVE fixes.</description>
+    </item>
+    <item>
+      <title>Release Notes - Rapid-Update-sle15-sp7-171-26.07.01</title>
+      <link>/docs-csm/en-17/operations/rapid_release_update/rru_26.07.01_171_releasenotes/</link>
+      <pubDate>Sat, 14 Nov 2026 03:36:02 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/rapid_release_update/rru_26.07.01_171_releasenotes/</guid>
+      <description>Release Notes - Rapid-Update-sle15-sp7-171-26.07.01 This document guides an administrator through the deploy of Rapid Release Update on CSM-1.7.1.&#xA;This page documents the changes introduced by this RRU, compared to the previous RRU version.&#xA;Kernel Version CVE fixes Deploy steps Kernel Version 6.4.0-150700.53.73.2&#xA;CVEs Fixes CVEs fixed which have NVD score &amp;gt; 9.&#xA;CVE-2026-43074 - Linux Kernel Eventpoll Use-After-Free. CVE-2026-43456 - Linux Kernel Bonding Type Confusion. CVE-2026-43499 - Linux Kernel rtmutex/Futex Privilege Escalation (GhostLock).</description>
+    </item>
+    <item>
+      <title>Release Notes - Rapid-Update-sle15-sp7-171-26.09.01</title>
+      <link>/docs-csm/en-17/operations/rapid_release_update/rru_26.09.01_171_releasenotes/</link>
+      <pubDate>Sat, 14 Nov 2026 03:36:02 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/rapid_release_update/rru_26.09.01_171_releasenotes/</guid>
+      <description>Release Notes - Rapid-Update-sle15-sp7-171-26.09.01 This document guides an administrator through the deploy of Rapid Release Update on CSM-1.7.1.&#xA;This page documents the changes introduced by this RRU, compared to the previous RRU version.&#xA;Kernel Version CVE fixes Deploy steps Kernel Version 6.4.0-150700.53.78.1&#xA;CVEs Fixes CVEs fixed which have NVD score &amp;gt; 9.&#xA;CVE-2026-53398 - Linux Kernel NFSD SECINFO_NO_NAME Use-After-Free CVE-2026-53399 - Linux Kernel NFSD Layout stateid Use-After-Free CVE-2026-63795 - Linux Kernel 9p Client Reference Underflow CVE-2026-63912 - Linux Kernel IPsec ESP Page Fragment Handling Flaw CVE-2026-63922 - Linux Kernel IPv6 Extension Header Pointer Handling Flaw CVE-2026-63924 - Linux Kernel IPv6 Jumbo Header Pointer Handling Flaw CVE-2026-63938 - Linux Kernel KVM SEV PSC Buffer Validation Flaw CVE-2026-63939 - Linux Kernel KVM SEV Scratch Buffer Length Calculation Flaw CVE-2026-63940 - Linux Kernel KVM SEV Zero-Length Port I/O Handling Flaw CVE-2026-63984 - Linux Kernel IPv6 RPL Header Length Overflow CVE-2026-63994 - Linux Kernel Tunnel PMTU Use-After-Free CVE-2026-64025 - Linux Kernel BPF sockmap and KTLS Race Condition CVE-2026-64089 - Linux Kernel B.</description>
+    </item>
+    <item>
+      <title>Release Notes - Rapid-Update-sle15-sp6-170-26.11.01</title>
+      <link>/docs-csm/en-17/operations/rapid_release_update/rru_26.11.01_170_releasenotes/</link>
+      <pubDate>Sat, 14 Nov 2026 03:36:02 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/rapid_release_update/rru_26.11.01_170_releasenotes/</guid>
+      <description>Release Notes - Rapid-Update-sle15-sp6-170-26.11.01 This document guides an administrator through the deploy of Rapid Release Update on CSM-1.7.0.&#xA;This page documents the changes introduced by this RRU, compared to the previous RRU version.&#xA;Kernel Version CVE fixes Deploy steps Kernel Version 6.4.0-150600.23.143.1&#xA;CVEs Fixes CVEs fixed which have NVD score &amp;gt; 9.&#xA;CVE-2026-63795 - Linux Kernel 9p Client Reference Underflow CVE-2026-63886 - Linux Kernel iSCSI Target CHAP_R Base64 Heap Overflow CVE-2026-63887 - Linux Kernel iSCSI Target Text Response Heap Overrun CVE-2026-63888 - Linux Kernel iSCSI Target Text Command CRC Overread and Double-Free CVE-2026-63992 - Linux Kernel Tunnel PMTU ICMP Out-of-Bounds Access CVE-2026-64000 - Linux Kernel HSR Supervision Frame Out-of-Bounds Read CVE-2026-64007 - Linux Kernel Netfilter SYNPROXY Stale TCP Header Use-After-Free CVE-2026-64018 - Linux Kernel MANA Out-of-Bounds Array Access CVE-2026-64034 - Linux Kernel MANA TOCTOU Double-Fetch CVE-2026-74669 - Linux Kernel IPVS Tunnel ICMP Stack Out-of-Bounds Write CVE-2026-74612 - Linux Kernel veth XDP skb Length Accounting Flaw CVE-2026-74581 - Linux Kernel IPv6 Suppressed FIB6 Rule Use-After-Free CVE-2026-74556 - Linux Kernel libiscsi_tcp SCSI Response Buffer Overflow CVE-2026-74394 - Linux Kernel RDMA/srpt Immediate Data Integer Overflow CVE-2026-74345 - Linux Kernel RDMA/siw Endpoint Socket Use-After-Free CVE-2026-72339 - Linux Kernel qede Off-by-One BD Ring Desynchronization CVE-2026-72317 - Linux Kernel SUNRPC TLS connect_worker Use-After-Free CVE-2026-72289 - Linux Kernel KVM arm64 vGIC Interrupt Migration Use-After-Free CVE-2026-72288 - Linux Kernel KVM arm64 vGIC LPI Disable Race Use-After-Free CVE-2026-72251 - Linux Kernel Netfilter nf_nat_sip Stale Data Pointer CVE-2026-72222 - Linux Kernel SUNRPC TLS Handshake Callback Use-After-Free CVE-2026-72221 - Linux Kernel SUNRPC TLS Cancel Race Use-After-Free CVE-2026-72084 - Linux Kernel SCSI Target PR-OUT TransportID Out-of-Bounds Read CVE-2026-72083 - Linux Kernel SCSI Target REGISTER AND MOVE Use-After-Free CVE-2026-72069 - Linux Kernel locking/rt rt_spin_unlock() RCU Use-After-Free CVE-2026-72020 - Linux Kernel IPVS ip_vs_conn_new Uninitialized Sequence Data CVE-2026-68426 - Linux Kernel xfrm Async Crypto Stale skb Use-After-Free CVE-2026-68160 - Linux Kernel Ceph Pre-Auth Snaptrace Out-of-Bounds Read CVE-2026-68159 - Linux Kernel libceph pg_temp/pg_upmap Stack Out-of-Bounds Write CVE-2026-68158 - Linux Kernel libceph OSDMap Multiplication Overflow CVE-2026-68136 - Linux Kernel GRO Double Aggregation NULL Dereference CVE-2026-64541 - Linux Kernel net/smc smc_cdc_rx_handler() Socket Use-After-Free CVE-2026-64450 - Linux Kernel TIPC Broadcast Gap ACK Out-of-Bounds Read CVE-2026-64387 - Linux Kernel SMB Client Query Directory Replay Double-Free CVE-2026-64386 - Linux Kernel SMB Client Query Info Replay Double-Free CVE-2026-64385 - Linux Kernel SMB Client IOCTL Replay Double-Free CVE-2026-64384 - Linux Kernel SMB Client Change Notify Replay Double-Free CVE-2026-64383 - Linux Kernel SMB Client Flush Replay Double-Free CVE-2026-64355 - Linux Kernel BPF devmap Fragmented Frame Out-of-Bounds Access CVE-2026-64268 - Linux Kernel RDMA/siw Read Response Out-of-Bounds Write CVE-2026-63912 - Linux Kernel IPsec ESP Page Fragment Handling Flaw CVE-2026-63922 - Linux Kernel IPv6 Extension Header Pointer Handling Flaw CVE-2026-63924 - Linux Kernel IPv6 Jumbo Header Pointer Handling Flaw CVE-2026-63984 - Linux Kernel IPv6 RPL Header Length Overflow CVE-2026-63994 - Linux Kernel Tunnel PMTU Use-After-Free CVE-2026-64106 - Linux Kernel KVM ARM64 VGIC ITS Restore Validation Flaw CVE-2026-64564 - Linux Kernel SCTP ASCONF DEL-IP Use-After-Free CVE-2026-64530 - Linux Kernel net/sched cls_api Use-After-Free CVE-2026-53246 - Linux Kernel SCTP COOKIE_ECHO Cached INIT Out-of-Bounds Read CVE-2026-53224 - Linux Kernel SCTP Cookie INIT and Address List Out-of-Bounds Read CVE-2026-53131 - Linux Kernel Netfilter Ethernet Header Out-of-Bounds Access CVE-2026-52986 - Linux Kernel Netfilter SIP Conntrack Out-of-Bounds Read CVE-2026-64320 - Linux Kernel nvmet Discovery Get Log Page Pre-Auth Out-of-Bounds Heap Read CVE-2026-74597 - Linux Kernel IPv6 Tunnel Stale HAO Metadata Out-of-Bounds Access CVE-2026-74473 - Linux Kernel vxlan route_shortcircuit() Network Header Out-of-Bounds Read CVE-2026-80725 - Linux Kernel GRO BIG TCP Aggregation Validation Out-of-Bounds Write CVE-2026-72129 - Linux Kernel nvmet-rdma Inline Data Offset Length Underflow CVE-2026-90414 - Linux Kernel IB/isert Over-Declared Data Segment Out-of-Bounds Read CVE-2026-72398 - Linux Kernel SCTP COOKIE-ECHO Missing INIT Re-Verification CVE-2026-89702 - Linux Kernel NFSD fh_verify Tracepoint Sockaddr Slot Overflow CVE-2026-80976 - Linux Kernel seg6 Stale IP6CB Out-of-Bounds Read After Decapsulation CVE-2026-89636 - Linux Kernel SMB Client DFS Cache tgthint Use-After-Free CVE-2026-74616 - Linux Kernel XDP Clone skb_shared_info Tailroom Overrun CVE-2026-80714 - Linux Kernel IPVS One-Packet Flag Synced Connection Use-After-Free CVE-2026-89533 - Linux Kernel svcrdma read_chunk_range Offset Arithmetic Underflow CVE-2026-74267 - Linux Kernel net/sched sch_codel Peek Backlog Wild Memory Access CVE-2026-74406 - Linux Kernel vxlan GRO Null Pointer Dereference CVE-2026-74608 - Linux Kernel SMB Client cifs_try_adding_channels Use-After-Free CVE-2026-72323 - Linux Kernel IPv4 IGMP Timer Use-After-Free CVE-2026-74476 - Linux Kernel veth frag_list XDP AF_XDP Copy-Mode Crash CVE-2026-89482 - Linux Kernel nvme-tcp WRITE_ZEROES C2HData Wild Memory Access CVE-2026-74586 - Linux Kernel SCTP new_transport Use-After-Free on Peer Removal CVE-2026-64319 - Linux Kernel nvmet-auth DHCHAP_REPLY Pre-Auth Out-of-Bounds Read CVE-2026-72322 - Linux Kernel IPv6 MLD Delayed Work Use-After-Free CVE-2026-74480 - Linux Kernel Bridge Fast-Leave Port Group Use-After-Free CVE-2026-100075 - Linux Kernel RDMA/srpt rw_ctx Unwind Counter Desync CVE-2026-74744 - Linux Kernel ipvlan Missing Headroom/Tailroom Reservation CVE-2026-74752 - Linux Kernel SCTP Cookie AUTH State Validation CVE-2026-89674 - Linux Kernel NFSD Layoutget XDR Length Miscalculation CVE-2026-72098 - Linux Kernel dm-verity FEC Erasure Buffer Overflow CVE-2026-90413 - Linux Kernel IB/isert Login PDU Over-Declared Length Out-of-Bounds Read CVE-2026-74688 - Linux Kernel SCTP Queued Control Chunk Transport Use-After-Free CVE-2026-74493 - Linux Kernel net/smc Link Group Termination Socket Use-After-Free CVE-2026-74398 - Linux Kernel IPv6 addrconf DAD Failure State Race Use-After-Free CVE-2026-72399 - Linux Kernel enetc XDP Frame BD Count Out-of-Bounds Write CVE-2026-89479 - Linux Kernel SCTP Bundled Chunk Association Use-After-Free CVE-2026-90104 - Linux Kernel NFSv4.</description>
+    </item>
+    <item>
+      <title>Configure SAT bootprep CFS Layers</title>
+      <link>/docs-csm/en-17/operations/rapid_release_update/configure_cfs/</link>
+      <pubDate>Sat, 14 Nov 2026 03:36:02 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/rapid_release_update/configure_cfs/</guid>
+      <description>Configure SAT bootprep CFS Layers Before running any IUF stages that use sat bootprep, you must add the csm-security layer to your bootprep input file.&#xA;(ncn-m001#) Locate your management node bootprep configuration.&#xA;If a previous CSM install or upgrade has been performed, the bootprep file is typically already in your admin directory (e.g., /etc/cray/upgrade/csm/admin/). This may be a site-customized version of the default recipe bootprep, or a completely custom file. Identify whichever bootprep file is actively used for your management node CFS configurations.</description>
+    </item>
+    <item>
+      <title>Prepare Images</title>
+      <link>/docs-csm/en-17/operations/rapid_release_update/image_preparation/</link>
+      <pubDate>Sat, 14 Nov 2026 03:36:02 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/rapid_release_update/image_preparation/</guid>
+      <description>Prepare Images Prepare the new images only after product delivery and CFS configuration have succeeded. This stage rebuilds NCN images (master, worker, storage) using sat bootprep. The images are built using the CFS configurations created during update-cfs-config, which include the csm-security layer with security patches.&#xA;Note: Building new management node images will take about an hour.&#xA;(ncn-m001#) Run the prepare-images stage.&#xA;iuf -a ${ACTIVITY_NAME} -m ${MEDIA_DIR} run \ -bm ${BOOTPREP_FILE} -sv ${SITE_VARS} -rv ${RECIPE_VARS} \ -r prepare-images After prepare-images completes, identify the image IDs and CFS configurations it created.</description>
+    </item>
+    <item>
+      <title>Deploying Rapid Release Update with IUF</title>
+      <link>/docs-csm/en-17/operations/rapid_release_update/installation_iuf/</link>
+      <pubDate>Sat, 14 Nov 2026 03:36:03 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/rapid_release_update/installation_iuf/</guid>
+      <description>Deploying Rapid Release Update with IUF This procedure describes how to deploy a Rapid Release Update(RRU) to an operational CSM system using the Install and Upgrade Framework (IUF). It updates the operational CSM release with the CVE patches from csm-security product. The kernels of all the NCNs are updated using CFS to create new NCN images. NCNs are rebooted with the new image to complete the deployment.&#xA;This procedure is limited to the deployment of the new images to management nodes (NCNs) only.</description>
+    </item>
+    <item>
+      <title>Management Nodes Rollout</title>
+      <link>/docs-csm/en-17/operations/rapid_release_update/management_nodes_rollout/</link>
+      <pubDate>Sat, 14 Nov 2026 03:36:03 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/rapid_release_update/management_nodes_rollout/</guid>
+      <description>Management Nodes Rollout This section updates the kernel running on management NCNs.&#xA;Storage Nodes Worker Nodes Master Nodes References Next Steps Important: csm-security includes kernel updates, this requires all node types to be rebooted into a new image. The standard docs-csm non-CSM-upgrade workflow (section 2.2) cannot be used here, because it only applies CFS configuration to master and storage nodes without rebooting them. To ensure that all management nodes are rebuilt to include these new csm-security fixes, follow the full image rollout procedures below for all management node types.</description>
+    </item>
+    <item>
+      <title>Post-Rollout Verification</title>
+      <link>/docs-csm/en-17/operations/rapid_release_update/post_rollout_verification/</link>
+      <pubDate>Sat, 14 Nov 2026 03:36:03 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/rapid_release_update/post_rollout_verification/</guid>
+      <description>Post-Rollout Verification Post-Rollout Verification Steps Stop the typescript References Next Steps 1. Post-Rollout Verification Steps After all nodes are rolled out, validate the system:&#xA;Online: Validate CSM Health On-system: /usr/share/doc/csm/operations/validate_csm_health.md Confirm all management nodes are running the expected kernel:&#xA;pdsh -w $(echo $(ceph orch host ls | grep ncn | cut -f1 -d&amp;#34; &amp;#34; | xargs) $(kubectl get nodes | grep ncn | cut -f1 -d&amp;#34; &amp;#34; | xargs) | sed &amp;#39;s/ /,/g&amp;#39;) &amp;#39;uname -r&amp;#39; |dshbak -c Example output:</description>
+    </item>
+    <item>
+      <title>Preparation steps</title>
+      <link>/docs-csm/en-17/operations/rapid_release_update/prerequisites/</link>
+      <pubDate>Sat, 14 Nov 2026 03:36:03 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/rapid_release_update/prerequisites/</guid>
+      <description>Preparation steps Start typescript Ensure latest documentation installed Health validation Prepare for the install Upload Product Media Check and clean old images on storage nodes Next Steps 1. Start typescript (ncn-m001#) If a typescript session is already running in the shell, then first stop it with the exit command.&#xA;(ncn-m001#) Start a typescript.&#xA;script -af /root/rru.$(date +%Y%m%d_%H%M%S).prepare_for_upgrade.txt export PS1=&amp;#39;\u@\H \D{%Y-%m-%d} \t \w # &amp;#39; If additional shells are opened during this procedure, then record those with typescripts as well.</description>
+    </item>
+    <item>
+      <title>Product Delivery and Update CFS Configuration</title>
+      <link>/docs-csm/en-17/operations/rapid_release_update/product_delivery/</link>
+      <pubDate>Sat, 14 Nov 2026 03:36:03 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/rapid_release_update/product_delivery/</guid>
+      <description>Product Delivery and Update CFS Configuration Execute the IUF process-media through deliver-product stages Update CFS Configuration Next steps 1. Execute the IUF process-media through deliver-product stages This stage extracts the tarball, validates the product manifest, uploads RPMs to Nexus, pushes CFS content to Gitea, and registers the product in the product catalog.&#xA;(ncn-m001#) Run from process-media through deliver-product.&#xA;Note: For csm-security, there are no required manual actions between pre-install-check and deliver-product, so these stages can be run in a single command.</description>
+    </item>
+    <item>
+      <title>Troubleshooting RRU Deploy</title>
+      <link>/docs-csm/en-17/operations/rapid_release_update/troubleshooting/</link>
+      <pubDate>Sat, 14 Nov 2026 03:36:03 +0000</pubDate>
+      <guid>/docs-csm/en-17/operations/rapid_release_update/troubleshooting/</guid>
+      <description>Troubleshooting RRU Deploy Known Issues Storage node cloud-init fails with &amp;lsquo;Timed out waiting for device&amp;rsquo; error Master node assign-ncn-images.sh fails with &amp;lsquo;Error: Error received from server: 403 Forbidden&amp;rsquo; Secret kubeadm-certs was not found in the kube-system Namespace 1. Storage node cloud-init fails with &amp;lsquo;Timed out waiting for device&amp;rsquo; error 1.1. Observed Error This error can be observed from a storage node&amp;rsquo;s console.&#xA;[ TIME ] Timed out waiting for device /dev/disk/by-label/CEPHETC.</description>
+    </item>
+  </channel>
+</rss>

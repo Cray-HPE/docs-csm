@@ -1,0 +1,301 @@
+#
+# MIT License
+#
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: vcs-upload
+spec:
+  entrypoint: main
+  templates:
+    ### Main Steps ###
+    - name: main
+      metrics:
+        prometheus:
+        - name: operation_counter
+          help: "Count of step execution by result status"
+          labels:
+            - key: "opname"
+              value: "vcs-upload"
+            - key: stage
+              value: "deliver-product"
+            - key: type
+              value: "product"
+            - key: pname
+              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
+            - key: pversion
+              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
+            - key: status
+              value: "{{status}}"
+          counter:
+            value: "1"
+      inputs:
+        parameters:
+          - name: auth_token
+          - name: global_params
+      steps:
+        - - name: start-operation
+            templateRef:
+              name: workflow-template-record-time-template
+              template: record-time-template
+        - - name: get-vcs-secrets
+            template: get-vcs-secrets-template
+        - - name: gitea-upload-content
+            template: gitea-upload-content
+            arguments:
+              parameters:
+                - name: vcs_user_credentials_secret_name
+                  value: "{{steps.get-vcs-secrets.outputs.parameters.secret_name}}"
+                - name: cf_import_product_name
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
+                - name: cf_import_product_version
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
+                - name: cf_import_content_hostpath # parent path + content.vcs.path from manifest
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.stage_params.process-media.current_product.parent_directory')}}/{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.content.vcs.path')}}"
+                - name: cf_import_gitea_org
+                  value: cray
+                - name: cf_import_gitea_repo
+                  value: >
+                    {{="repo_name" in jsonpath(inputs.parameters.global_params, "$.product_manifest.current_product.manifest.content.vcs") ?
+                    jsonpath(inputs.parameters.global_params, "$.product_manifest.current_product.manifest.content.vcs.repo_name") :
+                    ""}}
+                - name: cf_import_gitea_url
+                  value: "https://api-gw-service-nmn.local/vcs"
+        - - name: vcs-update-product-catalog
+            templateRef:
+              name: update-product-catalog-template
+              template: catalog-update
+            arguments:
+              parameters:
+              - name: product-name
+                value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
+              - name: product-version
+                value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
+              - name: yaml-content
+                value: "{{steps.gitea-upload-content.outputs.parameters.vcs-upload-content-results}}"
+        - - name: cleanup
+            template: cleanup-template
+            arguments:
+              parameters:
+                - name: vcs_user_credentials_secret_name
+                  value: "{{steps.get-vcs-secrets.outputs.parameters.secret_name}}"
+        - - name: end-operation
+            templateRef:
+              name: workflow-template-record-time-template
+              template: record-time-template
+        - - name:  prom-metrics
+            template: prom-metrics
+            arguments:
+              parameters:
+              - name: opstart
+                value: "{{steps.start-operation.outputs.result}}"
+              - name: opend
+                value: "{{steps.end-operation.outputs.result}}"
+              - name: pdname
+                value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
+              - name: pdversion
+                value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
+    - name: prom-metrics
+      inputs:
+        parameters:
+        - name: opstart
+        - name: opend
+        - name: pdname
+        - name: pdversion
+      metrics:
+        prometheus:
+          - name: operation_time
+            help: "Duration gauge by operation name in seconds"
+            labels:
+              - key: opname
+                value: "vcs-upload"
+              - key: stage
+                value: "deliver-product"
+              - key: type
+                value: "product"
+              - key: pdname
+                value: "{{inputs.parameters.pdname}}"
+              - key: pdversion
+                value: "{{inputs.parameters.pdversion}}"
+              - key: opstart
+                value: "{{inputs.parameters.opstart}}"
+              - key: opend
+                value: "{{inputs.parameters.opend}}"
+            gauge:
+              value: "{{outputs.parameters.diff-time-value}}"
+      outputs:
+        parameters:
+          - name: diff-time-value
+            globalName: diff-time-value
+            valueFrom:
+              path: /tmp/diff_time.txt
+      container:
+        image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
+        command: [sh, -c]
+        args: ["DIFF_TIME=$(expr {{inputs.parameters.opend}} - {{inputs.parameters.opstart}}); echo $DIFF_TIME; echo $DIFF_TIME > /tmp/diff_time.txt"]
+    ### Templates ###
+    ## get-vcs-secrets-template ##
+    - name: get-vcs-secrets-template
+      nodeSelector:
+        kubernetes.io/hostname: ncn-m001
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+      metadata:
+        annotations:
+          sidecar.istio.io/inject: "false"
+      outputs:
+        parameters:
+          - name: secret_name
+            valueFrom:
+              path: /tmp/secret_name
+      retryStrategy:
+        limit: "2"
+        retryPolicy: "Always"
+        backoff:
+          duration: "10s" # Must be a string. Default unit is seconds. Could also be a Duration, e.g.: "2m", "6h", "1d"
+          factor: "2"
+          maxDuration: "1m"
+      script:
+        image: artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
+        command: [bash]
+        source: |
+          function sync_item() {
+            item_name="$1"
+            source_ns="$2"
+            destination_name="$3-$RANDOM"
+            destination_ns="$4"
+            if kubectl get $item_name -n $source_ns &> /dev/null; then
+              echo "Syncing $item_name from $source_ns to $destination_ns as $destination_name"
+              kubectl get $item_name -n $source_ns -o json | \
+                jq 'del(.metadata.namespace)' | \
+                jq 'del(.metadata.creationTimestamp)' | \
+                jq 'del(.metadata.resourceVersion)' | \
+                jq 'del(.metadata.selfLink)' | \
+                jq 'del(.metadata.uid)' | \
+                jq 'del(.metadata.ownerReferences)' | \
+                jq 'del(.metadata.name)' | \
+                jq '.metadata |= . + {"name":"'$destination_name'"}' | \
+                kubectl apply -n $destination_ns -f -
+                return $?
+            else
+              echo "Didn't find $item_name in the $source_ns namespace"
+              return 1
+            fi
+          }
+          sync_item secret/vcs-user-credentials services vcs-user-credentials-argo argo
+          rc=$?
+          echo $destination_name >> /tmp/secret_name
+          exit $rc
+    ## gitea-upload-content ##
+    - name: gitea-upload-content
+      nodeSelector:
+        kubernetes.io/hostname: ncn-m001
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+      metadata:
+        annotations:
+          sidecar.istio.io/inject: "false"
+      inputs:
+        parameters:
+          - name: vcs_user_credentials_secret_name
+          - name: cf_import_gitea_url
+          - name: cf_import_product_name
+          - name: cf_import_product_version
+          - name: cf_import_gitea_org
+          - name: cf_import_gitea_repo
+          - name: cf_import_content_hostpath
+      outputs:
+        parameters:
+          - name: vcs-upload-content-results
+            valueFrom:
+              path: /results/records.yaml
+              default: "{}"
+      container:
+        image: artifactory.algol60.net/csm-docker/stable/cf-gitea-import:1.9.4
+        command:
+          - "/bin/sh"
+        args: ["-c", "/opt/csm/cf-gitea-import/argo_entrypoint.sh"]
+        env:
+          - name: IUF_LOGGING
+            value: "true"
+          - name: CF_IMPORT_GITEA_USER
+            valueFrom:
+              secretKeyRef:
+                name: "{{inputs.parameters.vcs_user_credentials_secret_name}}"
+                key: vcs_username
+          - name: CF_IMPORT_GITEA_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: "{{inputs.parameters.vcs_user_credentials_secret_name}}"
+                key: vcs_password
+          - name: CF_IMPORT_GITEA_URL
+            value: "{{inputs.parameters.cf_import_gitea_url}}"
+          - name: CF_IMPORT_PRODUCT_NAME
+            value: "{{inputs.parameters.cf_import_product_name}}"
+          - name: CF_IMPORT_PRODUCT_VERSION
+            value: "{{inputs.parameters.cf_import_product_version}}"
+          - name: CF_IMPORT_GITEA_ORG
+            value: "{{inputs.parameters.cf_import_gitea_org}}"
+          - name: CF_IMPORT_GITEA_REPO
+            value: "{{inputs.parameters.cf_import_gitea_repo}}"
+          - name: CF_IMPORT_CONTENT
+            value: /content
+        volumeMounts:
+          - name: content
+            mountPath: /content
+          - name: results
+            mountPath: /results
+          - name: certs
+            mountPath: /usr/local/share/ca-certificates
+      volumes:
+        - name: content
+          hostPath:
+            # /etc/cray/upgrade/csm
+            path: "{{inputs.parameters.cf_import_content_hostpath}}"
+        - name: results
+          emptyDir: {}
+        - name: certs
+          configMap:
+            name: cray-configmap-ca-public-key
+    ## cleanup-template ##
+    ## Remove the secret created earlier.
+    - name: cleanup-template
+      inputs:
+        parameters:
+          - name: vcs_user_credentials_secret_name
+            value: "{{steps.get-vcs-secrets.outputs.parameters.secret_name}}"
+      nodeSelector:
+        kubernetes.io/hostname: ncn-m001
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+      metadata:
+        annotations:
+          sidecar.istio.io/inject: "false"
+      script:
+        image: artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
+        command: [bash]
+        source: |
+          kubectl -n argo delete secret/{{inputs.parameters.vcs_user_credentials_secret_name}}

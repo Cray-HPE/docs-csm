@@ -1,0 +1,103 @@
+#
+# MIT License
+#
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: before-each-node-storage-workflow
+  namespace: argo
+spec:
+  templates:
+    - name: main
+      inputs:
+        parameters:
+          - name: dryRun
+          - name: targetNcn
+          - name: imageId
+          - name: desiredCfsConfig
+      dag:
+        tasks:
+          - name: verify-bss-runcmd
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                    TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+                      -d client_id=admin-client \
+                      -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                      https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+                    TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                        jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+                    cloud_init_script=$(cray bss bootparameters list --name ${TARGET_XNAME} --format=json|jq -r '.[]|.["cloud-init"]|.["user-data"].runcmd' | grep "storage-ceph-cloudinit.sh") || cloud_init_script=""
+                    if [[ -n $cloud_init_script ]]; then
+                      # fix BSS run command
+                      python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
+                      # verify the run command has been fixed
+                      cloud_init_script=$(cray bss bootparameters list --name ${TARGET_XNAME} --format=json|jq -r '.[]|.["cloud-init"]|.["user-data"].runcmd' | grep "storage-ceph-cloudinit.sh")
+                      if [[ -n $cloud_init_script ]]; then
+                        echo "ERROR: There was an issue removing 'storage-ceph-cloudinit.sh' from the BSS run command. Run 'python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py' to fix this manually."
+                        exit 1
+                      fi
+                    else
+                      echo "BSS run command is correct."
+                    fi
+          - name: validate-boot-loader
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                    if [[ ! -f /opt/cray/tests/install/ncn/scripts/check_bootloader.sh ]]; then 
+                      echo "Error: this file is not present /opt/cray/tests/install/ncn/scripts/check_bootloader.sh on ncn-m001."
+                      exit 1
+                    fi
+                    scp /opt/cray/tests/install/ncn/scripts/check_bootloader.sh $TARGET_NCN:/opt/cray/csm/scripts/check_bootloader.sh
+                    ssh $TARGET_NCN '/opt/cray/csm/scripts/check_bootloader.sh; rm -rf /metal/recovery/*'
+                    echo "Successfully checked bootloader on $TARGET_NCN and removed /metal/recovery."
+          - name: set-bss-image-and-cfs-config
+            dependencies:
+            - verify-bss-runcmd
+            templateRef:
+              name: set-bss-image-cfs-config
+              template: main
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: targetNcn
+                  value: "{{inputs.parameters.targetNcn}}"
+                - name: imageId
+                  value: "{{inputs.parameters.imageId}}"
+                - name: desiredCfsConfig
+                  value: "{{inputs.parameters.desiredCfsConfig}}"

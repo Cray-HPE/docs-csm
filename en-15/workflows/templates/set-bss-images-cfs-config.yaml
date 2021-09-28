@@ -1,0 +1,125 @@
+#
+# MIT License
+#
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: set-bss-image-cfs-config
+  namespace: argo
+spec:
+  entrypoint: main
+  templates:
+    - name: main
+      inputs:
+        parameters:
+          - name: targetNcn
+          - name: dryRun
+          - name: desiredCfsConfig
+          - name: imageId
+      dag:
+        tasks:
+        - name: update-image-in-bss
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+                    -d client_id=admin-client \
+                    -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+                  TARGET_NCN={{inputs.parameters.targetNcn}}
+                  TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                      jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+
+                  # set image to boot into in BSS
+                  IMAGE_ID={{inputs.parameters.imageId}}
+
+                  if [[ -n $IMAGE_ID ]]; then
+                    # USE BELOW COMMAND ONCE LIBCSM IS UPDATED IN CSM
+                    # bss-set-image --xnames $TARGET_XNAME --image_id $IMAGE_ID
+                    
+                    # BELOW IS TEMPORARY UNTIL LIBCSM IS UPDATED
+                    image_manifest_str=$(cray ims images describe $IMAGE_ID --format json | jq '.link.path')
+                    image_manifest_str=${image_manifest_str#*s3://}
+                    bucket="$( cut -d '/' -f 1 <<< "$image_manifest_str" )"
+                    bucket_rm="${bucket}/"
+                    path=${image_manifest_str#*${bucket_rm}}
+                    path=${path%?}
+
+                    temp_file="/tmp/$(echo $RANDOM | md5sum | head -c 21; echo).json"
+                    cray artifacts get $bucket $path $temp_file
+
+                    metal_image=$(jq '.artifacts | map({"path": .link.path, "type": .type}) | .[] | select( .type == "application/vnd.cray.image.rootfs.squashfs") | .path ' < $temp_file)
+                    echo "Setting metal.server image to: $metal_image"
+                    kernel_image=$(jq '.artifacts | map({"path": .link.path, "type": .type}) | .[] | select( .type == "application/vnd.cray.image.kernel") | .path ' < $temp_file)
+                    kernel_image=$(echo "$kernel_image" | tr -d '"')
+                    echo "Setting kernel image to: $kernel_image"
+                    initrd_image=$(jq '.artifacts | map({"path": .link.path, "type": .type}) | .[] | select( .type == "application/vnd.cray.image.initrd") | .path ' < $temp_file)
+                    initrd_image=$(echo "$initrd_image" | tr -d '"')
+                    echo "Setting initrd image to: $initrd_image"
+
+                    echo "INFO  Changing boot image in bss to $IMAGE_ID"
+                    METAL_SERVER=$(cray bss bootparameters list --hosts "${TARGET_XNAME}" --format json | jq '.[] |."params"' \
+                    | awk -F 'metal.server=' '{print $2}' \
+                    | awk -F ' ' '{print $1}')
+                    NEW_METAL_SERVER=$metal_image
+                    PARAMS=$(cray bss bootparameters list --hosts "${TARGET_XNAME}" --format json | jq '.[] |."params"' | \
+                        sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" | \
+                        tr -d \")
+                    cray bss bootparameters update --hosts "${TARGET_XNAME}" \
+                      --kernel $kernel_image \
+                      --initrd $initrd_image \
+                      --params "${PARAMS}"
+                  else
+                    echo "INFO  No Image ID was specified for the boot image. The image that will be booted is the current image in BSS."
+                  fi
+        - name: update-cfs-config
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+                    -d client_id=admin-client \
+                    -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+                  TARGET_NCN={{inputs.parameters.targetNcn}}
+                  TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                      jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+                  
+                  DESIRED_CFS_CONFIG={{inputs.parameters.desiredCfsConfig}}
+                  if [[ -n $DESIRED_CFS_CONFIG ]]; then
+                    echo "INFO  Changing CFS configuration to $DESIRED_CFS_CONFIG"
+                    cray cfs components update ${TARGET_XNAME} --enabled false --desired-config "${DESIRED_CFS_CONFIG}"
+                  else
+                    echo "INFO  No desired CFS configuration was specified so the CFS configuration after reboot will be the current CFS configuration."
+                  fi
