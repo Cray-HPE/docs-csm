@@ -1,0 +1,124 @@
+#
+# MIT License
+#
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: post-migrate-cilium 
+  namespace: argo
+spec:
+  entrypoint: main
+  templates:
+    - name: main
+      inputs:
+        parameters:
+          - name: dryRun
+      dag:
+        tasks:
+        - name: restore-network-policies
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  if kubectl -n argo get cm stash-netpol -o jsonpath='{.data.netpol\.yaml}' > /tmp/netpol-out.yaml; then
+                    kubectl apply -f /tmp/netpol-out.yaml
+                    kubectl -n argo delete cm stash-netpol
+                  fi
+                  kubectl get netpol -A
+                  rm -f /tmp/netpol-out.yaml
+        - name: validate-cilium-content
+          dependencies:
+            - restore-network-policies
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  if [ ! -r /srv/cray/resources/common/cilium-cli-helm-values-migration.yaml ]; then
+                    echo "Cilium content not found"
+                    exit 1
+                  else
+                    echo "Found Cilium content"
+                  fi
+        - name: upgrade-cilium-chart 
+          dependencies:
+            - validate-cilium-content
+          templateRef:
+            name: ssh-template 
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  echo "Upgrading cilium chart"
+                  source /srv/cray/resources/common/vars.sh
+                  export CILIUM_OPERATOR_REPLICAS=$(craysys metadata get cilium-operator-replicas)
+                  export CILIUM_MIGRATION_TUNNEL_PORT=8473
+                  export CILIUM_MIGRATION_POD_CIDR=10.48.0.0/16
+                  envsubst < /srv/cray/resources/common/cilium-cli-helm-values-migration.yaml > /etc/cray/kubernetes/cilium-cli-helm-values.yaml
+                  helm upgrade -f /etc/cray/kubernetes/cilium-cli-helm-values.yaml cilium /srv/cray/resources/common/cilium-${CILIUM_CNI_VERSION} --namespace kube-system --set prometheus.enabled=true --set operator.prometheus.enabled=true --set hubble.enabled=true --set hubble.metrics.enableOpenMetrics=true --set hubble.metrics.enabled="{dns,drop,tcp,flow,port-distribution,icmp,httpV2:exemplars=true;labelsContext=source_ip\,source_namespace\,source_workload\,destination_ip\,destination_namespace\,destination_workload\,traffic_direction}" --set operator.unmanagedPodWatcher.restart=true --set cni.customConf=false   --set policyEnforcementMode=default   --set bpf.hostLegacyRouting=false
+                  kubectl wait deployment -n kube-system cilium-operator --for condition=Available=True --timeout=30s
+                  kubectl wait pods -n kube-system -l k8s-app=cilium --for condition=Ready --timeout=90s
+        - name: delete-cilium-node-config
+          dependencies:
+            - upgrade-cilium-chart
+          templateRef:
+            name: kubectl-and-curl-template 
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  kubectl delete -n kube-system ciliumnodeconfig cilium-default 
+        - name: remove-weave 
+          dependencies:
+            - delete-cilium-node-config 
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  source /srv/cray/resources/common/vars.sh
+                  export PODS_CIDR=$(craysys metadata get kubernetes-pods-cidr)
+                  export WEAVE_MTU=$(craysys metadata get kubernetes-weave-mtu)
+                  envsubst < /srv/cray/resources/common/weave.yaml > /tmp/weave.yaml 
+                  kubectl delete -f /tmp/weave.yaml
+                  sleep 30
+      
