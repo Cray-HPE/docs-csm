@@ -1,0 +1,56 @@
+#
+# MIT License
+#
+# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+
+cray_thanos_rgw_user: "{{ thanos_rgw_user |default('Thanos') }}"
+cray_user_rgw_user: "{{ user_rgw_user |default('USER') }}"
+
+ceph_rgw_users:
+  - user_name: "{{ cray_sts_rgw_user }}"
+    user_display_name: "Security Token Service User"
+    role_name: "{{ cray_sts_rgw_user }}"
+    role_arn: "{{ cray_sts_role_arn }}"
+    policy_name: "{{ cray_sts_rgw_user }}_Policy"
+    policy_action: "\"s3:*\""
+    policy_resource: "\"arn:aws:s3:::*\""
+  - user_name: "{{ cray_user_rgw_user }}"
+    user_display_name: "User Service User"
+    role_name: "{{ cray_user_rgw_user }}"
+    role_arn: "arn:aws:iam:::user/{{ cray_user_rgw_user }}"
+    policy_name: "{{ cray_user_rgw_user }}_Policy"
+    policy_action: "\"s3:*\""
+    policy_resource: "\"arn:aws:s3:::user\",\"arn:aws:s3:::user/*\""
+  - user_name: "{{ cray_thanos_rgw_user }}"
+    user_display_name: "Thanos user"
+    role_name: "{{ cray_thanos_rgw_user }}"
+    role_arn: "arn:aws:iam:::user/{{ cray_thanos_rgw_user }}"
+    policy_name: "{{ cray_thanos_rgw_user }}_Policy"
+    policy_action: "\"s3:*\""
+    policy_resource: "\"arn:aws:s3:::thanos\",\"arn:aws:s3:::thanos/*\""
+
+ceph_rgw_buckets:
+  - bucket_name: thanos
+    bucket_policy: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\": [\"arn:aws:iam:::user/{{ cray_thanos_rgw_user }}\"]},\"Action\":[\"s3:*\"],\"Resource\":[\"arn:aws:s3:::thanos\",\"arn:aws:s3:::thanos/*\"]}]}"
+  - bucket_name: user
+    bucket_policy: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\": [\"arn:aws:iam:::user/{{ cray_user_rgw_user }}\"]},\"Action\":[\"s3:*\"],\"Resource\":[\"arn:aws:s3:::user\",\"arn:aws:s3:::user/*\"]}]}"
+

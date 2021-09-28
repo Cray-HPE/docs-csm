@@ -1,0 +1,229 @@
+#
+# MIT License
+#
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: ncn-lifecycle-rebuild-
+  labels:
+    target-ncns: "{{$length := len .TargetNcns }}{{range $index,$value := .TargetNcns }}{{$myvar := add $index 1}}{{if lt $myvar $length}}{{$value}}.{{else}}{{$value}}{{end}}{{ end }}"
+    type: rebuild
+    node-type: worker
+spec:
+  podMetadata:
+    annotations:
+      sidecar.istio.io/inject: "false"    
+  volumes:
+    - name: ssh
+      hostPath:
+        path: /root/.ssh
+        type: Directory
+    - name: host-usr-bin
+      hostPath:
+        path: /usr/bin
+        type: Directory
+    # the volumes below are needed for iuf-base-template
+    - name: ca-bundle
+      hostPath:
+        path: /var/lib/ca-certificates
+        type: Directory
+    # iuf needs to be specified but will not be used which is reasoning for using emptyDir'
+    - name: iuf
+      emptyDir:
+        sizeLimit: 1Mi
+    - name: podinfo
+      downwardAPI:
+        items:
+          - path: "labels"
+            fieldRef:
+              fieldPath: metadata.labels
+          - path: "annotations"
+            fieldRef:
+              fieldPath: metadata.annotations
+  # schedule workflow jobs asap
+  priorityCLassName: system-node-critical
+  # Pod GC strategy must be one of the following:
+  # * OnPodCompletion - delete pods immediately when pod is completed (including errors/failures)
+  # * OnPodSuccess - delete pods immediately when pod is successful
+  # * OnWorkflowCompletion - delete pods when workflow is completed
+  # * OnWorkflowSuccess - delete pods when workflow is successful
+  podGC:
+    strategy: OnPodCompletion
+  # allow workflow jobs running on master node
+  #   we may have a situation that all worker nodes
+  #   are marked as "being rebuilt" (cray.nls=ncn-w001)
+  tolerations:
+    - key: "node-role.kubernetes.io/master"
+      operator: "Exists"
+      effect: "NoSchedule"
+  affinity:
+    nodeAffinity:
+      # avoid putting workflow jobs onto workers that will be rebuilt
+      # this label is set onto each workers at beginning of workflow
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: cray.nls
+            operator: NotIn
+            values:
+            {{- range $index,$value := .TargetNcns }}
+            - {{$value -}}
+            {{- end }}
+      # try to use master nodes as much as possible
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 50
+          preference:
+            matchExpressions:
+            - key: node-role.kubernetes.io/master
+              operator: Exists
+  entrypoint: main
+  templates:
+    - name: main
+      dag:
+        tasks:
+          - name: before-all
+            templateRef:
+              name: before-all-hooks
+              template: main
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: targetNcns
+                  value: "{{$.TargetNcns}}"
+          {{- range $index,$value := .TargetNcns }}
+          - name: add-labels-{{$value}}
+            templateRef: 
+              name: add-labels
+              template: main
+            arguments: 
+              parameters:
+              - name: targetNcn
+                value: {{$value}}
+          - name: before-each-{{$value}}
+            dependencies:
+              - before-all
+              # each drain depends on previous drain action
+              # so we make sure only one node is drained at a time
+              {{ if ne $index 0 }}
+              - drain-{{ index $.TargetNcns (add $index -1) }}
+              {{ end }}
+            templateRef:
+              name: before-each-hooks
+              template: main
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: targetNcn
+                  value: "{{$value}}"
+          # drain: sync
+          #     Only one worker can be drained at a time
+          - name: drain-{{$value}}
+            dependencies:
+              - add-labels-{{$value}}
+              - before-all
+              - before-each-{{$value}}
+            templateRef:
+              name: drain-worker
+              template: main
+            arguments:
+              parameters:
+              - name: targetNcn
+                value: {{$value}}
+              - name: dryRun
+                value: "{{$.DryRun}}"
+              - name: imageId
+                value: "{{$.ImageId}}"
+              - name: desiredCfsConfig
+                value: "{{$.DesiredCfsConfig}}"
+          # wipe and reboot: parallel
+          #     once a worker node is drained from k8s
+          #     we can safely wipe and reboot this node
+          #     regardless of what state other nodes are
+          - name: wipe-and-reboot-{{$value}}
+            dependencies: 
+              - drain-{{$value}}
+            templateRef:
+              name: wipe-and-reboot-worker
+              template: main
+            arguments:
+              parameters:
+              - name: targetNcn
+                value: {{$value}}
+              - name: dryRun
+                value: "{{$.DryRun}}"
+              - name: imageId
+                value: "{{$.ImageId}}"
+              - name: desiredCfsConfig
+                value: "{{$.DesiredCfsConfig}}"
+              - name: bootTimeoutInSeconds
+                value: "{{$.BootTimeoutInSeconds}}"
+          # after each: parallel
+          #     once a worker node is rebooted
+          #     we need to run post boot hooks
+          - name: after-each-{{$value}}
+            dependencies:
+              - wipe-and-reboot-{{$value}}
+            templateRef:
+              name: after-each-hooks
+              template: main
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: targetNcn
+                  value: "{{$value}}"
+          # post rebuild: parallel
+          #     Post rebuild validation can be run in parallel
+          - name: post-rebuild-{{$value}}
+            dependencies: 
+              - after-each-{{$value}}
+            templateRef: 
+              name: post-rebuild-worker
+              template: main
+            arguments:
+              parameters:
+              - name: targetNcn
+                value: {{$value}}
+              - name: dryRun
+                value: "{{$.DryRun}}"
+              - name: switchPassword
+                value: "{{$.SwitchPassword}}"
+          {{- end }}
+          - name: after-all
+            dependencies:
+              # each drain depends on previous drain action
+              # so we make sure only one node is drained at a time
+              {{- range $index,$value := .TargetNcns }}
+              - post-rebuild-{{$value}}
+              {{- end }}
+            templateRef:
+              name: after-all-hooks
+              template: main
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: targetNcns
+                  value: "{{$.TargetNcns}}"
