@@ -1,0 +1,64 @@
+#
+# MIT License
+#
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: check-ceph-health
+  namespace: argo
+spec:
+  entrypoint: main
+  templates:
+    - name: main
+      inputs:
+        parameters:
+          - name: dryRun
+      dag:
+        tasks:
+          - name: check-ceph-health-task
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"  
+                - name: scriptContent
+                  value: |
+                    sleep_time=15
+                    max_retries=60
+                    attempt=1
+                    while [[ $attempt -le $max_retries ]]; do
+                      echo -e "\nChecking Ceph health status. Attempt ${attempt}/${max_retries}..."
+                      if ! /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -v true; then
+                        attempt=$(( attempt + 1 ))
+                        sleep $sleep_time
+                        # Archive new crash events to avoid them affecting overall Ceph health status
+                        # Crashes can still be investigated with ceph crash ls/ceph crash info.
+                        ceph crash archive-all
+                      else
+                        exit 0
+                      fi
+                    done
+                    echo "ERROR Ceph is unhealthy. Please run 'Ceph health detail' and investigate what is causing Ceph to be unhealthy".
+                    exit 1
