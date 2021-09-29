@@ -409,11 +409,21 @@ The configuration workflow described here is intended to help understand the exp
     ```
 
 <a name="check-for-unused-drives-on-utility-storage-nodes"></a>
+
 #### 3.3 Check for Unused Drives on Utility Storage Nodes
 
 > **`IMPORTANT:`** Do the following if NCNs are Gigabyte hardware. It is suggested (but optional) for HPE NCNs.
 >
 > **`IMPORTANT:`** the cephadm may output this warning "WARNING: The same type, major and minor should not be used for multiple devices.". You can ignore this warning.
+
+> **`IMPORTANT:`** Estimate the expected number of OSDs using the following table and using this equation:
+> 
+>  total_osds = (num of utility storage/ceph nodes) * (OSD count from table below for the appropriate hardware)
+
+| Hardware Manufacturer | OSD Drive Count (not including OS drives)|
+| :-------------------: | :---------------------------------------: |
+| GigaByte              | 12 |
+| HPE                   | 8  |
 
 ##### Option 1
 
@@ -425,6 +435,8 @@ The configuration workflow described here is intended to help understand the exp
     ncn-s# ceph -f json-pretty osd stat |jq .num_osds
     24
     ```
+
+   **`IMPORTANT:`** If the returned number of OSDs is == total_osds calulated, then you can skip the following steps.  If not, then please proceed with the below additional checks and remdiation steps.
 
 1. Compare your number of OSDs to your output which should resemble the example below. The number of drives will depend on the server hardware.
 
@@ -470,7 +482,7 @@ The configuration workflow described here is intended to help understand the exp
     24
     ```
 
-    If the numbers are equal, then you may need to fail your `ceph-mgr` daemon to get a fresh inventory.
+    If the numbers are equal, but less than the `total_osds` calulated, then you may need to fail your `ceph-mgr` daemon to get a fresh inventory.
 
     ```bash
     ncn-s# ceph mgr fail $(ceph mgr dump | jq -r .active_name)
@@ -507,7 +519,7 @@ The configuration workflow described here is intended to help understand the exp
     The field `available` would be `True` if Ceph sees the drive as empty and can
     be used, e.g.:
 
-    ```
+    ```bash
     Device Path               Size         rotates available Model name
     /dev/sda                  447.13 GB    False   False     SAMSUNG MZ7LH480
     /dev/sdb                  447.13 GB    False   False     SAMSUNG MZ7LH480
@@ -525,9 +537,12 @@ The configuration workflow described here is intended to help understand the exp
     ncn-s# cephadm shell -- ceph-volume inventory --format json-pretty | jq -r '.[]|select(.available==true)|.path'
     ```
 
-1. Wipe the drive ONLY after you have confirmed the drive is not being used by the current Ceph cluster via options 1, 2, or both.
+##### Wipe and Add Drives
+
+1. Wipe the drive `ONLY after you have confirmed the drive is not being used by the current Ceph cluster` via options 1, 2, or both.
 
     > The following example wipes drive `/dev/sdc` on `ncn-s002`. You should replace these values with the appropriate ones for your situation.
+
     ```bash
     ncn-s# ceph orch device zap ncn-s002 /dev/sdc --force
     ```
