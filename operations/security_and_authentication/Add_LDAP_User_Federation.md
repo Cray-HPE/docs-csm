@@ -280,15 +280,32 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         ncn-m001# ${CSM_DISTDIR}/hack/load-container-image.sh dtr.dev.cray.com/library/openjdk:11-jre-slim
         ```
 
-        **Troubleshooting:** If the output shows the skopeo.tar file cannot be found, ensure that the $CSM_DISTDIR directory looks correct, and contains the `dtr.dev.cray.com` directory that includes the originally installed docker images.
+        **Troubleshooting:** 
+        
+        * If the output shows the skopeo.tar file cannot be found, ensure that the $CSM_DISTDIR directory looks correct, and contains the `dtr.dev.cray.com` directory that includes the originally installed docker images.
 
-        The following is an example of the skopeo.tar file not being found:
+          The following is an example of the skopeo.tar file not being found:
 
-        ```bash
-        ++ podman load -q -i ./hack/../vendor/skopeo.tar
-        ++ sed -e 's/^.*: //'
-        + SKOPEO_IMAGE=
-        ```
+          ```bash
+          ++ podman load -q -i ./hack/../vendor/skopeo.tar
+          ++ sed -e 's/^.*: //'
+          + SKOPEO_IMAGE=
+          ```
+
+        * If the following overlay error is returned, it could be caused by an earlier podman invocation using a different configuration:
+
+          ```
+          "ERRO[0000] [graphdriver] prior storage driver overlay failed: 'overlay' is not supported over overlayfs, a mount_program is required: backing file system is unsupported for this graph driver"
+          ```
+
+          To recover podman, move the overlay directories to a backup folder as follows:
+
+          ```bash
+          ncn-m001# mkdir /var/lib/containers/storage/backup
+          ncn-m001# mv /var/lib/containers/storage/overlay* /var/lib/containers/storage/backup
+          ```
+
+          This should allow load-container-images.sh to succeed.
 
    2. Create (or update) `cert.jks` with the PEM-encoded CA certificate for an LDAP host.
 
@@ -352,7 +369,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
                 awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' > cacert.pem
         ```
 
-    1. Verify the issuer's certificate was properly extracted and saved in `cacert.pem`.
+    5. Verify the issuer's certificate was properly extracted and saved in `cacert.pem`.
 
         ```bash
         ncn-m001# cat cacert.pem
@@ -386,7 +403,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         -----END CERTIFICATE-----
         ```
 
-    2. Create `certs.jks`.
+    6. Create `certs.jks`.
 
         ```bash
         ncn-m001# podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool -importcert \
@@ -394,13 +411,13 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         -storepass password -noprompt
         ```
 
-    3. Create `certs.jks.b64` by base-64 encoding `certs.jks`.
+    7. Create `certs.jks.b64` by base-64 encoding `certs.jks`.
 
         ```bash
         ncn-m001# base64 certs.jks > certs.jks.b64
         ```
 
-    4.  Inject and encrypt `certs.jks.b64` into `customizations.yaml`.
+    8.  Inject and encrypt `certs.jks.b64` into `customizations.yaml`.
 
         ```bash
         ncn-m001# cat <<EOF | yq w - 'data."certs.jks"' "$(<certs.jks.b64)" | \
