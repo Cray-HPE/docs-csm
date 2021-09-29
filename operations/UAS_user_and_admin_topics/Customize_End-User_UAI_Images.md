@@ -47,7 +47,7 @@ A custom end-user UAI image can be any container image set up with the end-user 
     name: wlm-sessiontemplate-0.1.0
     ```
 
-    Alternatively, collect the sessiontemplate name used when performing the installation/configuration procedure in the Cray Operating System (COS) documentation repository. Near the end of that procedure, the step to create a BOS session to boot the compute nodes should contain the name.
+    Alternatively, collect the sessiontemplate name used during the Cray Operating System (COS) install. Refer to the "Install or Upgrade COS" procedure in the COS product stream documentation. Near the end of that procedure, the step to create a BOS session to boot the compute nodes should contain the name.
 
     ```
     ncn-w001# SESSION_NAME=wlm-sessiontemplate-0.1.0
