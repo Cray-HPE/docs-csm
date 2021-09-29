@@ -236,7 +236,7 @@ sections, but there is also a general troubleshooting topic.
    1. Next Topic
 
       After completion of the firmware update with FAS and the preparation of compute nodes, the CSM product stream has
-      been fully installed and configured. Refer to the _HPE Cray EX Installation and Configuration Guide 1.5 S-8000_
+      been fully installed and configured. Refer to the 1.5 _HPE Cray EX System Software Getting Started Guide S-8000_
       for other product streams to be installed and configured after CSM.
    <a name="troubleshooting_installation"></a>
 
