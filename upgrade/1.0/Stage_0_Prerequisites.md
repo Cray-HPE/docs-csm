@@ -94,7 +94,7 @@ Perform these steps to update `customizations.yaml`:
         ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --tarball-file [PATH_TO_CSM_TARBALL_FILE]
         ```
 
-**`IMPORTANT:`** If any errors are encountered then potential fixs should be displayed where the error occurred. `IF` the upgrade prequesites.sh script does not provide guidance, then open a support ticket for guidance before proceeding.
+**`IMPORTANT:`** If any errors are encountered then potential fixs should be displayed where the error occurred. `IF` the upgrade prequisites.sh script fails and does not provide guidance, try rerunning it. If the failure persists open a support ticket for guidance before proceeding.
 
 2. The script also runs the goss tests on the initial stable node (typically `ncn-m001`) where the latest version of CSM has been installed.
 
