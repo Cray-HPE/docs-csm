@@ -192,7 +192,11 @@ Execute ncnPostgresHealthChecks script and analyze the output of each individual
             INFO: running post_bootstrap
             INFO: trying to bootstrap a new cluster
          ```
-         Errors reported prior to the lock status, such as **ERROR: get_cluster** or **ERROR: ObjectCache.run ProtocolError('Connection broken: IncompleteRead(0 bytes read)', IncompleteRead(0 bytes read))** can be ignored.
+         Errors reported prior to the lock status can be ignored:
+         - **ERROR: get_cluster**
+         - **ERROR: ObjectCache.run ProtocolError('Connection broken: IncompleteRead(0 bytes read)', IncompleteRead(0 bytes read))**
+         - **ERROR: failed to update leader lock** 
+         
          If there is no Leader, refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#leader).
 
       - Verify the State of each cluster member is 'running'.
@@ -709,7 +713,7 @@ If one or more checks failed:
         1
         ```
 
-Additional test execution details can be found in `/opt/cray/tests/cmsdev.log`.
+Additional test execution details can be found in `/opt/cray/tests/cmsdev.log` on the node where the test was run.
 
 <a name="booting-csm-barebones-image"></a>
 ## 4. Booting CSM Barebones Image
