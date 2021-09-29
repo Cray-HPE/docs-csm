@@ -197,6 +197,30 @@ deployment "cray-dns-unbound" successfully rolled out
    ```bash
    ncn-m001# kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r  - '"0.9.6".configuration.import_date'
    ```
+
+### Verify updated images for CVE-2021-3711:
+
+1. Confirm the version of istio pilot image has `cray2` suffix:
+
+   ```bash
+   ncn-m001:~ # kubectl describe pod istiod- -n istio-system |grep Image:
+    Image:         dtr.dev.cray.com/cray/pilot:1.6.13-cray2
+   ```
+
+2. Confirm the version of cray-spire-tokens image is `0.4.1`:
+
+   ```bash
+   ncn-m001:~ # kubectl describe pod spire-server-0 -n spire |grep Image | grep spire-tokens:
+    Image:          dtr.dev.cray.com/cray/cray-spire-tokens:0.4.1
+   ```
+
+3. Confirm the version of hms-redfish-translation-service image is `1.8.8`:
+
+   ```bash
+   ncn-m001:~ # kubectl describe pod cray-hms-rts- -n services |grep Image: |grep hms
+    Image:          dtr.dev.cray.com/cray/hms-redfish-translation-service:1.8.8
+   ```
+
 ### Verify cray-sysmgmt-health changes:
 
 1. Confirm node-exporter is running on each storage node. This command can be run from a master node.  Validate that the result contains `go_goroutines` (replace ncn-s001 below with each storage node):
