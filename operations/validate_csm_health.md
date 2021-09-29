@@ -511,25 +511,9 @@ ncn# /opt/cray/csm/scripts/hms_verification/run_hms_ct_tests.sh
 ```
 
 The return value of the script is 0 if all CT tests ran successfully, non-zero
-if not.
-
-#### Running CT Tests Manually
-
-To run the tests manually:
-
-```
-ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resources.sh
-```
-
-Examine the output. If one or more failures occur, investigate the cause of each failure. See the [interpreting_hms_health_check_results](../troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
-
-Otherwise, run the HMS functional tests.
-
-```
-ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-resources.sh
-```
-
-Examine the output. If one or more failures occur, investigate the cause of each failure. See the [interpreting_hms_health_check_results](../troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
+if not.  On CT test failures the script will instruct the admin to look at the
+CT test log files.  If one or more failures occur, investigate the cause of
+each failure. See the [interpreting_hms_health_check_results](../troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
 
 <a name="hms-aruba-fixup"></a>
 ### 2.2 Aruba Switch SNMP Fixup

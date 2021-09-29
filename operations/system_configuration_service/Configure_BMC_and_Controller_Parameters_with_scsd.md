@@ -90,45 +90,11 @@ After the script runs, verify that it worked:
    -rw-r--r--    1 root     root          5781 May 10 15:36 powerfault_up.Node1
    ```
 
+## Debugging If Script Fails
 
-## Manual SSH Key Setting Process
-If for whatever reason this script fails, SSH keys can be set manually using the following process:
+If this script does not achieve the goal of setting SSH keys, check the following:
 
-
-1. Save the public SSH key for the root user.
-
-   ```bash
-   ncn# export SCSD_SSH_KEY=$(cat /root/.ssh/id_rsa.pub | sed 's/[[:space:]]*$//')
-   ```
-
-1. Generate a System Configuration Service configuration via the scsd tool.
-The admin must be authenticated to the Cray CLI before proceeding.
-
-   ```bash
-   ncn# cat > scsd_cfg.json <<DATA
-   {
-      "Force":false,
-      "Targets": $(cray hsm inventory redfishEndpoints list --format=json | jq '[.RedfishEndpoints[] | .ID]' | sed 's/^/ /'),
-      "Params":{
-         "SSHKey":"$(echo $SCSD_SSH_KEY)"
-      }
-   }
-   DATA
-   ```
-
-1. Inspect the generated scsd_cfg.json file.
-
-   Ensure the following are true before running the command below:
-
-   * The xname list looks valid/appropriate
-   * The SSHKey settings match the desired public key
-
-   ```bash
-   ncn# cray scsd bmc loadcfg create scsd_cfg.json
-   ```
-
-   Check the output to verify all hardware has been set with the correct keys. Passwordless SSH to the root
-   user should now function as expected.
-
-1. Verify correct SSH operation as shown above.
+* Make sure the SSH key is correct.
+* If --exclude= or --include= was used with the script, insure the correct XNames were specified.
+* Re-run the script with --debug=3 for verbose debugging output.  Look for things like missing BMCs, bad authentication token, bad communications with BMCs, etc.
 
