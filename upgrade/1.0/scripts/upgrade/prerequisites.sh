@@ -392,6 +392,8 @@ sed -i '/^\(  echo "logchange 1.0" >>"$CHRONY_CONF"$\)/a \ \ echo "initstepslew 
 rm -f etc/chrony.d/pool.conf
 # silence some of the noise mksquashfs creates
 sed -i 's/^mksquashfs.*/& 1>\/dev\/null/' srv/cray/scripts/common/create-kis-artifacts.sh
+# silence xattr/indoe errors
+sed -i 's/-xattrs/-no-xattrs/' srv/cray/scripts/common/create-kis-artifacts.sh
 # Create the new artifacts
 srv/cray/scripts/common/create-kis-artifacts.sh
 # set -e back
