@@ -155,6 +155,17 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+# Install the docs-csm on newly upgraded master
+state_name="INSTALL_DOCS_NEW_MASTER"
+state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    record_state "${state_name}" ${upgrade_ncn}
+    ssh $upgrade_ncn -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "rpm --force -Uvh ${DOC_RPM_NEXUS_URL}"
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 cat <<EOF
 
 NOTE:
