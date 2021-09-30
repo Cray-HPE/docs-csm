@@ -71,7 +71,7 @@ function ssh_keygen_keyscan() {
     upgrade_ncn="$1"
     ncn_ip=$(host ${upgrade_ncn} | awk '{ print $NF }')
     [ -n "${ncn_ip}" ]
-    # Since we may be called without set -e, we should check return codes after running commands
+    # Because we may be called without set -e, we should check return codes after running commands
     [ $? -ne 0 ] && return 1
     echo "${upgrade_ncn} IP address is ${ncn_ip}"
     ssh-keygen -R "${upgrade_ncn}" -f "${known_hosts}"

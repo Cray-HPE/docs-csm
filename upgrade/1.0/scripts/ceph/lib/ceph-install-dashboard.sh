@@ -29,7 +29,7 @@ function install_dashboard () {
       # Leaving a place where we can set the rgw-vip address
       # ceph dashboard set-rgw-api-host <host>
       ceph dashboard set-rgw-api-port 8080
-      # Putting option incase we need to enable/disable https
+      # Putting option in case we need to enable/disable https
       # ceph dashboard set-rgw-api-scheme <scheme>  # http or https
       # Need to investigate the below
       # ceph dashboard set-rgw-api-admin-resource <admin_resource>

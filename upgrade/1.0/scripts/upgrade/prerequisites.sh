@@ -63,7 +63,7 @@ if [[ -z ${TARBALL_FILE} ]]; then
     state_name="GET_CSM_TARBALL_FILE"
     state_recorded=$(is_state_recorded "${state_name}" $(hostname))
     if [[ $state_recorded == "0" ]]; then
-        # Since we are getting a new tarball
+        # Because we are getting a new tarball
         # this has to be a new upgrade
         # clean up myenv 
         # this is block/breaking 1.0 to 1.0 upgrade
@@ -123,7 +123,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     
   "${BASEDIR}"/CASMINST-2689.sh
 
-  # only fix ntp if we're coming from 0.9
+  # only fix ntp if we are coming from 0.9
   if [[ "$CSM1_EXISTS" == "false" ]]; then
   # Check if ncn-m001 is using itself for an upstream server
   if [[ "$(awk '/^server/ {print $2}' /etc/chrony.d/cray.conf)" == ncn-m001 ]] ||
@@ -392,7 +392,7 @@ sed -i '/^\(  echo "logchange 1.0" >>"$CHRONY_CONF"$\)/a \ \ echo "initstepslew 
 rm -f etc/chrony.d/pool.conf
 # silence some of the noise mksquashfs creates
 sed -i 's/^mksquashfs.*/& 1>\/dev\/null/' srv/cray/scripts/common/create-kis-artifacts.sh
-# silence xattr/indoe errors
+# silence xattr/inode errors
 sed -i 's/-xattrs/-no-xattrs/' srv/cray/scripts/common/create-kis-artifacts.sh
 # Create the new artifacts
 srv/cray/scripts/common/create-kis-artifacts.sh

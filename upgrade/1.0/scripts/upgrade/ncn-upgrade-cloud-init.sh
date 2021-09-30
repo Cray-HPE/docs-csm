@@ -14,7 +14,7 @@ upgrade_ncn=$1
 URL="https://api-gw-service-nmn.local/apis/sls/v1/networks"
 
 function on_error() {
-    echo "Error: $1.  Exiting"
+    echo "Error: $1. Exiting"
     exit 1
 }
 
@@ -92,9 +92,9 @@ patch_in_new_metadata() {
       && [[ -f "$switch_metadata" ]] \
       && [[ -f "$hmn_connections" ]] \
       && [[ -f "$system_config" ]]; then
-        echo "PITDATA not found but seed files are present.  Using those to generate new metadata..."
+        echo "PITDATA not found but seed files are present. Using those to generate new metadata..."
     else
-      echo "PITDATA not found.  Seed files needed to generate new cloud-init metadata."
+      echo "PITDATA not found. Seed files needed to generate new cloud-init metadata."
       echo "Re-create/re-populate the PITDATA partition"
       echo "or"
       echo "Copy seed files to /mnt/pitdata/prep"

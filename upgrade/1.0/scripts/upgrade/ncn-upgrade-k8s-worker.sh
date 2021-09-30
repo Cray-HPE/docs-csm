@@ -11,7 +11,7 @@ upgrade_ncn=$1
 
 . ${BASEDIR}/ncn-upgrade-common.sh ${upgrade_ncn}
 
-ssh_keygen_keyscan $1 || true # oror true to unblock rerun
+ssh_keygen_keyscan $1 || true # or true to unblock rerun
 
 cfs_config_status=$(cray cfs components describe $UPGRADE_XNAME --format json | jq -r '.configurationStatus')
 echo "CFS configuration status: ${cfs_config_status}"

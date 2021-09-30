@@ -16,7 +16,7 @@ upgrade that node.
 
 ## Upgrade Stages
 
-- [Stage 0 - Prequisites](Stage_0_Prerequisites.md)
+- [Stage 0 - Prerequisites](Stage_0_Prerequisites.md)
 - [Stage 1 - Ceph Initial Upgrade](Stage_1.md)
 - [Stage 2 - Ceph Node Image Upgrade](Stage_2.md)
 - [Stage 3 - Kubernetes Upgrade](Stage_3.md)
