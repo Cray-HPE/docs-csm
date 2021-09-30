@@ -436,7 +436,7 @@ The configuration workflow described here is intended to help understand the exp
     24
     ```
 
-   **`IMPORTANT:`** If the returned number of OSDs is == total_osds calulated, then you can skip the following steps.  If not, then please proceed with the below additional checks and remdiation steps.
+   **`IMPORTANT:`** If the returned number of OSDs is equal to total_osds calculated, then you can skip the following steps.  If not, then please proceed with the below additional checks and remediation steps.
 
 1. Compare your number of OSDs to your output which should resemble the example below. The number of drives will depend on the server hardware.
 
@@ -482,7 +482,7 @@ The configuration workflow described here is intended to help understand the exp
     24
     ```
 
-    If the numbers are equal, but less than the `total_osds` calulated, then you may need to fail your `ceph-mgr` daemon to get a fresh inventory.
+    If the numbers are equal, but less than the `total_osds` calculated, then you may need to fail your `ceph-mgr` daemon to get a fresh inventory.
 
     ```bash
     ncn-s# ceph mgr fail $(ceph mgr dump | jq -r .active_name)
