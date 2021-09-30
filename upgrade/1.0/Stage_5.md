@@ -8,7 +8,7 @@ Issue description:
 >
 >**Symptom:**           MAC learning stops.
 >
->**Scenario:**          Under extremely rare DMA stress conditions, anL2 learning threadmay     timeout and exit preventing future MAC learning.
+>**Scenario:**          Under extremely rare DMA stress conditions, anL2 learning thread may timeout and exit preventing future MAC learning.
 >
 >**Workaround:**        Reboot the switch or monitor the L2 thread and restart it with anNAE     script
 >
@@ -33,7 +33,7 @@ Prerequisites:
 2. You have 8325 in your setup that is running software version below 10.06.0130.
 3. Script assumes you  are using default username "admin"  for the switch and it will prompt you for password.
 
-**`NOTE:`** The nae-upload script automatically detects 8325's and only applies the fix to this platform.
+**`NOTE:`** The nae-upload script automatically detects 8325s and only applies the fix to this platform.
 
 **How to run the install script:**
 

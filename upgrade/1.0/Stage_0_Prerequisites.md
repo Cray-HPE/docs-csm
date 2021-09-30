@@ -78,30 +78,28 @@ Perform these steps to update `customizations.yaml`:
 
 ## Stage 0.3 - Execute Prerequisites Check
 
-1. Run check script:
+Run check script:
 
-    * Internet Connected
+* Internet Connected
 
-        ```bash
-        ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --endpoint [ENDPOINT]
-        ```
+    ```bash
+    ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --endpoint [ENDPOINT]
+    ```
 
-        **NOTE** ENDPOINT is optional for internal use. It is pointing to internal arti by default.
+    **NOTE** ENDPOINT is optional for internal use. It is pointing to internal arti by default.
 
-    * Air Gapped
+* Air Gapped
 
-        ```bash
-        ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --tarball-file [PATH_TO_CSM_TARBALL_FILE]
-        ```
+    ```bash
+    ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --tarball-file [PATH_TO_CSM_TARBALL_FILE]
+    ```
 
-**`IMPORTANT:`** If any errors are encountered then potential fixs should be displayed where the error occurred. `IF` the upgrade prequisites.sh script fails and does not provide guidance, try rerunning it. If the failure persists open a support ticket for guidance before proceeding.
-
-2. The script also runs the goss tests on the initial stable node (typically `ncn-m001`) where the latest version of CSM has been installed.
+**`IMPORTANT:`** If any errors are encountered, then potential fixes should be displayed where the error occurred. **IF** the upgrade `prerequisites.sh` script fails and does not provide guidance, then try rerunning it. If the failure persists, then open a support ticket for guidance before proceeding.
 
 ## Stage 0.4 - Backup VCS Data
 
-To prevent any possibility of losing configuration data, backup the VCS data and store it in a safe location.  See [Version_Control_Service_VCS.md](../../operations/configuration_management/Version_Control_Service_VCS.md#backup-and-restore-data) for these procedures.
+To prevent any possibility of losing configuration data, backup the VCS data and store it in a safe location. See [Version_Control_Service_VCS.md](../../operations/configuration_management/Version_Control_Service_VCS.md#backup-and-restore-data) for these procedures.
 
-**`IMPORTANT:`** As Part of this stage, only perform the backup steps.  `Only execute the restore if necessary.`  You will not always restore after a backup as we callout the backup procedure as a precautionary step.
+**`IMPORTANT:`** As part of this stage, **only perform the backup, not the restore**. The backup procedure is being done here as a precautionary step.
 
-Once the above steps have been completed please proceed to [Stage 1](Stage_1.md)
+Once the above steps have been completed, proceed to [Stage 1](Stage_1.md).

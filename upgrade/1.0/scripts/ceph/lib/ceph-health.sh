@@ -66,7 +66,7 @@ function wait_for_osd() {
   while true; do
     #
     # We have already slept 2 minutes adopting the OSD, so if it is not
-    # here yet (after 30 seconds of the 5 minutes), let's kick the
+    # here yet (after 30 seconds of the 5 minutes), let us kick the
     # active mgr.
     #
     if [[ "$cnt" -eq 6 ]]; then

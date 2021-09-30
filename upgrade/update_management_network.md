@@ -88,7 +88,7 @@ sw-spine01(config)# no ip route 10.92.100.60/32 10.252.1.x
 
 - Next step is to re-run the BGP script.
 - It is located at `/opt/cray/csm/scripts/networking/BG/Aruba_BGP_Peers.py`
-- This is documented on this page [Updae BGP Neighbors](../operations/network/metallb_bgp/Update_BGP_Neighbors.md)
+- This is documented on this page [Update BGP Neighbors](../operations/network/metallb_bgp/Update_BGP_Neighbors.md)
 
 ### Check Aruba BGP configuration
 
@@ -99,7 +99,7 @@ Note: the following configuration needs to be present.
 `ip prefix-list tftp seq 10 permit 10.92.100.60/32 ge 32 le 32`
 `neighbor 10.252.1.x passive`
 The neighbors should be the NMN IP of the worker nodes.
-Here's an example output from an aruba switch with 3 worker nodes.
+Here is an example output from an Aruba switch with 3 worker nodes.
 
 ```bash
 ip prefix-list pl-can seq 10 permit 10.103.11.0/24 ge 24
