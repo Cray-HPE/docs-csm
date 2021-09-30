@@ -1,6 +1,6 @@
 # Stage 0 - Prerequisites and Preflight Checks
 
-> **NOTE:** CSM-0.9.4 or CSM-0.9.5 is the version of CSM required in order to upgrade to CSM-1.0.0 (available with Shasta v1.5).
+> **NOTE:** CSM-0.9.4 or later CSM 0.9.x is required in order to upgrade to CSM-1.0.0 (available with Shasta v1.5).
 >
 > **NOTE:** Installed CSM versions may be listed from the product catalog using the following command. This will sort a semantic version without a hyphenated suffix after the same semantic version with a hyphenated suffix, e.g. 1.0.0 > 1.0.0-beta.19.
 >
@@ -94,9 +94,9 @@ Perform these steps to update `customizations.yaml`:
         ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --tarball-file [PATH_TO_CSM_TARBALL_FILE]
         ```
 
-**`IMPORTANT:`** If any errors are encountered then potential fixs should be displayed where the error occurred. `IF` the upgrade prequesites.sh script does not provide guidance, then open a support ticket for guidance before proceeding.
+**`IMPORTANT:`** If any errors are encountered then potential fixs should be displayed where the error occurred. `IF` the upgrade prequisites.sh script fails and does not provide guidance, try rerunning it. If the failure persists open a support ticket for guidance before proceeding.
 
-2. The script also runs the goss tests on the initial stable node (typically `ncn-m001`) where the latest version of CSM has been installed. Make sure the goss test pass before continue.
+2. The script also runs the goss tests on the initial stable node (typically `ncn-m001`) where the latest version of CSM has been installed.
 
 ## Stage 0.4 - Backup VCS Data
 

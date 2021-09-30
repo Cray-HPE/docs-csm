@@ -235,7 +235,7 @@ if [[ $state_recorded == "0" ]]; then
     if [[ ! -f docs-csm-latest.noarch.rpm ]]; then
         echo "Please make sure 'docs-csm-latest.noarch.rpm' exists under: $(pwd)"
     fi
-    cp docs-csm-latest.noarch.rpm ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/
+    cp /root/docs-csm-latest.noarch.rpm ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
@@ -392,6 +392,8 @@ sed -i '/^\(  echo "logchange 1.0" >>"$CHRONY_CONF"$\)/a \ \ echo "initstepslew 
 rm -f etc/chrony.d/pool.conf
 # silence some of the noise mksquashfs creates
 sed -i 's/^mksquashfs.*/& 1>\/dev\/null/' srv/cray/scripts/common/create-kis-artifacts.sh
+# silence xattr/indoe errors
+sed -i 's/-xattrs/-no-xattrs/' srv/cray/scripts/common/create-kis-artifacts.sh
 # Create the new artifacts
 srv/cray/scripts/common/create-kis-artifacts.sh
 # set -e back
@@ -476,7 +478,7 @@ if [[ $state_recorded == "0" ]]; then
     kubectl get cm -n services cray-product-catalog -o json | jq  -r '.data.csm' | yq r -  -d '*' -j | jq -r 'keys[]' > /tmp/csm_versions
     # sort -V: version sort
     highest_version=$(sort -V /tmp/csm_versions | tail -1)
-    minimum_version="0.9.5"
+    minimum_version="0.9.4"
     # compare sorted versions with unsorted so we know if our highest is greater than minimum
     if [[ $(printf "$minimum_version\n$highest_version") != $(printf "$minimum_version\n$highest_version" | sort -V) ]]; then
       echo "Required CSM patch $minimum_version or above has not been applied to this system"
