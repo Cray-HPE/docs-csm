@@ -519,7 +519,7 @@ The configuration workflow described here is intended to help understand the exp
     The field `available` would be `True` if Ceph sees the drive as empty and can
     be used, e.g.:
 
-    ```bash
+    ```text
     Device Path               Size         rotates available Model name
     /dev/sda                  447.13 GB    False   False     SAMSUNG MZ7LH480
     /dev/sdb                  447.13 GB    False   False     SAMSUNG MZ7LH480
@@ -539,7 +539,7 @@ The configuration workflow described here is intended to help understand the exp
 
 ##### Wipe and Add Drives
 
-1. Wipe the drive `ONLY after you have confirmed the drive is not being used by the current Ceph cluster` via options 1, 2, or both.
+1. Wipe the drive ***ONLY after you have confirmed the drive is not being used by the current Ceph cluster*** via options 1, 2, or both.
 
     > The following example wipes drive `/dev/sdc` on `ncn-s002`. You should replace these values with the appropriate ones for your situation.
 
