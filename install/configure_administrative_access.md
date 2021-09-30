@@ -54,8 +54,15 @@ BMC/controller passwords.
       nodes are taken down, or all Kubernetes worker nodes are taken down by mistake, the system is dead and has to be
       completely restarted.
       **Lock the management nodes now!**
-   
-      See [Lock and Unlock Nodes](../operations/hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
+
+      Run the `lock_management_nodes.py` script to lock all management nodes that are not already locked:
+      ```
+      ncn# /opt/cray/csm/scripts/admin_access/lock_management_nodes.py
+      ```
+
+      The return value of the script is 0 if locking was successful. Otherwise, a non-zero return means that manual intervention may be needed to lock the nodes.
+
+      For more inormation see [Lock and Unlock Nodes](../operations/hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
    <a name="configure_with_scsd"></a>
    1. Configure BMC and Controller Parameters with SCSD
 
