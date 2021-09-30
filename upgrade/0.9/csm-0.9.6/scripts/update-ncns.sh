@@ -16,7 +16,7 @@ masters=$(kubectl get node --selector='node-role.kubernetes.io/master' -o name |
 export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 export IFS=","
 for master in $masters; do
-  scp ${ROOTDIR}/scripts/patch-manifests.sh $master:/tmp
+  scp ./patch-manifests.sh $master:/tmp
   pdsh -w $master "/tmp/patch-manifests.sh"
   # Give K8S a chance to spin up pods for this node
   sleep 10
@@ -39,5 +39,5 @@ for node_num in $(seq $num_storage_nodes); do
   if [ "$status" == "active" ]; then
     pdsh -w $storage_node "systemctl stop node_exporter; zypper rm -y golang-github-prometheus-node_exporter"
   fi
-  pdsh -w $storage_node "zypper --no-gpg-checks in -y https://packages.local/repository/csm-sle-15sp2/cray-node-exporter-1.2.2.1-1.x86_64.rpm"
+  pdsh -w $storage_node "zypper --no-gpg-checks in -y https://packages.local/repository/csm-sle-15sp2/x86_64/cray-node-exporter-1.2.2.1-1.x86_64.rpm"
 done

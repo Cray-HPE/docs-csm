@@ -686,25 +686,26 @@ Expected output is similar to the following:
 <a name="csm-bst"></a>
 ### Create a BOS Session Template for the CSM Barebones Image
 
-The session template below can be copied and used as the basis for the BOS Session Template. As noted below, make sure the S3 path for the manifest matches the S3 path shown in IMS.
+The session template below can be copied and used as the basis for the BOS Session Template. As noted below, make sure the S3 path for the manifest matches the S3 path shown in the Image Management Service (IMS).
 
 1. Create `sessiontemplate.json`
    ```bash
    ncn# vi sessiontemplate.json
    ```
-1. Its contents should be the following:
+
+   The session template should contain the following:
    ```json
    {
      "boot_sets": {
        "compute": {
          "boot_ordinal": 2,
-         "etag": "6d04c3a4546888ee740d7149eaecea68",// <== This should be set to the etag of the IMS Image
+         "etag": "etag_value_from_cray_ims_command",
          "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
          "network": "nmn",
          "node_roles_groups": [
            "Compute"
          ],
-         "path": "s3://boot-images/293b1e9c-2bc4-4225-b235-147d1d611eef/manifest.json",// <== Make sure this path matches the IMS Image Path
+         "path": "path_value_from_cray_ims_command",
          "rootfs_provider": "cpss3",
          "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
          "type": "s3"
@@ -717,7 +718,10 @@ The session template below can be copied and used as the basis for the BOS Sessi
      "name": "shasta-1.4-csm-bare-bones-image"
    }
    ```
-1. Create the BOS session template using this file as input:
+
+   **NOTE**: Be sure to replace the values of the `etag` and `path` fields with the ones you noted earlier in the `cray ims images list` command.
+
+2. Create the BOS session template using this file as input:
    ```
    ncn# cray bos sessiontemplate create --file sessiontemplate.json --name shasta-1.4-csm-bare-bones-image
    ```
