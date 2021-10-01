@@ -26,7 +26,7 @@ A etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unheal
     Boot preparation information for other product streams can be found in the following locations:
 
     -   UANs: Refer to the UAN product stream repository and search for the "PREPARE UAN BOOT SESSION TEMPLATES" header in the "Install and Configure UANs" procedure.
-    -   Cray Operating System \(COS\): Refer to the "Create a Boot Session Template" header in the "Install or Upgrade COS" procedure in the COS product stream documentation.
+    -   Cray Operating System \(COS\): Refer to the "Create a Boot Session Template" header in the "Boot COS" procedure in the COS product stream documentation.
 
 
 ### CPS
