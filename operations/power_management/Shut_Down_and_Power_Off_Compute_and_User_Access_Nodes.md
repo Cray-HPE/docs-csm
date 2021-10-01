@@ -6,7 +6,7 @@ Shut down and power off compute and user access nodes \(UANs\). This procedure p
 
 ### Prerequisites
 
-The `cray` and `sat` commands must be initialized and authenticated with valid credentials for Keycloak. If these have not been prepared, then see [Configure the Cray Command Line Interface (cray CLI)](../configure_cray_cli.md) and refer to "SAT Authentication" in the System Admin Toolkit (SAT) product documentation.
+The `cray` and `sat` commands must be initialized and authenticated with valid credentials for Keycloak. If these have not been prepared, then see [Configure the Cray Command Line Interface (cray CLI)](../configure_cray_cli.md) and refer to "SAT Authentication" in the System Admin Toolkit (SAT) product stream documentation.
 
 ### Procedure
 
