@@ -7,7 +7,7 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 ### Prerequisites
 
 * All management rack PDUs are connected to facility power and facility power is ON.
-* An authentication token is required to access the API gateway and to use the `sat` command. See the [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md) and "SAT Authentication" in the Shasta Admin Toolkit product documentation.
+* An authentication token is required to access the API gateway and to use the `sat` command. See the [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md) and "SAT Authentication" in the System Admin Tookit product stream documentation.
 
 ### Procedure
 
