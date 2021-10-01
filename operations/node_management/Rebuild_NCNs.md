@@ -13,6 +13,8 @@ The following is a high-level overview of the NCN rebuild workflow:
     * Same procedure for all node types.
 1. [Rebuild Storage Node](#rebuild__storage_node)
     * Only needed for storage nodes
+1. [Validate `BOOTRAID` artifacts](#validate-bootraid-artifacts)
+    * Run from ncn-m001
 1. [Validation](#validation)
     * There is a different procedure for each type of node (worker, master, and storage).
 
@@ -876,8 +878,25 @@ This section applies to storage nodes. Skip this section if rebuilding a master 
     rgw_s3_auth_use_sts = True
     rgw_sts_key = <REDACTED_KEY>
     ```
+<a name="validate-bootraid-artifacts"></a>
 
-#### 6. Validation
+#### 6. Validate `BOOTRAID` artifacts
+
+Perform the following steps **on ncn-m001**.
+
+1. Initialize the `cray` command and follow the prompts (required for the next step):
+
+    ```
+    ncn-m001# cray init
+    ```
+
+1. Run the script to ensure the local BOOTRAID has a valid kernel and initrd
+
+    ```
+    ncn-m001# /opt/cray/tests/install/ncn/scripts/validate-bootraid-artifacts.sh
+    ```
+
+#### 7. Validation
 
 Only follow the steps in the section for the node type that was rebuilt:
 
@@ -887,7 +906,7 @@ Only follow the steps in the section for the node type that was rebuilt:
 
 <a name="validate_worker_node"></a>
 
-##### 6.1. Validate Worker Node
+##### 7.1. Validate Worker Node
 
 Validate the worker node rebuilt successfully.
 

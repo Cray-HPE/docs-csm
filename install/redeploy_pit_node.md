@@ -18,6 +18,7 @@ Topics:
    * [Reboot](#reboot)
    * [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard)
    * [Configure DNS and NTP on each BMC](#configure-dns-and-ntp-on-each-bmc)
+   * [Validate `BOOTRAID` artifacts](#validate-bootraid-artifacts)
    * [Next Topic](#next-topic)
 
 ## Details
@@ -525,6 +526,23 @@ Perform the following steps on every NCN **except ncn-m001**.
 
     ```bash
     ncn# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "$(hostname)-mgmt" -s
+    ```
+
+<a name="validate-bootraid-artifacts"></a>
+### 7. Validate `BOOTRAID` artifacts
+
+Perform the following steps **on ncn-m001**.
+
+1. Initialize the `cray` command and follow the prompts (required for the next step):
+
+    ```
+    ncn-m001# cray init
+    ```
+
+1. Run the script to ensure the local BOOTRAID has a valid kernel and initrd
+
+    ```
+    ncn-m001# /opt/cray/tests/install/ncn/scripts/validate-bootraid-artifacts.sh
     ```
 
 <a name="next-topic"></a>
