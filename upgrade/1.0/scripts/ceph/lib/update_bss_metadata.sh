@@ -84,7 +84,10 @@ function update_bss_storage() {
     for node_num in $(seq $num_storage_nodes); do
         storage_node=$(printf "ncn-s%03d" "$node_num")
         echo -e "\nupdate_bss_storage: Processing ${storage_node}"
-        pdsh -N -w $storage_node "systemctl stop cray-node-exporter.service; systemctl disable cray-node-exporter.service"
+        status=$(pdsh -N -w $storage_node "systemctl is-active cray-node-exporter" 2>/dev/null)
+        if [ "$status" == "active" ]; then
+          pdsh -N -w $storage_node "systemctl stop cray-node-exporter.service; systemctl disable cray-node-exporter.service"
+        fi
         xName=$(update_bss_storage_run_cmd_verify_nonblank ssh -q -o StrictHostKeyChecking=no $storage_node 'cat /etc/cray/xname') || return 1
         cray bss bootparameters list --name $xName --format=json | jq '.[]' > /tmp/$xName
         if [ $? -ne 0 ]; then
