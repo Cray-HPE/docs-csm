@@ -208,7 +208,7 @@ There are several starting points for modifying compute images. An admin can sta
 
     For passwordless SSH to work, ensure that the correct public/private key pair is used. The private key will need to match the public key that was uploaded to the IMS service and specified in the IMS Job.
 
-    **Important:** The following command will work when run on any of the master nodes and worker nodes, except for ``.
+    **Important:** The following command will work when run on any of the master nodes and worker nodes, except for `ncn-w001`.
 
     ```bash
     ncn# ssh -p $IMS_SSH_PORT root@$IMS_SSH_HOST

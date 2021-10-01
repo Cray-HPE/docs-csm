@@ -304,26 +304,16 @@ Check the expiration of the certificates.
    `NOTE:` You may have errors copying files. The target may or may not exist depending on the version of Shasta.
   
    - You `DO NOT` need to copy this to the master node where you are performing this work.
-   - Shasta v1.3 and earlier copy /root/.kube/config to all master nodes and ncn-w001.
-   - Shasta v1.4 and later copy /etc/kubernetes/admin.conf to all master and worker nodes.
-
-   If you attempt to copy to workers nodes other than `ncn-w001` in a Shasta v1.3 or earlier system you will see this error `pdcp@ncn-m001: ncn-w003: fatal: /root/.kube/: Is a directory` and this is expected and can be ignored.
+   - Copy /etc/kubernetes/admin.conf to all master and worker nodes.
 
    Client access:
 
    **`NOTE:`** Please update the below command with the appropriate amount of worker nodes.
 
-   For Shasta v1.3 and earlier :
-
-   ```bash
-   ncn-m# pdcp -w ncn-m00[2-3] -w ncn-w001 /root/.kube/config /root/.kube/
-   ```
-
-   For Shasta v1.4 and later :
-
    ```
    ncn-m# pdcp -w ncn-m00[2-3] -w ncn-w00[1-3] /etc/kubernetes/admin.conf /etc/kubernetes/
    ```
+
 
 ## Regenerating kubelet .pem certificates
 
@@ -394,11 +384,12 @@ Check the expiration of the certificates.
    ```
 
 6. Perform a rolling reboot of master nodes.
-   1. Follow process [Reboot_NCNs](../node_management/Reboot_NCNs.md)
 
-   **IMPORTANT:** Please ensure you are verifying pods are running on the master node that was rebooted before proceeding to the next node.
+   1. Follow the [Reboot_NCNs](../node_management/Reboot_NCNs.md) process.
+
+      **IMPORTANT:** Please ensure you are verifying pods are running on the master node that was rebooted before proceeding to the next node.
 
 7. Perform a rolling reboot of worker nodes.
-   1. Follow process [Reboot_NCNs](../node_management/Reboot_NCNs.md)
 
-   **IMPORTANT:** Please keep track of where the nexus pod is running and ensure it is either scaled down to 0 replicas or has moved and full started via the drain process.
+   1. Follow the [Reboot_NCNs](../node_management/Reboot_NCNs.md) process.
+

@@ -42,7 +42,7 @@ cleanup() {
 	fi
 }
 
-trap 'echo Cancelling $(basename "${0%.*}") ; cleanup ; exit 1' SIGINT
+trap 'echo Canceling $(basename "${0%.*}") ; cleanup ; exit 1' SIGINT
 
 mount_bootraid() {
 	if ! eval pit_check; then
