@@ -63,7 +63,7 @@ if [[ -z ${TARBALL_FILE} ]]; then
     state_name="GET_CSM_TARBALL_FILE"
     state_recorded=$(is_state_recorded "${state_name}" $(hostname))
     if [[ $state_recorded == "0" ]]; then
-        # Since we are getting a new tarball
+        # Because we are getting a new tarball
         # this has to be a new upgrade
         # clean up myenv 
         # this is block/breaking 1.0 to 1.0 upgrade
@@ -114,46 +114,6 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-# Apply WAR for CASMINST-2689, just in case
-state_name="APPLY_CASMINST-2689"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
-  echo "====> ${state_name} ..."
-  echo "Opening and refreshing fallback artifacts on the NCNs.."
-    
-  "${BASEDIR}"/CASMINST-2689.sh
-
-  # Check if ncn-m001 is using itself for an upstream server
-  if [[ "$(awk '/^server/ {print $2}' /etc/chrony.d/cray.conf)" == ncn-m001 ]] ||
-      [[ "$(chronyc tracking | awk '/Reference ID/ {print $5}' | tr -d '()')" == ncn-m001 ]]; then
-        # Get the upstream NTP server from cloud-init metadata, trying a few different sources before failing
-        upstream_ntp_server=$(craysys metadata get upstream_ntp_server)
-        # check to make sure we are not re-creating the bug by setting m001 to use itself as an upstream
-        if [[ "$upstream_ntp_server" == "ncn-m001" ]]; then
-          # if a pool is set, and we did not find an upstream server, just use the pool
-          if grep "^\(pool\).*" /etc/chrony.d/cray.conf >/dev/null ; then
-            sed -i "/^\(server ncn-m001\).*/d" /etc/chrony.d/cray.conf
-          # otherwise error
-          else
-            echo "Upstream server cannot be $upstream_ntp_server"
-            exit 1
-          fi
-        else
-          # Swap in the "real" NTP server
-          sed -i "s/^\(server ncn-m001\).*/server $upstream_ntp_server iburst trust/" /etc/chrony.d/cray.conf
-          # add a new config that will step the clock if it is less that 1s of drift, otherwise, it will slew it
-          # this applies on startups of the system from a reboot only
-          sed -i "/^\(logchange 1.0\)\$/a initstepslew 1 $upstream_ntp_server" /etc/chrony.d/cray.conf
-          # Apply the change to use the new upstream server
-        fi
-        systemctl restart chronyd
-  fi
-  record_state ${state_name} $(hostname)
-else
-    echo "====> ${state_name} has been completed"
-fi
-
-
 state_name="CHECK_CLOUD_INIT_PREREQ"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
@@ -203,6 +163,48 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+# Apply WAR for CASMINST-2689, just in case
+state_name="APPLY_CASMINST-2689"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+  echo "====> ${state_name} ..."
+  echo "Opening and refreshing fallback artifacts on the NCNs.."
+    
+  "${BASEDIR}"/CASMINST-2689.sh
+
+  # only fix ntp if we are coming from 0.9
+  if [[ "$CSM1_EXISTS" == "false" ]]; then
+  # Check if ncn-m001 is using itself for an upstream server
+  if [[ "$(awk '/^server/ {print $2}' /etc/chrony.d/cray.conf)" == ncn-m001 ]] ||
+      [[ "$(chronyc tracking | awk '/Reference ID/ {print $5}' | tr -d '()')" == ncn-m001 ]]; then
+        # Get the upstream NTP server from cloud-init metadata, trying a few different sources before failing
+        upstream_ntp_server=$(craysys metadata get upstream_ntp_server)
+        # check to make sure we are not re-creating the bug by setting m001 to use itself as an upstream
+        if [[ "$upstream_ntp_server" == "ncn-m001" ]]; then
+          # if a pool is set, and we did not find an upstream server, just use the pool
+          if grep "^\(pool\).*" /etc/chrony.d/cray.conf >/dev/null ; then
+            sed -i "/^\(server ncn-m001\).*/d" /etc/chrony.d/cray.conf
+          # otherwise error
+          else
+            echo "Upstream server cannot be $upstream_ntp_server"
+            exit 1
+          fi
+        else
+          # Swap in the "real" NTP server
+          sed -i "s/^\(server ncn-m001\).*/server $upstream_ntp_server iburst trust/" /etc/chrony.d/cray.conf
+          # add a new config that will step the clock if it is less that 1s of drift, otherwise, it will slew it
+          # this applies on startups of the system from a reboot only
+          sed -i "/^\(logchange 1.0\)\$/a initstepslew 1 $upstream_ntp_server" /etc/chrony.d/cray.conf
+          # Apply the change to use the new upstream server
+        fi
+        systemctl restart chronyd
+  fi
+  fi
+  record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="INSTALL_CSI"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
@@ -232,7 +234,7 @@ if [[ $state_recorded == "0" ]]; then
     if [[ ! -f docs-csm-latest.noarch.rpm ]]; then
         echo "Please make sure 'docs-csm-latest.noarch.rpm' exists under: $(pwd)"
     fi
-    cp docs-csm-latest.noarch.rpm ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/
+    cp /root/docs-csm-latest.noarch.rpm ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
@@ -243,6 +245,20 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     ${CSM_ARTI_DIR}/lib/setup-nexus.sh
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
+state_name="DISABLE_SERVICE_REPOS"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    NCNS=$(${CSM_ARTI_DIR}/lib/list-ncns.sh | paste -sd,)
+    pdsh -w "$NCNS" 'zypper ms -d Basesystem_Module_15_SP2_x86_64'
+    pdsh -w "$NCNS" 'zypper ms -d Public_Cloud_Module_15_SP2_x86_64'
+    pdsh -w "$NCNS" 'zypper ms -d SUSE_Linux_Enterprise_Server_15_SP2_x86_64'
+    pdsh -w "$NCNS" 'zypper ms -d Server_Applications_Module_15_SP2_x86_64'
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
@@ -324,6 +340,9 @@ else
     echo "${state_name} has been completed"
 fi
 
+# only the modify the image if we are coming from 0.9.x
+if [[ "$CSM1_EXISTS" == "false" ]]; then
+
 state_name="MODIFYING_NEW_NCN_IMAGE"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
@@ -372,6 +391,8 @@ sed -i '/^\(  echo "logchange 1.0" >>"$CHRONY_CONF"$\)/a \ \ echo "initstepslew 
 rm -f etc/chrony.d/pool.conf
 # silence some of the noise mksquashfs creates
 sed -i 's/^mksquashfs.*/& 1>\/dev\/null/' srv/cray/scripts/common/create-kis-artifacts.sh
+# silence xattr/inode errors
+sed -i 's/-xattrs/-no-xattrs/' srv/cray/scripts/common/create-kis-artifacts.sh
 # Create the new artifacts
 srv/cray/scripts/common/create-kis-artifacts.sh
 # set -e back
@@ -398,10 +419,12 @@ EOF
         #rm -rf squashfs-root/
       # pop out of the dir
       popd || exit 1
+      
     done
     record_state ${state_name} "$(hostname)"
 else
     echo "====> ${state_name} has been completed"
+fi
 fi
 
 state_name="UPLOAD_NEW_NCN_IMAGE"
@@ -454,7 +477,7 @@ if [[ $state_recorded == "0" ]]; then
     kubectl get cm -n services cray-product-catalog -o json | jq  -r '.data.csm' | yq r -  -d '*' -j | jq -r 'keys[]' > /tmp/csm_versions
     # sort -V: version sort
     highest_version=$(sort -V /tmp/csm_versions | tail -1)
-    minimum_version="0.9.5"
+    minimum_version="0.9.4"
     # compare sorted versions with unsorted so we know if our highest is greater than minimum
     if [[ $(printf "$minimum_version\n$highest_version") != $(printf "$minimum_version\n$highest_version" | sort -V) ]]; then
       echo "Required CSM patch $minimum_version or above has not been applied to this system"

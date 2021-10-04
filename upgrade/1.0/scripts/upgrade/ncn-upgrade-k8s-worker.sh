@@ -11,7 +11,7 @@ upgrade_ncn=$1
 
 . ${BASEDIR}/ncn-upgrade-common.sh ${upgrade_ncn}
 
-ssh_keygen_keyscan $1 || true # oror true to unblock rerun
+ssh_keygen_keyscan $1 || true # or true to unblock rerun
 
 cfs_config_status=$(cray cfs components describe $UPGRADE_XNAME --format json | jq -r '.configurationStatus')
 echo "CFS configuration status: ${cfs_config_status}"
@@ -31,7 +31,7 @@ if [[ $state_recorded == "0" ]]; then
 
     workers="$(kubectl get node --selector='!node-role.kubernetes.io/master' -o name | sed -e 's,^node/,,' | paste -sd,)"
     export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-    yq r ${CSM_ARTI_DIR}/manifests/platform.yaml 'spec.charts(name==cray-precache-images).values.cacheImages[*]' | while read image; do echo >&2 "+ caching $image"; pdsh -w "$workers" "crictl pull $image"; done
+    kubectl get configmap -n nexus cray-precache-images -o json | jq -r '.data.images_to_cache' | while read image; do echo >&2 "+ caching $image"; pdsh -w "$workers" "crictl pull $image" 2>/dev/null; done
 
     record_state "${state_name}" ${upgrade_ncn}
 else
@@ -65,11 +65,38 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+# The UPGRADE_POSTGRES_MAX_LAG may be exported by the user to control
+# the maximum lag value permitted by this script. Setting its value to
+# a negative number or a non-integer value has the effect of skipping the
+# maximum lag check. In other words, if one wishes to skip this check,
+# one could:
+# export UPGRADE_POSTGRES_MAX_LAG=skip
+UPGRADE_POSTGRES_MAX_LAG=${UPGRADE_POSTGRES_MAX_LAG:-'0'}
+
+# UPGRADE_POSTGRES_MAX_ATTEMPTS specifies the maximum number of times the
+# postgres check will be performed on a given cluster before failing. Note that
+# failures other than due to maximum lag are always fatal and are not retried.
+# If unset or set to a non-positive integer, default to 10
+if [[ ! $UPGRADE_POSTGRES_MAX_ATTEMPTS =~ ^[1-9][0-9]*$ ]]; then
+    UPGRADE_POSTGRES_MAX_ATTEMPTS=10
+fi
+
+# UPGRADE_POSTGRES_WAIT_SECONDS_BETWEEN_ATTEMPTS specifies the time (in seconds)
+# between postgres checks on a given cluster.
+# If unset or set to a non-positive integer, default to 10
+if [[ ! $UPGRADE_POSTGRES_WAIT_SECONDS_BETWEEN_ATTEMPTS =~ ^[1-9][0-9]*$ ]]; then
+    UPGRADE_POSTGRES_WAIT_SECONDS_BETWEEN_ATTEMPTS=10
+fi
+
 state_name="ENSURE_POSTGRES_HEALTHY"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-
+    if [[ ! $UPGRADE_POSTGRES_MAX_LAG =~ ^[0-9][0-9]*$ ]]; then
+        echo "Skipping postgres cluster max lag checks because of UPGRADE_POSTGRES_MAX_LAG setting"
+    else
+        echo "Postgres cluster checks may take several minutes, depending on latency"
+    fi
     if [[ ! -z $(kubectl get postgresql -A -o json | jq '.items[].status | select(.PostgresClusterStatus != "Running")') ]]; then
         echo "--- ERROR --- not all Postgresql Clusters have a status of 'Running'"
         exit 1
@@ -81,42 +108,70 @@ if [[ $state_recorded == "0" ]]; then
         # NameSpace and postgres cluster name
         c_ns="$(echo $c | awk -F, '{print $1;}')"
         c_name="$(echo $c | awk -F, '{print $2;}')"
-        c_cluster_details=$(kubectl exec "${c_name}-1" -c postgres -it -n ${c_ns} -- curl -s http://localhost:8008/cluster)
-        c_num_of_members=$(echo $c_cluster_details | jq '.members | length' )
-        c_num_of_leader=$(echo $c_cluster_details | jq '.members[] | .role' | grep "leader" | wc -l)
-        c_max_lag=$(echo $c_cluster_details | jq '[.members[] | .lag] | max')
-        c_unknown_lag=$(echo $c_cluster_details | jq '[.members[] | .lag]' | grep "unknown" | wc -l)
+        echo -n "Checking postgres cluster ${c_name} in namespace ${c_ns} ..."
+        c_attempt=0
+        c_lag_history=""
+        while [ true ]; do
+            # Normally I would use let for arithmetic, but if the let expression evaluates to 0,
+            # the return code is non-0, which breaks us because we are operating under set -e.
+            # Therefore, in this function, arithmetic is performed in the following fashion:
+            c_attempt=$((${c_attempt} + 1))
 
-        # check number of members
-        if [[ $c_name == "sma-postgres-cluster" ]]; then
-            if [[ $c_num_of_members -ne 2 ]]; then
-                echo "--- ERROR --- $c cluster only has $c_num_of_members/2 cluster members"
+            echo -n "."
+            if [[ $c_attempt -gt 1 ]]; then
+                # Sleep before re-attempting
+                sleep $UPGRADE_POSTGRES_WAIT_SECONDS_BETWEEN_ATTEMPTS
+            fi
+            c_cluster_details=$(kubectl exec "${c_name}-1" -c postgres -it -n ${c_ns} -- curl -s http://localhost:8008/cluster)
+            c_num_of_members=$(echo $c_cluster_details | jq '.members | length' )
+            c_num_of_leader=$(echo $c_cluster_details | jq '.members[] | .role' | grep "leader" | wc -l)
+            c_max_lag=$(echo $c_cluster_details | jq '[.members[] | .lag] | max')
+            if [[ -n $c_lag_history ]]; then
+                c_lag_history+=", $c_max_lag"
+            else
+                c_lag_history="$c_max_lag"
+            fi
+            c_unknown_lag=$(echo $c_cluster_details | jq '[.members[] | .lag]' | grep "unknown" | wc -l)
+
+            # check number of members
+            if [[ $c_name == "sma-postgres-cluster" ]]; then
+                if [[ $c_num_of_members -ne 2 ]]; then
+                    echo -e "\n--- ERROR --- $c cluster only has $c_num_of_members/2 cluster members"
+                    exit 1
+                fi
+            else
+                if [[ $c_num_of_members -ne 3 ]]; then
+                    echo -e "\n--- ERROR --- $c cluster only has $c_num_of_members/3 cluster members"
+                    exit 1
+                fi
+            fi
+
+            #check number of leader
+            if [[ $c_num_of_leader -ne 1 ]]; then
+                echo -e "\n--- ERROR --- $c cluster does not have a leader"
                 exit 1
             fi
-        else
-            if [[ $c_num_of_members -ne 3 ]]; then
-                echo "--- ERROR --- $c cluster only has $c_num_of_members/3 cluster members"
+
+            #check lag:unknown
+            if [[ $c_unknown_lag -gt 0 ]]; then
+                echo -e "\n--- ERROR --- $c cluster has lag: unknown"
                 exit 1
             fi
-        fi
 
-        #check number of leader
-        if [[ $c_num_of_leader -ne 1 ]]; then
-            echo "--- ERROR --- $c cluster does not have a leader"
-            exit 1
-        fi
-        #check number of lag
-        if [[ $c_max_lag -gt 0 ]]; then
-            echo "--- ERROR --- $c cluster has lag: $c_max_lag"
-            exit 1
-        fi
-        #check lag:unknown
-        if [[ $c_unknown_lag -gt 0 ]]; then
-            echo "--- ERROR --- $c cluster has lag: unknown"
-            exit 1
-        fi
+            if [[ $UPGRADE_POSTGRES_MAX_LAG =~ ^[0-9][0-9]*$ ]]; then
+                #check max_lag is <= $UPGRADE_POSTGRES_MAX_LAG
+                if [[ $c_max_lag -gt $UPGRADE_POSTGRES_MAX_LAG ]]; then
+                    # If we have not exhausted our number of attempts, retry
+                    [[ $c_attempt -ge $UPGRADE_POSTGRES_MAX_ATTEMPTS ]] || continue
+                    
+                    echo -e "\n--- ERROR --- $c cluster has lag: $c_lag_history"
+                    exit 1
+                fi
+            fi
+            echo " OK"
+            break
+        done
     done
-
 
     record_state "${state_name}" ${upgrade_ncn}
 else

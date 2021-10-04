@@ -2,6 +2,7 @@
 #
 # Copyright 2021 Hewlett Packard Enterprise Development LP
 #
+
 set -e
 BASEDIR=$(dirname $0)
 . ${BASEDIR}/upgrade-state.sh
@@ -10,6 +11,13 @@ trap 'err_report' ERR
 upgrade_ncn=$1
 
 . ${BASEDIR}/ncn-upgrade-common.sh ${upgrade_ncn}
+
+skipCephInitial=$(sort -V /tmp/csm_versions | tail -1 | grep "1.0.0" | wc -l)
+if [[ $skipCephInitial -eq 1 ]]; then
+    echo "It is running on 1.0.0 already. Skip ceph upgrade"
+    exit 0
+fi
+
 
 cat <<EOF
 NOTE:

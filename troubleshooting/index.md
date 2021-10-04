@@ -7,6 +7,7 @@ This document provides troubleshooting information for services and functionalit
     * [Hardware Discovery](#known-issues-hardware-discovery)
     * [initrd.img.xz not found](#initrd-not-found)
     * [SAT/HSM/CAPMC Component Power State Mismatch](known_issues/component_power_state_mismatch.md)
+    * [BOS/BOA Incorrect command is output to rerun a failed operation.](known_issues/incorrect_output_for_bos_command_rerun.md)
  * Kubernetes troubleshooting
     * [General Kubernetes Commands for Troubleshooting](./kubernetes/Kubernetes_Troubleshooting_Information.md)
     * [Kubernetes Log File Locations](./kubernetes/Kubernetes_Log_File_Locations.md)
@@ -27,14 +28,16 @@ Known issues related to hardware discovery in a system.
  * [HMS Discovery job not creating RedfishEndpoints in Hardware State Manager](known_issues/discovery_job_not_creating_redfish_endpoints.md)
 
 <a name="initrd-not-found"></a>
-### ``error: file  `/boot/grub2/../initrd.img.xz' not found.Press any key to continue...``
+### `initrd.img.xz` Not Found
 
 This is a problem that is fixed in CSM 1.0+, but if your system was upgraded from CSM 0.9.x you may run into this. Below is the full error seen when attempting to boot:
 
 ```
 Loading Linux  ...
 Loading initial ramdisk ...
-error: file `/boot/grub2/../initrd.img.xz' not found.Press any key to continue...
+error: file `/boot/grub2/../initrd.img.xz' not found.
+
+Press any key to continue...
 [    2.528752] Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0)
 [    2.537264] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.3.18-24.64-default #1 SLE15-SP2
 [    2.545499] Hardware name: Cray Inc. R272-Z30-00/MZ32-AR0-00, BIOS C27 05/12/2021

@@ -5,12 +5,12 @@ This guide runs through the most common issues and shows the user what is needed
 
 1. [NCNs on install](#ncns-on-install)<br>
 2. [ncn-m001 on reboot or NCN boot](#ncn-m001-on-reboot)<br>
-	2.1. [Verify DHCP packets can be forwarded from the workers to the MTL network (VLAN1)](#Verify-DHCP-packets)<br>
-	2.2. [Verify BGP](#verify-bgp)<br>
-	2.3. [Verify route to TFTP](#verify-route-to-tftp)<br>
-	2.4. [Test TFTP traffic (Aruba Only)](#test-tftp-traffic)<br>
-	2.5. [Check DHCP lease is getting allocated](#check-dhcp-lease)<br>
-	2.6. [Verify the DHCP traffic on the Workers](#verify-the-dhcp-traffic)<br>
+    2.1. [Verify DHCP packets can be forwarded from the workers to the MTL network (VLAN1)](#Verify-DHCP-packets)<br>
+    2.2. [Verify BGP](#verify-bgp)<br>
+    2.3. [Verify route to TFTP](#verify-route-to-tftp)<br>
+    2.4. [Test TFTP traffic (Aruba Only)](#test-tftp-traffic)<br>
+    2.5. [Check DHCP lease is getting allocated](#check-dhcp-lease)<br>
+    2.6. [Verify the DHCP traffic on the Workers](#verify-the-dhcp-traffic)<br>
     2.7. [Verify the switches are forwarding DHCP traffic.](#verify-the-switches)<br>
 3. [Computes/UANs/Application Nodes](#computes-uans-applications-nodes)<br>
 
@@ -20,7 +20,7 @@ This guide runs through the most common issues and shows the user what is needed
 
 
 * Verify the DNSMASQ configuration file matches what is configured on the switches.
-	* Here is a DNSMASQ configuration file for the Metal network (VLAN1). As you can see, the router is `10.1.0.1`. This has to match what the IP address is on the switches doing the routing for the MTL network. This is most commonly on the spines. This configuration is commonly missed on the CSI input file.
+    * Here is a DNSMASQ configuration file for the Metal network (VLAN1). As you can see, the router is `10.1.0.1`. This has to match what the IP address is on the switches doing the routing for the MTL network. This is most commonly on the spines. This configuration is commonly missed on the CSI input file.
 
 >MTL dnsmasq file
 
@@ -159,8 +159,10 @@ BGP Summary
  10.252.1.9      65533       78389   90108   02m:02w:02d  Established   Up
 
 ```
-```
 
+>Mellanox BGP
+
+```
 sw-spine-001 [standalone: master] # show ip bgp summary
 
 VRF name                  : default

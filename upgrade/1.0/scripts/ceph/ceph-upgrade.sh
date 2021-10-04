@@ -25,6 +25,11 @@ then
   exit 1
 fi
 
+if ceph orch ps >  /dev/null 2>&1; then
+  echo "Ceph as already been upgraded"
+  exit 0
+fi
+
 . ./lib/ceph-health.sh
 . ./lib/mark_step_complete.sh
 . ./lib/k8s-scale-utils.sh
