@@ -445,6 +445,16 @@ These are ports that are connected to management nodes.
        lag 17
    ```
 
+## Configure SNMP
+
+Aruba switch FW (at present) contains a bug where the MAC addr info in SNMP can
+be incomplete.  To fix this an SNMP server reset needs to be done.
+
+   ```
+   sw-agg-001(config)# no snmp-server vrf default
+   sw-agg-001(config)# snmp-server vrf default
+   ```
+
 ## Save configuration
 
    ```
