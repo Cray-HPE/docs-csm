@@ -75,7 +75,7 @@ Results may vary if an unconfigured switch is being used.
     sw-leaf-001# show mac-address-table
     ```
 
-2. Ensure the management NCNs are present in the ncn_metadata.csv file.
+1. Ensure the management NCNs are present in the ncn_metadata.csv file.
    
    The output from the previous `show mac address-table` command will display information for all management NCNs that do not have an external connection for their BMC, such as ncn-m001.
    
@@ -96,7 +96,7 @@ Results may vary if an unconfigured switch is being used.
 
    The column heading must match that shown above for `csi` to parse it correctly.
 
-3. Collect the BMC MAC address information for the PIT node.
+1. Collect the BMC MAC address information for the PIT node.
    
    The PIT node BMC is not connected to the switch like the other management nodes.
 
@@ -116,7 +116,7 @@ Results may vary if an unconfigured switch is being used.
    x3000c0s1b0n0,Management,Master,a4:bf:01:37:87:32,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
    ```
 
-4. Verify the `ncn_metadata.csv` file has a row for every management node in the SHCD.
+1. Verify the `ncn_metadata.csv` file has a row for every management node in the SHCD.
    
    There may be placeholder entries for some MAC addresses.
 
@@ -136,3 +136,4 @@ Results may vary if an unconfigured switch is being used.
    x3000c0s1b0n0,Management,Master,a4:bf:01:37:87:32,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
 
    ```
+
