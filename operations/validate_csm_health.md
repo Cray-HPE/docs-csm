@@ -192,10 +192,11 @@ Execute ncnPostgresHealthChecks script and analyze the output of each individual
             INFO: running post_bootstrap
             INFO: trying to bootstrap a new cluster
          ```
-         Errors reported prior to the lock status can be ignored:
+         Errors reported prior to the lock status can be ignored - for example:
          - **ERROR: get_cluster**
          - **ERROR: ObjectCache.run ProtocolError('Connection broken: IncompleteRead(0 bytes read)', IncompleteRead(0 bytes read))**
          - **ERROR: failed to update leader lock** 
+         - **ERROR: Exception when working with master via replication connection**
          
          If there is no Leader, refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#leader).
 
