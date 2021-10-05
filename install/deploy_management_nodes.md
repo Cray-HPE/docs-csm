@@ -190,8 +190,6 @@ during or after the installation, but it is better to meet the minimum NCN firmw
 1. The firmware on the management nodes should be checked for compliance with the minimum required version
    and updated, if necessary, at this point.
 
-   See [Update NCN Firmware](update_ncn_firmware.md).
-
    > **`WARNING:`** Gigabyte NCNs running BIOS version C20 can become unusable
    > when Shasta 1.5 is installed. This is a result of a bug in the Gigabyte
    > firmware. This bug has not been observed in BIOS version C17.
