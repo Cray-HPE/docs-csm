@@ -232,8 +232,17 @@ The configuration workflow described here is intended to help understand the exp
 1. Once `ncn-s001` notices that `ncn-m002` has created /etc/kubernetes/admin.conf, then `ncn-s001` waits for any worker node to become available.
 1. Once each worker node notices that `ncn-m002` has created /etc/cray/kubernetes/join-command-control-plan, then it will join the Kubernetes cluster.
     - Now `ncn-s001` should notice this from any one of the worker nodes and move forward with creation of ConfigMaps and running the post-Ceph playbooks (s3, OSD pools, quotas, etc.)
-1. Once `ncn-s001` creates etcd-backup-s3-credentials during the benji-backups role which is one of the last roles after Ceph has been set up, then `ncn-m001` notices this and moves forward
-
+1. Once `ncn-s001` creates etcd-backup-s3-credentials during the ceph-rgw-users role which is one of the last roles after Ceph has been set up, then `ncn-m001` notices this and moves forward
+   > **`NOTE`**: If several hours have elapsed between storage and master nodes booting, or if there were issues PXE booting master nodes, the cloud init script on `ncn-s001` may not complete successfully.  This can cause the `/var/log/cloud-init-output.log` on master node(s) to continue to output the following message:
+   >
+   > [ 1328.351558] cloud-init[8472]: Waiting for storage node to create etcd-backup-s3-credentials secret...
+   >
+   > In this case, the following script is safe to be executed again on `ncn-s001`:
+   >
+   > ncn-s001# /srv/cray/scripts/common/storage-ceph-cloudinit.sh
+   >
+   > After this script finishes, the secrets will be created and the cloud-init script on the master node(s) should complete.
+   >
 
 <a name="deploy"></a>
 ##### 3.2 Deploy
