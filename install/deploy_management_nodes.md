@@ -651,13 +651,13 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 
    1. This command will list the available helper scripts.
       ```bash
-      pit# ls -1 /usr/bin/*mellanox_set_bgp_peer*py
+      pit# ls -1 /usr/local/bin/*mellanox_set_bgp_peer*py
       ```
 
       Expected output looks similar to the following:
 
       ```
-      /usr/bin/mellanox_set_bgp_peers.py
+      /usr/local/bin/mellanox_set_bgp_peers.py
       ```
 
    1. Run the BGP helper script if you have mellanox switches.
@@ -672,7 +672,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
       The IP addresses in this example should be replaced by the IP addresses of the switches.
 
       ```bash
-      pit# /usr/bin/mellanox_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/```
+      pit# /usr/local/bin/mellanox_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/```
 
    1. Run CANU if you have Aruba switches.
      
