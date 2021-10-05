@@ -1,10 +1,12 @@
-# CSM Operational Activities
+
+
+# Cray System Management (CSM) Administration Guide
 
 The Cray System Management (CSM) operational activities are administrative procedures required to operate an HPE Cray EX system with CSM software installed.
 
 The following administrative topics can be found in this guide:
 
-- [CSM Operational Activities](#csm-operational-activities)
+- [Cray System Management (CSM) Administration Guide](#cray-system-management-csm-administration-guide)
     - [CSM Product Management](#csm-product-management)
   - [Image Management](#image-management)
   - [Boot Orchestration](#boot-orchestration)
@@ -24,7 +26,7 @@ The following administrative topics can be found in this guide:
   - [System Layout Service (SLS)](#system-layout-service-sls)
   - [System Configuration Service](#system-configuration-service)
   - [Hardware State Manager (HSM)](#hardware-state-manager-hsm)
-  - [Hardware Management (HM) Collector](#hm-collector)
+  - [Hardware Management (HM) Collector](#hardware-management-hm-collector)
   - [Node Management](#node-management)
   - [River Endpoint Discovery Service (REDS)](#river-endpoint-discovery-service-reds)
   - [Network](#network)

@@ -11,8 +11,8 @@ product streams for the HPE Cray EX system can be installed or upgraded.
 ## Topics
 
 1. [Prepare for Upgrade](#prepare_for_upgrade)
-1. [Update Management Network](#update_management_network)
 1. [Upgrade Management Nodes and CSM Services](#upgrade_management_nodes_csm_services)
+1. [Update Management Network](#update_management_network)
 1. [Validate CSM Health](#validate_csm_health)
 1. [Update Firmware with FAS](#update_firmware_with_fas)
 1. [Next Topic](#next_topic)
@@ -30,6 +30,14 @@ sections, but there is also a general troubleshooting topic.
 
    <a name="update_management_network"></a>
 
+1. Upgrade Management Nodes and CSM Services
+
+    The upgrade of CSM software will do a controlled, rolling reboot of all management nodes before updating the CSM services.
+
+    The upgrade is a guided process Starting with [Upgrade Management Nodes and CSM Services](1.0/README.md)
+
+    <a name="validate_csm_health"></a>
+
 1. Update Management Network
 
    There are new features and functions with Shasta v1.5. Some of these changes were available as patches and hotfixes
@@ -42,14 +50,6 @@ sections, but there is also a general troubleshooting topic.
    See [Update Management Network](update_management_network.md)
 
    <a name="upgrade_management_nodes_csm_services"></a>
-
-1. Upgrade Management Nodes and CSM Services
-
-    The upgrade of CSM software will do a controlled, rolling reboot of all management nodes before updating the CSM services.
-
-    The upgrade is a guided process Starting with [Upgrade Management Nodes and CSM Services](1.0/README.md)
-
-    <a name="validate_csm_health"></a>
 
 1. Validate CSM Health
 
@@ -88,5 +88,6 @@ sections, but there is also a general troubleshooting topic.
 1. Next Topic
 
     After completion of the firmware update with FAS, the CSM product stream has been fully upgraded and
-    configured. Refer to the _HPE Cray EX Installation and Configuration Guide 1.5 S-8000_ for other product streams
-    to be upgraded and configured after CSM.
+    configured. Refer to the 1.5 _HPE Cray EX System Software Getting Started Guide S-8000_ 
+    on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg 
+    more information on other product streams to be upgraded and configured after CSM.
