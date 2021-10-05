@@ -759,7 +759,7 @@ Observe the output of the checks and note any failures, then remediate them.
 
    Once that command has finished, the following will extract the test totals reported for each node:
    ```bash
-   pit# grep "Total" csi-pit-validate-k8s.log
+   pit# grep "Total Test" csi-pit-validate-k8s.log
    ```
 
    Example output for a system with 5 master and worker nodes (other than the PIT node):
