@@ -6,7 +6,9 @@ Non-compute nodes boot two ways:
 
 ## Topics:
 
-* [Determine if NCNs booted via disk or PXE](#determine-if-ncns-booted-via-disk-or-pxe)
+* [Determine the Current Boot Order](#determine-the-current-boot-order)
+   * [Reasons to Change the Boot Order](#reasons-to-change-the-bootorder)
+* [Determine if NCNs Booted via Disk or PXE](#determine-if-ncns-booted-via-disk-or-pxe)
 * [Set BMCs to DHCP](#set-bmcs-to-dhcp)
 * [Boot Order Overview](#set-boot-order)
 * [Setting Order](#setting-order)
@@ -15,8 +17,29 @@ Non-compute nodes boot two ways:
 * [Reverting Changes](#reverting-changes)
 * [Locating USB Device](#locating-usb-device)
 
+<a name="determine-the-current-boot-order"></a>
+
+### Determine the Current Boot Order
+
+Under normal operations, the NCNs use the following boot order:
+
+1. PXE (to ensure the NCN is booting with desired images and configs)
+2. Disk (fallback in the even PXE services are unavailable)
+
+<a name="reasons-to-change-the-bootorder"></a>
+
+#### Reasons to Change the Boot Order
+
+Under normal operations, it is not necessary to change the boot order.  Having PXE first and disk as a fallback works in the majority of situations.
+
+It may be desireable to change this order under these circumstances:
+
+- testing disk-backed booting
+- booting from a USB or remote ISO
+- testing or deploying other customizations
+
 <a name="determine-if-ncns-booted-via-disk-or-pxe"></a>
-## Determine if NCNs booted via disk or PXE
+## Determine if NCNs Booted via Disk or PXE
 
 There are two different methods for determining whether a management node is booted using disk or
 PXE. The method to use will vary depending on the system environment.
