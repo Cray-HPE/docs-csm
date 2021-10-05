@@ -4,17 +4,17 @@
 
 This topic provides directions on constructing the `application_node_config.yaml` file. This file controls how the `csi config init` command finds and treats application nodes discovered in the `hmn_connections.json` file when generating configuration files for the system.
 
-* [Requirements](#requirements)
+* [Prerequisites](#prerequisites)
 * [Background](#background)
 * [Directions](#directions)
 
-<a name="requirements"></a>
-## Requirements
+<a name="prerequisites"></a>
+## Prerequisites
 
 The `application_node_config.yaml` file can be constructed from information from one of the following sources:
 
 - The SHCD Excel spreadsheet for the system
-- The `hmn_connections.json` file generated from the system's SHCD.
+- The `hmn_connections.json` file generated from the system's SHCD
 
 <a name="background"></a>
 ## Background
@@ -78,13 +78,13 @@ Example hmn_connections.json row representing an application node with SourceNam
 
     If the HMN Connections.json file is not available, then the HMN tab of SHCD spreadsheet will need to be used instead. The table below is equivalent to the [example hmn_connections.json output](#hmn-connections-example-output) above.
 
-| Source (J20) | Rack (K20) | Location (L20) | (M20) | Parent (N20) | (O20) | Port (P20) | Destination (Q20) | Rack (R20) | Location (S20) | (T20) | Port (U20) |
-| ------------ | ---------- | -------------- | ----- | ------------ | ----- | ---------- | ----------------- | ---------- | -------------- | ----- | ---------- |
-| gateway01    | x3000      | u29            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j42        |
-| login02      | x3000      | u28            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j43        |
-| lnet01       | x3000      | u27            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j41        |
-| vn01         | x3000      | u25            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j40        |
-| uan01        | x3000      | u23            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j39        |
+    | Source (J20) | Rack (K20) | Location (L20) | (M20) | Parent (N20) | (O20) | Port (P20) | Destination (Q20) | Rack (R20) | Location (S20) | (T20) | Port (U20) |
+    | ------------ | ---------- | -------------- | ----- | ------------ | ----- | ---------- | ----------------- | ---------- | -------------- | ----- | ---------- |
+    | gateway01    | x3000      | u29            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j42        |
+    | login02      | x3000      | u28            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j43        |
+    | lnet01       | x3000      | u27            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j41        |
+    | vn01         | x3000      | u25            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j40        |
+    | uan01        | x3000      | u23            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j39        |
 
 3. Add additional application node prefixes.
 
