@@ -1,19 +1,9 @@
 # Prepare Management Nodes
 
-Some preparation of the management nodes might be needed before starting an install or reinstall.
-
-For either scenario, the BMC and BIOS firmware should be checked and may need to be updated on the node which will become the PIT node. If necessary, [Set Gigabyte Node BMC to Factory Defaults](set_gigabyte_node_bmc_to_factory_defaults.md).
-
-For an install, if the system ever had any previous software installed, then storage might need to be wiped on management nodes. And if switching a system from USB LiveCD to RemoteISO LiveCD, the old USB device might need to be wiped.
-
-For a reinstall, the preparation includes quiescing the compute nodes and application nodes, scaling back DHCP on the management nodes,
-wiping the storage on the management nodes, and powering off the management nodes.
-
 The procedures described on this page are being done before any node is booted with the Cray Pre-Install Toolkit. When the PIT node is referenced during these procedures, it means the node that will be be booted as the PIT node.
 
 ## Topics:
 
-1. [Firmware Check on PIT Node](#firmware_check_on_pit_node)
 1. [Quiesce Compute and Application Nodes](#quiesce_compute_and_application_nodes)
 1. [Disable DHCP Service](#disable_dhcp_service) (if any management nodes are booted)
 1. [Wipe Disks on Booted Nodes](#wipe_disks_on_booted_nodes)
@@ -21,20 +11,6 @@ The procedures described on this page are being done before any node is booted w
 1. [Set Node BMCs to DHCP](#set_node_bmcs_to_dhcp)
 1. [Wipe USB Device on PIT Node](#wipe_usb_device_on_pit_node) (**Only if** switching from USB LiveCD method to RemoteISO LiveCD method)
 1. [Power Off PIT Node](#power_off_pit_node)
-
-<a name="firmware_check_on_pit_node"></a>
-## Firmware Check on PIT Node
-
-Check the BMC and BIOS firmware for the PIT node and update if necessary.
-
-If the PIT node does not have the minimum level, it is possible to update it using a method described in the HPC Firmware Pack (HFP).
-The HPC Firmware Pack is available in the same location as other product streams which are part of the software stack for HPE Cray Ex systems.
-
-See the HPC Firmware Pack product stream for required minimum levels and procedures to check and update firmware.
-
-Later in the installation process the HPC Firmware Pack will be installed on the PIT node and added to the Nexus repository so that it can be used in conjunction with the Firmware Action Services (FAS) to update firmware on other components.
-
-See [Update NCN Firmware](update_ncn_firmware.md)
 
 <a name="quiesce_compute_and_application_nodes"></a>
 ## Quiesce compute nodes and application nodes.
