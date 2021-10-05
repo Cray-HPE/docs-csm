@@ -1,6 +1,10 @@
 ## Updating the Liquid-Cooled EX Cabinet CEC with Default Credentials
 
-This changes the credential for liquid-cooled EX cabinet chassis controllers, node controllers, and switch controllers (BMCs) used by CSM services after the CECs have been set to a new global default credential. 
+This procedure changes the credential for liquid-cooled EX cabinet chassis controllers and node controller (BMCs) used by CSM services after the CECs have been set to a new global default credential. 
+
+**NOTE:** This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC default credentials must be changed using the procedures in the Slingshot product documentation. Refer to "Change Switch BMC Passwords" in the Slingshot product documentation for more information. 
+
+This procedure provisions only the default Redfish root account passwords. It does not modify Redfish accounts that have been added after an initial system installation.
 
 ### Prerequisites
 
@@ -16,7 +20,7 @@ The MEDS sealed secret contains the default global credential used by MEDS when 
 #### 1.1 Acquire site-init.
 Before redeploying MEDS, update the `customizations.yaml` file in the `site-init` secret in the `loftsman` namespace.
 
-1. If the `site-init` repository is available as a remote repository then clone it on the host orchestrating the upgrade [as described here](https://github.com/Cray-HPE/docs-csm/blob/main/install/prepare_site_init.md#5-version-control-site-init-files).
+1. If the `site-init` repository is available as a remote repository, then clone it on the host orchestrating the upgrade [as described here](https://github.com/Cray-HPE/docs-csm/blob/main/install/prepare_site_init.md#5-version-control-site-init-files).
 
    ```bash
    ncn-m001# git clone "$SITE_INIT_REPO_URL" site-init
@@ -65,7 +69,7 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
     ```
 
 2. Specify the desired default credentials for MEDS to use with new hardware:
-    > Replace `foobar` with the root password that was configured on the CEC in the system.
+    > Replace `foobar` with the root password configured on the CEC(s).
     ```bash
     ncn-m001# echo '{ "Username": "root", "Password": "foobar" }' | base64 > creds.json.b64
     ```

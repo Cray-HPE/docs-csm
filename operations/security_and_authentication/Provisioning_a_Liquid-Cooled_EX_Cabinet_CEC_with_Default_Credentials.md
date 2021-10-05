@@ -2,7 +2,9 @@
 
 ## Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials
 
-This procedure provisions a Glibc compatible SHA-512 administrative password hash to a cabinet environmental controller (CEC). This password becomes the Redfish endpoint superuser credential to access the CMM controllers, node controllers, and switch controllers (BMCs) in the cabinet. 
+This procedure provisions a Glibc compatible SHA-512 administrative password hash to a cabinet environmental controller (CEC). This password becomes the Redfish endpoint superuser credential to access the CMM controllers and node controllers (BMCs). 
+
+**NOTE:** This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC default credentials must be changed using the procedures in the Slingshot product documentation. Refer to "Change Switch BMC Passwords" in the Slingshot product documentation for more information. 
 
 ### Prerequisites
 
@@ -24,9 +26,7 @@ This procedure provisions a Glibc compatible SHA-512 administrative password has
 1. Connect an Ethernet cable from an Apple Mac or Linux laptop to the CEC Ethernet port.
    The CEC Ethernet PHY will auto negotiate to either 10/100Mb speed and it supports auto crossover functionality. Any standard Ethernet patch cord should work for this.
    
-   
-   
-   ![](CEC_Front_Panel.svg)
+   ![](../../img/CEC_Front_Panel.svg)
    
 2. On an Apple Mac or Linux laptop, start the terminal program and use Netcat `'nc'` to connect to CEC command shell. 
 
@@ -70,7 +70,7 @@ This procedure provisions a Glibc compatible SHA-512 administrative password has
 
 7. Enter `set_hash` and provide the password hash value as the argument.
 
-   The CEC validates the input syntax of the hash. Adding an extra char or omitting a character is flagged as an error. I a character is changed, the password entered in the serial console login shell or the Redfish `root` account will not work. If that happens, rerun the`set_hash` command on the CEC and reboot the CMMs.
+   The CEC validates the input syntax of the hash. Adding an extra char or omitting a character is flagged as an error. I a character is changed, the password entered in the serial console login shell or the Redfish `root` account will not work. If that happens, rerun the `set_hash` command on the CEC and reboot the CMMs.
    [end]
 
       ```screen
@@ -84,9 +84,9 @@ This procedure provisions a Glibc compatible SHA-512 administrative password has
    CEC>
    ```
 
-   The CEC remains in privileged mode until it is reset with the `lock` command, or if the X button on the CEC front panel is pressed. Typing `exit` or terminating the connection exits privileged mode. There is no connection timeout.
+   The CEC remains in privileged mode until it is reset with the `lock` command or if the **X** button on the CEC front panel is pressed. Typing `exit` or terminating the connection exits privileged mode. There is no connection timeout.
 
-9. Reboot the CMMs attached to this CEC to load the new credential. The following command reboots all the even numbered, or odd numbered CMMs, depending on which CEC is issuing the commands.
+9. Reboot the CMMs attached to this CEC to load the new credential. The following command reboots all the even numbered, or odd numbered CMMs in the cabinet, depending on which CEC is issuing the commands.
 
    ```screen
    CEC> reset_cmm cmm0
@@ -97,12 +97,9 @@ This procedure provisions a Glibc compatible SHA-512 administrative password has
 
    The CMMs can also be reset from the front panel controls:
 
+   ![Front Panel Controls](../../img//CEC_Display_Controls_CEC_Actions.svg)
 
-   ![Front Panel Controls](./CEC_Display_Controls_CEC_Actions.svg)
-
-
-
-10. To test the password, connect to the CMM serial console though the CEC. This can also be done with `nc` but it requires different arguments. The IPv6 address is the same, but the port numbers are different as described below. 
+10. To test the password, connect to the CMM serial console though the CEC. It is possible to connect to the CMM serial console  with `nc` but it requires different arguments. The IPv6 address is the same, but the port numbers are different as described below. 
 
     ```screen
     #!/bin/bash
@@ -115,4 +112,6 @@ This procedure provisions a Glibc compatible SHA-512 administrative password has
     - The odd numbered CEC manages the CMM serial console for chassis 1, 3, 5, 7 on TCP port numbers 50000-50003 respectively. 
     - If using the script shown in the example to connect to the CMM console, type `exit` to return to the CMM login prompt and enter ctrl-c to close the console connection.
 
-11. Repeat this procedure for the other CEC in the cabinet. HPE Cray EX2000 cabinets (Hill) have a single CEC.
+11. Perform this procedure for each CEC in all system cabinets.
+
+    HPE Cray EX2000 cabinets (Hill) have a single CEC per cabinet.
