@@ -28,6 +28,7 @@ the number of storage and worker nodes.
    1. [Deploy Management Nodes](#deploy_management_nodes)
       1. [Deploy Workflow](#deploy-workflow)
       1. [Deploy](#deploy)
+      1. [Check LVM on Masters and Workers](#check-lvm-on-masters-and-workers)
       1. [Check for Unused Drives on Utility Storage Nodes](#check-for-unused-drives-on-utility-storage-nodes)
       1. [Apply NCN Post-Boot Workarounds](#apply-ncn-post-boot-workarounds)
    1. [Configure after Management Node Deployment](#configure_after_management_node_deployment)
@@ -210,7 +211,7 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 
 
 <a name="deploy-workflow"></a>
-#### 3.1 Deploy Workflow
+### 3.1 Deploy Workflow
 The configuration workflow described here is intended to help understand the expected path for booting and configuring. See the actual steps below for the commands to deploy these management NCNs.
 
 1. Start watching the consoles for `ncn-s001` and at least one other storage node
@@ -240,7 +241,7 @@ The configuration workflow described here is intended to help understand the exp
    >
 
 <a name="deploy"></a>
-#### 3.2 Deploy
+### 3.2 Deploy
 
 1. Change the default root password and SSH keys
    > If you want to avoid using the default install root password and SSH keys for the NCNs, follow the
@@ -431,8 +432,85 @@ The configuration workflow described here is intended to help understand the exp
     pit#
     ```
 
+<a name="check-lvm-on-masters-and-workers"></a>
+### 3.3 Check LVM on Masters and Workers
+
+#### 3.3.1 Run The Check
+
+Run the following command on the PIT node to validate that the expected LVM labels are present on disks on the master and worker nodes. When it prompts you for a password, enter the password for `ncn-m002`.
+
+```bash
+pit# /usr/share/doc/csm/install/scripts/check_lvm.sh
+```
+
+#### 3.3.2 Expected Check Output
+
+Expected output looks something like
+```
+When prompted, please enter the NCN password for ncn-m002
+Warning: Permanently added 'ncn-m002,10.252.1.11' (ECDSA) to the list of known hosts.
+Password:
+Checking ncn-m002...
+ncn-m002: OK
+Checking ncn-m003...
+Warning: Permanently added 'ncn-m003,10.252.1.10' (ECDSA) to the list of known hosts.
+Warning: Permanently added 'ncn-m003,10.252.1.10' (ECDSA) to the list of known hosts.
+ncn-m003: OK
+Checking ncn-w001...
+Warning: Permanently added 'ncn-w001,10.252.1.9' (ECDSA) to the list of known hosts.
+Warning: Permanently added 'ncn-w001,10.252.1.9' (ECDSA) to the list of known hosts.
+ncn-w001: OK
+Checking ncn-w002...
+Warning: Permanently added 'ncn-w002,10.252.1.8' (ECDSA) to the list of known hosts.
+Warning: Permanently added 'ncn-w002,10.252.1.8' (ECDSA) to the list of known hosts.
+ncn-w002: OK
+Checking ncn-w003...
+Warning: Permanently added 'ncn-w003,10.252.1.7' (ECDSA) to the list of known hosts.
+Warning: Permanently added 'ncn-w003,10.252.1.7' (ECDSA) to the list of known hosts.
+ncn-w003: OK
+SUCCESS: LVM checks passed on all master and worker NCNs
+```
+
+***If the check fails for any nodes, the problem must be resolved before continuing.*** See [LVM Check Failure Recovery](#lvm-check-failure-recovery).
+
+<a name="manual-lvm-check-procedure"></a>
+#### 3.3.3 Manual LVM Check Procedure
+
+If needed, the LVM checks can be performed manually on the master and worker nodes.
+
+* Manual check on master nodes:
+    ```bash
+    ncn-m# blkid -L ETCDLVM
+    /dev/sdc
+    ```
+
+* Manual check on worker nodes:
+    ```bash
+    ncn-w# blkid -L CONLIB
+    /dev/sdc
+   ncn-w# blkid -L CONRUN
+   /dev/sdc
+   ncn-w# blkid -L K8SLET
+   /dev/sdc
+   ```
+
+The manual checks are considered successful if all of the `blkid` commands report a disk device (such as `/dev/sdc` -- the particular device is unimportant). If any of the `lsblk` commands return no output, then the check is a failure. **Any failures must be resolved before continuing.** See the following section for details on how to do so.
+
+<a name="lvm-check-failure-recovery"></a>
+#### 3.3.3 LVM Check Failure Recovery
+
+If there are LVM check failures, then the problem must be resolved before continuing to the next step.
+
+* If a **master node** has the problem then it is best to wipe and redeploy all of the management nodes before continuing the installation.
+    1. Wipe the each of the worker and master nodes (except `ncn-m001` because it is the PIT node) using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe) and then wipe each of the storage nodes using the 'Full Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#full-wipe).
+    1. Return to the [Boot the **Storage Nodes**](#boot-the-storage-nodes) step of [Deploy Management Nodes](#deploy_management_nodes) section above.
+
+* If a **worker node** has the problem then it is best to wipe and redeploy that worker node before continuing the installation.
+    1. Wipe this  worker node using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe).
+    1. Return to the [Boot the Master and Worker Nodes**](#boot-master-and-worker-nodes) step of [Deploy Management Nodes](#deploy_management_nodes) section above.
+
 <a name="check-for-unused-drives-on-utility-storage-nodes"></a>
-### 3.3 Check for Unused Drives on Utility Storage Nodes
+### 3.4 Check for Unused Drives on Utility Storage Nodes
 
  > **`IMPORTANT:`** Do the following if NCNs are Gigabyte hardware.
  > **`IMPORTANT:`** the cephadm may output this warning "WARNING: The same type, major and minor should not be used for multiple devices.". You can ignore this warning. 
@@ -562,7 +640,7 @@ The configuration workflow described here is intended to help understand the exp
 More information can be found at [the `cephadm` reference page](../operations/utility_storage/Cephadm_Reference_Material.md).
 
 <a name="apply-ncn-post-boot-workarounds"></a>
-### 3.4 Apply NCN Post-Boot Workarounds
+### 3.5 Apply NCN Post-Boot Workarounds
 
 Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `after-ncn-boot` breakpoint.
 
@@ -784,40 +862,7 @@ Observe the output of the checks and note any failures, then remediate them.
 
    If these total lines report any failed tests, look through the full output of the test to see which node had the failed test and what the details are for that test.
 
-   > **`WARNING`** If there are failures for tests with names like "Worker Node CONLIB FS Label", then these manual tests should be run on the node which reported the failure. The master nodes have a test looking for ETCDLVM label. The worker nodes have tests looking for the CONLIB, CONRUN, and K8SLET labels.
-   >
-   > Master nodes:
-   >
-   > ```bash
-   > ncn-m# blkid -L ETCDLVM
-   > /dev/sdc
-   > ```
-   >
-   > Worker nodes:
-   >
-   > ```bash
-   > ncn-w# blkid -L CONLIB
-   > /dev/sdc
-   > ncn-w# blkid -L CONRUN
-   > /dev/sdc
-   > ncn-w# blkid -L K8SLET
-   > /dev/sdc
-   > ```
-   >
-
-   > **WARNING** If these manual tests do not report a disk device such as "/dev/sdc" (this letter will vary and is unimportant) as having the respective label on that node, then the problem must be resolved before continuing to the next step.
-   > * If a **master node** has the problem then it is best to wipe and redeploy all of the management nodes before continuing the installation.
-   >   1. Wipe the each of the worker and master nodes (except `ncn-m001` because it is the PIT node) using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe) and then wipe each of the storage nodes using the 'Full Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#full-wipe).
-   >   1. Return to the [Boot the **Storage Nodes**](#boot-the-storage-nodes) step of [Deploy Management Nodes](#deploy_management_nodes) section above.
-   > * If a **worker node** has the problem then it is best to wipe and redeploy that worker node before continuing the installation.
-   >   1. Wipe this  worker node using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe).
-   >   1. Return to the [Boot the Master and Worker Nodes**](#boot-master-and-worker-nodes) step of [Deploy Management Nodes](#deploy_management_nodes) section above.
-
-1. If your shell terminal is not echoing your input after running the above `csi pit validate` tests, then reset the terminal.
-
-   ```bash
-   pit# reset
-   ```
+   > **`WARNING`** If there are failures for tests with names like "Worker Node CONLIB FS Label", then manual tests should be run on the node which reported the failure. See [Manual LVM Check Procedure](#manual-lvm-check-procedure). If the manul tests fail, then the problem must be resolved before continuing to the next step. See [LVM Check Failure Recovery](#lvm-check-failure-recovery).
 
 1. Ensure that weave has not become split-brained.
 
