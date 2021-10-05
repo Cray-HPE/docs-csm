@@ -11,14 +11,14 @@ will join Kubernetes after it is rebooted later in
 [Redeploy PIT Node](index.md#redeploy_pit_node).
 
 <a name="timing-of-deployments"></a>
-### Timing of Deployments
+## Timing of Deployments
 
 The timing of each set of boots varies based on hardware. Nodes from some manufacturers will
 POST faster than others or vary based on BIOS setting. After powering on a set of nodes,
 an administrator can expect a healthy boot session to take about 60 minutes depending on
 the number of storage and worker nodes.
 
-### Topics:
+## Topics:
 
    1. [Prepare for Management Node Deployment](#prepare_for_management_node_deployment)
       1. [Tokens and IPMI Password](#tokens-and-ipmi-password)
@@ -40,15 +40,13 @@ the number of storage and worker nodes.
       1. [Optional Validation](#optional-validation)
    1. [Next Topic](#next-topic)
 
-## Details
-
 <a name="prepare_for_management_node_deployment"></a>
-### 1. Prepare for Management Node Deployment
+## 1. Prepare for Management Node Deployment
 
 Preparation of the environment must be done before attempting to deploy the management nodes.
 
 <a name="tokens-and-ipmi-password"></a>
-#### 1.1 Tokens and IPMI Password
+### 1.1 Tokens and IPMI Password
 
 1. Define shell environment variables that will simplify later commands to deploy management nodes.
 
@@ -79,14 +77,14 @@ Preparation of the environment must be done before attempting to deploy the mana
    ```
 
 <a name="apply-ncn-pre-boot-workarounds"></a>
-#### 1.2 Apply NCN Pre-Boot Workarounds
+### 1.2 Apply NCN Pre-Boot Workarounds
 
 _There will be post-boot workarounds as well._
 
 Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `before-ncn-boot` breakpoint.
 
 <a name="ensure-time-is-accurate-before-deploying-ncns"></a>
-#### 1.3 Ensure Time Is Accurate Before Deploying NCNs
+### 1.3 Ensure Time Is Accurate Before Deploying NCNs
 
 **NOTE**: If you wish to use a timezone other than UTC, instead of step 1 below, follow
 [this procedure for setting a local timezone](../operations/node_management/Configure_NTP_on_NCNs.md#set-a-local-timezone), then
@@ -177,7 +175,7 @@ proceed to step 2.
    Repeat the above process for each NCN.
 
 <a name="update_management_node_firmware"></a>
-### 2. Update Management Node Firmware
+## 2. Update Management Node Firmware
 
 The management nodes are expected to have certain minimum firmware installed for BMC, node BIOS, and PCIe card
 firmware. Where possible, the firmware should be updated prior to install. Some firmware can be updated
@@ -205,7 +203,7 @@ during or after the installation, but it is better to meet the minimum NCN firmw
    * See [Clear Gigabyte CMOS](clear_gigabyte_cmos.md).
 
 <a name="deploy_management_nodes"></a>
-### 3. Deploy Management Nodes
+## 3. Deploy Management Nodes
 
 Deployment of the nodes starts with booting the storage nodes first. Then, the master nodes and worker nodes should be booted together.
 After the operating system boots on each node, there are some configuration actions which take place. Watching the
@@ -214,7 +212,7 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 
 
 <a name="deploy-workflow"></a>
-##### 3.1 Deploy Workflow
+#### 3.1 Deploy Workflow
 The configuration workflow described here is intended to help understand the expected path for booting and configuring. See the actual steps below for the commands to deploy these management NCNs.
 
 1. Start watching the consoles for `ncn-s001` and at least one other storage node
@@ -244,7 +242,7 @@ The configuration workflow described here is intended to help understand the exp
    >
 
 <a name="deploy"></a>
-##### 3.2 Deploy
+#### 3.2 Deploy
 
 1. Change the default root password and SSH keys
    > If you want to avoid using the default install root password and SSH keys for the NCNs, follow the
@@ -285,6 +283,7 @@ The configuration workflow described here is intended to help understand the exp
     pit# csi pit validate --livecd-preflight
     ```
 
+    > Note: This check sometimes leaves the terminal in a state where input is not echoed to the screen. If this happens, running the `reset` command will correct it.
     > Note: You can ignore any errors about not being able resolve arti.dev.cray.com.
 
 1. Print the consoles available to you:
@@ -307,7 +306,7 @@ The configuration workflow described here is intended to help understand the exp
     ncn-w003-mgmt
     ```
 
-    > **`IMPORTANT`** This is the administrators _last chance_ to run [NCN pre-boot workarounds](#apply-ncn-pre-boot-workarounds) (the `before-ncn-boot` breakpoint).
+    > **`IMPORTANT`** This is the administrator's _last chance_ to run [NCN pre-boot workarounds](#apply-ncn-pre-boot-workarounds) (the `before-ncn-boot` breakpoint).
 
     > **`NOTE`**: All consoles are located at `/var/log/conman/console*`
 <a name="boot-the-storage-nodes"></a>
@@ -435,12 +434,12 @@ The configuration workflow described here is intended to help understand the exp
     ```
 
 <a name="check-for-unused-drives-on-utility-storage-nodes"></a>
-#### 3.3 Check for Unused Drives on Utility Storage Nodes
+### 3.3 Check for Unused Drives on Utility Storage Nodes
 
  > **`IMPORTANT:`** Do the following if NCNs are Gigabyte hardware.
  > **`IMPORTANT:`** the cephadm may output this warning "WARNING: The same type, major and minor should not be used for multiple devices.". You can ignore this warning. 
 
-##### Option 1
+#### Option 1
 
   If you have OSDs on each node (`ceph osd tree` can show this), then you have all your nodes in Ceph. That means you can utilize the orchestrator to look for the devices.
 
@@ -451,8 +450,8 @@ The configuration workflow described here is intended to help understand the exp
     24
     ```
 
-2. Compare your number of OSDs to the output below. 
-   > **NOTE:**  If your Ceph cluster is large and has a lot of nodes, you can specify a node after the following command to limit the results.
+1. Compare your number of OSDs to the output below. 
+    > **NOTE:**  If your Ceph cluster is large and has a lot of nodes, you can specify a node after the below command to limit the results.
 
     ```bash
     ncn-s# ceph orch device ls
@@ -518,7 +517,7 @@ The configuration workflow described here is intended to help understand the exp
 
     * If it has an LVM volume like above, then it may be in use and you should do the option 2 check below to make sure we can wipe the drive.
 
-##### Option 2
+#### Option 2
 
 1. Log into **each** ncn-s node and check for unused drives.
 
@@ -565,18 +564,18 @@ The configuration workflow described here is intended to help understand the exp
 More information can be found at [the `cephadm` reference page](../operations/utility_storage/Cephadm_Reference_Material.md).
 
 <a name="apply-ncn-post-boot-workarounds"></a>
-#### 3.4 Apply NCN Post-Boot Workarounds
+### 3.4 Apply NCN Post-Boot Workarounds
 
 Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `after-ncn-boot` breakpoint.
 
 <a name="configure_after_management_node_deployment"></a>
-### 4. Configure after Management Node Deployment
+## 4. Configure after Management Node Deployment
 
 After the management nodes have been deployed, configuration can be applied to the booted nodes.
 
 
 <a name="livecd-cluster-authentication"></a>
-#### 4.1 LiveCD Cluster Authentication
+### 4.1 LiveCD Cluster Authentication
 
 The LiveCD needs to authenticate with the cluster to facilitate the rest of the CSM installation.
 
@@ -591,164 +590,156 @@ The LiveCD needs to authenticate with the cluster to facilitate the rest of the 
 
 
 <a name="bgp-routing"></a>
-#### 4.2 BGP Routing
+### 4.2 BGP Routing
 
 After the NCNs are booted, the BGP peers will need to be checked and updated if the neighbor IP addresses are incorrect on the switches. Follow the steps below and see [Check and Update BGP Neighbors](../operations/network/metallb_bgp/Update_BGP_Neighbors.md) for more details on the BGP configuration.
 
 1. Make sure the SYSTEM_NAME variable is set to name of your system.
 
-   ```bash
-   pit# export SYSTEM_NAME=eniac
-   ```
+    ```bash
+    pit# export SYSTEM_NAME=eniac
+    ```
 
 1. Determine the IP address of the worker NCNs.
 
-   ```bash
-   pit# grep -B1 "name: ncn-w" /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN.yaml
-   ```
+    ```bash
+    pit# grep -B1 "name: ncn-w" /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN.yaml
+    ```
 
 1. Determine the IP addresses for the switches that are peering.
 
-   ```bash
-   pit# grep peer-address /var/www/ephemeral/prep/${SYSTEM_NAME}/metallb.yaml
-   ```
+    ```bash
+    pit# grep peer-address /var/www/ephemeral/prep/${SYSTEM_NAME}/metallb.yaml
+    ```
 
-1. Do the following steps for each of the switch IP addresses that you found in the previous step:
+1. <a name="bgp-check-procedure">Do the following steps</a> ***for each of the switch IP addresses that you found previously***:
 
     1. Log in to the switch as the `admin` user:
-
+      
         ```bash
         pit# ssh admin@<switch_ip_address>
-        ```
-
+        ```   
 
     1. Clear the BGP peering sessions by running the following commands. You should see either "arubanetworks" or "Mellanox" in the first output you see when you log in to the switch.
-        - Aruba: `clear bgp *`
-        - Mellanox: First run `enable`, then run `clear ip bgp all`
+        * Aruba: `clear bgp *`
+        * Mellanox: First run `enable`, then run `clear ip bgp all`
 
-   At this point the peering sessions with the worker IP addresses should be in IDLE, CONNECT, or ACTIVE state but not ESTABLISHED state. This is because the MetalLB speaker pods have not been deployed yet.
- 
-   You should see that the MsgRcvd and MsgSent columns for the worker IP addresses are 0.
+    1. Wait about 10 seconds, then check the status of the BGP peering sessions.
+        * Aruba: `show bgp ipv4 unicast summary`
+        * Mellanox: `show ip bgp summary`
 
-1. Check the status of the BGP peering sessions by running the following commands **on each switch**:
-    - Aruba: `show bgp ipv4 unicast summary`
-    - Mellanox: `show ip bgp summary`
+        You should see a neighbor for each of the workers NCN IP addresses found above. If it is an Aruba switch, you will also see a neighbor for the other switch of the pair that are peering.
 
-    You should see a neighbor for each of the workers NCN IP addresses found in an earlier step. If it is an Aruba switch, you will also see a neighbor for the other switch of the pair that are peering.
+        At this point the peering sessions with the worker IP addresses should be in `IDLE`, `CONNECT`, or `ACTIVE` state (not `ESTABLISHED`). This is due to the MetalLB speaker pods not being deployed yet.
 
-   At this point the peering sessions with the worker IP addresses should be in `IDLE`, `CONNECT`, or `ACTIVE` state (not `ESTABLISHED`). This is due to the MetalLB speaker pods not being deployed yet.
+        You should see that the `MsgRcvd` and `MsgSent` columns for the worker IP addresses are 0.
 
-   You should see that the `MsgRcvd` and `MsgSent` columns for the worker IP addresses are 0.
+    1. Check the BGP config to verify that the NCN neighbors are configured as passive.
+        * Aruba: 
+        
+            ```
+            # show run bgp
+            ``` 
+            
+            The passive neighbor configuration is required, which looks similar to `neighbor 10.252.1.7 passive`
 
-1. If the neighbor IP addresses do not match the worker NCN IP addresses, use the helper script for Mellanox and CANU (Cray Automated Network Utility) for Aruba.
+            EXAMPLE OUTPUT
+            ```
+            sw-spine-001# show run bgp
+            router bgp 65533
+            bgp router-id 10.252.0.2
+            maximum-paths 8
+            distance bgp 20 70
+            neighbor 10.252.0.3 remote-as 65533
+            neighbor 10.252.1.7 remote-as 65533
+            neighbor 10.252.1.7 passive
+            neighbor 10.252.1.8 remote-as 65533
+            neighbor 10.252.1.8 passive
+            neighbor 10.252.1.9 remote-as 65533
+            neighbor 10.252.1.9 passive
+            ```
 
-   1. This command will list the available helper scripts.
-      ```bash
-      pit# ls -1 /usr/local/bin/*mellanox_set_bgp_peer*py
-      ```
+        * Mellanox: 
+        
+            ```
+            # show run protocol bgp
+            ``` 
+            
+            The passive neighbor configuration is required, which looks similar to `router bgp 65533 vrf default neighbor 10.252.1.7 transport connection-mode passive` 
 
-      Expected output looks similar to the following:
+            EXAMPLE OUTPUT
+            ```
+            protocol bgp
+            router bgp 65533 vrf default
+            router bgp 65533 vrf default router-id 10.252.0.2 force
+            router bgp 65533 vrf default maximum-paths ibgp 32
+            router bgp 65533 vrf default neighbor 10.252.1.7 remote-as 65533
+            router bgp 65533 vrf default neighbor 10.252.1.7 route-map ncn-w003
+            router bgp 65533 vrf default neighbor 10.252.1.8 remote-as 65533
+            router bgp 65533 vrf default neighbor 10.252.1.8 route-map ncn-w002
+            router bgp 65533 vrf default neighbor 10.252.1.9 remote-as 65533
+            router bgp 65533 vrf default neighbor 10.252.1.9 route-map ncn-w001
+            router bgp 65533 vrf default neighbor 10.252.1.7 transport connection-mode passive
+            router bgp 65533 vrf default neighbor 10.252.1.8 transport connection-mode passive
+            router bgp 65533 vrf default neighbor 10.252.1.9 transport connection-mode passive
+            ```
 
-      ```
-      /usr/local/bin/mellanox_set_bgp_peers.py
-      ```
+    1. Repeat the previous steps for the remaining switch IP addresses.
 
-   1. Run the BGP helper script if you have mellanox switches.
+1. If the neighbor IP addresses do not match the worker NCN IP addresses:
 
-      The BGP helper script requires three parameters: the IP address of switch 1, the IP addresss of switch 2, and the path to the to CSI generated network files.
+    1. Run the script appropriate for your switch hardware vendor:
 
-      - The IP addresses used should be Node Management Network IP addresses (NMN). These IP addresses will be used for the BGP Router-ID.
-      - The path to the CSI generated network files must include `CAN.yaml`, `HMN.yaml`, `HMNLB.yaml`, `NMNLB.yaml`, and `NMN.yaml`. The path must include the SYSTEM_NAME.
+        * If you have Mellanox switches, run the BGP helper script.
 
-      For Mellanox:
+            The BGP helper script requires three parameters: the IP address of switch 1, the IP addresss of switch 2, and the path to the to CSI generated network files.
 
-      The IP addresses in this example should be replaced by the IP addresses of the switches.
+            * The IP addresses used should be Node Management Network IP addresses (NMN). These IP addresses will be used for the BGP Router-ID.
+            * The path to the CSI generated network files must include `CAN.yaml`, `HMN.yaml`, `HMNLB.yaml`, `NMNLB.yaml`, and `NMN.yaml`. The path must include the SYSTEM_NAME.
 
-      ```bash
-      pit# /usr/local/bin/mellanox_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/```
+            The IP addresses in this example should be replaced by the IP addresses of the switches.
 
-   1. Run CANU if you have Aruba switches.
+            ```bash
+            pit# /usr/local/bin/mellanox_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/
+            ```
+
+        * If you have Aruba switches, run CANU.
      
-      CANU requires three parameters: the IP address of switch 1, the IP addresss of switch 2, and the path to the to directory containing the file ```sls_input_file.json```
+            CANU requires three parameters: the IP address of switch 1, the IP addresss of switch 2, and the path to the to directory containing the file `sls_input_file.json`
 
-      The IP addresses in this example should be replaced by the IP addresses of the switches.
+            The IP addresses in this example should be replaced by the IP addresses of the switches.
 
-      ```bash
-      pit# canu -s 1.5 config bgp --ips 10.252.0.2,10.252.0.3 --csi-folder /var/www/ephemeral/prep/${SYSTEM_NAME}/```
+            ```bash
+            pit# canu -s 1.5 config bgp --ips 10.252.0.2,10.252.0.3 --csi-folder /var/www/ephemeral/prep/${SYSTEM_NAME}/
+            ```
 
-   1. Check the status of the BGP peering sessions **on each switch**.
-      - Aruba: `show bgp ipv4 unicast summary`
-      - Mellanox: `show ip bgp summary`
-
-      You should see a neighbor for each of the workers NCN IP addresses found above. If it is an Aruba switch, you will also see a neighbor for the other switch of the pair that are peering.
-
-      At this point the peering sessions with the worker IP addresses should be in `IDLE`, `CONNECT`, or `ACTIVE` state (not `ESTABLISHED`). This is due to the MetalLB speaker pods not being deployed yet.
-
-      You should see that the `MsgRcvd` and `MsgSent` columns for the worker IP addresses are 0.
-   1. Check the BGP config ***on each switch*** to verify that the NCN neighbors are configured as passive.
-      - Aruba: ```show run bgp``` The passive neighbor configuration is required. ```neighbor 10.252.1.7 passive``` 
-      EXAMPLE ONLY
-
-        ```
-        sw-spine-001# show run bgp
-        router bgp 65533
-        bgp router-id 10.252.0.2
-        maximum-paths 8
-        distance bgp 20 70
-        neighbor 10.252.0.3 remote-as 65533
-        neighbor 10.252.1.7 remote-as 65533
-        neighbor 10.252.1.7 passive
-        neighbor 10.252.1.8 remote-as 65533
-        neighbor 10.252.1.8 passive
-        neighbor 10.252.1.9 remote-as 65533
-        neighbor 10.252.1.9 passive
-        ```
-      - Mellanox: ```show run protocol bgp``` The passive neighbor configuration is required. ```router bgp 65533 vrf default neighbor 10.252.1.7 transport connection-mode passive``` 
-      EXAMPLE ONLY
-
-        ```
-        protocol bgp
-        router bgp 65533 vrf default
-        router bgp 65533 vrf default router-id 10.252.0.2 force
-        router bgp 65533 vrf default maximum-paths ibgp 32
-        router bgp 65533 vrf default neighbor 10.252.1.7 remote-as 65533
-        router bgp 65533 vrf default neighbor 10.252.1.7 route-map ncn-w003
-        router bgp 65533 vrf default neighbor 10.252.1.8 remote-as 65533
-        router bgp 65533 vrf default neighbor 10.252.1.8 route-map ncn-w002
-        router bgp 65533 vrf default neighbor 10.252.1.9 remote-as 65533
-        router bgp 65533 vrf default neighbor 10.252.1.9 route-map ncn-w001
-        router bgp 65533 vrf default neighbor 10.252.1.7 transport connection-mode passive
-        router bgp 65533 vrf default neighbor 10.252.1.8 transport connection-mode passive
-        router bgp 65533 vrf default neighbor 10.252.1.9 transport connection-mode passive
-        ```
+    1. Repeat the previous [BGP check procedure](#bgp-check-procedure) ***on each switch***.
 
 <a name="configure-and-trim-uefi-entries"></a>
-#### 4.3 Configure and Trim UEFI Entries
+### 4.3 Configure and Trim UEFI Entries
 
-> **`IMPORTANT`** *The Boot-Order is set by cloud-init; however, the current setting is still iterating. This manual step is required until further notice.*
-
-1. Do the following two steps outlined in [Set Boot Order](../background/ncn_boot_workflow.md#set-boot-order) **for all NCNs and the PIT node**.
+1. Do the following two steps **for all NCNs and the PIT node**:
 
    1. [Setting Order](../background/ncn_boot_workflow.md#setting-order)
    1. [Trimming Boot Order](../background/ncn_boot_workflow.md#trimming_boot_order)
 
 <a name="install-tests"></a>
-#### 4.4 Install Tests and Test Server on NCNs
+### 4.4 Install Tests and Test Server on NCNs
 
-    ```bash
-    pit# export CSM_RELEASE=csm-x.y.z
-    pit# pushd /var/www/ephemeral
-    pit# ${CSM_RELEASE}/lib/install-goss-tests.sh
-    pit# popd
-    ```
+```bash
+pit# export CSM_RELEASE=csm-x.y.z
+pit# pushd /var/www/ephemeral
+pit# ${CSM_RELEASE}/lib/install-goss-tests.sh
+pit# popd
+```
 
 <a name="validate_management_node_deployment"></a>
-### 5. Validate Management Node Deployment
+## 5. Validate Management Node Deployment
 
 Do all of the validation steps. The optional validation steps are manual steps which could be skipped.
 
 <a name="validation"></a>
-#### 5.1 Validation
+### 5.1 Validation
 
 The following `csi pit validate` commands will run a series of remote tests on the other nodes to validate they are healthy and configured correctly.
 
@@ -773,7 +764,7 @@ Observe the output of the checks and note any failures, then remediate them.
 
 1. Check the master and worker nodes.
 
-   **`Note`**: Throughout the output of the `csi pit validate` command there will be a test total for each node where the tests run. Be sure to check all of them and not just the final one.
+   **`Note`**: Throughout the output of the `csi pit validate` command there will be a test total for each node where the tests run. **Be sure to check all of them and not just the final one.** (a `grep` command is provided to help with this)
 
    ```bash
    pit# csi pit validate --k8s | tee csi-pit-validate-k8s.log
@@ -844,13 +835,7 @@ Observe the output of the checks and note any failures, then remediate them.
 
 
 <a name="optional-validation"></a>
-#### 5.2 Optional Validation
-
-   All validation should be taken care of by the CSI validate commands. The following checks can be
-   done for sanity-checking:
-
-   **Important common issues should be checked by tests, new pains in these areas should entail requests for
-   new tests.**
+### 5.2 Optional Validation
 
    1. Verify all nodes have joined the cluster
 
