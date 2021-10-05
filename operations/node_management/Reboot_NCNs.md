@@ -6,6 +6,7 @@ The following is a high-level overview of the non-compute node \(NCN\) reboot wo
   - Ensure `ncn-m001` is not running in "LiveCD" or install mode
   - Check the `metal.no-wipe` settings for all NCNs
   - Run all platform health checks, including checks on the Border Gateway Protocol \(BGP\) peering sessions
+  - [Validate the current boot order](../background/ncn_boot_workflow.md#determine-the-current-boot-order) (or [specify the boot order](../background/ncn_boot_workflow.md#set-boot-order))
 - Run the rolling NCN reboot procedure:
   - Loop through reboots on storage nodes, worker nodes, and master nodes, where each boot consists of the following workflow:
          - Establish console session with node to reboot
