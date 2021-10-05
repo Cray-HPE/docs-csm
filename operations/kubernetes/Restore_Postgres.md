@@ -790,7 +790,7 @@ In the event that the Capsules Warehouse Postgres cluster is in a state that the
     root@capsules-warehouse-server-postgres-0:/home/postgres# /usr/bin/psql postgres postgres
     postgres=# ALTER USER postgres WITH PASSWORD 'ABCXYZ';
     ALTER ROLE
-    postgres=# ALTER USER service-account WITH PASSWORD 'ABC123';
+    postgres=# ALTER USER service_account WITH PASSWORD 'ABC123';
     ALTER ROLE
     postgres=#ALTER USER standby WITH PASSWORD '123456';
     ALTER ROLE
