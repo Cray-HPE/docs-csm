@@ -1,40 +1,44 @@
+
 # Configure Aruba Aggregation Switch
 
 This page describes how Aruba aggregation switches are configured.
 
 Management nodes and Application nodes will be plugged into aggregation switches.
 
-Switch Models used:
-JL635A Aruba 8325-48Y8C
+Switch models used: JL635A Aruba 8325-48Y8C
 
 They run in a high availability pair and use VSX to provide redundancy.
 
-Requirements:
-   - Three connections between the switches, two of these are used for the ISL (Inter switch link) and one used for the keepalive.
-   - The ISL uses 100GB ports and the keepalive will be a 25 GB port.
+## Prerequisites
 
-Here is an example snippet from a aggregation switch on the 25G_10G tab of the SHCD spreadsheet.
+- Three connections between the switches, two of these are used for the Inter switch link (ISL), and one used for the keepalive.
+- The ISL uses 100GB ports and the keepalive will be a 25 GB port.
 
-| Source | Source Label Info | Destination Label Info | Destination | Description | Notes
-| --- | --- | ---| --- | --- | --- |
-| sw-25g01 | x3105u38-j49 | x3105u39-j49 | sw-25g02 | 100g-1m-DAC | |
-| sw-25g01 | x3105u38-j50 | x3105u39-j50 | sw-25g02 | 100g-1m-DAC | |
-| sw-25g01 | x3105u38-j53 | x3105u39-j53 | sw-25g02 | 100g-1m-DAC | keepalive |
+  Here is an example snippet from an aggregation switch on the 25G_10G tab of the SHCD spreadsheet.
 
-It is assumed that you have connectivity to the switch and have done the [Configure Aruba Management Network Base](configure_aruba_management_network_base.md) procedure.
+  | Source | Source Label Info | Destination Label Info | Destination | Description | Notes
+  | --- | --- | ---| --- | --- | --- |
+  | sw-25g01 | x3105u38-j49 | x3105u39-j49 | sw-25g02 | 100g-1m-DAC | |
+  | sw-25g01 | x3105u38-j50 | x3105u39-j50 | sw-25g02 | 100g-1m-DAC | |
+  | sw-25g01 | x3105u38-j53 | x3105u39-j53 | sw-25g02 | 100g-1m-DAC | keepalive |
+
+- Connectivity to the switch is established.
+- The [Configure Aruba Management Network Base](configure_aruba_management_network_base.md) procedure has been run.
 
 ## Configure VSX
 
 1. Create the keepalive VRF on both switches.
-   ```
+   
+   ```bash
    sw-agg-001 & sw-agg-002 (config)#
        vrf keepalive
    ```
 
 1. Set up the keepalive link.
+   
    This will require a unique IP address on both switches. The IP address is in its own VRF so this address will not be reachable from anywhere besides the aggregation pair.
 
-   ```
+   ```bash
    sw-agg-001(config)#
        int 1/1/48
        no shutdown
@@ -52,7 +56,7 @@ It is assumed that you have connectivity to the switch and have done the [Config
 
 1. Create the ISL lag on both switches.
 
-   ```
+   ```bash
    sw-agg-001 & sw-agg-002 (config)#
        interface lag 99
        no shutdown
@@ -63,9 +67,11 @@ It is assumed that you have connectivity to the switch and have done the [Config
        lacp mode active
    ```
 
-1. Add the ISL ports to the LAG, these are two of the ports connected between the switches.
+1. Add the ISL ports to the LAG.
 
-   ```
+   These are two of the ports connected between the switches.
+
+   ```bash
    sw-agg-001 & sw-agg-002 (config)#
        int 1/1/31-1/1/32
        no shutdown
@@ -75,7 +81,7 @@ It is assumed that you have connectivity to the switch and have done the [Config
 
 1. Create the VSX instance and setup the keepalive link.
 
-   ```
+   ```bash
    sw-agg-001(config)#
        no ip icmp redirect
        vsx
@@ -97,8 +103,10 @@ It is assumed that you have connectivity to the switch and have done the [Config
        vsx-sync vsx-global
 
    ```
-1. At this point you should have an `Established` VSX session
-   ```
+
+1. Verify there is an `Established` VSX session.
+   
+   ```bash
    sw-agg-001 # show vsx brief
    ISL State                              : In-Sync
    Device State                           : Sync-Primary
@@ -110,10 +118,13 @@ It is assumed that you have connectivity to the switch and have done the [Config
 ## Configure VLAN
 
 **Cray Site Init (CSI) generates the IP addresses used by the system, below are samples only.**
-The VLAN information is located in the network YAML files. Below are examples.
+The VLAN information is located in the network YAML files. The following are examples.
 
-1. The aggregation switches will have VLAN interfaces in NMN, HMN networks
-   ```
+1. Check that the aggregation switches have VLAN interfaces in the Node Management Network (NMN) and Hardware Management Network (HMN).
+   
+   Example NMN.yaml:
+
+   ```bash
    pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN.yaml
    SNIPPET
      - ip_address: 10.252.0.4
@@ -130,7 +141,10 @@ The VLAN information is located in the network YAML files. Below are examples.
      comment: ""
      gateway: 10.252.0.1
    ```
-   ```
+   
+   Example HMN.yaml:
+
+   ```bash
    pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/HMN.yaml
    SNIPPET
      - ip_address: 10.254.0.4
@@ -148,15 +162,16 @@ The VLAN information is located in the network YAML files. Below are examples.
      gateway: 10.254.0.1
    ```
 
-1. Below is an example of aggregation switch IP addressing based on the network .yaml files from above.
+   The following is an example of aggregation switch IP addressing based on the network .yaml files above:
 
    | VLAN | Agg01 | Agg02	| Purpose |
    | --- | --- | ---| --- |
    | 2 | 10.252.0.4/17| 10.252.0.5/17 | River Node Management
    | 4 | 10.254.0.4/17| 10.254.0.5/17 | River Hardware Management
 
-1. NMN VLAN config
-   ```
+1. Configure the NMN VLAN.
+   
+   ```bash
    sw-agg-001(config)#
        vlan 2
        interface vlan2
@@ -172,8 +187,10 @@ The VLAN information is located in the network YAML files. Below are examples.
        ip mtu 9198
        exit
    ```
-1. HMN VLAN config
-   ```
+
+1. Configure the HMN VLAN.
+   
+   ```bash
    sw-agg-001(config)#
        vlan 4
        interface vlan4
@@ -192,10 +209,12 @@ The VLAN information is located in the network YAML files. Below are examples.
    ```
 
 ## Configure Uplink
+
 The uplink ports are the ports connecting the aggregation switches to the spine switches.
+
 1. Create the LAG.
 
-   ```
+   ```bash
    sw-agg-001 & sw-agg-002 (config)#
    interface lag 1 multi-chassis
        no shutdown
@@ -206,8 +225,9 @@ The uplink ports are the ports connecting the aggregation switches to the spine 
        exit
    ```
 
-1. Add ports to the LAG
-   ```
+1. Add ports to the LAG.
+   
+   ```bash
    sw-agg-001 & sw-agg-002 (config)#
    interface 1/1/1 - 1/1/2
        no shutdown
@@ -218,12 +238,15 @@ The uplink ports are the ports connecting the aggregation switches to the spine 
 
 ## Configure ACL
 
-These ACLs are designed to block traffic from the node management network to and from the hardware management network and restrict management access to the hardware management network.
+These ACLs are designed to block traffic from the NMN to and from the HMN.
 
-1. The first step is to create the access list, once it is created we have to apply it to a VLAN.
+One port is shutdown.
 
-   NOTE: these are examples only, the IP addresses below need to match what was generated by CSI.
-   ```
+1. Create the access list.
+   
+   **NOTE:** The following are examples only. The IP addresses below need to match what was generated by CSI.
+   
+   ```bash
    sw-agg-001 & sw-agg-002 (config)#
        access-list ip nmn-hmn
        10 deny any 10.252.0.0/255.255.128.0 10.254.0.0/255.255.128.0
@@ -238,8 +261,9 @@ These ACLs are designed to block traffic from the node management network to and
    ```
 
 1. Apply ACL to VLANs.
-   ```
-   sw-agg-001 & sw-agg-002 (config)#
+   
+   ```bash
+   sw-cdu-001 & sw-cdu-002 (config)#
        vlan 2
        apply access-list ip nmn-hmn in
        apply access-list ip nmn-hmn out
@@ -254,35 +278,11 @@ These ACLs are designed to block traffic from the node management network to and
        apply access-list ip nmn-hmn out
    ```
 
-Control plane ACL
-- This restricts management traffic to the HMN.
+## Configure Spanning-Tree
 
-```
-   sw-agg-001 & sw-agg-002 (config)#
-    access-list ip mgmt
-    05 comment ALLOW SSH, HTTPS, AND SNMP ON HMN SUBNET
-    10 permit tcp 10.254.0.0/17 any eq 22
-    20 permit tcp 10.254.0.0/17 any eq 443
-    30 permit udp 10.254.0.0/17 any eq 161
-    40 permit udp 10.254.0.0/17 any eq 162
-    45 comment ALLOW SNMP FROM HMN METALLB SUBNET
-    50 permit udp 10.94.100.0/24 any eq 161
-    60 permit udp 10.94.100.0/24 any eq 162
-    65 comment BLOCK SSH, HTTPS, AND SNMP FROM EVERYWHERE ELSE
-    70 deny tcp any any eq 22
-    80 deny tcp any any eq 443
-    90 deny udp any any eq 161
-    100 deny udp any any eq 162
-    105 comment ALLOW ANYTHING ELSE
-    110 permit any any any
-    apply access-list ip mgmt control-plane vrf default
-```
+The following configuration is applied to Aruba aggregation switches:
 
-## Configure Spanning-tree
-
-1. The following config is applied to Aruba aggregation switches.
-
-   ```
+   ```bash
    sw-agg-001 & sw-agg-002 (config)#
        spanning-tree mode rpvst
        spanning-tree
@@ -292,11 +292,11 @@ Control plane ACL
 
 ## Configure OSPF
 
-1. OSPF is a dynamic routing protocol used to exchange routes.
-   It provides reachability from the MTN networks to NMN/Kubernetes networks.
-   The router-id used here is the NMN IP address. (VLAN 2 IP)
+OSPF is a dynamic routing protocol used to exchange routes.
+It provides reachability from the MTN networks to NMN/Kubernetes networks.
+The router-id used here is the NMN IP address. (VLAN 2 IP)
 
-   ```
+   ```bash
    sw-agg-001 & sw-agg-002 (config)#
        router ospf 1
        router-id 10.252.0.x
@@ -308,9 +308,9 @@ Control plane ACL
 
 ## Configure NTP
 
-1. The IP addresses used here will be the first three worker nodes on the NMN network. These can be found in NMN.yaml.
+The IP addresses used are be the first three worker nodes on the NMN network. These can be found in NMN.yaml.
 
-   ```
+   ```bash
    sw-agg-001 & sw-agg-002 (config)#
        ntp server 10.252.1.7
        ntp server 10.252.1.8
@@ -320,9 +320,9 @@ Control plane ACL
 
 ## Configure DNS
 
-1. This will point to the unbound DNS server.
+The following will point to the unbound DNS server.
 
-   ```
+   ```bash
    sw-agg-001 & sw-agg-002 (config)#
        ip dns server-address 10.92.100.225
    ```
@@ -331,10 +331,11 @@ Control plane ACL
 
 These are ports that are connected to management nodes.
 
-1. Worker node and master node configuration
+1. Set the worker node and master node configuration.
+   
    Refer to [Cable Management Network Servers](cable_management_network_servers.md) for cabling specs.
 
-   ```
+   ```bash
    sw-agg-001 & sw-agg-002 (config)#
        interface lag 4 multi-chassis
        no shutdown
@@ -356,11 +357,12 @@ These are ports that are connected to management nodes.
        exit
    ```
 
-1. Aruba Storage port configuration (future use)
+1. Set the Aruba Storage port configuration (future use).
+   
    These will be configured, but the ports will be shut down until needed.
    These are OCP and PCIe port 2 on storage nodes.
 
-   ```
+   ```bash
    sw-agg-001 & sw-agg-002 (config)#
        interface 1/1/7
        shutdown
@@ -368,8 +370,10 @@ These are ports that are connected to management nodes.
        lag 4
        exit
    ```
-1. Aruba LAG Configuration
-   ```
+
+1. Set the Aruba LAG configuration.
+   
+   ```bash
    sw-agg-001 & sw-agg-002 (config)#
        interface lag 4 multi-chassis
        shutdown
@@ -382,14 +386,16 @@ These are ports that are connected to management nodes.
        exit
    ```
 
-## Configure User Access/Login/Application node port
-- One connection will go to a NMN (VLAN2) access port, this is where the UAN will PXE boot and communicate with internal nodes. (see SHCD for UAN cabling).
+## Configure User Access/Login/Application Node Port
+
+- One connection will go to a NMN (VLAN2) access port, which is where the UAN will PXE boot and communicate with internal nodes (see SHCD for UAN cabling).
 - One Bond (two connections) will be going to the MLAG/VSX pair of switches. This will be a trunk port for the CAN connection.
 
-1. Aruba UAN NMN Configuration
+1. Set the Aruba UAN NMN configuration.
+   
    One port is shutdown.
 
-   ```
+   ```bash
    sw-agg-001 (config)#
        interface 1/1/16
        no shutdown
@@ -411,11 +417,11 @@ These are ports that are connected to management nodes.
        exit
    ```
 
-1. Aruba UAN CAN Configuration
+1. Set the Aruba UAN CAN configuration.
 
    Port Configuration is the same on both switches.
 
-   ```
+   ```bash
    sw-agg-001 (config)#
        interface 1/1/16
        no shutdown
@@ -437,7 +443,7 @@ These are ports that are connected to management nodes.
        exit
    ```
 
-   ```
+   ```bash
    sw-agg-001 & sw-agg-002 (config)#
        interface 1/1/17
        no shutdown
@@ -445,9 +451,11 @@ These are ports that are connected to management nodes.
        lag 17
    ```
 
-## Save configuration
+## Save Configuration
 
-   ```
+To save a configuration:
+
+   ```bash
    sw-agg-001(config)# exit
    sw-agg-001# write memory
    ```
@@ -455,6 +463,10 @@ These are ports that are connected to management nodes.
 
 ## Show Running Configuration
 
-   ```
+To show the currently running configuration:
+
+   ```bash
    sw-agg-001# show running-config
    ```
+
+   
