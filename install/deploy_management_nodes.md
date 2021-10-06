@@ -794,7 +794,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 <a name="configure-and-trim-uefi-entries"></a>
 ### 4.3 Configure and Trim UEFI Entries
 
-1. Do the following two steps **for all NCNs and the PIT node**:
+1. Do the following two steps **for all NCNs, but not the PIT node**:
 
    1. [Setting Order](../background/ncn_boot_workflow.md#setting-order)
    1. [Trimming Boot Order](../background/ncn_boot_workflow.md#trimming_boot_order)
