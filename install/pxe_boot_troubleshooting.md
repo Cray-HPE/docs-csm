@@ -2,8 +2,19 @@
 
 This page is designed to cover various issues that arise when trying to PXE boot nodes in an HPE Cray EX system.
 
+- [PXE Boot Troubleshooting](#pxe-boot-troubleshooting)
+  - [Configuration required for PXE booting](#configuration-required-for-pxe-booting)
+  - [Switch Configuration](#switch-configuration)
+    - [Aruba Configuration](#aruba-configuration)
+    - [Mellanox Configuration](#mellanox-configuration)
+  - [Next steps](#next-steps)
+    - [Restart BSS](#restart-bss)
+    - [Restart KEA](#restart-kea)
+    - [Missing BSS Data](#missing-bss-data)
+
 In order for PXE booting to work successfully, the management network switches need to be configured correctly.
 
+<a name="#required-configuration"></a>
 ## Configuration required for PXE booting
 
 To successfully PXE boot nodes, the following is required:
@@ -24,7 +35,11 @@ Snippet of MTL.yaml:
   gateway: 10.1.0.1
 ```
 
-## Aruba Configuration
+<a name="#switch-configuration"></a>
+## Switch Configuration
+
+<a name="#aruba-configuration"></a>
+### Aruba Configuration
 
 1.  Check the configuration for `interface vlan x`.
 
@@ -69,7 +84,7 @@ Snippet of MTL.yaml:
         ip helper-address 10.92.100.222
     ```
 
-1.  If any of this configuration is missing, update it to BOTH switches.
+2.  If any of this configuration is missing, update it to BOTH switches.
 
     ```bash
     sw-spine-002# conf t
@@ -97,7 +112,7 @@ Snippet of MTL.yaml:
     sw-spine-002(config-if-vlan)# write mem
     ```
 
-1.  Verify the route to the TFTP server is in place.
+3.  Verify the route to the TFTP server is in place.
 
     This is a static route to get to the TFTP server via a worker node.
 
@@ -135,7 +150,8 @@ Snippet of MTL.yaml:
     sw-spine-001(config)# ip route 10.92.100.60/32 10.252.1.7
     ```
 
-## Mellanox Configuration
+<a name="#mellanox-configuration"></a>
+### Mellanox Configuration
 
 1.  Check the configuration for `interface vlan 1`.
 
@@ -268,10 +284,12 @@ Snippet of MTL.yaml:
 
     If these routes are missing, refer to [Update BGP Neighbors](../operations/network/metallb_bgp/Update_BGP_Neighbors.md).
 
+<a name="#next-steps"></a>
 ## Next steps
 
 If the configuration looks good, and PXE boot is still not working, there are some other things to try.
 
+<a name="restart-bss"></a>
 ### Restart BSS
 
 Restart the Boot Script Service (BSS) if the following output is returned on the console during PXE
@@ -284,17 +302,14 @@ X509 chain 0x6d35c548 added X509 0x6d3d6420 "Platform CA (a0b073c8-5c9c-4f89-b8a
 EFITIME is 2021-02-26 21:55:04
 HTTP 0x6d35da88 status 404 Not Found
 ```
-
-1.  Rollout a restart of the BSS deployment from any other NCN.
-    
-    This is likely ncn-m002 if executing the ncn-m001 reboot:
+1. Rollout a restart of the BSS deployment from any other NCN (likely `ncn-m002` if you are executing the `ncn-m001` reboot):
 
     ```bash
     ncn-m002# kubectl -n services rollout restart deployment cray-bss
     deployment.apps/cray-bss restarted
     ```
 
-    Wait for this command to return (it will block showing status as the pods are refreshed):
+1. Wait for this command to return (it will block showing status as the pods are refreshed):
 
     ```bash
     ncn-m002# # kubectl -n services rollout status deployment cray-bss
@@ -309,8 +324,9 @@ HTTP 0x6d35da88 status 404 Not Found
     deployment "cray-bss" successfully rolled out
     ```
 
-2. Reboot the NCN one more time.
+1. Reboot the NCN that failed to PXE boot.
 
+<a name="restart-kea"></a>
 ### Restart KEA
 
 In some cases, rebooting the KEA pod has resolved PXE issues.
@@ -322,10 +338,110 @@ In some cases, rebooting the KEA pod has resolved PXE issues.
     cray-dhcp-kea-6bd8cfc9c5-m6bgw                                 3/3     Running     0          20h
     ```
 
-1.  Delete the pod.
-   
+1. Delete KEA Pod.
+    
     ```bash
     ncn-m002# kubectl delete pods -n services cray-dhcp-kea-6bd8cfc9c5-m6bgw
     ```
 
+<a name="#missing-bss-data"></a>
+### Missing BSS Data
 
+If the PXE boot is giving 404 errors, this could be because the necessary information is not in BSS. The
+information is uploaded into BSS with the `csi handoff bss-metadata` and `csi handoff bss-update-cloud-init`
+commands in the [Redeploy PIT Node](redeploy_pit_node.md#csi-handoff-bss-metadata) procedure. If these commands
+failed or were skipped accidentally, this will cause the `ncn-m001` PXE boot to fail.
+
+In that case, use the following recovery procedure.
+
+1. Reboot to the PIT.
+
+    * If using a USB PIT:
+    
+        1. Reboot the PIT node, watching the console as it boots.
+        
+        1. Manually stop it at the boot menu.
+        
+        1. Select the USB device for the boot.
+        
+        1. Once booted, log in and mount the data partition.
+        
+            ```bash
+            pit# mount -vL PITDATA
+            ```
+
+    * If using a remote ISO PIT, follow the [Bootstrap LiveCD Remote ISO](bootstrap_livecd_remote_iso.md) procedure up through (**and including**) the [Set Up The Site Link](bootstrap_livecd_remote_iso.md#set-up-site-link) step.
+
+1. Set variables for the system name, the CAN IP address for `ncn-m002`. the Kubernetes version, and the Ceph version.
+
+    The CAN IP address for `ncn-m002` is obtained [at this step of the Redeploy PIT Node procedure](redeploy_pit_node.md#collect-can-ip-ncn-m002).
+
+    The Kubernetes and Ceph versions are from the output of the [`csi handoff ncn-images` command in the Redeploy PIT Node procedure](redeploy_pit_node.md#ncn-boot-artifacts-hand-off). If needed, the typescript file from that procedure should be on `ncn-m002` in the `/metal/bootstrap/prep/admin` directory.
+
+    Be sure to substitute the correct values for your system in the commands below.
+
+    ```bash
+    pit# SYSTEM_NAME=eniac
+    pit# CAN_IP_NCN_M002=a.b.c.d
+    pit# export KUBERNETES_VERSION=m.n.o
+    pit# export CEPH_VERSION=x.y.z
+    ```
+
+1. **If using a remote ISO PIT**, run the following commands to finish configuring the network and copy files. 
+
+    **Skip these steps if using a USB PIT**.
+
+    1. Run the following command to copy files from `ncn-m002` to the PIT node.
+        
+        ```bash
+        pit# scp -p ${CAN_IP_NCN_M002}:/metal/bootstrap/prep/${SYSTEM_NAME}/pit-files/* /etc/sysconfig/network/
+        ```
+
+    1. Apply the network changes.
+        
+        ```bash
+        pit# wicked ifreload all
+        pit# systemctl restart wickedd-nanny && sleep 5
+        ```
+
+    1. Copy `data.json` from `ncn-m002` to the PIT node.
+
+        ```bash
+        pit# mkdir -p /var/www/ephemeral/configs
+        pit# scp ${CAN_IP_NCN_M002}:/metal/bootstrap/prep/${SYSTEM_NAME}/basecamp/data.json /var/www/ephemeral/configs
+        ```
+
+1. Copy Kubernetes config file from `ncn-m002`.
+
+    ```bash
+    pit# mkdir -pv ~/.kube
+    pit# scp ${CAN_IP_NCN_M002}:/etc/kubernetes/admin.conf ~/.kube/config
+    ```
+
+1. Set DNS to use unbound.
+
+    ```bash
+    pit# echo "nameserver 10.92.100.225" > /etc/resolv.conf
+    ```
+
+1. Export the API token.
+
+    ```bash
+    pit# export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+        -d client_id=admin-client \
+        -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+        https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+    ```
+
+1. Re-run the [BSS handoff commands from the Redeploy PIT Node procedure](redeploy_pit_node.md#ncn-boot-artifacts-hand-off).
+
+    **WARNING: These commands should never be run from a node other than the PIT node or `ncn-m001`**
+    
+    ```bash
+    pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json || echo "ERROR: csi handoff bss-metadata failed"
+    pit# csi handoff bss-update-cloud-init --set meta-data.dns-server=10.92.100.225 --limit Global
+    ```
+
+1. Perform the [BSS Restart](#restart-bss) and the [KEA Restart](#restart-kea) procedures.
+
+1. Reboot the PIT node.

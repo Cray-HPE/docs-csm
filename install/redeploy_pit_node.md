@@ -160,26 +160,24 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
         export KUBERNETES_VERSION=x.y.z
         export CEPH_VERSION=x.y.z
         ```
-        
-        Be sure to perform this action so subsequent steps are successful.
 
-2. Upload the same `data.json` file we used to BSS, our Kubernetes cloud-init DataSource. 
+    1. Run the `export` commands listed at the end of the output from the previous step.
+
+1. <a name="csi-handoff-bss-metadata"></a>Upload the same `data.json` file we used to BSS, our Kubernetes cloud-init DataSource. 
    
-   __If you have made any changes__
-   to this file as a result of any customizations or workarounds, use the path to that file instead. This step will
-   prompt for the root password of the NCNs.
+   __If you have made any changes__ to this file as a result of any customizations or workarounds, use the path to that file instead. This step will prompt for the root password of the NCNs.
 
     ```bash
-    pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json
+    pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json || echo "ERROR: csi handoff bss-metadata failed"
     ```
 
-3. Ensure the DNS server value is correctly set to point toward Unbound at `10.92.100.225`.
+1. Ensure the DNS server value is correctly set to point toward Unbound at `10.92.100.225`.
 
     ```bash
     pit# csi handoff bss-update-cloud-init --set meta-data.dns-server=10.92.100.225 --limit Global
     ```
 
-4. Upload the bootstrap information; note this denotes information that should always be kept together in order to fresh-install the system again.
+1. Upload the bootstrap information; note this denotes information that should always be kept together in order to fresh-install the system again.
 
     1. Log in; setup passwordless SSH _to_ the PIT node by copying ONLY the public keys from `ncn-m002` and `ncn-m003` to the PIT (**do not setup passwordless SSH _from_ the PIT** or the key will have to be securely tracked or expunged if using a USB installation).
 
@@ -208,21 +206,17 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
         rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/${CSM_RELEASE}/cray-pre-install-toolkit*.iso /metal/bootstrap/"
         ```
 
-5. List ipv4 boot options using `efibootmgr`:
+1. List ipv4 boot options using `efibootmgr`:
 
     ```bash
     pit# efibootmgr | grep -Ei "ip(v4|4)"
     ```
 
-6. Set and trim the boot order for **master nodes** using one of the following guides:
+1. Set and trim the boot order on the PIT node.
 
-    > **NOTE:** If the boot order from `efibootmgr` looks like one of [these examples](../background/ncn_boot_workflow.md#examples), proceed to the next step.
+    In [Deploy Management Nodes](deploy_management_nodes.md#configure-and-trim-uefi-entries), this procedure was done on the other NCNs. Now it is time to do it on the PIT node. See [Setting Boot Order](../background/ncn_boot_workflow.md#setting-order) and [Trimming Boot Order](../background/ncn_boot_workflow.md#trimming_boot_order).
 
-    - [Gigabyte Technology](../background/ncn_boot_workflow.md#gigabyte-technology)
-    - [Hewlett Packard Enterprise](../background/ncn_boot_workflow.md#hewlett-packard-enterprise)
-    - [Intel Corporation](../background/ncn_boot_workflow.md#intel-corporation)
-
-7. Tell the node to PXE boot on the next boot. 
+1. Tell the node to PXE boot on the next boot. 
    
    Use `efibootmgr` to set the next boot device to the first PXE boot option. This step assumes the boot order was set up in the previous step.
 
@@ -231,7 +225,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     BootNext: 0014
     ```
 
-8. Collect a backdoor login and fetch the CAN IP address for `ncn-m002` for a backdoor during the reboot of `ncn-m001`.
+1. <a name="collect-can-ip-ncn-m002"></a>Collect a backdoor login. Fetch the CAN IP address for `ncn-m002` for a backdoor during the reboot of `ncn-m001`.
 
     1. Get the IP address. 
 
@@ -260,7 +254,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     > performed of the PIT node we cannot simply boot back to the same state.
     > This is the last step before rebooting the node.
 
-9.  **`IN-PLACE WORKAROUND`** This is a workaround until the auto-wipe feature ceases preventing the creation of the 3rd disk (CASMINST-169. This step is safe to do even after auto-wipe is fixed.
+1. Wipe the disks on the PIT node.
 
     > **`WARNING : USER ERROR`** Do not assume to wipe the first three disks (e.g. `sda, sdb, and sdc`), they float and are not pinned to any physical disk layout. **Choosing the wrong ones may result in wiping the USB device**, the USB device can only be wiped by operators at this point in the install. The USB device are never wiped by the CSM installer.
 
@@ -303,17 +297,17 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 
         If there was any wiping done, output should appear similar to the snippet above. If this is re-ran, there may be no output or an ignorable error.
 
-10. Preserve the ConMan console logs for the other NCNs if desired.
+1. Preserve the ConMan console logs for the other NCNs if desired.
     
     > **WARNING:** This is the last chance to do so. The logs will be lost after rebooting. They are located in `/var/log/conman` on the PIT node.
 
-11. Quit the typescript session with the `exit` command and copy the file (`csm-livecd-reboot.<date>.txt`) to a location on another server for reference later.
+1. Quit the typescript session with the `exit` command and copy the file (`csm-livecd-reboot.<date>.txt`) to a location on another server for reference later.
 
     ```bash
     pit# exit
     ```
 
-12. (Optional) Setup ConMan or serial console if not already on one from any laptop or other system with network connectivity to the cluster.
+1. (Optional) Setup ConMan or serial console if not already on one from any laptop or other system with network connectivity to the cluster.
 
     ```bash
     external# script -a boot.livecd.$(date +%Y-%m-%d).txt
@@ -543,11 +537,7 @@ Perform the following steps on every NCN **except ncn-m001**.
 
 Perform the following steps **on ncn-m001**.
 
-1. Initialize the `cray` command and follow the prompts (required for the next step):
-
-    ```
-    ncn-m001# cray init
-    ```
+1. Initialize the Cray CLI on `ncn-m001`. See [Configure the Cray Command Line Interface](../operations/configure_cray_cli.md) for details on how to do this.
 
 1. Run the script to ensure the local BOOTRAID has a valid kernel and initrd
 
