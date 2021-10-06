@@ -83,19 +83,19 @@ The commands are the same for all hardware vendors, except where noted.
 
     Follow the section corresponding to the hardware manufacturer of the system:
 
-    * <a name="gigabyte-technology">Gigabyte Technology</a>
+    * Gigabyte Technology
 
         ```bash
         ncn# efibootmgr | grep -iP '(pxe ipv?4.*adapter)' | tee /tmp/bbs1
         ```
         
-    * <a name="hewlett-packard-enterprise">Hewlett-Packard Enterprise</a>
+    * Hewlett-Packard Enterprise
 
         ```bash
         ncn# efibootmgr | grep -i 'port 1' | grep -i 'pxe ipv4' | tee /tmp/bbs1
         ```
 
-    * <a name="intel-corporation">Intel Corporation</a>
+    * Intel Corporation
 
         ```bash
         ncn# efibootmgr | grep -i 'ipv4' | grep -iv 'baseboard' | tee /tmp/bbs1
@@ -133,7 +133,8 @@ vendor-specific entries beyond disks and NICs to cover in this section (e.g. BIO
 
 In this case, the instructions are the same regardless of node type (management, storage, or worker):
 
-1. Find the other PXE entries.
+1. Make lists of the unwanted boot entries.
+
     * Gigabyte Technology
 
         ```bash
@@ -156,7 +157,7 @@ In this case, the instructions are the same regardless of node type (management,
         ncn# efibootmgr | grep -i baseboard | tee /tmp/rbbs2
         ```
 
-1. Remove them:
+1. Remove them.
 
     ```bash
     ncn# cat /tmp/rbbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -r -t -i efibootmgr -b {} -B
