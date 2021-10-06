@@ -223,13 +223,9 @@ data, so run them only when indicated. Instructions are in the `README` files.
     pit# efibootmgr | grep -Ei "ip(v4|4)"
     ```
 
-1. Set and trim the boot order for **master nodes** using one of the following guides:
+1. Set and trim the boot order on the PIT node.
 
-    > `**NOTE**` If your boot order from `efibootmgr` looks like one of [these examples](../background/ncn_boot_workflow.md#examples) then you can proceed to the next step.
-
-    - [Gigabyte Technology](../background/ncn_boot_workflow.md#gigabyte-technology)
-    - [Hewlett Packard Enterprise](../background/ncn_boot_workflow.md#hewlett-packard-enterprise)
-    - [Intel Corporation](../background/ncn_boot_workflow.md#intel-corporation)
+    In [Deploy Management Nodes](deploy_management_nodes.md#configure-and-trim-uefi-entries), this procedure was done on the other NCNs. Now it is time to do it on the PIT node. See [Setting Boot Order](../background/ncn_boot_workflow.md#setting-order) and [Trimming Boot Order](../background/ncn_boot_workflow.md#trimming_boot_order).
 
 1. Tell the node to PXE boot on the next boot ... use `efibootmgr` to set next boot device to the first PXE boot option. This step assumes the boot order was set up by the immediate, previous step.
 
