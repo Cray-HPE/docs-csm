@@ -2,7 +2,7 @@
 
 ## Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials
 
-This procedure provisions a Glibc compatible SHA-512 administrative password hash to a cabinet environmental controller (CEC). This password becomes the Redfish endpoint superuser credential to access the CMM controllers and node controllers (BMCs). 
+This procedure provisions a Glibc compatible SHA-512 administrative password hash to a cabinet environmental controller (CEC). This password becomes the Redfish default global credential to access the CMM controllers and node controllers (BMCs). 
 
 **NOTE:** This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC default credentials must be changed using the procedures in the Slingshot product documentation. Refer to "Change Switch BMC Passwords" in the Slingshot product documentation for more information. 
 
@@ -28,27 +28,27 @@ This procedure provisions a Glibc compatible SHA-512 administrative password has
    
    ![](../../img/CEC_Front_Panel.svg)
    
-2. On an Apple Mac or Linux laptop, start the terminal program and use Netcat `'nc'` to connect to CEC command shell. 
+2. On an Apple Mac or Linux laptop, start the terminal program and use Netcat (`nc`) to connect to CEC command shell. 
 
-   Specify the CEC IPv6 link local address shown on the CEC front panel display.
+   Specify the CEC IPv6 link local address that is displayed on the CEC front panel display.
 
    ```screen
    # nc -t -6 'fe80::a1:2328:0%en14' 23
    ```
 
-   - The CEC IPv6 link local address is shown on the front panel display. 
+   - Use the display controls to display the CEC IPv6 link local address on the front panel. 
 
-   - Specify the Ethernet interface name for the laptop. In this example the wired Ethernet interface is named `en14`. 
+   - Specify the Ethernet interface name for the laptop. In this example, the wired Ethernet interface is `en14`. 
 
-3.  From the CEC> prompt, enter help to view the list of commands.
+3. From the CEC> prompt, enter help to view the list of commands.
 
-      ```screen
-      CEC> help
-      ```
+     ```screen
+     CEC> help
+     ```
 
-   **CAUTION**: Modifications to the CEC settings should be made only under advisement from HPE support.
+   **CAUTION**: Modifications to the CEC settings should be made only under advisement from HPE technical support.
 
-4. From the CEC> prompt, generate an unlock token for the CEC. Use the enable command (alias for unlock command) without arguments to display a random unlock token on the CEC LCD panel.
+4. From the `CEC>` prompt, generate an unlock token for the CEC. Use the enable command (alias for unlock command) without arguments to display a random unlock token on the CEC front panel.
 
    ```screen
    CEC> enable
