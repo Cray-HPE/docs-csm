@@ -172,14 +172,15 @@ data, so run them only when indicated. Instructions are in the `README` files.
         export KUBERNETES_VERSION=x.y.z
         export CEPH_VERSION=x.y.z
         ```
-        Be sure to perform this action so subsequent steps are successful.
 
-1. Upload the same `data.json` file we used to BSS, our Kubernetes cloud-init DataSource. __If you have made any changes__
+    1. Run the `export` commands listed at the end of the output from the previous step.
+
+1. <a name="csi-handoff-bss-metadata"></a>Upload the same `data.json` file we used to BSS, our Kubernetes cloud-init DataSource. __If you have made any changes__
    to this file as a result of any customizations or workarounds, use the path to that file instead. This step will
    prompt for the root password of the NCNs.
 
     ```bash
-    pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json
+    pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json || echo "ERROR: csi handoff bss-metadata failed"
     ```
 
 1. Ensure the DNS server value is correctly set to point toward Unbound at `10.92.100.225`.
@@ -234,7 +235,7 @@ data, so run them only when indicated. Instructions are in the `README` files.
     BootNext: 0014
     ```
 
-1. Collect a backdoor login ... fetch the CAN IP address for `ncn-m002` for a backdoor during the reboot of `ncn-m001`.
+1. <a name="collect-can-ip-ncn-m002"></a>Collect a backdoor login. Fetch the CAN IP address for `ncn-m002` for a backdoor during the reboot of `ncn-m001`.
 
     1. Get the IP
 
@@ -263,7 +264,7 @@ data, so run them only when indicated. Instructions are in the `README` files.
     > performed of the PIT node, we cannot simply boot back to the same state.
     > This is the last step before rebooting the node.
 
-1. **`IN-PLACE WORKAROUND`** This is a workaround until the auto-wipe feature ceases preventing the creation of the 3rd disk (CASMINST-169. This step is safe to do even after auto-wipe is fixed.
+1. Wipe the disks on the PIT node.
 
     > **`WARNING : USER ERROR`** Do not assume to wipe the first three disks (e.g. `sda, sdb, and sdc`), they float and are not pinned to any physical disk layout. **Choosing the wrong ones may result in wiping the USB device**, the USB device can only be wiped by operators at this point in the install. The USB device are never wiped by the CSM installer.
 
