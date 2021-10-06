@@ -530,11 +530,7 @@ Perform the following steps on every NCN **except ncn-m001**.
 
 Perform the following steps **on ncn-m001**.
 
-1. Initialize the `cray` command and follow the prompts (required for the next step):
-
-    ```
-    ncn-m001# cray init
-    ```
+1. Initialize the Cray CLI on `ncn-m001`. See [Configure the Cray Command Line Interface](../operations/configure_cray_cli.md) for details on how to do this.
 
 1. Run the script to ensure the local BOOTRAID has a valid kernel and initrd
 
