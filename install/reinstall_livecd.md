@@ -1,3 +1,5 @@
+
+
 # Reinstall LiveCD
 
 Setup a re-install of LiveCD on a node using the previous configuration.
@@ -28,13 +30,9 @@ Setup a re-install of LiveCD on a node using the previous configuration.
     mylinuxpc> umount -v /dev/disk/by-label/PITDATA
     ```
 
-1. Follow the steps in the "Boot LiveCD" procedure in the HPE Cray EX System Installation and Configuration
-Guide S-8000.
-The new tar.gz file can be stored anywhere, and can be used to reinitialize the LiveCD.
-
-1. The new tar.gz file you made can be stored anywhere, and can be used to reinit the liveCD. Follow
-the directions in [Bootstrap PIT Node from LiveCD USB](bootstrap_livecd_usb.md) and then return here and move onto the
-next step.
+1. Follow the directions in [Bootstrap PIT Node from LiveCD USB](bootstrap_livecd_usb.md), and then return here and move onto the next step.
+   
+   The new tar.gz file can be stored anywhere, and can be used to reinitialize the LiveCD.
 
 1. Delete the existing content on the USB device and create a new LiveCD on that same USB device.
 
@@ -49,14 +47,15 @@ next step.
    The tarball should have extracted everything into the install-data partition.
 
 1. Retrieve the SquashFS artifacts.
+   
    The artifacts can be retrieved at the following locations:
 
    * `/mnt/var/www/ephemeral/k8s/`
    * `/mnt/var/www/ephemeral/ceph/`
 
-1. Attach the USB to a Cray non-compute node and reboot into the USB device.
+1. Attach the USB to a Cray non-compute node (NCN) and reboot into the USB device.
 
-1. Once booted into the USB device, restore network configuration, dnsmasq, and ensure the pods are started.
+1. Once booted into the USB device, restore network configuration and dnsmasq, and ensure the pods are started.
 
    > STOP AND INSPECT ANY FAILURE IN ANY OF THESE COMMANDS
 
@@ -68,4 +67,4 @@ next step.
    pit# systemctl start basecamp nexus
    ```
 
-1. The LiveCD is now re-installed with the previous configuration.
+The LiveCD is now re-installed with the previous configuration.

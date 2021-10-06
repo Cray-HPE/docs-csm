@@ -1,8 +1,8 @@
 # Create Cabinets YAML
 
-This page provides directions on constructing the optional `cabinets.yaml` file. This file lists cabinet ids for any systems with non-contiguous cabinet id numbers and controls how the `csi config init` command treats cabinet ids.
+This page provides directions on constructing the optional `cabinets.yaml` file. This file lists cabinet IDs for any systems with non-contiguous cabinet ID numbers and controls how the `csi config init` command treats cabinet IDs.
 
-This file is manually created and follows this format. For each "type" of cabinet can have several fields: `total_number` of cabinets of this type, `starting_id` for this cabinet type, and a list of the ids.
+The following example file is manually created and follows this format. Eeach "type" of cabinet can have several fields: `total_number` of cabinets of this type, `starting_id` for this cabinet type, and a list of the IDs.
 
 ```yaml
 ---
@@ -27,8 +27,8 @@ cabinets:
   starting_id: 3000
 ```
 
-In the above example file, there are 2 Hill cabinets that will be automatically numbered as 9000 and 9001. The Mountain cabinets appear in 3 groupings of four ids. The River cabinets are non-contiguous in 4 separated ids.
+In this example file, there are two Hill cabinets that will be automatically numbered as 9000 and 9001. The Mountain cabinets appear in three groupings of four IDs. The River cabinets are non-contiguous in four separated IDs.
 
-A system will Hill cabinets can have 1 to 4 cabinet ids. There is no limit on the number of Mountain or River cabinets.
+A system with Hill cabinets can have one to four cabinet IDs. There is no limit on the number of Mountain or River cabinets.
 
 When the above `cabinets.yaml` file is used, `csi` will ignore any command-line argument to `csi config init` for `starting-mountain-cabinet`, `starting-river-cabinet`, `starting-hill-cabinet`, `mountain-cabinets`, `river-cabinets`, or `hill-cabinets`.

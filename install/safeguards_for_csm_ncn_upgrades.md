@@ -2,7 +2,7 @@
 
 This page covers safe-guards for preventing destructive behaviors on management nodes.
 
-**If you are reinstalling or upgrading** you should run through these safe-guards on a by-case basis:
+**If reinstalling or upgrading**, run through these safe-guards on a by-case basis:
 
 1. Whether or not CEPH should be preserved.
 2. Whether or not the RAIDs should be protected.
@@ -31,6 +31,7 @@ This page covers safe-guards for preventing destructive behaviors on management 
    ```bash
    pit# vi /var/www/ephemeral/configs/data.json
    ```
+
 1. Quickly toggle yes or no to the file:
 
    ```bash
@@ -40,6 +41,7 @@ This page covers safe-guards for preventing destructive behaviors on management 
    # set wipe-ceph-osds=yes
    pit# sed -i 's/wipe-ceph-osds": "no"/wipe-ceph-osds": "yes"/g' /var/www/ephemeral/configs/data.json
    ```
+
 1. Activate the new setting:
 
    ```bash
@@ -48,7 +50,7 @@ This page covers safe-guards for preventing destructive behaviors on management 
 
 ### Safeguard RAIDS / BOOTLOADERS / SquashFS / OverlayFS
 
-1. Edit `/var/www/boot/script.ipxe` and align the following options as you see them here:
+1. Edit `/var/www/boot/script.ipxe` and align the following options as follows:
 
 - `rd.live.overlay.reset=0` will prevent any overlayFS files from being cleared.
 - `metal.no-wipe=1` will guard against touching RAIDs, disks, and partitions.
@@ -56,3 +58,4 @@ This page covers safe-guards for preventing destructive behaviors on management 
    ```bash
    pit# vi /var/www/boot/script.ipxe
    ```
+
