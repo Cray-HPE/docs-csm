@@ -33,9 +33,9 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
 
 ```bash
 ncn# kubectl create secret generic vcs-user-credentials --save-config \
---from-literal=vcs_username="crayvcs"
+--from-literal=vcs_username="crayvcs" \
 --from-literal=vcs_password="NEW_PASSWORD" \
---dry-run -o yaml | kubectl apply -f -
+--dry-run=client -o yaml | kubectl apply -f -
 ```
 
 The `NEW_PASSWORD` value must be replaced with the updated password.
