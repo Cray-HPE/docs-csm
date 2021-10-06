@@ -1,3 +1,5 @@
+
+
 # Wipe NCN Disks for Reinstallation
 
 This page will detail how disks are wiped and includes workarounds for wedged disks.
@@ -28,7 +30,7 @@ The following are potential use cases for wiping disks:
 ### 1. Basic Wipe
 
 A basic wipe includes wiping the disks and all of the RAIDs. These basic wipe instructions can be
-executed on **any management nodes** (master, worker and storage).
+executed on **any management nodes** (master, worker, and storage).
 
 1. List the disks for verification:
 
@@ -65,7 +67,7 @@ executed on **any management nodes** (master, worker and storage).
 This section is specific to utility storage nodes. An advanced wipe includes deleting the Ceph volumes and then
 wiping the disks and RAIDs.
 
-1. Delete CEPH Volumes
+1. Delete CEPH Volumes.
 
    ```bash
    ncn-s# systemctl stop ceph-osd.target
@@ -96,7 +98,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
 1. Reset Kubernetes on each master and worker node
 
-   ***NOTE:*** Our recommended order is to do this on the workers then the master nodes
+   **NOTE:** The recommended order is to do this on the worker nodes, and then the master nodes.
 
    1. For each worker node, log in and run:
 
@@ -116,9 +118,9 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
        c3d4811fc3cd0       0215a709bdd9b       3 days ago           Running             weave-npc                                    0                   f5e25c12e617e
       ```
 
-   1. Stop any running containers from the output of our `crictl ps` command
+   1. Stop any running containers from the output of the `crictl ps` command.
 
-      ***NOTE:*** There should be no containers.
+      **NOTE:** There should be no containers.
 
       ```bash
       ncn-m/w #crictl stop <container id from the CONTAINER column>
@@ -126,7 +128,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
    This will stop kubelet, underlying containers, and remove the contents of `/var/lib/kubelet`
 
-1. Delete CEPH Volumes ***on Utility Storage Nodes ONLY***
+1. Delete CEPH Volumes **on Utility Storage Nodes ONLY**.
 
    For Each Storage node:
 
@@ -167,33 +169,33 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
         ncn-s# vgremove -f --select 'vg_name=~ceph*'
         ```
 
-1. Unmount volumes
+1. Unmount the volumes.
 
-   > **`NOTE`** Some of the following umount commands may fail or have warnings depending on the state of the NCN. Failures in this section can be ignored and will not inhibit the wipe process.
-   >
-   > **`NOTE:`** There is an edge case where the overlay may keep you from unmounting the drive. If this is a rebuild you ignore this or go here.
+   > **NOTE:** Some of the following umount commands may fail or have warnings depending on the state of the NCN. Failures in this section can be ignored and will not inhibit the wipe process.
+   
+   > **NOTE:** There is an edge case where the overlay may keep you from unmounting the drive. If this is a rebuild you ignore this or go here.
 
-   1. Storage nodes
+   1. Storage nodes:
 
        ```bash
        ncn-s# umount -vf /var/lib/ceph /var/lib/containers /etc/ceph
        ```
 
-   1. Master nodes
+   1. Master nodes:
 
        ```bash
        ncn-m# umount -v /var/lib/etcd /var/lib/sdu
        ```
 
-   1. Worker nodes
+   1. Worker nodes:
 
       ```bash
       ncn-w# umount -v /var/lib/containerd /var/lib/kubelet /var/lib/sdu
       ```
 
-   Troubleshooting Unmount on a Storage node
+   **Troubleshooting:** Unmount on a storage node:
 
-   1. If the umount command is responding with `target is busy` then try the following
+   If the umount command is responding with `target is busy`, try the following:
 
       ```bash
       ncn-s:~ # mount | grep "containers"
@@ -209,9 +211,9 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
       ncn-s001:~ # umount -v /var/lib/containers
       umount: /var/lib/containers unmounted
 
-1. Remove auxiliary LVMs
+1. Remove auxiliary LVMs.
 
-   1. Stop sdu container if necessary
+   1. Stop the SDU container if necessary.
 
       ```bash
       ncn# podman ps
@@ -226,13 +228,13 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
       7741d50966259410298bb4c3210e6665cdbd57a82e34e467d239f519ae3f17d4
       ```
 
-   1. Remove metal LVM
+   2. Remove metal LVM.
 
       ```bash
       ncn# vgremove -f --select 'vg_name=~metal*'
       ```
 
-      > **`NOTE`** Optionally you can run the `pvs` command and if any drives are still listed, you can remove them with `pvremove`, but this is rarely needed. Also, if the above command fails or returns a warning about the filesystem being in use, you should ignore the error and proceed to the next step, as this will not inhibit the wipe process.
+      > **NOTE:** Optionally, run the `pvs` command and if any drives are still listed, you can remove them with `pvremove`, but this is rarely needed. Also, if the above command fails or returns a warning about the filesystem being in use, you should ignore the error and proceed to the next step, as this will not inhibit the wipe process.
 
 1. Stop the RAIDs.
 
@@ -247,7 +249,8 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
    ncn# wipefs --all --force /dev/sd* /dev/disk/by-label/*
    ```
 
-   **Note**: On worker nodes, it is a known issue that the sgdisk command sometimes encounters a hard hang. If you see no output from the command for 90 seconds, close the terminal session to the worker node, open a new terminal session to it, and complete the disk wipe procedure by running the above wipefs command.
+   **NOTE:**: On worker nodes, it is a known issue that the `sgdisk` command sometimes encounters a hard hang. If there is no output from the command for 90 seconds, close the terminal session to the worker node, open a new terminal session to it, and complete the disk wipe procedure by running the above `wipefs` command.
 
-   See [Basic Wipe](#basic-wipe) section for expected output from the wipefs command.
+   See [Basic Wipe](#basic-wipe) section for expected output from the `wipefs` command.
+
 
