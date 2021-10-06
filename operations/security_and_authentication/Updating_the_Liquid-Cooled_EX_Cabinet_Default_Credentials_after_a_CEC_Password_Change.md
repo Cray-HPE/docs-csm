@@ -182,7 +182,7 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
 2. Update the credentials used by CSM services for all previously discovered EX cabinet BMCs to the new global default:
     ```bash
     ncn-m001# \
-    REDFISH_ENDPOINTS=$(cray hsm inventory redfishEndpoints list --format json | jq .RedfishEndpoints[].ID -r | sort -V )
+    REDFISH_ENDPOINTS=$(cray hsm inventory redfishEndpoints list --type '!RouterBMC' --format json | jq .RedfishEndpoints[].ID -r | sort -V )
     cray hsm state components list --format json  > /tmp/components.json
     
     for RF in $REDFISH_ENDPOINTS; do
@@ -214,7 +214,7 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
     The following bash script will find all Redfish endpoints for the Liquid cooled BMCs that are not in `DiscoverOK`, and display their last Discovery Status.
     ```bash
     ncn-m001# \
-    cray hsm inventory redfishEndpoints list --laststatus '!DiscoverOK' --format json > /tmp/redfishEndpoints.json
+    cray hsm inventory redfishEndpoints list --laststatus '!DiscoverOK' --type '!RouterBMC' --format json > /tmp/redfishEndpoints.json
     cray hsm state components list --format json  > /tmp/components.json
 
     REDFISH_ENDPOINTS=$(jq .RedfishEndpoints[].ID -r /tmp/redfishEndpoints.json | sort -V)
@@ -246,7 +246,7 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
             ncn-m001# ping x1001c1s0b0
             ```
 
-        2. If a Node or Router BMC is not pingable verify that the slot powering the BMC is powered on. For example, the NodeBMC x1001c1s0b0 is in slot x1001c1s0 and the RouterBMC x1001c0r5b0 is in slot x1001c0r5.
+        2. If a Node or Router BMC is not pingable verify that the slot powering the BMC is powered on. For example, the NodeBMC x1001c1s0b0 is in slot x1001c1s0.
             ```bash
             ncn-m001# cray capmc get_xname_status create --xnames x1001c1s0
             e = 0
@@ -327,7 +327,7 @@ This section only needs to be performed if any Liquid cooled BMCs had to be Stat
     The following bash script will find all Redfish endpoints for the Liquid cooled BMCs that are not in `DiscoverOK`, and display their last Discovery Status.
     ```bash
     ncn-m001# \
-    cray hsm inventory redfishEndpoints list --laststatus '!DiscoverOK' --format json > /tmp/redfishEndpoints.json
+    cray hsm inventory redfishEndpoints list --laststatus '!DiscoverOK' --type '!RouterBMC' --format json > /tmp/redfishEndpoints.json
     cray hsm state components list --format json  > /tmp/components.json
 
     REDFISH_ENDPOINTS=$(jq .RedfishEndpoints[].ID -r /tmp/redfishEndpoints.json | sort -V)
@@ -356,6 +356,6 @@ This section only needs to be performed if any Liquid cooled BMCs had to be Stat
     ncn-m001# kubectl -n services rollout status deployment cray-conman
     ```
 
-6. Restore passwordless SSH connections to the Liquid cooled Chassis and Router BMCs by following the procedure `30.23 Enable Passwordless Connections to Liquid Cooled Node BMCs` of the _HPE Cray EX System Administration Guide 1.4 S-80001_. 
+6. Restore passwordless SSH connections to the Liquid cooled BMCs by following the procedure `30.23 Enable Passwordless Connections to Liquid Cooled Node BMCs` of the _HPE Cray EX System Administration Guide 1.4 S-80001_. 
     > __WARNING__: If an admin uses SCSD to update the SSHConsoleKey value outside of ConMan, it will disrupt the ConMan connection to the console and collection of console logs.
     > Refer to "About the ConMan Containerized Service" in the _HPE Cray EX System Administration Guide 1.4 S-8001_.
