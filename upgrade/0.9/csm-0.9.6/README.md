@@ -200,25 +200,11 @@ deployment "cray-dns-unbound" successfully rolled out
 
 ### Verify updated images for CVE-2021-3711:
 
-1. Confirm the version of istio pilot image has `cray2` suffix:
+ Execute the following script from the scripts directory to make sure correct images for CVE-2021-3711 are updated:
 
    ```bash
-   ncn-m001:~ # kubectl describe pod istiod- -n istio-system |grep Image:
-    Image:         dtr.dev.cray.com/cray/pilot:1.6.13-cray2
-   ```
-
-2. Confirm the version of cray-spire-tokens image is `0.4.1`:
-
-   ```bash
-   ncn-m001:~ # kubectl describe pod spire-server-0 -n spire |grep Image | grep spire-tokens:
-    Image:          dtr.dev.cray.com/cray/cray-spire-tokens:0.4.1
-   ```
-
-3. Confirm the version of hms-redfish-translation-service image is `1.8.8`:
-
-   ```bash
-   ncn-m001:~ # kubectl describe pod cray-hms-rts- -n services |grep Image: |grep hms
-    Image:          dtr.dev.cray.com/cray/hms-redfish-translation-service:1.8.8
+   ncn-m001# cd "$CSM_SCRIPTDIR"
+   ncn-m001# ./validate_versions.sh
    ```
 
 ### Verify cray-sysmgmt-health changes:
