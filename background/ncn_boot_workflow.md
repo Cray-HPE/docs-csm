@@ -7,7 +7,7 @@ Non-compute nodes boot two ways:
 ## Topics:
 
 * [Determine the Current Boot Order](#determine-the-current-boot-order)
-   * [Reasons to Change the Boot Order](#reasons-to-change-the-bootorder)
+* [Reasons to Change the Boot Order After CSM Install](#reasons-to-change-the-bootorder)
 * [Determine if NCNs Booted via Disk or PXE](#determine-if-ncns-booted-via-disk-or-pxe)
 * [Set BMCs to DHCP](#set-bmcs-to-dhcp)
 * [Boot Order Overview](#set-boot-order)
@@ -18,25 +18,23 @@ Non-compute nodes boot two ways:
 * [Locating USB Device](#locating-usb-device)
 
 <a name="determine-the-current-boot-order"></a>
-
-### Determine the Current Boot Order
+## Determine the Current Boot Order
 
 Under normal operations, the NCNs use the following boot order:
 
-1. PXE (to ensure the NCN is booting with desired images and configs)
-2. Disk (fallback in the even PXE services are unavailable)
+1. PXE (to ensure the NCN is booting with desired images and configuration)
+2. Disk (fallback in the event that PXE services are unavailable)
 
 <a name="reasons-to-change-the-bootorder"></a>
+## Reasons to Change the Boot Order After CSM Install
 
-#### Reasons to Change the Boot Order
+After the CSM install is complete, it is usually not necessary to change the boot order.  Having PXE first and disk as a fallback works in the majority of situations.
 
-Under normal operations, it is not necessary to change the boot order.  Having PXE first and disk as a fallback works in the majority of situations.
+It may be desirable to change the boot order under these circumstances:
 
-It may be desireable to change this order under these circumstances:
-
-- testing disk-backed booting
-- booting from a USB or remote ISO
-- testing or deploying other customizations
+* testing disk-backed booting
+* booting from a USB or remote ISO
+* testing or deploying other customizations
 
 <a name="determine-if-ncns-booted-via-disk-or-pxe"></a>
 ## Determine if NCNs Booted via Disk or PXE
