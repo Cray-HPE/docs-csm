@@ -1,4 +1,4 @@
-# Domain Name 
+# Domain name 
 
 A domain name is a name to identify the person, group, or organization that controls the devices within an area. An example of a domain name could be us.cray.com 
 

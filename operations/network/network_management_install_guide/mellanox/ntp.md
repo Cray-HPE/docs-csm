@@ -1,4 +1,4 @@
-# Network Time Protocol (NTP) Client 
+# Network time protocol (NTP) client 
 
 
 “NTP is used to synchronize timekeeping among a set of distributed time servers and clients [...] It provides the protocol mechanisms to synchronize time in principle to precisions in the order of nanoseconds while preserving a non-ambiguous date well into the next century.” –rfc1305 

@@ -16,15 +16,6 @@ Show Commands to Validate Functionality
 switch# show domain-name
 ```
 
-Example Output 
-
-```
-switch(config)# domain-name us.cray.com
-switch(config)# end
-switch-test# show domain-name
-arubanetworks.com
-```
-
 Expected Results 
 
 * Step 1: You can configure the domain name

@@ -1,4 +1,4 @@
-# Use Canu to verify, generate or compare switch configuration
+# Use CANU to verify, generate or compare switch configuration
 
 
 ### Check Single Switch Firmware

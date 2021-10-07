@@ -1,4 +1,4 @@
-# Initializing Canu
+# Initializing CANU
 
 To help creating the switch configuration. CANU can automatically parse CSI output or the Shasta SLS API for switch IPv4 addresses.
 

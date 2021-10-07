@@ -1,4 +1,4 @@
-# Check Kea DHPC logs
+# Check KEA DHCP logs
 
 In order to check the logs for the pod you'll need to know the pod name, run this command to see the pod name:
 

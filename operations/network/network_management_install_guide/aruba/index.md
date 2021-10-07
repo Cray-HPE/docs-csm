@@ -4,7 +4,7 @@
 
 ### ARUBA - CX Platform based networks
 
-![](../docs-csm/operations/network/network_management_install_guide/img/intro.png)
+![title](/docs-csm/operations/network/network_management_install_guide/img/intro.png)
 
 © 2021 Hewlett Packard Enterprise Development LP
 
@@ -45,166 +45,164 @@ __________________________________
 
 ## Introduction:
 
-   1. [Introduction](#intro)
-   1. [Notice](#notice)
-   1. [Index](#index)
-   1. [Introduction to Canu](#introduction_to_canu)
+   1. [Introduction](/docs-csm/operations/network/network_management_install_guide/aruba/index)
+   1. [Notice](/docs-csm/operations/network/network_management_install_guide/aruba/index)
+   1. [Index](/docs-csm/operations/network/network_management_install_guide/aruba/index)
+   1. [Introduction to Canu](/docs-csm/operations/network/network_management_install_guide/aruba/introduction_to_canu)
 
 ### Quick start guide to Canu
 
-   1. [Quick start guide to Canu](#quick_start_guide_to_canu)
+   1. [Quick start guide to Canu](/docs-csm/operations/network/network_management_install_guide/aruba/quick_start_guide_to_canu)
 
 ### Canu:
-   1. [Installation](#canu_installation)
-   1. [Initializing canu](#initializing_canu)
-   1. [Use Canu to verify, generate or compare switch configuration](#canu_verify_generate_compare_switch_configuration)
-   1. [Using Canu to generate full network configuration](#using_canu_to_generate_full_network_config)
-   1. [Uninstall Canu](#uninstall_canu)
+   1. [Installation](/docs-csm/operations/network/network_management_install_guide/aruba/canu_installation)
+   1. [Initializing canu](/docs-csm/operations/network/network_management_install_guide/aruba/initializing_canu)
+   1. [Use Canu to verify, generate or compare switch configuration](/docs-csm/operations/network/network_management_install_guide/aruba/canu_verify_generate_compare_switch_configuration)
+   1. [Using Canu to generate full network configuration](/docs-csm/operations/network/network_management_install_guide/aruba/using_canu_to_generate_full_network_config)
+   1. [Uninstall Canu](/docs-csm/operations/network/network_management_install_guide/aruba/uninstall_canu)
 
 ### Examples of Network topologies:
 
-   1. [Very Large](#very_large)
-   1. [Large](#large)
-   1. [Medium](#medium)
-   1. [Small](#small)
+   1. [Very Large](/docs-csm/operations/network/network_management_install_guide/aruba/very_large)
+   1. [Large](/docs-csm/operations/network/network_management_install_guide/aruba/large)
+   1. [Medium](/docs-csm/operations/network/network_management_install_guide/aruba/medium)
+   1. [Small](/docs-csm/operations/network/network_management_install_guide/aruba/small)
 
 ### Network design explained
-   1. [What is Spine-Leaf Architecture?](#spine_leaf_architecture)
-   1. [How does a spine-leaf architecture differ from traditional network designs?](#spine_leaf_architecture2)
-   1. [Why are spine-leaf architectures becoming more popular?](#spine_leaf_architecture3)
-   1. [What is VSX?](#vsx_architecture)
-   1. [What are the benefits of VSX?](#vsx_architecture2)
-   1. [VSX summary](#vsx_architecture3)
+   1. [What is Spine-Leaf Architecture?](/docs-csm/operations/network/network_management_install_guide/aruba/spine_leaf_architecture)
+   1. [How does a spine-leaf architecture differ from traditional network designs?](/docs-csm/operations/network/network_management_install_guide/aruba/spine_leaf_architecture2)
+   1. [Why are spine-leaf architectures becoming more popular?](/docs-csm/operations/network/network_management_install_guide/aruba/spine_leaf_architecture3)
+   1. [What is VSX?](/docs-csm/operations/network/network_management_install_guide/aruba/vsx_architecture)
+   1. [What are the benefits of VSX?](/docs-csm/operations/network/network_management_install_guide/aruba/vsx_architecture2)
+   1. [VSX summary](/docs-csm/operations/network/network_management_install_guide/aruba/vsx_architecture3)
 
 ### Built in High Availability
-   1. [VSX: MCLAG link HA	](#mclag_link_ha)
-   1. [VSX: ISL HA](#mclag_isl_ha)
-   1. [VSX: Split](#mclag_split)
-   1. [VSX: Member Power Failure](#mclag_power_failure)
+   1. [VSX: MCLAG link HA	](/docs-csm/operations/network/network_management_install_guide/aruba/mclag_link_ha)
+   1. [VSX: ISL HA](/docs-csm/operations/network/network_management_install_guide/aruba/mclag_isl_ha)
+   1. [VSX: Split](/docs-csm/operations/network/network_management_install_guide/aruba/mclag_split)
+   1. [VSX: Member Power Failure](/docs-csm/operations/network/network_management_install_guide/aruba/mclag_power_failure)
 
 ### Management network overview
-   1. [Network Types – Naming and segment Function](#network_naming_function)
-   1. [Network traffic pattern inside of the system](#network_traffic_pattern)
-   1. [System management network functions in more detail](#manegement_network_function_in_detail)
+   1. [Network Types – Naming and segment Function](/docs-csm/operations/network/network_management_install_guide/aruba/network_naming_function)
+   1. [Network traffic pattern inside of the system](/docs-csm/operations/network/network_management_install_guide/aruba/network_traffic_pattern)
+   1. [System management network functions in more detail](/docs-csm/operations/network/network_management_install_guide/aruba/manegement_network_function_in_detail)
 
 ### Key features used in the management network configuration
-   1. [Key Feature list](#key_features)
-   1. [Typical configuration of VSX](#typical_VSX_configuration)
-   1. [Typical MCLAG port configuration connecting to dual homed devices](#typical_mclag_port_configuration)
-   1. [Typical edge port configuration connecting single homed devices](#typical_edge_port_configuration)
+   1. [Key Feature list](/docs-csm/operations/network/network_management_install_guide/aruba/key_features)
+   1. [Typical configuration of VSX](/docs-csm/operations/network/network_management_install_guide/aruba/typical_VSX_configuration)
+   1. [Typical MCLAG port configuration connecting to dual homed devices](/docs-csm/operations/network/network_management_install_guide/aruba/typical_mclag_port_configuration)
+   1. [Typical edge port configuration connecting single homed devices](/docs-csm/operations/network/network_management_install_guide/aruba/typical_edge_port_configuration)
 
 ### How to connect management network to your campus network
-   1. [Requirements and optional configuration](#requirements_and_optional_configuration)
-   1. [Scenario A: network connection via management network](#scenario-a)
-   1. [Scenario B: network connection via high speed network](#scenario-b)
-   1. [Example of how to configure Scenario A or B](#management_network_configuration_example)
+   1. [Requirements and optional configuration](/docs-csm/operations/network/network_management_install_guide/aruba/requirements_and_optional_configuration)
+   1. [Scenario A: network connection via management network](/docs-csm/operations/network/network_management_install_guide/aruba/scenario-a)
+   1. [Scenario B: network connection via high speed network](/docs-csm/operations/network/network_management_install_guide/aruba/scenario-b)
+   1. [Example of how to configure Scenario A or B](/docs-csm/operations/network/network_management_install_guide/aruba/management_network_configuration_example)
 
 ### Managing switches from CLI
 
 ###Device management
-  1. [Management Interface](#management_interface)
-  1. [Network Time Protocol (NTP) Client](#ntp)
-  1. [Domain Name System (DNS) Client](#dns-client)
-  1. [Message-Of-The-Day (MOTD)](#motd)
-  1. [Exec Banners](#exec_banner)
-  1. [Hostname](#hostname)
-  1. [Domain Name](#domain_name)
-  1. [Secure Shell (SSH)](#ssh)
-  1. [Remote Logging](#remote_logging)
-  1. [Web User Interface (WebUI)](#web-ui)
-  1. [Simple Network Management Protocol (SNMP) Agent](#snmp_agent)
-  1. [SNMPv2c Community](#snmp_community)
-  1. [SNMP Traps](#snmp_trap)
-  1. [SNMPv3 Users](#snmpv3_users)
-  1. [System images](#system_images)
-  1. [Bluetooth Capabilities](#bluetooth)
+  1. [Management Interface](/docs-csm/operations/network/network_management_install_guide/aruba/management_interface)
+  1. [Network Time Protocol (NTP) Client](/docs-csm/operations/network/network_management_install_guide/aruba/ntp)
+  1. [Domain Name System (DNS) Client](/docs-csm/operations/network/network_management_install_guide/aruba/dns-client)
+  1. [Message-Of-The-Day (MOTD)](/docs-csm/operations/network/network_management_install_guide/aruba/motd)
+  1. [Exec Banners](/docs-csm/operations/network/network_management_install_guide/aruba/exec_banner)
+  1. [Hostname](/docs-csm/operations/network/network_management_install_guide/aruba/hostname)
+  1. [Domain Name](/docs-csm/operations/network/network_management_install_guide/aruba/domain_name)
+  1. [Secure Shell (SSH)](/docs-csm/operations/network/network_management_install_guide/aruba/ssh)
+  1. [Remote Logging](/docs-csm/operations/network/network_management_install_guide/aruba/remote_logging)
+  1. [Web User Interface (WebUI)](/docs-csm/operations/network/network_management_install_guide/aruba/web-ui)
+  1. [Simple Network Management Protocol (SNMP) Agent](/docs-csm/operations/network/network_management_install_guide/aruba/snmp_agent)
+  1. [SNMPv2c Community](/docs-csm/operations/network/network_management_install_guide/aruba/snmp-community)
+  1. [SNMP Traps](/docs-csm/operations/network/network_management_install_guide/aruba/snmp_trap)
+  1. [SNMPv3 Users](/docs-csm/operations/network/network_management_install_guide/aruba/snmpv3_users)
+  1. [System images](/docs-csm/operations/network/network_management_install_guide/aruba/system_images)
+  1. [Bluetooth Capabilities](/docs-csm/operations/network/network_management_install_guide/aruba/bluetooth)
 
 ### Layer one features
-  1. [Physical Interfaces](#physical_interfaces)
-  1. [Redundant Power Supplies](#redundant_power_supplies)
-  1. [Locator LED](#locator_led)
-  1. [Cable Diagnostics](#cable_diagnostics)
+  1. [Physical Interfaces](/docs-csm/operations/network/network_management_install_guide/aruba/physical_interfaces)
+  1. [Redundant Power Supplies](/docs-csm/operations/network/network_management_install_guide/aruba/redundant_power_supplies)
+  1. [Locator LED](/docs-csm/operations/network/network_management_install_guide/aruba/locator_led)
+  1. [Cable Diagnostics](/docs-csm/operations/network/network_management_install_guide/aruba/cable_diagnostics)
 
 ### Layer two features
-  1. [Unidirectional Link Detection (UDLD)](#udld)
-  1. [Link Layer Discovery Protocol (LLDP)](#lldp)
-  1. [Virtual Local Access Networks (VLANs)](#vlan)
-  1. [Native VLAN](#native_vlan)
-  1. [VLAN Trunking 802.1Q](#vlan_trunking_8021q)
-  1. [Link Aggregation Group (LAG)](#lag)
-  1. [Virtual Switching Extension (VSX)](#vsx)
-  1. [Multi-Chassis Link Aggregation Group (MCLAG)](#mlag)
-  1. [VSX Sync](#vsx_sync)
-  1. [Virtual Switching Framework (VSF) 6300 Only](#vsf)
-  1. [Multiple Spanning Tree Protocol (MSTP)](#mstp)
+  1. [Unidirectional Link Detection (UDLD)](/docs-csm/operations/network/network_management_install_guide/aruba/udld)
+  1. [Link Layer Discovery Protocol (LLDP)](/docs-csm/operations/network/network_management_install_guide/aruba/lldp)
+  1. [Virtual Local Access Networks (VLANs)](/docs-csm/operations/network/network_management_install_guide/aruba/vlan)
+  1. [Native VLAN](/docs-csm/operations/network/network_management_install_guide/aruba/native_vlan)
+  1. [VLAN Trunking 802.1Q](/docs-csm/operations/network/network_management_install_guide/aruba/vlan_trunking_8021q)
+  1. [Link Aggregation Group (LAG)](/docs-csm/operations/network/network_management_install_guide/aruba/lag)
+  1. [Virtual Switching Extension (VSX)](/docs-csm/operations/network/network_management_install_guide/aruba/vsx)
+  1. [Multi-Chassis Link Aggregation Group (MCLAG)](/docs-csm/operations/network/network_management_install_guide/aruba/mlag)
+  1. [VSX Sync](/docs-csm/operations/network/network_management_install_guide/aruba/vsx_sync)
+  1. [Virtual Switching Framework (VSF) 6300 Only](/docs-csm/operations/network/network_management_install_guide/aruba/vsf)
+  1. [Multiple Spanning Tree Protocol (MSTP)](/docs-csm/operations/network/network_management_install_guide/aruba/mstp)
 
 ### Layer three features
-  1. [Routed Interfaces](#routed_interface)
-  1. [VLAN Interface](#vlan_interface)
-  1. [Address Resolution Protocol (ARP)](#arp)
-  1. [Static Routing](#static_routing)
-  1. [Loopback Interface](#loopback)
-  1. [Open Shortest Path First (OSPF) v2](#ospfv2)
-  1. [BGP Basics](#bgp_basic)
+  1. [Routed Interfaces](/docs-csm/operations/network/network_management_install_guide/aruba/routed_interface)
+  1. [VLAN Interface](/docs-csm/operations/network/network_management_install_guide/aruba/vlan_interface)
+  1. [Address Resolution Protocol (ARP)](/docs-csm/operations/network/network_management_install_guide/aruba/arp)
+  1. [Static Routing](/docs-csm/operations/network/network_management_install_guide/aruba/static_routing)
+  1. [Loopback Interface](/docs-csm/operations/network/network_management_install_guide/aruba/loopback)
+  1. [Open Shortest Path First (OSPF) v2](/docs-csm/operations/network/network_management_install_guide/aruba/ospfv2)
+  1. [BGP Basics](/docs-csm/operations/network/network_management_install_guide/aruba/bgp_basic)
 
 ### Multicast
-  1. [IGMP](#igmp)
-  1. [MSDP](#msdp)
-  1. [PIM-SM Bootstrap Router (BSR) and Rendezvous-Point (RP)](#pim)
+  1. [IGMP](/docs-csm/operations/network/network_management_install_guide/aruba/igmp)
+  1. [MSDP](/docs-csm/operations/network/network_management_install_guide/aruba/msdp)
+  1. [PIM-SM Bootstrap Router (BSR) and Rendezvous-Point (RP)](/docs-csm/operations/network/network_management_install_guide/aruba/pim)
 
 ### Security
-  1. [Access Control Lists (ACLs)](#acl)
-  1. [TACACS](#tacacs)
-  1. [RADIUS](#radius)
-  1. [Port Security](#port_security)
-  1. [802.1X](#8021x)
-  1. [MAC Authentication](#mac_auth)
+  1. [Access Control Lists (ACLs)](/docs-csm/operations/network/network_management_install_guide/aruba/acl)
+  1. [TACACS](/docs-csm/operations/network/network_management_install_guide/aruba/tacacs)
+  1. [RADIUS](/docs-csm/operations/network/network_management_install_guide/aruba/radius)
+  1. [Port Security](/docs-csm/operations/network/network_management_install_guide/aruba/port_security)
+  1. [802.1X](/docs-csm/operations/network/network_management_install_guide/aruba/8021x)
+  1. [MAC Authentication](/docs-csm/operations/network/network_management_install_guide/aruba/mac_auth)
 
 ### Quality of Service
-  1. [Initial Prioritization)](#initial_prioritization)
-  1. [Classifier Policies](#classifier_policies)
-  1. [Queuing and Scheduling](#queuing_and_scheduling)
+  1. [Initial Prioritization)](/docs-csm/operations/network/network_management_install_guide/aruba/initial_prioritization)
+  1. [Classifier Policies](/docs-csm/operations/network/network_management_install_guide/aruba/classifier_policies)
+  1. [Queuing and Scheduling](/docs-csm/operations/network/network_management_install_guide/aruba/queuing_and_scheduling)
 
 ### Performing VSX upgrade on Aruba switches
-  1. [VSX Upgrade](#upgrade)
+  1. [VSX Upgrade](/docs-csm/operations/network/network_management_install_guide/aruba/upgrade)
 
 ### Switch replacement in the VSX Cluster
-  1. [Switch replacement in the VSX Cluster](#vsx_switch_replacement)
+  1. [Switch replacement in the VSX Cluster](/docs-csm/operations/network/network_management_install_guide/aruba/vsx_switch_replacement)
 
 ### Backing up switch configuration
-  1. [Backing up switch configuration](#backup)
-  1. [Parameters](#)
-  1. [Example copying a running configuration to remote file in CLI format:](#)
+  1. [Backing up switch configuration](/docs-csm/operations/network/network_management_install_guide/aruba/backup)
 
 ### Erase all zeroize
-  1. [Erase all zeroize](#zeroize)
+  1. [Erase all zeroize](/docs-csm/operations/network/network_management_install_guide/aruba/zeroize)
  
 ### Troubleshooting
 
 ### Port mirroring on Aruba CX
-  1. [Port Mirroring](#port_mirroring)
+  1. [Port Mirroring](/docs-csm/operations/network/network_management_install_guide/aruba/port_mirroring)
 
 ### DHCP
-  1. [Confirm the status of the cray-dhcp-kea pods/services](#status_of_cray-dhcp-kea_pods.md)
-  1. [Check current DHCP leases](#check_current_dhcp_leases)
-  1. [Check HSM](#check_hsm)
-  1. [Check Kea DHPC logs](#check_kea_dhcp_logs)
-  1. [TCPDUMP](#ncn_tcpdump)
-  1. [Check BGP and MetalLB](#check_bgp_and_metallb)
-  1. [You are getting IP, but not the correct one. Duplicate IP check](#duplicate_ip)
-  1. [Large number of DHCP declines during a node boot](#dhcp_decline)
+  1. [Confirm the status of the cray-dhcp-kea pods/services](/docs-csm/operations/network/network_management_install_guide/aruba/status_of_cray-dhcp-kea_pods.md)
+  1. [Check current DHCP leases](/docs-csm/operations/network/network_management_install_guide/aruba/check_current_dhcp_leases)
+  1. [Check HSM](/docs-csm/operations/network/network_management_install_guide/aruba/check_hsm)
+  1. [Check Kea DHPC logs](/docs-csm/operations/network/network_management_install_guide/aruba/check_kea_dhcp_logs)
+  1. [TCPDUMP](/docs-csm/operations/network/network_management_install_guide/aruba/ncn_tcpdump)
+  1. [Check BGP and MetalLB](/docs-csm/operations/network/network_management_install_guide/aruba/check_bgp_and_metallb)
+  1. [You are getting IP, but not the correct one. Duplicate IP check](/docs-csm/operations/network/network_management_install_guide/aruba/duplicate_ip)
+  1. [Large number of DHCP declines during a node boot](/docs-csm/operations/network/network_management_install_guide/aruba/dhcp_decline)
 
 ### DNS
 
 ### PXE boot
 
-  1. [NCNs on install](#ncns_on_install)
-  1. [Rebooting NCN and PXE fails](#reboot_pxe_fail)
-  1. [Verify BGP](#verify_bgp)
-  1. [Verify route to TFTP](#verify_route_to_tftp)
-  1. [Test TFTP traffic (Aruba Only)](#test_tftp_traffic)
-  1. [Check DHCP lease is getting allocated](#check_dhcp_lease_is_getting_allocated)
-  1. [Verify DHCP traffic on workers](#verify_dhcp_traffic_on_workers)
-  1. [Verify switches are forwarding DHCP traffic](#verify-switches_are_forwarding_dhcp_traffic)
-  1. [Computes/UANs/Application Nodes](#compute_uan_application_nodes)
+  1. [NCNs on install](/docs-csm/operations/network/network_management_install_guide/aruba/ncns_on_install)
+  1. [Rebooting NCN and PXE fails](/docs-csm/operations/network/network_management_install_guide/aruba/reboot_pxe_fail)
+  1. [Verify BGP](/docs-csm/operations/network/network_management_install_guide/aruba/verify_bgp)
+  1. [Verify route to TFTP](/docs-csm/operations/network/network_management_install_guide/aruba/verify_route_to_tftp)
+  1. [Test TFTP traffic (Aruba Only)](/docs-csm/operations/network/network_management_install_guide/aruba/test_tftp_traffic)
+  1. [Check DHCP lease is getting allocated](/docs-csm/operations/network/network_management_install_guide/aruba/check_dhcp_lease_is_getting_allocated)
+  1. [Verify DHCP traffic on workers](/docs-csm/operations/network/network_management_install_guide/aruba/verify_dhcp_traffic_on_workers)
+  1. [Verify switches are forwarding DHCP traffic](/docs-csm/operations/network/network_management_install_guide/aruba/verify-switches_are_forwarding_dhcp_traffic)
+  1. [Computes/UANs/Application Nodes](/docs-csm/operations/network/network_management_install_guide/aruba/compute_uan_application_nodes)
 

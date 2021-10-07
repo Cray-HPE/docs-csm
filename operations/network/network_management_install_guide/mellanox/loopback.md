@@ -1,4 +1,4 @@
-# Loopback Interface 
+# Loopback interface 
 
 You can think of loopbacks as internal virtual interfaces. Loopback interfaces are not bound to a physical port and are used for device management and routing protocols. 
 

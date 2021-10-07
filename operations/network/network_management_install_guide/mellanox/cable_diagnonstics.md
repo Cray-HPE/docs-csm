@@ -1,4 +1,4 @@
-# Cable Diagnostics 
+# Cable diagnostics 
 
 Cable plugin collects various information from the cables attached to the fabric ports.
 

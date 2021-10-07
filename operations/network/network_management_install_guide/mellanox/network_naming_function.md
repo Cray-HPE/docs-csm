@@ -1,4 +1,4 @@
-# Network Types – Naming and segment Function
+# Network types – Naming and segment Function
 
 Description
 

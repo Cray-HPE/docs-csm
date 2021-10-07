@@ -1,4 +1,4 @@
-# Link Aggregation Group (LAG) 
+# Link aggregation group (LAG) 
 
 Link Aggregation allows you to assign multiple physical links to one logical link that functions as a single, higher-speed link providing dramatically increased bandwidth. 
 

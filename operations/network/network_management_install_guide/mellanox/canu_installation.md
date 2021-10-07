@@ -1,4 +1,4 @@
-# Canu
+# CANU
 
 ## Installation
 

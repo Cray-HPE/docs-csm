@@ -1,4 +1,4 @@
-# Performing upgrade on mellanox switches
+# Performing upgrade on Mellanox switches
 
 To perform an automatic firmware update by the OS for a different switch firmware version without changing the OS version, import the firmware package as described below. The OS sets it as the new default firmware and performs the firmware update automatically as described in the previous subsections.
 

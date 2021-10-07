@@ -1,4 +1,4 @@
-# SNMPv2c Community 
+# SNMPv2c community 
 
 The switch supports SNMPv2c community-based security for Read-Only access. 
 

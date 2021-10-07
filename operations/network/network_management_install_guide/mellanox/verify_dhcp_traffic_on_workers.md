@@ -1,4 +1,4 @@
-# Verify the DHCP traffic on the Workers
+# Verify the DHCP traffic on the workers
 
 Example issue: Source address of the DHCP Offer is the Metallb address of KEA "10.92.100.222".  
 
