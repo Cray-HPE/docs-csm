@@ -307,6 +307,8 @@ deployment "cray-dns-unbound" successfully rolled out
 
 ### Verify HMNFD timestamp fix:
 
+**`NOTE:`** `The following verification steps require SMA and SAT to be installed.`
+
 Once the patch is installed the missing timestamp fix can be validated by taking the following steps:
 
 1. Find an instance of a cluster-kafka pod:
