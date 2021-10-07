@@ -32,7 +32,6 @@ The HPE Cray EX system includes the following nodes:
 * [Replace a Compute Blade](Replace_a_Compute_Blade.md)
 * [Swap a Compute Blade with a Different System](Swap_a_Compute_Blade_with_a_Different_System.md)
 * [Clear Space in Root File System on Worker Nodes](Clear_Space_in_Root_File_System_on_Worker_Nodes.md)
-* [Manually Wipe Boot Configuration on Nodes to be Reinstalled](Manually_Wipe_Boot_Configuration_on_Nodes_to_be_Reinstalled.md)
 * [Troubleshoot Issues with Redfish Endpoint DiscoveryCheck for Redfish Events from Nodes](Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md)
 * [Reset Credentials on Redfish Devices](Reset_Credentials_on_Redfish_Devices_for_Reinstallation.md)
 * [Access and Update Settings for Replacement NCNs](Access_and_Update_the_Settings_for_Replacement_NCNs.md)
