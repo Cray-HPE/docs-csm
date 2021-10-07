@@ -11,7 +11,7 @@ After the CDU is switched on and healthy, the liquid-cooled PDU circuit breakers
 ### Prerequisites
 
 * The cabinet PDUs and coolant distribution units are connected to facility power and are healthy.
-* An authentication token is required to access the API gateway and to use the `sat` command. See the [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md) and "SAT Authentication" in the Shasta Admin Toolkit (SAT) product documentation.
+* An authentication token is required to access the API gateway and to use the `sat` command. See the [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md) and "SAT Authentication" in the System Admin Tookit (SAT) product stream documentation.
 
 ### Procedure
 
