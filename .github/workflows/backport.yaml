@@ -11,4 +11,4 @@ jobs:
     runs-on: self-hosted
     name: Backport closed pull request
     steps:
-    - uses: syndesisio/backport-action@master
+    - uses: Cray-HPE/backport-action@v1
