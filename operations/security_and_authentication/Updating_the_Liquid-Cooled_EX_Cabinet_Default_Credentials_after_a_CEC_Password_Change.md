@@ -2,7 +2,7 @@
 
 This procedure changes the credential for liquid-cooled EX cabinet chassis controllers and node controller (BMCs) used by CSM services after the CECs have been set to a new global default credential. 
 
-**NOTE:** This procedure does not provision Slingshot switch BMCs (RouterBMCs). Slingshot switch BMC default credentials must be changed using the procedures in the Slingshot product documentation. Refer to "Change Switch BMC Passwords" in the Slingshot product documentation for more information. 
+**NOTE:** This procedure does not provision Slingshot switch BMCs (RouterBMCs). Slingshot switch BMC default credentials must be changed using the procedures in the Slingshot product documentation. To update Slingshot switch BMCs, refer to "Change Rosetta Login and Redfish API Credentials" in the *Slingshot Operations Guide* (1.6.0).  
 
 This procedure provisions only the default Redfish root account passwords. It does not modify Redfish accounts that have been added after an initial system installation.
 
@@ -216,7 +216,7 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
     ncn-m001# \
     cray hsm inventory redfishEndpoints list --laststatus '!DiscoverOK' --type '!RouterBMC' --format json > /tmp/redfishEndpoints.json
     cray hsm state components list --format json  > /tmp/components.json
-
+    
     REDFISH_ENDPOINTS=$(jq .RedfishEndpoints[].ID -r /tmp/redfishEndpoints.json | sort -V)
     for RF in $REDFISH_ENDPOINTS; do
         CLASS=$(jq -r --arg XNAME "$RF" '.Components[] | select(.ID == $XNAME).Class' /tmp/components.json)
@@ -240,7 +240,7 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
     - If the Redfish endpoint is `DiscoveryStarted`, then that BMC is currently in the process of being inventoried by HSM. Wait a few minutes and re-try the bash script above to re-check the current discovery status of the RedfishEndpoints.
         > The hms-discovery cronjob (if enabled) will trigger a discover on BMCs that are not currently in `DiscoverOK` or `DiscoveryStarted` every 3 minutes.  
     - If the Redfish endpoint is `HTTPsGetFailed`, then HSM had issues contacting BMC.
-
+    
         1. Verify that the BMC xname is resolvable and pingable:
            > If the BMC is a ChassisBMC, then the `b0` in its xname needs to be removed to get its hostname. Otherwise, for NodeBMCs their xnames is their BMC hostname.
            > For example, the ChassisBMC has the xname `x1000c0b0`, and its hostname is `x1000c0`.
@@ -249,14 +249,14 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
            ncn-m001# ping x1001c1s0b0
            ```
 
-        2. If a Node is not pingable verify that the slot powering the BMC is powered on. If this is a ChassisBMC, skip this step. For example, the NodeBMC x1001c1s0b0 is in slot x1001c1s0.
+        2. If a NodeBMC is not pingable, then verify that the slot powering the BMC is powered on. If this is a ChassisBMC, skip this step. For example, the NodeBMC x1001c1s0b0 is in slot x1001c1s0.
             ```bash
             ncn-m001# cray capmc get_xname_status create --xnames x1001c1s0
             e = 0
             err_msg = ""
             on = [ "x1001c1s0b0",]
             ```
-
+    
             If the slot is off, power it on:
             ```bash
             ncn-m001# cray capmc xname_on create --xnames x1001c1s0
@@ -270,7 +270,7 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
             ``` 
 
             If the error message below is returned, then the BMC needs to be have a StatefulReset action performed on it. The StatefulReset action will clear out any previously user defined credentials that are taking precedence over the CEC supplied credential. It will also clear out NTP, Syslog, and SSH Key configurations on the BMC.
-
+    
             ```json
             {
                 "error": {
@@ -292,7 +292,7 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
             }
             ```
 
-            Perform a StatefulReset on the liquid-cooled BMC replace `BMC_HOSTNAME` with the hostname of the BMC. The `OLD_DEFAULT_PASSWORD` needs to be the match the credential that was perviously set on the BMC. This is mostly likely to be the pervious global default credential for liquid-cooled BMCs.
+            Perform a StatefulReset on the liquid-cooled BMC replace `BMC_HOSTNAME` with the hostname of the BMC. The `OLD_DEFAULT_PASSWORD` needs to match the credential that was perviously set on the BMC. This is mostly likely to be the pervious global default credential for liquid-cooled BMCs.
             ```bash
             ncn-m001# curl -k -u root:OLD_DEFAULT_PASSWORD -X POST -H 'Content-Type: application/json' -d \
             '{"ResetType": "StatefulReset"}' \
@@ -336,7 +336,7 @@ This section only needs to be performed if any liquid-cooled Node or Chassis BMC
     ncn-m001# \
     cray hsm inventory redfishEndpoints list --laststatus '!DiscoverOK' --type '!RouterBMC' --format json > /tmp/redfishEndpoints.json
     cray hsm state components list --format json  > /tmp/components.json
-
+   
     REDFISH_ENDPOINTS=$(jq .RedfishEndpoints[].ID -r /tmp/redfishEndpoints.json | sort -V)
     for RF in $REDFISH_ENDPOINTS; do
         CLASS=$(jq -r --arg XNAME "$RF" '.Components[] | select(.ID == $XNAME).Class' /tmp/components.json)
