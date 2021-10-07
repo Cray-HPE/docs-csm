@@ -3,7 +3,7 @@
 For each storage node in the cluster, start by following the steps:
 
 ```bash
-ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-ceph-nodes.sh ncn-s001
+ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-ceph-nodes.sh ncn-s001
 ```
 
 **NOTE:** Run the script once each for all storage nodes. Follow output of the script carefully. The script will pause for manual interaction.
@@ -44,7 +44,7 @@ After the last storage node has been rebooted you will need to deploy `node-expo
 1. Update BSS to ensure the Ceph images are loaded if a node is rebuilt.
 
     ```bash
-    ncn-m001# . /usr/share/doc/csm/upgrade/1.0/scripts/ceph/lib/update_bss_metadata.sh
+    ncn-m001# . /usr/share/doc/csm/upgrade/1.2/scripts/ceph/lib/update_bss_metadata.sh
     ncn-m001# update_bss_storage
     ```
 

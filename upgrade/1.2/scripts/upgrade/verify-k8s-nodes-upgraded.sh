@@ -1,7 +1,7 @@
 #!/bin/sh
 # Copyright 2021 Hewlett Packard Enterprise Development LP
 
-EXPECTED_VERSION="v1.19.9"
+EXPECTED_VERSION="v1.20.11"
 display_output=$(kubectl get nodes)
 versions=$(kubectl get nodes -o json | jq -r '.items[].status.nodeInfo.kubeletVersion')
 stringarray=($versions)
