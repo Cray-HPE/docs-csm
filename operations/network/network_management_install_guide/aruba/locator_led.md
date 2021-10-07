@@ -4,6 +4,8 @@ The Locator LED is an LED in the front of the chassis that you can turn on or ma
 
 Relevant Configuration 
 
+Enable led
+
 ```
 switch# led locator <flashing|off|on>
 ```

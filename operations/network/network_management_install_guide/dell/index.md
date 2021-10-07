@@ -62,98 +62,42 @@ __________________________________
   1. [Remote Logging](#remote_logging)
   1. [SNMPv2c Community](#snmp-community)
   1. [System images](#system_images)
-  1. [Bluetooth Capabilities](#bluetooth)
 
 ### Layer one features
   1. [Physical Interfaces](#physical_interfaces)
-  1. [Redundant Power Supplies](#redundant_power_supplies)
   1. [Locator LED](#locator_led)
-  1. [Cable Diagnostics](#cable_diagnostics)
 
 ### Layer two features
-  1. [Unidirectional Link Detection (UDLD)](#udld)
   1. [Link Layer Discovery Protocol (LLDP)](#lldp)
   1. [Virtual Local Access Networks (VLANs)](#vlan)
-  1. [Native VLAN](#native_vlan)
   1. [VLAN Trunking 802.1Q](#vlan_trunking_8021q)
   1. [Link Aggregation Group (LAG)](#lag)
-  1. [Virtual Switching Extension (VSX)](#vsx)
-  1. [Multi-Chassis Link Aggregation Group (MCLAG)](#mlag)
-  1. [VSX Sync](#vsx_sync)
-  1. [Virtual Switching Framework (VSF) 6300 Only](#vsf)
   1. [Multiple Spanning Tree Protocol (MSTP)](#mstp)
 
 ### Layer three features
-  1. [Routed Interfaces](#routed_interface)
   1. [VLAN Interface](#vlan_interface)
   1. [Address Resolution Protocol (ARP)](#arp)
-  1. [Static Routing](#static_routing)
   1. [Loopback Interface](#loopback)
-  1. [Open Shortest Path First (OSPF) v2](#ospfv2)
-  1. [BGP Basics](#bgp_basic)
+
 
 ### Multicast
   1. [IGMP](#igmp)
-  1. [MSDP](#msdp)
-  1. [PIM-SM Bootstrap Router (BSR) and Rendezvous-Point (RP)](#pim)
 
 ### Security
   1. [Access Control Lists (ACLs)](#acl)
-  1. [TACACS](#tacacs)
-  1. [RADIUS](#radius)
-  1. [Port Security](#port_security)
-  1. [802.1X](#8021x)
-  1. [MAC Authentication](#mac_auth)
 
 ### Quality of Service
-  1. [Initial Prioritization)](#initial_prioritization)
-  1. [Classifier Policies](#classifier_policies)
-  1. [Queuing and Scheduling](#queuing_and_scheduling)
+  1. [Qos)](#qos)
 
-### Performing VSX upgrade on Aruba switches
-  1. [VSX Upgrade](#upgrade)
-
-### Switch replacement in the VSX Cluster
-  1. [Switch replacement in the VSX Cluster](#vsx_switch_replacement)
+### Performing upgrade on Dell switches
+  1. [Software upgrade](#upgrade)
 
 ### Backing up switch configuration
   1. [Backing up switch configuration](#backup)
-  1. [Parameters](#)
-  1. [Example copying a running configuration to remote file in CLI format:](#)
 
-### Erase all zeroize
-  1. [Erase all zeroize](#zeroize)
+### Factory reset
+  1. [Reset configuration](#reset)
  
-### Troubleshooting
-
-### Port mirroring on Aruba CX
-  1. [Port Mirroring](#port_mirroring)
-
-### DHCP
-  1. [Confirm the status of the cray-dhcp-kea pods/services](#status_of_cray-dhcp-kea_pods.md)
-  1. [Check current DHCP leases](#check_current_dhcp_leases)
-  1. [Check HSM](#check_hsm)
-  1. [Check Kea DHPC logs](#check_kea_dhcp_logs)
-  1. [TCPDUMP](#ncn_tcpdump)
-  1. [Check BGP and MetalLB](#check_bgp_and_metallb)
-  1. [You are getting IP, but not the correct one. Duplicate IP check](#duplicate_ip)
-  1. [Large number of DHCP declines during a node boot](#dhcp_decline)
-
-### DNS
-
-### PXE boot
-
-  1. [NCNs on install](#ncns_on_install)
-  1. [Rebooting NCN and PXE fails](#reboot_pxe_fail)
-  1. [Verify BGP](#verify_bgp)
-  1. [Verify route to TFTP](#verify_route_to_tftp)
-  1. [Test TFTP traffic (Aruba Only)](#test_tftp_traffic)
-  1. [Check DHCP lease is getting allocated](#check_dhcp_lease_is_getting_allocated)
-  1. [Verify DHCP traffic on workers](#verify_dhcp_traffic_on_workers)
-  1. [Verify switches are forwarding DHCP traffic](#verify-switches_are_forwarding_dhcp_traffic)
-  1. [Computes/UANs/Application Nodes](#compute_uan_application_nodes)
-
-
 
 
 
