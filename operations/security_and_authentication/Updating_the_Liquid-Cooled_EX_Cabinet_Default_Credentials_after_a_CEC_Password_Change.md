@@ -2,13 +2,13 @@
 
 This procedure changes the credential for liquid-cooled EX cabinet chassis controllers and node controller (BMCs) used by CSM services after the CECs have been set to a new global default credential. 
 
-**NOTE:** This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC default credentials must be changed using the procedures in the Slingshot product documentation. Refer to "Change Switch BMC Passwords" in the Slingshot product documentation for more information. 
+**NOTE:** This procedure does not provision Slingshot switch BMCs (RouterBMCs). Slingshot switch BMC default credentials must be changed using the procedures in the Slingshot product documentation. Refer to "Change Switch BMC Passwords" in the Slingshot product documentation for more information. 
 
 This procedure provisions only the default Redfish root account passwords. It does not modify Redfish accounts that have been added after an initial system installation.
 
 ### Prerequisites
 
-- Perform procedures in [Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials](Provisioning_a_Liquid-Cooled_EX_Cabinet_CEC_with_Default Credentials.md) on all CECs in the system.  
+- Perform procedures in [Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials](Provisioning_a_Liquid-Cooled_EX_Cabinet_CEC_with_Default_Credentials.md) on all CECs in the system.  
 - All of the CECs must be configured with the __same__ global credential.
 - The previous default global credential for liquid-cooled BMCs needs to be known.
 
@@ -49,25 +49,25 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
    ```
 
 4. Acquire sealed secret keys:
-    ```bash
-    ncn-m001# mkdir -p certs
-    ncn-m001# kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.crt}' | base64 -d > certs/sealed_secrets.crt
-    ncn-m001# kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.key}' | base64 -d > certs/sealed_secrets.key
-    ```
+   ```bash
+   ncn-m001# mkdir -p certs
+   ncn-m001# kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.crt}' | base64 -d > certs/sealed_secrets.crt
+   ncn-m001# kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.key}' | base64 -d > certs/sealed_secrets.key
+   ```
 
 #### 1.2 Modify MEDS sealed secret to use new global default credential.
 
 1. Inspect the original default credentials for MEDS:
-    ```bash
-    ncn-m001# ./utils/secrets-decrypt.sh cray_meds_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_redfish_defaults -r | base64 -d | jq
-    ```
+   ```bash
+   ncn-m001# ./utils/secrets-decrypt.sh cray_meds_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_redfish_defaults -r | base64 -d | jq
+   ```
 
-    ```json
-    {
-        "Username": "root",
-        "Password": "bar"
-    }
-    ```
+   ```json
+   {
+       "Username": "root",
+       "Password": "bar"
+   }
+   ```
 
 2. Specify the desired default credentials for MEDS to use with new hardware:
     > Replace `foobar` with the root password configured on the CEC(s).
@@ -211,7 +211,7 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
 
 4. Wait for all updated Redfish endpoints to become `DiscoverOK`:
     
-    The following bash script will find all Redfish endpoints for the Liquid cooled BMCs that are not in `DiscoverOK`, and display their last Discovery Status.
+    The following bash script will find all Redfish endpoints for the liquid-cooled BMCs that are not in `DiscoverOK`, and display their last Discovery Status.
     ```bash
     ncn-m001# \
     cray hsm inventory redfishEndpoints list --laststatus '!DiscoverOK' --type '!RouterBMC' --format json > /tmp/redfishEndpoints.json
@@ -236,17 +236,20 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
     x1001c2s0b1: DiscoveryStarted
     ```
 
-    For each Redfish endpoint that is reported use the following to troubleshoot why it is not `DiscoverOK`:
+    For each Redfish endpoint that is reported use the following to troubleshoot why it is not `DiscoverOK` or `DiscoveryStarted`:
     - If the Redfish endpoint is `DiscoveryStarted`, then that BMC is currently in the process of being inventoried by HSM. Wait a few minutes and re-try the bash script above to re-check the current discovery status of the RedfishEndpoints.
-        > The hms-discovery cronjob (if enabled) will trigger a discover on BMCs that are not currently in `DiscoverOK` every 3 minutes.  
+        > The hms-discovery cronjob (if enabled) will trigger a discover on BMCs that are not currently in `DiscoverOK` or `DiscoveryStarted` every 3 minutes.  
     - If the Redfish endpoint is `HTTPsGetFailed`, then HSM had issues contacting BMC.
 
         1. Verify that the BMC xname is resolvable and pingable:
-            ```
-            ncn-m001# ping x1001c1s0b0
-            ```
+           > If the BMC is a ChassisBMC, then the `b0` in its xname needs to be removed to get its hostname. Otherwise, for NodeBMCs their xnames is their BMC hostname.
+           > For example, the ChassisBMC has the xname `x1000c0b0`, and its hostname is `x1000c0`.
+           > <!-- This changes in CSM 1.0, where the hostname for the ChassisBMC is its xname -->
+           ```
+           ncn-m001# ping x1001c1s0b0
+           ```
 
-        2. If a Node or Router BMC is not pingable verify that the slot powering the BMC is powered on. For example, the NodeBMC x1001c1s0b0 is in slot x1001c1s0.
+        2. If a Node is not pingable verify that the slot powering the BMC is powered on. If this is a ChassisBMC, skip this step. For example, the NodeBMC x1001c1s0b0 is in slot x1001c1s0.
             ```bash
             ncn-m001# cray capmc get_xname_status create --xnames x1001c1s0
             e = 0
@@ -259,9 +262,11 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
             ncn-m001# cray capmc xname_on create --xnames x1001c1s0
             ```
  
-        3. If the BMC is reachable and in `HTTPsGetFailed`, then verify that the BMC is accessible with the new default global credential. Replace `BMC_XNAME` with the name of the Redfish Endpoint.
+        3. If the BMC is reachable and in `HTTPsGetFailed`, then verify that the BMC is accessible with the new default global credential. Replace `BMC_HOSTNAME` with the hostname of the Redfish Endpoint. For a NodeBMC its hostname is its xname. For a ChassisBMC, then the `b0` in its xname needs to be removed to get its hostname.
+            > For example, the ChassisBMC has the xname `x1000c0b0`, and its hostname is `x1000c0`.
+            > <!-- In CSM 1.0 the hostname for a ChassisBMC matches its xname -->
             ```bash
-            ncn-m001# curl -k -u root:$CRED_PASSWORD https://BMC_XNAME/redfish/v1/Managers | jq
+            ncn-m001# curl -k -u root:$CRED_PASSWORD https://BMC_HOSTNAME/redfish/v1/Managers | jq
             ``` 
 
             If the error message below is returned, then the BMC needs to be have a StatefulReset action performed on it. The StatefulReset action will clear out any previously user defined credentials that are taking precedence over the CEC supplied credential. It will also clear out NTP, Syslog, and SSH Key configurations on the BMC.
@@ -287,17 +292,19 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
             }
             ```
 
-            Perform a StatefulReset on the Liquid cooled BMC replaced `BMC_XNAME` with the xname of the BMC. The `OLD_DEFAULT_PASSWORD` needs to be the match the credential that was perviously set on the BMC. This is mostly likely to be the pervious global default credential for Liquid cooled BMCs.
+            Perform a StatefulReset on the liquid-cooled BMC replace `BMC_HOSTNAME` with the hostname of the BMC. The `OLD_DEFAULT_PASSWORD` needs to be the match the credential that was perviously set on the BMC. This is mostly likely to be the pervious global default credential for liquid-cooled BMCs.
             ```bash
             ncn-m001# curl -k -u root:OLD_DEFAULT_PASSWORD -X POST -H 'Content-Type: application/json' -d \
             '{"ResetType": "StatefulReset"}' \
-            https://BMC_XNAME/redfish/v1/Managers/BMC/Actions/Manager.Reset
+            https://BMC_HOSTNAME/redfish/v1/Managers/BMC/Actions/Manager.Reset
             ```
 
-### 3. Reapply BMC settings if a StatefullReset was performed on any BMC.
-This section only needs to be performed if any Liquid cooled BMCs had to be StatefulReset.
+            After the StatefulReset action has been issued, the BMC will be unreachable for a few minutes as it performs the StatefulReset.
 
-1. For each Liquid cooled BMC that the StatefulReset action was applied delete the BMC from HSM. Replace `BMC_XNAME` with the BMC xname to delete.
+### 3. Reapply BMC settings if a StatefullReset was performed on any BMC.
+This section only needs to be performed if any liquid-cooled Node or Chassis BMCs that had to be StatefulReset.
+
+1. For each liquid-cooled BMC that the StatefulReset action was applied delete the BMC from HSM. Replace `BMC_XNAME` with the BMC xname to delete.
     > ```bash
     > ncn-m001# cray hsm inventory redfishEndpoints delete BMC_XNAME
     > ```
@@ -319,12 +326,12 @@ This section only needs to be performed if any Liquid cooled BMCs had to be Stat
 
 3. Wait for MEDS to re-discover the deleted RedfishEndpoints:
     ```bash
-    ncn-m001# sleep 180
+    ncn-m001# sleep 300
     ```
 
 4. Verify all expected hardware has been discovered:
    
-    The following bash script will find all Redfish endpoints for the Liquid cooled BMCs that are not in `DiscoverOK`, and display their last Discovery Status.
+    The following bash script will find all Redfish endpoints for the liquid-cooled BMCs that are not in `DiscoverOK`, and display their last Discovery Status.
     ```bash
     ncn-m001# \
     cray hsm inventory redfishEndpoints list --laststatus '!DiscoverOK' --type '!RouterBMC' --format json > /tmp/redfishEndpoints.json
@@ -341,7 +348,7 @@ This section only needs to be performed if any Liquid cooled BMCs had to be Stat
     done
     ```
 
-5. Restore SSH Keys configured by cray-conman on Liquid cooled Node BMCs.
+5. Restore SSH Keys configured by cray-conman on liquid-cooled Node BMCs.
     <!-- This step is only applicable to CSM 0.9, and will be different in CSM 1.0 -->
     View the current status of the cray-conman pods:
     ```bash
@@ -356,6 +363,27 @@ This section only needs to be performed if any Liquid cooled BMCs had to be Stat
     ncn-m001# kubectl -n services rollout status deployment cray-conman
     ```
 
-6. Restore passwordless SSH connections to the Liquid cooled BMCs by following the procedure `30.23 Enable Passwordless Connections to Liquid Cooled Node BMCs` of the _HPE Cray EX System Administration Guide 1.4 S-80001_. 
+6. Restore passwordless SSH connections to the liquid-cooled Node BMCs that have had the StatefulReset applied to them by following the procedure `30.23 Enable Passwordless Connections to Liquid Cooled Node BMCs` of the _HPE Cray EX System Administration Guide 1.4 S-80001_. 
     > __WARNING__: If an admin uses SCSD to update the SSHConsoleKey value outside of ConMan, it will disrupt the ConMan connection to the console and collection of console logs.
     > Refer to "About the ConMan Containerized Service" in the _HPE Cray EX System Administration Guide 1.4 S-8001_.
+
+7. Restore passwordless SSH connections to the liquid-cooled Chassis BMCs that have had the SateFulReset applied to them. Follow the steps below for each Chassis BMC that was StatefulReset:
+    <!-- This step is only applicable to CSM 0.9, and not required in CSM 1.0 as SCSD is able to manage ChassisBMCs -->
+    1. Save the public SSH key for the root user.
+        ```bash
+        ncn-m001# export SSH_PUBLIC_KEY=$(cat /root/.ssh/id_rsa.pub | sed 's/[[:space:]]*$//')
+        ```
+
+    2. Enable passwordless SSH to the root user of the BMCs. Skip this step if passwordless SSH to the root user is not desired. Replace `BMC_HOSTNAME` with the hostname name of the Chassis BMC. The hostname of a ChassisBMC is its xname with the ending `b0` removed. 
+        ```bash
+        ncn-m001# curl -k -u root:$CRED_PASSWORD -X PATCH https://BMC_HOSTNAME/redfish/v1/Managers/BMC/NetworkProtocol \
+            -H 'Content-Type: application/json' \
+            -d "{\"Oem\":{\"SSHAdmin\":{\"AuthorizedKeys\":\"ssh-rsa $SSH_PUBLIC_KEY\"}}}"
+        ```
+
+    3. Enable passwordless SSH to the consoles on the BMCs. Skip this step if passwordless SSH to the root user is not desired. Replace `BMC_HOSTNAME` with the hostname name of the Chassis BMC. The hostname of a ChassisBMC is its xname with the ending `b0` removed. 
+        ```bash
+        ncn-m001# curl -k -u root:$CRED_PASSWORD -X PATCH https://BMC_HOSTNAME/redfish/v1/Managers/BMC/NetworkProtocol \
+            -H 'Content-Type: application/json' \
+            -d "{\"Oem\":{\"SSHConsole\":{\"AuthorizedKeys\":\"ssh-rsa $SSH_PUBLIC_KEY\"}}}"
+        ```
