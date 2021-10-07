@@ -48,7 +48,6 @@ __________________________________
    1. [Introduction](#index)
    1. [Notice](#index)
    1. [Index](#index)
-   1. [Introduction to Canu](#introduction_to_canu)
 
 ### Managing switches from CLI
 
