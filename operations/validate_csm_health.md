@@ -29,7 +29,6 @@ The areas should be tested in the order they are listed on this page. Errors in 
       - [1.8.1 Known Test Issues](#autogoss-issues)
     - [1.9 OPTIONAL Check of System Management Monitoring Tools](#optional-check-of-system-management-monitoring-tools)
   - [2. Hardware Management Services Health Checks](#hms-health-checks)
-
     - [2.1 HMS CT Test Execution](#hms-test-execution)
     - [2.2 Aruba Switch SNMP Fixup](#hms-aruba-fixup)
     - [2.3 Hardware State Manager Discovery Validation](#hms-smd-discovery-validation)
