@@ -25,7 +25,7 @@ The following are potential use cases for wiping disks:
 ## 1. Basic Wipe
 
 A basic wipe includes wiping the disks and all of the RAIDs. These basic wipe instructions can be
-executed on **any management nodes** (master, worker and storage).
+executed on **any management nodes** (master, worker, and storage).
 
 1. List the disks for verification.
 
@@ -99,7 +99,9 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
 1. Reset Kubernetes on each master and worker node.
 
-    ***NOTE:*** Our recommended order is to do this first on the workers, then on the master nodes.
+   **NOTE:** The recommended order is to do this on the worker nodes, and then the master nodes.
+
+    
 
     1. For each worker node, run the following:
 
@@ -125,9 +127,9 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
         ncn-mw# crictl stop <container id from the CONTAINER column>
         ```
 
-    This will stop `kubelet`, underlying containers, and remove the contents of `/var/lib/kubelet`.
+   This will stop kubelet, underlying containers, and remove the contents of `/var/lib/kubelet`.
 
-1. Delete CEPH volumes ***on Utility Storage Nodes ONLY***.
+1. Delete CEPH Volumes **on Utility Storage Nodes ONLY**.
 
     For each Storage node:
 
@@ -168,11 +170,11 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
         ncn-s# vgremove -f --select 'vg_name=~ceph*'
         ```
 
-1. Unmount volumes.
+1. Unmount the volumes.
 
-    > **`NOTE`** Some of the following `umount` commands may fail or have warnings depending on the state of the NCN. Failures in this section can be ignored and will not inhibit the wipe process.
-    >
-    > **`NOTE:`** There is an edge case where the overlay may keep you from unmounting the drive. If this is a rebuild you ignore this.
+   > **NOTE** Some of the following umount commands may fail or have warnings depending on the state of the NCN. Failures in this section can be ignored and will not inhibit the wipe process.
+   
+   > **NOTE:** There is an edge case where the overlay may keep you from unmounting the drive. If this is a rebuild you ignore this or go here.
 
     1. Master nodes.
 
@@ -180,7 +182,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
         ncn-m# umount -v /var/lib/etcd /var/lib/sdu
         ```
 
-    1. Worker nodes.
+    2. Worker nodes.
 
         ```bash
         ncn-w# umount -v /var/lib/containerd /var/lib/kubelet /var/lib/sdu
@@ -219,20 +221,20 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
         7741d5096625  registry.local/sdu-docker-stable-local/cray-sdu-rda:1.1.1  /bin/sh -c /usr/s...  6 weeks ago  Up 6 weeks ago          cray-sdu-rda
         ```
 
-        If there is a running `cray-sdu-rda` container in the above output, stop it using the container id:
+      If there is a running `cray-sdu-rda` container in the above output, stop it using the container ID:
 
         ```bash
         ncn# podman stop 7741d5096625
         7741d50966259410298bb4c3210e6665cdbd57a82e34e467d239f519ae3f17d4
         ```
 
-    1. Remove metal LVM.
+   1. Remove metal LVM.
 
         ```bash
         ncn# vgremove -f --select 'vg_name=~metal*'
         ```
 
-        > **`NOTE`** Optionally you can run the `pvs` command and if any drives are still listed, you can remove them with `pvremove`, but this is rarely needed. Also, if the above command fails or returns a warning about the filesystem being in use, you should ignore the error and proceed to the next step, as this will not inhibit the wipe process.
+      > **NOTE:** Optionally, run the `pvs` command. If any drives are still listed, remove them with `pvremove`, but this is rarely needed. Also, if the above command fails or returns a warning about the filesystem being in use, ignore the error and proceed to the next step, as this will not inhibit the wipe process.
 
 1. Stop the RAIDs.
 
@@ -253,7 +255,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
     ncn# wipefs --all --force /dev/sd* /dev/disk/by-label/*
     ```
 
-    **Note**: On worker nodes, it is a known issue that the `sgdisk` command sometimes encounters a hard hang. If you see no output from the command for 90 seconds, close the terminal session to the worker node, open a new terminal session to it, and complete the disk wipe procedure by running the above `wipefs` command.
+   **NOTE:** On worker nodes, it is a known issue that the `sgdisk` command sometimes encounters a hard hang. If there is no output from the command for 90 seconds, close the terminal session to the worker node, open a new terminal session to it, and complete the disk wipe procedure by running the above `wipefs` command.
 
-    See [Basic Wipe](#basic-wipe) section for expected output from the `wipefs` command.
+   See [Basic Wipe](#basic-wipe) section for expected output from the `wipefs` command.
 
