@@ -1,6 +1,6 @@
 # Stage 0 - Prerequisites and Preflight Checks
 
-> **NOTE:** CSM-0.9.4 or later CSM 0.9.x is required in order to upgrade to CSM-1.0.0 (available with Shasta v1.5).
+> **NOTE:** CSM-1.1.0 is required in order to upgrade to CSM-1.2.0
 >
 > **NOTE:** Installed CSM versions may be listed from the product catalog using the following command. This will sort a semantic version without a hyphenated suffix after the same semantic version with a hyphenated suffix, e.g. 1.0.0 > 1.0.0-beta.19.
 >
@@ -46,7 +46,7 @@ Perform these steps to update `customizations.yaml`:
 2. Update `customizations.yaml`:
 
    ```bash
-   ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/update-customizations.sh -i customizations.yaml
+   ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/update-customizations.sh -i customizations.yaml
    ```
 
 3. Update the `site-init` secret:
@@ -83,7 +83,7 @@ Run check script:
 * Internet Connected
 
     ```bash
-    ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --endpoint [ENDPOINT]
+    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --endpoint [ENDPOINT]
     ```
 
     **NOTE** ENDPOINT is optional for internal use. It is pointing to internal arti by default.
@@ -91,7 +91,7 @@ Run check script:
 * Air Gapped
 
     ```bash
-    ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --tarball-file [PATH_TO_CSM_TARBALL_FILE]
+    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --tarball-file [PATH_TO_CSM_TARBALL_FILE]
     ```
 
 **`IMPORTANT:`** If any errors are encountered, then potential fixes should be displayed where the error occurred. **IF** the upgrade `prerequisites.sh` script fails and does not provide guidance, then try rerunning it. If the failure persists, then open a support ticket for guidance before proceeding.
