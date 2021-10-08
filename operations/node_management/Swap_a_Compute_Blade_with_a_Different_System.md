@@ -58,7 +58,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
   To insert an `ethernetInterfaces` entry using curl:
 
   ```bash
-  ncn-m001:# while read  PAYLOAD ; do curl -H "Authorization: Bearer $MY_TOKEN" -L -X POST 'https://api_gw_service.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces' -H 'Content-Type: application/json' --data-raw "$(echo $PAYLOAD | jq -c '{ComponentID: .xname,Description: .Desc,MACAddress: .MAC,IPAddress: .IP}')";sleep 5;  done < x9000c3s1.json
+  ncn-m001:# while read  PAYLOAD ; do curl -H "Authorization: Bearer $MY_TOKEN" -L -X POST 'https://api-gw-service-nmn.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces' -H 'Content-Type: application/json' --data-raw "$(echo $PAYLOAD | jq -c '{ComponentID: .xname,Description: .Desc,MACAddress: .MAC,IPAddress: .IP}')";sleep 5;  done < x9000c3s1.json
   ```
 
 - The blades must have the coolant drained and filled during the swap to minimize cross-contamination of cooling systems.
@@ -395,7 +395,7 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
     ```
 
     ```bash
-    ncn-m001# curl -H "Authorization: Bearer ${TOKEN}" -L -X POST 'https://api_gw_service.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces' -H 'Content-Type: application/json' --data-raw '{
+    ncn-m001# curl -H "Authorization: Bearer ${TOKEN}" -L -X POST 'https://api-gw-service-nmn.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces' -H 'Content-Type: application/json' --data-raw '{
             "Description": "Node Maintenance Network",
             "MACAddress": "$MAC",
             "IPAddress": "$IP_ADDRESS",
@@ -415,7 +415,7 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
     To change or correct a curl command that has been entered, use a PATCH request, for example:
 
     ```bash
-    ncn-m001# curl -k -H "Authorization: Bearer $TOKEN" -L -X PATCH \ 'https://api_gw_service.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces/0040a68350a4' -H 'Content-Type: application/json'  --data-raw '{"MACAddress":"xx:xx:xx:xx:xx:xx","IPAddress":"10.xxx.xxx.xxx","ComponentID":"XNAME"}'
+    ncn-m001# curl -k -H "Authorization: Bearer $TOKEN" -L -X PATCH \ 'https://api-gw-service-nmn.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces/0040a68350a4' -H 'Content-Type: application/json'  --data-raw '{"MACAddress":"xx:xx:xx:xx:xx:xx","IPAddress":"10.xxx.xxx.xxx","ComponentID":"XNAME"}'
     ```
 
 29. Repeat the preceding command for each node in the blade.
