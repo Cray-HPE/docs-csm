@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Copyright 2021 Hewlett Packard Enterprise Development LP
+
 # Many of our functions do not check return codes because they assume that
 # they are being run with set -e. This file is used in isolation at one
 # point during the upgrade procedure, thus it is important that we verify
@@ -110,20 +112,20 @@ function update_bss_storage() {
 
         echo "update_bss_storage: Putting updated bootparameters for ${storage_node}"
         curl -i -s -k -H "Content-Type: application/json" \
-            -H "Authorization: Bearer ${TOKEN}" "https://api_gw_service.local/apis/bss/boot/v1/bootparameters" \
+            -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters" \
             -X PUT -d @/tmp/$xName > /tmp/put.$xName
         rc=$?
         if [ $rc -ne 0 ]; then
             cat /tmp/put.$xName
             update_bss_storage_cmd_failed curl -i -s -k -H "Content-Type: application/json" \
-                -H "Authorization: Bearer ${TOKEN}" "https://api_gw_service.local/apis/bss/boot/v1/bootparameters" \
+                -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters" \
                 -X PUT -d @/tmp/$xName \> /tmp/put.$xName
             return 1
         elif ! head -1 /tmp/put.$xName | grep -Eq "^HTTP.*[[:space:]]200[[:space:]]*$" ; then
             cat /tmp/put.$xName
             update_bss_storage_error "Expected 200 response but did not receive it from command: " \
                 "curl -i -s -k -H \"Content-Type: application/json\" -H \"Authorization: Bearer ${TOKEN}\" "\
-                "https://api_gw_service.local/apis/bss/boot/v1/bootparameters -X PUT -d @/tmp/$xName"
+                "https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters -X PUT -d @/tmp/$xName"
             return 1
         fi
         echo "update_bss_storage: Successfully updated bootparameters for ${storage_node}"
